@@ -138,7 +138,7 @@ export default _xyz => layer => {
       return new _xyz.mapview.lib.style.Style({
         zIndex: style.zIndex,
         stroke: style.strokeColor && new _xyz.mapview.lib.style.Stroke({
-          color: _xyz.utils.Chroma(style.strokeColor).alpha(style.strokeOpacity === undefined ? 1 : parseFloat(style.strokeOpacity) || 0).rgba()
+          color: _xyz.utils.Chroma(style.strokeColor).alpha(style.strokeOpacity === undefined ? 1 : parseFloat(style.strokeOpacity) || 0).rgba(),
           width: parseInt(style.strokeWidth) || 1
         }),
         fill: style.fillColor && new _xyz.mapview.lib.style.Fill({
