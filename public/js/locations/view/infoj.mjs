@@ -23,6 +23,8 @@ export default _xyz => location => {
 
     if (location.view && location.view.classList.contains('disabled')) break
 
+    if (!entry.edit && entry.value === null) continue
+
     entry.listview = listview;
 
     if (document.body.dataset.viewmode === 'report') entry.edit = null;

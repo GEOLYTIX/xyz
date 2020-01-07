@@ -772,6 +772,12 @@
                             "edit": true
                         },
                         {
+                            "label": "int_test",
+                            "field": "int_test_",
+                            "fieldfx": "int_test",
+                            "type": "integer"
+                        },
+                        {
                             "label": "Images",
                             "field": "images",
                             "type": "images",
