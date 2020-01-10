@@ -37,7 +37,7 @@ export default _xyz => (entry, callback) => {
 
         _xyz.dataview.pgFunction({
           entry: val, 
-          container: document.getElementById(val.target_id) || flex_container
+          container: document.getElementById(entry.target_id) || flex_container
         });
       
       }
