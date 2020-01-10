@@ -31,17 +31,13 @@ export default _xyz => location => {
   // Remove an existing location from record.
   record.location && record.location.remove();
 
+  record.location = location;
+
   // Set record style to location.
   location.style = record.style;
 
   // Set record colorFilter to location.
   location.colorFilter = record.colorFilter;
-
-  // Assign location to record.
-  record.location = location;
-
-  record.location.record = record;
- 
 
   if (location._new) {
 
@@ -78,7 +74,7 @@ export default _xyz => location => {
   xhr.onload = e => {
 
     if (e.target.status !== 200) {
-      delete record.location;
+      //delete record.location;
       delete record.stamp;
       return console.error(e.target.statusText);
     }
@@ -86,19 +82,22 @@ export default _xyz => location => {
     // Push the hook for the location.
     if (_xyz.hooks) _xyz.hooks.push('locations', location.hook);
 
-    const infoj = location.layer.infoj.map(entry => {
+    const infoj = location.layer.infoj.map(_entry => {
+
+      const entry = Object.assign({}, _entry);
       entry.label = e.target.response[entry.field + '_label'] || entry.label;
       entry.value = e.target.response[entry.field];
       return entry;
-    })
+    });
 
     _xyz.locations.decorate(
       location,
       {
         infoj: infoj,
         geometry: JSON.parse(e.target.response.geomj),
-        editable: (location.layer.edit)
-      });
+        editable: (location.layer.edit),
+        record: record
+      });  
 
     location.marker = _xyz.mapview.lib.proj.transform(
       _xyz.utils.turf.pointOnFeature(JSON.parse(e.target.response.geomj)).geometry.coordinates,
