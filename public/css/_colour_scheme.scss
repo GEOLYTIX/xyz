@@ -21,6 +21,7 @@ a {
 
 .off-black-filter {
     filter: invert(24%) sepia(23%) saturate(0%) hue-rotate(271deg) brightness(86%) contrast(90%);
+    -webkit-filter: invert(24%) sepia(23%) saturate(0%) hue-rotate(271deg) brightness(86%) contrast(90%);
 }
 
 /* Primary colour properties */
@@ -30,6 +31,7 @@ a {
 
 .primary-colour-filter {
     filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%);
+    -webkit-filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%);
 }
 
 .primary-colour-bg {
@@ -55,6 +57,7 @@ input[type=range]::-moz-range-thumb {
 
 .secondary-colour-filter {
     filter: invert(90%) sepia(21%) saturate(301%) hue-rotate(48deg) brightness(104%) contrast(93%);
+    -webkit-filter: invert(90%) sepia(21%) saturate(301%) hue-rotate(48deg) brightness(104%) contrast(93%);
 }
 
 .secondary-colour-bg {

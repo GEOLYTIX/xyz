@@ -13,7 +13,7 @@ export default _xyz => location => {
   const listview = _xyz.utils.wire()`<table>`;
 
   // Create object to hold view groups.
-  const groups = {};
+  location.groups = {};
 
   // watch for group/chart data series and stacks
   let dataset;
@@ -51,16 +51,16 @@ export default _xyz => location => {
     // Create a new info group.
     if (entry.type === 'group') {
 
-      const group = _xyz.locations.view.group(entry);
-      if (!group) continue
-      groups[group.label] = group;
+      location.groups[entry.label] = entry;
+
+      _xyz.locations.view.group(entry);
             
-      listview.appendChild(group.row);
+      listview.appendChild(location.groups[entry.label].row);
       continue
     }
 
     // Create entry.row inside previously created group.
-    if (entry.group && groups[entry.group]){ 
+    if (entry.group && location.groups[entry.group]){ 
 
       if(entry.dataset || entry.stack){
 
@@ -72,21 +72,21 @@ export default _xyz => location => {
           if(entry.skip) continue
           dataset_label.textContent = entry.dataset;
           dataset_row.appendChild(dataset_label);
-          groups[entry.group].table.appendChild(dataset_row);
+          location.groups[entry.group].table.appendChild(dataset_row);
           dataset = entry.dataset;
         }
 
         if(entry.stack && entry.stack !== dataset){
           dataset_label.textContent = entry.stack;
           dataset_row.appendChild(dataset_label);
-          groups[entry.group].table.appendChild(dataset_row);
+          location.groups[entry.group].table.appendChild(dataset_row);
           dataset = entry.stack;
         }
 
       }
 
-      groups[entry.group].table.appendChild(entry.row);
-      groups[entry.group].div.style.display = 'block';
+      location.groups[entry.group].table.appendChild(entry.row);
+      location.groups[entry.group].div.style.display = 'block';
 
     }
 

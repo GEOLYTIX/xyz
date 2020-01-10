@@ -11,6 +11,7 @@ export default _xyz => location => {
 
     if (!_record.location) {
       record = _record;
+      return;
     } else if (_record.location && _record.stamp < record.stamp) {
       record = _record;
     }

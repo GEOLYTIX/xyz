@@ -2,6 +2,8 @@ export default _xyz => group => {
 
   if (!group.label) return;
 
+  //const group = entry;
+
   // check if group has any data
   let values = Object.values(group.location.infoj).filter(field => { if (field.group === group.label) return field.value });
 
@@ -105,6 +107,6 @@ export default _xyz => group => {
 
   }
 
-  return group;
+  //return group;
 
 };

@@ -14,14 +14,15 @@ document.querySelectorAll('#geodata__select > div').forEach(function(el){
         document.getElementById('geodata__faq').style.display = 'none';
 
         _xyz({
-            host: 'https://xyz-geodata-v2.now.sh/geodata',
+            host: 'http://localhost:3000/geodata',
             locale: el.dataset.locale,
             callback: function(_xyz) {
        
                 _xyz.mapview.create({
                     target: document.getElementById('map_geodata'),
+                    attribution: {}
                 });
-                      
+
                 el.dataset.layers.split(',').forEach(function(layer){
 
                     _xyz.layers.list[layer].show();

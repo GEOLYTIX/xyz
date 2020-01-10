@@ -16,14 +16,16 @@ a {
   color: #3f3f3f; }
 
 .off-black-filter {
-  filter: invert(24%) sepia(23%) saturate(0%) hue-rotate(271deg) brightness(86%) contrast(90%); }
+  filter: invert(24%) sepia(23%) saturate(0%) hue-rotate(271deg) brightness(86%) contrast(90%);
+  -webkit-filter: invert(24%) sepia(23%) saturate(0%) hue-rotate(271deg) brightness(86%) contrast(90%); }
 
 /* Primary colour properties */
 .primary-colour {
   color: #1f964d; }
 
 .primary-colour-filter {
-  filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%); }
+  filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%);
+  -webkit-filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%); }
 
 .primary-colour-bg {
   background-color: #1f964d; }
@@ -42,7 +44,8 @@ input[type=range]::-moz-range-thumb {
   color: #cae0b8; }
 
 .secondary-colour-filter {
-  filter: invert(90%) sepia(21%) saturate(301%) hue-rotate(48deg) brightness(104%) contrast(93%); }
+  filter: invert(90%) sepia(21%) saturate(301%) hue-rotate(48deg) brightness(104%) contrast(93%);
+  -webkit-filter: invert(90%) sepia(21%) saturate(301%) hue-rotate(48deg) brightness(104%) contrast(93%); }
 
 .secondary-colour-bg {
   background-color: #cae0b8; }
@@ -60,7 +63,7 @@ input[type=range]::-moz-range-thumb {
 
 .enabled > .xyz-icon {
   filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%);
-  /* primary colour filter */ }
+  -webkit-filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%); }
 
 .icon-layers {
   background-image: url("../icons/icon-layers.svg"); }
@@ -130,7 +133,8 @@ input[type=range]::-moz-range-thumb {
   background-image: url("../icons/icon-toggle-off.svg"); }
 
 .icon-toggle:not(.on) {
-  filter: invert(52%) sepia(6%) saturate(10%) hue-rotate(323deg) brightness(88%) contrast(85%); }
+  filter: invert(52%) sepia(6%) saturate(10%) hue-rotate(323deg) brightness(88%) contrast(85%);
+  -webkit-filter: invert(52%) sepia(6%) saturate(10%) hue-rotate(323deg) brightness(88%) contrast(85%); }
 
 .icon-toggle.on {
   background-image: url("../icons/icon-toggle-on.svg"); }
