@@ -1,6 +1,8 @@
 export default _xyz => location => {
 
   // Create location view.
+  //location.view = 
+  
   _xyz.locations.view.create(location);
 
   location.draw();
@@ -14,7 +16,7 @@ export default _xyz => location => {
     style: new _xyz.mapview.lib.style.Style({
       image: _xyz.mapview.icon({
         type: 'markerLetter',
-        letter: String.fromCharCode(64 + _xyz.locations.list.length - _xyz.locations.list.indexOf(location.record)),
+        letter: String.fromCharCode(65 + _xyz.locations.list.indexOf(location.record)),
         color: location.style.strokeColor,
         scale: 0.05,
         anchor: [0.5, 1],

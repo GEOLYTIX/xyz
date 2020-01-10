@@ -6,27 +6,27 @@ export default _xyz => location => {
 
   let record = {stamp: parseInt(Date.now())};
 
-  // Iterate through records in locations list
+  // Remove the location from record if it matches the current location.
   if (_xyz.locations.list.some(_record => {
+    if (_record.location && _record.location.hook === location.hook) {
+      _record.location.remove();
+      _record.stamp = 0;
+      return true;
+    };
+  })) return;
+
+  // Find empty or oldest records.
+  for (const _record of _xyz.locations.list) {
 
     if (!_record.location) {
       record = _record;
-      return;
-    } else if (_record.location && _record.stamp < record.stamp) {
+      break;
+    } else if (_record.stamp < record.stamp) {
       record = _record;
     }
+  }
 
-    // Remove the location from record if it matches the current location.
-    if (_record.location && _record.location.hook === location.hook) {
-
-      _record.location.remove();
-      _record.stamp = 0;
-
-      // Return from select by returning true to some array method.
-      return true;
-    };
-
-  })) return;
+  record.stamp = parseInt(Date.now());
 
   // Remove an existing location from record.
   record.location && record.location.remove();
@@ -41,9 +41,7 @@ export default _xyz => location => {
   record.location = location;
 
   record.location.record = record;
-
-  // Set new stamp on record.
-  record.stamp = parseInt(Date.now());
+ 
 
   if (location._new) {
 

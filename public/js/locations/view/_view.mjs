@@ -107,7 +107,7 @@ export default _xyz => {
         e.preventDefault();
         _xyz.utils.toggleExpanderParent(e.target, true);
       }}>
-      <div>${String.fromCharCode(64 + _xyz.locations.list.length - _xyz.locations.list.indexOf(location.record))}`;
+      <div>${String.fromCharCode(65 + _xyz.locations.list.indexOf(location.record))}`;
 
     location.view.appendChild(header);
 
@@ -217,7 +217,7 @@ export default _xyz => {
       }}>`);
 
 
-    location.infoj && location.view.appendChild(view.infoj(location));
+    location.infoj && location.view.appendChild(_xyz.locations.view.infoj(location));
 
   };
 

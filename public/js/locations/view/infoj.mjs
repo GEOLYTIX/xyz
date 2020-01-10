@@ -20,6 +20,8 @@ export default _xyz => location => {
 
   // Iterate through info fields and add to info table.
   for (const entry of location.infoj) {
+  //for (let i = 0; i < location.infoj.length -1; i++) {
+    //let entry = location.infoj[i];
 
     if (location.view && location.view.classList.contains('disabled')) break
 

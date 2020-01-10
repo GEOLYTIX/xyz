@@ -120785,27 +120785,27 @@ function panel(layer) {
 
   let record = {stamp: parseInt(Date.now())};
 
-  // Iterate through records in locations list
+  // Remove the location from record if it matches the current location.
   if (_xyz.locations.list.some(_record => {
+    if (_record.location && _record.location.hook === location.hook) {
+      _record.location.remove();
+      _record.stamp = 0;
+      return true;
+    };
+  })) return;
+
+  // Find empty or oldest records.
+  for (const _record of _xyz.locations.list) {
 
     if (!_record.location) {
       record = _record;
-      return;
-    } else if (_record.location && _record.stamp < record.stamp) {
+      break;
+    } else if (_record.stamp < record.stamp) {
       record = _record;
     }
+  }
 
-    // Remove the location from record if it matches the current location.
-    if (_record.location && _record.location.hook === location.hook) {
-
-      _record.location.remove();
-      _record.stamp = 0;
-
-      // Return from select by returning true to some array method.
-      return true;
-    };
-
-  })) return;
+  record.stamp = parseInt(Date.now());
 
   // Remove an existing location from record.
   record.location && record.location.remove();
@@ -120820,9 +120820,7 @@ function panel(layer) {
   record.location = location;
 
   record.location.record = record;
-
-  // Set new stamp on record.
-  record.stamp = parseInt(Date.now());
+ 
 
   if (location._new) {
 
@@ -120901,6 +120899,8 @@ function panel(layer) {
 /* harmony default export */ var selectCallback = (_xyz => location => {
 
   // Create location view.
+  //location.view = 
+  
   _xyz.locations.view.create(location);
 
   location.draw();
@@ -120914,7 +120914,7 @@ function panel(layer) {
     style: new _xyz.mapview.lib.style.Style({
       image: _xyz.mapview.icon({
         type: 'markerLetter',
-        letter: String.fromCharCode(64 + _xyz.locations.list.length - _xyz.locations.list.indexOf(location.record)),
+        letter: String.fromCharCode(65 + _xyz.locations.list.indexOf(location.record)),
         color: location.style.strokeColor,
         scale: 0.05,
         anchor: [0.5, 1],
@@ -120960,6 +120960,8 @@ function panel(layer) {
 
   // Iterate through info fields and add to info table.
   for (const entry of location.infoj) {
+  //for (let i = 0; i < location.infoj.length -1; i++) {
+    //let entry = location.infoj[i];
 
     if (location.view && location.view.classList.contains('disabled')) break
 
@@ -122726,7 +122728,7 @@ function panel(layer) {
         e.preventDefault();
         _xyz.utils.toggleExpanderParent(e.target, true);
       }}>
-      <div>${String.fromCharCode(64 + _xyz.locations.list.length - _xyz.locations.list.indexOf(location.record))}`;
+      <div>${String.fromCharCode(65 + _xyz.locations.list.indexOf(location.record))}`;
 
     location.view.appendChild(header);
 
@@ -122836,7 +122838,7 @@ function panel(layer) {
       }}>`);
 
 
-    location.infoj && location.view.appendChild(view.infoj(location));
+    location.infoj && location.view.appendChild(_xyz.locations.view.infoj(location));
 
   };
 
@@ -122867,18 +122869,18 @@ function panel(layer) {
       ['#9c27b0','invert(22%) sepia(80%) saturate(1933%) hue-rotate(272deg) brightness(97%) contrast(104%)'],
       ['#2196f3','invert(60%) sepia(94%) saturate(3876%) hue-rotate(184deg) brightness(98%) contrast(94%)'],
       ['#009688','invert(37%) sepia(46%) saturate(1993%) hue-rotate(144deg) brightness(96%) contrast(101%)'],
-      // ['#cddc39','invert(84%) sepia(82%) saturate(420%) hue-rotate(6deg) brightness(88%) contrast(94%)'],
-      // ['#ff9800','invert(59%) sepia(90%) saturate(1526%) hue-rotate(358deg) brightness(99%) contrast(106%)'],
-      // ['#673ab7','invert(23%) sepia(26%) saturate(6371%) hue-rotate(251deg) brightness(87%) contrast(87%)'],
-      // ['#03a9f4','invert(65%) sepia(61%) saturate(5963%) hue-rotate(168deg) brightness(101%) contrast(103%)'],
-      // ['#4caf50','invert(65%) sepia(8%) saturate(3683%) hue-rotate(73deg) brightness(92%) contrast(69%)'],
-      // ['#ffeb3b','invert(75%) sepia(76%) saturate(391%) hue-rotate(2deg) brightness(104%) contrast(109%)'],
-      // ['#ff5722','invert(47%) sepia(96%) saturate(3254%) hue-rotate(346deg) brightness(100%) contrast(102%)'],
-      // ['#0d47a1','invert(15%) sepia(99%) saturate(2827%) hue-rotate(213deg) brightness(87%) contrast(90%)'],
-      // ['#00bcd4','invert(60%) sepia(39%) saturate(2788%) hue-rotate(144deg) brightness(93%) contrast(102%)'],
-      // ['#8bc34a','invert(87%) sepia(8%) saturate(3064%) hue-rotate(35deg) brightness(85%) contrast(85%)'],
-      // ['#ffc107','invert(79%) sepia(86%) saturate(3969%) hue-rotate(346deg) brightness(98%) contrast(111%)'],
-      // ['#d32f2f','invert(28%) sepia(94%) saturate(3492%) hue-rotate(345deg) brightness(85%) contrast(92%)']
+      ['#cddc39','invert(84%) sepia(82%) saturate(420%) hue-rotate(6deg) brightness(88%) contrast(94%)'],
+      ['#ff9800','invert(59%) sepia(90%) saturate(1526%) hue-rotate(358deg) brightness(99%) contrast(106%)'],
+      ['#673ab7','invert(23%) sepia(26%) saturate(6371%) hue-rotate(251deg) brightness(87%) contrast(87%)'],
+      ['#03a9f4','invert(65%) sepia(61%) saturate(5963%) hue-rotate(168deg) brightness(101%) contrast(103%)'],
+      ['#4caf50','invert(65%) sepia(8%) saturate(3683%) hue-rotate(73deg) brightness(92%) contrast(69%)'],
+      ['#ffeb3b','invert(75%) sepia(76%) saturate(391%) hue-rotate(2deg) brightness(104%) contrast(109%)'],
+      ['#ff5722','invert(47%) sepia(96%) saturate(3254%) hue-rotate(346deg) brightness(100%) contrast(102%)'],
+      ['#0d47a1','invert(15%) sepia(99%) saturate(2827%) hue-rotate(213deg) brightness(87%) contrast(90%)'],
+      ['#00bcd4','invert(60%) sepia(39%) saturate(2788%) hue-rotate(144deg) brightness(93%) contrast(102%)'],
+      ['#8bc34a','invert(87%) sepia(8%) saturate(3064%) hue-rotate(35deg) brightness(85%) contrast(85%)'],
+      ['#ffc107','invert(79%) sepia(86%) saturate(3969%) hue-rotate(346deg) brightness(98%) contrast(111%)'],
+      ['#d32f2f','invert(28%) sepia(94%) saturate(3492%) hue-rotate(345deg) brightness(85%) contrast(92%)']
     ].map(colorFilter => ({
       style: {
         strokeColor: colorFilter[0]
@@ -123181,7 +123183,7 @@ function panel(layer) {
   
   function decorate(location, assign = {}) {
 
-    return Object.assign(
+    Object.assign(
       location,
       {
         remove: locations_remove(_xyz),
@@ -124570,7 +124572,7 @@ function random_rgba() {
 
         _xyz.dataview.pgFunction({
           entry: val, 
-          container: document.getElementById(val.target_id) || flex_container
+          container: document.getElementById(entry.target_id) || flex_container
         });
       
       }
@@ -125366,7 +125368,7 @@ function random_rgba() {
 async function js_xyz(params) {
 
   const _xyz = Object.assign({
-    version: "2.0.1",
+    version: "2.1.0",
     defaults: {
       colours: [
         { hex: '#c62828', name: 'Fire Engine Red' },
