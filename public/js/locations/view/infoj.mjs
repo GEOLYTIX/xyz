@@ -176,19 +176,19 @@ export default _xyz => location => {
 
 
     if (entry.type === 'tableDefinition') {
-      _xyz.locations.view.tableDefinition(Object.assign({}, entry));
+      _xyz.locations.view.tableDefinition(entry);
       continue
     }
 
 
     if (entry.type === 'orderedList') {
-      _xyz.locations.view.orderedList(Object.assign({}, entry));  
+      _xyz.locations.view.orderedList(entry);  
       continue
     }
 
 
     if (entry.type === 'dashboard') {
-      _xyz.locations.view.dashboard(Object.assign({}, entry));
+      _xyz.locations.view.dashboard(entry);
       continue
     }
 

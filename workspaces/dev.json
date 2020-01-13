@@ -2896,6 +2896,7 @@
                                 "share15": {
                                     "title": "% with 15 min",
                                     "type": "integer",
+                                    "group": "Index",
                                     "rows": [
                                         "100*min15.oac_1a/min15.oac_total",
                                         "100*min15.oac_1b/min15.oac_total",
@@ -2929,6 +2930,7 @@
                                 "oac_uk_total": {
                                     "title": "UK %",
                                     "type": "integer",
+                                    "group": "Index",
                                     "rows": [
                                         "uk.oac_1a_uk*100/uk.oac_total_uk",
                                         "uk.oac_1b_uk*100/uk.oac_total_uk",
@@ -2962,6 +2964,7 @@
                                 "oac_index": {
                                     "title": "OAC Profile Index",
                                     "type": "integer",
+                                    "group": "Index",
                                     "formatter": "progress",
                                     "formatterParams": {
                                         "color": [
