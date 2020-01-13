@@ -2,6 +2,8 @@ const env = require('../../../../mod/env');
 
 const sql_fields = require('../../../../mod/pg/sql_fields');
 
+const infoj_values = require('../select/infoj_values.js');
+
 module.exports = fastify => {
   fastify.route({
     method: 'GET',
@@ -58,27 +60,23 @@ module.exports = fastify => {
   
       var rows = await env.dbs[layer.dbs](q, [id]);
   
-      if (rows.err) return res.code(500).send('PostgreSQL query error - please check backend logs.');
+      if (rows.err) return res.code(500).send('Failed to update PostGIS table.');
   
-      // Query field for updated infoj
-      const infoj = JSON.parse(JSON.stringify(layer.infoj));
-  
-      // The fields array stores all fields to be queried for the location info.
-      fields = await sql_fields([], infoj, qID);
-  
-      var q = `SELECT ${fields.join()} FROM ${table} WHERE ${qID} = $1;`;
-  
-      var rows = await env.dbs[layer.dbs](q, [id]);
-  
-      if (rows.err) return res.code(500).send('PostgreSQL query error - please check backend logs.');
-  
-      // Iterate through infoj entries and assign values returned from query.
-      infoj.forEach(entry =>  {
-        if (rows[0][entry.field]) entry.value = rows[0][entry.field];
-      });
-  
-      // Send the infoj object with values back to the client.
-      res.code(200).send(infoj);
+			var rows = await infoj_values({
+				locale: req.query.locale,
+				layer: layer,
+				table: table,
+				id: req.query.id,
+				roles: req.params.token.roles || []
+			})
+
+			if (rows.err) return res.code(500).send('Failed to query PostGIS table.');
+
+			// return 204 if no record was returned from database.
+			if (rows.length === 0) return res.code(202).send('No rows returned from table.');
+
+			// Send the infoj object with values back to the client.
+			res.code(200).send(rows[0]);
 
     }
   });

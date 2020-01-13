@@ -21,7 +21,7 @@ export default _xyz => (entry, callback) => {
 
       if(val.type === 'group' && val.chart && val.dashboard && entry.title === val.dashboard){
 
-        entry.group = Object.assign({}, val);
+        entry.group = val;
 
         entry.group.fields = entry.location.infoj.filter(_entry => _entry.group === entry.group.label);
 
@@ -37,7 +37,7 @@ export default _xyz => (entry, callback) => {
 
         _xyz.dataview.pgFunction({
           entry: val, 
-          container: document.getElementById(val.target_id) || flex_container
+          container: document.getElementById(entry.target_id) || flex_container
         });
       
       }

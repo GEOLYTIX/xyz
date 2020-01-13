@@ -6,6 +6,8 @@ const checkLayer = require('./checkLayer');
 
 const checkWorkspaceTable = require('./checkWorkspaceTable');
 
+const fetch = require('node-fetch');
+
 module.exports = async () => {
 
   // Load zero config workspace if workspace is not defined in environment settings.
@@ -33,6 +35,33 @@ module.exports = async () => {
       return;
     }
   }
+
+    // Load workspace from github.
+    if (env.workspace_connection.split(':')[0] === 'github') {
+
+      let workspace = {};
+     
+      try {
+
+        const response = await fetch(
+          `https:${env.workspace_connection.split(':')[1]}`,
+          { headers: new fetch.Headers({ Authorization: `Basic ${Buffer.from(env.keys.GITHUB).toString('base64')}` }) });
+
+        const b64 = await response.json();
+        const buff = await Buffer.from(b64.content, 'base64');
+        const utf8 = await buff.toString('utf8');
+        workspace = JSON.parse(utf8);
+
+      } catch (err) {
+        Object.keys(err).forEach(key => !err[key] && delete err[key]);
+        console.error(err);
+    
+      } finally {
+        env.workspace = await assignDefaults(workspace);
+        if (env.debug) checkLayer(env.workspace);
+        return;
+      }
+    }
 
   // Load workspace from database.
   if (env.workspace_connection.split(':')[0] === 'postgres') {

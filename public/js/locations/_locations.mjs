@@ -48,7 +48,7 @@ export default _xyz => {
   
   function decorate(location, assign = {}) {
 
-    return Object.assign(
+    Object.assign(
       location,
       {
         remove: remove(_xyz),

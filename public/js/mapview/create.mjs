@@ -48,7 +48,11 @@ export default _xyz => params => {
 
   _xyz.mapview.node.addEventListener('updatesize', ()=>_xyz.map.updateSize());
 
+  // Set interaction break when map move starts.
+  _xyz.map.on('movestart', () => _xyz.mapview.interaction.break = true);
 
+  _xyz.mapview.node.addEventListener('changeEnd', ()=> _xyz.mapview.interaction.break = false);
+   
   _xyz.mapview.interaction.highlight.begin();
 
   // Add zoomControl.

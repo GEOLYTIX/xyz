@@ -5,7 +5,6 @@
 .sass-cache/
 node_modules/*
 public/css/.sass-cache/
-public/js/build/
 stats.json
 now
 now.json
@@ -28,18 +27,22 @@ workspaces/coles.json
 workspaces/test.json
 workspaces/brexit.json
 workspaces/mb.json
+workspaces/mab.json
 workspaces/richersounds.json
 workspaces/mns.json
 workspaces/tsh.json
 workspaces/kfc_japan.json
 workspaces/camelot.json
 workspaces/gla.json
+workspaces/citymart.json
 public/views/report_camelot.html
 public/views/report_camelot.js
-public/views/gla.html
-public/views/gla.js
+public/views/gla_desktop.html
+public/views/gla_desktop.js
 public/views/gla_mobile.html
 public/views/gla_mobile.js
+public/views/geodata.html
+public/views/geodata.js
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*

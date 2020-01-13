@@ -104,7 +104,8 @@
                 "HERE Imagery": {
                     "group": "Base maps",
                     "attribution": {
-                        "Here": "https://www.here.com/"
+                        "© Here": "https://www.here.com/",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
                     },
                     "format": "tiles",
                     "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?&provider=HERE"
@@ -112,7 +113,8 @@
                 "HERE Hybrid": {
                     "group": "Base maps",
                     "attribution": {
-                        "Here": "https://www.here.com/"
+                        "© Here": "https://www.here.com/",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
                     },
                     "format": "tiles",
                     "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?&provider=HERE"
@@ -121,7 +123,8 @@
                     "group": "Base maps",
                     "display": true,
                     "attribution": {
-                        "© Mapbox": "https://www.mapbox.com/about/maps"
+                        "© Mapbox": "https://www.mapbox.com/about/maps",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
                     },
                     "format": "tiles",
                     "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
@@ -135,8 +138,8 @@
                     "geom": "geom_p_4326",
                     "srid": "4326",
                     "cluster_label": "store_name",
-                    "cluster_kmeans": 0.01,
-                    "cluster_dbscan": 0.01,
+                    "cluster_kmeans": 0.02,
+                    "cluster_dbscan": 0.02,
                     "qID": "id",
                     "infoj": [
                         {
@@ -187,6 +190,7 @@
                         }
                     ],
                     "style": {
+                        "hidden": true,
                         "marker": {
                             "type": "target",
                             "fillColor": "#93827F"
@@ -375,9 +379,7 @@
                                     }
                                 }
                             }
-                        },
-                        "markerMin": 20,
-                        "markerMax": 40
+                        }
                     }
                 },
                 "Census": {
@@ -437,14 +439,12 @@
                         "default": {
                             "strokeWidth": 2,
                             "strokeColor": "#005580",
-                            "fill": true,
                             "fillColor": "#cccccc",
                             "fillOpacity": 0.3
                         },
                         "highlight": {
                             "strokeWidth": 2,
                             "strokeColor": "#009900",
-                            "fill": true,
                             "fillColor": "#ccff99",
                             "fillOpacity": 0.3
                         }
@@ -475,21 +475,16 @@
                     ],
                     "style": {
                         "default": {
-                            "strokeWidth": 1,
                             "strokeColor": "#1ab2ff",
-                            "fill": true,
                             "fillColor": "#cccccc",
                             "fillOpacity": 0.3
                         },
                         "highlight": {
                             "strokeWidth": 2,
                             "strokeColor": "#009900",
-                            "fill": true,
                             "fillColor": "#ccff99",
                             "fillOpacity": 0.3
-                        },
-                        "themes": {},
-                        "selected": {}
+                        }
                     }
                 },
                 "Education": {
@@ -618,8 +613,6 @@
                                 }
                             }
                         },
-                        "markerMin": 20,
-                        "markerMax": 40,
                         "marker": {
                             "type": "target",
                             "fillColor": "#999999"
@@ -659,21 +652,14 @@
                             "inline": true
                         }
                     ],
-                    "mvt_fields": [
-                        "ubuildtype"
-                    ],
                     "style": {
                         "default": {
-                            "strokeWidth": 1,
                             "strokeColor": "#FFAE03",
-                            "fill": true,
                             "fillColor": "#FFAE03",
                             "fillOpacity": 0.3
                         },
                         "highlight": {
-                            "strokeWidth": 1,
                             "strokeColor": "#bdbdbd",
-                            "fill": true,
                             "fillOpacity": 0.6
                         },
                         "themes": {
@@ -687,9 +673,7 @@
                                         "style": {
                                             "weight": 1,
                                             "color": "#238b45",
-                                            "opacity": 1,
                                             "fillColor": "#238b45",
-                                            "fill": true,
                                             "fillOpacity": 0.3
                                         }
                                     },
@@ -698,9 +682,7 @@
                                         "style": {
                                             "weight": 1,
                                             "color": "#cb181d",
-                                            "opacity": 1,
                                             "fillColor": "#cb181d",
-                                            "fill": true,
                                             "fillOpacity": 0.3
                                         }
                                     },
@@ -709,9 +691,7 @@
                                         "style": {
                                             "weight": 1,
                                             "color": "#fd8d3c",
-                                            "opacity": 1,
                                             "fillColor": "#fd8d3c",
-                                            "fill": true,
                                             "fillOpacity": 0.3
                                         }
                                     },
@@ -720,9 +700,7 @@
                                         "style": {
                                             "weight": 1,
                                             "color": "#fed976",
-                                            "opacity": 1,
                                             "fillColor": "#fed976",
-                                            "fill": true,
                                             "fillOpacity": 0.3
                                         }
                                     }
@@ -776,23 +754,15 @@
                             "type": "integer"
                         }
                     ],
-                    "mvt_fields": [
-                        "total"
-                    ],
                     "style": {
                         "default": {
-                            "strokeWidth": 1,
                             "strokeColor": "#ffffff",
-                            "stroke": true,
                             "fillColor": "#3d754a",
-                            "fill": true,
                             "fillOpacity": 0.6
                         },
                         "highlight": {
                             "strokeColor": "#56A3A6",
-                            "stroke": true,
                             "fillColor": "#e0d83f",
-                            "fill": true,
                             "fillOpacity": 0.6
                         },
                         "themes": {
@@ -911,38 +881,36 @@
                                 "cat": {
                                     "Airport": {
                                         "label": "Airport",
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/poi_pin_filled/poi_transport_airport.svg"
+                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/poi_pin_filled/poi_transport_airport.svg"
                                     },
                                     "Cinema": {
                                         "label": "Cinema",
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/poi_pin_filled/poi_entertainment_cinema.svg"
+                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/poi_pin_filled/poi_entertainment_cinema.svg"
                                     },
                                     "Hospital": {
                                         "label": "Hospital",
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/poi_pin_filled/poi_health_hospital.svg"
+                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/poi_pin_filled/poi_health_hospital.svg"
                                     },
                                     "Pharmacy": {
                                         "label": "Pharmacy",
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/poi_pin_filled/poi_health_pharmacy.svg"
+                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/poi_pin_filled/poi_health_pharmacy.svg"
                                     },
                                     "Sport and Leisure": {
                                         "label": "Sport and Leisure",
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/poi_pin_filled/poi_sports_leisure_sports_centre.svg"
+                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/poi_pin_filled/poi_sports_leisure_sports_centre.svg"
                                     },
                                     "Stadium": {
                                         "label": "Stadium",
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/poi_pin_filled/poi_entertainment_stadium.svg"
+                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/poi_pin_filled/poi_entertainment_stadium.svg"
                                     }
                                 }
                             }
-                        },
-                        "markerMin": 20,
-                        "markerMax": 40
+                        }
                     }
                 },
                 "Postal Sector": {
                     "group": "Postal",
-                    "groupmeta": "<p>Manually created postal boundaries at sector, district and area level, combining exceptional ‘enclosure’ accuracy with borders that follow real-world features. A key geography used within customer insight and marketing teams. An alternative reporting and display geography.  Download the 2012 postal sector boundaries released under the same terms as the OS Open Data license with the single addition of GEOLYTIX to the attribution list.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=185BP5LuT_QxC3MaIluxFk0lGuQtJi5yO\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Open data</b></p>",
+                    "groupmeta": "<p>Manually created postal boundaries at sector, district and area level, combining exceptional ‘enclosure’ accuracy with borders that follow real-world features. A key geography used within customer insight and marketing teams. An alternative reporting and display geography.  Download the 2012 postal sector boundaries released under the same terms as the OS Open Data license with the single addition of GEOLYTIX to the attribution list.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=185BP5LuT_QxC3MaIluxFk0lGuQtJi5yO\" target=\"_blank\">Documentation</a></p><br><br><p style='font-size:90%;text-align:right;'><b><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1V57a19QzaiqTP8wHVasfYNGwP-o6tDm-\" target=\"_blank\"> Open Data - download for free</a></b></p>",
                     "format": "mvt",
                     "dbs": "XYZ",
                     "mvt_cache": "website.vw_london_glx_geodata_postal_sector__mvts",
@@ -973,23 +941,14 @@
                             "type": "text"
                         }
                     ],
-                    "mvt_fields": [
-                        "rm_sect"
-                    ],
                     "style": {
                         "default": {
-                            "strokeWidth": 1,
                             "strokeColor": "#c6dbef",
-                            "fill": true,
-                            "opacity": 0.8,
                             "fillOpacity": 0.1,
                             "fillColor": "#ffffff"
                         },
                         "highlight": {
-                            "strokeColor": "#090",
-                            "fill": true,
-                            "opacity": 0.3,
-                            "fillOpacity": 0.1
+                            "strokeColor": "#090"
                         }
                     }
                 },
@@ -1027,16 +986,11 @@
                         "default": {
                             "strokeWidth": 2,
                             "strokeColor": "#4292c6",
-                            "fill": true,
-                            "opacity": 0.8,
                             "fillOpacity": 0.1,
                             "fillColor": "#ffffff"
                         },
                         "highlight": {
-                            "strokeColor": "#090",
-                            "fill": true,
-                            "opacity": 0.3,
-                            "fillOpacity": 0.1
+                            "strokeColor": "#090"
                         }
                     }
                 },
@@ -1073,16 +1027,11 @@
                         "default": {
                             "strokeWidth": 3,
                             "strokeColor": "#084594",
-                            "fill": true,
-                            "opacity": 0.8,
                             "fillOpacity": 0.1,
                             "fillColor": "#ffffff"
                         },
                         "highlight": {
-                            "strokeColor": "#090",
-                            "fill": true,
-                            "opacity": 0.3,
-                            "fillOpacity": 0.1
+                            "strokeColor": "#090"
                         }
                     }
                 },
@@ -1108,23 +1057,15 @@
                             "type": "text"
                         }
                     ],
-                    "mvt_fields": [
-                        "line_type"
-                    ],
                     "style": {
                         "default": {
-                            "strokeWidth": 1,
-                            "stroke": true,
-                            "opacity": 1,
+                            "strokeColor": "#000000",
                             "fillColor": "#bdbdbd",
-                            "fill": true,
                             "fillOpacity": 0.8
                         },
                         "highlight": {
                             "strokeColor": "#56A3A6",
-                            "stroke": true,
                             "fillColor": "#DBD56E",
-                            "fill": true,
                             "fillOpacity": 0.3
                         },
                         "themes": {
@@ -1200,8 +1141,6 @@
                         }
                     ],
                     "style": {
-                        "markerMin": 20,
-                        "markerMax": 40,
                         "marker": {
                             "type": "target",
                             "fillColor": "#3366ff",
@@ -1314,24 +1253,17 @@
                             "inline": true
                         }
                     ],
-                    "mvt_fields": [
-                        "rp_type"
-                    ],
                     "style": {
                         "label": {
                             "field": "rp_name"
                         },
                         "default": {
-                            "strokeWidth": 1,
                             "strokeColor": "#ffff66",
-                            "fill": true,
-                            "opacity": 1,
                             "fillColor": "#ffff66",
                             "fillOpacity": 0.7
                         },
                         "highlight": {
                             "strokeColor": "#e91e63",
-                            "fill": true,
                             "fillOpacity": 0.3
                         },
                         "themes": {
@@ -1434,20 +1366,14 @@
                     },
                     "geom": "geom_3857",
                     "srid": "3857",
-                    "mvt_fields": [
-                        "pitch_dec"
-                    ],
                     "style": {
                         "default": {
-                            "fill": true,
                             "fillColor": "#000",
-                            "fillOpacity": 0.3,
-                            "stroke": false
+                            "fillOpacity": 0.3
                         },
                         "highlight": {
                             "strokeWidth": 2,
                             "strokeColor": "#009900",
-                            "fill": true,
                             "fillColor": "#ccff99",
                             "fillOpacity": 0.2
                         },
@@ -1521,21 +1447,14 @@
                     "table": "website.vw_london_glx_geodata_road_detail",
                     "geom": "geom_3857",
                     "srid": "3857",
-                    "mvt_fields": [
-                        "road_type"
-                    ],
                     "style": {
                         "default": {
-                            "strokeWidth": 1,
                             "strokeColor": "#780116",
-                            "fill": true,
                             "fillColor": "#780116",
                             "fillOpacity": 0.3
                         },
                         "highlight": {
-                            "strokeWidth": 1,
-                            "strokeColor": "#780116",
-                            "fill": true
+                            "strokeColor": "#780116"
                         },
                         "themes": {
                             "Road Type": {
@@ -1607,15 +1526,12 @@
                             "field": "town_name"
                         },
                         "default": {
-                            "strokeWidth": 1,
                             "strokeColor": "#4F7CAC",
-                            "fill": true,
                             "fillColor": "#EEE",
                             "fillOpacity": 0
                         },
                         "highlight": {
                             "strokeColor": "#4F7CAC",
-                            "fill": true,
                             "fillOpacity": 0,
                             "strokeWidth": 3
                         }
@@ -1653,20 +1569,14 @@
                             "type": "text"
                         }
                     ],
-                    "mvt_fields": [
-                        "class_ind"
-                    ],
                     "style": {
                         "default": {
-                            "strokeWidth": 1,
                             "strokeColor": "#444",
-                            "fill": true,
                             "fillColor": "#444",
                             "fillOpacity": 0.3
                         },
                         "highlight": {
                             "strokeColor": "#e91e63",
-                            "fill": true,
                             "fillOpacity": 0.3
                         },
                         "themes": {
@@ -1743,19 +1653,13 @@
                     ],
                     "style": {
                         "default": {
-                            "strokeWidth": 1,
-                            "stroke": true,
                             "strokeColor": "#ffffff",
-                            "opacity": 1,
                             "fillColor": "#bdbdbd",
-                            "fill": true,
                             "fillOpacity": 0.8
                         },
                         "highlight": {
                             "strokeColor": "#56A3A6",
-                            "stroke": true,
                             "fillColor": "#DBD56E",
-                            "fill": true,
                             "fillOpacity": 0.3
                         },
                         "themes": {
@@ -1865,20 +1769,14 @@
                             "inline": true
                         }
                     ],
-                    "mvt_fields": [
-                        "workerskm2"
-                    ],
                     "style": {
                         "default": {
-                            "strokeWidth": 1,
                             "strokeColor": "#5A9367",
-                            "fill": true,
                             "fillColor": "#5A9367",
                             "fillOpacity": 0.3
                         },
                         "highlight": {
                             "strokeColor": "#5A9367",
-                            "fill": true,
                             "fillOpacity": 0.6
                         },
                         "themes": {
@@ -1890,7 +1788,6 @@
                                         "value": "100",
                                         "label": "100 or less per km2",
                                         "style": {
-                                            "opacity": 1,
                                             "strokeColor": "#1e88e5",
                                             "fillColor": "#1e88e5"
                                         }
@@ -1899,7 +1796,6 @@
                                         "value": "1000",
                                         "label": "1,000 per km2",
                                         "style": {
-                                            "opacity": 1,
                                             "strokeColor": "#00897b",
                                             "fillColor": "#00897b"
                                         }
@@ -1908,7 +1804,6 @@
                                         "value": "5000",
                                         "label": "5,000 per km2",
                                         "style": {
-                                            "opacity": 1,
                                             "strokeColor": "#43a047",
                                             "fillColor": "#43a047"
                                         }
@@ -1918,7 +1813,6 @@
                                         "label": "10,000 per km2",
                                         "style": {
                                             "strokeColor": "#c0ca33",
-                                            "opacity": 1,
                                             "fillColor": "#c0ca33"
                                         }
                                     },
@@ -1926,7 +1820,6 @@
                                         "value": "20000",
                                         "label": "20,000 per km2",
                                         "style": {
-                                            "opacity": 1,
                                             "strokeColor": "#fdd835",
                                             "fillColor": "#fdd835"
                                         }
@@ -1935,7 +1828,6 @@
                                         "value": "50000",
                                         "label": "50,000 per km2",
                                         "style": {
-                                            "opacity": 1,
                                             "strokeColor": "#fb8c00",
                                             "fillColor": "#fb8c00"
                                         }
@@ -1944,7 +1836,6 @@
                                         "value": "100000",
                                         "label": "over 100,000 per km2",
                                         "style": {
-                                            "opacity": 1,
                                             "strokeColor": "#f4511e",
                                             "fillColor": "#f4511e"
                                         }
@@ -1984,7 +1875,8 @@
                 "HERE Imagery": {
                     "group": "Base maps",
                     "attribution": {
-                        "Here": "https://www.here.com/"
+                        "© Here": "https://www.here.com/",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
                     },
                     "format": "tiles",
                     "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?&provider=HERE"
@@ -1992,7 +1884,8 @@
                 "HERE Hybrid": {
                     "group": "Base maps",
                     "attribution": {
-                        "Here": "https://www.here.com/"
+                        "© Here": "https://www.here.com/",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
                     },
                     "format": "tiles",
                     "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?&provider=HERE"
@@ -2001,7 +1894,8 @@
                     "group": "Base maps",
                     "display": true,
                     "attribution": {
-                        "© Mapbox": "https://www.mapbox.com/about/maps"
+                        "© Mapbox": "https://www.mapbox.com/about/maps",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
                     },
                     "format": "tiles",
                     "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
@@ -2029,25 +1923,18 @@
                             "inline": true
                         }
                     ],
-                    "mvt_fields": [
-                        "rp_type"
-                    ],
                     "style": {
                         "default": {
-                            "strokeWidth": 1,
                             "strokeColor": "#001d63",
-                            "fill": true,
                             "fillColor": "#001d63",
                             "fillOpacity": 0.1
                         },
                         "highlight": {
                             "strokeWidth": 2,
                             "strokeColor": "#009900",
-                            "fill": true,
                             "fillColor": "#ccff99",
                             "fillOpacity": 0.2
-                        },
-                        "themes": {}
+                        }
                     }
                 },
                 "Retail Venues": {
@@ -2078,21 +1965,15 @@
                             "inline": true
                         }
                     ],
-                    "mvt_fields": [
-                        "venue_type"
-                    ],
                     "style": {
                         "default": {
-                            "strokeWidth": 1,
                             "strokeColor": "#890815",
-                            "fill": true,
                             "fillColor": "#890815",
                             "fillOpacity": 0.4
                         },
                         "highlight": {
                             "strokeWidth": 2,
                             "strokeColor": "#009900",
-                            "fill": true,
                             "fillColor": "#ccff99",
                             "fillOpacity": 0.4
                         },
@@ -2169,8 +2050,6 @@
                         }
                     ],
                     "style": {
-                        "markerMin": 20,
-                        "markerMax": 40,
                         "marker": {
                             "type": "target",
                             "fillColor": "#3366ff",
@@ -2266,7 +2145,8 @@
                 "HERE Imagery": {
                     "group": "Base maps",
                     "attribution": {
-                        "Here": "https://www.here.com/"
+                        "© Here": "https://www.here.com/",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
                     },
                     "format": "tiles",
                     "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?&provider=HERE"
@@ -2274,7 +2154,8 @@
                 "HERE Hybrid": {
                     "group": "Base maps",
                     "attribution": {
-                        "Here": "https://www.here.com/"
+                        "© Here": "https://www.here.com/",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
                     },
                     "format": "tiles",
                     "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?&provider=HERE"
@@ -2283,7 +2164,8 @@
                     "group": "Base maps",
                     "display": true,
                     "attribution": {
-                        "© Mapbox": "https://www.mapbox.com/about/maps"
+                        "© Mapbox": "https://www.mapbox.com/about/maps",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
                     },
                     "format": "tiles",
                     "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
@@ -2309,24 +2191,15 @@
                             "inline": true
                         }
                     ],
-                    "mvt_fields": [
-                        "totalpop"
-                    ],
                     "style": {
                         "default": {
-                            "strokeWidth": 1,
-                            "stroke": true,
-                            "opacity": 1,
                             "strokeColor": "#ffffff",
                             "fillColor": "#ffffff",
-                            "fill": true,
                             "fillOpacity": 0.8
                         },
                         "highlight": {
                             "strokeColor": "#56A3A6",
-                            "stroke": true,
                             "fillColor": "#DBD56E",
-                            "fill": true,
                             "fillOpacity": 0.3
                         },
                         "themes": {
@@ -2410,16 +2283,13 @@
                     ],
                     "style": {
                         "default": {
-                            "strokeWidth": 1,
                             "strokeColor": "#001d63",
-                            "fill": true,
                             "fillColor": "#001d63",
                             "fillOpacity": 0.1
                         },
                         "highlight": {
                             "strokeWidth": 2,
                             "strokeColor": "#009900",
-                            "fill": true,
                             "fillColor": "#ccff99",
                             "fillOpacity": 0.2
                         },
@@ -2452,22 +2322,15 @@
                             "inline": true
                         }
                     ],
-                    "mvt_fields": [
-                        "venue_type"
-                    ],
                     "style": {
                         "default": {
-                            "strokeWidth": 1,
                             "fillColor": "#3366cc",
                             "strokeColor": "#3366cc",
-                            "fill": true,
-                            "fillOpacity": 0.3,
-                            "opacity": 1
+                            "fillOpacity": 0.3
                         },
                         "highlight": {
                             "strokeColor": "#56A3A6",
                             "fillColor": "#DBD56E",
-                            "fill": true,
                             "fillOpacity": 0.3
                         },
                         "themes": {
@@ -2530,23 +2393,14 @@
                             "inline": true
                         }
                     ],
-                    "mvt_fields": [
-                        "urbanity"
-                    ],
                     "style": {
                         "default": {
-                            "strokeWidth": 1,
-                            "stroke": true,
-                            "opacity": 1,
                             "fillColor": "#bdbdbd",
-                            "fill": true,
                             "fillOpacity": 0.8
                         },
                         "highlight": {
                             "strokeColor": "#56A3A6",
-                            "stroke": true,
                             "fillColor": "#DBD56E",
-                            "fill": true,
                             "fillOpacity": 0.3
                         },
                         "themes": {
@@ -2616,7 +2470,8 @@
                 "HERE Imagery": {
                     "group": "Base maps",
                     "attribution": {
-                        "Here": "https://www.here.com/"
+                        "© Here": "https://www.here.com/",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
                     },
                     "format": "tiles",
                     "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?&provider=HERE"
@@ -2624,7 +2479,8 @@
                 "HERE Hybrid": {
                     "group": "Base maps",
                     "attribution": {
-                        "Here": "https://www.here.com/"
+                        "© Here": "https://www.here.com/",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
                     },
                     "format": "tiles",
                     "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?&provider=HERE"
@@ -2633,7 +2489,8 @@
                     "group": "Base maps",
                     "display": true,
                     "attribution": {
-                        "© Mapbox": "https://www.mapbox.com/about/maps"
+                        "© Mapbox": "https://www.mapbox.com/about/maps",
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
                     },
                     "format": "tiles",
                     "URI": "https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"
@@ -2757,20 +2614,14 @@
                             "type": "streetview"
                         }
                     ],
-                    "mvt_fields": [
-                        "venue_type"
-                    ],
                     "style": {
                         "default": {
-                            "strokeWidth": 1,
                             "strokeColor": "#4747d1",
-                            "fill": true,
                             "fillColor": "#4747d1",
                             "fillOpacity": 0.3
                         },
                         "highlight": {
                             "strokeColor": "#e91e63",
-                            "fill": true,
                             "fillOpacity": 0.3
                         },
                         "themes": {

@@ -1,5 +1,7 @@
 export default _xyz => location => {
 
+  if (!location.infoj && location.infoj.length < 1) return;
+
   location.geometries = location.geometries.filter(geom => {
     _xyz.map.removeLayer(geom)
   });
@@ -8,16 +10,20 @@ export default _xyz => location => {
     _xyz.dataview.removeTab(table)
   });
 
-  const listview = _xyz.utils.wire()`<table class="locationview">`;
+  const listview = _xyz.utils.wire()`<table>`;
 
   // Create object to hold view groups.
-  const groups = {};
+  location.groups = {};
 
   // watch for group/chart data series and stacks
   let dataset;
 
   // Iterate through info fields and add to info table.
-  location.infoj && Object.values(location.infoj).forEach(entry => {
+  for (const entry of location.infoj) {
+
+    if (location.view && location.view.classList.contains('disabled')) break
+
+    if (!entry.edit && entry.value === null) continue
 
     entry.listview = listview;
 
@@ -45,15 +51,16 @@ export default _xyz => location => {
     // Create a new info group.
     if (entry.type === 'group') {
 
-      const group = _xyz.locations.view.group(entry);
-      if (!group) return;
-      groups[group.label] = group;
+      location.groups[entry.label] = entry;
+
+      _xyz.locations.view.group(entry);
             
-      return listview.appendChild(group.row);
+      listview.appendChild(location.groups[entry.label].row);
+      continue
     }
 
     // Create entry.row inside previously created group.
-    if (entry.group && groups[entry.group]){ 
+    if (entry.group && location.groups[entry.group]){ 
 
       if(entry.dataset || entry.stack){
 
@@ -62,24 +69,24 @@ export default _xyz => location => {
           dataset_label = _xyz.utils.wire()`<td class="label" colspan=2 style="color: #777;">`;
 
         if(entry.dataset && entry.dataset !== dataset){
-          if(entry.skip) return;
+          if(entry.skip) continue
           dataset_label.textContent = entry.dataset;
           dataset_row.appendChild(dataset_label);
-          groups[entry.group].table.appendChild(dataset_row);
+          location.groups[entry.group].table.appendChild(dataset_row);
           dataset = entry.dataset;
         }
 
         if(entry.stack && entry.stack !== dataset){
           dataset_label.textContent = entry.stack;
           dataset_row.appendChild(dataset_label);
-          groups[entry.group].table.appendChild(dataset_row);
+          location.groups[entry.group].table.appendChild(dataset_row);
           dataset = entry.stack;
         }
 
       }
 
-      groups[entry.group].table.appendChild(entry.row);
-      groups[entry.group].div.style.display = 'block';
+      if(location.groups[entry.group].table) location.groups[entry.group].table.appendChild(entry.row);
+      if(location.groups[entry.group].div) location.groups[entry.group].div.style.display = 'block';
 
     }
 
@@ -97,60 +104,104 @@ export default _xyz => location => {
     // display layer name in location view
     if(entry.type === 'key') {
      
-      return listview.appendChild(_xyz.utils.wire()`
+      listview.appendChild(_xyz.utils.wire()`
       <tr>
       <td class="${'label lv-0 ' + (entry.class || '')}" colspan=2 style="padding: 10px 0;">
       <span title="Source layer"
       style="${'float: right; padding: 3px; cursor: help; border-radius: 2px; background-color: ' + (_xyz.utils.Chroma(location.style.strokeColor).alpha(0.3)) + ';'}"
       >${location.layer.name}`);
+
+      continue
     }
 
 
-    if (entry.script) return window[entry.script](_xyz, entry);
+    if (entry.script) {
+      window[entry.script](_xyz, entry);
+      continue
+    }
 
 
-    if (entry.type === 'label') return entry.label_td.colSpan = '2';
+    if (entry.type === 'label') {
+      entry.label_td.colSpan = '2';
+      continue
+    }
 
 
-    if (entry.type === 'streetview') return _xyz.locations.view.streetview(entry);
+    if (entry.type === 'streetview') {
+      _xyz.locations.view.streetview(entry);
+      continue
+    }
 
 
-    if (entry.type === 'report') return _xyz.locations.view.report(entry);
+    if (entry.type === 'report') {
+      _xyz.locations.view.report(entry);
+      continue
+    }
 
 
-    if (entry.type === 'images') return _xyz.locations.view.images(entry);
+    if (entry.type === 'images') {
+      _xyz.locations.view.images(entry);
+      continue
+    }
 
 
-    if (entry.custom && _xyz.locations.custom[entry.custom]) return _xyz.locations.custom[entry.custom](entry);
+    if (entry.custom && _xyz.locations.custom[entry.custom]) {
+      _xyz.locations.custom[entry.custom](entry);
+      continue
+    }
 
 
-    if (entry.type === 'documents') return _xyz.locations.view.documents(entry);
+    if (entry.type === 'documents') {
+      _xyz.locations.view.documents(entry);
+      continue
+    }
 
 
-    if (entry.type === 'geometry') return _xyz.locations.view.geometry(entry);
+    if (entry.type === 'geometry') {
+      _xyz.locations.view.geometry(entry);
+      continue
+    }
 
 
-    if (entry.type === 'meta') return _xyz.locations.view.meta(entry);
+    if (entry.type === 'meta') {
+      _xyz.locations.view.meta(entry);
+      continue
+    }
 
 
-    if (entry.type === 'boolean') return _xyz.locations.view.boolean(entry);    
+    if (entry.type === 'boolean') {
+      _xyz.locations.view.boolean(entry);    
+      continue
+    }
 
 
-    if (entry.type === 'tableDefinition') return _xyz.locations.view.tableDefinition(Object.assign({}, entry));
+    if (entry.type === 'tableDefinition') {
+      _xyz.locations.view.tableDefinition(entry);
+      continue
+    }
 
 
-    if (entry.type === 'orderedList') return _xyz.locations.view.orderedList(Object.assign({}, entry));  
+    if (entry.type === 'orderedList') {
+      _xyz.locations.view.orderedList(entry);  
+      continue
+    }
 
 
-   if (entry.type === 'dashboard') return _xyz.locations.view.dashboard(Object.assign({}, entry));
+    if (entry.type === 'dashboard') {
+      _xyz.locations.view.dashboard(entry);
+      continue
+    }
 
 
     // prevent clusterArea from firing if layer is not cluster
-    if(entry.clusterArea && location.layer.format !== 'cluster') return;
+    if(entry.clusterArea && location.layer.format !== 'cluster') continue
 
 
     // Remove empty row which is not editable.
-    if (!entry.edit && !entry.displayValue) return entry.row.remove();
+    if (!entry.edit && !entry.displayValue) {
+      entry.row.remove();
+      continue
+    }
 
 
     // Create val table cell in a new line.
@@ -179,33 +230,25 @@ export default _xyz => location => {
     }
 
     // Create controls for editable fields.
-    if (entry.edit && !entry.fieldfx) return _xyz.locations.view.edit.input(entry);
+    if (entry.edit && !entry.fieldfx) {
+      _xyz.locations.view.edit.input(entry);
+      continue
+    }
 
     if (entry.type === 'html') {
 
       // Directly set the HTML if raw HTML was specified
-      return entry.val.innerHTML = entry.value;
+      entry.val.innerHTML = entry.value;
+      continue
 
     } else {
 
       // otherwise use the displayValue
-      return entry.val.textContent = entry.displayValue;
+      entry.val.textContent = entry.displayValue;
+      continue
     }
 
-  });
-
-  // Hide group if empty
-  // location.infoj && Object.values(location.infoj).map(entry => {
-
-  //   if(!entry.group) return;
-
-  //   if(groups[entry.group]
-  //     && groups[entry.group].table
-  //     && !groups[entry.group].table.innerHTML) {
-  //     groups[entry.group].table.parentNode.style.display = 'none';
-  //   }
-
-  // });
+  };
 
   return listview;
 

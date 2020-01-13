@@ -4,7 +4,8 @@
 }
 
 .enabled > .xyz-icon{
-    filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%); /* primary colour filter */
+    filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%);
+    -webkit-filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%);
 }
 
 .icon-layers {
@@ -98,6 +99,7 @@
 
 .icon-toggle:not(.on) {
     filter: invert(52%) sepia(6%) saturate(10%) hue-rotate(323deg) brightness(88%) contrast(85%);
+    -webkit-filter: invert(52%) sepia(6%) saturate(10%) hue-rotate(323deg) brightness(88%) contrast(85%);
 }
 
 .icon-toggle.on {

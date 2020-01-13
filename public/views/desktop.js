@@ -116,7 +116,7 @@ function init(_xyz) {
             class="logo"
             target="_blank"
             href="https://geolytix.co.uk"
-            style="background-image: url('https://cdn.jsdelivr.net/gh/GEOLYTIX/geolytix@master/public/geolytix.svg');">`
+            style="background-image: url('https://cdn.jsdelivr.net/gh/GEOLYTIX/geolytix/public/geolytix.svg');">`
     },
     view: {
       lat: _xyz.hooks.current.lat,

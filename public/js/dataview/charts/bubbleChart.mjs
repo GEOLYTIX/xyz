@@ -44,6 +44,9 @@ export default _xyz => entry => {
   let chart = new _xyz.utils.Chart(canvas, { 
     type: 'bubble',
     options: {
+      layout: {
+        responsive: entry.chart.responsive === undefined ? true : false
+      },
       legend: {
         display: entry.chart.legend || false,
         position: 'bottom'

@@ -541,6 +541,7 @@
                     "cluster_kmeans": 0.01,
                     "edit": {
                         "point": true,
+                        "geometry": true,
                         "delete": true
                     },
                     "qID": "id",
@@ -711,7 +712,28 @@
                     "style": {
                         "default": {
                             "strokeColor": "#ff69b4",
-                            "strokeWidth": 2
+                            "strokeWidth": 2,
+                            "fillColor": "#eee",
+                            "fillOpacity": 1
+                        },
+                        "themes": {
+                            "Test categorized": {
+                                "field": "test_binary",
+                                "type": "categorized",
+                                "other": true,
+                                "cat": {
+                                    "0": {
+                                        "style": {
+                                            "fillColor": "#283593"
+                                        }
+                                    },
+                                    "1": {
+                                        "style": {
+                                            "fillColor": "#ff1744"
+                                        }
+                                    }
+                                }
+                            }
                         }
                     },
                     "infoj": [
@@ -719,9 +741,21 @@
                             "type": "key"
                         },
                         {
+                            "field": "id",
+                            "label": "ID",
+                            "inline": true
+                        },
+                        {
                             "field": "strokecolor",
                             "label": "Stroke color",
                             "inline": true
+                        },
+                        {
+                            "field": "test_binary",
+                            "fieldfx": "MOD(id, 2)",
+                            "label": "Nombre",
+                            "inline": true,
+                            "type": "integer"
                         }
                     ]
                 },
@@ -769,6 +803,12 @@
                             "field": "int_test",
                             "type": "integer",
                             "edit": true
+                        },
+                        {
+                            "label": "int_test",
+                            "field": "int_test_",
+                            "fieldfx": "int_test",
+                            "type": "integer"
                         },
                         {
                             "label": "Images",
@@ -866,7 +906,7 @@
                     "mvt_cache": "dev.oa__mvts",
                     "style": {
                         "themes": {
-                            "Population '11": {
+                            "Population 2011": {
                                 "type": "graduated",
                                 "field": "pop_11",
                                 "cat_arr": [
@@ -1664,7 +1704,6 @@
                         },
                         {
                             "label": "Retailer",
-                            "labelfx": "store",
                             "field": "retailer",
                             "filter": "like"
                         },
@@ -1998,21 +2037,29 @@
                             "name": "Fixed Geometry",
                             "field": "fixed_geom",
                             "fieldfx": "ST_asGeoJson(fixed_geom)",
-                            "display": true
+                            "display": true,
+                            "style": {
+                                "fillOpacity": 0.3,
+                                "strokeWidth": 2
+                            }
                         },
                         {
                             "type": "geometry",
                             "name": "Buffer 10km",
                             "field": "buffer_10km",
                             "fieldfx": "ST_asGeoJson(ST_Transform(ST_Buffer(ST_Transform(geom_4326, 3857), 10000), 4326))",
-                            "display": true
+                            "display": true,
+                            "style": {
+                                "fillOpacity": 0.3,
+                                "strokeWidth": 2
+                            }
                         },
                         {
                             "name": "HERE Catchment 10min",
                             "field": "isoline_10min",
                             "fieldfx": "ST_asGeoJson(isoline_10min)",
                             "type": "geometry",
-                            "display": true,
+                            "display": false,
                             "edit": {
                                 "isoline_here": {
                                     "minutes": 10
@@ -2030,6 +2077,7 @@
                             "type": "group",
                             "class": "_report",
                             "chart": {
+                                "height": 300,
                                 "type": "bar",
                                 "unit": "k",
                                 "maxRotationX": 90,
@@ -2109,14 +2157,18 @@
                             "type": "dashboard",
                             "title": "Dashboard",
                             "display": true,
-                            "class": "_report"
+                            "class": "_report",
+                            "template": "/views/dashboard.html"
                         },
                         {
                             "label": "Random data series",
                             "type": "group",
                             "dashboard": "Dashboard",
+                            "dashboard_id": "chart_1",
                             "class": "_report",
                             "chart": {
+                                "height": 300,
+                                "width": 500,
                                 "type": "mixed",
                                 "title": true,
                                 "legend": true,
@@ -2542,7 +2594,7 @@
                         {
                             "type": "tableDefinition",
                             "title": "Population Summary",
-                            "display": true,
+                            "display": false,
                             "target_id": "xyz_table1",
                             "class": "_report",
                             "layout": "fitColumns",
@@ -2658,7 +2710,7 @@
                         {
                             "type": "tableDefinition",
                             "title": "Worker Summary",
-                            "display": true,
+                            "display": false,
                             "class": "_report",
                             "target_id": "xyz_table8",
                             "layout": "fitColumns",
@@ -2696,7 +2748,7 @@
                         {
                             "type": "tableDefinition",
                             "title": "OAC Profile",
-                            "display": true,
+                            "display": false,
                             "toolbars": {},
                             "target_id": "xyz_table3",
                             "layout": "fitColumns",
@@ -2877,6 +2929,7 @@
                                 "share15": {
                                     "title": "% with 15 min",
                                     "type": "integer",
+                                    "group": "Index",
                                     "rows": [
                                         "100*min15.oac_1a/min15.oac_total",
                                         "100*min15.oac_1b/min15.oac_total",
@@ -2910,6 +2963,7 @@
                                 "oac_uk_total": {
                                     "title": "UK %",
                                     "type": "integer",
+                                    "group": "Index",
                                     "rows": [
                                         "uk.oac_1a_uk*100/uk.oac_total_uk",
                                         "uk.oac_1b_uk*100/uk.oac_total_uk",
@@ -2943,6 +2997,7 @@
                                 "oac_index": {
                                     "title": "OAC Profile Index",
                                     "type": "integer",
+                                    "group": "Index",
                                     "formatter": "progress",
                                     "formatterParams": {
                                         "color": [
@@ -3143,7 +3198,7 @@
                         {
                             "type": "tableDefinition",
                             "title": "Social Grade",
-                            "display": true,
+                            "display": false,
                             "target_id": "xyz_table4",
                             "class": "_report",
                             "layout": "fitColumns",
@@ -3304,10 +3359,15 @@
                             "limit": 5,
                             "columns": [
                                 {
-                                    "title": "Distance (km)",
+                                    "title": "Distance",
                                     "field": "dist",
                                     "fieldfx": "ROUND(((ST_Transform(a.geom_4326, 3857) <#> ST_Transform(b.geom_p_4326, 3857))/1000)::numeric, 2)",
-                                    "align": "left"
+                                    "align": "right",
+                                    "formatter": "money",
+                                    "formatterParams": {
+                                        "symbol": " km",
+                                        "symbolAfter": true
+                                    }
                                 },
                                 {
                                     "title": "Competitor name",
@@ -3321,190 +3381,29 @@
                                 }
                             ]
                         }
-                    ]
-                },
-                "mns_index_mvt": {
-                    "name": "M&S Index",
-                    "display": false,
-                    "format": "mvt",
-                    "dbs": "MNS",
-                    "qID": "pcd",
-                    "mvt_cache": "mns.uk_mns_restrict_index_postcode__mvts",
-                    "tables": {
-                        "11": null,
-                        "12": "mns.uk_mns_restrict_index_postcode_30",
-                        "13": "mns.uk_mns_restrict_index_postcode_20",
-                        "14": "mns.uk_mns_restrict_index_postcode_20"
-                    },
-                    "geom": "geom_area_3857",
-                    "srid": "3857",
-                    "infoj": [
-                        {
-                            "type": "key"
-                        },
-                        {
-                            "field": "pcd",
-                            "label": "Postcode",
-                            "inline": true
-                        },
-                        {
-                            "field": "food_index",
-                            "label": "Food Index",
-                            "inline": true
-                        },
-                        {
-                            "field": "clothing_index",
-                            "label": "Clothing Index",
-                            "inline": true
-                        },
-                        {
-                            "field": "home_index",
-                            "label": "Home Index",
-                            "inline": true
-                        }
                     ],
                     "style": {
-                        "hidden": true,
-                        "default": {
-                            "strokeColor": "#ffffff",
-                            "strokeOpacity": 0.6,
-                            "fillColor": "#00b386",
-                            "fillOpacity": 0.6
-                        },
-                        "highlight": {
-                            "strokeColor": "#e91e63",
-                            "fillColor": "#e91e63",
-                            "fillOpacity": 0.3
+                        "marker": {
+                            "type": "target",
+                            "fillColor": "#ffb300"
                         },
                         "themes": {
-                            "Food Index": {
-                                "label": "Food Index",
-                                "field": "food_index",
-                                "type": "graduated",
-                                "cat_arr": [
-                                    {
-                                        "value": 0,
-                                        "label": "<70",
-                                        "strokeColor": "#004d80",
-                                        "fillColor": "#004d80"
+                            "Test categorized": {
+                                "field": "test_binary",
+                                "type": "categorized",
+                                "other": true,
+                                "cat": {
+                                    "0": {
+                                        "style": {
+                                            "fillColor": "#283593"
+                                        }
                                     },
-                                    {
-                                        "value": 0.7,
-                                        "label": "70-85",
-                                        "strokeColor": "#0099ff",
-                                        "fillColor": "#0099ff"
-                                    },
-                                    {
-                                        "value": 0.85,
-                                        "label": "86-100",
-                                        "strokeColor": "#66cc99",
-                                        "fillColor": "#66cc99"
-                                    },
-                                    {
-                                        "value": 1,
-                                        "label": "101-120",
-                                        "strokeColor": "#ffff4d",
-                                        "fillColor": "#ffff4d"
-                                    },
-                                    {
-                                        "value": 1.2,
-                                        "label": "121-140",
-                                        "strokeColor": "#ff9933",
-                                        "fillColor": "#ff9933"
-                                    },
-                                    {
-                                        "value": 1.4,
-                                        "label": ">140",
-                                        "strokeColor": "#e60000",
-                                        "fillColor": "#e60000"
+                                    "1": {
+                                        "style": {
+                                            "fillColor": "#ff1744"
+                                        }
                                     }
-                                ]
-                            },
-                            "Clothing Index": {
-                                "label": "Clothing Index",
-                                "field": "clothing_index",
-                                "type": "graduated",
-                                "cat_arr": [
-                                    {
-                                        "value": 0,
-                                        "label": "<70",
-                                        "strokeColor": "#004d80",
-                                        "fillColor": "#004d80"
-                                    },
-                                    {
-                                        "value": 0.7,
-                                        "label": "70-85",
-                                        "strokeColor": "#0099ff",
-                                        "fillColor": "#0099ff"
-                                    },
-                                    {
-                                        "value": 0.85,
-                                        "label": "86-100",
-                                        "strokeColor": "#66cc99",
-                                        "fillColor": "#66cc99"
-                                    },
-                                    {
-                                        "value": 1,
-                                        "label": "101-120",
-                                        "strokeColor": "#ffff4d",
-                                        "fillColor": "#ffff4d"
-                                    },
-                                    {
-                                        "value": 1.2,
-                                        "label": "121-140",
-                                        "strokeColor": "#ff9933",
-                                        "fillColor": "#ff9933"
-                                    },
-                                    {
-                                        "value": 1.4,
-                                        "label": ">140",
-                                        "strokeColor": "#e60000",
-                                        "fillColor": "#e60000"
-                                    }
-                                ]
-                            },
-                            "Home Index": {
-                                "label": "Home Index",
-                                "field": "home_index",
-                                "type": "graduated",
-                                "cat_arr": [
-                                    {
-                                        "value": 0,
-                                        "label": "<70",
-                                        "strokeColor": "#004d80",
-                                        "fillColor": "#004d80"
-                                    },
-                                    {
-                                        "value": 0.7,
-                                        "label": "70-85",
-                                        "strokeColor": "#0099ff",
-                                        "fillColor": "#0099ff"
-                                    },
-                                    {
-                                        "value": 0.85,
-                                        "label": "86-100",
-                                        "strokeColor": "#66cc99",
-                                        "fillColor": "#66cc99"
-                                    },
-                                    {
-                                        "value": 1,
-                                        "label": "101-120",
-                                        "strokeColor": "#ffff4d",
-                                        "fillColor": "#ffff4d"
-                                    },
-                                    {
-                                        "value": 1.2,
-                                        "label": "121-140",
-                                        "strokeColor": "#ff9933",
-                                        "fillColor": "#ff9933"
-                                    },
-                                    {
-                                        "value": 1.4,
-                                        "label": ">140",
-                                        "strokeColor": "#e60000",
-                                        "fillColor": "#e60000"
-                                    }
-                                ]
+                                }
                             }
                         }
                     }

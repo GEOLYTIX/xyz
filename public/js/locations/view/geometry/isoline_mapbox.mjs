@@ -144,7 +144,13 @@ export default _xyz => {
           return alert('Something with saving isoline went wrong.');
         }
 
-        entry.location.infoj = _e.target.response;
+        Object.keys(_e.target.response).forEach(key => {
+
+          entry.location.infoj.forEach(entry => {
+            if (entry.field === key) entry.value = _e.target.response[key];
+          });
+
+        });
 
         // Update the location view.
         _xyz.locations.view.create(entry.location);
@@ -161,8 +167,9 @@ export default _xyz => {
     };
 
     xhr.send();
+
     entry.location.view && entry.location.view.classList.add('disabled');
   
   };
 
-}
+};

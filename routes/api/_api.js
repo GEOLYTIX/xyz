@@ -38,6 +38,8 @@ module.exports = fastify => {
 
   require('./location/pgFunction')(fastify);
 
+  require('./location/pgQuery')(fastify);
+
   // location/edit
 
   require('./location/edit/delete')(fastify);
@@ -79,7 +81,5 @@ module.exports = fastify => {
   require('./location/select/latlng_contains')(fastify);
 
   require('./location/select/aggregate')(fastify);
-
-  require('./location/select/isoline')(fastify);
 
 };

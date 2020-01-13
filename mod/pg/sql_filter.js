@@ -62,7 +62,7 @@ module.exports = async filter => {
     if((filter.like)) {
       const likes = decodeURIComponent(filter.like).split(',')
         .filter(like => like.length > 0)
-        .map(like => `${field}::text ILIKE '${like}%'`);
+        .map(like => `${field}::text ILIKE '${like.trim()}%'`);
       sql_filter.push(likes.join(' OR '));
       sql_filter.push(conjunction);
     }

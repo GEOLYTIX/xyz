@@ -94,7 +94,7 @@ export default _xyz => {
           return layer.qID && layer.style && layer.style.highlight && layer.L === featureLayer;
         });
       },
-      hitTolerance: 0,
+      hitTolerance: 5,
     });
 
     // Assign current set to highlight object.
@@ -106,6 +106,8 @@ export default _xyz => {
   }
 
   function touchSelect(e) {
+
+    if (_xyz.mapview.interaction.break) return;
 
     if (e.touches.length > 1) return;
 
@@ -134,7 +136,7 @@ export default _xyz => {
           return layer.qID && layer.L === featureLayer;
         });
       },
-      hitTolerance: 0,
+      hitTolerance: 5,
     });
 
     // Assign current set to highlight object.
@@ -151,9 +153,9 @@ export default _xyz => {
     _xyz.mapview.node.removeEventListener('mouseout', mouseOut);
   }
 
-  function select(e) {
+  function select() {
 
-    //if (e.mozInputSource === 5) return;
+    if (_xyz.mapview.interaction.break) return;
 
     if (_xyz.mapview.popup.overlay) _xyz.map.removeOverlay(_xyz.mapview.popup.overlay);
 

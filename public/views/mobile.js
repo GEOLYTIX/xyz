@@ -1,4 +1,4 @@
-if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+if ('scrollRestoration' in history) history.scrollRestoration = 'auto';
 
 //move map up on document scroll
 document.addEventListener('scroll', () => document.getElementById('Map').style['marginTop'] = -parseInt(window.pageYOffset / 2) + 'px');
@@ -47,7 +47,7 @@ function init(_xyz) {
             class="logo"
             target="_blank"
             href="https://geolytix.co.uk"
-            style="background-image: url('https://cdn.jsdelivr.net/gh/GEOLYTIX/geolytix@master/public/geolytix.svg');">`
+            style="background-image: url('https://cdn.jsdelivr.net/gh/GEOLYTIX/geolytix/public/geolytix.svg');">`
     },
     view: {
       lat: _xyz.hooks.current.lat,

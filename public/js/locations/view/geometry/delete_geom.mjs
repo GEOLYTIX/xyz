@@ -21,13 +21,30 @@ export default _xyz => entry => {
     })
   );
 
+  xhr.setRequestHeader('Content-Type', 'application/json');
+  xhr.responseType = 'json';
+
   xhr.onload = e => {
 
-    if (e.target.status !== 200) return entry.location.view && entry.location.view.classList.remove('disabled');
+    if (e.target.status !== 200) {
+      entry.location.view && entry.location.view.classList.remove('disabled');
+      console.log(_e.target.response);
+      return alert('Something with saving isoline went wrong.');
+    }
 
-    entry.location.infoj = JSON.parse(e.target.response);
+    Object.keys(e.target.response).forEach(key => {
 
+      entry.location.infoj.forEach(_entry => {
+
+        if (_entry.field === entry.field) _entry.display = false;
+        if (_entry.field === key) _entry.value = e.target.response[key];
+      });
+
+    })
+
+    // Update the location view.
     _xyz.locations.view.create(entry.location);
+
   };
 
   entry.location.view && entry.location.view.classList.add('disabled');

@@ -1,7 +1,9 @@
+const fetch = require('node-fetch');
+
 module.exports = async (url, no_log) => {
 
   try {
-    const response = await require('node-fetch')(url);
+    const response = await fetch(url);
     return await response.json();
     
   } catch (err) {

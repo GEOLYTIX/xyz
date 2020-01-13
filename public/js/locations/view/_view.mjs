@@ -69,6 +69,8 @@ export default _xyz => {
       location.view = _xyz.utils.wire()`<div class="drawer location-view expandable expanded">`;
     }
 
+    location.view.classList.remove('disabled');
+
     location.view.innerHTML = '';
     location.view.classList.remove('disabled');
 
@@ -105,7 +107,7 @@ export default _xyz => {
         e.preventDefault();
         _xyz.utils.toggleExpanderParent(e.target, true);
       }}>
-      <div>${String.fromCharCode(64 + _xyz.locations.list.length - _xyz.locations.list.indexOf(location.record))}`;
+      <div>${String.fromCharCode(65 + _xyz.locations.list.indexOf(location.record))}`;
 
     location.view.appendChild(header);
 
@@ -113,7 +115,7 @@ export default _xyz => {
     // Expander icon.
     location.infoj && header.appendChild(_xyz.utils.wire()`
     <button
-      style = "${'filter: ' + location.colorFilter}"
+      style = "${'filter: ' + location.colorFilter + '; -webkit-filter: ' + location.colorFilter}"
       title = "Toggle location view drawer."
       class = "btn-header xyz-icon icon-expander "
       onclick = ${e => {
@@ -125,7 +127,7 @@ export default _xyz => {
     // Zoom to location bounds.
     header.appendChild(_xyz.utils.wire()`
     <button
-      style = "${'filter: ' + location.colorFilter}"
+      style = "${'filter: ' + location.colorFilter + '; -webkit-filter: ' + location.colorFilter}"
       title = "Zoom map to feature bounds"
       class = "btn-header xyz-icon icon-search"
       onclick = ${e => {
@@ -137,7 +139,7 @@ export default _xyz => {
     // Update icon.
     const upload = _xyz.utils.wire()`
     <button
-      style = "${'display: none; filter: ' + location.colorFilter}"
+      style = "${'display: none; filter: ' + location.colorFilter + '; -webkit-filter: ' + location.colorFilter}"
       title = "Save changes to cloud."
       class = "btn-header xyz-icon icon-cloud-upload"
       onclick = ${e => {
@@ -149,10 +151,10 @@ export default _xyz => {
 
 
     // Edit geometry icon
-    location.layer.edit && header.appendChild(_xyz.utils.wire()`
+    location.layer.edit && location.layer.edit.geometry && header.appendChild(_xyz.utils.wire()`
     <button
-      style = "${'filter: ' + location.colorFilter}"
-      title = "Edit the locations geometry."
+      style = "${'filter: ' + location.colorFilter + '; -webkit-filter: ' + location.colorFilter}"
+      title = "Edit location geometry."
       class = "btn-header xyz-icon icon-build"
       onclick = ${e => {
         e.stopPropagation();
@@ -172,9 +174,9 @@ export default _xyz => {
 
 
     // Trash icon.
-    location.editable && header.appendChild(_xyz.utils.wire()`
+    location.layer.edit && location.layer.edit.delete && header.appendChild(_xyz.utils.wire()`
     <button
-      style = "${'filter: ' + location.colorFilter}"
+      style = "${'filter: ' + location.colorFilter + '; -webkit-filter: ' + location.colorFilter}"
       title = "Delete location."
       class = "btn-header xyz-icon icon-trash"
       onclick = ${e => {
@@ -186,7 +188,7 @@ export default _xyz => {
     // Toggle marker.
     header.appendChild(_xyz.utils.wire()`
     <button
-      style = "${'filter: ' + location.colorFilter}"
+      style = "${'filter: ' + location.colorFilter + '; -webkit-filter: ' + location.colorFilter}"
       title = "Hide marker"
       class = "btn-header xyz-icon icon-location-tick" 
       onclick = ${e => {
@@ -205,7 +207,7 @@ export default _xyz => {
     // Clear selection.
     header.appendChild(_xyz.utils.wire()`
     <button
-      style = "${'filter: ' + location.colorFilter}"
+      style = "${'filter: ' + location.colorFilter + '; -webkit-filter: ' + location.colorFilter}"
       title = "Remove feature from selection"
       class = "btn-header xyz-icon icon-close"
       onclick = ${e => {
@@ -215,7 +217,7 @@ export default _xyz => {
       }}>`);
 
 
-    location.infoj && location.view.appendChild(view.infoj(location));
+    location.infoj && location.view.appendChild(_xyz.locations.view.infoj(location));
 
   };
 

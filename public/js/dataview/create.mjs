@@ -27,6 +27,7 @@ export default _xyz => params => {
   if (_xyz.mapview.node) {
 
     _xyz.mapview.node.addEventListener('changeEnd', ()=>{
+
       _xyz.dataview.current_table &&
       _xyz.dataview.current_table.viewport &&
       _xyz.dataview.current_table.update();

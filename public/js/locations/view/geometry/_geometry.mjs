@@ -37,7 +37,7 @@ export default _xyz => {
             width: entry.style.strokeWidth || 1
           }),
           fill: new _xyz.mapview.lib.style.Fill({
-            color: _xyz.utils.Chroma(entry.style.fillColor || entry.style.strokeColor).alpha(parseFloat(entry.style.fillOpacity) ? entry.style.fillOpacity : 0).rgba()
+            color: _xyz.utils.Chroma(entry.style.fillColor || entry.style.strokeColor).alpha(entry.style.fillOpacity === undefined ? 1 : parseFloat(entry.style.fillOpacity) || 0).rgba()
           })
         })
       });
@@ -79,7 +79,7 @@ export default _xyz => {
     td.appendChild(_xyz.utils.wire()`
     <div class="sample-circle"
       style="${
-        'background-color:' + _xyz.utils.Chroma(entry.style.fillColor || entry.style.strokeColor).alpha(parseFloat(entry.style.fillOpacity) ? entry.style.fillOpacity : 0) + ';' +
+        'background-color:' + _xyz.utils.Chroma(entry.style.fillColor || entry.style.strokeColor).alpha(entry.style.fillOpacity === undefined ? 1 : (parseFloat(entry.style.fillOpacity) || 0)) + ';' +
         'border-color:' + _xyz.utils.Chroma(entry.style.color || entry.style.strokeColor).alpha(1) + ';'+
         'border-style: solid;' +
         'border-width:' + (entry.style.strokeWidth || 1) + 'px;' +
@@ -92,7 +92,7 @@ export default _xyz => {
 
     if (entry.edit && entry.edit.isoline_here) td.appendChild(isoline_here.settings(entry));
 
-    if (entry.value && (entry.display || entry.edit)) drawGeom();
+    if (entry.value && (entry.display || entry.edit)) return drawGeom();
 
     if (!entry.value && entry.display) createGeom();
 

@@ -70,7 +70,7 @@ export default _xyz => entry => {
     			position: 'bottom',
     			text: entry.label
     		},
-    		responsive: true,
+    		responsive: entry.chart.responsive === undefined ? true : false,
     		legend: {
     			display: entry.chart.legend,
     			position: entry.chart.legendPosition || 'left',

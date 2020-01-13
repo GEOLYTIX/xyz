@@ -64,10 +64,12 @@ export default _xyz => layer => {
       if (theme && theme.type === 'categorized') {
 
         const field = feature.get(theme.field);
+
+        if(field === undefined) return Object.assign(style, {});
   
         Object.assign(
           style,
-          field && theme.cat[field] && theme.cat[field].style || theme.cat[field] || {});
+          (theme.cat[field] && theme.cat[field].style) || theme.cat[field]);
       }
   
       // Graduated theme.
@@ -102,11 +104,11 @@ export default _xyz => layer => {
       return new _xyz.mapview.lib.style.Style({
         zIndex: style.zIndex,
         stroke: style.strokeColor && new _xyz.mapview.lib.style.Stroke({
-          color: _xyz.utils.Chroma(style.strokeColor).alpha(parseFloat(style.strokeOpacity) || 1).rgba(),
+          color: _xyz.utils.Chroma(style.strokeColor).alpha(style.strokeOpacity === undefined ? 1 : parseFloat(style.strokeOpacity) || 0).rgba(),
           width: parseFloat(style.strokeWidth) || 1
         }),
         fill: style.fillColor && new _xyz.mapview.lib.style.Fill({
-          color: _xyz.utils.Chroma(style.fillColor).alpha(parseFloat(style.fillOpacity) || 1).rgba()
+          color: _xyz.utils.Chroma(style.fillColor).alpha(style.fillOpacity === undefined ? 1 : parseFloat(style.fillOpacity) || 0).rgba()
         }),
         image: style.marker && _xyz.mapview.icon(style.marker)
       });
