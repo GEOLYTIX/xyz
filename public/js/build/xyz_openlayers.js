@@ -117031,11 +117031,7 @@ var Map_Map = /** @class */ (function (_super) {
 
         const field = feature.get(theme.field);
 
-        console.log(field);
-        console.log(theme.cat[field]);
-        console.log(theme.cat[field].style);
-
-        if(field === null || field === undefined) return Object.assign(style, {});
+        if(field === undefined) return Object.assign(style, {});
   
         Object.assign(
           style,
@@ -120994,6 +120990,8 @@ function panel(layer) {
     // Create a new info group.
     if (entry.type === 'group') {
 
+      console.log(entry.label);
+
       location.groups[entry.label] = entry;
 
       _xyz.locations.view.group(entry);
@@ -121027,6 +121025,10 @@ function panel(layer) {
         }
 
       }
+
+      console.log(entry.group);
+      console.log(location.groups);
+      console.log(location.groups[entry.group]);
 
       location.groups[entry.group].table.appendChild(entry.row);
       location.groups[entry.group].div.style.display = 'block';
@@ -121201,12 +121203,20 @@ function panel(layer) {
 
   if (!group.label) return;
 
+  console.log('make group');
+
   //const group = entry;
 
   // check if group has any data
-  let values = Object.values(group.location.infoj).filter(field => { if (field.group === group.label) return field.value });
+  let values = Object.values(group.location.infoj).filter(field => { if (field.group === group.label) {
+    //console.log([field.group, group.label]);
+    //console.log(field);
+    return field.value ;
+  }
+  });
 
-  if (!values.length) return; // break when no data to show
+  //console.log(values);
+  //console.log(values.length);
 
   group.td = _xyz.utils.wire()`<td colSpan=2>`;
 
@@ -121231,6 +121241,10 @@ function panel(layer) {
 
   // Add table
   group.table = _xyz.utils.wire()`<table>`;
+
+  console.log(group);
+
+  if (!values.length) return; // break when no data to show
 
   group.div.appendChild(group.table); 
 

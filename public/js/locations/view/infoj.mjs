@@ -85,8 +85,8 @@ export default _xyz => location => {
 
       }
 
-      location.groups[entry.group].table.appendChild(entry.row);
-      location.groups[entry.group].div.style.display = 'block';
+      if(location.groups[entry.group].table) location.groups[entry.group].table.appendChild(entry.row);
+      if(location.groups[entry.group].div) location.groups[entry.group].div.style.display = 'block';
 
     }
 

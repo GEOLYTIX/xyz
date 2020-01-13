@@ -719,7 +719,6 @@
                         "themes": {
                             "Test categorized": {
                                 "field": "test_binary",
-                                "fieldfx": "MOD(id,2)",
                                 "type": "categorized",
                                 "other": true,
                                 "cat": {
