@@ -712,7 +712,28 @@
                     "style": {
                         "default": {
                             "strokeColor": "#ff69b4",
-                            "strokeWidth": 2
+                            "strokeWidth": 2,
+                            "fillColor": "#eee",
+                            "fillOpacity": 1
+                        },
+                        "themes": {
+                            "Test categorized": {
+                                "field": "test_binary",
+                                "type": "categorized",
+                                "other": true,
+                                "cat": {
+                                    "0": {
+                                        "style": {
+                                            "fillColor": "#283593"
+                                        }
+                                    },
+                                    "1": {
+                                        "style": {
+                                            "fillColor": "#ff1744"
+                                        }
+                                    }
+                                }
+                            }
                         }
                     },
                     "infoj": [
@@ -720,9 +741,21 @@
                             "type": "key"
                         },
                         {
+                            "field": "id",
+                            "label": "ID",
+                            "inline": true
+                        },
+                        {
                             "field": "strokecolor",
                             "label": "Stroke color",
                             "inline": true
+                        },
+                        {
+                            "field": "test_binary",
+                            "fieldfx": "MOD(id, 2)",
+                            "label": "Nombre",
+                            "inline": true,
+                            "type": "integer"
                         }
                     ]
                 },
@@ -2896,6 +2929,7 @@
                                 "share15": {
                                     "title": "% with 15 min",
                                     "type": "integer",
+                                    "group": "Index",
                                     "rows": [
                                         "100*min15.oac_1a/min15.oac_total",
                                         "100*min15.oac_1b/min15.oac_total",
@@ -2929,6 +2963,7 @@
                                 "oac_uk_total": {
                                     "title": "UK %",
                                     "type": "integer",
+                                    "group": "Index",
                                     "rows": [
                                         "uk.oac_1a_uk*100/uk.oac_total_uk",
                                         "uk.oac_1b_uk*100/uk.oac_total_uk",
@@ -2962,6 +2997,7 @@
                                 "oac_index": {
                                     "title": "OAC Profile Index",
                                     "type": "integer",
+                                    "group": "Index",
                                     "formatter": "progress",
                                     "formatterParams": {
                                         "color": [
@@ -3345,7 +3381,32 @@
                                 }
                             ]
                         }
-                    ]
+                    ],
+                    "style": {
+                        "marker": {
+                            "type": "target",
+                            "fillColor": "#ffb300"
+                        },
+                        "themes": {
+                            "Test categorized": {
+                                "field": "test_binary",
+                                "type": "categorized",
+                                "other": true,
+                                "cat": {
+                                    "0": {
+                                        "style": {
+                                            "fillColor": "#283593"
+                                        }
+                                    },
+                                    "1": {
+                                        "style": {
+                                            "fillColor": "#ff1744"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
                 }
             }
         }
