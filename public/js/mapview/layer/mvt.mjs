@@ -64,10 +64,12 @@ export default _xyz => layer => {
       if (theme && theme.type === 'categorized') {
 
         const field = feature.get(theme.field);
+
+        if(field === undefined) return Object.assign(style, {});
   
         Object.assign(
           style,
-          field && theme.cat[field] && theme.cat[field].style || theme.cat[field] || {});
+          (theme.cat[field] && theme.cat[field].style) || theme.cat[field]);
       }
   
       // Graduated theme.

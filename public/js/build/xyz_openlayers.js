@@ -117030,10 +117030,16 @@ var Map_Map = /** @class */ (function (_super) {
       if (theme && theme.type === 'categorized') {
 
         const field = feature.get(theme.field);
+
+        console.log(field);
+        console.log(theme.cat[field]);
+        console.log(theme.cat[field].style);
+
+        if(field === null || field === undefined) return Object.assign(style, {});
   
         Object.assign(
           style,
-          field && theme.cat[field] && theme.cat[field].style || theme.cat[field] || {});
+          (theme.cat[field] && theme.cat[field].style) || theme.cat[field]);
       }
   
       // Graduated theme.
