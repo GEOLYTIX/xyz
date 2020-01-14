@@ -264,30 +264,30 @@ function init(_xyz) {
     });
   });
 
-  if (document.body.dataset.login) {
-    document.querySelector('.btn-column').appendChild(_xyz.utils.wire()`
-    <a
-      title="${_xyz.user ? `Logout ${_xyz.user.email}` : 'Login'}"
-      class="enabled"
-      href="${_xyz.host + '/login'}">
-      <div class="${'xyz-icon ' + (_xyz.user ? 'icon-logout' : 'icon-lock-open')}">`);
-  }
-
   if (_xyz.user) {
 
     _xyz.user.admin_user && document.querySelector('.btn-column').appendChild(_xyz.utils.wire()`
     <a
       title="Open account admin view"
-      class="enabled"
+      class="enabled" style="cursor: pointer;"
       href="${_xyz.host + '/user/admin'}">
       <div class="xyz-icon icon-supervisor-account">`);
 
     _xyz.user.admin_workspace && document.body.dataset.pgworkspace && document.querySelector('.btn-column').appendChild(_xyz.utils.wire()`
     <button
       title="Open workspace configuration view"
-      class="enabled"
+      class="enabled" style="cursor: pointer;"
       onclick=${_xyz.workspace.admin}>
       <div class="xyz-icon icon-settings">`);
+  }
+
+  if (document.body.dataset.login) {
+    document.querySelector('.btn-column').appendChild(_xyz.utils.wire()`
+    <a
+      title="${_xyz.user ? `Logout ${_xyz.user.email}` : 'Login'}"
+      class="enabled" style="cursor: pointer;"
+      href="${_xyz.host + '/login'}">
+      <div class="${'xyz-icon ' + (_xyz.user ? 'icon-logout' : 'icon-lock-open')}">`);
   }
 
   if (_xyz.log) console.log(_xyz);
