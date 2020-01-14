@@ -267,10 +267,10 @@ function init(_xyz) {
   if (document.body.dataset.login) {
     document.querySelector('.btn-column').appendChild(_xyz.utils.wire()`
     <a
-      title="${_xyz.user ? _xyz.user.email : 'Login'}"
+      title="${_xyz.user ? `Logout ${_xyz.user.email}` : 'Login'}"
       class="enabled"
       href="${_xyz.host + '/login'}">
-      <div class="${'xyz-icon ' + (_xyz.user ? 'icon-face' : 'icon-lock-open')}">`);
+      <div class="${'xyz-icon ' + (_xyz.user ? 'icon-logout' : 'icon-lock-open')}">`);
   }
 
   if (_xyz.user) {
