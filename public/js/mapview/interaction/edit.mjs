@@ -178,9 +178,9 @@ export default _xyz => {
 
     const menu = _xyz.utils.wire()`<ul>`;
 
-    _xyz.mapview.interaction.edit.feature.length && menu.appendChild(_xyz.utils.wire()`<li onclick=${update}>Update</li>`);
+    _xyz.mapview.interaction.edit.feature.length && menu.appendChild(_xyz.utils.wire()`<li class="off-white-hover" onclick=${update}>Update</li>`);
 
-    _xyz.mapview.interaction.edit.feature.length && menu.appendChild(_xyz.utils.wire()`<li onclick=${undo}>Undo</li>`);
+    _xyz.mapview.interaction.edit.feature.length && menu.appendChild(_xyz.utils.wire()`<li class="off-white-hover" onclick=${undo}>Undo</li>`);
 
     menu.appendChild(_xyz.utils.wire()`<li class="off-white-hover" onclick=${finish}>Cancel</li>`);
 
