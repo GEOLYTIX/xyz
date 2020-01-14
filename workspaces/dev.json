@@ -40,11 +40,11 @@
                     "dataview": {
                         "table1": {
                             "title": "Population / GDP",
-                            "type": "table",
                             "from": "dev.natural_earth_countries",
                             "columns": [
                                 {
-                                    "field": "name"
+                                    "field": "name",
+                                    "title": "Name"
                                 },
                                 {
                                     "title": "Population Est",
@@ -57,6 +57,7 @@
                         },
                         "GDP / Population": {
                             "display": true,
+                            "layout": "fitColumns",
                             "from": "dev.natural_earth_countries",
                             "columns": [
                                 {
@@ -65,6 +66,7 @@
                                 {
                                     "field": "gdp_md_est",
                                     "formatter": "money",
+                                    "align": "right",
                                     "formatterParams": {
                                         "symbol": " dollars",
                                         "symbolAfter": true,
@@ -75,7 +77,7 @@
                                     "title": "Population Est",
                                     "field": "pop_est",
                                     "formatter": "money",
-                                    "align": "right",
+                                    "align": "center",
                                     "formatterParams": {
                                         "precision": false
                                     }
@@ -706,7 +708,8 @@
                         "point": true,
                         "isoline_mapbox": true,
                         "isoline_here": true,
-                        "delete": true
+                        "delete": true,
+                        "geometry": true
                     },
                     "mvt_cache": "dev.draw__mvts",
                     "style": {
