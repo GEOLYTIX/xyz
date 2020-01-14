@@ -9,7 +9,9 @@ export default _xyz => {
 
     if (this.node) this.node.remove();
 
-    this.node = _xyz.utils.wire()`<div class="infotip">${info}`;
+    this.node = _xyz.utils.wire()`<div class="infotip">`;
+
+    this.node.innerHTML = info;
 
     _xyz.mapview.node.appendChild(this.node);
 
