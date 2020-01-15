@@ -4,6 +4,8 @@ const gaz_google = require('../../../mod/gazetteer/google');
 
 const gaz_mapbox = require('../../../mod/gazetteer/mapbox');
 
+const gaz_opencage = require('../../../mod/gazetteer/opencage');
+
 module.exports = fastify => {
   fastify.route({
     method: 'GET',
@@ -70,6 +72,10 @@ module.exports = fastify => {
 
         // Return error message _err if an error occured.
         if (results._err) return res.code(500).send(results._err);
+      }
+
+      if(locale.gazetteer.provider === 'OPENCAGE'){
+        results = await gaz_opencage(req.query.q, locale.gazetteer);
       }
 
       // Query Mapbox Geocoder API

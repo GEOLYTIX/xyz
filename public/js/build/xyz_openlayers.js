@@ -1764,7 +1764,7 @@ function inBBox(pt, bbox) {
   \**********************************************************/
 /*! exports provided: default */
 /*! ModuleConcatenation bailout: Cannot concat with ./node_modules/@turf/helpers/main.es.js (<- Module is referenced from these modules with unsupported syntax: ./node_modules/@turf/point-on-feature/main.js (referenced with cjs require)) */
-/*! ModuleConcatenation bailout: Cannot concat with ./node_modules/@turf/meta/main.es.js because of ./node_modules/@turf/explode/main.es.js */
+/*! ModuleConcatenation bailout: Cannot concat with ./node_modules/@turf/meta/main.es.js because of ./node_modules/@turf/nearest-point/main.es.js */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -69242,7 +69242,7 @@ module.exports = function(module) {
 
 /***/ "./public/js/index.mjs":
 /*!*******************************************!*\
-  !*** ./public/js/index.mjs + 352 modules ***!
+  !*** ./public/js/index.mjs + 353 modules ***!
   \*******************************************/
 /*! exports provided: default */
 /*! ModuleConcatenation bailout: Cannot concat with ./node_modules/@turf/point-on-feature/main.js (<- Module is not an ECMAScript module) */
@@ -69656,13 +69656,13 @@ function scrolly(el) {
     bar.style.height = track.clientHeight * el.clientHeight / el.scrollHeight + 'px';
     bar.style.top = track.clientHeight * el.scrollTop / el.scrollHeight + 'px';
 
-    clearTimeout(el.dataset.timeout);
+    //clearTimeout(el.dataset.timeout);
 
-    !el.classList.contains('disable-hover') && el.classList.add('disable-hover');
+    /*!el.classList.contains('disable-hover') && el.classList.add('disable-hover');
 
     el.dataset.timeout = setTimeout(function() {
       el.classList.remove('disable-hover');
-    }, 500);
+    }, 500);*/
   });
 
   bar.addEventListener('mousedown', e => {
@@ -116807,9 +116807,9 @@ var Map_Map = /** @class */ (function (_super) {
 
     const menu = _xyz.utils.wire()`<ul>`;
 
-    _xyz.mapview.interaction.edit.feature.length && menu.appendChild(_xyz.utils.wire()`<li onclick=${update}>Update</li>`);
+    _xyz.mapview.interaction.edit.feature.length && menu.appendChild(_xyz.utils.wire()`<li class="off-white-hover" onclick=${update}>Update</li>`);
 
-    _xyz.mapview.interaction.edit.feature.length && menu.appendChild(_xyz.utils.wire()`<li onclick=${undo}>Undo</li>`);
+    _xyz.mapview.interaction.edit.feature.length && menu.appendChild(_xyz.utils.wire()`<li class="off-white-hover" onclick=${undo}>Undo</li>`);
 
     menu.appendChild(_xyz.utils.wire()`<li class="off-white-hover" onclick=${finish}>Cancel</li>`);
 
@@ -116899,7 +116899,9 @@ var Map_Map = /** @class */ (function (_super) {
 
     if (this.node) this.node.remove();
 
-    this.node = _xyz.utils.wire()`<div class="infotip">${info}`;
+    this.node = _xyz.utils.wire()`<div class="infotip">`;
+
+    this.node.innerHTML = info;
 
     _xyz.mapview.node.appendChild(this.node);
 
@@ -120990,8 +120992,6 @@ function panel(layer) {
     // Create a new info group.
     if (entry.type === 'group') {
 
-      console.log(entry.label);
-
       location.groups[entry.label] = entry;
 
       _xyz.locations.view.group(entry);
@@ -121026,12 +121026,8 @@ function panel(layer) {
 
       }
 
-      console.log(entry.group);
-      console.log(location.groups);
-      console.log(location.groups[entry.group]);
-
-      location.groups[entry.group].table.appendChild(entry.row);
-      location.groups[entry.group].div.style.display = 'block';
+      if(location.groups[entry.group].table) location.groups[entry.group].table.appendChild(entry.row);
+      if(location.groups[entry.group].div) location.groups[entry.group].div.style.display = 'block';
 
     }
 
@@ -121203,20 +121199,12 @@ function panel(layer) {
 
   if (!group.label) return;
 
-  console.log('make group');
-
   //const group = entry;
 
   // check if group has any data
-  let values = Object.values(group.location.infoj).filter(field => { if (field.group === group.label) {
-    //console.log([field.group, group.label]);
-    //console.log(field);
-    return field.value ;
-  }
-  });
+  let values = Object.values(group.location.infoj).filter(field => { if (field.group === group.label) return field.value });
 
-  //console.log(values);
-  //console.log(values.length);
+  if (!values.length) return; // break when no data to show
 
   group.td = _xyz.utils.wire()`<td colSpan=2>`;
 
@@ -121241,10 +121229,6 @@ function panel(layer) {
 
   // Add table
   group.table = _xyz.utils.wire()`<table>`;
-
-  console.log(group);
-
-  if (!values.length) return; // break when no data to show
 
   group.div.appendChild(group.table); 
 
@@ -121823,11 +121807,36 @@ function panel(layer) {
 
   function showTab() {
 
-    entry.location.tables.push(entry);
+    const xhr = new XMLHttpRequest();
+
+    xhr.open('GET', _xyz.host + '/dashboard?' + _xyz.utils.paramString({
+      template: entry.template,
+      locale: _xyz.workspace.locale.key,
+      layer: entry.location.layer.key,
+      table: entry.location.table,
+      id: entry.location.id,
+      token: _xyz.token
+    }));
+
+    xhr.onload = e => {
+
+      entry.layout = e.target.response;
+
+      entry.location.tables.push(entry);
+
+      entry.target = _xyz.dataview.node && _xyz.dataview.node.querySelector('.tab-content') || document.getElementById(entry.target_id);
+
+      if (entry.target) return _xyz.dataview.dashboard(entry);
+
+    };
+
+    xhr.send();
+
+    /*entry.location.tables.push(entry);
 
     entry.target = _xyz.dataview.node && _xyz.dataview.node.querySelector('.tab-content') || document.getElementById(entry.target_id);
 
-    if (entry.target) _xyz.dataview.dashboard(entry);
+    if (entry.target) _xyz.dataview.dashboard(entry);*/
   }
 
   function removeTab() {
@@ -122436,9 +122445,9 @@ function panel(layer) {
       onchange=${e => {
         entry.display = e.target.checked;
         if (entry.display && entry.edit) return createGeom();
-        //if (entry.display && !entry.edit) return drawGeom();
+        if (entry.display && !entry.edit) return drawGeom();
         if (!entry.display && entry.edit) return deleteGeom(entry);
-        //if (!entry.display && !entry.edit) return hideGeom();
+        if (!entry.display && !entry.edit) return hideGeom();
       }}>
     </input>
     <div></div><span>${entry.name || 'Geometry'}`);
@@ -124692,7 +124701,7 @@ function random_rgba() {
         _xyz.dataview.btn.dataViewport.classList.remove('active');
       }
 
-      _xyz.dataview.btn.dataViewport.style.display = 'block';
+      //_xyz.dataview.btn.dataViewport.style.display = 'block'; // not showing until design resolved
     }
 
     table.target = document.getElementById(table.target_id) || _xyz.dataview.tableContainer(table.toolbars);
@@ -124830,7 +124839,7 @@ function random_rgba() {
         _xyz.dataview.btn.dataViewport.classList.remove('active');
       }
 
-      _xyz.dataview.btn.dataViewport.style.display = 'block';
+      //_xyz.dataview.btn.dataViewport.style.display = 'block'; // not showing until design resolved
     }
 
     chart.update();
@@ -125053,7 +125062,13 @@ function random_rgba() {
 
     return columns;
 });
+// CONCATENATED MODULE: ./public/js/dataview/createElement.mjs
+/* harmony default export */ var dataview_createElement = (_xyz => param => {
+	console.log(param);
+});
 // CONCATENATED MODULE: ./public/js/dataview/_dataview.mjs
+
+
 
 
 
@@ -125110,7 +125125,9 @@ function random_rgba() {
 
     pgFunction: pgFunction(_xyz),
 
-    groupColumns: groupColumns(_xyz)
+    groupColumns: groupColumns(_xyz),
+
+    createElement: dataview_createElement(_xyz)
 
   };
     
@@ -125128,6 +125145,7 @@ function random_rgba() {
       glx: glx,
       mapbox: mapbox,
       google: google,
+      opencage: opencage
     },
 
     select: select,
@@ -125237,6 +125255,8 @@ function random_rgba() {
     gazetteer.xhr.setRequestHeader('Content-Type', 'application/json');
     gazetteer.xhr.responseType = 'json';
     gazetteer.xhr.onload = e => {
+
+      console.log(e.target.response);
   
       if (e.target.status !== 200) return;
         
@@ -125253,7 +125273,7 @@ function random_rgba() {
       Object.values(e.target.response).forEach(entry => {
   
         gazetteer.result.appendChild(_xyz.utils.wire()`
-        <li onclick=${e=>{
+        <li style="cursor:pointer;" onclick=${e=>{
           e.preventDefault();
   
           if (!entry.source || !entry.id) return;
@@ -125265,7 +125285,7 @@ function random_rgba() {
             layer: entry.layer,
             table: entry.table,
             marker: entry.marker,
-            callback: params.callback,
+            callback: params.callback
           });
   
         }}>${entry.label}`);
@@ -125330,7 +125350,7 @@ function random_rgba() {
     record.callback && record.callback();
   }
 
-  function google (record) {
+  function google(record) {
 
     // Get the geometry from the gazetteer database.
     const xhr = new XMLHttpRequest();
@@ -125355,6 +125375,17 @@ function random_rgba() {
     };
     
     xhr.send();
+  }
+
+  function opencage(record){
+
+    gazetteer.createFeature({
+      type: 'Point',
+      coordinates: record.marker
+    });
+
+    record.callback && record.callback();
+
   }
 
 });

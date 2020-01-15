@@ -246,7 +246,7 @@ function init(_xyz) {
     desktop.scrolly.insertBefore(gazetteer, desktop.scrolly.firstChild);
 
     _xyz.gazetteer.init({
-      group: gazetteer.querySelector('.input-drop'),
+      group: gazetteer.querySelector('.input-drop')
     });
   }
 

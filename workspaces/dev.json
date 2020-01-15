@@ -4,6 +4,12 @@
         "Natural Earth": {
             "minZoom": 3,
             "maxZoom": 14,
+            "gazetteer": {
+                "provider": "OPENCAGE",
+                "placeholder": "e.g. Venice",
+                "bounds": "-13,48,5,62",
+                "code": "GB"
+            },
             "layers": {
                 "OSM": {
                     "group": "Base Layer",
@@ -376,8 +382,8 @@
                     "style": {
                         "default": {
                             "strokeColor": "#333333",
-                            "fillColor": "#ffffff",
-                            "fillOpacity": 0.1
+                            "fillColor": "#8C7AA9",
+                            "fillOpacity": 0
                         }
                     }
                 },
@@ -2076,10 +2082,11 @@
                             }
                         },
                         {
-                            "label": "Population within 10min",
+                            "label": "10 min",
                             "type": "group",
                             "class": "_report",
-                            "chart": {
+                            "layout": "fitColumns",
+                            "__chart": {
                                 "height": 300,
                                 "type": "bar",
                                 "unit": "k",
@@ -2105,63 +2112,71 @@
                                     "#F5A549",
                                     "#F49D37"
                                 ]
-                            }
-                        },
-                        {
-                            "group": "Population within 10min",
-                            "label": "2011",
-                            "field": "_pop__11_10min",
-                            "fieldfx": "SELECT sum(b.pop__11) FROM dev.uk_glx_sites a, geodata.uk_glx_geodata_hex_1k b WHERE a.id = $1 AND st_intersects(a.isoline_10min, b.geom_p_4326)",
-                            "type": "integer"
-                        },
-                        {
-                            "group": "Population within 10min",
-                            "label": "2012",
-                            "field": "_pop__12_10min",
-                            "fieldfx": "SELECT sum(b.pop__12) FROM dev.uk_glx_sites a, geodata.uk_glx_geodata_hex_1k b WHERE a.id = $1 AND st_intersects(a.isoline_10min, b.geom_p_4326)",
-                            "type": "integer"
-                        },
-                        {
-                            "group": "Population within 10min",
-                            "label": "2013",
-                            "field": "_pop__13_10min",
-                            "fieldfx": "SELECT sum(b.pop__13) FROM dev.uk_glx_sites a, geodata.uk_glx_geodata_hex_1k b WHERE a.id = $1 AND st_intersects(a.isoline_10min, b.geom_p_4326)",
-                            "type": "integer"
-                        },
-                        {
-                            "group": "Population within 10min",
-                            "label": "2014",
-                            "field": "_pop__14_10min",
-                            "fieldfx": "SELECT sum(b.pop__14) FROM dev.uk_glx_sites a, geodata.uk_glx_geodata_hex_1k b WHERE a.id = $1 AND st_intersects(a.isoline_10min, b.geom_p_4326)",
-                            "type": "integer"
-                        },
-                        {
-                            "group": "Population within 10min",
-                            "label": "2015",
-                            "field": "_pop__15_10min",
-                            "fieldfx": "SELECT sum(b.pop__15) FROM dev.uk_glx_sites a, geodata.uk_glx_geodata_hex_1k b WHERE a.id = $1 AND st_intersects(a.isoline_10min, b.geom_p_4326)",
-                            "type": "integer"
-                        },
-                        {
-                            "group": "Population within 10min",
-                            "label": "2016",
-                            "field": "_pop__16_10min",
-                            "fieldfx": "SELECT sum(b.pop__16) FROM dev.uk_glx_sites a, geodata.uk_glx_geodata_hex_1k b WHERE a.id = $1 AND st_intersects(a.isoline_10min, b.geom_p_4326)",
-                            "type": "integer"
-                        },
-                        {
-                            "group": "Population within 10min",
-                            "label": "2017",
-                            "field": "_pop__17_10min",
-                            "fieldfx": "SELECT sum(b.pop__17) FROM dev.uk_glx_sites a, geodata.uk_glx_geodata_hex_1k b WHERE a.id = $1 AND st_intersects(a.isoline_10min, b.geom_p_4326)",
-                            "type": "integer"
+                            },
+                            "columns": [
+                                {
+                                    "title": "Population",
+                                    "field": "pop_10min",
+                                    "fieldfx": "SUM(b.pop__11) as pop__11_10min, SUM(b.pop__12) as pop__12_10min, SUM(b.pop__13) as pop__13_10min, SUM(b.pop__14) as pop__14_10min, SUM(b.pop__15) as pop__15_10min, SUM(b.pop__16) as pop__16_10min, SUM(b.pop__17) as pop__17_10min FROM dev.uk_glx_sites a, geodata.uk_glx_geodata_hex_1k b WHERE a.id = $1 AND st_intersects(a.isoline_10min, b.geom_p_4326)",
+                                    "type": "integer"
+                                }
+                            ],
+                            "rows": [
+                                {
+                                    "title": "2011",
+                                    "field": "pop__11_10min",
+                                    "fieldfx": "pop_10min.pop__11_10min",
+                                    "type": "integer"
+                                },
+                                {
+                                    "title": "2012",
+                                    "field": "pop__12_10min",
+                                    "fieldfx": "pop_10min.pop__12_10min",
+                                    "type": "integer"
+                                },
+                                {
+                                    "title": "2013",
+                                    "field": "pop__13_10min",
+                                    "fieldfx": "pop_10min.pop__13_10min",
+                                    "type": "integer"
+                                },
+                                {
+                                    "title": "2014",
+                                    "field": "pop__14_10min",
+                                    "fieldfx": "pop_10min.pop__14_10min",
+                                    "type": "integer"
+                                },
+                                {
+                                    "title": "2015",
+                                    "field": "pop__15_10min",
+                                    "fieldfx": "pop_10min.pop__15_10min",
+                                    "type": "integer"
+                                },
+                                {
+                                    "title": "2016",
+                                    "field": "pop__16_10min",
+                                    "fieldfx": "pop_10min.pop__16_10min",
+                                    "type": "integer"
+                                },
+                                {
+                                    "title": "2017",
+                                    "field": "pop__17_10min",
+                                    "fieldfx": "pop_10min.pop__17_10min",
+                                    "type": "integer"
+                                }
+                            ]
                         },
                         {
                             "type": "dashboard",
                             "title": "Dashboard",
                             "display": true,
                             "class": "_report",
-                            "template": "/views/dashboard.html"
+                            "template": "/views/dashboard.html",
+                            "elements": [
+                                {
+                                    "title": "this is a chart"
+                                }
+                            ]
                         },
                         {
                             "label": "Random data series",
@@ -2176,6 +2191,7 @@
                                 "title": true,
                                 "legend": true,
                                 "legendPosition": "bottom",
+                                "responsive": true,
                                 "backgroundColor": [
                                     "rgba(192, 117, 205, 0.3)",
                                     "rgba(255, 167, 38, 0.3)"
@@ -2595,7 +2611,7 @@
                             "class": "_report"
                         },
                         {
-                            "type": "tableDefinition",
+                            "type": "dataview",
                             "title": "Population Summary",
                             "display": false,
                             "target_id": "xyz_table1",
@@ -2751,7 +2767,7 @@
                         {
                             "type": "tableDefinition",
                             "title": "OAC Profile",
-                            "display": false,
+                            "display": true,
                             "toolbars": {},
                             "target_id": "xyz_table3",
                             "layout": "fitColumns",
@@ -3039,6 +3055,48 @@
                                         "uk.oac_total_uk*(100*min15.oac_7d/min15.oac_total)/uk.oac_7d_uk"
                                     ]
                                 }
+                            },
+                            "chart": {
+                                "title": {
+                                    "display": true,
+                                    "position": "top",
+                                    "text": "OAC Profile",
+                                    "fontSize": 12,
+                                    "fontStyle": "bold"
+                                },
+                                "layout": {
+                                    "padding": {
+                                        "left": 50,
+                                        "right": 50
+                                    }
+                                },
+                                "responsive": true,
+                                "width": 500,
+                                "height": 300,
+                                "maxRotationX": 90,
+                                "minRotationX": 90,
+                                "type": "bar",
+                                "backgroundColor": [
+                                    "#FBDBB6",
+                                    "#FAD2A4",
+                                    "#F9C991",
+                                    "#F8C07F",
+                                    "#F7B76D",
+                                    "#F6AE5B",
+                                    "#F5A549",
+                                    "#F49D37"
+                                ],
+                                "borderColor": [
+                                    "#FBDBB6",
+                                    "#FAD2A4",
+                                    "#F9C991",
+                                    "#F8C07F",
+                                    "#F7B76D",
+                                    "#F6AE5B",
+                                    "#F5A549",
+                                    "#F49D37"
+                                ],
+                                "field": "min10"
                             }
                         },
                         {
