@@ -118909,6 +118909,43 @@ var Map_Map = /** @class */ (function (_super) {
     if (layer.style.theme && layer.style.themes && layer.style.hidden) {
       panel.appendChild(_xyz.utils.wire()`<span style="font-weight: bold;">${Object.keys(layer.style.themes)[0]}`)
     }
+
+    //if(layer.style.theme && layer.style.theme.type === 'categorized'){
+
+        panel.appendChild(_xyz.utils.wire()`
+          <div class="switch-all" style="font-size: 90%; display:none;">
+          Click on labels to switch visibity or 
+          <a class="primary-colour" style="cursor: pointer;"
+          onclick=${e => {
+
+            e.stopPropagation();
+
+            layer.style.theme.hideAll = layer.style.theme.hideAll ? false : true;
+
+            if(!layer.filter.legend[layer.style.theme.field]) layer.filter.legend[layer.style.theme.field] = {};
+
+            layer.filter.legend[layer.style.theme.field].ni = [];
+            layer.filter.legend[layer.style.theme.field].in = [];
+
+            if(layer.style.theme.hideAll) {
+
+              Object.keys(layer.style.theme.cat).map(c => layer.filter.legend[layer.style.theme.field].ni.push(c));
+              layer.filter.legend[layer.style.theme.field].in = Object.keys(layer.style.theme.cat);
+            
+            }
+
+            let childNodes = layer.format === 'cluster' ? e.target.parentElement.nextSibling.children.length - 2 : e.target.parentElement.nextSibling.children.length;
+
+            for(let i = 0; i < childNodes; i++){
+              e.target.parentElement.nextSibling.children[i].style.textDecoration = layer.style.theme.hideAll ? 'line-through' : 'none';
+              e.target.parentElement.nextSibling.children[i].style.opacity = layer.style.theme.hideAll ? 0.8 : 1;
+              e.target.parentElement.nextSibling.children[i].style.fillOpacity = layer.style.theme.hideAll ? 0.8 : 1;
+            }
+
+            layer.reload();
+
+          }}>switch all</a>.`);
+      //}
     
     // Apply the current theme.
     applyTheme(layer); 
@@ -118916,6 +118953,10 @@ var Map_Map = /** @class */ (function (_super) {
     return panel;
   
     function applyTheme(layer) {
+
+      console.log('apply theme');
+
+      panel.querySelector('.switch-all').style.display = layer.style.theme && layer.style.theme.type === 'categorized' ? 'block' : 'none';
   
       // Empty legend.
       layer.style.legend && layer.style.legend.remove();

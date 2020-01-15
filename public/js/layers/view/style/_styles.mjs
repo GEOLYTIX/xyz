@@ -88,6 +88,40 @@ export default _xyz => {
     if (layer.style.theme && layer.style.themes && layer.style.hidden) {
       panel.appendChild(_xyz.utils.wire()`<span style="font-weight: bold;">${Object.keys(layer.style.themes)[0]}`)
     }
+
+    // Allow hide all from legend
+    panel.appendChild(_xyz.utils.wire()`
+      <div class="switch-all" style="font-size: 90%; display:none;">Click on labels to switch visibity or 
+      <a class="primary-colour" style="cursor: pointer;"
+      onclick=${e => {
+        e.stopPropagation();
+
+        layer.style.theme.hideAll = layer.style.theme.hideAll ? false : true; // control flag
+
+        if(!layer.filter.legend[layer.style.theme.field]) layer.filter.legend[layer.style.theme.field] = {};
+
+        layer.filter.legend[layer.style.theme.field].ni = []; // set initial values for filters
+        layer.filter.legend[layer.style.theme.field].in = [];
+
+        if(layer.style.theme.hideAll) { // apply all exclusions
+
+          Object.keys(layer.style.theme.cat).map(c => layer.filter.legend[layer.style.theme.field].ni.push(c));
+          layer.filter.legend[layer.style.theme.field].in = Object.keys(layer.style.theme.cat);
+            
+        }
+        // count nodes to update excluding 'Multiple locations on cluster layers
+        let childNodes = layer.format === 'cluster' ? e.target.parentElement.nextSibling.children.length - 2 : e.target.parentElement.nextSibling.children.length;
+
+        for(let i = 0; i < childNodes; i++){ // apply styling
+          e.target.parentElement.nextSibling.children[i].style.textDecoration = layer.style.theme.hideAll ? 'line-through' : 'none';
+          e.target.parentElement.nextSibling.children[i].style.opacity = layer.style.theme.hideAll ? 0.8 : 1;
+          e.target.parentElement.nextSibling.children[i].style.fillOpacity = layer.style.theme.hideAll ? 0.8 : 1;
+        }
+
+        layer.reload(); // reload layer
+
+    }}>switch all</a>.`);
+
     
     // Apply the current theme.
     applyTheme(layer); 
@@ -95,6 +129,8 @@ export default _xyz => {
     return panel;
   
     function applyTheme(layer) {
+      // enable or hide 'switch all' filter.
+      panel.querySelector('.switch-all').style.display = layer.style.theme && layer.style.theme.type === 'categorized' ? 'block' : 'none';
   
       // Empty legend.
       layer.style.legend && layer.style.legend.remove();
