@@ -120,8 +120,6 @@ export default _xyz => {
     gazetteer.xhr.setRequestHeader('Content-Type', 'application/json');
     gazetteer.xhr.responseType = 'json';
     gazetteer.xhr.onload = e => {
-
-      console.log(e.target.response);
   
       if (e.target.status !== 200) return;
         
