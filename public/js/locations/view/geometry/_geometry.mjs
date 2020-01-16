@@ -28,9 +28,11 @@ export default _xyz => {
     entry.row.appendChild(td);
 
     function drawGeom() {
+
       entry.geometry = entry.value && _xyz.mapview.geoJSON({
         geometry: JSON.parse(entry.value),
         dataProjection: '4326',
+        zIndex: _xyz.layers.list[entry.location.layer.key].L.getZIndex() - 1,
         style: new _xyz.mapview.lib.style.Style({
           stroke: entry.style.strokeColor && new _xyz.mapview.lib.style.Stroke({
             color: _xyz.utils.Chroma(entry.style.color || entry.style.strokeColor).alpha(1),
