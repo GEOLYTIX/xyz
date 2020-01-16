@@ -11,16 +11,11 @@ export default _xyz => layer => {
 
     let image_container = _xyz.utils.wire()`<div style="height: 24px; width: 24px;">`;
 
-    let svg = _xyz.utils.wire()`<svg>`;
+    let image = _xyz.utils.wire()`<img height=20 width=20>`;
 
-    let image = _xyz.utils.wire(null, 'svg')`
-    <image x=0 y=0 width=20 height=20>`;
+    image.setAttribute('src', _xyz.utils.svg_symbols(Object.assign({}, layer.style.marker, cat[1].style || cat[1])));
 
-    image.setAttribute('href', _xyz.utils.svg_symbols(Object.assign({}, layer.style.marker, cat[1].style || cat[1])));
-
-    svg.appendChild(image);
-
-    image_container.appendChild(svg);
+    image_container.appendChild(image);
 
     legend.appendChild(image_container);
 
@@ -116,16 +111,11 @@ export default _xyz => layer => {
 
   let imageMulti_container = _xyz.utils.wire()`<div style="height: 40px; width: 40px;">`;
 
-  let svgMulti = _xyz.utils.wire()`<svg>`;
+  let imageMulti = _xyz.utils.wire()`<img height=40 width=40>`;
 
-  imageMulti_container.appendChild(svgMulti);
+  imageMulti.setAttribute('src', _xyz.utils.svg_symbols(layer.style.markerMulti));
 
-  let imageMulti = _xyz.utils.wire(null, 'svg')`
-  <image x=0 width=40 height=40 />`;
-
-  imageMulti.setAttribute('href', _xyz.utils.svg_symbols(layer.style.markerMulti));
-
-  svgMulti.appendChild(imageMulti);
+  imageMulti_container.appendChild(imageMulti);
 
   legend.appendChild(imageMulti_container);
 
