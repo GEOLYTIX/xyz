@@ -63,7 +63,7 @@ module.exports = fastify => {
         SELECT ${fields.join(',')} 
         FROM ${tableDef.from}
         ${tableDef.where ? `WHERE ${tableDef.where}` : ``}
-        ORDER BY ${tableDef.orderby || ''} NULLS LAST
+        ${tableDef.orderby ? `ORDER BY ${tableDef.orderby}`: ``} NULLS LAST
         LIMIT ${tableDef.limit || 100};`;
 
       const rows = await env.dbs[layer.dbs](q, [req.query.id]);
