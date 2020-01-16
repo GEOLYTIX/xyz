@@ -69242,7 +69242,7 @@ module.exports = function(module) {
 
 /***/ "./public/js/index.mjs":
 /*!*******************************************!*\
-  !*** ./public/js/index.mjs + 353 modules ***!
+  !*** ./public/js/index.mjs + 352 modules ***!
   \*******************************************/
 /*! exports provided: default */
 /*! ModuleConcatenation bailout: Cannot concat with ./node_modules/@turf/point-on-feature/main.js (<- Module is not an ECMAScript module) */
@@ -69656,13 +69656,13 @@ function scrolly(el) {
     bar.style.height = track.clientHeight * el.clientHeight / el.scrollHeight + 'px';
     bar.style.top = track.clientHeight * el.scrollTop / el.scrollHeight + 'px';
 
-    //clearTimeout(el.dataset.timeout);
+    clearTimeout(el.dataset.timeout);
 
-    /*!el.classList.contains('disable-hover') && el.classList.add('disable-hover');
+    !el.classList.contains('disable-hover') && el.classList.add('disable-hover');
 
     el.dataset.timeout = setTimeout(function() {
       el.classList.remove('disable-hover');
-    }, 500);*/
+    }, 500);
   });
 
   bar.addEventListener('mousedown', e => {
@@ -118910,42 +118910,39 @@ var Map_Map = /** @class */ (function (_super) {
       panel.appendChild(_xyz.utils.wire()`<span style="font-weight: bold;">${Object.keys(layer.style.themes)[0]}`)
     }
 
-    //if(layer.style.theme && layer.style.theme.type === 'categorized'){
+    // Allow hide all from legend
+    panel.appendChild(_xyz.utils.wire()`
+      <div class="switch-all" style="font-size: 90%; display:none;">Click on labels to switch visibity or 
+      <a class="primary-colour" style="cursor: pointer;"
+      onclick=${e => {
+        e.stopPropagation();
 
-        panel.appendChild(_xyz.utils.wire()`
-          <div class="switch-all" style="font-size: 90%; display:none;">
-          Click on labels to switch visibity or 
-          <a class="primary-colour" style="cursor: pointer;"
-          onclick=${e => {
+        layer.style.theme.hideAll = layer.style.theme.hideAll ? false : true; // control flag
 
-            e.stopPropagation();
+        if(!layer.filter.legend[layer.style.theme.field]) layer.filter.legend[layer.style.theme.field] = {};
 
-            layer.style.theme.hideAll = layer.style.theme.hideAll ? false : true;
+        layer.filter.legend[layer.style.theme.field].ni = []; // set initial values for filters
+        layer.filter.legend[layer.style.theme.field].in = [];
 
-            if(!layer.filter.legend[layer.style.theme.field]) layer.filter.legend[layer.style.theme.field] = {};
+        if(layer.style.theme.hideAll) { // apply all exclusions
 
-            layer.filter.legend[layer.style.theme.field].ni = [];
-            layer.filter.legend[layer.style.theme.field].in = [];
-
-            if(layer.style.theme.hideAll) {
-
-              Object.keys(layer.style.theme.cat).map(c => layer.filter.legend[layer.style.theme.field].ni.push(c));
-              layer.filter.legend[layer.style.theme.field].in = Object.keys(layer.style.theme.cat);
+          Object.keys(layer.style.theme.cat).map(c => layer.filter.legend[layer.style.theme.field].ni.push(c));
+          layer.filter.legend[layer.style.theme.field].in = Object.keys(layer.style.theme.cat);
             
-            }
+        }
+        // count nodes to update excluding 'Multiple locations on cluster layers
+        let childNodes = layer.format === 'cluster' ? e.target.parentElement.nextSibling.children.length - 2 : e.target.parentElement.nextSibling.children.length;
 
-            let childNodes = layer.format === 'cluster' ? e.target.parentElement.nextSibling.children.length - 2 : e.target.parentElement.nextSibling.children.length;
+        for(let i = 0; i < childNodes; i++){ // apply styling
+          e.target.parentElement.nextSibling.children[i].style.textDecoration = layer.style.theme.hideAll ? 'line-through' : 'none';
+          e.target.parentElement.nextSibling.children[i].style.opacity = layer.style.theme.hideAll ? 0.8 : 1;
+          e.target.parentElement.nextSibling.children[i].style.fillOpacity = layer.style.theme.hideAll ? 0.8 : 1;
+        }
 
-            for(let i = 0; i < childNodes; i++){
-              e.target.parentElement.nextSibling.children[i].style.textDecoration = layer.style.theme.hideAll ? 'line-through' : 'none';
-              e.target.parentElement.nextSibling.children[i].style.opacity = layer.style.theme.hideAll ? 0.8 : 1;
-              e.target.parentElement.nextSibling.children[i].style.fillOpacity = layer.style.theme.hideAll ? 0.8 : 1;
-            }
+        layer.reload(); // reload layer
 
-            layer.reload();
+    }}>switch all</a>.`);
 
-          }}>switch all</a>.`);
-      //}
     
     // Apply the current theme.
     applyTheme(layer); 
@@ -118953,9 +118950,7 @@ var Map_Map = /** @class */ (function (_super) {
     return panel;
   
     function applyTheme(layer) {
-
-      console.log('apply theme');
-
+      // enable or hide 'switch all' filter.
       panel.querySelector('.switch-all').style.display = layer.style.theme && layer.style.theme.type === 'categorized' ? 'block' : 'none';
   
       // Empty legend.
@@ -121876,36 +121871,11 @@ function panel(layer) {
 
   function showTab() {
 
-    const xhr = new XMLHttpRequest();
-
-    xhr.open('GET', _xyz.host + '/dashboard?' + _xyz.utils.paramString({
-      template: entry.template,
-      locale: _xyz.workspace.locale.key,
-      layer: entry.location.layer.key,
-      table: entry.location.table,
-      id: entry.location.id,
-      token: _xyz.token
-    }));
-
-    xhr.onload = e => {
-
-      entry.layout = e.target.response;
-
-      entry.location.tables.push(entry);
-
-      entry.target = _xyz.dataview.node && _xyz.dataview.node.querySelector('.tab-content') || document.getElementById(entry.target_id);
-
-      if (entry.target) return _xyz.dataview.dashboard(entry);
-
-    };
-
-    xhr.send();
-
-    /*entry.location.tables.push(entry);
+    entry.location.tables.push(entry);
 
     entry.target = _xyz.dataview.node && _xyz.dataview.node.querySelector('.tab-content') || document.getElementById(entry.target_id);
 
-    if (entry.target) _xyz.dataview.dashboard(entry);*/
+    if (entry.target) _xyz.dataview.dashboard(entry);
   }
 
   function removeTab() {
@@ -125131,13 +125101,7 @@ function random_rgba() {
 
     return columns;
 });
-// CONCATENATED MODULE: ./public/js/dataview/createElement.mjs
-/* harmony default export */ var dataview_createElement = (_xyz => param => {
-	console.log(param);
-});
 // CONCATENATED MODULE: ./public/js/dataview/_dataview.mjs
-
-
 
 
 
@@ -125194,9 +125158,7 @@ function random_rgba() {
 
     pgFunction: pgFunction(_xyz),
 
-    groupColumns: groupColumns(_xyz),
-
-    createElement: dataview_createElement(_xyz)
+    groupColumns: groupColumns(_xyz)
 
   };
     

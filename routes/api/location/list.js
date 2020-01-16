@@ -62,7 +62,7 @@ module.exports = fastify => {
       let q = `
         SELECT ${fields.join(',')} 
         FROM ${tableDef.from}
-        WHERE ${tableDef.where}
+        ${tableDef.where ? `WHERE ${tableDef.where}` : ``}
         ORDER BY ${tableDef.orderby || ''} NULLS LAST
         LIMIT ${tableDef.limit || 100};`;
 
