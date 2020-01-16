@@ -10,19 +10,11 @@ export default _xyz => layer => {
 
     let image_container = _xyz.utils.wire()`<div style="height: 24px; width: 24px;">`;
 
-    let svg = _xyz.utils.wire()`<svg>`;
+    let image = _xyz.utils.wire()`<img width=20 height=20>`;
 
-    let image = _xyz.utils.wire(null, 'svg')`
-    <image
-      x=0 y=0
-      width=20
-      height=20>`;
+    image.setAttribute('src', _xyz.utils.svg_symbols(Object.assign({}, layer.style.marker, cat.style)));
 
-    image.setAttribute('href', _xyz.utils.svg_symbols(Object.assign({}, layer.style.marker, cat.style)));
-
-    svg.appendChild(image);
-
-    image_container.appendChild(svg);
+    image_container.appendChild(image);
 
     legend.appendChild(image_container);
 
