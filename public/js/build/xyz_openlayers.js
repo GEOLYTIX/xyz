@@ -118402,16 +118402,11 @@ var Map_Map = /** @class */ (function (_super) {
 
     let image_container = _xyz.utils.wire()`<div style="height: 24px; width: 24px;">`;
 
-    let svg = _xyz.utils.wire()`<svg>`;
+    let image = _xyz.utils.wire()`<img height=20 width=20>`;
 
-    let image = _xyz.utils.wire(null, 'svg')`
-    <image x=0 y=0 width=20 height=20>`;
+    image.setAttribute('src', _xyz.utils.svg_symbols(Object.assign({}, layer.style.marker, cat[1].style || cat[1])));
 
-    image.setAttribute('href', _xyz.utils.svg_symbols(Object.assign({}, layer.style.marker, cat[1].style || cat[1])));
-
-    svg.appendChild(image);
-
-    image_container.appendChild(svg);
+    image_container.appendChild(image);
 
     legend.appendChild(image_container);
 
@@ -118507,16 +118502,11 @@ var Map_Map = /** @class */ (function (_super) {
 
   let imageMulti_container = _xyz.utils.wire()`<div style="height: 40px; width: 40px;">`;
 
-  let svgMulti = _xyz.utils.wire()`<svg>`;
+  let imageMulti = _xyz.utils.wire()`<img height=40 width=40>`;
 
-  imageMulti_container.appendChild(svgMulti);
+  imageMulti.setAttribute('src', _xyz.utils.svg_symbols(layer.style.markerMulti));
 
-  let imageMulti = _xyz.utils.wire(null, 'svg')`
-  <image x=0 width=40 height=40 />`;
-
-  imageMulti.setAttribute('href', _xyz.utils.svg_symbols(layer.style.markerMulti));
-
-  svgMulti.appendChild(imageMulti);
+  imageMulti_container.appendChild(imageMulti);
 
   legend.appendChild(imageMulti_container);
 
@@ -118539,19 +118529,11 @@ var Map_Map = /** @class */ (function (_super) {
 
     let image_container = _xyz.utils.wire()`<div style="height: 24px; width: 24px;">`;
 
-    let svg = _xyz.utils.wire()`<svg>`;
+    let image = _xyz.utils.wire()`<img width=20 height=20>`;
 
-    let image = _xyz.utils.wire(null, 'svg')`
-    <image
-      x=0 y=0
-      width=20
-      height=20>`;
+    image.setAttribute('src', _xyz.utils.svg_symbols(Object.assign({}, layer.style.marker, cat.style)));
 
-    image.setAttribute('href', _xyz.utils.svg_symbols(Object.assign({}, layer.style.marker, cat.style)));
-
-    svg.appendChild(image);
-
-    image_container.appendChild(svg);
+    image_container.appendChild(image);
 
     legend.appendChild(image_container);
 
@@ -121193,6 +121175,7 @@ function panel(layer) {
 
 
     if (entry.type === 'dashboard') {
+      console.log(Object.assign({}, {el: document.getElementById('xyz_propensity_index') ? document.getElementById('xyz_propensity_index').outerHTML : ''}))
       _xyz.locations.view.dashboard(entry);
       continue
     }
@@ -122443,9 +122426,11 @@ function panel(layer) {
     entry.row.appendChild(td);
 
     function drawGeom() {
+
       entry.geometry = entry.value && _xyz.mapview.geoJSON({
         geometry: JSON.parse(entry.value),
         dataProjection: '4326',
+        zIndex: _xyz.layers.list[entry.location.layer.key].L.getZIndex() - 1,
         style: new _xyz.mapview.lib.style.Style({
           stroke: entry.style.strokeColor && new _xyz.mapview.lib.style.Stroke({
             color: _xyz.utils.Chroma(entry.style.color || entry.style.strokeColor).alpha(1),
@@ -124605,7 +124590,7 @@ function random_rgba() {
 
   entry.update = () => {
 
-    entry.target.innerHTML = '';
+    if(!document.getElementById(entry.target_id)) entry.target.innerHTML = '';
 
     let flex_container = _xyz.utils.wire()`<div 
     style="display: flex; flex-wrap: wrap; position: relative; padding: 20px;">`;
@@ -124630,13 +124615,14 @@ function random_rgba() {
 
       if(val.type === 'pgFunction' && val.dashboard && entry.title === val.dashboard) {
 
-        _xyz.dataview.pgFunction({
+       _xyz.dataview.pgFunction({
           entry: val, 
           container: document.getElementById(entry.target_id) || flex_container
         });
       
       }
     });
+
   };
 
   entry.activate = () => {
@@ -125060,7 +125046,9 @@ function random_rgba() {
 
       let chartElem = _xyz.dataview.charts.create(param.entry);
 
-      if(!chartElem || !chartElem.style) return;
+      //if(!chartElem || !chartElem.style) return;
+
+      if(!chartElem) return;
 
       param.container.appendChild(chartElem);
     
