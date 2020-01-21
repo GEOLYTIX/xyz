@@ -17,7 +17,8 @@ export default _xyz => layer => {
 
   layer.L = new _xyz.mapview.lib.layer.Tile({
     source: source,
-    layer: layer
+    layer: layer,
+    zIndex: -1
   });
 
 };

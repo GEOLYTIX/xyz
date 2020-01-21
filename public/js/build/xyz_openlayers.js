@@ -116204,8 +116204,8 @@ var Map_Map = /** @class */ (function (_super) {
   
   const layerVector = new _xyz.mapview.lib.layer.Vector({
     source: sourceVector,
-    zIndex: 20,
-    style: params.style,
+    zIndex: isNaN(params.zIndex) ? 2000 : params.zIndex,
+    style: params.style
   }); 
   
   _xyz.map.addLayer(layerVector);
@@ -116793,6 +116793,7 @@ var Map_Map = /** @class */ (function (_super) {
           type: 'Point',
           coordinates: _xyz.mapview.interaction.edit.location.marker,
         },
+        zIndex: 2000,
         style: new _xyz.mapview.lib.style.Style({
           image: _xyz.mapview.icon({
             type: 'markerLetter',
@@ -117683,7 +117684,8 @@ var Map_Map = /** @class */ (function (_super) {
 
   layer.L = new _xyz.mapview.lib.layer.Tile({
     source: source,
-    layer: layer
+    layer: layer,
+    zIndex: -1
   });
 
 });
@@ -118842,7 +118844,6 @@ var Map_Map = /** @class */ (function (_super) {
       }}><span>Style</span><button
       class="btn-header xyz-icon icon-expander primary-colour-filter">`);
   
-  
     // Add toggle for label layer.
     layer.style.label && panel.appendChild(_xyz.utils.wire()`
     <label class="input-checkbox" style="margin-bottom: 10px;">
@@ -118854,6 +118855,29 @@ var Map_Map = /** @class */ (function (_super) {
       }}>
     </input>
     <div></div><span>Display Labels.`);
+
+    layer.style.bringToFront = _xyz.utils.wire()`<button 
+      title="Bring layer to front." 
+      class="btn-wide primary-colour"
+      onclick=${e => {
+
+        if(layer.L.getZIndex() === 1000) return;
+
+        Object.values(_xyz.layers.list).map(_layer => {
+
+          if( _layer.format !== 'tiles') _layer.L.setZIndex(_layer.style.zIndex || 1) && (_layer.display && _layer.reload());
+        
+        });
+
+        layer.L.setZIndex(1000);
+
+        layer.reload();
+
+      }}>Bring layer to front`;
+
+    layer.style.bringToFront.disabled = !layer.display;
+
+    //panel.appendChild(layer.style.bringToFront);
   
     // Add theme control
     if(layer.style.theme && !layer.style.hidden){
@@ -118928,6 +118952,8 @@ var Map_Map = /** @class */ (function (_super) {
     
     // Apply the current theme.
     applyTheme(layer); 
+
+    panel.appendChild(layer.style.bringToFront);
   
     return panel;
   
@@ -120370,7 +120396,12 @@ function panel(layer) {
     header.appendChild(header.toggleDisplay);
 
     layer.view.addEventListener('toggleDisplay', 
-        ()=>header.toggleDisplay.classList.toggle('on'));
+      () => {
+        header.toggleDisplay.classList.toggle('on');
+        layer.style && layer.style.bringToFront && (layer.style.bringToFront.disabled = !!layer.display); // aga: disable bring to front button if layer hidden?
+        //layer.view && layer.view.bringToFront && (layer.view.bringToFront.disabled = !!layer.display);
+
+      });
 
     layer.view.appendChild(header);
 
@@ -120380,6 +120411,29 @@ function panel(layer) {
         meta.innerHTML = layer.meta;
         layer.view.appendChild(meta);
     }
+
+    /*layer.view.bringToFront = _xyz.utils.wire()`<button 
+      title="Bring layer to front." 
+      class="btn-column primary-colour"
+      onclick=${e => {
+
+        if(layer.L.getZIndex() === 1000) return;
+
+        Object.values(_xyz.layers.list).map(_layer => {
+
+          if( _layer.format !== 'tiles') _layer.L.setZIndex(_layer.style.zIndex || 1) && (_layer.display && _layer.reload());
+        
+        });
+
+        layer.L.setZIndex(1000);
+
+        layer.reload();
+
+      }}>Bring layer to front`;
+
+    layer.view.bringToFront.disabled = !layer.display;
+
+    layer.view.appendChild(layer.view.bringToFront);*/
 
     // Create & add Style panel.
     const style_panel = view.style.panel(layer);
@@ -120958,6 +121012,7 @@ function panel(layer) {
       type: 'Point',
       coordinates: location.marker,
     },
+    zIndex: 2000,
     style: new _xyz.mapview.lib.style.Style({
       image: _xyz.mapview.icon({
         type: 'markerLetter',
@@ -121175,7 +121230,6 @@ function panel(layer) {
 
 
     if (entry.type === 'dashboard') {
-      console.log(Object.assign({}, {el: document.getElementById('xyz_propensity_index') ? document.getElementById('xyz_propensity_index').outerHTML : ''}))
       _xyz.locations.view.dashboard(entry);
       continue
     }
@@ -122430,11 +122484,11 @@ function panel(layer) {
       entry.geometry = entry.value && _xyz.mapview.geoJSON({
         geometry: JSON.parse(entry.value),
         dataProjection: '4326',
-        zIndex: _xyz.layers.list[entry.location.layer.key].L.getZIndex() - 1,
+        zIndex: 1998,
         style: new _xyz.mapview.lib.style.Style({
           stroke: entry.style.strokeColor && new _xyz.mapview.lib.style.Stroke({
             color: _xyz.utils.Chroma(entry.style.color || entry.style.strokeColor).alpha(1),
-            width: entry.style.strokeWidth || 1
+            width: entry.style.strokeWidth || 1,
           }),
           fill: new _xyz.mapview.lib.style.Fill({
             color: _xyz.utils.Chroma(entry.style.fillColor || entry.style.strokeColor).alpha(entry.style.fillOpacity === undefined ? 1 : parseFloat(entry.style.fillOpacity) || 0).rgba()
@@ -122443,6 +122497,7 @@ function panel(layer) {
       });
       entry.geometry && entry.location.geometries.push(entry.geometry);
       entry.display = true;
+
     }
 
     function hideGeom() {
@@ -122969,6 +123024,7 @@ function panel(layer) {
 
     location.Layer = _xyz.mapview.geoJSON({
         geometry: location.geometry,
+        zIndex: 1999,
         style: [
             new _xyz.mapview.lib.style.Style({
                 stroke: new _xyz.mapview.lib.style.Stroke({
@@ -125046,9 +125102,7 @@ function random_rgba() {
 
       let chartElem = _xyz.dataview.charts.create(param.entry);
 
-      //if(!chartElem || !chartElem.style) return;
-
-      if(!chartElem) return;
+      if(!chartElem || !chartElem.style) return;
 
       param.container.appendChild(chartElem);
     
@@ -125428,7 +125482,7 @@ function random_rgba() {
 async function js_xyz(params) {
 
   const _xyz = Object.assign({
-    version: "2.1.0",
+    version: "2.1.1",
     defaults: {
       colours: [
         { hex: '#c62828', name: 'Fire Engine Red' },

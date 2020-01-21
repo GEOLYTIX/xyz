@@ -915,6 +915,14 @@
                     "geom": "geom_3857",
                     "mvt_cache": "dev.oa__mvts",
                     "style": {
+                        "default": {
+                            "fillOpacity": 1,
+                            "fillColor": "#EEE",
+                            "strokeColor": "#DDD"
+                        },
+                        "highlight": {
+                            "fillOpacity": 1
+                        },
                         "themes": {
                             "Population 2011": {
                                 "type": "graduated",
@@ -924,49 +932,49 @@
                                         "value": 0,
                                         "label": "0 to 100",
                                         "style": {
-                                            "fillColor": "#15773f"
+                                            "fillColor": "#b9beff"
                                         }
                                     },
                                     {
                                         "value": 100,
                                         "label": "100 to 200",
                                         "style": {
-                                            "fillColor": "#66bd63"
+                                            "fillColor": "#8ea1fc"
                                         }
                                     },
                                     {
                                         "value": 200,
                                         "label": "200 to 300",
                                         "style": {
-                                            "fillColor": "#a6d96a"
+                                            "fillColor": "#638cfa"
                                         }
                                     },
                                     {
                                         "value": 300,
                                         "label": "300 to 400",
                                         "style": {
-                                            "fillColor": "#d9ef8b"
+                                            "fillColor": "#1fb4ed"
                                         }
                                     },
                                     {
                                         "value": 400,
                                         "label": "400 to 500",
                                         "style": {
-                                            "fillColor": "#fdae61"
+                                            "fillColor": "#00d764"
                                         }
                                     },
                                     {
                                         "value": 500,
                                         "label": "500 to 600",
                                         "style": {
-                                            "fillColor": "#f46d43"
+                                            "fillColor": "#85b300"
                                         }
                                     },
                                     {
                                         "value": 600,
                                         "label": "600 or more",
                                         "style": {
-                                            "fillColor": "#d73027"
+                                            "fillColor": "#870000"
                                         }
                                     }
                                 ]
@@ -981,7 +989,6 @@
                         {
                             "label": "OA Code",
                             "field": "oacode",
-                            "type": "text",
                             "inline": true,
                             "filter": "like"
                         },
@@ -1852,11 +1859,11 @@
                         },
                         "marker": {
                             "type": "target",
-                            "fillColor": "#C2095A"
+                            "fillColor": "#539987"
                         },
                         "markerMulti": {
                             "type": "target",
-                            "fillColor": "#C2095A"
+                            "fillColor": "#539987"
                         },
                         "highlight": {
                             "scale": 0.07
@@ -2060,7 +2067,7 @@
                             "fieldfx": "ST_asGeoJson(ST_Transform(ST_Buffer(ST_Transform(geom_4326, 3857), 10000), 4326))",
                             "display": true,
                             "style": {
-                                "fillOpacity": 1,
+                                "fillOpacity": 0.5,
                                 "strokeWidth": 2,
                                 "fillColor": "#8E7C93"
                             }

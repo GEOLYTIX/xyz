@@ -164,6 +164,7 @@ export default _xyz => {
           type: 'Point',
           coordinates: _xyz.mapview.interaction.edit.location.marker,
         },
+        zIndex: 2000,
         style: new _xyz.mapview.lib.style.Style({
           image: _xyz.mapview.icon({
             type: 'markerLetter',

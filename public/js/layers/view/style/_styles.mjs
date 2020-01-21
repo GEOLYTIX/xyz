@@ -39,7 +39,6 @@ export default _xyz => {
       }}><span>Style</span><button
       class="btn-header xyz-icon icon-expander primary-colour-filter">`);
   
-  
     // Add toggle for label layer.
     layer.style.label && panel.appendChild(_xyz.utils.wire()`
     <label class="input-checkbox" style="margin-bottom: 10px;">
@@ -51,6 +50,29 @@ export default _xyz => {
       }}>
     </input>
     <div></div><span>Display Labels.`);
+
+    layer.style.bringToFront = _xyz.utils.wire()`<button 
+      title="Bring layer to front." 
+      class="btn-wide primary-colour"
+      onclick=${e => {
+
+        if(layer.L.getZIndex() === 1000) return;
+
+        Object.values(_xyz.layers.list).map(_layer => {
+
+          if( _layer.format !== 'tiles') _layer.L.setZIndex(_layer.style.zIndex || 1) && (_layer.display && _layer.reload());
+        
+        });
+
+        layer.L.setZIndex(1000);
+
+        layer.reload();
+
+      }}>Bring layer to front`;
+
+    layer.style.bringToFront.disabled = !layer.display;
+
+    //panel.appendChild(layer.style.bringToFront);
   
     // Add theme control
     if(layer.style.theme && !layer.style.hidden){
@@ -125,6 +147,8 @@ export default _xyz => {
     
     // Apply the current theme.
     applyTheme(layer); 
+
+    panel.appendChild(layer.style.bringToFront);
   
     return panel;
   

@@ -32,11 +32,11 @@ export default _xyz => {
       entry.geometry = entry.value && _xyz.mapview.geoJSON({
         geometry: JSON.parse(entry.value),
         dataProjection: '4326',
-        zIndex: _xyz.layers.list[entry.location.layer.key].L.getZIndex() - 1,
+        zIndex: 1998,
         style: new _xyz.mapview.lib.style.Style({
           stroke: entry.style.strokeColor && new _xyz.mapview.lib.style.Stroke({
             color: _xyz.utils.Chroma(entry.style.color || entry.style.strokeColor).alpha(1),
-            width: entry.style.strokeWidth || 1
+            width: entry.style.strokeWidth || 1,
           }),
           fill: new _xyz.mapview.lib.style.Fill({
             color: _xyz.utils.Chroma(entry.style.fillColor || entry.style.strokeColor).alpha(entry.style.fillOpacity === undefined ? 1 : parseFloat(entry.style.fillOpacity) || 0).rgba()
@@ -45,6 +45,7 @@ export default _xyz => {
       });
       entry.geometry && entry.location.geometries.push(entry.geometry);
       entry.display = true;
+
     }
 
     function hideGeom() {

@@ -5,6 +5,7 @@ export default _xyz => function () {
 
     location.Layer = _xyz.mapview.geoJSON({
         geometry: location.geometry,
+        zIndex: 1999,
         style: [
             new _xyz.mapview.lib.style.Style({
                 stroke: new _xyz.mapview.lib.style.Stroke({

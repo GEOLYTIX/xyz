@@ -77,7 +77,10 @@ export default _xyz => {
     header.appendChild(header.toggleDisplay);
 
     layer.view.addEventListener('toggleDisplay', 
-        ()=>header.toggleDisplay.classList.toggle('on'));
+      () => {
+        header.toggleDisplay.classList.toggle('on');
+        layer.style && layer.style.bringToFront && (layer.style.bringToFront.disabled = !!layer.display); // aga: disable bring to front button if layer hidden?
+      });
 
     layer.view.appendChild(header);
 
