@@ -62,13 +62,13 @@ module.exports = async filter => {
     if((filter.like)) {
       const likes = decodeURIComponent(filter.like).split(',')
         .filter(like => like.length > 0)
-        .map(like => `${field}::text ILIKE '${like.trim()}%'`);
+        .map(like => `${field}::text ILIKE '${like.trim().replace(/'/g, "''")}%'`);
       sql_filter.push(likes.join(' OR '));
       sql_filter.push(conjunction);
     }
 
     if((filter.match)) {
-      sql_filter.push(`${field}::text ILIKE '${decodeURIComponent(filter.match)}'`);
+      sql_filter.push(`${field}::text ILIKE '${decodeURIComponent(filter.match.replace(/'/g, "''"))}'`);
       sql_filter.push(conjunction);
     }
 
