@@ -69242,7 +69242,7 @@ module.exports = function(module) {
 
 /***/ "./public/js/index.mjs":
 /*!*******************************************!*\
-  !*** ./public/js/index.mjs + 352 modules ***!
+  !*** ./public/js/index.mjs + 353 modules ***!
   \*******************************************/
 /*! exports provided: default */
 /*! ModuleConcatenation bailout: Cannot concat with ./node_modules/@turf/point-on-feature/main.js (<- Module is not an ECMAScript module) */
@@ -118859,21 +118859,8 @@ var Map_Map = /** @class */ (function (_super) {
     layer.style.bringToFront = _xyz.utils.wire()`<button 
       title="Bring layer to front." 
       class="btn-wide primary-colour"
-      onclick=${e => {
-
-        if(layer.L.getZIndex() === 1000) return;
-
-        Object.values(_xyz.layers.list).map(_layer => {
-
-          if( _layer.format !== 'tiles') _layer.L.setZIndex(_layer.style.zIndex || 1) && (_layer.display && _layer.reload());
-        
-        });
-
-        layer.L.setZIndex(1000);
-
-        layer.reload();
-
-      }}>Bring layer to front`;
+      onclick=${e => layer.bringToFront()
+      }>Bring layer to front`;
 
     layer.style.bringToFront.disabled = !layer.display;
 
@@ -120399,8 +120386,6 @@ function panel(layer) {
       () => {
         header.toggleDisplay.classList.toggle('on');
         layer.style && layer.style.bringToFront && (layer.style.bringToFront.disabled = !!layer.display); // aga: disable bring to front button if layer hidden?
-        //layer.view && layer.view.bringToFront && (layer.view.bringToFront.disabled = !!layer.display);
-
       });
 
     layer.view.appendChild(header);
@@ -120411,29 +120396,6 @@ function panel(layer) {
         meta.innerHTML = layer.meta;
         layer.view.appendChild(meta);
     }
-
-    /*layer.view.bringToFront = _xyz.utils.wire()`<button 
-      title="Bring layer to front." 
-      class="btn-column primary-colour"
-      onclick=${e => {
-
-        if(layer.L.getZIndex() === 1000) return;
-
-        Object.values(_xyz.layers.list).map(_layer => {
-
-          if( _layer.format !== 'tiles') _layer.L.setZIndex(_layer.style.zIndex || 1) && (_layer.display && _layer.reload());
-        
-        });
-
-        layer.L.setZIndex(1000);
-
-        layer.reload();
-
-      }}>Bring layer to front`;
-
-    layer.view.bringToFront.disabled = !layer.display;
-
-    layer.view.appendChild(layer.view.bringToFront);*/
 
     // Create & add Style panel.
     const style_panel = view.style.panel(layer);
@@ -120811,7 +120773,27 @@ function panel(layer) {
   xhr.send();
 
 });
+// CONCATENATED MODULE: ./public/js/layers/bringToFront.mjs
+/* harmony default export */ var bringToFront = (_xyz => function () {
+
+	const layer = this;
+
+	if(layer.L.getZIndex() === 1000) return;
+
+	Object.values(_xyz.layers.list).map(_layer => {
+
+		if( _layer.format !== 'tiles') _layer.L.setZIndex(_layer.style.zIndex || 1) && (_layer.display && _layer.reload());
+
+	});
+
+	layer.L.setZIndex(1000);
+
+	layer.reload();
+
+});
 // CONCATENATED MODULE: ./public/js/layers/_layers.mjs
+
+
 
 
 
@@ -120865,6 +120847,8 @@ function panel(layer) {
         remove: layers_remove(_xyz),
 
         count: layers_count(_xyz),
+
+        bringToFront: bringToFront(_xyz)
 
       },
       layer
@@ -122484,7 +122468,7 @@ function panel(layer) {
       entry.geometry = entry.value && _xyz.mapview.geoJSON({
         geometry: JSON.parse(entry.value),
         dataProjection: '4326',
-        zIndex: 1998,
+        zIndex: 999,
         style: new _xyz.mapview.lib.style.Style({
           stroke: entry.style.strokeColor && new _xyz.mapview.lib.style.Stroke({
             color: _xyz.utils.Chroma(entry.style.color || entry.style.strokeColor).alpha(1),

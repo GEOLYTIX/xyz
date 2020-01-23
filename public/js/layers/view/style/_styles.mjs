@@ -54,21 +54,8 @@ export default _xyz => {
     layer.style.bringToFront = _xyz.utils.wire()`<button 
       title="Bring layer to front." 
       class="btn-wide primary-colour"
-      onclick=${e => {
-
-        if(layer.L.getZIndex() === 1000) return;
-
-        Object.values(_xyz.layers.list).map(_layer => {
-
-          if( _layer.format !== 'tiles') _layer.L.setZIndex(_layer.style.zIndex || 1) && (_layer.display && _layer.reload());
-        
-        });
-
-        layer.L.setZIndex(1000);
-
-        layer.reload();
-
-      }}>Bring layer to front`;
+      onclick=${e => layer.bringToFront()
+      }>Bring layer to front`;
 
     layer.style.bringToFront.disabled = !layer.display;
 
