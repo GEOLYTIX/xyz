@@ -116,7 +116,7 @@ module.exports = fastify => {
             cat,
             size,
             geom,
-            ${label && label !== 'count' ? label + ' AS label,' : ''}
+            ${label && label !== 'count' ? 'label,' : ''}
             kmeans_cid,
             ST_ClusterDBSCAN(geom, ${dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
           FROM ${cluster_sql}) dbscan`;
