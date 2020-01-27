@@ -348,7 +348,7 @@ module.exports = fastify => {
         SELECT
           count(1) count,
           SUM(size) size,
-          label,
+          ${label && label !== 'count' ? 'label,' : ''}
           ${cat_sql || ''}
           ${xy_sql}
         FROM ${agg_sql}`;
