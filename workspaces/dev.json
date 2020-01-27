@@ -1475,8 +1475,7 @@
                     "table": "dev.retailpoints",
                     "geom": "geom",
                     "srid": "4326",
-                    "cluster_kmeans": 0.02,
-                    "cluster_dbscan": 0.02,
+                    "cluster_hexresolution": 0.1,
                     "hover": {
                         "field": "store"
                     },
@@ -2020,6 +2019,9 @@
                     "cluster_label": "site_name",
                     "infoj": [
                         {
+                            "type": "key"
+                        },
+                        {
                             "type": "report",
                             "report": {
                                 "template": "/views/report_location.html"
@@ -2067,9 +2069,9 @@
                             "fieldfx": "ST_asGeoJson(ST_Transform(ST_Buffer(ST_Transform(geom_4326, 3857), 10000), 4326))",
                             "display": true,
                             "style": {
-                                "fillOpacity": 0.5,
+                                "fillOpacity": 1,
                                 "strokeWidth": 2,
-                                "fillColor": "#8E7C93"
+                                "fillColor": "#E2DE84"
                             }
                         },
                         {
@@ -3474,6 +3476,141 @@
                                         }
                                     }
                                 }
+                            }
+                        }
+                    }
+                },
+                "Shops with catchments": {
+                    "format": "cluster",
+                    "edit": {
+                        "geometry": true
+                    },
+                    "dbs": "XYZ",
+                    "geom": "geom_4326",
+                    "sird": "4326",
+                    "table": "dev.storelist_1507__19",
+                    "qID": "id",
+                    "cluster_label": "id",
+                    "cluster_dbscan": 0.001,
+                    "cluster_kmeans": 0.01,
+                    "infoj": [
+                        {
+                            "type": "key",
+                            "class": "_report"
+                        },
+                        {
+                            "label": "Address",
+                            "type": "label"
+                        },
+                        {
+                            "field": "town"
+                        },
+                        {
+                            "field": "county"
+                        },
+                        {
+                            "label": "Customer catchments",
+                            "type": "label",
+                            "class": "_report"
+                        },
+                        {
+                            "name": "Primary",
+                            "field": "catchment_primary",
+                            "fieldfx": "ST_asGeoJson(catchment_primary)",
+                            "type": "geometry",
+                            "class": "_report",
+                            "style": {
+                                "stroke": true,
+                                "color": "#E01A4F",
+                                "weight": 2,
+                                "fill": true,
+                                "fillOpacity": 0.2,
+                                "fillColor": "#E01A4F"
+                            }
+                        },
+                        {
+                            "name": "Secondary",
+                            "field": "catchment_secondary",
+                            "fieldfx": "ST_asGeoJson(catchment_secondary)",
+                            "type": "geometry",
+                            "class": "_report",
+                            "style": {
+                                "stroke": true,
+                                "color": "#F17105",
+                                "weight": 2,
+                                "fill": true,
+                                "fillOpacity": 0.2,
+                                "fillColor": "#F17105"
+                            }
+                        },
+                        {
+                            "name": "Tertiary",
+                            "field": "catchment_tertiary",
+                            "fieldfx": "ST_asGeoJson(catchment_tertiary)",
+                            "type": "geometry",
+                            "class": "_report",
+                            "style": {
+                                "stroke": true,
+                                "color": "#E6C229",
+                                "weight": 2,
+                                "fill": true,
+                                "fillOpacity": 0.2,
+                                "fillColor": "#E6C229"
+                            }
+                        },
+                        {
+                            "name": "All catchments",
+                            "type": "geometry",
+                            "class": "_report",
+                            "display": true,
+                            "style": {
+                                "theme": {
+                                    "type": "categorized",
+                                    "field": "catchment",
+                                    "cat": {
+                                        "primary": {
+                                            "style": {
+                                                "strokeColor": "#5E08E4",
+                                                "fillOpacity": 0.7,
+                                                "fillColor": "#5E08E4"
+                                            }
+                                        },
+                                        "secondary": {
+                                            "style": {
+                                                "strokeColor": "#D15CF1",
+                                                "fillOpacity": 0.7,
+                                                "fillColor": "#D15CF1"
+                                            }
+                                        },
+                                        "tertiary": {
+                                            "style": {
+                                                "strokeColor": "#FFB9F2",
+                                                "fillOpacity": 0.7,
+                                                "fillColor": "#FFB9F2"
+                                            }
+                                        }
+                                    }
+                                } 
+                            },
+                            "field": "all_catchments",
+                            "fieldfx": "SELECT jsonb_build_object('type', 'FeatureCollection','features', b.features) AS collection FROM (SELECT jsonb_build_array(jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'primary', 'id', id),'geometry', ST_AsGeoJson(catchment_primary)::jsonb),jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'secondary', 'id', id),'geometry', ST_AsGeoJson(catchment_secondary)::jsonb),jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'tertiary', 'id', id),'geometry', ST_AsGeoJson(catchment_tertiary)::jsonb)) AS features FROM (SELECT * FROM dev.storelist_1507__19 where id = $1) a) b"
+                        }
+                    ],
+                    "style": {
+                        "marker": {
+                            "type": "target",
+                            "fillColor": "#011D4A",
+                            "layers": {
+                                "0.75": "#EEE",
+                                "0.5": "#33849D"
+                            }
+                        },
+                        "markerMulti": {
+                            "type": "target",
+                            "fillColor": "#011D4A",
+                            "layers": {
+                                "0.75": "#EEE",
+                                "0.5": "#33849D"
                             }
                         }
                     }
