@@ -117649,7 +117649,7 @@ var Map_Map = /** @class */ (function (_super) {
 
         text: new _xyz.mapview.lib.style.Text({
           font: layer.style.label.font || '12px sans-serif',
-          text: properties.label,
+          text: properties.label || `${properties.count > 1 ? properties.count : ''}`,
           stroke: layer.style.label.strokeColor && new _xyz.mapview.lib.style.Stroke({
             color: layer.style.label.strokeColor,
             width: layer.style.label.strokeWidth || 1
@@ -122450,6 +122450,8 @@ function panel(layer) {
 
   return entry => {
 
+    console.log(entry);
+
     if (!entry.value && !entry.edit) return;
 
     // Merge location style with entry style.
@@ -122464,6 +122466,23 @@ function panel(layer) {
     entry.row.appendChild(td);
 
     function drawGeom() {
+
+      if(entry.value && entry.value.type === 'FeatureCollection'){
+
+        entry.value.features.map(feature => {
+          let f = _xyz.mapview.geoJSON({
+            geometry: feature.geometry,
+            dataProjection: '4326',
+            zIndex: 999
+          });
+
+          entry.location.geometries.push(f);
+
+        });
+
+        entry.display = true;
+        
+      } else {
 
       entry.geometry = entry.value && _xyz.mapview.geoJSON({
         geometry: JSON.parse(entry.value),
@@ -122481,6 +122500,7 @@ function panel(layer) {
       });
       entry.geometry && entry.location.geometries.push(entry.geometry);
       entry.display = true;
+    }
 
     }
 
