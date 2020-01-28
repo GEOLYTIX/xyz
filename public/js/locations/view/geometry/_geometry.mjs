@@ -4,6 +4,8 @@ import _isoline_here from './isoline_here.mjs';
 
 import _delete_geom from './delete_geom.mjs';
 
+import _geometryCollection from './geometryCollection.mjs';
+
 export default _xyz => {
 
   const isoline_here = _isoline_here(_xyz);
@@ -11,6 +13,8 @@ export default _xyz => {
   const isoline_mapbox = _isoline_mapbox(_xyz);
 
   const deleteGeom = _delete_geom(_xyz);
+
+  const geometryCollection = _geometryCollection(_xyz);
 
   return entry => {
 
@@ -31,46 +35,7 @@ export default _xyz => {
 
       if(entry.value.type === 'FeatureCollection'){
 
-        entry.location.geometryCollection = [];
-          
-        entry.value.features.map(feature => {
-
-          let style;
-
-          if(entry.style.theme.type === 'categorized') style = entry.style.theme && entry.style.theme.cat[feature.properties[entry.style.theme.field]].style;
-
-          if(entry.style.theme.type === 'graduated') {
-
-            for (let i = 0; i < entry.style.theme.cat_arr.length; i++) {
-
-              if (feature.properties[entry.style.theme.field] < entry.style.theme.cat_arr[i].value) break;
-
-              style = entry.style.theme.cat_arr[i].style;
-            }
-
-          }
-
-          let f = _xyz.mapview.geoJSON({
-            geometry: feature.geometry,
-            dataProjection: '4326',
-            zIndex: 999,
-            style: new _xyz.mapview.lib.style.Style({
-              stroke: style.strokeColor && new _xyz.mapview.lib.style.Stroke({
-                color: _xyz.utils.Chroma(style.color || style.strokeColor).alpha(1),
-                width: entry.style.strokeWidth || 1
-              }),
-              fill: new _xyz.mapview.lib.style.Fill({
-                color: _xyz.utils.Chroma(style.fillColor || style.strokeColor).alpha(style.fillOpacity === undefined ? 1 : parseFloat(style.fillOpacity) || 0).rgba()
-              })
-            })
-          });
-
-          entry.location.geometryCollection.push(f);
-
-        });
-
-        entry.location.geometries.push(entry.location.geometryCollection);
-        entry.display = true;
+        geometryCollection(entry);
 
       } else {
 
@@ -138,7 +103,7 @@ export default _xyz => {
         'top:5px;'
       }">`);
 
-    
+
 
     if (entry.edit && entry.edit.isoline_mapbox) td.appendChild(isoline_mapbox.settings(entry));
 

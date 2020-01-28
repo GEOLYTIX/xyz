@@ -1764,7 +1764,7 @@ function inBBox(pt, bbox) {
   \**********************************************************/
 /*! exports provided: default */
 /*! ModuleConcatenation bailout: Cannot concat with ./node_modules/@turf/helpers/main.es.js (<- Module is referenced from these modules with unsupported syntax: ./node_modules/@turf/point-on-feature/main.js (referenced with cjs require)) */
-/*! ModuleConcatenation bailout: Cannot concat with ./node_modules/@turf/meta/main.es.js because of ./node_modules/@turf/nearest-point/main.es.js */
+/*! ModuleConcatenation bailout: Cannot concat with ./node_modules/@turf/meta/main.es.js because of ./node_modules/@turf/explode/main.es.js */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -69242,7 +69242,7 @@ module.exports = function(module) {
 
 /***/ "./public/js/index.mjs":
 /*!*******************************************!*\
-  !*** ./public/js/index.mjs + 353 modules ***!
+  !*** ./public/js/index.mjs + 354 modules ***!
   \*******************************************/
 /*! exports provided: default */
 /*! ModuleConcatenation bailout: Cannot concat with ./node_modules/@turf/point-on-feature/main.js (<- Module is not an ECMAScript module) */
@@ -122433,55 +122433,24 @@ function panel(layer) {
   entry.location.view && entry.location.view.classList.add('disabled');
   xhr.send();
 });
-// CONCATENATED MODULE: ./public/js/locations/view/geometry/_geometry.mjs
+// CONCATENATED MODULE: ./public/js/locations/view/geometry/geometryCollection.mjs
+/* harmony default export */ var geometry_geometryCollection = (_xyz => entry => {
 
+	entry.location.geometryCollection = [];
 
+	entry.value.features.map(feature => {
 
+		let style;
 
+		if(entry.style.theme.type === 'categorized') style = entry.style.theme && entry.style.theme.cat[feature.properties[entry.style.theme.field]].style;
 
+        if(entry.style.theme.type === 'graduated') {
 
-/* harmony default export */ var _geometry = (_xyz => {
+        	for (let i = 0; i < entry.style.theme.cat_arr.length; i++) {
 
-  const isoline_here = geometry_isoline_here(_xyz);
+        		if (feature.properties[entry.style.theme.field] < entry.style.theme.cat_arr[i].value) break;
 
-  const isoline_mapbox = geometry_isoline_mapbox(_xyz);
-
-  const deleteGeom = delete_geom(_xyz);
-
-  return entry => {
-
-    if (!entry.value && !entry.edit) return;
-
-    // Merge location style with entry style.
-    entry.style = Object.assign(
-      {},
-      entry.location.style,
-      entry.style
-    );
-
-    let td = _xyz.utils.wire()`<td style="padding-top: 5px; position: relative;" colSpan=2>`;
-
-    entry.row.appendChild(td);
-
-    function drawGeom() {
-
-      if(entry.value.type === 'FeatureCollection'){
-
-        entry.location.geometryCollection = [];
-          
-        entry.value.features.map(feature => {
-
-          let style;
-
-          if(entry.style.theme.type === 'categorized') style = entry.style.theme && entry.style.theme.cat[feature.properties[entry.style.theme.field]].style;
-
-          if(entry.style.theme.type === 'graduated') {
-
-            for (let i = 0; i < entry.style.theme.cat_arr.length; i++) {
-
-              if (feature.properties[entry.style.theme.field] < entry.style.theme.cat_arr[i].value) break;
-
-              style = entry.style.theme.cat_arr[i].style;
+        		style = entry.style.theme.cat_arr[i].style;
             }
 
           }
@@ -122505,8 +122474,49 @@ function panel(layer) {
 
         });
 
-        entry.location.geometries.push(entry.location.geometryCollection);
-        entry.display = true;
+	entry.location.geometries.push(entry.location.geometryCollection);
+    entry.display = true;
+
+});
+// CONCATENATED MODULE: ./public/js/locations/view/geometry/_geometry.mjs
+
+
+
+
+
+
+
+
+/* harmony default export */ var _geometry = (_xyz => {
+
+  const isoline_here = geometry_isoline_here(_xyz);
+
+  const isoline_mapbox = geometry_isoline_mapbox(_xyz);
+
+  const deleteGeom = delete_geom(_xyz);
+
+  const geometryCollection = geometry_geometryCollection(_xyz);
+
+  return entry => {
+
+    if (!entry.value && !entry.edit) return;
+
+    // Merge location style with entry style.
+    entry.style = Object.assign(
+      {},
+      entry.location.style,
+      entry.style
+    );
+
+    let td = _xyz.utils.wire()`<td style="padding-top: 5px; position: relative;" colSpan=2>`;
+
+    entry.row.appendChild(td);
+
+    function drawGeom() {
+
+      if(entry.value.type === 'FeatureCollection'){
+
+        geometryCollection(entry);
 
       } else {
 
@@ -122574,7 +122584,7 @@ function panel(layer) {
         'top:5px;'
       }">`);
 
-    
+
 
     if (entry.edit && entry.edit.isoline_mapbox) td.appendChild(isoline_mapbox.settings(entry));
 
