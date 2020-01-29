@@ -24,7 +24,7 @@ export default _xyz => function() {
     geom => _xyz.map.removeLayer(geom)
   );
 
-  location.geometryCollection.forEach(
+  if(location.geometryCollection) location.geometryCollection.forEach(
     geom => _xyz.map.removeLayer(geom)
   );
 
