@@ -84,7 +84,7 @@ export default _xyz => table => {
         _xyz.dataview.btn.dataViewport.classList.remove('active');
       }
 
-      _xyz.dataview.btn.dataViewport.style.display = 'block';
+      //_xyz.dataview.btn.dataViewport.style.display = 'block'; // not showing until design resolved
     }
 
     table.target = document.getElementById(table.target_id) || _xyz.dataview.tableContainer(table.toolbars);

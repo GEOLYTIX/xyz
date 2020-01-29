@@ -67,7 +67,7 @@ export default _xyz => chart => {
         _xyz.dataview.btn.dataViewport.classList.remove('active');
       }
 
-      _xyz.dataview.btn.dataViewport.style.display = 'block';
+      //_xyz.dataview.btn.dataViewport.style.display = 'block'; // not showing until design resolved
     }
 
     chart.update();

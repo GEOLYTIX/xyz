@@ -10,7 +10,7 @@ export default _xyz => (entry, callback) => {
 
   entry.update = () => {
 
-    entry.target.innerHTML = '';
+    if(!document.getElementById(entry.target_id)) entry.target.innerHTML = '';
 
     let flex_container = _xyz.utils.wire()`<div 
     style="display: flex; flex-wrap: wrap; position: relative; padding: 20px;">`;
@@ -35,13 +35,14 @@ export default _xyz => (entry, callback) => {
 
       if(val.type === 'pgFunction' && val.dashboard && entry.title === val.dashboard) {
 
-        _xyz.dataview.pgFunction({
+       _xyz.dataview.pgFunction({
           entry: val, 
           container: document.getElementById(entry.target_id) || flex_container
         });
       
       }
     });
+
   };
 
   entry.activate = () => {

@@ -88,8 +88,8 @@ export default _xyz => layer => {
 
       layer.style.legend.size_min = _xyz.utils.wire(null, 'svg')`
       <text
-        style='font-size:12px; text-anchor: start; 
-        font-family: "PT Mono", monospace;'>min`;
+        style='font-size:11px; text-anchor: start; 
+        font-family: "Open Sans", sans-serif;'>min`;
 
       layer.style.legend.size_min.setAttribute("x", x  + '%');
       layer.style.legend.size_min.setAttribute("y", yTrack - 20);
@@ -101,8 +101,8 @@ export default _xyz => layer => {
 
       layer.style.legend.size_avg = _xyz.utils.wire(null, 'svg')`
       <text
-        style='font-size:12px; text-anchor: middle; 
-        font-family: "PT Mono", monospace;'>avg`;
+        style='font-size:11px; text-anchor: middle; 
+        font-family: "Open Sans", sans-serif;'>avg`;
 
       layer.style.legend.size_avg.setAttribute("x", x + w / 2 + '%');
       layer.style.legend.size_avg.setAttribute("y", yTrack - 20);
@@ -115,8 +115,8 @@ export default _xyz => layer => {
 
       layer.style.legend.size_max = _xyz.utils.wire(null, 'svg')`
       <text
-        style='font-size:12px; text-anchor: end; 
-        font-family: "PT Mono", monospace;'>max`;
+        style='font-size:11px; text-anchor: end; 
+        font-family: "Open Sans", sans-serif;'>max`;
 
       layer.style.legend.size_max.setAttribute("x", x + w + '%');
       layer.style.legend.size_max.setAttribute("y", yTrack - 20);
@@ -148,8 +148,8 @@ export default _xyz => layer => {
 
       layer.style.legend.color_min = _xyz.utils.wire(null, 'svg')`
       <text
-        style='font-size:12px; text-anchor: start; 
-        font-family: "PT Mono", monospace;'>min`;
+        style='font-size:11px; text-anchor: start; 
+        font-family: "Open Sans", sans-serif;'>min`;
 
       layer.style.legend.color_min.setAttribute("x", x  + '%');
       layer.style.legend.color_min.setAttribute("y", yTrack + 40);
@@ -161,8 +161,8 @@ export default _xyz => layer => {
 
       layer.style.legend.color_avg = _xyz.utils.wire(null, 'svg')`
       <text id="grid_legend_color__avg"
-        style='font-size:12px; text-anchor: middle; 
-        font-family: "PT Mono", monospace;'>avg`;
+        style='font-size:11px; text-anchor: middle; 
+        font-family: "Open Sans", sans-serif;'>avg`;
 
       layer.style.legend.color_avg.setAttribute("x", x + w / 2 + '%');
       layer.style.legend.color_avg.setAttribute("y", yTrack + 40);
@@ -174,8 +174,8 @@ export default _xyz => layer => {
 
       layer.style.legend.color_max = _xyz.utils.wire(null, 'svg')`
       <text id="grid_legend_color__max"
-        style='font-size:12px; text-anchor: end; 
-        font-family: "PT Mono", monospace;'>max`;
+        style='font-size:11px; text-anchor: end; 
+        font-family: "Open Sans", sans-serif;'>max`;
 
       layer.style.legend.color_max.setAttribute("x", x + w + '%')
       layer.style.legend.color_max.setAttribute("y", yTrack + 40);

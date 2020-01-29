@@ -14,7 +14,7 @@ export default _xyz => layer => {
 
         text: new _xyz.mapview.lib.style.Text({
           font: layer.style.label.font || '12px sans-serif',
-          text: properties.label,
+          text: properties.label || `${properties.count > 1 ? properties.count : ''}`,
           stroke: layer.style.label.strokeColor && new _xyz.mapview.lib.style.Stroke({
             color: layer.style.label.strokeColor,
             width: layer.style.label.strokeWidth || 1

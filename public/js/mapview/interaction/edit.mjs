@@ -144,11 +144,40 @@ export default _xyz => {
 
       if (e.target.status !== 200) return;
 
-      _xyz.mapview.interaction.edit.location.layer.reload();
-
       const locationFeature = _xyz.mapview.interaction.edit.location.Layer.getSource().getFeatures()[0];
 
       locationFeature.setGeometry(features[0].getGeometry());
+
+      _xyz.map.removeLayer(_xyz.mapview.interaction.edit.location.Marker); // remove Marker from map
+
+      _xyz.mapview.interaction.edit.location.geometry = feature.geometry; // assign new geometry
+
+      // make new marker
+      _xyz.mapview.interaction.edit.location.marker = _xyz.mapview.lib.proj.transform( 
+        _xyz.utils.turf.pointOnFeature(feature.geometry).geometry.coordinates,  
+        'EPSG:' + _xyz.mapview.interaction.edit.location.layer.srid,
+        'EPSG:' + _xyz.mapview.srid);
+
+      // draw updated Marker
+      _xyz.mapview.interaction.edit.location.Marker = _xyz.mapview.geoJSON({ 
+        geometry: {
+          type: 'Point',
+          coordinates: _xyz.mapview.interaction.edit.location.marker,
+        },
+        zIndex: 2000,
+        style: new _xyz.mapview.lib.style.Style({
+          image: _xyz.mapview.icon({
+            type: 'markerLetter',
+            letter: String.fromCharCode(65 + _xyz.locations.list.indexOf(_xyz.mapview.interaction.edit.location.record)),
+            color: _xyz.mapview.interaction.edit.location.style.strokeColor,
+            scale: 0.05,
+            anchor: [0.5, 1]
+          })
+        })
+      });
+
+      // reload layer
+      _xyz.mapview.interaction.edit.location.layer.reload();
 
     };
 
@@ -178,9 +207,9 @@ export default _xyz => {
 
     const menu = _xyz.utils.wire()`<ul>`;
 
-    _xyz.mapview.interaction.edit.feature.length && menu.appendChild(_xyz.utils.wire()`<li onclick=${update}>Update</li>`);
+    _xyz.mapview.interaction.edit.feature.length && menu.appendChild(_xyz.utils.wire()`<li class="off-white-hover" onclick=${update}>Update</li>`);
 
-    _xyz.mapview.interaction.edit.feature.length && menu.appendChild(_xyz.utils.wire()`<li onclick=${undo}>Undo</li>`);
+    _xyz.mapview.interaction.edit.feature.length && menu.appendChild(_xyz.utils.wire()`<li class="off-white-hover" onclick=${undo}>Undo</li>`);
 
     menu.appendChild(_xyz.utils.wire()`<li class="off-white-hover" onclick=${finish}>Cancel</li>`);
 

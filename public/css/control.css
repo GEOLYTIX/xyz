@@ -59,7 +59,8 @@ input[type=range]::-moz-range-thumb {
 
 .xyz-icon {
   background-repeat: no-repeat;
-  background-size: contain; }
+  background-size: contain;
+  -webkit-background-size: contain; }
 
 .enabled > .xyz-icon {
   filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%);
@@ -97,6 +98,9 @@ input[type=range]::-moz-range-thumb {
 
 .icon-lock-open {
   background-image: url("../icons/icon-lock-open.svg"); }
+
+.icon-logout {
+  background-image: url("../icons/icon-logout.svg"); }
 
 .icon-supervisor-account {
   background-image: url("../icons/icon-supervisor-account.svg"); }
@@ -334,6 +338,7 @@ input[type=number] {
     background-repeat: no-repeat;
     background-position: center;
     background-size: contain;
+    -webkit-background-size: contain;
     background-image: url("../icons/icon-checkbox-unchecked.svg"); }
   .input-checkbox input:checked + div {
     background-image: url("../icons/icon-checkbox-checked.svg"); }
@@ -2033,7 +2038,8 @@ span.flatpickr-weekday {
     height: 30px;
     background-repeat: no-repeat;
     background-position: right;
-    background-size: contain; }
+    background-size: contain;
+    -webkit-background-size: contain; }
   .attribution .ol-scale-line {
     position: static; }
 
@@ -2216,7 +2222,8 @@ span.flatpickr-weekday {
       .location-view .list > .item button {
         height: 25px;
         width: 25px;
-        background-size: contain; }
+        background-size: contain;
+        -webkit-background-size: contain; }
       .location-view .list > .item .loader {
         height: 40px;
         background-image: url("../icons/icon-loading-bubbles.svg"); }
@@ -2237,6 +2244,7 @@ span.flatpickr-weekday {
       width: 100%;
       height: 40px;
       background-size: contain;
+      -webkit-background-size: contain;
       background-position: center;
       position: relative; }
       .location-view .list > .add:hover {

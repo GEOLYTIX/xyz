@@ -10,6 +10,7 @@ export default _xyz => {
       glx: glx,
       mapbox: mapbox,
       google: google,
+      opencage: opencage
     },
 
     select: select,
@@ -135,7 +136,7 @@ export default _xyz => {
       Object.values(e.target.response).forEach(entry => {
   
         gazetteer.result.appendChild(_xyz.utils.wire()`
-        <li onclick=${e=>{
+        <li style="cursor:pointer;" onclick=${e=>{
           e.preventDefault();
   
           if (!entry.source || !entry.id) return;
@@ -147,7 +148,7 @@ export default _xyz => {
             layer: entry.layer,
             table: entry.table,
             marker: entry.marker,
-            callback: params.callback,
+            callback: params.callback
           });
   
         }}>${entry.label}`);
@@ -212,7 +213,7 @@ export default _xyz => {
     record.callback && record.callback();
   }
 
-  function google (record) {
+  function google(record) {
 
     // Get the geometry from the gazetteer database.
     const xhr = new XMLHttpRequest();
@@ -237,6 +238,17 @@ export default _xyz => {
     };
     
     xhr.send();
+  }
+
+  function opencage(record){
+
+    gazetteer.createFeature({
+      type: 'Point',
+      coordinates: record.marker
+    });
+
+    record.callback && record.callback();
+
   }
 
 };

@@ -106,7 +106,6 @@ module.exports = fastify => {
           
         FROM ${table} ${where_sql}) kmeans`;
 
-
         // Apply nested DBScan cluster algorithm.
         if (dbscan) {
 
@@ -183,6 +182,8 @@ module.exports = fastify => {
 
               ${size} AS size,
 
+              ${label && label !== 'count' ? label + ' AS label,' : ''}
+
               ${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'} AS geom,
 
               ST_X(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) x,
@@ -211,6 +212,7 @@ module.exports = fastify => {
 
               cat,
               size,
+              ${label && label !== 'count' ? 'label,' : ''}
 
               CASE
 
@@ -312,7 +314,7 @@ module.exports = fastify => {
             FROM first
           )`;
 
-          var agg_sql = `second GROUP BY point;`;
+          var agg_sql = `second GROUP BY point ${label && label !== 'count' ? ',label' : ''};`;
 
           var xy_sql = `
           ST_X(${layer.srid == 3857 && 'point' || 'ST_Transform(ST_SetSRID(point, 3857), ' + parseInt(layer.srid) + ')'}) x,
@@ -324,12 +326,13 @@ module.exports = fastify => {
           (SELECT
             ${cat} AS cat,
             ${size} AS size,
+            ${label && label !== 'count' ? label + ' AS label,' : ''}
             ST_X(${geom}) AS x,
             ST_Y(${geom}) AS y,
             round(ST_X(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${r}) * ${r} x_round,
             round(ST_Y(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${r}) * ${r} y_round
             
-          FROM ${table} ${where_sql}) agg_sql GROUP BY x_round, y_round;`;
+          FROM ${table} ${where_sql}) agg_sql GROUP BY x_round, y_round ${label && label !== 'count' ? ', label' : ''};`;
 
           var xy_sql = `
           percentile_disc(0.5) WITHIN GROUP (ORDER BY x) x,
@@ -345,6 +348,7 @@ module.exports = fastify => {
         SELECT
           count(1) count,
           SUM(size) size,
+          ${label && label !== 'count' ? 'label,' : ''}
           ${cat_sql || ''}
           ${xy_sql}
         FROM ${agg_sql}`;
@@ -377,7 +381,7 @@ module.exports = fastify => {
           count: parseInt(row.count),
           size: parseInt(row.size),
           cat: row.cat.length === 1? row.cat[0] : null,
-          label: row.label,
+          label: row.label
         }
       })));
 
@@ -390,7 +394,7 @@ module.exports = fastify => {
           count: parseInt(row.count),
           size: parseInt(row.size),
           cat: parseFloat(row.cat),
-          label: row.label,
+          label: row.label
         }
       })));
 
@@ -403,7 +407,7 @@ module.exports = fastify => {
           count: parseInt(row.count),
           size: parseInt(row.size),
           cat: Object.assign({}, ...row.cat),
-          label: row.label,
+          label: row.label
         }
       })));
 

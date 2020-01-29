@@ -16,6 +16,8 @@ import remove from './remove.mjs';
 
 import count from './count.mjs';
 
+import bringToFront from './bringToFront.mjs';
+
 export default _xyz => {
 
   const layers = {
@@ -51,6 +53,8 @@ export default _xyz => {
         remove: remove(_xyz),
 
         count: count(_xyz),
+
+        bringToFront: bringToFront(_xyz)
 
       },
       layer

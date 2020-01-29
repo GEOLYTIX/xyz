@@ -4,6 +4,8 @@ import _isoline_here from './isoline_here.mjs';
 
 import _delete_geom from './delete_geom.mjs';
 
+import _geometryCollection from './geometryCollection.mjs';
+
 export default _xyz => {
 
   const isoline_here = _isoline_here(_xyz);
@@ -11,6 +13,8 @@ export default _xyz => {
   const isoline_mapbox = _isoline_mapbox(_xyz);
 
   const deleteGeom = _delete_geom(_xyz);
+
+  const geometryCollection = _geometryCollection(_xyz);
 
   return entry => {
 
@@ -28,13 +32,21 @@ export default _xyz => {
     entry.row.appendChild(td);
 
     function drawGeom() {
+
+      if(entry.value.type === 'FeatureCollection'){
+
+        geometryCollection(entry);
+
+      } else {
+
       entry.geometry = entry.value && _xyz.mapview.geoJSON({
         geometry: JSON.parse(entry.value),
         dataProjection: '4326',
+        zIndex: 999,
         style: new _xyz.mapview.lib.style.Style({
           stroke: entry.style.strokeColor && new _xyz.mapview.lib.style.Stroke({
             color: _xyz.utils.Chroma(entry.style.color || entry.style.strokeColor).alpha(1),
-            width: entry.style.strokeWidth || 1
+            width: entry.style.strokeWidth || 1,
           }),
           fill: new _xyz.mapview.lib.style.Fill({
             color: _xyz.utils.Chroma(entry.style.fillColor || entry.style.strokeColor).alpha(entry.style.fillOpacity === undefined ? 1 : parseFloat(entry.style.fillOpacity) || 0).rgba()
@@ -45,11 +57,13 @@ export default _xyz => {
       entry.display = true;
     }
 
+    }
+
     function hideGeom() {
 
-      entry.location.geometries.splice(entry.location.geometries.indexOf(entry.geometry), 1);
+      entry.geometry && entry.location.geometries.splice(entry.location.geometries.indexOf(entry.geometry), 1) && _xyz.map.removeLayer(entry.geometry);
 
-      _xyz.map.removeLayer(entry.geometry);
+      entry.location.geometryCollection && entry.location.geometries.splice(entry.location.geometries.indexOf(entry.geometryCollection), 1) && entry.location.geometryCollection.map(f => _xyz.map.removeLayer(f));
 
       entry.display = false;
     };
@@ -60,6 +74,7 @@ export default _xyz => {
 
       if (entry.edit.isoline_here) return isoline_here.create(entry);
     }
+
 
     td.appendChild(_xyz.utils.wire()`
     <td style="padding-top: 5px;" colSpan=2>
@@ -76,7 +91,7 @@ export default _xyz => {
     </input>
     <div></div><span>${entry.name || 'Geometry'}`);
 
-    td.appendChild(_xyz.utils.wire()`
+    !entry.style.theme && td.appendChild(_xyz.utils.wire()`
     <div class="sample-circle"
       style="${
         'background-color:' + _xyz.utils.Chroma(entry.style.fillColor || entry.style.strokeColor).alpha(entry.style.fillOpacity === undefined ? 1 : (parseFloat(entry.style.fillOpacity) || 0)) + ';' +
@@ -86,7 +101,9 @@ export default _xyz => {
         'position: absolute;' +
         'right:0;' +
         'top:5px;'
-      }">`)
+      }">`);
+
+
 
     if (entry.edit && entry.edit.isoline_mapbox) td.appendChild(isoline_mapbox.settings(entry));
 

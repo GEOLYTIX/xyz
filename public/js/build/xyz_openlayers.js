@@ -69242,7 +69242,7 @@ module.exports = function(module) {
 
 /***/ "./public/js/index.mjs":
 /*!*******************************************!*\
-  !*** ./public/js/index.mjs + 352 modules ***!
+  !*** ./public/js/index.mjs + 354 modules ***!
   \*******************************************/
 /*! exports provided: default */
 /*! ModuleConcatenation bailout: Cannot concat with ./node_modules/@turf/point-on-feature/main.js (<- Module is not an ECMAScript module) */
@@ -116204,8 +116204,8 @@ var Map_Map = /** @class */ (function (_super) {
   
   const layerVector = new _xyz.mapview.lib.layer.Vector({
     source: sourceVector,
-    zIndex: 20,
-    style: params.style,
+    zIndex: isNaN(params.zIndex) ? 2000 : params.zIndex,
+    style: params.style
   }); 
   
   _xyz.map.addLayer(layerVector);
@@ -116773,11 +116773,40 @@ var Map_Map = /** @class */ (function (_super) {
 
       if (e.target.status !== 200) return;
 
-      _xyz.mapview.interaction.edit.location.layer.reload();
-
       const locationFeature = _xyz.mapview.interaction.edit.location.Layer.getSource().getFeatures()[0];
 
       locationFeature.setGeometry(features[0].getGeometry());
+
+      _xyz.map.removeLayer(_xyz.mapview.interaction.edit.location.Marker); // remove Marker from map
+
+      _xyz.mapview.interaction.edit.location.geometry = feature.geometry; // assign new geometry
+
+      // make new marker
+      _xyz.mapview.interaction.edit.location.marker = _xyz.mapview.lib.proj.transform( 
+        _xyz.utils.turf.pointOnFeature(feature.geometry).geometry.coordinates,  
+        'EPSG:' + _xyz.mapview.interaction.edit.location.layer.srid,
+        'EPSG:' + _xyz.mapview.srid);
+
+      // draw updated Marker
+      _xyz.mapview.interaction.edit.location.Marker = _xyz.mapview.geoJSON({ 
+        geometry: {
+          type: 'Point',
+          coordinates: _xyz.mapview.interaction.edit.location.marker,
+        },
+        zIndex: 2000,
+        style: new _xyz.mapview.lib.style.Style({
+          image: _xyz.mapview.icon({
+            type: 'markerLetter',
+            letter: String.fromCharCode(65 + _xyz.locations.list.indexOf(_xyz.mapview.interaction.edit.location.record)),
+            color: _xyz.mapview.interaction.edit.location.style.strokeColor,
+            scale: 0.05,
+            anchor: [0.5, 1]
+          })
+        })
+      });
+
+      // reload layer
+      _xyz.mapview.interaction.edit.location.layer.reload();
 
     };
 
@@ -116807,9 +116836,9 @@ var Map_Map = /** @class */ (function (_super) {
 
     const menu = _xyz.utils.wire()`<ul>`;
 
-    _xyz.mapview.interaction.edit.feature.length && menu.appendChild(_xyz.utils.wire()`<li onclick=${update}>Update</li>`);
+    _xyz.mapview.interaction.edit.feature.length && menu.appendChild(_xyz.utils.wire()`<li class="off-white-hover" onclick=${update}>Update</li>`);
 
-    _xyz.mapview.interaction.edit.feature.length && menu.appendChild(_xyz.utils.wire()`<li onclick=${undo}>Undo</li>`);
+    _xyz.mapview.interaction.edit.feature.length && menu.appendChild(_xyz.utils.wire()`<li class="off-white-hover" onclick=${undo}>Undo</li>`);
 
     menu.appendChild(_xyz.utils.wire()`<li class="off-white-hover" onclick=${finish}>Cancel</li>`);
 
@@ -116899,7 +116928,9 @@ var Map_Map = /** @class */ (function (_super) {
 
     if (this.node) this.node.remove();
 
-    this.node = _xyz.utils.wire()`<div class="infotip">${info}`;
+    this.node = _xyz.utils.wire()`<div class="infotip">`;
+
+    this.node.innerHTML = info;
 
     _xyz.mapview.node.appendChild(this.node);
 
@@ -117618,7 +117649,7 @@ var Map_Map = /** @class */ (function (_super) {
 
         text: new _xyz.mapview.lib.style.Text({
           font: layer.style.label.font || '12px sans-serif',
-          text: properties.label,
+          text: properties.label || `${properties.count > 1 ? properties.count : ''}`,
           stroke: layer.style.label.strokeColor && new _xyz.mapview.lib.style.Stroke({
             color: layer.style.label.strokeColor,
             width: layer.style.label.strokeWidth || 1
@@ -117653,7 +117684,8 @@ var Map_Map = /** @class */ (function (_super) {
 
   layer.L = new _xyz.mapview.lib.layer.Tile({
     source: source,
-    layer: layer
+    layer: layer,
+    zIndex: -1
   });
 
 });
@@ -118372,16 +118404,11 @@ var Map_Map = /** @class */ (function (_super) {
 
     let image_container = _xyz.utils.wire()`<div style="height: 24px; width: 24px;">`;
 
-    let svg = _xyz.utils.wire()`<svg>`;
+    let image = _xyz.utils.wire()`<img height=20 width=20>`;
 
-    let image = _xyz.utils.wire(null, 'svg')`
-    <image x=0 y=0 width=20 height=20>`;
+    image.setAttribute('src', _xyz.utils.svg_symbols(Object.assign({}, layer.style.marker, cat[1].style || cat[1])));
 
-    image.setAttribute('href', _xyz.utils.svg_symbols(Object.assign({}, layer.style.marker, cat[1].style || cat[1])));
-
-    svg.appendChild(image);
-
-    image_container.appendChild(svg);
+    image_container.appendChild(image);
 
     legend.appendChild(image_container);
 
@@ -118477,16 +118504,11 @@ var Map_Map = /** @class */ (function (_super) {
 
   let imageMulti_container = _xyz.utils.wire()`<div style="height: 40px; width: 40px;">`;
 
-  let svgMulti = _xyz.utils.wire()`<svg>`;
+  let imageMulti = _xyz.utils.wire()`<img height=40 width=40>`;
 
-  imageMulti_container.appendChild(svgMulti);
+  imageMulti.setAttribute('src', _xyz.utils.svg_symbols(layer.style.markerMulti));
 
-  let imageMulti = _xyz.utils.wire(null, 'svg')`
-  <image x=0 width=40 height=40 />`;
-
-  imageMulti.setAttribute('href', _xyz.utils.svg_symbols(layer.style.markerMulti));
-
-  svgMulti.appendChild(imageMulti);
+  imageMulti_container.appendChild(imageMulti);
 
   legend.appendChild(imageMulti_container);
 
@@ -118509,19 +118531,11 @@ var Map_Map = /** @class */ (function (_super) {
 
     let image_container = _xyz.utils.wire()`<div style="height: 24px; width: 24px;">`;
 
-    let svg = _xyz.utils.wire()`<svg>`;
+    let image = _xyz.utils.wire()`<img width=20 height=20>`;
 
-    let image = _xyz.utils.wire(null, 'svg')`
-    <image
-      x=0 y=0
-      width=20
-      height=20>`;
+    image.setAttribute('src', _xyz.utils.svg_symbols(Object.assign({}, layer.style.marker, cat.style)));
 
-    image.setAttribute('href', _xyz.utils.svg_symbols(Object.assign({}, layer.style.marker, cat.style)));
-
-    svg.appendChild(image);
-
-    image_container.appendChild(svg);
+    image_container.appendChild(image);
 
     legend.appendChild(image_container);
 
@@ -118624,8 +118638,8 @@ var Map_Map = /** @class */ (function (_super) {
 
       layer.style.legend.size_min = _xyz.utils.wire(null, 'svg')`
       <text
-        style='font-size:12px; text-anchor: start; 
-        font-family: "PT Mono", monospace;'>min`;
+        style='font-size:11px; text-anchor: start; 
+        font-family: "Open Sans", sans-serif;'>min`;
 
       layer.style.legend.size_min.setAttribute("x", x  + '%');
       layer.style.legend.size_min.setAttribute("y", yTrack - 20);
@@ -118637,8 +118651,8 @@ var Map_Map = /** @class */ (function (_super) {
 
       layer.style.legend.size_avg = _xyz.utils.wire(null, 'svg')`
       <text
-        style='font-size:12px; text-anchor: middle; 
-        font-family: "PT Mono", monospace;'>avg`;
+        style='font-size:11px; text-anchor: middle; 
+        font-family: "Open Sans", sans-serif;'>avg`;
 
       layer.style.legend.size_avg.setAttribute("x", x + w / 2 + '%');
       layer.style.legend.size_avg.setAttribute("y", yTrack - 20);
@@ -118651,8 +118665,8 @@ var Map_Map = /** @class */ (function (_super) {
 
       layer.style.legend.size_max = _xyz.utils.wire(null, 'svg')`
       <text
-        style='font-size:12px; text-anchor: end; 
-        font-family: "PT Mono", monospace;'>max`;
+        style='font-size:11px; text-anchor: end; 
+        font-family: "Open Sans", sans-serif;'>max`;
 
       layer.style.legend.size_max.setAttribute("x", x + w + '%');
       layer.style.legend.size_max.setAttribute("y", yTrack - 20);
@@ -118684,8 +118698,8 @@ var Map_Map = /** @class */ (function (_super) {
 
       layer.style.legend.color_min = _xyz.utils.wire(null, 'svg')`
       <text
-        style='font-size:12px; text-anchor: start; 
-        font-family: "PT Mono", monospace;'>min`;
+        style='font-size:11px; text-anchor: start; 
+        font-family: "Open Sans", sans-serif;'>min`;
 
       layer.style.legend.color_min.setAttribute("x", x  + '%');
       layer.style.legend.color_min.setAttribute("y", yTrack + 40);
@@ -118697,8 +118711,8 @@ var Map_Map = /** @class */ (function (_super) {
 
       layer.style.legend.color_avg = _xyz.utils.wire(null, 'svg')`
       <text id="grid_legend_color__avg"
-        style='font-size:12px; text-anchor: middle; 
-        font-family: "PT Mono", monospace;'>avg`;
+        style='font-size:11px; text-anchor: middle; 
+        font-family: "Open Sans", sans-serif;'>avg`;
 
       layer.style.legend.color_avg.setAttribute("x", x + w / 2 + '%');
       layer.style.legend.color_avg.setAttribute("y", yTrack + 40);
@@ -118710,8 +118724,8 @@ var Map_Map = /** @class */ (function (_super) {
 
       layer.style.legend.color_max = _xyz.utils.wire(null, 'svg')`
       <text id="grid_legend_color__max"
-        style='font-size:12px; text-anchor: end; 
-        font-family: "PT Mono", monospace;'>max`;
+        style='font-size:11px; text-anchor: end; 
+        font-family: "Open Sans", sans-serif;'>max`;
 
       layer.style.legend.color_max.setAttribute("x", x + w + '%')
       layer.style.legend.color_max.setAttribute("y", yTrack + 40);
@@ -118830,7 +118844,6 @@ var Map_Map = /** @class */ (function (_super) {
       }}><span>Style</span><button
       class="btn-header xyz-icon icon-expander primary-colour-filter">`);
   
-  
     // Add toggle for label layer.
     layer.style.label && panel.appendChild(_xyz.utils.wire()`
     <label class="input-checkbox" style="margin-bottom: 10px;">
@@ -118842,6 +118855,16 @@ var Map_Map = /** @class */ (function (_super) {
       }}>
     </input>
     <div></div><span>Display Labels.`);
+
+    layer.style.bringToFront = _xyz.utils.wire()`<button 
+      title="Bring layer to front." 
+      class="btn-wide primary-colour"
+      onclick=${e => layer.bringToFront()
+      }>Bring layer to front`;
+
+    layer.style.bringToFront.disabled = !layer.display;
+
+    //panel.appendChild(layer.style.bringToFront);
   
     // Add theme control
     if(layer.style.theme && !layer.style.hidden){
@@ -118879,13 +118902,51 @@ var Map_Map = /** @class */ (function (_super) {
     if (layer.style.theme && layer.style.themes && layer.style.hidden) {
       panel.appendChild(_xyz.utils.wire()`<span style="font-weight: bold;">${Object.keys(layer.style.themes)[0]}`)
     }
+
+    // Allow hide all from legend
+    panel.appendChild(_xyz.utils.wire()`
+      <div class="switch-all" style="font-size: 90%; display:none;">Click on labels to switch visibity or 
+      <a class="primary-colour" style="cursor: pointer;"
+      onclick=${e => {
+        e.stopPropagation();
+
+        layer.style.theme.hideAll = layer.style.theme.hideAll ? false : true; // control flag
+
+        if(!layer.filter.legend[layer.style.theme.field]) layer.filter.legend[layer.style.theme.field] = {};
+
+        layer.filter.legend[layer.style.theme.field].ni = []; // set initial values for filters
+        layer.filter.legend[layer.style.theme.field].in = [];
+
+        if(layer.style.theme.hideAll) { // apply all exclusions
+
+          Object.keys(layer.style.theme.cat).map(c => layer.filter.legend[layer.style.theme.field].ni.push(c));
+          layer.filter.legend[layer.style.theme.field].in = Object.keys(layer.style.theme.cat);
+            
+        }
+        // count nodes to update excluding 'Multiple locations on cluster layers
+        let childNodes = layer.format === 'cluster' ? e.target.parentElement.nextSibling.children.length - 2 : e.target.parentElement.nextSibling.children.length;
+
+        for(let i = 0; i < childNodes; i++){ // apply styling
+          e.target.parentElement.nextSibling.children[i].style.textDecoration = layer.style.theme.hideAll ? 'line-through' : 'none';
+          e.target.parentElement.nextSibling.children[i].style.opacity = layer.style.theme.hideAll ? 0.8 : 1;
+          e.target.parentElement.nextSibling.children[i].style.fillOpacity = layer.style.theme.hideAll ? 0.8 : 1;
+        }
+
+        layer.reload(); // reload layer
+
+    }}>switch all</a>.`);
+
     
     // Apply the current theme.
     applyTheme(layer); 
+
+    panel.appendChild(layer.style.bringToFront);
   
     return panel;
   
     function applyTheme(layer) {
+      // enable or hide 'switch all' filter.
+      panel.querySelector('.switch-all').style.display = layer.style.theme && layer.style.theme.type === 'categorized' ? 'block' : 'none';
   
       // Empty legend.
       layer.style.legend && layer.style.legend.remove();
@@ -120322,7 +120383,10 @@ function panel(layer) {
     header.appendChild(header.toggleDisplay);
 
     layer.view.addEventListener('toggleDisplay', 
-        ()=>header.toggleDisplay.classList.toggle('on'));
+      () => {
+        header.toggleDisplay.classList.toggle('on');
+        layer.style && layer.style.bringToFront && (layer.style.bringToFront.disabled = !!layer.display); // aga: disable bring to front button if layer hidden?
+      });
 
     layer.view.appendChild(header);
 
@@ -120709,7 +120773,27 @@ function panel(layer) {
   xhr.send();
 
 });
+// CONCATENATED MODULE: ./public/js/layers/bringToFront.mjs
+/* harmony default export */ var bringToFront = (_xyz => function () {
+
+	const layer = this;
+
+	if(layer.L.getZIndex() === 1000) return;
+
+	Object.values(_xyz.layers.list).map(_layer => {
+
+		if( _layer.format !== 'tiles') _layer.L.setZIndex(_layer.style.zIndex || 1) && (_layer.display && _layer.reload());
+
+	});
+
+	layer.L.setZIndex(1000);
+
+	layer.reload();
+
+});
 // CONCATENATED MODULE: ./public/js/layers/_layers.mjs
+
+
 
 
 
@@ -120763,6 +120847,8 @@ function panel(layer) {
         remove: layers_remove(_xyz),
 
         count: layers_count(_xyz),
+
+        bringToFront: bringToFront(_xyz)
 
       },
       layer
@@ -120910,6 +120996,7 @@ function panel(layer) {
       type: 'Point',
       coordinates: location.marker,
     },
+    zIndex: 2000,
     style: new _xyz.mapview.lib.style.Style({
       image: _xyz.mapview.icon({
         type: 'markerLetter',
@@ -120990,8 +121077,6 @@ function panel(layer) {
     // Create a new info group.
     if (entry.type === 'group') {
 
-      console.log(entry.label);
-
       location.groups[entry.label] = entry;
 
       _xyz.locations.view.group(entry);
@@ -121026,12 +121111,8 @@ function panel(layer) {
 
       }
 
-      console.log(entry.group);
-      console.log(location.groups);
-      console.log(location.groups[entry.group]);
-
-      location.groups[entry.group].table.appendChild(entry.row);
-      location.groups[entry.group].div.style.display = 'block';
+      if(location.groups[entry.group].table) location.groups[entry.group].table.appendChild(entry.row);
+      if(location.groups[entry.group].div) location.groups[entry.group].div.style.display = 'block';
 
     }
 
@@ -121203,20 +121284,12 @@ function panel(layer) {
 
   if (!group.label) return;
 
-  console.log('make group');
-
   //const group = entry;
 
   // check if group has any data
-  let values = Object.values(group.location.infoj).filter(field => { if (field.group === group.label) {
-    //console.log([field.group, group.label]);
-    //console.log(field);
-    return field.value ;
-  }
-  });
+  let values = Object.values(group.location.infoj).filter(field => { if (field.group === group.label) return field.value });
 
-  //console.log(values);
-  //console.log(values.length);
+  if (!values.length) return; // break when no data to show
 
   group.td = _xyz.utils.wire()`<td colSpan=2>`;
 
@@ -121241,10 +121314,6 @@ function panel(layer) {
 
   // Add table
   group.table = _xyz.utils.wire()`<table>`;
-
-  console.log(group);
-
-  if (!values.length) return; // break when no data to show
 
   group.div.appendChild(group.table); 
 
@@ -122364,7 +122433,54 @@ function panel(layer) {
   entry.location.view && entry.location.view.classList.add('disabled');
   xhr.send();
 });
+// CONCATENATED MODULE: ./public/js/locations/view/geometry/geometryCollection.mjs
+/* harmony default export */ var geometry_geometryCollection = (_xyz => entry => {
+
+	entry.location.geometryCollection = [];
+
+	entry.value.features.map(feature => {
+
+		let style;
+
+		if(entry.style.theme.type === 'categorized') style = entry.style.theme && entry.style.theme.cat[feature.properties[entry.style.theme.field]].style;
+
+        if(entry.style.theme.type === 'graduated') {
+
+        	for (let i = 0; i < entry.style.theme.cat_arr.length; i++) {
+
+        		if (feature.properties[entry.style.theme.field] < entry.style.theme.cat_arr[i].value) break;
+
+        		style = entry.style.theme.cat_arr[i].style;
+            }
+
+          }
+
+          let f = _xyz.mapview.geoJSON({
+            geometry: feature.geometry,
+            dataProjection: '4326',
+            zIndex: 999,
+            style: new _xyz.mapview.lib.style.Style({
+              stroke: style.strokeColor && new _xyz.mapview.lib.style.Stroke({
+                color: _xyz.utils.Chroma(style.color || style.strokeColor).alpha(1),
+                width: entry.style.strokeWidth || 1
+              }),
+              fill: new _xyz.mapview.lib.style.Fill({
+                color: _xyz.utils.Chroma(style.fillColor || style.strokeColor).alpha(style.fillOpacity === undefined ? 1 : parseFloat(style.fillOpacity) || 0).rgba()
+              })
+            })
+          });
+
+          entry.location.geometryCollection.push(f);
+
+        });
+
+	entry.location.geometries.push(entry.location.geometryCollection);
+    entry.display = true;
+
+});
 // CONCATENATED MODULE: ./public/js/locations/view/geometry/_geometry.mjs
+
+
 
 
 
@@ -122378,6 +122494,8 @@ function panel(layer) {
   const isoline_mapbox = geometry_isoline_mapbox(_xyz);
 
   const deleteGeom = delete_geom(_xyz);
+
+  const geometryCollection = geometry_geometryCollection(_xyz);
 
   return entry => {
 
@@ -122395,13 +122513,21 @@ function panel(layer) {
     entry.row.appendChild(td);
 
     function drawGeom() {
+
+      if(entry.value.type === 'FeatureCollection'){
+
+        geometryCollection(entry);
+
+      } else {
+
       entry.geometry = entry.value && _xyz.mapview.geoJSON({
         geometry: JSON.parse(entry.value),
         dataProjection: '4326',
+        zIndex: 999,
         style: new _xyz.mapview.lib.style.Style({
           stroke: entry.style.strokeColor && new _xyz.mapview.lib.style.Stroke({
             color: _xyz.utils.Chroma(entry.style.color || entry.style.strokeColor).alpha(1),
-            width: entry.style.strokeWidth || 1
+            width: entry.style.strokeWidth || 1,
           }),
           fill: new _xyz.mapview.lib.style.Fill({
             color: _xyz.utils.Chroma(entry.style.fillColor || entry.style.strokeColor).alpha(entry.style.fillOpacity === undefined ? 1 : parseFloat(entry.style.fillOpacity) || 0).rgba()
@@ -122412,11 +122538,13 @@ function panel(layer) {
       entry.display = true;
     }
 
+    }
+
     function hideGeom() {
 
-      entry.location.geometries.splice(entry.location.geometries.indexOf(entry.geometry), 1);
+      entry.geometry && entry.location.geometries.splice(entry.location.geometries.indexOf(entry.geometry), 1) && _xyz.map.removeLayer(entry.geometry);
 
-      _xyz.map.removeLayer(entry.geometry);
+      entry.location.geometryCollection && entry.location.geometries.splice(entry.location.geometries.indexOf(entry.geometryCollection), 1) && entry.location.geometryCollection.map(f => _xyz.map.removeLayer(f));
 
       entry.display = false;
     };
@@ -122428,6 +122556,7 @@ function panel(layer) {
       if (entry.edit.isoline_here) return isoline_here.create(entry);
     }
 
+
     td.appendChild(_xyz.utils.wire()`
     <td style="padding-top: 5px;" colSpan=2>
     <label class="input-checkbox">
@@ -122436,14 +122565,14 @@ function panel(layer) {
       onchange=${e => {
         entry.display = e.target.checked;
         if (entry.display && entry.edit) return createGeom();
-        //if (entry.display && !entry.edit) return drawGeom();
+        if (entry.display && !entry.edit) return drawGeom();
         if (!entry.display && entry.edit) return deleteGeom(entry);
-        //if (!entry.display && !entry.edit) return hideGeom();
+        if (!entry.display && !entry.edit) return hideGeom();
       }}>
     </input>
     <div></div><span>${entry.name || 'Geometry'}`);
 
-    td.appendChild(_xyz.utils.wire()`
+    !entry.style.theme && td.appendChild(_xyz.utils.wire()`
     <div class="sample-circle"
       style="${
         'background-color:' + _xyz.utils.Chroma(entry.style.fillColor || entry.style.strokeColor).alpha(entry.style.fillOpacity === undefined ? 1 : (parseFloat(entry.style.fillOpacity) || 0)) + ';' +
@@ -122453,7 +122582,9 @@ function panel(layer) {
         'position: absolute;' +
         'right:0;' +
         'top:5px;'
-      }">`)
+      }">`);
+
+
 
     if (entry.edit && entry.edit.isoline_mapbox) td.appendChild(isoline_mapbox.settings(entry));
 
@@ -122936,6 +123067,7 @@ function panel(layer) {
 
     location.Layer = _xyz.mapview.geoJSON({
         geometry: location.geometry,
+        zIndex: 1999,
         style: [
             new _xyz.mapview.lib.style.Style({
                 stroke: new _xyz.mapview.lib.style.Stroke({
@@ -122995,6 +123127,10 @@ function panel(layer) {
 
   // Clear geometries and delete location to free up record.
   location.geometries.forEach(
+    geom => _xyz.map.removeLayer(geom)
+  );
+
+  location.geometryCollection.forEach(
     geom => _xyz.map.removeLayer(geom)
   );
 
@@ -124557,7 +124693,7 @@ function random_rgba() {
 
   entry.update = () => {
 
-    entry.target.innerHTML = '';
+    if(!document.getElementById(entry.target_id)) entry.target.innerHTML = '';
 
     let flex_container = _xyz.utils.wire()`<div 
     style="display: flex; flex-wrap: wrap; position: relative; padding: 20px;">`;
@@ -124582,13 +124718,14 @@ function random_rgba() {
 
       if(val.type === 'pgFunction' && val.dashboard && entry.title === val.dashboard) {
 
-        _xyz.dataview.pgFunction({
+       _xyz.dataview.pgFunction({
           entry: val, 
           container: document.getElementById(entry.target_id) || flex_container
         });
       
       }
     });
+
   };
 
   entry.activate = () => {
@@ -124692,7 +124829,7 @@ function random_rgba() {
         _xyz.dataview.btn.dataViewport.classList.remove('active');
       }
 
-      _xyz.dataview.btn.dataViewport.style.display = 'block';
+      //_xyz.dataview.btn.dataViewport.style.display = 'block'; // not showing until design resolved
     }
 
     table.target = document.getElementById(table.target_id) || _xyz.dataview.tableContainer(table.toolbars);
@@ -124830,7 +124967,7 @@ function random_rgba() {
         _xyz.dataview.btn.dataViewport.classList.remove('active');
       }
 
-      _xyz.dataview.btn.dataViewport.style.display = 'block';
+      //_xyz.dataview.btn.dataViewport.style.display = 'block'; // not showing until design resolved
     }
 
     chart.update();
@@ -125128,6 +125265,7 @@ function random_rgba() {
       glx: glx,
       mapbox: mapbox,
       google: google,
+      opencage: opencage
     },
 
     select: select,
@@ -125253,7 +125391,7 @@ function random_rgba() {
       Object.values(e.target.response).forEach(entry => {
   
         gazetteer.result.appendChild(_xyz.utils.wire()`
-        <li onclick=${e=>{
+        <li style="cursor:pointer;" onclick=${e=>{
           e.preventDefault();
   
           if (!entry.source || !entry.id) return;
@@ -125265,7 +125403,7 @@ function random_rgba() {
             layer: entry.layer,
             table: entry.table,
             marker: entry.marker,
-            callback: params.callback,
+            callback: params.callback
           });
   
         }}>${entry.label}`);
@@ -125330,7 +125468,7 @@ function random_rgba() {
     record.callback && record.callback();
   }
 
-  function google (record) {
+  function google(record) {
 
     // Get the geometry from the gazetteer database.
     const xhr = new XMLHttpRequest();
@@ -125357,6 +125495,17 @@ function random_rgba() {
     xhr.send();
   }
 
+  function opencage(record){
+
+    gazetteer.createFeature({
+      type: 'Point',
+      coordinates: record.marker
+    });
+
+    record.callback && record.callback();
+
+  }
+
 });
 // CONCATENATED MODULE: ./public/js/index.mjs
 
@@ -125380,7 +125529,7 @@ function random_rgba() {
 async function js_xyz(params) {
 
   const _xyz = Object.assign({
-    version: "2.1.0",
+    version: "2.1.1",
     defaults: {
       colours: [
         { hex: '#c62828', name: 'Fire Engine Red' },

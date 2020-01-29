@@ -16,8 +16,8 @@ export default _xyz => function (params){
   
   const layerVector = new _xyz.mapview.lib.layer.Vector({
     source: sourceVector,
-    zIndex: 20,
-    style: params.style,
+    zIndex: isNaN(params.zIndex) ? 2000 : params.zIndex,
+    style: params.style
   }); 
   
   _xyz.map.addLayer(layerVector);
