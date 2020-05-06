@@ -1,0 +1,197 @@
+<!doctype html>
+<html>
+
+<head data-dir="${dir}">
+    <title>XYZ | Login</title>
+    <link rel="icon" type="image/x-icon" href="${dir}/icons/favicon.ico" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <script src="https://www.google.com/recaptcha/api.js?render=${captcha}"></script>
+
+    <script src="${dir}/views/_login.js" defer></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 50px;
+            font-size: 13px;
+            font-family: 'Open Sans', sans-serif;
+
+        }
+
+        .input-group {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        input {
+            padding: 10px 0;
+            width: 100%;
+            border: none;
+            border-bottom: 1px solid #999;
+            font-size: 18px;
+        }
+
+        input:focus {
+            outline: none;
+        }
+
+        input:-webkit-autofill {
+            box-shadow: 0 0 0px 1000px white inset;
+        }
+
+        .bar {
+            position: relative;
+            display: block;
+            width: 100%;
+        }
+
+        .bar:before,
+        .bar:after {
+            content: '';
+            height: 2px;
+            width: 0;
+            bottom: 0;
+            position: absolute;
+            background: #1F964D;
+            transition: 0.2s ease all;
+            -moz-transition: 0.2s ease all;
+            -webkit-transition: 0.2s ease all;
+        }
+
+        input:invalid+.bar:before,
+        input:invalid+.bar:after {
+            background: orangered;
+        }
+
+        .bar:before {
+            left: 50%;
+        }
+
+        .bar:after {
+            right: 50%;
+        }
+
+        input:focus~.bar:before,
+        input:focus~.bar:after {
+            width: 50%;
+        }
+
+        button {
+            color: white;
+            background-color: #1F964D;
+            margin: 10px 0;
+            padding: 8px;
+            text-align: center;
+            font: 18px "Open Sans", sans-serif;
+            font-weight: 700;
+            border-radius: 3px;
+            border: 0;
+            box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        button:hover:enabled {
+            cursor: pointer;
+            color: #1F964D;
+            background-color: white;
+        }
+
+        .login_form p {
+            font-size: 18px;
+        }
+
+        .register_form p {
+            font-size: 14px;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .switch {
+            font-size: 18px;
+            text-decoration: none;
+            color: #1F964D;
+            font-weight: 700;
+        }
+
+        .switch:hover {
+            cursor: pointer;
+        }
+
+        button:disabled {
+            background-color: darkslategrey;
+        }
+
+        .msg {
+            color: #f57c00;
+        }
+
+        .mailto {
+            color: #1F964D;
+            text-decoration: none;
+        }
+
+        a, button {
+            outline: 0;
+        }
+    </style>
+</head>
+
+<body class="login_form" data-captcha=${captcha}>
+
+    <form action="${dir}/api/user/cookie" method="post" autocomplete="off">
+
+        <input style="display: none;" name="redirect" value="${redirect}">
+
+        <div class="input-group">
+            <input
+            id="auth_user_email"
+            name="email"
+            type="email"
+
+            required 
+            maxlength="50">
+
+            <span class="bar"></span>
+            <label for="auth_user_email">E-mail</label>
+        </div>
+
+        <br>
+
+        <div class="input-group">
+            <input 
+            id="auth_user_password" 
+            name="password" 
+            type="password" 
+
+            required
+            minlength="8">
+
+            <span class="bar"></span>
+            <label for="auth_user_password">Password</label>
+        </div>
+
+        <br>
+
+        <p class="msg">${msg}</p>
+
+        <button id="btnLogin" type="submit" disabled>
+            Log In
+        </button>
+
+        <input 
+            style="display:none;" 
+            id="captcha_input" 
+            name="captcha"
+            required >
+
+        <p>Your account must be verified by following a verification link sent to the email address and approved by
+            an administrator before you are able to log in.</p>
+        <a class="switch" href="${dir}/api/user/register">Register a new account or reset your password.</a>
+    </form>
+
+</body>
+
+</html>

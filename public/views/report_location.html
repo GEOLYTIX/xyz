@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+
+<html lang="en">
+
+
+<head data-host="${host}" data-dir="${dir}">
+
+    <title>Mapp Site Report</title>
+
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="icon" type="image/x-icon" href="${dir}/favicon.ico" />
+    <link rel="stylesheet" href="${dir}/css/control.css" />
+
+    <script src="${dir}/js/xyz_openlayers.js" defer></script>
+
+    <!--<script type="application/javascript"
+        src="${dir}/proxy/cdn?uri=https://api.github.com/repos/GEOLYTIX/xyz_resources/contents/dev/report_sites/sites.js&type=application/javascript&token=${token}"
+        defer></script>-->
+
+    <script type="application/javascript"
+        src="${dir}/api/provider/github?url=api.github.com/repos/GEOLYTIX/xyz_resources/contents/dev/report_sites/sites.js"
+        defer></script>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        .attribution, .logo {
+            display: none;
+        }
+
+        .page {
+            width: 297mm;
+            height: 200mm;
+            margin: 5mm auto;
+            padding: 10mm;
+            page-break-after: auto;
+            box-shadow: 1px 1px 2px #333;
+        }
+
+        @media print {
+            .page {
+                box-shadow: none;
+                margin: none;
+                padding: 10mm;
+            }
+        }
+
+        .page h3 {
+            padding: 6px;
+            background-color: #DEF6CA;
+            color: #5E5E5A;
+            font-size: 13px;
+            margin-bottom: 5mm;
+        }
+
+        .page h5 {
+            margin-bottom: 5mm;
+        }
+
+        .page > .grid {
+            display: grid;
+            grid-gap: 5mm;
+        }
+
+        ._report {
+            display: none !important;
+        }
+
+        .locationview td.label {
+            width:  50mm;
+        }
+
+        /*#xyz_legends {
+            grid-column: 2;
+            grid-row: 15;
+        }*/
+
+        #xyz_location {
+            grid-column: 1;
+            grid-row: 1/5;
+        }
+
+        #xyz_map {
+            grid-column: 2;
+            grid-row: 1;
+            height: 300px;
+        }
+
+        #xyz_legends {
+            grid-column: 2;
+            grid-row: 2;
+            height: 100%;
+        }
+
+        /*#xyz_location {
+            grid-column: 1;
+            grid-row: 1/10;
+        }*/
+
+        #xyz_sites_pop {
+            grid-column: 2;
+            grid-row: 2;
+        }
+
+        #xyz_sites_pop .tabulator-table div.tabulator-row:last-child {
+            font-weight: bold;
+        }
+
+        #xyz_sites_random {
+            grid-column: 1;
+            grid-row: 4;
+        }
+
+        #xyz_sites_random2 {
+            grid-column: 2;
+            grid-row: 4;
+        }
+
+        #xyz_sites_socialgrade {
+            grid-column: 1;
+            grid-row: 2;
+        }
+
+        #xyz_sites_socialgrade .tabulator-table div.tabulator-row:last-child {
+            font-weight: bold;
+        }
+
+        #xyz_sites_nearestcomp {
+            grid-column: 1;
+            grid-row: 4;
+        }
+
+        #xyz_sites_workers {
+            grid-column: 1;
+            grid-row: 2;
+        }
+
+        /* oac */
+
+        #xyz_sites_oac {
+            font-size: 90%;
+        }
+
+        #xyz_sites_oac .tabulator-row {
+            height: 22px;
+            vertical-align: middle;
+        }
+
+        #xyz_sites_oac .tabulator-table div.tabulator-row:last-child {
+            font-weight: bold;
+        }
+
+    </style>
+
+</head>
+
+<body data-viewmode="report" data-token=${token}>
+
+    <div class="page">
+        <h3>MAPP SITE REPORT</h3>
+        <div class="grid" style="grid-template-columns: 1fr 2fr;">
+            <div id="xyz_legends">Hello</div>
+            <div id="xyz_location"></div>
+            <div id="xyz_map"></div>
+            <div id="xyz_sites_pop"></div>
+        </div>
+    </div>
+
+    <div class="page">
+        <div class="grid">
+
+            <!--<h3 style="grid-column: 1 / span 2; grid-row: 1;">SOCIAL GRADE</h3>
+
+            <div id="xyz_sites_socialgrade"></div>-->
+
+            <h3 style="grid-column: 1 / span 2; grid-row: 3;">RANDOM DATA SERIES</h3>
+
+            <div id="xyz_sites_random"></div>
+            <div id="xyz_sites_random2"></div>
+
+        </div>
+    </div>
+
+    <div class="page">
+        
+        <div class="grid">
+
+            <h3 style="grid-column: 1; grid-row: 1;">WORKERS</h3>
+
+            <div id="xyz_sites_workers"></div>
+
+            <h3 style="grid-column: 1; grid-row: 3;">NEAREST COMPETITORS</h3>
+
+            <div id="xyz_sites_nearestcomp"></div>
+        
+        </div>
+
+    </div>
+
+    <!--<div class="page">
+        
+        <h3>OAC Profile</h3>
+
+        <div id="xyz_sites_oac"></div>
+        
+    </div>-->
+
+</body>
+
+</html>

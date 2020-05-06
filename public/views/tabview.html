@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <title>Test for table view</title>
+
+  <link rel="icon" type="image/x-icon" href="${dir}/icons/favicon.ico" />
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="${dir}/css/openlayers.css" />
+  <link rel="stylesheet" href="${dir}/css/control.css" />
+
+  <script src="${dir}/js/xyz_openlayers.js" defer></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+    }
+
+    #tabview {
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div id="tabview"></div>
+
+</body>
+
+<script>
+
+  window.addEventListener('DOMContentLoaded', function () {
+
+    _xyz({
+      host: '${host}',
+      locale: 'GB',
+      callback: function (_xyz) {
+
+        _xyz.dataviews.tabview.init({
+          target: document.getElementById('tabview'),
+        });
+
+
+        _xyz.dataviews.tabview.add({
+          title: "Worker Summary Sites",
+          query: 'Worker Summary Sites',
+          layer: _xyz.layers.list['Sites'],
+          id: 35,
+          layout: "fitColumns",
+          columns: [
+            {
+              "field": "rows",
+              "title": "Worker Summary",
+              "headerSort": false,
+              "align": "left"
+            },
+            {
+              "title": "Total Workers",
+              "field": "workers",
+              "align": "center",
+              "formatter": "money",
+              "formatterParams": {
+                "precision": 0
+              }
+            }
+          ]
+        })
+
+        _xyz.dataviews.tabview.add({
+          title: "Radar Chart",
+          layer: _xyz.layers.list['Sites'],
+          id: 35,
+          query: 'Random Data Series',
+          chart: {
+            "type": "radar",
+            "labels": [
+              "Rand 1",
+              "Rand 2",
+              "Rand 3",
+              "Rand 4",
+              "Rand 5"
+            ],
+            "datasets": [
+              {
+                "fields": [
+                  "random1",
+                  "random2",
+                  "random3",
+                  "random4",
+                  "random5"
+                ],
+                "label": "Serie 1",
+                "borderColor": "#0B9800",
+                "fill": false,
+              },
+              {
+                "fields": [
+                  "rev_random1",
+                  "rev_random2",
+                  "rev_random3",
+                  "rev_random4",
+                  "rev_random5"
+                ],
+                "label": "Serie 2",
+                "borderColor": "#e65100",
+                "fill": false,
+              }
+            ]
+          }
+        })
+
+        _xyz.dataviews.tabview.add({
+          title: "Population Summary Sites",
+          query: 'Population Summary Sites',
+          layer: _xyz.layers.list['Sites'],
+          id: 35,
+          layout: "fitColumns",
+          columns: [
+            {
+              "field": "rows",
+              "title": "Population Summary",
+              "headerSort": false,
+              "align": "left"
+            },
+            {
+              "title": "Grouped columns",
+              "columns": [
+                {
+                  "title": "0-5 mins",
+                  "field": "min5",
+                  "formatter": "money",
+                  "formatterParams": {
+                    "precision": 0
+                  },
+                  "align": "center"
+                },
+                {
+                  "title": "0-10 mins",
+                  "field": "min10",
+                  "formatter": "money",
+                  "formatterParams": {
+                    "precision": 0
+                  },
+                  "align": "center"
+                }
+              ]
+            }
+          ]
+        })
+
+        _xyz.dataviews.tabview.add({
+          title: "Stacked Data",
+          layer: _xyz.layers.list['Sites'],
+          id: 35,
+          query: 'Stacked Data',
+          chart: {
+            "type": "bar",
+            "labels": [
+              "Activity 1",
+              "Activity 2",
+              "Activity 3",
+              "Activity 4"
+            ],
+            "datasets": [
+              {
+                "label": "actual",
+                "fields": [
+                  "actual_sales_activity1",
+                  "actual_sales_activity2",
+                  "actual_sales_activity3",
+                  "actual_sales_activity4"
+                ],
+                "backgroundColor": "#FFA630"
+              },
+              {
+                "label": "model",
+                "field": "model",
+                "backgroundColor": "#0B9800"
+              }
+            ],
+            options: {
+              scales: {
+                yAxes: [
+                  {
+                    stacked: true
+                  }
+                ],
+                xAxes: [
+                  {
+                    stacked: true
+                  }
+                ]
+              }
+            }
+          }
+        })
+
+      }
+
+    });
+
+  })
+
+</script>
+
+</html>

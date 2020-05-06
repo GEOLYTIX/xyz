@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <title>Test for table view</title>
+
+  <link rel="icon" type="image/x-icon" href="${dir}/icons/favicon.ico" />
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="${dir}/css/openlayers.css" />
+  <link rel="stylesheet" href="${dir}/css/control.css" />
+
+  <script src="${dir}/js/xyz_openlayers.js" defer></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+    }
+
+    #Grid {
+      display: grid;
+      height: 100%;
+      grid-template-columns: 1fr 1fr;
+    }
+
+    #Map {
+      grid-column: 1;
+    }
+
+    #Container {
+      grid-column: 2;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div id="Grid">
+    <div id="Map"></div>
+    <div id="Container"></div>
+  </div>
+
+</body>
+
+<script>
+
+  window.addEventListener('DOMContentLoaded', function () {
+
+    const __xyz = _xyz({
+      host: 'http://localhost:3000',
+      locale: 'GB',
+      callback: _xyz => {
+
+        //_xyz.layers.list['Countries'].filter.current = {pop_est_edit: {gte: 235933369, lte: 1379302771}}
+
+        _xyz.mapview.create({
+          target: document.getElementById('Map'),
+          scrollWheelZoom: true
+        });
+
+        _xyz.layers.list['Retail Places'].show();
+
+        const container = document.getElementById('Container');
+
+        document.addEventListener('addDashboard', e => {
+          e.detail(_xyz, {
+            target: container,
+            id: 278,
+            layer: _xyz.layers.list['Sites']})
+        }, true);
+
+        container.appendChild(_xyz.utils.wire()`<script src="/api/provider/github?url=api.github.com/repos/GEOLYTIX/xyz_resources/contents/dev/dashboards/with_charts.js">`);
+
+      }
+
+    });
+
+  })
+
+</script>
+
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head data-dir="${dir}">
+    <title>Geodata</title>
+    <link rel="icon" type="image/x-icon" href="${dir}/favicon.ico" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="${dir}/css/openlayers.css" />
+    <link rel="stylesheet" href="${dir}/css/control.css" />
+
+    <script src="${dir}/js/build/xyz_openlayers.js" defer></script>
+    <script src="${dir}/views/geodata.js" defer></script>
+
+    <style>
+
+        body {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            min-width: 799px;
+            overflow-x: hidden;
+            margin: 0px;
+            color: #3f3f3f;
+
+            font-family: ffmark, "Open Sans", sans-serif;
+            font-weight: 400;
+            font-size: 13px;
+        }
+
+        .bold {
+          font-family: ffmark_bold, "Open Sans", sans-serif;
+          font-weight: 700;
+        }
+
+        .primary-colour, a {
+          color: #090;
+        }
+
+        .section {
+          margin: 50px auto 0 auto;
+          max-width: 1600px;
+          padding-left: 50px;
+        }
+
+        h1 {
+          font-size: 300%;
+          margin-bottom: 10px;
+        }
+
+        h2 {
+          font-size: 200%;
+          margin-bottom: 10px;
+        }
+
+        h3 {
+          font-size: 150%;
+          margin-bottom: 20px;
+        }
+
+        .legend > svg {
+          width: 100%;
+        }
+                        
+        .geodata__select {
+          font-size: 18px;
+        }
+        
+        .geodata__select>div {
+          margin-bottom: 5px;
+          border-bottom: 10px solid white;
+        }
+        
+        .geodata__select>div:hover {
+          border-bottom: 10px solid black;
+          cursor: pointer;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <div id="section_geodata" class="section">
+      <h1 class="bold">GeoData</h1>
+      <h2 class="bold primary-colour">Where people live, work, study and shop</h2>
+      <h3 class="bold">We create novel datasets using Open Data as inputs, to help with your network strategy and location based decisions.</h3>
+    
+      <div style="display: grid; grid-template-columns: 270px 300px 1fr;">
+
+        <div id="geodata__select" class="geodata__select" style="grid-row: 1; grid-column: 1;">
+
+            <div data-locale="London" data-layers="Retail Points">Retail Points</div>
+
+            <div data-locale="London" data-layers="Census">Census</div>
+
+            <div data-locale="London" data-layers="LAD,OA">Admin Boundaries</div>
+
+            <div data-locale="London" data-layers="Education,University building">Education</div>
+
+            <div data-locale="London" data-layers="Grocery Demand">Grocery Demand</div>
+
+            <div data-locale="London" data-layers="Points of Interest">Points of Interest</div>
+
+            <div data-locale="London" data-layers="Postal Sector,Postal District,Postal Areas">Postal</div>
+
+            <div data-locale="London" data-layers="Rail Lines,Rail Stations">Public Transport</div>
+
+            <div data-locale="London" data-layers="Residential">Residential</div>
+
+            <div data-locale="London" data-layers="Retail Places">Retail Places</div>
+
+            <div data-locale="London" data-layers="Road Network">Road Network</div>
+
+            <div data-locale="London" data-layers="Seamless towns and suburbs">Seamless towns and suburbs</div>
+
+            <div data-locale="London" data-layers="Town and suburb">Town and suburb</div>
+
+            <div data-locale="London" data-layers="Urbanity">Urbanity</div>
+
+            <div data-locale="London" data-layers="Workers">Workers</div>
+
+            <div data-faq=true>FAQ</div>
+
+        </div>
+
+        <div id="geodata__info" class="geodata__info" style="grid-row: 1; grid-column: 2; background-color: #f0f0f0; padding: 10px;">
+        </div>
+
+        <div class="geodata__content" style="grid-row: 1; grid-column: 3; position: relative;">
+          <div class="btn-column" style="position: absolute; height: 100%; padding: 4px; background-color: #fff; opacity: 0.8; box-shadow: inset 4px 0 4px -4px #777;">
+            <button class="btn-zoomin enabled"><div class="xyz-icon icon-add"></div></button>
+            <button class="btn-zoomout enabled" disabled><div class="xyz-icon icon-remove"></div></button>
+            <a class="btn-fullscreen enabled" target="_blank"><div class="xyz-icon icon-fullscreen"></div></a>
+          </div>
+          <div id="map_geodata" class="map" ></div>
+        </div>
+
+        <div id="geodata__faq" style="display: none; z-index: 999; background-color: white; grid-row: 1; grid-column: 2/4; grid-gap: 30px; grid-template-rows: min-content min-content min-content min-content min-content min-content min-content; grid-row-gap: 0;">
+          <div class="bold" style="grid-column: 1; grid-row:1;">IS THE DATA I PURCHASE LICENSED?</div>
+          <div class="bold" style="grid-column: 2; grid-row:1;">CAN I PUBLISH THE DATA?</div>
+          <div style="grid-column: 1; grid-row:2; margin-bottom: 10px;">Yes, our aim is to keep licensing simple and transparent. All prices shown are for an annual right to use. This includes full corporate use with no restrictions on user numbers.</div style="grid-column: 2; grid-row:1">
+          <div style="grid-column: 2; grid-row:2; margin-bottom: 10px;">The prices shown are for internal business use only. If you would like to use the data in a website or in a commercial product we’d be delighted to discuss options so please get in touch.</div>
+          <div class="bold" style="grid-column: 1; grid-row:3">WHAT SOFTWARE CAN THE DATA BE USED IN?</div>
+          <div class="bold" style="grid-column: 2; grid-row:3">I CAN’T TELL IF THE DATA IS WHAT I NEED?</div>
+          <div style="grid-column: 1; grid-row:4; margin-bottom: 10px;">We provide our data in all formats commonly used by desktop GIS, spatial databases and web mapping applications. We’re more than happy to discuss, whatever your software requirements are.</div style="grid-column: 2; grid-row:1">
+          <div style="grid-column: 2; grid-row:4; margin-bottom: 10px;">Then please get in touch. We’d be delighted to pay a visit and take you through the data with examples of the benefits and how it can be used.</div style="grid-column: 2; grid-row:1">
+          <div class="bold" style="grid-column: 1; grid-row:5">HOW OFTEN IS THE DATA UPDATED?</div>
+          <div class="bold" style="grid-column: 2; grid-row:5">I’M INTERESTED, HOW DO I BUY?</div>
+          <div style="grid-column: 1; grid-row:6; margin-bottom: 10px;">Every pack is updated at least annually, with some packs updated every quarter. Ask for more details.</div style="grid-column: 2; grid-row:1">
+          <div style="grid-column: 2; grid-row:6; margin-bottom: 10px;">Please get in touch, we can send you the data asap and provide payment details.</div style="grid-column: 2; grid-row:1">
+          <div class="bold" style="grid-column: 1; grid-row:7">CAN I SEE A USER GUIDE / DOCUMENTATION?</div>
+          <div class="bold" style="grid-column: 2; grid-row:7">HOW DOES THE DATA ARRIVE?</div>
+          <div style="grid-column: 1; grid-row:8; margin-bottom: 10px;">Yes of course, please get in touch and we will send the same day.</div style="grid-column: 2; grid-row:1">
+          <div style="grid-column: 2; grid-row:8; margin-bottom: 10px;">We can send a link to download, memory stick or DVD.</div style="grid-column: 2; grid-row:1">
+        </div>
+
+      </div>
+
+    </div>
+
+</body>
+
+</html>

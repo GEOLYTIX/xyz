@@ -1,0 +1,241 @@
+<!doctype html>
+<html>
+
+<head data-dir="${dir}">
+    <title>XYZ | Registration</title>
+    <link rel="icon" type="image/x-icon" href="${dir}/icons/favicon.ico" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://www.google.com/recaptcha/api.js?render=${captcha}"></script>
+
+    <script src="${dir}/views/_register.js" defer></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 50px;
+            font: 14px "Open Sans", sans-serif;
+        }
+
+        .input-group {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        input {
+            padding: 10px 0;
+            width: 100%;
+            border: none;
+            border-bottom: 1px solid #999;
+            font-size: 18px;
+        }
+
+        input:focus {
+            outline: none;
+        }
+
+        input:-webkit-autofill {
+            box-shadow: 0 0 0px 1000px white inset;
+        }
+
+        .bar {
+            position: relative;
+            display: block;
+            width: 100%;
+        }
+
+        .bar:before,
+        .bar:after {
+            content: '';
+            height: 2px;
+            width: 0;
+            bottom: 0;
+            position: absolute;
+            background: #1F964D;
+            transition: 0.2s ease all;
+            -moz-transition: 0.2s ease all;
+            -webkit-transition: 0.2s ease all;
+        }
+
+        input:invalid+.bar:before,
+        input:invalid+.bar:after {
+            background: orangered;
+        }
+
+        .bar:before {
+            left: 50%;
+        }
+
+        .bar:after {
+            right: 50%;
+        }
+
+        input:focus~.bar:before,
+        input:focus~.bar:after {
+            width: 50%;
+        }
+
+        button {
+            color: white;
+            background-color: #1F964D;
+            margin: 10px 0;
+            padding: 8px;
+            text-align: center;
+            font: 18px "Open Sans", sans-serif;
+            font-weight: 700;
+            border-radius: 3px;
+            border: 0;
+            box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .login_form p {
+            font-size: 18px;
+        }
+
+        .register_form p {
+            font-size: 14px;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .switch {
+            font-size: 18px;
+            text-decoration: none;
+            color: #1F964D;
+            font-weight: 700;
+        }
+
+        button:hover,
+        .switch:hover {
+            cursor: pointer;
+        }
+
+        button:disabled {
+            background-color: darkslategrey;
+        }
+
+        .msg {
+            color: #f57c00;
+        }
+
+        .mailto {
+            color: #1F964D;
+            text-decoration: none;
+        }
+
+        .checkbox {
+            display: block;
+        }
+
+        .checkbox input {
+            display: none;
+        }
+
+        .checkbox>span {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .checkbox>div {
+            display: inline-block;
+            vertical-align: middle;
+            width: 18px;
+            height: 18px;
+            margin-right: 5px;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            -webkit-background-size: contain;
+            background-image: url("${dir}/icons/icon-checkbox-unchecked.svg");
+        }
+
+        input:checked+div {
+            background-image: url("${dir}/icons/icon-checkbox-checked.svg");
+        }
+
+        #btnRegister {
+            display: block;
+        }
+
+    </style>
+</head>
+
+<body class="register_form" data-captcha=${captcha}>
+    <form method="post">
+
+        <div class="input-group">
+            <input id="auth_user_email" name="email" type="email" autocomplete="off" required maxlength="50" value="">
+
+            <span class="bar"></span>
+            <label for="auth_user_email">E-mail</label>
+        </div>
+
+        <br>
+
+        <div class="input-group">
+            <input id="auth_user_password" name="password" type="password" autocomplete="off" required minlength="8"
+                value="">
+
+            <span class="bar"></span>
+            <label for="auth_user_password">New Password (min. length 8 character)</label>
+        </div>
+
+        <br>
+
+        <div class="input-group">
+            <input id="auth_user_password_retype" type="password" autocomplete="off" required
+                minlength="8" value="">
+
+            <span class="bar"></span>
+            <label for="auth_user_password_retype">Re-type password</label>
+        </div>
+
+        <br>
+
+        <p class="bold">Privacy</p>
+
+        <p>Here at Geolytix we take your privacy seriously and will only use your personal information to administer
+            your account and provide the products and services requested from us. We will never share your personal
+            data with a third party.</p>
+
+        <p>Disabling your account can be done through your administrator however if you wish for your details to be
+            permanently removed please email <a class="mailto"
+                href="mailto:support@geolytix.co.uk">support@geolytix.co.uk</a></p>
+
+        <p>This website is owned and operated by Geolytix, with its principal place of business at Phoenix Yard, 65
+            Kings Cross Road, London, WC1X 9LW</p>
+
+        <label class="checkbox">
+            <input id="privacy_agreement" type="checkbox">
+            <div></div>
+            <span>I agree</span>
+        </label>
+
+        <button id="btnRegister" type="submit" formaction="register" disabled>
+            Register or Re-set Password
+        </button>
+
+        <input style="display:none;" id="captcha_input" required>
+
+        <p class="bold">What happens next? Confirming your account</p>
+
+        <p>An email will will be sent to the email address you have provided, from <a class="mailto"
+                href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a>, with a link to
+            verify your account.</p>
+
+        <p>If this has not been received in a few minutes please check any spam / junk folders. Adding
+            <a class="mailto" href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a> to your safe senders list will
+            ensure messages get through.</p>
+
+        <p>After verification, a site administrator will approve new accounts. You will receive a further email once
+            your account has been approved.</p>
+
+        <a class="switch" href="${dir}/?login">Already registered? Login.</a>
+    </form>
+
+</body>
+
+</html>

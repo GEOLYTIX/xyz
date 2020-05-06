@@ -1,0 +1,74 @@
+body {
+    color: #3f3f3f;
+}
+
+a {
+    color: #3f3f3f;
+}
+
+.off-white {
+    color: ghostwhite;
+}
+
+.off-white-hover:hover {
+    background-color: ghostwhite;
+    cursor: pointer;
+}
+
+.off-black {
+    color: #3f3f3f;
+}
+
+.off-black-filter {
+    filter: invert(24%) sepia(23%) saturate(0%) hue-rotate(271deg) brightness(86%) contrast(90%);
+    -webkit-filter: invert(24%) sepia(23%) saturate(0%) hue-rotate(271deg) brightness(86%) contrast(90%);
+}
+
+/* Primary colour properties */
+.primary-colour {
+    color: #1f964d;
+}
+
+.primary-colour-filter {
+    filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%);
+    -webkit-filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%);
+}
+
+.primary-colour-bg {
+    background-color: #1f964d;
+}
+
+.primary-colour-bb {
+	border-bottom: 1px solid #1f964d;
+}
+
+input[type=range]::-webkit-slider-thumb {
+    background: #1f964d;
+}
+
+input[type=range]::-moz-range-thumb {
+    background: #1f964d;
+}
+
+/* Secondary colour properties */
+.secondary-colour {
+    color: #cae0b8;
+}
+
+.secondary-colour-filter {
+    filter: invert(90%) sepia(21%) saturate(301%) hue-rotate(48deg) brightness(104%) contrast(93%);
+    -webkit-filter: invert(90%) sepia(21%) saturate(301%) hue-rotate(48deg) brightness(104%) contrast(93%);
+}
+
+.secondary-colour-bg {
+    background-color: #cae0b8;
+}
+
+.secondary-colour-bb {
+    border-bottom: solid 1px #cae0b8;
+}
+
+.secondary-colour-hover:hover {
+    background-color: #cae0b8;
+    cursor: pointer;
+}

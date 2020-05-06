@@ -1,0 +1,73 @@
+body {
+  display: grid;
+  min-width: 666px;
+  grid-template-columns: 333px 10px auto;
+}
+
+#listviews {
+  grid-column: 1;
+  padding: 20px;
+  background-color: #f0f0f0;
+  overflow-y: auto;
+  overflow-x: hidden;
+  transform: rotateY(180deg);
+}
+
+#listviews>div {
+  transform: rotateY(180deg);
+}
+
+#listviews>div>div {
+  margin-bottom: 20px;
+}
+
+#clear_locations {
+  font-size: 90%;
+}
+
+.listview-title {
+  font-weight: bold;
+  margin-bottom: 10px;
+  padding: 3px;
+  border-radius: 2px;
+}
+
+#vertDivider {
+  grid-column: 2;
+  background: repeating-linear-gradient(90deg, #ddd, #fff 3px);
+  box-shadow: 3px 0px 6px -3px #777;
+  z-index: 9999;
+}
+
+#vertDivider:hover {
+  cursor: col-resize;
+}
+
+#hozDivider {
+  height: 10px;
+  background: repeating-linear-gradient(0deg, #ddd, #fff 3px);
+  box-shadow: inset 3px 0 4px -4px #777;
+}
+
+#hozDivider:hover {
+  cursor: row-resize;
+}
+
+.mapview {
+  grid-column: 3;
+  position: relative;
+  overflow: hidden;
+}
+
+.mapview>.btn-column {
+  position: absolute;
+  left: 0;
+  height: 100%;
+  padding: 4px;
+  background-color: #fff;
+  opacity: 0.8;
+}
+
+.dataview {
+  box-shadow: 5px 5px 5px 5px #777;
+}

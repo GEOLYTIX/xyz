@@ -1,0 +1,56 @@
+#tabview {
+  overflow: hidden;
+  bottom: 0;
+  position: absolute;
+  width: 100%;
+  z-index: 1000;
+  background-color: white;
+  min-height: 65px;
+  height: 100%;
+
+  .tab-bar {
+    height: 55px;
+    width: 100%;
+    background-color: #f0f0f0;
+    overflow-x: auto;
+    transform: rotateX(180deg);
+
+    >div {
+      height: 100%;
+      transform: rotateX(180deg);
+      list-style-type: none;
+      white-space: nowrap;
+      display: flex;
+
+      >div{
+        display: flex;
+        align-items: center;
+        padding: 0 20px;
+        border-right: 1px solid #ccc;
+      }
+
+      >div:hover {
+        cursor: pointer;
+      }
+
+      >div.active {
+        background-color: #fff;
+        font-weight: bold;
+      }
+    }
+
+  }
+
+  .tab-panel {
+    height: calc(100% - 65px);
+    overflow-x: auto;
+  }
+
+  .toolbar {
+
+    button {
+      margin: 10px;
+    }
+  }
+
+}
