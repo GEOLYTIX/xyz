@@ -2368,7 +2368,8 @@
           },
           "cluster_kmeans": 0.1,
           "cluster_label": "site_name",
-          "infoj": [{
+          "infoj": [
+            {
               "type": "streetview"
             },
             {
@@ -2803,6 +2804,8 @@
             }
           ],
           "style": {
+            "markerMin": 20,
+            "markerMax": 30,
             "marker": {
               "type": "target",
               "fillColor": "#ffb300"
@@ -2812,7 +2815,24 @@
               "fillColor": "rgba(0, 75, 168, 0.3)"
             },
             "themes": {
-              "Test categorized": {
+              "Test categorized pins": {
+                "field": "test_binary",
+                "type": "categorized",
+                "other": true,
+                "cat": {
+                  "0": {
+                    "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/aga/hi.svg",
+                    "markerMin": 50,
+                    "markerMax": 50
+                  },
+                  "1": {
+                    "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/aga/hi2.svg",
+                    "markerMin": 50,
+                    "markerMax": 50
+                  }
+                }
+              },
+              "Test categorized dots": {
                 "field": "test_binary",
                 "type": "categorized",
                 "other": true,
