@@ -8,6 +8,6 @@ Failing to select location will now remove the hook and not prompt the error mes
 
 Integer and numeric fields now can be set to empty - previously resulted in database column type error.
 
-Fix to document container - newly uploaded document added at the end of the list, original file name is retained instead of unix timestamp.
+Fix to document container - newly uploaded document added at the end of the list, original file name is retained instead of unix timestamp. #262 
 
-Cluster markers - markerMin/Max now supported within theme markers.
+Cluster markers - markerMin/Max now supported within theme markers. #251 
