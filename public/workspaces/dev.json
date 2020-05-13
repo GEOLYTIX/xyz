@@ -2361,12 +2361,10 @@
           "geom": "geom_4326",
           "dbs": "XYZ",
           "qID": "id",
-          "tables": {
-            "9": null,
-            "10": "dev.uk_glx_sites",
-            "11": "dev.uk_glx_sites",
-            "12": "dev.uk_glx_sites",
-            "13": null
+          "table": "dev.uk_glx_sites",
+          "_tables": {
+            "6": null,
+            "7": "dev.uk_glx_sites"
           },
           "cluster_kmeans": 0.1,
           "cluster_label": "site_name",
@@ -2395,6 +2393,25 @@
             {
               "field": "id",
               "label": "Site ID",
+              "inline": true
+            },
+            {
+              "field": "text_edit",
+              "label": "Text edit",
+              "edit": true
+            },
+            {
+              "field": "integer_edit",
+              "label": "Integer edit",
+              "type": "integer",
+              "edit": true,
+              "inline": true
+            },
+            {
+              "field": "numeric_edit",
+              "label": "Numeric edit",
+              "type": "numeric",
+              "edit": true,
               "inline": true
             },
             {
@@ -2738,7 +2755,8 @@
               "class": "_report",
               "layout": "fitColumns",
               "query": "Worker Summary Sites",
-              "columns": [{
+              "columns": [
+                {
                   "field": "rows",
                   "title": "Worker Summary",
                   "headerSort": false,
@@ -2762,7 +2780,8 @@
               "target": "xyz_sites_nearestcomp",
               "layout": "fitColumns",
               "query": "Nearest competitors Sites",
-              "columns": [{
+              "columns": [
+                {
                   "title": "Distance",
                   "field": "dist",
                   "align": "center",
