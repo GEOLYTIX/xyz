@@ -11,3 +11,5 @@ Integer and numeric fields now can be set to empty - previously resulted in data
 Fix to document container - newly uploaded document added at the end of the list, original file name is retained instead of unix timestamp. #262 
 
 Cluster markers - markerMin/Max now supported within theme markers. #251 
+
+Tabulator grouped columns - removed displaced borders for cleaner look #249.
