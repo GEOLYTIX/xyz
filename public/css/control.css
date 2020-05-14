@@ -283,7 +283,8 @@ input[type=number] {
     width: 100%;
     text-overflow: ellipsis;
     padding: 5px;
-    border: 1px solid #ccc; }
+    border: 1px solid #ccc;
+    line-height: 1.5; }
   .input-drop ul {
     width: 100%;
     margin-top: -2px;
@@ -913,9 +914,6 @@ button {
 
 .tabulator-row .tabulator-responsive-collapse:empty {
   display: none; }
-
-.tabulator-row .tabulator-responsive-collapse table {
-  /*font-size: 14px;*/ }
 
 .tabulator-row .tabulator-responsive-collapse table tr td {
   position: relative; }
