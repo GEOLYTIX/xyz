@@ -26,3 +26,4 @@ public/views/camelot_report.js
 .ebextensions/*
 \.ebextensions/
 .now
+.vercel

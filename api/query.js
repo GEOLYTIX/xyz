@@ -64,7 +64,7 @@ module.exports = async (req, res) => {
     return console.error(err)
   }
 
-  const rows = await dbs[template.dbs || req.params.dbs || req.params.layer.dbs](q)
+  const rows = await dbs[template.dbs || req.params.dbs || req.params.layer.dbs](q, req.body && req.body.length && [JSON.stringify(req.body)] || req.params.params && req.params.params.split(','))
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
