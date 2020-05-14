@@ -177,4 +177,5 @@ async function gaz_locale(req, locale) {
   }
 
   // Return empty results array if no results where found in any dataset.return []
+  return []
 }
