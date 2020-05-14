@@ -6,6 +6,7 @@ Check whether remove dataview function exists before trying to remove dataview. 
 
 Failing to select location will now remove the hook and not prompt the error message twice.
 
+<<<<<<< HEAD
 Datasource Gazetteer may now be set without association to a layer.
 
 ```
@@ -32,3 +33,12 @@ Dataviews may have a center property to send the lat lng of the current map view
 
 Dataviews now support a queryparams object to be sent to the Query API.
 
+=======
+Integer and numeric fields now can be set to empty - previously resulted in database column type error.
+
+Fix to document container - newly uploaded document added at the end of the list, original file name is retained instead of unix timestamp. #262 
+
+Cluster markers - markerMin/Max now supported within theme markers. #251 
+
+Tabulator grouped columns - removed displaced borders for cleaner look #249.
+>>>>>>> 1c5e9498a6cff87745279f96c7a888ae69e1eece

@@ -203,6 +203,11 @@
   display: inline-block;
 }
 
+.item > button.xyz-icon {
+    width: 16px;
+    height: 16px;
+}
+
 .link-with-img {
   display: block;
   margin-top: 5px;
