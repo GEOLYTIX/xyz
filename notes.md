@@ -45,3 +45,5 @@ Integer and numeric fields now can be set to empty - previously resulted in data
 Fix to document container - newly uploaded document added at the end of the list, original file name is retained instead of unix timestamp.
 
 Query API to support parameter array or stringified body as $1.
+
+Export JSON and CSV from dataview table fixed.
