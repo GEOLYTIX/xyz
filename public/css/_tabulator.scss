@@ -104,8 +104,13 @@
     position: relative;
     display: -ms-flexbox;
     display: flex;
+    border-left: none;
     border-top: 1px solid #ddd;
     overflow: hidden;
+
+    .tabulator-col {
+        border-left: none;
+    }
 }
 
 .tabulator .tabulator-header .tabulator-col.tabulator-col-group .tabulator-col-group-cols .tabulator-col:last-child {
@@ -498,10 +503,6 @@
     display: none;
 }
 
-.tabulator-row .tabulator-responsive-collapse table {
-    /*font-size: 14px;*/
-}
-
 .tabulator-row .tabulator-responsive-collapse table tr td {
     position: relative;
 }
@@ -687,8 +688,8 @@
 
 .tabulator-row.tabulator-group {
     box-sizing: border-box;
-    border-bottom: 1px solid #999;
-    border-left: 1px solid #ddd;
+    /*border-bottom: 1px solid #999;
+    border-left: 1px solid #ddd;*/
     border-top: 1px solid #999;
     padding: 5px;
     padding-left: 10px;

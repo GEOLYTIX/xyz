@@ -1,87 +1,53 @@
-This branch is for the migration from Zeit Now v1 to v2.
+## 3.1.0
 
-Node runtime must be 10+, should be 12.
+Icon in theme drop down no longer removed after switch.
 
-Fastify has been removed on this branch.
+Check whether remove dataview function exists before trying to remove dataview. A dataview will be pushed into the location array but may not be created if the display is false. This caused an error when trying to remove location with dataviews.
 
-There is a micro.js placeholder which is not currently used.
+Failing to select location will now remove the hook and not prompt the error message twice.
 
-For debugging the express.js file must be executed with node.
+Datasource Gazetteer may now be set without association to a layer.
 
-A now.json file must be in the root to test now dev local or to deploy to the Zeit/Now platform.
+```
+{
+  "source": "lad",
+  "table": "coop.vw_uk_glx_geodata_admin_lad_new",
+  "label": "lad_name",
+  "geom": "geom_4326",
+  "dbs": "XYZ"
+}
+```
 
-Routing is now implicit. A url path route is derived from the handlers location in the api/directory.
+The location.remove() will now be assigned before async call to Location API. This ensures that a location can be removed before the location decorator in the callback of the location/get request. [#267](https://github.com/GEOLYTIX/xyz/issues/267)
 
+Dataviews have an active flag to control whether they should be updated.
 
-Isolines have a common save and not a save handler depending on the isolines provider.
+Check on attribution layer to prevent error thrown when mapview is used without attriubution target.
 
-This is provisional. There should not be a handler to save isolines. This should be handled like any other geometry field.
+STATEMENT_TIMEOUT maybe set as environment setting. This will override the default statement of "10000" (10 seconds) for all dbs requests.
 
-The images_upload & documents_upload have now become cloudinary_upload.
+Touch interactions set a timeout of 1 second to prevent quick multi-tap for highlight / selection.
 
-Likewise, images_delete and documents_delete have become cloudinary_delete.
+Dataviews may have a center property to send the lat lng of the current map view centre to the Query API.
 
+Dataviews now support a queryparams object to be sent to the Query API.
 
-We are using express-http-proxy (also for the Zeit Now deployment). This may be temporary but requires a change to the URL which have a provider defined. The host needs to be split from the beginning of the URL path and added as a host query param.
+Cluster markers - markerMin/Max now supported within theme markers. [#251](https://github.com/GEOLYTIX/xyz/issues/251)
 
-e.g.
+Tabulator grouped columns - removed displaced borders for cleaner look. [#249](https://github.com/GEOLYTIX/xyz/issues/249)
 
-`"URI": "https://api.mapbox.com/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX"`
+Fix to document container - newly uploaded document added at the end of the list, original file name is retained instead of unix timestamp. [#262](https://github.com/GEOLYTIX/xyz/issues/262)
 
-becomes
+Failing to select location will now remove the hook and not prompt the error message twice.
 
-"URI": "/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX&host=https://api.mapbox.com"
+Integer and numeric fields now can be set to empty - previously resulted in database column type error.
 
-This doesn't work for provider=OS. In this case the key needs to be provided instead of the provider as these calls can not be proxied due to the use of encoded character in the URL path.
+Fix to document container - newly uploaded document added at the end of the list, original file name is retained instead of unix timestamp.
 
-I haven't figured out yet how to consistently use URL params between the Zeit Now rewrites and Express routing. For the time being /:x/:y/:z etc. must be changed to ?x=1&y=2&z=3
+Query API to support parameter array or stringified body as $1.
 
-The build file is now stored in the repository and building must be done locally not on deployment. Build dependencies are now installed as save-dev.
+Export JSON and CSV from dataview table fixed.
 
-I haven't tested using dotenv config yet.
+Shortcircuit 202 select requests.
 
-Workspaces are now in the public folder due to the implicit routing for static files.
-
-Valid workspace locations are:
-
-http://localhost:3000/zeit/workspaces/dev.json
-
-https://cdn.jsdelivr.net/gh/GEOLYTIX/public/dev.json
-
-github://api.github.com/repos/GEOLYTIX/xyz_resources/contents/dev/workspace.json
-
-Github is the recommended method.
-
-postgres://omfug:cbgb@pg.xyz.geolytix.net/xyz|dev.workspace
-
-file:dev.json
-
-file:* can only work with express and is not recommended.
-
-
-
-Layer checks
-
-
-There is no longer a DEBUG nor LOG_LEVEL option.
-
-Debug wouldn't make sense and log lebel was Fastify specific.
-
-There will be a LOG environment option but this is not yet implemented.
-
-There is TITLE environment key which supercedes the title in the workspace root.
-
-The ALIAS environment key is no more.
-
-
-Workspace administration is now a seperate view. This is likely to stay in alpha for a while due to Github being the opinionated choice.
-
-There are two endpoints to create PostgreSQL tables for the ACL and workspaces. These endpoints are:
-
-/api/workspace/pgtable
-
-/api/user/pgtable
-
-The endpoints are only available to user with admin rights. Obviously there are no users yet if a new ACL table is to be created. For this reason a token will have to be fudged from the SECRET which is used to sign and verify token. This can be done via jwt.io website.
-
-The SECRET goes into the signature and the payload needs to have an email (any) and admin_user set to true.
+Add gazetteer.callback prior to select for glx source.

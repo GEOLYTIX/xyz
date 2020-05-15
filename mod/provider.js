@@ -120,8 +120,8 @@ async function cloudinary(req) {
   return await _cloudinary.uploader.upload(ressource,
     {
       resource_type: req.params.resource_type,
-      public_id: `${process.env.CLOUDINARY.split(' ')[3]}/${Date.now()}`,
-      overwrite: true,
+      public_id: `${process.env.CLOUDINARY.split(' ')[3]}/${req.params.public_id}`, //${Date.now()}`,
+      overwrite: true
     })
 }
 

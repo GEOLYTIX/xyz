@@ -12,7 +12,7 @@ module.exports = () => {
       // Create connection pool.
       const pool = new Pool({
         connectionString: process.env[key],
-        statement_timeout: 10000
+        statement_timeout: parseInt(process.env.STATEMENT_TIMEOUT) || 10000
       });
 
       // Log connection name if after it's pool has been created.

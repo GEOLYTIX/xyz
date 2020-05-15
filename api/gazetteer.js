@@ -80,7 +80,7 @@ module.exports = async (req, res) => {
   res.send(results)
 }
 
-async function gaz_google (term, gazetteer) {
+async function gaz_google(term, gazetteer) {
 
   //https://developers.google.com/places/web-service/autocomplete
 
@@ -88,7 +88,7 @@ async function gaz_google (term, gazetteer) {
   const results = await provider.google(`maps.googleapis.com/maps/api/place/autocomplete/json?input=${term}`
     + `${gazetteer.code ? '&components=country:' + gazetteer.code : ''}`
     + `${gazetteer.bounds ? '&' + decodeURIComponent(gazetteer.bounds) : ''}`)
-  
+
   // Return results to route. Zero results will return an empty array.
   return results.predictions.map(f => ({
     label: f.description,
@@ -97,21 +97,21 @@ async function gaz_google (term, gazetteer) {
   }))
 }
 
-async function gaz_opencage (term, gazetteer) {
+async function gaz_opencage(term, gazetteer) {
 
-	const results = await provider.opencage(`api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(term)}`
-		+ `${gazetteer.code ? `&countrycode=${gazetteer.code}` : ''}`
-		+ `${gazetteer.bounds ? '&bounds=' + decodeURIComponent(gazetteer.bounds) : ''}`)
+  const results = await provider.opencage(`api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(term)}`
+    + `${gazetteer.code ? `&countrycode=${gazetteer.code}` : ''}`
+    + `${gazetteer.bounds ? '&bounds=' + decodeURIComponent(gazetteer.bounds) : ''}`)
 
-	return results.results.map(f => ({
-		id: f.annotations.geohash,
-		label: f.formatted,
-		marker: [f.geometry.lng, f.geometry.lat],
-		source: 'opencage'
-	}))
+  return results.results.map(f => ({
+    id: f.annotations.geohash,
+    label: f.formatted,
+    marker: [f.geometry.lng, f.geometry.lat],
+    source: 'opencage'
+  }))
 }
 
-async function gaz_mapbox (term, gazetteer) {
+async function gaz_mapbox(term, gazetteer) {
 
   //https://www.mapbox.com/api-documentation/#search-for-places
 
@@ -130,18 +130,18 @@ async function gaz_mapbox (term, gazetteer) {
   }))
 }
 
-async function gaz_locale (req, locale) {
+async function gaz_locale(req, locale) {
 
   // Loop through dataset entries in gazetteer configuration.
   for (let dataset of locale.gazetteer.datasets) {
 
     const layer = locale.layers[dataset.layer]
 
-    const roles = layer.roles && req.params.token.roles && req.params.token.roles.filter(
+    const roles = layer && layer.roles && req.params.token.roles && req.params.token.roles.filter(
       role => layer.roles[role]).map(
         role => layer.roles[role]) || []
-  
-    const filter = await sql_filter(Object.assign(
+
+    const filter = roles && await sql_filter(Object.assign(
       {},
       req.params.filter && JSON.parse(req.params.filter) || {},
       roles.length && Object.assign(...roles) || {}))
@@ -150,9 +150,9 @@ async function gaz_locale (req, locale) {
     var q = `
     SELECT
       ${dataset.label} AS label,
-      ${layer.qID} AS id,
-      ST_X(ST_PointOnSurface(${layer.geom || 'geom'})) AS lng,
-      ST_Y(ST_PointOnSurface(${layer.geom || 'geom'})) AS lat
+      ${dataset.qID || layer && layer.qID || null} AS id,
+      ST_X(ST_PointOnSurface(${dataset.geom || layer && layer.geom || 'geom'})) AS lng,
+      ST_Y(ST_PointOnSurface(${dataset.geom || layer && layer.geom || 'geom'})) AS lat
       FROM ${dataset.table}
       WHERE ${dataset.qterm || dataset.label}::text ILIKE $1
       ${filter}
@@ -160,9 +160,9 @@ async function gaz_locale (req, locale) {
       LIMIT 10`
 
     // Get gazetteer results from dataset table.
-    var rows = await dbs[layer.dbs](q, [`${dataset.leading_wildcard ? '%': ''}${decodeURIComponent(req.params.q)}%`])
+    var rows = await dbs[dataset.dbs || layer && layer.dbs](q, [`${dataset.leading_wildcard ? '%' : ''}${decodeURIComponent(req.params.q)}%`])
 
-    if (rows instanceof Error) return {err: 'Error fetching gazetteer results.'}
+    if (rows instanceof Error) return { err: 'Error fetching gazetteer results.' }
 
     // Format JSON array of gazetteer results from rows object.
     if (rows.length > 0) return Object.values(rows).map(row => ({
@@ -171,11 +171,11 @@ async function gaz_locale (req, locale) {
       table: dataset.table,
       layer: dataset.layer,
       marker: `${row.lng},${row.lat}`,
-      source: 'glx'
+      source: dataset.source || 'glx'
     }))
 
   }
 
-  // Return empty results array if no results where found in any dataset.
+  // Return empty results array if no results where found in any dataset.return []
   return []
 }
