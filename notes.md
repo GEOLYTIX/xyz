@@ -47,3 +47,7 @@ Fix to document container - newly uploaded document added at the end of the list
 Query API to support parameter array or stringified body as $1.
 
 Export JSON and CSV from dataview table fixed.
+
+Shortcircuit 202 select requests.
+
+Add gazetteer.callback prior to select for glx source.
