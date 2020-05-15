@@ -1862,8 +1862,8 @@
       "minZoom": 11,
       "maxZoom": 18,
       "view": {
-        "lat": 121.4,
-        "lng": 31.24
+        "lat": 31.24,
+        "lng": 121.4
       },
       "layers": {
         "HERE Imagery": {
@@ -1896,7 +1896,6 @@
         },
         "Retail Places": {
           "group": "Retail Places",
-          "groupmeta": "<p>To be added<BR><BR><a href='mailto:info@geolytix.com?Subject=Geodata - China Retail Places' target='_top'>Contact Us</a></p>",
           "format": "mvt",
           "dbs": "XYZ",
           "table": "website.vw_shanghai_glx_geodata_retail_place",
@@ -2036,11 +2035,6 @@
               "field": "trans_type",
               "label": "Location Type",
               "type": "text"
-            },
-            {
-              "field": "pass_count",
-              "label": "Passenger Count",
-              "type": "integer"
             }
           ],
           "style": {
@@ -2536,13 +2530,11 @@
         },
         "Retail Venues": {
           "group": "Retail Venues",
-          "format": "mvt",
+          "_format": "mvt",
           "dbs": "XYZ",
           "geom": "geom_3857",
           "srid": "3857",
-          "hover": {
-            "field": "venue_name"
-          },
+
           "mvt_cache": "website.vw_warsaw_glx_geodata_retail_venue__mvts",
           "tables": {
             "9": null,
