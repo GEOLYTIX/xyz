@@ -12,7 +12,7 @@ Spatial data must be stored in a cloud accessible PostGIS database to allow for 
 
 **Application control and presentation layers** are provided as an ES6 javscript library. XYZ' client library utilizes the Openlayers mapping engine among other visualisation libraries such as Tabulator and ChartJS to power engaging application views.
 
-Please visit the [XYZ project page](https://geolytix.github.io/xyz/) for in depth articles, code samples, documentation, and developer notes.
+Please visit the [XYZ project page](https://geolytix.github.io/xyz/docs) for in depth articles, code samples, documentation, and developer notes.
 
 ### JAMstack Application Views
 
