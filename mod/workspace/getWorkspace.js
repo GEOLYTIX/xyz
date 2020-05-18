@@ -20,7 +20,7 @@ module.exports = async cache => {
 
   if (!workspace || cache) {
 
-    workspace = await getFrom[process.env.WORKSPACE.split(':')[0]](process.env.WORKSPACE)
+    workspace = process.env.WORKSPACE && await getFrom[process.env.WORKSPACE.split(':')[0]](process.env.WORKSPACE) || {}
 
     if (workspace instanceof Error) return workspace
 
