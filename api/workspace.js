@@ -20,6 +20,8 @@ const { Pool } = require('pg')
 
 const fetch = require('node-fetch')
 
+const cloneDeep = require('lodash/cloneDeep')
+
 let host
 
 module.exports = async (req, res) => {
@@ -101,9 +103,7 @@ async function get(req, res) {
 
     if (!locale) return res.status(400).send('Locale not found.')
 
-    //return res.send(locale)
-
-    const _locale = JSON.parse(JSON.stringify(locale));
+    const _locale = cloneDeep(locale);
 
       (function objectEval(o, parent, key) {
 
@@ -129,7 +129,6 @@ async function get(req, res) {
       })(_locale)
 
     return res.send(_locale)
-
   }
 
   if (req.params.key === 'locales') return res.send(Object.keys(workspace.locales))
