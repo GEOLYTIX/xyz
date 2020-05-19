@@ -101,11 +101,9 @@ async function get(req, res) {
 
     if (!locale) return res.status(400).send('Locale not found.')
 
-    return res.send(locale)
+    //return res.send(locale)
 
-    if (req.params.token && req.params.token.roles) {
-
-      let _locale = JSON.parse(JSON.stringify(locale))
+    const _locale = JSON.parse(JSON.stringify(locale));
 
       (function objectEval(o, parent, key) {
 
@@ -129,7 +127,8 @@ async function get(req, res) {
         });
 
       })(_locale)
-    }
+
+    return res.send(_locale)
 
   }
 

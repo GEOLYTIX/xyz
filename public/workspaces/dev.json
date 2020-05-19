@@ -1,5 +1,4 @@
 {
-  "title": "GEOLYTIX | XYZ DEV",
   "templates": {
     "NE Countries table1": {
       "template": "SELECT name, pop_est, gdp_md_est FROM dev.natural_earth_countries WHERE true ${viewport} ${filter} ORDER BY id ASC FETCH FIRST 99 ROW ONLY;",
@@ -49,6 +48,48 @@
     }
   },
   "locales": {
+    "Roles": {
+      "bounds": {
+        "north": 62,
+        "east": 5,
+        "south": 49,
+        "west": -13
+      },
+      "minZoom": 2,
+      "maxZoom": 17,
+      "showScaleBar": true,
+      "layers": {
+        "OSM": {
+          "display": true,
+          "format": "tiles",
+          "attribution": {
+            "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+          },
+          "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        },
+        "Test": {
+          "display": true,
+          "roles": {
+            "default": null,
+            "Super": null
+          },
+          "format": "cluster",
+          "dbs": "DEV",
+          "table": "dev.uk_glx_open_retail_points_collector",
+          "qID": "id",
+          "geom": "geom_p_4326",
+          "srid": "4326"
+        },
+        "no_roles": {
+          "format": "cluster",
+          "dbs": "DEV",
+          "table": "dev.uk_glx_open_retail_points_collector",
+          "qID": "id",
+          "geom": "geom_p_4326",
+          "srid": "4326"
+        }
+      }
+    },
     "Natural Earth": {
       "minZoom": 3,
       "maxZoom": 14,
@@ -3979,556 +4020,15 @@
           }
         },
         "Dennis": {
-          "group": "Cluster",
-          "edit": {
-            "point": true,
-            "delete": true
+          "roles": {
+            "default": null
           },
           "format": "cluster",
           "srid": "4326",
           "geom": "geom_4326",
           "dbs": "XYZ",
-          "qID": "id",
           "table": "dev.uk_glx_sites",
-          "cluster_kmeans": 0.1,
-          "cluster_label": "site_name",
-          "infoj": [
-            {
-              "type": "streetview"
-            },
-            {
-              "type": "key",
-              "class": "_report"
-            },
-            {
-              "type": "report",
-              "report": {
-                "template": "Sites Local Report"
-              },
-              "class": "_report"
-            },
-            {
-              "type": "report",
-              "report": {
-                "name": "Report hosted with GitHub",
-                "template": "Dev sites report"
-              },
-              "class": "_report"
-            },
-            {
-              "field": "id",
-              "label": "Site ID",
-              "inline": true
-            },
-            {
-              "field": "site_name",
-              "label": "Site Name",
-              "edit": true,
-              "dependents": ["site_name_confirm", "site_type", "Random Data Series"],
-              "inline": true
-            },
-            {
-              "field": "site_name_confirm",
-              "fieldfx": "site_name",
-              "label": "Site Name Confirm",
-              "inline": true
-            },
-            {
-              "field": "site_type",
-              "label": "Site Type",
-              "inline": true,
-              "edit": {
-                "options": [
-                  "Type A",
-                  "Type B",
-                  " "
-                ]
-              }
-            },
-            {
-              "type": "geometry",
-              "name": "Fixed Geometry",
-              "field": "fixed_geom",
-              "fieldfx": "ST_asGeoJson(fixed_geom)",
-              "class": "_report",
-              "display": true,
-              "level": 1,
-              "style": {
-                "fillOpacity": 0.3,
-                "strokeWidth": 2
-              }
-            },
-            {
-              "type": "geometry",
-              "name": "Buffer 10km",
-              "field": "buffer_10km",
-              "class": "_report",
-              "fieldfx": "ST_asGeoJson(ST_Transform(ST_Buffer(ST_Transform(geom_4326, 3857), 10000), 4326))",
-              "display": true,
-              "level": 1,
-              "style": {
-                "fillOpacity": 1,
-                "strokeWidth": 2,
-                "fillColor": "#E2DE84"
-              }
-            },
-            {
-              "name": "HERE Catchment 5min",
-              "field": "isoline_5min",
-              "fieldfx": "ST_asGeoJson(isoline_5min)",
-              "type": "geometry",
-              "class": "_report",
-              "level": 1,
-              "display": false,
-              "edit": {
-                "isoline_here": {
-                  "minutes": 5
-                }
-              },
-              "style": {
-                "strokeColor": "#F49D37",
-                "fillColor": "#F49D37",
-                "fillOpacity": 0.3,
-                "strokeWidth": 2
-              }
-            },
-            {
-              "name": "HERE Catchment 10min",
-              "field": "isoline_10min",
-              "fieldfx": "ST_asGeoJson(isoline_10min)",
-              "type": "geometry",
-              "class": "_report",
-              "level": 1,
-              "display": false,
-              "edit": {
-                "isoline_here": {
-                  "minutes": 10
-                }
-              },
-              "style": {
-                "strokeColor": "#F49D37",
-                "fillColor": "#F49D37",
-                "fillOpacity": 0.3,
-                "strokeWidth": 2
-              }
-            },
-            {
-              "name": "HERE Catchment 15min",
-              "field": "isoline_15min",
-              "fieldfx": "ST_asGeoJson(isoline_15min)",
-              "type": "geometry",
-              "class": "_report",
-              "display": false,
-              "level": 1,
-              "edit": {
-                "isoline_here": {
-                  "minutes": 15
-                }
-              },
-              "style": {
-                "strokeColor": "#F49D37",
-                "fillColor": "#F49D37",
-                "fillOpacity": 0.3,
-                "strokeWidth": 2
-              }
-            },
-            {
-              "label": "Dashboards",
-              "type": "label",
-              "class": "_report"
-            },
-            {
-              "type": "__dataview",
-              "title": "Population Dashboard",
-              "class": "_report",
-              "script": "/api/provider/github?url=api.github.com/repos/GEOLYTIX/xyz_resources/contents/dev/dashboards/sites_population.js"
-            },
-            {
-              "label": "dataviews array",
-              "type": "dataview",
-              "title": "Dataviews array",
-              "dataviews": [
-                {
-                  "style": "grid-column: 1;",
-                  "query": "Random Data Series",
-                  "chart": {
-                    "type": "radar",
-                    "labels": [
-                      "Rand 1",
-                      "Rand 2",
-                      "Rand 3",
-                      "Rand 4",
-                      "Rand 5"
-                    ],
-                    "datasets": [
-                      {
-                        "fields": [
-                          "random1",
-                          "random2",
-                          "random3",
-                          "random4",
-                          "random5"
-                        ],
-                        "label": "Serie 1",
-                        "backgroundColor": "rgba(192, 117, 205, 0.3)",
-                        "borderColor": "#4a148c"
-                      },
-                      {
-                        "fields": [
-                          "rev_random1",
-                          "rev_random2",
-                          "rev_random3",
-                          "rev_random4",
-                          "rev_random5"
-                        ],
-                        "label": "Serie 2",
-                        "backgroundColor": "rgba(255, 167, 38, 0.3)",
-                        "borderColor": "#e65100"
-                      }
-                    ],
-                    "options": {
-                      "legend": {
-                        "display": true
-                      }
-                    }
-                  }
-                },
-                {
-                  "style": "grid-column: 2;",
-                  "query": "Random Data Series",
-                  "chart": {
-                    "type": "pie",
-                    "labels": [
-                      "Rand 1",
-                      "Rand 2",
-                      "Rand 3",
-                      "Rand 4",
-                      "Rand 5"
-                    ],
-                    "datasets": [
-                      {
-                        "fields": [
-                          "random1",
-                          "random2",
-                          "random3",
-                          "random4",
-                          "random5"
-                        ],
-                        "backgroundColor": [
-                          "rgba(229, 99 , 153, 0.4)",
-                          "rgba(0, 167, 225, 0.4)",
-                          "rgba(237, 222, 164, 0.4)",
-                          "rgba(247, 160 ,114, 0.4)",
-                          "rgba(255, 155, 66, 0.4)"
-                        ],
-                        "borderColor": "#C0B4A7"
-                      }
-                    ],
-                    "options": {
-                      "legend": {
-                        "display": true
-                      }
-                    }
-
-                  }
-                }
-              ]
-            },
-            {
-              "title": "Mixed chart with 2 series",
-              "type": "dataview",
-              "query": "Random Data Series",
-              "chart": {
-                "labels": [
-                  "Rand 1",
-                  "Rand 2",
-                  "Rand 3",
-                  "Rand 4",
-                  "Rand 5"
-                ],
-                "datasets": [
-                  {
-                    "fields": [
-                      "random1",
-                      "random2",
-                      "random3",
-                      "random4",
-                      "random5"
-                    ],
-                    "label": "Serie 1",
-                    "backgroundColor": "rgba(192, 117, 205, 0.3)",
-                    "borderColor": "#4a148c",
-                    "type": "bar"
-                  },
-                  {
-                    "fields": [
-                      "rev_random1",
-                      "rev_random2",
-                      "rev_random3",
-                      "rev_random4",
-                      "rev_random5"
-                    ],
-                    "label": "Serie 2",
-                    "backgroundColor": "rgba(255, 167, 38, 0.3)",
-                    "borderColor": "#e65100"
-                  }
-                ],
-                "options": {
-                  "legend": {
-                    "display": true,
-                    "position": "bottom"
-                  }
-                }
-              }
-            },
-            {
-              "label": "Doughnut Chart",
-              "type": "dataview",
-              "query": "Random Data Series",
-              "target": "location",
-              "chart": {
-                "height": 400,
-                "type": "doughnut",
-                "options": {
-                  "title": {
-                    "display": true,
-                    "text": "Optional title text here"
-                  }
-                },
-                "labels": [
-                  "Rand 1",
-                  "Rand 2",
-                  "Rand 3",
-                  "Rand 4",
-                  "Rand 5"
-                ],
-                "datasets": [
-                  {
-                    "fields": [
-                      "random1",
-                      "random2",
-                      "random3",
-                      "random4",
-                      "random5"
-                    ],
-                    "backgroundColor": [
-                      "rgba(229, 99 , 153, 0.4)",
-                      "rgba(0, 167, 225, 0.4)",
-                      "rgba(237, 222, 164, 0.4)",
-                      "rgba(247, 160 ,114, 0.4)",
-                      "rgba(255, 155, 66, 0.4)"
-                    ],
-                    "label": "Serie 1",
-                    "borderColor": "#C0B4A7"
-                  }
-                ]
-              }
-            },
-            {
-              "group": "Random data series",
-              "label": "Rand 1",
-              "field": "random1",
-              "type": "integer",
-              "expanded": true
-            },
-            {
-              "group": "Random data series",
-              "label": "Rand 2",
-              "field": "random2",
-              "type": "integer"
-            },
-            {
-              "group": "Random data series",
-              "label": "Rand 3",
-              "field": "random3",
-              "type": "integer"
-            },
-            {
-              "group": "Random data series",
-              "label": "Rand 4",
-              "field": "random4",
-              "type": "integer"
-            },
-            {
-              "group": "Random data series",
-              "label": "Rand 5",
-              "field": "random5",
-              "type": "integer"
-            },
-            {
-              "field": "comments",
-              "label": "Comments",
-              "type": "textarea",
-              "edit": true,
-              "class": "_report"
-            },
-            {
-              "field": "images",
-              "label": "Images",
-              "type": "images",
-              "edit": true,
-              "class": "_report"
-            },
-            {
-              "label": "Documents",
-              "field": "documents",
-              "type": "documents",
-              "edit": true,
-              "class": "_report"
-            },
-            {
-              "label": "Available dv",
-              "type": "label",
-              "class": "_report"
-            },
-            {
-              "type": "dataview",
-              "title": "Population Summary",
-              "query": "Population Summary Sites",
-              "class": "_report",
-              "layout": "fitColumns",
-              "columns": [
-                {
-                  "field": "rows",
-                  "title": "Population Summary",
-                  "headerSort": false,
-                  "hozAlign": "left"
-                },
-                {
-                  "title": "Grouped columns",
-                  "columns": [
-                    {
-                      "title": "0-5 mins",
-                      "field": "min5",
-                      "formatter": "money",
-                      "formatterParams": {
-                        "precision": 0
-                      },
-                      "hozAlign": "center"
-                    },
-                    {
-                      "title": "0-10 mins",
-                      "field": "min10",
-                      "formatter": "money",
-                      "formatterParams": {
-                        "precision": 0
-                      },
-                      "hozAlign": "center"
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "dataview",
-              "title": "Population Summary *2",
-              "class": "_report",
-              "dataviews": [
-                {
-                  "query": "Population Summary Sites",
-                  "class": "test",
-                  "style": "padding: 30px",
-                  "layout": "fitColumns",
-                  "columns": [
-                    {
-                      "field": "rows",
-                      "title": "Population Summary",
-                      "headerSort": false,
-                      "hozAlign": "left"
-                    },
-                    {
-                      "title": "Grouped columns",
-                      "columns": [
-                        {
-                          "title": "0-5 mins",
-                          "field": "min5",
-                          "formatter": "money",
-                          "formatterParams": {
-                            "precision": 0
-                          },
-                          "hozAlign": "center"
-                        },
-                        {
-                          "title": "0-10 mins",
-                          "field": "min10",
-                          "formatter": "money",
-                          "formatterParams": {
-                            "precision": 0
-                          },
-                          "hozAlign": "center"
-                        }
-                      ]
-                    }
-                  ]
-                },
-                {
-                  "query": "Population Summary Sites",
-                  "class": "test",
-                  "style": "padding: 30px",
-                  "layout": "fitColumns",
-                  "columns": [
-                    {
-                      "field": "rows",
-                      "title": "Population Summary",
-                      "headerSort": false,
-                      "hozAlign": "left"
-                    },
-                    {
-                      "title": "Grouped columns",
-                      "columns": [
-                        {
-                          "title": "0-5 mins",
-                          "field": "min5",
-                          "formatter": "money",
-                          "formatterParams": {
-                            "precision": 0
-                          },
-                          "hozAlign": "center"
-                        },
-                        {
-                          "title": "0-10 mins",
-                          "field": "min10",
-                          "formatter": "money",
-                          "formatterParams": {
-                            "precision": 0
-                          },
-                          "hozAlign": "center"
-                        }
-                      ]
-                    }
-                  ]
-                }
-              ]
-            },
-            {
-              "type": "dataview",
-              "title": "Nearest competitors",
-              "class": "_report",
-              "target_id": "xyz_sites_nearestcomp",
-              "layout": "fitColumns",
-              "query": "Nearest competitors Sites",
-              "columns": [
-                {
-                  "title": "Distance",
-                  "field": "dist",
-                  "hozAlign": "center",
-                  "formatter": "money",
-                  "formatterParams": {
-                    "symbol": " km",
-                    "symbolAfter": true
-                  }
-                },
-                {
-                  "title": "Competitor name",
-                  "field": "fascia"
-                },
-                {
-                  "title": "Postcode",
-                  "field": "postcode"
-                }
-              ]
-            }
-          ]
+          "cluster_kmeans": 0.1
         }
       }
     }
