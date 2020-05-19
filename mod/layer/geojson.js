@@ -6,14 +6,21 @@ module.exports = async (req, res) => {
 
   const layer = req.params.layer
 
-  const roles = layer.roles && req.params.token.roles && req.params.token.roles.filter(
-    role => layer.roles[role]).map(
-      role => layer.roles[role]) || []
+  const roles = layer.roles
+    && req.params.token
+    && Object.keys(layer.roles)
+      .filter(key => req.params.token.roles.includes(key))
+      .reduce((obj, key) => {
+        obj[key] = layer.roles[key];
+        return obj;
+      }, {});
+
+  if (!roles && layer.roles) return res.status(403).send('Access prohibited.');
 
   const filter = await sql_filter(Object.assign(
     {},
     req.params.filter && JSON.parse(req.params.filter) || {},
-    roles.length && Object.assign(...roles) || {}))
+    ...Object.values(roles)))
 
   var q = `
   SELECT
