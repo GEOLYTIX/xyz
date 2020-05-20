@@ -9,3 +9,5 @@ Container with geometry collection legend to get display: block; otherwise legen
 Fix to geometry checkbox - previously hiding a geometry would also hide geometry collection defined on the same location.
 
 Fix for roles. [#273](https://github.com/GEOLYTIX/xyz/issues/273)
+
+Assign tab to dataviews in array.
