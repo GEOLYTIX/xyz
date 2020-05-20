@@ -23,7 +23,6 @@ const _defaults = {
     _desktop: renderTemplate('../../public/views/_desktop.html'),
     _mobile: renderTemplate('../../public/views/_mobile.html'),
     admin_user: renderTemplate('../../public/views/_admin_user.html'),
-    admin_workspace: renderTemplate('../../public/views/_admin_workspace.html'),
 
     //queries
     mvt_cache: require('../../public/queries/mvt_cache'),
