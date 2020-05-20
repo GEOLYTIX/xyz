@@ -44,7 +44,7 @@ const _method = {
   },
   logout: {
     handler: (req, res) => {
-      res.setHeader('Set-Cookie', `XYZ ${process.env.COOKIE || process.env.TITLE || 'token'}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
+      res.setHeader('Set-Cookie', `XYZ ${process.env.TITLE || 'token'}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
       return res.send('Logged out.')
     }
   }

@@ -6,7 +6,7 @@ const acl = require('./acl')()
 
 module.exports = async (req, res, access) => {
 
-  req.params.token = req.params.token || req.cookies && req.cookies[`XYZ ${process.env.COOKIE || process.env.TITLE || 'token'}`]
+  req.params.token = req.params.token || req.cookies && req.cookies[`XYZ ${process.env.TITLE || 'token'}`]
 
   Object.entries(req.params).filter(entry => typeof entry[1] === 'string').forEach(entry => {
     req.params[entry[0]] = decodeURIComponent(entry[1])
