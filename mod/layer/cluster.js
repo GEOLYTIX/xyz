@@ -32,7 +32,7 @@ module.exports = async (req, res) => {
   const filter = await sql_filter(Object.assign(
     {},
     req.params.filter && JSON.parse(req.params.filter) || {},
-    ...Object.values(roles)))
+    ...Object.values(roles || [])))
 
   // Combine filter with envelope
   const where_sql = `

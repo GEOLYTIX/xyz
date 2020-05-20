@@ -151,7 +151,7 @@ async function gaz_locale(req, locale) {
     const filter = await sql_filter(Object.assign(
       {},
       req.params.filter && JSON.parse(req.params.filter) || {},
-      ...Object.values(roles)))
+      ...Object.values(roles || [])))
 
     // Build PostgreSQL query to fetch gazetteer results.
     var q = `
