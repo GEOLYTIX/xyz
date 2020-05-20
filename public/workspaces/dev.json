@@ -71,9 +71,14 @@
           "display": true,
           "roles": {
             "default": null,
-            "Super": {
+            "mo": {
               "retailer": {
                 "like": "mo"
+              }
+            },
+            "te": {
+              "retailer": {
+                "like": "te"
               }
             }
           },
@@ -96,7 +101,13 @@
           "table": "dev.uk_glx_open_retail_points_collector",
           "qID": "id",
           "geom": "geom_p_4326",
-          "srid": "4326"
+          "srid": "4326",
+          "infoj": [{
+            "field": "retailer",
+            "label": "Retailer",
+            "inline": true,
+            "filter": "like"
+          }]
         }
       }
     },

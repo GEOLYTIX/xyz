@@ -1,18 +1,20 @@
-module.exports = async filter => {
+module.exports = async (filter, conjunction = 'AND') => {
 
-  if (!Object.keys(filter).length) return '';
+  if (!filter.length) return '';
 
-  const sql_filter = ['AND']
+  const sql_filter = []
   
-  for (const field of await Object.keys(filter)) {
+  for (const f of filter) {
 
-    if (Array.isArray(filter[field])) {
+    const field = Object.keys(f)[0]
+
+    if (Array.isArray(f[field])) {
 
       if (sql_filter[sql_filter.length - 1] !== 'AND') sql_filter.push('AND')
 
       sql_filter.push('(')
 
-      filter[field].forEach(f => addField(f, field, 'OR'))
+      f[field].forEach(f => addField(f, field, 'OR'))
 
       sql_filter.pop()
 
@@ -21,13 +23,13 @@ module.exports = async filter => {
       continue
     }
 
-    addField(filter[field], field, 'AND')
+    addField(f[field], field, conjunction)
 
   }
 
   if (sql_filter[sql_filter.length - 1] !== ')') sql_filter.pop()
       
-  if (sql_filter.length > 1) return sql_filter.join(' ')
+  if (sql_filter.length) return `AND (${sql_filter.join(' ')})`
 
   return ' '
 

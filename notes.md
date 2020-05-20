@@ -11,3 +11,5 @@ Fix to geometry checkbox - previously hiding a geometry would also hide geometry
 Fix for roles. [#273](https://github.com/GEOLYTIX/xyz/issues/273)
 
 Assign tab to dataviews in array.
+
+Return error message if unable to connect to DBS in query.

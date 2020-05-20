@@ -41,10 +41,13 @@ module.exports = async (req, res) => {
 
     if (!roles && layer.roles) return res.status(403).send('Access prohibited.');
 
-    const filter = await sql_filter(Object.assign(
-      {},
-      req.params.filter && JSON.parse(req.params.filter) || {},
-      ...Object.values(roles || [])))
+    const filter = `
+    ${req.params.filter
+      && await sql_filter(Object.entries(JSON.parse(req.params.filter)).map(e => ({[e[0]]:e[1]})))
+      || ''}
+    ${roles && Object.values(roles).some(r => !!r)
+      && await sql_filter(Object.values(roles).filter(r => !!r), 'OR')
+      || ''}`
 
     req.params.viewport = req.params.viewport && req.params.viewport.split(',')
     
@@ -71,7 +74,11 @@ module.exports = async (req, res) => {
     return console.error(err)
   }
 
-  const rows = await dbs[template.dbs || req.params.dbs || req.params.layer.dbs](q, req.body && req.body.length && [JSON.stringify(req.body)] || req.params.params && req.params.params.split(','))
+  const _dbs = dbs[template.dbs || req.params.dbs || req.params.layer.dbs]
+
+  if (!_dbs) return res.status(500).send(`Cannot connect to ${template.dbs || req.params.dbs || req.params.layer.dbs}`)
+
+  const rows = await _dbs(q, req.body && req.body.length && [JSON.stringify(req.body)] || req.params.params && req.params.params.split(','))
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
