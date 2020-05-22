@@ -17,9 +17,9 @@ module.exports = async (req, res) => {
 
   if (!req.body) {
 
-    if (req.cookies && req.cookies[`XYZ ${process.env.COOKIE || process.env.TITLE || 'token'}`]) {
+    if (req.cookies && req.cookies[`XYZ ${process.env.TITLE || 'token'}`]) {
 
-      return res.send(`XYZ ${process.env.COOKIE || process.env.TITLE || 'token'}=<a href="${process.env.DIR || '/'}api/user/token">token</a>;HttpOnly;Max-Age=28800;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
+      return res.send(`XYZ ${process.env.TITLE || 'token'}=<a href="${process.env.DIR || '/'}api/user/token">token</a>;HttpOnly;Max-Age=28800;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
 
     }
 
@@ -31,7 +31,7 @@ module.exports = async (req, res) => {
 
   if (token instanceof Error) return login(req, res, token.message)
 
-  const cookie = `XYZ ${process.env.COOKIE || process.env.TITLE || 'token'}=${token.signed};HttpOnly;Max-Age=28800;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`
+  const cookie = `XYZ ${process.env.TITLE || 'token'}=${token.signed};HttpOnly;Max-Age=28800;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`
 
   res.setHeader('Set-Cookie', cookie)
 

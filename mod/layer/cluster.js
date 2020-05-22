@@ -18,14 +18,24 @@ module.exports = async (req, res) => {
     dbscan = parseFloat(req.params.dbscan),
     viewport = req.params.viewport.split(',')
 
-  const roles = layer.roles && req.params.token.roles && req.params.token.roles.filter(
-    role => layer.roles[role]).map(
-      role => layer.roles[role]) || []
+  const roles = layer.roles
+    && req.params.token
+    && Object.keys(layer.roles)
+      .filter(key => req.params.token.roles.includes(key))
+      .reduce((obj, key) => {
+        obj[key] = layer.roles[key];
+        return obj;
+      }, {});
 
-  const filter = await sql_filter(Object.assign(
-    {},
-    req.params.filter && JSON.parse(req.params.filter) || {},
-    roles.length && Object.assign(...roles) || {}))
+  if (!roles && layer.roles) return res.status(403).send('Access prohibited.');
+
+  const filter = `
+  ${req.params.filter
+    && await sql_filter(Object.entries(JSON.parse(req.params.filter)).map(e => ({[e[0]]:e[1]})))
+    || ''}
+  ${roles && Object.values(roles).some(r => !!r)
+    && await sql_filter(Object.values(roles).filter(r => !!r), 'OR')
+    || ''}`
 
   // Combine filter with envelope
   const where_sql = `

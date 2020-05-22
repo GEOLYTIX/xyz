@@ -5,10 +5,6 @@ const _method = {
     handler: cache,
     access: 'admin_workspace'
   },
-  set: {
-    handler: set,
-    access: 'admin_workspace'
-  },
   get: {
     handler: get
   }
@@ -19,6 +15,8 @@ const getWorkspace = require('../mod/workspace/getWorkspace')
 const { Pool } = require('pg')
 
 const fetch = require('node-fetch')
+
+const cloneDeep = require('lodash/cloneDeep')
 
 let host
 
@@ -101,11 +99,7 @@ async function get(req, res) {
 
     if (!locale) return res.status(400).send('Locale not found.')
 
-    return res.send(locale)
-
-    if (req.params.token && req.params.token.roles) {
-
-      let _locale = JSON.parse(JSON.stringify(locale))
+    const _locale = cloneDeep(locale);
 
       (function objectEval(o, parent, key) {
 
@@ -129,33 +123,11 @@ async function get(req, res) {
         });
 
       })(_locale)
-    }
 
+    return res.send(_locale)
   }
 
   if (req.params.key === 'locales') return res.send(Object.keys(workspace.locales))
 
   res.send('Help text.')
-}
-
-async function set(req, res) {
-
-  try {
-
-    const pool = new Pool({
-      connectionString: process.env.WORKSPACE.split('|')[0],
-      statement_timeout: 10000
-    })
-
-    await pool.query(`
-      INSERT INTO ${process.env.WORKSPACE.split('|')[1]} (settings)
-      SELECT $1 AS settings;`, [req.body]);
-
-    return res.send('PostgreSQL Workspace updated.')
-
-  } catch (err) {
-
-    console.error(err)
-    return res.status(500).send('FAILED to update PostgreSQL Workspace table.')
-  }
 }

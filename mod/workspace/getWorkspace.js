@@ -1,7 +1,5 @@
 const fetch = require('node-fetch')
 
-const { Pool } = require('pg');
-
 const assignDefaults = require('./assignDefaults')
 
 const provider = require('../provider')
@@ -10,8 +8,7 @@ const getFrom = {
   'http': ref => http(ref),
   'https': ref => http(ref),
   'file': ref => file(ref.split(':')[1]),
-  'github': ref => github(ref.split(':')[1]),
-  'postgres': ref => postgres(ref),
+  'github': ref => github(ref.split(':')[1])
 }
 
 let workspace = null
@@ -20,7 +17,7 @@ module.exports = async cache => {
 
   if (!workspace || cache) {
 
-    workspace = await getFrom[process.env.WORKSPACE.split(':')[0]](process.env.WORKSPACE)
+    workspace = process.env.WORKSPACE && await getFrom[process.env.WORKSPACE.split(':')[0]](process.env.WORKSPACE) || {}
 
     if (workspace instanceof Error) return workspace
 
@@ -63,23 +60,6 @@ async function github(ref){
   const response = await provider.github(ref)
   if (response instanceof Error) return response
   return JSON.parse(response)
-}
-
-async function postgres(ref) {
-
-  const pool = new Pool({
-    connectionString: ref.split('|')[0],
-    statement_timeout: 10000
-  })
-
-  try {
-    const { rows } = await pool.query(`SELECT * FROM ${ref.split('|')[1]} ORDER BY _id DESC LIMIT 1`)
-    return rows[0].settings
-
-  } catch(err) {
-    console.error(err)
-    return {}
-  }
 }
 
 async function assignTemplates() {

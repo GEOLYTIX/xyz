@@ -276,13 +276,6 @@ function init(_xyz) {
       href="${_xyz.host + '/view/admin_user'}">
       <div class="xyz-icon icon-supervisor-account">`);
 
-  _xyz.user && _xyz.user.admin_workspace && document.querySelector('.btn-column').appendChild(_xyz.utils.wire()`
-    <a
-      title="Open workspace configuration view"
-      class="enabled" style="cursor: pointer;"
-      href="${_xyz.host + '/view/admin_workspace'}">
-      <div class="xyz-icon icon-settings">`);
-
   if (document.body.dataset.login) {
     document.querySelector('.btn-column').appendChild(_xyz.utils.wire()`
     <a

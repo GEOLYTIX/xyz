@@ -27,7 +27,7 @@ module.exports = async (req, res) => {
   const access = template.access || req.params.access
    
   if (access === 'logout') {
-    res.setHeader('Set-Cookie', `XYZ ${process.env.COOKIE || process.env.TITLE || 'token'}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
+    res.setHeader('Set-Cookie', `XYZ ${process.env.TITLE || 'token'}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
     return res.send('Logged out.')
   }
 
@@ -42,7 +42,6 @@ module.exports = async (req, res) => {
     title: process.env.TITLE || 'GEOLYTIX | XYZ',
     dir: process.env.DIR || '',
     token: req.params.token && req.params.token.signed || '""',
-    log: process.env.LOG_LEVEL || '""',
     login: (process.env.PRIVATE || process.env.PUBLIC) && 'true' || '""',
   }))
 
