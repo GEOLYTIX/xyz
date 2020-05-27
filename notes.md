@@ -17,3 +17,5 @@ Return error message if unable to connect to DBS in query.
 Add raw.githubusercontent.com and gitcdn to csp image source.
 
 Filter will now call update to active layer dataviews.
+
+Grouped layers - now can be displayed all at once.
