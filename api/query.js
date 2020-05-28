@@ -78,7 +78,10 @@ module.exports = async (req, res) => {
 
   if (!_dbs) return res.status(500).send(`Cannot connect to ${template.dbs || req.params.dbs || req.params.layer.dbs}`)
 
-  const rows = await _dbs(q, req.body && req.body.length && [JSON.stringify(req.body)] || req.params.params && req.params.params.split(','))
+  const rows = await _dbs(
+    q,
+    req.body && req.body.length && [JSON.stringify(req.body)] || req.params.params && req.params.params.split(','),
+    req.params.statement_timeout)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 

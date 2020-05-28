@@ -1,19 +1,9 @@
-# 3.1.1
+# 3.1.2
 
-Fix for zero env launch. getWorkspace to get default if no env provided.
+Query API to accept statement_timeout param.
 
-Token are removed from all lib request calls. All calls should work with cookies alone.
+Lib Dataviews create to accept plugins for chartjs.
 
-Container with geometry collection legend to get display: block; otherwise legend displayed inline as flex element.
+Location removeCallback.
 
-Fix to geometry checkbox - previously hiding a geometry would also hide geometry collection defined on the same location.
-
-Fix for roles. [#273](https://github.com/GEOLYTIX/xyz/issues/273)
-
-Assign tab to dataviews in array.
-
-Return error message if unable to connect to DBS in query.
-
-Add raw.githubusercontent.com and gitcdn to csp image source.
-
-Filter will now call update to active layer dataviews.
+Blog view.
