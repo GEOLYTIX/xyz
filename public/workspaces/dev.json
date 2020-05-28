@@ -45,6 +45,10 @@
     "UK Retail Points Layer Table": {
       "template": "SELECT id, retailpoint_id, retailer, fascia FROM dev.retailpoints ORDER BY id ASC FETCH FIRST 99 ROW ONLY;",
       "dbs": "XYZ"
+    },
+    "UK Shops with catchments all catchments": {
+      "template": "SELECT jsonb_build_object('type', 'FeatureCollection','features', b.features) AS collection FROM (SELECT jsonb_build_array(jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'primary', 'id', id),'geometry', ST_AsGeoJson(catchment_primary)::jsonb),jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'secondary', 'id', id),'geometry', ST_AsGeoJson(catchment_secondary)::jsonb),jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'tertiary', 'id', id),'geometry', ST_AsGeoJson(catchment_tertiary)::jsonb)) AS features FROM (SELECT * FROM dev.storelist_1507__19 where id = ${id}) a) b",
+      "dbs": "XYZ"
     }
   },
   "locales": {
@@ -640,7 +644,6 @@
           "group": "Maps",
           "format": "tiles",
           "URI": "/styles/v1/dbauszus/ck440j2d20nmd1coafctud8tl/tiles/256/{z}/{x}/{y}?&provider=MAPBOX&host=https://api.mapbox.com",
-          "display": true,
           "attribution": {
             "© Mapbox": "https://www.mapbox.com/about/maps",
             "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
@@ -658,7 +661,6 @@
         },
         "Mapbox Labels": {
           "group": "Maps",
-          "display": false,
           "format": "tiles",
           "URI": "/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX&host=https://api.mapbox.com",
           "attribution": {
@@ -2547,7 +2549,8 @@
                 "height": 200,
                 "type": "bar",
                 "labels": ["2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018"],
-                "datasets": [{
+                "datasets": [
+                  {
                   "fields": [
                     "_pop__11_5min",
                     "_pop__12_5min",
@@ -2689,7 +2692,8 @@
               "chart": {
                 "type": "doughnut",
                 "labels": ["Rand 1", "Rand 2", "Rand 3", "Rand 4", "Rand 5"],
-                "datasets": [{
+                "datasets": [
+                  {
                   "fields": ["random1", "random2", "random3", "random4", "random5"],
                   "backgroundColor": [
                     "rgba(229, 99 , 153, 0.4)",
@@ -2780,8 +2784,9 @@
               "query": "Population Summary Sites",
               "class": "_report",
               "layout": "fitColumns",
-              "target_id": "xyz_sites_pop",
-              "columns": [{
+              "target": "xyz_sites_pop",
+              "columns": [
+                {
                   "field": "rows",
                   "title": "Population Summary 2",
                   "headerSort": false,
@@ -3975,9 +3980,10 @@
               }
             },
             {
-              "name": "All catchments",
+              "name": "All catchments - query",
               "type": "geometry",
               "display": true,
+              "query": "UK Shops with catchments all catchments",
               "style": {
                 "theme": {
                   "legend": true,
@@ -4011,8 +4017,8 @@
                   }
                 }
               },
-              "field": "all_catchments",
-              "fieldfx": "SELECT jsonb_build_object('type', 'FeatureCollection','features', b.features) AS collection FROM (SELECT jsonb_build_array(jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'primary', 'id', id),'geometry', ST_AsGeoJson(catchment_primary)::jsonb),jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'secondary', 'id', id),'geometry', ST_AsGeoJson(catchment_secondary)::jsonb),jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'tertiary', 'id', id),'geometry', ST_AsGeoJson(catchment_tertiary)::jsonb)) AS features FROM (SELECT * FROM dev.storelist_1507__19 where id = $1) a) b"
+              "field": "collection",
+              "__fieldfx": "SELECT jsonb_build_object('type', 'FeatureCollection','features', b.features) AS collection FROM (SELECT jsonb_build_array(jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'primary', 'id', id),'geometry', ST_AsGeoJson(catchment_primary)::jsonb),jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'secondary', 'id', id),'geometry', ST_AsGeoJson(catchment_secondary)::jsonb),jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'tertiary', 'id', id),'geometry', ST_AsGeoJson(catchment_tertiary)::jsonb)) AS features FROM (SELECT * FROM dev.storelist_1507__19 where id = $1) a) b"
             },
             {
               "field": "county2",
