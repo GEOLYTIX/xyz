@@ -9,3 +9,5 @@ Lib Dataviews create to accept plugins for chartjs.
 Location removeCallback.
 
 Blog view.
+
+Geometry entry - now supports query property.
