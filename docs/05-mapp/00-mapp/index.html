@@ -1,0 +1,385 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="/icons/favicon.ico">
+  <title>Mapp</title>
+  <style>
+
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .grid {
+      font-family: system-ui;
+      display:grid;
+      grid-template-columns: 1fr 5fr;
+      max-width: 1100px;
+      margin: auto;
+      padding: 0 30px;
+    }
+
+    #toggle {
+        display: none;
+    }
+
+    #toggle:hover {
+      cursor: pointer;
+    }
+
+    #nav {
+      grid-column: 1;
+      padding-inline-start: 0px;
+      list-style-type: none;
+      padding-right: 20px;
+      margin: 10px 0;
+    }
+
+    #nav > *:first-child {
+      line-height: 1;
+    }
+
+    #content {
+      grid-column: 2;
+      padding-left: 20px;
+      border-left: 1px solid #ddd;
+      margin: 10px 0;
+    }
+
+    #content > *:first-child {
+      margin: 0;
+    }
+
+    .active {
+      font-weight: bold;
+    }
+
+    a {
+      text-decoration: none;
+      white-space: nowrap;
+      color: #333;
+    }
+
+    h1, h2, h3 {
+      margin-bottom: 0.5em;
+    }
+
+    p {
+      margin-top: 0.5em;
+      line-height: 1.5;
+    }
+
+    li {
+      line-height: 1.5;
+    }
+
+    li._1 {
+      padding-left: 0px;
+    }
+
+    li._2 {
+      padding-left: 20px;
+    }
+
+    li.__2 {
+      padding-left: 0px;
+    }
+
+    li._3 {
+      padding-left: 40px;
+    }
+
+    li.__3 {
+      padding-left: 20px;
+    }
+
+    pre {
+      display: block;
+      font-family: monospace;
+      white-space: pre;
+      margin: 1em 0;
+      padding: 15px;
+      box-shadow: 0 0 2px #555;
+      overflow-x: auto;
+      background-color: #f0f0f0;
+    }
+
+    code {
+      font-family: monospace;
+      background-color: #f0f0f0;
+    }
+
+    *:not(pre) > code {
+      padding: 5px;
+    }
+
+    #content a {
+      color: #090;
+    }
+
+    #content img {
+      max-width: 100%;
+      display: block;
+      margin: 0 auto;
+    }
+
+    @media only screen and (max-width: 700px) {
+      .grid {
+        grid-template-columns: 0 1fr;
+        padding: 0 0 0 40px;
+      }
+
+      #toggle {
+        display: block;
+        position: fixed;
+        top: 10px;
+        left: 10px;        
+        width: 20px;
+        height: 30px;
+        background: repeating-linear-gradient(#ddd, #fff 10px);
+      }
+
+      #nav {
+        display: none;
+      }
+
+      #content {
+        border-left: none;
+        padding: 0 20px 0 1px;
+        overflow: hidden;
+      }
+    }
+
+    .show_nav {
+      grid-template-columns: 1fr 2fr;
+    }
+
+    .show_nav > #nav {
+      display: block;
+    }
+
+    .show_nav > #content * {
+      font-size: 30%;
+      padding: 0;
+      overflow: hidden;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="grid">
+
+    <div id="toggle"></div>
+
+    <ul id="nav">
+
+      <li>
+        <a style="font-weight: bold; font-size: 30px;" href="/docs">XYZ</a>
+      </li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <li class="_1 __1 active">
+        <a href="/docs/05-mapp/00-mapp/">Mapp</a>
+      </li>
+      
+      
+      
+      
+      
+      
+
+    </ul>
+
+    <div id="content">
+      <p>Introduction to Mapp interface.<br>
+You can write text here and it will display - hopefully!</p>
+<h1>Getting started with Geolytix MAPP</h1>
+<p>Geolytix MAPP is a web mapping application that can be accessed ‘on the go’ wherever you are. It has been designed much like any other website or app so scroll, drag and click around to discover some of its features. If you get stuck this guide should provide you with some helpful tips!</p>
+<p>Put images here!</p>
+<p>Jump to</p>
+<ul>
+<li>[Map Controls] <a href="http://example.com/" title="Optional Title Here">id</a></li>
+<li>Layer Controls</li>
+<li>Location Controls</li>
+<li>Further help</li>
+</ul>
+<hr>
+<h2>Map Controls</h2>
+<table>
+<thead>
+<tr>
+<th>Icon</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="https://cdn.jsdelivr.net/gh/GEOLYTIX/xyz/public/icons/icon-search.svg" alt=""></td>
+<td>Search for a location. Enter a town, postcode or street</td>
+</tr>
+<tr>
+<td><img src="https://cdn.jsdelivr.net/gh/GEOLYTIX/xyz/public/icons/icon-add.svg" alt=""></td>
+<td>Zoom In</td>
+</tr>
+<tr>
+<td><img src="https://cdn.jsdelivr.net/gh/GEOLYTIX/xyz/public/icons/icon-remove.svg" alt=""></td>
+<td>Zoom Out</td>
+</tr>
+<tr>
+<td><img src="https://cdn.jsdelivr.net/gh/GEOLYTIX/xyz/public/icons/icon-school.svg" alt=""></td>
+<td>Documentation / help pages</td>
+</tr>
+<tr>
+<td><img src="https://cdn.jsdelivr.net/gh/GEOLYTIX/xyz/public/icons/icon-logout.svg" alt=""></td>
+<td>Logout</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>Layer Controls</h2>
+<table>
+<thead>
+<tr>
+<th>Icon</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="https://cdn.jsdelivr.net/gh/GEOLYTIX/xyz/public/icons/icon-search.svg" alt=""></td>
+<td>Reveals further layers in a group or settings for a layer</td>
+</tr>
+<tr>
+<td><img src="https://cdn.jsdelivr.net/gh/GEOLYTIX/xyz/public/icons/icon-add.svg" alt=""></td>
+<td>Zoom to show entire layer</td>
+</tr>
+<tr>
+<td><img src="https://cdn.jsdelivr.net/gh/GEOLYTIX/xyz/public/icons/icon-toggle-on.svg" alt=""><img src="https://cdn.jsdelivr.net/gh/GEOLYTIX/xyz/public/icons/icon-toggle-off.svg" alt=""></td>
+<td>Toggle to hide and show layer</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>Location Controls</h2>
+<p>Select a point on the map to display the location information. A marker will appear on the map as shown</p>
+<table>
+<thead>
+<tr>
+<th>Icon</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><img src="https://cdn.jsdelivr.net/gh/GEOLYTIX/xyz/public/icons/icon-keyboard-arrow-down.svg" alt=""><img src="https://cdn.jsdelivr.net/gh/GEOLYTIX/xyz/public/icons/icon-keyboard-arrow-up.svg" alt=""></td>
+<td>Expand and collapse location information</td>
+</tr>
+<tr>
+<td><img src="https://cdn.jsdelivr.net/gh/GEOLYTIX/xyz/public/icons/icon-location-tick.svg" alt=""></td>
+<td>Toggle to hide and show location marker</td>
+</tr>
+<tr>
+<td><img src="https://cdn.jsdelivr.net/gh/GEOLYTIX/xyz/public/icons/icon-fullscreen.svg" alt=""></td>
+<td>Zoom to centre on this location</td>
+</tr>
+<tr>
+<td><img src="https://cdn.jsdelivr.net/gh/GEOLYTIX/xyz/public/icons/icon-cloud-upload.svg" alt=""></td>
+<td>Save changes to the database (editable layers only)</td>
+</tr>
+<tr>
+<td><img src="https://cdn.jsdelivr.net/gh/GEOLYTIX/xyz/public/icons/icon-close.svg" alt=""></td>
+<td>Remove location from selection</td>
+</tr>
+</tbody>
+</table>
+<hr>
+<h2>For further help</h2>
+<p>Take a look at our you tube channel, or email us at <a href="mailto:info@geolytix.co.uk">info@geolytix.co.uk</a></p>
+
+    </div>
+
+  </div>
+
+</body>
+
+<script>
+    const toggle = document.getElementById('toggle');
+
+    toggle.onclick = e => { e.target.parentElement.classList.toggle('show_nav'); };
+</script>
+
+</html>

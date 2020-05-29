@@ -1,0 +1,386 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="/icons/favicon.ico">
+  <title>Gazetteer</title>
+  <style>
+
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .grid {
+      font-family: system-ui;
+      display:grid;
+      grid-template-columns: 1fr 5fr;
+      max-width: 1100px;
+      margin: auto;
+      padding: 0 30px;
+    }
+
+    #toggle {
+        display: none;
+    }
+
+    #toggle:hover {
+      cursor: pointer;
+    }
+
+    #nav {
+      grid-column: 1;
+      padding-inline-start: 0px;
+      list-style-type: none;
+      padding-right: 20px;
+      margin: 10px 0;
+    }
+
+    #nav > *:first-child {
+      line-height: 1;
+    }
+
+    #content {
+      grid-column: 2;
+      padding-left: 20px;
+      border-left: 1px solid #ddd;
+      margin: 10px 0;
+    }
+
+    #content > *:first-child {
+      margin: 0;
+    }
+
+    .active {
+      font-weight: bold;
+    }
+
+    a {
+      text-decoration: none;
+      white-space: nowrap;
+      color: #333;
+    }
+
+    h1, h2, h3 {
+      margin-bottom: 0.5em;
+    }
+
+    p {
+      margin-top: 0.5em;
+      line-height: 1.5;
+    }
+
+    li {
+      line-height: 1.5;
+    }
+
+    li._1 {
+      padding-left: 0px;
+    }
+
+    li._2 {
+      padding-left: 20px;
+    }
+
+    li.__2 {
+      padding-left: 0px;
+    }
+
+    li._3 {
+      padding-left: 40px;
+    }
+
+    li.__3 {
+      padding-left: 20px;
+    }
+
+    pre {
+      display: block;
+      font-family: monospace;
+      white-space: pre;
+      margin: 1em 0;
+      padding: 15px;
+      box-shadow: 0 0 2px #555;
+      overflow-x: auto;
+      background-color: #f0f0f0;
+    }
+
+    code {
+      font-family: monospace;
+      background-color: #f0f0f0;
+    }
+
+    *:not(pre) > code {
+      padding: 5px;
+    }
+
+    #content a {
+      color: #090;
+    }
+
+    #content img {
+      max-width: 100%;
+      display: block;
+      margin: 0 auto;
+    }
+
+    @media only screen and (max-width: 700px) {
+      .grid {
+        grid-template-columns: 0 1fr;
+        padding: 0 0 0 40px;
+      }
+
+      #toggle {
+        display: block;
+        position: fixed;
+        top: 10px;
+        left: 10px;        
+        width: 20px;
+        height: 30px;
+        background: repeating-linear-gradient(#ddd, #fff 10px);
+      }
+
+      #nav {
+        display: none;
+      }
+
+      #content {
+        border-left: none;
+        padding: 0 20px 0 1px;
+        overflow: hidden;
+      }
+    }
+
+    .show_nav {
+      grid-template-columns: 1fr 2fr;
+    }
+
+    .show_nav > #nav {
+      display: block;
+    }
+
+    .show_nav > #content * {
+      font-size: 30%;
+      padding: 0;
+      overflow: hidden;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="grid">
+
+    <div id="toggle"></div>
+
+    <ul id="nav">
+
+      <li>
+        <a style="font-weight: bold; font-size: 30px;" href="/docs">XYZ</a>
+      </li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <li class="_1 __1 ">
+        <a href="/docs/02-configure/00-configure/">Configure</a>
+      </li>
+      
+      
+      
+      <li class="_1  ">
+        <a href="/docs/02-configure/01-locale/">Locale</a>
+      </li>
+      
+      
+      
+      <li class="_2 __2 ">
+        <a href="/docs/02-configure/02-layer/00-layers/">Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/02-layer/01-tile-layer/">Tile Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/02-layer/02-postgis-layer/">PostGIS Data Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/02-layer/03-cluster-layer/">Cluster Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/02-layer/04-geojson-layer/">GeoJson Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/02-layer/05-vector-tile-mvt-layer/">MapBox Vector Tile (MVT) Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/02-layer/06-grid-hex/">Grid (Hex) Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/02-layer/07-filter/">Filter</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/02-layer/08-dataviews/">Dataviews</a>
+      </li>
+      
+      
+      
+      <li class="_2 __2 ">
+        <a href="/docs/02-configure/03-location/00-infoj/">Location</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/03-location/01-groups/">Groups</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/03-location/02-filter/">Filter</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/03-location/04-geometry/">Geometry</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/03-location/05-dataviews/">Dataviews</a>
+      </li>
+      
+      
+      
+      <li class="_1 __1 active">
+        <a href="/docs/02-configure/04-gazetteer/">Gazetteer</a>
+      </li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+    </ul>
+
+    <div id="content">
+      <h1>Gazetteer</h1>
+<p>The gazetteer object defines which gazetteer should be used for the current locale.</p>
+<pre><code class="language-javascript">&quot;gazetteer&quot;: {
+  &quot;provider&quot;: &quot;MAPBOX&quot;,
+  &quot;placeholder&quot;: &quot;e.g. London&quot;,
+  &quot;datasets&quot;: [
+    {
+      &quot;layer&quot;: &quot;sprawls&quot;,
+      &quot;table&quot;: &quot;glx_cities_of_the_world&quot;,
+      &quot;qterm&quot;: &quot;name&quot;,
+      &quot;label&quot;: &quot;nameascii&quot;,
+      &quot;leading_wildcard&quot;: true
+    }
+  ]
+}
+</code></pre>
+<p>The gazetteer can be set to use either third party provider and / or hosted datasets. Locations from hosted datasets will be selected while geolocations from 3rd party providers are shown as a marker on the map.</p>
+<p><code>&quot;provider&quot;: &quot;MAPBOX&quot;</code></p>
+<p>The geolocation service to use (MAPBOX or GOOGLE). A corresponding KEY_*** is required in the environment settings in order to use a 3rd party service.</p>
+<p><code>&quot;placeholder&quot;: &quot;e.g. London&quot;</code></p>
+<p>The placeholder to be shown in the gazetteer input.</p>
+<p><code>&quot;code&quot;: &quot;GB&quot;</code></p>
+<p>The country code to limit the search on 3rd party geolocation services. Permited country codes are <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1 alpha-2</a>.</p>
+<p>It is possible to further restrict the results by defining a bounds entry. The bounds value varies with the gazetteer provider used for the query.</p>
+<p><strong>Google bounds</strong></p>
+<p><code>&quot;bounds&quot;: &quot;location=51.75,-1.25&amp;radius=4000&quot;</code></p>
+<p>Google requires the bounds to be defined as a latitutde, longitude coordinate pair and a radius in metres.</p>
+<p><strong>Mapbox bounds</strong></p>
+<p><code>&quot;bounds&quot;: &quot;bbox=-2,50,4,54&quot;</code></p>
+<h2>Dataset gazetteer</h2>
+<p>An array of dataset gazetteers which are hit by the autocomplete search first. The 3rd party geolocation service is used once no results are returned from any of the dataset gazetteer entries.</p>
+<p><code>&quot;layer&quot;: &quot;sprawls&quot;</code></p>
+<p>The layer key in the datasets array object must correspond to a layer defined in the locale's layers.</p>
+<p><code>&quot;table&quot;: &quot;glx_cities_of_the_world&quot;</code></p>
+<p>The table to be used for the layer. This is required as layers may aggregate data from multiple table.</p>
+<p><code>&quot;qterm&quot;: &quot;name&quot;</code></p>
+<p>The field to be queried for the search term. Will default to label.</p>
+<p><code>&quot;label&quot;: &quot;nameascii&quot;</code></p>
+<p>The field which is searched for the autocomplete match. The label is also displayed in the results list.</p>
+<p><code>&quot;leading_wildcard&quot;: true</code></p>
+<p>The ILIKE query will pre-fix the search term with a wild card. e.g. 'Man' will find 'Central Manchester' as well as 'Manchester Airport'.</p>
+
+    </div>
+
+  </div>
+
+</body>
+
+<script>
+    const toggle = document.getElementById('toggle');
+
+    toggle.onclick = e => { e.target.parentElement.classList.toggle('show_nav'); };
+</script>
+
+</html>

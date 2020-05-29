@@ -1,0 +1,405 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="/icons/favicon.ico">
+  <title>Location</title>
+  <style>
+
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .grid {
+      font-family: system-ui;
+      display:grid;
+      grid-template-columns: 1fr 5fr;
+      max-width: 1100px;
+      margin: auto;
+      padding: 0 30px;
+    }
+
+    #toggle {
+        display: none;
+    }
+
+    #toggle:hover {
+      cursor: pointer;
+    }
+
+    #nav {
+      grid-column: 1;
+      padding-inline-start: 0px;
+      list-style-type: none;
+      padding-right: 20px;
+      margin: 10px 0;
+    }
+
+    #nav > *:first-child {
+      line-height: 1;
+    }
+
+    #content {
+      grid-column: 2;
+      padding-left: 20px;
+      border-left: 1px solid #ddd;
+      margin: 10px 0;
+    }
+
+    #content > *:first-child {
+      margin: 0;
+    }
+
+    .active {
+      font-weight: bold;
+    }
+
+    a {
+      text-decoration: none;
+      white-space: nowrap;
+      color: #333;
+    }
+
+    h1, h2, h3 {
+      margin-bottom: 0.5em;
+    }
+
+    p {
+      margin-top: 0.5em;
+      line-height: 1.5;
+    }
+
+    li {
+      line-height: 1.5;
+    }
+
+    li._1 {
+      padding-left: 0px;
+    }
+
+    li._2 {
+      padding-left: 20px;
+    }
+
+    li.__2 {
+      padding-left: 0px;
+    }
+
+    li._3 {
+      padding-left: 40px;
+    }
+
+    li.__3 {
+      padding-left: 20px;
+    }
+
+    pre {
+      display: block;
+      font-family: monospace;
+      white-space: pre;
+      margin: 1em 0;
+      padding: 15px;
+      box-shadow: 0 0 2px #555;
+      overflow-x: auto;
+      background-color: #f0f0f0;
+    }
+
+    code {
+      font-family: monospace;
+      background-color: #f0f0f0;
+    }
+
+    *:not(pre) > code {
+      padding: 5px;
+    }
+
+    #content a {
+      color: #090;
+    }
+
+    #content img {
+      max-width: 100%;
+      display: block;
+      margin: 0 auto;
+    }
+
+    @media only screen and (max-width: 700px) {
+      .grid {
+        grid-template-columns: 0 1fr;
+        padding: 0 0 0 40px;
+      }
+
+      #toggle {
+        display: block;
+        position: fixed;
+        top: 10px;
+        left: 10px;        
+        width: 20px;
+        height: 30px;
+        background: repeating-linear-gradient(#ddd, #fff 10px);
+      }
+
+      #nav {
+        display: none;
+      }
+
+      #content {
+        border-left: none;
+        padding: 0 20px 0 1px;
+        overflow: hidden;
+      }
+    }
+
+    .show_nav {
+      grid-template-columns: 1fr 2fr;
+    }
+
+    .show_nav > #nav {
+      display: block;
+    }
+
+    .show_nav > #content * {
+      font-size: 30%;
+      padding: 0;
+      overflow: hidden;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="grid">
+
+    <div id="toggle"></div>
+
+    <ul id="nav">
+
+      <li>
+        <a style="font-weight: bold; font-size: 30px;" href="/docs">XYZ</a>
+      </li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <li class="_1 __1 ">
+        <a href="/docs/02-configure/00-configure/">Configure</a>
+      </li>
+      
+      
+      
+      <li class="_1  ">
+        <a href="/docs/02-configure/01-locale/">Locale</a>
+      </li>
+      
+      
+      
+      <li class="_2 __2 ">
+        <a href="/docs/02-configure/02-layer/00-layers/">Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/02-layer/01-tile-layer/">Tile Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/02-layer/02-postgis-layer/">PostGIS Data Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/02-layer/03-cluster-layer/">Cluster Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/02-layer/04-geojson-layer/">GeoJson Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/02-layer/05-vector-tile-mvt-layer/">MapBox Vector Tile (MVT) Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/02-layer/06-grid-hex/">Grid (Hex) Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/02-layer/07-filter/">Filter</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/02-layer/08-dataviews/">Dataviews</a>
+      </li>
+      
+      
+      
+      <li class="_2 __2 active">
+        <a href="/docs/02-configure/03-location/00-infoj/">Location</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/03-location/01-groups/">Groups</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/03-location/02-filter/">Filter</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/03-location/04-geometry/">Geometry</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/03-location/05-dataviews/">Dataviews</a>
+      </li>
+      
+      
+      
+      <li class="_1 __1 ">
+        <a href="/docs/02-configure/04-gazetteer/">Gazetteer</a>
+      </li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+    </ul>
+
+    <div id="content">
+      <h2>infoj</h2>
+<p><code>infoj</code> is a JSON array [of Objects] which describes the properties of a location.</p>
+<pre><code class="language-text">&quot;infoj&quot;: [
+  {
+    &quot;field&quot;: &quot;name&quot;,
+    &quot;label&quot;: &quot;Name: &quot;,
+    &quot;type&quot;: &quot;text&quot;
+  },
+  {
+    &quot;label&quot;: &quot;Label&quot;
+  },
+  {...}
+]
+</code></pre>
+<p><strong>Each infoj array entry must describe a single property only.</strong></p>
+<p>The <strong><code>field</code></strong> is the datasource (PostGIS table) field to be queried for a property value to be presented in the location info.</p>
+<p>The <strong><code>label</code></strong> will be displayed before the field value. A label without a field definition will be displayed on its own. The label will not be displayed if a field has no value and is not editable.</p>
+<p>The <strong><code>type</code></strong> defines the nature of an entry and how the data should be displayed. <code>&quot;text&quot;</code> is the default content format.</p>
+<p><code>&quot;type&quot; : &quot;text&quot;</code></p>
+<p>In order to split data rows with label headers define entry as:</p>
+<p><code>&quot;type&quot; : &quot;label&quot;</code></p>
+<p>A text will be displayed on a new line below the label.</p>
+<p><code>&quot;type&quot; : &quot;textarea&quot;</code></p>
+<p>A multi-line input will be provided for an editable textarea. Otherwise the display of a textarea does not deviate from a simple text type.</p>
+<p><code>&quot;type&quot; : &quot;integer&quot;</code></p>
+<p>Integer will be rounded and displayed with comma delimiter.</p>
+<p><code>&quot;type&quot; : &quot;numeric&quot;</code></p>
+<p>Numeric values will be rounded to 2 decimal places and displayed with comma delimiter.</p>
+<p><code>&quot;type&quot; : &quot;date&quot;</code></p>
+<p>Dates will be displayed as a formatted string. <strong>Important</strong>: internally dates are stored as <a href="https://www.unixtimestamp.com/"><em>unix timestamps</em></a>. The database field must be of the type <code>bigint</code> in order to store dates.</p>
+<p>Dates, integer and numeric values will be displayed inline with the label. Text will displayed on a new line below the label.</p>
+<p><code>&quot;type&quot;: &quot;boolean&quot;</code></p>
+<p>Boolean data type is displayed as a checkbox element in the location view and can be also set up as editable. Boolean data type is stored in the database as <a href="https://www.postgresql.org/docs/11/datatype-boolean.html"><em>boolean</em></a>.</p>
+<p>The checkbox is also shown when it is not editable.</p>
+<p><code>&quot;type&quot; : &quot;html&quot;</code></p>
+<p>Setting the type to html will render the field value as html rather than text.</p>
+<p><code>&quot;inline&quot; : true</code></p>
+<p>Setting the inline key in an <code>infoj</code> entry will force text values to be displayed inline with the label.</p>
+<h2><strong>Special property types</strong></h2>
+<p><code>&quot;type&quot; : &quot;group&quot;</code></p>
+<p>Any subsequent entries can be added to a <a href="groups.md"><strong>group entry</strong></a>.</p>
+<p><code>&quot;type&quot; : &quot;images&quot;</code></p>
+<p>The entry will be displayed as an image array in a scrollable table row. The entry must have edit set to true in order to upload or remove images. The database table field for image arrays must be of the type <code>TEXT[]</code> and have a default of <code>'{}'::TEXT[]</code></p>
+<p>A cloudinary account is required in order to upload images to the cloudinary image hosting platform. The access key for the cloudinary account must be defined in the environment settings as a 3rd party API key.</p>
+<p><code>&quot;type&quot; : &quot;streetview&quot;</code></p>
+<p>The entry will displayed as a Google Streetview image requested for the location of a marker. A Google API key with access to the Google Streetview service must be defined in the environment settings as a 3rd party API key.</p>
+<p><code>&quot;type&quot; : &quot;geometry&quot;</code></p>
+<p>A geometry associated with the location will be read from the table field and displayed in the map control together with the location's own geometry.</p>
+<p><code>&quot;type&quot;: &quot;key&quot;</code></p>
+<p>This property displays layer name in location view.</p>
+<h2><strong>Supporting infoj keys</strong></h2>
+<p><code>&quot;title&quot; : &quot;I am a tooltip&quot;</code></p>
+<p>The title will be displayed when the cursor hovers over the info entry label.</p>
+<p><code>&quot;level&quot; : 1</code></p>
+<p>The level is a class which will be assigned to the table row which holds the entry label and value. This class can be used to assign hierarchical styling to entries.</p>
+<p><code>&quot;fieldfx&quot; : &quot;(field_a + field_b)&quot;</code></p>
+<p>Function fields can be used to calculate a value from other fields in the same table. These fields can not be edited.</p>
+<p><code>&quot;prefix&quot; : &quot;$ &quot;</code></p>
+<p><code>&quot;postfix&quot; : &quot; %&quot;</code></p>
+<p>A prefix will be added at the beginning, a postfix at the end of the displayed value. Handy for adding units to the output.</p>
+
+    </div>
+
+  </div>
+
+</body>
+
+<script>
+    const toggle = document.getElementById('toggle');
+
+    toggle.onclick = e => { e.target.parentElement.classList.toggle('show_nav'); };
+</script>
+
+</html>

@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="/icons/favicon.ico">
+  <title>Dataviews</title>
+  <style>
+
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .grid {
+      font-family: system-ui;
+      display:grid;
+      grid-template-columns: 1fr 5fr;
+      max-width: 1100px;
+      margin: auto;
+      padding: 0 30px;
+    }
+
+    #toggle {
+        display: none;
+    }
+
+    #toggle:hover {
+      cursor: pointer;
+    }
+
+    #nav {
+      grid-column: 1;
+      padding-inline-start: 0px;
+      list-style-type: none;
+      padding-right: 20px;
+      margin: 10px 0;
+    }
+
+    #nav > *:first-child {
+      line-height: 1;
+    }
+
+    #content {
+      grid-column: 2;
+      padding-left: 20px;
+      border-left: 1px solid #ddd;
+      margin: 10px 0;
+    }
+
+    #content > *:first-child {
+      margin: 0;
+    }
+
+    .active {
+      font-weight: bold;
+    }
+
+    a {
+      text-decoration: none;
+      white-space: nowrap;
+      color: #333;
+    }
+
+    h1, h2, h3 {
+      margin-bottom: 0.5em;
+    }
+
+    p {
+      margin-top: 0.5em;
+      line-height: 1.5;
+    }
+
+    li {
+      line-height: 1.5;
+    }
+
+    li._1 {
+      padding-left: 0px;
+    }
+
+    li._2 {
+      padding-left: 20px;
+    }
+
+    li.__2 {
+      padding-left: 0px;
+    }
+
+    li._3 {
+      padding-left: 40px;
+    }
+
+    li.__3 {
+      padding-left: 20px;
+    }
+
+    pre {
+      display: block;
+      font-family: monospace;
+      white-space: pre;
+      margin: 1em 0;
+      padding: 15px;
+      box-shadow: 0 0 2px #555;
+      overflow-x: auto;
+      background-color: #f0f0f0;
+    }
+
+    code {
+      font-family: monospace;
+      background-color: #f0f0f0;
+    }
+
+    *:not(pre) > code {
+      padding: 5px;
+    }
+
+    #content a {
+      color: #090;
+    }
+
+    #content img {
+      max-width: 100%;
+      display: block;
+      margin: 0 auto;
+    }
+
+    @media only screen and (max-width: 700px) {
+      .grid {
+        grid-template-columns: 0 1fr;
+        padding: 0 0 0 40px;
+      }
+
+      #toggle {
+        display: block;
+        position: fixed;
+        top: 10px;
+        left: 10px;        
+        width: 20px;
+        height: 30px;
+        background: repeating-linear-gradient(#ddd, #fff 10px);
+      }
+
+      #nav {
+        display: none;
+      }
+
+      #content {
+        border-left: none;
+        padding: 0 20px 0 1px;
+        overflow: hidden;
+      }
+    }
+
+    .show_nav {
+      grid-template-columns: 1fr 2fr;
+    }
+
+    .show_nav > #nav {
+      display: block;
+    }
+
+    .show_nav > #content * {
+      font-size: 30%;
+      padding: 0;
+      overflow: hidden;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="grid">
+
+    <div id="toggle"></div>
+
+    <ul id="nav">
+
+      <li>
+        <a style="font-weight: bold; font-size: 30px;" href="/docs">XYZ</a>
+      </li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <li class="_1 __1 ">
+        <a href="/docs/02-configure/00-configure/">Configure</a>
+      </li>
+      
+      
+      
+      <li class="_1  ">
+        <a href="/docs/02-configure/01-locale/">Locale</a>
+      </li>
+      
+      
+      
+      <li class="_2 __2 ">
+        <a href="/docs/02-configure/02-layer/00-layers/">Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/02-layer/01-tile-layer/">Tile Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/02-layer/02-postgis-layer/">PostGIS Data Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/02-layer/03-cluster-layer/">Cluster Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/02-layer/04-geojson-layer/">GeoJson Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/02-layer/05-vector-tile-mvt-layer/">MapBox Vector Tile (MVT) Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/02-layer/06-grid-hex/">Grid (Hex) Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/02-layer/07-filter/">Filter</a>
+      </li>
+      
+      
+      
+      <li class="_2  active">
+        <a href="/docs/02-configure/02-layer/08-dataviews/">Dataviews</a>
+      </li>
+      
+      
+      
+      <li class="_2 __2 ">
+        <a href="/docs/02-configure/03-location/00-infoj/">Location</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/03-location/01-groups/">Groups</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/03-location/02-filter/">Filter</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/03-location/04-geometry/">Geometry</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/02-configure/03-location/05-dataviews/">Dataviews</a>
+      </li>
+      
+      
+      
+      <li class="_1 __1 ">
+        <a href="/docs/02-configure/04-gazetteer/">Gazetteer</a>
+      </li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+    </ul>
+
+    <div id="content">
+      <p>Layer data can be displayed in tables. Tables are defined inside <code>layer.tableview: {}</code> object:</p>
+<pre><code class="language-text">&quot;tableview&quot;: {
+	&quot;tables&quot;: {
+	    &quot;Retail Places&quot;: {
+	    	&quot;from&quot;: &quot;dev.retailplaces&quot;, // data source
+	    	&quot;columns&quot;: [
+	    	{
+	    		&quot;title&quot;: &quot;ID&quot;,
+	    		&quot;field&quot;: &quot;id&quot;
+	    	},{
+	    		&quot;field&quot;: &quot;dev_date&quot;,
+	    		&quot;title&quot;: &quot;Date&quot;,
+	    		&quot;type&quot;: &quot;date&quot;
+	    	},{
+	    		&quot;field&quot;: &quot;rp_type&quot;
+	    	}
+	    	]
+	    },
+	    ...
+	}
+}
+</code></pre>
+<p>On row click feature is selected in the location view:</p>
+<p>Layer data can be displayed in a scatterplot and bubble chart. These chart types are meant for presenting long series of x, y pairs (scatterplot) or x, y, r tripples (bubble chart) therefore as of now they are better suited for layer data.</p>
+<p>Layer charts are defined inside <code>&quot;layer.tableview&quot;</code> object.</p>
+<p>Find bubble chart configuration below:</p>
+<pre><code class="language-text">    &quot;tableview&quot;: {,
+        &quot;charts&quot;: {
+            &quot;Retail strength&quot;: {
+                &quot;display&quot;: true,
+                &quot;chart&quot;: {
+                    &quot;type&quot;: &quot;bubble&quot;                         // chart options
+                },
+                &quot;from&quot;: &quot;dev.retailplaces&quot;,
+                &quot;columns&quot;: [                                 // first 3 entries must be numeric or integer
+                    {
+                        &quot;title&quot;: &quot;Units&quot;,                    // first entry is x-coordinate
+                        &quot;field&quot;: &quot;est_units&quot;,
+                        &quot;type&quot;: &quot;integer&quot;
+                    },{
+                        &quot;title&quot;: &quot;Brands&quot;,                   // second entry is y-coordinate
+                        &quot;field&quot;: &quot;est_brands&quot;,
+                        &quot;type&quot;: &quot;integer&quot;
+                    },{
+                        &quot;title&quot;: &quot;Strength&quot;,                 // third entry is a bubble radius
+                        &quot;field&quot;: &quot;comp_strgh&quot;,
+                        &quot;fieldfx&quot;: &quot;(comp_strgh/1000000)&quot;,
+                        &quot;type&quot;: &quot;integer&quot;
+                    },{
+                        &quot;title&quot;: &quot;Name&quot;,                     // fourth entry is a data point label
+                        &quot;field&quot;: &quot;rp_name&quot;
+                    }
+                ]
+            }
+        }
+    }
+</code></pre>
+<p>Scatterplot settings are similar to bubble chart without the radius coodinate:</p>
+<pre><code class="language-text">    &quot;tableview&quot;: {
+	    &quot;charts&quot;: {
+	        &quot;Services share&quot;: {
+	    	    &quot;display&quot;: true,
+	    	    &quot;chart&quot;: {                               // chart options
+	    		    &quot;type&quot;: &quot;scatter&quot;,
+	    		    &quot;pointStyle&quot;: &quot;triangle&quot;,
+	    		    &quot;radius&quot;: 10
+	    	    },
+	    	    &quot;from&quot;: &quot;dev.retailplaces&quot;,
+	    	    &quot;columns&quot;: [
+	    	        {
+	    	    	    &quot;field&quot;: &quot;fbl&quot;,                           // first entry is x-coordinate, numeric or integer
+	    	    	    &quot;title&quot;: &quot;Food / Beverage / Leaisure&quot;,
+	    	    	    &quot;type&quot;: &quot;numeric&quot;
+	    	        },{
+	    	    	    &quot;field&quot;: &quot;services&quot;,                      // second entry is y-coordinate, numeric or integer
+	    	    	    &quot;title&quot;: &quot;Services&quot;,
+	    	    	    &quot;type&quot;: &quot;numeric&quot;
+	    	        },{
+	    	    	    &quot;title&quot;: &quot;Name&quot;,                         // third entry is a data point label
+	    	    	    &quot;field&quot;: &quot;rp_name&quot;
+	    	    	}
+	    	    ]
+	        }
+	    }
+    }
+</code></pre>
+
+    </div>
+
+  </div>
+
+</body>
+
+<script>
+    const toggle = document.getElementById('toggle');
+
+    toggle.onclick = e => { e.target.parentElement.classList.toggle('show_nav'); };
+</script>
+
+</html>

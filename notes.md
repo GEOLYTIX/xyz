@@ -1,4 +1,6 @@
-# 3.1.2
+# 3.2.0
+
+Documentation is now included.
 
 Grouped layers - now can be displayed all at once.
 
