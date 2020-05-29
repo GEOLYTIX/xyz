@@ -1,0 +1,531 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="/icons/favicon.ico">
+  <title>Cluster Layer</title>
+  <style>
+
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .grid {
+      font-family: system-ui;
+      display:grid;
+      grid-template-columns: 1fr 5fr;
+      max-width: 1100px;
+      margin: auto;
+      padding: 0 30px;
+    }
+
+    #toggle {
+        display: none;
+    }
+
+    #toggle:hover {
+      cursor: pointer;
+    }
+
+    #nav {
+      grid-column: 1;
+      padding-inline-start: 0px;
+      list-style-type: none;
+      padding-right: 20px;
+      margin: 10px 0;
+      position: fixed;
+    }
+
+    #nav > *:first-child {
+      line-height: 1;
+    }
+
+    #content {
+      grid-column: 2;
+      padding-left: 20px;
+      border-left: 1px solid #ddd;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    #content > *:first-child {
+      margin: 0;
+    }
+
+    .active {
+      font-weight: bold;
+    }
+
+    a {
+      text-decoration: none;
+      white-space: nowrap;
+      color: #333;
+    }
+
+    h1, h2, h3 {
+      margin-bottom: 0.5em;
+    }
+
+    p {
+      margin-top: 0.5em;
+      line-height: 1.5;
+    }
+
+    li {
+      line-height: 1.5;
+    }
+
+    li._1 {
+      padding-left: 0px;
+    }
+
+    li._2 {
+      padding-left: 20px;
+    }
+
+    li.__2 {
+      padding-left: 0px;
+    }
+
+    li._3 {
+      padding-left: 40px;
+    }
+
+    li.__3 {
+      padding-left: 20px;
+    }
+
+    pre {
+      display: block;
+      font-family: monospace;
+      white-space: pre;
+      margin: 1em 2px;
+      padding: 15px;
+      box-shadow: 0 0 2px #555;
+      overflow-x: auto;
+      background-color: #f0f0f0;
+    }
+
+    code {
+      font-family: monospace;
+      background-color: #f0f0f0;
+    }
+
+    *:not(pre) > code {
+      padding: 5px;
+    }
+
+    #content a {
+      color: #090;
+    }
+
+    #content img {
+      max-width: 100%;
+      display: block;
+      margin: 0 auto;
+    }
+
+    @media only screen and (max-width: 700px) {
+      .grid {
+        grid-template-columns: 0 1fr;
+        padding: 0 0 0 40px;
+      }
+
+      #toggle {
+        display: block;
+        position: fixed;
+        top: 10px;
+        left: 10px;        
+        width: 20px;
+        height: 30px;
+        background: repeating-linear-gradient(#ddd, #fff 10px);
+      }
+
+      #nav {
+        display: none;
+      }
+
+      #content {
+        border-left: none;
+        padding: 0 20px 0 1px;
+        overflow: hidden;
+      }
+    }
+
+    .show_nav {
+      grid-template-columns: 1fr 2fr;
+    }
+
+    .show_nav > #nav {
+      display: block;
+    }
+
+    .show_nav > #content * {
+      font-size: 30%;
+      padding: 0;
+      overflow: hidden;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="grid">
+
+    <div id="toggle"></div>
+
+    <ul id="nav">
+
+      <li>
+        <a style="font-weight: bold; font-size: 30px;" href="/docs">XYZ</a>
+      </li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <li class="_1 __1 ">
+        <a href="/docs/configure/">Configure</a>
+      </li>
+      
+      
+      
+      <li class="_1  ">
+        <a href="/docs/configure/gazetteer/">Gazetteer</a>
+      </li>
+      
+      
+      
+      <li class="_2 __2 active">
+        <a href="/docs/configure/layer/cluster-layer/">Cluster Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/configure/layer/dataviews/">Dataviews</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/configure/layer/filter/">Filter</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/configure/layer/geojson-layer/">GeoJson Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/configure/layer/grid-hex/">Grid (Hex) Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/configure/layer/layers/">Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/configure/layer/postgis-layer/">PostGIS Data Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/configure/layer/tile-layer/">Tile Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/configure/layer/vector-tile-mvt-layer/">MapBox Vector Tile (MVT) Layer</a>
+      </li>
+      
+      
+      
+      <li class="_1 __1 ">
+        <a href="/docs/configure/locale/">Locale</a>
+      </li>
+      
+      
+      
+      <li class="_2 __2 ">
+        <a href="/docs/configure/location/dataviews/">Dataviews</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/configure/location/filter/">Filter</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/configure/location/geometry/">Geometry</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/configure/location/groups/">Groups</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/configure/location/infoj/">Location</a>
+      </li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+    </ul>
+
+    <div id="content">
+      <p>Cluster layer are point layers. <a href="https://medium.com/@goldrydigital/cluster-f-x-nesting-postgresql-kmeans-in-dbscan-for-responsive-maps-9ed99590a439">A combination of PostGIS cluster algorithm</a> are applied by the XYZ backend in order to display aggregate cluster for large point location datasets in the map control.</p>
+<p>It is possible to select individual locations from an aggregate cluster and theme the cluster based on their aggregate scores.</p>
+<p>The size of a cluster represents the count of locations which are aggregated into a cluster.</p>
+<p>The cluster panel is not drawn by default. Setting the layer property <code>cluster_panel:true</code>, will draw the cluster panel.</p>
+<h3><strong>Cluster geometry</strong></h3>
+<p><code>&quot;geom&quot;: &quot;geom&quot;</code></p>
+<p>Cluster layer require a PostGIS geometry column of the type GEOMETRY(POINT,4326). By default the geom value will be set to 'geom'.</p>
+<h2><strong>Cluster parameter</strong></h2>
+<p>The cluster algorithm which is used to aggregate locations can be specified with additional cluster parameter.</p>
+<p><code>&quot;cluster_kmeans&quot;: 0.05</code></p>
+<p><strong>cluster_kmeans</strong> defines the minimum number of cluster. The number is determined by 1 over the kmeans value (eg. KMeans 0.05 will generate a minimum number of 20 cluster). The XYZ backend will adjusted KMeans by the absolute number of locations in a map view. The KMeans value can be altered through the cluster panel. <em>The default value is 0.5.</em> <strong>A lower KMeans value will produce more cluster.</strong></p>
+<p><code>&quot;cluster_dbscan&quot;: 0.01</code></p>
+<p><strong>cluster_dbscan</strong> defines the maximum distance between locations in a cluster. The applied value is a ratio of the cross distance across the map view (eg. DBScan 0.01 with 10km cross distance of the map view will set the maximum distance between locations to 100 meter). <em>The default value is 0.01.</em> <strong>A higher DBScan value will produce more cluster.</strong></p>
+<h2><strong>Cluster locations</strong></h2>
+<p><code>&quot;qID&quot;: &quot;optional&quot;</code></p>
+<p>Setting the <strong>qID</strong> as a valid id column for the database table will make cluster locations selectable. There is no default for the qID value. The qID value together with the table and dbs parameter will be tested during the workspace load.</p>
+<p><code>&quot;cluster_label&quot;: &quot;optional&quot;</code></p>
+<p><strong>cluster_label</strong> defines the label which is shown in the select dialog for multiple locations in a cluster. If not defined, the qID value will be shown in the select dialog.</p>
+<h2><strong>Hover</strong></h2>
+<p><code>&quot;hover&quot;: {   &quot;field&quot;: &quot;location_name&quot; // field name pointing to label text content   }</code></p>
+<p>Hovering labels can be displayed on single cluster features. In order to enable them set <code>&quot;hover&quot;: {}</code> parameter on cluster layer. <code>&quot;field&quot;</code> property will point to text content displayed in the label.</p>
+<p>Labels can be displayed on mouse hover or permanent. In order to set labels as permanent set the following:</p>
+<p><code>&quot;hover&quot;: {   &quot;field&quot;: &quot;location_name&quot;,   &quot;permanent&quot;: &quot;true | false&quot;   }</code></p>
+<p>Setting <code>&quot;permanent&quot;</code> parameter allows hiding or showing all labels with a button visible in the layer style panel.<br>
+Setting <code>&quot;permanent&quot;: false</code> will set labels as permanent but hidden by default.</p>
+<h2>Cluster styling</h2>
+<p>Cluster are represented by marker on the map. Two different markers can be defined for single location cluster or multi location cluster. Markers can be svg resources or generated from a set of instructions. The default marker is a 'target' which is displayed as simple circle by default or multiple shapes of varying size and colour.</p>
+<pre><code class="language-javascript">&quot;style&quot;: {
+  &quot;markerMin&quot;: 20,
+  &quot;markerMax&quot;: 40,
+  &quot;anchor&quot;: [20, 40], // optional anchor can align location icon with selection marker
+  &quot;marker&quot;: {
+    &quot;type&quot;: &quot;target&quot;,
+    &quot;fillColor&quot;: &quot;#999999&quot;
+  },
+  &quot;markerMulti&quot;: {
+    &quot;type&quot;: &quot;target | triangle | square&quot;,
+    &quot;fillColor&quot;: &quot;#333333&quot;
+  },
+  &quot;themes&quot;: {}
+}
+</code></pre>
+<p>Icons for markers can be stored externally. The following example uses a public Github repository:</p>
+<pre><code class="language-text">&quot;marker&quot;: {
+  &quot;svg&quot;: &quot;https://raw.githubusercontent.com/GEOLYTIX/MapIcons/master/poi_pin_filled/poi_health_hospital.svg?sanitize=true&quot;
+}
+</code></pre>
+<p>Finally, markers can be also set to raw SVG dataURI:</p>
+<pre><code class="language-text">&quot;marker&quot;: {
+  &quot;svg&quot;: &quot;data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij48cGF0aCBkPSJNMjEgMTZ2LTJsLTgtNVYzLjVjMC0uODMtLjY3LTEuNS0xLjUtMS41UzEwIDIuNjcgMTAgMy41VjlsLTggNXYybDgtMi41VjE5bC0yIDEuNVYyMmwzLjUtMSAzLjUgMXYtMS41TDEzIDE5di01LjVsOCAyLjV6IiBmaWxsPSIjMmU3NzA5Ii8+PHBhdGggZD0iTTAgMGgyNHYyNEgweiIgZmlsbD0ibm9uZSIvPjwvc3ZnPg==&quot;
+</code></pre>
+<h3><strong>Marker</strong></h3>
+<p>The default target marker is defined by their fillColour only.</p>
+<pre><code class="language-javascript">&quot;fillColor&quot;: &quot;#ee8a00&quot;,
+&quot;layers&quot;: {
+  &quot;0.5&quot;: &quot;#ffffff&quot;,
+  &quot;0.35&quot;: &quot;#ee8a00&quot;
+}
+</code></pre>
+<p>Complex <code>target | triangle | square</code> marker can be created by adding additional layers to the marker definition. The size of the fillColour shape is 1. Additional layers will be drawn in the order of their defintion in the layers entry. The key is the size of the shape as a fraction of 1. Larger shapes must be defined first or will otherwise be hidden underneath drawn layers subsequently.</p>
+<p>To use alternative marker shape use &quot;triangle&quot; and &quot;square&quot;. They also accept &quot;layers&quot; parameters. For triangle markers consider larger marker size as triagles have smaller area than other shapes.</p>
+<h2>Themes</h2>
+<p>Cluster layers support categorized, graduated and competition themes. A theme must have a unique name as key in the themes object. The type of the theme must be defined in the theme entry.</p>
+<p><strong>Theme styles are adaptive.</strong> The marker and markerMulti definition will be augmented by the style elements in theme's categories (cat).</p>
+<h3><strong>Categorized cluster theme</strong></h3>
+<pre><code class="language-javascript">&quot;Retailer&quot;: {
+  &quot;type&quot;: &quot;categorized&quot;,
+  &quot;field&quot;: &quot;retailer&quot;,
+  &quot;other&quot;: true,
+  &quot;cat&quot;: {
+      &quot;Tesco&quot;: {
+          &quot;label&quot;: &quot;Tesco&quot;,
+          &quot;fillColor&quot;: &quot;#0055a8&quot;,
+          &quot;layers&quot;: {
+              &quot;0.75&quot;: &quot;#ffffff&quot;,
+              &quot;0.35&quot;: &quot;#f02f26&quot;
+          }
+      },
+      &quot;Sainsburys&quot;: {
+          &quot;label&quot;: &quot;Sainsbury's&quot;,
+          &quot;fillColor&quot;: &quot;#ee8a00&quot;,
+          &quot;layers&quot;: {
+              &quot;0.5&quot;: &quot;#ffffff&quot;,
+              &quot;0.35&quot;: &quot;#ee8a00&quot;
+          }
+      },
+      &quot;Marks and Spencer&quot;: {
+          &quot;label&quot;: &quot;Marks &amp; Spencer&quot;,
+          &quot;fillColor&quot;: &quot;#0a0d10&quot;,
+          &quot;layers&quot;: {
+              &quot;0.5&quot;: &quot;#def036&quot;,
+              &quot;0.25&quot;: &quot;#0a0d10&quot;
+          }
+      }
+  }
+}  
+</code></pre>
+<p>A categorized theme requires as a minimum the type, field, and cat properties. The type is <strong>categorized</strong>. The <strong>field</strong> value must be a column in the PostGIS table which can be used to categorize a location. <strong>cat</strong> is an array like object which lists the different categories as key/value pairs. The key is used to identify the category of a location while the value defines the styling of the marker as well as the label which should be shown in the legend.</p>
+<p><code>&quot;other&quot;: true</code></p>
+<p>The other entry will show a marker for values which do not match a category key in the theme's legend.</p>
+<p><img src="../../../assets/img/cluster_layer_3.png" alt=""></p>
+<p>Entries (label) in the categorized theme legend can be used to filter the respective category.</p>
+<p><img src="../../../assets/img/cluster_layer_4.png" alt=""></p>
+<h3><strong>Graduated cluster theme</strong></h3>
+<p>Cluster fall into a graduated theme category when their aggregated value is larger then the categories key (parsed) but smaller than the subsequent category's key (parsed).</p>
+<pre><code class="language-javascript">&quot;Households&quot;: {
+  &quot;type&quot;: &quot;graduated&quot;,
+  &quot;field&quot;: &quot;hhdooc_11&quot;,
+  &quot;cat&quot;: {
+      &quot;0&quot;: {
+          &quot;label&quot;: &quot;0 to 100&quot;,
+          &quot;fillColor&quot;: &quot;#15773f&quot;
+      },
+      &quot;100&quot;: {
+          &quot;label&quot;: &quot;100 to 250&quot;,
+          &quot;fillColor&quot;: &quot;#66bd63&quot;
+      },
+      &quot;250&quot;: {
+          &quot;label&quot;: &quot;250 to 500&quot;,
+          &quot;fillColor&quot;: &quot;#a6d96a&quot;
+      },
+      &quot;500&quot;: {
+          &quot;label&quot;: &quot;500 to 1000&quot;,
+          &quot;fillColor&quot;: &quot;#d9ef8b&quot;
+      },
+      &quot;1000&quot;: {
+          &quot;label&quot;: &quot;1000 to 2500&quot;,
+          &quot;fillColor&quot;: &quot;#fdae61&quot;
+      },
+      &quot;2500&quot;: {
+          &quot;label&quot;: &quot;2500 to 5000&quot;,
+          &quot;fillColor&quot;: &quot;#f46d43&quot;
+      },
+      &quot;5000&quot;: {
+          &quot;label&quot;: &quot;5000 or more&quot;,
+          &quot;fillColor&quot;: &quot;#d73027&quot;
+      }
+  }
+</code></pre>
+<p>Graduated categories can not be filtered from the legend.</p>
+<h3>Competition Theme</h3>
+<p>Competition themes allow to show the makeup of locations aggregated in individual cluster.</p>
+<pre><code class="language-javascript">&quot;Tesco/Sainsbury's&quot;: {
+  &quot;type&quot;: &quot;competition&quot;,
+  &quot;field&quot;: &quot;retailer&quot;,
+  &quot;other&quot;: true,
+  &quot;cat&quot;: {
+      &quot;Tesco&quot;: {
+          &quot;label&quot;: &quot;Tesco&quot;,
+          &quot;fillColor&quot;: &quot;#0055a8&quot;
+      },
+      &quot;Sainsburys&quot;: {
+          &quot;label&quot;: &quot;Sainsbury's&quot;,
+          &quot;fillColor&quot;: &quot;#ee8a00&quot;
+      }
+  }
+}
+</code></pre>
+<p>The size of the competition layers in marker are defined by their respective size. A single colour cluster marker indicates that the whole cluster is made up of the same category. A cluster split 50/50 between two categories will have a base colour of one category and a target disc with a radius of 0.5 the size of the cluster to represent the second category.</p>
+<p>The legend can be used to filter individual competition categories.</p>
+<h2>Cluster size</h2>
+<p>By default cluster will be sized according to their count. The marker for a cluster with three locations will be bigger than a marker for a cluster with 2 locations. The size is linear to the size of the cluster with the highest count of locations.</p>
+<p>It is possible to set the minimum and maximum size for cluster locations in the cluster panel.</p>
+<p>It is also possible to use a log scale instead of a linear scale to size cluster in relation to the largest cluster in the view.</p>
+<h3>Cluster size in themes</h3>
+<p>It is possible to define a size entry themes.</p>
+<pre><code class="language-text">&quot;Households&quot;: {
+  &quot;type&quot;: &quot;graduated&quot;,
+  &quot;field&quot;: &quot;hhdooc_11&quot;,
+  &quot;size&quot;: &quot;hhdooc_11&quot;,
+  &quot;cat&quot;: {...}
+}
+</code></pre>
+<p>The aggregated cluster value from the size field will then be used to determine the relative size of cluster.</p>
+
+    </div>
+
+  </div>
+
+</body>
+
+<script>
+    const toggle = document.getElementById('toggle');
+
+    toggle.onclick = e => { e.target.parentElement.classList.toggle('show_nav'); };
+</script>
+
+</html>

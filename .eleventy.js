@@ -11,8 +11,8 @@ module.exports = function (eleventyConfig) {
   eleventyConfig.addCollection('posts', collection => {
 
     const _collection = collection.getFilteredByGlob('**/*.md').sort((a, b) => {
-      if (a.inputPath < b.inputPath) return -1;
-      else if (a.inputPath > b.inputPath) return 1;
+      if ((a.data.orderPath || a.filePathStem) < (b.orderPath || b.filePathStem)) return -1;
+      else if ((a.data.orderPath || a.filePathStem) > (b.orderPath || b.filePathStem)) return 1;
       else return 0;
     })
 

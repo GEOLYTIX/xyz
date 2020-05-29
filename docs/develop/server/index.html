@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="/icons/favicon.ico">
-  <title>{{ title }}</title>
+  <title>Server</title>
   <style>
 
     body {
@@ -184,18 +184,126 @@
         <a style="font-weight: bold; font-size: 30px;" href="/docs">XYZ</a>
       </li>
       
-      {% for post in collections.posts %}
-      {% if post.data.tags contains tag %}
-      <li class="_{{ post.data.level }} {{ post.data.class }} {% if page.url == post.url %}active{% endif %}">
-        <a href="/docs{{post.url}}">{{ post.data.title }}</a>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <li class="_1 __1 ">
+        <a href="/docs/develop/client/">Client</a>
       </li>
-      {% endif %}
-      {% endfor %}
+      
+      
+      
+      <li class="_1  ">
+        <a href="/docs/develop/infrastructure/">Develop</a>
+      </li>
+      
+      
+      
+      <li class="_1  ">
+        <a href="/docs/develop/sass/">Sass</a>
+      </li>
+      
+      
+      
+      <li class="_1  active">
+        <a href="/docs/develop/server/">Server</a>
+      </li>
+      
+      
+      
+      <li class="_1  ">
+        <a href="/docs/develop/webpack/">Webpack</a>
+      </li>
+      
+      
+      
+      
+      
+      
+      
+      
 
     </ul>
 
     <div id="content">
-      {{ content | safe }}
+      <p>Running <a href="https://github.com/GEOLYTIX/xyz/blob/master/server.js">server.js</a> as a node will initialise a <a href="https://www.fastify.io/">Fastify</a> web server.</p>
+<p>The startup procedure is as follows.</p>
+<ol>
+<li>Inspect the environment settings provided to the process.</li>
+<li>Setup node-postgres connection pools.</li>
+<li>Load workspace into memory.</li>
+<li>Declare Fastify web server.</li>
+<li>Register Fastify modules and routes.</li>
+<li>Start listening for requests.</li>
+</ol>
+
     </div>
 
   </div>

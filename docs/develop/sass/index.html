@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="/icons/favicon.ico">
-  <title>{{ title }}</title>
+  <title>Sass</title>
   <style>
 
     body {
@@ -184,18 +184,117 @@
         <a style="font-weight: bold; font-size: 30px;" href="/docs">XYZ</a>
       </li>
       
-      {% for post in collections.posts %}
-      {% if post.data.tags contains tag %}
-      <li class="_{{ post.data.level }} {{ post.data.class }} {% if page.url == post.url %}active{% endif %}">
-        <a href="/docs{{post.url}}">{{ post.data.title }}</a>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <li class="_1 __1 ">
+        <a href="/docs/develop/client/">Client</a>
       </li>
-      {% endif %}
-      {% endfor %}
+      
+      
+      
+      <li class="_1  ">
+        <a href="/docs/develop/infrastructure/">Develop</a>
+      </li>
+      
+      
+      
+      <li class="_1  active">
+        <a href="/docs/develop/sass/">Sass</a>
+      </li>
+      
+      
+      
+      <li class="_1  ">
+        <a href="/docs/develop/server/">Server</a>
+      </li>
+      
+      
+      
+      <li class="_1  ">
+        <a href="/docs/develop/webpack/">Webpack</a>
+      </li>
+      
+      
+      
+      
+      
+      
+      
+      
 
     </ul>
 
     <div id="content">
-      {{ content | safe }}
+      <p>We use syntactically awesome style sheets (<a href="https://sass-lang.com">SASS</a>) for the client application. Compiled css are included in the repository. With SASS installed it is possible to compile style sheets with following command <code>sass -update public/css</code> from the application root.</p>
+
     </div>
 
   </div>

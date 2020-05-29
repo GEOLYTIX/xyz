@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="/icons/favicon.ico">
-  <title>{{ title }}</title>
+  <title>Webpack</title>
   <style>
 
     body {
@@ -184,18 +184,144 @@
         <a style="font-weight: bold; font-size: 30px;" href="/docs">XYZ</a>
       </li>
       
-      {% for post in collections.posts %}
-      {% if post.data.tags contains tag %}
-      <li class="_{{ post.data.level }} {{ post.data.class }} {% if page.url == post.url %}active{% endif %}">
-        <a href="/docs{{post.url}}">{{ post.data.title }}</a>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <li class="_1 __1 ">
+        <a href="/docs/develop/client/">Client</a>
       </li>
-      {% endif %}
-      {% endfor %}
+      
+      
+      
+      <li class="_1  ">
+        <a href="/docs/develop/infrastructure/">Develop</a>
+      </li>
+      
+      
+      
+      <li class="_1  ">
+        <a href="/docs/develop/sass/">Sass</a>
+      </li>
+      
+      
+      
+      <li class="_1  ">
+        <a href="/docs/develop/server/">Server</a>
+      </li>
+      
+      
+      
+      <li class="_1  active">
+        <a href="/docs/develop/webpack/">Webpack</a>
+      </li>
+      
+      
+      
+      
+      
+      
+      
+      
 
     </ul>
 
     <div id="content">
-      {{ content | safe }}
+      <p>The application is bundled with <a href="https://webpack.js.org">Webpack 4</a>.</p>
+<p>With the <a href="https://github.com/GEOLYTIX/xyz/blob/master/package.json">package.json</a> dependencies installed the <a href="https://github.com/GEOLYTIX/xyz/blob/master/public/js/xyz_entry.js">xyz entry code</a> can be bundled with the <code>npm run build</code> command from the root.</p>
+<pre><code class="language-javascript">const path = require('path');
+
+module.exports = {
+  entry: {
+    xyz: ['./public/js/xyz_entry.js']
+  },
+  output: {
+    path: path.resolve(__dirname, 'public/js/build'),
+    filename: '[name]_bundle.js'
+  },
+  devtool: 'source-map',
+  module: {
+    rules: [{
+      test: /\.js$/,
+      exclude: /node_modules/
+    }]
+  },
+  optimization: {
+    concatenateModules: true
+  },
+  stats: {
+    maxModules: Infinity,
+    optimizationBailout: true
+  }
+};
+</code></pre>
+
     </div>
 
   </div>

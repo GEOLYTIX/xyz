@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="/icons/favicon.ico">
-  <title></title>
+  <title>Configure</title>
   <style>
 
     body {
@@ -186,15 +186,6 @@
       
       
       
-      <li class="_1 __1 ">
-        <a href="/docs/deploy/getting-started/">Getting started</a>
-      </li>
-      
-      
-      
-      <li class="_1 __1 ">
-        <a href="/docs/api/_api/">API</a>
-      </li>
       
       
       
@@ -216,111 +207,147 @@
       
       
       
-      <li class="_1 __1 ">
+      
+      <li class="_1 __1 active">
         <a href="/docs/configure/">Configure</a>
       </li>
       
       
       
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
       <li class="_1  ">
-        <a href="/docs/design/">Design</a>
+        <a href="/docs/configure/gazetteer/">Gazetteer</a>
       </li>
       
       
       
-      
-      
-      
-      
-      <li class="_1  ">
-        <a href="/docs/develop/infrastructure/">Develop</a>
+      <li class="_2 __2 ">
+        <a href="/docs/configure/layer/cluster-layer/">Cluster Layer</a>
       </li>
       
       
       
-      
-      
-      
-      
-      
-      
-      <li class="_1 __1 ">
-        <a href="/docs/document/">Document</a>
+      <li class="_2  ">
+        <a href="/docs/configure/layer/dataviews/">Dataviews</a>
       </li>
       
       
       
-      <li class="_0 __0 active">
-        <a href="/docs/"></a>
+      <li class="_2  ">
+        <a href="/docs/configure/layer/filter/">Filter</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/configure/layer/geojson-layer/">GeoJson Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/configure/layer/grid-hex/">Grid (Hex) Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/configure/layer/layers/">Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/configure/layer/postgis-layer/">PostGIS Data Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/configure/layer/tile-layer/">Tile Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/configure/layer/vector-tile-mvt-layer/">MapBox Vector Tile (MVT) Layer</a>
       </li>
       
       
       
       <li class="_1 __1 ">
-        <a href="/docs/mapp/">Mapp</a>
+        <a href="/docs/configure/locale/">Locale</a>
       </li>
+      
+      
+      
+      <li class="_2 __2 ">
+        <a href="/docs/configure/location/dataviews/">Dataviews</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/configure/location/filter/">Filter</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/configure/location/geometry/">Geometry</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/configure/location/groups/">Groups</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/configure/location/infoj/">Location</a>
+      </li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       
       
 
     </ul>
 
     <div id="content">
-      <h2>Open source javascript library and middleware for spatial data and application interfaces.</h2>
-<p>XYZ is a combination of node.js middleware and client libraries for building web applications for the analysis of spatial data.</p>
-<p>The XYZ middleware is a collection of RESTful endpoints which provide secure interfaces to spatial data sources.</p>
-<h3>Getting started</h3>
-<p>This section explains how to run the XYZ host locally, set the process environment and how to deploy XYZ as serverless functions to Vercel's Now platform. Information in regard to API access is provided in this section.</p>
-<h3>Configure</h3>
-<p>Workspaces are used to configure locales, layers and locations in connected data sources. The workspace configuration defines how spatial data is presented in maps, tables, or charts created through the XYZ library.</p>
-<h3>Develop</h3>
-<p>User will primarily interact with spatial data interfaces through views which facilitate the XYZ library to communicate with the middleware. This section gives an overview of library methods as well as the various API endpoints providing access to connected data sources.</p>
-<p>Being open source we encourage developers to contribute to the XYZ project. Customization however can be achieved without the need to alter the core code base. Endpoints may be extended with stored scripts and custom views may be provided as a combination of markup and javascript.</p>
-<h3>Design</h3>
-<p>A collection of interface control elements with a consistent look and feel to ease the development of custom application views.</p>
-<h3>Mapp</h3>
-<p>A default user interface for desktop and mobile browser. This section provides a user guide to the functionality provided by the Mapp interface.</p>
-<h3>Document</h3>
-<p>Made possible with eleventy. This page explains how to the XYZ project documentation contained in the gh-pages branch of the XYZ repository can be run locally.</p>
+      <p>Instances can be configured by providing JSON object which defines locales, layer, and locations. This object can be provided as a file, from a connected PostgreSQL table, or via GitHub. The configuration object is referred to as workspace.</p>
+<h2>Workspaces</h2>
+<p>A workspace is a configuration of services, locales, layers and locations which are used in a deployment.</p>
+<p>Layers are defined within locales. A locale is defined by its extent (bounds and zoom level). A locale may have services itself. e.g. The gazetteer geolocation service.</p>
+<p>Locations are defined by an InfoJ schema on the layer through which a location can be accessed.</p>
+<p><strong>Workspaces are served from memory.</strong> During startup a workspace will be loaded into memory from either a file or a PostgreSQL tables. A minimum configuration will be loaded into memory if no workspace is defined or if the backend is not able to parse a valid JSON document.</p>
+<p>The workspace can be loaded through workspace admin views. The workspace admin views allow to upload workspace files and load the workspace into the instances memory.</p>
 
     </div>
 

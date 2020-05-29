@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="/icons/favicon.ico">
-  <title>{{ title }}</title>
+  <title>View</title>
   <style>
 
     body {
@@ -184,18 +184,137 @@
         <a style="font-weight: bold; font-size: 30px;" href="/docs">XYZ</a>
       </li>
       
-      {% for post in collections.posts %}
-      {% if post.data.tags contains tag %}
-      <li class="_{{ post.data.level }} {{ post.data.class }} {% if page.url == post.url %}active{% endif %}">
-        <a href="/docs{{post.url}}">{{ post.data.title }}</a>
+      
+      
+      
+      
+      <li class="_1 __1 ">
+        <a href="/docs/api/_api/">API</a>
       </li>
-      {% endif %}
-      {% endfor %}
+      
+      
+      
+      <li class="_1  ">
+        <a href="/docs/api/gazetteer/">Gazetteer</a>
+      </li>
+      
+      
+      
+      <li class="_1  ">
+        <a href="/docs/api/layer/">Layer</a>
+      </li>
+      
+      
+      
+      <li class="_1  ">
+        <a href="/docs/api/location/">Location</a>
+      </li>
+      
+      
+      
+      <li class="_1  ">
+        <a href="/docs/api/provider/">Provider</a>
+      </li>
+      
+      
+      
+      <li class="_1  ">
+        <a href="/docs/api/proxy/">Proxy</a>
+      </li>
+      
+      
+      
+      <li class="_1  ">
+        <a href="/docs/api/query/">Query</a>
+      </li>
+      
+      
+      
+      <li class="_1  ">
+        <a href="/docs/api/user/">User</a>
+      </li>
+      
+      
+      
+      <li class="_1  active">
+        <a href="/docs/api/view/">View</a>
+      </li>
+      
+      
+      
+      <li class="_1  ">
+        <a href="/docs/api/workspace/">Workspace</a>
+      </li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
 
     </ul>
 
     <div id="content">
-      {{ content | safe }}
+      <p>The View API...</p>
+
     </div>
 
   </div>
