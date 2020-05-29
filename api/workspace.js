@@ -26,7 +26,10 @@ module.exports = async (req, res) => {
 
   const method = _method[req.params && req.params.method]
 
-  if (!method) return res.send('Help text.')
+  if (!method) {
+    res.setHeader('location', `${process.env.DIR || ''}/docs/07-api/workspace/`)
+    return res.status(302).send()
+  }
 
   await auth(req, res, method.access)
 
