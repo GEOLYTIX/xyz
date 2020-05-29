@@ -94,7 +94,7 @@
           "qID": "id",
           "infoj": [{
             "field": "retailer",
-            "label": "Retailer",
+            "title": "Retailer",
             "inline": true,
             "filter": "like"
           }]
@@ -108,7 +108,7 @@
           "srid": "4326",
           "infoj": [{
             "field": "retailer",
-            "label": "Retailer",
+            "title": "Retailer",
             "inline": true,
             "filter": "like"
           }]
@@ -263,35 +263,35 @@
               "type": "key"
             },
             {
-              "label": "Name",
+              "title": "Name",
               "field": "name"
             },
             {
-              "label": "Population Est",
+              "title": "Population Est",
               "field": "pop_est",
               "type": "integer"
             },
             {
-              "label": "Population Est edit",
+              "title": "Population Est edit",
               "field": "pop_est_edit",
               "type": "integer",
               "filter": "numeric",
               "edit": true
             },
             {
-              "label": "GDP",
+              "title": "GDP",
               "field": "gdp_md_est",
               "type": "integer",
               "suffix": " dollars"
             },
             {
-              "label": "GDP edit",
+              "title": "GDP edit",
               "field": "gdp_md_est_edit",
               "type": "integer",
               "edit": true
             },
             {
-              "label": "Area SRID:3857",
+              "title": "Area SRID:3857",
               "field": "area_",
               "fieldfx": "ST_Area(geom_3857)",
               "type": "integer"
@@ -593,7 +593,7 @@
               "type": "key"
             },
             {
-              "label": "Address",
+              "title": "Address",
               "field": "address",
               "type": "html"
             }
@@ -715,22 +715,22 @@
             },
             {
               "field": "retailer",
-              "label": "Retailer",
+              "title": "Retailer",
               "inline": true
             },
             {
               "field": "fascia",
-              "label": "Fascia",
+              "title": "Fascia",
               "inline": true
             },
             {
               "field": "store_name",
-              "label": "Name",
+              "title": "Name",
               "inline": true
             },
             {
-              "label": "Address",
-              "type": "label"
+              "title": "Address",
+              "type": "title"
             },
             {
               "field": "add_one"
@@ -749,15 +749,15 @@
             },
             {
               "field": "pqi",
-              "label": "PQI"
+              "title": "PQI"
             },
             {
               "field": "open_date",
-              "label": "Open Date"
+              "title": "Open Date"
             },
             {
               "field": "close_date",
-              "label": "Close Date"
+              "title": "Close Date"
             },
             {
               "type": "streetview"
@@ -851,22 +851,22 @@
             },
             {
               "field": "retailer",
-              "label": "Retailer",
+              "title": "Retailer",
               "inline": true
             },
             {
               "field": "fascia",
-              "label": "Fascia",
+              "title": "Fascia",
               "inline": true
             },
             {
               "field": "store_name",
-              "label": "Name",
+              "title": "Name",
               "inline": true
             },
             {
-              "label": "Address",
-              "type": "label"
+              "title": "Address",
+              "type": "title"
             },
             {
               "field": "add_one"
@@ -885,20 +885,20 @@
             },
             {
               "field": "pqi",
-              "label": "PQI"
+              "title": "PQI"
             },
             {
               "field": "open_date",
-              "label": "Open Date"
+              "title": "Open Date"
             },
             {
               "field": "close_date",
-              "label": "Close Date"
+              "title": "Close Date"
             },
             {
-              "label": "Catchments",
+              "title": "Catchments",
               "type": "label",
-              "title": "Customer catchment"
+              "tooltip": "Customer catchment"
             },
             {
               "name": "Catchment",
@@ -912,8 +912,8 @@
               }
             },
             {
-              "label": "Drivetimes",
-              "type": "label"
+              "title": "Drivetimes",
+              "type": "title"
             },
             {
               "name": "HERE drivetime 5 min",
@@ -935,7 +935,7 @@
             },
             {
               "group": "Food Stores within 5min",
-              "label": "Asda",
+              "title": "Asda",
               "field": "_asda5min",
               "fieldfx": "SELECT coalesce(sum(case when b.retailer = 'Asda' then 1 else 0 end), 0) FROM dev.uk_glx_open_retail_points_food_stores a, dev.uk_glx_open_retail_points_food_stores b WHERE a.id = $1 AND st_intersects(a.isoline_5min, b.geom_p_4326) and a.id <> b.id",
               "type": "integer",
@@ -943,35 +943,35 @@
             },
             {
               "group": "Food Stores within 5min",
-              "label": "Co-op",
+              "title": "Co-op",
               "field": "_coop5min",
               "fieldfx": "SELECT coalesce(sum(case when b.retailer = 'Co-op' then 1 else 0 end), 0) FROM dev.uk_glx_open_retail_points_food_stores a, dev.uk_glx_open_retail_points_food_stores b WHERE a.id = $1 AND st_intersects(a.isoline_5min, b.geom_p_4326) and a.id <> b.id",
               "type": "integer"
             },
             {
               "group": "Food Stores within 5min",
-              "label": "Morrisons",
+              "title": "Morrisons",
               "field": "_morrisons5min",
               "fieldfx": "SELECT coalesce(sum(case when b.retailer = 'Morrisons' then 1 else 0 end), 0) FROM dev.uk_glx_open_retail_points_food_stores a, dev.uk_glx_open_retail_points_food_stores b WHERE a.id = $1 AND st_intersects(a.isoline_5min, b.geom_p_4326) and a.id <> b.id",
               "type": "integer"
             },
             {
               "group": "Food Stores within 5min",
-              "label": "Sainsburys",
+              "title": "Sainsburys",
               "field": "_sainsburys5min",
               "fieldfx": "SELECT coalesce(sum(case when b.retailer = 'Sainsburys' then 1 else 0 end), 0) FROM dev.uk_glx_open_retail_points_food_stores a, dev.uk_glx_open_retail_points_food_stores b WHERE a.id = $1 AND st_intersects(a.isoline_5min, b.geom_p_4326) and a.id <> b.id",
               "type": "integer"
             },
             {
               "group": "Food Stores within 5min",
-              "label": "Tesco",
+              "title": "Tesco",
               "field": "_tesco5min",
               "fieldfx": "SELECT coalesce(sum(case when b.retailer = 'Tesco' then 1 else 0 end), 0) FROM dev.uk_glx_open_retail_points_food_stores a, dev.uk_glx_open_retail_points_food_stores b WHERE a.id = $1 AND st_intersects(a.isoline_5min, b.geom_p_4326) and a.id <> b.id",
               "type": "integer"
             },
             {
               "group": "Food Stores within 5min",
-              "label": "Waitrose",
+              "title": "Waitrose",
               "field": "_waitrose5min",
               "fieldfx": "SELECT coalesce(sum(case when b.retailer = 'Waitrose' then 1 else 0 end), 0) FROM dev.uk_glx_open_retail_points_food_stores a, dev.uk_glx_open_retail_points_food_stores b WHERE a.id = $1 AND st_intersects(a.isoline_5min, b.geom_p_4326) and a.id <> b.id",
               "type": "integer"
@@ -997,7 +997,7 @@
             },
             {
               "group": "Food Stores within 10min",
-              "label": "Asda",
+              "title": "Asda",
               "field": "_asda10min",
               "fieldfx": "SELECT coalesce(sum(case when b.retailer = 'Asda' then 1 else 0 end), 0) FROM dev.uk_glx_open_retail_points_food_stores a, dev.uk_glx_open_retail_points_food_stores b WHERE a.id = $1 AND st_intersects(a.isoline_10min, b.geom_p_4326) and a.id <> b.id",
               "type": "integer",
@@ -1005,35 +1005,35 @@
             },
             {
               "group": "Food Stores within 10min",
-              "label": "Co-op",
+              "title": "Co-op",
               "field": "_coop10min",
               "fieldfx": "SELECT coalesce(sum(case when b.retailer = 'Co-op' then 1 else 0 end), 0) FROM dev.uk_glx_open_retail_points_food_stores a, dev.uk_glx_open_retail_points_food_stores b WHERE a.id = $1 AND st_intersects(a.isoline_10min, b.geom_p_4326) and a.id <> b.id",
               "type": "integer"
             },
             {
               "group": "Food Stores within 10min",
-              "label": "Morrisons",
+              "title": "Morrisons",
               "field": "_morrisons10min",
               "fieldfx": "SELECT coalesce(sum(case when b.retailer = 'Morrisons' then 1 else 0 end), 0) FROM dev.uk_glx_open_retail_points_food_stores a, dev.uk_glx_open_retail_points_food_stores b WHERE a.id = $1 AND st_intersects(a.isoline_10min, b.geom_p_4326) and a.id <> b.id",
               "type": "integer"
             },
             {
               "group": "Food Stores within 10min",
-              "label": "Sainsburys",
+              "title": "Sainsburys",
               "field": "_sainsburys10min",
               "fieldfx": "SELECT coalesce(sum(case when b.retailer = 'Sainsburys' then 1 else 0 end), 0) FROM dev.uk_glx_open_retail_points_food_stores a, dev.uk_glx_open_retail_points_food_stores b WHERE a.id = $1 AND st_intersects(a.isoline_10min, b.geom_p_4326) and a.id <> b.id",
               "type": "integer"
             },
             {
               "group": "Food Stores within 10min",
-              "label": "Tesco",
+              "title": "Tesco",
               "field": "_tesco10min",
               "fieldfx": "SELECT coalesce(sum(case when b.retailer = 'Tesco' then 1 else 0 end), 0) FROM dev.uk_glx_open_retail_points_food_stores a, dev.uk_glx_open_retail_points_food_stores b WHERE a.id = $1 AND st_intersects(a.isoline_10min, b.geom_p_4326) and a.id <> b.id",
               "type": "integer"
             },
             {
               "group": "Food Stores within 10min",
-              "label": "Waitrose",
+              "title": "Waitrose",
               "field": "_waitrose10min",
               "fieldfx": "SELECT coalesce(sum(case when b.retailer = 'Waitrose' then 1 else 0 end), 0) FROM dev.uk_glx_open_retail_points_food_stores a, dev.uk_glx_open_retail_points_food_stores b WHERE a.id = $1 AND st_intersects(a.isoline_10min, b.geom_p_4326) and a.id <> b.id",
               "type": "integer"
@@ -1059,7 +1059,7 @@
             },
             {
               "group": "Food Stores within 15min",
-              "label": "Asda",
+              "title": "Asda",
               "field": "_asda15min",
               "fieldfx": "SELECT coalesce(sum(case when b.retailer = 'Asda' then 1 else 0 end), 0) FROM dev.uk_glx_open_retail_points_food_stores a, dev.uk_glx_open_retail_points_food_stores b WHERE a.id = $1 AND st_intersects(a.isoline_15min, b.geom_p_4326) and a.id <> b.id",
               "type": "integer",
@@ -1067,35 +1067,35 @@
             },
             {
               "group": "Food Stores within 15min",
-              "label": "Co-op",
+              "title": "Co-op",
               "field": "_coop15min",
               "fieldfx": "SELECT coalesce(sum(case when b.retailer = 'Co-op' then 1 else 0 end), 0) FROM dev.uk_glx_open_retail_points_food_stores a, dev.uk_glx_open_retail_points_food_stores b WHERE a.id = $1 AND st_intersects(a.isoline_15min, b.geom_p_4326) and a.id <> b.id",
               "type": "integer"
             },
             {
               "group": "Food Stores within 15min",
-              "label": "Morrisons",
+              "title": "Morrisons",
               "field": "_morrisons15min",
               "fieldfx": "SELECT coalesce(sum(case when b.retailer = 'Morrisons' then 1 else 0 end), 0) FROM dev.uk_glx_open_retail_points_food_stores a, dev.uk_glx_open_retail_points_food_stores b WHERE a.id = $1 AND st_intersects(a.isoline_15min, b.geom_p_4326) and a.id <> b.id",
               "type": "integer"
             },
             {
               "group": "Food Stores within 15min",
-              "label": "Sainsburys",
+              "title": "Sainsburys",
               "field": "_sainsburys15min",
               "fieldfx": "SELECT coalesce(sum(case when b.retailer = 'Sainsburys' then 1 else 0 end), 0) FROM dev.uk_glx_open_retail_points_food_stores a, dev.uk_glx_open_retail_points_food_stores b WHERE a.id = $1 AND st_intersects(a.isoline_15min, b.geom_p_4326) and a.id <> b.id",
               "type": "integer"
             },
             {
               "group": "Food Stores within 15min",
-              "label": "Tesco",
+              "title": "Tesco",
               "field": "_tesco15min",
               "fieldfx": "SELECT coalesce(sum(case when b.retailer = 'Tesco' then 1 else 0 end), 0) FROM dev.uk_glx_open_retail_points_food_stores a, dev.uk_glx_open_retail_points_food_stores b WHERE a.id = $1 AND st_intersects(a.isoline_15min, b.geom_p_4326) and a.id <> b.id",
               "type": "integer"
             },
             {
               "group": "Food Stores within 15min",
-              "label": "Waitrose",
+              "title": "Waitrose",
               "field": "_waitrose15min",
               "fieldfx": "SELECT coalesce(sum(case when b.retailer = 'Waitrose' then 1 else 0 end), 0) FROM dev.uk_glx_open_retail_points_food_stores a, dev.uk_glx_open_retail_points_food_stores b WHERE a.id = $1 AND st_intersects(a.isoline_15min, b.geom_p_4326) and a.id <> b.id",
               "type": "integer"
@@ -1203,27 +1203,27 @@
               "type": "key"
             },
             {
-              "field": "retailer",
+              "title": "retailer",
               "label": "Retailer",
               "inline": true,
               "edit": true,
               "filter": "like"
             },
             {
-              "field": "fascia",
+              "title": "fascia",
               "label": "Fascia",
               "inline": true,
               "edit": true
             },
             {
-              "field": "store_name",
+              "title": "store_name",
               "label": "Name",
               "inline": true,
               "edit": true
             },
             {
-              "label": "Address",
-              "type": "label"
+              "title": "Address",
+              "type": "title"
             },
             {
               "field": "add_one",
@@ -1247,7 +1247,7 @@
             },
             {
               "field": "store_type",
-              "label": "Store Type",
+              "title": "Store Type",
               "filter": {
                 "in": [
                   "Convenience",
@@ -1268,7 +1268,7 @@
             },
             {
               "field": "size_sqft",
-              "label": "Size in sqft",
+              "title": "Size in sqft",
               "inline": true,
               "edit": {
                 "options": [
@@ -1281,17 +1281,17 @@
             },
             {
               "field": "pqi",
-              "label": "PQI",
+              "title": "PQI",
               "edit": true
             },
             {
-              "label": "Images",
+              "title": "Images",
               "field": "images",
               "type": "images",
               "edit": true
             },
             {
-              "label": "Comments",
+              "title": "Comments",
               "field": "comments",
               "type": "textarea",
               "edit": true
@@ -1528,18 +1528,18 @@
             },
             {
               "field": "id",
-              "label": "Site ID",
+              "title": "Site ID",
               "inline": true
             },
             {
               "field": "site_name",
-              "label": "Site Name",
+              "title": "Site Name",
               "edit": true,
               "inline": true
             },
             {
               "field": "site_type",
-              "label": "Site Type",
+              "title": "Site Type",
               "inline": true,
               "edit": {
                 "options": [
@@ -1567,7 +1567,7 @@
             },
             {
               "observe": ["isoline_custom1"],
-              "label": "area",
+              "title": "area",
               "field": "isoline_dependent",
               "fieldfx": "st_area(isoline_custom1)"
             },
@@ -1590,13 +1590,13 @@
             },
             {
               "observe": ["isoline_custom2"],
-              "label": "area",
+              "title": "area",
               "field": "isoline_dependent2",
               "fieldfx": "st_area(isoline_custom2)"
             },
             {
               "observe": ["isoline_custom2"],
-              "label": "length",
+              "title": "length",
               "field": "isoline_dependent3",
               "fieldfx": "st_area(st_transform(isoline_custom2, 3857))"
             },
@@ -1662,27 +1662,27 @@
             },
             {
               "field": "area_name",
-              "label": "Area Name",
+              "title": "Area Name",
               "inline": true
             },
             {
               "field": "postal_area",
-              "label": "Postal Area",
+              "title": "Postal Area",
               "inline": true
             },
             {
               "field": "postal_district",
-              "label": "Postal District",
+              "title": "Postal District",
               "inline": true
             },
             {
               "field": "postal_sector",
-              "label": "Postal Sector",
+              "title": "Postal Sector",
               "inline": true
             },
             {
               "field": "postcode_count",
-              "label": "Number of Postcodes",
+              "title": "Number of Postcodes",
               "type": "integer",
               "inline": true
             }
@@ -1823,7 +1823,7 @@
           },
           "filter": {
             "infoj": [{
-              "label": "ID count",
+              "title": "ID count",
               "field": "id_count",
               "type": "integer",
               "inline": true,
@@ -1834,12 +1834,12 @@
               "type": "key"
             },
             {
-              "label": "ID",
+              "title": "ID",
               "field": "id",
               "inline": true
             },
             {
-              "label": "RP Type",
+              "title": "RP Type",
               "field": "rptype",
               "filter": {
                 "in": [
@@ -1854,44 +1854,44 @@
               }
             },
             {
-              "label": "Name",
+              "title": "Name",
               "field": "rpname",
               "inline": true
             },
             {
-              "label": "Competition Str.",
+              "title": "Competition Str.",
               "field": "strength",
               "type": "integer",
               "inline": true
             },
             {
               "group": "Profile",
-              "label": "Comp",
+              "title": "Comp",
               "field": "comp_pct",
               "type": "numeric",
               "expanded": true
             },
             {
               "group": "Profile",
-              "label": "Conv",
+              "title": "Conv",
               "field": "conv_pct",
               "type": "numeric"
             },
             {
               "group": "Profile",
-              "label": "Leisure",
+              "title": "Leisure",
               "field": "leisure_pct",
               "type": "numeric"
             },
             {
               "group": "Profile",
-              "label": "Home",
+              "title": "Home",
               "field": "home_pct",
               "type": "numeric"
             },
             {
               "group": "Profile",
-              "label": "Services",
+              "title": "Services",
               "field": "service_pct",
               "type": "numeric"
             }
@@ -2148,7 +2148,7 @@
           "filter": {
             "infoj": [
               {
-                "label": "ID count",
+                "title": "ID count",
                 "field": "id_count",
                 "type": "integer",
                 "inline": true,
@@ -2161,24 +2161,24 @@
               "type": "key"
             },
             {
-              "label": "ID",
+              "title": "ID",
               "field": "id",
               "inline": true
             },
             {
-              "label": "Date edit",
+              "title": "Date edit",
               "field": "dev_date",
               "type": "date",
               "filter": "date"
             },
             {
-              "label": "Date",
+              "title": "Date",
               "field": "dev_date_",
               "fieldfx": "dev_date",
               "type": "date"
             },
             {
-              "label": "RP Type",
+              "title": "RP Type",
               "field": "rp_type",
               "filter": {
                 "in": [
@@ -2190,63 +2190,59 @@
               }
             },
             {
-              "label": "Name",
+              "title": "Name",
               "field": "uniq_name"
             },
             {
-              "label": "Competition Str.",
+              "title": "Competition Str.",
               "field": "comp_strgh",
               "type": "integer",
               "prefix": "£ "
             },
             {
-              "label": "OA pop_11",
+              "title": "OA pop_11",
               "field": "pop__11",
               "fieldfx": "SELECT AVG(a.pop__11) FROM dev.retailplaces a, dev.oa b WHERE ST_INTERSECTS(a.geom, b.geom) AND a.id = $1",
               "type": "integer"
             },
             {
-              "label": "Population",
-              "type": "group"
-            },
-            {
               "group": "Population",
-              "label": "2011",
+              "title": "2011",
               "field": "pop__11",
               "type": "integer"
             },
             {
               "group": "Population",
-              "label": "2012",
+              "title": "2012",
               "field": "pop__12",
               "type": "integer"
             },
             {
               "group": "Population",
-              "label": "2013",
+              "title": "2013",
               "field": "pop__13",
               "type": "integer"
             },
             {
               "group": "Population",
-              "label": "2014",
+              "title": "2014",
               "field": "pop__14",
               "type": "integer"
             },
             {
               "group": "Population",
-              "label": "2015",
+              "title": "2015",
               "field": "pop__15",
               "type": "integer"
             },
             {
               "group": "Population",
-              "label": "2016",
+              "title": "2016",
               "field": "pop__16",
               "type": "integer"
             },
             {
-              "label": "Population 16 - 11",
+              "title": "Population 16 - 11",
               "field": "pop_diff",
               "fieldfx": "(pop__16 - pop__11)",
               "type": "integer"
@@ -2254,7 +2250,7 @@
             {
               "type": "dataview",
               "target": "location",
-              "label": "Profile",
+              "title": "Profile",
               "query": "UK Retail Places Profile",
               "chart": {
                 "type": "horizontalBar",
@@ -2295,7 +2291,7 @@
             },
             {
               "group": "Profile",
-              "label": "Comparison",
+              "tooltip": "Comparison",
               "title": "Comp",
               "field": "comparison",
               "type": "numeric",
@@ -2303,27 +2299,27 @@
             },
             {
               "group": "Profile",
-              "label": "Conv",
-              "title": "Convenience",
+              "title": "Conv",
+              "tooltip": "Convenience",
               "field": "conv",
               "type": "numeric"
             },
             {
               "group": "Profile",
-              "label": "F/B/L",
+              "title": "F/B/L",
               "field": "fbl",
               "type": "numeric",
-              "title": "Food/Bev/Leisure"
+              "tooltip": "Food/Bev/Leisure"
             },
             {
               "group": "Profile",
-              "label": "Services",
+              "title": "Services",
               "field": "services",
               "type": "numeric"
             },
             {
               "group": "Profile",
-              "label": "Class/Brass",
+              "title": "Class/Brass",
               "field": "classbrass",
               "type": "numeric"
             }
@@ -2350,33 +2346,34 @@
             "delete": true,
             "geometry": true
           },
-          "infoj": [{
+          "infoj": [
+            {
               "type": "key"
             },
             {
-              "label": "ID",
+              "title": "ID",
               "field": "id",
               "inline": true
             },
             {
-              "label": "Area Name",
+              "title": "Area Name",
               "field": "area_name",
               "edit": true,
               "inline": true
             },
             {
-              "label": "Description",
+              "title": "Description",
               "field": "description",
               "edit": true
             },
             {
-              "label": "Number of Food Stores",
+              "title": "Number of Food Stores",
               "field": "_store_count",
               "fieldfx": "(SELECT sum(1) FROM dev.uk_dev_scratch a, dev.uk_glx_open_retail_points_food_stores b  WHERE st_intersects(st_transform(a.geom_3857, 4326), b.geom_p_4326) AND a.id =$1)",
               "inline": true
             },
             {
-              "label": "Date last edited",
+              "title": "Date last edited",
               "field": "edited",
               "type": "date",
               "inline": true
@@ -2450,44 +2447,44 @@
             {
               "type": "report",
               "report": {
-                "name": "Report hosted with GitHub",
+                "title": "Report hosted with GitHub",
                 "template": "Dev sites report"
               },
               "class": "_report"
             },
             {
               "field": "id",
-              "label": "Site ID",
+              "title": "Site ID",
               "inline": true
             },
             {
               "field": "text_edit",
-              "label": "Text edit",
+              "title": "Text edit",
               "edit": true
             },
             {
               "field": "integer_edit",
-              "label": "Integer edit",
+              "title": "Integer edit",
               "type": "integer",
               "edit": true,
               "inline": true
             },
             {
               "field": "numeric_edit",
-              "label": "Numeric edit",
+              "title": "Numeric edit",
               "type": "numeric",
               "edit": true,
               "inline": true
             },
             {
               "field": "site_name",
-              "label": "Site Name",
+              "title": "Site Name",
               "edit": true,
               "inline": true
             },
             {
               "field": "site_type",
-              "label": "Site Type",
+              "title": "Site Type",
               "inline": true,
               "edit": {
                 "options": ["Type A", "Type B", " "]
@@ -2540,7 +2537,7 @@
               }
             },
             {
-              "label": "Population within 5min",
+              "title": "Population within 5min",
               "type": "dataview",
               "target": "location",
               "class": "hidden_in_report",
@@ -2723,59 +2720,59 @@
             },
             {
               "group": "Random data series",
-              "label": "Rand 1",
+              "title": "Rand 1",
               "field": "random1",
               "type": "integer",
               "expanded": true
             },
             {
               "group": "Random data series",
-              "label": "Rand 2",
+              "title": "Rand 2",
               "field": "random2",
               "type": "integer"
             },
             {
               "group": "Random data series",
-              "label": "Rand 3",
+              "title": "Rand 3",
               "field": "random3",
               "type": "integer"
             },
             {
               "group": "Random data series",
-              "label": "Rand 4",
+              "title": "Rand 4",
               "field": "random4",
               "type": "integer"
             },
             {
               "group": "Random data series",
-              "label": "Rand 5",
+              "title": "Rand 5",
               "field": "random5",
               "type": "integer"
             },
             {
               "field": "comments",
-              "label": "Comments",
+              "title": "Comments",
               "type": "textarea",
               "edit": true,
               "class": "_report"
             },
             {
               "field": "images",
-              "label": "Images",
+              "title": "Images",
               "type": "images",
               "edit": true,
               "class": "_report"
             },
             {
-              "label": "Documents",
+              "title": "Documents",
               "field": "documents",
               "type": "documents",
               "edit": true,
               "class": "_report"
             },
             {
-              "label": "Available dataviews",
-              "type": "label",
+              "title": "Available dataviews",
+              "type": "title",
               "class": "_report"
             },
             {
@@ -2938,7 +2935,7 @@
               "type": "key"
             },
             {
-              "label": "Catchment Geometry",
+              "title": "Catchment Geometry",
               "type": "label"
             },
             {
@@ -2953,8 +2950,8 @@
               }
             },
             {
-              "label": "Catchment Here",
-              "type": "label"
+              "title": "Catchment Here",
+              "type": "title"
             },
             {
               "name": "Create / Delete 10 min",
@@ -2969,8 +2966,8 @@
               }
             },
             {
-              "label": "Catchment Mapbox",
-              "type": "label"
+              "title": "Catchment Mapbox",
+              "type": "title"
             },
             {
               "name": "Create/Delete 10 min",
@@ -2990,8 +2987,8 @@
               }
             },
             {
-              "label": "Custom Here Catchment",
-              "type": "label"
+              "title": "Custom Here Catchment",
+              "type": "title"
             },
             {
               "name": "Create / Delete",
@@ -3011,12 +3008,11 @@
               }
             },
             {
-              "title": "Recent isoline",
               "field": "isoline_here_custom_meta",
               "type": "meta"
             },
             {
-              "label": "Custom Mapbox Catchment",
+              "title": "Custom Mapbox Catchment",
               "type": "label"
             },
             {
@@ -3037,23 +3033,22 @@
               }
             },
             {
-              "title": "Recent isoline",
               "field": "isoline_mapbox_custom_meta",
               "type": "meta"
             },
             {
-              "label": "something",
+              "title": "something",
               "field": "chk",
               "type": "boolean"
             },
             {
-              "label": "Images",
+              "title": "Images",
               "field": "images",
               "type": "images",
               "edit": true
             },
             {
-              "label": "Documents",
+              "title": "Documents",
               "field": "documents",
               "type": "documents",
               "edit": true
@@ -3131,18 +3126,18 @@
             },
             {
               "field": "id",
-              "label": "ID",
+              "title": "ID",
               "inline": true
             },
             {
               "field": "strokecolor",
-              "label": "Stroke color",
+              "title": "Stroke color",
               "inline": true
             },
             {
               "field": "test_binary",
               "fieldfx": "MOD(id, 2)",
-              "label": "Nombre",
+              "title": "Nombre",
               "inline": true,
               "type": "integer"
             }
@@ -3173,40 +3168,41 @@
               "type": "key"
             },
             {
-              "label": "ID",
+              "title": "ID",
               "field": "id"
             },
             {
-              "label": "RP Count",
+              "title": "RP Count",
               "field": "rp_count",
               "fieldfx": "SELECT sum(1) FROM dev.retailpoints, dev.scratch WHERE st_intersects(dev.retailpoints.geom, st_transform(dev.scratch.geom_3857, 4326)) AND dev.scratch.id = $1"
             },
             {
-              "label": "something",
+              "title": "something",
               "field": "chk",
+              "name": "Hello World",
               "type": "boolean",
               "edit": true
             },
             {
-              "label": "int_test",
+              "title": "int_test",
               "field": "int_test",
               "type": "integer",
               "edit": true
             },
             {
-              "label": "int_test",
+              "title": "int_test",
               "field": "int_test_",
               "fieldfx": "int_test",
               "type": "integer"
             },
             {
-              "label": "Images",
+              "title": "Images",
               "field": "images",
               "type": "images",
               "edit": true
             },
             {
-              "label": "Date",
+              "title": "Date",
               "field": "dev_date",
               "type": "date",
               "edit": {
@@ -3214,21 +3210,21 @@
               }
             },
             {
-              "label": "Date and time",
+              "title": "Date and time",
               "field": "dev_date_time",
               "type": "datetime",
               "edit": true,
               "inline": true
             },
             {
-              "label": "not editable:",
+              "title": "not editable:",
               "field": "_date",
               "fieldfx": "dev_date",
               "type": "datetime",
               "inline": true
             },
             {
-              "label": "Options",
+              "title": "Options",
               "field": "dev_options",
               "inline": true,
               "edit": {
@@ -3245,7 +3241,7 @@
             },
             {
               "field": "notes",
-              "label": "Notes",
+              "title": "Notes",
               "type": "textarea",
               "edit": true
             }
@@ -3366,13 +3362,13 @@
               "type": "key"
             },
             {
-              "label": "OA Code",
+              "title": "OA Code",
               "field": "oacode",
               "inline": true,
               "filter": "like"
             },
             {
-              "label": "Population '11",
+              "title": "Population '11",
               "field": "pop_11",
               "type": "integer",
               "filter": "numeric",
@@ -3416,7 +3412,7 @@
           "filter": {
             "infoj": [
               {
-                "label": "ID count",
+                "title": "ID count",
                 "field": "id_count",
                 "type": "integer",
                 "inline": true,
@@ -3726,21 +3722,21 @@
             },
             {
               "field": "poi_type",
-              "label": "Category",
+              "title": "Category",
               "inline": true
             },
             {
               "field": "poi_name",
-              "label": "Name",
+              "title": "Name",
               "inline": true
             },
             {
               "field": "brand",
-              "label": "Brand",
+              "title": "Brand",
               "inline": true
             },
             {
-              "label": "Address",
+              "title": "Address",
               "type": "label"
             },
             {
@@ -3925,22 +3921,22 @@
               "class": "_report"
             },
             {
-              "label": "Address",
-              "type": "label"
+              "title": "Address",
+              "type": "title"
             },
             {
               "field": "town",
-              "label": "Town",
+              "title": "Town",
               "inline": true
             },
             {
               "field": "county",
-              "label": "County",
+              "title": "County",
               "inline": true
             },
             {
-              "label": "Customer catchments",
-              "type": "label",
+              "title": "Customer catchments",
+              "type": "title",
               "class": "_report"
             },
             {
@@ -4023,7 +4019,7 @@
             {
               "field": "county2",
               "fieldfx": "county",
-              "label": "County 2",
+              "title": "County 2",
               "inline": true
             }
           ],
