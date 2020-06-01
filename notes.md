@@ -25,3 +25,5 @@ Gazetteer endpoint - results now returned from multiple datasets. Previously - m
 Gazetteer searchbox - entries have now source label.
 
 Settings for isolines - now wrapped in expandable group-style container.
+
+Isolines - restored support for "meta" entry - so that custom isolines have keep their metadata.
