@@ -21,3 +21,5 @@ Isoline settings for locations - fixed layout broken by display: flex of the con
 Gazetteer endpoint - results now returned from multiple datasets. Previously - more datasets searched when no results found.
 
 Gazetteer searchbox - entries have now source label.
+
+Settings for isolines - now wrapped in expandable group-style container.
