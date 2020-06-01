@@ -132,6 +132,8 @@ async function gaz_mapbox(term, gazetteer) {
 
 async function gaz_locale(req, locale) {
 
+  const results = [];
+
   // Loop through dataset entries in gazetteer configuration.
   for (let dataset of locale.gazetteer.datasets) {
 
@@ -172,20 +174,25 @@ async function gaz_locale(req, locale) {
     // Get gazetteer results from dataset table.
     var rows = await dbs[dataset.dbs || layer && layer.dbs](q, [`${dataset.leading_wildcard ? '%' : ''}${decodeURIComponent(req.params.q)}%`])
 
-    if (rows instanceof Error) return { err: 'Error fetching gazetteer results.' }
+    if (rows instanceof Error) {
+      console.log({ err: 'Error fetching gazetteer results.' });
+      continue;
+    }
 
     // Format JSON array of gazetteer results from rows object.
-    if (rows.length > 0) return Object.values(rows).map(row => ({
-      label: row.label,
-      id: row.id,
-      table: dataset.table,
-      layer: dataset.layer,
-      marker: `${row.lng},${row.lat}`,
-      source: dataset.source || 'glx'
-    }))
+    if(rows.length > 0) {
+      Object.values(rows).map(row => results.push({
+        label: row.label,
+        id: row.id,
+        table: dataset.table,
+        layer: dataset.layer,
+        marker: `${row.lng},${row.lat}`,
+        source: dataset.source || 'glx'
+      }));
+    };
 
   }
 
   // Return empty results array if no results where found in any dataset.return []
-  return []
+  return results;
 }
