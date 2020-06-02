@@ -31,3 +31,5 @@ Isolines - restored support for "meta" entry - so that custom isolines have keep
 Fix for cluster aggregate param.
 
 Labels for ChartJS can now be a function taking the query response as input.
+
+Make moment external for webpack bundle.
