@@ -27,3 +27,5 @@ Gazetteer searchbox - entries have now source label.
 Settings for isolines - now wrapped in expandable group-style container.
 
 Isolines - restored support for "meta" entry - so that custom isolines have keep their metadata.
+
+Fix for cluster aggregate param.
