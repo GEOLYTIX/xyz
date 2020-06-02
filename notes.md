@@ -29,3 +29,5 @@ Settings for isolines - now wrapped in expandable group-style container.
 Isolines - restored support for "meta" entry - so that custom isolines have keep their metadata.
 
 Fix for cluster aggregate param.
+
+Labels for ChartJS can now be a function taking the query response as input.
