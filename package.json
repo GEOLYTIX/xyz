@@ -9,6 +9,7 @@
   "scripts": {
     "build": "webpack --mode production",
     "dev": "webpack --mode development",
+    "buildstats": "webpack --env production --json > stats.json",
     "start": "node express.js",
     "debug": "nodemon --inspect express.js",
     "lint": "eslint --debug ./",
@@ -21,10 +22,7 @@
     ]
   },
   "dependencies": {
-    "@turf/explode": "^5.1.5",
-    "@turf/flatten": "^5.1.5",
     "bcryptjs": "^2.4.3",
-    "chart.js": "^2.9.3",
     "cloudinary": "^1.21.0",
     "express-http-proxy": "^1.6.0",
     "jsonwebtoken": "^8.5.1",
@@ -35,8 +33,11 @@
   },
   "devDependencies": {
     "@11ty/eleventy": "^0.11.0",
+    "@turf/explode": "^5.1.5",
+    "@turf/flatten": "^5.1.5",
     "@turf/kinks": "^6.0.0",
     "@turf/point-on-feature": "^5.1.5",
+    "chart.js": "^2.9.3",
     "chartjs-plugin-datalabels": "^0.7.0",
     "chroma-js": "^2.1.0",
     "cookie-parser": "^1.4.5",

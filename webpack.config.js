@@ -23,6 +23,9 @@ module.exports = {
   optimization: {
     concatenateModules: true
   },
+  externals: {
+    moment: 'moment'
+  },
   plugins: [
     new webpack.DefinePlugin({
         XYZ_VERSION: JSON.stringify(require('./package.json').version)
