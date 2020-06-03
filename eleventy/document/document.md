@@ -14,7 +14,7 @@ We use [Eleventy](https://github.com/11ty/eleventy) to compile markdown into sta
 
 eleventy and markdown-it are included as save-dev dependencies in the XYZ package.json
 
-Individual markdown documents and a template html are stored in the /eleventy folder. Configuration for the compilation is in .eleventy.js file in the XYZ root.
+Individual markdown documents and a template html are stored in the /eleventy folder. Configuration for the compilation is in the .eleventy.js file in the XYZ root.
 
 Use following command to compile templates and markdown from the /eleventy folder in the /docs directory.
 
