@@ -33,3 +33,5 @@ Fix for cluster aggregate param.
 Labels for ChartJS can now be a function taking the query response as input.
 
 Make moment external for webpack bundle.
+
+Fix for isolines draw interaction. Features to be drawn with interaction.draw.feature.
