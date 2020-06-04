@@ -91,6 +91,14 @@ With the selectable flag set to true, the locations.select() method will be call
 
 The row data consists of all the fields returned in a record from the query. The `field` must match the field in the query for the field value to be displayed in the table.
 
+## Dataview Class & Style
+
+The string value of the class entry in the dataview configuration will be assigned to the dataviews' target element. This allows for the dataview to be styled according to the class definition in the application views' stylesheet. Inline styles can be assigned to the target element by defining the style specification as a string value in the style entry.
+
+## Dataview Arrays
+
+Multiple dataviews defined in an array `dataviews: []` will be created in the same target element. This allows for multiple dataviews to be shown in a single tabview panel. The parent element of the dataviews in the array will be displayed as a grid. The grid column and row of individual dataview elements in the array can therefore be set in the style entry for each dataview.
+
 ## Toolbars
 
 Toolbars are control element to be displayed prior to the dataview element. It is possible to assign control buttons for export or viewport settings to the toolbar.
