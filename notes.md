@@ -35,3 +35,5 @@ Labels for ChartJS can now be a function taking the query response as input.
 Make moment external for webpack bundle.
 
 Fix for isolines draw interaction. Features to be drawn with interaction.draw.feature.
+
+Gazetteer - optional dataset label. To display source dataset for results add "label": true in gazetteer params.
