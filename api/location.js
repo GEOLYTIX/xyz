@@ -25,11 +25,17 @@ module.exports = async (req, res) => {
 
   const method = _method[req.params.method]
 
-  if (!method) return res.send('Help text.')
+  if (!method) {
+    return res.send(`Failed to evaluate 'method' param.<br><br>
+    <a href="https://geolytix.github.io/xyz/docs/develop/api/location/">Location API</a>`)
+  }
 
   req.params.layer = req.params.locale && workspace.locales[req.params.locale].layers[req.params.layer]
 
-  if (!req.params.layer) return res.send('Help text.')
+  if (!req.params.layer) {
+    return res.status().send(`Failed to evaluate 'layer' param.<br><br>
+    <a href="https://geolytix.github.io/xyz/docs/develop/api/location/">Location API</a>`)
+  }
   
   return method(req, res)
 }

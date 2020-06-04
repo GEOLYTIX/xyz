@@ -23,7 +23,10 @@ module.exports = async (req, res) => {
   const locale = workspace.locales[req.params.locale]
 
   // Return 406 is gazetteer is not found in locale.
-  if (!locale) return res.send('Help text.')
+  if (!locale) {
+    return res.send(`Failed to evaluate 'locale' param.<br><br>
+    <a href="https://geolytix.github.io/xyz/docs/develop/api/gazetteer/">Gazetteer API</a>`)
+  }
 
   // Return 406 is gazetteer is not found in locale.
   if (!locale.gazetteer) return res.status(400).send(new Error('Gazetteer not defined for locale.'))

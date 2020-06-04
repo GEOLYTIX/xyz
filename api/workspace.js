@@ -27,8 +27,8 @@ module.exports = async (req, res) => {
   const method = _method[req.params && req.params.method]
 
   if (!method) {
-    res.setHeader('location', `${process.env.DIR || ''}/docs/07-api/workspace/`)
-    return res.status(302).send()
+    return res.send(`Failed to evaluate 'method' param.<br><br>
+    <a href="https://geolytix.github.io/xyz/docs/develop/api/workspace/">Workspace API</a>`)
   }
 
   await auth(req, res, method.access)
@@ -132,5 +132,6 @@ async function get(req, res) {
 
   if (req.params.key === 'locales') return res.send(Object.keys(workspace.locales))
 
-  res.send('Help text.')
+  res.send(`Failed to evaluate 'key' param.<br><br>
+  <a href="https://geolytix.github.io/xyz/docs/develop/api/workspace/">Workspace API</a>`)
 }
