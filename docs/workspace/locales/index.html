@@ -1,0 +1,376 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="/icons/favicon.ico">
+  <title>Locale</title>
+  <style>
+
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .grid {
+      font-family: system-ui;
+      display:grid;
+      grid-template-columns: 1fr 5fr;
+      max-width: 1100px;
+      margin: auto;
+      padding: 0 30px;
+    }
+
+    #toggle {
+        display: none;
+    }
+
+    #toggle:hover {
+      cursor: pointer;
+    }
+
+    #nav {
+      grid-column: 1;
+      padding-inline-start: 0px;
+      list-style-type: none;
+      padding-right: 20px;
+      margin: 10px 0;
+      position: fixed;
+    }
+
+    #nav > *:first-child {
+      line-height: 1;
+    }
+
+    #content {
+      grid-column: 2;
+      padding-left: 20px;
+      border-left: 1px solid #ddd;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    #content > *:first-child {
+      margin: 0;
+    }
+
+    .active {
+      font-weight: bold;
+    }
+
+    a {
+      text-decoration: none;
+      white-space: nowrap;
+      color: #333;
+    }
+
+    h1, h2, h3 {
+      margin-bottom: 0.5em;
+    }
+
+    p {
+      margin-top: 0.5em;
+      line-height: 1.5;
+    }
+
+    li {
+      line-height: 1.5;
+    }
+
+    li._1 {
+      padding-left: 0px;
+    }
+
+    li._2 {
+      padding-left: 20px;
+    }
+
+    li.__2 {
+      padding-left: 0px;
+    }
+
+    li._3 {
+      padding-left: 40px;
+    }
+
+    li.__3 {
+      padding-left: 20px;
+    }
+
+    pre {
+      display: block;
+      font-family: monospace;
+      white-space: pre;
+      margin: 1em 2px;
+      padding: 15px;
+      box-shadow: 0 0 2px #555;
+      overflow-x: auto;
+      background-color: #f0f0f0;
+    }
+
+    code {
+      font-family: monospace;
+      background-color: #f0f0f0;
+    }
+
+    *:not(pre) > code {
+      padding: 5px;
+    }
+
+    #content a {
+      color: #090;
+    }
+
+    #content img {
+      max-width: 100%;
+      display: block;
+      margin: 0 auto;
+    }
+
+    @media only screen and (max-width: 700px) {
+      .grid {
+        grid-template-columns: 0 1fr;
+        padding: 0 0 0 40px;
+      }
+
+      #toggle {
+        display: block;
+        position: fixed;
+        top: 10px;
+        left: 10px;        
+        width: 20px;
+        height: 30px;
+        background: repeating-linear-gradient(#ddd, #fff 10px);
+      }
+
+      #nav {
+        display: none;
+      }
+
+      #content {
+        border-left: none;
+        padding: 0 20px 0 1px;
+        overflow: hidden;
+      }
+    }
+
+    .show_nav {
+      grid-template-columns: 1fr 2fr;
+    }
+
+    .show_nav > #nav {
+      display: block;
+    }
+
+    .show_nav > #content * {
+      font-size: 30%;
+      padding: 0;
+      overflow: hidden;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="grid">
+
+    <div id="toggle"></div>
+
+    <ul id="nav">
+
+      <li>
+        <a style="font-weight: bold; font-size: 30px;" href="/docs">XYZ</a>
+      </li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <li class="_1 __1 ">
+        <a href="/docs/workspace/workspaces/">Workspace</a>
+      </li>
+      
+      
+      
+      <li class="_1  ">
+        <a href="/docs/workspace/dataviews/">Dataviews</a>
+      </li>
+      
+      
+      
+      <li class="_2 __2 ">
+        <a href="/docs/workspace/layer/">Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/workspace/layer/cluster/">Cluster</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/workspace/layer/geojson/">GeoJson</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/workspace/layer/grid/">Hex Grid</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/workspace/layer/mvt/">MVT</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/workspace/layer/themes/">Themes</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/workspace/layer/tile/">Tile Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2 __2 active">
+        <a href="/docs/workspace/locales/">Locale</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/workspace/locales/gazetteer/">Gazetteer</a>
+      </li>
+      
+      
+      
+      <li class="_2 __2 ">
+        <a href="/docs/workspace/locations/infoj/">Location</a>
+      </li>
+      
+      
+      
+      <li class="_1 __1 ">
+        <a href="/docs/workspace/styles/">Styles</a>
+      </li>
+      
+      
+
+    </ul>
+
+    <div id="content">
+      <h1>Locale</h1>
+<p>Locales are regional sub settings. The XYZ Library may load a locale from the Workspace API to provide a complex configuration object for the creation of an OpenLayers Mapview control.</p>
+<p>Each locale is commonly defined by a name, bounds, and a set of layers.</p>
+<p>A locale is defined by a key/value entry in the locales object of a workspace. The locale <strong>key</strong> is used to reference the locale in requests to the XYZ API.</p>
+<pre><code class="language-javascript">&quot;locales&quot;: {
+  &quot;Global&quot;: {...}
+  &quot;UK&quot;: {
+    &quot;name&quot;: &quot;United Kingdom&quot;,
+    &quot;gazetteer&quot;: {...},
+    &quot;bounds&quot;: {
+      &quot;north&quot;: 62,
+      &quot;east&quot;: 5,
+      &quot;south&quot;: 48,
+      &quot;west&quot;: -13
+    },
+    &quot;showScaleBar&quot;: true,
+    &quot;maskBounds&quot;: true,
+    &quot;view&quot;: {
+      &quot;lat&quot;: 45,
+      &quot;lng&quot;: 60,
+      &quot;z&quot;: 3
+    },
+    &quot;minZoom&quot;: 6,
+    &quot;maxZoom&quot;: 17,
+    &quot;layers&quot;: {...}
+  }
+}
+</code></pre>
+<p>Locales are JSON objects with a set of parameter.</p>
+<p>The <strong>name</strong> value will be displayed in the locale dropdown. The locale key will be the default for the name value.</p>
+<p>The locale's <strong>bounds</strong> are defined by their northern, eastern, southern and western border. The default bounds are for a global view.</p>
+<p>Setting the <strong>showScaleBar</strong> entry will show a scale bar in the lower left corner of the map:</p>
+<p><img src="../../../assets/img/locales_1.png" alt=""></p>
+<p>Setting the <strong>maskBounds</strong> entry will put a mask on the region which falls outside the locale bounds:</p>
+<p><img src="../../../assets/img/locales_1.png" alt=""></p>
+<p>The <strong>min</strong> and <strong>maxZoom</strong> define the outer zoom levels for the map object. The default zoom range is from 2 to 20.</p>
+<p>Setting the <strong>view</strong> with latitude (<strong>lat</strong>), longitude (<strong>lng</strong>), and zoom (<strong>z</strong>) will define the view which is loaded if not overridden by either the init parameter or url hooks.</p>
+
+    </div>
+
+  </div>
+
+</body>
+
+<script>
+    const toggle = document.getElementById('toggle');
+
+    toggle.onclick = e => { e.target.parentElement.classList.toggle('show_nav'); };
+</script>
+
+</html>

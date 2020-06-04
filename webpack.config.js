@@ -2,6 +2,8 @@ const path = require('path');
 
 const webpack = require('webpack');
 
+const TerserPlugin = require('terser-webpack-plugin');
+
 module.exports = {
   entry: {
     xyz_openlayers: ['./lib/index.mjs']
@@ -21,11 +23,22 @@ module.exports = {
     }]
   },
   optimization: {
-    concatenateModules: true
+    concatenateModules: true,
+    minimize: true,
+    minimizer: [
+      new TerserPlugin({
+        terserOptions: {
+          ecma: 8
+        }
+      })
+    ]
+  },
+  externals: {
+    moment: 'moment'
   },
   plugins: [
     new webpack.DefinePlugin({
-        XYZ_VERSION: JSON.stringify(require('./package.json').version)
+      XYZ_VERSION: JSON.stringify(require('./package.json').version)
     })
   ]
   //stats: 'verbose'

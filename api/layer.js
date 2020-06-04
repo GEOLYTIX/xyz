@@ -25,11 +25,17 @@ module.exports = async (req, res) => {
 
   const format = _format[req.params.format]
 
-  if (!format) return res.send('Help text.')
+  if (!format) {
+    return res.send(`Failed to evaluate 'format' param.<br><br>
+    <a href="https://geolytix.github.io/xyz/docs/develop/api/layer/">Layer API</a>`)
+  }
 
   req.params.layer = req.params.locale && workspace.locales[req.params.locale].layers[req.params.layer]
 
-  if (!req.params.layer) return res.send('Help text.')
+  if (!req.params.layer) {
+    return res.status().send(`Failed to evaluate 'layer' param.<br><br>
+    <a href="https://geolytix.github.io/xyz/docs/develop/api/layer/">Layer API</a>`)
+  }
 
   return format(req, res)
 }

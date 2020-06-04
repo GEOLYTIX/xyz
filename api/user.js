@@ -56,7 +56,10 @@ module.exports = async (req, res) => {
 
   const method = _method[req.params.method]
 
-  if (!method) return res.send('Help text.')
+  if (!method) {
+    return res.send(`Failed to evaluate 'method' param.<br><br>
+    <a href="https://geolytix.github.io/xyz/docs/develop/api/user/">User API</a>`)
+  }
 
   method.access && await auth(req, res, method.access)
 

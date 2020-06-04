@@ -1,0 +1,395 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="/icons/favicon.ico">
+  <title>Layer</title>
+  <style>
+
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .grid {
+      font-family: system-ui;
+      display:grid;
+      grid-template-columns: 1fr 5fr;
+      max-width: 1100px;
+      margin: auto;
+      padding: 0 30px;
+    }
+
+    #toggle {
+        display: none;
+    }
+
+    #toggle:hover {
+      cursor: pointer;
+    }
+
+    #nav {
+      grid-column: 1;
+      padding-inline-start: 0px;
+      list-style-type: none;
+      padding-right: 20px;
+      margin: 10px 0;
+      position: fixed;
+    }
+
+    #nav > *:first-child {
+      line-height: 1;
+    }
+
+    #content {
+      grid-column: 2;
+      padding-left: 20px;
+      border-left: 1px solid #ddd;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    #content > *:first-child {
+      margin: 0;
+    }
+
+    .active {
+      font-weight: bold;
+    }
+
+    a {
+      text-decoration: none;
+      white-space: nowrap;
+      color: #333;
+    }
+
+    h1, h2, h3 {
+      margin-bottom: 0.5em;
+    }
+
+    p {
+      margin-top: 0.5em;
+      line-height: 1.5;
+    }
+
+    li {
+      line-height: 1.5;
+    }
+
+    li._1 {
+      padding-left: 0px;
+    }
+
+    li._2 {
+      padding-left: 20px;
+    }
+
+    li.__2 {
+      padding-left: 0px;
+    }
+
+    li._3 {
+      padding-left: 40px;
+    }
+
+    li.__3 {
+      padding-left: 20px;
+    }
+
+    pre {
+      display: block;
+      font-family: monospace;
+      white-space: pre;
+      margin: 1em 2px;
+      padding: 15px;
+      box-shadow: 0 0 2px #555;
+      overflow-x: auto;
+      background-color: #f0f0f0;
+    }
+
+    code {
+      font-family: monospace;
+      background-color: #f0f0f0;
+    }
+
+    *:not(pre) > code {
+      padding: 5px;
+    }
+
+    #content a {
+      color: #090;
+    }
+
+    #content img {
+      max-width: 100%;
+      display: block;
+      margin: 0 auto;
+    }
+
+    @media only screen and (max-width: 700px) {
+      .grid {
+        grid-template-columns: 0 1fr;
+        padding: 0 0 0 40px;
+      }
+
+      #toggle {
+        display: block;
+        position: fixed;
+        top: 10px;
+        left: 10px;        
+        width: 20px;
+        height: 30px;
+        background: repeating-linear-gradient(#ddd, #fff 10px);
+      }
+
+      #nav {
+        display: none;
+      }
+
+      #content {
+        border-left: none;
+        padding: 0 20px 0 1px;
+        overflow: hidden;
+      }
+    }
+
+    .show_nav {
+      grid-template-columns: 1fr 2fr;
+    }
+
+    .show_nav > #nav {
+      display: block;
+    }
+
+    .show_nav > #content * {
+      font-size: 30%;
+      padding: 0;
+      overflow: hidden;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="grid">
+
+    <div id="toggle"></div>
+
+    <ul id="nav">
+
+      <li>
+        <a style="font-weight: bold; font-size: 30px;" href="/docs">XYZ</a>
+      </li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <li class="_1 __1 ">
+        <a href="/docs/workspace/workspaces/">Workspace</a>
+      </li>
+      
+      
+      
+      <li class="_1  ">
+        <a href="/docs/workspace/dataviews/">Dataviews</a>
+      </li>
+      
+      
+      
+      <li class="_2 __2 active">
+        <a href="/docs/workspace/layer/">Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/workspace/layer/cluster/">Cluster</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/workspace/layer/geojson/">GeoJson</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/workspace/layer/grid/">Hex Grid</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/workspace/layer/mvt/">MVT</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/workspace/layer/themes/">Themes</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/workspace/layer/tile/">Tile Layer</a>
+      </li>
+      
+      
+      
+      <li class="_2 __2 ">
+        <a href="/docs/workspace/locales/">Locale</a>
+      </li>
+      
+      
+      
+      <li class="_2  ">
+        <a href="/docs/workspace/locales/gazetteer/">Gazetteer</a>
+      </li>
+      
+      
+      
+      <li class="_2 __2 ">
+        <a href="/docs/workspace/locations/infoj/">Location</a>
+      </li>
+      
+      
+      
+      <li class="_1 __1 ">
+        <a href="/docs/workspace/styles/">Styles</a>
+      </li>
+      
+      
+
+    </ul>
+
+    <div id="content">
+      <h1>Layer</h1>
+<p>Layers are a sub setting of a locale. Each layer object has a set of parameters which depend on the type of layer, whether the layer is interactive or editable and how the data should be styled in the map window.</p>
+<p>Valid layers for the current locale will be listed in the Layers control of the client application.</p>
+<p>The drawing order of layers is dependent on the order of the layer keys in the layers object. <strong>Layers added last to the list will be drawn on top.</strong></p>
+<pre><code class="language-javascript">&quot;layers&quot;: {
+  &quot;base&quot;: {
+    &quot;group&quot;: &quot;Base maps&quot;,
+    &quot;display&quot;: true,
+    &quot;name&quot;: &quot;Mapbox Baselayer&quot;,
+    &quot;attribution&quot;: {
+      &quot;© Mapbox&quot; : &quot;https://www.mapbox.com/about/maps&quot;,
+      &quot;© OpenStreetMap&quot;: &quot;http://www.openstreetmap.org/copyright&quot;
+    },
+    &quot;format&quot;: &quot;tiles&quot;,
+    &quot;URI&quot;: &quot;https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&amp;provider=MAPBOX&quot;
+  }
+}
+</code></pre>
+<p>A layer will be listed by it's name. If no name has been set for a layer it will be listed under it's key in the locales object.</p>
+<p><code>&quot;display&quot;: true</code></p>
+<p>If the display key is set to true the layer will be displayed by default. Otherwise the layer display can be toggled through the client interface.</p>
+<p><code>&quot;hidden&quot;: true</code></p>
+<p>A layer can be hidden from the layers list. It is still possible to select locations from hidden layers and aggregate scores from hidden layers can be used in lookup fields. Hidden layers can be used as scratch layers to store aggregate locations created from running filter outputs.</p>
+<p><code>&quot;group&quot;: &quot;Base maps&quot;</code></p>
+<p>Groups will be created for every unique group name found in any of the layer definitions. Layers will be nested in their respective group in the Layers control.</p>
+<p><code>&quot;meta&quot;: &quot;Satellite Imagery layer provided by HERE.&quot;</code></p>
+<p>The meta value will be displayed as text directly under the layer header in the Layer control of the client application.</p>
+<pre><code class="language-text">&quot;attribution&quot;: {
+  &quot;© Mapbox&quot; : &quot;https://www.mapbox.com/about/maps&quot;,
+  &quot;© OpenStreetMap&quot;: &quot;http://www.openstreetmap.org/copyright&quot;
+}
+</code></pre>
+<p>The attribution object can hold multiple key/value pairs. The key being the text displayed in the lower right corner of the map control when the corresponding layer is visible and the value being the link for the attribution text.</p>
+<p><code>&quot;format&quot;: &quot;tiles&quot;</code></p>
+<p>The format value is mandatory for valid layers. The layer type defines the additional parameter a layer may use. The additional parameter are described in the individual format sections.</p>
+<p>Data layers from PostGIS tables require additional connection parameter.</p>
+<p><code>&quot;dbs&quot;: &quot;XYZ&quot;</code></p>
+<p>The dbs key value must match a database connection in the environment settings. The key value XYZ requires a database connection DBS_XYZ.</p>
+<p><code>&quot;table&quot;: &quot;schema.eu_nuts_lv0&quot;</code></p>
+<p>The table value must match a table in the database defined by the dbs parameter. The table name can be prefixed with a schema separated from the table name with a dot.</p>
+<pre><code class="language-javascript">&quot;tables&quot;: {
+  &quot;10&quot;: null,
+  &quot;11&quot;: &quot;eu_nuts_lv0&quot;,
+  &quot;12&quot;: &quot;eu_nuts_lv0&quot;,
+  &quot;13&quot;: &quot;eu_nuts_lv0&quot;,
+  &quot;14&quot;: &quot;eu_nuts_lv0&quot;,
+  &quot;15&quot;: null
+}
+</code></pre>
+<p>A tables object can be provided instead of the table key. With a single table key the layer will be visible on all zoom levels in a locale. It is possible to set a tables object with key value/pairs defining which table should provide the data at the zoom level represented by the key.</p>
+<p>Setting a null value will prevent the layer to be visible on the zoom level and beyond the defined range.</p>
+<p>PostGIS data layers also require a geometry field to be defined in the layer settings. The definition of the geometry field varies with the layer format.</p>
+<p><code>&quot;geom&quot;: &quot;geometry&quot;</code></p>
+<p>The name of the field which stores the layer features geometry. The geometry field should use a spatial index.</p>
+<p><code>&quot;srid&quot;: &quot;4326&quot;</code></p>
+<p>The PostGIS SRID (EPSG) for the layer geometries projection.</p>
+
+    </div>
+
+  </div>
+
+</body>
+
+<script>
+    const toggle = document.getElementById('toggle');
+
+    toggle.onclick = e => { e.target.parentElement.classList.toggle('show_nav'); };
+</script>
+
+</html>

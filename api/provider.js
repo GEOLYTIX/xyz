@@ -12,7 +12,10 @@ module.exports = async (req, res) => {
 
   const provider = _provider[req.params.provider]
 
-  if (!provider) return res.send('Help text.')
+  if (!provider) {
+    return res.send(`Failed to evaluate 'provider' param.<br><br>
+    <a href="https://geolytix.github.io/xyz/docs/develop/api/provider/">Provider API</a>`)
+  }
 
   req.body = req.body && await bodyData(req) || null
 

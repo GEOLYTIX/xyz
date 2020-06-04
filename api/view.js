@@ -31,7 +31,10 @@ module.exports = async (req, res) => {
     return res.send('Logged out.')
   }
 
-  if (access && access !== 'login') return res.send('Help text.')
+  if (access && access !== 'login') {
+    return res.send(`Failed to evaluate 'access' param.<br><br>
+    <a href="https://geolytix.github.io/xyz/docs/develop/api/view/">View API</a>`)
+  }
 
   await auth(req, res, access)
 

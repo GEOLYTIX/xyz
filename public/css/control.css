@@ -2091,6 +2091,8 @@ span.flatpickr-weekday {
     font-weight: bold;
     padding: 5px 0;
     margin-right: -5px; }
+  .layer-view .drawer.panel .btn-wide {
+    margin: 3px 0; }
 
 .location-view {
   margin: 5px 0; }
