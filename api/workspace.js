@@ -83,7 +83,10 @@ async function get(req, res) {
 
     res.setHeader('content-type', 'text/plain')
 
-    return res.send(template.err && template.err.message || template.template || template.render.toString())
+    return res.send(template.err && template.err.message
+      || template.template
+      || template.render && template.render.toString()
+      || template)
   }
 
   if (req.params.key === 'templates') {
