@@ -1,6 +1,7 @@
 ---
 layout: root.html
 tags: [root]
+title: XYZ - Open source API and Library for spatial data and application interfaces
 ---
 
 ## Open source API and Library for spatial data and application interfaces.
