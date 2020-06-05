@@ -1,4 +1,9 @@
 {
+  "templates": {
+    "blog": {
+      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/blog.html"
+    }
+  },
   "locales": {
     "Offices": {
       "minZoom": 2,
@@ -69,7 +74,7 @@
               "type": "key"
             },
             {
-              "label": "Address HTML",
+              "title": "Address HTML",
               "field": "address_html",
               "fieldfx": "address",
               "type": "html"
@@ -144,21 +149,21 @@
           "infoj": [
             {
               "field": "retailer",
-              "label": "Retailer",
+              "title": "Retailer",
               "inline": true
             },
             {
               "field": "fascia",
-              "label": "Fascia",
+              "title": "Fascia",
               "inline": true
             },
             {
               "field": "store_name",
-              "label": "Name",
+              "title": "Name",
               "inline": true
             },
             {
-              "label": "Address",
+              "title": "Address",
               "type": "label"
             },
             {
@@ -178,15 +183,15 @@
             },
             {
               "field": "size_sqft",
-              "label": "Size in sqft"
+              "title": "Size in sqft"
             },
             {
               "field": "size_sqm",
-              "label": "Size in sqm"
+              "title": "Size in sqm"
             },
             {
               "field": "pqi",
-              "label": "Accuracy"
+              "title": "Accuracy"
             }
           ],
           "style": {
@@ -423,13 +428,13 @@
           "qID": "id",
           "infoj": [
             {
-              "label": "LAD Code",
+              "title": "LAD Code",
               "field": "lad_code",
               "type": "text",
               "inline": true
             },
             {
-              "label": "LAD Name",
+              "title": "LAD Name",
               "field": "lad_name",
               "type": "text",
               "inline": true
@@ -467,7 +472,7 @@
           },
           "infoj": [
             {
-              "label": "OA Code",
+              "title": "OA Code",
               "field": "oa_code",
               "type": "text",
               "inline": true
@@ -501,24 +506,24 @@
           "qID": "id",
           "infoj": [
             {
-              "label": "Type",
+              "title": "Type",
               "field": "edu_type",
               "type": "text",
               "inline": true
             },
             {
-              "label": "Service Type",
+              "title": "Service Type",
               "field": "serv_type",
               "type": "text",
               "inline": true
             },
             {
-              "label": "Name",
+              "title": "Name",
               "field": "edu_name",
               "type": "text"
             },
             {
-              "label": "Address",
+              "title": "Address",
               "field": "add_one",
               "type": "text"
             },
@@ -535,39 +540,38 @@
               "type": "text"
             },
             {
-              "label": "Capacity",
+              "title": "Capacity",
               "field": "capacity",
               "type": "text",
               "inline": true
             },
             {
-              "label": "Management",
+              "title": "Management",
               "field": "sch_run",
               "type": "text",
               "inline": true
             },
             {
-              "label": "Deprivation",
+              "title": "Deprivation",
               "field": "deprivatio",
               "type": "text",
-              "inline": true,
-              "title": "Providers are allocated to one of five deprivation bands, based on quantiles calculated from the IDACI ranks of all 2001 LSOAs."
+              "inline": true
             },
             {
-              "label": "Free School Meal",
+              "title": "Free School Meal",
               "field": "percentfsm",
               "type": "text",
               "inline": true,
               "suffix": " %"
             },
             {
-              "label": "Inspection Rating",
+              "title": "Inspection Rating",
               "field": "inspect_ra",
               "type": "text",
               "inline": true
             },
             {
-              "label": "Inspection Date",
+              "title": "Inspection Date",
               "field": "inspect_da",
               "type": "text",
               "inline": true
@@ -638,17 +642,17 @@
           "infoj": [
             {
               "field": "ubuildtype",
-              "label": "Building type",
+              "title": "Building type",
               "inline": true
             },
             {
               "field": "uni_name",
-              "label": "University name",
+              "title": "University name",
               "inline": true
             },
             {
               "field": "ubuildname",
-              "label": "Building name",
+              "title": "Building name",
               "inline": true
             }
           ],
@@ -722,33 +726,33 @@
           "infoj": [
             {
               "field": "oa_code",
-              "label": "OA Code",
+              "title": "OA Code",
               "inline": true,
               "type": "text"
             },
             {
               "field": "total",
-              "label": "Total Demand",
+              "title": "Total Demand",
               "inline": true,
               "type": "integer"
             },
             {
               "field": "main",
-              "label": "Supermarkets",
+              "title": "Supermarkets",
               "inline": true,
               "level": 2,
               "type": "integer"
             },
             {
               "field": "conv",
-              "label": "Convenience",
+              "title": "Convenience",
               "inline": true,
               "level": 2,
               "type": "integer"
             },
             {
               "field": "online",
-              "label": "Online",
+              "title": "Online",
               "inline": true,
               "level": 2,
               "type": "integer"
@@ -825,42 +829,42 @@
           "infoj": [
             {
               "field": "poi_type",
-              "label": "Category",
+              "title": "Category",
               "inline": true
             },
             {
               "field": "poi_name",
-              "label": "Name",
+              "title": "Name",
               "inline": true
             },
             {
               "field": "poi_fascia",
-              "label": "Brand",
+              "title": "Brand",
               "inline": true
             },
             {
               "field": "poi_flag",
-              "label": "Type",
+              "title": "Type",
               "inline": true
             },
             {
               "field": "poi_address",
-              "label": "Address",
+              "title": "Address",
               "inline": true
             },
             {
               "field": "postcode",
-              "label": "Postcode",
+              "title": "Postcode",
               "inline": true
             },
             {
               "field": "town",
-              "label": "Town",
+              "title": "Town",
               "inline": true
             },
             {
               "field": "locality",
-              "label": "locality",
+              "title": "locality",
               "inline": true
             }
           ],
@@ -929,17 +933,20 @@
           "infoj": [
             {
               "field": "post_area",
-              "label": "Postal Area",
+              "title": "Postal Area",
+              "inline": true,
               "type": "text"
             },
             {
               "field": "post_dist",
-              "label": "Postal District",
+              "title": "Postal District",
+              "inline": true,
               "type": "text"
             },
             {
               "field": "rm_sect",
-              "label": "Postal Sector",
+              "title": "Postal Sector",
+              "inline": true,
               "type": "text"
             }
           ],
@@ -975,12 +982,14 @@
           "infoj": [
             {
               "field": "post_area",
-              "label": "Postal Area",
+              "title": "Postal Area",
+              "inline": true,
               "type": "text"
             },
             {
               "field": "post_dist",
-              "label": "Postal District",
+              "title": "Postal District",
+              "inline": true,
               "type": "text"
             }
           ],
@@ -1016,12 +1025,12 @@
           "infoj": [
             {
               "field": "post_area",
-              "label": "Postal Area",
+              "title": "Postal Area",
               "type": "text"
             },
             {
               "field": "area_name",
-              "label": "Postal Area Name",
+              "title": "Postal Area Name",
               "type": "text"
             }
           ],
@@ -1050,12 +1059,12 @@
           "infoj": [
             {
               "field": "line_name",
-              "label": "Line Name",
+              "title": "Line Name",
               "type": "text"
             },
             {
               "field": "line_type",
-              "label": "Line Type",
+              "title": "Line Type",
               "type": "text"
             }
           ],
@@ -1123,22 +1132,22 @@
           "infoj": [
             {
               "field": "glx_town",
-              "label": "Town",
+              "title": "Town",
               "type": "text"
             },
             {
               "field": "stat_name",
-              "label": "Station Name",
+              "title": "Station Name",
               "type": "text"
             },
             {
               "field": "stat_type",
-              "label": "Station Type",
+              "title": "Station Type",
               "type": "text"
             },
             {
               "field": "pass_ly",
-              "label": "2017 Passenger Numbers",
+              "title": "2017 Passenger Numbers",
               "type": "integer"
             }
           ],
@@ -1237,19 +1246,19 @@
           },
           "infoj": [
             {
-              "label": "Name",
+              "title": "Name",
               "field": "rp_name",
               "type": "text",
               "inline": true
             },
             {
-              "label": "Postcode",
+              "title": "Postcode",
               "field": "ref_pc",
               "type": "text",
               "inline": true
             },
             {
-              "label": "Type",
+              "title": "Type",
               "field": "rp_type",
               "type": "text",
               "inline": true
@@ -1506,12 +1515,12 @@
           "infoj": [
             {
               "field": "town_name",
-              "label": "Town name",
+              "title": "Town name",
               "inline": true
             },
             {
               "field": "sub_name",
-              "label": "Suburb Name",
+              "title": "Suburb Name",
               "inline": true
             }
           ],
@@ -1544,22 +1553,22 @@
           "infoj": [
             {
               "field": "county",
-              "label": "County",
+              "title": "County",
               "type": "text"
             },
             {
               "field": "sub_name",
-              "label": "Suburb Name",
+              "title": "Suburb Name",
               "type": "text"
             },
             {
               "field": "town_name",
-              "label": "Town Name",
+              "title": "Town Name",
               "type": "text"
             },
             {
               "field": "classify",
-              "label": "Classification",
+              "title": "Classification",
               "type": "text"
             }
           ],
@@ -1742,23 +1751,23 @@
           "infoj": [
             {
               "field": "oa_code",
-              "label": "OA Code",
+              "title": "OA Code",
               "inline": true
             },
             {
               "field": "wz_code",
-              "label": "WZ Code",
+              "title": "WZ Code",
               "inline": true
             },
             {
               "field": "workers_18",
-              "label": "Workers",
+              "title": "Workers",
               "type": "integer",
               "inline": true
             },
             {
               "field": "workerskm2",
-              "label": "Workers km2",
+              "title": "Workers km2",
               "type": "integer",
               "inline": true
             }
@@ -1904,13 +1913,13 @@
           "qID": "id",
           "infoj": [
             {
-              "label": "Name",
+              "title": "Name",
               "field": "rp_name",
               "type": "text",
               "inline": true
             },
             {
-              "label": "Local Name",
+              "title": "Local Name",
               "field": "rp_local",
               "type": "text",
               "inline": true
@@ -1940,19 +1949,19 @@
           "qID": "id",
           "infoj": [
             {
-              "label": "Name",
+              "title": "Name",
               "field": "venue_name",
               "type": "text",
               "inline": true
             },
             {
-              "label": "Local Name",
+              "title": "Local Name",
               "field": "venuelocal",
               "type": "text",
               "inline": true
             },
             {
-              "label": "Venue Type",
+              "title": "Venue Type",
               "field": "venue_type",
               "type": "text",
               "inline": true
@@ -2023,17 +2032,17 @@
           "infoj": [
             {
               "field": "name_local",
-              "label": "Name",
+              "title": "Name",
               "type": "text"
             },
             {
               "field": "name_en",
-              "label": "Name (English)",
+              "title": "Name (English)",
               "type": "text"
             },
             {
               "field": "trans_type",
-              "label": "Location Type",
+              "title": "Location Type",
               "type": "text"
             }
           ],
@@ -2170,12 +2179,12 @@
           "infoj": [
             {
               "field": "chomoku_cd",
-              "label": "Chomoku Code",
+              "title": "Chomoku Code",
               "inline": true
             },
             {
               "field": "totalpop",
-              "label": "Population",
+              "title": "Population",
               "inline": true
             }
           ],
@@ -2260,12 +2269,12 @@
           "infoj": [
             {
               "field": "id",
-              "label": "Retail Place ID",
+              "title": "Retail Place ID",
               "inline": true
             },
             {
               "field": "rp_name",
-              "label": "Retail Place Name",
+              "title": "Retail Place Name",
               "inline": true
             }
           ],
@@ -2296,17 +2305,17 @@
           "infoj": [
             {
               "field": "id",
-              "label": "Retail Venue ID",
+              "title": "Retail Venue ID",
               "inline": true
             },
             {
               "field": "venue_name",
-              "label": "Retail Venue Name",
+              "title": "Retail Venue Name",
               "inline": true
             },
             {
               "field": "venue_type",
-              "label": "Retail Venue Type",
+              "title": "Retail Venue Type",
               "inline": true
             }
           ],
@@ -2372,12 +2381,12 @@
           "infoj": [
             {
               "field": "urbanity_id",
-              "label": "Urbanity ID",
+              "title": "Urbanity ID",
               "inline": true
             },
             {
               "field": "urbanity",
-              "label": "Urbanity",
+              "title": "Urbanity",
               "inline": true
             }
           ],
@@ -2534,7 +2543,6 @@
           "dbs": "XYZ",
           "geom": "geom_3857",
           "srid": "3857",
-
           "mvt_cache": "website.vw_warsaw_glx_geodata_retail_venue__mvts",
           "tables": {
             "9": null,
@@ -2543,55 +2551,55 @@
           "qID": "id",
           "infoj": [
             {
-              "label": "Venue ID",
+              "title": "Venue ID",
               "field": "id",
               "type": "integer",
               "inline": true
             },
             {
-              "label": "Venue Name",
+              "title": "Venue Name",
               "field": "venue_name",
               "type": "text",
               "inline": true
             },
             {
-              "label": "Local Name",
+              "title": "Local Name",
               "field": "venuelocal",
               "type": "text",
               "inline": true
             },
             {
-              "label": "Address",
+              "title": "Address",
               "field": "local_add",
               "type": "text",
               "inline": true
             },
             {
-              "label": "City",
+              "title": "City",
               "field": "city",
               "type": "text",
               "inline": true
             },
             {
-              "label": "Type",
+              "title": "Type",
               "field": "venue_type",
               "type": "text",
               "inline": true
             },
             {
-              "label": "Local Type",
+              "title": "Local Type",
               "field": "local_type",
               "type": "text",
               "inline": true
             },
             {
-              "label": "GFA sqm",
+              "title": "GFA sqm",
               "field": "gfa_sqm",
               "type": "integer",
               "inline": true
             },
             {
-              "label": "Notes",
+              "title": "Notes",
               "field": "notes",
               "type": "text",
               "inline": true
