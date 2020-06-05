@@ -94,6 +94,14 @@ async function assignTemplates() {
       // Default templates already have a render method
       if (entry[1].render) return resolve({[entry[0]]:entry[1]})
 
+      if (entry[1].src.toLowerCase().includes('api.github')) {
+        return provider.github(entry[1].src).then(template => _resolve(template))
+      }
+
+      if (entry[1].src.startsWith('http')) {
+        return provider.http(entry[1].src).then(template => _resolve(template))
+      }
+
       if (entry[1].template.toLowerCase().includes('api.github')) {
         return provider.github(entry[1].template).then(template => _resolve(template))
       }
