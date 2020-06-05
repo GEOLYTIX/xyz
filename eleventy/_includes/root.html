@@ -181,13 +181,13 @@
     <ul id="nav">
 
       <li>
-        <a style="font-weight: bold; font-size: 30px;" href="/docs">XYZ</a>
+        <a style="font-weight: bold; font-size: 30px;" href="/xyz/docs">XYZ</a>
       </li>
       
       {% for post in collections.posts %}
       {% if post.data.tags contains tag %}
       <li class="_{{ post.data.level }} {{ post.data.class }} {% if page.url == post.url %}active{% endif %}">
-        <a href="/docs{{post.url}}">{{ post.data.title }}</a>
+        <a href="/xyz/docs{{post.url}}">{{ post.data.title }}</a>
       </li>
       {% endif %}
       {% endfor %}
