@@ -764,10 +764,186 @@
       onclick=${()=>{i.Tabulator.download("csv",(i.title||"table")+".csv")}}>CSV`),i.toolbar&&i.toolbar.download_json&&n.appendChild(t.utils.wire()`
     <button
       class="off-white-hover primary-colour"
+<<<<<<< HEAD
+      onclick=${() => {
+        dataview.Tabulator.download('json', `${dataview.title || 'table'}.json`)
+      }}>JSON`)
+
+    return dataview;
+
+  }
+
+});
+// CONCATENATED MODULE: ./lib/gazetteer.mjs
+/* harmony default export */ var gazetteer = (_xyz => {
+
+  const gazetteer = {
+
+    init: init,
+
+    search: search,
+
+    sources: {
+      glx: glx,
+      mapbox: mapbox,
+      google: google,
+      opencage: opencage
+    },
+
+    select: select,
+
+    createFeature: createFeature,
+
+    icon: {
+      type: 'markerColor',
+      colorMarker: '#64dd17',
+      colorDot: '#33691e',
+      anchor: [0.5, 1],
+      scale: 0.05,
+    },
+
+  };
+
+  return gazetteer;
+
+  function init(params) {
+
+    if (!params) return;
+
+    Object.assign(gazetteer, params);
+
+    // Results
+    gazetteer.result = gazetteer.group.querySelector('ul');
+
+    // Input
+    gazetteer.input = gazetteer.group.querySelector('input');
+
+    gazetteer.input.placeholder = _xyz.workspace.locale.gazetteer.placeholder || '';
+
+    // Initiate search on keyup with input value
+    gazetteer.input.addEventListener('keyup', e => {
+
+      const keyset = new Set([37, 38, 39, 40, 13]);
+
+      if (
+        !keyset.has(e.keyCode || e.charCode) &&
+        e.target.value.length > 0) gazetteer.search(e.target.value);
+
+    });
+
+    // Keydown events
+    gazetteer.input.addEventListener('keydown', e => {
+
+      const key = e.keyCode || e.charCode;
+
+      // Cancel search and set results to empty on backspace or delete keydown
+      if (key === 46 || key === 8) {
+        if (gazetteer.xhr) gazetteer.xhr.abort();
+        gazetteer.clear();
+        if (gazetteer.layer) _xyz.map.removeLayer(gazetteer.layer);
+        return;
+      }
+
+      // Select first result on enter keypress
+      if (key === 13) {
+
+        // Get possible coordinates from input and draw location if valid
+        let latlng = e.target.value.split(',').map(parseFloat);
+        if ((latlng[1] > -90 && latlng[1] < 90) && (latlng[0] > -180 && latlng[0] < 180)) {
+          if (gazetteer.xhr) gazetteer.xhr.abort();
+          gazetteer.clear();
+          gazetteer.createFeature({
+            type: 'Point',
+            coordinates: [latlng[1], latlng[0]]
+          });
+        }
+
+        gazetteer.result.querySelector('li').click();
+      }
+    });
+
+    // Cancel search and empty results on input focusout
+    gazetteer.input.addEventListener('focusout', () => {
+      if (gazetteer.xhr) gazetteer.xhr.abort();
+      setTimeout(gazetteer.clear, 400);
+    });
+
+    gazetteer.clear = () => {
+      gazetteer.group.classList.remove('active');
+      gazetteer.result.innerHTML = '';
+    }
+
+  };
+
+  function search (term, params = {}){
+ 
+    // Empty results.
+    gazetteer.clear && gazetteer.clear();
+  
+    // Abort existing xhr and create new.
+    gazetteer.xhr && gazetteer.xhr.abort();
+    gazetteer.xhr = new XMLHttpRequest();
+  
+    // Send gazetteer query to backend.
+    gazetteer.xhr.open('GET', _xyz.host + '/api/gazetteer?' +
+      _xyz.utils.paramString({
+        locale: _xyz.workspace.locale.key,
+        q: encodeURIComponent(term),
+        source: params.source
+      }));
+  
+    gazetteer.xhr.setRequestHeader('Content-Type', 'application/json');
+    gazetteer.xhr.responseType = 'json';
+    gazetteer.xhr.onload = e => {
+  
+      if (e.target.status !== 200) return;
+        
+      if (params.callback) return params.callback(e.target.response);
+  
+      // No results
+      if (e.target.response.length === 0) {
+        gazetteer.result.appendChild(_xyz.utils.wire()`
+        <li>No results for this search.`);
+        return gazetteer.group.classList.add('active');
+      }
+  
+      // Add results from JSON to gazetteer.
+      Object.values(e.target.response).forEach(entry => {
+  
+        gazetteer.result.appendChild(_xyz.utils.wire()`
+        <li style="cursor:pointer;" onclick=${e=>{
+          e.preventDefault();
+  
+          if (!entry.source || !entry.id) {
+
+            if (gazetteer.callback) return gazetteer.callback(entry);
+
+            entry.marker && gazetteer.createFeature({
+              type: 'Point',
+              coordinates: entry.marker.split(',')
+            });
+
+            return
+          }
+  
+          gazetteer.select({
+            label: entry.label,
+            id: entry.id,
+            source: entry.source,
+            layer: entry.layer,
+            table: entry.table,
+            marker: entry.marker,
+            callback: params.callback
+          });
+  
+        }}>
+        ${_xyz.workspace.locale.gazetteer.label ? _xyz.utils.wire()`
+=======
       onclick=${()=>{i.Tabulator.download("json",(i.title||"table")+".json")}}>JSON`),i}};async function Ls(i){const n=Object.assign({version:"3.2.0",defaults:{colours:[{hex:"#c62828",name:"Fire Engine Red"},{hex:"#f50057",name:"Folly"},{hex:"#9c27b0",name:"Dark Orchid"},{hex:"#673ab7",name:"Plump Purple"},{hex:"#3f51b5",name:"Violet Blue"},{hex:"#2196f3",name:"Dodger Blue"},{hex:"#03a9f4",name:"Vivid Cerulean"},{hex:"#00bcd4",name:"Turquoise Surf"},{hex:"#009688",name:"Dark Cyan"},{hex:"#4caf50",name:"Middle Green"},{hex:"#8bc34a",name:"Dollar Bill"},{hex:"#cddc39",name:"Pear"},{hex:"#ffeb3b",name:"Banana Yellow"},{hex:"#ffb300",name:"UCLA Gold"},{hex:"#fb8c00",name:"Dark Orange"},{hex:"#f4511e",name:"Orioles Orange"},{hex:"#8d6e63",name:"Dark Chestnut"},{hex:"#777777",name:"Sonic Silver"},{hex:"#bdbdbd",name:"X11 Gray"},{hex:"#aaaaaa",name:"Dark Medium Gray"},{hex:"#78909c",name:"Light Slate Gray"}]},utils:t},i);return n.workspace=$t(n),n.hooks=(t=>{if(!t.hooks)return null;const e={layers:[],locations:[]};return window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi,(t,i,n)=>{e[i]?e[i]=decodeURI(n).split(","):e[i]=decodeURI(n)}),{current:e,set:function(e){Object.assign(t.hooks.current,e),n()},remove:i,removeAll:function(){Object.keys(t.hooks.current).forEach(t=>i(t)),n()},push:function(e,i){t.hooks.current[e]?t.hooks.current[e].indexOf(i)<0&&t.hooks.current[e].push(i):t.hooks.current[e]=[i];n()},filter:function(e,i){t.hooks.current[e]=t.hooks.current[e].filter(t=>t!==i),n()}};function i(e){Array.isArray(t.hooks.current[e])?t.hooks.current[e].length=0:delete t.hooks.current[e],n()}function n(){try{history.pushState({hooks:!0},"hooks","?"+t.utils.paramString(t.hooks.current))}catch(t){console.log(t)}}})(n),n.mapview={lib:{Map:Zr,View:Gr.ZP,Feature:Ye.Z,Overlay:Hr.Z,control:{defaults:Nr,Zoom:Ar,ScaleLine:Jr},interaction:{defaults:Uo,PinchZoom:qo,PinchRotate:Wo,DragPan:po,Draw:dr,Modify:kr},draw:{createBox:hr,createRegularPolygon:ur},events:{click:so.V4},proj:{transform:ie.vs,transformExtent:ie.$A,fromLonLat:ie.mi},geom:e,format:{MVT:We,GeoJSON:ri},source:{OSM:an,VectorTile:fn,Vector:mn.Z},loadingstrategy:{bbox:vn.VW},layer:{Tile:Rn,VectorTile:Yn,Vector:qn.Z},style:{Style:Un.ZP,Fill:Xn.Z,Stroke:$n.Z,Circle:Kn.Z,Icon:Jn.Z,Text:Qn.Z}}},Object.assign(n.mapview,(t=>({create:Qr(t),changeEndEvent:new CustomEvent("changeEnd"),attribution:ta(t),locate:ea(t),interaction:la(t),popup:na(t),infotip:ha(t),geoJSON:ia(t),icon:ua(t),layer:xa(t),getBounds:ca(t),flyToBounds:(e,i={})=>{t.map.getView().fit(e,Object.assign({padding:[50,50,50,50],duration:1e3},i))},getZoom:()=>t.map.getView().getZoom()}))(n)),n.layers=(t=>({decorate:function(e){const i=Object.assign({tableCurrent:Ka(t),tableMin:Ja(),tableMax:Qa(),zoomToExtent:ts(t),show:es(t),remove:is(t),count:ns(t),bringToFront:os(t),_dataviews:new Set},e);i.filter=Object.assign(i.filter||{},{current:{}}),i.style&&i.style.themes&&(i.style.theme=i.style.themes[Object.keys(i.style.themes)[0]]);return t.mapview.layer[e.format](i),i},list:{},view:Xa(t),listview:$a(t)}))(n),n.locations=(t=>({select:rs(t),selectCallback:as(t),list:[{style:{strokeColor:"#9c27b0"},colorFilter:"invert(22%) sepia(80%) saturate(1933%) hue-rotate(272deg) brightness(97%) contrast(104%)"}],view:_s(t),listview:xs(t),custom:{},decorate:function(e,i={}){Object.assign(e,{remove:Es(t),trash:Ss(t),flyTo:ks(t),update:Ts(t),draw:Cs(t),geometries:[],tables:[],tabviews:[],geometryCollection:[],style:Object.assign({strokeColor:"#1F964D"},e.style||{})},i)}}))(n),n.gazetteer=(t=>{const e={init:function(i){if(!i)return;Object.assign(e,i),e.result=e.group.querySelector("ul"),e.input=e.group.querySelector("input"),e.input.placeholder=t.workspace.locale.gazetteer.placeholder||"",e.input.addEventListener("keyup",t=>{!new Set([37,38,39,40,13]).has(t.keyCode||t.charCode)&&t.target.value.length>0&&e.search(t.target.value)}),e.input.addEventListener("keydown",i=>{const n=i.keyCode||i.charCode;if(46===n||8===n)return e.xhr&&e.xhr.abort(),e.clear(),void(e.layer&&t.map.removeLayer(e.layer));if(13===n){let t=i.target.value.split(",").map(parseFloat);t[1]>-90&&t[1]<90&&t[0]>-180&&t[0]<180&&(e.xhr&&e.xhr.abort(),e.clear(),e.createFeature({type:"Point",coordinates:[t[1],t[0]]})),e.result.querySelector("li").click()}}),e.input.addEventListener("focusout",()=>{e.xhr&&e.xhr.abort(),setTimeout(e.clear,400)}),e.clear=()=>{e.group.classList.remove("active"),e.result.innerHTML=""}},search:function(i,n={}){e.clear&&e.clear(),e.xhr&&e.xhr.abort(),e.xhr=new XMLHttpRequest,e.xhr.open("GET",t.host+"/api/gazetteer?"+t.utils.paramString({locale:t.workspace.locale.key,q:encodeURIComponent(i),source:n.source})),e.xhr.setRequestHeader("Content-Type","application/json"),e.xhr.responseType="json",e.xhr.onload=i=>{if(200===i.target.status)return n.callback?n.callback(i.target.response):0===i.target.response.length?(e.result.appendChild(t.utils.wire()`
         <li>No results for this search.`),e.group.classList.add("active")):void Object.values(i.target.response.slice(0,t.workspace.locale.gazetteer.limit||10)).forEach(i=>{e.result.appendChild(t.utils.wire()`
         <li style="cursor:pointer;" onclick=${t=>{if(t.preventDefault(),!i.source||!i.id)return e.callback?e.callback(i):void(i.marker&&e.createFeature({type:"Point",coordinates:i.marker.split(",")}));e.select({label:i.label,id:i.id,source:i.source,layer:i.layer,table:i.table,marker:i.marker,callback:n.callback})}}>
         ${t.workspace.locale.gazetteer.label?t.utils.wire()`
+>>>>>>> 3b115006e53cda79264ae62d0cf44eafad00be2d
           <span class="secondary-colour-bg" 
           style="font-size: smaller; padding: 0 2px 0 2px; cursor: help; border-radius: 2px;"
           >${i.layer||i.source}</span>`:""}
