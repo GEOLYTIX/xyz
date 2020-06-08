@@ -1,7 +1,10 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head data-dir="${dir}">
+<head 
+  data-dir="${dir}"
+  data-token=${token}
+  data-login=${login}>
     <title>${title}</title>
     <link rel="icon" type="image/x-icon" href="${dir}/icons/favicon.ico" />
     <meta charset="UTF-8" />
@@ -19,9 +22,7 @@
     <!--script src="${dir}/api/provider/github?url=api.github.com/repos/GEOLYTIX/xyz/contents/public/views/desktop.js" defer></script>-->
 </head>
 
-<body
-data-token=${token}
-data-login=${login}>
+<body>
 
   <div id="listviews">
 

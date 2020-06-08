@@ -95,16 +95,15 @@ function stopResize_y() {
 
 _xyz({
   host: document.head.dataset.dir || new String(''),
-  token: document.body.dataset.token,
-  log: document.body.dataset.log,
+  token: document.head.dataset.token,
   hooks: true,
   callback: init,
 });
 
 function init(_xyz) {
 
-  if (document.body.dataset.token) {
-    _xyz.user = _xyz.utils.JWTDecode(document.body.dataset.token);
+  if (document.head.dataset.token) {
+    _xyz.user = _xyz.utils.JWTDecode(document.head.dataset.token);
   }
 
   _xyz.mapview.create({
@@ -276,7 +275,7 @@ function init(_xyz) {
       href="${_xyz.host + '/view/admin_user'}">
       <div class="xyz-icon icon-supervisor-account">`);
 
-  if (document.body.dataset.login) {
+  if (document.head.dataset.login) {
     document.querySelector('.btn-column').appendChild(_xyz.utils.wire()`
     <a
       title="${_xyz.user ? `Logout ${_xyz.user.email}` : 'Login'}"
