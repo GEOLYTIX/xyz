@@ -39,10 +39,18 @@ module.exports = async (req, res) => {
 
   // Combine filter with envelope
   const where_sql = `
-  WHERE ST_DWithin(
-    ST_MakeEnvelope(${viewport[0]}, ${viewport[1]}, ${viewport[2]}, ${viewport[3]}, ${parseInt(layer.srid)}),
-    ${geom}, 0.00001)
-    ${filter}`
+  WHERE
+  ST_Intersects(
+    ST_MakeEnvelope(
+      ${viewport[0]},
+      ${viewport[1]},
+      ${viewport[2]},
+      ${viewport[3]},
+      ${parseInt(layer.srid)}
+    ),
+    ${geom}
+  )
+  ${filter}`
 
   // Apply KMeans cluster algorithm.
   if (kmeans) {

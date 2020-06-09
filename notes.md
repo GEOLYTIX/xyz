@@ -5,3 +5,5 @@ Templates may be loaded from src. This will override any literal or src definiti
 Layer Templates [280](https://github.com/GEOLYTIX/xyz/issues/280)
 
 Fix for intersection checks on geometry drawing.
+
+Replace ST_DWithin with ST_Intersects in viewport constrcutions.
