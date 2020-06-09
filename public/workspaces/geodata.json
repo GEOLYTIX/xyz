@@ -1,7 +1,8 @@
 {
   "templates": {
     "blog": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/blog.html"
+      "_src": "https://api.github.com/repos/GEOLYTIX/public/contents/blog.html",
+      "src": "http://localhost:3000/geodata/views/blog.html"
     }
   },
   "locales": {
