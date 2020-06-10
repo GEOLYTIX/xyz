@@ -1,4 +1,4 @@
-# 3.2.1
+# 3.3.0
 
 Templates may be loaded from src. This will override any literal or src definition from the template value.
 
@@ -9,3 +9,5 @@ Fix for intersection checks on geometry drawing.
 Replace ST_DWithin with ST_Intersects in viewport constrcutions.
 
 Initial support for infoj entry queries. [272](https://github.com/GEOLYTIX/xyz/issues/272)
+
+Remove Openlayers from XYZ bundle. [292](https://github.com/GEOLYTIX/xyz/issues/292)

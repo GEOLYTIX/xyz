@@ -11,8 +11,11 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <link rel="stylesheet" href="${dir}/css/openlayers.css" />
-  <link rel="stylesheet" href="${dir}/css/control.css" />
+  <link rel="stylesheet" href="${dir}/css/control.css" /> 
 
+  <script src="https://unpkg.com/tabulator-tables@4.6.3/dist/js/tabulator.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0" defer></script>
+  <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.3.1/build/ol.js" defer></script>
   <script src="${dir}/js/xyz_openlayers.js" defer></script>
 
   <style>
@@ -130,12 +133,14 @@
       params[key] = decodeURI(value);
     });
 
-    _xyz({
+    const foo = _xyz({
       host: params.host || document.head.dataset.dir,
-      locale: params.locale,
-      callback: init,
+      // locale: params.locale,
+      // callback: init,
       hooks: true,
     })
+
+
   }
 
   function init(_xyz) {
