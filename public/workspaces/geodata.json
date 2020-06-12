@@ -3,6 +3,29 @@
     "blog": {
       "_src": "https://api.github.com/repos/GEOLYTIX/public/contents/blog.html",
       "src": "http://localhost:3000/geodata/views/blog.html"
+    },
+    "Mapbox Base": {
+      "attribution": {
+        "© Mapbox": "https://www.mapbox.com/about/maps",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      },
+      "format": "tiles",
+      "URI": "/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX&host=https://api.mapbox.com"
+    },
+    "Retail Places": {
+      "format": "mvt",
+      "dbs": "XYZ",
+      "table": "website.vw_london_glx_geodata_retail_place",
+      "geom": "geom_3857",
+      "srid": "3857"
+    },
+    "Mapbox Label": {
+      "attribution": {
+        "© Mapbox": "https://www.mapbox.com/about/maps",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      },
+      "format": "tiles",
+      "URI": "/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX&host=https://api.mapbox.com"
     }
   },
   "locales": {
@@ -17,12 +40,7 @@
       "layers": {
         "Base": {
           "display": true,
-          "attribution": {
-            "© Mapbox": "https://www.mapbox.com/about/maps",
-            "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-          },
-          "format": "tiles",
-          "URI": "/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX&host=https://api.mapbox.com"
+          "template": "Mapbox Base"
         },
         "Offices": {
           "display": true,
@@ -84,12 +102,7 @@
         },
         "Label": {
           "display": true,
-          "attribution": {
-            "© Mapbox": "https://www.mapbox.com/about/maps",
-            "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-          },
-          "format": "tiles",
-          "URI": "/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX&host=https://api.mapbox.com"
+          "template": "Mapbox Label"
         }
       }
     },

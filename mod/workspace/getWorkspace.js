@@ -1,7 +1,5 @@
 const fetch = require('node-fetch')
 
-const assignDefaults = require('./assignDefaults')
-
 const provider = require('../provider')
 
 const getFrom = {
@@ -23,31 +21,9 @@ module.exports = async cache => {
 
     await assignTemplates()
 
-    await layerTemplates()
-
-    workspace = await assignDefaults(workspace)
-
   }
 
   return workspace
-}
-
-async function layerTemplates() {
-
-  Object.keys(workspace.locales).forEach(locale => {
-
-    Object.keys(workspace.locales[locale].layers).forEach(_layer => {
-
-      const layer = workspace.locales[locale].layers[_layer];
-
-      if (layer.template && workspace.templates[layer.template]) {
-        workspace.locales[locale].layers[_layer] = Object.assign({}, workspace.templates[layer.template], layer)
-      }
-
-    })
-
-  })
-
 }
 
 async function http(ref){

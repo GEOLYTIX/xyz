@@ -13,9 +13,7 @@
   <link rel="stylesheet" href="${dir}/css/openlayers.css" />
   <link rel="stylesheet" href="${dir}/css/control.css" /> 
 
-  <script src="https://unpkg.com/tabulator-tables@4.6.3/dist/js/tabulator.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@2.8.0" defer></script>
-  <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.3.1/build/ol.js" defer></script>
+  <script src="${dir}/js/ol.js" defer></script>
   <script src="${dir}/js/xyz_openlayers.js" defer></script>
 
   <style>
@@ -125,7 +123,7 @@
   window.onload = () => {
 
     const params = {
-      host: window.location.origin
+      host: window.location.origin,
     };
 
     // Take hooks from URL and store as current hooks.
@@ -133,13 +131,45 @@
       params[key] = decodeURI(value);
     });
 
-    const foo = _xyz({
-      host: params.host || document.head.dataset.dir,
-      // locale: params.locale,
-      // callback: init,
-      hooks: true,
+    const xyz = _xyz({
+      host: params.host + document.head.dataset.dir
+    });
+
+    xyz.mapview.create({
+      target: document.getElementById('Map'),
+      scrollWheelZoom: true,
+    });
+
+    xyz.workspace.get.locale({
+      locale: 'Offices'
+    }).then(locale => {
+
+      xyz.workspace.locale = locale;
+
+      locale.layers.forEach(layer => {
+
+        xyz.workspace.get.layer({
+          locale: locale.key,
+          layer: layer
+        }).then(layer => {
+          layer = xyz.layers.decorate(layer);
+          xyz.layers.list[layer.key] = layer;
+          layer.show()
+        })
+
+      })
     })
 
+    // xyz.workspace.get.layer({
+    //   layer: 'Mapbox Base'
+    // })
+    // .then(layer => xyz.layers.decorate(layer).show())
+
+    // xyz.layers.decorate({
+    //   key: 'OSM',
+    //   format: 'tiles',
+    //   URI: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+    // }).show()
 
   }
 

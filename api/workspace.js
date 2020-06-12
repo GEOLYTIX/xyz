@@ -10,15 +10,15 @@ const _method = {
   }
 }
 
-const getWorkspace = require('../mod/workspace/getWorkspace')
+const defaults = require('../mod/workspace/defaults')
 
-const { Pool } = require('pg')
+const getWorkspace = require('../mod/workspace/getWorkspace')
 
 const fetch = require('node-fetch')
 
 const cloneDeep = require('lodash/cloneDeep')
 
-let host
+let host, workspace
 
 module.exports = async (req, res) => {
 
@@ -42,7 +42,7 @@ module.exports = async (req, res) => {
 
 async function cache(req, res) {
 
-  const workspace = await getWorkspace(true)
+  workspace = await getWorkspace(true)
 
   if (workspace instanceof Error) return res.status(500).send(`<span style="color: red;">${workspace.message}</span>`)
 
@@ -65,76 +65,129 @@ async function cache(req, res) {
 
 async function get(req, res) {
 
-  const workspace = await getWorkspace()
+  workspace = await getWorkspace()
 
   if (workspace instanceof Error) return res.status(500).send(workspace.message)
 
-  //if (req.params.key === 'layer' && req.params.layer) return res.send(layers[req.params.layer])
-
-  //if (req.params.key === 'layers') return res.send(Object.keys(layers))
-
-  if (req.params.key === 'template') {
-
-    if (!req.params.template) return res.send('Template not defined.')
-
-    const template = workspace.templates[req.params.template];
-    
-    if (!template) return res.status(400).send('Template not found.')
-
-    res.setHeader('content-type', 'text/plain')
-
-    return res.send(template.err && template.err.message
-      || template.template
-      || template.render && template.render.toString()
-      || template)
+  const keys = {
+    defaults: () => res.send(defaults),
+    layer: getLayer,
+    template: getTemplate,
+    templates: getTemplates,
+    locale: getLocale,
+    locales: () => res.send(Object.keys(workspace.locales)),
+    all: () => res.send(workspace)
   }
 
-  if (req.params.key === 'templates') {
-    const templates = Object.entries(workspace.templates).map(
-      template => `<a ${template[1].err && 'style="color: red;"' ||''} href="${host}/api/workspace/get/template?template=${template[0]}">${template[0]}</a>`
-    )
+  if (keys[req.params.key]) return keys[req.params.key](req, res)
 
-    return res.send(templates.join('<br>'))
-  }
-
-  if (req.params.key === 'locale') {
-
-    if (!req.params.locale) return res.send('Locale not defined.')
-
-    const locale = workspace.locales[req.params.locale];
-
-    if (!locale) return res.status(400).send('Locale not found.')
-
-    const _locale = cloneDeep(locale);
-
-      (function objectEval(o, parent, key) {
-
-        // check whether the object has an access key matching the current level.
-        if (Object.entries(o).some(
-          e => e[0] === 'roles' && !Object.keys(e[1]).some(
-            role => req.params.token && req.params.token.roles && req.params.token.roles.includes(role)
-          )
-        )) {
-
-          // if the parent is an array splice the key index.
-          if (parent.length > 0) return parent.splice(parseInt(key), 1)
-
-          // if the parent is an object delete the key from the parent.
-          return delete parent[key]
-        }
-
-        // iterate through the object tree.
-        Object.keys(o).forEach((key) => {
-          if (o[key] && typeof o[key] === 'object') objectEval(o[key], o, key)
-        });
-
-      })(_locale)
-
-    return res.send(_locale)
-  }
-
-  if (req.params.key === 'locales') return res.send(Object.keys(workspace.locales))
-
-  res.send(`Failed to evaluate 'key' param.<br><br>
+  res.send(`Failed to evaluate ${req.params.key && req.params.key + ' as'} 'key' param.<br><br>
   <a href="https://geolytix.github.io/xyz/docs/develop/api/workspace/">Workspace API</a>`)
+}
+
+async function getLayer(req, res) {
+
+  if (!req.params.layer) return res.send('Layer key missing.')
+
+  const locale = req.params.locale && workspace.locales[req.params.locale]
+
+  let layer = locale && locale.layers[req.params.layer] ||  workspace.templates[req.params.layer]
+
+  if (!layer) return res.status(400).send('Layer not found.')
+
+  layer.template && Object.assign(layer, workspace.templates[layer.template])
+
+  layer = Object.assign({key: req.params.layer}, defaults.layers[layer.format] || {}, layer)
+
+  layer.style = layer.style && Object.assign({}, defaults.layers[layer.format].style || {}, layer.style)
+
+  if (layer.roles && !Object.keys(layer.roles).some(
+    role => req.params.token
+      && req.params.token.roles
+      && req.params.token.roles.includes(role)
+  )) return res.status(403).send('Role access denied.')
+
+  if (req.params.token && req.params.token.roles) {
+    layer = await roleEval(layer, req.params.token.roles)
+  }
+
+  res.send(layer)
+}
+
+function getTemplate(req, res) {
+
+  if (!req.params.template) return res.send('Template key missing.')
+
+  const template = workspace.templates[req.params.template];
+
+  if (!template) return res.status(400).send('Template not found.')
+
+  res.setHeader('content-type', 'text/plain')
+
+  res.send(template.err && template.err.message
+    || template.template
+    || template.render && template.render.toString()
+    || template)
+}
+
+function getTemplates(req, res) {
+
+  const templates = Object.entries(workspace.templates).map(
+    template => `<a ${template[1].err && 'style="color: red;"' ||''} href="${host}/api/workspace/get/template?template=${template[0]}">${template[0]}</a>`
+  )
+
+  res.send(templates.join('<br>'))
+}
+
+function getLocale(req, res) {
+
+  if (!req.params.locale) return res.send('Locale key missing.')
+
+  if (!workspace.locales[req.params.locale]) return res.status(400).send('Locale not found.')
+
+  let locale = Object.assign({key: req.params.locale}, cloneDeep(workspace.locales[req.params.locale]))
+
+  locale.layers = Object.entries(locale.layers)
+    .map(layer => {
+
+      if (!layer[1].roles) return layer[0]
+
+      // check whether the layer is available for roles in token.
+      if (Object.keys(layer[1].roles).some(
+        role => req.params.token
+          && req.params.token.roles
+          && req.params.token.roles.includes(role)
+      )) return layer[0]
+    })
+    .filter(layer => !!layer)
+
+  res.send(locale)
+}
+
+async function roleEval(check, roles) {
+
+  (function objectEval(o, parent, key) {
+
+    // check whether the object has an access key matching the current level.
+    if (Object.entries(o).some(
+      e => e[0] === 'roles' && !Object.keys(e[1]).some(
+        role => roles.includes(role)
+      )
+    )) {
+
+      // if the parent is an array splice the key index.
+      if (parent.length > 0) return parent.splice(parseInt(key), 1)
+
+      // if the parent is an object delete the key from the parent.
+      return delete parent[key]
+    }
+
+    // iterate through the object tree.
+    Object.keys(o).forEach((key) => {
+      if (o[key] && typeof o[key] === 'object') objectEval(o[key], o, key)
+    });
+
+  })(check)
+
+  return check
 }

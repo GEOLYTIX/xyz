@@ -1,19 +1,5 @@
 /* flatpickr v4.6.3, @license MIT */
 
-/*!
- * Chart.js v2.9.3
- * https://www.chartjs.org
- * (c) 2019 Chart.js Contributors
- * Released under the MIT License
- */
-
-/*!
- * chartjs-plugin-datalabels v0.7.0
- * https://chartjs-plugin-datalabels.netlify.com
- * (c) 2019 Chart.js Contributors
- * Released under the MIT license
- */
-
 /*! (c) 2018 Andrea Giammarchi (ISC) */
 
 /*! (c) Andrea Giammarchi (ISC) */
