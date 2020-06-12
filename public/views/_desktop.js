@@ -107,7 +107,7 @@ window.onload = () => {
       locale: locale
     }).then(createMap)
 
-    if (!locales.length > 1) return
+    if (locales.length === 1) return
 
     const localeDropdown = xyz.utils.wire()`
     <div>
@@ -232,11 +232,16 @@ window.onload = () => {
 
     Promise.all(layerPromises).then(layers => {
 
+      if (xyz.hooks && xyz.hooks.current.layers.length) {
+        layers.forEach(layer => {
+          layer.display = !!~xyz.hooks.current.layers.indexOf(layer.key)
+        })
+      }
+
       layers.forEach(layer => {
 
         layer = xyz.layers.decorate(layer)
         xyz.layers.list[layer.key] = layer
-        layer.display = !!~xyz.hooks.current.layers.indexOf(layer.key)
         layer.display && layer.show()
 
       })
