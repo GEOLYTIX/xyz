@@ -39,26 +39,26 @@ window.onload = () => {
       locale: locale
     }).then(createMap)
 
-    if (!locales.length > 1) return
+    if (locales.length === 1) return
 
     const localeDropdown = xyz.utils.wire()`
-  <div>
-    <div class="listview-title secondary-colour-bg">Locales</div>
-    <div>Show layers for the following locale:</div>
-    <button
-      class="btn-drop">
-      <div
-        class="head"
-        onclick=${e => {
-        e.preventDefault()
-        e.target.parentElement.classList.toggle('active')
-      }}>
-      <span>${locale}</span>
-      <div class="icon"></div>
-    </div>
-    <ul>${locales.map(
-        locale => xyz.utils.wire()`<li><a href="${xyz.host + '?locale=' + locale}">${locale}`
-      )}`
+    <div>
+      <div class="listview-title secondary-colour-bg">Locales</div>
+      <div>Show layers for the following locale:</div>
+      <button
+        class="btn-drop">
+        <div
+          class="head"
+          onclick=${e => {
+          e.preventDefault()
+          e.target.parentElement.classList.toggle('active')
+        }}>
+        <span>${locale}</span>
+        <div class="icon"></div>
+      </div>
+      <ul>${locales.map(
+          locale => xyz.utils.wire()`<li><a href="${xyz.host + '?locale=' + locale}">${locale}`
+        )}`
 
     layersTab.parentElement.insertBefore(localeDropdown, layersTab.parentElement.firstChild)
   }
@@ -164,11 +164,16 @@ window.onload = () => {
 
     Promise.all(layerPromises).then(layers => {
 
+      if (xyz.hooks && xyz.hooks.current.layers.length) {
+        layers.forEach(layer => {
+          layer.display = !!~xyz.hooks.current.layers.indexOf(layer.key)
+        })
+      }
+
       layers.forEach(layer => {
 
         layer = xyz.layers.decorate(layer)
         xyz.layers.list[layer.key] = layer
-        layer.display = !!~xyz.hooks.current.layers.indexOf(layer.key)
         layer.display && layer.show()
 
       })
