@@ -315,7 +315,7 @@ window.onload = () => {
           <a
             title="Open account admin view"
             class="enabled" style="cursor: pointer;"
-            href="${_xyz.host + '/view/admin_user'}">
+            href="${xyz.host + '/view/admin_user'}">
             <div class="xyz-icon icon-supervisor-account">`)
 
     if (document.head.dataset.login) {
