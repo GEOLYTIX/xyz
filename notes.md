@@ -11,3 +11,5 @@ Replace ST_DWithin with ST_Intersects in viewport constrcutions.
 Initial support for infoj entry queries. [272](https://github.com/GEOLYTIX/xyz/issues/272)
 
 Remove Openlayers from XYZ bundle. [292](https://github.com/GEOLYTIX/xyz/issues/292)
+
+Fix for draw interaction methods not being referenced correctly.
