@@ -153,7 +153,7 @@ window.onload = () => {
 
   function loadLayers(layers) {
 
-    layerPromises = layers.map(layer => {
+    const layerPromises = layers.map(layer => {
 
       return xyz.workspace.get.layer({
         locale: xyz.locale.key,
