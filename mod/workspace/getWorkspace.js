@@ -115,9 +115,11 @@ async function assignTemplates() {
           return resolve(template)
         }
 
-        if (entry[1].layer) {
-          Object.assign(template[entry[0]], JSON.parse(_template))
+        try {
+          const obj = JSON.parse(_template)
+          Object.assign(template[entry[0]], obj)
           return resolve(template)
+        } catch(err) {   
         }
 
         template[entry[0]].template = _template
