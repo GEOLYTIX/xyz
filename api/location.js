@@ -1,7 +1,5 @@
 const auth = require('../mod/auth/handler')
 
-const defaults = require('../mod/workspace/defaults')
-
 const getWorkspace = require('../mod/workspace/getWorkspace')
 
 const _method = {
@@ -34,15 +32,9 @@ module.exports = async (req, res) => {
 
   const locale = req.params.locale && workspace.locales[req.params.locale]
 
-  let layer = locale && locale.layers[req.params.layer] ||  workspace.templates[req.params.layer]
+  const layer = locale && locale.layers[req.params.layer] ||  workspace.templates[req.params.layer]
 
   if (!layer) return res.status(400).send('Layer not found.')
-
-  layer.template && Object.assign(layer, workspace.templates[layer.template])
-
-  layer = Object.assign({key: req.params.layer}, defaults.layers[layer.format] || {}, layer)
-
-  layer.style = layer.style && Object.assign({}, defaults.layers[layer.format].style || {}, layer.style)
 
   req.params.layer = layer
 

@@ -26,9 +26,15 @@ module.exports = async (req, res) => {
 
   if (res.finished) return
 
-  if (req.params.locale && req.params.layer) {
+  if (req.params.layer) {
 
-    const layer = req.params.locale && workspace.locales[req.params.locale].layers[req.params.layer]
+    const locale = req.params.locale && workspace.locales[req.params.locale]
+
+    const layer = locale && locale.layers[req.params.layer] ||  workspace.templates[req.params.layer]
+
+    if (!layer) return res.status(400).send('Layer not found.')
+  
+    req.params.layer = layer
 
     const roles = layer.roles
     && req.params.token
