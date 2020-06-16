@@ -211,7 +211,7 @@ async function assignDefaults() {
     })
   })
 
-  Object.entries(workspace.templates).forEach(layer_key => {
+  Object.keys(workspace.templates).forEach(layer_key => {
 
     let layer = workspace.templates[layer_key]
 

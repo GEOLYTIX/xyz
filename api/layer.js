@@ -1,7 +1,5 @@
 const auth = require('../mod/auth/handler')
 
-// const defaults = require('../mod/workspace/defaults')
-
 const getWorkspace = require('../mod/workspace/getWorkspace')
 
 const _format = {

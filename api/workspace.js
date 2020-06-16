@@ -93,12 +93,6 @@ async function getLayer(req, res) {
 
   if (!layer) return res.status(400).send('Layer not found.')
 
-  // layer.template && Object.assign(layer, workspace.templates[layer.template])
-
-  // layer = Object.assign({key: req.params.layer}, defaults.layers[layer.format] || {}, layer)
-
-  // layer.style = layer.style && Object.assign({}, defaults.layers[layer.format].style || {}, layer.style)
-
   if (layer.roles && !Object.keys(layer.roles).some(
     role => req.params.token
       && req.params.token.roles
