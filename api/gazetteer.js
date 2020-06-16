@@ -140,6 +140,8 @@ async function gaz_locale(req, locale) {
   // Loop through dataset entries in gazetteer configuration.
   for (let dataset of locale.gazetteer.datasets) {
 
+    if(dataset.minLength && decodeURIComponent(req.params.q).trim().length < dataset.minLength) continue
+
     const layer = locale.layers[dataset.layer]
 
     const roles = layer.roles
@@ -174,8 +176,12 @@ async function gaz_locale(req, locale) {
       ORDER BY length(${dataset.label})
       LIMIT 10`
 
+    let phrase = dataset.space_wildcard ? `${decodeURIComponent(req.params.q).replace(new RegExp(/  */g), '% ')}%` : `${decodeURIComponent(req.params.q)}%`;
+
+    //console.log({dataset: dataset.layer, phrase: phrase});
+
     // Get gazetteer results from dataset table.
-    var rows = await dbs[dataset.dbs || layer && layer.dbs](q, [`${dataset.leading_wildcard ? '%' : ''}${decodeURIComponent(req.params.q)}%`])
+    var rows = await dbs[dataset.dbs || layer && layer.dbs](q, [`${dataset.leading_wildcard ? '%' : ''}${phrase}`]);
 
     if (rows instanceof Error) {
       console.log({ err: 'Error fetching gazetteer results.' });
