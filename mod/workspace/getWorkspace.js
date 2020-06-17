@@ -204,7 +204,7 @@ async function assignDefaults() {
         defaults.layers[layer.format] || {},
         layer)
 
-      layer.style && Object.assign(
+      layer.style = layer.style && Object.assign(
         {},
         defaults.layers[layer.format].style,
         layer.style)
@@ -226,7 +226,7 @@ async function assignDefaults() {
         defaults.layers[layer.format],
         layer)
 
-      layer.style && Object.assign(
+      layer.style = layer.style && Object.assign(
         {},
         defaults.layers[layer.format].style,
         layer.style)
