@@ -616,11 +616,21 @@
         "provider": "GOOGLE",
         "code": "GB",
         "placeholder": "eg. London",
-        "datasets": [{
+        "datasets": [
+          {
           "layer": "Retail Points",
           "table": "dev.retailpoints",
-          "label": "store"
-        }]
+          "label": "store",
+          "leading_wildcard": true
+        },
+        {
+          "layer": "Retail Places",
+          "table": "dev.retailplaces",
+          "label": "uniq_name",
+          "space_wildcard": true,
+          "minLength": 2
+        }
+      ]
       },
       "bounds": {
         "north": 62,

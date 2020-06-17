@@ -15,3 +15,6 @@ Remove Openlayers from XYZ bundle. [292](https://github.com/GEOLYTIX/xyz/issues/
 Fix for draw interaction methods not being referenced correctly.
 
 Fix 'x-forward-for' address in email notifications. [293](https://github.com/GEOLYTIX/xyz/issues/293)
+
+Gazetteer - added support for "space_wildcard": true and "minLength" for searched dataset.
+Results returned in promises array.
