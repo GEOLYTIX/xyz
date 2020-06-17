@@ -17,3 +17,7 @@ Fix for draw interaction methods not being referenced correctly.
 Fix 'x-forward-for' address in email notifications. [293](https://github.com/GEOLYTIX/xyz/issues/293)
 
 Add µhtml support. [281](https://github.com/GEOLYTIX/xyz/issues/281)
+
+Gazetteer - added support for "space_wildcard": true and "minLength" for searched dataset.
+
+Results returned in promises array.
