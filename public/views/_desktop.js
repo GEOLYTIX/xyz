@@ -109,7 +109,7 @@ window.onload = () => {
 
     if (locales.length === 1) return
 
-    const localeDropdown = xyz.utils.wire()`
+    const localeDropdown = xyz.utils.html.node`
     <div>
       <div class="listview-title secondary-colour-bg">Locales</div>
       <div>Show layers for the following locale:</div>
@@ -125,7 +125,7 @@ window.onload = () => {
         <div class="icon"></div>
       </div>
       <ul>${locales.map(
-        locale => xyz.utils.wire()`<li><a href="${xyz.host + '?locale=' + locale}">${locale}`
+        locale => xyz.utils.html.node`<li><a href="${xyz.host + '?locale=' + locale}">${locale}`
       )}`
 
     desktop.listviews.querySelector('div').insertBefore(localeDropdown, desktop.listviews.querySelector('div').firstChild)
@@ -138,7 +138,7 @@ window.onload = () => {
     xyz.mapview.create({
       target: document.getElementById('Map'),
       attribution: {
-        logo: xyz.utils.wire()`
+        logo: xyz.utils.html.node`
         <a
           class="logo"
           target="_blank"
@@ -155,7 +155,7 @@ window.onload = () => {
 
     loadLayers(locale.layers)
 
-    const btnZoomIn = xyz.utils.wire()`
+    const btnZoomIn = xyz.utils.html.node`
     <button
       disabled=${xyz.map.getView().getZoom() >= xyz.locale.maxZoom}
       class="enabled"
@@ -168,7 +168,7 @@ window.onload = () => {
 
     document.querySelector('.btn-column').appendChild(btnZoomIn)
 
-    const btnZoomOut = xyz.utils.wire()`
+    const btnZoomOut = xyz.utils.html.node`
     <button
       disabled=${xyz.map.getView().getZoom() <= xyz.locale.minZoom}
       class="enabled"
@@ -187,7 +187,7 @@ window.onload = () => {
       btnZoomOut.disabled = z <= xyz.locale.minZoom;
     })
 
-    document.querySelector('.btn-column').appendChild(xyz.utils.wire()`
+    document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
     <button
       title="Zoom to area"
       onclick=${e => {
@@ -208,7 +208,7 @@ window.onload = () => {
       }}>
       <div class="xyz-icon icon-area off-black-filter">`)
 
-    document.querySelector('.btn-column').appendChild(xyz.utils.wire()`
+    document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
     <button
       title="Current location"
       onclick=${e => {
@@ -280,7 +280,7 @@ window.onload = () => {
 
     if (xyz.locale.gazetteer) {
 
-      const gazetteer = xyz.utils.wire()`
+      const gazetteer = xyz.utils.html.node`
       <div>
         <div class="listview-title secondary-colour-bg">Search</div>
         <div class="input-drop">
@@ -311,7 +311,7 @@ window.onload = () => {
       xyz.user = xyz.utils.JWTDecode(document.head.dataset.token)
     }
 
-    xyz.user && xyz.user.admin_user && document.querySelector('.btn-column').appendChild(xyz.utils.wire()`
+    xyz.user && xyz.user.admin_user && document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
           <a
             title="Open account admin view"
             class="enabled" style="cursor: pointer;"
@@ -319,7 +319,7 @@ window.onload = () => {
             <div class="xyz-icon icon-supervisor-account">`)
 
     if (document.head.dataset.login) {
-      document.querySelector('.btn-column').appendChild(xyz.utils.wire()`
+      document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
           <a
             title="${xyz.user ? `Logout ${xyz.user.email}` : 'Login'}"
             class="enabled" style="cursor: pointer;"
