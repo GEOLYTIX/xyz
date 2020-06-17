@@ -71,7 +71,7 @@ async function register(req, res) {
     UPDATE acl_schema.acl_table SET
       password_reset = '${password}',
       verificationtoken = '${verificationtoken}',
-      access_log = array_append(access_log, '${date}@${req.headers['X-Forwarded-For'] || 'localhost'}')
+      access_log = array_append(access_log, '${date}@${req.headers['x-forwarded-for'] || 'localhost'}')
     WHERE lower(email) = lower($1);`, [req.body.email])
 
     if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
@@ -81,7 +81,7 @@ async function register(req, res) {
       subject: `Please verify your password reset for ${host}`,
       text: `A new password has been set for this account.
       Please verify that you are the account holder: ${protocol}${host}/api/user/verify/${verificationtoken}
-      The reset occured from this remote address ${req.headers['X-Forwarded-For'] || 'localhost'}
+      The reset occured from this remote address ${req.headers['x-forwarded-for'] || 'localhost'}
       This wasn't you? Please let your manager know.`
     })
 
@@ -106,7 +106,7 @@ async function register(req, res) {
     Please verify that you are the account holder: ${protocol}${host}/api/user/verify/${verificationtoken}
     A site administrator must approve the account before you are able to login.
     You will be notified via email once an adimistrator has approved your account.
-    The account was registered from this remote address ${req.headers['X-Forwarded-For'] || 'localhost'}\n
+    The account was registered from this remote address ${req.headers['x-forwarded-for'] || 'localhost'}\n
     This wasn't you? Do NOT verify the account and let your manager know.`
   })
 

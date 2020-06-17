@@ -13,3 +13,5 @@ Initial support for infoj entry queries. [272](https://github.com/GEOLYTIX/xyz/i
 Remove Openlayers from XYZ bundle. [292](https://github.com/GEOLYTIX/xyz/issues/292)
 
 Fix for draw interaction methods not being referenced correctly.
+
+Fix 'x-forward-for' address in email notifications. [293](https://github.com/GEOLYTIX/xyz/issues/293)
