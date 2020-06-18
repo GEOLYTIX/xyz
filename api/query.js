@@ -90,7 +90,7 @@ module.exports = async (req, res) => {
   const rows = await _dbs(
     q,
     req.body && req.body.length && [JSON.stringify(req.body)] || req.params.params && req.params.params.split(','),
-    req.params.statement_timeout)
+    req.params.statement_timeout || template.statement_timeout)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 

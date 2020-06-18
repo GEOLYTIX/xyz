@@ -71,23 +71,20 @@ const { readFileSync } = require('fs');
 
 const { join } = require('path');
 
-const renderTemplate = location => {
-  const template = readFileSync(join(__dirname, location)).toString('utf8')
-
-  return {
-    template: template,
-    render: params => template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
-  }
-}
-
 async function assignTemplates() {
 
   workspace.templates = Object.assign({
 
     //views
-    _desktop: renderTemplate('../../public/views/_desktop.html'),
-    _mobile: renderTemplate('../../public/views/_mobile.html'),
-    admin_user: renderTemplate('../../public/views/_admin_user.html'),
+    _desktop: {
+      template: readFileSync(join(__dirname, '../../public/views/_desktop.html')).toString('utf8')
+    },
+    _mobile: {
+      template: readFileSync(join(__dirname, '../../public/views/_mobile.html')).toString('utf8')
+    },
+    admin_user: {
+      template: readFileSync(join(__dirname, '../../public/views/_admin_user.html')).toString('utf8')
+    },
 
     //queries
     mvt_cache: require('../../public/queries/mvt_cache'),
@@ -106,55 +103,54 @@ async function assignTemplates() {
 
       function _resolve(_template) {
 
-        const template = {}
-
-        template[entry[0]] = {}
-
+        // Failed to fetch template from src.
         if (_template instanceof Error) {
-          template[entry[0]].err = _template
-          return resolve(template)
+          return resolve({
+            [entry[0]]: { err: _template }
+          })
         }
 
-        try {
-          const obj = JSON.parse(_template)
-          Object.assign(template[entry[0]], obj)
-          return resolve(template)
-        } catch(err) {   
+        // Template maybe json as string.
+        if (typeof _template === 'string') {
+          try {
+            _template = JSON.parse(_template)
+          } catch(err) { }
         }
 
-        template[entry[0]].template = _template
+        // Template is string only.
+        if (typeof _template === 'string') {
+          _template = {
+            template: _template
+          }
+        }
 
-        template[entry[0]].dbs = entry[1].dbs
+        // Assign render method if none exists.
+        if (!_template.render) {
+          _template.render = params => _template.template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
+        }
 
-        template[entry[0]].roles = entry[1].roles
-
-        template[entry[0]].access = entry[1].access
-
-        template[entry[0]].render = params => _template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
-
-        resolve(template)
+        resolve({
+          [entry[0]]: _template
+        })
       }
 
       // Default templates already have a render method
-      if (entry[1].render || (!entry[1].src && !entry[1].template)) return resolve({[entry[0]]:entry[1]})
+      if (!entry[1].src) return _resolve(entry[1])
+
+      if (entry[1].src && entry[1].src.startsWith('file:')) {
+        return provider.file(`../public/${entry[1].src.replace('file:', '')}`)
+          .then(_resolve)
+      }
 
       if (entry[1].src && entry[1].src.toLowerCase().includes('api.github')) {
-        return provider.github(entry[1].src).then(template => _resolve(template))
+        return provider.github(entry[1].src)
+          .then(_resolve)
       }
 
       if (entry[1].src && entry[1].src.startsWith('http')) {
-        return provider.http(entry[1].src).then(template => _resolve(template))
+        return provider.http(entry[1].src)
+          .then(_resolve)
       }
-
-      if (entry[1].template && entry[1].template.toLowerCase().includes('api.github')) {
-        return provider.github(entry[1].template).then(template => _resolve(template))
-      }
-
-      if (entry[1].template && entry[1].template.startsWith('http')) {
-        return provider.http(entry[1].template).then(template => _resolve(template))
-      }
-
-      return _resolve(entry[1].template)
 
     })
   )

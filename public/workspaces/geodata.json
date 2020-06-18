@@ -1,31 +1,45 @@
 {
   "templates": {
     "blog": {
-      "_src": "https://api.github.com/repos/GEOLYTIX/public/contents/blog.html",
-      "src": "http://localhost:3000/geodata/views/blog.html"
+      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/blog.html"
     },
     "Mapbox Base": {
+      "format": "tiles",
+      "URI": "/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX&host=https://api.mapbox.com",
       "attribution": {
         "© Mapbox": "https://www.mapbox.com/about/maps",
         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-      },
-      "format": "tiles",
-      "URI": "/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX&host=https://api.mapbox.com"
-    },
-    "Retail Places": {
-      "format": "mvt",
-      "dbs": "XYZ",
-      "table": "website.vw_london_glx_geodata_retail_place",
-      "geom": "geom_3857",
-      "srid": "3857"
+      }
     },
     "Mapbox Label": {
+      "format": "tiles",
+      "URI": "/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX&host=https://api.mapbox.com",
       "attribution": {
         "© Mapbox": "https://www.mapbox.com/about/maps",
         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-      },
+      }
+    },
+    "HERE Imagery": {
       "format": "tiles",
-      "URI": "/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX&host=https://api.mapbox.com"
+      "URI": "/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?&provider=HERE&host=https://1.aerial.maps.api.here.com",
+      "attribution": {
+        "© Here": "https://www.here.com/",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "HERE Hybrid": {
+      "format": "tiles",
+      "URI": "/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?&provider=HERE&host=https://1.aerial.maps.api.here.com",
+      "attribution": {
+        "© Here": "https://www.here.com/",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "geolytix_offices": {
+      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/offices.json"
+    },
+    "london_census": {
+      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/census.json"
     }
   },
   "locales": {
@@ -44,61 +58,7 @@
         },
         "Offices": {
           "display": true,
-          "format": "geojson",
-          "dbs": "XYZ",
-          "table": "website.glx_offices",
-          "geom": "geom",
-          "srid": "4326",
-          "style": {
-            "default": {
-              "marker": {
-                "type": "markerColor",
-                "colorMarker": "#999999",
-                "colorDot": "#333333",
-                "anchor": [
-                  0.5,
-                  1
-                ],
-                "scale": 0.05
-              }
-            },
-            "highlight": {
-              "marker": {
-                "type": "markerColor",
-                "colorMarker": "#64dd17",
-                "colorDot": "#33691e",
-                "anchor": [
-                  0.5,
-                  1
-                ],
-                "scale": 0.05
-              }
-            },
-            "selected": {
-              "marker": {
-                "type": "markerColor",
-                "colorMarker": "#64dd17",
-                "colorDot": "#33691e",
-                "anchor": [
-                  0.5,
-                  1
-                ],
-                "scale": 0.05
-              }
-            }
-          },
-          "qID": "id",
-          "infoj": [
-            {
-              "type": "key"
-            },
-            {
-              "title": "Address HTML",
-              "field": "address_html",
-              "fieldfx": "address",
-              "type": "html"
-            }
-          ]
+          "template": "geolytix_offices"
         },
         "Label": {
           "display": true,
@@ -122,21 +82,11 @@
       "layers": {
         "HERE Imagery": {
           "group": "Base maps",
-          "attribution": {
-            "© Here": "https://www.here.com/",
-            "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-          },
-          "format": "tiles",
-          "URI": "/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?&provider=HERE&host=https://1.aerial.maps.api.here.com"
+          "template": "HERE Imagery"
         },
         "HERE Hybrid": {
           "group": "Base maps",
-          "attribution": {
-            "© Here": "https://www.here.com/",
-            "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-          },
-          "format": "tiles",
-          "URI": "/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?&provider=HERE&host=https://1.aerial.maps.api.here.com"
+          "template": "HERE Hybrid"
         },
         "Mapbox Baselayer": {
           "group": "Base maps",
@@ -402,33 +352,9 @@
           }
         },
         "Census": {
+          "template": "london_census",
           "group": "Census",
-          "groupmeta": "<p>The processed 2011 UK Census.</p><p>Download a collection of 197 variables as Output Area (OA) level. English, Welsh, Scottish and Northern Irish Census data processed into a single easy-to-use flat file. We have released free-of-charge and under the same license terms as the census.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1W3dyz--u--2lYBXpo8fnDe0b-t8rDpGt\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1-HRjPCUUIxypW1ZxwLgwhxhfesxCR4Ub\" target=\"_blank\"> Open Data - download for free</a></b></p>",
-          "format": "grid",
-          "dbs": "XYZ",
-          "tables": {
-            "12": "geodata.uk_glx_geodata_hex_1k",
-            "13": "geodata.uk_glx_geodata_hex_1k",
-            "14": "geodata.uk_glx_geodata_hex_1k",
-            "15": "geodata.uk_glx_geodata_hex_1k"
-          },
-          "geom": "geom_p_4326",
-          "srid": "4326",
-          "grid_fields": {
-            "Population 2011": "pop__11",
-            "Employed": "eac_employed__11"
-          },
-          "grid_color": "pop__11",
-          "style": {
-            "range": [
-              "#15773f",
-              "#66bd63",
-              "#a6d96a",
-              "#fdae61",
-              "#f46d43",
-              "#d73027"
-            ]
-          }
+          "groupmeta": "<p>The processed 2011 UK Census.</p><p>Download a collection of 197 variables as Output Area (OA) level. English, Welsh, Scottish and Northern Irish Census data processed into a single easy-to-use flat file. We have released free-of-charge and under the same license terms as the census.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1W3dyz--u--2lYBXpo8fnDe0b-t8rDpGt\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1-HRjPCUUIxypW1ZxwLgwhxhfesxCR4Ub\" target=\"_blank\"> Open Data - download for free</a></b></p>"
         },
         "LAD": {
           "group": "Admin Boundaries",
@@ -2553,7 +2479,7 @@
         },
         "Retail Venues": {
           "group": "Retail Venues",
-          "_format": "mvt",
+          "format": "mvt",
           "dbs": "XYZ",
           "geom": "geom_3857",
           "srid": "3857",
