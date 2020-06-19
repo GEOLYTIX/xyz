@@ -491,7 +491,7 @@
         <span
           title="Source layer"
           style="${"float: right; padding: 3px; cursor: help; border-radius: 2px; background-color: "+e.utils.Chroma(t.style.strokeColor).alpha(.3)+";"}"
-          >${t.layer.name}`);else{const t=e.locations.view.dataview(i);t&&i.listview.appendChild(t)}}return r},Tr=e=>t=>{t.__title_div&&(t.__title_div.style.gridColumn="1 / 3");const r=ol.proj.transform(t.location.marker,"EPSG:"+e.mapview.srid,"EPSG:4326"),n=`${e.host}/api/proxy?uri=/maps/api/streetview?location=${r[1]},${r[0]}%26source=outdoor%26size=300x230&provider=GOOGLE&host=maps.googleapis.com`;t.listview.appendChild(e.utils.wire()`
+          >${t.layer.name||t.layer.key}`);else{const t=e.locations.view.dataview(i);t&&i.listview.appendChild(t)}}return r},Tr=e=>t=>{t.__title_div&&(t.__title_div.style.gridColumn="1 / 3");const r=ol.proj.transform(t.location.marker,"EPSG:"+e.mapview.srid,"EPSG:4326"),n=`${e.host}/api/proxy?uri=/maps/api/streetview?location=${r[1]},${r[0]}%26source=outdoor%26size=300x230&provider=GOOGLE&host=maps.googleapis.com`;t.listview.appendChild(e.utils.wire()`
     <div
       class="${t.class||""}"
       style="grid-column: 1 / 3;">
