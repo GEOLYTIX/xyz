@@ -119,9 +119,11 @@ async function assignTemplates() {
 
         // Template is string only.
         if (typeof _template === 'string') {
-          _template = {
-            template: _template
-          }
+          _template = Object.assign(
+            entry[1],
+            {
+              template: _template
+            })
         }
 
         // Assign render method if none exists.
