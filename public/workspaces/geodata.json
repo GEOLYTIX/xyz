@@ -36,10 +36,13 @@
       }
     },
     "geolytix_offices": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/offices.json"
+      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/geolytix_offices.json"
     },
     "london_census": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/census.json"
+      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_census.json"
+    },
+    "london_retailpoints": {
+      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_retailpoints.json"
     }
   },
   "locales": {
@@ -91,270 +94,17 @@
         "Mapbox Baselayer": {
           "group": "Base maps",
           "display": true,
-          "attribution": {
-            "© Mapbox": "https://www.mapbox.com/about/maps",
-            "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-          },
-          "format": "tiles",
-          "URI": "/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX&host=https://api.mapbox.com"
+          "template": "Mapbox Base"
         },
         "Retail Points": {
           "group": "Retail Points",
           "groupmeta": "<p>Over 10,000 supermarket roof-top locations and addresses. Retailers include Aldi, Asda, Booths, Budgens, Co-op, Costco, Lidl, Marks and Spencer, Morrisons, Sainsbury’s, Tesco, Waitrose, Wholefoods.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1VQFcL1ysZDrHY7gLPjjoJ3b9nLE3nVub\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1B8M7m86rQg2sx2TsHhFa2d-x-dZ1DbSy\" target=\"_blank\">Open Data - download for free</a></b></p>",
-          "format": "cluster",
-          "dbs": "XYZ",
-          "table": "geodata.uk_glx_open_retail_points",
-          "geom": "geom_p_4326",
-          "srid": "4326",
-          "cluster_label": "store_name",
-          "cluster_kmeans": 0.02,
-          "cluster_dbscan": 0.02,
-          "qID": "id",
-          "infoj": [
-            {
-              "field": "retailer",
-              "title": "Retailer",
-              "inline": true
-            },
-            {
-              "field": "fascia",
-              "title": "Fascia",
-              "inline": true
-            },
-            {
-              "field": "store_name",
-              "title": "Name",
-              "inline": true
-            },
-            {
-              "title": "Address",
-              "type": "label"
-            },
-            {
-              "field": "add_one"
-            },
-            {
-              "field": "add_two"
-            },
-            {
-              "field": "locality"
-            },
-            {
-              "field": "postcode"
-            },
-            {
-              "field": "town"
-            },
-            {
-              "field": "size_sqft",
-              "title": "Size in sqft"
-            },
-            {
-              "field": "size_sqm",
-              "title": "Size in sqm"
-            },
-            {
-              "field": "pqi",
-              "title": "Accuracy"
-            }
-          ],
-          "style": {
-            "hidden": true,
-            "marker": {
-              "type": "target",
-              "fillColor": "#93827F"
-            },
-            "markerMulti": {
-              "type": "target",
-              "fillColor": "#93827F"
-            },
-            "themes": {
-              "Retailers": {
-                "type": "categorized",
-                "field": "retailer",
-                "other": true,
-                "cat": {
-                  "Aldi": {
-                    "label": "Aldi",
-                    "style": {
-                      "fillColor": "#ffbf45",
-                      "layers": {
-                        "0.875": "#fa6f08",
-                        "0.75": "#ef3c11",
-                        "0.625": "#001f79",
-                        "0.5": "#02bee3",
-                        "0.25": "ffffff"
-                      }
-                    }
-                  },
-                  "Asda": {
-                    "label": "Asda",
-                    "style": {
-                      "fillColor": "#83b923",
-                      "layers": {
-                        "0.5": "#ffffff",
-                        "0.375": "#fdb839"
-                      }
-                    }
-                  },
-                  "Booths": {
-                    "label": "Booths",
-                    "style": {
-                      "fillColor": "#a12629",
-                      "layers": {
-                        "0.5": "#ffffff",
-                        "0.375": "#a12629"
-                      }
-                    }
-                  },
-                  "Budgens": {
-                    "label": "Budgens",
-                    "style": {
-                      "fillColor": "#EEEEE0",
-                      "layers": {
-                        "0.5": "#679a00",
-                        "0.375": "#cccb01"
-                      }
-                    }
-                  },
-                  "Co-op": {
-                    "label": "The Co-Operative",
-                    "style": {
-                      "fillColor": "#0b1e60",
-                      "layers": {
-                        "0.625": "#ffffff",
-                        "0.5": "#a3d227"
-                      }
-                    }
-                  },
-                  "Costco": {
-                    "label": "Costco",
-                    "style": {
-                      "fillColor": "#005daa",
-                      "layers": {
-                        "0.875": "#ffffff",
-                        "0.625": "#e31837"
-                      }
-                    }
-                  },
-                  "Farmfoods": {
-                    "label": "Farm Foods",
-                    "style": {
-                      "fillColor": "#77a632",
-                      "layers": {
-                        "0.75": "#f7f900",
-                        "0.5": "#ff0000"
-                      }
-                    }
-                  },
-                  "Heron": {
-                    "label": "Heron",
-                    "style": {
-                      "fillColor": "#ffffff",
-                      "layers": {
-                        "0.75": "#313590",
-                        "0.25": "#ffcf00"
-                      }
-                    }
-                  },
-                  "Iceland": {
-                    "label": "Iceland",
-                    "style": {
-                      "fillColor": "#ed1b2d",
-                      "layers": {
-                        "0.75": "#f2552b",
-                        "0.5": "#f89128",
-                        "0.25": "#ffffff"
-                      }
-                    }
-                  },
-                  "Lidl": {
-                    "label": "Lidl",
-                    "style": {
-                      "fillColor": "#d61408",
-                      "layers": {
-                        "0.875": "#ffe502",
-                        "0.5": "#002d7a",
-                        "0.25": "#d61408"
-                      }
-                    }
-                  },
-                  "Makro": {
-                    "label": "Makro",
-                    "style": {
-                      "fillColor": "#00457a",
-                      "layers": {
-                        "0.325": "#ffe811"
-                      }
-                    }
-                  },
-                  "Marks and Spencer": {
-                    "label": "Marks & Spencer",
-                    "style": {
-                      "fillColor": "#0a0d10",
-                      "layers": {
-                        "0.5": "#def036",
-                        "0.25": "#0a0d10"
-                      }
-                    }
-                  },
-                  "Morrisons": {
-                    "label": "Morrisons",
-                    "style": {
-                      "fillColor": "#ffe133",
-                      "layers": {
-                        "0.5": "#00614e"
-                      }
-                    }
-                  },
-                  "Sainsburys": {
-                    "label": "Sainsbury's",
-                    "style": {
-                      "fillColor": "#ee8a00",
-                      "layers": {
-                        "0.625": "#ffffff",
-                        "0.325": "#ee8a00"
-                      }
-                    }
-                  },
-                  "Tesco": {
-                    "label": "Tesco",
-                    "style": {
-                      "fillColor": "#0055a8",
-                      "layers": {
-                        "0.75": "#ffffff",
-                        "0.325": "#f02f26"
-                      }
-                    }
-                  },
-                  "Waitrose": {
-                    "label": "Waitrose",
-                    "style": {
-                      "fillColor": "#81ae37",
-                      "layers": {
-                        "0.325": "#ffffff"
-                      }
-                    }
-                  },
-                  "Whole Foods Market": {
-                    "label": "Whole Foods Market",
-                    "style": {
-                      "fillColor": "#00674b",
-                      "layers": {
-                        "0.875": "#ffffff",
-                        "0.5": "#00674b"
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
+          "template": "london_retailpoints"
         },
         "Census": {
-          "template": "london_census",
           "group": "Census",
-          "groupmeta": "<p>The processed 2011 UK Census.</p><p>Download a collection of 197 variables as Output Area (OA) level. English, Welsh, Scottish and Northern Irish Census data processed into a single easy-to-use flat file. We have released free-of-charge and under the same license terms as the census.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1W3dyz--u--2lYBXpo8fnDe0b-t8rDpGt\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1-HRjPCUUIxypW1ZxwLgwhxhfesxCR4Ub\" target=\"_blank\"> Open Data - download for free</a></b></p>"
+          "groupmeta": "<p>The processed 2011 UK Census.</p><p>Download a collection of 197 variables as Output Area (OA) level. English, Welsh, Scottish and Northern Irish Census data processed into a single easy-to-use flat file. We have released free-of-charge and under the same license terms as the census.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1W3dyz--u--2lYBXpo8fnDe0b-t8rDpGt\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1-HRjPCUUIxypW1ZxwLgwhxhfesxCR4Ub\" target=\"_blank\"> Open Data - download for free</a></b></p>",
+          "template": "london_census"
         },
         "LAD": {
           "group": "Admin Boundaries",
@@ -1789,15 +1539,9 @@
           }
         },
         "Mapbox Labels": {
-          "display": true,
           "group": "Base maps",
-          "name": "Mapbox Labels",
-          "attribution": {
-            "© Mapbox": "https://www.mapbox.com/about/maps",
-            "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-          },
-          "format": "tiles",
-          "URI": "/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX&host=https://api.mapbox.com"
+          "display": true,
+          "template": "Mapbox Label"
         }
       }
     },
