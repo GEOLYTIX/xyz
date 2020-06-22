@@ -23,3 +23,5 @@ Add µhtml support. [281](https://github.com/GEOLYTIX/xyz/issues/281)
 Gazetteer - added support for "space_wildcard": true and "minLength" for searched dataset.
 
 Results returned in promises array.
+
+Images - now images arranged in a flex box.

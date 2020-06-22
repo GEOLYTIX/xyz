@@ -1840,7 +1840,8 @@
               "fieldfx": "count(id)"
             }]
           },
-          "infoj": [{
+          "infoj": [
+            {
               "type": "key"
             },
             {
@@ -2590,7 +2591,6 @@
                   ]
                 }],
                 "options": {
-                  "maintainAspectRatio": false,
                   "legend": {
                     "display": false
                   },
@@ -2618,7 +2618,6 @@
               "type": "geometry",
               "class": "_report",
               "level": 1,
-              "display": false,
               "edit": {
                 "isoline_here": {
                   "minutes": 10
@@ -2637,7 +2636,6 @@
               "fieldfx": "ST_asGeoJson(isoline_15min)",
               "type": "geometry",
               "class": "_report",
-              "display": false,
               "level": 1,
               "edit": {
                 "isoline_here": {
