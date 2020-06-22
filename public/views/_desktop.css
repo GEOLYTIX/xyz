@@ -57,6 +57,7 @@ body {
   grid-column: 3;
   position: relative;
   overflow: hidden;
+  background-color: #f0f0f0;
 }
 
 .mapview>.btn-column {
@@ -70,4 +71,9 @@ body {
 
 .dataview {
   box-shadow: 5px 5px 5px 5px #777;
+}
+
+.fullscreen {
+  position: fixed;
+  z-index: 10000;
 }
