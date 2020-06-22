@@ -6,6 +6,9 @@
     "blog_postal": {
       "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/blog_postal.html"
     },
+    "geodata": {
+      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/geodata.html"
+    },
     "Mapbox Base": {
       "format": "tiles",
       "URI": "/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX&host=https://api.mapbox.com",
