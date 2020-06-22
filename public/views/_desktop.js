@@ -204,13 +204,23 @@ window.onload = () => {
       <div class="xyz-icon icon-area off-black-filter">`)
 
     document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
-    <button
-      title="Current location"
-      onclick=${e => {
-        xyz.mapview.locate.toggle();
+      <button
+        title="Current location"
+        onclick=${e => {
+          xyz.mapview.locate.toggle();
+          e.target.classList.toggle('enabled');
+        }}>
+          <div class="xyz-icon icon-gps-not-fixed off-black-filter">`)
+
+    document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
+      <button
+        title="Fullscreen Mapview"
+        onclick=${e => {
         e.target.classList.toggle('enabled');
+        xyz.mapview.node.classList.toggle('fullscreen');
+        xyz.map.updateSize();
       }}>
-      <div class="xyz-icon icon-gps-not-fixed off-black-filter">`)
+        <div class="xyz-icon icon-fullscreen off-black-filter">`)
 
   }
 
