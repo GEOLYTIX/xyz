@@ -1917,17 +1917,6 @@
           },
           "geom": "geom_3857",
           "srid": "3857",
-          "report": {
-            "templates": {
-              "Report 1": {
-                "template": "/views/report_layer.html",
-                "name": "Report A"
-              },
-              "Report 2": {
-                "template": "/views/report_layer.html"
-              }
-            }
-          },
           "script": {
             "Script Test": {
               "script": "/api/provider/github?url=api.github.com/repos/GEOLYTIX/xyz_resources/contents/dev/dashboards/retail_places.js"

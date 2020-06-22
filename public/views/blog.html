@@ -11,9 +11,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
   <link rel="stylesheet" href="${dir}/css/openlayers.css" />
-  <link rel="stylesheet" href="${dir}/css/control.css" /> 
+  <link rel="stylesheet" href="${dir}/css/control.css" />
 
+  <script src="${dir}/js/tabulator.js" defer></script>
+  <script src="${dir}/js/Chart.min.js" defer></script>
   <script src="${dir}/js/ol.js" defer></script>
+
   <script src="${dir}/js/xyz_openlayers.js" defer></script>
 
   <style>
@@ -40,7 +43,7 @@
       padding: 10px;
     }
 
-    #Locale > * {
+    #Locale>* {
       transform: rotateY(180deg);
     }
 
@@ -124,88 +127,44 @@
 
     const params = {
       host: window.location.origin,
-    };
+    }
 
     // Take hooks from URL and store as current hooks.
     window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (match, key, value) => {
       params[key] = decodeURI(value);
-    });
-
-    const xyz = _xyz({
-      host: params.host + document.head.dataset.dir
-    });
-
-    xyz.mapview.create({
-      target: document.getElementById('Map'),
-      scrollWheelZoom: true,
-    });
-
-    xyz.workspace.get.locale({
-      locale: 'Offices'
-    }).then(locale => {
-
-      xyz.locale = locale;
-
-      locale.layers.forEach(layer => {
-
-        xyz.workspace.get.layer({
-          locale: locale.key,
-          layer: layer
-        }).then(layer => {
-          layer = xyz.layers.decorate(layer);
-          xyz.layers.list[layer.key] = layer;
-          layer.show()
-        })
-
-      })
     })
 
-    // xyz.workspace.get.layer({
-    //   layer: 'Mapbox Base'
-    // })
-    // .then(layer => xyz.layers.decorate(layer).show())
+    const xyz = _xyz({
+      host: params.host + document.head.dataset.dir,
+      hooks: true
+    })
 
-    // xyz.layers.decorate({
-    //   key: 'OSM',
-    //   format: 'tiles',
-    //   URI: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png'
-    // }).show()
+    const grid = document.getElementById('Grid')
 
-  }
+    const locale = document.getElementById('Locale')
 
-  function init(_xyz) {
-
-    _xyz.mapview.create({
-      target: document.getElementById('Map'),
-      scrollWheelZoom: true,
-      zoomControl: true,
-      showScaleBar: 'never',
-      view: {
-        lat: _xyz.hooks.current.lat,
-        lng: _xyz.hooks.current.lng,
-        z: _xyz.hooks.current.z
+    xyz.locations.list = [
+      {
+        style: { strokeColor: '#090', strokeWidth: 2 },
+        colorFilter: 'invert(22%) sepia(80%) saturate(1933%) hue-rotate(272deg) brightness(97%) contrast(104%)'
       }
-    });
+    ]
 
-    const grid = document.getElementById('Grid');
-
-    const locale = document.getElementById('Locale');
-
-    _xyz.locations.selectCallback = location => {
+    xyz.locations.selectCallback = location => {
 
       grid.style['grid-template-columns'] = '300px 1fr';
       grid.style['column-gap'] = '10px';
 
       location.draw();
 
-      location.Marker = _xyz.mapview.geoJSON({
+      location.Marker = xyz.mapview.geoJSON({
         geometry: {
           type: 'Point',
           coordinates: location.marker,
         },
         zIndex: 2000,
-        style: new _xyz.mapview.lib.style.Style({
-          image: _xyz.mapview.icon({
+        style: new ol.style.Style({
+          image: xyz.mapview.icon({
             type: 'markerColor',
             colorMarker: '#64dd17',
             colorDot: '#33691e',
@@ -217,34 +176,79 @@
 
       locale.innerHTML = '';
 
-      location.view = _xyz.locations.view.infoj(location);
+      location.view = xyz.locations.view.infoj(location);
 
       locale.appendChild(location.view);
 
-      _xyz.map.updateSize();
+      xyz.map.updateSize();
 
       location.removeCallback = () => setTimeout(function () {
 
         if (locale.innerHTML === '') {
           grid.style['grid-template-columns'] = '0 1fr';
           grid.style['column-gap'] = '0';
-          _xyz.map.updateSize();
+          xyz.map.updateSize();
         }
 
       }, 1000);
     }
 
-    _xyz.hooks.current.locations.forEach(_hook => {
 
-      let hook = _hook.split('!');
+    if (params.locale) {
 
-      _xyz.locations.select({
-        locale: _xyz.workspace.locale.key,
-        layer: _xyz.layers.list[decodeURIComponent(hook[0])],
-        table: hook[1],
-        id: hook[2]
-      });
-    });
+      xyz.workspace.get.locale({
+        locale: params.locale
+      }).then(locale => {
+        xyz.locale = locale
+        createMap()
+      })
+
+    } else {
+      createMap()
+    }
+
+
+    function createMap() {
+
+      xyz.mapview.create({
+        target: document.getElementById('Map'),
+        scrollWheelZoom: true,
+      })
+
+      const layers = params.layers && params.layers.split(',') || xyz.locale.layers
+
+      if (!layers) return
+
+      const layerPromises = layers.map(layer => xyz.workspace.get.layer({
+        locale: params.locale,
+        layer: layer
+      }))
+
+      Promise.all(layerPromises).then(layers => {
+
+        layers.forEach(layer => {
+
+          layer = xyz.layers.decorate(layer)
+          xyz.layers.list[layer.key] = layer
+          layer.show()
+
+        })
+
+        xyz.hooks.current.locations.forEach(_hook => {
+
+          let hook = _hook.split('!');
+
+          xyz.locations.select({
+            locale: xyz.workspace.locale.key,
+            layer: xyz.layers.list[decodeURIComponent(hook[0])],
+            table: hook[1],
+            id: hook[2]
+          })
+        })
+
+      })
+
+    }
 
   }
 
