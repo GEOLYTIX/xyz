@@ -145,11 +145,6 @@ window.onload = () => {
           href="https://geolytix.co.uk"
           style="background-image: url('https://cdn.jsdelivr.net/gh/GEOLYTIX/geolytix/public/geolytix.svg');">`
       },
-      view: {
-        lat: xyz.hooks.current.lat,
-        lng: xyz.hooks.current.lng,
-        z: xyz.hooks.current.z
-      },
       scrollWheelZoom: true,
     })
 
