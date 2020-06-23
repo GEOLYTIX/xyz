@@ -616,11 +616,21 @@
         "provider": "GOOGLE",
         "code": "GB",
         "placeholder": "eg. London",
-        "datasets": [{
+        "datasets": [
+          {
           "layer": "Retail Points",
           "table": "dev.retailpoints",
-          "label": "store"
-        }]
+          "label": "store",
+          "leading_wildcard": true
+        },
+        {
+          "layer": "Retail Places",
+          "table": "dev.retailplaces",
+          "label": "uniq_name",
+          "space_wildcard": true,
+          "minLength": 2
+        }
+      ]
       },
       "bounds": {
         "north": 62,
@@ -1830,7 +1840,8 @@
               "fieldfx": "count(id)"
             }]
           },
-          "infoj": [{
+          "infoj": [
+            {
               "type": "key"
             },
             {
@@ -1906,17 +1917,6 @@
           },
           "geom": "geom_3857",
           "srid": "3857",
-          "report": {
-            "templates": {
-              "Report 1": {
-                "template": "/views/report_layer.html",
-                "name": "Report A"
-              },
-              "Report 2": {
-                "template": "/views/report_layer.html"
-              }
-            }
-          },
           "script": {
             "Script Test": {
               "script": "/api/provider/github?url=api.github.com/repos/GEOLYTIX/xyz_resources/contents/dev/dashboards/retail_places.js"
@@ -2580,7 +2580,6 @@
                   ]
                 }],
                 "options": {
-                  "maintainAspectRatio": false,
                   "legend": {
                     "display": false
                   },
@@ -2608,7 +2607,6 @@
               "type": "geometry",
               "class": "_report",
               "level": 1,
-              "display": false,
               "edit": {
                 "isoline_here": {
                   "minutes": 10
@@ -2627,7 +2625,6 @@
               "fieldfx": "ST_asGeoJson(isoline_15min)",
               "type": "geometry",
               "class": "_report",
-              "display": false,
               "level": 1,
               "edit": {
                 "isoline_here": {

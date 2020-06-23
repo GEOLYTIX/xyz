@@ -10,20 +10,21 @@ module.exports = function (eleventyConfig) {
 
   eleventyConfig.addCollection('posts', collection => {
 
-    const _collection = collection.getFilteredByGlob('**/*.md').sort((a, b) => {
-      if ((a.data.orderPath || a.filePathStem) < (b.orderPath || b.filePathStem)) return -1;
-      else if ((a.data.orderPath || a.filePathStem) > (b.orderPath || b.filePathStem)) return 1;
-      else return 0;
-    })
+    const _collection = collection.getFilteredByGlob('**/*.md').sort(
+      (a, b) => (a.data.orderPath || a.filePathStem).localeCompare((b.orderPath || b.filePathStem))
+    )
 
     let currentGroup;
 
     _collection.forEach(entry => {
-      let path = entry.inputPath.split('/');
-      let group = path[path.length - 2];
-      entry.data.level = path.length - 3;
-      if (group !== currentGroup) entry.data.class = '__' + entry.data.level;
+      const path = entry.inputPath.split('/');
+      const group = path[path.length - 2];
+
+      entry.data.lv = path.length - 2;
+
+      group !== currentGroup && entry.data.lv--;
       currentGroup = group;
+
       entry.data.tag = entry.data.tags && entry.data.tags[0];
     })
 

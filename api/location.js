@@ -30,7 +30,13 @@ module.exports = async (req, res) => {
     <a href="https://geolytix.github.io/xyz/docs/develop/api/location/">Location API</a>`)
   }
 
-  req.params.layer = req.params.locale && workspace.locales[req.params.locale].layers[req.params.layer]
+  const locale = req.params.locale && workspace.locales[req.params.locale]
+
+  const layer = locale && locale.layers[req.params.layer] ||  workspace.templates[req.params.layer]
+
+  if (!layer) return res.status(400).send('Layer not found.')
+
+  req.params.layer = layer
 
   if (!req.params.layer) {
     return res.status().send(`Failed to evaluate 'layer' param.<br><br>
