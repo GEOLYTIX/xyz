@@ -25,3 +25,7 @@ Gazetteer - added support for "space_wildcard": true and "minLength" for searche
 Results returned in promises array.
 
 Images - now images arranged in a flex box.
+
+Images - simple image viewer added for images on desktop template.
+
+Desktop template - added container #modalOverlay to hold possible full screen views.
