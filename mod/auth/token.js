@@ -24,7 +24,7 @@ module.exports = async (req) => {
 
   var rows = await acl(`
   UPDATE acl_schema.acl_table
-  SET access_log = array_append(access_log, '${date}@${req.headers['X-Forwarded-For'] || 'localhost'}')
+  SET access_log = array_append(access_log, '${date}@${req.headers['x-forwarded-for'] || 'localhost'}')
   WHERE lower(email) = lower($1)
   RETURNING *;`, [req.body.email])
 
@@ -47,7 +47,7 @@ module.exports = async (req) => {
       subject: `A failed login attempt was made on ${host}`,
       text: `${user.verified ? 'The account has been verified.' : 'The account has NOT been verified.'}
       ${user.approved ? 'The account has been approved.' : 'Please wait for account approval confirmation email.'}
-      The failed attempt occured from this remote address ${req.headers['X-Forwarded-For'] || 'localhost'}
+      The failed attempt occured from this remote address ${req.headers['x-forwarded-for'] || 'localhost'}
       This wasn't you? Please let your manager know.`
     })
 
@@ -109,7 +109,7 @@ module.exports = async (req) => {
       This account has now been locked until verified.
       Please verify that you are the account holder: ${protocol}${host}/api/user/verify/${verificationtoken}
       Verifying the account will reset the failed login attempts.
-      The failed attempt occured from this remote address ${req.headers['X-Forwarded-For'] || 'localhost'}
+      The failed attempt occured from this remote address ${req.headers['x-forwarded-for'] || 'localhost'}
       This wasn't you? Please let your manager know.`
     })
 
@@ -121,7 +121,7 @@ module.exports = async (req) => {
     to: user.email,
     subject: `A failed login attempt was made on ${host}`,
     text: `An incorrect password was entered!
-    The failed attempt occured from this remote address ${req.headers['X-Forwarded-For'] || 'localhost'}
+    The failed attempt occured from this remote address ${req.headers['x-forwarded-for'] || 'localhost'}
     This wasn't you? Please let your manager know.`
   })
 

@@ -26,9 +26,15 @@ module.exports = async (req, res) => {
 
   if (res.finished) return
 
-  if (req.params.locale && req.params.layer) {
+  if (req.params.layer) {
 
-    const layer = req.params.locale && workspace.locales[req.params.locale].layers[req.params.layer]
+    const locale = req.params.locale && workspace.locales[req.params.locale]
+
+    const layer = locale && locale.layers[req.params.layer] ||  workspace.templates[req.params.layer]
+
+    if (!layer) return res.status(400).send('Layer not found.')
+  
+    req.params.layer = layer
 
     const roles = layer.roles
     && req.params.token
@@ -52,17 +58,20 @@ module.exports = async (req, res) => {
     req.params.viewport = req.params.viewport && req.params.viewport.split(',')
     
     const viewport = req.params.viewport && `
-    AND ST_DWithin(
-      ST_Transform(
-        ST_MakeEnvelope(
-          ${req.params.viewport[0]},
-          ${req.params.viewport[1]},
-          ${req.params.viewport[2]},
-          ${req.params.viewport[3]},
-          ${parseInt(req.params.viewport[4])}
-        )
-      ,${layer.srid}),
-      ${layer.geom}, 0.00001)` || ''
+    AND
+      ST_Intersects(
+        ST_Transform(
+          ST_MakeEnvelope(
+            ${req.params.viewport[0]},
+            ${req.params.viewport[1]},
+            ${req.params.viewport[2]},
+            ${req.params.viewport[3]},
+            ${parseInt(req.params.viewport[4])}
+          ),
+          ${layer.srid}),
+        ${layer.geom}
+      )`
+    || ''
 
     Object.assign(req.params, {layer: layer, filter: filter, viewport: viewport})
   }
@@ -81,7 +90,7 @@ module.exports = async (req, res) => {
   const rows = await _dbs(
     q,
     req.body && req.body.length && [JSON.stringify(req.body)] || req.params.params && req.params.params.split(','),
-    req.params.statement_timeout)
+    req.params.statement_timeout || template.statement_timeout)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 

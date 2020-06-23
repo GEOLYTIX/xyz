@@ -8,7 +8,7 @@ module.exports = async (req, res) => {
 
   let
     geom = layer.geom,
-    style_theme = layer.style.themes[req.params.theme],
+    style_theme = layer.style.themes && layer.style.themes[req.params.theme],
     cat = style_theme && (style_theme.fieldfx || style_theme.field) || null,
     size = style_theme && style_theme.size || 1,
     theme = style_theme && style_theme.type,
@@ -39,10 +39,18 @@ module.exports = async (req, res) => {
 
   // Combine filter with envelope
   const where_sql = `
-  WHERE ST_DWithin(
-    ST_MakeEnvelope(${viewport[0]}, ${viewport[1]}, ${viewport[2]}, ${viewport[3]}, ${parseInt(layer.srid)}),
-    ${geom}, 0.00001)
-    ${filter}`
+  WHERE
+  ST_Intersects(
+    ST_MakeEnvelope(
+      ${viewport[0]},
+      ${viewport[1]},
+      ${viewport[2]},
+      ${viewport[3]},
+      ${parseInt(layer.srid)}
+    ),
+    ${geom}
+  )
+  ${filter}`
 
   // Apply KMeans cluster algorithm.
   if (kmeans) {

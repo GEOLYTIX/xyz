@@ -1,203 +1,264 @@
 window.onload = () => {
 
-if ('scrollRestoration' in history) history.scrollRestoration = 'auto';
+  if ('scrollRestoration' in history) history.scrollRestoration = 'auto'
 
-//move map up on document scroll
-document.addEventListener('scroll', () => document.getElementById('Map').style['marginTop'] = -parseInt(window.pageYOffset / 2) + 'px');
+  //move map up on document scroll
+  document.addEventListener('scroll', () => document.getElementById('Map').style['marginTop'] = -parseInt(window.pageYOffset / 2) + 'px')
 
-const tabs = document.querySelectorAll('.tab');
-const locations = document.getElementById('locations');
-const layers = document.getElementById('layers');
+  const tabs = document.querySelectorAll('.tab')
+  const locationsTab = document.getElementById('locations')
+  const layersTab = document.getElementById('layers')
 
-tabs.forEach(tab => {
-  tab.querySelector('.listview').addEventListener('scroll',
-    e => {
-      if (e.target.scrollTop > 0) return e.target.classList.add('shadow');
-      e.target.classList.remove('shadow');
-    });
+  tabs.forEach(tab => {
+    tab.querySelector('.listview').addEventListener('scroll',
+      e => {
+        if (e.target.scrollTop > 0) return e.target.classList.add('shadow')
+        e.target.classList.remove('shadow')
+      })
 
-  tab.onclick = e => {
-    if (!e.target.classList.contains('tab')) return;
-    e.preventDefault();
-    tabs.forEach(el => el.classList.remove('active'));
-    e.target.classList.add('active');
-  }
-});
-
-
-_xyz({
-  host: document.head.dataset.dir || new String(''),
-  token: document.body.dataset.token,
-  log: document.body.dataset.log,
-  hooks: true,
-  callback: init,
-});
-
-function init(_xyz) {
-
-  if (document.body.dataset.token) {
-    _xyz.user = _xyz.utils.JWTDecode(document.body.dataset.token);
-  }
-
-  // Create mapview control.
-  _xyz.mapview.create({
-    target: document.getElementById('Map'),
-    attribution: {
-      logo: _xyz.utils.wire()`
-          <a
-            class="logo"
-            target="_blank"
-            href="https://geolytix.co.uk"
-            style="background-image: url('https://cdn.jsdelivr.net/gh/GEOLYTIX/geolytix/public/geolytix.svg');">`
-    },
-    view: {
-      lat: _xyz.hooks.current.lat,
-      lng: _xyz.hooks.current.lng,
-      z: _xyz.hooks.current.z
-    },
-    scrollWheelZoom: true,
-  });
-
-
-  const btnZoomIn = _xyz.utils.wire()`
-  <button
-    disabled=${_xyz.map.getView().getZoom() >= _xyz.workspace.locale.maxZoom}
-    class="enabled"
-    title="Zoom in"
-    onclick=${e => {
-      const z = parseInt(_xyz.map.getView().getZoom() + 1);
-      _xyz.map.getView().setZoom(z);
-      e.target.disabled = (z >= _xyz.workspace.locale.maxZoom);
-    }}><div class="xyz-icon icon-add">`;
-
-  document.querySelector('.btn-column').appendChild(btnZoomIn);
-
-  const btnZoomOut = _xyz.utils.wire()`
-  <button
-    disabled=${_xyz.map.getView().getZoom() <= _xyz.workspace.locale.minZoom}
-    class="enabled"
-    title="Zoom out"
-    onclick=${e => {
-      const z = parseInt(_xyz.map.getView().getZoom() - 1);
-      _xyz.map.getView().setZoom(z);
-      e.target.disabled = (z <= _xyz.workspace.locale.minZoom);
-    }}><div class="xyz-icon icon-remove">`;
-
-  document.querySelector('.btn-column').appendChild(btnZoomOut);  
-
-  _xyz.mapview.node.addEventListener('changeEnd', () => {
-    const z = _xyz.map.getView().getZoom();
-    btnZoomIn.disabled = z >= _xyz.workspace.locale.maxZoom;
-    btnZoomOut.disabled = z <= _xyz.workspace.locale.minZoom;
-  });
-
-
-  if(_xyz.workspace.locale.locate) {
-
-    document.querySelector('.btn-column').appendChild(_xyz.utils.wire()`
-    <button title="Current location"
-      onclick=${e=>{
-        _xyz.mapview.locate.toggle();
-        e.target.classList.toggle('enabled');
-      }}><div class="xyz-icon icon-gps-not-fixed off-black-filter">`);
-  }
-
-
-  _xyz.layers.listview.init({
-    target: layers,
-  });
-
-  _xyz.locations.listview.init({
-    target: locations,
-    callbackInit: () => {
-      locations.closest('.tab').style.display = 'none';
-      layers.closest('.tab').click();
-    },
-    callbackAdd: () => {
-      locations.closest('.tab').style.display = 'block';
-      locations.closest('.tab').click();
+    tab.onclick = e => {
+      if (!e.target.classList.contains('tab')) return
+      e.preventDefault()
+      tabs.forEach(el => el.classList.remove('active'))
+      e.target.classList.add('active')
     }
-  });
+  })
 
-  document.getElementById('clear_locations').onclick = e => {
-    e.preventDefault();
-    _xyz.locations.list
-      .filter(record => !!record.location)
-      .forEach(record => record.location.remove());
-  };
+  const xyz = _xyz({
+    host: document.head.dataset.dir || new String(''),
+    hooks: true
+  })
 
-  if (_xyz.workspace.locale.gazetteer) {
+  xyz.workspace.get.locales().then(getLocale)
 
-    const gazetteer = _xyz.utils.wire()`
-    <div id="gazetteer" class="display-none">
-      <div class="input-drop">
-          <input type="text" placeholder="e.g. London">
-          <ul>`;
+  function getLocale(locales) {
 
-    const btnGazetteer = _xyz.utils.wire()`
-    <button onclick=${e=>{
-      e.preventDefault();
-      e.target.classList.toggle('enabled');
-      gazetteer.classList.toggle('display-none');
-    }}><div class="xyz-icon icon-search">`;
+    const locale = (xyz.hooks && xyz.hooks.current.locale) || locales[0]
 
-    document.querySelector('.btn-column').insertBefore(btnGazetteer,document.querySelector('.btn-column').firstChild);
+    xyz.workspace.get.locale({
+      locale: locale
+    }).then(createMap)
 
-    document.body.insertBefore(gazetteer, document.querySelector('.btn-column'));
+    if (locales.length === 1) return
 
-    _xyz.gazetteer.init({
-      group: gazetteer.querySelector('.input-drop'),
-    });
-  }
-
-  // Create locales dropdown if length of locales array is > 1.
-  if (_xyz.workspace.locales.length > 1) {
-
-    const localeDropdown = _xyz.utils.wire()`
+    const localeDropdown = xyz.utils.wire()`
     <div>
       <div class="listview-title secondary-colour-bg">Locales</div>
       <div>Show layers for the following locale:</div>
       <button
-        style="margin-bottom: 10px;"
         class="btn-drop">
         <div
           class="head"
           onclick=${e => {
-            e.preventDefault();
-            e.target.parentElement.classList.toggle('active');
-          }}>
-          <span>${_xyz.workspace.locale.key}</span>
-          <div class="icon"></div>
-        </div>
-        <ul>${_xyz.workspace.locales.map(
-          locale => _xyz.utils.wire()`<li><a href="${_xyz.host + '?locale=' + locale}">${locale}`
+          e.preventDefault()
+          e.target.parentElement.classList.toggle('active')
+        }}>
+        <span>${locale}</span>
+        <div class="icon"></div>
+      </div>
+      <ul>${locales.map(
+          locale => xyz.utils.wire()`<li><a href="${xyz.host + '?locale=' + locale}">${locale}`
         )}`
 
-        layers.parentElement.insertBefore(localeDropdown, layers.parentElement.firstChild);
+    layersTab.parentElement.insertBefore(localeDropdown, layersTab.parentElement.firstChild)
   }
 
-  // Select locations from hooks.
-  _xyz.hooks.current.locations.forEach(_hook => {
+  function createMap(locale) {
 
-    let hook = _hook.split('!');
+    xyz.locale = locale;
 
-    _xyz.locations.select({
-      locale: _xyz.workspace.locale.key,
-      layer: _xyz.layers.list[decodeURIComponent(hook[0])],
-      table: hook[1],
-      id: hook[2]
-    });
-  });
+    xyz.mapview.create({
+      target: document.getElementById('Map'),
+      attribution: {
+        logo: xyz.utils.wire()`
+        <a
+          class="logo"
+          target="_blank"
+          href="https://geolytix.co.uk"
+          style="background-image: url('https://cdn.jsdelivr.net/gh/GEOLYTIX/geolytix/public/geolytix.svg');">`
+      },
+      scrollWheelZoom: true,
+    })
 
-  if (document.body.dataset.login) {
-    document.querySelector('.btn-column').appendChild(_xyz.utils.wire()`
-    <a
-      title="${_xyz.user ? `Logout ${_xyz.user.email}` : 'Login'}"
+    loadLayers(locale.layers)
+
+    const btnZoomIn = xyz.utils.wire()`
+    <button
+      disabled=${xyz.map.getView().getZoom() >= xyz.locale.maxZoom}
       class="enabled"
-      href="${_xyz.host + '/login'}">
-      <div class="${'xyz-icon ' + (_xyz.user ? 'icon-logout' : 'icon-lock-open')}">`);
+      title="Zoom in"
+      onclick=${e => {
+        const z = parseInt(xyz.map.getView().getZoom() + 1)
+        xyz.map.getView().setZoom(z)
+        e.target.disabled = (z >= xyz.locale.maxZoom)
+      }}><div class="xyz-icon icon-add">`
+
+    document.querySelector('.btn-column').appendChild(btnZoomIn)
+
+    const btnZoomOut = xyz.utils.wire()`
+    <button
+      disabled=${xyz.map.getView().getZoom() <= xyz.locale.minZoom}
+      class="enabled"
+      title="Zoom out"
+      onclick=${e => {
+        const z = parseInt(xyz.map.getView().getZoom() - 1)
+        xyz.map.getView().setZoom(z)
+        e.target.disabled = (z <= xyz.locale.minZoom)
+      }}><div class="xyz-icon icon-remove">`
+
+    document.querySelector('.btn-column').appendChild(btnZoomOut)
+
+    xyz.mapview.node.addEventListener('changeEnd', () => {
+      const z = xyz.map.getView().getZoom();
+      btnZoomIn.disabled = z >= xyz.locale.maxZoom;
+      btnZoomOut.disabled = z <= xyz.locale.minZoom;
+    })
+
+    document.querySelector('.btn-column').appendChild(xyz.utils.wire()`
+    <button
+      title="Zoom to area"
+      onclick=${e => {
+        e.stopPropagation()
+        e.target.classList.toggle('enabled')
+
+        if (e.target.classList.contains('enabled')) {
+
+          return xyz.mapview.interaction.zoom.begin({
+            callback: () => {
+              e.target.classList.remove('enabled')
+            }
+          })
+        }
+
+        xyz.mapview.interaction.zoom.cancel()
+
+      }}>
+      <div class="xyz-icon icon-area off-black-filter">`)
+
+    document.querySelector('.btn-column').appendChild(xyz.utils.wire()`
+    <button
+      title="Current location"
+      onclick=${e => {
+        xyz.mapview.locate.toggle();
+        e.target.classList.toggle('enabled');
+      }}>
+      <div class="xyz-icon icon-gps-not-fixed off-black-filter">`)
+
   }
 
-}
+  function loadLayers(layers) {
+
+    const layerPromises = layers.map(layer => {
+
+      return xyz.workspace.get.layer({
+        locale: xyz.locale.key,
+        layer: layer
+      })
+
+    })
+
+    Promise.all(layerPromises).then(layers => {
+
+      if (xyz.hooks && xyz.hooks.current.layers.length) {
+        layers.forEach(layer => {
+          layer.display = !!~xyz.hooks.current.layers.indexOf(layer.key)
+        })
+      }
+
+      layers.forEach(layer => {
+
+        layer = xyz.layers.decorate(layer)
+        xyz.layers.list[layer.key] = layer
+        layer.display && layer.show()
+
+      })
+
+      mappUI()
+
+    })
+  }
+
+  function mappUI() {
+
+    xyz.layers.listview.init({
+      target: layersTab
+    })
+
+    xyz.locations.listview.init({
+      target: locationsTab,
+      callbackInit: () => {
+        locationsTab.closest('.tab').style.display = 'none'
+        layersTab.closest('.tab').click()
+      },
+      callbackAdd: () => {
+        locationsTab.closest('.tab').style.display = 'block'
+        locationsTab.closest('.tab').click()
+      }
+    })
+
+    document.getElementById('clear_locations').onclick = e => {
+      e.preventDefault()
+      xyz.locations.list
+        .filter(record => !!record.location)
+        .forEach(record => record.location.remove())
+    }
+
+    if (xyz.locale.gazetteer) {
+
+      const gazetteer = _xyz.utils.wire()`
+      <div id="gazetteer" class="display-none">
+        <div class="input-drop">
+            <input type="text" placeholder="e.g. London">
+            <ul>`
+
+      const btnGazetteer = _xyz.utils.wire()`
+      <button onclick=${e => {
+          e.preventDefault()
+          e.target.classList.toggle('enabled')
+          gazetteer.classList.toggle('display-none')
+        }}><div class="xyz-icon icon-search">`
+
+      document.querySelector('.btn-column').insertBefore(btnGazetteer, document.querySelector('.btn-column').firstChild)
+
+      document.body.insertBefore(gazetteer, document.querySelector('.btn-column'))
+
+      _xyz.gazetteer.init({
+        group: gazetteer.querySelector('.input-drop')
+      })
+    }
+
+    // Select locations from hooks.
+    xyz.hooks.current.locations.forEach(_hook => {
+
+      const hook = _hook.split('!');
+
+      xyz.locations.select({
+        locale: xyz.locale.key,
+        layer: xyz.layers.list[decodeURIComponent(hook[0])],
+        table: hook[1],
+        id: hook[2]
+      })
+    })
+
+    if (document.head.dataset.token) {
+      xyz.user = xyz.utils.JWTDecode(document.head.dataset.token)
+    }
+
+    xyz.user && xyz.user.admin_user && document.querySelector('.btn-column').appendChild(xyz.utils.wire()`
+          <a
+            title="Open account admin view"
+            class="enabled" style="cursor: pointer;"
+            href="${xyz.host + '/view/admin_user'}">
+            <div class="xyz-icon icon-supervisor-account">`)
+
+    if (document.head.dataset.login) {
+      document.querySelector('.btn-column').appendChild(xyz.utils.wire()`
+          <a
+            title="${xyz.user ? `Logout ${xyz.user.email}` : 'Login'}"
+            class="enabled" style="cursor: pointer;"
+            href="${xyz.host + (xyz.user ? '/logout' : '/login')}">
+            <div class="${'xyz-icon ' + (xyz.user ? 'icon-logout' : 'icon-lock-open')}">`)
+    }
+  }
 
 }

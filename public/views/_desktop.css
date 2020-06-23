@@ -57,6 +57,35 @@ body {
   grid-column: 3;
   position: relative;
   overflow: hidden;
+  background-color: #f0f0f0;
+}
+
+#modalOverlay {
+  display: none;
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 110%;
+  z-index: 10000;
+  text-align: center;
+  background-color: rgba(0,0,0,0.7);
+}
+
+#modalOverlay > span  {
+  position: absolute;
+  top: 15px;
+  right: 35px;
+  color: #f1f1f1;
+  font-size: 30px;
+  transition: 0.3s;
+}
+
+#modalOverlay > span:hover, #modalOverlay > span:focus {
+  color: #fff;
+  text-decoration: none;
+  cursor: pointer;
+  font-weight: bold;
 }
 
 .mapview>.btn-column {
@@ -70,4 +99,9 @@ body {
 
 .dataview {
   box-shadow: 5px 5px 5px 5px #777;
+}
+
+.fullscreen {
+  position: fixed;
+  z-index: 10000;
 }

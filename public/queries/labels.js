@@ -7,8 +7,15 @@ module.exports = {
     ST_Y(ST_PointOnSurface(${_.layer.geom})) AS y
   FROM ${_.table}
   WHERE
-    ST_DWithin(
-      ST_MakeEnvelope(${_.west}, ${_.south}, ${_.east}, ${_.north}, ${_.layer.srid}),
-      ${_.layer.geom}, 0.00001)
-    ${_.filter};`
+    ST_Intersects(
+      ST_MakeEnvelope(
+        ${_.west},
+        ${_.south},
+        ${_.east},
+        ${_.north},
+        ${_.layer.srid}
+      ),
+      ${_.layer.geom}
+    )
+  ${_.filter};`
 }

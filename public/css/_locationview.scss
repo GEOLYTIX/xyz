@@ -17,14 +17,51 @@
           grid-template-columns: 1fr;
 
           .img-remove {
-            width: 30px;
-            height: 30px;
+            width: 20px;
+            height: 20px;
             position: absolute;
-            right: 10px;
-            top: 10px;
+            right: 6px;
+            top: 6px;
             background-color: #fff;
             border-radius: 50%;
           }
+
+          .images-grid div img {
+            cursor: pointer;
+            transition: 0.3s;
+
+            &:hover {
+                opacity: 0.7;
+            }
+          }
+
+          /*.image-modal {
+
+            display: none;
+            position: fixed;
+            padding-top: 100px;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0,0,0,0.7);
+
+            >span.close {
+                position: absolute;
+                top: 15px;
+                right: 35px;
+                color: #f1f1f1;
+                font-size: 30px;
+                transition: 0.3s;
+
+                &:hover, &:focus {
+                    color: #bbb;
+                    text-decoration: none;
+                    cursor: pointer;
+                }
+            }
+          }*/
       }
     }
 

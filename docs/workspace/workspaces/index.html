@@ -16,7 +16,7 @@
     .grid {
       font-family: system-ui;
       display:grid;
-      grid-template-columns: 1fr 5fr;
+      grid-template-columns: 200px 5fr;
       max-width: 1100px;
       margin: auto;
       padding: 0 30px;
@@ -41,6 +41,8 @@
 
     #nav > *:first-child {
       line-height: 1;
+      font-size: 30px;
+      font-weight: bold;
     }
 
     #content {
@@ -78,24 +80,24 @@
       line-height: 1.5;
     }
 
-    li._1 {
-      padding-left: 0px;
+    li.__0 {
+      padding-left: 0;
     }
 
-    li._2 {
-      padding-left: 20px;
+    li.__1 {
+      padding-left: 0;
     }
 
     li.__2 {
-      padding-left: 0px;
-    }
-
-    li._3 {
-      padding-left: 40px;
+      padding-left: 0;
     }
 
     li.__3 {
       padding-left: 20px;
+    }
+
+    li.__4 {
+      padding-left: 40px;
     }
 
     pre {
@@ -179,9 +181,11 @@
     <div id="toggle"></div>
 
     <ul id="nav">
-
-      <li>
-        <a style="font-weight: bold; font-size: 30px;" href="/xyz/docs">XYZ</a>
+      
+      
+      
+      <li class="__0 ">
+        <a href="/xyz/docs/">XYZ</a>
       </li>
       
       
@@ -240,81 +244,79 @@
       
       
       
-      
-      
-      <li class="_1 __1 active">
+      <li class="__1 active">
         <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
       </li>
       
       
       
-      <li class="_1  ">
+      <li class="__2 ">
         <a href="/xyz/docs/workspace/dataviews/">Dataviews</a>
       </li>
       
       
       
-      <li class="_2 __2 ">
+      <li class="__2 ">
         <a href="/xyz/docs/workspace/layer/">Layer</a>
       </li>
       
       
       
-      <li class="_2  ">
+      <li class="__3 ">
         <a href="/xyz/docs/workspace/layer/cluster/">Cluster</a>
       </li>
       
       
       
-      <li class="_2  ">
+      <li class="__3 ">
         <a href="/xyz/docs/workspace/layer/geojson/">GeoJson</a>
       </li>
       
       
       
-      <li class="_2  ">
+      <li class="__3 ">
         <a href="/xyz/docs/workspace/layer/grid/">Hex Grid</a>
       </li>
       
       
       
-      <li class="_2  ">
+      <li class="__3 ">
         <a href="/xyz/docs/workspace/layer/mvt/">MVT</a>
       </li>
       
       
       
-      <li class="_2  ">
+      <li class="__3 ">
         <a href="/xyz/docs/workspace/layer/themes/">Themes</a>
       </li>
       
       
       
-      <li class="_2  ">
+      <li class="__3 ">
         <a href="/xyz/docs/workspace/layer/tile/">Tile Layer</a>
       </li>
       
       
       
-      <li class="_2 __2 ">
+      <li class="__2 ">
         <a href="/xyz/docs/workspace/locales/">Locale</a>
       </li>
       
       
       
-      <li class="_2  ">
+      <li class="__3 ">
         <a href="/xyz/docs/workspace/locales/gazetteer/">Gazetteer</a>
       </li>
       
       
       
-      <li class="_2 __2 ">
+      <li class="__2 ">
         <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
       </li>
       
       
       
-      <li class="_1 __1 ">
+      <li class="__1 ">
         <a href="/xyz/docs/workspace/styles/">Styles</a>
       </li>
       

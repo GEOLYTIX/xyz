@@ -19,9 +19,16 @@ module.exports = async (req, res) => {
     ${color} color
   FROM ${table}
   WHERE
-    ST_DWithin(
-      ST_MakeEnvelope(${viewport[0]}, ${viewport[1]}, ${viewport[2]}, ${viewport[3]}, ${layer.srid}),
-    ${geom}, 0.000001)
+    ST_Intersects(
+      ST_MakeEnvelope(
+        ${viewport[0]},
+        ${viewport[1]},
+        ${viewport[2]},
+        ${viewport[3]},
+        ${layer.srid}
+      ),
+      ${geom}
+    )
     AND ${size} >= 1 LIMIT 10000;`
 
 
