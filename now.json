@@ -44,6 +44,14 @@
   ],
   "rewrites": [
     {
+      "source": "/xyz/docs/(.*)",
+      "destination": "/docs/$1/$2"
+    },
+    {
+      "source": "/xyz/docs",
+      "destination": "/docs/index.html"
+    },
+    {
       "source": "/api/query/:_template?",
       "destination": "/api/query.js"
     },
@@ -70,14 +78,6 @@
     {
       "source": "/api/(.*)",
       "destination": "/api/$1.js"
-    },
-    {
-      "source": "/docs/(.*)",
-      "destination": "/docs/$1/$2"
-    },
-    {
-      "source": "/docs",
-      "destination": "/docs/index.html"
     },
     {
       "source": "/(public|workspaces|views|css|js|icons)/(.*)",

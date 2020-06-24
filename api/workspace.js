@@ -45,11 +45,11 @@ async function cache(req, res) {
   if (workspace instanceof Error) return res.status(500).send(`<span style="color: red;">${workspace.message}</span>`)
 
   Promise.all([
-    fetch(`${host}/view?clear_cache=true&token=${req.params.token.signed}`),
-    fetch(`${host}/api/query?clear_cache=true&token=${req.params.token.signed}`),
-    fetch(`${host}/api/gazetteer?clear_cache=true&token=${req.params.token.signed}`),
-    fetch(`${host}/api/layer?clear_cache=true&token=${req.params.token.signed}`),
-    fetch(`${host}/api/location?clear_cache=true&token=${req.params.token.signed}`),
+    fetch(`${host}/view?cache=true&token=${req.params.token.signed}`),
+    fetch(`${host}/api/query?cache=true&token=${req.params.token.signed}`),
+    fetch(`${host}/api/gazetteer?cache=true&token=${req.params.token.signed}`),
+    fetch(`${host}/api/layer?cache=true&token=${req.params.token.signed}`),
+    fetch(`${host}/api/location?cache=true&token=${req.params.token.signed}`),
   ]).then(arr => {
     if (arr.some(response => !response.ok)) return res.status(500).send('Failed to cache workspace.')
 
@@ -73,13 +73,14 @@ async function get(req, res) {
     template: getTemplate,
     templates: getTemplates,
     locale: getLocale,
-    locales: () => res.send(Object.keys(workspace.locales)),
-    all: () => res.send(workspace)
+    locales: () => res.send(Object.keys(workspace.locales || {})),
   }
+
+  if (!req.params.key) return res.send(workspace)
 
   if (keys[req.params.key]) return keys[req.params.key](req, res)
 
-  res.send(`Failed to evaluate ${req.params.key && req.params.key + ' as'} 'key' param.<br><br>
+  res.send(`Failed to evaluate ${req.params.key} as 'key' param.<br><br>
   <a href="https://geolytix.github.io/xyz/docs/develop/api/workspace/">Workspace API</a>`)
 }
 

@@ -8,11 +8,11 @@ module.exports = async (req, res) => {
 
   req.params = Object.assign(req.params || {}, req.query || {})
 
-  const workspace = await getWorkspace(req.params.clear_cache)
+  const workspace = await getWorkspace(req.params.cache)
 
   if (workspace instanceof Error) return res.status(500).send(workspace.message)
 
-  if (req.params.clear_cache) return res.send('/query endpoint cache cleared')
+  if (req.params.cache) return res.send('/query endpoint cache cleared')
 
   const md = new Md(req.headers['user-agent'])
 
