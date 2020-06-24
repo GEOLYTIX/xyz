@@ -54,5 +54,5 @@ The field defines which location field will be shown as the location's label.
   "declutter": true,
   "strokeColor": "#ffffff",
   "strokeWidth": 3
-},
+}
 ```

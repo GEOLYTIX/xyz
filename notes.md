@@ -8,6 +8,7 @@ Documentation:
   - Develop / Mapview
   - Develop / Mapview / Interactions
   - Workspace / Style / Label
+  - Workspace / Templates
 
 Fix for zero workspace with get empty locales array.
 
