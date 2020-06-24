@@ -11,7 +11,7 @@ const app = express()
 
 app.use(process.env.DIR||'', express.static('public'))
 
-app.use(`${process.env.DIR||''}/docs`, express.static('docs'))
+app.use(`/xyz/docs`, express.static('docs'))
 
 app.use(cookieParser())
 

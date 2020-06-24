@@ -178,7 +178,7 @@ const defaults = require('./defaults')
 
 async function assignDefaults() {
 
-  Object.keys(workspace.locales).forEach(locale_key => {
+  Object.keys(workspace.locales || {}).forEach(locale_key => {
 
     const locale = workspace.locales[locale_key]
 
