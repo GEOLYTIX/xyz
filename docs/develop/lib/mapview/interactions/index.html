@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="/xyz/public/icons/favicon.ico">
-  <title>Layer</title>
+  <title>Interactions</title>
   <style>
 
     body {
@@ -210,7 +210,7 @@
       
       
       
-      <li class="__3 active">
+      <li class="__3 ">
         <a href="/xyz/docs/develop/api/layer/">Layer</a>
       </li>
       
@@ -300,7 +300,7 @@
       
       
       
-      <li class="__4 ">
+      <li class="__4 active">
         <a href="/xyz/docs/develop/lib/mapview/interactions/">Interactions</a>
       </li>
       
@@ -355,9 +355,15 @@
     </ul>
 
     <div id="content">
-      <h1>Layer API</h1>
-<p>The Layer API provides methods to return formatted spatial data from connected PostGIS data sources.</p>
-<p>Suported formats are GeoJSON, Mapbox Vector Tiles (MVT), grided data, or clustered data.</p>
+      <h1>Interactions</h1>
+<p>Interactions define map interface methods such as selecting locations from displayed layers or drawing geometries.</p>
+<p>Only one interaction can be current at any one time.</p>
+<p>Interactions must have begin, finish, and cancel methods.</p>
+<p>The current interaction will be finished if another interactions begins.</p>
+<p>The default interaction is highlight/select. If any other interaction is finished the highlight/select interaction will begin.</p>
+<h2>draw</h2>
+<p>Params provided to the draw.begin() method define type of geometry to be drawn.</p>
+<p>The default <a href="https://openlayers.org/en/latest/apidoc/module-ol_interaction_Draw.html#~GeometryFunction">geometryFunction</a> used for the construction of linestrings and polygons uses <a href="https://www.npmjs.com/package/@turf/kinks">Turf.kinks</a> to check for self intersections in the sketch geometry. If true, the construction of the next vertix is prevented.</p>
 
     </div>
 

@@ -2,7 +2,7 @@
 
 Documentation to use /xyz directory.
 
-Documentation; Workspace API
+Documentation; Workspace API, Mapview, Mapview - Interactions
 
 Fix for zero workspace with get empty locales array.
 
