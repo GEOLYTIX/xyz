@@ -73,3 +73,11 @@ The field which is searched for the autocomplete match. The label is also displa
 `"leading_wildcard": true`
 
 The ILIKE query will pre-fix the search term with a wild card. e.g. 'Man' will find 'Central Manchester' as well as 'Manchester Airport'.
+
+`"space_wildcard": true`
+
+If set as true, space_wildcard will break the search term into two.
+
+`"minLength": 2`
+
+The minLength defines the minimum length of the search term before the gazetteer will query connected tables.

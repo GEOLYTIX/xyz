@@ -39,10 +39,6 @@ If the display key is set to true the layer will be displayed by default. Otherw
 
 A layer can be hidden from the layers list. It is still possible to select locations from hidden layers and aggregate scores from hidden layers can be used in lookup fields. Hidden layers can be used as scratch layers to store aggregate locations created from running filter outputs.
 
-`"group": "Base maps"`
-
-Groups will be created for every unique group name found in any of the layer definitions. Layers will be nested in their respective group in the Layers control.
-
 `"meta": "Satellite Imagery layer provided by HERE."`
 
 The meta value will be displayed as text directly under the layer header in the Layer control of the client application.
@@ -94,3 +90,13 @@ The name of the field which stores the layer features geometry. The geometry fie
 `"srid": "4326"`
 
 The PostGIS SRID (EPSG) for the layer geometries projection.
+
+## Groups
+
+Setting a group value will add the layer to a group of the same name. The group will be created if it does not already exist.
+
+`"group": "Base maps"`
+
+Similar to the meta entry the groupmeta entry allows for the addition of html to the group meta container once the layer is added to the group.
+
+`"groupmeta": "<p>Up to date worker counts for more than 400,000 commercial postcodes across the UK. Worker counts, densities and occupation splits at hybrid zone level.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1R1eQj-S4BThQkcqFmFvhN3mo6FVfGIGd\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Workers' target='_top'>Contact Us</a></p>"`
