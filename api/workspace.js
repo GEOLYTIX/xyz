@@ -1,4 +1,4 @@
-const auth = require('../mod/auth/handler')
+const auth = require('../mod/user/auth')
 
 const _method = {
   cache: {

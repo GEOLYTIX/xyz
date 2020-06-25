@@ -1,4 +1,4 @@
-const login = require('../user/login')
+const login = require('./login')
 
 const jwt = require('jsonwebtoken')
 

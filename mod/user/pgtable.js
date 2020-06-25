@@ -1,4 +1,4 @@
-const acl = require('../auth/acl')()
+const acl = require('./acl')()
 
 const bcrypt = require('bcryptjs')
 
