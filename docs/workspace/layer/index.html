@@ -356,8 +356,6 @@
 <p>If the display key is set to true the layer will be displayed by default. Otherwise the layer display can be toggled through the client interface.</p>
 <p><code>&quot;hidden&quot;: true</code></p>
 <p>A layer can be hidden from the layers list. It is still possible to select locations from hidden layers and aggregate scores from hidden layers can be used in lookup fields. Hidden layers can be used as scratch layers to store aggregate locations created from running filter outputs.</p>
-<p><code>&quot;group&quot;: &quot;Base maps&quot;</code></p>
-<p>Groups will be created for every unique group name found in any of the layer definitions. Layers will be nested in their respective group in the Layers control.</p>
 <p><code>&quot;meta&quot;: &quot;Satellite Imagery layer provided by HERE.&quot;</code></p>
 <p>The meta value will be displayed as text directly under the layer header in the Layer control of the client application.</p>
 <pre><code class="language-text">&quot;attribution&quot;: {
@@ -389,6 +387,11 @@
 <p>The name of the field which stores the layer features geometry. The geometry field should use a spatial index.</p>
 <p><code>&quot;srid&quot;: &quot;4326&quot;</code></p>
 <p>The PostGIS SRID (EPSG) for the layer geometries projection.</p>
+<h2>Groups</h2>
+<p>Setting a group value will add the layer to a group of the same name. The group will be created if it does not already exist.</p>
+<p><code>&quot;group&quot;: &quot;Base maps&quot;</code></p>
+<p>Similar to the meta entry the groupmeta entry allows for the addition of html to the group meta container once the layer is added to the group.</p>
+<p><code>&quot;groupmeta&quot;: &quot;&lt;p&gt;Up to date worker counts for more than 400,000 commercial postcodes across the UK. Worker counts, densities and occupation splits at hybrid zone level.&lt;/p&gt;&lt;br&gt;&lt;p&gt;&lt;a class=\&quot;docu_link\&quot; href=\&quot;https://drive.google.com/open?id=1R1eQj-S4BThQkcqFmFvhN3mo6FVfGIGd\&quot; target=\&quot;_blank\&quot;&gt;Documentation&lt;/a&gt;&lt;/p&gt;&lt;br&gt;&lt;p style='font-size:90%;text-align:right;'&gt;&lt;b&gt;Price:  £3,000&lt;/b&gt;&lt;/p&gt;&lt;p style='font-size:80%;text-align:right;'&gt;&lt;i&gt;Bundle pricing for multiple datasets available&lt;/i&gt;&lt;/p&gt;&lt;p style='font-size:80%;text-align:right;'&gt;&lt;a href='mailto:info@geolytix.com?Subject=Geodata - UK Workers' target='_top'&gt;Contact Us&lt;/a&gt;&lt;/p&gt;&quot;</code></p>
 
     </div>
 
