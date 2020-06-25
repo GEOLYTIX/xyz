@@ -34,6 +34,9 @@ module.exports = async (req, res) => {
     && await sql_filter(Object.values(roles).filter(r => !!r), 'OR')
     || ''}`
 
+  //Remove empty lines in filter
+  filter.replace(/^\s*$/,'')
+
   if (!filter && layer.mvt_cache) {
 
     // Get MVT from cache table.

@@ -40,15 +40,19 @@ The country code to limit the search on 3rd party geolocation services. Permited
 
 It is possible to further restrict the results by defining a bounds entry. The bounds value varies with the gazetteer provider used for the query.
 
-**Google bounds**
+## Google
 
 `"bounds": "location=51.75,-1.25&radius=4000"`
 
 Google requires the bounds to be defined as a latitutde, longitude coordinate pair and a radius in metres.
 
-**Mapbox bounds**
+## Mapbox
 
 `"bounds": "bbox=-2,50,4,54"`
+
+## Opencage
+
+Will require a valid Opencage API key provided as KEY_OPENCAGE in the environment settings.
 
 ## Dataset gazetteer
 
