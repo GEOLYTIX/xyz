@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="/xyz/public/icons/favicon.ico">
-  <title>Hex Grid</title>
+  <title>Authentication</title>
   <style>
 
     body {
@@ -192,166 +192,179 @@
       
       
       
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
       <li class="__1 ">
-        <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
+        <a href="/xyz/docs/develop/">Develop</a>
       </li>
       
       
       
       <li class="__2 ">
-        <a href="/xyz/docs/workspace/dataviews/">Dataviews</a>
+        <a href="/xyz/docs/develop/api/">API</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/api/gazetteer/">Gazetteer</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/api/layer/">Layer</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/api/location/">Location</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/api/provider/">Provider</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/api/proxy/">Proxy</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/api/query/">Query</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/api/user/">User</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/api/view/">View</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/api/workspace/">Workspace</a>
       </li>
       
       
       
       <li class="__2 ">
-        <a href="/xyz/docs/workspace/layer/">Layer</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/layer/cluster/">Cluster</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/layer/geojson/">GeoJson</a>
-      </li>
-      
-      
-      
-      <li class="__3 active">
-        <a href="/xyz/docs/workspace/layer/grid/">Hex Grid</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/layer/mvt/">MVT</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/layer/themes/">Themes</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/layer/tile/">Tile Layer</a>
+        <a href="/xyz/docs/develop/design/">Design</a>
       </li>
       
       
       
       <li class="__2 ">
-        <a href="/xyz/docs/workspace/locales/">Locale</a>
+        <a href="/xyz/docs/develop/jamstack/">JAMStack</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/develop/lib/library/">Library</a>
       </li>
       
       
       
       <li class="__3 ">
-        <a href="/xyz/docs/workspace/locales/gazetteer/">Gazetteer</a>
+        <a href="/xyz/docs/develop/lib/dataviews/">Dataviews</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/lib/layers/">Layers</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/lib/locations/">Locations</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/lib/mapview/">Mapview</a>
+      </li>
+      
+      
+      
+      <li class="__4 ">
+        <a href="/xyz/docs/develop/lib/mapview/interactions/">Interactions</a>
       </li>
       
       
       
       <li class="__2 ">
-        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
+        <a href="/xyz/docs/develop/lib/webpack/">Webpack</a>
       </li>
       
       
       
-      <li class="__1 ">
-        <a href="/xyz/docs/workspace/styles/">Styles</a>
+      <li class="__2 active">
+        <a href="/xyz/docs/develop/security/authentication/">Authentication</a>
       </li>
       
       
       
-      <li class="__2 ">
-        <a href="/xyz/docs/workspace/templates/">Templates</a>
-      </li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       
       
 
     </ul>
 
     <div id="content">
-      <h1>Grid layer</h1>
-<p>Hex grid layers need to be prepared in a PostGIS database. It is recommended to create a series of grid layer for different zoom level. Grid layers are styled with a special bi-variate theme. The grid panel allows to control which field should be used to define the size of a grid cell and a second field is applied to colour grid cells.</p>
-<p>Grid layers do not have locations and grid cells can not be selected.</p>
-<h2><strong>Grid fields</strong></h2>
-<p>The fields available for the styling of grid layers must be defined in the <strong>grid_fields</strong> entry.</p>
-<pre><code class="language-text">&quot;grid_fields&quot;: {
-  &quot;Population 2001&quot;: &quot;pop__01&quot;,
-  &quot;Population 2011&quot;: &quot;pop__11&quot;,
-  &quot;Female population&quot;: &quot;gen_female__11&quot;,
-  &quot;Male population&quot;: &quot;gen_male__11&quot;
-}
-</code></pre>
-<p>It is possible to set in the layer entry which fields should be set as the default.</p>
-<p><code>&quot;grid_color&quot;: &quot;pop__11&quot;</code></p>
-<p>The default field to be used for the color scale can be set as <strong>grid_color</strong>.</p>
-<p><code>&quot;grid_size&quot;: &quot;pop__01&quot;</code></p>
-<p>The default field to be used for the size scale can be set as <strong>grid_size</strong>.</p>
+      <h1>Authentication Strategy</h1>
+<p>All API requests must pass through the user auth module. Requests may be passed on to the API handler if the API is public or if a cookie with a valid signature is set on the request header.</p>
 
     </div>
 

@@ -1,4 +1,4 @@
-const auth = require('../mod/auth/handler')
+const auth = require('../mod/user/auth')
 
 const getWorkspace = require('../mod/workspace/getWorkspace')
 

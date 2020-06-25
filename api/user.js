@@ -1,4 +1,4 @@
-const auth = require('../mod/auth/handler')
+const auth = require('../mod/user/auth')
 
 const _method = {
   register: {
@@ -40,7 +40,7 @@ const _method = {
     access: 'login'
   },
   cookie: {
-    handler: require('../mod/auth/cookie')
+    handler: require('../mod/user/cookie')
   },
   logout: {
     handler: (req, res) => {
