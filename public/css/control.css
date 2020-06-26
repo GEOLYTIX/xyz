@@ -2171,8 +2171,7 @@ span.flatpickr-weekday {
     text-align: right;
     font-weight: 400; }
   .location-view .val {
-    font-weight: 400;
-    overflow: auto; }
+    font-weight: 400; }
   .location-view .list {
     width: 100%;
     border-top: 2px solid #aaa;
