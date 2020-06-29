@@ -299,7 +299,7 @@
     <button
       style="margin-top: 5px;"
       class="btn-wide primary-colour"
-      onclick=${()=>{const t=new XMLHttpRequest;t.open("GET",e.host+"/api/query?"+e.utils.paramString({template:"filter_aggregate",locale:e.locale.key,layer:r.key,table:r.tableMin(),filter:r.filter&&JSON.stringify(r.filter.current)})),t.setRequestHeader("Content-Type","application/json"),t.responseType="json",t.onload=t=>{if(200!==t.target.status)return;const n=r.filter.infoj.map(e=>(e.value=t.target.response[e.field],e));e.locations.select({_new:!0,_flyTo:!0,geometry:JSON.parse(t.target.response.geometry),infoj:n,layer:r})},t.send()}}>Run Output`,i.appendChild(r.filter.run_output),r.filter.infoj||(r.filter.run_output.style.display="none");return r.count(e=>{r.filter.run_output.disabled=!(e>1)}),i},block:function(t,r){const n=e.utils.wire()`
+      onclick=${()=>{const t=new XMLHttpRequest;t.open("GET",e.host+"/api/query?"+e.utils.paramString({template:"filter_aggregate",locale:e.locale.key,layer:r.key,table:r.tableMin(),filter:r.filter&&JSON.stringify(r.filter.current)})),t.setRequestHeader("Content-Type","application/json"),t.responseType="json",t.onload=t=>{if(200!==t.target.status)return;const n=r.filter.infoj.map(e=>(e.value=t.target.response[e.field],e));e.locations.select({_new:!0,_flyTo:!0,geometry:JSON.parse(t.target.response.geometry),infoj:n,layer:r})},t.send()}}>Run Output`,i.appendChild(r.filter.run_output),r.filter.infoj||(r.filter.run_output.style.display="none");return i},block:function(t,r){const n=e.utils.wire()`
     <div class="drawer">
     <div class="header bold">
     <span>${r.title}</span>
