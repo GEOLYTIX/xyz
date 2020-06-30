@@ -483,8 +483,14 @@
       <div style="grid-column: 1 / 3;" class="${i.class||""}">`;const r=n=>{n.detail(e,i),document.removeEventListener(i.script,r,!0),t.remove()};document.addEventListener(i.script,r,!0),i.target.appendChild(t),i.listview.appendChild(i.target)}else if("dataview"!==i.type)i.title&&(i.title_div=e.utils.wire()`
       <div
         class="${`label lv-${i.level||"0"} ${i.class||""}`}"
-        style="grid-column: 1;"
-        title="${i.tooltip||null}">${i.title}`,i.listview.appendChild(i.title_div)),"key"!==i.type?"title"!==i.type?"streetview"!==i.type?"report"!==i.type?"images"!==i.type?"documents"!==i.type?"geometry"!==i.type?"meta"!==i.type?"boolean"!==i.type?(i.edit||i.displayValue||i.query)&&(i.inline||"integer"===i.type^"numeric"===i.type^"date"===i.type?(i.val=e.utils.wire()`<div class="val num ${i.class||""}" style="grid-column: 2;">`,i.listview.appendChild(i.val)):(i.title_div&&(i.title_div.style.gridColumn="1 / 3"),i.val=e.utils.wire()`<div class="val ${i.class||""}" style="grid-column: 1 / 3;">`,i.listview.appendChild(i.val)),i.query?(i.layer=i.location.layer,i.id=i.location.id,e.query(i).then(e=>{i.val.textContent=e[i.key]})):!i.edit||i.fieldfx?"html"!==i.type?i.val.textContent=i.displayValue:(i.val.style="grid-column: 1 / 3;",i.val.innerHTML=i.value):e.locations.view.edit.input(i)):e.locations.view.boolean(i):e.locations.view.meta(i):e.locations.view.geometry(i):e.locations.view.documents(i):e.locations.view.images(i):e.locations.view.report(i):e.locations.view.streetview(i):i.title_div.style.gridColumn="1 / 3":i.listview.appendChild(e.utils.wire()`
+        style="grid-column: 1; ${i.css_title}"
+        title="${i.tooltip||null}">${i.title}`,i.listview.appendChild(i.title_div)),"key"!==i.type?"title"!==i.type?"streetview"!==i.type?"report"!==i.type?"images"!==i.type?"documents"!==i.type?"geometry"!==i.type?"meta"!==i.type?"boolean"!==i.type?(i.edit||i.displayValue||i.query)&&(i.inline||"integer"===i.type^"numeric"===i.type^"date"===i.type?(i.val=e.utils.wire()`
+      <div
+        class="val num ${i.class||""}"
+        style="grid-column: 2; ${i.css_val}">`,i.listview.appendChild(i.val)):(i.title_div&&(i.title_div.style.gridColumn="1 / 3"),i.val=e.utils.wire()`
+      <div
+        class="val ${i.class||""}"
+        style="grid-column: 1 / 3; ${i.css_val}">`,i.listview.appendChild(i.val)),i.query?(i.layer=i.location.layer,i.id=i.location.id,e.query(i).then(e=>{i.val.textContent=e[i.key]})):!i.edit||i.fieldfx?"html"!==i.type?i.val.textContent=i.displayValue:(i.val.style="grid-column: 1 / 3;",i.val.innerHTML=i.value):e.locations.view.edit.input(i)):e.locations.view.boolean(i):e.locations.view.meta(i):e.locations.view.geometry(i):e.locations.view.documents(i):e.locations.view.images(i):e.locations.view.report(i):e.locations.view.streetview(i):i.title_div.style.gridColumn="1 / 3":i.listview.appendChild(e.utils.wire()`
       <div
         class="label lv-0 ${i.class||""}"
         style="grid-column: 2; margin: 3px;">
