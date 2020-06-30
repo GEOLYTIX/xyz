@@ -21,3 +21,5 @@ Move auth modules into user API modules.
 Fix for long values overfloing location view. [#258](https://github.com/GEOLYTIX/xyz/issues/258)
 
 Fix for MVT filtering and caching.
+
+css_title and css_val for infoj fields to provide inline css rules.
