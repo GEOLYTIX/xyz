@@ -713,7 +713,6 @@
           "geom": "geom_p_4326",
           "srid": "4326",
           "cluster_label": "fascia",
-          "cluster_cat": "retailer",
           "cluster_kmeans": 0.02,
           "cluster_dbscan": 0.02,
           "hover": {
@@ -847,7 +846,6 @@
           "geom": "geom_p_4326",
           "srid": "4326",
           "cluster_label": "fascia",
-          "cluster_cat": "retailer",
           "cluster_kmeans": 0.04,
           "hover": {
             "field": "store_name"
@@ -1200,7 +1198,6 @@
           "geom": "geom_p_4326",
           "srid": "4326",
           "cluster_label": "fascia",
-          "cluster_cat": "retailer",
           "cluster_kmeans": 0.01,
           "edit": {
             "properties": true,

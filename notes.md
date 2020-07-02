@@ -23,3 +23,5 @@ Fix for long values overfloing location view. [#258](https://github.com/GEOLYTIX
 Fix for MVT filtering and caching.
 
 css_title and css_val for infoj fields to provide inline css rules.
+
+Fix for null values in mvt categorized theme.

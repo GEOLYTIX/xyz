@@ -7,7 +7,8 @@
       "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/blog_postal.html"
     },
     "geodata": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/geodata.html"
+      "src": "http://localhost:3000/geodata/views/geodata.html",
+      "__src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/geodata.html"
     },
     "Mapbox Base": {
       "format": "tiles",
