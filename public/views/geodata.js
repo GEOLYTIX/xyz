@@ -1,82 +1,93 @@
-document.querySelectorAll('#geodata__select > div').forEach(function(el){
+const xyz = _xyz({
+  host: 'http://localhost:3000/geodata'
+})
 
-    el.onclick = function() {
+xyz.workspace.get.locale({
+  locale: 'London'
+}).then(createMap)
 
-        document.querySelector('#geodata__select > .bold') && document.querySelector('#geodata__select > .bold').classList.remove('bold');
+function createMap(locale) {
 
-        el.classList.add('bold');
+  xyz.locale = locale;
 
-        document.getElementById('map_geodata').innerHTML = '';
-        document.querySelector('.geodata__info').innerHTML =  '';
+  xyz.mapview.create({
+    target: document.getElementById('map_geodata'),
+    attribution: {}
+  });
 
-        if (el.dataset.faq) return document.getElementById('geodata__faq').style.display = 'grid';
+  document.querySelector('#geodata__select > div').click();
 
-        document.getElementById('geodata__faq').style.display = 'none';
+  const btnZoomIn = document.querySelector('.geodata__content > .btn-column > .btn-zoomin');
+  btnZoomIn.onclick = function (e) {
+    const z = parseInt(xyz.map.getView().getZoom() + 1);
+    xyz.map.getView().setZoom(z);
+    e.target.disabled = (z >= xyz.workspace.locale.maxZoom);
+  }
 
-        _xyz({
-            host: 'http://localhost:3000/geodata',
-            locale: el.dataset.locale,
-            callback: function(_xyz) {
-       
-                _xyz.mapview.create({
-                    target: document.getElementById('map_geodata'),
-                    attribution: {}
-                });
+  const btnZoomOut = document.querySelector('.geodata__content > .btn-column > .btn-zoomout');
+  btnZoomOut.onclick = function (e) {
+    const z = parseInt(xyz.map.getView().getZoom() - 1);
+    xyz.map.getView().setZoom(z);
+    e.target.disabled = (z <= xyz.workspace.locale.minZoom);
+  }
 
-                el.dataset.layers.split(',').forEach(function(layer){
+  xyz.mapview.node.addEventListener('changeEnd', function () {
+    const z = xyz.map.getView().getZoom();
+    btnZoomIn.disabled = z >= xyz.workspace.locale.maxZoom;
+    btnZoomOut.disabled = z <= xyz.workspace.locale.minZoom;
+  })
 
-                    _xyz.layers.list[layer].show();
+  xyz.locations.selectCallback = location => {
 
-                    if (_xyz.layers.list[layer].groupmeta) {
-                        document.querySelector('.geodata__info').innerHTML = _xyz.layers.list[layer].groupmeta;
-                    }
+    const locationview = xyz.utils.wire()`<div class="location-view" style="padding: 10px;">`
 
-                    if (_xyz.layers.list[layer].style.theme || _xyz.layers.list[layer].format === 'grid') {
-                        document.querySelector('.geodata__info').appendChild(_xyz.layers.view.style.legend(_xyz.layers.list[layer]));
-                    }
+    locationview.appendChild(xyz.locations.view.infoj(location))
 
-                    _xyz.map.updateSize();
-                });
+    xyz.mapview.popup.create({
+      coords: location.marker,
+      content: locationview
+    })
 
-                const btnZoomIn = document.querySelector('.geodata__content > .btn-column > .btn-zoomin');
-                btnZoomIn.onclick = function(e){
-                    const z = parseInt(_xyz.map.getView().getZoom() + 1);
-                    _xyz.map.getView().setZoom(z);
-                    e.target.disabled = (z >= _xyz.workspace.locale.maxZoom);
-                }
+  }
 
-                const btnZoomOut = document.querySelector('.geodata__content > .btn-column > .btn-zoomout');
-                btnZoomOut.onclick = function(e){
-                    const z = parseInt(_xyz.map.getView().getZoom() - 1);
-                    _xyz.map.getView().setZoom(z);
-                    e.target.disabled = (z <= _xyz.workspace.locale.minZoom);
-                }
+}
 
-                _xyz.mapview.node.addEventListener('changeEnd', function(){
-                    const z = _xyz.map.getView().getZoom();
-                    btnZoomIn.disabled = z >= _xyz.workspace.locale.maxZoom;
-                    btnZoomOut.disabled = z <= _xyz.workspace.locale.minZoom;
-                  });
+document.querySelectorAll('#geodata__select > div').forEach(function (el) {
 
-                document.querySelector('.geodata__content > .btn-column > .btn-fullscreen').href = "https://xyz-geodata-v2.now.sh/geodata?layers=Mapbox Baselayer,Mapbox Labels," + el.dataset.layers + "&locale=London";
+  el.onclick = function () {
 
-                _xyz.locations.selectCallback = location => {
+    document.querySelector('#geodata__select > .bold') && document.querySelector('#geodata__select > .bold').classList.remove('bold');
 
-                    const locationview = _xyz.utils.wire()`<div class="location-view" style="padding: 10px;">`;
+    el.classList.add('bold');
 
-                    locationview.appendChild(_xyz.locations.view.infoj(location));
+    document.querySelector('.geodata__info').innerHTML = '';
 
-                    _xyz.mapview.popup.create({
-                        coords: location.marker,
-                        content: locationview
-                    });
+    if (el.dataset.faq) return document.getElementById('geodata__faq').style.display = 'grid';
 
-                }
-        
-            }
-        });
+    document.getElementById('geodata__faq').style.display = 'none';
 
-    }
+    el.dataset.layers.split(',').forEach(function (layer) {
+
+      xyz.workspace.get.layer({
+        locale: xyz.locale.key,
+        layer: layer
+      }).then(layer => {
+        xyz.layers.decorate(layer).show()
+
+        if (layer.groupmeta) {
+          document.querySelector('.geodata__info').innerHTML = layer.groupmeta;
+        }
+
+        if (layer.style.theme || layer.format === 'grid') {
+          document.querySelector('.geodata__info').appendChild(xyz.layers.view.style.legend(layer));
+        }
+
+      })
+
+      //xyz.map.updateSize();
+    });
+
+    document.querySelector('.geodata__content > .btn-column > .btn-fullscreen').href = "https://xyz-geodata-v2.now.sh/geodata?layers=Mapbox Baselayer,Mapbox Labels," + el.dataset.layers + "&locale=London";
+
+  }
 });
-
-document.querySelector('#geodata__select > div').click();
