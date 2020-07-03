@@ -245,6 +245,8 @@ window.onload = () => {
 
       layers.forEach(layer => {
 
+        if (!layer.format) return
+
         layer = xyz.layers.decorate(layer)
         xyz.layers.list[layer.key] = layer
         layer.display && layer.show()
