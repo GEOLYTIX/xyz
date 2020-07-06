@@ -42,8 +42,13 @@
   }
 
   .tab-panel {
-    height: calc(100% - 65px);
+    /*height: 100%;*/
+    height: calc(100% - 40px);
     overflow-x: auto;
+
+    div.active {
+      height: inherit;
+    }
   }
 
   .toolbar {
