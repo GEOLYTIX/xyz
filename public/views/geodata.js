@@ -19,6 +19,7 @@ function createMap(locale) {
 
   xyz.mapview.create({
     target: document.getElementById('map_geodata'),
+    scrollWheelZoom: true,
     attribution: {}
   });
 
