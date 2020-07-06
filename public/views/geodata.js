@@ -1,9 +1,16 @@
+const params = {}
+
+// Take hooks from URL and store as current hooks.
+window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (match, key, value) => {
+  params[key] = decodeURI(value)
+})
+
 const xyz = _xyz({
-  host: 'http://localhost:3000/geodata'
+  host: params.host
 })
 
 xyz.workspace.get.locale({
-  locale: 'London'
+  locale: params.locale
 }).then(createMap)
 
 function createMap(locale) {
@@ -14,8 +21,6 @@ function createMap(locale) {
     target: document.getElementById('map_geodata'),
     attribution: {}
   });
-
-  document.querySelector('#geodata__select > div').click();
 
   const btnZoomIn = document.querySelector('.geodata__content > .btn-column > .btn-zoomin');
   btnZoomIn.onclick = function (e) {
@@ -50,6 +55,8 @@ function createMap(locale) {
 
   }
 
+  document.querySelector('#geodata__select > div').click();
+
 }
 
 document.querySelectorAll('#geodata__select > div').forEach(function (el) {
@@ -66,28 +73,48 @@ document.querySelectorAll('#geodata__select > div').forEach(function (el) {
 
     document.getElementById('geodata__faq').style.display = 'none';
 
-    el.dataset.layers.split(',').forEach(function (layer) {
+    Object.values(xyz.layers.list).forEach(layer => {
+      layer.remove()
+    })
 
-      xyz.workspace.get.layer({
+    xyz.layers.list = {}
+
+    const layerPromises = el.dataset.layers.split(',').map(layer => {
+
+      return xyz.workspace.get.layer({
         locale: xyz.locale.key,
         layer: layer
-      }).then(layer => {
-        xyz.layers.decorate(layer).show()
+      })
 
+    })
+
+    Promise.all(layerPromises).then(layers => {
+
+      layers.forEach(layer => {
+
+        if (!layer.format) return
+
+        layer = xyz.layers.decorate(layer)
+        
+        layer.show()
+  
+        xyz.layers.list[layer.key] = layer;
+  
         if (layer.groupmeta) {
           document.querySelector('.geodata__info').innerHTML = layer.groupmeta;
         }
-
-        if (layer.style.theme || layer.format === 'grid') {
+  
+        if (layer.style && layer.style.theme || layer.format === 'grid') {
           document.querySelector('.geodata__info').appendChild(xyz.layers.view.style.legend(layer));
         }
 
       })
 
-      //xyz.map.updateSize();
-    });
+      xyz.map.updateSize()
 
-    document.querySelector('.geodata__content > .btn-column > .btn-fullscreen').href = "https://xyz-geodata-v2.now.sh/geodata?layers=Mapbox Baselayer,Mapbox Labels," + el.dataset.layers + "&locale=London";
+    })
+
+    document.querySelector('.geodata__content > .btn-column > .btn-fullscreen').href = "https://geolytix.dev/geodata?layers=" + el.dataset.layers + "&locale=London";
 
   }
 });
