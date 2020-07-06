@@ -614,7 +614,7 @@
       "name": "United Kingdom",
       "gazetteer": {
         "provider": "GOOGLE",
-        "code": "GB",
+        "country": "GB",
         "placeholder": "eg. London",
         "datasets": [
           {
