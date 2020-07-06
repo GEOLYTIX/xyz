@@ -104,7 +104,7 @@ async function gaz_google(term, gazetteer) {
 async function gaz_opencage(term, gazetteer) {
 
   const results = await provider.opencage(`api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(term)}`
-    + `${gazetteer.code ? `&countrycode=${gazetteer.code}` : ''}`
+    + `${gazetteer.countrycode ? `&countrycode=${gazetteer.countrycode}` : ''}`
     + `${gazetteer.bounds ? '&bounds=' + decodeURIComponent(gazetteer.bounds) : ''}`)
 
   return results.results.map(f => ({
