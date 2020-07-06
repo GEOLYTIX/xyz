@@ -2436,7 +2436,6 @@ span.flatpickr-weekday {
 }
 #tabview .tab-panel div.active {
   height: inherit;
-  grid-template-rows: 10px;
 }
 #tabview .toolbar button {
   margin: 10px;
