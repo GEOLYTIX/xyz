@@ -27,3 +27,7 @@ css_title and css_val for infoj fields to provide inline css rules.
 Fix for null values in mvt categorized theme.
 
 Add check for layer format. Layers with missing or invalid formats will now be omitted rather than crashing the application.
+
+Tabview - header freeze.
+
+Fix to images - #299. Added fallback empty array prior to length check.
