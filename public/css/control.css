@@ -109,6 +109,10 @@ input[type=range]::-moz-range-thumb {
   background-image: url("../icons/icon-gps_not_fixed.svg");
 }
 
+.icon-map {
+  background-image: url("../icons/icon-map.svg");
+}
+
 .icon-add {
   background-image: url("../icons/icon-add.svg");
 }
@@ -2426,8 +2430,13 @@ span.flatpickr-weekday {
   font-weight: bold;
 }
 #tabview .tab-panel {
-  height: calc(100% - 65px);
+  /*height: 100%;*/
+  height: calc(100% - 40px);
   overflow-x: auto;
+}
+#tabview .tab-panel div.active {
+  height: inherit;
+  grid-template-rows: min-content;
 }
 #tabview .toolbar button {
   margin: 10px;
@@ -2512,31 +2521,31 @@ span.flatpickr-weekday {
   grid-template-columns: 1fr;
   /*.image-modal {
 
-    display: none;
-    position: fixed;
-    padding-top: 100px;
-    left: 0;
-    top: 0;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
-    background-color: rgba(0,0,0,0.7);
+        display: none;
+        position: fixed;
+        padding-top: 100px;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+        background-color: rgba(0,0,0,0.7);
 
-    >span.close {
-        position: absolute;
-        top: 15px;
-        right: 35px;
-        color: #f1f1f1;
-        font-size: 30px;
-        transition: 0.3s;
+        >span.close {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 30px;
+            transition: 0.3s;
 
-        &:hover, &:focus {
-            color: #bbb;
-            text-decoration: none;
-            cursor: pointer;
+            &:hover, &:focus {
+                color: #bbb;
+                text-decoration: none;
+                cursor: pointer;
+            }
         }
-    }
-  }*/
+      }*/
 }
 .location-view.drawer .location-view-grid .img-remove {
   width: 20px;

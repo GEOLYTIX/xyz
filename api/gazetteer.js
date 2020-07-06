@@ -1,4 +1,4 @@
-const auth = require('../mod/auth/handler')
+const auth = require('../mod/user/auth')
 
 const provider = require('../mod/provider')
 
@@ -14,11 +14,11 @@ module.exports = async (req, res) => {
 
   await auth(req, res)
 
-  const workspace = await getWorkspace(req.params.clear_cache)
+  const workspace = await getWorkspace(req.params.cache)
 
   if (workspace instanceof Error) return res.status(500).send(workspace.message)
 
-  if (req.params.clear_cache) return res.send('/query endpoint cache cleared')
+  if (req.params.cache) return res.send('/query endpoint cache cleared')
 
   const locale = workspace.locales[req.params.locale]
 
@@ -90,7 +90,8 @@ async function gaz_google(term, gazetteer) {
 
   // Create url decorated with gazetteer options.
   const results = await provider.google(`maps.googleapis.com/maps/api/place/autocomplete/json?input=${term}`
-    + `${gazetteer.code ? '&components=country:' + gazetteer.code : ''}`
+    + `${gazetteer.country ? '&components=country:' + gazetteer.country : ''}`
+    + `${gazetteer.components ? '&components=' + gazetteer.components : ''}`
     + `${gazetteer.bounds ? '&' + decodeURIComponent(gazetteer.bounds) : ''}`)
 
   // Return results to route. Zero results will return an empty array.
@@ -104,7 +105,7 @@ async function gaz_google(term, gazetteer) {
 async function gaz_opencage(term, gazetteer) {
 
   const results = await provider.opencage(`api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(term)}`
-    + `${gazetteer.code ? `&countrycode=${gazetteer.code}` : ''}`
+    + `${gazetteer.countrycode ? `&countrycode=${gazetteer.countrycode}` : ''}`
     + `${gazetteer.bounds ? '&bounds=' + decodeURIComponent(gazetteer.bounds) : ''}`)
 
   return results.results.map(f => ({
@@ -121,13 +122,13 @@ async function gaz_mapbox(term, gazetteer) {
 
   // Create url decorated with gazetteer options.
   const results = await provider.mapbox(`api.mapbox.com/geocoding/v5/mapbox.places/${term}.json?`
-    + `${gazetteer.code ? 'country=' + gazetteer.code : ''}`
+    + `${gazetteer.country ? 'country=' + gazetteer.country : ''}`
     + `${gazetteer.bounds ? '&' + gazetteer.bounds : ''}`
     + '&types=postcode,district,locality,place,neighborhood,address,poi')
 
   // Return results to route. Zero results will return an empty array.
   return results.features.map(f => ({
-    label: `${f.text} (${f.place_type[0]}) ${!gazetteer.code && f.context ? ', ' + f.context.slice(-1)[0].text : ''}`,
+    label: `${f.text} (${f.place_type[0]}) ${!gazetteer.country && f.context ? ', ' + f.context.slice(-1)[0].text : ''}`,
     id: f.id,
     marker: f.center,
     source: 'mapbox'

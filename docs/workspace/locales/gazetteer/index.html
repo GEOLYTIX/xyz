@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/x-icon" href="/xyz/public/icons/favicon.ico">
+  <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
   <title>Gazetteer</title>
   <style>
 
@@ -244,6 +244,10 @@
       
       
       
+      
+      
+      
+      
       <li class="__1 ">
         <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
       </li>
@@ -321,6 +325,12 @@
       </li>
       
       
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/templates/">Templates</a>
+      </li>
+      
+      
 
     </ul>
 
@@ -349,11 +359,13 @@
 <p><code>&quot;code&quot;: &quot;GB&quot;</code></p>
 <p>The country code to limit the search on 3rd party geolocation services. Permited country codes are <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1 alpha-2</a>.</p>
 <p>It is possible to further restrict the results by defining a bounds entry. The bounds value varies with the gazetteer provider used for the query.</p>
-<p><strong>Google bounds</strong></p>
+<h2>Google</h2>
 <p><code>&quot;bounds&quot;: &quot;location=51.75,-1.25&amp;radius=4000&quot;</code></p>
 <p>Google requires the bounds to be defined as a latitutde, longitude coordinate pair and a radius in metres.</p>
-<p><strong>Mapbox bounds</strong></p>
+<h2>Mapbox</h2>
 <p><code>&quot;bounds&quot;: &quot;bbox=-2,50,4,54&quot;</code></p>
+<h2>Opencage</h2>
+<p>Will require a valid Opencage API key provided as KEY_OPENCAGE in the environment settings.</p>
 <h2>Dataset gazetteer</h2>
 <p>An array of dataset gazetteers which are hit by the autocomplete search first. The 3rd party geolocation service is used once no results are returned from any of the dataset gazetteer entries.</p>
 <p><code>&quot;layer&quot;: &quot;sprawls&quot;</code></p>
@@ -366,6 +378,10 @@
 <p>The field which is searched for the autocomplete match. The label is also displayed in the results list.</p>
 <p><code>&quot;leading_wildcard&quot;: true</code></p>
 <p>The ILIKE query will pre-fix the search term with a wild card. e.g. 'Man' will find 'Central Manchester' as well as 'Manchester Airport'.</p>
+<p><code>&quot;space_wildcard&quot;: true</code></p>
+<p>If set as true, space_wildcard will break the search term into two.</p>
+<p><code>&quot;minLength&quot;: 2</code></p>
+<p>The minLength defines the minimum length of the search term before the gazetteer will query connected tables.</p>
 
     </div>
 

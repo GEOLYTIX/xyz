@@ -1,82 +1,121 @@
-document.querySelectorAll('#geodata__select > div').forEach(function(el){
+const params = {}
 
-    el.onclick = function() {
+// Take hooks from URL and store as current hooks.
+window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (match, key, value) => {
+  params[key] = decodeURI(value)
+})
 
-        document.querySelector('#geodata__select > .bold') && document.querySelector('#geodata__select > .bold').classList.remove('bold');
+const xyz = _xyz({
+  host: params.host
+})
 
-        el.classList.add('bold');
+xyz.workspace.get.locale({
+  locale: params.locale
+}).then(createMap)
 
-        document.getElementById('map_geodata').innerHTML = '';
-        document.querySelector('.geodata__info').innerHTML =  '';
+function createMap(locale) {
 
-        if (el.dataset.faq) return document.getElementById('geodata__faq').style.display = 'grid';
+  xyz.locale = locale;
 
-        document.getElementById('geodata__faq').style.display = 'none';
+  xyz.mapview.create({
+    target: document.getElementById('map_geodata'),
+    scrollWheelZoom: true,
+    attribution: {}
+  });
 
-        _xyz({
-            host: 'http://localhost:3000/geodata',
-            locale: el.dataset.locale,
-            callback: function(_xyz) {
-       
-                _xyz.mapview.create({
-                    target: document.getElementById('map_geodata'),
-                    attribution: {}
-                });
+  const btnZoomIn = document.querySelector('.geodata__content > .btn-column > .btn-zoomin');
+  btnZoomIn.onclick = function (e) {
+    const z = parseInt(xyz.map.getView().getZoom() + 1);
+    xyz.map.getView().setZoom(z);
+    e.target.disabled = (z >= xyz.workspace.locale.maxZoom);
+  }
 
-                el.dataset.layers.split(',').forEach(function(layer){
+  const btnZoomOut = document.querySelector('.geodata__content > .btn-column > .btn-zoomout');
+  btnZoomOut.onclick = function (e) {
+    const z = parseInt(xyz.map.getView().getZoom() - 1);
+    xyz.map.getView().setZoom(z);
+    e.target.disabled = (z <= xyz.workspace.locale.minZoom);
+  }
 
-                    _xyz.layers.list[layer].show();
+  xyz.mapview.node.addEventListener('changeEnd', function () {
+    const z = xyz.map.getView().getZoom();
+    btnZoomIn.disabled = z >= xyz.workspace.locale.maxZoom;
+    btnZoomOut.disabled = z <= xyz.workspace.locale.minZoom;
+  })
 
-                    if (_xyz.layers.list[layer].groupmeta) {
-                        document.querySelector('.geodata__info').innerHTML = _xyz.layers.list[layer].groupmeta;
-                    }
+  xyz.locations.selectCallback = location => {
 
-                    if (_xyz.layers.list[layer].style.theme || _xyz.layers.list[layer].format === 'grid') {
-                        document.querySelector('.geodata__info').appendChild(_xyz.layers.view.style.legend(_xyz.layers.list[layer]));
-                    }
+    const locationview = xyz.utils.wire()`<div class="location-view" style="padding: 10px;">`
 
-                    _xyz.map.updateSize();
-                });
+    locationview.appendChild(xyz.locations.view.infoj(location))
 
-                const btnZoomIn = document.querySelector('.geodata__content > .btn-column > .btn-zoomin');
-                btnZoomIn.onclick = function(e){
-                    const z = parseInt(_xyz.map.getView().getZoom() + 1);
-                    _xyz.map.getView().setZoom(z);
-                    e.target.disabled = (z >= _xyz.workspace.locale.maxZoom);
-                }
+    xyz.mapview.popup.create({
+      coords: location.marker,
+      content: locationview
+    })
 
-                const btnZoomOut = document.querySelector('.geodata__content > .btn-column > .btn-zoomout');
-                btnZoomOut.onclick = function(e){
-                    const z = parseInt(_xyz.map.getView().getZoom() - 1);
-                    _xyz.map.getView().setZoom(z);
-                    e.target.disabled = (z <= _xyz.workspace.locale.minZoom);
-                }
+  }
 
-                _xyz.mapview.node.addEventListener('changeEnd', function(){
-                    const z = _xyz.map.getView().getZoom();
-                    btnZoomIn.disabled = z >= _xyz.workspace.locale.maxZoom;
-                    btnZoomOut.disabled = z <= _xyz.workspace.locale.minZoom;
-                  });
+  document.querySelector('#geodata__select > div').click();
 
-                document.querySelector('.geodata__content > .btn-column > .btn-fullscreen').href = "https://xyz-geodata-v2.now.sh/geodata?layers=Mapbox Baselayer,Mapbox Labels," + el.dataset.layers + "&locale=London";
+}
 
-                _xyz.locations.selectCallback = location => {
+document.querySelectorAll('#geodata__select > div').forEach(function (el) {
 
-                    const locationview = _xyz.utils.wire()`<div class="location-view" style="padding: 10px;">`;
+  el.onclick = function () {
 
-                    locationview.appendChild(_xyz.locations.view.infoj(location));
+    document.querySelector('#geodata__select > .bold') && document.querySelector('#geodata__select > .bold').classList.remove('bold');
 
-                    _xyz.mapview.popup.create({
-                        coords: location.marker,
-                        content: locationview
-                    });
+    el.classList.add('bold');
 
-                }
+    document.querySelector('.geodata__info').innerHTML = '';
+
+    if (el.dataset.faq) return document.getElementById('geodata__faq').style.display = 'grid';
+
+    document.getElementById('geodata__faq').style.display = 'none';
+
+    Object.values(xyz.layers.list).forEach(layer => {
+      layer.remove()
+    })
+
+    xyz.layers.list = {}
+
+    const layerPromises = el.dataset.layers.split(',').map(layer => {
+
+      return xyz.workspace.get.layer({
+        locale: xyz.locale.key,
+        layer: layer
+      })
+
+    })
+
+    Promise.all(layerPromises).then(layers => {
+
+      layers.forEach(layer => {
+
+        if (!layer.format) return
+
+        layer = xyz.layers.decorate(layer)
         
-            }
-        });
+        layer.show()
+  
+        xyz.layers.list[layer.key] = layer;
+  
+        if (layer.groupmeta) {
+          document.querySelector('.geodata__info').innerHTML = layer.groupmeta;
+        }
+  
+        if (layer.style && layer.style.theme || layer.format === 'grid') {
+          document.querySelector('.geodata__info').appendChild(xyz.layers.view.style.legend(layer));
+        }
 
-    }
+      })
+
+      xyz.map.updateSize()
+
+    })
+
+    document.querySelector('.geodata__content > .btn-column > .btn-fullscreen').href = "https://geolytix.dev/geodata?layers=" + el.dataset.layers + "&locale=London";
+
+  }
 });
-
-document.querySelector('#geodata__select > div').click();

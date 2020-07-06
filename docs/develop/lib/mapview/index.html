@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/x-icon" href="/xyz/public/icons/favicon.ico">
+  <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
   <title>Mapview</title>
   <style>
 
@@ -300,9 +300,23 @@
       
       
       
-      <li class="__3 ">
+      <li class="__4 ">
+        <a href="/xyz/docs/develop/lib/mapview/interactions/">Interactions</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
         <a href="/xyz/docs/develop/lib/webpack/">Webpack</a>
       </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/develop/security/authentication/">Authentication</a>
+      </li>
+      
+      
       
       
       
@@ -350,7 +364,29 @@
 
     <div id="content">
       <h1>Mapview</h1>
-<p>Each _xyz object currently supports only a single mapview. The _xyz.mapview.create emthod will assign the mapview to the _xyz.map key.</p>
+<p>Mapview methods relate to the Openlayers map object.</p>
+<h2>.create(params)</h2>
+<p>Will create an Openlayers map object will be assigned to _xyz.map. Params provided to the Mapview create method will be assigned to the locale object. It is therefore possible to override the initial view, bounds, and other locale entries for a mapview.</p>
+<p>Layers with display as true in the layers.list will be immediately added to the map and shown.</p>
+<p>A <strong>changeEnd</strong> event listener will update the viewport URL hooks if enabled and check the layers list. Layers which should be displayed at the current zoom level at the end of a map view change event will be reloaded. The changeEnd event will be called after the map view changes due to panning or a change of zoom level. Interactions will be disabled at the beginning of a map view change event.</p>
+<h3>view</h3>
+<p>A view will be set to lng, lat, and z defined as a view object. The view object will be created from the current viewport hooks if enabled.</p>
+<h3>bounds</h3>
+<p>The extent of the map view will be limited to the west, south, east, and north defined in a bounds object.</p>
+<h3>maskBounds</h3>
+<p>The area which falls outside the bounds will be masked if set as true.</p>
+<h3>minZoom, maxZoom</h3>
+<p>If set the map view will be limited to these zoom levels.</p>
+<h3>srid</h3>
+<p>The map view projection. Defaults to EPSG:3857 if not explicitly set.</p>
+<h3>mouseWheelZoom</h3>
+<p>Allows for pinch and mousewheel zoom if set as true.</p>
+<h3>showScaleBar</h3>
+<p>A scalebar will be displayed within the map container if set as true.</p>
+<h2>.getBounds()</h2>
+<p>Returns the current bounds of the map view.</p>
+<h2>.flyTo(extent, params)</h2>
+<p>Set the map view to the provided extent with an animation for the change between views.</p>
 
     </div>
 

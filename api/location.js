@@ -1,4 +1,4 @@
-const auth = require('../mod/auth/handler')
+const auth = require('../mod/user/auth')
 
 const getWorkspace = require('../mod/workspace/getWorkspace')
 
@@ -17,11 +17,11 @@ module.exports = async (req, res) => {
 
   if (res.finished) return
 
-  const workspace = await getWorkspace(req.params.clear_cache)
+  const workspace = await getWorkspace(req.params.cache)
 
   if (workspace instanceof Error) return res.status(500).send(workspace.message)
 
-  if (req.params.clear_cache) return res.send('/location endpoint cache cleared')
+  if (req.params.cache) return res.send('/location endpoint cache cleared')
 
   const method = _method[req.params.method]
 
