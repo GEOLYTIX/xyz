@@ -35,3 +35,5 @@ Fix to images - #299. Added fallback empty array prior to length check.
 Gazetteer - Open Cage search - parameter code changed to countrycode.
 
 Gazetteer - Google search - parameter code changed to country. Added support for "components" parameter.
+
+Gazetteer - Mapbox search - parameter code changed to country.
