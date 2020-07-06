@@ -178,7 +178,7 @@ const defaults = require('./defaults')
 
 async function assignDefaults() {
 
-  Object.keys(workspace.locales).forEach(locale_key => {
+  Object.keys(workspace.locales || {}).forEach(locale_key => {
 
     const locale = workspace.locales[locale_key]
 
@@ -199,12 +199,12 @@ async function assignDefaults() {
 
       layer = Object.assign(
         {},
-        defaults.layers[layer.format] || {},
+        layer.format && defaults.layers[layer.format] || {},
         layer)
 
       layer.style = layer.style && Object.assign(
         {},
-        defaults.layers[layer.format].style,
+        layer.format && defaults.layers[layer.format].style,
         layer.style)
 
       locale.layers[layer_key] = layer

@@ -66,14 +66,14 @@ body {
   left: 0;
   top: 0;
   width: 100%;
-  height: 110%;
+  min-height: 110%;
   z-index: 10000;
   text-align: center;
-  background-color: rgba(0,0,0,0.7);
+  background-color: rgba(0,0,0,0.9);
 }
 
 #modalOverlay > span  {
-  position: absolute;
+  position: fixed;
   top: 15px;
   right: 35px;
   color: #f1f1f1;

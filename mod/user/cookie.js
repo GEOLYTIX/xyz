@@ -2,7 +2,7 @@ const fetch = require('node-fetch')
 
 const _token = require('./token')
 
-const login = require('../user/login')
+const login = require('./login')
 
 module.exports = async (req, res) => {
 

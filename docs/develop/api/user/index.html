@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/x-icon" href="/xyz/public/icons/favicon.ico">
+  <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
   <title>User</title>
   <style>
 
@@ -300,9 +300,23 @@
       
       
       
-      <li class="__3 ">
+      <li class="__4 ">
+        <a href="/xyz/docs/develop/lib/mapview/interactions/">Interactions</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
         <a href="/xyz/docs/develop/lib/webpack/">Webpack</a>
       </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/develop/security/authentication/">Authentication</a>
+      </li>
+      
+      
       
       
       
@@ -350,7 +364,18 @@
 
     <div id="content">
       <h1>User API</h1>
-<p>The User API allows to register, verify, and aprove user accounts. With access to the access control list (ACL) the User API may issue or revoke cookies with signed token (JWT) to provide secure access to other XYZ APIs.</p>
+<p>The User API allows to register, verify, and aprove user accounts. With access to the access control list (ACL) the User API may issue or revoke cookies with signed token (JWT) to provide secure access to other XYZ APIs. The User API requires a method value as URL parameter.</p>
+<p>The different methods are following.</p>
+<h3>/api/user/token</h3>
+<p>Will return the signed token from a XYZ Cookie set in the HTTP request header. The request will be redirected to the login form if no Cookie with a valid signed token was sent with the request.</p>
+<h3>/api/user/coookie</h3>
+<p>Will return the textual representation of a HTTP Cookie if accessed as a <em>GET</em> request. The request will be redirected to the login form if no cookie is found on the request header. A new cookie will be set on the response header to a <em>POST</em> request after the login information in the request body has been checked against a user record in the ACL.</p>
+<h3>/api/user/key</h3>
+<p>Will generate and respond with an API key if enabled for a user account.</p>
+<h3>/api/user/log?email=dennis.bauszus@geolytix.co.uk</h3>
+<p>Returns an array of logins for the user. User accounts are looked up by their email address in the ACL. The log array will store the date time of every login and if possible the IP address of the login request.</p>
+<h3>/api/user/logout</h3>
+<p>Will set a response header Cookie with a max age of 0 and a NULL token value. This will overwrite any existing XYZ Cookie effectively requiring the user to login in order to create a new Token/Cookie.</p>
 
     </div>
 

@@ -220,7 +220,7 @@ window.onload = () => {
         xyz.mapview.node.classList.toggle('fullscreen');
         xyz.map.updateSize();
       }}>
-        <div class="xyz-icon icon-fullscreen off-black-filter">`)
+        <div class="xyz-icon icon-map off-black-filter">`)
 
   }
 
@@ -244,6 +244,8 @@ window.onload = () => {
       }
 
       layers.forEach(layer => {
+
+        if (!layer.format) return
 
         layer = xyz.layers.decorate(layer)
         xyz.layers.list[layer.key] = layer

@@ -39,3 +39,20 @@ Icons can be defined as marker to represent a point location in the rendered map
   }
 }
 ```
+
+## Labels
+
+Label for locations on cluster or MVT layer are created as a seperate layer to make use of Openlayers declutter capability to prevent overlapping map labels. The label itself is created as an [Openlayers Text object](https://openlayers.org/en/latest/apidoc/module-ol_style_Text.html).
+
+The entries in the label object will be assigned to the text style. '12px sans-serif' will be the default is not explicitly set.
+
+The field defines which location field will be shown as the location's label.
+
+```
+"label": {
+  "field": "store_name",
+  "declutter": true,
+  "strokeColor": "#ffffff",
+  "strokeWidth": 3
+}
+```

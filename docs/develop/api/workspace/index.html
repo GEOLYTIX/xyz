@@ -4,7 +4,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <link rel="icon" type="image/x-icon" href="/xyz/public/icons/favicon.ico">
+  <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
   <title>Workspace</title>
   <style>
 
@@ -300,9 +300,23 @@
       
       
       
-      <li class="__3 ">
+      <li class="__4 ">
+        <a href="/xyz/docs/develop/lib/mapview/interactions/">Interactions</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
         <a href="/xyz/docs/develop/lib/webpack/">Webpack</a>
       </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/develop/security/authentication/">Authentication</a>
+      </li>
+      
+      
       
       
       
@@ -351,6 +365,57 @@
     <div id="content">
       <h1>Workspace API</h1>
 <p>The Workspace API provides methods to retrieve configuration objects and request the chaching of the workspace in other XYZ APIs.</p>
+<p>A method must be provided to the Workspace API.</p>
+<p>Valid methods are <strong>get</strong> and <strong>cache</strong>.</p>
+<p>The Workspace API will redact responses if roles are assigned.</p>
+<h3>/api/workspace/get</h3>
+<p>Will return the complete workspace; All templates and locales.</p>
+<pre><code>{
+  templates: {...},
+  locales: {...}
+}
+</code></pre>
+<h3>/api/workspace/get/locales</h3>
+<p>Will return an array of all locale keys.</p>
+<pre><code>[&quot;uk&quot;,...]
+</code></pre>
+<h3>/api/workspace/get/locale?locale=[key]</h3>
+<p>Will return the locale json with layers as an array of layer keys.</p>
+<pre><code>{
+  &quot;key&quot;: &quot;uk&quot;,
+  &quot;bounds&quot;: {
+    &quot;north&quot;: 62,
+    &quot;east&quot;: 5,
+    &quot;south&quot;: 49,
+    &quot;west&quot;: -13
+  },
+  &quot;minZoom&quot;: 2,
+  &quot;maxZoom&quot;: 17,
+  &quot;showScaleBar&quot;: true,
+  &quot;layers&quot;: [
+    &quot;OSM&quot;,
+    &quot;Stores&quot;
+  ]
+}
+</code></pre>
+<h3>/api/workspace/get/layer?layer=[key]&amp;locale=[key]</h3>
+<p>Will return the layer configuration from a layer template. If a locale parameter is provided the layer will be returned with the locale layer configuration assigned to the layer template object.</p>
+<pre><code>{
+  &quot;display&quot;: true,
+  &quot;format&quot;: &quot;tiles&quot;,
+  &quot;attribution&quot;: {
+    &quot;© OpenStreetMap&quot;: &quot;http://www.openstreetmap.org/copyright&quot;
+  },
+  &quot;URI&quot;: &quot;https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png&quot;,
+  &quot;key&quot;: &quot;OSM&quot;
+}
+</code></pre>
+<h3>/api/workspace/get/templates</h3>
+<p>Will return a list of html links for the individual templates available in the workspace. Links for templates which failed to load from source will be coloured red.</p>
+<h3>/api/workspace/get/template?template=[key]</h3>
+<p>Will return the template rendered to string or an error message if the Workspace API failed to load from source.</p>
+<h3>/api/workspace/cache</h3>
+<p>The cache method requires admin workspace access. If authenticated, requests will send to the View, Query, Gazetteer, Layer, and Location API with the URL parameter cache as true. Upon receiving the cache request each API will cache the workspace from its source. XYZ will cache the workspace upon invocation if the current memorized workspace is null. It is required to call the cache method of the Workspace API should the workspace change at the source.</p>
 
     </div>
 

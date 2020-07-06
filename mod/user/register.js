@@ -12,7 +12,7 @@ const crypto = require('crypto')
 
 const transformDate = require('../date')
 
-const acl = require('../auth/acl')()
+const acl = require('./acl')()
 
 const mailer = require('../mailer')
 

@@ -2,7 +2,7 @@ const mailer = require('../mailer')
 
 const crypto = require('crypto')
 
-const acl = require('../auth/acl')()
+const acl = require('./acl')()
 
 module.exports = async (req, res) => {
 
