@@ -48,6 +48,7 @@
 
     div.active {
       height: inherit;
+      grid-template-rows: min-content;
     }
   }
 
