@@ -122,7 +122,7 @@
         "provider": "OPENCAGE",
         "placeholder": "e.g. Venice",
         "bounds": "-13,48,5,62",
-        "code": "GB"
+        "countrycode": "GB"
       },
       "layers": {
         "OSM": {
@@ -614,7 +614,7 @@
       "name": "United Kingdom",
       "gazetteer": {
         "provider": "GOOGLE",
-        "code": "GB",
+        "country": "GB",
         "placeholder": "eg. London",
         "datasets": [
           {
