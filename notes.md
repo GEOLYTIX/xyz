@@ -31,3 +31,5 @@ Add check for layer format. Layers with missing or invalid formats will now be o
 Tabview - header freeze.
 
 Fix to images - #299. Added fallback empty array prior to length check.
+
+Gazetteer - Open Cage search - parameter code changed to countrycode.
