@@ -66,6 +66,23 @@ and (© Mapbox)[https://www.mapbox.com/about/maps]
 	}
 }
 
+* Skip "minutes" parameter to use custom slider.
+Use "meta" property for both providers in order to store details of most recent isoline:
+
+```
+{
+	"name": "Custom HERE Catchment (1)",
+	"field": "_isoline_custom1",
+    "fieldfx": "ST_asGeoJson(isoline_custom1)",
+    "type": "geometry",
+    "edit": {
+        "isoline_here": {
+            "meta": "isoline_custom1_meta"
+        }
+    }
+}
+```
+
 Geometry can also support "query" parameter which is independent from selected location. It is useful for more complex geometries which may only be requested when needed. 
 
 ```
