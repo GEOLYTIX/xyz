@@ -11,7 +11,7 @@ Entry of type "geometry" allows to visualize geometries associated with selected
 
 The basic setup: 
 
-```
+```json
 {   
 	"title": "Isoline 5min",
 	"type": "geometry",
@@ -24,13 +24,13 @@ This entry uses "geojson" layer type therefore geometry value is passed as GeoJS
 
 In order to display by default set:
 
-```
+```json
 "display": true
 ```
 
 This type supports isolines provided by third party APIs, currently (© HERE)[https://www.here.com/] 
 
-```
+```json
 {
 	"name": "HERE drivetime 5 min",  // "name" is used as custom checkbox name
 	"field": "isoline_5min",
@@ -38,10 +38,11 @@ This type supports isolines provided by third party APIs, currently (© HERE)[ht
 	"type": "geometry",
 	"edit": {
 		"isoline_here": {  
-			"minutes": 5  // returns 5 minute drivetime isochrone from Here API
+			"minutes": 5
 		}
 	}
 }
+  // request returns 5 minute drivetime isochrone from Here API
 ```
 
 Supported HERE API request parameters:
@@ -53,7 +54,7 @@ distance: distance in kilometres when "rangetype": "distance"
 
 and (© Mapbox)[https://www.mapbox.com/about/maps]
 
-```
+```json
 {
 	"name": "Mapbox drivetime 5 min",
 	"field": "isoline_5min",
@@ -61,20 +62,23 @@ and (© Mapbox)[https://www.mapbox.com/about/maps]
 	"type": "geometry",
 	"edit": {
 		"isoline_mapbox": {  
-			"minutes": 5  // returns 5 minute drivetime isochrone from Mapbox API
+			"minutes": 5
 		}
 	}
 }
+  // request returns 5 minute drivetime isochrone from Mapbox API
+```
 
 * Skip "minutes" parameter to use custom slider.
-Use "meta" property for both providers in order to store details of most recent isoline:
+Use "meta" property for both providers in order to store details of most recent isoline.
 
-```
+
+```json
 {
 	"name": "Custom HERE Catchment (1)",
 	"field": "_isoline_custom1",
-    "fieldfx": "ST_asGeoJson(isoline_custom1)",
-    "type": "geometry",
+	"fieldfx": "ST_asGeoJson(isoline_custom1)",
+	"type": "geometry",
     "edit": {
         "isoline_here": {
             "meta": "isoline_custom1_meta"
@@ -85,7 +89,7 @@ Use "meta" property for both providers in order to store details of most recent 
 
 Geometry can also support "query" parameter which is independent from selected location. It is useful for more complex geometries which may only be requested when needed. 
 
-```
+```json
 {
 	"name": "All catchments - query",
 	"type": "geometry",
@@ -99,7 +103,7 @@ Query should return GeoJSON object as value for given field.
 
 Geometry takes selection style by default and can also accept geojson style object:
 
-```
+```json
 {
 	"name": "Catchment",
 	"field": "catchment",
@@ -118,7 +122,7 @@ Geometry takes selection style by default and can also accept geojson style obje
 Additional geometries has be also displayed as multi geometries with thematic styling.
 The following example demonstrates multi geometry returned from a query template along with thematic styling and optional legend:
 
-```
+```json
 {
 	"name": "All catchments - query",
 	"type": "geometry",
@@ -163,7 +167,7 @@ The following example demonstrates multi geometry returned from a query template
 
 Query used for multi geometry in the above example:
 
-```
+```sql
 SELECT jsonb_build_object('type', 'FeatureCollection', 'features', b.features) AS collection
 FROM (SELECT jsonb_build_array(jsonb_build_object('type', 'Feature', 'properties',
                                                   jsonb_build_object('catchment', 'primary', 'id', id), 'geometry',
