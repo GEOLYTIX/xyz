@@ -36,7 +36,9 @@ Icons can be defined as marker to represent a point location in the rendered map
       0.5,
       0.95
     ]
-  }
+  },
+  "markerMin": 20, // optional
+  "markerMax": 40 
 }
 ```
 
@@ -48,7 +50,7 @@ The entries in the label object will be assigned to the text style. '12px sans-s
 
 The field defines which location field will be shown as the location's label.
 
-```
+```json
 "label": {
   "field": "store_name",
   "declutter": true,
