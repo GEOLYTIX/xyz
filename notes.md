@@ -37,3 +37,5 @@ Gazetteer - Open Cage search - parameter code changed to countrycode.
 Gazetteer - Google search - parameter code changed to country. Added support for "components" parameter.
 
 Gazetteer - Mapbox search - parameter code changed to country.
+
+Geometry query - fix. Now uses "field" instead of "key" to assign returned value.
