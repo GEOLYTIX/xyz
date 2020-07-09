@@ -3900,7 +3900,8 @@
         "Shops with catchments": {
           "format": "cluster",
           "edit": {
-            "geometry": true
+            "geometry": true,
+            "delete": true
           },
           "dbs": "XYZ",
           "geom": "geom_4326",
@@ -3927,6 +3928,12 @@
             {
               "field": "county",
               "title": "County",
+              "inline": true
+            },
+            {
+              "field": "county2",
+              "fieldfx": "county",
+              "title": "County 2",
               "inline": true
             },
             {
@@ -3973,7 +3980,7 @@
             {
               "name": "All catchments - query",
               "type": "geometry",
-              "display": true,
+              "_display": true,
               "query": "UK Shops with catchments all catchments",
               "style": {
                 "theme": {
@@ -4012,10 +4019,18 @@
               "__fieldfx": "SELECT jsonb_build_object('type', 'FeatureCollection','features', b.features) AS collection FROM (SELECT jsonb_build_array(jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'primary', 'id', id),'geometry', ST_AsGeoJson(catchment_primary)::jsonb),jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'secondary', 'id', id),'geometry', ST_AsGeoJson(catchment_secondary)::jsonb),jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'tertiary', 'id', id),'geometry', ST_AsGeoJson(catchment_tertiary)::jsonb)) AS features FROM (SELECT * FROM dev.storelist_1507__19 where id = $1) a) b"
             },
             {
-              "field": "county2",
-              "fieldfx": "county",
-              "title": "County 2",
-              "inline": true
+              "name": "Test catchment",
+              "type": "geometry",
+              "field": "test_catchment",
+              "fieldfx": "ST_AsGeoJSON(test_catchment)",
+              "edit": {
+                "polygon": true,
+                "circle": true,
+                "isoline_here": {}
+              },
+              "style": {
+                "fillOpacity": 0.3
+              }
             }
           ],
           "style": {
