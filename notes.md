@@ -13,6 +13,6 @@ Geometry query - fix. Now uses "field" instead of "key" to assign returned value
 
 ## New
 
-Manual creation of location additional geometries - polygon and circle implemented.
+Manual creation of location additional geometries - polygon, rectangle, circle, line, freehand implemented.
 
 Deleting location additional geometries - alert to confirm.

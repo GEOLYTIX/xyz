@@ -671,7 +671,7 @@
         value=${t.edit.isoline_mapbox._minutes}
         max=60
         step=1
-        oninput=${e=>{t.edit.isoline_mapbox._minutes=parseInt(e.target.value),e.target.parentNode.previousElementSibling.textContent=t.edit.isoline_mapbox._minutes}}>`),n}}))(e),r=(e=>t=>{t.value.features&&(t.value.features.map(n=>{let r;if(t.style||(r=t.location.style),t.style.theme||(r=t.style),t.style.theme&&"categorized"===t.style.theme.type&&(r=t.style.theme&&t.style.theme.cat[n.properties[t.style.theme.field]].style),t.style.theme&&"graduated"===t.style.theme.type)for(let e=0;e<t.style.theme.cat_arr.length&&!(n.properties[t.style.theme.field]<t.style.theme.cat_arr[e].value);e++)r=t.style.theme.cat_arr[e].style;let o=e.mapview.geoJSON({geometry:n.geometry,dataProjection:"4326",zIndex:t.location.layer.L.getZIndex()-1,style:new ol.style.Style({stroke:r.strokeColor&&new ol.style.Stroke({color:e.utils.Chroma(r.color||r.strokeColor).alpha(1),width:t.style.strokeWidth||1}),fill:new ol.style.Fill({color:e.utils.Chroma(r.fillColor||r.strokeColor).alpha(void 0===r.fillOpacity?1:parseFloat(r.fillOpacity)||0).rgba()})})});t.location.geometryCollection.push(o)}),t.location.geometries.push(t.location.geometryCollection),t.display=!0,t.style&&t.style.theme&&t.style.theme.legend&&(t.legend=e.utils.wire()`<div class="legend lv-1">`,t.legend.appendChild(e.layers.view.style.legend({format:"mvt",style:t.style})),t.container.style.display="block",t.container.appendChild(t.legend)))})(e),o=(e=>{return{polygon:function(n){return n.value?e.utils.wire()`<div>`:(t(n),n.edit.group.polygon||(n.edit.group.polygon=e.utils.wire()`
+        oninput=${e=>{t.edit.isoline_mapbox._minutes=parseInt(e.target.value),e.target.parentNode.previousElementSibling.textContent=t.edit.isoline_mapbox._minutes}}>`),n}}))(e),r=(e=>t=>{t.value.features&&(t.value.features.map(n=>{let r;if(t.style||(r=t.location.style),t.style.theme||(r=t.style),t.style.theme&&"categorized"===t.style.theme.type&&(r=t.style.theme&&t.style.theme.cat[n.properties[t.style.theme.field]].style),t.style.theme&&"graduated"===t.style.theme.type)for(let e=0;e<t.style.theme.cat_arr.length&&!(n.properties[t.style.theme.field]<t.style.theme.cat_arr[e].value);e++)r=t.style.theme.cat_arr[e].style;let o=e.mapview.geoJSON({geometry:n.geometry,dataProjection:"4326",zIndex:t.location.layer.L.getZIndex()-1,style:new ol.style.Style({stroke:r.strokeColor&&new ol.style.Stroke({color:e.utils.Chroma(r.color||r.strokeColor).alpha(1),width:t.style.strokeWidth||1}),fill:new ol.style.Fill({color:e.utils.Chroma(r.fillColor||r.strokeColor).alpha(void 0===r.fillOpacity?1:parseFloat(r.fillOpacity)||0).rgba()})})});t.location.geometryCollection.push(o)}),t.location.geometries.push(t.location.geometryCollection),t.display=!0,t.style&&t.style.theme&&t.style.theme.legend&&(t.legend=e.utils.wire()`<div class="legend lv-1">`,t.legend.appendChild(e.layers.view.style.legend({format:"mvt",style:t.style})),t.container.style.display="block",t.container.appendChild(t.legend)))})(e),o=(e=>{return{polygon:function(r){return r.value?e.utils.wire()`<div>`:(t(r),r.edit.group.polygon||(r.edit.group.polygon=e.utils.wire()`
     		<div style="
     		margin-top: 8px;
     		grid-column: 1 / 3;
@@ -681,7 +681,7 @@
     		">
     		<div style="grid-column: 1 / span 3;">
     		<button class="btn-wide primary-colour" style="font-size: x-small;"
-    		onclick=${t=>{t.stopPropagation();const r=t.target;if(r.classList.contains("active"))return e.mapview.interaction.draw.cancel();r.classList.add("active"),e.mapview.interaction.draw.begin({layer:n.location.layer,type:"Polygon",callback:()=>{r.classList.remove("active")},update:()=>{const t=e.mapview.interaction.draw.Layer.getSource().getFeatures();n.newValue=JSON.parse(e.mapview.interaction.draw.format.writeFeature(t[0],{dataProjection:"EPSG:"+e.mapview.interaction.draw.layer.srid,featureProjection:"EPSG:"+e.mapview.srid})).geometry,n.location.update(),e.mapview.interaction.draw.finish()}})}}>Polygon`,n.edit.panel.appendChild(n.edit.group.polygon)),n.edit.panel)},circle:function(n){return n.value?e.utils.wire()`<div>`:(t(n),n.edit.group.circle||(n.edit.group.circle=e.utils.wire()`
+    		onclick=${t=>{t.stopPropagation();const o=t.target;if(o.classList.contains("active"))return e.mapview.interaction.draw.cancel();o.classList.add("active"),e.mapview.interaction.draw.begin({layer:r.location.layer,type:"Polygon",callback:()=>{o.classList.remove("active")},update:()=>n(r)})}}>Polygon`,r.edit.panel.appendChild(r.edit.group.polygon)),r.edit.panel)},circle:function(r){return r.value?e.utils.wire()`<div>`:(t(r),r.edit.group.circle||(r.edit.group.circle=e.utils.wire()`
     	<div style="
     	margin-top: 8px;
     	grid-column: 1 / 3;
@@ -691,7 +691,37 @@
     	">
     	<div style="grid-column: 1 / span 3;">
     	<button class="btn-wide primary-colour" style="font-size: x-small;"
-    	onclick=${t=>{t.stopPropagation();const r=t.target;if(r.classList.contains("active"))return e.mapview.interaction.draw.cancel();r.classList.add("active"),e.mapview.interaction.draw.begin({layer:n.location.layer,type:"Circle",geometryFunction:ol.interaction.Draw.createRegularPolygon(33),callback:()=>{r.classList.remove("active")},update:()=>{const t=e.mapview.interaction.draw.Layer.getSource().getFeatures();n.newValue=JSON.parse(e.mapview.interaction.draw.format.writeFeature(t[0],{dataProjection:"EPSG:"+e.mapview.interaction.draw.layer.srid,featureProjection:"EPSG:"+e.mapview.srid})).geometry,n.location.update(),e.mapview.interaction.draw.finish()}})}}>Circle`,n.edit.panel.appendChild(n.edit.group.circle)),n.edit.panel)}};function t(t){t.edit.panel||(t.edit.panel=e.utils.wire()`
+    	onclick=${t=>{t.stopPropagation();const o=t.target;if(o.classList.contains("active"))return e.mapview.interaction.draw.cancel();o.classList.add("active"),e.mapview.interaction.draw.begin({layer:r.location.layer,type:"Circle",geometryFunction:ol.interaction.Draw.createRegularPolygon(33),callback:()=>{o.classList.remove("active")},update:()=>n(r)})}}>Circle`,r.edit.panel.appendChild(r.edit.group.circle)),r.edit.panel)},rectangle:function(r){return r.value?e.utils.wire()`<div>`:(t(r),r.edit.group.rectangle||(r.edit.group.rectangle=e.utils.wire()`
+    	<div style="
+    	margin-top: 8px;
+    	grid-column: 1 / 3;
+    	display: grid;
+    	grid-template-columns: 50px 1fr;
+    	align-items: center;
+    	">
+    	<div style="grid-column: 1 / span 3;">
+    	<button class="btn-wide primary-colour" style="font-size: x-small;"
+    	onclick=${t=>{t.stopPropagation();const o=t.target;if(o.classList.contains("active"))return e.mapview.interaction.draw.cancel();o.classList.add("active"),e.mapview.interaction.draw.begin({layer:r.location.layer,type:"Circle",geometryFunction:ol.interaction.Draw.createBox(),callback:()=>{o.classList.remove("active")},update:()=>n(r)})}}>Rectangle`,r.edit.panel.appendChild(r.edit.group.rectangle)),r.edit.panel)},freehand:function(r){return r.value?e.utils.wire()`<div>`:(t(r),r.edit.group.freehand||(r.edit.group.freehand=e.utils.wire()`
+    	<div style="
+    	margin-top: 8px;
+    	grid-column: 1 / 3;
+    	display: grid;
+    	grid-template-columns: 50px 1fr;
+    	align-items: center;
+    	">
+    	<div style="grid-column: 1 / span 3;">
+    	<button class="btn-wide primary-colour" style="font-size: x-small;"
+    	onclick=${t=>{t.stopPropagation();const o=t.target;if(o.classList.contains("active"))return e.mapview.interaction.draw.cancel();o.classList.add("active"),e.mapview.interaction.draw.begin({layer:r.location.layer,type:"LineString",freehand:!0,callback:()=>{o.classList.remove("active")},update:()=>n(r)})}}>Freehand`,r.edit.panel.appendChild(r.edit.group.freehand)),r.edit.panel)},line:function(r){return r.value?e.utils.wire()`<div>`:(t(r),r.edit.group.line||(r.edit.group.line=e.utils.wire()`
+    	<div style="
+    	margin-top: 8px;
+    	grid-column: 1 / 3;
+    	display: grid;
+    	grid-template-columns: 50px 1fr;
+    	align-items: center;
+    	">
+    	<div style="grid-column: 1 / span 3;">
+    	<button class="btn-wide primary-colour" style="font-size: x-small;"
+    	onclick=${t=>{t.stopPropagation();const o=t.target;if(o.classList.contains("active"))return e.mapview.interaction.draw.cancel();o.classList.add("active"),e.mapview.interaction.draw.begin({layer:r.location.layer,type:"LineString",callback:()=>{o.classList.remove("active")},update:()=>n(r)})}}>Line`,r.edit.panel.appendChild(r.edit.group.line)),r.edit.panel)}};function t(t){t.edit.panel||(t.edit.panel=e.utils.wire()`
 		<div
 		class="drawer group panel expandable ${t.class||""}"
 		style="display: grid; grid-column: 1 / 3; max-height: 20px;">
@@ -700,7 +730,7 @@
         style="text-align: left; grid-column: 1 / 3;"
         onclick=${t=>{e.utils.toggleExpanderParent(t.target)}}
         ><span>${t.name||""} Editing</span>
-        <span class="xyz-icon btn-header icon-expander primary-colour-filter">`,t.edit.group={})}})(e);return a=>{if(a.query&&a.display)return e.query(Object.assign({layer:a.location.layer,id:a.location.id},a)).then(e=>{a.value=e[a.field],i(),l()});function i(){a.style=Object.assign({},a.location.style,a.style),a.container=e.utils.wire()`
+        <span class="xyz-icon btn-header icon-expander primary-colour-filter">`,t.edit.group={})}function n(t){const n=e.mapview.interaction.draw.Layer.getSource().getFeatures();t.newValue=JSON.parse(e.mapview.interaction.draw.format.writeFeature(n[0],{dataProjection:"EPSG:"+e.mapview.interaction.draw.layer.srid,featureProjection:"EPSG:"+e.mapview.srid})).geometry,t.location.update(),e.mapview.interaction.draw.finish()}})(e);return a=>{if(a.query&&a.display)return e.query(Object.assign({layer:a.location.layer,id:a.location.id},a)).then(e=>{a.value=e[a.field],i(),l()});function i(){a.style=Object.assign({},a.location.style,a.style),a.container=e.utils.wire()`
       <div 
       class=${"lv-"+(a.level||0)+" "+(a.class||"")}
       style="grid-column: 1 / 3; position: relative; display: flex; align-items: center;">`,a.listview.appendChild(a.container),a.container.appendChild(e.utils.wire()`
@@ -712,7 +742,7 @@
         <div></div>
         <span>${a.name||"Geometry"}<span>`),!a.style.theme&&a.container.appendChild(e.utils.wire()`
         <div class="sample-circle"
-        style="${`\n          background-color: ${e.utils.Chroma(a.style.fillColor||a.style.strokeColor).alpha(void 0===a.style.fillOpacity?1:parseFloat(a.style.fillOpacity)||0)};\n          border-color: ${e.utils.Chroma(a.style.color||a.style.strokeColor).alpha(1)};\n          border-style: solid;\n          border-width: ${a.style.strokeWidth||1}px;\n          margin-left: auto;`}">`)}function l(){"FeatureCollection"===a.value.type?r(a):(a.geometry=a.value&&e.mapview.geoJSON({geometry:"object"==typeof a.value&&a.value||JSON.parse(a.value),dataProjection:"4326",zIndex:a.location.layer.L.getZIndex()-1,style:new ol.style.Style({stroke:a.style.strokeColor&&new ol.style.Stroke({color:e.utils.Chroma(a.style.color||a.style.strokeColor).alpha(1),width:a.style.strokeWidth||1}),fill:new ol.style.Fill({color:e.utils.Chroma(a.style.fillColor||a.style.strokeColor).alpha(void 0===a.style.fillOpacity?1:parseFloat(a.style.fillOpacity)||0).rgba()})})}),a.geometry&&a.location.geometries.push(a.geometry),a.display=!0)}function s(){if(a.edit)return a.edit.isoline_mapbox?n.create(a):a.edit.isoline_here?t.create(a):void 0}if(i(),a.edit&&a.edit.isoline_mapbox&&a.container.parentNode.insertBefore(n.settings(a),a.container.nextSibling),a.edit&&a.edit.isoline_here&&a.container.parentNode.insertBefore(t.settings(a),a.container.nextSibling),a.edit&&a.edit.polygon&&a.container.parentNode.appendChild(o.polygon(a)),a.edit&&a.edit.circle&&a.container.parentNode.appendChild(o.circle(a)),a.value&&(a.display||a.edit))return l();!a.value&&a.display&&s()}},qn=e=>t=>{t.val.appendChild(e.utils.wire()`
+        style="${`\n          background-color: ${e.utils.Chroma(a.style.fillColor||a.style.strokeColor).alpha(void 0===a.style.fillOpacity?1:parseFloat(a.style.fillOpacity)||0)};\n          border-color: ${e.utils.Chroma(a.style.color||a.style.strokeColor).alpha(1)};\n          border-style: solid;\n          border-width: ${a.style.strokeWidth||1}px;\n          margin-left: auto;`}">`)}function l(){"FeatureCollection"===a.value.type?r(a):(a.geometry=a.value&&e.mapview.geoJSON({geometry:"object"==typeof a.value&&a.value||JSON.parse(a.value),dataProjection:"4326",zIndex:a.location.layer.L.getZIndex()-1,style:new ol.style.Style({stroke:a.style.strokeColor&&new ol.style.Stroke({color:e.utils.Chroma(a.style.color||a.style.strokeColor).alpha(1),width:a.style.strokeWidth||1}),fill:new ol.style.Fill({color:e.utils.Chroma(a.style.fillColor||a.style.strokeColor).alpha(void 0===a.style.fillOpacity?1:parseFloat(a.style.fillOpacity)||0).rgba()})})}),a.geometry&&a.location.geometries.push(a.geometry),a.display=!0)}function s(){if(a.edit)return a.edit.isoline_mapbox?n.create(a):a.edit.isoline_here?t.create(a):void 0}if(i(),a.edit&&a.edit.isoline_mapbox&&a.container.parentNode.insertBefore(n.settings(a),a.container.nextSibling),a.edit&&a.edit.isoline_here&&a.container.parentNode.insertBefore(t.settings(a),a.container.nextSibling),a.edit&&a.edit.polygon&&a.container.parentNode.appendChild(o.polygon(a)),a.edit&&a.edit.rectangle&&a.container.parentNode.appendChild(o.rectangle(a)),a.edit&&a.edit.circle&&a.container.parentNode.appendChild(o.circle(a)),a.edit&&a.edit.line&&a.container.parentNode.appendChild(o.line(a)),a.edit&&a.edit.freehand&&a.container.parentNode.appendChild(o.freehand(a)),a.value&&(a.display||a.edit))return l();!a.value&&a.display&&s()}},qn=e=>t=>{t.val.appendChild(e.utils.wire()`
   <div>
   <span>${t.edit.range.label}</span>
   <span class="bold">${t.value}</span>
