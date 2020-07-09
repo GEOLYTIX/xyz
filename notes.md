@@ -1,39 +1,9 @@
-# 3.3.1
+# 3.3.2
 
-Documentation to use /xyz directory.
+## Documentation
 
-Documentation:
+Hidden flag in layer styles configuration
 
-  - Develop / API / Workspace
-  - Develop / API / User
-  - Develop / Mapview
-  - Develop / Mapview / Interactions
-  - Develop / Security / Authentication
-  - Workspace / Style / Label
-  - Workspace / Templates
+## Fixes
 
-Fix for zero workspace with get empty locales array.
-
-Change clear_cache URL param to cache.
-
-Move auth modules into user API modules.
-
-Fix for long values overfloing location view. [#258](https://github.com/GEOLYTIX/xyz/issues/258)
-
-Fix for MVT filtering and caching.
-
-css_title and css_val for infoj fields to provide inline css rules.
-
-Fix for null values in mvt categorized theme.
-
-Add check for layer format. Layers with missing or invalid formats will now be omitted rather than crashing the application.
-
-Tabview - header freeze.
-
-Fix to images - #299. Added fallback empty array prior to length check.
-
-Gazetteer - Open Cage search - parameter code changed to countrycode.
-
-Gazetteer - Google search - parameter code changed to country. Added support for "components" parameter.
-
-Gazetteer - Mapbox search - parameter code changed to country.
+MVT can now be generated from tables with a different EPSG than 3857. [#307](https://github.com/GEOLYTIX/xyz/issues/307)

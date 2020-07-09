@@ -56,3 +56,7 @@ The field defines which location field will be shown as the location's label.
   "strokeWidth": 3
 }
 ```
+
+## Hide the style panel
+
+Setting a flag `hidden=true` in the style configuration will hide the style panel in the layer view. A legend will still be shown for a theme but the theme can not be changed with the hidden flag.

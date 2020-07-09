@@ -64,7 +64,7 @@ module.exports = async (req, res) => {
         ${ m - (y * r)},
         ${-m + (x * r) + r},
         ${ m - (y * r) - r},
-        ${req.params.srid || 3857}
+        3857
       ) tile
 
     FROM (
@@ -73,14 +73,18 @@ module.exports = async (req, res) => {
         ${id} as id,
         ${mvt_fields.length && mvt_fields.toString() + ',' || ''}
         ST_AsMVTGeom(
-          ${layer.geom},
-          ST_MakeEnvelope(
-            ${-m + (x * r)},
-            ${ m - (y * r)},
-            ${-m + (x * r) + r},
-            ${ m - (y * r) - r},
-            ${req.params.srid || 3857}
-          ),
+          ${layer.srid !== '3857' && `ST_Transform(` ||''}
+            ${layer.geom},
+          ${layer.srid !== '3857' && `${layer.srid}),` ||''}
+          ${layer.srid !== '3857' && `ST_Transform(` ||''}
+            ST_MakeEnvelope(
+              ${-m + (x * r)},
+              ${ m - (y * r)},
+              ${-m + (x * r) + r},
+              ${ m - (y * r) - r},
+              3857
+            ),
+          ${layer.srid !== '3857' && `${layer.srid}),` ||''}
           4096,
           256,
           true
@@ -89,16 +93,17 @@ module.exports = async (req, res) => {
       FROM ${table}
 
       WHERE
-        ST_DWithin(
-          ST_MakeEnvelope(
-            ${-m + (x * r)},
-            ${ m - (y * r)},
-            ${-m + (x * r) + r},
-            ${ m - (y * r) - r},
-            ${req.params.srid || 3857}
-          ),
-          ${layer.geom},
-          ${r / 4}
+        ST_Intersects(
+          ${layer.srid !== '3857' && `ST_Transform(` ||''}
+            ST_MakeEnvelope(
+              ${-m + (x * r)},
+              ${ m - (y * r)},
+              ${-m + (x * r) + r},
+              ${ m - (y * r) - r},
+              3857
+            ),
+          ${layer.srid !== '3857' && `${layer.srid}),` ||''}
+          ${layer.geom}
         )
 
         ${filter}
