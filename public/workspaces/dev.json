@@ -2511,6 +2511,7 @@
               "style": {
                 "fillOpacity": 1,
                 "strokeWidth": 2,
+                "fillOpacity": 0.3,
                 "fillColor": "#E2DE84"
               }
             },

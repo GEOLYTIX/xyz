@@ -74,3 +74,7 @@ The entry will displayed as a Google Streetview image requested for the location
 `"type" : "geometry"`
 
 A geometry associated with the location will be read from the table field and displayed in the map control together with the location's own geometry.
+
+`"tooltip": <text>`
+
+To enable tooltip on mouse hover. 
