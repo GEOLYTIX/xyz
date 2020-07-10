@@ -13,10 +13,12 @@ Geometry query - fix. Now uses "field" instead of "key" to assign returned value
 
 Add "NODE_ENV": "production" back into now.json
 
+Fix for cut symbols. [#311](https://github.com/GEOLYTIX/xyz/issues/311)
+
+Fix for geometryFunction. Function to check for Kinks should only be applied on Polygon construction.
+
 ## New
 
 Manual creation of location additional geometries - polygon, rectangle, circle, line, freehand implemented.
 
 Deleting location additional geometries - alert to confirm.
-
-Fix for cut symbols. [#311](https://github.com/GEOLYTIX/xyz/issues/311)

@@ -149,7 +149,7 @@
             "Made with Natural Earth.": "https://www.naturalearthdata.com/"
           },
           "format": "mvt",
-          "dbs": "XYZ",
+          "dbs": "DEV",
           "mvt_cache": "dev.natural_earth_countries__mvts",
           "tables": {
             "2": null,
@@ -529,7 +529,7 @@
         },
         "Tiles": {
           "format": "mvt",
-          "dbs": "XYZ",
+          "dbs": "DEV",
           "table": "dev.natural_earth_countries__mvts",
           "geom": "tile",
           "style": {
@@ -542,7 +542,7 @@
         },
         "Offices": {
           "format": "geojson",
-          "dbs": "XYZ",
+          "dbs": "DEV",
           "table": "glx_offices",
           "srid": "4326",
           "geom": "geom",
@@ -684,7 +684,7 @@
           },
           "srid": "4326",
           "format": "grid",
-          "dbs": "XYZ",
+          "dbs": "DEV",
           "geom": "geomcntr",
           "tables": {
             "7": null,
@@ -1907,7 +1907,7 @@
         },
         "Retail Places": {
           "format": "mvt",
-          "dbs": "XYZ",
+          "dbs": "DEV",
           "tables": {
             "8": null,
             "9": "dev.retailplaces"
@@ -2417,7 +2417,7 @@
           "format": "cluster",
           "srid": "4326",
           "geom": "geom_4326",
-          "dbs": "XYZ",
+          "dbs": "DEV",
           "qID": "id",
           "table": "dev.uk_glx_sites",
           "_tables": {
@@ -2914,7 +2914,7 @@
         "Cluster Catchments": {
           "group": "Cluster",
           "format": "cluster",
-          "dbs": "XYZ",
+          "dbs": "DEV",
           "table": "dev.cluster_catchments",
           "geom": "geom",
           "srid": "4326",
@@ -3070,7 +3070,7 @@
         },
         "Draw": {
           "format": "mvt",
-          "dbs": "XYZ",
+          "dbs": "DEV",
           "table": "dev.draw",
           "srid": "3857",
           "geom": "geom",
@@ -3141,7 +3141,7 @@
         "Scratch": {
           "meta": "This is a test layer for editing and drawing geometries.",
           "format": "mvt",
-          "dbs": "XYZ",
+          "dbs": "DEV",
           "table": "dev.scratch",
           "srid": "3857",
           "geom": "geom_3857",
@@ -3275,7 +3275,7 @@
             "© ONS": "https://www.ons.gov.uk"
           },
           "format": "mvt",
-          "dbs": "XYZ",
+          "dbs": "DEV",
           "tables": {
             "12": null,
             "13": "dev.oa",
@@ -3375,7 +3375,7 @@
           "group": "Cluster",
           "format": "cluster",
           "cluster_label": "store",
-          "dbs": "XYZ",
+          "dbs": "DEV",
           "qID": "id",
           "table": "dev.retailpoints",
           "geom": "geom",
@@ -3700,7 +3700,7 @@
           "group": "Cluster",
           "meta": "A subset of collection of points of interest across the UK including healthcare locations, law and order sites along with sport & leisure facilities, car parks, cinemas and service areas.",
           "format": "cluster",
-          "dbs": "XYZ",
+          "dbs": "DEV",
           "table": "geodata.vw_uk_glx_geodata_poi_health",
           "qID": "id",
           "geom": "geom_p_4326",
@@ -3797,7 +3797,7 @@
         "Election Wards": {
           "group": "Cluster",
           "format": "cluster",
-          "dbs": "XYZ",
+          "dbs": "DEV",
           "table": "politics.election_ward",
           "geom": "geom_point_4326",
           "srid": "4326",
@@ -3821,7 +3821,7 @@
         "PPD": {
           "group": "Cluster",
           "format": "cluster",
-          "dbs": "XYZ",
+          "dbs": "DEV",
           "table": "dev.london_hpp",
           "geom": "geom_3857",
           "srid": "3857",
@@ -3903,7 +3903,7 @@
             "geometry": true,
             "delete": true
           },
-          "dbs": "XYZ",
+          "dbs": "DEV",
           "geom": "geom_4326",
           "sird": "4326",
           "table": "dev.storelist_1507__19",
@@ -4059,7 +4059,7 @@
           "format": "cluster",
           "srid": "4326",
           "geom": "geom_4326",
-          "dbs": "XYZ",
+          "dbs": "DEV",
           "table": "dev.uk_glx_sites",
           "cluster_kmeans": 0.1
         }

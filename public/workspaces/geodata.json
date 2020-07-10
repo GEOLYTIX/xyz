@@ -1,16 +1,16 @@
 {
   "templates": {
     "blog": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/blog.html"
+      "src": "https://geolytix.github.io/public/blog.html"
     },
     "blog_postal": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/blog_postal.html"
+      "src": "https://geolytix.github.io/public/geodata/blog_postal.html"
     },
     "geodata": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/geodata.html"
+      "src": "https://geolytix.github.io/public/geodata/geodata.html"
     },
     "geodata_single": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/geodata_single.html"
+      "src": "https://geolytix.github.io/public/geodata/geodata_single.html"
     },
     "Mapbox Base": {
       "format": "tiles",
@@ -45,97 +45,97 @@
       }
     },
     "geolytix_offices": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/geolytix_offices.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/geolytix_offices.json"
     },
     "london_census": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_census.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_census.json"
     },
     "london_retailpoints": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_retailpoints.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_retailpoints.json"
     },
     "london_lad": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_lad.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_lad.json"
     },
     "london_oa": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_oa.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_oa.json"
     },
     "london_education": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_education.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_education.json"
     },
     "london_university_building": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_university_building.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_university_building.json"
     },
     "london_grocery_demand": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_grocery_demand.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_grocery_demand.json"
     },
     "london_poi": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_poi.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_poi.json"
     },
     "london_postal_sector": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_postal_sector.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_postal_sector.json"
     },
     "london_postal_district": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_postal_district.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_postal_district.json"
     },
     "london_postal_area": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_postal_area.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_postal_area.json"
     },
     "london_rail": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_rail.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_rail.json"
     },
     "london_rail_stations": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_rail_stations.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_rail_stations.json"
     },
     "london_residential": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_residential.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_residential.json"
     },
     "london_retailplaces": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_retailplaces.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_retailplaces.json"
     },
     "london_retailplaces_pitch": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_retailplaces_pitch.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_retailplaces_pitch.json"
     },
     "london_roads": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_roads.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_roads.json"
     },
     "london_seamless": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_seamless.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_seamless.json"
     },
     "london_town_suburb": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_town_suburb.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_town_suburb.json"
     },
     "london_urbanity": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_urbanity.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_urbanity.json"
     },
     "london_workers": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_workers.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_workers.json"
     },
     "shanghai_retailplaces": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/shanghai_retailplaces.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/shanghai_retailplaces.json"
     },
     "shanghai_retailvenues": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/shanghai_retailvenues.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/shanghai_retailvenues.json"
     },
     "shanghai_transport": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/shanghai_transport.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/shanghai_transport.json"
     },
     "tokyo_demographics": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/tokyo_demographics.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/tokyo_demographics.json"
     },
     "tokyo_retailplaces": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/tokyo_retailplaces.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/tokyo_retailplaces.json"
     },
     "tokyo_retailvenues": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/tokyo_retailvenues.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/tokyo_retailvenues.json"
     },
     "tokyo_urbanity": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/tokyo_urbanity.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/tokyo_urbanity.json"
     },
     "warsaw_census": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/warsaw_census.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/warsaw_census.json"
     },
     "warsaw_retailvenues": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/warsaw_retailvenues.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/warsaw_retailvenues.json"
     }
   },
   "locales": {
@@ -263,15 +263,7 @@
         },
         "OA": {
           "group": "Admin Boundaries",
-          "__template": "london_oa",
-          "format": "mvt",
-          "dbs": "XYZ",
-          "tables": {
-            "13": null,
-            "14": "website.vw_london_glx_geodata_admin_outputarea"
-          },
-          "geom": "geom_3857_5m",
-          "srid": "3857"
+          "template": "london_oa"
         },
         "Education": {
           "group": "Education",
