@@ -4026,7 +4026,10 @@
               "edit": {
                 "polygon": true,
                 "circle": true,
-                "isoline_here": {}
+                "rectangle": true,
+                "line": true,
+                "freehand": true,
+                "_isoline_here": {}
               },
               "style": {
                 "fillOpacity": 0.3
