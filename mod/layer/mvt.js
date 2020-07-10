@@ -96,10 +96,10 @@ module.exports = async (req, res) => {
         ST_Intersects(
           ${layer.srid !== '3857' && `ST_Transform(` ||''}
             ST_MakeEnvelope(
-              ${-m + (x * r)},
-              ${ m - (y * r)},
-              ${-m + (x * r) + r},
-              ${ m - (y * r) - r},
+              ${-m + (x * r) - (r/16)},
+              ${ m - (y * r) - (r/16)},
+              ${-m + (x * r) + r + (r/16)},
+              ${ m - (y * r) - r + (r/16)},
               3857
             ),
           ${layer.srid !== '3857' && `${layer.srid}),` ||''}
