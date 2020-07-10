@@ -18,3 +18,5 @@ Add "NODE_ENV": "production" back into now.json
 Manual creation of location additional geometries - polygon, rectangle, circle, line, freehand implemented.
 
 Deleting location additional geometries - alert to confirm.
+
+Fix for cut symbols. [#311](https://github.com/GEOLYTIX/xyz/issues/311)

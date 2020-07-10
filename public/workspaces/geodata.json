@@ -159,6 +159,63 @@
         "Label": {
           "display": true,
           "template": "Mapbox Label"
+        },
+        "MVT Offices": {
+          "format": "mvt",
+          "dbs": "XYZ",
+          "table": "website.glx_offices",
+          "geom": "geom",
+          "srid": "4326",
+          "style": {
+            "default": {
+              "marker": {
+                "type": "markerColor",
+                "colorMarker": "#999999",
+                "colorDot": "#333333",
+                "anchor": [
+                  0.5,
+                  1
+                ],
+                "scale": 0.05
+              }
+            },
+            "highlight": {
+              "marker": {
+                "type": "markerColor",
+                "colorMarker": "#64dd17",
+                "colorDot": "#33691e",
+                "anchor": [
+                  0.5,
+                  1
+                ],
+                "scale": 0.05
+              }
+            },
+            "selected": {
+              "marker": {
+                "type": "markerColor",
+                "colorMarker": "#64dd17",
+                "colorDot": "#33691e",
+                "anchor": [
+                  0.5,
+                  1
+                ],
+                "scale": 0.05
+              }
+            }
+          },
+          "qID": "id",
+          "infoj": [
+            {
+              "type": "key"
+            },
+            {
+              "title": "Address HTML",
+              "field": "address_html",
+              "fieldfx": "address",
+              "type": "html"
+            }
+          ]
         }
       }
     },
