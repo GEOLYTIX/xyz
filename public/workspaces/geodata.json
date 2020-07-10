@@ -263,15 +263,7 @@
         },
         "OA": {
           "group": "Admin Boundaries",
-          "__template": "london_oa",
-          "format": "mvt",
-          "dbs": "XYZ",
-          "tables": {
-            "13": null,
-            "14": "website.vw_london_glx_geodata_admin_outputarea"
-          },
-          "geom": "geom_3857_5m",
-          "srid": "3857"
+          "template": "london_oa"
         },
         "Education": {
           "group": "Education",
