@@ -184,6 +184,8 @@
       
       
       
+      
+      
       <li class="__0 ">
         <a href="/xyz/docs/">XYZ</a>
       </li>
@@ -246,9 +248,37 @@
       
       
       
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/layer/">Layer</a>
+      </li>
       
       
-      <li class="__1 ">
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/locales/gazetteer/">Gazetteer</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/locations/geometry/">Geoometry</a>
+      </li>
+      
+      
+      
+      <li class="__1 active">
+        <a href="/xyz/docs/workspace/styles/">Styles</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/templates/">Templates</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
         <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
       </li>
       
@@ -261,12 +291,6 @@
       
       
       <li class="__2 ">
-        <a href="/xyz/docs/workspace/layer/">Layer</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
         <a href="/xyz/docs/workspace/layer/cluster/">Cluster</a>
       </li>
       
@@ -308,26 +332,8 @@
       
       
       
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/locales/gazetteer/">Gazetteer</a>
-      </li>
-      
-      
-      
       <li class="__2 ">
         <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
-      </li>
-      
-      
-      
-      <li class="__1 active">
-        <a href="/xyz/docs/workspace/styles/">Styles</a>
-      </li>
-      
-      
-      
-      <li class="__2 ">
-        <a href="/xyz/docs/workspace/templates/">Templates</a>
       </li>
       
       
@@ -360,20 +366,24 @@
       0.5,
       0.95
     ]
-  }
+  },
+  &quot;markerMin&quot;: 20, // optional
+  &quot;markerMax&quot;: 40 
 }
 </code></pre>
 <h2>Labels</h2>
 <p>Label for locations on cluster or MVT layer are created as a seperate layer to make use of Openlayers declutter capability to prevent overlapping map labels. The label itself is created as an <a href="https://openlayers.org/en/latest/apidoc/module-ol_style_Text.html">Openlayers Text object</a>.</p>
 <p>The entries in the label object will be assigned to the text style. '12px sans-serif' will be the default is not explicitly set.</p>
 <p>The field defines which location field will be shown as the location's label.</p>
-<pre><code>&quot;label&quot;: {
+<pre><code class="language-json">&quot;label&quot;: {
   &quot;field&quot;: &quot;store_name&quot;,
   &quot;declutter&quot;: true,
   &quot;strokeColor&quot;: &quot;#ffffff&quot;,
   &quot;strokeWidth&quot;: 3
 }
 </code></pre>
+<h2>Hide the style panel</h2>
+<p>Setting a flag <code>hidden=true</code> in the style configuration will hide the style panel in the layer view. A legend will still be shown for a theme but the theme can not be changed with the hidden flag.</p>
 
     </div>
 

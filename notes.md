@@ -15,6 +15,6 @@ Add "NODE_ENV": "production" back into now.json
 
 ## New
 
-Manual creation of location additional geometries - polygon and circle implemented.
+Manual creation of location additional geometries - polygon, rectangle, circle, line, freehand implemented.
 
 Deleting location additional geometries - alert to confirm.
