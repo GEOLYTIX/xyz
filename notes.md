@@ -17,6 +17,8 @@ Fix for cut symbols. [#311](https://github.com/GEOLYTIX/xyz/issues/311)
 
 Fix for geometryFunction. Function to check for Kinks should only be applied on Polygon construction.
 
+Gazetteer interface in mobile view.
+
 ## New
 
 Manual creation of location additional geometries - polygon, rectangle, circle, line, freehand implemented.

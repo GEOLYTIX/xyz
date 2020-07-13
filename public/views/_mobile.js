@@ -207,13 +207,13 @@ window.onload = () => {
 
     if (xyz.locale.gazetteer) {
 
-      const gazetteer = _xyz.utils.wire()`
+      const gazetteer = xyz.utils.wire()`
       <div id="gazetteer" class="display-none">
         <div class="input-drop">
             <input type="text" placeholder="e.g. London">
             <ul>`
 
-      const btnGazetteer = _xyz.utils.wire()`
+      const btnGazetteer = xyz.utils.wire()`
       <button onclick=${e => {
           e.preventDefault()
           e.target.classList.toggle('enabled')
@@ -224,7 +224,7 @@ window.onload = () => {
 
       document.body.insertBefore(gazetteer, document.querySelector('.btn-column'))
 
-      _xyz.gazetteer.init({
+      xyz.gazetteer.init({
         group: gazetteer.querySelector('.input-drop')
       })
     }
