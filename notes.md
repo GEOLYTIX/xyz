@@ -19,6 +19,8 @@ Fix for geometryFunction. Function to check for Kinks should only be applied on 
 
 Gazetteer interface in mobile view.
 
+Filter from categorised legend to fire show layer event.
+
 ## New
 
 Manual creation of location additional geometries - polygon, rectangle, circle, line, freehand implemented.
