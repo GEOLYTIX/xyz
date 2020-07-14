@@ -21,6 +21,8 @@ Gazetteer interface in mobile view.
 
 Filter from categorised legend to fire show layer event.
 
+Graduated theme for line mvts - now lines displayed in legend.
+
 ## New
 
 Manual creation of location additional geometries - polygon, rectangle, circle, line, freehand implemented.
