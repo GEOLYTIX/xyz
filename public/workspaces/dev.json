@@ -4130,11 +4130,26 @@
                 "circle": true,
                 "rectangle": true,
                 "line": true,
-                "freehand": true,
-                "_isoline_here": {}
+                "freehand": true
               },
               "style": {
                 "fillOpacity": 0.3
+              }
+            },
+            {
+              "name": "HERE Isoline 10min",
+              "type": "geometry",
+              "field": "isoline_10min",
+              "fieldfx": "ST_AsGeoJson(isoline_10min)",
+              "edit": {
+                "isoline_here": {
+                  "__minutes": 10
+                }
+              },
+              "style": {
+                "fillOpacity": 0.2,
+                "fillColor": "#5A2A27",
+                "strokeColor": "#5A2A27"
               }
             }
           ],
