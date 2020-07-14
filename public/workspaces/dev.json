@@ -149,7 +149,7 @@
             "Made with Natural Earth.": "https://www.naturalearthdata.com/"
           },
           "format": "mvt",
-          "dbs": "DEV",
+          "dbs": "XYZ",
           "mvt_cache": "dev.natural_earth_countries__mvts",
           "tables": {
             "2": null,
@@ -529,7 +529,7 @@
         },
         "Tiles": {
           "format": "mvt",
-          "dbs": "DEV",
+          "dbs": "XYZ",
           "table": "dev.natural_earth_countries__mvts",
           "geom": "tile",
           "style": {
@@ -542,7 +542,7 @@
         },
         "Offices": {
           "format": "geojson",
-          "dbs": "DEV",
+          "dbs": "XYZ",
           "table": "glx_offices",
           "srid": "4326",
           "geom": "geom",
@@ -616,7 +616,7 @@
         "provider": "GOOGLE",
         "country": "GB",
         "placeholder": "eg. London",
-        "datasets": [
+        "_datasets": [
           {
           "layer": "Retail Points",
           "table": "dev.retailpoints",
@@ -684,7 +684,7 @@
           },
           "srid": "4326",
           "format": "grid",
-          "dbs": "DEV",
+          "dbs": "XYZ",
           "geom": "geomcntr",
           "tables": {
             "7": null,
@@ -1907,7 +1907,7 @@
         },
         "Retail Places": {
           "format": "mvt",
-          "dbs": "DEV",
+          "dbs": "XYZ",
           "tables": {
             "8": null,
             "9": "dev.retailplaces"
@@ -2322,6 +2322,109 @@
             }
           ]
         },
+        "Road network": {
+          "group": "Transport",
+          "meta": "The UK’s motorways including all junctions, slip roads, stubs and spurs. All non-primary UK roads (trunk roads or otherwise, A-road). B-roads designated as carrying significant local traffic. Minor roads that are generally local. Minor roads that provide the most satisfactory route for through traffic between places of traffic importance, they are often but not always trunk roads.",
+          "format": "mvt",
+          "dbs": "XYZ",
+          "qID": "id",
+          "geom": "geom_l_3857",
+          "srid": "3857",
+          "tables": {
+            "7": null,
+            "8": "geodata.uk_glx_geodata_road_detail"
+          },
+          "hover": {
+            "field": "road_type"
+          },
+          "infoj": [
+            {
+              "type": "key"
+            },
+            {
+              "field": "road_name",
+              "title": "Name",
+              "inline": true
+            },
+            {
+              "field": "road_type",
+              "title": "Road Type",
+              "inline": true
+            },
+            {
+              "field": "detailtype",
+              "title": "Road category",
+              "inline": true
+            }
+          ],
+          "style": {
+            "default": {
+              "strokeColor": "#780116"
+            },
+            "highlight": {
+              "strokeColor": "#780116"
+            },
+            "themes": {
+              "Road Category": {
+                "field": "detailtype",
+                "other": true,
+                "type": "categorized",
+                "cat": {
+                  "A Road": {
+                    "style": {
+                      "strokeColor": "#1e88e5"
+                    }
+                  },
+                  "B Road": {
+                    "style": {
+                      "strokeColor": "#66bb6a"
+                    }
+                  },
+                  "Motorway": {
+                    "style": {
+                      "strokeWidth": 2,
+                      "strokeColor": "#ef5350"
+                    }
+                  },
+                  "Primary Road": {
+                    "style": {
+                      "strokeWidth": 2,
+                      "strokeColor": "#7b1fa2"
+                    }
+                  }
+                }
+              },
+              "Test graduated theme": {
+                "field": "detailtype_num",
+                "type": "graduated",
+                "cat_arr": [
+                  {
+                    "value": 0,
+                    "label": "1",
+                    "style": {
+                      "strokeWidth": 5,
+                      "strokeColor": "#1e88e5" 
+                    }
+                  },
+                  {
+                    "value": 1,
+                    "label": "2",
+                    "style": {
+                      "strokeColor": "#66bb6a" 
+                    }
+                  },
+                  {
+                    "value": 2,
+                    "label": "3",
+                    "style": {
+                      "strokeColor": "#ef5350" 
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
         "Free Draw / Selection Tool": {
           "meta": "Test layer for editing and drawing geometries.",
           "format": "mvt",
@@ -2417,7 +2520,7 @@
           "format": "cluster",
           "srid": "4326",
           "geom": "geom_4326",
-          "dbs": "DEV",
+          "dbs": "XYZ",
           "qID": "id",
           "table": "dev.uk_glx_sites",
           "_tables": {
@@ -2914,7 +3017,7 @@
         "Cluster Catchments": {
           "group": "Cluster",
           "format": "cluster",
-          "dbs": "DEV",
+          "dbs": "XYZ",
           "table": "dev.cluster_catchments",
           "geom": "geom",
           "srid": "4326",
@@ -3070,7 +3173,7 @@
         },
         "Draw": {
           "format": "mvt",
-          "dbs": "DEV",
+          "dbs": "XYZ",
           "table": "dev.draw",
           "srid": "3857",
           "geom": "geom",
@@ -3141,7 +3244,7 @@
         "Scratch": {
           "meta": "This is a test layer for editing and drawing geometries.",
           "format": "mvt",
-          "dbs": "DEV",
+          "dbs": "XYZ",
           "table": "dev.scratch",
           "srid": "3857",
           "geom": "geom_3857",
@@ -3275,7 +3378,7 @@
             "© ONS": "https://www.ons.gov.uk"
           },
           "format": "mvt",
-          "dbs": "DEV",
+          "dbs": "XYZ",
           "tables": {
             "12": null,
             "13": "dev.oa",
@@ -3375,7 +3478,7 @@
           "group": "Cluster",
           "format": "cluster",
           "cluster_label": "store",
-          "dbs": "DEV",
+          "dbs": "XYZ",
           "qID": "id",
           "table": "dev.retailpoints",
           "geom": "geom",
@@ -3700,7 +3803,7 @@
           "group": "Cluster",
           "meta": "A subset of collection of points of interest across the UK including healthcare locations, law and order sites along with sport & leisure facilities, car parks, cinemas and service areas.",
           "format": "cluster",
-          "dbs": "DEV",
+          "dbs": "XYZ",
           "table": "geodata.vw_uk_glx_geodata_poi_health",
           "qID": "id",
           "geom": "geom_p_4326",
@@ -3797,7 +3900,7 @@
         "Election Wards": {
           "group": "Cluster",
           "format": "cluster",
-          "dbs": "DEV",
+          "dbs": "XYZ",
           "table": "politics.election_ward",
           "geom": "geom_point_4326",
           "srid": "4326",
@@ -3821,7 +3924,7 @@
         "PPD": {
           "group": "Cluster",
           "format": "cluster",
-          "dbs": "DEV",
+          "dbs": "XYZ",
           "table": "dev.london_hpp",
           "geom": "geom_3857",
           "srid": "3857",
@@ -3903,7 +4006,7 @@
             "geometry": true,
             "delete": true
           },
-          "dbs": "DEV",
+          "dbs": "XYZ",
           "geom": "geom_4326",
           "sird": "4326",
           "table": "dev.storelist_1507__19",
@@ -4062,7 +4165,7 @@
           "format": "cluster",
           "srid": "4326",
           "geom": "geom_4326",
-          "dbs": "DEV",
+          "dbs": "XYZ",
           "table": "dev.uk_glx_sites",
           "cluster_kmeans": 0.1
         }

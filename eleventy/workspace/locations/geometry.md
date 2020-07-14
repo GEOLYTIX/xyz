@@ -1,15 +1,17 @@
 ---
-title: Geoometry
+title: Geometry
 tags: [workspace, infoj, entry, geometry]
 layout: root.html
 orderPath: /workspace/locations/_geometry
 ---
 
-# "type": "geometry" - Additional geometries
+# Additional geometries
+
+`"type": "geometry"`
 
 Entry of type "geometry" allows to visualize geometries associated with selected location. This is often used for representation of catchments, isolines, boundaries relevant to selected location.
 
-The basic setup: 
+The basic setup:
 
 ```json
 {   
@@ -28,11 +30,11 @@ In order to display by default set:
 "display": true
 ```
 
-This type supports isolines provided by third party APIs, currently (© HERE)[https://www.here.com/] 
+This type supports isolines provided by third party APIs, currently (© HERE)[https://www.here.com/]
 
 ```json
 {
-	"name": "HERE drivetime 5 min",  // "name" is used as custom checkbox name
+	"name": "HERE drivetime 5 min",
 	"field": "isoline_5min",
 	"fieldfx": "ST_asGeoJson(isoline_5min)",
 	"type": "geometry",
@@ -42,6 +44,7 @@ This type supports isolines provided by third party APIs, currently (© HERE)[ht
 		}
 	}
 }
+  // "name" is used as custom checkbox name
   // request returns 5 minute drivetime isochrone from Here API
 ```
 
@@ -87,7 +90,7 @@ Use "meta" property for both providers in order to store details of most recent 
 }
 ```
 
-Geometry can also support "query" parameter which is independent from selected location. It is useful for more complex geometries which may only be requested when needed. 
+Geometry can also support "query" parameter which is independent from selected location. It is useful for more complex geometries which may only be requested when needed.
 
 ```json
 {
@@ -131,7 +134,7 @@ The following example demonstrates multi geometry returned from a query template
 	"query": "Shops with catchments all catchments",
 	"style": {
 	    "theme": {
-	        "legend": true, // optional legend
+	        "legend": true,
             "type": "categorized",
             "field": "catchment",
             "cat": {
@@ -163,6 +166,7 @@ The following example demonstrates multi geometry returned from a query template
         }
     }
 }
+// "legend": true - optional legend
 ```
 
 Query used for multi geometry in the above example:
@@ -180,3 +184,9 @@ FROM (SELECT jsonb_build_array(jsonb_build_object('type', 'Feature', 'properties
                                                   ST_AsGeoJson(catchment_tertiary)::jsonb)) AS features
       FROM (SELECT * FROM dev.storelist_1507__19 where id = ${id}) a) b
 ```
+
+#### Applied z-index
+* Layer is by default drawn on z-index: 1 unless configured otherwise.
+* The layer brought to front is drawn on z-index: 1000.
+* Selected location is drawn on z-index: 1999.
+* Additional geometries are drawn on z-index: 999, just below most top layer and under feature of selected location.
