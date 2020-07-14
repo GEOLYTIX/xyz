@@ -2323,8 +2323,7 @@
           ]
         },
         "Road network": {
-          "group": "Transport",
-          "meta": "The UK’s motorways including all junctions, slip roads, stubs and spurs. All non-primary UK roads (trunk roads or otherwise, A-road). B-roads designated as carrying significant local traffic. Minor roads that are generally local. Minor roads that provide the most satisfactory route for through traffic between places of traffic importance, they are often but not always trunk roads.",
+          "meta": "MVT layer where features are linestrings.",
           "format": "mvt",
           "dbs": "XYZ",
           "qID": "id",
