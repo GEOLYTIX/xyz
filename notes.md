@@ -26,3 +26,5 @@ Filter from categorised legend to fire show layer event.
 Manual creation of location additional geometries - polygon, rectangle, circle, line, freehand implemented.
 
 Deleting location additional geometries - alert to confirm.
+
+Editing shapes stored as additonal geometries.
