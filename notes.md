@@ -30,3 +30,7 @@ Manual creation of location additional geometries - polygon, rectangle, circle, 
 Deleting location additional geometries - alert to confirm.
 
 Editing shapes stored as additonal geometries.
+
+Manual editing of Here API isolines.
+
+Manual editing of Mapbox API isolines.
