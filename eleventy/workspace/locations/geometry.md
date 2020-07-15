@@ -190,3 +190,41 @@ FROM (SELECT jsonb_build_array(jsonb_build_object('type', 'Feature', 'properties
 * The layer brought to front is drawn on z-index: 1000.
 * Selected location is drawn on z-index: 1999.
 * Additional geometries are drawn on z-index: 999, just below most top layer and under feature of selected location.
+
+
+## Editing additional geometries
+
+Additional geometries can be drawn manually using map interaction modules.
+
+In order to allow manual creation of shapes set any of the following:
+
+```json
+	"edit": {
+		"polygon": true,
+	  "circle": true,
+		"rectangle": true,
+		"line": true,
+		"freehand": true
+	}
+```
+
+Each shape can be manually created and edited when existing.
+
+In order to allow manual editing of isolines returned from third party APIs:
+
+```json
+"edit": {
+	"isoline_here": {
+		"geometry": true,
+		"minutes": 10
+	}
+}
+// 10-minute Here isoline with enabled manual editing
+
+"edit": {
+	"isoline_mapbox": {
+		"geometry": true
+	}
+}
+// custom Mapbox isoline with enabled manual editing
+```
