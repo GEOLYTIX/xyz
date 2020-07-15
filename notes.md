@@ -30,3 +30,5 @@ Manual creation of location additional geometries - polygon, rectangle, circle, 
 Deleting location additional geometries - alert to confirm.
 
 Editing shapes stored as additonal geometries.
+
+Support for dynamic modules. [#316](https://github.com/GEOLYTIX/xyz/issues/316)
