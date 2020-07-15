@@ -4137,19 +4137,36 @@
               }
             },
             {
-              "name": "HERE Isoline 10min",
+              "name": "Here Isoline 10min",
               "type": "geometry",
               "field": "isoline_10min",
               "fieldfx": "ST_AsGeoJson(isoline_10min)",
               "edit": {
                 "isoline_here": {
-                  "__minutes": 10
+                  "geometry": true,
+                  "minutes": 10
                 }
               },
               "style": {
                 "fillOpacity": 0.2,
                 "fillColor": "#5A2A27",
                 "strokeColor": "#5A2A27"
+              }
+            },
+            {
+              "name": "Mapbox Isoline",
+              "type": "geometry",
+              "field": "isoline_mapbox",
+              "fieldfx": "ST_AsGeoJson(isoline_mapbox)",
+              "edit": {
+                "isoline_mapbox": {
+                  "geometry": true
+                }
+              },
+              "style": {
+                "fillOpacity": 0.2,
+                "fillColor": "#8D5B4C",
+                "strokeColor": "#8D5B4C"
               }
             }
           ],

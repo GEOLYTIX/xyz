@@ -32,3 +32,6 @@ Deleting location additional geometries - alert to confirm.
 Editing shapes stored as additonal geometries.
 
 Support for dynamic modules. [#316](https://github.com/GEOLYTIX/xyz/issues/316)
+Manual editing of Here API isolines.
+
+Manual editing of Mapbox API isolines.
