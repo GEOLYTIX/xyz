@@ -139,12 +139,10 @@ async function assignTemplates() {
       if (entry[1].module) {
         return provider.http(entry[1].module)
         .then(response => {
-
           const Module = module.constructor;
           const m = new Module();
           m._compile(response, entry[1].module)
           _resolve(m.exports)
-
         })
       }
 
