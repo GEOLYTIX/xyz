@@ -74,8 +74,6 @@ module.exports = {
           scale: 1,
         },
         cluster: {
-          type: 'target',
-          fillolor: '#333333',
           scale: 1.2
         },
         highlight: {

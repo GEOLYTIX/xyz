@@ -14,6 +14,8 @@ Cluster style object:
 
 * location markers now use size (in pixels) and also can use scale which defaults to 1, 1.2 for cluster, 1.3 for highlight.
 
+* "cluster":{} marker now inherits default styling properties and these can be overridden.
+
 ## Fixes
 
 MVT can now be generated from tables with a different EPSG than 3857. [#307](https://github.com/GEOLYTIX/xyz/issues/307)

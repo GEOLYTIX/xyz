@@ -2615,7 +2615,7 @@
           "table": "politics.election_ward",
           "geom": "geom_point_4326",
           "srid": "4326",
-          "cluster_hexresolution": 0.1,
+          "cluster_hexresolution": 0.3,
           "style": {
             "size": 10,
             "anchor": null,
@@ -2889,13 +2889,7 @@
               }
             },
             "cluster": {
-              "size": 20,
-              "type": "target",
-              "fillColor": "#011D4A",
-              "layers": {
-                "0.75": "#EEE",
-                "0.5": "#33849D"
-              }
+              "type": "target"
             }
           }
         },
