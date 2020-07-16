@@ -4169,6 +4169,7 @@
           ],
           "style": {
             "default": {
+              "size": 20,
               "type": "square",
               "fillColor": "#011D4A",
               "layers": {
@@ -4177,6 +4178,7 @@
               }
             },
             "cluster": {
+              "size": 20,
               "type": "target",
               "fillColor": "#011D4A",
               "layers": {
