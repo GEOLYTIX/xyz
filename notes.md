@@ -4,6 +4,14 @@
 
 Hidden flag in layer styles configuration
 
+Cluster style object: 
+
+* markerMin and markerMax replaced with "size" which is now the default size of the icon
+
+* "marker" renamed to "default"
+
+* "markerMulti" renamed to "cluster"
+
 ## Fixes
 
 MVT can now be generated from tables with a different EPSG than 3857. [#307](https://github.com/GEOLYTIX/xyz/issues/307)
