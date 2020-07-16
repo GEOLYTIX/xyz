@@ -66,18 +66,17 @@ module.exports = {
     cluster: {
       srid: '4326',
       style: {
-        markerMin: 20,
-        markerMax: 40,
+        size: 20,
         anchor: null,
-        marker: {
+        default: {
           type: 'target',
           fillColor: '#999999',
           scale: 0.05,
         },
-        markerMulti: {
+        cluster: {
           type: 'target',
           fillolor: '#333333',
-          scale: 0.05,
+          scale: 0.05
         },
         highlight: {
           scale: 0.08

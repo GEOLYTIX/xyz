@@ -616,7 +616,7 @@
         "provider": "GOOGLE",
         "country": "GB",
         "placeholder": "eg. London",
-        "_datasets": [
+        "datasets": [
           {
           "layer": "Retail Points",
           "table": "dev.retailpoints",
@@ -779,16 +779,15 @@
               "strokeColor": "#ffffff",
               "strokeWidth": 3
             },
-            "marker": {
+            "default": {
               "type": "target",
               "fillColor": "#d3d3d3"
             },
-            "markerMulti": {
+            "cluster": {
               "type": "target",
               "fillColor": "#93827F"
             },
-            "markerMin": 50,
-            "markerMax": 50,
+            "size": 50,
             "themes": {
               "Retailers": {
                 "type": "categorized",
@@ -1116,11 +1115,11 @@
               "strokeColor": "#ffffff",
               "strokeWidth": 3
             },
-            "marker": {
+            "default": {
               "type": "target",
               "fillColor": "#d3d3d3"
             },
-            "markerMulti": {
+            "cluster": {
               "type": "target",
               "fillColor": "#93827F"
             },
@@ -1305,11 +1304,11 @@
             }
           ],
           "style": {
-            "marker": {
+            "default": {
               "type": "target",
               "fillColor": "#7EBDC3"
             },
-            "markerMulti": {
+            "cluster": {
               "type": "target",
               "fillColor": "#7EBDC3"
             },
@@ -1529,7 +1528,8 @@
           "qID": "id",
           "table": "dev.uk_dev_sites",
           "cluster_label": "site_name",
-          "infoj": [{
+          "infoj": [
+            {
               "type": "key",
               "class": "_report"
             },
@@ -1627,7 +1627,7 @@
           ],
           "style": {
             "hidden": true,
-            "marker": {
+            "default": {
               "type": "target",
               "fillColor": "#2364AA",
               "layers": {
@@ -1635,7 +1635,7 @@
                 "0.50": "#2364AA"
               }
             },
-            "markerMulti": {
+            "cluster": {
               "type": "target",
               "fillColor": "#2364AA",
               "layers": {
@@ -1664,7 +1664,8 @@
             "12": "geodata.uk_glx_open_postal_sector",
             "13": null
           },
-          "infoj": [{
+          "infoj": [
+            {
               "type": "key"
             },
             {
@@ -2965,13 +2966,12 @@
             }
           ],
           "style": {
-            "markerMin": 20,
-            "markerMax": 30,
-            "marker": {
+            "size": 20,
+            "default": {
               "type": "target",
               "fillColor": "#ffb300"
             },
-            "markerMulti": {
+            "cluster": {
               "type": "dot",
               "fillColor": "rgba(0, 75, 168, 0.3)"
             },
@@ -2983,13 +2983,11 @@
                 "cat": {
                   "0": {
                     "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/aga/hi.svg",
-                    "markerMin": 50,
-                    "markerMax": 50
+                    "size": 50
                   },
                   "1": {
                     "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/aga/hi2.svg",
-                    "markerMin": 50,
-                    "markerMax": 50
+                    "size": 50
                   }
                 }
               },
@@ -3152,7 +3150,7 @@
             }
           ],
           "style": {
-            "marker": {
+            "default": {
               "type": "square",
               "fillColor": "#03a9f4",
               "layers": {
@@ -3160,7 +3158,7 @@
                 "0.5": "#512da8"
               }
             },
-            "markerMulti": {
+            "cluster": {
               "type": "square",
               "fillColor": "#03a9f4",
               "layers": {
@@ -3525,11 +3523,11 @@
               "strokeColor": "#fff",
               "strokeWidth": 3
             },
-            "marker": {
+            "default": {
               "type": "target",
               "fillColor": "#eeeeee"
             },
-            "markerMulti": {
+            "cluster": {
               "type": "target",
               "fillColor": "#534B62"
             },
@@ -3857,18 +3855,17 @@
               "field": "count",
               "display": true,
               "fillColor": "#fff",
-              "font": "bold 20px sans-serif"
+              "font": "bold 16px sans-serif"
             },
-            "marker": {
+            "default": {
               "type": "target",
               "fillColor": "#539987"
             },
-            "markerMulti": {
+            "cluster": {
               "type": "target",
               "fillColor": "#539987"
             },
-            "markerMin": 80,
-            "markerMax": 80,
+            "size": 30,
             "themes": {
               "POI Type": {
                 "field": "poi_type",
@@ -3881,7 +3878,8 @@
                     "anchor": [
                       0.5,
                       0.95
-                    ]
+                    ],
+                    "size": 70
                   },
                   "Pharmacy": {
                     "label": "Pharmacy",
@@ -3889,7 +3887,8 @@
                     "anchor": [
                       0.5,
                       0.95
-                    ]
+                    ],
+                    "size": 70
                   }
                 }
               }
@@ -3905,15 +3904,14 @@
           "srid": "4326",
           "cluster_hexresolution": 0.1,
           "style": {
-            "markerMin": 10,
-            "markerMax": 20,
+            "size": 10,
             "anchor": null,
-            "marker": {
+            "default": {
               "type": "target",
               "fillColor": "#cddc39",
               "scale": 0.05
             },
-            "markerMulti": {
+            "cluster": {
               "type": "target",
               "fillColor": "#ff9800",
               "scale": 0.05
@@ -3937,8 +3935,7 @@
             }
           ],
           "style": {
-            "markerMin": 10,
-            "markerMax": 30,
+            "size": 10,
             "themes": {
               "PPD": {
                 "type": "graduated",
@@ -4171,15 +4168,17 @@
             }
           ],
           "style": {
-            "marker": {
-              "type": "target",
+            "default": {
+              "size": 20,
+              "type": "square",
               "fillColor": "#011D4A",
               "layers": {
                 "0.75": "#EEE",
                 "0.5": "#33849D"
               }
             },
-            "markerMulti": {
+            "cluster": {
+              "size": 20,
               "type": "target",
               "fillColor": "#011D4A",
               "layers": {
