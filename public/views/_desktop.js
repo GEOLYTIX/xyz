@@ -209,8 +209,25 @@ window.onload = () => {
         onclick=${e => {
           xyz.mapview.locate.toggle();
           e.target.classList.toggle('enabled');
-        }}>
-          <div class="xyz-icon icon-gps-not-fixed off-black-filter">`)
+        }}><div class="xyz-icon icon-gps-not-fixed off-black-filter">`)
+
+    document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
+      <button
+        title="Measure distance"
+        onclick=${e => {
+
+          if (e.target.classList.contains('enabled')) return xyz.mapview.interaction.draw.cancel()
+
+          e.target.classList.add('enabled')
+
+          xyz.mapview.interaction.draw.begin({
+            type: 'LineString',
+            tooltip: 'length',
+            callback: () => {
+              e.target.classList.remove('enabled')
+            }
+          })
+        }}><div class="xyz-icon icon-line off-black-filter">`)          
 
     document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
       <button
