@@ -33,13 +33,13 @@ module.exports = {
           strokeWidth: 1,
           strokeColor: '#333333',
           fillColor: '#333333',
-          fillOpacity: 0.1,
+          fillOpacity: 0.1
         },
         highlight: {
           strokeColor: '#1F964D',
           strokeWidth: 2,
           fillColor: '#cae0b8',
-          fillOpacity: 0.2,
+          fillOpacity: 0.2
         },
         themes: {},
       },
@@ -71,15 +71,13 @@ module.exports = {
         default: {
           type: 'target',
           fillColor: '#999999',
-          scale: 0.05,
+          scale: 1,
         },
         cluster: {
-          type: 'target',
-          fillolor: '#333333',
-          scale: 0.05
+          scale: 1.2
         },
         highlight: {
-          scale: 0.08
+          scale: 1.3
         },
         themes: {},
       },
