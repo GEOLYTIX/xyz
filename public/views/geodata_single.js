@@ -50,7 +50,8 @@ function createMap(locale) {
 
     xyz.mapview.popup.create({
       coords: location.marker,
-      content: locationview
+      content: locationview,
+      autoPan: true
     })
 
   }

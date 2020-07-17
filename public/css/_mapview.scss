@@ -19,6 +19,7 @@
 
 .popup {
   position: absolute;
+  background-color: white;
   box-shadow: 0 3px 14px rgba(0, 0, 0, 0.4);
   bottom: 12px;
   transform: translate(-50%, 0);
@@ -36,26 +37,6 @@
     border-width: 10px;
     left: 50%;
     margin-left: -10px;
-  }
-
-  >div {
-    background-color: white;
-    width: 400px;
-    max-width: 75vw;
-    max-height: 300px;
-    overflow-x: hidden;
-  }
-
-  ul {
-    list-style-type: none;
-    text-align: left;
-    overflow-x: hidden;
-
-    >li {
-      padding: 5px 0 5px 10px;
-      white-space: nowrap;
-      line-height: 1.5;
-    }
   }
 }
 
