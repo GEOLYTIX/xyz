@@ -47,3 +47,5 @@ Support for dynamic modules. [#316](https://github.com/GEOLYTIX/xyz/issues/316)
 Manual editing of Here API isolines.
 
 Manual editing of Mapbox API isolines.
+
+Support for tooltips in drawing interaction. [#321](https://github.com/GEOLYTIX/xyz/issues/321)
