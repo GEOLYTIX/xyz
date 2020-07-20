@@ -13,7 +13,7 @@
       "dbs": "XYZ"
     },
     "Population Summary Sites": {
-      "template": "https://api.github.com/repos/GEOLYTIX/xyz_resources/contents/dev/queries/population_summary.txt",
+      "src": "https://api.github.com/repos/GEOLYTIX/xyz_resources/contents/dev/queries/population_summary.txt",
       "dbs": "XYZ"
     },
     "Worker Summary Sites": {
@@ -1577,6 +1577,17 @@
               "type": "documents",
               "edit": true,
               "class": "_report"
+            },
+            {
+              "field": "test_jsonb",
+              "title": "Test JSONb",
+              "type": "json"
+            },
+            {
+              "field": "test_jsonb2",
+              "title": "Test JSONb",
+              "type": "json",
+              "edit": true
             },
             {
               "title": "Available dataviews",
