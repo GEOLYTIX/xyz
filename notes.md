@@ -51,3 +51,7 @@ Manual editing of Mapbox API isolines.
 Support for tooltips in drawing interaction. [#321](https://github.com/GEOLYTIX/xyz/issues/321)
 
 Measure length tool added to desktop view.
+
+Support for json entry type => "type": "json". 
+
+Entry type "meta" removed. 
