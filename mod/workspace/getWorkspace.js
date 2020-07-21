@@ -127,7 +127,7 @@ async function assignTemplates() {
         }
 
         // Assign render method if none exists.
-        if (!_template.render) {
+        if (!_template.render && !_template.format) {
           _template.render = params => _template.template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
         }
 
