@@ -1989,7 +1989,7 @@
                     },
                     {
                         "title": "Catchment Geometry",
-                        "type": "label"
+                        "type": "title"
                     },
                     {
                         "name": "Show / Hide",
@@ -2075,7 +2075,7 @@
                     },
                     {
                         "title": "Custom Mapbox Catchment",
-                        "type": "label"
+                        "type": "title"
                     },
                     {
                         "name": "Create / Delete",
@@ -2932,7 +2932,7 @@
                     },
                     {
                         "title": "Catchment 10min",
-                        "type": "label"
+                        "type": "title"
                     },
                     {
                         "field": "catchment_10min",
@@ -2992,7 +2992,7 @@
                     },
                     {
                         "title": "Address",
-                        "type": "label"
+                        "type": "title"
                     },
                     {
                         "field": "add_one"
