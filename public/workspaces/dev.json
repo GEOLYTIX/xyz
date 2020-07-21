@@ -1829,7 +1829,7 @@
             },
             {
               "field": "isoline_here_custom_meta",
-              "type": "meta"
+              "type": "json"
             },
             {
               "title": "Custom Mapbox Catchment",
@@ -1854,7 +1854,7 @@
             },
             {
               "field": "isoline_mapbox_custom_meta",
-              "type": "meta"
+              "type": "json"
             },
             {
               "title": "something",
