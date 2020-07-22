@@ -73,7 +73,7 @@ async function get(req, res) {
     template: getTemplate,
     templates: getTemplates,
     locale: getLocale,
-    locales: () => res.send(Object.keys(workspace.locales || {})),
+    locales: getLocales,
   }
 
   if (!req.params.key) return res.send(workspace)
@@ -130,6 +130,28 @@ function getTemplates(req, res) {
   )
 
   res.send(templates.join('<br>'))
+}
+
+function getLocales(req, res) {
+
+  if (!workspace.locales) return res.send({})
+
+  const locales = Object.keys(workspace.locales).map(key => {
+
+    const locale = workspace.locales[key]
+
+    if (!locale.roles) return key
+
+    if (Object.keys(locale.roles).some(
+      role => req.params.token
+        && req.params.token.roles
+        && req.params.token.roles.includes(role)
+    )) return key
+
+  }).filter(key => typeof key ==='string')
+
+  res.send(locales)
+
 }
 
 function getLocale(req, res) {
