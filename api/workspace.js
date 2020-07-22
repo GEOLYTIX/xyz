@@ -162,6 +162,12 @@ function getLocale(req, res) {
 
   let locale = Object.assign({key: req.params.locale}, cloneDeep(workspace.locales[req.params.locale]))
 
+  if (locale.roles && !Object.keys(locale.roles).some(
+    role => req.params.token
+      && req.params.token.roles
+      && req.params.token.roles.includes(role)
+  )) return res.status(403).send('Role access denied.')
+
   locale.layers = Object.entries(locale.layers)
     .map(layer => {
 
