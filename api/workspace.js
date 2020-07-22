@@ -90,6 +90,12 @@ async function getLayer(req, res) {
 
   const locale = req.params.locale && workspace.locales[req.params.locale]
 
+  if (locale.roles && !Object.keys(locale.roles).some(
+    role => req.params.token
+      && req.params.token.roles
+      && req.params.token.roles.includes(role)
+  )) return res.status(403).send('Role access denied.')
+
   let layer = locale && locale.layers[req.params.layer] ||  workspace.templates[req.params.layer]
 
   if (!layer) return res.status(400).send('Layer not found.')
