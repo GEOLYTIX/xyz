@@ -101,6 +101,8 @@ window.onload = () => {
 
   function getLocale(locales) {
 
+    if (!locales.length) return console.log('No accessible locales')
+
     const locale = (xyz.hooks && xyz.hooks.current.locale) || locales[0]
 
     xyz.workspace.get.locale({
