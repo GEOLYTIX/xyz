@@ -62,7 +62,21 @@ module.exports = async (req, res, access) => {
       return
     }
 
-    if (!access || access === 'login') return
+    if (!access || access === 'login') {
+
+      // Set cookie from valid token if no cookie present on request.
+      if (!req.cookies || !req.cookies[`XYZ ${process.env.TITLE || 'token'}`]) {
+        delete token.admin_user
+        delete token.admin_workspace
+        token.signed = jwt.sign(
+          token,
+          process.env.SECRET)
+
+        res.setHeader('Set-Cookie', `XYZ ${process.env.TITLE || 'token'}=${token.signed};HttpOnly;Max-Age=28800;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
+      }
+      
+      return
+    }
 
     // Check admin_user privileges.
     if (access === 'key' && token.key) return

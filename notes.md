@@ -59,3 +59,5 @@ Entry type "meta" removed.
 Don't create render method for templates with format key, ie. layer templates.
 
 Filter getLocales for roles.
+
+Provide token access by generating a cookie from token. [#323](https://github.com/GEOLYTIX/xyz/issues/323)
