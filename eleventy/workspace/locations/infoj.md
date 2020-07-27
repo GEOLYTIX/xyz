@@ -82,3 +82,7 @@ To enable tooltip on mouse hover.
 `"type": "json"`
 
 This entry stores string representation of JSON object. To enable editing add flag `"edit": true`. The recommended PostgreSQL database column type to store this value is `jsonb`.
+
+`"class": "<class name>"`
+
+Property `"class"` applies CSS class to the entry which can be used for custom styling of the entry.

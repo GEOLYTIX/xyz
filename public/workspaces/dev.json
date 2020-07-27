@@ -1453,7 +1453,8 @@
                     {
                         "field": "id",
                         "title": "Site ID",
-                        "inline": true
+                        "inline": true,
+                        "class": "purple-text"
                     },
                     {
                         "field": "text_edit",
