@@ -21,6 +21,10 @@ The snippet below is an example of styling for layers mvt and geojson. It is mos
     "strokeWidth": 1
 
   },
+  "marker": {
+    "type": "circle",
+    "strokeColor": "#083D77"
+  },
   "highlight": {
     "strokeColor": "#ff69b4",
     "strokeWidth": 2
@@ -28,13 +32,17 @@ The snippet below is an example of styling for layers mvt and geojson. It is mos
 }
 ```
 
+`"marker"` is an optional setting which applies in case of point features displayed on MVT and GeoJSON layers. For more details of marker-style settings check section on Icons. 
+
 Style object also supports `zIndex` property which modifies the drawing order of the layer.
 For most layers default `zIndex` is 1 while for cluster layers it equals to 10.
 
 ### Cluster styling
 
-Cluster features take their style from style.default object.
+Cluster features inherit their style from style.default object.
 Default marker size is 20, default scale equals to 1.
+
+Cluster scale defaults to 1.2 and highlight scale defaults to 1.3. 
 
 ```json
 {
@@ -69,6 +77,8 @@ Here's an example of inherited styles:
   }
 }
 ```
+
+Please note that `"size"` defined inside `"cluster"` object is a maximum size of cluster icon.
 
 Supported types of markers:
 

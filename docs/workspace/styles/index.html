@@ -353,17 +353,23 @@
     &quot;strokeWidth&quot;: 1
 
   },
+  &quot;marker&quot;: {
+    &quot;type&quot;: &quot;circle&quot;,
+    &quot;strokeColor&quot;: &quot;#083D77&quot;
+  },
   &quot;highlight&quot;: {
     &quot;strokeColor&quot;: &quot;#ff69b4&quot;,
     &quot;strokeWidth&quot;: 2
   }
 }
 </code></pre>
+<p><code>&quot;marker&quot;</code> is an optional setting which applies in case of point features displayed on MVT and GeoJSON layers. For more details of marker-style settings check section on Icons.</p>
 <p>Style object also supports <code>zIndex</code> property which modifies the drawing order of the layer.<br>
 For most layers default <code>zIndex</code> is 1 while for cluster layers it equals to 10.</p>
 <h3>Cluster styling</h3>
-<p>Cluster features take their style from style.default object.<br>
+<p>Cluster features inherit their style from style.default object.<br>
 Default marker size is 20, default scale equals to 1.</p>
+<p>Cluster scale defaults to 1.2 and highlight scale defaults to 1.3.</p>
 <pre><code class="language-json">{
   &quot;default&quot;: {
     &quot;type&quot;: &quot;target&quot;,
@@ -392,6 +398,7 @@ Default marker size is 20, default scale equals to 1.</p>
   }
 }
 </code></pre>
+<p>Please note that <code>&quot;size&quot;</code> defined inside <code>&quot;cluster&quot;</code> object is a maximum size of cluster icon.</p>
 <p>Supported types of markers:</p>
 <ul>
 <li>svg</li>

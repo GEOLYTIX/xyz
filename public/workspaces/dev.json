@@ -1526,7 +1526,7 @@
                         "fieldfx": "ST_asGeoJson(isoline_5min)",
                         "type": "geometry",
                         "class": "_report",
-                        "display": true,
+                        "_display": true,
                         "level": 1,
                         "edit":
                         {
@@ -1665,6 +1665,7 @@
                         "target": "xyz_sites_random",
                         "query": "Random Data Series",
                         "class": "_report",
+                        "display": true,
                         "chart":
                         {
                             "height": 300,
@@ -1917,7 +1918,8 @@
                         {
                             "type": "dot",
                             "fillColor": "rgba(0, 75, 168, 0.3)",
-                            "scale": 2
+                            "scale": 2,
+                            "size": 30
                         },
                         "highlight":
                         {
