@@ -181,8 +181,7 @@ async function gaz_locale(req, locale, results) {
       FROM ${dataset.table}
       WHERE ${dataset.qterm || dataset.label}::text ILIKE $1
       ${filter}
-      ORDER BY length(${dataset.label})
-      LIMIT 10`
+      LIMIT ${dataset.limit || locale.gazetteer.limit || 10}`
 
     let phrase = dataset.space_wildcard ? `${decodeURIComponent(req.params.q).replace(new RegExp(/  */g), '% ')}%` : `${decodeURIComponent(req.params.q)}%`;
 
@@ -209,6 +208,8 @@ async function gaz_locale(req, locale, results) {
           source: row.source || 'glx'
         });
       });
+
+      results.sort((a, b) => a.label.localeCompare(b.label));
     }
   });
 }

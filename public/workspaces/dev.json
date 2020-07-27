@@ -713,12 +713,14 @@
                 "country": "GB",
                 "placeholder": "eg. London",
                 "label": true,
+                "limit": 8,
                 "datasets": [
                 {
                     "layer": "Retail Points",
                     "table": "dev.retailpoints",
                     "label": "store",
-                    "leading_wildcard": true
+                    "leading_wildcard": true,
+                    "limit": 5
                 },
                 {
                     "layer": "Retail Places",

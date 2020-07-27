@@ -346,6 +346,7 @@
 <pre><code class="language-javascript">&quot;gazetteer&quot;: {
   &quot;provider&quot;: &quot;MAPBOX&quot;,
   &quot;placeholder&quot;: &quot;e.g. London&quot;,
+  &quot;label&quot;: true,
   &quot;datasets&quot;: [
     {
       &quot;layer&quot;: &quot;sprawls&quot;,
@@ -356,7 +357,10 @@
     }
   ]
 }
+
+// &quot;label&quot;: true within gazetteer object is optional - it displays result source and is useful in case of searching multiple datasets. 
 </code></pre>
+<p>Each dataset supports <code>&quot;limit&quot;</code> parameters which defaults to 10. It can be also set within gazetter object in order to apply to all datasets. Results will be sorted alphabetically.</p>
 <p>The gazetteer can be set to use either third party provider and / or hosted datasets. Locations from hosted datasets will be selected while geolocations from 3rd party providers are shown as a marker on the map.</p>
 <p><code>&quot;provider&quot;: &quot;MAPBOX&quot;</code></p>
 <p>The geolocation service to use (MAPBOX, GOOGLE or OPENCAGE). A corresponding KEY_*** is required in the environment settings in order to use a 3rd party service.</p>
