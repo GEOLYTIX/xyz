@@ -28,6 +28,9 @@ The snippet below is an example of styling for layers mvt and geojson. It is mos
 }
 ```
 
+Style object also supports `zIndex` property which modifies the drawing order of the layer.
+For most layers default `zIndex` is 1 while for cluster layers it equals to 10.
+
 ### Cluster styling
 
 Cluster features take their style from style.default object.
