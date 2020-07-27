@@ -85,4 +85,4 @@ This entry stores string representation of JSON object. To enable editing add fl
 
 `"class": "<class name>"`
 
-Property `"class"` applies CSS class to the entry which can be used for custom styling of the entry.
+Property `"class"` applies CSS class to the entry which can be used for custom styling of the entry. Class CSS can be included in CSS stylesheets and document templates.
