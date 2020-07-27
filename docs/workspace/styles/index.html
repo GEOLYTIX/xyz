@@ -342,7 +342,9 @@
 
     <div id="content">
       <h1>Styles</h1>
-<p>Style objects define how geometries are drawn in the map. Style objects are merged with Object.assign(). This means that a highlight or theme style only needs to define the style elements which should be ammended to or overwrite the default style.</p>
+<p>Style define how geometries are drawn in the map. Style objects inherit values. This means that a highlight or theme style only needs to define the style elements which should be amended to or overwrite the default style.</p>
+<h3>MVT and GeoJSON styling</h3>
+<p>The snippet below is an example of styling for layers mvt and geojson. It is most common for these layer formats to represent polygon and linestring features although they can also contain points.</p>
 <pre><code class="language-json">&quot;style&quot;: {
   &quot;default&quot;: {
     &quot;strokeColor&quot;: &quot;#004BA8&quot;,
@@ -357,19 +359,63 @@
   }
 }
 </code></pre>
+<h3>Cluster styling</h3>
+<p>Cluster features take their style from style.default object.<br>
+Default marker size is 20, default scale equals to 1.</p>
+<pre><code class="language-json">{
+  &quot;default&quot;: {
+    &quot;type&quot;: &quot;target&quot;,
+    &quot;fillColor&quot;: &quot;#cddc39&quot;
+  },
+  &quot;cluster&quot;: {
+    &quot;fillColor&quot;: &quot;#ff9800&quot;
+  }
+}
+</code></pre>
+<p>Cluster of location inherits default settings and takes scaled size unless overridden.</p>
+<p>Here's an example of inherited styles:</p>
+<pre><code class="language-json">&quot;style&quot;: {
+  &quot;default&quot;: {
+    &quot;type&quot;: &quot;target&quot;,
+    &quot;fillColor&quot;: &quot;#ffb300&quot;,
+    &quot;size&quot;: 30
+  },
+  &quot;cluster&quot;: {
+    &quot;type&quot;: &quot;dot&quot;,
+    &quot;fillColor&quot;: &quot;rgba(0, 75, 168, 0.3)&quot;,
+    &quot;scale&quot;: 2
+  },
+  &quot;highlight&quot;: {
+    &quot;scale&quot;: 2.1
+  }
+}
+</code></pre>
+<p>Supported types of markers:</p>
+<ul>
+<li>svg</li>
+<li>target</li>
+<li>triangle</li>
+<li>square</li>
+<li>semiCircle</li>
+<li>dot</li>
+<li>markerColor</li>
+<li>markerLetter</li>
+<li>geo</li>
+</ul>
 <h2>Icons</h2>
 <p>Icons can be defined as marker to represent a point location in the rendered map.</p>
 <pre><code class="language-json">&quot;style&quot;: {
-  &quot;marker&quot;: {
+  &quot;default&quot;: {
     &quot;svg&quot;: &quot;https://cdn.jsdelivr.net/gh/GEOLYTIX/mapicons/coffee/bean_blue.svg&quot;,
     &quot;anchor&quot;: [
       0.5,
       0.95
-    ]
+    ],
+    &quot;scale&quot;: 2
   },
-  &quot;markerMin&quot;: 20, // optional
-  &quot;markerMax&quot;: 40 
+  &quot;size&quot;: 20
 }
+/* scale and size optional */
 </code></pre>
 <h2>Labels</h2>
 <p>Label for locations on cluster or MVT layer are created as a seperate layer to make use of Openlayers declutter capability to prevent overlapping map labels. The label itself is created as an <a href="https://openlayers.org/en/latest/apidoc/module-ol_style_Text.html">Openlayers Text object</a>.</p>
