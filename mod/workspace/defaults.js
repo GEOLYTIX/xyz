@@ -25,7 +25,9 @@ module.exports = {
     },
   },
   layers: {
-    tiles: {},
+    tiles: {
+      style: {}
+    },
     geojson: {
       srid: '4326',
       style: {

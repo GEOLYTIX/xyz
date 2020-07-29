@@ -13,9 +13,9 @@ module.exports = {
 
     			let z = _.z;
 
-    			if(z < Math.min(zoomKeys)) z = tables[Math.min(zoomKeys)];
+    			if(z <= Math.min(...zoomKeys)) z = Math.min(...zoomKeys);
 
-    		    if(z < Math.max(zoomKeys)) z = tables[Math.max(zoomKeys)];
+    		    if(z >= Math.max(...zoomKeys)) z = Math.max(...zoomKeys);
 
     		    table = _.layer.tables[z];
 
@@ -47,9 +47,13 @@ module.exports = {
 
     		let z = _.z;
 
-    		if(z < Math.min(zoomKeys)) z = hex[Math.min(zoomKeys)];
+    		if(!hex[z]) {
+    			
+    			if(z <= Math.min(...zoomKeys)) z = Math.min(...zoomKeys);
 
-    		if(z < Math.max(zoomKeys)) z = hex[Math.max(zoomKeys)];
+    		    if(z >= Math.max(...zoomKeys)) z = Math.max(...zoomKeys);
+    		
+    		}
 
     		return hex[z];
     	}
