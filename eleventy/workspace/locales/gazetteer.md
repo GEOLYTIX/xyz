@@ -12,6 +12,7 @@ The gazetteer object defines which gazetteer should be used for the current loca
 "gazetteer": {
   "provider": "MAPBOX",
   "placeholder": "e.g. London",
+  "label": true,
   "datasets": [
     {
       "layer": "sprawls",
@@ -22,7 +23,11 @@ The gazetteer object defines which gazetteer should be used for the current loca
     }
   ]
 }
+
+// "label": true within gazetteer object is optional - it displays result source and is useful in case of searching multiple datasets. 
 ```
+
+Each dataset supports `"limit"` parameters which defaults to 10. It can be also set within gazetter object in order to apply to all datasets. Results will be sorted alphabetically.
 
 The gazetteer can be set to use either third party provider and / or hosted datasets. Locations from hosted datasets will be selected while geolocations from 3rd party providers are shown as a marker on the map.
 

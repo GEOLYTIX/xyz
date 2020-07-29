@@ -35,6 +35,8 @@ Filter from categorised legend to fire show layer event.
 
 Graduated theme for line mvts - now lines displayed in legend.
 
+Gazetteer - now supports limit of results per dataset or all searched datasets. Final array of results now sorted alphabetically.
+
 ## New
 
 Manual creation of location additional geometries - polygon, rectangle, circle, line, freehand implemented.
@@ -44,6 +46,9 @@ Deleting location additional geometries - alert to confirm.
 Editing shapes stored as additonal geometries.
 
 Support for dynamic modules. [#316](https://github.com/GEOLYTIX/xyz/issues/316)
+
+Current map zoom sent to API on selection along with viewport.
+
 Manual editing of Here API isolines.
 
 Manual editing of Mapbox API isolines.

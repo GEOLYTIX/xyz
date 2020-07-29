@@ -73,7 +73,7 @@ and (© Mapbox)[https://www.mapbox.com/about/maps]
 ```
 
 * Skip "minutes" parameter to use custom slider.
-Use "meta" property for both providers in order to store details of most recent isoline.
+Use "meta" property for both providers in order to store details of most recent isoline. This value can be displayed as a separate entry of type `"json"`.
 
 
 ```json
