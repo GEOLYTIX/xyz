@@ -2,6 +2,7 @@
 title: Mapview
 tags: [develop]
 layout: root.html
+group: true
 orderPath: /develop/lib/mapview/_mapview
 ---
 

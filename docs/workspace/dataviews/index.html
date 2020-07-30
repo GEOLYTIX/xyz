@@ -184,9 +184,11 @@
       
       
       
-      <li class="__0 ">
+      <li class="__1 ">
         <a href="/xyz/docs/">XYZ</a>
       </li>
+      
+      
       
       
       
@@ -260,6 +262,18 @@
       
       
       
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/dataviews/charts/">Charts</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/dataviews/tables/">Tables</a>
+      </li>
+      
+      
+      
       <li class="__2 ">
         <a href="/xyz/docs/workspace/layer/">Layer</a>
       </li>
@@ -326,7 +340,7 @@
       
       
       
-      <li class="__1 ">
+      <li class="__2 ">
         <a href="/xyz/docs/workspace/styles/">Styles</a>
       </li>
       
@@ -342,76 +356,27 @@
 
     <div id="content">
       <h1>Dataviews</h1>
-<p>Dataviews may be configured as an infoj entry for a location or as key/value pair entry in the layers dataviews configuration.</p>
-<p>The entry value object will be sent as configuration parameter to the dataviews.create() method.</p>
-<p>The query to be used for a dataview must be stored as template. Queries are never sent from the client to the datasource, but a reference for a query template is passed to the Query API with query parameters to be substituted when the query template is rendered.</p>
+<p>Dataviews allow for the representation of a data response from a query as either table or chart.</p>
+<p>Dataviews may be assigned to either locations or a layer itself. The location ID will be provided as a query parameter if the dataview is defined for a location in the infoj array.</p>
 <pre><code class="language-json">{
   &quot;type&quot;: &quot;dataview&quot;,
   &quot;target&quot;: &quot;location&quot;,
-  &quot;query&quot;: &quot;shopper towns - population 15 to 21&quot;,
-  &quot;chart&quot;: {
-    &quot;labels&quot;: [
-      &quot;'19&quot;,
-      &quot;'20&quot;,
-      &quot;'21&quot;
-    ],
-    &quot;datasets&quot;: [
-      {
-        &quot;fields&quot;: [
-          &quot;pop_19&quot;,
-          &quot;pop_20&quot;,
-          &quot;pop_21&quot;
-        ],
-        &quot;backgroundColor&quot;: [
-          &quot;#C73649&quot;,
-          &quot;#C12035&quot;,
-          &quot;#BB0A21&quot;
-        ]
-      }
-    ]
-  }
+  &quot;display&quot;: true,
+  &quot;viewport&quot;: true,
+  &quot;query&quot;: &quot;shopper towns - population 15 to 21&quot;
 }
 </code></pre>
 <p>The <code>type: &quot;dataview&quot;</code> is required for dataview entries in the infoj schema.</p>
 <p>The <code>target</code> defines where the dataview is created. By default, without a target defined, dataviews.create() will generate a div element and assign this element as the dataview target. If called from the layer or location view, the dataview target will be added as a new tab to the tabview. The layer and location view methods for dataviews will attempt to get an element by ID if the target value is a string. A valid ID should be set as the target value if the dataview should be generated in a custom application view. For example on a report template.</p>
 <p><code>target: &quot;location&quot;</code> will generate a new target element for the dataview and assign that element to the location view.</p>
 <p><code>display: true</code> will define whether the dataview is shown by default. If not set the dataview will be represented as a checkbox in the layer or location view to be displayed if ticked.</p>
-<h2>Charts</h2>
-<p>A <code>chart</code> entry will be passed by the dataviews.create() method to the ChartJS library which is compiled as a util in the XYZ Library.</p>
-<p>Please refer to the <a href="https://www.chartjs.org/docs/latest/">ChartJS documentation</a> for layout and dataset configuration.</p>
-<h2>Tables</h2>
-<p>A <code>columns</code> entry will be passed by the dataviews.create() method to the Tabulator library which is compiled as a util in the XYZ Library.</p>
-<p>Please refer to the <a href="http://tabulator.info/docs/4.6">Tabulator documentation</a> for table layout and column configuration.</p>
-<pre><code>&quot;dataviews&quot;: {
-  &quot;Stores&quot;: {
-    &quot;display&quot;: true,
-    &quot;layout&quot;: &quot;fitColumns&quot;,
-    &quot;query&quot;: &quot;store_table&quot;,
-    &quot;viewport&quot;: true,
-    &quot;selectable&quot;: true,
-    &quot;table&quot;: &quot;schema.table_name&quot;,
-    &quot;toolbar&quot;: {
-      &quot;viewport&quot;: true
-    },
-    &quot;columns&quot;: [
-      {
-        &quot;title&quot;: &quot;Store&quot;,
-        &quot;field&quot;: &quot;store_name&quot;
-      },
-      {
-        &quot;title&quot;: &quot;Status&quot;,
-        &quot;field&quot;: &quot;status&quot;
-      }
-    ]
-  }
-}
-</code></pre>
-<p>With the selectable flag set to true, the locations.select() method will be called from a row click. This requires the layer, table, and id to be defined for either the dataview or in the row data.</p>
-<p>The row data consists of all the fields returned in a record from the query. The <code>field</code> must match the field in the query for the field value to be displayed in the table.</p>
-<h2>Dataview Class &amp; Style</h2>
-<p>The string value of the class entry in the dataview configuration will be assigned to the dataviews' target element. This allows for the dataview to be styled according to the class definition in the application views' stylesheet. Inline styles can be assigned to the target element by defining the style specification as a string value in the style entry.</p>
+<p>The <strong>query</strong> to be used for a dataview must be stored as template. Queries are never sent from the client to the datasource, but a reference for a query template is passed to the Query API with query parameters to be substituted when the query template is rendered.</p>
+<p>With <code>viewport: true</code> the current bounds of the mapview will be sent as viewport params with the query.</p>
+<p>With <code>center: true</code> the current lat, lng, and z of the mapview will be sent as params with the query.</p>
 <h2>Dataview Arrays</h2>
 <p>Multiple dataviews defined in an array <code>dataviews: []</code> will be created in the same target element. This allows for multiple dataviews to be shown in a single tabview panel. The parent element of the dataviews in the array will be displayed as a grid. The grid column and row of individual dataview elements in the array can therefore be set in the style entry for each dataview.</p>
+<h2>Dataview Class &amp; Style</h2>
+<p>The string value of the class entry in the dataview configuration will be assigned to the dataviews' target element. This allows for the dataview to be styled according to the class definition in the application views' stylesheet. Inline styles can be assigned to the target element by defining the style specification as a string value in the style entry.</p>
 <h2>Toolbars</h2>
 <p>Toolbars are control element to be displayed prior to the dataview element. It is possible to assign control buttons for export or viewport settings to the toolbar.</p>
 <p>The <code>viewport: true</code> option in the toolbar entry will create a viewport button in the toolbar which will toggle whether the viewport option is set for the dataview query.</p>

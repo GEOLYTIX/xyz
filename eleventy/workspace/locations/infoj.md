@@ -2,6 +2,7 @@
 title: Location
 tags: [workspace]
 layout: root.html
+group: true
 orderPath: /workspace/locations/_infoj
 ---
 

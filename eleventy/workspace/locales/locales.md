@@ -2,6 +2,7 @@
 title: Locale
 tags: [workspace]
 layout: root.html
+group: true
 orderPath: /workspace/locales/_locales
 ---
 

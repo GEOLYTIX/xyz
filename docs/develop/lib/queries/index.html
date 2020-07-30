@@ -5,7 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
-  <title>JAMStack</title>
+  <title>Queries</title>
   <style>
 
     body {
@@ -264,7 +264,7 @@
       
       
       
-      <li class="__3 active">
+      <li class="__3 ">
         <a href="/xyz/docs/develop/jamstack/">JAMStack</a>
       </li>
       
@@ -306,7 +306,7 @@
       
       
       
-      <li class="__3 ">
+      <li class="__3 active">
         <a href="/xyz/docs/develop/lib/queries/">Queries</a>
       </li>
       
@@ -375,9 +375,14 @@
     </ul>
 
     <div id="content">
-      <h1>JAMStack</h1>
-<p>XYZ application views maybe accessed through the XYZ View API or through the markup and script from a CDN. It is recommended to use the XYZ Library to connect to the XYZ API. Restful calls however may also be sent directly to the API.</p>
-<p>Views may be accessed on their own or can be embedded into other applications.</p>
+      <h1>Queries</h1>
+<p>SQL queries must never be sent directly from the client layer to the data source layer. For this reason queries can be cached as templates in the workspace.</p>
+<h2>Params</h2>
+<p>The Query API will substitute template parameter with values received either in the payload of the request or as URL parameter.</p>
+<p>With <code>viewport: true</code> the current <strong>bounds</strong> of the mapview will be sent as viewport params with the query. The bounds param is sent as an array [west, south, east, north, srid] to the query endpoint.</p>
+<p>With <code>center: true</code> the current <strong>lat</strong>, <strong>lng</strong>, and <strong>z</strong> of the mapview will be sent as params with the query.</p>
+<p>Common parameters to be sent with a query are <strong>locale</strong>, <strong>layer</strong>, <strong>table</strong>, <strong>dbs</strong>, and <strong>id</strong> (of location).</p>
+<p>If provided the <strong>queryparams</strong> object will be assigned to the URL params object.</p>
 
     </div>
 

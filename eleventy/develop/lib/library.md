@@ -2,6 +2,7 @@
 title: Library
 tags: [develop]
 layout: root.html
+group: true
 orderPath: /develop/lib/_library
 ---
 
