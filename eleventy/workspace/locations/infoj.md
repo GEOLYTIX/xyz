@@ -11,7 +11,9 @@ The infoj is a location schema which must defined inside the layer configuration
 
 The infoj schema is an array of objects. Each infoj entry may either represent a field to be queried for a value from the layer table or a complex object such as a dataview or even a custom script to be loaded and executed.
 
-The **`field`** is the datasource (PostGIS table) field to be queried for a property value to be presented in the location info.
+The **`field`** is the datasource (PostGIS table) field to be queried for a property value to be presented in the location info. 
+
+Set `title` only to display full-width text.
 
 The **`title`** will be displayed before the field value.
 
@@ -24,10 +26,6 @@ The default being a simple text value.
 `"type" : "text"`
 
 In order to split data rows with label headers define entry as:
-
-`"type" : "label"`
-
-A text will be displayed on a new line below the label.
 
 `"type" : "textarea"`
 

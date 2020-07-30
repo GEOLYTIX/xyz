@@ -184,11 +184,11 @@
       
       
       
+      
+      
       <li class="__0 ">
         <a href="/xyz/docs/">XYZ</a>
       </li>
-      
-      
       
       
       
@@ -303,25 +303,25 @@
       
       
       <li class="__2 ">
-        <a href="/xyz/docs/workspace/locales/">Locale</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
         <a href="/xyz/docs/workspace/locales/gazetteer/">Gazetteer</a>
       </li>
       
       
       
-      <li class="__2 active">
-        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/locales/">Locale</a>
       </li>
       
       
       
-      <li class="__3 ">
+      <li class="__2 ">
         <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
+      </li>
+      
+      
+      
+      <li class="__3 active">
+        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
       </li>
       
       
@@ -345,14 +345,13 @@
 <p>The infoj is a location schema which must defined inside the layer configuration object. Given a query ID <strong>(qID)</strong> the XYZ library might request the location data as defined in the infoj schema from the Location API.</p>
 <p>The infoj schema is an array of objects. Each infoj entry may either represent a field to be queried for a value from the layer table or a complex object such as a dataview or even a custom script to be loaded and executed.</p>
 <p>The <strong><code>field</code></strong> is the datasource (PostGIS table) field to be queried for a property value to be presented in the location info.</p>
+<p>Set <code>title</code> only to display full-width text.</p>
 <p>The <strong><code>title</code></strong> will be displayed before the field value.</p>
 <h2>Entry types</h2>
 <p>The entry type defines the nature of an entry and how the data should be displayed.</p>
 <p>The default being a simple text value.</p>
 <p><code>&quot;type&quot; : &quot;text&quot;</code></p>
 <p>In order to split data rows with label headers define entry as:</p>
-<p><code>&quot;type&quot; : &quot;label&quot;</code></p>
-<p>A text will be displayed on a new line below the label.</p>
 <p><code>&quot;type&quot; : &quot;textarea&quot;</code></p>
 <p>A multi-line input will be provided for an editable textarea. Otherwise the display of a textarea does not deviate from a simple text type.</p>
 <p><code>&quot;type&quot; : &quot;integer&quot;</code></p>
