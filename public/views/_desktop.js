@@ -145,7 +145,7 @@ window.onload = () => {
           class="logo"
           target="_blank"
           href="https://geolytix.co.uk"
-          style="background-image: url('https://cdn.jsdelivr.net/gh/GEOLYTIX/geolytix/public/geolytix.svg');">`
+          style="background-image: url('https://geolytix.github.io/public/geolytix.svg');">`
       },
       scrollWheelZoom: true,
     })
