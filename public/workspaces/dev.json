@@ -57,6 +57,29 @@
     },
     "locales": {
         "Roles": {
+            "gazetteer": {
+                "provider": "GOOGLE",
+                "country": "GB",
+                "placeholder": "eg. Marseille",
+                "label": true,
+                "limit": 8,
+                "datasets": [
+                    {
+                        "layer": "Test",
+                        "table": "dev.uk_glx_open_retail_points_collector",
+                        "label": "store",
+                        "leading_wildcard": true,
+                        "limit": 5
+                    },
+                    {
+                        "layer": "no_roles",
+                        "table": "dev.uk_glx_open_retail_points_collector",
+                        "label": "uniq_name",
+                        "space_wildcard": true,
+                        "minLength": 2
+                    }
+                ]
+            },
             "bounds": {
                 "north": 62,
                 "east": 5,
@@ -91,9 +114,9 @@
                         }
                     },
                     "format": "cluster",
-                    "dbs": "DEV",
-                    "table": "dev.uk_glx_open_retail_points_collector",
-                    "geom": "geom_p_4326",
+                    "dbs": "XYZ",
+                    "table": "dev.retailpoints",
+                    "geom": "geom",
                     "srid": "4326",
                     "qID": "id",
                     "infoj": [{
@@ -105,10 +128,10 @@
                 },
                 "no_roles": {
                     "format": "cluster",
-                    "dbs": "DEV",
-                    "table": "dev.uk_glx_open_retail_points_collector",
+                    "dbs": "XYZ",
+                    "table": "dev.retailpoints",
                     "qID": "id",
-                    "geom": "geom_p_4326",
+                    "geom": "geom",
                     "srid": "4326",
                     "infoj": [{
                         "field": "retailer",
@@ -1783,7 +1806,7 @@
                         }
                     ],
                     "style": {
-                        "size": 20,
+                        "_size": 20,
                         "default": {
                             "type": "dot",
                             "fillColor": "#ffb300"
@@ -1791,13 +1814,13 @@
                         "cluster": {
                             "type": "dot",
                             "fillColor": "rgba(0, 75, 168, 0.3)",
-                            "scale": 2,
+                            "_scale": 2,
                             "size": 30
                         },
                         "highlight": {
-                            "scale": 2.1
+                            "__scale": 2.1
                         },
-                        "__themes": {
+                        "themes": {
                             "Test categorized pins": {
                                 "field": "test_binary",
                                 "type": "categorized",
@@ -1805,11 +1828,11 @@
                                 "cat": {
                                     "0": {
                                         "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/aga/hi.svg",
-                                        "scale": 2
+                                        "scale": 0.1
                                     },
                                     "1": {
                                         "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/aga/hi2.svg",
-                                        "size": 40
+                                        "scale": 0.1
                                     }
                                 }
                             },
@@ -3091,6 +3114,44 @@
                     "dbs": "XYZ",
                     "table": "dev.uk_glx_sites",
                     "cluster_kmeans": 0.1
+                },
+                "Advice Center": {
+                    "display": true,
+                    "format": "cluster",
+                    "meta": "Employment advice centers",
+                    "dbs": "XYZ",
+                    "table": "gla.gla",
+                    "geom": "geom",
+                    "srid": "4326",
+                    "qID": "id",
+                    "cluster_label": "organisation_short",
+                    "cluster_kmeans": 0.3,
+                    "cluster_dbscan": 0.02,
+                    "infoj": [
+                        {
+                            "title": "Organisation",
+                            "field": "organisation_short"
+                        }
+                    ],
+                    "style": {
+                        "label": {
+                            "field": "count",
+                            "display": true,
+                            "fillColor": "#fff",
+                            "font": "bold 20px sans-serif"
+                        },
+                        "default": {
+                            "svg": "https://geolytix.github.io/gla/icons/pin_slate.svg",
+                            "anchor": [
+                                0.5,
+                                1
+                            ]
+                        },
+                        "cluster": {
+                            "svg": "https://geolytix.github.io/gla/icons/pin_slate.svg"
+                        },
+                        "highlight": {}
+                    }
                 }
             }
         }
