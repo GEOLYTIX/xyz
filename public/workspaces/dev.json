@@ -74,6 +74,7 @@
                     {
                         "layer": "no_roles",
                         "table": "dev.retailpoints",
+                        "label": "store",
                         "label": "address_1",
                         "space_wildcard": true,
                         "minLength": 2
@@ -102,6 +103,11 @@
                     "display": true,
                     "roles": {
                         "default": null,
+                        "ki": {
+                            "store": {
+                                "like": "ki"
+                            }
+                        },
                         "mo": {
                             "retailer": {
                                 "like": "mo"
@@ -124,7 +130,18 @@
                         "title": "Retailer",
                         "inline": true,
                         "filter": "like"
-                    }]
+                    }],
+                    "style": {
+                        "default": {
+                            "type": "target",
+                            "fillColor": "#1e88e5"
+                        },
+                        "label": {
+                            "field": "store",
+                            "display": true,
+                            "declutter": true
+                        }
+                    }
                 },
                 "no_roles": {
                     "format": "cluster",
@@ -133,12 +150,25 @@
                     "qID": "id",
                     "geom": "geom",
                     "srid": "4326",
+                    "hover": {
+                        "field": "store"
+                    },
                     "infoj": [{
                         "field": "retailer",
                         "title": "Retailer",
                         "inline": true,
                         "filter": "like"
-                    }]
+                    }],
+                    "style": {
+                        "default": {
+                            "type": "triangle",
+                            "fillColor": "rgba(255,112,67, 0.3)"
+                        },
+                        "label": {
+                            "field": "store",
+                            "declutter": true
+                        }
+                    }
                 }
             }
         },
