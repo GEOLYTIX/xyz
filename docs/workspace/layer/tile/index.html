@@ -184,15 +184,15 @@
       
       
       
+      
+      
+      
+      
+      
+      
       <li class="__1 ">
         <a href="/xyz/docs/">XYZ</a>
       </li>
-      
-      
-      
-      
-      
-      
       
       
       
@@ -367,6 +367,12 @@
 <p>The z, x, and y parameter will be substituted by the XYZ Library.</p>
 <p><code>/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&amp;provider=MAPBOX&amp;host=https://api.mapbox.com</code></p>
 <p>Setting a provider and host will substitute the host param as well as the API key when the request is passed through the XYZ API.</p>
+<p>By default tile layers are drawn on <code>&quot;zIndex: -1&quot;</code>. In order to set custom <code>&quot;zIndex&quot;</code> add the following to the layer settings:</p>
+<pre><code class="language-json">&quot;style&quot;: {
+	&quot;zIndex&quot;: 5
+}
+// tile layer will be drawn on zIndex: 5.
+</code></pre>
 
     </div>
 

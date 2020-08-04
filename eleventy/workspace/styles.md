@@ -37,6 +37,15 @@ The snippet below is an example of styling for layers mvt and geojson. It is mos
 Style object also supports `zIndex` property which modifies the drawing order of the layer.
 For most layers default `zIndex` is 1 while for cluster layers it equals to 10.
 
+By default cluster layers are drawn on `"zIndex: 10"`. In order to set custom `"zIndex"` add the following to the layer style settings:
+
+```json
+"style": {
+  "zIndex": 25
+}
+// tile layer will be drawn on zIndex: 25.
+```
+
 ### Cluster styling
 
 Cluster features inherit their style from style.default object.

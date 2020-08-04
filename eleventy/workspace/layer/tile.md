@@ -15,3 +15,12 @@ The z, x, and y parameter will be substituted by the XYZ Library.
 `/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX&host=https://api.mapbox.com`
 
 Setting a provider and host will substitute the host param as well as the API key when the request is passed through the XYZ API.
+
+By default tile layers are drawn on `"zIndex: -1"`. In order to set custom `"zIndex"` add the following to the layer settings:
+
+```json
+"style": {
+	"zIndex": 5
+}
+// tile layer will be drawn on zIndex: 5.
+```
