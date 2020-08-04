@@ -66,15 +66,15 @@
                 "datasets": [
                     {
                         "layer": "Test",
-                        "table": "dev.uk_glx_open_retail_points_collector",
+                        "table": "dev.retailpoints",
                         "label": "store",
                         "leading_wildcard": true,
                         "limit": 5
                     },
                     {
                         "layer": "no_roles",
-                        "table": "dev.uk_glx_open_retail_points_collector",
-                        "label": "uniq_name",
+                        "table": "dev.retailpoints",
+                        "label": "address_1",
                         "space_wildcard": true,
                         "minLength": 2
                     }
