@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
     || ''}
   ${roles && Object.values(roles).some(r => !!r)
     && await sql_filter(Object.values(roles).filter(r => !!r), 'OR')
-    || ''}`
+    || ''}`.replace(/^\s*$/,'')
 
   var q = `
   SELECT
