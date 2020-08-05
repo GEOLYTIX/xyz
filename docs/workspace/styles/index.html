@@ -184,15 +184,15 @@
       
       
       
+      
+      
+      
+      
+      
+      
       <li class="__1 ">
         <a href="/xyz/docs/">XYZ</a>
       </li>
-      
-      
-      
-      
-      
-      
       
       
       
@@ -386,6 +386,12 @@
 <p><code>&quot;marker&quot;</code> is an optional setting which applies in case of point features displayed on MVT and GeoJSON layers. For more details of marker-style settings check section on Icons.</p>
 <p>Style object also supports <code>zIndex</code> property which modifies the drawing order of the layer.<br>
 For most layers default <code>zIndex</code> is 1 while for cluster layers it equals to 10.</p>
+<p>By default cluster layers are drawn on <code>&quot;zIndex: 10&quot;</code>. In order to set custom <code>&quot;zIndex&quot;</code> add the following to the layer style settings:</p>
+<pre><code class="language-json">&quot;style&quot;: {
+  &quot;zIndex&quot;: 25
+}
+// tile layer will be drawn on zIndex: 25.
+</code></pre>
 <h3>Cluster styling</h3>
 <p>Cluster features inherit their style from style.default object.<br>
 Default marker size is 20, default scale equals to 1.</p>
