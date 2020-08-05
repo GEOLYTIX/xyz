@@ -74,7 +74,6 @@
                     {
                         "layer": "no_roles",
                         "table": "dev.retailpoints",
-                        "label": "store",
                         "label": "address_1",
                         "space_wildcard": true,
                         "minLength": 2
@@ -683,7 +682,7 @@
                     {
                         "layer": "Retail Places",
                         "table": "dev.retailplaces",
-                        "label": "uniq_name",
+                        "label": "store",
                         "space_wildcard": true,
                         "minLength": 2
                     }
@@ -1371,6 +1370,67 @@
                         }
                     }
                 },
+                "Rail": {
+                    "format": "mvt",
+                    "dbs": "XYZ",
+                    "___table": "geodata.uk_glx_geodata_transport_rail_line",
+                    "table": "dev.vw_uk_glx_geodata_transport_rail_line_and_station",
+                    "___mvt_cache": "dev.vw_uk_glx_geodata_transport_rail_line_and_station__mvts",
+                    "geom": "geom_3857",
+                    "___geom": "geom_l_3857",
+                    "srid": "3857",
+                    "qID": "fid",
+                    "____qID": "id",
+                    "style": {
+                        "default": {
+                            "strokeColor": "#01579b",
+                            "strokeWidth": 2,
+                            "marker": {
+                                "type": "circle",
+                                "strokeColor": "#00695c",
+                                "fillColor": "#ff3d00",
+                                "radius": 6
+                            }
+                        },
+                        "themes": {
+                            "Class": {
+                                "type": "categorized",
+                                "field": "class",
+                                "other": true,
+                                "cat": {
+                                    "station": {
+                                        "label": "Station",
+                                        "style": {
+                                            "marker": {
+                                                "type": "circle",
+                                                "strokeColor": "#00695c",
+                                                "fillColor": "#ff3d00",
+                                                "radius": 4
+                                            }
+                                        }
+                                    },
+                                    "railway": {
+                                        "label": "Railway",
+                                        "style": {
+                                            "strokeColor": "#00695c",
+                                            "strokeWidth": 3
+                                        }
+                                    },
+                                    "test": {
+                                        "label": "Test polygon",
+                                        "style": {
+                                            "strokeWidth": 1,
+                                            "fillColor": "#512da8"
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    },
+                    "filter": {
+
+                    }
+                },
                 "Agata": {
                     "group": "Cluster",
                     "meta": "XYZ database, don't touch.",
@@ -1836,21 +1896,23 @@
                         }
                     ],
                     "style": {
-                        "_size": 20,
                         "default": {
-                            "type": "dot",
-                            "fillColor": "#ffb300"
+                            "type": "target",
+                            "fillColor": "#ffb300",
+                            "layers": {
+                                "0.5": "#0C6291",
+                                "0.3": "#ffb300"
+                            }
                         },
                         "cluster": {
                             "type": "dot",
                             "fillColor": "rgba(0, 75, 168, 0.3)",
-                            "_scale": 2,
-                            "size": 30
+                            "scale": 2
                         },
                         "highlight": {
                             "__scale": 2.1
                         },
-                        "themes": {
+                        "__themes": {
                             "Test categorized pins": {
                                 "field": "test_binary",
                                 "type": "categorized",
@@ -2390,15 +2452,18 @@
                         },
                         "default": {
                             "type": "target",
-                            "fillColor": "#eeeeee"
+                            "fillColor": "#CEE5F2",
+                            "size": 30
                         },
                         "cluster": {
                             "type": "target",
-                            "fillColor": "#534B62"
+                            "fillColor": "#534B62",
+                            "size": 50
                         },
                         "highlight": {
                             "type": "target",
-                            "fillColor": "#ccff99"
+                            "fillColor": "#ccff99",
+                            "scale": 1.1
                         },
                         "themes": {
                             "Retailer": {
@@ -2667,7 +2732,8 @@
                             }
                         }
                     },
-                    "infoj": [{
+                    "infoj": [
+                        {
                             "type": "streetview"
                         },
                         {
