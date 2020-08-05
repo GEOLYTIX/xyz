@@ -1897,8 +1897,9 @@
                     ],
                     "style": {
                         "default": {
-                            "type": "target",
+                            "type": "semiCircle",
                             "fillColor": "#ffb300",
+                            "scale": 2,
                             "layers": {
                                 "0.5": "#0C6291",
                                 "0.3": "#ffb300"
