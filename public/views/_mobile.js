@@ -72,12 +72,11 @@ window.onload = () => {
     xyz.mapview.create({
       target: document.getElementById('Map'),
       attribution: {
-        logo: xyz.utils.wire()`
-        <a
-          class="logo"
-          target="_blank"
-          href="https://geolytix.co.uk"
-          style="background-image: url('https://geolytix.github.io/public/geolytix.svg');">`
+        target: document.getElementById('Attribution'),
+        links: {
+          [`XYZ v${xyz.version}`]: 'https://geolytix.github.io/xyz',
+          Openlayers: 'https://openlayers.org'
+        }
       },
       scrollWheelZoom: true,
     })

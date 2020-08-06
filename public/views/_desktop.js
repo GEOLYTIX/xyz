@@ -72,14 +72,14 @@ window.onload = () => {
     let height = window.innerHeight - pageY
 
     // Min height snap.
-    if (height < 40) return
+    if (height < 65) return
 
     // Full height snap.
     if (height > (window.innerHeight - 10)) height = window.innerHeight
 
     desktop.tabview.style.maxHeight = height + 'px'
 
-    if (height > 65 && document.querySelector('.attribution')) document.querySelector('.attribution').style.bottom = height + 'px'
+    document.getElementById('Attribution').style.bottom = height + 'px'
   }
 
   // Remove eventListener after resize event.
@@ -140,12 +140,11 @@ window.onload = () => {
     xyz.mapview.create({
       target: document.getElementById('Map'),
       attribution: {
-        logo: xyz.utils.html.node`
-        <a
-          class="logo"
-          target="_blank"
-          href="https://geolytix.co.uk"
-          style="background-image: url('https://geolytix.github.io/public/geolytix.svg');">`
+        target: document.getElementById('Attribution'),
+        links: {
+          [`XYZ v${xyz.version}`]: 'https://geolytix.github.io/xyz',
+          Openlayers: 'https://openlayers.org'
+        }
       },
       scrollWheelZoom: true,
     })
