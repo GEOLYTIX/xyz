@@ -74,3 +74,5 @@ Provide token access by generating a cookie from token. [#323](https://github.co
 Check locales array in getLocale mapp view script. [#325](https://github.com/GEOLYTIX/xyz/issues/325)
 
 Support multiple datasets in charts. [#327](https://github.com/GEOLYTIX/xyz/issues/327)
+
+Update attribution logic. [#332](https://github.com/GEOLYTIX/xyz/issues/332)

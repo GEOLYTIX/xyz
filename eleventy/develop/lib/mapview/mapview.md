@@ -18,6 +18,22 @@ Layers with display as true in the layers.list will be immediately added to the 
 
 A **changeEnd** event listener will update the viewport URL hooks if enabled and check the layers list. Layers which should be displayed at the current zoom level at the end of a map view change event will be reloaded. The changeEnd event will be called after the map view changes due to panning or a change of zoom level. Interactions will be disabled at the beginning of a map view change event.
 
+```javascript
+xyz.mapview.create({
+  target: document.getElementById('Map'),
+  attribution: {
+    target: document.getElementById('Attribution'),
+    links: {
+      [`XYZ v${xyz.version}`]: 'https://geolytix.github.io/xyz',
+      Openlayers: 'https://openlayers.org'
+    }
+  },
+  scrollWheelZoom: true,
+})
+```
+
+With an **attribution** object defined in the create parameters the mapview.attribution module will be called to create a list of links in the attribution target. Links defined within the attribution object will always be shown. An attribution.check method will be run whenever layers are toggled. Links defined as attribution object in the layer configuration will be shown when the layer is visible.
+
 ### view
 
 A view will be set to lng, lat, and z defined as a view object. The view object will be created from the current viewport hooks if enabled.
