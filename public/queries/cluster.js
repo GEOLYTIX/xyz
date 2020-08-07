@@ -1,4 +1,4 @@
-document.dispatchEvent(new CustomEvent('cluster', { detail: _f }));
+document.dispatchEvent(new CustomEvent('cluster', { detail: _f }))
 
 function _f(_xyz, layer) {
 

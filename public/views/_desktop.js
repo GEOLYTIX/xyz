@@ -149,7 +149,10 @@ window.onload = () => {
       scrollWheelZoom: true,
     })
 
-    loadLayers(locale.layers)
+    xyz.modules()
+      .then(() => xyz.layers.load())
+      .then(() => mappUI())
+      .catch(error => console.error(error))
 
     const btnZoomIn = xyz.utils.html.node`
     <button
@@ -242,39 +245,41 @@ window.onload = () => {
 
   }
 
-  function loadLayers(layers) {
+  // function loadModules() {
 
-    const layerPromises = layers.map(layer => {
+  //   return new Promise((resolveAll, rejectAll) => {
 
-      return xyz.workspace.get.layer({
-        locale: xyz.locale.key,
-        layer: layer
-      })
+  //     if (!xyz.locale.modules) return resolve()
 
-    })
+  //     const promises = Object.entries(xyz.locale.modules).map(_module => {
 
-    Promise.all(layerPromises).then(layers => {
+  //       return new Promise((resolve, reject) => {
 
-      if (xyz.hooks && xyz.hooks.current.layers.length) {
-        layers.forEach(layer => {
-          layer.display = !!~xyz.hooks.current.layers.indexOf(layer.key)
-        })
-      }
+  //         const tag = xyz.utils.wire()`<script src="${_module[1]}">`
 
-      layers.forEach(layer => {
+  //         const eF = e => {
+  //           e.detail(xyz)
+  //           document.removeEventListener(_module[0], eF, true)
+  //           tag.remove()
+  //           resolve(_module)
+  //         }
 
-        if (!layer.format) return
+  //         document.addEventListener(_module[0], eF, true)
+  //         document.head.appendChild(tag)
+  //       })
+  //     })
 
-        layer = xyz.layers.decorate(layer)
-        xyz.layers.list[layer.key] = layer
-        layer.display && layer.show()
+  //     Promise
+  //       .all(promises)
+  //       .then(arr => resolveAll(arr))
+  //       .catch(error => {
+  //         console.error(error)
+  //         rejectAll(error)
+  //       });
+  
+  //   })
 
-      })
-
-      mappUI()
-
-    })
-  }
+  // }
 
   function mappUI() {
 

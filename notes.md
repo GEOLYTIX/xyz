@@ -76,3 +76,5 @@ Check locales array in getLocale mapp view script. [#325](https://github.com/GEO
 Support multiple datasets in charts. [#327](https://github.com/GEOLYTIX/xyz/issues/327)
 
 Update attribution logic. [#332](https://github.com/GEOLYTIX/xyz/issues/332)
+
+Add layers.load method. [#333](https://github.com/GEOLYTIX/xyz/issues/333)
