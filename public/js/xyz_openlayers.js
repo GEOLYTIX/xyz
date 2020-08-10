@@ -449,17 +449,17 @@
           checked=${!!r[1].display}
           onchange=${t=>{if(r[1].display=t.target.checked,r[1].display)return e.dataviews.tabview.add(r[1]);r[1].remove()}}>
         </input>
-        <div></div><span>${r[1].title||r[0]}`),r[1].display&&t.display&&e.dataviews.tabview.add(r[1])}),n}}),wn=e=>({panel:function(t){if(!t.report)return;if(!t.report.templates)return;const n=e.utils.wire()`
+        <div></div><span>${r[1].title||r[0]}`),r[1].display&&t.display&&e.dataviews.tabview.add(r[1])}),n}}),wn=e=>({panel:function(t){if(!t.reports)return;const n=e.utils.wire()`
     <div class="drawer panel expandable">`;return n.appendChild(e.utils.wire()`
     <div
       class="header primary-colour"
       onclick=${t=>{t.stopPropagation(),e.utils.toggleExpanderParent(t.target,!0)}}><span>Reports</span><button
-      class="btn-header xyz-icon icon-expander primary-colour-filter">`),Object.entries(t.report.templates).forEach(r=>{const o=e.host+"/view/"+encodeURIComponent(t.report.template)+"?"+e.utils.paramString(Object.assign(r[1],{locale:e.locale.key,layer:t.key,lat:e.hooks.current.lat,lng:e.hooks.current.lng,z:e.hooks.current.z}));n.appendChild(e.utils.wire()`
+      class="btn-header xyz-icon icon-expander primary-colour-filter">`),Object.entries(t.reports).forEach(r=>{const o=e.host+"/view/"+encodeURIComponent(r[0])+"?"+e.utils.paramString(Object.assign(r[1],{locale:e.locale.key,layer:t.key,lat:e.hooks.current.lat,lng:e.hooks.current.lng,z:e.hooks.current.z}));n.appendChild(e.utils.wire()`
       <a
         target="_blank"
         href="${o}"
         class="link-with-img">
-        <div class="xyz-icon icon-event-note"></div><span>${r[1].name||r[0]}`)}),n}}),_n=e=>{const t={create:function(n){n.view=e.utils.html.node`<div class="drawer layer-view">`;const r=e.utils.html.node`
+        <div class="xyz-icon icon-event-note"></div><span>${r[0]}`)}),n}}),_n=e=>{const t={create:function(n){n.view=e.utils.html.node`<div class="drawer layer-view">`;const r=e.utils.html.node`
     <div class="header enabled"><span>${n.name||n.key}`;"cluster"===n.format&&n.style.default&&r.appendChild(e.utils.html.node`
       <img
         class="btn-header"
