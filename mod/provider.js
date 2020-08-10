@@ -4,6 +4,8 @@ const { readFileSync } = require('fs')
 
 const { join } = require('path')
 
+const cfsign = require('aws-cloudfront-sign')
+
 const _cloudinary = require('cloudinary').v2
 
 module.exports = {
@@ -23,6 +25,8 @@ module.exports = {
   http: async req => await http(req),
 
   file: async req => await file(req),
+
+  cloudfront: async ref => await cloudfront(ref),
 }
 
 async function http(req) {
@@ -41,6 +45,33 @@ async function http(req) {
 
   }
 }
+
+async function cloudfront(ref) {
+
+  try {
+  
+    const signedUrl = cfsign.getSignedUrl(
+      `https://${ref}`, 
+      {
+        keypairId: process.env.KEY_CLOUDFRONT,
+        privateKeyPath: join(__dirname, `../${process.env.KEY_CLOUDFRONT}.pem`),
+        // expireTime: 1426625464599
+      }
+    )
+  
+    const response = await fetch(signedUrl)
+  
+    if (response.status >= 300) return new Error(`${response.status} ${req}`)
+
+    return response
+
+  } catch(err) {
+
+    return err
+
+  }
+}
+
 
 function file(ref) {
   try {

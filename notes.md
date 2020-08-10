@@ -80,3 +80,5 @@ Update attribution logic. [#332](https://github.com/GEOLYTIX/xyz/issues/332)
 Add layers.load method. [#333](https://github.com/GEOLYTIX/xyz/issues/333)
 
 Add layer modules. [#334](https://github.com/GEOLYTIX/xyz/issues/334)
+
+Workspace from Cloudfront. [#335](https://github.com/GEOLYTIX/xyz/issues/335)

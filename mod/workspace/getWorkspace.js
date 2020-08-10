@@ -6,7 +6,8 @@ const getFrom = {
   'http': ref => http(ref),
   'https': ref => http(ref),
   'file': ref => file(ref.split(':')[1]),
-  'github': ref => github(ref.split(':')[1])
+  'github': ref => github(ref.split(':')[1]),
+  'cloudfront': ref => cloudfront(ref.split(':')[1]),
 }
 
 let workspace = null
@@ -41,6 +42,14 @@ async function http(ref){
     console.error(err)
     return err
   }
+}
+
+async function cloudfront(ref){
+  const response = await provider.cloudfront(ref)
+
+  if (response instanceof Error) return response
+
+  return await response.json()
 }
 
 async function file(ref) {
