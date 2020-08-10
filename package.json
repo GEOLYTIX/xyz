@@ -22,6 +22,7 @@
     ]
   },
   "dependencies": {
+    "aws-cloudfront-sign": "^2.2.0",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.21.0",
     "express-http-proxy": "^1.6.0",

@@ -74,6 +74,7 @@ async function get(req, res) {
     templates: getTemplates,
     locale: getLocale,
     locales: getLocales,
+    cloudfront: cloudfront,
   }
 
   if (!req.params.key) return res.send(workspace)
@@ -82,6 +83,33 @@ async function get(req, res) {
 
   res.send(`Failed to evaluate ${req.params.key} as 'key' param.<br><br>
   <a href="https://geolytix.github.io/xyz/docs/develop/api/workspace/">Workspace API</a>`)
+}
+
+const cfsign = require('aws-cloudfront-sign')
+
+const { join } = require('path')
+
+async function cloudfront(req, res) {
+
+  var signingParams = {
+    keypairId: process.env.KEY_CLOUDFRONT,
+    privateKeyPath: join(__dirname, `../${process.env.KEY_CLOUDFRONT}.pem`),
+    // expireTime: 1426625464599
+  }
+
+  var signedUrl = cfsign.getSignedUrl(
+    'https://www.geolytix.io/aldi/workspace.json', 
+    signingParams
+  )
+
+  const response = await fetch(signedUrl)
+
+  if (response.status >= 300) return res.send('err')
+
+  const ws = await response.json()
+
+  res.send(ws)
+
 }
 
 async function getLayer(req, res) {

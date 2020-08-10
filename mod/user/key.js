@@ -24,10 +24,7 @@ module.exports = async (req, res) => {
 
   api_token.signed = jwt.sign(
     api_token,
-    process.env.SECRET,
-    {
-      expiresIn: '8h'
-    })
+    process.env.SECRET)
  
   
   // Store api_token in ACL.
