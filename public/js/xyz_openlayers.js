@@ -454,7 +454,7 @@
     <div
       class="header primary-colour"
       onclick=${t=>{t.stopPropagation(),e.utils.toggleExpanderParent(t.target,!0)}}><span>Reports</span><button
-      class="btn-header xyz-icon icon-expander primary-colour-filter">`),Object.entries(t.reports).forEach(r=>{const o=e.host+"/view/"+encodeURIComponent(r[0])+"?"+e.utils.paramString(Object.assign(r[1],{locale:e.locale.key,layer:t.key,lat:e.hooks.current.lat,lng:e.hooks.current.lng,z:e.hooks.current.z}));n.appendChild(e.utils.wire()`
+      class="btn-header xyz-icon icon-expander primary-colour-filter">`),Object.entries(t.reports).forEach(r=>{const o=e.host+"/view?"+e.utils.paramString(Object.assign(r[1],{template:r[0],locale:e.locale.key,layer:t.key,lat:e.hooks.current.lat,lng:e.hooks.current.lng,z:e.hooks.current.z}));n.appendChild(e.utils.wire()`
       <a
         target="_blank"
         href="${o}"
