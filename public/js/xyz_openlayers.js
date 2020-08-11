@@ -518,7 +518,7 @@
           title="Source layer"
           style="${"float: right; padding: 3px; cursor: help; border-radius: 2px; background-color: "+e.utils.Chroma(t.style.strokeColor).alpha(.3)+";"}"
           >${t.layer.name||t.layer.key}`);else{const t=e.locations.view.dataview(i);t&&i.listview.appendChild(t)}else{const t=e.utils.wire()`<script src="${i.src}">`;i.target=e.utils.wire()`
-      <div style="grid-column: 1 / 3;" class="${i.class||""}">`;const r=n=>{n.detail(e,i),document.removeEventListener(i.script,r,!0),t.remove()};document.addEventListener(i.script,r,!0),i.target.appendChild(t),i.listview.appendChild(i.target)}}return r},$r=e=>t=>{t.__title_div&&(t.__title_div.style.gridColumn="1 / 3");const r=ol.proj.transform(t.location.marker,"EPSG:"+e.mapview.srid,"EPSG:4326"),n=`${e.host}/api/proxy?uri=/maps/api/streetview?location=${r[1]},${r[0]}%26source=outdoor%26size=300x230&provider=GOOGLE&host=https://maps.googleapis.com`;t.listview.appendChild(e.utils.wire()`
+      <div style="grid-column: 1 / 3;" class="${i.class||""}">`;const r=n=>{n.detail(e,i),document.removeEventListener(i.script,r,!0),t.remove()};document.addEventListener(i.script,r,!0),i.target.appendChild(t),i.listview.appendChild(i.target)}}return r},$r=e=>t=>{t.__title_div&&(t.__title_div.style.gridColumn="1 / 3");const r=ol.proj.transform(t.location.marker,"EPSG:"+e.mapview.srid,"EPSG:4326"),n=`${e.host}/api/proxy?uri=https://maps.googleapis.com/maps/api/streetview?location=${r[1]},${r[0]}%26source=outdoor%26size=300x230&provider=GOOGLE`;t.listview.appendChild(e.utils.wire()`
     <div
       class="${t.class||""}"
       style="grid-column: 1 / 3;">

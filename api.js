@@ -24,9 +24,14 @@ module.exports = async (req, res) => {
 
   const workspace = await getWorkspace(req.params.method && req.params.method === 'cache')
 
-  // if (workspace instanceof Error) return res.status(500).send(workspace.message)
+  if (workspace instanceof Error) return res.status(500).send(workspace.message)
 
-  // if (req.params.cache) return res.send('/layer endpoint cache cleared')
+  if (req.params.method && req.params.method === 'cache') {
+
+    const host = `${req.headers.host.includes('localhost') && 'http' || 'https'}://${req.headers.host}${process.env.DIR || ''}`
+
+    return res.send(`<a href="${host}/api/workspace/get">Workspace</a> cached`)
+  }
 
   req.params.workspace = workspace
 
@@ -42,7 +47,7 @@ const https = require('https')
 
 function proxy(req, res) {
 
-  const url = `${req.query.host}${req.query.uri}&${process.env[`KEY_${req.query.provider.toUpperCase()}`]}`
+  const url = `${req.query.host || ''}${req.query.uri}&${process.env[`KEY_${req.query.provider.toUpperCase()}`]}`
 
   const proxy = https.request(url, _res => {
     res.writeHead(_res.statusCode, _res.headers)

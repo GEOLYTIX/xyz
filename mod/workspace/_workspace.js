@@ -6,17 +6,9 @@ const _method = {
   }
 }
 
-//const getWorkspace = require('../mod/workspace/getWorkspace')
-
-//const fetch = require('node-fetch')
-
 const cloneDeep = require('lodash/cloneDeep')
 
-let host
-
 module.exports = async (req, res) => {
-
-  req.params = Object.assign(req.params || {}, req.query || {})
 
   const method = _method[req.params && req.params.method]
 
@@ -28,8 +20,6 @@ module.exports = async (req, res) => {
   await auth(req, res, method.access)
 
   if (res.finished) return
-
-  host = `${req.headers.host.includes('localhost') && 'http' || 'https'}://${req.headers.host}${process.env.DIR || ''}`
 
   method.handler(req, res)
 }
@@ -45,7 +35,7 @@ async function get(req, res) {
     locales: getLocales,
   }
 
-  if (!req.params.key) return res.send(workspace)
+  if (!req.params.key) return res.send(req.params.workspace)
 
   if (keys[req.params.key]) return keys[req.params.key](req, res)
 
@@ -99,6 +89,8 @@ function getTemplate(req, res) {
 }
 
 function getTemplates(req, res) {
+
+  const host = `${req.headers.host.includes('localhost') && 'http' || 'https'}://${req.headers.host}${process.env.DIR || ''}`
 
   const templates = Object.entries(req.params.workspace.templates).map(
     template => `<a ${template[1].err && 'style="color: red;"' ||''} href="${host}/api/workspace/get/template?template=${template[0]}">${template[0]}</a>`
