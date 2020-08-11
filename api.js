@@ -1,5 +1,3 @@
-const auth = require('./mod/user/auth')
-
 const getWorkspace = require('./mod/workspace/getWorkspace')
 
 const mod = {
@@ -18,20 +16,9 @@ module.exports = async (req, res) => {
 
   req.params = Object.assign(req.params || {}, req.query || {})
 
-  await auth(req, res)
-
-  if (res.finished) return
-
-  const workspace = await getWorkspace(req.params.method && req.params.method === 'cache')
+  const workspace = await getWorkspace()
 
   if (workspace instanceof Error) return res.status(500).send(workspace.message)
-
-  if (req.params.method && req.params.method === 'cache') {
-
-    const host = `${req.headers.host.includes('localhost') && 'http' || 'https'}://${req.headers.host}${process.env.DIR || ''}`
-
-    return res.send(`<a href="${host}/api/workspace/get">Workspace</a> cached`)
-  }
 
   req.params.workspace = workspace
 
@@ -94,5 +81,5 @@ function bodyData(req) {
 
     req.on('error', error => reject(error))
 
-  });
+  })
 }
