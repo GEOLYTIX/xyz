@@ -1,38 +1,38 @@
-const auth = require('../mod/user/auth')
+const auth = require('./auth')
 
 const _method = {
   register: {
-    handler: require('../mod/user/register')
+    handler: require('./register')
   },
   verify: {
-    handler: require('../mod/user/verify')
+    handler: require('./verify')
   },
   delete: {
-    handler: require('../mod/user/delete'),
+    handler: require('./delete'),
     access: 'admin_user'
   },
   update: {
-    handler: require('../mod/user/update'),
+    handler: require('./update'),
     access: 'admin_user'
   },
   approve: {
-    handler: require('../mod/user/approve'),
+    handler: require('./approve'),
     access: 'admin_user'
   },
   list: {
-    handler: require('../mod/user/list'),
+    handler: require('./list'),
     access: 'admin_user'
   },
   log: {
-    handler: require('../mod/user/log'),
+    handler: require('./log'),
     access: 'admin_user'
   },
   pgtable: {
-    handler: require('../mod/user/pgtable'),
+    handler: require('./pgtable'),
     access: 'admin_user'
   },
   key: {
-    handler: require('../mod/user/key'),
+    handler: require('./key'),
     access: 'key'
   },
   token: {
@@ -40,7 +40,7 @@ const _method = {
     access: 'login'
   },
   cookie: {
-    handler: require('../mod/user/cookie')
+    handler: require('./cookie')
   },
   logout: {
     handler: (req, res) => {
@@ -51,8 +51,6 @@ const _method = {
 }
 
 module.exports = async (req, res) => {
-
-  req.params = Object.assign(req.params || {}, req.query || {})
 
   const method = _method[req.params.method]
 
@@ -66,4 +64,5 @@ module.exports = async (req, res) => {
   if (res.finished) return
 
   method.handler(req, res)
+  
 }

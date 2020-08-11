@@ -1,6 +1,6 @@
 {
   "name": "xyz",
-  "version": "3.3.2",
+  "version": "3.4.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/geolytix/xyz"
@@ -25,7 +25,6 @@
     "aws-cloudfront-sign": "^2.2.0",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.21.0",
-    "express-http-proxy": "^1.6.0",
     "jsonwebtoken": "^8.5.1",
     "mobile-detect": "^1.4.3",
     "node-fetch": "^2.2.1",

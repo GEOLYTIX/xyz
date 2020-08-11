@@ -1,12 +1,10 @@
-const auth = require('../mod/user/auth')
+const auth = require('./user/auth')
 
-const provider = require('../mod/provider')
+const provider = require('./provider')
 
-const dbs = require('../mod/dbs')()
+const dbs = require('./dbs')()
 
-const sql_filter = require('../mod/layer/sql_filter')
-
-const getWorkspace = require('../mod/workspace/getWorkspace')
+const sql_filter = require('./layer/sql_filter')
 
 module.exports = async (req, res) => {
 
@@ -14,13 +12,7 @@ module.exports = async (req, res) => {
 
   await auth(req, res)
 
-  const workspace = await getWorkspace(req.params.cache)
-
-  if (workspace instanceof Error) return res.status(500).send(workspace.message)
-
-  if (req.params.cache) return res.send('/query endpoint cache cleared')
-
-  const locale = workspace.locales[req.params.locale]
+  const locale = req.params.workspace.locales[req.params.locale]
 
   // Return 406 is gazetteer is not found in locale.
   if (!locale) {

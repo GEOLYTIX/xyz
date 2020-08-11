@@ -1,22 +1,12 @@
-const auth = require('../mod/user/auth')
+const auth = require('./user/auth')
 
-const dbs = require('../mod/dbs')()
+const dbs = require('./dbs')()
 
-const sql_filter = require('../mod/layer/sql_filter')
-
-const getWorkspace = require('../mod/workspace/getWorkspace')
+const sql_filter = require('./layer/sql_filter')
 
 module.exports = async (req, res) => {
 
-  req.params = Object.assign(req.params || {}, req.query || {})
-
-  const workspace = await getWorkspace(req.params.cache)
-
-  if (workspace instanceof Error) return res.status(500).send(workspace.message)
-
-  if (req.params.cache) return res.send('/query endpoint cache cleared')
-
-  const template = workspace.templates[decodeURIComponent(req.params._template || req.params.template)]
+  const template = req.params.workspace.templates[decodeURIComponent(req.params._template || req.params.template)]
 
   if(!template) return res.status(404).send('Template not found')
 
@@ -28,9 +18,9 @@ module.exports = async (req, res) => {
 
   if (req.params.layer) {
 
-    const locale = req.params.locale && workspace.locales[req.params.locale]
+    const locale = req.params.locale && req.params.workspace.locales[req.params.locale]
 
-    const layer = locale && locale.layers[req.params.layer] ||  workspace.templates[req.params.layer]
+    const layer = locale && locale.layers[req.params.layer] ||  req.params.workspace.templates[req.params.layer]
 
     if (!layer) return res.status(400).send('Layer not found.')
   

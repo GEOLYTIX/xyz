@@ -1,12 +1,10 @@
-const auth = require('../mod/user/auth')
-
-const getWorkspace = require('../mod/workspace/getWorkspace')
+const auth = require('../user/auth')
 
 const _method = {
-  new: require('../mod/location/new'),
-  get: require('../mod/location/get'),
-  update: require('../mod/location/update'),
-  delete: require('../mod/location/delete'),
+  new: require('./new'),
+  get: require('./get'),
+  update: require('./update'),
+  delete: require('./delete'),
 }
 
 module.exports = async (req, res) => {
@@ -17,12 +15,6 @@ module.exports = async (req, res) => {
 
   if (res.finished) return
 
-  const workspace = await getWorkspace(req.params.cache)
-
-  if (workspace instanceof Error) return res.status(500).send(workspace.message)
-
-  if (req.params.cache) return res.send('/location endpoint cache cleared')
-
   const method = _method[req.params.method]
 
   if (!method) {
@@ -30,9 +22,9 @@ module.exports = async (req, res) => {
     <a href="https://geolytix.github.io/xyz/docs/develop/api/location/">Location API</a>`)
   }
 
-  const locale = req.params.locale && workspace.locales[req.params.locale]
+  const locale = req.params.locale && req.params.workspace.locales[req.params.locale]
 
-  const layer = locale && locale.layers[req.params.layer] ||  workspace.templates[req.params.layer]
+  const layer = locale && locale.layers[req.params.layer] ||  req.params.workspace.templates[req.params.layer]
 
   if (!layer) return res.status(400).send('Layer not found.')
 

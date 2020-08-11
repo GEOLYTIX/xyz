@@ -1,4 +1,4 @@
-# 3.3.2
+# 3.4.0
 
 ## Documentation
 
@@ -82,3 +82,7 @@ Add layers.load method. [#333](https://github.com/GEOLYTIX/xyz/issues/333)
 Add layer modules. [#334](https://github.com/GEOLYTIX/xyz/issues/334)
 
 Workspace from Cloudfront. [#335](https://github.com/GEOLYTIX/xyz/issues/335)
+
+## New now.json
+
+API endpoints are no longer build as individual serverless functions. api.js in the root will import other api functions from the mod directory.

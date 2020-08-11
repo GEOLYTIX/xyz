@@ -1,22 +1,18 @@
-const auth = require('../mod/user/auth')
+const auth = require('../user/auth')
 
 const _method = {
-  cache: {
-    handler: cache,
-    access: 'admin_workspace'
-  },
   get: {
     handler: get
   }
 }
 
-const getWorkspace = require('../mod/workspace/getWorkspace')
+//const getWorkspace = require('../mod/workspace/getWorkspace')
 
-const fetch = require('node-fetch')
+//const fetch = require('node-fetch')
 
 const cloneDeep = require('lodash/cloneDeep')
 
-let host, workspace
+let host
 
 module.exports = async (req, res) => {
 
@@ -38,34 +34,7 @@ module.exports = async (req, res) => {
   method.handler(req, res)
 }
 
-async function cache(req, res) {
-
-  workspace = await getWorkspace(true)
-
-  if (workspace instanceof Error) return res.status(500).send(`<span style="color: red;">${workspace.message}</span>`)
-
-  Promise.all([
-    fetch(`${host}/view?cache=true&token=${req.params.token.signed}`),
-    fetch(`${host}/api/query?cache=true&token=${req.params.token.signed}`),
-    fetch(`${host}/api/gazetteer?cache=true&token=${req.params.token.signed}`),
-    fetch(`${host}/api/layer?cache=true&token=${req.params.token.signed}`),
-    fetch(`${host}/api/location?cache=true&token=${req.params.token.signed}`),
-  ]).then(arr => {
-    if (arr.some(response => !response.ok)) return res.status(500).send('Failed to cache workspace.')
-
-    const errormessages = Object.values(workspace.templates)
-      .filter(template => template.err)
-      .map(template => `<span style="color: red;">${template.err}</span>`)
-
-    res.send(`Workspace cached.<br><br>${errormessages.join('<br>')}`)
-  })
-}
-
 async function get(req, res) {
-
-  workspace = await getWorkspace()
-
-  if (workspace instanceof Error) return res.status(500).send(workspace.message)
 
   const keys = {
     defaults: () => res.send(defaults),
@@ -88,7 +57,7 @@ async function getLayer(req, res) {
 
   if (!req.params.layer) return res.send('Layer key missing.')
 
-  const locale = req.params.locale && workspace.locales[req.params.locale]
+  const locale = req.params.locale && req.params.workspace.locales[req.params.locale]
 
   if (locale.roles && !Object.keys(locale.roles).some(
     role => req.params.token
@@ -96,7 +65,7 @@ async function getLayer(req, res) {
       && req.params.token.roles.includes(role)
   )) return res.status(403).send('Role access denied.')
 
-  let layer = locale && locale.layers[req.params.layer] ||  workspace.templates[req.params.layer]
+  let layer = locale && locale.layers[req.params.layer] ||  req.params.workspace.templates[req.params.layer]
 
   if (!layer) return res.status(400).send('Layer not found.')
 
@@ -117,7 +86,7 @@ function getTemplate(req, res) {
 
   if (!req.params.template) return res.send('Template key missing.')
 
-  const template = workspace.templates[req.params.template];
+  const template = req.params.workspace.templates[req.params.template];
 
   if (!template) return res.status(400).send('Template not found.')
 
@@ -131,7 +100,7 @@ function getTemplate(req, res) {
 
 function getTemplates(req, res) {
 
-  const templates = Object.entries(workspace.templates).map(
+  const templates = Object.entries(req.params.workspace.templates).map(
     template => `<a ${template[1].err && 'style="color: red;"' ||''} href="${host}/api/workspace/get/template?template=${template[0]}">${template[0]}</a>`
   )
 
@@ -140,11 +109,11 @@ function getTemplates(req, res) {
 
 function getLocales(req, res) {
 
-  if (!workspace.locales) return res.send({})
+  if (!req.params.workspace.locales) return res.send({})
 
-  const locales = Object.keys(workspace.locales).map(key => {
+  const locales = Object.keys(req.params.workspace.locales).map(key => {
 
-    const locale = workspace.locales[key]
+    const locale = req.params.workspace.locales[key]
 
     if (!locale.roles) return key
 
@@ -164,9 +133,9 @@ function getLocale(req, res) {
 
   if (!req.params.locale) return res.send('Locale key missing.')
 
-  if (!workspace.locales[req.params.locale]) return res.status(400).send('Locale not found.')
+  if (!req.params.workspace.locales[req.params.locale]) return res.status(400).send('Locale not found.')
 
-  let locale = Object.assign({key: req.params.locale}, cloneDeep(workspace.locales[req.params.locale]))
+  let locale = Object.assign({key: req.params.locale}, cloneDeep(req.params.workspace.locales[req.params.locale]))
 
   if (locale.roles && !Object.keys(locale.roles).some(
     role => req.params.token
