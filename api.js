@@ -26,6 +26,12 @@ module.exports = async (req, res) => {
       req.params[entry[0]] = decodeURIComponent(entry[1])
     })
 
+  const path = req.url.match(/(?<=\/api\/)(.*?)[\/\?]/)
+
+  if (path && path[1] === 'user') return routes.user(req, res)
+
+  //!/(\/api\/user\/)/.test(req.url) && await auth(req, res)
+
   await auth(req, res)
 
   if (res.finished) return
@@ -36,9 +42,7 @@ module.exports = async (req, res) => {
 
   req.params.workspace = workspace
 
-  const term = req.url.match(/(?<=\/api\/)(.*?)[\/\?]/)
-
-  if (term && term[1] && routes[term[1]]) return routes[term[1]](req, res)
+  if (path && path[1] && routes[path[1]]) return routes[path[1]](req, res)
 
   routes.view(req, res)
 
