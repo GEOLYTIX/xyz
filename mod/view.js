@@ -6,9 +6,12 @@ module.exports = async (req, res) => {
 
   const md = new Md(req.headers['user-agent'])
 
-  req.params.template = req.params._template || req.params.template || (md.mobile() === null || md.tablet() !== null) && '_desktop' || '_mobile'
+  req.params.template = req.params._template
+    || req.params.template
+    || (md.mobile() === null || md.tablet() !== null) && '_desktop'
+    || '_mobile'
 
-  const template = req.params.workspace.templates[decodeURIComponent(req.params.template)]
+  const template = req.params.workspace.templates[req.params.template]
 
   if (!template) return res.status(404).send('View template not found.')
 
@@ -26,9 +29,12 @@ module.exports = async (req, res) => {
     <a href="https://geolytix.github.io/xyz/docs/develop/api/view/">View API</a>`)
   }
 
-  await auth(req, res, access)
+  if (acccess) {
 
-  if (res.finished) return
+    await auth(req, res, access)
+
+    if (res.finished) return
+  }
 
   const html = template.render(Object.assign(
     req.params || {}, {
@@ -40,4 +46,5 @@ module.exports = async (req, res) => {
 
   //Build the template with jsrender and send to client.
   res.send(html)
+  
 }

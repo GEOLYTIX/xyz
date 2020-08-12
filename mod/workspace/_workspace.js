@@ -21,9 +21,12 @@ module.exports = async (req, res) => {
     <a href="https://geolytix.github.io/xyz/docs/develop/api/workspace/">Workspace API</a>`)
   }
 
-  await auth(req, res, method.access)
+  if (method.access) {
 
-  if (res.finished) return
+    await auth(req, res, method.access)
+
+    if (res.finished) return
+  }
 
   method.handler(req, res)
 }

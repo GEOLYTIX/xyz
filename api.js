@@ -1,6 +1,8 @@
+const auth = require('./mod/user/auth')
+
 const getWorkspace = require('./mod/workspace/getWorkspace')
 
-const mod = {
+const routes = {
   layer: require('./mod/layer/_layer'),
   location: require('./mod/location/_location'),
   workspace: require('./mod/workspace/_workspace'),
@@ -14,7 +16,19 @@ const mod = {
 
 module.exports = async (req, res) => {
 
+  // Merge request params and query params.
   req.params = Object.assign(req.params || {}, req.query || {})
+
+  // URI decode string params.
+  Object.entries(req.params)
+    .filter(entry => typeof entry[1] === 'string')
+    .forEach(entry => {
+      req.params[entry[0]] = decodeURIComponent(entry[1])
+    })
+
+  await auth(req, res)
+
+  if (res.finished) return
 
   const workspace = await getWorkspace()
 
@@ -24,9 +38,9 @@ module.exports = async (req, res) => {
 
   const term = req.url.match(/(?<=\/api\/)(.*?)[\/\?]/)
 
-  if (term && term[1] && mod[term[1]]) return mod[term[1]](req, res)
+  if (term && term[1] && routes[term[1]]) return routes[term[1]](req, res)
 
-  mod.view(req, res)
+  routes.view(req, res)
 
 }
 

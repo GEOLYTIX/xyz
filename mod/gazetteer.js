@@ -1,5 +1,3 @@
-const auth = require('./user/auth')
-
 const provider = require('./provider')
 
 const dbs = require('./dbs')()
@@ -7,10 +5,6 @@ const dbs = require('./dbs')()
 const sql_filter = require('./layer/sql_filter')
 
 module.exports = async (req, res) => {
-
-  req.params = Object.assign(req.params || {}, req.query || {})
-
-  await auth(req, res)
 
   const locale = req.params.workspace.locales[req.params.locale]
 

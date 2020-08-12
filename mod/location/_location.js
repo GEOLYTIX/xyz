@@ -1,5 +1,3 @@
-const auth = require('../user/auth')
-
 const _method = {
   new: require('./new'),
   get: require('./get'),
@@ -8,12 +6,6 @@ const _method = {
 }
 
 module.exports = async (req, res) => {
-
-  req.params = Object.assign(req.params || {}, req.query || {})
-
-  await auth(req, res)
-
-  if (res.finished) return
 
   const method = _method[req.params.method]
 
@@ -36,4 +28,5 @@ module.exports = async (req, res) => {
   }
   
   return method(req, res)
+  
 }

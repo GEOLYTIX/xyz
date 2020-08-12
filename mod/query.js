@@ -12,9 +12,12 @@ module.exports = async (req, res) => {
 
   if (template.err) return res.status(500).send(template.err.message)
 
-  await auth(req, res, template.access)
+  if (template.access) {
 
-  if (res.finished) return
+    await auth(req, res, template.access)
+
+    if (res.finished) return
+  }
 
   if (req.params.layer) {
 
@@ -95,4 +98,5 @@ module.exports = async (req, res) => {
 
   // Send the infoj object with values back to the client.
   res.send(rows.length === 1 && rows[0] || rows)
+  
 }
