@@ -29,7 +29,7 @@ module.exports = async (req, res) => {
     <a href="https://geolytix.github.io/xyz/docs/develop/api/view/">View API</a>`)
   }
 
-  if (acccess) {
+  if (access) {
 
     await auth(req, res, access)
 
@@ -46,5 +46,5 @@ module.exports = async (req, res) => {
 
   //Build the template with jsrender and send to client.
   res.send(html)
-  
+
 }
