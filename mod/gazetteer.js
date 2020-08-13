@@ -20,11 +20,11 @@ module.exports = async (req, res) => {
   // Create an empty results object to be populated with the results from the different gazetteer methods.
   let results = []
 
-  if (req.params.source) {
+  /*if (req.params.source) { // aga: I think this is outdated
 
     if (req.params.source === 'GOOGLE') {
 
-      results = await gaz_google(req.params.q, locale.gazetteer)
+      results = await gaz_google(req.params.q, locale.gazetteer, results)
 
       // Return error message _err if an error occured.
       if (results._err) return res.status(500).send(results._err)
@@ -32,93 +32,72 @@ module.exports = async (req, res) => {
       // Return results to client.
       return res.send(results);
     }
-  }
+  }*/
 
   // Locale gazetteer which can query datasources in the same locale.
-  if (locale.gazetteer.datasets) {
-    
-    await gaz_locale(req, locale, results);
-
-    // Return error message _err if an error occured.
-    if (results._err) return res.status(500).send(results._err)
-
-    // Return and send results to client.
-    if (results.length > 0) return res.send(results);
-  }
+  if (locale.gazetteer.datasets) await gaz_locale(req, locale, results)
 
   // Query Google Maps API
-  if (locale.gazetteer.provider === 'GOOGLE') {
-    results = await gaz_google(req.params.q, locale.gazetteer)
+  if (locale.gazetteer.provider === 'GOOGLE') await gaz_google(req.params.q, locale.gazetteer, results)
 
-    // Return error message _err if an error occured.
-    if (results._err) return res.status(500).send(results._err)
-  }
 
-  if (locale.gazetteer.provider === 'OPENCAGE') {
-    results = await gaz_opencage(req.params.q, locale.gazetteer)
-  }
-
+  if (locale.gazetteer.provider === 'OPENCAGE') await gaz_opencage(req.params.q, locale.gazetteer, results)
+  
   // Query Mapbox Geocoder API
-  if (locale.gazetteer.provider === 'MAPBOX') {
-    results = await gaz_mapbox(req.params.q, locale.gazetteer)
-
-    // Return error message _err if an error occured.
-    if (results._err) return res.status(500).send(results._err)
-  }
+  if (locale.gazetteer.provider === 'MAPBOX') await gaz_mapbox(req.params.q, locale.gazetteer, results)
 
   // Return results to client.
   res.send(results)
 }
 
-async function gaz_google(term, gazetteer) {
-
-  //https://developers.google.com/places/web-service/autocomplete
+async function gaz_google(term, gazetteer, results) {
 
   // Create url decorated with gazetteer options.
-  const results = await provider.google(`maps.googleapis.com/maps/api/place/autocomplete/json?input=${term}`
+  const __results = await provider.google(`maps.googleapis.com/maps/api/place/autocomplete/json?input=${term}`
     + `${gazetteer.country ? '&components=country:' + gazetteer.country : ''}`
     + `${gazetteer.components ? '&components=' + gazetteer.components : ''}`
     + `${gazetteer.bounds ? '&' + decodeURIComponent(gazetteer.bounds) : ''}`)
 
-  // Return results to route. Zero results will return an empty array.
-  return results.predictions.map(f => ({
+  if (__results._err) return;
+
+  return __results.predictions.map(f => (results.push({
     label: f.description,
     id: f.place_id,
     source: 'google'
-  }))
+  })))
+
 }
 
-async function gaz_opencage(term, gazetteer) {
+async function gaz_opencage(term, gazetteer, results) {
 
-  const results = await provider.opencage(`api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(term)}`
+  const __results = await provider.opencage(`api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(term)}`
     + `${gazetteer.countrycode ? `&countrycode=${gazetteer.countrycode}` : ''}`
     + `${gazetteer.bounds ? '&bounds=' + decodeURIComponent(gazetteer.bounds) : ''}`)
 
-  return results.results.map(f => ({
+  return __results.results.map(f => (results.push({
     id: f.annotations.geohash,
     label: f.formatted,
     marker: [f.geometry.lng, f.geometry.lat],
     source: 'opencage'
-  }))
+  })))
 }
 
-async function gaz_mapbox(term, gazetteer) {
-
-  //https://www.mapbox.com/api-documentation/#search-for-places
+async function gaz_mapbox(term, gazetteer, results) {
 
   // Create url decorated with gazetteer options.
-  const results = await provider.mapbox(`api.mapbox.com/geocoding/v5/mapbox.places/${term}.json?`
+  const __results = await provider.mapbox(`api.mapbox.com/geocoding/v5/mapbox.places/${term}.json?`
     + `${gazetteer.country ? 'country=' + gazetteer.country : ''}`
     + `${gazetteer.bounds ? '&' + gazetteer.bounds : ''}`
     + '&types=postcode,district,locality,place,neighborhood,address,poi')
 
-  // Return results to route. Zero results will return an empty array.
-  return results.features.map(f => ({
+  if (__results._err) return;
+
+  return __results.features.map(f => (results.push({
     label: `${f.text} (${f.place_type[0]}) ${!gazetteer.country && f.context ? ', ' + f.context.slice(-1)[0].text : ''}`,
     id: f.id,
     marker: f.center,
     source: 'mapbox'
-  }))
+  })))
 }
 
 async function gaz_locale(req, locale, results) {

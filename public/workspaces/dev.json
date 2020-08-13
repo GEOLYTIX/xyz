@@ -676,15 +676,15 @@
                         "layer": "Retail Points",
                         "table": "dev.retailpoints",
                         "label": "store",
-                        "leading_wildcard": true,
+                        "_leading_wildcard": true,
                         "limit": 5
                     },
                     {
                         "layer": "Retail Places",
                         "table": "dev.retailplaces",
-                        "label": "store",
-                        "space_wildcard": true,
-                        "minLength": 2
+                        "label": "uniq_name",
+                        "_space_wildcard": true,
+                        "_minLength": 2
                     }
                 ]
             },
