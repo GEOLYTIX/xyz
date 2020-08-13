@@ -6,7 +6,6 @@
 node_modules/*
 public/css/.sass-cache/
 stats.json
-now.json
 env
 
 public/workspaces/*
