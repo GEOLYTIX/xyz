@@ -10,6 +10,7 @@ module.exports = {
   },
   output: {
     path: path.resolve(__dirname, 'public/js'),
+    // chunkFilename: '[name].js',
     filename: '[name].js',
     // library: 'xyz',
     // libraryTarget: 'amd-require'
@@ -34,12 +35,19 @@ module.exports = {
     ]
   },
   externals: {
-    moment: 'moment'
+    'moment': 'moment',
+    // 'chroma-js': 'chroma-js'
   },
   plugins: [
     new webpack.DefinePlugin({
       XYZ_VERSION: JSON.stringify(require('./package.json').version)
-    })
+    }),
+    new webpack.ProvidePlugin({
+      uhtml: 'uhtml'
+    }),
+    // new webpack.ProvidePlugin({
+    //   'chroma-js': 'chroma-js'
+    // })
   ]
   //stats: 'verbose'
   // stats: {
