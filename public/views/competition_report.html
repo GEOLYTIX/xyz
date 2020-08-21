@@ -31,13 +31,34 @@
       background-color: #f0f0f0;
     }
 
+    #pageformat {
+      right: 10px;
+      text-decoration: underline;
+      position: absolute;
+    }
+
+    .a4 {
+      width: 297mm;
+      height: 209mm;
+    }
+
     #Grid {
       height: 100%;
       display: grid;
       grid-row-gap: 10px;
       grid-column-gap: 1%;
       grid-auto-columns: 24.3%;
-      grid-template-rows: min-content repeat(3, minmax(min-content, auto));
+      grid-template-rows: min-content min-content;
+    }
+
+    .tabulator {
+      height: 39vh !important;
+      background: none;
+      border: none;
+    }
+
+    body.a4 .tabulator {
+      height: 76mm !important;
     }
 
     #report_header {
@@ -51,41 +72,21 @@
     }
 
     #Map {
-      grid-row: 2/5;
+      grid-row: 2/4;
       grid-column: 1/3;
       overflow: hidden;
       position: relative;
       height: 100%;
     }
 
-    #age_profile {
+    #supermarkets_15min {
       grid-row: 2;
-      grid-column: 3;
+      grid-column: 3/5;
     }
 
-    #home_ownership {
-      grid-row: 2;
-      grid-column: 4;
-    }
-
-    #ethnicity {
+    #convenience_15min {
       grid-row: 3;
-      grid-column: 3;
-    }
-
-    #pop_growth {
-      grid-row: 3;
-      grid-column: 4;
-    }
-
-    #disposable_income {
-      grid-row: 4;
-      grid-column: 3;
-    }
-
-    #social_grade_pie {
-      grid-row: 4;
-      grid-column: 4;
+      grid-column: 3/5;
     }
 
     @media only screen and (max-width: 1000px) {
@@ -94,108 +95,38 @@
         display: none
       }
 
-      #Grid {
+      body:not(.a4) .tabulator {
+        height: auto !important;
+      }
+
+      body:not(.a4) #Grid {
         grid-auto-columns: 49.5%;
-        grid-template-rows: min-content minmax(500px, auto) min-content min-content min-content 75px;
+        grid-template-rows: min-content minmax(400px, auto) min-content min-content 75px;
       }
 
-      #report_header {
+      body:not(.a4) #report_header {
         grid-row: 1;
         grid-column: 1/3;
       }
 
-      #Map {
+      body:not(.a4) #Map {
         grid-row: 2;
         grid-column: 1/3;
       }
 
-      #age_profile {
+      body:not(.a4) #supermarkets_15min {
         grid-row: 3;
-        grid-column: 1;
-      }
-
-      #home_ownership {
-        grid-row: 3;
-        grid-column: 2;
-      }
-
-      #ethnicity {
-        grid-row: 4;
-        grid-column: 1;
-      }
-
-      #pop_growth {
-        grid-row: 4;
-        grid-column: 2;
-      }
-
-      #disposable_income {
-        grid-row: 5;
-        grid-column: 1;
-      }
-
-      #social_grade_pie {
-        grid-row: 5;
-        grid-column: 2;
-      }
-
-      #report_attrib {
-        grid-row: 6;
         grid-column: 1/3;
       }
 
-    }
-
-    @media only screen and (max-width: 700px) {
-
-      #Grid {
-        grid-auto-columns: 100%;
-        grid-template-rows: min-content minmax(500px, auto) repeat(6,min-content) 75px;
-      }
-
-      #report_header {
-        grid-row: 1;
-        grid-column: 1;
-      }
-
-      #Map {
-        grid-row: 2;
-        grid-column: 1;
-      }
-
-      #age_profile {
-        grid-row: 3;
-        grid-column: 1;
-      }
-
-      #home_ownership {
+      body:not(.a4) #convenience_15min {
         grid-row: 4;
-        grid-column: 1;
+        grid-column: 1/3;
       }
 
-      #ethnicity {
+      body:not(.a4) #report_attrib {
         grid-row: 5;
-        grid-column: 1;
-      }
-
-      #pop_growth {
-        grid-row: 6;
-        grid-column: 1;
-      }
-
-      #disposable_income {
-        grid-row: 7;
-        grid-column: 1;
-      }
-
-      #social_grade_pie {
-        grid-row: 8;
-        grid-column: 1;
-      }
-
-      #report_attrib {
-        grid-row: 9;
-        grid-column: 1;
+        grid-column: 1/3;
       }
 
     }
@@ -210,6 +141,10 @@
       font-size: 110%;
       font-weight: 600;
       line-height: 1.5;
+    }
+
+    .panel_header.chart {
+      margin-bottom: 15px;
     }
 
     ._attribution {
@@ -304,35 +239,21 @@
 
     <div id="Map">
       <div id="Legend">
-        <span>Population in OA</span>
+        <span>Retailer</span>
       </div>
     </div>
 
-    <div id="age_profile" class="panel">
-      <div class="panel_header">Age profile</div>
+    <div id="supermarkets_15min">
+      <div class="panel_header">Supermarkets within 15min</div>
     </div>
 
-    <div id="home_ownership" class="panel">
-      <div class="panel_header">Home ownership</div>
-    </div>
-
-    <div id="ethnicity" class="panel">
-      <div class="panel_header">Ethnicity</div>
-    </div>
-
-    <div id="pop_growth" class="panel">
-      <div class="panel_header">Population growth</div>
-    </div>
-
-    <div id="disposable_income" class="panel">
-      <div class="panel_header">Disposable income</div>
-    </div>
-
-    <div id="social_grade_pie" class="panel">
-      <div class="panel_header">Social grade</div>
+    <div id="convenience_15min">
+      <div class="panel_header">Convenience within 15min</div>
     </div>
 
   </div>
+
+  <a id="pageformat">Print Layout</div>
 
 </body>
 
@@ -350,6 +271,13 @@
     window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (match, key, value) => {
       params[key] = decodeURI(value);
     })
+
+    if (params.layout === 'a4') {
+      document.body.classList.add('a4')
+      document.getElementById('pageformat').remove()
+    } else {
+      document.getElementById('pageformat').href = window.location.href + '&layout=a4'
+    }
 
     const xyz = _xyz({
       host: params.host,
@@ -388,23 +316,20 @@
         })
       });
 
+      // xyz.map.updateSize();
+
       document.getElementById('input_site_name').value = location.infoj.find(entry => entry.field === 'site_name').value
       document.getElementById('input_location').value = location.infoj.find(entry => entry.field === 'location').value
       document.getElementById('input_postcode').value = location.infoj.find(entry => entry.field === 'postcode').value
 
       location.infoj = location.infoj.filter(entry => entry.type === 'geometry'
-        || entry.target === 'age_profile'
-        || entry.target === 'home_ownership'
-        || entry.target === 'ethnicity'
-        || entry.target === 'pop_growth'
-        || entry.target === 'disposable_income'
-        || entry.target === 'social_grade_pie')
+        || entry.target === 'supermarkets_15min'
+        || entry.target === 'convenience_15min');
 
-      xyz.locations.view.infoj(location)
+
+      xyz.locations.view.infoj(location);
 
       location.flyTo();
-
-      // xyz.map.updateSize();
 
       // location.removeCallback = () => setTimeout(function () {
 
@@ -433,7 +358,7 @@
         scrollWheelZoom: true,
       })
 
-      const layerPromises = ['Mapbox Base', 'Output Areas', 'Sites'].map(layer => xyz.workspace.get.layer({
+      const layerPromises = ['Mapbox Base', 'Grocery', 'Sites'].map(layer => xyz.workspace.get.layer({
         locale: params.locale,
         layer: layer
       }))
@@ -444,11 +369,15 @@
 
           layer = xyz.layers.decorate(layer)
           xyz.layers.list[layer.key] = layer
+          if (layer.key === "Grocery") {
+            layer.cluster_kmeans = 0.01
+            layer.cluster_dbscan = 0.01
+          }
           layer.show()
 
         })
 
-        document.getElementById('Legend').appendChild(xyz.layers.view.style.legend(xyz.layers.list['Output Areas']))
+        document.getElementById('Legend').appendChild(xyz.layers.view.style.legend(xyz.layers.list['Grocery']))
 
         xyz.locations.select({
           locale: xyz.hooks.current.locale,
