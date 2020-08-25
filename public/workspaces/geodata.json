@@ -154,7 +154,44 @@
         },
         "Offices": {
           "display": true,
-          "template": "geolytix_offices"
+          "template": "geolytix_offices",
+          "style": {
+            "default": {
+              "marker": {
+                "type": "markerColor",
+                "colorMarker": "#999999",
+                "colorDot": "#333333",
+                "anchor": [
+                  0.5,
+                  1
+                ],
+                "scale": 2
+              }
+            },
+            "highlight": {
+              "marker": {
+                "type": "markerColor",
+                "colorMarker": "#64dd17",
+                "colorDot": "#33691e",
+                "anchor": [
+                  0.5,
+                  1
+                ],
+                "scale": 1.5
+              }
+            },
+            "selected": {
+              "marker": {
+                "type": "markerColor",
+                "colorMarker": "#64dd17",
+                "colorDot": "#33691e",
+                "anchor": [
+                  0.5,
+                  1
+                ]
+              }
+            }
+          }
         },
         "Offices Edit": {
           "template": "geolytix_offices",
