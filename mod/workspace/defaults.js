@@ -44,8 +44,7 @@ module.exports = {
           strokeWidth: 2,
           fillColor: '#cae0b8',
           fillOpacity: 0.2
-        },
-        themes: {},
+        }
       },
       filter: {},
     },
@@ -62,8 +61,7 @@ module.exports = {
           strokeColor: '#1F964D',
           fillColor: '#cae0b8',
           fillOpacity: 0.2,
-        },
-        themes: {},
+        }
       },
       filter: {},
     },
@@ -82,8 +80,7 @@ module.exports = {
         },
         highlight: {
           scale: 1.3
-        },
-        themes: {},
+        }
       },
       filter: {},
     },

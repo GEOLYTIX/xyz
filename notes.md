@@ -83,6 +83,8 @@ Add layer modules. [#334](https://github.com/GEOLYTIX/xyz/issues/334)
 
 Workspace from Cloudfront. [#335](https://github.com/GEOLYTIX/xyz/issues/335)
 
+Basic theme support [#339](https://github.com/GEOLYTIX/xyz/issues/339)
+
 ## New now.json
 
 API endpoints are no longer build as individual serverless functions. api.js in the root will import other api functions from the mod directory.
