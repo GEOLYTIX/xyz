@@ -87,6 +87,9 @@ module.exports = {
     grid: {
       srid: '4326',
       style: {
+        theme: {
+          type: 'grid'
+        },
         range: [
           '#15773f',
           '#66bd63',
