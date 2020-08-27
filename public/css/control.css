@@ -2075,8 +2075,18 @@ span.flatpickr-weekday {
 .layer-view .meta {
   font-size: 90%;
   padding-bottom: 5px; }
+.layer-view .legend.grid {
+  margin-top: 5px;
+  display: grid;
+  grid-template-columns: 30px auto; }
 .layer-view .legend > svg {
   width: 100%; }
+.layer-view .legend .switch {
+  font-size: 12px;
+  cursor: pointer; }
+.layer-view .legend .switch.disabled {
+  text-decoration: line-through;
+  opacity: 0.5; }
 .layer-view .drawer.panel {
   border-top: 1px solid #f0f0f0;
   padding-bottom: 5px;

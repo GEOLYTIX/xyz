@@ -50,8 +50,24 @@
         padding-bottom: 5px;
     }
 
+    .legend.grid {
+      margin-top: 5px;
+      display: grid;
+      grid-template-columns: 30px auto;
+    }
+
     .legend>svg {
         width: 100%;
+    }
+
+    .legend .switch {
+      font-size: 12px;
+      cursor: pointer;
+    }
+
+    .legend .switch.disabled {
+      text-decoration: line-through;
+      opacity: 0.5;
     }
 
     .drawer.panel {
