@@ -2081,8 +2081,9 @@ span.flatpickr-weekday {
   grid-template-columns: 30px auto; }
 .layer-view .legend > svg {
   width: 100%; }
+.layer-view .legend .label {
+  font-size: 12px; }
 .layer-view .legend .switch {
-  font-size: 12px;
   cursor: pointer; }
 .layer-view .legend .switch.disabled {
   text-decoration: line-through;

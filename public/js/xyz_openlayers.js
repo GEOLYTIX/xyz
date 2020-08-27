@@ -91,7 +91,7 @@
         stroke=${i.strokeColor}
         stroke-width=${i.strokeWidth||1}>`),n.appendChild(a),n.appendChild(e.utils.html.node`
     <div
-      class="switch"
+      class="label switch"
       onclick=${e=>{e.stopPropagation(),e.target.classList.toggle("disabled"),e.target.classList.contains("disabled")?t.filter.current[t.style.theme.field].ni.push(r[0]):t.filter.current[t.style.theme.field].ni.splice(t.filter.current[t.style.theme.field].ni.indexOf(r[0]),1),t.reload()}}>${r[1].label||r[0]}`)}),t.style.theme.other){const r=e.utils.html.node`
       <div style="height: 24px; width: 24px;">`;void 0===t.style.default.fillOpacity?r.appendChild(e.utils.svg.node`
       <svg>
@@ -114,22 +114,26 @@
         stroke-width=${t.style.default.strokeWidth||1}>`),n.appendChild(r),n.appendChild(e.utils.html.node`
     <div
       class="switch"
-      onclick=${e=>{e.stopPropagation(),e.target.classList.toggle("disabled"),e.target.classList.contains("disabled")?t.filter.current[t.style.theme.field].in=Object.keys(t.style.theme.cat):t.filter.current[t.style.theme.field].in=[],t.reload()}}>other`)}return n},ht=e=>t=>{if(!t.style.theme.cat_arr)return;const n=e.utils.wire()`<div style="margin-top: 5px; display: grid; grid-template-columns: 30px auto;">`;return t.style.legend=n,t.style.theme.cat_arr.forEach(r=>{let i=e.utils.wire()`<div style="height: 24px; width: 24px;">`,a=e.utils.wire()`<svg>`;i.appendChild(a);let o=Object.assign({},t.style.default,r.style||r);if(void 0===o.fillOpacity){let t=e.utils.wire(null,"svg")`
+      onclick=${e=>{e.stopPropagation(),e.target.classList.toggle("disabled"),e.target.classList.contains("disabled")?t.filter.current[t.style.theme.field].in=Object.keys(t.style.theme.cat):t.filter.current[t.style.theme.field].in=[],t.reload()}}>other`)}return n},ht=e=>t=>{const n=e.utils.html.node`<div class="legend grid">`;return t.style.theme.cat_arr.forEach(r=>{const i=Object.assign({},t.style.default,r.style||r),a=e.utils.html.node`
+      <div style="height: 24px; width: 24px;">`;void 0===i.fillOpacity?a.appendChild(e.utils.svg.node`
+      <svg>
       <line
         x1=4
         x2=18
         y1=10
         y2=10
-        stroke=${o.strokeColor}
-        stroke-width=${o.strokeWidth||1}/>`;a.appendChild(t)}else{let t=e.utils.wire(null,"svg")`
+        stroke=${i.strokeColor}
+        stroke-width=${i.strokeWidth||1}>`):a.appendChild(e.utils.svg.node`
+      <svg>
       <rect
         x=4
         y=2
         width=14
         height=14
-        fill=${o.fillColor}
-        fill-opacity=${o.fillOpacity}
-        stroke=${o.strokeColor}/>`;a.appendChild(t)}n.appendChild(i);let l=e.utils.wire()`<div style="font-size:12px; alignment-baseline:central; cursor:default;">${r.label||r.value}`;n.appendChild(l)}),n},gt=e=>t=>{const n=e.utils.html.node`
+        fill=${i.fillColor||"#FFF"}
+        fill-opacity=${i.fillOpacity}
+        stroke=${i.strokeColor}
+        stroke-width=${i.strokeWidth||1}>`),n.appendChild(a),n.appendChild(e.utils.html.node`<div class="label">${r.label||r.value}`)}),n},gt=e=>t=>{const n=e.utils.html.node`
     <div style="margin-top: 5px; display: grid; grid-template-columns: 30px auto;">`;if(n.appendChild(e.utils.html.node`
     <div
       class="switch-all"
