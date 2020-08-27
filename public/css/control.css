@@ -2081,7 +2081,7 @@ span.flatpickr-weekday {
   grid-template-columns: min-content;
   grid-gap: 5px;
   align-items: center;
-  justify-content: center; }
+  justify-content: start; }
 .layer-view .legend .label {
   font-size: 12px; }
 .layer-view .legend .switch {

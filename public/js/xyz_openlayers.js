@@ -105,7 +105,7 @@
       onclick=${e=>{e.stopPropagation(),e.target.classList.toggle("disabled"),e.target.classList.contains("disabled")?t.filter.current[t.style.theme.field].in=Object.keys(t.style.theme.cat):t.filter.current[t.style.theme.field].in=[],t.reload()}}>other`)),t.style.cluster&&(n.appendChild(e.utils.html.node`
     <img height=40 src="${e.utils.svg_symbols(t.style.cluster)}">`),n.appendChild(e.utils.html.node`
     <div class="label" style="alignment-baseline:central;">Multiple Locations`)),n},ht=e=>t=>{const n=e.utils.html.node`<div class="legend grid">`;return t.style.theme.cat_arr.forEach(r=>{const i=Object.assign({},t.style.default,r.style||r);i.svg||i.type?n.appendChild(e.utils.html.node`
-      <img height=24 src="${e.utils.svg_symbols(i)}">`):void 0===i.fillOpacity?n.appendChild(e.utils.svg.node`
+      <img style="grid-column: 1" height=24 src="${e.utils.svg_symbols(i)}">`):void 0===i.fillOpacity?n.appendChild(e.utils.svg.node`
       <svg height=24 width=24>
       <line
         x1=0 y1=0 x2=24 y2=24
@@ -117,7 +117,8 @@
         fill=${i.fillColor||"#FFF"}
         fill-opacity=${i.fillOpacity}
         stroke=${i.strokeColor}
-        stroke-width=${i.strokeWidth||1}>`),n.appendChild(e.utils.html.node`<div class="label">${r.label||r.value}`)}),n},gt=e=>t=>{t.style.legend.appendChild(e.utils.wire()`
+        stroke-width=${i.strokeWidth||1}>`),n.appendChild(e.utils.html.node`
+    <div  style="grid-column: 2" class="label">${r.label||r.value}`)}),n},gt=e=>t=>{t.style.legend.appendChild(e.utils.wire()`
   <button class="btn-drop">
   <div
     class="head"
