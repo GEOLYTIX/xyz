@@ -53,11 +53,10 @@
     .legend.grid {
       margin-top: 5px;
       display: grid;
-      grid-template-columns: 30px auto;
-    }
-
-    .legend>svg {
-        width: 100%;
+      grid-template-columns: min-content;
+      grid-gap: 5px;
+      align-items: center;
+      justify-content: center;
     }
 
     .legend .label {
