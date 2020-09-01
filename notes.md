@@ -65,6 +65,10 @@ Entry type "meta" removed.
 
 Removed entry type "title" (prev. "label").
 
+Layer: 
+    if "qID" is unset all interaction is disabled. 
+    if "qID" is set and "infoj" is unset highlight and hover will work but selection will be prevented.
+
 Don't create render method for templates with format key, ie. layer templates.
 
 Filter getLocales for roles.
