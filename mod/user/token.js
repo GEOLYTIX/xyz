@@ -1,5 +1,3 @@
-const transformDate = require('../date')
-
 const mailer = require('../mailer')
 
 const bcrypt = require('bcryptjs')
@@ -16,7 +14,7 @@ module.exports = async (req) => {
 
   if (!req.body.password) return new Error('Missing password')
 
-  const date = transformDate()
+  const date = new Date().toISOString()
 
   const protocol = `${req.headers.host.includes('localhost') && 'http' || 'https'}://`
 

@@ -93,6 +93,8 @@ Add language support [#340](https://github.com/GEOLYTIX/xyz/issues/340)
 
 Show style in header [#341](https://github.com/GEOLYTIX/xyz/issues/341)
 
+Remove formatDate polyfill from /mod
+
 ## New now.json
 
 API endpoints are no longer build as individual serverless functions. api.js in the root will import other api functions from the mod directory.

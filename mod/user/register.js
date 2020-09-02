@@ -10,8 +10,6 @@ const bcrypt = require('bcryptjs')
 
 const crypto = require('crypto')
 
-const transformDate = require('../date')
-
 const acl = require('./acl')()
 
 const mailer = require('../mailer')
@@ -56,7 +54,7 @@ async function register(req, res) {
 
   const verificationtoken = crypto.randomBytes(20).toString('hex')
 
-  const date = transformDate()
+  const date = new Date().toISOString()
 
   const protocol = `${req.headers.host.includes('localhost') && 'http' || 'https'}://`
 
