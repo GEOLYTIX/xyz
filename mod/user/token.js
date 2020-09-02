@@ -34,7 +34,7 @@ module.exports = async (req) => {
   if (user && user.blocked) return new Error('User blocked')
 
   // Redirect back to login (get) with error msg if user is not found.
-  if (!user) return new Error('No user')
+  if (!user) return new Error('User not found.')
 
   // Redirect back to login (get) with error msg if user is not valid.
   if (!user.verified || !user.approved) {
