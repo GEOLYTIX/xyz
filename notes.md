@@ -95,6 +95,8 @@ Show style in header [#341](https://github.com/GEOLYTIX/xyz/issues/341)
 
 Remove formatDate polyfill from /mod
 
+Introduction of APPROVAL_EXPIRY environment variable [#324](https://github.com/GEOLYTIX/xyz/issues/324)
+
 ## New now.json
 
 API endpoints are no longer build as individual serverless functions. api.js in the root will import other api functions from the mod directory.

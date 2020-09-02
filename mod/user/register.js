@@ -54,7 +54,7 @@ async function register(req, res) {
 
   const verificationtoken = crypto.randomBytes(20).toString('hex')
 
-  const date = new Date().toISOString()
+  const date = new Date().toISOString().replace(/\..*/,'')
 
   const protocol = `${req.headers.host.includes('localhost') && 'http' || 'https'}://`
 

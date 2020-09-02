@@ -14,7 +14,7 @@ module.exports = async (req) => {
 
   if (!req.body.password) return new Error('Missing password')
 
-  const date = new Date().toISOString()
+  const date = new Date()
 
   const protocol = `${req.headers.host.includes('localhost') && 'http' || 'https'}://`
 
@@ -22,7 +22,7 @@ module.exports = async (req) => {
 
   var rows = await acl(`
   UPDATE acl_schema.acl_table
-  SET access_log = array_append(access_log, '${date}@${req.headers['x-forwarded-for'] || 'localhost'}')
+  SET access_log = array_append(access_log, '${date.toISOString().replace(/\..*/,'')}@${req.headers['x-forwarded-for'] || 'localhost'}')
   WHERE lower(email) = lower($1)
   RETURNING *;`, [req.body.email])
 
@@ -31,10 +31,36 @@ module.exports = async (req) => {
   // Get user record from first row.
   const user = rows[0]
 
-  if (user && user.blocked) return new Error('User blocked')
-
   // Redirect back to login (get) with error msg if user is not found.
   if (!user) return new Error('User not found.')
+
+  if (user.blocked) return new Error('User blocked')
+
+  const approvalDate = new Date(user.approved_by.replace(/.*\|/,''))
+
+  if (approvalDate && approvalDate.setDate(approvalDate.getDate() + parseInt(process.env.APPROVAL_EXPIRY || 0)) < date) {
+
+    // Account approval date + APPROVAL_EXPIRY exceeds current date.
+    if (!user.admin_user) {
+
+      // Non user admin user will loose approval
+      if (user.approved) {
+
+        var rows = await acl(`
+        UPDATE acl_schema.acl_table
+        SET approved = false
+        WHERE lower(email) = lower($1);`,
+        [req.body.email])
+      
+        if (rows instanceof Error) return new Error('Bad Config')
+
+      }
+
+      return new Error('User approval has expired. Please re-register.')
+
+    }
+
+  }
 
   // Redirect back to login (get) with error msg if user is not valid.
   if (!user.verified || !user.approved) {

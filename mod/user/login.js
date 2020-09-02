@@ -18,7 +18,7 @@ module.exports = async (req, res, msg) => {
 
   const html = render({
     dir: process.env.DIR || '',
-    redirect: req.url && decodeURIComponent(req.url),
+    redirect: req.body && req.body.redirect || req.url && decodeURIComponent(req.url),
     msg: msg || ' ',
     captcha: process.env.GOOGLE_CAPTCHA && process.env.GOOGLE_CAPTCHA.split('|')[0] || '',
   })

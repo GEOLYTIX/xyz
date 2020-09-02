@@ -16,7 +16,7 @@ module.exports = async (req, res) => {
   UPDATE acl_schema.acl_table SET
     approved = true,
     approvaltoken = null,
-    approved_by = '${req.params.token.email}'
+    approved_by = '${req.params.token.email}|${new Date().toISOString().replace(/\..*/,'')}'
   WHERE lower(email) = lower($1);`, [user.email])
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')

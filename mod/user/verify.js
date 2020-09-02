@@ -29,9 +29,6 @@ module.exports = async (req, res) => {
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
-  // Return on password reset; Do NOT notify administrator
-  if (user.password_reset) return res.send('Password has been reset.')
-
   // Notify administrator if user needs to be approved.
   if (!user.approved) {
 
@@ -61,5 +58,8 @@ module.exports = async (req, res) => {
 
     return res.send('This account has been verified but requires administrator approval.')
   }
+
+  // Return on password reset; Do NOT notify administrator
+  if (user.password_reset) return res.send('Password has been reset.')
 
 }
