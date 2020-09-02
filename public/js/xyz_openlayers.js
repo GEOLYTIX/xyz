@@ -101,7 +101,7 @@
       <img height=24 src="${e.utils.svg_symbols(i)}">`):void 0===i.fillOpacity?n.appendChild(e.utils.svg.node`
       <svg height=24 width=24>
       <line
-        x1=0 y1=0 x2=24 y2=24
+        x1=0 y1=12 x2=24 y2=12
         stroke=${i.strokeColor}
         stroke-width=${i.strokeWidth||1}>`):n.appendChild(e.utils.svg.node`
       <svg height=24 width=24>
@@ -117,7 +117,7 @@
       <img height=24 src="${e.utils.svg_symbols(t.style.default)}">`):void 0===t.style.default.fillOpacity?n.appendChild(e.utils.svg.node`
       <svg height=24 width=24>
       <line
-        x1=0 y1=0 x2=24 y2=24
+        x1=0 y1=12 x2=24 y2=12
         stroke=${t.style.default.strokeColor}
         stroke-width=${t.style.default.strokeWidth||1}>`):n.appendChild(e.utils.svg.node`
       <svg height=24 width=24>
@@ -135,7 +135,7 @@
       <img style="grid-column: 1" height=24 src="${e.utils.svg_symbols(i)}">`):void 0===i.fillOpacity?n.appendChild(e.utils.svg.node`
       <svg height=24 width=24>
       <line
-        x1=0 y1=0 x2=24 y2=24
+        x1=0 y1=12 x2=24 y2=12
         stroke=${i.strokeColor}
         stroke-width=${i.strokeWidth||1}>`):n.appendChild(e.utils.svg.node`
       <svg height=24 width=24>
@@ -450,7 +450,7 @@
         href="${i}"
         class="link-with-img">
         <div class="xyz-icon icon-event-note"></div><span>${r[0]}`)}),n}}),Ot=e=>{const t={create:function(n){n.view=e.utils.html.node`<div class="drawer layer-view">`;const r=e.utils.html.node`
-    <div class="header enabled"><span>${n.name||n.key}`;"cluster"===n.format&&n.style.default&&r.appendChild(e.utils.html.node`
+    <div class="header enabled"><span>${n.name||n.key}`;n.style.default&&n.style.default.showInHeader&&r.appendChild(e.utils.html.node`
       <img
         class="btn-header"
         title="Default icon"
