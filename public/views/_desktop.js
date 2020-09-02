@@ -114,7 +114,7 @@ window.onload = () => {
     const localeDropdown = xyz.utils.html.node`
     <div>
       <div class="listview-title secondary-colour-bg">Locales</div>
-      <div>Show layers for the following locale:</div>
+      <div>${xyz.language.show_layers_for_locale}</div>
       <button
         class="btn-drop">
         <div
