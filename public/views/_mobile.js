@@ -87,7 +87,7 @@ window.onload = () => {
     <button
       disabled=${xyz.map.getView().getZoom() >= xyz.locale.maxZoom}
       class="enabled"
-      title="Zoom in"
+      title=${_xyz.language.toolbar_zoom_in}
       onclick=${e => {
         const z = parseInt(xyz.map.getView().getZoom() + 1)
         xyz.map.getView().setZoom(z)
@@ -100,7 +100,7 @@ window.onload = () => {
     <button
       disabled=${xyz.map.getView().getZoom() <= xyz.locale.minZoom}
       class="enabled"
-      title="Zoom out"
+      title=${_xyz.language.toolbar_zoom_out}
       onclick=${e => {
         const z = parseInt(xyz.map.getView().getZoom() - 1)
         xyz.map.getView().setZoom(z)
@@ -117,7 +117,7 @@ window.onload = () => {
 
     document.querySelector('.btn-column').appendChild(xyz.utils.wire()`
     <button
-      title="Zoom to area"
+      title=${_xyz.language.toolbar_zoom_to_area}
       onclick=${e => {
         e.stopPropagation()
         e.target.classList.toggle('enabled')
@@ -138,7 +138,7 @@ window.onload = () => {
 
     document.querySelector('.btn-column').appendChild(xyz.utils.wire()`
     <button
-      title="Current location"
+      title=${_xyz.language.toolbar_current_location}
       onclick=${e => {
         xyz.mapview.locate.toggle();
         e.target.classList.toggle('enabled');
@@ -249,7 +249,7 @@ window.onload = () => {
 
     xyz.user && xyz.user.admin_user && document.querySelector('.btn-column').appendChild(xyz.utils.wire()`
           <a
-            title="Open account admin view"
+            title=${_xyz.language.toolbar_admin}
             class="enabled" style="cursor: pointer;"
             href="${xyz.host + '/view/admin_user'}">
             <div class="xyz-icon icon-supervisor-account">`)
@@ -257,7 +257,7 @@ window.onload = () => {
     if (document.head.dataset.login) {
       document.querySelector('.btn-column').appendChild(xyz.utils.wire()`
           <a
-            title="${xyz.user ? `Logout ${xyz.user.email}` : 'Login'}"
+            title="${xyz.user ? `${_xyz.language.toolbar_logout} ${xyz.user.email}` : 'Login'}"
             class="enabled" style="cursor: pointer;"
             href="${xyz.host + (xyz.user ? '/logout' : '/login')}">
             <div class="${'xyz-icon ' + (xyz.user ? 'icon-logout' : 'icon-lock-open')}">`)
