@@ -36,7 +36,7 @@ module.exports = async (req) => {
 
   if (user.blocked) return new Error('User blocked')
 
-  const approvalDate = new Date(user.approved_by.replace(/.*\|/,''))
+  const approvalDate = user.approved_by && new Date(user.approved_by.replace(/.*\|/,''))
 
   if (approvalDate && approvalDate.setDate(approvalDate.getDate() + parseInt(process.env.APPROVAL_EXPIRY || 0)) < date) {
 
