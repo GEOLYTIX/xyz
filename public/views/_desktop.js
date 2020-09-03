@@ -158,7 +158,7 @@ window.onload = () => {
     <button
       disabled=${xyz.map.getView().getZoom() >= xyz.locale.maxZoom}
       class="enabled"
-      title=${_xyz.language.toolbar_zoom_in}
+      title=${xyz.language.toolbar_zoom_in}
       onclick=${e => {
         const z = parseInt(xyz.map.getView().getZoom() + 1)
         xyz.map.getView().setZoom(z)
@@ -171,7 +171,7 @@ window.onload = () => {
     <button
       disabled=${xyz.map.getView().getZoom() <= xyz.locale.minZoom}
       class="enabled"
-      title=${_xyz.language.toolbar_zoom_out}
+      title=${xyz.language.toolbar_zoom_out}
       onclick=${e => {
         const z = parseInt(xyz.map.getView().getZoom() - 1)
         xyz.map.getView().setZoom(z)
@@ -188,7 +188,7 @@ window.onload = () => {
 
     document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
     <button
-      title=${_xyz.language.toolbar_zoom_to_area}
+      title=${xyz.language.toolbar_zoom_to_area}
       onclick=${e => {
         e.stopPropagation()
         e.target.classList.toggle('enabled')
@@ -209,7 +209,7 @@ window.onload = () => {
 
     document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
       <button
-        title=${_xyz.language.toolbar_current_location}
+        title=${xyz.language.toolbar_current_location}
         onclick=${e => {
           xyz.mapview.locate.toggle();
           e.target.classList.toggle('enabled');
@@ -217,7 +217,7 @@ window.onload = () => {
 
     document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
       <button
-        title=${_xyz.language.toolbar_measure}
+        title=${xyz.language.toolbar_measure}
         onclick=${e => {
 
           if (e.target.classList.contains('enabled')) return xyz.mapview.interaction.draw.cancel()
@@ -235,7 +235,7 @@ window.onload = () => {
 
     document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
       <button
-        title=${_xyz.language.toolbar_fullscreen}
+        title=${xyz.language.toolbar_fullscreen}
         onclick=${e => {
         e.target.classList.toggle('enabled');
         xyz.mapview.node.classList.toggle('fullscreen');
@@ -244,42 +244,6 @@ window.onload = () => {
         <div class="xyz-icon icon-map off-black-filter">`)
 
   }
-
-  // function loadModules() {
-
-  //   return new Promise((resolveAll, rejectAll) => {
-
-  //     if (!xyz.locale.modules) return resolve()
-
-  //     const promises = Object.entries(xyz.locale.modules).map(_module => {
-
-  //       return new Promise((resolve, reject) => {
-
-  //         const tag = xyz.utils.wire()`<script src="${_module[1]}">`
-
-  //         const eF = e => {
-  //           e.detail(xyz)
-  //           document.removeEventListener(_module[0], eF, true)
-  //           tag.remove()
-  //           resolve(_module)
-  //         }
-
-  //         document.addEventListener(_module[0], eF, true)
-  //         document.head.appendChild(tag)
-  //       })
-  //     })
-
-  //     Promise
-  //       .all(promises)
-  //       .then(arr => resolveAll(arr))
-  //       .catch(error => {
-  //         console.error(error)
-  //         rejectAll(error)
-  //       });
-  
-  //   })
-
-  // }
 
   function mappUI() {
 
@@ -343,7 +307,7 @@ window.onload = () => {
 
     xyz.user && xyz.user.admin_user && document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
           <a
-            title=${_xyz.language.toolbar_admin}
+            title=${xyz.language.toolbar_admin}
             class="enabled" style="cursor: pointer;"
             href="${xyz.host + '/view/admin_user'}">
             <div class="xyz-icon icon-supervisor-account">`)
@@ -351,7 +315,7 @@ window.onload = () => {
     if (document.head.dataset.login) {
       document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
           <a
-            title="${xyz.user ? `${_xyz.language.toolbar_logout} ${xyz.user.email}` : 'Login'}"
+            title="${xyz.user ? `${xyz.language.toolbar_logout} ${xyz.user.email}` : 'Login'}"
             class="enabled" style="cursor: pointer;"
             href="${xyz.host + (xyz.user ? '/logout' : '/login')}">
             <div class="${'xyz-icon ' + (xyz.user ? 'icon-logout' : 'icon-lock-open')}">`)
