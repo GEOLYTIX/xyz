@@ -113,7 +113,7 @@ window.onload = () => {
 
     const localeDropdown = xyz.utils.html.node`
     <div>
-      <div class="listview-title secondary-colour-bg">Locales</div>
+      <div class="listview-title secondary-colour-bg">${xyz.language.locales_header}</div>
       <div>${xyz.language.show_layers_for_locale}</div>
       <button
         class="btn-drop">
@@ -158,7 +158,7 @@ window.onload = () => {
     <button
       disabled=${xyz.map.getView().getZoom() >= xyz.locale.maxZoom}
       class="enabled"
-      title="Zoom in"
+      title=${_xyz.language.toolbar_zoom_in}
       onclick=${e => {
         const z = parseInt(xyz.map.getView().getZoom() + 1)
         xyz.map.getView().setZoom(z)
@@ -171,7 +171,7 @@ window.onload = () => {
     <button
       disabled=${xyz.map.getView().getZoom() <= xyz.locale.minZoom}
       class="enabled"
-      title="Zoom out"
+      title=${_xyz.language.toolbar_zoom_out}
       onclick=${e => {
         const z = parseInt(xyz.map.getView().getZoom() - 1)
         xyz.map.getView().setZoom(z)
@@ -188,7 +188,7 @@ window.onload = () => {
 
     document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
     <button
-      title="Zoom to area"
+      title=${_xyz.language.toolbar_zoom_to_area}
       onclick=${e => {
         e.stopPropagation()
         e.target.classList.toggle('enabled')
@@ -209,7 +209,7 @@ window.onload = () => {
 
     document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
       <button
-        title="Current location"
+        title=${_xyz.language.toolbar_current_location}
         onclick=${e => {
           xyz.mapview.locate.toggle();
           e.target.classList.toggle('enabled');
@@ -217,7 +217,7 @@ window.onload = () => {
 
     document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
       <button
-        title="Measure distance"
+        title=${_xyz.language.toolbar_measure}
         onclick=${e => {
 
           if (e.target.classList.contains('enabled')) return xyz.mapview.interaction.draw.cancel()
@@ -235,7 +235,7 @@ window.onload = () => {
 
     document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
       <button
-        title="Fullscreen Mapview"
+        title=${_xyz.language.toolbar_fullscreen}
         onclick=${e => {
         e.target.classList.toggle('enabled');
         xyz.mapview.node.classList.toggle('fullscreen');
@@ -312,7 +312,7 @@ window.onload = () => {
 
       const gazetteer = xyz.utils.html.node`
       <div>
-        <div class="listview-title secondary-colour-bg">Search</div>
+        <div class="listview-title secondary-colour-bg">${xyz.language.search_header}</div>
         <div class="input-drop">
           <input type="text" placeholder="Search places">
           <ul>`
@@ -343,7 +343,7 @@ window.onload = () => {
 
     xyz.user && xyz.user.admin_user && document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
           <a
-            title="Open account admin view"
+            title=${_xyz.language.toolbar_admin}
             class="enabled" style="cursor: pointer;"
             href="${xyz.host + '/view/admin_user'}">
             <div class="xyz-icon icon-supervisor-account">`)
@@ -351,7 +351,7 @@ window.onload = () => {
     if (document.head.dataset.login) {
       document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
           <a
-            title="${xyz.user ? `Logout ${xyz.user.email}` : 'Login'}"
+            title="${xyz.user ? `${_xyz.language.toolbar_logout} ${xyz.user.email}` : 'Login'}"
             class="enabled" style="cursor: pointer;"
             href="${xyz.host + (xyz.user ? '/logout' : '/login')}">
             <div class="${'xyz-icon ' + (xyz.user ? 'icon-logout' : 'icon-lock-open')}">`)
