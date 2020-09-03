@@ -1,3 +1,39 @@
 window._xyz_language = {
-  show_layers_for_locale: "Zeige alle Layer fuer diese Lokale:"
+  search_header: "Search", 
+  search_no_results: "No results for this search",
+  locales_header: "Locales",
+  show_layers_for_locale: "Zeige alle Layer fuer diese Lokale:",
+  layers_header: "Layers", // to be done d&m
+  locations_header: "Locations", // to be done d&m
+  clear_all_locations: "Clear all locations", // to be done d&m
+  layer_group_hide_layers: "Hide layers from group",
+  layer_group_toggle: "Toggle group panel",
+  layer_default_icon: "Default icon",
+  layer_zoom_to_extent: "Zoom to filtered layer extent",
+  layer_visibility: "Toggle visibility",
+  layer_toggle_dashboard: "Toggle layer dashboard",
+  layer_style_header: "Style",
+  layer_style_select_theme: "Select thematic style",
+  layer_style_bring_to_front: "Bring layer to front",
+  layer_style_display_labels: "Display labels",
+  layer_style_switch_caption: "Click on labels to switch visibity or ",
+  layer_style_switch_all: "switch all",
+  layer_grid_legend_min: "min",
+  layer_grid_legend_max: "max",
+  layer_grid_legend_avg: "avg",
+  layer_grid_legend_ratio: "Display colour as a ratio to the size",
+  layer_style_other: "other",
+  layer_style_cluster: "Multiple locations",
+  layer_filter_header: "Filter",
+  layer_filter_select: "Select filter from list",
+  layer_filter_run: "Run Output",
+  layer_filter_clear_all: "Clear all filters",
+  layer_filter_date_after: "After",
+  layer_filter_date_before: "Before",
+  layer_filter_pick: "Pick from calendar",
+  layer_filter_boolean: "True",
+  layer_filter_greater: "Greater or equal",
+  layer_filter_smaller: "Smaller or equal",
+  layer_filter_text: "Search",
+  layer_dataview_header: "Data Views"
 }

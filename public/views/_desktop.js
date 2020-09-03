@@ -113,7 +113,7 @@ window.onload = () => {
 
     const localeDropdown = xyz.utils.html.node`
     <div>
-      <div class="listview-title secondary-colour-bg">Locales</div>
+      <div class="listview-title secondary-colour-bg">${xyz.language.locales_header}</div>
       <div>${xyz.language.show_layers_for_locale}</div>
       <button
         class="btn-drop">
@@ -312,7 +312,7 @@ window.onload = () => {
 
       const gazetteer = xyz.utils.html.node`
       <div>
-        <div class="listview-title secondary-colour-bg">Search</div>
+        <div class="listview-title secondary-colour-bg">${xyz.language.search_header}</div>
         <div class="input-drop">
           <input type="text" placeholder="Search places">
           <ul>`
