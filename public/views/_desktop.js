@@ -91,7 +91,6 @@ window.onload = () => {
     window.removeEventListener('touchend', stopResize_y);
   }
 
-
   const xyz = _xyz({
     host: document.head.dataset.dir || new String(''),
     hooks: true
@@ -108,6 +107,10 @@ window.onload = () => {
     xyz.workspace.get.locale({
       locale: locale
     }).then(createMap)
+
+    document.getElementById('layers_header').textContent = xyz.language.layers_header
+    document.getElementById('locations_header').textContent = xyz.language.locations_header
+    document.getElementById('clear_all_locations').textContent = xyz.language.clear_all_locations
 
     if (locales.length === 1) return
 
@@ -265,7 +268,7 @@ window.onload = () => {
       }
     })
 
-    document.getElementById('clear_locations').onclick = e => {
+    document.getElementById('clear_all_locations').onclick = e => {
       e.preventDefault()
       xyz.locations.list
         .filter(record => !!record.location)

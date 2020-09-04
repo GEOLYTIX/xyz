@@ -13,7 +13,6 @@
     <link rel="stylesheet" href="${dir}/css/openlayers.css" />
     <link rel="stylesheet" href="${dir}/css/control.css" />
     <link rel="stylesheet" href="${dir}/views/_desktop.css" />
-    <!--link rel="stylesheet" href="${dir}/api/provider/github?url=api.github.com/repos/GEOLYTIX/xyz/contents/public/views/desktop.css&content_type=text/css"-->
 
     <!-- <script src="https://unpkg.com/tabulator-tables@4.6.3/dist/js/tabulator.min.js"></script> -->
     <script src="${dir}/js/tabulator.js" defer></script>
@@ -25,8 +24,8 @@
     <script src="${dir}/js/ol.js" defer></script>
     <script src="${dir}/js/xyz_openlayers.js" defer></script>
     <script src="${dir}/views/_desktop.js" defer></script>
-    <!--script src="${dir}/api/provider/github?url=api.github.com/repos/GEOLYTIX/xyz/contents/public/views/desktop.js" defer></script>-->
-</head>
+
+  </head>
 
 <body>
 
@@ -36,7 +35,7 @@
 
       <div>
 
-        <div class="listview-title secondary-colour-bg">Layers</div>
+        <div id="layers_header" class="listview-title secondary-colour-bg"></div>
 
         <div id="layers"></div>
 
@@ -44,9 +43,9 @@
 
       <div>
 
-        <div class="listview-title secondary-colour-bg">Locations</div>
+        <div id="locations_header" class="listview-title secondary-colour-bg"></div>
 
-        <button id="clear_locations" class="bold primary-colour">Clear all locations.</button>
+        <button id="clear_all_locations" class="bold primary-colour"></button>
 
         <div id="locations"></div>
 
