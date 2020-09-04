@@ -1,5 +1,11 @@
 {
     "templates": {
+        "de": {
+            "src": "http://localhost:3000/dev/views/_desktop_deutsch.html"
+        },
+        "fr": {
+            "src": "http://localhost:3000/dev/views/_desktop_fr.html"
+        },
         "NE Countries table1": {
             "template": "SELECT name, pop_est, gdp_md_est FROM dev.natural_earth_countries WHERE true ${viewport} ${filter} ORDER BY id ASC FETCH FIRST 99 ROW ONLY;",
             "dbs": "XYZ"
@@ -20,10 +26,6 @@
             "dbs": "XYZ",
             "module": "http://localhost:3000/dev/views/postal_population.js"
         },
-        "Worker Summary Sites": {
-            "template": "WITH workers AS (SELECT (SUM(case when ST_distance(ST_Transform(a.geom_4326,27700),ST_transform(b.geom_p_4326,27700))<=250 then b.workers else 0 end))::integer AS workers_250,(SUM(case when ST_distance(ST_Transform(a.geom_4326,27700),ST_transform(b.geom_p_4326,27700))<=500 then b.workers else 0 end))::integer AS workers_500 FROM dev.uk_glx_sites a, geodata.uk_glx_geodata_hex_1k b WHERE a.id = ${id} AND ST_INTERSECTS(a.isoline_15min, b.geom_p_4326)) SELECT UNNEST(ARRAY['Workers 250m','Workers 500m']) AS rows,UNNEST(ARRAY[workers.workers_250,workers.workers_500]) AS workers FROM workers;",
-            "dbs": "XYZ"
-        },
         "Nearest competitors Sites": {
             "template": "SELECT (ROUND(((ST_Transform(a.geom_4326, 3857) <#> ST_Transform(b.geom_p_4326, 3857))/1000)::numeric, 2))::text AS dist,(b.fascia)::text AS fascia,(b.postcode)::text AS postcode FROM dev.uk_glx_sites a, geodata.uk_glx_open_retail_points b WHERE a.id = ${id} ORDER BY ST_Transform(a.geom_4326, 3857) <#> ST_Transform(b.geom_p_4326, 3857) NULLS LAST LIMIT 5;",
             "dbs": "XYZ"
@@ -33,10 +35,6 @@
         },
         "Sites Local Report": {
             "template": "http://localhost:3000/views/report_location.html"
-        },
-        "aga_isoline_5min": {
-            "template": "SELECT ROUND(sum(b.pop__11)) as _pop__11_5min, ROUND(sum(b.pop__12)) as _pop__12_5min, ROUND(sum(b.pop__13)) as _pop__13_5min, ROUND(sum(b.pop__14)) as _pop__14_5min, ROUND(sum(b.pop__15)) as _pop__15_5min, ROUND(sum(b.pop__16)) as _pop__16_5min, ROUND(sum(b.pop__17)) as _pop__17_5min, ROUND(sum(b.pop__18)) as _pop__18_5min FROM dev.uk_glx_sites a, geodata.uk_glx_geodata_hex_1k b WHERE a.id = ${id} AND st_intersects(a.isoline_5min, b.geom_p_4326);",
-            "dbs": "XYZ"
         },
         "UK Retail Places Layer Table": {
             "template": "SELECT tid AS qID, id, dev_date ,rp_type, comp_strgh, est_units, est_brands FROM dev.retailplaces WHERE true ${viewport} ORDER BY tid ASC FETCH FIRST 99 ROW ONLY;",
@@ -218,7 +216,8 @@
                             "title": "Population / GDP",
                             "query": "NE Countries table1",
                             "viewport": true,
-                            "columns": [{
+                            "columns": [
+                                {
                                     "field": "name",
                                     "title": "Name"
                                 },
@@ -315,7 +314,8 @@
                         }
                     },
                     "qID": "id",
-                    "infoj": [{
+                    "infoj": [
+                        {
                             "type": "key"
                         },
                         {
@@ -367,53 +367,61 @@
                             "Population": {
                                 "type": "graduated",
                                 "field": "pop_est_edit",
-                                "cat_arr": [{
+                                "cat_arr": [
+                                    {
                                         "value": 0,
                                         "label": "0 to 10000",
                                         "style": {
-                                            "fillColor": "#15773f"
+                                            "fillColor": "#15773f",
+                                            "strokeColor": "#15773f"
                                         }
                                     },
                                     {
                                         "value": 1000000,
                                         "label": "1+ million",
                                         "style": {
-                                            "fillColor": "#66bd63"
+                                            "fillColor": "#66bd63",
+                                            "strokeColor": "#66bd63"
                                         }
                                     },
                                     {
                                         "value": 10000000,
                                         "label": "10+ million",
                                         "style": {
-                                            "fillColor": "#a6d96a"
+                                            "fillColor": "#a6d96a",
+                                            "strokeColor": "#a6d96a"
                                         }
                                     },
                                     {
                                         "value": 25000000,
                                         "label": "25+ million",
                                         "style": {
-                                            "fillColor": "#d9ef8b"
+                                            "fillColor": "#d9ef8b",
+                                            "strokeColor": "#d9ef8b"
                                         }
                                     },
                                     {
                                         "value": 50000000,
                                         "label": "50+ million",
                                         "style": {
-                                            "fillColor": "#fdae61"
+                                            "fillColor": "#fdae61",
+                                            "strokeColor": "#fdae61"
                                         }
                                     },
                                     {
                                         "value": 100000000,
                                         "label": "100+ million",
                                         "style": {
-                                            "fillColor": "#f46d43"
+                                            "fillColor": "#f46d43",
+                                            "strokeColor": "#f46d43"
                                         }
                                     },
                                     {
                                         "value": 1000000000,
                                         "label": "1+ billion",
                                         "style": {
-                                            "fillColor": "#d73027"
+                                            "fillColor": "#d73027",
+                                            "strokeColor": "#d73027"
                                         }
                                     }
                                 ]
@@ -743,7 +751,7 @@
                     },
                     "srid": "4326",
                     "format": "grid",
-                    "dbs": "XYZ",
+                    "dbs": "MAPP",
                     "geom": "geom_p_4326",
                     "tables": {
                         "7": null,
@@ -996,8 +1004,12 @@
                         }
                     },
                     "qID": "tid",
+                    "hover": {
+                        "field": "tid"
+                    },
                     "filter": {
-                        "infoj": [{
+                        "infoj": [
+                            {
                             "title": "ID count",
                             "field": "id_count",
                             "type": "integer",
@@ -1005,7 +1017,8 @@
                             "fieldfx": "count(id)"
                         }]
                     },
-                    "infoj": [{
+                    "infoj": [
+                        {
                             "type": "key"
                         },
                         {
@@ -1171,266 +1184,6 @@
                         }
                     ]
                 },
-                "Road network": {
-                    "meta": "MVT layer where features are linestrings.",
-                    "format": "mvt",
-                    "dbs": "XYZ",
-                    "qID": "id",
-                    "geom": "geom_l_3857",
-                    "srid": "3857",
-                    "tables": {
-                        "7": null,
-                        "8": "geodata.uk_glx_geodata_road_detail"
-                    },
-                    "hover": {
-                        "field": "road_type"
-                    },
-                    "infoj": [{
-                            "type": "key"
-                        },
-                        {
-                            "field": "road_name",
-                            "title": "Name",
-                            "inline": true
-                        },
-                        {
-                            "field": "road_type",
-                            "title": "Road Type",
-                            "inline": true
-                        },
-                        {
-                            "field": "detailtype",
-                            "title": "Road category",
-                            "inline": true
-                        }
-                    ],
-                    "style": {
-                        "default": {
-                            "strokeColor": "#780116"
-                        },
-                        "highlight": {
-                            "strokeColor": "#780116"
-                        },
-                        "themes": {
-                            "Road Category": {
-                                "field": "detailtype",
-                                "other": true,
-                                "type": "categorized",
-                                "cat": {
-                                    "A Road": {
-                                        "style": {
-                                            "strokeColor": "#1e88e5"
-                                        }
-                                    },
-                                    "B Road": {
-                                        "style": {
-                                            "strokeColor": "#66bb6a"
-                                        }
-                                    },
-                                    "Motorway": {
-                                        "style": {
-                                            "strokeWidth": 2,
-                                            "strokeColor": "#ef5350"
-                                        }
-                                    },
-                                    "Primary Road": {
-                                        "style": {
-                                            "strokeWidth": 2,
-                                            "strokeColor": "#7b1fa2"
-                                        }
-                                    }
-                                }
-                            },
-                            "Test graduated theme": {
-                                "field": "detailtype_num",
-                                "type": "graduated",
-                                "cat_arr": [{
-                                        "value": 0,
-                                        "label": "1",
-                                        "style": {
-                                            "strokeWidth": 5,
-                                            "strokeColor": "#1e88e5"
-                                        }
-                                    },
-                                    {
-                                        "value": 1,
-                                        "label": "2",
-                                        "style": {
-                                            "strokeColor": "#66bb6a"
-                                        }
-                                    },
-                                    {
-                                        "value": 2,
-                                        "label": "3",
-                                        "style": {
-                                            "strokeColor": "#ef5350"
-                                        }
-                                    }
-                                ]
-                            }
-                        }
-                    }
-                },
-                "Postal": {
-                    "format": "mvt",
-                    "dbs": "XYZ",
-                    "qID": "id",
-                    "geom": "geom_3857",
-                    "srid": "3857",
-                    "tables": {
-                        "7": null,
-                        "8": "geodata.uk_glx_geodata_postal_area",
-                        "9": "geodata.uk_glx_geodata_postal_area",
-                        "10": "geodata.uk_glx_geodata_postal_district",
-                        "11": "geodata.uk_glx_geodata_postal_district",
-                        "12": "geodata.uk_glx_geodata_postal_sector",
-                        "13": "geodata.uk_glx_geodata_postal_sector",
-                        "14": "geodata.uk_glx_geodata_postal_sector",
-                        "15": null
-                    },
-                    "infoj": [
-                        {
-                            "type": "key"
-                        },
-                        {
-                            "field": "id",
-                            "title": "ID",
-                            "inline": true
-                        },
-                        {
-                            "field": "lvl",
-                            "title": "Level",
-                            "inline": true
-                        },
-                        {
-                            "title": "Population",
-                            "type": "dataview",
-                            "target": "location",
-                            "class": "hidden_in_report",
-                            "query": "aga postal population",
-                            "chart": {
-                                "height": 200,
-                                "type": "bar",
-                                "labels": ["2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018"],
-                                "datasets": [
-                                    {
-                                    "fields": [
-                                        "_pop__11",
-                                        "_pop__12",
-                                        "_pop__13",
-                                        "_pop__14",
-                                        "_pop__15",
-                                        "_pop__16",
-                                        "_pop__17",
-                                        "_pop__18"
-                                    ],
-                                    "backgroundColor": [
-                                        "#b2dfdb",
-                                        "#80cbc4",
-                                        "#4db6ac",
-                                        "#26a69a",
-                                        "#009688",
-                                        "#00897b",
-                                        "#00796b",
-                                        "#00695c"
-                                    ]
-                                }],
-                                "options": {
-                                    "legend": {
-                                        "display": false
-                                    },
-                                    "scales": {
-                                        "yAxes": [{
-                                            "ticks": {
-                                                "display": false,
-                                                "beginAtZero": true
-                                            }
-                                        }],
-                                        "xAxes": [{
-                                            "ticks": {
-                                                "maxRotation": 90,
-                                                "minRotation": 90
-                                            }
-                                        }]
-                                    }
-                                }
-                            }
-                        }
-                    ],
-                    "style": {
-                        "hidden": true,
-                        "default": {
-                            "strokeColor": "#0C6291",
-                            "fillColor": "#CEE5F2",
-                            "fillOpacity": 0.1
-                        },
-                        "highlight": {
-                            "fillColor": "#F7A072",
-                            "fillOpacity": 0.3
-                        }
-                    }
-                },
-                "Rail": {
-                    "format": "mvt",
-                    "dbs": "XYZ",
-                    "___table": "geodata.uk_glx_geodata_transport_rail_line",
-                    "table": "dev.vw_uk_glx_geodata_transport_rail_line_and_station",
-                    "___mvt_cache": "dev.vw_uk_glx_geodata_transport_rail_line_and_station__mvts",
-                    "geom": "geom_3857",
-                    "___geom": "geom_l_3857",
-                    "srid": "3857",
-                    "qID": "fid",
-                    "____qID": "id",
-                    "style": {
-                        "default": {
-                            "strokeColor": "#01579b",
-                            "strokeWidth": 2,
-                            "marker": {
-                                "type": "circle",
-                                "strokeColor": "#00695c",
-                                "fillColor": "#ff3d00",
-                                "radius": 6
-                            }
-                        },
-                        "themes": {
-                            "Class": {
-                                "type": "categorized",
-                                "field": "class",
-                                "other": true,
-                                "cat": {
-                                    "station": {
-                                        "label": "Station",
-                                        "style": {
-                                            "marker": {
-                                                "type": "circle",
-                                                "strokeColor": "#00695c",
-                                                "fillColor": "#ff3d00",
-                                                "radius": 4
-                                            }
-                                        }
-                                    },
-                                    "railway": {
-                                        "label": "Railway",
-                                        "style": {
-                                            "strokeColor": "#00695c",
-                                            "strokeWidth": 3
-                                        }
-                                    },
-                                    "test": {
-                                        "label": "Test polygon",
-                                        "style": {
-                                            "strokeWidth": 1,
-                                            "fillColor": "#512da8"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "filter": {
-
-                    }
-                },
                 "Agata": {
                     "group": "Cluster",
                     "meta": "XYZ database, don't touch.",
@@ -1558,69 +1311,6 @@
                                 "fillColor": "#F49D37",
                                 "fillOpacity": 0.3,
                                 "strokeWidth": 2
-                            }
-                        },
-                        {
-                            "title": "Population within 5min",
-                            "type": "dataview",
-                            "target": "location",
-                            "class": "hidden_in_report",
-                            "query": "aga_isoline_5min",
-                            "chart": {
-                                "height": 200,
-                                "type": "bar",
-                                "labels": ["2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018"],
-                                "datasets": [{
-                                    "fields": [
-                                        "_pop__11_5min",
-                                        "_pop__12_5min",
-                                        "_pop__13_5min",
-                                        "_pop__14_5min",
-                                        "_pop__15_5min",
-                                        "_pop__16_5min",
-                                        "_pop__17_5min",
-                                        "_pop__18_5min"
-                                    ],
-                                    "backgroundColor": [
-                                        "#E6A5AE",
-                                        "#E08F9A",
-                                        "#D97985",
-                                        "#D36371",
-                                        "#CD4C5D",
-                                        "#C73649",
-                                        "#C12035",
-                                        "#BB0A21"
-                                    ],
-                                    "borderColor": [
-                                        "#E6A5AE",
-                                        "#E08F9A",
-                                        "#D97985",
-                                        "#D36371",
-                                        "#CD4C5D",
-                                        "#C73649",
-                                        "#C12035",
-                                        "#BB0A21"
-                                    ]
-                                }],
-                                "options": {
-                                    "legend": {
-                                        "display": false
-                                    },
-                                    "scales": {
-                                        "yAxes": [{
-                                            "ticks": {
-                                                "display": false,
-                                                "beginAtZero": true
-                                            }
-                                        }],
-                                        "xAxes": [{
-                                            "ticks": {
-                                                "maxRotation": 90,
-                                                "minRotation": 90
-                                            }
-                                        }]
-                                    }
-                                }
                             }
                         },
                         {
@@ -1845,30 +1535,6 @@
                         },
                         {
                             "type": "dataview",
-                            "title": "Worker Summary",
-                            "target": "xyz_sites_workers",
-                            "class": "_report",
-                            "layout": "fitColumns",
-                            "query": "Worker Summary Sites",
-                            "columns": [{
-                                    "field": "rows",
-                                    "title": "Worker Summary",
-                                    "headerSort": false,
-                                    "align": "left"
-                                },
-                                {
-                                    "title": "Total Workers",
-                                    "field": "workers",
-                                    "align": "center",
-                                    "formatter": "money",
-                                    "formatterParams": {
-                                        "precision": 0
-                                    }
-                                }
-                            ]
-                        },
-                        {
-                            "type": "dataview",
                             "title": "Nearest competitors",
                             "class": "_report",
                             "target": "xyz_sites_nearestcomp",
@@ -1910,10 +1576,7 @@
                             "fillColor": "rgba(0, 75, 168, 0.3)",
                             "scale": 2
                         },
-                        "highlight": {
-                            "__scale": 2.1
-                        },
-                        "__themes": {
+                        "themes": {
                             "Test categorized pins": {
                                 "field": "test_binary",
                                 "type": "categorized",
@@ -1963,12 +1626,12 @@
                         "delete": true
                     },
                     "qID": "id",
-                    "infoj": [{
+                    "infoj": [
+                        {
                             "type": "key"
                         },
                         {
-                            "title": "Catchment Geometry",
-                            "type": "title"
+                            "title": "Catchment Geometry"
                         },
                         {
                             "name": "Show / Hide",
@@ -1982,8 +1645,7 @@
                             }
                         },
                         {
-                            "title": "Catchment Here",
-                            "type": "title"
+                            "title": "Catchment Here"
                         },
                         {
                             "name": "Create / Delete 10 min",
@@ -1998,8 +1660,7 @@
                             }
                         },
                         {
-                            "title": "Catchment Mapbox",
-                            "type": "title"
+                            "title": "Catchment Mapbox"
                         },
                         {
                             "name": "Create/Delete 10 min",
@@ -2019,8 +1680,7 @@
                             }
                         },
                         {
-                            "title": "Custom Here Catchment",
-                            "type": "title"
+                            "title": "Custom Here Catchment"
                         },
                         {
                             "name": "Create / Delete",
@@ -2044,8 +1704,7 @@
                             "type": "json"
                         },
                         {
-                            "title": "Custom Mapbox Catchment",
-                            "type": "title"
+                            "title": "Custom Mapbox Catchment"
                         },
                         {
                             "name": "Create / Delete",
@@ -2822,104 +2481,6 @@
                         }
                     ]
                 },
-                "Health": {
-                    "group": "Cluster",
-                    "meta": "A subset of collection of points of interest across the UK including healthcare locations, law and order sites along with sport & leisure facilities, car parks, cinemas and service areas.",
-                    "format": "cluster",
-                    "dbs": "XYZ",
-                    "table": "geodata.vw_uk_glx_geodata_poi_health",
-                    "qID": "id",
-                    "geom": "geom_p_4326",
-                    "srid": "4326",
-                    "cluster_label": "poi_name",
-                    "cluster_kmeans": 0.1,
-                    "cluster_dbscan": 0.01,
-                    "infoj": [{
-                            "type": "streetview"
-                        },
-                        {
-                            "type": "key"
-                        },
-                        {
-                            "field": "poi_type",
-                            "title": "Category",
-                            "inline": true
-                        },
-                        {
-                            "field": "poi_name",
-                            "title": "Name",
-                            "inline": true
-                        },
-                        {
-                            "field": "brand",
-                            "title": "Brand",
-                            "inline": true
-                        },
-                        {
-                            "title": "Address",
-                            "type": "title"
-                        },
-                        {
-                            "field": "add_one"
-                        },
-                        {
-                            "field": "add_two"
-                        },
-                        {
-                            "field": "locality"
-                        },
-                        {
-                            "field": "town"
-                        },
-                        {
-                            "field": "postcode"
-                        }
-                    ],
-                    "style": {
-                        "label": {
-                            "field": "count",
-                            "display": true,
-                            "fillColor": "#fff",
-                            "font": "bold 16px sans-serif"
-                        },
-                        "default": {
-                            "type": "target",
-                            "fillColor": "#539987"
-                        },
-                        "cluster": {
-                            "type": "target",
-                            "fillColor": "#539987"
-                        },
-                        "size": 30,
-                        "themes": {
-                            "POI Type": {
-                                "field": "poi_type",
-                                "type": "categorized",
-                                "other": true,
-                                "cat": {
-                                    "Hospital": {
-                                        "label": "Hospital",
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/poi_pin_filled/poi_health_hospital.svg",
-                                        "anchor": [
-                                            0.5,
-                                            0.95
-                                        ],
-                                        "size": 70
-                                    },
-                                    "Pharmacy": {
-                                        "label": "Pharmacy",
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/poi_pin_filled/poi_health_pharmacy.svg",
-                                        "anchor": [
-                                            0.5,
-                                            0.95
-                                        ],
-                                        "size": 70
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
                 "Election Wards": {
                     "group": "Cluster",
                     "format": "cluster",
@@ -3242,10 +2803,12 @@
                             "anchor": [
                                 0.5,
                                 1
-                            ]
+                            ],
+                            "scale": 0.5
                         },
                         "cluster": {
-                            "svg": "https://geolytix.github.io/gla/icons/pin_slate.svg"
+                            "svg": "https://geolytix.github.io/gla/icons/pin_slate.svg",
+                            "scale": 0.5
                         },
                         "highlight": {}
                     }
