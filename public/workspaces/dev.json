@@ -1563,6 +1563,7 @@
                     ],
                     "style": {
                         "default": {
+                            "showInHeader": true,
                             "type": "semiCircle",
                             "fillColor": "#ffb300",
                             "scale": 2,

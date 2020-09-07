@@ -72,6 +72,7 @@ Here's an example of inherited styles:
 ```json
 "style": {
   "default": {
+    "showInHeader": true,
     "type": "target",
     "fillColor": "#ffb300",
     "size": 30
@@ -88,6 +89,8 @@ Here's an example of inherited styles:
 ```
 
 Please note that `"size"` defined inside `"cluster"` object is a maximum size of cluster icon.
+
+`"showInHeader"` is an optional flag which shows default icon in the layer panel to help differentiating layers in the list.
 
 Supported types of markers:
 
