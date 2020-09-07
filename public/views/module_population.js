@@ -69,6 +69,6 @@ module.exports = {
     	ROUND(sum(b.pop__18)) as _pop__18
     	FROM ${table(_)} a, ${hex(_)} b 
     	WHERE a.${qID(_)} = ${id(_)} 
-    	AND ST_INTERSECTS(a.geom_4326, b.geom_p_4326);`;
+    	AND ST_INTERSECTS(a.geom_4326_5m, b.geom_p_4326);`;
     }
 }
