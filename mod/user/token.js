@@ -38,7 +38,7 @@ module.exports = async (req) => {
 
   const approvalDate = user.approved_by && new Date(user.approved_by.replace(/.*\|/,''))
 
-  if (approvalDate && approvalDate.setDate(approvalDate.getDate() + parseInt(process.env.APPROVAL_EXPIRY || 0)) < date) {
+  if (process.env.APPROVAL_EXPIRY && approvalDate && approvalDate.setDate(approvalDate.getDate() + parseInt(process.env.APPROVAL_EXPIRY || 0)) < date) {
 
     // Account approval date + APPROVAL_EXPIRY exceeds current date.
     if (!user.admin_user) {
