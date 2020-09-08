@@ -43,7 +43,7 @@ window.onload = () => {
 
     if (locales.length === 1) return
 
-    const localeDropdown = xyz.utils.wire()`
+    const localeDropdown = xyz.utils.html.node`
     <div>
       <div class="listview-title secondary-colour-bg">${xyz.language.locales_header}</div>
       <div>${xyz.language.show_layers_for_locale}</div>
@@ -59,7 +59,7 @@ window.onload = () => {
         <div class="icon"></div>
       </div>
       <ul>${locales.map(
-          locale => xyz.utils.wire()`<li><a href="${xyz.host + '?locale=' + locale}">${locale}`
+          locale => xyz.utils.html.node`<li><a href="${xyz.host + '?locale=' + locale}">${locale}`
         )}`
 
     layersTab.parentElement.insertBefore(localeDropdown, layersTab.parentElement.firstChild)
@@ -83,7 +83,7 @@ window.onload = () => {
 
     loadLayers(locale.layers)
 
-    const btnZoomIn = xyz.utils.wire()`
+    const btnZoomIn = xyz.utils.html.node`
     <button
       disabled=${xyz.map.getView().getZoom() >= xyz.locale.maxZoom}
       class="enabled"
@@ -96,7 +96,7 @@ window.onload = () => {
 
     document.querySelector('.btn-column').appendChild(btnZoomIn)
 
-    const btnZoomOut = xyz.utils.wire()`
+    const btnZoomOut = xyz.utils.html.node`
     <button
       disabled=${xyz.map.getView().getZoom() <= xyz.locale.minZoom}
       class="enabled"
@@ -115,7 +115,7 @@ window.onload = () => {
       btnZoomOut.disabled = z <= xyz.locale.minZoom;
     })
 
-    document.querySelector('.btn-column').appendChild(xyz.utils.wire()`
+    document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
     <button
       title=${_xyz.language.toolbar_zoom_to_area}
       onclick=${e => {
@@ -136,7 +136,7 @@ window.onload = () => {
       }}>
       <div class="xyz-icon icon-area off-black-filter">`)
 
-    document.querySelector('.btn-column').appendChild(xyz.utils.wire()`
+    document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
     <button
       title=${_xyz.language.toolbar_current_location}
       onclick=${e => {
@@ -208,13 +208,13 @@ window.onload = () => {
 
     if (xyz.locale.gazetteer) {
 
-      const gazetteer = xyz.utils.wire()`
+      const gazetteer = xyz.utils.html.node`
       <div id="gazetteer" class="display-none">
         <div class="input-drop">
             <input type="text" placeholder="e.g. London">
             <ul>`
 
-      const btnGazetteer = xyz.utils.wire()`
+      const btnGazetteer = xyz.utils.html.node`
       <button onclick=${e => {
           e.preventDefault()
           e.target.classList.toggle('enabled')
@@ -247,7 +247,7 @@ window.onload = () => {
       xyz.user = xyz.utils.JWTDecode(document.head.dataset.token)
     }
 
-    xyz.user && xyz.user.admin_user && document.querySelector('.btn-column').appendChild(xyz.utils.wire()`
+    xyz.user && xyz.user.admin_user && document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
           <a
             title=${_xyz.language.toolbar_admin}
             class="enabled" style="cursor: pointer;"
@@ -255,7 +255,7 @@ window.onload = () => {
             <div class="xyz-icon icon-supervisor-account">`)
 
     if (document.head.dataset.login) {
-      document.querySelector('.btn-column').appendChild(xyz.utils.wire()`
+      document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
           <a
             title="${xyz.user ? `${_xyz.language.toolbar_logout} ${xyz.user.email}` : 'Login'}"
             class="enabled" style="cursor: pointer;"
