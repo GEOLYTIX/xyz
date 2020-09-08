@@ -158,6 +158,9 @@ async function assignTemplates() {
       // Default templates already have a render method
       if (!entry[1].src) return _resolve(entry[1])
 
+      entry[1].src = entry[1].src.replace(/\$\{(.*?)\}/g,
+        matched => process.env[`SRC_${matched.replace(/\$|\{|\}/g, '')}`] || matched)
+
       if (entry[1].src && entry[1].src.startsWith('file:')) {
         return provider.file(`../public/${entry[1].src.replace('file:', '')}`)
           .then(_resolve)
@@ -196,6 +199,12 @@ async function assignTemplates() {
 const defaults = require('./defaults')
 
 async function assignDefaults() {
+
+  //Substitute src parameter
+  workspace.locales = JSON.parse(
+    JSON.stringify(workspace.locales).replace(/\$\{(.*?)\}/g,
+      matched => process.env[`SRC_${matched.replace(/\$|\{|\}/g, '')}`] || matched)
+  )
 
   Object.keys(workspace.locales || {}).forEach(locale_key => {
 

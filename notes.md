@@ -97,6 +97,8 @@ Remove formatDate polyfill from /mod
 
 Introduction of APPROVAL_EXPIRY environment variable [#324](https://github.com/GEOLYTIX/xyz/issues/324)
 
+Introduction of SRC_* parameter substitution in workspace [#343](https://github.com/GEOLYTIX/xyz/issues/343)
+
 ## New now.json
 
 API endpoints are no longer build as individual serverless functions. api.js in the root will import other api functions from the mod directory.
