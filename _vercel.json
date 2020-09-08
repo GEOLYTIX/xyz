@@ -3,25 +3,16 @@
   "regions": [
     "lhr1"
   ],
-  "builds": [
-    {
-      "src": "/public/**",
-      "use": "@now/static"
-    },
-    {
-      "src": "/docs/**",
-      "use": "@now/static"
-    },
-    {
-      "src": "/api.js",
-      "use": "@now/node",
-      "config": {
-        "includeFiles": [
-          "public/**"
-        ]
-      }
+  "build": {
+    "env": {
+      "NODE_ENV": "production"
     }
-  ],
+  },
+  "functions": {
+    "api/api.js": {
+      "includeFiles": "public/**"
+    }
+  },
   "trailingSlash": false,
   "headers": [
     {
@@ -57,43 +48,46 @@
     },
     {
       "source": "/api/query/:_template?",
-      "destination": "/api.js"
+      "destination": "/api/api.js"
     },
     {
       "source": "/api/location/:method?",
-      "destination": "/api.js"
+      "destination": "/api/api.js"
     },
     {
       "source": "/api/user/:method?/:key?",
-      "destination": "/api.js"
+      "destination": "/api/api.js"
     },
     {
       "source": "/api/workspace/:method?/:key?",
-      "destination": "/api.js"
+      "destination": "/api/api.js"
     },
     {
       "source": "/api/layer/:format?/:z?/:x?/:y?",
-      "destination": "/api.js"
+      "destination": "/api/api.js"
     },
     {
       "source": "/api/provider/:provider?",
-      "destination": "/api.js"
+      "destination": "/api/api.js"
     },
     {
       "source": "/api/(.*)",
-      "destination": "/api.js"
+      "destination": "/api/api.js"
     },
     {
       "source": "/view/:_template?/:access?",
-      "destination": "/api.js"
+      "destination": "/api/api.js"
     },
     {
       "source": "/:access?",
-      "destination": "/api.js"
+      "destination": "/api/api.js"
     },
     {
       "source": "/",
-      "destination": "/api.js"
+      "destination": "/api/api.js"
     }
-  ]
+  ],
+  "env": {
+    "WORKSPACE": "file:zero.json"
+  }
 }
