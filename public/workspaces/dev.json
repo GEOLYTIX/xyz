@@ -22,9 +22,9 @@
             "src": "https://api.github.com/repos/GEOLYTIX/xyz_resources/contents/dev/queries/population_summary.txt",
             "dbs": "XYZ"
         },
-        "aga postal population": {
-            "dbs": "XYZ",
-            "module": "http://localhost:3000/dev/views/postal_population.js"
+        "module population": {
+            "dbs": "MAPP",
+            "module": "http://localhost:3000/dev/views/module_population.js"
         },
         "Nearest competitors Sites": {
             "template": "SELECT (ROUND(((ST_Transform(a.geom_4326, 3857) <#> ST_Transform(b.geom_p_4326, 3857))/1000)::numeric, 2))::text AS dist,(b.fascia)::text AS fascia,(b.postcode)::text AS postcode FROM dev.uk_glx_sites a, geodata.uk_glx_open_retail_points b WHERE a.id = ${id} ORDER BY ST_Transform(a.geom_4326, 3857) <#> ST_Transform(b.geom_p_4326, 3857) NULLS LAST LIMIT 5;",
@@ -1968,15 +1968,16 @@
                         "© ONS": "https://www.ons.gov.uk"
                     },
                     "format": "mvt",
-                    "dbs": "XYZ",
-                    "tables": {
+                    "dbs": "MAPP",
+                    "table": "geodata.uk_glx_geodata_demog_oa",
+                    "__tables": {
                         "12": null,
-                        "13": "dev.oa",
-                        "14": "dev.oa"
+                        "13": "geodata.uk_glx_geodata_demog_oa",
+                        "14": "geodata.uk_glx_geodata_demog_oa",
+                        "15": null
                     },
                     "srid": "3857",
-                    "geom": "geom_3857",
-                    "mvt_cache": "dev.oa__mvts",
+                    "geom": "geom_3857_5m",
                     "style": {
                         "default": {
                             "fillOpacity": 1,
@@ -2044,21 +2045,74 @@
                         }
                     },
                     "qID": "id",
-                    "infoj": [{
+                    "infoj": [
+                        {
                             "type": "key"
                         },
                         {
                             "title": "OA Code",
-                            "field": "oacode",
+                            "field": "oa_code",
                             "inline": true,
                             "filter": "like"
                         },
                         {
-                            "title": "Population '11",
+                            "title": "Population 2011",
                             "field": "pop_11",
                             "type": "integer",
-                            "filter": "numeric",
-                            "edit": true
+                            "filter": "numeric"
+                        },
+                        {
+                            "title": "Population",
+                            "type": "dataview",
+                            "target": "location",
+                            "query": "module population",
+                            "chart": {
+                                "height": 200,
+                                "type": "bar",
+                                "labels": ["2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018"],
+                                "datasets": [
+                                    {
+                                    "fields": [
+                                        "_pop__11",
+                                        "_pop__12",
+                                        "_pop__13",
+                                        "_pop__14",
+                                        "_pop__15",
+                                        "_pop__16",
+                                        "_pop__17",
+                                        "_pop__18"
+                                    ],
+                                    "backgroundColor": [
+                                        "#b2dfdb",
+                                        "#80cbc4",
+                                        "#4db6ac",
+                                        "#26a69a",
+                                        "#009688",
+                                        "#00897b",
+                                        "#00796b",
+                                        "#00695c"
+                                    ]
+                                }],
+                                "options": {
+                                    "legend": {
+                                        "display": false
+                                    },
+                                    "scales": {
+                                        "yAxes": [{
+                                            "ticks": {
+                                                "display": false,
+                                                "beginAtZero": true
+                                            }
+                                        }],
+                                        "xAxes": [{
+                                            "ticks": {
+                                                "maxRotation": 90,
+                                                "minRotation": 90
+                                            }
+                                        }]
+                                    }
+                                }
+                            }
                         }
                     ]
                 },
