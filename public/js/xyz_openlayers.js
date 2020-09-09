@@ -493,11 +493,11 @@
             <span class="xyz-icon btn-header icon-expander primary-colour-filter">`,a.listview.appendChild(r[a.group])),a.group_class&&a.group_class.split(" ").forEach(e=>r[a.group].classList.add(e)),a.expanded&&r[a.group].classList.add("expanded"),a.listview=r[a.group]),!a.script||a.type)if("dataview"!==a.type)a.title&&(a.title_div=e.utils.html.node`
       <div
         class="${`label lv-${a.level||"0"} ${a.class||""}`}"
-        style="grid-column: 1; ${a.css_title}"
+        style="${"grid-column: 1; "+a.css_title}"
         title="${a.tooltip||null}">${a.title}`,a.listview.appendChild(a.title_div)),"key"!==a.type?a.type&&"title"===a.type?a.title_div.style.gridColumn="1 / 3":a.type&&"streetview"===a.type?e.locations.view.streetview(a):a.type&&"report"===a.type?e.locations.view.report(a):a.type&&"images"===a.type?e.locations.view.images(a):a.type&&"documents"===a.type?e.locations.view.documents(a):a.type&&"geometry"===a.type?e.locations.view.geometry(a):a.type&&"boolean"===a.type?e.locations.view.boolean(a):a.type&&"json"===a.type?e.locations.view.json(a):(a.query||a.edit||a.displayValue)&&(a.inline||"integer"===a.type^"numeric"===a.type^"date"===a.type?(a.val=e.utils.html.node`
       <div
-        class="val num ${a.class||""}"
-        style="grid-column: 2; ${a.css_val}">`,a.listview.appendChild(a.val)):(a.title_div&&(a.title_div.style.gridColumn="1 / 3"),a.val=e.utils.html.node`
+        class="${"val num "+(a.class||"")}"
+        style="${"grid-column: 2; "+a.css_val}">`,a.listview.appendChild(a.val)):(a.title_div&&(a.title_div.style.gridColumn="1 / 3"),a.val=e.utils.html.node`
       <div
         class="val ${a.class||""}"
         style="grid-column: 1 / 3; ${a.css_val}">`,a.listview.appendChild(a.val)),a.query?(a.layer=a.location.layer,a.id=a.location.id,e.query(a).then(e=>{a.val.textContent=Object.values(e)[0]})):!a.edit||a.fieldfx?a.type&&"html"===a.type?(a.val.style="grid-column: 1 / 3;",a.val.innerHTML=a.value):a.val.textContent=a.displayValue:e.locations.view.edit.input(a)):a.listview.appendChild(e.utils.html.node`
