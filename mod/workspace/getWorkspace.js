@@ -167,6 +167,11 @@ async function assignTemplates() {
           .then(_resolve)
       }
 
+      if (entry[1].src && entry[1].src.startsWith('cloudfront:')) {
+        return cloudfront(entry[1].src.replace('cloudfront:', 'https://'))
+          .then(_resolve)
+      }
+
       if (entry[1].src && entry[1].src.toLowerCase().includes('api.github')) {
         return provider.github(entry[1].src)
           .then(_resolve)
