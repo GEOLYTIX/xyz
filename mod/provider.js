@@ -6,7 +6,7 @@ const { join } = require('path')
 
 const cfsign = require('aws-cloudfront-sign')
 
-const _cloudinary = require('cloudinary').v2
+const cloudinary_v2 = require('cloudinary').v2
 
 module.exports = {
 
@@ -62,7 +62,9 @@ async function cloudfront(ref) {
   
     if (response.status >= 300) return new Error(`${response.status} ${req}`)
 
-    return response
+    if (ref.match(/\.json$/i)) return await response.json()
+
+    return await response.text()
 
   } catch(err) {
 
@@ -135,17 +137,17 @@ async function google(req) {
 
 async function cloudinary(req) {
 
-  _cloudinary.config({
+  cloudinary_v2.config({
     api_key: process.env.CLOUDINARY.split(' ')[0],
     api_secret: process.env.CLOUDINARY.split(' ')[1],
     cloud_name: process.env.CLOUDINARY.split(' ')[2],
   })
 
-  if (req.params.destroy) return await _cloudinary.uploader.destroy(`${process.env.CLOUDINARY.split(' ')[3]}/${req.params.public_id}`)
+  if (req.params.destroy) return await cloudinary_v2.uploader.destroy(`${process.env.CLOUDINARY.split(' ')[3]}/${req.params.public_id}`)
 
   const ressource = req.params.resource_type === 'raw' && req.body.toString() || `data:image/jpeg;base64,${req.body.toString('base64')}`
 
-  return await _cloudinary.uploader.upload(ressource,
+  return await cloudinary_v2.uploader.upload(ressource,
     {
       resource_type: req.params.resource_type,
       public_id: `${process.env.CLOUDINARY.split(' ')[3]}/${req.params.public_id}`, //${Date.now()}`,

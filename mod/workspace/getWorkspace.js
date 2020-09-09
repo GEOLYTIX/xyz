@@ -7,7 +7,7 @@ const getFrom = {
   'https': ref => http(ref),
   'file': ref => file(ref.split(':')[1]),
   'github': ref => github(ref.split(':')[1]),
-  'cloudfront': ref => cloudfront(ref.split(':')[1]),
+  'cloudfront': ref => provider.cloudfront(ref.split(':')[1]),
 }
 
 let workspace = null
@@ -44,13 +44,13 @@ async function http(ref){
   }
 }
 
-async function cloudfront(ref){
-  const response = await provider.cloudfront(ref)
+// async function cloudfront(ref){
+//   const response = await provider.cloudfront(ref)
 
-  if (response instanceof Error) return response
+//   if (response instanceof Error) return response
 
-  return await response.json()
-}
+//   return await response.json()
+// }
 
 async function file(ref) {
   try {
@@ -168,7 +168,7 @@ async function assignTemplates() {
       }
 
       if (entry[1].src && entry[1].src.startsWith('cloudfront:')) {
-        return cloudfront(entry[1].src.replace('cloudfront:', 'https://'))
+        return provider.cloudfront(entry[1].src.split(':')[1])
           .then(_resolve)
       }
 
