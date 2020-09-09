@@ -502,7 +502,7 @@
         class="val ${a.class||""}"
         style="grid-column: 1 / 3; ${a.css_val}">`,a.listview.appendChild(a.val)),a.query?(a.layer=a.location.layer,a.id=a.location.id,e.query(a).then(e=>{a.val.textContent=Object.values(e)[0]})):!a.edit||a.fieldfx?a.type&&"html"===a.type?(a.val.style="grid-column: 1 / 3;",a.val.innerHTML=a.value):a.val.textContent=a.displayValue:e.locations.view.edit.input(a)):a.listview.appendChild(e.utils.html.node`
       <div
-        class="label lv-0 ${a.class||""}"
+        class="${"label lv-0 "+(a.class||"")}"
         style="grid-column: 2; margin: 3px;">
         <span
           title=${e.language.location_source_layer}
