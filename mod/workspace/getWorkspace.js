@@ -110,12 +110,49 @@ async function assignTemplates() {
   const templatePromises = Object.entries(workspace.templates).map(
     entry => new Promise(resolve => {
 
+      // Entries without a src value must not be fetched.
+      if (!entry[1].src) return _resolve(entry[1])
+
+      // Substitute SRC_* parameter
+      entry[1].src = entry[1].src.replace(/\$\{(.*?)\}/g,
+        matched => process.env[`SRC_${matched.replace(/\$|\{|\}/g, '')}`] || matched)
+
+      if (entry[1].src && entry[1].src.startsWith('file:')) {
+        return provider.file(`../public/${entry[1].src.replace('file:', '')}`)
+          .then(_resolve)
+      }
+
+      if (entry[1].src && entry[1].src.startsWith('cloudfront:')) {
+        return provider.cloudfront(entry[1].src.split(':')[1])
+          .then(_resolve)
+      }
+
+      if (entry[1].src && entry[1].src.toLowerCase().includes('api.github')) {
+        return provider.github(entry[1].src)
+          .then(_resolve)
+      }
+
+      if (entry[1].src && entry[1].src.startsWith('http')) {
+        return provider.http(entry[1].src)
+          .then(_resolve)
+      }
+
       function _resolve(_template) {
 
         // Failed to fetch template from src.
         if (_template instanceof Error) {
           return resolve({
             [entry[0]]: { err: _template }
+          })
+        }
+
+        if (entry[1].module || entry[1].type && entry[1].type === 'module') {
+          const module_constructor = module.constructor;
+          const Module = new module_constructor();
+          Module._compile(_template, entry[1].src)
+
+          return resolve({
+            [entry[0]]: Module.exports
           })
         }
 
@@ -143,43 +180,6 @@ async function assignTemplates() {
         resolve({
           [entry[0]]: _template
         })
-      }
-
-      if (entry[1].module) {
-        return provider.http(entry[1].module)
-        .then(response => {
-          const Module = module.constructor;
-          const m = new Module();
-          m._compile(response, entry[1].module)
-          _resolve(m.exports)
-        })
-      }
-
-      // Default templates already have a render method
-      if (!entry[1].src) return _resolve(entry[1])
-
-      // Substitute SRC_* parameter
-      entry[1].src = entry[1].src.replace(/\$\{(.*?)\}/g,
-        matched => process.env[`SRC_${matched.replace(/\$|\{|\}/g, '')}`] || matched)
-
-      if (entry[1].src && entry[1].src.startsWith('file:')) {
-        return provider.file(`../public/${entry[1].src.replace('file:', '')}`)
-          .then(_resolve)
-      }
-
-      if (entry[1].src && entry[1].src.startsWith('cloudfront:')) {
-        return provider.cloudfront(entry[1].src.split(':')[1])
-          .then(_resolve)
-      }
-
-      if (entry[1].src && entry[1].src.toLowerCase().includes('api.github')) {
-        return provider.github(entry[1].src)
-          .then(_resolve)
-      }
-
-      if (entry[1].src && entry[1].src.startsWith('http')) {
-        return provider.http(entry[1].src)
-          .then(_resolve)
       }
 
     })
