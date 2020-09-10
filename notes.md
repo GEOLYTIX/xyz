@@ -91,6 +91,8 @@ Basic theme support [#339](https://github.com/GEOLYTIX/xyz/issues/339)
 
 Add language support [#340](https://github.com/GEOLYTIX/xyz/issues/340)
 
+Add layer data export as geojson [#286] https://github.com/GEOLYTIX/xyz/issues/286
+
 Show style in header [#341](https://github.com/GEOLYTIX/xyz/issues/341)
 
 Remove formatDate polyfill from /mod
