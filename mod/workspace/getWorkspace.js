@@ -213,11 +213,11 @@ async function assignDefaults() {
 
   //Substitute SRC_* parameter in locales.
   workspace.locales = JSON.parse(
-    JSON.stringify(workspace.locales || {}).replace(/\$\{(.*?)\}/g,
+    JSON.stringify(workspace.locales || {zero: defaults.locale}).replace(/\$\{(.*?)\}/g,
       matched => process.env[`SRC_${matched.replace(/\$|\{|\}/g, '')}`] || matched)
   )
 
-  Object.keys(workspace.locales || {zero: defaults.locale}).forEach(locale_key => {
+  Object.keys(workspace.locales).forEach(locale_key => {
 
     const locale = workspace.locales[locale_key]
 
