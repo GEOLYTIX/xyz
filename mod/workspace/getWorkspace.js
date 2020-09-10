@@ -143,13 +143,21 @@ async function assignTemplates() {
 
         // Template is a module.
         if (entry[1].module || entry[1].type && entry[1].type === 'module') {
-          const module_constructor = module.constructor;
-          const Module = new module_constructor();
-          Module._compile(_template, entry[1].src)
 
-          return resolve({
-            [entry[0]]: Module.exports
-          })
+          try {
+            const module_constructor = module.constructor;
+            const Module = new module_constructor();
+            Module._compile(_template, entry[1].src)
+  
+            return resolve({
+              [entry[0]]: Module.exports
+            })
+          } catch(err) {
+            return resolve({
+              [entry[0]]: { err: err }
+            })
+          }
+
         }
 
         // Template maybe json as string.
