@@ -1,9 +1,4 @@
 module.exports = {
-  workspace: {
-    locales: {
-      zero: {},
-    },
-  },
   locale: {
     minZoom: 0,
     maxZoom: 20,
