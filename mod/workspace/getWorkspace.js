@@ -1,12 +1,12 @@
-const fetch = require('node-fetch')
+// const fetch = require('node-fetch')
 
 const provider = require('../provider')
 
 const getFrom = {
-  'http': ref => http(ref),
-  'https': ref => http(ref),
-  'file': ref => file(ref.split(':')[1]),
-  'github': ref => github(ref.split(':')[1]),
+  'http': ref => provider.http(ref),
+  'https': ref => provider.http(ref),
+  'file': ref => provider.file(`../public/workspaces/${ref.split(':')[1]}`),
+  'github': ref => provider.github(ref.split(':')[1]),
   'cloudfront': ref => provider.cloudfront(ref.split(':')[1]),
 }
 
@@ -29,52 +29,44 @@ module.exports = async cache => {
   return workspace
 }
 
-async function http(ref){
-  try {
+// async function http(ref){
+//   try {
 
-    const response = await fetch(ref)
+//     const response = await fetch(ref)
 
-    if (response.status >= 300) return new Error(`${response.status} ${req}`)
+//     if (response.status >= 300) return new Error(`${response.status} ${req}`)
 
-    return await response.json()
+//     return await response.json()
 
-  } catch(err) {
-    console.error(err)
-    return err
-  }
-}
+//   } catch(err) {
+//     console.error(err)
+//     return err
+//   }
+// }
 
-// async function cloudfront(ref){
-//   const response = await provider.cloudfront(ref)
+// async function file(ref) {
+//   try {
+
+//     const workspace = await provider.file(`../public/workspaces/${ref}`)
+
+//     if (workspace instanceof Error) return workspace
+
+//     return JSON.parse(workspace, 'utf8')
+
+//   } catch (err) {
+//     console.error(err)
+//     return err
+//   }
+// }
+
+// async function github(ref){
+
+//   const response = await provider.github(ref)
 
 //   if (response instanceof Error) return response
 
-//   return await response.json()
+//   return JSON.parse(response)
 // }
-
-async function file(ref) {
-  try {
-
-    const workspace = await provider.file(`../public/workspaces/${ref}`)
-
-    if (workspace instanceof Error) return workspace
-
-    return JSON.parse(workspace, 'utf8')
-
-  } catch (err) {
-    console.error(err)
-    return err
-  }
-}
-
-async function github(ref){
-
-  const response = await provider.github(ref)
-
-  if (response instanceof Error) return response
-
-  return JSON.parse(response)
-}
 
 const { readFileSync } = require('fs');
 
@@ -82,9 +74,10 @@ const { join } = require('path');
 
 async function assignTemplates() {
 
+  // Assign default view and query templates to workspace.
   workspace.templates = Object.assign({
 
-    //views
+    // View templates:
     _desktop: {
       template: readFileSync(join(__dirname, '../../public/views/_desktop.html')).toString('utf8')
     },
@@ -95,7 +88,7 @@ async function assignTemplates() {
       template: readFileSync(join(__dirname, '../../public/views/_admin_user.html')).toString('utf8')
     },
 
-    //queries
+    // Query templates:
     mvt_cache: require('../../public/queries/mvt_cache'),
     get_nnearest: require('../../public/queries/get_nnearest'),
     field_stats: require('../../public/queries/field_stats'),
@@ -105,6 +98,8 @@ async function assignTemplates() {
     layer_extent: require('../../public/queries/layer_extent'),
     set_field_array: require('../../public/queries/set_field_array'),
     filter_aggregate: require('../../public/queries/filter_aggregate'),
+
+    // Default templates can be overridden by assigning a template with the same name.
   }, workspace.templates)
 
   const templatePromises = Object.entries(workspace.templates).map(
@@ -146,6 +141,7 @@ async function assignTemplates() {
           })
         }
 
+        // Template is a module.
         if (entry[1].module || entry[1].type && entry[1].type === 'module') {
           const module_constructor = module.constructor;
           const Module = new module_constructor();
@@ -157,11 +153,12 @@ async function assignTemplates() {
         }
 
         // Template maybe json as string.
-        if (typeof _template === 'string') {
-          try {
-            _template = JSON.parse(_template)
-          } catch(err) { }
-        }
+        //if (ref.match(/\.json$/i)) return await response.json()
+        // if (typeof _template === 'string') {
+        //   try {
+        //     _template = JSON.parse(_template)
+        //   } catch(err) { }
+        // }
 
         // Template is string only.
         if (typeof _template === 'string') {
@@ -170,11 +167,11 @@ async function assignTemplates() {
             {
               template: _template
             })
-        }
 
-        // Assign render method if none exists.
-        if (!_template.render && !_template.format) {
-          _template.render = params => _template.template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
+          // Assign render method if none exists.
+          if (!_template.render) {
+            _template.render = params => _template.template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
+          }
         }
 
         resolve({

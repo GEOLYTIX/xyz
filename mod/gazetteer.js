@@ -20,20 +20,6 @@ module.exports = async (req, res) => {
   // Create an empty results object to be populated with the results from the different gazetteer methods.
   let results = []
 
-  /*if (req.params.source) { // aga: I think this is outdated
-
-    if (req.params.source === 'GOOGLE') {
-
-      results = await gaz_google(req.params.q, locale.gazetteer, results)
-
-      // Return error message _err if an error occured.
-      if (results._err) return res.status(500).send(results._err)
-
-      // Return results to client.
-      return res.send(results);
-    }
-  }*/
-
   // Locale gazetteer which can query datasources in the same locale.
   if (locale.gazetteer.datasets) await gaz_locale(req, locale, results)
 
