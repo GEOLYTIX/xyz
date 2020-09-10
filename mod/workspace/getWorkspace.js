@@ -175,11 +175,11 @@ async function assignTemplates() {
             {
               template: _template
             })
+        }
 
-          // Assign render method if none exists.
-          if (!_template.render) {
-            _template.render = params => _template.template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
-          }
+        // Assign render method if none exists.
+        if (!_template.render && !_template.format) {
+          _template.render = params => _template.template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
         }
 
         resolve({
@@ -213,11 +213,11 @@ async function assignDefaults() {
 
   //Substitute SRC_* parameter in locales.
   workspace.locales = JSON.parse(
-    JSON.stringify(workspace.locales).replace(/\$\{(.*?)\}/g,
+    JSON.stringify(workspace.locales || {}).replace(/\$\{(.*?)\}/g,
       matched => process.env[`SRC_${matched.replace(/\$|\{|\}/g, '')}`] || matched)
   )
 
-  Object.keys(workspace.locales || {}).forEach(locale_key => {
+  Object.keys(workspace.locales || {zero: defaults.locale}).forEach(locale_key => {
 
     const locale = workspace.locales[locale_key]
 

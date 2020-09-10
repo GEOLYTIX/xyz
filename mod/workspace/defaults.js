@@ -1,6 +1,5 @@
 module.exports = {
   workspace: {
-    title: 'GEOLYTIX | XYZ',
     locales: {
       zero: {},
     },
