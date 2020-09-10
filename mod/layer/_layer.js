@@ -3,6 +3,7 @@ const _format = {
   mvt: require('./mvt'),
   geojson: require('./geojson'),
   grid: require('./grid'),
+  data: require('./data.js')
 }
 
 module.exports = async (req, res) => {

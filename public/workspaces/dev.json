@@ -1192,6 +1192,7 @@
                         "delete": true,
                         "geometry": true
                     },
+                    "download": {},
                     "format": "cluster",
                     "srid": "4326",
                     "geom": "geom_4326",
