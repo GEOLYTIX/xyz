@@ -45,23 +45,38 @@ async function http(ref) {
   }
 }
 
+const { readFileSync } = require('fs')
 
-const cfsign = require('aws-cloudfront-sign')
+const AWS = require("aws-sdk")
+
+function readPem() {
+  const pem = readFileSync(join(__dirname, `../${process.env.KEY_CLOUDFRONT}.pem`))
+  return String(pem)
+}
+
+const awsSigner = new AWS.CloudFront.Signer(
+  process.env.KEY_CLOUDFRONT,
+  readPem()
+)
+
+function generateSignedDownloadUrl(ref) {
+  return new Promise(function(resolve) {
+    const url = awsSigner.getSignedUrl({
+      url: `https://${ref}`,
+      expires: Date.now() + 60 * 60 * 1000 // 1 hour
+    })
+    resolve(url)
+  })
+}
 
 async function cloudfront(ref) {
   try {
   
-    const signedUrl = cfsign.getSignedUrl(
-      `https://${ref}`, 
-      {
-        keypairId: process.env.KEY_CLOUDFRONT,
-        privateKeyPath: join(__dirname, `../${process.env.KEY_CLOUDFRONT}.pem`)
-      }
-    )
+    const signedUrl = await generateSignedDownloadUrl(ref)
   
     const response = await fetch(signedUrl)
   
-    if (response.status >= 300) return new Error(`${response.status} ${req}`)
+    if (response.status >= 300) return new Error(`${response.status} ${ref}`)
 
     if (ref.match(/\.json$/i)) return await response.json()
 
@@ -73,8 +88,6 @@ async function cloudfront(ref) {
   }
 }
 
-
-const { readFileSync } = require('fs')
 
 function file(ref) {
   try {
