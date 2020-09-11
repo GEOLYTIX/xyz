@@ -16,6 +16,8 @@ const routes = {
 
 module.exports = async (req, res) => {
 
+  if (IEdetect(req.headers['user-agent'])) return res.send('Uh Oh... It looks like your request comes from an unspported user agent (e.g. Internet Explorer)')
+
   // Merge request params and query params.
   req.params = Object.assign(req.params || {}, req.query || {})
 
@@ -100,4 +102,14 @@ function bodyData(req) {
     req.on('error', error => reject(error))
 
   })
+}
+
+function IEdetect(sUsrAg) {
+  if (sUsrAg.indexOf("Firefox") > -1) return false
+
+  if (sUsrAg.indexOf("SamsungBrowser") > -1) return false
+  
+  if (sUsrAg.indexOf("Opera") > -1 || sUsrAg.indexOf("OPR") > -1) return false
+  
+  if (sUsrAg.indexOf("Trident") > -1) return true
 }
