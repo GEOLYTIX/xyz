@@ -86,8 +86,5 @@
       "source": "/",
       "destination": "/api/api.js"
     }
-  ],
-  "env": {
-    "WORKSPACE": "file:zero.json"
-  }
+  ]
 }

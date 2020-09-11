@@ -16,7 +16,7 @@ app.use(`/xyz/docs`, express.static('docs'))
 app.use(cookieParser())
 
 
-const _api = require('./api')
+const _api = require('./api/api')
 
 const api = (req, res) => _api(req, res)
 
