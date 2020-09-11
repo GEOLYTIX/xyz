@@ -2,19 +2,13 @@ const path = require('path');
 
 const webpack = require('webpack');
 
-const TerserPlugin = require('terser-webpack-plugin');
-
 module.exports = {
   entry: {
     xyz_openlayers: ['./lib/index.mjs']
   },
   output: {
     path: path.resolve(__dirname, 'public/js'),
-    // chunkFilename: '[name].js',
-    filename: '[name].js',
-    // library: 'xyz',
-    // libraryTarget: 'amd-require'
-
+    filename: '[name].js'
   },
   devtool: 'source-map',
   module: {
@@ -26,17 +20,9 @@ module.exports = {
   optimization: {
     concatenateModules: true,
     minimize: true,
-    minimizer: [
-      new TerserPlugin({
-        terserOptions: {
-          ecma: 8
-        }
-      })
-    ]
   },
   externals: {
-    'moment': 'moment',
-    // 'chroma-js': 'chroma-js'
+    'moment': 'moment'
   },
   plugins: [
     new webpack.DefinePlugin({
@@ -45,13 +31,5 @@ module.exports = {
     new webpack.ProvidePlugin({
       uhtml: 'uhtml'
     }),
-    // new webpack.ProvidePlugin({
-    //   'chroma-js': 'chroma-js'
-    // })
   ]
-  //stats: 'verbose'
-  // stats: {
-  //   optimizationBailout: true,
-  //   maxModules: Infinity
-  // }
-};
+}
