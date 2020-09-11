@@ -22,10 +22,11 @@
     ]
   },
   "dependencies": {
-    "aws-cloudfront-sign": "^2.2.0",
+    "aws-sdk": "^2.750.0",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.21.0",
     "jsonwebtoken": "^8.5.1",
+    "lodash": "^4.17.20",
     "mobile-detect": "^1.4.3",
     "node-fetch": "^2.6.1",
     "nodemailer": "^4.6.8",
@@ -49,7 +50,6 @@
     "hyperhtml": "^2.32.2",
     "jwt-decode": "^2.2.0",
     "lint-staged": "^8.0.4",
-    "lodash": ">=4.17.19",
     "markdown-it": "^11.0.0",
     "uhtml": "^1.12.0",
     "webpack": "^5.0.0-beta.29",

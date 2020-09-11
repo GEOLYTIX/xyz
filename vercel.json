@@ -35,16 +35,8 @@
   ],
   "rewrites": [
     {
-      "source": "/xyz/docs/(.*)",
-      "destination": "/docs/$1/$2"
-    },
-    {
-      "source": "/xyz/docs",
-      "destination": "/docs/index.html"
-    },
-    {
       "source": "/(public|workspaces|views|css|js|icons|queries)/(.*)",
-      "destination": "/public/$1/$2"
+      "destination": "/$1/$2"
     },
     {
       "source": "/api/query/:_template?",
