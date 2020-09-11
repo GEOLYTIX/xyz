@@ -16,7 +16,7 @@ const routes = {
 
 module.exports = async (req, res) => {
 
-  if (IEdetect(req.headers['user-agent'])) return res.send('Uh Oh... It looks like your request comes from an unspported user agent (e.g. Internet Explorer)')
+  if (IEdetect(req.headers['user-agent'])) return res.send('Uh Oh... It looks like your request comes from an unsupported user agent (e.g. Internet Explorer)')
 
   // Merge request params and query params.
   req.params = Object.assign(req.params || {}, req.query || {})
