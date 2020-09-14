@@ -70,7 +70,7 @@
       <button class="btn-header xyz-icon icon-expander primary-colour-filter">`),t.style.label&&n.appendChild(e.utils.html.node`
     <label class="input-checkbox" style="margin-bottom: 10px;">
     <input type="checkbox"
-      checked=${!!t.style.label.display||null}
+      .checked=${!!t.style.label.display}
       onchange=${e=>{t.style.label.display=e.target.checked,t.show()}}>
     </input>
     <div></div><span>${e.language.layer_style_display_labels}`),t.style.themes&&n.appendChild(e.utils.html.node`
@@ -436,7 +436,7 @@
         <label class="input-checkbox">
         <input
           type="checkbox"
-          checked=${!!r[1].display||null}
+          .checked=${!!r[1].display}
           onchange=${t=>{if(r[1].display=t.target.checked,r[1].display)return e.dataviews.tabview.add(r[1]);r[1].remove()}}>
         </input>
         <div></div><span>${r[1].title||r[0]}`),r[1].display&&t.display&&e.dataviews.tabview.add(r[1])}),n}}),Jt=e=>({panel:function(t){if(!t.reports)return;const n=e.utils.html.node`
@@ -601,8 +601,8 @@
     <div style="padding-top: 5px; grid-column: 1 / 3">
       <label class="input-checkbox">
         <input type="checkbox"
-          disabled=${!t.edit||null}
-          checked=${!!t.value||null}
+          .disabled=${!t.edit}
+          .checked=${!!t.value}
           onchange=${e=>{t.location.view.dispatchEvent(new CustomEvent("valChange",{detail:{input:e.target,entry:t,newValue:!!e.target.checked}}))}}>
         </input>
         <div></div><span>${t.title||t.name||t.field}`)},mn=e=>{const t=(e=>{return{polygon:function(a){return a.value?n(a):(t(a),a.edit.group.edit&&(a.edit.group.edit.remove(),a.edit.group.edit=null),a.edit.group.polygon=e.utils.html.node`
@@ -793,7 +793,7 @@
       style="grid-column: 1 / 3; position: relative; display: flex; align-items: center;">`,i.listview.appendChild(i.container),i.container.appendChild(e.utils.html.node`
         <label class="input-checkbox">
         <input type="checkbox"
-        checked=${i.edit&&i.value||!!i.display&&!0||null}
+        .checked=${i.edit&&i.value||!!i.display}
         onchange=${t=>(i.display=t.target.checked,i.display&&i.query?e.query(Object.assign({layer:i.location.layer,id:i.location.id},i)).then(e=>{i.value=e[i.field],l()}):i.display&&i.edit?s(t):i.display&&!i.edit?l():!i.display&&i.edit?i.value&&!confirm(e.language.location_geometry_delete_msg)?t.target.checked=!0:(i.newValue=null,i.edit.edit&&(i.edit.edit.remove(),i.edit.edit=null),i.edit.isoline_here&&i.edit.isoline_here.meta&&i.location.infoj.filter(e=>"json"===e.type&&e.field===i.edit.isoline_here.meta).forEach(e=>e.newValue=null),i.edit.isoline_mapbox&&i.edit.isoline_mapbox.meta&&i.location.infoj.filter(e=>"json"===e.type&&e.field===i.edit.isoline_mapbox.meta).forEach(e=>e.newValue=null),void i.location.update()):i.display||i.edit?void 0:(i.display=!1,i.legend&&i.legend.remove(),void("FeatureCollection"===i.value.type?i.location.geometries.splice(i.location.geometries.indexOf(i.geometryCollection),1)&&i.location.geometryCollection.map(t=>e.map.removeLayer(t)):i.geometry&&i.location.geometries.splice(i.location.geometries.indexOf(i.geometry),1)&&e.map.removeLayer(i.geometry))))}>
         </input>
         <div></div>
@@ -837,7 +837,7 @@
       style="grid-column: 1 / 3">
       <input
         type="checkbox"
-        checked=${!!t.display||null}
+        .checked=${!!t.display}
         onchange=${n=>{if(t.display=n.target.checked,t.display)return e.dataviews.tabview.add(t);t.remove()}}>
       </input>
       <div></div><span>${t.title||"Dataview"}`):void 0)),kn=e=>t=>{if(!t.value)return;t.value="object"==typeof t.value?t.value:JSON.parse(t.value);let n=e.utils.html.node`
