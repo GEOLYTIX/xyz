@@ -10,8 +10,7 @@
     "_start": "node express.js",
     "_build": "webpack --mode production",
     "_dev": "webpack --mode development",
-    "buildstats": "webpack --env production --json > stats.json",
-    "debug": "nodemon --inspect express.js",
+    
     "lint": "eslint --debug ./",
     "lint:write": "eslint --debug ./ --fix"
   },

@@ -27,9 +27,6 @@ module.exports = {
   plugins: [
     new webpack.DefinePlugin({
       XYZ_VERSION: JSON.stringify(require('./package.json').version)
-    }),
-    // new webpack.ProvidePlugin({
-    //   uhtml: 'uhtml'
-    // }),
+    })
   ]
 }
