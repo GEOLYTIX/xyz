@@ -54,7 +54,7 @@ function readPem() {
   return String(pem)
 }
 
-const awsSigner = new AWS.CloudFront.Signer(
+const awsSigner = process.env.KEY_CLOUDFRONT && new AWS.CloudFront.Signer(
   process.env.KEY_CLOUDFRONT,
   readPem()
 )
