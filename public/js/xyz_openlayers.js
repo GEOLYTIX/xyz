@@ -5,8 +5,14 @@
     <circle cx=10 cy=10 r=10 fill=${e.fillColor||"#fff"}></circle>`;return"data:image/svg+xml,"+encodeURIComponent(B.serializeToString(t))}function V(e){const t=N.node`
   <svg width=24 height=24 viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
     <circle cx=11 cy=10.5 fill='#333' r=10 opacity=0.4></circle>
-    <circle cx=10 cy=10 r=10 fill=${e.fillColor||"#FFF"}>`;return e.layers&&Object.entries(e.layers).forEach(e=>{t.appendChild(N.node`<circle cx=10 cy=10 r=${10*parseFloat(e[0])} fill=${e[1]}>`)}),"data:image/svg+xml,"+encodeURIComponent(B.serializeToString(t))}function W(e){const t=wire()`
-  <svg width=24 height=24 viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>`;let n="M0,-19.618873042551414L16.990442448471224,9.809436521275707L-16.990442448471224,9.809436521275707Z",r=wire(null,"svg")`<path fill='#333' opacity=0.4>`;r.setAttribute("d",n),r.setAttribute("transform","translate(50 30) scale(0.6, 0.6)"),t.appendChild(r);let a=wire(null,"svg")`<path fill=${e.fillColor||"#FFF"}>`;return a.setAttribute("d",n),a.setAttribute("transform","translate(10 10) scale(0.6, 0.6)"),t.appendChild(a),e.layers?(Object.entries(e.layers).map(e=>{const r=wire(null,"svg")`<path fill=${e[1]}>`;r.setAttribute("d",n),r.setAttribute("transform",`translate(10 10) scale(${.6*e[0]}, ${.6*e[0]})`),t.appendChild(r)}),"data:image/svg+xml,"+encodeURIComponent(B.serializeToString(t))):"data:image/svg+xml,"+encodeURIComponent(B.serializeToString(t))}function q(e){const t=N.node`
+    <circle cx=10 cy=10 r=10 fill=${e.fillColor||"#FFF"}>`;return e.layers&&Object.entries(e.layers).forEach(e=>{t.appendChild(N.node`<circle cx=10 cy=10 r=${10*parseFloat(e[0])} fill=${e[1]}>`)}),"data:image/svg+xml,"+encodeURIComponent(B.serializeToString(t))}function W(e){const t=N.node`
+  <svg width=24 height=24 viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>`;return t.appendChild(N.node`<path
+    fill=${e.fillColor||"#FFF"}
+    d="M0,-19.6L17,9.8L-17,9.8Z"
+    transform=${"translate(10 11) scale(0.6)"}/>`),e.layers&&Object.entries(e.layers).forEach(e=>{t.appendChild(N.node`<path
+    fill=${e[1]}
+    d="M0,-19.6L17,9.8L-17,9.8Z"
+    transform=${`translate(10 11) scale(${.6*e[0]})`}/>`)}),"data:image/svg+xml,"+encodeURIComponent(B.serializeToString(t))}function q(e){const t=N.node`
   <svg width=24 height=24 viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
     <rect fill='#333' opacity=0.3 width=20 height=20 x=2 y=2></rect>
     <rect fill=${e.fillColor||"#FFF"} width=20 height=20 x=0 y=0></rect>`;return e.layers&&Object.entries(e.layers).forEach(e=>{t.appendChild(N.node`<rect fill=${e[1]}
