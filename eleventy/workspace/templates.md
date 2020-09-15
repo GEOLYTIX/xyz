@@ -12,8 +12,29 @@ Default templates for common queries, as well as the MAPP and admin views are ap
 
 Following view template would override the default MAPP desktop view with a custom view where the initial width of the control panel is increased. The default view will be loaded from a public GitHub repository.
 
-```
+```json
 "_desktop_": {
   "src": "https://api.github.com/repos/GEOLYTIX/public/contents/_desktop_wide.html"
 }
 ```
+
+Templates are useful for queries which can be shared across layers, locales or apps.
+The example above uses a template hosted with Github. For simple content templates can use explicit statements:
+
+```json
+"global_cities_query": {
+	"template": "select id, city_name, country from citiesoftheworld WHERE true ${viewport} limit 99;"
+}
+```
+
+Templates can be imported as modules in order to include functions of parameters:
+
+```json
+"pl_population": {
+	"type": "module", // or "module": true
+	"src": "https://geolytix.github.io/public/mapp/layers/poland/pl_population.js"
+}
+```
+
+The template above can be shared across layers since query parameters are substituted with current layer properties.
+
