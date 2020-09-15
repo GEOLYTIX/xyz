@@ -56,4 +56,10 @@ Drawing interaction supports labels on interaction parameters. To display labels
 }
 ```
 
+This metrics are calculated with [openlayers sphere methods](https://openlayers.org/en/latest/apidoc/module-ol_sphere.html).
+
+The distance is calculated from the interiorPoint of the geometry to the mapview.position (cursor).
+
+Length is measured along the geometry. For polygons, circles, and rectangles the length is the circumference.
+
 Note that in order to enable editing properties of selected locations editable entries need their own editing settings. 
