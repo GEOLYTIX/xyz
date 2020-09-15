@@ -7,50 +7,41 @@
             "src": "http://localhost:3000/dev/views/_desktop_fr.html"
         },
         "NE Countries table1": {
-            "template": "SELECT name, pop_est, gdp_md_est FROM dev.natural_earth_countries WHERE true ${viewport} ${filter} ORDER BY id ASC FETCH FIRST 99 ROW ONLY;",
-            "dbs": "XYZ"
+            "template": "SELECT name, pop_est, gdp_md_est FROM dev.natural_earth_countries WHERE true ${viewport} ${filter} ORDER BY id ASC FETCH FIRST 99 ROW ONLY;"
         },
         "NE GDP/Population Layer Table": {
-            "template": "SELECT id, name, gdp_md_est, pop_est FROM dev.natural_earth_countries WHERE true ${viewport} ${filter} ORDER BY id ASC FETCH FIRST 99 ROW ONLY;",
-            "dbs": "XYZ"
+            "template": "SELECT id, name, gdp_md_est, pop_est FROM dev.natural_earth_countries WHERE true ${viewport} ${filter} ORDER BY id ASC FETCH FIRST 99 ROW ONLY;"
         },
         "Random Data Series": {
-            "template": "SELECT id AS id, random1 AS random1, random2 AS random2, random3 AS random3, random4 AS random4, random5 AS random5, random5 AS rev_random1, random4 AS rev_random2, random3 AS rev_random3, random2 AS rev_random4, random1 AS rev_random5 FROM dev.uk_glx_sites WHERE id = ${id};",
-            "dbs": "XYZ"
+            "template": "SELECT id AS id, random1 AS random1, random2 AS random2, random3 AS random3, random4 AS random4, random5 AS random5, random5 AS rev_random1, random4 AS rev_random2, random3 AS rev_random3, random2 AS rev_random4, random1 AS rev_random5 FROM dev.uk_glx_sites WHERE id = ${id};"
         },
         "Population Summary Sites": {
-            "src": "https://api.github.com/repos/GEOLYTIX/xyz_resources/contents/dev/queries/population_summary.txt",
-            "dbs": "XYZ"
+            "src": "https://api.github.com/repos/GEOLYTIX/xyz_resources/contents/dev/queries/population_summary.txt"
         },
         "module population": {
-            "dbs": "MAPP",
-            "module": "http://localhost:3000/dev/views/module_population.js"
+            "type": "module",
+            "src": "http://localhost:3000/dev/views/module_population.js"
         },
         "Nearest competitors Sites": {
-            "template": "SELECT (ROUND(((ST_Transform(a.geom_4326, 3857) <#> ST_Transform(b.geom_p_4326, 3857))/1000)::numeric, 2))::text AS dist,(b.fascia)::text AS fascia,(b.postcode)::text AS postcode FROM dev.uk_glx_sites a, geodata.uk_glx_open_retail_points b WHERE a.id = ${id} ORDER BY ST_Transform(a.geom_4326, 3857) <#> ST_Transform(b.geom_p_4326, 3857) NULLS LAST LIMIT 5;",
-            "dbs": "XYZ"
+            "template": "SELECT (ROUND(((ST_Transform(a.geom_4326, 3857) <#> ST_Transform(b.geom_p_4326, 3857))/1000)::numeric, 2))::text AS dist,(b.fascia)::text AS fascia,(b.postcode)::text AS postcode FROM dev.uk_glx_sites a, geodata.uk_glx_open_retail_points b WHERE a.id = ${id} ORDER BY ST_Transform(a.geom_4326, 3857) <#> ST_Transform(b.geom_p_4326, 3857) NULLS LAST LIMIT 5;"
         },
         "Dev sites report": {
-            "template": "https://api.github.com/repos/GEOLYTIX/xyz_resources/contents/dev/report_sites/sites.html"
+            "src": "https://api.github.com/repos/GEOLYTIX/xyz_resources/contents/dev/report_sites/sites.html"
         },
         "Sites Local Report": {
-            "template": "http://localhost:3000/views/report_location.html"
+            "src": "http://localhost:3000/views/report_location.html"
         },
         "UK Retail Places Layer Table": {
-            "template": "SELECT tid AS qID, id, dev_date ,rp_type, comp_strgh, est_units, est_brands FROM dev.retailplaces WHERE true ${viewport} ORDER BY tid ASC FETCH FIRST 99 ROW ONLY;",
-            "dbs": "XYZ"
+            "template": "SELECT tid AS qID, id, dev_date ,rp_type, comp_strgh, est_units, est_brands FROM dev.retailplaces WHERE true ${viewport} ORDER BY tid ASC FETCH FIRST 99 ROW ONLY;"
         },
         "UK Retail Places Profile": {
-            "template": "SELECT ROUND(comparison::numeric, 2) AS comparison, ROUND(conv::numeric, 2) AS conv, ROUND(fbl::numeric, 2) AS fbl, ROUND(services::numeric, 2) AS services, ROUND(classbrass::numeric, 2) AS classbrass FROM dev.retailplaces WHERE tid = ${id};",
-            "dbs": "XYZ"
+            "template": "SELECT ROUND(comparison::numeric, 2) AS comparison, ROUND(conv::numeric, 2) AS conv, ROUND(fbl::numeric, 2) AS fbl, ROUND(services::numeric, 2) AS services, ROUND(classbrass::numeric, 2) AS classbrass FROM dev.retailplaces WHERE tid = ${id};"
         },
         "UK Retail Points Layer Table": {
-            "template": "SELECT id, retailpoint_id, retailer, fascia FROM dev.retailpoints ORDER BY id ASC FETCH FIRST 99 ROW ONLY;",
-            "dbs": "XYZ"
+            "template": "SELECT id, retailpoint_id, retailer, fascia FROM dev.retailpoints ORDER BY id ASC FETCH FIRST 99 ROW ONLY;"
         },
         "UK Shops with catchments all catchments": {
-            "template": "SELECT jsonb_build_object('type', 'FeatureCollection','features', b.features) AS collection FROM (SELECT jsonb_build_array(jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'primary', 'id', id),'geometry', ST_AsGeoJson(catchment_primary)::jsonb),jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'secondary', 'id', id),'geometry', ST_AsGeoJson(catchment_secondary)::jsonb),jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'tertiary', 'id', id),'geometry', ST_AsGeoJson(catchment_tertiary)::jsonb)) AS features FROM (SELECT * FROM dev.storelist_1507__19 where id = ${id}) a) b",
-            "dbs": "XYZ"
+            "template": "SELECT jsonb_build_object('type', 'FeatureCollection','features', b.features) AS collection FROM (SELECT jsonb_build_array(jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'primary', 'id', id),'geometry', ST_AsGeoJson(catchment_primary)::jsonb),jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'secondary', 'id', id),'geometry', ST_AsGeoJson(catchment_secondary)::jsonb),jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'tertiary', 'id', id),'geometry', ST_AsGeoJson(catchment_tertiary)::jsonb)) AS features FROM (SELECT * FROM dev.storelist_1507__19 where id = ${id}) a) b"
         }
     },
     "locales": {
@@ -1578,7 +1569,7 @@
                             "fillColor": "rgba(0, 75, 168, 0.3)",
                             "scale": 2
                         },
-                        "themes": {
+                        "___themes": {
                             "Test categorized pins": {
                                 "field": "test_binary",
                                 "type": "categorized",
@@ -1813,7 +1804,8 @@
                             }
                         }
                     },
-                    "infoj": [{
+                    "infoj": [
+                        {
                             "type": "key"
                         },
                         {
