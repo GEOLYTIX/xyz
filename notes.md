@@ -103,6 +103,13 @@ Introduction of SRC_* parameter substitution in workspace [#343](https://github.
 
 Check for Internet Explorer in api.js
 
-## New now.json
+Prevent click propagation for ol-control [#328](https://github.com/GEOLYTIX/xyz/issues/328)
+
+Replace hyperhtml with µhtml [#281](https://github.com/GEOLYTIX/xyz/issues/281)
+
+Drilldown methodology for select [#135](https://github.com/GEOLYTIX/xyz/issues/135)
+
+
+## vercel.json to superseed now.json
 
 API endpoints are no longer build as individual serverless functions. api.js in the root will import other api functions from the mod directory.
