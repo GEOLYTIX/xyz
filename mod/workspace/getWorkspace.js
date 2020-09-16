@@ -1,5 +1,3 @@
-// const fetch = require('node-fetch')
-
 const provider = require('../provider')
 
 const getFrom = {
@@ -16,6 +14,8 @@ module.exports = async cache => {
 
   if (!workspace || cache) {
 
+    !workspace && console.log('workspace is empty')
+
     workspace = process.env.WORKSPACE && await getFrom[process.env.WORKSPACE.split(':')[0]](process.env.WORKSPACE) || {}
 
     if (workspace instanceof Error) return workspace
@@ -24,49 +24,15 @@ module.exports = async cache => {
 
     await assignDefaults()
 
+    workspace.timestamp = Date.now()
+
+  } else if (!!workspace.timestamp) {
+
+    console.log(`workspace cached at ${workspace.timestamp}`)
   }
 
   return workspace
 }
-
-// async function http(ref){
-//   try {
-
-//     const response = await fetch(ref)
-
-//     if (response.status >= 300) return new Error(`${response.status} ${req}`)
-
-//     return await response.json()
-
-//   } catch(err) {
-//     console.error(err)
-//     return err
-//   }
-// }
-
-// async function file(ref) {
-//   try {
-
-//     const workspace = await provider.file(`../public/workspaces/${ref}`)
-
-//     if (workspace instanceof Error) return workspace
-
-//     return JSON.parse(workspace, 'utf8')
-
-//   } catch (err) {
-//     console.error(err)
-//     return err
-//   }
-// }
-
-// async function github(ref){
-
-//   const response = await provider.github(ref)
-
-//   if (response instanceof Error) return response
-
-//   return JSON.parse(response)
-// }
 
 const { readFileSync } = require('fs');
 
@@ -159,14 +125,6 @@ async function assignTemplates() {
           }
 
         }
-
-        // Template maybe json as string.
-        //if (ref.match(/\.json$/i)) return await response.json()
-        // if (typeof _template === 'string') {
-        //   try {
-        //     _template = JSON.parse(_template)
-        //   } catch(err) { }
-        // }
 
         // Template is string only.
         if (typeof _template === 'string') {
