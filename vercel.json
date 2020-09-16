@@ -23,6 +23,10 @@
           "value": "*"
         },
         {
+          "key": "Cache-Control",
+          "value": "no-cache"
+        }
+        {
           "key": "Access-Control-Allow-Headers",
           "value": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
         },
