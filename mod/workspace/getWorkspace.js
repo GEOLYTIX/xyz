@@ -10,15 +10,25 @@ const getFrom = {
 
 let workspace = null
 
-module.exports = async cache => {
+module.exports = async (req, cache) => {
 
   if (!workspace || cache) {
 
     const timestamp = Date.now()
 
-    !workspace && console.log(`workspace is empty at ${timestamp}`)
+    if (!workspace) {
 
-    cache && console.log(`cache is true ${timestamp}`)
+      console.log(`workspace is empty at ${timestamp}`)
+      !(req.params.logger instanceof Error) && req.params.logger.info(`workspace is empty at ${timestamp}`)
+
+    } 
+
+    if (cache) {
+
+      console.log(`cache is true ${timestamp}`)
+      !(req.params.logger instanceof Error) && req.params.logger.info(`cache is true ${timestamp}`)
+
+    }
 
     workspace = process.env.WORKSPACE && await getFrom[process.env.WORKSPACE.split(':')[0]](process.env.WORKSPACE) || {}
 
@@ -33,6 +43,8 @@ module.exports = async cache => {
   } else if (!!workspace.timestamp) {
 
     console.log(`workspace cached at ${workspace.timestamp}`)
+    !(req.params.logger instanceof Error) && req.params.logger.info(`workspace cached at ${workspace.timestamp}`)
+
   }
 
   return workspace
