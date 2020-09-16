@@ -16,6 +16,8 @@ module.exports = async cache => {
 
     !workspace && console.log('workspace is empty')
 
+    cache && console.log('cache is true')
+
     workspace = process.env.WORKSPACE && await getFrom[process.env.WORKSPACE.split(':')[0]](process.env.WORKSPACE) || {}
 
     if (workspace instanceof Error) return workspace
