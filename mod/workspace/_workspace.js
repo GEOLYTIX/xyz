@@ -35,7 +35,7 @@ const getWorkspace = require('./getWorkspace')
 
 async function cache(req, res) {
 
-  const workspace = await getWorkspace(true)
+  const workspace = await getWorkspace(req, true)
 
   if (workspace instanceof Error) return res.status(500).send(`<span style="color: red;">${workspace.message}</span>`)
 

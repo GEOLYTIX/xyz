@@ -1,3 +1,5 @@
+const logger = require('../mod/logger')()
+
 const auth = require('../mod/user/auth')
 
 const getWorkspace = require('../mod/workspace/getWorkspace')
@@ -21,6 +23,8 @@ module.exports = async (req, res) => {
   // Merge request params and query params.
   req.params = Object.assign(req.params || {}, req.query || {})
 
+  req.params.logger = logger
+
   // URI decode string params.
   Object.entries(req.params)
     .filter(entry => typeof entry[1] === 'string')
@@ -32,13 +36,11 @@ module.exports = async (req, res) => {
 
   if (path && path[1] === 'user') return routes.user(req, res)
 
-  //!/(\/api\/user\/)/.test(req.url) && await auth(req, res)
-
   await auth(req, res)
 
   if (res.finished) return
 
-  const workspace = await getWorkspace()
+  const workspace = await getWorkspace(req)
 
   if (workspace instanceof Error) return res.status(500).send(workspace.message)
 
