@@ -48,6 +48,7 @@ async function get(req, res) {
 
   const keys = {
     defaults: () => res.send(defaults),
+    timestamp: () => res.send(req.params.workspace.timestamp.toString()),
     layer: getLayer,
     template: getTemplate,
     templates: getTemplates,
