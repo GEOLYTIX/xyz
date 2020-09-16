@@ -14,9 +14,11 @@ module.exports = async cache => {
 
   if (!workspace || cache) {
 
-    !workspace && console.log('workspace is empty')
+    const timestamp = Date.now()
 
-    cache && console.log('cache is true')
+    !workspace && console.log(`workspace is empty at ${timestamp}`)
+
+    cache && console.log(`cache is true ${timestamp}`)
 
     workspace = process.env.WORKSPACE && await getFrom[process.env.WORKSPACE.split(':')[0]](process.env.WORKSPACE) || {}
 
