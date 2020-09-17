@@ -109,6 +109,8 @@ Replace hyperhtml with µhtml [#281](https://github.com/GEOLYTIX/xyz/issues/281)
 
 Drilldown methodology for select [#135](https://github.com/GEOLYTIX/xyz/issues/135)
 
+Workspace caching [#346](https://github.com/GEOLYTIX/xyz/issues/346)
+
 
 ## vercel.json to superseed now.json
 

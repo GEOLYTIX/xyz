@@ -10,15 +10,18 @@ const getFrom = {
 
 let workspace = null
 
-module.exports = async (req, cache) => {
+module.exports = async req => {
 
-  if (!workspace || cache) {
+  let timestamp = Date.now()
 
-    const timestamp = Date.now()
+  // If the workspace is empty or older than 1hr it needs to be cached.
+  if (!workspace || ((timestamp - workspace.timestamp)>3600000)) {
 
-    if (!workspace) req.params.logger(`workspace is empty at ${timestamp}`)
-
-    if (cache) req.params.logger(`cache is true ${timestamp}`)
+    if (!workspace) {
+      req.params.logger(`workspace is empty ${timestamp}`)
+    } else {
+      req.params.logger(`workspace has expired ${workspace.timestamp} | new timestamp is ${timestamp}`)
+    }
 
     workspace = process.env.WORKSPACE && await getFrom[process.env.WORKSPACE.split(':')[0]](process.env.WORKSPACE) || {}
 
@@ -28,9 +31,9 @@ module.exports = async (req, cache) => {
 
     await assignDefaults()
 
-    workspace.timestamp = Date.now()
+    workspace.timestamp = timestamp
 
-  } else if (!!workspace.timestamp) {
+  } else {
 
     req.params.logger(`workspace cached at ${workspace.timestamp}`)
 

@@ -1,10 +1,6 @@
 const auth = require('../user/auth')
 
 const _method = {
-  cache: {
-    handler: cache,
-    access: 'admin_workspace'
-  },
   get: {
     handler: get
   }
@@ -29,19 +25,6 @@ module.exports = async (req, res) => {
   }
 
   method.handler(req, res)
-}
-
-const getWorkspace = require('./getWorkspace')
-
-async function cache(req, res) {
-
-  const workspace = await getWorkspace(req, true)
-
-  if (workspace instanceof Error) return res.status(500).send(`<span style="color: red;">${workspace.message}</span>`)
-
-  const host = `${req.headers.host.includes('localhost') && 'http' || 'https'}://${req.headers.host}${process.env.DIR || ''}`
-
-  res.send(`<a href="${host}/api/workspace/get">Workspace</a> cached`)
 }
 
 async function get(req, res) {
