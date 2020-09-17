@@ -1,29 +1,18 @@
-const pino = require('pino')
+const fetch = require('node-fetch')
 
-const pinoLogflare = require('pino-logflare')
-
-module.exports = () => {
+module.exports = msg => {
   
-  try {
-
-    const { stream } = pinoLogflare.logflarePinoVercel({
-      apiKey: process.env.KEY_LOGFLARE,
-      sourceToken: process.env.SOURCE_TOKEN
+  fetch(`https://api.logflare.app/logs/json?api_key=${process.env.KEY_LOGFLARE}&source=${process.env.SOURCE_TOKEN}`,
+  {
+    method: 'post',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      msg: msg
     })
-
-    console.log(stream)
- 
-    return pino({
-      level: "debug",
-      base: {
-        revision: process.env.VERCEL_GITHUB_COMMIT_SHA,
-      }
-    }, stream)
-
-  } catch (err) {
-
-    console.log(err)
-
-  }
+  }).then(resp=>{
+    !resp.ok && console.log(msg)
+  }).catch(err=>{
+    console.error(err)
+  })
 
 }

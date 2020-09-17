@@ -1,4 +1,4 @@
-const logger = require('../mod/logger')()
+const logger = require('../mod/logger')
 
 const auth = require('../mod/user/auth')
 
