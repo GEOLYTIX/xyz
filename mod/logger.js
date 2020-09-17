@@ -10,18 +10,19 @@ module.exports = () => {
       apiKey: process.env.KEY_LOGFLARE,
       sourceToken: process.env.SOURCE_TOKEN
     })
-  
+
+    console.log(stream)
+ 
     return pino({
       level: "debug",
       base: {
-        env: process.env.ENV || "ENV not set",
         revision: process.env.VERCEL_GITHUB_COMMIT_SHA,
       }
     }, stream)
 
   } catch (err) {
 
-    return err
+    console.log(err)
 
   }
 
