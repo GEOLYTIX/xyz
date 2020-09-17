@@ -111,6 +111,8 @@ Drilldown methodology for select [#135](https://github.com/GEOLYTIX/xyz/issues/1
 
 Workspace caching [#346](https://github.com/GEOLYTIX/xyz/issues/346)
 
+Logger module [#347](https://github.com/GEOLYTIX/xyz/issues/347)
+
 
 ## vercel.json to superseed now.json
 
