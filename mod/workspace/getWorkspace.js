@@ -16,19 +16,9 @@ module.exports = async (req, cache) => {
 
     const timestamp = Date.now()
 
-    if (!workspace) {
+    if (!workspace) req.params.logger(`workspace is empty at ${timestamp}`)
 
-      console.log(`workspace is empty at ${timestamp}`)
-      req.params.logger && req.params.logger.info(`workspace is empty at ${timestamp}`)
-
-    } 
-
-    if (cache) {
-
-      console.log(`cache is true ${timestamp}`)
-      req.params.logger && req.params.logger.info(`cache is true ${timestamp}`)
-
-    }
+    if (cache) req.params.logger(`cache is true ${timestamp}`)
 
     workspace = process.env.WORKSPACE && await getFrom[process.env.WORKSPACE.split(':')[0]](process.env.WORKSPACE) || {}
 
@@ -42,8 +32,7 @@ module.exports = async (req, cache) => {
 
   } else if (!!workspace.timestamp) {
 
-    console.log(`workspace cached at ${workspace.timestamp}`)
-    req.params.logger && req.params.logger.info(`workspace cached at ${workspace.timestamp}`)
+    req.params.logger(`workspace cached at ${workspace.timestamp}`)
 
   }
 

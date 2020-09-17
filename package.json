@@ -28,9 +28,7 @@
     "mobile-detect": "^1.4.3",
     "node-fetch": "^2.6.1",
     "nodemailer": "^4.6.8",
-    "pg": "^7.18.2",
-    "pino": "^6.6.1",
-    "pino-logflare": "^0.3.5"
+    "pg": "^7.18.2"
   },
   "devDependencies": {
     "@turf/explode": "^5.1.5",
