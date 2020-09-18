@@ -455,10 +455,9 @@ Default marker size is 20, default scale equals to 1.</p>
       0.95
     ],
     &quot;scale&quot;: 2
-  },
-  &quot;size&quot;: 20
+  }
 }
-/* scale and size optional */
+/* scale is optional */
 </code></pre>
 <h2>Labels</h2>
 <p>Label for locations on cluster or MVT layer are created as a seperate layer to make use of Openlayers declutter capability to prevent overlapping map labels. The label itself is created as an <a href="https://openlayers.org/en/latest/apidoc/module-ol_style_Text.html">Openlayers Text object</a>.</p>
@@ -471,6 +470,8 @@ Default marker size is 20, default scale equals to 1.</p>
   &quot;strokeWidth&quot;: 3
 }
 </code></pre>
+<p>In order to display labels by default add <code>&quot;display&quot;: true</code>.<br>
+To include count on clustered features add <code>&quot;count&quot;: true</code>.</p>
 <h2>Hide the style panel</h2>
 <p>Setting a flag <code>hidden=true</code> in the style configuration will hide the style panel in the layer view. A legend will still be shown for a theme but the theme can not be changed with the hidden flag.</p>
 
