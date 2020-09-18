@@ -113,6 +113,8 @@ Workspace caching [#346](https://github.com/GEOLYTIX/xyz/issues/346)
 
 Logger module [#347](https://github.com/GEOLYTIX/xyz/issues/347)
 
+Edge caching [#348](https://github.com/GEOLYTIX/xyz/issues/348)
+
 
 ## vercel.json to superseed now.json
 

@@ -41,6 +41,8 @@ module.exports = async (req, res) => {
 
     if (rows instanceof Error) console.log('failed to query mvt cache')
 
+    res.setHeader('Cache-Control', 's-maxage=1, stale-while-revalidate')
+
     // If found return the cached MVT to client.
     if (rows.length === 1) return res.send(rows[0].mvt)
 
@@ -117,6 +119,7 @@ module.exports = async (req, res) => {
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
   // Return MVT to client.
-  res.send(rows[0].mvt);
+  res.setHeader('Cache-Control', 's-maxage=1, stale-while-revalidate')
+  res.send(rows[0].mvt)
 
 }
