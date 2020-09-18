@@ -118,10 +118,9 @@ Icons can be defined as marker to represent a point location in the rendered map
       0.95
     ],
     "scale": 2
-  },
-  "size": 20
+  }
 }
-/* scale and size optional */
+/* scale is optional */
 ```
 
 ## Labels
@@ -140,6 +139,9 @@ The field defines which location field will be shown as the location's label.
   "strokeWidth": 3
 }
 ```
+
+In order to display labels by default add `"display": true`.
+To include count on clustered features add `"count": true`.
 
 ## Hide the style panel
 
