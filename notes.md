@@ -16,6 +16,8 @@ Cluster style object:
 
 * "cluster":{} marker now inherits default styling properties and these can be overridden.
 
+* Labelling - to add count label on clusters set count: true inside style.label.
+
 ## Fixes
 
 MVT can now be generated from tables with a different EPSG than 3857. [#307](https://github.com/GEOLYTIX/xyz/issues/307)
