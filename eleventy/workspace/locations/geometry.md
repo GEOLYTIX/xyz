@@ -40,12 +40,14 @@ This type supports isolines provided by third party APIs, currently (© HERE)[ht
 	"type": "geometry",
 	"edit": {
 		"isoline_here": {  
-			"minutes": 5
+			"minutes": 5,
+			"departure": "2019-11-16T18:30:00"
 		}
 	}
 }
   // "name" is used as custom checkbox name
   // request returns 5 minute drivetime isochrone from Here API
+  // departure is an optional setting to return drivetime for a certain date/time.
 ```
 
 Supported HERE API request parameters:
