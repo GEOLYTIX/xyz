@@ -15,11 +15,11 @@ module.exports = async req => {
   let timestamp = Date.now()
 
   // If the workspace is empty or older than 1hr it needs to be cached.
-  if (!workspace || ((timestamp - workspace.timestamp)>3600000)) {
+  if (!workspace || ((timestamp - workspace.timestamp) > 3600000)) {
 
     if (!workspace) {
       req.params.logger(`workspace is empty ${timestamp}`)
-    } else if ((timestamp - workspace.timestamp)>3600000) {
+    } else if ((timestamp - workspace.timestamp) > 3600000) {
       req.params.logger(`workspace has expired ${workspace.timestamp} | new timestamp is ${timestamp}`)
     }
 
@@ -35,7 +35,7 @@ module.exports = async req => {
 
   } else {
 
-    req.params.logger(`workspace cached at ${workspace.timestamp}`)
+    req.params.logger(`workspace cached ${workspace.timestamp} | age ${timestamp - workspace.timestamp}`)
 
   }
 
