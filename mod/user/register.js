@@ -24,6 +24,7 @@ module.exports = async (req, res) => {
   if (req.body) return register(req, res)
 
   const params = {
+    language: req.params.language || 'english',
     dir: process.env.DIR || '',
     captcha: process.env.GOOGLE_CAPTCHA && process.env.GOOGLE_CAPTCHA.split('|')[0] || '',
   }
@@ -44,6 +45,8 @@ async function register(req, res) {
     if (captcha_verification.score < 0.6) return res.status(500).send('Captcha failed.')
 
   }
+
+  const acl_schema = await acl(`SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'acl_table';`)
 
   var rows = await acl(`SELECT * FROM acl_schema.acl_table WHERE lower(email) = lower($1);`, [req.body.email])
 
@@ -89,10 +92,11 @@ async function register(req, res) {
 
   // Create new user account
   var rows = await acl(`
-  INSERT INTO acl_schema.acl_table (email, password, verificationtoken, access_log)
+  INSERT INTO acl_schema.acl_table (email, password, ${acl_schema.some(col => col.columnn_name === 'language') && 'language,' || ''} verificationtoken, access_log)
   SELECT
     '${req.body.email}' AS email,
     '${password}' AS password,
+    ${acl_schema.some(col => col.columnn_name === 'language') && `'${req.body.language}' AS language,` || ''}
     '${verificationtoken}' AS verificationtoken,
     array['${date}@${req.ips && req.ips.pop() || req.ip}'] AS access_log;`)
 
