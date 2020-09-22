@@ -81,7 +81,10 @@ window.onload = () => {
       scrollWheelZoom: true,
     })
 
-    loadLayers(locale.layers)
+    xyz.modules()
+      .then(() => xyz.layers.load())
+      .then(() => mappUI())
+      .catch(error => console.error(error))
 
     const btnZoomIn = xyz.utils.html.node`
     <button
@@ -145,40 +148,6 @@ window.onload = () => {
       }}>
       <div class="xyz-icon icon-gps-not-fixed off-black-filter">`)
 
-  }
-
-  function loadLayers(layers) {
-
-    const layerPromises = layers.map(layer => {
-
-      return xyz.workspace.get.layer({
-        locale: xyz.locale.key,
-        layer: layer
-      })
-
-    })
-
-    Promise.all(layerPromises).then(layers => {
-
-      if (xyz.hooks && xyz.hooks.current.layers.length) {
-        layers.forEach(layer => {
-          layer.display = !!~xyz.hooks.current.layers.indexOf(layer.key)
-        })
-      }
-
-      layers.forEach(layer => {
-
-        if (!layer.format) return
-
-        layer = xyz.layers.decorate(layer)
-        xyz.layers.list[layer.key] = layer
-        layer.display && layer.show()
-
-      })
-
-      mappUI()
-
-    })
   }
 
   function mappUI() {
