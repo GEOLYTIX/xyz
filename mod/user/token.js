@@ -86,6 +86,7 @@ module.exports = async (req) => {
       email: user.email,
       admin_user: user.admin_user,
       admin_workspace: user.admin_workspace,
+      language: user.language,
       key: user.api,
       roles: user.roles
     }
