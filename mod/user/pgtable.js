@@ -21,7 +21,8 @@ module.exports = async (req, res) => {
     blocked boolean default false,
     roles text[] default '{}'::text[],
     admin_workspace boolean default false,
-    admin_user boolean default false
+    admin_user boolean default false,
+    language text default 'english'
   );
   
   INSERT INTO acl_schema.acl_table (email, password, verified, approved, admin_user, admin_workspace)
