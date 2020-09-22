@@ -1,5 +1,7 @@
 const login = require('./login')
 
+//const view = require('../view')
+
 const jwt = require('jsonwebtoken')
 
 const acl = require('./acl')()
