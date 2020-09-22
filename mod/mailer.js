@@ -11,4 +11,4 @@ module.exports = async mail => {
 
   mail.text = mail.text.replace(/^(?!\s+$)\s+/gm, '')
   return mailer.createTransport(process.env.TRANSPORT).sendMail(mail)
-};
+}

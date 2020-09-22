@@ -15,6 +15,8 @@ const acl = require('./acl')()
 
 const mailer = require('../mailer')
 
+const mail_templates = require('../mail_templates')
+
 module.exports = async (req, res) => {
 
   if (!acl) return res.send('No Access Control List.')
@@ -78,14 +80,26 @@ async function register(req, res) {
 
     if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
-    await mailer({
-      to: user.email,
-      subject: `Please verify your password reset for ${host}`,
-      text: `A new password has been set for this account.
-      Please verify that you are the account holder: ${protocol}${host}/api/user/verify/${verificationtoken}
-      The reset occured from this remote address ${req.headers['x-forwarded-for'] || 'localhost'}
-      This wasn't you? Please let your manager know.`
-    })
+    const verification_mail = mail_templates.verification[user.language || 'english'] || mail_templates.verification.english
+    
+    await mailer(Object.assign({
+        to: user.email
+      },
+      verification_mail({
+        host: host,
+        protocol: protocol,
+        verificationtoken: verificationtoken,
+        address: req.headers['x-forwarded-for'] || 'localhost',
+      })))
+
+    // await mailer({
+    //   to: user.email,
+    //   subject: `Please verify your password reset for ${host}`,
+    //   text: `A new password has been set for this account.
+    //   Please verify that you are the account holder: ${protocol}${host}/api/user/verify/${verificationtoken}
+    //   The reset occured from this remote address ${req.headers['x-forwarded-for'] || 'localhost'}
+    //   This wasn't you? Please let your manager know.`
+    // })
 
     return res.send('Password will be reset after email verification.')
   }
