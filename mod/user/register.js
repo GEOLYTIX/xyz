@@ -2,9 +2,10 @@ const { readFileSync } = require('fs')
 
 const { join } = require('path')
 
-const template = readFileSync(join(__dirname, '../../public/views/_register.html')).toString('utf8')
-
-const render = params => template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
+const templates = {
+  english: readFileSync(join(__dirname, '../../public/views/_register.html')).toString('utf8'),
+  german: readFileSync(join(__dirname, '../../public/views/_register_german.html')).toString('utf8')
+}
 
 const bcrypt = require('bcryptjs')
 
@@ -18,16 +19,16 @@ module.exports = async (req, res) => {
 
   if (!acl) return res.send('No Access Control List.')
 
-  const rows = await acl(`select * from acl_schema.acl_table limit 1`)
-
-  if (rows instanceof Error) return res.send('Failed to connect with Access Control List.')
+  const template = req.params.language && templates[req.params.language] || templates.english
 
   if (req.body) return register(req, res)
 
-  const html = render({
+  const params = {
     dir: process.env.DIR || '',
     captcha: process.env.GOOGLE_CAPTCHA && process.env.GOOGLE_CAPTCHA.split('|')[0] || '',
-  })
+  }
+
+  const html = template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
 
   res.send(html)
 }
