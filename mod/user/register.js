@@ -5,7 +5,8 @@ const { join } = require('path')
 const templates = {
   en: readFileSync(join(__dirname, '../../public/views/_register.html')).toString('utf8'),
   de: readFileSync(join(__dirname, '../../public/views/_register_de.html')).toString('utf8'),
-  ja: readFileSync(join(__dirname, '../../public/views/_register_ja.html')).toString('utf8')
+  ja: readFileSync(join(__dirname, '../../public/views/_register_ja.html')).toString('utf8'),
+  ko: readFileSync(join(__dirname, '../../public/views/_register_ko.html')).toString('utf8')
 }
 
 const bcrypt = require('bcryptjs')
