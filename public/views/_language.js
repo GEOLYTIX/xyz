@@ -1,8 +1,9 @@
 (() => {
     if (!document.getElementById('language')) return;
     let href = new URL(window.location.href);
-    let lang = href.searchParams.get("language");
-    document.getElementById('language').value = lang ? lang : 'en';
+    let lang = href.searchParams.get("language") || 'en';
+    document.getElementById('language').value = lang;
+    document.querySelector('.switch').href += `?language=${lang}`;
 })();
 
 if (document.getElementById('language')) document.getElementById('language').addEventListener('change', e => {
