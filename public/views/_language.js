@@ -3,7 +3,9 @@
     let href = new URL(window.location.href);
     let lang = href.searchParams.get("language") || 'en';
     document.getElementById('language').value = lang;
-    document.querySelector('.switch').href += `?language=${lang}`;
+
+    let login_href = document.querySelector('.switch').href;
+    document.querySelector('.switch').href += login_href.includes('?') ? `&language=${lang}` : `?language=${lang}`;
 })();
 
 if (document.getElementById('language')) document.getElementById('language').addEventListener('change', e => {

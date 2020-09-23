@@ -18,7 +18,7 @@ module.exports = async (req, res, msg) => {
   if (!acl) return res.send('No Access Control List.')
 
   const template = req.params.language && templates[req.params.language] || templates.en
-
+  
   const params = {
     dir: process.env.DIR || '',
     redirect: req.body && req.body.redirect || req.url && decodeURIComponent(req.url),
