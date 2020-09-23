@@ -5,15 +5,19 @@ const { readFileSync } = require('fs')
 const { join } = require('path')
 
 const templates = {
-  english: readFileSync(join(__dirname, '../../public/views/_login.html')).toString('utf8'),
-  german: readFileSync(join(__dirname, '../../public/views/_login_german.html')).toString('utf8')
+  en: readFileSync(join(__dirname, '../../public/views/_login.html')).toString('utf8'),
+  de: readFileSync(join(__dirname, '../../public/views/_login_de.html')).toString('utf8'),
+  fr: readFileSync(join(__dirname, '../../public/views/_login_fr.html')).toString('utf8'),
+  ja: readFileSync(join(__dirname, '../../public/views/_login_ja.html')).toString('utf8'),
+  ko: readFileSync(join(__dirname, '../../public/views/_login_ko.html')).toString('utf8'),
+  zh: readFileSync(join(__dirname, '../../public/views/_login_zh.html')).toString('utf8')
 }
 
 module.exports = async (req, res, msg) => {
 
   if (!acl) return res.send('No Access Control List.')
 
-  const template = req.params.language && templates[req.params.language] || templates.english
+  const template = req.params.language && templates[req.params.language] || templates.en
 
   const params = {
     dir: process.env.DIR || '',
