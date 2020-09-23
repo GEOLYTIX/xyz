@@ -4,8 +4,7 @@
     let lang = href.searchParams.get("language") || 'en';
     document.getElementById('language').value = lang;
 
-    let login_href = document.querySelector('.switch').href;
-    document.querySelector('.switch').href += login_href.includes('?') ? `&language=${lang}` : `?language=${lang}`;
+    document.querySelector('.switch').href += document.querySelector('.switch').href.includes('?') ? `&language=${lang}` : `?language=${lang}`;
 })();
 
 if (document.getElementById('language')) document.getElementById('language').addEventListener('change', e => {
