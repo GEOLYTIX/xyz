@@ -3,8 +3,8 @@ const { readFileSync } = require('fs')
 const { join } = require('path')
 
 const templates = {
-  english: readFileSync(join(__dirname, '../../public/views/_register.html')).toString('utf8'),
-  german: readFileSync(join(__dirname, '../../public/views/_register_german.html')).toString('utf8')
+  en: readFileSync(join(__dirname, '../../public/views/_register.html')).toString('utf8'),
+  de: readFileSync(join(__dirname, '../../public/views/_register_de.html')).toString('utf8')
 }
 
 const bcrypt = require('bcryptjs')
@@ -21,12 +21,12 @@ module.exports = async (req, res) => {
 
   if (!acl) return res.send('No Access Control List.')
 
-  const template = req.params.language && templates[req.params.language] || templates.english
+  const template = req.params.language && templates[req.params.language] || templates.en
 
   if (req.body) return register(req, res)
 
   const params = {
-    language: req.params.language || 'english',
+    language: req.params.language || 'en',
     dir: process.env.DIR || '',
     captcha: process.env.GOOGLE_CAPTCHA && process.env.GOOGLE_CAPTCHA.split('|')[0] || '',
   }
