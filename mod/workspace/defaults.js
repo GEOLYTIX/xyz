@@ -24,6 +24,11 @@ module.exports = {
         hidden: true
       }
     },
+    mbtiles: {
+      style: {
+        hidden: true
+      }
+    },
     geojson: {
       srid: '4326',
       style: {
