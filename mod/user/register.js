@@ -84,7 +84,7 @@ async function register(req, res) {
 
     if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
-    const verification_mail = mail_templates.verification[user.language || 'english'] || mail_templates.verification.english
+    const verification_mail = mail_templates.verification[user.language || 'en'] || mail_templates.verification.en
     
     await mailer(Object.assign({
         to: user.email
@@ -107,14 +107,14 @@ async function register(req, res) {
 
     return res.send('Password will be reset after email verification.')
   }
-
+  
   // Create new user account
   var rows = await acl(`
-  INSERT INTO acl_schema.acl_table (email, password, ${acl_schema.some(col => col.columnn_name === 'language') && 'language,' || ''} verificationtoken, access_log)
+  INSERT INTO acl_schema.acl_table (email, password, ${acl_schema.some(col => col.column_name === 'language') && 'language,' || ''} verificationtoken, access_log)
   SELECT
     '${req.body.email}' AS email,
     '${password}' AS password,
-    ${acl_schema.some(col => col.columnn_name === 'language') && `'${req.body.language}' AS language,` || ''}
+    ${acl_schema.some(col => col.column_name === 'language') && `'${req.body.language}' AS language,` || ''}
     '${verificationtoken}' AS verificationtoken,
     array['${date}@${req.ips && req.ips.pop() || req.ip}'] AS access_log;`)
 
