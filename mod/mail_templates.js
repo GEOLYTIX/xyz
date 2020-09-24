@@ -13,6 +13,13 @@ module.exports = {
       アカウントホールダーであることを検証してください ${_.protocol}${_.host}/api/user/verify/${_.verificationtoken}
       このリモートアドレスによりリセットがされました ${_.address}
       あなたではなかった場合、マネージャーに連絡をして下さい`
+    }),
+    ko: _ => ({
+      subject: `비밀번호 재설정을 확인해주십시오. ${_.host}`,
+      text: `이 계정의 새로운 비밀번호가 설정되었습니다.
+      계정 소유자임을 확인해주십시오. ${_.protocol}${_.host}/api/user/verify/${_.verificationtoken}
+      기기의 고유주소로부터 재설정이 되었습니다. ${_.address}
+      본인이 아니면 담당매니저에게 알려주십시오.`
     })
   },
   verify_account: {
@@ -33,7 +40,16 @@ module.exports = {
     サイトアドミニストレーターによるアカウント承認後通知メールが送信されます
     アカウントはこのリモートアドレスより登録されました。 ${_.remote_address}\n
     これがあなたでなかった場合はアカウントの検証は行わずマネージャーに連絡をしてください`
-    })
+    }),
+    ko: _ => ({
+  		subject: `계정 확인바랍니다 ${_.host}`,
+  		text: `이 이메일주소의 새로운 계정이 등록되었습니다. ${_.host}
+    계정 소유자임을 확인해주십시오. ${_.protocol}${_.host}/api/user/verify/${_.verificationtoken}
+    로그인전에 입지 관리자가 계정을 승인해야만 합니다. 
+    관리자가 계정 승인을 하면 공지 이메일을 받게됩니다.
+    기기의 고유주소로부터 계정 등록이 되었습니다. ${_.remote_address}\n
+    본인이 아니면 계정 확인을 하지말고 관리자에게 알려주십시오.`
+  	})
   },
   approved_account: {
   	en: _ => ({
@@ -43,7 +59,11 @@ module.exports = {
     ja: _ => ({
     	subject: `アカウントは承認されました ${_.host}`,
   		text: `これで、${_.protocol}${_.host}にログオンできます。`
-    })
+    }),
+    ko: _ => ({
+  		subject: `계정이 승인되었습니다. ${_.host}`,
+  		text: `로그인이 가능합니다. ${_.protocol}${_.host}`
+  	})
   },
   deleted_account: {
   	en: _ => ({
@@ -53,7 +73,11 @@ module.exports = {
     ja: _ => ({
     	subject: `${_.host}のこのアカウントは削除されました`,
     	text: `${_.protocol}${_.host}にログインできなくなります削除されました`
-    })
+    }),
+    ko: _ => ({
+  		subject: `계정이 삭제되었습니다. ${_.host}`,
+  		text: `더 이상 로그인이 불가합니다. ${_.protocol}${_.host}`
+  	})
   },
   failed_login: {
   	en: _ => ({
@@ -69,6 +93,13 @@ module.exports = {
   		${_.approved ? 'アカウントは承認されました' : 'アカウント承認確認メールが送信されるのをお待ちください'}
       このリモートアドレスから試されましたが失敗しました ${_.remote_address}
       これがあなたではなかった場合、マネージャーに連絡をして下さい`
+  	}),
+  	ko: _ => ({
+  		subject: `잘못된 로그인 시도입니다. ${_.host}`,
+  		text: `${_.verified ? '계정이 확인되었습니다.' : '계정이 확인되지않았습니다.'}
+  		${_.approved ? '계정이 승인되었습니다.' : '계정승인 확인 이메일을 기다려주십시오.'}
+      기기의 고유주소로부터 잘못된 로그인 시도가 발생했습니다. ${_.remote_address}
+      본인이 아니면 담당매니저에게 알려주십시오.`
   	})
   },
   locked_account: {
@@ -89,6 +120,15 @@ module.exports = {
       アカウント検証によりログイン失敗がリセットされます 
       このリモートアドレスから試されましたが失敗しました ${_.remote_address}
       これがあなたではなかった場合、マネージャーに連絡をして下さい`
+  	}),
+  	ko: _ => ({
+  		subject: `다수의 잘못된 로그인 시도가 발생했습니다. ${_.host}`,
+  		text: `이 계정에 ${_.failed_attempts} 번의 잘못된 로그인 시도가 발생했습니다.
+      이 계정은 확인될때까지 봉쇄되었습니다.
+      계정 소유자임을 확인해주십시오. ${_.protocol}${_.host}/api/user/verify/${_.verificationtoken}
+      계정 확인은 잘못된 로그인 시도를 재설정합니다.
+      기기의 고유주소로부터 잘못된 로그인 시도가 발생했습니다. ${_.remote_address}
+      본인이 아니면 담당매니저에게 알려주십시오.`
   	})
   },
   login_incorrect: {
@@ -103,6 +143,12 @@ module.exports = {
   		text: `間違ったパスワードが入力されました 
     このリモートアドレスから試されましたが失敗しました ${_.remote_address}
     これがあなたではなかった場合、マネージャーに連絡をして下さい`
+  	}),
+  	ko: _ => ({
+  		subject: `잘못된 로그인 시도입니다. ${_.host}`,
+  		text: `잘못된 비밀번호입니다.
+    기기의 고유주소로부터 잘못된 로그인 시도가 발생했습니다. ${_.remote_address}
+    본인이 아니면 담당매니저에게 알려주십시오.`
   	})
   },
   admin_email: {
@@ -115,6 +161,11 @@ module.exports = {
     	subject: `${_.host}についてアカウントを検証されました`,
     	text: `アドミンパネルにログインして承認してください ${_.protocol}${_.host}/view/admin_user to approve ${_.email}
     	このリンクからもアカウントを承認することができます ${_.protocol}${_.host}/api/user/approve/${_.approvaltoken}`
-    })
+    }),
+    ko: _ => ({
+  		subject: `새로운 계정이 확인되었습니다. ${_.host}`,
+  		text: `승인을 위해서 관리 패널로 로그인하십시오. ${_.protocol}${_.host}/view/admin_user to approve ${_.email}
+        다음의 링크로 또한 계정 승인을 할 수 있습니다. ${_.protocol}${_.host}/api/user/approve/${_.approvaltoken}`
+  	})
   }
 }
