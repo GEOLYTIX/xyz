@@ -84,7 +84,7 @@ async function register(req, res) {
 
     if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
-    const verification_mail = mail_templates.verification[user.language || 'en'] || mail_templates.verification.en
+    const verification_mail = mail_templates.verify_password_reset[req.body.language || 'en'] || mail_templates.verify_password_reset.en;
     
     await mailer(Object.assign({
         to: user.email
@@ -95,15 +95,6 @@ async function register(req, res) {
         verificationtoken: verificationtoken,
         address: req.headers['x-forwarded-for'] || 'localhost',
       })))
-
-    // await mailer({
-    //   to: user.email,
-    //   subject: `Please verify your password reset for ${host}`,
-    //   text: `A new password has been set for this account.
-    //   Please verify that you are the account holder: ${protocol}${host}/api/user/verify/${verificationtoken}
-    //   The reset occured from this remote address ${req.headers['x-forwarded-for'] || 'localhost'}
-    //   This wasn't you? Please let your manager know.`
-    // })
 
     return res.send('Password will be reset after email verification.')
   }
@@ -120,16 +111,17 @@ async function register(req, res) {
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
-  await mailer({
-    to: req.body.email,
-    subject: `Please verify your account on ${host}`,
-    text: `A new account for this email address has been registered with ${host}
-    Please verify that you are the account holder: ${protocol}${host}/api/user/verify/${verificationtoken}
-    A site administrator must approve the account before you are able to login.
-    You will be notified via email once an adimistrator has approved your account.
-    The account was registered from this remote address ${req.headers['x-forwarded-for'] || 'localhost'}\n
-    This wasn't you? Do NOT verify the account and let your manager know.`
-  })
+  const verify_account_mail = mail_templates.verify_account[req.body.language || 'en'] || mail_templates.verify_account.en;
+
+  await mailer(Object.assign({
+    to: req.body.email
+  },
+  verify_account_mail({
+    host: host,
+    protocol: protocol,
+    verificationtoken: verificationtoken,
+    remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
+  })));
 
   return res.send('A new account has been registered and is awaiting email verification.')
 
