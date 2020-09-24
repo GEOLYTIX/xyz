@@ -2,7 +2,11 @@ const acl = require('./acl')()
 
 const mailer = require('../mailer')
 
+const mail_templates = require('../mail_templates')
+
 module.exports = async (req, res) => {
+
+  console.log(req.params);
 
   // Remove spaces from email.
   const email = req.params.email.replace(/\s+/g, '')
@@ -29,11 +33,16 @@ module.exports = async (req, res) => {
 
   // Send email to the user account if an account has been approved.
   if (req.params.field === 'approved' && req.params.value === 'true') {
-    await mailer({
-      to: email,
-      subject: `This account has been approved for ${host}`,
-      text: `You are now able to log on to ${protocol}${host}`
-    })
+
+    const approved_account_mail = mail_templates.approved_account[req.params.token.language || 'en'] || mail_templates.approved_account.en;
+
+    await mailer(Object.assign({
+      to: email
+    },
+    approved_account_mail({
+      host: host,
+      protocol: protocol
+    })));
 
   }
 

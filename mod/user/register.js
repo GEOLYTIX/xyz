@@ -3,8 +3,12 @@ const { readFileSync } = require('fs')
 const { join } = require('path')
 
 const templates = {
-  english: readFileSync(join(__dirname, '../../public/views/_register.html')).toString('utf8'),
-  german: readFileSync(join(__dirname, '../../public/views/_register_german.html')).toString('utf8')
+  en: readFileSync(join(__dirname, '../../public/views/_register.html')).toString('utf8'),
+  de: readFileSync(join(__dirname, '../../public/views/_register_de.html')).toString('utf8'),
+  fr: readFileSync(join(__dirname, '../../public/views/_register_fr.html')).toString('utf8'),
+  ja: readFileSync(join(__dirname, '../../public/views/_register_ja.html')).toString('utf8'),
+  ko: readFileSync(join(__dirname, '../../public/views/_register_ko.html')).toString('utf8'),
+  zh: readFileSync(join(__dirname, '../../public/views/_register_zh.html')).toString('utf8')
 }
 
 const bcrypt = require('bcryptjs')
@@ -21,12 +25,12 @@ module.exports = async (req, res) => {
 
   if (!acl) return res.send('No Access Control List.')
 
-  const template = req.params.language && templates[req.params.language] || templates.english
+  const template = req.params.language && templates[req.params.language] || templates.en
 
   if (req.body) return register(req, res)
 
   const params = {
-    language: req.params.language || 'english',
+    language: req.params.language || 'en',
     dir: process.env.DIR || '',
     captcha: process.env.GOOGLE_CAPTCHA && process.env.GOOGLE_CAPTCHA.split('|')[0] || '',
   }
@@ -80,7 +84,7 @@ async function register(req, res) {
 
     if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
-    const verification_mail = mail_templates.verification[user.language || 'english'] || mail_templates.verification.english
+    const verification_mail = mail_templates.verify_password_reset[req.body.language || 'en'] || mail_templates.verify_password_reset.en;
     
     await mailer(Object.assign({
         to: user.email
@@ -92,40 +96,32 @@ async function register(req, res) {
         address: req.headers['x-forwarded-for'] || 'localhost',
       })))
 
-    // await mailer({
-    //   to: user.email,
-    //   subject: `Please verify your password reset for ${host}`,
-    //   text: `A new password has been set for this account.
-    //   Please verify that you are the account holder: ${protocol}${host}/api/user/verify/${verificationtoken}
-    //   The reset occured from this remote address ${req.headers['x-forwarded-for'] || 'localhost'}
-    //   This wasn't you? Please let your manager know.`
-    // })
-
     return res.send('Password will be reset after email verification.')
   }
-
+  
   // Create new user account
   var rows = await acl(`
-  INSERT INTO acl_schema.acl_table (email, password, ${acl_schema.some(col => col.columnn_name === 'language') && 'language,' || ''} verificationtoken, access_log)
+  INSERT INTO acl_schema.acl_table (email, password, ${acl_schema.some(col => col.column_name === 'language') && 'language,' || ''} verificationtoken, access_log)
   SELECT
     '${req.body.email}' AS email,
     '${password}' AS password,
-    ${acl_schema.some(col => col.columnn_name === 'language') && `'${req.body.language}' AS language,` || ''}
+    ${acl_schema.some(col => col.column_name === 'language') && `'${req.body.language}' AS language,` || ''}
     '${verificationtoken}' AS verificationtoken,
     array['${date}@${req.ips && req.ips.pop() || req.ip}'] AS access_log;`)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
-  await mailer({
-    to: req.body.email,
-    subject: `Please verify your account on ${host}`,
-    text: `A new account for this email address has been registered with ${host}
-    Please verify that you are the account holder: ${protocol}${host}/api/user/verify/${verificationtoken}
-    A site administrator must approve the account before you are able to login.
-    You will be notified via email once an adimistrator has approved your account.
-    The account was registered from this remote address ${req.headers['x-forwarded-for'] || 'localhost'}\n
-    This wasn't you? Do NOT verify the account and let your manager know.`
-  })
+  const verify_account_mail = mail_templates.verify_account[req.body.language || 'en'] || mail_templates.verify_account.en;
+
+  await mailer(Object.assign({
+    to: req.body.email
+  },
+  verify_account_mail({
+    host: host,
+    protocol: protocol,
+    verificationtoken: verificationtoken,
+    remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
+  })));
 
   return res.send('A new account has been registered and is awaiting email verification.')
 

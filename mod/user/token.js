@@ -1,5 +1,7 @@
 const mailer = require('../mailer')
 
+const mail_templates = require('../mail_templates')
+
 const bcrypt = require('bcryptjs')
 
 const crypto = require('crypto')
@@ -65,15 +67,18 @@ module.exports = async (req) => {
   // Redirect back to login (get) with error msg if user is not valid.
   if (!user.verified || !user.approved) {
 
-    // Sent fail mail when to account email if login failed.
-    await mailer({
-      to: user.email,
-      subject: `A failed login attempt was made on ${host}`,
-      text: `${user.verified ? 'The account has been verified.' : 'The account has NOT been verified.'}
-      ${user.approved ? 'The account has been approved.' : 'Please wait for account approval confirmation email.'}
-      The failed attempt occured from this remote address ${req.headers['x-forwarded-for'] || 'localhost'}
-      This wasn't you? Please let your manager know.`
-    })
+    const failed_login_mail = mail_templates.failed_login[user.language || 'en'] || mail_templates.failed_login.en;
+
+    await mailer(Object.assign({
+      to: user.email
+    },
+    failed_login_mail({
+      host: host,
+      protocol: protocol,
+      verified: user.verified,
+      approved: user.approved,
+      remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
+    })));
 
     return new Error('User not verified or approved')
   }
@@ -127,28 +132,32 @@ module.exports = async (req) => {
 
     if (rows instanceof Error) return new Error('Bad Config')
 
-    await mailer({
-      to: user.email,
-      subject: `Too many failed login attempts occured on ${host}`,
-      text: `${parseInt(process.env.FAILED_ATTEMPTS) || 3} failed login attempts have been recorded on this account.
-      This account has now been locked until verified.
-      Please verify that you are the account holder: ${protocol}${host}/api/user/verify/${verificationtoken}
-      Verifying the account will reset the failed login attempts.
-      The failed attempt occured from this remote address ${req.headers['x-forwarded-for'] || 'localhost'}
-      This wasn't you? Please let your manager know.`
-    })
+    const locked_account_mail = mail_templates.locked_account[user.language || 'en'] || mail_templates.locked_account.en;
+
+    await mailer(Object.assign({
+      to: user.email
+    },
+    locked_account_mail({
+      host: host,
+      failed_attempts: parseInt(process.env.FAILED_ATTEMPTS) || 3,
+      protocol: protocol,
+      verificationtoken: verificationtoken,
+      remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
+    })));
 
     return new Error('Account is blocked, please check email.')
   }
 
   // Finally login has failed.
-  await mailer({
-    to: user.email,
-    subject: `A failed login attempt was made on ${host}`,
-    text: `An incorrect password was entered!
-    The failed attempt occured from this remote address ${req.headers['x-forwarded-for'] || 'localhost'}
-    This wasn't you? Please let your manager know.`
-  })
+  const login_incorrect_mail = mail_templates.login_incorrect[user.language || 'en'] || mail_templates.login_incorrect.en;
+
+    await mailer(Object.assign({
+      to: user.email
+    },
+    login_incorrect_mail({
+      host: host,
+      remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
+    })));
 
   return new Error('Failed to create token')
 
