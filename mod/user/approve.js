@@ -2,6 +2,8 @@ const acl = require('./acl')()
 
 const mailer = require('../mailer')
 
+const mail_templates = require('../mail_templates')
+
 module.exports = async (req, res) => {
 
   var rows = await acl(`SELECT * FROM acl_schema.acl_table WHERE approvaltoken = $1;`, [req.params.key])
@@ -25,11 +27,15 @@ module.exports = async (req, res) => {
 
   const host = `${req.headers.host.includes('localhost') && req.headers.host || process.env.ALIAS || req.headers.host}${process.env.DIR || ''}`
 
-  await mailer({
-    to: user.email,
-    subject: `This account has been approved on ${host}`,
-    text: `You are now able to log on to ${protocol}${host}`
-  })
+  const approved_account_mail = mail_templates.approved_account[user.language || 'en'] || mail_templates.approved_account.en;
+
+  await mailer(Object.assign({
+    to: user.email
+  },
+  approved_account_mail({
+    host: host,
+    protocol: protocol
+  })));
 
   res.send('The account has been approved by you. An email has been sent to the account holder.')
 

@@ -1,0 +1,241 @@
+<!doctype html>
+<html>
+
+<head data-dir="${dir}">
+    <title>XYZ | 注册</title>
+    <link rel="icon" type="image/x-icon" href="${dir}/icons/favicon.ico" />
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://www.google.com/recaptcha/api.js?render=${captcha}"></script>
+
+    <script src="${dir}/views/_register.js" defer></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 50px;
+            font: 14px "Open Sans", sans-serif;
+        }
+
+        .input-group {
+            width: 100%;
+            max-width: 500px;
+        }
+
+        input {
+            padding: 10px 0;
+            width: 100%;
+            border: none;
+            border-bottom: 1px solid #999;
+            font-size: 18px;
+        }
+
+        input:focus {
+            outline: none;
+        }
+
+        input:-webkit-autofill {
+            box-shadow: 0 0 0px 1000px white inset;
+        }
+
+        .bar {
+            position: relative;
+            display: block;
+            width: 100%;
+        }
+
+        .bar:before,
+        .bar:after {
+            content: '';
+            height: 2px;
+            width: 0;
+            bottom: 0;
+            position: absolute;
+            background: #1F964D;
+            transition: 0.2s ease all;
+            -moz-transition: 0.2s ease all;
+            -webkit-transition: 0.2s ease all;
+        }
+
+        input:invalid+.bar:before,
+        input:invalid+.bar:after {
+            background: orangered;
+        }
+
+        .bar:before {
+            left: 50%;
+        }
+
+        .bar:after {
+            right: 50%;
+        }
+
+        input:focus~.bar:before,
+        input:focus~.bar:after {
+            width: 50%;
+        }
+
+        button {
+            color: white;
+            background-color: #1F964D;
+            margin: 10px 0;
+            padding: 8px;
+            text-align: center;
+            font: 18px "Open Sans", sans-serif;
+            font-weight: 700;
+            border-radius: 3px;
+            border: 0;
+            box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.2);
+        }
+
+        .login_form p {
+            font-size: 18px;
+        }
+
+        .register_form p {
+            font-size: 14px;
+        }
+
+        .bold {
+            font-weight: bold;
+        }
+
+        .switch {
+            font-size: 18px;
+            text-decoration: none;
+            color: #1F964D;
+            font-weight: 700;
+        }
+
+        button:hover,
+        .switch:hover {
+            cursor: pointer;
+        }
+
+        button:disabled {
+            background-color: darkslategrey;
+        }
+
+        .msg {
+            color: #f57c00;
+        }
+
+        .mailto {
+            color: #1F964D;
+            text-decoration: none;
+        }
+
+        .checkbox {
+            display: block;
+        }
+
+        .checkbox input {
+            display: none;
+        }
+
+        .checkbox>span {
+            display: inline-block;
+            vertical-align: middle;
+        }
+
+        .checkbox>div {
+            display: inline-block;
+            vertical-align: middle;
+            width: 18px;
+            height: 18px;
+            margin-right: 5px;
+            background-repeat: no-repeat;
+            background-position: center;
+            background-size: contain;
+            -webkit-background-size: contain;
+            background-image: url("${dir}/icons/icon-checkbox-unchecked.svg");
+        }
+
+        input:checked+div {
+            background-image: url("${dir}/icons/icon-checkbox-checked.svg");
+        }
+
+        #btnRegister {
+            display: block;
+        }
+
+    </style>
+</head>
+
+<body class="register_form" data-captcha=${captcha}>
+    <form method="post">
+
+      <input style="display:none;" id="language" name="language" required value=${language}>
+
+        <div class="input-group">
+            <input id="auth_user_email" name="email" type="email" autocomplete="off" required maxlength="50" value="">
+
+            <span class="bar"></span>
+            <label for="auth_user_email">电子邮件</label>
+        </div>
+
+        <br>
+
+        <div class="input-group">
+            <input id="auth_user_password" name="password" type="password" autocomplete="off" required minlength="8"
+                value="">
+
+            <span class="bar"></span>
+            <label for="auth_user_password">新密码（最少8个字符）</label>
+        </div>
+
+        <br>
+
+        <div class="input-group">
+            <input id="auth_user_password_retype" type="password" autocomplete="off" required
+                minlength="8" value="">
+
+            <span class="bar"></span>
+            <label for="auth_user_password_retype">再次输入密码</label>
+        </div>
+
+        <br>
+
+        <p class="bold">隐私条款</p>
+
+        <p>Geolytix会认真对待您的隐私，仅会使用您的个人信息来管理您的帐户并提供相应产品和服务。我们绝不会与第三方共享您的个人数据。</p>
+
+        <p>可以通过管理员来禁用您的帐户，但是如果您希望永久删除您的详细信息，请发送电子邮件至<a class="mailto"
+                href="mailto:support@geolytix.co.uk">support@geolytix.co.uk</a>
+
+        </p>
+
+        <p>该网站由Geolytix所有和运营，其主要营业地点位于伦敦国王十字路65号 Phoenix Yard（邮编：WC1X 9LW）</p>
+
+        <label class="checkbox">
+            <input id="privacy_agreement" type="checkbox">
+            <div></div>
+            <span>我同意</span>
+        </label>
+
+        <button id="btnRegister" type="submit" formaction="register" disabled>
+            注册或重置密码
+        </button>
+
+        <input style="display:none;" id="captcha_input" required>
+
+        <p class="bold">接下来发生什么？确认您的帐户</p>
+
+        <p>
+            我们将会通过<a class="mailto"
+                href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a>向您提供的电子邮件地址发送一封电子邮件，其中包含一个可验证您的帐户的链接
+        </p>
+
+        <p>
+            如果几分钟后仍未收到通知邮件，请检查所有垃圾邮件/垃圾文件夹，并将<a class="mailto" href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a>添加到您的安全发件人列表中，确保消息通过。
+        </p>
+
+        <p>验证后，网站管理员将批准新帐户。您的帐户获得批准后，您将收到另一封电子邮件。</p>
+
+        <a class="switch" href="${dir}/?login">已经注册了？请登录</a>
+    </form>
+
+</body>
+
+</html>
