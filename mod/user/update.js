@@ -6,8 +6,6 @@ const mail_templates = require('../mail_templates')
 
 module.exports = async (req, res) => {
 
-  console.log(req.params);
-
   // Remove spaces from email.
   const email = req.params.email.replace(/\s+/g, '')
 
