@@ -1,6 +1,6 @@
 module.exports = {
   verification: {
-    english: _=>({
+    en: _=>({
       subject: `Please verify your password reset for ${_.host}`,
       text: `A new password has been set for this account.
       Please verify that you are the account holder: ${_.protocol}${_.host}/api/user/verify/${_.verificationtoken}
