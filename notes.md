@@ -117,6 +117,8 @@ Logger module [#347](https://github.com/GEOLYTIX/xyz/issues/347)
 
 Edge caching [#348](https://github.com/GEOLYTIX/xyz/issues/348)
 
+Mapbox-GL layers and styles [#303](https://github.com/GEOLYTIX/xyz/issues/303)
+
 
 ## vercel.json to superseed now.json
 
