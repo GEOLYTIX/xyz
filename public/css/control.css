@@ -1944,6 +1944,9 @@ span.flatpickr-weekday {
   width: 100%;
   height: 100%; }
 
+.mapboxgl-canvas {
+  position: absolute; }
+
 .infotip {
   position: fixed;
   margin: 0;
