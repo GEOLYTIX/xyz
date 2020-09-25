@@ -6,13 +6,16 @@ const mail_templates = require('../mail_templates')
 
 module.exports = async (req, res) => {
 
+
   var rows = await acl(`SELECT * FROM acl_schema.acl_table WHERE approvaltoken = $1;`, [req.params.key])
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
   const user = rows[0]
 
-  if (!user) return res.send('Token not found. The token has probably been resolved already.')
+  if (!user) {
+    return res.send(msg_templates.token_not_found[user.language || 'en'] || msg_templates.token_not_found.en)
+  }
 
   var rows = await acl(`
   UPDATE acl_schema.acl_table SET
@@ -36,7 +39,7 @@ module.exports = async (req, res) => {
     host: host,
     protocol: protocol
   })));
-
-  res.send('The account has been approved by you. An email has been sent to the account holder.')
+  
+  res.send(msg_templates.admin_approved[req.params.token.language || 'en'] || msg_templates.admin_approved.en)
 
 }

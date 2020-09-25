@@ -1,5 +1,7 @@
 const auth = require('./auth')
 
+const msg_templates = require('../msg_templates')
+
 const _method = {
   register: {
     handler: require('./register')
@@ -45,7 +47,8 @@ const _method = {
   logout: {
     handler: (req, res) => {
       res.setHeader('Set-Cookie', `XYZ ${process.env.TITLE || 'token'}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
-      return res.send('Logged out.')
+      const msg = msg_templates.logout[req.params.token.language] || msg_templates.logout.en
+      return res.send(msg)
     }
   }
 }
