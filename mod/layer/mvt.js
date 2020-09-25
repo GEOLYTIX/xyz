@@ -50,7 +50,7 @@ module.exports = async (req, res) => {
 
   // Construct array of fields queried
   const mvt_fields = Object.values(layer.style.themes || {}).map(
-    theme => theme.fieldfx && `${theme.fieldfx} AS ${theme.field}` || theme.field)
+    theme => theme.fieldfx && `${theme.fieldfx} AS ${theme.field}` || theme.fields || theme.field)
 
   // Create a new tile and store in cache table if defined.
   // ST_MakeEnvelope() in ST_AsMVT is based on https://github.com/mapbox/postgis-vt-util/blob/master/src/TileBBox.sql

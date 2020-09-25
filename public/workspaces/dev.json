@@ -188,6 +188,14 @@
                     "format": "tiles",
                     "URI": "/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX&host=https://api.mapbox.com"
                 },
+                "Countries Split":{
+                  "format": "mvt",
+                  "geom": "geom_3857",
+                  "srid": "3857",
+                  "dbs": "MAPP",
+                  "table": "mapp.global_glx_open_admin_countries_split",
+                  "qID": "country_cd"
+                },
                 "Countries": {
                     "display": true,
                     "attribution": {
