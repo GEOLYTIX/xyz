@@ -4,6 +4,8 @@ const mailer = require('../mailer')
 
 const mail_templates = require('../mail_templates')
 
+const msg_templates = require('../mail_templates')
+
 module.exports = async (req, res) => {
 
   // Remove spaces from email.
@@ -44,5 +46,5 @@ module.exports = async (req, res) => {
 
   }
 
-  return res.send('Update successful')
+  return res.send(msg_templates.update_ok[req.body.language || 'en'] || msg_templates.update_ok.en)
 }
