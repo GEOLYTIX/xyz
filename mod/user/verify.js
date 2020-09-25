@@ -2,6 +2,8 @@ const mailer = require('../mailer')
 
 const mail_templates = require('../mail_templates')
 
+const msg_templates = require('../msg_templates')
+
 const crypto = require('crypto')
 
 const acl = require('./acl')()
@@ -15,7 +17,7 @@ module.exports = async (req, res) => {
 
   const user = rows[0]
 
-  if (!user) return res.send('No matching account found.')
+  if (!user) return res.send(msg_templates.account_not_found[user.language || 'en'] || msg_templates.account_not_found.en)
 
   const approvaltoken = crypto.randomBytes(20).toString('hex')
 
@@ -92,10 +94,10 @@ module.exports = async (req, res) => {
 
     }
 
-    return res.send('This account has been verified but requires administrator approval.')
+    return res.send(msg_templates.account_await_approval[user.language || 'en'] || msg_templates.account_await_approval.en)
   }
 
   // Return on password reset; Do NOT notify administrator
-  if (user.password_reset) return res.send('Password has been reset.')
+  if (user.password_reset) return res.send(msg_templates.password_reset_ok[user.language || 'en'] || msg_templates.password_reset_ok.en)
 
 }

@@ -21,6 +21,8 @@ const mailer = require('../mailer')
 
 const mail_templates = require('../mail_templates')
 
+const msg_templates = require('../msg_templates')
+
 module.exports = async (req, res) => {
 
   if (!acl) return res.send('No Access Control List.')
@@ -72,7 +74,7 @@ async function register(req, res) {
 
   if (user) {
 
-    if (user.blocked) return res.status(500).send('User account is blocked.')
+    if (user.blocked) return res.status(500).send(msg_templates.user_blocked[user.language || 'en'] || msg_templates.user_blocked.en)
 
     // Reset password.
     rows = await acl(`
@@ -95,8 +97,9 @@ async function register(req, res) {
         verificationtoken: verificationtoken,
         address: req.headers['x-forwarded-for'] || 'localhost',
       })))
-
-    return res.send('Password will be reset after email verification.')
+    
+    return res.send(msg_templates.password_reset_verification[req.body.language || 'en'] || msg_templates.verify_password_reset.en)
+    //return res.send('Password will be reset after email verification.')
   }
   
   // Create new user account
@@ -123,6 +126,8 @@ async function register(req, res) {
     remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
   })));
 
-  return res.send('A new account has been registered and is awaiting email verification.')
+  return res.send(msg_templates.new_account_registered[req.body.language || 'en'] || msg_templates.new_account_registered.en)
+
+  //return res.send('A new account has been registered and is awaiting email verification.')
 
 }
