@@ -2,6 +2,8 @@ const mailer = require('../mailer')
 
 const mail_templates = require('../mail_templates')
 
+const msg_templates = require('../msg_templates')
+
 const bcrypt = require('bcryptjs')
 
 const crypto = require('crypto')
@@ -12,9 +14,13 @@ const acl = require('./acl')()
 
 module.exports = async (req) => {
 
-  if (!req.body.email) return new Error('Missing email')
+  //if (!req.body.email) return new Error('Missing email')
 
-  if (!req.body.password) return new Error('Missing password')
+  if(!req.body.email) return new Error(msg_templates.missing_email[req.body.language || 'en'] || msg_templates.missing_email.en);
+
+  //if (!req.body.password) return new Error('Missing password')
+
+  if(!req.body.password) return new Error(msg_templates.missing_password[req.body.language || 'en'] || msg_templates.missing_password.en);
 
   const date = new Date()
 
@@ -34,9 +40,13 @@ module.exports = async (req) => {
   const user = rows[0]
 
   // Redirect back to login (get) with error msg if user is not found.
-  if (!user) return new Error('User not found.')
+  //if (!user) return new Error('User not found.')
 
-  if (user.blocked) return new Error('User blocked')
+  if(!user) return new Error(msg_templates.user_not_found.en)
+
+  //if (user.blocked) return new Error('User blocked')
+
+  if(!user) return new Error(msg_templates.user_blocked[req.body.language || 'en'] || msg_templates.user_blocked.en)
 
   const approvalDate = user.approved_by && new Date(user.approved_by.replace(/.*\|/,''))
 
@@ -58,7 +68,9 @@ module.exports = async (req) => {
 
       }
 
-      return new Error('User approval has expired. Please re-register.')
+      //return new Error('User approval has expired. Please re-register.')
+
+      return new Error(msg_templates.user_expired[req.body.language || 'en'] || msg_templates.user_expired.en)
 
     }
 
@@ -80,7 +92,10 @@ module.exports = async (req) => {
       remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
     })));
 
-    return new Error('User not verified or approved')
+    //return new Error('User not verified or approved')
+
+    return new Error(msg_templates.user_not_verified[req.body.language || 'en'] || msg_templates.user_not_verified.en)
+
   }
 
   // Check password from post body against encrypted password from ACL.
@@ -145,7 +160,10 @@ module.exports = async (req) => {
       remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
     })));
 
-    return new Error('Account is blocked, please check email.')
+    //return new Error('Account is blocked, please check email.')
+
+    return new Error(msg_templates.account_blocked[req.body.language || 'en'] || msg_templates.account_blocked.en)
+
   }
 
   // Finally login has failed.
@@ -159,6 +177,9 @@ module.exports = async (req) => {
       remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
     })));
 
-  return new Error('Failed to create token')
+  //return new Error('Failed to create token')
+
+  return new Error(msg_templates.token_failed[req.body.language || 'en'] || msg_templates.token_failed.en)
+
 
 }
