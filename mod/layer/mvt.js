@@ -60,7 +60,7 @@ module.exports = async (req, res) => {
       ${z},
       ${x},
       ${y},
-      ST_AsMVT(tile, '${req.params.layer}', 4096, 'geom') mvt,
+      ST_AsMVT(tile, '${layer.key}', 4096, 'geom') mvt,
       ST_MakeEnvelope(
         ${-m + (x * r)},
         ${ m - (y * r) - r},
