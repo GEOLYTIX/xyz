@@ -2,7 +2,7 @@
 <html>
 
 <head data-dir="${dir}">
-    <title>XYZ | Se connecter</title>
+    <title>XYZ | Logowanie</title>
     <link rel="icon" type="image/x-icon" href="${dir}/icons/favicon.ico" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -205,7 +205,7 @@
             maxlength="50">
 
             <span class="bar"></span>
-            <label for="auth_user_email">E-mail</label>
+            <label for="auth_user_email">Adres e-mail</label>
         </div>
 
         <br>
@@ -220,7 +220,7 @@
             minlength="8">
 
             <span class="bar"></span>
-            <label for="auth_user_password">Mot de passe</label>
+            <label for="auth_user_password">Hasło</label>
         </div>
 
         <br>
@@ -228,7 +228,7 @@
         <p class="msg">${msg}</p>
 
         <button id="btnLogin" type="submit" disabled>
-            Se connecter
+            Zaloguj się
         </button>
 
         <input 
@@ -237,8 +237,10 @@
             name="captcha"
             required >
 
-        <p>Son compte doit être vérifié avec un lien de vérification envoyé à l’adresse e-mail et approuvé par l'administrateur.</p>
-        <a class="switch" href="${dir}/api/user/register">Enregistrer un nouveau compte ou réinitialiser son mot de passe.</a>
+        <p>
+           Logowanie jest możliwe po weryfikacji konta za pomocą linku wysłanego we wiadomości e-mail, a następnie zatwierdzonego przez administratora. 
+        </p>
+        <a class="switch" href="${dir}/api/user/register">Zarejestruj nowe konto lub zmień hasło.</a>
     </form>
 
 </body>
