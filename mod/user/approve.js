@@ -4,6 +4,8 @@ const mailer = require('../mailer')
 
 const mail_templates = require('../mail_templates')
 
+const messages = require('./messages')
+
 module.exports = async (req, res) => {
 
 
@@ -14,7 +16,8 @@ module.exports = async (req, res) => {
   const user = rows[0]
 
   if (!user) {
-    return res.send(msg_templates.token_not_found[user.language || 'en'] || msg_templates.token_not_found.en)
+    return res.send(messages.token_not_found[req.params.token.language || req.params.language || 'en']) ||
+      `Token not found. The token has probably been resolved already.`
   }
 
   var rows = await acl(`
@@ -40,6 +43,7 @@ module.exports = async (req, res) => {
     protocol: protocol
   })));
   
-  res.send(msg_templates.admin_approved[req.params.token.language || 'en'] || msg_templates.admin_approved.en)
+  res.send(messages.admin_approved[req.params.token.language || req.params.language || 'en'] ||
+    `The account has been approved by you. An email has been sent to the account holder.`)
 
 }

@@ -2,7 +2,7 @@ const mailer = require('../mailer')
 
 const mail_templates = require('../mail_templates')
 
-const msg_templates = require('../msg_templates')
+const messages = require('./messages')
 
 const crypto = require('crypto')
 
@@ -17,7 +17,8 @@ module.exports = async (req, res) => {
 
   const user = rows[0]
 
-  if (!user) return res.send(msg_templates.account_not_found[user.language || 'en'] || msg_templates.account_not_found.en)
+  if (!user) return res.send(messages.account_not_found[req.params.language || 'en'] ||
+    `No matching account found.`)
 
   const approvaltoken = crypto.randomBytes(20).toString('hex')
 
@@ -43,61 +44,36 @@ module.exports = async (req, res) => {
 
     if (rows.length > 0) {
 
-      // Create an array of all admin account emails.
-      //let adminmail = rows.map(admin => admin.email)
-
-      let admins = rows.map(admin => { return {email: admin.email, language: (admin.language || 'en')}});
-
-      //let admin_language = rows.map(admin => (admin.language || 'en'));
+      let admins = rows.map(row => ({
+        email: row.email,
+        language: row.language || 'en'
+      }))
 
       const protocol = `${req.headers.host.includes('localhost') && 'http' || 'https'}://`
 
       const host = `${req.headers.host.includes('localhost') && req.headers.host || process.env.ALIAS || req.headers.host}${process.env.DIR || ''}` 
 
-      for(let i = 0; i < admins.length; i++){
-
-        let admin_mail = mail_templates.admin_email[admins[i].language] || mail_templates.admin_email.en;
-
-        await mailer(Object.assign({
-          to: admins[i].email
-        },
-        admin_mail({
-          email: user.email,
-          host: host,
-          protocol: protocol,
-          approvaltoken: approvaltoken
-        })));
-      }
-
-      /*admins.forEach(admin => {
-
-        let admin_mail = mail_templates.admin_email[admin.language] || mail_templates.admin_email.en;
+      admins.forEach(admin => {
 
         mailer(Object.assign({
           to: admin.email
         },
-        admin_mail({
+        mail_templates.admin_email[admin.language]({
           email: user.email,
           host: host,
           protocol: protocol,
           approvaltoken: approvaltoken
-        })));
-      });   */
-
-      // Sent an email to all admin account emails with a request to approve the new user account.
-      /*await mailer({
-        bcc: adminmail,
-        subject: `A new account has been verified on ${host}`,
-        text: `Please log into the admin panel ${protocol}${host}/view/admin_user to approve ${user.email}
-        You can also approve the account by following this link: ${protocol}${host}/api/user/approve/${approvaltoken}`
-      })*/
+        })))
+      })
 
     }
 
-    return res.send(msg_templates.account_await_approval[user.language || 'en'] || msg_templates.account_await_approval.en)
+    return res.send(messages.account_await_approval[user.language || req.params.language || 'en'] ||
+      `This account has been verified but requires administrator approval.`)
   }
 
   // Return on password reset; Do NOT notify administrator
-  if (user.password_reset) return res.send(msg_templates.password_reset_ok[user.language || 'en'] || msg_templates.password_reset_ok.en)
+  if (user.password_reset) return res.send(messages.password_reset_ok[user.language || req.params.language || 'en'] ||
+    `Password has been reset.`)
 
 }
