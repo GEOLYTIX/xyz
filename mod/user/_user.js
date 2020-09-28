@@ -1,6 +1,6 @@
 const auth = require('./auth')
 
-const msg_templates = require('../msg_templates')
+const messages = require('./messages')
 
 const _method = {
   register: {
@@ -47,8 +47,7 @@ const _method = {
   logout: {
     handler: (req, res) => {
       res.setHeader('Set-Cookie', `XYZ ${process.env.TITLE || 'token'}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
-      const msg = msg_templates.logout[req.params.token.language] || msg_templates.logout.en
-      return res.send(msg)
+      return res.send(messages.logout[req.params.token.language || req.params.language || 'en'] || `Logged out.`)
     }
   }
 }

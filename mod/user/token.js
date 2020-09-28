@@ -2,7 +2,7 @@ const mailer = require('../mailer')
 
 const mail_templates = require('../mail_templates')
 
-const msg_templates = require('../msg_templates')
+const messages = require('./messages')
 
 const bcrypt = require('bcryptjs')
 
@@ -14,13 +14,19 @@ const acl = require('./acl')()
 
 module.exports = async (req) => {
 
-  //if (!req.body.email) return new Error('Missing email')
-
-  if(!req.body.email) return new Error(msg_templates.missing_email[req.body.language || 'en'] || msg_templates.missing_email.en);
-
-  //if (!req.body.password) return new Error('Missing password')
-
-  if(!req.body.password) return new Error(msg_templates.missing_password[req.body.language || 'en'] || msg_templates.missing_password.en);
+  if(!req.body.email) return jwt.sign({
+    msg: messages.missing_email[req.body.language || req.params.language || 'en'] || `Missing email`
+  },
+  process.env.SECRET, {
+    expiresIn: '1h'
+  })
+  
+  if(!req.body.password) return jwt.sign({
+    msg: messages.missing_password[req.body.language || req.params.language || 'en'] || `Missing password`
+  },
+  process.env.SECRET, {
+    expiresIn: '1h'
+  })
 
   const date = new Date()
 
@@ -29,25 +35,31 @@ module.exports = async (req) => {
   const host = `${req.headers.host.includes('localhost') && req.headers.host || process.env.ALIAS || req.headers.host}${process.env.DIR || ''}`
 
   var rows = await acl(`
-  UPDATE acl_schema.acl_table
-  SET access_log = array_append(access_log, '${date.toISOString().replace(/\..*/,'')}@${req.headers['x-forwarded-for'] || 'localhost'}')
-  WHERE lower(email) = lower($1)
-  RETURNING *;`, [req.body.email])
+    UPDATE acl_schema.acl_table
+    SET access_log = array_append(access_log, '${date.toISOString().replace(/\..*/,'')}@${req.headers['x-forwarded-for'] || 'localhost'}')
+    WHERE lower(email) = lower($1)
+    RETURNING *;`, [req.body.email])
 
-  if (rows instanceof Error) return new Error('Bad Config')
+  if (rows instanceof Error) new Error('Bad Config')
 
   // Get user record from first row.
   const user = rows[0]
 
   // Redirect back to login (get) with error msg if user is not found.
-  //if (!user) return new Error('User not found.')
+  if (!user) return jwt.sign({
+      msg: messages.user_not_found[req.body.language || req.params.language || 'en'] || `User not found.`
+    },
+    process.env.SECRET, {
+      expiresIn: '1h'
+    })
 
-  if(!user) return new Error(msg_templates.user_not_found.en)
-
-  //if (user.blocked) return new Error('User blocked')
-
-  if(!user) return new Error(msg_templates.user_blocked[req.body.language || 'en'] || msg_templates.user_blocked.en)
-
+  if(user.blocked) return jwt.sign({
+    msg: messages.user_blocked[req.body.language || req.params.language || 'en'] || `User blocked`
+  },
+  process.env.SECRET, {
+    expiresIn: '1h'
+  })
+  
   const approvalDate = user.approved_by && new Date(user.approved_by.replace(/.*\|/,''))
 
   if (process.env.APPROVAL_EXPIRY && approvalDate && approvalDate.setDate(approvalDate.getDate() + parseInt(process.env.APPROVAL_EXPIRY || 0)) < date) {
@@ -59,19 +71,22 @@ module.exports = async (req) => {
       if (user.approved) {
 
         var rows = await acl(`
-        UPDATE acl_schema.acl_table
-        SET approved = false
-        WHERE lower(email) = lower($1);`,
-        [req.body.email])
+          UPDATE acl_schema.acl_table
+          SET approved = false
+          WHERE lower(email) = lower($1);`,
+          [req.body.email])
       
         if (rows instanceof Error) return new Error('Bad Config')
 
       }
 
-      //return new Error('User approval has expired. Please re-register.')
-
-      return new Error(msg_templates.user_expired[req.body.language || 'en'] || msg_templates.user_expired.en)
-
+      return jwt.sign({
+        msg: messages.user_expired[req.body.language || req.params.language || 'en'] || `User approval has expired. Please re-register.`
+      },
+      process.env.SECRET, {
+        expiresIn: '1h'
+      })
+      
     }
 
   }
@@ -79,7 +94,7 @@ module.exports = async (req) => {
   // Redirect back to login (get) with error msg if user is not valid.
   if (!user.verified || !user.approved) {
 
-    const failed_login_mail = mail_templates.failed_login[user.language || 'en'] || mail_templates.failed_login.en;
+    const failed_login_mail = mail_templates.failed_login[user.language || req.params.language || 'en'] || mail_templates.failed_login.en;
 
     await mailer(Object.assign({
       to: user.email
@@ -92,9 +107,12 @@ module.exports = async (req) => {
       remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
     })));
 
-    //return new Error('User not verified or approved')
-
-    return new Error(msg_templates.user_not_verified[req.body.language || 'en'] || msg_templates.user_not_verified.en)
+    return jwt.sign({
+      msg: messages.user_not_verified[req.body.language || req.params.language || 'en'] || `User not verified or approved`
+    },
+    process.env.SECRET, {
+      expiresIn: '1h'
+    })
 
   }
 
@@ -124,10 +142,10 @@ module.exports = async (req) => {
   // Password from login form does NOT match encrypted password in ACL!
   // Increase failed login attempts counter by 1 for user in ACL.
   var rows = await acl(`
-  UPDATE acl_schema.acl_table
-  SET failedattempts = failedattempts + 1
-  WHERE lower(email) = lower($1)
-  RETURNING failedattempts;`, [req.body.email])
+    UPDATE acl_schema.acl_table
+    SET failedattempts = failedattempts + 1
+    WHERE lower(email) = lower($1)
+    RETURNING failedattempts;`, [req.body.email])
 
   if (rows instanceof Error) return new Error('Bad Config')
 
@@ -139,15 +157,15 @@ module.exports = async (req) => {
 
     // Store new verification token in ACL.
     var rows = await acl(`
-    UPDATE acl_schema.acl_table
-    SET
-      verified = false,
-      verificationtoken = '${verificationtoken}'
-    WHERE lower(email) = lower($1);`, [req.body.email])
+      UPDATE acl_schema.acl_table
+      SET
+        verified = false,
+        verificationtoken = '${verificationtoken}'
+      WHERE lower(email) = lower($1);`, [req.body.email])
 
     if (rows instanceof Error) return new Error('Bad Config')
 
-    const locked_account_mail = mail_templates.locked_account[user.language || 'en'] || mail_templates.locked_account.en;
+    const locked_account_mail = mail_templates.locked_account[user.language || req.params.language || 'en'] || mail_templates.locked_account.en;
 
     await mailer(Object.assign({
       to: user.email
@@ -160,14 +178,17 @@ module.exports = async (req) => {
       remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
     })));
 
-    //return new Error('Account is blocked, please check email.')
-
-    return new Error(msg_templates.account_blocked[req.body.language || 'en'] || msg_templates.account_blocked.en)
+    return jwt.sign({
+      msg: messages.account_blocked[req.body.language || req.params.language || 'en'] || `Account is blocked, please check email.`
+    },
+    process.env.SECRET, {
+      expiresIn: '1h'
+    })
 
   }
 
   // Finally login has failed.
-  const login_incorrect_mail = mail_templates.login_incorrect[user.language || 'en'] || mail_templates.login_incorrect.en;
+  const login_incorrect_mail = mail_templates.login_incorrect[user.language || req.params.language || 'en'] || mail_templates.login_incorrect.en;
 
     await mailer(Object.assign({
       to: user.email
@@ -177,9 +198,11 @@ module.exports = async (req) => {
       remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
     })));
 
-  //return new Error('Failed to create token')
-
-  return new Error(msg_templates.token_failed[req.body.language || 'en'] || msg_templates.token_failed.en)
-
+  return jwt.sign({
+    msg: messages.token_failed[req.body.language|| req.params.language || 'en'] || `Failed to create token`
+  },
+  process.env.SECRET, {
+    expiresIn: '1h'
+  })
 
 }

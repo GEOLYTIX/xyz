@@ -1,6 +1,6 @@
 const fetch = require('node-fetch')
 
-const _token = require('./token')
+const getToken = require('./token')
 
 const login = require('./login')
 
@@ -27,11 +27,11 @@ module.exports = async (req, res) => {
 
   }
 
-  const token = await _token(req)
+  const token = await getToken(req)
 
-  if (token instanceof Error) return login(req, res, token.message)
-
-  const cookie = `XYZ ${process.env.TITLE || 'token'}=${token.signed};HttpOnly;Max-Age=28800;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`
+  if (token instanceof Error) return res.send(token.message)
+  
+  const cookie = `XYZ ${process.env.TITLE || 'token'}=${token.signed || token};HttpOnly;Max-Age=28800;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`
 
   res.setHeader('Set-Cookie', cookie)
 

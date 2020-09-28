@@ -21,7 +21,7 @@ const mailer = require('../mailer')
 
 const mail_templates = require('../mail_templates')
 
-const msg_templates = require('../msg_templates')
+const messages = require('./messages')
 
 module.exports = async (req, res) => {
 
@@ -74,7 +74,8 @@ async function register(req, res) {
 
   if (user) {
 
-    if (user.blocked) return res.status(500).send(msg_templates.user_blocked[user.language || 'en'] || msg_templates.user_blocked.en)
+    if (user.blocked) return res.status(500).send(messages.user_blocked[user.language || req.params.language || 'en'] || 
+      `User blocked`)
 
     // Reset password.
     rows = await acl(`
@@ -98,8 +99,8 @@ async function register(req, res) {
         address: req.headers['x-forwarded-for'] || 'localhost',
       })))
     
-    return res.send(msg_templates.password_reset_verification[req.body.language || 'en'] || msg_templates.verify_password_reset.en)
-    //return res.send('Password will be reset after email verification.')
+    return res.send(messages.password_reset_verification[req.body.language || req.params.language || 'en'] || 
+      `Password will be reset after email verification.`)
   }
   
   // Create new user account
@@ -114,7 +115,7 @@ async function register(req, res) {
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
-  const verify_account_mail = mail_templates.verify_account[req.body.language || 'en'] || mail_templates.verify_account.en;
+  const verify_account_mail = mail_templates.verify_account[req.body.language || req.params.language || 'en'] || mail_templates.verify_account.en;
 
   await mailer(Object.assign({
     to: req.body.email
@@ -126,8 +127,7 @@ async function register(req, res) {
     remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
   })));
 
-  return res.send(msg_templates.new_account_registered[req.body.language || 'en'] || msg_templates.new_account_registered.en)
-
-  //return res.send('A new account has been registered and is awaiting email verification.')
+  return res.send(messages.new_account_registered[req.body.language || req.params.language || 'en'] ||
+    `A new account has been registered and is awaiting email verification.`)
 
 }

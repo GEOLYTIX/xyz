@@ -2,7 +2,7 @@ const auth = require('./user/auth')
 
 const Md = require('mobile-detect')
 
-const msg_templates = require('./msg_templates')
+const user_messages = require('./user/messages')
 
 module.exports = async (req, res) => {
 
@@ -23,8 +23,8 @@ module.exports = async (req, res) => {
    
   if (access === 'logout') {
     res.setHeader('Set-Cookie', `XYZ ${process.env.TITLE || 'token'}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)   
-    const msg = msg_templates.logout[req.params.token.language] || msg_templates.logout.en
-    return res.send(msg)
+    return res.send(user_messages.logout[req.params.token.language || req.params.language || 'en'] ||
+      `Logged out.`)
   }
 
   if (access && access !== 'login') {

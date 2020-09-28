@@ -1,7 +1,5 @@
 const login = require('./login')
 
-//const view = require('../view')
-
 const jwt = require('jsonwebtoken')
 
 const acl = require('./acl')()
@@ -27,14 +25,16 @@ module.exports = async (req, res, access) => {
   // Verify token (checks token expiry).
   jwt.verify(req.params.token.signed || req.params.token, process.env.SECRET, async (err, token) => {
 
-    if (err) return res.status(401).send('Invalid token.');
+    if (err) return res.status(401).send('Invalid token.')
+
+    if (token.msg) return login(req, res, token.msg)
 
     token.signed = req.params.token
 
     req.params.token = token
 
     // Token must have an email.
-    if (!token.email) return res.status(401).send('Invalid token.');
+    if (!token.email) return res.status(401).send('Invalid token.')
 
     // API keys have an api flag in the decoded token.
     if (token.api) {
