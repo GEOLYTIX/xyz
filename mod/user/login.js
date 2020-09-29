@@ -23,6 +23,7 @@ module.exports = async (req, res, msg) => {
   const params = {
     dir: process.env.DIR || '',
     redirect: req.body && req.body.redirect || req.url && decodeURIComponent(req.url),
+    language: req.params.language || 'en',
     msg: msg || ' '
   }
 

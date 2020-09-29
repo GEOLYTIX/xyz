@@ -25,7 +25,9 @@ module.exports = async (req, res, access) => {
   // Verify token (checks token expiry).
   jwt.verify(req.params.token.signed || req.params.token, process.env.SECRET, async (err, token) => {
 
-    if (err) return res.status(401).send('Invalid token.')
+    //if (err) return res.status(401).send('Invalid token.')
+
+    if (err) return login(req, res)
 
     if (token.msg) return login(req, res, token.msg)
 
