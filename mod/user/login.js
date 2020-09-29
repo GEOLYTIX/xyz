@@ -8,6 +8,7 @@ const templates = {
   en: readFileSync(join(__dirname, '../../public/views/_login.html')).toString('utf8'),
   de: readFileSync(join(__dirname, '../../public/views/_login_de.html')).toString('utf8'),
   fr: readFileSync(join(__dirname, '../../public/views/_login_fr.html')).toString('utf8'),
+  pl: readFileSync(join(__dirname, '../../public/views/_login_pl.html')).toString('utf8'),
   ja: readFileSync(join(__dirname, '../../public/views/_login_ja.html')).toString('utf8'),
   ko: readFileSync(join(__dirname, '../../public/views/_login_ko.html')).toString('utf8'),
   zh: readFileSync(join(__dirname, '../../public/views/_login_zh.html')).toString('utf8')

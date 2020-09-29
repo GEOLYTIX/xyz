@@ -14,6 +14,13 @@ module.exports = {
     	La réinitialisation a été exécutée par ${_.address}
     	Vous ne l’avez pas demandé? Veuillez informer votre directeur.`
     }),
+    pl: _ => ({
+      subject: `Zweryfikuj nowe hasło ${_.host}.`,
+      text: `Dla tego konta ustawiono nowe hasło.
+      Potwierdź swoje prawa dostępu do ${_.protocol}${_.host}/api/user/verify/${_.verificationtoken}
+      Proces zmiany hasła rozpoczęto z tego adresu ${_.address}
+      To nie Ty? Zgłoś to osobie odpowiedzialnej.`
+    }),
     ja: _ => ({
     	subject: `リセットするパスワードを検証してください ${_.host}`,
     	text: `このアカウントに新規パスワードが設定されました.
@@ -55,6 +62,15 @@ module.exports = {
   		L'enregistrement a été exécuté par ${_.remote_address}\n
   		Vous ne l’avez pas demandé? Veuillez informer votre directeur.`
   	}),
+    pl: _ => ({
+      subject: `Zweryfikuj konto ${_.host}`,
+      text: `Nowe konto dla tego adresu e-mail zostało zarejestrowane z ${_.host}
+      Potwierdź swoje prawa dostępu do ${_.protocol}${_.host}/api/user/verify/${_.verificationtoken}
+      Administrator musi zatwierdzić konto przed logowaniem.
+      Otrzymasz powiadomienie na swój adres e-mail.
+      Proces rejestracji konta rozpoczęto z tego adresu ${_.remote_address}\n
+      To nie Ty? Zignoruj ten link i zgłoś to osobie odpowiedzialnej.`
+    }),
     ja: _ => ({
     	subject: `${_.host} についてアカウントを検証して下さい`,
     	text: `このE-メールアドレスの新規アカウントは${_.host}に登録されています
@@ -85,13 +101,17 @@ module.exports = {
   },
   approved_account: {
   	en: _ => ({
-  		subject: `This account has been approved on ${_.host}`,
+  		subject: `This account has been approved on ${_.host}.`,
   		text: `You are now able to log on to ${_.protocol}${_.host}`
   	}),
   	fr: _ => ({
-  		text: `Ce compte a été approuvé sur ${_.host}`,
+  		text: `Ce compte a été approuvé sur ${_.host}.`,
   		subject: `Maintenant vous pouvez vous connecter à ${_.protocol}${_.host}`
   	}),
+    pl: _ => ({
+      text: `Konto na ${_.host} zostało zatwierdzone.`,
+      subject: `Teraz możesz się zalogować na ${_.protocol}${_.host}`
+    }),
     ja: _ => ({
     	subject: `アカウントは承認されました ${_.host}`,
   		text: `これで、${_.protocol}${_.host}にログオンできます。`
@@ -111,9 +131,13 @@ module.exports = {
   		text: `You will no longer be able to log in to ${_.protocol}${_.host}`
   	}),
   	fr: _ => ({
-  		subject: `Ce compte sur ${_.host} a été supprimé`,
+  		subject: `Ce compte sur ${_.host} a été supprimé.`,
   		text: `Vous ne pouvez plus vous connecter à ${_.protocol}${_.host}`
   	}),
+    pl: _ => ({
+      subject: `Konto na ${_.host} zostało usunięte.`,
+      text: `Nie możesz się już logować na ${_.protocol}${_.host}`
+    }),
     ja: _ => ({
     	subject: `${_.host}のこのアカウントは削除されました`,
     	text: `${_.protocol}${_.host}にログインできなくなります削除されました`
@@ -143,6 +167,13 @@ module.exports = {
   	  Vous ne l’avez pas exécuté? Veuillez informer votre directeur.
       `
   	}),
+    pl: _ => ({
+      subject: `Nieudana próba logowania na ${_.host}`,
+      text: `${_.verified ? 'To konto zostało zweryfikowane.' : 'To konto nie zostało zweryfikowane.'}
+      ${_.approved ? 'To konto zostało zatwierdzone.' : 'Poczekaj na powiadomienie e-mail o zatwierdzeniu konta.'}
+      Nieudaną próbę logowania rozpoczęto z tego adresu ${_.remote_address}
+      To nie Ty? Zgłoś to osobie odpowiedzialnej.`
+    }),
     ja: _ => ({
   		subject: `ログインに失敗しました ${_.host}にログインしようとしました`,
   		text: `${_.verified ? 'アカウントは検証されました' : 'アカウントは検証されていません'}
@@ -184,6 +215,15 @@ module.exports = {
   		La tentative de connexion échouée a été exécuté par ${_.remote_address}\n
   		Vous ne l’avez pas exécuté? Veuillez informer votre directeur.`
   	}),
+    pl: _ => ({
+      subject: `Zbyt wiele nieudanych prób logowania na ${_.host}`,
+      text: `Na tym koncie zarejestrowano ${_.failed_attempts} ${_.failed_attempts === 1 ? 'nieudaną próbę' : 'nieudane próby'}
+      logowania. To konto zostało zablokowane do czasu powtórnej weryfikacji.
+      Potwierdź swoje prawa dostępu do ${_.protocol}${_.host}/api/user/verify/${_.verificationtoken}
+      Powtórna weryfikacja odświeży dozwoloną liczbę nieudanych prób.
+      Nieudaną próbę logowania rozpoczęto z tego adresu ${_.remote_address}
+      To nie Ty? Zgłoś to osobie odpowiedzialnej.`
+    }),
   	ja: _ => ({
   		subject: `${_.host}ログインに多数失敗しました`,
   		text: `このアカウントによるログインが${_.failed_attempts}回失敗しました 
@@ -224,6 +264,12 @@ module.exports = {
   		text: `Le mot de passe entré est incorrect.
   		Vous ne l’avez pas exécuté? Veuillez informer votre directeur.`
   	}),
+    pl: _ => ({
+      subject: `Nieudana próba logowania na ${_.host}`,
+      text: `Podano błędne hasło.
+      Nieudaną próbę logowania rozpoczęto z tego adresu ${_.remote_address}
+      To nie Ty? Zgłoś to osobie odpowiedzialnej.`
+    }),
     ja: _ => ({
   		subject: `ログインに失敗しました ${_.host}にログインしようとしました`,
   		text: `間違ったパスワードが入力されました 
@@ -254,6 +300,11 @@ module.exports = {
   		text: `Veuillez vous connecter à votre compte administrateur ${_.protocol}${_.host}/view/admin_user pour approuver ${_.email}
   		Vous pouvez également l'approuver en suivant ce lien ${_.protocol}${_.host}/api/user/approve/${_.approvaltoken}`
   	}),
+    pl: _ => ({
+      subject: `Nowe konto zostało zweryfikowane na ${_.host}`,
+      text: `Zaloguj się do panelu administratora ${_.protocol}${_.host}/view/admin_user aby zatwierdzić ${_.email}
+      Możesz też zatwierdzić nowego konto za pomocą tego linku ${_.protocol}${_.host}/api/user/approve/${_.approvaltoken}`
+    }),
     ja: _ => ({
     	subject: `${_.host}についてアカウントを検証されました`,
     	text: `${_.email} を承認するには、管理パネル ${_.protocol}${_.host}/view/admin_user にログインしてください
