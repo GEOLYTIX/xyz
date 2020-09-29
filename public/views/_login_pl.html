@@ -7,8 +7,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <script src="https://www.google.com/recaptcha/api.js?render=${captcha}"></script>
-
     <script src="${dir}/views/_login.js" defer></script>
 
     <style>
@@ -172,7 +170,7 @@
 
 </head>
 
-<body class="login_form" data-captcha=${captcha}>
+<body class="login_form">
       
       <div style="width: 500px; height: 40px; position: relative; display: block;">
             
@@ -228,12 +226,6 @@
         <button id="btnLogin" type="submit" disabled>
             Zaloguj się
         </button>
-
-        <input 
-            style="display:none;" 
-            id="captcha_input" 
-            name="captcha"
-            required >
 
         <p>
            Logowanie jest możliwe po weryfikacji konta za pomocą linku wysłanego we wiadomości e-mail, a następnie zatwierdzonego przez administratora. 

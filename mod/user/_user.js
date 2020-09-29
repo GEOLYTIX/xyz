@@ -2,6 +2,8 @@ const auth = require('./auth')
 
 const messages = require('./messages')
 
+const jwt = require('jsonwebtoken')
+
 const _method = {
   register: {
     handler: require('./register')
@@ -46,8 +48,9 @@ const _method = {
   },
   logout: {
     handler: (req, res) => {
+      const token = jwt.decode(req.cookies && req.cookies[`XYZ ${process.env.TITLE || 'token'}`])
       res.setHeader('Set-Cookie', `XYZ ${process.env.TITLE || 'token'}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
-      return res.send(messages.logout[req.params.token.language || req.params.language || 'en'] || `Logged out.`)
+      return res.send(messages.logout[token && token.language || 'en'] || `Logged out.`)
     }
   }
 }

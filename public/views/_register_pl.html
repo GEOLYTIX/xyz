@@ -7,8 +7,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="https://www.google.com/recaptcha/api.js?render=${captcha}"></script>
-
     <script src="${dir}/views/_register.js" defer></script>
 
     <style>
@@ -163,7 +161,7 @@
     </style>
 </head>
 
-<body class="register_form" data-captcha=${captcha}>
+<body class="register_form">
     <form method="post">
 
       <input style="display:none;" id="language" name="language" required value=${language}>
@@ -216,8 +214,6 @@
         <button id="btnRegister" type="submit" formaction="register" disabled>
             Zarejestruj się lub zmień hasło
         </button>
-
-        <input style="display:none;" id="captcha_input" required>
 
         <p class="bold">Co dalej? Potwierdź swoje konto</p>
 
