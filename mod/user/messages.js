@@ -1,6 +1,7 @@
 module.exports = {
 	logout: {
-		en: `Logged out.`,
+    en: `Logged out.`,
+    de: `Benutzer ausgelogt. Benutzerkonto Cookie wurde entfernt`,
 		fr: `Deconnecté.`,
 		pl: 'Wylogowano.',
 		ja: `ログアウト`,

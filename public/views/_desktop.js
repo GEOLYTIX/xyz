@@ -320,7 +320,7 @@ window.onload = () => {
           <a
             title="${xyz.user ? `${xyz.language.toolbar_logout} ${xyz.user.email}` : 'Login'}"
             class="enabled" style="cursor: pointer;"
-            href="${xyz.host + (xyz.user ? '/logout' : '/login')}">
+            href="${xyz.host + (xyz.user ? '/api/user/logout' : '/login')}">
             <div class="${'xyz-icon ' + (xyz.user ? 'icon-logout' : 'icon-lock-open')}">`)
     }
   }
