@@ -48,9 +48,21 @@ const _method = {
   },
   logout: {
     handler: (req, res) => {
-      const token = jwt.decode(req.cookies && req.cookies[`XYZ ${process.env.TITLE || 'token'}`])
-      res.setHeader('Set-Cookie', `XYZ ${process.env.TITLE || 'token'}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
-      return res.send(messages.logout[token && token.language || 'en'] || `Logged out.`)
+
+      let token = jwt.decode(req.cookies && req.cookies[`XYZ ${process.env.TITLE || 'token'}`])
+
+      token.signed = jwt.sign({
+        msg: messages.logout[token && token.language || 'en'] || `Logged out.`
+      },
+      process.env.SECRET, {
+        expiresIn: '3s'
+      })
+
+      res.setHeader('Set-Cookie', `XYZ ${process.env.TITLE || 'token'}=${token.signed};HttpOnly;Max-Age=3;Path=${process.env.DIR || '/'}`)
+      
+      res.setHeader('location', `${process.env.DIR || ''}`)
+
+      res.status(302).send()
     }
   }
 }

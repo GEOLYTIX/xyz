@@ -2,8 +2,6 @@ const auth = require('./user/auth')
 
 const Md = require('mobile-detect')
 
-const user_messages = require('./user/messages')
-
 module.exports = async (req, res) => {
 
   const md = new Md(req.headers['user-agent'])
@@ -21,17 +19,6 @@ module.exports = async (req, res) => {
 
   const access = template.access || req.params.access
    
-  if (access === 'logout') {
-    res.setHeader('Set-Cookie', `XYZ ${process.env.TITLE || 'token'}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)   
-    return res.send(user_messages.logout[req.params.token.language || req.params.language || 'en'] ||
-      `Logged out.`)
-  }
-
-  if (access && access !== 'login') {
-    return res.send(`Failed to evaluate 'access' param.<br><br>
-    <a href="https://geolytix.github.io/xyz/docs/develop/api/view/">View API</a>`)
-  }
-
   if (access) {
 
     await auth(req, res, access)
