@@ -307,6 +307,11 @@ module.exports = {
   		subject: `A new account has been verified on ${_.host}`,
   		text: `Please log into the admin panel ${_.protocol}${_.host}/view/admin_user to approve ${_.email}
       You can also approve the account by following this link: ${_.protocol}${_.host}/api/user/approve/${_.approvaltoken}`
+    }),
+    de: _ => ({
+  		subject: `A neues Benutzerkonto wurde erstellt fuer ${_.host}`,
+  		text: `Please log into the admin panel ${_.protocol}${_.host}/view/admin_user to approve ${_.email}
+      You can also approve the account by following this link: ${_.protocol}${_.host}/api/user/approve/${_.approvaltoken}`
   	}),
   	fr: _ => ({
   		subject: `Un nouveau compte a été verifié sur ${_.host}`,
