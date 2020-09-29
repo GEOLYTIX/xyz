@@ -2,10 +2,12 @@
 <html>
 
 <head data-dir="${dir}">
-    <title>XYZ | Registration</title>
+    <title>XYZ | Rejestracja</title>
     <link rel="icon" type="image/x-icon" href="${dir}/icons/favicon.ico" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <script src="https://www.google.com/recaptcha/api.js?render=${captcha}"></script>
 
     <script src="${dir}/views/_register.js" defer></script>
 
@@ -161,7 +163,7 @@
     </style>
 </head>
 
-<body class="register_form">
+<body class="register_form" data-captcha=${captcha}>
     <form method="post">
 
       <input style="display:none;" id="language" name="language" required value=${language}>
@@ -170,7 +172,7 @@
             <input id="auth_user_email" name="email" type="email" autocomplete="off" required maxlength="50" value="">
 
             <span class="bar"></span>
-            <label for="auth_user_email">E-mail</label>
+            <label for="auth_user_email">Adres e-mail</label>
         </div>
 
         <br>
@@ -180,7 +182,7 @@
                 value="">
 
             <span class="bar"></span>
-            <label for="auth_user_password">New Password (min. length 8 character)</label>
+            <label for="auth_user_password">Nowe hasło (co najmniej 8 znaków)</label>
         </div>
 
         <br>
@@ -190,48 +192,44 @@
                 minlength="8" value="">
 
             <span class="bar"></span>
-            <label for="auth_user_password_retype">Re-type password</label>
+            <label for="auth_user_password_retype">Potwiedź nowe hasło</label>
         </div>
 
         <br>
 
-        <p class="bold">Privacy</p>
+        <p class="bold">Prywatność</p>
 
-        <p>Here at Geolytix we take your privacy seriously and will only use your personal information to administer
-            your account and provide the products and services requested from us. We will never share your personal
-            data with a third party.</p>
+        <p>Geolytix traktuje prywatność poważnie, a dane kontaktowe służą jedynie do zarządzania kontami użytkowników, dostarczonymi im produktami i usługami. Nie są w żaden sposób udostępniane podmiotom trzecim.</p>
 
-        <p>Disabling your account can be done through your administrator however if you wish for your details to be
-            permanently removed please email <a class="mailto"
+        <p>Konto może usunąć administrator aplikacji. Jeśli chcesz, aby Twoje dane kontaktowe zostały usunięte napisz do <a class="mailto"
                 href="mailto:support@geolytix.co.uk">support@geolytix.co.uk</a></p>
 
-        <p>This website is owned and operated by Geolytix, with its principal place of business at Phoenix Yard, 65
-            Kings Cross Road, London, WC1X 9LW</p>
+        <p>Właścicielem tej strony jest Geolytix, z siedzibą Phoenix Yard, 65
+            Kings Cross Road, Londyn, WC1X 9LW, Wielkia Brytania.</p>
 
         <label class="checkbox">
             <input id="privacy_agreement" type="checkbox">
             <div></div>
-            <span>I agree</span>
+            <span>Zgadzam się</span>
         </label>
 
         <button id="btnRegister" type="submit" formaction="register" disabled>
-            Register or Re-set Password
+            Zarejestruj się lub zmień hasło
         </button>
 
-        <p class="bold">What happens next? Confirming your account</p>
+        <input style="display:none;" id="captcha_input" required>
 
-        <p>An email will be sent to the email address you have provided, from <a class="mailto"
-                href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a>, with a link to
-            verify your account.</p>
+        <p class="bold">Co dalej? Potwierdź swoje konto</p>
 
-        <p>If this has not been received in a few minutes please check any spam / junk folders. Adding
-            <a class="mailto" href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a> to your safe senders list will
-            ensure messages get through.</p>
+        <p>Na podany adres e-mail zostanie wysłana wiadomość od <a class="mailto"
+                href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a> zawierająca link weryfikacyjny.</p>
 
-        <p>After verification, a site administrator will approve new accounts. You will receive a further email once
-            your account has been approved.</p>
+        <p>Jeśli nie dotrze w ciągu kilku następnych minut sprawdź foldery SPAM. Dla pewności odebrania powiadomień dodaj
+            <a class="mailto" href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a> do listy bezpiecznych nadawców.</p>
 
-        <a class="switch" href="${dir}/?login">Already registered? Login.</a>
+        <p>Po weryfikacji administrator zatwierdzi nowe konta, co potwierdzimy następną wiadomością e-mail.</p>
+
+        <a class="switch" href="${dir}/?login">Masz konto? Zaloguj się.</a>
     </form>
 
 </body>

@@ -130,7 +130,7 @@ window.onload = () => {
         <div class="icon"></div>
       </div>
       <ul>${locales.map(
-        locale => xyz.utils.html.node`<li><a href="${xyz.host + '?locale=' + locale}">${locale}`
+        locale => xyz.utils.html.node`<li><a href="${xyz.host + '?locale=' + locale + `${xyz.hooks && xyz.hooks.current.language ? '&language=' + xyz.hooks.current.language : ''}`}">${locale}`
       )}`
 
     desktop.listviews.querySelector('div').insertBefore(localeDropdown, desktop.listviews.querySelector('div').firstChild)
