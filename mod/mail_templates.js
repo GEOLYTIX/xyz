@@ -20,7 +20,7 @@ module.exports = {
       Potwierdź swoje prawa dostępu do ${_.protocol}${_.host}/api/user/verify/${_.verificationtoken}
       Proces zmiany hasła rozpoczęto z tego adresu ${_.address}
       To nie Ty? Zgłoś to osobie odpowiedzialnej.`
-    }),,
+    }),
     ja: _ => ({
     	subject: `リセットするパスワードを検証してください ${_.host}`,
     	text: `このアカウントに新規パスワードが設定されました.
