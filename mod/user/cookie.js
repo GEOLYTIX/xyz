@@ -1,5 +1,3 @@
-const fetch = require('node-fetch')
-
 const getToken = require('./token')
 
 const login = require('./login')
