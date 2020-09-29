@@ -22,8 +22,7 @@ module.exports = async (req, res, msg) => {
   const params = {
     dir: process.env.DIR || '',
     redirect: req.body && req.body.redirect || req.url && decodeURIComponent(req.url),
-    msg: msg || ' ',
-    captcha: process.env.GOOGLE_CAPTCHA && process.env.GOOGLE_CAPTCHA.split('|')[0] || '',
+    msg: msg || ' '
   }
 
   const html = template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')

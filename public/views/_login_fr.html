@@ -7,8 +7,6 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     
-    <script src="https://www.google.com/recaptcha/api.js?render=${captcha}"></script>
-
     <script src="${dir}/views/_login.js" defer></script>
 
     <script src="${dir}/views/_language.js" defer></script>
@@ -174,7 +172,7 @@
 
 </head>
 
-<body class="login_form" data-captcha=${captcha}>
+<body class="login_form">
       
       <div style="width: 500px; height: 40px; position: relative; display: block;">
             
@@ -229,12 +227,6 @@
         <button id="btnLogin" type="submit" disabled>
             Se connecter
         </button>
-
-        <input 
-            style="display:none;" 
-            id="captcha_input" 
-            name="captcha"
-            required >
 
         <p>Son compte doit être vérifié avec un lien de vérification envoyé à l’adresse e-mail et approuvé par l'administrateur.</p>
         <a class="switch" href="${dir}/api/user/register">Enregistrer un nouveau compte ou réinitialiser son mot de passe.</a>
