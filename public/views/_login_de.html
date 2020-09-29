@@ -9,8 +9,6 @@
     
     <script src="${dir}/views/_login.js" defer></script>
 
-    <script src="${dir}/views/_language.js" defer></script>
-
     <style>
         body {
             margin: 0;
@@ -174,15 +172,15 @@
 
     <div style="width: 500px; height: 40px; position: relative; display: block;">
     
-        <select id="language">
-            <option value="en">English</option>
-            <option value="de">deutsch</option>
-            <option value="fr">français</option>
-            <option value="pl">polski</option>
-            <option value="ja">日本語</option>
-            <option value="ko">한국어</option>
-            <option value="zh">中文简体</option>
-        </select>
+      <select id="language" onChange="window.location.href=this.value">
+        <option value="${dir}?language=de">Deutsch</option>
+        <option value="${dir}?language=en">English</option>
+        <option value="${dir}?language=fr">Français</option>
+        <option value="${dir}?language=pl">Polski</option>
+        <option value="${dir}?language=ja">日本語</option>
+        <option value="${dir}?language=ko">한국어</option>
+        <option value="${dir}?language=zh">中文简体</option>
+      </select>
 
     </div>
 
@@ -226,9 +224,8 @@
             Einloggen
         </button>
 
-        <p>Your account must be verified by following a verification link sent to the email address and approved by
-            an administrator before you are able to log in.</p>
-        <a class="switch" href="${dir}/api/user/register">Register a new account or reset your password.</a>
+        <p>Benutzerkontos müssen mit einem Email Link verifiziert und anschließend von einem Administrator genehmigt werden.</p>
+        <a class="switch" href="${dir}/api/user/register">Passwort zurücksetzen oder neues Benutzerkonto registrieren.</a>
 
     </form>
 
