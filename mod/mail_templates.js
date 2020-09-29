@@ -91,7 +91,7 @@ module.exports = {
   	}),
   	zh: _ => ({
   		subject: `请验证您的帐户 ${_.host}`,
-  		text: `已为此电子邮件地址设立新帐户 ${_.host}
+  		text: `已为此电子邮件在g${_.host}上注册了新账户
       请确认您是帐户持有人 ${_.protocol}${_.host}/api/user/verify/${_.verificationtoken}
       等待网站管理员批准该帐户，然后才能登录。
       一旦管理员批准了您的帐户，就会通过电子邮件通知您。
