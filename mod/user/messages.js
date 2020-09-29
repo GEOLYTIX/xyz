@@ -31,7 +31,10 @@ module.exports = {
 		ja: `新規アカウントの登録完了にてE-メール検証待ち`,
 		ko: `새로운 계정이 등록되었고 이메일 확인을 기다리고 있습니다.`,
 		zh: `已注册一个新帐户，正在等待电子邮件验证。`
-	},
+  },
+  no_cookie_found: {
+    en: `No cookie relating to this application found on request`
+  },
 	update_ok: {
 		en: `Update successful`,
 		fr: `Cette mise à jour a réussi.`,

@@ -2,6 +2,8 @@ const getToken = require('./token')
 
 const login = require('./login')
 
+const messages = require('./messages')
+
 module.exports = async (req, res) => {
 
   if (!req.body) {
@@ -12,7 +14,7 @@ module.exports = async (req, res) => {
 
     }
 
-    return login(req, res)
+    return login(req, res, messages.no_cookie_found[req.params.language || 'en'] || `No cookie relating to this application found on request`)
 
   }
 

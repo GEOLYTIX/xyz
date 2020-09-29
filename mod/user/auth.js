@@ -13,7 +13,7 @@ module.exports = async (req, res, access) => {
   if (!req.params.token) {
 
     // Requests with restricted access return a login screen in order to generate a token.
-    if (access) return login(req, res)
+    if (access && access == 'login') return login(req, res)
 
     // Requests without restricted access on a public instance may proceed without token validation.
     if (!process.env.PRIVATE) return
@@ -27,7 +27,7 @@ module.exports = async (req, res, access) => {
 
     //if (err) return res.status(401).send('Invalid token.')
 
-    if (err) return login(req, res)
+    if (err) return login(req, res, 'Invalid token.')
 
     if (token.msg) return login(req, res, token.msg)
 
