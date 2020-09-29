@@ -51,20 +51,41 @@ module.exports = async (req, res) => {
 
       const protocol = `${req.headers.host.includes('localhost') && 'http' || 'https'}://`
 
-      const host = `${req.headers.host.includes('localhost') && req.headers.host || process.env.ALIAS || req.headers.host}${process.env.DIR || ''}` 
+      const host = `${req.headers.host.includes('localhost') && req.headers.host || process.env.ALIAS || req.headers.host}${process.env.DIR || ''}`
 
-      admins.forEach(admin => {
+      for (let i = 0; i < (admins.length -1); i++) {
 
-        mailer(Object.assign({
+        const admin = admins[i]
+
+        var mail_template = mail_templates.admin_email[admin.language]
+
+        await mailer(Object.assign({
           to: admin.email
         },
-        mail_templates.admin_email[admin.language]({
+        mail_template({
           email: user.email,
           host: host,
           protocol: protocol,
           approvaltoken: approvaltoken
         })))
-      })
+
+      }
+
+      // admins.forEach(async admin => {
+
+      //   var mail_template = mail_templates.admin_email[admin.language]
+
+      //   await mailer(Object.assign({
+      //     to: admin.email
+      //   },
+      //   mail_template({
+      //     email: user.email,
+      //     host: host,
+      //     protocol: protocol,
+      //     approvaltoken: approvaltoken
+      //   })))
+
+      // })
 
     }
 
