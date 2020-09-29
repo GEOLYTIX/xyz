@@ -18,14 +18,14 @@ module.exports = async (req) => {
     msg: messages.missing_email[req.body.language || req.params.language || 'en'] || `Missing email`
   },
   process.env.SECRET, {
-    expiresIn: '1h'
+    expiresIn: '3s'
   })
   
   if(!req.body.password) return jwt.sign({
     msg: messages.missing_password[req.body.language || req.params.language || 'en'] || `Missing password`
   },
   process.env.SECRET, {
-    expiresIn: '1h'
+    expiresIn: '3s'
   })
 
   const date = new Date()
@@ -50,14 +50,14 @@ module.exports = async (req) => {
       msg: messages.user_not_found[req.body.language || req.params.language || 'en'] || `User not found.`
     },
     process.env.SECRET, {
-      expiresIn: '1h'
+      expiresIn: '3s'
     })
 
   if(user.blocked) return jwt.sign({
     msg: messages.user_blocked[req.body.language || req.params.language || 'en'] || `User blocked`
   },
   process.env.SECRET, {
-    expiresIn: '1h'
+    expiresIn: '3s'
   })
   
   const approvalDate = user.approved_by && new Date(user.approved_by.replace(/.*\|/,''))
@@ -84,7 +84,7 @@ module.exports = async (req) => {
         msg: messages.user_expired[req.body.language || req.params.language || 'en'] || `User approval has expired. Please re-register.`
       },
       process.env.SECRET, {
-        expiresIn: '1h'
+        expiresIn: '3s'
       })
       
     }
@@ -111,7 +111,7 @@ module.exports = async (req) => {
       msg: messages.user_not_verified[req.body.language || req.params.language || 'en'] || `User not verified or approved`
     },
     process.env.SECRET, {
-      expiresIn: '1h'
+      expiresIn: '3s'
     })
 
   }
@@ -182,7 +182,7 @@ module.exports = async (req) => {
       msg: messages.account_blocked[req.body.language || req.params.language || 'en'] || `Account is blocked, please check email.`
     },
     process.env.SECRET, {
-      expiresIn: '1h'
+      expiresIn: '3s'
     })
 
   }
@@ -202,7 +202,7 @@ module.exports = async (req) => {
     msg: messages.token_failed[req.body.language|| req.params.language || 'en'] || `Failed to create token`
   },
   process.env.SECRET, {
-    expiresIn: '1h'
+    expiresIn: '3s'
   })
 
 }

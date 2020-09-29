@@ -52,6 +52,15 @@ module.exports = {
       You will be notified via email once an adimistrator has approved your account.
       The account was registered from this remote address ${_.remote_address}\n
       This wasn't you? Do NOT verify the account and let your manager know.`
+    }),
+    de: _ => ({
+  		subject: `Bitte verifizieren Sie ihr Benutzerkonto für ${_.host}`,
+  		text: `A new account for this email address has been registered with ${_.host}
+      Please verify that you are the account holder: ${_.protocol}${_.host}/api/user/verify/${_.verificationtoken}
+      A site administrator must approve the account before you are able to login.
+      You will be notified via email once an adimistrator has approved your account.
+      The account was registered from this remote address ${_.remote_address}\n
+      This wasn't you? Do NOT verify the account and let your manager know.`
   	}),
   	fr: _ => ({
   		subject: `Vérifiez votre compte sur ${_.host}`,
@@ -129,6 +138,10 @@ module.exports = {
   	en: _ => ({
   		subject: `This ${_.host} account has been deleted.`,
   		text: `You will no longer be able to log in to ${_.protocol}${_.host}`
+    }),
+    de: _ => ({
+  		subject: `Diese Benutzerkonto für ${_.host} wurde entfernt.`,
+  		text: `Einloggen ist nicht länger möglich ${_.protocol}${_.host}`
   	}),
   	fr: _ => ({
   		subject: `Ce compte sur ${_.host} a été supprimé.`,

@@ -11,9 +11,12 @@ module.exports = async (req, res) => {
   // Delete user account in ACL.
   var rows = await acl(`
     DELETE FROM acl_schema.acl_table
-    WHERE lower(email) = lower($1);`, [email])
+    WHERE lower(email) = lower($1)
+    RETURNING *;`, [email])
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
+
+  const user = rows[0]
 
   const protocol = `${req.headers.host.includes('localhost') && 'http' || 'https'}://`
 
