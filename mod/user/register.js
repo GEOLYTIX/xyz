@@ -33,8 +33,7 @@ module.exports = async (req, res) => {
 
   const params = {
     language: req.params.language || 'en',
-    dir: process.env.DIR || '',
-    captcha: process.env.GOOGLE_CAPTCHA && process.env.GOOGLE_CAPTCHA.split('|')[0] || '',
+    dir: process.env.DIR || ''
   }
 
   const html = template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
@@ -43,16 +42,6 @@ module.exports = async (req, res) => {
 }
 
 async function register(req, res) {
-
-  if (process.env.GOOGLE_CAPTCHA && process.env.GOOGLE_CAPTCHA.split('|')[1]) {
-
-    const response = await fetch(`https://www.google.com/recaptcha/api/siteverify?secret=${process.env.GOOGLE_CAPTCHA.split('|')[1]}&response=${req.body.captcha}`)
-
-    const captcha_verification = await response.json()
-    
-    if (captcha_verification.score < 0.6) return res.status(500).send('Captcha failed.')
-
-  }
 
   const acl_schema = await acl(`SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'acl_table';`)
 
