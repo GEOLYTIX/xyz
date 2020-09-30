@@ -68,7 +68,8 @@ module.exports = {
 		zh: `密码已重设`
 	},
 	user_not_found: {
-		en: `User not found.`,
+    en: `User not found.`,
+    de: `Benutzerkonto nicht gefunden.`,
 		fr: `Ce nom d’utilisateur n’a pas été trouvé.`,
 		pl: `Nie znaleziono tej nazwy użytkownika.`,
 		ja: `ユーザーが見つかりません`,
