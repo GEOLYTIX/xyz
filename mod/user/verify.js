@@ -53,48 +53,38 @@ module.exports = async (req, res) => {
 
       const host = `${req.headers.host.includes('localhost') && req.headers.host || process.env.ALIAS || req.headers.host}${process.env.DIR || ''}`
 
-      for (let i = 0; i < (admins.length -1); i++) {
-
-        const admin = admins[i]
-
-        var mail_template = mail_templates.admin_email[admin.language]
-
-        await mailer(Object.assign({
+      const mail_promises = admins.map(admin => mailer(Object.assign({
           to: admin.email
         },
-        mail_template({
+        mail_templates.admin_email[admin.language]({
           email: user.email,
           host: host,
           protocol: protocol,
           approvaltoken: approvaltoken
-        })))
+        }))))
 
-      }
+      Promise
+        .all(mail_promises)
+        .then(arr => {
+          console.log(arr)
+          res.send(messages.account_await_approval[user.language || req.params.language || 'en'] ||
+            `This account has been verified but requires administrator approval.`)
+        })
+        .catch(error => {
+          console.error(error)
+        })
 
-      // admins.forEach(async admin => {
+    } else {
 
-      //   var mail_template = mail_templates.admin_email[admin.language]
-
-      //   await mailer(Object.assign({
-      //     to: admin.email
-      //   },
-      //   mail_template({
-      //     email: user.email,
-      //     host: host,
-      //     protocol: protocol,
-      //     approvaltoken: approvaltoken
-      //   })))
-
-      // })
+      res.send(messages.account_await_approval[user.language || req.params.language || 'en'] ||
+        `This account has been verified but requires administrator approval.`)
 
     }
 
-    return res.send(messages.account_await_approval[user.language || req.params.language || 'en'] ||
-      `This account has been verified but requires administrator approval.`)
-  }
+  } else if (user.password_reset) {
 
-  // Return on password reset; Do NOT notify administrator
-  if (user.password_reset) return res.send(messages.password_reset_ok[user.language || req.params.language || 'en'] ||
-    `Password has been reset.`)
+    res.send(messages.password_reset_ok[user.language || req.params.language || 'en'] ||
+      `Password has been reset.`)
+  }
 
 }
