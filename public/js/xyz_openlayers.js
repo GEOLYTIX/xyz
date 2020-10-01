@@ -8,18 +8,18 @@
     <circle cx=12 cy=12 r=10 fill=${e.fillColor||"#FFF"}>`;return e.layers&&Object.entries(e.layers).forEach(e=>{t.appendChild(R.node`<circle cx=12 cy=12 r=${10*parseFloat(e[0])} fill=${e[1]}>`)}),"data:image/svg+xml,"+encodeURIComponent(V.serializeToString(t))}function G(e){const t=R.node`
   <svg width=24 height=24 viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>`;return t.appendChild(R.node`<path
     fill=${e.fillColor||"#FFF"}
-    d="M0,-19.6L17,9.8L-17,9.8Z"
+    d="M0,-19.6L17,9.8L-17,9.8Z" stroke-linejoin="round"
     transform=${"translate(10 11) scale(0.6)"}/>`),e.layers&&Object.entries(e.layers).forEach(e=>{t.appendChild(R.node`<path
     fill=${e[1]}
-    d="M0,-19.6L17,9.8L-17,9.8Z"
-    transform=${`translate(10 11) scale(${.6*e[0]})`}/>`)}),"data:image/svg+xml,"+encodeURIComponent(V.serializeToString(t))}function Y(e){const t=R.node`
+    d="M0,-19.6L17,9.8L-17,9.8Z" stroke-linejoin="round"
+    transform=${`translate(10 11) scale(${.6*e[0]})`}/>`)}),console.log(t.outerHTML),"data:image/svg+xml,"+encodeURIComponent(V.serializeToString(t))}function Y(e){const t=R.node`
   <svg width=24 height=24 viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
-    <rect fill='#333' opacity=0.3 width=20 height=20 x=2 y=2></rect>
-    <rect fill=${e.fillColor||"#FFF"} width=20 height=20 x=0 y=0></rect>`;return e.layers&&Object.entries(e.layers).forEach(e=>{t.appendChild(R.node`<rect fill=${e[1]}
+    <rect fill='#333' opacity=0.3 width=20 height=20 x=2 y=2 rx=1></rect>
+    <rect fill=${e.fillColor||"#FFF"} width=20 height=20 x=0 y=0 rx=1></rect>`;return e.layers&&Object.entries(e.layers).forEach(e=>{t.appendChild(R.node`<rect fill=${e[1]}
       width=${20*parseFloat(e[0])}
       height=${20*parseFloat(e[0])}
       x=${10*(1-parseFloat(e[0]))}
-      y=${10*(1-parseFloat(e[0]))}></rect>`)}),"data:image/svg+xml,"+encodeURIComponent(V.serializeToString(t))}function U(e){const t=R.node`
+      y=${10*(1-parseFloat(e[0]))} rx=${parseFloat(e[0])}></rect>`)}),"data:image/svg+xml,"+encodeURIComponent(V.serializeToString(t))}function U(e){const t=R.node`
   <svg width=24 height=24 viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
     <defs>
       <clipPath id="cut-off-shade">
