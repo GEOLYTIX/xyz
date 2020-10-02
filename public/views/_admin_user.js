@@ -68,6 +68,12 @@ xhr.onload = e => {
           formatter: (cell, formatterParams) => '<span style="color:red; font-weight:bold;">' + cell.getValue() + '</span>',
         },
         {
+          field: 'language',
+          align: 'center',
+          headerTooltip: 'Account language',
+          titleFormatter: () => '<div class="xyz-icon icon-translate"></div>',
+        },
+        {
           field: 'roles',
           title: 'Roles',
           headerTooltip: 'Account roles',
