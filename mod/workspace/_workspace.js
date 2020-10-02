@@ -107,7 +107,18 @@ function getLocales(req, res) {
 
   if (!req.params.workspace.locales) return res.send({})
 
+  let _locales = Object.keys(req.params.workspace.locales).map(key => {
+    
+    let locale = req.params.workspace.locales[key];
+    
+    if(!locale.languages || (locale.languages && req.params.token && locale.languages[req.params.token.language])) return key;
+
+  }).filter(el => el !== undefined);
+
+
   const locales = Object.keys(req.params.workspace.locales).map(key => {
+
+    if(!_locales.includes(key)) return;
 
     const locale = req.params.workspace.locales[key]
 
