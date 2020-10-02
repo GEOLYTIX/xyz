@@ -4,7 +4,7 @@ const mailer = require('../mailer')
 
 const mail_templates = require('../mail_templates')
 
-const msg_templates = require('../mail_templates')
+const messages = require('./messages')
 
 module.exports = async (req, res) => {
 
@@ -46,5 +46,5 @@ module.exports = async (req, res) => {
 
   }
 
-  return res.send(msg_templates.update_ok[req.body.language || 'en'] || msg_templates.update_ok.en)
+  return res.send(messages.update_ok[req.params.token.language || 'en'] || messages.update_ok.en)
 }
