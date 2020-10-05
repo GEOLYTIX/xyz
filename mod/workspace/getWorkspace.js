@@ -63,15 +63,15 @@ async function assignTemplates() {
     },
 
     // Query templates:
-    mvt_cache: require('../../public/queries/mvt_cache'),
-    get_nnearest: require('../../public/queries/get_nnearest'),
-    field_stats: require('../../public/queries/field_stats'),
-    infotip: require('../../public/queries/infotip'),
-    count_locations: require('../../public/queries/count_locations'),
-    labels: require('../../public/queries/labels'),
-    layer_extent: require('../../public/queries/layer_extent'),
-    set_field_array: require('../../public/queries/set_field_array'),
-    filter_aggregate: require('../../public/queries/filter_aggregate'),
+    count_locations: require('../../public/js/queries/count_locations'),
+    field_stats: require('../../public/js/queries/field_stats'),
+    filter_aggregate: require('../../public/js/queries/filter_aggregate'),
+    get_nnearest: require('../../public/js/queries/get_nnearest'),
+    infotip: require('../../public/js/queries/infotip'),
+    labels: require('../../public/js/queries/labels'),
+    layer_extent: require('../../public/js/queries/layer_extent'),
+    mvt_cache: require('../../public/js/queries/mvt_cache'),
+    set_field_array: require('../../public/js/queries/set_field_array'),   
 
     // Default templates can be overridden by assigning a template with the same name.
   }, workspace.templates)

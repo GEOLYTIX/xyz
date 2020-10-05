@@ -39,7 +39,7 @@
   ],
   "rewrites": [
     {
-      "source": "/(public|workspaces|views|css|js|icons|queries)/(.*)",
+      "source": "/(workspaces|views|css|js|icons)/(.*)",
       "destination": "/$1/$2"
     },
     {
