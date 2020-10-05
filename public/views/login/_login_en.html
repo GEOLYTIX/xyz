@@ -2,12 +2,12 @@
 <html>
 
 <head data-dir="${dir}">
-  <title>XYZ | Se connecter</title>
+  <title>XYZ | Login</title>
   <link rel="icon" type="image/x-icon" href="${dir}/icons/favicon.ico" />
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script src="${dir}/views/_login.js" defer></script>
+  <script src="${dir}/views/login/_login.js" defer></script>
 
   <style>
     body {
@@ -174,9 +174,9 @@
   <div style="width: 500px; height: 40px; position: relative; display: block;">
 
     <select id="language" onChange="window.location.href=this.value">
-      <option value="${dir}?language=fr">Français</option>
       <option value="${dir}?language=en">English</option>
       <option value="${dir}?language=de">Deutsch</option>
+      <option value="${dir}?language=fr">Français</option>
       <option value="${dir}?language=pl">Polski</option>
       <option value="${dir}?language=ja">日本語</option>
       <option value="${dir}?language=ko">한국어</option>
@@ -205,7 +205,7 @@
       <input id="auth_user_password" name="password" type="password" required minlength="8">
 
       <span class="bar"></span>
-      <label for="auth_user_password">Mot de passe</label>
+      <label for="auth_user_password">Password</label>
     </div>
 
     <br>
@@ -213,13 +213,12 @@
     <p class="msg">${msg}</p>
 
     <button id="btnLogin" type="submit" disabled>
-      Se connecter
+      Log In
     </button>
 
-    <p>Son compte doit être vérifié avec un lien de vérification envoyé à l’adresse e-mail et approuvé par
-      l'administrateur.</p>
-    <a class="switch" href="${dir}/api/user/register?language=${language}">Enregistrer un nouveau compte ou
-      réinitialiser son mot de passe.</a>
+    <p>Your account must be verified by following a verification link sent to the email address and approved by
+      an administrator before you are able to log in.</p>
+    <a class="switch" href="${dir}/api/user/register">Register a new account or reset your password.</a>
   </form>
 
 </body>
