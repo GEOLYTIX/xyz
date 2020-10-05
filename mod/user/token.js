@@ -128,8 +128,7 @@ module.exports = async (req) => {
       admin_workspace: user.admin_workspace,
       language: req.body.language || user.language,
       key: user.api,
-      roles: user.roles,
-      timestamp: new Date()
+      roles: user.roles
     }
 
     token.signed = jwt.sign(
