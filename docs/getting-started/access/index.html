@@ -185,18 +185,18 @@
       
       
       <li class="__1 ">
+        <a href="/xyz/docs/">XYZ</a>
+      </li>
+      
+      
+      
+      <li class="__1 ">
         <a href="/xyz/docs/getting-started/">Getting started</a>
       </li>
       
       
       
       
-      
-      
-      
-      <li class="__1 ">
-        <a href="/xyz/docs/">XYZ</a>
-      </li>
       
       
       
@@ -373,6 +373,7 @@
 <p>The token may be provided as an URL parameter or with a named cookie.</p>
 <h2>Cookies</h2>
 <p>Cookies are set in the request header upon successful login. A cookie is named according to the <code>TITLE</code> environment setting for the path defined in the <code>DIR</code> entry. The signed JWT is the content of the cookie. The cookie itself is only valid for 8 hours. The <strong>/api/user/cookie</strong> endpoint may be called to issue or revoke an existting cookie. The logout process will revoke an existing cookie of the same name. This is done by setting a cookie of the same name without content to expire immediately.</p>
+<p><a href="/xyz/docs/develop/security/authentication">Authentication strategy</a></p>
 <p><img src="https://res.cloudinary.com/geolytix-xyz/image/upload/v1589878516/documentation/geolytix-dev-cookie.png" alt=""></p>
 
     </div>
