@@ -66,7 +66,7 @@ module.exports = {
   		subject: `Vérifiez votre compte sur ${_.host}`,
   		text: `Un nouveau compte a été enregistré sur ${_.host}.
   		Vérifiez que vous disposez des droits d'accès du compte ${_.protocol}${_.host}/api/user/verify/${_.verificationtoken}
-  		L'adminstrateur doit approuver votre compte avant vous connecter.
+  		L'adminstrateur doit approuver votre compte avant de vous connecter.
   		Vous recevrez un e-mail lorsque votre compte sera approuvé.
   		L'enregistrement a été exécuté par ${_.remote_address}\n
   		Vous ne l’avez pas demandé? Veuillez informer votre directeur.`
