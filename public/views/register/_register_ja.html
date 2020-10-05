@@ -2,12 +2,12 @@
 <html>
 
 <head data-dir="${dir}">
-  <title>XYZ | Registration</title>
+  <title>XYZ | 登録</title>
   <link rel="icon" type="image/x-icon" href="${dir}/icons/favicon.ico" />
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script src="${dir}/views/_register.js" defer></script>
+  <script src="${dir}/views/register/_register.js" defer></script>
 
   <style>
     body {
@@ -169,7 +169,7 @@
       <input id="auth_user_email" name="email" type="email" autocomplete="off" required maxlength="50" value="">
 
       <span class="bar"></span>
-      <label for="auth_user_email">E-mail</label>
+      <label for="auth_user_email">E-メール</label>
     </div>
 
     <br>
@@ -178,7 +178,7 @@
       <input id="auth_user_password" name="password" type="password" autocomplete="off" required minlength="8" value="">
 
       <span class="bar"></span>
-      <label for="auth_user_password">New Password (min. length 8 character)</label>
+      <label for="auth_user_password">新規パスワード（８文字以上）</label>
     </div>
 
     <br>
@@ -187,48 +187,47 @@
       <input id="auth_user_password_retype" type="password" autocomplete="off" required minlength="8" value="">
 
       <span class="bar"></span>
-      <label for="auth_user_password_retype">Re-type password</label>
+      <label for="auth_user_password_retype">パスワード再入力</label>
     </div>
 
     <br>
 
-    <p class="bold">Privacy</p>
+    <p class="bold">プライバシー</p>
 
-    <p>Here at Geolytix we take your privacy seriously and will only use your personal information to administer
-      your account and provide the products and services requested from us. We will never share your personal
-      data with a third party.</p>
+    <p>Geolytixは提供された顧客情報を厳重に取り扱い、当社が顧客依頼に基づく各種商品サービス提供のために
+      顧客管理上必要な個人情報のみを利用し、同情報の第三者への提供は行わない。</p>
 
-    <p>Disabling your account can be done through your administrator however if you wish for your details to be
-      permanently removed please email <a class="mailto" href="mailto:support@geolytix.co.uk">support@geolytix.co.uk</a>
-    </p>
+    <p>アドミニストレーターによりアカウントを無効と出来るが永久的に削除するには「<a class="mailto"
+        href="mailto:support@geolytix.co.uk">support@geolytix.co.uk</a>a>」にメール依頼連絡 </p>
 
-    <p>This website is owned and operated by Geolytix, with its principal place of business at Phoenix Yard, 65
-      Kings Cross Road, London, WC1X 9LW</p>
+    <p>"ウェブサイトはGeolytix（ 所在地：Phoenix Yard, 65 Kings Cross Road, London, WC1X 9LW）
+      の所有及び運営による"</p>
 
     <label class="checkbox">
       <input id="privacy_agreement" type="checkbox">
       <div></div>
-      <span>I agree</span>
+      <span>同意する</span>
     </label>
 
     <button id="btnRegister" type="submit" formaction="register" disabled>
-      Register or Re-set Password
+      登録 またはパスワードのリセット
     </button>
 
-    <p class="bold">What happens next? Confirming your account</p>
+    <p class="bold">次のステップは？ アカウントの確認</p>
 
-    <p>An email will be sent to the email address you have provided, from <a class="mailto"
-        href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a>, with a link to
-      verify your account.</p>
+    <p>提供されたE-メールアドレス宛に「<a class="mailto"
+        href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a>」よりアカウント検証リンク付きのメールが送信される。
+    </p>
 
-    <p>If this has not been received in a few minutes please check any spam / junk folders. Adding
-      <a class="mailto" href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a> to your safe senders list will
-      ensure messages get through.</p>
+    <p>数分してもメールが受信されない場合はスパム/ジャンクホールダーを確認し、
+      「<a class="mailto" href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a>」を受診可能な安全な送信元リストに追加して下さい。
 
-    <p>After verification, a site administrator will approve new accounts. You will receive a further email once
-      your account has been approved.</p>
+    </p>
 
-    <a class="switch" href="${dir}/?login">Already registered? Login.</a>
+    <p>アカウント検証完了後にサイトアドミニストレーターにより新規アカウントが承認され、
+      新規アカウント設定完了メールが送信される。</p>
+
+    <a class="switch" href="${dir}/?login">登録完了の場合→ログイン</a>
   </form>
 
 </body>

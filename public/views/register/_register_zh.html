@@ -2,12 +2,12 @@
 <html>
 
 <head data-dir="${dir}">
-  <title>XYZ | 등록</title>
+  <title>XYZ | 注册</title>
   <link rel="icon" type="image/x-icon" href="${dir}/icons/favicon.ico" />
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script src="${dir}/views/_register.js" defer></script>
+  <script src="${dir}/views/register/_register.js" defer></script>
 
   <style>
     body {
@@ -169,7 +169,7 @@
       <input id="auth_user_email" name="email" type="email" autocomplete="off" required maxlength="50" value="">
 
       <span class="bar"></span>
-      <label for="auth_user_email">이메일</label>
+      <label for="auth_user_email">电子邮件</label>
     </div>
 
     <br>
@@ -178,7 +178,7 @@
       <input id="auth_user_password" name="password" type="password" autocomplete="off" required minlength="8" value="">
 
       <span class="bar"></span>
-      <label for="auth_user_password">신규 비밀번호(최소 8자 이상)</label>
+      <label for="auth_user_password">新密码（最少8个字符）</label>
     </div>
 
     <br>
@@ -187,44 +187,47 @@
       <input id="auth_user_password_retype" type="password" autocomplete="off" required minlength="8" value="">
 
       <span class="bar"></span>
-      <label for="auth_user_password_retype">비밀번호 재입력</label>
+      <label for="auth_user_password_retype">再次输入密码</label>
     </div>
 
     <br>
 
-    <p class="bold">개인정보</p>
+    <p class="bold">隐私条款</p>
 
-    <p>Geolytix는 개인정보관리를 철저히 하며 계정관리와 제품서비스 제공 목적으로만 사용할 것입니다. 그외 어떠한 경우라도 제3자와 개인정보를 공유하는 일은 없을 것입니다.</p>
+    <p>Geolytix会认真对待您的隐私，仅会使用您的个人信息来管理您的帐户并提供相应产品和服务。我们绝不会与第三方共享您的个人数据。</p>
 
-    <p>관리자가 귀하의 계정을 무효화할수있지만 귀하의 개인정보의 영구 삭제를 원하시면 <a class="mailto"
-        href="mailto:support@geolytix.co.uk">support@geolytix.co.uk</a> 로 이메일을 보내주십시오.
+    <p>可以通过管理员来禁用您的帐户，但是如果您希望永久删除您的详细信息，请发送电子邮件至<a class="mailto"
+        href="mailto:support@geolytix.co.uk">support@geolytix.co.uk</a>
+
     </p>
 
-    <p>이 웹사이트는 Phoenix Yard, 65 Kings Cross Road, London, WC1X 9LW에 주 사업장을 둔 Geolytix소유이며 Geolytix에 의해 운영됩니다.</p>
+    <p>该网站由Geolytix所有和运营，其主要营业地点位于伦敦国王十字路65号 Phoenix Yard（邮编：WC1X 9LW）</p>
 
     <label class="checkbox">
       <input id="privacy_agreement" type="checkbox">
       <div></div>
-      <span>동의합니다.</span>
+      <span>我同意</span>
     </label>
 
     <button id="btnRegister" type="submit" formaction="register" disabled>
-      계정등록 및 비밀번호 설정
+      注册或重置密码
     </button>
 
-    <p class="bold">다음단계는? 귀하의 계정을 확인하시면 됩니다.</p>
+    <p class="bold">接下来发生什么？确认您的帐户</p>
 
-    <p>귀하가 제공한 이메일주소로 <a class="mailto" href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a> 로부터 계정을 확인할 수 있는 링크가 포함된
-      이메일을 받게됩니다.
+    <p>
+      我们将会通过<a class="mailto"
+        href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a>向您提供的电子邮件地址发送一封电子邮件，其中包含一个可验证您的帐户的链接
     </p>
 
-    <p>몇분내로 이메일을 받지못하셨으면 스팸메일함을 확인해보십시오. <a class="mailto" href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a> 를 안전한
-      발신자 리스트에 추가하시면 메시지 수신에 문제가 없을 것입니다.
+    <p>
+      如果几分钟后仍未收到通知邮件，请检查所有垃圾邮件/垃圾文件夹，并将<a class="mailto"
+        href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a>添加到您的安全发件人列表中，确保消息通过。
     </p>
 
-    <p>확인 후, 입지 관리자가 신규계정 승인을 하게됩니다. 귀하의 계정이 승인되면 그 다음의 이메일을 받으시게 됩니다.</p>
+    <p>验证后，网站管理员将批准新帐户。您的帐户获得批准后，您将收到另一封电子邮件。</p>
 
-    <a class="switch" href="${dir}/?login">이미 등록이 되었나요? 로그인 하세요.</a>
+    <a class="switch" href="${dir}/?login">已经注册了？请登录</a>
   </form>
 
 </body>
