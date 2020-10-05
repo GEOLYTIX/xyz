@@ -3,13 +3,13 @@ const { readFileSync } = require('fs')
 const { join } = require('path')
 
 const templates = {
-  en: readFileSync(join(__dirname, '../../public/views/_register.html')).toString('utf8'),
-  de: readFileSync(join(__dirname, '../../public/views/_register_de.html')).toString('utf8'),
-  fr: readFileSync(join(__dirname, '../../public/views/_register_fr.html')).toString('utf8'),
-  pl: readFileSync(join(__dirname, '../../public/views/_register_pl.html')).toString('utf8'),
-  ja: readFileSync(join(__dirname, '../../public/views/_register_ja.html')).toString('utf8'),
-  ko: readFileSync(join(__dirname, '../../public/views/_register_ko.html')).toString('utf8'),
-  zh: readFileSync(join(__dirname, '../../public/views/_register_zh.html')).toString('utf8')
+  en: readFileSync(join(__dirname, '../../public/views/register/_register_en.html')).toString('utf8'),
+  de: readFileSync(join(__dirname, '../../public/views/register/_register_de.html')).toString('utf8'),
+  fr: readFileSync(join(__dirname, '../../public/views/register/_register_fr.html')).toString('utf8'),
+  pl: readFileSync(join(__dirname, '../../public/views/register/_register_pl.html')).toString('utf8'),
+  ja: readFileSync(join(__dirname, '../../public/views/register/_register_ja.html')).toString('utf8'),
+  ko: readFileSync(join(__dirname, '../../public/views/register/_register_ko.html')).toString('utf8'),
+  zh: readFileSync(join(__dirname, '../../public/views/register/_register_zh.html')).toString('utf8')
 }
 
 const bcrypt = require('bcryptjs')

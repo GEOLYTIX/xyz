@@ -2,12 +2,12 @@
 <html>
 
 <head data-dir="${dir}">
-  <title>XYZ | 登録</title>
+  <title>XYZ | Enregistrement</title>
   <link rel="icon" type="image/x-icon" href="${dir}/icons/favicon.ico" />
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script src="${dir}/views/_register.js" defer></script>
+  <script src="${dir}/views/register/_register.js" defer></script>
 
   <style>
     body {
@@ -169,7 +169,7 @@
       <input id="auth_user_email" name="email" type="email" autocomplete="off" required maxlength="50" value="">
 
       <span class="bar"></span>
-      <label for="auth_user_email">E-メール</label>
+      <label for="auth_user_email">E-mail</label>
     </div>
 
     <br>
@@ -178,7 +178,7 @@
       <input id="auth_user_password" name="password" type="password" autocomplete="off" required minlength="8" value="">
 
       <span class="bar"></span>
-      <label for="auth_user_password">新規パスワード（８文字以上）</label>
+      <label for="auth_user_password">Le nouveau mot de passe (au moins 8 caractères)</label>
     </div>
 
     <br>
@@ -187,47 +187,53 @@
       <input id="auth_user_password_retype" type="password" autocomplete="off" required minlength="8" value="">
 
       <span class="bar"></span>
-      <label for="auth_user_password_retype">パスワード再入力</label>
+      <label for="auth_user_password_retype">Revalider le mot de passe</label>
     </div>
 
     <br>
 
-    <p class="bold">プライバシー</p>
+    <p class="bold">Confidentialité</p>
 
-    <p>Geolytixは提供された顧客情報を厳重に取り扱い、当社が顧客依頼に基づく各種商品サービス提供のために
-      顧客管理上必要な個人情報のみを利用し、同情報の第三者への提供は行わない。</p>
+    <p>Ici à Geolytix nous prenons très au sérieux votre confidentialité. Nous utilisons vos données personnelles pour
+      gérer votre compte et vous fournir les produits et services requis. Nous ne partagerons jamais vos informations
+      avec des tiers.
+    </p>
 
-    <p>アドミニストレーターによりアカウントを無効と出来るが永久的に削除するには「<a class="mailto"
-        href="mailto:support@geolytix.co.uk">support@geolytix.co.uk</a>a>」にメール依頼連絡 </p>
+    <p>Désactivation d'un compte peut être effectuée par l'administrateur.
+      Si vous souhaitez supprimer définitivement vos coordonnées veuillez nous contacter à <a class="mailto"
+        href="mailto:support@geolytix.co.uk">support@geolytix.co.uk</a>
+    </p>
 
-    <p>"ウェブサイトはGeolytix（ 所在地：Phoenix Yard, 65 Kings Cross Road, London, WC1X 9LW）
-      の所有及び運営による"</p>
+    <p>Le propriétaire et exploiteur de ce site est Geolytix dont le siège social se trouve à Phoenix Yard, 65
+      Kings Cross Road, Londres, WC1X 9LW, Royaume-Uni
+    </p>
 
     <label class="checkbox">
       <input id="privacy_agreement" type="checkbox">
       <div></div>
-      <span>同意する</span>
+      <span>J'accepte</span>
     </label>
 
     <button id="btnRegister" type="submit" formaction="register" disabled>
-      登録 またはパスワードのリセット
+      S'enregistrer ou réinitialiser son mot de passe
     </button>
 
-    <p class="bold">次のステップは？ アカウントの確認</p>
+    <p class="bold">Maintenant, confirmez votre compte.</p>
 
-    <p>提供されたE-メールアドレス宛に「<a class="mailto"
-        href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a>」よりアカウント検証リンク付きのメールが送信される。
+    <p>Un e-mail de <a class="mailto" href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a> sera automatiquement
+      expédié à l'adresse entrée
+      avec un lien de vérification.</p>
+
+    <p>Si l'email n'arrivera encore pas en quelques minutes s'il vous plaît vérifier le spam dans votre boîte e-mail.
+      Veuillez ajouter <a class="mailto" href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a> à la liste
+      d'expéditeurs de confiance.
     </p>
 
-    <p>数分してもメールが受信されない場合はスパム/ジャンクホールダーを確認し、
-      「<a class="mailto" href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a>」を受診可能な安全な送信元リストに追加して下さい。
-
+    <p>Après vérification l'administrateur approuvera tous les nouveaux comptes.
+      Vous recevrez un autre email dès que votre compte sera approuvé.
     </p>
 
-    <p>アカウント検証完了後にサイトアドミニストレーターにより新規アカウントが承認され、
-      新規アカウント設定完了メールが送信される。</p>
-
-    <a class="switch" href="${dir}/?login">登録完了の場合→ログイン</a>
+    <a class="switch" href="${dir}/?login">Déjà enregistré? Se connecter.</a>
   </form>
 
 </body>

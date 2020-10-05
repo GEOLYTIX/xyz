@@ -2,12 +2,12 @@
 <html>
 
 <head data-dir="${dir}">
-  <title>XYZ | Enregistrement</title>
+  <title>XYZ | Rejestracja</title>
   <link rel="icon" type="image/x-icon" href="${dir}/icons/favicon.ico" />
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script src="${dir}/views/_register.js" defer></script>
+  <script src="${dir}/views/register/_register.js" defer></script>
 
   <style>
     body {
@@ -169,7 +169,7 @@
       <input id="auth_user_email" name="email" type="email" autocomplete="off" required maxlength="50" value="">
 
       <span class="bar"></span>
-      <label for="auth_user_email">E-mail</label>
+      <label for="auth_user_email">Adres e-mail</label>
     </div>
 
     <br>
@@ -178,7 +178,7 @@
       <input id="auth_user_password" name="password" type="password" autocomplete="off" required minlength="8" value="">
 
       <span class="bar"></span>
-      <label for="auth_user_password">Le nouveau mot de passe (au moins 8 caractères)</label>
+      <label for="auth_user_password">Nowe hasło (co najmniej 8 znaków)</label>
     </div>
 
     <br>
@@ -187,53 +187,43 @@
       <input id="auth_user_password_retype" type="password" autocomplete="off" required minlength="8" value="">
 
       <span class="bar"></span>
-      <label for="auth_user_password_retype">Revalider le mot de passe</label>
+      <label for="auth_user_password_retype">Potwiedź nowe hasło</label>
     </div>
 
     <br>
 
-    <p class="bold">Confidentialité</p>
+    <p class="bold">Prywatność</p>
 
-    <p>Ici à Geolytix nous prenons très au sérieux votre confidentialité. Nous utilisons vos données personnelles pour
-      gérer votre compte et vous fournir les produits et services requis. Nous ne partagerons jamais vos informations
-      avec des tiers.
-    </p>
+    <p>Geolytix traktuje prywatność poważnie, a dane kontaktowe służą jedynie do zarządzania kontami użytkowników,
+      dostarczonymi im produktami i usługami. Nie są w żaden sposób udostępniane podmiotom trzecim.</p>
 
-    <p>Désactivation d'un compte peut être effectuée par l'administrateur.
-      Si vous souhaitez supprimer définitivement vos coordonnées veuillez nous contacter à <a class="mailto"
-        href="mailto:support@geolytix.co.uk">support@geolytix.co.uk</a>
-    </p>
+    <p>Konto może usunąć administrator aplikacji. Jeśli chcesz, aby Twoje dane kontaktowe zostały usunięte napisz do <a
+        class="mailto" href="mailto:support@geolytix.co.uk">support@geolytix.co.uk</a></p>
 
-    <p>Le propriétaire et exploiteur de ce site est Geolytix dont le siège social se trouve à Phoenix Yard, 65
-      Kings Cross Road, Londres, WC1X 9LW, Royaume-Uni
-    </p>
+    <p>Właścicielem tej strony jest Geolytix, z siedzibą Phoenix Yard, 65
+      Kings Cross Road, Londyn, WC1X 9LW, Wielkia Brytania.</p>
 
     <label class="checkbox">
       <input id="privacy_agreement" type="checkbox">
       <div></div>
-      <span>J'accepte</span>
+      <span>Zgadzam się</span>
     </label>
 
     <button id="btnRegister" type="submit" formaction="register" disabled>
-      S'enregistrer ou réinitialiser son mot de passe
+      Zarejestruj się lub zmień hasło
     </button>
 
-    <p class="bold">Maintenant, confirmez votre compte.</p>
+    <p class="bold">Co dalej? Potwierdź swoje konto</p>
 
-    <p>Un e-mail de <a class="mailto" href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a> sera automatiquement
-      expédié à l'adresse entrée
-      avec un lien de vérification.</p>
+    <p>Na podany adres e-mail zostanie wysłana wiadomość od <a class="mailto"
+        href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a> zawierająca link weryfikacyjny.</p>
 
-    <p>Si l'email n'arrivera encore pas en quelques minutes s'il vous plaît vérifier le spam dans votre boîte e-mail.
-      Veuillez ajouter <a class="mailto" href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a> à la liste
-      d'expéditeurs de confiance.
-    </p>
+    <p>Jeśli nie dotrze w ciągu kilku następnych minut sprawdź foldery SPAM. Dla pewności odebrania powiadomień dodaj
+      <a class="mailto" href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a> do listy bezpiecznych nadawców.</p>
 
-    <p>Après vérification l'administrateur approuvera tous les nouveaux comptes.
-      Vous recevrez un autre email dès que votre compte sera approuvé.
-    </p>
+    <p>Po weryfikacji administrator zatwierdzi nowe konta, co potwierdzimy następną wiadomością e-mail.</p>
 
-    <a class="switch" href="${dir}/?login">Déjà enregistré? Se connecter.</a>
+    <a class="switch" href="${dir}/?login">Masz konto? Zaloguj się.</a>
   </form>
 
 </body>
