@@ -119,16 +119,17 @@ module.exports = async (req) => {
   // Check password from post body against encrypted password from ACL.
   if (bcrypt.compareSync(req.body.password, user.password)) {
 
-    user.roles.push(user.language)
+    user.roles.push(req.body.language || user.language)
 
     // Create token with 8 hour expiry.
     const token = {
       email: user.email,
       admin_user: user.admin_user,
       admin_workspace: user.admin_workspace,
-      language: user.language,
+      language: req.body.language || user.language,
       key: user.api,
-      roles: user.roles
+      roles: user.roles,
+      timestamp: new Date()
     }
 
     token.signed = jwt.sign(
@@ -140,6 +141,7 @@ module.exports = async (req) => {
 
     return token
   }
+
 
   // Password from login form does NOT match encrypted password in ACL!
   // Increase failed login attempts counter by 1 for user in ACL.
