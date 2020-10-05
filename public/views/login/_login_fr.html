@@ -2,12 +2,12 @@
 <html>
 
 <head data-dir="${dir}">
-  <title>XYZ | ログイン</title>
+  <title>XYZ | Se connecter</title>
   <link rel="icon" type="image/x-icon" href="${dir}/icons/favicon.ico" />
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script src="${dir}/views/_login.js" defer></script>
+  <script src="${dir}/views/login/_login.js" defer></script>
 
   <style>
     body {
@@ -174,11 +174,11 @@
   <div style="width: 500px; height: 40px; position: relative; display: block;">
 
     <select id="language" onChange="window.location.href=this.value">
-      <option value="${dir}?language=ja">日本語</option>
       <option value="${dir}?language=fr">Français</option>
       <option value="${dir}?language=en">English</option>
       <option value="${dir}?language=de">Deutsch</option>
       <option value="${dir}?language=pl">Polski</option>
+      <option value="${dir}?language=ja">日本語</option>
       <option value="${dir}?language=ko">한국어</option>
       <option value="${dir}?language=zh">中文简体</option>
     </select>
@@ -196,7 +196,7 @@
       <input id="auth_user_email" name="email" type="email" required maxlength="50">
 
       <span class="bar"></span>
-      <label for="auth_user_email">E-メール</label>
+      <label for="auth_user_email">E-mail</label>
     </div>
 
     <br>
@@ -205,7 +205,7 @@
       <input id="auth_user_password" name="password" type="password" required minlength="8">
 
       <span class="bar"></span>
-      <label for="auth_user_password">パスワード</label>
+      <label for="auth_user_password">Mot de passe</label>
     </div>
 
     <br>
@@ -213,11 +213,13 @@
     <p class="msg">${msg}</p>
 
     <button id="btnLogin" type="submit" disabled>
-      ログイン
+      Se connecter
     </button>
 
-    <p>ログインするにはE-メールアドレス宛に送信された検証リンクに基づくアカウント検証が必要。</p>
-    <a class="switch" href="${dir}/api/user/register?language=${language}">新規アカウント登録或いはパスワードをリセット</a>
+    <p>Son compte doit être vérifié avec un lien de vérification envoyé à l’adresse e-mail et approuvé par
+      l'administrateur.</p>
+    <a class="switch" href="${dir}/api/user/register?language=${language}">Enregistrer un nouveau compte ou
+      réinitialiser son mot de passe.</a>
   </form>
 
 </body>

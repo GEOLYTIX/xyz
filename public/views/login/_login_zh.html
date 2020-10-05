@@ -2,12 +2,12 @@
 <html>
 
 <head data-dir="${dir}">
-  <title>XYZ | Login (Deutsch)</title>
+  <title>XYZ | 登录</title>
   <link rel="icon" type="image/x-icon" href="${dir}/icons/favicon.ico" />
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script src="${dir}/views/_login.js" defer></script>
+  <script src="${dir}/views/login/_login.js" defer></script>
 
   <style>
     body {
@@ -166,6 +166,7 @@
       font-weight: normal;
     }
   </style>
+
 </head>
 
 <body class="login_form">
@@ -173,13 +174,13 @@
   <div style="width: 500px; height: 40px; position: relative; display: block;">
 
     <select id="language" onChange="window.location.href=this.value">
-      <option value="${dir}?language=de">Deutsch</option>
+      <option value="${dir}?language=zh">中文简体</option>
       <option value="${dir}?language=en">English</option>
+      <option value="${dir}?language=de">Deutsch</option>
       <option value="${dir}?language=fr">Français</option>
       <option value="${dir}?language=pl">Polski</option>
       <option value="${dir}?language=ja">日本語</option>
       <option value="${dir}?language=ko">한국어</option>
-      <option value="${dir}?language=zh">中文简体</option>
     </select>
 
   </div>
@@ -194,7 +195,7 @@
       <input id="auth_user_email" name="email" type="email" required maxlength="50">
 
       <span class="bar"></span>
-      <label for="auth_user_email">Email</label>
+      <label for="auth_user_email">电子邮件</label>
     </div>
 
     <br>
@@ -203,7 +204,7 @@
       <input id="auth_user_password" name="password" type="password" required minlength="8">
 
       <span class="bar"></span>
-      <label for="auth_user_password">Passwort</label>
+      <label for="auth_user_password">密码</label>
     </div>
 
     <br>
@@ -211,14 +212,11 @@
     <p class="msg">${msg}</p>
 
     <button id="btnLogin" type="submit" disabled>
-      Einloggen
+      登录
     </button>
 
-    <p>Benutzerkontos müssen mit einem Email Link verifiziert und anschließend von einem Administrator genehmigt werden.
-    </p>
-    <a class="switch" href="${dir}/api/user/register?language=${language}">Passwort zurücksetzen oder neues
-      Benutzerkonto registrieren.</a>
-
+    <p>请通过以下验证链接来验证您的帐户。该链接发送电子邮件并得到管理员的批准之后，您就可以登录了。</p>
+    <a class="switch" href="${dir}/api/user/register?language=${language}">注册新帐户或重设密码</a>
   </form>
 
 </body>
