@@ -2,8 +2,7 @@ const _format = {
   cluster: require('./cluster'),
   mvt: require('./mvt'),
   geojson: require('./geojson'),
-  grid: require('./grid'),
-  data: require('./data.js')
+  grid: require('./grid')
 }
 
 module.exports = async (req, res) => {
