@@ -1,10 +1,41 @@
 {
     "templates": {
-        "de": {
-            "src": "http://localhost:3000/dev/views/_desktop_deutsch.html"
+        "Mapbox": {
+            "format": "mbtiles",
+            "mbStyle": "mapbox://styles/dbauszus/ciozrimi3002bdsm8bjtn2v1y",
+            "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmY25oa2thMWhoMDJzbGNldmF2ZzYzcCJ9.IWcezkYm8mipsGXygnYbNw",
+            "attribution": {
+                "© Mapbox": "https://www.mapbox.com/about/maps",
+                "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+            }
         },
-        "fr": {
-            "src": "http://localhost:3000/dev/views/_desktop_fr.html"
+        "Mapbox Colour": {
+            "format": "mbtiles",
+            "mbStyle": "mapbox://styles/dbauszus/ck440h6990nii1co520go20i2",
+            "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmY25oa2thMWhoMDJzbGNldmF2ZzYzcCJ9.IWcezkYm8mipsGXygnYbNw",
+            "attribution": {
+                "© Mapbox": "https://www.mapbox.com/about/maps",
+                "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+            }
+        },
+        "Mapbox Labels": {
+            "format": "mbtiles",
+            "mbStyle": "mapbox://styles/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z",
+            "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmY25oa2thMWhoMDJzbGNldmF2ZzYzcCJ9.IWcezkYm8mipsGXygnYbNw",
+            "attribution": {
+                "© Mapbox": "https://www.mapbox.com/about/maps",
+                "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+            },
+            "OSM": {
+                "format": "tiles",
+                "attribution": {
+                    "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                },
+                "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            },
+            "style": {
+                "zIndex": 20
+            }
         },
         "NE Countries table1": {
             "template": "SELECT name, pop_est, gdp_md_est FROM dev.natural_earth_countries WHERE true ${viewport} ${filter} ORDER BY id ASC FETCH FIRST 99 ROW ONLY;"
@@ -32,16 +63,25 @@
             "src": "http://localhost:3000/views/report_location.html"
         },
         "UK Retail Places Layer Table": {
-            "template": "SELECT tid AS qID, id, dev_date ,rp_type, comp_strgh, est_units, est_brands FROM dev.retailplaces WHERE true ${viewport} ORDER BY tid ASC FETCH FIRST 99 ROW ONLY;"
+            "template": "SELECT id AS qID, id, dev_date ,rp_type, comp_strgh, est_units, est_brands FROM dev.uk_glx_geodata_retail_place_working WHERE true ${viewport} ORDER BY id ASC FETCH FIRST 99 ROW ONLY;"
         },
         "UK Retail Places Profile": {
-            "template": "SELECT ROUND(comparison::numeric, 2) AS comparison, ROUND(conv::numeric, 2) AS conv, ROUND(fbl::numeric, 2) AS fbl, ROUND(services::numeric, 2) AS services, ROUND(classbrass::numeric, 2) AS classbrass FROM dev.retailplaces WHERE tid = ${id};"
+            "template": "SELECT ROUND(comparison::numeric, 2) AS comparison, ROUND(conv::numeric, 2) AS conv, ROUND(fbl::numeric, 2) AS fbl, ROUND(services::numeric, 2) AS services, ROUND(classbrass::numeric, 2) AS classbrass FROM dev.uk_glx_geodata_retail_place_working WHERE id = ${id};"
         },
         "UK Retail Points Layer Table": {
-            "template": "SELECT id, retailpoint_id, retailer, fascia FROM dev.retailpoints ORDER BY id ASC FETCH FIRST 99 ROW ONLY;"
+            "template": "SELECT id, retailer, fascia FROM dev.uk_glx_open_retail_points_food_stores ORDER BY id ASC FETCH FIRST 99 ROW ONLY;"
         },
         "UK Shops with catchments all catchments": {
             "template": "SELECT jsonb_build_object('type', 'FeatureCollection','features', b.features) AS collection FROM (SELECT jsonb_build_array(jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'primary', 'id', id),'geometry', ST_AsGeoJson(catchment_primary)::jsonb),jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'secondary', 'id', id),'geometry', ST_AsGeoJson(catchment_secondary)::jsonb),jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'tertiary', 'id', id),'geometry', ST_AsGeoJson(catchment_tertiary)::jsonb)) AS features FROM (SELECT * FROM dev.storelist_1507__19 where id = ${id}) a) b"
+        },
+        "japan_chomoku": {
+            "src": "https://api.github.com/repos/geolytix/xyz_resources/contents/mapp/layers/japan/chomoku.json"
+        },
+        "japan_restaurants": {
+            "src": "cloudfront:${CDN}/mapp/layers/japan/restaurants.json"
+        },
+        "ja_japan_restaurants": {
+            "src": "cloudfront:${CDN}/mapp/layers/japan/restaurants_ja.json"
         }
     },
     "locales": {
@@ -52,18 +92,17 @@
                 "placeholder": "eg. Marseille",
                 "label": true,
                 "limit": 8,
-                "datasets": [
-                    {
+                "datasets": [{
                         "layer": "Test",
-                        "table": "dev.retailpoints",
-                        "label": "store",
+                        "table": "dev.uk_glx_open_retail_points_food_stores",
+                        "label": "store_name",
                         "leading_wildcard": true,
                         "limit": 5
                     },
                     {
                         "layer": "no_roles",
-                        "table": "dev.retailpoints",
-                        "label": "address_1",
+                        "table": "dev.uk_glx_open_retail_points_food_stores",
+                        "label": "add_one",
                         "space_wildcard": true,
                         "minLength": 2
                     }
@@ -108,9 +147,9 @@
                         }
                     },
                     "format": "cluster",
-                    "dbs": "XYZ",
-                    "table": "dev.retailpoints",
-                    "geom": "geom",
+                    "dbs": "MAPP",
+                    "table": "dev.uk_glx_open_retail_points_food_stores",
+                    "geom": "geom_p_4326",
                     "srid": "4326",
                     "qID": "id",
                     "infoj": [{
@@ -125,7 +164,7 @@
                             "fillColor": "#1e88e5"
                         },
                         "label": {
-                            "field": "store",
+                            "field": "store_name",
                             "display": true,
                             "declutter": true
                         }
@@ -133,13 +172,13 @@
                 },
                 "no_roles": {
                     "format": "cluster",
-                    "dbs": "XYZ",
-                    "table": "dev.retailpoints",
+                    "dbs": "MAPP",
+                    "table": "dev.uk_glx_open_retail_points_food_stores",
                     "qID": "id",
-                    "geom": "geom",
+                    "geom": "geom_p_4326",
                     "srid": "4326",
                     "hover": {
-                        "field": "store"
+                        "field": "store_name"
                     },
                     "infoj": [{
                         "field": "retailer",
@@ -153,7 +192,7 @@
                             "fillColor": "rgba(255,112,67, 0.3)"
                         },
                         "label": {
-                            "field": "store",
+                            "field": "store_name",
                             "declutter": true
                         }
                     }
@@ -188,476 +227,13 @@
                     "format": "tiles",
                     "URI": "/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX&host=https://api.mapbox.com"
                 },
-                "Countries Split":{
-                  "format": "mvt",
-                  "geom": "geom_3857",
-                  "srid": "3857",
-                  "dbs": "MAPP",
-                  "table": "mapp.global_glx_open_admin_countries_split",
-                  "qID": "country_cd"
-                },
-                "Countries": {
-                    "display": true,
-                    "attribution": {
-                        "Made with Natural Earth.": "https://www.naturalearthdata.com/"
-                    },
+                "Countries Split": {
                     "format": "mvt",
-                    "dbs": "XYZ",
-                    "mvt_cache": "dev.natural_earth_countries__mvts",
-                    "tables": {
-                        "2": null,
-                        "3": "dev.natural_earth_countries"
-                    },
                     "geom": "geom_3857",
                     "srid": "3857",
-                    "dataviews": {
-                        "table1": {
-                            "title": "Population / GDP",
-                            "query": "NE Countries table1",
-                            "viewport": true,
-                            "columns": [
-                                {
-                                    "field": "name",
-                                    "title": "Name"
-                                },
-                                {
-                                    "title": "Population Est",
-                                    "field": "pop_est"
-                                },
-                                {
-                                    "field": "gdp_md_est"
-                                }
-                            ]
-                        },
-                        "GDP / Population": {
-                            "display": true,
-                            "query": "NE GDP/Population Layer Table",
-                            "viewport": true,
-                            "selectable": true,
-                            "layout": "fitColumns",
-                            "columns": [{
-                                    "field": "name",
-                                    "customFormatter": "colour",
-                                    "formatterParams": {
-                                        "colour": "#090"
-                                    }
-                                },
-                                {
-                                    "field": "gdp_md_est",
-                                    "formatter": "money",
-                                    "hozAlign": "right",
-                                    "formatterParams": {
-                                        "symbol": " dollars",
-                                        "symbolAfter": true,
-                                        "precision": 0
-                                    }
-                                },
-                                {
-                                    "title": "Population Est",
-                                    "field": "pop_est",
-                                    "formatter": "money",
-                                    "hozAlign": "center",
-                                    "formatterParams": {
-                                        "precision": false
-                                    }
-                                }
-                            ]
-                        },
-                        "multiviews": {
-                            "dataviews": [{
-                                    "query": "NE Countries table1",
-                                    "viewport": true,
-                                    "columns": [{
-                                            "field": "name",
-                                            "title": "Name"
-                                        },
-                                        {
-                                            "title": "Population Est",
-                                            "field": "pop_est"
-                                        },
-                                        {
-                                            "field": "gdp_md_est"
-                                        }
-                                    ]
-                                },
-                                {
-                                    "query": "NE GDP/Population Layer Table",
-                                    "viewport": true,
-                                    "selectable": true,
-                                    "layout": "fitColumns",
-                                    "columns": [{
-                                            "field": "name"
-                                        },
-                                        {
-                                            "field": "gdp_md_est",
-                                            "formatter": "money",
-                                            "hozAlign": "right",
-                                            "formatterParams": {
-                                                "symbol": " dollars",
-                                                "symbolAfter": true,
-                                                "precision": 0
-                                            }
-                                        },
-                                        {
-                                            "title": "Population Est",
-                                            "field": "pop_est",
-                                            "formatter": "money",
-                                            "hozAlign": "center",
-                                            "formatterParams": {
-                                                "precision": false
-                                            }
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    },
-                    "qID": "id",
-                    "infoj": [
-                        {
-                            "type": "key"
-                        },
-                        {
-                            "title": "Name",
-                            "field": "name"
-                        },
-                        {
-                            "title": "Population Est",
-                            "field": "pop_est",
-                            "type": "integer"
-                        },
-                        {
-                            "title": "Population Est edit",
-                            "field": "pop_est_edit",
-                            "type": "integer",
-                            "filter": "numeric",
-                            "edit": true
-                        },
-                        {
-                            "title": "GDP",
-                            "field": "gdp_md_est",
-                            "type": "integer",
-                            "suffix": " dollars"
-                        },
-                        {
-                            "title": "GDP edit",
-                            "field": "gdp_md_est_edit",
-                            "type": "integer",
-                            "edit": true
-                        },
-                        {
-                            "title": "Area SRID:3857",
-                            "field": "area_",
-                            "fieldfx": "ST_Area(geom_3857)",
-                            "type": "integer"
-                        }
-                    ],
-                    "style": {
-                        "default": {
-                            "strokeColor": "#004BA8",
-                            "fillColor": "#ffffff",
-                            "fillOpacity": 0.8
-                        },
-                        "highlight": {
-                            "fillOpacity": 1,
-                            "strokeWidth": 2
-                        },
-                        "themes": {
-                            "Population": {
-                                "type": "graduated",
-                                "field": "pop_est_edit",
-                                "cat_arr": [
-                                    {
-                                        "value": 0,
-                                        "label": "0 to 10000",
-                                        "style": {
-                                            "fillColor": "#15773f",
-                                            "strokeColor": "#15773f"
-                                        }
-                                    },
-                                    {
-                                        "value": 1000000,
-                                        "label": "1+ million",
-                                        "style": {
-                                            "fillColor": "#66bd63",
-                                            "strokeColor": "#66bd63"
-                                        }
-                                    },
-                                    {
-                                        "value": 10000000,
-                                        "label": "10+ million",
-                                        "style": {
-                                            "fillColor": "#a6d96a",
-                                            "strokeColor": "#a6d96a"
-                                        }
-                                    },
-                                    {
-                                        "value": 25000000,
-                                        "label": "25+ million",
-                                        "style": {
-                                            "fillColor": "#d9ef8b",
-                                            "strokeColor": "#d9ef8b"
-                                        }
-                                    },
-                                    {
-                                        "value": 50000000,
-                                        "label": "50+ million",
-                                        "style": {
-                                            "fillColor": "#fdae61",
-                                            "strokeColor": "#fdae61"
-                                        }
-                                    },
-                                    {
-                                        "value": 100000000,
-                                        "label": "100+ million",
-                                        "style": {
-                                            "fillColor": "#f46d43",
-                                            "strokeColor": "#f46d43"
-                                        }
-                                    },
-                                    {
-                                        "value": 1000000000,
-                                        "label": "1+ billion",
-                                        "style": {
-                                            "fillColor": "#d73027",
-                                            "strokeColor": "#d73027"
-                                        }
-                                    }
-                                ]
-                            },
-                            "GDP": {
-                                "type": "graduated",
-                                "field": "gdp_md_est",
-                                "cat_arr": [{
-                                        "value": 0,
-                                        "label": "0",
-                                        "style": {
-                                            "fillColor": "#15773f"
-                                        }
-                                    },
-                                    {
-                                        "value": 5000,
-                                        "label": "5000",
-                                        "style": {
-                                            "fillColor": "#66bd63"
-                                        }
-                                    },
-                                    {
-                                        "value": 25000,
-                                        "label": "25000",
-                                        "style": {
-                                            "fillColor": "#a6d96a"
-                                        }
-                                    },
-                                    {
-                                        "value": 75000,
-                                        "label": "75000",
-                                        "style": {
-                                            "fillColor": "#d9ef8b"
-                                        }
-                                    },
-                                    {
-                                        "value": 250000,
-                                        "label": "250000",
-                                        "style": {
-                                            "fillColor": "#fdae61"
-                                        }
-                                    },
-                                    {
-                                        "value": 500000,
-                                        "label": "500000",
-                                        "style": {
-                                            "fillColor": "#f46d43"
-                                        }
-                                    },
-                                    {
-                                        "value": 1000000,
-                                        "label": "1000000",
-                                        "style": {
-                                            "fillColor": "#d73027"
-                                        }
-                                    }
-                                ]
-                            },
-                            "GDP / Population": {
-                                "type": "graduated",
-                                "field": "gdp_pp",
-                                "fieldfx": "gdp_md_est_edit::numeric / (pop_est_edit::numeric + 1) * 1000",
-                                "cat_arr": [{
-                                        "value": 1,
-                                        "label": "1",
-                                        "style": {
-                                            "fillColor": "#15773f"
-                                        }
-                                    },
-                                    {
-                                        "value": 2.5,
-                                        "label": "2.5",
-                                        "style": {
-                                            "fillColor": "#66bd63"
-                                        }
-                                    },
-                                    {
-                                        "value": 5,
-                                        "label": "5",
-                                        "style": {
-                                            "fillColor": "#a6d96a"
-                                        }
-                                    },
-                                    {
-                                        "value": 10,
-                                        "label": "10",
-                                        "style": {
-                                            "fillColor": "#d9ef8b"
-                                        }
-                                    },
-                                    {
-                                        "value": 25,
-                                        "label": "25",
-                                        "style": {
-                                            "fillColor": "#fdae61"
-                                        }
-                                    },
-                                    {
-                                        "value": 50,
-                                        "label": "50",
-                                        "style": {
-                                            "fillColor": "#f46d43"
-                                        }
-                                    },
-                                    {
-                                        "value": 100,
-                                        "label": "100",
-                                        "style": {
-                                            "fillColor": "#d73027"
-                                        }
-                                    }
-                                ]
-                            },
-                            "Population Density": {
-                                "type": "graduated",
-                                "fieldfx": "(pop_est_edit / st_area(geom_3857)) * 1000",
-                                "field": "pop_dens",
-                                "cat_arr": [{
-                                        "value": 0,
-                                        "label": "0",
-                                        "style": {
-                                            "fillColor": "#15773f"
-                                        }
-                                    },
-                                    {
-                                        "value": 0.01,
-                                        "label": "0.01",
-                                        "style": {
-                                            "fillColor": "#66bd63"
-                                        }
-                                    },
-                                    {
-                                        "value": 0.025,
-                                        "label": "0.025",
-                                        "style": {
-                                            "fillColor": "#a6d96a"
-                                        }
-                                    },
-                                    {
-                                        "value": 0.05,
-                                        "label": "0.05",
-                                        "style": {
-                                            "fillColor": "#d9ef8b"
-                                        }
-                                    },
-                                    {
-                                        "value": 0.1,
-                                        "label": "0.1",
-                                        "fillColor": "#fdae61"
-                                    },
-                                    {
-                                        "value": 0.5,
-                                        "label": "0.5",
-                                        "style": {
-                                            "fillColor": "#f46d43"
-                                        }
-                                    },
-                                    {
-                                        "value": 1,
-                                        "label": "1",
-                                        "style": {
-                                            "fillColor": "#d73027"
-                                        }
-                                    }
-                                ]
-                            }
-                        }
-                    }
-                },
-                "Tiles": {
-                    "format": "mvt",
-                    "dbs": "XYZ",
-                    "table": "dev.natural_earth_countries__mvts",
-                    "geom": "tile",
-                    "style": {
-                        "default": {
-                            "strokeColor": "#333333",
-                            "fillColor": "#8C7AA9",
-                            "fillOpacity": 0
-                        }
-                    }
-                },
-                "Offices": {
-                    "format": "geojson",
-                    "dbs": "XYZ",
-                    "table": "glx_offices",
-                    "srid": "4326",
-                    "geom": "geom",
-                    "style": {
-                        "hidden": true,
-                        "default": {
-                            "marker": {
-                                "type": "markerColor",
-                                "colorMarker": "#999999",
-                                "colorDot": "#333333",
-                                "anchor": [
-                                    0.5,
-                                    1
-                                ]
-                            }
-                        },
-                        "highlight": {
-                            "marker": {
-                                "type": "markerColor",
-                                "colorMarker": "#64dd17",
-                                "colorDot": "#33691e",
-                                "anchor": [
-                                    0.5,
-                                    1
-                                ]
-                            }
-                        },
-                        "selected": {
-                            "marker": {
-                                "type": "markerColor",
-                                "colorMarker": "#64dd17",
-                                "colorDot": "#33691e",
-                                "anchor": [
-                                    0.5,
-                                    1
-                                ]
-                            }
-                        }
-                    },
-                    "hover": {
-                        "field": "address"
-                    },
-                    "qID": "id",
-                    "infoj": [{
-                            "type": "key"
-                        },
-                        {
-                            "title": "Address",
-                            "field": "address",
-                            "type": "html"
-                        }
-                    ]
+                    "dbs": "MAPP",
+                    "table": "mapp.global_glx_open_admin_countries_split",
+                    "qID": "country_cd"
                 },
                 "Mapbox Labels": {
                     "group": "Maps",
@@ -671,24 +247,22 @@
             }
         },
         "UK": {
-            "name": "United Kingdom",
             "gazetteer": {
                 "provider": "GOOGLE",
                 "country": "GB",
                 "placeholder": "eg. London",
                 "label": true,
                 "limit": 8,
-                "datasets": [
-                    {
+                "datasets": [{
                         "layer": "Retail Points",
-                        "table": "dev.retailpoints",
+                        "table": "dev.uk_glx_open_retail_points_food_stores",
                         "label": "store",
                         "_leading_wildcard": true,
                         "limit": 5
                     },
                     {
                         "layer": "Retail Places",
-                        "table": "dev.retailplaces",
+                        "table": "dev.uk_glx_open_retail_points_food_stores",
                         "label": "uniq_name",
                         "_space_wildcard": true,
                         "_minLength": 2
@@ -707,42 +281,19 @@
             "layers": {
                 "OSM": {
                     "group": "Maps",
-                    "format": "tiles",
-                    "attribution": {
-                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-                    },
-                    "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    "template": "OSM"
                 },
                 "Mapbox Custom": {
                     "group": "Maps",
-                    "format": "tiles",
-                    "URI": "/styles/v1/dbauszus/ck440j2d20nmd1coafctud8tl/tiles/256/{z}/{x}/{y}?&provider=MAPBOX&host=https://api.mapbox.com",
-                    "attribution": {
-                        "© Mapbox": "https://www.mapbox.com/about/maps",
-                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-                    }
+                    "template": "Mapbox Colour"
                 },
                 "Mapbox": {
                     "group": "Maps",
-                    "display": true,
-                    "attribution": {
-                        "© Mapbox": "https://www.mapbox.com/about/maps",
-                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-                    },
-                    "format": "tiles",
-                    "URI": "/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX&host=https://api.mapbox.com"
+                    "template": "Mapbox"
                 },
                 "Mapbox Labels": {
                     "group": "Maps",
-                    "format": "tiles",
-                    "URI": "/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX&host=https://api.mapbox.com",
-                    "attribution": {
-                        "© Mapbox": "https://www.mapbox.com/about/maps",
-                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-                    },
-                    "style": {
-                        "zIndex": 20
-                    }
+                    "template": "Mapbox Labels"
                 },
                 "Grid": {
                     "attribution": {
@@ -771,10 +322,10 @@
                 },
                 "Retail Places": {
                     "format": "mvt",
-                    "dbs": "XYZ",
+                    "dbs": "MAPP",
                     "tables": {
                         "8": null,
-                        "9": "dev.retailplaces"
+                        "9": "dev.uk_glx_geodata_retail_place_working"
                     },
                     "geom": "geom_3857",
                     "srid": "3857",
@@ -788,36 +339,29 @@
                             "layout": "fitColumns",
                             "query": "UK Retail Places Layer Table",
                             "viewport": true,
-                            "columns": [{
+                            "columns": [
+                                {
                                     "title": "ID",
                                     "field": "id"
-                                },
-                                {
-                                    "field": "dev_date"
                                 },
                                 {
                                     "field": "rp_type"
                                 },
                                 {
-                                    "title": "Characteristics",
+                                    "title": "Address",
                                     "columns": [{
-                                            "field": "comp_strgh",
-                                            "title": "Competition strength"
+                                            "field": "ref_pc",
+                                            "title": "Postcode"
                                         },
                                         {
-                                            "field": "est_units",
-                                            "title": "Estimate units"
-                                        },
-                                        {
-                                            "field": "est_brands",
-                                            "title": "Estimate brands"
+                                            "field": "country",
+                                            "title": "Country"
                                         }
                                     ]
                                 }
                             ]
                         }
                     },
-                    "__mvt_cache": "dev.retailplaces__mvts",
                     "style": {
                         "themes": {
                             "Retail Place type": {
@@ -826,189 +370,118 @@
                                 "other": true,
                                 "cat": {
                                     "Major City Centre": {
-                                        "label": "Major City Centre",
                                         "style": {
                                             "strokeColor": "#EF271B",
                                             "fillColor": "#EF271B"
                                         }
                                     },
                                     "City Centre": {
-                                        "label": "City Centre",
                                         "style": {
                                             "strokeColor": "#BA2D0B",
                                             "fillColor": "#BA2D0B"
                                         }
                                     },
                                     "Large Town Centre": {
-                                        "label": "Large Town Centre",
                                         "style": {
                                             "strokeColor": "#FE4E00",
                                             "fillColor": "#FE4E00"
                                         }
                                     },
                                     "Major Urban Centre": {
-                                        "label": "Major Urban Centre",
                                         "style": {
                                             "strokeColor": "#E2711D",
                                             "fillColor": "#E2711D"
                                         }
                                     },
                                     "Town Centre": {
-                                        "label": "Town Centre",
                                         "style": {
                                             "strokeColor": "#F3A712",
                                             "fillColor": "#F3A712"
                                         }
                                     },
                                     "Urban Centre": {
-                                        "label": "Urban Centre",
                                         "style": {
                                             "strokeColor": "#FADF63",
                                             "fillColor": "#FADF63"
                                         }
                                     },
                                     "Small Town Centre": {
-                                        "label": "Small Town Centre",
                                         "style": {
                                             "strokeColor": "#FFE74C",
                                             "fillColor": "#FFE74C"
                                         }
                                     },
                                     "Village Centre": {
-                                        "label": "Village Centre",
                                         "style": {
                                             "strokeColor": "#DBFE87",
                                             "fillColor": "#DBFE87"
                                         }
                                     },
                                     "Regional SC": {
-                                        "label": "Regional SC",
+                                        "label": "Regional Shopping Centre",
                                         "style": {
                                             "strokeColor": "#8ED081",
                                             "fillColor": "#8ED081"
                                         }
                                     },
                                     "Outlet Centre": {
-                                        "label": "Outlet Centre",
                                         "style": {
                                             "strokeColor": "#7DDF64",
                                             "fillColor": "#7DDF64"
                                         }
                                     },
                                     "Shopping Park": {
-                                        "label": "Shopping Park",
                                         "style": {
                                             "strokeColor": "#074F57",
                                             "fillColor": "#074F57"
                                         }
                                     },
                                     "Retail Park": {
-                                        "label": "Retail Park",
                                         "style": {
                                             "strokeColor": "#32746D",
                                             "fillColor": "#32746D"
                                         }
                                     },
                                     "Leisure Park": {
-                                        "label": "Leisure Park",
                                         "style": {
                                             "strokeColor": "#41D3BD",
                                             "fillColor": "#41D3BD"
                                         }
                                     },
                                     "Local Hub": {
-                                        "label": "Local Hub",
                                         "style": {
                                             "strokeColor": "#08B2E3",
                                             "fillColor": "#08B2E3"
                                         }
                                     },
                                     "Large Parade": {
-                                        "label": "Large Parade",
                                         "style": {
                                             "strokeColor": "#1F487E",
                                             "fillColor": "#1F487E"
                                         }
                                     },
                                     "Parade": {
-                                        "label": "Parade",
                                         "style": {
                                             "strokeColor": "#541388",
                                             "fillColor": "#541388"
                                         }
                                     },
                                     "Weak Parade": {
-                                        "label": "Weak Parade",
                                         "style": {
                                             "strokeColor": "#D90368",
                                             "fillColor": "#D90368"
                                         }
                                     }
                                 }
-                            },
-                            "Population '11": {
-                                "type": "graduated",
-                                "field": "pop__11",
-                                "cat_arr": [{
-                                        "value": 0,
-                                        "label": "0 to 10000",
-                                        "style": {
-                                            "fillColor": "#15773f"
-                                        }
-                                    },
-                                    {
-                                        "value": 10000,
-                                        "label": "10000 to 25000",
-                                        "style": {
-                                            "fillColor": "#66bd63"
-                                        }
-                                    },
-                                    {
-                                        "value": 25000,
-                                        "label": "25000 to 50000",
-                                        "style": {
-                                            "fillColor": "#a6d96a"
-                                        }
-                                    },
-                                    {
-                                        "value": 50000,
-                                        "label": "50000 to 100000",
-                                        "style": {
-                                            "fillColor": "#d9ef8b"
-                                        }
-                                    },
-                                    {
-                                        "value": 100000,
-                                        "label": "100000 to 250000",
-                                        "style": {
-                                            "fillColor": "#fdae61"
-                                        }
-                                    },
-                                    {
-                                        "value": 250000,
-                                        "label": "250000 to 500000",
-                                        "style": {
-                                            "fillColor": "#f46d43"
-                                        }
-                                    },
-                                    {
-                                        "value": 500000,
-                                        "label": "500000 or more",
-                                        "style": {
-                                            "fillColor": "#d73027"
-                                        }
-                                    }
-                                ]
                             }
                         }
                     },
-                    "qID": "tid",
+                    "qID": "id",
                     "hover": {
-                        "field": "tid"
+                        "field": "rp_name"
                     },
                     "filter": {
-                        "infoj": [
-                            {
+                        "infoj": [{
                             "title": "ID count",
                             "field": "id_count",
                             "type": "integer",
@@ -1016,26 +489,13 @@
                             "fieldfx": "count(id)"
                         }]
                     },
-                    "infoj": [
-                        {
+                    "infoj": [{
                             "type": "key"
                         },
                         {
                             "title": "ID",
                             "field": "id",
                             "inline": true
-                        },
-                        {
-                            "title": "Date edit",
-                            "field": "dev_date",
-                            "type": "date",
-                            "filter": "date"
-                        },
-                        {
-                            "title": "Date",
-                            "field": "dev_date_",
-                            "fieldfx": "dev_date",
-                            "type": "date"
                         },
                         {
                             "title": "RP Type",
@@ -1052,134 +512,6 @@
                         {
                             "title": "Name",
                             "field": "uniq_name"
-                        },
-                        {
-                            "title": "Competition Str.",
-                            "field": "comp_strgh",
-                            "type": "integer",
-                            "prefix": "£ "
-                        },
-                        {
-                            "title": "OA pop_11",
-                            "field": "pop__11",
-                            "fieldfx": "SELECT AVG(a.pop__11) FROM dev.retailplaces a, dev.oa b WHERE ST_INTERSECTS(a.geom, b.geom) AND a.id = $1",
-                            "type": "integer"
-                        },
-                        {
-                            "group": "Population",
-                            "title": "2011",
-                            "field": "pop__11",
-                            "type": "integer"
-                        },
-                        {
-                            "group": "Population",
-                            "title": "2012",
-                            "field": "pop__12",
-                            "type": "integer"
-                        },
-                        {
-                            "group": "Population",
-                            "title": "2013",
-                            "field": "pop__13",
-                            "type": "integer"
-                        },
-                        {
-                            "group": "Population",
-                            "title": "2014",
-                            "field": "pop__14",
-                            "type": "integer"
-                        },
-                        {
-                            "group": "Population",
-                            "title": "2015",
-                            "field": "pop__15",
-                            "type": "integer"
-                        },
-                        {
-                            "group": "Population",
-                            "title": "2016",
-                            "field": "pop__16",
-                            "type": "integer"
-                        },
-                        {
-                            "title": "Population 16 - 11",
-                            "field": "pop_diff",
-                            "fieldfx": "(pop__16 - pop__11)",
-                            "type": "integer"
-                        },
-                        {
-                            "type": "dataview",
-                            "target": "location",
-                            "title": "Profile",
-                            "query": "UK Retail Places Profile",
-                            "chart": {
-                                "type": "horizontalBar",
-                                "yAxesWidth": 80,
-                                "labels": [
-                                    "Comparison",
-                                    "Convenience",
-                                    "F/B/L",
-                                    "Services",
-                                    "Class/Brass"
-                                ],
-                                "datasets": [{
-                                    "fields": [
-                                        "comparison",
-                                        "conv",
-                                        "fbl",
-                                        "services",
-                                        "classbrass"
-                                    ],
-                                    "backgroundColor": [
-                                        "#FFA630",
-                                        "#C6DEA6",
-                                        "#7EBDC3",
-                                        "#7A6263",
-                                        "#CED097"
-                                    ],
-                                    "borderColor": [
-                                        "#FFA630",
-                                        "#C6DEA6",
-                                        "#7EBDC3",
-                                        "#7A6263",
-                                        "#CED097"
-                                    ]
-                                }]
-                            }
-                        },
-                        {
-                            "group": "Profile",
-                            "tooltip": "Comparison",
-                            "title": "Comp",
-                            "field": "comparison",
-                            "type": "numeric",
-                            "expanded": true
-                        },
-                        {
-                            "group": "Profile",
-                            "title": "Conv",
-                            "tooltip": "Convenience",
-                            "field": "conv",
-                            "type": "numeric"
-                        },
-                        {
-                            "group": "Profile",
-                            "title": "F/B/L",
-                            "field": "fbl",
-                            "type": "numeric",
-                            "tooltip": "Food/Bev/Leisure"
-                        },
-                        {
-                            "group": "Profile",
-                            "title": "Services",
-                            "field": "services",
-                            "type": "numeric"
-                        },
-                        {
-                            "group": "Profile",
-                            "title": "Class/Brass",
-                            "field": "classbrass",
-                            "type": "numeric"
                         }
                     ]
                 },
@@ -1195,7 +527,7 @@
                     "format": "cluster",
                     "srid": "4326",
                     "geom": "geom_4326",
-                    "dbs": "XYZ",
+                    "dbs": "MAPP",
                     "qID": "id",
                     "table": "dev.uk_glx_sites",
                     "_tables": {
@@ -1204,8 +536,7 @@
                     },
                     "cluster_kmeans": 0.1,
                     "cluster_label": "site_name",
-                    "infoj": [
-                        {
+                    "infoj": [{
                             "type": "streetview"
                         },
                         {
@@ -1616,7 +947,7 @@
                 "Cluster Catchments": {
                     "group": "Cluster",
                     "format": "cluster",
-                    "dbs": "XYZ",
+                    "dbs": "MAPP",
                     "table": "dev.cluster_catchments",
                     "geom": "geom",
                     "srid": "4326",
@@ -1627,8 +958,7 @@
                         "delete": true
                     },
                     "qID": "id",
-                    "infoj": [
-                        {
+                    "infoj": [{
                             "type": "key"
                         },
                         {
@@ -1765,84 +1095,13 @@
                         }
                     }
                 },
-                "Draw": {
-                    "format": "mvt",
-                    "dbs": "XYZ",
-                    "table": "dev.draw",
-                    "srid": "3857",
-                    "geom": "geom",
-                    "qID": "id",
-                    "edit": {
-                        "polygon": true,
-                        "freehand": true,
-                        "circle": true,
-                        "rectangle": true,
-                        "line": true,
-                        "point": true,
-                        "isoline_mapbox": true,
-                        "isoline_here": true,
-                        "delete": true,
-                        "geometry": true
-                    },
-                    "mvt_cache": "dev.draw__mvts",
-                    "style": {
-                        "default": {
-                            "strokeColor": "#ff69b4",
-                            "strokeWidth": 2,
-                            "fillColor": "#eee",
-                            "fillOpacity": 1
-                        },
-                        "themes": {
-                            "Test categorized": {
-                                "field": "test_binary",
-                                "type": "categorized",
-                                "other": true,
-                                "cat": {
-                                    "0": {
-                                        "style": {
-                                            "fillColor": "#283593"
-                                        }
-                                    },
-                                    "1": {
-                                        "style": {
-                                            "fillColor": "#ff1744"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "infoj": [
-                        {
-                            "type": "key"
-                        },
-                        {
-                            "field": "id",
-                            "title": "ID",
-                            "inline": true
-                        },
-                        {
-                            "field": "strokecolor",
-                            "title": "Stroke color",
-                            "inline": true
-                        },
-                        {
-                            "field": "test_binary",
-                            "fieldfx": "MOD(id, 2)",
-                            "title": "Nombre",
-                            "inline": true,
-                            "type": "integer"
-                        }
-                    ]
-                },
                 "Scratch": {
                     "meta": "Free Draw / Selection Tool. This is a test layer for editing and drawing geometries.",
                     "format": "mvt",
-                    "dbs": "XYZ",
-                    "table": "dev.scratch",
+                    "dbs": "MAPP",
+                    "table": "dev.uk_dev_scratch",
                     "srid": "3857",
                     "geom": "geom_3857",
-                    "mvt_cache": "dev.scratch__mvts",
                     "qID": "id",
                     "edit": {
                         "polygon": true,
@@ -1865,7 +1124,7 @@
                         {
                             "title": "RP Count",
                             "field": "rp_count",
-                            "fieldfx": "SELECT sum(1) FROM dev.retailpoints, dev.scratch WHERE st_intersects(dev.retailpoints.geom, st_transform(dev.scratch.geom_3857, 4326)) AND dev.scratch.id = $1"
+                            "fieldfx": "SELECT sum(1) FROM dev.uk_glx_open_retail_points_food_stores, dev.uk_dev_scratch WHERE st_intersects(dev.uk_glx_open_retail_points_food_stores.geom_p_4326, st_transform(dev.uk_dev_scratch.geom_3857, 4326)) AND dev.uk_dev_scratch.id = $1"
                         },
                         {
                             "title": "something",
@@ -1885,12 +1144,6 @@
                             "field": "int_test_",
                             "fieldfx": "int_test",
                             "type": "integer"
-                        },
-                        {
-                            "title": "Images",
-                            "field": "images",
-                            "type": "images",
-                            "edit": true
                         },
                         {
                             "title": "Date",
@@ -2046,8 +1299,7 @@
                         }
                     },
                     "qID": "id",
-                    "infoj": [
-                        {
+                    "infoj": [{
                             "type": "key"
                         },
                         {
@@ -2071,8 +1323,7 @@
                                 "height": 200,
                                 "type": "bar",
                                 "labels": ["2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018"],
-                                "datasets": [
-                                    {
+                                "datasets": [{
                                     "fields": [
                                         "_pop__11",
                                         "_pop__12",
@@ -2120,15 +1371,15 @@
                 "Retail Points": {
                     "group": "Cluster",
                     "format": "cluster",
-                    "cluster_label": "store",
-                    "dbs": "XYZ",
+                    "cluster_label": "store_name",
+                    "dbs": "MAPP",
                     "qID": "id",
-                    "table": "dev.retailpoints",
-                    "geom": "geom",
+                    "table": "dev.uk_glx_open_retail_points_food_stores",
+                    "geom": "geom_p_4326",
                     "srid": "4326",
                     "cluster_hexresolution": 0.1,
                     "hover": {
-                        "field": "store"
+                        "field": "store_name"
                     },
                     "dataviews": {
                         "Retail Points": {
@@ -2136,7 +1387,7 @@
                             "query": "UK Retail Points Layer Table",
                             "columns": [{
                                     "title": "ID",
-                                    "field": "retailpoint_id"
+                                    "field": "id"
                                 },
                                 {
                                     "title": "Retailer",
@@ -2155,12 +1406,12 @@
                             "field": "id_count",
                             "type": "integer",
                             "inline": true,
-                            "fieldfx": "count(retailpoint_id)"
+                            "fieldfx": "count(id)"
                         }]
                     },
                     "style": {
                         "label": {
-                            "field": "store",
+                            "field": "store_name",
                             "display": true,
                             "declutter": true,
                             "strokeColor": "#fff",
@@ -2168,13 +1419,11 @@
                         },
                         "default": {
                             "type": "target",
-                            "fillColor": "#CEE5F2",
-                            "size": 30
+                            "fillColor": "#CEE5F2"
                         },
                         "cluster": {
                             "type": "target",
-                            "fillColor": "#534B62",
-                            "size": 50
+                            "fillColor": "#534B62"
                         },
                         "highlight": {
                             "type": "target",
@@ -2218,115 +1467,6 @@
                                         }
                                     }
                                 }
-                            },
-                            "Households": {
-                                "type": "graduated",
-                                "field": "hhdooc_11",
-                                "cat_arr": [{
-                                        "value": 0,
-                                        "label": "0 to 100",
-                                        "style": {
-                                            "fillColor": "#15773f"
-                                        }
-                                    },
-                                    {
-                                        "value": 100,
-                                        "label": "100 to 200",
-                                        "style": {
-                                            "fillColor": "#66bd63"
-                                        }
-                                    },
-                                    {
-                                        "value": 200,
-                                        "label": "200 to 400",
-                                        "style": {
-                                            "fillColor": "#a6d96a"
-                                        }
-                                    },
-                                    {
-                                        "value": 400,
-                                        "label": "400 to 600",
-                                        "style": {
-                                            "fillColor": "#d9ef8b"
-                                        }
-                                    },
-                                    {
-                                        "value": 600,
-                                        "label": "600 to 800",
-                                        "style": {
-                                            "fillColor": "#fdae61"
-                                        }
-                                    },
-                                    {
-                                        "value": 800,
-                                        "label": "800 to 1000",
-                                        "style": {
-                                            "fillColor": "#f46d43"
-                                        }
-                                    },
-                                    {
-                                        "value": 1000,
-                                        "label": "1000 or more",
-                                        "style": {
-                                            "fillColor": "#d73027"
-                                        }
-                                    }
-                                ]
-                            },
-                            "Households Sized": {
-                                "type": "graduated",
-                                "field": "hhdooc_11",
-                                "size": "hhdooc_11",
-                                "cat_arr": [{
-                                        "value": 0,
-                                        "label": "0 to 100",
-                                        "style": {
-                                            "fillColor": "#15773f"
-                                        }
-                                    },
-                                    {
-                                        "value": 100,
-                                        "label": "100 to 200",
-                                        "style": {
-                                            "fillColor": "#66bd63"
-                                        }
-                                    },
-                                    {
-                                        "value": 200,
-                                        "label": "200 to 400",
-                                        "style": {
-                                            "fillColor": "#a6d96a"
-                                        }
-                                    },
-                                    {
-                                        "value": 400,
-                                        "label": "400 to 600",
-                                        "style": {
-                                            "fillColor": "#d9ef8b"
-                                        }
-                                    },
-                                    {
-                                        "value": 600,
-                                        "label": "600 to 800",
-                                        "style": {
-                                            "fillColor": "#fdae61"
-                                        }
-                                    },
-                                    {
-                                        "value": 800,
-                                        "label": "800 to 1000",
-                                        "style": {
-                                            "fillColor": "#f46d43"
-                                        }
-                                    },
-                                    {
-                                        "value": 1000,
-                                        "label": "1000 or more",
-                                        "style": {
-                                            "fillColor": "#d73027"
-                                        }
-                                    }
-                                ]
                             },
                             "Tesco/Sainsbury's": {
                                 "type": "competition",
@@ -2448,8 +1588,7 @@
                             }
                         }
                     },
-                    "infoj": [
-                        {
+                    "infoj": [{
                             "type": "streetview"
                         },
                         {
@@ -2457,12 +1596,12 @@
                         },
                         {
                             "title": "ID",
-                            "field": "retailpoint_id",
+                            "field": "id",
                             "inline": true
                         },
                         {
                             "title": "Store",
-                            "field": "store",
+                            "field": "store_name",
                             "filter": "like"
                         },
                         {
@@ -2479,11 +1618,11 @@
                             "title": "Address"
                         },
                         {
-                            "field": "address_1",
+                            "field": "add_one",
                             "level": 1
                         },
                         {
-                            "field": "address_2",
+                            "field": "add_two",
                             "level": 1
                         },
                         {
@@ -2502,25 +1641,12 @@
                             "filterZoom": true
                         },
                         {
-                            "title": "Households",
-                            "field": "hhdooc_11",
-                            "type": "integer",
-                            "filter": "numeric"
-                        },
-                        {
-                            "field": "test_flag",
-                            "title": "Test boolean field",
-                            "type": "boolean",
-                            "filter": "boolean",
-                            "edit": true
-                        },
-                        {
                             "title": "Catchment 10min",
                             "type": "title"
                         },
                         {
-                            "field": "catchment_10min",
-                            "fieldfx": "ST_asGeoJson(catchment_10min)",
+                            "field": "isoline_10min",
+                            "fieldfx": "ST_asGeoJson(isoline_10min)",
                             "type": "geometry",
                             "display": true,
                             "edit": {
@@ -2537,109 +1663,13 @@
                         }
                     ]
                 },
-                "Election Wards": {
-                    "group": "Cluster",
-                    "format": "cluster",
-                    "dbs": "XYZ",
-                    "table": "politics.election_ward",
-                    "geom": "geom_point_4326",
-                    "srid": "4326",
-                    "cluster_hexresolution": 0.3,
-                    "style": {
-                        "size": 10,
-                        "anchor": null,
-                        "default": {
-                            "type": "target",
-                            "fillColor": "#cddc39"
-                        },
-                        "cluster": {
-                            "type": "target",
-                            "fillColor": "#ff9800"
-                        }
-                    }
-                },
-                "PPD": {
-                    "group": "Cluster",
-                    "format": "cluster",
-                    "dbs": "XYZ",
-                    "table": "dev.london_hpp",
-                    "geom": "geom_3857",
-                    "srid": "3857",
-                    "cluster_hexresolution": 0.1,
-                    "qID": "id",
-                    "infoj": [{
-                        "field": "trans_date_bigint",
-                        "type": "date",
-                        "filter": "date"
-                    }],
-                    "style": {
-                        "size": 10,
-                        "themes": {
-                            "PPD": {
-                                "type": "graduated",
-                                "field": "price_paid",
-                                "aggregate": "avg",
-                                "cat_arr": [{
-                                        "value": 0,
-                                        "label": "0",
-                                        "style": {
-                                            "fillColor": "#15773f"
-                                        }
-                                    },
-                                    {
-                                        "value": 250000,
-                                        "label": "250000",
-                                        "style": {
-                                            "fillColor": "#66bd63"
-                                        }
-                                    },
-                                    {
-                                        "value": 500000,
-                                        "label": "500000",
-                                        "style": {
-                                            "fillColor": "#a6d96a"
-                                        }
-                                    },
-                                    {
-                                        "value": 750000,
-                                        "label": "750000",
-                                        "style": {
-                                            "fillColor": "#d9ef8b"
-                                        }
-                                    },
-                                    {
-                                        "value": 1000000,
-                                        "label": "1000000",
-                                        "style": {
-                                            "fillColor": "#fdae61"
-                                        }
-                                    },
-                                    {
-                                        "value": 1500000,
-                                        "label": "1500000",
-                                        "style": {
-                                            "fillColor": "#f46d43"
-                                        }
-                                    },
-                                    {
-                                        "value": 2000000,
-                                        "label": "2000000",
-                                        "style": {
-                                            "fillColor": "#d73027"
-                                        }
-                                    }
-                                ]
-                            }
-                        }
-                    }
-                },
                 "Shops with catchments": {
                     "format": "cluster",
                     "edit": {
                         "geometry": true,
                         "delete": true
                     },
-                    "dbs": "XYZ",
+                    "dbs": "MAPP",
                     "geom": "geom_4326",
                     "sird": "4326",
                     "table": "dev.storelist_1507__19",
@@ -2825,48 +1855,40 @@
                     "format": "cluster",
                     "srid": "4326",
                     "geom": "geom_4326",
-                    "dbs": "XYZ",
+                    "dbs": "MAPP",
                     "table": "dev.uk_glx_sites",
                     "cluster_kmeans": 0.1
+                }
+            }
+        },
+        "日本 Japan": {
+            "bounds": {
+                "north": 45,
+                "east": 149,
+                "south": 30,
+                "west": 127
+            },
+            "gazetteer": {
+                "provider": "MAPBOX",
+                "placeholder": "例えば山梨"
+            },
+            "minZoom": 6,
+            "maxZoom": 17,
+            "showScaleBar": true,
+            "layers": {
+                "Mapboxマップ": {
+                    "template": "Mapbox Colour"
                 },
-                "Advice Center": {
-                    "display": true,
-                    "format": "cluster",
-                    "meta": "Employment advice centers",
-                    "dbs": "XYZ",
-                    "table": "gla.gla",
-                    "geom": "geom",
-                    "srid": "4326",
-                    "qID": "id",
-                    "cluster_label": "organisation_short",
-                    "cluster_kmeans": 0.3,
-                    "cluster_dbscan": 0.02,
-                    "infoj": [
-                        {
-                            "title": "Organisation",
-                            "field": "organisation_short"
-                        }
-                    ],
-                    "style": {
-                        "label": {
-                            "field": "count",
-                            "display": true,
-                            "fillColor": "#fff",
-                            "font": "bold 20px sans-serif"
-                        },
-                        "default": {
-                            "svg": "https://geolytix.github.io/gla/icons/pin_slate.svg",
-                            "anchor": [
-                                0.5,
-                                1
-                            ],
-                            "scale": 0.5
-                        },
-                        "cluster": {
-                            "svg": "https://geolytix.github.io/gla/icons/pin_slate.svg",
-                            "scale": 0.5
-                        },
-                        "highlight": {}
+                "レストラン": {
+                    "template": "ja_japan_restaurants",
+                    "roles": {
+                        "ja": true
+                    }
+                },
+                "Restaurants": {
+                    "template": "japan_restaurants",
+                    "roles": {
+                        "en": true
                     }
                 }
             }
