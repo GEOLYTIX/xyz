@@ -152,7 +152,7 @@ window.onload = () => {
       scrollWheelZoom: true,
     })
 
-    xyz.modules()
+    xyz.plugins()
       .then(() => xyz.layers.load())
       .then(() => mappUI())
       .catch(error => console.error(error))

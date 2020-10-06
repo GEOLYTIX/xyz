@@ -38,6 +38,8 @@ orderPath: /_getting-started/_getting-started
 
 This example front matter shows how the `tags` array is used to show the 'Getting Started' page in the documentation root.
 
+The `group` flag ensures that entry is pushed to the left in the tree view layout.
+
 The `orderPath` is used to ensure that this page link will be on top of it's section due to underscores being sorted ahead of numerals and other characters.
 
 ## Images
