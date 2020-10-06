@@ -479,7 +479,7 @@
 	<div></div><span>${e.language.layer_data_viewport_only}`),n.appendChild(e.utils.html.node`
 	    	<button
 	    	class="btn-wide primary-colour"
-	    	onclick=${n=>{n.stopPropagation();const r=n.target;r.classList.add("active"),setTimeout(()=>{r.classList.remove("active")},300);const a=t.download.viewport&&e.map&&e.mapview.getBounds();let i=new XMLHttpRequest;i.responseType="blob",i.open("GET",e.host+"/api/layer/data?"+e.utils.paramString({locale:e.locale.key,layer:t.key,table:t.tableCurrent(),filter:t.filter&&JSON.stringify(t.filter.current),viewport:a&&[a.west,a.south,a.east,a.north,e.mapview.srid]})),i.onload=e=>{var n=document.createElement("a");n.href=window.URL.createObjectURL(e.target.response),n.download=t.key+".json",n.dispatchEvent(new MouseEvent("click"))},i.send()}}>${e.language.layer_data_geojson}`),n}}),Qt=e=>{const t={create:function(n){n.view=e.utils.html.node`<div class="drawer layer-view">`;const r=e.utils.html.node`
+	    	onclick=${n=>{n.stopPropagation();const r=n.target;r.classList.add("active"),setTimeout(()=>{r.classList.remove("active")},300);const a=t.download.viewport&&e.map&&e.mapview.getBounds();let i=new XMLHttpRequest;i.responseType="blob",i.open("GET",e.host+"/api/layer/geojson?"+e.utils.paramString({download:!0,locale:e.locale.key,layer:t.key,table:t.tableCurrent(),filter:t.filter&&JSON.stringify(t.filter.current),viewport:a&&[a.west,a.south,a.east,a.north,e.mapview.srid]})),i.onload=e=>{var n=document.createElement("a");n.href=window.URL.createObjectURL(e.target.response),n.download=t.key+".json",n.dispatchEvent(new MouseEvent("click"))},i.send()}}>${e.language.layer_data_geojson}`),n}}),Qt=e=>{const t={create:function(n){n.view=e.utils.html.node`<div class="drawer layer-view">`;const r=e.utils.html.node`
     <div class="header enabled"><span>${n.name||n.key}`;n.style.default&&n.style.default.showInHeader&&r.appendChild(e.utils.html.node`
       <img
         class="btn-header"
@@ -743,7 +743,7 @@
           step=1
           oninput=${e=>{n.edit.isoline_here._minutes=parseInt(e.target.value),e.target.parentNode.previousElementSibling.textContent=n.edit.isoline_here._minutes}}>`;return n.edit.panel.appendChild(i),n.edit.panel}};function t(t){t.edit.panel||(t.edit.panel=e.utils.html.node`
     <div
-    class="drawer group panel expandable ${t.class||""}"
+    class="${"drawer group panel expandable "+t.class||0}"
     style="display: grid; grid-column: 1 / 3; max-height: 20px;">
     <div
     class="header primary-colour"
@@ -788,7 +788,7 @@
         step=1
         oninput=${e=>{n.edit.isoline_mapbox._minutes=parseInt(e.target.value),e.target.parentNode.previousElementSibling.textContent=n.edit.isoline_mapbox._minutes}}>`),n.edit.panel}};function t(t){t.edit.panel||(t.edit.panel=e.utils.html.node`
     <div
-    class="drawer group panel expandable ${t.class||""}"
+    class="${"drawer group panel expandable "+t.class||0}"
     style="display: grid; grid-column: 1 / 3; max-height: 20px;">
     <div
     class="header primary-colour"
