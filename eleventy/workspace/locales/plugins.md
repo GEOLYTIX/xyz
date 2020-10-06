@@ -8,9 +8,9 @@ layout: root.html
 
 The plugins object entry in the locale workspace configuration can be used to define which addon scripts should be loaded.
 
-```javascript
+```json
 "plugins": {
-  "cluster": "/mapp/js/modules/cluster.js"
+  "cluster": "/js/plugins/cluster.js"
 }
 ```
 

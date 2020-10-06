@@ -248,8 +248,6 @@
       
       
       
-      
-      
       <li class="__1 ">
         <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
       </li>
@@ -359,6 +357,12 @@
       
       
       <li class="__2 ">
+        <a href="/xyz/docs/workspace/src/">Source Links</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
         <a href="/xyz/docs/workspace/styles/">Styles</a>
       </li>
       
@@ -374,26 +378,32 @@
 
     <div id="content">
       <h1>Templates</h1>
-<p>The XYZ APIs use templates for Views, Queries, and Layer. Each template will have a render method which substitutes parameter in the template with values.</p>
-<p>Default templates for common queries, as well as the MAPP and admin views are applied when the workspace is cached. It is possible to override the default templates by defining a template with the same key in the workspace configuration.</p>
-<p>Following view template would override the default MAPP desktop view with a custom view where the initial width of the control panel is increased. The default view will be loaded from a public GitHub repository.</p>
-<pre><code class="language-json">&quot;_desktop_&quot;: {
+<p>The XYZ API uses templates for Views, Queries, and Layer.</p>
+<p>Templates are available to all locales in a workspace.</p>
+<p>Templates are <strong>not</strong> used in XYZ client applications.</p>
+<p>Queries will never be sent as literal from client to host but may only be executed by <a href="/xyz/docs/develop/api/query/">api/queries</a> <em>via</em> parameter reference.</p>
+<p>Available templates may be examined with <a href="/xyz/docs/develop/api/workspace/">api/workspace</a> methods.</p>
+<p>Defining a template with the same key will overwrite a default template.</p>
+<p>For example; The default MAPP Desktop view template can be set by defining a view template with the key <code>_desktop</code>.</p>
+<pre><code class="language-json">&quot;_desktop&quot;: {
   &quot;src&quot;: &quot;https://api.github.com/repos/GEOLYTIX/public/contents/_desktop_wide.html&quot;
 }
 </code></pre>
-<p>Templates are useful for queries which can be shared across layers, locales or apps.<br>
-The example above uses a template hosted with Github. For simple content templates can use explicit statements:</p>
+<p>Templates may be loaded as string from a valid <a href="/xyz/docs/workspace/workspaces/src">ressource link; &quot;src&quot;</a>.</p>
+<h2>Template Literals</h2>
+<p>Templates may also be defined as literals.</p>
 <pre><code class="language-json">&quot;global_cities_query&quot;: {
-	&quot;template&quot;: &quot;select id, city_name, country from citiesoftheworld WHERE true ${viewport} limit 99;&quot;
+  &quot;template&quot;: &quot;select id, city_name, country from citiesoftheworld WHERE true ${viewport} limit 99;&quot;
 }
 </code></pre>
-<p>Templates can be imported as modules in order to include functions of parameters:</p>
+<h2>Query Modules</h2>
+<p>Query templates may be compiled from string by way of literal or ressource link with <code>module</code> paramater flag set as true in the template definition:</p>
 <pre><code class="language-json">&quot;pl_population&quot;: {
-	&quot;type&quot;: &quot;module&quot;, // or &quot;module&quot;: true
-	&quot;src&quot;: &quot;https://geolytix.github.io/public/mapp/layers/poland/pl_population.js&quot;
+  &quot;module&quot;: true,
+  &quot;src&quot;: &quot;https://geolytix.github.io/public/mapp/layers/poland/pl_population.js&quot;
 }
 </code></pre>
-<p>The template above can be shared across layers since query parameters are substituted with current layer properties.</p>
+<p>Detailed information for query templates and modules are in the <a href="/xyz/docs/develop/api/workspace/">api/workspace</a> developer documentation.</p>
 
     </div>
 

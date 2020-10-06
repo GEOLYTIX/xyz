@@ -242,8 +242,6 @@
       
       
       
-      
-      
       <li class="__2 active">
         <a href="/xyz/docs/document/">Document</a>
       </li>
@@ -309,6 +307,8 @@
       
       
       
+      
+      
 
     </ul>
 
@@ -317,7 +317,7 @@
 <p>Please refer to the information in this article in order to contribute to the documentation.</p>
 <h2>eleventy</h2>
 <p>We use <a href="https://github.com/11ty/eleventy">Eleventy</a> to compile markdown into static pages.</p>
-<p>eleventy and markdown-it are <strong>not included</strong> as dependencies in the XYZ included as save-dev dependencies in the XYZ package.json</p>
+<p>eleventy and markdown-it are <strong>not included</strong> as dependencies in the XYZ included as save-dev dependencies. The npm modules may be installed for the project or globally.</p>
 <p>Individual markdown documents and a template html are stored in the /eleventy folder. Configuration for the compilation is in the .eleventy.js file in the XYZ root.</p>
 <p>Use following command to compile templates and markdown from the /eleventy folder in the /docs directory.</p>
 <pre><code>npx eleventy --input ./eleventy --output ./docs --formats=md
