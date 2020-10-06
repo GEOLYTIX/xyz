@@ -6,35 +6,47 @@ layout: root.html
 
 # Templates
 
-The XYZ APIs use templates for Views, Queries, and Layer. Each template will have a render method which substitutes parameter in the template with values.
+The XYZ API uses templates for Views, Queries, and Layer.
 
-Default templates for common queries, as well as the MAPP and admin views are applied when the workspace is cached. It is possible to override the default templates by defining a template with the same key in the workspace configuration.
+Templates are available to all locales in a workspace.
 
-Following view template would override the default MAPP desktop view with a custom view where the initial width of the control panel is increased. The default view will be loaded from a public GitHub repository.
+Templates are **not** used in XYZ client applications.
+
+Queries will never be sent as literal from client to host but may only be executed by [api/queries](/xyz/docs/develop/api/query/) *via* parameter reference.
+
+Available templates may be examined with [api/workspace](/xyz/docs/develop/api/workspace/) methods.
+
+Defining a template with the same key will overwrite a default template.
+
+For example; The default MAPP Desktop view template can be set by defining a view template with the key `_desktop`.
 
 ```json
-"_desktop_": {
+"_desktop": {
   "src": "https://api.github.com/repos/GEOLYTIX/public/contents/_desktop_wide.html"
 }
 ```
 
-Templates are useful for queries which can be shared across layers, locales or apps.
-The example above uses a template hosted with Github. For simple content templates can use explicit statements:
+Templates may be loaded as string from a valid [ressource link; "src"](/xyz/docs/workspace/workspaces/src).
+
+## Template Literals
+
+Templates may also be defined as literals.
 
 ```json
 "global_cities_query": {
-	"template": "select id, city_name, country from citiesoftheworld WHERE true ${viewport} limit 99;"
+  "template": "select id, city_name, country from citiesoftheworld WHERE true ${viewport} limit 99;"
 }
 ```
 
-Templates can be imported as modules in order to include functions of parameters:
+## Query Modules
+
+Query templates may be compiled from string by way of literal or ressource link with `module` paramater flag set as true in the template definition:
 
 ```json
 "pl_population": {
-	"type": "module", // or "module": true
-	"src": "https://geolytix.github.io/public/mapp/layers/poland/pl_population.js"
+  "module": true,
+  "src": "https://geolytix.github.io/public/mapp/layers/poland/pl_population.js"
 }
 ```
 
-The template above can be shared across layers since query parameters are substituted with current layer properties.
-
+Detailed information for query templates and modules are in the [api/workspace](/xyz/docs/develop/api/workspace/) developer documentation.
