@@ -383,6 +383,8 @@
 <p>Templates are <strong>not</strong> used in XYZ client applications.</p>
 <p>Queries will never be sent as literal from client to host but may only be executed by <a href="/xyz/docs/develop/api/query/">api/queries</a> <em>via</em> parameter reference.</p>
 <p>Available templates may be examined with <a href="/xyz/docs/develop/api/workspace/">api/workspace</a> methods.</p>
+<h2>Application Views / Reports</h2>
+<p>Reports are application views which must be defined as templates. Detailed information in regards to application views and scripts are in the developer documention.</p>
 <p>Defining a template with the same key will overwrite a default template.</p>
 <p>For example; The default MAPP Desktop view template can be set by defining a view template with the key <code>_desktop</code>.</p>
 <pre><code class="language-json">&quot;_desktop&quot;: {
@@ -404,6 +406,8 @@
 }
 </code></pre>
 <p>Detailed information for query templates and modules are in the <a href="/xyz/docs/develop/api/workspace/">api/workspace</a> developer documentation.</p>
+<h2>Access &amp; Roles</h2>
+<p>Queries may be restricted to be accessed by user with administrative rights only. In addition to filter in template literals queries may also be restricted by assigning <a href="/xyz/docs/workspace/roles/">roles</a> in the template object definition.</p>
 
     </div>
 
