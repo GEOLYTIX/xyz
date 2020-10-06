@@ -8,6 +8,8 @@ module.exports = async (filter, conjunction = 'AND') => {
 
     const field = Object.keys(f)[0]
 
+    if(!field) continue;
+
     if (Array.isArray(f[field])) {
 
       if (sql_filter[sql_filter.length - 1] !== 'AND') sql_filter.push('AND')
