@@ -16,6 +16,10 @@ Queries will never be sent as literal from client to host but may only be execut
 
 Available templates may be examined with [api/workspace](/xyz/docs/develop/api/workspace/) methods.
 
+## Application Views / Reports
+
+Reports are application views which must be defined as templates. Detailed information in regards to application views and scripts are in the developer documention.
+
 Defining a template with the same key will overwrite a default template.
 
 For example; The default MAPP Desktop view template can be set by defining a view template with the key `_desktop`.
@@ -50,3 +54,7 @@ Query templates may be compiled from string by way of literal or ressource link 
 ```
 
 Detailed information for query templates and modules are in the [api/workspace](/xyz/docs/develop/api/workspace/) developer documentation.
+
+## Access & Roles
+
+Queries may be restricted to be accessed by user with administrative rights only. In addition to filter in template literals queries may also be restricted by assigning [roles](/xyz/docs/workspace/roles/) in the template object definition.

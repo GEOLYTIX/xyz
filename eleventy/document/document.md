@@ -44,7 +44,7 @@ The `orderPath` is used to ensure that this page link will be on top of it's sec
 
 ## Images
 
-We do not store images for the documentation in the XYZ repository. Images should be uploaded to an image hosting platform such as [cloudinary](https://cloudinary.com).
+Images should not be comitted to the XYZ repository but must be uploaded to an image hosting platform such as [cloudinary](https://cloudinary.com).
 
 ![](https://res.cloudinary.com/geolytix-xyz/image/upload/v1589640927/documentation/gh-pages_z1zcne.png)
 
