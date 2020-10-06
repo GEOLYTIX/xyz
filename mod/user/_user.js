@@ -52,7 +52,7 @@ const _method = {
       let token = jwt.decode(req.cookies && req.cookies[`XYZ ${process.env.TITLE || 'token'}`])
 
       token.signed = jwt.sign({
-        msg: messages.logout[token && token.language || 'en'] || `Logged out.`
+        msg: messages.logout[token.language || 'en'] || `Logged out.`
       },
       process.env.SECRET, {
         expiresIn: '3s'
@@ -60,7 +60,7 @@ const _method = {
 
       res.setHeader('Set-Cookie', `XYZ ${process.env.TITLE || 'token'}=${token.signed};HttpOnly;Max-Age=3;Path=${process.env.DIR || '/'}`)
       
-      res.setHeader('location', `${process.env.DIR || ''}`)
+      res.setHeader('location', `${process.env.DIR || ''}?language=${token.language || 'en'}`)
 
       res.status(302).send()
     }
