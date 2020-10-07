@@ -67,6 +67,7 @@ async function getLayer(req, res) {
     role => req.params.token
       && req.params.token.roles
       && req.params.token.roles.includes(role)
+      || (role.match(/^\!/) && !req.params.token.roles.includes(role.replace(/^\!/, '')))
   )) return res.status(403).send('Role access denied.')
 
   if (req.params.token && req.params.token.roles) {
@@ -144,9 +145,9 @@ function getLocale(req, res) {
 
       // check whether the layer is available for roles in token.
       if (Object.keys(layer[1].roles).some(
-        role => req.params.token
-          && req.params.token.roles
+        role => req.params.token && req.params.token.roles
           && req.params.token.roles.includes(role)
+          || (role.match(/^\!/) && !req.params.token.roles.includes(role.replace(/^\!/, '')))
       )) return layer[0]
     })
     .filter(layer => !!layer)
@@ -161,7 +162,7 @@ async function roleEval(check, roles) {
     // check whether the object has an access key matching the current level.
     if (Object.entries(o).some(
       e => e[0] === 'roles' && !Object.keys(e[1]).some(
-        role => roles.includes(role)
+        role => roles.includes(role) || (role.match(/^\!/) && !roles.includes(role.replace(/^\!/, '')))
       )
     )) {
 
