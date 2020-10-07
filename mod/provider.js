@@ -71,14 +71,16 @@ function generateSignedDownloadUrl(ref) {
 
 async function cloudfront(ref) {
   try {
+
+    const url = ref.params && ref.params.url || ref
   
-    const signedUrl = await generateSignedDownloadUrl(ref)
+    const signedUrl = await generateSignedDownloadUrl(url)
   
     const response = await fetch(signedUrl)
   
     if (response.status >= 300) return new Error(`${response.status} ${ref}`)
 
-    if (ref.match(/\.json$/i)) return await response.json()
+    if (url.match(/\.json$/i)) return await response.json()
 
     return await response.text()
 
