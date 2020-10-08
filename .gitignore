@@ -12,6 +12,8 @@ public/workspaces/*
 !public/workspaces/dev.json
 !public/workspaces/geodata.json
 
+public/views/[!_]*.*
+
 public/views/wellbeing.*
 public/views/geodata.html
 public/views/geodata.js
