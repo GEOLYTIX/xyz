@@ -85,120 +85,6 @@
         }
     },
     "locales": {
-        "Roles": {
-            "gazetteer": {
-                "provider": "GOOGLE",
-                "country": "GB",
-                "placeholder": "eg. Marseille",
-                "label": true,
-                "limit": 8,
-                "datasets": [{
-                        "layer": "Test",
-                        "table": "dev.uk_glx_open_retail_points_food_stores",
-                        "label": "store_name",
-                        "leading_wildcard": true,
-                        "limit": 5
-                    },
-                    {
-                        "layer": "no_roles",
-                        "table": "dev.uk_glx_open_retail_points_food_stores",
-                        "label": "add_one",
-                        "space_wildcard": true,
-                        "minLength": 2
-                    }
-                ]
-            },
-            "bounds": {
-                "north": 62,
-                "east": 5,
-                "south": 49,
-                "west": -13
-            },
-            "minZoom": 2,
-            "maxZoom": 17,
-            "showScaleBar": true,
-            "layers": {
-                "OSM": {
-                    "display": true,
-                    "format": "tiles",
-                    "attribution": {
-                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-                    },
-                    "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                },
-                "Test": {
-                    "display": true,
-                    "roles": {
-                        "default": null,
-                        "ki": {
-                            "store": {
-                                "like": "ki"
-                            }
-                        },
-                        "mo": {
-                            "retailer": {
-                                "like": "mo"
-                            }
-                        },
-                        "te": {
-                            "retailer": {
-                                "like": "te"
-                            }
-                        }
-                    },
-                    "format": "cluster",
-                    "dbs": "MAPP",
-                    "table": "dev.uk_glx_open_retail_points_food_stores",
-                    "geom": "geom_p_4326",
-                    "srid": "4326",
-                    "qID": "id",
-                    "infoj": [{
-                        "field": "retailer",
-                        "title": "Retailer",
-                        "inline": true,
-                        "filter": "like"
-                    }],
-                    "style": {
-                        "default": {
-                            "type": "target",
-                            "fillColor": "#1e88e5"
-                        },
-                        "label": {
-                            "field": "store_name",
-                            "display": true,
-                            "declutter": true
-                        }
-                    }
-                },
-                "no_roles": {
-                    "format": "cluster",
-                    "dbs": "MAPP",
-                    "table": "dev.uk_glx_open_retail_points_food_stores",
-                    "qID": "id",
-                    "geom": "geom_p_4326",
-                    "srid": "4326",
-                    "hover": {
-                        "field": "store_name"
-                    },
-                    "infoj": [{
-                        "field": "retailer",
-                        "title": "Retailer",
-                        "inline": true,
-                        "filter": "like"
-                    }],
-                    "style": {
-                        "default": {
-                            "type": "triangle",
-                            "fillColor": "rgba(255,112,67, 0.3)"
-                        },
-                        "label": {
-                            "field": "store_name",
-                            "declutter": true
-                        }
-                    }
-                }
-            }
-        },
         "Natural Earth": {
             "minZoom": 3,
             "maxZoom": 14,
@@ -339,8 +225,7 @@
                             "layout": "fitColumns",
                             "query": "UK Retail Places Layer Table",
                             "viewport": true,
-                            "columns": [
-                                {
+                            "columns": [{
                                     "title": "ID",
                                     "field": "id"
                                 },
@@ -594,7 +479,11 @@
                             "title": "Site Type",
                             "inline": true,
                             "edit": {
-                                "options": ["Type A", "Type B", " "]
+                                "options": [
+                                    "Type A",
+                                    "Type B",
+                                    " "
+                                ]
                             }
                         },
                         {
@@ -694,9 +583,21 @@
                                 "width": 290,
                                 "type": "bar",
                                 "responsive": true,
-                                "labels": ["Rand 1", "Rand 2", "Rand 3", "Rand 4", "Rand 5"],
+                                "labels": [
+                                    "Rand 1",
+                                    "Rand 2",
+                                    "Rand 3",
+                                    "Rand 4",
+                                    "Rand 5"
+                                ],
                                 "datasets": [{
-                                        "fields": ["random1", "random2", "random3", "random4", "random5"],
+                                        "fields": [
+                                            "random1",
+                                            "random2",
+                                            "random3",
+                                            "random4",
+                                            "random5"
+                                        ],
                                         "label": "Serie 1",
                                         "backgroundColor": "rgba(192, 117, 205, 0.3)",
                                         "borderColor": "#4a148c",
@@ -704,7 +605,13 @@
                                         "type": "bar"
                                     },
                                     {
-                                        "fields": ["rev_random1", "rev_random2", "rev_random3", "rev_random4", "rev_random5"],
+                                        "fields": [
+                                            "rev_random1",
+                                            "rev_random2",
+                                            "rev_random3",
+                                            "rev_random4",
+                                            "rev_random5"
+                                        ],
                                         "label": "Serie 2",
                                         "type": "line",
                                         "backgroundColor": "rgba(255, 167, 38, 0.3)",
@@ -730,9 +637,21 @@
                             "target": "xyz_sites_random2",
                             "chart": {
                                 "type": "doughnut",
-                                "labels": ["Rand 1", "Rand 2", "Rand 3", "Rand 4", "Rand 5"],
+                                "labels": [
+                                    "Rand 1",
+                                    "Rand 2",
+                                    "Rand 3",
+                                    "Rand 4",
+                                    "Rand 5"
+                                ],
                                 "datasets": [{
-                                    "fields": ["random1", "random2", "random3", "random4", "random5"],
+                                    "fields": [
+                                        "random1",
+                                        "random2",
+                                        "random3",
+                                        "random4",
+                                        "random5"
+                                    ],
                                     "backgroundColor": [
                                         "rgba(229, 99 , 153, 0.4)",
                                         "rgba(0, 167, 225, 0.4)",
@@ -1322,7 +1241,16 @@
                             "chart": {
                                 "height": 200,
                                 "type": "bar",
-                                "labels": ["2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018"],
+                                "labels": [
+                                    "2011",
+                                    "2012",
+                                    "2013",
+                                    "2014",
+                                    "2015",
+                                    "2016",
+                                    "2017",
+                                    "2018"
+                                ],
                                 "datasets": [{
                                     "fields": [
                                         "_pop__11",
@@ -1888,7 +1816,121 @@
                 "Restaurants": {
                     "template": "japan_restaurants",
                     "roles": {
-                        "en": true
+                        "!ja": null
+                    }
+                }
+            }
+        },
+        "Roles": {
+            "gazetteer": {
+                "provider": "GOOGLE",
+                "country": "GB",
+                "placeholder": "eg. Marseille",
+                "label": true,
+                "limit": 8,
+                "datasets": [{
+                        "layer": "Test",
+                        "table": "dev.uk_glx_open_retail_points_food_stores",
+                        "label": "store_name",
+                        "leading_wildcard": true,
+                        "limit": 5
+                    },
+                    {
+                        "layer": "no_roles",
+                        "table": "dev.uk_glx_open_retail_points_food_stores",
+                        "label": "add_one",
+                        "space_wildcard": true,
+                        "minLength": 2
+                    }
+                ]
+            },
+            "bounds": {
+                "north": 62,
+                "east": 5,
+                "south": 49,
+                "west": -13
+            },
+            "minZoom": 2,
+            "maxZoom": 17,
+            "showScaleBar": true,
+            "layers": {
+                "OSM": {
+                    "display": true,
+                    "format": "tiles",
+                    "attribution": {
+                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+                    },
+                    "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                },
+                "Test": {
+                    "display": true,
+                    "roles": {
+                        "default": null,
+                        "ki": {
+                            "store": {
+                                "like": "ki"
+                            }
+                        },
+                        "mo": {
+                            "retailer": {
+                                "like": "mo"
+                            }
+                        },
+                        "te": {
+                            "retailer": {
+                                "like": "te"
+                            }
+                        }
+                    },
+                    "format": "cluster",
+                    "dbs": "MAPP",
+                    "table": "dev.uk_glx_open_retail_points_food_stores",
+                    "geom": "geom_p_4326",
+                    "srid": "4326",
+                    "qID": "id",
+                    "infoj": [{
+                        "field": "retailer",
+                        "title": "Retailer",
+                        "inline": true,
+                        "filter": "like"
+                    }],
+                    "style": {
+                        "default": {
+                            "type": "target",
+                            "fillColor": "#1e88e5"
+                        },
+                        "label": {
+                            "field": "store_name",
+                            "display": true,
+                            "declutter": true
+                        }
+                    }
+                },
+                "no_roles": {
+                    "format": "cluster",
+                    "dbs": "MAPP",
+                    "table": "dev.uk_glx_open_retail_points_food_stores",
+                    "qID": "id",
+                    "geom": "geom_p_4326",
+                    "srid": "4326",
+                    "hover": {
+                        "field": "store_name"
+                    },
+                    "infoj": [{
+                        "field": "retailer",
+                        "title": "Retailer",
+                        "inline": true,
+                        "filter": "like"
+                    }],
+                    "style": {
+                        "default": {
+                            "type": "triangle",
+                            "fillColor": "rgba(255,112,67, 0.3)"
+                        },
+                        "label": {
+                            "field": "store_name",
+                            "declutter": true
+                        }
                     }
                 }
             }
