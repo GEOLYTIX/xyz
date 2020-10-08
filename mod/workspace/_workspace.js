@@ -112,12 +112,10 @@ function getLocales(req, res) {
 
     if (!locale.roles) return key
 
-    if (locale.roles && !Object.keys(locale.roles).some(
+    if (Object.keys(locale.roles).some(
       role => req.params.token && req.params.token.roles
-      && req.params.token.roles.includes(role)
-      || (role.match(/^\!/) && !req.params.token.roles.includes(role.replace(/^\!/, '')))
+        && req.params.token.roles.includes(role)
     )) return key
-
 
   }).filter(key => typeof key ==='string')
 
