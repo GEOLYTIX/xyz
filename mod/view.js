@@ -27,12 +27,14 @@ module.exports = async (req, res) => {
   }
 
   const html = template.render(Object.assign(
-    req.params || {}, {
-    title: process.env.TITLE || 'GEOLYTIX | XYZ',
-    dir: process.env.DIR || '',
-    token: req.params.token && req.params.token.signed || '""',
-    login: (process.env.PRIVATE || process.env.PUBLIC) && 'true' || '""',
-  }))
+    req.params || {},
+    {
+      title: process.env.TITLE || 'GEOLYTIX | XYZ',
+      dir: process.env.DIR || '',
+      token: req.params.token && req.params.token.signed || '""',
+      login: (process.env.PRIVATE || process.env.PUBLIC) && 'true' || '""',
+    },
+    Object.fromEntries(Object.entries(process.env).filter(entry => entry[0].match(/^SRC_/)))))
 
   //Build the template with jsrender and send to client.
   res.send(html)
