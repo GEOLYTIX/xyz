@@ -27,7 +27,7 @@
     "express-http-proxy": "^1.6.0",
     "jsonwebtoken": "^8.5.1",
     "mobile-detect": "^1.4.3",
-    "node-fetch": "^2.2.1",
+    "node-fetch": "^2.6.1",
     "nodemailer": "^4.6.8",
     "pg": "^7.5.0"
   },
