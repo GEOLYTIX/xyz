@@ -33,3 +33,38 @@ roles: {
 ```
 
 User with the role 'uk' in their token will have a SQL match filter for the value 'uk' on the field 'country' applied to all queries for this layer.
+
+# Language versions
+
+User can select language from the list of supported languages in the login form. Workspace content can be displayed in relevant language versions. Concept of roles can be applied to locale and / or layer availability dependent on selected language.
+
+This is the list of currently supported languages.
+
+| code  | language | original | note
+| --- | ----------- |
+| en | English | * | default | 
+| de | German | Deutsch | |
+| fr | French | Français | |
+| pl | Polish | Polski | |
+| ja | Japanese | 日本語 | |
+| ko | Korean | 한국어 | |
+| zh | Chinese | 中文简体 | |
+
+Codes adhere to ISO 639-1 norm of language codes.
+*Please note these are keys reserved to language versions within `"roles"` object.*
+
+In order to define an element as Japanese write:
+
+```json
+"roles": {
+	"ja": null
+}
+```
+
+In order to restrict an element from Japanese language write:
+
+```json
+"roles": {
+	"!ja": null
+}
+```

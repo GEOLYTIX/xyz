@@ -184,15 +184,15 @@
       
       
       
+      
+      
+      
+      
+      
+      
       <li class="__1 ">
         <a href="/xyz/docs/">XYZ</a>
       </li>
-      
-      
-      
-      
-      
-      
       
       
       
@@ -398,6 +398,30 @@
 }
 </code></pre>
 <p>User with the role 'uk' in their token will have a SQL match filter for the value 'uk' on the field 'country' applied to all queries for this layer.</p>
+<h1>Language versions</h1>
+<p>User can select language from the list of supported languages in the login form. Workspace content can be displayed in relevant language versions. Concept of roles can be applied to locale and / or layer availability dependent on selected language.</p>
+<p>This is the list of currently supported languages.</p>
+<p>| code  | language | original | note<br>
+| --- | ----------- |<br>
+| en | English | * | default |<br>
+| de | German | Deutsch | |<br>
+| fr | French | Français | |<br>
+| pl | Polish | Polski | |<br>
+| ja | Japanese | 日本語 | |<br>
+| ko | Korean | 한국어 | |<br>
+| zh | Chinese | 中文简体 | |</p>
+<p>Codes adhere to ISO 639-1 norm of language codes.<br>
+<em>Please note these are keys reserved to language versions within <code>&quot;roles&quot;</code> object.</em></p>
+<p>In order to define an element as Japanese write:</p>
+<pre><code class="language-json">&quot;roles&quot;: {
+	&quot;ja&quot;: null
+}
+</code></pre>
+<p>In order to restrict an element from Japanese language write:</p>
+<pre><code class="language-json">&quot;roles&quot;: {
+	&quot;!ja&quot;: null
+}
+</code></pre>
 
     </div>
 
