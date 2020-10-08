@@ -104,16 +104,20 @@ function getTemplates(req, res) {
 
 function getLocales(req, res) {
 
+  if (!req.params.workspace.locales) return res.send({})
+
   const locales = Object.keys(req.params.workspace.locales).map(key => {
 
     const locale = req.params.workspace.locales[key]
 
     if (!locale.roles) return key
 
-    if (Object.keys(locale.roles).some(
+    if (locale.roles && !Object.keys(locale.roles).some(
       role => req.params.token && req.params.token.roles
-        && req.params.token.roles.includes(role)
+      && req.params.token.roles.includes(role)
+      || (role.match(/^\!/) && !req.params.token.roles.includes(role.replace(/^\!/, '')))
     )) return key
+
 
   }).filter(key => typeof key ==='string')
 
