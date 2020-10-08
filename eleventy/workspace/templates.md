@@ -48,7 +48,7 @@ Query templates may be compiled from string by way of literal or ressource link 
 
 ```json
 "pl_population": {
-  "module": true,
+  "module": true, // or "type": "module"
   "src": "https://geolytix.github.io/public/mapp/layers/poland/pl_population.js"
 }
 ```
