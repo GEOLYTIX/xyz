@@ -35,10 +35,13 @@ window.onload = () => {
 
     if (!locales.length) return console.log('No accessible locales')
 
-    const locale = (xyz.hooks && xyz.hooks.current.locale) || locales[0]
+    const locale = xyz.hooks && xyz.hooks.current.locale ? {
+      key: xyz.hooks.current.locale, 
+      name: locales.find(l => l.key === xyz.hooks.current.locale).name
+    } : locales[0];
 
     xyz.workspace.get.locale({
-      locale: locale
+      locale: locale.key
     }).then(createMap)
 
     if (locales.length === 1) return
@@ -55,11 +58,11 @@ window.onload = () => {
           e.preventDefault()
           e.target.parentElement.classList.toggle('active')
         }}>
-        <span>${locale}</span>
+        <span>${locale.name || locale.key}</span>
         <div class="icon"></div>
       </div>
       <ul>${locales.map(
-          locale => xyz.utils.html.node`<li><a href="${xyz.host + '?locale=' + locale + `${xyz.hooks && xyz.hooks.current.language ? '&language=' + xyz.hooks.current.language : ''}`}">${locale}`
+        _locale => xyz.utils.html.node`<li><a href="${xyz.host + '?locale=' + _locale.key + `${xyz.hooks && xyz.hooks.current.language ? '&language=' + xyz.hooks.current.language : ''}`}">${_locale.name || _locale.key}`
         )}`
 
     layersTab.parentElement.insertBefore(localeDropdown, layersTab.parentElement.firstChild)
