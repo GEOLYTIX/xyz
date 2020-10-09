@@ -110,14 +110,14 @@ function getLocales(req, res) {
 
     const locale = req.params.workspace.locales[key]
 
-    if (!locale.roles) return key
+    if (!locale.roles) return {key: key, name: locale.name}
 
     if (Object.keys(locale.roles).some(
       role => req.params.token && req.params.token.roles
         && req.params.token.roles.includes(role)
-    )) return key
+    )) return { key: key, name: locale.name }//key
 
-  }).filter(key => typeof key ==='string')
+  }).filter(item => item && typeof item.key ==='string')
 
   res.send(locales)
 
