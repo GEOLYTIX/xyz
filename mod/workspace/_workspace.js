@@ -56,6 +56,7 @@ async function getLayer(req, res) {
   if (locale.roles && !Object.keys(locale.roles).some(
     role => req.params.token && req.params.token.roles
       && req.params.token.roles.includes(role)
+      || (role.match(/^\!/) && !req.params.token.roles.includes(role.replace(/^\!/, '')))
   )) return res.status(403).send('Role access denied.')
 
   let layer = locale && locale.layers[req.params.layer] ||  req.params.workspace.templates[req.params.layer]
@@ -113,9 +114,10 @@ function getLocales(req, res) {
     if (!locale.roles) return {key: key, name: locale.name}
 
     if (Object.keys(locale.roles).some(
-      role => req.params.token && req.params.token.roles
-        && req.params.token.roles.includes(role)
-    )) return { key: key, name: locale.name }//key
+      role => (req.params.token && req.params.token.roles
+        && req.params.token.roles.includes(role)) 
+      || (role.match(/^\!/) && !req.params.token.roles.includes(role.replace(/^\!/, '')))
+    )) return { key: key, name: locale.name }
 
   }).filter(item => item && typeof item.key ==='string')
 
@@ -131,10 +133,10 @@ function getLocale(req, res) {
 
   let locale = Object.assign({key: req.params.locale}, cloneDeep(req.params.workspace.locales[req.params.locale]))
 
-  if (locale.roles && !Object.keys(locale.roles).some(
-    role => req.params.token && req.params.token.roles
-      && req.params.token.roles.includes(role)
-  )) return res.status(403).send('Role access denied.')
+   if(locale.roles && !Object.keys(locale.roles).some(
+    role => req.params.token && req.params.token.roles && req.params.token.roles.includes(role) 
+    || ((role.match(/^\!/) && !req.params.token.roles.includes(role.replace(/^\!/, ''))))
+    )) return res.status(403).send('Role access denied.')
 
   locale.layers = Object.entries(locale.layers)
     .map(layer => {
