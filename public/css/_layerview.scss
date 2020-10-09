@@ -47,10 +47,29 @@
 
     .meta {
         font-size: 90%;
+        padding-bottom: 5px;
     }
 
-    .legend>svg {
-        width: 100%;
+    .legend.grid {
+      margin-top: 5px;
+      display: grid;
+      grid-template-columns: min-content;
+      grid-gap: 5px;
+      align-items: center;
+      justify-content: start;
+    }
+
+    .legend .label {
+      font-size: 12px;
+    }
+
+    .legend .switch {
+      cursor: pointer;
+    }
+
+    .legend .switch.disabled {
+      text-decoration: line-through;
+      opacity: 0.5;
     }
 
     .drawer.panel {

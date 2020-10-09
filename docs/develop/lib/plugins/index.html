@@ -1,0 +1,420 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
+  <title>Plugins</title>
+  <style>
+
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .grid {
+      font-family: system-ui;
+      display:grid;
+      grid-template-columns: 200px 5fr;
+      max-width: 1100px;
+      margin: auto;
+      padding: 0 30px;
+    }
+
+    #toggle {
+        display: none;
+    }
+
+    #toggle:hover {
+      cursor: pointer;
+    }
+
+    #nav {
+      grid-column: 1;
+      padding-inline-start: 0px;
+      list-style-type: none;
+      padding-right: 20px;
+      margin: 10px 0;
+      position: fixed;
+    }
+
+    #nav > *:first-child {
+      line-height: 1;
+      font-size: 30px;
+      font-weight: bold;
+    }
+
+    #content {
+      grid-column: 2;
+      padding-left: 20px;
+      border-left: 1px solid #ddd;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    #content > *:first-child {
+      margin: 0;
+    }
+
+    .active {
+      font-weight: bold;
+    }
+
+    a {
+      text-decoration: none;
+      white-space: nowrap;
+      color: #333;
+    }
+
+    h1, h2, h3 {
+      margin-bottom: 0.5em;
+    }
+
+    p {
+      margin-top: 0.5em;
+      line-height: 1.5;
+    }
+
+    li {
+      line-height: 1.5;
+    }
+
+    li.__0 {
+      padding-left: 0;
+    }
+
+    li.__1 {
+      padding-left: 0;
+    }
+
+    li.__2 {
+      padding-left: 0;
+    }
+
+    li.__3 {
+      padding-left: 20px;
+    }
+
+    li.__4 {
+      padding-left: 40px;
+    }
+
+    pre {
+      display: block;
+      font-family: monospace;
+      white-space: pre;
+      margin: 1em 2px;
+      padding: 15px;
+      box-shadow: 0 0 2px #555;
+      overflow-x: auto;
+      background-color: #f0f0f0;
+    }
+
+    code {
+      font-family: monospace;
+      background-color: #f0f0f0;
+    }
+
+    *:not(pre) > code {
+      padding: 5px;
+    }
+
+    #content a {
+      color: #090;
+    }
+
+    #content img {
+      max-width: 100%;
+      display: block;
+      margin: 0 auto;
+    }
+
+    @media only screen and (max-width: 700px) {
+      .grid {
+        grid-template-columns: 0 1fr;
+        padding: 0 0 0 40px;
+      }
+
+      #toggle {
+        display: block;
+        position: fixed;
+        top: 10px;
+        left: 10px;        
+        width: 20px;
+        height: 30px;
+        background: repeating-linear-gradient(#ddd, #fff 10px);
+      }
+
+      #nav {
+        display: none;
+      }
+
+      #content {
+        border-left: none;
+        padding: 0 20px 0 1px;
+        overflow: hidden;
+      }
+    }
+
+    .show_nav {
+      grid-template-columns: 1fr 2fr;
+    }
+
+    .show_nav > #nav {
+      display: block;
+    }
+
+    .show_nav > #content * {
+      font-size: 30%;
+      padding: 0;
+      overflow: hidden;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="grid">
+
+    <div id="toggle"></div>
+
+    <ul id="nav">
+      
+      
+      
+      
+      
+      <li class="__1 ">
+        <a href="/xyz/docs/develop/">Develop</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/develop/api/">API</a>
+      </li>
+      
+      
+      
+      <li class="__1 ">
+        <a href="/xyz/docs/">XYZ</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/api/gazetteer/">Gazetteer</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/api/layer/">Layer</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/api/location/">Location</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/api/provider/">Provider</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/api/proxy/">Proxy</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/api/query/">Query</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/api/user/">User</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/api/view/">View</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/api/workspace/">Workspace</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/develop/design/">Design</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/develop/lib/library/">Library</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/lib/dataviews/">Dataviews</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/lib/layers/">Layers</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/lib/locations/">Locations</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/lib/mapview/">Mapview</a>
+      </li>
+      
+      
+      
+      <li class="__4 ">
+        <a href="/xyz/docs/develop/lib/mapview/interactions/">Interactions</a>
+      </li>
+      
+      
+      
+      <li class="__3 active">
+        <a href="/xyz/docs/develop/lib/plugins/">Plugins</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/lib/webpack/">Webpack</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/develop/security/authentication/">Authentication</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/develop/views/">Application Views</a>
+      </li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+    </ul>
+
+    <div id="content">
+      <h1>Library plugins</h1>
+<p>Script plugins may be used to extend the XYZ Library.</p>
+<p>The xyz.plugins() method will create promises for <a href="/xyz/docs/workspace/locales/plugins">plugins which have been defined in the locale workspace</a>. The promise method will add an event listener and a script tag to the window object. The event listener function will pass the XYZ Library object to method which has been defined as the <a href="https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/detail">custom event's detail</a>. Thereafter the event listener will remove itself as well as the script tag from the window document.</p>
+<p>xyz.plugins() will return a promise which will be resolved after all plugin promises have been resolved. The script for the default Mapp views will add plugins prior to loading layers.</p>
+<p>Plugin script must dispatch a custom event to the document. The event name must match the plugin key in the locale configuration.</p>
+<p>The event detail can be a function which will receive the XYZ Library object. Additional library methods may be created or existing methods can be re-assigned. The example below re-assigns the xyz.layers.view.create() method. The original method will be called first within the new method. The function will short circuit if a custom property flag <code>clusterPanel</code> is not assigned to the layers object which must be passed to xyz.layers.view.create(). Otherwise a panel for the control of cluster layer properies will be added the layer view node. The full script is in <a href="https://github.com/GEOLYTIX/xyz/tree/development/public/js/plugins">public/js/plugins</a>.</p>
+<pre><code class="language-javascript">document.dispatchEvent(new CustomEvent('cluster', {
+  detail: _xyz =&gt; {
+
+    const createView = _xyz.layers.view.create
+
+    _xyz.layers.view.create = layer =&gt; {
+
+      createView(layer)
+
+      if (!layer.clusterPanel) return
+
+      // create a cluster panel in the layer view.
+  }
+}))
+</code></pre>
+
+    </div>
+
+  </div>
+
+</body>
+
+<script>
+    const toggle = document.getElementById('toggle');
+
+    toggle.onclick = e => { e.target.parentElement.classList.toggle('show_nav'); };
+</script>
+
+</html>

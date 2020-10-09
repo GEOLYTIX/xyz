@@ -2,6 +2,7 @@
 title: Location
 tags: [workspace]
 layout: root.html
+group: true
 orderPath: /workspace/locations/_infoj
 ---
 
@@ -11,7 +12,9 @@ The infoj is a location schema which must defined inside the layer configuration
 
 The infoj schema is an array of objects. Each infoj entry may either represent a field to be queried for a value from the layer table or a complex object such as a dataview or even a custom script to be loaded and executed.
 
-The **`field`** is the datasource (PostGIS table) field to be queried for a property value to be presented in the location info.
+The **`field`** is the datasource (PostGIS table) field to be queried for a property value to be presented in the location info. 
+
+Set `title` only to display full-width text.
 
 The **`title`** will be displayed before the field value.
 
@@ -24,10 +27,6 @@ The default being a simple text value.
 `"type" : "text"`
 
 In order to split data rows with label headers define entry as:
-
-`"type" : "label"`
-
-A text will be displayed on a new line below the label.
 
 `"type" : "textarea"`
 
@@ -74,3 +73,15 @@ The entry will displayed as a Google Streetview image requested for the location
 `"type" : "geometry"`
 
 A geometry associated with the location will be read from the table field and displayed in the map control together with the location's own geometry.
+
+`"tooltip": <text>`
+
+To enable tooltip on mouse hover. 
+
+`"type": "json"`
+
+This entry stores string representation of JSON object. To enable editing add flag `"edit": true`. The recommended PostgreSQL database column type to store this value is `jsonb`.
+
+`"class": "<class name>"`
+
+Property `"class"` applies CSS class to the entry which can be used for custom styling of the entry. Class CSS can be included in CSS stylesheets and document templates.

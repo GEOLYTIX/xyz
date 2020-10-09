@@ -184,13 +184,15 @@
       
       
       
-      <li class="__0 ">
+      
+      
+      
+      
+      
+      
+      <li class="__1 ">
         <a href="/xyz/docs/">XYZ</a>
       </li>
-      
-      
-      
-      
       
       
       
@@ -260,6 +262,18 @@
       
       
       
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/dataviews/charts/">Charts</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/dataviews/tables/">Tables</a>
+      </li>
+      
+      
+      
       <li class="__2 ">
         <a href="/xyz/docs/workspace/layer/">Layer</a>
       </li>
@@ -268,6 +282,12 @@
       
       <li class="__3 active">
         <a href="/xyz/docs/workspace/layer/cluster/">Cluster</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/layer/editing/">Layer editing</a>
       </li>
       
       
@@ -314,13 +334,37 @@
       
       
       
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/locales/plugins/">Plugins</a>
+      </li>
+      
+      
+      
       <li class="__2 ">
         <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
       </li>
       
       
       
-      <li class="__1 ">
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/roles/">Roles</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/src/">Source Links</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
         <a href="/xyz/docs/workspace/styles/">Styles</a>
       </li>
       
@@ -345,6 +389,7 @@
 <p><strong>cluster_kmeans</strong> defines the minimum number of cluster. The number is determined by 1 over the kmeans value (eg. KMeans 0.05 will generate a minimum number of 20 cluster). The XYZ backend will adjusted KMeans by the absolute number of locations in a map view. The KMeans value can be altered through the cluster panel. <em>The default value is 0.5.</em> <strong>A lower KMeans value will produce more cluster.</strong></p>
 <p><code>&quot;cluster_dbscan&quot;: 0.01</code></p>
 <p><strong>cluster_dbscan</strong> defines the maximum distance between locations in a cluster. The applied value is a ratio of the cross distance across the map view (eg. DBScan 0.01 with 10km cross distance of the map view will set the maximum distance between locations to 100 meter). <em>The default value is 0.01.</em> <strong>A higher DBScan value will produce more cluster.</strong></p>
+<p>Layer will be drawn by default on zIndex: 10.</p>
 
     </div>
 

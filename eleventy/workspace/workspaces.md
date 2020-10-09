@@ -2,7 +2,8 @@
 title: Workspace
 tags: [workspace, root]
 layout: root.html
-orderPath: /workspace/_workspaces
+group: true
+orderPath: /workspace/_workspace
 ---
 
 # XYZ Workspace

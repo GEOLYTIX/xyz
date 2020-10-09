@@ -1,0 +1,241 @@
+<!doctype html>
+<html>
+
+<head data-dir="${dir}">
+  <title>XYZ | Enregistrement</title>
+  <link rel="icon" type="image/x-icon" href="${dir}/icons/favicon.ico" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="${dir}/views/register/_register.js" defer></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 50px;
+      font: 14px "Open Sans", sans-serif;
+    }
+
+    .input-group {
+      width: 100%;
+      max-width: 500px;
+    }
+
+    input {
+      padding: 10px 0;
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid #999;
+      font-size: 18px;
+    }
+
+    input:focus {
+      outline: none;
+    }
+
+    input:-webkit-autofill {
+      box-shadow: 0 0 0px 1000px white inset;
+    }
+
+    .bar {
+      position: relative;
+      display: block;
+      width: 100%;
+    }
+
+    .bar:before,
+    .bar:after {
+      content: '';
+      height: 2px;
+      width: 0;
+      bottom: 0;
+      position: absolute;
+      background: #1F964D;
+      transition: 0.2s ease all;
+      -moz-transition: 0.2s ease all;
+      -webkit-transition: 0.2s ease all;
+    }
+
+    input:invalid+.bar:before,
+    input:invalid+.bar:after {
+      background: orangered;
+    }
+
+    .bar:before {
+      left: 50%;
+    }
+
+    .bar:after {
+      right: 50%;
+    }
+
+    input:focus~.bar:before,
+    input:focus~.bar:after {
+      width: 50%;
+    }
+
+    button {
+      color: white;
+      background-color: #1F964D;
+      margin: 10px 0;
+      padding: 8px;
+      text-align: center;
+      font: 18px "Open Sans", sans-serif;
+      font-weight: 700;
+      border-radius: 3px;
+      border: 0;
+      box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .login_form p {
+      font-size: 18px;
+    }
+
+    .register_form p {
+      font-size: 14px;
+    }
+
+    .bold {
+      font-weight: bold;
+    }
+
+    .switch {
+      font-size: 18px;
+      text-decoration: none;
+      color: #1F964D;
+      font-weight: 700;
+    }
+
+    button:hover,
+    .switch:hover {
+      cursor: pointer;
+    }
+
+    button:disabled {
+      background-color: darkslategrey;
+    }
+
+    .msg {
+      color: #f57c00;
+    }
+
+    .mailto {
+      color: #1F964D;
+      text-decoration: none;
+    }
+
+    .checkbox {
+      display: block;
+    }
+
+    .checkbox input {
+      display: none;
+    }
+
+    .checkbox>span {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .checkbox>div {
+      display: inline-block;
+      vertical-align: middle;
+      width: 18px;
+      height: 18px;
+      margin-right: 5px;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      -webkit-background-size: contain;
+      background-image: url("${dir}/icons/icon-checkbox-unchecked.svg");
+    }
+
+    input:checked+div {
+      background-image: url("${dir}/icons/icon-checkbox-checked.svg");
+    }
+
+    #btnRegister {
+      display: block;
+    }
+  </style>
+</head>
+
+<body class="register_form">
+  <form method="post">
+
+    <input style="display:none;" name="language" required value=${language}>
+
+    <div class="input-group">
+      <input id="auth_user_email" name="email" type="email" autocomplete="off" required maxlength="50" value="">
+
+      <span class="bar"></span>
+      <label for="auth_user_email">E-mail</label>
+    </div>
+
+    <br>
+
+    <div class="input-group">
+      <input id="auth_user_password" name="password" type="password" autocomplete="off" required minlength="8" value="">
+
+      <span class="bar"></span>
+      <label for="auth_user_password">Le nouveau mot de passe (au moins 8 caractères)</label>
+    </div>
+
+    <br>
+
+    <div class="input-group">
+      <input id="auth_user_password_retype" type="password" autocomplete="off" required minlength="8" value="">
+
+      <span class="bar"></span>
+      <label for="auth_user_password_retype">Revalider le mot de passe</label>
+    </div>
+
+    <br>
+
+    <p class="bold">Confidentialité</p>
+
+    <p>Ici à Geolytix nous prenons très au sérieux votre confidentialité. Nous utilisons vos données personnelles pour
+      gérer votre compte et vous fournir les produits et services requis. Nous ne partagerons jamais vos informations
+      avec des tiers.
+    </p>
+
+    <p>Désactivation d'un compte peut être effectuée par l'administrateur.
+      Si vous souhaitez supprimer définitivement vos coordonnées veuillez nous contacter à <a class="mailto"
+        href="mailto:support@geolytix.co.uk">support@geolytix.co.uk</a>
+    </p>
+
+    <p>Le propriétaire et exploiteur de ce site est Geolytix dont le siège social se trouve à Phoenix Yard, 65
+      Kings Cross Road, Londres, WC1X 9LW, Royaume-Uni
+    </p>
+
+    <label class="checkbox">
+      <input id="privacy_agreement" type="checkbox">
+      <div></div>
+      <span>J'accepte</span>
+    </label>
+
+    <button id="btnRegister" type="submit" formaction="register" disabled>
+      S'enregistrer ou réinitialiser son mot de passe
+    </button>
+
+    <p class="bold">Maintenant, confirmez votre compte.</p>
+
+    <p>Un e-mail de <a class="mailto" href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a> sera automatiquement
+      expédié à l'adresse entrée
+      avec un lien de vérification.</p>
+
+    <p>Si l'email n'arrivera encore pas en quelques minutes s'il vous plaît vérifier le spam dans votre boîte e-mail.
+      Veuillez ajouter <a class="mailto" href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a> à la liste
+      d'expéditeurs de confiance.
+    </p>
+
+    <p>Après vérification l'administrateur approuvera tous les nouveaux comptes.
+      Vous recevrez un autre email dès que votre compte sera approuvé.
+    </p>
+
+    <a class="switch" href="${dir}/?login">Déjà enregistré? Se connecter.</a>
+  </form>
+
+</body>
+
+</html>

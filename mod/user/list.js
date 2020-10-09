@@ -11,6 +11,7 @@ module.exports = async (req, res) => {
     admin_workspace,
     length(api)::boolean AS api,
     roles,
+    language,
     access_log[array_upper(access_log, 1)],
     failedattempts,
     approved_by,

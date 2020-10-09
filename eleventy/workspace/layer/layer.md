@@ -2,6 +2,7 @@
 title: Layer
 tags: [workspace]
 layout: root.html
+group: true
 orderPath: /workspace/layer/_layer
 ---
 
@@ -43,7 +44,7 @@ A layer can be hidden from the layers list. It is still possible to select locat
 
 The meta value will be displayed as text directly under the layer header in the Layer control of the client application.
 
-```text
+```json
 "attribution": {
   "© Mapbox" : "https://www.mapbox.com/about/maps",
   "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
@@ -90,6 +91,14 @@ The name of the field which stores the layer features geometry. The geometry fie
 `"srid": "4326"`
 
 The PostGIS SRID (EPSG) for the layer geometries projection.
+
+`"qID": "id"`
+
+Unique indentifier for each feature on the given layer. Left unset results in a non-interactive view-only layer. Use this parameter along with unique database column to enable layer interaction and editing. Note that in case of editable layers identifier must be an automatic non-null unique value.
+
+`"infoj": []`
+
+Contains information for each feature in the layer. If left unset feature selection will be prevented. For feature information see more in Location and Infoj section.
 
 ## Groups
 

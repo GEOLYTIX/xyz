@@ -2,6 +2,7 @@
 title: Mapview
 tags: [develop]
 layout: root.html
+group: true
 orderPath: /develop/lib/mapview/_mapview
 ---
 
@@ -16,6 +17,22 @@ Will create an Openlayers map object will be assigned to _xyz.map. Params provid
 Layers with display as true in the layers.list will be immediately added to the map and shown.
 
 A **changeEnd** event listener will update the viewport URL hooks if enabled and check the layers list. Layers which should be displayed at the current zoom level at the end of a map view change event will be reloaded. The changeEnd event will be called after the map view changes due to panning or a change of zoom level. Interactions will be disabled at the beginning of a map view change event.
+
+```javascript
+xyz.mapview.create({
+  target: document.getElementById('Map'),
+  attribution: {
+    target: document.getElementById('Attribution'),
+    links: {
+      [`XYZ v${xyz.version}`]: 'https://geolytix.github.io/xyz',
+      Openlayers: 'https://openlayers.org'
+    }
+  },
+  scrollWheelZoom: true,
+})
+```
+
+With an **attribution** object defined in the create parameters the mapview.attribution module will be called to create a list of links in the attribution target. Links defined within the attribution object will always be shown. An attribution.check method will be run whenever layers are toggled. Links defined as attribution object in the layer configuration will be shown when the layer is visible.
 
 ### view
 

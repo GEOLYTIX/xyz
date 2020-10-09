@@ -6,12 +6,13 @@
 node_modules/*
 public/css/.sass-cache/
 stats.json
-now.json
 env
 
 public/workspaces/*
 !public/workspaces/dev.json
 !public/workspaces/geodata.json
+
+public/views/[!_]*.*
 
 public/views/wellbeing.*
 public/views/geodata.html
@@ -27,3 +28,5 @@ public/views/camelot_report.js
 \.ebextensions/
 .now
 .vercel
+
+*.pem

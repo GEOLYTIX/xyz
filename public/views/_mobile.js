@@ -33,18 +33,23 @@ window.onload = () => {
 
   function getLocale(locales) {
 
-    const locale = (xyz.hooks && xyz.hooks.current.locale) || locales[0]
+    if (!locales.length) return console.log('No accessible locales')
+
+    const locale = xyz.hooks && xyz.hooks.current.locale ? {
+      key: xyz.hooks.current.locale, 
+      name: locales.find(l => l.key === xyz.hooks.current.locale).name
+    } : locales[0];
 
     xyz.workspace.get.locale({
-      locale: locale
+      locale: locale.key
     }).then(createMap)
 
     if (locales.length === 1) return
 
-    const localeDropdown = xyz.utils.wire()`
+    const localeDropdown = xyz.utils.html.node`
     <div>
-      <div class="listview-title secondary-colour-bg">Locales</div>
-      <div>Show layers for the following locale:</div>
+      <div class="listview-title secondary-colour-bg">${xyz.language.locales_header}</div>
+      <div>${xyz.language.show_layers_for_locale}</div>
       <button
         class="btn-drop">
         <div
@@ -53,11 +58,11 @@ window.onload = () => {
           e.preventDefault()
           e.target.parentElement.classList.toggle('active')
         }}>
-        <span>${locale}</span>
+        <span>${locale.name || locale.key}</span>
         <div class="icon"></div>
       </div>
       <ul>${locales.map(
-          locale => xyz.utils.wire()`<li><a href="${xyz.host + '?locale=' + locale}">${locale}`
+        _locale => xyz.utils.html.node`<li><a href="${xyz.host + '?locale=' + _locale.key + `${xyz.hooks && xyz.hooks.current.language ? '&language=' + xyz.hooks.current.language : ''}`}">${_locale.name || _locale.key}`
         )}`
 
     layersTab.parentElement.insertBefore(localeDropdown, layersTab.parentElement.firstChild)
@@ -70,23 +75,25 @@ window.onload = () => {
     xyz.mapview.create({
       target: document.getElementById('Map'),
       attribution: {
-        logo: xyz.utils.wire()`
-        <a
-          class="logo"
-          target="_blank"
-          href="https://geolytix.co.uk"
-          style="background-image: url('https://cdn.jsdelivr.net/gh/GEOLYTIX/geolytix/public/geolytix.svg');">`
+        target: document.getElementById('Attribution'),
+        links: {
+          [`XYZ v${xyz.version}`]: 'https://geolytix.github.io/xyz',
+          Openlayers: 'https://openlayers.org'
+        }
       },
       scrollWheelZoom: true,
     })
 
-    loadLayers(locale.layers)
+    xyz.plugins()
+      .then(() => xyz.layers.load())
+      .then(() => mappUI())
+      .catch(error => console.error(error))
 
-    const btnZoomIn = xyz.utils.wire()`
+    const btnZoomIn = xyz.utils.html.node`
     <button
       disabled=${xyz.map.getView().getZoom() >= xyz.locale.maxZoom}
       class="enabled"
-      title="Zoom in"
+      title=${xyz.language.toolbar_zoom_in}
       onclick=${e => {
         const z = parseInt(xyz.map.getView().getZoom() + 1)
         xyz.map.getView().setZoom(z)
@@ -95,11 +102,11 @@ window.onload = () => {
 
     document.querySelector('.btn-column').appendChild(btnZoomIn)
 
-    const btnZoomOut = xyz.utils.wire()`
+    const btnZoomOut = xyz.utils.html.node`
     <button
       disabled=${xyz.map.getView().getZoom() <= xyz.locale.minZoom}
       class="enabled"
-      title="Zoom out"
+      title=${xyz.language.toolbar_zoom_out}
       onclick=${e => {
         const z = parseInt(xyz.map.getView().getZoom() - 1)
         xyz.map.getView().setZoom(z)
@@ -114,9 +121,9 @@ window.onload = () => {
       btnZoomOut.disabled = z <= xyz.locale.minZoom;
     })
 
-    document.querySelector('.btn-column').appendChild(xyz.utils.wire()`
+    document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
     <button
-      title="Zoom to area"
+      title=${xyz.language.toolbar_zoom_to_area}
       onclick=${e => {
         e.stopPropagation()
         e.target.classList.toggle('enabled')
@@ -135,49 +142,15 @@ window.onload = () => {
       }}>
       <div class="xyz-icon icon-area off-black-filter">`)
 
-    document.querySelector('.btn-column').appendChild(xyz.utils.wire()`
+    document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
     <button
-      title="Current location"
+      title=${xyz.language.toolbar_current_location}
       onclick=${e => {
         xyz.mapview.locate.toggle();
         e.target.classList.toggle('enabled');
       }}>
       <div class="xyz-icon icon-gps-not-fixed off-black-filter">`)
 
-  }
-
-  function loadLayers(layers) {
-
-    const layerPromises = layers.map(layer => {
-
-      return xyz.workspace.get.layer({
-        locale: xyz.locale.key,
-        layer: layer
-      })
-
-    })
-
-    Promise.all(layerPromises).then(layers => {
-
-      if (xyz.hooks && xyz.hooks.current.layers.length) {
-        layers.forEach(layer => {
-          layer.display = !!~xyz.hooks.current.layers.indexOf(layer.key)
-        })
-      }
-
-      layers.forEach(layer => {
-
-        if (!layer.format) return
-
-        layer = xyz.layers.decorate(layer)
-        xyz.layers.list[layer.key] = layer
-        layer.display && layer.show()
-
-      })
-
-      mappUI()
-
-    })
   }
 
   function mappUI() {
@@ -207,13 +180,13 @@ window.onload = () => {
 
     if (xyz.locale.gazetteer) {
 
-      const gazetteer = _xyz.utils.wire()`
+      const gazetteer = xyz.utils.html.node`
       <div id="gazetteer" class="display-none">
         <div class="input-drop">
             <input type="text" placeholder="e.g. London">
             <ul>`
 
-      const btnGazetteer = _xyz.utils.wire()`
+      const btnGazetteer = xyz.utils.html.node`
       <button onclick=${e => {
           e.preventDefault()
           e.target.classList.toggle('enabled')
@@ -224,7 +197,7 @@ window.onload = () => {
 
       document.body.insertBefore(gazetteer, document.querySelector('.btn-column'))
 
-      _xyz.gazetteer.init({
+      xyz.gazetteer.init({
         group: gazetteer.querySelector('.input-drop')
       })
     }
@@ -246,19 +219,19 @@ window.onload = () => {
       xyz.user = xyz.utils.JWTDecode(document.head.dataset.token)
     }
 
-    xyz.user && xyz.user.admin_user && document.querySelector('.btn-column').appendChild(xyz.utils.wire()`
+    xyz.user && xyz.user.admin_user && document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
           <a
-            title="Open account admin view"
+            title=${xyz.language.toolbar_admin}
             class="enabled" style="cursor: pointer;"
             href="${xyz.host + '/view/admin_user'}">
             <div class="xyz-icon icon-supervisor-account">`)
 
     if (document.head.dataset.login) {
-      document.querySelector('.btn-column').appendChild(xyz.utils.wire()`
+      document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
           <a
-            title="${xyz.user ? `Logout ${xyz.user.email}` : 'Login'}"
+            title="${xyz.user ? `${xyz.language.toolbar_logout} ${xyz.user.email}` : 'Login'}"
             class="enabled" style="cursor: pointer;"
-            href="${xyz.host + (xyz.user ? '/logout' : '/login')}">
+            href="${xyz.host + (xyz.user ? '/api/user/logout' : '/login')}">
             <div class="${'xyz-icon ' + (xyz.user ? 'icon-logout' : 'icon-lock-open')}">`)
     }
   }

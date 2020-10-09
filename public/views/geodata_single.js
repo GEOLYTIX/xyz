@@ -44,13 +44,14 @@ function createMap(locale) {
 
   xyz.locations.selectCallback = location => {
 
-    const locationview = xyz.utils.wire()`<div class="location-view" style="padding: 10px;">`
+    const locationview = xyz.utils.html.node`<div class="location-view" style="padding: 10px;">`
 
     locationview.appendChild(xyz.locations.view.infoj(location))
 
     xyz.mapview.popup.create({
       coords: location.marker,
-      content: locationview
+      content: locationview,
+      autoPan: true
     })
 
   }

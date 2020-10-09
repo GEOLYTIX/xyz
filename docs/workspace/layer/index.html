@@ -184,13 +184,15 @@
       
       
       
-      <li class="__0 ">
+      
+      
+      
+      
+      
+      
+      <li class="__1 ">
         <a href="/xyz/docs/">XYZ</a>
       </li>
-      
-      
-      
-      
       
       
       
@@ -260,6 +262,18 @@
       
       
       
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/dataviews/charts/">Charts</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/dataviews/tables/">Tables</a>
+      </li>
+      
+      
+      
       <li class="__2 active">
         <a href="/xyz/docs/workspace/layer/">Layer</a>
       </li>
@@ -268,6 +282,12 @@
       
       <li class="__3 ">
         <a href="/xyz/docs/workspace/layer/cluster/">Cluster</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/layer/editing/">Layer editing</a>
       </li>
       
       
@@ -314,13 +334,37 @@
       
       
       
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/locales/plugins/">Plugins</a>
+      </li>
+      
+      
+      
       <li class="__2 ">
         <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
       </li>
       
       
       
-      <li class="__1 ">
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/roles/">Roles</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/src/">Source Links</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
         <a href="/xyz/docs/workspace/styles/">Styles</a>
       </li>
       
@@ -360,7 +404,7 @@
 <p>A layer can be hidden from the layers list. It is still possible to select locations from hidden layers and aggregate scores from hidden layers can be used in lookup fields. Hidden layers can be used as scratch layers to store aggregate locations created from running filter outputs.</p>
 <p><code>&quot;meta&quot;: &quot;Satellite Imagery layer provided by HERE.&quot;</code></p>
 <p>The meta value will be displayed as text directly under the layer header in the Layer control of the client application.</p>
-<pre><code class="language-text">&quot;attribution&quot;: {
+<pre><code class="language-json">&quot;attribution&quot;: {
   &quot;© Mapbox&quot; : &quot;https://www.mapbox.com/about/maps&quot;,
   &quot;© OpenStreetMap&quot;: &quot;http://www.openstreetmap.org/copyright&quot;
 }
@@ -389,6 +433,10 @@
 <p>The name of the field which stores the layer features geometry. The geometry field should use a spatial index.</p>
 <p><code>&quot;srid&quot;: &quot;4326&quot;</code></p>
 <p>The PostGIS SRID (EPSG) for the layer geometries projection.</p>
+<p><code>&quot;qID&quot;: &quot;id&quot;</code></p>
+<p>Unique indentifier for each feature on the given layer. Left unset results in a non-interactive view-only layer. Use this parameter along with unique database column to enable layer interaction and editing. Note that in case of editable layers identifier must be an automatic non-null unique value.</p>
+<p><code>&quot;infoj&quot;: []</code></p>
+<p>Contains information for each feature in the layer. If left unset feature selection will be prevented. For feature information see more in Location and Infoj section.</p>
 <h2>Groups</h2>
 <p>Setting a group value will add the layer to a group of the same name. The group will be created if it does not already exist.</p>
 <p><code>&quot;group&quot;: &quot;Base maps&quot;</code></p>
