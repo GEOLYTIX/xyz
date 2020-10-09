@@ -1,10 +1,6 @@
 const fetch = require('node-fetch')
 
-const { readFileSync } = require('fs')
-
 const { join } = require('path')
-
-const _cloudinary = require('cloudinary').v2
 
 module.exports = {
 
@@ -23,15 +19,22 @@ module.exports = {
   http: async req => await http(req),
 
   file: async req => await file(req),
+
+  cloudfront: async ref => await cloudfront(ref),
 }
 
-async function http(req) {
+
+async function http(ref) {
 
   try {
 
-    const response = await fetch(req)
+    const response = await fetch(ref)
 
-    if (response.status >= 300) return new Error(`${response.status} ${req}`)
+    if (response.status >= 300) return new Error(`${response.status} ${ref}`)
+
+    if (ref.match(/\.json$/i)) {
+      return await response.json()
+    }
 
     return await response.text()
 
@@ -42,22 +45,75 @@ async function http(req) {
   }
 }
 
+const { readFileSync } = require('fs')
+
+const AWS = require("aws-sdk")
+
+function readPem() {
+  const pem = readFileSync(join(__dirname, `../${process.env.KEY_CLOUDFRONT}.pem`))
+  return String(pem)
+}
+
+const awsSigner = process.env.KEY_CLOUDFRONT && new AWS.CloudFront.Signer(
+  process.env.KEY_CLOUDFRONT,
+  readPem()
+)
+
+function generateSignedDownloadUrl(ref) {
+  return new Promise(function(resolve) {
+    const url = awsSigner.getSignedUrl({
+      url: `https://${ref}`,
+      expires: Date.now() + 60 * 60 * 1000 // 1 hour
+    })
+    resolve(url)
+  })
+}
+
+async function cloudfront(ref) {
+  try {
+
+    const url = ref.params && ref.params.url || ref
+  
+    const signedUrl = await generateSignedDownloadUrl(url)
+  
+    const response = await fetch(signedUrl)
+  
+    if (response.status >= 300) return new Error(`${response.status} ${ref}`)
+
+    if (url.match(/\.json$/i)) return await response.json()
+
+    return await response.text()
+
+  } catch(err) {
+    console.error(err)
+    return err
+  }
+}
+
+
 function file(ref) {
   try {
-    return readFileSync(join(__dirname, ref))
+
+    const file = readFileSync(join(__dirname, ref))
+
+    if (ref.match(/\.json$/i)) {
+      return JSON.parse(file, 'utf8')
+    }
+
+    return file
+
   } catch (err) {
     console.error(err)
     return err
   }
 }
 
+
 async function github(req) {
 
   try {
 
     const url = req.params && req.params.url.replace(/https:/,'').replace(/\/\//,'') || req.replace(/https:/,'').replace(/\/\//,'')
-
-    // console.log(`https://${url}`);
   
     const response = await fetch(`https://${url}`, process.env.KEY_GITHUB &&
       {headers: new fetch.Headers({Authorization:`token ${process.env.KEY_GITHUB}`})})
@@ -67,15 +123,44 @@ async function github(req) {
     const b64 = await response.json()
   
     const buff = await Buffer.from(b64.content, 'base64')
+
+    const str = await buff.toString('utf8')
+
+    if (url.match(/\.json$/i)) {
+      return JSON.parse(str)
+    }
   
-    return await buff.toString('utf8')
+    return str
 
   } catch(err) {
-
+    console.error(err)
     return err
-
   }
 }
+
+
+const cloudinary_v2 = require('cloudinary').v2
+
+async function cloudinary(req) {
+
+  cloudinary_v2.config({
+    api_key: process.env.CLOUDINARY.split(' ')[0],
+    api_secret: process.env.CLOUDINARY.split(' ')[1],
+    cloud_name: process.env.CLOUDINARY.split(' ')[2],
+  })
+
+  if (req.params.destroy) return await cloudinary_v2.uploader.destroy(`${process.env.CLOUDINARY.split(' ')[3]}/${req.params.public_id}`)
+
+  const ressource = req.params.resource_type === 'raw' && req.body.toString() || `data:image/jpeg;base64,${req.body.toString('base64')}`
+
+  return await cloudinary_v2.uploader.upload(ressource,
+    {
+      resource_type: req.params.resource_type,
+      public_id: `${process.env.CLOUDINARY.split(' ')[3]}/${req.params.public_id}`, //${Date.now()}`,
+      overwrite: true
+    })
+}
+
 
 async function here(req) {
 
@@ -103,26 +188,6 @@ async function google(req) {
   const response = await fetch(`https://${getURL(req)}&${process.env.KEY_GOOGLE}`)
 
   return await response.json()
-}
-
-async function cloudinary(req) {
-
-  _cloudinary.config({
-    api_key: process.env.CLOUDINARY.split(' ')[0],
-    api_secret: process.env.CLOUDINARY.split(' ')[1],
-    cloud_name: process.env.CLOUDINARY.split(' ')[2],
-  })
-
-  if (req.params.destroy) return await _cloudinary.uploader.destroy(`${process.env.CLOUDINARY.split(' ')[3]}/${req.params.public_id}`)
-
-  const ressource = req.params.resource_type === 'raw' && req.body.toString() || `data:image/jpeg;base64,${req.body.toString('base64')}`
-
-  return await _cloudinary.uploader.upload(ressource,
-    {
-      resource_type: req.params.resource_type,
-      public_id: `${process.env.CLOUDINARY.split(' ')[3]}/${req.params.public_id}`, //${Date.now()}`,
-      overwrite: true
-    })
 }
 
 function getURL(req) {

@@ -2,6 +2,7 @@
 title: Authentication
 tags: [develop]
 layout: root.html
+group: true
 orderPath: /develop/security/_authentication
 ---
 

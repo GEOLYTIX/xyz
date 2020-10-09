@@ -1,19 +1,27 @@
-const fetch = require('node-fetch')
-
 const provider = require('../provider')
 
 const getFrom = {
-  'http': ref => http(ref),
-  'https': ref => http(ref),
-  'file': ref => file(ref.split(':')[1]),
-  'github': ref => github(ref.split(':')[1])
+  'http': ref => provider.http(ref),
+  'https': ref => provider.http(ref),
+  'file': ref => provider.file(`../public/workspaces/${ref.split(':')[1]}`),
+  'github': ref => provider.github(ref.split(':')[1]),
+  'cloudfront': ref => provider.cloudfront(ref.split(':')[1]),
 }
 
 let workspace = null
 
-module.exports = async cache => {
+module.exports = async req => {
 
-  if (!workspace || cache) {
+  let timestamp = Date.now()
+
+  // If the workspace is empty or older than 1hr it needs to be cached.
+  if (!workspace || ((timestamp - workspace.timestamp) > 3600000)) {
+
+    if (!workspace) {
+      req.params.logger(`workspace is empty ${timestamp}`)
+    } else if ((timestamp - workspace.timestamp) > 3600000) {
+      req.params.logger(`workspace has expired ${workspace.timestamp} | new timestamp is ${timestamp}`)
+    }
 
     workspace = process.env.WORKSPACE && await getFrom[process.env.WORKSPACE.split(':')[0]](process.env.WORKSPACE) || {}
 
@@ -23,48 +31,15 @@ module.exports = async cache => {
 
     await assignDefaults()
 
+    workspace.timestamp = timestamp
+
+  } else {
+
+    req.params.logger(`workspace cached ${workspace.timestamp} | age ${timestamp - workspace.timestamp}`)
+
   }
 
   return workspace
-}
-
-async function http(ref){
-  try {
-
-    const response = await fetch(ref)
-
-    if (response.status >= 300) return new Error(`${response.status} ${req}`)
-
-    return await response.json()
-
-  } catch(err) {
-    console.error(err)
-    return err
-  }
-}
-
-async function file(ref) {
-  try {
-
-    const workspace = await provider.file(`../public/workspaces/${ref}`)
-
-    if (workspace instanceof Error) return workspace
-
-    return JSON.parse(workspace, 'utf8')
-
-  } catch (err) {
-    console.error(err)
-    return err
-  }
-}
-
-async function github(ref){
-
-  const response = await provider.github(ref)
-
-  if (response instanceof Error) return response
-
-  return JSON.parse(response)
 }
 
 const { readFileSync } = require('fs');
@@ -73,9 +48,10 @@ const { join } = require('path');
 
 async function assignTemplates() {
 
+  // Assign default view and query templates to workspace.
   workspace.templates = Object.assign({
 
-    //views
+    // View templates:
     _desktop: {
       template: readFileSync(join(__dirname, '../../public/views/_desktop.html')).toString('utf8')
     },
@@ -86,20 +62,49 @@ async function assignTemplates() {
       template: readFileSync(join(__dirname, '../../public/views/_admin_user.html')).toString('utf8')
     },
 
-    //queries
-    mvt_cache: require('../../public/queries/mvt_cache'),
-    get_nnearest: require('../../public/queries/get_nnearest'),
-    field_stats: require('../../public/queries/field_stats'),
-    infotip: require('../../public/queries/infotip'),
-    count_locations: require('../../public/queries/count_locations'),
-    labels: require('../../public/queries/labels'),
-    layer_extent: require('../../public/queries/layer_extent'),
-    set_field_array: require('../../public/queries/set_field_array'),
-    filter_aggregate: require('../../public/queries/filter_aggregate'),
+    // Query templates:
+    count_locations: require('../../public/js/queries/count_locations'),
+    field_stats: require('../../public/js/queries/field_stats'),
+    filter_aggregate: require('../../public/js/queries/filter_aggregate'),
+    get_nnearest: require('../../public/js/queries/get_nnearest'),
+    infotip: require('../../public/js/queries/infotip'),
+    labels: require('../../public/js/queries/labels'),
+    layer_extent: require('../../public/js/queries/layer_extent'),
+    mvt_cache: require('../../public/js/queries/mvt_cache'),
+    set_field_array: require('../../public/js/queries/set_field_array'),   
+
+    // Default templates can be overridden by assigning a template with the same name.
   }, workspace.templates)
 
   const templatePromises = Object.entries(workspace.templates).map(
     entry => new Promise(resolve => {
+
+      // Entries without a src value must not be fetched.
+      if (!entry[1].src) return _resolve(entry[1])
+
+      // Substitute SRC_* parameter
+      entry[1].src = entry[1].src.replace(/\$\{(.*?)\}/g,
+        matched => process.env[`SRC_${matched.replace(/\$|\{|\}/g, '')}`] || matched)
+
+      if (entry[1].src && entry[1].src.startsWith('file:')) {
+        return provider.file(`../public/${entry[1].src.replace('file:', '')}`)
+          .then(_resolve)
+      }
+
+      if (entry[1].src && entry[1].src.startsWith('cloudfront:')) {
+        return provider.cloudfront(entry[1].src.split(':')[1])
+          .then(_resolve)
+      }
+
+      if (entry[1].src && entry[1].src.toLowerCase().includes('api.github')) {
+        return provider.github(entry[1].src)
+          .then(_resolve)
+      }
+
+      if (entry[1].src && entry[1].src.startsWith('http')) {
+        return provider.http(entry[1].src)
+          .then(_resolve)
+      }
 
       function _resolve(_template) {
 
@@ -110,11 +115,23 @@ async function assignTemplates() {
           })
         }
 
-        // Template maybe json as string.
-        if (typeof _template === 'string') {
+        // Template is a module.
+        if (entry[1].module || entry[1].type && entry[1].type === 'module') {
+
           try {
-            _template = JSON.parse(_template)
-          } catch(err) { }
+            const module_constructor = module.constructor;
+            const Module = new module_constructor();
+            Module._compile(_template, entry[1].src)
+  
+            return resolve({
+              [entry[0]]: Module.exports
+            })
+          } catch(err) {
+            return resolve({
+              [entry[0]]: { err: err }
+            })
+          }
+
         }
 
         // Template is string only.
@@ -127,31 +144,13 @@ async function assignTemplates() {
         }
 
         // Assign render method if none exists.
-        if (!_template.render) {
+        if (!_template.render && !_template.format) {
           _template.render = params => _template.template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
         }
 
         resolve({
           [entry[0]]: _template
         })
-      }
-
-      // Default templates already have a render method
-      if (!entry[1].src) return _resolve(entry[1])
-
-      if (entry[1].src && entry[1].src.startsWith('file:')) {
-        return provider.file(`../public/${entry[1].src.replace('file:', '')}`)
-          .then(_resolve)
-      }
-
-      if (entry[1].src && entry[1].src.toLowerCase().includes('api.github')) {
-        return provider.github(entry[1].src)
-          .then(_resolve)
-      }
-
-      if (entry[1].src && entry[1].src.startsWith('http')) {
-        return provider.http(entry[1].src)
-          .then(_resolve)
       }
 
     })
@@ -178,7 +177,13 @@ const defaults = require('./defaults')
 
 async function assignDefaults() {
 
-  Object.keys(workspace.locales || {}).forEach(locale_key => {
+  //Substitute SRC_* parameter in locales.
+  workspace.locales = JSON.parse(
+    JSON.stringify(workspace.locales || {zero: defaults.locale}).replace(/\$\{(.*?)\}/g,
+      matched => process.env[`SRC_${matched.replace(/\$|\{|\}/g, '')}`] || matched)
+  )
+
+  Object.keys(workspace.locales).forEach(locale_key => {
 
     const locale = workspace.locales[locale_key]
 

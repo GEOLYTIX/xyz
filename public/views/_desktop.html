@@ -13,20 +13,22 @@
     <link rel="stylesheet" href="${dir}/css/openlayers.css" />
     <link rel="stylesheet" href="${dir}/css/control.css" />
     <link rel="stylesheet" href="${dir}/views/_desktop.css" />
-    <!--link rel="stylesheet" href="${dir}/api/provider/github?url=api.github.com/repos/GEOLYTIX/xyz/contents/public/views/desktop.css&content_type=text/css"-->
 
-    <!-- <script src="https://unpkg.com/tabulator-tables@4.6.3/dist/js/tabulator.min.js"></script> -->
-    <script src="${dir}/js/tabulator.js" defer></script>
+    <!-- <script src="https://unpkg.com/tabulator-tables@4.8.0/dist/js/tabulator.min.js"></script> -->
+    <script src="${dir}/js/tabulator.min.js" defer></script>
 
     <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.3/Chart.min.js"></script> -->
     <script src="${dir}/js/Chart.min.js" defer></script>
 
-    <!-- <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.3.1/build/ol.js" defer></script> -->
+    <!-- <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.4.3/build/ol.js" defer></script> -->
     <script src="${dir}/js/ol.js" defer></script>
     <script src="${dir}/js/xyz_openlayers.js" defer></script>
     <script src="${dir}/views/_desktop.js" defer></script>
-    <!--script src="${dir}/api/provider/github?url=api.github.com/repos/GEOLYTIX/xyz/contents/public/views/desktop.js" defer></script>-->
-</head>
+
+    <!-- <link href='https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.css' rel='stylesheet' /> -->
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js" defer></script>
+
+  </head>
 
 <body>
 
@@ -36,7 +38,7 @@
 
       <div>
 
-        <div class="listview-title secondary-colour-bg">Layers</div>
+        <div id="layers_header" class="listview-title secondary-colour-bg"></div>
 
         <div id="layers"></div>
 
@@ -44,9 +46,9 @@
 
       <div>
 
-        <div class="listview-title secondary-colour-bg">Locations</div>
+        <div id="locations_header" class="listview-title secondary-colour-bg"></div>
 
-        <button id="clear_locations" class="bold primary-colour">Clear all locations.</button>
+        <button id="clear_all_locations" class="bold primary-colour"></button>
 
         <div id="locations"></div>
 
@@ -61,6 +63,15 @@
   <div id="Map" class="mapview map">
 
     <div id="mapButton" class="btn-column"></div>
+
+    <div id="Attribution" class="attribution">
+      <div id="ol-scale"></div>
+      <a
+        class="logo"
+        target="_blank"
+        href="https://geolytix.co.uk"
+        style="background-image: url('https://geolytix.github.io/public/geolytix.svg');"></a>
+    </div>
 
     <div id="tabview" style="display: none; max-height: 65px;">
 

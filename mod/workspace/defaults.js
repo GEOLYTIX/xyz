@@ -1,10 +1,4 @@
 module.exports = {
-  workspace: {
-    title: 'GEOLYTIX | XYZ',
-    locales: {
-      zero: {},
-    },
-  },
   locale: {
     minZoom: 0,
     maxZoom: 20,
@@ -25,7 +19,16 @@ module.exports = {
     },
   },
   layers: {
-    tiles: {},
+    tiles: {
+      style: {
+        hidden: true
+      }
+    },
+    mbtiles: {
+      style: {
+        hidden: true
+      }
+    },
     geojson: {
       srid: '4326',
       style: {
@@ -33,15 +36,14 @@ module.exports = {
           strokeWidth: 1,
           strokeColor: '#333333',
           fillColor: '#333333',
-          fillOpacity: 0.1,
+          fillOpacity: 0.1
         },
         highlight: {
           strokeColor: '#1F964D',
           strokeWidth: 2,
           fillColor: '#cae0b8',
-          fillOpacity: 0.2,
-        },
-        themes: {},
+          fillOpacity: 0.2
+        }
       },
       filter: {},
     },
@@ -58,37 +60,35 @@ module.exports = {
           strokeColor: '#1F964D',
           fillColor: '#cae0b8',
           fillOpacity: 0.2,
-        },
-        themes: {},
+        }
       },
       filter: {},
     },
     cluster: {
       srid: '4326',
       style: {
-        markerMin: 20,
-        markerMax: 40,
+        size: 20,
         anchor: null,
-        marker: {
+        default: {
           type: 'target',
           fillColor: '#999999',
-          scale: 0.05,
+          scale: 1,
         },
-        markerMulti: {
-          type: 'target',
-          fillolor: '#333333',
-          scale: 0.05,
+        cluster: {
+          scale: 1.2
         },
         highlight: {
-          scale: 0.08
-        },
-        themes: {},
+          scale: 1.3
+        }
       },
       filter: {},
     },
     grid: {
       srid: '4326',
       style: {
+        theme: {
+          type: 'grid'
+        },
         range: [
           '#15773f',
           '#66bd63',

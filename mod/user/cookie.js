@@ -1,19 +1,10 @@
-const fetch = require('node-fetch')
-
-const _token = require('./token')
+const getToken = require('./token')
 
 const login = require('./login')
 
+const messages = require('./messages')
+
 module.exports = async (req, res) => {
-
-  if (process.env.GOOGLE_CAPTCHA) {
-
-    const response = await fetch(`https://www.google.com/recaptcha/api/siteverify?secret=${process.env.GOOGLE_CAPTCHA.split('|')[1]}&response=${req.body.captcha}`)
-
-    const captcha_verification = await response.json()
-
-    if (captcha_verification.score < 0.6) return new Error('Captcha Fail')
-  } 
 
   if (!req.body) {
 
@@ -23,15 +14,15 @@ module.exports = async (req, res) => {
 
     }
 
-    return login(req, res)
+    return login(req, res, messages.no_cookie_found[req.params.language || 'en'] || `No cookie relating to this application found on request`)
 
   }
 
-  const token = await _token(req)
+  const token = await getToken(req)
 
-  if (token instanceof Error) return login(req, res, token.message)
-
-  const cookie = `XYZ ${process.env.TITLE || 'token'}=${token.signed};HttpOnly;Max-Age=28800;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`
+  if (token instanceof Error) return res.send(token.message)
+  
+  const cookie = `XYZ ${process.env.TITLE || 'token'}=${token.signed || token};HttpOnly;Max-Age=28800;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`
 
   res.setHeader('Set-Cookie', cookie)
 

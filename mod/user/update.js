@@ -2,6 +2,10 @@ const acl = require('./acl')()
 
 const mailer = require('../mailer')
 
+const mail_templates = require('../mail_templates')
+
+const messages = require('./messages')
+
 module.exports = async (req, res) => {
 
   // Remove spaces from email.
@@ -15,8 +19,10 @@ module.exports = async (req, res) => {
   var rows = await acl(`
   UPDATE acl_schema.acl_table
   SET
-    ${req.params.field} = ${req.params.value === 'false' && 'NULL' || req.params.value},
-    approved_by = '${req.params.token.email}'
+    ${req.params.field} = ${req.params.value === 'false' && 'NULL' || req.params.value}
+    ${req.params.field === 'approved'
+      && `, approvaltoken = null, approved_by = '${req.params.token.email}|${new Date().toISOString().replace(/\..*/,'')}'`
+      || ''}
   WHERE lower(email) = lower($1);`, [email])
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
@@ -27,13 +33,18 @@ module.exports = async (req, res) => {
 
   // Send email to the user account if an account has been approved.
   if (req.params.field === 'approved' && req.params.value === 'true') {
-    await mailer({
-      to: email,
-      subject: `This account has been approved for ${host}`,
-      text: `You are now able to log on to ${protocol}${host}`
-    })
+
+    const approved_account_mail = mail_templates.approved_account[req.params.token.language || 'en'] || mail_templates.approved_account.en;
+
+    await mailer(Object.assign({
+      to: email
+    },
+    approved_account_mail({
+      host: host,
+      protocol: protocol
+    })));
 
   }
 
-  return res.send('Update successful')
+  return res.send(messages.update_ok[req.params.token.language || 'en'] || messages.update_ok.en)
 }

@@ -41,6 +41,8 @@ module.exports = async (req, res) => {
 
     if (rows instanceof Error) console.log('failed to query mvt cache')
 
+    // res.setHeader('Cache-Control', 's-maxage=1, stale-while-revalidate')
+
     // If found return the cached MVT to client.
     if (rows.length === 1) return res.send(rows[0].mvt)
 
@@ -48,7 +50,7 @@ module.exports = async (req, res) => {
 
   // Construct array of fields queried
   const mvt_fields = Object.values(layer.style.themes || {}).map(
-    theme => theme.fieldfx && `${theme.fieldfx} AS ${theme.field}` || theme.field)
+    theme => theme.fieldfx && `${theme.fieldfx} AS ${theme.field}` || theme.fields || theme.field)
 
   // Create a new tile and store in cache table if defined.
   // ST_MakeEnvelope() in ST_AsMVT is based on https://github.com/mapbox/postgis-vt-util/blob/master/src/TileBBox.sql
@@ -58,13 +60,13 @@ module.exports = async (req, res) => {
       ${z},
       ${x},
       ${y},
-      ST_AsMVT(tile, '${req.params.layer}', 4096, 'geom') mvt,
+      ST_AsMVT(tile, '${layer.key}', 4096, 'geom') mvt,
       ST_MakeEnvelope(
         ${-m + (x * r)},
-        ${ m - (y * r)},
-        ${-m + (x * r) + r},
         ${ m - (y * r) - r},
-        ${req.params.srid || 3857}
+        ${-m + (x * r) + r},
+        ${ m - (y * r)},
+        3857
       ) tile
 
     FROM (
@@ -73,14 +75,18 @@ module.exports = async (req, res) => {
         ${id} as id,
         ${mvt_fields.length && mvt_fields.toString() + ',' || ''}
         ST_AsMVTGeom(
-          ${layer.geom},
-          ST_MakeEnvelope(
-            ${-m + (x * r)},
-            ${ m - (y * r)},
-            ${-m + (x * r) + r},
-            ${ m - (y * r) - r},
-            ${req.params.srid || 3857}
-          ),
+          ${layer.srid !== '3857' && `ST_Transform(` ||''}
+            ${layer.geom},
+          ${layer.srid !== '3857' && `${layer.srid}),` ||''}
+          ${layer.srid !== '3857' && `ST_Transform(` ||''}
+            ST_MakeEnvelope(
+              ${-m + (x * r)},
+              ${ m - (y * r) - r},
+              ${-m + (x * r) + r},
+              ${ m - (y * r)},
+              3857
+            ),
+          ${layer.srid !== '3857' && `${layer.srid}),` ||''}
           4096,
           256,
           true
@@ -89,16 +95,17 @@ module.exports = async (req, res) => {
       FROM ${table}
 
       WHERE
-        ST_DWithin(
-          ST_MakeEnvelope(
-            ${-m + (x * r)},
-            ${ m - (y * r)},
-            ${-m + (x * r) + r},
-            ${ m - (y * r) - r},
-            ${req.params.srid || 3857}
-          ),
-          ${layer.geom},
-          ${r / 4}
+        ST_Intersects(
+          ${layer.srid !== '3857' && `ST_Transform(` ||''}
+            ST_MakeEnvelope(
+              ${-m + (x * r) - (r/16)},
+              ${ m - (y * r) - r - (r/16)},
+              ${-m + (x * r) + r + (r/16)},
+              ${ m - (y * r) + (r/16)},
+              3857
+            ),
+          ${layer.srid !== '3857' && `${layer.srid}),` ||''}
+          ${layer.geom}
         )
 
         ${filter}
@@ -112,6 +119,7 @@ module.exports = async (req, res) => {
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
   // Return MVT to client.
-  res.send(rows[0].mvt);
+  // res.setHeader('Cache-Control', 's-maxage=1, stale-while-revalidate')
+  res.send(rows[0].mvt)
 
 }

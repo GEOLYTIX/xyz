@@ -1,4 +1,4 @@
-**v3.3.1**
+**v3.4.0**
 
 # xyz
 
@@ -72,9 +72,7 @@ The domain and service layer may secure proxy access for services provided by Go
 
 [Express](https://www.npmjs.com/package/express) - Fast, unopinionated, minimalist web framework for Node.
 
-[express-http-proxy](https://www.npmjs.com/package/express-http-proxy) - Express middleware to proxy request to another host and pass response back to original caller.
-
-[hyperHTML](https://github.com/WebReflection/hyperHTML) - A Fast & Light Virtual DOM Alternative.
+[µhtml](https://github.com/WebReflection/uhtml) - A micro HTML/SVG render.
 
 [chart.js](https://github.com/chartjs/Chart.js) - For the creation of HTML canvas charts in info panels and report views.
 

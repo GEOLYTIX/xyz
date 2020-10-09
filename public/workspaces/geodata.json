@@ -1,16 +1,16 @@
 {
   "templates": {
     "blog": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/blog.html"
+      "src": "https://geolytix.github.io/public/blog.html"
     },
     "blog_postal": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/blog_postal.html"
+      "src": "https://geolytix.github.io/public/geodata/blog_postal.html"
     },
     "geodata": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/geodata.html"
+      "src": "https://geolytix.github.io/public/geodata/geodata.html"
     },
     "geodata_single": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/geodata_single.html"
+      "src": "https://geolytix.github.io/public/geodata/geodata_single.html"
     },
     "Mapbox Base": {
       "format": "tiles",
@@ -45,97 +45,97 @@
       }
     },
     "geolytix_offices": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/geolytix_offices.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/geolytix_offices.json"
     },
     "london_census": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_census.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_census.json"
     },
     "london_retailpoints": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_retailpoints.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_retailpoints.json"
     },
     "london_lad": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_lad.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_lad.json"
     },
     "london_oa": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_oa.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_oa.json"
     },
     "london_education": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_education.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_education.json"
     },
     "london_university_building": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_university_building.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_university_building.json"
     },
     "london_grocery_demand": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_grocery_demand.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_grocery_demand.json"
     },
     "london_poi": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_poi.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_poi.json"
     },
     "london_postal_sector": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_postal_sector.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_postal_sector.json"
     },
     "london_postal_district": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_postal_district.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_postal_district.json"
     },
     "london_postal_area": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_postal_area.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_postal_area.json"
     },
     "london_rail": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_rail.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_rail.json"
     },
     "london_rail_stations": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_rail_stations.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_rail_stations.json"
     },
     "london_residential": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_residential.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_residential.json"
     },
     "london_retailplaces": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_retailplaces.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_retailplaces.json"
     },
     "london_retailplaces_pitch": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_retailplaces_pitch.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_retailplaces_pitch.json"
     },
     "london_roads": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_roads.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_roads.json"
     },
     "london_seamless": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_seamless.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_seamless.json"
     },
     "london_town_suburb": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_town_suburb.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_town_suburb.json"
     },
     "london_urbanity": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_urbanity.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_urbanity.json"
     },
     "london_workers": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/london_workers.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/london_workers.json"
     },
     "shanghai_retailplaces": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/shanghai_retailplaces.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/shanghai_retailplaces.json"
     },
     "shanghai_retailvenues": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/shanghai_retailvenues.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/shanghai_retailvenues.json"
     },
     "shanghai_transport": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/shanghai_transport.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/shanghai_transport.json"
     },
     "tokyo_demographics": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/tokyo_demographics.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/tokyo_demographics.json"
     },
     "tokyo_retailplaces": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/tokyo_retailplaces.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/tokyo_retailplaces.json"
     },
     "tokyo_retailvenues": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/tokyo_retailvenues.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/tokyo_retailvenues.json"
     },
     "tokyo_urbanity": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/tokyo_urbanity.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/tokyo_urbanity.json"
     },
     "warsaw_census": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/warsaw_census.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/warsaw_census.json"
     },
     "warsaw_retailvenues": {
-      "src": "https://api.github.com/repos/GEOLYTIX/public/contents/geodata/layers/warsaw_retailvenues.json"
+      "src": "https://geolytix.github.io/public/geodata/layers/warsaw_retailvenues.json"
     }
   },
   "locales": {
@@ -155,6 +155,30 @@
         "Offices": {
           "display": true,
           "template": "geolytix_offices"
+        },
+        "Offices Edit": {
+          "template": "geolytix_offices",
+          "edit": {
+            "point": true,
+            "delete": true
+          },
+          "infoj": [
+            {
+              "title": "address",
+              "field": "address",
+              "type": "textarea",
+              "edit": true
+            },
+            {
+              "title": "website",
+              "field": "website",
+              "type": "textarea",
+              "edit": true
+            }
+          ],
+          "roles": {
+            "glx": null
+          }
         },
         "Label": {
           "display": true,
@@ -287,145 +311,6 @@
           "group": "Workers",
           "groupmeta": "<p>Up to date worker counts for more than 400,000 commercial postcodes across the UK. Worker counts, densities and occupation splits at hybrid zone level.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1R1eQj-S4BThQkcqFmFvhN3mo6FVfGIGd\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Workers' target='_top'>Contact Us</a></p>",
           "template": "london_workers"
-        },
-        "Mapbox Labels": {
-          "group": "Base maps",
-          "display": true,
-          "template": "Mapbox Label"
-        }
-      }
-    },
-    "Shanghai": {
-      "bounds": {
-        "north": 31.45,
-        "east": 121.65,
-        "south": 31,
-        "west": 121.15
-      },
-      "minZoom": 11,
-      "maxZoom": 18,
-      "view": {
-        "lat": 31.24,
-        "lng": 121.4
-      },
-      "layers": {
-        "HERE Imagery": {
-          "group": "Base maps",
-          "template": "HERE Imagery"
-        },
-        "HERE Hybrid": {
-          "group": "Base maps",
-          "template": "HERE Hybrid"
-        },
-        "Mapbox Baselayer": {
-          "group": "Base maps",
-          "display": true,
-          "template": "Mapbox Base"
-        },
-        "Retail Places": {
-          "group": "Retail Places",
-          "template": "shanghai_retailplaces"
-        },
-        "Retail Venues": {
-          "group": "Retail Places",
-          "template": "shanghai_retailvenues"
-        },
-        "Transport Stations": {
-          "group": "Public Transport",
-          "template": "shanghai_transport"
-        },
-        "Mapbox Labels": {
-          "display": true,
-          "group": "Base maps",
-          "template": "Mapbox Label"
-        }
-      }
-    },
-    "Tokyo": {
-      "bounds": {
-        "north": 35.9,
-        "east": 139.9,
-        "south": 35.4,
-        "west": 139.55
-      },
-      "minZoom": 12,
-      "maxZoom": 18,
-      "view": {
-        "lat": 35.7,
-        "lng": 139.7
-      },
-      "layers": {
-        "HERE Imagery": {
-          "group": "Base maps",
-          "template": "HERE Imagery"
-        },
-        "HERE Hybrid": {
-          "group": "Base maps",
-          "template": "HERE Hybrid"
-        },
-        "Mapbox Baselayer": {
-          "group": "Base maps",
-          "display": true,
-          "template": "Mapbox Base"
-        },
-        "Demographics": {
-          "group": "Demographics",
-          "template": "tokyo_demographics"
-        },
-        "Retail Places": {
-          "group": "Retail Places",
-          "template": "tokyo_retailplaces"
-        },
-        "Retail Venues": {
-          "group": "Retail Places",
-          "template": "tokyo_retailvenues"
-        },
-        "Urbanity": {
-          "group": "Urbanity",
-          "template": "tokyo_urbanity"
-        },
-        "Mapbox Labels": {
-          "group": "Base maps",
-          "display": true,
-          "template": "Mapbox Label"
-        }
-      }
-    },
-    "Warsaw": {
-      "bounds": {
-        "north": 52.289,
-        "east": 21.1,
-        "south": 52.17,
-        "west": 20.904
-      },
-      "minZoom": 12,
-      "maxZoom": 18,
-      "view": {
-        "lat": 21,
-        "lng": 52.2
-      },
-      "layers": {
-        "HERE Imagery": {
-          "group": "Base maps",
-          "template": "HERE Imagery"
-        },
-        "HERE Hybrid": {
-          "group": "Base maps",
-          "template": "HERE Hybrid"
-        },
-        "Mapbox Baselayer": {
-          "group": "Base maps",
-          "display": true,
-          "template": "Mapbox Base"
-        },
-        "Census": {
-          "group": "Census",
-          "groupmeta": "<p>Our processed 2011 European Census - available across 10 countries.</p><p>All the variables have consistent naming, meta data, attribution and formats. The data relates to the smallest geographical units each country uses for demographic reporting and comes with cleaned boundaries.</p><br><p style='font-size:90%;text-align:right;'><a href='mailto:open_census_europe@geolytix.com?Subject=Geodata - European Census' target='_top'>Contact Us for a download link for the data</a></p><br><p style='font-size:90%;'><b><a class=\"docu_link\" href=\"https://blog.geolytix.net/2018/11/13/open-eu-2011-census-data-pack\" target=\"_blank\">Read about the Open EU 2011 Census Data Pack on our blog</a></b></p>",
-          "template": "warsaw_census"
-        },
-        "Retail Venues": {
-          "group": "Retail Venues",
-          "template": "warsaw_retailvenues"
         },
         "Mapbox Labels": {
           "group": "Base maps",

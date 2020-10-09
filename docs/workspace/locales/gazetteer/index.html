@@ -184,13 +184,15 @@
       
       
       
-      <li class="__0 ">
+      
+      
+      
+      
+      
+      
+      <li class="__1 ">
         <a href="/xyz/docs/">XYZ</a>
       </li>
-      
-      
-      
-      
       
       
       
@@ -260,6 +262,18 @@
       
       
       
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/dataviews/charts/">Charts</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/dataviews/tables/">Tables</a>
+      </li>
+      
+      
+      
       <li class="__2 ">
         <a href="/xyz/docs/workspace/layer/">Layer</a>
       </li>
@@ -268,6 +282,12 @@
       
       <li class="__3 ">
         <a href="/xyz/docs/workspace/layer/cluster/">Cluster</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/layer/editing/">Layer editing</a>
       </li>
       
       
@@ -314,13 +334,37 @@
       
       
       
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/locales/plugins/">Plugins</a>
+      </li>
+      
+      
+      
       <li class="__2 ">
         <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
       </li>
       
       
       
-      <li class="__1 ">
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/roles/">Roles</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/src/">Source Links</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
         <a href="/xyz/docs/workspace/styles/">Styles</a>
       </li>
       
@@ -340,6 +384,7 @@
 <pre><code class="language-javascript">&quot;gazetteer&quot;: {
   &quot;provider&quot;: &quot;MAPBOX&quot;,
   &quot;placeholder&quot;: &quot;e.g. London&quot;,
+  &quot;label&quot;: true,
   &quot;datasets&quot;: [
     {
       &quot;layer&quot;: &quot;sprawls&quot;,
@@ -350,21 +395,30 @@
     }
   ]
 }
+
+// &quot;label&quot;: true within gazetteer object is optional - it displays result source and is useful in case of searching multiple datasets. 
 </code></pre>
+<p>Each dataset supports <code>&quot;limit&quot;</code> parameters which defaults to 10. It can be also set within gazetter object in order to apply to all datasets. Results will be sorted alphabetically.</p>
 <p>The gazetteer can be set to use either third party provider and / or hosted datasets. Locations from hosted datasets will be selected while geolocations from 3rd party providers are shown as a marker on the map.</p>
 <p><code>&quot;provider&quot;: &quot;MAPBOX&quot;</code></p>
-<p>The geolocation service to use (MAPBOX or GOOGLE). A corresponding KEY_*** is required in the environment settings in order to use a 3rd party service.</p>
+<p>The geolocation service to use (MAPBOX, GOOGLE or OPENCAGE). A corresponding KEY_*** is required in the environment settings in order to use a 3rd party service.</p>
 <p><code>&quot;placeholder&quot;: &quot;e.g. London&quot;</code></p>
 <p>The placeholder to be shown in the gazetteer input.</p>
-<p><code>&quot;code&quot;: &quot;GB&quot;</code></p>
-<p>The country code to limit the search on 3rd party geolocation services. Permited country codes are <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1 alpha-2</a>.</p>
 <p>It is possible to further restrict the results by defining a bounds entry. The bounds value varies with the gazetteer provider used for the query.</p>
 <h2>Google</h2>
+<p><code>&quot;countrycode&quot;: &quot;GB&quot;</code></p>
+<p>The country code to limit the search on 3rd party geolocation services. Permitted country codes are <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1 alpha-2</a>.</p>
 <p><code>&quot;bounds&quot;: &quot;location=51.75,-1.25&amp;radius=4000&quot;</code></p>
-<p>Google requires the bounds to be defined as a latitutde, longitude coordinate pair and a radius in metres.</p>
+<p>Google requires the bounds to be defined as a latitude, longitude coordinate pair and a radius in metres.</p>
+<p><code>&quot;components&quot;: &quot;country:GB|country:IE&quot;</code></p>
+<p>Google also accepts &quot;components&quot; parameter (see API Docs) which can pass additional information on expected API response.</p>
+<p>In the example above results are restricted to United Kingdom and Republic of Ireland.</p>
 <h2>Mapbox</h2>
 <p><code>&quot;bounds&quot;: &quot;bbox=-2,50,4,54&quot;</code></p>
+<p><code>&quot;country: &quot;GB&quot;</code></p>
 <h2>Opencage</h2>
+<p><code>&quot;bounds&quot;: &quot;-13,48,5,62&quot;</code></p>
+<p><code>&quot;countrycode&quot;: &quot;GB&quot;</code></p>
 <p>Will require a valid Opencage API key provided as KEY_OPENCAGE in the environment settings.</p>
 <h2>Dataset gazetteer</h2>
 <p>An array of dataset gazetteers which are hit by the autocomplete search first. The 3rd party geolocation service is used once no results are returned from any of the dataset gazetteer entries.</p>

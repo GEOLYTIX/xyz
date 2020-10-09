@@ -111,4 +111,6 @@ The token may be provided as an URL parameter or with a named cookie.
 
 Cookies are set in the request header upon successful login. A cookie is named according to the `TITLE` environment setting for the path defined in the `DIR` entry. The signed JWT is the content of the cookie. The cookie itself is only valid for 8 hours. The **/api/user/cookie** endpoint may be called to issue or revoke an existting cookie. The logout process will revoke an existing cookie of the same name. This is done by setting a cookie of the same name without content to expire immediately.
 
+[Authentication strategy](/xyz/docs/develop/security/authentication)
+
 ![](https://res.cloudinary.com/geolytix-xyz/image/upload/v1589878516/documentation/geolytix-dev-cookie.png)

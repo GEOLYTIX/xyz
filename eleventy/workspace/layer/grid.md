@@ -14,7 +14,7 @@ Grid layers do not have locations and grid cells can not be selected.
 
 The fields available for the styling of grid layers must be defined in the **grid_fields** entry.
 
-```text
+```json
 "grid_fields": {
   "Population 2001": "pop__01",
   "Population 2011": "pop__11",

@@ -184,12 +184,6 @@
       
       
       
-      <li class="__0 ">
-        <a href="/xyz/docs/">XYZ</a>
-      </li>
-      
-      
-      
       <li class="__1 ">
         <a href="/xyz/docs/getting-started/">Getting started</a>
       </li>
@@ -204,6 +198,9 @@
       
       
       
+      <li class="__1 ">
+        <a href="/xyz/docs/">XYZ</a>
+      </li>
       
       
       
@@ -242,7 +239,12 @@
       
       
       
-      <li class="__1 active">
+      
+      
+      
+      
+      
+      <li class="__2 active">
         <a href="/xyz/docs/document/">Document</a>
       </li>
       
@@ -254,7 +256,7 @@
       
       
       
-      <li class="__1 ">
+      <li class="__2 ">
         <a href="/xyz/docs/mapp/">Mapp</a>
       </li>
       
@@ -295,6 +297,20 @@
       
       
       
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
 
     </ul>
 
@@ -303,15 +319,55 @@
 <p>Please refer to the information in this article in order to contribute to the documentation.</p>
 <h2>eleventy</h2>
 <p>We use <a href="https://github.com/11ty/eleventy">Eleventy</a> to compile markdown into static pages.</p>
-<p>eleventy and markdown-it are included as save-dev dependencies in the XYZ package.json</p>
+<p>eleventy and markdown-it are <strong>not included</strong> as dependencies in the XYZ included as save-dev dependencies. The npm modules may be installed for the project or globally.</p>
 <p>Individual markdown documents and a template html are stored in the /eleventy folder. Configuration for the compilation is in the .eleventy.js file in the XYZ root.</p>
 <p>Use following command to compile templates and markdown from the /eleventy folder in the /docs directory.</p>
 <pre><code>npx eleventy --input ./eleventy --output ./docs --formats=md
 </code></pre>
-<p>We use <a href="https://pages.github.com/">Github pages</a> to serve the documentation directly from the XYZ repository /docs.</p>
+<h2>Tree view structure</h2>
+<p>The order of static pages in the /docs directory will resemble the nesting of markdown articles in the /eleventy input folder. Defining front matter in the the individual markdown files allows for the configuration of the tree view navigation.</p>
+<pre><code>---
+title: Getting started
+tags: [getting-started, root]
+layout: root.html
+group: true
+orderPath: /_getting-started/_getting-started
+---
+</code></pre>
+<p>This example front matter shows how the <code>tags</code> array is used to show the 'Getting Started' page in the documentation root.</p>
+<p>The <code>group</code> flag ensures that entry is pushed to the left in the tree view layout.</p>
+<p>The <code>orderPath</code> is used to ensure that this page link will be on top of it's section due to underscores being sorted ahead of numerals and other characters.</p>
+<h2>Images</h2>
+<p>Images should not be comitted to the XYZ repository but must be uploaded to an image hosting platform such as <a href="https://cloudinary.com">cloudinary</a>.</p>
 <p><img src="https://res.cloudinary.com/geolytix-xyz/image/upload/v1589640927/documentation/gh-pages_z1zcne.png" alt=""></p>
-<p>Images as shown above must be uploaded to cloudinary or other cdn for hosting. Image links should be added to markdown like so.</p>
+<p>The shown above is defined as an image link in the markdown:</p>
 <p><code>![](https://res.cloudinary.com/geolytix-xyz/image/upload/v1589640927/documentation/gh-pages_z1zcne.png)</code></p>
+<h2>Deploying the documentation</h2>
+<p>We use <a href="https://pages.github.com/">Github pages</a> to serve the documentation directly from the XYZ repository /docs. For this reason relative links are prefixed with /xyz/docs.</p>
+<p>In order to deploy the documentation as a static build to Vercel the vercel.json must be configured like so:</p>
+<pre><code>{
+  &quot;regions&quot;: [
+    &quot;lhr1&quot;
+  ],
+  &quot;builds&quot;: [
+    {
+      &quot;src&quot;: &quot;/docs/**&quot;,
+      &quot;use&quot;: &quot;@vercel/static&quot;
+    }
+  ],
+  &quot;trailingSlash&quot;: false,
+  &quot;rewrites&quot;: [
+    {
+      &quot;source&quot;: &quot;/xyz/docs/(.*)&quot;,
+      &quot;destination&quot;: &quot;/docs/$1&quot;
+    },
+    {
+      &quot;source&quot;: &quot;/xyz/docs&quot;,
+      &quot;destination&quot;: &quot;/docs/index.html&quot;
+    }
+  ]
+}
+</code></pre>
 
     </div>
 

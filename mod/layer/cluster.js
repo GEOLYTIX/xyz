@@ -13,6 +13,7 @@ module.exports = async (req, res) => {
     size = style_theme && style_theme.size || 1,
     theme = style_theme && style_theme.type,
     label = req.params.label,
+    count = req.params.count,
     pixelRatio = parseFloat(req.params.pixelRatio),
     kmeans = parseInt(1 / req.params.kmeans),
     dbscan = parseFloat(req.params.dbscan),
@@ -80,7 +81,7 @@ module.exports = async (req, res) => {
       ${cat} AS cat,
       ${size} AS size,
       ${geom} AS geom,
-      ${label && label !== 'count' ? label + ' AS label,' : ''}
+      ${label ? label + ' AS label,' : ''}
       ST_ClusterKMeans(${geom}, ${kmeans}
     ) OVER () kmeans_cid
     FROM ${req.params.table} ${where_sql}) kmeans`
@@ -96,7 +97,7 @@ module.exports = async (req, res) => {
         cat,
         size,
         geom,
-        ${label && label !== 'count' ? 'label,' : ''}
+        ${label ? 'label,' : ''}
         kmeans_cid,
         ST_ClusterDBSCAN(geom, ${dbscan}, 1
       ) OVER (PARTITION BY kmeans_cid) dbscan_cid
@@ -113,7 +114,7 @@ module.exports = async (req, res) => {
       count(1) count,
       SUM(size) size,
       ${cat_sql || ''}
-      ${label && label !== 'count' ? '(array_agg(label))[1] AS label,' : ''}
+      ${label ? '(array_agg(label))[1] AS label,' : ''}
       ST_X(ST_PointOnSurface(ST_Union(geom))) AS x,
       ST_Y(ST_PointOnSurface(ST_Union(geom))) AS y
     FROM ${cluster_sql}
@@ -125,7 +126,7 @@ module.exports = async (req, res) => {
         SUM(size) count,
         SUM(size) size,
         JSON_Agg(JSON_Build_Object(cat, size)) cat,
-        ${label && label !== 'count' ? '(array_agg(label))[1] AS label,' : ''}
+        ${label ? '(array_agg(label))[1] AS label,' : ''}
         ST_X(ST_PointOnSurface(ST_Union(geom))) AS x,
         ST_Y(ST_PointOnSurface(ST_Union(geom))) AS y
   
@@ -133,7 +134,7 @@ module.exports = async (req, res) => {
         SELECT
           SUM(size) size,
           cat,
-          ${label && label !== 'count' ? '(array_agg(label))[1] AS label,' : ''}
+          ${label ? '(array_agg(label))[1] AS label,' : ''}
           ST_Union(geom) geom,
           kmeans_cid,
           dbscan_cid
@@ -160,7 +161,7 @@ module.exports = async (req, res) => {
           SELECT
             ${cat} AS cat,
             ${size} AS size,
-            ${label && label !== 'count' ? label + ' AS label,' : ''}
+            ${label ? label + ' AS label,' : ''}
             ${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'} AS geom,
             ST_X(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) x,
             ST_Y(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) y,
@@ -185,7 +186,7 @@ module.exports = async (req, res) => {
           SELECT
             cat,
             size,
-            ${label && label !== 'count' ? 'label,' : ''}
+            ${label ? 'label,' : ''}
 
             CASE WHEN odds = 0 THEN CASE
         
@@ -251,7 +252,7 @@ module.exports = async (req, res) => {
             END as point
           FROM first)`
 
-      var agg_sql = `second GROUP BY point ${label && label !== 'count' ? ',label' : ''};`;
+      var agg_sql = `second GROUP BY point ${label ? ',label' : ''};`;
 
       var xy_sql = `
         ST_X(${layer.srid == 3857 && 'point' || 'ST_Transform(ST_SetSRID(point, 3857), ' + parseInt(layer.srid) + ')'}) x,
@@ -263,7 +264,7 @@ module.exports = async (req, res) => {
         (SELECT
           ${cat} AS cat,
           ${size} AS size,
-          ${label && label !== 'count' ? label + ' AS label,' : ''}
+          ${label ? label + ' AS label,' : ''}
           ST_X(${geom}) AS x,
           ST_Y(${geom}) AS y,
           round(ST_X(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${r}) * ${r} x_round,
@@ -285,7 +286,7 @@ module.exports = async (req, res) => {
     SELECT
       count(1) count,
       SUM(size) size,
-      ${label && label !== 'count' ? 'label,' : ''}
+      ${label ? 'label,' : ''}
       ${cat_sql || ''}
       ${xy_sql}
     FROM ${agg_sql}`
@@ -305,7 +306,7 @@ module.exports = async (req, res) => {
     properties: {
       count: parseInt(row.count),
       size: parseInt(row.size),
-      label: label === 'count' ? parseInt(row.count) > 1 ? row.count : '' : row.label,
+      label: count ? parseInt(row.count) > 1 ? row.count : row.label : row.label,
     }
   })))
 

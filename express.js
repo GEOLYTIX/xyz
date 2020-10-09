@@ -15,55 +15,49 @@ app.use(`/xyz/docs`, express.static('docs'))
 
 app.use(cookieParser())
 
-const proxy = require('express-http-proxy');
 
-app.use(`${process.env.DIR || ''}/api/proxy`, proxy(
-    req => req.query.host,
-    {
-        https: true,
-        proxyReqPathResolver: req => {
+const _api = require('./api/api')
 
-            //console.log(`${encodeURIComponent(req.query.uri)}&${process.env[`KEY_${req.query.provider.toUpperCase()}`]}`)
-            return `${req.query.uri}&${process.env[`KEY_${req.query.provider.toUpperCase()}`]}`
-
-        }
-    }))
+const api = (req, res) => _api(req, res)
 
 
-app.get(`${process.env.DIR||''}/view/:template?/:access?`, (req, res) => require('./api/view')(req, res))
+app.get(`${process.env.DIR||''}/view/:template?/:access?`, api)
 
-app.get(`${process.env.DIR||''}/:access?`, (req, res) => require('./api/view')(req, res))
-
-
-app.get(`${process.env.DIR||''}/api/provider/:provider?`, (req, res) => require('./api/provider')(req, res))
-
-app.post(`${process.env.DIR||''}/api/provider/:provider?`, bodyParser.json({limit: '5mb'}), (req, res) => require('./api/provider')(req, res))
+app.get(`${process.env.DIR||''}/:access?`, api)
 
 
-app.get(`${process.env.DIR||''}/api/query/:template?`, (req, res) => require('./api/query')(req, res))
-
-app.post(`${process.env.DIR||''}/api/query/:template?`, bodyParser.json({limit: '5mb'}), (req, res) => require('./api/query')(req, res))
+app.get(`${process.env.DIR||''}/api/proxy`, api)
 
 
-app.get(`${process.env.DIR||''}/api/gazetteer`, (req, res) => require('./api/gazetteer')(req, res))
+app.get(`${process.env.DIR||''}/api/provider/:provider?`, api)
+
+app.post(`${process.env.DIR||''}/api/provider/:provider?`, bodyParser.json({limit: '5mb'}), api)
 
 
-app.get(`${process.env.DIR||''}/api/workspace/:method?/:key?`, (req, res) => require('./api/workspace')(req, res))
+app.get(`${process.env.DIR||''}/api/query/:template?`, api)
 
-app.post(`${process.env.DIR||''}/api/workspace/:method?/:key?`, bodyParser.json({limit: '5mb'}), (req, res) => require('./api/workspace')(req, res))
-
-
-app.get(`${process.env.DIR||''}/api/layer/:format?/:z?/:x?/:y?`, (req, res) => require('./api/layer')(req, res))
+app.post(`${process.env.DIR||''}/api/query/:template?`, bodyParser.json({limit: '5mb'}), api)
 
 
-app.get(`${process.env.DIR||''}/api/location/:method?`, (req, res) => require('./api/location')(req, res))
-
-app.post(`${process.env.DIR||''}/api/location/:method?`, bodyParser.json({limit: '5mb'}), (req, res) => require('./api/location')(req, res))
+app.get(`${process.env.DIR||''}/api/gazetteer`, api)
 
 
-app.get(`${process.env.DIR||''}/api/user/:method?/:key?`, (req, res) => require('./api/user')(req, res))
+app.get(`${process.env.DIR||''}/api/workspace/:method?/:key?`, api)
 
-app.post(`${process.env.DIR||''}/api/user/:method?/:key?`, bodyParser.urlencoded({extended: true}), (req, res) => require('./api/user')(req, res))
+app.post(`${process.env.DIR||''}/api/workspace/:method?/:key?`, bodyParser.json({limit: '5mb'}), api)
+
+
+app.get(`${process.env.DIR||''}/api/layer/:format?/:z?/:x?/:y?`, api)
+
+
+app.get(`${process.env.DIR||''}/api/location/:method?`, api)
+
+app.post(`${process.env.DIR||''}/api/location/:method?`, bodyParser.json({limit: '5mb'}), api)
+
+
+app.get(`${process.env.DIR||''}/api/user/:method?/:key?`, api)
+
+app.post(`${process.env.DIR||''}/api/user/:method?/:key?`, bodyParser.urlencoded({extended: true}), api)
 
 
 app.listen(process.env.PORT || 3000)

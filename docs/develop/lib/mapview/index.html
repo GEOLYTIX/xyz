@@ -184,12 +184,6 @@
       
       
       
-      <li class="__0 ">
-        <a href="/xyz/docs/">XYZ</a>
-      </li>
-      
-      
-      
       
       
       <li class="__1 ">
@@ -200,6 +194,12 @@
       
       <li class="__2 ">
         <a href="/xyz/docs/develop/api/">API</a>
+      </li>
+      
+      
+      
+      <li class="__1 ">
+        <a href="/xyz/docs/">XYZ</a>
       </li>
       
       
@@ -265,12 +265,6 @@
       
       
       <li class="__2 ">
-        <a href="/xyz/docs/develop/jamstack/">JAMStack</a>
-      </li>
-      
-      
-      
-      <li class="__2 ">
         <a href="/xyz/docs/develop/lib/library/">Library</a>
       </li>
       
@@ -306,7 +300,13 @@
       
       
       
-      <li class="__2 ">
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/lib/plugins/">Plugins</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
         <a href="/xyz/docs/develop/lib/webpack/">Webpack</a>
       </li>
       
@@ -315,6 +315,26 @@
       <li class="__2 ">
         <a href="/xyz/docs/develop/security/authentication/">Authentication</a>
       </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/develop/views/">Application Views</a>
+      </li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
       
       
       
@@ -369,6 +389,19 @@
 <p>Will create an Openlayers map object will be assigned to _xyz.map. Params provided to the Mapview create method will be assigned to the locale object. It is therefore possible to override the initial view, bounds, and other locale entries for a mapview.</p>
 <p>Layers with display as true in the layers.list will be immediately added to the map and shown.</p>
 <p>A <strong>changeEnd</strong> event listener will update the viewport URL hooks if enabled and check the layers list. Layers which should be displayed at the current zoom level at the end of a map view change event will be reloaded. The changeEnd event will be called after the map view changes due to panning or a change of zoom level. Interactions will be disabled at the beginning of a map view change event.</p>
+<pre><code class="language-javascript">xyz.mapview.create({
+  target: document.getElementById('Map'),
+  attribution: {
+    target: document.getElementById('Attribution'),
+    links: {
+      [`XYZ v${xyz.version}`]: 'https://geolytix.github.io/xyz',
+      Openlayers: 'https://openlayers.org'
+    }
+  },
+  scrollWheelZoom: true,
+})
+</code></pre>
+<p>With an <strong>attribution</strong> object defined in the create parameters the mapview.attribution module will be called to create a list of links in the attribution target. Links defined within the attribution object will always be shown. An attribution.check method will be run whenever layers are toggled. Links defined as attribution object in the layer configuration will be shown when the layer is visible.</p>
 <h3>view</h3>
 <p>A view will be set to lng, lat, and z defined as a view object. The view object will be created from the current viewport hooks if enabled.</p>
 <h3>bounds</h3>

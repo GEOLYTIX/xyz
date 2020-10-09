@@ -1,0 +1,232 @@
+<!doctype html>
+<html>
+
+<head data-dir="${dir}">
+  <title>XYZ | 등록</title>
+  <link rel="icon" type="image/x-icon" href="${dir}/icons/favicon.ico" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <script src="${dir}/views/register/_register.js" defer></script>
+
+  <style>
+    body {
+      margin: 0;
+      padding: 50px;
+      font: 14px "Open Sans", sans-serif;
+    }
+
+    .input-group {
+      width: 100%;
+      max-width: 500px;
+    }
+
+    input {
+      padding: 10px 0;
+      width: 100%;
+      border: none;
+      border-bottom: 1px solid #999;
+      font-size: 18px;
+    }
+
+    input:focus {
+      outline: none;
+    }
+
+    input:-webkit-autofill {
+      box-shadow: 0 0 0px 1000px white inset;
+    }
+
+    .bar {
+      position: relative;
+      display: block;
+      width: 100%;
+    }
+
+    .bar:before,
+    .bar:after {
+      content: '';
+      height: 2px;
+      width: 0;
+      bottom: 0;
+      position: absolute;
+      background: #1F964D;
+      transition: 0.2s ease all;
+      -moz-transition: 0.2s ease all;
+      -webkit-transition: 0.2s ease all;
+    }
+
+    input:invalid+.bar:before,
+    input:invalid+.bar:after {
+      background: orangered;
+    }
+
+    .bar:before {
+      left: 50%;
+    }
+
+    .bar:after {
+      right: 50%;
+    }
+
+    input:focus~.bar:before,
+    input:focus~.bar:after {
+      width: 50%;
+    }
+
+    button {
+      color: white;
+      background-color: #1F964D;
+      margin: 10px 0;
+      padding: 8px;
+      text-align: center;
+      font: 18px "Open Sans", sans-serif;
+      font-weight: 700;
+      border-radius: 3px;
+      border: 0;
+      box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.2);
+    }
+
+    .login_form p {
+      font-size: 18px;
+    }
+
+    .register_form p {
+      font-size: 14px;
+    }
+
+    .bold {
+      font-weight: bold;
+    }
+
+    .switch {
+      font-size: 18px;
+      text-decoration: none;
+      color: #1F964D;
+      font-weight: 700;
+    }
+
+    button:hover,
+    .switch:hover {
+      cursor: pointer;
+    }
+
+    button:disabled {
+      background-color: darkslategrey;
+    }
+
+    .msg {
+      color: #f57c00;
+    }
+
+    .mailto {
+      color: #1F964D;
+      text-decoration: none;
+    }
+
+    .checkbox {
+      display: block;
+    }
+
+    .checkbox input {
+      display: none;
+    }
+
+    .checkbox>span {
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .checkbox>div {
+      display: inline-block;
+      vertical-align: middle;
+      width: 18px;
+      height: 18px;
+      margin-right: 5px;
+      background-repeat: no-repeat;
+      background-position: center;
+      background-size: contain;
+      -webkit-background-size: contain;
+      background-image: url("${dir}/icons/icon-checkbox-unchecked.svg");
+    }
+
+    input:checked+div {
+      background-image: url("${dir}/icons/icon-checkbox-checked.svg");
+    }
+
+    #btnRegister {
+      display: block;
+    }
+  </style>
+</head>
+
+<body class="register_form">
+  <form method="post">
+
+    <input style="display:none;" name="language" required value=${language}>
+
+    <div class="input-group">
+      <input id="auth_user_email" name="email" type="email" autocomplete="off" required maxlength="50" value="">
+
+      <span class="bar"></span>
+      <label for="auth_user_email">이메일</label>
+    </div>
+
+    <br>
+
+    <div class="input-group">
+      <input id="auth_user_password" name="password" type="password" autocomplete="off" required minlength="8" value="">
+
+      <span class="bar"></span>
+      <label for="auth_user_password">신규 비밀번호(최소 8자 이상)</label>
+    </div>
+
+    <br>
+
+    <div class="input-group">
+      <input id="auth_user_password_retype" type="password" autocomplete="off" required minlength="8" value="">
+
+      <span class="bar"></span>
+      <label for="auth_user_password_retype">비밀번호 재입력</label>
+    </div>
+
+    <br>
+
+    <p class="bold">개인정보</p>
+
+    <p>Geolytix는 개인정보관리를 철저히 하며 계정관리와 제품서비스 제공 목적으로만 사용할 것입니다. 그외 어떠한 경우라도 제3자와 개인정보를 공유하는 일은 없을 것입니다.</p>
+
+    <p>관리자가 귀하의 계정을 무효화할수있지만 귀하의 개인정보의 영구 삭제를 원하시면 <a class="mailto"
+        href="mailto:support@geolytix.co.uk">support@geolytix.co.uk</a> 로 이메일을 보내주십시오.
+    </p>
+
+    <p>이 웹사이트는 Phoenix Yard, 65 Kings Cross Road, London, WC1X 9LW에 주 사업장을 둔 Geolytix소유이며 Geolytix에 의해 운영됩니다.</p>
+
+    <label class="checkbox">
+      <input id="privacy_agreement" type="checkbox">
+      <div></div>
+      <span>동의합니다.</span>
+    </label>
+
+    <button id="btnRegister" type="submit" formaction="register" disabled>
+      계정등록 및 비밀번호 설정
+    </button>
+
+    <p class="bold">다음단계는? 귀하의 계정을 확인하시면 됩니다.</p>
+
+    <p>귀하가 제공한 이메일주소로 <a class="mailto" href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a> 로부터 계정을 확인할 수 있는 링크가 포함된
+      이메일을 받게됩니다.
+    </p>
+
+    <p>몇분내로 이메일을 받지못하셨으면 스팸메일함을 확인해보십시오. <a class="mailto" href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a> 를 안전한
+      발신자 리스트에 추가하시면 메시지 수신에 문제가 없을 것입니다.
+    </p>
+
+    <p>확인 후, 입지 관리자가 신규계정 승인을 하게됩니다. 귀하의 계정이 승인되면 그 다음의 이메일을 받으시게 됩니다.</p>
+
+    <a class="switch" href="${dir}/?login">이미 등록이 되었나요? 로그인 하세요.</a>
+  </form>
+
+</body>
+
+</html>

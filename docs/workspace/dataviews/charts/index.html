@@ -1,0 +1,430 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
+  <title>Charts</title>
+  <style>
+
+    body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .grid {
+      font-family: system-ui;
+      display:grid;
+      grid-template-columns: 200px 5fr;
+      max-width: 1100px;
+      margin: auto;
+      padding: 0 30px;
+    }
+
+    #toggle {
+        display: none;
+    }
+
+    #toggle:hover {
+      cursor: pointer;
+    }
+
+    #nav {
+      grid-column: 1;
+      padding-inline-start: 0px;
+      list-style-type: none;
+      padding-right: 20px;
+      margin: 10px 0;
+      position: fixed;
+    }
+
+    #nav > *:first-child {
+      line-height: 1;
+      font-size: 30px;
+      font-weight: bold;
+    }
+
+    #content {
+      grid-column: 2;
+      padding-left: 20px;
+      border-left: 1px solid #ddd;
+      margin: 10px 0;
+      overflow: hidden;
+    }
+
+    #content > *:first-child {
+      margin: 0;
+    }
+
+    .active {
+      font-weight: bold;
+    }
+
+    a {
+      text-decoration: none;
+      white-space: nowrap;
+      color: #333;
+    }
+
+    h1, h2, h3 {
+      margin-bottom: 0.5em;
+    }
+
+    p {
+      margin-top: 0.5em;
+      line-height: 1.5;
+    }
+
+    li {
+      line-height: 1.5;
+    }
+
+    li.__0 {
+      padding-left: 0;
+    }
+
+    li.__1 {
+      padding-left: 0;
+    }
+
+    li.__2 {
+      padding-left: 0;
+    }
+
+    li.__3 {
+      padding-left: 20px;
+    }
+
+    li.__4 {
+      padding-left: 40px;
+    }
+
+    pre {
+      display: block;
+      font-family: monospace;
+      white-space: pre;
+      margin: 1em 2px;
+      padding: 15px;
+      box-shadow: 0 0 2px #555;
+      overflow-x: auto;
+      background-color: #f0f0f0;
+    }
+
+    code {
+      font-family: monospace;
+      background-color: #f0f0f0;
+    }
+
+    *:not(pre) > code {
+      padding: 5px;
+    }
+
+    #content a {
+      color: #090;
+    }
+
+    #content img {
+      max-width: 100%;
+      display: block;
+      margin: 0 auto;
+    }
+
+    @media only screen and (max-width: 700px) {
+      .grid {
+        grid-template-columns: 0 1fr;
+        padding: 0 0 0 40px;
+      }
+
+      #toggle {
+        display: block;
+        position: fixed;
+        top: 10px;
+        left: 10px;        
+        width: 20px;
+        height: 30px;
+        background: repeating-linear-gradient(#ddd, #fff 10px);
+      }
+
+      #nav {
+        display: none;
+      }
+
+      #content {
+        border-left: none;
+        padding: 0 20px 0 1px;
+        overflow: hidden;
+      }
+    }
+
+    .show_nav {
+      grid-template-columns: 1fr 2fr;
+    }
+
+    .show_nav > #nav {
+      display: block;
+    }
+
+    .show_nav > #content * {
+      font-size: 30%;
+      padding: 0;
+      overflow: hidden;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="grid">
+
+    <div id="toggle"></div>
+
+    <ul id="nav">
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <li class="__1 ">
+        <a href="/xyz/docs/">XYZ</a>
+      </li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      <li class="__1 ">
+        <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/dataviews/">Dataviews</a>
+      </li>
+      
+      
+      
+      <li class="__3 active">
+        <a href="/xyz/docs/workspace/dataviews/charts/">Charts</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/dataviews/tables/">Tables</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/layer/">Layer</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/layer/cluster/">Cluster</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/layer/editing/">Layer editing</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/layer/geojson/">GeoJson</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/layer/grid/">Hex Grid</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/layer/mvt/">MVT</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/layer/themes/">Themes</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/layer/tile/">Tile Layer</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/locales/">Locale</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/locales/gazetteer/">Gazetteer</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/locales/plugins/">Plugins</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/roles/">Roles</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/src/">Source Links</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/styles/">Styles</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/templates/">Templates</a>
+      </li>
+      
+      
+
+    </ul>
+
+    <div id="content">
+      <h1>Charts</h1>
+<p>The chart object configures the display of data returned from a query as a chart.</p>
+<p>Data from a query may be returned as an array, an object with key/value pairs, or as an array of objects. An array of objects would be returned from a query which matches several records. Each record being an object in the array and the field names from the query being the keys in each of the record objects.</p>
+<p>Please refer to the <a href="https://www.chartjs.org/docs/latest/">ChartJS documentation</a> for detailed information in regard to the individual chart types and layout options.</p>
+<p>ChartJS requires the definition of datasets as an array. Each dataset may receive styling parameter such as backgroundColor or borderWidth to define the styling of the dataset elements.</p>
+<p>By defining a field, or an fields array, it is possible to map individual fields in a dataset.</p>
+<p>The options object allows for a global layout confiuration. Element styles defined in the options object are applied accross all datasets in the chart.</p>
+<p>The legend is set to be hidden in the default options configuration.</p>
+<p>Below is an example for a single dataset pie chart with legend display and position, as well as layout padding defined in the chart options.</p>
+<pre><code>&quot;chart&quot;: {
+  &quot;options&quot;: {
+    &quot;legend&quot;: {
+      &quot;display&quot;: true,
+      &quot;position&quot;: &quot;bottom&quot;
+    },
+    &quot;layout&quot;: {
+      &quot;padding&quot;: {
+        &quot;left&quot;: 5,
+        &quot;right&quot;: 5,
+        &quot;top&quot;: 10,
+        &quot;bottom&quot;: 15
+      }
+    }
+  },
+  &quot;type&quot;: &quot;pie&quot;,
+  &quot;labels&quot;: [&quot;AB&quot;, &quot;C1&quot;, &quot;C2&quot;, &quot;DE&quot;],
+  &quot;datasets&quot;: [
+    {
+      &quot;borderWidth&quot;: 0,
+      &quot;fields&quot;: [&quot;ab&quot;, &quot;c1&quot;, &quot;c2&quot;, &quot;de&quot;],
+      &quot;backgroundColor&quot;: [&quot;#cddc39&quot;,&quot;#00bcd4&quot;,&quot;#ffc107&quot;,&quot;#33691e&quot;]
+    }
+  ]
+}
+</code></pre>
+
+    </div>
+
+  </div>
+
+</body>
+
+<script>
+    const toggle = document.getElementById('toggle');
+
+    toggle.onclick = e => { e.target.parentElement.classList.toggle('show_nav'); };
+</script>
+
+</html>
