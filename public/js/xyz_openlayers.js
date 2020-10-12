@@ -480,7 +480,7 @@
         <span>${e.language.layer_data_viewport_only}`),n.appendChild(e.utils.html.node`
       <button
         class="btn-wide primary-colour"
-        onclick=${n=>{!function(t){e.query(t.download).then(n=>{const r="json"===t.download.format&&function(e){const t=e.map(e=>{const t={type:"Feature",properties:e};return t.geometry=JSON.parse(e.geometry),delete t.properties.geometry,t}),n=JSON.stringify({type:"FeatureCollection",features:t});return new Blob([n],{type:"application/json"})}(n)||function(e){const t=e.map(e=>Object.values(e).map(e=>isNaN(e)&&`"${e}"`||e).join(",")).join("\r\n");return new Blob([t],{type:"text/csv;charset=utf-8;"})}(n);e.utils.html.node`<a
+        onclick=${n=>{!function(t){t.download.layer=t,e.query(t.download).then(n=>{const r="json"===t.download.format&&function(e){const t=e.map(e=>{const t={type:"Feature",properties:e};return t.geometry=JSON.parse(e.geometry),delete t.properties.geometry,t}),n=JSON.stringify({type:"FeatureCollection",features:t});return new Blob([n],{type:"application/json"})}(n)||function(e){const t=e.map(e=>Object.values(e).map(e=>isNaN(e)&&`"${e}"`||e).join(",")).join("\r\n");return new Blob([t],{type:"text/csv;charset=utf-8;"})}(n);e.utils.html.node`<a
         href=${URL.createObjectURL(r)}
         download=${`${t.key}.${t.download.format||"csv"}`}>`.click()})}(t)}}>${e.language.layer_download}`),n}}),Qt=e=>{const t={create:function(n){n.view=e.utils.html.node`<div class="drawer layer-view">`;const r=e.utils.html.node`
     <div class="header enabled"><span>${n.name||n.key}`;n.style.default&&n.style.default.showInHeader&&r.appendChild(e.utils.html.node`
