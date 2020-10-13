@@ -12,6 +12,7 @@
     }
 
     .location-view-grid {
+      display: grid;
       align-items: stretch;
       grid-gap: 3px 10px;
       grid-template-columns: 1fr;

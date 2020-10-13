@@ -1944,9 +1944,6 @@ span.flatpickr-weekday {
   width: 100%;
   height: 100%; }
 
-.mapboxgl-canvas {
-  position: absolute; }
-
 .infotip {
   position: fixed;
   margin: 0;
@@ -2117,6 +2114,7 @@ span.flatpickr-weekday {
       padding: 5px 0;
       height: 30px; }
     .location-view.drawer .location-view-grid {
+      display: grid;
       align-items: stretch;
       grid-gap: 3px 10px;
       grid-template-columns: 1fr;
