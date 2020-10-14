@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -383,7 +388,7 @@
     </ul>
 
     <div id="content">
-      <h1>Layers</h1>
+      <h1 id="layers">Layers <a class="header-anchor" href="#layers">¶</a></h1>
 <p>The _xyz.layers object provides methods to create (decorate) new layer objects. All currently loaded layers are stored in the _xyz.layers.list.</p>
 <p>The layers list is an object with all keys being individual layers.</p>
 <p>The layers.view factory will create a DOM element with control elements linked to the layers' methods.</p>

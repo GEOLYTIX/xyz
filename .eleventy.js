@@ -1,4 +1,8 @@
-const markdownIt = require("markdown-it");
+const markdownIt = require("markdown-it")
+
+const markdownItAnchor = require("markdown-it-anchor")
+
+// .use(require('markdown-it-anchor'), opts)
 
 module.exports = function (eleventyConfig) {
   
@@ -6,7 +10,7 @@ module.exports = function (eleventyConfig) {
     html: true,
     breaks: true,
     linkify: true
-  }));
+  }).use(markdownItAnchor,{permalink: true}))
 
   eleventyConfig.addCollection('posts', collection => {
 
@@ -15,16 +19,16 @@ module.exports = function (eleventyConfig) {
     )
 
     _collection.forEach(entry => {
-      const path = entry.inputPath.split('/');
+      const path = entry.inputPath.split('/')
 
-      entry.data.lv = path.length - 2;
+      entry.data.lv = path.length - 2
 
-      entry.data.group && entry.data.lv--;
+      entry.data.group && entry.data.lv--
 
-      entry.data.tag = entry.data.tags && entry.data.tags[0];
+      entry.data.tag = entry.data.tags && entry.data.tags[0]
     })
 
-    return _collection;
-  });
+    return _collection
+  })
 
-};
+}

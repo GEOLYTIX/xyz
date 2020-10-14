@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -311,7 +316,7 @@
     </ul>
 
     <div id="content">
-      <h2>Deploying serverless functions to Vercel</h2>
+      <h2 id="deploying-serverless-functions-to-vercel">Deploying serverless functions to Vercel <a class="header-anchor" href="#deploying-serverless-functions-to-vercel">¶</a></h2>
 <p>The XYZ host was designed to be deployed as a Serverless Function. By keeping memory uptake to a minimum it is possible to deploy XYZ on <a href="https://vercel.com/pricing">Vercel's free Hobby plan</a>.</p>
 <p>A command line interface must be installed in order to deploy to Vercel.</p>
 <pre><code>npm i -g vercel
@@ -320,7 +325,7 @@
 <pre><code>vercel --prod --force
 </code></pre>
 <p>The <code>--force</code> option ensures that the build directories are overwritten. This may be required to force the workspace to change accross all process invocations.</p>
-<h3>Configuration (vercel.json)</h3>
+<h3 id="configuration-(vercel.json)">Configuration (vercel.json) <a class="header-anchor" href="#configuration-(vercel.json)">¶</a></h3>
 <p>The project will be deployed and build according to the <a href="https://github.com/GEOLYTIX/xyz/blob/master/vercel.json">vercel.json</a> which is located in the project's root.</p>
 <pre><code>{
   &quot;version&quot;: 2,
@@ -407,7 +412,7 @@
 </code></pre>
 <p>Rewrites are required for url path parameter to be passed to the api process.</p>
 <p>Headers allow the configuration of request header on all requests. These can be overwritten for individual requests prior to sending a response back to the client from inside the serverless function execution.</p>
-<h2>Content Security Policies (CSP)</h2>
+<h2 id="content-security-policies-(csp)">Content Security Policies (CSP) <a class="header-anchor" href="#content-security-policies-(csp)">¶</a></h2>
 <p><a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/CSP">CSP</a> directives defined on the header define how the API may be accessed and which sources are valid for client applications. The default directives are:</p>
 <p><em>default-src:</em> 'self'</p>
 <p><em>base-uri:</em> 'self'</p>

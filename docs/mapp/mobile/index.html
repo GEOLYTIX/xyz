@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -307,7 +312,7 @@
     </ul>
 
     <div id="content">
-      <h1>MAPP Mobile</h1>
+      <h1 id="mapp-mobile">MAPP Mobile <a class="header-anchor" href="#mapp-mobile">¶</a></h1>
 <p>The default mobile interface. Layer control and location info are displayed in a scrollable tabs at the bottom of the view. The control panel maybe moved up and over the map view by holding and moving the panel header.</p>
 <p><img src="https://res.cloudinary.com/geolytix-xyz/image/upload/v1591181636/documentation/mapp_mobile.png" alt=""></p>
 

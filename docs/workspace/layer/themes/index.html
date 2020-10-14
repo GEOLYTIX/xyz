@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -379,7 +384,7 @@
     </ul>
 
     <div id="content">
-      <h1>Layer themes</h1>
+      <h1 id="layer-themes">Layer themes <a class="header-anchor" href="#layer-themes">¶</a></h1>
 <p>Vector layer locations are drawn according to the style object in the layer configuration.</p>
 <p>Styles may also be applied according to a locations property. A theme defines which style should be applied after evaluating the locations property, before painting the location on the map canvas.</p>
 

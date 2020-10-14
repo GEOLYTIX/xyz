@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -379,7 +384,7 @@
     </ul>
 
     <div id="content">
-      <h1>Gazetteer</h1>
+      <h1 id="gazetteer">Gazetteer <a class="header-anchor" href="#gazetteer">¶</a></h1>
 <p>The gazetteer object defines which gazetteer should be used for the current locale.</p>
 <pre><code class="language-javascript">&quot;gazetteer&quot;: {
   &quot;provider&quot;: &quot;MAPBOX&quot;,
@@ -405,7 +410,7 @@
 <p><code>&quot;placeholder&quot;: &quot;e.g. London&quot;</code></p>
 <p>The placeholder to be shown in the gazetteer input.</p>
 <p>It is possible to further restrict the results by defining a bounds entry. The bounds value varies with the gazetteer provider used for the query.</p>
-<h2>Google</h2>
+<h2 id="google">Google <a class="header-anchor" href="#google">¶</a></h2>
 <p><code>&quot;countrycode&quot;: &quot;GB&quot;</code></p>
 <p>The country code to limit the search on 3rd party geolocation services. Permitted country codes are <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1 alpha-2</a>.</p>
 <p><code>&quot;bounds&quot;: &quot;location=51.75,-1.25&amp;radius=4000&quot;</code></p>
@@ -413,14 +418,14 @@
 <p><code>&quot;components&quot;: &quot;country:GB|country:IE&quot;</code></p>
 <p>Google also accepts &quot;components&quot; parameter (see API Docs) which can pass additional information on expected API response.</p>
 <p>In the example above results are restricted to United Kingdom and Republic of Ireland.</p>
-<h2>Mapbox</h2>
+<h2 id="mapbox">Mapbox <a class="header-anchor" href="#mapbox">¶</a></h2>
 <p><code>&quot;bounds&quot;: &quot;bbox=-2,50,4,54&quot;</code></p>
 <p><code>&quot;country: &quot;GB&quot;</code></p>
-<h2>Opencage</h2>
+<h2 id="opencage">Opencage <a class="header-anchor" href="#opencage">¶</a></h2>
 <p><code>&quot;bounds&quot;: &quot;-13,48,5,62&quot;</code></p>
 <p><code>&quot;countrycode&quot;: &quot;GB&quot;</code></p>
 <p>Will require a valid Opencage API key provided as KEY_OPENCAGE in the environment settings.</p>
-<h2>Dataset gazetteer</h2>
+<h2 id="dataset-gazetteer">Dataset gazetteer <a class="header-anchor" href="#dataset-gazetteer">¶</a></h2>
 <p>An array of dataset gazetteers which are hit by the autocomplete search first. The 3rd party geolocation service is used once no results are returned from any of the dataset gazetteer entries.</p>
 <p><code>&quot;layer&quot;: &quot;sprawls&quot;</code></p>
 <p>The layer key in the datasets array object must correspond to a layer defined in the locale's layers.</p>

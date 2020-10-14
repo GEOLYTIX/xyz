@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -383,7 +388,7 @@
     </ul>
 
     <div id="content">
-      <h1>Design</h1>
+      <h1 id="design">Design <a class="header-anchor" href="#design">¶</a></h1>
 <p>XYZ application views, such as MAPP, maybe be composed with predefined control elements. These elements are defined as classes in the control.css which is hosted as a static file in the /public/css XYZ directory.</p>
 <p>The control.css file itself is compiled from individual SCSS files in the same directory.</p>
 <p>This section of the documentation will highlight the individual control element classes and explain how elements can be modified by overwriting component styles.</p>

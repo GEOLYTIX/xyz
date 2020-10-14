@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -379,7 +384,7 @@
     </ul>
 
     <div id="content">
-      <h1>Dataviews</h1>
+      <h1 id="dataviews">Dataviews <a class="header-anchor" href="#dataviews">¶</a></h1>
 <p>Dataviews allow for the representation of a data response from a query as either table or chart.</p>
 <p>Dataviews may be assigned to either locations or a layer itself. The location ID will be provided as a query parameter if the dataview is defined for a location in the infoj array.</p>
 <pre><code class="language-json">{
@@ -397,11 +402,11 @@
 <p>The <strong>query</strong> to be used for a dataview must be stored as template. Queries are never sent from the client to the datasource, but a reference for a query template is passed to the Query API with query parameters to be substituted when the query template is rendered.</p>
 <p>With <code>viewport: true</code> the current bounds of the mapview will be sent as viewport params with the query.</p>
 <p>With <code>center: true</code> the current lat, lng, and z of the mapview will be sent as params with the query.</p>
-<h2>Dataview Arrays</h2>
+<h2 id="dataview-arrays">Dataview Arrays <a class="header-anchor" href="#dataview-arrays">¶</a></h2>
 <p>Multiple dataviews defined in an array <code>dataviews: []</code> will be created in the same target element. This allows for multiple dataviews to be shown in a single tabview panel. The parent element of the dataviews in the array will be displayed as a grid. The grid column and row of individual dataview elements in the array can therefore be set in the style entry for each dataview.</p>
-<h2>Dataview Class &amp; Style</h2>
+<h2 id="dataview-class-%26-style">Dataview Class &amp; Style <a class="header-anchor" href="#dataview-class-%26-style">¶</a></h2>
 <p>The string value of the class entry in the dataview configuration will be assigned to the dataviews' target element. This allows for the dataview to be styled according to the class definition in the application views' stylesheet. Inline styles can be assigned to the target element by defining the style specification as a string value in the style entry.</p>
-<h2>Toolbars</h2>
+<h2 id="toolbars">Toolbars <a class="header-anchor" href="#toolbars">¶</a></h2>
 <p>Toolbars are control element to be displayed prior to the dataview element. It is possible to assign control buttons for export or viewport settings to the toolbar.</p>
 <p>The <code>viewport: true</code> option in the toolbar entry will create a viewport button in the toolbar which will toggle whether the viewport option is set for the dataview query.</p>
 

@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -383,18 +388,18 @@
     </ul>
 
     <div id="content">
-      <h1>User API</h1>
+      <h1 id="user-api">User API <a class="header-anchor" href="#user-api">¶</a></h1>
 <p>The User API allows to register, verify, and aprove user accounts. With access to the access control list (ACL) the User API may issue or revoke cookies with signed token (JWT) to provide secure access to other XYZ APIs. The User API requires a method value as URL parameter.</p>
 <p>The different methods are following.</p>
-<h3>/api/user/token</h3>
+<h3 id="%2Fapi%2Fuser%2Ftoken">/api/user/token <a class="header-anchor" href="#%2Fapi%2Fuser%2Ftoken">¶</a></h3>
 <p>Will return the signed token from a XYZ Cookie set in the HTTP request header. The request will be redirected to the login form if no Cookie with a valid signed token was sent with the request.</p>
-<h3>/api/user/coookie</h3>
+<h3 id="%2Fapi%2Fuser%2Fcoookie">/api/user/coookie <a class="header-anchor" href="#%2Fapi%2Fuser%2Fcoookie">¶</a></h3>
 <p>Will return the textual representation of a HTTP Cookie if accessed as a <em>GET</em> request. The request will be redirected to the login form if no cookie is found on the request header. A new cookie will be set on the response header to a <em>POST</em> request after the login information in the request body has been checked against a user record in the ACL.</p>
-<h3>/api/user/key</h3>
+<h3 id="%2Fapi%2Fuser%2Fkey">/api/user/key <a class="header-anchor" href="#%2Fapi%2Fuser%2Fkey">¶</a></h3>
 <p>Will generate and respond with an API key if enabled for a user account.</p>
-<h3>/api/user/log?email=dennis.bauszus@geolytix.co.uk</h3>
+<h3 id="%2Fapi%2Fuser%2Flog%3Femail%3Ddennis.bauszus%40geolytix.co.uk">/api/user/log?email=dennis.bauszus@geolytix.co.uk <a class="header-anchor" href="#%2Fapi%2Fuser%2Flog%3Femail%3Ddennis.bauszus%40geolytix.co.uk">¶</a></h3>
 <p>Returns an array of logins for the user. User accounts are looked up by their email address in the ACL. The log array will store the date time of every login and if possible the IP address of the login request.</p>
-<h3>/api/user/logout</h3>
+<h3 id="%2Fapi%2Fuser%2Flogout">/api/user/logout <a class="header-anchor" href="#%2Fapi%2Fuser%2Flogout">¶</a></h3>
 <p>Will set a response header Cookie with a max age of 0 and a NULL token value. This will overwrite any existing XYZ Cookie effectively requiring the user to login in order to create a new Token/Cookie.</p>
 
     </div>

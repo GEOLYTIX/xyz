@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -383,7 +388,7 @@
     </ul>
 
     <div id="content">
-      <h1>XYZ Proxy</h1>
+      <h1 id="xyz-proxy">XYZ Proxy <a class="header-anchor" href="#xyz-proxy">¶</a></h1>
 <p>An Express HTTP proxy to route requests through the XYZ API.</p>
 <p><em>This is likely to be merged with the provider service in the future</em></p>
 

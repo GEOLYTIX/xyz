@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -383,7 +388,7 @@
     </ul>
 
     <div id="content">
-      <h1>Provider API</h1>
+      <h1 id="provider-api">Provider API <a class="header-anchor" href="#provider-api">¶</a></h1>
 <p>Provider are external services which can be accessed via the XYZ API. API keys for external services may be stored as environment variables allowing XYZ clients access to secure services without exposing the API keys themselves.</p>
 <p><em>This is likely to be merged with the proxy service in the future</em></p>
 

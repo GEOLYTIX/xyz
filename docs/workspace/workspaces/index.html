@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -379,7 +384,7 @@
     </ul>
 
     <div id="content">
-      <h1>XYZ Workspace</h1>
+      <h1 id="xyz-workspace">XYZ Workspace <a class="header-anchor" href="#xyz-workspace">¶</a></h1>
 <p>The XYZ workspace is a compiled configuration object. The workspace is available to most XYZ APIs as well as the XYZ library once requested from the Workspace API.</p>
 <p>The workspace is seperated into templates and locales.</p>
 <p><strong>Templates</strong> maybe markup, script, or queries which can be rendered by either the XYZ View or Query APIs to extend the functionality of the XYZ API and Library.</p>

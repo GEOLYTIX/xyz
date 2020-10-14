@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -383,7 +388,7 @@
     </ul>
 
     <div id="content">
-      <h1>Gazetteer API</h1>
+      <h1 id="gazetteer-api">Gazetteer API <a class="header-anchor" href="#gazetteer-api">¶</a></h1>
 <p>The Gazetteer API is capable to search multiple sources and return details associated with the search term as JSON.</p>
 <p>As configured in the workspace. The Gazetteer API may access external geocoding services provided by Google, Here, or Mapbox, <em>et al.</em> or query connected PostgreSQL data sources.</p>
 

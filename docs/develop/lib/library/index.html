@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -383,7 +388,7 @@
     </ul>
 
     <div id="content">
-      <h1>XYZ Library</h1>
+      <h1 id="xyz-library">XYZ Library <a class="header-anchor" href="#xyz-library">¶</a></h1>
 <p>The XYZ application control, control, or client library is the recommended way to interact with the XYZ API.</p>
 <p>The library is compiled as a javascript bundle which may be added as a HTML script tag. Once added the library will execute and assign itself as _xyz to the window.global.</p>
 <p>The _xyz method exported from the <a href="https://github.com/GEOLYTIX/xyz/blob/master/lib/index.mjs">index.mjs</a> will initialise a _xyz object in the browser. The _xyz object is passed to a callback in the _xyz method or can be awaited in an async closure.</p>

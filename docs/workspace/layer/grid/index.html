@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -379,10 +384,10 @@
     </ul>
 
     <div id="content">
-      <h1>Grid layer</h1>
+      <h1 id="grid-layer">Grid layer <a class="header-anchor" href="#grid-layer">¶</a></h1>
 <p>Hex grid layers need to be prepared in a PostGIS database. It is recommended to create a series of grid layer for different zoom level. Grid layers are styled with a special bi-variate theme. The grid panel allows to control which field should be used to define the size of a grid cell and a second field is applied to colour grid cells.</p>
 <p>Grid layers do not have locations and grid cells can not be selected.</p>
-<h2><strong>Grid fields</strong></h2>
+<h2 id="grid-fields"><strong>Grid fields</strong> <a class="header-anchor" href="#grid-fields">¶</a></h2>
 <p>The fields available for the styling of grid layers must be defined in the <strong>grid_fields</strong> entry.</p>
 <pre><code class="language-json">&quot;grid_fields&quot;: {
   &quot;Population 2001&quot;: &quot;pop__01&quot;,

@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -379,7 +384,7 @@
     </ul>
 
     <div id="content">
-      <h1>Plugins</h1>
+      <h1 id="plugins">Plugins <a class="header-anchor" href="#plugins">¶</a></h1>
 <p>The plugins object entry in the locale workspace configuration can be used to define which addon scripts should be loaded.</p>
 <pre><code class="language-json">&quot;plugins&quot;: {
   &quot;cluster&quot;: &quot;/js/plugins/cluster.js&quot;

@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -383,7 +388,7 @@
     </ul>
 
     <div id="content">
-      <h1>Library plugins</h1>
+      <h1 id="library-plugins">Library plugins <a class="header-anchor" href="#library-plugins">¶</a></h1>
 <p>Script plugins may be used to extend the XYZ Library.</p>
 <p>The xyz.plugins() method will create promises for <a href="/xyz/docs/workspace/locales/plugins">plugins which have been defined in the locale workspace</a>. The promise method will add an event listener and a script tag to the window object. The event listener function will pass the XYZ Library object to method which has been defined as the <a href="https://developer.mozilla.org/en-US/docs/Web/API/CustomEvent/detail">custom event's detail</a>. Thereafter the event listener will remove itself as well as the script tag from the window document.</p>
 <p>xyz.plugins() will return a promise which will be resolved after all plugin promises have been resolved. The script for the default Mapp views will add plugins prior to loading layers.</p>

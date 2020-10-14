@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -379,9 +384,9 @@
     </ul>
 
     <div id="content">
-      <h1>MVT layer</h1>
+      <h1 id="mvt-layer">MVT layer <a class="header-anchor" href="#mvt-layer">¶</a></h1>
 <p>MVT layer are vector layers which read the geometry column from a PostGIS table. The XYZ backend splits the map view into tiles and compresses the geometry as well as properties into the vector tile PBF format using the <a href="https://www.mapbox.com/vector-tiles/specification">MapBox Vector Tile specification</a>.</p>
-<h2>MVT cache</h2>
+<h2 id="mvt-cache">MVT cache <a class="header-anchor" href="#mvt-cache">¶</a></h2>
 <p>Tile caches need to be truncated if the list of attribute fields changes.</p>
 <p>It is possible to enable the caching backend rendered MVT thus reducing the response time when accessing accessing cached tiles.</p>
 <p><code>&quot;mvt_cache&quot;: &quot;{tablename}__mvts&quot;</code></p>

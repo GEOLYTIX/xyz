@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -383,7 +388,7 @@
     </ul>
 
     <div id="content">
-      <h1>Dataviews</h1>
+      <h1 id="dataviews">Dataviews <a class="header-anchor" href="#dataviews">¶</a></h1>
 <p>Dataviews can be graphs or tables. A dataview can be created from a static json dataset or associated to a query which is called prior to updating the dataview. The layout and query of a dataview maybe configured by paramter for the dataview creation method.</p>
 
     </div>

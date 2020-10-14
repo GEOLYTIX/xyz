@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -379,7 +384,7 @@
     </ul>
 
     <div id="content">
-      <h1>Locale</h1>
+      <h1 id="locale">Locale <a class="header-anchor" href="#locale">¶</a></h1>
 <p>Locales are regional sub settings. The XYZ Library may load a locale from the Workspace API to provide a complex configuration object for the creation of an OpenLayers Mapview control.</p>
 <p>Each locale is commonly defined by a name, bounds, and a set of layers.</p>
 <p>A locale is defined by a key/value entry in the locales object of a workspace. The locale <strong>key</strong> is used to reference the locale in requests to the XYZ API.</p>
