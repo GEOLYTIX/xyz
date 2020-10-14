@@ -29,7 +29,7 @@ module.exports = async (req, res) => {
   const html = template.render(Object.assign(
     req.params || {},
     {
-      title: process.env.TITLE || 'GEOLYTIX | XYZ',
+      title: process.env.TITLE,
       dir: process.env.DIR || '',
       token: req.params.token && req.params.token.signed || '""',
       login: (process.env.PRIVATE || process.env.PUBLIC) && 'true' || '""',

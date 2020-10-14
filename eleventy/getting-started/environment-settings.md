@@ -6,13 +6,13 @@ layout: root.html
 
 # Environment settings
 
-The process environment contains sensitive information such as connection strings for data sources, security information and API keys. These should never be made public and are not contained in this repository.
+The XYZ process can be configured by providing environment variables. The process environment contains sensistive information such as connection strings for the data source layer.
 
-Running the application without any environment settings \(zero-configuration\) will host a sample application with a single OSM base layer on port 3000.
+A default workspace with a single OSM tile layer will be avilable if the XYZ process is executed without any environment variables defined.
 
 `PORT: "3000"`
 
-By default the express.js script will listen for requests on port 3000. The PORT environment entry may override the listening port.
+By default the express.js script will listen for requests on port 3000. The PORT environment entry may override the listening port. 
 
 `TITLE: "GEOLYTIX | XYZ"`
 
