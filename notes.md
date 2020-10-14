@@ -9,3 +9,5 @@ Script module definitions in the infoj are no longer valid.
 Webpack bumped to 5.1 (from 5.beta)
 
 Webpack CLI bumped to 4.0
+
+process.env.TITLE default 'GEOLYTIX | XYZ' will no be set in api.js

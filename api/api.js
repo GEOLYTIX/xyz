@@ -16,6 +16,8 @@ const routes = {
   proxy: proxy,
 }
 
+process.env.TITLE = process.env.TITLE || 'GEOLYTIX | XYZ'
+
 module.exports = async (req, res) => {
 
   if (IEdetect(req.headers['user-agent'])) return res.send('Uh Oh... It looks like your request comes from an unsupported user agent (e.g. Internet Explorer)')

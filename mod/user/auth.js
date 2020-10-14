@@ -7,7 +7,7 @@ const acl = require('./acl')()
 module.exports = async (req, res, access) => {
 
   // Get token from params or cookie.
-  req.params.token = req.params.token || req.cookies && req.cookies[`XYZ ${process.env.TITLE || 'token'}`]
+  req.params.token = req.params.token || req.cookies && req.cookies[`XYZ ${process.env.TITLE}`]
 
   // Requests without token must terminate before validation.
   if (!req.params.token) {
@@ -76,14 +76,14 @@ module.exports = async (req, res, access) => {
     if (!access || access === 'login') {
 
       // Set cookie from valid token if no cookie present on request.
-      if (!req.cookies || !req.cookies[`XYZ ${process.env.TITLE || 'token'}`]) {
+      if (!req.cookies || !req.cookies[`XYZ ${process.env.TITLE}`]) {
         delete token.admin_user
         delete token.admin_workspace
         token.signed = jwt.sign(
           token,
           process.env.SECRET)
 
-        res.setHeader('Set-Cookie', `XYZ ${process.env.TITLE || 'token'}=${token.signed};HttpOnly;Max-Age=28800;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
+        res.setHeader('Set-Cookie', `XYZ ${process.env.TITLE}=${token.signed};HttpOnly;Max-Age=28800;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
       }
       
       return
