@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -307,7 +312,7 @@
     </ul>
 
     <div id="content">
-      <h1>MAPP Desktop</h1>
+      <h1 id="mapp-desktop">MAPP Desktop <a class="header-anchor" href="#mapp-desktop">¶</a></h1>
 <p>The default desktop interface. Layer control and location info are displayed in a resizable and scrollable control column on the left hand side.</p>
 <p>A tab panel may be displayed at the bottom of the map view. This panel maybe expanded by holding the seperator bar and moving the cursor up or down.</p>
 <p><img src="https://res.cloudinary.com/geolytix-xyz/image/upload/v1591181376/documentation/mapp_desktop.png" alt=""></p>

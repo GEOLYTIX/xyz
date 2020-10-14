@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -383,7 +388,7 @@
     </ul>
 
     <div id="content">
-      <h1>Bundling the control library</h1>
+      <h1 id="bundling-the-control-library">Bundling the control library <a class="header-anchor" href="#bundling-the-control-library">¶</a></h1>
 <p>The library code split into multiple ES6 modules is stored in the <a href="https://github.com/GEOLYTIX/xyz/tree/master/lib">/lib</a> directory of the XYZ repo. The application is bundled with <a href="https://webpack.js.org">Webpack 4</a>.</p>
 <p>The <a href="https://github.com/GEOLYTIX/xyz/blob/master/package.json">package.json</a> stores mutliple scripts to build the control library as <a href="https://github.com/GEOLYTIX/xyz/blob/master/public/js/xyz_openlayers.js">xyz_openlayers.js</a> in the /public/js directory.</p>
 <p><code>npm run dev</code> will be build a development library which is not size optimised. The compilation to dev is fastest.</p>

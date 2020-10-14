@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -383,7 +388,7 @@
     </ul>
 
     <div id="content">
-      <h1>Layer API</h1>
+      <h1 id="layer-api">Layer API <a class="header-anchor" href="#layer-api">¶</a></h1>
 <p>The Layer API provides methods to return formatted spatial data from connected PostGIS data sources.</p>
 <p>Suported formats are GeoJSON, Mapbox Vector Tiles (MVT), grided data, or clustered data.</p>
 

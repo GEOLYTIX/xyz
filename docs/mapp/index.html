@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -307,7 +312,7 @@
     </ul>
 
     <div id="content">
-      <h1>MAPP</h1>
+      <h1 id="mapp">MAPP <a class="header-anchor" href="#mapp">¶</a></h1>
 <p>MAPP is the default application view for the XYZ stack. Accessed via the root address the View API will determine whether the client request originated from a mobile or desktop platform.</p>
 <p>The appropriate application view template and script will be returned to the browser. The MAPP view maybe private, requiering a registered user to login prior to accessing the XYZ host via the MAPP interface.</p>
 <p><img src="https://res.cloudinary.com/geolytix-xyz/image/upload/v1591181227/documentation/mapp_login.png" alt=""></p>

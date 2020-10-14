@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -383,7 +388,7 @@
     </ul>
 
     <div id="content">
-      <h1>Authentication Strategy</h1>
+      <h1 id="authentication-strategy">Authentication Strategy <a class="header-anchor" href="#authentication-strategy">¶</a></h1>
 <p>All API requests must pass through the user auth module. Requests may be passed on to the API handler if the API is public or if a cookie with a valid signature is set on the request header.</p>
 
     </div>

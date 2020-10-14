@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -315,16 +320,16 @@
     </ul>
 
     <div id="content">
-      <h1>How to Document</h1>
+      <h1 id="how-to-document">How to Document <a class="header-anchor" href="#how-to-document">¶</a></h1>
 <p>Please refer to the information in this article in order to contribute to the documentation.</p>
-<h2>eleventy</h2>
+<h2 id="eleventy">eleventy <a class="header-anchor" href="#eleventy">¶</a></h2>
 <p>We use <a href="https://github.com/11ty/eleventy">Eleventy</a> to compile markdown into static pages.</p>
 <p>eleventy and markdown-it are <strong>not included</strong> as dependencies in the XYZ included as save-dev dependencies. The npm modules may be installed for the project or globally.</p>
 <p>Individual markdown documents and a template html are stored in the /eleventy folder. Configuration for the compilation is in the .eleventy.js file in the XYZ root.</p>
 <p>Use following command to compile templates and markdown from the /eleventy folder in the /docs directory.</p>
 <pre><code>npx eleventy --input ./eleventy --output ./docs --formats=md
 </code></pre>
-<h2>Tree view structure</h2>
+<h2 id="tree-view-structure">Tree view structure <a class="header-anchor" href="#tree-view-structure">¶</a></h2>
 <p>The order of static pages in the /docs directory will resemble the nesting of markdown articles in the /eleventy input folder. Defining front matter in the the individual markdown files allows for the configuration of the tree view navigation.</p>
 <pre><code>---
 title: Getting started
@@ -337,12 +342,12 @@ orderPath: /_getting-started/_getting-started
 <p>This example front matter shows how the <code>tags</code> array is used to show the 'Getting Started' page in the documentation root.</p>
 <p>The <code>group</code> flag ensures that entry is pushed to the left in the tree view layout.</p>
 <p>The <code>orderPath</code> is used to ensure that this page link will be on top of it's section due to underscores being sorted ahead of numerals and other characters.</p>
-<h2>Images</h2>
+<h2 id="images">Images <a class="header-anchor" href="#images">¶</a></h2>
 <p>Images should not be comitted to the XYZ repository but must be uploaded to an image hosting platform such as <a href="https://cloudinary.com">cloudinary</a>.</p>
 <p><img src="https://res.cloudinary.com/geolytix-xyz/image/upload/v1589640927/documentation/gh-pages_z1zcne.png" alt=""></p>
 <p>The shown above is defined as an image link in the markdown:</p>
 <p><code>![](https://res.cloudinary.com/geolytix-xyz/image/upload/v1589640927/documentation/gh-pages_z1zcne.png)</code></p>
-<h2>Deploying the documentation</h2>
+<h2 id="deploying-the-documentation">Deploying the documentation <a class="header-anchor" href="#deploying-the-documentation">¶</a></h2>
 <p>We use <a href="https://pages.github.com/">Github pages</a> to serve the documentation directly from the XYZ repository /docs. For this reason relative links are prefixed with /xyz/docs.</p>
 <p>In order to deploy the documentation as a static build to Vercel the vercel.json must be configured like so:</p>
 <pre><code>{

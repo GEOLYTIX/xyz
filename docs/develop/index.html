@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -383,7 +388,7 @@
     </ul>
 
     <div id="content">
-      <h1>XYZ development</h1>
+      <h1 id="xyz-development">XYZ development <a class="header-anchor" href="#xyz-development">¶</a></h1>
 <p>The XYZ project consists of two distinct parts.</p>
 <p><strong>XYZ API</strong>; The XYZ host is collection of programming interfaces to pass transactional script from the client library to the data source layer.</p>
 <p>Core development contributes to the XYZ API and library code directly. In order for core developments to be implemented a pull request must be sent to the maintainers of the XYZ repository. Alternatively the XYZ repository may be forked and altered in accordance with the <a href="https://github.com/GEOLYTIX/xyz/blob/master/LICENSE">XYZ licence</a>.</p>

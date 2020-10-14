@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -379,7 +384,7 @@
     </ul>
 
     <div id="content">
-      <h1>Charts</h1>
+      <h1 id="charts">Charts <a class="header-anchor" href="#charts">¶</a></h1>
 <p>The chart object configures the display of data returned from a query as a chart.</p>
 <p>Data from a query may be returned as an array, an object with key/value pairs, or as an array of objects. An array of objects would be returned from a query which matches several records. Each record being an object in the array and the field names from the query being the keys in each of the record objects.</p>
 <p>Please refer to the <a href="https://www.chartjs.org/docs/latest/">ChartJS documentation</a> for detailed information in regard to the individual chart types and layout options.</p>

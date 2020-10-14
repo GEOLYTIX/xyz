@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -379,7 +384,7 @@
     </ul>
 
     <div id="content">
-      <h1>Tables</h1>
+      <h1 id="tables">Tables <a class="header-anchor" href="#tables">¶</a></h1>
 <p>A <code>columns</code> entry will be passed by the dataviews.create() method to the Tabulator library which is compiled as a util in the XYZ Library.</p>
 <p>Please refer to the <a href="http://tabulator.info/docs/4.6">Tabulator documentation</a> for table layout and column configuration.</p>
 <pre><code>&quot;dataviews&quot;: {

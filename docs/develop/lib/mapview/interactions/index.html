@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -383,13 +388,13 @@
     </ul>
 
     <div id="content">
-      <h1>Interactions</h1>
+      <h1 id="interactions">Interactions <a class="header-anchor" href="#interactions">¶</a></h1>
 <p>Interactions define map interface methods such as selecting locations from displayed layers or drawing geometries.</p>
 <p>Only one interaction can be current at any one time.</p>
 <p>Interactions must have begin, finish, and cancel methods.</p>
 <p>The current interaction will be finished if another interactions begins.</p>
 <p>The default interaction is highlight/select. If any other interaction is finished the highlight/select interaction will begin.</p>
-<h2>draw</h2>
+<h2 id="draw">draw <a class="header-anchor" href="#draw">¶</a></h2>
 <p>Params provided to the draw.begin() method define type of geometry to be drawn.</p>
 <p>The default <a href="https://openlayers.org/en/latest/apidoc/module-ol_interaction_Draw.html#~GeometryFunction">geometryFunction</a> used for the construction of linestrings and polygons uses <a href="https://www.npmjs.com/package/@turf/kinks">Turf.kinks</a> to check for self intersections in the sketch geometry. If true, the construction of the next vertix is prevented.</p>
 

@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -379,13 +384,13 @@
     </ul>
 
     <div id="content">
-      <h1>infoj</h1>
+      <h1 id="infoj">infoj <a class="header-anchor" href="#infoj">¶</a></h1>
 <p>The infoj is a location schema which must defined inside the layer configuration object. Given a query ID <strong>(qID)</strong> the XYZ library might request the location data as defined in the infoj schema from the Location API.</p>
 <p>The infoj schema is an array of objects. Each infoj entry may either represent a field to be queried for a value from the layer table or a complex object such as a dataview or even a custom script to be loaded and executed.</p>
 <p>The <strong><code>field</code></strong> is the datasource (PostGIS table) field to be queried for a property value to be presented in the location info.</p>
 <p>Set <code>title</code> only to display full-width text.</p>
 <p>The <strong><code>title</code></strong> will be displayed before the field value.</p>
-<h2>Entry types</h2>
+<h2 id="entry-types">Entry types <a class="header-anchor" href="#entry-types">¶</a></h2>
 <p>The entry type defines the nature of an entry and how the data should be displayed.</p>
 <p>The default being a simple text value.</p>
 <p><code>&quot;type&quot; : &quot;text&quot;</code></p>

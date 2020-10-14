@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -383,7 +388,7 @@
     </ul>
 
     <div id="content">
-      <h1>Application Views</h1>
+      <h1 id="application-views">Application Views <a class="header-anchor" href="#application-views">¶</a></h1>
 <p>Application views are the primary client interface. They usually consist of a HTML document with the XYZ Library script, stylesheets, Openlayers, and other script dependencies referenced in the document header.</p>
 
     </div>

@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -379,9 +384,9 @@
     </ul>
 
     <div id="content">
-      <h1>Styles</h1>
+      <h1 id="styles">Styles <a class="header-anchor" href="#styles">¶</a></h1>
 <p>Style define how geometries are drawn in the map. Style objects inherit values. This means that a highlight or theme style only needs to define the style elements which should be amended to or overwrite the default style.</p>
-<h3>MVT and GeoJSON styling</h3>
+<h3 id="mvt-and-geojson-styling">MVT and GeoJSON styling <a class="header-anchor" href="#mvt-and-geojson-styling">¶</a></h3>
 <p>The snippet below is an example of styling for layers mvt and geojson. It is most common for these layer formats to represent polygon and linestring features although they can also contain points.</p>
 <pre><code class="language-json">&quot;style&quot;: {
   &quot;default&quot;: {
@@ -410,7 +415,7 @@ For most layers default <code>zIndex</code> is 1 while for cluster layers it equ
 }
 // tile layer will be drawn on zIndex: 25.
 </code></pre>
-<h3>Cluster styling</h3>
+<h3 id="cluster-styling">Cluster styling <a class="header-anchor" href="#cluster-styling">¶</a></h3>
 <p>Cluster features inherit their style from style.default object.<br>
 Default marker size is 20, default scale equals to 1.</p>
 <p>Cluster scale defaults to 1.2 and highlight scale defaults to 1.3.</p>
@@ -457,7 +462,7 @@ Default marker size is 20, default scale equals to 1.</p>
 <li>markerLetter</li>
 <li>geo</li>
 </ul>
-<h2>Icons</h2>
+<h2 id="icons">Icons <a class="header-anchor" href="#icons">¶</a></h2>
 <p>Icons can be defined as marker to represent a point location in the rendered map.</p>
 <pre><code class="language-json">&quot;style&quot;: {
   &quot;default&quot;: {
@@ -471,7 +476,7 @@ Default marker size is 20, default scale equals to 1.</p>
 }
 /* scale is optional */
 </code></pre>
-<h2>Labels</h2>
+<h2 id="labels">Labels <a class="header-anchor" href="#labels">¶</a></h2>
 <p>Label for locations on cluster or MVT layer are created as a seperate layer to make use of Openlayers declutter capability to prevent overlapping map labels. The label itself is created as an <a href="https://openlayers.org/en/latest/apidoc/module-ol_style_Text.html">Openlayers Text object</a>.</p>
 <p>The entries in the label object will be assigned to the text style. '12px sans-serif' will be the default is not explicitly set.</p>
 <p>The field defines which location field will be shown as the location's label.</p>
@@ -484,7 +489,7 @@ Default marker size is 20, default scale equals to 1.</p>
 </code></pre>
 <p>In order to display labels by default add <code>&quot;display&quot;: true</code>.<br>
 To include count on clustered features add <code>&quot;count&quot;: true</code>.</p>
-<h2>Hide the style panel</h2>
+<h2 id="hide-the-style-panel">Hide the style panel <a class="header-anchor" href="#hide-the-style-panel">¶</a></h2>
 <p>Setting a flag <code>hidden=true</code> in the style configuration will hide the style panel in the layer view. A legend will still be shown for a theme but the theme can not be changed with the hidden flag.</p>
 
     </div>

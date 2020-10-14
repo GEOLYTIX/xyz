@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -383,7 +388,7 @@
     </ul>
 
     <div id="content">
-      <h1>Locations</h1>
+      <h1 id="locations">Locations <a class="header-anchor" href="#locations">¶</a></h1>
 <p>The _xyz.locations object provides methods to create (decorate) new location objects.</p>
 <p>Locations may either be manualy created or be selected from a layer. The layers infoj object describes the schema for all locations that make up a layer. The locations.select method will request a location's geometry and properties from the XYZ Location API. The information returned from the API fill be passed into the locations.selectCallback which will create a new location and the location to the locations.list.</p>
 <p>The locations.list is an array of object with each object being one location. All of the locations methods can be accessed through the object in the locations.list. Removing a location by invoking the remove function will clear the location from this list.</p>

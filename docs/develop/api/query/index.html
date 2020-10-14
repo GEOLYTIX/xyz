@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -383,7 +388,7 @@
     </ul>
 
     <div id="content">
-      <h1>Query API</h1>
+      <h1 id="query-api">Query API <a class="header-anchor" href="#query-api">¶</a></h1>
 <p>The XYZ Query API allows to render transactional script with request parameters to be send to connected PostgreSQL data sources and return a formated response to the client.</p>
 <p>Rendering queries from templates in the Query API prevents direct SQL requests from the client to a data source.</p>
 

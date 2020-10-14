@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -311,15 +316,15 @@
     </ul>
 
     <div id="content">
-      <h1>Access</h1>
+      <h1 id="access">Access <a class="header-anchor" href="#access">¶</a></h1>
 <p>Access to the XYZ API is by default open without the possibility of administrative access.</p>
-<h2>PUBLIC</h2>
+<h2 id="public">PUBLIC <a class="header-anchor" href="#public">¶</a></h2>
 <p><code>&quot;PUBLIC&quot;: &quot;postgres://username:password@123.123.123.123:5432/database|schema.table&quot;</code></p>
 <p>Public access with a <a href="https://github.com/iceddev/pg-connection-string">pg-connection-string</a> which references a PostgreSQL ACL keeps the API open but allows for users to login with elevated access defined by the user accounts' roles and admin rights.</p>
-<h2>PRIVATE</h2>
+<h2 id="private">PRIVATE <a class="header-anchor" href="#private">¶</a></h2>
 <p><code>&quot;PRIVATE&quot;: &quot;postgres://username:password@123.123.123.123:5432/database|schema.table&quot;</code></p>
 <p>Setting the PRIVATE access key in the environment settings requires authentication via token for every request sent to the API.</p>
-<h2>Access Control Lists (ACL)</h2>
+<h2 id="access-control-lists-(acl)">Access Control Lists (ACL) <a class="header-anchor" href="#access-control-lists-(acl)">¶</a></h2>
 <p>The Access Control List (ACL) is a PostgreSQL table which stores user accounts identified by a valid email address, encrypted passwords, and roles.</p>
 <p>The PostgreSQL user defined in the ACL connection string must have rights to read, update, and create records in the ACL table.</p>
 <p>Given the rights to create tables in the ACL database schema the <code>api/user/pgtable</code> endpoint may be used to create a new ACL table. A table will only be created if none exists yet. The newly created ACL will have one admin user admin@geolytix.xyz with the password 'admin123'. You are advised to register a new account immediately. Assign admin rights to the new account and thereafter delete the admin@geolytix.xyz account.</p>
@@ -347,21 +352,21 @@
 <p><code>&quot;TRANSPORT&quot;: &quot;smtps://xyz%40geolytix.co.uk:password@smtp.gmail.com&quot;</code></p>
 <p>A domain alias may be defined to overwrite the <a href="https://developer.mozilla.org/en-US/docs/Web/HTTP/Headers/Host">host value from the request header</a> in mails send from the XYZ. This may be useful where domain rewrites are used.</p>
 <p><code>&quot;ALIAS&quot;: &quot;geolytix.xyz&quot;</code></p>
-<h2>User Registration</h2>
+<h2 id="user-registration">User Registration <a class="header-anchor" href="#user-registration">¶</a></h2>
 <p>The User registration form will submit a post query to the User API in order to register a new User record with an encrypted password.</p>
 <p>The host will send an email with a verification token to the registered account email. The link containing the verification token must be opened in order to <strong>verify ownership of the email account</strong>.</p>
 <p>After the account has been verified by its owner a second email with an approval token will be sent to all registered site administrators. Any one <strong>administrator must follow the link to approve the newly verified account</strong>.</p>
 <p>Emails will be sent to inform whether an account has been deleted or approved by an administrator.</p>
-<h2>Password reset</h2>
+<h2 id="password-reset">Password reset <a class="header-anchor" href="#password-reset">¶</a></h2>
 <p>The <strong>user registration form</strong> can be used to reset a users password. Registering an existing email account will sent a new verification token to the registered email account. The new password will be live once the email account has been verified by its owner.</p>
 <p>Resetting the password will also reset the number of failed login attempts.</p>
-<h2>Failed logins / Locking User Accounts</h2>
+<h2 id="failed-logins-%2F-locking-user-accounts">Failed logins / Locking User Accounts <a class="header-anchor" href="#failed-logins-%2F-locking-user-accounts">¶</a></h2>
 <p>By default accounts will be locked after 3 failed login attempts. Administrator may lock accounts at any time through the User API or the User Admin Panel. Setting the <code>FAILED_ATTEMPTS</code> environment key may change the maximum number of failed attempts.</p>
 <p><code>&quot;FAILED_ATTEMPTS&quot;: &quot;3&quot;</code></p>
-<h2>Secrets</h2>
+<h2 id="secrets">Secrets <a class="header-anchor" href="#secrets">¶</a></h2>
 <p>A secret must be set in the environment settings for signing web token. More complex secrets harden signatures against brute force attempts to find the secret itself.</p>
 <p><code>&quot;SECRET&quot;: &quot;ChinaCatSunflower&quot;</code></p>
-<h2>JSON Web Token</h2>
+<h2 id="json-web-token">JSON Web Token <a class="header-anchor" href="#json-web-token">¶</a></h2>
 <p>JWT issued by the XYZ host are signed and valid for 8 hours. The payload of the token carries information about the user account for which the token was generated.</p>
 <pre><code>{
   &quot;email&quot;: &quot;dennis.bauszus@geolytix.co.uk&quot;,
@@ -375,7 +380,7 @@
 </code></pre>
 <p>The <strong>/api/user/token</strong> endpoint may be called to return a signed token.</p>
 <p>The token may be provided as an URL parameter or with a named cookie.</p>
-<h2>Cookies</h2>
+<h2 id="cookies">Cookies <a class="header-anchor" href="#cookies">¶</a></h2>
 <p>Cookies are set in the request header upon successful login. A cookie is named according to the <code>TITLE</code> environment setting for the path defined in the <code>DIR</code> entry. The signed JWT is the content of the cookie. The cookie itself is only valid for 8 hours. The <strong>/api/user/cookie</strong> endpoint may be called to issue or revoke an existting cookie. The logout process will revoke an existing cookie of the same name. This is done by setting a cookie of the same name without content to expire immediately.</p>
 <p><a href="/xyz/docs/develop/security/authentication">Authentication strategy</a></p>
 <p><img src="https://res.cloudinary.com/geolytix-xyz/image/upload/v1589878516/documentation/geolytix-dev-cookie.png" alt=""></p>

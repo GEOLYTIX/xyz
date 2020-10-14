@@ -13,6 +13,10 @@
       padding: 0;
     }
 
+    .header-anchor {
+      font-size: 80%;
+    }
+
     .grid {
       font-family: system-ui;
       display:grid;
@@ -51,6 +55,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -383,7 +388,7 @@
     </ul>
 
     <div id="content">
-      <h1>View API</h1>
+      <h1 id="view-api">View API <a class="header-anchor" href="#view-api">¶</a></h1>
 <p>Views stored as markup templates can be rendered with request parameter and returned as HTML to the client.</p>
 
     </div>
