@@ -2,6 +2,7 @@
 title: Document
 tags: [root]
 layout: root.html
+date: 2020-01-01
 ---
 
 # How to Document
