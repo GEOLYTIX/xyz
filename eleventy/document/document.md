@@ -75,7 +75,7 @@ In order to deploy the documentation as a static build to Vercel the vercel.json
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net"
+          "value": "style-src 'self' https://unpkg.com 'unsafe-inline' cdn.jsdelivr.net"
         }
       ]
     }
