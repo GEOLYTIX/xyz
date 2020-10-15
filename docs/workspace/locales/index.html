@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
+  <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
   <title>Locale</title>
   <style>
 
@@ -189,6 +190,12 @@
       
       
       
+      
+      
+      
+      
+      
+      
       <li class="__1 ">
         <a href="/xyz/docs/">XYZ</a>
       </li>
@@ -247,18 +254,6 @@
       
       
       
-      
-      
-      
-      
-      
-      
-      <li class="__1 ">
-        <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
-      </li>
-      
-      
-      
       <li class="__2 ">
         <a href="/xyz/docs/workspace/dataviews/">Dataviews</a>
       </li>
@@ -273,6 +268,12 @@
       
       <li class="__3 ">
         <a href="/xyz/docs/workspace/dataviews/tables/">Tables</a>
+      </li>
+      
+      
+      
+      <li class="__1 ">
+        <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
       </li>
       
       
@@ -343,14 +344,14 @@
       
       
       
-      <li class="__2 ">
-        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
       </li>
       
       
       
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
       </li>
       
       
@@ -386,30 +387,7 @@
 <p>Locales are regional sub settings. The XYZ Library may load a locale from the Workspace API to provide a complex configuration object for the creation of an OpenLayers Mapview control.</p>
 <p>Each locale is commonly defined by a name, bounds, and a set of layers.</p>
 <p>A locale is defined by a key/value entry in the locales object of a workspace. The locale <strong>key</strong> is used to reference the locale in requests to the XYZ API.</p>
-<pre><code class="language-javascript">&quot;locales&quot;: {
-  &quot;Global&quot;: {...}
-  &quot;UK&quot;: {
-    &quot;name&quot;: &quot;United Kingdom&quot;,
-    &quot;gazetteer&quot;: {...},
-    &quot;bounds&quot;: {
-      &quot;north&quot;: 62,
-      &quot;east&quot;: 5,
-      &quot;south&quot;: 48,
-      &quot;west&quot;: -13
-    },
-    &quot;showScaleBar&quot;: true,
-    &quot;maskBounds&quot;: true,
-    &quot;view&quot;: {
-      &quot;lat&quot;: 45,
-      &quot;lng&quot;: 60,
-      &quot;z&quot;: 3
-    },
-    &quot;minZoom&quot;: 6,
-    &quot;maxZoom&quot;: 17,
-    &quot;layers&quot;: {...}
-  }
-}
-</code></pre>
+<pre class="language-javascript"><code class="language-javascript"><span class="token string">"locales"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>  <span class="token string">"Global"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token operator">...</span><span class="token punctuation">}</span><br>  <span class="token string">"UK"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>    <span class="token string">"name"</span><span class="token operator">:</span> <span class="token string">"United Kingdom"</span><span class="token punctuation">,</span><br>    <span class="token string">"gazetteer"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token operator">...</span><span class="token punctuation">}</span><span class="token punctuation">,</span><br>    <span class="token string">"bounds"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>      <span class="token string">"north"</span><span class="token operator">:</span> <span class="token number">62</span><span class="token punctuation">,</span><br>      <span class="token string">"east"</span><span class="token operator">:</span> <span class="token number">5</span><span class="token punctuation">,</span><br>      <span class="token string">"south"</span><span class="token operator">:</span> <span class="token number">48</span><span class="token punctuation">,</span><br>      <span class="token string">"west"</span><span class="token operator">:</span> <span class="token operator">-</span><span class="token number">13</span><br>    <span class="token punctuation">}</span><span class="token punctuation">,</span><br>    <span class="token string">"showScaleBar"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span><br>    <span class="token string">"maskBounds"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span><br>    <span class="token string">"view"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>      <span class="token string">"lat"</span><span class="token operator">:</span> <span class="token number">45</span><span class="token punctuation">,</span><br>      <span class="token string">"lng"</span><span class="token operator">:</span> <span class="token number">60</span><span class="token punctuation">,</span><br>      <span class="token string">"z"</span><span class="token operator">:</span> <span class="token number">3</span><br>    <span class="token punctuation">}</span><span class="token punctuation">,</span><br>    <span class="token string">"minZoom"</span><span class="token operator">:</span> <span class="token number">6</span><span class="token punctuation">,</span><br>    <span class="token string">"maxZoom"</span><span class="token operator">:</span> <span class="token number">17</span><span class="token punctuation">,</span><br>    <span class="token string">"layers"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token operator">...</span><span class="token punctuation">}</span><br>  <span class="token punctuation">}</span><br><span class="token punctuation">}</span></code></pre>
 <p>Locales are JSON objects with a set of parameter.</p>
 <p>The <strong>name</strong> value will be displayed in the locale dropdown. The locale key will be the default for the name value.</p>
 <p>The locale's <strong>bounds</strong> are defined by their northern, eastern, southern and western border. The default bounds are for a global view.</p>

@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
+  <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
   <title>Layer</title>
   <style>
 
@@ -189,6 +190,12 @@
       
       
       
+      
+      
+      
+      
+      
+      
       <li class="__1 ">
         <a href="/xyz/docs/">XYZ</a>
       </li>
@@ -247,18 +254,6 @@
       
       
       
-      
-      
-      
-      
-      
-      
-      <li class="__1 ">
-        <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
-      </li>
-      
-      
-      
       <li class="__2 ">
         <a href="/xyz/docs/workspace/dataviews/">Dataviews</a>
       </li>
@@ -273,6 +268,12 @@
       
       <li class="__3 ">
         <a href="/xyz/docs/workspace/dataviews/tables/">Tables</a>
+      </li>
+      
+      
+      
+      <li class="__1 ">
+        <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
       </li>
       
       
@@ -343,14 +344,14 @@
       
       
       
-      <li class="__2 ">
-        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
       </li>
       
       
       
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
       </li>
       
       
@@ -386,20 +387,7 @@
 <p>Layers are a sub setting of a locale. Each layer object has a set of parameters which depend on the type of layer, whether the layer is interactive or editable and how the data should be styled in the map window.</p>
 <p>Valid layers for the current locale will be listed in the Layers control of the client application.</p>
 <p>The drawing order of layers is dependent on the order of the layer keys in the layers object. <strong>Layers added last to the list will be drawn on top.</strong></p>
-<pre><code class="language-javascript">&quot;layers&quot;: {
-  &quot;base&quot;: {
-    &quot;group&quot;: &quot;Base maps&quot;,
-    &quot;display&quot;: true,
-    &quot;name&quot;: &quot;Mapbox Baselayer&quot;,
-    &quot;attribution&quot;: {
-      &quot;© Mapbox&quot; : &quot;https://www.mapbox.com/about/maps&quot;,
-      &quot;© OpenStreetMap&quot;: &quot;http://www.openstreetmap.org/copyright&quot;
-    },
-    &quot;format&quot;: &quot;tiles&quot;,
-    &quot;URI&quot;: &quot;https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&amp;provider=MAPBOX&quot;
-  }
-}
-</code></pre>
+<pre class="language-javascript"><code class="language-javascript"><span class="token string">"layers"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>  <span class="token string">"base"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>    <span class="token string">"group"</span><span class="token operator">:</span> <span class="token string">"Base maps"</span><span class="token punctuation">,</span><br>    <span class="token string">"display"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span><br>    <span class="token string">"name"</span><span class="token operator">:</span> <span class="token string">"Mapbox Baselayer"</span><span class="token punctuation">,</span><br>    <span class="token string">"attribution"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>      <span class="token string">"© Mapbox"</span> <span class="token operator">:</span> <span class="token string">"https://www.mapbox.com/about/maps"</span><span class="token punctuation">,</span><br>      <span class="token string">"© OpenStreetMap"</span><span class="token operator">:</span> <span class="token string">"http://www.openstreetmap.org/copyright"</span><br>    <span class="token punctuation">}</span><span class="token punctuation">,</span><br>    <span class="token string">"format"</span><span class="token operator">:</span> <span class="token string">"tiles"</span><span class="token punctuation">,</span><br>    <span class="token string">"URI"</span><span class="token operator">:</span> <span class="token string">"https://api.mapbox.com/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&amp;provider=MAPBOX"</span><br>  <span class="token punctuation">}</span><br><span class="token punctuation">}</span></code></pre>
 <p>A layer will be listed by it's name. If no name has been set for a layer it will be listed under it's key in the locales object.</p>
 <p><code>&quot;display&quot;: true</code></p>
 <p>If the display key is set to true the layer will be displayed by default. Otherwise the layer display can be toggled through the client interface.</p>
@@ -407,11 +395,7 @@
 <p>A layer can be hidden from the layers list. It is still possible to select locations from hidden layers and aggregate scores from hidden layers can be used in lookup fields. Hidden layers can be used as scratch layers to store aggregate locations created from running filter outputs.</p>
 <p><code>&quot;meta&quot;: &quot;Satellite Imagery layer provided by HERE.&quot;</code></p>
 <p>The meta value will be displayed as text directly under the layer header in the Layer control of the client application.</p>
-<pre><code class="language-json">&quot;attribution&quot;: {
-  &quot;© Mapbox&quot; : &quot;https://www.mapbox.com/about/maps&quot;,
-  &quot;© OpenStreetMap&quot;: &quot;http://www.openstreetmap.org/copyright&quot;
-}
-</code></pre>
+<pre class="language-json"><code class="language-json"><span class="token property">"attribution"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>  <span class="token property">"© Mapbox"</span> <span class="token operator">:</span> <span class="token string">"https://www.mapbox.com/about/maps"</span><span class="token punctuation">,</span><br>  <span class="token property">"© OpenStreetMap"</span><span class="token operator">:</span> <span class="token string">"http://www.openstreetmap.org/copyright"</span><br><span class="token punctuation">}</span></code></pre>
 <p>The attribution object can hold multiple key/value pairs. The key being the text displayed in the lower right corner of the map control when the corresponding layer is visible and the value being the link for the attribution text.</p>
 <p><code>&quot;format&quot;: &quot;tiles&quot;</code></p>
 <p>The format value is mandatory for valid layers. The layer type defines the additional parameter a layer may use. The additional parameter are described in the individual format sections.</p>
@@ -420,15 +404,7 @@
 <p>The dbs key value must match a database connection in the environment settings. The key value XYZ requires a database connection DBS_XYZ.</p>
 <p><code>&quot;table&quot;: &quot;schema.eu_nuts_lv0&quot;</code></p>
 <p>The table value must match a table in the database defined by the dbs parameter. The table name can be prefixed with a schema separated from the table name with a dot.</p>
-<pre><code class="language-javascript">&quot;tables&quot;: {
-  &quot;10&quot;: null,
-  &quot;11&quot;: &quot;eu_nuts_lv0&quot;,
-  &quot;12&quot;: &quot;eu_nuts_lv0&quot;,
-  &quot;13&quot;: &quot;eu_nuts_lv0&quot;,
-  &quot;14&quot;: &quot;eu_nuts_lv0&quot;,
-  &quot;15&quot;: null
-}
-</code></pre>
+<pre class="language-javascript"><code class="language-javascript"><span class="token string">"tables"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>  <span class="token string">"10"</span><span class="token operator">:</span> <span class="token keyword">null</span><span class="token punctuation">,</span><br>  <span class="token string">"11"</span><span class="token operator">:</span> <span class="token string">"eu_nuts_lv0"</span><span class="token punctuation">,</span><br>  <span class="token string">"12"</span><span class="token operator">:</span> <span class="token string">"eu_nuts_lv0"</span><span class="token punctuation">,</span><br>  <span class="token string">"13"</span><span class="token operator">:</span> <span class="token string">"eu_nuts_lv0"</span><span class="token punctuation">,</span><br>  <span class="token string">"14"</span><span class="token operator">:</span> <span class="token string">"eu_nuts_lv0"</span><span class="token punctuation">,</span><br>  <span class="token string">"15"</span><span class="token operator">:</span> <span class="token keyword">null</span><br><span class="token punctuation">}</span></code></pre>
 <p>A tables object can be provided instead of the table key. With a single table key the layer will be visible on all zoom levels in a locale. It is possible to set a tables object with key value/pairs defining which table should provide the data at the zoom level represented by the key.</p>
 <p>Setting a null value will prevent the layer to be visible on the zoom level and beyond the defined range.</p>
 <p>PostGIS data layers also require a geometry field to be defined in the layer settings. The definition of the geometry field varies with the layer format.</p>

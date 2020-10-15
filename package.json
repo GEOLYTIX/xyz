@@ -32,6 +32,7 @@
     "pg": "^7.18.2"
   },
   "devDependencies": {
+    "@11ty/eleventy-plugin-syntaxhighlight": "^3.0.3",
     "@turf/explode": "^5.1.5",
     "@turf/flatten": "^5.1.5",
     "@turf/kinks": "^6.0.0",
