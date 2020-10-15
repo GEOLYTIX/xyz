@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
+  <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
   <title>Plugins</title>
   <style>
 
@@ -189,12 +190,6 @@
       
       
       
-      <li class="__1 ">
-        <a href="/xyz/docs/">XYZ</a>
-      </li>
-      
-      
-      
       
       
       <li class="__1 ">
@@ -205,6 +200,12 @@
       
       <li class="__2 ">
         <a href="/xyz/docs/develop/api/">API</a>
+      </li>
+      
+      
+      
+      <li class="__1 ">
+        <a href="/xyz/docs/">XYZ</a>
       </li>
       
       
@@ -392,21 +393,7 @@
 <p>xyz.plugins() will return a promise which will be resolved after all plugin promises have been resolved. The script for the default Mapp views will add plugins prior to loading layers.</p>
 <p>Plugin script must dispatch a custom event to the document. The event name must match the plugin key in the locale configuration.</p>
 <p>The event detail can be a function which will receive the XYZ Library object. Additional library methods may be created or existing methods can be re-assigned. The example below re-assigns the xyz.layers.view.create() method. The original method will be called first within the new method. The function will short circuit if a custom property flag <code>clusterPanel</code> is not assigned to the layers object which must be passed to xyz.layers.view.create(). Otherwise a panel for the control of cluster layer properies will be added the layer view node. The full script is in <a href="https://github.com/GEOLYTIX/xyz/tree/development/public/js/plugins">public/js/plugins</a>.</p>
-<pre><code class="language-javascript">document.dispatchEvent(new CustomEvent('cluster', {
-  detail: _xyz =&gt; {
-
-    const createView = _xyz.layers.view.create
-
-    _xyz.layers.view.create = layer =&gt; {
-
-      createView(layer)
-
-      if (!layer.clusterPanel) return
-
-      // create a cluster panel in the layer view.
-  }
-}))
-</code></pre>
+<pre class="language-js"><code class="language-js">document<span class="token punctuation">.</span><span class="token function">dispatchEvent</span><span class="token punctuation">(</span><span class="token keyword">new</span> <span class="token class-name">CustomEvent</span><span class="token punctuation">(</span><span class="token string">'cluster'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span><br>  <span class="token function-variable function">detail</span><span class="token operator">:</span> <span class="token parameter">_xyz</span> <span class="token operator">=></span> <span class="token punctuation">{</span><br><br>    <span class="token keyword">const</span> createView <span class="token operator">=</span> _xyz<span class="token punctuation">.</span>layers<span class="token punctuation">.</span>view<span class="token punctuation">.</span>create<br><br>    _xyz<span class="token punctuation">.</span>layers<span class="token punctuation">.</span>view<span class="token punctuation">.</span><span class="token function-variable function">create</span> <span class="token operator">=</span> <span class="token parameter">layer</span> <span class="token operator">=></span> <span class="token punctuation">{</span><br><br>      <span class="token function">createView</span><span class="token punctuation">(</span>layer<span class="token punctuation">)</span><br><br>      <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>layer<span class="token punctuation">.</span>clusterPanel<span class="token punctuation">)</span> <span class="token keyword">return</span><br><br>      <span class="token comment">// create a cluster panel in the layer view.</span><br>  <span class="token punctuation">}</span><br><span class="token punctuation">}</span><span class="token punctuation">)</span><span class="token punctuation">)</span></code></pre>
 
     </div>
 

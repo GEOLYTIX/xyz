@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
+  <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
   <title>Styles</title>
   <style>
 
@@ -189,6 +190,12 @@
       
       
       
+      
+      
+      
+      
+      
+      
       <li class="__1 ">
         <a href="/xyz/docs/">XYZ</a>
       </li>
@@ -247,18 +254,6 @@
       
       
       
-      
-      
-      
-      
-      
-      
-      <li class="__1 ">
-        <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
-      </li>
-      
-      
-      
       <li class="__2 ">
         <a href="/xyz/docs/workspace/dataviews/">Dataviews</a>
       </li>
@@ -273,6 +268,12 @@
       
       <li class="__3 ">
         <a href="/xyz/docs/workspace/dataviews/tables/">Tables</a>
+      </li>
+      
+      
+      
+      <li class="__1 ">
+        <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
       </li>
       
       
@@ -343,14 +344,14 @@
       
       
       
-      <li class="__2 ">
-        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
       </li>
       
       
       
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
       </li>
       
       
@@ -386,66 +387,20 @@
 <p>Style define how geometries are drawn in the map. Style objects inherit values. This means that a highlight or theme style only needs to define the style elements which should be amended to or overwrite the default style.</p>
 <h3 id="mvt-and-geojson-styling">MVT and GeoJSON styling <a class="header-anchor" href="#mvt-and-geojson-styling">¶</a></h3>
 <p>The snippet below is an example of styling for layers mvt and geojson. It is most common for these layer formats to represent polygon and linestring features although they can also contain points.</p>
-<pre><code class="language-json">&quot;style&quot;: {
-  &quot;default&quot;: {
-    &quot;strokeColor&quot;: &quot;#004BA8&quot;,
-    &quot;fillColor&quot;: &quot;#ffffff&quot;,
-    &quot;fillOpacity&quot;: 0.8,
-    &quot;strokeWidth&quot;: 1
-
-  },
-  &quot;marker&quot;: {
-    &quot;type&quot;: &quot;circle&quot;,
-    &quot;strokeColor&quot;: &quot;#083D77&quot;
-  },
-  &quot;highlight&quot;: {
-    &quot;strokeColor&quot;: &quot;#ff69b4&quot;,
-    &quot;strokeWidth&quot;: 2
-  }
-}
-</code></pre>
+<pre class="language-json"><code class="language-json"><span class="token property">"style"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>  <span class="token property">"default"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>    <span class="token property">"strokeColor"</span><span class="token operator">:</span> <span class="token string">"#004BA8"</span><span class="token punctuation">,</span><br>    <span class="token property">"fillColor"</span><span class="token operator">:</span> <span class="token string">"#ffffff"</span><span class="token punctuation">,</span><br>    <span class="token property">"fillOpacity"</span><span class="token operator">:</span> <span class="token number">0.8</span><span class="token punctuation">,</span><br>    <span class="token property">"strokeWidth"</span><span class="token operator">:</span> <span class="token number">1</span><br><br>  <span class="token punctuation">}</span><span class="token punctuation">,</span><br>  <span class="token property">"marker"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>    <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"circle"</span><span class="token punctuation">,</span><br>    <span class="token property">"strokeColor"</span><span class="token operator">:</span> <span class="token string">"#083D77"</span><br>  <span class="token punctuation">}</span><span class="token punctuation">,</span><br>  <span class="token property">"highlight"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>    <span class="token property">"strokeColor"</span><span class="token operator">:</span> <span class="token string">"#ff69b4"</span><span class="token punctuation">,</span><br>    <span class="token property">"strokeWidth"</span><span class="token operator">:</span> <span class="token number">2</span><br>  <span class="token punctuation">}</span><br><span class="token punctuation">}</span></code></pre>
 <p><code>&quot;marker&quot;</code> is an optional setting which applies in case of point features displayed on MVT and GeoJSON layers. For more details of marker-style settings check section on Icons.</p>
 <p>Style object also supports <code>zIndex</code> property which modifies the drawing order of the layer.<br>
 For most layers default <code>zIndex</code> is 1 while for cluster layers it equals to 10.</p>
 <p>By default cluster layers are drawn on <code>&quot;zIndex: 10&quot;</code>. In order to set custom <code>&quot;zIndex&quot;</code> add the following to the layer style settings:</p>
-<pre><code class="language-json">&quot;style&quot;: {
-  &quot;zIndex&quot;: 25
-}
-// tile layer will be drawn on zIndex: 25.
-</code></pre>
+<pre class="language-json"><code class="language-json"><span class="token property">"style"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>  <span class="token property">"zIndex"</span><span class="token operator">:</span> <span class="token number">25</span><br><span class="token punctuation">}</span><br><span class="token comment">// tile layer will be drawn on zIndex: 25.</span></code></pre>
 <h3 id="cluster-styling">Cluster styling <a class="header-anchor" href="#cluster-styling">¶</a></h3>
 <p>Cluster features inherit their style from style.default object.<br>
 Default marker size is 20, default scale equals to 1.</p>
 <p>Cluster scale defaults to 1.2 and highlight scale defaults to 1.3.</p>
-<pre><code class="language-json">{
-  &quot;default&quot;: {
-    &quot;type&quot;: &quot;target&quot;,
-    &quot;fillColor&quot;: &quot;#cddc39&quot;
-  },
-  &quot;cluster&quot;: {
-    &quot;fillColor&quot;: &quot;#ff9800&quot;
-  }
-}
-</code></pre>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span><br>  <span class="token property">"default"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>    <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"target"</span><span class="token punctuation">,</span><br>    <span class="token property">"fillColor"</span><span class="token operator">:</span> <span class="token string">"#cddc39"</span><br>  <span class="token punctuation">}</span><span class="token punctuation">,</span><br>  <span class="token property">"cluster"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>    <span class="token property">"fillColor"</span><span class="token operator">:</span> <span class="token string">"#ff9800"</span><br>  <span class="token punctuation">}</span><br><span class="token punctuation">}</span></code></pre>
 <p>Cluster of location inherits default settings and takes scaled size unless overridden.</p>
 <p>Here's an example of inherited styles:</p>
-<pre><code class="language-json">&quot;style&quot;: {
-  &quot;default&quot;: {
-    &quot;showInHeader&quot;: true,
-    &quot;type&quot;: &quot;target&quot;,
-    &quot;fillColor&quot;: &quot;#ffb300&quot;,
-    &quot;size&quot;: 30
-  },
-  &quot;cluster&quot;: {
-    &quot;type&quot;: &quot;dot&quot;,
-    &quot;fillColor&quot;: &quot;rgba(0, 75, 168, 0.3)&quot;,
-    &quot;scale&quot;: 2
-  },
-  &quot;highlight&quot;: {
-    &quot;scale&quot;: 2.1
-  }
-}
-</code></pre>
+<pre class="language-json"><code class="language-json"><span class="token property">"style"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>  <span class="token property">"default"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>    <span class="token property">"showInHeader"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span><br>    <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"target"</span><span class="token punctuation">,</span><br>    <span class="token property">"fillColor"</span><span class="token operator">:</span> <span class="token string">"#ffb300"</span><span class="token punctuation">,</span><br>    <span class="token property">"size"</span><span class="token operator">:</span> <span class="token number">30</span><br>  <span class="token punctuation">}</span><span class="token punctuation">,</span><br>  <span class="token property">"cluster"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>    <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"dot"</span><span class="token punctuation">,</span><br>    <span class="token property">"fillColor"</span><span class="token operator">:</span> <span class="token string">"rgba(0, 75, 168, 0.3)"</span><span class="token punctuation">,</span><br>    <span class="token property">"scale"</span><span class="token operator">:</span> <span class="token number">2</span><br>  <span class="token punctuation">}</span><span class="token punctuation">,</span><br>  <span class="token property">"highlight"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>    <span class="token property">"scale"</span><span class="token operator">:</span> <span class="token number">2.1</span><br>  <span class="token punctuation">}</span><br><span class="token punctuation">}</span></code></pre>
 <p>Please note that <code>&quot;size&quot;</code> defined inside <code>&quot;cluster&quot;</code> object is a maximum size of cluster icon.</p>
 <p><code>&quot;showInHeader&quot;</code> is an optional flag which shows default icon in the layer panel to help differentiating layers in the list.</p>
 <p>Supported types of markers:</p>
@@ -462,29 +417,12 @@ Default marker size is 20, default scale equals to 1.</p>
 </ul>
 <h2 id="icons">Icons <a class="header-anchor" href="#icons">¶</a></h2>
 <p>Icons can be defined as marker to represent a point location in the rendered map.</p>
-<pre><code class="language-json">&quot;style&quot;: {
-  &quot;default&quot;: {
-    &quot;svg&quot;: &quot;https://cdn.jsdelivr.net/gh/GEOLYTIX/mapicons/coffee/bean_blue.svg&quot;,
-    &quot;anchor&quot;: [
-      0.5,
-      0.95
-    ],
-    &quot;scale&quot;: 2
-  }
-}
-/* scale is optional */
-</code></pre>
+<pre class="language-json"><code class="language-json"><span class="token property">"style"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>  <span class="token property">"default"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>    <span class="token property">"svg"</span><span class="token operator">:</span> <span class="token string">"https://cdn.jsdelivr.net/gh/GEOLYTIX/mapicons/coffee/bean_blue.svg"</span><span class="token punctuation">,</span><br>    <span class="token property">"anchor"</span><span class="token operator">:</span> <span class="token punctuation">[</span><br>      <span class="token number">0.5</span><span class="token punctuation">,</span><br>      <span class="token number">0.95</span><br>    <span class="token punctuation">]</span><span class="token punctuation">,</span><br>    <span class="token property">"scale"</span><span class="token operator">:</span> <span class="token number">2</span><br>  <span class="token punctuation">}</span><br><span class="token punctuation">}</span><br><span class="token comment">/* scale is optional */</span></code></pre>
 <h2 id="labels">Labels <a class="header-anchor" href="#labels">¶</a></h2>
 <p>Label for locations on cluster or MVT layer are created as a seperate layer to make use of Openlayers declutter capability to prevent overlapping map labels. The label itself is created as an <a href="https://openlayers.org/en/latest/apidoc/module-ol_style_Text.html">Openlayers Text object</a>.</p>
 <p>The entries in the label object will be assigned to the text style. '12px sans-serif' will be the default is not explicitly set.</p>
 <p>The field defines which location field will be shown as the location's label.</p>
-<pre><code class="language-json">&quot;label&quot;: {
-  &quot;field&quot;: &quot;store_name&quot;,
-  &quot;declutter&quot;: true,
-  &quot;strokeColor&quot;: &quot;#ffffff&quot;,
-  &quot;strokeWidth&quot;: 3
-}
-</code></pre>
+<pre class="language-json"><code class="language-json"><span class="token property">"label"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>  <span class="token property">"field"</span><span class="token operator">:</span> <span class="token string">"store_name"</span><span class="token punctuation">,</span><br>  <span class="token property">"declutter"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span><br>  <span class="token property">"strokeColor"</span><span class="token operator">:</span> <span class="token string">"#ffffff"</span><span class="token punctuation">,</span><br>  <span class="token property">"strokeWidth"</span><span class="token operator">:</span> <span class="token number">3</span><br><span class="token punctuation">}</span></code></pre>
 <p>In order to display labels by default add <code>&quot;display&quot;: true</code>.<br>
 To include count on clustered features add <code>&quot;count&quot;: true</code>.</p>
 <h2 id="hide-the-style-panel">Hide the style panel <a class="header-anchor" href="#hide-the-style-panel">¶</a></h2>
