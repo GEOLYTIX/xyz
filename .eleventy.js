@@ -1,10 +1,14 @@
 const markdownIt = require("markdown-it")
 
 const markdownItAnchor = require("markdown-it-anchor")
+const syntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight")
+
 
 // .use(require('markdown-it-anchor'), opts)
 
 module.exports = function (eleventyConfig) {
+
+  eleventyConfig.addPlugin(syntaxHighlight);
   
   eleventyConfig.setLibrary("md", markdownIt({
     html: true,
