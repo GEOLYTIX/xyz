@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
+  <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
   <title>Plugins</title>
   <style>
 
@@ -189,6 +190,8 @@
       
       
       
+      
+      
       <li class="__1 ">
         <a href="/xyz/docs/">XYZ</a>
       </li>
@@ -248,14 +251,6 @@
       
       
       
-      
-      
-      
-      
-      
-      <li class="__1 ">
-        <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
-      </li>
       
       
       
@@ -343,14 +338,14 @@
       
       
       
-      <li class="__2 ">
-        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
       </li>
       
       
       
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
       </li>
       
       
@@ -378,16 +373,19 @@
       </li>
       
       
+      
+      <li class="__1 ">
+        <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
+      </li>
+      
+      
 
     </ul>
 
     <div id="content">
       <h1 id="plugins">Plugins <a class="header-anchor" href="#plugins">¶</a></h1>
 <p>The plugins object entry in the locale workspace configuration can be used to define which addon scripts should be loaded.</p>
-<pre><code class="language-json">&quot;plugins&quot;: {
-  &quot;cluster&quot;: &quot;/js/plugins/cluster.js&quot;
-}
-</code></pre>
+<pre class="language-json"><code class="language-json"><span class="token property">"plugins"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>  <span class="token property">"cluster"</span><span class="token operator">:</span> <span class="token string">"/js/plugins/cluster.js"</span><br><span class="token punctuation">}</span></code></pre>
 <p>The key must match the event name which is defined in the module code. The entry value defines the source for the script tag which added to the application window document.</p>
 <p>Additional information in regard to building XYZ Library plugins can be found <a href="/xyz/docs/develop/lib/plugins/">here</a>.</p>
 

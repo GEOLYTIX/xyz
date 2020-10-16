@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
+  <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
   <title>Tile Layer</title>
   <style>
 
@@ -189,6 +190,8 @@
       
       
       
+      
+      
       <li class="__1 ">
         <a href="/xyz/docs/">XYZ</a>
       </li>
@@ -248,14 +251,6 @@
       
       
       
-      
-      
-      
-      
-      
-      <li class="__1 ">
-        <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
-      </li>
       
       
       
@@ -343,14 +338,14 @@
       
       
       
-      <li class="__2 ">
-        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
       </li>
       
       
       
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
       </li>
       
       
@@ -378,6 +373,12 @@
       </li>
       
       
+      
+      <li class="__1 ">
+        <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
+      </li>
+      
+      
 
     </ul>
 
@@ -389,11 +390,7 @@
 <p><code>/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&amp;provider=MAPBOX&amp;host=https://api.mapbox.com</code></p>
 <p>Setting a provider and host will substitute the host param as well as the API key when the request is passed through the XYZ API.</p>
 <p>By default tile layers are drawn on <code>&quot;zIndex: -1&quot;</code>. In order to set custom <code>&quot;zIndex&quot;</code> add the following to the layer settings:</p>
-<pre><code class="language-json">&quot;style&quot;: {
-	&quot;zIndex&quot;: 5
-}
-// tile layer will be drawn on zIndex: 5.
-</code></pre>
+<pre class="language-json"><code class="language-json"><span class="token property">"style"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>	<span class="token property">"zIndex"</span><span class="token operator">:</span> <span class="token number">5</span><br><span class="token punctuation">}</span><br><span class="token comment">// tile layer will be drawn on zIndex: 5.</span></code></pre>
 
     </div>
 

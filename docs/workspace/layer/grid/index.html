@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
+  <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
   <title>Hex Grid</title>
   <style>
 
@@ -189,6 +190,8 @@
       
       
       
+      
+      
       <li class="__1 ">
         <a href="/xyz/docs/">XYZ</a>
       </li>
@@ -248,14 +251,6 @@
       
       
       
-      
-      
-      
-      
-      
-      <li class="__1 ">
-        <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
-      </li>
       
       
       
@@ -343,14 +338,14 @@
       
       
       
-      <li class="__2 ">
-        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
       </li>
       
       
       
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
       </li>
       
       
@@ -378,6 +373,12 @@
       </li>
       
       
+      
+      <li class="__1 ">
+        <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
+      </li>
+      
+      
 
     </ul>
 
@@ -387,13 +388,7 @@
 <p>Grid layers do not have locations and grid cells can not be selected.</p>
 <h2 id="grid-fields"><strong>Grid fields</strong> <a class="header-anchor" href="#grid-fields">¶</a></h2>
 <p>The fields available for the styling of grid layers must be defined in the <strong>grid_fields</strong> entry.</p>
-<pre><code class="language-json">&quot;grid_fields&quot;: {
-  &quot;Population 2001&quot;: &quot;pop__01&quot;,
-  &quot;Population 2011&quot;: &quot;pop__11&quot;,
-  &quot;Female population&quot;: &quot;gen_female__11&quot;,
-  &quot;Male population&quot;: &quot;gen_male__11&quot;
-}
-</code></pre>
+<pre class="language-json"><code class="language-json"><span class="token property">"grid_fields"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>  <span class="token property">"Population 2001"</span><span class="token operator">:</span> <span class="token string">"pop__01"</span><span class="token punctuation">,</span><br>  <span class="token property">"Population 2011"</span><span class="token operator">:</span> <span class="token string">"pop__11"</span><span class="token punctuation">,</span><br>  <span class="token property">"Female population"</span><span class="token operator">:</span> <span class="token string">"gen_female__11"</span><span class="token punctuation">,</span><br>  <span class="token property">"Male population"</span><span class="token operator">:</span> <span class="token string">"gen_male__11"</span><br><span class="token punctuation">}</span></code></pre>
 <p>It is possible to set in the layer entry which fields should be set as the default.</p>
 <p><code>&quot;grid_color&quot;: &quot;pop__11&quot;</code></p>
 <p>The default field to be used for the color scale can be set as <strong>grid_color</strong>.</p>

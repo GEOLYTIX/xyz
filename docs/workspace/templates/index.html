@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
+  <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
   <title>Templates</title>
   <style>
 
@@ -189,6 +190,8 @@
       
       
       
+      
+      
       <li class="__1 ">
         <a href="/xyz/docs/">XYZ</a>
       </li>
@@ -248,14 +251,6 @@
       
       
       
-      
-      
-      
-      
-      
-      <li class="__1 ">
-        <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
-      </li>
       
       
       
@@ -343,14 +338,14 @@
       
       
       
-      <li class="__2 ">
-        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
       </li>
       
       
       
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
       </li>
       
       
@@ -378,6 +373,12 @@
       </li>
       
       
+      
+      <li class="__1 ">
+        <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
+      </li>
+      
+      
 
     </ul>
 
@@ -392,24 +393,14 @@
 <p>Reports are application views which must be defined as templates. Detailed information in regards to application views and scripts are in the developer documention.</p>
 <p>Defining a template with the same key will overwrite a default template.</p>
 <p>For example; The default MAPP Desktop view template can be set by defining a view template with the key <code>_desktop</code>.</p>
-<pre><code class="language-json">&quot;_desktop&quot;: {
-  &quot;src&quot;: &quot;https://api.github.com/repos/GEOLYTIX/public/contents/_desktop_wide.html&quot;
-}
-</code></pre>
+<pre class="language-json"><code class="language-json"><span class="token property">"_desktop"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>  <span class="token property">"src"</span><span class="token operator">:</span> <span class="token string">"https://api.github.com/repos/GEOLYTIX/public/contents/_desktop_wide.html"</span><br><span class="token punctuation">}</span></code></pre>
 <p>Templates may be loaded as string from a valid <a href="/xyz/docs/workspace/workspaces/src">ressource link; &quot;src&quot;</a>.</p>
 <h2 id="template-literals">Template Literals <a class="header-anchor" href="#template-literals">¶</a></h2>
 <p>Templates may also be defined as literals.</p>
-<pre><code class="language-json">&quot;global_cities_query&quot;: {
-  &quot;template&quot;: &quot;select id, city_name, country from citiesoftheworld WHERE true ${viewport} limit 99;&quot;
-}
-</code></pre>
+<pre class="language-json"><code class="language-json"><span class="token property">"global_cities_query"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>  <span class="token property">"template"</span><span class="token operator">:</span> <span class="token string">"select id, city_name, country from citiesoftheworld WHERE true ${viewport} limit 99;"</span><br><span class="token punctuation">}</span></code></pre>
 <h2 id="query-modules">Query Modules <a class="header-anchor" href="#query-modules">¶</a></h2>
 <p>Query templates may be compiled from string by way of literal or ressource link with <code>module</code> paramater flag set as true in the template definition:</p>
-<pre><code class="language-json">&quot;pl_population&quot;: {
-  &quot;module&quot;: true, // or &quot;type&quot;: &quot;module&quot;
-  &quot;src&quot;: &quot;https://geolytix.github.io/public/mapp/layers/poland/pl_population.js&quot;
-}
-</code></pre>
+<pre class="language-json"><code class="language-json"><span class="token property">"pl_population"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>  <span class="token property">"module"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span> <span class="token comment">// or "type": "module"</span><br>  <span class="token property">"src"</span><span class="token operator">:</span> <span class="token string">"https://geolytix.github.io/public/mapp/layers/poland/pl_population.js"</span><br><span class="token punctuation">}</span></code></pre>
 <p>Detailed information for query templates and modules are in the <a href="/xyz/docs/develop/api/workspace/">api/workspace</a> developer documentation.</p>
 <h2 id="access-%26-roles">Access &amp; Roles <a class="header-anchor" href="#access-%26-roles">¶</a></h2>
 <p>Queries may be restricted to be accessed by user with administrative rights only. In addition to filter in template literals queries may also be restricted by assigning <a href="/xyz/docs/workspace/roles/">roles</a> in the template object definition.</p>
