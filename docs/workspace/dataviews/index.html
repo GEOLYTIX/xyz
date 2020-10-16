@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
+  <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
   <title>Dataviews</title>
   <style>
 
@@ -189,6 +190,8 @@
       
       
       
+      
+      
       <li class="__1 ">
         <a href="/xyz/docs/">XYZ</a>
       </li>
@@ -248,14 +251,6 @@
       
       
       
-      
-      
-      
-      
-      
-      <li class="__1 ">
-        <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
-      </li>
       
       
       
@@ -343,14 +338,14 @@
       
       
       
-      <li class="__2 ">
-        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
       </li>
       
       
       
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
       </li>
       
       
@@ -378,6 +373,12 @@
       </li>
       
       
+      
+      <li class="__1 ">
+        <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
+      </li>
+      
+      
 
     </ul>
 
@@ -385,14 +386,7 @@
       <h1 id="dataviews">Dataviews <a class="header-anchor" href="#dataviews">¶</a></h1>
 <p>Dataviews allow for the representation of a data response from a query as either table or chart.</p>
 <p>Dataviews may be assigned to either locations or a layer itself. The location ID will be provided as a query parameter if the dataview is defined for a location in the infoj array.</p>
-<pre><code class="language-json">{
-  &quot;type&quot;: &quot;dataview&quot;,
-  &quot;target&quot;: &quot;location&quot;,
-  &quot;display&quot;: true,
-  &quot;viewport&quot;: true,
-  &quot;query&quot;: &quot;shopper towns - population 15 to 21&quot;
-}
-</code></pre>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span><br>  <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"dataview"</span><span class="token punctuation">,</span><br>  <span class="token property">"target"</span><span class="token operator">:</span> <span class="token string">"location"</span><span class="token punctuation">,</span><br>  <span class="token property">"display"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span><br>  <span class="token property">"viewport"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span><br>  <span class="token property">"query"</span><span class="token operator">:</span> <span class="token string">"shopper towns - population 15 to 21"</span><br><span class="token punctuation">}</span></code></pre>
 <p>The <code>type: &quot;dataview&quot;</code> is required for dataview entries in the infoj schema.</p>
 <p>The <code>target</code> defines where the dataview is created. By default, without a target defined, dataviews.create() will generate a div element and assign this element as the dataview target. If called from the layer or location view, the dataview target will be added as a new tab to the tabview. The layer and location view methods for dataviews will attempt to get an element by ID if the target value is a string. A valid ID should be set as the target value if the dataview should be generated in a custom application view. For example on a report template.</p>
 <p><code>target: &quot;location&quot;</code> will generate a new target element for the dataview and assign that element to the location view.</p>

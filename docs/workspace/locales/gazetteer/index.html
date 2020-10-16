@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
+  <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
   <title>Gazetteer</title>
   <style>
 
@@ -189,6 +190,8 @@
       
       
       
+      
+      
       <li class="__1 ">
         <a href="/xyz/docs/">XYZ</a>
       </li>
@@ -248,14 +251,6 @@
       
       
       
-      
-      
-      
-      
-      
-      <li class="__1 ">
-        <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
-      </li>
       
       
       
@@ -343,14 +338,14 @@
       
       
       
-      <li class="__2 ">
-        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
       </li>
       
       
       
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
       </li>
       
       
@@ -378,29 +373,19 @@
       </li>
       
       
+      
+      <li class="__1 ">
+        <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
+      </li>
+      
+      
 
     </ul>
 
     <div id="content">
       <h1 id="gazetteer">Gazetteer <a class="header-anchor" href="#gazetteer">¶</a></h1>
 <p>The gazetteer object defines which gazetteer should be used for the current locale.</p>
-<pre><code class="language-javascript">&quot;gazetteer&quot;: {
-  &quot;provider&quot;: &quot;MAPBOX&quot;,
-  &quot;placeholder&quot;: &quot;e.g. London&quot;,
-  &quot;label&quot;: true,
-  &quot;datasets&quot;: [
-    {
-      &quot;layer&quot;: &quot;sprawls&quot;,
-      &quot;table&quot;: &quot;glx_cities_of_the_world&quot;,
-      &quot;qterm&quot;: &quot;name&quot;,
-      &quot;label&quot;: &quot;nameascii&quot;,
-      &quot;leading_wildcard&quot;: true
-    }
-  ]
-}
-
-// &quot;label&quot;: true within gazetteer object is optional - it displays result source and is useful in case of searching multiple datasets. 
-</code></pre>
+<pre class="language-javascript"><code class="language-javascript"><span class="token string">"gazetteer"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>  <span class="token string">"provider"</span><span class="token operator">:</span> <span class="token string">"MAPBOX"</span><span class="token punctuation">,</span><br>  <span class="token string">"placeholder"</span><span class="token operator">:</span> <span class="token string">"e.g. London"</span><span class="token punctuation">,</span><br>  <span class="token string">"label"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span><br>  <span class="token string">"datasets"</span><span class="token operator">:</span> <span class="token punctuation">[</span><br>    <span class="token punctuation">{</span><br>      <span class="token string">"layer"</span><span class="token operator">:</span> <span class="token string">"sprawls"</span><span class="token punctuation">,</span><br>      <span class="token string">"table"</span><span class="token operator">:</span> <span class="token string">"glx_cities_of_the_world"</span><span class="token punctuation">,</span><br>      <span class="token string">"qterm"</span><span class="token operator">:</span> <span class="token string">"name"</span><span class="token punctuation">,</span><br>      <span class="token string">"label"</span><span class="token operator">:</span> <span class="token string">"nameascii"</span><span class="token punctuation">,</span><br>      <span class="token string">"leading_wildcard"</span><span class="token operator">:</span> <span class="token boolean">true</span><br>    <span class="token punctuation">}</span><br>  <span class="token punctuation">]</span><br><span class="token punctuation">}</span><br><br><span class="token comment">// "label": true within gazetteer object is optional - it displays result source and is useful in case of searching multiple datasets. </span></code></pre>
 <p>Each dataset supports <code>&quot;limit&quot;</code> parameters which defaults to 10. It can be also set within gazetter object in order to apply to all datasets. Results will be sorted alphabetically.</p>
 <p>The gazetteer can be set to use either third party provider and / or hosted datasets. Locations from hosted datasets will be selected while geolocations from 3rd party providers are shown as a marker on the map.</p>
 <p><code>&quot;provider&quot;: &quot;MAPBOX&quot;</code></p>

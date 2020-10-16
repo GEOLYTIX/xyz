@@ -5,6 +5,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
+  <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
   <title>Mapview</title>
   <style>
 
@@ -189,22 +190,14 @@
       
       
       
-      <li class="__1 ">
-        <a href="/xyz/docs/">XYZ</a>
-      </li>
-      
-      
-      
-      
-      
-      <li class="__1 ">
-        <a href="/xyz/docs/develop/">Develop</a>
-      </li>
-      
-      
-      
       <li class="__2 ">
         <a href="/xyz/docs/develop/api/">API</a>
+      </li>
+      
+      
+      
+      <li class="__1 ">
+        <a href="/xyz/docs/">XYZ</a>
       </li>
       
       
@@ -269,14 +262,24 @@
       
       
       
-      <li class="__2 ">
-        <a href="/xyz/docs/develop/lib/library/">Library</a>
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/lib/dataviews/">Dataviews</a>
       </li>
       
       
       
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/lib/dataviews/">Dataviews</a>
+      
+      
+      
+      
+      <li class="__1 ">
+        <a href="/xyz/docs/develop/">Develop</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/develop/lib/library/">Library</a>
       </li>
       
       
@@ -380,8 +383,6 @@
       
       
       
-      
-      
 
     </ul>
 
@@ -392,18 +393,7 @@
 <p>Will create an Openlayers map object will be assigned to _xyz.map. Params provided to the Mapview create method will be assigned to the locale object. It is therefore possible to override the initial view, bounds, and other locale entries for a mapview.</p>
 <p>Layers with display as true in the layers.list will be immediately added to the map and shown.</p>
 <p>A <strong>changeEnd</strong> event listener will update the viewport URL hooks if enabled and check the layers list. Layers which should be displayed at the current zoom level at the end of a map view change event will be reloaded. The changeEnd event will be called after the map view changes due to panning or a change of zoom level. Interactions will be disabled at the beginning of a map view change event.</p>
-<pre><code class="language-javascript">xyz.mapview.create({
-  target: document.getElementById('Map'),
-  attribution: {
-    target: document.getElementById('Attribution'),
-    links: {
-      [`XYZ v${xyz.version}`]: 'https://geolytix.github.io/xyz',
-      Openlayers: 'https://openlayers.org'
-    }
-  },
-  scrollWheelZoom: true,
-})
-</code></pre>
+<pre class="language-javascript"><code class="language-javascript">xyz<span class="token punctuation">.</span>mapview<span class="token punctuation">.</span><span class="token function">create</span><span class="token punctuation">(</span><span class="token punctuation">{</span><br>  target<span class="token operator">:</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">'Map'</span><span class="token punctuation">)</span><span class="token punctuation">,</span><br>  attribution<span class="token operator">:</span> <span class="token punctuation">{</span><br>    target<span class="token operator">:</span> document<span class="token punctuation">.</span><span class="token function">getElementById</span><span class="token punctuation">(</span><span class="token string">'Attribution'</span><span class="token punctuation">)</span><span class="token punctuation">,</span><br>    links<span class="token operator">:</span> <span class="token punctuation">{</span><br>      <span class="token punctuation">[</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">XYZ v</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>xyz<span class="token punctuation">.</span>version<span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">]</span><span class="token operator">:</span> <span class="token string">'https://geolytix.github.io/xyz'</span><span class="token punctuation">,</span><br>      Openlayers<span class="token operator">:</span> <span class="token string">'https://openlayers.org'</span><br>    <span class="token punctuation">}</span><br>  <span class="token punctuation">}</span><span class="token punctuation">,</span><br>  scrollWheelZoom<span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span><br><span class="token punctuation">}</span><span class="token punctuation">)</span></code></pre>
 <p>With an <strong>attribution</strong> object defined in the create parameters the mapview.attribution module will be called to create a list of links in the attribution target. Links defined within the attribution object will always be shown. An attribution.check method will be run whenever layers are toggled. Links defined as attribution object in the layer configuration will be shown when the layer is visible.</p>
 <h3 id="view">view <a class="header-anchor" href="#view">¶</a></h3>
 <p>A view will be set to lng, lat, and z defined as a view object. The view object will be created from the current viewport hooks if enabled.</p>
