@@ -8,7 +8,7 @@ module.exports = async (req, res) => {
 
   let
     geom = layer.geom,
-    style_theme = layer.style.themes && layer.style.themes[req.params.theme],
+    style_theme = layer.style.theme || layer.style.themes && layer.style.themes[req.params.theme],
     cat = style_theme && (style_theme.fieldfx || style_theme.field) || null,
     size = style_theme && style_theme.size || 1,
     theme = style_theme && style_theme.type,

@@ -15,9 +15,6 @@ module.exports = () => {
         statement_timeout: parseInt(process.env.STATEMENT_TIMEOUT) || 10000
       });
 
-      // Log connection name if after it's pool has been created.
-      // console.log(key.split('_')[1]);
-
       dbs[key.split('_')[1]] = async (q, arr, timeout) => {
 
         // Request which accepts q and arr and will return rows or rows.err.
