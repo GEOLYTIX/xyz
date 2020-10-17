@@ -29,6 +29,28 @@ document.dispatchEvent(new CustomEvent('upload', {
         reader.onload = function() {
           try {
 
+            var _text = this.result.split(/\r?\n/)
+
+            _text.shift()
+
+            
+    
+            const _list = _text
+              .filter(row => !!row.length)
+              .map(row => {
+
+                row = row
+                  .split(/,(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))/)
+                  .map(x => x.replace(/^"(.*)"$/, '$1'))
+                  .map(x => !x.length && `NULL` || x)
+                  .map(x => x !== 'NULL' && `''${x}''` || x)
+                  //.map(x => isNaN(x) && `'${x}'` || x)
+                  //.map(x => !x.length && `NULL` || x)
+
+                return row.join()
+
+              })
+
             const xhr = new XMLHttpRequest()
 
             xhr.open('POST', `${_xyz.host}/api/query/upload?locale=UK&statement_timeout=100000`)
@@ -49,24 +71,6 @@ document.dispatchEvent(new CustomEvent('upload', {
         
             }
         
-            var _text = this.result.split(/\r?\n/)
-
-            _text.shift()
-                   
-            const _list = _text
-              .filter(row => !!row.length)
-              .map(row => {
-
-                row = row
-                  .split(/,(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))/)
-                  .map(x => x.replace(/^"(.*)"$/, '$1'))
-                  .map(x => isNaN(x) && `'${x}'` || x)
-                  .map(x => !x.length && `NULL` || x)
-
-                return `values (${row.join()})`
-
-              })
-
             xhr.send(JSON.stringify(_list))
 
           } catch (err) {
