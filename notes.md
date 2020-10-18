@@ -11,3 +11,11 @@ Webpack bumped to 5.1 (from 5.beta)
 Webpack CLI bumped to 4.0
 
 process.env.TITLE default 'GEOLYTIX | XYZ' will no be set in api.js
+
+Fix for editable textarea.
+
+Fix for default gazetteer icon scale.
+
+strictBounds for Google Autocomplete query.
+
+Fix for single theme on cluster layer.
