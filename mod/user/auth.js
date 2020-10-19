@@ -31,7 +31,7 @@ module.exports = async (req, res, access) => {
 
     if (token.msg) return login(req, res, token.msg)
 
-    token.signed = req.params.token
+    token.signed = req.params.token.signed || req.params.token
 
     req.params.token = token
 
