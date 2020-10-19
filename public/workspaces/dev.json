@@ -44,7 +44,10 @@
             "template": "SELECT id, name, gdp_md_est, pop_est FROM dev.natural_earth_countries WHERE true ${viewport} ${filter} ORDER BY id ASC FETCH FIRST 99 ROW ONLY;"
         },
         "Random Data Series": {
-            "template": "SELECT id AS id, random1 AS random1, random2 AS random2, random3 AS random3, random4 AS random4, random5 AS random5, random5 AS rev_random1, random4 AS rev_random2, random3 AS rev_random3, random2 AS rev_random4, random1 AS rev_random5 FROM dev.uk_glx_sites WHERE id = ${id};"
+            "src": "cloudfront:${CDN}/dev/queries/random_data_series.sql"
+        },
+        "Random Data Series 2": {
+            "template": "select ARRAY [json_build_object('data', ARRAY [random1::integer, random2::integer, random3::integer, random4::integer, random5::integer])] AS datasets, ARRAY ['Rand 1', 'Rand 2', 'Rand 3', 'Rand 4', 'Rand 5'] AS labels from dev.uk_glx_sites where id = ${id};"
         },
         "Population Summary Sites": {
             "src": "https://api.github.com/repos/GEOLYTIX/xyz_resources/contents/dev/queries/population_summary.txt"
@@ -582,42 +585,6 @@
                                 "height": 300,
                                 "width": 290,
                                 "type": "bar",
-                                "responsive": true,
-                                "labels": [
-                                    "Rand 1",
-                                    "Rand 2",
-                                    "Rand 3",
-                                    "Rand 4",
-                                    "Rand 5"
-                                ],
-                                "datasets": [{
-                                        "fields": [
-                                            "random1",
-                                            "random2",
-                                            "random3",
-                                            "random4",
-                                            "random5"
-                                        ],
-                                        "label": "Serie 1",
-                                        "backgroundColor": "rgba(192, 117, 205, 0.3)",
-                                        "borderColor": "#4a148c",
-                                        "datalabels": {},
-                                        "type": "bar"
-                                    },
-                                    {
-                                        "fields": [
-                                            "rev_random1",
-                                            "rev_random2",
-                                            "rev_random3",
-                                            "rev_random4",
-                                            "rev_random5"
-                                        ],
-                                        "label": "Serie 2",
-                                        "type": "line",
-                                        "backgroundColor": "rgba(255, 167, 38, 0.3)",
-                                        "borderColor": "#e65100"
-                                    }
-                                ],
                                 "options": {
                                     "title": {
                                         "display": true,
@@ -626,6 +593,11 @@
                                     "legend": {
                                         "display": true,
                                         "position": "bottom"
+                                    },
+                                    "plugins": {
+                                        "datalabels": {
+                                            "display": false
+                                        }
                                     }
                                 }
                             }
@@ -633,25 +605,12 @@
                         {
                             "title": "Doughnut Chart",
                             "type": "dataview",
-                            "query": "Random Data Series",
+                            "query": "Random Data Series 2",
                             "target": "xyz_sites_random2",
                             "chart": {
                                 "type": "doughnut",
-                                "labels": [
-                                    "Rand 1",
-                                    "Rand 2",
-                                    "Rand 3",
-                                    "Rand 4",
-                                    "Rand 5"
-                                ],
-                                "datasets": [{
-                                    "fields": [
-                                        "random1",
-                                        "random2",
-                                        "random3",
-                                        "random4",
-                                        "random5"
-                                    ],
+                                "datasets": [
+                                    {
                                     "backgroundColor": [
                                         "rgba(229, 99 , 153, 0.4)",
                                         "rgba(0, 167, 225, 0.4)",
@@ -659,7 +618,6 @@
                                         "rgba(247, 160 ,114, 0.4)",
                                         "rgba(255, 155, 66, 0.4)"
                                     ],
-                                    "label": "Serie 1",
                                     "borderColor": "#C0B4A7",
                                     "spanGaps": true,
                                     "lineTension": 0.5
@@ -1241,38 +1199,6 @@
                             "chart": {
                                 "height": 200,
                                 "type": "bar",
-                                "labels": [
-                                    "2011",
-                                    "2012",
-                                    "2013",
-                                    "2014",
-                                    "2015",
-                                    "2016",
-                                    "2017",
-                                    "2018"
-                                ],
-                                "datasets": [{
-                                    "fields": [
-                                        "_pop__11",
-                                        "_pop__12",
-                                        "_pop__13",
-                                        "_pop__14",
-                                        "_pop__15",
-                                        "_pop__16",
-                                        "_pop__17",
-                                        "_pop__18"
-                                    ],
-                                    "backgroundColor": [
-                                        "#b2dfdb",
-                                        "#80cbc4",
-                                        "#4db6ac",
-                                        "#26a69a",
-                                        "#009688",
-                                        "#00897b",
-                                        "#00796b",
-                                        "#00695c"
-                                    ]
-                                }],
                                 "options": {
                                     "legend": {
                                         "display": false

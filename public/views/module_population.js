@@ -58,17 +58,37 @@ module.exports = {
     		return hex[z];
     	}
 
-        return `SELECT 
-    	ROUND(sum(b.pop__11)) as _pop__11, 
-    	ROUND(sum(b.pop__12)) as _pop__12,
-    	ROUND(sum(b.pop__13)) as _pop__13,
-    	ROUND(sum(b.pop__14)) as _pop__14,
-    	ROUND(sum(b.pop__15)) as _pop__15,
-    	ROUND(sum(b.pop__16)) as _pop__16,     
-    	ROUND(sum(b.pop__17)) as _pop__17,
-    	ROUND(sum(b.pop__18)) as _pop__18
-    	FROM ${table(_)} a, ${hex(_)} b 
-    	WHERE a.${qID(_)} = ${id(_)} 
-    	AND ST_INTERSECTS(a.geom_4326_5m, b.geom_p_4326);`;
+        return `SELECT ARRAY[json_build_object('data', ARRAY [
+        ROUND(sum(b.pop__11)),
+        ROUND(sum(b.pop__12)),
+        ROUND(sum(b.pop__13)),
+        ROUND(sum(b.pop__14)),
+        ROUND(sum(b.pop__15)),
+        ROUND(sum(b.pop__16)),
+        ROUND(sum(b.pop__17)),
+        ROUND(sum(b.pop__18))
+        ],
+        'backgroundColor', ARRAY [
+        '#b2dfdb',
+        '#80cbc4',
+        '#4db6ac',
+        '#26a69a',
+        '#009688',
+        '#00897b',
+        '#00796b',
+        '#00695c']
+        )] AS datasets,
+        ARRAY[
+        '2011',
+        '2012',
+        '2013',
+        '2014',
+        '2015',
+        '2016',
+        '2017',
+        '2018'] AS labels 
+        FROM ${table(_)} a, ${hex(_)} b 
+        WHERE a.${qID(_)} = ${id(_)} 
+        AND ST_INTERSECTS(a.geom_4326_5m, b.geom_p_4326);`
     }
 }
