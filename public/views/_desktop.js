@@ -158,7 +158,9 @@ window.onload = () => {
     xyz.plugins()
       .then(() => xyz.layers.load())
       .then(() => mappUI())
-      .catch(error => console.error(error))
+      .catch(error => {
+        console.error(error)
+      })
 
     const btnZoomIn = xyz.utils.html.node`
     <button
