@@ -160,7 +160,7 @@ async function gaz_locale(req, locale, results) {
         });
       });
 
-      results.sort((a, b) => a.label.localeCompare(b.label));
+      results.sort((a, b) => a.label.toString().localeCompare(b.label));
     }
   });
 }
