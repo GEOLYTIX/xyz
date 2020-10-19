@@ -33,17 +33,16 @@ document.dispatchEvent(new CustomEvent('upload', {
 
             _text.shift()
 
-            
-    
             const _list = _text
               .filter(row => !!row.length)
               .map(row => {
 
                 row = row
                   .split(/,(?=(?:[^\"]*\"[^\"]*\")*(?![^\"]*\"))/)
+                  .map(x => x.replace(/'/g, '\'\''))
                   .map(x => x.replace(/^"(.*)"$/, '$1'))
                   .map(x => !x.length && `NULL` || x)
-                  .map(x => x !== 'NULL' && `''${x}''` || x)
+                  .map(x => x !== 'NULL' && `'${x}'` || x)
                   //.map(x => isNaN(x) && `'${x}'` || x)
                   //.map(x => !x.length && `NULL` || x)
 
@@ -65,7 +64,7 @@ document.dispatchEvent(new CustomEvent('upload', {
         
               if (e.target.status !== 200) return alert('Import went wrong. Likely unescaped characters found in your input.')
         
-              //alert(e.target.response.glx_camelot)
+              console.log(e.target.response.glx_camelot)
               
               layer.reload()
         
