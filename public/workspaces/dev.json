@@ -609,13 +609,6 @@
                             "target": "xyz_sites_random2",
                             "chart": {
                                 "type": "doughnut",
-                                "labels": [
-                                    "Rand 1",
-                                    "Rand 2",
-                                    "Rand 3",
-                                    "Rand 4",
-                                    "Rand 5"
-                                ],
                                 "datasets": [
                                     {
                                     "backgroundColor": [
@@ -1206,38 +1199,6 @@
                             "chart": {
                                 "height": 200,
                                 "type": "bar",
-                                "____labels": [
-                                    "2011",
-                                    "2012",
-                                    "2013",
-                                    "2014",
-                                    "2015",
-                                    "2016",
-                                    "2017",
-                                    "2018"
-                                ],
-                                "___datasets": [{
-                                    "fields": [
-                                        "_pop__11",
-                                        "_pop__12",
-                                        "_pop__13",
-                                        "_pop__14",
-                                        "_pop__15",
-                                        "_pop__16",
-                                        "_pop__17",
-                                        "_pop__18"
-                                    ],
-                                    "backgroundColor": [
-                                        "#b2dfdb",
-                                        "#80cbc4",
-                                        "#4db6ac",
-                                        "#26a69a",
-                                        "#009688",
-                                        "#00897b",
-                                        "#00796b",
-                                        "#00695c"
-                                    ]
-                                }],
                                 "options": {
                                     "legend": {
                                         "display": false
