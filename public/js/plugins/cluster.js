@@ -1,13 +1,7 @@
 document.dispatchEvent(new CustomEvent('cluster', {
   detail: _xyz => {
 
-    const createView = _xyz.layers.view.create
-
-    _xyz.layers.view.create = layer => {
-
-      createView(layer)
-
-      if (!layer.clusterPanel) return
+    _xyz.layers.plugins.cluster = layer => {
 
       let timer
 
