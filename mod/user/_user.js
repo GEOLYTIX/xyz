@@ -13,27 +13,26 @@ const _method = {
   },
   delete: {
     handler: require('./delete'),
-    access: 'admin_user'
+    access: 'admin'
   },
   update: {
     handler: require('./update'),
-    access: 'admin_user'
+    access: 'admin'
   },
   approve: {
     handler: require('./approve'),
-    access: 'admin_user'
+    access: 'admin'
   },
   list: {
     handler: require('./list'),
-    access: 'admin_user'
+    access: 'admin'
   },
   log: {
     handler: require('./log'),
-    access: 'admin_user'
+    access: 'admin'
   },
   pgtable: {
     handler: require('./pgtable'),
-    access: 'admin_user'
   },
   key: {
     handler: require('./key'),

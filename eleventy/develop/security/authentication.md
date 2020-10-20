@@ -36,8 +36,8 @@ CREATE TABLE acl_schema.acl_table (
   access_log text[] default '{}'::text[],
   blocked boolean default false,
   roles text[] default '{}'::text[],
-  admin_workspace boolean default false,
-  admin_user boolean default false
+  admin boolean default false,
+  language text default 'en'
 );
 ```
 
@@ -64,8 +64,7 @@ JWT issued by the XYZ host are signed and valid for 8 hours. The payload of the 
 ```
 {
   "email": "dennis.bauszus@geolytix.co.uk",
-  "admin_user": true,
-  "admin_workspace": true,
+  "admin": true,
   "key": null,
   "roles": [],
   "iat": 1589877546,
