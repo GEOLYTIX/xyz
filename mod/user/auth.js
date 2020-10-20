@@ -77,8 +77,7 @@ module.exports = async (req, res, access) => {
 
       // Set cookie from valid token if no cookie present on request.
       if (!req.cookies || !req.cookies[`XYZ ${process.env.TITLE}`]) {
-        delete token.admin_user
-        delete token.admin_workspace
+        delete token.admin
         token.signed = jwt.sign(
           token,
           process.env.SECRET)
@@ -89,14 +88,11 @@ module.exports = async (req, res, access) => {
       return
     }
 
-    // Check admin_user privileges.
+    // Check key access.
     if (access === 'key' && token.key) return
 
-    // Check admin_user privileges.
-    if (access === 'admin_user' && token.admin_user) return
-
-    // Check admibn_workspace privileges.
-    if (access === 'admin_workspace' && token.admin_workspace) return
+    // Check admin privileges.
+    if (access === 'admin' && token.admin) return
 
     res.status(401).send('Invalid token.')
   })

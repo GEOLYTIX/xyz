@@ -19,3 +19,9 @@ Fix for default gazetteer icon scale.
 strictBounds for Google Autocomplete query.
 
 Fix for single theme on cluster layer.
+
+Fix for single user in admin view.
+
+Fix for api/user/pgtable query.
+
+admin_user & admin_workspace are now retired in favour of a simple admin flag.

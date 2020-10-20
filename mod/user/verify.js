@@ -38,7 +38,7 @@ module.exports = async (req, res) => {
   if (!user.approved) {
 
     // Get all admin accounts from the ACL.
-    var rows = await acl('SELECT * FROM acl_schema.acl_table WHERE admin_user = true;')
+    var rows = await acl('SELECT * FROM acl_schema.acl_table WHERE admin = true;')
 
     if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 

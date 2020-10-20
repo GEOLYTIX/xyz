@@ -313,7 +313,7 @@ window.onload = () => {
       xyz.user = xyz.utils.JWTDecode(document.head.dataset.token)
     }
 
-    xyz.user && xyz.user.admin_user && document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
+    xyz.user && xyz.user.admin && document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
           <a
             title=${xyz.language.toolbar_admin}
             class="enabled" style="cursor: pointer;"

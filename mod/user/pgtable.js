@@ -14,25 +14,23 @@ module.exports = async (req, res) => {
     verificationtoken text,
     approvaltoken text,
     failedattempts integer default 0,
-    password_reset text,
+    password_reset text,  
     api text,
     approved_by text,
     access_log text[] default '{}'::text[],
     blocked boolean default false,
     roles text[] default '{}'::text[],
-    admin_workspace boolean default false,
-    admin_user boolean default false,
+    admin boolean default false,
     language text default 'en'
   );
   
-  INSERT INTO acl_schema.acl_table (email, password, verified, approved, admin_user, admin_workspace)
+  INSERT INTO acl_schema.acl_table (email, password, verified, approved, admin)
   SELECT
     'admin@geolytix.xyz' AS email,
     '${bcrypt.hashSync('admin123', bcrypt.genSaltSync(8))}' AS password,
     true AS verified,
     true AS approved,
-    true AS admin_user,
-    true AS admin_workspace;`)
+    true AS admin;`)
 
   if (rows instanceof Error) return res.status(500).send('Failed to create PostGIS table.')
 

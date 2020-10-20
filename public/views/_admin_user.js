@@ -37,18 +37,10 @@ xhr.onload = e => {
           cellClick: cellToggle,
         },
         {
-          field: 'admin_user',
+          field: 'admin',
           align: 'center',
           headerTooltip: 'The account is an admin account which can access this page and change other account credentials.',
           titleFormatter: ()=> '<div class="xyz-icon icon-supervisor-account"></div>',
-          formatter: 'tickCross',
-          cellClick: cellToggle,
-        },
-        {
-          field: 'admin_workspace',
-          align: 'center',
-          headerTooltip: 'The account has priviliges to modify the workspace.',
-          titleFormatter: ()=> '<div class="xyz-icon icon-settings"></div>',
           formatter: 'tickCross',
           cellClick: cellToggle,
         },
@@ -111,7 +103,7 @@ xhr.onload = e => {
       layout: 'fitDataFill',
     });
 
-  userTable.setData(e.target.response);
+  userTable.setData(e.target.response.length && e.target.response || [e.target.response]);
 
   userTable.redraw(true);
 
