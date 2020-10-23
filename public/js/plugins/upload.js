@@ -29,11 +29,14 @@ document.dispatchEvent(new CustomEvent('upload', {
         reader.onload = function() {
           try {
 
-            var _text = this.result.split(/\r?\n/)
+            // Split on new line to create array of rows.
+            const csv = this.result.split(/\r?\n/)
 
-            _text.shift()
+            // Shift header row from array.
+            csv.shift()
 
-            const _list = _text
+            
+            const lines = csv
               .filter(row => !!row.length)
               .map(row => {
 
@@ -43,34 +46,49 @@ document.dispatchEvent(new CustomEvent('upload', {
                   .map(x => x.replace(/^"(.*)"$/, '$1'))
                   .map(x => !x.length && `NULL` || x)
                   .map(x => x !== 'NULL' && `'${x}'` || x)
-                  //.map(x => isNaN(x) && `'${x}'` || x)
-                  //.map(x => !x.length && `NULL` || x)
 
                 return row.join()
 
               })
 
-            const xhr = new XMLHttpRequest()
+            const uploadPromise = payload => new Promise((resolve, reject)=>{
 
-            xhr.open('POST', `${_xyz.host}/api/query/upload?locale=UK&statement_timeout=100000`)
+              const xhr = new XMLHttpRequest()
 
-            xhr.setRequestHeader('Content-Type', 'application/json')
+              xhr.open('POST', `${_xyz.host}/api/query/upload?locale=UK&statement_timeout=100000`)
+  
+              xhr.setRequestHeader('Content-Type', 'application/json')
+  
+              xhr.responseType = 'json'
+  
+              xhr.onload = e => {
+            
+                if (e.target.status !== 200) return reject()
+          
+                resolve(payload[0])
+          
+              }
+          
+              xhr.send(JSON.stringify(payload))
 
-            xhr.responseType = 'json'
+            })
 
-            xhr.onload = e => {
+            const promises = []
 
-              button.disabled = false
-        
-              if (e.target.status !== 200) return alert('Import went wrong. Likely unescaped characters found in your input.')
-        
-              console.log(e.target.response.glx_camelot)
-              
-              layer.reload()
-        
+            for (let i = 0; i < lines.length; i+=999) {
+              let payload = lines.slice(i,i+999)
+              promises.push(uploadPromise(payload))
             }
-        
-            xhr.send(JSON.stringify(_list))
+
+            Promise
+              .all(promises)
+              .then(arr => {
+
+                //console.log(arr)
+
+                button.disabled = false               
+                layer.reload()
+              })
 
           } catch (err) {
             console.error(err)

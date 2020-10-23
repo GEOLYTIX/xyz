@@ -36,7 +36,7 @@ app.post(`${process.env.DIR||''}/api/provider/:provider?`, bodyParser.json({limi
 
 app.get(`${process.env.DIR||''}/api/query/:template?`, api)
 
-app.post(`${process.env.DIR||''}/api/query/:template?`, bodyParser.json({limit: '25mb'}), api)
+app.post(`${process.env.DIR||''}/api/query/:template?`, bodyParser.json({limit: '5mb'}), api)
 
 
 app.get(`${process.env.DIR||''}/api/gazetteer`, api)
