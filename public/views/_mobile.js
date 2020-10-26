@@ -123,27 +123,6 @@ window.onload = () => {
 
     document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
     <button
-      title=${xyz.language.toolbar_zoom_to_area}
-      onclick=${e => {
-        e.stopPropagation()
-        e.target.classList.toggle('enabled')
-
-        if (e.target.classList.contains('enabled')) {
-
-          return xyz.mapview.interaction.zoom.begin({
-            callback: () => {
-              e.target.classList.remove('enabled')
-            }
-          })
-        }
-
-        xyz.mapview.interaction.zoom.cancel()
-
-      }}>
-      <div class="xyz-icon icon-area off-black-filter">`)
-
-    document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
-    <button
       title=${xyz.language.toolbar_current_location}
       onclick=${e => {
         xyz.mapview.locate.toggle();
