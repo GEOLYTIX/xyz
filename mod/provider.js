@@ -103,7 +103,7 @@ function file(ref) {
       return JSON.parse(file, 'utf8')
     }
 
-    return file
+    return String(file)
 
   } catch (err) {
     console.error(err)
