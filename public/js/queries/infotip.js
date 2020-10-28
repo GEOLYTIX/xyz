@@ -3,5 +3,5 @@ module.exports = {
   
   SELECT ${_.field} AS label
   FROM ${_.table}
-  ${_.coords && `ORDER BY ST_Point(${_.coords}) <#> ${_.layer.geom} LIMIT 1;` || `WHERE ${_.layer.qID} = ${_.id};`}`
+  ${_.coords && `ORDER BY ST_Point(${_.coords}) <#> ${_.layer.geom} LIMIT 1;` || `WHERE ${_.layer.qID}::text = '${_.id}'::text`};`
 }
