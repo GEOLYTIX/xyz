@@ -48,15 +48,15 @@ window.onload = () => {
   }
 
   // Resize tabview while holding mousedown on hozDivider.
-  desktop.hozDivider.addEventListener('mousedown', e => {
-    e.preventDefault()
+  desktop.hozDivider.addEventListener('mousedown', () => {
     document.body.style.cursor = 'grabbing'
     window.addEventListener('mousemove', resize_y)
     window.addEventListener('mouseup', stopResize_y)
   }, true)
 
   // Resize dataview while touching hozDivider.
-  desktop.touch() && desktop.hozDivider.addEventListener('touchstart', e => {
+  desktop.hozDivider.addEventListener('touchstart', e => {
+    e.preventDefault()
     window.addEventListener('touchmove', resize_y)
     window.addEventListener('touchend', stopResize_y)
   }, { passive: true })
@@ -257,7 +257,7 @@ window.onload = () => {
 
     xyz.dataviews.tabview.init({
       target: document.getElementById('tabview'),
-    });
+    })
 
     xyz.layers.listview.init({
       target: document.getElementById('layers')

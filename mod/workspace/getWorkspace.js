@@ -52,11 +52,8 @@ async function assignTemplates() {
   workspace.templates = Object.assign({
 
     // View templates:
-    _desktop: {
-      template: readFileSync(join(__dirname, '../../public/views/_desktop.html')).toString('utf8')
-    },
-    _mobile: {
-      template: readFileSync(join(__dirname, '../../public/views/_mobile.html')).toString('utf8')
+    mapp: {
+      template: readFileSync(join(__dirname, '../../public/views/_default.html')).toString('utf8')
     },
     admin_user: {
       template: readFileSync(join(__dirname, '../../public/views/_admin_user.html')).toString('utf8')

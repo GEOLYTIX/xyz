@@ -424,6 +424,7 @@ button {
   width: 100%;
   background-color: white;
   box-shadow: 1px 1px 3px 0 #ddd;
+  margin-bottom: 5px;
   font-family: inherit; }
   .btn-drop:disabled {
     pointer-events: none;
@@ -1944,6 +1945,10 @@ span.flatpickr-weekday {
   width: 100%;
   height: 100%; }
 
+.mapboxgl-canvas {
+  min-width: 100%;
+  min-height: 100%; }
+
 .infotip {
   position: fixed;
   margin: 0;
@@ -1976,8 +1981,7 @@ span.flatpickr-weekday {
 
 .attribution {
   bottom: 0;
-  right: 5px;
-  margin-left: 150px;
+  right: 0;
   position: absolute;
   z-index: 999;
   text-align: right;
@@ -1986,7 +1990,7 @@ span.flatpickr-weekday {
   .attribution > * {
     float: right;
     clear: both;
-    margin-bottom: 5px; }
+    margin: 0 5px 5px 0; }
   .attribution a {
     margin-left: 10px;
     white-space: nowrap;
@@ -1994,7 +1998,7 @@ span.flatpickr-weekday {
     pointer-events: auto;
     text-shadow: 0px 0px 5px #fff; }
   .attribution .logo {
-    width: 250px;
+    width: 175px;
     height: 30px;
     background-repeat: no-repeat;
     background-position: right;
@@ -2010,7 +2014,6 @@ span.flatpickr-weekday {
   width: 100%;
   z-index: 1000;
   background-color: white;
-  min-height: 65px;
   height: 100%; }
   #tabview .tab-bar {
     height: 55px;
