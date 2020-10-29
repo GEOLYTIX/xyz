@@ -1,17 +1,8 @@
 const auth = require('./user/auth')
 
-const Md = require('mobile-detect')
-
 module.exports = async (req, res) => {
 
-  const md = new Md(req.headers['user-agent'])
-
-  req.params.template = req.params._template
-    || req.params.template
-    || (md.mobile() === null || md.tablet() !== null) && '_desktop'
-    || '_mobile'
-
-  const template = req.params.workspace.templates[req.params.template]
+  const template = req.params.workspace.templates[req.params._template || req.params.template || 'mapp']
 
   if (!template) return res.status(404).send('View template not found.')
 

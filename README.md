@@ -92,8 +92,6 @@ The domain and service layer may secure proxy access for services provided by Go
 
 [node-fetch](https://github.com/bitinn/node-fetch) - A light-weight module that brings window.fetch to Node.
 
-[mobile-detect.js](https://github.com/hgoebl/mobile-detect.js) - Node device detection from request header.
-
 
 ## License
 
