@@ -122,6 +122,7 @@ window.onload = () => {
 
     document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
     <button
+      class="mobile-display-none"
       title=${xyz.language.toolbar_zoom_to_area}
       onclick=${e => {
         e.stopPropagation()
@@ -345,7 +346,7 @@ window.onload = () => {
     xyz.user && xyz.user.admin && document.querySelector('.btn-column').appendChild(xyz.utils.html.node`
           <a
             title=${xyz.language.toolbar_admin}
-            class="enabled" style="cursor: pointer;"
+            class="enabled mobile-display-none style="cursor: pointer;"
             href="${xyz.host + '/view/admin_user'}">
             <div class="xyz-icon icon-supervisor-account">`)
 
