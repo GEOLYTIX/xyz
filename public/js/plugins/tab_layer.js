@@ -6,9 +6,9 @@ document.dispatchEvent(new CustomEvent('tab_layer', {
 
       const table = {
         active: true,
+        display: true,
         "target": _xyz.utils.html.node`<div>`,
         "layer": layer,
-        "display": true,
         "query": "global_cities_query",
         "selectable": true,
         "table": "geodata.global_glx_open_citiesoftheworld",
@@ -64,7 +64,7 @@ document.dispatchEvent(new CustomEvent('tab_layer', {
       }
 
       layer.view.addEventListener('toggleDisplay', () => {
-        if (layer.display) {
+        if (layer.display && table.display) {
           _xyz.dataviews.tabview.add(tab)
           table.update()
           return
@@ -72,21 +72,22 @@ document.dispatchEvent(new CustomEvent('tab_layer', {
         tab.remove()
       })
 
-      // layer.view.appendChild(_xyz.utils.html.node`
-      //   <label class="input-checkbox">
-      //   <input
-      //     type="checkbox"
-      //     onchange=${e => {
-      //       tab.display = e.target.checked
-      //       if (tab.display) {
-      //         _xyz.dataviews.tabview.add(tab)
-      //         table.update()
-      //         return
-      //       }
-      //       tab.remove()
-      //     }}>
-      //   </input>
-      //   <div></div><span>BSG75`)
+      layer.view.appendChild(_xyz.utils.html.node`
+        <label class="input-checkbox">
+        <input
+        .checked=${!!table.display}
+          type="checkbox"
+          onchange=${e => {
+            table.display = e.target.checked
+            if (table.display) {
+              _xyz.dataviews.tabview.add(tab)
+              table.update()
+              return
+            }
+            tab.remove()
+          }}>
+        </input>
+        <div></div><span>BSG75`)
 
     }
 
