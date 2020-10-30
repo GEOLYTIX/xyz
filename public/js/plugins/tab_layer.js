@@ -58,21 +58,35 @@ document.dispatchEvent(new CustomEvent('tab_layer', {
         node: table.target,
       }
 
-      layer.view.appendChild(_xyz.utils.html.node`
-        <label class="input-checkbox">
-        <input
-          type="checkbox"
-          onchange=${e => {
-            tab.display = e.target.checked
-            if (tab.display) {
-              _xyz.dataviews.tabview.add(tab)
-              table.update()
-              return
-            }
-            tab.remove()
-          }}>
-        </input>
-        <div></div><span>BSG75`)
+      if (layer.display) {
+        _xyz.dataviews.tabview.add(tab)
+        table.update()
+      }
+
+      layer.view.addEventListener('toggleDisplay', () => {
+        if (layer.display) {
+          _xyz.dataviews.tabview.add(tab)
+          table.update()
+          return
+        }
+        tab.remove()
+      })
+
+      // layer.view.appendChild(_xyz.utils.html.node`
+      //   <label class="input-checkbox">
+      //   <input
+      //     type="checkbox"
+      //     onchange=${e => {
+      //       tab.display = e.target.checked
+      //       if (tab.display) {
+      //         _xyz.dataviews.tabview.add(tab)
+      //         table.update()
+      //         return
+      //       }
+      //       tab.remove()
+      //     }}>
+      //   </input>
+      //   <div></div><span>BSG75`)
 
     }
 
