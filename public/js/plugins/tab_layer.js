@@ -58,7 +58,7 @@ document.dispatchEvent(new CustomEvent('tab_layer', {
         node: table.target,
       }
 
-      if (layer.display) {
+      if (layer.display && table.display) {
         _xyz.dataviews.tabview.add(tab)
         table.update()
       }
