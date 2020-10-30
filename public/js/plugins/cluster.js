@@ -7,8 +7,7 @@ document.dispatchEvent(new CustomEvent('cluster', {
 
       layer.view.appendChild(_xyz.utils.html.node `
         <div
-          class="drawer panel expandable expanded"
-          style="max-height: 30px;">
+          class="drawer panel expandable expanded">
           <div
             class="header primary-colour"
             onclick=${e => {
