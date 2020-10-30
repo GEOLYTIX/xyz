@@ -82,8 +82,6 @@ input[type=number] {
     ul {
         width: 100%;
         margin-top: -2px;
-        max-height: 0;
-        transition: max-height 0.3s ease-out;
         position: absolute;
         overflow-y: auto;
         overflow-x: hidden;
