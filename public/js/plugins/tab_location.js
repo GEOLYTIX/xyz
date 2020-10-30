@@ -14,7 +14,7 @@ document.dispatchEvent(new CustomEvent('tab_location', {
           type="checkbox"
           onchange=${e => {
             tab.display = e.target.checked
-            if (tab.display) return _xyz.dataviews.tabview.add(tab)
+            if (tab.display) return _xyz.tabview.add(tab)
             tab.remove()
           }}>
         </input>

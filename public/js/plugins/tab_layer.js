@@ -59,13 +59,13 @@ document.dispatchEvent(new CustomEvent('tab_layer', {
       }
 
       if (layer.display && table.display) {
-        _xyz.dataviews.tabview.add(tab)
+        _xyz.tabview.add(tab)
         table.update()
       }
 
       layer.view.addEventListener('toggleDisplay', () => {
         if (layer.display && table.display) {
-          _xyz.dataviews.tabview.add(tab)
+          _xyz.tabview.add(tab)
           table.update()
           return
         }
@@ -80,7 +80,7 @@ document.dispatchEvent(new CustomEvent('tab_layer', {
           onchange=${e => {
             table.display = e.target.checked
             if (table.display) {
-              _xyz.dataviews.tabview.add(tab)
+              _xyz.tabview.add(tab)
               table.update()
               return
             }
