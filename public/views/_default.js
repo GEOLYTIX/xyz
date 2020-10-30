@@ -226,7 +226,7 @@ window.onload = () => {
 
     const tabview = document.getElementById('tabview')
 
-    xyz.dataviews.tabview.init({
+    xyz.tabview.init({
       target: tabview
     })
 
