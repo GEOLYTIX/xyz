@@ -63,12 +63,13 @@ document.dispatchEvent(new CustomEvent('tab_layer', {
         table.update()
       }
 
-      layer.view.addEventListener('toggleDisplay', () => {
-        if (layer.display && table.display) {
-          _xyz.tabview.add(tab)
-          table.update()
-          return
-        }
+      layer.view.addEventListener('display-on', () => {
+        if (!table.display) return
+        _xyz.tabview.add(tab)
+        table.update()
+      })
+  
+      layer.view.addEventListener('display-off', () => {
         tab.remove()
       })
 

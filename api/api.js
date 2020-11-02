@@ -58,7 +58,7 @@ const https = require('https')
 
 function proxy(req, res) {
 
-  const url = `${req.query.host || ''}${req.query.uri}&${process.env[`KEY_${req.query.provider.toUpperCase()}`]}`
+  const url = `${req.query.host || ''}${req.query.uri || req.query.url}&${process.env[`KEY_${req.query.provider.toUpperCase()}`]}`
 
   const proxy = https.request(url, _res => {
     res.writeHead(_res.statusCode, _res.headers)
