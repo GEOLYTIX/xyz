@@ -2112,8 +2112,7 @@ span.flatpickr-weekday {
   margin: 5px 0; }
   .location-view.drawer {
     background-color: #fff;
-    padding: 0 5px;
-    max-height: 30px; }
+    padding: 0 5px; }
     .location-view.drawer > .header {
       padding: 5px 0;
       height: 30px; }
@@ -2177,7 +2176,7 @@ span.flatpickr-weekday {
   display: grid;
   align-items: stretch;
   grid-gap: 3px 10px;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
   /*.image-modal {
 
         display: none;
@@ -2213,6 +2212,10 @@ span.flatpickr-weekday {
     top: 6px;
     background-color: #fff;
     border-radius: 50%; }
+  .location-view-grid .drawer.group {
+    grid-column: 1 / 3;
+    display: grid;
+    grid-template-columns: 1fr 1fr; }
   .location-view-grid .images-grid div img {
     cursor: pointer;
     transition: 0.3s; }
@@ -2221,8 +2224,7 @@ span.flatpickr-weekday {
   .location-view-grid .group {
     margin-top: 5px; }
     .location-view-grid .group > .header {
-      font-weight: 600;
-      border-top: 1px solid #eee; }
+      font-weight: 600; }
   .location-view-grid .lv-0 {
     font-size: 95%;
     font-weight: bold; }

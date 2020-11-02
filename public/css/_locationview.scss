@@ -4,7 +4,6 @@
   &.drawer {
     background-color: #fff;
     padding: 0 5px;
-    max-height: 30px;
 
     >.header {
       padding: 5px 0;
@@ -97,7 +96,7 @@
   display: grid;
   align-items: stretch;
   grid-gap: 3px 10px;
-  grid-template-columns: 1fr;
+  grid-template-columns: 1fr 1fr;
 
   .img-remove {
     width: 20px;
@@ -107,6 +106,12 @@
     top: 6px;
     background-color: #fff;
     border-radius: 50%;
+  }
+
+  .drawer.group {
+    grid-column: 1 / 3;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
   }
 
   .images-grid div img {
@@ -123,7 +128,6 @@
 
     >.header {
       font-weight: 600;
-      border-top: 1px solid #eee;
     }
   }
 
