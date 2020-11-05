@@ -405,7 +405,7 @@
                 },
                 "Agata": {
                     "group": "Cluster",
-                    "meta": "XYZ database, don't touch.",
+                    "meta": "don't touch.",
                     "edit": {
                         "point": true,
                         "delete": true,
@@ -424,9 +424,7 @@
                     },
                     "cluster_kmeans": 0.1,
                     "cluster_label": "site_name",
-                    "infoj": [{
-                            "type": "streetview"
-                        },
+                    "infoj": [
                         {
                             "type": "key",
                             "class": "_report"
@@ -451,6 +449,22 @@
                             "title": "Site ID",
                             "inline": true,
                             "class": "purple-text"
+                        },
+                        {
+                            "_plugin": "tomtom",
+                            "title": "Here's tomtom",
+                            "name": "TomTom Reachable Range",
+                            "type": "geometry",
+                            "field": "isoline_tomtom",
+                            "fieldfx": "ST_AsGeoJSON(isoline_tomtom)",
+                            "edit": {
+                                "meta": "isoline_tomtom_meta",
+                                "isoline_tomtom": {}
+                            }
+                        },
+                        {
+                            "field": "isoline_tomtom_meta",
+                            "type": "json"
                         },
                         {
                             "field": "text_edit",
@@ -580,7 +594,6 @@
                             "target": "xyz_sites_random",
                             "query": "Random Data Series",
                             "class": "_report",
-                            "display": true,
                             "chart": {
                                 "height": 300,
                                 "width": 290,
@@ -640,8 +653,7 @@
                             "group": "Random data series",
                             "title": "Rand 1",
                             "field": "random1",
-                            "type": "integer",
-                            "expanded": true
+                            "type": "integer"
                         },
                         {
                             "group": "Random data series",
@@ -711,7 +723,8 @@
                             "class": "_report",
                             "layout": "fitColumns",
                             "target": "xyz_sites_pop",
-                            "columns": [{
+                            "columns": [
+                                {
                                     "field": "rows",
                                     "title": "Population Summary 2",
                                     "headerSort": false,
@@ -748,7 +761,8 @@
                             "target": "xyz_sites_nearestcomp",
                             "layout": "fitColumns",
                             "query": "Nearest competitors Sites",
-                            "columns": [{
+                            "columns": [
+                                {
                                     "title": "Distance",
                                     "field": "dist",
                                     "align": "center",
@@ -896,9 +910,8 @@
                             "fieldfx": "ST_asGeoJson(isoline_here_custom)",
                             "type": "geometry",
                             "edit": {
-                                "isoline_here": {
-                                    "meta": "isoline_here_custom_meta"
-                                }
+                                "meta": "isoline_here_custom_meta",
+                                "isoline_here": {}
                             },
                             "style": {
                                 "strokeColor": "#083D77",
@@ -920,9 +933,8 @@
                             "fieldfx": "ST_asGeoJSON(isoline_mapbox_custom)",
                             "type": "geometry",
                             "edit": {
-                                "isoline_mapbox": {
-                                    "meta": "isoline_mapbox_custom_meta"
-                                }
+                                "meta": "isoline_mapbox_custom_meta",
+                                "isoline_mapbox": {}
                             },
                             "style": {
                                 "strokeColor": "#43a047",
@@ -1715,7 +1727,8 @@
                 }
             }
         },
-        "日本 Japan": {
+        "Japan": {
+            "name": "日本",
             "bounds": {
                 "north": 45,
                 "east": 149,
