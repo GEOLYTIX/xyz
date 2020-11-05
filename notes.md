@@ -4,6 +4,8 @@ File download from query. [#286](https://github.com/GEOLYTIX/xyz/issues/286)
 
 Enable locatiom plugins. [#334](https://github.com/GEOLYTIX/xyz/issues/334)
 
+Replace default views with a responsive view. [#345](https://github.com/GEOLYTIX/xyz/issues/345)
+
 Script module definitions in the infoj are no longer valid.
 
 Webpack bumped to 5.1 (from 5.beta)
@@ -25,3 +27,5 @@ Fix for single user in admin view.
 Fix for api/user/pgtable query.
 
 admin_user & admin_workspace are now retired in favour of a simple admin flag.
+
+Filter empty value objects in paramString method.
