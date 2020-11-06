@@ -699,7 +699,7 @@
       <button class="btn-wide primary-colour" style="font-size: x-small;"
       onclick=${t=>{t.stopPropagation();const a=t.target;if(a.classList.contains("active"))return a.classList.remove("active"),e.mapview.interaction.edit.finish(),e.map.removeLayer(n.edit.feature);a.classList.add("active"),n.edit.feature=e.mapview.geoJSON({geometry:"object"==typeof n.value?n.value:JSON.parse(n.value),dataProjection:"4326"}),e.mapview.interaction.edit.begin({location:n.location,type:"Polygon",source:new ol.source.Vector({features:[n.edit.feature.getSource().getFeatures()[0].clone()]}),callback:()=>{a.classList.remove("active"),e.map.removeLayer(n.edit.feature)},update:()=>function(t){const n=e.mapview.interaction.edit.Source.getFeatures(),a=new ol.format.GeoJSON;t.newValue=JSON.parse(a.writeFeature(n[0],{dataProjection:"EPSG:"+t.location.layer.srid,featureProjection:"EPSG:"+e.mapview.srid})).geometry,t.location.update(),e.map.removeLayer(t.edit.feature),e.mapview.interaction.edit.finish()}(n)})}}>Edit`,n.edit.panel.appendChild(n.edit.edit))}(n),n.edit.panel;n.edit.isoline_here._minutes=n.edit.isoline_here.minutes||10,n.edit.isoline_here._distance=n.edit.isoline_here.distance||10;const a=[{[e.language.here_driving]:"car"},{[e.language.here_walking]:"pedestrian"},{[e.language.here_cargo]:"truck"},{[e.language.here_hov_lane]:"carHOV"}];n.edit.isoline_here.mode="car",n.edit.panel.appendChild(e.utils.html.node`
     <div
-        style="margin-top: 8px; grid-column: 1 / 3; display: grid; grid-template-columns: 50px 1fr; align-items: center;">
+        style="margin-top: 8px; grid-column: 1 / 3; align-items: center;">
         <span style="grid-column: 1;">${e.language.here_mode}</span>
         <div style="grid-column: 2;">
         <button class="btn-drop">
@@ -713,7 +713,7 @@
                 ${a.map(t=>e.utils.html.node`
                 <li onclick=${e=>{const a=e.target.closest(".btn-drop");a.classList.toggle("active"),a.querySelector(":first-child").textContent=Object.keys(t)[0],n.edit.isoline_here.mode=Object.values(t)[0]}}>${Object.keys(t)[0]}`)}`);const r=[{[e.language.here_time]:"time"},{[e.language.here_distance]:"distance"}];n.edit.isoline_here.rangetype="time",n.edit.panel.appendChild(e.utils.html.node`
     <div
-        style="margin-top: 8px; grid-column: 1 / 3; display: grid; grid-template-columns: 50px 1fr; align-items: center;">
+        style="margin-top: 8px; grid-column: 1 / 3; align-items: center;">
         <span style="grid-column: 1;">${e.language.here_range}</span>
         <div style="grid-column: 2;">
         <button class="btn-drop">
@@ -800,7 +800,7 @@
         stroke=${n[1].style.strokeColor}
         stroke-width=${n[1].style.strokeWidth||1}>`),t.legend.appendChild(e.utils.html.node`
     <div
-      class="label switch">${n[1].label||n[0]}`)}),t.container.style.display="block",t.container.appendChild(t.legend)))})(e),o=(e=>{return{create:function(n){n.edit.isoline_tomtom.timeBudgetInSec||(n.edit.isoline_tomtom.timeBudgetInSec=600),n.edit.isoline_tomtom.routeType||(n.edit.isoline_tomtom.routeType="fastest"),n.edit.isoline_tomtom.travelMode||(n.edit.isoline_tomtom.travelMode="car");const a=`${n.location.geometry.coordinates[1]},${n.location.geometry.coordinates[0]}`,r=new XMLHttpRequest;r.open("GET",e.host+"/api/provider/tomtom?url="+`api.tomtom.com/routing/1/calculateReachableRange/${a}/json&settings=`+JSON.stringify(n.edit.isoline_tomtom)),r.setRequestHeader("Content-Type","application/json"),r.responseType="json",r.onload=e=>{if(200!==e.target.status||!e.target.response.reachableRange)return n.location.view&&n.location.view.classList.remove("disabled"),console.log(e.target.response),alert("Wrong");if(n.newValue={type:"Polygon",coordinates:[e.target.response.reachableRange.boundary.map(e=>[e.longitude,e.latitude])]},n.edit.meta){let e=new Date;n.location.infoj.filter(e=>"json"===e.type&&e.field===n.edit.meta).forEach(t=>t.newValue=Object.assign({"Recent range":"TomTom",Created:`${e.getFullYear()}/${e.getMonth()+1}/${e.getDate()} ${e.getHours()}:${e.getMinutes()>8?e.getMinutes()+1:"0"+(e.getMinutes()+1)}`},n.edit.isoline_tomtom))}n.edit.panel&&(n.edit.panel.remove(),n.edit.panel=null,t(n)),n.location.update()},r.send(),n.location.view&&n.location.view.classList.add("disabled")},settings:function(a){return a.edit.isoline_tomtom&&!a.edit.isoline_tomtom.geometry&&(a.edit.isoline_tomtom.timeBudgetInSec||!a.edit.isoline_tomtom.timeBudgetInSec&&a.value)||a.edit.isoline_tomtom&&a.edit.isoline_tomtom.geometry&&a.edit.isoline_tomtom.minutes&&!a.value?e.utils.html.node`<div>`:(t(a),a.edit.isoline_tomtom&&a.edit.isoline_tomtom.geometry&&(a.edit.isoline_tomtom.timeBudgetInSec||!a.edit.isoline_tomtom.timeBudgetInSec&&a.value)?(function(n){t(n),n.edit.edit||(n.edit.edit=e.utils.html.node`
+      class="label switch">${n[1].label||n[0]}`)}),t.container.style.display="block",t.container.appendChild(t.legend)))})(e),o=(e=>{return{create:function(n){n.edit.isoline_tomtom.timeBudgetInSec||(n.edit.isoline_tomtom.timeBudgetInSec=600),n.edit.isoline_tomtom.routeType||(n.edit.isoline_tomtom.routeType="fastest"),n.edit.isoline_tomtom.travelMode||(n.edit.isoline_tomtom.travelMode="car");const a=`${n.location.geometry.coordinates[1]},${n.location.geometry.coordinates[0]}`,r=new XMLHttpRequest;r.open("GET",e.host+"/api/provider/tomtom?url="+`api.tomtom.com/routing/1/calculateReachableRange/${a}/json&settings=`+JSON.stringify(n.edit.isoline_tomtom)),r.setRequestHeader("Content-Type","application/json"),r.responseType="json",r.onload=e=>{if(200!==e.target.status||!e.target.response.reachableRange)return n.location.view&&n.location.view.classList.remove("disabled"),console.log(e.target.response),alert("Wrong");if(n.newValue={type:"Polygon",coordinates:[e.target.response.reachableRange.boundary.map(e=>[e.longitude,e.latitude])]},n.edit.meta){let e=new Date;n.location.infoj.filter(e=>"json"===e.type&&e.field===n.edit.meta).forEach(t=>t.newValue=Object.assign({"Recent range":"TomTom",Created:`${e.getFullYear()}/${e.getMonth()+1}/${e.getDate()} ${e.getHours()}:${e.getMinutes()>8?e.getMinutes()+1:"0"+(e.getMinutes()+1)}`},n.edit.isoline_tomtom))}n.edit.panel&&(n.edit.panel.remove(),n.edit.panel=null,t(n)),n.location.update()},r.send(),n.location.view&&n.location.view.classList.add("disabled")},settings:function(a){if(a.edit.isoline_tomtom&&!a.edit.isoline_tomtom.geometry&&(a.edit.isoline_tomtom.timeBudgetInSec||!a.edit.isoline_tomtom.timeBudgetInSec&&a.value))return e.utils.html.node`<div>`;if(a.edit.isoline_tomtom&&a.edit.isoline_tomtom.geometry&&a.edit.isoline_tomtom.minutes&&!a.value)return e.utils.html.node`<div>`;if(t(a),a.edit.isoline_tomtom&&a.edit.isoline_tomtom.geometry&&(a.edit.isoline_tomtom.timeBudgetInSec||!a.edit.isoline_tomtom.timeBudgetInSec&&a.value))return function(n){t(n),n.edit.edit||(n.edit.edit=e.utils.html.node`
     	<div style="
     	margin-top: 8px;
         grid-column: 1 / 3;
@@ -810,7 +810,11 @@
         ">
         <div style="grid-column: 1 / span 3;">
         <button class="btn-wide primary-colour" style="font-size: x-small;"
-        onclick=${t=>{t.stopPropagation();const a=t.target;if(a.classList.contains("active"))return a.classList.remove("active"),e.mapview.interaction.edit.finish(),e.map.removeLayer(n.edit.feature);a.classList.add("active"),n.edit.feature=e.mapview.geoJSON({geometry:"object"==typeof n.value?n.value:JSON.parse(n.value),dataProjection:"4326"}),e.mapview.interaction.edit.begin({location:n.location,type:"Polygon",source:new ol.source.Vector({features:[n.edit.feature.getSource().getFeatures()[0].clone()]}),callback:()=>{a.classList.remove("active"),e.map.removeLayer(n.edit.feature)},update:()=>function(t){const n=e.mapview.interaction.edit.Source.getFeatures(),a=new ol.format.GeoJSON;t.newValue=JSON.parse(a.writeFeature(n[0],{dataProjection:"EPSG:"+t.location.layer.srid,featureProjection:"EPSG:"+e.mapview.srid})).geometry,t.location.update(),e.map.removeLayer(t.edit.feature),e.mapview.interaction.edit.finish()}(n)})}}>Edit`,n.edit.panel.appendChild(n.edit.edit))}(a),a.edit.panel):(void 0===a.edit.isoline_tomtom.timeBudgetInSec&&a.edit.panel.appendChild(e.utils.html.node`
+        onclick=${t=>{t.stopPropagation();const a=t.target;if(a.classList.contains("active"))return a.classList.remove("active"),e.mapview.interaction.edit.finish(),e.map.removeLayer(n.edit.feature);a.classList.add("active"),n.edit.feature=e.mapview.geoJSON({geometry:"object"==typeof n.value?n.value:JSON.parse(n.value),dataProjection:"4326"}),e.mapview.interaction.edit.begin({location:n.location,type:"Polygon",source:new ol.source.Vector({features:[n.edit.feature.getSource().getFeatures()[0].clone()]}),callback:()=>{a.classList.remove("active"),e.map.removeLayer(n.edit.feature)},update:()=>function(t){const n=e.mapview.interaction.edit.Source.getFeatures(),a=new ol.format.GeoJSON;t.newValue=JSON.parse(a.writeFeature(n[0],{dataProjection:"EPSG:"+t.location.layer.srid,featureProjection:"EPSG:"+e.mapview.srid})).geometry,t.location.update(),e.map.removeLayer(t.edit.feature),e.mapview.interaction.edit.finish()}(n)})}}>Edit`,n.edit.panel.appendChild(n.edit.edit))}(a),a.edit.panel;if(void 0===a.edit.isoline_tomtom.departAt){let t=e.utils.html.node`<input type="text" placeholder=${e.language.layer_filter_pick} style="text-align: end;">`;a.edit.panel.appendChild(e.utils.html.node`
+				<div style="margin-top: 12px; grid-column: 1 / 3;">
+				<div style="display: grid; grid-template-columns: 100px 1fr; align-items: center;">
+				<div style="grid-column: 1;"><span>Depart at </span></div>
+				<div style="grid-column: 2;">${t}</div>`),e.utils.flatpickr({element:t,enableTime:!0,callback:e=>{t.value=e,a.edit.isoline_tomtom.departAt=new Date(e).toISOString()}})}return void 0===a.edit.isoline_tomtom.timeBudgetInSec&&a.edit.panel.appendChild(e.utils.html.node`
         	<div style="margin-top: 12px; grid-column: 1 / 3;">
         	<span>Time budget in minutes: </span>
         	<span class="bold">${a.edit.isoline_tomtom.timeBudgetInSec||10}</span>
@@ -821,20 +825,20 @@
             value=10
             max=60
             step=1
-            oninput=${e=>{a.edit.isoline_tomtom.timeBudgetInSec=60*parseInt(e.target.value),e.target.parentNode.previousElementSibling.textContent=e.target.value}}>`),void 0===a.edit.isoline_tomtom.travelMode&&a.edit.panel.appendChild(n({title:"Travel mode",options:[{car:"car"},{truck:"truck"},{taxi:"taxi"},{bus:"bus"},{van:"van"},{motorcycle:"motorcycle"},{bicycle:"bicycle"},{pedestrian:"pedestrian"}],callback:e=>{a.edit.isoline_tomtom.travelMode=e.target.value}})),void 0===a.edit.isoline_tomtom.routeType&&a.edit.panel.appendChild(n({title:"Route type",options:[{fastest:"fastest"},{shortest:"shortest"},{eco:"eco"},{thrilling:"thrilling"}],callback:e=>{a.edit.isoline_tomtom.routeType=e.target.value}})),void 0===a.edit.isoline_tomtom.vehicleMaxSpeed&&a.edit.panel.appendChild(e.utils.html.node`
-        <div style="padding-top: 5px; grid-column: 1 / 3">
-        <div style="display: grid; grid-template-columns: 150px 1fr; align-items: center;">
-        <div style="grid-column: 1;"><span>Max Vehicle Speed </span></div>
-        <div style="grid-column: 2;"><input type="number" value="${a.value||a.displayValue||""}"
-        placeholder="km/h"
-        onkeyup=${e=>{a.edit.isoline_tomtom.vehicleMaxSpeed=parseInt(e.target.value)}}>`),void 0===a.edit.isoline_tomtom.traffic&&a.edit.panel.appendChild(e.utils.html.node`
+            oninput=${e=>{a.edit.isoline_tomtom.timeBudgetInSec=60*parseInt(e.target.value),e.target.parentNode.previousElementSibling.textContent=e.target.value}}>`),void 0===a.edit.isoline_tomtom.traffic&&a.edit.panel.appendChild(e.utils.html.node`
         <div style="padding-top: 5px; grid-column: 1 / 3">
         <label class="input-checkbox">
         <input type="checkbox"
           .checked=${!!a.value}
           onchange=${e=>{a.edit.isoline_tomtom.traffic=e.target.checked}}>
         </input>
-        <div></div><span>Include current traffic`),a.edit.panel))}};function t(t){t.edit.panel||(t.edit.panel=e.utils.html.node`
+        <div></div><span>Include current traffic`),void 0===a.edit.isoline_tomtom.travelMode&&a.edit.panel.appendChild(n({title:"Travel mode",options:[{car:"car"},{truck:"truck"},{taxi:"taxi"},{bus:"bus"},{van:"van"},{motorcycle:"motorcycle"},{bicycle:"bicycle"},{pedestrian:"pedestrian"}],callback:e=>{a.edit.isoline_tomtom.travelMode=e.target.value}})),void 0===a.edit.isoline_tomtom.routeType&&a.edit.panel.appendChild(n({title:"Route type",options:[{fastest:"fastest"},{shortest:"shortest"},{eco:"eco"},{thrilling:"thrilling"}],callback:e=>{a.edit.isoline_tomtom.routeType=e.target.value}})),void 0===a.edit.isoline_tomtom.vehicleMaxSpeed&&a.edit.panel.appendChild(e.utils.html.node`
+        <div style="padding-top: 5px; grid-column: 1 / 3">
+        <div style="display: grid; grid-template-columns: 150px 1fr; align-items: center;">
+        <div style="grid-column: 1;"><span>Max Vehicle Speed </span></div>
+        <div style="grid-column: 2;"><input type="number" value="${a.value||a.displayValue||""}"
+        placeholder="km/h"
+        onkeyup=${e=>{a.edit.isoline_tomtom.vehicleMaxSpeed=parseInt(e.target.value)}}>`),a.edit.panel}};function t(t){t.edit.panel||(t.edit.panel=e.utils.html.node`
 		<div
 		class="${"drawer group panel expandable "+(t.class||"")}"
 		style="display: grid; grid-column: 1 / 3;">
