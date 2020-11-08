@@ -3,16 +3,19 @@ document.dispatchEvent(new CustomEvent('tab_layer', {
 
     _xyz.layers.plugins.tab_layer = layer => {
 
-
       const table = {
         active: true,
+        viewport: true,
         display: true,
-        "target": _xyz.utils.html.node`<div>`,
-        "layer": layer,
-        "query": "global_cities_query",
-        "selectable": true,
-        "table": "geodata.global_glx_open_citiesoftheworld",
-        "columns": [
+        title: 'Layer Table',
+        layer: layer,
+        query: 'global_cities_query',
+        selectable: true,
+        toolbar: {
+          viewport: true
+        },
+        table: 'geodata.global_glx_open_citiesoftheworld',
+        columns: [
           {
             "field": "city_name",
             "title": "City"
@@ -51,27 +54,11 @@ document.dispatchEvent(new CustomEvent('tab_layer', {
         ]
       }
 
+      _xyz.tabview.add(table)
+
       _xyz.dataviews.create(table)
 
-      const tab = {
-        title: 'Layer',
-        node: table.target,
-      }
-
-      if (layer.display && table.display) {
-        _xyz.tabview.add(tab)
-        table.update()
-      }
-
-      layer.view.addEventListener('display-on', () => {
-        if (!table.display) return
-        _xyz.tabview.add(tab)
-        table.update()
-      })
-  
-      layer.view.addEventListener('display-off', () => {
-        tab.remove()
-      })
+      layer.display && table.display && table.show()
 
       layer.view.appendChild(_xyz.utils.html.node`
         <label class="input-checkbox">
@@ -79,13 +66,12 @@ document.dispatchEvent(new CustomEvent('tab_layer', {
         .checked=${!!table.display}
           type="checkbox"
           onchange=${e => {
+
             table.display = e.target.checked
-            if (table.display) {
-              _xyz.tabview.add(tab)
-              table.update()
-              return
-            }
-            tab.remove()
+            table.display ?
+              table.show() :
+              table.remove()
+
           }}>
         </input>
         <div></div><span>BSG75`)

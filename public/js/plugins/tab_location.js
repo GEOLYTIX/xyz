@@ -5,8 +5,11 @@ document.dispatchEvent(new CustomEvent('tab_location', {
 
       const tab = {
         title: 'Location',
-        node: _xyz.utils.html.node`<div>So we all say`
+        target: _xyz.utils.html.node`<div>So we all say`,
+        location: entry.location
       }
+
+      _xyz.tabview.add(tab)
 
       entry.listview.appendChild(_xyz.utils.html.node`
         <label class="input-checkbox">
@@ -14,8 +17,7 @@ document.dispatchEvent(new CustomEvent('tab_location', {
           type="checkbox"
           onchange=${e => {
             tab.display = e.target.checked
-            if (tab.display) return _xyz.tabview.add(tab)
-            tab.remove()
+            tab.display ? tab.show() : tab.remove()
           }}>
         </input>
         <div></div><span>BSG75`)

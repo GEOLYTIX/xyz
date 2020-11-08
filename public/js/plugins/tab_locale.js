@@ -3,10 +3,14 @@ document.dispatchEvent(new CustomEvent('tab_locale', {
 
     _xyz.tabview.plugins.tab_fixed = _xyz => {
 
-      _xyz.tabview.add({
+      const tab = {
         title: 'Locale',
-        node: _xyz.utils.html.node`<div>This is the way`
-      })
+        target: _xyz.utils.html.node`<div>This is the way`
+      }
+
+      _xyz.tabview.add(tab)
+
+      tab.show()
 
     }
 
