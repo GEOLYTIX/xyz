@@ -448,13 +448,14 @@
         onclick=${t=>{t.stopPropagation(),e.utils.toggleExpanderParent(t.target,!0)}}>
         <span>${e.language.layer_dataview_header}</span>
         <button class="btn-header xyz-icon icon-expander primary-colour-filter">`),Object.entries(t.dataviews).forEach((r=>{const a=r[1];a.key=r[0],a.layer=t,e.tabview.add(a),e.dataviews.create(a),t.display&&a.display&&a.show(),n.appendChild(e.utils.html.node`
-        <label class="input-checkbox">
-        <input
-          type="checkbox"
-          .checked=${!!a.display}
-          onchange=${e=>{a.display=e.target.checked,a.display?a.show():a.remove()}}></input>
+        <label class="input-checkbox inline">
+          <input
+            type="checkbox"
+            .checked=${!!a.display}
+            onchange=${e=>{a.display=e.target.checked,a.display?a.show():a.remove()}}></input>
           <div></div>
-          <span>${a.title||a.key}`)})),n}}),Yt=e=>({panel:function(t){if(!t.reports)return;const n=e.utils.html.node`
+        </label>
+        <span>${a.title||a.key}`)})),n}}),Yt=e=>({panel:function(t){if(!t.reports)return;const n=e.utils.html.node`
     <div class="drawer panel expandable">`;return n.appendChild(e.utils.html.node`
     <div
       class="header primary-colour"

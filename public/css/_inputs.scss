@@ -130,17 +130,20 @@ input[type=number] {
 .input-checkbox {
   display: block;
 
-  input {
-    display: none;
-  }
-
-  input:hover {
-    cursor: pointer;
+  &.inline {
+    display: inline-block;
   }
 
   >span {
-    display: inline-block;
     vertical-align: middle;
+  }
+
+  &.inline + span {
+    vertical-align: middle;
+  }
+
+  >input {
+    display: none;
   }
 
   >div {
@@ -156,6 +159,10 @@ input[type=number] {
     background-size: contain;
     -webkit-background-size: contain;
     background-image: url("../icons/icon-checkbox-unchecked.svg");
+  }
+
+  >div:hover {
+    cursor: pointer;
   }
 
   input:checked+div {
