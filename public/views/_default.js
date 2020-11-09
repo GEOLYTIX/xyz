@@ -223,11 +223,8 @@ window.onload = () => {
       // xyz.map.updateSize()
     }
 
-
-    const tabview = document.getElementById('tabview')
-
     xyz.tabview.init({
-      target: tabview
+      node: document.getElementById('tabview')
     })
 
 

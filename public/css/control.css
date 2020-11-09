@@ -2010,7 +2010,6 @@ span.flatpickr-weekday {
 
 #tabview {
   overflow: hidden;
-  bottom: 0;
   position: relative;
   width: 100%;
   background-color: white;
