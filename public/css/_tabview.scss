@@ -3,12 +3,11 @@
   bottom: 0;
   position: relative;
   width: 100%;
-  z-index: 1000;
   background-color: white;
   height: 100%;
 
   .tabs {
-    height: 60px;
+    height: 50px;
     width: 100%;
     overflow-x: auto;
     display: flex;
@@ -39,9 +38,9 @@
     .tab > .content {
       display: none;
       position: absolute;
-      top: 70px;
+      top: 50px;
       left: 0;
-      height: calc(100% - 70px);
+      height: calc(100% - 50px);
       width: 100%;
       border-top: 1px solid #777;
       overflow-y: auto;

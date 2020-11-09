@@ -258,12 +258,12 @@ window.onload = () => {
       let height = window.innerHeight - pageY
 
       // Min height snap.
-      if (height < 75) height = 65
+      if (height < 65) height = 50
 
       // Full height snap.
       if (height > (window.innerHeight - 10)) height = window.innerHeight
 
-      document.body.style.gridTemplateRows = `auto ${height}px`
+      document.body.style.gridTemplateRows = `auto 10px ${height}px`
 
       xyz.mapview.node.style.marginTop = `-${(height/2)}px`
 
