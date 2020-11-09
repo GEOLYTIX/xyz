@@ -333,13 +333,14 @@ input[type=number] {
 
 .input-checkbox {
   display: block; }
-  .input-checkbox input {
-    display: none; }
-  .input-checkbox input:hover {
-    cursor: pointer; }
+  .input-checkbox.inline {
+    display: inline-block; }
   .input-checkbox > span {
-    display: inline-block;
     vertical-align: middle; }
+  .input-checkbox.inline + span {
+    vertical-align: middle; }
+  .input-checkbox > input {
+    display: none; }
   .input-checkbox > div {
     display: inline-block;
     vertical-align: middle;
@@ -353,6 +354,8 @@ input[type=number] {
     background-size: contain;
     -webkit-background-size: contain;
     background-image: url("../icons/icon-checkbox-unchecked.svg"); }
+  .input-checkbox > div:hover {
+    cursor: pointer; }
   .input-checkbox input:checked + div {
     background-image: url("../icons/icon-checkbox-checked.svg"); }
   .input-checkbox input:disabled + div {
