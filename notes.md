@@ -6,6 +6,10 @@ Enable locatiom plugins. [#334](https://github.com/GEOLYTIX/xyz/issues/334)
 
 Replace default views with a responsive view. [#345](https://github.com/GEOLYTIX/xyz/issues/345)
 
+Redesign tabview logic. [#355](https://github.com/GEOLYTIX/xyz/issues/355)
+
+Redesign dataview logic [#356](https://github.com/GEOLYTIX/xyz/issues/356)
+
 Script module definitions in the infoj are no longer valid.
 
 Webpack bumped to 5.1 (from 5.beta)
