@@ -75,6 +75,9 @@ input[type=range]::-moz-range-thumb {
 .icon-location {
   background-image: url("../icons/icon-room.svg"); }
 
+.icon-maps-ugc {
+  background-image: url("../icons/icon-maps-ugc.svg"); }
+
 .icon-face {
   background-image: url("../icons/icon-face.svg"); }
 
