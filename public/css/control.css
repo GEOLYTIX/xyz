@@ -270,9 +270,6 @@ input[type=number] {
   input[type=number]:focus {
     cursor: text; }
 
-/*input:hover {
-    cursor: pointer;
-}*/
 .input-flex {
   display: flex;
   align-items: center;
@@ -336,11 +333,14 @@ input[type=number] {
 
 .input-checkbox {
   display: block; }
-  .input-checkbox input {
-    display: none; }
+  .input-checkbox.inline {
+    display: inline-block; }
   .input-checkbox > span {
-    display: inline-block;
     vertical-align: middle; }
+  .input-checkbox.inline + span {
+    vertical-align: middle; }
+  .input-checkbox > input {
+    display: none; }
   .input-checkbox > div {
     display: inline-block;
     vertical-align: middle;
@@ -354,6 +354,8 @@ input[type=number] {
     background-size: contain;
     -webkit-background-size: contain;
     background-image: url("../icons/icon-checkbox-unchecked.svg"); }
+  .input-checkbox > div:hover {
+    cursor: pointer; }
   .input-checkbox input:checked + div {
     background-image: url("../icons/icon-checkbox-checked.svg"); }
   .input-checkbox input:disabled + div {
@@ -368,25 +370,23 @@ button {
   button:disabled {
     opacity: 0.5; }
 
-.btn-column {
-  z-index: 999; }
-  .btn-column button,
-  .btn-column > a {
-    margin-top: 10px;
-    border-radius: 10px;
-    padding: 10px;
-    float: left;
-    clear: both;
-    height: 50px;
-    width: 50px;
-    background-color: #fff;
-    text-align: center;
-    cursor: default; }
-    .btn-column button .xyz-icon,
-    .btn-column > a .xyz-icon {
-      width: 100%;
-      height: 100%;
-      pointer-events: none; }
+.btn-column button,
+.btn-column > a {
+  margin-top: 10px;
+  border-radius: 10px;
+  padding: 10px;
+  float: left;
+  clear: both;
+  height: 50px;
+  width: 50px;
+  background-color: #fff;
+  text-align: center;
+  cursor: default; }
+  .btn-column button .xyz-icon,
+  .btn-column > a .xyz-icon {
+    width: 100%;
+    height: 100%;
+    pointer-events: none; }
 
 .btn-header {
   margin-left: 5px;
@@ -2010,14 +2010,12 @@ span.flatpickr-weekday {
 
 #tabview {
   overflow: hidden;
-  bottom: 0;
   position: relative;
   width: 100%;
-  z-index: 1000;
   background-color: white;
   height: 100%; }
   #tabview .tabs {
-    height: 60px;
+    height: 50px;
     width: 100%;
     overflow-x: auto;
     display: flex;
@@ -2041,9 +2039,9 @@ span.flatpickr-weekday {
     #tabview .tabs .tab > .content {
       display: none;
       position: absolute;
-      top: 70px;
+      top: 50px;
       left: 0;
-      height: calc(100% - 70px);
+      height: calc(100% - 50px);
       width: 100%;
       border-top: 1px solid #777;
       overflow-y: auto; }
