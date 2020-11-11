@@ -1,25 +1,28 @@
 const markdownIt = require("markdown-it")
 
 const markdownItAnchor = require("markdown-it-anchor")
-const syntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight")
 
+const syntaxHighlight = require("@11ty/eleventy-plugin-syntaxhighlight")
 
 // .use(require('markdown-it-anchor'), opts)
 
 module.exports = function (eleventyConfig) {
 
   eleventyConfig.addPlugin(syntaxHighlight);
-  
+
   eleventyConfig.setLibrary("md", markdownIt({
     html: true,
     breaks: true,
     linkify: true
-  }).use(markdownItAnchor,{permalink: true}))
+  }).use(markdownItAnchor, {
+    permalink: true
+  }))
 
   eleventyConfig.addCollection('posts', collection => {
 
     const _collection = collection.getFilteredByGlob('**/*.md').sort(
-      (a, b) => (a.data.orderPath || a.filePathStem).localeCompare((b.orderPath || b.filePathStem))
+      (a, b) => (a.data.orderPath || a.filePathStem)
+        .localeCompare(b.data.orderPath || b.filePathStem)
     )
 
     _collection.forEach(entry => {
