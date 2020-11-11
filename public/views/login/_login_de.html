@@ -8,181 +8,21 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <script src="${dir}/views/login/_login.js" defer></script>
+  <link rel="stylesheet" href="${dir}/views/login/_login.css" />
 
-  <style>
-    body {
-      margin: 0;
-      padding: 50px;
-      font-size: 13px;
-      font-family: 'Open Sans', sans-serif;
-
-    }
-
-    .input-group {
-      width: 100%;
-      max-width: 500px;
-    }
-
-    input {
-      padding: 10px 0;
-      width: 100%;
-      border: none;
-      border-bottom: 1px solid #999;
-      font-size: 18px;
-    }
-
-    input:focus {
-      outline: none;
-    }
-
-    input:-webkit-autofill {
-      box-shadow: 0 0 0px 1000px white inset;
-    }
-
-    .bar {
-      position: relative;
-      display: block;
-      width: 100%;
-    }
-
-    .bar:before,
-    .bar:after {
-      content: '';
-      height: 2px;
-      width: 0;
-      bottom: 0;
-      position: absolute;
-      background: #1F964D;
-      transition: 0.2s ease all;
-      -moz-transition: 0.2s ease all;
-      -webkit-transition: 0.2s ease all;
-    }
-
-    input:invalid+.bar:before,
-    input:invalid+.bar:after {
-      background: orangered;
-    }
-
-    .bar:before {
-      left: 50%;
-    }
-
-    .bar:after {
-      right: 50%;
-    }
-
-    input:focus~.bar:before,
-    input:focus~.bar:after {
-      width: 50%;
-    }
-
-    button {
-      color: white;
-      background-color: #1F964D;
-      margin: 10px 0;
-      padding: 8px;
-      text-align: center;
-      font: 18px "Open Sans", sans-serif;
-      font-weight: 700;
-      border-radius: 3px;
-      border: 0;
-      box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.2);
-    }
-
-    button:hover:enabled {
-      cursor: pointer;
-      color: #1F964D;
-      background-color: white;
-    }
-
-    .login_form p {
-      font-size: 18px;
-    }
-
-    .register_form p {
-      font-size: 14px;
-    }
-
-    .bold {
-      font-weight: bold;
-    }
-
-    .switch {
-      font-size: 18px;
-      text-decoration: none;
-      color: #1F964D;
-      font-weight: 700;
-    }
-
-    .switch:hover {
-      cursor: pointer;
-    }
-
-    button:disabled {
-      background-color: darkslategrey;
-    }
-
-    .msg {
-      color: #f57c00;
-    }
-
-    .mailto {
-      color: #1F964D;
-      text-decoration: none;
-    }
-
-    a,
-    button {
-      outline: 0;
-    }
-
-    #language {
-      display: block;
-      position: absolute;
-      right: 0;
-      font-size: 12px;
-      font-family: "Open Sans", sans-serif;
-      padding: 5px;
-      color: #444;
-      width: 240px;
-      border: 1px solid #aaa;
-      box-shadow: 0 1px 0 1px rgba(0, 0, 0, .04);
-      border-radius: 2px;
-      background-color: #fff;
-    }
-
-    #language:hover {
-      border-color: #888;
-      outline: none;
-    }
-
-    #language:focus {
-      border-color: #aaa;
-      color: #222;
-      outline: none;
-    }
-
-    #language option {
-      font-weight: normal;
-    }
-  </style>
 </head>
 
 <body class="login_form">
 
-  <div style="width: 500px; height: 40px; position: relative; display: block;">
-
-    <select id="language" onChange="window.location.href=this.value">
-      <option value="${dir}?language=de">Deutsch</option>
-      <option value="${dir}?language=en">English</option>
-      <option value="${dir}?language=fr">Français</option>
-      <option value="${dir}?language=pl">Polski</option>
-      <option value="${dir}?language=ja">日本語</option>
-      <option value="${dir}?language=ko">한국어</option>
-      <option value="${dir}?language=zh">中文简体</option>
-    </select>
-
-  </div>
+  <select id="language" onChange="window.location.href=this.value">
+    <option value="${dir}?language=de">Deutsch</option>
+    <option value="${dir}?language=en">English</option>
+    <option value="${dir}?language=fr">Français</option>
+    <option value="${dir}?language=pl">Polski</option>
+    <option value="${dir}?language=ja">日本語</option>
+    <option value="${dir}?language=ko">한국어</option>
+    <option value="${dir}?language=zh">中文简体</option>
+  </select>
 
   <form action="${dir}/api/user/cookie" method="post" autocomplete="off">
 
@@ -192,32 +32,23 @@
 
     <div class="input-group">
       <input id="auth_user_email" name="email" type="email" required maxlength="50">
-
       <span class="bar"></span>
       <label for="auth_user_email">Email</label>
     </div>
 
-    <br>
-
     <div class="input-group">
       <input id="auth_user_password" name="password" type="password" required minlength="8">
-
       <span class="bar"></span>
       <label for="auth_user_password">Passwort</label>
     </div>
 
-    <br>
-
     <p class="msg">${msg}</p>
 
-    <button id="btnLogin" type="submit" disabled>
-      Einloggen
-    </button>
+    <button id="btnLogin" type="submit" disabled>Einloggen</button>
 
-    <p>Benutzerkontos müssen mit einem Email Link verifiziert und anschließend von einem Administrator genehmigt werden.
-    </p>
-    <a class="switch" href="${dir}/api/user/register?language=${language}">Passwort zurücksetzen oder neues
-      Benutzerkonto registrieren.</a>
+    <p>Benutzerkontos müssen mit einem Email Link verifiziert und anschließend von einem Administrator genehmigt werden.</p>
+
+    <a class="switch" href="${dir}/api/user/register?language=${language}">Passwort zurücksetzen oder neues Benutzerkonto registrieren.</a>
 
   </form>
 
