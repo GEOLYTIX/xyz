@@ -2,7 +2,7 @@
 title: XYZ
 tags: [root, getting-started, workspace, develop, mapp]
 layout: root.html
-orderPath: /_index
+orderPath: /__index
 ---
 
 ## Open source API and Library for spatial data and application interfaces.
