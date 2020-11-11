@@ -29,7 +29,7 @@ module.exports = async (req, res, msg) => {
 
   const html = template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
 
-  res.setHeader('Set-Cookie', `XYZ ${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
+  res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
 
   res.send(html)
 }
