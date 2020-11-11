@@ -10,6 +10,10 @@ p {
   line-height: 1.5;
 }
 
+label {
+  color: #555;
+}
+
 .input-group {
   width: 100%;
   padding: 5px 0;
