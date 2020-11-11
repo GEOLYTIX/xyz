@@ -51,7 +51,7 @@ module.exports = async (req, res) => {
 
       const protocol = `${req.headers.host.includes('localhost') && 'http' || 'https'}://`
 
-      const host = `${req.headers.host.includes('localhost') && req.headers.host || process.env.ALIAS || req.headers.host}${process.env.DIR || ''}`
+      const host = `${req.headers.host.includes('localhost') && req.headers.host || process.env.ALIAS || req.headers.host}${process.env.DIR}`
 
       const mail_promises = admins.map(admin => mailer(Object.assign({
           to: admin.email

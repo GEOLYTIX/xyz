@@ -59,7 +59,7 @@ const _method = {
 
       res.setHeader('Set-Cookie', `XYZ ${process.env.TITLE}=${token.signed};HttpOnly;Max-Age=3;Path=${process.env.DIR || '/'}`)
       
-      res.setHeader('location', `${process.env.DIR || ''}?language=${token.language || 'en'}`)
+      res.setHeader('location', `${process.env.DIR}?language=${token.language || 'en'}`)
 
       res.status(302).send()
     }

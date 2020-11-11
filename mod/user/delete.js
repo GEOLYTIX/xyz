@@ -20,7 +20,7 @@ module.exports = async (req, res) => {
 
   const protocol = `${req.headers.host.includes('localhost') && 'http' || 'https'}://`
 
-  const host = `${req.headers.host.includes('localhost') && req.headers.host || process.env.ALIAS || req.headers.host}${process.env.DIR || ''}`
+  const host = `${req.headers.host.includes('localhost') && req.headers.host || process.env.ALIAS || req.headers.host}${process.env.DIR}`
 
   // Sent email to inform user that their account has been deleted.
   const deleted_account_mail = mail_templates.deleted_account[user.language || 'en'] ||  mail_templates.deleted_account.en;

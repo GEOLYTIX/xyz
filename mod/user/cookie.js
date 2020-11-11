@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
 
     if (req.cookies && req.cookies[`XYZ ${process.env.TITLE}`]) {
 
-      return res.send(`XYZ ${process.env.TITLE}=<a href="${process.env.DIR || '/'}api/user/token">token</a>;HttpOnly;Max-Age=28800;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
+      return res.send(`XYZ ${process.env.TITLE}=<a href="${process.env.DIR}/api/user/token">token</a>;HttpOnly;Max-Age=28800;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
 
     }
 
