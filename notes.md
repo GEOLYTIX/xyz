@@ -16,7 +16,9 @@ Webpack bumped to 5.1 (from 5.beta)
 
 Webpack CLI bumped to 4.0
 
-process.env.TITLE default 'GEOLYTIX | XYZ' will no be set in api.js
+process.env.TITLE default 'GEOLYTIX | XYZ' will now be set in api.js
+
+process.env.DIR default '' will now be set in api.js
 
 Fix for editable textarea.
 
