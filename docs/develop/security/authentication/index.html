@@ -190,14 +190,20 @@
       
       
       
-      <li class="__2 ">
-        <a href="/xyz/docs/develop/api/">API</a>
+      <li class="__1 ">
+        <a href="/xyz/docs/">XYZ</a>
       </li>
       
       
       
       <li class="__1 ">
-        <a href="/xyz/docs/">XYZ</a>
+        <a href="/xyz/docs/develop/">Develop</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/develop/api/">API</a>
       </li>
       
       
@@ -262,24 +268,14 @@
       
       
       
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/lib/dataviews/">Dataviews</a>
-      </li>
-      
-      
-      
-      
-      
-      
-      
-      <li class="__1 ">
-        <a href="/xyz/docs/develop/">Develop</a>
-      </li>
-      
-      
-      
       <li class="__2 ">
         <a href="/xyz/docs/develop/lib/library/">Library</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/lib/dataviews/">Dataviews</a>
       </li>
       
       
@@ -383,6 +379,10 @@
       
       
       
+      
+      
+      
+      
 
     </ul>
 
@@ -394,7 +394,7 @@
 <p>The PostgreSQL user defined in the ACL connection string must have rights to read, update, and create records in the ACL table.</p>
 <p>Given the rights to create tables in the ACL database schema the <code>api/user/pgtable</code> endpoint may be used to create a new ACL table. A table will only be created if none exists yet. The newly created ACL will have one admin user admin@geolytix.xyz with the password 'admin123'. You are advised to register a new account immediately. Assign admin rights to the new account and thereafter delete the admin@geolytix.xyz account.</p>
 <p>Give the necessary roles to the PostgreSQL account defined in the environment settings the backend will generate a new ACL table from this schema.</p>
-<pre class="language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> acl_schema<span class="token punctuation">.</span>acl_table <span class="token punctuation">(</span><br>  <span class="token string">"_id"</span> <span class="token keyword">serial</span> <span class="token operator">not</span> <span class="token boolean">null</span><span class="token punctuation">,</span><br>  email <span class="token keyword">text</span> <span class="token operator">not</span> <span class="token boolean">null</span><span class="token punctuation">,</span><br>  password <span class="token keyword">text</span> <span class="token operator">not</span> <span class="token boolean">null</span><span class="token punctuation">,</span><br>  verified <span class="token keyword">boolean</span> <span class="token keyword">default</span> <span class="token boolean">false</span><span class="token punctuation">,</span><br>  approved <span class="token keyword">boolean</span> <span class="token keyword">default</span> <span class="token boolean">false</span><span class="token punctuation">,</span><br>  verificationtoken <span class="token keyword">text</span><span class="token punctuation">,</span><br>  approvaltoken <span class="token keyword">text</span><span class="token punctuation">,</span><br>  failedattempts <span class="token keyword">integer</span> <span class="token keyword">default</span> <span class="token number">0</span><span class="token punctuation">,</span><br>  password_reset <span class="token keyword">text</span><span class="token punctuation">,</span><br>  api <span class="token keyword">text</span><span class="token punctuation">,</span><br>  approved_by <span class="token keyword">text</span><span class="token punctuation">,</span><br>  access_log <span class="token keyword">text</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token keyword">default</span> <span class="token string">'{}'</span>::<span class="token keyword">text</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span><br>  blocked <span class="token keyword">boolean</span> <span class="token keyword">default</span> <span class="token boolean">false</span><span class="token punctuation">,</span><br>  roles <span class="token keyword">text</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token keyword">default</span> <span class="token string">'{}'</span>::<span class="token keyword">text</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span><br>  admin_workspace <span class="token keyword">boolean</span> <span class="token keyword">default</span> <span class="token boolean">false</span><span class="token punctuation">,</span><br>  admin_user <span class="token keyword">boolean</span> <span class="token keyword">default</span> <span class="token boolean">false</span><br><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<pre class="language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> acl_schema<span class="token punctuation">.</span>acl_table <span class="token punctuation">(</span><br>  <span class="token string">"_id"</span> <span class="token keyword">serial</span> <span class="token operator">not</span> <span class="token boolean">null</span><span class="token punctuation">,</span><br>  email <span class="token keyword">text</span> <span class="token operator">not</span> <span class="token boolean">null</span><span class="token punctuation">,</span><br>  password <span class="token keyword">text</span> <span class="token operator">not</span> <span class="token boolean">null</span><span class="token punctuation">,</span><br>  verified <span class="token keyword">boolean</span> <span class="token keyword">default</span> <span class="token boolean">false</span><span class="token punctuation">,</span><br>  approved <span class="token keyword">boolean</span> <span class="token keyword">default</span> <span class="token boolean">false</span><span class="token punctuation">,</span><br>  verificationtoken <span class="token keyword">text</span><span class="token punctuation">,</span><br>  approvaltoken <span class="token keyword">text</span><span class="token punctuation">,</span><br>  failedattempts <span class="token keyword">integer</span> <span class="token keyword">default</span> <span class="token number">0</span><span class="token punctuation">,</span><br>  password_reset <span class="token keyword">text</span><span class="token punctuation">,</span><br>  api <span class="token keyword">text</span><span class="token punctuation">,</span><br>  approved_by <span class="token keyword">text</span><span class="token punctuation">,</span><br>  access_log <span class="token keyword">text</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token keyword">default</span> <span class="token string">'{}'</span>::<span class="token keyword">text</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span><br>  blocked <span class="token keyword">boolean</span> <span class="token keyword">default</span> <span class="token boolean">false</span><span class="token punctuation">,</span><br>  roles <span class="token keyword">text</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token keyword">default</span> <span class="token string">'{}'</span>::<span class="token keyword">text</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span><br>  admin <span class="token keyword">boolean</span> <span class="token keyword">default</span> <span class="token boolean">false</span><span class="token punctuation">,</span><br>  <span class="token keyword">language</span> <span class="token keyword">text</span> <span class="token keyword">default</span> <span class="token string">'en'</span><br><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
 <h2 id="user-registration">User Registration <a class="header-anchor" href="#user-registration">¶</a></h2>
 <p>The User registration form will submit a post query to the User API in order to register a new User record with an encrypted password.</p>
 <p>The host will send an email with a verification token to the registered account email. The link containing the verification token must be opened in order to <strong>verify ownership of the email account</strong>.</p>
@@ -407,8 +407,7 @@
 <p>JWT issued by the XYZ host are signed and valid for 8 hours. The payload of the token carries information about the user account for which the token was generated.</p>
 <pre><code>{
   &quot;email&quot;: &quot;dennis.bauszus@geolytix.co.uk&quot;,
-  &quot;admin_user&quot;: true,
-  &quot;admin_workspace&quot;: true,
+  &quot;admin&quot;: true,
   &quot;key&quot;: null,
   &quot;roles&quot;: [],
   &quot;iat&quot;: 1589877546,

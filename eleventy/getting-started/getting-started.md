@@ -3,7 +3,7 @@ title: Getting started
 tags: [getting-started, root]
 layout: root.html
 group: true
-orderPath: /_getting-started/_getting-started
+orderPath: /getting-started/_getting-started
 date: 2020-01-01
 ---
 
