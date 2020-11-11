@@ -21,7 +21,7 @@ module.exports = async (req, res, msg) => {
   const template = req.params.language && templates[req.params.language] || templates.en
   
   const params = {
-    dir: process.env.DIR || '',
+    dir: process.env.DIR,
     redirect: req.body && req.body.redirect || req.url && decodeURIComponent(req.url),
     language: req.params.language || 'en',
     msg: msg || ' '

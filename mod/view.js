@@ -21,7 +21,7 @@ module.exports = async (req, res) => {
     req.params || {},
     {
       title: process.env.TITLE,
-      dir: process.env.DIR || '',
+      dir: process.env.DIR,
       token: req.params.token && req.params.token.signed || '""',
       login: (process.env.PRIVATE || process.env.PUBLIC) && 'true' || '""',
     },

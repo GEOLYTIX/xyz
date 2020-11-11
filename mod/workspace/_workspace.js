@@ -94,7 +94,7 @@ function getTemplate(req, res) {
 
 function getTemplates(req, res) {
 
-  const host = `${req.headers.host.includes('localhost') && 'http' || 'https'}://${req.headers.host}${process.env.DIR || ''}`
+  const host = `${req.headers.host.includes('localhost') && 'http' || 'https'}://${req.headers.host}${process.env.DIR}`
 
   const templates = Object.entries(req.params.workspace.templates).map(
     template => `<a ${template[1].err && 'style="color: red;"' ||''} href="${host}/api/workspace/get/template?template=${template[0]}">${template[0]}</a>`
