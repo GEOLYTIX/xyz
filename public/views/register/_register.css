@@ -3,7 +3,7 @@ body {
   padding: 50px;
   min-width: 400px;
   max-width: 600px;
-  font: 18px "Open Sans", sans-serif;
+  font: 14px "Open Sans", sans-serif;
 }
 
 p {
@@ -13,7 +13,7 @@ p {
 .input-group {
   width: 100%;
   max-width: 500px;
-  padding: 5px 0;
+  margin: 5px 0;
 }
 
 input {
@@ -21,6 +21,7 @@ input {
   width: 100%;
   border: none;
   border-bottom: 1px solid #999;
+  font-size: 18px;
 }
 
 input:focus {
@@ -74,16 +75,11 @@ button {
   margin: 10px 0;
   padding: 8px;
   text-align: center;
+  font: 18px "Open Sans", sans-serif;
+  font-weight: 700;
   border-radius: 3px;
   border: 0;
   box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.2);
-  font-weight: bold;
-}
-
-button:hover:enabled {
-  cursor: pointer;
-  color: #1F964D;
-  background-color: white;
 }
 
 .bold {
@@ -91,11 +87,12 @@ button:hover:enabled {
 }
 
 .switch {
+  font-size: 18px;
   color: #1F964D;
-  font-weight: bold;
+  font-weight: 700;
 }
 
-.switch:hover {
+button:hover {
   cursor: pointer;
 }
 
@@ -112,28 +109,36 @@ button:disabled {
   text-decoration: none;
 }
 
-a,
-button {
-  outline: 0;
+.checkbox {
+  display: block;
 }
 
-#language {
-  float: right;
-  margin-bottom: 20px;
-  width: 240px;
-  padding: 5px;
-  color: #444;
-  background-color: #fff;
-  border: 1px solid #aaa;
+.checkbox input {
+  display: none;
 }
 
-#language:hover {
-  border-color: #888;
-  outline: none;
+.checkbox>span {
+  display: inline-block;
+  vertical-align: middle;
 }
 
-#language:focus {
-  border-color: #aaa;
-  color: #222;
-  outline: none;
+.checkbox>div {
+  display: inline-block;
+  vertical-align: middle;
+  width: 18px;
+  height: 18px;
+  margin-right: 5px;
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: contain;
+  -webkit-background-size: contain;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z'/%3E%3C/svg%3E");
+}
+
+input:checked+div {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'/%3E%3C/svg%3E");
+}
+
+#btnRegister {
+  display: block;
 }
