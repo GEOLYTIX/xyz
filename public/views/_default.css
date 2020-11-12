@@ -2,18 +2,11 @@ html {
   height: 100%;
 }
 
-.mapview>.btn-column {
+#mapButton {
   position: absolute;
   left: 0;
   height: 100%;
   padding: 4px;
-}
-
-.listview-title {
-  font-weight: bold;
-  margin-bottom: 10px;
-  padding: 3px;
-  border-radius: 2px;
 }
 
 @media only screen and (min-width: 700px) {
@@ -63,7 +56,7 @@ html {
     grid-column: 3/5;
   }
 
-  .btn-column {
+  #mapButton {
     grid-column: 3;
     grid-row: 1/4;
     background-color: #fff;
@@ -149,13 +142,13 @@ html {
     height: calc(100% - 50px);
   }
 
-  .btn-column {
+  #mapButton {
     position: fixed;
     left: 10px;
   }
 
-  .btn-column>button,
-  .btn-column>a {
+  #mapButton>button,
+  #mapButton>a {
     box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
     border-radius: 50%;
   }
@@ -219,7 +212,6 @@ html {
 
   #ctrls .listview-title {
     font-weight: bold;
-    /*font-size: 105%;*/
     margin-bottom: 10px;
     padding: 3px;
     border-radius: 2px;

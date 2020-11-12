@@ -3,7 +3,7 @@ document.dispatchEvent(new CustomEvent('layer_areastats_button', {
 
     _xyz.layers.plugins.layer_areastats_button = layer => {
 
-      document.querySelector('.btn-column').appendChild(_xyz.utils.html.node`
+      document.getElementById('mapButton').appendChild(_xyz.utils.html.node`
       <button
       class="mobile-display-none"
         title="Add area stats polygon"
