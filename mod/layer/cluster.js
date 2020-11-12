@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
     kmeans = parseInt(1 / req.params.kmeans),
     dbscan = parseFloat(req.params.dbscan), 
     viewport = req.params.viewport.split(','),
-    z = req.params.mapZoom;
+    z = parseFloat(req.params.z);
 
   const roles = layer.roles
     && req.params.token
