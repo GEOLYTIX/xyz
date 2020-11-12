@@ -2,8 +2,11 @@ window.onload = () => {
 
   if ('scrollRestoration' in history) history.scrollRestoration = 'auto'
 
+  const OL = document.getElementById('OL')
+
   //move map up on document scroll
-  document.addEventListener('scroll', () => document.getElementById('OL').style['marginTop'] = `-${parseInt(window.pageYOffset / 2)}px`)
+  document.addEventListener('scroll',
+    () => OL.style['marginTop'] = `-${parseInt(window.pageYOffset / 2)}px`)
 
   const tabs = document.querySelectorAll('.tab')
   const locationsTab = document.getElementById('locations')
@@ -72,7 +75,7 @@ window.onload = () => {
     xyz.locale = locale
 
     xyz.mapview.create({
-      target: document.getElementById('OL'),
+      target: OL,
       attribution: {
         target: document.querySelector('#Attribution > .attribution'),
         links: {
@@ -114,7 +117,7 @@ window.onload = () => {
             e.target.disabled = (z <= xyz.locale.minZoom)
           }}><div class="xyz-icon icon-remove">`)
 
-    xyz.mapview.node.addEventListener('changeEnd', () => {
+    OL.addEventListener('changeEnd', () => {
       const z = xyz.map.getView().getZoom()
       btnZoomIn.disabled = z >= xyz.locale.maxZoom
       btnZoomOut.disabled = z <= xyz.locale.minZoom
@@ -262,10 +265,7 @@ window.onload = () => {
 
       document.body.style.gridTemplateRows = `auto 10px ${height}px`
 
-      xyz.mapview.node.style.marginTop = `-${(height/2)}px`
-
-      //xyz.map.updateSize()
-
+      OL.style.marginTop = `-${(height/2)}px`
     }
 
     // Remove eventListener after resize event.
