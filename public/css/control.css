@@ -2060,6 +2060,12 @@ span.flatpickr-weekday {
 .tabview .target {
   position: absolute; }
 
+.dataview-container {
+  display: grid; }
+
+.dataview-container > .dataview {
+  position: relative; }
+
 .dataview .toolbar > * {
   height: 25px;
   padding-left: 10px; }
