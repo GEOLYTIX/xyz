@@ -2051,14 +2051,16 @@ span.flatpickr-weekday {
     #tabview .tabs .tab.active > .content {
       display: grid; }
   #tabview .tab-panel {
-    /*height: 100%;*/
     height: calc(100% - 40px);
     overflow-x: auto; }
     #tabview .tab-panel div.active {
       height: inherit;
       grid-template-rows: min-content; }
-  #tabview .toolbar button {
-    margin: 10px; }
+
+.dataview .target {
+  position: absolute;
+  height: 100%;
+  width: 100%; }
 
 .drawer.layer-group,
 .drawer.layer-view {

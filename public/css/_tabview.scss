@@ -62,11 +62,15 @@
     
   }
 
-  .toolbar {
+}
 
-    button {
-      margin: 10px;
-    }
+.dataview {
+
+  .target {
+
+    position: absolute;
+    height: 100%;
+    width: 100%;
 
   }
 
