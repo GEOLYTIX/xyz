@@ -43,8 +43,6 @@
       width: 100%;
       border-top: 1px solid #777;
       overflow-y: auto;
-
-      // position: absolute; height: 100%; display: grid;
     }
 
     .tab.active > .content {
@@ -54,7 +52,6 @@
 
   .tab-panel {
 
-    /*height: 100%;*/
     height: calc(100% - 40px);
     overflow-x: auto;
 
