@@ -64,23 +64,16 @@
 
 }
 
-.tabview {
-
-  .target {
-
-    position: absolute;
-
-  }
-
+.tabview .target {
+  position: absolute;
 }
 
-.dataview {
+.dataview .toolbar>* {
+  height: 25px;
+  padding-left: 10px;
+}
 
-  .target {
-
-    height: 100%;
-    width: 100%;
-
-  }
-
+.dataview .target {
+  width: 100%;
+  height: 100%;
 }
