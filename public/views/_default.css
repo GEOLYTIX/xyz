@@ -2,21 +2,23 @@ html {
   height: 100%;
 }
 
-.mapview>.btn-column {
+#mapButton {
   position: absolute;
   left: 0;
   height: 100%;
   padding: 4px;
 }
 
-.listview-title {
-  font-weight: bold;
-  margin-bottom: 10px;
-  padding: 3px;
-  border-radius: 2px;
-}
-
 @media only screen and (min-width: 700px) {
+
+  .desktop-display-none {
+    display: none;
+  }
+
+  body {
+    display: grid;
+    grid-template-columns: 333px 10px 50px auto;
+  }
 
   #spacer {
     grid-row: 1/4;
@@ -24,6 +26,10 @@ html {
     background: repeating-linear-gradient(90deg, #ddd, #fff 3px);
     box-shadow: 3px 0px 6px -3px #777;
     z-index: 9999;
+  }
+
+  #spacer:hover {
+    cursor: col-resize;
   }
 
   #hozDivider {
@@ -37,18 +43,17 @@ html {
   #hozDivider:hover {
     cursor: row-resize;
   }
-  
-  #spacer:hover {
-    cursor: col-resize;
+
+  #Map {
+    grid-row: 1;
+    grid-column: 3/5;
+    position: relative;
   }
 
-  .desktop-display-none {
-    display: none;
-  }
-
-  body {
-    display: grid;
-    grid-template-columns: 333px 10px 50px auto;
+  #OL {
+    width: 100%;
+    height: 100vh;
+    position: absolute;
   }
 
   #Attribution {
@@ -58,25 +63,11 @@ html {
     pointer-events: none;
   }
 
-  #tabview {
-    grid-row: 3;
-    grid-column: 3/5;
-  }
-
-  .btn-column {
+  #mapButton {
     grid-column: 3;
     grid-row: 1/4;
     background-color: #fff;
     opacity: 0.8;
-  }
-
-  #gazetteer {
-    margin-bottom: 15px;
-    z-index: 9999;
-  }
-
-  #closeGazetteer {
-    display: none;
   }
 
   #ctrls {
@@ -91,31 +82,63 @@ html {
 
   #ctrls>div {
     transform: rotateY(180deg);
-}
-
-  #Map {
-    grid-row: 1;
-    grid-column: 3/5;
-    position: relative;
   }
 
-  #OL {
-    width: 100%;
-    height: 100vh;
-    position: absolute;
+  .listview-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+    padding: 3px;
+    border-radius: 2px;
+  }
+
+  #gazetteer {
+    margin-bottom: 15px;
+    z-index: 9999;
+  }
+
+  #closeGazetteer {
+    display: none;
   }
 
   #layers {
     margin-bottom: 20px;
   }
 
+  #tabview {
+    grid-row: 3;
+    grid-column: 3/5;
+  }
+
 }
 
 @media only screen and (max-width: 700px) {
 
+  .mobile-hidden {
+    visibility: hidden;
+  }
+
+  .mobile-display-none {
+    display: none;
+  }
+
+  .mobile-disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
   body {
     overflow-y: scroll;
     overflow-x: hidden;
+  }
+
+  #spacer {
+    height: calc(100% - 50px);
+  }
+
+  #Map {
+    position: fixed;
+    height: calc(100% - 50px);
+    width: 100%;
   }
 
   #OL {
@@ -131,40 +154,18 @@ html {
     bottom: 50px;
   }
 
-  .mobile-hidden {
-    visibility: hidden;
-  }
-
-  .mobile-display-none {
-    display: none;
-  }
-
-  .mobile-disabled {
-    opacity: 0.3;
-    pointer-events: none;
-  }
-
-  .mapview {
-    position: fixed;
-    height: calc(100% - 50px);
-  }
-
-  .btn-column {
+  #mapButton {
     position: fixed;
     left: 10px;
   }
 
-  .btn-column>button,
-  .btn-column>a {
+  #mapButton>button,
+  #mapButton>a {
     box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
     border-radius: 50%;
   }
 
-  #spacer {
-    height: calc(100% - 50px);
-  }
-
-  #ctrls{
+  #ctrls {
     width: 100%;
     height: 100%;
   }
@@ -217,20 +218,8 @@ html {
     background-color: #f0f0f0;
   }
 
-  #ctrls .listview-title {
-    font-weight: bold;
-    /*font-size: 105%;*/
-    margin-bottom: 10px;
-    padding: 3px;
-    border-radius: 2px;
-  }
-
   #ctrls .listview.shadow {
     box-shadow: inset 0px 4px 4px -4px #999;
-  }
-
-  #clear_locations {
-    font-size: 90%;
   }
 
   #gazetteer {
@@ -248,13 +237,8 @@ html {
     width: 37px;
   }
 
-  #closeGazetteer > .xyz-icon {
+  #closeGazetteer>.xyz-icon {
     height: 33px;
-  }
-
-  .tabulator {
-    margin-bottom: 0;
-    margin-top: 0;
   }
 
 }
