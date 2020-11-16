@@ -1,6 +1,4 @@
-console.log(document.currentScript.src.match(/[^\/]+$/)[0])
-
-document.dispatchEvent(new CustomEvent('tabulator_conditional_formatter', {
+document.dispatchEvent(new CustomEvent(document.currentScript.src.match(/[^\/]+$/)[0], {
   detail: _xyz => {
 
     _xyz.dataviews.plugins.conditional_formatter = (cell, formatterParams, onRendered) => {
