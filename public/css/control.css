@@ -2039,7 +2039,7 @@ span.flatpickr-weekday {
       font-weight: bold; }
     #tabview .tabs .tab:not(.active) > .header:hover {
       cursor: pointer; }
-    #tabview .tabs .tab > .content {
+    #tabview .tabs .tab > .panel {
       display: none;
       position: absolute;
       top: 50px;
@@ -2048,7 +2048,7 @@ span.flatpickr-weekday {
       width: 100%;
       border-top: 1px solid #777;
       overflow-y: auto; }
-    #tabview .tabs .tab.active > .content {
+    #tabview .tabs .tab.active > .panel {
       display: grid; }
   #tabview .tab-panel {
     height: calc(100% - 40px);
