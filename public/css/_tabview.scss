@@ -34,7 +34,7 @@
       cursor: pointer;
     }
 
-    .tab > .content {
+    .tab > .panel {
       display: none;
       position: absolute;
       top: 50px;
@@ -45,7 +45,7 @@
       overflow-y: auto;
     }
 
-    .tab.active > .content {
+    .tab.active > .panel {
       display: grid;
     }
   }
