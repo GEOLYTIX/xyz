@@ -111,15 +111,31 @@ function getLocales(req, res) {
 
     const locale = req.params.workspace.locales[key]
 
-    if (!locale.roles) return {key: key, name: locale.name}
+    const roles = req.params.token.roles
 
+    // Locales without roles will always be returned.
+    if (!locale.roles) return {
+      key: key,
+      name: locale.name || key
+    }
+
+    // Check for negatice roles
     if (Object.keys(locale.roles).some(
-      role => (req.params.token && req.params.token.roles
-        && req.params.token.roles.includes(role)) 
-      || (role.match(/^\!/) && !req.params.token.roles.includes(role.replace(/^\!/, '')))
-    )) return { key: key, name: locale.name }
 
-  }).filter(item => item && typeof item.key ==='string')
+      // Locales with a negated role will not be returned if that role is property of the locale roles.
+      role => role.match(/^\!/) && locale.roles.hasOwnProperty(role)
+    )) return;
+
+    // Check for positive roles
+    if (Object.keys(locale.roles).some(
+      role => roles.includes(role)
+    )) return {
+      key: key,
+      name: locale.name || key
+    }
+
+  // Filter out the locales which are undefined after role checks.
+  }).filter(locale => typeof locale !== "undefined")
 
   res.send(locales)
 
