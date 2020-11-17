@@ -127,6 +127,10 @@ window.onload = () => {
     hooks: true
   })
 
+  document.getElementById('layers_header').textContent = xyz.language.layers_header
+  document.getElementById('locations_header').textContent = xyz.locations_header
+
+
   xyz.workspace.get.locales().then(getLocale)
 
   // Get locale from host.
