@@ -111,7 +111,7 @@ function getLocales(req, res) {
 
     const locale = req.params.workspace.locales[key]
 
-    const roles = req.params.token.roles
+    const roles = req.params.token && req.params.token.roles
 
     // Locales without roles will always be returned.
     if (!locale.roles) return {
