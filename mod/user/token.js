@@ -125,7 +125,7 @@ module.exports = async (req) => {
     const token = {
       email: user.email,
       admin: user.admin,
-      language: req.body.language || user.language,
+      language: user.language || req.body.language,
       key: user.api,
       roles: user.roles
     }
