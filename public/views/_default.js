@@ -128,7 +128,7 @@ window.onload = () => {
   })
 
   document.getElementById('layers_header').textContent = xyz.language.layers_header
-  document.getElementById('locations_header').textContent = xyz.locations_header
+  document.getElementById('locations_header').textContent = xyz.language.locations_header
 
 
   xyz.workspace.get.locales().then(getLocale)
