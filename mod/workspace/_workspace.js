@@ -119,7 +119,7 @@ function getLocales(req, res) {
       name: locale.name || key
     }
 
-    // Check for negatice roles
+    // Check for negative roles
     if (Object.keys(locale.roles).some(
 
       // Locales with a negated role will not be returned if that role is property of the locale roles.
