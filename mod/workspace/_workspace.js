@@ -122,8 +122,8 @@ function getLocales(req, res) {
     // Check for negative roles
     if (Object.keys(locale.roles).some(
 
-      // Locales with a negated role will not be returned if that role is property of the locale roles.
-      role => role.match(/^\!/) && roles.includes(role.replace(/^\!/, ''))
+      // Locales with a negated role will not be returned if that role is not equal to the language on the token.
+      role => role.match(/^\!/) && (role.replace(/^\!/, '').match(req.params.token.language))
     )) return;
 
     // Check for positive roles
