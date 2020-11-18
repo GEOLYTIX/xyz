@@ -119,7 +119,7 @@ module.exports = async (req) => {
   // Check password from post body against encrypted password from ACL.
   if (bcrypt.compareSync(req.body.password, user.password)) {
 
-    user.roles.push(user.language || req.body.language)
+    user.roles.push(req.body.language || user.language)
 
     // Create token with 8 hour expiry.
     const token = {
