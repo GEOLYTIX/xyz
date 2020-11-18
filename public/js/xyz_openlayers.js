@@ -523,15 +523,12 @@
         <div
           class="${"label "+(a.class||"lv-1")}"
           style="${`grid-column: ${a.inline?"1":"1/3"}; ${a.css_title||""}`}"
-          title="${a.tooltip||null}">${a.title}`),"title"===a.type)continue}if("dataview"!==a.type)"key"!==a.type?"streetview"!==a.type?a.type&&"report"===a.type?e.locations.view.report(a):a.type&&"images"===a.type?e.locations.view.images(a):a.type&&"documents"===a.type?e.locations.view.documents(a):a.type&&"geometry"===a.type?e.locations.view.geometry(a):a.type&&"boolean"===a.type?e.locations.view.boolean(a):a.type&&"json"===a.type?e.locations.view.json(a):(a.query||a.edit||a.value)&&(a.inline?(a.val=e.utils.html.node`
+          title="${a.tooltip||null}">${a.title}`),"title"===a.type)continue}if("dataview"!==a.type)"key"!==a.type?"streetview"!==a.type?"report"!==a.type?"images"!==a.type?"documents"!==a.type?"geometry"!==a.type?"boolean"!==a.type?"json"!==a.type?(a.query||a.edit||a.value)&&(a.val=a.listview.appendChild(e.utils.html.node`
       <div
-        class="${"val num "+(a.class||"")}"
-        style="${"grid-column: 2; "+(a.css_val||"")}">`,a.listview.appendChild(a.val)):(a.val=e.utils.html.node`
+        class="${`val ${a.type} ${a.class||"lv-1"}`}"
+        style="${`\n          grid-column: ${a.inline?"1":"1/3"}\n          ${a.css_val||""}`}">`),a.query?(a.layer=a.location.layer,e.query(a).then((e=>{a.val.textContent=Object.values(e)[0]}))):!a.edit||a.fieldfx?a.type&&"html"===a.type?(a.val.style="grid-column: 1 / 3; "+(a.css_val||""),a.val.innerHTML=a.value):a.val.textContent=a.displayValue:e.locations.view.edit.input(a)):e.locations.view.json(a):e.locations.view.boolean(a):e.locations.view.geometry(a):e.locations.view.documents(a):e.locations.view.images(a):e.locations.view.report(a):e.locations.view.streetview(a):a.listview.appendChild(e.utils.html.node`
       <div
-        class="${"val "+(a.class||"")}"
-        style="${`grid-column: 1 / 3; ${"textarea"===a.type?"white-space: break-spaces;":""} ${a.css_val||""}`}">`,a.listview.appendChild(a.val)),a.query?(a.layer=a.location.layer,e.query(a).then((e=>{a.val.textContent=Object.values(e)[0]}))):!a.edit||a.fieldfx?a.type&&"html"===a.type?(a.val.style="grid-column: 1 / 3; "+(a.css_val||""),a.val.innerHTML=a.value):a.val.textContent=a.displayValue:e.locations.view.edit.input(a)):e.locations.view.streetview(a):a.listview.appendChild(e.utils.html.node`
-      <div
-        class="${"label lv-0 "+(a.class||"")}"
+        class="${"label "+(a.class||"")}"
         style="grid-column: 2;">
         <span
           title=${e.language.location_source_layer}
