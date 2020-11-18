@@ -2050,12 +2050,6 @@ span.flatpickr-weekday {
       overflow-y: auto; }
     #tabview .tabs .tab.active > .panel {
       display: grid; }
-  #tabview .tab-panel {
-    height: calc(100% - 40px);
-    overflow-x: auto; }
-    #tabview .tab-panel div.active {
-      height: inherit;
-      grid-template-rows: min-content; }
 
 .tabview .target {
   position: absolute; }
