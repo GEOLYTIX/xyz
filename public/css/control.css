@@ -2259,6 +2259,8 @@ span.flatpickr-weekday {
   .location-view-grid .num {
     text-align: right;
     font-weight: 400; }
+  .location-view-grid .textarea {
+    white-space: break-spaces; }
   .location-view-grid .val {
     font-weight: 400; }
 
