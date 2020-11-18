@@ -2248,15 +2248,12 @@ span.flatpickr-weekday {
     .location-view-grid .group > .header {
       font-weight: 600; }
   .location-view-grid .lv-0 {
-    font-size: 95%;
     font-weight: bold; }
   .location-view-grid .lv-1 {
     font-size: 90%;
-    font-weight: 400; }
+    font-weight: bold; }
   .location-view-grid .lv-2 {
-    font-size: 85%;
-    padding-left: 10px;
-    font-weight: 400; }
+    font-size: 80%; }
   .location-view-grid img {
     width: 100%; }
   .location-view-grid .num {
