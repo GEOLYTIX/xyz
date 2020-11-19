@@ -451,7 +451,6 @@
                             "class": "purple-text"
                         },
                         {
-                            "_plugin": "tomtom",
                             "title": "Here's tomtom",
                             "name": "TomTom Reachable Range",
                             "type": "geometry",
@@ -464,6 +463,26 @@
                         },
                         {
                             "field": "isoline_tomtom_meta",
+                            "type": "json"
+                        },
+                        {
+                            "title": "Here API v2",
+                            "name": "Display",
+                            "type": "geometry",
+                            "field": "here_isoline_v2",
+                            "fieldfx": "ST_AsGeoJSON(here_isoline_v2)",
+                            "edit": {
+                                "meta": "here_isoline_v2_meta",
+                                "isoline_here": {}
+                            },
+                            "style": {
+                                "fillColor": "steelblue",
+                                "strokeColor": "steelblue",
+                                "fillOpacity": 0.3
+                            }
+                        },
+                        {
+                            "field": "here_isoline_v2_meta",
                             "type": "json"
                         },
                         {
@@ -509,7 +528,7 @@
                             "field": "fixed_geom",
                             "fieldfx": "ST_asGeoJson(fixed_geom)",
                             "class": "_report",
-                            "display": true,
+                            "_display": true,
                             "level": 1,
                             "style": {
                                 "fillOpacity": 0.3,
@@ -522,7 +541,7 @@
                             "field": "buffer_10km",
                             "class": "_report",
                             "fieldfx": "ST_asGeoJson(ST_Transform(ST_Buffer(ST_Transform(geom_4326, 3857), 10000), 4326))",
-                            "display": true,
+                            "_display": true,
                             "level": 1,
                             "style": {
                                 "strokeWidth": 2,
