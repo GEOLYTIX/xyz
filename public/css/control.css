@@ -2296,7 +2296,14 @@ span.flatpickr-weekday {
   .location-view-grid .val {
     font-weight: 400;
     grid-column: 1/3; }
-  .location-view-grid .input-checkbox.dataview {
+  .location-view-grid .streetview {
+    grid-column: 1 / 3; }
+  .location-view-grid .geometry.legend {
+    display: grid;
+    grid-gap: 4px;
+    grid-template-columns: 30px 1fr;
+    padding-top: 4px; }
+  .location-view-grid .dataview {
     text-align: left;
     grid-column: 1 / 3; }
   .location-view-grid .val.inline {
