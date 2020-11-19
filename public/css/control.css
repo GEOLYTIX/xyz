@@ -2243,7 +2243,10 @@ span.flatpickr-weekday {
   .location-view-grid .label {
     align-items: center;
     display: flex;
-    font-weight: bold; }
+    font-weight: bold;
+    grid-column: 1/3; }
+  .location-view-grid .label.inline {
+    grid-column: 1; }
   .location-view-grid .drawer.group {
     grid-column: 1 / 3;
     display: grid;
@@ -2283,7 +2286,8 @@ span.flatpickr-weekday {
   .location-view-grid .val {
     font-weight: 400; }
   .location-view-grid .val.inline {
-    text-align: right; }
+    text-align: right;
+    grid-column: 2; }
 
 *,
 *::after,

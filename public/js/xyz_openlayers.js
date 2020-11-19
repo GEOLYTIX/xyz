@@ -523,7 +523,7 @@
         <div
           class="${"label "+a.class}"
           style="${`grid-column: ${a.inline?"1":"1/3"}; ${a.css_title||""}`}"
-          title="${a.tooltip||null}">${a.title}`),"title"===a.type)continue}if("dataview"!==a.type)"key"!==a.type?e.locations.view.streetview[a.type]?e.locations.view.streetview[a.type](a):(a.query||a.edit||a.value)&&(a.val=a.listview.appendChild(e.utils.html.node`
+          title="${a.tooltip||null}">${a.title}`),"title"===a.type)continue}if("dataview"!==a.type)"key"!==a.type?e.locations.view[a.type]?e.locations.view[a.type](a):(a.query||a.edit||a.value)&&(a.val=a.listview.appendChild(e.utils.html.node`
       <div
         class="${`val ${a.type} ${a.class}`}"
         style="${`\n          grid-column: ${a.inline?"2":"1/3"}\n          ${a.css_val||""}`}">`),a.query?(a.layer=a.location.layer,e.query(a).then((e=>{a.val.textContent=Object.values(e)[0]}))):!a.edit||a.fieldfx?"html"!==a.type?a.val.textContent=a.displayValue:a.val.innerHTML=a.value:e.locations.view.edit.input(a)):a.listview.appendChild(e.utils.html.node`
