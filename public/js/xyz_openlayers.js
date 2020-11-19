@@ -523,10 +523,10 @@
         <div
           class="${"label "+a.class}"
           style="${`grid-column: ${a.inline?"1":"1/3"}; ${a.css_title||""}`}"
-          title="${a.tooltip||null}">${a.title}`),"title"===a.type)continue}if("dataview"!==a.type)"key"!==a.type?"streetview"!==a.type?"report"!==a.type?"images"!==a.type?"documents"!==a.type?"geometry"!==a.type?"boolean"!==a.type?"json"!==a.type?(a.query||a.edit||a.value)&&(a.val=a.listview.appendChild(e.utils.html.node`
+          title="${a.tooltip||null}">${a.title}`),"title"===a.type)continue}if("dataview"!==a.type)"key"!==a.type?e.locations.view.streetview[a.type]?e.locations.view.streetview[a.type](a):(a.query||a.edit||a.value)&&(a.val=a.listview.appendChild(e.utils.html.node`
       <div
         class="${`val ${a.type} ${a.class}`}"
-        style="${`\n          grid-column: ${a.inline?"2":"1/3"}\n          ${a.css_val||""}`}">`),a.query?(a.layer=a.location.layer,e.query(a).then((e=>{a.val.textContent=Object.values(e)[0]}))):!a.edit||a.fieldfx?"html"!==a.type?a.val.textContent=a.displayValue:a.val.innerHTML=a.value:e.locations.view.edit.input(a)):e.locations.view.json(a):e.locations.view.boolean(a):e.locations.view.geometry(a):e.locations.view.documents(a):e.locations.view.images(a):e.locations.view.report(a):e.locations.view.streetview(a):a.listview.appendChild(e.utils.html.node`
+        style="${`\n          grid-column: ${a.inline?"2":"1/3"}\n          ${a.css_val||""}`}">`),a.query?(a.layer=a.location.layer,e.query(a).then((e=>{a.val.textContent=Object.values(e)[0]}))):!a.edit||a.fieldfx?"html"!==a.type?a.val.textContent=a.displayValue:a.val.innerHTML=a.value:e.locations.view.edit.input(a)):a.listview.appendChild(e.utils.html.node`
       <div
         class="${`label ${a.type} ${a.class}`}"
         style="grid-column: 2;">
