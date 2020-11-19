@@ -2262,7 +2262,9 @@ span.flatpickr-weekday {
     padding-bottom: 5px; }
     .location-view-grid .group > .header {
       font-weight: 600;
-      padding: 5px 0; }
+      padding: 5px 0;
+      text-align: left;
+      grid-column: 1 / 3; }
       .location-view-grid .group > .header .icon-expander {
         background-position: right; }
   .location-view-grid .group:not(.expanded) {
@@ -2275,16 +2277,28 @@ span.flatpickr-weekday {
   .location-view-grid .lv-2 {
     font-size: 90%; }
   .location-view-grid .key {
-    float: right;
-    padding: 3px;
-    cursor: help;
-    border-radius: 2px; }
+    grid-column: 2; }
+    .location-view-grid .key > span {
+      float: right;
+      padding: 3px;
+      cursor: help;
+      border-radius: 2px;
+      font-weight: bold; }
   .location-view-grid img {
     width: 100%; }
   .location-view-grid .textarea {
     white-space: break-spaces; }
+  .location-view-grid .geometry {
+    grid-column: 1 / 3;
+    position: relative;
+    display: flex;
+    align-items: center; }
   .location-view-grid .val {
-    font-weight: 400; }
+    font-weight: 400;
+    grid-column: 1/3; }
+  .location-view-grid .input-checkbox.dataview {
+    text-align: left;
+    grid-column: 1 / 3; }
   .location-view-grid .val.inline {
     text-align: right;
     grid-column: 2; }

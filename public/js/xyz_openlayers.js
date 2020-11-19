@@ -516,20 +516,18 @@
           class="${"drawer group panel expandable "+(a.class||"")}">
           <div
             class="header primary-colour"
-            style="text-align: left; grid-column: 1 / 3;"
             onclick=${t=>{e.utils.toggleExpanderParent(t.target)}}>
             <span>${a.group}</span>
             <span class="xyz-icon btn-header icon-expander primary-colour-filter">`,a.listview.appendChild(r[a.group])),a.expanded&&r[a.group].classList.add("expanded"),a.listview=r[a.group]),a.plugin)e.locations.plugins[a.plugin]&&e.locations.plugins[a.plugin](a);else{if(a.title&&!a.query){if(!a.edit&&!a.value&&"title"!==a.type)continue;if(a.listview.appendChild(e.utils.html.node`
         <div
           class="${"label "+a.class}"
-          style="${`grid-column: ${a.inline?"1":"1/3"}; ${a.css_title||""}`}"
+          style="${""+(a.css_title||"")}"
           title="${a.tooltip||null}">${a.title}`),"title"===a.type)continue}if("dataview"!==a.type)"key"!==a.type?e.locations.view[a.type]?e.locations.view[a.type](a):(a.query||a.edit||a.value)&&(a.val=a.listview.appendChild(e.utils.html.node`
       <div
         class="${`val ${a.type} ${a.class}`}"
-        style="${`\n          grid-column: ${a.inline?"2":"1/3"}\n          ${a.css_val||""}`}">`),a.query?(a.layer=a.location.layer,e.query(a).then((e=>{a.val.textContent=Object.values(e)[0]}))):!a.edit||a.fieldfx?"html"!==a.type?a.val.textContent=a.displayValue:a.val.innerHTML=a.value:e.locations.view.edit.input(a)):a.listview.appendChild(e.utils.html.node`
+        style="${""+(a.css_val||"")}">`),a.query?(a.layer=a.location.layer,e.query(a).then((e=>{a.val.textContent=Object.values(e)[0]}))):!a.edit||a.fieldfx?"html"!==a.type?a.val.textContent=a.displayValue:a.val.innerHTML=a.value:e.locations.view.edit.input(a)):a.listview.appendChild(e.utils.html.node`
       <div
-        class="${`label ${a.type} ${a.class}`}"
-        style="grid-column: 2;">
+        class="${`${a.type} ${a.class}`}">
         <span
           title=${e.language.location_source_layer}
           style="${"background-color: "+e.utils.Chroma(t.style.strokeColor||"#090").alpha(.3)}"
@@ -602,8 +600,7 @@
               </button>`}
               <a href=${a} target="_blank">${i}`)},l.send()},a.send(r.target.result)},a.readAsDataURL(i),r.target.value=""}}>`)},cn=e=>t=>{if(!t.report.template)return;const n=`${e.host}/view?${e.utils.paramString(Object.assign(t.report,{locale:e.locale.key,layer:t.location.layer.key,table:t.location.table,id:t.location.id,host:e.host}))}`;t.listview.appendChild(e.utils.html.node`
     <div
-      class="${"label "+(t.class||"")}"
-      style="grid-column: 1 / 3;">
+      class="${"label "+(t.class||"")}">
       <a
         class="primary-colour"
         target="_blank"
@@ -846,13 +843,7 @@
             <ul>
                 ${t.options.map((n=>e.utils.html.node`
                 <li onclick=${e=>{const r=e.target.closest(".btn-drop");r.classList.toggle("active"),r.querySelector(":first-child").textContent=Object.keys(n)[0],t.callback&&t.callback(e)}}>${Object.keys(n)[0]}`))}`}})(e);return o=>{if(o.query&&o.display)return e.query(Object.assign({layer:o.location.layer,id:o.location.id},o)).then((e=>{o.value=e[o.field],o.value&&(l(),s())}));function l(){o.style=Object.assign({},o.location.style,o.style),o.container=o.listview.appendChild(e.utils.html.node`
-        <div 
-          class="${o.class}"
-          style="
-            grid-column: 1 / 3;
-            position: relative;
-            display: flex;
-            align-items: center;">`),o.container.appendChild(e.utils.html.node`
+        <div class="${`${o.type} ${o.class}`}">`),o.container.appendChild(e.utils.html.node`
         <label class="input-checkbox">
           <input type="checkbox"
             .checked=${o.edit&&o.value||!!o.display}
@@ -882,21 +873,21 @@
       <div class="icon"></div>
       </div>
       <ul>
-      ${t.edit.options.map((n=>{let r=n,a=n;return"object"==typeof n&&(r=Object.keys(n)[0],a=Object.values(n)[0]),e.utils.html.node`<li onclick=${e=>{const n=e.target.closest(".btn-drop");n.classList.toggle("active"),n.querySelector(":first-child").textContent=r,n.querySelector(":first-child").value=a,t.location.view.dispatchEvent(new CustomEvent("valChange",{detail:{input:n.querySelector(":first-child"),entry:t}}))}}>${r}`}))}`)},fn=e=>t=>{const n=e.utils.html.node`<input type="text" placeholder=${e.language.layer_filter_pick} style="text-align: end;">${"datetime"===t.type&&e.utils.formatDateTime(t.value)||e.utils.formatDate(t.value)||""}`.childNodes[0];n.value="datetime"===t.type&&e.utils.formatDateTime(t.value)||e.utils.formatDate(t.value)||"",t.val.appendChild(n),e.utils.flatpickr({value:t.value?new Date(1e3*t.value).toISOString():"",element:n,enableTime:"datetime"===t.type,callback:r=>{n.value=r;const a=e.utils.meltDateStr(r);t.location.view.dispatchEvent(new CustomEvent("valChange",{detail:{input:n,entry:t,newValue:a}}))}})},gn=e=>t=>{let n=e.utils.html.node`
-  <textarea
-    style="auto; min-height: 50px;"
-	  onfocus=${e=>{e.target.style.height=e.target.scrollHeight+"px"}}
-	  onfocusout=${e=>{e.target.style.height="auto"}}
-	  onkeyup=${e=>{t.location.view.dispatchEvent(new CustomEvent("valChange",{detail:{input:e.target,entry:t}}))}}
-	  onkeydown=${e=>setTimeout((()=>{e.target.style.height="auto",e.target.style.height=e.target.scrollHeight+"px"}),100)}>${t.value||""}`;return t.val.style.gridColumn="1 / 3",t.val.appendChild(n),n},mn=e=>{const t={input:function(n){if(n.edit)return"date"===n.type||"datetime"===n.type?t.date(n):n.edit.range?t.range(n):n.edit.options?t.options(n):"textarea"===n.type||"html"===n.type?t.textarea(n):void n.val.appendChild(e.utils.html.node`
+      ${t.edit.options.map((n=>{let r=n,a=n;return"object"==typeof n&&(r=Object.keys(n)[0],a=Object.values(n)[0]),e.utils.html.node`<li onclick=${e=>{const n=e.target.closest(".btn-drop");n.classList.toggle("active"),n.querySelector(":first-child").textContent=r,n.querySelector(":first-child").value=a,t.location.view.dispatchEvent(new CustomEvent("valChange",{detail:{input:n.querySelector(":first-child"),entry:t}}))}}>${r}`}))}`)},fn=e=>t=>{const n=e.utils.html.node`<input type="text" placeholder=${e.language.layer_filter_pick} style="text-align: end;">${"datetime"===t.type&&e.utils.formatDateTime(t.value)||e.utils.formatDate(t.value)||""}`.childNodes[0];n.value="datetime"===t.type&&e.utils.formatDateTime(t.value)||e.utils.formatDate(t.value)||"",t.val.appendChild(n),e.utils.flatpickr({value:t.value?new Date(1e3*t.value).toISOString():"",element:n,enableTime:"datetime"===t.type,callback:r=>{n.value=r;const a=e.utils.meltDateStr(r);t.location.view.dispatchEvent(new CustomEvent("valChange",{detail:{input:n,entry:t,newValue:a}}))}})},gn=e=>t=>t.val.appendChild(e.utils.html.node`
+    <textarea
+      style="auto; min-height: 50px;"
+      onfocus=${e=>{e.target.style.height=e.target.scrollHeight+"px"}}
+      onfocusout=${e=>{e.target.style.height="auto"}}
+      onkeyup=${e=>{t.location.view.dispatchEvent(new CustomEvent("valChange",{detail:{input:e.target,entry:t}}))}}
+      onkeydown=${e=>setTimeout((()=>{e.target.style.height="auto",e.target.style.height=e.target.scrollHeight+"px"}),100)}>
+      ${t.value||""}`),mn=e=>{const t={input:function(n){if(n.edit)return"date"===n.type||"datetime"===n.type?t.date(n):n.edit.range?t.range(n):n.edit.options?t.options(n):"textarea"===n.type||"html"===n.type?t.textarea(n):void n.val.appendChild(e.utils.html.node`
     <input type="${"numeric"===n.type||"integer"===n.type?"number":"text"}" value="${n.value||n.displayValue||""}"
       onkeyup=${e=>{n.location.view.dispatchEvent(new CustomEvent("valChange",{detail:{input:e.target,entry:n}}))}}>`)},range:pn(e),date:fn(e),options:hn(e),textarea:gn(e)};return t},yn=e=>t=>(t.dependents&&t.dependents.some((e=>t.location.infoj.some((t=>!t.value&&t.field===e))))&&delete t.display,t.layer="object"==typeof t.layer&&t.layer||"string"==typeof t.layer&&e.layers.list[t.layer]||t.location.layer,"location"===t.target||t.dataview&&t.dataview.classList.contains("location")?t.dataview?(t.update(),t.dataview):(t.target=e.utils.html.node`
       <div
         class="${"location "+(t.class||"")}"
         style="${"grid-column: 1 / 3; "+(t.style||"")}">`,e.dataviews.create(t),t.dataview):"string"==typeof t.target&&document.getElementById(t.target)?(t.target=document.getElementById(t.target),void e.dataviews.create(t)):e.tabview.node?(t.tab_style="border-bottom: 2px solid "+t.location.style.strokeColor,e.tabview.add(t),e.dataviews.create(t),t.display&&t.show(),e.utils.html.node`
       <label
-        class="${"input-checkbox mobile-disabled "+(t.class||"")}"
-        style="grid-column: 1 / 3">
+        class="${`input-checkbox mobile-disabled ${t.type} ${t.class}`}">
         <input
           type="checkbox"
           .checked=${!!t.display}
