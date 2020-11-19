@@ -144,6 +144,8 @@
     >.header {
       font-weight: 600;
       padding: 5px 0;
+      text-align: left;
+      grid-column: 1 / 3;
 
       .icon-expander {
         background-position: right;
@@ -169,10 +171,15 @@
   }
 
   .key {
-    float: right;
-    padding: 3px;
-    cursor: help;
-    border-radius: 2px; 
+    grid-column: 2;
+
+    >span {
+      float: right;
+      padding: 3px;
+      cursor: help;
+      border-radius: 2px;
+      font-weight: bold;
+    }
   }
 
   img {
@@ -183,8 +190,21 @@
     white-space: break-spaces;
   }
 
+  .geometry {
+    grid-column: 1 / 3;
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
   .val {
     font-weight: 400;
+    grid-column: 1/3;
+  }
+
+  .input-checkbox.dataview {
+    text-align: left;
+    grid-column: 1 / 3;
   }
 
   .val.inline {
