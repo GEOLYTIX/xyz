@@ -910,10 +910,10 @@
 	  onkeyup=${e=>{t.location.view.dispatchEvent(new CustomEvent("valChange",{detail:{input:e.target,entry:t}}))}}
 	  onkeydown=${e=>setTimeout((()=>{e.target.style.height="auto",e.target.style.height=e.target.scrollHeight+"px"}),100)}>${t.value||""}`;return t.val.style.gridColumn="1 / 3",t.val.appendChild(n),n},mn=e=>{const t={input:function(n){if(n.edit)return"date"===n.type||"datetime"===n.type?t.date(n):n.edit.range?t.range(n):n.edit.options?t.options(n):"textarea"===n.type||"html"===n.type?t.textarea(n):void n.val.appendChild(e.utils.html.node`
     <input type="${"numeric"===n.type||"integer"===n.type?"number":"text"}" value="${n.value||n.displayValue||""}"
-      onkeyup=${e=>{n.location.view.dispatchEvent(new CustomEvent("valChange",{detail:{input:e.target,entry:n}}))}}>`)},range:pn(e),date:fn(e),options:hn(e),textarea:gn(e)};return t},yn=e=>t=>(t.dependents&&t.dependents.some((e=>t.location.infoj.some((t=>!t.value&&t.field===e))))&&delete t.display,t.layer="object"==typeof t.layer&&t.layer||"string"==typeof t.layer&&e.layers.list[t.layer]||t.location.layer,"location"===t.target?(t.target=e.utils.html.node`
+      onkeyup=${e=>{n.location.view.dispatchEvent(new CustomEvent("valChange",{detail:{input:e.target,entry:n}}))}}>`)},range:pn(e),date:fn(e),options:hn(e),textarea:gn(e)};return t},yn=e=>t=>(t.dependents&&t.dependents.some((e=>t.location.infoj.some((t=>!t.value&&t.field===e))))&&delete t.display,t.layer="object"==typeof t.layer&&t.layer||"string"==typeof t.layer&&e.layers.list[t.layer]||t.location.layer,"location"===t.target||t.dataview&&t.dataview.classList.contains("location")?t.dataview?(t.update(),t.dataview):(t.target=e.utils.html.node`
       <div
-        class="${t.class}"
-        style="${"grid-column: 1 / 3; "+(t.style||"")}">`,e.dataviews.create(t),t.dataview):document.getElementById(t.target)?(t.target=document.getElementById(t.target),void e.dataviews.create(t)):e.tabview.node?(t.tab_style="border-bottom: 2px solid "+t.location.style.strokeColor,e.tabview.add(t),e.dataviews.create(t),t.display&&t.show(),e.utils.html.node`
+        class="${"location "+(t.class||"")}"
+        style="${"grid-column: 1 / 3; "+(t.style||"")}">`,e.dataviews.create(t),t.dataview):"string"==typeof t.target&&document.getElementById(t.target)?(t.target=document.getElementById(t.target),void e.dataviews.create(t)):e.tabview.node?(t.tab_style="border-bottom: 2px solid "+t.location.style.strokeColor,e.tabview.add(t),e.dataviews.create(t),t.display&&t.show(),e.utils.html.node`
       <label
         class="${"input-checkbox mobile-disabled "+(t.class||"")}"
         style="grid-column: 1 / 3">
