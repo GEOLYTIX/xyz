@@ -174,16 +174,16 @@
     width: 100%;
   }
 
-  .numeric, .integer {
-    text-align: right;
-  }
-
   .textarea {
     white-space: break-spaces;
   }
 
   .val {
     font-weight: 400;
+  }
+
+  .val.inline {
+    text-align: right;
   }
 
   /*.image-modal {

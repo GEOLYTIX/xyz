@@ -2278,12 +2278,12 @@ span.flatpickr-weekday {
     border-radius: 2px; }
   .location-view-grid img {
     width: 100%; }
-  .location-view-grid .numeric, .location-view-grid .integer {
-    text-align: right; }
   .location-view-grid .textarea {
     white-space: break-spaces; }
   .location-view-grid .val {
     font-weight: 400; }
+  .location-view-grid .val.inline {
+    text-align: right; }
 
 *,
 *::after,
