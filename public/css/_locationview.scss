@@ -132,11 +132,18 @@
   }
 
   .group {
-    margin-top: 5px;
+    margin: 5px 0;
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 5px;
 
     >.header {
       font-weight: 600;
+      padding: 5px 0;
     }
+  }
+
+  .group:not(.expanded){
+    box-shadow: 0 3px 5px -3px #ccc;
   }
 
   .lv-0 {

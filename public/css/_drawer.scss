@@ -25,7 +25,7 @@
     }
 
     &.expandable>.header>.icon-expander {
-      background-image: url("../icons/icon-keyboard-arrow-down.svg");
+      background-image: url("../icons/icon-arrow-down.svg");
     }
 
     &.expandable:not(.expanded) > *:not(.header) {
@@ -33,7 +33,7 @@
     }
 
     &.expanded>.header>.icon-expander {
-      background-image: url("../icons/icon-keyboard-arrow-up.svg");
+      background-image: url("../icons/icon-arrow-up.svg");
     }
 
     &.disabled {
