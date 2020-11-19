@@ -2256,6 +2256,11 @@ span.flatpickr-weekday {
     font-weight: bold; }
   .location-view-grid .lv-2 {
     font-size: 90%; }
+  .location-view-grid .key {
+    float: right;
+    padding: 3px;
+    cursor: help;
+    border-radius: 2px; }
   .location-view-grid img {
     width: 100%; }
   .location-view-grid .num {
