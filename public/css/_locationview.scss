@@ -114,6 +114,11 @@
     align-items: center;
     display: flex;
     font-weight: bold;
+    grid-column: 1/3;
+  }
+
+  .label.inline {
+    grid-column: 1
   }
 
   .drawer.group {
@@ -184,6 +189,7 @@
 
   .val.inline {
     text-align: right;
+    grid-column: 2;
   }
 
   /*.image-modal {
