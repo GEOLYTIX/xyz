@@ -54,7 +54,7 @@
         },
         "module population": {
             "type": "module",
-            "src": "http://localhost:3000/dev/views/module_population.js"
+            "src": "http://localhost:3000/dev/js/queries/module_population.js"
         },
         "Nearest competitors Sites": {
             "template": "SELECT (ROUND(((ST_Transform(a.geom_4326, 3857) <#> ST_Transform(b.geom_p_4326, 3857))/1000)::numeric, 2))::text AS dist,(b.fascia)::text AS fascia,(b.postcode)::text AS postcode FROM dev.uk_glx_sites a, geodata.uk_glx_open_retail_points b WHERE a.id = ${id} ORDER BY ST_Transform(a.geom_4326, 3857) <#> ST_Transform(b.geom_p_4326, 3857) NULLS LAST LIMIT 5;"

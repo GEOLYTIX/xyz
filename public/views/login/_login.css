@@ -1,9 +1,16 @@
 body {
   margin: 0 auto !important;
   padding: 50px;
-  min-width: 400px;
   max-width: 600px;
   font: 18px "Open Sans", sans-serif;
+}
+
+@media only screen and (max-width: 700px) {
+
+  body {
+    padding: 20px;
+  }
+
 }
 
 p {
@@ -73,6 +80,7 @@ input:focus~.bar:after {
 }
 
 button {
+  font-size: 100%;
   color: white;
   background-color: #1F964D;
   margin: 10px 0;
