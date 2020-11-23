@@ -14,6 +14,13 @@ xhr.onload = e => {
   const userTable = new Tabulator(
     document.getElementById('userTable'),
     {
+      rowFormatter: row => {
+    
+        const user = row.getData()
+    
+        row.getElement().style.backgroundColor = user.blocked && '#ef9a9a' || '#fff'
+
+      },
       columns: [
         {
           field: 'email',
@@ -128,6 +135,11 @@ function cellToggle(e, cell) {
   xhr.onload = () => {
     if (xhr.status !== 200) return alert(xhr.response.message);
     cell.setValue(!cell.getValue());
+
+    const row = cell.getRow()
+
+    row.reformat()
+
   };
 
   xhr.send();

@@ -37,3 +37,5 @@ Fix for api/user/pgtable query.
 admin_user & admin_workspace are now retired in favour of a simple admin flag.
 
 Filter empty value objects in paramString method.
+
+Format blocked rows in user admin view.
