@@ -190,32 +190,6 @@ window.onload = () => {
       .then(() => mappUI())
       .catch(error => console.error(error))
 
-    // Add gazetteer control.
-    if (xyz.locale.gazetteer) {
-
-      const gazetteer = document.getElementById('gazetteer')
-    
-      const btnGazetteer = btnColumn.appendChild(xyz.utils.html.node`
-        <button onclick=${e => {
-          e.preventDefault()
-          btnGazetteer.classList.toggle('enabled')
-          btnGazetteer.classList.toggle('mobile-hidden')
-          gazetteer.classList.toggle('display-none')
-        }}><div class="xyz-icon icon-search">`)
-    
-      document.getElementById('closeGazetteer').onclick = e => {
-        e.preventDefault()
-        btnGazetteer.classList.toggle('enabled')
-        btnGazetteer.classList.toggle('mobile-hidden')
-        gazetteer.classList.toggle('display-none')
-      }
-      
-      xyz.gazetteer.init({
-        group: gazetteer.querySelector('.input-drop')
-      })
-      
-    }
-
     // Add zoomIn button.
     const btnZoomIn = btnColumn.appendChild(xyz.utils.html.node `
       <button
@@ -318,6 +292,33 @@ window.onload = () => {
 
   // Initialise listview controls.
   function mappUI() {
+
+    // Add gazetteer control.
+    if (xyz.locale.gazetteer) {
+
+      const gazetteer = document.getElementById('gazetteer')
+        
+      const btnGazetteer = btnColumn.insertBefore(xyz.utils.html.node`
+        <button id="btnGazetteer"
+          onclick=${e => {
+            e.preventDefault()
+            btnGazetteer.classList.toggle('enabled')
+            btnGazetteer.classList.toggle('mobile-hidden')
+            gazetteer.classList.toggle('display-none')
+          }}><div class="xyz-icon icon-search">`, btnColumn.firstChild)
+        
+      document.getElementById('closeGazetteer').onclick = e => {
+        e.preventDefault()
+        btnGazetteer.classList.toggle('enabled')
+        btnGazetteer.classList.toggle('mobile-hidden')
+        gazetteer.classList.toggle('display-none')
+      }
+          
+      xyz.gazetteer.init({
+        group: gazetteer.querySelector('.input-drop')
+      })
+          
+    }
 
     xyz.tabview.init({
       node: document.getElementById('tabview')
