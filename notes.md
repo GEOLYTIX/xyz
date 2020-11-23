@@ -8,13 +8,15 @@ Replace default views with a responsive view. [#345](https://github.com/GEOLYTIX
 
 Redesign tabview logic. [#355](https://github.com/GEOLYTIX/xyz/issues/355)
 
-Redesign dataview logic [#356](https://github.com/GEOLYTIX/xyz/issues/356)
+Redesign dataview logic. [#356](https://github.com/GEOLYTIX/xyz/issues/356)
+
+Remove labelfx. [#158](https://github.com/GEOLYTIX/xyz/issues/158)
 
 Script module definitions in the infoj are no longer valid.
 
-Webpack bumped to 5.1 (from 5.beta)
+Webpack bumped to 5.1 (from 5.beta).
 
-Webpack CLI bumped to 4.0
+Webpack CLI bumped to 4.0.
 
 process.env.TITLE default 'GEOLYTIX | XYZ' will now be set in api.js
 

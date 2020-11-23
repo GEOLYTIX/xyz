@@ -9,10 +9,7 @@ module.exports = async (req, res) => {
     .filter(entry => !entry.query)
     .filter(entry => entry.type !== 'key')
     .filter(entry => entry.field)
-    .map(entry => {
-      if (entry.labelfx) return `${entry.labelfx} AS ${entry.field}_label`
-      if (entry.field) return `(${entry.fieldfx || entry.field}) AS ${entry.field}`
-    })
+    .map(entry => `(${entry.fieldfx || entry.field}) AS ${entry.field}`)
 
   !req.params.fields && fields.push(`ST_asGeoJson(${layer.geom}, 4) AS geomj`)
 
