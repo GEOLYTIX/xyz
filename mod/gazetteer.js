@@ -42,9 +42,9 @@ async function gaz_google(term, gazetteer, results) {
   const __results = await provider.google(`maps.googleapis.com/maps/api/place/autocomplete/json?input=${term}`
     + `${gazetteer.country ? '&components=country:' + gazetteer.country : ''}`
     + `${gazetteer.components ? '&components=' + gazetteer.components : ''}`
-    + `${gazetteer.bounds ? '&' + decodeURIComponent(gazetteer.bounds) : ''}`)
+    + `${gazetteer.bounds ? '&' + decodeURIComponent(gazetteer.bounds) + '&strictbounds' : ''}`)
 
-  if (__results._err) return;
+  if (__results.a_err) return;
 
   return __results.predictions.map(f => (results.push({
     label: f.description,
@@ -160,7 +160,7 @@ async function gaz_locale(req, locale, results) {
         });
       });
 
-      results.sort((a, b) => a.label.localeCompare(b.label));
+      results.sort((a, b) => a.label.toString().localeCompare(b.label));
     }
   });
 }

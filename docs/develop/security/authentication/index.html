@@ -5,12 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
+  <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
   <title>Authentication</title>
   <style>
 
     body {
       margin: 0;
       padding: 0;
+    }
+
+    .header-anchor {
+      font-size: 80%;
     }
 
     .grid {
@@ -35,7 +40,7 @@
       padding-inline-start: 0px;
       list-style-type: none;
       padding-right: 20px;
-      margin: 10px 0;
+      margin: 3px 0;
       position: fixed;
     }
 
@@ -51,6 +56,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -184,6 +190,12 @@
       
       
       
+      <li class="__1 ">
+        <a href="/xyz/docs/">XYZ</a>
+      </li>
+      
+      
+      
       
       
       <li class="__1 ">
@@ -194,12 +206,6 @@
       
       <li class="__2 ">
         <a href="/xyz/docs/develop/api/">API</a>
-      </li>
-      
-      
-      
-      <li class="__1 ">
-        <a href="/xyz/docs/">XYZ</a>
       </li>
       
       
@@ -377,14 +383,43 @@
       
       
       
-      
-      
 
     </ul>
 
     <div id="content">
-      <h1>Authentication Strategy</h1>
+      <h1 id="authentication-strategy">Authentication Strategy <a class="header-anchor" href="#authentication-strategy">¶</a></h1>
 <p>All API requests must pass through the user auth module. Requests may be passed on to the API handler if the API is public or if a cookie with a valid signature is set on the request header.</p>
+<h2 id="access-control-lists-(acl)">Access Control Lists (ACL) <a class="header-anchor" href="#access-control-lists-(acl)">¶</a></h2>
+<p>The Access Control List (ACL) is a PostgreSQL table which stores user accounts identified by a valid email address, encrypted passwords, and roles.</p>
+<p>The PostgreSQL user defined in the ACL connection string must have rights to read, update, and create records in the ACL table.</p>
+<p>Given the rights to create tables in the ACL database schema the <code>api/user/pgtable</code> endpoint may be used to create a new ACL table. A table will only be created if none exists yet. The newly created ACL will have one admin user admin@geolytix.xyz with the password 'admin123'. You are advised to register a new account immediately. Assign admin rights to the new account and thereafter delete the admin@geolytix.xyz account.</p>
+<p>Give the necessary roles to the PostgreSQL account defined in the environment settings the backend will generate a new ACL table from this schema.</p>
+<pre class="language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> acl_schema<span class="token punctuation">.</span>acl_table <span class="token punctuation">(</span><br>  <span class="token string">"_id"</span> <span class="token keyword">serial</span> <span class="token operator">not</span> <span class="token boolean">null</span><span class="token punctuation">,</span><br>  email <span class="token keyword">text</span> <span class="token operator">not</span> <span class="token boolean">null</span><span class="token punctuation">,</span><br>  password <span class="token keyword">text</span> <span class="token operator">not</span> <span class="token boolean">null</span><span class="token punctuation">,</span><br>  verified <span class="token keyword">boolean</span> <span class="token keyword">default</span> <span class="token boolean">false</span><span class="token punctuation">,</span><br>  approved <span class="token keyword">boolean</span> <span class="token keyword">default</span> <span class="token boolean">false</span><span class="token punctuation">,</span><br>  verificationtoken <span class="token keyword">text</span><span class="token punctuation">,</span><br>  approvaltoken <span class="token keyword">text</span><span class="token punctuation">,</span><br>  failedattempts <span class="token keyword">integer</span> <span class="token keyword">default</span> <span class="token number">0</span><span class="token punctuation">,</span><br>  password_reset <span class="token keyword">text</span><span class="token punctuation">,</span><br>  api <span class="token keyword">text</span><span class="token punctuation">,</span><br>  approved_by <span class="token keyword">text</span><span class="token punctuation">,</span><br>  access_log <span class="token keyword">text</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token keyword">default</span> <span class="token string">'{}'</span>::<span class="token keyword">text</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span><br>  blocked <span class="token keyword">boolean</span> <span class="token keyword">default</span> <span class="token boolean">false</span><span class="token punctuation">,</span><br>  roles <span class="token keyword">text</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token keyword">default</span> <span class="token string">'{}'</span>::<span class="token keyword">text</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span><br>  admin <span class="token keyword">boolean</span> <span class="token keyword">default</span> <span class="token boolean">false</span><span class="token punctuation">,</span><br>  <span class="token keyword">language</span> <span class="token keyword">text</span> <span class="token keyword">default</span> <span class="token string">'en'</span><br><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h2 id="user-registration">User Registration <a class="header-anchor" href="#user-registration">¶</a></h2>
+<p>The User registration form will submit a post query to the User API in order to register a new User record with an encrypted password.</p>
+<p>The host will send an email with a verification token to the registered account email. The link containing the verification token must be opened in order to <strong>verify ownership of the email account</strong>.</p>
+<p>After the account has been verified by its owner a second email with an approval token will be sent to all registered site administrators. Any one <strong>administrator must follow the link to approve the newly verified account</strong>.</p>
+<p>Emails will be sent to inform whether an account has been deleted or approved by an administrator.</p>
+<h2 id="password-reset">Password reset <a class="header-anchor" href="#password-reset">¶</a></h2>
+<p>The <strong>user registration form</strong> can be used to reset a users password. Registering an existing email account will sent a new verification token to the registered email account. The new password will be live once the email account has been verified by its owner.</p>
+<p>Resetting the password will also reset the number of failed login attempts.</p>
+<h2 id="json-web-token">JSON Web Token <a class="header-anchor" href="#json-web-token">¶</a></h2>
+<p>JWT issued by the XYZ host are signed and valid for 8 hours. The payload of the token carries information about the user account for which the token was generated.</p>
+<pre><code>{
+  &quot;email&quot;: &quot;dennis.bauszus@geolytix.co.uk&quot;,
+  &quot;admin&quot;: true,
+  &quot;key&quot;: null,
+  &quot;roles&quot;: [],
+  &quot;iat&quot;: 1589877546,
+  &quot;exp&quot;: 1589906346
+}
+</code></pre>
+<p>The <strong>/api/user/token</strong> endpoint may be called to return a signed token.</p>
+<p>The token may be provided as an URL parameter or with a named cookie.</p>
+<h2 id="cookies">Cookies <a class="header-anchor" href="#cookies">¶</a></h2>
+<p>Cookies are set in the request header upon successful login. A cookie is named according to the <code>TITLE</code> environment setting for the path defined in the <code>DIR</code> entry. The signed JWT is the content of the cookie. The cookie itself is only valid for 8 hours. The <strong>/api/user/cookie</strong> endpoint may be called to issue or revoke an existting cookie. The logout process will revoke an existing cookie of the same name. This is done by setting a cookie of the same name without content to expire immediately.</p>
+<p><a href="/xyz/docs/develop/security/authentication">Authentication strategy</a></p>
+<p><img src="https://res.cloudinary.com/geolytix-xyz/image/upload/v1589878516/documentation/geolytix-dev-cookie.png" alt=""></p>
 
     </div>
 

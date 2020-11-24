@@ -21,7 +21,7 @@ module.exports = async (req, res, msg) => {
   const template = req.params.language && templates[req.params.language] || templates.en
   
   const params = {
-    dir: process.env.DIR || '',
+    dir: process.env.DIR,
     redirect: req.body && req.body.redirect || req.url && decodeURIComponent(req.url),
     language: req.params.language || 'en',
     msg: msg || ' '
@@ -29,7 +29,7 @@ module.exports = async (req, res, msg) => {
 
   const html = template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
 
-  res.setHeader('Set-Cookie', `XYZ ${process.env.TITLE || 'token'}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
+  res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
 
   res.send(html)
 }

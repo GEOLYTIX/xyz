@@ -5,12 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
+  <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
   <title>Getting started</title>
   <style>
 
     body {
       margin: 0;
       padding: 0;
+    }
+
+    .header-anchor {
+      font-size: 80%;
     }
 
     .grid {
@@ -35,7 +40,7 @@
       padding-inline-start: 0px;
       list-style-type: none;
       padding-right: 20px;
-      margin: 10px 0;
+      margin: 3px 0;
       position: fixed;
     }
 
@@ -51,6 +56,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -184,6 +190,12 @@
       
       
       
+      <li class="__1 ">
+        <a href="/xyz/docs/">XYZ</a>
+      </li>
+      
+      
+      
       <li class="__1 active">
         <a href="/xyz/docs/getting-started/">Getting started</a>
       </li>
@@ -194,9 +206,6 @@
       
       
       
-      <li class="__1 ">
-        <a href="/xyz/docs/">XYZ</a>
-      </li>
       
       
       
@@ -236,15 +245,6 @@
       
       
       
-      
-      
-      
-      
-      
-      
-      <li class="__2 ">
-        <a href="/xyz/docs/getting-started/access/">Access</a>
-      </li>
       
       
       
@@ -311,7 +311,7 @@
     </ul>
 
     <div id="content">
-      <h1>Getting started</h1>
+      <h1 id="getting-started">Getting started <a class="header-anchor" href="#getting-started">¶</a></h1>
 <p>The best way to get started is by running an XYZ instance locally. XYZ being platform independent, you will only need git and node.js installed to do this.</p>
 <p>Start by cloning the XYZ repository from GEOLYTIX' public GitHub repository.</p>
 <pre><code>git clone https://github.com/GEOLYTIX/xyz

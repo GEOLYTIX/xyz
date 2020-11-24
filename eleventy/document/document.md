@@ -2,6 +2,7 @@
 title: Document
 tags: [root]
 layout: root.html
+date: 2020-01-01
 ---
 
 # How to Document
@@ -58,7 +59,7 @@ We use [Github pages](https://pages.github.com/) to serve the documentation dire
 
 In order to deploy the documentation as a static build to Vercel the vercel.json must be configured like so:
 
-```
+``` json
 {
   "regions": [
     "lhr1"
@@ -67,6 +68,17 @@ In order to deploy the documentation as a static build to Vercel the vercel.json
     {
       "src": "/docs/**",
       "use": "@vercel/static"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "Content-Security-Policy",
+          "value": "style-src 'self' https://unpkg.com 'unsafe-inline' cdn.jsdelivr.net"
+        }
+      ]
     }
   ],
   "trailingSlash": false,

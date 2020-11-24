@@ -34,7 +34,7 @@ module.exports = async (req, res) => {
 
   const params = {
     language: req.params.language || 'en',
-    dir: process.env.DIR || ''
+    dir: process.env.DIR
   }
 
   const html = template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
@@ -60,7 +60,7 @@ async function register(req, res) {
 
   const protocol = `${req.headers.host.includes('localhost') && 'http' || 'https'}://`
 
-  const host = `${req.headers.host.includes('localhost') && req.headers.host || process.env.ALIAS || req.headers.host}${process.env.DIR || ''}`
+  const host = `${req.headers.host.includes('localhost') && req.headers.host || process.env.ALIAS || req.headers.host}${process.env.DIR}`
 
   if (user) {
 

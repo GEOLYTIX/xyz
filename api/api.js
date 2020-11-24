@@ -16,6 +16,10 @@ const routes = {
   proxy: proxy,
 }
 
+process.env.TITLE = process.env.TITLE || 'GEOLYTIX | XYZ'
+
+process.env.DIR = process.env.DIR || ''
+
 module.exports = async (req, res) => {
 
   if (IEdetect(req.headers['user-agent'])) return res.send('Uh Oh... It looks like your request comes from an unsupported user agent (e.g. Internet Explorer)')
@@ -56,7 +60,7 @@ const https = require('https')
 
 function proxy(req, res) {
 
-  const url = `${req.query.host || ''}${req.query.uri}&${process.env[`KEY_${req.query.provider.toUpperCase()}`]}`
+  const url = `${req.query.host || ''}${req.query.uri || req.query.url}&${process.env[`KEY_${req.query.provider.toUpperCase()}`]}`
 
   const proxy = https.request(url, _res => {
     res.writeHead(_res.statusCode, _res.headers)

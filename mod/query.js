@@ -80,8 +80,11 @@ module.exports = async (req, res) => {
 
   if (!_dbs) return res.status(500).send(`Cannot connect to ${template.dbs || req.params.dbs || req.params.layer.dbs}`)
 
+  //console.log(JSON.stringify(req.body))
+
   const rows = await _dbs(
     q,
+    //[JSON.stringify(req.body)],
     req.body && req.body.length && [JSON.stringify(req.body)] || req.params.params && req.params.params.split(','),
     req.params.statement_timeout || template.statement_timeout)
 

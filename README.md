@@ -1,4 +1,4 @@
-**v3.4.0**
+**v3.4.1**
 
 # xyz
 
@@ -12,7 +12,9 @@ Spatial data must be stored in a cloud accessible PostGIS database to allow for 
 
 **Application control and presentation layers** are provided as an ES6 javscript library. XYZ' client library utilizes the Openlayers mapping engine among other visualisation libraries such as Tabulator and ChartJS to power engaging application views.
 
-Please visit the [XYZ project page](https://geolytix.github.io/xyz/docs) for in depth articles, code samples, documentation, and developer notes.
+Please visit [geolytix.github.io/xyz/docs](https://geolytix.github.io/xyz/docs) for the release version of the XYZ documentation hosted from the master branch of this repository.
+
+The latest development build of the docs are hosted on [geolytix.dev/xyz/docs](https://geolytix.dev/xyz/docs)
 
 ### JAMstack Application Views
 
@@ -89,8 +91,6 @@ The domain and service layer may secure proxy access for services provided by Go
 [nodemailer](https://github.com/nodemailer/nodemailer) - Send e-mails with Node – easy as cake!
 
 [node-fetch](https://github.com/bitinn/node-fetch) - A light-weight module that brings window.fetch to Node.
-
-[mobile-detect.js](https://github.com/hgoebl/mobile-detect.js) - Node device detection from request header.
 
 
 ## License

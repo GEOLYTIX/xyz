@@ -31,7 +31,7 @@ module.exports = async (req, res) => {
 
   const protocol = `${req.headers.host.includes('localhost') && 'http' || 'https'}://`
 
-  const host = `${req.headers.host.includes('localhost') && req.headers.host || process.env.ALIAS || req.headers.host}${process.env.DIR || ''}`
+  const host = `${req.headers.host.includes('localhost') && req.headers.host || process.env.ALIAS || req.headers.host}${process.env.DIR}`
 
   const approved_account_mail = mail_templates.approved_account[user.language || 'en'] || mail_templates.approved_account.en;
 

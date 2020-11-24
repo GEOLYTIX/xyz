@@ -16,7 +16,7 @@ Plugin script must dispatch a custom event to the document. The event name must 
 
 The event detail can be a function which will receive the XYZ Library object. Additional library methods may be created or existing methods can be re-assigned. The example below re-assigns the xyz.layers.view.create() method. The original method will be called first within the new method. The function will short circuit if a custom property flag `clusterPanel` is not assigned to the layers object which must be passed to xyz.layers.view.create(). Otherwise a panel for the control of cluster layer properies will be added the layer view node. The full script is in [public/js/plugins](https://github.com/GEOLYTIX/xyz/tree/development/public/js/plugins).
 
-```javascript
+``` js
 document.dispatchEvent(new CustomEvent('cluster', {
   detail: _xyz => {
 

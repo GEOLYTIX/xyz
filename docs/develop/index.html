@@ -5,12 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
+  <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
   <title>Develop</title>
   <style>
 
     body {
       margin: 0;
       padding: 0;
+    }
+
+    .header-anchor {
+      font-size: 80%;
     }
 
     .grid {
@@ -35,7 +40,7 @@
       padding-inline-start: 0px;
       list-style-type: none;
       padding-right: 20px;
-      margin: 10px 0;
+      margin: 3px 0;
       position: fixed;
     }
 
@@ -51,6 +56,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -184,6 +190,12 @@
       
       
       
+      <li class="__1 ">
+        <a href="/xyz/docs/">XYZ</a>
+      </li>
+      
+      
+      
       
       
       <li class="__1 active">
@@ -194,12 +206,6 @@
       
       <li class="__2 ">
         <a href="/xyz/docs/develop/api/">API</a>
-      </li>
-      
-      
-      
-      <li class="__1 ">
-        <a href="/xyz/docs/">XYZ</a>
       </li>
       
       
@@ -377,13 +383,11 @@
       
       
       
-      
-      
 
     </ul>
 
     <div id="content">
-      <h1>XYZ development</h1>
+      <h1 id="xyz-development">XYZ development <a class="header-anchor" href="#xyz-development">¶</a></h1>
 <p>The XYZ project consists of two distinct parts.</p>
 <p><strong>XYZ API</strong>; The XYZ host is collection of programming interfaces to pass transactional script from the client library to the data source layer.</p>
 <p>Core development contributes to the XYZ API and library code directly. In order for core developments to be implemented a pull request must be sent to the maintainers of the XYZ repository. Alternatively the XYZ repository may be forked and altered in accordance with the <a href="https://github.com/GEOLYTIX/xyz/blob/master/LICENSE">XYZ licence</a>.</p>

@@ -21,6 +21,8 @@ module.exports = {
   file: async req => await file(req),
 
   cloudfront: async ref => await cloudfront(ref),
+
+  tomtom: async ref => await tomtom(ref)
 }
 
 
@@ -72,7 +74,10 @@ function generateSignedDownloadUrl(ref) {
 async function cloudfront(ref) {
   try {
 
-    const url = ref.params && ref.params.url || ref
+    let url = ref.params && ref.params.url || ref
+
+    url = url.replace(/\{(.*?)\}/g,
+        matched => process.env[`SRC_${matched.replace(/\{|\}/g, '')}`] || matched)
   
     const signedUrl = await generateSignedDownloadUrl(url)
   
@@ -100,7 +105,7 @@ function file(ref) {
       return JSON.parse(file, 'utf8')
     }
 
-    return file
+    return String(file)
 
   } catch (err) {
     console.error(err)
@@ -188,6 +193,20 @@ async function google(req) {
   const response = await fetch(`https://${getURL(req)}&${process.env.KEY_GOOGLE}`)
 
   return await response.json()
+}
+
+async function tomtom(req) {
+
+  let url = `${req.params.url}?`;
+
+  url += Object.entries(JSON.parse(req.params.settings))
+    .map(entry => encodeURI(`${entry[0]}=${entry[1]}`))
+    .join('&');
+
+  const response = await fetch(`https://${url}&key=${process.env.KEY_TOMTOM}`);
+
+  return await response.json()
+
 }
 
 function getURL(req) {

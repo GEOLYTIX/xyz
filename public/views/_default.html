@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head 
+  data-dir="${dir}"
+  data-token=${token}
+  data-login=${login}>
+
+    <title>${title}</title>
+
+    <link rel="icon" type="image/x-icon" href="${dir}/icons/favicon.ico" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <link rel="stylesheet" href="${dir}/css/openlayers.css" />
+    <link rel="stylesheet" href="${dir}/css/control.css" />
+    <link rel="stylesheet" href="${dir}/views/_default.css" />
+
+    <script src="${dir}/js/tabulator.min.js" defer></script>
+
+    <script src="${dir}/js/ol.js" defer></script>
+
+    <script src="${dir}/js/xyz_openlayers.js" defer></script>
+    <script src="${dir}/views/_default.js" defer></script>
+
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js" defer></script>
+
+</head>
+
+<body style="grid-template-rows: auto 0 0;">
+
+    <div id="Map">
+      <div id="OL"></div>
+    </div>
+
+    <div id="Attribution">
+      <div class="attribution">
+        <div id="ol-scale"></div>
+        <a
+          class="logo"
+          target="_blank"
+          href="https://geolytix.co.uk"
+          style="background-image: url('https://geolytix.github.io/public/geolytix.svg');"></a>
+      </div>
+    </div>
+
+    <div id="mapButton" class="btn-column"></div>
+
+    <div id="hozDivider"></div>
+
+    <div id="tabview" class="tabview mobile-display-none desktop-display-none"></div>
+
+    <div id="spacer"></div>
+
+    <div id="ctrls">
+
+      <div>
+
+        <div id="gazetteer" class="display-none">
+          <button id="closeGazetteer">
+            <div class="xyz-icon icon-close"></div>
+          </button>
+          <div class="input-drop">
+            <input type="text" placeholder="e.g. London">
+            <ul></ul>
+          </div>
+        </div>
+
+        <div class="tab active">
+          <div class="xyz-icon icon-layers"></div>
+          <div id="layers_header" class="mobile-display-none listview-title secondary-colour-bg"></div>
+          <div id="layers" class="tab-display listview"></div>
+        </div>
+
+        <div class="tab" style="display: none;">
+          <div class="xyz-icon icon-location"></div>
+          <div id="locations_header" class="mobile-display-none listview-title secondary-colour-bg"></div>
+          <div id="locations" class="tab-display listview"></div>
+        </div>
+
+      </div>
+
+    </div>
+
+</body>
+
+</html>

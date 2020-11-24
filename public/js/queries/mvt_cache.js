@@ -1,5 +1,5 @@
 module.exports = {
-  access: 'admin_workspace',
+  access: 'admin',
   render: _ => `
   
   DROP table if exists ${_.layer.mvt_cache};

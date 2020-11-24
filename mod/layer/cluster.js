@@ -8,7 +8,7 @@ module.exports = async (req, res) => {
 
   let
     geom = layer.geom,
-    style_theme = layer.style.themes && layer.style.themes[req.params.theme],
+    style_theme = layer.style.theme || layer.style.themes && layer.style.themes[req.params.theme],
     cat = style_theme && (style_theme.fieldfx || style_theme.field) || null,
     size = style_theme && style_theme.size || 1,
     theme = style_theme && style_theme.type,
@@ -16,8 +16,9 @@ module.exports = async (req, res) => {
     count = req.params.count,
     pixelRatio = parseFloat(req.params.pixelRatio),
     kmeans = parseInt(1 / req.params.kmeans),
-    dbscan = parseFloat(req.params.dbscan),
-    viewport = req.params.viewport.split(',')
+    dbscan = parseFloat(req.params.dbscan), 
+    viewport = req.params.viewport.split(','),
+    z = parseFloat(req.params.z);
 
   const roles = layer.roles
     && req.params.token
@@ -147,7 +148,7 @@ module.exports = async (req, res) => {
   // Apply grid aggregation if KMeans is not defined.
   } else {
 
-    let r = parseInt(40075016.68 / Math.pow(2, req.params.z) * (layer.cluster_resolution || layer.cluster_hexresolution || 0.1));
+    let r = parseInt(40075016.68 / Math.pow(2, z) * (layer.cluster_resolution || layer.cluster_hexresolution || 0.1));
 
     if (layer.cluster_hexresolution) {
 

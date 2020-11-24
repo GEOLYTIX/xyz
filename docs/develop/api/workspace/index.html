@@ -5,12 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
+  <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
   <title>Workspace</title>
   <style>
 
     body {
       margin: 0;
       padding: 0;
+    }
+
+    .header-anchor {
+      font-size: 80%;
     }
 
     .grid {
@@ -35,7 +40,7 @@
       padding-inline-start: 0px;
       list-style-type: none;
       padding-right: 20px;
-      margin: 10px 0;
+      margin: 3px 0;
       position: fixed;
     }
 
@@ -51,6 +56,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -184,6 +190,12 @@
       
       
       
+      <li class="__1 ">
+        <a href="/xyz/docs/">XYZ</a>
+      </li>
+      
+      
+      
       
       
       <li class="__1 ">
@@ -194,12 +206,6 @@
       
       <li class="__2 ">
         <a href="/xyz/docs/develop/api/">API</a>
-      </li>
-      
-      
-      
-      <li class="__1 ">
-        <a href="/xyz/docs/">XYZ</a>
       </li>
       
       
@@ -377,29 +383,27 @@
       
       
       
-      
-      
 
     </ul>
 
     <div id="content">
-      <h1>Workspace API</h1>
+      <h1 id="workspace-api">Workspace API <a class="header-anchor" href="#workspace-api">¶</a></h1>
 <p>The Workspace API provides methods to retrieve configuration objects and request the chaching of the workspace in other XYZ APIs.</p>
 <p>A method must be provided to the Workspace API.</p>
 <p>Valid methods are <strong>get</strong> and <strong>cache</strong>.</p>
 <p>The Workspace API will redact responses if roles are assigned.</p>
-<h3>/api/workspace/get</h3>
+<h3 id="%2Fapi%2Fworkspace%2Fget">/api/workspace/get <a class="header-anchor" href="#%2Fapi%2Fworkspace%2Fget">¶</a></h3>
 <p>Will return the complete workspace; All templates and locales.</p>
 <pre><code>{
   templates: {...},
   locales: {...}
 }
 </code></pre>
-<h3>/api/workspace/get/locales</h3>
+<h3 id="%2Fapi%2Fworkspace%2Fget%2Flocales">/api/workspace/get/locales <a class="header-anchor" href="#%2Fapi%2Fworkspace%2Fget%2Flocales">¶</a></h3>
 <p>Will return an array of all locale keys.</p>
 <pre><code>[&quot;uk&quot;,...]
 </code></pre>
-<h3>/api/workspace/get/locale?locale=[key]</h3>
+<h3 id="%2Fapi%2Fworkspace%2Fget%2Flocale%3Flocale%3D%5Bkey%5D">/api/workspace/get/locale?locale=[key] <a class="header-anchor" href="#%2Fapi%2Fworkspace%2Fget%2Flocale%3Flocale%3D%5Bkey%5D">¶</a></h3>
 <p>Will return the locale json with layers as an array of layer keys.</p>
 <pre><code>{
   &quot;key&quot;: &quot;uk&quot;,
@@ -418,7 +422,7 @@
   ]
 }
 </code></pre>
-<h3>/api/workspace/get/layer?layer=[key]&amp;locale=[key]</h3>
+<h3 id="%2Fapi%2Fworkspace%2Fget%2Flayer%3Flayer%3D%5Bkey%5D%26locale%3D%5Bkey%5D">/api/workspace/get/layer?layer=[key]&amp;locale=[key] <a class="header-anchor" href="#%2Fapi%2Fworkspace%2Fget%2Flayer%3Flayer%3D%5Bkey%5D%26locale%3D%5Bkey%5D">¶</a></h3>
 <p>Will return the layer configuration from a layer template. If a locale parameter is provided the layer will be returned with the locale layer configuration assigned to the layer template object.</p>
 <pre><code>{
   &quot;display&quot;: true,
@@ -430,11 +434,11 @@
   &quot;key&quot;: &quot;OSM&quot;
 }
 </code></pre>
-<h3>/api/workspace/get/templates</h3>
+<h3 id="%2Fapi%2Fworkspace%2Fget%2Ftemplates">/api/workspace/get/templates <a class="header-anchor" href="#%2Fapi%2Fworkspace%2Fget%2Ftemplates">¶</a></h3>
 <p>Will return a list of html links for the individual templates available in the workspace. Links for templates which failed to load from source will be coloured red.</p>
-<h3>/api/workspace/get/template?template=[key]</h3>
+<h3 id="%2Fapi%2Fworkspace%2Fget%2Ftemplate%3Ftemplate%3D%5Bkey%5D">/api/workspace/get/template?template=[key] <a class="header-anchor" href="#%2Fapi%2Fworkspace%2Fget%2Ftemplate%3Ftemplate%3D%5Bkey%5D">¶</a></h3>
 <p>Will return the template rendered to string or an error message if the Workspace API failed to load from source.</p>
-<h3>/api/workspace/cache</h3>
+<h3 id="%2Fapi%2Fworkspace%2Fcache">/api/workspace/cache <a class="header-anchor" href="#%2Fapi%2Fworkspace%2Fcache">¶</a></h3>
 <p>The cache method requires admin workspace access. If authenticated, requests will send to the View, Query, Gazetteer, Layer, and Location API with the URL parameter cache as true. Upon receiving the cache request each API will cache the workspace from its source. XYZ will cache the workspace upon invocation if the current memorized workspace is null. It is required to call the cache method of the Workspace API should the workspace change at the source.</p>
 
     </div>

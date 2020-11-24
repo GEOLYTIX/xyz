@@ -13,7 +13,6 @@ button {
 }
 
 .btn-column {
-    z-index: 999;
 
     button,
     >a {
@@ -54,7 +53,6 @@ button {
     font-weight: 600;
     box-shadow: 1px 1px 2px #ccc;
     border: 1px solid #eee;
-    // margin: 5px 0;
     width: calc(100% - 1px);
 
     &.disabled {
@@ -83,7 +81,6 @@ button {
     width: 100%;
     background-color: white;
     box-shadow: 1px 1px 3px 0 #ddd;
-    // margin: 5px 0;
     font-family: inherit;
 
     &:disabled {
@@ -107,8 +104,7 @@ button {
         >.icon {
             pointer-events: none;
             margin-left: auto;
-            height: 20px;
-            width: 20px;
+            width: 18px;
             content: url("../icons/icon-drop-down.svg");
         }
     }

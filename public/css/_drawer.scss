@@ -2,6 +2,10 @@
     box-sizing: content-box;
 
     >.header {
+        -webkit-user-select: none;  /* Chrome all / Safari all */
+        -moz-user-select: none;     /* Firefox all */
+        -ms-user-select: none;      /* IE 10+ */
+        user-select: none; 
         display: flex;
         align-items: center;
 
@@ -14,28 +18,22 @@
         >:nth-child(2) {
             margin-left: auto;
         }
-
-        &:hover {
-            cursor: pointer;
-        }
     }
 
-    &.expandable {
-        overflow: hidden;
-        transition: max-height 0.3s ease-out;
-
-        >.header>.icon-expander {
-            background-image: url("../icons/icon-keyboard-arrow-down.svg");
-        }
+    &.expandable>.header:hover {
+      cursor: pointer;
     }
 
-    &.expanded {
-        overflow: visible;
-        max-height: none !important;
+    &.expandable>.header>.icon-expander {
+      background-image: url("../icons/icon-arrow-down.svg");
+    }
 
-        >.header>.icon-expander {
-            background-image: url("../icons/icon-keyboard-arrow-up.svg");
-        }
+    &.expandable:not(.expanded) > *:not(.header) {
+      display: none;
+    }
+
+    &.expanded>.header>.icon-expander {
+      background-image: url("../icons/icon-arrow-up.svg");
     }
 
     &.disabled {
