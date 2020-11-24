@@ -5,12 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
+  <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
   <title>Charts</title>
   <style>
 
     body {
       margin: 0;
       padding: 0;
+    }
+
+    .header-anchor {
+      font-size: 80%;
     }
 
     .grid {
@@ -35,7 +40,7 @@
       padding-inline-start: 0px;
       list-style-type: none;
       padding-right: 20px;
-      margin: 10px 0;
+      margin: 3px 0;
       position: fixed;
     }
 
@@ -51,6 +56,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -184,15 +190,13 @@
       
       
       
-      
-      
-      
-      
-      
-      
       <li class="__1 ">
         <a href="/xyz/docs/">XYZ</a>
       </li>
+      
+      
+      
+      
       
       
       
@@ -340,14 +344,14 @@
       
       
       
-      <li class="__2 ">
-        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
       </li>
       
       
       
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
       </li>
       
       
@@ -379,14 +383,21 @@
     </ul>
 
     <div id="content">
-      <h1>Charts</h1>
+      <h1 id="charts">Charts <a class="header-anchor" href="#charts">¶</a></h1>
 <p>The chart object configures the display of data returned from a query as a chart.</p>
-<p>Data from a query may be returned as an array, an object with key/value pairs, or as an array of objects. An array of objects would be returned from a query which matches several records. Each record being an object in the array and the field names from the query being the keys in each of the record objects.</p>
+<p>Charts require data structure to comply with ChartJS <code>&quot;datasets&quot;</code> object.</p>
 <p>Please refer to the <a href="https://www.chartjs.org/docs/latest/">ChartJS documentation</a> for detailed information in regard to the individual chart types and layout options.</p>
-<p>ChartJS requires the definition of datasets as an array. Each dataset may receive styling parameter such as backgroundColor or borderWidth to define the styling of the dataset elements.</p>
-<p>By defining a field, or an fields array, it is possible to map individual fields in a dataset.</p>
-<p>The options object allows for a global layout confiuration. Element styles defined in the options object are applied accross all datasets in the chart.</p>
+<p>ChartJS support the definition of datasets as an array. Each dataset may receive styling parameter such as backgroundColor or borderWidth to define the styling of the dataset elements. When dataview is constructed each element of <code>&quot;datasets&quot;</code> will be inherited by endpoint response.</p>
+<p>Chart query result <em>must contain</em> <code>&quot;datasets&quot;</code> field which stores data in format required by ChartJS chart object.<br>
+Additionally the query result may contain <code>&quot;labels&quot;</code> list with data labels used in the chart. Alternatively <code>&quot;labels&quot;</code> can be defined inside <code>&quot;chart&quot;</code> object.</p>
+<p>The options object allows for a global layout confiuration. Element styling defined in the options object are applied accross all datasets in the chart.</p>
+<p>Example chart query with labels and some custom styling:</p>
+<pre class="language-sql"><code class="language-sql"><span class="token keyword">SELECT</span><br>    array_agg<span class="token punctuation">(</span>json_build_object<span class="token punctuation">(</span><br>    <span class="token string">'data'</span><span class="token punctuation">,</span> ARRAY<span class="token punctuation">[</span><br>        <span class="token function">ROUND</span><span class="token punctuation">(</span>comp_pct<span class="token punctuation">)</span><span class="token punctuation">,</span><br>        <span class="token function">ROUND</span><span class="token punctuation">(</span>fbl_pct<span class="token punctuation">)</span><span class="token punctuation">,</span><br>        <span class="token function">ROUND</span><span class="token punctuation">(</span>conv_pct<span class="token punctuation">)</span><span class="token punctuation">,</span><br>        <span class="token function">ROUND</span><span class="token punctuation">(</span>serv_pct<span class="token punctuation">)</span><br>        <span class="token punctuation">]</span><span class="token punctuation">,</span><br>    <span class="token string">'backgroundColor'</span><span class="token punctuation">,</span> ARRAY<span class="token punctuation">[</span><br>        <span class="token string">'#ffb300'</span><span class="token punctuation">,</span><br>        <span class="token string">'#d81b60'</span><span class="token punctuation">,</span><br>        <span class="token string">'#8e24aa'</span><span class="token punctuation">,</span><br>        <span class="token string">'#5e35b1'</span><br>        <span class="token punctuation">]</span><span class="token punctuation">,</span><br>     <span class="token string">'borderColor'</span><span class="token punctuation">,</span> ARRAY <span class="token punctuation">[</span><br>         <span class="token string">'#ffb300'</span><span class="token punctuation">,</span><br>         <span class="token string">'#d81b60'</span><span class="token punctuation">,</span><br>         <span class="token string">'#8e24aa'</span><span class="token punctuation">,</span><br>         <span class="token string">'#5e35b1'</span><span class="token punctuation">]</span><br>        <span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token keyword">AS</span> datasets<span class="token punctuation">,</span><br>       ARRAY<span class="token punctuation">[</span><span class="token string">'Comparison'</span><span class="token punctuation">,</span> <span class="token string">'F/B/L'</span><span class="token punctuation">,</span> <span class="token string">'Convenience'</span><span class="token punctuation">,</span> <span class="token string">'Services'</span><span class="token punctuation">]</span> <span class="token keyword">AS</span> labels<br><br><span class="token keyword">FROM</span> retail<br><span class="token keyword">WHERE</span> id <span class="token operator">=</span> ${id}<span class="token punctuation">;</span></code></pre>
+<ul>
+<li>Read more on ChartJS <code>&quot;datasets&quot;</code> <a href="https://www.chartjs.org/docs/latest/">here</a>.</li>
+</ul>
 <p>The legend is set to be hidden in the default options configuration.</p>
+<p>The chart uses <a href="https://chartjs-plugin-datalabels.netlify.app/"><em>Datalabels</em></a> and <a href="https://github.com/chartjs/chartjs-plugin-annotation"><em>Annotation</em></a> plugins. Their configurations should be included within <code>&quot;options.plugins&quot;</code> level.</p>
 <p>Below is an example for a single dataset pie chart with legend display and position, as well as layout padding defined in the chart options.</p>
 <pre><code>&quot;chart&quot;: {
   &quot;options&quot;: {
@@ -408,7 +419,6 @@
   &quot;datasets&quot;: [
     {
       &quot;borderWidth&quot;: 0,
-      &quot;fields&quot;: [&quot;ab&quot;, &quot;c1&quot;, &quot;c2&quot;, &quot;de&quot;],
       &quot;backgroundColor&quot;: [&quot;#cddc39&quot;,&quot;#00bcd4&quot;,&quot;#ffc107&quot;,&quot;#33691e&quot;]
     }
   ]

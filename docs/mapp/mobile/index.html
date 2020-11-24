@@ -5,12 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
+  <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
   <title>Mobile</title>
   <style>
 
     body {
       margin: 0;
       padding: 0;
+    }
+
+    .header-anchor {
+      font-size: 80%;
     }
 
     .grid {
@@ -35,7 +40,7 @@
       padding-inline-start: 0px;
       list-style-type: none;
       padding-right: 20px;
-      margin: 10px 0;
+      margin: 3px 0;
       position: fixed;
     }
 
@@ -51,6 +56,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -184,15 +190,13 @@
       
       
       
-      
-      
-      
-      
-      
-      
       <li class="__1 ">
         <a href="/xyz/docs/">XYZ</a>
       </li>
+      
+      
+      
+      
       
       
       
@@ -307,7 +311,7 @@
     </ul>
 
     <div id="content">
-      <h1>MAPP Mobile</h1>
+      <h1 id="mapp-mobile">MAPP Mobile <a class="header-anchor" href="#mapp-mobile">¶</a></h1>
 <p>The default mobile interface. Layer control and location info are displayed in a scrollable tabs at the bottom of the view. The control panel maybe moved up and over the map view by holding and moving the panel header.</p>
 <p><img src="https://res.cloudinary.com/geolytix-xyz/image/upload/v1591181636/documentation/mapp_mobile.png" alt=""></p>
 

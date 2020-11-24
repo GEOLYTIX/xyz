@@ -14,6 +14,13 @@ xhr.onload = e => {
   const userTable = new Tabulator(
     document.getElementById('userTable'),
     {
+      rowFormatter: row => {
+    
+        const user = row.getData()
+    
+        row.getElement().style.backgroundColor = user.blocked && '#ef9a9a' || '#fff'
+
+      },
       columns: [
         {
           field: 'email',
@@ -37,18 +44,10 @@ xhr.onload = e => {
           cellClick: cellToggle,
         },
         {
-          field: 'admin_user',
+          field: 'admin',
           align: 'center',
           headerTooltip: 'The account is an admin account which can access this page and change other account credentials.',
           titleFormatter: ()=> '<div class="xyz-icon icon-supervisor-account"></div>',
-          formatter: 'tickCross',
-          cellClick: cellToggle,
-        },
-        {
-          field: 'admin_workspace',
-          align: 'center',
-          headerTooltip: 'The account has priviliges to modify the workspace.',
-          titleFormatter: ()=> '<div class="xyz-icon icon-settings"></div>',
           formatter: 'tickCross',
           cellClick: cellToggle,
         },
@@ -111,7 +110,7 @@ xhr.onload = e => {
       layout: 'fitDataFill',
     });
 
-  userTable.setData(e.target.response);
+  userTable.setData(e.target.response.length && e.target.response || [e.target.response]);
 
   userTable.redraw(true);
 
@@ -136,6 +135,11 @@ function cellToggle(e, cell) {
   xhr.onload = () => {
     if (xhr.status !== 200) return alert(xhr.response.message);
     cell.setValue(!cell.getValue());
+
+    const row = cell.getRow()
+
+    row.reformat()
+
   };
 
   xhr.send();

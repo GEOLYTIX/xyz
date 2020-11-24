@@ -5,12 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
+  <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
   <title>Layer editing</title>
   <style>
 
     body {
       margin: 0;
       padding: 0;
+    }
+
+    .header-anchor {
+      font-size: 80%;
     }
 
     .grid {
@@ -35,7 +40,7 @@
       padding-inline-start: 0px;
       list-style-type: none;
       padding-right: 20px;
-      margin: 10px 0;
+      margin: 3px 0;
       position: fixed;
     }
 
@@ -51,6 +56,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -184,15 +190,13 @@
       
       
       
-      
-      
-      
-      
-      
-      
       <li class="__1 ">
         <a href="/xyz/docs/">XYZ</a>
       </li>
+      
+      
+      
+      
       
       
       
@@ -340,14 +344,14 @@
       
       
       
-      <li class="__2 ">
-        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
       </li>
       
       
       
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
       </li>
       
       
@@ -381,43 +385,15 @@
     <div id="content">
       <p>Layers support edit and draw interactions.<br>
 In order to enable function of adding new features to the layer add the following:</p>
-<pre><code class="language-json">&quot;edit&quot;: {}
-</code></pre>
+<pre class="language-json"><code class="language-json"><span class="token property">"edit"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span></code></pre>
 <p><code>&quot;layer.edit&quot;</code> holds parameters which determine drawing and editing interactions.<br>
 The following geometries are currently supported:</p>
-<pre><code class="language-json">&quot;edit&quot;: {
-	&quot;point&quot;: true,
-	&quot;polygon&quot;: true,
-    &quot;freehand&quot;: true,
-    &quot;circle&quot;: true,
-    &quot;rectangle&quot;: true,
-    &quot;line&quot;: true,
-    &quot;point&quot;: true,
-    &quot;isoline_mapbox&quot;: true,
-    &quot;isoline_here&quot;: true                
-}
-</code></pre>
+<pre class="language-json"><code class="language-json"><span class="token property">"edit"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>	<span class="token property">"point"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span><br>	<span class="token property">"polygon"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span><br>    <span class="token property">"freehand"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span><br>    <span class="token property">"circle"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span><br>    <span class="token property">"rectangle"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span><br>    <span class="token property">"line"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span><br>    <span class="token property">"point"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span><br>    <span class="token property">"isoline_mapbox"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span><br>    <span class="token property">"isoline_here"</span><span class="token operator">:</span> <span class="token boolean">true</span>                <br><span class="token punctuation">}</span></code></pre>
 <p>Isolines along with their custom parameters are provided by HERE API and/or Mapbox API.</p>
 <p>In order to enable deleting features or editing their geometries add the following:</p>
-<pre><code class="language-json">&quot;edit&quot;: {
-    &quot;delete&quot;: true,
-    &quot;geometry&quot;: true                 
-}
-</code></pre>
+<pre class="language-json"><code class="language-json"><span class="token property">"edit"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>    <span class="token property">"delete"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span><br>    <span class="token property">"geometry"</span><span class="token operator">:</span> <span class="token boolean">true</span>                 <br><span class="token punctuation">}</span></code></pre>
 <p>Drawing interaction supports labels on interaction parameters. To display labels use parameters from the example below:</p>
-<pre><code class="language-json">&quot;polygon&quot;: {
-	&quot;tooltip&quot;: &quot;length&quot;
-},
-&quot;circle&quot;: {
-	&quot;tooltip&quot;: &quot;distance&quot;
-},
-&quot;rectangle&quot;: {
-    &quot;tooltip&quot;: &quot;area&quot;
-},
-&quot;line&quot;: {
-	&quot;tooltip&quot;: &quot;length&quot;
-}
-</code></pre>
+<pre class="language-json"><code class="language-json"><span class="token property">"polygon"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>	<span class="token property">"tooltip"</span><span class="token operator">:</span> <span class="token string">"length"</span><br><span class="token punctuation">}</span><span class="token punctuation">,</span><br><span class="token property">"circle"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>	<span class="token property">"tooltip"</span><span class="token operator">:</span> <span class="token string">"distance"</span><br><span class="token punctuation">}</span><span class="token punctuation">,</span><br><span class="token property">"rectangle"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>    <span class="token property">"tooltip"</span><span class="token operator">:</span> <span class="token string">"area"</span><br><span class="token punctuation">}</span><span class="token punctuation">,</span><br><span class="token property">"line"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>	<span class="token property">"tooltip"</span><span class="token operator">:</span> <span class="token string">"length"</span><br><span class="token punctuation">}</span></code></pre>
 <p>This metrics are calculated with <a href="https://openlayers.org/en/latest/apidoc/module-ol_sphere.html">openlayers sphere methods</a>.</p>
 <p>The distance is calculated from the interiorPoint of the geometry to the mapview.position (cursor).</p>
 <p>Length is measured along the geometry. For polygons, circles, and rectangles the length is the circumference.</p>

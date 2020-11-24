@@ -32,7 +32,7 @@ module.exports = async (req) => {
 
   const protocol = `${req.headers.host.includes('localhost') && 'http' || 'https'}://`
 
-  const host = `${req.headers.host.includes('localhost') && req.headers.host || process.env.ALIAS || req.headers.host}${process.env.DIR || ''}`
+  const host = `${req.headers.host.includes('localhost') && req.headers.host || process.env.ALIAS || req.headers.host}${process.env.DIR}`
 
   var rows = await acl(`
     UPDATE acl_schema.acl_table
@@ -65,7 +65,7 @@ module.exports = async (req) => {
   if (process.env.APPROVAL_EXPIRY && approvalDate && approvalDate.setDate(approvalDate.getDate() + parseInt(process.env.APPROVAL_EXPIRY || 0)) < date) {
 
     // Account approval date + APPROVAL_EXPIRY exceeds current date.
-    if (!user.admin_user) {
+    if (!user.admin) {
 
       // Non user admin user will loose approval
       if (user.approved) {
@@ -124,8 +124,7 @@ module.exports = async (req) => {
     // Create token with 8 hour expiry.
     const token = {
       email: user.email,
-      admin_user: user.admin_user,
-      admin_workspace: user.admin_workspace,
+      admin: user.admin,
       language: req.body.language || user.language,
       key: user.api,
       roles: user.roles

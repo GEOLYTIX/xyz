@@ -7,7 +7,10 @@ module.exports = async (req, res) => {
   const fields = Object.entries(req.body)
     .map(entry => {
       if (entry[1] === null) return ` ${entry[0]} = null`
-      if (typeof entry[1] === 'string') return ` ${entry[0]} = '${entry[1]}'`
+      if (typeof entry[1] === 'string') {
+
+        return ` ${entry[0]} = '${entry[1].replace(/\'/gi, `''`)}'`
+      }
       if (entry[1].coordinates) return ` ${entry[0]} = ST_SetSRID(ST_GeomFromGeoJSON('${JSON.stringify(entry[1])}'),${layer.srid})`
       if (typeof entry[1] === 'object') return ` ${entry[0]} = '${JSON.stringify(entry[1])}'`
       if (typeof entry[1] === 'boolean' || typeof entry[1] === 'number') return ` ${entry[0]} = ${entry[1]}`

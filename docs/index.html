@@ -5,12 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
+  <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
   <title>XYZ</title>
   <style>
 
     body {
       margin: 0;
       padding: 0;
+    }
+
+    .header-anchor {
+      font-size: 80%;
     }
 
     .grid {
@@ -35,7 +40,7 @@
       padding-inline-start: 0px;
       list-style-type: none;
       padding-right: 20px;
-      margin: 10px 0;
+      margin: 3px 0;
       position: fixed;
     }
 
@@ -51,6 +56,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -184,6 +190,12 @@
       
       
       
+      <li class="__1 active">
+        <a href="/xyz/docs/">XYZ</a>
+      </li>
+      
+      
+      
       <li class="__1 ">
         <a href="/xyz/docs/getting-started/">Getting started</a>
       </li>
@@ -195,12 +207,6 @@
       </li>
       
       
-      
-      
-      
-      <li class="__1 active">
-        <a href="/xyz/docs/">XYZ</a>
-      </li>
       
       
       
@@ -247,8 +253,6 @@
       <li class="__2 ">
         <a href="/xyz/docs/document/">Document</a>
       </li>
-      
-      
       
       
       
@@ -315,17 +319,17 @@
     </ul>
 
     <div id="content">
-      <h2>Open source API and Library for spatial data and application interfaces.</h2>
+      <h2 id="open-source-api-and-library-for-spatial-data-and-application-interfaces.">Open source API and Library for spatial data and application interfaces. <a class="header-anchor" href="#open-source-api-and-library-for-spatial-data-and-application-interfaces.">¶</a></h2>
 <p>XYZ is a combination of node.js APIs and a client library that power web applications for the analysis and presentation of spatial data.</p>
-<h3>Getting started</h3>
+<h3 id="getting-started">Getting started <a class="header-anchor" href="#getting-started">¶</a></h3>
 <p>This section explains how to run the XYZ host locally, configuring a process environment and deploying the XYZ API as serverless functions via Vercel.</p>
-<h3>Workspaces</h3>
+<h3 id="workspaces">Workspaces <a class="header-anchor" href="#workspaces">¶</a></h3>
 <p>Workspaces are used to configure locales, layers and locations in connected data sources. The workspace configuration defines how spatial data is presented in maps, tables, or charts created through the XYZ library.</p>
-<h3>Develop</h3>
+<h3 id="develop">Develop <a class="header-anchor" href="#develop">¶</a></h3>
 <p>User will primarily interact with spatial data interfaces through views which facilitate the XYZ library to communicate with the API. This section gives an overview of library methods and API endpoints.</p>
-<h3>Mapp</h3>
+<h3 id="mapp">Mapp <a class="header-anchor" href="#mapp">¶</a></h3>
 <p>Mapp is default application interface for desktop and mobile. This section provides a user guide to the functionality provided by the Mapp interface.</p>
-<h3>Document</h3>
+<h3 id="document">Document <a class="header-anchor" href="#document">¶</a></h3>
 <p>Made possible with eleventy. This page explains how to document the XYZ project.</p>
 
     </div>

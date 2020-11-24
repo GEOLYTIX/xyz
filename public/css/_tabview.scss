@@ -1,62 +1,75 @@
 #tabview {
   overflow: hidden;
-  bottom: 0;
-  position: absolute;
+  position: relative;
   width: 100%;
-  z-index: 1000;
   background-color: white;
-  min-height: 65px;
   height: 100%;
 
-  .tab-bar {
-    height: 55px;
+  .tabs {
+    height: 50px;
     width: 100%;
+    overflow-x: auto;
+    display: flex;
     background-color: #f0f0f0;
-    overflow-x: auto;
-    transform: rotateX(180deg);
 
-    >div {
+    .tab > .header {
       height: 100%;
-      transform: rotateX(180deg);
-      list-style-type: none;
-      white-space: nowrap;
       display: flex;
-
-      >div{
-        display: flex;
-        align-items: center;
-        padding: 0 20px;
-        border-right: 1px solid #ccc;
-      }
-
-      >div:hover {
-        cursor: pointer;
-      }
-
-      >div.active {
-        background-color: #fff;
-        font-weight: bold;
-      }
+      align-items: center;
+      white-space: nowrap;
+      border-right: 1px solid #bbb;
+      padding: 10px;
+      -webkit-user-select: none;
+      -moz-user-select: none;
+      -ms-user-select: none;
+      user-select: none;
     }
 
-  }
-
-  .tab-panel {
-    /*height: 100%;*/
-    height: calc(100% - 40px);
-    overflow-x: auto;
-
-    div.active {
-      height: inherit;
-      grid-template-rows: min-content;
+    .tab.active > .header {
+      background-color: white;
+      font-weight: bold;
     }
-  }
+    
+    .tab:not(.active) > .header:hover {
+      cursor: pointer;
+    }
 
-  .toolbar {
+    .tab > .panel {
+      display: none;
+      position: absolute;
+      top: 50px;
+      left: 0;
+      height: calc(100% - 50px);
+      width: 100%;
+      border-top: 1px solid #777;
+      overflow-y: auto;
+    }
 
-    button {
-      margin: 10px;
+    .tab.active > .panel {
+      display: grid;
     }
   }
 
+}
+
+.tabview .target {
+  position: absolute;
+}
+
+.dataview-container {
+  display: grid;
+}
+
+.dataview-container > .dataview {
+  position: relative;
+}
+
+.dataview .toolbar>* {
+  height: 25px;
+  padding-left: 10px;
+}
+
+.dataview .target {
+  width: 100%;
+  height: 100%;
 }

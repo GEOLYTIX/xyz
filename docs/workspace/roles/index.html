@@ -5,12 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
+  <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
   <title>Roles</title>
   <style>
 
     body {
       margin: 0;
       padding: 0;
+    }
+
+    .header-anchor {
+      font-size: 80%;
     }
 
     .grid {
@@ -35,7 +40,7 @@
       padding-inline-start: 0px;
       list-style-type: none;
       padding-right: 20px;
-      margin: 10px 0;
+      margin: 3px 0;
       position: fixed;
     }
 
@@ -51,6 +56,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -184,15 +190,13 @@
       
       
       
-      
-      
-      
-      
-      
-      
       <li class="__1 ">
         <a href="/xyz/docs/">XYZ</a>
       </li>
+      
+      
+      
+      
       
       
       
@@ -340,14 +344,14 @@
       
       
       
-      <li class="__2 ">
-        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
       </li>
       
       
       
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
       </li>
       
       
@@ -379,7 +383,7 @@
     </ul>
 
     <div id="content">
-      <h1>Roles</h1>
+      <h1 id="roles">Roles <a class="header-anchor" href="#roles">¶</a></h1>
 <p>Roles allow to restrict access to locales or layers.</p>
 <p>Roles are defined as an object. The key being the role name. For locales the value must be truthful but does not have any other effect.</p>
 <pre><code>roles: {
@@ -387,7 +391,7 @@
 }
 </code></pre>
 <p>Users who have the admin role will be able to see this locale.</p>
-<h2>Role filter</h2>
+<h2 id="role-filter">Role filter <a class="header-anchor" href="#role-filter">¶</a></h2>
 <p>The role value may be a filter object for layers. A filter set as the role value will be applied to any SQL query for this layer. User who do not have any matching layer role will not be able to see the layer at all.</p>
 <pre><code>roles: {
   uk: {
@@ -398,7 +402,7 @@
 }
 </code></pre>
 <p>User with the role 'uk' in their token will have a SQL match filter for the value 'uk' on the field 'country' applied to all queries for this layer.</p>
-<h1>Language versions</h1>
+<h1 id="language-versions">Language versions <a class="header-anchor" href="#language-versions">¶</a></h1>
 <p>User can select language from the list of supported languages in the login form. Workspace content can be displayed in relevant language versions. Concept of roles can be applied to locale and / or layer availability dependent on selected language.</p>
 <p>This is the list of currently supported languages.</p>
 <p>| code  | language | original | note<br>
@@ -413,15 +417,9 @@
 <p>Codes adhere to ISO 639-1 norm of language codes.<br>
 <em>Please note these are keys reserved to language versions within <code>&quot;roles&quot;</code> object.</em></p>
 <p>In order to define an element as Japanese write:</p>
-<pre><code class="language-json">&quot;roles&quot;: {
-	&quot;ja&quot;: null
-}
-</code></pre>
+<pre class="language-json"><code class="language-json"><span class="token property">"roles"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>	<span class="token property">"ja"</span><span class="token operator">:</span> <span class="token null keyword">null</span><br><span class="token punctuation">}</span></code></pre>
 <p>In order to restrict an element from Japanese language write:</p>
-<pre><code class="language-json">&quot;roles&quot;: {
-	&quot;!ja&quot;: null
-}
-</code></pre>
+<pre class="language-json"><code class="language-json"><span class="token property">"roles"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>	<span class="token property">"!ja"</span><span class="token operator">:</span> <span class="token null keyword">null</span><br><span class="token punctuation">}</span></code></pre>
 
     </div>
 

@@ -94,7 +94,7 @@ function getTemplate(req, res) {
 
 function getTemplates(req, res) {
 
-  const host = `${req.headers.host.includes('localhost') && 'http' || 'https'}://${req.headers.host}${process.env.DIR || ''}`
+  const host = `${req.headers.host.includes('localhost') && 'http' || 'https'}://${req.headers.host}${process.env.DIR}`
 
   const templates = Object.entries(req.params.workspace.templates).map(
     template => `<a ${template[1].err && 'style="color: red;"' ||''} href="${host}/api/workspace/get/template?template=${template[0]}">${template[0]}</a>`
@@ -111,15 +111,31 @@ function getLocales(req, res) {
 
     const locale = req.params.workspace.locales[key]
 
-    if (!locale.roles) return {key: key, name: locale.name}
+    const roles = req.params.token && req.params.token.roles
 
+    // Locales without roles will always be returned.
+    if (!locale.roles) return {
+      key: key,
+      name: locale.name || key
+    }
+
+    // Check for negative roles
     if (Object.keys(locale.roles).some(
-      role => (req.params.token && req.params.token.roles
-        && req.params.token.roles.includes(role)) 
-      || (role.match(/^\!/) && !req.params.token.roles.includes(role.replace(/^\!/, '')))
-    )) return { key: key, name: locale.name }
 
-  }).filter(item => item && typeof item.key ==='string')
+      // Locales with a negated role will not be returned if that role is property of the locale roles.
+      role => role.match(/^\!/) && roles.includes(role.replace(/^\!/, ''))
+    )) return;
+
+    // Check for positive roles
+    if (Object.keys(locale.roles).some(
+      role => roles.includes(role)
+    )) return {
+      key: key,
+      name: locale.name || key
+    }
+
+  // Filter out the locales which are undefined after role checks.
+  }).filter(locale => typeof locale !== "undefined")
 
   res.send(locales)
 

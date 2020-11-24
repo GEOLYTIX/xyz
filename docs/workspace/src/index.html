@@ -5,12 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
+  <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
   <title>Source Links</title>
   <style>
 
     body {
       margin: 0;
       padding: 0;
+    }
+
+    .header-anchor {
+      font-size: 80%;
     }
 
     .grid {
@@ -35,7 +40,7 @@
       padding-inline-start: 0px;
       list-style-type: none;
       padding-right: 20px;
-      margin: 10px 0;
+      margin: 3px 0;
       position: fixed;
     }
 
@@ -51,6 +56,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -184,15 +190,13 @@
       
       
       
-      
-      
-      
-      
-      
-      
       <li class="__1 ">
         <a href="/xyz/docs/">XYZ</a>
       </li>
+      
+      
+      
+      
       
       
       
@@ -340,14 +344,14 @@
       
       
       
-      <li class="__2 ">
-        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
       </li>
       
       
       
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
       </li>
       
       
@@ -379,7 +383,7 @@
     </ul>
 
     <div id="content">
-      <h1>Source links</h1>
+      <h1 id="source-links">Source links <a class="header-anchor" href="#source-links">¶</a></h1>
 <p>Typically a ressource link is defined as a value for an entry with <code>src</code> as key.</p>
 <p>Links allow the XYZ host to gather ressources which are required to assemble the workspace.</p>
 <p>The XYZ Library may also fetch style ressources, images, or plugin scripts from URI references defined as <code>src</code> entries.</p>

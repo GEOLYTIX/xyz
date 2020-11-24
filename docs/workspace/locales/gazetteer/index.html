@@ -5,12 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
+  <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
   <title>Gazetteer</title>
   <style>
 
     body {
       margin: 0;
       padding: 0;
+    }
+
+    .header-anchor {
+      font-size: 80%;
     }
 
     .grid {
@@ -35,7 +40,7 @@
       padding-inline-start: 0px;
       list-style-type: none;
       padding-right: 20px;
-      margin: 10px 0;
+      margin: 3px 0;
       position: fixed;
     }
 
@@ -51,6 +56,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -184,15 +190,13 @@
       
       
       
-      
-      
-      
-      
-      
-      
       <li class="__1 ">
         <a href="/xyz/docs/">XYZ</a>
       </li>
+      
+      
+      
+      
       
       
       
@@ -340,14 +344,14 @@
       
       
       
-      <li class="__2 ">
-        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
       </li>
       
       
       
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
       </li>
       
       
@@ -379,25 +383,9 @@
     </ul>
 
     <div id="content">
-      <h1>Gazetteer</h1>
+      <h1 id="gazetteer">Gazetteer <a class="header-anchor" href="#gazetteer">¶</a></h1>
 <p>The gazetteer object defines which gazetteer should be used for the current locale.</p>
-<pre><code class="language-javascript">&quot;gazetteer&quot;: {
-  &quot;provider&quot;: &quot;MAPBOX&quot;,
-  &quot;placeholder&quot;: &quot;e.g. London&quot;,
-  &quot;label&quot;: true,
-  &quot;datasets&quot;: [
-    {
-      &quot;layer&quot;: &quot;sprawls&quot;,
-      &quot;table&quot;: &quot;glx_cities_of_the_world&quot;,
-      &quot;qterm&quot;: &quot;name&quot;,
-      &quot;label&quot;: &quot;nameascii&quot;,
-      &quot;leading_wildcard&quot;: true
-    }
-  ]
-}
-
-// &quot;label&quot;: true within gazetteer object is optional - it displays result source and is useful in case of searching multiple datasets. 
-</code></pre>
+<pre class="language-javascript"><code class="language-javascript"><span class="token string">"gazetteer"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>  <span class="token string">"provider"</span><span class="token operator">:</span> <span class="token string">"MAPBOX"</span><span class="token punctuation">,</span><br>  <span class="token string">"placeholder"</span><span class="token operator">:</span> <span class="token string">"e.g. London"</span><span class="token punctuation">,</span><br>  <span class="token string">"label"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span><br>  <span class="token string">"datasets"</span><span class="token operator">:</span> <span class="token punctuation">[</span><br>    <span class="token punctuation">{</span><br>      <span class="token string">"layer"</span><span class="token operator">:</span> <span class="token string">"sprawls"</span><span class="token punctuation">,</span><br>      <span class="token string">"table"</span><span class="token operator">:</span> <span class="token string">"glx_cities_of_the_world"</span><span class="token punctuation">,</span><br>      <span class="token string">"qterm"</span><span class="token operator">:</span> <span class="token string">"name"</span><span class="token punctuation">,</span><br>      <span class="token string">"label"</span><span class="token operator">:</span> <span class="token string">"nameascii"</span><span class="token punctuation">,</span><br>      <span class="token string">"leading_wildcard"</span><span class="token operator">:</span> <span class="token boolean">true</span><br>    <span class="token punctuation">}</span><br>  <span class="token punctuation">]</span><br><span class="token punctuation">}</span><br><br><span class="token comment">// "label": true within gazetteer object is optional - it displays result source and is useful in case of searching multiple datasets. </span></code></pre>
 <p>Each dataset supports <code>&quot;limit&quot;</code> parameters which defaults to 10. It can be also set within gazetter object in order to apply to all datasets. Results will be sorted alphabetically.</p>
 <p>The gazetteer can be set to use either third party provider and / or hosted datasets. Locations from hosted datasets will be selected while geolocations from 3rd party providers are shown as a marker on the map.</p>
 <p><code>&quot;provider&quot;: &quot;MAPBOX&quot;</code></p>
@@ -405,7 +393,7 @@
 <p><code>&quot;placeholder&quot;: &quot;e.g. London&quot;</code></p>
 <p>The placeholder to be shown in the gazetteer input.</p>
 <p>It is possible to further restrict the results by defining a bounds entry. The bounds value varies with the gazetteer provider used for the query.</p>
-<h2>Google</h2>
+<h2 id="google">Google <a class="header-anchor" href="#google">¶</a></h2>
 <p><code>&quot;countrycode&quot;: &quot;GB&quot;</code></p>
 <p>The country code to limit the search on 3rd party geolocation services. Permitted country codes are <a href="https://en.wikipedia.org/wiki/ISO_3166-1_alpha-2">ISO 3166-1 alpha-2</a>.</p>
 <p><code>&quot;bounds&quot;: &quot;location=51.75,-1.25&amp;radius=4000&quot;</code></p>
@@ -413,14 +401,14 @@
 <p><code>&quot;components&quot;: &quot;country:GB|country:IE&quot;</code></p>
 <p>Google also accepts &quot;components&quot; parameter (see API Docs) which can pass additional information on expected API response.</p>
 <p>In the example above results are restricted to United Kingdom and Republic of Ireland.</p>
-<h2>Mapbox</h2>
+<h2 id="mapbox">Mapbox <a class="header-anchor" href="#mapbox">¶</a></h2>
 <p><code>&quot;bounds&quot;: &quot;bbox=-2,50,4,54&quot;</code></p>
 <p><code>&quot;country: &quot;GB&quot;</code></p>
-<h2>Opencage</h2>
+<h2 id="opencage">Opencage <a class="header-anchor" href="#opencage">¶</a></h2>
 <p><code>&quot;bounds&quot;: &quot;-13,48,5,62&quot;</code></p>
 <p><code>&quot;countrycode&quot;: &quot;GB&quot;</code></p>
 <p>Will require a valid Opencage API key provided as KEY_OPENCAGE in the environment settings.</p>
-<h2>Dataset gazetteer</h2>
+<h2 id="dataset-gazetteer">Dataset gazetteer <a class="header-anchor" href="#dataset-gazetteer">¶</a></h2>
 <p>An array of dataset gazetteers which are hit by the autocomplete search first. The 3rd party geolocation service is used once no results are returned from any of the dataset gazetteer entries.</p>
 <p><code>&quot;layer&quot;: &quot;sprawls&quot;</code></p>
 <p>The layer key in the datasets array object must correspond to a layer defined in the locale's layers.</p>

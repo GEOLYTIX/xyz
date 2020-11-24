@@ -5,12 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
+  <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
   <title>Webpack</title>
   <style>
 
     body {
       margin: 0;
       padding: 0;
+    }
+
+    .header-anchor {
+      font-size: 80%;
     }
 
     .grid {
@@ -35,7 +40,7 @@
       padding-inline-start: 0px;
       list-style-type: none;
       padding-right: 20px;
-      margin: 10px 0;
+      margin: 3px 0;
       position: fixed;
     }
 
@@ -51,6 +56,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -184,6 +190,12 @@
       
       
       
+      <li class="__1 ">
+        <a href="/xyz/docs/">XYZ</a>
+      </li>
+      
+      
+      
       
       
       <li class="__1 ">
@@ -194,12 +206,6 @@
       
       <li class="__2 ">
         <a href="/xyz/docs/develop/api/">API</a>
-      </li>
-      
-      
-      
-      <li class="__1 ">
-        <a href="/xyz/docs/">XYZ</a>
       </li>
       
       
@@ -377,58 +383,17 @@
       
       
       
-      
-      
 
     </ul>
 
     <div id="content">
-      <h1>Bundling the control library</h1>
+      <h1 id="bundling-the-control-library">Bundling the control library <a class="header-anchor" href="#bundling-the-control-library">¶</a></h1>
 <p>The library code split into multiple ES6 modules is stored in the <a href="https://github.com/GEOLYTIX/xyz/tree/master/lib">/lib</a> directory of the XYZ repo. The application is bundled with <a href="https://webpack.js.org">Webpack 4</a>.</p>
 <p>The <a href="https://github.com/GEOLYTIX/xyz/blob/master/package.json">package.json</a> stores mutliple scripts to build the control library as <a href="https://github.com/GEOLYTIX/xyz/blob/master/public/js/xyz_openlayers.js">xyz_openlayers.js</a> in the /public/js directory.</p>
 <p><code>npm run dev</code> will be build a development library which is not size optimised. The compilation to dev is fastest.</p>
 <p><code>npm run build</code> will bundle a production library which is commited to the XYZ repository.</p>
 <p>The <a href="https://github.com/GEOLYTIX/xyz/blob/master/webpack.config.js">webpack.config</a> provides following configuration for the compilation process. The entry point for the bundle is the index.mjs module script in the /lib directory.</p>
-<pre><code class="language-javascript">const path = require('path');
-
-const webpack = require('webpack');
-
-module.exports = {
-  entry: {
-    xyz_openlayers: ['./lib/index.mjs']
-  },
-  output: {
-    path: path.resolve(__dirname, 'public/js'),
-    filename: '[name].js',
-    // library: 'xyz',
-    // libraryTarget: 'amd-require'
-
-  },
-  devtool: 'source-map',
-  module: {
-    rules: [{
-      test: /\.js$/,
-      exclude: /node_modules/
-    }]
-  },
-  optimization: {
-    concatenateModules: true
-  },
-  externals: {
-    moment: 'moment'
-  },
-  plugins: [
-    new webpack.DefinePlugin({
-        XYZ_VERSION: JSON.stringify(require('./package.json').version)
-    })
-  ]
-  //stats: 'verbose'
-  // stats: {
-  //   optimizationBailout: true,
-  //   maxModules: Infinity
-  // }
-};
-</code></pre>
+<pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> path <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'path'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><br><br><span class="token keyword">const</span> webpack <span class="token operator">=</span> <span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'webpack'</span><span class="token punctuation">)</span><span class="token punctuation">;</span><br><br>module<span class="token punctuation">.</span>exports <span class="token operator">=</span> <span class="token punctuation">{</span><br>  entry<span class="token operator">:</span> <span class="token punctuation">{</span><br>    xyz_openlayers<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'./lib/index.mjs'</span><span class="token punctuation">]</span><br>  <span class="token punctuation">}</span><span class="token punctuation">,</span><br>  output<span class="token operator">:</span> <span class="token punctuation">{</span><br>    path<span class="token operator">:</span> path<span class="token punctuation">.</span><span class="token function">resolve</span><span class="token punctuation">(</span>__dirname<span class="token punctuation">,</span> <span class="token string">'public/js'</span><span class="token punctuation">)</span><span class="token punctuation">,</span><br>    filename<span class="token operator">:</span> <span class="token string">'[name].js'</span><span class="token punctuation">,</span><br>    <span class="token comment">// library: 'xyz',</span><br>    <span class="token comment">// libraryTarget: 'amd-require'</span><br><br>  <span class="token punctuation">}</span><span class="token punctuation">,</span><br>  devtool<span class="token operator">:</span> <span class="token string">'source-map'</span><span class="token punctuation">,</span><br>  module<span class="token operator">:</span> <span class="token punctuation">{</span><br>    rules<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token punctuation">{</span><br>      test<span class="token operator">:</span> <span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">\.js$</span><span class="token regex-delimiter">/</span></span><span class="token punctuation">,</span><br>      exclude<span class="token operator">:</span> <span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">node_modules</span><span class="token regex-delimiter">/</span></span><br>    <span class="token punctuation">}</span><span class="token punctuation">]</span><br>  <span class="token punctuation">}</span><span class="token punctuation">,</span><br>  optimization<span class="token operator">:</span> <span class="token punctuation">{</span><br>    concatenateModules<span class="token operator">:</span> <span class="token boolean">true</span><br>  <span class="token punctuation">}</span><span class="token punctuation">,</span><br>  externals<span class="token operator">:</span> <span class="token punctuation">{</span><br>    moment<span class="token operator">:</span> <span class="token string">'moment'</span><br>  <span class="token punctuation">}</span><span class="token punctuation">,</span><br>  plugins<span class="token operator">:</span> <span class="token punctuation">[</span><br>    <span class="token keyword">new</span> <span class="token class-name">webpack<span class="token punctuation">.</span>DefinePlugin</span><span class="token punctuation">(</span><span class="token punctuation">{</span><br>        <span class="token constant">XYZ_VERSION</span><span class="token operator">:</span> <span class="token constant">JSON</span><span class="token punctuation">.</span><span class="token function">stringify</span><span class="token punctuation">(</span><span class="token function">require</span><span class="token punctuation">(</span><span class="token string">'./package.json'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>version<span class="token punctuation">)</span><br>    <span class="token punctuation">}</span><span class="token punctuation">)</span><br>  <span class="token punctuation">]</span><br>  <span class="token comment">//stats: 'verbose'</span><br>  <span class="token comment">// stats: {</span><br>  <span class="token comment">//   optimizationBailout: true,</span><br>  <span class="token comment">//   maxModules: Infinity</span><br>  <span class="token comment">// }</span><br><span class="token punctuation">}</span><span class="token punctuation">;</span></code></pre>
 
     </div>
 

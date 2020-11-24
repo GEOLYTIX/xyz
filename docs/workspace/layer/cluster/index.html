@@ -5,12 +5,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
+  <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
   <title>Cluster</title>
   <style>
 
     body {
       margin: 0;
       padding: 0;
+    }
+
+    .header-anchor {
+      font-size: 80%;
     }
 
     .grid {
@@ -35,7 +40,7 @@
       padding-inline-start: 0px;
       list-style-type: none;
       padding-right: 20px;
-      margin: 10px 0;
+      margin: 3px 0;
       position: fixed;
     }
 
@@ -51,6 +56,7 @@
       border-left: 1px solid #ddd;
       margin: 10px 0;
       overflow: hidden;
+      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -184,15 +190,13 @@
       
       
       
-      
-      
-      
-      
-      
-      
       <li class="__1 ">
         <a href="/xyz/docs/">XYZ</a>
       </li>
+      
+      
+      
+      
       
       
       
@@ -340,14 +344,14 @@
       
       
       
-      <li class="__2 ">
-        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
+      <li class="__3 ">
+        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
       </li>
       
       
       
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
+      <li class="__2 ">
+        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
       </li>
       
       
@@ -379,11 +383,11 @@
     </ul>
 
     <div id="content">
-      <h1>Cluster layer</h1>
+      <h1 id="cluster-layer">Cluster layer <a class="header-anchor" href="#cluster-layer">¶</a></h1>
 <p>Cluster layer are point layers. <a href="https://medium.com/@goldrydigital/cluster-f-x-nesting-postgresql-kmeans-in-dbscan-for-responsive-maps-9ed99590a439">A combination of PostGIS cluster algorithm</a> are applied by the XYZ backend in order to display aggregate cluster for large point location datasets in the map control.</p>
 <p>It is possible to select individual locations from an aggregate cluster and theme the cluster based on their aggregate scores.</p>
 <p>The size of a cluster represents the count of locations which are aggregated into a cluster.</p>
-<h2><strong>Cluster parameter</strong></h2>
+<h2 id="cluster-parameter"><strong>Cluster parameter</strong> <a class="header-anchor" href="#cluster-parameter">¶</a></h2>
 <p>The cluster algorithm which is used to aggregate locations can be specified with additional cluster parameter.</p>
 <p><code>&quot;cluster_kmeans&quot;: 0.05</code></p>
 <p><strong>cluster_kmeans</strong> defines the minimum number of cluster. The number is determined by 1 over the kmeans value (eg. KMeans 0.05 will generate a minimum number of 20 cluster). The XYZ backend will adjusted KMeans by the absolute number of locations in a map view. The KMeans value can be altered through the cluster panel. <em>The default value is 0.5.</em> <strong>A lower KMeans value will produce more cluster.</strong></p>

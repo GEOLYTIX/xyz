@@ -4,6 +4,7 @@ tags: [workspace, root]
 layout: root.html
 group: true
 orderPath: /workspace/_workspace
+date: 2020-01-01
 ---
 
 # XYZ Workspace

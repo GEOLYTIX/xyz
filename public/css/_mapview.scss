@@ -3,6 +3,11 @@
   height: 100%;
 }
 
+.mapboxgl-canvas {
+  min-width: 100%;
+  min-height: 100%;
+}
+
 .infotip {
   position: fixed;
   margin: 0;
@@ -42,19 +47,17 @@
 
 .attribution {
   bottom: 0;
-  right: 5px;
-  margin-left: 150px;
+  right: 0;
   position: absolute;
   z-index: 999;
   text-align: right;
   font-weight: bold;
   font-size: 100%;
-  // pointer-events: none;
 
   >* {
     float: right;
     clear: both;
-    margin-bottom: 5px;
+    margin: 0 5px 5px 0;
   }
 
   a {
@@ -66,7 +69,7 @@
   }
 
   .logo {
-    width: 250px;
+    width: 175px;
     height: 30px;
     background-repeat: no-repeat;
     background-position: right;
