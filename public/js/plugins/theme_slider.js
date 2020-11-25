@@ -46,7 +46,7 @@ function addModule(_xyz) {
         onchange=${e => {
           if (e.target.checked) {
 
-            const slider = document.getElementById('mancs_hx_hour_slider')
+            const slider = document.getElementById('hx_hour_slider')
 
             layer.style.theme.loop = setInterval(()=>{
               slider.value++
@@ -66,7 +66,7 @@ function addModule(_xyz) {
         <span>Hour: </span>
         <span class="bold">0</span>
         <div class="input-range">
-        <input id="mancs_hx_hour_slider"
+        <input id="hx_hour_slider"
           class="secondary-colour-bg"
           type="range"
           min=0

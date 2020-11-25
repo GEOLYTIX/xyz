@@ -344,6 +344,9 @@ input[type=number] {
 
 .input-checkbox {
   display: block; }
+  .input-checkbox.disabled {
+    opacity: 0.3;
+    pointer-events: none; }
   .input-checkbox.inline {
     display: inline-block; }
   .input-checkbox > span {
