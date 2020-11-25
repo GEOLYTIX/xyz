@@ -133,14 +133,25 @@ The field defines which location field will be shown as the location's label.
 
 ```json
 "label": {
+  "display": true,
   "field": "store_name",
   "declutter": true,
   "strokeColor": "#ffffff",
-  "strokeWidth": 3
+  "strokeWidth": 3,
+  "maxZoom": 18,
+  "minZoom": 14,
+  "title": "Store"
 }
 ```
 
-In order to display labels by default add `"display": true`.
+If the `display` flag is set the label will be turned on by default.
+
+The `declutter` flag asks Openlayers to declutter the text label on the map preventing labels which would overlap to be rendered.
+
+The `minZoom` and `maxZoom` integer can be set to limit at which zoom levels the labels will be drawn on the map.
+
+The `title` value will be shown with the checkbox if set.
+
 To include count on clustered features add `"count": true`.
 
 ## Hide the style panel
