@@ -94,15 +94,15 @@ module.exports = async (req, res) => {
       dbscan *= rows[0].xdistance
 
       cluster_sql = `
-      (SELECT
-        cat,
-        size,
-        geom,
-        ${label ? 'label,' : ''}
-        kmeans_cid,
-        ST_ClusterDBSCAN(geom, ${dbscan}, 1
-      ) OVER (PARTITION BY kmeans_cid) dbscan_cid
-      FROM ${cluster_sql}) dbscan`
+        (SELECT
+          cat,
+          size,
+          geom,
+          ${label ? 'label,' : ''}
+          kmeans_cid,
+          ST_ClusterDBSCAN(geom, ${dbscan}, 1
+        ) OVER (PARTITION BY kmeans_cid) dbscan_cid
+        FROM ${cluster_sql}) dbscan`
 
     }
 
@@ -111,15 +111,15 @@ module.exports = async (req, res) => {
     if (theme === 'graduated') var cat_sql = `${req.params.aggregate || 'sum'}(cat) cat,`
 
     var q = `
-    SELECT
-      count(1) count,
-      SUM(size) size,
-      ${cat_sql || ''}
-      ${label ? '(array_agg(label))[1] AS label,' : ''}
-      ST_X(ST_PointOnSurface(ST_Union(geom))) AS x,
-      ST_Y(ST_PointOnSurface(ST_Union(geom))) AS y
-    FROM ${cluster_sql}
-    GROUP BY kmeans_cid ${dbscan ? ', dbscan_cid;' : ';'}`
+      SELECT
+        count(1) count,
+        SUM(size) size,
+        ${cat_sql || ''}
+        ${label ? '(array_agg(label))[1] AS label,' : ''}
+        ST_X(ST_PointOnSurface(ST_Union(geom))) AS x,
+        ST_Y(ST_PointOnSurface(ST_Union(geom))) AS y
+      FROM ${cluster_sql}
+      GROUP BY kmeans_cid ${dbscan ? ', dbscan_cid;' : ';'}`
 
 
     if (theme === 'competition') var q = `

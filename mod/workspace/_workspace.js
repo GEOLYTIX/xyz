@@ -127,7 +127,7 @@ function getLocales(req, res) {
     )) return;
 
     // Check for positive roles
-    if (Object.keys(locale.roles).some(
+    if (roles && Object.keys(locale.roles).some(
       role => roles.includes(role)
     )) return {
       key: key,
