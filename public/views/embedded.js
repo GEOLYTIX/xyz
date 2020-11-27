@@ -141,9 +141,7 @@ window.onload = () => {
         title=${xyz.language.toolbar_fullscreen}
         onclick=${e => {
           e.target.classList.toggle('enabled')
-
-          document.body.style.gridTemplateColumns = e.target.classList.contains('enabled') ?
-            '0 0 50px auto' : '333px 10px 50px auto';
+          document.body.classList.toggle('fullscreen')
           xyz.map.updateSize()
         }}>
         <div class="xyz-icon icon-map off-black-filter">`)      
