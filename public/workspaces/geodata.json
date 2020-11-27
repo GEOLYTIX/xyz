@@ -160,11 +160,9 @@
           "template": "geolytix_offices",
           "edit": {
             "point": true,
-            "delete": true,
-            "geometry": true
+            "delete": true
           },
-          "infoj": [
-            {
+          "infoj": [{
               "title": "address",
               "field": "address",
               "type": "textarea",
