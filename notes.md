@@ -7,3 +7,5 @@ Fix for login on public access routes. [#367](https://github.com/GEOLYTIX/xyz/is
 Fix for fullscreen button.
 
 Include embedded view.
+
+Fix single theme mvt creation.

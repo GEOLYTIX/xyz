@@ -13,12 +13,12 @@
   <link rel="stylesheet" href="${dir}/css/openlayers.css" />
   <link rel="stylesheet" href="${dir}/css/control.css" />
 
-  <script src="${dir}/js/tabulator.min.js" defer></script>
-  <script src="${dir}/js/Chart.min.js" defer></script>
+  <!-- <script src="${dir}/js/Chart.min.js" defer></script> -->
+
   <script src="${dir}/js/ol.js" defer></script>
+  <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js" defer></script>
 
   <script src="${dir}/js/xyz_openlayers.js" defer></script>
-
   <style>
     * {
       margin: 0;
@@ -125,11 +125,13 @@
 
   window.onload = () => {
 
+    // Assign location origin as host.
     const params = {
       host: window.location.origin,
     }
 
     // Take hooks from URL and store as current hooks.
+    // It should be possible to override params.host.
     window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (match, key, value) => {
       params[key] = decodeURI(value);
     })
@@ -143,6 +145,7 @@
 
     const locale = document.getElementById('Locale')
 
+    // Define locations list and selectCallback.
     xyz.locations.list = [
       {
         style: { strokeColor: '#090', strokeWidth: 2 },
@@ -193,20 +196,27 @@
       }, 1000);
     }
 
+    // Load locale if defined
+    if (params.locale) return getLocale(params.locale)
 
-    if (params.locale) {
+    // Load first locale if no locale has been defined.
+    xyz.workspace.get.locales().then(locales => {
+
+      if (!locales.length) return console.log('No accessible locales')
+
+      getLocale(locales[0].key)
+    })
+
+    function getLocale(locale) {
 
       xyz.workspace.get.locale({
-        locale: params.locale
+        locale: locale
       }).then(locale => {
         xyz.locale = locale
         createMap()
       })
 
-    } else {
-      createMap()
     }
-
 
     function createMap() {
 
@@ -215,38 +225,27 @@
         scrollWheelZoom: true,
       })
 
-      const layers = params.layers && params.layers.split(',') || xyz.locale.layers
 
-      if (!layers) return
 
-      const layerPromises = layers.map(layer => xyz.workspace.get.layer({
-        locale: params.locale,
-        layer: layer
-      }))
+      xyz.plugins()
+        .then(() => xyz.layers.load(xyz.hooks.current.layers))
+        .then(() => {
 
-      Promise.all(layerPromises).then(layers => {
+          xyz.hooks.current.locations.forEach(_hook => {
 
-        layers.forEach(layer => {
+            let hook = _hook.split('!');
 
-          layer = xyz.layers.decorate(layer)
-          xyz.layers.list[layer.key] = layer
-          layer.show()
+            xyz.locations.select({
+              locale: xyz.workspace.locale.key,
+              layer: xyz.layers.list[decodeURIComponent(hook[0])],
+              table: hook[1],
+              id: hook[2]
+            })
 
-        })
-
-        xyz.hooks.current.locations.forEach(_hook => {
-
-          let hook = _hook.split('!');
-
-          xyz.locations.select({
-            locale: xyz.workspace.locale.key,
-            layer: xyz.layers.list[decodeURIComponent(hook[0])],
-            table: hook[1],
-            id: hook[2]
           })
-        })
 
-      })
+        })
+        .catch(error => console.error(error))
 
     }
 
