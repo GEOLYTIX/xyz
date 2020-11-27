@@ -114,3 +114,8 @@ body {
   grid-row: 3;
   grid-column: 3/5;
 }
+
+.mobile-disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
