@@ -8,7 +8,6 @@ const messages = require('./messages')
 
 module.exports = async (req, res) => {
 
-
   var rows = await acl(`SELECT * FROM acl_schema.acl_table WHERE approvaltoken = $1;`, [req.params.key])
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
