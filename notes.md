@@ -9,3 +9,5 @@ Fix for fullscreen button.
 Include embedded view.
 
 Fix single theme mvt creation.
+
+Updated blog view.
