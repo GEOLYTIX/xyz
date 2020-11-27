@@ -2103,7 +2103,8 @@ span.flatpickr-weekday {
   border-radius: 2px; }
 .layer-view .meta {
   font-size: 90%;
-  padding-bottom: 5px; }
+  padding-bottom: 5px;
+  padding-right: 5px; }
 .layer-view .legend.grid {
   margin-top: 5px;
   display: grid;
@@ -2111,6 +2112,11 @@ span.flatpickr-weekday {
   grid-gap: 5px;
   align-items: center;
   justify-content: start; }
+.layer-view .legend .title {
+  font-size: 120%;
+  font-weight: bold;
+  margin: 0;
+  padding: 0; }
 .layer-view .legend .label {
   font-size: 12px; }
 .layer-view .legend .switch {

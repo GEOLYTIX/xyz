@@ -49,75 +49,10 @@ window.onload = () => {
     window.removeEventListener('touchend', stopResize_x)
   }
 
-  // Set hoxDivider for horizontal resize of body grid.
-  const hozDivider = document.getElementById('hozDivider')
-
-  // Resize tabview while holding mousedown on hozDivider.
-  hozDivider.addEventListener('mousedown', () => {
-    document.body.style.cursor = 'grabbing'
-    window.addEventListener('mousemove', resize_y)
-    window.addEventListener('mouseup', stopResize_y)
-  }, true)
-
-  // Resize dataview while touching hozDivider.
-  hozDivider.addEventListener('touchstart', e => {
-    e.preventDefault()
-    window.addEventListener('touchmove', resize_y)
-    window.addEventListener('touchend', stopResize_y)
-  }, {
-    passive: true
-  })
-
-  // Resize the dataview container.
-  function resize_y(e) {
-    e.preventDefault()
-
-    let pageY = (e.touches && e.touches[0].pageY) || e.pageY
-
-    if (pageY < 0) return
-
-    let height = window.innerHeight - pageY
-
-    // Min height snap.
-    if (height < 65) height = 50
-
-    // Full height snap.
-    if (height > (window.innerHeight - 10)) height = window.innerHeight
-
-    document.body.style.gridTemplateRows = `auto 10px ${height}px`
-
-    OL.style.marginTop = `-${(height/2)}px`
-  }
-
-  // Remove horizontal resize events.
-  function stopResize_y() {
-    document.body.style.cursor = 'auto';
-    window.removeEventListener('mousemove', resize_y);
-    window.removeEventListener('touchmove', resize_y);
-    window.removeEventListener('mouseup', stopResize_y);
-    window.removeEventListener('touchend', stopResize_y);
-  }
 
   // Tab event for mobile view.
-  const tabs = document.querySelectorAll('.tab')
   const locationsTab = document.getElementById('locations')
   const layersTab = document.getElementById('layers')
-
-  tabs.forEach(tab => {
-
-    tab.querySelector('.listview').addEventListener('scroll', e => {
-      if (e.target.scrollTop > 0) return e.target.classList.add('shadow')
-      e.target.classList.remove('shadow')
-    })
-
-    tab.onclick = e => {
-      if (!e.target.classList.contains('tab')) return
-      e.preventDefault()
-      tabs.forEach(el => el.classList.remove('active'))
-      e.target.classList.add('active')
-    }
-
-  })
 
   const btnColumn = document.getElementById('mapButton')
 
@@ -131,10 +66,7 @@ window.onload = () => {
   document.getElementById('locations_header').textContent = xyz.language.locations_header
 
 
-  xyz.workspace.get.locales().then(getLocale)
-
-  // Get locale from host.
-  function getLocale(locales) {
+  xyz.workspace.get.locales().then(locales => {
 
     if (!locales.length) return console.log('No accessible locales')
 
@@ -147,26 +79,7 @@ window.onload = () => {
       locale: locale.key
     }).then(createMap)
 
-    if (locales.length === 1) return
-
-    layersTab.appendChild(xyz.utils.html.node`
-      <div>${xyz.language.show_layers_for_locale}</div>
-      <button class="btn-drop">
-        <div class="head"
-          onclick=${e => {
-            e.preventDefault()
-            e.target.parentElement.classList.toggle('active')
-          }}>
-          <span>${locale.name || locale.key}</span>
-          <div class="icon"></div>
-        </div>
-        <ul>${locales.map(_locale => xyz.utils.html.node`
-            <li>
-              <a href="${xyz.host + '?locale=' + _locale.key + 
-                `${xyz.hooks.current.language && '&language=' + xyz.hooks.current.language || ''}`}">
-              ${_locale.name || _locale.key}`)}`)
-
-  }
+  })
 
   // Create map element.
   function createMap(locale) {
@@ -221,67 +134,16 @@ window.onload = () => {
       btnZoomOut.disabled = z <= xyz.locale.minZoom
     })
 
-    // Add zoom to area button.
-    btnColumn.appendChild(xyz.utils.html.node`
-      <button
-        class="mobile-display-none"
-        title=${xyz.language.toolbar_zoom_to_area}
-        onclick=${e => {
-          e.stopPropagation()
-          e.target.classList.toggle('enabled')
-
-          if (e.target.classList.contains('enabled')) {
-
-            return xyz.mapview.interaction.zoom.begin({
-              callback: () => {
-                e.target.classList.remove('enabled')
-              }
-            })
-          }
-
-          xyz.mapview.interaction.zoom.cancel()
-
-        }}>
-        <div class="xyz-icon icon-area off-black-filter">`)
-
-    // Add locator button.
-    btnColumn.appendChild(xyz.utils.html.node`
-      <button
-        title=${xyz.language.toolbar_current_location}
-        onclick=${e => {
-          xyz.mapview.locate.toggle();
-          e.target.classList.toggle('enabled');
-        }}>
-        <div class="xyz-icon icon-gps-not-fixed off-black-filter">`)
-
-    // Add measure button.
-    btnColumn.appendChild(xyz.utils.html.node`
-      <button
-        class="mobile-display-none"
-          title=${xyz.language.toolbar_measure}
-          onclick=${e => {
-
-            if (e.target.classList.contains('enabled')) return xyz.mapview.interaction.draw.cancel()
-
-            e.target.classList.add('enabled')
-
-            xyz.mapview.interaction.draw.begin({
-              type: 'LineString',
-              tooltip: 'length',
-              callback: () => {
-                e.target.classList.remove('enabled')
-              }
-            })
-          }}><div class="xyz-icon icon-line off-black-filter">`)          
 
     // Add fullscreen button.
     btnColumn.appendChild(xyz.utils.html.node`
       <button
-        class="mobile-display-none"
         title=${xyz.language.toolbar_fullscreen}
         onclick=${e => {
           e.target.classList.toggle('enabled')
-          document.body.classList.toggle('fullscreen')
+
+          document.body.style.gridTemplateColumns = e.target.classList.contains('enabled') ?
+            '0 0 50px auto' : '333px 10px 50px auto';
           xyz.map.updateSize()
         }}>
         <div class="xyz-icon icon-map off-black-filter">`)      
@@ -317,10 +179,6 @@ window.onload = () => {
       })
           
     }
-
-    xyz.tabview.init({
-      node: document.getElementById('tabview')
-    })
 
     xyz.layers.listview.init({
       target: layersTab
@@ -359,22 +217,6 @@ window.onload = () => {
     if (document.head.dataset.token) {
       xyz.user = xyz.utils.JWTDecode(document.head.dataset.token)
     }
-
-    // Append user admin button.
-    xyz.user && xyz.user.admin && btnColumn.appendChild(xyz.utils.html.node`
-      <a
-        title=${xyz.language.toolbar_admin}
-        class="enabled mobile-display-none style="cursor: pointer;"
-        href="${xyz.host + '/view/admin_user'}">
-        <div class="xyz-icon icon-supervisor-account">`)
-
-    // Append logout button.
-    document.head.dataset.login && btnColumn.appendChild(xyz.utils.html.node`
-      <a
-        title="${xyz.user ? `${xyz.language.toolbar_logout} ${xyz.user.email}` : 'Login'}"
-        class="enabled" style="cursor: pointer;"
-        href="${xyz.host + (xyz.user ? '/api/user/logout' : '/login')}">
-        <div class="${'xyz-icon ' + (xyz.user && 'icon-logout' || 'icon-lock-open')}">`)
 
   }
 
