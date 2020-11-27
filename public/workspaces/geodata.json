@@ -1,15 +1,10 @@
 {
   "templates": {
     "blog": {
-      "__src": "https://geolytix.github.io/public/blog.html",
-      "src": "http://localhost:3000/geodata/views/blog.html"
+      "src": "file://views/blog.html"
     },
     "embedded": {
-      "__src": "https://geolytix.github.io/public/embedded.html",
-      "src": "http://localhost:3000/geodata/views/embedded.html"
-    },
-    "geodata_single": {
-      "src": "https://geolytix.github.io/public/geodata/geodata_single.html"
+      "src": "file://views/embedded.html"
     },
     "Mapbox Base": {
       "format": "tiles",
@@ -108,33 +103,6 @@
     },
     "london_workers": {
       "src": "https://geolytix.github.io/public/geodata/layers/london_workers.json"
-    },
-    "shanghai_retailplaces": {
-      "src": "https://geolytix.github.io/public/geodata/layers/shanghai_retailplaces.json"
-    },
-    "shanghai_retailvenues": {
-      "src": "https://geolytix.github.io/public/geodata/layers/shanghai_retailvenues.json"
-    },
-    "shanghai_transport": {
-      "src": "https://geolytix.github.io/public/geodata/layers/shanghai_transport.json"
-    },
-    "tokyo_demographics": {
-      "src": "https://geolytix.github.io/public/geodata/layers/tokyo_demographics.json"
-    },
-    "tokyo_retailplaces": {
-      "src": "https://geolytix.github.io/public/geodata/layers/tokyo_retailplaces.json"
-    },
-    "tokyo_retailvenues": {
-      "src": "https://geolytix.github.io/public/geodata/layers/tokyo_retailvenues.json"
-    },
-    "tokyo_urbanity": {
-      "src": "https://geolytix.github.io/public/geodata/layers/tokyo_urbanity.json"
-    },
-    "warsaw_census": {
-      "src": "https://geolytix.github.io/public/geodata/layers/warsaw_census.json"
-    },
-    "warsaw_retailvenues": {
-      "src": "https://geolytix.github.io/public/geodata/layers/warsaw_retailvenues.json"
     }
   },
   "locales": {

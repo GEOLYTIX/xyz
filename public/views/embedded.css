@@ -9,6 +9,10 @@ html {
   padding: 4px;
 }
 
+body.fullscreen {
+  grid-template-columns: 0 0 50px auto !important;
+}
+
 .desktop-display-none {
   display: none;
 }
@@ -76,6 +80,10 @@ body {
   background-color: #f0f0f0;
   overflow-y: auto;
   overflow-x: hidden;
+}
+
+.fullscreen #ctrls {
+  display: none;
 }
 
 #ctrls>div {
