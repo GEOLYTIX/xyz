@@ -20,6 +20,10 @@ html {
     grid-template-columns: 333px 10px 50px auto;
   }
 
+  body.fullscreen {
+    grid-template-columns: 0 0 50px auto !important;
+  }
+
   #spacer {
     grid-row: 1/4;
     grid-column: 2;
@@ -78,6 +82,10 @@ html {
     background-color: #f0f0f0;
     overflow-y: auto;
     overflow-x: hidden;
+  }
+
+  .fullscreen #ctrls {
+    display: none;
   }
 
   #ctrls>div {
