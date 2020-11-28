@@ -36,12 +36,45 @@
       background-repeat: no-repeat;
       background-position: center;
     }
+    
+    .progress-line, .progress-line:before {
+      height: 3px;
+      width: 100%;
+      margin: 0;
+    }
+
+    .progress-line {
+      background-color: #cddc39;
+      display: -webkit-flex;
+      display: flex;
+    }
+    
+    .progress-line:before {
+      background-color: #090;
+      content: '';
+      -webkit-animation: running-progress 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      animation: running-progress 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+    }
+    
+    @-webkit-keyframes running-progress {
+      0% { margin-left: 0px; margin-right: 100%; }
+      50% { margin-left: 25%; margin-right: 0%; }
+      100% { margin-left: 100%; margin-right: 0; }
+    }
+    
+    @keyframes running-progress {
+      0% { margin-left: 0px; margin-right: 100%; }
+      50% { margin-left: 25%; margin-right: 0%; }
+      100% { margin-left: 100%; margin-right: 0; }
+    }
+
   </style>
 
 </head>
 
 <body>
   
+  <div class="progress-line"></div>
   <div id="gallery"></div>
 
 </body>
@@ -55,10 +88,6 @@ fetch(`https://api.github.com/repos/geolytix/xyz/contents/public/icons`)
   .then((json) => {
     const gallery = document.getElementById("gallery");
 
-    Object.values(json).forEach((o) =>
-      console.log(`https://geolytix.github.io/xyz/public/icons/${o.name}`)
-    );
-
     Object.values(json)
       .filter((o) => o.name.match(/\.svg$/i))
       .forEach((o) => {
@@ -68,6 +97,8 @@ fetch(`https://api.github.com/repos/geolytix/xyz/contents/public/icons`)
       style="${`background-image: url(https://geolytix.github.io/xyz/public/icons/${o.name})`}"
       >`)
       })
+  
+    document.querySelector('.progress-line').remove()
 
   })
 
