@@ -3,7 +3,7 @@
 
 <head>
 
-  <title>GEOLYTIX | MapIcons</title>
+  <title>XYZ Icons</title>
 
   <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico" />
 
@@ -22,11 +22,7 @@
 
     }
 
-    .directory {
-      display: block;
-    }
-
-    .gallery {
+    #gallery {
       display: flex;
       flex-wrap: wrap;
       margin-top: 20px;
@@ -45,37 +41,35 @@
 </head>
 
 <body>
+  
+  <div id="gallery"></div>
 
 </body>
 
 <script  type="module">
 
-  import {render, html} from 'https://unpkg.com/uhtml?module';
+import { render, html } from "https://unpkg.com/uhtml?module";
 
-  window.onload = async () => {
+fetch(`https://api.github.com/repos/geolytix/xyz/contents/public/icons`)
+  .then((response) => response.json())
+  .then((json) => {
+    const gallery = document.getElementById("gallery");
 
-    const pathname = window.location.pathname.replace(/\/xyz/, '').replace(/index.html/, '')
+    Object.values(json).forEach((o) =>
+      console.log(`https://geolytix.github.io/xyz/public/icons/${o.name}`)
+    );
 
-    const response = await fetch(`https://api.github.com/repos/geolytix/xyz/contents${pathname}`)
+    Object.values(json)
+      .filter((o) => o.name.match(/\.svg$/i))
+      .forEach((o) => {
+        gallery.appendChild(html.node`<div
+      class="img"
+      title="${o.name}"
+      style="${`background-image: url(https://geolytix.github.io/xyz/public/icons/${o.name})`}"
+      >`)
+      })
 
-    const results = await response.json()
-
-    render(document.body, html`
-    <div>
-      ${results.filter(el => el.type === 'dir').map(el => html`
-      <a
-        class="directory"
-        href="${`https://geolytix.github.io/MapIcons${pathname}${el.name}`}">${el.name}`)}
-    </div>
-    <div class="gallery">
-      ${results.filter(el => el.name.match(/\.(gif|jpe?g|tiff?|png|webp|bmp|svg)$/i)).map(el => html`
-        <a
-          class="img"
-          href="${`https://geolytix.github.io/xyz${pathname}${el.name}`}"
-          style="${`background-image: url(https://geolytix.github.io/xyz${pathname}${el.name})`}">`)}`)
-  
-
-  }
+  })
 
 </script>
 
