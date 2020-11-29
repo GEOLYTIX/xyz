@@ -136,6 +136,9 @@ input[type=range]::-moz-range-thumb {
 .icon-description {
   background-image: url("../icons/icon-description.svg"); }
 
+.icon-reply {
+  background-image: url("../icons/icon-reply.svg"); }
+
 .icon-touch-app {
   background-image: url("../icons/icon-touch-app.svg"); }
 

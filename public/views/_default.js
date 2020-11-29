@@ -185,14 +185,10 @@ window.onload = () => {
       scrollWheelZoom: true,
     })
 
-    xyz.plugins()
-      .then(() => xyz.layers.load())
-      .then(() => mappUI())
-      .catch(error => console.error(error))
-
     // Add zoomIn button.
     const btnZoomIn = btnColumn.appendChild(xyz.utils.html.node `
       <button
+        id="btnZoomIn"
         disabled=${xyz.map.getView().getZoom() >= xyz.locale.maxZoom}
         class="enabled"
         title=${xyz.language.toolbar_zoom_in}
@@ -286,6 +282,10 @@ window.onload = () => {
         }}>
         <div class="xyz-icon icon-map off-black-filter">`)      
 
+    xyz.plugins()
+      .then(() => xyz.layers.load())
+      .then(() => mappUI())
+      .catch(error => console.error(error))
   }
 
   // Initialise listview controls.
