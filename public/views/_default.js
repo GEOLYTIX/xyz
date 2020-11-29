@@ -201,6 +201,7 @@ window.onload = () => {
     // Add zoomOut button.
     const btnZoomOut = btnColumn.appendChild(xyz.utils.html.node`
       <button
+        id="btnZoomOut"
         disabled=${xyz.map.getView().getZoom() <= xyz.locale.minZoom}
         class="enabled"
         title=${xyz.language.toolbar_zoom_out}
@@ -238,7 +239,7 @@ window.onload = () => {
           xyz.mapview.interaction.zoom.cancel()
 
         }}>
-        <div class="xyz-icon icon-area off-black-filter">`)
+        <div class="xyz-icon icon-pageview off-black-filter">`)
 
     // Add locator button.
     btnColumn.appendChild(xyz.utils.html.node`
@@ -268,7 +269,7 @@ window.onload = () => {
                 e.target.classList.remove('enabled')
               }
             })
-          }}><div class="xyz-icon icon-line off-black-filter">`)          
+          }}><div class="xyz-icon icon-straighten off-black-filter">`)          
 
     // Add fullscreen button.
     btnColumn.appendChild(xyz.utils.html.node`
