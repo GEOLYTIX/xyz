@@ -133,9 +133,6 @@ input[type=range]::-moz-range-thumb {
   background-image: url("../icons/icon-close.svg");
   background-position: right; }
 
-.icon-backup {
-  background-image: url("../icons/icon-backup.svg"); }
-
 .icon-description {
   background-image: url("../icons/icon-description.svg"); }
 
