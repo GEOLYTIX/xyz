@@ -139,6 +139,12 @@ input[type=range]::-moz-range-thumb {
 .icon-reply {
   background-image: url("../icons/icon-reply.svg"); }
 
+.icon-pageview {
+  background-image: url("../icons/icon-pageview.svg"); }
+
+.icon-straighten {
+  background-image: url("../icons/icon-straighten.svg"); }
+
 .icon-touch-app {
   background-image: url("../icons/icon-touch-app.svg"); }
 
