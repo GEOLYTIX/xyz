@@ -6,5 +6,23 @@ layout: root.html
 
 # Application Views
 
-Application views are the primary client interface. They usually consist of a HTML document with the XYZ Library script, stylesheets, Openlayers, and other script dependencies referenced in the document header.
+Application views are browser interfaces which consist of HTML(CSS) and Javascript. The default Mapp interface is provided as _default.html, _default.js, and _default.css in the [public/views](https://github.com/GEOLYTIX/xyz/tree/master/public/views) directory.
 
+A series of stylesheet and script must be referenced in the document head of the application view.
+
+```html
+<!-- Load openlayers library and stylesheet. -->
+<link rel="stylesheet" href="${dir}/css/openlayers.css" />
+<script src="${dir}/js/ol.js" defer></script>
+
+<!-- Load mapbox-gl library required for mbtiles layer. -->
+<script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js" defer></script>
+
+<!-- Load XYZ / MAPP stylesheet and library. -->
+<link rel="stylesheet" href="${dir}/css/control.css" />
+<script src="${dir}/js/xyz_openlayers.js" defer></script>
+```
+
+Aditional script sources (and stylesheets) may be required for plugins and 3rd party utility libraries such as tabulator (eg. `<script src="/js/tabulator.min.js" defer></script>`).
+
+Application views may either be hosted as static files (eg. on Github pages) or XYZ templates. If hosted as template the view can be accessed through the [api/view](/xyz/docs/develop/api/view/) method which allows template parameter substitution.

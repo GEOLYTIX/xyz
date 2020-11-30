@@ -12,17 +12,22 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
+    <!-- Load openlayers library and stylesheet. -->
     <link rel="stylesheet" href="${dir}/css/openlayers.css" />
-    <link rel="stylesheet" href="${dir}/css/control.css" />
-    <link rel="stylesheet" href="${dir}/views/_default.css" />
+    <script src="${dir}/js/ol.js" defer></script>
 
+    <!-- Load tabulator library. -->
     <script src="${dir}/js/tabulator.min.js" defer></script>
 
-    <script src="${dir}/js/ol.js" defer></script>
+    <!-- Load mapbox-gl library required for mbtiles layer. -->
     <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js" defer></script>
 
+    <!-- Load XYZ / MAPP stylesheet and library. -->
+    <link rel="stylesheet" href="${dir}/css/control.css" />
     <script src="${dir}/js/xyz_openlayers.js" defer></script>
     
+    <!-- Load _default stylesheet and script for this application view. -->
+    <link rel="stylesheet" href="${dir}/views/_default.css" />
     <script src="${dir}/views/_default.js" defer></script>
 </head>
 
