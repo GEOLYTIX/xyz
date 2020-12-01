@@ -2,6 +2,8 @@ const logger = require('../mod/logger')
 
 const auth = require('../mod/user/auth')
 
+const login = require('../mod/user/login')
+
 const getWorkspace = require('../mod/workspace/getWorkspace')
 
 const routes = {
@@ -27,30 +29,69 @@ module.exports = async (req, res) => {
   // Merge request params and query params.
   req.params = Object.assign(req.params || {}, req.query || {})
 
-  req.params.logger = logger
+  req.params.language = req.params.language || 'en'
 
-  // URI decode string params.
+  req.params.template = req.params._template || req.params.template
+
+  // Decode string params.
   Object.entries(req.params)
     .filter(entry => typeof entry[1] === 'string')
     .forEach(entry => {
       req.params[entry[0]] = decodeURIComponent(entry[1])
     })
 
+  // Make logger method available through params.
+  req.params.logger = logger
+
+  if (req.params.login) return login(req, res)
+
+  if (req.params.logout) {
+
+    res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
+
+    res.setHeader('location', process.env.DIR || '/')
+
+    return res.status(302).send()
+  }
+
+  const user = await auth(req, res)
+
+  if (!user && process.env.PRIVATE) return login(req, res)
+
+  req.params.user = user
+
   const path = req.url.match(/(?<=\/api\/)(.*?)[\/\?]/)
 
-  if (path && path[1] === 'user') return routes.user(req, res)
-
-  await auth(req, res)
-
-  if (res.finished) return
+  if (path && path[1] === 'user') {
+    const msg = routes.user(req, res)
+    msg && login(req, res, msg)
+    return
+  }
 
   const workspace = await getWorkspace(req)
 
   if (workspace instanceof Error) return res.status(500).send(workspace.message)
 
+  if (req.params.template) {
+
+    const template = workspace.templates[req.params.template]
+
+    if (!template) return res.status(404).send('Template not found.')
+
+    if (template.err) return res.status(500).send(template.err.message)
+
+    if (!user && (template.login || template.admin)) return login(req, res, 'Route requires login')
+
+    if (user && (!user.admin && template.admin)) return login(req, res, 'Route requires admin priviliges')
+
+    req.params.template = template
+  }
+
   req.params.workspace = workspace
 
   if (path && path[1] && routes[path[1]]) return routes[path[1]](req, res)
+
+  req.params.template = req.params.workspace.templates.mapp
 
   routes.view(req, res)
 

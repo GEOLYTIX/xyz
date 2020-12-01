@@ -14,19 +14,9 @@ const acl = require('./acl')()
 
 module.exports = async (req) => {
 
-  if(!req.body.email) return jwt.sign({
-    msg: messages.missing_email[req.body.language || req.params.language || 'en'] || `Missing email`
-  },
-  process.env.SECRET, {
-    expiresIn: '3s'
-  })
+  if(!req.body.email) return new Error(messages.missing_email[req.body.language || req.params.language || 'en'] || 'Missing email')
   
-  if(!req.body.password) return jwt.sign({
-    msg: messages.missing_password[req.body.language || req.params.language || 'en'] || `Missing password`
-  },
-  process.env.SECRET, {
-    expiresIn: '3s'
-  })
+  if(!req.body.password) return new Error(messages.missing_password[req.body.language || req.params.language || 'en'] || 'Missing password')
 
   const date = new Date()
 
@@ -40,25 +30,15 @@ module.exports = async (req) => {
     WHERE lower(email) = lower($1)
     RETURNING *;`, [req.body.email])
 
-  if (rows instanceof Error) new Error('Bad Config')
+  if (rows instanceof Error) return new Error('Bad Config')
 
   // Get user record from first row.
   const user = rows[0]
 
   // Redirect back to login (get) with error msg if user is not found.
-  if (!user) return jwt.sign({
-      msg: messages.user_not_found[req.body.language || req.params.language || 'en'] || `User not found.`
-    },
-    process.env.SECRET, {
-      expiresIn: '3s'
-    })
+  if (!user) return new Error(messages.user_not_found[req.body.language || req.params.language || 'en'] || 'User not found.')
 
-  if(user.blocked) return jwt.sign({
-    msg: messages.user_blocked[req.body.language || req.params.language || 'en'] || `User blocked`
-  },
-  process.env.SECRET, {
-    expiresIn: '3s'
-  })
+  if (user.blocked) return new Error(messages.user_blocked[req.body.language || req.params.language || 'en'] || 'User blocked')
   
   const approvalDate = user.approved_by && new Date(user.approved_by.replace(/.*\|/,''))
 
@@ -80,12 +60,7 @@ module.exports = async (req) => {
 
       }
 
-      return jwt.sign({
-        msg: messages.user_expired[req.body.language || req.params.language || 'en'] || `User approval has expired. Please re-register.`
-      },
-      process.env.SECRET, {
-        expiresIn: '3s'
-      })
+      return new Error(messages.user_expired[req.body.language || req.params.language || 'en'] || 'User approval has expired. Please re-register.')
       
     }
 
@@ -107,12 +82,7 @@ module.exports = async (req) => {
       remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
     })));
 
-    return jwt.sign({
-      msg: messages.user_not_verified[req.body.language || req.params.language || 'en'] || `User not verified or approved`
-    },
-    process.env.SECRET, {
-      expiresIn: '3s'
-    })
+    return new Error(messages.user_not_verified[req.body.language || req.params.language || 'en'] || 'User not verified or approved')
 
   }
 
@@ -122,16 +92,14 @@ module.exports = async (req) => {
     user.roles.push(req.body.language || user.language)
 
     // Create token with 8 hour expiry.
-    const token = {
-      email: user.email,
-      admin: user.admin,
-      language: req.body.language || user.language,
-      key: user.api,
-      roles: user.roles
-    }
-
-    token.signed = jwt.sign(
-      token,
+    const token = jwt.sign(
+      {
+        email: user.email,
+        admin: user.admin,
+        language: req.body.language || user.language,
+        key: user.api,
+        roles: user.roles
+      },
       process.env.SECRET,
       {
         expiresIn: '8h'
@@ -180,19 +148,14 @@ module.exports = async (req) => {
       remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
     })));
 
-    return jwt.sign({
-      msg: messages.account_blocked[req.body.language || req.params.language || 'en'] || `Account is blocked, please check email.`
-    },
-    process.env.SECRET, {
-      expiresIn: '3s'
-    })
+    return new Error(messages.account_blocked[req.body.language || req.params.language || 'en'] || 'Account is blocked, please check email.')
 
   }
 
   // Finally login has failed.
   const login_incorrect_mail = mail_templates.login_incorrect[user.language || req.params.language || 'en'] || mail_templates.login_incorrect.en;
 
-    await mailer(Object.assign({
+  await mailer(Object.assign({
       to: user.email
     },
     login_incorrect_mail({
@@ -200,11 +163,6 @@ module.exports = async (req) => {
       remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
     })));
 
-  return jwt.sign({
-    msg: messages.token_failed[req.body.language|| req.params.language || 'en'] || `Failed to create token`
-  },
-  process.env.SECRET, {
-    expiresIn: '3s'
-  })
+  return new Error(messages.token_failed[req.body.language|| req.params.language || 'en'] || 'Failed to create token')
 
 }

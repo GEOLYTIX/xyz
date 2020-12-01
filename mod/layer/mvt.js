@@ -16,9 +16,9 @@ module.exports = async (req, res) => {
     r = (m * 2) / (Math.pow(2, z))
 
   const roles = layer.roles
-    && req.params.token
+    && req.params.user
     && Object.keys(layer.roles)
-      .filter(key => req.params.token.roles.includes(key))
+      .filter(key => req.params.user.roles.includes(key))
       .reduce((obj, key) => {
         obj[key] = layer.roles[key];
         return obj;

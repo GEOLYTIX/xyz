@@ -15,7 +15,7 @@ module.exports = async (req, res) => {
   const user = rows[0]
 
   if (!user) {
-    return res.send(messages.token_not_found[req.params.token.language || req.params.language || 'en']) ||
+    return res.send(messages.token_not_found[req.params.user.language || req.params.language || 'en']) ||
       `Token not found. The token has probably been resolved already.`
   }
 
@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
   UPDATE acl_schema.acl_table SET
     approved = true,
     approvaltoken = null,
-    approved_by = '${req.params.token.email}|${new Date().toISOString().replace(/\..*/,'')}'
+    approved_by = '${req.params.user.email}|${new Date().toISOString().replace(/\..*/,'')}'
   WHERE lower(email) = lower($1);`, [user.email])
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
@@ -42,7 +42,7 @@ module.exports = async (req, res) => {
     protocol: protocol
   })));
   
-  res.send(messages.admin_approved[req.params.token.language || req.params.language || 'en'] ||
+  res.send(messages.admin_approved[req.params.user.language || req.params.language || 'en'] ||
     `The account has been approved by you. An email has been sent to the account holder.`)
 
 }

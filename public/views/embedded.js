@@ -211,11 +211,6 @@ window.onload = () => {
       })
     })
 
-    // Get user from token.
-    if (document.head.dataset.token) {
-      xyz.user = xyz.utils.JWTDecode(document.head.dataset.token)
-    }
-
   }
 
 }

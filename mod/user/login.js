@@ -18,17 +18,24 @@ module.exports = async (req, res, msg) => {
 
   if (!acl) return res.send('No Access Control List.')
 
-  const template = req.params.language && templates[req.params.language] || templates.en
+  // Get the login template for language param or English if template doesn't exist
+  const template = templates[req.params.language] || templates.en
+
+  // The redirect for a successful login.
+  const redirect = req.body && req.body.redirect ||
+    req.url && decodeURIComponent(req.url).replace(/login\=true/, '')
   
   const params = {
     dir: process.env.DIR,
-    redirect: req.body && req.body.redirect || req.url && decodeURIComponent(req.url),
-    language: req.params.language || 'en',
+    redirect: redirect,
+    language: req.params.language,
     msg: msg || ' '
   }
 
+  // Render the login template with params.
   const html = template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
 
+  // The login view will set the cookie to null.
   res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
 
   res.send(html)

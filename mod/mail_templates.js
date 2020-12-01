@@ -305,37 +305,37 @@ module.exports = {
   admin_email: {
   	en: _ => ({
   		subject: `A new account has been verified on ${_.host}`,
-  		text: `Please log into the admin panel ${_.protocol}${_.host}/view/admin_user to approve ${_.email}
+  		text: `Please log into the admin panel ${_.protocol}${_.host}/api/user/admin to approve ${_.email}
       You can also approve the account by following this link: ${_.protocol}${_.host}/api/user/approve/${_.approvaltoken}`
     }),
     de: _ => ({
   		subject: `A neues Benutzerkonto wurde erstellt fuer ${_.host}`,
-  		text: `Please log into the admin panel ${_.protocol}${_.host}/view/admin_user to approve ${_.email}
+  		text: `Please log into the admin panel ${_.protocol}${_.host}/api/user/admin to approve ${_.email}
       You can also approve the account by following this link: ${_.protocol}${_.host}/api/user/approve/${_.approvaltoken}`
   	}),
   	fr: _ => ({
   		subject: `Un nouveau compte a été verifié sur ${_.host}`,
-  		text: `Veuillez vous connecter à votre compte administrateur ${_.protocol}${_.host}/view/admin_user pour approuver ${_.email}
+  		text: `Veuillez vous connecter à votre compte administrateur ${_.protocol}${_.host}/api/user/admin pour approuver ${_.email}
   		Vous pouvez également l'approuver en suivant ce lien ${_.protocol}${_.host}/api/user/approve/${_.approvaltoken}`
   	}),
     pl: _ => ({
       subject: `Nowe konto zostało zweryfikowane na ${_.host}`,
-      text: `Zaloguj się do panelu administratora ${_.protocol}${_.host}/view/admin_user aby zatwierdzić ${_.email}
+      text: `Zaloguj się do panelu administratora ${_.protocol}${_.host}/api/user/admin aby zatwierdzić ${_.email}
       Możesz też zatwierdzić nowego konto za pomocą tego linku ${_.protocol}${_.host}/api/user/approve/${_.approvaltoken}`
     }),
     ja: _ => ({
     	subject: `${_.host}についてアカウントを検証されました`,
-    	text: `${_.email} を承認するには、管理パネル ${_.protocol}${_.host}/view/admin_user にログインしてください
+    	text: `${_.email} を承認するには、管理パネル ${_.protocol}${_.host}/api/user/admin にログインしてください
     	このリンクからもアカウントを承認することができます ${_.protocol}${_.host}/api/user/approve/${_.approvaltoken}`
     }),
     ko: _ => ({
   		subject: `새로운 계정이 확인되었습니다. ${_.host}`,
-  		text: `${_.email} 을 승인하려면 관리자 패널 ${_.protocol}${_.host}/view/admin_user 에 로그인하세요.
+  		text: `${_.email} 을 승인하려면 관리자 패널 ${_.protocol}${_.host}/api/user/admin 에 로그인하세요.
       다음의 링크로 또한 계정 승인을 할 수 있습니다. ${_.protocol}${_.host}/api/user/approve/${_.approvaltoken}`
   	}),
   	zh: _ => ({
   		subject: `新帐户已通过验证 ${_.host}`,
-  		text: `请登录管理控制台 ${_.protocol}${_.host}/view/admin_user 批准 ${_.email}
+  		text: `请登录管理控制台 ${_.protocol}${_.host}/api/user/admin 批准 ${_.email}
       You can also approve the account by following this link: ${_.protocol}${_.host}/api/user/approve/${_.approvaltoken}`
   	})
   }

@@ -20,8 +20,8 @@ module.exports = async (req, res) => {
 
   const token = await getToken(req)
 
-  if (token instanceof Error) return res.send(token.message)
-  
+  if (token instanceof Error) return login(req, res, token.message)
+ 
   const cookie = `${process.env.TITLE}=${token.signed || token};HttpOnly;Max-Age=28800;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`
 
   res.setHeader('Set-Cookie', cookie)
