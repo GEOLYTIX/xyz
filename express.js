@@ -1,5 +1,6 @@
-const dotenv = require('dotenv');
-dotenv.config();
+const dotenv = require('dotenv')
+
+dotenv.config()
 
 const express = require('express')
 
@@ -21,11 +22,6 @@ const _api = require('./api/api')
 const api = (req, res) => _api(req, res)
 
 
-app.get(`${process.env.DIR||''}/view/:template?/:access?`, api)
-
-app.get(`${process.env.DIR||''}/:access?`, api)
-
-
 app.get(`${process.env.DIR||''}/api/proxy`, api)
 
 
@@ -42,9 +38,7 @@ app.post(`${process.env.DIR||''}/api/query/:template?`, bodyParser.json({limit: 
 app.get(`${process.env.DIR||''}/api/gazetteer`, api)
 
 
-app.get(`${process.env.DIR||''}/api/workspace/:method?/:key?`, api)
-
-app.post(`${process.env.DIR||''}/api/workspace/:method?/:key?`, bodyParser.json({limit: '5mb'}), api)
+app.get(`${process.env.DIR||''}/api/workspace/get/:key?`, api)
 
 
 app.get(`${process.env.DIR||''}/api/layer/:format?/:z?/:x?/:y?`, api)
@@ -58,6 +52,11 @@ app.post(`${process.env.DIR||''}/api/location/:method?`, bodyParser.json({limit:
 app.get(`${process.env.DIR||''}/api/user/:method?/:key?`, api)
 
 app.post(`${process.env.DIR||''}/api/user/:method?/:key?`, bodyParser.urlencoded({extended: true}), api)
+
+
+app.get(`${process.env.DIR||''}/view/:template?`, api)
+
+app.get(`${process.env.DIR||''}/`, api)
 
 
 app.listen(process.env.PORT || 3000)

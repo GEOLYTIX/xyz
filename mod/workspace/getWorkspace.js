@@ -55,9 +55,6 @@ async function assignTemplates() {
     mapp: {
       template: readFileSync(join(__dirname, '../../public/views/_default.html')).toString('utf8')
     },
-    admin_user: {
-      template: readFileSync(join(__dirname, '../../public/views/_admin_user.html')).toString('utf8')
-    },
 
     // Query templates:
     count_locations: require('../../public/js/queries/count_locations'),

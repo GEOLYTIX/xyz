@@ -356,26 +356,23 @@ window.onload = () => {
       })
     })
 
-    // Get user from token.
-    if (document.head.dataset.token) {
-      xyz.user = xyz.utils.JWTDecode(document.head.dataset.token)
-    }
+    xyz.user = document.head.dataset.user && JSON.parse(decodeURI(document.head.dataset.user))
 
     // Append user admin button.
     xyz.user && xyz.user.admin && btnColumn.appendChild(xyz.utils.html.node`
       <a
         title=${xyz.language.toolbar_admin}
         class="enabled mobile-display-none style="cursor: pointer;"
-        href="${xyz.host + '/view/admin_user'}">
+        href="${xyz.host + '/api/user/admin'}">
         <div class="xyz-icon icon-supervisor-account">`)
 
     // Append logout button.
     document.head.dataset.login && btnColumn.appendChild(xyz.utils.html.node`
       <a
-        title="${xyz.user ? `${xyz.language.toolbar_logout} ${xyz.user.email}` : 'Login'}"
+        title="${xyz.user && `${xyz.language.toolbar_logout} ${xyz.user.email}` || 'Login'}"
         class="enabled" style="cursor: pointer;"
-        href="${xyz.host + (xyz.user ? '/api/user/logout' : '/login')}">
-        <div class="${'xyz-icon ' + (xyz.user && 'icon-logout' || 'icon-lock-open')}">`)
+        href="${xyz.user && '?logout=true' || '?login=true'}">
+        <div class="${`xyz-icon ${xyz.user && 'icon-logout' || 'icon-lock-open'}`}">`)
 
   }
 

@@ -1,4 +1,4 @@
-# 3.4.2
+# 3.5.0
 
 Label to support minZoom, maxZoom, and title. [#351](https://github.com/GEOLYTIX/xyz/issues/351)
 
@@ -11,3 +11,7 @@ Include embedded view.
 Fix single theme mvt creation.
 
 Updated blog view.
+
+Remove JWT from utils.
+
+Authentication review.

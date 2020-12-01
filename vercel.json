@@ -55,7 +55,7 @@
       "destination": "/api/api.js"
     },
     {
-      "source": "/api/workspace/:method?/:key?",
+      "source": "/api/workspace/get/:key?",
       "destination": "/api/api.js"
     },
     {
@@ -71,11 +71,7 @@
       "destination": "/api/api.js"
     },
     {
-      "source": "/view/:_template?/:access?",
-      "destination": "/api/api.js"
-    },
-    {
-      "source": "/:access?",
+      "source": "/view/:_template?",
       "destination": "/api/api.js"
     },
     {

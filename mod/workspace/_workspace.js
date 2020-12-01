@@ -1,33 +1,6 @@
-const auth = require('../user/auth')
-
-const _method = {
-  get: {
-    handler: get
-  }
-}
-
 const cloneDeep = require('lodash/cloneDeep')
 
 module.exports = async (req, res) => {
-
-  const method = _method[req.params && req.params.method]
-
-  if (!method) {
-    return res.send(`Failed to evaluate 'method' param.<br><br>
-    <a href="https://geolytix.github.io/xyz/docs/develop/api/workspace/">Workspace API</a>`)
-  }
-
-  if (method.access) {
-
-    await auth(req, res, method.access)
-
-    if (res.finished) return
-  }
-
-  method.handler(req, res)
-}
-
-async function get(req, res) {
 
   const keys = {
     defaults: () => res.send(defaults),
@@ -43,20 +16,24 @@ async function get(req, res) {
 
   if (keys[req.params.key]) return keys[req.params.key](req, res)
 
-  res.send(`Failed to evaluate ${req.params.key} as 'key' param.<br><br>
-  <a href="https://geolytix.github.io/xyz/docs/develop/api/workspace/">Workspace API</a>`)
+  res.send(`
+    Failed to evaluate ${req.params.key} as 'key' param.
+    <br>
+    <br>
+    <a href="https://geolytix.github.io/xyz/docs/develop/api/workspace/">Workspace API</a>`)
 }
 
 async function getLayer(req, res) {
+
+  const roles = req.params.user && req.params.user.roles || []
 
   if (!req.params.layer) return res.send('Layer key missing.')
 
   const locale = req.params.locale && req.params.workspace.locales[req.params.locale]
 
   if (locale.roles && !Object.keys(locale.roles).some(
-    role => req.params.token && req.params.token.roles
-      && req.params.token.roles.includes(role)
-      || (role.match(/^\!/) && !req.params.token.roles.includes(role.replace(/^\!/, '')))
+    role => roles.includes(role)
+      || (role.match(/^\!/) && !roles.includes(role.replace(/^\!/, '')))
   )) return res.status(403).send('Role access denied.')
 
   let layer = locale && locale.layers[req.params.layer] ||  req.params.workspace.templates[req.params.layer]
@@ -64,13 +41,12 @@ async function getLayer(req, res) {
   if (!layer) return res.status(400).send('Layer not found.')
 
   if (layer.roles && !Object.keys(layer.roles).some(
-    role => req.params.token && req.params.token.roles
-      && req.params.token.roles.includes(role)
-      || (role.match(/^\!/) && !req.params.token.roles.includes(role.replace(/^\!/, '')))
+    role => roles.includes(role)
+      || (role.match(/^\!/) && !roles.includes(role.replace(/^\!/, '')))
   )) return res.status(403).send('Role access denied.')
 
-  if (req.params.token && req.params.token.roles) {
-    layer = await roleEval(layer, req.params.token.roles)
+  if (roles.length) {
+    layer = await roleEval(layer, roles)
   }
 
   res.send(layer)
@@ -111,7 +87,7 @@ function getLocales(req, res) {
 
     const locale = req.params.workspace.locales[key]
 
-    const roles = req.params.token && req.params.token.roles
+    const roles = req.params.user && req.params.user.roles || []
 
     // Locales without roles will always be returned.
     if (!locale.roles) return {
@@ -149,9 +125,11 @@ function getLocale(req, res) {
 
   let locale = Object.assign({key: req.params.locale}, cloneDeep(req.params.workspace.locales[req.params.locale]))
 
-   if(locale.roles && !Object.keys(locale.roles).some(
-    role => req.params.token && req.params.token.roles && req.params.token.roles.includes(role) 
-    || ((role.match(/^\!/) && !req.params.token.roles.includes(role.replace(/^\!/, ''))))
+  const roles = req.params.user && req.params.user.roles || []
+
+  if(locale.roles && !Object.keys(locale.roles).some(
+    role => roles.includes(role) 
+    || ((role.match(/^\!/) && !roles.includes(role.replace(/^\!/, ''))))
     )) return res.status(403).send('Role access denied.')
 
   locale.layers = Object.entries(locale.layers)
@@ -161,10 +139,10 @@ function getLocale(req, res) {
 
       // check whether the layer is available for roles in token.
       if (Object.keys(layer[1].roles).some(
-        role => req.params.token && req.params.token.roles
-          && req.params.token.roles.includes(role)
-          || (role.match(/^\!/) && !req.params.token.roles.includes(role.replace(/^\!/, '')))
+        role => roles.includes(role)
+          || (role.match(/^\!/) && !roles.includes(role.replace(/^\!/, '')))
       )) return layer[0]
+      
     })
     .filter(layer => !!layer)
 
