@@ -4,13 +4,29 @@ const login = require('./login')
 
 const messages = require('./messages')
 
+const jwt = require('jsonwebtoken')
+
 module.exports = async (req, res) => {
 
   if (!req.body) {
+  
+    const cookie = req.cookies && req.cookies[process.env.TITLE]
 
-    if (req.cookies && req.cookies[process.env.TITLE]) {
+    if (cookie) {
 
-      return res.send(`${process.env.TITLE}=<a href="${process.env.DIR}/api/user/token">token</a>;HttpOnly;Max-Age=28800;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
+      return jwt.verify(
+        cookie,
+        process.env.SECRET,
+        async (err, user) => {
+
+          if (err) return err
+
+          user.iat = new Date(user.iat * 1000)
+          user.exp = new Date(user.exp * 1000)
+
+          res.send(user)
+
+        })
 
     }
 
