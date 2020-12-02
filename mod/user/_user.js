@@ -1,27 +1,8 @@
-const { readFileSync } = require('fs')
-
-const { join } = require('path')
-
 const messages = require('./messages')
-
-const jwt = require('jsonwebtoken')
 
 const methods = {
   admin: {
-    handler: (req, res) => {
-
-      const template = readFileSync(join(__dirname, '../../public/views/_user.html')).toString('utf8')
-
-      const params = {
-        dir: process.env.DIR
-      }
-    
-      // Render the login template with params.
-      const html = template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
-    
-      res.send(html)
-
-    },
+    handler: require('./admin'),
     admin: true
   },
   register: {
@@ -59,25 +40,7 @@ const methods = {
     login: true
   },
   token: {
-    handler: (req, res) => {
-
-      const user = req.params.user
-
-      if (user.from_token) return res.send('Token may not be generated from token authentication.')
-
-      delete user.admin
-      delete user.exp
-      delete user.iat
-
-      const token = jwt.sign(
-        req.params.user,
-        process.env.SECRET, {
-          expiresIn: '8hr'
-        })
-
-      res.send(token)
-
-    },
+    handler: require('./token'),
     login: true
   },
   cookie: {

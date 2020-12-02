@@ -1,5 +1,7 @@
 module.exports = async (req, res) => {
 
+  if (!req.params.template) return res.status(400).send('No template provided for request.')
+
   const user = req.params.user && encodeURI(JSON.stringify({
     email: req.params.user.email,
     admin: req.params.user.admin,
