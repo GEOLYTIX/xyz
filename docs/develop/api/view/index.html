@@ -397,7 +397,13 @@
 
     <div id="content">
       <h1 id="view-api">View API <a class="header-anchor" href="#view-api">¶</a></h1>
-<p>Views stored as markup templates can be rendered with request parameter and returned as HTML to the client.</p>
+<p><a href="/xyz/docs/develop/views/">Application view</a> templates can be accessed through the XYZ API to allow for parameter substitution prior to the template being sent to the client. The View API will be private or public dependent on the environment configuration. Individual templates may be defined as private or for admin access only overriding the environment settings.</p>
+<h3 id="%2Fapi%2Fview%2F%3Atemplate%3F">/api/view/:template? <a class="header-anchor" href="#%2Fapi%2Fview%2F%3Atemplate%3F">¶</a></h3>
+<p>A template parameter must be provided to the View API. The template parameter (eg. <code>/api/view?template=myTemplate</code>) may be provided as first URL path parameter (eg. <code>/api/view/myTemplate</code>).</p>
+<p>A <code>400</code> status code will be returned if the template parameter is not defined.</p>
+<p>The named template must be available as in the workspace.</p>
+<p>A <code>404</code> status code will be returned if the template is not found in the workspace.</p>
+<p>An err property will be defined if the XYZ Host fails to cache a template in the workspace. The value of the err property will be returned if found.</p>
 
     </div>
 

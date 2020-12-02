@@ -31,6 +31,7 @@ module.exports = async (req, res) => {
   // Merge request params and query params.
   req.params = Object.assign(req.params || {}, req.query || {})
 
+  // Language param will default to english [en] is not explicitly set.
   req.params.language = req.params.language || 'en'
 
   req.params.template = req.params._template || req.params.template
@@ -45,44 +46,54 @@ module.exports = async (req, res) => {
   // Make logger method available through params.
   req.params.logger = logger
 
+  // Short circuit login view or post request.
   if (req.params.login || req.body && req.body.login) return login(req, res)
 
+  // Short circuit register view or post request.
   if (req.params.register || req.body && req.body.register) return register(req, res)
 
+  // Short circuit logout request
   if (req.params.logout) {
 
+    // Remove cookie.
     res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
 
+    // Remove logout parameter.
     res.setHeader('location', req.url && decodeURIComponent(req.url).replace(/logout\=true/, ''))
 
     return res.status(302).send()
   }
 
+  // Validate signature of either request token or cookie.
   const user = await auth(req, res)
 
+  // Remove token from params object.
   delete req.params.token
 
+  // The authentication method returns an error.
   if (user && user instanceof Error) {
+
+    // Remove cookie.
     res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
-    return res.send(user.msg)
+
+    // Return login view with error message.
+    return login(req, res, user.msg)
   }
 
+  // The login view will be returned for all PRIVATE requests without a valid user.
   if (!user && process.env.PRIVATE) return login(req, res)
 
+  // Set user as request parameter.
   req.params.user = user
 
-  const path = req.url.match(/(?<=\/api\/)(.*?)[\/\?]/)
-
-  if (path && path[1] === 'user') {
-    const msg = routes.user(req, res)
-    msg && login(req, res, msg)
-    return
-  }
-
+  // Retrieve workspace and assign to request params.
   const workspace = await getWorkspace(req)
 
   if (workspace instanceof Error) return res.status(500).send(workspace.message)
 
+  req.params.workspace = workspace
+
+  // Retrieve query or view template from workspace
   if (req.params.template) {
 
     const template = workspace.templates[req.params.template]
@@ -98,7 +109,14 @@ module.exports = async (req, res) => {
     req.params.template = template
   }
 
-  req.params.workspace = workspace
+  // Retrieve path component from request URL for method routing.
+  const path = req.url.match(/(?<=\/api\/)(.*?)[\/\?]/)
+
+  if (path && path[1] === 'user') {
+    const msg = routes.user(req, res)
+    msg && login(req, res, msg)
+    return
+  }
 
   if (path && path[1] && routes[path[1]]) return routes[path[1]](req, res)
 
