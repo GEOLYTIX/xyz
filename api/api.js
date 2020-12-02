@@ -45,7 +45,7 @@ module.exports = async (req, res) => {
   // Make logger method available through params.
   req.params.logger = logger
 
-  if (req.body && req.body.login) return cookie(req, res)
+  if (req.body && req.body.login) return login(req, res)
 
   if (req.params.login) return login(req, res)
 
