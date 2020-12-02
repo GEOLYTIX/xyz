@@ -1,12 +1,10 @@
 const logger = require('../mod/logger')
 
-const auth = require('../mod/user/auth')
-
 const login = require('../mod/user/login')
 
 const register = require('../mod/user/register')
 
-const cookie = require('../mod/user/cookie')
+const auth = require('../mod/user/auth')
 
 const getWorkspace = require('../mod/workspace/getWorkspace')
 

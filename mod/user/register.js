@@ -32,12 +32,16 @@ module.exports = async (req, res) => {
 
   if (req.body) return register(req, res)
 
+
+
   const params = {
     language: req.params.language || 'en',
     dir: process.env.DIR
   }
 
   const html = template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
+
+  res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
 
   res.send(html)
 }
