@@ -2,7 +2,8 @@ module.exports = async (req, res) => {
 
   const user = req.params.user && encodeURI(JSON.stringify({
     email: req.params.user.email,
-    admin: req.params.user.admin
+    admin: req.params.user.admin,
+    roles: req.params.user.roles
   }))
 
   const html = req.params.template.render(Object.assign(
