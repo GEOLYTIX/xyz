@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
 
   if (!acl) return res.send('No Access Control List.')
 
-  if (req.body && req.body.register) return register(req, res)
+  if (req.body && req.body.register) return post(req, res)
 
   view(req, res)
 
@@ -57,7 +57,7 @@ function view(req, res) {
 
 }
 
-async function register(req, res) {
+async function post(req, res) {
 
   const acl_schema = await acl(`SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'acl_table';`)
 
