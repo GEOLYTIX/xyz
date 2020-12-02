@@ -97,7 +97,6 @@ module.exports = async (req) => {
         email: user.email,
         admin: user.admin,
         language: req.body.language || user.language,
-        key: user.api,
         roles: user.roles
       },
       process.env.SECRET,

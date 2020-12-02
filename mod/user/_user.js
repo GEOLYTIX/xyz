@@ -61,7 +61,11 @@ const methods = {
   token: {
     handler: (req, res) => {
 
-      delete req.params.user.admin
+      const user = req.params.user
+
+      delete user.admin
+      delete user.exp
+      delete user.iat
 
       const token = jwt.sign(
         req.params.user,
