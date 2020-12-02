@@ -38,6 +38,10 @@ The cookie will be removed and the login view will be returned with an error mes
 
 The request will terminate without a valid user in a PRIVATE process environment and return the login view.
 
+### Proxy requests
+
+Proxy requests are short circuited as they only need authentication for PRIVATE process environments and the environment keys themselves for parameter substitution in the proxied request.
+
 ### Workspace
 
 The workspace will be retrieved after successfull authentication to account for user roles.

@@ -17,7 +17,6 @@ const routes = {
   query: require('../mod/query'),
   gazetteer: require('../mod/gazetteer'),
   provider: provider,
-  proxy: proxy,
 }
 
 process.env.TITLE = process.env.TITLE || 'GEOLYTIX | XYZ'
@@ -83,6 +82,12 @@ module.exports = async (req, res) => {
   // The login view will be returned for all PRIVATE requests without a valid user.
   if (!user && process.env.PRIVATE) return login(req, res)
 
+  // Retrieve path component from request URL for method routing.
+  const path = req.url.match(/(?<=\/api\/)(.*?)[\/\?]/)
+
+  // Short circuit proxy requests.
+  if (path && path[0] === 'proxy?') return proxy(req, res)
+
   // Set user as request parameter.
   req.params.user = user
 
@@ -108,9 +113,6 @@ module.exports = async (req, res) => {
 
     req.params.template = template
   }
-
-  // Retrieve path component from request URL for method routing.
-  const path = req.url.match(/(?<=\/api\/)(.*?)[\/\?]/)
 
   if (path && path[1] === 'user') {
     const msg = routes.user(req, res)
