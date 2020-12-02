@@ -63,6 +63,8 @@ const methods = {
 
       const user = req.params.user
 
+      if (user.from_token) return res.send('Token may not be generated from token authentication.')
+
       delete user.admin
       delete user.exp
       delete user.iat
