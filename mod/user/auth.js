@@ -46,12 +46,13 @@ module.exports = async (req, res) => {
       delete req.params.key
       delete req.params.token
       delete user.admin
+      user.from_token = true
 
       if (req.cookies && req.cookies[process.env.TITLE]) return user
 
       const cookie = jwt.sign(user, process.env.SECRET)
 
-      res.setHeader('Set-Cookie', `${process.env.TITLE}=${cookie};HttpOnly;Max-Age=28800;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
+      res.setHeader('Set-Cookie', `${process.env.TITLE}=${cookie};HttpOnly;Max-Age=${user.exp - user.iat};Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
     }
 
     return user
