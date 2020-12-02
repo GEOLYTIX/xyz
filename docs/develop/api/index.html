@@ -412,6 +412,8 @@
 <p>The token will be removed from the request params.</p>
 <p>The cookie will be removed and the login view will be returned with an error messgae if the authentication method returns an error.</p>
 <p>The request will terminate without a valid user in a PRIVATE process environment and return the login view.</p>
+<h3 id="proxy-requests">Proxy requests <a class="header-anchor" href="#proxy-requests">¶</a></h3>
+<p>Proxy requests are short circuited as they only need authentication for PRIVATE process environments and the environment keys themselves for parameter substitution in the proxied request.</p>
 <h3 id="workspace">Workspace <a class="header-anchor" href="#workspace">¶</a></h3>
 <p>The workspace will be retrieved after successfull authentication to account for user roles.</p>
 <p>A <code>500</code> error will be returned with an error message if the workspace method fails to evaluate a workspace obejct.</p>

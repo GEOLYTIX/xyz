@@ -19,7 +19,5 @@ module.exports = async (req, res) => {
     },
     Object.fromEntries(Object.entries(process.env).filter(entry => entry[0].match(/^SRC_/)))))
 
-  //Build the template with jsrender and send to client.
   res.send(html)
-
 }
