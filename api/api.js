@@ -53,7 +53,7 @@ module.exports = async (req, res) => {
 
     res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
 
-    res.setHeader('location', process.env.DIR || '/')
+    res.setHeader('location', req.url && decodeURIComponent(req.url).replace(/logout\=true/, ''))
 
     return res.status(302).send()
   }
