@@ -60,6 +60,13 @@ module.exports = async (req, res) => {
 
   const user = await auth(req, res)
 
+  delete req.params.token
+
+  if (user && user instanceof Error) {
+    res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
+    return res.send(user.msg)
+  }
+
   if (!user && process.env.PRIVATE) return login(req, res)
 
   req.params.user = user

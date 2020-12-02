@@ -17,42 +17,32 @@ module.exports = async (req, res) => {
 
     if (err) return err
 
-    // API keys have an api flag in the decoded token.
-    // if (user.api) {
-
-    //   // Get user from ACL.
-    //   var rows = await acl(`
-    //     SELECT * FROM acl_schema.acl_table
-    //     WHERE lower(email) = lower($1);`, [user.email])
-
-    //   if (rows instanceof Error) return rows
-
-    //   const api_user = rows[0]
-
-    //   // Check whether the stored key matches the provided key.
-    //   if (!api_user || !api_user.api || (api_user.api !== token)) {
-    //     return new Error('API Key mismatch')
-    //   }
-            
-    //   return {
-    //     email: api_user.email,
-    //     roles: api_user.roles
-    //   }
-    // }
-
     // Token access must not have any admin rights. 
     if (req.params.token) {
 
-      delete req.params.key
-      delete req.params.token
+      if (user.api) {
+
+        // Get API key from ACL.
+        var rows = await acl(`
+          SELECT api FROM acl_schema.acl_table
+          WHERE lower(email) = lower($1);`, [user.email])
+
+        if (rows instanceof Error) return rows
+
+        if (rows[0].api !== req.params.token) return new Error('API Key mismatch')
+      }
+
       delete user.admin
+
       user.from_token = true
 
-      if (req.cookies && req.cookies[process.env.TITLE]) return user
+      if (req.cookies && req.cookies[process.env.TITLE] !== req.params.token) {
 
-      const cookie = jwt.sign(user, process.env.SECRET)
+        const cookie = jwt.sign(user, process.env.SECRET)
 
-      res.setHeader('Set-Cookie', `${process.env.TITLE}=${cookie};HttpOnly;Max-Age=${user.exp - user.iat};Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
+        res.setHeader('Set-Cookie', `${process.env.TITLE}=${cookie};HttpOnly;Max-Age=${user.exp && (user.exp - user.iat) || 28800};Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
+      }
+
     }
 
     return user
