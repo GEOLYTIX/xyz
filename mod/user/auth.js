@@ -41,7 +41,7 @@ module.exports = async (req, res) => {
     }
 
     // Token access must not have any admin rights. 
-    if (req.params.key || req.params.token) {
+    if (req.params.api_key || req.params.token) {
 
       delete req.params.key
       delete req.params.token
