@@ -4,6 +4,8 @@ const auth = require('../mod/user/auth')
 
 const login = require('../mod/user/login')
 
+const register = require('../mod/user/register')
+
 const cookie = require('../mod/user/cookie')
 
 const getWorkspace = require('../mod/workspace/getWorkspace')
@@ -45,9 +47,9 @@ module.exports = async (req, res) => {
   // Make logger method available through params.
   req.params.logger = logger
 
-  if (req.body && req.body.login) return login(req, res)
+  if (req.params.login || req.body && req.body.login) return login(req, res)
 
-  if (req.params.login) return login(req, res)
+  if (req.params.register || req.body && req.body.register) return register(req, res)
 
   if (req.params.logout) {
 
