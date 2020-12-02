@@ -2,16 +2,6 @@ const { readFileSync } = require('fs')
 
 const { join } = require('path')
 
-const templates = {
-  en: readFileSync(join(__dirname, '../../public/views/register/_register_en.html')).toString('utf8'),
-  de: readFileSync(join(__dirname, '../../public/views/register/_register_de.html')).toString('utf8'),
-  fr: readFileSync(join(__dirname, '../../public/views/register/_register_fr.html')).toString('utf8'),
-  pl: readFileSync(join(__dirname, '../../public/views/register/_register_pl.html')).toString('utf8'),
-  ja: readFileSync(join(__dirname, '../../public/views/register/_register_ja.html')).toString('utf8'),
-  ko: readFileSync(join(__dirname, '../../public/views/register/_register_ko.html')).toString('utf8'),
-  zh: readFileSync(join(__dirname, '../../public/views/register/_register_zh.html')).toString('utf8')
-}
-
 const bcrypt = require('bcryptjs')
 
 const crypto = require('crypto')
@@ -28,22 +18,43 @@ module.exports = async (req, res) => {
 
   if (!acl) return res.send('No Access Control List.')
 
-  const template = req.params.language && templates[req.params.language] || templates.en
+  if (req.body && req.body.register) return register(req, res)
 
-  if (req.body) return register(req, res)
+  view(req, res)
 
+}
 
+function view(req, res) {
 
-  const params = {
-    language: req.params.language || 'en',
-    dir: process.env.DIR
+  let template
+
+  try {
+
+    template = readFileSync(join(__dirname, `../../public/views/register/_register_${req.params.language}.html`)).toString('utf8')
+
+  } catch {
+
+    template = readFileSync(join(__dirname, `../../public/views/register/_register_en.html`)).toString('utf8')
+
   }
 
+  // The redirect for a successful login.
+  const redirect = req.body && req.body.redirect ||
+    req.url && decodeURIComponent(req.url).replace(/login\=true/, '')
+
+    const params = {
+      language: req.params.language || 'en',
+      dir: process.env.DIR
+    }
+
+  // Render the login template with params.
   const html = template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
 
+  // The login view will set the cookie to null.
   res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
 
   res.send(html)
+
 }
 
 async function register(req, res) {
