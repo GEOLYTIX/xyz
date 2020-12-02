@@ -7,9 +7,9 @@ module.exports = async (req, res) => {
   // Get token from params or cookie.
   const token = req.params.token || req.cookies && req.cookies[process.env.TITLE]
 
-  // Return to api without token
   if (!token) return null
 
+  // Verify the token signature.
   return jwt.verify(
     token,
     process.env.SECRET,
