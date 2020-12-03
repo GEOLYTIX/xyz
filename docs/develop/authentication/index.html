@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
+  <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
+  <title>Authentication</title>
+  <style>
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      height: 100%
+    }
+
+    .header-anchor {
+      font-size: 80%;
+    }
+
+    .grid {
+      font-family: system-ui;
+      display:grid;
+      grid-template-columns: 200px minmax(0, 1fr);
+      max-width: 1100px;
+      margin: auto;
+      padding: 0 30px;
+      height: 100%;
+    }
+
+    iframe {
+      border: none;
+    }
+
+    #toggle {
+        display: none;
+    }
+
+    #toggle:hover {
+      cursor: pointer;
+    }
+
+    #nav {
+      grid-column: 1;
+      padding-inline-start: 0px;
+      list-style-type: none;
+      padding-right: 20px;
+      margin: 3px 0;
+      position: fixed;
+    }
+
+    #nav > *:first-child {
+      line-height: 1;
+      font-size: 30px;
+      font-weight: bold;
+    }
+
+    #content {
+      grid-column: 2;
+      padding-left: 20px;
+      border-left: 1px solid #ddd;
+      margin: 10px 0;
+    }
+
+    #content > *:first-child {
+      margin: 0;
+    }
+
+    .active {
+      font-weight: bold;
+    }
+
+    a {
+      text-decoration: none;
+      white-space: nowrap;
+      color: #333;
+    }
+
+    h1, h2, h3 {
+      margin-bottom: 0.5em;
+    }
+
+    p {
+      margin-top: 0.5em;
+      line-height: 1.5;
+    }
+
+    li {
+      line-height: 1.5;
+    }
+
+    li.__0 {
+      padding-left: 0;
+    }
+
+    li.__1 {
+      padding-left: 0;
+    }
+
+    li.__2 {
+      padding-left: 0;
+    }
+
+    li.__3 {
+      padding-left: 20px;
+    }
+
+    li.__4 {
+      padding-left: 40px;
+    }
+
+    pre {
+      display: block;
+      font-family: monospace;
+      white-space: pre;
+      margin: 1em 2px;
+      padding: 15px;
+      box-shadow: 0 0 2px #555;
+      overflow-x: auto;
+      background-color: #f0f0f0;
+    }
+
+    code {
+      font-family: monospace;
+      background-color: #f0f0f0;
+    }
+
+    *:not(pre) > code {
+      padding: 5px;
+    }
+
+    #content a {
+      color: #090;
+    }
+
+    #content img {
+      max-width: 100%;
+      display: block;
+      margin: 0 auto;
+    }
+
+    @media only screen and (max-width: 700px) {
+      .grid {
+        grid-template-columns: 0 minmax(0, 1fr);
+        padding: 0 0 0 40px;
+      }
+
+      #toggle {
+        display: block;
+        position: fixed;
+        top: 10px;
+        left: 10px;        
+        width: 20px;
+        height: 30px;
+        background: repeating-linear-gradient(#ddd, #fff 10px);
+      }
+
+      #nav {
+        display: none;
+      }
+
+      #content {
+        border-left: none;
+        padding: 0 20px 0 1px;
+      }
+    }
+
+    .show_nav {
+      grid-template-columns: 1fr 2fr;
+    }
+
+    .show_nav > #nav {
+      display: block;
+    }
+
+    .show_nav > #content * {
+      font-size: 30%;
+      padding: 0;
+      overflow: hidden;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="grid">
+
+    <div id="toggle"></div>
+
+    <ul id="nav">
+      
+      
+      
+      <li class="__1 ">
+        <a href="/xyz/docs/">XYZ</a>
+      </li>
+      
+      
+      
+      
+      
+      <li class="__1 ">
+        <a href="/xyz/docs/develop/">Develop</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/develop/api/">API</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/api/gazetteer/">Gazetteer</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/api/layer/">Layer</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/api/location/">Location</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/api/provider/">Provider</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/api/proxy/">Proxy</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/api/query/">Query</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/api/user/">User</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/api/view/">View</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/api/workspace/">Workspace</a>
+      </li>
+      
+      
+      
+      <li class="__2 active">
+        <a href="/xyz/docs/develop/authentication/">Authentication</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/develop/design/">Design</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/design/icons/">Icons</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/develop/lib/library/">Library</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/lib/dataviews/">Dataviews</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/lib/layers/">Layers</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/lib/locations/">Locations</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/lib/mapview/">Mapview</a>
+      </li>
+      
+      
+      
+      <li class="__4 ">
+        <a href="/xyz/docs/develop/lib/mapview/interactions/">Interactions</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/lib/plugins/">Plugins</a>
+      </li>
+      
+      
+      
+      <li class="__3 ">
+        <a href="/xyz/docs/develop/lib/webpack/">Webpack</a>
+      </li>
+      
+      
+      
+      <li class="__2 ">
+        <a href="/xyz/docs/develop/views/">Application Views</a>
+      </li>
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+      
+
+    </ul>
+
+    <div id="content">
+      <h1 id="authentication-strategy">Authentication Strategy <a class="header-anchor" href="#authentication-strategy">¶</a></h1>
+<p>The XYZ process environment can be either PRIVATE or PUBLIC. In a PRIVATE environment ALL requests must be validated. In a PUBLIC environment only requests with elevated access must be validated.</p>
+<h2 id="access-control-lists-(acl)">Access Control Lists (ACL) <a class="header-anchor" href="#access-control-lists-(acl)">¶</a></h2>
+<p>The Access Control List (ACL) is a PostgreSQL table which stores user accounts and their priviliges. In the XYZ process environment the PRIVATE or PUBLIC key value must be a PostgreSQL connection with rights to read, update, and create records in the ACL table.</p>
+<p>This is the PostgreSQL table schema for the ACL.</p>
+<pre class="language-sql"><code class="language-sql"><span class="token keyword">CREATE</span> <span class="token keyword">TABLE</span> acl_schema<span class="token punctuation">.</span>acl_table <span class="token punctuation">(</span><br>  <span class="token string">"_id"</span> <span class="token keyword">serial</span> <span class="token operator">not</span> <span class="token boolean">null</span><span class="token punctuation">,</span><br>  email <span class="token keyword">text</span> <span class="token operator">not</span> <span class="token boolean">null</span><span class="token punctuation">,</span><br>  password <span class="token keyword">text</span> <span class="token operator">not</span> <span class="token boolean">null</span><span class="token punctuation">,</span><br>  verified <span class="token keyword">boolean</span> <span class="token keyword">default</span> <span class="token boolean">false</span><span class="token punctuation">,</span><br>  approved <span class="token keyword">boolean</span> <span class="token keyword">default</span> <span class="token boolean">false</span><span class="token punctuation">,</span><br>  verificationtoken <span class="token keyword">text</span><span class="token punctuation">,</span><br>  approvaltoken <span class="token keyword">text</span><span class="token punctuation">,</span><br>  failedattempts <span class="token keyword">integer</span> <span class="token keyword">default</span> <span class="token number">0</span><span class="token punctuation">,</span><br>  password_reset <span class="token keyword">text</span><span class="token punctuation">,</span><br>  api <span class="token keyword">text</span><span class="token punctuation">,</span><br>  approved_by <span class="token keyword">text</span><span class="token punctuation">,</span><br>  access_log <span class="token keyword">text</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token keyword">default</span> <span class="token string">'{}'</span>::<span class="token keyword">text</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span><br>  blocked <span class="token keyword">boolean</span> <span class="token keyword">default</span> <span class="token boolean">false</span><span class="token punctuation">,</span><br>  roles <span class="token keyword">text</span><span class="token punctuation">[</span><span class="token punctuation">]</span> <span class="token keyword">default</span> <span class="token string">'{}'</span>::<span class="token keyword">text</span><span class="token punctuation">[</span><span class="token punctuation">]</span><span class="token punctuation">,</span><br>  admin <span class="token keyword">boolean</span> <span class="token keyword">default</span> <span class="token boolean">false</span><span class="token punctuation">,</span><br>  <span class="token keyword">language</span> <span class="token keyword">text</span> <span class="token keyword">default</span> <span class="token string">'en'</span><br><span class="token punctuation">)</span><span class="token punctuation">;</span></code></pre>
+<h2 id="registration">Registration <a class="header-anchor" href="#registration">¶</a></h2>
+<p><a href="https://github.com/GEOLYTIX/xyz/blob/master/mod/user/register.js">mod/user/register.js</a></p>
+<p>A post request for user ragistration must contain a valid email address, an ecrypted password, and the <code>register=true</code> flag in the request body.</p>
+<p>The requested user account will be added as a new record to the ACL.</p>
+<p>A get request to the user registration endpoint will return a view with a registration form to make the post request. Opening the registration view will remove the XYZ cookie. Language specific registration view templates are in <a href="https://github.com/GEOLYTIX/xyz/tree/master/public/views/register">/public/views/register</a>.</p>
+<p>Any get request with the url parameter <code>register=true</code> will short circuit the api script to return the registration view.</p>
+<h2 id="verification">Verification <a class="header-anchor" href="#verification">¶</a></h2>
+<p><a href="https://github.com/GEOLYTIX/xyz/blob/master/mod/user/verify.js">mod/user/verify.js</a></p>
+<p>The XYZ host will send an email with a verification token to the registered account email. The link containing the verification token must be followed in order to <strong>verify ownership of the account</strong>.</p>
+<h3 id="password-reset">Password reset <a class="header-anchor" href="#password-reset">¶</a></h3>
+<p>The <strong>user registration form</strong> can be used to reset a users password. Registering an existing email account will remove account verification and sent a new verification token to the registered email account. The new password will be stored in a seperate field and only become the password once the account has been verified by the account holder.</p>
+<p>Password resets will reset the number of failed login attempts.</p>
+<p><strong>Password reset is not possible with a blocked account.</strong></p>
+<h3 id="approval">Approval <a class="header-anchor" href="#approval">¶</a></h3>
+<p><a href="https://github.com/GEOLYTIX/xyz/blob/master/mod/user/approve.js">mod/user/approve.js</a></p>
+<p>Following verification an email with an approval token will be sent to all site administrators.</p>
+<p>Any one administrator must follow the link to <strong>approve a verified account</strong>.</p>
+<p>An email will be sent to the account owner with information in regards to the account approval.</p>
+<h2 id="login">Login <a class="header-anchor" href="#login">¶</a></h2>
+<p><a href="https://github.com/GEOLYTIX/xyz/blob/master/mod/user/login.js">mod/user/login.js</a></p>
+<p>A post request for user login must contain a valid email address, an ecrypted password, and the <code>login=true</code> flag in the request body.</p>
+<p>A get request to the user login endpoint will return a view with a login form to make the post request. Opening the login view will remove the XYZ cookie. Language specific login view templates are in <a href="https://github.com/GEOLYTIX/xyz/tree/master/public/views/login">/public/views/login</a>.</p>
+<p>Any get request with the url parameter <code>login=true</code> will short circuit the api script and return the login view.</p>
+<h3 id="expired-accounts">Expired accounts <a class="header-anchor" href="#expired-accounts">¶</a></h3>
+<p>Accounts may expire if set in the process environment.</p>
+<p><strong>Admin accounts will not expire.</strong></p>
+<p>An account will expire when the login date exceeds the approval date by more than the expiry limit set in the process environment (APPROVAL_EXPIRY).</p>
+<h3 id="failed-login-attempts">Failed login attempts <a class="header-anchor" href="#failed-login-attempts">¶</a></h3>
+<p>A login will fail if the provided password does not match the stored password. This will increased the counter for failed logins. An account will be locked if the number of failed attempts exceeds the limit set in the process environment (FAILED_ATTEMPTS).</p>
+<h3 id="locked-accounts">Locked accounts <a class="header-anchor" href="#locked-accounts">¶</a></h3>
+<p>A locked account is simply an account with too many failed login attempts. This will remove the verification flag on the ACL record and issue a new verification mail. Locked accounts retain their administrator approval and password.</p>
+<h3 id="blocked-accounts">Blocked accounts <a class="header-anchor" href="#blocked-accounts">¶</a></h3>
+<p>An account which has been flagged as blocked may have administrator approval as well as verification but can no longer be used for login nor password resets.</p>
+<h3 id="login-redirects">Login redirects <a class="header-anchor" href="#login-redirects">¶</a></h3>
+<p>The login post request will redirect a successful login to the URL provided as redirect in the login post body.</p>
+<h3 id="logout">Logout <a class="header-anchor" href="#logout">¶</a></h3>
+<p>The <code>logout=true</code> request parameter on any route will shortcircuit the api method and remove a session cookie by setting a cookie with the value null and expiry 0.</p>
+<h2 id="cookies">Cookies <a class="header-anchor" href="#cookies">¶</a></h2>
+<p>A successful login will create a cookie with a signed user token. The cookie has an expiry of 8 hours and will be set on the response header.</p>
+<p>The value from the <code>TITLE</code> process environment key is used as name for the cookie.</p>
+<p>The value from the <code>DIR</code> process environment key is used as path for the cookie.</p>
+<p><img src="https://res.cloudinary.com/geolytix-xyz/image/upload/v1589878516/documentation/geolytix-dev-cookie.png" alt=""></p>
+<p>The cookie value itself is a signed token.</p>
+<h3 id="token">Token <a class="header-anchor" href="#token">¶</a></h3>
+<p>A JSON Web Token (<a href="https://jwt.io/">JWT</a>) consist of three parts, the header, payload, and signature.</p>
+<pre><code>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlbm5pcy5iYXVzenVzQGdlb2x5dGl4LmNvLnVrIiwibGFuZ3VhZ2UiOiJlbiIsInJvbGVzIjpbImdseCIsImVuIl0sImlhdCI6MTYwNjk5MzU0MCwiZXhwIjoxNjA3MDIyMzQwfQ.GSqDpYBTWRCPRl-gc-I7evTQmjo4E7Qfc1hkMydUCNA
+</code></pre>
+<p>The payload of an XYZ token is an encrypted user object.</p>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span><br>  <span class="token property">"email"</span><span class="token operator">:</span> <span class="token string">"dennis.bauszus@geolytix.co.uk"</span><span class="token punctuation">,</span><br>  <span class="token property">"language"</span><span class="token operator">:</span> <span class="token string">"en"</span><span class="token punctuation">,</span><br>  <span class="token property">"roles"</span><span class="token operator">:</span> <span class="token punctuation">[</span><br>    <span class="token string">"glx"</span><span class="token punctuation">,</span><br>    <span class="token string">"en"</span><br>  <span class="token punctuation">]</span><span class="token punctuation">,</span><br>  <span class="token property">"iat"</span><span class="token operator">:</span> <span class="token number">1606993540</span><span class="token punctuation">,</span><br>  <span class="token property">"exp"</span><span class="token operator">:</span> <span class="token number">1607022340</span><br><span class="token punctuation">}</span></code></pre>
+<p>The payload can be decrypted without knowing the secret which has been used to sign the token. Validation of a token's signature is only possible with knowledge of the SECRET which has been used to sign the token. <strong>The SECRET is provided in the XYZ process environment and must never be made public.</strong></p>
+<p>A token will expire after 8 hours. A token signature can not be validated after the token has expired.</p>
+<h3 id="token-login">Token login <a class="header-anchor" href="#token-login">¶</a></h3>
+<p>A cookie will be generated from a token and set on the response header. The cookie expiry will match the expiry of the token.</p>
+<h3 id="api-key">API key <a class="header-anchor" href="#api-key">¶</a></h3>
+<p>An API key is a token which will not expire. The API key must be stored in the ACL. Generating a new API key will overwrite the existing API key. Request with an API key as token will check whether the provided key matches the stored key.</p>
+<p>Removing the key in the ACL will therefore invalidate a key.</p>
+<p>API keys are invalid if the associated account is blocked.</p>
+<p>A cookie generated from an API key will expire in 8 hours.</p>
+<h3 id="auth-process">Auth process <a class="header-anchor" href="#auth-process">¶</a></h3>
+<p><a href="https://github.com/GEOLYTIX/xyz/blob/master/mod/user/auth.js">mod/user/auth.js</a></p>
+
+    </div>
+
+  </div>
+
+</body>
+
+<script>
+    const toggle = document.getElementById('toggle');
+
+    toggle.onclick = e => { e.target.parentElement.classList.toggle('show_nav'); };
+</script>
+
+</html>

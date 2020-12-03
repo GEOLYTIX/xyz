@@ -2,7 +2,7 @@ const acl = require('./acl')()
 
 const mailer = require('../mailer')
 
-const mail_templates = require('../mail_templates')
+const mail_templates = require('./mails')
 
 const messages = require('./messages')
 
