@@ -7,6 +7,7 @@ module.exports = async (req, res) => {
   // Get token from params or cookie.
   const token = req.params.token || req.cookies && req.cookies[process.env.TITLE]
 
+  // Return if there is no token to decode
   if (!token) return null
 
   // Verify the token signature.
@@ -15,31 +16,38 @@ module.exports = async (req, res) => {
     process.env.SECRET,
     async (err, user) => {
 
+    // Return error if verification fails.
     if (err) return err
 
-    // Token access must not have any admin rights. 
+    // The token was provided as param.
     if (req.params.token) {
 
+      // and is an api key.
       if (user.api) {
 
-        // Get API key from ACL.
+        // Retrieve the original api key for the user from ACL.
         var rows = await acl(`
           SELECT api FROM acl_schema.acl_table
           WHERE lower(email) = lower($1);`, [user.email])
 
         if (rows instanceof Error) return rows
 
+        // API key do not expire and must therefore match the copy in the ACL to allow for retraction.
         if (rows[0].api !== req.params.token) return new Error('API Key mismatch')
       }
 
+      // Token access must not have admin rights.
       delete user.admin
 
+      // Flag the user to be created from a token.
+      // It must not be possible created a new token from a token user.
       user.from_token = true
 
+      // Check whether the token matches the params token.
       if (req.cookies && req.cookies[process.env.TITLE] !== req.params.token) {
 
+        // Create and assign a new cookie from the token user.
         const cookie = jwt.sign(user, process.env.SECRET)
-
         res.setHeader('Set-Cookie', `${process.env.TITLE}=${cookie};HttpOnly;Max-Age=${user.exp && (user.exp - user.iat) || 28800};Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
       }
 

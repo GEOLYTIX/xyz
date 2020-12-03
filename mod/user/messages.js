@@ -1,4 +1,7 @@
 module.exports = {
+  acl_unavailable: {
+    en: `ACL unavailable`
+  },
 	logout: {
     en: `Logged out.`,
     de: `Benutzer ausgelogt. Benutzerkonto Cookie wurde entfernt`,
