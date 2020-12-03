@@ -27,10 +27,13 @@ module.exports = async (req, res) => {
 
         // Retrieve the original api key for the user from ACL.
         var rows = await acl(`
-          SELECT api FROM acl_schema.acl_table
+          SELECT api, blocked
+          FROM acl_schema.acl_table
           WHERE lower(email) = lower($1);`, [user.email])
 
         if (rows instanceof Error) return rows
+
+        if (rows.blocked) return new Error('Account is blocked')
 
         // API key do not expire and must therefore match the copy in the ACL to allow for retraction.
         if (rows[0].api !== req.params.token) return new Error('API Key mismatch')

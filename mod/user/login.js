@@ -1,11 +1,3 @@
-const acl = require('./acl')()
-
-const mailer = require('../mailer')
-
-const mail_templates = require('../mail_templates')
-
-const messages = require('./messages')
-
 const bcrypt = require('bcryptjs')
 
 const crypto = require('crypto')
@@ -16,9 +8,21 @@ const { readFileSync } = require('fs')
 
 const { join } = require('path')
 
+const acl = require('./acl')()
+
+const mailer = require('../mailer')
+
+const mails = require('./mails')
+
+const mail = (m, lang) => mails[m] && (mails[m][lang] || mails[m].en)
+
+const messages = require('./messages')
+
+const msg = (m, lang) => messages[m] && (messages[m][lang] || messages[m].en) || m
+
 module.exports = async (req, res, msg) => {
 
-  if (!acl) return res.send('No Access Control List.')
+  if (!acl) return res.status(500).send(msg('acl_unavailable', req.params.language))
 
   if (req.body && req.body.login) {
 
@@ -48,21 +52,22 @@ module.exports = async (req, res, msg) => {
   }
 
   view(req, res, msg)
-
 }
 
 function view(req, res, msg) {
 
   let template
 
+  // The template should be read inside the view handler.
   try {
 
+    // Attempt to read a language spcific login view template.
     template = readFileSync(join(__dirname, `../../public/views/login/_login_${req.params.language}.html`)).toString('utf8')
 
   } catch {
 
+    // Read and assign the English login view as fallback.
     template = readFileSync(join(__dirname, `../../public/views/login/_login_en.html`)).toString('utf8')
-
   }
 
   // The redirect for a successful login.
@@ -72,7 +77,6 @@ function view(req, res, msg) {
   const params = {
     dir: process.env.DIR,
     redirect: redirect,
-    language: req.params.language,
     msg: msg || ' '
   }
 
@@ -83,67 +87,71 @@ function view(req, res, msg) {
   res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
 
   res.send(html)
-
 }
 
 async function post(req, res) {
 
-  if(!req.body.email) return new Error(messages.missing_email[req.body.language || req.params.language || 'en'] || 'Missing email')
+  if(!req.body.email) return new Error(msg('missing_email', req.params.language))
   
-  if(!req.body.password) return new Error(messages.missing_password[req.body.language || req.params.language || 'en'] || 'Missing password')
+  if(!req.body.password) return new Error(msg('missing_password', req.params.language))
 
   const date = new Date()
 
+  // Get the protocol and host for account verification email.
   const protocol = `${req.headers.host.includes('localhost') && 'http' || 'https'}://`
-
   const host = `${req.headers.host.includes('localhost') && req.headers.host || process.env.ALIAS || req.headers.host}${process.env.DIR}`
 
+  // Update access_log and return user record matched by email.
   var rows = await acl(`
     UPDATE acl_schema.acl_table
     SET access_log = array_append(access_log, '${date.toISOString().replace(/\..*/,'')}@${req.headers['x-forwarded-for'] || 'localhost'}')
     WHERE lower(email) = lower($1)
-    RETURNING *;`, [req.body.email])
+    RETURNING email, roles, language, blocked, approved, approved_by, verified, admin, password;`,
+    [req.body.email])
 
-  if (rows instanceof Error) return new Error('Bad Config')
+  if (rows instanceof Error) return new Error(msg('failed_query', req.params.language))
 
   // Get user record from first row.
   const user = rows[0]
 
-  // Redirect back to login (get) with error msg if user is not found.
-  if (!user) return new Error(messages.user_not_found[req.body.language || req.params.language || 'en'] || 'User not found.')
+  if (!user) return new Error(msg('user_not_found', req.params.language))
 
-  if (user.blocked) return new Error(messages.user_blocked[req.body.language || req.params.language || 'en'] || 'User blocked')
+  // Blocked user cannot login.
+  if (user.blocked) return new Error(msg('user_blocked', user.language || req.params.language))
   
+  // Get approvalDate for checking expiry.
   const approvalDate = user.approved_by && new Date(user.approved_by.replace(/.*\|/,''))
 
-  if (!user.admin && process.env.APPROVAL_EXPIRY && approvalDate && approvalDate.setDate(approvalDate.getDate() + parseInt(process.env.APPROVAL_EXPIRY || 0)) < date) {
+  // Non admin accounts may expire.
+  if (!user.admin 
+    && process.env.APPROVAL_EXPIRY && approvalDate
+    && approvalDate.setDate(approvalDate.getDate() + parseInt(process.env.APPROVAL_EXPIRY || 0)) < date) {
 
-    // Non user admin user will loose approval
     if (user.approved) {
 
+      // Remove approval of expired user account.
       var rows = await acl(`
-          UPDATE acl_schema.acl_table
-          SET approved = false
-          WHERE lower(email) = lower($1);`,
+        UPDATE acl_schema.acl_table
+        SET approved = false
+        WHERE lower(email) = lower($1);`,
         [req.body.email])
 
-      if (rows instanceof Error) return new Error('Bad Config')
+      if (rows instanceof Error) return new Error(msg('failed_query', req.params.language))
 
     }
 
-    return new Error(messages.user_expired[req.body.language || req.params.language || 'en'] || 'User approval has expired. Please re-register.')
-
+    return new Error(msg('user_expired', user.language))
   }
 
-  // Redirect back to login (get) with error msg if user is not valid.
+  // Accounts must be verified and approved for login
   if (!user.verified || !user.approved) {
 
-    const failed_login_mail = mail_templates.failed_login[user.language || req.params.language || 'en'] || mail_templates.failed_login.en;
+    const mail_template = mail('failed_login', user.language)
 
     await mailer(Object.assign({
       to: user.email
     },
-    failed_login_mail({
+    mail_template({
       host: host,
       protocol: protocol,
       verified: user.verified,
@@ -151,36 +159,37 @@ async function post(req, res) {
       remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
     })));
 
-    return new Error(messages.user_not_verified[req.body.language || req.params.language || 'en'] || 'User not verified or approved')
-
+    return new Error(msg('user_not_verified', user.language))
   }
 
   // Check password from post body against encrypted password from ACL.
   if (bcrypt.compareSync(req.body.password, user.password)) {
 
+    // Override the user language role with the login form language
     user.roles.push(req.body.language || user.language)
 
     return user
   }
 
-
+  // FAILED LOGIN
   // Password from login form does NOT match encrypted password in ACL!
-  // Increase failed login attempts counter by 1 for user in ACL.
+
+  // Increase failed login attempts counter by 1.
   var rows = await acl(`
     UPDATE acl_schema.acl_table
     SET failedattempts = failedattempts + 1
     WHERE lower(email) = lower($1)
     RETURNING failedattempts;`, [req.body.email])
 
-  if (rows instanceof Error) return new Error('Bad Config')
+  if (rows instanceof Error) return new Error(msg('failed_query', req.params.language))
 
   // Check whether failed login attempts exceeds limit.
   if (rows[0].failedattempts >= parseInt(process.env.FAILED_ATTEMPTS || 3)) {
 
-    // Create a new verification token and remove verified status in ACL.
+    // Create a verificationtoken.
     const verificationtoken = crypto.randomBytes(20).toString('hex')
 
-    // Store new verification token in ACL.
+    // Store verificationtoken and remove verification status.
     var rows = await acl(`
       UPDATE acl_schema.acl_table
       SET
@@ -188,14 +197,14 @@ async function post(req, res) {
         verificationtoken = '${verificationtoken}'
       WHERE lower(email) = lower($1);`, [req.body.email])
 
-    if (rows instanceof Error) return new Error('Bad Config')
+    if (rows instanceof Error) return new Error(msg('failed_query', req.params.language))
 
-    const locked_account_mail = mail_templates.locked_account[user.language || req.params.language || 'en'] || mail_templates.locked_account.en;
+    const mail_template = mail('locked_account', user.language)
 
     await mailer(Object.assign({
       to: user.email
     },
-    locked_account_mail({
+    mail_template({
       host: host,
       failed_attempts: parseInt(process.env.FAILED_ATTEMPTS) || 3,
       protocol: protocol,
@@ -203,21 +212,19 @@ async function post(req, res) {
       remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
     })));
 
-    return new Error(messages.account_blocked[req.body.language || req.params.language || 'en'] || 'Account is blocked, please check email.')
-
+    return new Error(msg('locked_account', user.language))
   }
 
-  // Finally login has failed.
-  const login_incorrect_mail = mail_templates.login_incorrect[user.language || req.params.language || 'en'] || mail_templates.login_incorrect.en;
+  // Login has failed but account is not locked (yet).
+  const mail_template = mail('login_incorrect', user.language)
 
   await mailer(Object.assign({
       to: user.email
     },
-    login_incorrect_mail({
+    mail_template({
       host: host,
       remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
-    })));
+    })))
 
-  return new Error(messages.token_failed[req.body.language|| req.params.language || 'en'] || 'Failed to create token')
-
+  return new Error(msg('token_failed', user.language))
 }

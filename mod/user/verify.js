@@ -1,90 +1,98 @@
-const mailer = require('../mailer')
-
-const mail_templates = require('../mail_templates')
-
-const messages = require('./messages')
-
 const crypto = require('crypto')
 
 const acl = require('./acl')()
 
+const mailer = require('../mailer')
+
+const mails = require('./mails')
+
+const mail = (m, lang) => mails[m] && (mails[m][lang] || mails[m].en)
+
+const messages = require('./messages')
+
+const msg = (m, lang) => messages[m] && (messages[m][lang] || messages[m].en) || m
+
+const login = require('./login')
+
 module.exports = async (req, res) => {
 
-  // Find user account in ACL from matching token.
-  var rows = await acl(`SELECT * FROM acl_schema.acl_table WHERE verificationtoken = $1;`, [req.params.key])
+  if (!acl) return res.status(500).send(msg('acl_unavailable', req.params.language))
 
-  if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
+  // Find user record with matching verificationtoken.
+  var rows = await acl(`
+    SELECT email, language, approved, password_reset
+    FROM acl_schema.acl_table
+    WHERE verificationtoken = $1;`,
+    [req.params.key])
+
+  if (rows instanceof Error) return res.status(500).send(msg('failed_query', req.params.language))
 
   const user = rows[0]
 
-  if (!user) return res.send(messages.account_not_found[req.params.language || 'en'] ||
-    `No matching account found.`)
-
+  if (!user) return res.send(msg('account_not_found', req.params.language))
+  
+  // Create a random approval token.
   const approvaltoken = crypto.randomBytes(20).toString('hex')
 
-  // Update user account in ACL.
+  // Update user account in ACL with the approval token and remove verification token.
   var rows = await acl(`
     UPDATE acl_schema.acl_table SET
       failedattempts = 0,
-      ${user.password_reset ? `password = '${user.password_reset}', password_reset = null,` : ''}
+      ${user.password_reset ?
+        `password = '${user.password_reset}',
+        password_reset = null,` : ''}
       verified = true,
       ${!user.approved ? `approvaltoken = '${approvaltoken}',` : ''}
       verificationtoken = null
     WHERE lower(email) = lower($1);`, [user.email])
 
-  if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
+  if (rows instanceof Error) return res.status(500).send(msg('failed_query', req.params.language))
 
-  // Notify administrator if user needs to be approved.
-  if (!user.approved) {
+  if (user.approved) {
 
-    // Get all admin accounts from the ACL.
-    var rows = await acl('SELECT * FROM acl_schema.acl_table WHERE admin = true;')
+    // Login with message if account is approved and password reset.
+    if (user.password_reset) return login(req, res, msg('password_reset_ok', req.params.language))
 
-    if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
+    return login(req, res)
+  }
 
-    if (rows.length > 0) {
+  // Get all admin accounts from the ACL.
+  var rows = await acl(`
+    SELECT email, language
+    FROM acl_schema.acl_table
+    WHERE admin = true;`)
 
-      let admins = rows.map(row => ({
-        email: row.email,
-        language: row.language || 'en'
-      }))
+  if (rows instanceof Error) return res.status(500).send(msg('failed_query', req.params.language))
 
-      const protocol = `${req.headers.host.includes('localhost') && 'http' || 'https'}://`
+  // One or more administrator have been 
+  if (rows.length > 0) {
 
-      const host = `${req.headers.host.includes('localhost') && req.headers.host || process.env.ALIAS || req.headers.host}${process.env.DIR}`
+    // Create protocol and host for mail templates.
+    const protocol = `${req.headers.host.includes('localhost') && 'http' || 'https'}://`
+    const host = `${req.headers.host.includes('localhost') && req.headers.host || process.env.ALIAS || req.headers.host}${process.env.DIR}`
 
-      const mail_promises = admins.map(admin => mailer(Object.assign({
-          to: admin.email
-        },
-        mail_templates.admin_email[admin.language]({
-          email: user.email,
-          host: host,
-          protocol: protocol,
-          approvaltoken: approvaltoken
-        }))))
+    // Get array of mail promises.
+    const mail_promises = rows.map(row => {
 
-      Promise
-        .all(mail_promises)
-        .then(arr => {
-          console.log(arr)
-          res.send(messages.account_await_approval[user.language || req.params.language || 'en'] ||
-            `This account has been verified but requires administrator approval.`)
-        })
-        .catch(error => {
-          console.error(error)
-        })
+      const mail_template = mail('admin_email', row.language || req.params.language)
+       
+      return mailer(Object.assign({
+        to: row.email
+      },
+      mail_template({
+        email: user.email,
+        host: host,
+        protocol: protocol,
+        approvaltoken: approvaltoken
+      })))
+    })
 
-    } else {
+    // Continue after all mail promises have been resolved.
+    Promise
+      .all(mail_promises)
+      .then(arr => res.send(msg('account_await_approval', user.language)))
+      .catch(error => console.error(error))
 
-      res.send(messages.account_await_approval[user.language || req.params.language || 'en'] ||
-        `This account has been verified but requires administrator approval.`)
-
-    }
-
-  } else if (user.password_reset) {
-
-    res.send(messages.password_reset_ok[user.language || req.params.language || 'en'] ||
-      `Password has been reset.`)
   }
 
 }
