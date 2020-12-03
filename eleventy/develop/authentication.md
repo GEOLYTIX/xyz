@@ -171,3 +171,4 @@ A cookie generated from an API key will expire in 8 hours.
 
 [mod/user/auth.js](https://github.com/GEOLYTIX/xyz/blob/master/mod/user/auth.js)
 
+The auth process checks the signature of token from a cookie or provided as URL parameter. The auth process will set a cookie if the token has been provided as URL parameter.
