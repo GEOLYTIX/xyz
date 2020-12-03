@@ -14,9 +14,11 @@ const mail_templates = require('../mail_templates')
 
 const messages = require('./messages')
 
+const msg = (m, lang) => messages[m] && (messages[m][lang] || messages[m].en) || m
+
 module.exports = async (req, res) => {
 
-  if (!acl) return res.send('No Access Control List.')
+  if (!acl) return res.status(500).send('foo')
 
   if (req.body && req.body.register) return post(req, res)
 
@@ -26,26 +28,32 @@ module.exports = async (req, res) => {
 
 function view(req, res) {
 
+  // console.log(msg())
+
+  // console.log(msg('foo'))
+
+  // console.log(msg('acl_unavailable'))
+
+  // console.log(msg('acl_unavailable', 'ja'))
+
   let template
 
+  // The template should be read inside the view handler.
   try {
 
+    // Attempt to read a language spcific registration view template.
     template = readFileSync(join(__dirname, `../../public/views/register/_register_${req.params.language}.html`)).toString('utf8')
 
   } catch {
 
+    // Read and assign the English registration view as fallback.
     template = readFileSync(join(__dirname, `../../public/views/register/_register_en.html`)).toString('utf8')
 
   }
 
-  // The redirect for a successful login.
-  const redirect = req.body && req.body.redirect ||
-    req.url && decodeURIComponent(req.url).replace(/login\=true/, '')
-
-    const params = {
-      language: req.params.language || 'en',
-      dir: process.env.DIR
-    }
+  const params = {
+    dir: process.env.DIR
+  }
 
   // Render the login template with params.
   const html = template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
@@ -59,9 +67,18 @@ function view(req, res) {
 
 async function post(req, res) {
 
-  const acl_schema = await acl(`SELECT column_name FROM INFORMATION_SCHEMA.COLUMNS WHERE TABLE_NAME = 'acl_table';`)
+  // Retrieve the table schema of the ACL to account for release changes.
+  const acl_schema = await acl(`
+    SELECT column_name
+    FROM INFORMATION_SCHEMA.COLUMNS
+    WHERE TABLE_NAME = 'acl_table';`)
 
-  var rows = await acl(`SELECT * FROM acl_schema.acl_table WHERE lower(email) = lower($1);`, [req.body.email])
+  // Attempt to retrieve ACL record with matching email field.
+  var rows = await acl(`
+    SELECT * 
+    FROM acl_schema.acl_table 
+    WHERE lower(email) = lower($1);`,
+    [req.body.email])
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 

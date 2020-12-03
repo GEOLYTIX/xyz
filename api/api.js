@@ -122,7 +122,7 @@ module.exports = async (req, res) => {
 
   if (path && path[1] && routes[path[1]]) return routes[path[1]](req, res)
 
-  req.params.template = req.params.workspace.templates.mapp
+  req.params.template = req.params.template || req.params.workspace.templates.mapp
 
   routes.view(req, res)
 
