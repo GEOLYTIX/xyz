@@ -1,6 +1,6 @@
 ---
 title: Application Views
-tags: [develop]
+
 layout: root.html
 ---
 

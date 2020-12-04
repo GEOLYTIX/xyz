@@ -1,6 +1,6 @@
 ---
 title: Design
-tags: [develop]
+
 group: true
 layout: root.html
 ---

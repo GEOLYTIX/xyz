@@ -1,6 +1,6 @@
 ---
 title: Dataviews
-tags: [workspace]
+
 layout: root.html
 group: true
 orderPath: /workspace/dataviews/_dataviews

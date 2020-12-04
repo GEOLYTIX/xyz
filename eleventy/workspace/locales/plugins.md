@@ -1,6 +1,6 @@
 ---
 title: Plugins
-tags: [workspace]
+
 layout: root.html
 ---
 

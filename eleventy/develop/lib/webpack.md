@@ -1,6 +1,6 @@
 ---
 title: Webpack
-tags: [develop]
+
 layout: root.html
 ---
 

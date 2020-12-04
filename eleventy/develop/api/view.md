@@ -1,6 +1,6 @@
 ---
 title: View
-tags: [develop]
+
 layout: root.html
 ---
 

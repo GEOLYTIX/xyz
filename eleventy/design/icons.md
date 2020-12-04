@@ -1,6 +1,6 @@
 ---
 title: Icons
-tags: [develop]
+
 layout: root.html
 ---
 

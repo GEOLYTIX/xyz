@@ -1,6 +1,6 @@
 ---
 title: API
-tags: [develop]
+
 layout: root.html
 group: true
 orderPath: /develop/api/_api
