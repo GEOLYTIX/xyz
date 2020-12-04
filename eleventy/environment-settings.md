@@ -1,6 +1,6 @@
 ---
 title: Environment Settings
-tags: [getting-started]
+tags: [root]
 layout: root.html
 ---
 
