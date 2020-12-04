@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
   <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
-  <title>Tabview</title>
+  <title>Design</title>
   <style>
 
     html, body {
@@ -209,7 +209,7 @@
           <a href="/xyz/docs/deploy/">Deployments</a>
         </li>
         
-        <li class="__1 ">
+        <li class="__1 active">
           <a href="/xyz/docs/design/">Design</a>
         </li>
         
@@ -293,7 +293,7 @@
           <a href="/xyz/docs/develop/lib/plugins/">Plugins</a>
         </li>
         
-        <li class="__3 active">
+        <li class="__3 ">
           <a href="/xyz/docs/develop/lib/tabview/">Tabview</a>
         </li>
         
@@ -412,18 +412,13 @@
 
 
     <div id="content">
-      <h1 id="tabview">Tabview <a class="header-anchor" href="#tabview">¶</a></h1>
-<p><a href="https://github.com/GEOLYTIX/xyz/blob/development/lib/tabview.mjs">/lib/tabview</a></p>
-<p>The tabview control manages a single tabview element which may hold a set of tab elements.</p>
-<p>The tabview element must be initialised by providing a node param to the <code>tabview.init()</code> method. The init method will create a <code>.tabs</code> element in the tabview node which will hold the tabs.</p>
-<p>A tab can be added to the tabview tabs container by calling the <code>tabview.add()</code> method with a tab object.</p>
-<p>A tab element consists of a header and a panel. The header is shown in the <code>.tabs</code> container of the tabview. The tab panel is only shown for a single active tab. Clicking the header of a shown tab will make the tab active after deactivating all other sibling tabs.</p>
-<p>A tab has <code>.show()</code> and <code>.remove()</code> methods. A tab will only become visible after the show method is called.</p>
-<p>The <code>.remove()</code> will remove a tab for good.</p>
-<iframe height="406" style="width: 100%;" scrolling="no" title="tabview" src="https://codepen.io/dbauszus-glx/embed/YzGwOWJ?height=406&theme-id=light&default-tab=js,result" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
-  See the Pen <a href='https://codepen.io/dbauszus-glx/pen/YzGwOWJ'>tabview</a> by dbauzus-glx
-  (<a href='https://codepen.io/dbauszus-glx'>@dbauszus-glx</a>) on <a href='https://codepen.io'>CodePen</a>.
-</iframe>
+      <h1 id="design">Design <a class="header-anchor" href="#design">¶</a></h1>
+<p>XYZ application views, such as MAPP, maybe be composed with predefined control elements. These elements are defined as classes in the control.css which is hosted as a static file in the /public/css XYZ directory.</p>
+<p>The control.css file itself is compiled from individual SCSS files in the same directory.</p>
+<p>This section of the documentation will highlight the individual control element classes and explain how elements can be modified by overwriting component styles.</p>
+<p>The mobile and desktop MAPP views have their own style sheets which define the layout configuration as well as overrides for components nested within the individual application view panels.</p>
+<p>Responsive application views used for embeds and reports will be added to this section once they become publicly available.</p>
+
     </div>
 
   </div>

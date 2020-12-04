@@ -1,6 +1,6 @@
 ---
 title: Styles
-tags: [workspace]
+
 layout: root.html
 ---
 

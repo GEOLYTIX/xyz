@@ -1,6 +1,6 @@
 ---
 title: XYZ
-tags: [root, getting-started, workspace, develop, mapp]
+
 layout: root.html
 orderPath: /__index
 ---

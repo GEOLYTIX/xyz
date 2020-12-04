@@ -1,6 +1,6 @@
 ---
 title: Tables
-tags: [workspace]
+
 layout: root.html
 ---
 

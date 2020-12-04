@@ -1,6 +1,6 @@
 ---
 title: Plugins
-tags: [develop]
+
 layout: root.html
 ---
 

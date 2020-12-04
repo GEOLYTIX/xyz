@@ -1,6 +1,6 @@
 ---
 title: Layer
-tags: [workspace]
+
 layout: root.html
 group: true
 orderPath: /workspace/layer/_layer

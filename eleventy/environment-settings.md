@@ -1,6 +1,6 @@
 ---
 title: Environment Settings
-tags: [root]
+
 layout: root.html
 ---
 

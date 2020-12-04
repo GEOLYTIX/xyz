@@ -1,6 +1,6 @@
 ---
 title: Hex Grid
-tags: [workspace]
+
 layout: root.html
 ---
 

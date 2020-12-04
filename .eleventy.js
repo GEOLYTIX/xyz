@@ -32,7 +32,7 @@ module.exports = function (eleventyConfig) {
 
       entry.data.group && entry.data.lv--
 
-      entry.data.tag = entry.data.tags && entry.data.tags[0]
+
     })
 
     return _collection
