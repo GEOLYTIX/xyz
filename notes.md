@@ -4,6 +4,8 @@ Label to support minZoom, maxZoom, and title. [#351](https://github.com/GEOLYTIX
 
 Fix for login on public access routes. [#367](https://github.com/GEOLYTIX/xyz/issues/367)
 
+Fix _xyz init without OL library. [#370](https://github.com/GEOLYTIX/xyz/issues/370)
+
 Fix for fullscreen button.
 
 Include embedded view.
