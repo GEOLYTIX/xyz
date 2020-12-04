@@ -1,6 +1,6 @@
 ---
 title: Deployments
-tags: [getting-started]
+tags: [root]
 layout: root.html
 ---
 

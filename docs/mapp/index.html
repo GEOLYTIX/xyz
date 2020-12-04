@@ -199,6 +199,21 @@
       
       
       
+      <li class="__1 ">
+        <a href="/xyz/docs/getting-started/">Getting started</a>
+      </li>
+      
+      
+      
+      <li class="__1 ">
+        <a href="/xyz/docs/deploy/">Deployments</a>
+      </li>
+      
+      
+      
+      <li class="__1 ">
+        <a href="/xyz/docs/develop/">Develop</a>
+      </li>
       
       
       
@@ -248,30 +263,27 @@
       
       
       
+      <li class="__1 ">
+        <a href="/xyz/docs/document/">Document</a>
+      </li>
       
       
       
+      <li class="__1 ">
+        <a href="/xyz/docs/environment-settings/">Environment Settings</a>
+      </li>
       
       
       
-      
-      <li class="__2 active">
+      <li class="__1 active">
         <a href="/xyz/docs/mapp/">Mapp</a>
       </li>
       
       
       
-      <li class="__2 ">
-        <a href="/xyz/docs/mapp/desktop/">Desktop</a>
+      <li class="__1 ">
+        <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
       </li>
-      
-      
-      
-      <li class="__2 ">
-        <a href="/xyz/docs/mapp/mobile/">Mobile</a>
-      </li>
-      
-      
       
       
       
@@ -319,8 +331,10 @@
 
     <div id="content">
       <h1 id="mapp">MAPP <a class="header-anchor" href="#mapp">¶</a></h1>
-<p>MAPP is the default application view for the XYZ stack. Accessed via the root address the View API will determine whether the client request originated from a mobile or desktop platform.</p>
-<p>The appropriate application view template and script will be returned to the browser. The MAPP view maybe private, requiering a registered user to login prior to accessing the XYZ host via the MAPP interface.</p>
+<p>MAPP is the default application view template.</p>
+<p>This is a responsive view with a display threshold of 768px width. Depending on the width of the display the control element will either be displayed on the left hand side or as a scrollable container at the bottom of small displays.</p>
+<p>The tabview control will not be displayed on small screens.</p>
+<p>Login might be required for the MAPP view dependent on the PRIVATE or PUBLIC environment setting.</p>
 <p><img src="https://res.cloudinary.com/geolytix-xyz/image/upload/v1591181227/documentation/mapp_login.png" alt=""></p>
 
     </div>
