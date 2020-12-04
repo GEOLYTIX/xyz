@@ -377,16 +377,12 @@
           <a href="/xyz/docs/workspace/locales/gazetteer/">Gazetteer</a>
         </li>
         
-        <li class="__3 ">
-          <a href="/xyz/docs/workspace/locales/plugins/">Plugins</a>
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
         </li>
         
         <li class="__3 ">
           <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
-        </li>
-        
-        <li class="__2 ">
-          <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
         </li>
         
         <li class="__2 ">
@@ -426,6 +422,11 @@
 <p><img src="../../../assets/img/locales_1.png" alt=""></p>
 <p>The <strong>min</strong> and <strong>maxZoom</strong> define the outer zoom levels for the map object. The default zoom range is from 2 to 20.</p>
 <p>Setting the <strong>view</strong> with latitude (<strong>lat</strong>), longitude (<strong>lng</strong>), and zoom (<strong>z</strong>) will define the view which is loaded if not overridden by either the init parameter or url hooks.</p>
+<h2 id="plugins">Plugins <a class="header-anchor" href="#plugins">¶</a></h2>
+<p>The plugins object entry in the locale workspace configuration can be used to define which addon scripts should be loaded.</p>
+<pre class="language-json"><code class="language-json"><span class="token property">"plugins"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>  <span class="token property">"cluster"</span><span class="token operator">:</span> <span class="token string">"/js/plugins/cluster.js"</span><br><span class="token punctuation">}</span></code></pre>
+<p>The key must match the event name which is defined in the module code. The entry value defines the source for the script tag which added to the application window document.</p>
+<p>Additional information in regard to building plugins can be found here <a href="/xyz/docs/develop/lib/plugins/">/develop/lib/plugins</a>.</p>
 
     </div>
 

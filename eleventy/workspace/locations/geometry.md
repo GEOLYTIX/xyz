@@ -1,8 +1,6 @@
 ---
 title: Geometry
-tags: [workspace, infoj, entry, geometry]
 layout: root.html
-orderPath: /workspace/locations/_geometry
 ---
 
 # Additional geometries
