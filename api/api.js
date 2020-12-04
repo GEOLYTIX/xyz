@@ -79,6 +79,9 @@ module.exports = async (req, res) => {
     return login(req, res, user.msg)
   }
 
+  // Set user as request parameter.
+  req.params.user = user
+
   // Retrieve path component from request URL for method routing.
   const path = req.url.match(/(?<=\/api\/)(.*?)[\/\?]/)
 
@@ -98,9 +101,6 @@ module.exports = async (req, res) => {
 
   // The login view will be returned for all PRIVATE requests without a valid user.
   if (!user && process.env.PRIVATE) return login(req, res)
-
-  // Set user as request parameter.
-  req.params.user = user
 
   // Retrieve workspace and assign to request params.
   const workspace = await getWorkspace(req)
