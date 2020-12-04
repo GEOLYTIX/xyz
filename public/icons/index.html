@@ -77,7 +77,7 @@
 
 import { render, html } from "https://unpkg.com/uhtml?module";
 
-fetch(`https://api.github.com/repos/geolytix/xyz/contents/public/icons`)
+fetch(`https://api.github.com/repos/geolytix/xyz/contents/public/icons?ref=development`)
   .then((response) => response.json())
   .then((json) => {
     const gallery = document.getElementById("gallery");
