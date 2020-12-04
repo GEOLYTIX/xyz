@@ -304,6 +304,7 @@ window.onload = () => {
             btnGazetteer.classList.toggle('enabled')
             btnGazetteer.classList.toggle('mobile-hidden')
             gazetteer.classList.toggle('display-none')
+            gazetteer.querySelector('input').focus()
           }}><div class="xyz-icon icon-search">`, btnColumn.firstChild)
         
       document.getElementById('closeGazetteer').onclick = e => {
