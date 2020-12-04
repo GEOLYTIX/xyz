@@ -115,17 +115,22 @@ module.exports = async (req, res) => {
   }
 
   if (path && path[1] === 'user') {
+
+    // A msg will be returned if the user does not met the required priviliges.
     const msg = routes.user(req, res)
+
+    // Return the login view with the msg.
     msg && login(req, res, msg)
     return
   }
 
   if (path && path[1] && routes[path[1]]) return routes[path[1]](req, res)
 
+  // Assign the mapp template as default if no template is set.
   req.params.template = req.params.template || req.params.workspace.templates.mapp
 
+  // Return the View API on the root.
   routes.view(req, res)
-
 }
 
 const https = require('https')

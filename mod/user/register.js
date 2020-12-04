@@ -144,7 +144,7 @@ async function post(req, res) {
   if (rows instanceof Error) return res.status(500).send(msg('failed_query', req.params.language))
 
   // Sent mail with verification token to the account email address.
-  const mail_template = mail('verify_account', user.language)
+  const mail_template = mail('verify_account', req.body.language)
 
   await mailer(Object.assign({
       to: req.body.email
@@ -157,6 +157,6 @@ async function post(req, res) {
     })))
 
   // Return msg. No redirect for password reset.
-  res.send(msg('new_account_registered', user.language))
+  res.send(msg('new_account_registered', req.body.language))
 
 }

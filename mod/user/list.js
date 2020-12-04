@@ -24,5 +24,4 @@ module.exports = async (req, res) => {
 
   // Send the infoj object with values back to the client.
   res.send(rows.length === 1 && rows[0] || rows)
-
 }

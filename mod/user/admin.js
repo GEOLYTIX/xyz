@@ -14,5 +14,4 @@ module.exports = async (req, res) => {
   const html = template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
 
   res.send(html)
-
 }
