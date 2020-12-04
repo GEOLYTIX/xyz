@@ -64,7 +64,7 @@ async function post(req, res) {
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(req.body.email)) return res.status(403).send('Invalid email provided')
 
   // Test whether a password has been provided.
-  if (req.body.password) return res.status(400).send('No password provided')
+  if (!req.body.password) return res.status(400).send('No password provided')
 
   // Attempt to retrieve ACL record with matching email field.
   var rows = await acl(`
