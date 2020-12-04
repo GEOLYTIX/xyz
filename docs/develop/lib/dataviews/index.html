@@ -403,8 +403,28 @@
 
     <div id="content">
       <h1 id="dataviews">Dataviews <a class="header-anchor" href="#dataviews">¶</a></h1>
-<p>Dataviews can be graphs or tables. A dataview can be created from a static json dataset or associated to a query which is called prior to updating the dataview. The layout and query of a dataview maybe configured by paramter for the dataview creation method.</p>
-
+<p><a href="https://github.com/GEOLYTIX/xyz/blob/development/lib/dataviews.mjs">/lib/dataviews</a></p>
+<p>Dataviews can be created as either chart or table.</p>
+<p>The dataview must be provided as an object to the <code>dataviews.create()</code> method. A target for the dataview may be provided as ID (string) or HTMLElement. New target element will be created if no target value is provided with the dataview object.</p>
+<p>The dataview will be appended as a child if a <code>.panel</code> HTMLElement is provided with the dataview object. This allows for dataviews to be created in a tabview panel.</p>
+<p>Dataviews can be nested by providing the multiple dataview objects within a dataviews array on the dataview object. This allows for mutiple dataviews to be arranged in a grid display.</p>
+<p>A dataview HTMLElement contains a <code>.toolbar</code> container which allows for additional utility controls to be created alongside the dataview, and the dataview target itself which will hold the canvas on which dataview is drawm.</p>
+<p>Dataviews have a <code>.setData()</code> method which will assign data to the dataview and render the newly set data.</p>
+<p>The <code>.update()</code> method of a dataview will wait for a promise to execute the dataview query and send the response to the <code>.setData()</code> method.</p>
+<p>The update method will be called from a <code>changeEnd</code> event listener on the <code>mapview.node</code> if the <code>.mapChange = true</code> flag is set.</p>
+<h2 id="chartjs">ChartJS <a class="header-anchor" href="#chartjs">¶</a></h2>
+<p>The Mapp library will attempt to create a ChartJS dataview if a <code>.chart</code> object is assigned to the input dataview object.</p>
+<iframe height="406" style="width: 100%;" scrolling="no" title="tabview" src="https://codepen.io/dbauszus-glx/embed/ExgPdeB?height=406&theme-id=light&default-tab=js,result" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href='https://codepen.io/dbauszus-glx/pen/ExgPdeB'>tabview</a> by dbauzus-glx
+  (<a href='https://codepen.io/dbauszus-glx'>@dbauszus-glx</a>) on <a href='https://codepen.io'>CodePen</a>.
+</iframe>
+<h2 id="tabulator">Tabulator <a class="header-anchor" href="#tabulator">¶</a></h2>
+<p>The Mapp library will attempt to create a Tabulator dataview is a <code>.columns</code> array is assigned to the input dataview object.</p>
+<p>The Tabulator library must be available as a script ressource.</p>
+<iframe height="406" style="width: 100%;" scrolling="no" title="tabview" src="https://codepen.io/dbauszus-glx/embed/BaLjvae?height=406&theme-id=light&default-tab=js,result" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href='https://codepen.io/dbauszus-glx/pen/BaLjvae'>tabview</a> by dbauzus-glx
+  (<a href='https://codepen.io/dbauszus-glx'>@dbauszus-glx</a>) on <a href='https://codepen.io'>CodePen</a>.
+</iframe>
     </div>
 
   </div>
