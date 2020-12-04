@@ -79,14 +79,25 @@ module.exports = async (req, res) => {
     return login(req, res, user.msg)
   }
 
-  // The login view will be returned for all PRIVATE requests without a valid user.
-  if (!user && process.env.PRIVATE) return login(req, res)
-
   // Retrieve path component from request URL for method routing.
   const path = req.url.match(/(?<=\/api\/)(.*?)[\/\?]/)
 
   // Short circuit proxy requests.
   if (path && path[0] === 'proxy?') return proxy(req, res)
+
+  // The user path will short circuit since workspace or templates are not required.
+  if (path && path[1] === 'user') {
+
+    // A msg will be returned if the user does not met the required priviliges.
+    const msg = routes.user(req, res)
+
+    // Return the login view with the msg.
+    msg && login(req, res, msg)
+    return
+  }
+
+  // The login view will be returned for all PRIVATE requests without a valid user.
+  if (!user && process.env.PRIVATE) return login(req, res)
 
   // Set user as request parameter.
   req.params.user = user
@@ -112,16 +123,6 @@ module.exports = async (req, res) => {
     if (user && (!user.admin && template.admin)) return login(req, res, 'Route requires admin priviliges')
 
     req.params.template = template
-  }
-
-  if (path && path[1] === 'user') {
-
-    // A msg will be returned if the user does not met the required priviliges.
-    const msg = routes.user(req, res)
-
-    // Return the login view with the msg.
-    msg && login(req, res, msg)
-    return
   }
 
   if (path && path[1] && routes[path[1]]) return routes[path[1]](req, res)
