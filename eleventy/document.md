@@ -30,7 +30,6 @@ The order of static pages in the /docs directory will resemble the nesting of ma
 ```
 ---
 title: Getting started
-tags: [getting-started, root]
 layout: root.html
 group: true
 orderPath: /_getting-started/_getting-started
