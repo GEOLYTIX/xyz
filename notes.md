@@ -6,6 +6,8 @@ Fix for login on public access routes. [#367](https://github.com/GEOLYTIX/xyz/is
 
 Fix _xyz init without OL library. [#370](https://github.com/GEOLYTIX/xyz/issues/370)
 
+Selection without a listview. [#320](https://github.com/GEOLYTIX/xyz/issues/320)
+
 Fix for fullscreen button.
 
 Include embedded view.
