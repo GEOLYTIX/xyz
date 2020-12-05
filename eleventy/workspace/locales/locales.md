@@ -1,6 +1,5 @@
 ---
 title: Locale
-
 layout: root.html
 group: true
 orderPath: /workspace/locales/_locales
