@@ -14,7 +14,6 @@ module.exports = async (req, res) => {
     theme = style_theme && style_theme.type,
     label = req.params.label,
     count = req.params.count,
-    pixelRatio = parseFloat(req.params.pixelRatio),
     kmeans = parseInt(1 / req.params.kmeans),
     dbscan = parseFloat(req.params.dbscan), 
     viewport = req.params.viewport.split(','),
