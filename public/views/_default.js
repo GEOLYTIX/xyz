@@ -190,7 +190,6 @@ window.onload = () => {
       <button
         id="btnZoomIn"
         disabled=${xyz.map.getView().getZoom() >= xyz.locale.maxZoom}
-        class="enabled"
         title=${xyz.language.toolbar_zoom_in}
         onclick=${e => {
           const z = parseInt(xyz.map.getView().getZoom() + 1)
@@ -203,7 +202,6 @@ window.onload = () => {
       <button
         id="btnZoomOut"
         disabled=${xyz.map.getView().getZoom() <= xyz.locale.minZoom}
-        class="enabled"
         title=${xyz.language.toolbar_zoom_out}
         onclick=${e => {
           const z = parseInt(xyz.map.getView().getZoom() - 1)
@@ -239,7 +237,7 @@ window.onload = () => {
           xyz.mapview.interaction.zoom.cancel()
 
         }}>
-        <div class="xyz-icon icon-pageview off-black-filter">`)
+        <div class="xyz-icon icon-pageview">`)
 
     // Add locator button.
     btnColumn.appendChild(xyz.utils.html.node`
@@ -249,7 +247,7 @@ window.onload = () => {
           xyz.mapview.locate.toggle();
           e.target.classList.toggle('enabled');
         }}>
-        <div class="xyz-icon icon-gps-not-fixed off-black-filter">`)
+        <div class="xyz-icon icon-gps-not-fixed">`)
 
     // Add measure button.
     btnColumn.appendChild(xyz.utils.html.node`
@@ -269,7 +267,7 @@ window.onload = () => {
                 e.target.classList.remove('enabled')
               }
             })
-          }}><div class="xyz-icon icon-straighten off-black-filter">`)          
+          }}><div class="xyz-icon icon-straighten">`)          
 
     // Add fullscreen button.
     btnColumn.appendChild(xyz.utils.html.node`
@@ -281,7 +279,7 @@ window.onload = () => {
           document.body.classList.toggle('fullscreen')
           xyz.map.updateSize()
         }}>
-        <div class="xyz-icon icon-map off-black-filter">`)      
+        <div class="xyz-icon icon-map">`)      
 
     xyz.plugins()
       .then(() => xyz.layers.load())
@@ -363,7 +361,7 @@ window.onload = () => {
     xyz.user && xyz.user.admin && btnColumn.appendChild(xyz.utils.html.node`
       <a
         title=${xyz.language.toolbar_admin}
-        class="enabled mobile-display-none style="cursor: pointer;"
+        class="mobile-display-none"
         href="${xyz.host + '/api/user/admin'}">
         <div class="xyz-icon icon-supervisor-account">`)
 
@@ -371,9 +369,9 @@ window.onload = () => {
     document.head.dataset.login && btnColumn.appendChild(xyz.utils.html.node`
       <a
         title="${xyz.user && `${xyz.language.toolbar_logout} ${xyz.user.email}` || 'Login'}"
-        class="enabled" style="cursor: pointer;"
         href="${xyz.user && '?logout=true' || '?login=true'}">
-        <div class="${`xyz-icon ${xyz.user && 'icon-logout' || 'icon-lock-open'}`}">`)
+        <div
+          class="${`xyz-icon ${xyz.user && 'icon-logout red-filter' || 'icon-lock-open primary-colour-filter'}`}">`)
 
   }
 
