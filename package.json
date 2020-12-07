@@ -44,6 +44,7 @@
     "eslint": "^6.8.0",
     "express": "^4.17.1",
     "flatpickr": "^4.6.3",
+    "geostats": "^2.0.0",
     "jwt-decode": "^2.2.0",
     "lint-staged": "^8.0.4",
     "markdown-it": "^11.0.1",
