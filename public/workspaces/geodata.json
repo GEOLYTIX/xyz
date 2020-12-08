@@ -24,7 +24,7 @@
     },
     "HERE Imagery": {
       "format": "tiles",
-      "URI": "/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?&provider=HERE&host=https://1.aerial.maps.api.here.com",
+      "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8&key=HERE",
       "attribution": {
         "© Here": "https://www.here.com/",
         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"

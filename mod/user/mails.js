@@ -49,7 +49,7 @@ module.exports = {
   		text: `A new account for this email address has been registered with ${_.host}
       Please verify that you are the account holder: ${_.protocol}${_.host}/api/user/verify/${_.verificationtoken}
       A site administrator must approve the account before you are able to login.
-      You will be notified via email once an adimistrator has approved your account.
+      You will be notified via email once an administrator has approved your account.
       The account was registered from this remote address ${_.remote_address}\n
       This wasn't you? Do NOT verify the account and let your manager know.`
     }),
@@ -58,7 +58,7 @@ module.exports = {
   		text: `A new account for this email address has been registered with ${_.host}
       Please verify that you are the account holder: ${_.protocol}${_.host}/api/user/verify/${_.verificationtoken}
       A site administrator must approve the account before you are able to login.
-      You will be notified via email once an adimistrator has approved your account.
+      You will be notified via email once an administrator has approved your account.
       The account was registered from this remote address ${_.remote_address}\n
       This wasn't you? Do NOT verify the account and let your manager know.`
   	}),
