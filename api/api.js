@@ -138,7 +138,16 @@ const https = require('https')
 
 function proxy(req, res) {
 
-  const url = `${req.query.host || ''}${req.query.uri || req.query.url}&${process.env[`KEY_${req.query.provider.toUpperCase()}`]}`
+  const queryParams = Object.entries(req.query)
+    .filter(entry => entry[0] !== 'url')
+    .filter(entry => entry[0] !== 'key')
+    .map(entry => `${entry[0]}=${entry[1]}`)
+
+  req.query.key 
+    && process.env[`KEY_${req.query.key.toUpperCase()}`] 
+    && queryParams.push(process.env[`KEY_${req.query.key.toUpperCase()}`])
+
+  const url = `${req.query.url}?${queryParams.join('&')}`
 
   const proxy = https.request(url, _res => {
     res.writeHead(_res.statusCode, _res.headers)
