@@ -7,16 +7,18 @@
       "src": "file://views/embedded.html"
     },
     "Mapbox Base": {
-      "format": "tiles",
-      "URI": "/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX&host=https://api.mapbox.com",
+      "format": "mbtiles",
+      "mbStyle": "mapbox://styles/dbauszus/ciozrimi3002bdsm8bjtn2v1y",
+      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmem95NXR0MG1mcDJ0bTdpZWtvbWczYSJ9.jed0_YFQsDd0IcHQDU2ZQw",
       "attribution": {
         "© Mapbox": "https://www.mapbox.com/about/maps",
         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
       }
     },
     "Mapbox Label": {
-      "format": "tiles",
-      "URI": "/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX&host=https://api.mapbox.com",
+      "format": "mbtiles",
+      "mbStyle": "mapbox://styles/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z",
+      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmem95NXR0MG1mcDJ0bTdpZWtvbWczYSJ9.jed0_YFQsDd0IcHQDU2ZQw",
       "attribution": {
         "© Mapbox": "https://www.mapbox.com/about/maps",
         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
@@ -24,7 +26,7 @@
     },
     "HERE Imagery": {
       "format": "tiles",
-      "URI": "https://1.aerial.maps.api.here.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8&key=HERE",
+      "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8&key=HERE",
       "attribution": {
         "© Here": "https://www.here.com/",
         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
@@ -32,7 +34,7 @@
     },
     "HERE Hybrid": {
       "format": "tiles",
-      "URI": "/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?&provider=HERE&host=https://1.aerial.maps.api.here.com",
+      "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8&key=HERE",
       "attribution": {
         "© Here": "https://www.here.com/",
         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"

@@ -12,6 +12,8 @@ Marker location for polygon geometries. [#331](https://github.com/GEOLYTIX/xyz/i
 
 Provider and Proxy endpoints. [#282](https://github.com/GEOLYTIX/xyz/issues/282)
 
+Query params and queryparams. [#374](https://github.com/GEOLYTIX/xyz/issues/374)
+
 Fix for fullscreen button.
 
 Include embedded view.

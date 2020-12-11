@@ -74,6 +74,18 @@ module.exports = async (req, res) => {
 
   //console.log(JSON.stringify(req.body))
 
+  if (req.params.nonblocking || template.nonblocking) {
+
+    _dbs(
+      q,
+      //[JSON.stringify(req.body)],
+      req.body && req.body.length && [JSON.stringify(req.body)] || req.params.params && req.params.params.split(','),
+      req.params.statement_timeout || template.statement_timeout)
+
+    return res.send('Non blocking request sent.')
+
+  }
+
   const rows = await _dbs(
     q,
     //[JSON.stringify(req.body)],
