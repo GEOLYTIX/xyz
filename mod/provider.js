@@ -169,7 +169,13 @@ async function cloudinary(req) {
 
 async function here(req) {
 
-  const response = await fetch(`https://${getURL(req)}&${process.env.KEY_HERE}`)
+  let url = `${req.params.url}?`;
+
+  url += Object.entries(JSON.parse(req.params.settings))
+    .map(entry => (`${entry[0]}=${entry[1]}`))
+    .join('&');
+
+  const response = await fetch(`https://${url}&apiKey=${process.env.KEY_HERE}`)
 
   return await response.json()
 }
