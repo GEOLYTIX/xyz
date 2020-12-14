@@ -6,7 +6,7 @@ module.exports = async (req, res) => {
  
   var q = `
   INSERT INTO ${req.params.table} (${layer.geom})
-  SELECT ST_SetSRID(ST_GeomFromGeoJSON('${JSON.stringify(req.body.geometry)}'), ${layer.srid})
+  SELECT ST_SetSRID(ST_MakeValid(ST_GeomFromGeoJSON('${JSON.stringify(req.body.geometry)}')), ${layer.srid})
   RETURNING ${layer.qID} AS id;`
 
   var rows = await dbs[layer.dbs](q)
