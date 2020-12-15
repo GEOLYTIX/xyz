@@ -3,138 +3,357 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
 
     _xyz.layers.plugins.scenario_panel = async layer => {
 
-      let ping
+      _xyz.layers.list.scenario_region.show()
 
-      const scenarios = await _xyz.query({
-        query: 'scenario_list'
-      })
+      const scenarios = {}
 
-      layer.filter.current.scenario_id = {
-        match: scenarios[0].scenario_id
-      }
-
-      layer.reload()
-
-      const panel = layer.view.insertBefore(_xyz.utils.html.node`
+      scenarios.panel = layer.view.insertBefore(_xyz.utils.html.node`
         <div style="padding-right: 5px; margin-bottom: 5px;">`,
         layer.view.querySelector('.drawer'))
 
-      panel.appendChild(_xyz.utils.html.node`
-        <button class="btn-drop">
-          <div
-            class="head"
-            onclick=${e => {
-              e.preventDefault();
-              e.target.parentElement.classList.toggle('active');
-            }}>
-            <span>${scenarios[0].scenario}</span>
-            <div class="icon"></div>
-          </div>
-          <ul>${scenarios.map(scenario => _xyz.utils.html.node`
-            <li onclick=${e => {
+      scenarios.demands = await _xyz.query({
+        query: 'demand_list'
+      })
 
-              const drop = e.target.closest('.btn-drop')
-              drop.classList.toggle('active')
+      scenarios.fields = {
+        scenario_id: value => scenarios.grid.appendChild(_xyz.utils.html.node`
+          <div style="grid-column: 1">ID</div>
+          <div style="grid-column: 2">${value}`),
+        scenario_name: value => scenarios.grid.appendChild(_xyz.utils.html.node`
+          <div style="grid-column: 1">Name</div>
+          <div style="grid-column: 2">
+            <input type="text"
+              oninput=${e => onInput(e, 'scenario_name')} value=${value}>`),
+        cap_main: value => scenarios.grid.appendChild(_xyz.utils.html.node`
+          <div style="grid-column: 1">Cap (Plus)</div>
+          <div style="grid-column: 2">
+            <input type="number"
+              oninput=${e => onInput(e, 'cap_main')} value=${value}>`),
+        cap_local: value => scenarios.grid.appendChild(_xyz.utils.html.node`
+          <div style="grid-column: 1">Cap (Light Touch)</div>
+          <div style="grid-column: 2">
+            <input type="number"
+              oninput=${e => onInput(e, 'cap_local')} value=${value}>`),
+        collar_main: value => scenarios.grid.appendChild(_xyz.utils.html.node`
+          <div style="grid-column: 1">Collar(Plus)</div>
+          <div style="grid-column: 2">
+            <input type="number" 
+              oninput=${e => onInput(e, 'collar_main')} value=${value}>`),
+        collar_local: value => scenarios.grid.appendChild(_xyz.utils.html.node`
+          <div style="grid-column: 1">Collar (Light Touch)</div>
+          <div style="grid-column: 2">
+            <input type="number"
+              oninput=${e => onInput(e, 'collar_local')} value=${value}>`),
+        created_by: value => scenarios.grid.appendChild(_xyz.utils.html.node`
+          <div style="grid-column: 1">Created by</div>
+          <div style="grid-column: 2">${value}`),
+        created_datetime: value => scenarios.grid.appendChild(_xyz.utils.html.node`
+          <div style="grid-column: 1">Created on</div>
+          <div style="grid-column: 2">${value}`),
+        run_datetime: value => scenarios.grid.appendChild(_xyz.utils.html.node`
+          <div style="grid-column: 1">Last run</div>
+          <div style="grid-column: 2">${value}`),
+        status: value => scenarios.grid.appendChild(_xyz.utils.html.node`
+          <div style="grid-column: 1">Status</div>
+          <div style="grid-column: 2">${value}`),
+        national_flag: value => {
+          
+          scenarios.grid.appendChild(_xyz.utils.html.node`
+            <label style="grid-column: 1/3" class="input-checkbox">
+              <input
+                type="checkbox"
+                .checked=${value === 1}
+                onchange=${e => {
+                  scenarios.btn.textContent = 'Update'
+                  scenarios.update.national_flag = e.target.checked && 1 || 0
 
-              drop.querySelector('span').textContent = scenario.scenario
+                  drawButton.style.display =  e.target.checked && 'none' || 'block'
+                }}>
+              </input>
+              <div></div>
+              <span>National Extent`)
 
-              layer.filter.current.scenario_id.match = scenario.scenario_id
+          const drawButton = scenarios.grid.appendChild(_xyz.utils.html.node`
+            <button
+              style="${`grid-column: 1/3; ${value === 1 && 'display: none;' ||''}`}"
+              class="btn-wide primary-colour"
+              onclick=${e => {
+            
+                e.stopPropagation()
+                       
+                if (drawButton.classList.contains('active')) return _xyz.mapview.interaction.draw.cancel()
+            
+                drawButton.classList.add('active')
+            
+                _xyz.mapview.interaction.draw.begin({
+                  layer: _xyz.layers.list.scenario_region,
+                  type: 'Polygon',
+                  geometryFunction: _xyz.mapview.interaction.draw.polygonKinks,
+                  callback: () => {
+                    drawButton.classList.remove('active')
+                  },
+                  select_callback: async glid => {
 
-              layer.reload()
+                    await _xyz.query({
+                      query: 'scenario_region_set',
+                      queryparams: {
+                        scenario_id: scenarios.current.scenario_id,
+                        glid: glid
+                      }
+                    })
 
-              load_scenario(scenario.scenario_id)
-             
-            }}>${scenario.scenario}`)}`)
+                    _xyz.layers.list.scenario_region.reload()
+
+                  }
+                })
+            
+              }}>Draw region`)
 
 
+          },
+        demandid: value => scenarios.grid.appendChild(_xyz.utils.html.node`
+          <div style="grid-column: 1">Demand</div>
+          <div style="grid-column: 2">
+            <button class="btn-drop">
+              <div
+                class="head"
+                onclick=${e => {
+                  e.preventDefault();
+                  e.target.parentElement.classList.toggle('active');
+                }}>
+                <span>${scenarios.demands.find(d => d.demandid === value).name}</span>
+                <div class="icon"></div>
+              </div>
+              <ul>${scenarios.demands.map(d => _xyz.utils.html.node`
+                <li onclick=${e => {
 
-      const scenario_grid = panel.appendChild(_xyz.utils.html.node`
-        <div style="display:grid">`)
+                  const drop = e.target.closest('.btn-drop')
+                  drop.classList.toggle('active')
 
+                  drop.querySelector('span').textContent = d.name
+                  drop.querySelector('span').style.color = '#090'
 
-      load_scenario(scenarios[0].scenario_id)
+                  scenarios.btn.textContent = 'Update'
 
-      async function load_scenario(scenario_id) {
+                  scenarios.update.demandid = d.demandid
+                
+                }}>${d.name}`)}`),
+      }
 
-        scenario_grid.innerHTML = ''
+      loadPanel()
 
-        const scenario = await _xyz.query({
-          query: 'scenario_details',
-          queryparams: {
-            scenario_id: scenario_id
-          }
+      async function loadPanel() {
+
+        scenarios.panel.innerHTML = ''
+
+        scenarios.list = await _xyz.query({
+          query: 'scenario_list'
+        })
+  
+        scenarios.list.push({
+          scenario_name: 'New'
         })
 
-        if (scenario.status === 'running') ping = setTimeout(pingScenario, 10000)
+        scenarios.current = scenarios.current || scenarios.list[0]
 
-        Object.entries(scenario).forEach(entry => {
+        layer.filter.current.scenario_id = {
+          match: scenarios.current.scenario_id
+        }
+  
+        layer.reload()
+  
+        scenarios.panel.appendChild(_xyz.utils.html.node`
+          <button class="btn-drop">
+            <div
+              class="head"
+              onclick=${e => {
+                e.preventDefault();
+                e.target.parentElement.classList.toggle('active');
+              }}>
+              <span>${scenarios.current.scenario_name}</span>
+              <div class="icon"></div>
+            </div>
+            <ul>${scenarios.list.map(scenario => _xyz.utils.html.node`
+              <li onclick=${e => {
+  
+                const drop = e.target.closest('.btn-drop')
+                drop.classList.toggle('active')
+  
+                drop.querySelector('span').textContent = scenario.scenario_name
+  
+                layer.filter.current.scenario_id.match = scenario.scenario_id || 0
+  
+                layer.reload()
 
-          scenario_grid.appendChild(_xyz.utils.html.node`
-            <div style="grid-column: 1">${entry[0]}`)
+                scenarios.current = scenario
+  
+                loadScenario()
+               
+              }}>${scenario.scenario_name}`)}`)
 
-          scenario_grid.appendChild(_xyz.utils.html.node`
-            <div style="grid-column: 2">${entry[1]}`)
-        
+        scenarios.grid = scenarios.panel.appendChild(_xyz.utils.html.node`
+          <div style="margin-top: 5px; display:grid; grid-gap: 5px; align-items: center;">`)              
+
+        loadScenario()
+      }
+
+      async function loadScenario() {
+
+        scenarios.grid.innerHTML = ''
+
+        if (scenarios.current.scenario_id) {
+
+          Object.assign(scenarios.current, await _xyz.query({
+            query: 'scenario_details',
+            queryparams: {
+              scenario_id: scenarios.current.scenario_id
+            }
+          }))
+
+        } else {
+
+          Object.assign(scenarios.current, {
+            scenario_name: 'New Scenario',
+            status: 'New'
+          })
+        }
+
+        _xyz.layers.list.scenario_region.filter.current.scenario_id.match = scenarios.current.scenario_id || -1
+        _xyz.layers.list.scenario_region.reload()
+
+        scenarios.update = {
+          scenario_id: scenarios.current.scenario_id,
+          scenario_name: scenarios.current.scenario_name,
+          status: scenarios.current.status,
+          cap_main: 'cap_main',
+          collar_main: 'collar_main',
+          cap_local: 'cap_local',
+          collar_local: 'collar_local',
+          demandid: 'demandid',
+          national_flag: 'national_flag'
+        }
+
+        Object.entries(scenarios.current).forEach(entry => {
+
+          scenarios.fields[entry[0]] && scenarios.fields[entry[0]](entry[1])
+
         })
 
-        const btn = scenario_grid.appendChild(_xyz.utils.html.node`
+        if (scenarios.current.status === 'running') setTimeout(pingScenario, 10000)
+
+        scenarios.btn = scenarios.grid.appendChild(_xyz.utils.html.node`
           <button
-            .disabled=${scenario.status === 'running'}
+            .disabled=${scenarios.current.status === 'running'}
             class="btn-wide primary-colour"
-            style="grid-column: 2"
-            onclick=${runScenario}>Make it so`)
-
-        async function runScenario() {
-
-          btn.disabled = true
-
-          await _xyz.query({
-            query: 'scenario_set_running',
-            queryparams: {
-              scenario_id: scenario_id
-            }
-          })
-
-          const test = await _xyz.query({
-            query: 'scenario_run',
-            queryparams: {
-              scenario_id: scenario_id
-            }
-          })
-
-          console.log(test)
-
-          load_scenario(scenario_id)
-
-        }
-
-        async function pingScenario() {
-
-          const test = await _xyz.query({
-            query: 'scenario_ping',
-            queryparams: {
-              scenario_id: scenario_id
-            }
-          })
-
-          console.log(test)
-
-          if (test.status === 'running') {
-
-            return setTimeout(pingScenario, 10000)
-          }
-
-          if (test.status === 'Complete') {
-
-            alert('Scenario Complete')
-
-            return load_scenario(scenario_id)
-          }
-
-        }
+            style="grid-column: 1/3"
+            onclick=${runScenario}>${scenarios.current.scenario_id && 'Make it so' || 'Create'}`)
 
       }
 
+      async function createScenario() {
+
+        scenarios.btn.disabled = true
+
+        const response = await _xyz.query({
+          query: 'scenario_create',
+          queryparams: Object.assign({
+            created_by: _xyz.user.email
+          }, scenarios.update)
+        })
+
+        scenarios.current = scenarios.update
+        scenarios.current.scenario_id = response.scenario_id
+
+        loadPanel()
+      }
+
+      function onInput(e, param) {
+        e.target.style.color = '#090'
+        scenarios.update[param] = e.target.value
+        if (scenarios.current.scenario_id) scenarios.btn.textContent = 'Update'
+      }
+
+      async function updateScenario() {
+
+        scenarios.btn.disabled = true
+
+        scenarios.update.status = 'Updated'
+
+        await _xyz.query({
+          query: 'scenario_update',
+          queryparams: scenarios.update
+        })
+
+        scenarios.current.scenario_name = scenarios.update.scenario_name
+
+        loadPanel()
+      }
+
+      async function runScenario() {
+
+        if (!scenarios.current.scenario_id) return createScenario()
+
+        if (scenarios.btn.textContent === 'Update') return updateScenario()
+
+        if (!scenarios.current.national_flag) {
+
+          const response = await _xyz.query({
+            query: 'count_locations',
+            layer: _xyz.layers.list.scenario_region,
+            queryparams: {
+              table: _xyz.layers.list.scenario_region.tableMin()
+            }
+          })
+
+          if (!parseInt(response.count)) return alert('Unable to run regional model without regions.')
+
+        }
+
+        if (!window.confirm('Would like to run the scenario with the current settings. Running a scenario may take up to 30 minutes.')) return
+
+        scenarios.btn.disabled = true
+
+        scenarios.update.status = 'running'
+
+        await _xyz.query({
+          query: 'scenario_update',
+          queryparams: scenarios.update
+        })
+
+        await _xyz.query({
+          query: 'scenario_run',
+          queryparams: {
+            scenario_id: scenarios.current.scenario_id
+          }
+        })
+
+        loadScenario()
+      }
+
+      async function pingScenario() {
+
+        const response = await _xyz.query({
+          query: 'scenario_ping',
+          queryparams: {
+            scenario_id: scenarios.current.scenario_id
+          }
+        })
+
+        console.log(response)
+
+        if (response.status === 'running') {
+
+          return setTimeout(pingScenario, 10000)
+        }
+
+        if (response.status === 'Complete') {
+
+          alert('Scenario Complete')
+
+          return loadScenario()
+        }
+
+      }
 
     }
 
