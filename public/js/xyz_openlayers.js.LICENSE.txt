@@ -29,6 +29,976 @@
     and limitations under the License.
     ***************************************************************************** */
 
+/*! ../helpers.js */
+
+/*! ./_DataView */
+
+/*! ./_Hash */
+
+/*! ./_ListCache */
+
+/*! ./_Map */
+
+/*! ./_MapCache */
+
+/*! ./_Promise */
+
+/*! ./_Set */
+
+/*! ./_Stack */
+
+/*! ./_Symbol */
+
+/*! ./_Uint8Array */
+
+/*! ./_WeakMap */
+
+/*! ./_arrayEach */
+
+/*! ./_arrayFilter */
+
+/*! ./_arrayLikeKeys */
+
+/*! ./_arrayPush */
+
+/*! ./_assignValue */
+
+/*! ./_assocIndexOf */
+
+/*! ./_baseAssign */
+
+/*! ./_baseAssignIn */
+
+/*! ./_baseAssignValue */
+
+/*! ./_baseClone */
+
+/*! ./_baseCreate */
+
+/*! ./_baseGetAllKeys */
+
+/*! ./_baseGetTag */
+
+/*! ./_baseIsArguments */
+
+/*! ./_baseIsMap */
+
+/*! ./_baseIsNative */
+
+/*! ./_baseIsSet */
+
+/*! ./_baseIsTypedArray */
+
+/*! ./_baseKeys */
+
+/*! ./_baseKeysIn */
+
+/*! ./_baseTimes */
+
+/*! ./_baseUnary */
+
+/*! ./_cloneArrayBuffer */
+
+/*! ./_cloneBuffer */
+
+/*! ./_cloneDataView */
+
+/*! ./_cloneRegExp */
+
+/*! ./_cloneSymbol */
+
+/*! ./_cloneTypedArray */
+
+/*! ./_copyArray */
+
+/*! ./_copyObject */
+
+/*! ./_copySymbols */
+
+/*! ./_copySymbolsIn */
+
+/*! ./_coreJsData */
+
+/*! ./_defineProperty */
+
+/*! ./_freeGlobal */
+
+/*! ./_getAllKeys */
+
+/*! ./_getAllKeysIn */
+
+/*! ./_getMapData */
+
+/*! ./_getNative */
+
+/*! ./_getPrototype */
+
+/*! ./_getRawTag */
+
+/*! ./_getSymbols */
+
+/*! ./_getSymbolsIn */
+
+/*! ./_getTag */
+
+/*! ./_getValue */
+
+/*! ./_hashClear */
+
+/*! ./_hashDelete */
+
+/*! ./_hashGet */
+
+/*! ./_hashHas */
+
+/*! ./_hashSet */
+
+/*! ./_initCloneArray */
+
+/*! ./_initCloneByTag */
+
+/*! ./_initCloneObject */
+
+/*! ./_isIndex */
+
+/*! ./_isKeyable */
+
+/*! ./_isMasked */
+
+/*! ./_isPrototype */
+
+/*! ./_listCacheClear */
+
+/*! ./_listCacheDelete */
+
+/*! ./_listCacheGet */
+
+/*! ./_listCacheHas */
+
+/*! ./_listCacheSet */
+
+/*! ./_mapCacheClear */
+
+/*! ./_mapCacheDelete */
+
+/*! ./_mapCacheGet */
+
+/*! ./_mapCacheHas */
+
+/*! ./_mapCacheSet */
+
+/*! ./_nativeCreate */
+
+/*! ./_nativeKeys */
+
+/*! ./_nativeKeysIn */
+
+/*! ./_nodeUtil */
+
+/*! ./_objectToString */
+
+/*! ./_overArg */
+
+/*! ./_root */
+
+/*! ./_stackClear */
+
+/*! ./_stackDelete */
+
+/*! ./_stackGet */
+
+/*! ./_stackHas */
+
+/*! ./_stackSet */
+
+/*! ./_toSource */
+
+/*! ./annotation.js */
+
+/*! ./element.js */
+
+/*! ./eq */
+
+/*! ./events.js */
+
+/*! ./helpers.js */
+
+/*! ./isArguments */
+
+/*! ./isArray */
+
+/*! ./isArrayLike */
+
+/*! ./isBuffer */
+
+/*! ./isFunction */
+
+/*! ./isLength */
+
+/*! ./isMap */
+
+/*! ./isObject */
+
+/*! ./isObjectLike */
+
+/*! ./isSet */
+
+/*! ./isTypedArray */
+
+/*! ./keys */
+
+/*! ./keysIn */
+
+/*! ./stubArray */
+
+/*! ./stubFalse */
+
+/*! ./types/box.js */
+
+/*! ./types/line.js */
+
+/*! @turf/helpers */
+
+/*! CommonJS bailout: exports is used directly at 2:73-80 */
+
+/*! CommonJS bailout: exports is used directly at 4:48-55 */
+
+/*! CommonJS bailout: exports is used directly at 4:80-87 */
+
+/*! CommonJS bailout: exports is used directly at 5:48-55 */
+
+/*! CommonJS bailout: exports is used directly at 5:80-87 */
+
+/*! CommonJS bailout: module.exports is used directly at 11:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 13:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 14:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 15:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 166:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 16:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 17:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 18:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 19:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 1:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 20:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 21:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 22:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 23:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 25:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 26:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 27:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 28:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 29:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 2:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 30:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 31:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 32:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 33:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 34:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 35:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 36:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 37:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 38:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 3:67-81 */
+
+/*! CommonJS bailout: module.exports is used directly at 40:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 46:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 47:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 49:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 4:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 58:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 59:67-81 */
+
+/*! CommonJS bailout: module.exports is used directly at 60:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 6:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 77:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 7:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 89:0-14 */
+
+/*! CommonJS bailout: module.exports is used directly at 8:63-77 */
+
+/*! CommonJS bailout: module.exports is used directly at 9:0-14 */
+
+/*! CommonJS bailout: this is used directly at 11:2-6 */
+
+/*! CommonJS bailout: this is used directly at 5:2-6 */
+
+/*! CommonJS bailout: this is used directly at 62:2-6 */
+
+/*! CommonJS bailout: this is used directly at 6:2-6 */
+
+/*! ModuleConcatenation bailout: Cannot concat with ./node_modules/@turf/kinks/index.js: Module is not an ECMAScript module */
+
+/*! ModuleConcatenation bailout: Cannot concat with ./node_modules/chartjs-plugin-annotation/src/index.js: Module is not an ECMAScript module */
+
+/*! ModuleConcatenation bailout: Cannot concat with ./node_modules/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.js: Module is not an ECMAScript module */
+
+/*! ModuleConcatenation bailout: Cannot concat with ./node_modules/chroma-js/chroma.js: Module is not an ECMAScript module */
+
+/*! ModuleConcatenation bailout: Cannot concat with ./node_modules/flatpickr/dist/flatpickr.js: Module is not an ECMAScript module */
+
+/*! ModuleConcatenation bailout: Cannot concat with ./node_modules/flatpickr/dist/l10n/fr.js: Module is not an ECMAScript module */
+
+/*! ModuleConcatenation bailout: Cannot concat with ./node_modules/flatpickr/dist/l10n/pl.js: Module is not an ECMAScript module */
+
+/*! ModuleConcatenation bailout: Cannot concat with ./node_modules/lodash/cloneDeep.js: Module is not an ECMAScript module */
+
+/*! ModuleConcatenation bailout: List of module exports is dynamic (other exports: maybe provided (runtime-defined) and no usage info) */
+
+/*! ModuleConcatenation bailout: Module is not an ECMAScript module */
+
+/*! chart.js */
+
+/*! dynamic exports */
+
+/*! export __esModule [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export areaFactors [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export bearingToAngle [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export bearingToAzimuth [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export convertArea [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export convertDistance [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export convertLength [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export default [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export degrees2radians [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export degreesToRadians [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export distanceToDegrees [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export distanceToRadians [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export earthRadius [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export factors [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export feature [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export featureCollection [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export geometry [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export geometryCollection [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export isNumber [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export isObject [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export lengthToDegrees [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export lengthToRadians [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export lineString [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export lineStrings [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export multiLineString [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export multiPoint [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export multiPolygon [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export point [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export points [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export polygon [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export polygons [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export radians2degrees [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export radiansToDegrees [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export radiansToDistance [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export radiansToLength [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export round [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export unitsFactors [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export validateBBox [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export validateId [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! exports [maybe provided (runtime-defined)] [no usage info] */
+
+/*! flagged exports */
+
+/*! moment */
+
+/*! namespace exports */
+
+/*! other exports [not provided] [no usage info] */
+
+/*! runtime requirements: __webpack_exports__ */
+
+/*! runtime requirements: __webpack_exports__, __webpack_require__ */
+
+/*! runtime requirements: __webpack_exports__, module.loaded, module.id, module, __webpack_require__.nmd, __webpack_require__, __webpack_require__.* */
+
+/*! runtime requirements: __webpack_exports__, top-level-this-exports */
+
+/*! runtime requirements: __webpack_require__.r, __webpack_exports__, __webpack_require__.d, __webpack_require__, __webpack_require__.* */
+
+/*! runtime requirements: module */
+
+/*! runtime requirements: module, __webpack_require__ */
+
+/*! runtime requirements: module, __webpack_require__.g, __webpack_require__.* */
+
+/*! runtime requirements: module, top-level-this-exports */
+
+/*! runtime requirements: module, top-level-this-exports, __webpack_require__ */
+
+/*! unknown exports (runtime-defined) */
+
+/*!*************************!*\
+  !*** external "moment" ***!
+  \*************************/
+
+/*!***********************************!*\
+  !*** ./node_modules/lodash/eq.js ***!
+  \***********************************/
+
+/*!*************************************!*\
+  !*** ./lib/index.mjs + 144 modules ***!
+  \*************************************/
+
+/*!*************************************!*\
+  !*** ./node_modules/lodash/_Map.js ***!
+  \*************************************/
+
+/*!*************************************!*\
+  !*** ./node_modules/lodash/_Set.js ***!
+  \*************************************/
+
+/*!*************************************!*\
+  !*** ./node_modules/lodash/keys.js ***!
+  \*************************************/
+
+/*!**************************************!*\
+  !*** ./node_modules/lodash/_Hash.js ***!
+  \**************************************/
+
+/*!**************************************!*\
+  !*** ./node_modules/lodash/_root.js ***!
+  \**************************************/
+
+/*!**************************************!*\
+  !*** ./node_modules/lodash/isMap.js ***!
+  \**************************************/
+
+/*!**************************************!*\
+  !*** ./node_modules/lodash/isSet.js ***!
+  \**************************************/
+
+/*!***************************************!*\
+  !*** ./node_modules/lodash/_Stack.js ***!
+  \***************************************/
+
+/*!***************************************!*\
+  !*** ./node_modules/lodash/keysIn.js ***!
+  \***************************************/
+
+/*!****************************************!*\
+  !*** ./node_modules/lodash/_Symbol.js ***!
+  \****************************************/
+
+/*!****************************************!*\
+  !*** ./node_modules/lodash/_getTag.js ***!
+  \****************************************/
+
+/*!****************************************!*\
+  !*** ./node_modules/lodash/isArray.js ***!
+  \****************************************/
+
+/*!*****************************************!*\
+  !*** ./node_modules/lodash/_Promise.js ***!
+  \*****************************************/
+
+/*!*****************************************!*\
+  !*** ./node_modules/lodash/_WeakMap.js ***!
+  \*****************************************/
+
+/*!*****************************************!*\
+  !*** ./node_modules/lodash/_hashGet.js ***!
+  \*****************************************/
+
+/*!*****************************************!*\
+  !*** ./node_modules/lodash/_hashHas.js ***!
+  \*****************************************/
+
+/*!*****************************************!*\
+  !*** ./node_modules/lodash/_hashSet.js ***!
+  \*****************************************/
+
+/*!*****************************************!*\
+  !*** ./node_modules/lodash/_isIndex.js ***!
+  \*****************************************/
+
+/*!*****************************************!*\
+  !*** ./node_modules/lodash/_overArg.js ***!
+  \*****************************************/
+
+/*!*****************************************!*\
+  !*** ./node_modules/lodash/isBuffer.js ***!
+  \*****************************************/
+
+/*!*****************************************!*\
+  !*** ./node_modules/lodash/isLength.js ***!
+  \*****************************************/
+
+/*!*****************************************!*\
+  !*** ./node_modules/lodash/isObject.js ***!
+  \*****************************************/
+
+/*!******************************************!*\
+  !*** ./node_modules/chroma-js/chroma.js ***!
+  \******************************************/
+
+/*!******************************************!*\
+  !*** ./node_modules/lodash/_DataView.js ***!
+  \******************************************/
+
+/*!******************************************!*\
+  !*** ./node_modules/lodash/_MapCache.js ***!
+  \******************************************/
+
+/*!******************************************!*\
+  !*** ./node_modules/lodash/_baseKeys.js ***!
+  \******************************************/
+
+/*!******************************************!*\
+  !*** ./node_modules/lodash/_getValue.js ***!
+  \******************************************/
+
+/*!******************************************!*\
+  !*** ./node_modules/lodash/_isMasked.js ***!
+  \******************************************/
+
+/*!******************************************!*\
+  !*** ./node_modules/lodash/_nodeUtil.js ***!
+  \******************************************/
+
+/*!******************************************!*\
+  !*** ./node_modules/lodash/_stackGet.js ***!
+  \******************************************/
+
+/*!******************************************!*\
+  !*** ./node_modules/lodash/_stackHas.js ***!
+  \******************************************/
+
+/*!******************************************!*\
+  !*** ./node_modules/lodash/_stackSet.js ***!
+  \******************************************/
+
+/*!******************************************!*\
+  !*** ./node_modules/lodash/_toSource.js ***!
+  \******************************************/
+
+/*!******************************************!*\
+  !*** ./node_modules/lodash/cloneDeep.js ***!
+  \******************************************/
+
+/*!******************************************!*\
+  !*** ./node_modules/lodash/stubArray.js ***!
+  \******************************************/
+
+/*!******************************************!*\
+  !*** ./node_modules/lodash/stubFalse.js ***!
+  \******************************************/
+
+/*!*******************************************!*\
+  !*** ./node_modules/@turf/kinks/index.js ***!
+  \*******************************************/
+
+/*!*******************************************!*\
+  !*** ./node_modules/lodash/_ListCache.js ***!
+  \*******************************************/
+
+/*!*******************************************!*\
+  !*** ./node_modules/lodash/_arrayEach.js ***!
+  \*******************************************/
+
+/*!*******************************************!*\
+  !*** ./node_modules/lodash/_arrayPush.js ***!
+  \*******************************************/
+
+/*!*******************************************!*\
+  !*** ./node_modules/lodash/_baseClone.js ***!
+  \*******************************************/
+
+/*!*******************************************!*\
+  !*** ./node_modules/lodash/_baseIsMap.js ***!
+  \*******************************************/
+
+/*!*******************************************!*\
+  !*** ./node_modules/lodash/_baseIsSet.js ***!
+  \*******************************************/
+
+/*!*******************************************!*\
+  !*** ./node_modules/lodash/_baseTimes.js ***!
+  \*******************************************/
+
+/*!*******************************************!*\
+  !*** ./node_modules/lodash/_baseUnary.js ***!
+  \*******************************************/
+
+/*!*******************************************!*\
+  !*** ./node_modules/lodash/_copyArray.js ***!
+  \*******************************************/
+
+/*!*******************************************!*\
+  !*** ./node_modules/lodash/_getNative.js ***!
+  \*******************************************/
+
+/*!*******************************************!*\
+  !*** ./node_modules/lodash/_getRawTag.js ***!
+  \*******************************************/
+
+/*!*******************************************!*\
+  !*** ./node_modules/lodash/_hashClear.js ***!
+  \*******************************************/
+
+/*!*******************************************!*\
+  !*** ./node_modules/lodash/_isKeyable.js ***!
+  \*******************************************/
+
+/*!*******************************************!*\
+  !*** ./node_modules/lodash/isFunction.js ***!
+  \*******************************************/
+
+/*!********************************************!*\
+  !*** ./node_modules/lodash/_Uint8Array.js ***!
+  \********************************************/
+
+/*!********************************************!*\
+  !*** ./node_modules/lodash/_baseAssign.js ***!
+  \********************************************/
+
+/*!********************************************!*\
+  !*** ./node_modules/lodash/_baseCreate.js ***!
+  \********************************************/
+
+/*!********************************************!*\
+  !*** ./node_modules/lodash/_baseGetTag.js ***!
+  \********************************************/
+
+/*!********************************************!*\
+  !*** ./node_modules/lodash/_baseKeysIn.js ***!
+  \********************************************/
+
+/*!********************************************!*\
+  !*** ./node_modules/lodash/_copyObject.js ***!
+  \********************************************/
+
+/*!********************************************!*\
+  !*** ./node_modules/lodash/_coreJsData.js ***!
+  \********************************************/
+
+/*!********************************************!*\
+  !*** ./node_modules/lodash/_freeGlobal.js ***!
+  \********************************************/
+
+/*!********************************************!*\
+  !*** ./node_modules/lodash/_getAllKeys.js ***!
+  \********************************************/
+
+/*!********************************************!*\
+  !*** ./node_modules/lodash/_getMapData.js ***!
+  \********************************************/
+
+/*!********************************************!*\
+  !*** ./node_modules/lodash/_getSymbols.js ***!
+  \********************************************/
+
+/*!********************************************!*\
+  !*** ./node_modules/lodash/_hashDelete.js ***!
+  \********************************************/
+
+/*!********************************************!*\
+  !*** ./node_modules/lodash/_nativeKeys.js ***!
+  \********************************************/
+
+/*!********************************************!*\
+  !*** ./node_modules/lodash/_stackClear.js ***!
+  \********************************************/
+
+/*!********************************************!*\
+  !*** ./node_modules/lodash/isArguments.js ***!
+  \********************************************/
+
+/*!********************************************!*\
+  !*** ./node_modules/lodash/isArrayLike.js ***!
+  \********************************************/
+
+/*!*********************************************!*\
+  !*** ./node_modules/@turf/helpers/index.js ***!
+  \*********************************************/
+
+/*!*********************************************!*\
+  !*** ./node_modules/chart.js/dist/Chart.js ***!
+  \*********************************************/
+
+/*!*********************************************!*\
+  !*** ./node_modules/lodash/_arrayFilter.js ***!
+  \*********************************************/
+
+/*!*********************************************!*\
+  !*** ./node_modules/lodash/_assignValue.js ***!
+  \*********************************************/
+
+/*!*********************************************!*\
+  !*** ./node_modules/lodash/_cloneBuffer.js ***!
+  \*********************************************/
+
+/*!*********************************************!*\
+  !*** ./node_modules/lodash/_cloneRegExp.js ***!
+  \*********************************************/
+
+/*!*********************************************!*\
+  !*** ./node_modules/lodash/_cloneSymbol.js ***!
+  \*********************************************/
+
+/*!*********************************************!*\
+  !*** ./node_modules/lodash/_copySymbols.js ***!
+  \*********************************************/
+
+/*!*********************************************!*\
+  !*** ./node_modules/lodash/_isPrototype.js ***!
+  \*********************************************/
+
+/*!*********************************************!*\
+  !*** ./node_modules/lodash/_mapCacheGet.js ***!
+  \*********************************************/
+
+/*!*********************************************!*\
+  !*** ./node_modules/lodash/_mapCacheHas.js ***!
+  \*********************************************/
+
+/*!*********************************************!*\
+  !*** ./node_modules/lodash/_mapCacheSet.js ***!
+  \*********************************************/
+
+/*!*********************************************!*\
+  !*** ./node_modules/lodash/_stackDelete.js ***!
+  \*********************************************/
+
+/*!*********************************************!*\
+  !*** ./node_modules/lodash/isObjectLike.js ***!
+  \*********************************************/
+
+/*!*********************************************!*\
+  !*** ./node_modules/lodash/isTypedArray.js ***!
+  \*********************************************/
+
+/*!**********************************************!*\
+  !*** ./node_modules/lodash/_assocIndexOf.js ***!
+  \**********************************************/
+
+/*!**********************************************!*\
+  !*** ./node_modules/lodash/_baseAssignIn.js ***!
+  \**********************************************/
+
+/*!**********************************************!*\
+  !*** ./node_modules/lodash/_baseIsNative.js ***!
+  \**********************************************/
+
+/*!**********************************************!*\
+  !*** ./node_modules/lodash/_getAllKeysIn.js ***!
+  \**********************************************/
+
+/*!**********************************************!*\
+  !*** ./node_modules/lodash/_getPrototype.js ***!
+  \**********************************************/
+
+/*!**********************************************!*\
+  !*** ./node_modules/lodash/_getSymbolsIn.js ***!
+  \**********************************************/
+
+/*!**********************************************!*\
+  !*** ./node_modules/lodash/_listCacheGet.js ***!
+  \**********************************************/
+
+/*!**********************************************!*\
+  !*** ./node_modules/lodash/_listCacheHas.js ***!
+  \**********************************************/
+
+/*!**********************************************!*\
+  !*** ./node_modules/lodash/_listCacheSet.js ***!
+  \**********************************************/
+
+/*!**********************************************!*\
+  !*** ./node_modules/lodash/_nativeCreate.js ***!
+  \**********************************************/
+
+/*!**********************************************!*\
+  !*** ./node_modules/lodash/_nativeKeysIn.js ***!
+  \**********************************************/
+
+/*!***********************************************!*\
+  !*** ./node_modules/lodash/_arrayLikeKeys.js ***!
+  \***********************************************/
+
+/*!***********************************************!*\
+  !*** ./node_modules/lodash/_cloneDataView.js ***!
+  \***********************************************/
+
+/*!***********************************************!*\
+  !*** ./node_modules/lodash/_copySymbolsIn.js ***!
+  \***********************************************/
+
+/*!***********************************************!*\
+  !*** ./node_modules/lodash/_mapCacheClear.js ***!
+  \***********************************************/
+
+/*!************************************************!*\
+  !*** ./node_modules/flatpickr/dist/l10n/fr.js ***!
+  \************************************************/
+
+/*!************************************************!*\
+  !*** ./node_modules/flatpickr/dist/l10n/pl.js ***!
+  \************************************************/
+
+/*!************************************************!*\
+  !*** ./node_modules/lodash/_baseGetAllKeys.js ***!
+  \************************************************/
+
+/*!************************************************!*\
+  !*** ./node_modules/lodash/_defineProperty.js ***!
+  \************************************************/
+
+/*!************************************************!*\
+  !*** ./node_modules/lodash/_initCloneArray.js ***!
+  \************************************************/
+
+/*!************************************************!*\
+  !*** ./node_modules/lodash/_initCloneByTag.js ***!
+  \************************************************/
+
+/*!************************************************!*\
+  !*** ./node_modules/lodash/_listCacheClear.js ***!
+  \************************************************/
+
+/*!************************************************!*\
+  !*** ./node_modules/lodash/_mapCacheDelete.js ***!
+  \************************************************/
+
+/*!************************************************!*\
+  !*** ./node_modules/lodash/_objectToString.js ***!
+  \************************************************/
+
+/*!*************************************************!*\
+  !*** ./node_modules/lodash/_baseAssignValue.js ***!
+  \*************************************************/
+
+/*!*************************************************!*\
+  !*** ./node_modules/lodash/_baseIsArguments.js ***!
+  \*************************************************/
+
+/*!*************************************************!*\
+  !*** ./node_modules/lodash/_cloneTypedArray.js ***!
+  \*************************************************/
+
+/*!*************************************************!*\
+  !*** ./node_modules/lodash/_initCloneObject.js ***!
+  \*************************************************/
+
+/*!*************************************************!*\
+  !*** ./node_modules/lodash/_listCacheDelete.js ***!
+  \*************************************************/
+
+/*!**************************************************!*\
+  !*** ./node_modules/flatpickr/dist/flatpickr.js ***!
+  \**************************************************/
+
+/*!**************************************************!*\
+  !*** ./node_modules/lodash/_baseIsTypedArray.js ***!
+  \**************************************************/
+
+/*!**************************************************!*\
+  !*** ./node_modules/lodash/_cloneArrayBuffer.js ***!
+  \**************************************************/
+
+/*!*************************************************************!*\
+  !*** ./node_modules/chartjs-plugin-annotation/src/index.js ***!
+  \*************************************************************/
+
+/*!**************************************************************!*\
+  !*** ./node_modules/chartjs-plugin-annotation/src/events.js ***!
+  \**************************************************************/
+
+/*!***************************************************************!*\
+  !*** ./node_modules/chartjs-plugin-annotation/src/element.js ***!
+  \***************************************************************/
+
+/*!***************************************************************!*\
+  !*** ./node_modules/chartjs-plugin-annotation/src/helpers.js ***!
+  \***************************************************************/
+
+/*!*****************************************************************!*\
+  !*** ./node_modules/chartjs-plugin-annotation/src/types/box.js ***!
+  \*****************************************************************/
+
+/*!******************************************************************!*\
+  !*** ./node_modules/chartjs-plugin-annotation/src/annotation.js ***!
+  \******************************************************************/
+
+/*!******************************************************************!*\
+  !*** ./node_modules/chartjs-plugin-annotation/src/types/line.js ***!
+  \******************************************************************/
+
+/*!**********************************************************************************!*\
+  !*** ./node_modules/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.js ***!
+  \**********************************************************************************/
+
 /**
  * chroma.js - JavaScript library for color conversions
  *
