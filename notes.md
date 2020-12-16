@@ -25,3 +25,5 @@ Updated blog view.
 Remove JWT from utils.
 
 Authentication review.
+
+Cluster style - adds relative: true flag to make cluster scale dependent on current zoom.
