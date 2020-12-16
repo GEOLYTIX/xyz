@@ -257,7 +257,11 @@
 
 /*! ./types/line.js */
 
+/*! @turf/destination */
+
 /*! @turf/helpers */
+
+/*! @turf/invariant */
 
 /*! CommonJS bailout: exports is used directly at 2:73-80 */
 
@@ -365,6 +369,8 @@
 
 /*! CommonJS bailout: this is used directly at 6:2-6 */
 
+/*! ModuleConcatenation bailout: Cannot concat with ./node_modules/@turf/circle/index.js: Module is not an ECMAScript module */
+
 /*! ModuleConcatenation bailout: Cannot concat with ./node_modules/@turf/kinks/index.js: Module is not an ECMAScript module */
 
 /*! ModuleConcatenation bailout: Cannot concat with ./node_modules/chartjs-plugin-annotation/src/index.js: Module is not an ECMAScript module */
@@ -397,6 +403,10 @@
 
 /*! export bearingToAzimuth [provided] [no usage info] [missing usage info prevents renaming] */
 
+/*! export collectionOf [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export containsNumber [provided] [no usage info] [missing usage info prevents renaming] */
+
 /*! export convertArea [provided] [no usage info] [missing usage info prevents renaming] */
 
 /*! export convertDistance [provided] [no usage info] [missing usage info prevents renaming] */
@@ -421,9 +431,21 @@
 
 /*! export featureCollection [provided] [no usage info] [missing usage info prevents renaming] */
 
+/*! export featureOf [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export geojsonType [provided] [no usage info] [missing usage info prevents renaming] */
+
 /*! export geometry [provided] [no usage info] [missing usage info prevents renaming] */
 
 /*! export geometryCollection [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export getCoord [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export getCoords [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export getGeom [provided] [no usage info] [missing usage info prevents renaming] */
+
+/*! export getType [provided] [no usage info] [missing usage info prevents renaming] */
 
 /*! export isNumber [provided] [no usage info] [missing usage info prevents renaming] */
 
@@ -716,6 +738,10 @@
   \*******************************************/
 
 /*!********************************************!*\
+  !*** ./node_modules/@turf/circle/index.js ***!
+  \********************************************/
+
+/*!********************************************!*\
   !*** ./node_modules/lodash/_Uint8Array.js ***!
   \********************************************/
 
@@ -936,6 +962,10 @@
   \************************************************/
 
 /*!*************************************************!*\
+  !*** ./node_modules/@turf/destination/index.js ***!
+  \*************************************************/
+
+/*!*************************************************!*\
   !*** ./node_modules/lodash/_baseAssignValue.js ***!
   \*************************************************/
 
@@ -994,6 +1024,10 @@
 /*!******************************************************************!*\
   !*** ./node_modules/chartjs-plugin-annotation/src/types/line.js ***!
   \******************************************************************/
+
+/*!******************************************************************************!*\
+  !*** ./node_modules/@turf/destination/node_modules/@turf/invariant/index.js ***!
+  \******************************************************************************/
 
 /*!**********************************************************************************!*\
   !*** ./node_modules/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.js ***!
