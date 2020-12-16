@@ -26,8 +26,6 @@ Remove JWT from utils.
 
 Authentication review.
 
-<<<<<<< HEAD
 Support eq type filter.
-=======
+
 Cluster style - adds relative: true flag to make cluster scale dependent on current zoom.
->>>>>>> ecc909cee935e44c58e6d043bcba21f83b107a93
