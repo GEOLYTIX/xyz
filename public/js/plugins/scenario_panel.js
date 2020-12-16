@@ -4,6 +4,7 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
     _xyz.layers.plugins.scenario_panel = async layer => {
 
       _xyz.layers.list.scenario_region.show()
+      _xyz.layers.list.scenario_seeds.show()
 
       const scenarios = {}
 
@@ -56,7 +57,7 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
         status: value => scenarios.grid.appendChild(_xyz.utils.html.node`
           <div style="grid-column: 1">Status</div>
           <div style="grid-column: 2">${value}`),
-        national_flag: value => {
+        national_flag: async value => {
           
           scenarios.grid.appendChild(_xyz.utils.html.node`
             <label style="grid-column: 1/3" class="input-checkbox">
@@ -109,8 +110,37 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
             
               }}>Draw region`)
 
+          scenarios.grid.appendChild(_xyz.utils.html.node`
+            <div style="grid-column: 1">Seed Points`)
 
-          },
+          const seedCount = scenarios.grid.appendChild(_xyz.utils.html.node`
+            <div style="grid-column: 2">`)
+
+          _xyz.query({
+            query: 'count_locations',
+            layer: _xyz.layers.list.scenario_seeds,
+            queryparams: {
+              table: 'ui.pol_scenario_pre_seed'
+            }
+          }).then(response => seedCount.textContent = parseInt(response.count) || 'All')
+
+          const input = scenarios.grid.appendChild(_xyz.utils.html.node`
+            <input
+              type="file"
+              accept=".csv"
+              onchange=${seedImport}
+              style="display: none;">`)
+
+          scenarios.grid.appendChild(_xyz.utils.html.node`
+            <button
+              style="grid-column: 1/3"
+              class="btn-wide primary-colour"
+              onclick=${e => {
+                e.stopPropagation()
+                input.click()
+            }}>CSV Import`)        
+
+        },
         demandid: value => scenarios.grid.appendChild(_xyz.utils.html.node`
           <div style="grid-column: 1">Demand</div>
           <div style="grid-column: 2">
@@ -157,7 +187,7 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
         scenarios.current = scenarios.current || scenarios.list[0]
 
         layer.filter.current.scenario_id = {
-          match: scenarios.current.scenario_id
+          eq: scenarios.current.scenario_id
         }
   
         layer.reload()
@@ -181,7 +211,7 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
   
                 drop.querySelector('span').textContent = scenario.scenario_name
   
-                layer.filter.current.scenario_id.match = scenario.scenario_id || 0
+                layer.filter.current.scenario_id.eq = scenario.scenario_id || 0
   
                 layer.reload()
 
@@ -218,8 +248,10 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
           })
         }
 
-        _xyz.layers.list.scenario_region.filter.current.scenario_id.match = scenarios.current.scenario_id || -1
+        _xyz.layers.list.scenario_region.filter.current.scenario_id.eq = scenarios.current.scenario_id || -1
         _xyz.layers.list.scenario_region.reload()
+        _xyz.layers.list.scenario_seeds.filter.current.scenario_id.eq = scenarios.current.scenario_id || -1
+        _xyz.layers.list.scenario_seeds.reload()
 
         scenarios.update = {
           scenario_id: scenarios.current.scenario_id,
@@ -301,7 +333,7 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
             query: 'count_locations',
             layer: _xyz.layers.list.scenario_region,
             queryparams: {
-              table: _xyz.layers.list.scenario_region.tableMin()
+              table: 'model.pol_local_region'
             }
           })
 
@@ -353,6 +385,55 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
           return loadScenario()
         }
 
+      }
+
+      function seedImport(){
+
+        const reader = new FileReader()
+
+        reader.onload = async function() {
+          try {
+
+            // Split on new line to create array of rows.
+            const csv = this.result.split(/\r?\n/)
+
+            // Shift header row from array.
+            csv.shift()
+
+            const seeds = csv
+              .filter(row => !!row.length)
+              .map(row => `(${scenarios.current.scenario_id},${row.replace(/"/g, '\'')})`)
+              //.join(',')
+
+            await _xyz.query({
+              query: 'scenario_seed_remove',
+              queryparams: {
+                scenario_id: scenarios.current.scenario_id
+              }
+            })
+
+            const xhr = new XMLHttpRequest()
+
+            xhr.open('POST', `${_xyz.host}/api/query/scenario_seed_insert`)
+  
+            xhr.setRequestHeader('Content-Type', 'application/json')
+  
+            xhr.responseType = 'json'
+  
+            xhr.onload = e => {
+
+              loadScenario()
+          
+            }
+          
+            xhr.send(JSON.stringify(seeds))
+
+          } catch (err) {
+            console.error(err)
+          }
+        }
+
+        reader.readAsText(this.files[0])
       }
 
     }

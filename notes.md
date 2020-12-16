@@ -25,3 +25,5 @@ Updated blog view.
 Remove JWT from utils.
 
 Authentication review.
+
+Support eq type filter.

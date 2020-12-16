@@ -75,6 +75,11 @@ module.exports = async (filter, conjunction = 'AND') => {
         sql_filter.push(conjunction)
     }
 
+    if(filter.eq) {
+      sql_filter.push(`${field} = ${filter.eq}`)
+      sql_filter.push(conjunction)
+    }
+
     if((filter.match)) {
       sql_filter.push(`${field}::text ILIKE '${decodeURIComponent(filter.match.toString().replace(/'/g, "''"))}'`)
       sql_filter.push(conjunction)
