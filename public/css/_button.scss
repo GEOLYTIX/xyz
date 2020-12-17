@@ -1,167 +1,167 @@
 button {
-    border: none;
-    outline: none;
-    background: none;
+  border: none;
+  outline: none;
+  background: none;
 
-    &:hover:enabled {
-        cursor: pointer;
-    }
+  &:hover:enabled {
+    cursor: pointer;
+  }
 
-    &:disabled {
-        opacity: 0.3;
-    }
+  &:disabled {
+    opacity: 0.3;
+  }
 }
 
 .btn-column {
 
-    button,
-    >a {
-        margin-top: 10px;
-        border-radius: 10px;
-        padding: 10px;
-        float: left;
-        clear: both;
-        height: 50px;
-        width: 50px;
-        background-color: #fff;
-        text-align: center;
+  button,
+  >a {
+    margin-top: 10px;
+    border-radius: 10px;
+    padding: 10px;
+    float: left;
+    clear: both;
+    height: 50px;
+    width: 50px;
+    background-color: #fff;
+    text-align: center;
 
-        .xyz-icon {
-            width: 100%;
-            height: 100%;
-            pointer-events: none;
-        }
+    .xyz-icon {
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
     }
+  }
 
-    button:disabled,
-    a:disabled {
-      cursor: not-allowed;
-    }
+  button:disabled,
+  a:disabled {
+    cursor: not-allowed;
+  }
 }
 
 .btn-header {
-    margin-left: 5px;
-    width: 25px;
-    height: 20px;
-    background-position: center;
+  margin-left: 5px;
+  width: 25px;
+  height: 20px;
+  background-position: center;
 
-    &:hover {
-        cursor: pointer;
-    }
+  &:hover {
+    cursor: pointer;
+  }
 }
 
 .btn-wide {
-    border-radius: 2px;
-    line-height: 2;
-    text-align: center;
-    font-weight: 600;
-    box-shadow: 1px 1px 2px #ccc;
-    border: 1px solid #eee;
-    width: calc(100% - 1px);
+  border-radius: 2px;
+  line-height: 2;
+  text-align: center;
+  font-weight: 600;
+  box-shadow: 1px 1px 2px #ccc;
+  border: 1px solid #eee;
+  width: calc(100% - 1px);
 
-    &.disabled {
-        opacity: 0.3;
-        cursor: default;
-    }
+  &.disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
 
-    &:disabled {
-        opacity: 0.3;
-        cursor: default;
-    }
+  &:disabled {
+    opacity: 0.3;
+    cursor: default;
+  }
 
-    &:hover:enabled {
-        cursor: pointer;
-    }
+  &:hover:enabled {
+    cursor: pointer;
+  }
 
-    &.active {
-        color: #000;
-        box-shadow: none;
-        border: 1px solid #ddd;
-    }
+  &.active {
+    color: #000;
+    box-shadow: none;
+    border: 1px solid #ddd;
+  }
 }
 
 .btn-drop {
-    position: relative;
-    width: 100%;
-    background-color: white;
-    box-shadow: 1px 1px 3px 0 #ddd;
-    font-family: inherit;
+  position: relative;
+  width: 100%;
+  background-color: white;
+  box-shadow: 1px 1px 3px 0 #ddd;
+  font-family: inherit;
 
-    &:disabled {
-        pointer-events: none;
-        opacity: 0.4;
+  &:disabled {
+    pointer-events: none;
+    opacity: 0.4;
+  }
+
+  >.head {
+    padding: 5px;
+    display: flex;
+    border: 1px solid #ccc;
+    align-items: center;
+
+    >:first-child {
+      pointer-events: none;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
+    >.icon {
+      pointer-events: none;
+      margin-left: auto;
+      width: 18px;
+      content: url("../icons/icon-drop-down.svg");
+    }
+  }
+
+  >ul {
+    display: none;
+    position: absolute;
+    list-style-type: none;
+    width: inherit;
+    box-sizing: border-box;
+    box-shadow: 1px 1px 3px 0 #ddd;
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ccc;
+    border-top: none;
+    text-align: left;
+    background-color: white;
+    z-index: 1;
+
+    >li {
+      padding: 5px;
+
+      a {
+        margin: 0px;
+        display: block;
+        width: 100%;
+        height: 100%;
+      }
+    }
+
+    >li:hover {
+      background-color: #eee;
+    }
+
+    >li.selected {
+      background-color: #cae0b8;
+    }
+  }
+
+  &.active {
     >.head {
-        padding: 5px;
-        display: flex;
-        border: 1px solid #ccc;
-        align-items: center;
-
-        >:first-child {
-            pointer-events: none;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
-
-        >.icon {
-            pointer-events: none;
-            margin-left: auto;
-            width: 18px;
-            content: url("../icons/icon-drop-down.svg");
-        }
+      border-bottom: 1px solid #eee;
     }
 
     >ul {
-        display: none;
-        position: absolute;
-        list-style-type: none;
-        width: inherit;
-        box-sizing: border-box;
-        box-shadow: 1px 1px 3px 0 #ddd;
-        max-height: 500px;
-        overflow-y: auto;
-        overflow-x: hidden;
-        padding: 0;
-        margin: 0;
-        border: 1px solid #ccc;
-        border-top: none;
-        text-align: left;
-        background-color: white;
-        z-index: 1;
-
-        >li {
-            padding: 5px;
-
-            a {
-                margin: 0px;
-                display: block;
-                width: 100%;
-                height: 100%;
-            }
-        }
-
-        >li:hover {
-            background-color: #eee;
-        }
-
-        >li.selected {
-            background-color: #cae0b8;
-        }
+      display: block;
     }
 
-    &.active {
-        >.head {
-            border-bottom: 1px solid #eee;
-        }
-
-        >ul {
-            display: block;
-        }
-
-        >.head>.icon {
-            content: url("../icons/icon-drop-up.svg");
-        }
+    >.head>.icon {
+      content: url("../icons/icon-drop-up.svg");
     }
+  }
 }

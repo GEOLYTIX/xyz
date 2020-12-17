@@ -31,6 +31,7 @@
   },
   "devDependencies": {
     "@11ty/eleventy-plugin-syntaxhighlight": "^3.0.3",
+    "@turf/circle": "^6.0.1",
     "@turf/explode": "^5.1.5",
     "@turf/flatten": "^5.1.5",
     "@turf/kinks": "^6.0.0",

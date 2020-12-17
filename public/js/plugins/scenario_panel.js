@@ -23,28 +23,28 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
         scenario_name: value => scenarios.grid.appendChild(_xyz.utils.html.node`
           <div style="grid-column: 1">Name</div>
           <div style="grid-column: 2">
-            <input type="text"
+            <input type="text" .disabled=${scenarios.current.locked == 1}
               oninput=${e => onInput(e, 'scenario_name')} value=${value}>`),
         cap_main: value => scenarios.grid.appendChild(_xyz.utils.html.node`
-          <div style="grid-column: 1">Cap (Plus)</div>
+          <div style="grid-column: 1">Cap</div>
           <div style="grid-column: 2">
-            <input type="number"
+            <input type="number" .disabled=${scenarios.current.locked == 1}
               oninput=${e => onInput(e, 'cap_main')} value=${value}>`),
-        cap_local: value => scenarios.grid.appendChild(_xyz.utils.html.node`
-          <div style="grid-column: 1">Cap (Light Touch)</div>
-          <div style="grid-column: 2">
-            <input type="number"
-              oninput=${e => onInput(e, 'cap_local')} value=${value}>`),
+        // cap_local: value => scenarios.grid.appendChild(_xyz.utils.html.node`
+        //   <div style="grid-column: 1">Cap (Light Touch)</div>
+        //   <div style="grid-column: 2">
+        //     <input type="number" .disabled=${scenarios.current.locked == 1}
+        //       oninput=${e => onInput(e, 'cap_local')} value=${value}>`),
         collar_main: value => scenarios.grid.appendChild(_xyz.utils.html.node`
-          <div style="grid-column: 1">Collar(Plus)</div>
+          <div style="grid-column: 1">Collar</div>
           <div style="grid-column: 2">
-            <input type="number" 
+            <input type="number" .disabled=${scenarios.current.locked == 1}
               oninput=${e => onInput(e, 'collar_main')} value=${value}>`),
-        collar_local: value => scenarios.grid.appendChild(_xyz.utils.html.node`
-          <div style="grid-column: 1">Collar (Light Touch)</div>
-          <div style="grid-column: 2">
-            <input type="number"
-              oninput=${e => onInput(e, 'collar_local')} value=${value}>`),
+        // collar_local: value => scenarios.grid.appendChild(_xyz.utils.html.node`
+        //   <div style="grid-column: 1">Collar (Light Touch)</div>
+        //   <div style="grid-column: 2">
+        //     <input type="number" .disabled=${scenarios.current.locked == 1}
+        //       oninput=${e => onInput(e, 'collar_local')} value=${value}>`),
         created_by: value => scenarios.grid.appendChild(_xyz.utils.html.node`
           <div style="grid-column: 1">Created by</div>
           <div style="grid-column: 2">${value}`),
@@ -63,6 +63,7 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
             <label style="grid-column: 1/3" class="input-checkbox">
               <input
                 type="checkbox"
+                .disabled=${scenarios.current.locked == 1}
                 .checked=${value === 1}
                 onchange=${e => {
                   scenarios.btn.textContent = 'Update'
@@ -76,6 +77,7 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
 
           const drawButton = scenarios.grid.appendChild(_xyz.utils.html.node`
             <button
+              .disabled=${scenarios.current.locked == 1}
               style="${`grid-column: 1/3; ${value === 1 && 'display: none;' ||''}`}"
               class="btn-wide primary-colour"
               onclick=${e => {
@@ -133,6 +135,7 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
 
           scenarios.grid.appendChild(_xyz.utils.html.node`
             <button
+              .disabled=${scenarios.current.locked == 1}
               style="grid-column: 1/3"
               class="btn-wide primary-colour"
               onclick=${e => {
@@ -144,7 +147,7 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
         demandid: value => scenarios.grid.appendChild(_xyz.utils.html.node`
           <div style="grid-column: 1">Demand</div>
           <div style="grid-column: 2">
-            <button class="btn-drop">
+            <button class="btn-drop" .disabled=${scenarios.current.locked == 1}>
               <div
                 class="head"
                 onclick=${e => {
@@ -275,7 +278,7 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
 
         scenarios.btn = scenarios.grid.appendChild(_xyz.utils.html.node`
           <button
-            .disabled=${scenarios.current.status === 'running'}
+            .disabled=${scenarios.current.locked == 1 || scenarios.current.status === 'running'}
             class="btn-wide primary-colour"
             style="grid-column: 1/3"
             onclick=${runScenario}>${scenarios.current.scenario_id && 'Make it so' || 'Create'}`)
