@@ -2079,7 +2079,7 @@ span.flatpickr-weekday {
 
 .dataview .toolbar > * {
   height: 25px;
-  padding-left: 10px; }
+  padding: 0 10px; }
 
 .dataview .target {
   width: 100%;
