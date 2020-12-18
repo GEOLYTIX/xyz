@@ -332,7 +332,7 @@
     <label class="input-checkbox">
     <input
       type="checkbox"
-      onchange=${e=>{if(e.target.checked)t.filter.current[n.field].in||(t.filter.current[n.field].in=[]),t.filter.current[n.field].in.push(encodeURIComponent(e.target.parentNode.innerText));else{let r=t.filter.current[n.field].in.indexOf(encodeURIComponent(e.target.parentNode.innerText));t.filter.current[n.field].in.splice(r,1),t.filter.current[n.field].in.length||delete t.filter.current[n.field].in}t.reload(),t.show(),t.count((e=>{t.filter.run_output.disabled=!(e>1),n.filterZoom&&e>1&&t.zoomToExtent()}))}}>
+      onchange=${e=>{if(e.target.checked)t.filter.current[n.field]||(t.filter.current[n.field]={}),t.filter.current[n.field].in||(t.filter.current[n.field].in=[]),t.filter.current[n.field].in.push(encodeURIComponent(e.target.parentNode.innerText));else{let r=t.filter.current[n.field].in.indexOf(encodeURIComponent(e.target.parentNode.innerText));t.filter.current[n.field].in.splice(r,1),t.filter.current[n.field].in.length||delete t.filter.current[n.field].in}t.reload(),t.show(),t.count((e=>{t.filter.run_output.disabled=!(e>1),n.filterZoom&&e>1&&t.zoomToExtent()}))}}>
     </input>
     <div></div><span>${a}`)}))},qt=e=>(t,n)=>{if(n.el&&n.el.parentNode)return e.layers.view.filter.reset(t,n);const r=e.layers.view.filter.block(t,n);r.dataset.field=n.field,n.el=r;var a=e.utils.html.node`
   <div class="input-flex">
