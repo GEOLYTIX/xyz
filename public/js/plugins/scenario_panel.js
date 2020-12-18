@@ -3,15 +3,42 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
 
     _xyz.layers.plugins.scenario_panel = async layer => {
 
-      _xyz.layers.list.scenario_region.show()
-      _xyz.layers.list.scenario_seeds.show()
+      layer.view.addEventListener('display-off', () => {
+
+        _xyz.layers.list.scenario_region.remove()
+        _xyz.layers.list.scenario_seeds.remove()
+
+      })
+
+      layer.view.addEventListener('display-on', () => {
+
+        _xyz.layers.list.scenario_region.show()
+        _xyz.layers.list.scenario_seeds.show()
+
+      })
+
 
       const scenarios = {}
 
-      scenarios.panel = layer.view.insertBefore(_xyz.utils.html.node`
-        <div style="padding-right: 5px; margin-bottom: 5px;">`,
-        layer.view.querySelector('.drawer'))
+      const drawer = layer.view.insertBefore(_xyz.utils.html.node`
+      <div class="drawer panel expandable">
+        <div
+          class="header primary-colour"
+          onclick=${e => {
+            e.stopPropagation()
+            _xyz.utils.toggleExpanderParent(e.target, true)
+          }}>
+          <span>Scenario</span>
+          <button class="btn-header xyz-icon icon-expander primary-colour-filter">`,
+          layer.view.querySelector('.drawer'))
 
+      const selector = layer.view.insertBefore(
+        _xyz.utils.html.node`<div style="padding: 5px">`,
+        layer.view.querySelector('.drawer'))          
+
+      scenarios.panel = drawer.appendChild(_xyz.utils.html.node`
+        <div style="padding-right: 5px; margin-bottom: 5px;">`)
+        
       scenarios.demands = await _xyz.query({
         query: 'demand_list'
       })
@@ -19,7 +46,9 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
       scenarios.fields = {
         scenario_id: value => scenarios.grid.appendChild(_xyz.utils.html.node`
           <div style="grid-column: 1">ID</div>
-          <div style="grid-column: 2">${value}`),
+          <div style="grid-column: 2">${value}
+          ${!scenarios.current.locked && _xyz.utils.html`
+            <button onclick=${deleteScenario} style="color: red; float: right;">DELETE` || ''}`),
         scenario_name: value => scenarios.grid.appendChild(_xyz.utils.html.node`
           <div style="grid-column: 1">Name</div>
           <div style="grid-column: 2">
@@ -30,21 +59,11 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
           <div style="grid-column: 2">
             <input type="number" .disabled=${scenarios.current.locked == 1}
               oninput=${e => onInput(e, 'cap_main')} value=${value}>`),
-        // cap_local: value => scenarios.grid.appendChild(_xyz.utils.html.node`
-        //   <div style="grid-column: 1">Cap (Light Touch)</div>
-        //   <div style="grid-column: 2">
-        //     <input type="number" .disabled=${scenarios.current.locked == 1}
-        //       oninput=${e => onInput(e, 'cap_local')} value=${value}>`),
         collar_main: value => scenarios.grid.appendChild(_xyz.utils.html.node`
           <div style="grid-column: 1">Collar</div>
           <div style="grid-column: 2">
             <input type="number" .disabled=${scenarios.current.locked == 1}
               oninput=${e => onInput(e, 'collar_main')} value=${value}>`),
-        // collar_local: value => scenarios.grid.appendChild(_xyz.utils.html.node`
-        //   <div style="grid-column: 1">Collar (Light Touch)</div>
-        //   <div style="grid-column: 2">
-        //     <input type="number" .disabled=${scenarios.current.locked == 1}
-        //       oninput=${e => onInput(e, 'collar_local')} value=${value}>`),
         created_by: value => scenarios.grid.appendChild(_xyz.utils.html.node`
           <div style="grid-column: 1">Created by</div>
           <div style="grid-column: 2">${value}`),
@@ -194,36 +213,38 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
         }
   
         layer.reload()
-  
-        scenarios.panel.appendChild(_xyz.utils.html.node`
-          <button class="btn-drop">
-            <div
-              class="head"
-              onclick=${e => {
-                e.preventDefault();
-                e.target.parentElement.classList.toggle('active');
-              }}>
-              <span>${scenarios.current.scenario_name}</span>
-              <div class="icon"></div>
-            </div>
-            <ul>${scenarios.list.map(scenario => _xyz.utils.html.node`
-              <li onclick=${e => {
-  
-                const drop = e.target.closest('.btn-drop')
-                drop.classList.toggle('active')
-  
-                drop.querySelector('span').textContent = scenario.scenario_name
-  
-                layer.filter.current.scenario_id.eq = scenario.scenario_id || 0
-  
-                layer.reload()
 
-                scenarios.current = scenario
-  
-                loadScenario()
-               
-              }}>${scenario.scenario_name}`)}`)
+        selector.innerHTML = ''
 
+        selector.appendChild(_xyz.utils.html.node`
+        <button class="btn-drop">
+          <div
+            class="head"
+            onclick=${e => {
+              e.preventDefault();
+              e.target.parentElement.classList.toggle('active');
+            }}>
+            <span>${scenarios.current.scenario_name}</span>
+            <div class="icon"></div>
+          </div>
+          <ul>${scenarios.list.map(scenario => _xyz.utils.html.node`
+            <li onclick=${e => {
+
+              const drop = e.target.closest('.btn-drop')
+              drop.classList.toggle('active')
+
+              drop.querySelector('span').textContent = scenario.scenario_name
+
+              layer.filter.current.scenario_id.eq = scenario.scenario_id || 0
+
+              layer.reload()
+
+              scenarios.current = scenario
+
+              loadScenario()
+             
+            }}>${scenario.scenario_name}`)}`)
+  
         scenarios.grid = scenarios.panel.appendChild(_xyz.utils.html.node`
           <div style="margin-top: 5px; display:grid; grid-gap: 5px; align-items: center;">`)              
 
@@ -298,6 +319,7 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
 
         scenarios.current = scenarios.update
         scenarios.current.scenario_id = response.scenario_id
+        scenarios.current.scenario_name = scenarios.update.scenario_name
 
         loadPanel()
       }
@@ -386,6 +408,46 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
           alert('Scenario Complete')
 
           return loadScenario()
+        }
+
+      }
+
+      async function deleteScenario() {
+
+        if (confirm('Would you like to delete the current scenario?')) {
+
+          await _xyz.query({
+            query: 'scenario_seed_remove',
+            queryparams: {
+              scenario_id: scenarios.current.scenario_id
+            }
+          })
+
+          await _xyz.query({
+            query: 'scenario_region_remove',
+            queryparams: {
+              scenario_id: scenarios.current.scenario_id
+            }
+          })
+
+          await _xyz.query({
+            query: 'scenario_delete_blueprint',
+            queryparams: {
+              scenario_id: scenarios.current.scenario_id
+            }
+          })          
+
+          await _xyz.query({
+            query: 'scenario_delete',
+            queryparams: {
+              scenario_id: scenarios.current.scenario_id
+            }
+          })
+
+          delete scenarios.current
+
+          loadPanel()
+
         }
 
       }
