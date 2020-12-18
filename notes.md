@@ -29,3 +29,5 @@ Authentication review.
 Support eq type filter.
 
 Cluster style - adds relative: true flag to make cluster scale dependent on current zoom.
+
+Metric geometry need to be measured through sphere. [#376](https://github.com/GEOLYTIX/xyz/issues/376)
