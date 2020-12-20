@@ -24,6 +24,10 @@
   bottom: 12px;
   transform: translate(-50%, 0);
 
+  .location-view > .header {
+    display: none;
+  }
+
   &::after,
   &::before {
     border: solid transparent;

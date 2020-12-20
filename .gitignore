@@ -15,6 +15,7 @@ public/workspaces/*
 public/views/foodmap.*
 public/views/wellbeing.*
 public/views/test.*
+public/views/pol.*
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
