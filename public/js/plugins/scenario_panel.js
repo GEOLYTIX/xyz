@@ -7,6 +7,8 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
 
         _xyz.layers.list.scenario_region.remove()
         _xyz.layers.list.scenario_seeds.remove()
+        _xyz.layers.list.scenario_closures.remove()
+        _xyz.layers.list.scenario_custom_seeds.remove()
 
       })
 
@@ -14,6 +16,8 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
 
         _xyz.layers.list.scenario_region.show()
         _xyz.layers.list.scenario_seeds.show()
+        _xyz.layers.list.scenario_closures.show()
+        _xyz.layers.list.scenario_custom_seeds.show()
 
       })
 
@@ -131,6 +135,69 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
             
               }}>Draw region`)
 
+          if (!scenarios.current.locked) {
+
+            scenarios.grid.appendChild(_xyz.utils.html.node`
+              <div style="grid-column: 1">Custom Seeds`)
+    
+            const customSeedCount = scenarios.grid.appendChild(_xyz.utils.html.node`
+              <div style="grid-column: 2">`)
+    
+            _xyz.query({
+                query: 'count_locations',
+                layer: _xyz.layers.list.scenario_custom_seeds,
+                queryparams: {
+                  table: 'model.pol_custom_pre_seed'
+                }
+              }).then(response => customSeedCount.textContent = parseInt(response.count))
+
+            scenarios.grid.appendChild(_xyz.utils.html.node`
+              <button
+                style="grid-column: 1/3;"
+                class="btn-wide primary-colour"
+                onclick=${e => {
+              
+                  e.stopPropagation()
+
+                  const btn = e.target
+                        
+                  if (btn.classList.contains('active')) return _xyz.mapview.interaction.draw.cancel()
+              
+                  btn.classList.add('active')
+              
+                  _xyz.mapview.interaction.draw.begin({
+                    layer: _xyz.layers.list.scenario_custom_seeds,
+                    type: 'Point',
+                    callback: () => {
+                      btn.classList.remove('active')
+                    },
+                    select_callback: async id => {
+
+                      await _xyz.query({
+                        query: 'scenario_seed_set',
+                        queryparams: {
+                          scenario_id: scenarios.current.scenario_id,
+                          id: id
+                        }
+                      })
+
+                      _xyz.layers.list.scenario_custom_seeds.reload()
+
+                      _xyz.query({
+                        query: 'count_locations',
+                        layer: _xyz.layers.list.scenario_custom_seeds,
+                        queryparams: {
+                          table: 'model.pol_custom_pre_seed'
+                        }
+                      }).then(response => customSeedCount.textContent = parseInt(response.count))
+
+                    }
+                  })
+              
+                }}>Draw Custom Seed`)
+
+          }
+
           scenarios.grid.appendChild(_xyz.utils.html.node`
             <div style="grid-column: 1">Seed Points`)
 
@@ -145,22 +212,56 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
             }
           }).then(response => seedCount.textContent = parseInt(response.count) || 'All')
 
-          const input = scenarios.grid.appendChild(_xyz.utils.html.node`
-            <input
-              type="file"
-              accept=".csv"
-              onchange=${seedImport}
-              style="display: none;">`)
+          if (!scenarios.current.locked) {
 
-          scenarios.grid.appendChild(_xyz.utils.html.node`
-            <button
-              .disabled=${scenarios.current.locked == 1}
-              style="grid-column: 1/3"
-              class="btn-wide primary-colour"
-              onclick=${e => {
-                e.stopPropagation()
-                input.click()
-            }}>CSV Import`)        
+            const inputSeed = scenarios.grid.appendChild(_xyz.utils.html.node`
+              <input
+                type="file"
+                accept=".csv"
+                onchange=${()=>csvImport('seed')}
+                style="display: none;">`)
+
+            scenarios.grid.appendChild(_xyz.utils.html.node`
+              <button
+                style="grid-column: 1/3"
+                class="btn-wide primary-colour"
+                onclick=${e => {
+                  e.stopPropagation()
+                  inputSeed.click()
+              }}>CSV Import Seed`)
+              
+              scenarios.grid.appendChild(_xyz.utils.html.node`
+              <div style="grid-column: 1">Closures`)
+          
+
+            const closuresCount = scenarios.grid.appendChild(_xyz.utils.html.node`
+              <div style="grid-column: 2">`)
+
+            _xyz.query({
+              query: 'count_locations',
+              layer: _xyz.layers.list.scenario_closures,
+              queryparams: {
+                table: 'ui.pol_scenario_closure'
+              }
+            }).then(response => closuresCount.textContent = parseInt(response.count))
+
+            const inputClosures = scenarios.grid.appendChild(_xyz.utils.html.node`
+              <input
+                type="file"
+                accept=".csv"
+                onchange=${()=>csvImport('closure')}
+                style="display: none;">`)
+
+            scenarios.grid.appendChild(_xyz.utils.html.node`
+              <button
+                style="grid-column: 1/3"
+                class="btn-wide primary-colour"
+                onclick=${e => {
+                  e.stopPropagation()
+                  inputClosures.click()
+              }}>CSV Import Closures`) 
+
+          }
 
         },
         demandid: value => scenarios.grid.appendChild(_xyz.utils.html.node`
@@ -276,6 +377,10 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
         _xyz.layers.list.scenario_region.reload()
         _xyz.layers.list.scenario_seeds.filter.current.scenario_id.eq = scenarios.current.scenario_id || -1
         _xyz.layers.list.scenario_seeds.reload()
+        _xyz.layers.list.scenario_closures.filter.current.scenario_id.eq = scenarios.current.scenario_id || -1
+        _xyz.layers.list.scenario_closures.reload()
+        _xyz.layers.list.scenario_custom_seeds.filter.current.scenario_id.eq = scenarios.current.scenario_id || -1
+        _xyz.layers.list.scenario_custom_seeds.reload()
 
         scenarios.update = {
           scenario_id: scenarios.current.scenario_id,
@@ -416,26 +521,33 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
 
         if (confirm('Would you like to delete the current scenario?')) {
 
-          await _xyz.query({
+          _xyz.query({
             query: 'scenario_seed_remove',
             queryparams: {
               scenario_id: scenarios.current.scenario_id
             }
           })
 
-          await _xyz.query({
+          _xyz.query({
+            query: 'scenario_custom_seed_remove',
+            queryparams: {
+              scenario_id: scenarios.current.scenario_id
+            }
+          })
+
+          _xyz.query({
             query: 'scenario_region_remove',
             queryparams: {
               scenario_id: scenarios.current.scenario_id
             }
           })
 
-          await _xyz.query({
+          _xyz.query({
             query: 'scenario_delete_blueprint',
             queryparams: {
               scenario_id: scenarios.current.scenario_id
             }
-          })          
+          })
 
           await _xyz.query({
             query: 'scenario_delete',
@@ -452,7 +564,7 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
 
       }
 
-      function seedImport(){
+      function csvImport(type){
 
         const reader = new FileReader()
 
@@ -465,13 +577,12 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
             // Shift header row from array.
             csv.shift()
 
-            const seeds = csv
+            const rows = csv
               .filter(row => !!row.length)
               .map(row => `(${scenarios.current.scenario_id},${row.replace(/"/g, '\'')})`)
-              //.join(',')
 
             await _xyz.query({
-              query: 'scenario_seed_remove',
+              query: `scenario_${type}_remove`,
               queryparams: {
                 scenario_id: scenarios.current.scenario_id
               }
@@ -479,7 +590,7 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
 
             const xhr = new XMLHttpRequest()
 
-            xhr.open('POST', `${_xyz.host}/api/query/scenario_seed_insert`)
+            xhr.open('POST', `${_xyz.host}/api/query/scenario_${type}_insert`)
   
             xhr.setRequestHeader('Content-Type', 'application/json')
   
@@ -491,7 +602,7 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
           
             }
           
-            xhr.send(JSON.stringify(seeds))
+            xhr.send(JSON.stringify(rows))
 
           } catch (err) {
             console.error(err)
