@@ -3,15 +3,95 @@ document.dispatchEvent(new CustomEvent('scenario_comparison', {
 
     _xyz.layers.plugins.scenario_comparison = async layer => {
 
+      // Make the layer view panel expandable if it contains children.
+      layer.view.classList.add('expandable')
+
+      const header = layer.view.querySelector('.header')
+
+      // Expander control for layer drawer.
+      header.onclick = e => {
+        e.stopPropagation()
+        _xyz.utils.toggleExpanderParent(e.target, true)
+      }
+
+      // Add the expander toggle to the layer view header.
+      header.appendChild(_xyz.utils.html.node`
+      <button
+        title=${_xyz.language.layer_toggle_dashboard}
+        class="btn-header xyz-icon icon-expander"
+        onclick=${e=>{
+          e.stopPropagation()
+          _xyz.utils.toggleExpanderParent(e.target)
+        }}>`)
+
+      const bounds = _xyz.map && _xyz.mapview.getBounds(4326)
+
+      const table = {
+        query: 'scenario_comparison_table',
+        queryparams: {
+          ying: layer.filter.current.scenario_id.eq,
+          yang: _xyz.layers.list.yang.filter.current.scenario_id.eq,
+          xmin: bounds.west,
+          ymin: bounds.south,
+          xmax: bounds.east,
+          ymax: bounds.north
+        },
+        viewport: true,
+        display: true,
+        title: 'Comparison Table',
+        layer: layer,
+        columns: [
+          {
+            "field": "FAD",
+            "title": "FAD"
+          },
+          {
+            "field": "Name",
+            "title": "Name"
+          },
+          {
+            "field": "Pre Forecast AWS",
+            "title": "Pre Forecast AWS",
+            "hozAlign": "right",
+            "formatter": "money",
+            "formatterParams": {
+              "precision": 0
+            }
+          },
+          {
+            "field": "Post Forecast AWS",
+            "title": "Post Forecast AWS",
+            "hozAlign": "right",
+            "formatter": "money",
+            "formatterParams": {
+              "precision": 0
+            }
+          },
+          {
+            "field": "Change",
+            "title": "Change",
+            "hozAlign": "right",
+            "plugin": "create_percentage"
+          }
+        ]
+      }
+
+      _xyz.tabview.add(table)
+
+      _xyz.dataviews.create(table)
+
       layer.view.addEventListener('display-off', () => {
 
         _xyz.layers.list.ying.remove()
+        table.remove()
 
       })
 
       layer.view.addEventListener('display-on', () => {
 
         _xyz.layers.list.ying.show()
+        if (layer.filter.current.scenario_id.eq === _xyz.layers.list.ying.filter.current.scenario_id.eq) return;
+        table.show()
 
       })
 
@@ -19,7 +99,9 @@ document.dispatchEvent(new CustomEvent('scenario_comparison', {
         query: 'scenario_list'
       })
 
-      const panel = layer.view.appendChild(_xyz.utils.html.node`
+      const expander = layer.view.appendChild(_xyz.utils.html.node`<div>`)
+
+      const panel = expander.appendChild(_xyz.utils.html.node`
       <div style="padding-right: 5px; grid-gap: 5px; display: grid;">`)
 
       layerControls(_xyz.layers.list.ying)
@@ -40,6 +122,24 @@ document.dispatchEvent(new CustomEvent('scenario_comparison', {
 
       function layerControls(_layer) {
 
+        const _scenarios = _layer.key === 'ying' && scenarios || [{
+            "scenario_id": 1,
+            "scenario_name": "National v25"
+          },
+          {
+            "scenario_id": 2,
+            "scenario_name": "v25 Dense"
+          },
+          {
+            "scenario_id": 4,
+            "scenario_name": "V25 Covid"
+          },
+          {
+            "scenario_id": 5,
+            "scenario_name": "V25 Covid Dense"
+          }
+        ]
+
         panel.appendChild(_xyz.utils.html.node`
           <button class="btn-drop">
             <div
@@ -48,10 +148,10 @@ document.dispatchEvent(new CustomEvent('scenario_comparison', {
                 e.preventDefault();
                 e.target.parentElement.classList.toggle('active');
               }}>
-              <span>${scenarios[0].scenario_name}</span>
+              <span>${_scenarios[0].scenario_name}</span>
               <div class="icon"></div>
             </div>
-            <ul>${scenarios.map(scenario => _xyz.utils.html.node`
+            <ul>${_scenarios.map(scenario => _xyz.utils.html.node`
               <li onclick=${e => {
 
                 const drop = e.target.closest('.btn-drop')
@@ -75,7 +175,16 @@ document.dispatchEvent(new CustomEvent('scenario_comparison', {
                   })
                 )
 
-                tableUpdate()
+                table.queryparams.ying = _xyz.layers.list.ying.filter.current.scenario_id.eq
+                table.queryparams.yang = _xyz.layers.list.yang.filter.current.scenario_id.eq
+
+                if (layer.filter.current.scenario_id.eq === _xyz.layers.list.ying.filter.current.scenario_id.eq) {
+                  table.remove()
+                  return;
+                }
+                table.show()
+
+                //tableUpdate()
               
               }}>${scenario.scenario_name}`)}`)
 
@@ -110,67 +219,6 @@ document.dispatchEvent(new CustomEvent('scenario_comparison', {
       }
 
 
-      const bounds = _xyz.map && _xyz.mapview.getBounds(4326)
-
-      const table = {
-        query: 'scenario_comparison_table',
-        queryparams: {
-          ying: layer.filter.current.scenario_id.eq,
-          yang: _xyz.layers.list.yang.filter.current.scenario_id.eq,
-          xmin: bounds.west,
-          ymin: bounds.south,
-          xmax: bounds.east,
-          ymax: bounds.north
-        },
-        viewport: true,
-        display: true,
-        title: 'Comparison Table',
-        layer: layer,
-        columns: [
-          {
-            "field": "FAD",
-            "title": "FAD"
-          },
-          {
-            "field": "Name",
-            "title": "Name"
-          },
-          {
-            "field": "Pre Forecast AWS",
-            "title": "Pre Forecast AWS",
-            "hozAlign": "right",
-            "formatter": "money",
-            "formatterParams": {
-              "precision": 3
-            }
-          },
-          {
-            "field": "Post Forecast AWS",
-            "title": "Post Forecast AWS",
-            "hozAlign": "right",
-            "formatter": "money",
-            "formatterParams": {
-              "precision": 3
-            }
-          },
-          {
-            "field": "Change",
-            "title": "Change",
-            "hozAlign": "right",
-            "formatter": "money",
-            "formatterParams": {
-              "precision": 3
-            }
-          }
-        ]
-      }
-
-      _xyz.tabview.add(table)
-
-      _xyz.dataviews.create(table)
-
-      table.show()
-
       _xyz.mapview.node.addEventListener('changeEnd', ()=>{
 
         report.href = _xyz.host + '/view/report?' + _xyz.utils.paramString(
@@ -185,14 +233,16 @@ document.dispatchEvent(new CustomEvent('scenario_comparison', {
           })
         )
 
-        if (!table.tab.classList.contains('active')) return;
-
-        if (_xyz.map.getView().getZoom() < 12) return;
-
         tableUpdate()
       })
 
       function tableUpdate() {
+
+        if (!table.tab.classList.contains('active')) return;
+
+        if (_xyz.map.getView().getZoom() < 12) return;
+
+        if (layer.filter.current.scenario_id.eq === _xyz.layers.list.ying.filter.current.scenario_id.eq) return;
 
         const bounds = _xyz.mapview.getBounds(4326)
 
