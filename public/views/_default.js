@@ -249,26 +249,6 @@ window.onload = () => {
         }}>
         <div class="xyz-icon icon-gps-not-fixed">`)
 
-    // Add measure button.
-    btnColumn.appendChild(xyz.utils.html.node`
-      <button
-        class="mobile-display-none"
-          title=${xyz.language.toolbar_measure}
-          onclick=${e => {
-
-            if (e.target.classList.contains('enabled')) return xyz.mapview.interaction.draw.cancel()
-
-            e.target.classList.add('enabled')
-
-            xyz.mapview.interaction.draw.begin({
-              type: 'LineString',
-              tooltip: 'length',
-              callback: () => {
-                e.target.classList.remove('enabled')
-              }
-            })
-          }}><div class="xyz-icon icon-straighten">`)          
-
     // Add fullscreen button.
     btnColumn.appendChild(xyz.utils.html.node`
       <button
