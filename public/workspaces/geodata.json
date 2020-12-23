@@ -9,7 +9,7 @@
     "Mapbox Base": {
       "format": "mbtiles",
       "mbStyle": "mapbox://styles/dbauszus/ciozrimi3002bdsm8bjtn2v1y",
-      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmem95NXR0MG1mcDJ0bTdpZWtvbWczYSJ9.jed0_YFQsDd0IcHQDU2ZQw",
+      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tqMXBtdnp6MGxpbDJ6cDh1eXQzZ2tlcCJ9.u5fDJVun8BTbnjGOqmrW8Q",
       "attribution": {
         "© Mapbox": "https://www.mapbox.com/about/maps",
         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
@@ -18,7 +18,7 @@
     "Mapbox Label": {
       "format": "mbtiles",
       "mbStyle": "mapbox://styles/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z",
-      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmem95NXR0MG1mcDJ0bTdpZWtvbWczYSJ9.jed0_YFQsDd0IcHQDU2ZQw",
+      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tqMXBtdnp6MGxpbDJ6cDh1eXQzZ2tlcCJ9.u5fDJVun8BTbnjGOqmrW8Q",
       "attribution": {
         "© Mapbox": "https://www.mapbox.com/about/maps",
         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
