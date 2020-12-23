@@ -17,9 +17,7 @@ module.exports = async (req, res) => {
   if (keys[req.params.key]) return keys[req.params.key](req, res)
 
   res.send(`
-    Failed to evaluate ${req.params.key} as 'key' param.
-    <br>
-    <br>
+    Failed to evaluate 'key' param.<br><br>
     <a href="https://geolytix.github.io/xyz/docs/develop/api/workspace/">Workspace API</a>`)
 }
 
