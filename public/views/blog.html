@@ -72,6 +72,13 @@
       padding: 2px 5px;
     }
 
+    #ol-scale {
+      bottom: 20px;
+      position: absolute;
+      right: 0;
+      z-index: 999;
+    }
+
     .ol-control button {
       color: #000;
       font-size: 1.5em;
@@ -130,9 +137,8 @@
   <div id="Locale" class="location-view"></div>
 
   <div id="Map">
-    <div id="_Attribution">
-
-    </div>
+    <div id="ol-scale"></div>
+    <div id="_Attribution"></div>
   </div>
 
 </body>
