@@ -10,10 +10,6 @@ module.exports = {
 
   mapbox: async req => await mapbox(req),
 
-  opencage: async req => await opencage(req),
-
-  google: async req => await google(req),
-
   cloudinary: async req => await cloudinary(req),
 
   http: async req => await http(req),
@@ -187,20 +183,6 @@ async function mapbox(req) {
   return await response.json()
 }
 
-async function opencage(req) {
-
-  const response = await fetch(`https://${getURL(req)}&key=${process.env.KEY_OPENCAGE}`)
-
-  return await response.json()
-}
-
-async function google(req) {
-
-  const response = await fetch(`https://${getURL(req)}&${process.env.KEY_GOOGLE}`)
-
-  return await response.json()
-}
-
 async function tomtom(req) {
 
   let url = `${req.params.url}?`;
@@ -212,7 +194,6 @@ async function tomtom(req) {
   const response = await fetch(`https://${url}&key=${process.env.KEY_TOMTOM}`);
 
   return await response.json()
-
 }
 
 function getURL(req) {
