@@ -332,7 +332,7 @@
       value=${a.max}
       max=${a.max}
       step=${o}
-      oninput=${e=>{u.value=e.target.value,g()}}>`;let f;function g(){clearTimeout(f),f=setTimeout((()=>{f=null,t.filter.current[n.field]={},t.filter.current[n.field].gte=parseFloat(s.value),t.filter.current[n.field].lte=parseFloat(u.value),t.reload(),t.show(),t.count((e=>{t.filter.run_output.disabled=!(e>1),n.filterZoom&&e>1&&t.zoomToExtent()}))}),500)}p.appendChild(h)},r.send()},Wt=e=>(t,n)=>{if(n.el&&n.el.parentNode)return e.layers.view.filter.reset(t,n);const r=e.layers.view.filter.block(t,n);r.dataset.field=n.field,n.el=r,t.filter.current[t.style.theme.field]||(t.filter.current[t.style.theme.field]={}),n.filter.in.forEach((a=>{r.appendChild(e.utils.html.node`
+      oninput=${e=>{u.value=e.target.value,g()}}>`;let f;function g(){clearTimeout(f),f=setTimeout((()=>{f=null,t.filter.current[n.field]={},t.filter.current[n.field].gte=parseFloat(s.value),t.filter.current[n.field].lte=parseFloat(u.value),t.reload(),t.show(),t.count((e=>{t.filter.run_output.disabled=!(e>1),n.filterZoom&&e>1&&t.zoomToExtent()}))}),500)}p.appendChild(h)},r.send()},Wt=e=>(t,n)=>{if(n.el&&n.el.parentNode)return e.layers.view.filter.reset(t,n);const r=e.layers.view.filter.block(t,n);r.dataset.field=n.field,n.el=r,t.filter.current[t.style.theme&&t.style.theme.field||n.field]||(t.filter.current[t.style.theme&&t.style.theme.field||n.field]={}),n.filter.in.forEach((a=>{r.appendChild(e.utils.html.node`
     <label class="input-checkbox">
     <input
       type="checkbox"
