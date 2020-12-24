@@ -171,6 +171,8 @@ async function here(req) {
     .map(entry => (`${entry[0]}=${entry[1]}`))
     .join('&');
 
+  console.log(`https://${url}&${process.env.KEY_HERE}`)
+
   const response = await fetch(`https://${url}&${process.env.KEY_HERE}`)
 
   return await response.json()
