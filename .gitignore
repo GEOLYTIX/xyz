@@ -11,6 +11,7 @@ env
 public/workspaces/*
 !public/workspaces/dev.json
 !public/workspaces/geodata.json
+!public/workspaces/blog.json
 
 public/views/foodmap.*
 public/views/wellbeing.*

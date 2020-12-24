@@ -1,0 +1,335 @@
+{
+  "templates": {
+    "blog": {
+      "src": "file:/views/blog.html"
+    },
+    "Mapbox Base": {
+      "group": "Base Maps",
+      "format": "mbtiles",
+      "mbStyle": "mapbox://styles/dbauszus/ciozrimi3002bdsm8bjtn2v1y",
+      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2p5Nmt3bm4wMGhzeTNjbGVxOGZyZG5qZCJ9.9naYTbockHur5X8WO3nsjQ",
+      "attribution": {
+        "© Mapbox": "https://www.mapbox.com/about/maps",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "Mapbox Colour": {
+      "group": "Base Maps",
+      "display": true,
+      "format": "mbtiles",
+      "mbStyle": "mapbox://styles/dbauszus/ck440h6990nii1co520go20i2",
+      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2p5Nmt3bm4wMGhzeTNjbGVxOGZyZG5qZCJ9.9naYTbockHur5X8WO3nsjQ",
+      "attribution": {
+        "© Mapbox": "https://www.mapbox.com/about/maps",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "Mapbox Labels": {
+      "group": "Base Maps",
+      "format": "mbtiles",
+      "mbStyle": "mapbox://styles/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z",
+      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2p5Nmt3bm4wMGhzeTNjbGVxOGZyZG5qZCJ9.9naYTbockHur5X8WO3nsjQ",
+      "attribution": {
+        "© Mapbox": "https://www.mapbox.com/about/maps",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "HERE Imagery": {
+      "group": "Base Maps",
+      "format": "tiles",
+      "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8&key=HERE",
+      "proxy": true,
+      "attribution": {
+        "© Here": "https://www.here.com/",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "HERE Hybrid": {
+      "group": "Base Maps",
+      "format": "tiles",
+      "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8&key=HERE",
+      "proxy": true,
+      "attribution": {
+        "© Here": "https://www.here.com/",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "Mapbox Dark": {
+      "format": "mbtiles",
+      "mbStyle": "mapbox://styles/dbauszus/ck87sxnow12c31ikbcl1suce5",
+      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2p5Nmt3bm4wMGhzeTNjbGVxOGZyZG5qZCJ9.9naYTbockHur5X8WO3nsjQ",
+      "attribution": {
+        "© Mapbox": "https://www.mapbox.com/about/maps",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "Mapbox Blues": {
+      "format": "mbtiles",
+      "mbStyle": "mapbox://styles/dbauszus/ckhuwgi7c037m19nzvmof1dzf",
+      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2p5Nmt3bm4wMGhzeTNjbGVxOGZyZG5qZCJ9.9naYTbockHur5X8WO3nsjQ",
+      "attribution": {
+        "© Mapbox": "https://www.mapbox.com/about/maps",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "global_cities": {
+      "src": "cloudfront:${CDN}/mapp/layers/global_cities.json"
+    },
+    "global_cities_query": {
+      "template": "select id, city_name, country, pop_ghs, area, pop_den from geodata.global_glx_open_citiesoftheworld WHERE true ${viewport} ${filter} limit 99;"
+    },
+    "global_airports": {
+      "src": "cloudfront:${CDN}/mapp/layers/global_airports.json"
+    },
+    "global_airports_query": {
+      "template": "select id, full_name, main_city, country, iata, icao, rank_group, rank from geodata.global_glx_geodata_transport_airport WHERE true ${viewport} ${filter} limit 99;"
+    },
+    "riverford": {
+      "src": "cloudfront:${CDN}/blog/layers/riverford.json"
+    },
+    "geolytix_projects": {
+      "src": "cloudfront:${CDN}/blog/layers/geolytix_projects.json"
+    },
+    "retail points": {
+      "src": "cloudfront:${CDN}/blog/layers/retail_points.json"
+    },
+    "retail points - layer table": {
+      "template": "SELECT id, store_name, town FROM geodata.uk_glx_open_retail_points WHERE true ${viewport} ${filter} FETCH FIRST 99 ROW ONLY;"
+    },
+    "blackwells": {
+      "src": "cloudfront:${CDN}/blog/layers/blackwells.json"
+    },
+    "lush": {
+      "src": "cloudfront:${CDN}/blog/layers/lush.json"
+    },
+    "mumbai_retail_venues": {
+      "src": "cloudfront:${CDN}/blog/layers/mumbai_retail_venues.json"
+    },
+    "wall_of_china": {
+      "src": "cloudfront:${CDN}/blog/layers/wall_of_china.json"
+    },
+    "walkingthewall": {
+      "src": "cloudfront:${CDN}/blog/templates/wall_of_china/walkingthewall.html"
+    },
+    "walking_america": {
+      "src": "cloudfront:${CDN}/blog/layers/walking_america.json"
+    },
+    "usa_landmarks": {
+      "src": "cloudfront:${CDN}/blog/layers/usa_landmarks.json"
+    },
+    "usa_route": {
+      "src": "cloudfront:${CDN}/blog/layers/usa_route.json"
+    },
+    "walkusa": {
+      "src": "cloudfront:${CDN}/blog/templates/walking_america/walkusa.html"
+    }
+  },
+  "locales": {
+    "Global": {
+      "minZoom": 3,
+      "maxZoom": 15,
+      "showScaleBar": true,
+      "layers": {
+        "Mapbox": {
+          "template": "Mapbox Base",
+          "display": true,
+          "group": "Maps"
+        },
+        "Mapbox Labels": {
+          "template": "Mapbox Label",
+          "display": true,
+          "group": "Maps"
+        },
+        "Here": {
+          "template": "Here Imagery",
+          "group": "Maps"
+        },
+        "Here Hybrid": {
+          "template": "Here Hybrid",
+          "group": "Maps"
+        },
+        "World Cities": {
+          "template": "global_cities"
+        },
+        "Global Airports": {
+          "template": "global_airports"
+        },
+        "Riverford": {
+          "template": "riverford"
+        }
+      }
+    },
+    "Geolytix": {
+      "minZoom": 2,
+      "maxZoom": 15,
+      "view": {
+        "lat": 45,
+        "lng": 60,
+        "z": 2
+      },
+      "showScaleBar": true,
+      "layers": {
+        "Mapbox": {
+          "display": true,
+          "template": "Mapbox Base"
+        },
+        "Geolytix Projects": {
+          "display": true,
+          "template": "geolytix_projects"
+        }
+      }
+    },
+    "UK": {
+      "name": "United Kingdom",
+      "gazetteer": {
+        "provider": "GOOGLE",
+        "country": "GB",
+        "placeholder": "eg. London"
+      },
+      "bounds": {
+        "north": 48,
+        "east": -13,
+        "south": 62,
+        "west": 5
+      },
+      "minZoom": 6,
+      "maxZoom": 17,
+      "showScaleBar": true,
+      "layers": {
+        "Mapbox": {
+          "template": "Mapbox Base",
+          "display": true,
+          "group": "Maps"
+        },
+        "Mapbox Labels": {
+          "template": "Mapbox Label",
+          "display": true,
+          "group": "Maps"
+        },
+        "Retail Points": {
+          "template": "retail points"
+        },
+        "Blackwells": {
+          "template": "blackwells"
+        },
+        "Seamless Leeds": {
+          "meta": "View for Seamless Town & Suburb dataset in Leeds",
+          "format": "mvt",
+          "geom": "geom_3857",
+          "srid": "3857",
+          "dbs": "BLOG",
+          "qID": "id",
+          "table": "blog.vw_leeds_glx_geodata_seamless_combined",
+          "infoj": [
+            {
+              "type": "key"
+            },
+            {
+              "field": "comb_name",
+              "title": "Name"
+            },
+            {
+              "field": "pop",
+              "title": "Population",
+              "inline": true
+            }
+          ]
+        }
+      }
+    },
+    "Lush": {
+      "minZoom": 2,
+      "maxZoom": 15,
+      "view": {
+        "lat": 45,
+        "lng": 60,
+        "z": 2
+      },
+      "showScaleBar": true,
+      "layers": {
+        "Mapbox": {
+          "template": "Mapbox Base",
+          "display": true
+        },
+        "Lush Locations": {
+          "display": true,
+          "template": "lush"
+        }
+      }
+    },
+    "Mumbai": {
+      "bounds": {
+        "north": 22,
+        "east": 76,
+        "south": 18,
+        "west": 70
+      },
+      "view": {
+        "lat": 19.0108,
+        "lng": 72.8502,
+        "z": 2
+      },
+      "minZoom": 12,
+      "maxZoom": 15,
+      "showScaleBar": true,
+      "layers": {
+        "Mapbox": {
+          "template": "Mapbox Base",
+          "display": true,
+          "group": "Maps"
+        },
+        "Mapbox Labels": {
+          "template": "Mapbox Label",
+          "display": true,
+          "group": "Maps"
+        },
+        "Mumbai Retail Venues": {
+          "display": true,
+          "template": "mumbai_retail_venues"
+        }
+      }
+    },
+    "Walking The Great Wall of China": {
+      "minZoom": 5,
+      "maxZoom": 19,
+      "view": {
+        "lat": 39.602,
+        "lng": 107.578,
+        "z": 5
+      },
+      "layers": {
+        "Mapbox": {
+          "template": "Mapbox Dark",
+          "display": true
+        },
+        "The Great Wall": {
+          "template": "wall_of_china"
+        }
+      }
+    },
+    "Walking America": {
+      "minZoom": 3,
+      "maxZoom": 19,
+      "view": {
+        "lat": 42.001,
+        "lng": -101.158,
+        "z": 5
+      },
+      "layers": {
+        "Mapbox": {
+          "template": "Mapbox Blues",
+          "display": true
+        },
+        "Walking America": {
+          "template": "walking_america"
+        },
+        "Landmarks": {
+          "template": "usa_landmarks"
+        },
+        "Route": {
+          "template": "usa_route"
+        }
+      }
+    }
+  }
+}
