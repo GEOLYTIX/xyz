@@ -23,6 +23,16 @@ process.env.TITLE = process.env.TITLE || 'GEOLYTIX | XYZ'
 
 process.env.DIR = process.env.DIR || ''
 
+function IEdetect(sUsrAg) {
+  if (sUsrAg.indexOf("Firefox") > -1) return false
+
+  if (sUsrAg.indexOf("SamsungBrowser") > -1) return false
+  
+  if (sUsrAg.indexOf("Opera") > -1 || sUsrAg.indexOf("OPR") > -1) return false
+  
+  if (sUsrAg.indexOf("Trident") > -1) return true
+}
+
 module.exports = async (req, res) => {
 
   if (IEdetect(req.headers['user-agent'])) return res.send('Uh Oh... It looks like your request comes from an unsupported user agent (e.g. Internet Explorer)')
@@ -161,9 +171,19 @@ function proxy(req, res) {
   
 }
 
-const _provider = require('../mod/provider')
+const github = require('../mod/provider/github')
+
+const cloudfront = require('../mod/provider/cloudfront')
+
+const cloudinary = require('../mod/provider/cloudinary')
 
 async function provider(req, res) {
+
+  const _provider = {
+    github: github,
+    cloudfront: cloudfront,
+    cloudinary: cloudinary
+  }
 
   const provider = _provider[req.params.provider]
 
@@ -196,12 +216,3 @@ function bodyData(req) {
   })
 }
 
-function IEdetect(sUsrAg) {
-  if (sUsrAg.indexOf("Firefox") > -1) return false
-
-  if (sUsrAg.indexOf("SamsungBrowser") > -1) return false
-  
-  if (sUsrAg.indexOf("Opera") > -1 || sUsrAg.indexOf("OPR") > -1) return false
-  
-  if (sUsrAg.indexOf("Trident") > -1) return true
-}

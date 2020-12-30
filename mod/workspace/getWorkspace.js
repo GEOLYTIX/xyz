@@ -1,11 +1,57 @@
-const provider = require('../provider')
+const github = require('../provider/github')
+
+const cloudfront = require('../provider/cloudfront')
+
+const fetch = require('node-fetch')
+
+const { readFileSync } = require('fs');
+
+const { join } = require('path');
 
 const getFrom = {
-  'http': ref => provider.http(ref),
-  'https': ref => provider.http(ref),
-  'file': ref => provider.file(`../public/workspaces/${ref.split(':')[1]}`),
-  'github': ref => provider.github(ref.split(':')[1]),
-  'cloudfront': ref => provider.cloudfront(ref.split(':')[1]),
+  'http': ref => http(ref),
+  'https': ref => http(ref),
+  'file': ref => file(`../../public/workspaces/${ref.split(':')[1]}`),
+  'github': ref => github(ref.split(':')[1]),
+  'cloudfront': ref => cloudfront(ref.split(':')[1]),
+}
+
+async function http(ref) {
+
+  try {
+
+    const response = await fetch(ref)
+
+    if (response.status >= 300) return new Error(`${response.status} ${ref}`)
+
+    if (ref.match(/\.json$/i)) {
+      return await response.json()
+    }
+
+    return await response.text()
+
+  } catch(err) {
+
+    return err
+
+  }
+}
+
+async function file(ref) {
+  try {
+
+    const file = readFileSync(join(__dirname, ref))
+
+    if (ref.match(/\.json$/i)) {
+      return JSON.parse(file, 'utf8')
+    }
+
+    return String(file)
+
+  } catch (err) {
+    console.error(err)
+    return err
+  }
 }
 
 let workspace = null
@@ -42,9 +88,7 @@ module.exports = async req => {
   return workspace
 }
 
-const { readFileSync } = require('fs');
 
-const { join } = require('path');
 
 async function assignTemplates() {
 
@@ -81,22 +125,22 @@ async function assignTemplates() {
         matched => process.env[`SRC_${matched.replace(/\$|\{|\}/g, '')}`] || matched)
 
       if (entry[1].src && entry[1].src.startsWith('file:')) {
-        return provider.file(`../public/${entry[1].src.replace('file:', '')}`)
+        return file(`../../public/${entry[1].src.replace('file:', '')}`)
           .then(_resolve)
       }
 
       if (entry[1].src && entry[1].src.startsWith('cloudfront:')) {
-        return provider.cloudfront(entry[1].src.split(':')[1])
+        return cloudfront(entry[1].src.split(':')[1])
           .then(_resolve)
       }
 
       if (entry[1].src && entry[1].src.toLowerCase().includes('api.github')) {
-        return provider.github(entry[1].src)
+        return github(entry[1].src)
           .then(_resolve)
       }
 
       if (entry[1].src && entry[1].src.startsWith('http')) {
-        return provider.http(entry[1].src)
+        return http(entry[1].src)
           .then(_resolve)
       }
 

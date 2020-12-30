@@ -264,8 +264,6 @@
             {
               "title": "char_field",
               "field": "char_field",
-              "name": "Hello World",
-              "type": "boolean",
               "edit": true
             },
             {
