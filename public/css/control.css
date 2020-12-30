@@ -520,6 +520,8 @@ button {
       text-overflow: ellipsis; }
     .drawer > .header > :nth-child(2) {
       margin-left: auto; }
+  .drawer .display-grid {
+    display: grid; }
   .drawer.expandable > .header:hover {
     cursor: pointer; }
   .drawer.expandable > .header > .icon-expander {

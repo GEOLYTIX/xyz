@@ -6,10 +6,6 @@ module.exports = {
 
   github: async req => await github(req),
 
-  here: async req => await here(req),
-
-  mapbox: async req => await mapbox(req),
-
   cloudinary: async req => await cloudinary(req),
 
   http: async req => await http(req),
@@ -18,7 +14,6 @@ module.exports = {
 
   cloudfront: async ref => await cloudfront(ref),
 
-  tomtom: async ref => await tomtom(ref)
 }
 
 
@@ -160,53 +155,4 @@ async function cloudinary(req) {
       public_id: `${process.env.CLOUDINARY.split(' ')[3]}/${req.params.public_id}`, //${Date.now()}`,
       overwrite: true
     })
-}
-
-
-async function here(req) {
-
-  let url = `${req.params.url}?`;
-
-  url += Object.entries(JSON.parse(req.params.settings))
-    .map(entry => (`${entry[0]}=${entry[1]}`))
-    .join('&');
-
-  console.log(`https://${url}&${process.env.KEY_HERE}`)
-
-  const response = await fetch(`https://${url}&${process.env.KEY_HERE}`)
-
-  return await response.json()
-}
-
-async function mapbox(req) {
-
-  const response = await fetch(`https://${getURL(req)}&${process.env.KEY_MAPBOX}`.replace(/\&provider=mapbox/,''))
-
-  return await response.json()
-}
-
-async function tomtom(req) {
-
-  let url = `${req.params.url}?`;
-
-  url += Object.entries(JSON.parse(req.params.settings))
-    .map(entry => encodeURI(`${entry[0]}=${entry[1]}`))
-    .join('&');
-
-  const response = await fetch(`https://${url}&key=${process.env.KEY_TOMTOM}`);
-
-  return await response.json()
-}
-
-function getURL(req) {
-
-  if (!req.params || !req.params.url) return req
-
-  return req.params.url + Object.entries(req.params)
-    .filter(entry => entry[0] !== 'provider')
-    .filter(entry => entry[0] !== 'url')
-    .filter(entry => entry[1] === 0 || !!entry[1])
-    .filter(entry => entry[1].length > 0 || typeof entry[1] !== 'object')
-    .map(entry => encodeURI(`${entry[0]}=${entry[1]}`))
-    .join('&')
 }

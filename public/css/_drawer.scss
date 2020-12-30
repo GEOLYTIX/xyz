@@ -20,6 +20,10 @@
         }
     }
 
+    .display-grid {
+      display: grid; 
+    }
+
     &.expandable>.header:hover {
       cursor: pointer;
     }
