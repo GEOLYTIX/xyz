@@ -37,7 +37,7 @@
     "HERE Imagery": {
       "group": "Base Maps",
       "format": "tiles",
-      "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8&key=HERE",
+      "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?{HERE}",
       "proxy": true,
       "attribution": {
         "© Here": "https://www.here.com/",
@@ -47,7 +47,7 @@
     "HERE Hybrid": {
       "group": "Base Maps",
       "format": "tiles",
-      "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8&key=HERE",
+      "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?{HERE}",
       "proxy": true,
       "attribution": {
         "© Here": "https://www.here.com/",

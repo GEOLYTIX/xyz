@@ -33,3 +33,5 @@ Cluster style - adds relative: true flag to make cluster scale dependent on curr
 Metric geometry need to be measured through sphere. [#376](https://github.com/GEOLYTIX/xyz/issues/376)
 
 Fix for in type filter.
+
+Remove mapbox, tomtom, here provider. [#282](https://github.com/GEOLYTIX/xyz/issues/282)

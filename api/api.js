@@ -138,16 +138,15 @@ const https = require('https')
 
 function proxy(req, res) {
 
-  const queryParams = Object.entries(req.query)
-    .filter(entry => entry[0] !== 'url')
-    .filter(entry => entry[0] !== 'key')
-    .map(entry => `${entry[0]}=${entry[1]}`)
+  const _url = req.url.match(/\?.*/)
 
-  req.query.key 
-    && process.env[`KEY_${req.query.key.toUpperCase()}`] 
-    && queryParams.push(process.env[`KEY_${req.query.key.toUpperCase()}`])
+  if (!_url[0]) return
 
-  const url = `${req.query.url}?${queryParams.join('&')}`
+  // Find variables to be substituted.
+  const url = _url[0].substring(1).replace(/\$\{(.*?)\}/g,
+
+    // Substitute matched variable with key value from process environment.
+    matched => process.env[`KEY_${matched.replace(/\$|\{|\}/g, '')}`] || matched)
 
   const proxy = https.request(url, _res => {
     res.writeHead(_res.statusCode, _res.headers)

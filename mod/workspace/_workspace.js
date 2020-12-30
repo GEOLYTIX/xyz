@@ -136,7 +136,7 @@ function getLocale(req, res) {
       if (!layer[1].roles) return layer[0]
 
       // check whether the layer is available for roles in token.
-      if (Object.keys(layer[1].roles).some(
+      if (roles.length && Object.keys(layer[1].roles).some(
         role => roles.includes(role)
           || (role.match(/^\!/) && !roles.includes(role.replace(/^\!/, '')))
       )) return layer[0]
