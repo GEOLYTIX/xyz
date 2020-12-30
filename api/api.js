@@ -192,27 +192,9 @@ async function provider(req, res) {
     <a href="https://geolytix.github.io/xyz/docs/develop/api/provider/">Provider API</a>`)
   }
 
-  req.body = req.body && await bodyData(req) || null
-
   const content = await provider(req)
 
   req.params.content_type && res.setHeader('content-type', req.params.content_type)
 
   res.send(content)
 }
-
-function bodyData(req) {
-
-  return new Promise((resolve, reject) => {
-
-    const chunks = []
-
-    req.on('data', chunk => chunks.push(chunk))
-
-    req.on('end', () => resolve(Buffer.concat(chunks)))
-
-    req.on('error', error => reject(error))
-
-  })
-}
-

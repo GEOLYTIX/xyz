@@ -2,6 +2,8 @@ const cloudinary_v2 = require('cloudinary').v2
 
 module.exports = async req => {
 
+  req.body = req.body && await bodyData(req) || null
+
   cloudinary_v2.config({
     api_key: process.env.CLOUDINARY.split(' ')[0],
     api_secret: process.env.CLOUDINARY.split(' ')[1],
@@ -19,4 +21,19 @@ module.exports = async req => {
       overwrite: true
     })
 
+}
+
+function bodyData(req) {
+
+  return new Promise((resolve, reject) => {
+
+    const chunks = []
+
+    req.on('data', chunk => chunks.push(chunk))
+
+    req.on('end', () => resolve(Buffer.concat(chunks)))
+
+    req.on('error', error => reject(error))
+
+  })
 }
