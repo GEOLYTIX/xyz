@@ -410,7 +410,7 @@
     <div id="content">
       <h1 id="bundling-the-control-library">Bundling the control library <a class="header-anchor" href="#bundling-the-control-library">¶</a></h1>
 <p>The library code split into multiple ES6 modules is stored in the <a href="https://github.com/GEOLYTIX/xyz/tree/master/lib">/lib</a> directory of the XYZ repo. The application is bundled with <a href="https://webpack.js.org">Webpack 4</a>.</p>
-<p>The <a href="https://github.com/GEOLYTIX/xyz/blob/master/package.json">package.json</a> stores mutliple scripts to build the control library as <a href="https://github.com/GEOLYTIX/xyz/blob/master/public/js/xyz_openlayers.js">xyz_openlayers.js</a> in the /public/js directory.</p>
+<p>The <a href="https://github.com/GEOLYTIX/xyz/blob/master/package.json">package.json</a> stores mutliple scripts to build the control library as <a href="https://github.com/GEOLYTIX/xyz/blob/master/public/js/mapp.js">mapp.js</a> in the /public/js directory.</p>
 <p><code>npm run dev</code> will be build a development library which is not size optimised. The compilation to dev is fastest.</p>
 <p><code>npm run build</code> will bundle a production library which is commited to the XYZ repository.</p>
 <p>The <a href="https://github.com/GEOLYTIX/xyz/blob/master/webpack.config.js">webpack.config</a> provides following configuration for the compilation process. The entry point for the bundle is the index.mjs module script in the /lib directory.</p>
