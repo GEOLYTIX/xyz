@@ -6,19 +6,10 @@ const http = require('./http')
 
 const file = require('./file')
 
-const { readFileSync } = require('fs')
-
-const { join } = require('path');
-
 module.exports = async workspace => {
 
   // Assign default view and query templates to workspace.
   workspace.templates = Object.assign({
-
-    // View templates:
-    mapp: {
-      template: readFileSync(join(__dirname, '../../public/views/_default.html')).toString('utf8')
-    },
 
     // Query templates:
     count_locations: require('../../public/js/queries/count_locations'),
