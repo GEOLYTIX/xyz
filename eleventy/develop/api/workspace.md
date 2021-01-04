@@ -6,17 +6,11 @@ layout: root.html
 
 # Workspace API
 
-The Workspace API provides methods to retrieve configuration objects and request the chaching of the workspace in other XYZ APIs.
-
-A method must be provided to the Workspace API.
-
-Valid methods are **get** and **cache**.
-
-The Workspace API will redact responses if roles are assigned.
+The [Workspace API module](https://github.com/GEOLYTIX/xyz/blob/master/mod/workspace/_workspace.js) provides methods to retrieve the cached workspace from the XYZ Host.
 
 ### /api/workspace/get
 
-Will return the complete workspace; All templates and locales.
+Will return a JSON object of the complete workspace.
 
 ```
 {
@@ -27,19 +21,28 @@ Will return the complete workspace; All templates and locales.
 
 ### /api/workspace/get/locales
 
-Will return an array of all locale keys.
+Will return an array of accessible locales.
 
 ```
-["uk",...]
+[
+  {
+    "key": "UK",
+    "name": "UK"
+  },
+  {
+    "key": "Japan",
+    "name": "日本"
+}
+]
 ```
 
 ### /api/workspace/get/locale?locale=[key]
 
-Will return the locale json with layers as an array of layer keys.
+Will return the workspace object a single locale. The locale key must be provided as request parameter.
 
 ```
 {
-  "key": "uk",
+  "key": "UK",
   "bounds": {
     "north": 62,
     "east": 5,
@@ -50,8 +53,9 @@ Will return the locale json with layers as an array of layer keys.
   "maxZoom": 17,
   "showScaleBar": true,
   "layers": [
-    "OSM",
-    "Stores"
+    "Mapbox Base",
+    "Grid",
+    "Retail Places"
   ]
 }
 ```
@@ -62,13 +66,11 @@ Will return the layer configuration from a layer template. If a locale parameter
 
 ```
 {
-  "display": true,
   "format": "tiles",
+  "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
   "attribution": {
     "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-  },
-  "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-  "key": "OSM"
+  }
 }
 ```
 
@@ -78,8 +80,4 @@ Will return a list of html links for the individual templates available in the w
 
 ### /api/workspace/get/template?template=[key]
 
-Will return the template rendered to string or an error message if the Workspace API failed to load from source.
-
-### /api/workspace/cache
-
-The cache method requires admin workspace access. If authenticated, requests will send to the View, Query, Gazetteer, Layer, and Location API with the URL parameter cache as true. Upon receiving the cache request each API will cache the workspace from its source. XYZ will cache the workspace upon invocation if the current memorized workspace is null. It is required to call the cache method of the Workspace API should the workspace change at the source.
+Will return the template object or an error message if the Workspace API failed to load from source. Template methods such as the render function are not displayed in the JSON representation of the template.
