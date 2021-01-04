@@ -10,6 +10,8 @@ const getWorkspace = require('../mod/workspace/getWorkspace')
 
 const proxy = require('../mod/proxy')
 
+const provider = require('../mod/provider/_provider')
+
 const routes = {
   layer: require('../mod/layer/_layer'),
   location: require('../mod/location/_location'),
@@ -144,32 +146,4 @@ module.exports = async (req, res) => {
 
   // Return the View API on the root.
   routes.view(req, res)
-}
-
-const github = require('../mod/provider/github')
-
-const cloudfront = require('../mod/provider/cloudfront')
-
-const cloudinary = require('../mod/provider/cloudinary')
-
-async function provider(req, res) {
-
-  const _provider = {
-    github: github,
-    cloudfront: cloudfront,
-    cloudinary: cloudinary
-  }
-
-  const provider = _provider[req.params.provider]
-
-  if (!provider) {
-    return res.send(`Failed to evaluate 'provider' param.<br><br>
-    <a href="https://geolytix.github.io/xyz/docs/develop/api/provider/">Provider API</a>`)
-  }
-
-  const content = await provider(req)
-
-  req.params.content_type && res.setHeader('content-type', req.params.content_type)
-
-  res.send(content)
 }

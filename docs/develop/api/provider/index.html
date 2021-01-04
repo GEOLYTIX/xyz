@@ -409,8 +409,15 @@
 
     <div id="content">
       <h1 id="provider-api">Provider API <a class="header-anchor" href="#provider-api">¶</a></h1>
-<p>Provider are external services which can be accessed via the XYZ API. API keys for external services may be stored as environment variables allowing XYZ clients access to secure services without exposing the API keys themselves.</p>
-<p><em>This is likely to be merged with the proxy service in the future</em></p>
+<p>The XYZ <a href="https://github.com/GEOLYTIX/xyz/blob/development/mod/provider/_provider.js">provider module</a> is a collection of modules which allow requests to 3rd party provider.</p>
+<p>The provider modules themselves are in the same mod folder. Requests for these provider may not be proxied due to specific requirements in regards to keys and auxiliary libraries.</p>
+<p>The Cloudfront and Github provider may both be used to request workspaces and workspace templates.</p>
+<h2 id="cloudfront">Cloudfront <a class="header-anchor" href="#cloudfront">¶</a></h2>
+<p>The <a href="https://github.com/GEOLYTIX/xyz/blob/development/mod/provider/cloudflare.js">Cloudfront provider module</a> makes use of the AWS-SDK and requires a Cloudfront encryption key in order to request protected ressources stored with the AWS Cloudfront platform.</p>
+<h2 id="github">Github <a class="header-anchor" href="#github">¶</a></h2>
+<p>The <a href="https://github.com/GEOLYTIX/xyz/blob/development/mod/provider/github.js">Github provider module</a> decorates request header with credentials which must be provided as environment <code>KEY_GITHUB</code> variable. Content is parsed as JSON before being returned to the request client.</p>
+<h2 id="cloudinary">Cloudinary <a class="header-anchor" href="#cloudinary">¶</a></h2>
+<p>The <a href="https://github.com/GEOLYTIX/xyz/blob/development/mod/provider/cloudinary.js">Cloudinary provider module</a> uses the <a href="https://www.npmjs.com/package/cloudinary">Cloudinary API module</a> to upload images or documents provided as a post body to the Cloudinary API.</p>
 
     </div>
 
