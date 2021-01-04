@@ -103,7 +103,7 @@ module.exports = async (req, res) => {
   if (path && path[0] === 'proxy?') return proxy(req, res)
 
   // Short circuit proxy requests.
-  //if (path && path[0] === 'provider') return provider(req, res)
+  if (path && path[1] === 'provider') return provider(req, res)
 
   // The user path will short circuit since workspace or templates are not required.
   if (path && path[1] === 'user') {
