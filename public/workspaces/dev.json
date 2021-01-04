@@ -115,10 +115,10 @@
           "display": true
         },
         "Grid": {
-          "srid": "4326",
-          "format": "grid",
+          "format": "mvt",
           "dbs": "MAPP",
           "geom": "geom_p_4326",
+          "srid": "4326",
           "tables": {
             "7": null,
             "8": "geodata.uk_glx_geodata_hex_16k",
