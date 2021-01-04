@@ -12,6 +12,10 @@ const proxy = require('../mod/proxy')
 
 const provider = require('../mod/provider/_provider')
 
+const { readFileSync } = require('fs')
+
+const { join } = require('path');
+
 const routes = {
   layer: require('../mod/layer/_layer'),
   location: require('../mod/location/_location'),
@@ -145,7 +149,15 @@ module.exports = async (req, res) => {
   if (path && path[1] && routes[path[1]]) return routes[path[1]](req, res)
 
   // Assign the mapp template as default if no template is set.
-  req.params.template = req.params.template || req.params.workspace.templates.mapp
+  req.params.template = req.params.template || req.params.workspace.templates.default
+
+  if (!req.params.template) {
+    const template = readFileSync(join(__dirname, '../public/views/_default.html')).toString('utf8')
+    req.params.template = {
+      template: template,
+      render: params => template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
+    }
+  }
 
   // Return the View API on the root.
   routes.view(req, res)
