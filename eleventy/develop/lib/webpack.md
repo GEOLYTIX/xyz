@@ -8,7 +8,7 @@ layout: root.html
 
 The library code split into multiple ES6 modules is stored in the [/lib](https://github.com/GEOLYTIX/xyz/tree/master/lib) directory of the XYZ repo. The application is bundled with [Webpack 4](https://webpack.js.org).
 
-The [package.json](https://github.com/GEOLYTIX/xyz/blob/master/package.json) stores mutliple scripts to build the control library as [xyz_openlayers.js](https://github.com/GEOLYTIX/xyz/blob/master/public/js/xyz_openlayers.js) in the /public/js directory.
+The [package.json](https://github.com/GEOLYTIX/xyz/blob/master/package.json) stores mutliple scripts to build the control library as [mapp.js](https://github.com/GEOLYTIX/xyz/blob/master/public/js/mapp.js) in the /public/js directory.
 
 `npm run dev` will be build a development library which is not size optimised. The compilation to dev is fastest.
 

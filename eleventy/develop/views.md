@@ -19,8 +19,8 @@ A series of stylesheet and script must be referenced in the document head of the
 <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js" defer></script>
 
 <!-- Load XYZ / MAPP stylesheet and library. -->
-<link rel="stylesheet" href="${dir}/css/control.css" />
-<script src="${dir}/js/xyz_openlayers.js" defer></script>
+<link rel="stylesheet" href="${dir}/css/mapp.css" />
+<script src="${dir}/js/mapp.js" defer></script>
 ```
 
 Aditional script sources (and stylesheets) may be required for plugins and 3rd party utility libraries such as tabulator (eg. `<script src="/js/tabulator.min.js" defer></script>`).

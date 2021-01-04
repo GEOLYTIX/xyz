@@ -35,3 +35,5 @@ Metric geometry need to be measured through sphere. [#376](https://github.com/GE
 Fix for in type filter.
 
 Remove mapbox, tomtom, here provider. [#282](https://github.com/GEOLYTIX/xyz/issues/282)
+
+Mapp library and stylesheets. [#377](https://github.com/GEOLYTIX/xyz/issues/377)
