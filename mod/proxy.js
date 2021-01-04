@@ -1,6 +1,6 @@
 const https = require('https')
 
-module.exports = async (req, res) => {
+module.exports = (req, res) => {
 
   const _url = req.url.match(/\?.*/)
 
