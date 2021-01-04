@@ -12,7 +12,7 @@ A series of stylesheet and script must be referenced in the document head of the
 
 ```html
 <!-- Load openlayers library and stylesheet. -->
-<link rel="stylesheet" href="${dir}/css/openlayers.css" />
+<link rel="stylesheet" href="${dir}/css/ol.css" />
 <script src="${dir}/js/ol.js" defer></script>
 
 <!-- Load mapbox-gl library required for mbtiles layer. -->

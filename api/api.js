@@ -6,7 +6,7 @@ const register = require('../mod/user/register')
 
 const auth = require('../mod/user/auth')
 
-const getWorkspace = require('../mod/workspace/getWorkspace')
+const workspaceCache = require('../mod/workspace/cache')
 
 const proxy = require('../mod/proxy')
 
@@ -102,6 +102,9 @@ module.exports = async (req, res) => {
   // Short circuit proxy requests.
   if (path && path[0] === 'proxy?') return proxy(req, res)
 
+  // Short circuit proxy requests.
+  //if (path && path[0] === 'provider') return provider(req, res)
+
   // The user path will short circuit since workspace or templates are not required.
   if (path && path[1] === 'user') {
 
@@ -117,7 +120,7 @@ module.exports = async (req, res) => {
   if (!user && process.env.PRIVATE) return login(req, res)
 
   // Retrieve workspace and assign to request params.
-  const workspace = await getWorkspace(req)
+  const workspace = await workspaceCache(req)
 
   if (workspace instanceof Error) return res.status(500).send(workspace.message)
 
