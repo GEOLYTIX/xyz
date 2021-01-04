@@ -2,92 +2,15 @@ const github = require('../provider/github')
 
 const cloudfront = require('../provider/cloudfront')
 
-const fetch = require('node-fetch')
+const http = require('./http')
 
-const { readFileSync } = require('fs');
+const file = require('./file')
+
+const { readFileSync } = require('fs')
 
 const { join } = require('path');
 
-const getFrom = {
-  'http': ref => http(ref),
-  'https': ref => http(ref),
-  'file': ref => file(`../../public/workspaces/${ref.split(':')[1]}`),
-  'github': ref => github(ref.split(':')[1]),
-  'cloudfront': ref => cloudfront(ref.split(':')[1]),
-}
-
-async function http(ref) {
-  try {
-
-    const response = await fetch(ref)
-
-    if (response.status >= 300) return new Error(`${response.status} ${ref}`)
-
-    if (ref.match(/\.json$/i)) {
-      return await response.json()
-    }
-
-    return await response.text()
-
-  } catch(err) {
-    console.error(err)
-    return err
-  }
-}
-
-async function file(ref) {
-  try {
-
-    const file = readFileSync(join(__dirname, ref))
-
-    if (ref.match(/\.json$/i)) {
-      return JSON.parse(file, 'utf8')
-    }
-
-    return String(file)
-
-  } catch (err) {
-    console.error(err)
-    return err
-  }
-}
-
-let workspace = null
-
-module.exports = async req => {
-
-  let timestamp = Date.now()
-
-  // If the workspace is empty or older than 1hr it needs to be cached.
-  if (!workspace || ((timestamp - workspace.timestamp) > 3600000)) {
-
-    if (!workspace) {
-      req.params.logger(`workspace is empty ${timestamp}`)
-    } else if ((timestamp - workspace.timestamp) > 3600000) {
-      req.params.logger(`workspace has expired ${workspace.timestamp} | new timestamp is ${timestamp}`)
-    }
-
-    workspace = process.env.WORKSPACE && await getFrom[process.env.WORKSPACE.split(':')[0]](process.env.WORKSPACE) || {}
-
-    if (workspace instanceof Error) return workspace
-
-    await assignTemplates()
-
-    await assignDefaults()
-
-    workspace.timestamp = timestamp
-
-  } else {
-
-    req.params.logger(`workspace cached ${workspace.timestamp} | age ${timestamp - workspace.timestamp}`)
-
-  }
-
-  return workspace
-}
-
-
-async function assignTemplates() {
+module.exports = async workspace => {
 
   // Assign default view and query templates to workspace.
   workspace.templates = Object.assign({
@@ -161,7 +84,9 @@ async function assignTemplates() {
             return resolve({
               [entry[0]]: Module.exports
             })
+
           } catch(err) {
+
             return resolve({
               [entry[0]]: { err: err }
             })
@@ -206,72 +131,4 @@ async function assignTemplates() {
 
   })
 
-}
-
-const defaults = require('./defaults')
-
-async function assignDefaults() {
-
-  //Substitute SRC_* parameter in locales.
-  workspace.locales = JSON.parse(
-    JSON.stringify(workspace.locales || {zero: defaults.locale}).replace(/\$\{(.*?)\}/g,
-      matched => process.env[`SRC_${matched.replace(/\$|\{|\}/g, '')}`] || matched)
-  )
-
-  Object.keys(workspace.locales).forEach(locale_key => {
-
-    const locale = workspace.locales[locale_key]
-
-    locale.key = locale_key
-
-    Object.keys(locale.layers).forEach(layer_key => {
-
-      let layer = locale.layers[layer_key]
-
-      layer.key = layer_key
-
-      if (layer.template && workspace.templates[layer.template]) {
-        layer = Object.assign(
-        {},
-        workspace.templates[layer.template],
-        layer)
-      }
-
-      layer = Object.assign(
-        {},
-        layer.format && defaults.layers[layer.format] || {},
-        layer)
-
-      layer.style = layer.style && Object.assign(
-        {},
-        layer.format && defaults.layers[layer.format].style,
-        layer.style)
-
-      locale.layers[layer_key] = layer
-    })
-  })
-
-  Object.keys(workspace.templates).forEach(layer_key => {
-
-    let layer = workspace.templates[layer_key]
-
-    if (layer.format && defaults.layers[layer.format]) {
-
-      layer.key = layer_key
-
-      layer = Object.assign(
-        {},
-        defaults.layers[layer.format],
-        layer)
-
-      layer.style = layer.style && Object.assign(
-        {},
-        defaults.layers[layer.format].style,
-        layer.style)
-
-      workspace.templates[layer_key] = layer
-
-    }
-
-  })
 }
