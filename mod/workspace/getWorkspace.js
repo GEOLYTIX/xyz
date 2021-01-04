@@ -17,7 +17,6 @@ const getFrom = {
 }
 
 async function http(ref) {
-
   try {
 
     const response = await fetch(ref)
@@ -31,9 +30,8 @@ async function http(ref) {
     return await response.text()
 
   } catch(err) {
-
+    console.error(err)
     return err
-
   }
 }
 
@@ -87,7 +85,6 @@ module.exports = async req => {
 
   return workspace
 }
-
 
 
 async function assignTemplates() {

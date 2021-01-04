@@ -93,6 +93,9 @@
       "cluster_kmeans": 0.01,
       "cluster_dbscan": 0.1,
       "qID": "id"
+    },
+    "Dennis": {
+      "src": "file:workspaces/dennis.json"
     }
   },
   "locales": {
@@ -795,6 +798,9 @@
               }
             }
           }
+        },
+        "Dennis": {
+          "template": "Dennis"
         }
       }
     },
