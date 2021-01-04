@@ -12,7 +12,7 @@ Keys defined as template parameter will be substituted if matched with keys defi
 
 The request with the substituted key parameter will then be piped to the client.
 
-```JS
+```js
   const _url = req.url.match(/\?.*/)
 
   if (!_url[0]) return
@@ -43,7 +43,7 @@ Proxied requests can be sent through the Mapp library proxy method. The request 
 
 Within the [Mapp gazetteer module](https://github.com/GEOLYTIX/xyz/blob/development/lib/gazetteer.mjs) this is used to request place details from the Google Places API.
 
-```JS
+```js
 _xyz
   .proxy(`https://maps.googleapis.com/maps/api/place/details/json?placeid=${record.id}&\${GOOGLE}`)
   .then(response => {
