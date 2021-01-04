@@ -50,7 +50,7 @@
     "lint-staged": "^8.0.4",
     "markdown-it": "^11.0.1",
     "markdown-it-anchor": "^6.0.0",
-    "uhtml": "^1.12.0",
+    "uhtml": "^2.2.0",
     "webpack": "^5.11.1",
     "webpack-cli": "^4.3.1"
   }
