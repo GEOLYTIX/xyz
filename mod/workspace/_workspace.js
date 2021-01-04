@@ -29,7 +29,7 @@ async function getLayer(req, res) {
 
   const locale = req.params.locale && req.params.workspace.locales[req.params.locale]
 
-  if (locale.roles && !Object.keys(locale.roles).some(
+  if (locale && locale.roles && !Object.keys(locale.roles).some(
     role => roles.includes(role)
       || (role.match(/^\!/) && !roles.includes(role.replace(/^\!/, '')))
   )) return res.status(403).send('Role access denied.')
@@ -52,18 +52,12 @@ async function getLayer(req, res) {
 
 function getTemplate(req, res) {
 
-  if (!req.params.template) return res.send('Template key missing.')
-
-  const template = req.params.workspace.templates[req.params.template];
-
-  if (!template) return res.status(400).send('Template not found.')
+  if (!req.params.template) return res.status(400).send('Template not found.')
 
   res.setHeader('content-type', 'text/plain')
 
-  res.send(template.err && template.err.message
-    || template.template
-    || template.render && template.render.toString()
-    || template)
+  res.send(req.params.template.err && req.params.template.err.message
+    || req.params.template)
 }
 
 function getTemplates(req, res) {
