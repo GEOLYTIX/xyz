@@ -2031,6 +2031,14 @@ span.flatpickr-weekday {
     -webkit-background-size: contain; }
   .attribution .ol-scale-line {
     position: static; }
+  .attribution .ol-scale-line-inner {
+    border: 2px solid #222;
+    border-top: none;
+    color: #222;
+    font-size: 10px;
+    text-align: center;
+    margin: 1px;
+    will-change: contents, width; }
 
 #tabview {
   overflow: hidden;
@@ -2373,3 +2381,5 @@ li {
 
 .chartjs-render-monitor {
   width: 100% !important; }
+
+/*# sourceMappingURL=mapp.css.map */
