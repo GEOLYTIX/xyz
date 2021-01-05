@@ -567,7 +567,7 @@
         <span
           title=${e.language.location_source_layer}
           style="${`background-color: ${e.utils.Chroma(t.style.strokeColor||"#090").alpha(.3)}`}"
-          >${t.layer.name||t.layer.key}`);else{const t=e.locations.view.dataview(a);t&&a.listview.appendChild(t)}}}return n},_n=e=>t=>{const n=ol.proj.transform(t.location.marker,"EPSG:"+e.mapview.srid,"EPSG:4326"),r=`${e.host}/api/proxy?`+e.utils.paramString({url:"https://maps.googleapis.com/maps/api/streetview",location:`${n[1]},${n[0]}`,source:"outdoor",size:"300x230",key:"GOOGLE"});t.listview.appendChild(e.utils.html.node`
+          >${t.layer.name||t.layer.key}`);else{const t=e.locations.view.dataview(a);t&&a.listview.appendChild(t)}}}return n},_n=e=>t=>{const n=ol.proj.transform(t.location.marker,"EPSG:"+e.mapview.srid,"EPSG:4326"),r=`${e.host}/api/proxy?https://maps.googleapis.com/maps/api/streetview?location=${n[1]},${n[0]}&source=outdoor&size=300x230&\${GOOGLE}`;t.listview.appendChild(e.utils.html.node`
     <div
       class="${t.class}">
       <a
