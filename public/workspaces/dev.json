@@ -117,8 +117,8 @@
         "Grid": {
           "format": "mvt",
           "dbs": "MAPP",
-          "geom": "geom_p_4326",
-          "srid": "4326",
+          "geom": "geom_p_3857",
+          "srid": "3857",
           "tables": {
             "7": null,
             "8": "geodata.uk_glx_geodata_hex_16k",
@@ -128,6 +128,51 @@
             "12": "geodata.uk_glx_geodata_hex_1k",
             "13": "geodata.uk_glx_geodata_hex_1k",
             "14": null
+          },
+          "style": {
+            "theme": {
+              "type": "dynamic",
+              "field": "pop__01",
+              "geostat": "getClassJenks",
+              "cat_arr": [
+                {
+                  "style": {
+                    "marker": {
+                      "type": "dot",
+                      "fillColor": "#BA2D0B",
+                      "scale": 1.3
+                    }
+                  }
+                },
+                {
+                  "style": {
+                    "marker": {
+                      "type": "dot",
+                      "fillColor": "#F3A712",
+                      "scale": 1.3
+                    }                    
+                  }
+                },
+                {
+                  "style": {
+                    "marker": {
+                      "type": "dot",
+                      "fillColor": "#FADF63",
+                      "scale": 1.3
+                    }                    
+                  }
+                },
+                {
+                  "style": {
+                    "marker": {
+                      "type": "dot",
+                      "fillColor": "#32746D",
+                      "scale": 1.3
+                    }
+                  }
+                }
+              ]
+            }
           },
           "grid_fields": {
             "Population 2001": "pop__01",
