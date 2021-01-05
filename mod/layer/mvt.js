@@ -97,7 +97,7 @@ module.exports = async (req, res) => {
             ),
           ${layer.srid !== '3857' && `${layer.srid}),` ||''}
           4096,
-          256,
+          1024,
           true
         ) geom
 
@@ -107,10 +107,10 @@ module.exports = async (req, res) => {
         ST_Intersects(
           ${layer.srid !== '3857' && `ST_Transform(` ||''}
             ST_MakeEnvelope(
-              ${-m + (x * r) - (r/16)},
-              ${ m - (y * r) - r - (r/16)},
-              ${-m + (x * r) + r + (r/16)},
-              ${ m - (y * r) + (r/16)},
+              ${-m + (x * r) - (r/4)},
+              ${ m - (y * r) - r - (r/4)},
+              ${-m + (x * r) + r + (r/4)},
+              ${ m - (y * r) + (r/4)},
               3857
             ),
           ${layer.srid !== '3857' && `${layer.srid}),` ||''}
