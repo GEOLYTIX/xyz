@@ -114,10 +114,18 @@ document.dispatchEvent(new CustomEvent('scenario_comparison', {
       panel.appendChild(_xyz.utils.html.node`
       <div style="width: 100%; margin: 5px 0; border-bottom: 1px solid #999;">`)
 
-      const report = panel.appendChild(_xyz.utils.html.node`
-      <a
-        target="_blank"
-        style="font-weight: bold; margin-bottom: 5px; color: #090;">Report View`)
+      const reportA = panel.appendChild(_xyz.utils.html.node`
+        <a
+          title="Open Comparison Report View"
+          target="_blank"
+          style="font-weight: bold; margin-bottom: 5px; color: #090;">Report View`)
+
+      const reportB = document.getElementById('mapButton').appendChild(_xyz.utils.html.node`
+        <a
+          title="Open Comparison Report View"
+          target="_blank">`)
+          
+      reportB.appendChild(_xyz.utils.html.node`<div class="xyz-icon icon-wysiwyg">`)
 
 
       function layerControls(_layer) {
@@ -163,7 +171,7 @@ document.dispatchEvent(new CustomEvent('scenario_comparison', {
 
                 _layer.reload()
 
-                report.href = _xyz.host + '/view/report?' + _xyz.utils.paramString(
+                const href = _xyz.host + '/view/report?' + _xyz.utils.paramString(
                   Object.assign({
                     locale: _xyz.locale.key,
                     layers: _xyz.hooks.current.layers,
@@ -174,6 +182,9 @@ document.dispatchEvent(new CustomEvent('scenario_comparison', {
                     yang: _xyz.layers.list.yang.filter.current.scenario_id.eq
                   })
                 )
+
+                reportA.href = href
+                reportB.href = href
 
                 table.queryparams.ying = _xyz.layers.list.ying.filter.current.scenario_id.eq
                 table.queryparams.yang = _xyz.layers.list.yang.filter.current.scenario_id.eq
@@ -221,7 +232,7 @@ document.dispatchEvent(new CustomEvent('scenario_comparison', {
 
       _xyz.mapview.node.addEventListener('changeEnd', ()=>{
 
-        report.href = _xyz.host + '/view/report?' + _xyz.utils.paramString(
+        const href = _xyz.host + '/view/report?' + _xyz.utils.paramString(
           Object.assign({
             locale: _xyz.locale.key,
             layers: _xyz.hooks.current.layers,
@@ -232,6 +243,9 @@ document.dispatchEvent(new CustomEvent('scenario_comparison', {
             yang: _xyz.layers.list.yang.filter.current.scenario_id.eq
           })
         )
+
+        reportA.href = href
+        reportB.href = href
 
         tableUpdate()
       })
