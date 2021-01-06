@@ -25,16 +25,41 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
       const scenarios = {}
 
       const drawer = layer.view.insertBefore(_xyz.utils.html.node`
-      <div class="drawer panel expandable">
-        <div
-          class="header primary-colour"
+        <div class="drawer panel expandable">
+          <div
+            class="header primary-colour"
+            onclick=${e => {
+              e.stopPropagation()
+              _xyz.utils.toggleExpanderParent(e.target, true)
+            }}>
+            <span>Scenario</span>
+            <button class="btn-header xyz-icon icon-expander primary-colour-filter">`,
+            layer.view.querySelector('.drawer'))
+
+      drawer.appendChild(_xyz.utils.html.node`
+        <button
+          class="btn-wide primary-colour"
           onclick=${e => {
             e.stopPropagation()
-            _xyz.utils.toggleExpanderParent(e.target, true)
+            scenarios.current = {
+              scenario_name: 'New Scenario',
+              status: 'New'
+            }
+            loadScenario()
+          }}>New Scenario`)
+
+      document.getElementById('mapButton').appendChild(_xyz.utils.html.node`
+        <button
+          title="Create New Locale Scenario"
+          onclick=${e => {
+            e.stopPropagation()
+            scenarios.current = {
+              scenario_name: 'New Scenario',
+              status: 'New'
+            }
+            loadScenario()
           }}>
-          <span>Scenario</span>
-          <button class="btn-header xyz-icon icon-expander primary-colour-filter">`,
-          layer.view.querySelector('.drawer'))
+          <div class="xyz-icon icon-add-chart">`)
 
       const selector = layer.view.insertBefore(
         _xyz.utils.html.node`<div style="padding: 5px">`,
@@ -303,18 +328,11 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
           query: 'scenario_list'
         })
   
-        scenarios.list.push({
-          scenario_name: 'New'
-        })
-
-        scenarios.current = scenarios.current || scenarios.list[0]
-
-        layer.filter.current.scenario_id = {
-          eq: scenarios.current.scenario_id
+        scenarios.current = {
+          scenario_id: -1,
+          scenario_name: 'Existing Scenarios'
         }
-  
-        layer.reload()
-
+ 
         selector.innerHTML = ''
 
         selector.appendChild(_xyz.utils.html.node`
@@ -349,14 +367,14 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
         scenarios.grid = scenarios.panel.appendChild(_xyz.utils.html.node`
           <div style="margin-top: 5px; display:grid; grid-gap: 5px; align-items: center;">`)              
 
-        loadScenario()
+        scenarios.current.scenario_id > 0 && loadScenario()
       }
 
       async function loadScenario() {
 
         scenarios.grid.innerHTML = ''
 
-        if (scenarios.current.scenario_id) {
+        if (scenarios.current.scenario_id > 0) {
 
           Object.assign(scenarios.current, await _xyz.query({
             query: 'scenario_details',
@@ -365,12 +383,6 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
             }
           }))
 
-        } else {
-
-          Object.assign(scenarios.current, {
-            scenario_name: 'New Scenario',
-            status: 'New'
-          })
         }
 
         _xyz.layers.list.scenario_region.filter.current.scenario_id.eq = scenarios.current.scenario_id || -1
