@@ -86,8 +86,7 @@ module.exports = async (req, res) => {
         ST_AsMVTGeom(
           ${layer.srid !== '3857' && `ST_Transform(` ||''}
             ${layer.geom},
-          ${layer.srid !== '3857' && `${layer.srid}),` ||''}
-          ${layer.srid !== '3857' && `ST_Transform(` ||''}
+          ${layer.srid !== '3857' && `${layer.srid}), ST_Transform(` ||''}
             ST_MakeEnvelope(
               ${-m + (x * r)},
               ${ m - (y * r) - r},
@@ -98,7 +97,7 @@ module.exports = async (req, res) => {
           ${layer.srid !== '3857' && `${layer.srid}),` ||''}
           4096,
           1024,
-          true
+          false
         ) geom
 
       FROM ${table}
