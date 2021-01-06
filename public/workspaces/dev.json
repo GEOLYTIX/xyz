@@ -95,7 +95,7 @@
       "qID": "id"
     },
     "Agata": {
-      "src": "cloudfront:${CDN}/dev/aga/layer.jsons"
+      "src": "cloudfront:${CDN}/dev/aga/layer.json"
     },
     "Dennis": {
       "src": "file:workspaces/dennis.json"
