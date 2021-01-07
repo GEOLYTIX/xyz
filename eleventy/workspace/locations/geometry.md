@@ -106,7 +106,8 @@ and (TomTom Reachable Range API)[https://developer.tomtom.com/routing-api/routin
 
 For TomTom parameters see API Documentation. Default request parameters used here are: 
 - timeBudgetInSec, defaults to 10\*60 seconds, 
-- routeType, defaults to 'fastest'
+- routeType, defaults to 'fastest',
+- travelMode, defaults to 'car'.
 
 Geometry can also support "query" parameter which is independent from selected location. It is useful for more complex geometries which may only be requested when needed.
 
