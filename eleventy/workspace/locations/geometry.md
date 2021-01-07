@@ -55,7 +55,7 @@ rangetype: 'time', 'distance', defaults to 'time'
 distance: distance in kilometres when "rangetype": "distance"
 
 
-and (© Mapbox)[https://www.mapbox.com/about/maps]
+(© Mapbox)[https://www.mapbox.com/about/maps]
 
 ```json
 {
@@ -83,12 +83,30 @@ Use "meta" property for both providers in order to store details of most recent 
 	"fieldfx": "ST_asGeoJson(isoline_custom1)",
 	"type": "geometry",
     "edit": {
-        "isoline_here": {
-            "meta": "isoline_custom1_meta"
-        }
+    	"meta": "isoline_custom1_meta",
+        "isoline_here": {}
     }
 }
 ```
+
+and (TomTom Reachable Range API)[https://developer.tomtom.com/routing-api/routing-api-documentation-routing/calculate-reachable-range]
+
+```json
+{
+	"name": "TomTom Reachable Range",
+    "type": "geometry",
+    "field": "isoline_tomtom",
+    "fieldfx": "ST_AsGeoJSON(isoline_tomtom)",
+    "edit": {
+        "meta": "isoline_tomtom_meta",
+        "isoline_tomtom": {}
+    }
+}
+```
+
+For TomTom parameters see API Documentation. Default request parameters used here are: 
+- timeBudgetInSec, defaults to 10\*60 seconds, 
+- routeType, defaults to 'fastest'
 
 Geometry can also support "query" parameter which is independent from selected location. It is useful for more complex geometries which may only be requested when needed.
 
