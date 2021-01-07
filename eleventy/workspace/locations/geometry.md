@@ -109,6 +109,9 @@ For TomTom parameters see API Documentation. Default request parameters used her
 - routeType, defaults to 'fastest',
 - travelMode, defaults to 'car'.
 
+Please note that third party API isolines are only available for features with geometry type "Point".
+If defined for non-point features control will be skipped.
+
 Geometry can also support "query" parameter which is independent from selected location. It is useful for more complex geometries which may only be requested when needed.
 
 ```json
