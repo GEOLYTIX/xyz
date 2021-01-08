@@ -207,11 +207,12 @@
           location.remove()
         }}>`)
 
-      location.view = xyz.locations.view.infoj(location);
+      location.view = xyz.locations.view.infoj(location)
 
-      locale.appendChild(location.view);
+      locale.appendChild(location.view)
 
-      xyz.map.updateSize();
+      xyz.map.updateSize()
+      Object.values(xyz.layers.list).forEach(layer => layer.mbMap && layer.mbMap.resize())
 
       location.removeCallback = () => setTimeout(function () {
 
@@ -220,6 +221,7 @@
         locale.innerHTML = ''
         document.body.classList.remove('showLocation')
         xyz.map.updateSize()
+        Object.values(xyz.layers.list).forEach(layer => layer.mbMap && layer.mbMap.resize())
 
       }, 1000)
     }
