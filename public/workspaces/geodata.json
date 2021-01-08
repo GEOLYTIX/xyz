@@ -3,6 +3,9 @@
     "blog": {
       "src": "file://views/blog.html"
     },
+    "contact": {
+      "src": "file://views/contact.html"
+    },
     "embedded": {
       "src": "file://views/embedded.html"
     },
@@ -123,7 +126,38 @@
         },
         "Offices": {
           "display": true,
-          "template": "geolytix_offices"
+          "format": "geojson",
+          "dbs": "WEBSITE",
+          "table": "website.global_glx_open_geolytix_offices",
+          "geom": "geom_p_4326",
+          "srid": "4326",
+          "qID": "id",
+          "style": {
+            "default": {
+              "marker": {
+                "type": "markerColor",
+                "colorMarker": "#003D57",
+                "colorDot": "#F0F0F0",
+                "anchor": [
+                  0.5,
+                  1
+                ],
+                "scale": 3
+              }
+            },
+            "highlight": {
+              "marker": {
+                "type": "markerColor",
+                "colorMarker": "#EC602D",
+                "colorDot": "#F0F0F0",
+                "anchor": [
+                  0.5,
+                  1
+                ],
+                "scale": 1
+              }
+            }
+          }
         },
         "Offices Edit": {
           "template": "geolytix_offices",
@@ -274,6 +308,359 @@
           "group": "Base maps",
           "display": true,
           "template": "Mapbox Label"
+        }
+      }
+    },
+    "Europe": {
+      "bounds": {
+        "north": 72,
+        "east": 43,
+        "south": 32,
+        "west": -16
+      },
+      "minZoom": 3,
+      "maxZoom": 15,
+      "showScaleBar": true,
+      "layers": {
+        "Mapbox Baselayer": {
+          "display": true,
+          "template": "Mapbox Base"
+        },
+        "European Indicators": {
+          "display": true,
+          "format": "mvt",
+          "dbs": "MAPP",
+          "mvt_cache": "mapp.eu_glx_geodata_census_index_nuts3__mvts",
+          "table": "geodata.eu_glx_geodata_census_index_nuts3",
+          "qID": "nuts3",
+          "geom": "geom_3857",
+          "srid": "3857",
+          "infoj": [
+            {
+              "type": "key"
+            },
+            {
+              "field": "nuts3",
+              "title": "Nuts ID",
+              "inline": true
+            },
+            {
+              "field": "pop",
+              "title": "Population",
+              "type": "integer",
+              "inline": true
+            },
+            {
+              "title": "Average Age",
+              "field": "age",
+              "inline": true
+            },
+            {
+              "title": "Disposable Income",
+              "field": "disposable_income_person",
+              "type": "integer",
+              "inline": true
+            },
+            {
+              "title": "Affluence Index",
+              "field": "affluence_idx_eu",
+              "inline": true
+            },
+            {
+              "title": "Lifestage Index",
+              "field": "lifestage_idx_eu",
+              "inline": true
+            }
+          ],
+          "style": {
+            "default": {
+              "strokeWidth": 1,
+              "strokeColor": "#555",
+              "fillColor": "#fff",
+              "fillOpacity": 0
+            },
+            "highlight": {
+              "strokeColor": "#090"
+            },
+            "themes": {
+              "Population": {
+                "type": "graduated",
+                "field": "pop",
+                "cat_arr": [
+                  {
+                    "value": "0",
+                    "label": "up to 50000",
+                    "style": {
+                      "strokeColor": "#00897b",
+                      "fillColor": "#00897b",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "50000",
+                    "label": "50000+",
+                    "style": {
+                      "strokeColor": "#43a047",
+                      "fillColor": "#43a047",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "100000",
+                    "label": "100000+",
+                    "style": {
+                      "strokeColor": "#c0ca33",
+                      "fillColor": "#c0ca33",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "250000",
+                    "label": "250000+",
+                    "style": {
+                      "strokeColor": "#fdd835",
+                      "fillColor": "#fdd835",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "500000",
+                    "label": "500000+",
+                    "style": {
+                      "strokeColor": "#fb8c00",
+                      "fillColor": "#fb8c00",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "1000000",
+                    "label": "1000000+",
+                    "style": {
+                      "strokeColor": "#f4511e",
+                      "fillColor": "#f4511e",
+                      "fillOpacity": 0.5
+                    }
+                  }
+                ]
+              },
+              "Disposable Income": {
+                "type": "graduated",
+                "field": "disposable_income_person",
+                "cat_arr": [
+                  {
+                    "value": "0",
+                    "label": "up to 50000",
+                    "style": {
+                      "strokeColor": "#00897b",
+                      "fillColor": "#00897b",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "10000",
+                    "label": "50000+",
+                    "style": {
+                      "strokeColor": "#43a047",
+                      "fillColor": "#43a047",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "15000",
+                    "label": "100000+",
+                    "style": {
+                      "strokeColor": "#c0ca33",
+                      "fillColor": "#c0ca33",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "17500",
+                    "label": "250000+",
+                    "style": {
+                      "strokeColor": "#fdd835",
+                      "fillColor": "#fdd835",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "20000",
+                    "label": "500000+",
+                    "style": {
+                      "strokeColor": "#fb8c00",
+                      "fillColor": "#fb8c00",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "25000",
+                    "label": "1000000+",
+                    "style": {
+                      "strokeColor": "#f4511e",
+                      "fillColor": "#f4511e",
+                      "fillOpacity": 0.5
+                    }
+                  }
+                ]
+              },
+              "Average Age": {
+                "type": "graduated",
+                "field": "age",
+                "cat_arr": [
+                  {
+                    "value": "0",
+                    "label": "under 35",
+                    "style": {
+                      "strokeColor": "#00897b",
+                      "fillColor": "#00897b",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "35",
+                    "label": "over 35",
+                    "style": {
+                      "strokeColor": "#43a047",
+                      "fillColor": "#43a047",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "37.5",
+                    "label": "over 37.5",
+                    "style": {
+                      "strokeColor": "#c0ca33",
+                      "fillColor": "#c0ca33",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "40",
+                    "label": "over 40",
+                    "style": {
+                      "strokeColor": "#fdd835",
+                      "fillColor": "#fdd835",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "42.5",
+                    "label": "over 42.5",
+                    "style": {
+                      "strokeColor": "#fb8c00",
+                      "fillColor": "#fb8c00",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "45",
+                    "label": "over 45",
+                    "style": {
+                      "strokeColor": "#f4511e",
+                      "fillColor": "#f4511e",
+                      "fillOpacity": 0.5
+                    }
+                  }
+                ]
+              },
+              "Affluence": {
+                "type": "categorized",
+                "field": "affluence_idx_eu",
+                "cat": {
+                  "1":{
+                    "label": "1",
+                    "style": {
+                      "fillColor": "#fff7f3",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  "2":{
+                    "label": "2",
+                    "style": {
+                      "fillColor": "#fde0dd",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  "3":{
+                    "label": "3",
+                    "style": {
+                      "fillColor": "#fcc5c0",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  "4":{
+                    "label": "4",
+                    "style": {
+                      "fillColor": "#fa9fb5",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  "5":{
+                    "label": "5",
+                    "style": {
+                      "fillColor": "#f768a1",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  "6":{
+                    "label": "6",
+                    "style": {
+                      "fillColor": "#dd3497",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  "7":{
+                    "label": "7",
+                    "style": {
+                      "fillColor": "#ae017e",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  "8":{
+                    "label": "8",
+                    "style": {
+                      "fillColor": "#7a0177",
+                      "fillOpacity": 0.5
+                    }
+                  }
+                }
+              },
+              "Life Stage": {
+                "type": "categorized",
+                "field": "lifestage_idx_eu",
+                "cat": {
+                  "C":{
+                    "label": "C",
+                    "style": {
+                      "fillColor": "#f7fcb9",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  "D":{
+                    "label": "D",
+                    "style": {
+                      "fillColor": "#addd8e",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  "E":{
+                    "label": "E",
+                    "style": {
+                      "fillColor": "#41ab5d",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  "F":{
+                    "label": "F",
+                    "style": {
+                      "fillColor": "#005a32",
+                      "fillOpacity": 0.5
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }
