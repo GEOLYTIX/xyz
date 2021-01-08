@@ -409,7 +409,15 @@
 
     <div id="content">
       <h1 id="location-api">Location API <a class="header-anchor" href="#location-api">¶</a></h1>
-<p>A locations' information as defined by the infoj schema can be requested with the Location API from a connected PostGIS data source. The Location API also provides methods delete, update, or create new locations.</p>
+<p>The <a href="https://github.com/GEOLYTIX/xyz/blob/master/mod/location/_location.js">Location API module</a> provides methods to interface with locations.</p>
+<h3 id="%2Fapi%2Flocation%2Fget%3Flocale%3Duk%26layer%3Dscratch%26table%3Ddev.scratch%26id%3D8">/api/location/get?locale=UK&amp;layer=Scratch&amp;table=dev.scratch&amp;id=8 <a class="header-anchor" href="#%2Fapi%2Flocation%2Fget%3Flocale%3Duk%26layer%3Dscratch%26table%3Ddev.scratch%26id%3D8">¶</a></h3>
+<p>Get requests will use a DBS connection as defined by the locale and layer parameter to query a location record from the table. The id field is defined as <code>qID</code> parameter in the layer confirguration. Fields to be returned from a location/get query must be defined in the layer's infoj array.</p>
+<h3 id="%2Fapi%2Flocation%2Fnew%3Flocale%3Duk%26layer%3Dscratch%26table%3Ddev.scratch">/api/location/new?locale=UK&amp;layer=Scratch&amp;table=dev.scratch <a class="header-anchor" href="#%2Fapi%2Flocation%2Fnew%3Flocale%3Duk%26layer%3Dscratch%26table%3Ddev.scratch">¶</a></h3>
+<p>Post requests to the location/new endpoint must contain the geometry for the new location. Request require that the DBS connection has priviliges to insert new records into the database table. The id field must be <code>serial not null</code> and return an id from the post request to the client.</p>
+<h3 id="%2Fapi%2Flocation%2Fupdate%3Flocale%3Duk%26layer%3Dscratch%26table%3Ddev.scratch%26id%3D8">/api/location/update?locale=UK&amp;layer=Scratch&amp;table=dev.scratch&amp;id=8 <a class="header-anchor" href="#%2Fapi%2Flocation%2Fupdate%3Flocale%3Duk%26layer%3Dscratch%26table%3Ddev.scratch%26id%3D8">¶</a></h3>
+<p>Post requests to the location/update endpoint must have a JSON object in the body with the field and their values to be updated in the location record. Update requests require that the DBS connection has priviliges to update existing records in the database table.</p>
+<h3 id="%2Fapi%2Flocation%2Fdelete%3Flocale%3Duk%26layer%3Dscratch%26table%3Ddev.scratch%26id%3D8">/api/location/delete?locale=UK&amp;layer=Scratch&amp;table=dev.scratch&amp;id=8 <a class="header-anchor" href="#%2Fapi%2Flocation%2Fdelete%3Flocale%3Duk%26layer%3Dscratch%26table%3Ddev.scratch%26id%3D8">¶</a></h3>
+<p>Get requests to the location/delete endpoint will remove a location record from the database table which matches the id request parameter. Delete requests require that the DBS connection has priviliges to remove existing records in the database table.</p>
 
     </div>
 

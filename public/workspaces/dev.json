@@ -164,10 +164,76 @@
           },
           "style": {
             "theme": {
-              "type": "dynamic",
+              "type": "bivariate",
+              "dynamic": true,
               "fields": ["pop__01", "pop__11", "gen_female__11", "gen_male__11"],
               "field": "pop__01",
               "geostat": "getClassJenks",
+              "a": [
+                {
+                  "style": {
+                    "marker": {
+                      "type": "dot",
+                      "fillColor": "#15773f",
+                      "scale": 0.8
+                    }
+                  }
+                },
+                {
+                  "style": {
+                    "marker": {
+                      "type": "dot",
+                      "fillColor": "#66bd63",
+                      "scale": 0.8
+                    }                    
+                  }
+                },
+                {
+                  "style": {
+                    "marker": {
+                      "type": "dot",
+                      "fillColor": "#a6d96a",
+                      "scale": 0.8
+                    }                    
+                  }
+                },
+                {
+                  "style": {
+                    "marker": {
+                      "type": "dot",
+                      "fillColor": "#d9ef8b",
+                      "scale": 0.8
+                    }                    
+                  }
+                },
+                {
+                  "style": {
+                    "marker": {
+                      "type": "dot",
+                      "fillColor": "#fdae61",
+                      "scale": 0.8
+                    }                    
+                  }
+                },
+                {
+                  "style": {
+                    "marker": {
+                      "type": "dot",
+                      "fillColor": "#f46d43",
+                      "scale": 0.8
+                    }                    
+                  }
+                },
+                {
+                  "style": {
+                    "marker": {
+                      "type": "dot",
+                      "fillColor": "#d73027",
+                      "scale": 0.8
+                    }                    
+                  }
+                }
+              ],
               "cat_arr": [
                 {
                   "style": {
@@ -234,12 +300,6 @@
                 }
               ]
             }
-          },
-          "grid_fields": {
-            "Population 2001": "pop__01",
-            "Population 2011": "pop__11",
-            "Female population": "gen_female__11",
-            "Male population": "gen_male__11"
           }
         },
         "Retail Places": {

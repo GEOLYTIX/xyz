@@ -4,25 +4,28 @@ document.dispatchEvent(new CustomEvent('scenario_comparison', {
     _xyz.layers.plugins.scenario_comparison = async layer => {
 
       // Make the layer view panel expandable if it contains children.
-      layer.view.classList.add('expandable')
+      if (!layer.view.classList.contains('expandable')) {
 
-      const header = layer.view.querySelector('.header')
+        layer.view.classList.add('expandable')
 
-      // Expander control for layer drawer.
-      header.onclick = e => {
-        e.stopPropagation()
-        _xyz.utils.toggleExpanderParent(e.target, true)
-      }
-
-      // Add the expander toggle to the layer view header.
-      header.appendChild(_xyz.utils.html.node`
-      <button
-        title=${_xyz.language.layer_toggle_dashboard}
-        class="btn-header xyz-icon icon-expander"
-        onclick=${e=>{
+        const header = layer.view.querySelector('.header')
+  
+        // Expander control for layer drawer.
+        header.onclick = e => {
           e.stopPropagation()
-          _xyz.utils.toggleExpanderParent(e.target)
-        }}>`)
+          _xyz.utils.toggleExpanderParent(e.target, true)
+        }
+  
+        // Add the expander toggle to the layer view header.
+        header.appendChild(_xyz.utils.html.node`
+        <button
+          title=${_xyz.language.layer_toggle_dashboard}
+          class="btn-header xyz-icon icon-expander"
+          onclick=${e=>{
+            e.stopPropagation()
+            _xyz.utils.toggleExpanderParent(e.target)
+          }}>`)
+      }
 
       const bounds = _xyz.map && _xyz.mapview.getBounds(4326)
 
@@ -104,12 +107,36 @@ document.dispatchEvent(new CustomEvent('scenario_comparison', {
       const panel = expander.appendChild(_xyz.utils.html.node`
       <div style="padding-right: 5px; grid-gap: 5px; display: grid;">`)
 
-      layerControls(_xyz.layers.list.ying)
+      panel.appendChild(_xyz.utils.html.node`<div>Scenario`)
+
+      _xyz.layers.list.ying.scenariopanel = panel.appendChild(_xyz.utils.html.node`<div>`)
+
+      layerControls(_xyz.layers.list.ying, scenarios)
 
       panel.appendChild(_xyz.utils.html.node`
       <div style="width: 100%; margin: 5px 0; border-bottom: 1px solid #999;">`)
 
-      layerControls(_xyz.layers.list.yang)
+      panel.appendChild(_xyz.utils.html.node`<div>Baseline`)
+
+      _xyz.layers.list.yang.scenariopanel = panel.appendChild(_xyz.utils.html.node`<div>`)
+
+      layerControls(_xyz.layers.list.yang, [{
+          "scenario_id": 1,
+          "scenario_name": "National v25"
+        },
+        {
+          "scenario_id": 2,
+          "scenario_name": "v25 Dense"
+        },
+        {
+          "scenario_id": 4,
+          "scenario_name": "V25 Covid"
+        },
+        {
+          "scenario_id": 5,
+          "scenario_name": "V25 Covid Dense"
+        }
+      ])
 
       panel.appendChild(_xyz.utils.html.node`
       <div style="width: 100%; margin: 5px 0; border-bottom: 1px solid #999;">`)
@@ -127,28 +154,15 @@ document.dispatchEvent(new CustomEvent('scenario_comparison', {
           
       reportB.appendChild(_xyz.utils.html.node`<div class="xyz-icon icon-wysiwyg">`)
 
+      _xyz.layers.plugins.scenario_comparison_layerControls = layerControls
 
-      function layerControls(_layer) {
+      function layerControls(_layer, scenarios) {
 
-        const _scenarios = _layer.key === 'ying' && scenarios || [{
-            "scenario_id": 1,
-            "scenario_name": "National v25"
-          },
-          {
-            "scenario_id": 2,
-            "scenario_name": "v25 Dense"
-          },
-          {
-            "scenario_id": 4,
-            "scenario_name": "V25 Covid"
-          },
-          {
-            "scenario_id": 5,
-            "scenario_name": "V25 Covid Dense"
-          }
-        ]
+        _layer.reload()
 
-        panel.appendChild(_xyz.utils.html.node`
+        _layer.scenariopanel.innerHTML = ''
+
+        _layer.scenariopanel.appendChild(_xyz.utils.html.node`
           <button class="btn-drop">
             <div
               class="head"
@@ -156,10 +170,10 @@ document.dispatchEvent(new CustomEvent('scenario_comparison', {
                 e.preventDefault();
                 e.target.parentElement.classList.toggle('active');
               }}>
-              <span>${_scenarios[0].scenario_name}</span>
+              <span>${scenarios[0].scenario_name}</span>
               <div class="icon"></div>
             </div>
-            <ul>${_scenarios.map(scenario => _xyz.utils.html.node`
+            <ul>${scenarios.map(scenario => _xyz.utils.html.node`
               <li onclick=${e => {
 
                 const drop = e.target.closest('.btn-drop')
@@ -194,14 +208,12 @@ document.dispatchEvent(new CustomEvent('scenario_comparison', {
                   return;
                 }
                 table.show()
-
-                //tableUpdate()
               
               }}>${scenario.scenario_name}`)}`)
 
-     
-        panel.appendChild(_xyz.utils.html.node`
-          <button class="btn-drop">
+
+        _layer.scenariopanel.appendChild(_xyz.utils.html.node`
+          <button class="btn-drop" style="margin-top: 5px;">
             <div
               class="head"
               onclick=${e => {
@@ -222,6 +234,7 @@ document.dispatchEvent(new CustomEvent('scenario_comparison', {
                 _xyz.utils.render(_layer.style._legend, _xyz.layers.view.style.legend(_layer))
 
                 }}>${theme[0]}`)}`)
+
 
         _layer.style._legend = panel.appendChild(_xyz.utils.html.node`<div>`)
 

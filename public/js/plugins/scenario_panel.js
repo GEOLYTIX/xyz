@@ -318,6 +318,11 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
                 }}>${d.name}`)}`),
       }
 
+      scenarios.current = {
+        scenario_id: -1,
+        scenario_name: 'Existing Scenarios'
+      }
+
       loadPanel()
 
       async function loadPanel() {
@@ -327,11 +332,6 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
         scenarios.list = await _xyz.query({
           query: 'scenario_list'
         })
-  
-        scenarios.current = {
-          scenario_id: -1,
-          scenario_name: 'Existing Scenarios'
-        }
  
         selector.innerHTML = ''
 
@@ -439,6 +439,12 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
         scenarios.current.scenario_name = scenarios.update.scenario_name
 
         loadPanel()
+
+        const _scenarios = await _xyz.query({
+          query: 'scenario_list'
+        })
+
+        _xyz.layers.plugins.scenario_comparison_layerControls(_xyz.layers.list.ying, _scenarios)
       }
 
       function onInput(e, param) {
@@ -570,7 +576,18 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
 
           delete scenarios.current
 
+          scenarios.current = {
+            scenario_id: -1,
+            scenario_name: 'Existing Scenarios'
+          }
+
           loadPanel()
+
+          const _scenarios = await _xyz.query({
+            query: 'scenario_list'
+          })
+  
+          _xyz.layers.plugins.scenario_comparison_layerControls(_xyz.layers.list.ying, _scenarios)
 
         }
 
