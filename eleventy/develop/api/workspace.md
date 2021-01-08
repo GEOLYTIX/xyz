@@ -6,7 +6,7 @@ layout: root.html
 
 # Workspace API
 
-The [Workspace API module](https://github.com/GEOLYTIX/xyz/blob/master/mod/workspace/_workspace.js) provides methods to retrieve the cached workspace from the XYZ Host.
+The [Workspace API module](https://github.com/GEOLYTIX/xyz/blob/master/mod/workspace/_workspace.js) provides methods to retrieve the cached workspace or components of it from the XYZ Host.
 
 ### /api/workspace/get
 

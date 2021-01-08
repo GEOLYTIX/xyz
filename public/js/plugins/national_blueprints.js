@@ -21,6 +21,10 @@ document.dispatchEvent(new CustomEvent('national_blueprints', {
         }
       ]
 
+      layer.filter.current.scenario_id.eq = scenarios[0].scenario_id
+
+      layer.reload()
+
       layer.view.insertBefore(
         _xyz.utils.html.node`
           <div style="padding: 5px">
