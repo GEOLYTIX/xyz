@@ -319,13 +319,99 @@
           "display": true,
           "template": "Mapbox Base"
         },
-        "Rio Retail": {
+        "Demography Grid": {
           "format": "mvt",
           "dbs": "WEBSITE",
-          "table": "website.vw_rio_glx_geodata_retail_place",
+          "geom": "geom_3857",
+          "srid": "3857",
+          "tables": {
+            "9": null,
+            "10": "website.rio_glx_geodata_demog_hex_500"
+          },
+          "style": {
+            "default": {
+              "strokeWidth": 1,
+              "strokeColor": "#555",
+              "fillColor": "#fff",
+              "fillOpacity": 0
+            },
+            "highlight": {
+              "strokeColor": "#090"
+            },
+            "themes": {
+              "Population": {
+                "type": "graduated",
+                "field": "pop_2020",
+                "cat_arr": [
+                  {
+                    "value": "0",
+                    "label": "up to 50000",
+                    "style": {
+                      "strokeColor": "#00897b",
+                      "fillColor": "#00897b",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "250",
+                    "label": "50000+",
+                    "style": {
+                      "strokeColor": "#43a047",
+                      "fillColor": "#43a047",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "500",
+                    "label": "100000+",
+                    "style": {
+                      "strokeColor": "#c0ca33",
+                      "fillColor": "#c0ca33",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "1000",
+                    "label": "250000+",
+                    "style": {
+                      "strokeColor": "#fdd835",
+                      "fillColor": "#fdd835",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "2500",
+                    "label": "500000+",
+                    "style": {
+                      "strokeColor": "#fb8c00",
+                      "fillColor": "#fb8c00",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "5000",
+                    "label": "1000000+",
+                    "style": {
+                      "strokeColor": "#f4511e",
+                      "fillColor": "#f4511e",
+                      "fillOpacity": 0.5
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "Retail Places": {
+          "format": "mvt",
+          "dbs": "WEBSITE",
           "qID": "id",
           "geom": "geom_3857",
           "srid": "3857",
+          "tables": {
+            "7": null,
+            "8": "website.vw_rio_glx_geodata_retail_place"
+          },
           "infoj": [
             {
               "field": "rp_name",
@@ -335,7 +421,495 @@
               "field": "rp_type",
               "title": "Type"
             }
+          ],
+          "style": {
+            "label": {
+              "field": "rp_name",
+              "declutter": true,
+              "strokeColor": "#fff",
+              "strokeWidth": 3
+            },
+            "highlight": {
+              "strokeColor": "#e91e63",
+              "fillOpacity": 0.3,
+              "strokeWidth": 2
+            },
+            "themes": {
+              "Retail Place Type": {
+                "type": "categorized",
+                "field": "rp_type",
+                "other": true,
+                "cat": {
+                  "City Centre": {
+                    "style": {
+                      "strokeColor": "#6e016b",
+                      "fillColor": "#6e016b"
+                    }
+                  },
+                  "Urban Centre": {
+                    "style": {
+                      "strokeColor": "#8c6bb1",
+                      "fillColor": "#8c6bb1"
+                    }
+                  },
+                  "Shopping Centre": {
+                    "style": {
+                      "strokeColor": "#016450",
+                      "fillColor": "#016450"
+                    }
+                  },
+                  "Outlet Centre": {
+                    "style": {
+                      "strokeColor": "#3690c0",
+                      "fillColor": "#3690c0"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "Retail Venues": {
+          "format": "mvt",
+          "dbs": "WEBSITE",
+          "geom": "geom_3857",
+          "srid": "3857",
+          "tables": {
+            "7": null,
+            "8": "website.vw_rio_glx_geodata_retail_venue"
+          },
+          "qID": "id",
+          "infoj": [
+            {
+              "field": "venue_name",
+              "title": "Name"
+            },
+            {
+              "field": "venue_type",
+              "title": "Type"
+            }
           ]
+        }
+      }
+    },
+    "APAC": {
+      "minZoom": 3,
+      "maxZoom": 15,
+      "view": {
+        "lat": 58.8137,
+        "lng": 88.5937
+      },
+      "layers": {
+        "Mapbox Baselayer": {
+          "display": true,
+          "template": "Mapbox Base"
+        },
+        "Chomoku": {
+          "format": "mvt",
+          "dbs": "WEBSITE",
+          "qID": "chomoku_cd",
+          "geom": "geom_3857",
+          "srid": "3857",
+          "tables": {
+            "10": null,
+            "11": "geodata.jpn_glx_geodata_census_chomoku_metrics"
+          },
+          "style": {
+            "default": {
+              "fillColor": "#d9d9d9",
+              "fillOpacity": 0.5
+            },
+            "highlight": {
+              "fillColor": "#DBD56E",
+              "fillOpacity": 0.7
+            },
+            "themes": {
+              "Population": {
+                "type": "graduated",
+                "field": "totalpop",
+                "cat_arr": [
+                  {
+                    "value": 0,
+                    "label": "0 to 500",
+                    "style": {
+                      "fillColor": "#f1eef6"
+                    }
+                  },
+                  {
+                    "value": 500,
+                    "label": "500 to 1,500",
+                    "style": {
+                      "fillColor": "#bdc9e1"
+                    }
+                  },
+                  {
+                    "value": 1500,
+                    "label": "1,500 to 3,000",
+                    "style": {
+                      "fillColor": "#74a9cf"
+                    }
+                  },
+                  {
+                    "value": 3000,
+                    "label": "3,000 to 6,000",
+                    "style": {
+                      "fillColor": "#2b8cbe"
+                    }
+                  },
+                  {
+                    "value": 6000,
+                    "label": "6,000 and over",
+                    "style": {
+                      "fillColor": "#045a8d"
+                    }
+                  }
+                ]
+              },
+              "Urbanity": {
+                "type": "categorized",
+                "field": "urbanity",
+                "cat": {
+                  "Major Urban": {
+                    "label": "Major Urban",
+                    "style": {
+                      "strokeColor": "#8c2d04",
+                      "fillColor": "#8c2d04"
+                    }
+                  },
+                  "Urban": {
+                    "label": "Urban",
+                    "style": {
+                      "strokeColor": "#cc4c02",
+                      "fillColor": "#cc4c02"
+                    }
+                  },
+                  "Minor Urban": {
+                    "label": "Minor Urban",
+                    "style": {
+                      "strokeColor": "#ec7014",
+                      "fillColor": "#ec7014"
+                    }
+                  },
+                  "Major Suburban": {
+                    "label": "Major Suburban",
+                    "style": {
+                      "strokeColor": "#fe9929",
+                      "fillColor": "#fe9929"
+                    }
+                  },
+                  "Suburban": {
+                    "label": "Suburban",
+                    "style": {
+                      "strokeColor": "#fec44f",
+                      "fillColor": "#fec44f"
+                    }
+                  },
+                  "Minor Suburban": {
+                    "label": "Minor Suburban",
+                    "style": {
+                      "strokeColor": "#fee391",
+                      "fillColor": "#fee391"
+                    }
+                  },
+                  "Rural": {
+                    "label": "Rural",
+                    "style": {
+                      "strokeColor": "#ffffd4",
+                      "fillColor": "#ffffd4"
+                    }
+                  }
+                }
+              },
+              "Affluence": {
+                "type": "graduated",
+                "field": "affluence",
+                "cat_arr": [
+                  {
+                    "value": "0",
+                    "label": "0 to 0.7",
+                    "style": {
+                      "fillColor": "#fcfbfd"
+                    }
+                  },
+                  {
+                    "value": "0.7",
+                    "label": "0.7 to 0.85",
+                    "style": {
+                      "fillColor": "#efedf5"
+                    }
+                  },
+                  {
+                    "value": "0.85",
+                    "label": "0.85 to 0.9",
+                    "style": {
+                      "fillColor": "#dadaeb"
+                    }
+                  },
+                  {
+                    "value": 0.9,
+                    "label": "0.9 to 0.92",
+                    "style": {
+                      "fillColor": "#bcbddc"
+                    }
+                  },
+                  {
+                    "value": 0.92,
+                    "label": "0.92 to 0.94",
+                    "style": {
+                      "fillColor": "#9e9ac8"
+                    }
+                  },
+                  {
+                    "value": 0.94,
+                    "label": "0.94 to 0.96",
+                    "style": {
+                      "fillColor": "#807dba"
+                    }
+                  },
+                  {
+                    "value": 0.96,
+                    "label": "0.96 to 0.98",
+                    "style": {
+                      "fillColor": "#6a51a3"
+                    }
+                  },
+                  {
+                    "value": 0.98,
+                    "label": "0.98 and above",
+                    "style": {
+                      "fillColor": "#4a1486"
+                    }
+                  }
+                ]
+              },
+              "Geodemo": {
+                "type": "categorized",
+                "field": "geodemo10",
+                "cat": {
+                  "1": {
+                    "label": "Urban center wealthy",
+                    "style": {
+                      "fillColor": "#ffffff"
+                    }
+                  },
+                  "2": {
+                    "label": "High net worth family",
+                    "style": {
+                      "fillColor": "#f7f4f9"
+                    }
+                  },
+                  "3": {
+                    "label": "Urban singles",
+                    "style": {
+                      "fillColor": "#e7e1ef"
+                    }
+                  },
+                  "4": {
+                    "label": "Salaryman family",
+                    "style": {
+                      "fillColor": "#d4b9da"
+                    }
+                  },
+                  "5": {
+                    "label": "Manufacturing worker family",
+                    "style": {
+                      "fillColor": "#c994c7"
+                    }
+                  },
+                  "6": {
+                    "label": "Small and medium enterprise worker family",
+                    "style": {
+                      "fillColor": "#df65b0"
+                    }
+                  },
+                  "7": {
+                    "label": "Three generations co-habiting",
+                    "style": {
+                      "fillColor": "#e7298a"
+                    }
+                  },
+                  "8": {
+                    "label": "Rich elderly",
+                    "style": {
+                      "fillColor": "#ce1256"
+                    }
+                  },
+                  "9": {
+                    "label": "Ageing",
+                    "style": {
+                      "fillColor": "#980043"
+                    }
+                  },
+                  "10": {
+                    "label": "Rural",
+                    "style": {
+                      "fillColor": "#67001f"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "infoj": [
+            {
+              "type": "key"
+            },
+            {
+              "field": "chomoku_nm",
+              "title": "Chomoku",
+              "inline": true
+            },
+            {
+              "field": "city_nm",
+              "title": "City",
+              "inline": true
+            },
+            {
+              "field": "prefect_nm",
+              "title": "Prefecture",
+              "inline": true
+            },
+            {
+              "field": "region",
+              "title": "Region",
+              "inline": true
+            },
+            {
+              "field": "urbanity",
+              "title": "Urbanity",
+              "inline": true
+            },
+            {
+              "field": "totalpop",
+              "title": "Total population",
+              "type": "integer",
+              "inline": true
+            },
+            {
+              "field": "malepop",
+              "title": "Male",
+              "type": "integer",
+              "level": 2,
+              "inline": true
+            },
+            {
+              "field": "femalepop",
+              "title": "Female",
+              "type": "integer",
+              "level": 2,
+              "inline": true
+            },
+            {
+              "field": "average_age",
+              "title": "Average age",
+              "type": "integer",
+              "inline": true
+            }
+          ]
+        },
+        "Retail Places": {
+          "format": "mvt",
+          "dbs": "WEBSITE",
+          "qID": "id",
+          "geom": "geom_3857",
+          "srid": "3857",
+          "tables": {
+            "7": null,
+            "8": "website.vw_tokyo_glx_geodata_retail_place"
+          },
+          "infoj": [
+            {
+              "field": "rp_name",
+              "title": "Name"
+            }
+          ]
+        },
+        "Retail Venues": {
+          "format": "mvt",
+          "dbs": "WEBSITE",
+          "geom": "geom_3857",
+          "srid": "3857",
+          "tables": {
+            "7": null,
+            "8": "website.vw_tokyo_glx_geodata_retail_venue"
+          },
+          "qID": "id",
+          "infoj": [
+            {
+              "field": "venue_name",
+              "title": "Name"
+            },
+            {
+              "field": "venue_type",
+              "title": "Type"
+            }
+          ],
+          "style": {
+            "default": {
+              "fillColor": "#d9d9d9",
+              "fillOpacity": 0.5
+            },
+            "highlight": {
+              "fillColor": "#DBD56E",
+              "fillOpacity": 0.7
+            },
+            "themes": {
+              "Venue Type": {
+                "type": "categorized",
+                "field": "venue_type",
+                "cat": {
+                  "Airport": {
+                    "label": "Airport",
+                    "style": {
+                      "fillColor": "#f44336"
+                    }
+                  },
+                  "Department Store": {
+                    "label": "Department Store",
+                    "style": {
+                      "fillColor": "#9c27b0"
+                    }
+                  },
+                  "Other": {
+                    "label": "Other",
+                    "style": {
+                      "fillColor": "#3f51b5"
+                    }
+                  },
+                  "Outlet Centre": {
+                    "label": "Outlet Centre",
+                    "style": {
+                      "fillColor": "#03a9f4"
+                    }
+                  },
+                  "Retail Street": {
+                    "label": "Retail Street",
+                    "style": {
+                      "fillColor": "#009688"
+                    }
+                  },
+                  "Shopping Centre": {
+                    "label": "Shopping Centre",
+                    "style": {
+                      "fillColor": "#8bc34a"
+                    }
+                  },
+                  "Supermarket": {
+                    "label": "Supermarket",
+                    "style": {
+                      "fillColor": "#ffeb3b"
+                    }
+                  },
+                  "Train Station": {
+                    "label": "Train Station",
+                    "style": {
+                      "fillColor": "#ff9800"
+                    }
+                  }
+                }
+              }
+            }
+          }
         }
       }
     },
