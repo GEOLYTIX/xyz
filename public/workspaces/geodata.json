@@ -311,6 +311,34 @@
         }
       }
     },
+    "Americas": {
+      "minZoom": 3,
+      "maxZoom": 15,
+      "layers": {
+        "Mapbox Baselayer": {
+          "display": true,
+          "template": "Mapbox Base"
+        },
+        "Rio Retail": {
+          "format": "mvt",
+          "dbs": "WEBSITE",
+          "table": "website.vw_rio_glx_geodata_retail_place",
+          "qID": "id",
+          "geom": "geom_3857",
+          "srid": "3857",
+          "infoj": [
+            {
+              "field": "rp_name",
+              "title": "Name"
+            },
+            {
+              "field": "rp_type",
+              "title": "Type"
+            }
+          ]
+        }
+      }
+    },
     "Europe": {
       "bounds": {
         "north": 72,
@@ -320,7 +348,6 @@
       },
       "minZoom": 3,
       "maxZoom": 15,
-      "showScaleBar": true,
       "layers": {
         "Mapbox Baselayer": {
           "display": true,

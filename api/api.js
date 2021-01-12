@@ -14,7 +14,7 @@ const provider = require('../mod/provider/_provider')
 
 const { readFileSync } = require('fs')
 
-const { join } = require('path');
+const { join } = require('path')
 
 const routes = {
   layer: require('../mod/layer/_layer'),
