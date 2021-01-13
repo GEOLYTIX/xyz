@@ -852,7 +852,7 @@
         	type="range"
             min=5
             value=10
-            max=60
+            max=${t.edit.isoline_tomtom.maxMinutes||30}
             step=1
             oninput=${e=>{t.edit.isoline_tomtom.timeBudgetInSec=60*parseInt(e.target.value),e.target.parentNode.previousElementSibling.textContent=e.target.value}}>`),void 0===t.edit.defaults.traffic&&t.edit.panel.appendChild(e.utils.html.node`
         <div style="padding-top: 5px; grid-column: 1 / 3">
