@@ -42,6 +42,28 @@ plugins: {
 
 It is possible to assign a named plugin method to the tabview, dataviews, locations, or layer `.plugins` object. The plugin will then be executed by passing either the tab, dataview, layer, or location object to the plugin method if the plugin is configured for the relevant object in the workspace configuration.
 
+If assigned to the layers plugins the CustomStyle method would be called if the plugin is assigned in the layer configuration.
+
+Layer plugins are called from the layer view method.
+
+```js
+// In layer configuration
+"plugins": [
+  "CustomStyle"
+]
+
+// In plugin script
+document.dispatchEvent(new CustomEvent('MyPlugin', {
+  detail: _xyz => {
+
+    _xyz.layers.plugins.CustomStyle = async layer => {
+
+    // My layer plugin code
+    }
+  }
+})
+```
+
 It is also possible to modify existing library methods. The example below re-assigns the `.layers.view.create()` method. The original method will be called first within the new method. The function will short circuit if a custom property flag `clusterPanel` is not assigned to the layers object. Otherwise the code after the short circuit will execute.
 
 ``` js
