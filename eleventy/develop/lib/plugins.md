@@ -58,7 +58,7 @@ document.dispatchEvent(new CustomEvent('MyPlugin', {
 
     _xyz.layers.plugins.CustomStyle = async layer => {
 
-    // My layer plugin code
+      // My layer plugin code
     }
   }
 })

@@ -419,7 +419,7 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
             .disabled=${scenarios.current.locked == 1 || scenarios.current.status === 'running'}
             class="btn-wide primary-colour"
             style="grid-column: 1/3"
-            onclick=${runScenario}>${scenarios.current.scenario_id && 'Make it so' || 'Create'}`)
+            onclick=${runScenario}>${scenarios.current.scenario_id && 'Run scenario' || 'Create'}`)
 
       }
 
