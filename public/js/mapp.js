@@ -430,7 +430,7 @@
       <div class="input-range">
         <input
           class="secondary-colour-bg"
-          type="range" min=5 max=60 step=1
+          type="range" min=5 max=${t.edit.isoline_mapbox.maxMinutes||30} step=1
           value=${t.edit.isoline_mapbox.minutes}
           oninput=${e=>{t.edit.isoline_mapbox.minutes=parseInt(e.target.value),e.target.parentNode.previousElementSibling.textContent=t.edit.isoline_mapbox.minutes}}>`),n.appendChild(a),n.appendChild(e.utils.html.node`
     <button
@@ -799,7 +799,7 @@
         type="range"
         min=5
         value=${n.edit.isoline_mapbox._minutes}
-        max=60
+        max=${n.edit.isoline_mapbox.maxMinutes||30}
         step=1
         oninput=${e=>{n.edit.isoline_mapbox._minutes=parseInt(e.target.value),e.target.parentNode.previousElementSibling.textContent=n.edit.isoline_mapbox._minutes}}>`),n.container&&n.container.parentNode.insertBefore(n.edit.panel,n.container.nextSibling)}};function t(t){t.edit.panel||(t.edit.panel=e.utils.html.node`
     <div
