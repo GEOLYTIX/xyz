@@ -50,8 +50,12 @@ function create(_xyz) {
                 max: 1,
                 step: 0.1
             }))
+
+        let div = _xyz.utils.html.node`<div>`
+
+        div.appendChild(grid)
         
-        panel.appendChild(grid)
+        panel.appendChild(div)
 
         return layer.view.appendChild(panel)
 
