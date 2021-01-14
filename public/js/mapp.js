@@ -430,7 +430,7 @@
       <div class="input-range">
         <input
           class="secondary-colour-bg"
-          type="range" min=5 max=60 step=1
+          type="range" min=5 max=${t.edit.isoline_mapbox.maxMinutes||30} step=1
           value=${t.edit.isoline_mapbox.minutes}
           oninput=${e=>{t.edit.isoline_mapbox.minutes=parseInt(e.target.value),e.target.parentNode.previousElementSibling.textContent=t.edit.isoline_mapbox.minutes}}>`),n.appendChild(r),n.appendChild(e.utils.html.node`
     <button
@@ -451,7 +451,7 @@
                 <div style="margin-top: 12px; grid-column: 1 / 3; margin-bottom: 8px;">
                 <div style="display: grid; grid-template-columns: 100px 1fr; align-items: center;">
                 <div style="grid-column: 1;">${r}</div>
-                <div style="grid-column: 2;">${s}</div>`),e.utils.flatpickr({locale:e.hooks.current.language||null,element:s,enableTime:!0,callback:e=>{s.value=e,t.edit.isoline_here.dateISO=new Date(e).toISOString()}}),n.appendChild((c={title:e.language.here_travel_time,range:10,callback:e=>{t.edit.isoline_here.range=parseInt(e.target.value)}},e.utils.html.node`
+                <div style="grid-column: 2;">${s}</div>`),e.utils.flatpickr({locale:e.hooks.current.language||null,element:s,enableTime:!0,callback:e=>{s.value=e,t.edit.isoline_here.dateISO=new Date(e).toISOString()}}),n.appendChild((c={title:e.language.here_travel_time,max:t.edit.isoline_here.maxMinutes,range:10,callback:e=>{t.edit.isoline_here.range=parseInt(e.target.value)}},e.utils.html.node`
         <div style="margin-top: 12px; grid-column: 1 / 3;">
         <span>${c.title}</span>
         <span class="bold">${c.range}</span>
@@ -461,7 +461,7 @@
           type="range"
           min=5
           value=${c.range}
-          max=60
+          max=${c.max||30}
           step=1
           oninput=${e=>{e.target.parentNode.previousElementSibling.textContent=parseInt(e.target.value),c.callback&&c.callback(e)}}>`))}(r),n.appendChild(r),n.appendChild(e.utils.html.node`
     <button
@@ -723,7 +723,7 @@
     	    ">
     	    <div style="grid-column: 1 / span 3;">
     	    <button class="btn-wide primary-colour" style="font-size: x-small;"
-    	    onclick=${t=>{t.stopPropagation();const r=t.target;if(r.classList.contains("active"))return r.classList.remove("active"),e.mapview.interaction.edit.finish(),e.map.removeLayer(n.edit.feature);r.classList.add("active"),n.edit.feature=e.mapview.geoJSON({geometry:"object"==typeof n.value?n.value:JSON.parse(n.value),dataProjection:"4326"}),e.mapview.interaction.edit.begin({location:n.location,type:"object"==typeof n.value?n.value.type:JSON.parse(n.value).type,source:new ol.source.Vector({features:[n.edit.feature.getSource().getFeatures()[0].clone()]}),callback:()=>{r.classList.remove("active"),e.map.removeLayer(n.edit.feature)},update:()=>function(t){const n=e.mapview.interaction.edit.Source.getFeatures(),r=new ol.format.GeoJSON;t.newValue=JSON.parse(r.writeFeature(n[0],{dataProjection:"EPSG:"+t.location.layer.srid,featureProjection:"EPSG:"+e.mapview.srid})).geometry,t.location.update(),e.map.removeLayer(t.edit.feature),e.mapview.interaction.edit.finish()}(n)})}}>${e.language.layer_draw_edit}`,n.edit.panel.appendChild(n.edit.group.edit)),n.edit.panel}function r(t){const n=e.mapview.interaction.draw.Layer.getSource().getFeatures();t.newValue=JSON.parse(e.mapview.interaction.draw.format.writeFeature(n[0],{dataProjection:"EPSG:"+e.mapview.interaction.draw.layer.srid,featureProjection:"EPSG:"+e.mapview.srid})).geometry,t.location.update(),e.mapview.interaction.draw.finish()}})(e),n=(e=>{return{create:function(n){void 0===n.edit.defaults&&(n.edit.defaults=Object.assign({},n.edit.isoline_here));const r=60*(n.edit.isoline_here.minutes||n.edit.isoline_here.range),a=ol.proj.toLonLat(n.location.geometry.coordinates,`EPSG:${n.location.layer.srid}`),i=n.edit.isoline_here.destination||n.edit.defaults.destination,o=n.edit.isoline_here.dateISO?new Date(n.edit.isoline_here.dateISO).toISOString():n.edit.defaults.dateISO?new Date(n.edit.defaults.dateISO).toISOString():null,l={transportMode:n.edit.isoline_here.transportMode||"car",[i?"destination":"origin"]:`${a[1]},${a[0]}`,"range[values]":r||600,"range[type]":n.edit.isoline_here.rangetype||"time",optimizeFor:n.edit.isoline_here.optimizeFor||"balanced"};o&&Object.assign(l,{[i?"arrivalTime":"departureTime"]:o}),e.proxy(`https://isoline.router.hereapi.com/v8/isolines?${e.utils.paramString(l)}&{HERE}`).then((r=>{if(!r.isolines)return console.log(r),alert(e.language.here_error);if(!r.isolines[0].polygons.length)return void(n.location.view&&n.location.view.classList.remove("disabled"));const a=e.utils.isoline_here_decode(r.isolines[0].polygons[0].outer);a.polyline.map((e=>e.reverse())),n.newValue={type:"Polygon",coordinates:[a.polyline]},n.edit.meta&&(new Date,n.location.infoj.filter((e=>"json"===e.type&&e.field===n.edit.meta)).forEach((e=>e.newValue=Object.assign({provider:"Here"},l)))),n.edit.panel&&(n.edit.panel.remove(),n.edit.panel=null,t(n)),n.location.update(),n.edit.defaults.dateISO||(n.edit.isoline_here.dateISO=null),n.edit.defaults.destination||(n.edit.isoline_here.destination=null)})),n.location.view&&n.location.view.classList.add("disabled")},settings:function(e){if(void 0===e.edit.defaults&&(e.edit.defaults=Object.assign({},e.edit.isoline_here)),(!e.edit.isoline_here||e.edit.isoline_here.geometry||!e.edit.isoline_here.minutes&&!e.value)&&(!(e.edit.isoline_here&&e.edit.isoline_here.geometry&&e.edit.isoline_here.minutes)||e.value))return t(e),void(e.container&&e.container.parentNode.insertBefore(e.edit.panel,e.container.nextSibling))}};function t(t){t.edit.panel||t.edit.isoline_here.minutes||(t.edit.panel=e.utils.html.node`
+    	    onclick=${t=>{t.stopPropagation();const r=t.target;if(r.classList.contains("active"))return r.classList.remove("active"),e.mapview.interaction.edit.finish(),e.map.removeLayer(n.edit.feature);r.classList.add("active"),n.edit.feature=e.mapview.geoJSON({geometry:"object"==typeof n.value?n.value:JSON.parse(n.value),dataProjection:"4326"}),e.mapview.interaction.edit.begin({location:n.location,type:"object"==typeof n.value?n.value.type:JSON.parse(n.value).type,source:new ol.source.Vector({features:[n.edit.feature.getSource().getFeatures()[0].clone()]}),callback:()=>{r.classList.remove("active"),e.map.removeLayer(n.edit.feature)},update:()=>function(t){const n=e.mapview.interaction.edit.Source.getFeatures(),r=new ol.format.GeoJSON;t.newValue=JSON.parse(r.writeFeature(n[0],{dataProjection:"EPSG:"+t.location.layer.srid,featureProjection:"EPSG:"+e.mapview.srid})).geometry,t.location.update(),e.map.removeLayer(t.edit.feature),e.mapview.interaction.edit.finish()}(n)})}}>${e.language.layer_draw_edit}`,n.edit.panel.appendChild(n.edit.group.edit)),n.edit.panel}function r(t){const n=e.mapview.interaction.draw.Layer.getSource().getFeatures();t.newValue=JSON.parse(e.mapview.interaction.draw.format.writeFeature(n[0],{dataProjection:"EPSG:"+e.mapview.interaction.draw.layer.srid,featureProjection:"EPSG:"+e.mapview.srid})).geometry,t.location.update(),e.mapview.interaction.draw.finish()}})(e),n=(e=>{return{create:function(n){void 0===n.edit.defaults&&(n.edit.defaults=Object.assign({},n.edit.isoline_here));const r=60*(n.edit.isoline_here.minutes||n.edit.isoline_here.range),a=ol.proj.toLonLat(n.location.geometry.coordinates,`EPSG:${n.location.layer.srid}`),i=n.edit.isoline_here.destination||n.edit.defaults.destination,o=n.edit.isoline_here.dateISO?new Date(n.edit.isoline_here.dateISO).toISOString():n.edit.defaults.dateISO?new Date(n.edit.defaults.dateISO).toISOString():null,l={transportMode:n.edit.isoline_here.transportMode||"car",[i?"destination":"origin"]:`${a[1]},${a[0]}`,"range[values]":r||600,"range[type]":n.edit.isoline_here.rangetype||"time",optimizeFor:n.edit.isoline_here.optimizeFor||"balanced"};o&&Object.assign(l,{[i?"arrivalTime":"departureTime"]:o}),e.proxy(`https://isoline.router.hereapi.com/v8/isolines?${e.utils.paramString(l)}&{HERE}`).then((r=>{if(!r.isolines)return console.log(r),alert(e.language.here_error);if(r.isolines[0].polygons.length){{const a=e.utils.isoline_here_decode(r.isolines[0].polygons[0].outer);a.polyline.map((e=>e.reverse())),n.newValue={type:"Polygon",coordinates:[a.polyline]},n.edit.meta&&(new Date,n.location.infoj.filter((e=>"json"===e.type&&e.field===n.edit.meta)).forEach((e=>e.newValue=Object.assign({provider:"Here"},l)))),n.edit.panel&&(n.edit.panel.remove(),n.edit.panel=null,t(n)),n.location.update(),n.edit.defaults.dateISO||(n.edit.isoline_here.dateISO=null),n.edit.defaults.destination||(n.edit.isoline_here.destination=null)}n.location.view&&n.location.view.classList.add("disabled")}else n.location.view&&n.location.view.classList.remove("disabled")}))},settings:function(e){if(void 0===e.edit.defaults&&(e.edit.defaults=Object.assign({},e.edit.isoline_here)),(!e.edit.isoline_here||e.edit.isoline_here.geometry||!e.edit.isoline_here.minutes&&!e.value)&&(!(e.edit.isoline_here&&e.edit.isoline_here.geometry&&e.edit.isoline_here.minutes)||e.value))return t(e),void(e.container&&e.container.parentNode.insertBefore(e.edit.panel,e.container.nextSibling))}};function t(t){t.edit.panel||t.edit.isoline_here.minutes||(t.edit.panel=e.utils.html.node`
         <div
         class="${`drawer group panel expandable ${t.class||""}`}"
         style="display: grid; grid-column: 1 / 3; border-bottom: solid 1px grey;">
@@ -740,7 +740,7 @@
                 <div style="margin-top: 12px; grid-column: 1 / 3; margin-bottom: 8px;">
                 <div style="display: grid; grid-template-columns: 100px 1fr; align-items: center;">
                 <div style="grid-column: 1;">${r}</div>
-                <div style="grid-column: 2;">${n}</div>`),e.utils.flatpickr({locale:e.hooks.current.language||null,element:n,enableTime:!0,callback:e=>{n.value=e,t.edit.isoline_here.dateISO=new Date(e).toISOString()}})}var l;void 0===t.edit.defaults.range&&t.edit.panel.appendChild((l={title:e.language.here_travel_time,range:10,callback:e=>{t.edit.isoline_here.range=parseInt(e.target.value)}},e.utils.html.node`
+                <div style="grid-column: 2;">${n}</div>`),e.utils.flatpickr({locale:e.hooks.current.language||null,element:n,enableTime:!0,callback:e=>{n.value=e,t.edit.isoline_here.dateISO=new Date(e).toISOString()}})}var l;void 0===t.edit.defaults.range&&t.edit.panel.appendChild((l={title:e.language.here_travel_time,max:t.edit.isoline_here.maxMinutes,range:10,callback:e=>{t.edit.isoline_here.range=parseInt(e.target.value)}},e.utils.html.node`
         <div style="margin-top: 12px; grid-column: 1 / 3;">
         <span>${l.title}</span>
         <span class="bold">${l.range}</span>
@@ -750,7 +750,7 @@
           type="range"
           min=5
           value=${l.range}
-          max=60
+          max=${l.max||30}
           step=1
           oninput=${e=>{e.target.parentNode.previousElementSibling.textContent=parseInt(e.target.value),l.callback&&l.callback(e)}}>`))}(t))}function n(t){return e.utils.html.node`<div style="margin-top: 8px; grid-column: 1 / 3; align-items: center;">
             <div style="display: grid; grid-template-columns: 100px 1fr; align-items: center;">
@@ -799,7 +799,7 @@
         type="range"
         min=5
         value=${n.edit.isoline_mapbox._minutes}
-        max=60
+        max=${n.edit.isoline_mapbox.maxMinutes||30}
         step=1
         oninput=${e=>{n.edit.isoline_mapbox._minutes=parseInt(e.target.value),e.target.parentNode.previousElementSibling.textContent=n.edit.isoline_mapbox._minutes}}>`),n.container&&n.container.parentNode.insertBefore(n.edit.panel,n.container.nextSibling)}};function t(t){t.edit.panel||(t.edit.panel=e.utils.html.node`
     <div
@@ -852,7 +852,7 @@
         	type="range"
             min=5
             value=10
-            max=60
+            max=${t.edit.isoline_tomtom.maxMinutes||30}
             step=1
             oninput=${e=>{t.edit.isoline_tomtom.timeBudgetInSec=60*parseInt(e.target.value),e.target.parentNode.previousElementSibling.textContent=e.target.value}}>`),void 0===t.edit.defaults.traffic&&t.edit.panel.appendChild(e.utils.html.node`
         <div style="padding-top: 5px; grid-column: 1 / 3">
