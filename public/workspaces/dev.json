@@ -101,6 +101,9 @@
     },
     "Dennis": {
       "src": "file:workspaces/dennis.json"
+    },
+    "uk_polygon_demand": {
+      "src": "cloudfront:${CDN}/asda/templates/charts/polygon_demand.sql"
     }
   },
   "locales": {
@@ -114,6 +117,9 @@
       "minZoom": 2,
       "maxZoom": 17,
       "showScaleBar": true,
+      "plugins": {
+        "demand_chart": "/dev/js/plugins/demand_chart.js"
+      },
       "layers": {
         "Mapbox Base": {
           "template": "Mapbox Base",
@@ -524,6 +530,31 @@
         },
         "Dennis": {
           "template": "Dennis"
+        },
+        "Polygon Statistics": {
+          "format": "mvt",
+          "dbs": "AVOCET",
+          "table": "avocet.uk_polygons",
+          "geom": "geom_3857",
+          "srid": "3857",
+          "edit": {
+            "polygon": true,
+            "delete": true
+          },
+          "qID": "id",
+          "infoj": [
+            {
+              "type": "key"
+            },
+            {
+              "title": "Data & Charts",
+              "type": "title"
+            },
+            {
+              "plugin": "demand_chart",
+              "query": "uk_polygon_demand"
+            }
+          ]
         }
       }
     },

@@ -319,6 +319,10 @@
           "display": true,
           "template": "Mapbox Base"
         },
+        "Mapbox Label": {
+          "display": true,
+          "template": "Mapbox Label"
+        },
         "Demography Grid": {
           "format": "mvt",
           "dbs": "WEBSITE",
@@ -503,6 +507,10 @@
         "Mapbox Baselayer": {
           "display": true,
           "template": "Mapbox Base"
+        },
+        "Mapbox Label": {
+          "display": true,
+          "template": "Mapbox Label"
         },
         "Chomoku": {
           "format": "mvt",
@@ -926,6 +934,10 @@
         "Mapbox Baselayer": {
           "display": true,
           "template": "Mapbox Base"
+        },
+        "Mapbox Label": {
+          "display": true,
+          "template": "Mapbox Label"
         },
         "European Indicators": {
           "display": true,
