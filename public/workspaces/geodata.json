@@ -319,10 +319,6 @@
           "display": true,
           "template": "Mapbox Base"
         },
-        "Mapbox Label": {
-          "display": true,
-          "template": "Mapbox Label"
-        },
         "Demography Grid": {
           "format": "mvt",
           "dbs": "WEBSITE",
@@ -493,6 +489,11 @@
               "title": "Type"
             }
           ]
+        },
+        "Mapbox Label": {
+          "display": true,
+          "template": "Mapbox Label",
+          "zIndex": 99
         }
       }
     },
@@ -507,10 +508,6 @@
         "Mapbox Baselayer": {
           "display": true,
           "template": "Mapbox Base"
-        },
-        "Mapbox Label": {
-          "display": true,
-          "template": "Mapbox Label"
         },
         "Chomoku": {
           "format": "mvt",
@@ -918,6 +915,11 @@
               }
             }
           }
+        },
+        "Mapbox Label": {
+          "display": true,
+          "template": "Mapbox Label",
+          "zIndex": 99
         }
       }
     },
@@ -934,10 +936,6 @@
         "Mapbox Baselayer": {
           "display": true,
           "template": "Mapbox Base"
-        },
-        "Mapbox Label": {
-          "display": true,
-          "template": "Mapbox Label"
         },
         "European Indicators": {
           "display": true,
@@ -1274,6 +1272,11 @@
               }
             }
           }
+        },
+        "Mapbox Label": {
+          "display": true,
+          "template": "Mapbox Label",
+          "zIndex": 99
         }
       }
     }
