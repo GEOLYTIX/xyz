@@ -158,6 +158,7 @@
           "dbs": "MAPP",
           "geom": "geom_p_3857",
           "srid": "3857",
+          "mvt_cache": "mapp.uk_glx_geodata_hex__mvts",
           "tables": {
             "7": null,
             "8": "geodata.uk_glx_geodata_hex_16k",
@@ -170,6 +171,83 @@
           },
           "style": {
             "theme": {
+              "type": "graduated",
+              "fields": ["pop__01", "pop__11", "gen_female__11", "gen_male__11"],
+              "field": "pop__01",
+              "cat_arr": [
+                {
+                  "value": "0",
+                  "style": {
+                    "marker": {
+                      "type": "dot",
+                      "fillColor": "#15773f",
+                      "scale": 0.8
+                    }
+                  }
+                },
+                {
+                  "value": "250",
+                  "style": {
+                    "marker": {
+                      "type": "dot",
+                      "fillColor": "#66bd63",
+                      "scale": 0.8
+                    }                    
+                  }
+                },
+                {
+                  "value": "500",
+                  "style": {
+                    "marker": {
+                      "type": "dot",
+                      "fillColor": "#a6d96a",
+                      "scale": 0.8
+                    }                    
+                  }
+                },
+                {
+                  "value": "1000",
+                  "style": {
+                    "marker": {
+                      "type": "dot",
+                      "fillColor": "#d9ef8b",
+                      "scale": 0.8
+                    }                    
+                  }
+                },
+                {
+                  "value": "1500",
+                  "style": {
+                    "marker": {
+                      "type": "dot",
+                      "fillColor": "#fdae61",
+                      "scale": 0.8
+                    }                    
+                  }
+                },
+                {
+                  "value": "3000",
+                  "style": {
+                    "marker": {
+                      "type": "dot",
+                      "fillColor": "#f46d43",
+                      "scale": 0.8
+                    }                    
+                  }
+                },
+                {
+                  "value": "5000",
+                  "style": {
+                    "marker": {
+                      "type": "dot",
+                      "fillColor": "#d73027",
+                      "scale": 0.8
+                    }                    
+                  }
+                }
+              ]
+            },
+            "__theme": {
               "type": "bivariate",
               "dynamic": true,
               "fields": ["pop__01", "pop__11", "gen_female__11", "gen_male__11"],

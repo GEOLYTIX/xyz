@@ -48,6 +48,8 @@ module.exports = async (req, res) => {
   // Merge request params and query params.
   req.params = Object.assign(req.params || {}, req.query || {})
 
+  console.log(req.params)
+
   // Language param will default to english [en] is not explicitly set.
   req.params.language = req.params.language || 'en'
 
