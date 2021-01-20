@@ -1,6 +1,8 @@
 document.dispatchEvent(new CustomEvent('measure_distance', {
   detail: _xyz => {
 
+      if(!document.getElementById('mapButton')) return
+
       document.getElementById('mapButton').appendChild(_xyz.utils.html.node`
       <button
         class="mobile-display-none"
