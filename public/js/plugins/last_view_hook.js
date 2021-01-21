@@ -3,6 +3,8 @@ document.dispatchEvent(new CustomEvent('last_view_hook', {
 
     const history = []
 
+    if(!document.getElementById('mapButton')) return
+
     _xyz.mapview.node.addEventListener('changeEnd', () => {
 
       const center = ol.proj.transform(
