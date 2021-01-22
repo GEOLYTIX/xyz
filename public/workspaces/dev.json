@@ -171,8 +171,9 @@
           },
           "style": {
             "theme": {
-              "type": "graduated",
               "fields": ["pop__01", "pop__11", "gen_female__11", "gen_male__11"],
+              "dynamic": true,
+              "type": "graduated",
               "field": "pop__01",
               "cat_arr": [
                 {
@@ -180,8 +181,7 @@
                   "style": {
                     "marker": {
                       "type": "dot",
-                      "fillColor": "#15773f",
-                      "scale": 0.8
+                      "fillColor": "#15773f"
                     }
                   }
                 },
@@ -190,8 +190,7 @@
                   "style": {
                     "marker": {
                       "type": "dot",
-                      "fillColor": "#66bd63",
-                      "scale": 0.8
+                      "fillColor": "#66bd63"
                     }                    
                   }
                 },
@@ -200,8 +199,7 @@
                   "style": {
                     "marker": {
                       "type": "dot",
-                      "fillColor": "#a6d96a",
-                      "scale": 0.8
+                      "fillColor": "#a6d96a"
                     }                    
                   }
                 },
@@ -210,8 +208,7 @@
                   "style": {
                     "marker": {
                       "type": "dot",
-                      "fillColor": "#d9ef8b",
-                      "scale": 0.8
+                      "fillColor": "#d9ef8b"
                     }                    
                   }
                 },
@@ -220,8 +217,7 @@
                   "style": {
                     "marker": {
                       "type": "dot",
-                      "fillColor": "#fdae61",
-                      "scale": 0.8
+                      "fillColor": "#fdae61"
                     }                    
                   }
                 },
@@ -230,8 +226,7 @@
                   "style": {
                     "marker": {
                       "type": "dot",
-                      "fillColor": "#f46d43",
-                      "scale": 0.8
+                      "fillColor": "#f46d43"
                     }                    
                   }
                 },
@@ -240,149 +235,66 @@
                   "style": {
                     "marker": {
                       "type": "dot",
-                      "fillColor": "#d73027",
-                      "scale": 0.8
-                    }                    
-                  }
-                }
-              ]
-            },
-            "__theme": {
-              "type": "bivariate",
-              "dynamic": true,
-              "fields": ["pop__01", "pop__11", "gen_female__11", "gen_male__11"],
-              "field": "pop__01",
-              "geostat": "getClassJenks",
-              "a": [
-                {
-                  "style": {
-                    "marker": {
-                      "type": "dot",
-                      "fillColor": "#15773f",
-                      "scale": 0.8
-                    }
-                  }
-                },
-                {
-                  "style": {
-                    "marker": {
-                      "type": "dot",
-                      "fillColor": "#66bd63",
-                      "scale": 0.8
-                    }                    
-                  }
-                },
-                {
-                  "style": {
-                    "marker": {
-                      "type": "dot",
-                      "fillColor": "#a6d96a",
-                      "scale": 0.8
-                    }                    
-                  }
-                },
-                {
-                  "style": {
-                    "marker": {
-                      "type": "dot",
-                      "fillColor": "#d9ef8b",
-                      "scale": 0.8
-                    }                    
-                  }
-                },
-                {
-                  "style": {
-                    "marker": {
-                      "type": "dot",
-                      "fillColor": "#fdae61",
-                      "scale": 0.8
-                    }                    
-                  }
-                },
-                {
-                  "style": {
-                    "marker": {
-                      "type": "dot",
-                      "fillColor": "#f46d43",
-                      "scale": 0.8
-                    }                    
-                  }
-                },
-                {
-                  "style": {
-                    "marker": {
-                      "type": "dot",
-                      "fillColor": "#d73027",
-                      "scale": 0.8
+                      "fillColor": "#d73027"
                     }                    
                   }
                 }
               ],
-              "cat_arr": [
-                {
-                  "style": {
-                    "marker": {
-                      "type": "dot",
-                      "fillColor": "#15773f",
-                      "scale": 0.8
+              "theme": {
+                "type": "graduated",
+                "field": "pop__11",
+                "cat_arr": [
+                  {
+                    "style": {
+                      "marker": {
+                        "scale": 0.4
+                      }
+                    }
+                  },
+                  {
+                    "style": {
+                      "marker": {
+                        "scale": 0.5
+                      }                    
+                    }
+                  },
+                  {
+                    "style": {
+                      "marker": {
+                        "scale": 0.6
+                      }                    
+                    }
+                  },
+                  {
+                    "style": {
+                      "marker": {
+                        "scale": 0.7
+                      }                    
+                    }
+                  },
+                  {
+                    "style": {
+                      "marker": {
+                        "scale": 0.8
+                      }                    
+                    }
+                  },
+                  {
+                    "style": {
+                      "marker": {
+                        "scale": 0.9
+                      }                    
+                    }
+                  },
+                  {
+                    "style": {
+                      "marker": {
+                        "scale": 1
+                      }                    
                     }
                   }
-                },
-                {
-                  "style": {
-                    "marker": {
-                      "type": "dot",
-                      "fillColor": "#66bd63",
-                      "scale": 0.8
-                    }                    
-                  }
-                },
-                {
-                  "style": {
-                    "marker": {
-                      "type": "dot",
-                      "fillColor": "#a6d96a",
-                      "scale": 0.8
-                    }                    
-                  }
-                },
-                {
-                  "style": {
-                    "marker": {
-                      "type": "dot",
-                      "fillColor": "#d9ef8b",
-                      "scale": 0.8
-                    }                    
-                  }
-                },
-                {
-                  "style": {
-                    "marker": {
-                      "type": "dot",
-                      "fillColor": "#fdae61",
-                      "scale": 0.8
-                    }                    
-                  }
-                },
-                {
-                  "style": {
-                    "marker": {
-                      "type": "dot",
-                      "fillColor": "#f46d43",
-                      "scale": 0.8
-                    }                    
-                  }
-                },
-                {
-                  "style": {
-                    "marker": {
-                      "type": "dot",
-                      "fillColor": "#d73027",
-                      "scale": 0.8
-                    }                    
-                  }
-                }
-              ]
+                ]
+              }
             }
           }
         },
