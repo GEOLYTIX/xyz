@@ -18,7 +18,6 @@ window.onload = () => {
     //     locale: params.locale,
     //     // layer: params.layer,
     //     callback: xyz => page2(xyz)
-
     // })
 
     // _xyz({
@@ -26,7 +25,6 @@ window.onload = () => {
     //     locale: params.locale,
     //     // layer: params.layer,
     //     callback: xyz => page3(xyz)
-
     // })
 }
 
@@ -49,12 +47,13 @@ function page1(xyz) {
     xyz.layers.load(["Mapbox Base", "Retail Places", "Grocery", "Cook Pipeline"]).then(layers => {
       layers.forEach(layer => {
     
-        layer = xyz.layers.decorate(layer)
-        xyz.layers.list[layer.key] = layer
+        // layer = xyz.layers.decorate(layer)
+        // xyz.layers.list[layer.key] = layer
         layer.show()
 
       })
-      // layers.forEach(layer => layer.show())
+      
+      //layers.forEach(layer => layer.show())
       locationsSelect()
     })
 
