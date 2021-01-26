@@ -188,6 +188,67 @@
         }
       }
     },
+    "China": {
+      "minZoom": 2,
+      "maxZoom": 18,
+      "view": {
+        "lat": 31.2515,
+        "lng": 121.4254,
+        "z": 10
+      },
+      "bounds": {
+        "north": 34,
+        "east": 123,
+        "south": 28,
+        "west": 118
+      },
+      "maskBounds": true,
+      "layers": {
+        "Base": {
+          "display": true,
+          "template": "Mapbox Base"
+        },
+        "Offices": {
+          "display": true,
+          "format": "geojson",
+          "dbs": "WEBSITE",
+          "table": "website.global_glx_open_geolytix_offices",
+          "geom": "geom_p_4326",
+          "srid": "4326",
+          "qID": "id",
+          "style": {
+            "default": {
+              "marker": {
+                "type": "markerColor",
+                "colorMarker": "#003D57",
+                "colorDot": "#F0F0F0",
+                "anchor": [
+                  0.5,
+                  1
+                ],
+                "scale": 3
+              }
+            },
+            "highlight": {
+              "marker": {
+                "type": "markerColor",
+                "colorMarker": "#EC602D",
+                "colorDot": "#F0F0F0",
+                "anchor": [
+                  0.5,
+                  1
+                ],
+                "scale": 1
+              }
+            }
+          }
+        },
+        "Label": {
+          "display": true,
+          "template": "Mapbox Label"
+        }
+      }
+    },
     "London": {
       "bounds": {
         "north": 51.686,
