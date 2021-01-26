@@ -75,7 +75,7 @@ body {
 #ctrls {
   grid-row: 1/4;
   grid-column: 1;
-  padding: 15px;
+  padding: 0 15px;
   transform: rotateY(180deg);
   background-color: #f0f0f0;
   overflow-y: auto;
@@ -118,4 +118,27 @@ body {
 .mobile-disabled {
   opacity: 0.3;
   pointer-events: none;
+}
+
+.primary-colour-filter,
+.enabled > .xyz-icon {
+  filter: invert(13%) sepia(57%) saturate(827%) hue-rotate(336deg) brightness(93%) contrast(105%);
+  -webkit-filter: invert(13%) sepia(57%) saturate(827%) hue-rotate(336deg) brightness(93%) contrast(105%);
+}
+
+.secondary-colour-bg {
+  background-color: #E3D2C1;
+}
+
+.primary-colour {
+  color: #401505;
+}
+
+.location-view.drawer {
+  background-color: #F5F2EE;
+}
+
+.drawer.layer-group, .drawer.layer-view {
+  border-top: 3px solid #f0f0f0;
+  background-color: #F5F2EE;
 }
