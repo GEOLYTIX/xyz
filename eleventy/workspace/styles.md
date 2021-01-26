@@ -98,6 +98,7 @@ Supported types of markers:
 * target
 * triangle
 * square
+* diamond
 * semiCircle
 * dot
 * markerColor
@@ -121,6 +122,23 @@ Icons can be defined as marker to represent a point location in the rendered map
   }
 }
 /* scale is optional */
+```
+
+## Layered symbols
+
+Cluster icons support layered styling where style definitions are stored in an array and applied in given order. 
+
+```json
+"style": {
+  "layers": [
+    {
+      "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/pins/red.svg"
+    },
+    {
+      "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/logos/five_guys.svg"
+    }
+  ]
+}
 ```
 
 ## Labels
