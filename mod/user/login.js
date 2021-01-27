@@ -45,6 +45,8 @@ module.exports = async (req, res, msg) => {
 
     res.setHeader('Set-Cookie', cookie)
 
+    if (!req.body.redirect) return res.send('foo')
+
     res.setHeader('location', `${req.body.redirect}`)
 
     return res.status(302).send()
