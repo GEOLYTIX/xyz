@@ -28,7 +28,9 @@ module.exports = async (req, res, msg) => {
 
     const user = await post(req)
 
-    if (user instanceof Error) return view(req, res, user.message)
+    if (user instanceof Error && req.body.redirect) return view(req, res, user.message)
+
+    if (user instanceof Error) return res.status(401).send(user.message)
 
     // Create token with 8 hour expiry.
     const token = jwt.sign({
@@ -38,14 +40,14 @@ module.exports = async (req, res, msg) => {
         roles: user.roles
       },
       process.env.SECRET, {
-        expiresIn: '8h'
+        expiresIn: 60
       })
 
-    const cookie = `${process.env.TITLE}=${token};HttpOnly;Max-Age=28800;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`
+    const cookie = `${process.env.TITLE}=${token};HttpOnly;Max-Age=60;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`
 
     res.setHeader('Set-Cookie', cookie)
 
-    if (!req.body.redirect) return res.send('foo')
+    if (!req.body.redirect) return res.send(user)
 
     res.setHeader('location', `${req.body.redirect}`)
 
