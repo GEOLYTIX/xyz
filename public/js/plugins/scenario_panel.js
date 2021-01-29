@@ -243,7 +243,7 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
               <input
                 type="file"
                 accept=".csv"
-                onchange=${()=>csvImport('seed')}
+                onchange=${e=>csvImport(e, 'seed')}
                 style="display: none;">`)
 
             scenarios.grid.appendChild(_xyz.utils.html.node`
@@ -274,7 +274,7 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
               <input
                 type="file"
                 accept=".csv"
-                onchange=${()=>csvImport('closure')}
+                onchange=${e=>csvImport(e, 'closure')}
                 style="display: none;">`)
 
             scenarios.grid.appendChild(_xyz.utils.html.node`
@@ -593,7 +593,7 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
 
       }
 
-      function csvImport(type){
+      function csvImport(e, type){
 
         const reader = new FileReader()
 
@@ -601,7 +601,7 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
           try {
 
             // Split on new line to create array of rows.
-            const csv = this.result.split(/\r?\n/)
+            const csv = this.result.replace(/\r/g, '\n').split(/\r?\n/)
 
             // Shift header row from array.
             csv.shift()
@@ -638,7 +638,7 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
           }
         }
 
-        reader.readAsText(this.files[0])
+        reader.readAsText(e.target.files[0])
       }
 
     }
