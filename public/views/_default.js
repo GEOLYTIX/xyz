@@ -337,7 +337,10 @@ window.onload = () => {
 
     xyz.user = document.head.dataset.user && JSON.parse(decodeURI(document.head.dataset.user))
 
-    xyz.user && xyz.utils.idle()
+    xyz.user && xyz.utils.idle({
+      renew: 240,
+      idle: 300
+    })
 
     // Append user admin button.
     xyz.user && xyz.user.admin && btnColumn.appendChild(xyz.utils.html.node`

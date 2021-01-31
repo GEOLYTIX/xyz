@@ -37,3 +37,5 @@ Fix for in type filter.
 Remove mapbox, tomtom, here provider. [#282](https://github.com/GEOLYTIX/xyz/issues/282)
 
 Mapp library and stylesheets. [#377](https://github.com/GEOLYTIX/xyz/issues/377)
+
+Idle timeout and token renew. [#378](https://github.com/GEOLYTIX/xyz/issues/378)

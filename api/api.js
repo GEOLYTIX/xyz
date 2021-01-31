@@ -27,6 +27,8 @@ const routes = {
   provider: provider,
 }
 
+process.env.COOKIE_TTL = process.env.COOKIE_TTL || 3600
+
 process.env.TITLE = process.env.TITLE || 'GEOLYTIX | XYZ'
 
 process.env.DIR = process.env.DIR || ''
