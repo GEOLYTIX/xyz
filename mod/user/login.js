@@ -40,10 +40,10 @@ module.exports = async (req, res, msg) => {
         roles: user.roles
       },
       process.env.SECRET, {
-        expiresIn: 60
+        expiresIn: process.env.COOKIE_TTL
       })
 
-    const cookie = `${process.env.TITLE}=${token};HttpOnly;Max-Age=60;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`
+    const cookie = `${process.env.TITLE}=${token};HttpOnly;Max-Age=${process.env.COOKIE_TTL};Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`
 
     res.setHeader('Set-Cookie', cookie)
 
