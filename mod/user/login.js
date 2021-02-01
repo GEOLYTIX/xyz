@@ -118,7 +118,8 @@ async function post(req, res) {
   // Get user record from first row.
   const user = rows[0]
 
-  if (!user) return new Error(msg('user_not_found', req.params.language))
+  // new Error(msg('user_not_found', req.params.language))
+  if (!user) return new Error(msg('auth_failed', req.params.language))
 
   // Blocked user cannot login.
   if (user.blocked) return new Error(msg('user_blocked', user.language || req.params.language))
@@ -230,5 +231,6 @@ async function post(req, res) {
       remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
     })))
 
-  return new Error(msg('token_failed', user.language))
+  // new Error(msg('token_failed', user.language))
+  return new Error(msg('auth_failed', req.params.language))
 }
