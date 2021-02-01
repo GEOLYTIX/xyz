@@ -41,3 +41,5 @@ Mapp library and stylesheets. [#377](https://github.com/GEOLYTIX/xyz/issues/377)
 Idle timeout and token renew. [#378](https://github.com/GEOLYTIX/xyz/issues/378)
 
 Remove CORS header from vercel.json. [#380](https://github.com/GEOLYTIX/xyz/issues/380)
+
+Remove user enumaration messages. [#383](https://github.com/GEOLYTIX/xyz/issues/383)
