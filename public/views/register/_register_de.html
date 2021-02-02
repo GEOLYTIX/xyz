@@ -26,13 +26,13 @@
     </div>
 
     <div class="input-group">
-      <input id="auth_user_password" name="password" type="password" autocomplete="off" required minlength="8" value="">
+      <input id="auth_user_password" name="password" type="password" autocomplete="off" required pattern="(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{10,}$" value="">
       <span class="bar"></span>
-      <label for="auth_user_password">Neues Passwort (min. length 8 character)</label>
+      <label for="auth_user_password">Neues Passwort (min. 10, mit Nummer, Klein-, und Grossbuchstaben)</label>
     </div>
 
     <div class="input-group">
-      <input id="auth_user_password_retype" type="password" autocomplete="off" required minlength="8" value="">
+      <input id="auth_user_password_retype" type="password" autocomplete="off" value="">
       <span class="bar"></span>
       <label for="auth_user_password_retype">Re-type password</label>
     </div>
