@@ -27,6 +27,10 @@
           "value": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
         },
         {
+          "key": "Adding X-Frame-Options",
+          "value": "DENY"
+        },
+        {
           "key": "X-Content-Type-Options",
           "value": "nosniff"
         },
