@@ -11,16 +11,13 @@ window.onload = () => {
   const btnRegister = document.getElementById('btnRegister');
   const privacy_agreement = document.getElementById('privacy_agreement');
   
-  email.addEventListener('change', () => check());
-  email.addEventListener('keyup', () => check());
+  email.addEventListener('input', check);
   
-  password.addEventListener('change', () => check());
-  password.addEventListener('keyup', () => check());
+  password.addEventListener('input', check);
   
-  password_retype.addEventListener('change', () => check());
-  password_retype.addEventListener('keyup', () => check());
+  password_retype.addEventListener('input', check);
   
-  privacy_agreement.addEventListener('change', () => check());
+  privacy_agreement.addEventListener('change', check);
   
   function check() {
   

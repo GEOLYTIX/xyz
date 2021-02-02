@@ -60,11 +60,14 @@ function view(req, res) {
 
 async function post(req, res) {
 
-  // Test whether the email provided is valid.
+  // Test whether the provided email is valid.
   if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(req.body.email)) return res.status(403).send('Invalid email provided')
 
   // Test whether a password has been provided.
   if (!req.body.password) return res.status(400).send('No password provided')
+
+  // Test whether the provided password is valid.
+  if (!/(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{10,}$/.test(req.body.password)) return res.status(403).send('Invalid password provided')
 
   // Attempt to retrieve ACL record with matching email field.
   var rows = await acl(`
