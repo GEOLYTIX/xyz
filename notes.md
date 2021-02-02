@@ -45,3 +45,5 @@ Remove CORS header from vercel.json. [#380](https://github.com/GEOLYTIX/xyz/issu
 Remove user enumaration messages. [#383](https://github.com/GEOLYTIX/xyz/issues/383)
 
 New passwords must be complex. [#215](https://github.com/GEOLYTIX/xyz/issues/215)
+
+Update security header. [#382](https://github.com/GEOLYTIX/xyz/issues/382)
