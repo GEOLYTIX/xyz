@@ -45,7 +45,7 @@ function IEdetect(sUsrAg) {
 
 module.exports = async (req, res) => {
 
-  if (IEdetect(req.headers['user-agent'])) return res.send('Uh Oh... It looks like your request comes from an unsupported user agent (e.g. Internet Explorer)')
+  if (req.headers && req.headers['user-agent'] && IEdetect(req.headers['user-agent'])) return res.send('Uh Oh... It looks like your request comes from an unsupported user agent (e.g. Internet Explorer)')
 
   // Merge request params and query params.
   req.params = Object.assign(req.params || {}, req.query || {})
