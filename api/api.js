@@ -150,9 +150,6 @@ module.exports = async (req, res) => {
 
   if (path && path[1] && routes[path[1]]) return routes[path[1]](req, res)
 
-  // Defeat device
-  //if (!req.params.template && process.env.PRIVATE) return login(req, res)
-
   // Assign the mapp template as default if no template is set.
   req.params.template = req.params.template || req.params.workspace.templates.default
 

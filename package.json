@@ -25,6 +25,7 @@
     "cloudinary": "^1.23.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.20",
+    "nanoid": "^3.1.20",
     "node-fetch": "^2.6.1",
     "nodemailer": "^4.6.8",
     "pg": "^7.18.2"
