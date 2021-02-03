@@ -13,6 +13,8 @@ module.exports = async (req, res) => {
     return res.send('This too shall pass')
   }
 
+  if (!cookie && req.params.renew) return res.status(401).send('Failed to renew cookie')
+
   if (!cookie) return login(req, res, messages.no_cookie_found[req.params.language || 'en'] || `No cookie relating to this application found on request`)
 
   jwt.verify(

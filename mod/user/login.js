@@ -20,6 +20,8 @@ const messages = require('./messages')
 
 const msg = (m, lang) => messages[m] && (messages[m][lang] || messages[m].en) || m
 
+const { nanoid } = require('nanoid')
+
 module.exports = async (req, res, msg) => {
 
   if (!acl) return res.status(500).send(msg('acl_unavailable', req.params.language))
@@ -37,7 +39,8 @@ module.exports = async (req, res, msg) => {
         email: user.email,
         admin: user.admin,
         language: req.body.language || user.language,
-        roles: user.roles
+        roles: user.roles,
+        session: user.session
       },
       process.env.SECRET, {
         expiresIn: parseInt(process.env.COOKIE_TTL)
@@ -172,6 +175,22 @@ async function post(req, res) {
 
     // Override the user language role with the login form language
     user.roles.push(req.body.language || user.language)
+
+    if (process.env.NANO_SESSION) {
+
+      const nano_session = nanoid()
+
+      user.session = nano_session
+
+      var rows = await acl(`
+      UPDATE acl_schema.acl_table
+      SET session = '${nano_session}'
+      WHERE lower(email) = lower($1)`,
+      [req.body.email])
+  
+      if (rows instanceof Error) return new Error(msg('failed_query', req.params.language))
+
+    }
 
     return user
   }

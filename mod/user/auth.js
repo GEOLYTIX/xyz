@@ -19,6 +19,21 @@ module.exports = async (req, res) => {
     // Return error if verification fails.
     if (err) return err
 
+    if (process.env.NANO_SESSION) {
+      
+      var rows = await acl(`
+        SELECT session
+        FROM acl_schema.acl_table
+        WHERE lower(email) = lower($1);`,
+        [user.email])
+        
+      if (rows instanceof Error) return rows
+
+      console.log(`${user.session} | ${rows[0].session}`)
+
+      if (user.session !== rows[0].session) return new Error('Session ID mismatch')
+    }
+
     // The token was provided as param.
     if (req.params.token) {
 
