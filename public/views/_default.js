@@ -339,7 +339,8 @@ window.onload = () => {
 
     xyz.user && xyz.utils.idle({
       renew: 240,
-      idle: 300
+      idle: 300,
+      host: xyz.host
     })
 
     // Append user admin button.
