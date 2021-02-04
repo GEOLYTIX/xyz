@@ -84,7 +84,7 @@ API key required to access the [Opencage geocoding service](https://opencagedata
 
 ## SRC_* parameter
 
-SRC_* can be used for parameter substitution either a view, a template src string, or anywhere in a locale. The bracketed SRC_* parameter eg. `${SRC_CDN}/public/script.js` will be substituted with the value from matching process environment key. Substitution is applied when the view is rendered, templates are loaded into the workspace, and after defaults are assigned to the workspace locales.
+Can be used for parameter substitution in views, template src strings, or anywhere in a locale. The bracketed SRC_* parameter eg. `${SRC_CDN}/public/script.js` will be substituted with the value from matching process environment key. Substitution is applied when the view is rendered, templates are loaded into the workspace, and after defaults are assigned to the workspace locales.
 
 ## Logging
 
