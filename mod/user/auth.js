@@ -29,8 +29,6 @@ module.exports = async (req, res) => {
         
       if (rows instanceof Error) return rows
 
-      console.log(`${user.session} | ${rows[0].session}`)
-
       if (user.session !== rows[0].session) return new Error('Session ID mismatch')
     }
 
