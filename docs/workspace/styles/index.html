@@ -434,6 +434,7 @@ Default marker size is 20, default scale equals to 1.</p>
 <li>target</li>
 <li>triangle</li>
 <li>square</li>
+<li>diamond</li>
 <li>semiCircle</li>
 <li>dot</li>
 <li>markerColor</li>
@@ -443,6 +444,9 @@ Default marker size is 20, default scale equals to 1.</p>
 <h2 id="icons">Icons <a class="header-anchor" href="#icons">¶</a></h2>
 <p>Icons can be defined as marker to represent a point location in the rendered map.</p>
 <pre class="language-json"><code class="language-json"><span class="token property">"style"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>  <span class="token property">"default"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>    <span class="token property">"svg"</span><span class="token operator">:</span> <span class="token string">"https://cdn.jsdelivr.net/gh/GEOLYTIX/mapicons/coffee/bean_blue.svg"</span><span class="token punctuation">,</span><br>    <span class="token property">"anchor"</span><span class="token operator">:</span> <span class="token punctuation">[</span><br>      <span class="token number">0.5</span><span class="token punctuation">,</span><br>      <span class="token number">0.95</span><br>    <span class="token punctuation">]</span><span class="token punctuation">,</span><br>    <span class="token property">"scale"</span><span class="token operator">:</span> <span class="token number">2</span><br>  <span class="token punctuation">}</span><br><span class="token punctuation">}</span><br><span class="token comment">/* scale is optional */</span></code></pre>
+<h2 id="layered-symbols">Layered symbols <a class="header-anchor" href="#layered-symbols">¶</a></h2>
+<p>Cluster icons support layered styling where style definitions are stored in an array and applied in given order.</p>
+<pre class="language-json"><code class="language-json"><span class="token property">"style"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>  <span class="token property">"layers"</span><span class="token operator">:</span> <span class="token punctuation">[</span><br>    <span class="token punctuation">{</span><br>      <span class="token property">"svg"</span><span class="token operator">:</span> <span class="token string">"https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/pins/red.svg"</span><br>    <span class="token punctuation">}</span><span class="token punctuation">,</span><br>    <span class="token punctuation">{</span><br>      <span class="token property">"svg"</span><span class="token operator">:</span> <span class="token string">"https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/logos/five_guys.svg"</span><br>    <span class="token punctuation">}</span><br>  <span class="token punctuation">]</span><br><span class="token punctuation">}</span></code></pre>
 <h2 id="labels">Labels <a class="header-anchor" href="#labels">¶</a></h2>
 <p>Label for locations on cluster or MVT layer are created as a seperate layer to make use of Openlayers declutter capability to prevent overlapping map labels. The label itself is created as an <a href="https://openlayers.org/en/latest/apidoc/module-ol_style_Text.html">Openlayers Text object</a>.</p>
 <p>The entries in the label object will be assigned to the text style. '12px sans-serif' will be the default is not explicitly set.</p>
