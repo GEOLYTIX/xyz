@@ -31,7 +31,7 @@ module.exports = async workspace => {
       // Entries without a src value must not be fetched.
       if (!entry[1].src) return _resolve(entry[1])
 
-      // Substitute SRC_* parameter
+      // Substitute SRC_* parameter.
       entry[1].src = entry[1].src.replace(/\$\{(.*?)\}/g,
         matched => process.env[`SRC_${matched.replace(/\$|\{|\}/g, '')}`] || matched)
 
