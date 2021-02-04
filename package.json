@@ -20,6 +20,7 @@
     ]
   },
   "dependencies": {
+    "a-color-picker": "^1.2.1",
     "aws-sdk": "^2.820.0",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.23.0",
