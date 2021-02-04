@@ -180,9 +180,10 @@ function create(_xyz) {
             <div style="grid-column: 1;">${params.title}</div>
             <input
             placeholder="${params.placeholder}"
-            style="${params.colour ? `grid-column: 3; border-color: ${layer.style[params.style || 'default'][params.field]};` : 'grid-column: 3;'}"
+            style="${params.colour ? `border-radius: 4px; grid-column: 3; border-color: ${layer.style[params.style || 'default'][params.field]};` : 'border-radius: 4px; grid-column: 3;'}"
             value=${layer.style[params.style || 'default'][params.field]}
             onchange=${e=>{
+                
                 if(params.colour) e.target.style.borderColor = e.target.value
                 if(params.style !== 'label' && layer.style.theme) {
                     if(layer.style.theme.cat) {
