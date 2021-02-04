@@ -82,6 +82,10 @@ A [Cloudinary](https://cloudinary.com/) key, secret and folder for images to be 
 
 API key required to access the [Opencage geocoding service](https://opencagedata.com/api).
 
+## SRC_* parameter
+
+SRC_* can be used for parameter substitution either a view, a template src string, or anywhere in a locale. The bracketed SRC_* parameter eg. `${SRC_CDN}/public/script.js` will be substituted with the value from matching process environment key. Substitution is applied when the view is rendered, templates are loaded into the workspace, and after defaults are assigned to the workspace locales.
+
 ## Logging
 
 If enabled logs can be written from the execution of a serverless function to a log drain.

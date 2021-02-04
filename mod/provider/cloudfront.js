@@ -30,10 +30,7 @@ module.exports = async ref => {
 
   try {
 
-    let url = ref.params && ref.params.url || ref
-
-    url = url.replace(/\{(.*?)\}/g,
-        matched => process.env[`SRC_${matched.replace(/\{|\}/g, '')}`] || matched)
+    const url = ref.params && ref.params.url || ref
   
     const signedUrl = await generateSignedDownloadUrl(url)
   

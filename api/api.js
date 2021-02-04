@@ -151,7 +151,7 @@ module.exports = async (req, res) => {
   if (path && path[1] && routes[path[1]]) return routes[path[1]](req, res)
 
   // Assign the mapp template as default if no template is set.
-  req.params.template = req.params.template || req.params.workspace.templates.default
+  req.params.template = req.params.template || req.params.workspace.templates && req.params.workspace.templates.default
 
   if (!req.params.template) {
     const template = readFileSync(join(__dirname, '../public/views/_default.html')).toString('utf8')

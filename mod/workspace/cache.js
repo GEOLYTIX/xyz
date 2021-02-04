@@ -16,6 +16,8 @@ const getFrom = {
 
 const assignTemplates = require('./assignTemplates')
 
+const defaults = require('./defaults')
+
 const assignDefaults = require('./assignDefaults')
 
 let workspace = null
@@ -37,10 +39,26 @@ module.exports = async req => {
 
     if (workspace instanceof Error) return workspace
 
+    // Return the default locale
+    if (!workspace.locales) {
+      workspace = {
+        locales: {
+          zero: defaults.locale
+        }
+      }
+      return workspace
+    }
+
     await assignTemplates(workspace)
 
     await assignDefaults(workspace)
 
+    // Substitute SRC_* variables in locales.
+    workspace.locales = JSON.parse(
+      JSON.stringify(workspace.locales).replace(/\$\{(.*?)\}/g,
+        matched => process.env[`SRC_${matched.replace(/\$|\{|\}/g, '')}`] || matched)
+    )
+  
     workspace.timestamp = timestamp
 
   } else {
