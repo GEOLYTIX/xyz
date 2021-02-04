@@ -1,10 +1,5 @@
 window.onload = () => {
-
-  let href = new URL(window.location.href);
-  let lang = href.searchParams.get("language") || 'en';
-
-  document.querySelector('.switch').href += document.querySelector('.switch').href.includes('?') ? `&language=${lang}` : `?language=${lang}`;
-    
+   
   const email = document.getElementById('auth_user_email');
   const password = document.getElementById('auth_user_password');
   const password_retype = document.getElementById('auth_user_password_retype');
