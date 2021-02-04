@@ -457,6 +457,7 @@
 <p>The value from the <code>DIR</code> process environment key is used as path for the cookie.</p>
 <p><img src="https://res.cloudinary.com/geolytix-xyz/image/upload/v1589878516/documentation/geolytix-dev-cookie.png" alt=""></p>
 <p>The cookie value itself is a signed token.</p>
+<p>The <code>COOKIE_TTL</code> environment variable is used to set the time in seconds when a cookie will expire. The default is 3600 (1hr).</p>
 <h3 id="token">Token <a class="header-anchor" href="#token">¶</a></h3>
 <p>A JSON Web Token (<a href="https://jwt.io/">JWT</a>) consist of three parts, the header, payload, and signature.</p>
 <pre><code>eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImRlbm5pcy5iYXVzenVzQGdlb2x5dGl4LmNvLnVrIiwibGFuZ3VhZ2UiOiJlbiIsInJvbGVzIjpbImdseCIsImVuIl0sImlhdCI6MTYwNjk5MzU0MCwiZXhwIjoxNjA3MDIyMzQwfQ.GSqDpYBTWRCPRl-gc-I7evTQmjo4E7Qfc1hkMydUCNA
@@ -476,7 +477,7 @@
 <p><a href="https://github.com/GEOLYTIX/xyz/blob/master/mod/user/auth.js">mod/user/auth.js</a></p>
 <p>The auth process checks the signature of token from a cookie or provided as URL parameter. The auth process will set a cookie if the token has been provided as URL parameter.</p>
 <h3 id="sessions">Sessions <a class="header-anchor" href="#sessions">¶</a></h3>
-<p>If enabled by setting the <code>NANO_SESSION</code> environment variable a session ID will be generated with nanoid in the login script. The ID will be stored in the session field of the ACL user record. The session ID will be assigned to the user object in the token / cookie. The auth function will check whether the stored session ID matches the user session ID derived from the token. The auth function will return an error if the ID does not match. This makes it impossible to renew a cookie after the same user logs into the instance on a different platform.</p>
+<p>If enabled by setting the <code>NANO_SESSION</code> environment variable a session ID will be generated with a nanoid in the login script. The ID will be stored in the session field of the ACL user record. The session ID will be assigned to the user object in the token / cookie. The auth function will check whether the stored session ID matches the user session ID derived from the token. The auth function will return an error if the ID does not match. This makes it impossible to renew a cookie after the same user logs into the instance on a different platform.</p>
 
     </div>
 

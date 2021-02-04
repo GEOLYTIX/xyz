@@ -127,6 +127,8 @@ The value from the `DIR` process environment key is used as path for the cookie.
 
 The cookie value itself is a signed token.
 
+The `COOKIE_TTL` environment variable is used to set the time in seconds when a cookie will expire. The default is 3600 (1hr).
+
 ### Token
 
 A JSON Web Token ([JWT](https://jwt.io/)) consist of three parts, the header, payload, and signature.
@@ -176,4 +178,4 @@ The auth process checks the signature of token from a cookie or provided as URL 
 
 ### Sessions
 
-If enabled by setting the `NANO_SESSION` environment variable a session ID will be generated with nanoid in the login script. The ID will be stored in the session field of the ACL user record. The session ID will be assigned to the user object in the token / cookie. The auth function will check whether the stored session ID matches the user session ID derived from the token. The auth function will return an error if the ID does not match. This makes it impossible to renew a cookie after the same user logs into the instance on a different platform.
+If enabled by setting the `NANO_SESSION` environment variable a session ID will be generated with a nanoid in the login script. The ID will be stored in the session field of the ACL user record. The session ID will be assigned to the user object in the token / cookie. The auth function will check whether the stored session ID matches the user session ID derived from the token. The auth function will return an error if the ID does not match. This makes it impossible to renew a cookie after the same user logs into the instance on a different platform.

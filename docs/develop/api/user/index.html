@@ -415,6 +415,8 @@
 <p>Will return the signed token from a XYZ Cookie set in the HTTP request header. The request will be redirected to the login form if no Cookie with a valid signed token was sent with the request.</p>
 <h3 id="%2Fapi%2Fuser%2Fcoookie">/api/user/coookie <a class="header-anchor" href="#%2Fapi%2Fuser%2Fcoookie">¶</a></h3>
 <p>Will return the textual representation of a HTTP Cookie if accessed as a <em>GET</em> request. The request will be redirected to the login form if no cookie is found on the request header. A new cookie will be set on the response header to a <em>POST</em> request after the login information in the request body has been checked against a user record in the ACL.</p>
+<p><code>?renew=true</code> will renew a cookie but not return a login form if the cookie is already expired or not found.</p>
+<p><code>?destroy=true</code> will set a cookie with a null value. This cookie will immediately expire and remove any existing cookie.</p>
 <h3 id="%2Fapi%2Fuser%2Fkey">/api/user/key <a class="header-anchor" href="#%2Fapi%2Fuser%2Fkey">¶</a></h3>
 <p>Will generate and respond with an API key if enabled for a user account.</p>
 <h3 id="%2Fapi%2Fuser%2Flog%3Femail%3Ddennis.bauszus%40geolytix.co.uk">/api/user/log?email=dennis.bauszus@geolytix.co.uk <a class="header-anchor" href="#%2Fapi%2Fuser%2Flog%3Femail%3Ddennis.bauszus%40geolytix.co.uk">¶</a></h3>
