@@ -31,10 +31,6 @@ const methods = {
     handler: require('./log'),
     admin: true
   },
-  pgtable: {
-    handler: require('./pgtable'),
-    admin: true
-  },
   key: {
     handler: require('./key'),
     login: true

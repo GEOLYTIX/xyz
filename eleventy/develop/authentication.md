@@ -32,7 +32,8 @@ CREATE TABLE acl_schema.acl_table (
   blocked boolean default false,
   roles text[] default '{}'::text[],
   admin boolean default false,
-  language text default 'en'
+  language text default 'en',
+  session text
 );
 ```
 
@@ -172,3 +173,7 @@ A cookie generated from an API key will expire in 8 hours.
 [mod/user/auth.js](https://github.com/GEOLYTIX/xyz/blob/master/mod/user/auth.js)
 
 The auth process checks the signature of token from a cookie or provided as URL parameter. The auth process will set a cookie if the token has been provided as URL parameter.
+
+### Sessions
+
+If enabled by setting the `NANO_SESSION` environment variable a session ID will be generated with nanoid in the login script. The ID will be stored in the session field of the ACL user record. The session ID will be assigned to the user object in the token / cookie. The auth function will check whether the stored session ID matches the user session ID derived from the token. The auth function will return an error if the ID does not match. This makes it impossible to renew a cookie after the same user logs into the instance on a different platform.
