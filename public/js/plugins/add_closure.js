@@ -7,10 +7,10 @@ document.dispatchEvent(new CustomEvent('add_closure', {
         <button
           style="grid-column: 1/3;"
           class="btn-wide primary-colour"
-          onclick=${addRegion}
+          onclick=${addClosure}
         >Add Closure to current Scenario`)
 
-      async function addRegion() {
+      async function addClosure() {
 
         await _xyz.query({
           query: 'scenario_closure_copy',
@@ -24,6 +24,8 @@ document.dispatchEvent(new CustomEvent('add_closure', {
         })
 
         _xyz.layers.list.scenario_closures.reload()
+
+        _xyz.layers.plugins.scenario_panel_loadScenario()
       }
 
     }
