@@ -7,7 +7,7 @@ document.dispatchEvent(new CustomEvent('create_percentage', {
 
       if(!cellVal) return
 
-      return `${parseInt(cellVal * 100)}%`
+      return `${Math.round(cellVal * 1000) / 10}%`
     
     }
 
