@@ -47,3 +47,5 @@ Remove user enumaration messages. [#383](https://github.com/GEOLYTIX/xyz/issues/
 New passwords must be complex. [#215](https://github.com/GEOLYTIX/xyz/issues/215)
 
 Update security header. [#382](https://github.com/GEOLYTIX/xyz/issues/382)
+
+Added color picker utility (a-color-picker)
