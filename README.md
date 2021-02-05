@@ -90,6 +90,8 @@ The domain and service layer may secure proxy access for services provided by Go
 
 [node-fetch](https://github.com/bitinn/node-fetch) - A light-weight module that brings window.fetch to Node.
 
+[a-color-picker](https://narsenico.github.io/a-color-picker/) - a color picker for web app.
+
 
 ## License
 
