@@ -2013,6 +2013,9 @@ span.flatpickr-weekday {
     left: 50%;
     margin-left: -10px; }
 
+.mapboxgl-canary {
+  background-color: salmon; }
+
 .ol-scale-line {
   position: static; }
 
