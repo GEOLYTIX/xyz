@@ -370,6 +370,8 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
         scenarios.current.scenario_id > 0 && loadScenario()
       }
 
+      _xyz.layers.plugins.scenario_panel_loadScenario = loadScenario
+
       async function loadScenario() {
 
         scenarios.grid.innerHTML = ''
