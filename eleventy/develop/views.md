@@ -16,7 +16,7 @@ A series of stylesheet and script must be referenced in the document head of the
 <script src="${dir}/js/ol.js" defer></script>
 
 <!-- Load mapbox-gl library required for mbtiles layer. -->
-<script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js" defer></script>
+<script src="${dir}/js/mapbox-gl.js" defer></script>
 
 <!-- Load XYZ / MAPP stylesheet and library. -->
 <link rel="stylesheet" href="${dir}/css/mapp.css" />
