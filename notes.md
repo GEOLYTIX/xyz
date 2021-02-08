@@ -51,3 +51,5 @@ Update security header. [#382](https://github.com/GEOLYTIX/xyz/issues/382)
 Added color picker utility (a-color-picker)
 
 Replace mapbox-gl with maplibre. [#387](https://github.com/GEOLYTIX/xyz/issues/387)
+
+Dataviews - in case of no data tab gets message 'no data available', in the location view dataview container is skipped [#352](https://github.com/GEOLYTIX/xyz/issues/352)
