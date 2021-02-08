@@ -20,7 +20,7 @@ module.exports = async (req, res) => {
     if (err) return err
 
     if (process.env.NANO_SESSION) {
-      
+     
       var rows = await acl(`
         SELECT session
         FROM acl_schema.acl_table
