@@ -67,11 +67,14 @@
         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
       }
     },
-    "Random Data Series": {
+    "Random Data Series_aga": {
       "src": "cloudfront:${CDN}/dev/queries/random_data_series.sql"
     },
-    "Random Data Series 2": {
+    "Random Data Series": {
       "template": "select ARRAY [json_build_object('data', ARRAY [random1::integer, random2::integer, random3::integer, random4::integer, random5::integer])] AS datasets, ARRAY ['Rand 1', 'Rand 2', 'Rand 3', 'Rand 4', 'Rand 5'] AS labels from dev.uk_glx_sites where id = ${id};"
+    },
+    "random_data_series": {
+      "template": "select ARRAY [json_build_object('data', ARRAY [random1::integer, random2::integer, random3::integer, random4::integer, random5::integer])] AS datasets, ARRAY ['Rand 1', 'Rand 2', 'Rand 3', 'Rand 4', 'Rand 5'] AS labels from dev.uk_glx_sites where id = 0;"
     },
     "Population Summary Sites": {
       "src": "https://api.github.com/repos/GEOLYTIX/xyz_resources/contents/dev/queries/population_summary.txt"
@@ -98,9 +101,6 @@
     },
     "Agata": {
       "src": "cloudfront:${CDN}/dev/aga/layer.json"
-    },
-    "Dennis": {
-      "src": "file:workspaces/dennis.json"
     },
     "uk_polygon_demand": {
       "src": "cloudfront:${CDN}/asda/templates/charts/polygon_demand.sql"
@@ -521,9 +521,6 @@
         "Agata": {
           "template": "Agata"
         },
-        "Dennis": {
-          "template": "Dennis"
-        },
         "Polygon Statistics": {
           "format": "mvt",
           "dbs": "AVOCET",
@@ -548,7 +545,321 @@
               "query": "uk_polygon_demand"
             }
           ]
+        },
+        "aga": {
+    "meta": "don't touch.",
+    "edit":
+    {
+        "point": true,
+        "delete": true,
+        "geometry": true
+    },
+    "download":
+    {},
+    "format": "cluster",
+    "srid": "4326",
+    "geom": "geom_4326",
+    "dbs": "DEV",
+    "qID": "id",
+    "table": "dev.uk_glx_sites",
+    "_tables":
+    {
+        "6": null,
+        "7": "dev.uk_glx_sites"
+    },
+    "cluster_kmeans": 0.1,
+    "cluster_label": "site_name",
+    "infoj": [
+    {
+        "type": "key",
+        "class": "_report"
+    },
+    {
+        "type": "report",
+        "report":
+        {
+            "template": "Sites Local Report"
+        },
+        "class": "_report"
+    },
+    {
+        "type": "report",
+        "report":
+        {
+            "title": "Report hosted with GitHub",
+            "template": "Dev sites report"
+        },
+        "class": "_report"
+    },
+    {
+        "field": "id",
+        "title": "Site ID",
+        "inline": true,
+        "class": "purple-text"
+    },
+    {
+        "title": "Here's tomtom",
+        "name": "TomTom Reachable Range",
+        "type": "geometry",
+        "field": "isoline_tomtom",
+        "fieldfx": "ST_AsGeoJSON(isoline_tomtom)",
+        "edit":
+        {
+            "meta": "isoline_tomtom_meta",
+            "isoline_tomtom":
+            {}
         }
+    },
+    {
+        "field": "isoline_tomtom_meta",
+        "type": "json"
+    },
+    {
+        "title": "Here API v2",
+        "name": "Display",
+        "type": "geometry",
+        "field": "here_isoline_v2",
+        "fieldfx": "ST_AsGeoJSON(here_isoline_v2)",
+        "edit":
+        {
+            "meta": "here_isoline_v2_meta",
+            "isoline_here":
+            {}
+        },
+        "style":
+        {
+            "fillColor": "steelblue",
+            "strokeColor": "steelblue",
+            "fillOpacity": 0.3
+        }
+    },
+    {
+        "field": "here_isoline_v2_meta",
+        "type": "json"
+    },
+    {
+        "field": "text_edit",
+        "title": "Text edit",
+        "edit": true
+    },
+    {
+        "field": "integer_edit",
+        "title": "Integer edit",
+        "type": "integer",
+        "edit": true,
+        "inline": true
+    },
+    {
+        "field": "numeric_edit",
+        "title": "Numeric edit",
+        "type": "numeric",
+        "edit": true,
+        "inline": true
+    },
+    {
+        "field": "site_name",
+        "title": "Site Name",
+        "edit": true,
+        "inline": true
+    },
+    {
+        "field": "site_type",
+        "title": "Site Type",
+        "inline": true,
+        "edit":
+        {
+            "options": [
+                "Type A",
+                "Type B",
+                " "
+            ]
+        }
+    },
+    {
+        "title": "Random data series",
+        "type": "dataview",
+        "target": "xyz_sites_random",
+        "query": "random_data_series",
+        "class": "_report",
+        "chart":
+        {
+            "height": 300,
+            "width": 290,
+            "type": "bar",
+            "options":
+            {
+                "title":
+                {
+                    "display": true,
+                    "text": "Random data series"
+                },
+                "legend":
+                {
+                    "display": true,
+                    "position": "bottom"
+                },
+                "plugins":
+                {
+                    "datalabels":
+                    {
+                        "display": false
+                    }
+                }
+            }
+        }
+    },
+    {
+        "title": "Doughnut Chart",
+        "type": "dataview",
+        "_query": "random_data_series",
+        "query": "Random Data Series",
+        "_target": "xyz_sites_random2",
+        "target": "location",
+        "chart":
+        {
+            "type": "doughnut",
+            "datasets": [
+            {
+                "backgroundColor": [
+                    "rgba(229, 99 , 153, 0.4)",
+                    "rgba(0, 167, 225, 0.4)",
+                    "rgba(237, 222, 164, 0.4)",
+                    "rgba(247, 160 ,114, 0.4)",
+                    "rgba(255, 155, 66, 0.4)"
+                ],
+                "borderColor": "#C0B4A7",
+                "spanGaps": true,
+                "lineTension": 0.5
+            }],
+            "options":
+            {
+                "cutoutPercentage": 36,
+                "title":
+                {
+                    "display": true,
+                    "text": "Doughnut Chart"
+                },
+                "legend":
+                {
+                    "display": true,
+                    "position": "left"
+                }
+            }
+        },
+        "class": "_report"
+    },
+    {
+        "field": "comments",
+        "title": "Comments",
+        "type": "textarea",
+        "edit": true,
+        "class": "_report"
+    },
+    {
+        "field": "images",
+        "title": "Images",
+        "type": "images",
+        "edit": true,
+        "class": "_report"
+    },
+    {
+        "title": "Documents",
+        "field": "documents",
+        "type": "documents",
+        "edit": true,
+        "class": "_report"
+    },
+    {
+        "field": "test_jsonb",
+        "title": "Test JSONb",
+        "type": "json"
+    },
+    {
+        "field": "test_jsonb2",
+        "title": "Test JSONb",
+        "type": "json",
+        "edit": true
+    }],
+    "style":
+    {
+        "_default":
+        {
+            "showInHeader": true,
+            "type": "semiCircle",
+            "fillColor": "#ffb300",
+            "scale": 2,
+            "layers":
+            {
+                "0.5": "#0C6291",
+                "0.3": "#ffb300"
+            }
+        },
+        "default":
+        {
+            "showInHeader": true,
+            "layers":
+            [
+              {
+                "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/aga/red_pin.svg"
+              },
+              {
+                "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/aga/spar.svg"
+              }
+            ]
+        },
+        "cluster":
+        {
+            "type": "dot",
+            "fillColor": "rgba(0, 75, 168, 0.3)",
+            "scale": 2
+        },
+        "_themes":
+        {
+            "Test categorized pins":
+            {
+                "field": "test_binary",
+                "type": "categorized",
+                "other": true,
+                "cat":
+                {
+                    "0":
+                    {
+                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/aga/hi.svg",
+                        "scale": 0.1
+                    },
+                    "1":
+                    {
+                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/aga/hi2.svg",
+                        "scale": 0.1
+                    }
+                }
+            },
+            "Test categorized dots":
+            {
+                "field": "test_binary",
+                "type": "categorized",
+                "other": true,
+                "cat":
+                {
+                    "0":
+                    {
+                        "style":
+                        {
+                            "fillColor": "#283593"
+                        }
+                    },
+                    "1":
+                    {
+                        "style":
+                        {
+                            "fillColor": "#ff1744"
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
       }
     },
     "Japan": {
