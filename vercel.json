@@ -24,7 +24,7 @@
           "value": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
         },
         {
-          "key": "Adding X-Frame-Options",
+          "key": "X-Frame-Options",
           "value": "DENY"
         },
         {
