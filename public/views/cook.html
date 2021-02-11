@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head data-dir="${dir}" data-token=${token} data-login=${login}>
+    <title>${title}</title>
+    <link rel="icon" type="image/x-icon" href="${dir}/icons/favicon.ico" />
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://api.mapbox.com/mapbox-gl-js/v1.12.0/mapbox-gl.js" defer></script>
+    <script src="${dir}/js/Chart.min.js" defer></script>
+    <script src="${dir}/js/tabulator.min.js" defer></script>
+    <link rel="stylesheet" href="${dir}/css/ol.css" />
+    <script src="${dir}/js/ol.js" defer></script>
+    <link rel="stylesheet" href="${dir}/css/mapp.css" />
+    <script src="${dir}/js/mapp.js" defer></script>
+    <script src="${dir}/views/cook.js" defer></script>
+    <!--<script type="application/javascript" src="${dir}/api/provider/cloudfront?url=${SRC_CDN}/cook/templates/report/pipeline_report.js" defer></script>-->
+    <style>
+    * {
+        box-sizing: border-box;
+    }
+
+    .page {
+        width: 297mm;
+        height: 200mm;
+        margin: 20mm;
+        padding: 10mm;
+        page-break-after: auto;
+        background-color: #AEABAB;
+        position: relative;
+        top: 30px;
+        left: 30px;
+        /*box-shadow: 1px 1px 2px #333;*/
+    }
+
+    .header {
+        background-color: #3A3838;
+        width: 100%;
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 30px;
+        color: white;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 4px 4px 0 4px;
+    }
+
+    .header2 {
+        background-color: #3A3838;
+        height: 26px;
+        color: white;
+        font-weight: 600;
+        padding: 4px 4px 0 4px;
+    }
+
+    .header3 {
+        background-color: #5E5A5A;
+        height: 26px;
+        font-size: 12px;
+        color: white;
+        font-weight: 600;
+        padding: 4px 4px 0 4px;
+    }
+
+    .grid {
+        display: grid;
+        grid-gap: 20px;
+    }
+
+    .map {
+        height: 175mm;
+    }
+
+    .location-view-grid {
+        background-color: white;
+    }
+
+    .location-view-grid div {
+        margin: 0 10px 0 10px;
+    }
+
+    .current_date {
+        float: right;
+        font-weight: 400;
+    }
+
+    .xyz-dataview-chart {
+        background-color: white;
+    }
+
+    #legend4 .grid {
+      grid-gap: 4px;
+    }
+
+    </style>
+</head>
+
+<body>
+    <div class="page">
+        <div class="header">Cook Potential Site Assessment Report: <span class="xyz_site_name"></span><span class="area_leader"></span><span class="current_date"></span></div>
+        <div class="grid" style="grid-template-columns: 1fr 1fr;">
+            <div style="grid-column: 1; position: relative;">
+                <div class="header2">Site Location Map</div>
+                <div id="map" class="map"></div>
+                <div id="legend" style="background-color: rgba(255, 255, 255, 0.7); width: 160px; padding: 4px; position: absolute; top: 160mm; border-radius: 2px;"></div>
+            </div>
+            <div style="grid-column: 2; position: relative;">
+                <div>
+                    <div class="header2">Location Details</div>
+                    <div id="xyz_location"></div>
+                </div>
+                <br />
+                <div>
+                    <div class="header2">Nearest Existing Cook Stores</div>
+                    <div id="xyz_nearest_cook_stores"></div>
+                    <br />
+                    <div class="header2">Cook Concession Stores</div>
+                    <div id="xyz_concession_stores"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    </div>
+    <div class="page">
+        <div class="header">Cook Potential Site Assessment Report: <span class="xyz_site_name"></span><span class="current_date"></span></div>
+        <div class="grid" style="grid-template-columns: 1fr 1fr;">
+            <div style="grid-column: 1; position: relative;">
+                <div class="header2">Geolytix Retail Place & Pitch map with grocers & adjacent retailers</div>
+                <div id="map2" class="map"></div>
+            </div>
+            <div style="grid-column: 2; position: relative;">
+                <div>
+                    <div class="header2">Convenience</div>
+                    <div id="xyz_nearest_convenience"></div>
+                </div>
+                <!--<br />
+                <div>
+                    <div class="header2">Cook Concession Stores</div>
+                    <div id="xyz_concession_stores"></div>
+                </div>-->
+            </div>
+        </div>
+    </div>
+    
+    <div class="page">
+        <div class="header">Cook Potential Site Assessment Report: <span class="xyz_site_name"></span>
+          <span class="current_date"></span>
+        </div>
+
+        <div class="grid" style="grid-template-columns: 40% 60%;">
+          <div style="grid-column: 1; position: relative;">
+            
+            <div class="header2">Drivetime Map (5 min, 10 min, 15 min)</div>
+            <div id="map3" class="map"></div>
+          
+          </div>
+
+          <div style="grid-column: 2; position: relative;">
+             <div class="header2">Demographics</div>
+             <div class="grid" style="grid-template-columns: 1fr 1fr;">
+              <div style="grid-column: 1 / span 2;" class="xyz-dataview-chart">
+                 <div id="xyz_population"></div>
+               </div>
+
+                <div id="xyz_age_profile" style="grid-column: 1;" class="xyz-dataview-chart">
+                 <div class="header3">Age Profile</div>
+               </div>
+
+               <div id="xyz_social_grade_uk" style="grid-column: 2;" class="xyz-dataview-chart">
+                  <div class="header3">Social Grade vs UK</div>
+                </div>
+
+                <div id="xyz_disposable_income" style="grid-column: 1;" class="xyz-dataview-chart">
+                 <div class="header3">Disposable Income</div>
+               </div>
+
+               <div id="xyz_home_ownership" style="grid-column: 2;" class="xyz-dataview-chart">
+                  <div class="header3">Home Ownership</div>
+                </div>
+
+             </div>
+          </div>
+        
+        </div>
+
+    </div>
+    
+    <div class="page">
+        <div class="header">Cook Potential Site Assessment Report: <span class="xyz_site_name"></span><span class="current_date"></span></div>
+        <div class="grid" style="grid-template-columns: 1fr 1fr;">
+          <div style="grid-column: 1;">
+            <div class="header2">Cook Potential Score</div>
+            <div id="map4" style="height: 140mm;"></div>
+
+            <div id="legend4" style="background-color: rgba(255, 255, 255, 0.7); width: 150px; padding: 4px; position: absolute; top: 110mm; left: 14mm; border-radius: 2px;"><div style="margin-bottom: 4px; font-weight: 600;">Store Potential Index</div></div>
+            
+            <div id="xyz_customer_profile"><div class="header3">Customer Profile</div></div>
+          
+          </div>
+
+          <div style="grid-column: 2;">
+            <div id="xyz_oac_profile" class="xyz-dataview-chart">
+            
+            <div class="header2">Demographics - OAC Profile</div>
+
+          </div>
+
+          <div style="grid-column: 2;" class="xyz-dataview-chart">
+              <div style="display: grid; grid-template-columns: 1fr 1fr; padding: 10px; color: white; border-radius: 2px; text-align: center; font-size: 10px;">
+                  <div style="background-color: #5AAE53; padding: 2px;">Rural Residents</div>
+                  <div style="background-color: #A35B2C; padding: 2px;">Urbanities</div>
+                  <div style="background-color: #DA332E; padding: 2px;">Cosmopolitans</div>
+                  <div style="background-color: #98569E; padding: 2px;">Suburbanities</div>
+                  <div style="background-color: #EC7FAB; padding: 2px;">Ethnicity Central</div>
+                  <div style="background-color: #4079A8; padding: 2px;">Contrained City Dwellers</div>
+                  <div style="background-color: #F1803A; padding: 2px;">Multicultural Metropolitans</div>
+                  <div style="background-color: #EFC344; padding: 2px;">Hard-Pressed Living</div>
+              </div>
+          </div>
+
+      </div>
+
+     </div>
+   </div>
+    
+    <div class="page">
+        <div class="header">Cook Potential Site Assessment Report: <span class="xyz_site_name"></span><span class="current_date"></span></div>
+        <div class="grid" style="grid-template-columns: 1fr">
+            <div style="grid-column: 1; position: relative;">
+                <div class="header2">Customer catchments of nearby stores</div>
+                <div id="map5" class="map"></div>
+            </div>
+        </div>
+    </div>
+
+    
+</body>
+
+</html>
