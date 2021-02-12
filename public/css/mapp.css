@@ -316,6 +316,10 @@ input[type=range]::-moz-range-thumb {
   background-image: url("../icons/icon-people.svg");
 }
 
+.icon-city {
+  background-image: url("../icons/icon-city.svg");
+}
+
 .sample-poly {
   width: 30%;
   height: 32px;
