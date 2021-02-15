@@ -55,3 +55,5 @@ Replace mapbox-gl with maplibre. [#387](https://github.com/GEOLYTIX/xyz/issues/3
 Dataviews - in case of no data tab gets message 'no data available', in the location view dataview container is skipped [#352](https://github.com/GEOLYTIX/xyz/issues/352)
 
 Infoj - query callback now checks if response is null.
+
+Geometry entry edit - added skipComfirm flag to avoid delete confirm window when drivetime deleted.
