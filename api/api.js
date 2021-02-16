@@ -43,8 +43,6 @@ function IEdetect(sUsrAg) {
   if (sUsrAg.indexOf("Trident") > -1) return true
 }
 
-var serialize = require('serialize-javascript');
-
 module.exports = async (req, res) => {
 
   if (req.headers && req.headers['user-agent'] && IEdetect(req.headers['user-agent'])) return res.send('Uh Oh... It looks like your request comes from an unsupported user agent (e.g. Internet Explorer)')
