@@ -43,12 +43,20 @@ function IEdetect(sUsrAg) {
   if (sUsrAg.indexOf("Trident") > -1) return true
 }
 
+var serialize = require('serialize-javascript');
+
 module.exports = async (req, res) => {
 
   if (req.headers && req.headers['user-agent'] && IEdetect(req.headers['user-agent'])) return res.send('Uh Oh... It looks like your request comes from an unsupported user agent (e.g. Internet Explorer)')
 
   // Merge request params and query params.
   req.params = Object.assign(req.params || {}, req.query || {})
+
+  // Url parameter keys must be white listed as letters and numbers only.
+  if (Object.keys(req.params).some(key => !key.match(/^[A-Za-z0-9_-]*$/))) {
+
+    return res.status(403).send('Query params validation failed.')
+  }
 
   // Language param will default to english [en] is not explicitly set.
   req.params.language = req.params.language || 'en'
