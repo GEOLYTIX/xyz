@@ -57,3 +57,5 @@ Dataviews - in case of no data tab gets message 'no data available', in the loca
 Infoj - query callback now checks if response is null.
 
 Geometry entry edit - added skipComfirm flag to avoid delete confirm window when drivetime deleted.
+
+URL request parameter keys may only contain white listed characters. [#384](https://github.com/GEOLYTIX/xyz/issues/384)
