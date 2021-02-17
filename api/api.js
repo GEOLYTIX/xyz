@@ -69,7 +69,7 @@ module.exports = async (req, res) => {
     })
 
   // Make logger method available through params.
-  req.params.logger = logger
+  logger(req.params)
 
   // Short circuit login view or post request.
   if (req.params.login || req.body && req.body.login) return login(req, res)
