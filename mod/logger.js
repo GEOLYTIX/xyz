@@ -4,8 +4,6 @@ module.exports = msg => {
 
   if (!process.env.LOGS) return
 
-  if (process.env.LOGS === 'console') return console.log(msg)
-
   if (process.env.LOGS === 'logflare') {
 
     const keySource = process.env.KEY_LOGFLARE.split('|')
@@ -27,5 +25,7 @@ module.exports = msg => {
     })
 
   }
+
+  console.log(msg)
 
 }
