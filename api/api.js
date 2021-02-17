@@ -68,9 +68,6 @@ module.exports = async (req, res) => {
       req.params[entry[0]] = decodeURIComponent(entry[1])
     })
 
-  // Make logger method available through params.
-  logger(req.params)
-
   // Short circuit login view or post request.
   if (req.params.login || req.body && req.body.login) return login(req, res)
 
