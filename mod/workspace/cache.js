@@ -22,6 +22,8 @@ const assignDefaults = require('./assignDefaults')
 
 let workspace = null
 
+const logger = require('../logger')
+
 module.exports = async req => {
 
   let timestamp = Date.now()
@@ -30,9 +32,9 @@ module.exports = async req => {
   if (!workspace || ((timestamp - workspace.timestamp) > 3600000)) {
 
     if (!workspace) {
-      req.params.logger(`workspace is empty ${timestamp}`)
+      logger(`workspace is empty ${timestamp}`)
     } else if ((timestamp - workspace.timestamp) > 3600000) {
-      req.params.logger(`workspace has expired ${workspace.timestamp} | new timestamp is ${timestamp}`)
+      logger(`workspace has expired ${workspace.timestamp} | new timestamp is ${timestamp}`)
     }
 
     workspace = process.env.WORKSPACE && await getFrom[process.env.WORKSPACE.split(':')[0]](process.env.WORKSPACE) || {}
@@ -63,7 +65,7 @@ module.exports = async req => {
 
   } else {
 
-    req.params.logger(`workspace cached ${workspace.timestamp} | age ${timestamp - workspace.timestamp}`)
+    logger(`workspace cached ${workspace.timestamp} | age ${timestamp - workspace.timestamp}`)
 
   }
 
