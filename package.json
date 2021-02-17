@@ -36,7 +36,7 @@
     "@turf/circle": "^6.0.1",
     "@turf/explode": "^5.1.5",
     "@turf/flatten": "^5.1.5",
-    "@turf/kinks": "^6.0.0",
+    "@turf/kinks": "^6.3.0",
     "@turf/point-on-feature": "^5.1.5",
     "a-color-picker": "^1.2.1",
     "chart.js": "^2.9.3",
