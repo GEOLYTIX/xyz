@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
   <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
-  <title>Hex Grid</title>
+  <title>Logging</title>
   <style>
 
     html, body {
@@ -313,7 +313,7 @@
           <a href="/xyz/docs/environment-settings/">Environment Settings</a>
         </li>
         
-        <li class="__1 ">
+        <li class="__1 active">
           <a href="/xyz/docs/logging/">Logging</a>
         </li>
         
@@ -357,7 +357,7 @@
           <a href="/xyz/docs/workspace/layer/geojson/">GeoJson</a>
         </li>
         
-        <li class="__3 active">
+        <li class="__3 ">
           <a href="/xyz/docs/workspace/layer/grid/">Hex Grid</a>
         </li>
         
@@ -412,17 +412,16 @@
 
 
     <div id="content">
-      <h1 id="grid-layer">Grid layer <a class="header-anchor" href="#grid-layer">¶</a></h1>
-<p>Hex grid layers need to be prepared in a PostGIS database. It is recommended to create a series of grid layer for different zoom level. Grid layers are styled with a special bi-variate theme. The grid panel allows to control which field should be used to define the size of a grid cell and a second field is applied to colour grid cells.</p>
-<p>Grid layers do not have locations and grid cells can not be selected.</p>
-<h2 id="grid-fields"><strong>Grid fields</strong> <a class="header-anchor" href="#grid-fields">¶</a></h2>
-<p>The fields available for the styling of grid layers must be defined in the <strong>grid_fields</strong> entry.</p>
-<pre class="language-json"><code class="language-json"><span class="token property">"grid_fields"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>  <span class="token property">"Population 2001"</span><span class="token operator">:</span> <span class="token string">"pop__01"</span><span class="token punctuation">,</span><br>  <span class="token property">"Population 2011"</span><span class="token operator">:</span> <span class="token string">"pop__11"</span><span class="token punctuation">,</span><br>  <span class="token property">"Female population"</span><span class="token operator">:</span> <span class="token string">"gen_female__11"</span><span class="token punctuation">,</span><br>  <span class="token property">"Male population"</span><span class="token operator">:</span> <span class="token string">"gen_male__11"</span><br><span class="token punctuation">}</span></code></pre>
-<p>It is possible to set in the layer entry which fields should be set as the default.</p>
-<p><code>&quot;grid_color&quot;: &quot;pop__11&quot;</code></p>
-<p>The default field to be used for the color scale can be set as <strong>grid_color</strong>.</p>
-<p><code>&quot;grid_size&quot;: &quot;pop__01&quot;</code></p>
-<p>The default field to be used for the size scale can be set as <strong>grid_size</strong>.</p>
+      <h1 id="logging">Logging <a class="header-anchor" href="#logging">¶</a></h1>
+<p>By default log messages send to the <a href="https://github.com/GEOLYTIX/xyz/blob/master/mod/logger.js">logger module</a> will be written to the console if the <code>LOGS</code> process environment variable is set. If falsy, logs will not be written.</p>
+<h2 id="logflare">Logflare <a class="header-anchor" href="#logflare">¶</a></h2>
+<p>The logger module will attempt to send logs to a <a href="https://logflare.app/">logflare</a> source with <code>LOGS=logflare</code> as environment variable. The logflare API key and source ID, seperated by a pipe <code>|</code> must be provided as value for the <code>KEY_LOGFLARE</code> environment variable.</p>
+<pre><code>  &quot;LOGS&quot;: &quot;logflare&quot;,
+  &quot;KEY_LOGFLARE&quot;: &quot;6oCQu******|ad443baf-3e30-4c73-891e-**********&quot;,
+</code></pre>
+<h2 id="vercel-integration">Vercel Integration <a class="header-anchor" href="#vercel-integration">¶</a></h2>
+<p>Request handler and console logs will not be retained by Vercel. The functions panel must be open in the Vercel project dashboard to show realtime logs.</p>
+<p>A <a href="https://vercel.com/integrations/logflare">logflare integration</a> can be added to Vercel. The configuration for this integration allows to assign Logflare sources as log drains for projects within the scope.</p>
 
     </div>
 
