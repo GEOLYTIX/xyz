@@ -515,6 +515,9 @@
                   "access_token": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmY25oa2thMWhoMDJzbGNldmF2ZzYzcCJ9.IWcezkYm8mipsGXygnYbNw"
                 }
               }
+            },
+            {
+              "type": "streetview"
             }
           ]
         },
