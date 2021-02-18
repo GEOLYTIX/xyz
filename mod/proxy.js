@@ -2,14 +2,10 @@ const https = require('https')
 
 module.exports = (req, res) => {
 
-  let url = req.url.match(/\?.*/)
-
-  if (!url[0]) return
-
-  url = decodeURIComponent(url[0].substring(1))
+  if (!req.params.url) return
 
   // Find variables to be substituted.
-  url = url.replace(/\{(.*?)\}/g,
+  const url = decodeURIComponent(req.params.url).replace(/\{(.*?)\}/g,
 
     // Substitute matched variable with key value from process environment.
     matched => process.env[`KEY_${matched.replace(/\{|\}/g, '')}`] || matched)
