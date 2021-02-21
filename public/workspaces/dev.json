@@ -178,8 +178,7 @@
               "dynamic": true,
               "type": "graduated",
               "field": "pop__01",
-              "cat_arr": [
-                {
+              "cat_arr": [{
                   "value": "0",
                   "style": {
                     "marker": {
@@ -194,7 +193,7 @@
                     "marker": {
                       "type": "dot",
                       "fillColor": "#66bd63"
-                    }                    
+                    }
                   }
                 },
                 {
@@ -203,7 +202,7 @@
                     "marker": {
                       "type": "dot",
                       "fillColor": "#a6d96a"
-                    }                    
+                    }
                   }
                 },
                 {
@@ -212,7 +211,7 @@
                     "marker": {
                       "type": "dot",
                       "fillColor": "#d9ef8b"
-                    }                    
+                    }
                   }
                 },
                 {
@@ -221,7 +220,7 @@
                     "marker": {
                       "type": "dot",
                       "fillColor": "#fdae61"
-                    }                    
+                    }
                   }
                 },
                 {
@@ -230,7 +229,7 @@
                     "marker": {
                       "type": "dot",
                       "fillColor": "#f46d43"
-                    }                    
+                    }
                   }
                 },
                 {
@@ -239,15 +238,14 @@
                     "marker": {
                       "type": "dot",
                       "fillColor": "#d73027"
-                    }                    
+                    }
                   }
                 }
               ],
               "theme": {
                 "type": "graduated",
                 "field": "pop__11",
-                "cat_arr": [
-                  {
+                "cat_arr": [{
                     "style": {
                       "marker": {
                         "scale": 0.4
@@ -258,42 +256,42 @@
                     "style": {
                       "marker": {
                         "scale": 0.5
-                      }                    
+                      }
                     }
                   },
                   {
                     "style": {
                       "marker": {
                         "scale": 0.6
-                      }                    
+                      }
                     }
                   },
                   {
                     "style": {
                       "marker": {
                         "scale": 0.7
-                      }                    
+                      }
                     }
                   },
                   {
                     "style": {
                       "marker": {
                         "scale": 0.8
-                      }                    
+                      }
                     }
                   },
                   {
                     "style": {
                       "marker": {
                         "scale": 0.9
-                      }                    
+                      }
                     }
                   },
                   {
                     "style": {
                       "marker": {
                         "scale": 1
-                      }                    
+                      }
                     }
                   }
                 ]
@@ -430,11 +428,6 @@
               "edit": true
             },
             {
-              "title": "char_field",
-              "field": "char_field",
-              "edit": true
-            },
-            {
               "title": "integer_field",
               "field": "integer_field",
               "type": "integer",
@@ -521,6 +514,50 @@
             }
           ]
         },
+        "geoms": {
+          "format": "mvt",
+          "dbs": "DEV",
+          "table": "dev.scratch",
+          "srid": "3857",
+          "geom": "geom_3857",
+          "qID": "id",
+          "edit": {
+            "point": true,
+            "delete": true
+          },
+          "infoj": [
+            {
+              "title": "ID",
+              "field": "id"
+            },
+            {
+              "name": "isoline here",
+              "field": "isoline_here",
+              "fieldfx": "ST_asGeoJSON(isoline_here)",
+              "type": "geometry",
+              "edit": {
+                "isoline_here": {}
+              },
+              "style": {
+                "strokeColor": "#43a047",
+                "strokeWidth": 2,
+                "fillColor": "#43a047",
+                "fillOpacity": 0.2
+              }
+            },
+            {
+              "name": "isoline mapbox",
+              "field": "isoline_mapbox",
+              "fieldfx": "ST_asGeoJSON(isoline_here)",
+              "type": "geometry",
+              "edit": {
+                "isoline_mapbox": {
+                  "access_token": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmY25oa2thMWhoMDJzbGNldmF2ZzYzcCJ9.IWcezkYm8mipsGXygnYbNw"
+                }
+              }
+            }
+          ]
+        },
         "Agata": {
           "template": "Agata"
         },
@@ -535,8 +572,7 @@
             "delete": true
           },
           "qID": "id",
-          "infoj": [
-            {
+          "infoj": [{
               "type": "key"
             },
             {
@@ -550,319 +586,279 @@
           ]
         },
         "aga": {
-    "meta": "don't touch.",
-    "edit":
-    {
-        "point": true,
-        "delete": true,
-        "geometry": true
-    },
-    "download":
-    {},
-    "format": "cluster",
-    "srid": "4326",
-    "geom": "geom_4326",
-    "dbs": "DEV",
-    "qID": "id",
-    "table": "dev.uk_glx_sites",
-    "_tables":
-    {
-        "6": null,
-        "7": "dev.uk_glx_sites"
-    },
-    "cluster_kmeans": 0.1,
-    "cluster_label": "site_name",
-    "infoj": [
-    {
-        "type": "key",
-        "class": "_report"
-    },
-    {
-        "type": "report",
-        "report":
-        {
-            "template": "Sites Local Report"
-        },
-        "class": "_report"
-    },
-    {
-        "type": "report",
-        "report":
-        {
-            "title": "Report hosted with GitHub",
-            "template": "Dev sites report"
-        },
-        "class": "_report"
-    },
-    {
-        "field": "id",
-        "title": "Site ID",
-        "inline": true,
-        "class": "purple-text"
-    },
-    {
-        "title": "Here's tomtom",
-        "name": "TomTom Reachable Range",
-        "type": "geometry",
-        "field": "isoline_tomtom",
-        "fieldfx": "ST_AsGeoJSON(isoline_tomtom)",
-        "edit":
-        {
-            "meta": "isoline_tomtom_meta",
-            "isoline_tomtom":
-            {}
-        }
-    },
-    {
-        "field": "isoline_tomtom_meta",
-        "type": "json"
-    },
-    {
-        "title": "Here API v2",
-        "name": "Display",
-        "type": "geometry",
-        "field": "here_isoline_v2",
-        "fieldfx": "ST_AsGeoJSON(here_isoline_v2)",
-        "edit":
-        {
-            "meta": "here_isoline_v2_meta",
-            "isoline_here":
-            {}
-        },
-        "style":
-        {
-            "fillColor": "steelblue",
-            "strokeColor": "steelblue",
-            "fillOpacity": 0.3
-        }
-    },
-    {
-        "field": "here_isoline_v2_meta",
-        "type": "json"
-    },
-    {
-        "field": "text_edit",
-        "title": "Text edit",
-        "edit": true
-    },
-    {
-        "field": "integer_edit",
-        "title": "Integer edit",
-        "type": "integer",
-        "edit": true,
-        "inline": true
-    },
-    {
-        "field": "numeric_edit",
-        "title": "Numeric edit",
-        "type": "numeric",
-        "edit": true,
-        "inline": true
-    },
-    {
-        "field": "site_name",
-        "title": "Site Name",
-        "edit": true,
-        "inline": true
-    },
-    {
-        "field": "site_type",
-        "title": "Site Type",
-        "inline": true,
-        "edit":
-        {
-            "options": [
-                "Type A",
-                "Type B",
-                " "
-            ]
-        }
-    },
-    {
-        "title": "Random data series",
-        "type": "dataview",
-        "target": "xyz_sites_random",
-        "query": "random_data_series",
-        "class": "_report",
-        "chart":
-        {
-            "height": 300,
-            "width": 290,
-            "type": "bar",
-            "options":
+          "meta": "don't touch.",
+          "edit": {
+            "point": true,
+            "delete": true,
+            "geometry": true
+          },
+          "download": {},
+          "format": "cluster",
+          "srid": "4326",
+          "geom": "geom_4326",
+          "dbs": "DEV",
+          "qID": "id",
+          "table": "dev.uk_glx_sites",
+          "_tables": {
+            "6": null,
+            "7": "dev.uk_glx_sites"
+          },
+          "cluster_kmeans": 0.1,
+          "cluster_label": "site_name",
+          "infoj": [{
+              "type": "key",
+              "class": "_report"
+            },
             {
-                "title":
-                {
+              "type": "report",
+              "report": {
+                "template": "Sites Local Report"
+              },
+              "class": "_report"
+            },
+            {
+              "type": "report",
+              "report": {
+                "title": "Report hosted with GitHub",
+                "template": "Dev sites report"
+              },
+              "class": "_report"
+            },
+            {
+              "field": "id",
+              "title": "Site ID",
+              "inline": true,
+              "class": "purple-text"
+            },
+            {
+              "title": "Here's tomtom",
+              "name": "TomTom Reachable Range",
+              "type": "geometry",
+              "field": "isoline_tomtom",
+              "fieldfx": "ST_AsGeoJSON(isoline_tomtom)",
+              "edit": {
+                "meta": "isoline_tomtom_meta",
+                "isoline_tomtom": {}
+              }
+            },
+            {
+              "field": "isoline_tomtom_meta",
+              "type": "json"
+            },
+            {
+              "title": "Here API v2",
+              "name": "Display",
+              "type": "geometry",
+              "field": "here_isoline_v2",
+              "fieldfx": "ST_AsGeoJSON(here_isoline_v2)",
+              "edit": {
+                "meta": "here_isoline_v2_meta",
+                "isoline_here": {}
+              },
+              "style": {
+                "fillColor": "steelblue",
+                "strokeColor": "steelblue",
+                "fillOpacity": 0.3
+              }
+            },
+            {
+              "field": "here_isoline_v2_meta",
+              "type": "json"
+            },
+            {
+              "field": "text_edit",
+              "title": "Text edit",
+              "edit": true
+            },
+            {
+              "field": "integer_edit",
+              "title": "Integer edit",
+              "type": "integer",
+              "edit": true,
+              "inline": true
+            },
+            {
+              "field": "numeric_edit",
+              "title": "Numeric edit",
+              "type": "numeric",
+              "edit": true,
+              "inline": true
+            },
+            {
+              "field": "site_name",
+              "title": "Site Name",
+              "edit": true,
+              "inline": true
+            },
+            {
+              "field": "site_type",
+              "title": "Site Type",
+              "inline": true,
+              "edit": {
+                "options": [
+                  "Type A",
+                  "Type B",
+                  " "
+                ]
+              }
+            },
+            {
+              "title": "Random data series",
+              "type": "dataview",
+              "target": "xyz_sites_random",
+              "query": "random_data_series",
+              "class": "_report",
+              "chart": {
+                "height": 300,
+                "width": 290,
+                "type": "bar",
+                "options": {
+                  "title": {
                     "display": true,
                     "text": "Random data series"
-                },
-                "legend":
-                {
+                  },
+                  "legend": {
                     "display": true,
                     "position": "bottom"
-                },
-                "plugins":
-                {
-                    "datalabels":
-                    {
-                        "display": false
+                  },
+                  "plugins": {
+                    "datalabels": {
+                      "display": false
                     }
+                  }
                 }
-            }
-        }
-    },
-    {
-        "title": "Doughnut Chart",
-        "type": "dataview",
-        "_query": "random_data_series",
-        "query": "Random Data Series",
-        "_target": "xyz_sites_random2",
-        "target": "location",
-        "chart":
-        {
-            "type": "doughnut",
-            "datasets": [
+              }
+            },
             {
-                "backgroundColor": [
+              "title": "Doughnut Chart",
+              "type": "dataview",
+              "_query": "random_data_series",
+              "query": "Random Data Series",
+              "_target": "xyz_sites_random2",
+              "target": "location",
+              "chart": {
+                "type": "doughnut",
+                "datasets": [{
+                  "backgroundColor": [
                     "rgba(229, 99 , 153, 0.4)",
                     "rgba(0, 167, 225, 0.4)",
                     "rgba(237, 222, 164, 0.4)",
                     "rgba(247, 160 ,114, 0.4)",
                     "rgba(255, 155, 66, 0.4)"
-                ],
-                "borderColor": "#C0B4A7",
-                "spanGaps": true,
-                "lineTension": 0.5
-            }],
-            "options":
-            {
-                "cutoutPercentage": 36,
-                "title":
-                {
+                  ],
+                  "borderColor": "#C0B4A7",
+                  "spanGaps": true,
+                  "lineTension": 0.5
+                }],
+                "options": {
+                  "cutoutPercentage": 36,
+                  "title": {
                     "display": true,
                     "text": "Doughnut Chart"
-                },
-                "legend":
-                {
+                  },
+                  "legend": {
                     "display": true,
                     "position": "left"
+                  }
                 }
-            }
-        },
-        "class": "_report"
-    },
-    {
-        "field": "comments",
-        "title": "Comments",
-        "type": "textarea",
-        "edit": true,
-        "class": "_report"
-    },
-    {
-        "field": "images",
-        "title": "Images",
-        "type": "images",
-        "edit": true,
-        "class": "_report"
-    },
-    {
-        "title": "Documents",
-        "field": "documents",
-        "type": "documents",
-        "edit": true,
-        "class": "_report"
-    },
-    {
-        "field": "test_jsonb",
-        "title": "Test JSONb",
-        "type": "json"
-    },
-    {
-        "field": "test_jsonb2",
-        "title": "Test JSONb",
-        "type": "json",
-        "edit": true
-    }],
-    "style":
-    {
-        "_default":
-        {
-            "showInHeader": true,
-            "type": "semiCircle",
-            "fillColor": "#ffb300",
-            "scale": 2,
-            "layers":
+              },
+              "class": "_report"
+            },
             {
+              "field": "comments",
+              "title": "Comments",
+              "type": "textarea",
+              "edit": true,
+              "class": "_report"
+            },
+            {
+              "field": "images",
+              "title": "Images",
+              "type": "images",
+              "edit": true,
+              "class": "_report"
+            },
+            {
+              "title": "Documents",
+              "field": "documents",
+              "type": "documents",
+              "edit": true,
+              "class": "_report"
+            },
+            {
+              "field": "test_jsonb",
+              "title": "Test JSONb",
+              "type": "json"
+            },
+            {
+              "field": "test_jsonb2",
+              "title": "Test JSONb",
+              "type": "json",
+              "edit": true
+            }
+          ],
+          "style": {
+            "_default": {
+              "showInHeader": true,
+              "type": "semiCircle",
+              "fillColor": "#ffb300",
+              "scale": 2,
+              "layers": {
                 "0.5": "#0C6291",
                 "0.3": "#ffb300"
-            }
-        },
-        "default":
-        {
-            "showInHeader": true,
-            "layers":
-            [
-              {
-                "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/aga/red_pin.svg"
-              },
-              {
-                "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/aga/spar.svg"
               }
-            ]
-        },
-        "cluster":
-        {
-            "type": "dot",
-            "fillColor": "rgba(0, 75, 168, 0.3)",
-            "scale": 2
-        },
-        "_themes":
-        {
-            "Test categorized pins":
-            {
-                "field": "test_binary",
-                "type": "categorized",
-                "other": true,
-                "cat":
-                {
-                    "0":
-                    {
-                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/aga/hi.svg",
-                        "scale": 0.1
-                    },
-                    "1":
-                    {
-                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/aga/hi2.svg",
-                        "scale": 0.1
-                    }
-                }
             },
-            "Test categorized dots":
-            {
+            "default": {
+              "showInHeader": true,
+              "layers": [{
+                  "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/aga/red_pin.svg"
+                },
+                {
+                  "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/aga/spar.svg"
+                }
+              ]
+            },
+            "cluster": {
+              "type": "dot",
+              "fillColor": "rgba(0, 75, 168, 0.3)",
+              "scale": 2
+            },
+            "_themes": {
+              "Test categorized pins": {
                 "field": "test_binary",
                 "type": "categorized",
                 "other": true,
-                "cat":
-                {
-                    "0":
-                    {
-                        "style":
-                        {
-                            "fillColor": "#283593"
-                        }
-                    },
-                    "1":
-                    {
-                        "style":
-                        {
-                            "fillColor": "#ff1744"
-                        }
-                    }
+                "cat": {
+                  "0": {
+                    "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/aga/hi.svg",
+                    "scale": 0.1
+                  },
+                  "1": {
+                    "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/aga/hi2.svg",
+                    "scale": 0.1
+                  }
                 }
+              },
+              "Test categorized dots": {
+                "field": "test_binary",
+                "type": "categorized",
+                "other": true,
+                "cat": {
+                  "0": {
+                    "style": {
+                      "fillColor": "#283593"
+                    }
+                  },
+                  "1": {
+                    "style": {
+                      "fillColor": "#ff1744"
+                    }
+                  }
+                }
+              }
             }
+          }
         }
-    }
-}
       }
     },
     "Japan": {
