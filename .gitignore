@@ -8,6 +8,8 @@ public/css/.sass-cache/
 stats.json
 env
 
+caddy_linux_amd64
+
 public/workspaces/*
 !public/workspaces/dev.json
 !public/workspaces/geodata.json
