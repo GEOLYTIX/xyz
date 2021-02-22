@@ -405,6 +405,7 @@
             "rectangle": true,
             "line": true,
             "point": true,
+            "geometry": true,
             "isoline_mapbox": {
               "access_token": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmY25oa2thMWhoMDJzbGNldmF2ZzYzcCJ9.IWcezkYm8mipsGXygnYbNw"
             },
