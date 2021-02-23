@@ -53,6 +53,13 @@ app.get(`${process.env.DIR||''}/api/user/:method?/:key?`, api)
 
 app.post(`${process.env.DIR||''}/api/user/:method?/:key?`, bodyParser.urlencoded({extended: true}), api)
 
+//sudo ./caddy_linux_amd64 reverse-proxy --from localhost:443 --to localhost:3000
+app.get(`${process.env.DIR||''}/auth0/logout`, api)
+
+app.get(`${process.env.DIR||''}/auth0/login`, api)
+
+app.get(`${process.env.DIR||''}/auth0/callback`, api)
+
 
 app.get(`${process.env.DIR||''}/view/:template?`, api)
 
