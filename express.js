@@ -60,7 +60,6 @@ app.get(`${process.env.DIR||''}/auth0/login`, api)
 
 app.get(`${process.env.DIR||''}/auth0/callback`, api)
 
-
 app.get(`${process.env.DIR||''}/view/:template?`, api)
 
 app.get(`${process.env.DIR||''}/`, api)
