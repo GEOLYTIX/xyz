@@ -9,7 +9,7 @@
   <title>Geometry</title>
   <style>
 
-    body {
+    html, body {
       margin: 0;
       padding: 0;
     }
@@ -20,11 +20,15 @@
 
     .grid {
       font-family: system-ui;
-      display:grid;
-      grid-template-columns: 200px 5fr;
+      display: grid;
+      grid-template-columns: min-content minmax(0, 1fr);
       max-width: 1100px;
-      margin: auto;
-      padding: 0 30px;
+      margin-right: auto;
+      padding-right: 30px;
+    }
+
+    iframe {
+      border: none;
     }
 
     #toggle {
@@ -37,14 +41,19 @@
 
     #nav {
       grid-column: 1;
-      padding-inline-start: 0px;
-      list-style-type: none;
-      padding-right: 20px;
-      margin: 3px 0;
-      position: fixed;
+      /* transform: rotateY(180deg); */
+      padding: 10px 20px 20px 20px;
     }
 
-    #nav > *:first-child {
+    #nav > ul {
+      /* transform: rotateY(180deg); */
+      padding-inline-start: 0px;
+      list-style-type: none;
+      margin: 0;
+    }
+
+    #nav > ul > :first-child > a {
+      padding-top: 10px;
       line-height: 1;
       font-size: 30px;
       font-weight: bold;
@@ -52,11 +61,9 @@
 
     #content {
       grid-column: 2;
+      padding-top: 6px;
       padding-left: 20px;
       border-left: 1px solid #ddd;
-      margin: 10px 0;
-      overflow: hidden;
-      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -95,7 +102,7 @@
     }
 
     li.__2 {
-      padding-left: 0;
+      padding-left: 10px;
     }
 
     li.__3 {
@@ -103,7 +110,7 @@
     }
 
     li.__4 {
-      padding-left: 40px;
+      padding-left: 30px;
     }
 
     pre {
@@ -138,7 +145,7 @@
 
     @media only screen and (max-width: 700px) {
       .grid {
-        grid-template-columns: 0 1fr;
+        grid-template-columns: 0 minmax(0, 1fr);
         padding: 0 0 0 40px;
       }
 
@@ -159,12 +166,11 @@
       #content {
         border-left: none;
         padding: 0 20px 0 1px;
-        overflow: hidden;
       }
     }
 
     .show_nav {
-      grid-template-columns: 1fr 2fr;
+      grid-template-columns: min-content minmax(0, 1fr);
     }
 
     .show_nav > #nav {
@@ -186,201 +192,224 @@
 
     <div id="toggle"></div>
 
-    <ul id="nav">
-      
-      
-      
-      <li class="__1 ">
-        <a href="/xyz/docs/">XYZ</a>
-      </li>
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      <li class="__1 ">
-        <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
-      </li>
-      
-      
-      
-      <li class="__2 ">
-        <a href="/xyz/docs/workspace/dataviews/">Dataviews</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/dataviews/charts/">Charts</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/dataviews/tables/">Tables</a>
-      </li>
-      
-      
-      
-      <li class="__2 ">
-        <a href="/xyz/docs/workspace/layer/">Layer</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/layer/cluster/">Cluster</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/layer/editing/">Layer editing</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/layer/geojson/">GeoJson</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/layer/grid/">Hex Grid</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/layer/mvt/">MVT</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/layer/themes/">Themes</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/layer/tile/">Tile Layer</a>
-      </li>
-      
-      
-      
-      <li class="__2 ">
-        <a href="/xyz/docs/workspace/locales/">Locale</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/locales/gazetteer/">Gazetteer</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/workspace/locales/plugins/">Plugins</a>
-      </li>
-      
-      
-      
-      <li class="__3 active">
-        <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
-      </li>
-      
-      
-      
-      <li class="__2 ">
-        <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
-      </li>
-      
-      
-      
-      <li class="__2 ">
-        <a href="/xyz/docs/workspace/roles/">Roles</a>
-      </li>
-      
-      
-      
-      <li class="__2 ">
-        <a href="/xyz/docs/workspace/src/">Source Links</a>
-      </li>
-      
-      
-      
-      <li class="__2 ">
-        <a href="/xyz/docs/workspace/styles/">Styles</a>
-      </li>
-      
-      
-      
-      <li class="__2 ">
-        <a href="/xyz/docs/workspace/templates/">Templates</a>
-      </li>
-      
-      
+    <div id="nav">
 
-    </ul>
+      <ul>
+      
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/">XYZ</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/getting-started/">Getting started</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/deploy/">Deployments</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/design/">Design</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/design/icons/">Icons</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/develop/">Develop</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/develop/api/">API</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/gazetteer/">Gazetteer</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/layer/">Layer</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/location/">Location</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/provider/">Provider</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/proxy/">Proxy</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/query/">Query</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/user/">User</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/view/">View</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/workspace/">Workspace</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/develop/authentication/">Authentication</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/develop/lib/library/">Library</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/dataviews/">Dataviews</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/layers/">Layers</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/locations/">Locations</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/mapview/">Mapview</a>
+        </li>
+        
+        <li class="__4 ">
+          <a href="/xyz/docs/develop/lib/mapview/interactions/">Interactions</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/plugins/">Plugins</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/tabview/">Tabview</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/webpack/">Webpack</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/develop/views/">Application Views</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/document/">Document</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/environment-settings/">Environment Settings</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/logging/">Logging</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/mapp/">Mapp</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/security/">Security</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/dataviews/">Dataviews</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/dataviews/charts/">Charts</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/dataviews/tables/">Tables</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/layer/">Layer</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/cluster/">Cluster</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/editing/">Layer editing</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/geojson/">GeoJson</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/grid/">Hex Grid</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/mvt/">MVT</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/themes/">Themes</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/tile/">Tile Layer</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/locales/">Locale</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/locales/gazetteer/">Gazetteer</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
+        </li>
+        
+        <li class="__3 active">
+          <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/roles/">Roles</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/src/">Source Links</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/styles/">Styles</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/templates/">Templates</a>
+        </li>
+        
+  
+      </ul>
+
+    </div>
+
 
     <div id="content">
       <h1 id="additional-geometries">Additional geometries <a class="header-anchor" href="#additional-geometries">¶</a></h1>
@@ -397,13 +426,23 @@
 <p>mode: 'car', 'pedestrian', 'truck', 'carHOV', defaults to 'car'<br>
 rangetype: 'time', 'distance', defaults to 'time'<br>
 distance: distance in kilometres when &quot;rangetype&quot;: &quot;distance&quot;</p>
-<p>and (© Mapbox)[<a href="https://www.mapbox.com/about/maps">https://www.mapbox.com/about/maps</a>]</p>
+<p>(© Mapbox)[<a href="https://www.mapbox.com/about/maps">https://www.mapbox.com/about/maps</a>]</p>
 <pre class="language-json"><code class="language-json"><span class="token punctuation">{</span><br>	<span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"Mapbox drivetime 5 min"</span><span class="token punctuation">,</span><br>	<span class="token property">"field"</span><span class="token operator">:</span> <span class="token string">"isoline_5min"</span><span class="token punctuation">,</span><br>	<span class="token property">"fieldfx"</span><span class="token operator">:</span> <span class="token string">"ST_asGeoJson(isoline_5min)"</span><span class="token punctuation">,</span><br>	<span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"geometry"</span><span class="token punctuation">,</span><br>	<span class="token property">"edit"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>		<span class="token property">"isoline_mapbox"</span><span class="token operator">:</span> <span class="token punctuation">{</span>  <br>			<span class="token property">"minutes"</span><span class="token operator">:</span> <span class="token number">5</span><br>		<span class="token punctuation">}</span><br>	<span class="token punctuation">}</span><br><span class="token punctuation">}</span><br>  <span class="token comment">// request returns 5 minute drivetime isochrone from Mapbox API</span></code></pre>
 <ul>
 <li>Skip &quot;minutes&quot; parameter to use custom slider.<br>
 Use &quot;meta&quot; property for both providers in order to store details of most recent isoline. This value can be displayed as a separate entry of type <code>&quot;json&quot;</code>.</li>
 </ul>
-<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span><br>	<span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"Custom HERE Catchment (1)"</span><span class="token punctuation">,</span><br>	<span class="token property">"field"</span><span class="token operator">:</span> <span class="token string">"_isoline_custom1"</span><span class="token punctuation">,</span><br>	<span class="token property">"fieldfx"</span><span class="token operator">:</span> <span class="token string">"ST_asGeoJson(isoline_custom1)"</span><span class="token punctuation">,</span><br>	<span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"geometry"</span><span class="token punctuation">,</span><br>    <span class="token property">"edit"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>        <span class="token property">"isoline_here"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>            <span class="token property">"meta"</span><span class="token operator">:</span> <span class="token string">"isoline_custom1_meta"</span><br>        <span class="token punctuation">}</span><br>    <span class="token punctuation">}</span><br><span class="token punctuation">}</span></code></pre>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span><br>	<span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"Custom HERE Catchment (1)"</span><span class="token punctuation">,</span><br>	<span class="token property">"field"</span><span class="token operator">:</span> <span class="token string">"_isoline_custom1"</span><span class="token punctuation">,</span><br>	<span class="token property">"fieldfx"</span><span class="token operator">:</span> <span class="token string">"ST_asGeoJson(isoline_custom1)"</span><span class="token punctuation">,</span><br>	<span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"geometry"</span><span class="token punctuation">,</span><br>    <span class="token property">"edit"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>    	<span class="token property">"meta"</span><span class="token operator">:</span> <span class="token string">"isoline_custom1_meta"</span><span class="token punctuation">,</span><br>        <span class="token property">"isoline_here"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><br>    <span class="token punctuation">}</span><br><span class="token punctuation">}</span></code></pre>
+<p>and (TomTom Reachable Range API)[<a href="https://developer.tomtom.com/routing-api/routing-api-documentation-routing/calculate-reachable-range">https://developer.tomtom.com/routing-api/routing-api-documentation-routing/calculate-reachable-range</a>]</p>
+<pre class="language-json"><code class="language-json"><span class="token punctuation">{</span><br>	<span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"TomTom Reachable Range"</span><span class="token punctuation">,</span><br>    <span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"geometry"</span><span class="token punctuation">,</span><br>    <span class="token property">"field"</span><span class="token operator">:</span> <span class="token string">"isoline_tomtom"</span><span class="token punctuation">,</span><br>    <span class="token property">"fieldfx"</span><span class="token operator">:</span> <span class="token string">"ST_AsGeoJSON(isoline_tomtom)"</span><span class="token punctuation">,</span><br>    <span class="token property">"edit"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>        <span class="token property">"meta"</span><span class="token operator">:</span> <span class="token string">"isoline_tomtom_meta"</span><span class="token punctuation">,</span><br>        <span class="token property">"isoline_tomtom"</span><span class="token operator">:</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><br>    <span class="token punctuation">}</span><br><span class="token punctuation">}</span></code></pre>
+<p>For TomTom parameters see API Documentation. Default request parameters used here are:</p>
+<ul>
+<li>timeBudgetInSec, defaults to 10*60 seconds,</li>
+<li>routeType, defaults to 'fastest',</li>
+<li>travelMode, defaults to 'car'.</li>
+</ul>
+<p>Please note that third party API isolines are only available for features with geometry type &quot;Point&quot;.<br>
+If defined for non-point features control will be skipped.</p>
 <p>Geometry can also support &quot;query&quot; parameter which is independent from selected location. It is useful for more complex geometries which may only be requested when needed.</p>
 <pre class="language-json"><code class="language-json"><span class="token punctuation">{</span><br>	<span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"All catchments - query"</span><span class="token punctuation">,</span><br>	<span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"geometry"</span><span class="token punctuation">,</span><br>	<span class="token property">"field"</span><span class="token operator">:</span> <span class="token string">"collection"</span><span class="token punctuation">,</span><br>	<span class="token property">"query"</span><span class="token operator">:</span> <span class="token string">"Shops with all catchments"</span><br><span class="token punctuation">}</span></code></pre>
 <p>Query should return GeoJSON object as value for given field.</p>

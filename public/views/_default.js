@@ -185,16 +185,11 @@ window.onload = () => {
       scrollWheelZoom: true,
     })
 
-    xyz.plugins()
-      .then(() => xyz.layers.load())
-      .then(() => mappUI())
-      .catch(error => console.error(error))
-
     // Add zoomIn button.
     const btnZoomIn = btnColumn.appendChild(xyz.utils.html.node `
       <button
+        id="btnZoomIn"
         disabled=${xyz.map.getView().getZoom() >= xyz.locale.maxZoom}
-        class="enabled"
         title=${xyz.language.toolbar_zoom_in}
         onclick=${e => {
           const z = parseInt(xyz.map.getView().getZoom() + 1)
@@ -205,8 +200,8 @@ window.onload = () => {
     // Add zoomOut button.
     const btnZoomOut = btnColumn.appendChild(xyz.utils.html.node`
       <button
+        id="btnZoomOut"
         disabled=${xyz.map.getView().getZoom() <= xyz.locale.minZoom}
-        class="enabled"
         title=${xyz.language.toolbar_zoom_out}
         onclick=${e => {
           const z = parseInt(xyz.map.getView().getZoom() - 1)
@@ -242,7 +237,7 @@ window.onload = () => {
           xyz.mapview.interaction.zoom.cancel()
 
         }}>
-        <div class="xyz-icon icon-area off-black-filter">`)
+        <div class="xyz-icon icon-pageview">`)
 
     // Add locator button.
     btnColumn.appendChild(xyz.utils.html.node`
@@ -252,27 +247,7 @@ window.onload = () => {
           xyz.mapview.locate.toggle();
           e.target.classList.toggle('enabled');
         }}>
-        <div class="xyz-icon icon-gps-not-fixed off-black-filter">`)
-
-    // Add measure button.
-    btnColumn.appendChild(xyz.utils.html.node`
-      <button
-        class="mobile-display-none"
-          title=${xyz.language.toolbar_measure}
-          onclick=${e => {
-
-            if (e.target.classList.contains('enabled')) return xyz.mapview.interaction.draw.cancel()
-
-            e.target.classList.add('enabled')
-
-            xyz.mapview.interaction.draw.begin({
-              type: 'LineString',
-              tooltip: 'length',
-              callback: () => {
-                e.target.classList.remove('enabled')
-              }
-            })
-          }}><div class="xyz-icon icon-line off-black-filter">`)          
+        <div class="xyz-icon icon-gps-not-fixed">`)
 
     // Add fullscreen button.
     btnColumn.appendChild(xyz.utils.html.node`
@@ -281,13 +256,15 @@ window.onload = () => {
         title=${xyz.language.toolbar_fullscreen}
         onclick=${e => {
           e.target.classList.toggle('enabled')
-
-          document.body.style.gridTemplateColumns = e.target.classList.contains('enabled') ?
-            '0 0 50px auto' : '333px 10px 50px auto';
+          document.body.classList.toggle('fullscreen')
           xyz.map.updateSize()
         }}>
-        <div class="xyz-icon icon-map off-black-filter">`)      
+        <div class="xyz-icon icon-map">`)      
 
+    xyz.plugins()
+      .then(() => xyz.layers.load())
+      .then(() => mappUI())
+      .catch(error => console.error(error))
   }
 
   // Initialise listview controls.
@@ -305,6 +282,7 @@ window.onload = () => {
             btnGazetteer.classList.toggle('enabled')
             btnGazetteer.classList.toggle('mobile-hidden')
             gazetteer.classList.toggle('display-none')
+            gazetteer.querySelector('input').focus()
           }}><div class="xyz-icon icon-search">`, btnColumn.firstChild)
         
       document.getElementById('closeGazetteer').onclick = e => {
@@ -357,26 +335,27 @@ window.onload = () => {
       })
     })
 
-    // Get user from token.
-    if (document.head.dataset.token) {
-      xyz.user = xyz.utils.JWTDecode(document.head.dataset.token)
-    }
+    xyz.user = document.head.dataset.user && JSON.parse(decodeURI(document.head.dataset.user))
+
+    xyz.user && xyz.utils.idle({
+      host: xyz.host
+    })
 
     // Append user admin button.
     xyz.user && xyz.user.admin && btnColumn.appendChild(xyz.utils.html.node`
       <a
         title=${xyz.language.toolbar_admin}
-        class="enabled mobile-display-none style="cursor: pointer;"
-        href="${xyz.host + '/view/admin_user'}">
+        class="mobile-display-none"
+        href="${xyz.host + '/api/user/admin'}">
         <div class="xyz-icon icon-supervisor-account">`)
 
     // Append logout button.
     document.head.dataset.login && btnColumn.appendChild(xyz.utils.html.node`
       <a
-        title="${xyz.user ? `${xyz.language.toolbar_logout} ${xyz.user.email}` : 'Login'}"
-        class="enabled" style="cursor: pointer;"
-        href="${xyz.host + (xyz.user ? '/api/user/logout' : '/login')}">
-        <div class="${'xyz-icon ' + (xyz.user && 'icon-logout' || 'icon-lock-open')}">`)
+        title="${xyz.user && `${xyz.language.toolbar_logout} ${xyz.user.email}` || 'Login'}"
+        href="${xyz.user && '?logout=true' || '?login=true'}">
+        <div
+          class="${`xyz-icon ${xyz.user && 'icon-logout red-filter' || 'icon-lock-open primary-colour-filter'}`}">`)
 
   }
 

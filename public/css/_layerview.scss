@@ -32,23 +32,24 @@
     }
 
     >*:last-child {
-        padding-bottom: 5px;
+      padding-bottom: 5px;
     }
 }
 
 
 .layer-view {
 
-    .title {
-        margin-bottom: 10px;
-        padding: 5px 0;
-        border-radius: 2px;
-    }
+  .title {
+    margin-bottom: 10px;
+    padding: 5px 0;
+    border-radius: 2px;
+  }
 
-    .meta {
-        font-size: 90%;
-        padding-bottom: 5px;
-    }
+  .meta {
+    font-size: 90%;
+    padding-bottom: 5px;
+    padding-right: 5px;
+  }
 
     .legend.grid {
       margin-top: 5px;
@@ -57,6 +58,13 @@
       grid-gap: 5px;
       align-items: center;
       justify-content: start;
+    }
+
+    .legend .title {
+      font-size: 120%;
+      font-weight: bold;
+      margin: 0;
+      padding: 0;
     }
 
     .legend .label {

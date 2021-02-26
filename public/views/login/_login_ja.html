@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="ja">
 
 <head data-dir="${dir}">
   <title>XYZ | ログイン</title>
@@ -24,11 +24,13 @@
     <option value="${dir}?language=zh">中文简体</option>
   </select>
 
-  <form action="${dir}/api/user/cookie" method="post" autocomplete="off">
+  <form action="${dir}/api/user/login" method="post" autocomplete="off">
 
     <input style="display: none;" name="redirect" value="${redirect}">
 
-    <input style="display:none;" name="language" required value=${language}>
+    <input style="display: none;" name="login" value=true>
+
+    <input style="display:none;" name="language" required value="ja">
 
     <div class="input-group">
       <input id="auth_user_email" name="email" type="email" required maxlength="50">
@@ -47,7 +49,7 @@
     <button id="btnLogin" type="submit" disabled>ログイン</button>
 
     <p>ログインするにはE-メールアドレス宛に送信された検証リンクに基づくアカウント検証が必要。</p>
-    <a class="switch" href="${dir}/api/user/register?language=${language}">新規アカウント登録或いはパスワードをリセット</a>
+    <a class="switch" href="${dir}/api/user/register?register=true&language=ja">新規アカウント登録或いはパスワードをリセット</a>
     
   </form>
 

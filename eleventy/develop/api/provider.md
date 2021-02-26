@@ -1,11 +1,25 @@
 ---
 title: Provider
-tags: [develop]
+
 layout: root.html
 ---
 
 # Provider API
 
-Provider are external services which can be accessed via the XYZ API. API keys for external services may be stored as environment variables allowing XYZ clients access to secure services without exposing the API keys themselves.
+The XYZ [provider module](https://github.com/GEOLYTIX/xyz/blob/development/mod/provider/_provider.js) is a collection of modules which allow requests to 3rd party provider.
 
-*This is likely to be merged with the proxy service in the future*
+The provider modules themselves are in the same mod folder. Requests for these provider may not be proxied due to specific requirements in regards to keys and auxiliary libraries.
+
+The Cloudfront and Github provider may both be used to request workspaces and workspace templates.
+
+## Cloudfront
+
+The [Cloudfront provider module](https://github.com/GEOLYTIX/xyz/blob/development/mod/provider/cloudflare.js) makes use of the AWS-SDK and requires a Cloudfront encryption key in order to request protected ressources stored with the AWS Cloudfront platform.
+
+## Github
+
+The [Github provider module](https://github.com/GEOLYTIX/xyz/blob/development/mod/provider/github.js) decorates request header with credentials which must be provided as environment `KEY_GITHUB` variable. Content is parsed as JSON before being returned to the request client.
+
+## Cloudinary
+
+The [Cloudinary provider module](https://github.com/GEOLYTIX/xyz/blob/development/mod/provider/cloudinary.js) uses the [Cloudinary API module](https://www.npmjs.com/package/cloudinary) to upload images or documents provided as a post body to the Cloudinary API.

@@ -1,6 +1,5 @@
 ---
 title: Locale
-tags: [workspace]
 layout: root.html
 group: true
 orderPath: /workspace/locales/_locales
@@ -58,3 +57,16 @@ The **min** and **maxZoom** define the outer zoom levels for the map object. The
 
 Setting the **view** with latitude \(**lat**\), longitude \(**lng**\), and zoom \(**z**\) will define the view which is loaded if not overridden by either the init parameter or url hooks.
 
+## Plugins
+
+The plugins object entry in the locale workspace configuration can be used to define which addon scripts should be loaded.
+
+```json
+"plugins": {
+  "cluster": "/js/plugins/cluster.js"
+}
+```
+
+The key must match the event name which is defined in the module code. The entry value defines the source for the script tag which added to the application window document.
+
+Additional information in regard to building plugins can be found here [/develop/lib/plugins](/xyz/docs/develop/lib/plugins/).

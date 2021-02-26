@@ -1,6 +1,6 @@
 ---
 title: Workspace
-tags: [workspace, root]
+
 layout: root.html
 group: true
 orderPath: /workspace/_workspace

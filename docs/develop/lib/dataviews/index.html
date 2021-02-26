@@ -9,7 +9,7 @@
   <title>Dataviews</title>
   <style>
 
-    body {
+    html, body {
       margin: 0;
       padding: 0;
     }
@@ -20,11 +20,15 @@
 
     .grid {
       font-family: system-ui;
-      display:grid;
-      grid-template-columns: 200px 5fr;
+      display: grid;
+      grid-template-columns: min-content minmax(0, 1fr);
       max-width: 1100px;
-      margin: auto;
-      padding: 0 30px;
+      margin-right: auto;
+      padding-right: 30px;
+    }
+
+    iframe {
+      border: none;
     }
 
     #toggle {
@@ -37,14 +41,19 @@
 
     #nav {
       grid-column: 1;
-      padding-inline-start: 0px;
-      list-style-type: none;
-      padding-right: 20px;
-      margin: 3px 0;
-      position: fixed;
+      /* transform: rotateY(180deg); */
+      padding: 10px 20px 20px 20px;
     }
 
-    #nav > *:first-child {
+    #nav > ul {
+      /* transform: rotateY(180deg); */
+      padding-inline-start: 0px;
+      list-style-type: none;
+      margin: 0;
+    }
+
+    #nav > ul > :first-child > a {
+      padding-top: 10px;
       line-height: 1;
       font-size: 30px;
       font-weight: bold;
@@ -52,11 +61,9 @@
 
     #content {
       grid-column: 2;
+      padding-top: 6px;
       padding-left: 20px;
       border-left: 1px solid #ddd;
-      margin: 10px 0;
-      overflow: hidden;
-      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -95,7 +102,7 @@
     }
 
     li.__2 {
-      padding-left: 0;
+      padding-left: 10px;
     }
 
     li.__3 {
@@ -103,7 +110,7 @@
     }
 
     li.__4 {
-      padding-left: 40px;
+      padding-left: 30px;
     }
 
     pre {
@@ -138,7 +145,7 @@
 
     @media only screen and (max-width: 700px) {
       .grid {
-        grid-template-columns: 0 1fr;
+        grid-template-columns: 0 minmax(0, 1fr);
         padding: 0 0 0 40px;
       }
 
@@ -159,12 +166,11 @@
       #content {
         border-left: none;
         padding: 0 20px 0 1px;
-        overflow: hidden;
       }
     }
 
     .show_nav {
-      grid-template-columns: 1fr 2fr;
+      grid-template-columns: min-content minmax(0, 1fr);
     }
 
     .show_nav > #nav {
@@ -186,210 +192,249 @@
 
     <div id="toggle"></div>
 
-    <ul id="nav">
-      
-      
-      
-      <li class="__1 ">
-        <a href="/xyz/docs/">XYZ</a>
-      </li>
-      
-      
-      
-      
-      
-      <li class="__1 ">
-        <a href="/xyz/docs/develop/">Develop</a>
-      </li>
-      
-      
-      
-      <li class="__2 ">
-        <a href="/xyz/docs/develop/api/">API</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/api/gazetteer/">Gazetteer</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/api/layer/">Layer</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/api/location/">Location</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/api/provider/">Provider</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/api/proxy/">Proxy</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/api/query/">Query</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/api/user/">User</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/api/view/">View</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/api/workspace/">Workspace</a>
-      </li>
-      
-      
-      
-      <li class="__2 ">
-        <a href="/xyz/docs/develop/design/">Design</a>
-      </li>
-      
-      
-      
-      <li class="__2 ">
-        <a href="/xyz/docs/develop/lib/library/">Library</a>
-      </li>
-      
-      
-      
-      <li class="__3 active">
-        <a href="/xyz/docs/develop/lib/dataviews/">Dataviews</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/lib/layers/">Layers</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/lib/locations/">Locations</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/lib/mapview/">Mapview</a>
-      </li>
-      
-      
-      
-      <li class="__4 ">
-        <a href="/xyz/docs/develop/lib/mapview/interactions/">Interactions</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/lib/plugins/">Plugins</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/lib/webpack/">Webpack</a>
-      </li>
-      
-      
-      
-      <li class="__2 ">
-        <a href="/xyz/docs/develop/security/authentication/">Authentication</a>
-      </li>
-      
-      
-      
-      <li class="__2 ">
-        <a href="/xyz/docs/develop/views/">Application Views</a>
-      </li>
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
+    <div id="nav">
 
-    </ul>
+      <ul>
+      
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/">XYZ</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/getting-started/">Getting started</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/deploy/">Deployments</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/design/">Design</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/design/icons/">Icons</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/develop/">Develop</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/develop/api/">API</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/gazetteer/">Gazetteer</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/layer/">Layer</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/location/">Location</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/provider/">Provider</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/proxy/">Proxy</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/query/">Query</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/user/">User</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/view/">View</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/workspace/">Workspace</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/develop/authentication/">Authentication</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/develop/lib/library/">Library</a>
+        </li>
+        
+        <li class="__3 active">
+          <a href="/xyz/docs/develop/lib/dataviews/">Dataviews</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/layers/">Layers</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/locations/">Locations</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/mapview/">Mapview</a>
+        </li>
+        
+        <li class="__4 ">
+          <a href="/xyz/docs/develop/lib/mapview/interactions/">Interactions</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/plugins/">Plugins</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/tabview/">Tabview</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/webpack/">Webpack</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/develop/views/">Application Views</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/document/">Document</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/environment-settings/">Environment Settings</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/logging/">Logging</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/mapp/">Mapp</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/security/">Security</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/dataviews/">Dataviews</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/dataviews/charts/">Charts</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/dataviews/tables/">Tables</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/layer/">Layer</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/cluster/">Cluster</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/editing/">Layer editing</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/geojson/">GeoJson</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/grid/">Hex Grid</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/mvt/">MVT</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/themes/">Themes</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/tile/">Tile Layer</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/locales/">Locale</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/locales/gazetteer/">Gazetteer</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/roles/">Roles</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/src/">Source Links</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/styles/">Styles</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/templates/">Templates</a>
+        </li>
+        
+  
+      </ul>
+
+    </div>
+
 
     <div id="content">
       <h1 id="dataviews">Dataviews <a class="header-anchor" href="#dataviews">¶</a></h1>
-<p>Dataviews can be graphs or tables. A dataview can be created from a static json dataset or associated to a query which is called prior to updating the dataview. The layout and query of a dataview maybe configured by paramter for the dataview creation method.</p>
-
+<p><a href="https://github.com/GEOLYTIX/xyz/blob/development/lib/dataviews.mjs">/lib/dataviews</a></p>
+<p>Dataviews can be created as either chart or table.</p>
+<p>The dataview must be provided as an object to the <code>dataviews.create()</code> method. A target for the dataview may be provided as ID (string) or HTMLElement. New target element will be created if no target value is provided with the dataview object.</p>
+<p>The dataview will be appended as a child if a <code>.panel</code> HTMLElement is provided with the dataview object. This allows for dataviews to be created in a tabview panel.</p>
+<p>Dataviews can be nested by providing the multiple dataview objects within a dataviews array on the dataview object. This allows for mutiple dataviews to be arranged in a grid display.</p>
+<p>A dataview HTMLElement contains a <code>.toolbar</code> container which allows for additional utility controls to be created alongside the dataview, and the dataview target itself which will hold the canvas on which dataview is drawm.</p>
+<p>Dataviews have a <code>.setData()</code> method which will assign data to the dataview and render the newly set data.</p>
+<p>The <code>.update()</code> method of a dataview will wait for a promise to execute the dataview query and send the response to the <code>.setData()</code> method.</p>
+<p>The update method will be called from a <code>changeEnd</code> event listener on the <code>mapview.node</code> if the <code>.mapChange = true</code> flag is set.</p>
+<h2 id="chartjs">ChartJS <a class="header-anchor" href="#chartjs">¶</a></h2>
+<p>The Mapp library will attempt to create a ChartJS dataview if a <code>.chart</code> object is assigned to the input dataview object.</p>
+<iframe height="406" style="width: 100%;" scrolling="no" title="tabview" src="https://codepen.io/dbauszus-glx/embed/ExgPdeB?height=406&theme-id=light&default-tab=js,result" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href='https://codepen.io/dbauszus-glx/pen/ExgPdeB'>tabview</a> by dbauzus-glx
+  (<a href='https://codepen.io/dbauszus-glx'>@dbauszus-glx</a>) on <a href='https://codepen.io'>CodePen</a>.
+</iframe>
+<h2 id="tabulator">Tabulator <a class="header-anchor" href="#tabulator">¶</a></h2>
+<p>The Mapp library will attempt to create a Tabulator dataview is a <code>.columns</code> array is assigned to the input dataview object.</p>
+<p>The Tabulator library must be available as a script ressource.</p>
+<iframe height="406" style="width: 100%;" scrolling="no" title="tabview" src="https://codepen.io/dbauszus-glx/embed/BaLjvae?height=406&theme-id=light&default-tab=js,result" frameborder="no" loading="lazy" allowtransparency="true" allowfullscreen="true">
+  See the Pen <a href='https://codepen.io/dbauszus-glx/pen/BaLjvae'>tabview</a> by dbauzus-glx
+  (<a href='https://codepen.io/dbauszus-glx'>@dbauszus-glx</a>) on <a href='https://codepen.io'>CodePen</a>.
+</iframe>
     </div>
 
   </div>

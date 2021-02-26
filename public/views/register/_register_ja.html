@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="ja">
 
 <head data-dir="${dir}">
   <title>XYZ | 登録</title>
@@ -15,7 +15,9 @@
 <body class="register_form">
   <form method="post">
 
-    <input style="display:none;" name="language" required value=${language}>
+    <input style="display:none;" name="language" required value="ja">
+
+    <input style="display: none;" name="register" value=true>
 
     <div class="input-group">
       <input id="auth_user_email" name="email" type="email" autocomplete="off" required maxlength="50" value="">
@@ -24,15 +26,13 @@
     </div>
 
     <div class="input-group">
-      <input id="auth_user_password" name="password" type="password" autocomplete="off" required minlength="8" value="">
-
+      <input id="auth_user_password" name="password" type="password" autocomplete="off" required pattern="(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{10,}$" value="">
       <span class="bar"></span>
-      <label for="auth_user_password">新規パスワード（８文字以上）</label>
+      <label for="auth_user_password">新規パスワード（10文字以上）</label>
     </div>
 
     <div class="input-group">
-      <input id="auth_user_password_retype" type="password" autocomplete="off" required minlength="8" value="">
-
+      <input id="auth_user_password_retype" type="password" autocomplete="off" required value="">
       <span class="bar"></span>
       <label for="auth_user_password_retype">パスワード再入力</label>
     </div>
@@ -74,7 +74,7 @@
     <p>アカウント検証完了後にサイトアドミニストレーターにより新規アカウントが承認され、
       新規アカウント設定完了メールが送信される。</p>
 
-    <a class="switch" href="${dir}/?login">登録完了の場合→ログイン</a>
+    <a class="switch" href="${dir}/?login&language=ja">登録完了の場合→ログイン</a>
   </form>
 
 </body>

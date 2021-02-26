@@ -1,6 +1,6 @@
 ---
 title: Charts
-tags: [workspace]
+
 layout: root.html
 ---
 

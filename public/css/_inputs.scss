@@ -130,6 +130,11 @@ input[type=number] {
 .input-checkbox {
   display: block;
 
+  &.disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
   &.inline {
     display: inline-block;
   }

@@ -8,17 +8,17 @@ public/css/.sass-cache/
 stats.json
 env
 
+caddy_linux_amd64
+
 public/workspaces/*
 !public/workspaces/dev.json
 !public/workspaces/geodata.json
+!public/workspaces/blog.json
 
-public/views/[!_]*.*
-
+public/views/foodmap.*
 public/views/wellbeing.*
-public/views/geodata.html
-public/views/geodata.js
-public/views/camelot_report.html
-public/views/camelot_report.js
+public/views/test.*
+public/views/pol.*
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*

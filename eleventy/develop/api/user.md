@@ -1,6 +1,6 @@
 ---
 title: User
-tags: [develop]
+
 layout: root.html
 ---
 
@@ -17,6 +17,10 @@ Will return the signed token from a XYZ Cookie set in the HTTP request header. T
 ### /api/user/coookie
 
 Will return the textual representation of a HTTP Cookie if accessed as a *GET* request. The request will be redirected to the login form if no cookie is found on the request header. A new cookie will be set on the response header to a *POST* request after the login information in the request body has been checked against a user record in the ACL.
+
+`?renew=true` will renew a cookie but not return a login form if the cookie is already expired or not found.
+
+`?destroy=true` will set a cookie with a null value. This cookie will immediately expire and remove any existing cookie.
 
 ### /api/user/key
 

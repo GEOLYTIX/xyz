@@ -1,4 +1,4 @@
-module.exports = {
+module.exports = defaults = {
   locale: {
     minZoom: 0,
     maxZoom: 20,
@@ -15,6 +15,9 @@ module.exports = {
         display: true,
         format: 'tiles',
         URI: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+        style: {
+          hidden: true
+        }
       }
     },
   },
@@ -51,15 +54,24 @@ module.exports = {
       srid: '3857',
       style: {
         default: {
-          strokeColor: '#333333',
-          fillColor: '#333333',
+          strokeColor: '#333',
+          fillColor: '#333',
           fillOpacity: 0.1,
+          marker: {
+            type: 'dot',
+            fillColor: '#333'
+          }
         },
         highlight: {
           strokeWidth: 2,
           strokeColor: '#1F964D',
           fillColor: '#cae0b8',
           fillOpacity: 0.2,
+          marker: {
+            type: 'dot',
+            fillColor: '#1F964D',
+            scale: 1.3
+          }
         }
       },
       filter: {},

@@ -20,6 +20,10 @@
         }
     }
 
+    .display-grid {
+      display: grid; 
+    }
+
     &.expandable>.header:hover {
       cursor: pointer;
     }
@@ -37,8 +41,8 @@
     }
 
     &.disabled {
-        opacity: 0.4;
-        pointer-events: none;
+      opacity: 0.4;
+      pointer-events: none;
     }
 
 }

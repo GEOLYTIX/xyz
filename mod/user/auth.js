@@ -1,100 +1,75 @@
-const login = require('./login')
-
 const jwt = require('jsonwebtoken')
 
 const acl = require('./acl')()
 
-module.exports = async (req, res, access) => {
+module.exports = async (req, res) => {
 
   // Get token from params or cookie.
-  req.params.token = req.params.token || req.cookies && req.cookies[process.env.TITLE]
+  const token = req.params.token || req.cookies && req.cookies[process.env.TITLE]
 
-  // Requests without token must terminate before validation.
-  if (!req.params.token) {
+  // Return if there is no token to decode
+  if (!token) return null
 
-    // Requests with restricted access return a login screen in order to generate a token.
-    if (access && access == 'login') return login(req, res)
+  // Verify the token signature.
+  return jwt.verify(
+    token,
+    process.env.SECRET,
+    async (err, user) => {
 
-    // Requests without restricted access on a public instance may proceed without token validation.
-    if (!process.env.PRIVATE) return
+    // Return error if verification fails.
+    if (err) return err
 
-    // Proceed with login to generate a token.
-    return login(req, res)
-  }
-
-  // Verify token (checks token expiry).
-  jwt.verify(req.params.token.signed || req.params.token, process.env.SECRET, async (err, token) => {
-
-    //if (err) return res.status(401).send('Invalid token.')
-
-    if (err) return login(req, res, 'Invalid token.')
-
-    if (token.msg) return login(req, res, token.msg)
-
-    token.signed = req.params.token.signed || req.params.token
-
-    req.params.token = token
-
-    // Token must have an email.
-    if (!token.email) return res.status(401).send('Invalid token.')
-
-    // API keys have an api flag in the decoded token.
-    if (token.api) {
-
-      // Get user from ACL.
+    if (process.env.NANO_SESSION) {
+     
       var rows = await acl(`
-        SELECT * FROM acl_schema.acl_table
-        WHERE lower(email) = lower($1);`, [token.email])
+        SELECT session
+        FROM acl_schema.acl_table
+        WHERE lower(email) = lower($1);`,
+        [user.email])
+        
+      if (rows instanceof Error) return rows
 
-      if (rows instanceof Error) return res.status(500).send('Bad Config.')
-
-      const user = rows[0];
-
-      // Check whether the stored key matches the provided key.
-      if (!user || !user.api || (user.api !== req.params.token)) return res.status(401).send('Invalid token.')
-
-      // Create a private token with 10second expiry.
-      // A key may be public and must not have any admin flags.
-      const api_token = {
-        email: user.email,
-        roles: user.roles
-      }
-      
-      api_token.signed = jwt.sign(
-        api_token,
-        process.env.SECRET,
-        {
-          expiresIn: 10
-        })
-
-      req.params.token = api_token
-
-      return
+      if (user.session !== rows[0].session) return new Error('Session ID mismatch')
     }
 
-    // Token access must not have any admin rights. 
-    if (!access || access === 'login') {
+    // The token was provided as param.
+    if (req.params.token) {
 
-      // Set cookie from valid token if no cookie present on request.
-      if (!req.cookies || !req.cookies[process.env.TITLE]) {
-        delete token.admin
-        token.signed = jwt.sign(
-          token,
-          process.env.SECRET)
+      // and is an api key.
+      if (user.api) {
 
-        res.setHeader('Set-Cookie', `${process.env.TITLE}=${token.signed};HttpOnly;Max-Age=28800;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
+        // Retrieve the original api key for the user from ACL.
+        var rows = await acl(`
+          SELECT api, blocked
+          FROM acl_schema.acl_table
+          WHERE lower(email) = lower($1);`, [user.email])
+
+        if (rows instanceof Error) return rows
+
+        if (rows.blocked) return new Error('Account is blocked')
+
+        // API key do not expire and must therefore match the copy in the ACL to allow for retraction.
+        if (rows[0].api !== req.params.token) return new Error('API Key mismatch')
       }
-      
-      return
+
+      // Token access must not have admin rights.
+      delete user.admin
+
+      // Flag the user to be created from a token.
+      // It must not be possible created a new token from a token user.
+      user.from_token = true
+
+      // Check whether the token matches the params token.
+      if (req.cookies && req.cookies[process.env.TITLE] !== req.params.token) {
+
+        // Create and assign a new cookie from the token user.
+        const cookie = jwt.sign(user, process.env.SECRET)
+        res.setHeader('Set-Cookie', `${process.env.TITLE}=${cookie};HttpOnly;Max-Age=${user.exp && (user.exp - user.iat) || process.env.COOKIE_TTL};Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
+      }
+
     }
 
-    // Check key access.
-    if (access === 'key' && token.key) return
-
-    // Check admin privileges.
-    if (access === 'admin' && token.admin) return
-
-    res.status(401).send('Invalid token.')
+    return user
   })
 
 }

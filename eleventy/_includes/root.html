@@ -9,7 +9,7 @@
   <title>{{ title }}</title>
   <style>
 
-    body {
+    html, body {
       margin: 0;
       padding: 0;
     }
@@ -20,11 +20,15 @@
 
     .grid {
       font-family: system-ui;
-      display:grid;
-      grid-template-columns: 200px 5fr;
+      display: grid;
+      grid-template-columns: min-content minmax(0, 1fr);
       max-width: 1100px;
-      margin: auto;
-      padding: 0 30px;
+      margin-right: auto;
+      padding-right: 30px;
+    }
+
+    iframe {
+      border: none;
     }
 
     #toggle {
@@ -37,14 +41,19 @@
 
     #nav {
       grid-column: 1;
-      padding-inline-start: 0px;
-      list-style-type: none;
-      padding-right: 20px;
-      margin: 3px 0;
-      position: fixed;
+      /* transform: rotateY(180deg); */
+      padding: 10px 20px 20px 20px;
     }
 
-    #nav > *:first-child {
+    #nav > ul {
+      /* transform: rotateY(180deg); */
+      padding-inline-start: 0px;
+      list-style-type: none;
+      margin: 0;
+    }
+
+    #nav > ul > :first-child > a {
+      padding-top: 10px;
       line-height: 1;
       font-size: 30px;
       font-weight: bold;
@@ -52,11 +61,9 @@
 
     #content {
       grid-column: 2;
+      padding-top: 6px;
       padding-left: 20px;
       border-left: 1px solid #ddd;
-      margin: 10px 0;
-      overflow: hidden;
-      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -95,7 +102,7 @@
     }
 
     li.__2 {
-      padding-left: 0;
+      padding-left: 10px;
     }
 
     li.__3 {
@@ -103,7 +110,7 @@
     }
 
     li.__4 {
-      padding-left: 40px;
+      padding-left: 30px;
     }
 
     pre {
@@ -138,7 +145,7 @@
 
     @media only screen and (max-width: 700px) {
       .grid {
-        grid-template-columns: 0 1fr;
+        grid-template-columns: 0 minmax(0, 1fr);
         padding: 0 0 0 40px;
       }
 
@@ -159,12 +166,11 @@
       #content {
         border-left: none;
         padding: 0 20px 0 1px;
-        overflow: hidden;
       }
     }
 
     .show_nav {
-      grid-template-columns: 1fr 2fr;
+      grid-template-columns: min-content minmax(0, 1fr);
     }
 
     .show_nav > #nav {
@@ -186,17 +192,20 @@
 
     <div id="toggle"></div>
 
-    <ul id="nav">
-      
-      {% for post in collections.posts %}
-      {% if post.data.tags contains tag %}
-      <li class="__{{ post.data.lv }} {% if page.url == post.url %}active{% endif %}">
-        <a href="/xyz/docs{{post.url}}">{{ post.data.title }}</a>
-      </li>
-      {% endif %}
-      {% endfor %}
+    <div id="nav">
 
-    </ul>
+      <ul>
+      
+        {% for post in collections.posts %}
+        <li class="__{{ post.data.lv }} {% if page.url == post.url %}active{% endif %}">
+          <a href="/xyz/docs{{post.url}}">{{ post.data.title }}</a>
+        </li>
+        {% endfor %}
+  
+      </ul>
+
+    </div>
+
 
     <div id="content">
       {{ content | safe }}

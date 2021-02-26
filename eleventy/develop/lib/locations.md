@@ -1,6 +1,6 @@
 ---
 title: Locations
-tags: [develop]
+
 layout: root.html
 ---
 

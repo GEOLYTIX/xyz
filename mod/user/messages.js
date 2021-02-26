@@ -1,4 +1,7 @@
 module.exports = {
+  acl_unavailable: {
+    en: `ACL unavailable`
+  },
 	logout: {
     en: `Logged out.`,
     de: `Benutzer ausgelogt. Benutzerkonto Cookie wurde entfernt`,
@@ -66,6 +69,10 @@ module.exports = {
 		ja: `パスワードがリセットされました`,
 		ko: `비밀번호가 재설정되었습니다.`,
 		zh: `密码已重设`
+  },
+  auth_failed: {
+    en: `Authentication failed.`,
+    de: `Anmeldung gescheitert.`
 	},
 	user_not_found: {
     en: `User not found.`,
@@ -75,7 +82,11 @@ module.exports = {
 		ja: `ユーザーが見つかりません`,
 		ko: `사용자 미발견`,
 		zh: `找不到用户`
-	},
+  },
+  locked_account: {
+    en: `User account has been locked due to failed login attempts.`,
+    de: `Benutzerkonto gesperrt.`
+  },
 	user_blocked: {
 		en: `User blocked`,
 		fr: `Cet utilisateur est bloqué.`,

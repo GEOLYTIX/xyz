@@ -1,0 +1,434 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
+  <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
+  <title>Design</title>
+  <style>
+
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .header-anchor {
+      font-size: 80%;
+    }
+
+    .grid {
+      font-family: system-ui;
+      display: grid;
+      grid-template-columns: min-content minmax(0, 1fr);
+      max-width: 1100px;
+      margin-right: auto;
+      padding-right: 30px;
+    }
+
+    iframe {
+      border: none;
+    }
+
+    #toggle {
+        display: none;
+    }
+
+    #toggle:hover {
+      cursor: pointer;
+    }
+
+    #nav {
+      grid-column: 1;
+      /* transform: rotateY(180deg); */
+      padding: 10px 20px 20px 20px;
+    }
+
+    #nav > ul {
+      /* transform: rotateY(180deg); */
+      padding-inline-start: 0px;
+      list-style-type: none;
+      margin: 0;
+    }
+
+    #nav > ul > :first-child > a {
+      padding-top: 10px;
+      line-height: 1;
+      font-size: 30px;
+      font-weight: bold;
+    }
+
+    #content {
+      grid-column: 2;
+      padding-top: 6px;
+      padding-left: 20px;
+      border-left: 1px solid #ddd;
+    }
+
+    #content > *:first-child {
+      margin: 0;
+    }
+
+    .active {
+      font-weight: bold;
+    }
+
+    a {
+      text-decoration: none;
+      white-space: nowrap;
+      color: #333;
+    }
+
+    h1, h2, h3 {
+      margin-bottom: 0.5em;
+    }
+
+    p {
+      margin-top: 0.5em;
+      line-height: 1.5;
+    }
+
+    li {
+      line-height: 1.5;
+    }
+
+    li.__0 {
+      padding-left: 0;
+    }
+
+    li.__1 {
+      padding-left: 0;
+    }
+
+    li.__2 {
+      padding-left: 10px;
+    }
+
+    li.__3 {
+      padding-left: 20px;
+    }
+
+    li.__4 {
+      padding-left: 30px;
+    }
+
+    pre {
+      display: block;
+      font-family: monospace;
+      white-space: pre;
+      margin: 1em 2px;
+      padding: 15px;
+      box-shadow: 0 0 2px #555;
+      overflow-x: auto;
+      background-color: #f0f0f0;
+    }
+
+    code {
+      font-family: monospace;
+      background-color: #f0f0f0;
+    }
+
+    *:not(pre) > code {
+      padding: 5px;
+    }
+
+    #content a {
+      color: #090;
+    }
+
+    #content img {
+      max-width: 100%;
+      display: block;
+      margin: 0 auto;
+    }
+
+    @media only screen and (max-width: 700px) {
+      .grid {
+        grid-template-columns: 0 minmax(0, 1fr);
+        padding: 0 0 0 40px;
+      }
+
+      #toggle {
+        display: block;
+        position: fixed;
+        top: 10px;
+        left: 10px;        
+        width: 20px;
+        height: 30px;
+        background: repeating-linear-gradient(#ddd, #fff 10px);
+      }
+
+      #nav {
+        display: none;
+      }
+
+      #content {
+        border-left: none;
+        padding: 0 20px 0 1px;
+      }
+    }
+
+    .show_nav {
+      grid-template-columns: min-content minmax(0, 1fr);
+    }
+
+    .show_nav > #nav {
+      display: block;
+    }
+
+    .show_nav > #content * {
+      font-size: 30%;
+      padding: 0;
+      overflow: hidden;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="grid">
+
+    <div id="toggle"></div>
+
+    <div id="nav">
+
+      <ul>
+      
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/">XYZ</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/getting-started/">Getting started</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/deploy/">Deployments</a>
+        </li>
+        
+        <li class="__1 active">
+          <a href="/xyz/docs/design/">Design</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/design/icons/">Icons</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/develop/">Develop</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/develop/api/">API</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/gazetteer/">Gazetteer</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/layer/">Layer</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/location/">Location</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/provider/">Provider</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/proxy/">Proxy</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/query/">Query</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/user/">User</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/view/">View</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/workspace/">Workspace</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/develop/authentication/">Authentication</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/develop/lib/library/">Library</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/dataviews/">Dataviews</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/layers/">Layers</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/locations/">Locations</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/mapview/">Mapview</a>
+        </li>
+        
+        <li class="__4 ">
+          <a href="/xyz/docs/develop/lib/mapview/interactions/">Interactions</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/plugins/">Plugins</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/tabview/">Tabview</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/webpack/">Webpack</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/develop/views/">Application Views</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/document/">Document</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/environment-settings/">Environment Settings</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/logging/">Logging</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/mapp/">Mapp</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/security/">Security</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/dataviews/">Dataviews</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/dataviews/charts/">Charts</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/dataviews/tables/">Tables</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/layer/">Layer</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/cluster/">Cluster</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/editing/">Layer editing</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/geojson/">GeoJson</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/grid/">Hex Grid</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/mvt/">MVT</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/themes/">Themes</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/tile/">Tile Layer</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/locales/">Locale</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/locales/gazetteer/">Gazetteer</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/roles/">Roles</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/src/">Source Links</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/styles/">Styles</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/templates/">Templates</a>
+        </li>
+        
+  
+      </ul>
+
+    </div>
+
+
+    <div id="content">
+      <h1 id="design">Design <a class="header-anchor" href="#design">¶</a></h1>
+<p>XYZ application views, such as MAPP, maybe be composed with predefined control elements. These elements are defined as classes in the mapp.css which is hosted as a static file in the /public/css XYZ directory.</p>
+<p>The mapp.css file itself is compiled from individual SCSS files in the same directory.</p>
+<p>This section of the documentation will highlight the individual control element classes and explain how elements can be modified by overwriting component styles.</p>
+<p>The mobile and desktop MAPP views have their own style sheets which define the layout configuration as well as overrides for components nested within the individual application view panels.</p>
+<p>Responsive application views used for embeds and reports will be added to this section once they become publicly available.</p>
+
+    </div>
+
+  </div>
+
+</body>
+
+<script>
+    const toggle = document.getElementById('toggle');
+
+    toggle.onclick = e => { e.target.parentElement.classList.toggle('show_nav'); };
+</script>
+
+</html>

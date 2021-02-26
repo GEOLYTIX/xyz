@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="zh">
 
 <head data-dir="${dir}">
   <title>XYZ | 注册</title>
@@ -15,7 +15,9 @@
 <body class="register_form">
   <form method="post">
 
-    <input style="display:none;" name="language" required value=${language}>
+    <input style="display:none;" name="language" required value="zh">
+
+    <input style="display: none;" name="register" value=true>
 
     <div class="input-group">
       <input id="auth_user_email" name="email" type="email" autocomplete="off" required maxlength="50" value="">
@@ -24,13 +26,13 @@
     </div>
 
     <div class="input-group">
-      <input id="auth_user_password" name="password" type="password" autocomplete="off" required minlength="8" value="">
+      <input id="auth_user_password" name="password" type="password" autocomplete="off" required pattern="(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{10,}$" value="">
       <span class="bar"></span>
       <label for="auth_user_password">新密码（最少8个字符）</label>
     </div>
 
     <div class="input-group">
-      <input id="auth_user_password_retype" type="password" autocomplete="off" required minlength="8" value="">
+      <input id="auth_user_password_retype" type="password" autocomplete="off" value="">
       <span class="bar"></span>
       <label for="auth_user_password_retype">再次输入密码</label>
     </div>
@@ -72,7 +74,7 @@
 
     <p>验证后，网站管理员将批准新帐户。您的帐户获得批准后，您将收到另一封电子邮件。</p>
 
-    <a class="switch" href="${dir}/?login">已经注册了？请登录</a>
+    <a class="switch" href="${dir}/?login&language=zh">已经注册了？请登录</a>
   </form>
 
 </body>

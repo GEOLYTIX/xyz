@@ -24,6 +24,11 @@ a {
     -webkit-filter: invert(24%) sepia(23%) saturate(0%) hue-rotate(271deg) brightness(86%) contrast(90%);
 }
 
+.red-filter {
+  filter: invert(28%) sepia(94%) saturate(3492%) hue-rotate(345deg) brightness(85%) contrast(92%);
+  -webkit-filter: invert(28%) sepia(94%) saturate(3492%) hue-rotate(345deg) brightness(85%) contrast(92%);
+}
+
 /* Primary colour properties */
 .primary-colour {
     color: #1f964d;

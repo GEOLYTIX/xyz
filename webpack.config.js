@@ -4,7 +4,7 @@ const webpack = require('webpack');
 
 module.exports = {
   entry: {
-    xyz_openlayers: ['./lib/index.mjs']
+    mapp: ['./lib/index.mjs']
   },
   output: {
     path: path.resolve(__dirname, 'public/js'),

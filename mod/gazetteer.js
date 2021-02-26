@@ -1,4 +1,4 @@
-const provider = require('./provider')
+const fetch = require('node-fetch')
 
 const dbs = require('./dbs')()
 
@@ -38,15 +38,18 @@ module.exports = async (req, res) => {
 
 async function gaz_google(term, gazetteer, results) {
 
-  // Create url decorated with gazetteer options.
-  const __results = await provider.google(`maps.googleapis.com/maps/api/place/autocomplete/json?input=${term}`
+  const response = await fetch(`https://maps.googleapis.com/maps/api/place/autocomplete/json?`
+    + `input=${term}`
     + `${gazetteer.country ? '&components=country:' + gazetteer.country : ''}`
     + `${gazetteer.components ? '&components=' + gazetteer.components : ''}`
-    + `${gazetteer.bounds ? '&' + decodeURIComponent(gazetteer.bounds) + '&strictbounds' : ''}`)
+    + `${gazetteer.bounds ? '&' + decodeURIComponent(gazetteer.bounds) + '&strictbounds' : ''}`
+    + `&${process.env.KEY_GOOGLE}`)
 
-  if (__results.a_err) return;
+  const json = await response.json()
 
-  return __results.predictions.map(f => (results.push({
+  if (json.a_err) return;
+
+  return json.predictions.map(f => (results.push({
     label: f.description,
     id: f.place_id,
     source: 'google'
@@ -56,11 +59,14 @@ async function gaz_google(term, gazetteer, results) {
 
 async function gaz_opencage(term, gazetteer, results) {
 
-  const __results = await provider.opencage(`api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(term)}`
+  const response = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(term)}`
     + `${gazetteer.countrycode ? `&countrycode=${gazetteer.countrycode}` : ''}`
-    + `${gazetteer.bounds ? '&bounds=' + decodeURIComponent(gazetteer.bounds) : ''}`)
+    + `${gazetteer.bounds ? '&bounds=' + decodeURIComponent(gazetteer.bounds) : ''}`
+    + `&${process.env.KEY_OPENCAGE}`)
 
-  return __results.results.map(f => (results.push({
+  const json = await response.json()
+
+  return json.results.map(f => (results.push({
     id: f.annotations.geohash,
     label: f.formatted,
     marker: [f.geometry.lng, f.geometry.lat],
@@ -70,15 +76,17 @@ async function gaz_opencage(term, gazetteer, results) {
 
 async function gaz_mapbox(term, gazetteer, results) {
 
-  // Create url decorated with gazetteer options.
-  const __results = await provider.mapbox(`api.mapbox.com/geocoding/v5/mapbox.places/${term}.json?`
+  const response = await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${term}.json?`
     + `${gazetteer.country ? 'country=' + gazetteer.country : ''}`
     + `${gazetteer.bounds ? '&' + gazetteer.bounds : ''}`
-    + '&types=postcode,district,locality,place,neighborhood,address,poi')
+    + `&types=postcode,district,locality,place,neighborhood,address,poi`
+    + `&${process.env.KEY_MAPBOX}`)
 
-  if (__results._err) return;
+  const json = await response.json()
 
-  return __results.features.map(f => (results.push({
+  if (json._err) return;
+
+  return json.features.map(f => (results.push({
     label: `${f.text} (${f.place_type[0]}) ${!gazetteer.country && f.context ? ', ' + f.context.slice(-1)[0].text : ''}`,
     id: f.id,
     marker: f.center,
@@ -98,9 +106,9 @@ async function gaz_locale(req, locale, results) {
     const layer = locale.layers[dataset.layer]
 
     const roles = layer.roles
-    && req.params.token
+    && req.params.user
     && Object.keys(layer.roles)
-      .filter(key => req.params.token.roles.includes(key))
+      .filter(key => req.params.user.roles.includes(key))
       .reduce((obj, key) => {
         obj[key] = layer.roles[key];
         return obj;

@@ -1,6 +1,6 @@
 ---
 title: Themes
-tags: [workspace]
+
 layout: root.html
 ---
 
