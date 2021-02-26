@@ -2,7 +2,7 @@ const acl = require('./acl')()
 
 const mailer = require('../mailer')
 
-const mail_templates = require('../mail_templates')
+const mail_templates = require('./mails')
 
 const messages = require('./messages')
 
@@ -21,7 +21,7 @@ module.exports = async (req, res) => {
   SET
     ${req.params.field} = ${req.params.value === 'false' && 'NULL' || req.params.value}
     ${req.params.field === 'approved'
-      && `, approvaltoken = null, approved_by = '${req.params.token.email}|${new Date().toISOString().replace(/\..*/,'')}'`
+      && `, approvaltoken = null, approved_by = '${req.params.user.email}|${new Date().toISOString().replace(/\..*/,'')}'`
       || ''}
   WHERE lower(email) = lower($1);`, [email])
 
@@ -34,7 +34,7 @@ module.exports = async (req, res) => {
   // Send email to the user account if an account has been approved.
   if (req.params.field === 'approved' && req.params.value === 'true') {
 
-    const approved_account_mail = mail_templates.approved_account[req.params.token.language || 'en'] || mail_templates.approved_account.en;
+    const approved_account_mail = mail_templates.approved_account[req.params.user.language || 'en'] || mail_templates.approved_account.en;
 
     await mailer(Object.assign({
       to: email
@@ -46,5 +46,5 @@ module.exports = async (req, res) => {
 
   }
 
-  return res.send(messages.update_ok[req.params.token.language || 'en'] || messages.update_ok.en)
+  return res.send(messages.update_ok[req.params.user.language || 'en'] || messages.update_ok.en)
 }

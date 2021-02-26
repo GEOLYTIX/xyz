@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="de">
 
 <head data-dir="${dir}">
   <title>XYZ | Registration (Deutsch)</title>
@@ -15,7 +15,9 @@
 <body class="register_form">
   <form method="post">
 
-    <input style="display:none;" name="language" required value=${language}>
+    <input style="display:none;" name="language" required value="de">
+
+    <input style="display: none;" name="register" value=true>
 
     <div class="input-group">
       <input id="auth_user_email" name="email" type="email" autocomplete="off" required maxlength="50" value="">
@@ -24,13 +26,13 @@
     </div>
 
     <div class="input-group">
-      <input id="auth_user_password" name="password" type="password" autocomplete="off" required minlength="8" value="">
+      <input id="auth_user_password" name="password" type="password" autocomplete="off" required pattern="(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{10,}$" value="">
       <span class="bar"></span>
-      <label for="auth_user_password">Neues Passwort (min. length 8 character)</label>
+      <label for="auth_user_password">Neues Passwort (min. 10, mit Nummer, Klein-, und Grossbuchstaben)</label>
     </div>
 
     <div class="input-group">
-      <input id="auth_user_password_retype" type="password" autocomplete="off" required minlength="8" value="">
+      <input id="auth_user_password_retype" type="password" autocomplete="off" value="">
       <span class="bar"></span>
       <label for="auth_user_password_retype">Re-type password</label>
     </div>
@@ -73,7 +75,7 @@
     <p>After verification, a site administrator will approve new accounts. You will receive a further email once
       your account has been approved.</p>
 
-    <a class="switch" href="${dir}/?login">Already registered? Login.</a>
+    <a class="switch" href="${dir}/?login&language=de">Already registered? Login.</a>
   </form>
 
 </body>

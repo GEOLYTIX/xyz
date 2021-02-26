@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="de">
 
 <head data-dir="${dir}">
   <title>XYZ | Login (Deutsch)</title>
@@ -24,11 +24,13 @@
     <option value="${dir}?language=zh">中文简体</option>
   </select>
 
-  <form action="${dir}/api/user/cookie" method="post" autocomplete="off">
+  <form action="${dir}/api/user/login" method="post" autocomplete="off">
 
     <input style="display: none;" name="redirect" value="${redirect}">
 
-    <input style="display:none;" name="language" required value=${language}>
+    <input style="display: none;" name="login" value=true>
+
+    <input style="display:none;" name="language" required value="de">
 
     <div class="input-group">
       <input id="auth_user_email" name="email" type="email" required maxlength="50">
@@ -48,7 +50,7 @@
 
     <p>Benutzerkontos müssen mit einem Email Link verifiziert und anschließend von einem Administrator genehmigt werden.</p>
 
-    <a class="switch" href="${dir}/api/user/register?language=${language}">Passwort zurücksetzen oder neues Benutzerkonto registrieren.</a>
+    <a class="switch" href="${dir}/api/user/register?register=true&language=de">Passwort zurücksetzen oder neues Benutzerkonto registrieren.</a>
 
   </form>
 

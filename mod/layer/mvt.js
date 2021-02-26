@@ -16,9 +16,9 @@ module.exports = async (req, res) => {
     r = (m * 2) / (Math.pow(2, z))
 
   const roles = layer.roles
-    && req.params.token
+    && req.params.user
     && Object.keys(layer.roles)
-      .filter(key => req.params.token.roles.includes(key))
+      .filter(key => req.params.user.roles.includes(key))
       .reduce((obj, key) => {
         obj[key] = layer.roles[key];
         return obj;
@@ -48,9 +48,20 @@ module.exports = async (req, res) => {
 
   }
 
+  function getField(theme) {
+
+    return theme.fieldfx && `${theme.fieldfx} AS ${theme.field}` 
+      || theme.fields
+      || theme.field
+  }
+
   // Construct array of fields queried
-  const mvt_fields = Object.values(layer.style.themes || {}).map(
-    theme => theme.fieldfx && `${theme.fieldfx} AS ${theme.field}` || theme.fields || theme.field)
+  const mvt_fields = Object.values(layer.style.themes || {})
+    .map(theme => getField(theme))
+    .filter(field => typeof field !== 'undefined')
+
+  // Assign mvt_fields from single theme
+  layer.style.theme && mvt_fields.push(layer.style.theme && getField(layer.style.theme))
 
   // Create a new tile and store in cache table if defined.
   // ST_MakeEnvelope() in ST_AsMVT is based on https://github.com/mapbox/postgis-vt-util/blob/master/src/TileBBox.sql
@@ -77,8 +88,7 @@ module.exports = async (req, res) => {
         ST_AsMVTGeom(
           ${layer.srid !== '3857' && `ST_Transform(` ||''}
             ${layer.geom},
-          ${layer.srid !== '3857' && `${layer.srid}),` ||''}
-          ${layer.srid !== '3857' && `ST_Transform(` ||''}
+          ${layer.srid !== '3857' && `${layer.srid}), ST_Transform(` ||''}
             ST_MakeEnvelope(
               ${-m + (x * r)},
               ${ m - (y * r) - r},
@@ -88,8 +98,8 @@ module.exports = async (req, res) => {
             ),
           ${layer.srid !== '3857' && `${layer.srid}),` ||''}
           4096,
-          256,
-          true
+          1024,
+          false
         ) geom
 
       FROM ${table}
@@ -98,10 +108,10 @@ module.exports = async (req, res) => {
         ST_Intersects(
           ${layer.srid !== '3857' && `ST_Transform(` ||''}
             ST_MakeEnvelope(
-              ${-m + (x * r) - (r/16)},
-              ${ m - (y * r) - r - (r/16)},
-              ${-m + (x * r) + r + (r/16)},
-              ${ m - (y * r) + (r/16)},
+              ${-m + (x * r) - (r/4)},
+              ${ m - (y * r) - r - (r/4)},
+              ${-m + (x * r) + r + (r/4)},
+              ${ m - (y * r) + (r/4)},
               3857
             ),
           ${layer.srid !== '3857' && `${layer.srid}),` ||''}
@@ -113,6 +123,8 @@ module.exports = async (req, res) => {
     ) tile
     
     ${!filter && layer.mvt_cache && 'RETURNING mvt' ||''};`
+
+  //console.log(q)
 
   var rows = dbs[layer.dbs] && await dbs[layer.dbs](q)
 

@@ -1,8 +1,5 @@
 {
   "version": 2,
-  "regions": [
-    "lhr1"
-  ],
   "build": {
     "env": {
       "NODE_ENV": "production"
@@ -19,10 +16,6 @@
       "source": "/(.*)",
       "headers": [
         {
-          "key": "Access-Control-Allow-Origin",
-          "value": "*"
-        },
-        {
           "key": "Cache-Control",
           "value": "no-cache"
         },
@@ -31,8 +24,20 @@
           "value": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"
         },
         {
+          "key": "X-Frame-Options",
+          "value": "DENY"
+        },
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; base-uri 'self'; object-src 'self'; connect-src 'self' *.maptiler.com *.mapbox.com; worker-src 'self' blob:; child-src 'self' blob:; frame-src 'self' www.google.com www.gstatic.com; form-action 'self'; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net; font-src 'self' fonts.gstatic.com cdn.jsdelivr.net; script-src 'self' 'unsafe-inline' api.mapbox.com www.google.com www.gstatic.com cdn.jsdelivr.net blob:; img-src 'self' geolytix.github.io api.ordnancesurvey.co.uk *.tile.openstreetmap.org api.mapbox.com res.cloudinary.com *.global.ssl.fastly.net raw.githubusercontent.com cdn.jsdelivr.net gitcdn.xyz data:"
+          "value": "default-src 'self'; base-uri 'self'; object-src 'self'; connect-src 'self' *.maptiler.com *.mapbox.com www.google-analytics.com; worker-src 'self' blob:; child-src 'self' blob:; frame-src 'self' www.google.com www.gstatic.com; form-action 'self'; style-src 'self' 'unsafe-inline' fonts.googleapis.com cdn.jsdelivr.net; font-src 'self' fonts.gstatic.com cdn.jsdelivr.net; script-src 'self' 'unsafe-inline' api.mapbox.com www.google.com www.gstatic.com cdn.jsdelivr.net www.google-analytics.com blob:; img-src 'self' geolytix.github.io api.ordnancesurvey.co.uk *.tile.openstreetmap.org api.mapbox.com res.cloudinary.com *.global.ssl.fastly.net raw.githubusercontent.com cdn.jsdelivr.net gitcdn.xyz data:"
         }
       ]
     }
@@ -55,7 +60,7 @@
       "destination": "/api/api.js"
     },
     {
-      "source": "/api/workspace/:method?/:key?",
+      "source": "/api/workspace/get/:key?",
       "destination": "/api/api.js"
     },
     {
@@ -71,11 +76,7 @@
       "destination": "/api/api.js"
     },
     {
-      "source": "/view/:_template?/:access?",
-      "destination": "/api/api.js"
-    },
-    {
-      "source": "/:access?",
+      "source": "/view/:_template?",
       "destination": "/api/api.js"
     },
     {

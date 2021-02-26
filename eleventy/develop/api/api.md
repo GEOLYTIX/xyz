@@ -1,6 +1,6 @@
 ---
 title: API
-tags: [develop]
+
 layout: root.html
 group: true
 orderPath: /develop/api/_api
@@ -8,14 +8,68 @@ orderPath: /develop/api/_api
 
 # XYZ APIs
 
-Each XYZ API is an individual node process, usually deployed as a serverless function (lambda) via Vercel.
+The [api script](https://github.com/GEOLYTIX/xyz/blob/development/api/api.js) is the entry point for XYZ requests.
 
-API methods may imported from the modules directory /mod. Modules associated with specific API will be stored in a /mod folder of the same name. All API endpoints have access to the XYZ user and workspace modules.
+*Requests will be terminated immediately if received from Internet Explorer client.*
 
-## Workspace
+Request params will be assigned from the params and query property of the request object to support hosting via Express and through Vercel.
 
-The workspace will be cached in a variable outside the function handler. The workspace will be cached if the variable is undefined during a first invocation of a function or after a cold start. With the cache parameter set as true an API will overwrite the existing object variable. Caching is required after the workspace changes.
+The language parameter will be set to English [en] if not explicitly set in the request.
 
-## Request Parameter
+Parameter strings will be URI decoded.
 
-*GET* requests will provide parameter in the URL. The URL parameter are parsed within the user authentication module and assigned to the request param object. Most XYZ APIs support optional URL *path parameter*. The path parameter is usually a required method key to select an API module to process a request.
+A logger method will be assigned to the params object to be available with the request object.
+
+### Login / Register
+
+Either request param will short circuit the api script an return the associated method. The login and register method will either process the request body if either the `login` or `register` flag are set in the request body, or return a view with a request form to submit a post request for the associated method.
+
+### Logout
+
+The logout request parameter flag will short circuit the api script, remove any asscoiated cookie and redirect the request with the logout flag removed from the request URL.
+
+### Authentication
+
+Request authentication will check for a token parameter or cookie, validate the signature, and return the user information to the api script.
+
+The token will be removed from the request params.
+
+The cookie will be removed and the login view will be returned with an error messgae if the authentication method returns an error.
+
+The request will terminate without a valid user in a PRIVATE process environment and return the login view.
+
+### Proxy requests
+
+Proxy requests are short circuited as they only need authentication for PRIVATE process environments and the environment keys themselves for parameter substitution in the proxied request.
+
+### Workspace
+
+The workspace will be retrieved after successfull authentication to account for user roles.
+
+A `500` error will be returned with an error message if the workspace method fails to evaluate a workspace obejct.
+
+### Query & View templates
+
+A template will be retrieved from the workspace if defined as request parameter.
+
+A `404` will be returned if the defined template could not found in the workspace. This may be due to role restrictions.
+
+A `500` will be returned with an error message if the workspace was unable to retrieve the template. This may be caused by JSON exceptions or a faulty source for the template.
+
+The login form will be returned if the requested template has restricted access not met by the user object.
+
+### API path
+
+The path segment will be avaluated from the request URL. This allows for routing requests to the individual API modules.
+
+### User API
+
+Many User API methods require admin priviliges. The login view will be returned if access priviliges are not me by the user.
+
+### Route matching
+
+An API method will be returned the path segment of the request URL can be matched.
+
+### Default route / [root]
+
+The default Mapp view template will be assigned as template parameter for the View API to be returned on the root route.

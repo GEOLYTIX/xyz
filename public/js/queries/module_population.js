@@ -58,7 +58,7 @@ module.exports = {
     		return hex[z];
     	}
 
-        return `SELECT ARRAY[json_build_object('data', ARRAY [
+      return `SELECT ARRAY[json_build_object('data', ARRAY [
         ROUND(sum(b.pop__11)),
         ROUND(sum(b.pop__12)),
         ROUND(sum(b.pop__13)),

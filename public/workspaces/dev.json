@@ -1,1897 +1,938 @@
 {
-    "templates": {
-        "Mapbox": {
-            "format": "mbtiles",
-            "mbStyle": "mapbox://styles/dbauszus/ciozrimi3002bdsm8bjtn2v1y",
-            "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmY25oa2thMWhoMDJzbGNldmF2ZzYzcCJ9.IWcezkYm8mipsGXygnYbNw",
-            "attribution": {
-                "© Mapbox": "https://www.mapbox.com/about/maps",
-                "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-            }
-        },
-        "Mapbox Colour": {
-            "format": "mbtiles",
-            "mbStyle": "mapbox://styles/dbauszus/ck440h6990nii1co520go20i2",
-            "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmY25oa2thMWhoMDJzbGNldmF2ZzYzcCJ9.IWcezkYm8mipsGXygnYbNw",
-            "attribution": {
-                "© Mapbox": "https://www.mapbox.com/about/maps",
-                "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-            }
-        },
-        "Mapbox Labels": {
-            "format": "mbtiles",
-            "mbStyle": "mapbox://styles/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z",
-            "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmY25oa2thMWhoMDJzbGNldmF2ZzYzcCJ9.IWcezkYm8mipsGXygnYbNw",
-            "attribution": {
-                "© Mapbox": "https://www.mapbox.com/about/maps",
-                "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-            },
-            "OSM": {
-                "format": "tiles",
-                "attribution": {
-                    "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-                },
-                "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            },
-            "style": {
-                "zIndex": 20
-            }
-        },
-        "NE Countries table1": {
-            "template": "SELECT name, pop_est, gdp_md_est FROM dev.natural_earth_countries WHERE true ${viewport} ${filter} ORDER BY id ASC FETCH FIRST 99 ROW ONLY;"
-        },
-        "NE GDP/Population Layer Table": {
-            "template": "SELECT id, name, gdp_md_est, pop_est FROM dev.natural_earth_countries WHERE true ${viewport} ${filter} ORDER BY id ASC FETCH FIRST 99 ROW ONLY;"
-        },
-        "Random Data Series": {
-            "src": "cloudfront:${CDN}/dev/queries/random_data_series.sql"
-        },
-        "Random Data Series 2": {
-            "template": "select ARRAY [json_build_object('data', ARRAY [random1::integer, random2::integer, random3::integer, random4::integer, random5::integer])] AS datasets, ARRAY ['Rand 1', 'Rand 2', 'Rand 3', 'Rand 4', 'Rand 5'] AS labels from dev.uk_glx_sites where id = ${id};"
-        },
-        "Population Summary Sites": {
-            "src": "https://api.github.com/repos/GEOLYTIX/xyz_resources/contents/dev/queries/population_summary.txt"
-        },
-        "module population": {
-            "type": "module",
-            "src": "http://localhost:3000/dev/js/queries/module_population.js"
-        },
-        "Nearest competitors Sites": {
-            "template": "SELECT (ROUND(((ST_Transform(a.geom_4326, 3857) <#> ST_Transform(b.geom_p_4326, 3857))/1000)::numeric, 2))::text AS dist,(b.fascia)::text AS fascia,(b.postcode)::text AS postcode FROM dev.uk_glx_sites a, geodata.uk_glx_open_retail_points b WHERE a.id = ${id} ORDER BY ST_Transform(a.geom_4326, 3857) <#> ST_Transform(b.geom_p_4326, 3857) NULLS LAST LIMIT 5;"
-        },
-        "Dev sites report": {
-            "src": "https://api.github.com/repos/GEOLYTIX/xyz_resources/contents/dev/report_sites/sites.html"
-        },
-        "Sites Local Report": {
-            "src": "http://localhost:3000/views/report_location.html"
-        },
-        "UK Retail Places Layer Table": {
-            "template": "SELECT id AS qID, id, dev_date ,rp_type, comp_strgh, est_units, est_brands FROM dev.uk_glx_geodata_retail_place_working WHERE true ${viewport} ORDER BY id ASC FETCH FIRST 99 ROW ONLY;"
-        },
-        "UK Retail Places Profile": {
-            "template": "SELECT ROUND(comparison::numeric, 2) AS comparison, ROUND(conv::numeric, 2) AS conv, ROUND(fbl::numeric, 2) AS fbl, ROUND(services::numeric, 2) AS services, ROUND(classbrass::numeric, 2) AS classbrass FROM dev.uk_glx_geodata_retail_place_working WHERE id = ${id};"
-        },
-        "UK Retail Points Layer Table": {
-            "template": "SELECT id, retailer, fascia FROM dev.uk_glx_open_retail_points_food_stores ORDER BY id ASC FETCH FIRST 99 ROW ONLY;"
-        },
-        "UK Shops with catchments all catchments": {
-            "template": "SELECT jsonb_build_object('type', 'FeatureCollection','features', b.features) AS collection FROM (SELECT jsonb_build_array(jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'primary', 'id', id),'geometry', ST_AsGeoJson(catchment_primary)::jsonb),jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'secondary', 'id', id),'geometry', ST_AsGeoJson(catchment_secondary)::jsonb),jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'tertiary', 'id', id),'geometry', ST_AsGeoJson(catchment_tertiary)::jsonb)) AS features FROM (SELECT * FROM dev.storelist_1507__19 where id = ${id}) a) b"
-        },
-        "japan_chomoku": {
-            "src": "https://api.github.com/repos/geolytix/xyz_resources/contents/mapp/layers/japan/chomoku.json"
-        },
-        "japan_restaurants": {
-            "src": "cloudfront:${CDN}/mapp/layers/japan/restaurants.json"
-        },
-        "ja_japan_restaurants": {
-            "src": "cloudfront:${CDN}/mapp/layers/japan/restaurants_ja.json"
-        }
+  "templates": {
+    "blog": {
+      "src": "file://views/blog.html"
     },
-    "locales": {
-        "Natural Earth": {
-            "minZoom": 3,
-            "maxZoom": 14,
-            "gazetteer": {
-                "provider": "OPENCAGE",
-                "placeholder": "e.g. Venice",
-                "bounds": "-13,48,5,62",
-                "countrycode": "GB"
-            },
-            "layers": {
-                "OSM": {
-                    "group": "Maps",
-                    "meta": "<p>Test paragraph for meta in group</p>",
-                    "format": "tiles",
-                    "attribution": {
-                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-                    },
-                    "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                },
-                "Mapbox": {
-                    "group": "Maps",
-                    "attribution": {
-                        "© Mapbox": "https://www.mapbox.com/about/maps",
-                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-                    },
-                    "format": "tiles",
-                    "URI": "/styles/v1/dbauszus/ciozrimi3002bdsm8bjtn2v1y/tiles/256/{z}/{x}/{y}?&provider=MAPBOX&host=https://api.mapbox.com"
-                },
-                "Countries Split": {
-                    "format": "mvt",
-                    "geom": "geom_3857",
-                    "srid": "3857",
-                    "dbs": "MAPP",
-                    "table": "mapp.global_glx_open_admin_countries_split",
-                    "qID": "country_cd"
-                },
-                "Mapbox Labels": {
-                    "group": "Maps",
-                    "format": "tiles",
-                    "attribution": {
-                        "© Mapbox": "https://www.mapbox.com/about/maps",
-                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-                    },
-                    "URI": "/styles/v1/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z/tiles/256/{z}/{x}/{y}?&provider=MAPBOX&host=https://api.mapbox.com"
-                }
-            }
-        },
-        "UK": {
-            "gazetteer": {
-                "provider": "GOOGLE",
-                "country": "GB",
-                "placeholder": "eg. London",
-                "label": true,
-                "limit": 8,
-                "datasets": [{
-                        "layer": "Retail Points",
-                        "table": "dev.uk_glx_open_retail_points_food_stores",
-                        "label": "store",
-                        "_leading_wildcard": true,
-                        "limit": 5
-                    },
-                    {
-                        "layer": "Retail Places",
-                        "table": "dev.uk_glx_open_retail_points_food_stores",
-                        "label": "uniq_name",
-                        "_space_wildcard": true,
-                        "_minLength": 2
-                    }
-                ]
-            },
-            "bounds": {
-                "north": 62,
-                "east": 5,
-                "south": 49,
-                "west": -13
-            },
-            "minZoom": 2,
-            "maxZoom": 17,
-            "showScaleBar": true,
-            "layers": {
-                "OSM": {
-                    "group": "Maps",
-                    "template": "OSM"
-                },
-                "Mapbox Custom": {
-                    "group": "Maps",
-                    "template": "Mapbox Colour"
-                },
-                "Mapbox": {
-                    "group": "Maps",
-                    "template": "Mapbox"
-                },
-                "Mapbox Labels": {
-                    "group": "Maps",
-                    "template": "Mapbox Labels"
-                },
-                "Grid": {
-                    "attribution": {
-                        "© ONS": "https://www.ons.gov.uk"
-                    },
-                    "srid": "4326",
-                    "format": "grid",
-                    "dbs": "MAPP",
-                    "geom": "geom_p_4326",
-                    "tables": {
-                        "7": null,
-                        "8": "geodata.uk_glx_geodata_hex_16k",
-                        "9": "geodata.uk_glx_geodata_hex_8k",
-                        "10": "geodata.uk_glx_geodata_hex_4k",
-                        "11": "geodata.uk_glx_geodata_hex_2k",
-                        "12": "geodata.uk_glx_geodata_hex_1k",
-                        "13": "geodata.uk_glx_geodata_hex_1k",
-                        "14": null
-                    },
-                    "grid_fields": {
-                        "Population 2001": "pop__01",
-                        "Population 2011": "pop__11",
-                        "Female population": "gen_female__11",
-                        "Male population": "gen_male__11"
-                    }
-                },
-                "Retail Places": {
-                    "format": "mvt",
-                    "dbs": "MAPP",
-                    "tables": {
-                        "8": null,
-                        "9": "dev.uk_glx_geodata_retail_place_working"
-                    },
-                    "geom": "geom_3857",
-                    "srid": "3857",
-                    "script": {
-                        "Script Test": {
-                            "script": "/api/provider/github?url=api.github.com/repos/GEOLYTIX/xyz_resources/contents/dev/dashboards/retail_places.js"
-                        }
-                    },
-                    "dataviews": {
-                        "Retail Places": {
-                            "layout": "fitColumns",
-                            "query": "UK Retail Places Layer Table",
-                            "viewport": true,
-                            "columns": [{
-                                    "title": "ID",
-                                    "field": "id"
-                                },
-                                {
-                                    "field": "rp_type"
-                                },
-                                {
-                                    "title": "Address",
-                                    "columns": [{
-                                            "field": "ref_pc",
-                                            "title": "Postcode"
-                                        },
-                                        {
-                                            "field": "country",
-                                            "title": "Country"
-                                        }
-                                    ]
-                                }
-                            ]
-                        }
-                    },
-                    "style": {
-                        "themes": {
-                            "Retail Place type": {
-                                "type": "categorized",
-                                "field": "rp_type",
-                                "other": true,
-                                "cat": {
-                                    "Major City Centre": {
-                                        "style": {
-                                            "strokeColor": "#EF271B",
-                                            "fillColor": "#EF271B"
-                                        }
-                                    },
-                                    "City Centre": {
-                                        "style": {
-                                            "strokeColor": "#BA2D0B",
-                                            "fillColor": "#BA2D0B"
-                                        }
-                                    },
-                                    "Large Town Centre": {
-                                        "style": {
-                                            "strokeColor": "#FE4E00",
-                                            "fillColor": "#FE4E00"
-                                        }
-                                    },
-                                    "Major Urban Centre": {
-                                        "style": {
-                                            "strokeColor": "#E2711D",
-                                            "fillColor": "#E2711D"
-                                        }
-                                    },
-                                    "Town Centre": {
-                                        "style": {
-                                            "strokeColor": "#F3A712",
-                                            "fillColor": "#F3A712"
-                                        }
-                                    },
-                                    "Urban Centre": {
-                                        "style": {
-                                            "strokeColor": "#FADF63",
-                                            "fillColor": "#FADF63"
-                                        }
-                                    },
-                                    "Small Town Centre": {
-                                        "style": {
-                                            "strokeColor": "#FFE74C",
-                                            "fillColor": "#FFE74C"
-                                        }
-                                    },
-                                    "Village Centre": {
-                                        "style": {
-                                            "strokeColor": "#DBFE87",
-                                            "fillColor": "#DBFE87"
-                                        }
-                                    },
-                                    "Regional SC": {
-                                        "label": "Regional Shopping Centre",
-                                        "style": {
-                                            "strokeColor": "#8ED081",
-                                            "fillColor": "#8ED081"
-                                        }
-                                    },
-                                    "Outlet Centre": {
-                                        "style": {
-                                            "strokeColor": "#7DDF64",
-                                            "fillColor": "#7DDF64"
-                                        }
-                                    },
-                                    "Shopping Park": {
-                                        "style": {
-                                            "strokeColor": "#074F57",
-                                            "fillColor": "#074F57"
-                                        }
-                                    },
-                                    "Retail Park": {
-                                        "style": {
-                                            "strokeColor": "#32746D",
-                                            "fillColor": "#32746D"
-                                        }
-                                    },
-                                    "Leisure Park": {
-                                        "style": {
-                                            "strokeColor": "#41D3BD",
-                                            "fillColor": "#41D3BD"
-                                        }
-                                    },
-                                    "Local Hub": {
-                                        "style": {
-                                            "strokeColor": "#08B2E3",
-                                            "fillColor": "#08B2E3"
-                                        }
-                                    },
-                                    "Large Parade": {
-                                        "style": {
-                                            "strokeColor": "#1F487E",
-                                            "fillColor": "#1F487E"
-                                        }
-                                    },
-                                    "Parade": {
-                                        "style": {
-                                            "strokeColor": "#541388",
-                                            "fillColor": "#541388"
-                                        }
-                                    },
-                                    "Weak Parade": {
-                                        "style": {
-                                            "strokeColor": "#D90368",
-                                            "fillColor": "#D90368"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "qID": "id",
-                    "hover": {
-                        "field": "rp_name"
-                    },
-                    "filter": {
-                        "infoj": [{
-                            "title": "ID count",
-                            "field": "id_count",
-                            "type": "integer",
-                            "inline": true,
-                            "fieldfx": "count(id)"
-                        }]
-                    },
-                    "infoj": [{
-                            "type": "key"
-                        },
-                        {
-                            "title": "ID",
-                            "field": "id",
-                            "inline": true
-                        },
-                        {
-                            "title": "RP Type",
-                            "field": "rp_type",
-                            "filter": {
-                                "in": [
-                                    "Major City Centre",
-                                    "Large Town Centre",
-                                    "Village Centre",
-                                    "Weak Parade"
-                                ]
-                            }
-                        },
-                        {
-                            "title": "Name",
-                            "field": "uniq_name"
-                        }
-                    ]
-                },
-                "Agata": {
-                    "group": "Cluster",
-                    "meta": "don't touch.",
-                    "edit": {
-                        "point": true,
-                        "delete": true,
-                        "geometry": true
-                    },
-                    "download": {},
-                    "format": "cluster",
-                    "srid": "4326",
-                    "geom": "geom_4326",
-                    "dbs": "MAPP",
-                    "qID": "id",
-                    "table": "dev.uk_glx_sites",
-                    "_tables": {
-                        "6": null,
-                        "7": "dev.uk_glx_sites"
-                    },
-                    "cluster_kmeans": 0.1,
-                    "cluster_label": "site_name",
-                    "infoj": [
-                        {
-                            "type": "key",
-                            "class": "_report"
-                        },
-                        {
-                            "type": "report",
-                            "report": {
-                                "template": "Sites Local Report"
-                            },
-                            "class": "_report"
-                        },
-                        {
-                            "type": "report",
-                            "report": {
-                                "title": "Report hosted with GitHub",
-                                "template": "Dev sites report"
-                            },
-                            "class": "_report"
-                        },
-                        {
-                            "field": "id",
-                            "title": "Site ID",
-                            "inline": true,
-                            "class": "purple-text"
-                        },
-                        {
-                            "title": "Here's tomtom",
-                            "name": "TomTom Reachable Range",
-                            "type": "geometry",
-                            "field": "isoline_tomtom",
-                            "fieldfx": "ST_AsGeoJSON(isoline_tomtom)",
-                            "edit": {
-                                "meta": "isoline_tomtom_meta",
-                                "isoline_tomtom": {}
-                            }
-                        },
-                        {
-                            "field": "isoline_tomtom_meta",
-                            "type": "json"
-                        },
-                        {
-                            "title": "Here API v2",
-                            "name": "Display",
-                            "type": "geometry",
-                            "field": "here_isoline_v2",
-                            "fieldfx": "ST_AsGeoJSON(here_isoline_v2)",
-                            "edit": {
-                                "meta": "here_isoline_v2_meta",
-                                "isoline_here": {}
-                            },
-                            "style": {
-                                "fillColor": "steelblue",
-                                "strokeColor": "steelblue",
-                                "fillOpacity": 0.3
-                            }
-                        },
-                        {
-                            "field": "here_isoline_v2_meta",
-                            "type": "json"
-                        },
-                        {
-                            "field": "text_edit",
-                            "title": "Text edit",
-                            "edit": true
-                        },
-                        {
-                            "field": "integer_edit",
-                            "title": "Integer edit",
-                            "type": "integer",
-                            "edit": true,
-                            "inline": true
-                        },
-                        {
-                            "field": "numeric_edit",
-                            "title": "Numeric edit",
-                            "type": "numeric",
-                            "edit": true,
-                            "inline": true
-                        },
-                        {
-                            "field": "site_name",
-                            "title": "Site Name",
-                            "edit": true,
-                            "inline": true
-                        },
-                        {
-                            "field": "site_type",
-                            "title": "Site Type",
-                            "inline": true,
-                            "edit": {
-                                "options": [
-                                    "Type A",
-                                    "Type B",
-                                    " "
-                                ]
-                            }
-                        },
-                        {
-                            "type": "geometry",
-                            "name": "Fixed Geometry",
-                            "field": "fixed_geom",
-                            "fieldfx": "ST_asGeoJson(fixed_geom)",
-                            "class": "_report",
-                            "_display": true,
-                            "level": 1,
-                            "style": {
-                                "fillOpacity": 0.3,
-                                "strokeWidth": 2
-                            }
-                        },
-                        {
-                            "type": "geometry",
-                            "name": "Buffer 10km",
-                            "field": "buffer_10km",
-                            "class": "_report",
-                            "fieldfx": "ST_asGeoJson(ST_Transform(ST_Buffer(ST_Transform(geom_4326, 3857), 10000), 4326))",
-                            "_display": true,
-                            "level": 1,
-                            "style": {
-                                "strokeWidth": 2,
-                                "fillOpacity": 0.3,
-                                "fillColor": "#E2DE84"
-                            }
-                        },
-                        {
-                            "name": "HERE Catchment 5min",
-                            "field": "isoline_5min",
-                            "fieldfx": "ST_asGeoJson(isoline_5min)",
-                            "type": "geometry",
-                            "class": "_report",
-                            "_display": true,
-                            "level": 1,
-                            "edit": {
-                                "isoline_here": {
-                                    "minutes": 5
-                                }
-                            },
-                            "style": {
-                                "strokeColor": "#F49D37",
-                                "fillColor": "#F49D37",
-                                "fillOpacity": 0.3,
-                                "strokeWidth": 2
-                            }
-                        },
-                        {
-                            "name": "HERE Catchment 10min",
-                            "field": "isoline_10min",
-                            "fieldfx": "ST_asGeoJson(isoline_10min)",
-                            "type": "geometry",
-                            "class": "_report",
-                            "level": 1,
-                            "edit": {
-                                "isoline_here": {
-                                    "minutes": 10
-                                }
-                            },
-                            "style": {
-                                "strokeColor": "#F49D37",
-                                "fillColor": "#F49D37",
-                                "fillOpacity": 0.3,
-                                "strokeWidth": 2
-                            }
-                        },
-                        {
-                            "name": "HERE Catchment 15min",
-                            "field": "isoline_15min",
-                            "fieldfx": "ST_asGeoJson(isoline_15min)",
-                            "type": "geometry",
-                            "class": "_report",
-                            "level": 1,
-                            "edit": {
-                                "isoline_here": {
-                                    "minutes": 15
-                                }
-                            },
-                            "style": {
-                                "strokeColor": "#F49D37",
-                                "fillColor": "#F49D37",
-                                "fillOpacity": 0.3,
-                                "strokeWidth": 2
-                            }
-                        },
-                        {
-                            "title": "Random data series",
-                            "type": "dataview",
-                            "target": "xyz_sites_random",
-                            "query": "Random Data Series",
-                            "class": "_report",
-                            "chart": {
-                                "height": 300,
-                                "width": 290,
-                                "type": "bar",
-                                "options": {
-                                    "title": {
-                                        "display": true,
-                                        "text": "Random data series"
-                                    },
-                                    "legend": {
-                                        "display": true,
-                                        "position": "bottom"
-                                    },
-                                    "plugins": {
-                                        "datalabels": {
-                                            "display": false
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        {
-                            "title": "Doughnut Chart",
-                            "type": "dataview",
-                            "query": "Random Data Series 2",
-                            "target": "xyz_sites_random2",
-                            "chart": {
-                                "type": "doughnut",
-                                "datasets": [
-                                    {
-                                    "backgroundColor": [
-                                        "rgba(229, 99 , 153, 0.4)",
-                                        "rgba(0, 167, 225, 0.4)",
-                                        "rgba(237, 222, 164, 0.4)",
-                                        "rgba(247, 160 ,114, 0.4)",
-                                        "rgba(255, 155, 66, 0.4)"
-                                    ],
-                                    "borderColor": "#C0B4A7",
-                                    "spanGaps": true,
-                                    "lineTension": 0.5
-                                }],
-                                "options": {
-                                    "cutoutPercentage": 36,
-                                    "title": {
-                                        "display": true,
-                                        "text": "Doughnut Chart"
-                                    },
-                                    "legend": {
-                                        "display": true,
-                                        "position": "left"
-                                    }
-                                }
-                            },
-                            "class": "_report"
-                        },
-                        {
-                            "group": "Random data series",
-                            "title": "Rand 1",
-                            "field": "random1",
-                            "type": "integer"
-                        },
-                        {
-                            "group": "Random data series",
-                            "title": "Rand 2",
-                            "field": "random2",
-                            "type": "integer"
-                        },
-                        {
-                            "group": "Random data series",
-                            "title": "Rand 3",
-                            "field": "random3",
-                            "type": "integer"
-                        },
-                        {
-                            "group": "Random data series",
-                            "title": "Rand 4",
-                            "field": "random4",
-                            "type": "integer"
-                        },
-                        {
-                            "group": "Random data series",
-                            "title": "Rand 5",
-                            "field": "random5",
-                            "type": "integer"
-                        },
-                        {
-                            "field": "comments",
-                            "title": "Comments",
-                            "type": "textarea",
-                            "edit": true,
-                            "class": "_report"
-                        },
-                        {
-                            "field": "images",
-                            "title": "Images",
-                            "type": "images",
-                            "edit": true,
-                            "class": "_report"
-                        },
-                        {
-                            "title": "Documents",
-                            "field": "documents",
-                            "type": "documents",
-                            "edit": true,
-                            "class": "_report"
-                        },
-                        {
-                            "field": "test_jsonb",
-                            "title": "Test JSONb",
-                            "type": "json"
-                        },
-                        {
-                            "field": "test_jsonb2",
-                            "title": "Test JSONb",
-                            "type": "json",
-                            "edit": true
-                        },
-                        {
-                            "title": "Available dataviews",
-                            "type": "title",
-                            "class": "_report"
-                        },
-                        {
-                            "type": "dataview",
-                            "title": "Population Summary 2",
-                            "query": "Population Summary Sites",
-                            "class": "_report",
-                            "layout": "fitColumns",
-                            "target": "xyz_sites_pop",
-                            "columns": [
-                                {
-                                    "field": "rows",
-                                    "title": "Population Summary 2",
-                                    "headerSort": false,
-                                    "align": "left"
-                                },
-                                {
-                                    "title": "Grouped columns",
-                                    "columns": [{
-                                            "title": "0-5 mins",
-                                            "field": "min5",
-                                            "formatter": "money",
-                                            "formatterParams": {
-                                                "precision": 0
-                                            },
-                                            "align": "center"
-                                        },
-                                        {
-                                            "title": "0-10 mins",
-                                            "field": "min10",
-                                            "formatter": "money",
-                                            "formatterParams": {
-                                                "precision": 0
-                                            },
-                                            "align": "center"
-                                        }
-                                    ]
-                                }
-                            ]
-                        },
-                        {
-                            "type": "dataview",
-                            "title": "Nearest competitors",
-                            "class": "_report",
-                            "target": "xyz_sites_nearestcomp",
-                            "layout": "fitColumns",
-                            "query": "Nearest competitors Sites",
-                            "columns": [
-                                {
-                                    "title": "Distance",
-                                    "field": "dist",
-                                    "align": "center",
-                                    "formatter": "money",
-                                    "formatterParams": {
-                                        "symbol": " km",
-                                        "symbolAfter": true
-                                    }
-                                },
-                                {
-                                    "title": "Competitor name",
-                                    "field": "fascia"
-                                },
-                                {
-                                    "title": "Postcode",
-                                    "field": "postcode"
-                                }
-                            ]
-                        }
-                    ],
-                    "style": {
-                        "default": {
-                            "showInHeader": true,
-                            "type": "semiCircle",
-                            "fillColor": "#ffb300",
-                            "scale": 2,
-                            "layers": {
-                                "0.5": "#0C6291",
-                                "0.3": "#ffb300"
-                            }
-                        },
-                        "cluster": {
-                            "type": "dot",
-                            "fillColor": "rgba(0, 75, 168, 0.3)",
-                            "scale": 2
-                        },
-                        "___themes": {
-                            "Test categorized pins": {
-                                "field": "test_binary",
-                                "type": "categorized",
-                                "other": true,
-                                "cat": {
-                                    "0": {
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/aga/hi.svg",
-                                        "scale": 0.1
-                                    },
-                                    "1": {
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/aga/hi2.svg",
-                                        "scale": 0.1
-                                    }
-                                }
-                            },
-                            "Test categorized dots": {
-                                "field": "test_binary",
-                                "type": "categorized",
-                                "other": true,
-                                "cat": {
-                                    "0": {
-                                        "style": {
-                                            "fillColor": "#283593"
-                                        }
-                                    },
-                                    "1": {
-                                        "style": {
-                                            "fillColor": "#ff1744"
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                    }
-                },
-                "Cluster Catchments": {
-                    "group": "Cluster",
-                    "format": "cluster",
-                    "dbs": "MAPP",
-                    "table": "dev.cluster_catchments",
-                    "geom": "geom",
-                    "srid": "4326",
-                    "cluster_kmeans": 0.01,
-                    "edit": {
-                        "point": true,
-                        "geometry": true,
-                        "delete": true
-                    },
-                    "qID": "id",
-                    "infoj": [{
-                            "type": "key"
-                        },
-                        {
-                            "title": "Catchment Geometry"
-                        },
-                        {
-                            "name": "Show / Hide",
-                            "field": "catchment",
-                            "fieldfx": "ST_asGeoJson(catchment)",
-                            "type": "geometry",
-                            "display": true,
-                            "style": {
-                                "fillColor": "#c62828",
-                                "fillOpacity": 0.2
-                            }
-                        },
-                        {
-                            "title": "Catchment Here"
-                        },
-                        {
-                            "name": "Create / Delete 10 min",
-                            "field": "isoline_here",
-                            "display": false,
-                            "fieldfx": "ST_asGeoJson(isoline_here)",
-                            "type": "geometry",
-                            "edit": {
-                                "isoline_here": {
-                                    "minutes": 10
-                                }
-                            }
-                        },
-                        {
-                            "title": "Catchment Mapbox"
-                        },
-                        {
-                            "name": "Create/Delete 10 min",
-                            "field": "isoline_mapbox",
-                            "fieldfx": "ST_asGeoJson(isoline_mapbox)",
-                            "type": "geometry",
-                            "edit": {
-                                "isoline_mapbox": {
-                                    "minutes": 10
-                                }
-                            },
-                            "style": {
-                                "strokeColor": "#ffb300",
-                                "strokeWidth": 2,
-                                "fillColor": "#ffb300",
-                                "fillOpacity": 0.2
-                            }
-                        },
-                        {
-                            "title": "Custom Here Catchment"
-                        },
-                        {
-                            "name": "Create / Delete",
-                            "field": "isoline_here_custom",
-                            "fieldfx": "ST_asGeoJson(isoline_here_custom)",
-                            "type": "geometry",
-                            "edit": {
-                                "meta": "isoline_here_custom_meta",
-                                "isoline_here": {}
-                            },
-                            "style": {
-                                "strokeColor": "#083D77",
-                                "strokeWidth": 2,
-                                "fillColor": "#083D77",
-                                "fillOpacity": 0.2
-                            }
-                        },
-                        {
-                            "field": "isoline_here_custom_meta",
-                            "type": "json"
-                        },
-                        {
-                            "title": "Custom Mapbox Catchment"
-                        },
-                        {
-                            "name": "Create / Delete",
-                            "field": "isoline_mapbox_custom",
-                            "fieldfx": "ST_asGeoJSON(isoline_mapbox_custom)",
-                            "type": "geometry",
-                            "edit": {
-                                "meta": "isoline_mapbox_custom_meta",
-                                "isoline_mapbox": {}
-                            },
-                            "style": {
-                                "strokeColor": "#43a047",
-                                "strokeWidth": 2,
-                                "fillColor": "#43a047",
-                                "fillOpacity": 0.2
-                            }
-                        },
-                        {
-                            "field": "isoline_mapbox_custom_meta",
-                            "type": "json"
-                        },
-                        {
-                            "title": "something",
-                            "field": "chk",
-                            "type": "boolean"
-                        },
-                        {
-                            "title": "Images",
-                            "field": "images",
-                            "type": "images",
-                            "edit": true
-                        },
-                        {
-                            "title": "Documents",
-                            "field": "documents",
-                            "type": "documents",
-                            "edit": true
-                        }
-                    ],
-                    "style": {
-                        "default": {
-                            "type": "square",
-                            "fillColor": "#03a9f4",
-                            "layers": {
-                                "0.7": "#FFF",
-                                "0.5": "#512da8"
-                            }
-                        },
-                        "cluster": {
-                            "type": "square",
-                            "fillColor": "#03a9f4",
-                            "layers": {
-                                "0.7": "#FFF",
-                                "0.5": "#512da8"
-                            }
-                        }
-                    }
-                },
-                "Scratch": {
-                    "meta": "Free Draw / Selection Tool. This is a test layer for editing and drawing geometries.",
-                    "format": "mvt",
-                    "dbs": "MAPP",
-                    "table": "dev.uk_dev_scratch",
-                    "srid": "3857",
-                    "geom": "geom_3857",
-                    "qID": "id",
-                    "edit": {
-                        "polygon": true,
-                        "freehand": true,
-                        "circle": true,
-                        "rectangle": true,
-                        "line": true,
-                        "point": true,
-                        "isoline_mapbox": true,
-                        "isoline_here": true,
-                        "delete": true
-                    },
-                    "infoj": [{
-                            "type": "key"
-                        },
-                        {
-                            "title": "ID",
-                            "field": "id"
-                        },
-                        {
-                            "title": "RP Count",
-                            "field": "rp_count",
-                            "fieldfx": "SELECT sum(1) FROM dev.uk_glx_open_retail_points_food_stores, dev.uk_dev_scratch WHERE st_intersects(dev.uk_glx_open_retail_points_food_stores.geom_p_4326, st_transform(dev.uk_dev_scratch.geom_3857, 4326)) AND dev.uk_dev_scratch.id = $1"
-                        },
-                        {
-                            "title": "something",
-                            "field": "chk",
-                            "name": "Hello World",
-                            "type": "boolean",
-                            "edit": true
-                        },
-                        {
-                            "title": "int_test",
-                            "field": "int_test",
-                            "type": "integer",
-                            "edit": true
-                        },
-                        {
-                            "title": "int_test",
-                            "field": "int_test_",
-                            "fieldfx": "int_test",
-                            "type": "integer"
-                        },
-                        {
-                            "title": "Date",
-                            "field": "dev_date",
-                            "type": "date",
-                            "edit": {
-                                "enableTime": true
-                            }
-                        },
-                        {
-                            "title": "Date and time",
-                            "field": "dev_date_time",
-                            "type": "datetime",
-                            "edit": true,
-                            "inline": true
-                        },
-                        {
-                            "title": "not editable:",
-                            "field": "_date",
-                            "fieldfx": "dev_date",
-                            "type": "datetime",
-                            "inline": true
-                        },
-                        {
-                            "title": "Options",
-                            "field": "dev_options",
-                            "inline": true,
-                            "edit": {
-                                "options": [{
-                                        "Open": "1"
-                                    },
-                                    {
-                                        "Closed": "2"
-                                    },
-                                    "Other"
-                                ]
-                            }
-                        },
-                        {
-                            "field": "notes",
-                            "title": "Notes",
-                            "type": "textarea",
-                            "edit": true
-                        }
-                    ],
-                    "style": {
-                        "default": {
-                            "strokeColor": "#083D77",
-                            "fillColor": "#083D77",
-                            "fillOpacity": 0.3,
-                            "marker": {
-                                "type": "circle",
-                                "strokeColor": "#083D77"
-                            },
-                            "_marker": {
-                                "url": "https://cdn.jsdelivr.net/gh/GEOLYTIX/gla@master/icon-pin.svg",
-                                "anchor": [
-                                    0.5,
-                                    1
-                                ]
-                            }
-                        },
-                        "highlight": {
-                            "strokeColor": "#F78764",
-                            "fillColor": "#F78764",
-                            "fillOpacity": 0.3,
-                            "marker": {
-                                "type": "dot",
-                                "fillColor": "#F78764"
-                            }
-                        }
-                    }
-                },
-                "Output areas": {
-                    "attribution": {
-                        "© ONS": "https://www.ons.gov.uk"
-                    },
-                    "format": "mvt",
-                    "dbs": "MAPP",
-                    "table": "geodata.uk_glx_geodata_demog_oa",
-                    "__tables": {
-                        "12": null,
-                        "13": "geodata.uk_glx_geodata_demog_oa",
-                        "14": "geodata.uk_glx_geodata_demog_oa",
-                        "15": null
-                    },
-                    "srid": "3857",
-                    "geom": "geom_3857_5m",
-                    "style": {
-                        "default": {
-                            "fillOpacity": 1,
-                            "fillColor": "#EEE",
-                            "strokeColor": "#DDD"
-                        },
-                        "highlight": {
-                            "fillOpacity": 1
-                        },
-                        "themes": {
-                            "Population 2011": {
-                                "type": "graduated",
-                                "field": "pop_11",
-                                "cat_arr": [{
-                                        "value": 0,
-                                        "label": "0 to 100",
-                                        "style": {
-                                            "fillColor": "#b9beff"
-                                        }
-                                    },
-                                    {
-                                        "value": 100,
-                                        "label": "100 to 200",
-                                        "style": {
-                                            "fillColor": "#8ea1fc"
-                                        }
-                                    },
-                                    {
-                                        "value": 200,
-                                        "label": "200 to 300",
-                                        "style": {
-                                            "fillColor": "#638cfa"
-                                        }
-                                    },
-                                    {
-                                        "value": 300,
-                                        "label": "300 to 400",
-                                        "style": {
-                                            "fillColor": "#1fb4ed"
-                                        }
-                                    },
-                                    {
-                                        "value": 400,
-                                        "label": "400 to 500",
-                                        "style": {
-                                            "fillColor": "#00d764"
-                                        }
-                                    },
-                                    {
-                                        "value": 500,
-                                        "label": "500 to 600",
-                                        "style": {
-                                            "fillColor": "#85b300"
-                                        }
-                                    },
-                                    {
-                                        "value": 600,
-                                        "label": "600 or more",
-                                        "style": {
-                                            "fillColor": "#870000"
-                                        }
-                                    }
-                                ]
-                            }
-                        }
-                    },
-                    "qID": "id",
-                    "infoj": [{
-                            "type": "key"
-                        },
-                        {
-                            "title": "OA Code",
-                            "field": "oa_code",
-                            "inline": true,
-                            "filter": "like"
-                        },
-                        {
-                            "title": "Population 2011",
-                            "field": "pop_11",
-                            "type": "integer",
-                            "filter": "numeric"
-                        },
-                        {
-                            "title": "Population",
-                            "type": "dataview",
-                            "target": "location",
-                            "query": "module population",
-                            "chart": {
-                                "height": 200,
-                                "type": "bar",
-                                "options": {
-                                    "legend": {
-                                        "display": false
-                                    },
-                                    "scales": {
-                                        "yAxes": [{
-                                            "ticks": {
-                                                "display": false,
-                                                "beginAtZero": true
-                                            }
-                                        }],
-                                        "xAxes": [{
-                                            "ticks": {
-                                                "maxRotation": 90,
-                                                "minRotation": 90
-                                            }
-                                        }]
-                                    }
-                                }
-                            }
-                        }
-                    ]
-                },
-                "Retail Points": {
-                    "group": "Cluster",
-                    "format": "cluster",
-                    "cluster_label": "store_name",
-                    "dbs": "MAPP",
-                    "qID": "id",
-                    "table": "dev.uk_glx_open_retail_points_food_stores",
-                    "geom": "geom_p_4326",
-                    "srid": "4326",
-                    "cluster_hexresolution": 0.1,
-                    "hover": {
-                        "field": "store_name"
-                    },
-                    "dataviews": {
-                        "Retail Points": {
-                            "display": true,
-                            "query": "UK Retail Points Layer Table",
-                            "columns": [{
-                                    "title": "ID",
-                                    "field": "id"
-                                },
-                                {
-                                    "title": "Retailer",
-                                    "field": "retailer"
-                                },
-                                {
-                                    "title": "Fascia",
-                                    "field": "fascia"
-                                }
-                            ]
-                        }
-                    },
-                    "filter": {
-                        "infoj": [{
-                            "title": "ID count",
-                            "field": "id_count",
-                            "type": "integer",
-                            "inline": true,
-                            "fieldfx": "count(id)"
-                        }]
-                    },
-                    "style": {
-                        "label": {
-                            "field": "store_name",
-                            "display": true,
-                            "declutter": true,
-                            "strokeColor": "#fff",
-                            "strokeWidth": 3
-                        },
-                        "default": {
-                            "type": "target",
-                            "fillColor": "#CEE5F2"
-                        },
-                        "cluster": {
-                            "type": "target",
-                            "fillColor": "#534B62"
-                        },
-                        "highlight": {
-                            "type": "target",
-                            "fillColor": "#ccff99",
-                            "scale": 1.1
-                        },
-                        "themes": {
-                            "Retailer": {
-                                "type": "categorized",
-                                "field": "retailer",
-                                "other": true,
-                                "cat": {
-                                    "Tesco": {
-                                        "label": "Tesco",
-                                        "style": {
-                                            "fillColor": "#0055a8",
-                                            "layers": {
-                                                "0.75": "#ffffff",
-                                                "0.35": "#f02f26"
-                                            }
-                                        }
-                                    },
-                                    "Sainsburys": {
-                                        "label": "Sainsbury's",
-                                        "style": {
-                                            "fillColor": "#ee8a00",
-                                            "layers": {
-                                                "0.5": "#ffffff",
-                                                "0.35": "#ee8a00"
-                                            }
-                                        }
-                                    },
-                                    "Marks and Spencer": {
-                                        "label": "Marks & Spencer",
-                                        "style": {
-                                            "fillColor": "#0a0d10",
-                                            "layers": {
-                                                "0.5": "#def036",
-                                                "0.25": "#0a0d10"
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                            "Tesco/Sainsbury's": {
-                                "type": "competition",
-                                "field": "retailer",
-                                "other": true,
-                                "cat": {
-                                    "Tesco": {
-                                        "label": "Tesco",
-                                        "style": {
-                                            "fillColor": "#0055a8"
-                                        }
-                                    },
-                                    "Sainsburys": {
-                                        "label": "Sainsbury's",
-                                        "style": {
-                                            "fillColor": "#ee8a00"
-                                        }
-                                    }
-                                }
-                            },
-                            "Retail - Logos": {
-                                "type": "categorized",
-                                "field": "retailer",
-                                "cat": {
-                                    "Aldi": {
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/brands/aldi.svg",
-                                        "anchor": [
-                                            0.5,
-                                            0.95
-                                        ]
-                                    },
-                                    "Asda": {
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/brands/asda.svg",
-                                        "anchor": [
-                                            0.5,
-                                            0.95
-                                        ]
-                                    },
-                                    "Booths": {
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/brands/booths.svg",
-                                        "anchor": [
-                                            0.5,
-                                            0.95
-                                        ]
-                                    },
-                                    "Budgens": {
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/brands/budgens.svg",
-                                        "anchor": [
-                                            0.5,
-                                            0.95
-                                        ]
-                                    },
-                                    "Co-op": {
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/brands/coop.svg",
-                                        "anchor": [
-                                            0.5,
-                                            0.95
-                                        ]
-                                    },
-                                    "Iceland": {
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/brands/iceland.svg",
-                                        "anchor": [
-                                            0.5,
-                                            0.95
-                                        ]
-                                    },
-                                    "Lidl": {
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/brands/lidl.svg",
-                                        "anchor": [
-                                            0.5,
-                                            0.95
-                                        ]
-                                    },
-                                    "Marks and Spencer": {
-                                        "label": "Marks & Spencer",
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/brands/mns.svg",
-                                        "anchor": [
-                                            0.5,
-                                            0.95
-                                        ]
-                                    },
-                                    "Morrisons": {
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/brands/morrisons.svg",
-                                        "anchor": [
-                                            0.5,
-                                            0.95
-                                        ]
-                                    },
-                                    "Sainsburys": {
-                                        "label": "Sainsbury's",
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/brands/sainsbury.svg",
-                                        "anchor": [
-                                            0.5,
-                                            0.95
-                                        ]
-                                    },
-                                    "Tesco": {
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/brands/tesco.svg",
-                                        "anchor": [
-                                            0.5,
-                                            0.95
-                                        ]
-                                    },
-                                    "Waitrose": {
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/brands/waitrose.svg",
-                                        "anchor": [
-                                            0.5,
-                                            0.95
-                                        ]
-                                    },
-                                    "Whole Foods Market": {
-                                        "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/brands/whole_foods.svg",
-                                        "anchor": [
-                                            0.5,
-                                            0.95
-                                        ]
-                                    }
-                                }
-                            }
-                        }
-                    },
-                    "infoj": [{
-                            "type": "streetview"
-                        },
-                        {
-                            "type": "key"
-                        },
-                        {
-                            "title": "ID",
-                            "field": "id",
-                            "inline": true
-                        },
-                        {
-                            "title": "Store",
-                            "field": "store_name",
-                            "filter": "like"
-                        },
-                        {
-                            "title": "Retailer",
-                            "field": "retailer",
-                            "filter": "like"
-                        },
-                        {
-                            "title": "Fascia",
-                            "field": "fascia",
-                            "filter": "like"
-                        },
-                        {
-                            "title": "Address"
-                        },
-                        {
-                            "field": "add_one",
-                            "level": 1
-                        },
-                        {
-                            "field": "add_two",
-                            "level": 1
-                        },
-                        {
-                            "field": "locality",
-                            "level": 1
-                        },
-                        {
-                            "field": "town",
-                            "level": 1
-                        },
-                        {
-                            "title": "Postcode",
-                            "field": "postcode",
-                            "level": 1,
-                            "filter": "like",
-                            "filterZoom": true
-                        },
-                        {
-                            "title": "Catchment 10min",
-                            "type": "title"
-                        },
-                        {
-                            "field": "isoline_10min",
-                            "fieldfx": "ST_asGeoJson(isoline_10min)",
-                            "type": "geometry",
-                            "display": true,
-                            "edit": {
-                                "isoline_here": {
-                                    "minutes": 10
-                                }
-                            },
-                            "style": {
-                                "strokeColor": "#ffca28",
-                                "fillColor": "#ffca28",
-                                "strokeWidth": 2,
-                                "fillOpacity": 0.2
-                            }
-                        }
-                    ]
-                },
-                "Shops with catchments": {
-                    "format": "cluster",
-                    "edit": {
-                        "geometry": true,
-                        "delete": true
-                    },
-                    "dbs": "MAPP",
-                    "geom": "geom_4326",
-                    "sird": "4326",
-                    "table": "dev.storelist_1507__19",
-                    "qID": "id",
-                    "cluster_label": "id",
-                    "cluster_dbscan": 0.001,
-                    "cluster_kmeans": 0.01,
-                    "infoj": [{
-                            "type": "key",
-                            "class": "_report"
-                        },
-                        {
-                            "title": "Address",
-                            "type": "title"
-                        },
-                        {
-                            "field": "town",
-                            "title": "Town",
-                            "inline": true
-                        },
-                        {
-                            "field": "county",
-                            "title": "County",
-                            "inline": true
-                        },
-                        {
-                            "field": "county2",
-                            "fieldfx": "county",
-                            "title": "County 2",
-                            "inline": true
-                        },
-                        {
-                            "title": "Customer catchments",
-                            "type": "title",
-                            "class": "_report"
-                        },
-                        {
-                            "name": "Primary",
-                            "field": "catchment_primary",
-                            "fieldfx": "ST_asGeoJson(catchment_primary)",
-                            "type": "geometry",
-                            "style": {
-                                "strokeColor": "#E01A4F",
-                                "strokeWidth": 2,
-                                "fillOpacity": 0.2,
-                                "fillColor": "#E01A4F"
-                            }
-                        },
-                        {
-                            "name": "Secondary",
-                            "field": "catchment_secondary",
-                            "fieldfx": "ST_asGeoJson(catchment_secondary)",
-                            "type": "geometry",
-                            "style": {
-                                "strokeColor": "#F17105",
-                                "strokeWidth": 2,
-                                "fillOpacity": 0.2,
-                                "fillColor": "#F17105"
-                            }
-                        },
-                        {
-                            "name": "Tertiary",
-                            "field": "catchment_tertiary",
-                            "fieldfx": "ST_asGeoJson(catchment_tertiary)",
-                            "type": "geometry",
-                            "style": {
-                                "strokeColor": "#E6C229",
-                                "strokeWidth": 2,
-                                "fillOpacity": 0.2,
-                                "fillColor": "#E6C229"
-                            }
-                        },
-                        {
-                            "name": "All catchments - query",
-                            "type": "geometry",
-                            "_display": true,
-                            "query": "UK Shops with catchments all catchments",
-                            "style": {
-                                "theme": {
-                                    "legend": true,
-                                    "type": "categorized",
-                                    "field": "catchment",
-                                    "cat": {
-                                        "primary": {
-                                            "label": "Primary",
-                                            "style": {
-                                                "strokeColor": "#5E08E4",
-                                                "fillOpacity": 0.7,
-                                                "fillColor": "#5E08E4"
-                                            }
-                                        },
-                                        "secondary": {
-                                            "label": "Secondary",
-                                            "style": {
-                                                "strokeColor": "#D15CF1",
-                                                "fillOpacity": 0.7,
-                                                "fillColor": "#D15CF1"
-                                            }
-                                        },
-                                        "tertiary": {
-                                            "label": "Tertiary",
-                                            "style": {
-                                                "strokeColor": "#FFB9F2",
-                                                "fillOpacity": 0.7,
-                                                "fillColor": "#FFB9F2"
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                            "field": "collection",
-                            "__fieldfx": "SELECT jsonb_build_object('type', 'FeatureCollection','features', b.features) AS collection FROM (SELECT jsonb_build_array(jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'primary', 'id', id),'geometry', ST_AsGeoJson(catchment_primary)::jsonb),jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'secondary', 'id', id),'geometry', ST_AsGeoJson(catchment_secondary)::jsonb),jsonb_build_object('type', 'Feature','properties', jsonb_build_object('catchment', 'tertiary', 'id', id),'geometry', ST_AsGeoJson(catchment_tertiary)::jsonb)) AS features FROM (SELECT * FROM dev.storelist_1507__19 where id = $1) a) b"
-                        },
-                        {
-                            "name": "Test catchment",
-                            "type": "_geometry",
-                            "field": "test_catchment",
-                            "fieldfx": "ST_AsGeoJSON(test_catchment)",
-                            "edit": {
-                                "polygon": true,
-                                "circle": true,
-                                "rectangle": true,
-                                "line": true,
-                                "freehand": true
-                            },
-                            "style": {
-                                "fillOpacity": 0.3
-                            }
-                        },
-                        {
-                            "name": "Here Isoline 10min",
-                            "type": "geometry",
-                            "field": "isoline_10min",
-                            "fieldfx": "ST_AsGeoJson(isoline_10min)",
-                            "edit": {
-                                "isoline_here": {
-                                    "geometry": true,
-                                    "minutes": 10
-                                }
-                            },
-                            "style": {
-                                "fillOpacity": 0.2,
-                                "fillColor": "#5A2A27",
-                                "strokeColor": "#5A2A27"
-                            }
-                        },
-                        {
-                            "name": "Mapbox Isoline",
-                            "type": "geometry",
-                            "field": "isoline_mapbox",
-                            "fieldfx": "ST_AsGeoJson(isoline_mapbox)",
-                            "edit": {
-                                "isoline_mapbox": {
-                                    "geometry": true
-                                }
-                            },
-                            "style": {
-                                "fillOpacity": 0.2,
-                                "fillColor": "#8D5B4C",
-                                "strokeColor": "#8D5B4C"
-                            }
-                        }
-                    ],
-                    "style": {
-                        "default": {
-                            "size": 20,
-                            "type": "square",
-                            "fillColor": "#011D4A",
-                            "layers": {
-                                "0.75": "#EEE",
-                                "0.5": "#33849D"
-                            }
-                        },
-                        "cluster": {
-                            "type": "target"
-                        }
-                    }
-                },
-                "Dennis": {
-                    "roles": {
-                        "default": null
-                    },
-                    "format": "cluster",
-                    "srid": "4326",
-                    "geom": "geom_4326",
-                    "dbs": "MAPP",
-                    "table": "dev.uk_glx_sites",
-                    "cluster_kmeans": 0.1
-                }
-            }
-        },
-        "Japan": {
-            "name": "日本",
-            "bounds": {
-                "north": 45,
-                "east": 149,
-                "south": 30,
-                "west": 127
-            },
-            "gazetteer": {
-                "provider": "MAPBOX",
-                "placeholder": "例えば山梨"
-            },
-            "minZoom": 6,
-            "maxZoom": 17,
-            "showScaleBar": true,
-            "layers": {
-                "Mapboxマップ": {
-                    "template": "Mapbox Colour"
-                },
-                "レストラン": {
-                    "template": "ja_japan_restaurants",
-                    "roles": {
-                        "ja": true
-                    }
-                },
-                "Restaurants": {
-                    "template": "japan_restaurants",
-                    "roles": {
-                        "!ja": null
-                    }
-                }
-            }
-        },
-        "Roles": {
-            "gazetteer": {
-                "provider": "GOOGLE",
-                "country": "GB",
-                "placeholder": "eg. Marseille",
-                "label": true,
-                "limit": 8,
-                "datasets": [{
-                        "layer": "Test",
-                        "table": "dev.uk_glx_open_retail_points_food_stores",
-                        "label": "store_name",
-                        "leading_wildcard": true,
-                        "limit": 5
-                    },
-                    {
-                        "layer": "no_roles",
-                        "table": "dev.uk_glx_open_retail_points_food_stores",
-                        "label": "add_one",
-                        "space_wildcard": true,
-                        "minLength": 2
-                    }
-                ]
-            },
-            "bounds": {
-                "north": 62,
-                "east": 5,
-                "south": 49,
-                "west": -13
-            },
-            "minZoom": 2,
-            "maxZoom": 17,
-            "showScaleBar": true,
-            "layers": {
-                "OSM": {
-                    "display": true,
-                    "format": "tiles",
-                    "attribution": {
-                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-                    },
-                    "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-                },
-                "Test": {
-                    "display": true,
-                    "roles": {
-                        "default": null,
-                        "ki": {
-                            "store": {
-                                "like": "ki"
-                            }
-                        },
-                        "mo": {
-                            "retailer": {
-                                "like": "mo"
-                            }
-                        },
-                        "te": {
-                            "retailer": {
-                                "like": "te"
-                            }
-                        }
-                    },
-                    "format": "cluster",
-                    "dbs": "MAPP",
-                    "table": "dev.uk_glx_open_retail_points_food_stores",
-                    "geom": "geom_p_4326",
-                    "srid": "4326",
-                    "qID": "id",
-                    "infoj": [{
-                        "field": "retailer",
-                        "title": "Retailer",
-                        "inline": true,
-                        "filter": "like"
-                    }],
-                    "style": {
-                        "default": {
-                            "type": "target",
-                            "fillColor": "#1e88e5"
-                        },
-                        "label": {
-                            "field": "store_name",
-                            "display": true,
-                            "declutter": true
-                        }
-                    }
-                },
-                "no_roles": {
-                    "format": "cluster",
-                    "dbs": "MAPP",
-                    "table": "dev.uk_glx_open_retail_points_food_stores",
-                    "qID": "id",
-                    "geom": "geom_p_4326",
-                    "srid": "4326",
-                    "hover": {
-                        "field": "store_name"
-                    },
-                    "infoj": [{
-                        "field": "retailer",
-                        "title": "Retailer",
-                        "inline": true,
-                        "filter": "like"
-                    }],
-                    "style": {
-                        "default": {
-                            "type": "triangle",
-                            "fillColor": "rgba(255,112,67, 0.3)"
-                        },
-                        "label": {
-                            "field": "store_name",
-                            "declutter": true
-                        }
-                    }
-                }
-            }
-        }
+    "embedded": {
+      "src": "file://views/embedded.html"
+    },
+    "Mapbox Base": {
+      "format": "mbtiles",
+      "mbStyle": "mapbox://styles/dbauszus/ciozrimi3002bdsm8bjtn2v1y",
+      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmY25oa2thMWhoMDJzbGNldmF2ZzYzcCJ9.IWcezkYm8mipsGXygnYbNw",
+      "attribution": {
+        "© Mapbox": "https://www.mapbox.com/about/maps",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "Mapbox Colour": {
+      "format": "mbtiles",
+      "mbStyle": "mapbox://styles/dbauszus/ck440h6990nii1co520go20i2",
+      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmY25oa2thMWhoMDJzbGNldmF2ZzYzcCJ9.IWcezkYm8mipsGXygnYbNw",
+      "attribution": {
+        "© Mapbox": "https://www.mapbox.com/about/maps",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "Mapbox Label": {
+      "format": "mbtiles",
+      "mbStyle": "mapbox://styles/dbauszus/ckjk91u8b1da319o7dhpdhqln",
+      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmY25oa2thMWhoMDJzbGNldmF2ZzYzcCJ9.IWcezkYm8mipsGXygnYbNw",
+      "attribution": {
+        "© Mapbox": "https://www.mapbox.com/about/maps",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "Mapbox Mask": {
+      "format": "mbtiles",
+      "mbStyle": "mapbox://styles/dbauszus/ckj2u1dx20fw519pbblu2q1by",
+      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmY25oa2thMWhoMDJzbGNldmF2ZzYzcCJ9.IWcezkYm8mipsGXygnYbNw",
+      "attribution": {
+        "© Mapbox": "https://www.mapbox.com/about/maps",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "HERE Imagery": {
+      "format": "tiles",
+      "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?{HERE}",
+      "proxy": true,
+      "attribution": {
+        "© Here": "https://www.here.com/",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "HERE Hybrid": {
+      "format": "tiles",
+      "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?{HERE}",
+      "proxy": true,
+      "attribution": {
+        "© Here": "https://www.here.com/",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "OSM": {
+      "format": "tiles",
+      "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      "attribution": {
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "Random Data Series_aga": {
+      "src": "cloudfront:${CDN}/dev/queries/random_data_series.sql"
+    },
+    "Random Data Series": {
+      "template": "select ARRAY [json_build_object('data', ARRAY [random1::integer, random2::integer, random3::integer, random4::integer, random5::integer])] AS datasets, ARRAY ['Rand 1', 'Rand 2', 'Rand 3', 'Rand 4', 'Rand 5'] AS labels from dev.uk_glx_sites where id = ${id};"
+    },
+    "random_data_series": {
+      "template": "select ARRAY [json_build_object('data', ARRAY [random1::integer, random2::integer, random3::integer, random4::integer, random5::integer])] AS datasets, ARRAY ['Rand 1', 'Rand 2', 'Rand 3', 'Rand 4', 'Rand 5'] AS labels from dev.uk_glx_sites where id = 0;"
+    },
+    "Population Summary Sites": {
+      "src": "https://api.github.com/repos/GEOLYTIX/xyz_resources/contents/dev/queries/population_summary.txt"
+    },
+    "Nearest competitors Sites": {
+      "template": "SELECT (ROUND(((ST_Transform(a.geom_4326, 3857) <#> ST_Transform(b.geom_p_4326, 3857))/1000)::numeric, 2))::text AS dist,(b.fascia)::text AS fascia,(b.postcode)::text AS postcode FROM dev.uk_glx_sites a, geodata.uk_glx_open_retail_points b WHERE a.id = ${id} ORDER BY ST_Transform(a.geom_4326, 3857) <#> ST_Transform(b.geom_p_4326, 3857) NULLS LAST LIMIT 5;"
+    },
+    "Dev sites report": {
+      "src": "https://api.github.com/repos/GEOLYTIX/xyz_resources/contents/dev/report_sites/sites.html"
+    },
+    "Sites Local Report": {
+      "src": "http://localhost:3000/views/report_location.html"
+    },
+    "japan_restaurants": {
+      "format": "cluster",
+      "dbs": "DEV",
+      "table": "geodata.jpn_glx_geodata_retail_locations_restaurants",
+      "geom": "geom_p_4326",
+      "srid": "4326",
+      "cluster_label": "chain_name",
+      "cluster_kmeans": 0.01,
+      "cluster_dbscan": 0.1,
+      "qID": "id"
+    },
+    "Agata": {
+      "src": "cloudfront:${CDN}/dev/aga/layer.json"
+    },
+    "uk_polygon_demand": {
+      "src": "cloudfront:${CDN}/asda/templates/charts/polygon_demand.sql"
     }
+  },
+  "locales": {
+    "UK": {
+      "bounds": {
+        "north": 62,
+        "east": 5,
+        "south": 49,
+        "west": -13
+      },
+      "minZoom": 2,
+      "maxZoom": 17,
+      "showScaleBar": true,
+      "plugins": {
+        "demand_chart": "/dev/js/plugins/demand_chart.js"
+      },
+      "layers": {
+        "Mapbox Base": {
+          "template": "Mapbox Base",
+          "display": true
+        },
+        "HERE Imagery": {
+          "template": "HERE Imagery"
+        },
+        "HERE Hybrid": {
+          "template": "HERE Hybrid"
+        },
+        "Mapbox Label": {
+          "template": "Mapbox Label"
+        },
+        "Grid": {
+          "format": "grid",
+          "dbs": "MAPP",
+          "geom": "geom_p_4326",
+          "srid": "4326",
+          "tables": {
+            "7": null,
+            "8": "geodata.uk_glx_geodata_hex_16k",
+            "9": "geodata.uk_glx_geodata_hex_8k",
+            "10": "geodata.uk_glx_geodata_hex_4k",
+            "11": "geodata.uk_glx_geodata_hex_2k",
+            "12": "geodata.uk_glx_geodata_hex_1k",
+            "13": "geodata.uk_glx_geodata_hex_1k",
+            "14": null
+          },
+          "grid_fields": {
+            "Population 2001": "pop__01",
+            "Population 2011": "pop__11",
+            "Female population": "gen_female__11",
+            "Male population": "gen_male__11"
+          }
+        },
+        "Not Grid": {
+          "format": "mvt",
+          "dbs": "MAPP",
+          "geom": "geom_p_3857",
+          "srid": "3857",
+          "mvt_cache": "mapp.uk_glx_geodata_hex__mvts",
+          "tables": {
+            "7": null,
+            "8": "geodata.uk_glx_geodata_hex_16k",
+            "9": "geodata.uk_glx_geodata_hex_8k",
+            "10": "geodata.uk_glx_geodata_hex_4k",
+            "11": "geodata.uk_glx_geodata_hex_2k",
+            "12": "geodata.uk_glx_geodata_hex_1k",
+            "13": "geodata.uk_glx_geodata_hex_1k",
+            "14": null
+          },
+          "style": {
+            "theme": {
+              "fields": ["pop__01", "pop__11", "gen_female__11", "gen_male__11"],
+              "dynamic": true,
+              "type": "graduated",
+              "field": "pop__01",
+              "cat_arr": [{
+                  "value": "0",
+                  "style": {
+                    "marker": {
+                      "type": "dot",
+                      "fillColor": "#15773f"
+                    }
+                  }
+                },
+                {
+                  "value": "250",
+                  "style": {
+                    "marker": {
+                      "type": "dot",
+                      "fillColor": "#66bd63"
+                    }
+                  }
+                },
+                {
+                  "value": "500",
+                  "style": {
+                    "marker": {
+                      "type": "dot",
+                      "fillColor": "#a6d96a"
+                    }
+                  }
+                },
+                {
+                  "value": "1000",
+                  "style": {
+                    "marker": {
+                      "type": "dot",
+                      "fillColor": "#d9ef8b"
+                    }
+                  }
+                },
+                {
+                  "value": "1500",
+                  "style": {
+                    "marker": {
+                      "type": "dot",
+                      "fillColor": "#fdae61"
+                    }
+                  }
+                },
+                {
+                  "value": "3000",
+                  "style": {
+                    "marker": {
+                      "type": "dot",
+                      "fillColor": "#f46d43"
+                    }
+                  }
+                },
+                {
+                  "value": "5000",
+                  "style": {
+                    "marker": {
+                      "type": "dot",
+                      "fillColor": "#d73027"
+                    }
+                  }
+                }
+              ],
+              "theme": {
+                "type": "graduated",
+                "field": "pop__11",
+                "cat_arr": [{
+                    "style": {
+                      "marker": {
+                        "scale": 0.4
+                      }
+                    }
+                  },
+                  {
+                    "style": {
+                      "marker": {
+                        "scale": 0.5
+                      }
+                    }
+                  },
+                  {
+                    "style": {
+                      "marker": {
+                        "scale": 0.6
+                      }
+                    }
+                  },
+                  {
+                    "style": {
+                      "marker": {
+                        "scale": 0.7
+                      }
+                    }
+                  },
+                  {
+                    "style": {
+                      "marker": {
+                        "scale": 0.8
+                      }
+                    }
+                  },
+                  {
+                    "style": {
+                      "marker": {
+                        "scale": 0.9
+                      }
+                    }
+                  },
+                  {
+                    "style": {
+                      "marker": {
+                        "scale": 1
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "Retail Places": {
+          "format": "mvt",
+          "dbs": "DEV",
+          "tables": {
+            "8": null,
+            "9": "dev.uk_glx_geodata_retail_place_working"
+          },
+          "geom": "geom_3857",
+          "srid": "3857",
+          "style": {
+            "themes": {
+              "Retail Place type": {
+                "type": "categorized",
+                "field": "rp_type",
+                "other": true,
+                "cat": {
+                  "City Centre": {
+                    "style": {
+                      "strokeColor": "#BA2D0B",
+                      "fillColor": "#BA2D0B"
+                    }
+                  },
+                  "Town Centre": {
+                    "style": {
+                      "strokeColor": "#F3A712",
+                      "fillColor": "#F3A712"
+                    }
+                  },
+                  "Urban Centre": {
+                    "style": {
+                      "strokeColor": "#FADF63",
+                      "fillColor": "#FADF63"
+                    }
+                  },
+                  "Retail Park": {
+                    "style": {
+                      "strokeColor": "#32746D",
+                      "fillColor": "#32746D"
+                    }
+                  },
+                  "Local Hub": {
+                    "style": {
+                      "strokeColor": "#08B2E3",
+                      "fillColor": "#08B2E3"
+                    }
+                  },
+                  "Parade": {
+                    "style": {
+                      "strokeColor": "#541388",
+                      "fillColor": "#541388"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "qID": "id",
+          "filter": {
+            "infoj": [{
+              "title": "ID count",
+              "field": "id_count",
+              "type": "integer",
+              "inline": true,
+              "fieldfx": "count(id)"
+            }]
+          },
+          "infoj": [{
+            "title": "RP Type",
+            "field": "rp_type",
+            "filter": {
+              "in": [
+                "Major City Centre",
+                "Large Town Centre",
+                "Village Centre",
+                "Weak Parade"
+              ]
+            }
+          }]
+        },
+        "Retail Points HX": {
+          "format": "cluster",
+          "dbs": "DEV",
+          "table": "dev.uk_glx_open_retail_points_food_stores",
+          "geom": "geom_p_4326",
+          "srid": "4326",
+          "cluster_hexresolution": 0.1,
+          "qID": "id",
+          "cluster_label": "store_name",
+          "infoj": [{
+            "field": "id"
+          }]
+        },
+        "Scratch": {
+          "format": "mvt",
+          "dbs": "DEV",
+          "table": "dev.scratch",
+          "srid": "3857",
+          "geom": "geom_3857",
+          "qID": "id",
+          "edit": {
+            "polygon": true,
+            "freehand": true,
+            "circle": true,
+            "rectangle": true,
+            "line": true,
+            "point": true,
+            "geometry": true,
+            "isoline_mapbox": {
+              "access_token": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmY25oa2thMWhoMDJzbGNldmF2ZzYzcCJ9.IWcezkYm8mipsGXygnYbNw"
+            },
+            "isoline_here": true,
+            "delete": true
+          },
+          "infoj": [
+            {
+              "title": "ID",
+              "field": "id"
+            },
+            {
+              "title": "char_field",
+              "field": "char_field",
+              "edit": true
+            },
+            {
+              "title": "textarea",
+              "field": "textarea",
+              "type": "textarea",
+              "edit": true
+            },
+            {
+              "title": "integer_field",
+              "field": "integer_field",
+              "type": "integer",
+              "edit": true
+            },
+            {
+              "title": "numeric_field",
+              "field": "numeric_field",
+              "type": "numeric",
+              "edit": true
+            },
+            {
+              "field": "json_field",
+              "title": "json_field",
+              "type": "json",
+              "edit": true
+            },
+            {
+              "title": "datetime_integer",
+              "field": "datetime_integer",
+              "type": "datetime",
+              "edit": true
+            },
+            {
+              "title": "bool_field",
+              "field": "bool_field",
+              "type": "boolean",
+              "edit": true
+            },
+            {
+              "title": "options_field",
+              "field": "options_field",
+              "edit": {
+                "options": [{
+                    "Open": "1"
+                  },
+                  {
+                    "Closed": "2"
+                  },
+                  "Other"
+                ]
+              }
+            },
+            {
+              "title": "images",
+              "field": "images",
+              "type": "images",
+              "edit": true
+            },
+            {
+              "title": "documents",
+              "field": "documents",
+              "type": "documents",
+              "edit": true
+            },
+            {
+              "name": "isoline here",
+              "field": "isoline_here",
+              "fieldfx": "ST_asGeoJSON(isoline_here)",
+              "type": "geometry",
+              "edit": {
+                "isoline_here": {}
+              },
+              "style": {
+                "strokeColor": "#43a047",
+                "strokeWidth": 2,
+                "fillColor": "#43a047",
+                "fillOpacity": 0.2
+              }
+            },
+            {
+              "name": "isoline mapbox",
+              "field": "isoline_mapbox",
+              "fieldfx": "ST_asGeoJSON(isoline_here)",
+              "type": "geometry",
+              "edit": {
+                "isoline_mapbox": {
+                  "access_token": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmY25oa2thMWhoMDJzbGNldmF2ZzYzcCJ9.IWcezkYm8mipsGXygnYbNw"
+                }
+              }
+            },
+            {
+              "type": "streetview"
+            }
+          ]
+        },
+        "Aurora": {
+          "format": "mvt",
+          "dbs": "DEV",
+          "table": "geodata.uk_glx_geodata_postal_area",
+          "srid": "3857",
+          "geom": "geom_3857"
+        },
+        "geoms": {
+          "format": "mvt",
+          "dbs": "DEV",
+          "table": "dev.scratch",
+          "srid": "3857",
+          "geom": "geom_3857",
+          "qID": "id",
+          "edit": {
+            "point": true,
+            "delete": true
+          },
+          "infoj": [
+            {
+              "title": "ID",
+              "field": "id"
+            },
+            {
+              "name": "isoline here",
+              "field": "isoline_here",
+              "fieldfx": "ST_asGeoJSON(isoline_here)",
+              "type": "geometry",
+              "edit": {
+                "isoline_here": {}
+              },
+              "style": {
+                "strokeColor": "#43a047",
+                "strokeWidth": 2,
+                "fillColor": "#43a047",
+                "fillOpacity": 0.2
+              }
+            },
+            {
+              "name": "isoline mapbox",
+              "field": "isoline_mapbox",
+              "fieldfx": "ST_asGeoJSON(isoline_here)",
+              "type": "geometry",
+              "edit": {
+                "isoline_mapbox": {
+                  "access_token": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmY25oa2thMWhoMDJzbGNldmF2ZzYzcCJ9.IWcezkYm8mipsGXygnYbNw"
+                }
+              }
+            }
+          ]
+        },
+        "Agata": {
+          "template": "Agata"
+        },
+        "Polygon Statistics": {
+          "format": "mvt",
+          "dbs": "AVOCET",
+          "table": "avocet.uk_polygons",
+          "geom": "geom_3857",
+          "srid": "3857",
+          "edit": {
+            "polygon": true,
+            "delete": true
+          },
+          "qID": "id",
+          "infoj": [{
+              "type": "key"
+            },
+            {
+              "title": "Data & Charts",
+              "type": "title"
+            },
+            {
+              "plugin": "demand_chart",
+              "query": "uk_polygon_demand"
+            }
+          ]
+        },
+        "aga": {
+          "meta": "don't touch.",
+          "edit": {
+            "point": true,
+            "delete": true,
+            "geometry": true
+          },
+          "download": {},
+          "format": "cluster",
+          "srid": "4326",
+          "geom": "geom_4326",
+          "dbs": "DEV",
+          "qID": "id",
+          "table": "dev.uk_glx_sites",
+          "_tables": {
+            "6": null,
+            "7": "dev.uk_glx_sites"
+          },
+          "cluster_kmeans": 0.1,
+          "cluster_label": "site_name",
+          "infoj": [{
+              "type": "key",
+              "class": "_report"
+            },
+            {
+              "type": "report",
+              "report": {
+                "template": "Sites Local Report"
+              },
+              "class": "_report"
+            },
+            {
+              "type": "report",
+              "report": {
+                "title": "Report hosted with GitHub",
+                "template": "Dev sites report"
+              },
+              "class": "_report"
+            },
+            {
+              "field": "id",
+              "title": "Site ID",
+              "inline": true,
+              "class": "purple-text"
+            },
+            {
+              "title": "Here's tomtom",
+              "name": "TomTom Reachable Range",
+              "type": "geometry",
+              "field": "isoline_tomtom",
+              "fieldfx": "ST_AsGeoJSON(isoline_tomtom)",
+              "edit": {
+                "meta": "isoline_tomtom_meta",
+                "isoline_tomtom": {}
+              }
+            },
+            {
+              "field": "isoline_tomtom_meta",
+              "type": "json"
+            },
+            {
+              "title": "Here API v2",
+              "name": "Display",
+              "type": "geometry",
+              "field": "here_isoline_v2",
+              "fieldfx": "ST_AsGeoJSON(here_isoline_v2)",
+              "edit": {
+                "meta": "here_isoline_v2_meta",
+                "isoline_here": {}
+              },
+              "style": {
+                "fillColor": "steelblue",
+                "strokeColor": "steelblue",
+                "fillOpacity": 0.3
+              }
+            },
+            {
+              "field": "here_isoline_v2_meta",
+              "type": "json"
+            },
+            {
+              "field": "text_edit",
+              "title": "Text edit",
+              "edit": true
+            },
+            {
+              "field": "integer_edit",
+              "title": "Integer edit",
+              "type": "integer",
+              "edit": true,
+              "inline": true
+            },
+            {
+              "field": "numeric_edit",
+              "title": "Numeric edit",
+              "type": "numeric",
+              "edit": true,
+              "inline": true
+            },
+            {
+              "field": "site_name",
+              "title": "Site Name",
+              "edit": true,
+              "inline": true
+            },
+            {
+              "field": "site_type",
+              "title": "Site Type",
+              "inline": true,
+              "edit": {
+                "options": [
+                  "Type A",
+                  "Type B",
+                  " "
+                ]
+              }
+            },
+            {
+              "title": "Random data series",
+              "type": "dataview",
+              "target": "xyz_sites_random",
+              "query": "random_data_series",
+              "class": "_report",
+              "chart": {
+                "height": 300,
+                "width": 290,
+                "type": "bar",
+                "options": {
+                  "title": {
+                    "display": true,
+                    "text": "Random data series"
+                  },
+                  "legend": {
+                    "display": true,
+                    "position": "bottom"
+                  },
+                  "plugins": {
+                    "datalabels": {
+                      "display": false
+                    }
+                  }
+                }
+              }
+            },
+            {
+              "title": "Doughnut Chart",
+              "type": "dataview",
+              "_query": "random_data_series",
+              "query": "Random Data Series",
+              "_target": "xyz_sites_random2",
+              "target": "location",
+              "chart": {
+                "type": "doughnut",
+                "datasets": [{
+                  "backgroundColor": [
+                    "rgba(229, 99 , 153, 0.4)",
+                    "rgba(0, 167, 225, 0.4)",
+                    "rgba(237, 222, 164, 0.4)",
+                    "rgba(247, 160 ,114, 0.4)",
+                    "rgba(255, 155, 66, 0.4)"
+                  ],
+                  "borderColor": "#C0B4A7",
+                  "spanGaps": true,
+                  "lineTension": 0.5
+                }],
+                "options": {
+                  "cutoutPercentage": 36,
+                  "title": {
+                    "display": true,
+                    "text": "Doughnut Chart"
+                  },
+                  "legend": {
+                    "display": true,
+                    "position": "left"
+                  }
+                }
+              },
+              "class": "_report"
+            },
+            {
+              "field": "comments",
+              "title": "Comments",
+              "type": "textarea",
+              "edit": true,
+              "class": "_report"
+            },
+            {
+              "field": "images",
+              "title": "Images",
+              "type": "images",
+              "edit": true,
+              "class": "_report"
+            },
+            {
+              "title": "Documents",
+              "field": "documents",
+              "type": "documents",
+              "edit": true,
+              "class": "_report"
+            },
+            {
+              "field": "test_jsonb",
+              "title": "Test JSONb",
+              "type": "json"
+            },
+            {
+              "field": "test_jsonb2",
+              "title": "Test JSONb",
+              "type": "json",
+              "edit": true
+            }
+          ],
+          "style": {
+            "_default": {
+              "showInHeader": true,
+              "type": "semiCircle",
+              "fillColor": "#ffb300",
+              "scale": 2,
+              "layers": {
+                "0.5": "#0C6291",
+                "0.3": "#ffb300"
+              }
+            },
+            "default": {
+              "showInHeader": true,
+              "layers": [{
+                  "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/aga/red_pin.svg"
+                },
+                {
+                  "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/aga/spar.svg"
+                }
+              ]
+            },
+            "cluster": {
+              "type": "dot",
+              "fillColor": "rgba(0, 75, 168, 0.3)",
+              "scale": 2
+            },
+            "_themes": {
+              "Test categorized pins": {
+                "field": "test_binary",
+                "type": "categorized",
+                "other": true,
+                "cat": {
+                  "0": {
+                    "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/aga/hi.svg",
+                    "scale": 0.1
+                  },
+                  "1": {
+                    "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons@master/aga/hi2.svg",
+                    "scale": 0.1
+                  }
+                }
+              },
+              "Test categorized dots": {
+                "field": "test_binary",
+                "type": "categorized",
+                "other": true,
+                "cat": {
+                  "0": {
+                    "style": {
+                      "fillColor": "#283593"
+                    }
+                  },
+                  "1": {
+                    "style": {
+                      "fillColor": "#ff1744"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "Japan": {
+      "name": "日本",
+      "bounds": {
+        "north": 45,
+        "east": 149,
+        "south": 30,
+        "west": 127
+      },
+      "minZoom": 6,
+      "maxZoom": 17,
+      "layers": {
+        "Mapbox Colour": {
+          "template": "Mapbox Colour",
+          "display": true
+        },
+        "restaurants_ja": {
+          "name": "レストラン",
+          "template": "japan_restaurants",
+          "display": true,
+          "roles": {
+            "ja": true
+          },
+          "infoj": [{
+              "type": "key"
+            },
+            {
+              "field": "local_name",
+              "title": "レストラン名"
+            },
+            {
+              "field": "chain_name",
+              "title": "レストランチェーン"
+            },
+            {
+              "field": "info",
+              "title": "情報"
+            }
+          ]
+        },
+        "restaurants": {
+          "name": "Restaurants",
+          "template": "japan_restaurants",
+          "display": true,
+          "roles": {
+            "!ja": null
+          },
+          "infoj": [{
+              "type": "key"
+            },
+            {
+              "field": "local_name",
+              "title": "Name"
+            },
+            {
+              "field": "chain_name",
+              "title": "Chain"
+            },
+            {
+              "field": "info",
+              "title": "Info"
+            }
+          ]
+        }
+      }
+    }
+  }
 }

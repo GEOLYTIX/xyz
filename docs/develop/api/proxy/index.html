@@ -9,7 +9,7 @@
   <title>Proxy</title>
   <style>
 
-    body {
+    html, body {
       margin: 0;
       padding: 0;
     }
@@ -20,11 +20,15 @@
 
     .grid {
       font-family: system-ui;
-      display:grid;
-      grid-template-columns: 200px 5fr;
+      display: grid;
+      grid-template-columns: min-content minmax(0, 1fr);
       max-width: 1100px;
-      margin: auto;
-      padding: 0 30px;
+      margin-right: auto;
+      padding-right: 30px;
+    }
+
+    iframe {
+      border: none;
     }
 
     #toggle {
@@ -37,14 +41,19 @@
 
     #nav {
       grid-column: 1;
-      padding-inline-start: 0px;
-      list-style-type: none;
-      padding-right: 20px;
-      margin: 3px 0;
-      position: fixed;
+      /* transform: rotateY(180deg); */
+      padding: 10px 20px 20px 20px;
     }
 
-    #nav > *:first-child {
+    #nav > ul {
+      /* transform: rotateY(180deg); */
+      padding-inline-start: 0px;
+      list-style-type: none;
+      margin: 0;
+    }
+
+    #nav > ul > :first-child > a {
+      padding-top: 10px;
       line-height: 1;
       font-size: 30px;
       font-weight: bold;
@@ -52,11 +61,9 @@
 
     #content {
       grid-column: 2;
+      padding-top: 6px;
       padding-left: 20px;
       border-left: 1px solid #ddd;
-      margin: 10px 0;
-      overflow: hidden;
-      padding-bottom: 100%;
     }
 
     #content > *:first-child {
@@ -95,7 +102,7 @@
     }
 
     li.__2 {
-      padding-left: 0;
+      padding-left: 10px;
     }
 
     li.__3 {
@@ -103,7 +110,7 @@
     }
 
     li.__4 {
-      padding-left: 40px;
+      padding-left: 30px;
     }
 
     pre {
@@ -138,7 +145,7 @@
 
     @media only screen and (max-width: 700px) {
       .grid {
-        grid-template-columns: 0 1fr;
+        grid-template-columns: 0 minmax(0, 1fr);
         padding: 0 0 0 40px;
       }
 
@@ -159,12 +166,11 @@
       #content {
         border-left: none;
         padding: 0 20px 0 1px;
-        overflow: hidden;
       }
     }
 
     .show_nav {
-      grid-template-columns: 1fr 2fr;
+      grid-template-columns: min-content minmax(0, 1fr);
     }
 
     .show_nav > #nav {
@@ -186,210 +192,236 @@
 
     <div id="toggle"></div>
 
-    <ul id="nav">
-      
-      
-      
-      <li class="__1 ">
-        <a href="/xyz/docs/">XYZ</a>
-      </li>
-      
-      
-      
-      
-      
-      <li class="__1 ">
-        <a href="/xyz/docs/develop/">Develop</a>
-      </li>
-      
-      
-      
-      <li class="__2 ">
-        <a href="/xyz/docs/develop/api/">API</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/api/gazetteer/">Gazetteer</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/api/layer/">Layer</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/api/location/">Location</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/api/provider/">Provider</a>
-      </li>
-      
-      
-      
-      <li class="__3 active">
-        <a href="/xyz/docs/develop/api/proxy/">Proxy</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/api/query/">Query</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/api/user/">User</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/api/view/">View</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/api/workspace/">Workspace</a>
-      </li>
-      
-      
-      
-      <li class="__2 ">
-        <a href="/xyz/docs/develop/design/">Design</a>
-      </li>
-      
-      
-      
-      <li class="__2 ">
-        <a href="/xyz/docs/develop/lib/library/">Library</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/lib/dataviews/">Dataviews</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/lib/layers/">Layers</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/lib/locations/">Locations</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/lib/mapview/">Mapview</a>
-      </li>
-      
-      
-      
-      <li class="__4 ">
-        <a href="/xyz/docs/develop/lib/mapview/interactions/">Interactions</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/lib/plugins/">Plugins</a>
-      </li>
-      
-      
-      
-      <li class="__3 ">
-        <a href="/xyz/docs/develop/lib/webpack/">Webpack</a>
-      </li>
-      
-      
-      
-      <li class="__2 ">
-        <a href="/xyz/docs/develop/security/authentication/">Authentication</a>
-      </li>
-      
-      
-      
-      <li class="__2 ">
-        <a href="/xyz/docs/develop/views/">Application Views</a>
-      </li>
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
-      
+    <div id="nav">
 
-    </ul>
+      <ul>
+      
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/">XYZ</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/getting-started/">Getting started</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/deploy/">Deployments</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/design/">Design</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/design/icons/">Icons</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/develop/">Develop</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/develop/api/">API</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/gazetteer/">Gazetteer</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/layer/">Layer</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/location/">Location</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/provider/">Provider</a>
+        </li>
+        
+        <li class="__3 active">
+          <a href="/xyz/docs/develop/api/proxy/">Proxy</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/query/">Query</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/user/">User</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/view/">View</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/workspace/">Workspace</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/develop/authentication/">Authentication</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/develop/lib/library/">Library</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/dataviews/">Dataviews</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/layers/">Layers</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/locations/">Locations</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/mapview/">Mapview</a>
+        </li>
+        
+        <li class="__4 ">
+          <a href="/xyz/docs/develop/lib/mapview/interactions/">Interactions</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/plugins/">Plugins</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/tabview/">Tabview</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/webpack/">Webpack</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/develop/views/">Application Views</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/document/">Document</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/environment-settings/">Environment Settings</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/logging/">Logging</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/mapp/">Mapp</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/security/">Security</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/dataviews/">Dataviews</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/dataviews/charts/">Charts</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/dataviews/tables/">Tables</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/layer/">Layer</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/cluster/">Cluster</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/editing/">Layer editing</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/geojson/">GeoJson</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/grid/">Hex Grid</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/mvt/">MVT</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/themes/">Themes</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/tile/">Tile Layer</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/locales/">Locale</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/locales/gazetteer/">Gazetteer</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/roles/">Roles</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/src/">Source Links</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/styles/">Styles</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/templates/">Templates</a>
+        </li>
+        
+  
+      </ul>
+
+    </div>
+
 
     <div id="content">
       <h1 id="xyz-proxy">XYZ Proxy <a class="header-anchor" href="#xyz-proxy">¶</a></h1>
-<p>An Express HTTP proxy to route requests through the XYZ API.</p>
-<p><em>This is likely to be merged with the provider service in the future</em></p>
+<p>The XYZ <a href="https://github.com/GEOLYTIX/xyz/blob/development/mod/proxy.js">proxy module</a> will match a url defined as a request parameter.</p>
+<p>Keys defined as template parameter will be substituted if matched with keys defined as process environment variables.</p>
+<p>The request with the substituted key parameter will then be piped to the client.</p>
+<pre class="language-js"><code class="language-js">  <span class="token keyword">const</span> _url <span class="token operator">=</span> req<span class="token punctuation">.</span>url<span class="token punctuation">.</span><span class="token function">match</span><span class="token punctuation">(</span><span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">\?.*</span><span class="token regex-delimiter">/</span></span><span class="token punctuation">)</span><br><br>  <span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token operator">!</span>_url<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span> <span class="token keyword">return</span><br><br>  <span class="token comment">// Find variables to be substituted.</span><br>  <span class="token keyword">const</span> url <span class="token operator">=</span> _url<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">.</span><span class="token function">substring</span><span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">replace</span><span class="token punctuation">(</span><span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">\$\{(.*?)\}</span><span class="token regex-delimiter">/</span><span class="token regex-flags">g</span></span><span class="token punctuation">,</span><br><br>    <span class="token comment">// Substitute matched variable with key value from process environment.</span><br>    <span class="token parameter">matched</span> <span class="token operator">=></span> process<span class="token punctuation">.</span>env<span class="token punctuation">[</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">KEY_</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>matched<span class="token punctuation">.</span><span class="token function">replace</span><span class="token punctuation">(</span><span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">\$|\{|\}</span><span class="token regex-delimiter">/</span><span class="token regex-flags">g</span></span><span class="token punctuation">,</span> <span class="token string">''</span><span class="token punctuation">)</span><span class="token interpolation-punctuation punctuation">}</span></span><span class="token template-punctuation string">`</span></span><span class="token punctuation">]</span> <span class="token operator">||</span> matched<span class="token punctuation">)</span><br><br>  <span class="token keyword">const</span> proxy <span class="token operator">=</span> https<span class="token punctuation">.</span><span class="token function">request</span><span class="token punctuation">(</span>url<span class="token punctuation">,</span> <span class="token parameter">_res</span> <span class="token operator">=></span> <span class="token punctuation">{</span><br>    res<span class="token punctuation">.</span><span class="token function">writeHead</span><span class="token punctuation">(</span>_res<span class="token punctuation">.</span>statusCode<span class="token punctuation">,</span> _res<span class="token punctuation">.</span>headers<span class="token punctuation">)</span><br>    _res<span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>res<span class="token punctuation">,</span> <span class="token punctuation">{</span><br>      end<span class="token operator">:</span> <span class="token boolean">true</span><br>    <span class="token punctuation">}</span><span class="token punctuation">)</span><br>  <span class="token punctuation">}</span><span class="token punctuation">)</span><br><br>  req<span class="token punctuation">.</span><span class="token function">pipe</span><span class="token punctuation">(</span>proxy<span class="token punctuation">,</span> <span class="token punctuation">{</span><br>    end<span class="token operator">:</span> <span class="token boolean">true</span><br>  <span class="token punctuation">}</span><span class="token punctuation">)</span></code></pre>
+<h2 id="mapp-proxy">Mapp Proxy <a class="header-anchor" href="#mapp-proxy">¶</a></h2>
+<p>The Mapp <a href="https://github.com/GEOLYTIX/xyz/blob/development/lib/proxy.mjs">proxy module</a> will return a promise of a XHR request to the XYZ proxy module.</p>
+<p>Proxied requests can be sent through the Mapp library proxy method. The request will either be rejected with an error message or resolve with query response.</p>
+<p>Within the <a href="https://github.com/GEOLYTIX/xyz/blob/development/lib/gazetteer.mjs">Mapp gazetteer module</a> this is used to request place details from the Google Places API.</p>
+<pre class="language-js"><code class="language-js">_xyz<br>  <span class="token punctuation">.</span><span class="token function">proxy</span><span class="token punctuation">(</span><span class="token template-string"><span class="token template-punctuation string">`</span><span class="token string">https://maps.googleapis.com/maps/api/place/details/json?placeid=</span><span class="token interpolation"><span class="token interpolation-punctuation punctuation">${</span>record<span class="token punctuation">.</span>id<span class="token interpolation-punctuation punctuation">}</span></span><span class="token string">&amp;\${GOOGLE}</span><span class="token template-punctuation string">`</span></span><span class="token punctuation">)</span><br>  <span class="token punctuation">.</span><span class="token function">then</span><span class="token punctuation">(</span><span class="token parameter">response</span> <span class="token operator">=></span> <span class="token punctuation">{</span><br>    <span class="token keyword">const</span> feature <span class="token operator">=</span> <span class="token punctuation">{</span><br>      type<span class="token operator">:</span> <span class="token string">'Point'</span><span class="token punctuation">,</span><br>      coordinates<span class="token operator">:</span> <span class="token punctuation">[</span>response<span class="token punctuation">.</span>result<span class="token punctuation">.</span>geometry<span class="token punctuation">.</span>location<span class="token punctuation">.</span>lng<span class="token punctuation">,</span> response<span class="token punctuation">.</span>result<span class="token punctuation">.</span>geometry<span class="token punctuation">.</span>location<span class="token punctuation">.</span>lat<span class="token punctuation">]</span><br>    <span class="token punctuation">}</span><br>    <br>    gazetteer<span class="token punctuation">.</span><span class="token function">createFeature</span><span class="token punctuation">(</span>feature<span class="token punctuation">)</span><br>    <br>    <span class="token keyword">if</span> <span class="token punctuation">(</span>gazetteer<span class="token punctuation">.</span>callback<span class="token punctuation">)</span> <span class="token keyword">return</span> gazetteer<span class="token punctuation">.</span><span class="token function">callback</span><span class="token punctuation">(</span>feature<span class="token punctuation">)</span><span class="token punctuation">;</span><br>    <br>    record<span class="token punctuation">.</span>callback <span class="token operator">&amp;&amp;</span> record<span class="token punctuation">.</span><span class="token function">callback</span><span class="token punctuation">(</span>feature<span class="token punctuation">)</span><br><span class="token punctuation">}</span><span class="token punctuation">)</span></code></pre>
 
     </div>
 

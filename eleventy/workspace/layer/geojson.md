@@ -1,6 +1,6 @@
 ---
 title: GeoJson
-tags: [workspace]
+
 layout: root.html
 ---
 

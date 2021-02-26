@@ -1,6 +1,6 @@
 ---
 title: Tile Layer
-tags: [workspace]
+
 layout: root.html
 ---
 

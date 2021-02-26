@@ -1,6 +1,6 @@
 ---
 title: MVT
-tags: [workspace]
+
 layout: root.html
 ---
 

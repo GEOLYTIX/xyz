@@ -1,10 +1,10 @@
-const auth = require('./auth')
-
 const messages = require('./messages')
 
-const jwt = require('jsonwebtoken')
-
-const _method = {
+const methods = {
+  admin: {
+    handler: require('./admin'),
+    admin: true
+  },
   register: {
     handler: require('./register')
   },
@@ -13,71 +13,49 @@ const _method = {
   },
   delete: {
     handler: require('./delete'),
-    access: 'admin'
+    admin: true
   },
   update: {
     handler: require('./update'),
-    access: 'admin'
+    admin: true
   },
   approve: {
     handler: require('./approve'),
-    access: 'admin'
+    admin: true
   },
   list: {
     handler: require('./list'),
-    access: 'admin'
+    admin: true
   },
   log: {
     handler: require('./log'),
-    access: 'admin'
-  },
-  pgtable: {
-    handler: require('./pgtable'),
+    admin: true
   },
   key: {
     handler: require('./key'),
-    access: 'key'
+    login: true
   },
   token: {
-    handler: (req, res) => res.send(req.params.token.signed),
-    access: 'login'
+    handler: require('./token'),
+    login: true
   },
   cookie: {
     handler: require('./cookie')
-  },
-  logout: {
-    handler: (req, res) => {
-
-      let token = jwt.decode(req.cookies && req.cookies[process.env.TITLE])
-
-      token.signed = jwt.sign({
-        msg: messages.logout[token.language || 'en'] || `Logged out.`
-      },
-      process.env.SECRET, {
-        expiresIn: '3s'
-      })
-
-      res.setHeader('Set-Cookie', `${process.env.TITLE}=${token.signed};HttpOnly;Max-Age=3;Path=${process.env.DIR || '/'}`)
-      
-      res.setHeader('location', `${process.env.DIR}?language=${token.language || 'en'}`)
-
-      res.status(302).send()
-    }
   }
 }
 
-module.exports = async (req, res) => {
+module.exports = (req, res) => {
 
-  const method = _method[req.params.method]
+  const method = methods[req.params.method]
 
   if (!method) {
     return res.send(`Failed to evaluate 'method' param.<br><br>
     <a href="https://geolytix.github.io/xyz/docs/develop/api/user/">User API</a>`)
   }
 
-  method.access && await auth(req, res, method.access)
+  if (!req.params.user && (method.login || method.admin)) return 'Route requires login'
 
-  if (res.finished) return
+  if (req.params.user && (!req.params.user.admin && method.admin)) return 'Route requires admin priviliges'
 
   method.handler(req, res)
   

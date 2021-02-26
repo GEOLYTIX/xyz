@@ -1,6 +1,6 @@
 ---
 title: Styles
-tags: [workspace]
+
 layout: root.html
 ---
 
@@ -98,6 +98,7 @@ Supported types of markers:
 * target
 * triangle
 * square
+* diamond
 * semiCircle
 * dot
 * markerColor
@@ -123,6 +124,23 @@ Icons can be defined as marker to represent a point location in the rendered map
 /* scale is optional */
 ```
 
+## Layered symbols
+
+Cluster icons support layered styling where style definitions are stored in an array and applied in given order. 
+
+```json
+"style": {
+  "layers": [
+    {
+      "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/pins/red.svg"
+    },
+    {
+      "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/logos/five_guys.svg"
+    }
+  ]
+}
+```
+
 ## Labels
 
 Label for locations on cluster or MVT layer are created as a seperate layer to make use of Openlayers declutter capability to prevent overlapping map labels. The label itself is created as an [Openlayers Text object](https://openlayers.org/en/latest/apidoc/module-ol_style_Text.html).
@@ -133,14 +151,25 @@ The field defines which location field will be shown as the location's label.
 
 ```json
 "label": {
+  "display": true,
   "field": "store_name",
   "declutter": true,
   "strokeColor": "#ffffff",
-  "strokeWidth": 3
+  "strokeWidth": 3,
+  "maxZoom": 18,
+  "minZoom": 14,
+  "title": "Store"
 }
 ```
 
-In order to display labels by default add `"display": true`.
+If the `display` flag is set the label will be turned on by default.
+
+The `declutter` flag asks Openlayers to declutter the text label on the map preventing labels which would overlap to be rendered.
+
+The `minZoom` and `maxZoom` integer can be set to limit at which zoom levels the labels will be drawn on the map.
+
+The `title` value will be shown with the checkbox if set.
+
 To include count on clustered features add `"count": true`.
 
 ## Hide the style panel

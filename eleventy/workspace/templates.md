@@ -1,6 +1,6 @@
 ---
 title: Templates
-tags: [workspace]
+
 layout: root.html
 ---
 

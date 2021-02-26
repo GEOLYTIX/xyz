@@ -1,6 +1,6 @@
 ---
 title: Gazetteer
-tags: [workspace]
+
 layout: root.html
 ---
 

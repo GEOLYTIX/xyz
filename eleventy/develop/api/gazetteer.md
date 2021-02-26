@@ -1,6 +1,6 @@
 ---
 title: Gazetteer
-tags: [develop]
+
 layout: root.html
 ---
 

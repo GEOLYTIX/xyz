@@ -1,6 +1,6 @@
 ---
 title: Cluster
-tags: [workspace]
+
 layout: root.html
 ---
 

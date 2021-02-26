@@ -1,6 +1,5 @@
 ---
 title: Layer editing
-tags: [workspace, layer, interaction, draw, edit]
 layout: root.html
 ---
 

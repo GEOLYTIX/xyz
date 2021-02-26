@@ -1,5 +1,5 @@
 <!doctype html>
-<html>
+<html lang="en">
 
 <head data-dir="${dir}">
   <title>XYZ | Login</title>
@@ -24,11 +24,13 @@
     <option value="${dir}?language=zh">中文简体</option>
   </select>
 
-  <form action="${dir}/api/user/cookie" method="post" autocomplete="off">
+  <form action="${dir}/api/user/login" method="post" autocomplete="off">
 
     <input style="display: none;" name="redirect" value="${redirect}">
+    
+    <input style="display: none;" name="login" value=true>
 
-    <input style="display:none;" name="language" required value=${language}>
+    <input style="display:none;" name="language" required value="en">
 
     <div class="input-group">
       <input id="auth_user_email" name="email" type="email" required maxlength="50">
@@ -49,7 +51,7 @@
     <p>Your account must be verified by following a verification link sent to the email address and approved by
       an administrator before you are able to log in.</p>
 
-    <a class="switch" href="${dir}/api/user/register">Register a new account or reset your password.</a>
+    <a class="switch" href="${dir}/api/user/register?register=true">Register a new account or reset your password.</a>
     
   </form>
 

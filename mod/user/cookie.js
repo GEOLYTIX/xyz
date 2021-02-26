@@ -1,32 +1,42 @@
-const getToken = require('./token')
-
 const login = require('./login')
 
 const messages = require('./messages')
 
+const jwt = require('jsonwebtoken')
+
 module.exports = async (req, res) => {
 
-  if (!req.body) {
+  const cookie = req.cookies && req.cookies[process.env.TITLE]
 
-    if (req.cookies && req.cookies[process.env.TITLE]) {
-
-      return res.send(`${process.env.TITLE}=<a href="${process.env.DIR}/api/user/token">token</a>;HttpOnly;Max-Age=28800;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
-
-    }
-
-    return login(req, res, messages.no_cookie_found[req.params.language || 'en'] || `No cookie relating to this application found on request`)
-
+  if (req.params.destroy) {
+    res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
+    return res.send('This too shall pass')
   }
 
-  const token = await getToken(req)
+  if (!cookie && req.params.renew) return res.status(401).send('Failed to renew cookie')
 
-  if (token instanceof Error) return res.send(token.message)
-  
-  const cookie = `${process.env.TITLE}=${token.signed || token};HttpOnly;Max-Age=28800;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`
+  if (!cookie) return login(req, res, messages.no_cookie_found[req.params.language || 'en'] || `No cookie relating to this application found on request`)
 
-  res.setHeader('Set-Cookie', cookie)
+  jwt.verify(
+    cookie,
+    process.env.SECRET,
+    async (err, user) => {
 
-  res.setHeader('location', `${req.body.redirect}`)
+      if (err) return err
 
-  res.status(302).send()
+      delete user.iat
+      delete user.exp
+
+      const token = jwt.sign(user, process.env.SECRET, {
+        expiresIn: parseInt(process.env.COOKIE_TTL)
+      })
+
+      const cookie = `${process.env.TITLE}=${token};HttpOnly;Max-Age=${process.env.COOKIE_TTL};Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`
+
+      res.setHeader('Set-Cookie', cookie)
+
+      res.send(user)
+
+    })
+
 }
