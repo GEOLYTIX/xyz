@@ -412,12 +412,20 @@
 
 
     <div id="content">
-      <h1 id="xyz-library">XYZ Library <a class="header-anchor" href="#xyz-library">¶</a></h1>
-<p>The XYZ application control, control, or client library is the recommended way to interact with the XYZ API.</p>
-<p>The library is compiled as a javascript bundle which may be added as a HTML script tag. Once added the library will execute and assign itself as _xyz to the window.global.</p>
-<p>The _xyz method exported from the <a href="https://github.com/GEOLYTIX/xyz/blob/master/lib/index.mjs">index.mjs</a> will initialise a _xyz object in the browser. The _xyz object is passed to a callback in the _xyz method or can be awaited in an async closure.</p>
-<p>The library uses a factory design pattern with objects being created by assigning input params to object literals.</p>
-<p>The structure of modules in the /lib directory follows the structure of the _xyz object. The individual module methods will be discussed in this section of the documentation.</p>
+      <h1 id="mapp-library">Mapp Library <a class="header-anchor" href="#mapp-library">¶</a></h1>
+<p>The Mapp library is the recommended interface for the XYZ API.</p>
+<p>The bundled library is available in the public/js directory and may be added to a HTML view as a script tag sourced from the static files of an XYZ Host or directly from the public Github page of the XYZ repostory.</p>
+<p><a href="https://geolytix.github.io/xyz/public/js/mapp.js">https://geolytix.github.io/xyz/public/js/mapp.js</a></p>
+<p>The <a href="(https://github.com/GEOLYTIX/xyz/blob/master/lib/index.mjs)">entry point</a> for the Mapp library will assign itself to the global window object as <strong>_xyz</strong> as well as export the _xyz init method as default.</p>
+<h2 id="_xyz(params)">_xyz(params) <a class="header-anchor" href="#_xyz(params)">¶</a></h2>
+<p>Calling the _xyz() method will return an instance of the Mapp library.</p>
+<pre><code>const Mapp = _xyz()
+</code></pre>
+<p>Params passed to the _xyz() method will be assigned to the Mapp library object.</p>
+<h3 id="host">host <a class="header-anchor" href="#host">¶</a></h3>
+<p>The XYZ host including the directory if set as <code>DIR</code> environment variable. The host parameter must be set in order to allow for any request to the XYZ API.</p>
+<h3 id="hooks">hooks <a class="header-anchor" href="#hooks">¶</a></h3>
+<p>The Mapp library will update URL query params for the map viewport, locale, visible layers, and selected locations if the hooks param is set to true.</p>
 
     </div>
 
