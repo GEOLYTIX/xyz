@@ -583,11 +583,11 @@
             class="header primary-colour"
             onclick=${t=>{e.utils.toggleExpanderParent(t.target)}}>
             <span>${a.group}</span>
-            <span class="xyz-icon btn-header icon-expander primary-colour-filter">`,a.listview.appendChild(r[a.group])),a.expanded&&r[a.group].classList.add("expanded"),a.listview=r[a.group]),a.plugin)e.locations.plugins[a.plugin]&&e.locations.plugins[a.plugin](a);else{if(a.title&&!a.query&&!a.dataviews){if(!a.edit&&!a.value&&"title"!==a.type)continue;if(a.listview.appendChild(e.utils.html.node`
+            <span class="xyz-icon btn-header icon-expander primary-colour-filter">`,a.listview.appendChild(r[a.group])),a.expanded&&r[a.group].classList.add("expanded"),a.listview=r[a.group]),a.plugin)e.locations.plugins[a.plugin]&&e.locations.plugins[a.plugin](a);else{if(a.title&&!a.query&&!a.dataviews){if(!a.edit&&void 0===a.value&&"title"!==a.type)continue;if(a.listview.appendChild(e.utils.html.node`
         <div
           class="${`label ${a.class}`}"
           style="${`${a.css_title||""}`}"
-          title="${a.tooltip||null}">${a.title}`),"title"===a.type)continue}if("dataview"!==a.type)"key"!==a.type?e.locations.view[a.type]?e.locations.view[a.type](a):(a.query||a.edit||a.value)&&(a.val=a.listview.appendChild(e.utils.html.node`
+          title="${a.tooltip||null}">${a.title}`),"title"===a.type)continue}if("dataview"!==a.type)"key"!==a.type?e.locations.view[a.type]?e.locations.view[a.type](a):(a.query||a.edit||void 0!==a.value)&&(a.val=a.listview.appendChild(e.utils.html.node`
       <div
         class="${`val ${a.class}`}"
         style="${`${a.css_val||""}`}">`),a.query?(a.layer=a.layer||a.location.layer,e.query(a).then((e=>{e&&(a.val.textContent=Object.values(e)[0])}))):!a.edit||a.fieldfx?"html"!==a.type?a.val.textContent=a.displayValue:a.val.innerHTML=a.value:e.locations.view.edit.input(a)):a.listview.appendChild(e.utils.html.node`
