@@ -6,6 +6,8 @@ const express = require('express')
 
 const cookieParser = require('cookie-parser')
 
+const cors = require('cors');
+
 const app = express()
 
 app.use(process.env.DIR||'', express.static('public'))
@@ -13,6 +15,7 @@ app.use(process.env.DIR||'', express.static('public'))
 app.use(`/xyz/docs`, express.static('docs'))
 
 app.use(cookieParser())
+app.use(cors());
 
 
 const _api = require('./api/api')

@@ -24,6 +24,7 @@
     "bcryptjs": "^2.4.3",
     "chartjs": "^0.3.24",
     "cloudinary": "^1.24.0",
+    "cors": "^2.8.5",
     "data-api-client": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.21",
