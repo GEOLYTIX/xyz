@@ -124,7 +124,7 @@ window.onload = () => {
   // Initialize xyz object
   const xyz = _xyz({
     host: document.head.dataset.dir || new String(''),
-    hooks: true
+    hooks: false
   })
 
   document.getElementById('layers_header').textContent = xyz.language.layers_header

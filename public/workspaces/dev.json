@@ -2,13 +2,13 @@
   "locales": {
     "UK": {
       "bounds": {
-        "north": 62,
-        "east": 5,
-        "south": 49,
-        "west": -13
+        "north": 51.451968,
+        "east": -0.034304,
+        "south": 51.439717,
+        "west": -0.006453
       },
       "minZoom": 2,
-      "maxZoom": 17,
+      "maxZoom": 20,
       "showScaleBar": true,
       "layers": {
         "Mapbox Base": {
@@ -17,27 +17,47 @@
           "accessToken": "pk.eyJ1IjoiYW5keXBvbHMiLCJhIjoiY2ttMHQ3cnhqMG8yODJucjNyejRvaGVvaSJ9.RBSYVzv5pxlAgCCCjB9xoQ",
           "display": true
         },
-       
-        "Scratch": {
+        "Contributions": {
           "format": "mvt",
           "dbs": "XYZ",
-          "table": "awesomeMap",
+          "table": "contributions",
           "srid": "3857",
           "geom": "geom_3857",
           "qID": "id",
+          "display": true,
           "edit": {
-            "polygon": true,
-            "freehand": true,
-            "circle": true,
-            "rectangle": true,
-            "line": true,
-            "point": true,
-            "delete": true
+            "point": true
           },
           "infoj": [
             {
               "title": "ID",
               "field": "id"
+            },
+            {
+              "title": "Page",
+              "field": "pageId"
+            }
+          ]
+        },
+        "Polygon": {
+          "format": "mvt",
+          "dbs": "XYZ",
+          "table": "polygons",
+          "srid": "3857",
+          "geom": "geom_3857",
+          "qID": "id",
+          "display": true,
+          "edit": {
+            "polygon": true
+          },
+          "infoj": [
+            {
+              "title": "ID",
+              "field": "id"
+            },
+            {
+              "title": "Page",
+              "field": "pageId"
             }
           ]
         }
