@@ -87,9 +87,9 @@ module.exports = async (req, res) => {
 
   }
 
-  let body = req.body && Array.isArray(req.body) && [req.body.join(',')]
+  //let body = req.body && Array.isArray(req.body) && [req.body.join(',')]
 
-  body = body || req.body && req.body.length && [JSON.stringify(req.body)]
+  let body = req.body && req.body.length && [JSON.stringify(req.body)]
 
   body = body || req.params.params && req.params.params.split(',')
 
