@@ -563,8 +563,8 @@ button {
   -ms-transform: translatez(0);
   transform: translatez(0);
   border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
-  border-right: 1px solid #ddd; }
+  border-right: 1px solid #ddd;
+  border-bottom: none; }
 
 .tabulator[tabulator-layout="fitDataFill"] .tabulator-tableHolder .tabulator-table {
   min-width: 100%; }
@@ -2102,9 +2102,6 @@ span.flatpickr-weekday {
       overflow-y: auto; }
     #tabview .tabs .tab.active > .panel {
       display: grid; }
-
-.tabview .target {
-  position: absolute; }
 
 .dataview-container {
   display: grid; }
