@@ -1,14 +1,13 @@
 {
   "locales": {
     "UK": {
-      "bounds": {
-        "north": 51.451968,
-        "east": -0.034304,
-        "south": 51.439717,
-        "west": -0.006453
+      "minZoom": 14,
+      "maxZoom": 18,
+      "view": {
+        "lat": 53.54472,
+        "lng": -2.11833,
+        "z": 17
       },
-      "minZoom": 2,
-      "maxZoom": 20,
       "showScaleBar": true,
       "layers": {
         "Mapbox Base": {
