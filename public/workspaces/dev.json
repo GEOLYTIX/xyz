@@ -24,6 +24,28 @@
           "geom": "geom_3857",
           "qID": "id",
           "display": true,
+          "style": {
+            "default": {
+              "strokeColor": "blue",
+              "fillColor": "blue",
+              "fillOpacity": 0.1,
+              "marker": {
+                "type": "dot",
+                "fillColor": "blue"
+              }
+            },
+            "highlight": {
+              "strokeWidth": 2,
+              "strokeColor": "#1F964D",
+              "fillColor": "#cae0b8",
+              "fillOpacity": 0.2,
+              "marker": {
+                "type": "dot",
+                "fillColor": "#1F964D",
+                "scale": 1.1
+              }
+            }
+          },
           "edit": {
             "point": true
           },
@@ -33,21 +55,33 @@
               "field": "id"
             },
             {
-              "title": "Page",
-              "field": "pageId"
+              "title": "Slug",
+              "field": "slug"
+            },
+            {
+              "title": "Contribution ID",
+              "field": "contribution_id"
+            },
+            {
+              "title": "Sentiment",
+              "field": "sentiment"
+            },
+            {
+              "title": "Project",
+              "field": "project"
             }
           ]
         },
-        "Polygon": {
+        "Image3d": {
           "format": "mvt",
           "dbs": "XYZ",
-          "table": "polygons",
+          "table": "image_3d",
           "srid": "3857",
           "geom": "geom_3857",
           "qID": "id",
           "display": true,
           "edit": {
-            "polygon": true
+            "point": true
           },
           "infoj": [
             {
@@ -55,8 +89,20 @@
               "field": "id"
             },
             {
-              "title": "Page",
-              "field": "pageId"
+              "title": "URL",
+              "field": "url"
+            },
+            {
+              "title": "Slug",
+              "field": "slug"
+            },
+            {
+              "title": "Project",
+              "field": "project"
+            },
+            {
+              "title": "Hotspots",
+              "field": "hotspots"
             }
           ]
         }
