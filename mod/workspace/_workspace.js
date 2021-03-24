@@ -87,26 +87,31 @@ function getLocales(req, res) {
       name: locale.name || key
     }
 
-    // Check for negative roles
-    if (Object.keys(locale.roles).some(
-
-      // Locales with a negated role will not be returned if that role is property of the locale roles.
-      role => role.match(/^\!/) && roles.includes(role.replace(/^\!/, ''))
-    )) return;
-
-
-    //Checking for if the only role on the locale is negated
-    var negatedRole = Object.keys(locale.roles).length == 1 && Object.keys(locale.roles).some(
-      role => role.match(/^\!/)
+    // Check whether negated role is matched with user.
+    const someNegatedRole = Object.keys(locale.roles).some(
+      (role) => role.match(/^\!/) && roles.includes(role.replace(/^\!/, ""))
     );
 
-    // Check for positive roles
-    if (negatedRole || roles && Object.keys(locale.roles).some(
-      role => roles.includes(role)
-    )) return {
-      key: key,
-      name: locale.name || key
-    }
+    // Return undefined if some negated role is matched.
+    if (someNegatedRole) return;
+
+    // Check whether every role is negated.
+    const everyNegatedRoles = Object.keys(locale.roles).every((role) =>
+      role.match(/^\!/)
+    );
+
+    // Return locale if every role is negated.
+    if (everyNegatedRoles) return locale;
+
+    // Check if some positive role is matched.
+    const somePositiveRole = Object.keys(locale.roles).some((role) =>
+      roles.includes(role)
+    );
+
+    // Return locale if some positive role is matched.
+    if (somePositiveRole) return locale;
+
+    // Return undefined at end of map function.
 
     // Filter out the locales which are undefined after role checks.
   }).filter(locale => typeof locale !== "undefined")
