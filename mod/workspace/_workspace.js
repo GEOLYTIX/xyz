@@ -81,11 +81,13 @@ function getLocales(req, res) {
 
     const roles = req.params.user && req.params.user.roles || []
 
-    // Locales without roles will always be returned.
-    if (!locale.roles) return {
+    const _locale = {
       key: key,
       name: locale.name || key
     }
+
+    // Locales without roles will always be returned.
+    if (!locale.roles) return _locale
 
     // Check whether negated role is matched with user.
     const someNegatedRole = Object.keys(locale.roles).some(
@@ -101,7 +103,7 @@ function getLocales(req, res) {
     );
 
     // Return locale if every role is negated.
-    if (everyNegatedRoles) return locale;
+    if (everyNegatedRoles) return _locale;
 
     // Check if some positive role is matched.
     const somePositiveRole = Object.keys(locale.roles).some((role) =>
@@ -109,7 +111,7 @@ function getLocales(req, res) {
     );
 
     // Return locale if some positive role is matched.
-    if (somePositiveRole) return locale;
+    if (somePositiveRole) return _locale;
 
     // Return undefined at end of map function.
 
