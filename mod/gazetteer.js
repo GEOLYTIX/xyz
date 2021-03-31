@@ -106,13 +106,13 @@ async function gaz_locale(req, locale, results) {
     const layer = locale.layers[dataset.layer]
 
     const roles = layer.roles
-    && req.params.user
-    && Object.keys(layer.roles)
-      .filter(key => req.params.user.roles.includes(key))
-      .reduce((obj, key) => {
-        obj[key] = layer.roles[key];
-        return obj;
-      }, {});
+      && req.params.user
+      && Object.keys(layer.roles)
+        .filter(key => req.params.user.roles.includes(key))
+        .reduce((obj, key) => {
+          obj[key] = layer.roles[key];
+          return obj;
+        }, {});
 
     if (!roles && layer.roles) {
        console.log("User roles: Access prohibited.")

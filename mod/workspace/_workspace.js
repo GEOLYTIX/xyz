@@ -23,9 +23,9 @@ module.exports = async (req, res) => {
 
 async function getLayer(req, res) {
 
-  const roles = req.params.user && req.params.user.roles || []
+  if (!req.params.layer) return res.status(400).send('Layer key missing.')
 
-  if (!req.params.layer) return res.send('Layer key missing.')
+  const roles = req.params.user && req.params.user.roles || []
 
   const locale = req.params.locale && req.params.workspace.locales[req.params.locale]
 
@@ -36,7 +36,7 @@ async function getLayer(req, res) {
 
   let layer = locale && locale.layers[req.params.layer] || req.params.workspace.templates[req.params.layer]
 
-  if (!layer) return res.status(400).send('Layer not found.')
+  if (!layer) return res.status(404).send('Layer not found.')
 
   if (layer.roles && !Object.keys(layer.roles).some(
     role => roles.includes(role)
@@ -52,7 +52,7 @@ async function getLayer(req, res) {
 
 function getTemplate(req, res) {
 
-  if (!req.params.template) return res.status(400).send('Template not found.')
+  if (!req.params.template) return res.status(404).send('Template not found.')
 
   res.setHeader('content-type', 'text/plain')
 
@@ -75,83 +75,71 @@ function getLocales(req, res) {
 
   if (!req.params.workspace.locales) return res.send({})
 
-  const locales = Object.keys(req.params.workspace.locales).map(key => {
+  const roles = req.params.user && req.params.user.roles || []
 
-    const locale = req.params.workspace.locales[key]
-
-    const roles = req.params.user && req.params.user.roles || []
-
-    const _locale = {
-      key: key,
-      name: locale.name || key
-    }
-
-    // Locales without roles will always be returned.
-    if (!locale.roles) return _locale
-
-    // Check whether negated role is matched with user.
-    const someNegatedRole = Object.keys(locale.roles).some(
-      (role) => role.match(/^\!/) && roles.includes(role.replace(/^\!/, ""))
-    );
-
-    // Return undefined if some negated role is matched.
-    if (someNegatedRole) return;
-
-    // Check whether every role is negated.
-    const everyNegatedRoles = Object.keys(locale.roles).every((role) =>
-      role.match(/^\!/)
-    );
-
-    // Return locale if every role is negated.
-    if (everyNegatedRoles) return _locale;
-
-    // Check if some positive role is matched.
-    const somePositiveRole = Object.keys(locale.roles).some((role) =>
-      roles.includes(role)
-    );
-
-    // Return locale if some positive role is matched.
-    if (somePositiveRole) return _locale;
-
-    // Return undefined at end of map function.
-
-    // Filter out the locales which are undefined after role checks.
-  }).filter(locale => typeof locale !== "undefined")
+  const locales = Object.values(req.params.workspace.locales)
+    .filter(locale => !!checkRoles(locale, roles))
+    .map(locale => ({
+      key: locale.key,
+      name: locale.name
+    }))
 
   res.send(locales)
-
 }
 
 function getLocale(req, res) {
 
-  if (!req.params.locale) return res.send('Locale key missing.')
+  if (!req.params.locale) {
+    return res.status(400).send('Locale key missing.')
+  }
 
-  if (!req.params.workspace.locales[req.params.locale]) return res.status(400).send('Locale not found.')
+  if (!req.params.workspace.locales[req.params.locale]) {
+    return res.status(404).send('Locale not found.')
+  }
 
-  let locale = Object.assign({ key: req.params.locale }, cloneDeep(req.params.workspace.locales[req.params.locale]))
+  const locale = cloneDeep(req.params.workspace.locales[req.params.locale])
 
   const roles = req.params.user && req.params.user.roles || []
 
-  if (locale.roles && !Object.keys(locale.roles).some(
-    role => roles.includes(role)
-      || ((role.match(/^\!/) && !roles.includes(role.replace(/^\!/, ''))))
-  )) return res.status(403).send('Role access denied.')
+  if (!checkRoles(locale, roles)) {
+    return res.status(403).send('Role access denied.')
+  }
 
   locale.layers = Object.entries(locale.layers)
-    .map(layer => {
-
-      if (!layer[1].roles) return layer[0]
-
-      // check whether the layer is available for roles in token.
-      if (roles.length && Object.keys(layer[1].roles).some(
-        role => roles.includes(role)
-          || (role.match(/^\!/) && !roles.includes(role.replace(/^\!/, '')))
-      )) return layer[0]
-
-    })
-    .filter(layer => !!layer)
+    .filter(layer => !!checkRoles(layer[1], roles))
+    .map(layer => layer[0])
 
   res.send(locale)
+}
+
+function checkRoles(check, roles) {
+
+  if (!check.roles) return check
+
+  if (!roles) return false
+
+  // Check whether negated role is matched with user.
+  const someNegatedRole = Object.keys(check.roles)
+    .some(role => role.match(/^\!/) && roles.includes(role.replace(/^\!/, "")))
+
+  // Return undefined if some negated role is matched.
+  if (someNegatedRole) return false
+  
+  // Check whether every role is negated.
+  const everyNegatedRoles = Object.keys(check.roles)
+    .every(role => role.match(/^\!/))
+  
+  // Return locale if every role is negated.
+  if (everyNegatedRoles) return check
+  
+  // Check if some positive role is matched.
+  const somePositiveRole = Object.keys(check.roles)
+    .some(role => roles.includes(role))
+  
+  // Return locale if some positive role is matched.
+  if (somePositiveRole) return check
+  
+  return false
 }
 
 async function roleEval(check, roles) {

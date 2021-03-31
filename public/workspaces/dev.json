@@ -126,10 +126,16 @@
           "display": true
         },
         "HERE Imagery": {
-          "template": "HERE Imagery"
+          "template": "HERE Imagery",
+          "roles": {
+            "!de": null
+          }
         },
         "HERE Hybrid": {
-          "template": "HERE Hybrid"
+          "template": "HERE Hybrid",
+          "roles": {
+            "en": true
+          }
         },
         "Mapbox Label": {
           "template": "Mapbox Label"

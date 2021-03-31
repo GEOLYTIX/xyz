@@ -8,6 +8,8 @@ module.exports = async workspace => {
 
     locale.key = locale_key
 
+    locale.name = locale.name || locale_key
+
     Object.keys(locale.layers).forEach(layer_key => {
 
       let layer = locale.layers[layer_key]
