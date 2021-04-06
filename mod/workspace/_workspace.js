@@ -21,33 +21,15 @@ module.exports = async (req, res) => {
     <a href="https://geolytix.github.io/xyz/docs/develop/api/workspace/">Workspace API</a>`)
 }
 
-async function getLayer(req, res) {
+function getTemplates(req, res) {
 
-  if (!req.params.layer) return res.status(400).send('Layer key missing.')
+  const host = `${req.headers.host.includes('localhost') && 'http' || 'https'}://${req.headers.host}${process.env.DIR}`
 
-  const roles = req.params.user && req.params.user.roles || []
+  const templates = Object.entries(req.params.workspace.templates).map(
+    template => `<a ${template[1].err && 'style="color: red;"' || ''} href="${host}/api/workspace/get/template?template=${template[0]}">${template[0]}</a>`
+  )
 
-  const locale = req.params.locale && req.params.workspace.locales[req.params.locale]
-
-  if (locale && locale.roles && !Object.keys(locale.roles).some(
-    role => roles.includes(role)
-      || (role.match(/^\!/) && !roles.includes(role.replace(/^\!/, '')))
-  )) return res.status(403).send('Role access denied.')
-
-  let layer = locale && locale.layers[req.params.layer] || req.params.workspace.templates[req.params.layer]
-
-  if (!layer) return res.status(404).send('Layer not found.')
-
-  if (layer.roles && !Object.keys(layer.roles).some(
-    role => roles.includes(role)
-      || (role.match(/^\!/) && !roles.includes(role.replace(/^\!/, '')))
-  )) return res.status(403).send('Role access denied.')
-
-  if (roles.length) {
-    layer = await roleEval(layer, roles)
-  }
-
-  res.send(layer)
+  res.send(templates.join('<br>'))
 }
 
 function getTemplate(req, res) {
@@ -58,17 +40,6 @@ function getTemplate(req, res) {
 
   res.send(req.params.template.err && req.params.template.err.message
     || req.params.template)
-}
-
-function getTemplates(req, res) {
-
-  const host = `${req.headers.host.includes('localhost') && 'http' || 'https'}://${req.headers.host}${process.env.DIR}`
-
-  const templates = Object.entries(req.params.workspace.templates).map(
-    template => `<a ${template[1].err && 'style="color: red;"' || ''} href="${host}/api/workspace/get/template?template=${template[0]}">${template[0]}</a>`
-  )
-
-  res.send(templates.join('<br>'))
 }
 
 function getLocales(req, res) {
@@ -142,17 +113,42 @@ function checkRoles(check, roles) {
   return false
 }
 
+async function getLayer(req, res) {
+
+  if (!req.params.layer) return res.status(400).send('Layer param missing.')
+
+  if (!req.params.locale) return res.status(400).send('Locale param missing.')
+
+  const roles = req.params.user && req.params.user.roles || []
+
+  const locale = req.params.workspace.locales[req.params.locale]
+
+  if (!locale) return res.status(404).send('Locale not found.')
+
+  if (!checkRoles(locale, roles)) {
+    return res.status(403).send('Role access denied.')
+  }
+
+  const layer = cloneDeep(locale.layers[req.params.layer])
+
+  if (!layer) return res.status(404).send('Layer not found.')
+
+  if (!checkRoles(layer, roles)) {
+    return res.status(403).send('Role access denied.')
+  }
+
+  await roleEval(layer, roles)
+
+  res.send(layer)
+}
+
 async function roleEval(check, roles) {
+
+  if (!roles) return
 
   (function objectEval(o, parent, key) {
 
-    // check whether the object has an access key matching the current level.
-    if (Object.entries(o).some(
-      e => e[0] === 'roles' && !Object.keys(e[1]).some(
-        role => roles.includes(role) || (role.match(/^\!/) && !roles.includes(role.replace(/^\!/, '')))
-      )
-    )) {
-
+    if (!checkRoles(o, roles)) {
       // if the parent is an array splice the key index.
       if (parent.length > 0) return parent.splice(parseInt(key), 1)
 
@@ -167,5 +163,4 @@ async function roleEval(check, roles) {
 
   })(check)
 
-  return check
 }

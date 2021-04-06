@@ -128,7 +128,7 @@
         "HERE Imagery": {
           "template": "HERE Imagery",
           "roles": {
-            "!de": null
+            "de": null
           }
         },
         "HERE Hybrid": {
@@ -405,6 +405,9 @@
           "geom": "geom_3857",
           "qID": "id",
           "edit": {
+            "roles": {
+              "de": null
+            },
             "polygon": true,
             "freehand": true,
             "circle": true,
@@ -426,7 +429,10 @@
             {
               "title": "char_field",
               "field": "char_field",
-              "edit": true
+              "edit": true,
+              "roles": {
+                "de": null
+              }
             },
             {
               "title": "textarea",
