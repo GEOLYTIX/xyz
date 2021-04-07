@@ -371,6 +371,19 @@
               "fieldfx": "count(id)"
             }]
           },
+          "roles": {
+            "en": null,
+            "test": {
+              "rp_type": {
+                "match": "City Centre"
+              }
+            },
+            "!de": {
+              "rp_type": {
+                "match": "Parade"
+              }
+            }
+          },
           "infoj": [{
             "title": "RP Type",
             "field": "rp_type",
