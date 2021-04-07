@@ -1,5 +1,7 @@
 const cloneDeep = require('lodash/cloneDeep')
 
+const Roles = require('../roles.js')
+
 module.exports = async (req, res) => {
 
   const keys = {
@@ -49,7 +51,7 @@ function getLocales(req, res) {
   const roles = req.params.user && req.params.user.roles || []
 
   const locales = Object.values(req.params.workspace.locales)
-    .filter(locale => !!checkRoles(locale, roles))
+    .filter(locale => !!Roles.check(locale, roles))
     .map(locale => ({
       key: locale.key,
       name: locale.name
@@ -72,45 +74,15 @@ function getLocale(req, res) {
 
   const roles = req.params.user && req.params.user.roles || []
 
-  if (!checkRoles(locale, roles)) {
+  if (!Roles.check(locale, roles)) {
     return res.status(403).send('Role access denied.')
   }
 
   locale.layers = Object.entries(locale.layers)
-    .filter(layer => !!checkRoles(layer[1], roles))
+    .filter(layer => !!Roles.check(layer[1], roles))
     .map(layer => layer[0])
 
   res.send(locale)
-}
-
-function checkRoles(check, roles) {
-
-  if (!check.roles) return check
-
-  if (!roles) return false
-
-  // Check whether negated role is matched with user.
-  const someNegatedRole = Object.keys(check.roles)
-    .some(role => role.match(/^\!/) && roles.includes(role.replace(/^\!/, "")))
-
-  // Return undefined if some negated role is matched.
-  if (someNegatedRole) return false
-  
-  // Check whether every role is negated.
-  const everyNegatedRoles = Object.keys(check.roles)
-    .every(role => role.match(/^\!/))
-  
-  // Return locale if every role is negated.
-  if (everyNegatedRoles) return check
-  
-  // Check if some positive role is matched.
-  const somePositiveRole = Object.keys(check.roles)
-    .some(role => roles.includes(role))
-  
-  // Return locale if some positive role is matched.
-  if (somePositiveRole) return check
-  
-  return false
 }
 
 async function getLayer(req, res) {
@@ -125,7 +97,7 @@ async function getLayer(req, res) {
 
   if (!locale) return res.status(404).send('Locale not found.')
 
-  if (!checkRoles(locale, roles)) {
+  if (!Roles.check(locale, roles)) {
     return res.status(403).send('Role access denied.')
   }
 
@@ -133,34 +105,11 @@ async function getLayer(req, res) {
 
   if (!layer) return res.status(404).send('Layer not found.')
 
-  if (!checkRoles(layer, roles)) {
+  if (!Roles.check(layer, roles)) {
     return res.status(403).send('Role access denied.')
   }
 
-  await roleEval(layer, roles)
+  await Roles.reduce(layer, roles)
 
   res.send(layer)
-}
-
-async function roleEval(check, roles) {
-
-  if (!roles) return
-
-  (function objectEval(o, parent, key) {
-
-    if (!checkRoles(o, roles)) {
-      // if the parent is an array splice the key index.
-      if (parent.length > 0) return parent.splice(parseInt(key), 1)
-
-      // if the parent is an object delete the key from the parent.
-      return delete parent[key]
-    }
-
-    // iterate through the object tree.
-    Object.keys(o).forEach((key) => {
-      if (o[key] && typeof o[key] === 'object') objectEval(o[key], o, key)
-    });
-
-  })(check)
-
 }
