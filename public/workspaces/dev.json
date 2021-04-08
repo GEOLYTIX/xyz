@@ -1,6 +1,13 @@
 {
   "locales": {
     "UK": {
+      "minZoom": 14,
+      "maxZoom": 18,
+      "view": {
+        "lat": 53.54472,
+        "lng": -2.11833,
+        "z": 17
+      },
       "showScaleBar": true,
       "layers": {
         "Mapbox Base": {
@@ -35,7 +42,7 @@
           "geom": "geom",
           "qID": "id",
           "cluster_label": "id",
-          "cluster_kmeans": 0.5,
+          "cluster_kmeans": 0.9,
           "cluster_dbscan": 0.01,
           "display": true,
           "style": {
@@ -46,8 +53,7 @@
               "scale": 2
             },
             "cluster": {
-              "type": "clusterSummary",
-              "scale": 1
+              "type": "clusterSummary"
             },
             "label": {
               "display": true,
@@ -56,71 +62,41 @@
               "title": "Cluster count"
             },
             "theme": {
-              "type": "graduated",
+              "type": "categorized",
               "field": "sentiment",
               "aggregate": "avg",
-              "cat_arr": [
-                {
-                  "value": 0,
-                  "label": "< 20 Sentiment",
+              "cat": {
+                "0": {
                   "style": {
-                    "fillColor": "#8bc34a",
-                    "colorMarker": "#8bc34a",
-                    "colorDot": "#c5e1a5",
-                    "layers": {
-                      "0.75": "#c5e1a5"
-                    }
+                    "strokeColor": "#E80030",
+                    "colorMarker": "#E80030"
                   }
                 },
-                {
-                  "value": 20,
-                  "label": "20 to 40",
+                "25": {
                   "style": {
-                    "fillColor": "#cddc39",
-                    "colorMarker": "#cddc39",
-                    "colorDot": "#e6ee9c",
-                    "layers": {
-                      "0.75": "#e6ee9c"
-                    }
+                    "strokeColor": "#FF7700",
+                    "colorMarker": "#FF7700"
                   }
                 },
-                {
-                  "value": 40,
-                  "label": "40 to 60",
+                "50": {
                   "style": {
-                    "fillColor": "#ffeb3b",
-                    "colorMarker": "#ffeb3b",
-                    "colorDot": "#fff59d",
-                    "layers": {
-                      "0.75": "#fff59d"
-                    }
+                    "strokeColor": "#FEB000",
+                    "colorMarker": "#FEB000"
                   }
                 },
-                {
-                  "value": 60,
-                  "label": "60 to 80",
+                "75": {
                   "style": {
-                    "fillColor": "#ffc107",
-                    "colorMarker": "#ffc107",
-                    "colorDot": "#ffe082",
-                    "layers": {
-                      "0.75": "#ffe082"
-                    }
+                    "strokeColor": "#89C92D",
+                    "colorMarker": "#89C92D"
                   }
                 },
-                {
-                  "value": 80,
-                  "label": "> 80 Sentiment",
+                "100": {
                   "style": {
-                    "fillColor": "#ff9800",
-                    "colorMarker": "#ff9800",
-                    "colorDot": "#ffcc80",
-                    "layers": {
-                      "0.75": "#ffcc80"
-                    }
+                    "strokeColor": "#00AC5D",
+                    "colorMarker": "#00AC5D"
                   }
                 }
-              ]
+              }
             }
           },
           "edit": {
