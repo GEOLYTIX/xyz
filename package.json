@@ -9,7 +9,7 @@
   "scripts": {
     "_start": "nodemon express.js",
     "_build": "webpack --mode production",
-    "_dev": "webpack --mode development",
+    "_dev": "webpack --mode development -w",
     "lint": "eslint --debug ./",
     "lint:write": "eslint --debug ./ --fix"
   },

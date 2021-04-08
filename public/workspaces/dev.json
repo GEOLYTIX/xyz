@@ -1,49 +1,126 @@
 {
   "locales": {
     "UK": {
-      "minZoom": 14,
-      "maxZoom": 18,
-      "view": {
-        "lat": 53.54472,
-        "lng": -2.11833,
-        "z": 17
-      },
       "showScaleBar": true,
       "layers": {
         "Mapbox Base": {
+          "canEdit": [],
+          "canView": [
+            "*"
+          ],
+          "canSwitch": [],
+          "canReorder": [],
           "format": "mbtiles",
           "mbStyle": "mapbox://styles/andypols/ckm0tvy2p3knn17lh50xc87ly",
           "accessToken": "pk.eyJ1IjoiYW5keXBvbHMiLCJhIjoiY2ttMHQ3cnhqMG8yODJucjNyejRvaGVvaSJ9.RBSYVzv5pxlAgCCCjB9xoQ",
           "display": true
         },
         "Contributions": {
-          "format": "mvt",
+          "canView": [
+            "*"
+          ],
+          "canEdit": [
+            "editMapLayers"
+          ],
+          "canSwitch": [
+            "switchMapLayers"
+          ],
+          "canReorder": [
+            "reorderMapLayers"
+          ],
+          "format": "cluster",
           "dbs": "XYZ",
           "table": "contributions",
-          "srid": "3857",
-          "geom": "geom_3857",
+          "srid": "4326",
+          "geom": "geom",
           "qID": "id",
+          "cluster_label": "id",
+          "cluster_kmeans": 0.5,
+          "cluster_dbscan": 0.01,
           "display": true,
           "style": {
             "default": {
-              "strokeColor": "blue",
-              "fillColor": "blue",
-              "fillOpacity": 0.1,
-              "marker": {
-                "type": "dot",
-                "fillColor": "blue"
-              }
+              "type": "markerColor",
+              "colorMarker": "#777",
+              "colorDot": "#777",
+              "scale": 2
             },
-            "highlight": {
-              "strokeWidth": 2,
-              "strokeColor": "#1F964D",
-              "fillColor": "#cae0b8",
-              "fillOpacity": 0.2,
-              "marker": {
-                "type": "dot",
-                "fillColor": "#1F964D",
-                "scale": 1.1
-              }
+            "cluster": {
+              "type": "clusterSummary",
+              "scale": 1
+            },
+            "label": {
+              "display": true,
+              "count": true,
+              "font": "bold 17px sans-serif",
+              "title": "Cluster count"
+            },
+            "theme": {
+              "type": "graduated",
+              "field": "sentiment",
+              "aggregate": "avg",
+              "cat_arr": [
+                {
+                  "value": 0,
+                  "label": "< 20 Sentiment",
+                  "style": {
+                    "fillColor": "#8bc34a",
+                    "colorMarker": "#8bc34a",
+                    "colorDot": "#c5e1a5",
+                    "layers": {
+                      "0.75": "#c5e1a5"
+                    }
+                  }
+                },
+                {
+                  "value": 20,
+                  "label": "20 to 40",
+                  "style": {
+                    "fillColor": "#cddc39",
+                    "colorMarker": "#cddc39",
+                    "colorDot": "#e6ee9c",
+                    "layers": {
+                      "0.75": "#e6ee9c"
+                    }
+                  }
+                },
+                {
+                  "value": 40,
+                  "label": "40 to 60",
+                  "style": {
+                    "fillColor": "#ffeb3b",
+                    "colorMarker": "#ffeb3b",
+                    "colorDot": "#fff59d",
+                    "layers": {
+                      "0.75": "#fff59d"
+                    }
+                  }
+                },
+                {
+                  "value": 60,
+                  "label": "60 to 80",
+                  "style": {
+                    "fillColor": "#ffc107",
+                    "colorMarker": "#ffc107",
+                    "colorDot": "#ffe082",
+                    "layers": {
+                      "0.75": "#ffe082"
+                    }
+                  }
+                },
+                {
+                  "value": 80,
+                  "label": "> 80 Sentiment",
+                  "style": {
+                    "fillColor": "#ff9800",
+                    "colorMarker": "#ff9800",
+                    "colorDot": "#ffcc80",
+                    "layers": {
+                      "0.75": "#ffcc80"
+                    }
+                  }
+                }
+              ]
             }
           },
           "edit": {
@@ -52,59 +129,87 @@
           "infoj": [
             {
               "title": "ID",
-              "field": "id"
-            },
-            {
-              "title": "Slug",
-              "field": "slug"
-            },
-            {
-              "title": "Contribution ID",
               "field": "contribution_id"
-            },
-            {
-              "title": "Sentiment",
-              "field": "sentiment"
-            },
-            {
-              "title": "Project",
-              "field": "project"
             }
           ]
         },
-        "Image3d": {
+        "Custom": {
+          "canView": [
+            "*"
+          ],
+          "canEdit": [
+            "editMapLayers"
+          ],
+          "canSwitch": [
+            "switchMapLayers"
+          ],
+          "canReorder": [
+            "reorderMapLayers"
+          ],
           "format": "mvt",
           "dbs": "XYZ",
-          "table": "image_3d",
+          "table": "custom_layers",
           "srid": "3857",
           "geom": "geom_3857",
           "qID": "id",
-          "display": true,
-          "edit": {
-            "point": true
-          },
+          "display": false,
+          "edit": {},
+          "infoj": []
+        },
+        "3d View": {
+          "canView": [
+            "*"
+          ],
+          "canEdit": [
+            "editMapLayers"
+          ],
+          "canSwitch": [
+            "switchMapLayers"
+          ],
+          "canReorder": [
+            "reorderMapLayers"
+          ],
+          "format": "mvt",
+          "dbs": "XYZ",
+          "table": "image_3d",
+          "srid": "4326",
+          "geom": "geom_3857",
+          "qID": "id",
+          "display": false,
+          "edit": {},
           "infoj": [
-            {
-              "title": "ID",
-              "field": "id"
-            },
             {
               "title": "URL",
               "field": "url"
             },
             {
-              "title": "Slug",
-              "field": "slug"
-            },
-            {
-              "title": "Project",
-              "field": "project"
-            },
-            {
-              "title": "Hotspots",
+              "title": "hotspots",
               "field": "hotspots"
             }
           ]
+        },
+        "Postal district": {
+          "canView": [
+            "*"
+          ],
+          "canEdit": [
+            "editMapLayers"
+          ],
+          "canSwitch": [
+            "switchMapLayers"
+          ],
+          "canReorder": [
+            "reorderMapLayers"
+          ],
+          "format": "mvt",
+          "dbs": "XYZ",
+          "table": "data_delivery.uk_glx_open_postal_district",
+          "srid": "4326",
+          "geom": "geom_4326",
+          "qID": "id",
+          "display": false,
+          "edit": {},
+          "infoj": []
         }
       }
     }

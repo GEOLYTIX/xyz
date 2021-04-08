@@ -124,7 +124,6 @@ module.exports = async (req, res) => {
     
     ${!filter && layer.mvt_cache && 'RETURNING mvt' ||''};`
 
-  //console.log(q)
 
   var rows = dbs[layer.dbs] && await dbs[layer.dbs](q)
 
