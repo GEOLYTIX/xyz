@@ -20,6 +20,8 @@ public/views/wellbeing.*
 public/views/test.*
 public/views/pol.*
 public/views/gla.*
+public/views/mab.*
+public/views/_mab.*
 
 # Elastic Beanstalk Files
 .elasticbeanstalk/*
