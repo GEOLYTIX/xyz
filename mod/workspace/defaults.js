@@ -1,5 +1,7 @@
 module.exports = defaults = {
   locale: {
+    key: 'zero',
+    name: 'zero',
     minZoom: 0,
     maxZoom: 20,
     bounds: {
