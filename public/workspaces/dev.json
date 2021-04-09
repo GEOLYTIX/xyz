@@ -418,9 +418,6 @@
           "geom": "geom_3857",
           "qID": "id",
           "edit": {
-            "roles": {
-              "de": null
-            },
             "polygon": true,
             "freehand": true,
             "circle": true,
