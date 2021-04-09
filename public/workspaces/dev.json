@@ -1,13 +1,6 @@
 {
   "locales": {
     "UK": {
-      "minZoom": 14,
-      "maxZoom": 18,
-      "view": {
-        "lat": 53.54472,
-        "lng": -2.11833,
-        "z": 17
-      },
       "showScaleBar": true,
       "layers": {
         "Mapbox Base": {
@@ -151,7 +144,7 @@
           "srid": "4326",
           "geom": "geom_3857",
           "qID": "id",
-          "display": false,
+          "display": true,
           "edit": {},
           "infoj": [
             {
