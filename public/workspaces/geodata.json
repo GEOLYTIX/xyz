@@ -29,7 +29,8 @@
     },
     "HERE Imagery": {
       "format": "tiles",
-      "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8&key=HERE",
+      "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?{HERE}",
+      "proxy": true,
       "attribution": {
         "© Here": "https://www.here.com/",
         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
@@ -37,7 +38,8 @@
     },
     "HERE Hybrid": {
       "format": "tiles",
-      "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8&key=HERE",
+      "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?{HERE}",
+      "proxy": true,
       "attribution": {
         "© Here": "https://www.here.com/",
         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
@@ -157,29 +159,6 @@
                 "scale": 1
               }
             }
-          }
-        },
-        "Offices Edit": {
-          "template": "geolytix_offices",
-          "edit": {
-            "point": true,
-            "delete": true
-          },
-          "infoj": [{
-              "title": "address",
-              "field": "address",
-              "type": "textarea",
-              "edit": true
-            },
-            {
-              "title": "website",
-              "field": "website",
-              "type": "textarea",
-              "edit": true
-            }
-          ],
-          "roles": {
-            "glx": null
           }
         },
         "Label": {

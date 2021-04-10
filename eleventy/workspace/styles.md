@@ -19,11 +19,6 @@ The snippet below is an example of styling for layers mvt and geojson. It is mos
     "fillColor": "#ffffff",
     "fillOpacity": 0.8,
     "strokeWidth": 1
-
-  },
-  "marker": {
-    "type": "circle",
-    "strokeColor": "#083D77"
   },
   "highlight": {
     "strokeColor": "#ff69b4",
@@ -31,8 +26,6 @@ The snippet below is an example of styling for layers mvt and geojson. It is mos
   }
 }
 ```
-
-`"marker"` is an optional setting which applies in case of point features displayed on MVT and GeoJSON layers. For more details of marker-style settings check section on Icons. 
 
 Style object also supports `zIndex` property which modifies the drawing order of the layer.
 For most layers default `zIndex` is 1 while for cluster layers it equals to 10.

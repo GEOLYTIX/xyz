@@ -2,6 +2,8 @@ const dbs = require('./dbs')()
 
 const sql_filter = require('./layer/sql_filter')
 
+const Roles = require('./roles.js')
+
 module.exports = async (req, res) => {
 
   const template = req.params.template
@@ -16,14 +18,7 @@ module.exports = async (req, res) => {
   
     req.params.layer = layer
 
-    const roles = layer.roles
-      && req.params.user
-      && Object.keys(layer.roles)
-        .filter(key => req.params.user.roles.includes(key))
-        .reduce((obj, key) => {
-          obj[key] = layer.roles[key];
-          return obj;
-        }, {});
+    const roles = Roles.filter(layer, req.params.user && req.params.user.roles)
 
     if (!roles && layer.roles) return res.status(403).send('Access prohibited.');
 
@@ -87,9 +82,9 @@ module.exports = async (req, res) => {
 
   }
 
-  let body = req.body && Array.isArray(req.body) && [req.body.join(',')]
+  //let body = req.body && Array.isArray(req.body) && [req.body.join(',')]
 
-  body = body || req.body && req.body.length && [JSON.stringify(req.body)]
+  let body = req.body && req.body.length && [JSON.stringify(req.body)]
 
   body = body || req.params.params && req.params.params.split(',')
 

@@ -4,6 +4,8 @@ const dbs = require('./dbs')()
 
 const sql_filter = require('./layer/sql_filter')
 
+const Roles = require('./roles.js')
+
 module.exports = async (req, res) => {
 
   const locale = req.params.workspace.locales[req.params.locale]
@@ -105,14 +107,7 @@ async function gaz_locale(req, locale, results) {
 
     const layer = locale.layers[dataset.layer]
 
-    const roles = layer.roles
-    && req.params.user
-    && Object.keys(layer.roles)
-      .filter(key => req.params.user.roles.includes(key))
-      .reduce((obj, key) => {
-        obj[key] = layer.roles[key];
-        return obj;
-      }, {});
+    const roles = Roles.filter(layer, req.params.user && req.params.user.roles)
 
     if (!roles && layer.roles) {
        console.log("User roles: Access prohibited.")
