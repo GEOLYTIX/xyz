@@ -70,12 +70,13 @@ module.exports = async (req, res) => {
     delete req.params.viewport
   }
 
-  // Assign body to params to enable %{body} literals.
+  // Assign body to params to enable reserved %{body} parameter.
   req.params.body = req.body
 
-  // Array of literals for parameterized queries with node-pg.
-  const literals = []
+  // Array of params for parameterized queries with node-pg.
+  const params = []
 
+  // Reserved param keys may not be substituted from request query params.
   const reserved = new Set(['viewport', 'filter'])
 
   // Method to be applied if template does not have a render method.
@@ -101,16 +102,16 @@ module.exports = async (req, res) => {
       return change
     })
 
-    // Replace literals with numbered parameter, eg. $1, $2
+    // Replace params with placeholder, eg. $1, $2
     .replace(/\%\{(.*?)\}/g, matched => {
 
       // Remove template brackets from matched param.
       const param = matched.replace(/\%|\{|\}/g, "")
 
-      // Push value from request params object into literals array.
-      literals.push(req.params[param] || "")
+      // Push value from request params object into params array.
+      params.push(req.params[param] || "")
   
-      return `\$${literals.length}`
+      return `\$${params.length}`
     })
 
   // Render the query string q from tbe template and request params.
@@ -126,22 +127,17 @@ module.exports = async (req, res) => {
 
   if (!query) return res.status(400).send(`${template.dbs || req.params.dbs} connection not found.`)
 
+  const queryParams = [q, params, req.params.statement_timeout || template.statement_timeout]
 
   // Nonblocking queries will not wait for results but return immediately.
   if (template.nonblocking || req.params.nonblocking) {
 
-    query(
-      q,
-      !template.module && literals,
-      req.params.statement_timeout || template.statement_timeout)
+    query(queryParams)
 
     return res.send('Non blocking request sent.')
   }
 
-  const rows = await query(
-    q,
-    !template.module && literals,
-    req.params.statement_timeout || template.statement_timeout)
+  const rows = await query(queryParams)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
