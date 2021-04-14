@@ -94,11 +94,6 @@ module.exports = async workspace => {
             })
         }
 
-        // Assign render method if none exists.
-        if (!_template.render && !_template.format) {
-          _template.render = params => _template.template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
-        }
-
         resolve({
           [entry[0]]: _template
         })
