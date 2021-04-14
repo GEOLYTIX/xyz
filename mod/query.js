@@ -8,94 +8,138 @@ module.exports = async (req, res) => {
 
   const template = req.params.template
 
+  // A query template is required.
+  if (!template) return res.status(400).send('Missing query template.')
+
+  // Assign role filter and viewport params from layer object.
   if (req.params.layer) {
 
+    // Get locale for layer.
     const locale = req.params.locale && req.params.workspace.locales[req.params.locale]
 
+    // Get layer from workspace locale or layer template.
     const layer = locale && locale.layers[req.params.layer] ||  req.params.workspace.templates[req.params.layer]
 
+    // A layer must be found if the layer param is set.
     if (!layer) return res.status(400).send('Layer not found.')
-  
-    req.params.layer = layer
 
-    const roles = Roles.filter(layer, req.params.user && req.params.user.roles)
+    // Set layer dbs as fallback param if not defined.
+    req.params.dbs = req.params.dbs || layer.dbs
 
-    if (!roles && layer.roles) return res.status(403).send('Access prohibited.');
+    // Get array of role filter from layer configuration.
+    const roleFilter = Roles.filter(layer, req.params.user && req.params.user.roles)
 
-    const filter = `
+    // Access is prohibited if the layer has roles assigned but the roleFilter is falsy.
+    if (!roleFilter && layer.roles) return res.status(403).send('Access prohibited.');
+
+    // Create params filter string from roleFilter filter params.
+    req.params.filter = `
       ${req.params.filter
         && await sql_filter(Object.entries(JSON.parse(req.params.filter)).map(e => ({[e[0]]:e[1]})))
         || ''}
-      ${roles && Object.values(roles).some(r => !!r)
-        && await sql_filter(Object.values(roles).filter(r => !!r), 'OR')
+      ${roleFilter && Object.values(roleFilter).some(r => !!r)
+        && await sql_filter(Object.values(roleFilter).filter(r => !!r), 'OR')
         || ''}`
 
-    req.params.viewport = req.params.viewport && req.params.viewport.split(',')
+    // Assign viewport params filter string.
+    const viewport = req.params.viewport && req.params.viewport.split(',')
     
-    const viewport = req.params.viewport && `
+    req.params.viewport = viewport && `
       AND
         ST_Intersects(
           ST_Transform(
             ST_MakeEnvelope(
-              ${req.params.viewport[0]},
-              ${req.params.viewport[1]},
-              ${req.params.viewport[2]},
-              ${req.params.viewport[3]},
-              ${parseInt(req.params.viewport[4])}
+              ${viewport[0]},
+              ${viewport[1]},
+              ${viewport[2]},
+              ${viewport[3]},
+              ${parseInt(viewport[4])}
             ),
             ${layer.srid}),
           ${layer.geom}
         )` || ''
 
-    Object.assign(
-      req.params,
-      {
-        layer: layer,
-        filter: filter,
-        viewport: viewport
-      })
+  } else {
+
+    // Reserved will be deleted to prevent DDL injection.
+    delete req.params.filter
+    delete req.params.viewport
   }
 
+  // Assign body to params to enable %{body} literals.
   req.params.body = req.body
 
+  // Array of literals for parameterized queries with node-pg.
+  const literals = []
+
+  // Method to be applied if template does not have a render method.
+  const render = template => template
+
+    // Replace parameter for identifiers, e.g. table, schema, columns
+    .replace(/\$\{(.*?)\}/g, matched => {
+
+      // Remove template brackets from matched param.
+      const param = matched.replace(/\$|\{|\}/g, "")
+
+      // Get param value from request params object.
+      const change = req.params[param] || ""
+
+      // Change value may only contain a limited set of whitelisted characters.
+      if (!/^[A-Za-z0-9._-]*$/.test(change)) {
+
+        // Err and return empty string if the change value is invalid.
+        console.error("Change param no bueno")
+        return ""
+      }
+  
+      return change
+    })
+
+    // Replace literals with numbered parameter, eg. $1, $2
+    .replace(/\%\{(.*?)\}/g, matched => {
+
+      // Remove template brackets from matched param.
+      const param = matched.replace(/\%|\{|\}/g, "")
+
+      // Push value from request params object into literals array.
+      literals.push(req.params[param] || "")
+  
+      return `\$${literals.length}`
+    })
+
+  // Render the query string q from tbe template and request params.
   try {
-    var q = template.render(req.params)
+    var q = template.render && template.render(req.params) || render(template.template, req.params)
   } catch(err) {
     res.status(500).send(err.message)
     return console.error(err)
   }
 
-  const _dbs = dbs[template.dbs || req.params.dbs || req.params.layer.dbs]
+  // Get query pool from dbs module.
+  const query = dbs[template.dbs || req.params.dbs]
 
-  if (!_dbs) return res.status(500).send(`Cannot connect to ${template.dbs || req.params.dbs || req.params.layer.dbs}`)
+  if (!query) return res.status(400).send(`${template.dbs || req.params.dbs} connection not found.`)
 
 
-  if (req.params.nonblocking || template.nonblocking) {
+  // Nonblocking queries will not wait for results but return immediately.
+  if (template.nonblocking || req.params.nonblocking) {
 
-    _dbs(
+    query(
       q,
-      //[JSON.stringify(req.body)],
-      req.body && req.body.length && [JSON.stringify(req.body)] || req.params.params && req.params.params.split(','),
+      !template.module && literals,
       req.params.statement_timeout || template.statement_timeout)
 
     return res.send('Non blocking request sent.')
-
   }
 
-  //let body = req.body && Array.isArray(req.body) && [req.body.join(',')]
-
-  let body = req.body && req.body.length && [JSON.stringify(req.body)]
-
-  body = body || req.params.params && req.params.params.split(',')
-
-  const rows = await _dbs(
+  const rows = await query(
     q,
-    !template.module && body,
+    !template.module && literals,
     req.params.statement_timeout || template.statement_timeout)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
-  // return 204 if no record was returned from database.
+  // return 202 if no record was returned from database.
   if (!rows || !rows.length) return res.status(202).send('No rows returned from table.')
 
   const checkEmptyRow = row => typeof row === 'object' && Object.values(row).some(val => val !== null)

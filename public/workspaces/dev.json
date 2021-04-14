@@ -67,6 +67,26 @@
         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
       }
     },
+    "table_parameter_query": {
+      "template": "SELECT * from ${table}",
+      "dbs": "MAPP"
+    },
+    "array_input_query": {
+      "template": "SELECT mapp.array_input_test(%{body})",
+      "dbs": "MAPP"
+    },
+    "array_select": {
+      "template": "SELECT '${test}' as test, %{body} as arr",
+      "dbs": "MAPP"
+    },
+    "json_input_query": {
+      "template": "SELECT mapp.array_json_test(%{body}::json)",
+      "dbs": "MAPP"
+    },
+    "json_select": {
+      "template": "SELECT '${test}' as test, json_each(%{body}) as json",
+      "dbs": "MAPP"
+    },
     "Random Data Series_aga": {
       "src": "cloudfront:${CDN}/dev/queries/random_data_series.sql"
     },
@@ -118,7 +138,9 @@
       "maxZoom": 17,
       "showScaleBar": true,
       "plugins": {
-        "demand_chart": "/dev/js/plugins/demand_chart.js"
+        "demand_chart": "/dev/js/plugins/demand_chart.js",
+        "post_array": "/dev/js/plugins/post_array.js",
+        "post_json": "/dev/js/plugins/post_json.js"
       },
       "layers": {
         "Mapbox Base": {
@@ -389,10 +411,9 @@
             "field": "rp_type",
             "filter": {
               "in": [
-                "Major City Centre",
-                "Large Town Centre",
-                "Village Centre",
-                "Weak Parade"
+                "City Centre",
+                "Town Centre",
+                "Urban Centre"
               ]
             }
           }]
@@ -478,7 +499,8 @@
               "title": "bool_field",
               "field": "bool_field",
               "type": "boolean",
-              "edit": true
+              "edit": true,
+              "filter": true
             },
             {
               "title": "options_field",

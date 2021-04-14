@@ -47,7 +47,6 @@ function IEdetect(sUsrAg) {
 
 module.exports = async (req, res) => {
 
-
   // redirect if dir is missing in url path.
   if (process.env.DIR && !req.url.match(process.env.DIR)) {
     res.setHeader('location', `${process.env.DIR}`)
@@ -161,7 +160,7 @@ module.exports = async (req, res) => {
 
     req.params.template = template
   }
-
+  
   if (path && path[1] && routes[path[1]]) return routes[path[1]](req, res)
 
   // Assign the mapp template as default if no template is set.
