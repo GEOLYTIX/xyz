@@ -72,6 +72,8 @@ module.exports = async (req, res) => {
   // Array of literals for parameterized queries with node-pg.
   const literals = []
 
+  const reserved = new Set(['viewport', 'filter'])
+
   // Method to be applied if template does not have a render method.
   const render = template => template
 
@@ -85,7 +87,7 @@ module.exports = async (req, res) => {
       const change = req.params[param] || ""
 
       // Change value may only contain a limited set of whitelisted characters.
-      if (!/^[A-Za-z0-9._-]*$/.test(change)) {
+      if (!reserved.has(param) && !/^[A-Za-z0-9._-]*$/.test(change)) {
 
         // Err and return empty string if the change value is invalid.
         console.error("Change param no bueno")
