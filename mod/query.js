@@ -43,6 +43,8 @@ module.exports = async (req, res) => {
 
     // Assign viewport params filter string.
     const viewport = req.params.viewport && req.params.viewport.split(',')
+
+    req.params.geom = req.params.geom || layer.geom
     
     req.params.viewport = viewport && `
       AND
@@ -56,8 +58,10 @@ module.exports = async (req, res) => {
               ${parseInt(viewport[4])}
             ),
             ${layer.srid}),
-          ${layer.geom}
+          ${req.params.geom}
         )` || ''
+
+    req.params.qID = req.params.qID || layer.qID
 
   } else {
 
@@ -111,7 +115,7 @@ module.exports = async (req, res) => {
 
   // Render the query string q from tbe template and request params.
   try {
-    var q = template.render && template.render(req.params) || render(template.template, req.params)
+    var q = render(template.render && template.render(req.params) || template.template, req.params)
   } catch(err) {
     res.status(500).send(err.message)
     return console.error(err)
