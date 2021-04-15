@@ -116,7 +116,8 @@ module.exports = async (req, res) => {
 
   // Render the query string q from tbe template and request params.
   try {
-    var q = render(template.render && template.render(req.params) || template.template, req.params)
+    template.template = template.render && template.render(req.params) 
+    var q = render(template.template, req.params)
   } catch(err) {
     res.status(500).send(err.message)
     return console.error(err)
@@ -127,17 +128,15 @@ module.exports = async (req, res) => {
 
   if (!query) return res.status(400).send(`${template.dbs || req.params.dbs} connection not found.`)
 
-  const queryParams = [q, params, req.params.statement_timeout || template.statement_timeout]
-
   // Nonblocking queries will not wait for results but return immediately.
   if (template.nonblocking || req.params.nonblocking) {
 
-    query(queryParams)
+    query(q, params, req.params.statement_timeout || template.statement_timeout)
 
     return res.send('Non blocking request sent.')
   }
 
-  const rows = await query(queryParams)
+  const rows = await query(q, params, req.params.statement_timeout || template.statement_timeout)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
