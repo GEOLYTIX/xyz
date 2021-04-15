@@ -657,7 +657,8 @@
           },
           "cluster_kmeans": 0.1,
           "cluster_label": "site_name",
-          "infoj": [{
+          "infoj": [
+            {
               "type": "key",
               "class": "_report"
             },
