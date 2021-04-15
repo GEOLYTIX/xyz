@@ -393,6 +393,37 @@
               "fieldfx": "count(id)"
             }]
           },
+          "infoj": [{
+            "title": "RP Type",
+            "field": "rp_type",
+            "filter": {
+              "in": [
+                "City Centre",
+                "Town Centre",
+                "Urban Centre"
+              ]
+            }
+          }]
+        },
+        "RP Roles": {
+          "format": "mvt",
+          "dbs": "DEV",
+          "tables": {
+            "8": null,
+            "9": "dev.uk_glx_geodata_retail_place_working"
+          },
+          "geom": "geom_3857",
+          "srid": "3857",
+          "qID": "id",
+          "filter": {
+            "infoj": [{
+              "title": "ID count",
+              "field": "id_count",
+              "type": "integer",
+              "inline": true,
+              "fieldfx": "count(id)"
+            }]
+          },
           "roles": {
             "en": null,
             "test": {
