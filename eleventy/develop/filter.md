@@ -1,8 +1,6 @@
 ---
 title: SQL Filter
-
 layout: root.html
-date: 2020-01-01
 ---
 
 # SQL Filter

@@ -1,6 +1,5 @@
 ---
 title: Proxy
-
 layout: root.html
 ---
 

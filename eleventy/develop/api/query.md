@@ -1,6 +1,5 @@
 ---
 title: Query
-
 layout: root.html
 ---
 

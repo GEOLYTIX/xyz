@@ -1,6 +1,5 @@
 ---
 title: Provider
-
 layout: root.html
 ---
 

@@ -1,6 +1,5 @@
 ---
 title: Authentication
-
 layout: root.html
 ---
 

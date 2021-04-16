@@ -1,6 +1,5 @@
 ---
 title: Environment Settings
-
 layout: root.html
 ---
 

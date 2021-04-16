@@ -1,8 +1,6 @@
 ---
 title: Security
-
 layout: root.html
-date: 2020-01-01
 ---
 
 # Security

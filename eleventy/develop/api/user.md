@@ -1,6 +1,5 @@
 ---
 title: User
-
 layout: root.html
 ---
 
