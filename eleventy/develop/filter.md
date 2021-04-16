@@ -131,6 +131,20 @@ The *like* filter checks whether the filter value is `ILIKE` to the field value.
 // (('col' ILIKE 'foo%' OR 'col' ILIKE 'bar%'))
 ```
 
+## boolean
+
+The *boolean* filter checks whether a column `IS` true or false.
+
+```javascript
+{
+  "col": {
+    boolean: true
+  }
+}
+
+// ('col' IS true)
+```
+
 ## gt, gte, lt, lte
 
 The *greater* or *lesser than*, *greater* or *lesser and equal to* filter compare numeric values to the column.
