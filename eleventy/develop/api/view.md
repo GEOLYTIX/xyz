@@ -1,6 +1,5 @@
 ---
 title: View
-
 layout: root.html
 ---
 

@@ -1,10 +1,8 @@
 ---
 title: Develop
-
 layout: root.html
 group: true
 orderPath: /develop/_develop
-date: 2020-01-01
 ---
 
 # XYZ development

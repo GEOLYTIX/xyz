@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
+  <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
+  <title>SQL Filter</title>
+  <style>
+
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
+
+    .header-anchor {
+      font-size: 80%;
+    }
+
+    .grid {
+      font-family: system-ui;
+      display: grid;
+      grid-template-columns: min-content minmax(0, 1fr);
+      max-width: 1100px;
+      margin-right: auto;
+      padding-right: 30px;
+    }
+
+    iframe {
+      border: none;
+    }
+
+    #toggle {
+        display: none;
+    }
+
+    #toggle:hover {
+      cursor: pointer;
+    }
+
+    #nav {
+      grid-column: 1;
+      /* transform: rotateY(180deg); */
+      padding: 10px 20px 20px 20px;
+    }
+
+    #nav > ul {
+      /* transform: rotateY(180deg); */
+      padding-inline-start: 0px;
+      list-style-type: none;
+      margin: 0;
+    }
+
+    #nav > ul > :first-child > a {
+      padding-top: 10px;
+      line-height: 1;
+      font-size: 30px;
+      font-weight: bold;
+    }
+
+    #content {
+      grid-column: 2;
+      padding-top: 6px;
+      padding-left: 20px;
+      border-left: 1px solid #ddd;
+    }
+
+    #content > *:first-child {
+      margin: 0;
+    }
+
+    .active {
+      font-weight: bold;
+    }
+
+    a {
+      text-decoration: none;
+      white-space: nowrap;
+      color: #333;
+    }
+
+    h1, h2, h3 {
+      margin-bottom: 0.5em;
+    }
+
+    p {
+      margin-top: 0.5em;
+      line-height: 1.5;
+    }
+
+    li {
+      line-height: 1.5;
+    }
+
+    li.__0 {
+      padding-left: 0;
+    }
+
+    li.__1 {
+      padding-left: 0;
+    }
+
+    li.__2 {
+      padding-left: 10px;
+    }
+
+    li.__3 {
+      padding-left: 20px;
+    }
+
+    li.__4 {
+      padding-left: 30px;
+    }
+
+    pre {
+      display: block;
+      font-family: monospace;
+      white-space: pre;
+      margin: 1em 2px;
+      padding: 15px;
+      box-shadow: 0 0 2px #555;
+      overflow-x: auto;
+      background-color: #f0f0f0;
+    }
+
+    code {
+      font-family: monospace;
+      background-color: #f0f0f0;
+    }
+
+    *:not(pre) > code {
+      padding: 5px;
+    }
+
+    #content a {
+      color: #090;
+    }
+
+    #content img {
+      max-width: 100%;
+      display: block;
+      margin: 0 auto;
+    }
+
+    @media only screen and (max-width: 700px) {
+      .grid {
+        grid-template-columns: 0 minmax(0, 1fr);
+        padding: 0 0 0 40px;
+      }
+
+      #toggle {
+        display: block;
+        position: fixed;
+        top: 10px;
+        left: 10px;        
+        width: 20px;
+        height: 30px;
+        background: repeating-linear-gradient(#ddd, #fff 10px);
+      }
+
+      #nav {
+        display: none;
+      }
+
+      #content {
+        border-left: none;
+        padding: 0 20px 0 1px;
+      }
+    }
+
+    .show_nav {
+      grid-template-columns: min-content minmax(0, 1fr);
+    }
+
+    .show_nav > #nav {
+      display: block;
+    }
+
+    .show_nav > #content * {
+      font-size: 30%;
+      padding: 0;
+      overflow: hidden;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div class="grid">
+
+    <div id="toggle"></div>
+
+    <div id="nav">
+
+      <ul>
+      
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/">XYZ</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/getting-started/">Getting started</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/deploy/">Deployments</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/design/">Design</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/design/icons/">Icons</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/develop/">Develop</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/develop/api/">API</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/gazetteer/">Gazetteer</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/layer/">Layer</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/location/">Location</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/provider/">Provider</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/proxy/">Proxy</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/query/">Query</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/user/">User</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/view/">View</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/api/workspace/">Workspace</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/develop/authentication/">Authentication</a>
+        </li>
+        
+        <li class="__2 active">
+          <a href="/xyz/docs/develop/filter/">SQL Filter</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/develop/lib/library/">Library</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/dataviews/">Dataviews</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/layers/">Layers</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/locations/">Locations</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/mapview/">Mapview</a>
+        </li>
+        
+        <li class="__4 ">
+          <a href="/xyz/docs/develop/lib/mapview/interactions/">Interactions</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/plugins/">Plugins</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/tabview/">Tabview</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/develop/lib/webpack/">Webpack</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/develop/views/">Application Views</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/document/">Document</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/environment-settings/">Environment Settings</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/logging/">Logging</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/mapp/">Mapp</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/security/">Security</a>
+        </li>
+        
+        <li class="__1 ">
+          <a href="/xyz/docs/workspace/workspaces/">Workspace</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/dataviews/">Dataviews</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/dataviews/charts/">Charts</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/dataviews/tables/">Tables</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/layer/">Layer</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/cluster/">Cluster</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/editing/">Layer editing</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/geojson/">GeoJson</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/grid/">Hex Grid</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/mvt/">MVT</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/themes/">Themes</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/layer/tile/">Tile Layer</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/locales/">Locale</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/locales/gazetteer/">Gazetteer</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/locations/infoj/">Location</a>
+        </li>
+        
+        <li class="__3 ">
+          <a href="/xyz/docs/workspace/locations/geometry/">Geometry</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/roles/">Roles</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/src/">Source Links</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/styles/">Styles</a>
+        </li>
+        
+        <li class="__2 ">
+          <a href="/xyz/docs/workspace/templates/">Templates</a>
+        </li>
+        
+  
+      </ul>
+
+    </div>
+
+
+    <div id="content">
+      <h1 id="sql-filter">SQL Filter <a class="header-anchor" href="#sql-filter">¶</a></h1>
+<p>The XYZ/Mapp architecture prevents SQL injection by validating parameter to be substituted in query templates. This prevents SQL filter from being sent as query parameter to be substituted in query templates. The <code>${filter}</code> is reserved in query templates.</p>
+<p>The <a href="https://github.com/GEOLYTIX/xyz/blob/development/mod/layer/sql_filter.js">sql_filter</a> module is used by the gazetteer, query, and layer modules to generate SQL where statements from JSON objects. Provdided as a stringified and URLencoded filter parameter this allows for creation of complex filter conditions.</p>
+<p>All filter types and nesting of filters are shown in the this test object.</p>
+<p><strong>The filter types are reserved and cannot be column identifiers.</strong></p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token punctuation">{</span><br>  <span class="token string">"is equal to"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>    eq<span class="token operator">:</span> <span class="token string">"foo"</span><br>  <span class="token punctuation">}</span><span class="token punctuation">,</span><br>  matches<span class="token operator">:</span> <span class="token punctuation">{</span><br>    match<span class="token operator">:</span> <span class="token string">"bar"</span><br>  <span class="token punctuation">}</span><span class="token punctuation">,</span><br>  <span class="token string">"is like"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>    like<span class="token operator">:</span> <span class="token string">"foo, bar"</span><br>  <span class="token punctuation">}</span><span class="token punctuation">,</span><br>  <span class="token string">"greater than"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>    gt<span class="token operator">:</span> <span class="token number">123</span><br>  <span class="token punctuation">}</span><span class="token punctuation">,</span><br>  <span class="token string">"lesser than"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>    lt<span class="token operator">:</span> <span class="token number">123</span><br>  <span class="token punctuation">}</span><span class="token punctuation">,</span><br>  <span class="token string">"greater or equal than"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>    gte<span class="token operator">:</span> <span class="token number">123.45</span><br>  <span class="token punctuation">}</span><span class="token punctuation">,</span><br>  <span class="token string">"lesser or equal than"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>    lte<span class="token operator">:</span> <span class="token number">123.45</span><br>  <span class="token punctuation">}</span><span class="token punctuation">,</span><br>  or<span class="token operator">:</span> <span class="token punctuation">[</span><br>    <span class="token punctuation">{</span><br>      <span class="token string">"boolean true"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>        boolean<span class="token operator">:</span> <span class="token boolean">true</span><br>      <span class="token punctuation">}</span><br>    <span class="token punctuation">}</span><span class="token punctuation">,</span><br>    <span class="token punctuation">{</span><br>      <span class="token string">"boolean false"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>        boolean<span class="token operator">:</span> <span class="token boolean">false</span><br>      <span class="token punctuation">}</span><br>    <span class="token punctuation">}</span><br>  <span class="token punctuation">]</span><span class="token punctuation">,</span><br>  <span class="token string">"not in array"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>    ni<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"foo"</span><span class="token punctuation">,</span> <span class="token string">"bar"</span><span class="token punctuation">]</span><br>  <span class="token punctuation">}</span><span class="token punctuation">,</span><br>  <span class="token string">"in array"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>    <span class="token keyword">in</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"foo"</span><span class="token punctuation">,</span> <span class="token string">"bar"</span><span class="token punctuation">]</span><br>  <span class="token punctuation">}</span><br><span class="token punctuation">}</span></code></pre>
+<h2 id="filter-conditions">Filter conditions <a class="header-anchor" href="#filter-conditions">¶</a></h2>
+<p>The filter object key represents the column/field name to be filtered. Multiple keys inside a filter object will use the <code>AND</code> condition. Multiple filter objects inside an array will use the <code>OR</code> condition.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token keyword">const</span> AND_condition <span class="token operator">=</span> <span class="token punctuation">{</span><br>  a<span class="token operator">:</span> <span class="token punctuation">{</span><br>    like<span class="token operator">:</span> <span class="token string">"H"</span><br>  <span class="token punctuation">}</span><span class="token punctuation">,</span><br>  b<span class="token operator">:</span> <span class="token punctuation">{</span><br>    gt<span class="token operator">:</span> <span class="token number">116</span><br>  <span class="token punctuation">}</span><br><span class="token punctuation">}</span><span class="token punctuation">;</span><br><br><span class="token comment">// (('a' ILIKE 'H%') AND 'b' > 116)</span><br><br><span class="token keyword">const</span> OR_condition <span class="token operator">=</span> <span class="token punctuation">[</span><br>  <span class="token punctuation">{</span><br>    a<span class="token operator">:</span> <span class="token punctuation">{</span><br>      like<span class="token operator">:</span> <span class="token string">"H"</span><br>    <span class="token punctuation">}</span><br>  <span class="token punctuation">}</span><span class="token punctuation">,</span><br>  <span class="token punctuation">{</span><br>    b<span class="token operator">:</span> <span class="token punctuation">{</span><br>      gt<span class="token operator">:</span> <span class="token number">116</span><br>    <span class="token punctuation">}</span><br>  <span class="token punctuation">}</span><br><span class="token punctuation">]</span><br><br><span class="token comment">// ((('a' ILIKE 'H%')) OR ('b' > 116))</span></code></pre>
+<h2 id="eq">eq <a class="header-anchor" href="#eq">¶</a></h2>
+<p>The <em>equal</em> filter checks whether the filter value equals the field value.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token punctuation">{</span><br>  <span class="token string">"col"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>    eq<span class="token operator">:</span> <span class="token string">"value"</span><br>  <span class="token punctuation">}</span><br><span class="token punctuation">}</span><br><br><span class="token comment">// ('col' = 'value')</span></code></pre>
+<h2 id="match">match <a class="header-anchor" href="#match">¶</a></h2>
+<p>The <em>match</em> filter checks whether the filter value is <code>ILIKE</code> to the field value.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token punctuation">{</span><br>  <span class="token string">"col"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>    match<span class="token operator">:</span> <span class="token string">"value"</span><br>  <span class="token punctuation">}</span><br><span class="token punctuation">}</span><br><br><span class="token comment">// ('col'::text ILIKE 'value')</span></code></pre>
+<h2 id="like">like <a class="header-anchor" href="#like">¶</a></h2>
+<p>The <em>like</em> filter checks whether the filter value is <code>ILIKE</code> to the field value. The like filter will split the value on comma and add a wildcard to each segment.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token punctuation">{</span><br>  <span class="token string">"col"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>    like<span class="token operator">:</span> <span class="token string">"foo, bar"</span><br>  <span class="token punctuation">}</span><br><span class="token punctuation">}</span><br><br><span class="token comment">// (('col' ILIKE 'foo%' OR 'col' ILIKE 'bar%'))</span></code></pre>
+<h2 id="gt%2C-gte%2C-lt%2C-lte">gt, gte, lt, lte <a class="header-anchor" href="#gt%2C-gte%2C-lt%2C-lte">¶</a></h2>
+<p>The <em>greater</em> or <em>lesser than</em>, <em>greater</em> or <em>lesser and equal to</em> filter compare numeric values to the column.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token punctuation">{</span><br>  <span class="token string">"col"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>    gte<span class="token operator">:</span> <span class="token number">123.45</span><br>  <span class="token punctuation">}</span><br><span class="token punctuation">}</span><br><br><span class="token comment">// ('col' >= 123.45)</span></code></pre>
+<h2 id="in">in <a class="header-anchor" href="#in">¶</a></h2>
+<p>The <em>in</em> array filter checks whether the column is in an array of values.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token punctuation">{</span><br>  <span class="token string">"col"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>    <span class="token keyword">in</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'foo'</span><span class="token punctuation">,</span> <span class="token string">'bar'</span><span class="token punctuation">]</span><br>  <span class="token punctuation">}</span><br><span class="token punctuation">}</span><br><br><span class="token comment">// ('col' IN ('foo','bar'))</span></code></pre>
+<h2 id="ni">ni <a class="header-anchor" href="#ni">¶</a></h2>
+<p>The <em>not in</em> array filter checks whether the column is in an array of values.</p>
+<pre class="language-javascript"><code class="language-javascript"><span class="token punctuation">{</span><br>  <span class="token string">"col"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>    ni<span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">'foo'</span><span class="token punctuation">,</span> <span class="token string">'bar'</span><span class="token punctuation">]</span><br>  <span class="token punctuation">}</span><br><span class="token punctuation">}</span><br><br><span class="token comment">// ('col' NOT IN ('foo','bar'))</span></code></pre>
+
+    </div>
+
+  </div>
+
+</body>
+
+<script>
+    const toggle = document.getElementById('toggle');
+
+    toggle.onclick = e => { e.target.parentElement.classList.toggle('show_nav'); };
+</script>
+
+</html>
