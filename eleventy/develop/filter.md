@@ -18,7 +18,7 @@ All filter types and nesting of filters are shown in the this test object.
   "is equal to": {
     eq: "foo"
   },
-  matches: {
+  "matches": {
     match: "bar"
   },
   "is like": {
