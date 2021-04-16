@@ -12,13 +12,12 @@ module.exports = async (req, res) => {
 
   if (!roles && layer.roles) return res.status(403).send('Access prohibited.')
 
-  const filter = `
-    ${req.params.filter
-      && await sql_filter(Object.entries(JSON.parse(req.params.filter)).map(e => ({[e[0]]:e[1]})))
-      || ''}
+  const filter =
+    ` ${req.params.filter && `AND ${sql_filter(JSON.parse(req.params.filter))}` || ''}
     ${roles && Object.values(roles).some(r => !!r)
-      && await sql_filter(Object.values(roles).filter(r => !!r), 'OR')
-      || ''}`.replace(/^\s*$/, '')
+    && `AND ${sql_filter(Object.values(roles).filter(r => !!r))}`
+    || ''}`
+
 
   var q = `
     SELECT

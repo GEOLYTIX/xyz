@@ -13,3 +13,5 @@ Enable drawing styles. [#391](https://github.com/GEOLYTIX/xyz/issues/391)
 Skip and remove entry.val if entry displayValue is 'null'.
 
 Parameter substituion in query templates. [#391](https://github.com/GEOLYTIX/xyz/issues/393)
+
+Update SQLFilter module.

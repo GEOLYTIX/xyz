@@ -384,15 +384,6 @@
             }
           },
           "qID": "id",
-          "filter": {
-            "infoj": [{
-              "title": "ID count",
-              "field": "id_count",
-              "type": "integer",
-              "inline": true,
-              "fieldfx": "count(id)"
-            }]
-          },
           "infoj": [{
             "title": "RP Type",
             "field": "rp_type",
@@ -400,10 +391,16 @@
               "in": [
                 "City Centre",
                 "Town Centre",
-                "Urban Centre"
+                "Urban Centre",
+                "Parade"
               ]
             }
-          }]
+          },
+        {
+          "field": "rp_name",
+          "title": "rp_name",
+          "filter": "like"
+        }]
         },
         "RP Roles": {
           "format": "mvt",
