@@ -73,8 +73,8 @@ document.dispatchEvent(new CustomEvent('measure_distance_here', {
                                 transportMode: 'car',
                                 origin: `${p1[1]},${p1[0]}`,
                                 destination: `${p2[1]},${p2[0]}`,
-                                return: 'summary',
-                                departure: new Date('2020-02-01 13:00:00').toISOString()
+                                return: 'summary'/*,
+                                departure: new Date('2020-02-01 13:00:00').toISOString()*/ // set date swhen needed
                             }
 
                             _xyz
