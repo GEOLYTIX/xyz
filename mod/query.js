@@ -27,19 +27,17 @@ module.exports = async (req, res) => {
     req.params.dbs = req.params.dbs || layer.dbs
 
     // Get array of role filter from layer configuration.
-    const roleFilter = Roles.filter(layer, req.params.user && req.params.user.roles)
+    const roles = Roles.filter(layer, req.params.user && req.params.user.roles)
 
     // Access is prohibited if the layer has roles assigned but the roleFilter is falsy.
-    if (!roleFilter && layer.roles) return res.status(403).send('Access prohibited.');
+    if (!roles && layer.roles) return res.status(403).send('Access prohibited.');
 
     // Create params filter string from roleFilter filter params.
-    req.params.filter = `
-      ${req.params.filter
-        && await sql_filter(Object.entries(JSON.parse(req.params.filter)).map(e => ({[e[0]]:e[1]})))
-        || ''}
-      ${roleFilter && Object.values(roleFilter).some(r => !!r)
-        && await sql_filter(Object.values(roleFilter).filter(r => !!r), 'OR')
-        || ''}`
+    req.params.filter =
+      ` ${req.params.filter && `AND ${sql_filter(JSON.parse(req.params.filter))}` || ''}
+      ${roles && Object.values(roles).some(r => !!r)
+      && `AND ${sql_filter(Object.values(roles).filter(r => !!r))}`
+      || ''}`
 
     // Assign viewport params filter string.
     const viewport = req.params.viewport && req.params.viewport.split(',')

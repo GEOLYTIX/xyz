@@ -1,94 +1,72 @@
-module.exports = async (filter, conjunction = 'AND') => {
+const filterTypes = {
+  eq: (col, val) => `"${col}" = '${val}'`,
 
-  if (!filter.length) return '';
+  gt: (col, val) => `"${col}" > ${val}`,
 
-  const sql_filter = []
+  gte: (col, val) => `"${col}" >= ${val}`,
+
+  lt: (col, val) => `"${col}" < ${val}`,
+
+  lte: (col, val) => `"${col}" <= ${val}`,
+
+  boolean: (col, val) => `"${col}" IS ${val}`,
+
+  ni: (col, val) =>
+    `"${col}" NOT IN ('${val.map((f) => decodeURIComponent(f)).join("','")}')`,
+
+  in: (col, val) =>
+    `"${col}" IN ('${val.map((f) => decodeURIComponent(f)).join("','")}')`,
+
+  like: (col, val) =>
+    `(${decodeURIComponent(val)
+      .split(",")
+      .filter((like) => like.length > 0)
+      .map((like) => `"${col}" ILIKE '${like.trim().replace(/'/g, "''")}%'`)
+      .join(" OR ")})`,
+
+  match: (col, val) =>
+    `"${col}"::text ILIKE '${decodeURIComponent(
+      val.toString().replace(/'/g, "''")
+    )}'`
+};
+
+module.exports = sqlfilter
+
+function sqlfilter(filter) {
+  // Filter in an array will be conditional OR
+  if (filter.length)
+    return `(${filter
   
-  for (const f of filter) {
+        // Map filter in array with OR conjuction
+        .map((filter) => mapFilterEntries(filter, " OR "))
+        .join(" OR ")})`;
 
-    const field = Object.keys(f)[0]
+  // Filter in an object will be conditional AND
+  return mapFilterEntries(filter, " AND ");
+}
 
-    if(!field) continue;
-
-    if (Array.isArray(f[field])) {
-
-      if (sql_filter[sql_filter.length - 1] !== 'AND') sql_filter.push('AND')
-
-      sql_filter.push('(')
-
-      f[field].forEach(f => addField(f, field, 'OR'))
-
-      sql_filter.pop()
-
-      sql_filter.push(')')
-
-      continue
-    }
-
-    addField(f[field], field, conjunction)
-
-  }
-
-  if (sql_filter[sql_filter.length - 1] !== ')') sql_filter.pop()
-      
-  if (sql_filter.length) return `AND (${sql_filter.join(' ')})`
-
-  return ' '
-
-  function addField(filter, field, conjunction) {
-
-    if (filter.ni && filter.ni.length > 0) {
-      sql_filter.push(`${field} NOT IN ('${filter.ni.join('\',\'')}')`)
-      sql_filter.push(conjunction)
-    }
-
-    if (filter.in && filter.in.length > 0) {
-      sql_filter.push(`${field} IN ('${filter.in.map(f=>decodeURIComponent(f)).join('\',\'')}')`)
-      sql_filter.push(conjunction)
-    }
-
-    if(typeof(filter.gt) == 'number') {
-      sql_filter.push(`${field} > ${filter.gt}`)
-      sql_filter.push(conjunction)
-    }
-
-    if(typeof(filter.lt) == 'number') {
-      sql_filter.push(`${field} < ${filter.lt}`)
-      sql_filter.push(conjunction)
-    }
-          
-    if(filter.gte) {
-      sql_filter.push(`${field} >= ${filter.gte}`)
-      sql_filter.push(conjunction)
-    }
-
-    if(filter.lte) {
-      sql_filter.push(`${field} <= ${filter.lte}`)
-      sql_filter.push(conjunction)
-    }
-          
-    if((filter.like)) {
-      const likes = decodeURIComponent(filter.like).split(',')
-        .filter(like => like.length > 0)
-        .map(like => `${field}::text ILIKE '${like.trim().replace(/'/g, "''")}%'`)
-        sql_filter.push(`(${likes.join(' OR ')})`)
-        sql_filter.push(conjunction)
-    }
-
-    if(filter.eq) {
-      sql_filter.push(`${field} = ${filter.eq}`)
-      sql_filter.push(conjunction)
-    }
-
-    if((filter.match)) {
-      sql_filter.push(`${field}::text ILIKE '${decodeURIComponent(filter.match.toString().replace(/'/g, "''"))}'`)
-      sql_filter.push(conjunction)
-    }
-
-    if((filter.boolean)){
-      sql_filter.push(`${field} IS ${filter.boolean}`)
-      sql_filter.push(conjunction)
-    }
-
-  }
+function mapFilterEntries(filter, conjunction) {
+  return `(${Object.entries(filter)
+  
+      // Map filter entries
+      .map((entry) => {
+        // Array entry values represent conditional OR
+        if (entry[1].length) return sqlfilter(entry[1], " OR ");
+  
+        // Get filter type from first key of the entry value
+        const filterType = Object.keys(entry[1])[0];
+  
+        // Call filter type method for matching filter entry value
+        if (filterTypes[filterType])
+          return filterTypes[filterType](
+            // The entry key is col
+            entry[0],
+  
+            // The first entry value will be the filter val
+            Object.values(entry[1])[0]
+          );
+      })
+  
+      // Join filter with conjunction
+      .join(conjunction)})`;
 }
