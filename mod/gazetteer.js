@@ -114,10 +114,12 @@ async function gaz_locale(req, locale, results) {
        continue;
     }//return res.status(403).send('Access prohibited.');
 
+    const SQLparams = [`${dataset.leading_wildcard ? '%' : ''}${phrase}`]
+
     const filter =
-      ` ${req.params.filter && `AND ${sql_filter(JSON.parse(req.params.filter))}` || ''}
+      ` ${req.params.filter && `AND ${sql_filter(JSON.parse(req.params.filter), SQLparams)}` || ''}
       ${roles && Object.values(roles).some(r => !!r)
-      && `AND ${sql_filter(Object.values(roles).filter(r => !!r))}`
+      && `AND ${sql_filter(Object.values(roles).filter(r => !!r), SQLparams)}`
       || ''}`
 
 
@@ -138,7 +140,7 @@ async function gaz_locale(req, locale, results) {
 
     let phrase = dataset.space_wildcard ? `${decodeURIComponent(req.params.q).replace(new RegExp(/  */g), '% ')}%` : `${decodeURIComponent(req.params.q)}%`;
 
-    records.push(dbs[dataset.dbs || layer && layer.dbs](q, [`${dataset.leading_wildcard ? '%' : ''}${phrase}`]));
+    records.push(dbs[dataset.dbs || layer && layer.dbs](q, SQLparams));
 
   }
 

@@ -170,7 +170,7 @@ The *in* array filter checks whether the column is in an array of values.
   }
 }
 
-// ('col' IN ('foo','bar'))
+// ('col' = ANY ('foo','bar'))
 ```
 
 ## ni
@@ -184,5 +184,5 @@ The *not in* array filter checks whether the column is in an array of values.
   }
 }
 
-// ('col' NOT IN ('foo','bar'))
+// (NOT 'col' = ANY ('foo','bar'))
 ```

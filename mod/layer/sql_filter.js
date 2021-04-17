@@ -1,38 +1,41 @@
 const filterTypes = {
-  eq: (col, val) => `"${col}" = '${val}'`,
+  eq: (col, val) => `"${col}" = \$${addValues(val)}`,
 
-  gt: (col, val) => `"${col}" > ${val}`,
+  gt: (col, val) => `"${col}" > \$${addValues(val)}`,
 
-  gte: (col, val) => `"${col}" >= ${val}`,
+  gte: (col, val) => `"${col}" >= \$${addValues(val)}`,
 
-  lt: (col, val) => `"${col}" < ${val}`,
+  lt: (col, val) => `"${col}" < \$${addValues(val)}`,
 
-  lte: (col, val) => `"${col}" <= ${val}`,
+  lte: (col, val) => `"${col}" <= \$${addValues(val)}`,
 
-  boolean: (col, val) => `"${col}" IS ${val}`,
+  boolean: (col, val) => `"${col}" IS \$${addValues(val)}`,
 
-  ni: (col, val) =>
-    `"${col}" NOT IN ('${val.map((f) => decodeURIComponent(f)).join("','")}')`,
+  ni: (col, val) => `NOT "${col}" = ANY (\$${addValues([val])})`,
 
-  in: (col, val) =>
-    `"${col}" IN ('${val.map((f) => decodeURIComponent(f)).join("','")}')`,
+  in: (col, val) => `"${col}" = ANY (\$${addValues([val])})`,
 
   like: (col, val) =>
-    `(${decodeURIComponent(val)
+    `(${val
       .split(",")
-      .filter((like) => like.length > 0)
-      .map((like) => `"${col}" ILIKE '${like.trim().replace(/'/g, "''")}%'`)
+      .filter((val) => val.length > 0)
+      .map((val) => `"${col}" ILIKE \$${addValues(`${val}%`)}`)
       .join(" OR ")})`,
 
-  match: (col, val) =>
-    `"${col}"::text ILIKE '${decodeURIComponent(
-      val.toString().replace(/'/g, "''")
-    )}'`
+  match: (col, val) => `"${col}"::text ILIKE \$${addValues(val)}`
 };
 
-module.exports = sqlfilter
+let SQLparams
 
-function sqlfilter(filter) {
+function addValues(val) {
+  SQLparams.push(val);
+  return SQLparams.length;
+}
+
+module.exports = function sqlfilter(filter, params) {
+
+  SQLparams = params
+
   // Filter in an array will be conditional OR
   if (filter.length)
     return `(${filter
@@ -55,6 +58,12 @@ function mapFilterEntries(filter, conjunction) {
   
         // Get filter type from first key of the entry value
         const filterType = Object.keys(entry[1])[0];
+
+        // Identifiers must be validated to prevent SQL injection
+        if (!/^[A-Za-z0-9._-]*$/.test(entry[0])) {
+          console.log(`${entry[0]} - ¡no bueno!`);
+          return;
+        }
   
         // Call filter type method for matching filter entry value
         if (filterTypes[filterType])
@@ -66,6 +75,9 @@ function mapFilterEntries(filter, conjunction) {
             Object.values(entry[1])[0]
           );
       })
+
+      // Filter out undefined / escaped filter
+      .filter(f=>typeof f !== 'undefined')
   
       // Join filter with conjunction
       .join(conjunction)})`;
