@@ -8,6 +8,9 @@ module.exports = async (req, res) => {
 
   const template = req.params.template
 
+  // Array of params for parameterized queries with node-pg.
+  const SQLparams = []
+
   // A query template is required.
   if (!template) return res.status(400).send('Missing query template.')
 
@@ -34,9 +37,9 @@ module.exports = async (req, res) => {
 
     // Create params filter string from roleFilter filter params.
     req.params.filter =
-      ` ${req.params.filter && `AND ${sql_filter(JSON.parse(req.params.filter))}` || ''}
+      ` ${req.params.filter && `AND ${sql_filter(JSON.parse(req.params.filter), SQLparams)}` || ''}
       ${roles && Object.values(roles).some(r => !!r)
-      && `AND ${sql_filter(Object.values(roles).filter(r => !!r))}`
+      && `AND ${sql_filter(Object.values(roles).filter(r => !!r), SQLparams)}`
       || ''}`
 
     // Assign viewport params filter string.
@@ -71,9 +74,6 @@ module.exports = async (req, res) => {
   // Assign body to params to enable reserved %{body} parameter.
   req.params.body = req.body
 
-  // Array of params for parameterized queries with node-pg.
-  const params = []
-
   // Reserved param keys may not be substituted from request query params.
   const reserved = new Set(['viewport', 'filter'])
 
@@ -107,9 +107,9 @@ module.exports = async (req, res) => {
       const param = matched.replace(/\%|\{|\}/g, "")
 
       // Push value from request params object into params array.
-      params.push(req.params[param] || "")
+      SQLparams.push(req.params[param] || "")
   
-      return `\$${params.length}`
+      return `\$${SQLparams.length}`
     })
 
   // Render the query string q from tbe template and request params.
@@ -129,12 +129,12 @@ module.exports = async (req, res) => {
   // Nonblocking queries will not wait for results but return immediately.
   if (template.nonblocking || req.params.nonblocking) {
 
-    query(q, params, req.params.statement_timeout || template.statement_timeout)
+    query(q, SQLparams, req.params.statement_timeout || template.statement_timeout)
 
     return res.send('Non blocking request sent.')
   }
 
-  const rows = await query(q, params, req.params.statement_timeout || template.statement_timeout)
+  const rows = await query(q, SQLparams, req.params.statement_timeout || template.statement_timeout)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
