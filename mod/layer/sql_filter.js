@@ -9,7 +9,7 @@ const filterTypes = {
 
   lte: (col, val) => `"${col}" <= \$${addValues(val)}`,
 
-  boolean: (col, val) => `"${col}" IS \$${addValues(val)}`,
+  boolean: (col, val) => `"${col}" IS ${!!val}`,
 
   ni: (col, val) => `NOT "${col}" = ANY (\$${addValues([val])})`,
 
