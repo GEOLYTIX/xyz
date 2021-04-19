@@ -115,7 +115,7 @@ module.exports = async (req, res) => {
   // Render the query string q from tbe template and request params.
   try {
     template.template = template.render && template.render(req.params) || template.template
-    var q = render(template.template, req.params)
+    var q = render(template.template || template, req.params)
   } catch(err) {
     res.status(500).send(err.message)
     return console.error(err)
