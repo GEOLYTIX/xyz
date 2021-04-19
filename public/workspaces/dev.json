@@ -337,6 +337,16 @@
           "geom": "geom_3857",
           "srid": "3857",
           "style": {
+            "label": {
+              "display": true,
+              "field": "rp_name",
+              "declutter": true,
+              "strokeColor": "#ffffff",
+              "strokeWidth": 3,
+              "maxZoom": 18,
+              "minZoom": 14,
+              "title": "rp_name"
+            },
             "themes": {
               "Retail Place type": {
                 "type": "categorized",
