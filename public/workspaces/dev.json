@@ -519,7 +519,8 @@
               "title": "numeric_field",
               "field": "numeric_field",
               "type": "numeric",
-              "edit": true
+              "edit": true,
+              "filter": "numeric"
             },
             {
               "field": "json_field",
@@ -538,7 +539,7 @@
               "field": "bool_field",
               "type": "boolean",
               "edit": true,
-              "filter": true
+              "filter": "boolean"
             },
             {
               "title": "options_field",
