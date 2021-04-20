@@ -4,8 +4,6 @@ dotenv.config()
 
 const express = require('express')
 
-const bodyParser = require('body-parser')
-
 const cookieParser = require('cookie-parser')
 
 const cors = require('cors');
@@ -30,12 +28,12 @@ app.get(`${process.env.DIR||''}/api/proxy`, api)
 
 app.get(`${process.env.DIR||''}/api/provider/:provider?`, api)
 
-app.post(`${process.env.DIR||''}/api/provider/:provider?`, bodyParser.json({limit: '5mb'}), api)
+app.post(`${process.env.DIR||''}/api/provider/:provider?`, express.json({limit: '5mb'}), api)
 
 
 app.get(`${process.env.DIR||''}/api/query/:template?`, api)
 
-app.post(`${process.env.DIR||''}/api/query/:template?`, bodyParser.json({limit: '5mb'}), api)
+app.post(`${process.env.DIR||''}/api/query/:template?`, express.json({limit: '5mb'}), api)
 
 
 app.get(`${process.env.DIR||''}/api/gazetteer`, api)
@@ -49,12 +47,12 @@ app.get(`${process.env.DIR||''}/api/layer/:format?/:z?/:x?/:y?`, api)
 
 app.get(`${process.env.DIR||''}/api/location/:method?`, api)
 
-app.post(`${process.env.DIR||''}/api/location/:method?`, bodyParser.json({limit: '5mb'}), api)
+app.post(`${process.env.DIR||''}/api/location/:method?`, express.json({limit: '5mb'}), api)
 
 
 app.get(`${process.env.DIR||''}/api/user/:method?/:key?`, api)
 
-app.post(`${process.env.DIR||''}/api/user/:method?/:key?`, bodyParser.urlencoded({extended: true}), api)
+app.post(`${process.env.DIR||''}/api/user/:method?/:key?`, express.urlencoded({extended: true}), api)
 
 //sudo ./caddy_linux_amd64 reverse-proxy --from localhost:443 --to localhost:3000
 app.get(`${process.env.DIR||''}/auth0/logout`, api)

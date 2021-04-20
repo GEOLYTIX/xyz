@@ -21,13 +21,13 @@ module.exports = async (req, res) => {
 
   if (!roles && layer.roles) return res.status(403).send('Access prohibited.');
 
-  const filter = `
-  ${req.params.filter
-    && await sql_filter(Object.entries(JSON.parse(req.params.filter)).map(e => ({[e[0]]:e[1]})))
-    || ''}
-  ${roles && Object.values(roles).some(r => !!r)
-    && await sql_filter(Object.values(roles).filter(r => !!r), 'OR')
-    || ''}`.replace(/^\s*$/,'')
+  const SQLparams = []
+
+  const filter =
+    ` ${req.params.filter && `AND ${sql_filter(JSON.parse(req.params.filter), SQLparams)}` || ''}
+    ${roles && Object.values(roles).some(r => !!r)
+    && `AND ${sql_filter(Object.values(roles).filter(r => !!r), SQLparams)}`
+    || ''}`
 
   if (!filter && layer.mvt_cache) {
 
@@ -120,7 +120,7 @@ module.exports = async (req, res) => {
     ${!filter && layer.mvt_cache && 'RETURNING mvt' ||''};`
 
 
-  var rows = dbs[layer.dbs] && await dbs[layer.dbs](q)
+  var rows = dbs[layer.dbs] && await dbs[layer.dbs](q, SQLparams)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 

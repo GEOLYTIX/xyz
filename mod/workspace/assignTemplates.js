@@ -14,7 +14,6 @@ module.exports = async workspace => {
     // Query templates:
     count_locations: require('../../public/js/queries/count_locations'),
     field_stats: require('../../public/js/queries/field_stats'),
-    filter_aggregate: require('../../public/js/queries/filter_aggregate'),
     get_nnearest: require('../../public/js/queries/get_nnearest'),
     infotip: require('../../public/js/queries/infotip'),
     labels: require('../../public/js/queries/labels'),
@@ -92,11 +91,6 @@ module.exports = async workspace => {
             {
               template: _template
             })
-        }
-
-        // Assign render method if none exists.
-        if (!_template.render && !_template.format) {
-          _template.render = params => _template.template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
         }
 
         resolve({

@@ -1,7 +1,4 @@
-module.exports = {
-  render: _ => `
-  
+module.exports = `
   SELECT count(1)
-  FROM ${_.table}
-  WHERE true ${_.filter};`
-}
+  FROM \${table}
+  WHERE true \${filter};`

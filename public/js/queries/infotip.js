@@ -1,7 +1,17 @@
 module.exports = {
-  render: _ => `
-  
-  SELECT ${_.field} AS label
-  FROM ${_.table}
-  ${_.coords && `ORDER BY ST_Point(${_.coords}) <#> ${_.layer.geom} LIMIT 1;` || `WHERE ${_.layer.qID}::text = '${_.id}'::text`};`
+  render: _ => {
+
+    if (!_.coords) return `
+    SELECT \${field} AS label
+    FROM \${table}
+    WHERE \${qID} = %{id}`
+
+    const coords = _.coords.split(',').map(val => parseFloat(val))
+ 
+    return `
+    SELECT \${field} AS label
+    FROM \${table}
+    ORDER BY ST_Point(${coords[0]},${coords[1]}) <#> \${geom} LIMIT 1`
+
+  }
 }

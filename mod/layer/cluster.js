@@ -25,25 +25,14 @@ module.exports = async (req, res) => {
 
   if (!roles && layer.roles) return res.status(403).send('Access prohibited.');
 
-  const filter = `
-  ${
-    (req.params.filter &&
-      (await sql_filter(
-        Object.entries(JSON.parse(req.params.filter)).map((e) => ({
-          [e[0]]: e[1],
-        }))
-      ))) ||
-    ''
-  }
-  ${
-    (roles &&
-      Object.values(roles).some((r) => !!r) &&
-      (await sql_filter(
-        Object.values(roles).filter((r) => !!r),
-        'OR'
-      ))) ||
-    ''
-  }`;
+  const SQLparams = []
+
+  const filter =
+    ` ${req.params.filter && `AND ${sql_filter(JSON.parse(req.params.filter), SQLparams)}` || ''}
+    ${roles && Object.values(roles).some(r => !!r)
+    && `AND ${sql_filter(Object.values(roles).filter(r => !!r), SQLparams)}`
+    || ''}`
+
 
   // Combine filter with envelope
   const where_sql = `
@@ -71,7 +60,7 @@ module.exports = async (req, res) => {
       ) AS xdistance
     FROM ${req.params.table} ${where_sql}`;
 
-    var rows = await dbs[layer.dbs](q);
+    var rows = await dbs[layer.dbs](q, SQLparams)
 
     if (rows instanceof Error)
       return res.status(500).send('Failed to query PostGIS table.');

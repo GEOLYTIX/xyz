@@ -114,13 +114,14 @@ async function gaz_locale(req, locale, results) {
        continue;
     }//return res.status(403).send('Access prohibited.');
 
-    const filter = `
-    ${req.params.filter
-      && await sql_filter(Object.entries(JSON.parse(req.params.filter)).map(e => ({[e[0]]:e[1]})))
-      || ''}
-    ${roles && Object.values(roles).some(r => !!r)
-      && await sql_filter(Object.values(roles).filter(r => !!r), 'OR')
+    const SQLparams = [`${dataset.leading_wildcard ? '%' : ''}${phrase}`]
+
+    const filter =
+      ` ${req.params.filter && `AND ${sql_filter(JSON.parse(req.params.filter), SQLparams)}` || ''}
+      ${roles && Object.values(roles).some(r => !!r)
+      && `AND ${sql_filter(Object.values(roles).filter(r => !!r), SQLparams)}`
       || ''}`
+
 
     // Build PostgreSQL query to fetch gazetteer results.
     var q = `
@@ -139,7 +140,7 @@ async function gaz_locale(req, locale, results) {
 
     let phrase = dataset.space_wildcard ? `${decodeURIComponent(req.params.q).replace(new RegExp(/  */g), '% ')}%` : `${decodeURIComponent(req.params.q)}%`;
 
-    records.push(dbs[dataset.dbs || layer && layer.dbs](q, [`${dataset.leading_wildcard ? '%' : ''}${phrase}`]));
+    records.push(dbs[dataset.dbs || layer && layer.dbs](q, SQLparams));
 
   }
 

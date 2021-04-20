@@ -1,6 +1,5 @@
 ---
 title: Application Views
-
 layout: root.html
 ---
 

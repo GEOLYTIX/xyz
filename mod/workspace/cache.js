@@ -24,8 +24,9 @@ let workspace = null;
 
 const logger = require('../logger');
 
-module.exports = async (req) => {
-  let timestamp = Date.now();
+module.exports = async () => {
+
+  let timestamp = Date.now()
 
   // If the workspace is empty or older than 1hr it needs to be cached.
   if (

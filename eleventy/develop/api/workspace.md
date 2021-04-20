@@ -1,6 +1,5 @@
 ---
 title: Workspace
-
 layout: root.html
 ---
 
