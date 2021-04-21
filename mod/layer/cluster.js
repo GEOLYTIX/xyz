@@ -351,79 +351,61 @@ module.exports = async (req, res) => {
       ${xy_sql}
     FROM ${agg_sql}`;
   }
-  // console.log(q);
-  var rows = await dbs[layer.dbs](q);
-  if (rows instanceof Error)
-    return res.status(500).send('Failed to query PostGIS table.');
 
-  if (!theme)
-    return res.send(
-      rows.map((row) => ({
-        geometry: {
-          x: row.x,
-          y: row.y,
-        },
-        properties: {
-          count: parseInt(row.count),
-          size: parseInt(row.size),
-          label: count
-            ? parseInt(row.count) > 1
-              ? row.count
-              : row.label
-            : row.label,
-        },
-      }))
-    );
-  if (theme === 'categorized')
-    return res.send(
-      rows.map((row) => ({
-        geometry: {
-          x: row.x,
-          y: row.y,
-        },
-        properties: {
-          count: parseInt(row.count),
-          size: parseInt(row.size),
-          cat:
-            layer.style.cluster.type === 'clusterSummary'
-              ? row.cat
-              : row.cat.length === 1
-              ? row.cat[0]
-              : null,
-          label: row.label,
-        },
-      }))
-    );
+  var rows = await dbs[layer.dbs](q, SQLparams)
 
-  if (theme === 'graduated')
-    return res.send(
-      rows.map((row) => ({
-        geometry: {
-          x: row.x,
-          y: row.y,
-        },
-        properties: {
-          count: parseInt(row.count),
-          size: parseInt(row.size),
-          cat: parseFloat(row.cat),
-          label: row.label,
-        },
-      }))
-    );
+  if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
-  if (theme === 'competition')
-    return res.send(
-      rows.map((row) => ({
-        geometry: {
-          x: row.x,
-          y: row.y,
-        },
-        properties: {
-          count: parseInt(row.count),
-          size: parseInt(row.size),
-          cat: Object.assign({}, ...row.cat),
-          label: row.label,
-        },
-      }))
-    );
-};
+
+  if (!theme) return res.send(rows.map(row => ({
+    geometry: {
+      x: row.x,
+      y: row.y,
+    },
+    properties: {
+      count: parseInt(row.count),
+      size: parseInt(row.size),
+      label: count ? parseInt(row.count) > 1 ? row.count : row.label : row.label,
+    }
+  })))
+
+  if (theme === 'categorized') return res.send(rows.map(row => ({
+    geometry: {
+      x: row.x,
+      y: row.y,
+    },
+    properties: {
+      count: parseInt(row.count),
+      size: parseInt(row.size),
+      cat: row.cat.length === 1 ? row.cat[0] : null,
+      label: row.label
+    }
+  })))
+
+  if (theme === 'graduated') return res.send(rows.map(row => ({
+    geometry: {
+      x: row.x,
+      y: row.y,
+    },
+    properties: {
+      count: parseInt(row.count),
+      size: parseInt(row.size),
+      cat: parseFloat(row.cat),
+      label: row.label
+    }
+  })))
+
+  if (theme === 'competition') return res.send(rows.map(row => ({
+    geometry: {
+      x: row.x,
+      y: row.y,
+    },
+    properties: {
+      count: parseInt(row.count),
+      size: parseInt(row.size),
+      cat: Object.assign({}, ...row.cat),
+      label: row.label
+    }
+  })))
+
+}
