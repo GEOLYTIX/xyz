@@ -289,7 +289,7 @@ module.exports = async (req, res) => {
 
   }
 
-  var rows = await dbs[layer.dbs](q)
+  var rows = await dbs[layer.dbs](q, SQLparams)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
