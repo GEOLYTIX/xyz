@@ -114,6 +114,8 @@ async function gaz_locale(req, locale, results) {
        continue;
     }//return res.status(403).send('Access prohibited.');
 
+    let phrase = dataset.space_wildcard ? `${decodeURIComponent(req.params.q).replace(new RegExp(/  */g), '% ')}%` : `${decodeURIComponent(req.params.q)}%`;
+
     const SQLparams = [`${dataset.leading_wildcard ? '%' : ''}${phrase}`]
 
     const filter =
@@ -137,8 +139,6 @@ async function gaz_locale(req, locale, results) {
       WHERE ${dataset.qterm || dataset.label}::text ILIKE $1
       ${filter}
       LIMIT ${dataset.limit || locale.gazetteer.limit || 10}`
-
-    let phrase = dataset.space_wildcard ? `${decodeURIComponent(req.params.q).replace(new RegExp(/  */g), '% ')}%` : `${decodeURIComponent(req.params.q)}%`;
 
     records.push(dbs[dataset.dbs || layer && layer.dbs](q, SQLparams));
 
