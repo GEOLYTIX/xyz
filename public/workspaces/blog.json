@@ -136,16 +136,16 @@
           "group": "Maps"
         },
         "Mapbox Labels": {
-          "template": "Mapbox Label",
+          "template": "Mapbox Labels",
           "display": true,
           "group": "Maps"
         },
-        "Here": {
-          "template": "Here Imagery",
+        "HERE Imagery": {
+          "template": "HERE Imagery",
           "group": "Maps"
         },
-        "Here Hybrid": {
-          "template": "Here Hybrid",
+        "HERE Hybrid": {
+          "template": "HERE Hybrid",
           "group": "Maps"
         },
         "World Cities": {
