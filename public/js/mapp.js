@@ -137,22 +137,7 @@
         stroke-width=${o.strokeWidth||1}>`),n.appendChild(e.utils.html.node`
     <div
       class="label switch"
-      onclick=${e=>{e.stopPropagation(),e.target.classList.toggle("disabled"),e.target.classList.contains("disabled")?(t.filter.current[r.field].ni||(t.filter.current[r.field].ni=[]),t.filter.current[r.field].ni.push(a[0])):(t.filter.current[r.field].ni.splice(t.filter.current[r.field].ni.indexOf(a[0]),1),t.filter.current[r.field].ni.length||delete t.filter.current[r.field].ni),t.reload()}}>${a[1].label||a[0]}`)})),r.other&&(t.style.default.svg||t.style.default.type?n.appendChild(e.utils.svg_symbols(Object.assign({legend:!0},t.style.default))):void 0===t.style.default.fillOpacity?n.appendChild(e.utils.svg.node`
-      <svg height=24 width=24>
-      <line
-        x1=0 y1=12 x2=24 y2=12
-        stroke=${t.style.default.strokeColor}
-        stroke-width=${t.style.default.strokeWidth||1}>`):n.appendChild(e.utils.svg.node`
-      <svg height=24 width=24>
-      <rect
-        width=24 height=24
-        fill=${t.style.default.fillColor||"#FFF"}
-        fill-opacity=${t.style.default.fillOpacity}
-        stroke=${t.style.default.strokeColor}
-        stroke-width=${t.style.default.strokeWidth||1}>`),n.appendChild(e.utils.html.node`
-    <div
-      class="label switch"
-      onclick=${e=>{e.stopPropagation(),e.target.classList.toggle("disabled"),e.target.classList.contains("disabled")?t.filter.current[r.field].in=Object.keys(r.cat):delete t.filter.current[r.field].in,t.reload()}}>${e.language.layer_style_other}`)),t.style.cluster&&(n.appendChild(e.utils.svg_symbols(Object.assign({legend:!0,cluster:!0},t.style.cluster))),n.appendChild(e.utils.html.node`
+      onclick=${e=>{e.stopPropagation(),e.target.classList.toggle("disabled"),e.target.classList.contains("disabled")?(t.filter.current[r.field].ni||(t.filter.current[r.field].ni=[]),t.filter.current[r.field].ni.push(a[0])):(t.filter.current[r.field].ni.splice(t.filter.current[r.field].ni.indexOf(a[0]),1),t.filter.current[r.field].ni.length||delete t.filter.current[r.field].ni),t.reload()}}>${a[1].label||a[0]}`)})),t.style.cluster&&(n.appendChild(e.utils.svg_symbols(Object.assign({legend:!0,cluster:!0},t.style.cluster))),n.appendChild(e.utils.html.node`
     <div class="label" style="alignment-baseline:central;">${e.language.layer_style_cluster}`)),n},br=e=>t=>{const r=e.utils.html.node`<div class="legend grid">`;return t.style.theme.cat_arr.forEach((n=>{const a=Object.assign({},t.style.default,n.style&&n.style.marker||n.style||n);a.svg||a.type?r.appendChild(e.utils.svg_symbols(Object.assign({legend:!0},a))):void 0===a.fillOpacity?r.appendChild(e.utils.svg.node`
       <svg height=24 width=24>
       <line
