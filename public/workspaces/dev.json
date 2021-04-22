@@ -83,6 +83,10 @@
       "template": "SELECT count(1) from dev.uk_glx_geodata_retail_place_working where rp_type = ANY(%{types})",
       "dbs": "DEV"
     },
+    "array_any_id": {
+      "template": "SELECT count(1) from dev.scratch where id = ANY(%{ids})",
+      "dbs": "DEV"
+    },
     "json_input_query": {
       "template": "SELECT mapp.array_json_test(%{body}::json)",
       "dbs": "MAPP"

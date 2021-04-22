@@ -109,7 +109,9 @@ module.exports = async (req, res) => {
       var val = req.params[param] || ""
 
       try {
-        val = JSON.parse(val)
+
+        // Try to parse val if the string begins and ends with either [] or {}
+        val = /^[\[\{].*[\]\}]$/.test(val) && JSON.parse(val) || val
       } catch(err) {
         console.error(err)
       }
