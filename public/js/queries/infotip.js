@@ -11,6 +11,7 @@ module.exports = {
     return `
     SELECT \${field} AS label
     FROM \${table}
+    WHERE true \${filter}
     ORDER BY ST_Point(${coords[0]},${coords[1]}) <#> \${geom} LIMIT 1`
 
   }
