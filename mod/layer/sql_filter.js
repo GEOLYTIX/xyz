@@ -41,20 +41,20 @@ module.exports = function sqlfilter(filter, params) {
     return `(${filter
   
         // Map filter in array with OR conjuction
-        .map((filter) => mapFilterEntries(filter, " OR "))
-        .join(" OR ")})`;
+        .map((filter) => mapFilterEntries(filter))
+        .join(' OR ')})`;
 
   // Filter in an object will be conditional AND
-  return mapFilterEntries(filter, " AND ");
+  return mapFilterEntries(filter);
 }
 
-function mapFilterEntries(filter, conjunction) {
+function mapFilterEntries(filter) {
   return `(${Object.entries(filter)
   
       // Map filter entries
       .map((entry) => {
         // Array entry values represent conditional OR
-        if (entry[1].length) return sqlfilter(entry[1], " OR ");
+        if (entry[1].length) return sqlfilter(entry[1]);
   
         // Get filter type from first key of the entry value
         const filterType = Object.keys(entry[1])[0];
@@ -80,5 +80,5 @@ function mapFilterEntries(filter, conjunction) {
       .filter(f=>typeof f !== 'undefined')
   
       // Join filter with conjunction
-      .join(conjunction)})`;
+      .join(' AND ')})`;
 }
