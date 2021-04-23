@@ -24,10 +24,9 @@ module.exports = async (req, res) => {
   const SQLparams = []
 
   const filter =
-    ` ${req.params.filter && `AND ${sql_filter(JSON.parse(req.params.filter), SQLparams)}` || ''}
-    ${roles && Object.values(roles).some(r => !!r)
-    && `AND ${sql_filter(Object.values(roles).filter(r => !!r), SQLparams)}`
-    || ''}`
+    `${req.params.filter && ` AND ${sql_filter(JSON.parse(req.params.filter), SQLparams)}` || ''}`
+    +`${roles && Object.values(roles).some(r => !!r)
+    && ` AND ${sql_filter(Object.values(roles).filter(r => !!r), SQLparams)}` || ''}`
 
   if (!filter && layer.mvt_cache) {
 
