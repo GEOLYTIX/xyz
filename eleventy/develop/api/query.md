@@ -54,12 +54,29 @@ Parameter keys defined in curly braces prefixed with a percentage sign, eg. `%{i
   // Remove template brackets from matched param.
   const param = matched.replace(/\%|\{|\}/g, "")
 
+  var val = req.params[param] || ""
+
+  try {
+
+    // Try to parse val if the string begins and ends with either [] or {}
+    val = /^[\[\{].*[\]\}]$/.test(val) && JSON.parse(val) || val
+
+  } catch(err) {
+    console.error(err)
+  }
+
   // Push value from request params object into params array.
-  params.push(req.params[param] || "")
+  params.push(req.params[val] || "")
   
   return `\$${params.length}`
 })
 ```
+
+### Parameter parsing
+In order to provide URL parameter as either array or object we check whether it is possible to parse the parameter value prior to pushing the parsed value into the SQL params array. The string must begin and end with brackets in order for the parsing to be attempted.
+
+`api/query/array_any_id?ids=[10,3]` will provide an array of integer to the sample query array_any_id (`SELECT count(1) from dev.scratch where id = ANY(%{ids})`).
+
 
 ## Template Modules
 

@@ -377,7 +377,7 @@ module.exports = async (req, res) => {
     properties: {
       count: parseInt(row.count),
       size: parseInt(row.size),
-      cat: row.cat.length === 1 ? row.cat[0] : null,
+      cat: row.cat.length === 1 && row.cat[0] || layer.cat_array && row.cat || null,
       label: row.label
     }
   })))

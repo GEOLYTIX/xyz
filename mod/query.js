@@ -106,8 +106,18 @@ module.exports = async (req, res) => {
       // Remove template brackets from matched param.
       const param = matched.replace(/\%|\{|\}/g, "")
 
+      var val = req.params[param] || ""
+
+      try {
+
+        // Try to parse val if the string begins and ends with either [] or {}
+        val = /^[\[\{].*[\]\}]$/.test(val) && JSON.parse(val) || val
+      } catch(err) {
+        console.error(err)
+      }
+
       // Push value from request params object into params array.
-      SQLparams.push(req.params[param] || "")
+      SQLparams.push(val)
   
       return `\$${SQLparams.length}`
     })
