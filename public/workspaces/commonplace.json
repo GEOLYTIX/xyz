@@ -1,0 +1,186 @@
+{
+  "locales": {
+    "UK": {
+      "showScaleBar": true,
+      "layers": {
+        "Mapbox Base": {
+          "canEdit": [],
+          "canView": [
+            "*"
+          ],
+          "canSwitch": [],
+          "canReorder": [],
+          "format": "mbtiles",
+          "mbStyle": "mapbox://styles/andypols/ckm0tvy2p3knn17lh50xc87ly",
+          "accessToken": "pk.eyJ1IjoiYW5keXBvbHMiLCJhIjoiY2ttMHQ3cnhqMG8yODJucjNyejRvaGVvaSJ9.RBSYVzv5pxlAgCCCjB9xoQ",
+          "display": true
+        },
+        "Contributions": {
+          "canView": [
+            "*"
+          ],
+          "canEdit": [
+            "editMapLayers"
+          ],
+          "canSwitch": [
+            "switchMapLayers"
+          ],
+          "canReorder": [
+            "reorderMapLayers"
+          ],
+          "format": "cluster",
+          "dbs": "XYZ",
+          "table": "contributions",
+          "srid": "4326",
+          "geom": "geom",
+          "qID": "id",
+          "cluster_label": "id",
+          "cluster_kmeans": 0.9,
+          "cluster_dbscan": 0.01,
+          "display": true,
+          "style": {
+            "default": {
+              "type": "markerColor",
+              "colorMarker": "#777",
+              "colorDot": "#777",
+              "scale": 2
+            },
+            "cluster": {
+              "type": "clusterSummary"
+            },
+            "label": {
+              "display": true,
+              "count": true,
+              "font": "bold 17px sans-serif",
+              "title": "Cluster count"
+            },
+            "theme": {
+              "type": "categorized",
+              "field": "sentiment",
+              "aggregate": "avg",
+              "cat": {
+                "0": {
+                  "style": {
+                    "strokeColor": "#E80030",
+                    "colorMarker": "#E80030"
+                  }
+                },
+                "25": {
+                  "style": {
+                    "strokeColor": "#FF7700",
+                    "colorMarker": "#FF7700"
+                  }
+                },
+                "50": {
+                  "style": {
+                    "strokeColor": "#FEB000",
+                    "colorMarker": "#FEB000"
+                  }
+                },
+                "75": {
+                  "style": {
+                    "strokeColor": "#89C92D",
+                    "colorMarker": "#89C92D"
+                  }
+                },
+                "100": {
+                  "style": {
+                    "strokeColor": "#00AC5D",
+                    "colorMarker": "#00AC5D"
+                  }
+                }
+              }
+            }
+          },
+          "edit": {
+            "point": true
+          },
+          "infoj": [
+            {
+              "title": "ID",
+              "field": "contribution_id"
+            }
+          ]
+        },
+        "Custom": {
+          "canView": [
+            "*"
+          ],
+          "canEdit": [
+            "editMapLayers"
+          ],
+          "canSwitch": [
+            "switchMapLayers"
+          ],
+          "canReorder": [
+            "reorderMapLayers"
+          ],
+          "format": "mvt",
+          "dbs": "XYZ",
+          "table": "custom_layers",
+          "srid": "3857",
+          "geom": "geom_3857",
+          "qID": "id",
+          "display": false,
+          "edit": {},
+          "infoj": []
+        },
+        "3d View": {
+          "canView": [
+            "*"
+          ],
+          "canEdit": [
+            "editMapLayers"
+          ],
+          "canSwitch": [
+            "switchMapLayers"
+          ],
+          "canReorder": [
+            "reorderMapLayers"
+          ],
+          "format": "mvt",
+          "dbs": "XYZ",
+          "table": "image_3d",
+          "srid": "4326",
+          "geom": "geom_3857",
+          "qID": "id",
+          "display": false,
+          "edit": {},
+          "infoj": [
+            {
+              "title": "URL",
+              "field": "url"
+            },
+            {
+              "title": "hotspots",
+              "field": "hotspots"
+            }
+          ]
+        },
+        "Postal district": {
+          "canView": [
+            "*"
+          ],
+          "canEdit": [
+            "editMapLayers"
+          ],
+          "canSwitch": [
+            "switchMapLayers"
+          ],
+          "canReorder": [
+            "reorderMapLayers"
+          ],
+          "format": "mvt",
+          "dbs": "XYZ",
+          "table": "data_delivery.uk_glx_open_postal_district",
+          "srid": "4326",
+          "geom": "geom_4326",
+          "qID": "id",
+          "display": false,
+          "edit": {},
+          "infoj": []
+        }
+      }
+    }
+  }
+}
