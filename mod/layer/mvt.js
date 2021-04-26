@@ -91,14 +91,16 @@ module.exports = async (req, res) => {
 
     if (rows instanceof Error) console.log('failed to query mvt cache')
 
-    if(!rows.length) rows = await dbs[layer.dbs](`
+    if(!rows.length) {
+      rows = await dbs[layer.dbs](`
         WITH n AS (
           INSERT INTO ${layer.mvt_cache}
           ${tile} ON CONFLICT (z, x, y) DO NOTHING RETURNING mvt
         ) SELECT mvt FROM n;
       `)
 
-    if (rows instanceof Error) console.log('failed to create mvt cache')
+      if (rows instanceof Error) console.log('failed to cache mvt')
+    }
     
     if (rows.length === 1)  return res.send(rows[0].mvt) // If found return the cached MVT to client.
 
