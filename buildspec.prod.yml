@@ -1,0 +1,35 @@
+version: 0.2
+
+env:
+  secrets-manager:
+    DBS_XYZ_database: "acorn/geolytix:databaseName"
+    DBS_XYZ_username: "acorn/geolytix:databaseUsername"
+    DBS_XYZ_password: "acorn/geolytix:databasePassword"
+    DBS_XYZ_host: "acorn/geolytix:databaseHost"
+    DBS_XYZ_port: "acorn/geolytix:databasePort"
+
+phases:
+  pre_build:
+    commands:
+      - echo Logging in to Amazon ECR...
+      - $(aws ecr get-login --region $AWS_DEFAULT_REGION --no-include-email)
+      - IMAGE_TAG=$CODEBUILD_RESOLVED_SOURCE_VERSION-$ENVIRONMENT
+      - CI_BUILD_ID=$CODEBUILD_BUILD_ID
+  build:
+    commands:
+      - echo Build started on `date`
+      - echo Building the Docker image...
+      - echo Generating .env file
+      - echo "WORKSPACE=http://localhost:3000/workspaces/commonplace.json" > .env
+      - echo "DBS_XYZ=${DBS_XYZ_database}://${DBS_XYZ_username}:${DBS_XYZ_password}@${DBS_XYZ_host}:${DBS_XYZ_port}/${DBS_XYZ_database}" >> .env
+      - docker build -t $ECR_REPOSITORY_URI:$IMAGE_TAG .
+  post_build:
+    commands:
+      - echo Build completed on `date`
+      - echo Pushing the Docker image...
+      - docker push $ECR_REPOSITORY_URI:$IMAGE_TAG
+      - echo Deploying image to ECS cluster
+      - printf '[{"name":"defaultContainer","imageUri":"%s"}]' $ECR_REPOSITORY_URI:$IMAGE_TAG  > imageDetail.json
+artifacts:
+  files:
+    - imageDetail.json
