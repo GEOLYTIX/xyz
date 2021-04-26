@@ -90,17 +90,14 @@
     "geolytix_projects": {
       "src": "cloudfront:${CDN}/blog/layers/geolytix_projects.json"
     },
-    "retail points": {
-      "src": "cloudfront:${CDN}/blog/layers/retail_points.json"
+    "uk_grocery": {
+      "src": "cloudfront:${CDN}/templates/uk/grocery.json"
     },
-    "retail points - layer table": {
-      "template": "SELECT id, store_name, town FROM geodata.uk_glx_open_retail_points WHERE true ${viewport} ${filter} FETCH FIRST 99 ROW ONLY;"
+    "uk_grocery table": {
+      "template": "SELECT id as id, store_name, retailer, fascia, size_sqft FROM geodata.uk_glx_open_retail_points WHERE true ${viewport} ${filter} limit 99;"
     },
     "blackwells": {
       "src": "cloudfront:${CDN}/blog/layers/blackwells.json"
-    },
-    "lush": {
-      "src": "cloudfront:${CDN}/blog/layers/lush.json"
     },
     "mumbai_retail_venues": {
       "src": "cloudfront:${CDN}/blog/layers/mumbai_retail_venues.json"
@@ -210,7 +207,7 @@
           "group": "Maps"
         },
         "Retail Points": {
-          "template": "retail points"
+          "template": "uk_grocery"
         },
         "Blackwells": {
           "template": "blackwells"
@@ -256,7 +253,12 @@
         },
         "Lush Locations": {
           "display": true,
-          "template": "lush"
+          "template": "lush",
+          "format": "mvt",
+          "geom": "geom_3857_1000m",
+          "srid": "3857",
+          "dbs": "BLOG",
+          "table": "blog.global_glx_open_locations_lush"
         }
       }
     },
