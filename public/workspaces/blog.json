@@ -114,6 +114,9 @@
     "walking_america": {
       "src": "cloudfront:${CDN}/blog/layers/walking_america.json"
     },
+    "state_query": {
+      "template": "SELECT CONCAT(stusps, ' - ', statename) AS label FROM geodata.usa_glx_geodata_admin_state WHERE id = %{id}"
+    },
     "usa_landmarks": {
       "src": "cloudfront:${CDN}/blog/layers/usa_landmarks.json"
     },
@@ -321,7 +324,10 @@
           "display": true
         },
         "Walking America": {
-          "template": "walking_america"
+          "template": "walking_america",
+          "hover": {
+            "query": "state_query"
+          }
         },
         "Landmarks": {
           "template": "usa_landmarks"
