@@ -16,4 +16,9 @@ Parameter substituion in query templates. [#391](https://github.com/GEOLYTIX/xyz
 
 [Update SQLFilter module.](https://geolytix.github.io/xyz/docs/develop/filter/)
 
+Refactored mvt endpoint queries [#394](https://github.com/GEOLYTIX/xyz/issues/394)
+
+Added maxPoints parameter on here isolines.
+
 Different geoms for different zoom levels. [#310](https://github.com/GEOLYTIX/xyz/issues/310)
+
