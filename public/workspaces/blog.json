@@ -215,8 +215,7 @@
           "dbs": "BLOG",
           "qID": "id",
           "table": "blog.vw_leeds_glx_geodata_seamless_combined",
-          "infoj": [
-            {
+          "infoj": [{
               "type": "key"
             },
             {
@@ -336,13 +335,13 @@
     },
     "London": {
       "bounds": {
-        "north": 51.686,
-        "east": 0.236,
-        "south": 51.28,
-        "west": -0.489
+        "north": 52.686,
+        "east": 1.236,
+        "south": 50.28,
+        "west": -1.489
       },
       "maskBounds": true,
-      "minZoom": 12,
+      "minZoom": 10,
       "maxZoom": 18,
       "view": {
         "lat": 51.5073,
@@ -363,7 +362,125 @@
           "dbs": "MAPP",
           "table": "mapp.uk_glx_london_football_boroughs_blog",
           "geom": "geom_3857",
-          "srid": "3857"
+          "srid": "3857",
+          "style": {
+            "theme": {
+              "field": "team",
+              "type": "categorized",
+              "other": true,
+              "cat": {
+                "Arsenal": {
+                  "fillColor": "#FF0000",
+                  "strokeColor": "#fff",
+                  "strokeWidth": 2,
+                  "fillOpacity": 0.5
+                },
+                "Arsenal_Chelsea": {
+                  "fillColor": "#85234B",
+                  "strokeColor": "#0A4595",
+                  "strokeWidth": 2,
+                  "fillOpacity": 0.5
+                },
+                "Arsenal_Spurs": {
+                  "fillColor": "#FB7B7B",
+                  "strokeColor": "#0F204B",
+                  "strokeWidth": 2,
+                  "fillOpacity": 0.5
+                },
+                "Chelsea": {
+                  "fillColor": "#0A4595",
+                  "strokeColor": "#fff",
+                  "strokeWidth": 2,
+                  "fillOpacity": 0.5
+                },
+                "Spurs": {
+                  "fillColor": "#F6F6F6",
+                  "strokeColor": "#0F204B",
+                  "strokeWidth": 2,
+                  "fillOpacity": 0.5
+                },
+                "West Ham": {
+                  "fillColor": "#540D1A",
+                  "strokeColor": "#2CAADE",
+                  "strokeWidth": 2,
+                  "fillOpacity": 0.5
+                },
+                "Crystal Palace": {
+                  "fillColor": "#D80081",
+                  "strokeColor": "#0055A5",
+                  "strokeWidth": 2,
+                  "fillOpacity": 0.5
+                }
+              }
+            }
+          }
+        },
+        "Logos": {
+          "display": true,
+          "format": "geojson",
+          "dbs": "MAPP",
+          "table": "mapp.uk_glx_london_football_boroughs_blog",
+          "geom": "geom_p_4326",
+          "srid": "4326",
+          "qID": "id",
+          "style": {
+            "theme": {
+              "field": "team",
+              "type": "categorized",
+              "other": true,
+              "cat": {
+                "Arsenal": {
+                  "marker": {
+                    "svg": "https://geolytix.github.io/public/football/arsenal.svg",
+                    "scale": 0.1
+                  },
+                  "zIndex": 999
+                },
+                "Arsenal_Chelsea": {
+                  "marker": {
+                    "svg": "https://geolytix.github.io/public/football/arsenal_chelsea.svg",
+                    "scale": 0.1
+                  },
+                  "zIndex": 30
+                },
+                "Arsenal_Spurs": {
+                  "marker": {
+                    "svg": "https://geolytix.github.io/public/football/arsenal_spurs.svg",
+                    "scale": 0.1
+                  },
+                  "zIndex": 30
+                },
+                "Chelsea": {
+                  "marker": {
+                    "svg": "https://geolytix.github.io/public/football/chelsea.svg",
+                    "scale": 0.2
+                  },
+                  "zIndex": 30
+                },
+                "Spurs": {
+                  "marker": {
+                    "svg": "https://geolytix.github.io/public/football/spurs.svg",
+                    "scale": 0.1
+                  },
+                  "zIndex": 30
+                },
+                "West Ham": {
+                  "marker": {
+                    "svg": "https://geolytix.github.io/public/football/west_ham.svg",
+                    "scale": 0.1
+                  },
+                  "zIndex": 30
+                },
+                "Crystal Palace": {
+                  "marker": {
+                    "svg": "https://geolytix.github.io/public/football/crystal_palace.svg",
+                    "scale": 0.7
+                  },
+                  "zIndex": 30
+                }
+              }
+            }
+          }
         }
       }
     }
