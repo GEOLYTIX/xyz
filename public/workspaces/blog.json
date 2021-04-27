@@ -4,7 +4,6 @@
       "src": "file:/views/blog.html"
     },
     "Mapbox Base": {
-      "group": "Base Maps",
       "format": "mbtiles",
       "mbStyle": "mapbox://styles/dbauszus/ciozrimi3002bdsm8bjtn2v1y",
       "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2p5Nmt3bm4wMGhzeTNjbGVxOGZyZG5qZCJ9.9naYTbockHur5X8WO3nsjQ",
@@ -14,7 +13,6 @@
       }
     },
     "Mapbox Colour": {
-      "group": "Base Maps",
       "display": true,
       "format": "mbtiles",
       "mbStyle": "mapbox://styles/dbauszus/ck440h6990nii1co520go20i2",
@@ -25,7 +23,6 @@
       }
     },
     "Mapbox Labels": {
-      "group": "Base Maps",
       "format": "mbtiles",
       "mbStyle": "mapbox://styles/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z",
       "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2p5Nmt3bm4wMGhzeTNjbGVxOGZyZG5qZCJ9.9naYTbockHur5X8WO3nsjQ",
@@ -35,7 +32,6 @@
       }
     },
     "HERE Imagery": {
-      "group": "Base Maps",
       "format": "tiles",
       "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?{HERE}",
       "proxy": true,
@@ -45,7 +41,6 @@
       }
     },
     "HERE Hybrid": {
-      "group": "Base Maps",
       "format": "tiles",
       "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?{HERE}",
       "proxy": true,
@@ -336,6 +331,39 @@
         },
         "Route": {
           "template": "usa_route"
+        }
+      }
+    },
+    "London": {
+      "bounds": {
+        "north": 51.686,
+        "east": 0.236,
+        "south": 51.28,
+        "west": -0.489
+      },
+      "maskBounds": true,
+      "minZoom": 12,
+      "maxZoom": 18,
+      "view": {
+        "lat": 51.5073,
+        "lng": -0.12755
+      },
+      "layers": {
+        "Mapbox": {
+          "template": "Mapbox Base",
+          "display": true
+        },
+        "Mapbox Labels": {
+          "template": "Mapbox Labels",
+          "display": true
+        },
+        "Boroughs": {
+          "display": true,
+          "format": "mvt",
+          "dbs": "MAPP",
+          "table": "mapp.uk_glx_london_football_boroughs_blog",
+          "geom": "geom_3857",
+          "srid": "3857"
         }
       }
     }
