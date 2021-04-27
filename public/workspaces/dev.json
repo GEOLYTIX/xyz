@@ -170,6 +170,22 @@
         "Mapbox Label": {
           "template": "Mapbox Label"
         },
+        "ZoomGeom": {
+          "format": "mvt",
+          "geom": "geom_3857_5m",
+          "srid": "3857",
+          "dbs": "MAPP",
+          "qID": "id",
+          "geoms": {
+            "7": "geom_3857_100m",
+            "8": "geom_3857_50m",
+            "9": "geom_3857_50m",
+            "10": "geom_3857_5m",
+            "11": "geom_3857_5m",
+            "12": "geom_3857"
+          },
+          "table": "geodata.uk_glx_geodata_seamless_shopper_town"
+        },
         "Grid": {
           "format": "grid",
           "dbs": "MAPP",
