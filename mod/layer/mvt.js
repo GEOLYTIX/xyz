@@ -36,6 +36,14 @@ module.exports = async (req, res) => {
   // Assign mvt_fields from single theme
   layer.style.theme && mvt_fields.push(layer.style.theme && getField(layer.style.theme))
 
+  const geoms = Object.keys(layer.geoms)
+
+  var geom = geoms && layer.geoms[z] || layer.geom
+
+  var geom = geoms && z < parseInt(geoms[0]) && Object.values(layer.geoms)[0] || geom
+  
+  var geom = geoms && z > parseInt(geoms[geoms.length -1]) && Object.values(layer.geoms)[geoms.length -1]  || geom
+
   const tile = `
     SELECT
       ${z},
@@ -55,7 +63,7 @@ module.exports = async (req, res) => {
         ${mvt_fields.length && mvt_fields.toString() + ',' || ''}
         ST_AsMVTGeom(
           ${layer.srid !== '3857' && `ST_Transform(` ||''}
-            ${layer.geom},
+            ${geom},
           ${layer.srid !== '3857' && `${layer.srid}), ST_Transform(` ||''}
             ST_MakeEnvelope(
               ${-m + (x * r)},
@@ -81,7 +89,7 @@ module.exports = async (req, res) => {
               3857
             ),
           ${layer.srid !== '3857' && `${layer.srid}),` ||''}
-          ${layer.geom}
+          ${geom}
         ) ${filter}
       ) tile`
 
