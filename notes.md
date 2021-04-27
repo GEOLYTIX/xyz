@@ -15,3 +15,7 @@ Skip and remove entry.val if entry displayValue is 'null'.
 Parameter substituion in query templates. [#391](https://github.com/GEOLYTIX/xyz/issues/393)
 
 [Update SQLFilter module.](https://geolytix.github.io/xyz/docs/develop/filter/)
+
+Refactored mvt endpoint queries [#394](https://github.com/GEOLYTIX/xyz/issues/394)
+
+Added maxPoints parameter on here isolines.
