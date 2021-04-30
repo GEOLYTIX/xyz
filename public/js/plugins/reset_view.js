@@ -14,7 +14,7 @@ document.dispatchEvent(new CustomEvent('reset_view', {
         }}>
         <a class="link-with-img">
           <div
-            class="xyz-icon icon-restore primary-colour-filter"
+            class="xyz-icon icon-restore"
             style="width: 30px; height: 30px; margin-left: 10px;">`
 
       document
