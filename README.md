@@ -92,6 +92,38 @@ The domain and service layer may secure proxy access for services provided by Go
 
 [a-color-picker](https://narsenico.github.io/a-color-picker/) - a color picker for web app.
 
+## How to run the XYZ container locally via SSH Tunnel
+
+1. Run the docker command below if the XYZ docker image have not been built.
+
+```bash
+# Build XYZ docker image
+
+docker build -t <image_name_repo_name>:<tag> . --network=host
+
+# Push the XYZ image to docker repo
+
+docker push <image_name_repo_name>:<tag>
+```
+
+2. Create an SSH tunnel to connect to the new RDS database via Bastion Host.
+
+```bash
+# Unpopulated command
+
+ssh -L [LOCAL_IP:]LOCAL_PORT:DESTINATION:DESTINATION_PORT [USER@]SSH_SERVER -i [BASTION_HOST_PEM_CER_FILE]
+
+# Example
+ssh -L 0.0.0.0:5432:postgres-rds-private-eu-west-2.ct36hfcslmg5.eu-west-2.rds.amazonaws.com:5432 ubuntu@ec2-3-8-127-21.eu-west-2.compute.amazonaws.com -i ./commonplace-bastion.cer 
+```
+
+3. Run the XYZ container via SSH tunnel. NOTE: Please run the docker command as root.
+
+```bash
+# Run docker container with --network=host flag
+
+sudo docker run --network=host -p 3000:3000 --rm -it <image_name_repo_name>:<tag>
+```
 
 ## License 
 
