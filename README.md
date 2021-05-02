@@ -94,6 +94,8 @@ The domain and service layer may secure proxy access for services provided by Go
 
 ## How to run the XYZ container locally via SSH Tunnel
 
+THe purpose of this is to provide the ability to run the XYZ docker container locally via an SSH tunnel and it'll be able to connect to the new RDS database.
+
 1. Run the docker command below if the XYZ docker image have not been built.
 
 ```bash
