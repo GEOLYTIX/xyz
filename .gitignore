@@ -37,3 +37,4 @@ public/views/open_report.html
 public/views/other_report.html
 public/views/planned_report.html
 public/views/mydentist_report.html
+public/js/plugins/catalist_import.js
