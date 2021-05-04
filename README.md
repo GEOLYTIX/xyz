@@ -99,13 +99,23 @@ THe purpose of this is to provide the ability to run the XYZ docker container lo
 1. Run the docker command below if the XYZ docker image have not been built.
 
 ```bash
+# Set vars for AWS ECR repository 
+AWS_ACCOUNT_ID=695431195173
+AWS_REGION=eu-west-2 
+AWS_ECR_REPO=map
+AWS_ECR_URI=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${AWS_ECR_REPO}:latest
+
 # Build XYZ docker image
 
-docker build -t <image_name_repo_name>:<tag> . --network=host
+docker build -t ${AWS_ECR_URI} . --network=host
+
+# Login to ECR
+
+aws ecr get-login-password --region ${AWS_REGION} | docker login --username AWS --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com
 
 # Push the XYZ image to docker repo
 
-docker push <image_name_repo_name>:<tag>
+docker push ${AWS_ECR_URI}
 ```
 
 2. Create an SSH tunnel to connect to the new RDS database via Bastion Host.
