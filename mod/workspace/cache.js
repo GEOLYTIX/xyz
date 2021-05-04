@@ -24,9 +24,14 @@ let workspace = null;
 
 const logger = require('../logger');
 
-module.exports = async () => {
+const { MongoClient } = require('mongodb');
 
-  let timestamp = Date.now()
+const uri = process.env.MONGO_URL;
+const mongoClient = new MongoClient(uri);
+mongoClient.connect();
+
+module.exports = async (req) => {
+  let timestamp = Date.now();
 
   // If the workspace is empty or older than 1hr it needs to be cached.
   if (
@@ -43,12 +48,23 @@ module.exports = async () => {
     }
 
     if (process.env.WORKSPACE === 'dynamic') {
-      const url = process.env.WORKSPACE_ENDPOINT.replace(
-        '{project}',
-        req.query.project
-      ).replace('{slug}', req.query.slug);
-      workspace = await getFrom[url.split(':')[0]](url);
-      workspace = JSON.parse(workspace);
+      if (!req) return
+      const Page = mongoClient.db('acorn').collection('pages');
+      const Version = mongoClient.db('acorn').collection('versions');
+      const proposalPage = await Page.findOne({
+        slug: req.query.slug,
+        type: 'map',
+        projectId: req.query.project,
+        active: true,
+      });
+      console.log(req.query.slug);
+      if (!proposalPage) return;
+      // get the most recent version id
+      const contentVersionId = proposalPage?.content[lang][0];
+      if (!contentVersionId) return;
+      const proposalContent = await Version.findById(contentVersionId);
+
+      workspace = JSON.parse(proposalContent.geolytixWorkspace);
     } else {
       workspace =
         (process.env.WORKSPACE &&
