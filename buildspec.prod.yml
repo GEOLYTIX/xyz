@@ -7,6 +7,7 @@ env:
     DBS_XYZ_password: "acorn/geolytix:databasePassword"
     DBS_XYZ_host: "acorn/geolytix:databaseHost"
     DBS_XYZ_port: "acorn/geolytix:databasePort"
+    MONGO_URL: "acorn/geolytix:MONGO_URL"
 
 phases:
   pre_build:
@@ -20,8 +21,9 @@ phases:
       - echo Build started on `date`
       - echo Building the Docker image...
       - echo Generating .env file
-      - echo "WORKSPACE=http://localhost:3000/workspaces/commonplace.json" > .env
+      - echo "WORKSPACE=dynamic" > .env
       - echo "DBS_XYZ=${DBS_XYZ_database}://${DBS_XYZ_username}:${DBS_XYZ_password}@${DBS_XYZ_host}:${DBS_XYZ_port}/${DBS_XYZ_database}" >> .env
+      - echo "MONGO_URL=${MONGO_URL}" >> .env
       - docker build -t $ECR_REPOSITORY_URI:$IMAGE_TAG .
   post_build:
     commands:
