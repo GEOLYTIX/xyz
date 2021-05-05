@@ -24,10 +24,10 @@ let workspace = null;
 
 const logger = require('../logger');
 
-const { MongoClient } = require('mongodb');
+const { MongoClient, ObjectId } = require('mongodb');
 
 const uri = process.env.MONGO_URL;
-const mongoClient = new MongoClient(uri);
+const mongoClient = new MongoClient(uri, { useUnifiedTopology: true });
 mongoClient.connect();
 
 module.exports = async (req) => {
@@ -48,23 +48,24 @@ module.exports = async (req) => {
     }
 
     if (process.env.WORKSPACE === 'dynamic') {
-      if (!req) return
+      if (!req) return;
+      const { slug, project, lang } = req.query;
       const Page = mongoClient.db('acorn').collection('pages');
       const Version = mongoClient.db('acorn').collection('versions');
       const proposalPage = await Page.findOne({
-        slug: req.query.slug,
+        slug,
         type: 'map',
-        projectId: req.query.project,
+        projectId: new ObjectId(project),
         active: true,
       });
-      console.log(req.query.slug);
       if (!proposalPage) return;
       // get the most recent version id
       const contentVersionId = proposalPage?.content[lang][0];
       if (!contentVersionId) return;
-      const proposalContent = await Version.findById(contentVersionId);
-
-      workspace = JSON.parse(proposalContent.geolytixWorkspace);
+      const proposalContent = await Version.findOne({
+        _id: ObjectId(contentVersionId),
+      });
+      workspace = proposalContent.content.geolytixWorkspace;
     } else {
       workspace =
         (process.env.WORKSPACE &&
