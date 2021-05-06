@@ -72,7 +72,7 @@
     <circle cx=15 cy=15 r=10
       stroke="${e.strokeColor||"#333"}"
       stroke-width="${e.strokeWidth||1}"
-      fill="${e.fillColor||"none"}"></circle>`;return`data:image/svg+xml,${encodeURIComponent(B.serializeToString(t))}`}function K(e){if(!e.properties)return null;const{count:t,cat:o}=e.properties;let r;r=t<=20?10:t<=100?15:t<=500?18:t<=1e3?20:25;const n=t=>e.theme.cat[t].style.strokeColor,a=e=>100*o.filter((t=>t===e)).length/o.length,i=e=>{const t=a(e),o=100-t;return`${t.toFixed(2)} ${o.toFixed(2)}`},l=t=>100-Object.keys(e.theme.cat).reduce(((e,o)=>e+(+o<t?+a(+o):0)),0)+25,s=R.node`
+      fill="${e.fillColor||"none"}"></circle>`;return`data:image/svg+xml,${encodeURIComponent(B.serializeToString(t))}`}function K(e){if(!e.properties)return null;const{count:t,cat:o}=e.properties;let r;r=t<=20?10:t<=100?15:t<=500?18:t<=1e3?20:25;const n=t=>e.theme.cat[t].style.strokeColor,a=e=>o?100*o.filter((t=>t===e)).length/o.length:0,i=e=>{const t=a(e),o=100-t;return`${t.toFixed(2)} ${o.toFixed(2)}`},l=t=>100-Object.keys(e.theme.cat).reduce(((e,o)=>e+(+o<t?+a(+o):0)),0)+25,s=R.node`
     <svg width="${r}" height="${r}" viewBox="0 0 42 42" aria-labelledby="beers-title beers-desc" role="img">
       <circle cx="21" cy="21" r="15.91549430918954" fill="#f6f6f4" role="presentation"></circle>
       <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#d2d3d4" stroke-width="5" role="presentation"></circle>
