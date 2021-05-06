@@ -121,6 +121,9 @@ input[type=range]::-moz-range-thumb {
 .icon-settings {
   background-image: url("../icons/icon-settings.svg"); }
 
+.icon-circle-dot {
+  background-image: url("../icons/icon-circle-dot.svg"); }
+
 .icon-add-chart {
   background-image: url("../icons/icon-add-chart.svg"); }
 
