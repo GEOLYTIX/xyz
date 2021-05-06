@@ -357,6 +357,11 @@ window.onload = () => {
         <div
           class="${`xyz-icon ${xyz.user && 'icon-logout red-filter' || 'icon-lock-open primary-colour-filter'}`}">`)
 
+
+    // Append spacer for tableview
+    btnColumn.appendChild(xyz.utils.html.node`
+      <div style="height: 60px;">`)
+
   }
 
 }

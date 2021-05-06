@@ -72,6 +72,8 @@ html {
     grid-row: 1/4;
     background-color: #fff;
     opacity: 0.8;
+    display: grid;
+    width: 50px;
   }
 
   #ctrls {
