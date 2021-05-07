@@ -257,6 +257,9 @@ window.onload = () => {
           e.target.classList.toggle('enabled')
           document.body.classList.toggle('fullscreen')
           xyz.map.updateSize()
+          Object.values(xyz.layers.list).forEach(layer => {
+            layer.mbMap?.resize()
+          })
         }}>
         <div class="xyz-icon icon-map">`)      
 
