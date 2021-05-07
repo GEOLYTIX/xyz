@@ -32,10 +32,6 @@ document.dispatchEvent(new CustomEvent('practice_catchment', {
         <div class="val inline">${response.pop}`)
 
         entry.listview.appendChild(_xyz.utils.html.node`
-        <div class="label inline">Total Demand (£)</div>
-        <div class="val inline">${response.total_dem}`)
-
-        entry.listview.appendChild(_xyz.utils.html.node`
         <div class="label inline">OAC Index</div>
         <div class="val inline"
           style="${`color:${index_color(response.oac_index)}`}">${response.oac_index}`)
@@ -53,7 +49,7 @@ document.dispatchEvent(new CustomEvent('practice_catchment', {
         entry.listview.appendChild(_xyz.utils.html.node`
         <div class="label inline">Index - Full Price Private</div>
         <div class="val inline"
-          style="${`color:${index_color(response.private_reg_index)}`}">${response.private_reg_index}`)
+          style="${`color:${index_color(response.private_fp_index)}`}">${response.private_fp_index}`)
 
         entry.listview.appendChild(_xyz.utils.html.node`
         <div class="label inline">Index - Private Affordable</div>
@@ -61,18 +57,18 @@ document.dispatchEvent(new CustomEvent('practice_catchment', {
           style="${`color:${index_color(response.private_afford_index)}`}">${response.private_afford_index}`)
 
         entry.listview.appendChild(_xyz.utils.html.node`
-        <div class="label inline">Gap to NHS Index</div>
-        <div class="val inline"
-          style="${`color:${index_color(response.gap_to_nhs_index)}`}">${response.gap_to_nhs_index}`)
-
-        entry.listview.appendChild(_xyz.utils.html.node`
         <div class="label inline">Competitiveness Index</div>
         <div class="val inline"
-          style="${`color:${index_color(response.compness_index)}`}">${response.compness_index}`)
+          style="${`color:${index_color(response.competitiveness)}`}">${response.competitiveness}`)
 
         entry.listview.appendChild(_xyz.utils.html.node`
-        <div class="label inline">Strategy Weighting</div>
-        <div class="val inline">${response.strategy_weighting}`)
+        <div class="label inline">Gap to NHS Index</div>
+        <div class="val inline"
+          style="${`color:${index_color(response.gap_to_nhs_index)}`}">${response.gap_to_nhs_index}`)          
+
+        entry.listview.appendChild(_xyz.utils.html.node`
+        <div class="label inline">Total Demand (£)</div>
+        <div class="val inline">${response.total_dem}`)
         
       })
 
