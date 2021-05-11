@@ -22,3 +22,4 @@ Added maxPoints parameter on here isolines.
 
 Different geoms for different zoom levels. [#310](https://github.com/GEOLYTIX/xyz/issues/310)
 
+Bump nodemailer to v6.6 [CVE-2020-7769](https://github.com/advisories/GHSA-48ww-j4fc-435p)
