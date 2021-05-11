@@ -51,9 +51,14 @@ module.exports = async (req, res) => {
   if (user.approved) {
 
     // Login with message if account is approved and password reset.
-    if (user.password_reset) return login(req, res, msg('password_reset_ok', req.params.language))
+    if (user.password_reset) {
+      res.setHeader('location', `${process.env.DIR}`)
+
+      return res.status(302).send()
+    }
 
     return login(req, res)
+
   }
 
   // Get all admin accounts from the ACL.
