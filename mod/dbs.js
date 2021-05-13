@@ -29,9 +29,7 @@ module.exports = () => {
       try {
         timeout && await pool.query(`SET statement_timeout = ${timeout}`)
 
-        const {
-          rows
-        } = await pool.query(q, arr)
+        const { rows } = await pool.query(q, arr)
 
         timeout && await pool.query(`SET statement_timeout = 10000`)
 

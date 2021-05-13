@@ -52,7 +52,8 @@ Supported HERE API request parameters:
 
 mode: 'car', 'pedestrian', 'truck', 'carHOV', defaults to 'car'
 rangetype: 'time', 'distance', defaults to 'time'
-distance: distance in kilometres when "rangetype": "distance"
+distance: distance in kilometres when "rangetype": "distance",
+shape: maxPoints applied when "maxPoints": <int>
 
 
 (© Mapbox)[https://www.mapbox.com/about/maps]

@@ -10,11 +10,8 @@
     -ms-transform: translatez(0);
     transform: translatez(0);
     border-top: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
     border-right: 1px solid #ddd;
-    // margin-bottom: 30px;
-    // margin-top: 10px;
-    // margin-right: 10px;
+    border-bottom: none;
 }
 
 .tabulator[tabulator-layout="fitDataFill"] .tabulator-tableHolder .tabulator-table {
@@ -759,6 +756,7 @@
     overflow-y: auto;
     -webkit-overflow-scrolling: touch;
     z-index: 10000;
+    box-shadow: 1px 1px 6px #333;
 }
 
 .tabulator-edit-select-list .tabulator-edit-select-list-item {

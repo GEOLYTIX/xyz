@@ -1,6 +1,5 @@
 ---
 title: Location
-
 layout: root.html
 ---
 

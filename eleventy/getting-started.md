@@ -1,9 +1,7 @@
 ---
 title: Getting started
-
 layout: root.html
 orderPath: /_getting-started
-date: 2020-01-01
 ---
 
 # Getting started

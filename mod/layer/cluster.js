@@ -2,6 +2,8 @@ const dbs = require('../dbs')()
 
 const sql_filter = require('./sql_filter')
 
+const Roles = require('../roles.js')
+
 module.exports = async (req, res) => {
 
   const layer = req.params.layer
@@ -19,24 +21,18 @@ module.exports = async (req, res) => {
     viewport = req.params.viewport.split(','),
     z = parseFloat(req.params.z);
 
-  const roles = layer.roles
-    && req.params.user
-    && Object.keys(layer.roles)
-      .filter(key => req.params.user.roles.includes(key))
-      .reduce((obj, key) => {
-        obj[key] = layer.roles[key];
-        return obj;
-      }, {});
+  const roles = Roles.filter(layer, req.params.user && req.params.user.roles)
 
   if (!roles && layer.roles) return res.status(403).send('Access prohibited.');
 
-  const filter = `
-  ${req.params.filter
-    && await sql_filter(Object.entries(JSON.parse(req.params.filter)).map(e => ({[e[0]]:e[1]})))
-    || ''}
-  ${roles && Object.values(roles).some(r => !!r)
-    && await sql_filter(Object.values(roles).filter(r => !!r), 'OR')
+  const SQLparams = []
+
+  const filter =
+    ` ${req.params.filter && `AND ${sql_filter(JSON.parse(req.params.filter), SQLparams)}` || ''}
+    ${roles && Object.values(roles).some(r => !!r)
+    && `AND ${sql_filter(Object.values(roles).filter(r => !!r), SQLparams)}`
     || ''}`
+
 
   // Combine filter with envelope
   const where_sql = `
@@ -65,7 +61,7 @@ module.exports = async (req, res) => {
       ) AS xdistance
     FROM ${req.params.table} ${where_sql}`
 
-    var rows = await dbs[layer.dbs](q)
+    var rows = await dbs[layer.dbs](q, SQLparams)
 
     if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
@@ -293,12 +289,12 @@ module.exports = async (req, res) => {
 
   }
 
-  var rows = await dbs[layer.dbs](q)
+  var rows = await dbs[layer.dbs](q, SQLparams)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
 
-  if (!theme) return res.send(rows.map(row => ({
+  if (!theme || theme === 'basic') return res.send(rows.map(row => ({
     geometry: {
       x: row.x,
       y: row.y,
@@ -318,7 +314,7 @@ module.exports = async (req, res) => {
     properties: {
       count: parseInt(row.count),
       size: parseInt(row.size),
-      cat: row.cat.length === 1 ? row.cat[0] : null,
+      cat: row.cat.length === 1 && row.cat[0] || layer.cat_array && row.cat || null,
       label: row.label
     }
   })))

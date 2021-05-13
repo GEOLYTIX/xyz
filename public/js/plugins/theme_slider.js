@@ -49,9 +49,17 @@ function addModule(_xyz) {
             const slider = document.getElementById('hx_hour_slider')
 
             layer.style.theme.loop = setInterval(()=>{
+
+              if (slider.value === slider.max) {
+
+                slider.value = slider.min
+                slider.dispatchEvent(new Event('input'))
+                return
+
+              }
               slider.value++
-              if (slider.value == 23) slider.value = 0
               slider.dispatchEvent(new Event('input'))
+
             }, 500)
 
           } else {

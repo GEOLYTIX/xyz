@@ -1,6 +1,5 @@
 ---
 title: Gazetteer
-
 layout: root.html
 ---
 

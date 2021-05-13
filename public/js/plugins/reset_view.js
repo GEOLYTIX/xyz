@@ -1,25 +1,25 @@
 document.dispatchEvent(new CustomEvent('reset_view', {
   detail: _xyz => {
-
-    _xyz.layers.plugins.reset_view = layer => {
       
-
-      const node = _xyz.utils.html.node`
-      <div title="Reset View" onclick=${
-        e => { if(confirm('Initial app view is about to be restored. Are you sure?')) {
+    const node = _xyz.utils.html.node`
+      <div
+        title="Reset View"
+        onclick=${e => {
+          
+          if(confirm('Initial app view is about to be restored. Are you sure?')) {
+            _xyz.hooks.removeAll() 
+            location.reload()
+          }
         
-          _xyz.hooks.removeAll() 
+        }}>
+        <a class="link-with-img">
+          <div
+            class="xyz-icon icon-restore"
+            style="width: 30px; height: 30px; margin-left: 10px;">`
 
-          location.reload()
-        
-        }}
-      }>
-      <a class="link-with-img">
-      <div class="xyz-icon icon-restore primary-colour-filter" style="width: 30px; height: 30px; margin-left: 10px;">`
+      document
+        .getElementById('mapButton')
+        .insertBefore(node, document.getElementById('mapButton').firstChild)
 
-
-      document.getElementById('mapButton').insertBefore(node, document.getElementById('mapButton').firstChild)
-
-    }
   }
 }))
