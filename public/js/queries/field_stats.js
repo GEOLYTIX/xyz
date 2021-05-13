@@ -1,10 +1,7 @@
-module.exports = {
-  render: _ => `
-
+module.exports = `
   SELECT
-    min(${_.field}),
-    max(${_.field}),
-    avg(${_.field})
-    FROM ${_.table}
-    WHERE true ${_.filter};`
-}
+    min(\${field}),
+    max(\${field}),
+    avg(\${field})
+    FROM \${table}
+    WHERE true \${filter};`

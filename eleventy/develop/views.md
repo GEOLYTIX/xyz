@@ -1,6 +1,5 @@
 ---
 title: Application Views
-
 layout: root.html
 ---
 
@@ -15,8 +14,8 @@ A series of stylesheet and script must be referenced in the document head of the
 <link rel="stylesheet" href="${dir}/css/ol.css" />
 <script src="${dir}/js/ol.js" defer></script>
 
-<!-- Load mapbox-gl library required for mbtiles layer. -->
-<script src="${dir}/js/mapbox-gl.js" defer></script>
+<!-- Load maplibre-gl library required for mbtiles layer. -->
+<script src="${dir}/js/maplibre-gl.js" defer></script>
 
 <!-- Load XYZ / MAPP stylesheet and library. -->
 <link rel="stylesheet" href="${dir}/css/mapp.css" />

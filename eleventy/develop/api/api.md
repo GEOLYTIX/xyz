@@ -1,6 +1,5 @@
 ---
 title: API
-
 layout: root.html
 group: true
 orderPath: /develop/api/_api

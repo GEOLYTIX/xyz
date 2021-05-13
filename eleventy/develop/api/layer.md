@@ -1,6 +1,5 @@
 ---
 title: Layer
-
 layout: root.html
 ---
 

@@ -24,7 +24,7 @@ let workspace = null
 
 const logger = require('../logger')
 
-module.exports = async req => {
+module.exports = async () => {
 
   let timestamp = Date.now()
 

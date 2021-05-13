@@ -1,94 +1,84 @@
-module.exports = async (filter, conjunction = 'AND') => {
+const filterTypes = {
+  eq: (col, val) => `"${col}" = \$${addValues(val)}`,
 
-  if (!filter.length) return '';
+  gt: (col, val) => `"${col}" > \$${addValues(val)}`,
 
-  const sql_filter = []
+  gte: (col, val) => `"${col}" >= \$${addValues(val)}`,
+
+  lt: (col, val) => `"${col}" < \$${addValues(val)}`,
+
+  lte: (col, val) => `"${col}" <= \$${addValues(val)}`,
+
+  boolean: (col, val) => `"${col}" IS ${!!val}`,
+
+  ni: (col, val) => `NOT "${col}" = ANY (\$${addValues([val])})`,
+
+  in: (col, val) => `"${col}" = ANY (\$${addValues([val])})`,
+
+  like: (col, val) =>
+    `(${val
+      .split(",")
+      .filter((val) => val.length > 0)
+      .map((val) => `"${col}" ILIKE \$${addValues(`${val}%`)}`)
+      .join(" OR ")})`,
+
+  match: (col, val) => `"${col}"::text ILIKE \$${addValues(val)}`
+};
+
+let SQLparams
+
+function addValues(val) {
+  SQLparams.push(val);
+  return SQLparams.length;
+}
+
+module.exports = function sqlfilter(filter, params) {
+
+  SQLparams = params
+
+  // Filter in an array will be conditional OR
+  if (filter.length)
+    return `(${filter
   
-  for (const f of filter) {
+        // Map filter in array with OR conjuction
+        .map((filter) => mapFilterEntries(filter))
+        .join(' OR ')})`;
 
-    const field = Object.keys(f)[0]
+  // Filter in an object will be conditional AND
+  return mapFilterEntries(filter);
+}
 
-    if(!field) continue;
+function mapFilterEntries(filter) {
+  return `(${Object.entries(filter)
+  
+      // Map filter entries
+      .map((entry) => {
+        // Array entry values represent conditional OR
+        if (entry[1].length) return sqlfilter(entry[1]);
+  
+        // Get filter type from first key of the entry value
+        const filterType = Object.keys(entry[1])[0];
 
-    if (Array.isArray(f[field])) {
+        // Identifiers must be validated to prevent SQL injection
+        if (!/^[A-Za-z0-9._-]*$/.test(entry[0])) {
+          console.log(`${entry[0]} - ¡no bueno!`);
+          return;
+        }
+  
+        // Call filter type method for matching filter entry value
+        if (filterTypes[filterType])
+          return filterTypes[filterType](
+            // The entry key is col
+            entry[0],
+  
+            // The first entry value will be the filter val
+            Object.values(entry[1])[0]
+          );
+      })
 
-      if (sql_filter[sql_filter.length - 1] !== 'AND') sql_filter.push('AND')
-
-      sql_filter.push('(')
-
-      f[field].forEach(f => addField(f, field, 'OR'))
-
-      sql_filter.pop()
-
-      sql_filter.push(')')
-
-      continue
-    }
-
-    addField(f[field], field, conjunction)
-
-  }
-
-  if (sql_filter[sql_filter.length - 1] !== ')') sql_filter.pop()
-      
-  if (sql_filter.length) return `AND (${sql_filter.join(' ')})`
-
-  return ' '
-
-  function addField(filter, field, conjunction) {
-
-    if (filter.ni && filter.ni.length > 0) {
-      sql_filter.push(`${field} NOT IN ('${filter.ni.join('\',\'')}')`)
-      sql_filter.push(conjunction)
-    }
-
-    if (filter.in && filter.in.length > 0) {
-      sql_filter.push(`${field} IN ('${filter.in.map(f=>decodeURIComponent(f)).join('\',\'')}')`)
-      sql_filter.push(conjunction)
-    }
-
-    if(typeof(filter.gt) == 'number') {
-      sql_filter.push(`${field} > ${filter.gt}`)
-      sql_filter.push(conjunction)
-    }
-
-    if(typeof(filter.lt) == 'number') {
-      sql_filter.push(`${field} < ${filter.lt}`)
-      sql_filter.push(conjunction)
-    }
-          
-    if(filter.gte) {
-      sql_filter.push(`${field} >= ${filter.gte}`)
-      sql_filter.push(conjunction)
-    }
-
-    if(filter.lte) {
-      sql_filter.push(`${field} <= ${filter.lte}`)
-      sql_filter.push(conjunction)
-    }
-          
-    if((filter.like)) {
-      const likes = decodeURIComponent(filter.like).split(',')
-        .filter(like => like.length > 0)
-        .map(like => `${field}::text ILIKE '${like.trim().replace(/'/g, "''")}%'`)
-        sql_filter.push(`(${likes.join(' OR ')})`)
-        sql_filter.push(conjunction)
-    }
-
-    if(filter.eq) {
-      sql_filter.push(`${field} = ${filter.eq}`)
-      sql_filter.push(conjunction)
-    }
-
-    if((filter.match)) {
-      sql_filter.push(`${field}::text ILIKE '${decodeURIComponent(filter.match.toString().replace(/'/g, "''"))}'`)
-      sql_filter.push(conjunction)
-    }
-
-    if((filter.boolean)){
-      sql_filter.push(`${field} IS ${filter.boolean}`)
-      sql_filter.push(conjunction)
-    }
-
-  }
+      // Filter out undefined / escaped filter
+      .filter(f=>typeof f !== 'undefined')
+  
+      // Join filter with conjunction
+      .join(' AND ')})`;
 }

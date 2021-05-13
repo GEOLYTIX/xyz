@@ -84,6 +84,10 @@ li {
   background:rgba(255,255,255, 0.9);
 }
 
+.hover:hover{
+  cursor: pointer;
+}
+
 #loginForm {
   margin: 0 auto !important;
   padding: 50px;

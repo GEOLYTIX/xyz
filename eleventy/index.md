@@ -1,6 +1,5 @@
 ---
 title: XYZ
-
 layout: root.html
 orderPath: /__index
 ---

@@ -158,6 +158,10 @@ input[type=range]::-moz-range-thumb {
   background-image: url("../icons/icon-settings.svg");
 }
 
+.icon-circle-dot {
+  background-image: url("../icons/icon-circle-dot.svg");
+}
+
 .icon-add-chart {
   background-image: url("../icons/icon-add-chart.svg");
 }
@@ -530,22 +534,21 @@ button:disabled {
 }
 
 .btn-column button,
+.btn-column > div,
 .btn-column > a {
-  margin-top: 10px;
   border-radius: 10px;
-  padding: 10px;
-  float: left;
-  clear: both;
-  height: 50px;
-  width: 50px;
+  padding: 5px;
   background-color: #fff;
-  text-align: center;
 }
 .btn-column button .xyz-icon,
+.btn-column > div .xyz-icon,
 .btn-column > a .xyz-icon {
   width: 100%;
   height: 100%;
   pointer-events: none;
+  width: 24px;
+  height: 24px;
+  margin: auto;
 }
 .btn-column button:disabled,
 .btn-column a:disabled {
@@ -713,8 +716,8 @@ button:disabled {
   -ms-transform: translatez(0);
   transform: translatez(0);
   border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
   border-right: 1px solid #ddd;
+  border-bottom: none;
 }
 
 .tabulator[tabulator-layout=fitDataFill] .tabulator-tableHolder .tabulator-table {
@@ -1457,6 +1460,7 @@ button:disabled {
   overflow-y: auto;
   -webkit-overflow-scrolling: touch;
   z-index: 10000;
+  box-shadow: 1px 1px 6px #333;
 }
 
 .tabulator-edit-select-list .tabulator-edit-select-list-item {
@@ -2506,10 +2510,6 @@ span.flatpickr-weekday {
   display: grid;
 }
 
-.tabview .target {
-  position: absolute;
-}
-
 .dataview-container {
   display: grid;
 }
@@ -2884,6 +2884,10 @@ li {
   height: 100%;
   z-index: 999999;
   background: rgba(255, 255, 255, 0.9);
+}
+
+.hover:hover {
+  cursor: pointer;
 }
 
 #loginForm {

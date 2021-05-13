@@ -67,6 +67,34 @@
         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
       }
     },
+    "table_parameter_query": {
+      "template": "SELECT * from ${table}",
+      "dbs": "MAPP"
+    },
+    "array_input_query": {
+      "template": "SELECT mapp.array_input_test(%{body})",
+      "dbs": "MAPP"
+    },
+    "array_select": {
+      "template": "SELECT '${test}' as test, %{body} as arr",
+      "dbs": "MAPP"
+    },
+    "array_any_select": {
+      "template": "SELECT count(1) from dev.uk_glx_geodata_retail_place_working where rp_type = ANY(%{types})",
+      "dbs": "DEV"
+    },
+    "array_any_id": {
+      "template": "SELECT count(1) from dev.scratch where id = ANY(%{ids})",
+      "dbs": "DEV"
+    },
+    "json_input_query": {
+      "template": "SELECT mapp.array_json_test(%{body}::json)",
+      "dbs": "MAPP"
+    },
+    "json_select": {
+      "template": "SELECT '${test}' as test, json_each(%{body}) as json",
+      "dbs": "MAPP"
+    },
     "Random Data Series_aga": {
       "src": "cloudfront:${CDN}/dev/queries/random_data_series.sql"
     },
@@ -118,7 +146,9 @@
       "maxZoom": 17,
       "showScaleBar": true,
       "plugins": {
-        "demand_chart": "/dev/js/plugins/demand_chart.js"
+        "demand_chart": "/dev/js/plugins/demand_chart.js",
+        "post_array": "/dev/js/plugins/post_array.js",
+        "post_json": "/dev/js/plugins/post_json.js"
       },
       "layers": {
         "Mapbox Base": {
@@ -126,13 +156,35 @@
           "display": true
         },
         "HERE Imagery": {
-          "template": "HERE Imagery"
+          "template": "HERE Imagery",
+          "roles": {
+            "de": null
+          }
         },
         "HERE Hybrid": {
-          "template": "HERE Hybrid"
+          "template": "HERE Hybrid",
+          "roles": {
+            "en": true
+          }
         },
         "Mapbox Label": {
           "template": "Mapbox Label"
+        },
+        "ZoomGeom": {
+          "format": "mvt",
+          "geom": "geom_3857_5m",
+          "srid": "3857",
+          "dbs": "MAPP",
+          "qID": "id",
+          "geoms": {
+            "7": "geom_3857_100m",
+            "8": "geom_3857_50m",
+            "9": "geom_3857_50m",
+            "10": "geom_3857_5m",
+            "11": "geom_3857_5m",
+            "12": "geom_3857"
+          },
+          "table": "geodata.uk_glx_geodata_seamless_shopper_town"
         },
         "Grid": {
           "format": "grid",
@@ -309,6 +361,16 @@
           "geom": "geom_3857",
           "srid": "3857",
           "style": {
+            "label": {
+              "display": true,
+              "field": "rp_name",
+              "declutter": true,
+              "strokeColor": "#ffffff",
+              "strokeWidth": 3,
+              "maxZoom": 18,
+              "minZoom": 14,
+              "title": "rp_name"
+            },
             "themes": {
               "Retail Place type": {
                 "type": "categorized",
@@ -356,6 +418,34 @@
             }
           },
           "qID": "id",
+          "infoj": [{
+            "title": "RP Type",
+            "field": "rp_type",
+            "filter": {
+              "in": [
+                "City Centre",
+                "Town Centre",
+                "Urban Centre",
+                "Parade"
+              ]
+            }
+          },
+        {
+          "field": "rp_name",
+          "title": "rp_name",
+          "filter": "like"
+        }]
+        },
+        "RP Roles": {
+          "format": "mvt",
+          "dbs": "DEV",
+          "tables": {
+            "8": null,
+            "9": "dev.uk_glx_geodata_retail_place_working"
+          },
+          "geom": "geom_3857",
+          "srid": "3857",
+          "qID": "id",
           "filter": {
             "infoj": [{
               "title": "ID count",
@@ -365,15 +455,27 @@
               "fieldfx": "count(id)"
             }]
           },
+          "roles": {
+            "en": null,
+            "test": {
+              "rp_type": {
+                "match": "City Centre"
+              }
+            },
+            "!de": {
+              "rp_type": {
+                "match": "Parade"
+              }
+            }
+          },
           "infoj": [{
             "title": "RP Type",
             "field": "rp_type",
             "filter": {
               "in": [
-                "Major City Centre",
-                "Large Town Centre",
-                "Village Centre",
-                "Weak Parade"
+                "City Centre",
+                "Town Centre",
+                "Urban Centre"
               ]
             }
           }]
@@ -420,7 +522,10 @@
             {
               "title": "char_field",
               "field": "char_field",
-              "edit": true
+              "edit": true,
+              "roles": {
+                "de": null
+              }
             },
             {
               "title": "textarea",
@@ -438,7 +543,8 @@
               "title": "numeric_field",
               "field": "numeric_field",
               "type": "numeric",
-              "edit": true
+              "edit": true,
+              "filter": "numeric"
             },
             {
               "field": "json_field",
@@ -456,7 +562,8 @@
               "title": "bool_field",
               "field": "bool_field",
               "type": "boolean",
-              "edit": true
+              "edit": true,
+              "filter": "boolean"
             },
             {
               "title": "options_field",
@@ -613,7 +720,8 @@
           },
           "cluster_kmeans": 0.1,
           "cluster_label": "site_name",
-          "infoj": [{
+          "infoj": [
+            {
               "type": "key",
               "class": "_report"
             },
