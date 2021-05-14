@@ -17,4 +17,4 @@ ENV PORT 3000
 
 EXPOSE 3000
 
-CMD cat .env && npm run _start
+CMD npm run _start
