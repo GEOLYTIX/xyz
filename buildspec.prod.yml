@@ -7,7 +7,7 @@ env:
     DBS_XYZ_password: "acorn/geolytix:databasePassword"
     DBS_XYZ_host: "acorn/geolytix:databaseHost"
     DBS_XYZ_port: "acorn/geolytix:databasePort"
-    MONGO_URL: "acorn/geolytix:MONGO_URL"
+    MONGO_URL: "acorn/geolytix:mongoUrl"
 
 phases:
   pre_build:
