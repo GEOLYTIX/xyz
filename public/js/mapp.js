@@ -72,14 +72,18 @@
     <circle cx=15 cy=15 r=10
       stroke="${e.strokeColor||"#333"}"
       stroke-width="${e.strokeWidth||1}"
-      fill="${e.fillColor||"none"}"></circle>`;return`data:image/svg+xml,${encodeURIComponent(B.serializeToString(t))}`}function K(e){if(!e.properties)return null;const{count:t,cat:o}=e.properties;let r;r=t<=20?10:t<=100?15:t<=500?18:t<=1e3?20:25;const n=t=>e.theme.cat[t].style.strokeColor,a=e=>o?100*o.filter((t=>t===e)).length/o.length:0,i=e=>{const t=a(e),o=100-t;return`${t.toFixed(2)} ${o.toFixed(2)}`},l=t=>100-Object.keys(e.theme.cat).reduce(((e,o)=>e+(+o<t?+a(+o):0)),0)+25,s=R.node`
+      fill="${e.fillColor||"none"}"></circle>`;return`data:image/svg+xml,${encodeURIComponent(B.serializeToString(t))}`}function K(e){if(!e.properties)return null;const{count:t,cat:o}=e.properties;let r;r=t<=100?15:t<=500?18:t<=1e3?20:25;const n=t=>e.theme.cat[t].style.strokeColor,a=e=>o?100*o.filter((t=>t===e)).length/o.length:0,i=e=>{const t=a(e),o=100-t;return`${t.toFixed(2)} ${o.toFixed(2)}`},l=t=>100-Object.keys(e.theme.cat).reduce(((e,o)=>e+(+o<t?+a(+o):0)),0)+25,s=R.node`
     <svg width="${r}" height="${r}" viewBox="0 0 42 42" aria-labelledby="beers-title beers-desc" role="img">
       <circle cx="21" cy="21" r="15.91549430918954" fill="#f6f6f4" role="presentation"></circle>
       <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="#d2d3d4" stroke-width="5" role="presentation"></circle>
+      
       <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="${n(0)}" stroke-width="5" stroke-dasharray="${i(0)}" stroke-dashoffset="${l(0)}"></circle>
+  
       <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="${n(25)}" stroke-width="5" stroke-dasharray="${i(25)}" stroke-dashoffset="${l(25)}"></circle>
+      
       <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="${n(50)}" stroke-width="5" stroke-dasharray="${i(50)}" stroke-dashoffset="${l(50)}"></circle>
       <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="${n(75)}" stroke-width="5" stroke-dasharray="${i(75)}" stroke-dashoffset="${l(75)}"></circle>
+      
       <circle cx="21" cy="21" r="15.91549430918954" fill="transparent" stroke="${n(100)}" stroke-width="5" stroke-dasharray="${i(100)}" stroke-dashoffset="${l(100)}"></circle>
     </svg>
   `;return`data:image/svg+xml,${encodeURIComponent(B.serializeToString(s))}`}const Q=e=>Object.entries(e).filter((e=>0===e[1]||!!e[1])).filter((e=>"{}"!==e[1])).filter((e=>"object"!=typeof e[1]||e[1].length||Object.values(e[1]).some((e=>"object"==typeof e&&Object.keys(e).length)))).map((e=>("object"!=typeof e[1]||e[1].length||(e[1]=JSON.stringify(e[1])),encodeURI(`${e[0]}=${e[1]}`)))).join("&");function ee(e,t){const o=e.closest(".expandable");if(o){if(o.classList.contains("expanded"))return o.classList.remove("expanded");t&&[...o.parentElement.children].forEach((e=>{e.classList.remove("expanded")})),o.classList.add("expanded")}}function te(e){let t=_xyz.utils.html.node`<textarea style="visibility=none;">`;t.value=e,document.body.appendChild(t),t.select(),document.execCommand("copy"),t.remove()}function oe(e){if(-1==e.indexOf(";base64,")){let t=e.split(","),o=t[0].split(":")[1],r=t[1];return new Blob([r],{type:o})}let t=e.split(";base64,"),o=t[0].split(":")[1],r=window.atob(t[1]),n=new Uint8Array(r.length);for(let e=0;e<r.length;++e)n[e]=r.charCodeAt(e);return new Blob([n],{type:o})}let re,ne,ae,ie={renew:540,idle:600,host:""};function le(e){Object.assign(ie,e),window.onload=se,window.onmousemove=se,window.onmousedown=se,window.ontouchstart=se,window.onclick=se,window.onkeypress=se,se(),de()}function se(){ae||(clearTimeout(re),re=setTimeout(ce,1e3*ie.idle))}function ce(){ae=!0,clearTimeout(ne);const e=new XMLHttpRequest;e.open("GET",`${ie.host}/api/user/cookie?destroy=true`),e.send();const t=document.body.appendChild(z.node`<div id="InputMask">`);t.appendChild(z.node`
