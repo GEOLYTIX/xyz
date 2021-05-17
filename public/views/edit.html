@@ -1,0 +1,311 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head data-dir="${dir}">
+
+  <title>GEOLYTIX | Editor</title>
+
+  <link rel="icon" type="image/x-icon" href="${dir}/icons/favicon.ico" />
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <script src="${dir}/js/maplibre-gl.js" defer></script>
+
+  <link rel="stylesheet" href="${dir}/css/ol.css" />
+  <script src="${dir}/js/ol.js" defer></script>
+  
+  <link rel="stylesheet" href="${dir}/css/mapp.css" />
+  <script src="${dir}/js/mapp.js" defer></script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      height: 100%;
+      display: grid;
+      grid-template-columns: 300px 1fr;
+      grid-template-rows: 1fr;
+      background-color: #f0f0f0;
+    }
+
+    #Location {
+      grid-row: 1;
+      grid-column: 1;
+      margin: 0;
+      transform: rotateY(180deg);
+      overflow-x: auto;
+      column-gap: 10px;
+      padding: 10px;
+    }
+
+    #Location>* {
+      transform: rotateY(180deg);
+    }
+
+    #Map {
+      grid-row: 1;
+      grid-column: 2;
+      overflow: hidden;
+      position: relative;
+      height: 100%;
+    }
+
+    #_Attribution {
+      z-index: 999;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      text-align: left;
+      white-space: nowrap;
+      background-color: #fff;
+      opacity: 0.9;
+      padding: 5px;
+      font-size: 10px;
+      font-weight: bold;
+    }
+
+    #_Attribution a {
+      padding: 2px 5px;
+    }
+
+    #ol-scale {
+      bottom: 20px;
+      position: absolute;
+      right: 0;
+      z-index: 999;
+    }
+
+    .ol-control button {
+      color: #000;
+      font-size: 1.5em;
+      height: 1.5em;
+      width: 1.5em;
+      background-color: #fff;
+    }
+
+    .location-view-grid {
+      grid-gap: 5px;
+    }
+
+    button {
+      border: 1px solid #999;
+      padding: 3px;
+    }
+
+    button.active {
+      background-color: bisque;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div id="Location" class="location-view"></div>
+
+  <div id="Map">
+    <div id="ol-scale"></div>
+    <div id="_Attribution"></div>
+  </div>
+
+</body>
+
+<script>
+
+  window.onload = () => {
+
+    // Assign location origin as host.
+    const params = {
+      host: window.location.origin,
+    }
+
+    // Take hooks from URL and store as current hooks.
+    // It should be possible to override params.host.
+    window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (match, key, value) => {
+      params[key] = decodeURI(value);
+    })
+
+    const xyz = _xyz({
+      host: params.host + document.head.dataset.dir,
+      hooks: true
+    })
+
+    const Location = document.getElementById('Location')
+
+    // Define locations list and selectCallback.
+    xyz.locations.list = [
+      {
+        style: { strokeColor: '#090', strokeWidth: 2 },
+        colorFilter: 'invert(22%) sepia(80%) saturate(1933%) hue-rotate(272deg) brightness(97%) contrast(104%)'
+      }
+    ]
+
+    // xyz.mapview.interaction.modify.Style = new ol.style.Style({
+    //     image: new ol.style.Circle({
+    //       radius: 6,
+    //       stroke: new ol.style.Stroke({
+    //         color: '#ff6f00',
+    //         width: 2
+    //       })
+    //     })
+    //   })
+
+    xyz.mapview.interaction.modify.Style = new ol.style.Style({
+        image: new ol.style.Circle({
+          radius: 8,
+          stroke: new ol.style.Stroke({
+            color: '#ff6f00',
+            width: 2
+          })
+        })
+      })
+
+    xyz.mapview.interaction.modify.Layer.setStyle([
+        new ol.style.Style({
+          stroke: new ol.style.Stroke({
+            color: '#ff6f00',
+            width: 1
+          }),
+        }),
+        new ol.style.Style({
+          image: new ol.style.Circle({
+            radius: 6,
+            stroke: new ol.style.Stroke({
+              color: '#ff6f00',
+              width: 2
+            })
+          }),
+          geometry: feature => {
+
+            const geometry = feature.getGeometry()
+
+            if (geometry.getType() === 'Point') return new ol.geom.Point(geometry.getCoordinates())
+
+            if (geometry.getType() === 'LineString') return new ol.geom.MultiPoint(geometry.getCoordinates())
+
+            // return the coordinates of the first ring of the polygon
+            return new ol.geom.MultiPoint(geometry.getCoordinates()[0])
+          }
+        })
+      ])
+
+    const geoJSON = new ol.format.GeoJSON()
+
+    xyz.locations.selectCallback = location => {
+
+      Location.innerHTML = ''
+
+      location.view = xyz.locations.view.infoj(location)
+
+      Location.appendChild(location.view)
+
+      // location.draw()
+
+      // location.Layer = xyz.mapview.geoJSON({
+      //   geometry: location.geometry,
+      //   zIndex: 1999,
+      //   style: new ol.style.Style({
+      //     image: new ol.style.Circle({
+      //       radius: 8,
+      //       stroke: new ol.style.Stroke({
+      //         color: '#ff6f00',
+      //         width: 2
+      //       })
+      //     })
+      //   })
+      // })
+
+      const feature = geoJSON.readFeature({
+        type: 'Feature',
+        geometry: location.geometry
+      },{
+        dataProjection: 'EPSG:3857',
+        featureProjection:'EPSG:' + xyz.mapview.srid
+      })
+
+
+      Location.appendChild(xyz.utils.html.node`
+        <button onclick=${e=>{
+
+          e.target.classList.toggle('active')
+
+          if (!e.target.classList.contains('active')) return xyz.mapview.interaction.modify.finish()
+
+          xyz.mapview.interaction.modify.begin({
+          //feature: location.Layer.getSource().getFeatures()[0].clone(),
+          feature: feature,
+          callback: () => {
+
+            console.log(geoJSON.writeFeature(
+              feature,
+              {
+                dataProjection: 'EPSG:3857',
+                featureProjection:'EPSG:' + xyz.mapview.srid
+              }))
+            }})
+            
+        }}>Modify`)
+    }
+
+    // Load locale if defined
+    if (params.locale) return get(params.locale)
+
+    // Load first locale if no locale has been defined.
+    xyz.workspace.get.locales().then(locales => {
+      if (!locales.length) return console.log('No accessible locales')
+      get(locales[0].key)
+    })
+
+    function get(locale) {
+
+      xyz.workspace.get.locale({
+        locale: locale
+      }).then(locale => {
+        xyz.locale = locale
+        createMap()
+      })
+    }
+
+    function createMap() {
+
+      xyz.mapview.create({
+        target: document.getElementById('Map'),
+        scrollWheelZoom: true,
+        attribution: {
+          target: document.getElementById('_Attribution'),
+          links: {
+            ['XYZ v'+xyz.version]: 'https://geolytix.github.io/xyz',
+            Openlayers: 'https://openlayers.org'
+          }
+        }
+      })
+
+      xyz.plugins()
+        .then(() => xyz.layers.load(xyz.hooks.current.layers))
+        .then(() => {
+
+          xyz.hooks.current.locations.forEach(_hook => {
+            let hook = _hook.split('!');
+            xyz.locations.select({
+              locale: xyz.workspace.key,
+              layer: xyz.layers.list[decodeURIComponent(hook[0])],
+              table: hook[1],
+              id: hook[2]
+            })
+          })
+        })
+        .catch(error => console.error(error))
+    }
+
+  }
+
+</script>
+
+</html>
