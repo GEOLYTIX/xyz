@@ -147,16 +147,6 @@
       }
     ]
 
-    // xyz.mapview.interaction.modify.Style = new ol.style.Style({
-    //     image: new ol.style.Circle({
-    //       radius: 6,
-    //       stroke: new ol.style.Stroke({
-    //         color: '#ff6f00',
-    //         width: 2
-    //       })
-    //     })
-    //   })
-
     xyz.mapview.interaction.modify.Style = new ol.style.Style({
         image: new ol.style.Circle({
           radius: 8,
@@ -170,7 +160,7 @@
     xyz.mapview.interaction.modify.Layer.setStyle([
         new ol.style.Style({
           stroke: new ol.style.Stroke({
-            color: '#ff6f00',
+            color: '#64ffda',
             width: 1
           }),
         }),
@@ -178,7 +168,7 @@
           image: new ol.style.Circle({
             radius: 6,
             stroke: new ol.style.Stroke({
-              color: '#ff6f00',
+              color: '#64ffda',
               width: 2
             })
           }),
@@ -239,18 +229,19 @@
           if (!e.target.classList.contains('active')) return xyz.mapview.interaction.modify.finish()
 
           xyz.mapview.interaction.modify.begin({
-          //feature: location.Layer.getSource().getFeatures()[0].clone(),
-          feature: feature,
-          callback: () => {
+            //feature: location.Layer.getSource().getFeatures()[0].clone(),
+            feature: feature,
+            callback: () => {
 
-            console.log(geoJSON.writeFeature(
-              feature,
-              {
-                dataProjection: 'EPSG:3857',
-                featureProjection:'EPSG:' + xyz.mapview.srid
-              }))
-            }})
-            
+              console.log(geoJSON.writeFeature(
+                feature,
+                {
+                  dataProjection: 'EPSG:3857',
+                  featureProjection:'EPSG:' + xyz.mapview.srid
+                }))
+              }
+            })
+              
         }}>Modify`)
     }
 
