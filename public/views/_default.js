@@ -261,7 +261,7 @@ window.onload = () => {
             layer.mbMap?.resize()
           })
         }}>
-        <div class="xyz-icon icon-map">`)      
+        <div class="xyz-icon icon-map">`)
 
     xyz.plugins()
       .then(() => xyz.layers.load())

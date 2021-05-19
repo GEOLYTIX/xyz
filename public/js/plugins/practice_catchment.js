@@ -16,6 +16,7 @@ document.dispatchEvent(new CustomEvent('practice_catchment', {
 
         _xyz.locations.view.geometry({
           title: "Patient Catchment",
+          name: "80% Boundary",
           type: "geometry",
           location: entry.location,
           listview: entry.listview,
@@ -68,7 +69,7 @@ document.dispatchEvent(new CustomEvent('practice_catchment', {
 
         entry.listview.appendChild(_xyz.utils.html.node`
         <div class="label inline">Total Demand (£)</div>
-        <div class="val inline">${response.total_dem}`)
+        <div class="val inline">${parseInt(response.total_dem).toLocaleString()}`)
         
       })
 
