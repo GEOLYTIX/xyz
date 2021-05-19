@@ -48,8 +48,17 @@ module.exports = async (req) => {
     }
 
     if (process.env.WORKSPACE === 'dynamic') {
-      if (!req) return;
+      if (!req) return new Error('Not request found');
       const { slug, project, lang } = req.query;
+      if (!slug){
+        return new Error('No slug specified')
+      }
+      if (!project){
+        return new Error('No project specified')
+      }
+      if (!lang){
+        return new Error('No lang specified')
+      }
       const Page = mongoClient.db('acorn').collection('pages');
       const Version = mongoClient.db('acorn').collection('versions');
       const proposalPage = await Page.findOne({
