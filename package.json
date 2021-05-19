@@ -7,7 +7,7 @@
   },
   "license": "MIT",
   "scripts": {
-    "_start": "node express.js",
+    "_start": "nodemon express.js",
     "_build": "webpack --mode production",
     "_dev": "webpack --mode development",
     "lint": "eslint --debug ./",
@@ -50,6 +50,7 @@
     "jwt-decode": "^2.2.0",
     "markdown-it": "^11.0.1",
     "markdown-it-anchor": "^6.0.0",
+    "nodemon": "^2.0.7",
     "uhtml": "^2.5.3",
     "webpack": "^5.28.0",
     "webpack-cli": "^4.3.1"

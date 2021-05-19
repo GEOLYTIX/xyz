@@ -27,6 +27,11 @@
  * Released under the MIT License.
  */
 
+<<<<<<< HEAD
+=======
+/*! ../helpers.js */
+
+>>>>>>> AM-1: Created endpoint to get dynamic workspace
 /*! ./_DataView */
 
 /*! ./_Hash */
@@ -237,10 +242,25 @@
 
 /*! ./_toSource */
 
+<<<<<<< HEAD
 /*! ./constant */
 
 /*! ./eq */
 
+=======
+/*! ./annotation.js */
+
+/*! ./constant */
+
+/*! ./element.js */
+
+/*! ./eq */
+
+/*! ./events.js */
+
+/*! ./helpers.js */
+
+>>>>>>> AM-1: Created endpoint to get dynamic workspace
 /*! ./identity */
 
 /*! ./isArguments */
@@ -279,12 +299,31 @@
 
 /*! ./toPlainObject */
 
+<<<<<<< HEAD
+=======
+/*! ./types/box.js */
+
+/*! ./types/line.js */
+
+/*! chart.js */
+
+/*! moment */
+
+/*!*************************!*\
+  !*** external "moment" ***!
+  \*************************/
+
+>>>>>>> AM-1: Created endpoint to get dynamic workspace
 /*!***********************************!*\
   !*** ./node_modules/lodash/eq.js ***!
   \***********************************/
 
 /*!*************************************!*\
+<<<<<<< HEAD
   !*** ./lib/index.mjs + 161 modules ***!
+=======
+  !*** ./lib/index.mjs + 150 modules ***!
+>>>>>>> AM-1: Created endpoint to get dynamic workspace
   \*************************************/
 
 /*!*************************************!*\
@@ -592,6 +631,13 @@
   \********************************************/
 
 /*!*********************************************!*\
+<<<<<<< HEAD
+=======
+  !*** ./node_modules/chart.js/dist/Chart.js ***!
+  \*********************************************/
+
+/*!*********************************************!*\
+>>>>>>> AM-1: Created endpoint to get dynamic workspace
   !*** ./node_modules/lodash/_arrayFilter.js ***!
   \*********************************************/
 
@@ -815,6 +861,41 @@
   !*** ./node_modules/flatpickr/dist/esm/utils/polyfills.js ***!
   \************************************************************/
 
+<<<<<<< HEAD
+=======
+/*!*************************************************************!*\
+  !*** ./node_modules/chartjs-plugin-annotation/src/index.js ***!
+  \*************************************************************/
+
+/*!**************************************************************!*\
+  !*** ./node_modules/chartjs-plugin-annotation/src/events.js ***!
+  \**************************************************************/
+
+/*!***************************************************************!*\
+  !*** ./node_modules/chartjs-plugin-annotation/src/element.js ***!
+  \***************************************************************/
+
+/*!***************************************************************!*\
+  !*** ./node_modules/chartjs-plugin-annotation/src/helpers.js ***!
+  \***************************************************************/
+
+/*!*****************************************************************!*\
+  !*** ./node_modules/chartjs-plugin-annotation/src/types/box.js ***!
+  \*****************************************************************/
+
+/*!******************************************************************!*\
+  !*** ./node_modules/chartjs-plugin-annotation/src/annotation.js ***!
+  \******************************************************************/
+
+/*!******************************************************************!*\
+  !*** ./node_modules/chartjs-plugin-annotation/src/types/line.js ***!
+  \******************************************************************/
+
+/*!**********************************************************************************!*\
+  !*** ./node_modules/chartjs-plugin-datalabels/dist/chartjs-plugin-datalabels.js ***!
+  \**********************************************************************************/
+
+>>>>>>> AM-1: Created endpoint to get dynamic workspace
 /**
  * chroma.js - JavaScript library for color conversions
  *
