@@ -4,7 +4,6 @@
       "src": "file:/views/blog.html"
     },
     "Mapbox Base": {
-      "group": "Base Maps",
       "format": "mbtiles",
       "mbStyle": "mapbox://styles/dbauszus/ciozrimi3002bdsm8bjtn2v1y",
       "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2p5Nmt3bm4wMGhzeTNjbGVxOGZyZG5qZCJ9.9naYTbockHur5X8WO3nsjQ",
@@ -14,7 +13,6 @@
       }
     },
     "Mapbox Colour": {
-      "group": "Base Maps",
       "display": true,
       "format": "mbtiles",
       "mbStyle": "mapbox://styles/dbauszus/ck440h6990nii1co520go20i2",
@@ -25,7 +23,6 @@
       }
     },
     "Mapbox Labels": {
-      "group": "Base Maps",
       "format": "mbtiles",
       "mbStyle": "mapbox://styles/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z",
       "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2p5Nmt3bm4wMGhzeTNjbGVxOGZyZG5qZCJ9.9naYTbockHur5X8WO3nsjQ",
@@ -35,7 +32,6 @@
       }
     },
     "HERE Imagery": {
-      "group": "Base Maps",
       "format": "tiles",
       "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?{HERE}",
       "proxy": true,
@@ -45,7 +41,6 @@
       }
     },
     "HERE Hybrid": {
-      "group": "Base Maps",
       "format": "tiles",
       "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?{HERE}",
       "proxy": true,
@@ -90,17 +85,14 @@
     "geolytix_projects": {
       "src": "cloudfront:${CDN}/blog/layers/geolytix_projects.json"
     },
-    "retail points": {
-      "src": "cloudfront:${CDN}/blog/layers/retail_points.json"
+    "uk_grocery": {
+      "src": "cloudfront:${CDN}/templates/uk/grocery.json"
     },
-    "retail points - layer table": {
-      "template": "SELECT id, store_name, town FROM geodata.uk_glx_open_retail_points WHERE true ${viewport} ${filter} FETCH FIRST 99 ROW ONLY;"
+    "uk_grocery table": {
+      "template": "SELECT id as id, store_name, retailer, fascia, size_sqft FROM geodata.uk_glx_open_retail_points WHERE true ${viewport} ${filter} limit 99;"
     },
     "blackwells": {
       "src": "cloudfront:${CDN}/blog/layers/blackwells.json"
-    },
-    "lush": {
-      "src": "cloudfront:${CDN}/blog/layers/lush.json"
     },
     "mumbai_retail_venues": {
       "src": "cloudfront:${CDN}/blog/layers/mumbai_retail_venues.json"
@@ -113,6 +105,9 @@
     },
     "walking_america": {
       "src": "cloudfront:${CDN}/blog/layers/walking_america.json"
+    },
+    "state_query": {
+      "template": "SELECT CONCAT(stusps, ' - ', statename) AS label FROM geodata.usa_glx_geodata_admin_state WHERE id = %{id}"
     },
     "usa_landmarks": {
       "src": "cloudfront:${CDN}/blog/layers/usa_landmarks.json"
@@ -207,7 +202,7 @@
           "group": "Maps"
         },
         "Retail Points": {
-          "template": "retail points"
+          "template": "uk_grocery"
         },
         "Blackwells": {
           "template": "blackwells"
@@ -220,8 +215,7 @@
           "dbs": "BLOG",
           "qID": "id",
           "table": "blog.vw_leeds_glx_geodata_seamless_combined",
-          "infoj": [
-            {
+          "infoj": [{
               "type": "key"
             },
             {
@@ -253,7 +247,12 @@
         },
         "Lush Locations": {
           "display": true,
-          "template": "lush"
+          "template": "lush",
+          "format": "mvt",
+          "geom": "geom_3857_1000m",
+          "srid": "3857",
+          "dbs": "BLOG",
+          "table": "blog.global_glx_open_locations_lush"
         }
       }
     },
@@ -321,13 +320,163 @@
           "display": true
         },
         "Walking America": {
-          "template": "walking_america"
+          "template": "walking_america",
+          "hover": {
+            "query": "state_query"
+          }
         },
         "Landmarks": {
           "template": "usa_landmarks"
         },
         "Route": {
           "template": "usa_route"
+        }
+      }
+    },
+    "London": {
+      "bounds": {
+        "north": 52.686,
+        "east": 1.236,
+        "south": 50.28,
+        "west": -1.489
+      },
+      "maskBounds": true,
+      "minZoom": 10,
+      "maxZoom": 18,
+      "view": {
+        "lat": 51.5073,
+        "lng": -0.12755
+      },
+      "layers": {
+        "Mapbox": {
+          "template": "Mapbox Base",
+          "display": true
+        },
+        "Mapbox Labels": {
+          "template": "Mapbox Labels",
+          "display": true
+        },
+        "Boroughs": {
+          "display": true,
+          "format": "mvt",
+          "dbs": "MAPP",
+          "table": "mapp.uk_glx_london_football_boroughs_blog",
+          "mvt_cache": "mapp.uk_glx_london_football_boroughs_blog__mvts",
+          "geom": "geom_3857",
+          "srid": "3857",
+          "style": {
+            "zIndex": 99,
+            "theme": {
+              "field": "team",
+              "type": "categorized",
+              "other": true,
+              "cat": {
+                "Arsenal": {
+                  "fillColor": "#FF0000",
+                  "strokeColor": "#fff",
+                  "strokeWidth": 2,
+                  "fillOpacity": 0.5
+                },
+                "Arsenal_Chelsea": {
+                  "fillColor": "#85234B",
+                  "strokeColor": "#0A4595",
+                  "strokeWidth": 2,
+                  "fillOpacity": 0.5
+                },
+                "Arsenal_Spurs": {
+                  "fillColor": "#FB7B7B",
+                  "strokeColor": "#0F204B",
+                  "strokeWidth": 2,
+                  "fillOpacity": 0.5
+                },
+                "Chelsea": {
+                  "fillColor": "#0A4595",
+                  "strokeColor": "#fff",
+                  "strokeWidth": 2,
+                  "fillOpacity": 0.5
+                },
+                "Spurs": {
+                  "fillColor": "#F6F6F6",
+                  "strokeColor": "#0F204B",
+                  "strokeWidth": 2,
+                  "fillOpacity": 0.5
+                },
+                "West Ham": {
+                  "fillColor": "#540D1A",
+                  "strokeColor": "#2CAADE",
+                  "strokeWidth": 2,
+                  "fillOpacity": 0.5
+                },
+                "Crystal Palace": {
+                  "fillColor": "#D80081",
+                  "strokeColor": "#0055A5",
+                  "strokeWidth": 2,
+                  "fillOpacity": 0.5
+                }
+              }
+            }
+          }
+        },
+        "Logos": {
+          "display": true,
+          "format": "geojson",
+          "dbs": "MAPP",
+          "table": "mapp.uk_glx_london_football_boroughs_blog",
+          "geom": "geom_p_4326",
+          "srid": "4326",
+          "qID": "id",
+          "style": {
+            "zIndex": 999,
+            "theme": {
+              "field": "team",
+              "type": "categorized",
+              "other": true,
+              "cat": {
+                "Arsenal": {
+                  "marker": {
+                    "svg": "https://geolytix.github.io/public/football/arsenal.svg",
+                    "scale": 0.1
+                  }
+                },
+                "Arsenal_Chelsea": {
+                  "marker": {
+                    "svg": "https://geolytix.github.io/public/football/arsenal_chelsea.svg",
+                    "scale": 0.1
+                  }
+                },
+                "Arsenal_Spurs": {
+                  "marker": {
+                    "svg": "https://geolytix.github.io/public/football/arsenal_spurs.svg",
+                    "scale": 0.1
+                  }
+                },
+                "Chelsea": {
+                  "marker": {
+                    "svg": "https://geolytix.github.io/public/football/chelsea.svg",
+                    "scale": 0.2
+                  }
+                },
+                "Spurs": {
+                  "marker": {
+                    "svg": "https://geolytix.github.io/public/football/spurs.svg",
+                    "scale": 0.1
+                  }
+                },
+                "West Ham": {
+                  "marker": {
+                    "svg": "https://geolytix.github.io/public/football/west_ham.svg",
+                    "scale": 0.1
+                  }
+                },
+                "Crystal Palace": {
+                  "marker": {
+                    "svg": "https://geolytix.github.io/public/football/crystal_palace.svg",
+                    "scale": 0.7
+                  }
+                }
+              }
+            }
+          }
         }
       }
     }

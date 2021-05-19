@@ -59,41 +59,42 @@ document.dispatchEvent(new CustomEvent('measure_distance_here', {
                 type: params.type,
                 condition: e => {
 
-                    if (e.originalEvent.buttons === 1) {
+                    _xyz.mapview.interaction.draw.vertices.push(e.coordinate)
+                    if (_xyz.mapview.popup.node) _xyz.mapview.popup.node.remove()
 
-                        _xyz.mapview.interaction.draw.vertices.push(e.coordinate)
-                        if (_xyz.mapview.popup.node) _xyz.mapview.popup.node.remove()
+                    if (_xyz.mapview.interaction.draw.vertices.length > 1) {
 
-                        if (_xyz.mapview.interaction.draw.vertices.length > 1) {
+                        const p1 = ol.proj.toLonLat(_xyz.mapview.interaction.draw.vertices[0], `EPSG:3857`)
+                        const p2 = ol.proj.toLonLat(_xyz.mapview.interaction.draw.vertices[_xyz.mapview.interaction.draw.vertices.length - 1], `EPSG:3857`)
 
-                            const p1 = ol.proj.toLonLat(_xyz.mapview.interaction.draw.vertices[0], `EPSG:3857`)
-                            const p2 = ol.proj.toLonLat(_xyz.mapview.interaction.draw.vertices[_xyz.mapview.interaction.draw.vertices.length - 1], `EPSG:3857`)
-
-                            const params = {
-                                transportMode: 'car',
-                                origin: `${p1[1]},${p1[0]}`,
-                                destination: `${p2[1]},${p2[0]}`,
-                                return: 'summary'/*,
-                                departure: new Date('2020-02-01 13:00:00').toISOString()*/ // set date swhen needed
-                            }
-
-                            _xyz
-                                .proxy(`https://router.hereapi.com/v8/routes?${_xyz.utils.paramString(params)}&{HERE}`)
-                                .then(response => {
-                         
-                                    if (!response.routes) return
-                                    let length = response.routes[0].sections[0].summary.length,
-                                        duration = response.routes[0].sections[0].summary.duration
-
-                                    values.length = length
-                                    values.duration = duration
-                                })
+                        const params = {
+                            transportMode: 'car',
+                            origin: `${p1[1]},${p1[0]}`,
+                            destination: `${p2[1]},${p2[0]}`,
+                            return: 'summary'/*,
+                            departure: new Date('2020-02-01 13:00:00').toISOString()*/
                         }
 
-                        return true
+                        _xyz
+                            .proxy(`https://router.hereapi.com/v8/routes?${_xyz.utils.paramString(params)}&{HERE}`)
+                            .then(response => {
+
+                                if (!response.routes) return
+                                let length = response.routes[0].sections[0].summary.length,
+                                    duration = response.routes[0].sections[0].summary.duration
+
+                                values.length = length
+                                values.duration = duration
+
+                                _xyz.mapview.popup.create({
+                                    content: _xyz.utils.html.node `<div style="padding: 5px; min-width: 100px; font-size: smaller;">Length ${(parseFloat(values.length/1000).toFixed(2)).toString().toLocaleString('en-GB')} km<br/>Duration ${Math.round(values.duration/60)} min`,
+                                    coords: _xyz.mapview.interaction.draw.vertices[_xyz.mapview.interaction.draw.vertices.length - 1]
+                                })
+                            })
                     }
+                    return true
                 }
-            });
+            })
 
             _xyz.mapview.interaction.draw.interaction.on('drawstart', e => {
 
@@ -131,10 +132,13 @@ document.dispatchEvent(new CustomEvent('measure_distance_here', {
             geometry.on('change', () => {
 
                 if (!params.length || !params.duration) return
+                if (!params.duration) return
+
+                if (_xyz.mapview.popup.node) _xyz.mapview.popup.node.remove()
 
                 _xyz.mapview.popup.create({
                     content: _xyz.utils.html.node `<div style="padding: 5px; min-width: 100px; font-size: smaller;">Length ${(parseFloat(params.length/1000).toFixed(2)).toString().toLocaleString('en-GB')} km<br/>Duration ${Math.round(params.duration/60)} min`,
-                    coords: _xyz.mapview.interaction.draw.vertices[_xyz.mapview.interaction.draw.vertices.length-1]
+                    coords: _xyz.mapview.interaction.draw.vertices[_xyz.mapview.interaction.draw.vertices.length - 1]
                 })
             })
         }

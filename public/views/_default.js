@@ -124,7 +124,7 @@ window.onload = () => {
   // Initialize xyz object
   const xyz = _xyz({
     host: document.head.dataset.dir || new String(''),
-    hooks: true
+    hooks: false
   })
 
   document.getElementById('layers_header').textContent = xyz.language.layers_header
@@ -257,6 +257,9 @@ window.onload = () => {
           e.target.classList.toggle('enabled')
           document.body.classList.toggle('fullscreen')
           xyz.map.updateSize()
+          Object.values(xyz.layers.list).forEach(layer => {
+            layer.mbMap?.resize()
+          })
         }}>
         <div class="xyz-icon icon-map">`)      
 
@@ -337,7 +340,8 @@ window.onload = () => {
     xyz.user = document.head.dataset.user && JSON.parse(decodeURI(document.head.dataset.user))
 
     xyz.user && xyz.utils.idle({
-      host: xyz.host
+      host: xyz.host,
+      idle: xyz.locale.idle ?? 600
     })
 
     // Append user admin button.
@@ -355,6 +359,11 @@ window.onload = () => {
         href="${xyz.user && '?logout=true' || '?login=true'}">
         <div
           class="${`xyz-icon ${xyz.user && 'icon-logout red-filter' || 'icon-lock-open primary-colour-filter'}`}">`)
+
+
+    // Append spacer for tableview
+    btnColumn.appendChild(xyz.utils.html.node`
+      <div style="height: 60px;">`)
 
   }
 

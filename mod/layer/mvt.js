@@ -28,28 +28,7 @@ module.exports = async (req, res) => {
     +`${roles && Object.values(roles).some(r => !!r)
     && ` AND ${sql_filter(Object.values(roles).filter(r => !!r), SQLparams)}` || ''}`
 
-  if (!filter && layer.mvt_cache) {
-
-    // Get MVT from cache table.
-    var rows = await dbs[layer.dbs](`SELECT mvt FROM ${layer.mvt_cache} WHERE z = ${z} AND x = ${x} AND y = ${y}`)
-
-    if (rows instanceof Error) console.log('failed to query mvt cache')
-
-    // res.setHeader('Cache-Control', 's-maxage=1, stale-while-revalidate')
-
-    // If found return the cached MVT to client.
-    if (rows.length === 1) return res.send(rows[0].mvt)
-
-  }
-
-  function getField(theme) {
-
-    return theme.fieldfx && `${theme.fieldfx} AS ${theme.field}` 
-      || theme.fields
-      || theme.field
-  }
-
-  // Construct array of fields queried
+    // Construct array of fields queried
   const mvt_fields = Object.values(layer.style.themes || {})
     .map(theme => getField(theme))
     .filter(field => typeof field !== 'undefined')
@@ -57,10 +36,15 @@ module.exports = async (req, res) => {
   // Assign mvt_fields from single theme
   layer.style.theme && mvt_fields.push(layer.style.theme && getField(layer.style.theme))
 
-  // Create a new tile and store in cache table if defined.
-  // ST_MakeEnvelope() in ST_AsMVT is based on https://github.com/mapbox/postgis-vt-util/blob/master/src/TileBBox.sql
-  var q = `
-    ${!filter && layer.mvt_cache && `INSERT INTO ${layer.mvt_cache} (z, x, y, mvt, tile)` ||''}
+  const geoms = layer.geoms && Object.keys(layer.geoms)
+
+  var geom = geoms && layer.geoms[z] || layer.geom
+
+  var geom = geoms && z < parseInt(geoms[0]) && Object.values(layer.geoms)[0] || geom
+  
+  var geom = geoms && z > parseInt(geoms[geoms.length -1]) && Object.values(layer.geoms)[geoms.length -1]  || geom
+
+  const tile = `
     SELECT
       ${z},
       ${x},
@@ -73,15 +57,13 @@ module.exports = async (req, res) => {
         ${ m - (y * r)},
         3857
       ) tile
-
     FROM (
-
       SELECT
         ${id} as id,
         ${mvt_fields.length && mvt_fields.toString() + ',' || ''}
         ST_AsMVTGeom(
           ${layer.srid !== '3857' && `ST_Transform(` ||''}
-            ${layer.geom},
+            ${geom},
           ${layer.srid !== '3857' && `${layer.srid}), ST_Transform(` ||''}
             ST_MakeEnvelope(
               ${-m + (x * r)},
@@ -95,9 +77,7 @@ module.exports = async (req, res) => {
           1024,
           false
         ) geom
-
       FROM ${table}
-
       WHERE
         ST_Intersects(
           ${layer.srid !== '3857' && `ST_Transform(` ||''}
@@ -109,17 +89,39 @@ module.exports = async (req, res) => {
               3857
             ),
           ${layer.srid !== '3857' && `${layer.srid}),` ||''}
-          ${layer.geom}
-        )
+          ${geom}
+        ) ${filter}
+      ) tile`
 
-        ${filter}
+  if (!filter && layer.mvt_cache) {
 
-    ) tile
+    var rows = await dbs[layer.dbs](`SELECT mvt FROM ${layer.mvt_cache} WHERE z = ${z} AND x = ${x} AND y = ${y}`)
+
+    if (rows instanceof Error) console.log('failed to query mvt cache')
+
+    if(!rows.length) {
+      rows = await dbs[layer.dbs](`
+        WITH n AS (
+          INSERT INTO ${layer.mvt_cache}
+          ${tile} ON CONFLICT (z, x, y) DO NOTHING RETURNING mvt
+        ) SELECT mvt FROM n;
+      `)
+
+      if (rows instanceof Error) console.log('failed to cache mvt')
+    }
     
-    ${!filter && layer.mvt_cache && 'RETURNING mvt' ||''};`
+    if (rows.length === 1)  return res.send(rows[0].mvt) // If found return the cached MVT to client.
 
+  }
 
-  var rows = dbs[layer.dbs] && await dbs[layer.dbs](q, SQLparams)
+  function getField(theme) {
+
+    return theme.fieldfx && `${theme.fieldfx} AS ${theme.field}` 
+      || theme.fields
+      || theme.field
+  }
+
+  var rows = dbs[layer.dbs] && await dbs[layer.dbs](tile, SQLparams)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 

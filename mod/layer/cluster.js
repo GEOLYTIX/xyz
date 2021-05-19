@@ -357,7 +357,7 @@ module.exports = async (req, res) => {
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
 
-  if (!theme) return res.send(rows.map(row => ({
+  if (!theme || theme === 'basic') return res.send(rows.map(row => ({
     geometry: {
       x: row.x,
       y: row.y,
