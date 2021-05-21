@@ -87,9 +87,64 @@ window.onload = () => {
 
         })
 
+        ui()
+
       })
       .catch(error => console.error(error))
 
+  }
+
+  function ui() {
+
+    xyz.gazetteer.init({
+      group: document.getElementById('Gazetteer')
+    })
+
+    document.getElementById('FindMe').onclick = xyz.mapview.locate.toggle
+
+    document.getElementById('Reset').onclick = ()=>{
+      history.replaceState(null, '', '/retailpoints/view/custom')
+      location.reload()
+    }
+
+
+    const filter = document.getElementById('Filter')
+
+    filter.appendChild(xyz.utils.html.node `
+      <label class="input-checkbox">
+        <input type="checkbox" checked=true
+          onchange=${e=>layerFilter('Supermarket', e.target.checked)}>
+        </input>
+        <div></div>
+        <span>Supermarket`)
+
+    filter.appendChild(xyz.utils.html.node `
+      <label class="input-checkbox">
+        <input type="checkbox" checked=true
+          onchange=${e=>layerFilter('Convenience', e.target.checked)}>
+        </input>
+        <div></div>
+        <span>Convenience`)
+
+    const layer = xyz.layers.list['Retail Points']
+
+    layer.filter.current.store_type = {
+      in: ['Convenience', 'Supermarket', 'foo']
+    }
+
+    function layerFilter(store_type, checked) {
+
+      if (checked) {
+        layer.filter.current.store_type.in.push(store_type)
+      } else {
+        layer.filter.current.store_type.in = layer.filter.current.store_type.in
+          .filter(val => val !== store_type)
+      }
+      
+      layer.reload()
+
+    }
+    
   }
 
 }
