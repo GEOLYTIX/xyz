@@ -36,8 +36,12 @@ module.exports = async ref => {
         matched => process.env[`SRC_${matched.replace(/\{|\}/g, '')}`] || matched)
   
     const signedUrl = await generateSignedDownloadUrl(url)
+    
+    //console.time(url)
   
     const response = await fetch(signedUrl)
+
+    //console.timeEnd(url)
   
     if (response.status >= 300) return new Error(`${response.status} ${ref}`)
 
