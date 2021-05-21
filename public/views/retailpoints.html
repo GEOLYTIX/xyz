@@ -3,7 +3,7 @@
 
 <head data-dir="${dir}">
 
-  <title>GEOLYTIX | Blog</title>
+  <title>GEOLYTIX | Retail Points</title>
 
   <link rel="icon" type="image/x-icon" href="${dir}/icons/favicon.ico" />
 
@@ -64,6 +64,11 @@
       color: rgb(69, 23, 6);
     }
 
+    #CTRL button:hover {
+      color: rgb(196, 79, 36);
+      background-color: rgb(69, 23, 6);
+    }
+
     #Logo {
       background-image: url(https://geolytix.github.io/public/geolytix.svg);
       height: 40px;
@@ -71,6 +76,20 @@
       background-size: contain;
       background-repeat: no-repeat;
       margin-bottom: 20px;
+    }
+
+    #Gazetteer li {
+      font-size: 80%;
+      border-radius: 8px;
+      padding: 3px;
+      padding-left: 12.5px;
+      margin-top: 3px;
+    }
+
+    #Gazetteer li:hover {
+      background-color: rgb(196, 79, 36);
+      color: rgb(69, 23, 6);
+      cursor: pointer;
     }
 
     #Map {
@@ -99,6 +118,17 @@
     #Footer a {
       font-weight: 800;
       border-bottom: 2px solid;
+    }
+
+    #Footer .comms-link {
+      background-size: contain;
+      background-repeat: no-repeat;
+      width: 25px;
+      height: 25px;
+      display: inline-block;
+      border: none;
+      margin-left: 11px;
+      margin-bottom: -5px;
     }
 
     a:hover {
@@ -147,13 +177,19 @@
 
   <div id="CTRL">
     <a id="Logo" target="_blank" href="https://geolytix.co.uk"></a>
-    <div class="bold">Eggcited to find your nearest supermarket?</div>
-    <div>Avo go searching a location or click an icon to lettuce show details of supermarkets near you.</div>
+    <div class="bold">Excited to find your nearest supermarket?</div>
+    <div>Have a go searching a location or click an icon to see the details of a supermarkets near you.</div>
     <div id="Search">
-      <input style="grid-row: 1; grid-column: 1/4" placeholder="Enter your postcode or town" name="search" required="">
-      <button style="grid-row: 2; grid-column: 1">Reset</button>
-      <button style="grid-row: 2; grid-column: 2">Find me</button>
-      <button style="grid-row: 2; grid-column: 3">Let's roll</button>
+      <div id="Gazetteer" style="grid-row: 1; grid-column: 1/3">
+        <input placeholder="Enter your postcode or town" required="">
+        <ul></ul>
+      </div>
+      <button id="Reset" style="grid-row: 2; grid-column: 1">Reset</button>
+      <button id="FindMe" style="grid-row: 2; grid-column: 2">Find me</button>
+    </div>
+    <br>
+    <div id="Filter">
+      <div class="bold">Filter</div>
     </div>
   </div>
 
@@ -163,9 +199,13 @@
   </div>
 
   <div id="Footer">
-    <div>Wonton to know more about this data... <a>read here</a></div>
-    <div>Supermarket Retail Points are released openly by Geolytix under a <a>CCO license</a> and can be downloaded for free <a>here</a>.</div>
-    <div>Missing a supermarket? It would be magnificent if you could let us know <a>mail</a> <a>twitter</a> <a>linkedin</a></div>
+    <div>Want to know more about this data... <a target="_blank" href="https://geolytix.com/blog/supermarket-retail-points/">read here</a></div>
+    <div>Supermarket Retail Points are released as open data by Geolytix under a <a target="_blank" href="https://creativecommons.org/publicdomain/zero/1.0/">CCO license</a> and can be downloaded for free <a target="_blank" href="https://drive.google.com/file/d/1B8M7m86rQg2sx2TsHhFa2d-x-dZ1DbSy/view">here</a>.</div>
+    <div>Missing a supermarket? It would be magnificent if you could let us know. 
+      <a class="comms-link" style="background-image: url(https://geolytix.github.io/public/comms/mail.svg)" target="_blank" href="mailto:info@geolytix.com"></a>
+      <a class="comms-link" style="background-image: url(https://geolytix.github.io/public/comms/twitter.svg)" target="_blank" href="https://twitter.com/Geolytix"></a>
+      <a class="comms-link" style="background-image: url(https://geolytix.github.io/public/comms/linkedin.svg)" target="_blank" href="https://www.linkedin.com/company/geolytix"></a>
+      <a class="comms-link" style="background-image: url(https://geolytix.github.io/public/comms/github.svg)" target="_blank" href="https://github.com/GEOLYTIX/xyz"></a></div>
   </div>
 
 </body>
