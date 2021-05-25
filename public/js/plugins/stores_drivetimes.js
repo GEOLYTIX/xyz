@@ -11,8 +11,6 @@ document.dispatchEvent(new CustomEvent('stores_drivetimes', {
 
       if (!entry.location.infoj.find(e => e.field === 'geom_15_min').value) return
 
-      console.log(uk_metrics)
-
       Promise.all([_xyz.query(Object.assign(
         entry, {
           query: 'stores_drivetimes_no_uk'
