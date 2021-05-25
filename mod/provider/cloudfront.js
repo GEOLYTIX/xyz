@@ -6,42 +6,29 @@ const { join } = require('path')
 
 const AWS = require("aws-sdk")
 
-function readPem() {
-  const pem = readFileSync(join(__dirname, `../../${process.env.KEY_CLOUDFRONT}.pem`))
-  return String(pem)
-}
+const pem = String(readFileSync(join(__dirname, `../../${process.env.KEY_CLOUDFRONT}.pem`)))
 
 const awsSigner = process.env.KEY_CLOUDFRONT && new AWS.CloudFront.Signer(
   process.env.KEY_CLOUDFRONT,
-  readPem()
-)
-
-function generateSignedDownloadUrl(ref) {
-  return new Promise(function(resolve) {
-    const url = awsSigner.getSignedUrl({
-      url: `https://${ref}`,
-      expires: Date.now() + 60 * 60 * 1000 // 1 hour
-    })
-    resolve(url)
-  })
-}
+  pem)
 
 module.exports = async ref => {
 
   try {
 
-    let url = ref.params && ref.params.url || ref
-
-    url = url.replace(/\{(.*?)\}/g,
+    let url = (ref.params?.url || ref).replace(/\{(.*?)\}/g,
         matched => process.env[`SRC_${matched.replace(/\{|\}/g, '')}`] || matched)
   
-    const signedUrl = await generateSignedDownloadUrl(url)
+    const signedURL = awsSigner.getSignedUrl({
+      url: `https://${url}`,
+      expires: Date.now() + 60 * 60 * 1000 // 1 hour
+    })
     
-    //console.time(url)
+    console.time(url)
   
-    const response = await fetch(signedUrl)
+    const response = await fetch(signedURL)
 
-    //console.timeEnd(url)
+    console.timeEnd(url)
   
     if (response.status >= 300) return new Error(`${response.status} ${ref}`)
 

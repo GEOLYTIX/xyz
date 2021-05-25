@@ -40,6 +40,7 @@ module.exports = async workspace => {
       }
 
       if (entry[1].src && entry[1].src.startsWith('cloudfront:')) {
+
         return cloudfront(entry[1].src.split(':')[1])
           .then(_resolve)
       }
@@ -103,9 +104,12 @@ module.exports = async workspace => {
 
   return new Promise((resolve, reject) => {
 
+    console.time('promise all')
+
     Promise
       .all(templatePromises)
       .then(arr => {
+        console.timeEnd('promise all')
         Object.assign(workspace.templates, ...arr)
         resolve()
       })
