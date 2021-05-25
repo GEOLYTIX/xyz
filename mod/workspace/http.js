@@ -4,7 +4,7 @@ const https = require('https')
 
 const httpsAgent = new https.Agent({
 	keepAlive: true,
-  maxSockets: 1
+  maxSockets: parseInt(process.env.CUSTOM_AGENT)
 })
 
 module.exports = async ref => {
