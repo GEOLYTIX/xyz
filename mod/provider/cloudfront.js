@@ -1,5 +1,12 @@
 const fetch = require('node-fetch')
 
+const https = require('https')
+
+const httpsAgent = new https.Agent({
+	keepAlive: true,
+  maxSockets: 1
+})
+
 const { readFileSync } = require('fs')
 
 const { join } = require('path')
@@ -26,7 +33,9 @@ module.exports = async ref => {
     
     // console.time(url)
   
-    const response = await fetch(signedURL)
+    const response = await fetch(signedURL, {
+      agent: process.env.CUSTOM_AGENT && httpsAgent
+    })
 
     // console.timeEnd(url)
   
