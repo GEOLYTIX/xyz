@@ -24,11 +24,11 @@ module.exports = async ref => {
       expires: Date.now() + 60 * 60 * 1000 // 1 hour
     })
     
-    console.time(url)
+    // console.time(url)
   
     const response = await fetch(signedURL)
 
-    console.timeEnd(url)
+    // console.timeEnd(url)
   
     if (response.status >= 300) return new Error(`${response.status} ${ref}`)
 
