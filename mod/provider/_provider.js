@@ -1,5 +1,3 @@
-const github = require('./github')
-
 const cloudfront = require('./cloudfront')
 
 const cloudinary = require('./cloudinary')
@@ -7,7 +5,6 @@ const cloudinary = require('./cloudinary')
 module.exports = async (req, res) => {
 
   const _provider = {
-    github: github,
     cloudfront: cloudfront,
     cloudinary: cloudinary
   }
@@ -15,8 +12,7 @@ module.exports = async (req, res) => {
   const provider = _provider[req.params.provider]
 
   if (!provider) {
-    return res.send(`Failed to evaluate 'provider' param.<br><br>
-    <a href="https://geolytix.github.io/xyz/docs/develop/api/provider/">Provider API</a>`)
+    return res.send(`Failed to evaluate 'provider' param.`)
   }
 
   const response = await provider(req)

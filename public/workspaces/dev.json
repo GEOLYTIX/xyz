@@ -1,10 +1,10 @@
 {
   "templates": {
     "blog": {
-      "src": "file://views/blog.html"
+      "src": "file:views/blog.html"
     },
     "embedded": {
-      "src": "file://views/embedded.html"
+      "src": "file:views/embedded.html"
     },
     "Mapbox Base": {
       "format": "mbtiles",
@@ -129,6 +129,9 @@
     },
     "Agata": {
       "src": "cloudfront:${CDN}/dev/aga/layer.json"
+    },
+    "open": {
+      "src": "file:workspaces/templates/open.json"
     },
     "uk_polygon_demand": {
       "src": "cloudfront:${CDN}/asda/templates/charts/polygon_demand.sql"

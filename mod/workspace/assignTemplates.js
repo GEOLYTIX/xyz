@@ -1,10 +1,10 @@
-const github = require('../provider/github')
-
 const cloudfront = require('../provider/cloudfront')
 
 const http = require('./http')
 
 const file = require('./file')
+
+const logger = require('../logger')
 
 module.exports = async workspace => {
 
@@ -24,8 +24,8 @@ module.exports = async workspace => {
     // Default templates can be overridden by assigning a template with the same name.
   }, workspace.templates)
 
-  const templatePromises = Object.entries(workspace.templates).map(
-    entry => new Promise(resolve => {
+  const templatePromises = Object.entries(workspace.templates)
+    .map(entry => new Promise(resolve => {
 
       // Entries without a src value must not be fetched.
       if (!entry[1].src) return _resolve(entry[1])
@@ -40,13 +40,7 @@ module.exports = async workspace => {
       }
 
       if (entry[1].src && entry[1].src.startsWith('cloudfront:')) {
-
         return cloudfront(entry[1].src.split(':')[1])
-          .then(_resolve)
-      }
-
-      if (entry[1].src && entry[1].src.toLowerCase().includes('api.github')) {
-        return github(entry[1].src)
           .then(_resolve)
       }
 
@@ -104,12 +98,12 @@ module.exports = async workspace => {
 
   return new Promise((resolve, reject) => {
 
-    console.time('promise all')
+    const timestamp = Date.now()
 
     Promise
       .all(templatePromises)
       .then(arr => {
-        console.timeEnd('promise all')
+        logger(`Templates fetched in ${Date.now() - timestamp}`, 'templates')
         Object.assign(workspace.templates, ...arr)
         resolve()
       })

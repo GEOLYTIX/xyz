@@ -1,30 +1,28 @@
-const fetch = require('node-fetch')
-
 const https = require('https')
 
 const httpsAgent = new https.Agent({
 	keepAlive: true,
-  maxSockets: parseInt(process.env.CUSTOM_AGENT)
+  maxSockets: parseInt(process.env.CUSTOM_AGENT) || 1
 })
+
+const fetch = require('node-fetch')
+
+const AWS = require("aws-sdk")
 
 const { readFileSync } = require('fs')
 
 const { join } = require('path')
 
-const AWS = require("aws-sdk")
-
-const pem = String(readFileSync(join(__dirname, `../../${process.env.KEY_CLOUDFRONT}.pem`)))
-
 const awsSigner = process.env.KEY_CLOUDFRONT && new AWS.CloudFront.Signer(
   process.env.KEY_CLOUDFRONT,
-  pem)
+  String(readFileSync(join(__dirname, `../../${process.env.KEY_CLOUDFRONT}.pem`))))
 
 module.exports = async ref => {
 
   try {
 
-    let url = (ref.params?.url || ref).replace(/\{(.*?)\}/g,
-        matched => process.env[`SRC_${matched.replace(/\{|\}/g, '')}`] || matched)
+    const url = (ref.params?.url || ref).replace(/\{(.*?)\}/g,
+      matched => process.env[`SRC_${matched.replace(/\{|\}/g, '')}`] || matched)
   
     const signedURL = awsSigner.getSignedUrl({
       url: `https://${url}`,
