@@ -4,14 +4,10 @@ const http = require('./http')
 
 const cloudfront = require('../provider/cloudfront')
 
-const github = require('../provider/github')
-
 const getFrom = {
-  'http': ref => http(ref),
   'https': ref => http(ref),
   'file': ref => file(`../../public/workspaces/${ref.split(':')[1]}`),
   'cloudfront': ref => cloudfront(ref.split(':')[1]),
-  'github': ref => github(ref.split(':')[1]),
 }
 
 const assignTemplates = require('./assignTemplates')
@@ -26,48 +22,50 @@ const logger = require('../logger')
 
 module.exports = async () => {
 
-  let timestamp = Date.now()
+  const timestamp = Date.now()
 
-  // If the workspace is empty or older than 1hr it needs to be cached.
-  if (!workspace || ((timestamp - workspace.timestamp) > 3600000)) {
+  // Cache workspace if empty.
+  if (!workspace) {
+    logger(`Workspace empty @${timestamp}`, 'workspace')
+    await cache()
+  }
 
-    if (!workspace) {
-      logger(`workspace is empty ${timestamp}`)
-    } else if ((timestamp - workspace.timestamp) > 3600000) {
-      logger(`workspace has expired ${workspace.timestamp} | new timestamp is ${timestamp}`)
-    }
+  // Logically assign timestamp.
+  workspace.timestamp = workspace.timestamp || timestamp
 
-    workspace = process.env.WORKSPACE && await getFrom[process.env.WORKSPACE.split(':')[0]](process.env.WORKSPACE) || {}
-
-    if (workspace instanceof Error) return workspace
-
-    // Return the default locale
-    if (!workspace.locales) {
-      workspace = {
-        locales: {
-          zero: defaults.locale
-        }
-      }
-      return workspace
-    }
-
-    await assignTemplates(workspace)
-
-    await assignDefaults(workspace)
-
-    // Substitute SRC_* variables in locales.
-    workspace.locales = JSON.parse(
-      JSON.stringify(workspace.locales).replace(/\$\{(.*?)\}/g,
-        matched => process.env[`SRC_${matched.replace(/\$|\{|\}/g, '')}`] || matched)
-    )
-  
+  // Cache workspace if expired.
+  if ((timestamp - workspace.timestamp) > 3600000) {
+    logger(`workspace cache expired @${timestamp}`, 'workspace')
+    await cache()
     workspace.timestamp = timestamp
 
   } else {
-
-    logger(`workspace cached ${workspace.timestamp} | age ${timestamp - workspace.timestamp}`)
-
+    logger(`Workspace age ${timestamp - workspace.timestamp}`, 'workspace')
   }
 
   return workspace
+}
+
+async function cache() {
+
+  // Get workspace from source.
+  workspace = process.env.WORKSPACE
+    && await getFrom[process.env.WORKSPACE.split(':')[0]](process.env.WORKSPACE)
+    || {}
+
+  // Return error if source failed.
+  if (workspace instanceof Error) return workspace
+
+  // Assign default locale as locales if missing.
+  workspace.locales = workspace.locales || { zero: defaults.locale }
+
+  await assignTemplates(workspace)
+
+  await assignDefaults(workspace)
+
+  // Substitute all SRC_* variables in locales.
+  workspace.locales = JSON.parse(
+    JSON.stringify(workspace.locales).replace(/\$\{(.*?)\}/g,
+      matched => process.env[`SRC_${matched.replace(/\$|\{|\}/g, '')}`] || matched)
+  )
 }

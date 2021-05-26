@@ -41,3 +41,4 @@ public/js/plugins/catalist_import.js
 public/js/mod.js
 public/js/log.js
 async.js
+public/js/plugins/scenario_branch_analogues.js

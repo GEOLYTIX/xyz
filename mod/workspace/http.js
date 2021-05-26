@@ -1,11 +1,11 @@
-const fetch = require('node-fetch')
-
 const https = require('https')
 
 const httpsAgent = new https.Agent({
 	keepAlive: true,
-  maxSockets: parseInt(process.env.CUSTOM_AGENT)
+  maxSockets: parseInt(process.env.CUSTOM_AGENT) || 1
 })
+
+const fetch = require('node-fetch')
 
 module.exports = async ref => {
   try {
