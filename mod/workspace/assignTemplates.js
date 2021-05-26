@@ -103,7 +103,7 @@ module.exports = async workspace => {
     Promise
       .all(templatePromises)
       .then(arr => {
-        logger(`Templates fetched in ${Date.now() - timestamp}`, 'templates')
+        logger(`Templates for ${workspace.nanoid} fetched in ${Date.now() - timestamp}`, 'templates')
         Object.assign(workspace.templates, ...arr)
         resolve()
       })
