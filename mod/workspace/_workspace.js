@@ -40,7 +40,7 @@ function getTemplate(req, res) {
 
   res.setHeader('content-type', 'text/plain')
 
-  res.send(req.params.template.err && req.params.template.err.message
+  res.send(req.params.template.err?.message
     || req.params.template)
 }
 

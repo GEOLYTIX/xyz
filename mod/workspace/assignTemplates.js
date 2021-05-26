@@ -4,6 +4,12 @@ const http = require('./http')
 
 const file = require('./file')
 
+const getFrom = {
+  'https': ref => http(ref),
+  'file': ref => file(`../../public/${ref.split(':')[1]}`),
+  'cloudfront': ref => cloudfront(ref.split(':')[1]),
+}
+
 const logger = require('../logger')
 
 module.exports = async workspace => {
@@ -28,33 +34,24 @@ module.exports = async workspace => {
     .map(entry => new Promise(resolve => {
 
       // Entries without a src value must not be fetched.
-      if (!entry[1].src) return _resolve(entry[1])
+      if (!entry[1].src) return assign(entry[1])
 
       // Substitute SRC_* parameter.
       entry[1].src = entry[1].src.replace(/\$\{(.*?)\}/g,
         matched => process.env[`SRC_${matched.replace(/\$|\{|\}/g, '')}`] || matched)
 
-      if (entry[1].src && entry[1].src.startsWith('file:')) {
-        return file(`../../public/${entry[1].src.replace('file:', '')}`)
-          .then(_resolve)
+      if (getFrom[entry[1].src.split(':')[0]]) {
+
+        return getFrom[entry[1].src.split(':')[0]](entry[1].src)
+          .then(assign)
       }
 
-      if (entry[1].src && entry[1].src.startsWith('cloudfront:')) {
-        return cloudfront(entry[1].src.split(':')[1])
-          .then(_resolve)
-      }
-
-      if (entry[1].src && entry[1].src.startsWith('http')) {
-        return http(entry[1].src)
-          .then(_resolve)
-      }
-
-      function _resolve(_template) {
+      function assign(template) {
 
         // Failed to fetch template from src.
-        if (_template instanceof Error) {
+        if (template instanceof Error) {
           return resolve({
-            [entry[0]]: { err: _template }
+            [entry[0]]: { err: template }
           })
         }
 
@@ -64,7 +61,7 @@ module.exports = async workspace => {
           try {
             const module_constructor = module.constructor;
             const Module = new module_constructor();
-            Module._compile(_template, entry[1].src)
+            Module._compile(template, entry[1].src)
   
             return resolve({
               [entry[0]]: Module.exports
@@ -80,16 +77,16 @@ module.exports = async workspace => {
         }
 
         // Template is string only.
-        if (typeof _template === 'string') {
-          _template = Object.assign(
+        if (typeof template === 'string') {
+          template = Object.assign(
             entry[1],
             {
-              template: _template
+              template: template
             })
         }
 
         resolve({
-          [entry[0]]: _template
+          [entry[0]]: template
         })
       }
 
@@ -110,7 +107,7 @@ module.exports = async workspace => {
       .catch(error => {
         console.error(error)
         reject()
-      });
+      })
 
   })
 
