@@ -18,6 +18,8 @@ const assignDefaults = require('./assignDefaults')
 
 let workspace = null
 
+const { nanoid } = require('nanoid')
+
 const logger = require('../logger')
 
 module.exports = async () => {
@@ -35,12 +37,12 @@ module.exports = async () => {
 
   // Cache workspace if expired.
   if ((timestamp - workspace.timestamp) > 3600000) {
-    logger(`workspace cache expired @${timestamp}`, 'workspace')
+    logger(`Workspace ${workspace.nanoid} cache expired @${timestamp}`, 'workspace')
     await cache()
     workspace.timestamp = timestamp
 
   } else {
-    logger(`Workspace age ${timestamp - workspace.timestamp}`, 'workspace')
+    logger(`Workspace ${workspace.nanoid} age ${timestamp - workspace.timestamp}`, 'workspace')
   }
 
   return workspace
@@ -55,6 +57,8 @@ async function cache() {
 
   // Return error if source failed.
   if (workspace instanceof Error) return workspace
+
+  workspace.nanoid = nanoid(6)
 
   // Assign default locale as locales if missing.
   workspace.locales = workspace.locales || { zero: defaults.locale }
