@@ -1,6 +1,7 @@
 const dbs = require('../dbs')()
 
 module.exports = async (req, res) => {
+  console.log(req.body);
   const layer = req.params.layer
   var q = `
   INSERT INTO ${req.params.table} (${layer.geom}, metadata)
