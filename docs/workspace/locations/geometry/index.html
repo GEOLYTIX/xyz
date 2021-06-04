@@ -429,7 +429,8 @@
 <p>Supported HERE API request parameters:</p>
 <p>mode: 'car', 'pedestrian', 'truck', 'carHOV', defaults to 'car'<br>
 rangetype: 'time', 'distance', defaults to 'time'<br>
-distance: distance in kilometres when &quot;rangetype&quot;: &quot;distance&quot;</p>
+distance: distance in kilometres when &quot;rangetype&quot;: &quot;distance&quot;,<br>
+shape: maxPoints applied when &quot;maxPoints&quot;: <int></p>
 <p>(© Mapbox)[<a href="https://www.mapbox.com/about/maps">https://www.mapbox.com/about/maps</a>]</p>
 <pre class="language-json"><code class="language-json"><span class="token punctuation">{</span><br>	<span class="token property">"name"</span><span class="token operator">:</span> <span class="token string">"Mapbox drivetime 5 min"</span><span class="token punctuation">,</span><br>	<span class="token property">"field"</span><span class="token operator">:</span> <span class="token string">"isoline_5min"</span><span class="token punctuation">,</span><br>	<span class="token property">"fieldfx"</span><span class="token operator">:</span> <span class="token string">"ST_asGeoJson(isoline_5min)"</span><span class="token punctuation">,</span><br>	<span class="token property">"type"</span><span class="token operator">:</span> <span class="token string">"geometry"</span><span class="token punctuation">,</span><br>	<span class="token property">"edit"</span><span class="token operator">:</span> <span class="token punctuation">{</span><br>		<span class="token property">"isoline_mapbox"</span><span class="token operator">:</span> <span class="token punctuation">{</span>  <br>			<span class="token property">"minutes"</span><span class="token operator">:</span> <span class="token number">5</span><br>		<span class="token punctuation">}</span><br>	<span class="token punctuation">}</span><br><span class="token punctuation">}</span><br>  <span class="token comment">// request returns 5 minute drivetime isochrone from Mapbox API</span></code></pre>
 <ul>

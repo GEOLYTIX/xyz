@@ -2,6 +2,7 @@ const defaults = require('./defaults')
 
 module.exports = async workspace => {
 
+  // Loop through locales in workspace.
   Object.keys(workspace.locales).forEach(locale_key => {
 
     const locale = workspace.locales[locale_key]
@@ -10,49 +11,42 @@ module.exports = async workspace => {
 
     locale.name = locale.name || locale_key
 
+    // Loop through layers in locale.
     Object.keys(locale.layers).forEach(layer_key => {
 
       let layer = locale.layers[layer_key]
 
       layer.key = layer_key
 
-      if (layer.template && workspace.templates[layer.template]) {
-        layer = Object.assign({},
-          workspace.templates[layer.template],
-          layer)
-      }
+      layer = layer.template && Object.assign({},
 
-      layer = Object.assign({},
-        layer.format && defaults.layers[layer.format] || {},
-        layer)
+        // Assign layer template.
+        workspace.templates[layer.template] || {},
 
-      layer.style = layer.style && Object.assign({},
-        layer.format && defaults.layers[layer.format].style,
-        layer.style)
+        // Layer entries must override template entries.
+        layer) || layer
 
+      layer = layer.format && Object.assign({},
+
+        // Assign layer defaults.
+        defaults.layers[layer.format],
+
+        // Layer entries must override template entries.
+        layer) || layer
+
+      layer.style = layer.format && Object.assign({},
+
+        // Assign layer style.
+        defaults.layers[layer.format].style,
+
+        // Layer style must override default style.
+        layer.style || {})
+
+      layer.name = layer.name || layer_key
+
+      // Assign layer to workspace locale
       locale.layers[layer_key] = layer
     })
-  })
-
-  Object.keys(workspace.templates).forEach(layer_key => {
-
-    let layer = workspace.templates[layer_key]
-
-    if (layer.format && defaults.layers[layer.format]) {
-
-      layer.key = layer_key
-
-      layer = Object.assign({},
-        defaults.layers[layer.format],
-        layer)
-
-      layer.style = layer.style && Object.assign({},
-        defaults.layers[layer.format].style,
-        layer.style)
-
-      workspace.templates[layer_key] = layer
-
-    }
 
   })
 

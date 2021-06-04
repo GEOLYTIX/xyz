@@ -7,6 +7,12 @@ xhr.open('GET', document.head.dataset.dir + '/api/user/list');
 xhr.setRequestHeader('Content-Type', 'application/json');
 xhr.responseType = 'json';
 
+const params = {}
+
+window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, (match, key, value) => {
+  params[key] = decodeURI(value)
+})
+
 xhr.onload = e => {
 
   if (e.target.status !== 200) return;
@@ -17,8 +23,12 @@ xhr.onload = e => {
       rowFormatter: row => {
     
         const user = row.getData()
+
+        console.log(user.email)
+
+        row.getElement().style.backgroundColor = user.email === params.email && '#fff9c4'
     
-        row.getElement().style.backgroundColor = user.blocked && '#ef9a9a' || '#fff'
+        row.getElement().style.backgroundColor = user.blocked && '#ef9a9a'
 
       },
       columns: [

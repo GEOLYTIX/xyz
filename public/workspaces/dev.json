@@ -1,4 +1,142 @@
 {
+  "templates": {
+    "blog": {
+      "src": "file:views/blog.html"
+    },
+    "embedded": {
+      "src": "file:views/embedded.html"
+    },
+    "Mapbox Base": {
+      "format": "mbtiles",
+      "mbStyle": "mapbox://styles/dbauszus/ciozrimi3002bdsm8bjtn2v1y",
+      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmY25oa2thMWhoMDJzbGNldmF2ZzYzcCJ9.IWcezkYm8mipsGXygnYbNw",
+      "attribution": {
+        "© Mapbox": "https://www.mapbox.com/about/maps",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "Mapbox Colour": {
+      "format": "mbtiles",
+      "mbStyle": "mapbox://styles/dbauszus/ck440h6990nii1co520go20i2",
+      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmY25oa2thMWhoMDJzbGNldmF2ZzYzcCJ9.IWcezkYm8mipsGXygnYbNw",
+      "attribution": {
+        "© Mapbox": "https://www.mapbox.com/about/maps",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "Mapbox Label": {
+      "format": "mbtiles",
+      "mbStyle": "mapbox://styles/dbauszus/ckjk91u8b1da319o7dhpdhqln",
+      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmY25oa2thMWhoMDJzbGNldmF2ZzYzcCJ9.IWcezkYm8mipsGXygnYbNw",
+      "attribution": {
+        "© Mapbox": "https://www.mapbox.com/about/maps",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "Mapbox Mask": {
+      "format": "mbtiles",
+      "mbStyle": "mapbox://styles/dbauszus/ckj2u1dx20fw519pbblu2q1by",
+      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmY25oa2thMWhoMDJzbGNldmF2ZzYzcCJ9.IWcezkYm8mipsGXygnYbNw",
+      "attribution": {
+        "© Mapbox": "https://www.mapbox.com/about/maps",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "HERE Imagery": {
+      "format": "tiles",
+      "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?{HERE}",
+      "proxy": true,
+      "attribution": {
+        "© Here": "https://www.here.com/",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "HERE Hybrid": {
+      "format": "tiles",
+      "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?{HERE}",
+      "proxy": true,
+      "attribution": {
+        "© Here": "https://www.here.com/",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "OSM": {
+      "format": "tiles",
+      "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      "attribution": {
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "table_parameter_query": {
+      "template": "SELECT * from ${table}",
+      "dbs": "MAPP"
+    },
+    "array_input_query": {
+      "template": "SELECT mapp.array_input_test(%{body})",
+      "dbs": "MAPP"
+    },
+    "array_select": {
+      "template": "SELECT '${test}' as test, %{body} as arr",
+      "dbs": "MAPP"
+    },
+    "array_any_select": {
+      "template": "SELECT count(1) from dev.uk_glx_geodata_retail_place_working where rp_type = ANY(%{types})",
+      "dbs": "DEV"
+    },
+    "array_any_id": {
+      "template": "SELECT count(1) from dev.scratch where id = ANY(%{ids})",
+      "dbs": "DEV"
+    },
+    "json_input_query": {
+      "template": "SELECT mapp.array_json_test(%{body}::json)",
+      "dbs": "MAPP"
+    },
+    "json_select": {
+      "template": "SELECT '${test}' as test, json_each(%{body}) as json",
+      "dbs": "MAPP"
+    },
+    "Random Data Series_aga": {
+      "src": "cloudfront:${CDN}/dev/queries/random_data_series.sql"
+    },
+    "Random Data Series": {
+      "template": "select ARRAY [json_build_object('data', ARRAY [random1::integer, random2::integer, random3::integer, random4::integer, random5::integer])] AS datasets, ARRAY ['Rand 1', 'Rand 2', 'Rand 3', 'Rand 4', 'Rand 5'] AS labels from dev.uk_glx_sites where id = ${id};"
+    },
+    "random_data_series": {
+      "template": "select ARRAY [json_build_object('data', ARRAY [random1::integer, random2::integer, random3::integer, random4::integer, random5::integer])] AS datasets, ARRAY ['Rand 1', 'Rand 2', 'Rand 3', 'Rand 4', 'Rand 5'] AS labels from dev.uk_glx_sites where id = 0;"
+    },
+    "Population Summary Sites": {
+      "src": "https://api.github.com/repos/GEOLYTIX/xyz_resources/contents/dev/queries/population_summary.txt"
+    },
+    "Nearest competitors Sites": {
+      "template": "SELECT (ROUND(((ST_Transform(a.geom_4326, 3857) <#> ST_Transform(b.geom_p_4326, 3857))/1000)::numeric, 2))::text AS dist,(b.fascia)::text AS fascia,(b.postcode)::text AS postcode FROM dev.uk_glx_sites a, geodata.uk_glx_open_retail_points b WHERE a.id = ${id} ORDER BY ST_Transform(a.geom_4326, 3857) <#> ST_Transform(b.geom_p_4326, 3857) NULLS LAST LIMIT 5;"
+    },
+    "Dev sites report": {
+      "src": "https://api.github.com/repos/GEOLYTIX/xyz_resources/contents/dev/report_sites/sites.html"
+    },
+    "Sites Local Report": {
+      "src": "file:views/report_location.html"
+    },
+    "japan_restaurants": {
+      "format": "cluster",
+      "dbs": "DEV",
+      "table": "geodata.jpn_glx_geodata_retail_locations_restaurants",
+      "geom": "geom_p_4326",
+      "srid": "4326",
+      "cluster_label": "chain_name",
+      "cluster_kmeans": 0.01,
+      "cluster_dbscan": 0.1,
+      "qID": "id"
+    },
+    "Agata": {
+      "src": "cloudfront:${CDN}/dev/aga/layer.json"
+    },
+    "open": {
+      "src": "file:workspaces/templates/open.json"
+    },
+    "uk_polygon_demand": {
+      "src": "cloudfront:${CDN}/asda/templates/charts/polygon_demand.sql"
+    }
+  },
   "locales": {
     "UK": {
       "minZoom": 14,

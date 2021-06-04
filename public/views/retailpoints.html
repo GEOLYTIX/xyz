@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head data-dir="${dir}">
+
+  <title>GEOLYTIX | Retail Points</title>
+
+  <link rel="icon" type="image/x-icon" href="${dir}/icons/favicon.ico" />
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <!-- <script src="${dir}/js/mapbox-gl.js" defer></script> -->
+  <script src="${dir}/js/maplibre-gl.js" defer></script>
+
+  <link rel="stylesheet" href="${dir}/css/ol.css" />
+  <script src="${dir}/js/ol.js" defer></script>
+  
+  <link rel="stylesheet" href="${dir}/css/mapp.css" />
+  <script src="${dir}/js/mapp.js" defer></script>
+  <script src="${dir}/views/retailpoints.js" defer></script>
+  
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: Inter, sans-serif;
+    }
+
+    body {
+      height: 100%;
+      padding: 25px 50px;
+      display: grid;
+      grid-template-columns: 400px 1fr;
+      grid-template-rows: 1fr min-content;
+      grid-gap: 10px;
+      background-color: #F7F8FA;
+    }
+
+    #CTRL {
+      grid-row: 1;
+      grid-column: 1;
+      font-size: 20px;
+      line-height: 1.5;
+    }
+
+    #Search {
+      grid-gap: 10px;
+      display: grid;
+      margin-top: 10px;
+    }
+
+    #CTRL input {
+      font-size: 18px;
+      border-radius: 8px;
+      padding: 12.5px;
+    }
+
+    #CTRL button {
+      font-size: 18px;
+      border-radius: 8px;
+      padding: 12.5px;
+      background-color: rgb(196, 79, 36);
+      color: rgb(69, 23, 6);
+    }
+
+    #CTRL button:hover {
+      color: rgb(196, 79, 36);
+      background-color: rgb(69, 23, 6);
+    }
+
+    #Logo {
+      background-image: url(https://geolytix.github.io/public/geolytix.svg);
+      height: 40px;
+      display: block;
+      background-size: contain;
+      background-repeat: no-repeat;
+      margin-bottom: 20px;
+    }
+
+    #Gazetteer li {
+      font-size: 80%;
+      border-radius: 8px;
+      padding: 3px;
+      padding-left: 12.5px;
+      margin-top: 3px;
+    }
+
+    #Gazetteer li:hover {
+      background-color: rgb(196, 79, 36);
+      color: rgb(69, 23, 6);
+      cursor: pointer;
+    }
+
+    #Map {
+      grid-row: 1;
+      grid-column: 2;
+      overflow: hidden;
+      position: relative;
+      height: 100%;
+    }
+
+    .location-view-grid {
+      width: 250px;
+      padding: 5px;
+    }
+
+    #Footer {
+      grid-row: 2;
+      grid-column: 1/3;
+      border: 2px solid;
+      border-radius: 20px;
+      padding: 10px 15px;
+      font-size: 20px;
+      line-height: 1.5;
+    }
+
+    #Footer a {
+      font-weight: 800;
+      border-bottom: 2px solid;
+    }
+
+    #Footer .comms-link {
+      background-size: contain;
+      background-repeat: no-repeat;
+      width: 25px;
+      height: 25px;
+      display: inline-block;
+      border: none;
+      margin-left: 11px;
+      margin-bottom: -5px;
+    }
+
+    a:hover {
+      cursor: pointer;
+    }
+
+    #_Attribution {
+      z-index: 999;
+      position: absolute;
+      bottom: 0;
+      width: 100%;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      text-align: left;
+      white-space: nowrap;
+      background-color: #fff;
+      opacity: 0.9;
+      padding: 5px;
+      font-size: 10px;
+      font-weight: bold;
+    }
+
+    #_Attribution a {
+      padding: 2px 5px;
+    }
+
+    #ol-scale {
+      bottom: 20px;
+      position: absolute;
+      right: 0;
+      z-index: 999;
+    }
+
+    .ol-control button {
+      color: #000;
+      font-size: 1.5em;
+      height: 1.5em;
+      width: 1.5em;
+      background-color: #fff;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div id="CTRL">
+    <a id="Logo" target="_blank" href="https://geolytix.co.uk"></a>
+    <div class="bold">Excited to find your nearest supermarket?</div>
+    <div>Have a go searching a location or click an icon to see the details of a supermarkets near you.</div>
+    <div id="Search">
+      <div id="Gazetteer" style="grid-row: 1; grid-column: 1/3">
+        <input placeholder="Enter your postcode or town" required="">
+        <ul></ul>
+      </div>
+      <button id="Reset" style="grid-row: 2; grid-column: 1">Reset</button>
+      <button id="FindMe" style="grid-row: 2; grid-column: 2">Find me</button>
+    </div>
+    <br>
+    <div id="Filter">
+      <div class="bold">Filter</div>
+    </div>
+  </div>
+
+  <div id="Map">
+    <div id="ol-scale"></div>
+    <div id="_Attribution"></div>
+  </div>
+
+  <div id="Footer">
+    <div>Want to know more about this data... <a target="_blank" href="https://geolytix.com/blog/supermarket-retail-points/">read here</a></div>
+    <div>Supermarket Retail Points are released as open data by Geolytix under a <a target="_blank" href="https://creativecommons.org/publicdomain/zero/1.0/">CCO license</a> and can be downloaded for free <a target="_blank" href="https://drive.google.com/file/d/1B8M7m86rQg2sx2TsHhFa2d-x-dZ1DbSy/view">here</a>.</div>
+    <div>Missing a supermarket? It would be magnificent if you could let us know. 
+      <a class="comms-link" style="background-image: url(https://geolytix.github.io/public/comms/mail.svg)" target="_blank" href="mailto:info@geolytix.com"></a>
+      <a class="comms-link" style="background-image: url(https://geolytix.github.io/public/comms/twitter.svg)" target="_blank" href="https://twitter.com/Geolytix"></a>
+      <a class="comms-link" style="background-image: url(https://geolytix.github.io/public/comms/linkedin.svg)" target="_blank" href="https://www.linkedin.com/company/geolytix"></a>
+      <a class="comms-link" style="background-image: url(https://geolytix.github.io/public/comms/github.svg)" target="_blank" href="https://github.com/GEOLYTIX/xyz"></a></div>
+  </div>
+
+</body>
+
+</html>
