@@ -10,9 +10,7 @@ const fetch = require('node-fetch')
 module.exports = async ref => {
   try {
 
-    const response = await fetch(ref, {
-      agent: process.env.CUSTOM_AGENT && httpsAgent
-    })
+    const response = await fetch(ref)
 
     if (response.status >= 300) return new Error(`${response.status} ${ref}`)
 
