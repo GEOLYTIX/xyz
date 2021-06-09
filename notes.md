@@ -5,3 +5,5 @@ Plugin load module [#406](https://github.com/GEOLYTIX/xyz/issues/406)
 Custom user agent for node-fetch [#407](https://github.com/GEOLYTIX/xyz/issues/407)
 
 Mapview icons will be memoized.
+
+Multiple filter on the same field [#409](https://github.com/GEOLYTIX/xyz/issues/409)
