@@ -9,3 +9,5 @@ Mapview icons will be memoized.
 Multiple filter on the same field [#409](https://github.com/GEOLYTIX/xyz/issues/409)
 
 Caching xhr request and response in module [#411](https://github.com/GEOLYTIX/xyz/issues/411)
+
+Improve highlight interaction [#412](https://github.com/GEOLYTIX/xyz/issues/412)
