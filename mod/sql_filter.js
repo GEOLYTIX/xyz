@@ -42,10 +42,10 @@ module.exports = function sqlfilter(filter, params) {
   
         // Map filter in array with OR conjuction
         .map((filter) => mapFilterEntries(filter))
-        .join(' OR ')})`;
+        .join(' OR ')})`
 
   // Filter in an object will be conditional AND
-  return mapFilterEntries(filter);
+  return mapFilterEntries(filter)
 }
 
 function mapFilterEntries(filter) {
@@ -71,7 +71,7 @@ function mapFilterEntries(filter) {
         // Multiple filterTypes for the same field will be joined with AND
         return Object.keys(value)
             .filter(filterType => !!filterTypes[filterType])
-            .map((filterType) => filterTypes[filterType](key, value[filterType]))
+            .map((filterType) => filterTypes[filterType](field, value[filterType]))
             .join(" AND ")
             
       })
