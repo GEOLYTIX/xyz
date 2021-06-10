@@ -366,7 +366,7 @@
       value=${n.min}
       max=${n.max}
       step=${i}
-      oninput=${e=>{s.value=e.target.value,g()}}>`;c.appendChild(d),l=e.utils.html.node`
+      oninput=${e=>{s.value=e.target.value,f()}}>`;c.appendChild(d),l=e.utils.html.node`
     <div class="input-flex">
       <span>${e.language.layer_filter_smaller}`;const u=e.utils.html.node`
     <input
