@@ -99,9 +99,9 @@ THe purpose of this is to provide the ability to run the XYZ docker container lo
 1. Run the docker command below if the XYZ docker image have not been built.
 
 ```bash
-# Set vars for AWS ECR repository 
+# Set vars for AWS ECR repository
 AWS_ACCOUNT_ID=695431195173
-AWS_REGION=eu-west-2 
+AWS_REGION=eu-west-2
 AWS_ECR_REPO=map
 AWS_ECR_URI=${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_REGION}.amazonaws.com/${AWS_ECR_REPO}:latest
 
@@ -126,7 +126,7 @@ docker push ${AWS_ECR_URI}
 ssh -L [LOCAL_IP:]LOCAL_PORT:DESTINATION:DESTINATION_PORT [USER@]SSH_SERVER -i [BASTION_HOST_PEM_CER_FILE]
 
 # Example
-ssh -L 0.0.0.0:5432:postgres-rds-private-eu-west-2.ct36hfcslmg5.eu-west-2.rds.amazonaws.com:5432 ubuntu@ec2-3-8-127-21.eu-west-2.compute.amazonaws.com -i ./commonplace-bastion.cer 
+ssh -L 0.0.0.0:5432:postgres-rds-private-eu-west-2.ct36hfcslmg5.eu-west-2.rds.amazonaws.com:5432 ubuntu@ec2-3-8-127-21.eu-west-2.compute.amazonaws.com -i ./commonplace-bastion.cer
 ```
 
 3. Run the XYZ container via SSH tunnel. NOTE: Please run the docker command as root.
@@ -137,10 +137,9 @@ ssh -L 0.0.0.0:5432:postgres-rds-private-eu-west-2.ct36hfcslmg5.eu-west-2.rds.am
 sudo docker run --network=host -p 3000:3000 --rm -it <image_name_repo_name>:<tag>
 ```
 
-## License 
+## License
 
 Free use of the code in this repository is allowed through a [MIT license](https://github.com/GEOLYTIX/xyz/blob/master/LICENSE).
-
 
 ## BrowserStack
 
