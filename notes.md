@@ -13,3 +13,5 @@ Caching xhr request and response in module [#411](https://github.com/GEOLYTIX/xy
 Improve highlight interaction [#412](https://github.com/GEOLYTIX/xyz/issues/412)
 
 Audit fix security vulnerabilities.
+
+Fix to data panel layout.
