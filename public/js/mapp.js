@@ -488,9 +488,9 @@
     <div
       class="header primary-colour"
       onclick=${t=>{t.stopPropagation(),e.utils.toggleExpanderParent(t.target,!0)}}><span>${e.language.layer_add_new_location}</span><button
-      class="btn-header xyz-icon icon-expander primary-colour-filter">`),o.edit.point&&a.appendChild(t.point(o)),o.edit.polygon&&a.appendChild(t.polygon(o)),o.edit.rectangle&&a.appendChild(t.rectangle(o)),o.edit.circle&&a.appendChild(t.circle(o)),o.edit.line&&a.appendChild(t.line(o)),o.edit.freehand&&a.appendChild(t.freehand(o)),o.edit.isoline_mapbox&&a.appendChild(t.isoline_mapbox(o)),o.edit.isoline_here&&a.appendChild(t.isoline_here(o)),a.children.length<2?void 0:a},polygon:bo(e),point:_o(e),rectangle:wo(e),circle:xo(e),line:ko(e),freehand:Co(e),isoline_mapbox:jo(e),isoline_here:So(e)};return t},Lo=e=>({panel:function(t){if(!t.dataviews||!e.tabview.node)return;const o=e.utils.html.node`<div class="drawer panel expandable" style="display: grid; grid-template-columns: 24px 1fr;">`;return o.appendChild(e.utils.html.node`
+      class="btn-header xyz-icon icon-expander primary-colour-filter">`),o.edit.point&&a.appendChild(t.point(o)),o.edit.polygon&&a.appendChild(t.polygon(o)),o.edit.rectangle&&a.appendChild(t.rectangle(o)),o.edit.circle&&a.appendChild(t.circle(o)),o.edit.line&&a.appendChild(t.line(o)),o.edit.freehand&&a.appendChild(t.freehand(o)),o.edit.isoline_mapbox&&a.appendChild(t.isoline_mapbox(o)),o.edit.isoline_here&&a.appendChild(t.isoline_here(o)),a.children.length<2?void 0:a},polygon:bo(e),point:_o(e),rectangle:wo(e),circle:xo(e),line:ko(e),freehand:Co(e),isoline_mapbox:jo(e),isoline_here:So(e)};return t},Lo=e=>({panel:function(t){if(!t.dataviews||!e.tabview.node)return;const o=e.utils.html.node`<div class="drawer panel expandable">`;return o.appendChild(e.utils.html.node`
       <div
-        class="header primary-colour" style="grid-column: 1/span 2;"
+        class="header primary-colour"
         onclick=${t=>{t.stopPropagation(),e.utils.toggleExpanderParent(t.target,!0)}}>
         <span>${e.language.layer_dataview_header}</span>
         <button class="btn-header xyz-icon icon-expander primary-colour-filter">`),Object.entries(t.dataviews).forEach((a=>{const n=a[1];n.key=a[0],n.layer=t,e.tabview.add(n),e.dataviews.create(n),t.display&&n.display&&n.show(),o.appendChild(e.utils.html.node`
@@ -501,7 +501,7 @@
             onchange=${e=>{n.display=e.target.checked,n.display?n.show():n.remove()}}></input>
           <div></div>
         </label>
-        <span>${n.title||n.key}`)})),o}}),$o=e=>({panel:function(t){if(!t.reports)return;const o=e.utils.html.node`
+        <span>${n.title||n.key}<span><br/>`)})),o}}),$o=e=>({panel:function(t){if(!t.reports)return;const o=e.utils.html.node`
     <div class="drawer panel expandable">`;return o.appendChild(e.utils.html.node`
     <div
       class="header primary-colour"
