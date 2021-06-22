@@ -25,7 +25,7 @@
     "pg": "^8.5.1"
   },
   "devDependencies": {
-    "@11ty/eleventy-plugin-syntaxhighlight": "^3.1.1",
+    "@11ty/eleventy-plugin-syntaxhighlight": "^3.0.6",
     "@turf/circle": "^6.3.0",
     "@turf/flatten": "^6.3.0",
     "@turf/kinks": "^6.3.0",
@@ -34,10 +34,8 @@
     "chroma-js": "^2.1.0",
     "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
-    "eslint": "^6.8.0",
     "express": "^4.17.1",
     "flatpickr": "^4.6.3",
-    "geostats": "^2.0.0",
     "jwt-decode": "^2.2.0",
     "markdown-it": "^11.0.1",
     "markdown-it-anchor": "^6.0.0",
