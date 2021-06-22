@@ -11,3 +11,5 @@ Multiple filter on the same field [#409](https://github.com/GEOLYTIX/xyz/issues/
 Caching xhr request and response in module [#411](https://github.com/GEOLYTIX/xyz/issues/411)
 
 Improve highlight interaction [#412](https://github.com/GEOLYTIX/xyz/issues/412)
+
+Audit fix security vulnerabilities.
