@@ -22,8 +22,7 @@
     "nanoid": "^3.1.20",
     "node-fetch": "^2.6.1",
     "nodemailer": "^6.6.0",
-    "pg": "^8.5.1",
-    "request": "^2.88.2"
+    "pg": "^8.5.1"
   },
   "devDependencies": {
     "@11ty/eleventy-plugin-syntaxhighlight": "^3.0.6",
