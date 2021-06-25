@@ -132,6 +132,10 @@
     text-align: center;
 }
 
+.tabulator-header.tabulator-header-hidden {
+    display: none !important;
+}
+
 .tabulator .tabulator-header .tabulator-col .tabulator-header-filter textarea {
     height: auto !important;
 }
