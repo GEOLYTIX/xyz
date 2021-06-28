@@ -7,10 +7,10 @@ module.exports = async (req, res) => {
   if (req.url.match(/\/auth0\/logout/)) {
 
     res.setHeader('location',
-      `https://geolytix-saml.eu.auth0.com/v2/logout`
-      + `?client_id=${process.env.AUTH_CLIENTID}`
-      + `&federated=https://auth.pingone.eu/dd912efb-f9b0-4fa5-9c9c-68c317910396/saml20/idp/slo`
-      + `&returnTo=https://dev-auth0.vercel.app/`)
+      `https://${process.env.AUTH0_DOMAIN}/v2/logout`
+      + `?client_id=${process.env.AUTH0_CLIENTID}`
+      + `&federated=${process.env.AUTH0_SLO}`
+      + `&returnTo=${process.env.AUTH0_HOST}/${process.env.DIR}`)
 
     return res.status(302).send()
   }
@@ -18,12 +18,12 @@ module.exports = async (req, res) => {
   if (req.url.match(/\/auth0\/login/)) {
 
     res.setHeader('location',
-      `https://geolytix-saml.eu.auth0.com/authorize`
+      `https://${process.env.AUTH0_DOMAIN}/authorize`
       + `?response_type=code`
-      + `&client_id=${process.env.AUTH_CLIENTID}`
-      + `&scope=openid email username roles`
+      + `&client_id=${process.env.AUTH0_CLIENTID}`
+      + `&scope=openid email`
       + `&connection=geolytix-saml-connection`
-      + `&redirect_uri=https://dev-auth0.vercel.app/auth0/callback`)
+      + `&redirect_uri=${process.env.AUTH0_HOST}/${process.env.DIR}auth0/callback`)
 
     return res.status(302).send()
   }
@@ -32,16 +32,16 @@ module.exports = async (req, res) => {
 
     const body = Object.entries({
         grant_type: 'authorization_code',
-        audience: 'https://geolytix-saml.eu.auth0.com/api/v2/',
-        client_id: process.env.AUTH_CLIENTID,
-        client_secret: process.env.AUTH_SECRET,
+        audience: `https://${process.env.AUTH0_DOMAIN}/api/v2/`,
+        client_id: process.env.AUTH0_CLIENTID,
+        client_secret: process.env.AUTH0_SECRET,
         code: req.query.code,
-        redirect_uri: 'https://dev-auth0.vercel.app/auth0/callback'
+        redirect_uri: `${process.env.AUTH0_HOST}/${process.env.DIR}auth0/callback`
       })
       .map(entry => `${encodeURIComponent(entry[0])}=${encodeURIComponent(entry[1])}`)
       .join('&')
 
-    const oauth_response = await fetch(`https://geolytix-saml.eu.auth0.com/oauth/token`,{
+    const oauth_response = await fetch(`https://${process.env.AUTH0_DOMAIN}/oauth/token`,{
       method: 'post',
       body:    body,
       headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
@@ -50,7 +50,7 @@ module.exports = async (req, res) => {
     const oauth_json = await oauth_response.json()
  
     const userinfo_response = await fetch(
-      `https://geolytix-saml.eu.auth0.com/userinfo`, {
+      `https://${process.env.AUTH0_DOMAIN}/userinfo`, {
         method: 'get',
         headers: {
           authorization: `Bearer ${oauth_json.access_token}`
@@ -69,11 +69,14 @@ module.exports = async (req, res) => {
         expiresIn: parseInt(process.env.COOKIE_TTL)
       })
 
-    const cookie = `${process.env.TITLE}=${token};HttpOnly;Max-Age=${process.env.COOKIE_TTL};Path=${process.env.DIR || '/'}${!req.headers.host.includes('localhost') && ';Secure' || ''}`
+    const cookie = `${process.env.TITLE}=${token};HttpOnly;`
+      + `Max-Age=${process.env.COOKIE_TTL};`
+      + `Path=${process.env.DIR || '/'}`
+      + `${!req.headers.host.includes('localhost') && ';Secure' || ''}`
 
     res.setHeader('Set-Cookie', cookie)
 
-    res.setHeader('location', `https://dev-auth0.vercel.app/`)
+    res.setHeader('location', `${process.env.AUTH0_HOST}/${process.env.DIR}`)
     res.status(302).send()
 
   }
