@@ -6,7 +6,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico">
   <link href="https://unpkg.com/prismjs@1.20.0/themes/prism-okaidia.css" rel="stylesheet">
-  <title>Application Views</title>
+  <title>SSO (SAML)</title>
   <style>
 
     html, body {
@@ -305,7 +305,7 @@
           <a href="/xyz/docs/develop/lib/webpack/">Webpack</a>
         </li>
         
-        <li class="__2 active">
+        <li class="__2 ">
           <a href="/xyz/docs/develop/views/">Application Views</a>
         </li>
         
@@ -329,7 +329,7 @@
           <a href="/xyz/docs/security/">Security</a>
         </li>
         
-        <li class="__1 ">
+        <li class="__1 active">
           <a href="/xyz/docs/sso/">SSO (SAML)</a>
         </li>
         
@@ -420,12 +420,114 @@
 
 
     <div id="content">
-      <h1 id="application-views">Application Views <a class="header-anchor" href="#application-views">¶</a></h1>
-<p>Application views are browser interfaces which consist of HTML(CSS) and Javascript. The default Mapp interface is provided as _default.html, _default.js, and _default.css in the <a href="https://github.com/GEOLYTIX/xyz/tree/master/public/views">public/views</a> directory.</p>
-<p>A series of stylesheet and script must be referenced in the document head of the application view.</p>
-<pre class="language-html"><code class="language-html"><span class="token comment">&lt;!-- Load openlayers library and stylesheet. --></span><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>link</span> <span class="token attr-name">rel</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>stylesheet<span class="token punctuation">"</span></span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>${dir}/css/ol.css<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>${dir}/js/ol.js<span class="token punctuation">"</span></span> <span class="token attr-name">defer</span><span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span><br><br><span class="token comment">&lt;!-- Load maplibre-gl library required for mbtiles layer. --></span><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>${dir}/js/maplibre-gl.js<span class="token punctuation">"</span></span> <span class="token attr-name">defer</span><span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span><br><br><span class="token comment">&lt;!-- Load XYZ / MAPP stylesheet and library. --></span><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>link</span> <span class="token attr-name">rel</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>stylesheet<span class="token punctuation">"</span></span> <span class="token attr-name">href</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>${dir}/css/mapp.css<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span><br><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>script</span> <span class="token attr-name">src</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>${dir}/js/mapp.js<span class="token punctuation">"</span></span> <span class="token attr-name">defer</span><span class="token punctuation">></span></span><span class="token script"></span><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>script</span><span class="token punctuation">></span></span></code></pre>
-<p>Aditional script sources (and stylesheets) may be required for plugins and 3rd party utility libraries such as tabulator (eg. <code>&lt;script src=&quot;/js/tabulator.min.js&quot; defer&gt;&lt;/script&gt;</code>).</p>
-<p>Application views may either be hosted as static files (eg. on Github pages) or XYZ templates. If hosted as template the view can be accessed through the <a href="/xyz/docs/develop/api/view/">api/view</a> method which allows template parameter substitution.</p>
+      <h1 id="single-sign-on-via-saml">Single Sign On via SAML <a class="header-anchor" href="#single-sign-on-via-saml">¶</a></h1>
+<p>The SAML standard allows the XYZ host to provide authorization to user account authenticated by a third party identity provider.</p>
+<p>Single sign on (SSO) requests must be initiated by the service provider. The <a href="https://github.com/GEOLYTIX/xyz/blob/development/mod/user/auth.js">auth0 module</a> provides endpoints to initiate sign on, authorization, and log out via Auth0 as service provider.</p>
+<h2 id="%2Fauth0%2Flogin">/auth0/login <a class="header-anchor" href="#%2Fauth0%2Flogin">¶</a></h2>
+<p>The auth0/login endpoint will redirect the http response object to an <strong>/authorize</strong> endpoint of an Auth0 Service Provider. The callback URI must be defined as redirect parameter in the authorization request. The authorization code which is requested as response_type will be send to the callback endpoint.</p>
+<p>The AUTH0_DOMAIN and AUTH0_CLIENTID must be provided to the XYZ process environment.</p>
+<p>The AUTH0_HOST environment value (e.g. <a href="http://localhost:3000">http://localhost:3000</a>) allows the process to be run on localhost without https to test the authentication flow.</p>
+<pre><code>res.setHeader('location',
+  `https://${process.env.AUTH0_DOMAIN}/authorize`
+  + `?response_type=code`
+  + `&amp;client_id=${process.env.AUTH0_CLIENTID}`
+  + `&amp;scope=openid email`
+  + `&amp;connection=geolytix-saml-connection`
+  + `&amp;redirect_uri=${process.env.AUTH0_HOST}/${process.env.DIR}auth0/callback`)
+
+res.status(302).send()
+</code></pre>
+<h2 id="auth0-service-provider">Auth0 Service Provider <a class="header-anchor" href="#auth0-service-provider">¶</a></h2>
+<p>A <em>regular web application</em> configured via the Auth0 dashboard may act as Service Provider for the XYZ Host.</p>
+<p>The AUTH0_CLIENTID and AUTH0_DOMAIN required for the XYZ process environment are defined in the settings for the Auth0 service provider application.</p>
+<p><img src="https://res.cloudinary.com/geolytix-xyz/image/upload/v1624878641/documentation/auth0_sp_application_settings_v0wzuy.png" alt=""></p>
+<p>The application URIs must be configured in the application settings panel. The login URI is not required as this is for SSO initiated sign on only. The allowed callback and logout URI must be set. We recommend to add the localhost URL as well as any aliased URL if required to the comma seperated list of URL. The logout URL is the root path for the XYZ host. This is the URL to which the request is redirected on conclusion of the logout.</p>
+<p><img src="https://res.cloudinary.com/geolytix-xyz/image/upload/v1624879546/documentation/auth0_allowed_url_fokbb5.png" alt=""></p>
+<p>The SAML Enterprise connection to be used must be authorised in the applications connection panel.</p>
+<p>The Auth0 Application itself must be authorized for machine to machine access in the Auth0 Management API panel.</p>
+<p><img src="https://res.cloudinary.com/geolytix-xyz/image/upload/v1624878474/documentation/auth0_management_api_vkni4i.png" alt=""></p>
+<p>The required <em>SAML enterprise connection</em> is not available on a free plan and requires the Auth0 tenant to be subscribed on a B2B Essentials plan.</p>
+<p>The SSO sign in URL (e.g. <a href="https://auth.pingone.eu/dd912efb-f9b0-4fa5-9c9c-68c317910396/saml20/idp/sso">https://auth.pingone.eu/dd912efb-f9b0-4fa5-9c9c-68c317910396/saml20/idp/sso</a>), and SLO (logout; e.g. <a href="https://auth.pingone.eu/dd912efb-f9b0-4fa5-9c9c-68c317910396/saml20/idp/slo">https://auth.pingone.eu/dd912efb-f9b0-4fa5-9c9c-68c317910396/saml20/idp/slo</a>) must be set in the SAML connection settings. The X509 signing certificate from the identity provider must be uploaded to be used by the SAML connection.</p>
+<p>We recommend to enable to the debug mode for the SAML connection to allow for more verbose logging during the authentication process. We also recommend to sign requests with the SHA256 algorithm digest.</p>
+<p>An Auth0 pipeline rule must be configured and enabled to map XYZ user attributes (e.g. roles) with their namespace from the identity provider token for the account profile to be used in the XYZ token.</p>
+<p><img src="https://res.cloudinary.com/geolytix-xyz/image/upload/v1624880795/documentation/auth0_pipeline_rule_stogak.png" alt=""></p>
+<p>Finally, the Auth0 application which is used as service provider must be authorized in the applications panel of the SAML connection.</p>
+<p><img src="https://res.cloudinary.com/geolytix-xyz/image/upload/v1624878474/documentation/auth0_management_api_vkni4i.png" alt=""></p>
+<h2 id="%2Fauth0%2Fcallback">/auth0/callback <a class="header-anchor" href="#%2Fauth0%2Fcallback">¶</a></h2>
+<p>The auth0 callback endpoint is a series of requests between the XYZ host and the Auth0 application with its respective SAML connection.</p>
+<p>Callback requests which are received from the authorization redirect must carry an authorization code. The code from the http request object query is provided in the body to the oauth/token API request.</p>
+<pre><code>const body = Object.entries({
+  grant_type: 'authorization_code',
+  audience: `https://${process.env.AUTH0_DOMAIN}/api/v2/`,
+  client_id: process.env.AUTH0_CLIENTID,
+  client_secret: process.env.AUTH0_SECRET,
+  code: req.query.code,
+  redirect_uri: `${process.env.AUTH0_HOST}/${process.env.DIR}auth0/callback`
+})
+  .map(entry =&gt; `${encodeURIComponent(entry[0])}=${encodeURIComponent(entry[1])}`)
+  .join('&amp;')
+
+const oauth_response = await fetch(`https://${process.env.AUTH0_DOMAIN}/oauth/token`,{
+  method: 'post',
+  body:    body,
+  headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+})
+  
+const oauth_json = await oauth_response.json()
+
+//access_token:'afE...'
+//expires_in:86400
+//id_token:'eyJ...'
+//scope:'openid email'
+//token_type:'Bearer'
+</code></pre>
+<p>The parsed oauth JSON token contains an id_token which can be used authorization header to request the userinfo.</p>
+<pre><code>const userinfo_response = await fetch(
+  `https://${process.env.AUTH0_DOMAIN}/userinfo`, {
+    method: 'get',
+    headers: {
+      authorization: `Bearer ${oauth_json.access_token}`
+    }
+  })
+  
+const userinfo_json = await userinfo_response.json()
+</code></pre>
+<p>Finally the userinfo from the userinfo response is used to sign an XYZ token to be set as an application cookie when the request is redirected to the application root path.</p>
+<pre><code>const token = jwt.sign({
+  email: userinfo_json.email,
+  language: userinfo_json.language || 'en',
+  roles: userinfo_json['https://geolytix.xyz/roles'],
+},
+process.env.SECRET, {
+  expiresIn: parseInt(process.env.COOKIE_TTL)
+})
+
+const cookie = `${process.env.TITLE}=${token};HttpOnly;`
+  + `Max-Age=${process.env.COOKIE_TTL};`
+  + `Path=${process.env.DIR || '/'}`
+  + `${!req.headers.host.includes('localhost') &amp;&amp; ';Secure' || ''}`
+
+res.setHeader('Set-Cookie', cookie)
+
+res.setHeader('location', `${process.env.AUTH0_HOST}/${process.env.DIR}`)
+res.status(302).send()
+</code></pre>
+<h2 id="pingone-identity-provider">PingOne Identity Provider <a class="header-anchor" href="#pingone-identity-provider">¶</a></h2>
+<p>PingOne provides an Identity Provider for SSO as a cloud service. If linked to a user directory this service is comparable to a Ping Federate server.</p>
+<p>The PingOne identity provider application may be configured from the Auth0 service provider metadata.</p>
+<p><img src="https://res.cloudinary.com/geolytix-xyz/image/upload/v1624883488/documentation/pingone_sp_conf_pzhvbk.png" alt=""></p>
+<p>Additional user attribute mapping is required to provide roles for the XYZ user token.</p>
+<p><img src="https://res.cloudinary.com/geolytix-xyz/image/upload/v1624883685/documentation/pingone_saml_mapping_njmipt.png" alt=""></p>
+<h2 id="%2Fauth0%2Flogout">/auth0/logout <a class="header-anchor" href="#%2Fauth0%2Flogout">¶</a></h2>
+<p>The auth0 logout endpoint will redirect the http request to the auth0 logout endpoint. The auth0 service provider will destroy the session cookie and request from the federated identity provider to logout the user. The federated single logout URI must be defined as AUTH0_SLO in the XYZ process environment.</p>
+<pre><code>res.setHeader('location',
+  `https://${process.env.AUTH0_DOMAIN}/v2/logout`
+  + `?client_id=${process.env.AUTH0_CLIENTID}`
+  + `&amp;federated=${process.env.AUTH0_SLO}`
+  + `&amp;returnTo=${process.env.AUTH0_HOST}/${process.env.DIR}`)
+
+res.status(302).send()
+</code></pre>
 
     </div>
 
