@@ -15,10 +15,6 @@ The Cloudfront and Github provider may both be used to request workspaces and wo
 
 The [Cloudfront provider module](https://github.com/GEOLYTIX/xyz/blob/development/mod/provider/cloudflare.js) makes use of the AWS-SDK and requires a Cloudfront encryption key in order to request protected ressources stored with the AWS Cloudfront platform.
 
-## Github
-
-The [Github provider module](https://github.com/GEOLYTIX/xyz/blob/development/mod/provider/github.js) decorates request header with credentials which must be provided as environment `KEY_GITHUB` variable. Content is parsed as JSON before being returned to the request client.
-
 ## Cloudinary
 
 The [Cloudinary provider module](https://github.com/GEOLYTIX/xyz/blob/development/mod/provider/cloudinary.js) uses the [Cloudinary API module](https://www.npmjs.com/package/cloudinary) to upload images or documents provided as a post body to the Cloudinary API.

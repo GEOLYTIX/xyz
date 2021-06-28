@@ -135,7 +135,7 @@ window.onload = () => {
   // Get locale from host.
   function getLocale(locales) {
 
-    if (!locales.length) return console.log('No accessible locales')
+    if (!locales.length) return alert('No accessible locales')
 
     const locale = xyz.hooks && xyz.hooks.current.locale ? {
       key: xyz.hooks.current.locale, 
@@ -261,7 +261,7 @@ window.onload = () => {
             layer.mbMap?.resize()
           })
         }}>
-        <div class="xyz-icon icon-map">`)      
+        <div class="xyz-icon icon-map">`)
 
     xyz.plugins()
       .then(() => xyz.layers.load())

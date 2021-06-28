@@ -1,8 +1,13 @@
 document.dispatchEvent(new CustomEvent('reset_view', {
   detail: _xyz => {
+
+    const mapButton = document.getElementById('mapButton')
+
+    if (!mapButton) return
       
     const node = _xyz.utils.html.node`
-      <div
+      <button
+        class="mobile-display-none"
         title="Reset View"
         onclick=${e => {
           
@@ -12,14 +17,9 @@ document.dispatchEvent(new CustomEvent('reset_view', {
           }
         
         }}>
-        <a class="link-with-img">
-          <div
-            class="xyz-icon icon-restore"
-            style="width: 30px; height: 30px; margin-left: 10px;">`
+        <div class="xyz-icon icon-restore">`
 
-      document
-        .getElementById('mapButton')
-        .insertBefore(node, document.getElementById('mapButton').firstChild)
+    mapButton.insertBefore(node, mapButton.firstChild)
 
   }
 }))

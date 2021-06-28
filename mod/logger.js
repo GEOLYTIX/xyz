@@ -1,10 +1,12 @@
 const fetch = require('node-fetch')
 
-module.exports = msg => {
+const logs = new Set(process.env.LOGS?.split(',') || [])
 
-  if (!process.env.LOGS) return
+module.exports = (msg, log) => {
 
-  if (process.env.LOGS === 'logflare') {
+  if (!logs.has(log)) return
+
+  if (process.env.KEY_LOGFLARE) {
 
     const keySource = process.env.KEY_LOGFLARE.split('|')
 

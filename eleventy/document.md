@@ -11,7 +11,7 @@ Please refer to the information in this article in order to contribute to the do
 
 We use [Eleventy](https://github.com/11ty/eleventy) to compile markdown into static pages.
 
-eleventy and markdown-it are **not included** as dependencies in the XYZ included as save-dev dependencies. The npm modules may be installed for the project or globally.
+eleventy and markdown-it are **not included** as dev-dependencies and must be installed locally or globally if you intend to compile the doc pages from the eleventy folder.
 
 Individual markdown documents and a template html are stored in the /eleventy folder. Configuration for the compilation is in the .eleventy.js file in the XYZ root.
 

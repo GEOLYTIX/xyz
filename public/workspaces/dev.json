@@ -1,10 +1,10 @@
 {
   "templates": {
     "blog": {
-      "src": "file://views/blog.html"
+      "src": "file:views/blog.html"
     },
     "embedded": {
-      "src": "file://views/embedded.html"
+      "src": "file:views/embedded.html"
     },
     "Mapbox Base": {
       "format": "mbtiles",
@@ -114,7 +114,7 @@
       "src": "https://api.github.com/repos/GEOLYTIX/xyz_resources/contents/dev/report_sites/sites.html"
     },
     "Sites Local Report": {
-      "src": "http://localhost:3000/views/report_location.html"
+      "src": "file:views/report_location.html"
     },
     "japan_restaurants": {
       "format": "cluster",
@@ -129,6 +129,9 @@
     },
     "Agata": {
       "src": "cloudfront:${CDN}/dev/aga/layer.json"
+    },
+    "open": {
+      "src": "file:workspaces/templates/open.json"
     },
     "uk_polygon_demand": {
       "src": "cloudfront:${CDN}/asda/templates/charts/polygon_demand.sql"
