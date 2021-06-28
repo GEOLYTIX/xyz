@@ -22,7 +22,7 @@ module.exports = async (req, res) => {
       + `?response_type=code`
       + `&client_id=${process.env.AUTH0_CLIENTID}`
       + `&scope=openid email`
-      + `&connection=geolytix-saml-connection`
+      + `&connection=${process.env.AUTH0_CONNECTION}`
       + `&redirect_uri=${process.env.AUTH0_HOST}/${process.env.DIR}auth0/callback`)
 
     return res.status(302).send()
