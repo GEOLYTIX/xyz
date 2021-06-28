@@ -837,6 +837,10 @@ button:disabled {
   text-align: center;
 }
 
+.tabulator-header.tabulator-header-hidden {
+  display: none !important;
+}
+
 .tabulator .tabulator-header .tabulator-col .tabulator-header-filter textarea {
   height: auto !important;
 }
@@ -2747,6 +2751,14 @@ span.flatpickr-weekday {
   grid-column: 1/3;
   display: grid;
   grid-template-columns: 1fr 1fr;
+}
+.location-view-grid .images-grid {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  grid-column: 1/3;
+  max-height: 400px;
+  overflow-y: scroll;
 }
 .location-view-grid .images-grid div img {
   cursor: pointer;

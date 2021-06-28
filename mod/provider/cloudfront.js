@@ -1,43 +1,41 @@
+const https = require('https')
+
+const httpsAgent = new https.Agent({
+	keepAlive: true,
+  maxSockets: parseInt(process.env.CUSTOM_AGENT) || 1
+})
+
 const fetch = require('node-fetch')
+
+const AWS = require("aws-sdk")
 
 const { readFileSync } = require('fs')
 
 const { join } = require('path')
 
-const AWS = require("aws-sdk")
-
-function readPem() {
-  const pem = readFileSync(join(__dirname, `../../${process.env.KEY_CLOUDFRONT}.pem`))
-  return String(pem)
-}
-
 const awsSigner = process.env.KEY_CLOUDFRONT && new AWS.CloudFront.Signer(
   process.env.KEY_CLOUDFRONT,
-  readPem()
-)
-
-function generateSignedDownloadUrl(ref) {
-  return new Promise(function(resolve) {
-    const url = awsSigner.getSignedUrl({
-      url: `https://${ref}`,
-      expires: Date.now() + 60 * 60 * 1000 // 1 hour
-    })
-    resolve(url)
-  })
-}
+  String(readFileSync(join(__dirname, `../../${process.env.KEY_CLOUDFRONT}.pem`))))
 
 module.exports = async ref => {
 
   try {
 
-    let url = ref.params && ref.params.url || ref
+    const url = (ref.params?.url || ref).replace(/\{(.*?)\}/g,
+      matched => process.env[`SRC_${matched.replace(/\{|\}/g, '')}`] || matched)
+  
+    const signedURL = awsSigner.getSignedUrl({
+      url: `https://${url}`,
+      expires: Date.now() + 60 * 60 * 1000 // 1 hour
+    })
+    
+    // console.time(url)
+  
+    const response = await fetch(signedURL, {
+      agent: process.env.CUSTOM_AGENT && httpsAgent
+    })
 
-    url = url.replace(/\{(.*?)\}/g,
-        matched => process.env[`SRC_${matched.replace(/\{|\}/g, '')}`] || matched)
-  
-    const signedUrl = await generateSignedDownloadUrl(url)
-  
-    const response = await fetch(signedUrl)
+    // console.timeEnd(url)
   
     if (response.status >= 300) return new Error(`${response.status} ${ref}`)
 

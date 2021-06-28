@@ -2,7 +2,7 @@ const fetch = require('node-fetch')
 
 const dbs = require('./dbs')()
 
-const sql_filter = require('./layer/sql_filter')
+const sql_filter = require('./sql_filter')
 
 const Roles = require('./roles.js')
 

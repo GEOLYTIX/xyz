@@ -1,6 +1,6 @@
 const dbs = require('../dbs')()
 
-const sql_filter = require('./sql_filter')
+const sql_filter = require('../sql_filter')
 
 const Roles = require('../roles.js')
 
@@ -315,7 +315,7 @@ module.exports = async (req, res) => {
       count: parseInt(row.count),
       size: parseInt(row.size),
       cat: row.cat.length === 1 && row.cat[0] || layer.cat_array && row.cat || null,
-      label: row.label
+      label: count ? parseInt(row.count) > 1 ? row.count : row.label : row.label
     }
   })))
 
@@ -328,7 +328,7 @@ module.exports = async (req, res) => {
       count: parseInt(row.count),
       size: parseInt(row.size),
       cat: parseFloat(row.cat),
-      label: row.label
+      label: count ? parseInt(row.count) > 1 ? row.count : row.label : row.label
     }
   })))
 
