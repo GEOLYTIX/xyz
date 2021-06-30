@@ -15,3 +15,5 @@ Improve highlight interaction [#412](https://github.com/GEOLYTIX/xyz/issues/412)
 Audit fix security vulnerabilities.
 
 Fix to data panel layout.
+
+Add SAML user module and [SAML2-JS](https://www.npmjs.com/package/saml2-js) package.

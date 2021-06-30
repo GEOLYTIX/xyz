@@ -8,6 +8,8 @@ const auth = require('../mod/user/auth')
 
 const auth0 = require('../mod/user/auth0')
 
+const saml = require('../mod/user/saml')
+
 const workspaceCache = require('../mod/workspace/cache')
 
 const proxy = require('../mod/proxy')
@@ -56,6 +58,8 @@ module.exports = async (req, res) => {
   if (req.headers && req.headers['user-agent'] && IEdetect(req.headers['user-agent'])) return res.send('Uh Oh... It looks like your request comes from an unsupported user agent (e.g. Internet Explorer)')
 
   if (req.url.match(/\/auth0/)) return auth0(req, res)
+
+  if (req.url.match(/\/saml/)) return saml(req, res)
 
   // Merge request params and query params.
   req.params = Object.assign(req.params || {}, req.query || {})
