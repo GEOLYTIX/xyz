@@ -32,6 +32,7 @@ public/views/mnb.*
 .vercel
 
 *.pem
+*.crt
 public/js/plugins/catalist_id_query.js
 public/views/open_report.html
 public/views/other_report.html
