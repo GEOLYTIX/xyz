@@ -424,7 +424,7 @@
 <p>Please refer to the information in this article in order to contribute to the documentation.</p>
 <h2 id="eleventy">eleventy <a class="header-anchor" href="#eleventy">¶</a></h2>
 <p>We use <a href="https://github.com/11ty/eleventy">Eleventy</a> to compile markdown into static pages.</p>
-<p>eleventy and markdown-it are <strong>not included</strong> as dev-dependencies and must be installed locally or globally if you intend to compile the doc pages from the eleventy folder.</p>
+<p>eleventy, markdown-it, and the syntaxhighlight plugin are <strong>not included</strong> as dependencies in the package.json and must be installed locally or globally if you intend to compile the doc pages from the eleventy folder.</p>
 <p>Individual markdown documents and a template html are stored in the /eleventy folder. Configuration for the compilation is in the .eleventy.js file in the XYZ root.</p>
 <p>Use following command to compile templates and markdown from the /eleventy folder in the /docs directory.</p>
 <pre><code>npx eleventy --input ./eleventy --output ./docs --formats=md
