@@ -6,8 +6,8 @@ const jwt = require('jsonwebtoken')
 
 const sp = new saml2.ServiceProvider({
   entity_id: process.env.SAML_ENTITY_ID,
-  private_key: String(readFileSync(join(__dirname, `../../geolytix_saml.pem`))),
-  certificate: String(readFileSync(join(__dirname, `../../geolytix_saml.crt`))),
+  private_key: process.env.SAML_SP_CRT && String(readFileSync(join(__dirname, `../../${process.env.SAML_SP_CRT}.pem`))),
+  certificate: process.env.SAML_SP_CRT && String(readFileSync(join(__dirname, `../../${process.env.SAML_SP_CRT}.crt`))),
   assert_endpoint: process.env.SAML_ACS,
   allow_unencrypted_assertion: true
 })
@@ -15,7 +15,7 @@ const sp = new saml2.ServiceProvider({
 const idp = new saml2.IdentityProvider({
   sso_login_url: process.env.SAML_SSO,
   sso_logout_url: process.env.SAML_SLO,
-  certificates: [String(readFileSync(join(__dirname, `../../pingone_sso_certificate.crt`)))],
+  certificates: process.env.SAML_IDP_CRT && [String(readFileSync(join(__dirname, `../../${process.env.SAML_IDP_CRT}.crt`)))],
   sign_get_request: true
 })
 
