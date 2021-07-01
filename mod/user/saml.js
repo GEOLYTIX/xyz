@@ -90,8 +90,11 @@ module.exports = (req, res) => {
 
       res.setHeader('Set-Cookie', cookie)
 
-      // res.setHeader('location', `${process.env.AUTH0_HOST}/${process.env.DIR}`)
-      // res.status(302).send()
+      if (process.env.SAML_LOGIN) {
+
+        res.setHeader('location', `${process.env.AUTH0_HOST}/${process.env.DIR}`)
+        return res.status(301).send()
+      }
 
       res.send(saml_response.user)
     })

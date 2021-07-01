@@ -26,7 +26,6 @@
     "saml2-js": "^3.0.1"
   },
   "devDependencies": {
-    "@11ty/eleventy-plugin-syntaxhighlight": "^3.0.6",
     "@turf/circle": "^6.3.0",
     "@turf/flatten": "^6.3.0",
     "@turf/kinks": "^6.3.0",
