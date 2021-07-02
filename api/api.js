@@ -46,7 +46,9 @@ function IEdetect(sUsrAg) {
 }
 
 module.exports = async (req, res) => {
-
+    
+  console.log(`Got a request with the headers: ${req.headers} and params = ${req.params} and query = ${req.query}`);
+    
   // redirect if dir is missing in url path.
   if (process.env.DIR && !req.url.match(process.env.DIR)) {
     res.setHeader('location', `${process.env.DIR}`)
