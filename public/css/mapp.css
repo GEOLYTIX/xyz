@@ -2531,9 +2531,6 @@ span.flatpickr-weekday {
   width: 100%;
   height: 100%;
 }
-.dataview .target ::-webkit-scrollbar {
-  display: none;
-}
 
 .drawer.layer-group,
 .drawer.layer-view {
