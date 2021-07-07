@@ -1,8 +1,10 @@
 const fetch = require('node-fetch')
 
-const logs = new Set(process.env.LOGS?.split(',') || [])
+const logs = process.env.LOGS && new Set(process.env.LOGS.split(','))
 
 module.exports = (msg, log) => {
+
+  if (!logs) return
 
   if (!logs.has(log)) return
 
