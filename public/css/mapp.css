@@ -956,6 +956,9 @@ button:disabled {
   overflow: auto;
   -webkit-overflow-scrolling: touch;
 }
+.tabulator .tabulator-tableHolder ::-webkit-scrollbar {
+  display: none;
+}
 
 .tabulator .tabulator-tableHolder:focus {
   outline: none;
