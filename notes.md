@@ -19,3 +19,5 @@ Fix to data panel layout.
 Add SAML user module and [SAML2-JS](https://www.npmjs.com/package/saml2-js) package.
 
 Remove @11ty/eleventy-plugin-syntaxhighlight dependency.
+
+Enable interaction.draw.style configuration.
