@@ -12,36 +12,75 @@ document.dispatchEvent(new CustomEvent('practice_patients', {
         source: source,
       })
 
-      const layer = new ol.layer.Vector({
-        source: clusterSource,
-        zIndex: 999,
-        style: feature => {
+      function styleFunction (feature) {
 
-          var size = 5 + 1000 * feature.get('features').length / features.length
+          let l = feature.get('features').length
 
-          size = size > 20 && 20 || size
+          maxCount = l > maxCount && l || maxCount
+
+          if (!flag && maxCount > 30) return null
+          
+          if (flag && maxCount > 30) l *= 30 / maxCount
 
           const style = new ol.style.Style({
               image: new ol.style.Circle({
-                radius: 20,
+                radius: 3 + l,
                 stroke: new ol.style.Stroke({
                   color: '#fff',
                 }),
                 fill: new ol.style.Fill({
                   color: entry.location.style.strokeColor,
-                }),
+                })
               })
             })
 
           return style
-        }
+      }
+
+
+
+      const layer = new ol.layer.Vector({
+        source: clusterSource,
+        zIndex: 999,
+        style: styleFunction
       })
+
+
+      let maxCount = 0
+
+      let flag = false
+
+      function postRender() {
+
+        _xyz.utils.render(counter, _xyz.utils.html`
+          <div style="padding-left: 29px; font-style: italic;">Largest cluster represents ${maxCount} Patients`)
+
+        if (!flag && maxCount > 30) {
+          
+          flag = true
+          return layer.setStyle(styleFunction)
+        }
+
+        flag = false
+        maxCount = 0
+      }
+
+      let postRenderTimeout
+
+      layer.on('postrender', e=>{
+
+        postRenderTimeout && clearTimeout(postRenderTimeout)
+
+        postRenderTimeout = setTimeout(postRender, 300)
+      })
+
 
       entry.location.removeCallbacks.push(()=>{
         _xyz.map.removeLayer(layer)
       })
 
-      entry.listview.appendChild(_xyz.utils.html.node `
+      const label = entry.listview.appendChild(_xyz.utils.html.node `
+      <div style="grid-column: 1/3;">
         <label
           class="${`input-checkbox mobile-disabled ${entry.class}`}">
           <input
@@ -50,13 +89,23 @@ document.dispatchEvent(new CustomEvent('practice_patients', {
             onchange=${e => {
 
               entry.display = e.target.checked
-              entry.display ?
-                _xyz.map.addLayer(layer) :
+              
+              if (entry.display) {
+                _xyz.map.addLayer(layer)
+                counter.style.display = 'block'
+
+              } else {
                 _xyz.map.removeLayer(layer)
+                counter.style.display = 'none'
+              }
 
             }}></input>
           <div></div>
           <span>Patient Locations`)
+
+
+      const counter = label.appendChild(_xyz.utils.html.node `
+        <div>`)
 
       _xyz.query({
         query: 'practice_directory_patients',
@@ -67,9 +116,13 @@ document.dispatchEvent(new CustomEvent('practice_patients', {
 
         source.addFeatures(features)
 
-        const test = clusterSource.getFeatures()
 
-        console.log(test)
+
+
+
+        // const test = clusterSource.getFeatures()
+
+        // console.log(test)
 
       })
 
