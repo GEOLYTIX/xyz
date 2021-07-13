@@ -21,3 +21,5 @@ Add SAML user module and [SAML2-JS](https://www.npmjs.com/package/saml2-js) pack
 Remove @11ty/eleventy-plugin-syntaxhighlight dependency.
 
 Enable interaction.draw.style configuration.
+
+Using Google SMTP Relay service for transport [#414](https://github.com/GEOLYTIX/xyz/issues/414)
