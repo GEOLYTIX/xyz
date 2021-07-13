@@ -23,7 +23,7 @@ document.dispatchEvent(new CustomEvent('practice_patients', {
 
           const style = new ol.style.Style({
               image: new ol.style.Circle({
-                radius: size,
+                radius: 20,
                 stroke: new ol.style.Stroke({
                   color: '#fff',
                 }),
@@ -66,6 +66,10 @@ document.dispatchEvent(new CustomEvent('practice_patients', {
         features = response.map(f => new ol.Feature(new ol.geom.Point([f.x, f.y])))
 
         source.addFeatures(features)
+
+        const test = clusterSource.getFeatures()
+
+        console.log(test)
 
       })
 
