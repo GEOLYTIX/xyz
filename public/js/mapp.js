@@ -369,7 +369,7 @@
     <div
       class="header primary-colour"
       onclick=${t=>{t.stopPropagation(),e.utils.toggleExpanderParent(t.target,!0)}}><span>${e.language.layer_filter_header}</span><button
-      class="btn-header xyz-icon icon-expander primary-colour-filter">`);let o={};return Object.values(n).forEach((e=>{e.field&&(o[e.field]=e.title||e.field)})),r.filter.select=e.utils.html.node`
+      class="btn-header xyz-icon icon-expander primary-colour-filter">`);let o={};return Object.values(n).forEach((e=>{e.field&&(o[e.field]=e.filter_title||e.title||e.field)})),r.filter.select=e.utils.html.node`
       <button class="btn-drop">
         <div
           class="head"
@@ -385,7 +385,7 @@
       onclick=${e=>{e.target.style.display="none",r.filter.list.innerHTML=null,Object.keys(r.filter.current).forEach((e=>r.filter.current[e]={})),r.reload(),r.show()}}>${e.language.layer_filter_clear_all}`,a.appendChild(r.filter.clear_all),r.filter.list=e.utils.html.node`<div>`,a.appendChild(r.filter.list),a},block:function(t,r){const n=e.utils.html.node`
     <div class="drawer">
     <div class="header bold">
-    <span>${r.title}</span>
+    <span>${r.filter_title||r.title}</span>
     <button
       class="btn-header xyz-icon icon-close primary-colour-filter"
       onclick=${e=>{t.filter.current[r.field]={},t.reload(),t.show(),n.remove(),t.filter.list.children.length||(t.filter.clear_all.style.display="none")}}>`;return t.filter.list.appendChild(n),n},reset:function(e,t){t.el.parentNode.removeChild(t.el),t.el=null,e.filter.list.children.length||(e.filter.clear_all.style.display="none")},filter_text:ur(e),filter_numeric:pr(e),filter_in:gr(e),filter_date:hr(e),filter_boolean:fr(e)};return t},yr=e=>t=>e.utils.html.node`
