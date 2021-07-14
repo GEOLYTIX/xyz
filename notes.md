@@ -23,3 +23,7 @@ Remove @11ty/eleventy-plugin-syntaxhighlight dependency.
 Enable interaction.draw.style configuration.
 
 Using Google SMTP Relay service for transport [#414](https://github.com/GEOLYTIX/xyz/issues/414)
+
+Fix update icon in location view header shown after update.
+
+Fix update values from options dropdown in location view.
