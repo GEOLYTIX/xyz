@@ -27,3 +27,5 @@ Using Google SMTP Relay service for transport [#414](https://github.com/GEOLYTIX
 Fix update icon in location view header shown after update.
 
 Fix update values from options dropdown in location view.
+
+Bump Openlayers to [6.6.1](https://github.com/openlayers/openlayers/releases/tag/v6.6.1)
