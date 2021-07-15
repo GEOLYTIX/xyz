@@ -34,6 +34,11 @@ module.exports = defaults = {
         hidden: true
       }
     },
+    mbvectortiles: {
+      style: {
+        hidden: true
+      }
+    },
     geojson: {
       srid: '4326',
       style: {
