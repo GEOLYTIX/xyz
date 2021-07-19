@@ -33,6 +33,8 @@ public/views/mnb.*
 
 *.pem
 *.crt
+public/js/plugins/scenario_branches_list.js
+public/js/plugins/scenario_branch_site_stats.js
 public/js/plugins/catalist_id_query.js
 public/views/open_report.html
 public/views/other_report.html
