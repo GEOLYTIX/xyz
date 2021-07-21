@@ -45,3 +45,7 @@ public/js/mod.js
 public/js/log.js
 async.js
 public/js/plugins/scenario_branch_analogues.js
+
+public/js/plugins/site_run_model.js
+public/js/queries/insert_impact_surface.js
+public/js/queries/insert_interaction_surface.js
