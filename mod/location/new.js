@@ -9,11 +9,11 @@ module.exports = async (req, res) => {
     columns += `, metadata`;
   }
   
-  if (req.body.properties.slug) {
+  if (req.query.slug) {
     columns += `, slug`;
   }
   
-  if (req.body.properties.project) {
+  if (req.query.project) {
     columns += `, project`;
   }
 
@@ -21,8 +21,8 @@ module.exports = async (req, res) => {
   INSERT INTO ${req.params.table} ${columns})
   SELECT ST_SetSRID(ST_MakeValid(ST_GeomFromGeoJSON('${JSON.stringify(req.body.geometry)}')), ${layer.srid})
   ${req.body.properties.metadata ? `, '${JSON.stringify(req.body.properties.metadata)}'` : ''}
-  ${req.body.properties.slug ? `, '${JSON.stringify(req.body.properties.slug)}'` : ''}
-  ${req.body.properties.project ? `, '${JSON.stringify(req.body.properties.project)}'` : ''}
+  ${req.query.slug ? `, '${req.query.slug}'` : ''}
+  ${req.query.project ? `, '${req.query.project}'` : ''}
   RETURNING ${layer.qID} AS id;`
 
   var rows = await dbs[layer.dbs](q)
