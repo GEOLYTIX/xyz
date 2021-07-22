@@ -23,7 +23,7 @@ document.dispatchEvent(new CustomEvent('layer_areastats_button', {
           _xyz.mapview.interaction.draw.begin({
             layer: layer,
             type: 'Polygon',
-            geometryFunction: _xyz.mapview.interaction.draw.polygonKinks,
+            //geometryFunction: _xyz.mapview.interaction.draw.polygonKinks,
             tooltip: layer.edit.polygon.tooltip,
             callback: () => {
               layer.view.querySelector('.header').classList.remove('edited', 'secondary-colour-bg')
