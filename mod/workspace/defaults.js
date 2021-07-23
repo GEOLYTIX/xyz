@@ -86,7 +86,6 @@ module.exports = defaults = {
     cluster: {
       srid: '4326',
       style: {
-        size: 20,
         anchor: null,
         default: {
           type: 'target',

@@ -270,7 +270,8 @@
             "cluster": {
               "type": "target",
               "fillColor": "#006666",
-              "scale": 2
+              "scale": 2,
+              "sizing": "fixed"
             },
             "themes": {
               "Retail - Simple": {
