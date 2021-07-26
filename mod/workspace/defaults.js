@@ -34,6 +34,11 @@ module.exports = defaults = {
         hidden: true
       }
     },
+    mbvectortiles: {
+      style: {
+        hidden: true
+      }
+    },
     geojson: {
       srid: '4326',
       style: {
@@ -81,7 +86,6 @@ module.exports = defaults = {
     cluster: {
       srid: '4326',
       style: {
-        size: 20,
         anchor: null,
         default: {
           type: 'target',

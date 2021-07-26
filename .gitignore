@@ -33,6 +33,9 @@ public/views/mnb.*
 .vercel
 
 *.pem
+*.crt
+public/js/plugins/scenario_branches_list.js
+public/js/plugins/scenario_branch_site_stats.js
 public/js/plugins/catalist_id_query.js
 public/views/open_report.html
 public/views/other_report.html
@@ -43,3 +46,7 @@ public/js/mod.js
 public/js/log.js
 async.js
 public/js/plugins/scenario_branch_analogues.js
+
+public/js/plugins/site_run_model.js
+public/js/queries/insert_impact_surface.js
+public/js/queries/insert_interaction_surface.js

@@ -78,6 +78,8 @@ function mapFilterEntries(filter) {
 
       // Filter out undefined / escaped filter
       .filter(f=>typeof f !== 'undefined')
+
+      .filter((f) => f!=="")
   
       // Join filter with conjunction
       .join(' AND ')})`;

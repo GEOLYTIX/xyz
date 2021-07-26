@@ -81,6 +81,14 @@
       "destination": "/api/api.js"
     },
     {
+      "source": "/auth0/(.*)",
+      "destination": "/api/api.js"
+    },
+    {
+      "source": "/saml/(.*)",
+      "destination": "/api/api.js"
+    },
+    {
       "source": "/",
       "destination": "/api/api.js"
     }

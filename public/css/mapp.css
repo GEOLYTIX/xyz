@@ -670,6 +670,9 @@ button {
   width: 100%;
   text-align: center; }
 
+.tabulator-header.tabulator-header-hidden {
+  display: none !important; }
+
 .tabulator .tabulator-header .tabulator-col .tabulator-header-filter textarea {
   height: auto !important; }
 
@@ -2029,7 +2032,8 @@ span.flatpickr-weekday {
   background-color: salmon; }
 
 .ol-scale-line {
-  position: static; }
+  position: static;
+  background: none; }
 
 .ol-scale-line-inner {
   border: 2px solid #222;

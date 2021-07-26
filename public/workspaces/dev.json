@@ -113,9 +113,6 @@
     "Dev sites report": {
       "src": "https://api.github.com/repos/GEOLYTIX/xyz_resources/contents/dev/report_sites/sites.html"
     },
-    "Sites Local Report": {
-      "src": "file:views/report_location.html"
-    },
     "japan_restaurants": {
       "format": "cluster",
       "dbs": "DEV",
@@ -154,7 +151,362 @@
           "accessToken": "pk.eyJ1IjoiYW5keXBvbHMiLCJhIjoiY2ttMHQ3cnhqMG8yODJucjNyejRvaGVvaSJ9.RBSYVzv5pxlAgCCCjB9xoQ",
           "display": true
         },
-        "Contributions": {
+        "HERE Imagery": {
+          "template": "HERE Imagery",
+          "roles": {
+            "de": null
+          }
+        },
+        "HERE Hybrid": {
+          "template": "HERE Hybrid",
+          "roles": {
+            "en": true
+          }
+        },
+        "Mapbox Label": {
+          "template": "Mapbox Label"
+        },
+        "Mapbox Base OL": {
+          "format": "mbvectortiles",
+          "mbStyle": "mapbox://styles/dbauszus/ciozrimi3002bdsm8bjtn2v1y",
+          "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmY25oa2thMWhoMDJzbGNldmF2ZzYzcCJ9.IWcezkYm8mipsGXygnYbNw",
+          "attribution": {
+            "© Mapbox": "https://www.mapbox.com/about/maps",
+            "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+          }
+        },
+        "Mapbox Label OL": {
+          "format": "mbvectortiles",
+          "mbStyle": "mapbox://styles/dbauszus/ckjk91u8b1da319o7dhpdhqln",
+          "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmY25oa2thMWhoMDJzbGNldmF2ZzYzcCJ9.IWcezkYm8mipsGXygnYbNw",
+          "attribution": {
+            "© Mapbox": "https://www.mapbox.com/about/maps",
+            "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+          }
+        },
+        "Retail Points": {
+          "format": "cluster",
+          "dbs": "MAPP",
+          "table": "geodata.vw_uk_glx_open_retail_points_display_brand",
+          "qID": "id",
+          "geom": "geom_p_4326",
+          "srid": "4326",
+          "properties": "size_band",
+          "cluster_label": "store_name",
+          "cluster_cat": "retailer",
+          "cluster_kmeans": 0.02,
+          "cluster_dbscan": 0.2,
+          "markerMin": 6,
+          "markerMax": 50,
+          "hover": {
+            "field": "store_name"
+          },
+          "infoj": [
+            {
+              "type": "key"
+            },
+            {
+              "field": "retailer",
+              "title": "Retailer",
+              "filter": "like",
+              "inline": true
+            },
+            {
+              "field": "fascia",
+              "title": "Fascia",
+              "inline": true
+            },
+            {
+              "field": "store_name",
+              "title": "Name"
+            },
+            {
+              "title": "Address",
+              "type": "title"
+            },
+            {
+              "field": "add_one"
+            },
+            {
+              "field": "add_two"
+            },
+            {
+              "field": "locality"
+            },
+            {
+              "field": "postcode"
+            },
+            {
+              "field": "town"
+            },
+            {
+              "field": "size_sqft",
+              "title": "Size in sqft",
+              "inline": true
+            },
+            {
+              "field": "pqi",
+              "title": "PQI"
+            },
+            {
+              "type": "streetview"
+            }
+          ],
+          "style": {
+            "label": {
+              "field": "store_name",
+              "declutter": true,
+              "strokeColor": "#fff",
+              "strokeWidth": 3
+            },
+            "default": {
+              "type": "target",
+              "fillColor": "#006666"
+            },
+            "cluster": {
+              "type": "target",
+              "fillColor": "#006666",
+              "scale": 2,
+              "sizing": "fixed"
+            },
+            "themes": {
+              "Retail - Simple": {
+                "type": "categorized",
+                "field": "retailer",
+                "other": true,
+                "cat": {
+                  "Aldi": {
+                    "label": "Aldi",
+                    "style": {
+                      "fillColor": "#ffbf45",
+                      "layers": {
+                        "0.875": "#fa6f08",
+                        "0.75": "#ef3c11",
+                        "0.625": "#001f79",
+                        "0.5": "#02bee3",
+                        "0.25": "ffffff"
+                      }
+                    }
+                  },
+                  "Asda": {
+                    "label": "Asda",
+                    "style": {
+                      "fillColor": "#83b923",
+                      "layers": {
+                        "0.5": "#ffffff",
+                        "0.375": "#fdb839"
+                      }
+                    }
+                  },
+                  "Booths": {
+                    "label": "Booths",
+                    "style": {
+                      "fillColor": "#a12629",
+                      "layers": {
+                        "0.5": "#ffffff",
+                        "0.375": "#a12629"
+                      }
+                    }
+                  },
+                  "Budgens": {
+                    "label": "Budgens",
+                    "style": {
+                      "fillColor": "#EEEEE0",
+                      "layers": {
+                        "0.5": "#679a00",
+                        "0.375": "#cccb01"
+                      }
+                    }
+                  },
+                  "Co-op": {
+                    "label": "The Co-Operative",
+                    "style": {
+                      "fillColor": "#0b1e60",
+                      "layers": {
+                        "0.625": "#ffffff",
+                        "0.5": "#a3d227"
+                      }
+                    }
+                  },
+                  "Costco": {
+                    "label": "Costco",
+                    "style": {
+                      "fillColor": "#005daa",
+                      "layers": {
+                        "0.875": "#ffffff",
+                        "0.625": "#e31837"
+                      }
+                    }
+                  },
+                  "Farmfoods": {
+                    "label": "Farm Foods",
+                    "style": {
+                      "fillColor": "#77a632",
+                      "layers": {
+                        "0.75": "#f7f900",
+                        "0.5": "#ff0000"
+                      }
+                    }
+                  },
+                  "Heron": {
+                    "label": "Heron",
+                    "style": {
+                      "fillColor": "#ffffff",
+                      "layers": {
+                        "0.75": "#313590",
+                        "0.25": "#ffcf00"
+                      }
+                    }
+                  },
+                  "Iceland": {
+                    "label": "Iceland",
+                    "style": {
+                      "fillColor": "#ed1b2d",
+                      "layers": {
+                        "0.75": "#f2552b",
+                        "0.5": "#f89128",
+                        "0.25": "#ffffff"
+                      }
+                    }
+                  },
+                  "Lidl": {
+                    "label": "Lidl",
+                    "style": {
+                      "fillColor": "#d61408",
+                      "layers": {
+                        "0.875": "#ffe502",
+                        "0.5": "#002d7a",
+                        "0.25": "#d61408"
+                      }
+                    }
+                  },
+                  "Makro": {
+                    "label": "Makro",
+                    "style": {
+                      "fillColor": "#00457a",
+                      "layers": {
+                        "0.325": "#ffe811"
+                      }
+                    }
+                  },
+                  "Marks and Spencer": {
+                    "label": "Marks & Spencer",
+                    "style": {
+                      "fillColor": "#0a0d10",
+                      "layers": {
+                        "0.5": "#def036",
+                        "0.25": "#0a0d10"
+                      }
+                    }
+                  },
+                  "Morrisons": {
+                    "label": "Morrisons",
+                    "style": {
+                      "fillColor": "#ffe133",
+                      "layers": {
+                        "0.5": "#00614e"
+                      }
+                    }
+                  },
+                  "Sainsburys": {
+                    "label": "Sainsbury's",
+                    "style": {
+                      "fillColor": "#ee8a00",
+                      "layers": {
+                        "0.625": "#ffffff",
+                        "0.325": "#ee8a00"
+                      }
+                    }
+                  },
+                  "Tesco": {
+                    "label": "Tesco",
+                    "style": {
+                      "fillColor": "#0055a8",
+                      "layers": {
+                        "0.75": "#ffffff",
+                        "0.325": "#f02f26"
+                      }
+                    }
+                  },
+                  "Waitrose": {
+                    "label": "Waitrose",
+                    "style": {
+                      "fillColor": "#81ae37",
+                      "layers": {
+                        "0.325": "#ffffff"
+                      }
+                    }
+                  },
+                  "Whole Foods Market": {
+                    "label": "Whole Foods Market",
+                    "style": {
+                      "fillColor": "#00674b",
+                      "layers": {
+                        "0.875": "#ffffff",
+                        "0.5": "#00674b"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },        
+        "ZoomGeom": {
+          "format": "mvt",
+          "geom": "geom_3857_5m",
+          "srid": "3857",
+          "dbs": "MAPP",
+          "qID": "id",
+          "geoms": {
+            "7": "geom_3857_100m",
+            "8": "geom_3857_50m",
+            "9": "geom_3857_50m",
+            "10": "geom_3857_5m",
+            "11": "geom_3857_5m",
+            "12": "geom_3857"
+          },
+          "table": "geodata.uk_glx_geodata_seamless_shopper_town",
+          "style": {
+            "themes": {
+              "Flame": {
+                "type": "basic",
+                "style": {
+                  "strokeColor": "#E35C2A"
+                }
+              },
+              "Chocolate": {
+                "type": "basic",
+                "style": {
+                  "strokeColor": "#401505"
+                }
+              }
+            }
+          }
+        },
+        "Grid": {
+          "format": "grid",
+          "dbs": "MAPP",
+          "geom": "geom_p_4326",
+          "srid": "4326",
+          "tables": {
+            "7": null,
+            "8": "geodata.uk_glx_geodata_hex_16k",
+            "9": "geodata.uk_glx_geodata_hex_8k",
+            "10": "geodata.uk_glx_geodata_hex_4k",
+            "11": "geodata.uk_glx_geodata_hex_2k",
+            "12": "geodata.uk_glx_geodata_hex_1k",
+            "13": "geodata.uk_glx_geodata_hex_1k",
+            "14": null
+          },
+          "grid_fields": {
+            "Population 2001": "pop__01",
+            "Population 2011": "pop__11",
+            "Female population": "gen_female__11",
+            "Male population": "gen_male__11"
+          }
+        },
+        "Not Grid": {
           "format": "mvt",
           "dbs": "XYZ",
           "table": "contributions",
