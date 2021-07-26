@@ -16,11 +16,17 @@ document.dispatchEvent(new CustomEvent('practice_patients', {
 
           let l = feature.get('features').length
 
-          maxCount = l > maxCount && l || maxCount
+          if (!flag) {
+            maxCount = l > maxCount && l || maxCount
+            
+            renderTimeout && clearTimeout(renderTimeout)
 
-          if (!flag && maxCount > 30) return null
+            renderTimeout = setTimeout(render, 600)
+
+            return null
+          }
           
-          if (flag && maxCount > 30) l *= 30 / maxCount
+          if (maxCount > 30) l *= 30 / maxCount
 
           const style = new ol.style.Style({
               image: new ol.style.Circle({
@@ -50,34 +56,38 @@ document.dispatchEvent(new CustomEvent('practice_patients', {
 
       let flag = false
 
-      function postRender() {
+      function render() {
+
+        console.log(`render flag ${flag} maxcount ${maxCount}`)
 
         _xyz.utils.render(counter, _xyz.utils.html`
           <div style="padding-left: 29px; font-style: italic;">Largest cluster represents ${maxCount} Patients`)
 
-        if (!flag && maxCount > 30) {
+        if (!flag) {
           
           flag = true
-          return layer.setStyle(styleFunction)
+          layer.setStyle(styleFunction)
+          return
         }
 
         flag = false
         maxCount = 0
+
       }
 
-      let postRenderTimeout
+      let renderTimeout
 
       layer.on('postrender', e=>{
 
-        postRenderTimeout && clearTimeout(postRenderTimeout)
+        console.log(`postrender flag ${flag} maxcount ${maxCount}`)
 
-        postRenderTimeout = setTimeout(postRender, 300)
+        renderTimeout && clearTimeout(renderTimeout)
+
+        renderTimeout = setTimeout(render, 600)
       })
 
 
-      entry.location.removeCallbacks.push(()=>{
-        _xyz.map.removeLayer(layer)
-      })
+      entry.location.removeCallbacks.push(()=>_xyz.map.removeLayer(layer))
 
       const label = entry.listview.appendChild(_xyz.utils.html.node `
       <div style="grid-column: 1/3;">
@@ -104,8 +114,7 @@ document.dispatchEvent(new CustomEvent('practice_patients', {
           <span>Patient Locations`)
 
 
-      const counter = label.appendChild(_xyz.utils.html.node `
-        <div>`)
+      const counter = label.appendChild(_xyz.utils.html.node `<div>`)
 
       _xyz.query({
         query: 'practice_directory_patients',
@@ -115,14 +124,6 @@ document.dispatchEvent(new CustomEvent('practice_patients', {
         features = response.map(f => new ol.Feature(new ol.geom.Point([f.x, f.y])))
 
         source.addFeatures(features)
-
-
-
-
-
-        // const test = clusterSource.getFeatures()
-
-        // console.log(test)
 
       })
 
