@@ -50,7 +50,7 @@ document.dispatchEvent(new CustomEvent('csv_import', {
       
           }).filter(o => typeof o === 'object')
          
-          const response = await _xyz.xhr({
+          await _xyz.xhr({
             method: 'POST',
             url: `${_xyz.host}/api/query?${_xyz.utils.paramString({
               template: 'csv_import',
@@ -60,8 +60,6 @@ document.dispatchEvent(new CustomEvent('csv_import', {
             })}`,
             body: JSON.stringify(_list)
           })
-
-          console.log(response)
 
           setTimeout(ping, 10000)
 

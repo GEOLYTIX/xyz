@@ -72,7 +72,7 @@ module.exports = async (req, res) => {
   }
 
   // Prevent automatic parsing of JSON string by adding leading spaces.
-  req.params.body = req.params.stringifyBody && `  ${JSON.stringify(req.body)}` || req.body
+  req.params.body = req.params.stringifyBody && JSON.stringify(req.body) || req.body
 
   // Reserved param keys may not be substituted from request query params.
   const reserved = new Set(['viewport', 'filter'])
@@ -111,7 +111,7 @@ module.exports = async (req, res) => {
       try {
 
         // Try to parse val if the string begins and ends with either [] or {}
-        val = /^[\[\{].*[\]\}]$/.test(val) && JSON.parse(val) || val
+        val = !param === 'body' && /^[\[\{].*[\]\}]$/.test(val) && JSON.parse(val) || val
       } catch(err) {
         console.error(err)
       }
