@@ -71,8 +71,8 @@ module.exports = async (req, res) => {
     delete req.params.viewport
   }
 
-  // Assign body to params to enable reserved %{body} parameter.
-  req.params.body = req.body
+  // Prevent automatic parsing of JSON string by adding leading spaces.
+  req.params.body = req.params.stringifyBody && `  ${JSON.stringify(req.body)}` || req.body
 
   // Reserved param keys may not be substituted from request query params.
   const reserved = new Set(['viewport', 'filter'])
