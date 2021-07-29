@@ -6,7 +6,7 @@ const cloudfront = require('../provider/cloudfront')
 
 const getFrom = {
   'https': ref => http(ref),
-  'file': ref => file(`../../public/workspaces/${ref.split(':')[1]}`),
+  'file': ref => file(ref.split(':')[1]),
   'cloudfront': ref => cloudfront(ref.split(':')[1]),
 }
 
