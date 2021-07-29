@@ -6,7 +6,7 @@ const file = require('./file')
 
 const getFrom = {
   'https': ref => http(ref),
-  'file': ref => file(`../../public/${ref.split(':')[1]}`),
+  'file': ref => file(`${ref.split(':')[1]}`),
   'cloudfront': ref => cloudfront(ref.split(':')[1]),
 }
 
