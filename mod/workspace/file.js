@@ -5,7 +5,7 @@ const { join } = require('path')
 module.exports = async ref => {
   try {
 
-    const file = readFileSync(join(__dirname, ref))
+    const file = readFileSync(join(__dirname, `../../${ref}`))
 
     if (ref.match(/\.json$/i)) {
       return JSON.parse(file, 'utf8')
