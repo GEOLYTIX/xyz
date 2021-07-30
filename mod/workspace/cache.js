@@ -89,6 +89,7 @@ async function cache() {
 async function getDynamicWorkspace(req) {
   if (!req) return new Error('Not request found');
   const { slug, project, lang } = req.query;
+  const { mongoClient } = req;
   if (!slug) {
     return new Error('No slug specified');
   }
@@ -98,10 +99,7 @@ async function getDynamicWorkspace(req) {
   if (!lang) {
     return new Error('No lang specified');
   }
-  const uri = process.env.MONGO_URL;
-  const { MongoClient, ObjectId } = require('mongodb');
-  const mongoClient = new MongoClient(uri, { useUnifiedTopology: true });
-  await mongoClient.connect();
+  const { ObjectId } = require('mongodb');
   const Page = mongoClient.db('acorn').collection('pages');
   const Version = mongoClient.db('acorn').collection('versions');
   const proposalPage = await Page.findOne({

@@ -17,6 +17,19 @@ app.use(`/xyz/docs`, express.static('docs'))
 app.use(cookieParser())
 app.use(cors());
 
+const mongoConnection = async () => {
+  const uri = process.env.MONGO_URL;
+  const { MongoClient } = require('mongodb');
+  const mongoClient = new MongoClient(uri, { useUnifiedTopology: true });
+  await mongoClient.connect(); 
+  return mongoClient
+}
+
+app.use(async (req, res, next) => {
+  const connection = await mongoConnection();
+  req.mongoClient = connection;
+  next()
+})
 
 const _api = require('./api/api')
 
