@@ -8,7 +8,7 @@ module.exports = async ref => {
     const path = (ref.params?.url || ref).replace(/\{(.*?)\}/g,
       matched => process.env[`SRC_${matched.replace(/\{|\}/g, '')}`] || matched)
 
-    const file = readFileSync(join(__dirname, path))
+    const file = readFileSync(join(__dirname, `../../${path}`))
 
     if (path.match(/\.json$/i)) {
       return JSON.parse(file, 'utf8')
