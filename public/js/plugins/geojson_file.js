@@ -112,12 +112,12 @@ document.dispatchEvent(new CustomEvent('geojson_file', {
               })
             }
 
-            layer.hover = true
+            // layer.hover = true
 
-            layer.infotip = feature => {
-              const properties = feature.getProperties()
-              _xyz.mapview.infotip.create(JSON.stringify(properties))
-            }
+            // layer.infotip = feature => {
+            //   const properties = feature.getProperties()
+            //   _xyz.mapview.infotip.create(JSON.stringify(properties))
+            // }
 
             layer.show()
 
