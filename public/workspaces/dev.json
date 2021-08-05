@@ -1,10 +1,10 @@
 {
   "templates": {
     "blog": {
-      "src": "file:views/blog.html"
+      "src": "file:public/views/blog.html"
     },
     "embedded": {
-      "src": "file:views/embedded.html"
+      "src": "file:public/views/embedded.html"
     },
     "Mapbox Base": {
       "format": "mbtiles",
@@ -127,9 +127,6 @@
     "Agata": {
       "src": "cloudfront:${CDN}/dev/aga/layer.json"
     },
-    "open": {
-      "src": "file:workspaces/templates/open.json"
-    },
     "uk_polygon_demand": {
       "src": "cloudfront:${CDN}/asda/templates/charts/polygon_demand.sql"
     }
@@ -146,6 +143,7 @@
       "maxZoom": 17,
       "showScaleBar": true,
       "plugins": {
+        "geojson_file": "/dev/js/plugins/geojson_file.js",
         "demand_chart": "/dev/js/plugins/demand_chart.js",
         "post_array": "/dev/js/plugins/post_array.js",
         "post_json": "/dev/js/plugins/post_json.js"
@@ -795,6 +793,10 @@
             "field": "id"
           }]
         },
+        "Geojson": {
+          "format": "geojson",
+          "plugins": ["geojson_file"]
+        },
         "Scratch": {
           "format": "mvt",
           "dbs": "DEV",
@@ -974,9 +976,6 @@
               }
             }
           ]
-        },
-        "Agata": {
-          "template": "Agata"
         },
         "Polygon Statistics": {
           "format": "mvt",
