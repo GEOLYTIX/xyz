@@ -70,19 +70,9 @@ document.dispatchEvent(new CustomEvent('geojson_file', {
                   )
           
                 }
-            
-                return new ol.style.Style({
-                  zIndex: style.zIndex,
-                  stroke: style.strokeColor && new ol.style.Stroke({
-                    color: _xyz.utils.Chroma(style.strokeColor).alpha(style.strokeOpacity === undefined ? 1 : parseFloat(style.strokeOpacity) || 0).rgba(),
-                    width: parseInt(style.strokeWidth) || 1
-                  }),
-                  fill: style.fillColor && new ol.style.Fill({
-                    color: _xyz.utils.Chroma(style.fillColor).alpha(style.fillOpacity === undefined ? 1 : parseFloat(style.fillOpacity) || 0).rgba()
-                  }),
-                  image: style.marker && _xyz.mapview.icon(style.marker)
-                })
-          
+
+                return _xyz.utils.style(style)
+                      
               }
             })
 
