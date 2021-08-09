@@ -262,14 +262,13 @@
               "strokeWidth": 3
             },
             "default": {
-              "type": "target",
-              "fillColor": "#006666"
+              "svg": "https://geolytix.github.io/MapIcons/pins/amber.svg"
             },
             "cluster": {
+              "svg": null,
               "type": "target",
               "fillColor": "#006666",
-              "scale": 2,
-              "sizing": "fixed"
+              "scale": 2
             },
             "themes": {
               "Retail - Simple": {
@@ -280,6 +279,8 @@
                   "Aldi": {
                     "label": "Aldi",
                     "style": {
+                      "svg": null,
+                      "type": "target",
                       "fillColor": "#ffbf45",
                       "layers": {
                         "0.875": "#fa6f08",
@@ -293,6 +294,8 @@
                   "Asda": {
                     "label": "Asda",
                     "style": {
+                      "svg": null,
+                      "type": "target",
                       "fillColor": "#83b923",
                       "layers": {
                         "0.5": "#ffffff",
@@ -300,29 +303,11 @@
                       }
                     }
                   },
-                  "Booths": {
-                    "label": "Booths",
-                    "style": {
-                      "fillColor": "#a12629",
-                      "layers": {
-                        "0.5": "#ffffff",
-                        "0.375": "#a12629"
-                      }
-                    }
-                  },
-                  "Budgens": {
-                    "label": "Budgens",
-                    "style": {
-                      "fillColor": "#EEEEE0",
-                      "layers": {
-                        "0.5": "#679a00",
-                        "0.375": "#cccb01"
-                      }
-                    }
-                  },
                   "Co-op": {
                     "label": "The Co-Operative",
                     "style": {
+                      "svg": null,
+                      "type": "target",
                       "fillColor": "#0b1e60",
                       "layers": {
                         "0.625": "#ffffff",
@@ -330,50 +315,11 @@
                       }
                     }
                   },
-                  "Costco": {
-                    "label": "Costco",
-                    "style": {
-                      "fillColor": "#005daa",
-                      "layers": {
-                        "0.875": "#ffffff",
-                        "0.625": "#e31837"
-                      }
-                    }
-                  },
-                  "Farmfoods": {
-                    "label": "Farm Foods",
-                    "style": {
-                      "fillColor": "#77a632",
-                      "layers": {
-                        "0.75": "#f7f900",
-                        "0.5": "#ff0000"
-                      }
-                    }
-                  },
-                  "Heron": {
-                    "label": "Heron",
-                    "style": {
-                      "fillColor": "#ffffff",
-                      "layers": {
-                        "0.75": "#313590",
-                        "0.25": "#ffcf00"
-                      }
-                    }
-                  },
-                  "Iceland": {
-                    "label": "Iceland",
-                    "style": {
-                      "fillColor": "#ed1b2d",
-                      "layers": {
-                        "0.75": "#f2552b",
-                        "0.5": "#f89128",
-                        "0.25": "#ffffff"
-                      }
-                    }
-                  },
                   "Lidl": {
                     "label": "Lidl",
                     "style": {
+                      "svg": null,
+                      "type": "target",
                       "fillColor": "#d61408",
                       "layers": {
                         "0.875": "#ffe502",
@@ -382,18 +328,11 @@
                       }
                     }
                   },
-                  "Makro": {
-                    "label": "Makro",
-                    "style": {
-                      "fillColor": "#00457a",
-                      "layers": {
-                        "0.325": "#ffe811"
-                      }
-                    }
-                  },
                   "Marks and Spencer": {
                     "label": "Marks & Spencer",
                     "style": {
+                      "svg": null,
+                      "type": "target",
                       "fillColor": "#0a0d10",
                       "layers": {
                         "0.5": "#def036",
@@ -404,6 +343,8 @@
                   "Morrisons": {
                     "label": "Morrisons",
                     "style": {
+                      "svg": null,
+                      "type": "target",
                       "fillColor": "#ffe133",
                       "layers": {
                         "0.5": "#00614e"
@@ -413,6 +354,8 @@
                   "Sainsburys": {
                     "label": "Sainsbury's",
                     "style": {
+                      "svg": null,
+                      "type": "target",
                       "fillColor": "#ee8a00",
                       "layers": {
                         "0.625": "#ffffff",
@@ -423,6 +366,8 @@
                   "Tesco": {
                     "label": "Tesco",
                     "style": {
+                      "svg": null,
+                      "type": "target",
                       "fillColor": "#0055a8",
                       "layers": {
                         "0.75": "#ffffff",
@@ -433,23 +378,50 @@
                   "Waitrose": {
                     "label": "Waitrose",
                     "style": {
+                      "svg": null,
+                      "type": "target",
                       "fillColor": "#81ae37",
                       "layers": {
                         "0.325": "#ffffff"
                       }
                     }
-                  },
-                  "Whole Foods Market": {
-                    "label": "Whole Foods Market",
+                  }
+                }
+              },
+              "Length": {
+                "type": "graduated",
+                "fieldfx": "length(store_name)",
+                "cat_arr": [{
+                    "value": "0",
                     "style": {
-                      "fillColor": "#00674b",
-                      "layers": {
-                        "0.875": "#ffffff",
-                        "0.5": "#00674b"
+                      "marker": {
+                        "svg": null,
+                        "type": "dot",
+                        "fillColor": "#15773f"
+                      }
+                    }
+                  },
+                  {
+                    "value": "10",
+                    "style": {
+                      "marker": {
+                        "svg": null,
+                        "type": "dot",
+                        "fillColor": "#66bd63"
+                      }
+                    }
+                  },
+                  {
+                    "value": "15",
+                    "style": {
+                      "marker": {
+                        "svg": null,
+                        "type": "dot",
+                        "fillColor": "#a6d96a"
                       }
                     }
                   }
-                }
+                ]
               }
             }
           }
@@ -662,7 +634,6 @@
           "srid": "3857",
           "style": {
             "label": {
-              "display": true,
               "field": "rp_name",
               "declutter": true,
               "strokeColor": "#ffffff",
