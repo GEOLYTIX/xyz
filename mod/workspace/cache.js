@@ -1,14 +1,16 @@
-const file = require('./file');
-
-const http = require('./http');
+const file = require('../provider/file')
 
 const cloudfront = require('../provider/cloudfront');
 
+const http = require('./httpsAgent')
+
 const getFrom = {
-  https: (ref) => http(ref),
-  file: (ref) => file(`../../public/workspaces/${ref.split(':')[1]}`),
-  cloudfront: (ref) => cloudfront(ref.split(':')[1]),
-};
+  'https': ref => http(ref),
+  'file': ref => file(ref.split(':')[1]),
+  'cloudfront': ref => cloudfront(ref.split(':')[1]),
+}
+
+const assignTemplates = require('./assignTemplates')
 
 const assignTemplates = require('./assignTemplates');
 
