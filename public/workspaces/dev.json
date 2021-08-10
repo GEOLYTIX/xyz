@@ -442,6 +442,11 @@
           },
           "table": "geodata.uk_glx_geodata_seamless_shopper_town",
           "style": {
+            "default": {
+              "fillColor": "#fff",
+              "fillOpacity": 0,
+              "strokeColor": "#333"
+            },
             "themes": {
               "Flame": {
                 "type": "basic",
