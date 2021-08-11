@@ -262,13 +262,16 @@
               "strokeWidth": 3
             },
             "default": {
-              "svg": "https://geolytix.github.io/MapIcons/pins/amber.svg"
+              "svg": "https://geolytix.github.io/MapIcons/pins/amber.svg",
+              "__zoomScale": 0.2
             },
             "cluster": {
               "svg": null,
               "type": "target",
               "fillColor": "#006666",
-              "scale": 2
+              "__scale": 3,
+              "__logScale": true,
+              "clusterScale": 2
             },
             "themes": {
               "Retail - Simple": {
