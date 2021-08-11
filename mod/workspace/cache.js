@@ -12,8 +12,6 @@ const getFrom = {
 
 const assignTemplates = require('./assignTemplates')
 
-const assignTemplates = require('./assignTemplates');
-
 const defaults = require('./defaults');
 
 const assignDefaults = require('./assignDefaults');
