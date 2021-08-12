@@ -3,6 +3,8 @@ document.dispatchEvent(new CustomEvent('cluster', {
 
     _xyz.layers.plugins.cluster = layer => {
 
+      return;
+
       let timer
 
       layer.view.appendChild(_xyz.utils.html.node `

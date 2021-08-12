@@ -1,78 +1,87 @@
-document.dispatchEvent(new CustomEvent('style_icon_scaling', { detail: create }))
+document.dispatchEvent(new CustomEvent('style_icon_scaling', {
+  detail: create
+}))
 
 function create(_xyz) {
 
-    _xyz.layers.plugins.style_icon_scaling = layer => {
+  _xyz.layers.plugins.style_icon_scaling = layer => {
 
-        let timeout
+    return;
 
-        const panel = _xyz.utils.html.node`<div class="drawer panel expandable">`
+    let timeout
 
-        panel.appendChild(_xyz.utils.html.node`
-          <div class="header primary-colour"
-          onclick=${e => {
-            e.stopPropagation()
-            _xyz.utils.toggleExpanderParent(e.target, true)
-          }}>
-          <span>Visual Adjustment</span>
-          <button class="btn-header xyz-icon icon-expander primary-colour-filter">`)
+    const panel = _xyz.utils.html.node `<div class="drawer panel expandable">`
 
-        const grid = _xyz.utils.html.node`
-        <div style="display: grid; align-items: center;">`
+    panel.appendChild(_xyz.utils.html.node`
+      <div
+        class="header primary-colour"
+        onclick=${e => {
+          e.stopPropagation()
+          _xyz.utils.toggleExpanderParent(e.target, true)
+        }}>
+        <span>Visual Adjustment</span>
+        <button class="btn-header xyz-icon icon-expander primary-colour-filter">`)
 
-        grid.appendChild(_xyz.utils.html.node`
-        <div class="header primary-colour" style-"grid-column: 1/2;"><span><b>Icon`)
+    const grid = _xyz.utils.html.node`
+      <div style="display: grid; align-items: center;">`
 
-        grid.appendChild(icon_scale({
-                title: 'Scale',
-                min: 0.3,
-                max: 1.5,
-                step: 0.1,
-                value: 1
-        }))
+    grid.appendChild(_xyz.utils.html.node`
+      <div
+        class="header primary-colour"
+        style-"grid-column: 1/2;">
+        <span><b>Icon`)
 
-        let div = _xyz.utils.html.node`<div>`
+    grid.appendChild(icon_scale({
+      title: 'Scale',
+      min: 0.3,
+      max: 1.5,
+      step: 0.1,
+      value: 1
+    }))
 
-        div.appendChild(grid)
-        
-        panel.appendChild(div)
+    let div = _xyz.utils.html.node `<div>`
 
-        return layer.view.appendChild(panel)
+    div.appendChild(grid)
 
+    panel.appendChild(div)
 
-        function icon_scale(params) {
+    return layer.view.appendChild(panel)
 
-            if(layer.style.theme && layer.style.theme.cat) {
+    function icon_scale(params) {
 
-                Object.values(layer.style.theme.cat).map(c => {
+      if (layer.style.theme && layer.style.theme.cat) {
 
-                    if(c.style && c.style.layers && c.style.layers.length) return c.style.layers.map(_c => _c.initial_scale = _c.scale || 1 )
-                    
-                    c.initial_scale = c.scale || 1
-                    
-                })
-            }
+        Object.values(layer.style.theme.cat).map(c => {
 
-            if(layer.style.theme && layer.style.theme.cat_arr) {
+          if (c.style && c.style.layers && c.style.layers.length) return c.style.layers.map(_c => _c.initial_scale = _c.scale || 1)
 
-                layer.style.theme.cat_arr.map(c => {
+          c.initial_scale = c.scale || 1
 
-                    if(c.style && c.style.layers && c.style.layers.length)  return c.style.layers.map(_c =>  _c.initial_scale = _c.scale || 1 ) 
-                    
-                    c.initial_scale = c.scale || 1
-        
-                })
-            }
+        })
+      }
 
-            layer.style.default.initial_scale = layer.style.default.scale || 1
+      if (layer.style.theme && layer.style.theme.cat_arr) {
 
-            if(layer.style.cluster) layer.style.cluster.initial_scale = layer.style.cluster.scale || 1
+        layer.style.theme.cat_arr.map(c => {
 
-            return _xyz.utils.html.node `
-            <div style="grid-column: 1;">${params.title}</div>
-            <div style="grid-column: 2;">${layer.style.default.scale || 1}</div>
-            <div class="input-range"  style="grid-column: 3;">
-            <input 
+          if (c.style && c.style.layers && c.style.layers.length) return c.style.layers.map(_c => _c.initial_scale = _c.scale || 1)
+
+          c.initial_scale = c.scale || 1
+
+        })
+      }
+
+      layer.style.default.initial_scale = layer.style.default.scale || 1
+
+      if (layer.style.cluster) layer.style.cluster.initial_scale = layer.style.cluster.scale || 1
+
+      return _xyz.utils.html.node `
+        <div style="grid-column: 1;">${params.title}</div>
+        <div style="grid-column: 2;">${layer.style.default.scale || 1}</div>
+        <div
+          class="input-range"
+          style="grid-column: 3;">
+          <input 
             type="range"
             class="secondary-colour-bg"
             min=${params.min || 0}
@@ -80,7 +89,7 @@ function create(_xyz) {
             max=${params.max || 1}
             step=${params.step || 0.1}
             oninput=${ e =>{
-
+              
               layer.style.default.scale = layer.style.default.initial_scale * e.target.value
               layer.style.cluster.scale = layer.style.cluster.initial_scale * e.target.value
 
@@ -114,8 +123,6 @@ function create(_xyz) {
 
               timeout = setTimeout(() => { layer.reload() }, 1000)
             }}>`
-        }
-
-
     }
+  }
 }
