@@ -1,128 +1,108 @@
 document.dispatchEvent(new CustomEvent('style_icon_scaling', {
-  detail: create
+  detail: detail
 }))
 
-function create(_xyz) {
+function detail(_xyz) {
 
   _xyz.layers.plugins.style_icon_scaling = layer => {
 
-    return;
-
     let timeout
 
-    const panel = _xyz.utils.html.node `<div class="drawer panel expandable">`
+    const panel = layer.view.appendChild(_xyz.utils.html.node `
+      <div class="drawer panel expandable">
+        <div
+          class="header primary-colour"
+          onclick=${e => {
+            e.stopPropagation()
+            _xyz.utils.toggleExpanderParent(e.target, true)
+          }}>
+          <span>Icon scaling</span>
+          <button
+            class="btn-header xyz-icon icon-expander primary-colour-filter">`)
+
+    layer.style.default.scale = layer.style.default.icon?.scale || layer.style.default.scale || 1
 
     panel.appendChild(_xyz.utils.html.node`
-      <div
-        class="header primary-colour"
-        onclick=${e => {
-          e.stopPropagation()
-          _xyz.utils.toggleExpanderParent(e.target, true)
-        }}>
-        <span>Visual Adjustment</span>
-        <button class="btn-header xyz-icon icon-expander primary-colour-filter">`)
+      <div>
+        <div style="display: grid; align-items: center;">
+          <div style="grid-column: 1;">Scale</div>
+          <div style="grid-column: 2;">${layer.style.default.scale}</div>
+          <div
+            class="input-range"
+            style="grid-column: 3;">
+            <input 
+              type="range"
+              class="secondary-colour-bg"
+              min=0
+              value=${layer.style.default.scale}
+              max=${layer.style.default.scale + layer.style.default.scale * 3}
+              step=${layer.style.default.scale / 20}
+              oninput=${ e =>{
+                
+                layer.style.default.scale = e.target.value
 
-    const grid = _xyz.utils.html.node`
-      <div style="display: grid; align-items: center;">`
+                e.target.parentNode.previousSibling.previousSibling.textContent = e.target.value
 
-    grid.appendChild(_xyz.utils.html.node`
-      <div
-        class="header primary-colour"
-        style-"grid-column: 1/2;">
-        <span><b>Icon`)
+                clearTimeout(timeout)
 
-    grid.appendChild(icon_scale({
-      title: 'Scale',
-      min: 0.3,
-      max: 1.5,
-      step: 0.1,
-      value: 1
-    }))
+                timeout = setTimeout(() => layer.L.setStyle(layer.L.getStyle()), 400)
+              }}>`)
 
-    let div = _xyz.utils.html.node `<div>`
+    layer.style.default.zoomInScale = layer.style.default.icon?.zoomInScale || layer.style.default.zoomInScale || 0
 
-    div.appendChild(grid)
+    panel.appendChild(_xyz.utils.html.node`
+      <div>
+        <div style="display: grid; align-items: center;">
+          <div style="grid-column: 1;">zoomInScale</div>
+          <div style="grid-column: 2;">${layer.style.default.zoomInScale}</div>
+          <div
+            class="input-range"
+            style="grid-column: 3;">
+            <input 
+              type="range"
+              class="secondary-colour-bg"
+              min=0
+              value=${layer.style.default.zoomInScale}
+              max=0.3
+              step=0.03
+              oninput=${ e =>{
+                      
+                layer.style.default.zoomInScale = e.target.value
+        
+                e.target.parentNode.previousSibling.previousSibling.textContent = e.target.value
+        
+                clearTimeout(timeout)
+        
+                timeout = setTimeout(() => layer.L.setStyle(layer.L.getStyle()), 400)
+              }}>`)
 
-    panel.appendChild(div)
+    layer.style.default.zoomOutScale = layer.style.default.icon?.zoomOutScale || layer.style.default.zoomOutScale || 0
 
-    return layer.view.appendChild(panel)
+    panel.appendChild(_xyz.utils.html.node`
+      <div>
+        <div style="display: grid; align-items: center;">
+          <div style="grid-column: 1;">zoomOutScale</div>
+          <div style="grid-column: 2;">${layer.style.default.zoomOutScale}</div>
+          <div
+            class="input-range"
+            style="grid-column: 3;">
+            <input 
+              type="range"
+              class="secondary-colour-bg"
+              min=0
+              value=${layer.style.default.zoomOutScale}
+              max=30
+              step=3
+              oninput=${ e =>{
+                                
+                layer.style.default.zoomOutScale = e.target.value
+                  
+                e.target.parentNode.previousSibling.previousSibling.textContent = e.target.value
+                  
+                clearTimeout(timeout)
+                  
+                timeout = setTimeout(() => layer.L.setStyle(layer.L.getStyle()), 400)
+              }}>`)
 
-    function icon_scale(params) {
-
-      if (layer.style.theme && layer.style.theme.cat) {
-
-        Object.values(layer.style.theme.cat).map(c => {
-
-          if (c.style && c.style.layers && c.style.layers.length) return c.style.layers.map(_c => _c.initial_scale = _c.scale || 1)
-
-          c.initial_scale = c.scale || 1
-
-        })
-      }
-
-      if (layer.style.theme && layer.style.theme.cat_arr) {
-
-        layer.style.theme.cat_arr.map(c => {
-
-          if (c.style && c.style.layers && c.style.layers.length) return c.style.layers.map(_c => _c.initial_scale = _c.scale || 1)
-
-          c.initial_scale = c.scale || 1
-
-        })
-      }
-
-      layer.style.default.initial_scale = layer.style.default.scale || 1
-
-      if (layer.style.cluster) layer.style.cluster.initial_scale = layer.style.cluster.scale || 1
-
-      return _xyz.utils.html.node `
-        <div style="grid-column: 1;">${params.title}</div>
-        <div style="grid-column: 2;">${layer.style.default.scale || 1}</div>
-        <div
-          class="input-range"
-          style="grid-column: 3;">
-          <input 
-            type="range"
-            class="secondary-colour-bg"
-            min=${params.min || 0}
-            value=${params.value || 1}
-            max=${params.max || 1}
-            step=${params.step || 0.1}
-            oninput=${ e =>{
-              
-              layer.style.default.scale = layer.style.default.initial_scale * e.target.value
-              layer.style.cluster.scale = layer.style.cluster.initial_scale * e.target.value
-
-              if(layer.style.theme) {
-
-                if(layer.style.theme.cat) {
-
-                  Object.values(layer.style.theme.cat).map(c => {
-
-                    if(c.style && c.style.layers  && c.style.layers.length) return c.style.layers.map(_c => _c.scale = _c.initial_scale * e.target.value )
-
-                    c.scale = c.initial_scale * e.target.value
-                            
-                  })
-                }
-
-                if(layer.style.theme.cat_arr) {
-
-                  layer.style.theme.cat_arr.map(c => {
-
-                    if(c.style && c.style.layers && c.style.layers.length) return c.style.layers.map(_c => _c.scale = _c.initial_scale * e.target.value )
-                            
-                    c.scale = c.initial_scale * e.target.value
-                  })
-                }
-              }
-
-              e.target.parentNode.previousSibling.previousSibling.textContent = e.target.value
-
-              clearTimeout(timeout)
-
-              timeout = setTimeout(() => { layer.reload() }, 1000)
-            }}>`
-    }
   }
 }
