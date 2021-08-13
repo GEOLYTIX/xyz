@@ -306,7 +306,8 @@
       </div>
       <ul>
         ${Object.entries(t.style.themes).map((r=>e.utils.html.node`
-          <li onclick=${e=>{const a=e.target.closest(".btn-drop");a.querySelector("span").textContent=r[0],a.classList.toggle("active"),t.style.theme=r[1],n(t),t.reload()}}>${r[0]}`))}`),t.style.bringToFront=e.utils.html.node`
+          <li onclick=${e=>{const a=e.target.closest(".btn-drop");a.querySelector("span").textContent=r[0],a.classList.toggle("active"),t.style.theme=r[1],n(t),t.reload()}}>${r[0]}`))}`),t.style.theme?.title&&!t.style.themes&&r.appendChild(e.utils.html.node`
+      <div style="font-weight: bold;">${t.style.theme.title}`),t.style.bringToFront=e.utils.html.node`
       <button 
         title=${e.language.layer_style_bring_to_front}
         style="margin-top: 5px;"
