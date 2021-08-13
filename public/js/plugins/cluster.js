@@ -1,62 +1,106 @@
 document.dispatchEvent(new CustomEvent('cluster', {
-  detail: _xyz => {
+  detail: detail
+}))
 
-    _xyz.layers.plugins.cluster = layer => {
+function detail(_xyz) {
 
-      return;
+  _xyz.layers.plugins.cluster = layer => {
 
-      let timer
+    let timeout
 
-      layer.view.appendChild(_xyz.utils.html.node `
+    const panel = layer.view.appendChild(_xyz.utils.html.node `
+      <div class="drawer panel expandable">
         <div
-          class="drawer panel expandable expanded">
+          class="header primary-colour"
+          onclick=${e => {
+            e.stopPropagation()
+            _xyz.utils.toggleExpanderParent(e.target, true)
+          }}>
+          <span>Cluster</span>
+          <button
+            class="btn-header xyz-icon icon-expander primary-colour-filter">`)
+
+
+    panel.appendChild(_xyz.utils.html.node`
+      <div>
+        <div style="display: grid; align-items: center;">
+          <div style="grid-column: 1;">kMeans</div>
+          <div style="grid-column: 2;">${layer.cluster_kmeans}</div>
           <div
-            class="header primary-colour"
-            onclick=${e => {
-              e.stopPropagation()
-              _xyz.utils.toggleExpanderParent(e.target)
-            }}>
-            <span>Cluster</span>
-            <button
-              class="btn-header xyz-icon icon-expander primary-colour-filter">
-          </div>
-          <div style="margin-top: 12px;">
-            <span>KMEANS: </span>
-            <span class="bold">${layer.cluster_kmeans}</span>
-            <div class="input-range">
-            <input
-              class="secondary-colour-bg"
+            class="input-range"
+            style="grid-column: 3;">
+            <input 
               type="range"
+              class="secondary-colour-bg"
               min=0
               value=${layer.cluster_kmeans}
-              max=1
-              step=0.01
-              oninput=${e => {
-              layer.cluster_kmeans = parseFloat(e.target.value)
-              e.target.parentNode.previousElementSibling.textContent = layer.cluster_kmeans
-              clearTimeout(timer)
-              timer = setTimeout(() => layer.reload(), 500)
-            }}>
-          </div>
-          <div style="margin-top: 12px;">
-            <span>DBSCAN: </span>
-            <span class="bold">${layer.cluster_dbscan}</span>
-            <div class="input-range">
-            <input
-              class="secondary-colour-bg"
+              max=0.5
+              step=${0.01}
+              oninput=${ e =>{
+                        
+                layer.cluster_kmeans = e.target.value
+        
+                e.target.parentNode.previousSibling.previousSibling.textContent = e.target.value
+        
+                clearTimeout(timeout)
+        
+                timeout = setTimeout(() => layer.reload(), 400)
+              }}>`)
+
+      panel.appendChild(_xyz.utils.html.node`
+        <div>
+          <div style="display: grid; align-items: center;">
+          <div style="grid-column: 1;">dbScan</div>
+          <div style="grid-column: 2;">${layer.cluster_dbscan}</div>
+          <div
+            class="input-range"
+            style="grid-column: 3;">
+            <input 
               type="range"
+              class="secondary-colour-bg"
               min=0
               value=${layer.cluster_dbscan}
-              max=1
-              step=0.01
-              oninput=${e => {
-              layer.cluster_dbscan = parseFloat(e.target.value)
-              e.target.parentNode.previousElementSibling.textContent = layer.cluster_dbscan
-              clearTimeout(timer)
-              timer = setTimeout(() => layer.reload(), 500)
-            }}>`)
+              max=0.5
+              step=${0.01}
+              oninput=${ e =>{
+                                
+                layer.cluster_dbscan = e.target.value
+                
+                e.target.parentNode.previousSibling.previousSibling.textContent = e.target.value
+                
+                clearTimeout(timeout)
+                
+                timeout = setTimeout(() => layer.reload(), 400)
+              }}>`)               
 
-    }
+    layer.style.cluster.clusterScale = layer.style.cluster.icon?.clusterScale || layer.style.cluster.clusterScale || 2
+
+    panel.appendChild(_xyz.utils.html.node`
+      <div>
+        <div style="display: grid; align-items: center;">
+          <div style="grid-column: 1;">Scale</div>
+          <div style="grid-column: 2;">${layer.style.default.scale}</div>
+          <div
+            class="input-range"
+            style="grid-column: 3;">
+            <input 
+              type="range"
+              class="secondary-colour-bg"
+              min=0
+              value=${layer.style.cluster.clusterScale}
+              max=${layer.style.cluster.clusterScale + layer.style.cluster.clusterScale * 3}
+              step=${layer.style.cluster.clusterScale / 20}
+              oninput=${ e =>{
+                
+                layer.style.cluster.clusterScale = e.target.value
+
+                e.target.parentNode.previousSibling.previousSibling.textContent = e.target.value
+
+                clearTimeout(timeout)
+
+                timeout = setTimeout(() => layer.L.setStyle(layer.L.getStyle()), 400)
+              }}>`)
+
 
   }
-}))
+}
