@@ -363,7 +363,7 @@ window.onload = () => {
 
     // Append spacer for tableview
     btnColumn.appendChild(xyz.utils.html.node`
-      <div style="height: 60px;">`)
+      <div class="mobile-display-none" style="height: 60px;">`)
 
   }
 
