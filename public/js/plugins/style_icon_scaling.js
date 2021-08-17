@@ -50,10 +50,12 @@ function detail(_xyz) {
 
     layer.style.default.zoomInScale = layer.style.default.icon?.zoomInScale || layer.style.default.zoomInScale || 0
 
-    panel.appendChild(_xyz.utils.html.node`
+    layer.style.default.zoomInScale && panel.appendChild(_xyz.utils.html.node`
       <div>
         <div style="display: grid; align-items: center;">
-          <div style="grid-column: 1;">zoomInScale</div>
+          <div 
+            title="Icons scale will be bigger when zoomed in."
+            style="grid-column: 1;">zoomInScale</div>
           <div style="grid-column: 2;">${layer.style.default.zoomInScale}</div>
           <div
             class="input-range"
@@ -78,10 +80,12 @@ function detail(_xyz) {
 
     layer.style.default.zoomOutScale = layer.style.default.icon?.zoomOutScale || layer.style.default.zoomOutScale || 0
 
-    panel.appendChild(_xyz.utils.html.node`
+    layer.style.default.zoomOutScale && panel.appendChild(_xyz.utils.html.node`
       <div>
         <div style="display: grid; align-items: center;">
-          <div style="grid-column: 1;">zoomOutScale</div>
+          <div 
+            title="Icons scale will be smaller when zoomed in."
+            style="grid-column: 1;">zoomOutScale</div>
           <div style="grid-column: 2;">${layer.style.default.zoomOutScale}</div>
           <div
             class="input-range"
