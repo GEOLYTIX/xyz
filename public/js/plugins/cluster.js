@@ -25,7 +25,7 @@ function detail(_xyz) {
       <div>
         <div style="display: grid; align-items: center;">
           <div
-            title="The minimum number of cluster in the viewport."
+            title="The maximum number of cluster in the viewport."
             style="grid-column: 1;">kMeans</div>
           <div style="grid-column: 2;">${parseInt(1 / layer.cluster_kmeans)}</div>
           <div
