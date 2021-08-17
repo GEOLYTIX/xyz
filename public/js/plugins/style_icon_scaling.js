@@ -39,7 +39,7 @@ function detail(_xyz) {
               step=${layer.style.default.scale / 20}
               oninput=${ e =>{
                 
-                layer.style.default.scale = e.target.value
+                layer.style.default.scale = parseFloat(e.target.value)
 
                 e.target.parentNode.previousSibling.previousSibling.textContent = e.target.value
 
@@ -69,7 +69,7 @@ function detail(_xyz) {
               step=0.03
               oninput=${ e =>{
                       
-                layer.style.default.zoomInScale = e.target.value
+                layer.style.default.zoomInScale = parseFloat(e.target.value)
         
                 e.target.parentNode.previousSibling.previousSibling.textContent = e.target.value
         
@@ -99,7 +99,7 @@ function detail(_xyz) {
               step=3
               oninput=${ e =>{
                                 
-                layer.style.default.zoomOutScale = e.target.value
+                layer.style.default.zoomOutScale = parseFloat(e.target.value)
                   
                 e.target.parentNode.previousSibling.previousSibling.textContent = e.target.value
                   

@@ -40,7 +40,7 @@ function detail(_xyz) {
               step=1
               oninput=${ e =>{
                         
-                layer.cluster_kmeans = 1 / e.target.value
+                layer.cluster_kmeans = parseInt(1 / e.target.value)
         
                 e.target.parentNode.previousSibling.previousSibling.textContent = e.target.value
         
@@ -70,7 +70,7 @@ function detail(_xyz) {
               step=${layer.style.cluster.clusterScale / 20}
               oninput=${ e =>{
                 
-                layer.style.cluster.clusterScale = e.target.value
+                layer.style.cluster.clusterScale = parseFloat(e.target.value)
 
                 e.target.parentNode.previousSibling.previousSibling.textContent = e.target.value
 
