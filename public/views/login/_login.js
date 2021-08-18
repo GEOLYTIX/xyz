@@ -1,12 +1,12 @@
 window.onload = () => {
 
   let url = new URL(window.location.href)
-  let params = new URLSearchParams(url.search)
-  params.delete('msg')
+  let urlparams = new URLSearchParams(url.search)
+  urlparams.delete('msg')
   window.history.pushState(
     {},
     document.title,
-    `?${params.toString()}`)
+    `?${urlparams.toString()}`)
 
   const email = document.getElementById('auth_user_email');
   const password = document.getElementById('auth_user_password');
