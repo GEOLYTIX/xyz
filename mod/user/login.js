@@ -22,7 +22,7 @@ const msg = (m, lang) => messages[m] && (messages[m][lang] || messages[m].en) ||
 
 const { nanoid } = require('nanoid')
 
-module.exports = async (req, res, msg) => {
+module.exports = async (req, res, message) => {
 
   if (!acl) return res.status(500).send(msg('acl_unavailable', req.params.language))
 
@@ -58,10 +58,12 @@ module.exports = async (req, res, msg) => {
 
   }
 
-  view(req, res, msg)
+  message = msg(req.params.msg || message, req.params.language)
+
+  view(req, res, message)
 }
 
-function view(req, res, msg) {
+function view(req, res, message) {
 
   let template
 
@@ -84,7 +86,7 @@ function view(req, res, msg) {
   const params = {
     dir: process.env.DIR,
     redirect: redirect,
-    msg: msg || ' '
+    msg: message || ' '
   }
 
   // Render the login template with params.
@@ -121,7 +123,6 @@ async function post(req, res) {
   // Get user record from first row.
   const user = rows[0]
 
-  // new Error(msg('user_not_found', req.params.language))
   if (!user) return new Error(msg('auth_failed', req.params.language))
 
   // Blocked user cannot login.
@@ -145,7 +146,6 @@ async function post(req, res) {
         [req.body.email])
 
       if (rows instanceof Error) return new Error(msg('failed_query', req.params.language))
-
     }
 
     return new Error(msg('user_expired', user.language))
@@ -250,6 +250,5 @@ async function post(req, res) {
       remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
     })))
 
-  // new Error(msg('token_failed', user.language))
   return new Error(msg('auth_failed', req.params.language))
 }
