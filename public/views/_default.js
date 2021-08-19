@@ -1,12 +1,12 @@
 window.onload = () => {
 
-  let url = new URL(window.location.href)
-  let urlparams = new URLSearchParams(url.search)
-  urlparams.delete('msg')
-  window.history.pushState(
-    {},
-    document.title,
-    `?${urlparams.toString()}`)
+  // let url = new URL(window.location.href)
+  // let urlparams = new URLSearchParams(url.search)
+  // urlparams.delete('msg')
+  // window.history.pushState(
+  //   {},
+  //   document.title,
+  //   `?${urlparams.toString()}`)
 
   if ('scrollRestoration' in history) history.scrollRestoration = 'auto'
 
