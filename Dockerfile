@@ -4,10 +4,14 @@ RUN mkdir -p /app
 
 WORKDIR /app
 
+RUN npm install pm2 -g
+
 COPY package*.json ./
 
 RUN npm ci \
  && npm cache clean --force 
+
+
  
 COPY ./ /app
 
@@ -17,4 +21,5 @@ ENV PORT 3000
 
 EXPOSE 3000
 
-CMD npm run _start
+CMD ["pm2-runtime", "express.js"]
+
