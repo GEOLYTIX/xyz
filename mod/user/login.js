@@ -52,7 +52,7 @@ module.exports = async (req, res, message) => {
 
     if (!req.body.redirect) return res.send(user)
 
-    res.setHeader('location', `${req.body.redirect}`)
+    res.setHeader('location', `${req.body.redirect.replace(/([?&])msg=[^&]+(&|$)/,'')}`)
 
     return res.status(302).send()
 
