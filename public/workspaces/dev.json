@@ -256,8 +256,7 @@
           ],
           "style": {
             "label": {
-              "field": "store_name",
-              "declutter": true,
+              "count": true,
               "strokeColor": "#fff",
               "strokeWidth": 3
             },
