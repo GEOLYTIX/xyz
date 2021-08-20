@@ -36,7 +36,6 @@ module.exports = async (req, res) => {
   // Assign mvt_fields from single theme
   layer.style.theme && mvt_fields.push(getField(layer.style.theme))
 
-  // Assign mvt_fields from single theme
   layer.style.label && mvt_fields.push(`${layer.style.label.field} AS label`)
 
   const geoms = layer.geoms && Object.keys(layer.geoms)
