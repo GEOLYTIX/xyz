@@ -53,11 +53,7 @@ module.exports = async (req, res) => {
 
     var q = `
     SELECT
-      count(1)::integer,
-      ST_Distance(
-        ST_Point(${viewport[0]}, ${viewport[1]}),
-        ST_Point(${viewport[2]}, ${viewport[3]})
-      ) AS xdistance
+      count(1)::integer
     FROM ${req.params.table} ${where_sql}`
 
     var rows = await dbs[layer.dbs](q, SQLparams)
