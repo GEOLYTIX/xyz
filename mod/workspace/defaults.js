@@ -102,7 +102,7 @@ module.exports = defaults = {
           scale: 1,
         },
         cluster: {
-          scale: 1.2
+          clusterScale: 2
         },
         highlight: {
           scale: 1.3

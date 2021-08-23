@@ -1,5 +1,7 @@
 const defaults = require('./defaults')
 
+const merge = require('lodash/merge')
+
 module.exports = async workspace => {
 
   // Loop through locales in workspace.
@@ -34,7 +36,7 @@ module.exports = async workspace => {
         // Layer entries must override template entries.
         layer) || layer
 
-      layer.style = layer.format && Object.assign({},
+      layer.style = layer.format && merge({},
 
         // Assign layer style.
         defaults.layers[layer.format].style,

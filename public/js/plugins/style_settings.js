@@ -163,12 +163,6 @@ function create(_xyz) {
                 timeout = setTimeout(() => {
                     layer.reload()
                     
-                    if(params.style === 'label') {
-                        _xyz.map.removeLayer(layer.label)
-                        layer.label = _xyz.mapview.layer.mvtLabel(layer);
-                        _xyz.map.addLayer(layer.label)
-                    }
-
                 }, 1000)
             }
         }
@@ -195,15 +189,7 @@ function create(_xyz) {
                 }
                 layer.style[params.style || 'default'][params.field] = e.target.value
                 clearTimeout(timeout)
-                timeout = setTimeout(() => {
-                    layer.reload()
-                    
-                    if(params.style === 'label') {
-                        _xyz.map.removeLayer(layer.label)
-                        layer.label = _xyz.mapview.layer.mvtLabel(layer);
-                        _xyz.map.addLayer(layer.label)
-                    }
-                }, 1000)
+                timeout = setTimeout(() => layer.reload(), 1000)
             }}>`
         }
 
@@ -235,16 +221,7 @@ function create(_xyz) {
         		layer.style[params.style || 'default'][params.field] = e.target.value
         		e.target.parentNode.previousSibling.previousSibling.textContent = e.target.value
         		clearTimeout(timeout)
-        		timeout = setTimeout(() => {
-        			layer.reload()
-
-        			if(params.style === 'label') {
-        				_xyz.map.removeLayer(layer.label)
-        				layer.label = _xyz.mapview.layer.mvtLabel(layer);
-        				_xyz.map.addLayer(layer.label)
-        			}
-
-        		}, 1000)
+        		timeout = setTimeout(() => layer.reload(), 1000)
         	}}>`
         }
     }

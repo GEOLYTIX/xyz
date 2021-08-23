@@ -74,7 +74,7 @@ html {
     opacity: 0.8;
     display: grid;
     grid-auto-rows: minmax(min-content, 50px);
-    width: 50px;
+    width: 44px;
   }
 
   #ctrls {
@@ -167,13 +167,16 @@ html {
 
   #mapButton {
     position: fixed;
-    left: 10px;
+    display: grid;
+    grid-auto-rows: minmax(min-content, 50px);
+    width: 48px;
   }
 
   #mapButton>button,
   #mapButton>a {
     box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
     border-radius: 50%;
+    margin-bottom: 10px;
   }
 
   #ctrls {

@@ -29,7 +29,12 @@ module.exports = async (req, res) => {
 
   const user = rows[0]
 
-  if (!user) return res.send(msg('account_not_found', req.params.language))
+  if (!user) {
+
+    res.setHeader('location', `${process.env.DIR}?msg=token_not_found`)
+
+    return res.status(302).send()
+  }
   
   // Create a random approval token.
   const approvaltoken = crypto.randomBytes(20).toString('hex')
@@ -52,13 +57,12 @@ module.exports = async (req, res) => {
 
     // Login with message if account is approved and password reset.
     if (user.password_reset) {
-      res.setHeader('location', `${process.env.DIR}`)
+      res.setHeader('location', `${process.env.DIR}?msg=password_reset_ok`)
 
       return res.status(302).send()
     }
 
     return login(req, res)
-
   }
 
   // Get all admin accounts from the ACL.
