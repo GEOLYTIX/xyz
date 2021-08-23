@@ -261,15 +261,9 @@
               "strokeWidth": 3
             },
             "default": {
-              "svg": "https://geolytix.github.io/MapIcons/pins/amber.svg",
-              "__zoomScale": 0.2
+              "scale": 2
             },
             "cluster": {
-              "svg": null,
-              "type": "target",
-              "fillColor": "#006666",
-              "__scale": 3,
-              "__logScale": true,
               "clusterScale": 2
             },
             "themes": {
@@ -279,19 +273,14 @@
                 "other": true,
                 "cat": {
                   "Aldi": {
-                    "label": "Aldi",
-                    "style": {
-                      "svg": null,
-                      "type": "target",
-                      "fillColor": "#ffbf45",
-                      "layers": {
-                        "0.875": "#fa6f08",
-                        "0.75": "#ef3c11",
-                        "0.625": "#001f79",
-                        "0.5": "#02bee3",
-                        "0.25": "ffffff"
+                    "layers": [
+                      {
+                        "svg": "https://geolytix.github.io/MapIcons/pins/mint.svg"
+                      },
+                      {
+                        "svg": "https://geolytix.github.io/MapIcons/logos/boots_white.svg"
                       }
-                    }
+                    ]
                   },
                   "Asda": {
                     "label": "Asda",
