@@ -52,17 +52,8 @@ module.exports = async (req, res) => {
   if (kmeans) {
     var q = `
     SELECT
-<<<<<<< HEAD
-      count(1)::integer,
-      ST_Distance(
-        ST_Point(${viewport[0]}, ${viewport[1]}),
-        ST_Point(${viewport[2]}, ${viewport[3]})
-      ) AS xdistance
-    FROM ${req.params.table} ${where_sql}`;
-=======
       count(1)::integer
     FROM ${req.params.table} ${where_sql}`
->>>>>>> 86cba94aa0c1b8f31892d1470c06732c4af98877
 
     var rows = await dbs[layer.dbs](q, SQLparams)
 
@@ -83,31 +74,9 @@ module.exports = async (req, res) => {
       ${label ? label + ' AS label,' : ''}
       ST_ClusterKMeans(${geom}, ${kmeans}
     ) OVER () kmeans_cid
-<<<<<<< HEAD
-    FROM ${req.params.table} ${where_sql}) kmeans`;
-
-    // Apply nested DBScan cluster algorithm.
-    if (dbscan) {
-      dbscan *= rows[0].xdistance;
-
-      cluster_sql = `
-        (SELECT
-          cat,
-          size,
-          geom,
-          ${label ? 'label,' : ''}
-          kmeans_cid,
-          ST_ClusterDBSCAN(geom, ${dbscan}, 1
-        ) OVER (PARTITION BY kmeans_cid) dbscan_cid
-        FROM ${cluster_sql}) dbscan`;
-    }
-
-    if (theme === 'categorized') var cat_sql = `array_agg(cat) cat,`;
-=======
     FROM ${req.params.table} ${where_sql}) kmeans`
 
     if (theme === 'categorized') var cat_sql = `array_agg(cat) cat,`
->>>>>>> 86cba94aa0c1b8f31892d1470c06732c4af98877
 
     if (theme === 'graduated')
       var cat_sql = `${req.params.aggregate || 'sum'}(cat) cat,`;
@@ -121,12 +90,8 @@ module.exports = async (req, res) => {
         ST_X(ST_PointOnSurface(ST_Union(geom))) AS x,
         ST_Y(ST_PointOnSurface(ST_Union(geom))) AS y
       FROM ${cluster_sql}
-<<<<<<< HEAD
-      GROUP BY kmeans_cid ${dbscan ? ', dbscan_cid;' : ';'}`;
-=======
       GROUP BY kmeans_cid;`
 
->>>>>>> 86cba94aa0c1b8f31892d1470c06732c4af98877
 
     if (theme === 'competition')
       var q = `
@@ -149,11 +114,7 @@ module.exports = async (req, res) => {
         FROM ${cluster_sql}
         GROUP BY cat, kmeans_cid
   
-<<<<<<< HEAD
-      ) cluster GROUP BY kmeans_cid ${dbscan ? ', dbscan_cid;' : ';'}`;
-=======
       ) cluster GROUP BY kmeans_cid;`
->>>>>>> 86cba94aa0c1b8f31892d1470c06732c4af98877
 
     // Apply grid aggregation if KMeans is not defined.
   } else {
