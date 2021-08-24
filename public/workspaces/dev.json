@@ -129,6 +129,10 @@
     },
     "uk_polygon_demand": {
       "src": "cloudfront:${CDN}/asda/templates/charts/polygon_demand.sql"
+    },
+    "custom_list_filter_query": {
+      "template": "select distinct(retailer) as retailer from geodata.vw_uk_glx_open_retail_points_display_brand",
+      "dbs": "MAPP"
     }
   },
   "locales": {
@@ -143,6 +147,7 @@
       "maxZoom": 17,
       "showScaleBar": true,
       "plugins": {
+        "custom_list_filter": "/dev/js/plugins/custom_list_filter.js",
         "geojson_file": "/dev/js/plugins/geojson_file.js",
         "demand_chart": "/dev/js/plugins/demand_chart.js",
         "post_array": "/dev/js/plugins/post_array.js",
@@ -197,9 +202,7 @@
           "cluster_label": "store_name",
           "cluster_cat": "retailer",
           "cluster_kmeans": 0.02,
-          "cluster_dbscan": 0.2,
-          "markerMin": 6,
-          "markerMax": 50,
+          "plugins": ["custom_list_filter"],
           "hover": {
             "field": "store_name"
           },
