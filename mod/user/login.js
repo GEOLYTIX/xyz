@@ -71,7 +71,8 @@ function view(req, res, message) {
   try {
 
     // Attempt to read a language spcific login view template.
-    template = readFileSync(join(__dirname, `../../public/views/login/_login_${req.params.language}.html`)).toString('utf8')
+    //template = readFileSync(join(__dirname, `../../public/views/login/_login_${req.params.language}.html`)).toString('utf8')
+    template = readFileSync(join(__dirname, `../../public/views/login/login_geolytix.html`)).toString('utf8')
 
   } catch {
 
