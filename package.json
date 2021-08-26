@@ -29,6 +29,7 @@
     "@turf/flatten": "^6.3.0",
     "@turf/kinks": "^6.3.0",
     "@turf/point-on-feature": "^6.3.0",
+    "a-color-picker": "^1.2.1",
     "chroma-js": "^2.1.0",
     "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
