@@ -269,6 +269,9 @@
             "cluster": {
               "clusterScale": 2
             },
+            "highlight": {
+              "scale": 1
+            },
             "themes": {
               "Retail - Simple": {
                 "type": "categorized",
