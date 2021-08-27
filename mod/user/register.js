@@ -154,19 +154,36 @@ async function post(req, res) {
   if (rows instanceof Error) return res.status(500).send(msg('failed_query', req.params.language))
 
   // Sent mail with verification token to the account email address.
-  const mail_template = mail('verify_account', req.body.language)
+  //const mail_template = mail('verify_account', req.body.language)
 
-  await mailer(Object.assign({
-      to: req.body.email
-    },
-    mail_template({
-      host: host,
-      protocol: protocol,
-      verificationtoken: verificationtoken,
-      remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
-    })))
+  // await mailer(Object.assign({
+  //   to: req.body.email
+  // },
+  // mail_template({
+  //   host: host,
+  //   protocol: protocol,
+  //   verificationtoken: verificationtoken,
+  //   remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
+  // })))
 
-  const response = await fetch('https://geolytix.github.io/public/mapp/confirm.html')
+  var response = await fetch('https://geolytix.github.io/public/mapp/mails/verify_registration.html')
+
+  var template = await response.text()
+
+  var mail_params = {
+    link: `${protocol}${host}/api/user/verify/${verificationtoken}`
+  }
+
+  // Render the login template with params.
+  var mail_body = template.replace(/\$\{(.*?)\}/g, matched => mail_params[matched.replace(/\$|\{|\}/g, '')] || '')
+
+  await mailer({
+    to: req.body.email,
+    subject: `Please verify your account on ${host}`,
+    html: mail_body
+  })
+
+  var response = await fetch('https://geolytix.github.io/public/mapp/confirm.html')
 
   res.send(await response.text())
 

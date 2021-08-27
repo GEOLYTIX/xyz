@@ -13,7 +13,7 @@ module.exports = async mail => {
     sender: email,
   })
 
-  mail.text = mail.text.replace(/^(?!\s+$)\s+/gm, '')
+  mail.text = mail.text && mail.text.replace(/^(?!\s+$)\s+/gm, '')
 
   if (!process.env.TRANSPORT_HOST) return mailer.createTransport(process.env.TRANSPORT).sendMail(mail)
 
