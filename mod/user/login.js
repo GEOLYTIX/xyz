@@ -4,6 +4,8 @@ const crypto = require('crypto')
 
 const jwt = require('jsonwebtoken')
 
+const fetch = require('node-fetch')
+
 const { readFileSync } = require('fs')
 
 const { join } = require('path')
@@ -63,7 +65,7 @@ module.exports = async (req, res, message) => {
   view(req, res, message)
 }
 
-function view(req, res, message) {
+async function view(req, res, message) {
 
   let template
 
@@ -72,7 +74,9 @@ function view(req, res, message) {
 
     // Attempt to read a language spcific login view template.
     //template = readFileSync(join(__dirname, `../../public/views/login/_login_${req.params.language}.html`)).toString('utf8')
-    template = readFileSync(join(__dirname, `../../public/views/login/login_geolytix.html`)).toString('utf8')
+
+    const response = await fetch('https://geolytix.github.io/public/mapp/login.html')
+    template = await response.text()
 
   } catch {
 
