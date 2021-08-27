@@ -1,3 +1,5 @@
+const fetch = require('node-fetch')
+
 const { readFileSync } = require('fs')
 
 const { join } = require('path')
@@ -29,7 +31,7 @@ module.exports = async (req, res) => {
   view(req, res)
 }
 
-function view(req, res) {
+async function view(req, res) {
 
   let template
 
@@ -37,7 +39,12 @@ function view(req, res) {
   try {
 
     // Attempt to read a language spcific registration view template.
-    template = readFileSync(join(__dirname, `../../public/views/register/_register_${req.params.language}.html`)).toString('utf8')
+    // template = readFileSync(join(__dirname, `../../public/views/register/_register_${req.params.language}.html`)).toString('utf8')
+
+    const response = req.params.reset ?
+      await fetch('https://geolytix.github.io/public/mapp/reset.html'):
+      await fetch('https://geolytix.github.io/public/mapp/register.html');
+    template = await response.text()
 
   } catch {
 
@@ -159,7 +166,10 @@ async function post(req, res) {
       remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
     })))
 
-  // Return msg. No redirect for password reset.
-  res.send(msg('new_account_registered', req.body.language))
+  const response = await fetch('https://geolytix.github.io/public/mapp/confirm.html')
 
+  res.send(await response.text())
+
+  // Return msg. No redirect for password reset.
+  //res.send(msg('new_account_registered', req.body.language))
 }
