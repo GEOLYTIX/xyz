@@ -17,6 +17,36 @@ document.dispatchEvent(new CustomEvent('filter_multiselect', {
     _xyz.layers.plugins.filter_multiselect = layer => {
 
       if (!layer.filter_multiselect?.length) return;
+
+      if (!layer.filter.select) {
+
+        const panel = layer.view.appendChild(_xyz.utils.html.node`
+          <div class="drawer panel expandable">`)
+
+        panel.appendChild(_xyz.utils.html.node`
+        <div
+          class="header primary-colour"
+          onclick=${e => {
+            e.stopPropagation();
+            _xyz.utils.toggleExpanderParent(e.target, true);
+          }}><span>${_xyz.language.layer_filter_header}</span><button
+          class="btn-header xyz-icon icon-expander primary-colour-filter">`)
+
+        layer.filter.select = panel.appendChild(_xyz.utils.html.node`
+        <div class="drawer panel expandable">
+        <button class="btn-drop">
+          <div
+            class="head"
+            onclick=${e => {
+              e.preventDefault();
+              e.target.parentElement.classList.toggle('active');
+            }}>
+            <span>${_xyz.language.layer_filter_select}</span>
+            <div class="icon"></div>
+          </div>
+          <ul>`)
+
+      }
     
       layer.filter_multiselect.forEach(async entry => {
         

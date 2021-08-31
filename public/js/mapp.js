@@ -142,7 +142,7 @@
         <img style="position:absolute; width: 100%; height: 100%" src="${t.svg}"/>`)):e.utils.html`
       <img
         style="position:absolute; width: 100%; height: 100%"
-        src="${e.utils.svg_symbols[t.type](t)}"/>`}},Qt=e=>t=>{const n=e.utils.html.node`<div class="legend grid">`;return t.style.theme.cat_arr.forEach((r=>{const a=Object.assign({},t.style.default,r.style&&r.style.marker||r.style||r);a.svg||a.type?n.appendChild(e.utils.html.node`
+        src="${t.svg||t.url||e.utils.svg_symbols[t.type](t)}"/>`}},Qt=e=>t=>{const n=e.utils.html.node`<div class="legend grid">`;return t.style.theme.cat_arr.forEach((r=>{const a=Object.assign({},t.style.default,r.style&&r.style.marker||r.style||r);a.svg||a.type?n.appendChild(e.utils.html.node`
         <div style="position:relative; height: 24px; width: 24px;">
           ${function(t){return t.layers&&Array.isArray(t.layers)?t.layers.map((t=>e.utils.html`
         <img style="position:absolute; width: 100%; height: 100%" src="${t.svg}"/>`)):e.utils.html`
@@ -379,7 +379,7 @@
     <div
       class="header primary-colour"
       onclick=${t=>{t.stopPropagation(),e.utils.toggleExpanderParent(t.target,!0)}}><span>${e.language.layer_filter_header}</span><button
-      class="btn-header xyz-icon icon-expander primary-colour-filter">`);let o={};return Object.values(r).forEach((e=>{e.field&&(o[e.field]=e.filter_title||e.title||e.field)})),n.filter.select=e.utils.html.node`
+      class="btn-header xyz-icon icon-expander primary-colour-filter">`);let o={};return Object.values(r).forEach((e=>{e.field&&(o[e.field]=e.filter_title||e.title||e.field)})),n.filter.select=a.appendChild(e.utils.html.node`
       <button class="btn-drop">
         <div
           class="head"
@@ -388,7 +388,7 @@
           <div class="icon"></div>
         </div>
         <ul>${Object.entries(o).map((a=>e.utils.html.node`
-          <li onclick=${e=>{e.target.closest(".btn-drop").classList.toggle("active");const o=r.find((e=>e.field===a[0]));return n.filter.clear_all.style.display="block","date"==o.filter?t.filter_date(n,o):"numeric"===o.filter?t.filter_numeric(n,o):"like"===o.filter||"match"===o.filter?t.filter_text(n,o):o.filter.in?t.filter_in(n,o):"boolean"===o.filter?t.filter_boolean(n,o):void 0}}>${a[1]}`))}`,a.appendChild(n.filter.select),n.filter.clear_all=e.utils.html.node`
+          <li onclick=${e=>{e.target.closest(".btn-drop").classList.toggle("active");const o=r.find((e=>e.field===a[0]));return n.filter.clear_all.style.display="block","date"==o.filter?t.filter_date(n,o):"numeric"===o.filter?t.filter_numeric(n,o):"like"===o.filter||"match"===o.filter?t.filter_text(n,o):o.filter.in?t.filter_in(n,o):"boolean"===o.filter?t.filter_boolean(n,o):void 0}}>${a[1]}`))}`),n.filter.clear_all=e.utils.html.node`
     <button
       class="primary-colour"
       style="display: none; margin-bottom: 5px;"
