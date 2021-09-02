@@ -83,7 +83,7 @@ module.exports = {
 		ko: `사용자 미발견`,
 		zh: `找不到用户`
   },
-  locked_account: {
+  user_locked: {
     en: `User account has been locked due to failed login attempts.`,
     de: `Benutzerkonto gesperrt.`
   },

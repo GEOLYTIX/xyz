@@ -6,8 +6,6 @@ const register = require('../mod/user/register')
 
 const auth = require('../mod/user/auth')
 
-const auth0 = require('../mod/user/auth0')
-
 const saml = require('../mod/user/saml')
 
 const workspaceCache = require('../mod/workspace/cache')
@@ -15,10 +13,6 @@ const workspaceCache = require('../mod/workspace/cache')
 const proxy = require('../mod/proxy')
 
 const provider = require('../mod/provider/_provider')
-
-const { readFileSync } = require('fs')
-
-const { join } = require('path')
 
 const routes = {
   layer: require('../mod/layer/_layer'),
@@ -57,7 +51,9 @@ module.exports = async (req, res) => {
 
   if (req.headers && req.headers['user-agent'] && IEdetect(req.headers['user-agent'])) return res.send('Uh Oh... It looks like your request comes from an unsupported user agent (e.g. Internet Explorer)')
 
-  if (req.url.match(/\/auth0/)) return auth0(req, res)
+  logger(req, 'req')
+
+  logger(req.url, 'req_url')
 
   if (req.url.match(/\/saml/)) return saml(req, res)
 
@@ -166,17 +162,6 @@ module.exports = async (req, res) => {
   }
   
   if (path && path[1] && routes[path[1]]) return routes[path[1]](req, res)
-
-  // Assign the mapp template as default if no template is set.
-  req.params.template = req.params.template || req.params.workspace.templates && req.params.workspace.templates.default
-
-  if (!req.params.template) {
-    const template = readFileSync(join(__dirname, '../public/views/_default.html')).toString('utf8')
-    req.params.template = {
-      template: template,
-      render: params => template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
-    }
-  }
 
   // Return the View API on the root.
   routes.view(req, res)

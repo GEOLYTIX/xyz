@@ -1,5 +1,3 @@
-const messages = require('./messages')
-
 const methods = {
   admin: {
     handler: require('./admin'),

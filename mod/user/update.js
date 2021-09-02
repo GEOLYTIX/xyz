@@ -2,9 +2,7 @@ const acl = require('./acl')()
 
 const mailer = require('../mailer')
 
-const mail_templates = require('./mails')
-
-const messages = require('./messages')
+const templates = require('../templates/_templates')
 
 module.exports = async (req, res) => {
 
@@ -34,17 +32,16 @@ module.exports = async (req, res) => {
   // Send email to the user account if an account has been approved.
   if (req.params.field === 'approved' && req.params.value === 'true') {
 
-    const approved_account_mail = mail_templates.approved_account[req.params.user.language || 'en'] || mail_templates.approved_account.en;
-
-    await mailer(Object.assign({
-      to: email
-    },
-    approved_account_mail({
+    var mail_template = await templates('approved_account', req.params.user.language, {
       host: host,
       protocol: protocol
-    })));
+    })
+    
+    await mailer(Object.assign(mail_template, {
+      to: email
+    }))
 
   }
 
-  return res.send(messages.update_ok[req.params.user.language || 'en'] || messages.update_ok.en)
+  return res.send(await templates('update_ok', req.params.user.language))
 }
