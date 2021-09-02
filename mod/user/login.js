@@ -14,7 +14,7 @@ const { nanoid } = require('nanoid')
 
 module.exports = async (req, res, message) => {
 
-  if (!acl) return res.status(500).send(await templates('acl_unavailable', req.params.language))
+  if (!acl) return res.status(500).send('ACL unavailable.')
 
   if (req.body && req.body.login) {
 
@@ -68,7 +68,7 @@ async function view(req, res, message) {
   // The login view will set the cookie to null.
   res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
 
-  res.send(template.html)
+  res.send(template)
 }
 
 async function post(req, res) {

@@ -1,16 +1,4 @@
 module.exports = {
-  acl_unavailable: {
-    en: `ACL unavailable`
-  },
-	logout: {
-    en: `Logged out.`,
-    de: `Benutzer ausgelogt. Benutzerkonto Cookie wurde entfernt`,
-		fr: `Deconnecté.`,
-		pl: 'Wylogowano.',
-		ja: `ログアウト`,
-		ko: `당신은 로그 아웃되었습니다`,
-		zh: `您已註銷`
-	},
 	token_not_found: {
 		en: `Token not found. The token has probably been resolved already.`,
 		fr: `Token n’a pas été trouvé. Il a probablement déjà été utilisé.`,

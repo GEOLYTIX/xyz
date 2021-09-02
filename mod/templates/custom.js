@@ -1,18 +1,12 @@
 module.exports = {
   "register_view": {
-    "en": {
-      "html": "https://geolytix.github.io/public/mapp/register.html"
-    }
+    "en": "https://geolytix.github.io/public/mapp/register.html"
   },
   "password_reset_view": {
-    "en": {
-      "html": "https://geolytix.github.io/public/mapp/reset.html"
-    }
+    "en": "https://geolytix.github.io/public/mapp/reset.html"
   },
   "login_view": {
-    "en": {
-      "html": "https://geolytix.github.io/public/mapp/login.html"
-    }
+    "en": "https://geolytix.github.io/public/mapp/login.html"
   },
   "verify_password_reset": {
     "en": {
