@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
       || ''}
   WHERE lower(email) = lower($1);`, [email])
 
-  if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
+  if (rows instanceof Error) return res.status(500).send(await templates('failed_query', req.params.language))
 
   const protocol = `${req.headers.host.includes('localhost') && 'http' || 'https'}://`
 
