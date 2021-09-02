@@ -10,7 +10,7 @@ const login = require('./login')
 
 module.exports = async (req, res) => {
 
-  if (!acl) return res.status(500).send(await templates('acl_unavailable', req.params.language))
+  if (!acl) return res.status(500).send('ACL unavailable.')
 
   // Find user record with matching verificationtoken.
   var rows = await acl(`

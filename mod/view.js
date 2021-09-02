@@ -30,5 +30,5 @@ module.exports = async (req, res) => {
     req.params.language || req.params.user?.language,
     params)
 
-  res.send(template.html)
+  res.send(template)
 }

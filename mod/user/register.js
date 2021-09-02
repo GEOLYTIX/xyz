@@ -10,7 +10,7 @@ const templates = require('../templates/_templates')
 
 module.exports = async (req, res) => {
 
-  if (!acl) return res.status(500).send(await templates('acl_unavailable', req.params.language))
+  if (!acl) return res.status(500).send('ACL unavailable.')
 
   // Post request to register new user.
   if (req.body && req.body.register) return post(req, res)
@@ -28,7 +28,7 @@ async function view(req, res) {
   // The login view will set the cookie to null.
   res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
 
-  res.send(template.html)
+  res.send(template)
 }
 
 async function post(req, res) {

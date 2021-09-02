@@ -6,7 +6,7 @@ const templates = require('../templates/_templates')
 
 module.exports = async (req, res) => {
 
-  if (!acl) return res.status(500).send(await templates('acl_unavailable', req.params.language))
+  if (!acl) return res.status(500).send('ACL unavailable.')
 
   const admin = req.params.user
 

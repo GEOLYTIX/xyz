@@ -6,5 +6,5 @@ module.exports = async (req, res) => {
     dir: process.env.DIR
   })
 
-  res.send(template.html)
+  res.send(template)
 }
