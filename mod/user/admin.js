@@ -1,17 +1,10 @@
-const { readFileSync } = require('fs')
-
-const { join } = require('path')
+const templates = require('../templates/_templates')
 
 module.exports = async (req, res) => {
 
-  const template = readFileSync(join(__dirname, '../../public/views/_user.html')).toString('utf8')
-
-  const params = {
+  let template = await templates('user_admin_view', 'en', {
     dir: process.env.DIR
-  }
+  })
 
-  // Render the login template with params.
-  const html = template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
-
-  res.send(html)
+  res.send(template.html)
 }

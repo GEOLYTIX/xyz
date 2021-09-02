@@ -1,6 +1,6 @@
-module.exports = async (req, res) => {
+const templates = require('./templates/_templates')
 
-  if (!req.params.template) return res.status(400).send('No template provided for request.')
+module.exports = async (req, res) => {
 
   const user = req.params.user && encodeURI(JSON.stringify({
     email: req.params.user.email,
@@ -8,25 +8,27 @@ module.exports = async (req, res) => {
     roles: req.params.user.roles
   }))
 
+  const params = Object.assign(
+    req.params || {},
+    {
+      title: process.env.TITLE,
+      dir: process.env.DIR,
+      user: user,
+      language: req.params.language,
+      login: (process.env.PRIVATE || process.env.PUBLIC) && 'true',
+    },
+    Object.fromEntries(Object.entries(process.env).filter(entry => entry[0].match(/^SRC_/))))
 
-  function render(template, params) {
+  // Template is provided from workspace
+  if (req.params.template?.template) {
 
-    return template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
-
+    return res.send(req.params.template?.template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || ''))
   }
 
-  const html = render(
-    req.params.template.template,
-    Object.assign(
-      req.params || {}, {
-        title: process.env.TITLE,
-        dir: process.env.DIR,
-        user: user,
-        language: req.params.language,
-        login: (process.env.PRIVATE || process.env.PUBLIC) && 'true',
-      },
-      Object.fromEntries(Object.entries(process.env).filter(entry => entry[0].match(/^SRC_/))))
-  )
+  let template = await templates(
+    'default_view',
+    req.params.language || req.params.user?.language,
+    params)
 
-  res.send(html)
+  res.send(template.html)
 }

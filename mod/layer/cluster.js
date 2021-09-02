@@ -17,6 +17,7 @@ module.exports = async (req, res) => {
     label = req.params.label,
     count = req.params.count,
     kmeans = parseInt(1 / req.params.kmeans),
+    dbscan = parseFloat(req.params.dbscan), 
     viewport = req.params.viewport.split(','),
     z = parseFloat(req.params.z);
 
@@ -53,7 +54,11 @@ module.exports = async (req, res) => {
 
     var q = `
     SELECT
-      count(1)::integer
+      count(1)::integer,
+      ST_Distance(
+        ST_Point(${viewport[0]}, ${viewport[1]}),
+        ST_Point(${viewport[2]}, ${viewport[3]})
+      ) AS xdistance
     FROM ${req.params.table} ${where_sql}`
 
     var rows = await dbs[layer.dbs](q, SQLparams)
@@ -77,6 +82,25 @@ module.exports = async (req, res) => {
     ) OVER () kmeans_cid
     FROM ${req.params.table} ${where_sql}) kmeans`
 
+
+    // Apply nested DBScan cluster algorithm.
+    if (dbscan) {
+
+      dbscan *= rows[0].xdistance
+
+      cluster_sql = `
+        (SELECT
+          cat,
+          size,
+          geom,
+          ${label ? 'label,' : ''}
+          kmeans_cid,
+          ST_ClusterDBSCAN(geom, ${dbscan}, 1
+        ) OVER (PARTITION BY kmeans_cid) dbscan_cid
+        FROM ${cluster_sql}) dbscan`
+
+    }
+
     if (theme === 'categorized') var cat_sql = `array_agg(cat) cat,`
 
     if (theme === 'graduated') var cat_sql = `${req.params.aggregate || 'sum'}(cat) cat,`
@@ -90,7 +114,7 @@ module.exports = async (req, res) => {
         ST_X(ST_PointOnSurface(ST_Union(geom))) AS x,
         ST_Y(ST_PointOnSurface(ST_Union(geom))) AS y
       FROM ${cluster_sql}
-      GROUP BY kmeans_cid;`
+      GROUP BY kmeans_cid ${dbscan ? ', dbscan_cid;' : ';'}`
 
 
     if (theme === 'competition') var q = `
@@ -108,12 +132,13 @@ module.exports = async (req, res) => {
           cat,
           ${label ? '(array_agg(label))[1] AS label,' : ''}
           ST_Union(geom) geom,
-          kmeans_cid
+          kmeans_cid,
+          dbscan_cid
   
         FROM ${cluster_sql}
-        GROUP BY cat, kmeans_cid
+        GROUP BY cat, kmeans_cid ${dbscan ? ', dbscan_cid' : ''}
   
-      ) cluster GROUP BY kmeans_cid;`
+      ) cluster GROUP BY kmeans_cid ${dbscan ? ', dbscan_cid;' : ';'}`
 
   // Apply grid aggregation if KMeans is not defined.
   } else {
