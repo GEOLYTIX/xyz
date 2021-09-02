@@ -172,7 +172,7 @@ git clone https://github.com/Commonplace-Digital-Ltd/foundations
 cd foundations
 git checkout main
 git pull
-# Swap out DUMMY values for passwords for mongo/postgres
+# Swap out DUMMY values for passwords for mongo/postgres, see AWS Secrets Manager acorn/geolytix
 helm upgrade map ./charts/generic --values ./charts/map/values-override.yaml --create-namespace --install --namespace default --set env.MONGO_URL='mongodb+srv://acorn:DUMMY@cp-non-prod.lfxwi.mongodb.net?retryWrites=true&w=majority' --set env.DBS_XYZ='postgres://postgres:DUMMY@postgres-rds-private-eu-west-2.ct36hfcslmg5.eu-west-2.rds.amazonaws.com:5432/postgres'
 ```
 
