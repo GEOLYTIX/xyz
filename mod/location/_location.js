@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
   req.params.layer = layer
 
   if (!req.params.layer) {
-    return res.status().send(`Failed to evaluate 'layer' param.<br><br>
+    return res.status(400).send(`Failed to evaluate 'layer' param.<br><br>
     <a href="https://geolytix.github.io/xyz/docs/develop/api/location/">Location API</a>`)
   }
   

@@ -115,7 +115,7 @@ async function post(req, res) {
       '${verificationtoken}' AS verificationtoken,
       array['${date}@${req.ips && req.ips.pop() || req.ip}'] AS access_log;`)
 
-  if (rows instanceof Error) return res.status(500).send(msg('failed_query', req.params.language))
+  if (rows instanceof Error) return res.status(500).send(await templates('failed_query', req.params.language))
 
   // Sent mail with verification token to the account email address.
   var mail_template = await templates('verify_account', req.body.language, {
