@@ -12,26 +12,6 @@ const file = require('../provider/file')
 
 const fetch = require('node-fetch')
 
-//const custom_templates = require('./custom')
-
-const custom_templates = new Promise(async (resolve, reject)=>{
-
-  if (!process.env.CUSTOM_TEMPLATES) return resolve({})
-
-  try {
-
-    const response = await fetch(process.env.CUSTOM_TEMPLATES)
-
-    resolve(await response.json())
-
-  } catch(err) {
-
-    console.error(err)
-    resolve({})
-  }
-
-})
-
 const getFrom = {
   https: async ref => {
 
@@ -42,6 +22,15 @@ const getFrom = {
   file: ref => file(ref.split(':')[1]),
   cloudfront: ref => cloudfront(ref.split(':')[1]),
 }
+
+//const custom_templates = require('./custom')
+
+const custom_templates = new Promise(async (resolve, reject)=>{
+
+  if (!process.env.CUSTOM_TEMPLATES) return resolve({})
+
+  resolve(await getFrom[process.env.CUSTOM_TEMPLATES.split(':')[0]](process.env.CUSTOM_TEMPLATES))
+})
 
 module.exports = async (name, language = 'en', params = {}) => {
 
