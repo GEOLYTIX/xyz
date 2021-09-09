@@ -135,7 +135,11 @@ window.onload = () => {
   // Get locale from host.
   function getLocale(locales) {
 
-    if (!locales.length) return alert('No accessible locales')
+    if (!locales.length) {
+      userAdmin();
+      alert("No accessible locales");
+      return;
+    }
 
     const locale = xyz.hooks && xyz.hooks.current.locale ? {
       key: xyz.hooks.current.locale, 
@@ -337,34 +341,47 @@ window.onload = () => {
       })
     })
 
+    userAdmin()
+
+  }
+
+  function userAdmin() {
+
     xyz.user = document.head.dataset.user && JSON.parse(decodeURI(document.head.dataset.user))
 
     xyz.user && xyz.utils.idle({
       host: xyz.host,
       idle: xyz.locale.idle ?? 600
     })
-
+    
     // Append user admin button.
-    xyz.user && xyz.user.admin && btnColumn.appendChild(xyz.utils.html.node`
-      <a
-        title=${xyz.language.toolbar_admin}
-        class="mobile-display-none"
-        href="${xyz.host + '/api/user/admin'}">
-        <div class="xyz-icon icon-supervisor-account">`)
+    xyz.user &&
+      xyz.user.admin &&
+      btnColumn.appendChild(xyz.utils.html.node`
+        <a
+          title=${xyz.language.toolbar_admin}
+          class="mobile-display-none"
+          href="${xyz.host + "/api/user/admin"}">
+          <div class="xyz-icon icon-supervisor-account">`);
 
     // Append logout button.
-    document.head.dataset.login && btnColumn.appendChild(xyz.utils.html.node`
-      <a
-        title="${xyz.user && `${xyz.language.toolbar_logout} ${xyz.user.email}` || 'Login'}"
-        href="${xyz.user && '?logout=true' || '?login=true'}">
-        <div
-          class="${`xyz-icon ${xyz.user && 'icon-logout red-filter' || 'icon-lock-open primary-colour-filter'}`}">`)
-
+    document.head.dataset.login &&
+      btnColumn.appendChild(xyz.utils.html.node`
+        <a
+          title="${
+            (xyz.user && `${xyz.language.toolbar_logout} ${xyz.user.email}`) ||
+            "Login"
+          }"
+          href="${(xyz.user && "?logout=true") || "?login=true"}">
+          <div
+            class="${`xyz-icon ${
+              (xyz.user && "icon-logout red-filter") ||
+              "icon-lock-open primary-colour-filter"
+            }`}">`);
 
     // Append spacer for tableview
     btnColumn.appendChild(xyz.utils.html.node`
-      <div class="mobile-display-none" style="height: 60px;">`)
-
+        <div class="mobile-display-none" style="height: 60px;">`);
   }
 
 }
