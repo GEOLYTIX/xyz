@@ -16,7 +16,11 @@ const getFrom = {
   https: async ref => {
 
     const response = await fetch(ref)
-  
+
+    if (ref.match(/\.json$/i)) {
+      return await response.json()
+    }
+
     return await response.text()
   },
   file: ref => file(ref.split(':')[1]),
