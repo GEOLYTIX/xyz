@@ -107,6 +107,9 @@
     },
     "london_workers": {
       "src": "https://geolytix.github.io/public/geodata/layers/london_workers.json"
+    },
+    "london_banks": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_banks.json"
     }
   },
   "locales": {
@@ -254,6 +257,10 @@
         },
         "Retail Points": {
           "template": "london_retailpoints",
+          "display": true
+        },
+        "Bank locations": {
+          "template": "london_banks",
           "display": true
         },
         "Census": {
