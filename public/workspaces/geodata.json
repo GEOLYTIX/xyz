@@ -260,8 +260,7 @@
           "display": true
         },
         "Bank locations": {
-          "template": "london_banks",
-          "display": true
+          "template": "london_banks"
         },
         "Census": {
           "meta": "<p>The processed 2011 UK Census.</p><p>Download a collection of 197 variables as Output Area (OA) level. English, Welsh, Scottish and Northern Irish Census data processed into a single easy-to-use flat file. We have released free-of-charge and under the same license terms as the census.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1W3dyz--u--2lYBXpo8fnDe0b-t8rDpGt\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1-HRjPCUUIxypW1ZxwLgwhxhfesxCR4Ub\" target=\"_blank\"> Open Data - download for free</a></b></p>",
