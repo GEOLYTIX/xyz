@@ -1,6 +1,8 @@
 {
-    "templates": {
-        "blog": {
+    "templates":
+    {
+        "blog":
+        {
             "src": "file://public/views/blog.html"
         },
         "contact": {
