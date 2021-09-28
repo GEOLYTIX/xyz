@@ -192,6 +192,41 @@
             "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
           }
         },
+        "Offices": {
+          "format": "geojson",
+          "dbs": "WEBSITE",
+          "table": "website.global_glx_open_geolytix_offices",
+          "geom": "geom_p_4326",
+          "srid": "4326",
+          "qID": "id",
+          "infoj": [
+            {
+              "field": "id",
+              "title": "ID"
+            }
+          ],
+          "style": {
+            "default": {
+              "type": "markerColor",
+              "colorMarker": "#003D57",
+              "colorDot": "#F0F0F0",
+              "anchor": [
+                0.5,
+                1
+              ],
+              "scale": 3
+            },
+            "highlight": {
+              "type": "markerColor",
+              "colorMarker": "#EC602D",
+              "colorDot": "#F0F0F0",
+              "anchor": [
+                0.5,
+                1
+              ]
+            }
+          }
+        },
         "Retail Points": {
           "format": "cluster",
           "dbs": "MAPP",
@@ -203,7 +238,9 @@
           "cluster_label": "store_name",
           "cluster_cat": "retailer",
           "cluster_kmeans": 0.02,
-          "plugins": ["custom_list_filter"],
+          "plugins": [
+            "custom_list_filter"
+          ],
           "hover": {
             "field": "store_name"
           },
@@ -389,7 +426,8 @@
               "Length": {
                 "type": "graduated",
                 "fieldfx": "length(store_name)",
-                "cat_arr": [{
+                "cat_arr": [
+                  {
                     "value": "0",
                     "style": {
                       "marker": {
@@ -423,7 +461,7 @@
               }
             }
           }
-        },        
+        },
         "ZoomGeom": {
           "format": "mvt",
           "geom": "geom_3857_5m",
@@ -501,11 +539,17 @@
           },
           "style": {
             "theme": {
-              "fields": ["pop__01", "pop__11", "gen_female__11", "gen_male__11"],
+              "fields": [
+                "pop__01",
+                "pop__11",
+                "gen_female__11",
+                "gen_male__11"
+              ],
               "dynamic": true,
               "type": "graduated",
               "field": "pop__01",
-              "cat_arr": [{
+              "cat_arr": [
+                {
                   "value": "0",
                   "style": {
                     "marker": {
@@ -572,7 +616,8 @@
               "theme": {
                 "type": "graduated",
                 "field": "pop__11",
-                "cat_arr": [{
+                "cat_arr": [
+                  {
                     "style": {
                       "marker": {
                         "scale": 0.4
@@ -692,23 +737,25 @@
             }
           },
           "qID": "id",
-          "infoj": [{
-            "title": "RP Type",
-            "field": "rp_type",
-            "filter": {
-              "in": [
-                "City Centre",
-                "Town Centre",
-                "Urban Centre",
-                "Parade"
-              ]
+          "infoj": [
+            {
+              "title": "RP Type",
+              "field": "rp_type",
+              "filter": {
+                "in": [
+                  "City Centre",
+                  "Town Centre",
+                  "Urban Centre",
+                  "Parade"
+                ]
+              }
+            },
+            {
+              "field": "rp_name",
+              "title": "rp_name",
+              "filter": "like"
             }
-          },
-        {
-          "field": "rp_name",
-          "title": "rp_name",
-          "filter": "like"
-        }]
+          ]
         },
         "RP Roles": {
           "format": "mvt",
@@ -721,13 +768,15 @@
           "srid": "3857",
           "qID": "id",
           "filter": {
-            "infoj": [{
-              "title": "ID count",
-              "field": "id_count",
-              "type": "integer",
-              "inline": true,
-              "fieldfx": "count(id)"
-            }]
+            "infoj": [
+              {
+                "title": "ID count",
+                "field": "id_count",
+                "type": "integer",
+                "inline": true,
+                "fieldfx": "count(id)"
+              }
+            ]
           },
           "roles": {
             "en": null,
@@ -742,17 +791,19 @@
               }
             }
           },
-          "infoj": [{
-            "title": "RP Type",
-            "field": "rp_type",
-            "filter": {
-              "in": [
-                "City Centre",
-                "Town Centre",
-                "Urban Centre"
-              ]
+          "infoj": [
+            {
+              "title": "RP Type",
+              "field": "rp_type",
+              "filter": {
+                "in": [
+                  "City Centre",
+                  "Town Centre",
+                  "Urban Centre"
+                ]
+              }
             }
-          }]
+          ]
         },
         "Retail Points HX": {
           "format": "cluster",
@@ -763,13 +814,17 @@
           "cluster_hexresolution": 0.1,
           "qID": "id",
           "cluster_label": "store_name",
-          "infoj": [{
-            "field": "id"
-          }]
+          "infoj": [
+            {
+              "field": "id"
+            }
+          ]
         },
         "Geojson": {
           "format": "geojson",
-          "plugins": ["geojson_file"]
+          "plugins": [
+            "geojson_file"
+          ]
         },
         "Scratch": {
           "format": "mvt",
@@ -778,7 +833,9 @@
           "srid": "3857",
           "geom": "geom_3857",
           "qID": "id",
-          "plugins": ["openrouteservice"],
+          "plugins": [
+            "openrouteservice"
+          ],
           "edit": {
             "polygon": true,
             "freehand": true,
@@ -848,7 +905,8 @@
               "title": "options_field",
               "field": "options_field",
               "edit": {
-                "options": [{
+                "options": [
+                  {
                     "Open": "1"
                   },
                   {
@@ -963,7 +1021,8 @@
             "delete": true
           },
           "qID": "id",
-          "infoj": [{
+          "infoj": [
+            {
               "type": "key"
             },
             {
@@ -1130,18 +1189,20 @@
               "target": "location",
               "chart": {
                 "type": "doughnut",
-                "datasets": [{
-                  "backgroundColor": [
-                    "rgba(229, 99 , 153, 0.4)",
-                    "rgba(0, 167, 225, 0.4)",
-                    "rgba(237, 222, 164, 0.4)",
-                    "rgba(247, 160 ,114, 0.4)",
-                    "rgba(255, 155, 66, 0.4)"
-                  ],
-                  "borderColor": "#C0B4A7",
-                  "spanGaps": true,
-                  "lineTension": 0.5
-                }],
+                "datasets": [
+                  {
+                    "backgroundColor": [
+                      "rgba(229, 99 , 153, 0.4)",
+                      "rgba(0, 167, 225, 0.4)",
+                      "rgba(237, 222, 164, 0.4)",
+                      "rgba(247, 160 ,114, 0.4)",
+                      "rgba(255, 155, 66, 0.4)"
+                    ],
+                    "borderColor": "#C0B4A7",
+                    "spanGaps": true,
+                    "lineTension": 0.5
+                  }
+                ],
                 "options": {
                   "cutoutPercentage": 36,
                   "title": {
@@ -1202,7 +1263,8 @@
             },
             "default": {
               "showInHeader": true,
-              "layers": [{
+              "layers": [
+                {
                   "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/aga/red_pin.svg"
                 },
                 {
@@ -1275,7 +1337,8 @@
           "roles": {
             "ja": true
           },
-          "infoj": [{
+          "infoj": [
+            {
               "type": "key"
             },
             {
@@ -1299,7 +1362,8 @@
           "roles": {
             "!ja": null
           },
-          "infoj": [{
+          "infoj": [
+            {
               "type": "key"
             },
             {
