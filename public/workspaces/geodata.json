@@ -1,1544 +1,1327 @@
 {
-    "templates": {
-        "blog": {
-            "src": "file://public/views/blog.html"
+  "templates": {
+    "blog": {
+      "src": "file://public/views/blog.html"
+    },
+    "contact": {
+      "src": "file://public/views/contact.html"
+    },
+    "embedded": {
+      "src": "file://public/views/embedded.html"
+    },
+    "Mapbox Base": {
+      "format": "mbtiles",
+      "mbStyle": "mapbox://styles/dbauszus/ciozrimi3002bdsm8bjtn2v1y",
+      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tqMXBtdnp6MGxpbDJ6cDh1eXQzZ2tlcCJ9.u5fDJVun8BTbnjGOqmrW8Q",
+      "attribution": {
+        "© Mapbox": "https://www.mapbox.com/about/maps",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "Mapbox Label": {
+      "format": "mbtiles",
+      "mbStyle": "mapbox://styles/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z",
+      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tqMXBtdnp6MGxpbDJ6cDh1eXQzZ2tlcCJ9.u5fDJVun8BTbnjGOqmrW8Q",
+      "attribution": {
+        "© Mapbox": "https://www.mapbox.com/about/maps",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "HERE Imagery": {
+      "format": "tiles",
+      "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?{HERE}",
+      "proxy": true,
+      "attribution": {
+        "© Here": "https://www.here.com/",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "HERE Hybrid": {
+      "format": "tiles",
+      "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?{HERE}",
+      "proxy": true,
+      "attribution": {
+        "© Here": "https://www.here.com/",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "london_census": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_census.json"
+    },
+    "london_retailpoints": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_retailpoints.json"
+    },
+    "london_lad": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_lad.json"
+    },
+    "london_oa": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_oa.json"
+    },
+    "london_education": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_education.json"
+    },
+    "london_university_building": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_university_building.json"
+    },
+    "london_grocery_demand": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_grocery_demand.json"
+    },
+    "london_poi": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_poi.json"
+    },
+    "london_postal_sector": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_postal_sector.json"
+    },
+    "london_postal_district": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_postal_district.json"
+    },
+    "london_postal_area": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_postal_area.json"
+    },
+    "london_rail": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_rail.json"
+    },
+    "london_rail_stations": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_rail_stations.json"
+    },
+    "london_residential": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_residential.json"
+    },
+    "london_retailplaces": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_retailplaces.json"
+    },
+    "london_retailplaces_pitch": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_retailplaces_pitch.json"
+    },
+    "london_roads": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_roads.json"
+    },
+    "london_seamless": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_seamless.json"
+    },
+    "london_town_suburb": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_town_suburb.json"
+    },
+    "london_urbanity": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_urbanity.json"
+    },
+    "london_workers": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_workers.json"
+    },
+    "london_banks": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_banks.json"
+    }
+  },
+  "locales": {
+    "Offices": {
+      "minZoom": 2,
+      "maxZoom": 18,
+      "view": {
+        "lat": 45,
+        "lng": 60,
+        "z": 3
+      },
+      "layers": {
+        "Base": {
+          "display": true,
+          "template": "Mapbox Base"
         },
-        "contact": {
-            "src": "file://public/views/contact.html"
-        },
-        "embedded": {
-            "src": "file://public/views/embedded.html"
-        },
-        "Mapbox Base": {
-            "format": "mbtiles",
-            "mbStyle": "mapbox://styles/dbauszus/ciozrimi3002bdsm8bjtn2v1y",
-            "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tqMXBtdnp6MGxpbDJ6cDh1eXQzZ2tlcCJ9.u5fDJVun8BTbnjGOqmrW8Q",
-            "attribution": {
-                "© Mapbox": "https://www.mapbox.com/about/maps",
-                "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+        "Offices": {
+          "display": true,
+          "format": "geojson",
+          "dbs": "WEBSITE",
+          "table": "website.global_glx_open_geolytix_offices",
+          "geom": "geom_p_4326",
+          "srid": "4326",
+          "qID": "id",
+          "style": {
+            "default": {
+              "marker": {
+                "type": "markerColor",
+                "colorMarker": "#003D57",
+                "colorDot": "#F0F0F0",
+                "anchor": [
+                  0.5,
+                  1
+                ],
+                "scale": 3
+              }
+            },
+            "highlight": {
+              "marker": {
+                "type": "markerColor",
+                "colorMarker": "#EC602D",
+                "colorDot": "#F0F0F0",
+                "anchor": [
+                  0.5,
+                  1
+                ],
+                "scale": 1
+              }
             }
+          }
         },
-        "Mapbox Label": {
-            "format": "mbtiles",
-            "mbStyle": "mapbox://styles/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z",
-            "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tqMXBtdnp6MGxpbDJ6cDh1eXQzZ2tlcCJ9.u5fDJVun8BTbnjGOqmrW8Q",
-            "attribution": {
-                "© Mapbox": "https://www.mapbox.com/about/maps",
-                "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+        "Label": {
+          "display": true,
+          "template": "Mapbox Label"
+        }
+      }
+    },
+    "China": {
+      "minZoom": 2,
+      "maxZoom": 18,
+      "view": {
+        "lat": 31.2515,
+        "lng": 121.4254,
+        "z": 10
+      },
+      "bounds": {
+        "north": 34,
+        "east": 123,
+        "south": 28,
+        "west": 118
+      },
+      "maskBounds": true,
+      "layers": {
+        "Base": {
+          "display": true,
+          "template": "Mapbox Base"
+        },
+        "Offices": {
+          "display": true,
+          "format": "geojson",
+          "dbs": "WEBSITE",
+          "table": "website.global_glx_open_geolytix_offices",
+          "geom": "geom_p_4326",
+          "srid": "4326",
+          "qID": "id",
+          "style": {
+            "default": {
+              "marker": {
+                "type": "markerColor",
+                "colorMarker": "#003D57",
+                "colorDot": "#F0F0F0",
+                "anchor": [
+                  0.5,
+                  1
+                ],
+                "scale": 3
+              }
+            },
+            "highlight": {
+              "marker": {
+                "type": "markerColor",
+                "colorMarker": "#EC602D",
+                "colorDot": "#F0F0F0",
+                "anchor": [
+                  0.5,
+                  1
+                ],
+                "scale": 1
+              }
             }
+          }
         },
+        "Label": {
+          "display": true,
+          "template": "Mapbox Label"
+        }
+      }
+    },
+    "London": {
+      "bounds": {
+        "north": 51.686,
+        "east": 0.236,
+        "south": 51.28,
+        "west": -0.489
+      },
+      "minZoom": 12,
+      "maxZoom": 18,
+      "view": {
+        "lat": 51.5073,
+        "lng": -0.12755
+      },
+      "layers": {
         "HERE Imagery": {
-            "format": "tiles",
-            "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?{HERE}",
-            "proxy": true,
-            "attribution": {
-                "© Here": "https://www.here.com/",
-                "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-            }
+          "group": "Base maps",
+          "template": "HERE Imagery"
         },
         "HERE Hybrid": {
-            "format": "tiles",
-            "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?{HERE}",
-            "proxy": true,
-            "attribution": {
-                "© Here": "https://www.here.com/",
-                "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-            }
+          "group": "Base maps",
+          "template": "HERE Hybrid"
         },
-        "london_census": {
-            "src": "https://geolytix.github.io/public/geodata/layers/london_census.json"
+        "Mapbox Baselayer": {
+          "group": "Base maps",
+          "display": true,
+          "template": "Mapbox Base"
         },
-        "london_retailpoints": {
-            "src": "https://geolytix.github.io/public/geodata/layers/london_retailpoints.json"
+        "Retail Points": {
+          "template": "london_retailpoints",
+          "display": true
         },
-        "london_lad": {
-            "src": "https://geolytix.github.io/public/geodata/layers/london_lad.json"
+        "Bank locations": {
+          "template": "london_banks"
         },
-        "london_oa": {
-            "src": "https://geolytix.github.io/public/geodata/layers/london_oa.json"
+        "Census": {
+          "meta": "<p>The processed 2011 UK Census.</p><p>Download a collection of 197 variables as Output Area (OA) level. English, Welsh, Scottish and Northern Irish Census data processed into a single easy-to-use flat file. We have released free-of-charge and under the same license terms as the census.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1W3dyz--u--2lYBXpo8fnDe0b-t8rDpGt\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1-HRjPCUUIxypW1ZxwLgwhxhfesxCR4Ub\" target=\"_blank\"> Open Data - download for free</a></b></p>",
+          "template": "london_census"
         },
-        "london_education": {
-            "src": "https://geolytix.github.io/public/geodata/layers/london_education.json"
+        "LAD": {
+          "group": "Admin Boundaries",
+          "groupmeta": "<p>The UK’s administrative boundaries in a consistent package. The geographics include hybrid zone, output area, lower super output area, local authority district, county, region, country. The core framework which all national statistics are published within.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=0Bxv47xHgfuJ4ZVpmYmFYd1JRTms\"target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price available on request</b></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Admin' target='_top'>Contact Us</a></p>",
+          "template": "london_lad"
         },
-        "london_university_building": {
-            "src": "https://geolytix.github.io/public/geodata/layers/london_university_building.json"
+        "OA": {
+          "group": "Admin Boundaries",
+          "template": "london_oa"
         },
-        "london_grocery_demand": {
-            "src": "https://geolytix.github.io/public/geodata/layers/london_grocery_demand.json"
+        "Education": {
+          "group": "Education",
+          "groupmeta": "<p>Spatial dataset of all early year locations, schools, colleges and further education establishments. All primary and secondary schools both private and state. Includes school roll data, ofsted results and pupil demographics.</p><p>All University buildings (academic, service, residential and campus boundary) & entrances digitised and attributed, with student counts.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1eibdMzjuQoydXeSgXJsJTG6FqRROs-G7\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price available on request</b></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Education' target='_top'>Contact Us</a></p>",
+          "template": "london_education"
         },
-        "london_poi": {
-            "src": "https://geolytix.github.io/public/geodata/layers/london_poi.json"
+        "University building": {
+          "group": "Education",
+          "template": "london_university_building"
         },
-        "london_postal_sector": {
-            "src": "https://geolytix.github.io/public/geodata/layers/london_postal_sector.json"
+        "Grocery Demand": {
+          "meta": "<p>Weekly spend on grocery at output area. Also split into main, convenience, kiosk and online. This can help identify how consumers spend within the grocery retail in an area and support retailers with the driving business in each of these channels.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1w1A8Dp8V3YU2bBshCdA5XF51_PU1Nq-z\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price available on request</b></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Grocery Demand' target='_top'>Contact Us</a></p>",
+          "template": "london_grocery_demand"
         },
-        "london_postal_district": {
-            "src": "https://geolytix.github.io/public/geodata/layers/london_postal_district.json"
+        "Points of Interest": {
+          "meta": "<p>A collection of points of interest across the UK including healthcare locations, law and order sites along with sport & leisure facilities, stadia, cinemas and service areas. Displays key features in an area, popularly used on property portals, allocating and routing of healthcare resources to vital locations and analysing law and order provisions.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1Nc_eNWdpsWNSJBP0m6huNF2BApnu67ol\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price available on request</b></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - POI' target='_top'>Contact Us</a></p>",
+          "template": "london_poi"
         },
-        "london_postal_area": {
-            "src": "https://geolytix.github.io/public/geodata/layers/london_postal_area.json"
+        "Postal Sector": {
+          "group": "Postal",
+          "groupmeta": "<p>Manually created postal boundaries at sector, district and area level, combining exceptional ‘enclosure’ accuracy with borders that follow real-world features. A key geography used within customer insight and marketing teams. An alternative reporting and display geography.  Download the 2012 postal sector boundaries released under the same terms as the OS Open Data license with the single addition of GEOLYTIX to the attribution list.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=185BP5LuT_QxC3MaIluxFk0lGuQtJi5yO\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price available on request</b></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Postal' target='_top'>Contact Us</a><br><br><p style='font-size:90%;text-align:right;'><b><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1V57a19QzaiqTP8wHVasfYNGwP-o6tDm-\" target=\"_blank\"> Open Data - download for free</a></b></p>",
+          "template": "london_postal_sector"
         },
-        "london_rail": {
-            "src": "https://geolytix.github.io/public/geodata/layers/london_rail.json"
+        "Postal District": {
+          "group": "Postal",
+          "template": "london_postal_district"
         },
-        "london_rail_stations": {
-            "src": "https://geolytix.github.io/public/geodata/layers/london_rail_stations.json"
+        "Postal Areas": {
+          "group": "Postal",
+          "template": "london_postal_area"
         },
-        "london_residential": {
-            "src": "https://geolytix.github.io/public/geodata/layers/london_residential.json"
+        "Rail Lines": {
+          "group": "Public Transport",
+          "groupmeta": "<p>100% Transport locations including airports, bus stops, rail, underground, light rail stations and lines plus passenger counts where available. Perfect for accessibility studies and modelling on-street pedestrian volume.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1nzcRiMsuPAKClAlz2VOxgywKQfMzfZxt\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price available on request</b></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - Transport' target='_top'>Contact Us</a></p>",
+          "template": "london_rail"
         },
-        "london_retailplaces": {
-            "src": "https://geolytix.github.io/public/geodata/layers/london_retailplaces.json"
+        "Rail Stations": {
+          "group": "Public Transport",
+          "template": "london_rail_stations"
         },
-        "london_retailplaces_pitch": {
-            "src": "https://geolytix.github.io/public/geodata/layers/london_retailplaces_pitch.json"
+        "Residential": {
+          "meta": "<p>Data relating to residential and population, current and forecasted figures. Disposable income and housing costs. Demographics can be used to understand areas and their residents providing local area insight. Forecasted population figures to aid planning future developments.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1QIOJq2XmbhgWheT3cSfYX0CEAvTZY6aS\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price available on request</b></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Seamless Town and Suburb' target='_top'>Contact Us</a></p>",
+          "template": "london_residential"
         },
-        "london_roads": {
-            "src": "https://geolytix.github.io/public/geodata/layers/london_roads.json"
+        "Retail Places": {
+          "group": "Retail Places",
+          "groupmeta": "<p>More than 20k scored, profiled and named polygons detailing where people shop in the UK. Ideal for locating new sites and understanding micro location performance.</p><p>Additionally Retail Pitch can be purchased along side this pack which identifies hotspots across 2,000 Retail Places which can aid in portfolio rationalisation.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1ajWjVh9H5_70Mdzfxul5vlb_KQJeqvG_\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price available on request</b></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Retail Places' target='_top'>Contact Us</a><br><br><p style='font-size:90%;text-align:right;'><b><a class=\"docu_link\" href=\"https://drive.google.com/file/d/1kQH3Lqc5k5a87vFfHporsFkWMOdIDK70\" target=\"_blank\">Open Data - download for free</a></b></p>",
+          "template": "london_retailplaces"
         },
-        "london_seamless": {
-            "src": "https://geolytix.github.io/public/geodata/layers/london_seamless.json"
+        "Retail Place Pitch": {
+          "group": "Retail Places",
+          "template": "london_retailplaces_pitch"
         },
-        "london_town_suburb": {
-            "src": "https://geolytix.github.io/public/geodata/layers/london_town_suburb.json"
+        "Road Network": {
+          "meta": "<p>Routable Link/Node data with link-level mid-afternoon speeds based on Highways agency probe data and sophisticated speed model; painlessly integrates into multiple routing software tools. Traffic counts, road accidents and road poi.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1xGg0-tVjIB-KS21ageTb9k4yloWgPXQL\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price available on request</b></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Road Network' target='_top'>Contact Us</a></p>",
+          "template": "london_roads"
         },
-        "london_urbanity": {
-            "src": "https://geolytix.github.io/public/geodata/layers/london_urbanity.json"
+        "Seamless towns and suburbs": {
+          "meta": "<p>100% Seamless UK definitions of natural markets at 4 levels, local, towns, district and region. Close match to true ‘markets’ at multiple scales.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=12t6Zan0dy5Bv3GWGJvj5A7w-3uFk-3v7\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price available on request</b></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Seamless Town and Suburb' target='_top'>Contact Us</a></p>",
+          "template": "london_seamless"
         },
-        "london_workers": {
-            "src": "https://geolytix.github.io/public/geodata/layers/london_workers.json"
+        "Town and suburb": {
+          "meta": "<p>A precise and intuitive set of 30,000 named ‘places’ across the UK richly attributed with data. Ideal base for UK wide profiling and benchmarking.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1aJ1Q9HBAxnW8V98mmED-GLjsINEPz6ih\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price available on request</b></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Town and Suburb' target='_top'>Contact Us</a></p>",
+          "template": "london_town_suburb"
         },
-        "london_banks": {
-            "src": "https://geolytix.github.io/public/geodata/layers/london_banks.json"
+        "Urbanity": {
+          "meta": "<p>Output areas assigned with an urbanity (1-9), ranging from major centre to ultra rural. Helpful to know how urban/rural somewhere is which will affect how people shop and influence the type of retail offer (convenience vs supermarket) that should be favoured.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1KNfHDRbkEGkWuSj_mRHOIeiS5oKsBnpO\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price available on request</b></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Urbanity' target='_top'>Contact Us</a></p>",
+          "template": "london_urbanity"
+        },
+        "Workers": {
+          "meta": "<p>Up to date worker counts for more than 400,000 commercial postcodes across the UK. Worker counts, densities and occupation splits at hybrid zone level.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1R1eQj-S4BThQkcqFmFvhN3mo6FVfGIGd\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price available on request</b></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Workers' target='_top'>Contact Us</a></p>",
+          "template": "london_workers"
+        },
+        "Mapbox Labels": {
+          "group": "Base maps",
+          "display": true,
+          "template": "Mapbox Label"
         }
+      }
     },
-    "locales": {
-        "Offices": {
-            "minZoom": 2,
-            "maxZoom": 18,
-            "view": {
-                "lat": 45,
-                "lng": 60,
-                "z": 3
+    "Americas": {
+      "minZoom": 3,
+      "maxZoom": 15,
+      "layers": {
+        "Mapbox Baselayer": {
+          "display": true,
+          "template": "Mapbox Base"
+        },
+        "Demography Grid": {
+          "format": "mvt",
+          "dbs": "WEBSITE",
+          "geom": "geom_3857",
+          "srid": "3857",
+          "tables": {
+            "9": null,
+            "10": "website.rio_glx_geodata_demog_hex_500"
+          },
+          "style": {
+            "default": {
+              "strokeWidth": 1,
+              "strokeColor": "#555",
+              "fillColor": "#fff",
+              "fillOpacity": 0
             },
-            "layers": {
-                "Base": {
-                    "display": true,
-                    "template": "Mapbox Base"
-                },
-                "contact": {
-                    "src": "file://public/views/contact.html"
-                },
-                "embedded": {
-                    "src": "file://public/views/embedded.html"
-                },
-                "Mapbox Base": {
-                    "format": "mbtiles",
-                    "mbStyle": "mapbox://styles/dbauszus/ciozrimi3002bdsm8bjtn2v1y",
-                    "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tqMXBtdnp6MGxpbDJ6cDh1eXQzZ2tlcCJ9.u5fDJVun8BTbnjGOqmrW8Q",
-                    "attribution": {
-                        "© Mapbox": "https://www.mapbox.com/about/maps",
-                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-                    }
-                },
-                "Mapbox Label": {
-                    "format": "mbtiles",
-                    "mbStyle": "mapbox://styles/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z",
-                    "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tqMXBtdnp6MGxpbDJ6cDh1eXQzZ2tlcCJ9.u5fDJVun8BTbnjGOqmrW8Q",
-                    "attribution": {
-                        "© Mapbox": "https://www.mapbox.com/about/maps",
-                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-                    }
-                },
-                "HERE Imagery": {
-                    "format": "tiles",
-                    "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?{HERE}",
-                    "proxy": true,
-                    "attribution": {
-                        "© Here": "https://www.here.com/",
-                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-                    }
-                },
-                "HERE Hybrid": {
-                    "format": "tiles",
-                    "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?{HERE}",
-                    "proxy": true,
-                    "attribution": {
-                        "© Here": "https://www.here.com/",
-                        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-                    }
-                },
-                "london_census": {
-                    "src": "https://geolytix.github.io/public/geodata/layers/london_census.json"
-                },
-                "london_retailpoints": {
-                    "src": "https://geolytix.github.io/public/geodata/layers/london_retailpoints.json"
-                },
-                "london_lad": {
-                    "src": "https://geolytix.github.io/public/geodata/layers/london_lad.json"
-                },
-                "london_oa": {
-                    "src": "https://geolytix.github.io/public/geodata/layers/london_oa.json"
-                },
-                "london_education": {
-                    "src": "https://geolytix.github.io/public/geodata/layers/london_education.json"
-                },
-                "london_university_building": {
-                    "src": "https://geolytix.github.io/public/geodata/layers/london_university_building.json"
-                },
-                "london_grocery_demand": {
-                    "src": "https://geolytix.github.io/public/geodata/layers/london_grocery_demand.json"
-                },
-                "london_poi": {
-                    "src": "https://geolytix.github.io/public/geodata/layers/london_poi.json"
-                },
-                "london_postal_sector": {
-                    "src": "https://geolytix.github.io/public/geodata/layers/london_postal_sector.json"
-                },
-                "london_postal_district": {
-                    "src": "https://geolytix.github.io/public/geodata/layers/london_postal_district.json"
-                },
-                "london_postal_area": {
-                    "src": "https://geolytix.github.io/public/geodata/layers/london_postal_area.json"
-                },
-                "london_rail": {
-                    "src": "https://geolytix.github.io/public/geodata/layers/london_rail.json"
-                },
-                "london_rail_stations": {
-                    "src": "https://geolytix.github.io/public/geodata/layers/london_rail_stations.json"
-                },
-                "london_residential": {
-                    "src": "https://geolytix.github.io/public/geodata/layers/london_residential.json"
-                },
-                "london_retailplaces": {
-                    "src": "https://geolytix.github.io/public/geodata/layers/london_retailplaces.json"
-                },
-                "london_retailplaces_pitch": {
-                    "src": "https://geolytix.github.io/public/geodata/layers/london_retailplaces_pitch.json"
-                },
-                "london_roads": {
-                    "src": "https://geolytix.github.io/public/geodata/layers/london_roads.json"
-                },
-                "london_seamless": {
-                    "src": "https://geolytix.github.io/public/geodata/layers/london_seamless.json"
-                },
-                "london_town_suburb": {
-                    "src": "https://geolytix.github.io/public/geodata/layers/london_town_suburb.json"
-                },
-                "london_urbanity": {
-                    "src": "https://geolytix.github.io/public/geodata/layers/london_urbanity.json"
-                },
-                "london_workers": {
-                    "src": "https://geolytix.github.io/public/geodata/layers/london_workers.json"
-                },
-                "london_banks": {
-                    "src": "https://geolytix.github.io/public/geodata/layers/london_banks.json"
-                }
+            "highlight": {
+              "strokeColor": "#090"
             },
-            "locales": {
-                "Offices": {
-                    "minZoom": 2,
-                    "maxZoom": 18,
-                    "view": {
-                        "lat": 45,
-                        "lng": 60,
-                        "z": 3
-                    },
-                    "layers": {
-                        "Base": {
-                            "display": true,
-                            "template": "Mapbox Base"
-                        },
-                        "Offices": {
-                            "display": true,
-                            "format": "geojson",
-                            "dbs": "WEBSITE",
-                            "table": "website.global_glx_open_geolytix_offices",
-                            "geom": "geom_p_4326",
-                            "srid": "4326",
-                            "qID": "id",
-                            "style": {
-                                "default": {
-                                    "marker": {
-                                        "type": "markerColor",
-                                        "colorMarker": "#003D57",
-                                        "colorDot": "#F0F0F0",
-                                        "anchor": [
-                                            0.5,
-                                            1
-                                        ],
-                                        "scale": 3
-                                    }
-                                },
-                                "highlight": {
-                                    "marker": {
-                                        "type": "markerColor",
-                                        "colorMarker": "#EC602D",
-                                        "colorDot": "#F0F0F0",
-                                        "anchor": [
-                                            0.5,
-                                            1
-                                        ],
-                                        "scale": 1
-                                    }
-                                }
-                            }
-                        },
-                        "Label": {
-                            "display": true,
-                            "template": "Mapbox Label"
-                        }
+            "themes": {
+              "Population": {
+                "type": "graduated",
+                "field": "pop_2020",
+                "cat_arr": [
+                  {
+                    "value": "0",
+                    "label": "up to 50000",
+                    "style": {
+                      "strokeColor": "#00897b",
+                      "fillColor": "#00897b",
+                      "fillOpacity": 0.5
                     }
-                },
-                "China": {
-                    "minZoom": 2,
-                    "maxZoom": 18,
-                    "view": {
-                        "lat": 31.2515,
-                        "lng": 121.4254,
-                        "z": 10
-                    },
-                    "bounds": {
-                        "north": 34,
-                        "east": 123,
-                        "south": 28,
-                        "west": 118
-                    },
-                    "maskBounds": true,
-                    "layers": {
-                        "Base": {
-                            "display": true,
-                            "template": "Mapbox Base"
-                        },
-                        "Offices": {
-                            "display": true,
-                            "format": "geojson",
-                            "dbs": "WEBSITE",
-                            "table": "website.global_glx_open_geolytix_offices",
-                            "geom": "geom_p_4326",
-                            "srid": "4326",
-                            "qID": "id",
-                            "style": {
-                                "default": {
-                                    "marker": {
-                                        "type": "markerColor",
-                                        "colorMarker": "#003D57",
-                                        "colorDot": "#F0F0F0",
-                                        "anchor": [
-                                            0.5,
-                                            1
-                                        ],
-                                        "scale": 3
-                                    }
-                                },
-                                "highlight": {
-                                    "marker": {
-                                        "type": "markerColor",
-                                        "colorMarker": "#EC602D",
-                                        "colorDot": "#F0F0F0",
-                                        "anchor": [
-                                            0.5,
-                                            1
-                                        ],
-                                        "scale": 1
-                                    }
-                                }
-                            }
-                        },
-                        "Label": {
-                            "display": true,
-                            "template": "Mapbox Label"
-                        }
+                  },
+                  {
+                    "value": "250",
+                    "label": "50000+",
+                    "style": {
+                      "strokeColor": "#43a047",
+                      "fillColor": "#43a047",
+                      "fillOpacity": 0.5
                     }
-                },
-                "London": {
-                    "bounds": {
-                        "north": 51.686,
-                        "east": 0.236,
-                        "south": 51.28,
-                        "west": -0.489
-                    },
-                    "minZoom": 12,
-                    "maxZoom": 18,
-                    "view": {
-                        "lat": 51.5073,
-                        "lng": -0.12755
-                    },
-                    "layers": {
-                        "HERE Imagery": {
-                            "group": "Base maps",
-                            "template": "HERE Imagery"
-                        },
-                        "HERE Hybrid": {
-                            "group": "Base maps",
-                            "template": "HERE Hybrid"
-                        },
-                        "Mapbox Baselayer": {
-                            "group": "Base maps",
-                            "display": true,
-                            "template": "Mapbox Base"
-                        },
-                        "Retail Points": {
-                            "template": "london_retailpoints",
-                            "display": true
-                        },
-                        "Bank open locations": {
-                            "name": "Bank Locations",
-                            "group": "Banking Data",
-                            "template": "london_banks",
-                            "filter": {
-                                "current": {
-                                    "status": {
-                                        "in": [
-                                            "A - Open"
-                                        ]
-                                    }
-                                }
-                            }
-                        },
-                        "Bank closed locations": {
-                            "meta": "",
-                            "name": "Closed Bank Locations",
-                            "group": "Banking Data",
-                            "template": "london_banks",
-                            "filter": {
-                                "current": {
-                                    "status": {
-                                        "in": [
-                                            "B - Temp Closed",
-                                            "C - Permanent Close"
-                                        ]
-                                    }
-                                }
-                            },
-                            "style": {
-                                "label": {
-                                    "field": "brand_full",
-                                    "declutter": true,
-                                    "strokeColor": "#fff",
-                                    "strokeWidth": 3
-                                },
-                                "default": {
-                                    "svg": "https://geolytix.github.io/MapIcons/brands/banks/default_gs.svg"
-                                },
-                                "cluster": {
-                                    "type": "target",
-                                    "fillColor": "#48BD6D"
-                                },
-                                "themes": {
-                                    "Brand": {
-                                        "field": "brand_full",
-                                        "type": "categorized",
-                                        "cat": {
-                                            "Bank of Scotland": {
-                                                "svg": "https://geolytix.github.io/MapIcons/brands/banks/bank_of_scotland_gs.svg"
-                                            },
-                                            "Barclays": {
-                                                "svg": "https://geolytix.github.io/MapIcons/brands/banks/barclays_gs.svg"
-                                            },
-                                            "Clydesdale Bank": {
-                                                "svg": "https://geolytix.github.io/MapIcons/brands/banks/clydesdale_bank_gs.svg"
-                                            },
-                                            "Co-op": {
-                                                "svg": "https://geolytix.github.io/MapIcons/brands/banks/coop_gs.svg"
-                                            },
-                                            "HSBC": {
-                                                "svg": "https://geolytix.github.io/MapIcons/brands/banks/hsbc_gs.svg"
-                                            },
-                                            "Halifax": {
-                                                "svg": "https://geolytix.github.io/MapIcons/brands/banks/halifax_gs.svg"
-                                            },
-                                            "Handelsbanken": {
-                                                "svg": "https://geolytix.github.io/MapIcons/brands/banks/handelsbanken_gs.svg"
-                                            },
-                                            "Lloyds": {
-                                                "svg": "https://geolytix.github.io/MapIcons/brands/banks/lloyds_gs.svg"
-                                            },
-                                            "NatWest": {
-                                                "svg": "https://geolytix.github.io/MapIcons/brands/banks/natwest_gs.svg"
-                                            },
-                                            "Nationwide": {
-                                                "svg": "https://geolytix.github.io/MapIcons/brands/banks/nationwide_gs.svg"
-                                            },
-                                            "Royal Bank of Scotland": {
-                                                "svg": "https://geolytix.github.io/MapIcons/brands/banks/rbs_gs.svg"
-                                            },
-                                            "Santander": {
-                                                "svg": "https://geolytix.github.io/MapIcons/brands/banks/santander_gs.svg"
-                                            },
-                                            "TSB": {
-                                                "svg": "https://geolytix.github.io/MapIcons/brands/banks/tsb_gs.svg"
-                                            },
-                                            "Yorkshire Bank": {
-                                                "svg": "https://geolytix.github.io/MapIcons/brands/banks/yorkshire_bank_gs.svg"
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "Census": {
-                            "meta": "<p>The processed 2011 UK Census.</p><p>Download a collection of 197 variables as Output Area (OA) level. English, Welsh, Scottish and Northern Irish Census data processed into a single easy-to-use flat file. We have released free-of-charge and under the same license terms as the census.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1W3dyz--u--2lYBXpo8fnDe0b-t8rDpGt\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1-HRjPCUUIxypW1ZxwLgwhxhfesxCR4Ub\" target=\"_blank\"> Open Data - download for free</a></b></p>",
-                            "template": "london_census"
-                        },
-                        "LAD": {
-                            "group": "Admin Boundaries",
-                            "groupmeta": "<p>The UK’s administrative boundaries in a consistent package. The geographics include hybrid zone, output area, lower super output area, local authority district, county, region, country. The core framework which all national statistics are published within.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=0Bxv47xHgfuJ4ZVpmYmFYd1JRTms\"target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price available on request</b></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Admin' target='_top'>Contact Us</a></p>",
-                            "template": "london_lad"
-                        },
-                        "OA": {
-                            "group": "Admin Boundaries",
-                            "template": "london_oa"
-                        },
-                        "Education": {
-                            "group": "Education",
-                            "groupmeta": "<p>Spatial dataset of all early year locations, schools, colleges and further education establishments. All primary and secondary schools both private and state. Includes school roll data, ofsted results and pupil demographics.</p><p>All University buildings (academic, service, residential and campus boundary) & entrances digitised and attributed, with student counts.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1eibdMzjuQoydXeSgXJsJTG6FqRROs-G7\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price available on request</b></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Education' target='_top'>Contact Us</a></p>",
-                            "template": "london_education"
-                        },
-                        "University building": {
-                            "group": "Education",
-                            "template": "london_university_building"
-                        },
-                        "Grocery Demand": {
-                            "meta": "<p>Weekly spend on grocery at output area. Also split into main, convenience, kiosk and online. This can help identify how consumers spend within the grocery retail in an area and support retailers with the driving business in each of these channels.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1w1A8Dp8V3YU2bBshCdA5XF51_PU1Nq-z\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price available on request</b></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Grocery Demand' target='_top'>Contact Us</a></p>",
-                            "template": "london_grocery_demand"
-                        },
-                        "Points of Interest": {
-                            "meta": "<p>A collection of points of interest across the UK including healthcare locations, law and order sites along with sport & leisure facilities, stadia, cinemas and service areas. Displays key features in an area, popularly used on property portals, allocating and routing of healthcare resources to vital locations and analysing law and order provisions.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1Nc_eNWdpsWNSJBP0m6huNF2BApnu67ol\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price available on request</b></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - POI' target='_top'>Contact Us</a></p>",
-                            "template": "london_poi"
-                        },
-                        "Postal Sector": {
-                            "group": "Postal",
-                            "groupmeta": "<p>Manually created postal boundaries at sector, district and area level, combining exceptional ‘enclosure’ accuracy with borders that follow real-world features. A key geography used within customer insight and marketing teams. An alternative reporting and display geography.  Download the 2012 postal sector boundaries released under the same terms as the OS Open Data license with the single addition of GEOLYTIX to the attribution list.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=185BP5LuT_QxC3MaIluxFk0lGuQtJi5yO\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price available on request</b></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Postal' target='_top'>Contact Us</a><br><br><p style='font-size:90%;text-align:right;'><b><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1V57a19QzaiqTP8wHVasfYNGwP-o6tDm-\" target=\"_blank\"> Open Data - download for free</a></b></p>",
-                            "template": "london_postal_sector"
-                        },
-                        "Postal District": {
-                            "group": "Postal",
-                            "template": "london_postal_district"
-                        },
-                        "Postal Areas": {
-                            "group": "Postal",
-                            "template": "london_postal_area"
-                        },
-                        "Rail Lines": {
-                            "group": "Public Transport",
-                            "groupmeta": "<p>100% Transport locations including airports, bus stops, rail, underground, light rail stations and lines plus passenger counts where available. Perfect for accessibility studies and modelling on-street pedestrian volume.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1nzcRiMsuPAKClAlz2VOxgywKQfMzfZxt\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price available on request</b></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - Transport' target='_top'>Contact Us</a></p>",
-                            "template": "london_rail"
-                        },
-                        "Rail Stations": {
-                            "group": "Public Transport",
-                            "template": "london_rail_stations"
-                        },
-                        "Residential": {
-                            "meta": "<p>Data relating to residential and population, current and forecasted figures. Disposable income and housing costs. Demographics can be used to understand areas and their residents providing local area insight. Forecasted population figures to aid planning future developments.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1QIOJq2XmbhgWheT3cSfYX0CEAvTZY6aS\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price available on request</b></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Seamless Town and Suburb' target='_top'>Contact Us</a></p>",
-                            "template": "london_residential"
-                        },
-                        "Retail Places": {
-                            "group": "Retail Places",
-                            "groupmeta": "<p>More than 20k scored, profiled and named polygons detailing where people shop in the UK. Ideal for locating new sites and understanding micro location performance.</p><p>Additionally Retail Pitch can be purchased along side this pack which identifies hotspots across 2,000 Retail Places which can aid in portfolio rationalisation.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1ajWjVh9H5_70Mdzfxul5vlb_KQJeqvG_\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price available on request</b></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Retail Places' target='_top'>Contact Us</a><br><br><p style='font-size:90%;text-align:right;'><b><a class=\"docu_link\" href=\"https://drive.google.com/file/d/1kQH3Lqc5k5a87vFfHporsFkWMOdIDK70\" target=\"_blank\">Open Data - download for free</a></b></p>",
-                            "template": "london_retailplaces"
-                        },
-                        "Retail Place Pitch": {
-                            "group": "Retail Places",
-                            "template": "london_retailplaces_pitch"
-                        },
-                        "Road Network": {
-                            "meta": "<p>Routable Link/Node data with link-level mid-afternoon speeds based on Highways agency probe data and sophisticated speed model; painlessly integrates into multiple routing software tools. Traffic counts, road accidents and road poi.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1xGg0-tVjIB-KS21ageTb9k4yloWgPXQL\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price available on request</b></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Road Network' target='_top'>Contact Us</a></p>",
-                            "template": "london_roads"
-                        },
-                        "Seamless towns and suburbs": {
-                            "meta": "<p>100% Seamless UK definitions of natural markets at 4 levels, local, towns, district and region. Close match to true ‘markets’ at multiple scales.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=12t6Zan0dy5Bv3GWGJvj5A7w-3uFk-3v7\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price available on request</b></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Seamless Town and Suburb' target='_top'>Contact Us</a></p>",
-                            "template": "london_seamless"
-                        },
-                        "Town and suburb": {
-                            "meta": "<p>A precise and intuitive set of 30,000 named ‘places’ across the UK richly attributed with data. Ideal base for UK wide profiling and benchmarking.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1aJ1Q9HBAxnW8V98mmED-GLjsINEPz6ih\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price available on request</b></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Town and Suburb' target='_top'>Contact Us</a></p>",
-                            "template": "london_town_suburb"
-                        },
-                        "Urbanity": {
-                            "meta": "<p>Output areas assigned with an urbanity (1-9), ranging from major centre to ultra rural. Helpful to know how urban/rural somewhere is which will affect how people shop and influence the type of retail offer (convenience vs supermarket) that should be favoured.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1KNfHDRbkEGkWuSj_mRHOIeiS5oKsBnpO\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price available on request</b></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Urbanity' target='_top'>Contact Us</a></p>",
-                            "template": "london_urbanity"
-                        },
-                        "Workers": {
-                            "meta": "<p>Up to date worker counts for more than 400,000 commercial postcodes across the UK. Worker counts, densities and occupation splits at hybrid zone level.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1R1eQj-S4BThQkcqFmFvhN3mo6FVfGIGd\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price available on request</b></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Workers' target='_top'>Contact Us</a></p>",
-                            "template": "london_workers"
-                        },
-                        "Mapbox Labels": {
-                            "group": "Base maps",
-                            "display": true,
-                            "template": "Mapbox Label"
-                        }
+                  },
+                  {
+                    "value": "500",
+                    "label": "100000+",
+                    "style": {
+                      "strokeColor": "#c0ca33",
+                      "fillColor": "#c0ca33",
+                      "fillOpacity": 0.5
                     }
-                },
-                "Americas": {
-                    "minZoom": 3,
-                    "maxZoom": 15,
-                    "layers": {
-                        "Mapbox Baselayer": {
-                            "display": true,
-                            "template": "Mapbox Base"
-                        },
-                        "Demography Grid": {
-                            "format": "mvt",
-                            "dbs": "WEBSITE",
-                            "geom": "geom_3857",
-                            "srid": "3857",
-                            "tables": {
-                                "9": null,
-                                "10": "website.rio_glx_geodata_demog_hex_500"
-                            },
-                            "style": {
-                                "default": {
-                                    "strokeWidth": 1,
-                                    "strokeColor": "#555",
-                                    "fillColor": "#fff",
-                                    "fillOpacity": 0
-                                },
-                                "highlight": {
-                                    "strokeColor": "#090"
-                                },
-                                "themes": {
-                                    "Population": {
-                                        "type": "graduated",
-                                        "field": "pop_2020",
-                                        "cat_arr": [
-                                            {
-                                                "value": "0",
-                                                "label": "up to 50000",
-                                                "style": {
-                                                    "strokeColor": "#00897b",
-                                                    "fillColor": "#00897b",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            {
-                                                "value": "250",
-                                                "label": "50000+",
-                                                "style": {
-                                                    "strokeColor": "#43a047",
-                                                    "fillColor": "#43a047",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            {
-                                                "value": "500",
-                                                "label": "100000+",
-                                                "style": {
-                                                    "strokeColor": "#c0ca33",
-                                                    "fillColor": "#c0ca33",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            {
-                                                "value": "1000",
-                                                "label": "250000+",
-                                                "style": {
-                                                    "strokeColor": "#fdd835",
-                                                    "fillColor": "#fdd835",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            {
-                                                "value": "2500",
-                                                "label": "500000+",
-                                                "style": {
-                                                    "strokeColor": "#fb8c00",
-                                                    "fillColor": "#fb8c00",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            {
-                                                "value": "5000",
-                                                "label": "1000000+",
-                                                "style": {
-                                                    "strokeColor": "#f4511e",
-                                                    "fillColor": "#f4511e",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            }
-                                        ]
-                                    }
-                                }
-                            }
-                        },
-                        "Retail Places": {
-                            "format": "mvt",
-                            "dbs": "WEBSITE",
-                            "qID": "id",
-                            "geom": "geom_3857",
-                            "srid": "3857",
-                            "tables": {
-                                "7": null,
-                                "8": "website.vw_rio_glx_geodata_retail_place"
-                            },
-                            "infoj": [
-                                {
-                                    "field": "rp_name",
-                                    "title": "Name"
-                                },
-                                {
-                                    "field": "rp_type",
-                                    "title": "Type"
-                                }
-                            ],
-                            "style": {
-                                "label": {
-                                    "field": "rp_name",
-                                    "declutter": true,
-                                    "strokeColor": "#fff",
-                                    "strokeWidth": 3
-                                },
-                                "highlight": {
-                                    "strokeColor": "#e91e63",
-                                    "fillOpacity": 0.3,
-                                    "strokeWidth": 2
-                                },
-                                "themes": {
-                                    "Retail Place Type": {
-                                        "type": "categorized",
-                                        "field": "rp_type",
-                                        "other": true,
-                                        "cat": {
-                                            "City Centre": {
-                                                "style": {
-                                                    "strokeColor": "#6e016b",
-                                                    "fillColor": "#6e016b"
-                                                }
-                                            },
-                                            "Urban Centre": {
-                                                "style": {
-                                                    "strokeColor": "#8c6bb1",
-                                                    "fillColor": "#8c6bb1"
-                                                }
-                                            },
-                                            "Shopping Centre": {
-                                                "style": {
-                                                    "strokeColor": "#016450",
-                                                    "fillColor": "#016450"
-                                                }
-                                            },
-                                            "Outlet Centre": {
-                                                "style": {
-                                                    "strokeColor": "#3690c0",
-                                                    "fillColor": "#3690c0"
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "Retail Venues": {
-                            "format": "mvt",
-                            "dbs": "WEBSITE",
-                            "geom": "geom_3857",
-                            "srid": "3857",
-                            "tables": {
-                                "7": null,
-                                "8": "website.vw_rio_glx_geodata_retail_venue"
-                            },
-                            "qID": "id",
-                            "infoj": [
-                                {
-                                    "field": "venue_name",
-                                    "title": "Name"
-                                },
-                                {
-                                    "field": "venue_type",
-                                    "title": "Type"
-                                }
-                            ]
-                        },
-                        "Mapbox Label": {
-                            "display": true,
-                            "template": "Mapbox Label",
-                            "zIndex": 99
-                        }
+                  },
+                  {
+                    "value": "1000",
+                    "label": "250000+",
+                    "style": {
+                      "strokeColor": "#fdd835",
+                      "fillColor": "#fdd835",
+                      "fillOpacity": 0.5
                     }
-                },
-                "APAC": {
-                    "minZoom": 3,
-                    "maxZoom": 15,
-                    "view": {
-                        "lat": 58.8137,
-                        "lng": 88.5937
-                    },
-                    "layers": {
-                        "Mapbox Baselayer": {
-                            "display": true,
-                            "template": "Mapbox Base"
-                        },
-                        "Chomoku": {
-                            "format": "mvt",
-                            "dbs": "WEBSITE",
-                            "qID": "chomoku_cd",
-                            "geom": "geom_3857",
-                            "srid": "3857",
-                            "tables": {
-                                "10": null,
-                                "11": "geodata.jpn_glx_geodata_census_chomoku_metrics"
-                            },
-                            "style": {
-                                "default": {
-                                    "fillColor": "#d9d9d9",
-                                    "fillOpacity": 0.5
-                                },
-                                "highlight": {
-                                    "fillColor": "#DBD56E",
-                                    "fillOpacity": 0.7
-                                },
-                                "themes": {
-                                    "Population": {
-                                        "type": "graduated",
-                                        "field": "totalpop",
-                                        "cat_arr": [
-                                            {
-                                                "value": 0,
-                                                "label": "0 to 500",
-                                                "style": {
-                                                    "fillColor": "#f1eef6"
-                                                }
-                                            },
-                                            {
-                                                "value": 500,
-                                                "label": "500 to 1,500",
-                                                "style": {
-                                                    "fillColor": "#bdc9e1"
-                                                }
-                                            },
-                                            {
-                                                "value": 1500,
-                                                "label": "1,500 to 3,000",
-                                                "style": {
-                                                    "fillColor": "#74a9cf"
-                                                }
-                                            },
-                                            {
-                                                "value": 3000,
-                                                "label": "3,000 to 6,000",
-                                                "style": {
-                                                    "fillColor": "#2b8cbe"
-                                                }
-                                            },
-                                            {
-                                                "value": 6000,
-                                                "label": "6,000 and over",
-                                                "style": {
-                                                    "fillColor": "#045a8d"
-                                                }
-                                            }
-                                        ]
-                                    },
-                                    "Urbanity": {
-                                        "type": "categorized",
-                                        "field": "urbanity",
-                                        "cat": {
-                                            "Major Urban": {
-                                                "label": "Major Urban",
-                                                "style": {
-                                                    "strokeColor": "#8c2d04",
-                                                    "fillColor": "#8c2d04"
-                                                }
-                                            },
-                                            "Urban": {
-                                                "label": "Urban",
-                                                "style": {
-                                                    "strokeColor": "#cc4c02",
-                                                    "fillColor": "#cc4c02"
-                                                }
-                                            },
-                                            "Minor Urban": {
-                                                "label": "Minor Urban",
-                                                "style": {
-                                                    "strokeColor": "#ec7014",
-                                                    "fillColor": "#ec7014"
-                                                }
-                                            },
-                                            "Major Suburban": {
-                                                "label": "Major Suburban",
-                                                "style": {
-                                                    "strokeColor": "#fe9929",
-                                                    "fillColor": "#fe9929"
-                                                }
-                                            },
-                                            "Suburban": {
-                                                "label": "Suburban",
-                                                "style": {
-                                                    "strokeColor": "#fec44f",
-                                                    "fillColor": "#fec44f"
-                                                }
-                                            },
-                                            "Minor Suburban": {
-                                                "label": "Minor Suburban",
-                                                "style": {
-                                                    "strokeColor": "#fee391",
-                                                    "fillColor": "#fee391"
-                                                }
-                                            },
-                                            "Rural": {
-                                                "label": "Rural",
-                                                "style": {
-                                                    "strokeColor": "#ffffd4",
-                                                    "fillColor": "#ffffd4"
-                                                }
-                                            }
-                                        }
-                                    },
-                                    "Affluence": {
-                                        "type": "graduated",
-                                        "field": "affluence",
-                                        "cat_arr": [
-                                            {
-                                                "value": "0",
-                                                "label": "0 to 0.7",
-                                                "style": {
-                                                    "fillColor": "#fcfbfd"
-                                                }
-                                            },
-                                            {
-                                                "value": "0.7",
-                                                "label": "0.7 to 0.85",
-                                                "style": {
-                                                    "fillColor": "#efedf5"
-                                                }
-                                            },
-                                            {
-                                                "value": "0.85",
-                                                "label": "0.85 to 0.9",
-                                                "style": {
-                                                    "fillColor": "#dadaeb"
-                                                }
-                                            },
-                                            {
-                                                "value": 0.9,
-                                                "label": "0.9 to 0.92",
-                                                "style": {
-                                                    "fillColor": "#bcbddc"
-                                                }
-                                            },
-                                            {
-                                                "value": 0.92,
-                                                "label": "0.92 to 0.94",
-                                                "style": {
-                                                    "fillColor": "#9e9ac8"
-                                                }
-                                            },
-                                            {
-                                                "value": 0.94,
-                                                "label": "0.94 to 0.96",
-                                                "style": {
-                                                    "fillColor": "#807dba"
-                                                }
-                                            },
-                                            {
-                                                "value": 0.96,
-                                                "label": "0.96 to 0.98",
-                                                "style": {
-                                                    "fillColor": "#6a51a3"
-                                                }
-                                            },
-                                            {
-                                                "value": 0.98,
-                                                "label": "0.98 and above",
-                                                "style": {
-                                                    "fillColor": "#4a1486"
-                                                }
-                                            }
-                                        ]
-                                    },
-                                    "Geodemo": {
-                                        "type": "categorized",
-                                        "field": "geodemo10",
-                                        "cat": {
-                                            "1": {
-                                                "label": "Urban center wealthy",
-                                                "style": {
-                                                    "fillColor": "#ffffff"
-                                                }
-                                            },
-                                            "2": {
-                                                "label": "High net worth family",
-                                                "style": {
-                                                    "fillColor": "#f7f4f9"
-                                                }
-                                            },
-                                            "3": {
-                                                "label": "Urban singles",
-                                                "style": {
-                                                    "fillColor": "#e7e1ef"
-                                                }
-                                            },
-                                            "4": {
-                                                "label": "Salaryman family",
-                                                "style": {
-                                                    "fillColor": "#d4b9da"
-                                                }
-                                            },
-                                            "5": {
-                                                "label": "Manufacturing worker family",
-                                                "style": {
-                                                    "fillColor": "#c994c7"
-                                                }
-                                            },
-                                            "6": {
-                                                "label": "Small and medium enterprise worker family",
-                                                "style": {
-                                                    "fillColor": "#df65b0"
-                                                }
-                                            },
-                                            "7": {
-                                                "label": "Three generations co-habiting",
-                                                "style": {
-                                                    "fillColor": "#e7298a"
-                                                }
-                                            },
-                                            "8": {
-                                                "label": "Rich elderly",
-                                                "style": {
-                                                    "fillColor": "#ce1256"
-                                                }
-                                            },
-                                            "9": {
-                                                "label": "Ageing",
-                                                "style": {
-                                                    "fillColor": "#980043"
-                                                }
-                                            },
-                                            "10": {
-                                                "label": "Rural",
-                                                "style": {
-                                                    "fillColor": "#67001f"
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            },
-                            "infoj": [
-                                {
-                                    "type": "key"
-                                },
-                                {
-                                    "field": "chomoku_nm",
-                                    "title": "Chomoku",
-                                    "inline": true
-                                },
-                                {
-                                    "field": "city_nm",
-                                    "title": "City",
-                                    "inline": true
-                                },
-                                {
-                                    "field": "prefect_nm",
-                                    "title": "Prefecture",
-                                    "inline": true
-                                },
-                                {
-                                    "field": "region",
-                                    "title": "Region",
-                                    "inline": true
-                                },
-                                {
-                                    "field": "urbanity",
-                                    "title": "Urbanity",
-                                    "inline": true
-                                },
-                                {
-                                    "field": "totalpop",
-                                    "title": "Total population",
-                                    "type": "integer",
-                                    "inline": true
-                                },
-                                {
-                                    "field": "malepop",
-                                    "title": "Male",
-                                    "type": "integer",
-                                    "level": 2,
-                                    "inline": true
-                                },
-                                {
-                                    "field": "femalepop",
-                                    "title": "Female",
-                                    "type": "integer",
-                                    "level": 2,
-                                    "inline": true
-                                },
-                                {
-                                    "field": "average_age",
-                                    "title": "Average age",
-                                    "type": "integer",
-                                    "inline": true
-                                }
-                            ]
-                        },
-                        "Retail Places": {
-                            "format": "mvt",
-                            "dbs": "WEBSITE",
-                            "qID": "id",
-                            "geom": "geom_3857",
-                            "srid": "3857",
-                            "tables": {
-                                "7": null,
-                                "8": "website.vw_tokyo_glx_geodata_retail_place"
-                            },
-                            "infoj": [
-                                {
-                                    "field": "rp_name",
-                                    "title": "Name"
-                                }
-                            ]
-                        },
-                        "Retail Venues": {
-                            "format": "mvt",
-                            "dbs": "WEBSITE",
-                            "geom": "geom_3857",
-                            "srid": "3857",
-                            "tables": {
-                                "7": null,
-                                "8": "website.vw_tokyo_glx_geodata_retail_venue"
-                            },
-                            "qID": "id",
-                            "infoj": [
-                                {
-                                    "field": "venue_name",
-                                    "title": "Name"
-                                },
-                                {
-                                    "field": "venue_type",
-                                    "title": "Type"
-                                }
-                            ],
-                            "style": {
-                                "default": {
-                                    "fillColor": "#d9d9d9",
-                                    "fillOpacity": 0.5
-                                },
-                                "highlight": {
-                                    "fillColor": "#DBD56E",
-                                    "fillOpacity": 0.7
-                                },
-                                "themes": {
-                                    "Venue Type": {
-                                        "type": "categorized",
-                                        "field": "venue_type",
-                                        "cat": {
-                                            "Airport": {
-                                                "label": "Airport",
-                                                "style": {
-                                                    "fillColor": "#f44336"
-                                                }
-                                            },
-                                            "Department Store": {
-                                                "label": "Department Store",
-                                                "style": {
-                                                    "fillColor": "#9c27b0"
-                                                }
-                                            },
-                                            "Other": {
-                                                "label": "Other",
-                                                "style": {
-                                                    "fillColor": "#3f51b5"
-                                                }
-                                            },
-                                            "Outlet Centre": {
-                                                "label": "Outlet Centre",
-                                                "style": {
-                                                    "fillColor": "#03a9f4"
-                                                }
-                                            },
-                                            "Retail Street": {
-                                                "label": "Retail Street",
-                                                "style": {
-                                                    "fillColor": "#009688"
-                                                }
-                                            },
-                                            "Shopping Centre": {
-                                                "label": "Shopping Centre",
-                                                "style": {
-                                                    "fillColor": "#8bc34a"
-                                                }
-                                            },
-                                            "Supermarket": {
-                                                "label": "Supermarket",
-                                                "style": {
-                                                    "fillColor": "#ffeb3b"
-                                                }
-                                            },
-                                            "Train Station": {
-                                                "label": "Train Station",
-                                                "style": {
-                                                    "fillColor": "#ff9800"
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "Mapbox Label": {
-                            "display": true,
-                            "template": "Mapbox Label",
-                            "zIndex": 99
-                        }
+                  },
+                  {
+                    "value": "2500",
+                    "label": "500000+",
+                    "style": {
+                      "strokeColor": "#fb8c00",
+                      "fillColor": "#fb8c00",
+                      "fillOpacity": 0.5
                     }
-                },
-                "Europe": {
-                    "bounds": {
-                        "north": 72,
-                        "east": 43,
-                        "south": 32,
-                        "west": -16
-                    },
-                    "minZoom": 3,
-                    "maxZoom": 15,
-                    "layers": {
-                        "Mapbox Baselayer": {
-                            "display": true,
-                            "template": "Mapbox Base"
-                        },
-                        "European Indicators": {
-                            "display": true,
-                            "format": "mvt",
-                            "dbs": "MAPP",
-                            "mvt_cache": "mapp.eu_glx_geodata_census_index_nuts3__mvts",
-                            "table": "geodata.eu_glx_geodata_census_index_nuts3",
-                            "qID": "nuts3",
-                            "geom": "geom_3857",
-                            "srid": "3857",
-                            "infoj": [
-                                {
-                                    "type": "key"
-                                },
-                                {
-                                    "field": "nuts3",
-                                    "title": "Nuts ID",
-                                    "inline": true
-                                },
-                                {
-                                    "field": "pop",
-                                    "title": "Population",
-                                    "type": "integer",
-                                    "inline": true
-                                },
-                                {
-                                    "title": "Average Age",
-                                    "field": "age",
-                                    "inline": true
-                                },
-                                {
-                                    "title": "Disposable Income",
-                                    "field": "disposable_income_person",
-                                    "type": "integer",
-                                    "inline": true
-                                },
-                                {
-                                    "title": "Affluence Index",
-                                    "field": "affluence_idx_eu",
-                                    "inline": true
-                                },
-                                {
-                                    "title": "Lifestage Index",
-                                    "field": "lifestage_idx_eu",
-                                    "inline": true
-                                }
-                            ],
-                            "style": {
-                                "default": {
-                                    "strokeWidth": 1,
-                                    "strokeColor": "#555",
-                                    "fillColor": "#fff",
-                                    "fillOpacity": 0
-                                },
-                                "highlight": {
-                                    "strokeColor": "#090"
-                                },
-                                "themes": {
-                                    "Population": {
-                                        "type": "graduated",
-                                        "field": "pop",
-                                        "cat_arr": [
-                                            {
-                                                "value": "0",
-                                                "label": "up to 50000",
-                                                "style": {
-                                                    "strokeColor": "#00897b",
-                                                    "fillColor": "#00897b",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            {
-                                                "value": "50000",
-                                                "label": "50000+",
-                                                "style": {
-                                                    "strokeColor": "#43a047",
-                                                    "fillColor": "#43a047",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            {
-                                                "value": "100000",
-                                                "label": "100000+",
-                                                "style": {
-                                                    "strokeColor": "#c0ca33",
-                                                    "fillColor": "#c0ca33",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            {
-                                                "value": "250000",
-                                                "label": "250000+",
-                                                "style": {
-                                                    "strokeColor": "#fdd835",
-                                                    "fillColor": "#fdd835",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            {
-                                                "value": "500000",
-                                                "label": "500000+",
-                                                "style": {
-                                                    "strokeColor": "#fb8c00",
-                                                    "fillColor": "#fb8c00",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            {
-                                                "value": "1000000",
-                                                "label": "1000000+",
-                                                "style": {
-                                                    "strokeColor": "#f4511e",
-                                                    "fillColor": "#f4511e",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            }
-                                        ]
-                                    },
-                                    "Disposable Income": {
-                                        "type": "graduated",
-                                        "field": "disposable_income_person",
-                                        "cat_arr": [
-                                            {
-                                                "value": "0",
-                                                "label": "up to 50000",
-                                                "style": {
-                                                    "strokeColor": "#00897b",
-                                                    "fillColor": "#00897b",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            {
-                                                "value": "10000",
-                                                "label": "50000+",
-                                                "style": {
-                                                    "strokeColor": "#43a047",
-                                                    "fillColor": "#43a047",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            {
-                                                "value": "15000",
-                                                "label": "100000+",
-                                                "style": {
-                                                    "strokeColor": "#c0ca33",
-                                                    "fillColor": "#c0ca33",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            {
-                                                "value": "17500",
-                                                "label": "250000+",
-                                                "style": {
-                                                    "strokeColor": "#fdd835",
-                                                    "fillColor": "#fdd835",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            {
-                                                "value": "20000",
-                                                "label": "500000+",
-                                                "style": {
-                                                    "strokeColor": "#fb8c00",
-                                                    "fillColor": "#fb8c00",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            {
-                                                "value": "25000",
-                                                "label": "1000000+",
-                                                "style": {
-                                                    "strokeColor": "#f4511e",
-                                                    "fillColor": "#f4511e",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            }
-                                        ]
-                                    },
-                                    "Average Age": {
-                                        "type": "graduated",
-                                        "field": "age",
-                                        "cat_arr": [
-                                            {
-                                                "value": "0",
-                                                "label": "under 35",
-                                                "style": {
-                                                    "strokeColor": "#00897b",
-                                                    "fillColor": "#00897b",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            {
-                                                "value": "35",
-                                                "label": "over 35",
-                                                "style": {
-                                                    "strokeColor": "#43a047",
-                                                    "fillColor": "#43a047",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            {
-                                                "value": "37.5",
-                                                "label": "over 37.5",
-                                                "style": {
-                                                    "strokeColor": "#c0ca33",
-                                                    "fillColor": "#c0ca33",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            {
-                                                "value": "40",
-                                                "label": "over 40",
-                                                "style": {
-                                                    "strokeColor": "#fdd835",
-                                                    "fillColor": "#fdd835",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            {
-                                                "value": "42.5",
-                                                "label": "over 42.5",
-                                                "style": {
-                                                    "strokeColor": "#fb8c00",
-                                                    "fillColor": "#fb8c00",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            {
-                                                "value": "45",
-                                                "label": "over 45",
-                                                "style": {
-                                                    "strokeColor": "#f4511e",
-                                                    "fillColor": "#f4511e",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            }
-                                        ]
-                                    },
-                                    "Affluence": {
-                                        "type": "categorized",
-                                        "field": "affluence_idx_eu",
-                                        "cat": {
-                                            "1": {
-                                                "label": "1",
-                                                "style": {
-                                                    "fillColor": "#fff7f3",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            "2": {
-                                                "label": "2",
-                                                "style": {
-                                                    "fillColor": "#fde0dd",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            "3": {
-                                                "label": "3",
-                                                "style": {
-                                                    "fillColor": "#fcc5c0",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            "4": {
-                                                "label": "4",
-                                                "style": {
-                                                    "fillColor": "#fa9fb5",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            "5": {
-                                                "label": "5",
-                                                "style": {
-                                                    "fillColor": "#f768a1",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            "6": {
-                                                "label": "6",
-                                                "style": {
-                                                    "fillColor": "#dd3497",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            "7": {
-                                                "label": "7",
-                                                "style": {
-                                                    "fillColor": "#ae017e",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            "8": {
-                                                "label": "8",
-                                                "style": {
-                                                    "fillColor": "#7a0177",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            }
-                                        }
-                                    },
-                                    "Life Stage": {
-                                        "type": "categorized",
-                                        "field": "lifestage_idx_eu",
-                                        "cat": {
-                                            "C": {
-                                                "label": "C",
-                                                "style": {
-                                                    "fillColor": "#f7fcb9",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            "D": {
-                                                "label": "D",
-                                                "style": {
-                                                    "fillColor": "#addd8e",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            "E": {
-                                                "label": "E",
-                                                "style": {
-                                                    "fillColor": "#41ab5d",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            },
-                                            "F": {
-                                                "label": "F",
-                                                "style": {
-                                                    "fillColor": "#005a32",
-                                                    "fillOpacity": 0.5
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                        "Mapbox Label": {
-                            "display": true,
-                            "template": "Mapbox Label",
-                            "zIndex": 99
-                        }
+                  },
+                  {
+                    "value": "5000",
+                    "label": "1000000+",
+                    "style": {
+                      "strokeColor": "#f4511e",
+                      "fillColor": "#f4511e",
+                      "fillOpacity": 0.5
                     }
-                }
+                  }
+                ]
+              }
             }
+          }
+        },
+        "Retail Places": {
+          "format": "mvt",
+          "dbs": "WEBSITE",
+          "qID": "id",
+          "geom": "geom_3857",
+          "srid": "3857",
+          "tables": {
+            "7": null,
+            "8": "website.vw_rio_glx_geodata_retail_place"
+          },
+          "infoj": [
+            {
+              "field": "rp_name",
+              "title": "Name"
+            },
+            {
+              "field": "rp_type",
+              "title": "Type"
+            }
+          ],
+          "style": {
+            "label": {
+              "field": "rp_name",
+              "declutter": true,
+              "strokeColor": "#fff",
+              "strokeWidth": 3
+            },
+            "highlight": {
+              "strokeColor": "#e91e63",
+              "fillOpacity": 0.3,
+              "strokeWidth": 2
+            },
+            "themes": {
+              "Retail Place Type": {
+                "type": "categorized",
+                "field": "rp_type",
+                "other": true,
+                "cat": {
+                  "City Centre": {
+                    "style": {
+                      "strokeColor": "#6e016b",
+                      "fillColor": "#6e016b"
+                    }
+                  },
+                  "Urban Centre": {
+                    "style": {
+                      "strokeColor": "#8c6bb1",
+                      "fillColor": "#8c6bb1"
+                    }
+                  },
+                  "Shopping Centre": {
+                    "style": {
+                      "strokeColor": "#016450",
+                      "fillColor": "#016450"
+                    }
+                  },
+                  "Outlet Centre": {
+                    "style": {
+                      "strokeColor": "#3690c0",
+                      "fillColor": "#3690c0"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "Retail Venues": {
+          "format": "mvt",
+          "dbs": "WEBSITE",
+          "geom": "geom_3857",
+          "srid": "3857",
+          "tables": {
+            "7": null,
+            "8": "website.vw_rio_glx_geodata_retail_venue"
+          },
+          "qID": "id",
+          "infoj": [
+            {
+              "field": "venue_name",
+              "title": "Name"
+            },
+            {
+              "field": "venue_type",
+              "title": "Type"
+            }
+          ]
+        },
+        "Mapbox Label": {
+          "display": true,
+          "template": "Mapbox Label",
+          "zIndex": 99
         }
+      }
+    },
+    "APAC": {
+      "minZoom": 3,
+      "maxZoom": 15,
+      "view": {
+        "lat": 58.8137,
+        "lng": 88.5937
+      },
+      "layers": {
+        "Mapbox Baselayer": {
+          "display": true,
+          "template": "Mapbox Base"
+        },
+        "Chomoku": {
+          "format": "mvt",
+          "dbs": "WEBSITE",
+          "qID": "chomoku_cd",
+          "geom": "geom_3857",
+          "srid": "3857",
+          "tables": {
+            "10": null,
+            "11": "geodata.jpn_glx_geodata_census_chomoku_metrics"
+          },
+          "style": {
+            "default": {
+              "fillColor": "#d9d9d9",
+              "fillOpacity": 0.5
+            },
+            "highlight": {
+              "fillColor": "#DBD56E",
+              "fillOpacity": 0.7
+            },
+            "themes": {
+              "Population": {
+                "type": "graduated",
+                "field": "totalpop",
+                "cat_arr": [
+                  {
+                    "value": 0,
+                    "label": "0 to 500",
+                    "style": {
+                      "fillColor": "#f1eef6"
+                    }
+                  },
+                  {
+                    "value": 500,
+                    "label": "500 to 1,500",
+                    "style": {
+                      "fillColor": "#bdc9e1"
+                    }
+                  },
+                  {
+                    "value": 1500,
+                    "label": "1,500 to 3,000",
+                    "style": {
+                      "fillColor": "#74a9cf"
+                    }
+                  },
+                  {
+                    "value": 3000,
+                    "label": "3,000 to 6,000",
+                    "style": {
+                      "fillColor": "#2b8cbe"
+                    }
+                  },
+                  {
+                    "value": 6000,
+                    "label": "6,000 and over",
+                    "style": {
+                      "fillColor": "#045a8d"
+                    }
+                  }
+                ]
+              },
+              "Urbanity": {
+                "type": "categorized",
+                "field": "urbanity",
+                "cat": {
+                  "Major Urban": {
+                    "label": "Major Urban",
+                    "style": {
+                      "strokeColor": "#8c2d04",
+                      "fillColor": "#8c2d04"
+                    }
+                  },
+                  "Urban": {
+                    "label": "Urban",
+                    "style": {
+                      "strokeColor": "#cc4c02",
+                      "fillColor": "#cc4c02"
+                    }
+                  },
+                  "Minor Urban": {
+                    "label": "Minor Urban",
+                    "style": {
+                      "strokeColor": "#ec7014",
+                      "fillColor": "#ec7014"
+                    }
+                  },
+                  "Major Suburban": {
+                    "label": "Major Suburban",
+                    "style": {
+                      "strokeColor": "#fe9929",
+                      "fillColor": "#fe9929"
+                    }
+                  },
+                  "Suburban": {
+                    "label": "Suburban",
+                    "style": {
+                      "strokeColor": "#fec44f",
+                      "fillColor": "#fec44f"
+                    }
+                  },
+                  "Minor Suburban": {
+                    "label": "Minor Suburban",
+                    "style": {
+                      "strokeColor": "#fee391",
+                      "fillColor": "#fee391"
+                    }
+                  },
+                  "Rural": {
+                    "label": "Rural",
+                    "style": {
+                      "strokeColor": "#ffffd4",
+                      "fillColor": "#ffffd4"
+                    }
+                  }
+                }
+              },
+              "Affluence": {
+                "type": "graduated",
+                "field": "affluence",
+                "cat_arr": [
+                  {
+                    "value": "0",
+                    "label": "0 to 0.7",
+                    "style": {
+                      "fillColor": "#fcfbfd"
+                    }
+                  },
+                  {
+                    "value": "0.7",
+                    "label": "0.7 to 0.85",
+                    "style": {
+                      "fillColor": "#efedf5"
+                    }
+                  },
+                  {
+                    "value": "0.85",
+                    "label": "0.85 to 0.9",
+                    "style": {
+                      "fillColor": "#dadaeb"
+                    }
+                  },
+                  {
+                    "value": 0.9,
+                    "label": "0.9 to 0.92",
+                    "style": {
+                      "fillColor": "#bcbddc"
+                    }
+                  },
+                  {
+                    "value": 0.92,
+                    "label": "0.92 to 0.94",
+                    "style": {
+                      "fillColor": "#9e9ac8"
+                    }
+                  },
+                  {
+                    "value": 0.94,
+                    "label": "0.94 to 0.96",
+                    "style": {
+                      "fillColor": "#807dba"
+                    }
+                  },
+                  {
+                    "value": 0.96,
+                    "label": "0.96 to 0.98",
+                    "style": {
+                      "fillColor": "#6a51a3"
+                    }
+                  },
+                  {
+                    "value": 0.98,
+                    "label": "0.98 and above",
+                    "style": {
+                      "fillColor": "#4a1486"
+                    }
+                  }
+                ]
+              },
+              "Geodemo": {
+                "type": "categorized",
+                "field": "geodemo10",
+                "cat": {
+                  "1": {
+                    "label": "Urban center wealthy",
+                    "style": {
+                      "fillColor": "#ffffff"
+                    }
+                  },
+                  "2": {
+                    "label": "High net worth family",
+                    "style": {
+                      "fillColor": "#f7f4f9"
+                    }
+                  },
+                  "3": {
+                    "label": "Urban singles",
+                    "style": {
+                      "fillColor": "#e7e1ef"
+                    }
+                  },
+                  "4": {
+                    "label": "Salaryman family",
+                    "style": {
+                      "fillColor": "#d4b9da"
+                    }
+                  },
+                  "5": {
+                    "label": "Manufacturing worker family",
+                    "style": {
+                      "fillColor": "#c994c7"
+                    }
+                  },
+                  "6": {
+                    "label": "Small and medium enterprise worker family",
+                    "style": {
+                      "fillColor": "#df65b0"
+                    }
+                  },
+                  "7": {
+                    "label": "Three generations co-habiting",
+                    "style": {
+                      "fillColor": "#e7298a"
+                    }
+                  },
+                  "8": {
+                    "label": "Rich elderly",
+                    "style": {
+                      "fillColor": "#ce1256"
+                    }
+                  },
+                  "9": {
+                    "label": "Ageing",
+                    "style": {
+                      "fillColor": "#980043"
+                    }
+                  },
+                  "10": {
+                    "label": "Rural",
+                    "style": {
+                      "fillColor": "#67001f"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "infoj": [
+            {
+              "type": "key"
+            },
+            {
+              "field": "chomoku_nm",
+              "title": "Chomoku",
+              "inline": true
+            },
+            {
+              "field": "city_nm",
+              "title": "City",
+              "inline": true
+            },
+            {
+              "field": "prefect_nm",
+              "title": "Prefecture",
+              "inline": true
+            },
+            {
+              "field": "region",
+              "title": "Region",
+              "inline": true
+            },
+            {
+              "field": "urbanity",
+              "title": "Urbanity",
+              "inline": true
+            },
+            {
+              "field": "totalpop",
+              "title": "Total population",
+              "type": "integer",
+              "inline": true
+            },
+            {
+              "field": "malepop",
+              "title": "Male",
+              "type": "integer",
+              "level": 2,
+              "inline": true
+            },
+            {
+              "field": "femalepop",
+              "title": "Female",
+              "type": "integer",
+              "level": 2,
+              "inline": true
+            },
+            {
+              "field": "average_age",
+              "title": "Average age",
+              "type": "integer",
+              "inline": true
+            }
+          ]
+        },
+        "Retail Places": {
+          "format": "mvt",
+          "dbs": "WEBSITE",
+          "qID": "id",
+          "geom": "geom_3857",
+          "srid": "3857",
+          "tables": {
+            "7": null,
+            "8": "website.vw_tokyo_glx_geodata_retail_place"
+          },
+          "infoj": [
+            {
+              "field": "rp_name",
+              "title": "Name"
+            }
+          ]
+        },
+        "Retail Venues": {
+          "format": "mvt",
+          "dbs": "WEBSITE",
+          "geom": "geom_3857",
+          "srid": "3857",
+          "tables": {
+            "7": null,
+            "8": "website.vw_tokyo_glx_geodata_retail_venue"
+          },
+          "qID": "id",
+          "infoj": [
+            {
+              "field": "venue_name",
+              "title": "Name"
+            },
+            {
+              "field": "venue_type",
+              "title": "Type"
+            }
+          ],
+          "style": {
+            "default": {
+              "fillColor": "#d9d9d9",
+              "fillOpacity": 0.5
+            },
+            "highlight": {
+              "fillColor": "#DBD56E",
+              "fillOpacity": 0.7
+            },
+            "themes": {
+              "Venue Type": {
+                "type": "categorized",
+                "field": "venue_type",
+                "cat": {
+                  "Airport": {
+                    "label": "Airport",
+                    "style": {
+                      "fillColor": "#f44336"
+                    }
+                  },
+                  "Department Store": {
+                    "label": "Department Store",
+                    "style": {
+                      "fillColor": "#9c27b0"
+                    }
+                  },
+                  "Other": {
+                    "label": "Other",
+                    "style": {
+                      "fillColor": "#3f51b5"
+                    }
+                  },
+                  "Outlet Centre": {
+                    "label": "Outlet Centre",
+                    "style": {
+                      "fillColor": "#03a9f4"
+                    }
+                  },
+                  "Retail Street": {
+                    "label": "Retail Street",
+                    "style": {
+                      "fillColor": "#009688"
+                    }
+                  },
+                  "Shopping Centre": {
+                    "label": "Shopping Centre",
+                    "style": {
+                      "fillColor": "#8bc34a"
+                    }
+                  },
+                  "Supermarket": {
+                    "label": "Supermarket",
+                    "style": {
+                      "fillColor": "#ffeb3b"
+                    }
+                  },
+                  "Train Station": {
+                    "label": "Train Station",
+                    "style": {
+                      "fillColor": "#ff9800"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "Mapbox Label": {
+          "display": true,
+          "template": "Mapbox Label",
+          "zIndex": 99
+        }
+      }
+    },
+    "Europe": {
+      "bounds": {
+        "north": 72,
+        "east": 43,
+        "south": 32,
+        "west": -16
+      },
+      "minZoom": 3,
+      "maxZoom": 15,
+      "layers": {
+        "Mapbox Baselayer": {
+          "display": true,
+          "template": "Mapbox Base"
+        },
+        "European Indicators": {
+          "display": true,
+          "format": "mvt",
+          "dbs": "MAPP",
+          "mvt_cache": "mapp.eu_glx_geodata_census_index_nuts3__mvts",
+          "table": "geodata.eu_glx_geodata_census_index_nuts3",
+          "qID": "nuts3",
+          "geom": "geom_3857",
+          "srid": "3857",
+          "infoj": [
+            {
+              "type": "key"
+            },
+            {
+              "field": "nuts3",
+              "title": "Nuts ID",
+              "inline": true
+            },
+            {
+              "field": "pop",
+              "title": "Population",
+              "type": "integer",
+              "inline": true
+            },
+            {
+              "title": "Average Age",
+              "field": "age",
+              "inline": true
+            },
+            {
+              "title": "Disposable Income",
+              "field": "disposable_income_person",
+              "type": "integer",
+              "inline": true
+            },
+            {
+              "title": "Affluence Index",
+              "field": "affluence_idx_eu",
+              "inline": true
+            },
+            {
+              "title": "Lifestage Index",
+              "field": "lifestage_idx_eu",
+              "inline": true
+            }
+          ],
+          "style": {
+            "default": {
+              "strokeWidth": 1,
+              "strokeColor": "#555",
+              "fillColor": "#fff",
+              "fillOpacity": 0
+            },
+            "highlight": {
+              "strokeColor": "#090"
+            },
+            "themes": {
+              "Population": {
+                "type": "graduated",
+                "field": "pop",
+                "cat_arr": [
+                  {
+                    "value": "0",
+                    "label": "up to 50000",
+                    "style": {
+                      "strokeColor": "#00897b",
+                      "fillColor": "#00897b",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "50000",
+                    "label": "50000+",
+                    "style": {
+                      "strokeColor": "#43a047",
+                      "fillColor": "#43a047",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "100000",
+                    "label": "100000+",
+                    "style": {
+                      "strokeColor": "#c0ca33",
+                      "fillColor": "#c0ca33",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "250000",
+                    "label": "250000+",
+                    "style": {
+                      "strokeColor": "#fdd835",
+                      "fillColor": "#fdd835",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "500000",
+                    "label": "500000+",
+                    "style": {
+                      "strokeColor": "#fb8c00",
+                      "fillColor": "#fb8c00",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "1000000",
+                    "label": "1000000+",
+                    "style": {
+                      "strokeColor": "#f4511e",
+                      "fillColor": "#f4511e",
+                      "fillOpacity": 0.5
+                    }
+                  }
+                ]
+              },
+              "Disposable Income": {
+                "type": "graduated",
+                "field": "disposable_income_person",
+                "cat_arr": [
+                  {
+                    "value": "0",
+                    "label": "up to 50000",
+                    "style": {
+                      "strokeColor": "#00897b",
+                      "fillColor": "#00897b",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "10000",
+                    "label": "50000+",
+                    "style": {
+                      "strokeColor": "#43a047",
+                      "fillColor": "#43a047",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "15000",
+                    "label": "100000+",
+                    "style": {
+                      "strokeColor": "#c0ca33",
+                      "fillColor": "#c0ca33",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "17500",
+                    "label": "250000+",
+                    "style": {
+                      "strokeColor": "#fdd835",
+                      "fillColor": "#fdd835",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "20000",
+                    "label": "500000+",
+                    "style": {
+                      "strokeColor": "#fb8c00",
+                      "fillColor": "#fb8c00",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "25000",
+                    "label": "1000000+",
+                    "style": {
+                      "strokeColor": "#f4511e",
+                      "fillColor": "#f4511e",
+                      "fillOpacity": 0.5
+                    }
+                  }
+                ]
+              },
+              "Average Age": {
+                "type": "graduated",
+                "field": "age",
+                "cat_arr": [
+                  {
+                    "value": "0",
+                    "label": "under 35",
+                    "style": {
+                      "strokeColor": "#00897b",
+                      "fillColor": "#00897b",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "35",
+                    "label": "over 35",
+                    "style": {
+                      "strokeColor": "#43a047",
+                      "fillColor": "#43a047",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "37.5",
+                    "label": "over 37.5",
+                    "style": {
+                      "strokeColor": "#c0ca33",
+                      "fillColor": "#c0ca33",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "40",
+                    "label": "over 40",
+                    "style": {
+                      "strokeColor": "#fdd835",
+                      "fillColor": "#fdd835",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "42.5",
+                    "label": "over 42.5",
+                    "style": {
+                      "strokeColor": "#fb8c00",
+                      "fillColor": "#fb8c00",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  {
+                    "value": "45",
+                    "label": "over 45",
+                    "style": {
+                      "strokeColor": "#f4511e",
+                      "fillColor": "#f4511e",
+                      "fillOpacity": 0.5
+                    }
+                  }
+                ]
+              },
+              "Affluence": {
+                "type": "categorized",
+                "field": "affluence_idx_eu",
+                "cat": {
+                  "1":{
+                    "label": "1",
+                    "style": {
+                      "fillColor": "#fff7f3",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  "2":{
+                    "label": "2",
+                    "style": {
+                      "fillColor": "#fde0dd",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  "3":{
+                    "label": "3",
+                    "style": {
+                      "fillColor": "#fcc5c0",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  "4":{
+                    "label": "4",
+                    "style": {
+                      "fillColor": "#fa9fb5",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  "5":{
+                    "label": "5",
+                    "style": {
+                      "fillColor": "#f768a1",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  "6":{
+                    "label": "6",
+                    "style": {
+                      "fillColor": "#dd3497",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  "7":{
+                    "label": "7",
+                    "style": {
+                      "fillColor": "#ae017e",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  "8":{
+                    "label": "8",
+                    "style": {
+                      "fillColor": "#7a0177",
+                      "fillOpacity": 0.5
+                    }
+                  }
+                }
+              },
+              "Life Stage": {
+                "type": "categorized",
+                "field": "lifestage_idx_eu",
+                "cat": {
+                  "C":{
+                    "label": "C",
+                    "style": {
+                      "fillColor": "#f7fcb9",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  "D":{
+                    "label": "D",
+                    "style": {
+                      "fillColor": "#addd8e",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  "E":{
+                    "label": "E",
+                    "style": {
+                      "fillColor": "#41ab5d",
+                      "fillOpacity": 0.5
+                    }
+                  },
+                  "F":{
+                    "label": "F",
+                    "style": {
+                      "fillColor": "#005a32",
+                      "fillOpacity": 0.5
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "Mapbox Label": {
+          "display": true,
+          "template": "Mapbox Label",
+          "zIndex": 99
+        }
+      }
     }
+  }
 }
