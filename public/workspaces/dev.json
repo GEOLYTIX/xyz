@@ -148,6 +148,7 @@
       "showScaleBar": true,
       "plugins": {
         "custom_list_filter": "/dev/js/plugins/custom_list_filter.js",
+        "openrouteservice": "/dev/js/plugins/openrouteservice.js",
         "geojson_file": "/dev/js/plugins/geojson_file.js",
         "demand_chart": "/dev/js/plugins/demand_chart.js",
         "post_array": "/dev/js/plugins/post_array.js",
@@ -777,6 +778,7 @@
           "srid": "3857",
           "geom": "geom_3857",
           "qID": "id",
+          "plugins": ["openrouteservice"],
           "edit": {
             "polygon": true,
             "freehand": true,
