@@ -1,9 +1,135 @@
 {
-    "templates":
+  "templates":
     {
         "blog":
         {
             "src": "file://public/views/blog.html"
+  "templates": {
+    "blog": {
+      "src": "file://public/views/blog.html"
+    },
+    "contact": {
+      "src": "file://public/views/contact.html"
+    },
+    "embedded": {
+      "src": "file://public/views/embedded.html"
+    },
+    "Mapbox Base": {
+      "format": "mbtiles",
+      "mbStyle": "mapbox://styles/dbauszus/ciozrimi3002bdsm8bjtn2v1y",
+      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tqMXBtdnp6MGxpbDJ6cDh1eXQzZ2tlcCJ9.u5fDJVun8BTbnjGOqmrW8Q",
+      "attribution": {
+        "© Mapbox": "https://www.mapbox.com/about/maps",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "Mapbox Label": {
+      "format": "mbtiles",
+      "mbStyle": "mapbox://styles/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z",
+      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tqMXBtdnp6MGxpbDJ6cDh1eXQzZ2tlcCJ9.u5fDJVun8BTbnjGOqmrW8Q",
+      "attribution": {
+        "© Mapbox": "https://www.mapbox.com/about/maps",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "HERE Imagery": {
+      "format": "tiles",
+      "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?{HERE}",
+      "proxy": true,
+      "attribution": {
+        "© Here": "https://www.here.com/",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "HERE Hybrid": {
+      "format": "tiles",
+      "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?{HERE}",
+      "proxy": true,
+      "attribution": {
+        "© Here": "https://www.here.com/",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "london_census": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_census.json"
+    },
+    "london_retailpoints": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_retailpoints.json"
+    },
+    "london_lad": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_lad.json"
+    },
+    "london_oa": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_oa.json"
+    },
+    "london_education": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_education.json"
+    },
+    "london_university_building": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_university_building.json"
+    },
+    "london_grocery_demand": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_grocery_demand.json"
+    },
+    "london_poi": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_poi.json"
+    },
+    "london_postal_sector": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_postal_sector.json"
+    },
+    "london_postal_district": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_postal_district.json"
+    },
+    "london_postal_area": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_postal_area.json"
+    },
+    "london_rail": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_rail.json"
+    },
+    "london_rail_stations": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_rail_stations.json"
+    },
+    "london_residential": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_residential.json"
+    },
+    "london_retailplaces": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_retailplaces.json"
+    },
+    "london_retailplaces_pitch": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_retailplaces_pitch.json"
+    },
+    "london_roads": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_roads.json"
+    },
+    "london_seamless": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_seamless.json"
+    },
+    "london_town_suburb": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_town_suburb.json"
+    },
+    "london_urbanity": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_urbanity.json"
+    },
+    "london_workers": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_workers.json"
+    },
+    "london_banks": {
+      "src": "https://geolytix.github.io/public/geodata/layers/london_banks.json"
+    }
+  },
+  "locales": {
+    "Offices": {
+      "minZoom": 2,
+      "maxZoom": 18,
+      "view": {
+        "lat": 45,
+        "lng": 60,
+        "z": 3
+      },
+      "layers": {
+        "Base": {
+          "display": true,
+          "template": "Mapbox Base"
         },
         "contact":
         {
