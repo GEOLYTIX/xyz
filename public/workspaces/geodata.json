@@ -178,31 +178,25 @@
                     {
                         "default":
                         {
-                            "marker":
-                            {
-                                "type": "markerColor",
-                                "colorMarker": "#003D57",
-                                "colorDot": "#F0F0F0",
-                                "anchor": [
-                                    0.5,
-                                    1
-                                ],
-                                "scale": 3
-                            }
+                            "type": "markerColor",
+                            "colorMarker": "#003D57",
+                            "colorDot": "#F0F0F0",
+                            "anchor": [
+                                0.5,
+                                1
+                            ],
+                            "scale": 3
                         },
                         "highlight":
                         {
-                            "marker":
-                            {
-                                "type": "markerColor",
-                                "colorMarker": "#EC602D",
-                                "colorDot": "#F0F0F0",
-                                "anchor": [
-                                    0.5,
-                                    1
-                                ],
-                                "scale": 1
-                            }
+                            "type": "markerColor",
+                            "colorMarker": "#EC602D",
+                            "colorDot": "#F0F0F0",
+                            "anchor": [
+                                0.5,
+                                1
+                            ],
+                            "scale": 1
                         }
                     }
                 },
@@ -251,31 +245,25 @@
                     {
                         "default":
                         {
-                            "marker":
-                            {
-                                "type": "markerColor",
-                                "colorMarker": "#003D57",
-                                "colorDot": "#F0F0F0",
-                                "anchor": [
-                                    0.5,
-                                    1
-                                ],
-                                "scale": 3
-                            }
+                            "type": "markerColor",
+                            "colorMarker": "#003D57",
+                            "colorDot": "#F0F0F0",
+                            "anchor": [
+                                0.5,
+                                1
+                            ],
+                            "scale": 3
                         },
                         "highlight":
                         {
-                            "marker":
-                            {
-                                "type": "markerColor",
-                                "colorMarker": "#EC602D",
-                                "colorDot": "#F0F0F0",
-                                "anchor": [
-                                    0.5,
-                                    1
-                                ],
-                                "scale": 1
-                            }
+                            "type": "markerColor",
+                            "colorMarker": "#EC602D",
+                            "colorDot": "#F0F0F0",
+                            "anchor": [
+                                0.5,
+                                1
+                            ],
+                            "scale": 1
                         }
                     }
                 },
