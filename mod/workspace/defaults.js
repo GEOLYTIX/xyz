@@ -47,15 +47,15 @@ module.exports = defaults = {
           strokeColor: '#333333',
           fillColor: '#333333',
           fillOpacity: 0.1,
-            type: 'dot',
+          type: 'dot',
         },
         highlight: {
           strokeColor: '#1F964D',
           strokeWidth: 2,
           fillColor: '#cae0b8',
           fillOpacity: 0.2,
-            type: 'dot',
-            scale: 1.3
+          type: 'dot',
+          scale: 1.3
         }
       },
       filter: {},
