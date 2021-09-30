@@ -14,13 +14,13 @@ document.dispatchEvent(new CustomEvent('geojson_file', {
           e.stopPropagation()
           input.click()
 
-      }}>File${input}`)
+        }}>File${input}`)
 
-      input.addEventListener('change', function() {
+      input.addEventListener('change', function () {
 
         const reader = new FileReader()
 
-        reader.onload = function() {
+        reader.onload = function () {
           try {
 
             const json = JSON.parse(this.result)
@@ -32,7 +32,7 @@ document.dispatchEvent(new CustomEvent('geojson_file', {
                 field: key
               }))
 
-            Object.values(json.features).forEach((f,i)=>{
+            Object.values(json.features).forEach((f, i) => {
               f.properties.id = i
             })
 
@@ -48,38 +48,14 @@ document.dispatchEvent(new CustomEvent('geojson_file', {
 
             layer.L = new ol.layer.Vector({
               source: source,
-              style: feature => {
-
-                const style = Object.assign(
-                  {},
-                  layer.style.default
-                )
-                        
-                if (layer.highlight === feature.get('id')){
-          
-                  let tmpHighlightStyle = _xyz.utils.cloneDeep(layer.style.highlight)
-                    
-                  // quick and dirty fix for scaling highlight
-                  if (style.marker && style.marker.scale && tmpHighlightStyle.marker && tmpHighlightStyle.marker.scale) {
-                    tmpHighlightStyle.marker.scale *= style.marker.scale
-                  }
-          
-                  Object.assign(
-                    style,
-                    tmpHighlightStyle || {}
-                  )
-          
-                }
-
-                return _xyz.utils.style(style)
-                      
-              }
+              zIndex: layer.style.zIndex || 1,
+              style: _xyz.mapview.layer.styleFunction(layer)
             })
 
             layer.L.set('layer', layer, true)
 
             layer.select = feature => {
-              
+
               jsonFeature = JSON.parse(geoJSON.writeFeature(feature))
 
               const infoj = layer.infoj.map(_entry => {
@@ -87,7 +63,7 @@ document.dispatchEvent(new CustomEvent('geojson_file', {
                 const entry = _xyz.utils.cloneDeep(_entry)
                 entry.title = entry.field
                 entry.value = jsonFeature.properties[entry.field]
-          
+
                 return entry
               })
 
