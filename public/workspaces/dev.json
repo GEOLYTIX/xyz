@@ -308,7 +308,7 @@
               "clusterScale": 2
             },
             "highlight": {
-              "scale": 1
+              "scale": 1.2
             },
             "themes": {
               "Retail - Simple": {
