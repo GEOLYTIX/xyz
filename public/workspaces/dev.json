@@ -308,7 +308,7 @@
               "clusterScale": 2
             },
             "highlight": {
-              "scale": 1
+              "scale": 1.2
             },
             "themes": {
               "Retail - Simple": {
@@ -850,6 +850,13 @@
             "isoline_here": true,
             "delete": true
           },
+          "filter": {
+            "current": {
+              "options_field": {
+                "in": ["1"]
+              }
+            }
+          },
           "infoj": [
             {
               "title": "ID",
@@ -913,6 +920,12 @@
                     "Closed": "2"
                   },
                   "Other"
+                ]
+              },
+              "filter": { 
+                "in": [
+                  "1",
+                  "2"
                 ]
               }
             },
