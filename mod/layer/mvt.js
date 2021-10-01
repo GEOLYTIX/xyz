@@ -34,7 +34,7 @@ module.exports = async (req, res) => {
     .filter(field => typeof field !== 'undefined')
 
   // Assign mvt_fields from single theme
-  layer.style.theme && mvt_fields.push(getField(layer.style.theme))
+  layer.style?.theme && mvt_fields.push(getField(layer.style.theme))
 
   layer.style.label && mvt_fields.push(`${layer.style.label.field} AS label`)
 

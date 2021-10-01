@@ -356,13 +356,14 @@
       value=${a.max}
       max=${a.max}
       step=${i}
-      oninput=${e=>{u.value=e.target.value,f()}}>`;let g;function f(){clearTimeout(g),g=setTimeout((()=>{g=null,t.filter.current[n.field]={},t.filter.current[n.field].gte=parseFloat(s.value),t.filter.current[n.field].lte=parseFloat(u.value),t.reload(),t.show(),t.count((e=>{n.filterZoom&&e>1&&t.zoomToExtent()}))}),500)}p.appendChild(h)},r.send()},sn=e=>(t,n)=>{if(n.el&&n.el.parentNode)return e.layers.view.filter.reset(t,n);const r=e.layers.view.filter.block(t,n);r.dataset.field=n.field,n.el=r,t.filter.current[t.style.theme&&t.style.theme.field||n.field]||(t.filter.current[t.style.theme&&t.style.theme.field||n.field]={}),n.filter.in.forEach((a=>{r.appendChild(e.utils.html.node`
+      oninput=${e=>{u.value=e.target.value,f()}}>`;let g;function f(){clearTimeout(g),g=setTimeout((()=>{g=null,t.filter.current[n.field]={},t.filter.current[n.field].gte=parseFloat(s.value),t.filter.current[n.field].lte=parseFloat(u.value),t.reload(),t.show(),t.count((e=>{n.filterZoom&&e>1&&t.zoomToExtent()}))}),500)}p.appendChild(h)},r.send()},sn=e=>(t,n)=>{if(n.el&&n.el.parentNode)return e.layers.view.filter.reset(t,n);const r=e.layers.view.filter.block(t,n);r.dataset.field=n.field,n.el=r,t.filter.current[t.style.theme&&t.style.theme.field||n.field]||(t.filter.current[t.style.theme&&t.style.theme.field||n.field]={});const a=new Set(t.filter?.current[n.field]?.in||[]);n.filter.in.forEach((o=>{r.appendChild(e.utils.html.node`
     <label class="input-checkbox">
     <input
       type="checkbox"
+      .checked=${a.has(o)}
       onchange=${e=>{if(e.target.checked)t.filter.current[n.field]||(t.filter.current[n.field]={}),t.filter.current[n.field].in||(t.filter.current[n.field].in=[]),t.filter.current[n.field].in.push(encodeURIComponent(e.target.parentNode.innerText));else{let r=t.filter.current[n.field].in.indexOf(encodeURIComponent(e.target.parentNode.innerText));t.filter.current[n.field].in.splice(r,1),t.filter.current[n.field].in.length||delete t.filter.current[n.field].in}t.reload(),t.show(),t.count((e=>{n.filterZoom&&e>1&&t.zoomToExtent()}))}}>
     </input>
-    <div></div><span>${a}`)}))},cn=e=>(t,n)=>{if(n.el&&n.el.parentNode)return e.layers.view.filter.reset(t,n);const r=e.layers.view.filter.block(t,n);r.dataset.field=n.field,n.el=r;var a=e.utils.html.node`
+    <div></div><span>${o}`)}))},cn=e=>(t,n)=>{if(n.el&&n.el.parentNode)return e.layers.view.filter.reset(t,n);const r=e.layers.view.filter.block(t,n);r.dataset.field=n.field,n.el=r;var a=e.utils.html.node`
   <div class="input-flex">
     <span>${e.language.layer_filter_date_after}`;const o=e.utils.html.node`
   <input type="text" readonly placeholder=${e.language.layer_filter_pick} style="width: 60%;">`;a.appendChild(o),r.appendChild(a),a=e.utils.html.node`
