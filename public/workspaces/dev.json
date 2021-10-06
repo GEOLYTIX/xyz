@@ -850,13 +850,6 @@
             "isoline_here": true,
             "delete": true
           },
-          "filter": {
-            "current": {
-              "options_field": {
-                "in": ["1"]
-              }
-            }
-          },
           "infoj": [
             {
               "title": "ID",
