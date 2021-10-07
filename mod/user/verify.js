@@ -30,9 +30,6 @@ module.exports = async (req, res) => {
     return res.status(302).send()
   }
   
-  // Create a random approval token.
-  const approvaltoken = crypto.randomBytes(20).toString('hex')
-
   // Update user account in ACL with the approval token and remove verification token.
   var rows = await acl(`
     UPDATE acl_schema.acl_table SET
@@ -41,7 +38,6 @@ module.exports = async (req, res) => {
         `password = '${user.password_reset}',
         password_reset = null,` : ''}
       verified = true,
-      ${!user.approved ? `approvaltoken = '${approvaltoken}',` : ''}
       verificationtoken = null
     WHERE lower(email) = lower($1);`, [user.email])
 
@@ -80,8 +76,7 @@ module.exports = async (req, res) => {
       var mail_template = await templates('admin_email', row.language || req.params.language, {
         email: user.email,
         host: host,
-        protocol: protocol,
-        approvaltoken: approvaltoken
+        protocol: protocol
       })
       
       return mailer(Object.assign(mail_template, {
