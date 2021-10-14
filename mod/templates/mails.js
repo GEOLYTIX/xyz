@@ -293,37 +293,37 @@ module.exports = {
   	en: {
   		subject: `A new account has been verified on \${host}`,
   		text: `Please log into the admin panel \${protocol}\${host}/api/user/admin to approve \${email}
-      You can also approve the account by following this link: \${protocol}\${host}/api/user/approve/\${approvaltoken}`
+      You can also approve the account by following this link: \${protocol}\${host}/api/user/admin?email=\${email}`
     },
     de: {
   		subject: `A neues Benutzerkonto wurde erstellt fuer \${host}`,
   		text: `Please log into the admin panel \${protocol}\${host}/api/user/admin to approve \${email}
-      You can also approve the account by following this link: \${protocol}\${host}/api/user/approve/\${approvaltoken}`
+      You can also approve the account by following this link: \${protocol}\${host}/api/user/admin?email=\${email}`
   	},
   	fr: {
   		subject: `Un nouveau compte a été verifié sur \${host}`,
   		text: `Veuillez vous connecter à votre compte administrateur \${protocol}\${host}/api/user/admin pour approuver \${email}
-  		Vous pouvez également l'approuver en suivant ce lien \${protocol}\${host}/api/user/approve/\${approvaltoken}`
+  		Vous pouvez également l'approuver en suivant ce lien \${protocol}\${host}/api/user/admin?email=\${email}`
   	},
     pl: {
       subject: `Nowe konto zostało zweryfikowane na \${host}`,
       text: `Zaloguj się do panelu administratora \${protocol}\${host}/api/user/admin aby zatwierdzić \${email}
-      Możesz też zatwierdzić nowego konto za pomocą tego linku \${protocol}\${host}/api/user/approve/\${approvaltoken}`
+      Możesz też zatwierdzić nowego konto za pomocą tego linku \${protocol}\${host}/api/user/admin?email=\${email}`
     },
     ja: {
     	subject: `\${host}についてアカウントを検証されました`,
     	text: `\${email} を承認するには、管理パネル \${protocol}\${host}/api/user/admin にログインしてください
-    	このリンクからもアカウントを承認することができます \${protocol}\${host}/api/user/approve/\${approvaltoken}`
+    	このリンクからもアカウントを承認することができます \${protocol}\${host}/api/user/admin?email=\${email}`
     },
     ko: {
   		subject: `새로운 계정이 확인되었습니다. \${host}`,
   		text: `\${email} 을 승인하려면 관리자 패널 \${protocol}\${host}/api/user/admin 에 로그인하세요.
-      다음의 링크로 또한 계정 승인을 할 수 있습니다. \${protocol}\${host}/api/user/approve/\${approvaltoken}`
+      다음의 링크로 또한 계정 승인을 할 수 있습니다. \${protocol}\${host}/api/user/admin?email=\${email}`
   	},
   	zh: {
   		subject: `新帐户已通过验证 \${host}`,
   		text: `请登录管理控制台 \${protocol}\${host}/api/user/admin 批准 \${email}
-      You can also approve the account by following this link: \${protocol}\${host}/api/user/approve/\${approvaltoken}`
+      You can also approve the account by following this link: \${protocol}\${host}/api/user/admin?email=\${email}`
   	}
   }
 }

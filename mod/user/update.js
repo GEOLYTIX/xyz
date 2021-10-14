@@ -19,7 +19,7 @@ module.exports = async (req, res) => {
   SET
     ${req.params.field} = ${req.params.value === 'false' && 'NULL' || req.params.value}
     ${req.params.field === 'approved'
-      && `, approvaltoken = null, approved_by = '${req.params.user.email}|${new Date().toISOString().replace(/\..*/,'')}'`
+      && `, approved_by = '${req.params.user.email}|${new Date().toISOString().replace(/\..*/,'')}'`
       || ''}
   WHERE lower(email) = lower($1);`, [email])
 
