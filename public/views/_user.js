@@ -24,8 +24,6 @@ xhr.onload = e => {
     
         const user = row.getData()
 
-        console.log(user.email)
-
         row.getElement().style.backgroundColor = user.email === params.email && '#fff9c4'
     
         row.getElement().style.backgroundColor = user.blocked && '#ef9a9a'
@@ -120,7 +118,13 @@ xhr.onload = e => {
       layout: 'fitDataFill',
     });
 
-  userTable.setData(e.target.response.length && e.target.response || [e.target.response]);
+  const data = e.target.response.length && e.target.response || [e.target.response]
+
+  if (params.email) {
+    data.sort(function(x,y){ return x.email == params.email ? -1 : y.email == params.email ? 1 : 0; });
+  }
+
+  userTable.setData(data);
 
   userTable.redraw(true);
 

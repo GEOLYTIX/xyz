@@ -17,10 +17,6 @@ const methods = {
     handler: require('./update'),
     admin: true
   },
-  approve: {
-    handler: require('./approve'),
-    admin: true
-  },
   list: {
     handler: require('./list'),
     admin: true
