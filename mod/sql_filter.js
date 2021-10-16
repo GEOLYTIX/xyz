@@ -15,6 +15,8 @@ const filterTypes = {
 
   in: (col, val) => `"${col}" = ANY (\$${addValues([val])})`,
 
+  null: (col, val) => `"${col}" IS ${!val?'NOT':''} NULL`,
+
   like: (col, val) =>
     `(${val
       .split(",")
@@ -37,12 +39,13 @@ module.exports = function sqlfilter(filter, params) {
   SQLparams = params
 
   // Filter in an array will be conditional OR
-  if (filter.length)
+  if (filter.length){
     return `(${filter
-  
+
         // Map filter in array with OR conjuction
         .map((filter) => mapFilterEntries(filter))
         .join(' OR ')})`
+  }
 
   // Filter in an object will be conditional AND
   return mapFilterEntries(filter)
