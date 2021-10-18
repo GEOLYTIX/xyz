@@ -1,7 +1,7 @@
 module.exports = {
   render: _ => `
-  
   SELECT
+    *,
     \${qID} AS ID,
     \${cluster_label} AS label,
     array[st_x(st_centroid(\${geom})), st_y(st_centroid(\${geom}))] AS coords
