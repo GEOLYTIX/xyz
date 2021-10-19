@@ -205,6 +205,9 @@ input[type=range]::-moz-range-thumb {
 .icon-add-photo {
   background-image: url("../icons/icon-add-photo.svg"); }
 
+.icon-image {
+  background-image: url("../icons/icon-image.svg"); }
+
 .icon-view-list {
   background-image: url("../icons/icon-view-list.svg"); }
 
