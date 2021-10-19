@@ -161,6 +161,9 @@ input[type=range]::-moz-range-thumb {
 .icon-touch-app {
   background-image: url("../icons/icon-touch-app.svg"); }
 
+.icon-receipt {
+  background-image: url("../icons/icon-receipt.svg"); }
+
 .icon-toggle {
   background-image: url("../icons/icon-toggle-off.svg"); }
 
