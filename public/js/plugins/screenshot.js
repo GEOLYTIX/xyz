@@ -8,7 +8,9 @@ document.dispatchEvent(
         class="mobile-display-none"
           title="Create screenshot from map canvas."
           onclick=${(e) => {
+
             html2canvas(_xyz.mapview.node).then((canvas) => {
+
               const byteArrays = [];
 
               const base64ImageData = canvas.toDataURL("image/png");
@@ -37,6 +39,12 @@ document.dispatchEvent(
               const blob = new Blob(byteArrays, { type: "image/png" });
               const blobUrl = URL.createObjectURL(blob);
 
+              // var link = document.createElement("a");
+              // link.href = blobUrl;
+              // link.download = "screenshot.png";
+              // document.body.appendChild(link);
+              // link.click();
+              
               window.open(blobUrl, "_blank");
             });
           }}><div class="xyz-icon icon-image">`);
