@@ -551,15 +551,15 @@
     <button
       title=${e.language.layer_toggle_dashboard}
       class="btn-header xyz-icon icon-expander"
-      onclick=${t=>{t.stopPropagation(),e.utils.toggleExpanderParent(t.target)}}>`))},style:an(e),filter:un(e),draw:_n(e),report:xn(e),data:wn(e),download:kn(e)};return t},Sn=e=>({init:function(t){e.layers.listview.node=t.target,e.layers.listview.groups={},Object.values(e.layers.list).forEach((t=>{t.hidden||(e.layers.view.create(t),t.group?(e.layers.listview.groups[t.group]||function(t){const n={list:[]};e.layers.listview.groups[t.group]=n;const r=e.layers.listview.node.appendChild(e.utils.html.node`<div class="drawer layer-group expandable">`),a=r.appendChild(e.utils.html.node`
+      onclick=${t=>{t.stopPropagation(),e.utils.toggleExpanderParent(t.target)}}>`))},style:an(e),filter:un(e),draw:_n(e),report:xn(e),data:wn(e),download:kn(e)};return t},Sn=e=>({init:function(t){e.layers.listview.node=t.target,e.layers.listview.groups={},Object.values(e.layers.list).forEach((t=>{t.hidden||(e.layers.view.create(t),t.group?(e.layers.listview.groups[t.group]||function(t){const n={list:[]};e.layers.listview.groups[t.group]=n,n.drawer=e.layers.listview.node.appendChild(e.utils.html.node`<div class="drawer layer-group expandable">`);const r=n.drawer.appendChild(e.utils.html.node`
       <div
         class="header enabled"
         onclick=${t=>{t.stopPropagation(),e.utils.toggleExpanderParent(t.target,!0)}}>
-        <span>${t.group}`),o=r.appendChild(e.utils.html.node`<div class="meta">`);n.chkVisibleLayer=()=>{n.list.some((e=>e.display))?i.classList.add("on"):i.classList.remove("on")},n.addLayer=t=>{t.groupmeta&&(o.appendChild(e.utils.html.node`<div>`).innerHTML=t.groupmeta),n.list.push(t),r.appendChild(t.view),n.chkVisibleLayer()};const i=a.appendChild(e.utils.html.node`
+        <span>${t.group}`),a=n.drawer.appendChild(e.utils.html.node`<div class="meta">`);n.chkVisibleLayer=()=>{n.list.some((e=>e.display))?o.classList.add("on"):o.classList.remove("on")},n.addLayer=t=>{t.groupmeta&&(a.appendChild(e.utils.html.node`<div>`).innerHTML=t.groupmeta),n.list.push(t),n.drawer.appendChild(t.view),n.chkVisibleLayer()};const o=r.appendChild(e.utils.html.node`
       <button
         class="btn-header xyz-icon icon-toggle"
         title=${e.language.layer_group_hide_layers}
-        onclick=${e=>{e.stopPropagation(),e.target.classList.toggle("on"),e.target.classList.contains("on")?n.list.filter((e=>!e.display)).forEach((e=>e.show())):n.list.filter((e=>e.display)).forEach((e=>e.remove()))}}>`);a.appendChild(e.utils.html.node`
+        onclick=${e=>{e.stopPropagation(),e.target.classList.toggle("on"),e.target.classList.contains("on")?n.list.filter((e=>!e.display)).forEach((e=>e.show())):n.list.filter((e=>e.display)).forEach((e=>e.remove()))}}>`);r.appendChild(e.utils.html.node`
       <button 
         class="xyz-icon btn-header icon-expander"
         title=${e.language.layer_group_toggle}

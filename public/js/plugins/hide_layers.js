@@ -14,7 +14,16 @@ document.dispatchEvent(new CustomEvent('hide_layers', {
               e.target.classList.remove('enabled')
               Object.values(_xyz.layers.list).forEach(layer => {
 
-                layer.view.style.display = 'block'
+                //layer.view.style.display = 'block'
+                layer.view.style.visibility = 'visible'
+                layer.view.style.height = 'auto'
+  
+              })
+
+              Object.values(_xyz.layers.listview.groups).forEach(group => {
+  
+                group.drawer.style.visibility = 'visible'
+                group.drawer.style.height = 'auto'
   
               })
               return;
@@ -25,7 +34,19 @@ document.dispatchEvent(new CustomEvent('hide_layers', {
 
             Object.values(_xyz.layers.list).forEach(layer => {
 
-              if (!layer.display) layer.view.style.display = 'none'
+              if (!layer.display) {
+                layer.view.style.visibility = 'hidden'
+                layer.view.style.height = '0'
+              }
+
+            })
+
+            Object.values(_xyz.layers.listview.groups).forEach(group => {
+
+              if (group.list.some(layerInGroup => layerInGroup.display)) return;
+
+              group.drawer.style.visibility = 'hidden'
+              group.drawer.style.height = '0'
 
             })
 

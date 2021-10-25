@@ -173,6 +173,13 @@
             "en": true
           }
         },
+        "Google Roadmap": {
+          "format": "tiles",
+          "URI": "http://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}",
+          "attribution": {
+            "© Google": "https://cloud.google.com/maps-platform/terms"
+          }
+        },
         "Mapbox Label": {
           "template": "Mapbox Label"
         },
