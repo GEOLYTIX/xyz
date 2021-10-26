@@ -951,7 +951,7 @@ button:disabled {
 .tabulator .tabulator-tableHolder .tabulator-table {
   position: relative;
   display: inline-block;
-  background-color: #fff;
+  background-color: #ffff;
   white-space: nowrap;
   overflow: visible;
   color: #333;
@@ -1080,7 +1080,7 @@ button:disabled {
   position: relative;
   box-sizing: border-box;
   min-height: 20px;
-  background-color: #fff;
+  background-color: #ffff;
 }
 .tabulator-row.tabulator-row-even {
   background-color: #EFEFEF;
@@ -1271,7 +1271,7 @@ button:disabled {
   width: 15px;
   border-radius: 20px;
   background: #666;
-  color: #fff;
+  color: #ffff;
   font-weight: bold;
   font-size: 1.1em;
 }
@@ -1354,7 +1354,7 @@ button:disabled {
   position: absolute;
   display: inline-block;
   box-sizing: border-box;
-  background: #fff;
+  background: #ffff;
   border: 1px solid #aaa;
   box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
   font-size: 12px;
@@ -1401,7 +1401,7 @@ button:disabled {
   display: inline-block;
   box-sizing: border-box;
   max-height: 200px;
-  background: #fff;
+  background: #ffff;
   border: 1px solid #aaa;
   font-size: 12px;
   overflow-y: auto;
@@ -1413,7 +1413,7 @@ button:disabled {
   color: #333;
 }
 .tabulator-edit-select-list .tabulator-edit-select-list-item.active {
-  color: #fff;
+  color: #ffff;
   background: #1D68CD;
 }
 .tabulator-edit-select-list .tabulator-edit-select-list-item.active.focused {
@@ -1424,7 +1424,7 @@ button:disabled {
 }
 .tabulator-edit-select-list .tabulator-edit-select-list-item:hover {
   cursor: pointer;
-  color: #fff;
+  color: #ffff;
   background: #1D68CD;
 }
 .tabulator-edit-select-list .tabulator-edit-select-list-notice {
