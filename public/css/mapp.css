@@ -211,6 +211,9 @@ input[type=range]::-moz-range-thumb {
   background-image: url("../icons/icon-touch-app.svg");
 }
 
+.icon-receipt {
+  background-image: url("../icons/icon-receipt.svg"); }
+
 .icon-toggle {
   background-image: url("../icons/icon-toggle-off.svg");
 }
@@ -263,6 +266,9 @@ input[type=range]::-moz-range-thumb {
 .icon-add-photo {
   background-image: url("../icons/icon-add-photo.svg");
 }
+
+.icon-image {
+  background-image: url("../icons/icon-image.svg"); }
 
 .icon-view-list {
   background-image: url("../icons/icon-view-list.svg");
