@@ -798,7 +798,7 @@ button {
 .tabulator .tabulator-tableHolder .tabulator-table {
   position: relative;
   display: inline-block;
-  background-color: #fff;
+  background-color: #ffff;
   white-space: nowrap;
   overflow: visible;
   color: #333; }
@@ -922,11 +922,12 @@ button {
 .tabulator-row {
   position: relative;
   box-sizing: border-box;
-  background-color: #fff;
-  border-bottom: 1px solid #ddd; }
-
-.tabulator-row:nth-child(even) {
-  background-color: #fff; }
+  min-height: 20px;
+  background-color: #ffff;
+}
+.tabulator-row.tabulator-row-even {
+  background-color: #EFEFEF;
+}
 
 .tabulator-row.tabulator-selectable:hover {
   /*background-color: #bbb;*/
@@ -1124,7 +1125,7 @@ button {
   width: 15px;
   border-radius: 20px;
   background: #666;
-  color: #fff;
+  color: #ffff;
   font-weight: bold;
   /*font-size: 1.1em;*/ }
 
@@ -1162,11 +1163,95 @@ button {
   border-top: 6px solid #666;
   border-bottom: 0; }
 
-.tabulator-row.tabulator-group.tabulator-group-level-1 .tabulator-arrow {
-  margin-left: 20px; }
+.tabulator-menu {
+  position: absolute;
+  display: inline-block;
+  box-sizing: border-box;
+  background: #ffff;
+  border: 1px solid #aaa;
+  box-shadow: 0 0 5px 0 rgba(0, 0, 0, 0.2);
+  font-size: 12px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  z-index: 10000;
+}
+.tabulator-menu .tabulator-menu-item {
+  position: relative;
+  box-sizing: border-box;
+  padding: 5px 10px;
+  user-select: none;
+}
+.tabulator-menu .tabulator-menu-item.tabulator-menu-item-disabled {
+  opacity: 0.5;
+}
+.tabulator-menu .tabulator-menu-item:not(.tabulator-menu-item-disabled):hover {
+  cursor: pointer;
+  background: #EFEFEF;
+}
+.tabulator-menu .tabulator-menu-item.tabulator-menu-item-submenu {
+  padding-right: 25px;
+}
+.tabulator-menu .tabulator-menu-item.tabulator-menu-item-submenu::after {
+  display: inline-block;
+  position: absolute;
+  top: calc(5px + 0.4em);
+  right: 10px;
+  height: 7px;
+  width: 7px;
+  content: "";
+  border-width: 1px 1px 0 0;
+  border-style: solid;
+  border-color: #aaa;
+  vertical-align: top;
+  transform: rotate(45deg);
+}
+.tabulator-menu .tabulator-menu-separator {
+  border-top: 1px solid #aaa;
+}
 
-.tabulator-row.tabulator-group.tabulator-group-level-2 .tabulator-arrow {
-  margin-left: 40px; }
+.tabulator-edit-select-list {
+  position: absolute;
+  display: inline-block;
+  box-sizing: border-box;
+  max-height: 200px;
+  background: #ffff;
+  border: 1px solid #aaa;
+  font-size: 12px;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+  z-index: 10000;
+}
+.tabulator-edit-select-list .tabulator-edit-select-list-item {
+  padding: 4px;
+  color: #333;
+}
+.tabulator-edit-select-list .tabulator-edit-select-list-item.active {
+  color: #ffff;
+  background: #1D68CD;
+}
+.tabulator-edit-select-list .tabulator-edit-select-list-item.active.focused {
+  outline: 1px solid rgba(255, 255, 255, 0.5);
+}
+.tabulator-edit-select-list .tabulator-edit-select-list-item.focused {
+  outline: 1px solid #1D68CD;
+}
+.tabulator-edit-select-list .tabulator-edit-select-list-item:hover {
+  cursor: pointer;
+  color: #ffff;
+  background: #1D68CD;
+}
+.tabulator-edit-select-list .tabulator-edit-select-list-notice {
+  padding: 4px;
+  color: #333;
+  text-align: center;
+}
+.tabulator-edit-select-list .tabulator-edit-select-list-group {
+  border-bottom: 1px solid #aaa;
+  padding: 4px;
+  padding-top: 6px;
+  color: #333;
+  font-weight: bold;
+}
 
 .tabulator-row.tabulator-group.tabulator-group-level-3 .tabulator-arrow {
   margin-left: 60px; }
