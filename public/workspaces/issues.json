@@ -98,7 +98,8 @@
                     "group": "Maps",
                     "template": "HERE Hybrid"
                 },
-                "GEOJSON ISSUE": {
+                "#443": {
+                    "meta": "<div><a class='primary-colour' href='https://github.com/GEOLYTIX/xyz/issues/443' target='_blank'>#443</a></div>",
                     "format": "cluster",
                     "dbs": "XYZ",
                     "table": "dev.uk_glx_sites",
