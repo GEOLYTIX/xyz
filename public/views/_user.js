@@ -132,8 +132,6 @@ async function removeExpiry(e, cell) {
 
   const user = cell.getData();
 
-  //const col = cell.getColumn();
-
   if (confirm('Remove expiry for ' + user.email)) {
 
     const response = await xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${user.email}&field=approved_by&value=${document.head.dataset.user}`);
@@ -146,16 +144,6 @@ async function removeExpiry(e, cell) {
   
     row.reformat();
   }
-
-  // const response = await xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${user.email}&field=${col.getField()}&value=${!cell.getValue()}`);
-
-  // if (response.err) return console.error(response.err);
-
-  // cell.setValue(!cell.getValue());
-
-  // const row = cell.getRow();
-
-  // row.reformat();
 };
 
 async function cellToggle(e, cell) {
