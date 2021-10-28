@@ -101,27 +101,38 @@ async function post(req, res) {
   // Blocked user cannot login.
   if (user.blocked) return new Error(await templates('user_blocked', user.language || req.params.language))
   
-  // Get approvalDate for checking expiry.
-  const approvalDate = user.approved_by && new Date(user.approved_by.replace(/.*\|/,''))
-
   // Non admin accounts may expire.
-  if (!user.admin 
-    && process.env.APPROVAL_EXPIRY && approvalDate
-    && approvalDate.setDate(approvalDate.getDate() + parseInt(process.env.APPROVAL_EXPIRY || 0)) < date) {
+  if (!user.admin && process.env.APPROVAL_EXPIRY) {
 
-    if (user.approved) {
+    // Get approvalDate for checking expiry.
+    const approvalDate = user.approved_by && new Date(user.approved_by.replace(/.*\|/,''))
+  
+    // Check whether the approvalDate is valid.
+    if (approvalDate instanceof Date && !isNaN(approvalDate.getDate())) {
 
-      // Remove approval of expired user account.
-      var rows = await acl(`
-        UPDATE acl_schema.acl_table
-        SET approved = false
-        WHERE lower(email) = lower($1);`,
-        [req.body.email])
+      // Calculate the difference in days between approval and now.
+      const diffTime = Math.abs(dateNow - approvalDate);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
 
-      if (rows instanceof Error) return new Error(await templates('failed_query', req.params.language))
+      // Check whether the difference exceeds the APPROVAL_EXPIRY
+      if (parseInt(process.env.APPROVAL_EXPIRY) < diffDays) {
+
+        // Remove user approval.
+        if (user.approved) {
+
+          // Remove approval of expired user account.
+          var rows = await acl(`
+            UPDATE acl_schema.acl_table
+            SET approved = false
+            WHERE lower(email) = lower($1);`,
+            [req.body.email])
+    
+          if (rows instanceof Error) return new Error(await templates('failed_query', req.params.language))
+        }
+    
+        return new Error(await templates('user_expired', user.language))
+      }
     }
-
-    return new Error(await templates('user_expired', user.language))
   }
 
   // Accounts must be verified and approved for login
