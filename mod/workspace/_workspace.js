@@ -12,6 +12,7 @@ module.exports = async (req, res) => {
     templates: getTemplates,
     locale: getLocale,
     locales: getLocales,
+    roles: getRoles
   }
 
   if (!req.params.key) return res.send(req.params.workspace)
@@ -112,4 +113,22 @@ async function getLayer(req, res) {
   await Roles.reduce(layer, roles)
 
   res.send(layer)
+}
+
+function getRoles(req, res) {
+
+  if (!req.params.workspace.locales) return res.send({})
+
+  let roles = Roles.get(req.params.workspace)
+
+  // const roles = req.params.user && req.params.user.roles || []
+
+  // const locales = Object.values(req.params.workspace.locales)
+  //   .filter(locale => !!Roles.check(locale, roles))
+  //   .map(locale => ({
+  //     key: locale.key,
+  //     name: locale.name
+  //   }))
+
+  res.send(roles)
 }
