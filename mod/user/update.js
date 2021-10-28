@@ -17,7 +17,7 @@ module.exports = async (req, res) => {
   var rows = await acl(`
   UPDATE acl_schema.acl_table
   SET
-    ${req.params.field} = ${req.params.value === 'false' && 'NULL' || req.params.value}
+    ${req.params.field} = ${req.params.value === 'false' && 'NULL' || `'${req.params.value}'`}
     ${req.params.field === 'approved'
       && `, approved_by = '${req.params.user.email}|${new Date().toISOString().replace(/\..*/,'')}'`
       || ''}
