@@ -280,15 +280,24 @@ window.onload = () => {
     if (xyz.locale.gazetteer) {
 
       const gazetteer = document.getElementById('gazetteer')
+
+      const gazetteerInput = gazetteer.querySelector('input')
         
       const btnGazetteer = btnColumn.insertBefore(xyz.utils.html.node`
         <button id="btnGazetteer"
           onclick=${e => {
             e.preventDefault()
+
+            // Check whether gazetteer input is enabled but not in view.
+            if (btnGazetteer.classList.contains('enabled')) {
+              const inputBounds = gazetteerInput.getBoundingClientRect()
+              if (inputBounds.y < 0) return gazetteerInput.focus()
+            }
+
             btnGazetteer.classList.toggle('enabled')
             btnGazetteer.classList.toggle('mobile-hidden')
             gazetteer.classList.toggle('display-none')
-            gazetteer.querySelector('input').focus()
+            gazetteerInput.focus()
           }}><div class="xyz-icon icon-search">`, btnColumn.firstChild)
         
       document.getElementById('closeGazetteer').onclick = e => {
