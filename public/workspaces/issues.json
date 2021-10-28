@@ -98,8 +98,8 @@
                     "group": "Maps",
                     "template": "HERE Hybrid"
                 },
-                "#443": {
-                    "meta": "<div><a class='primary-colour' href='https://github.com/GEOLYTIX/xyz/issues/443' target='_blank'>#443</a></div>",
+                "Feature Collection (geoJSON) on Infoj Entry": {
+                    "meta": "<div><a class='primary-colour' href='https://github.com/GEOLYTIX/xyz/issues/443' target='_blank'>Issue #443</a></div>",
                     "format": "cluster",
                     "dbs": "XYZ",
                     "table": "dev.uk_glx_sites",
