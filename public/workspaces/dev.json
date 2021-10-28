@@ -147,6 +147,8 @@
       "maxZoom": 17,
       "showScaleBar": true,
       "plugins": {
+        "screenshot": "/dev/js/plugins/screenshot.js",
+        "hide_layers": "/dev/js/plugins/hide_layers.js",
         "custom_list_filter": "/dev/js/plugins/custom_list_filter.js",
         "openrouteservice": "/dev/js/plugins/openrouteservice.js",
         "geojson_file": "/dev/js/plugins/geojson_file.js",
@@ -169,6 +171,13 @@
           "template": "HERE Hybrid",
           "roles": {
             "en": true
+          }
+        },
+        "Google Roadmap": {
+          "format": "tiles",
+          "URI": "http://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}",
+          "attribution": {
+            "© Google": "https://cloud.google.com/maps-platform/terms"
           }
         },
         "Mapbox Label": {
