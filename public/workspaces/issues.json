@@ -47,9 +47,6 @@
                 "© Here": "https://www.here.com/",
                 "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
             }
-        },
-        "test_feature_collection": {
-            "template": "SELECT jsonb_build_object('type', 'FeatureCollection', 'features', features.features) AS collection FROM ( SELECT array_agg(json_build_object('type', 'Feature', 'geometry', st_asgeojson(a.geom_p_4326)::jsonb)) features FROM dev.catchment_test a WHERE a.site_id = 17 ) features;"
         }
     },
     "locales": {
@@ -97,50 +94,6 @@
                 "HERE Hybrid": {
                     "group": "Maps",
                     "template": "HERE Hybrid"
-                },
-                "Feature Collection (geoJSON) on Infoj Entry": {
-                    "meta": "<div><a class='primary-colour' href='https://github.com/GEOLYTIX/xyz/issues/443' target='_blank'>Issue #443</a></div>",
-                    "format": "cluster",
-                    "dbs": "XYZ",
-                    "table": "dev.uk_glx_sites",
-                    "geom": "geom_4326",
-                    "srid": "4326",
-                    "qID": "id",
-                    "cluster_label": "id",
-                    "cluster_kmeans": 0.001,
-                    "style": {
-                        "default": {
-                            "scale": 0.6,
-                            "zoomInScale": 0.2
-                        },
-                        "cluster": {
-                            "clusterScale": 0.1
-                        },
-                        "themes": {}
-                    },
-                    "infoj": [
-                        {
-                            "type": "key"
-                        },
-                        {
-                            "name": "ID",
-                            "field": "id"
-                        },
-                        {
-                            "group": "Catchments",
-                            "expanded": true,
-                            "name": "Nearest to catchments",
-                            "field": "collection",
-                            "type": "geometry",
-                            "query": "test_feature_collection",
-                            "style": {
-                                "marker": {
-                                    "type": "circle",
-                                    "scale": 0.7
-                                }
-                            }
-                        }
-                    ]
                 }
             }
         }
