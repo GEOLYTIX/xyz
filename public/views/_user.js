@@ -256,11 +256,8 @@ function roleEdit(cell, onRendered, success, cancel, editorParams){
 
           cellElement.style.overflow = 'hidden';
 
-          await xhrPromise(document.head.dataset.dir + 
-            '/api/user/update' + 
-            '?email=' + user.email +
-            '&field=roles' +
-            '&value='+ cellValues)
+          await xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${user
+            .email}&field=roles&value=${cellValues}`)
 
           success(cellValues);
 
