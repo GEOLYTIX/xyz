@@ -13,11 +13,14 @@ module.exports = async (req, res) => {
     req.params.value = `'{"${req.params.value.replace(/\s+/g, '').split(',').join('","')}"}'`
   }
 
+  const val = req.params.value === 'false' && 'NULL'
+    || req.params.value
+
   // Get user to update from ACL.
   var rows = await acl(`
   UPDATE acl_schema.acl_table
   SET
-    ${req.params.field} = ${req.params.value === 'false' && 'NULL' || `'${req.params.value}'`}
+    ${req.params.field} = ${val}
     ${req.params.field === 'approved'
       && `, approved_by = '${req.params.user.email}|${new Date().toISOString().replace(/\..*/,'')}'`
       || ''}
