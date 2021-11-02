@@ -4,7 +4,7 @@ module.exports = {
     if (!_.coords) return `
     SELECT \${field} AS label
     FROM \${table}
-    WHERE \${qID} = %{id}`
+    WHERE \${qID} = %{id} \${filter}`
 
     const coords = _.coords.split(',').map(val => parseFloat(val))
  
