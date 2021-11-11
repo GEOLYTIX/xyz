@@ -7,7 +7,7 @@ document.dispatchEvent(new CustomEvent('measure_distance_here_walk', {
 
         document.getElementById('mapButton').appendChild(_xyz.utils.html.node `
       <button
-        class="mobile-display-none"
+        class="mobile-display-none measure_distance_here_walk"
           title="HERE Distance"
           onclick=${e => {
 
@@ -132,10 +132,9 @@ document.dispatchEvent(new CustomEvent('measure_distance_here_walk', {
 
             function end(e) {
                 _xyz.mapview.interaction.draw.Layer.getSource().clear()
-                _xyz.map.removeInteraction(_xyz.mapview.interaction.draw.interaction)
-                _xyz.map.removeLayer(_xyz.mapview.interaction.draw.Layer)
-                _xyz.mapview.node.style.cursor = 'default'
+                _xyz.mapview.interaction.draw.cancel()
                 _xyz.mapview.node.removeEventListener('contextmenu', end)
+                document.querySelector('#mapButton .measure_distance_here_walk').classList.remove('enabled')
             }
 
         }
