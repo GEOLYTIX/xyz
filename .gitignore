@@ -15,6 +15,7 @@ public/workspaces/*
 !public/workspaces/geodata.json
 !public/workspaces/blog.json
 !public/workspaces/issues.json
+!public/workspaces/commonplace.json
 
 public/views/foodmap.*
 public/views/wellbeing.*

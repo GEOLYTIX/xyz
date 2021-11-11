@@ -15,10 +15,10 @@ html {
     display: none;
   }
 
-  body {
+  /* body {
     display: grid;
     grid-template-columns: 333px 10px 50px auto;
-  }
+  } */
 
   body.fullscreen {
     grid-template-columns: 0 0 50px auto !important;

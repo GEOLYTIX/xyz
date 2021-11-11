@@ -3,10 +3,26 @@ const dbs = require('../dbs')()
 module.exports = async (req, res) => {
 
   const layer = req.params.layer
- 
+  let columns = `(${layer.geom}`;
+
+  if (req.body.properties.metadata) {
+    columns += `, metadata`;
+  }
+  
+  if (req.query.slug) {
+    columns += `, slug`;
+  }
+  
+  if (req.query.project) {
+    columns += `, project`;
+  }
+
   var q = `
-  INSERT INTO ${req.params.table} (${layer.geom})
+  INSERT INTO ${req.params.table} ${columns})
   SELECT ST_SetSRID(ST_MakeValid(ST_GeomFromGeoJSON('${JSON.stringify(req.body.geometry)}')), ${layer.srid})
+  ${req.body.properties.metadata ? `, '${JSON.stringify(req.body.properties.metadata)}'` : ''}
+  ${req.query.slug ? `, '${req.query.slug}'` : ''}
+  ${req.query.project ? `, '${req.query.project}'` : ''}
   RETURNING ${layer.qID} AS id;`
 
   var rows = await dbs[layer.dbs](q)

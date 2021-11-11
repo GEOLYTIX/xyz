@@ -19,6 +19,7 @@
           "key": "Cache-Control",
           "value": "no-cache"
         },
+        { "key": "Access-Control-Allow-Origin", "value": "*" },
         {
           "key": "Access-Control-Allow-Headers",
           "value": "Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With"

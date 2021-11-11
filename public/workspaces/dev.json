@@ -137,14 +137,13 @@
   },
   "locales": {
     "UK": {
-      "bounds": {
-        "north": 62,
-        "east": 5,
-        "south": 49,
-        "west": -13
+      "minZoom": 14,
+      "maxZoom": 18,
+      "view": {
+        "lat": 53.54472,
+        "lng": -2.11833,
+        "z": 17
       },
-      "minZoom": 2,
-      "maxZoom": 17,
       "showScaleBar": true,
       "plugins": {
         "screenshot": "/dev/js/plugins/screenshot.js",
@@ -158,7 +157,9 @@
       },
       "layers": {
         "Mapbox Base": {
-          "template": "Mapbox Base",
+          "format": "mbtiles",
+          "mbStyle": "mapbox://styles/andypols/ckm0tvy2p3knn17lh50xc87ly",
+          "accessToken": "pk.eyJ1IjoiYW5keXBvbHMiLCJhIjoiY2ttMHQ3cnhqMG8yODJucjNyejRvaGVvaSJ9.RBSYVzv5pxlAgCCCjB9xoQ",
           "display": true
         },
         "HERE Imagery": {
@@ -845,19 +846,9 @@
           "plugins": [
             "openrouteservice"
           ],
+          "display": true,
           "edit": {
-            "polygon": true,
-            "freehand": true,
-            "circle": true,
-            "rectangle": true,
-            "line": true,
-            "point": true,
-            "geometry": true,
-            "isoline_mapbox": {
-              "access_token": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmY25oa2thMWhoMDJzbGNldmF2ZzYzcCJ9.IWcezkYm8mipsGXygnYbNw"
-            },
-            "isoline_here": true,
-            "delete": true
+            "point": true
           },
           "infoj": [
             {
@@ -974,23 +965,16 @@
             }
           ]
         },
-        "Aurora": {
+        "Polygon": {
           "format": "mvt",
-          "dbs": "DEV",
-          "table": "geodata.uk_glx_geodata_postal_area",
-          "srid": "3857",
-          "geom": "geom_3857"
-        },
-        "geoms": {
-          "format": "mvt",
-          "dbs": "DEV",
-          "table": "dev.scratch",
+          "dbs": "XYZ",
+          "table": "polygons",
           "srid": "3857",
           "geom": "geom_3857",
           "qID": "id",
+          "display": true,
           "edit": {
-            "point": true,
-            "delete": true
+            "polygon": true
           },
           "infoj": [
             {

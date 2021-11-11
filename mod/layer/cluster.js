@@ -1,18 +1,18 @@
-const dbs = require('../dbs')()
+const dbs = require('../dbs')();
 
 const sql_filter = require('../sql_filter')
 
 const Roles = require('../roles.js')
 
 module.exports = async (req, res) => {
+  const layer = req.params.layer;
 
-  const layer = req.params.layer
-
-  let
-    geom = layer.geom,
-    style_theme = layer.style.theme || layer.style.themes && layer.style.themes[req.params.theme],
-    cat = style_theme && (style_theme.fieldfx || style_theme.field) || null,
-    size = style_theme && style_theme.size || 1,
+  let geom = layer.geom,
+    style_theme =
+      layer.style.theme ||
+      (layer.style.themes && layer.style.themes[req.params.theme]),
+    cat = (style_theme && (style_theme.fieldfx || style_theme.field)) || null,
+    size = (style_theme && style_theme.size) || 1,
     theme = style_theme && style_theme.type,
     label = req.params.label,
     count = req.params.count,
@@ -47,11 +47,10 @@ module.exports = async (req, res) => {
     ),
     ${geom}
   )
-  ${filter}`
+  ${filter}`;
 
   // Apply KMeans cluster algorithm.
   if (kmeans) {
-
     var q = `
     SELECT
       count(1)::integer,
@@ -63,13 +62,13 @@ module.exports = async (req, res) => {
 
     var rows = await dbs[layer.dbs](q, SQLparams)
 
-    if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
+    if (rows instanceof Error)
+      return res.status(500).send('Failed to query PostGIS table.');
 
     // return if no locations found within the envelope.
-    if (parseInt(rows[0].count) === 0) return res.send([])
+    if (parseInt(rows[0].count) === 0) return res.send([]);
 
-    if (kmeans >= rows[0].count) kmeans = rows[0].count
-
+    if (kmeans >= rows[0].count) kmeans = rows[0].count;
 
     // KMeans cluster algorithm
     var cluster_sql = `
@@ -103,7 +102,8 @@ module.exports = async (req, res) => {
 
     if (theme === 'categorized') var cat_sql = `array_agg(cat) cat,`
 
-    if (theme === 'graduated') var cat_sql = `${req.params.aggregate || 'sum'}(cat) cat,`
+    if (theme === 'graduated')
+      var cat_sql = `${req.params.aggregate || 'sum'}(cat) cat,`;
 
     var q = `
       SELECT
@@ -117,7 +117,8 @@ module.exports = async (req, res) => {
       GROUP BY kmeans_cid ${dbscan ? ', dbscan_cid;' : ';'}`
 
 
-    if (theme === 'competition') var q = `
+    if (theme === 'competition')
+      var q = `
       SELECT
         SUM(size) count,
         SUM(size) size,
@@ -140,16 +141,16 @@ module.exports = async (req, res) => {
   
       ) cluster GROUP BY kmeans_cid ${dbscan ? ', dbscan_cid;' : ';'}`
 
-  // Apply grid aggregation if KMeans is not defined.
+    // Apply grid aggregation if KMeans is not defined.
   } else {
-
-    let r = parseInt(40075016.68 / Math.pow(2, z) * (layer.cluster_resolution || layer.cluster_hexresolution || 0.1));
+    let r = parseInt(
+      (40075016.68 / Math.pow(2, z)) *
+        (layer.cluster_resolution || layer.cluster_hexresolution || 0.1)
+    );
 
     if (layer.cluster_hexresolution) {
-
-      let
-        _width = r,
-        _height = r - ((r * 2 / Math.sqrt(3)) - r) / 2;
+      let _width = r,
+        _height = r - ((r * 2) / Math.sqrt(3) - r) / 2;
 
       var with_sql = `
         WITH first as (
@@ -158,20 +159,42 @@ module.exports = async (req, res) => {
             ${cat} AS cat,
             ${size} AS size,
             ${label ? label + ' AS label,' : ''}
-            ${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'} AS geom,
-            ST_X(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) x,
-            ST_Y(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) y,
+            ${
+              (layer.srid == 3857 && geom) || 'ST_Transform(' + geom + ', 3857)'
+            } AS geom,
+            ST_X(${
+              (layer.srid == 3857 && geom) || 'ST_Transform(' + geom + ', 3857)'
+            }) x,
+            ST_Y(${
+              (layer.srid == 3857 && geom) || 'ST_Transform(' + geom + ', 3857)'
+            }) y,
 
-            ((ST_Y(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${_height})::integer % 2) odds,
+            ((ST_Y(${
+              (layer.srid == 3857 && geom) || 'ST_Transform(' + geom + ', 3857)'
+            }) / ${_height})::integer % 2) odds,
 
-            CASE WHEN ((ST_Y(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${_height})::integer % 2) = 0 THEN
+            CASE WHEN ((ST_Y(${
+              (layer.srid == 3857 && geom) || 'ST_Transform(' + geom + ', 3857)'
+            }) / ${_height})::integer % 2) = 0 THEN
               ST_Point(
-                round(ST_X(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${_width}) * ${_width},
-                round(ST_Y(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${_height}) * ${_height})
+                round(ST_X(${
+                  (layer.srid == 3857 && geom) ||
+                  'ST_Transform(' + geom + ', 3857)'
+                }) / ${_width}) * ${_width},
+                round(ST_Y(${
+                  (layer.srid == 3857 && geom) ||
+                  'ST_Transform(' + geom + ', 3857)'
+                }) / ${_height}) * ${_height})
 
             ELSE ST_Point(
-                round(ST_X(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${_width}) * ${_width} + ${_width / 2},
-                round(ST_Y(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${_height}) * ${_height})
+                round(ST_X(${
+                  (layer.srid == 3857 && geom) ||
+                  'ST_Transform(' + geom + ', 3857)'
+                }) / ${_width}) * ${_width} + ${_width / 2},
+                round(ST_Y(${
+                  (layer.srid == 3857 && geom) ||
+                  'ST_Transform(' + geom + ', 3857)'
+                }) / ${_height}) * ${_height})
 
             END p0                
 
@@ -189,12 +212,20 @@ module.exports = async (req, res) => {
               WHEN x < ST_X(p0) THEN CASE
         
                 WHEN y < ST_Y(p0) THEN CASE
-                  WHEN (geom <#> ST_Translate(p0, -${_width / 2}, -${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, -${_height}), 1)
+                  WHEN (geom <#> ST_Translate(p0, -${
+                    _width / 2
+                  }, -${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, -${
+        _width / 2
+      }, -${_height}), 1)
                   ELSE ST_SnapToGrid(p0, 1)
                   END
         
                 ELSE CASE
-                  WHEN (geom <#> ST_Translate(p0, -${_width / 2}, ${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, ${_height}), 1)
+                  WHEN (geom <#> ST_Translate(p0, -${
+                    _width / 2
+                  }, ${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, -${
+        _width / 2
+      }, ${_height}), 1)
                   ELSE ST_SnapToGrid(p0, 1)
                   END
         
@@ -203,12 +234,20 @@ module.exports = async (req, res) => {
               ELSE CASE
               
                 WHEN y < ST_Y(p0) THEN CASE
-                  WHEN (geom <#> ST_Translate(p0, ${_width / 2}, -${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, ${_width / 2}, -${_height}), 1)
+                  WHEN (geom <#> ST_Translate(p0, ${
+                    _width / 2
+                  }, -${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, ${
+        _width / 2
+      }, -${_height}), 1)
                   ELSE ST_SnapToGrid(p0, 1)
                   END
         
                 ELSE CASE
-                  WHEN (geom <#> ST_Translate(p0, ${_width / 2}, ${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, ${_width / 2}, ${_height}), 1)
+                  WHEN (geom <#> ST_Translate(p0, ${
+                    _width / 2
+                  }, ${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, ${
+        _width / 2
+      }, ${_height}), 1)
                   ELSE ST_SnapToGrid(p0, 1)
                   END
         
@@ -219,12 +258,20 @@ module.exports = async (req, res) => {
             ELSE CASE
               WHEN x < (ST_X(p0) - ${_width / 2}) THEN CASE
                 WHEN y < ST_Y(p0) THEN CASE
-                  WHEN (geom <#> ST_Translate(p0, -${_width / 2}, -${_height})) < (geom <#> ST_Translate(p0, -${_width}, 0)) THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, -${_height}), 1)
+                  WHEN (geom <#> ST_Translate(p0, -${
+                    _width / 2
+                  }, -${_height})) < (geom <#> ST_Translate(p0, -${_width}, 0)) THEN ST_SnapToGrid(ST_Translate(p0, -${
+        _width / 2
+      }, -${_height}), 1)
                   ELSE ST_SnapToGrid(ST_Translate(p0, -${_width}, 0), 1)
                   END
         
                 ELSE CASE
-                  WHEN (geom <#> ST_Translate(p0, -${_width / 2}, ${_height})) < (geom <#> ST_Translate(p0, -${_width}, 0)) THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, ${_height}), 1)
+                  WHEN (geom <#> ST_Translate(p0, -${
+                    _width / 2
+                  }, ${_height})) < (geom <#> ST_Translate(p0, -${_width}, 0)) THEN ST_SnapToGrid(ST_Translate(p0, -${
+        _width / 2
+      }, ${_height}), 1)
                   ELSE ST_SnapToGrid(ST_Translate(p0, -${_width}, 0), 1)
                   END
         
@@ -232,12 +279,20 @@ module.exports = async (req, res) => {
         
               ELSE CASE
                 WHEN y < ST_Y(p0) THEN CASE
-                  WHEN (geom <#> ST_Translate(p0, -${_width / 2}, -${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, -${_height}), 1)
+                  WHEN (geom <#> ST_Translate(p0, -${
+                    _width / 2
+                  }, -${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, -${
+        _width / 2
+      }, -${_height}), 1)
                   ELSE ST_SnapToGrid(p0, 1)
                   END
         
                 ELSE CASE
-                  WHEN (geom <#> ST_Translate(p0, -${_width / 2}, ${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, ${_height}), 1)
+                  WHEN (geom <#> ST_Translate(p0, -${
+                    _width / 2
+                  }, ${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, -${
+        _width / 2
+      }, ${_height}), 1)
                   ELSE ST_SnapToGrid(p0, 1)
                   END
         
@@ -246,16 +301,20 @@ module.exports = async (req, res) => {
               END
         
             END as point
-          FROM first)`
+          FROM first)`;
 
       var agg_sql = `second GROUP BY point ${label ? ',label' : ''};`;
 
       var xy_sql = `
-        ST_X(${layer.srid == 3857 && 'point' || 'ST_Transform(ST_SetSRID(point, 3857), ' + parseInt(layer.srid) + ')'}) x,
-        ST_Y(${layer.srid == 3857 && 'point' || 'ST_Transform(ST_SetSRID(point, 3857), ' + parseInt(layer.srid) + ')'}) y`
-
+        ST_X(${
+          (layer.srid == 3857 && 'point') ||
+          'ST_Transform(ST_SetSRID(point, 3857), ' + parseInt(layer.srid) + ')'
+        }) x,
+        ST_Y(${
+          (layer.srid == 3857 && 'point') ||
+          'ST_Transform(ST_SetSRID(point, 3857), ' + parseInt(layer.srid) + ')'
+        }) y`;
     } else {
-
       var agg_sql = `
         (SELECT
           ${cat} AS cat,
@@ -263,19 +322,28 @@ module.exports = async (req, res) => {
           ${label ? label + ' AS label,' : ''}
           ST_X(${geom}) AS x,
           ST_Y(${geom}) AS y,
-          round(ST_X(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${r}) * ${r} x_round,
-          round(ST_Y(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${r}) * ${r} y_round
+          round(ST_X(${
+            (layer.srid == 3857 && geom) || 'ST_Transform(' + geom + ', 3857)'
+          }) / ${r}) * ${r} x_round,
+          round(ST_Y(${
+            (layer.srid == 3857 && geom) || 'ST_Transform(' + geom + ', 3857)'
+          }) / ${r}) * ${r} y_round
             
-        FROM ${req.params.table} ${where_sql}) agg_sql GROUP BY x_round, y_round ${label && label !== 'count' ? ', label' : ''};`
+        FROM ${
+          req.params.table
+        } ${where_sql}) agg_sql GROUP BY x_round, y_round ${
+        label && label !== 'count' ? ', label' : ''
+      };`;
 
       var xy_sql = `
         percentile_disc(0.5) WITHIN GROUP (ORDER BY x) x,
-        percentile_disc(0.5) WITHIN GROUP (ORDER BY y) y`
+        percentile_disc(0.5) WITHIN GROUP (ORDER BY y) y`;
     }
 
-    if (theme === 'categorized') var cat_sql = `array_agg(cat) cat,`
+    if (theme === 'categorized') var cat_sql = `array_agg(cat) cat,`;
 
-    if (theme === 'graduated') var cat_sql = `${req.params.aggregate || 'sum'}(cat) cat,`
+    if (theme === 'graduated')
+      var cat_sql = `${req.params.aggregate || 'sum'}(cat) cat,`;
 
     var q = `
     ${with_sql || ''}
@@ -285,8 +353,7 @@ module.exports = async (req, res) => {
       ${label ? 'label,' : ''}
       ${cat_sql || ''}
       ${xy_sql}
-    FROM ${agg_sql}`
-
+    FROM ${agg_sql}`;
   }
 
   var rows = await dbs[layer.dbs](q, SQLparams)

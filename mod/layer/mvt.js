@@ -32,7 +32,6 @@ module.exports = async (req, res) => {
   const mvt_fields = Object.values(layer.style?.themes || {})
     .map(theme => getField(theme))
     .filter(field => typeof field !== 'undefined')
-
   // Assign mvt_fields from single theme
   layer.style?.theme && mvt_fields.push(getField(layer.style.theme))
 
@@ -94,7 +93,6 @@ module.exports = async (req, res) => {
           ${geom}
         ) ${filter}
       ) tile`
-
   if (!filter && layer.mvt_cache) {
 
     var rows = await dbs[layer.dbs](`SELECT mvt FROM ${layer.mvt_cache} WHERE z = ${z} AND x = ${x} AND y = ${y}`)
