@@ -28,7 +28,7 @@ document.dispatchEvent(new CustomEvent('measure_distance_here_walk', {
                 summary = {}
               }
             })
-          }}><div class="xyz-icon icon-car">`)
+          }}><div class="xyz-icon icon-walk-drive">`)
 
         function begin(params) {
 
