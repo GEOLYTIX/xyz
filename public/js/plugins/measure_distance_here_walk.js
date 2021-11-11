@@ -8,7 +8,7 @@ document.dispatchEvent(new CustomEvent('measure_distance_here_walk', {
         document.getElementById('mapButton').appendChild(_xyz.utils.html.node `
       <button
         class="mobile-display-none measure_distance_here_walk"
-          title="HERE Distance"
+          title="HERE Walk & Drive Distance"
           onclick=${e => {
 
             if (e.target.classList.contains('enabled')) return _xyz.mapview.interaction.draw.cancel()
