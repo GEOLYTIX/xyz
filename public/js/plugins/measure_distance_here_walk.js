@@ -1,7 +1,7 @@
 document.dispatchEvent(new CustomEvent('measure_distance_here_walk', {
     detail: _xyz => {
 
-        const summary = {}
+        let summary = {}
 
         if (!document.getElementById('mapButton')) return
 
@@ -25,7 +25,7 @@ document.dispatchEvent(new CustomEvent('measure_distance_here_walk', {
               callback: () => {
                 e.target.classList.remove('enabled')
                 _xyz.map.removeInteraction(_xyz.mapview.interaction.draw.interaction)
-                values = {}
+                summary = {}
               }
             })
           }}><div class="xyz-icon icon-car">`)
