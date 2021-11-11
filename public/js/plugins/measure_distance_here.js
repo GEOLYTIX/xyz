@@ -87,7 +87,7 @@ document.dispatchEvent(new CustomEvent('measure_distance_here', {
                                 values.duration = duration
 
                                 _xyz.mapview.popup.create({
-                                    content: _xyz.utils.html.node `<div style="padding: 5px; min-width: 100px; font-size: smaller;">Length ${(parseFloat(values.length/1000).toFixed(2)).toString().toLocaleString('en-GB')} km<br/>Duration ${Math.round(values.duration/60)} min`,
+                                    content: _xyz.utils.html.node `<div style="padding: 5px; min-width: 100px; font-size: smaller;">Drive Distance ${(parseFloat(values.length/1000).toFixed(2)).toString().toLocaleString('en-GB')} km<br/>Duration ${Math.round(values.duration/60)} min`,
                                     coords: _xyz.mapview.interaction.draw.vertices[_xyz.mapview.interaction.draw.vertices.length - 1]
                                 })
                             })
@@ -137,7 +137,7 @@ document.dispatchEvent(new CustomEvent('measure_distance_here', {
                 if (_xyz.mapview.popup.node) _xyz.mapview.popup.node.remove()
 
                 _xyz.mapview.popup.create({
-                    content: _xyz.utils.html.node `<div style="padding: 5px; min-width: 100px; font-size: smaller;">Length ${(parseFloat(params.length/1000).toFixed(2)).toString().toLocaleString('en-GB')} km<br/>Duration ${Math.round(params.duration/60)} min`,
+                    content: _xyz.utils.html.node `<div style="padding: 5px; min-width: 100px; font-size: smaller;">Drive Distance ${(parseFloat(params.length/1000).toFixed(2)).toString().toLocaleString('en-GB')} km<br/>Duration ${Math.round(params.duration/60)} min`,
                     coords: _xyz.mapview.interaction.draw.vertices[_xyz.mapview.interaction.draw.vertices.length - 1]
                 })
             })
