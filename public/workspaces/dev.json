@@ -776,17 +776,6 @@
           "geom": "geom_3857",
           "srid": "3857",
           "qID": "id",
-          "filter": {
-            "infoj": [
-              {
-                "title": "ID count",
-                "field": "id_count",
-                "type": "integer",
-                "inline": true,
-                "fieldfx": "count(id)"
-              }
-            ]
-          },
           "roles": {
             "en": null,
             "test": {
