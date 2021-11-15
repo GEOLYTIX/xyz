@@ -75,8 +75,18 @@ document.dispatchEvent(new CustomEvent('filter_multiselect', {
         block.dataset.field = entry.field
           
         entry.el = block
-          
-        layer.filter.current[entry.field] = {}
+
+        if (!layer.filter.current[entry.field]) {
+
+          layer.filter.current[entry.field] = {}
+        }
+
+        if (!layer.filter.current[entry.field].in) {
+
+          layer.filter.current[entry.field].in = []
+        }
+
+        filterSet = new Set(layer.filter.current[entry.field].in)
           
         block.appendChild(_xyz.utils.html.node`
           <button class="btn-drop">
@@ -90,7 +100,9 @@ document.dispatchEvent(new CustomEvent('filter_multiselect', {
               <div class="icon"></div>
             </div>
             <ul>${response.map(o => _xyz.utils.html`
-              <li onclick=${e => {
+              <li 
+                class="${filterSet.has(o[entry.field]) && 'secondary-colour-bg' || ''}"
+                onclick=${e => {
   
                 e.stopPropagation()
                 e.target.classList.toggle('secondary-colour-bg')
