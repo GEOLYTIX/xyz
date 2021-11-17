@@ -121,7 +121,8 @@ async function gaz_locale(req, locale, results) {
     const SQLparams = [`${dataset.leading_wildcard ? '%' : ''}${phrase}`]
 
     const filter =
-      ` ${req.params.filter && `AND ${sql_filter(JSON.parse(req.params.filter), SQLparams)}` || ''}
+    ` ${layer.filter?.default && 'AND '+layer.filter?.default || ''}
+      ${req.params.filter && `AND ${sql_filter(JSON.parse(req.params.filter), SQLparams)}` || ''}
       ${roles && Object.values(roles).some(r => !!r)
       && `AND ${sql_filter(Object.values(roles).filter(r => !!r), SQLparams)}`
       || ''}`
