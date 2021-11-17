@@ -146,6 +146,7 @@
       "minZoom": 2,
       "maxZoom": 17,
       "showScaleBar": true,
+      "foo": true,
       "plugins": {
         "screenshot": "/dev/js/plugins/screenshot.js",
         "hide_layers": "/dev/js/plugins/hide_layers.js",
