@@ -55,7 +55,7 @@ input:-webkit-autofill {
   width: 0;
   bottom: 0;
   position: absolute;
-  background: #1F964D;
+  background: #003D57;
   transition: 0.2s ease all;
   -moz-transition: 0.2s ease all;
   -webkit-transition: 0.2s ease all;
@@ -81,7 +81,7 @@ input:focus~.bar:after {
 
 button {
   color: white;
-  background-color: #1F964D;
+  background-color: #EC602D;
   margin: 10px 0;
   padding: 8px;
   text-align: center;
@@ -98,7 +98,7 @@ button {
 
 .switch {
   font-size: 18px;
-  color: #1F964D;
+  color: #EC602D;
   font-weight: 700;
 }
 
@@ -115,7 +115,7 @@ button:disabled {
 }
 
 .mailto {
-  color: #1F964D;
+  color: #003D57;
   text-decoration: none;
 }
 
