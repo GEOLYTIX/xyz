@@ -206,12 +206,12 @@ html {
     background-size: 30px;
     background-position: center;
     pointer-events: none;
-    border-bottom: 1px solid #1F964D;
-    filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%);
+    border-bottom: 1px solid #EC602D;
+    filter: invert(49%) sepia(53%) saturate(3142%) hue-rotate(343deg) brightness(96%) contrast(93%);
   }
 
   #ctrls>div>.tab.active {
-    background-color: #1F964D;
+    background-color: #EC602D;
   }
 
   #ctrls>div>.tab.active>.xyz-icon {
