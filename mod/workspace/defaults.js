@@ -50,7 +50,7 @@ module.exports = defaults = {
           type: 'dot',
         },
         highlight: {
-          strokeColor: '#1F964D',
+          strokeColor: '#EC602D',
           strokeWidth: 2,
           fillColor: '#cae0b8',
           fillOpacity: 0.2,
@@ -73,7 +73,7 @@ module.exports = defaults = {
         },
         highlight: {
           strokeWidth: 2,
-          strokeColor: '#1F964D',
+          strokeColor: '#EC602D',
           fillColor: '#cae0b8',
           fillOpacity: 0.2,
           icon: {
