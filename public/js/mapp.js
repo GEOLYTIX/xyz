@@ -652,7 +652,7 @@
     <div
       class="${`label ${t.class}`}">
       <a
-        class="primary-colour"
+        class="secondary-colour"
         target="_blank"
         href="${n}">
           ${t.report.title||t.report.name||"Location Report"}`)},Bn=e=>t=>{t.listview.appendChild(e.utils.html.node`
