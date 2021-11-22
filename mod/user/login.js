@@ -111,6 +111,7 @@ async function post(req, res) {
     if (approvalDate instanceof Date && !isNaN(approvalDate.getDate())) {
 
       // Calculate the difference in days between approval and now.
+      const dateNow = new Date();
       const diffTime = Math.abs(dateNow - approvalDate);
       const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
 
