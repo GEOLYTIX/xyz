@@ -1,31 +1,32 @@
 {
   "name": "xyz",
-  "version": "3.5.2",
+  "version": "3.6.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/geolytix/xyz"
   },
   "license": "MIT",
   "scripts": {
-    "_start": "node express.js",
+    "_start": "nodemon express.js",
     "_build": "webpack --mode production",
-    "_dev": "webpack --mode development"
+    "_dev": "webpack --mode development -w"
   },
   "dependencies": {
     "aws-sdk": "^2.820.0",
     "bcryptjs": "^2.4.3",
-    "chartjs": "^0.3.24",
     "cloudinary": "^1.24.0",
+    "cors": "^2.8.5",
     "data-api-client": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.21",
+    "lodash": "^4.17.20",
+    "mongodb": "^3.6.6",
     "nanoid": "^3.1.20",
     "node-fetch": "^2.6.1",
     "nodemailer": "^6.6.0",
-    "pg": "^8.5.1"
+    "pg": "^8.5.1",
+    "saml2-js": "^3.0.1"
   },
   "devDependencies": {
-    "@11ty/eleventy-plugin-syntaxhighlight": "^3.1.1",
     "@turf/circle": "^6.3.0",
     "@turf/flatten": "^6.3.0",
     "@turf/kinks": "^6.3.0",
@@ -34,13 +35,12 @@
     "chroma-js": "^2.1.0",
     "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
-    "eslint": "^6.8.0",
     "express": "^4.17.1",
     "flatpickr": "^4.6.3",
-    "geostats": "^2.0.0",
     "jwt-decode": "^2.2.0",
     "markdown-it": "^11.0.1",
     "markdown-it-anchor": "^6.0.0",
+    "nodemon": "^2.0.7",
     "uhtml": "^2.5.3",
     "webpack": "^5.28.0",
     "webpack-cli": "^4.3.1"

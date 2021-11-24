@@ -1,10 +1,10 @@
 {
   "templates": {
     "blog": {
-      "src": "file:views/blog.html"
+      "src": "file:public/views/blog.html"
     },
     "embedded": {
-      "src": "file:views/embedded.html"
+      "src": "file:public/views/embedded.html"
     },
     "Mapbox Base": {
       "format": "mbtiles",
@@ -113,9 +113,6 @@
     "Dev sites report": {
       "src": "https://api.github.com/repos/GEOLYTIX/xyz_resources/contents/dev/report_sites/sites.html"
     },
-    "Sites Local Report": {
-      "src": "file:views/report_location.html"
-    },
     "japan_restaurants": {
       "format": "cluster",
       "dbs": "DEV",
@@ -130,32 +127,39 @@
     "Agata": {
       "src": "cloudfront:${CDN}/dev/aga/layer.json"
     },
-    "open": {
-      "src": "file:workspaces/templates/open.json"
-    },
     "uk_polygon_demand": {
       "src": "cloudfront:${CDN}/asda/templates/charts/polygon_demand.sql"
+    },
+    "custom_list_filter_query": {
+      "template": "select distinct(retailer) as retailer from geodata.vw_uk_glx_open_retail_points_display_brand",
+      "dbs": "MAPP"
     }
   },
   "locales": {
     "UK": {
-      "bounds": {
-        "north": 62,
-        "east": 5,
-        "south": 49,
-        "west": -13
+      "minZoom": 14,
+      "maxZoom": 18,
+      "view": {
+        "lat": 53.54472,
+        "lng": -2.11833,
+        "z": 17
       },
-      "minZoom": 2,
-      "maxZoom": 17,
       "showScaleBar": true,
       "plugins": {
+        "screenshot": "/dev/js/plugins/screenshot.js",
+        "hide_layers": "/dev/js/plugins/hide_layers.js",
+        "custom_list_filter": "/dev/js/plugins/custom_list_filter.js",
+        "openrouteservice": "/dev/js/plugins/openrouteservice.js",
+        "geojson_file": "/dev/js/plugins/geojson_file.js",
         "demand_chart": "/dev/js/plugins/demand_chart.js",
         "post_array": "/dev/js/plugins/post_array.js",
         "post_json": "/dev/js/plugins/post_json.js"
       },
       "layers": {
         "Mapbox Base": {
-          "template": "Mapbox Base",
+          "format": "mbtiles",
+          "mbStyle": "mapbox://styles/andypols/ckm0tvy2p3knn17lh50xc87ly",
+          "accessToken": "pk.eyJ1IjoiYW5keXBvbHMiLCJhIjoiY2ttMHQ3cnhqMG8yODJucjNyejRvaGVvaSJ9.RBSYVzv5pxlAgCCCjB9xoQ",
           "display": true
         },
         "HERE Imagery": {
@@ -170,8 +174,303 @@
             "en": true
           }
         },
+        "Google Roadmap": {
+          "format": "tiles",
+          "URI": "http://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}",
+          "attribution": {
+            "© Google": "https://cloud.google.com/maps-platform/terms"
+          }
+        },
         "Mapbox Label": {
           "template": "Mapbox Label"
+        },
+        "Mapbox Base OL": {
+          "format": "mbvectortiles",
+          "mbStyle": "mapbox://styles/dbauszus/ciozrimi3002bdsm8bjtn2v1y",
+          "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmY25oa2thMWhoMDJzbGNldmF2ZzYzcCJ9.IWcezkYm8mipsGXygnYbNw",
+          "attribution": {
+            "© Mapbox": "https://www.mapbox.com/about/maps",
+            "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+          }
+        },
+        "Mapbox Label OL": {
+          "format": "mbvectortiles",
+          "mbStyle": "mapbox://styles/dbauszus/ckjk91u8b1da319o7dhpdhqln",
+          "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmY25oa2thMWhoMDJzbGNldmF2ZzYzcCJ9.IWcezkYm8mipsGXygnYbNw",
+          "attribution": {
+            "© Mapbox": "https://www.mapbox.com/about/maps",
+            "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+          }
+        },
+        "Offices": {
+          "format": "geojson",
+          "dbs": "WEBSITE",
+          "table": "website.global_glx_open_geolytix_offices",
+          "geom": "geom_p_4326",
+          "srid": "4326",
+          "qID": "id",
+          "infoj": [
+            {
+              "field": "id",
+              "title": "ID"
+            }
+          ],
+          "style": {
+            "default": {
+              "type": "markerColor",
+              "colorMarker": "#003D57",
+              "colorDot": "#F0F0F0",
+              "anchor": [
+                0.5,
+                1
+              ],
+              "scale": 3
+            },
+            "highlight": {
+              "type": "markerColor",
+              "colorMarker": "#EC602D",
+              "colorDot": "#F0F0F0",
+              "anchor": [
+                0.5,
+                1
+              ]
+            }
+          }
+        },
+        "Retail Points": {
+          "format": "cluster",
+          "dbs": "MAPP",
+          "table": "geodata.vw_uk_glx_open_retail_points_display_brand",
+          "qID": "id",
+          "geom": "geom_p_4326",
+          "srid": "4326",
+          "properties": "size_band",
+          "cluster_label": "store_name",
+          "cluster_cat": "retailer",
+          "cluster_kmeans": 0.02,
+          "plugins": [
+            "custom_list_filter"
+          ],
+          "hover": {
+            "field": "store_name"
+          },
+          "infoj": [
+            {
+              "type": "key"
+            },
+            {
+              "field": "retailer",
+              "title": "Retailer",
+              "filter": "like",
+              "inline": true
+            },
+            {
+              "field": "fascia",
+              "title": "Fascia",
+              "inline": true
+            },
+            {
+              "field": "store_name",
+              "title": "Name"
+            },
+            {
+              "title": "Address",
+              "type": "title"
+            },
+            {
+              "field": "add_one"
+            },
+            {
+              "field": "add_two"
+            },
+            {
+              "field": "locality"
+            },
+            {
+              "field": "postcode"
+            },
+            {
+              "field": "town"
+            },
+            {
+              "field": "size_sqft",
+              "title": "Size in sqft",
+              "inline": true
+            },
+            {
+              "field": "pqi",
+              "title": "PQI"
+            },
+            {
+              "type": "streetview"
+            }
+          ],
+          "style": {
+            "label": {
+              "count": true,
+              "strokeColor": "#fff",
+              "strokeWidth": 3
+            },
+            "default": {
+              "scale": 2
+            },
+            "cluster": {
+              "clusterScale": 2
+            },
+            "highlight": {
+              "scale": 1.2
+            },
+            "themes": {
+              "Retail - Simple": {
+                "type": "categorized",
+                "field": "retailer",
+                "other": true,
+                "cat": {
+                  "Aldi": {
+                    "layers": [
+                      {
+                        "svg": "https://geolytix.github.io/MapIcons/pins/mint.svg"
+                      },
+                      {
+                        "svg": "https://geolytix.github.io/MapIcons/logos/boots_white.svg"
+                      }
+                    ]
+                  },
+                  "Asda": {
+                    "label": "Asda",
+                    "style": {
+                      "svg": null,
+                      "type": "target",
+                      "fillColor": "#83b923",
+                      "layers": {
+                        "0.5": "#ffffff",
+                        "0.375": "#fdb839"
+                      }
+                    }
+                  },
+                  "Co-op": {
+                    "label": "The Co-Operative",
+                    "style": {
+                      "svg": null,
+                      "type": "target",
+                      "fillColor": "#0b1e60",
+                      "layers": {
+                        "0.625": "#ffffff",
+                        "0.5": "#a3d227"
+                      }
+                    }
+                  },
+                  "Lidl": {
+                    "label": "Lidl",
+                    "style": {
+                      "svg": null,
+                      "type": "target",
+                      "fillColor": "#d61408",
+                      "layers": {
+                        "0.875": "#ffe502",
+                        "0.5": "#002d7a",
+                        "0.25": "#d61408"
+                      }
+                    }
+                  },
+                  "Marks and Spencer": {
+                    "label": "Marks & Spencer",
+                    "style": {
+                      "svg": null,
+                      "type": "target",
+                      "fillColor": "#0a0d10",
+                      "layers": {
+                        "0.5": "#def036",
+                        "0.25": "#0a0d10"
+                      }
+                    }
+                  },
+                  "Morrisons": {
+                    "label": "Morrisons",
+                    "style": {
+                      "svg": null,
+                      "type": "target",
+                      "fillColor": "#ffe133",
+                      "layers": {
+                        "0.5": "#00614e"
+                      }
+                    }
+                  },
+                  "Sainsburys": {
+                    "label": "Sainsbury's",
+                    "style": {
+                      "svg": null,
+                      "type": "target",
+                      "fillColor": "#ee8a00",
+                      "layers": {
+                        "0.625": "#ffffff",
+                        "0.325": "#ee8a00"
+                      }
+                    }
+                  },
+                  "Tesco": {
+                    "label": "Tesco",
+                    "style": {
+                      "svg": null,
+                      "type": "target",
+                      "fillColor": "#0055a8",
+                      "layers": {
+                        "0.75": "#ffffff",
+                        "0.325": "#f02f26"
+                      }
+                    }
+                  },
+                  "Waitrose": {
+                    "label": "Waitrose",
+                    "style": {
+                      "svg": null,
+                      "type": "target",
+                      "fillColor": "#81ae37",
+                      "layers": {
+                        "0.325": "#ffffff"
+                      }
+                    }
+                  }
+                }
+              },
+              "Length": {
+                "type": "graduated",
+                "fieldfx": "length(store_name)",
+                "cat_arr": [
+                  {
+                    "value": "0",
+                    "style": {
+                      "marker": {
+                        "svg": null,
+                        "type": "dot",
+                        "fillColor": "#15773f"
+                      }
+                    }
+                  },
+                  {
+                    "value": "10",
+                    "style": {
+                      "marker": {
+                        "svg": null,
+                        "type": "dot",
+                        "fillColor": "#66bd63"
+                      }
+                    }
+                  },
+                  {
+                    "value": "15",
+                    "style": {
+                      "marker": {
+                        "svg": null,
+                        "type": "dot",
+                        "fillColor": "#a6d96a"
+                      }
+                    }
+                  }
+                ]
+              }
+            }
+          }
         },
         "ZoomGeom": {
           "format": "mvt",
@@ -187,7 +486,28 @@
             "11": "geom_3857_5m",
             "12": "geom_3857"
           },
-          "table": "geodata.uk_glx_geodata_seamless_shopper_town"
+          "table": "geodata.uk_glx_geodata_seamless_shopper_town",
+          "style": {
+            "default": {
+              "fillColor": "#fff",
+              "fillOpacity": 0,
+              "strokeColor": "#333"
+            },
+            "themes": {
+              "Flame": {
+                "type": "basic",
+                "style": {
+                  "strokeColor": "#E35C2A"
+                }
+              },
+              "Chocolate": {
+                "type": "basic",
+                "style": {
+                  "strokeColor": "#401505"
+                }
+              }
+            }
+          }
         },
         "Grid": {
           "format": "grid",
@@ -229,11 +549,17 @@
           },
           "style": {
             "theme": {
-              "fields": ["pop__01", "pop__11", "gen_female__11", "gen_male__11"],
+              "fields": [
+                "pop__01",
+                "pop__11",
+                "gen_female__11",
+                "gen_male__11"
+              ],
               "dynamic": true,
               "type": "graduated",
               "field": "pop__01",
-              "cat_arr": [{
+              "cat_arr": [
+                {
                   "value": "0",
                   "style": {
                     "marker": {
@@ -300,7 +626,8 @@
               "theme": {
                 "type": "graduated",
                 "field": "pop__11",
-                "cat_arr": [{
+                "cat_arr": [
+                  {
                     "style": {
                       "marker": {
                         "scale": 0.4
@@ -365,7 +692,6 @@
           "srid": "3857",
           "style": {
             "label": {
-              "display": true,
               "field": "rp_name",
               "declutter": true,
               "strokeColor": "#ffffff",
@@ -421,23 +747,25 @@
             }
           },
           "qID": "id",
-          "infoj": [{
-            "title": "RP Type",
-            "field": "rp_type",
-            "filter": {
-              "in": [
-                "City Centre",
-                "Town Centre",
-                "Urban Centre",
-                "Parade"
-              ]
+          "infoj": [
+            {
+              "title": "RP Type",
+              "field": "rp_type",
+              "filter": {
+                "in": [
+                  "City Centre",
+                  "Town Centre",
+                  "Urban Centre",
+                  "Parade"
+                ]
+              }
+            },
+            {
+              "field": "rp_name",
+              "title": "rp_name",
+              "filter": "like"
             }
-          },
-        {
-          "field": "rp_name",
-          "title": "rp_name",
-          "filter": "like"
-        }]
+          ]
         },
         "RP Roles": {
           "format": "mvt",
@@ -450,13 +778,15 @@
           "srid": "3857",
           "qID": "id",
           "filter": {
-            "infoj": [{
-              "title": "ID count",
-              "field": "id_count",
-              "type": "integer",
-              "inline": true,
-              "fieldfx": "count(id)"
-            }]
+            "infoj": [
+              {
+                "title": "ID count",
+                "field": "id_count",
+                "type": "integer",
+                "inline": true,
+                "fieldfx": "count(id)"
+              }
+            ]
           },
           "roles": {
             "en": null,
@@ -471,17 +801,19 @@
               }
             }
           },
-          "infoj": [{
-            "title": "RP Type",
-            "field": "rp_type",
-            "filter": {
-              "in": [
-                "City Centre",
-                "Town Centre",
-                "Urban Centre"
-              ]
+          "infoj": [
+            {
+              "title": "RP Type",
+              "field": "rp_type",
+              "filter": {
+                "in": [
+                  "City Centre",
+                  "Town Centre",
+                  "Urban Centre"
+                ]
+              }
             }
-          }]
+          ]
         },
         "Retail Points HX": {
           "format": "cluster",
@@ -492,9 +824,17 @@
           "cluster_hexresolution": 0.1,
           "qID": "id",
           "cluster_label": "store_name",
-          "infoj": [{
-            "field": "id"
-          }]
+          "infoj": [
+            {
+              "field": "id"
+            }
+          ]
+        },
+        "Geojson": {
+          "format": "geojson",
+          "plugins": [
+            "geojson_file"
+          ]
         },
         "Scratch": {
           "format": "mvt",
@@ -503,19 +843,12 @@
           "srid": "3857",
           "geom": "geom_3857",
           "qID": "id",
+          "plugins": [
+            "openrouteservice"
+          ],
+          "display": true,
           "edit": {
-            "polygon": true,
-            "freehand": true,
-            "circle": true,
-            "rectangle": true,
-            "line": true,
-            "point": true,
-            "geometry": true,
-            "isoline_mapbox": {
-              "access_token": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tmY25oa2thMWhoMDJzbGNldmF2ZzYzcCJ9.IWcezkYm8mipsGXygnYbNw"
-            },
-            "isoline_here": true,
-            "delete": true
+            "point": true
           },
           "infoj": [
             {
@@ -572,13 +905,20 @@
               "title": "options_field",
               "field": "options_field",
               "edit": {
-                "options": [{
+                "options": [
+                  {
                     "Open": "1"
                   },
                   {
                     "Closed": "2"
                   },
                   "Other"
+                ]
+              },
+              "filter": { 
+                "in": [
+                  "1",
+                  "2"
                 ]
               }
             },
@@ -625,23 +965,16 @@
             }
           ]
         },
-        "Aurora": {
+        "Polygon": {
           "format": "mvt",
-          "dbs": "DEV",
-          "table": "geodata.uk_glx_geodata_postal_area",
-          "srid": "3857",
-          "geom": "geom_3857"
-        },
-        "geoms": {
-          "format": "mvt",
-          "dbs": "DEV",
-          "table": "dev.scratch",
+          "dbs": "XYZ",
+          "table": "polygons",
           "srid": "3857",
           "geom": "geom_3857",
           "qID": "id",
+          "display": true,
           "edit": {
-            "point": true,
-            "delete": true
+            "polygon": true
           },
           "infoj": [
             {
@@ -676,9 +1009,6 @@
             }
           ]
         },
-        "Agata": {
-          "template": "Agata"
-        },
         "Polygon Statistics": {
           "format": "mvt",
           "dbs": "AVOCET",
@@ -690,7 +1020,8 @@
             "delete": true
           },
           "qID": "id",
-          "infoj": [{
+          "infoj": [
+            {
               "type": "key"
             },
             {
@@ -857,18 +1188,20 @@
               "target": "location",
               "chart": {
                 "type": "doughnut",
-                "datasets": [{
-                  "backgroundColor": [
-                    "rgba(229, 99 , 153, 0.4)",
-                    "rgba(0, 167, 225, 0.4)",
-                    "rgba(237, 222, 164, 0.4)",
-                    "rgba(247, 160 ,114, 0.4)",
-                    "rgba(255, 155, 66, 0.4)"
-                  ],
-                  "borderColor": "#C0B4A7",
-                  "spanGaps": true,
-                  "lineTension": 0.5
-                }],
+                "datasets": [
+                  {
+                    "backgroundColor": [
+                      "rgba(229, 99 , 153, 0.4)",
+                      "rgba(0, 167, 225, 0.4)",
+                      "rgba(237, 222, 164, 0.4)",
+                      "rgba(247, 160 ,114, 0.4)",
+                      "rgba(255, 155, 66, 0.4)"
+                    ],
+                    "borderColor": "#C0B4A7",
+                    "spanGaps": true,
+                    "lineTension": 0.5
+                  }
+                ],
                 "options": {
                   "cutoutPercentage": 36,
                   "title": {
@@ -929,7 +1262,8 @@
             },
             "default": {
               "showInHeader": true,
-              "layers": [{
+              "layers": [
+                {
                   "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/aga/red_pin.svg"
                 },
                 {
@@ -1002,7 +1336,8 @@
           "roles": {
             "ja": true
           },
-          "infoj": [{
+          "infoj": [
+            {
               "type": "key"
             },
             {
@@ -1026,7 +1361,8 @@
           "roles": {
             "!ja": null
           },
-          "infoj": [{
+          "infoj": [
+            {
               "type": "key"
             },
             {

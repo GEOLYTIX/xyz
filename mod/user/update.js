@@ -2,9 +2,7 @@ const acl = require('./acl')()
 
 const mailer = require('../mailer')
 
-const mail_templates = require('./mails')
-
-const messages = require('./messages')
+const templates = require('../templates/_templates')
 
 module.exports = async (req, res) => {
 
@@ -15,17 +13,20 @@ module.exports = async (req, res) => {
     req.params.value = `'{"${req.params.value.replace(/\s+/g, '').split(',').join('","')}"}'`
   }
 
+  const val = req.params.value === 'false' && 'NULL'
+    || req.params.value
+
   // Get user to update from ACL.
   var rows = await acl(`
   UPDATE acl_schema.acl_table
   SET
-    ${req.params.field} = ${req.params.value === 'false' && 'NULL' || req.params.value}
+    ${req.params.field} = ${val}
     ${req.params.field === 'approved'
-      && `, approvaltoken = null, approved_by = '${req.params.user.email}|${new Date().toISOString().replace(/\..*/,'')}'`
+      && `, approved_by = '${req.params.user.email}|${new Date().toISOString().replace(/\..*/,'')}'`
       || ''}
   WHERE lower(email) = lower($1);`, [email])
 
-  if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
+  if (rows instanceof Error) return res.status(500).send(await templates('failed_query', req.params.language))
 
   const protocol = `${req.headers.host.includes('localhost') && 'http' || 'https'}://`
 
@@ -34,17 +35,16 @@ module.exports = async (req, res) => {
   // Send email to the user account if an account has been approved.
   if (req.params.field === 'approved' && req.params.value === 'true') {
 
-    const approved_account_mail = mail_templates.approved_account[req.params.user.language || 'en'] || mail_templates.approved_account.en;
-
-    await mailer(Object.assign({
-      to: email
-    },
-    approved_account_mail({
+    var mail_template = await templates('approved_account', req.params.user.language, {
       host: host,
       protocol: protocol
-    })));
+    })
+    
+    await mailer(Object.assign(mail_template, {
+      to: email
+    }))
 
   }
 
-  return res.send(messages.update_ok[req.params.user.language || 'en'] || messages.update_ok.en)
+  return res.send(await templates('update_ok', req.params.user.language))
 }

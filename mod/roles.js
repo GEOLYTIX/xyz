@@ -1,7 +1,8 @@
 module.exports = {
-  check: check,
-  reduce: reduce,
-  filter: filter,
+  check,
+  reduce,
+  filter,
+  get
 }
 
 function check(obj, roles) {
@@ -73,4 +74,30 @@ function filter(obj, roles) {
     }, {})
 
   return roleFilter
+}
+
+function get(obj) {
+
+  const roles = new Set();
+
+  (function objectEval(o, parent, key) {
+
+    if (key === 'roles') {
+      Object.keys(parent.roles).forEach(role => {
+
+        let _role = role.replace(/^\!/, "")
+
+        !roles.has(_role) && roles.add(_role)
+
+      })
+    }
+
+    // iterate through the object tree.
+    Object.keys(o).forEach((key) => {
+      if (o[key] && typeof o[key] === 'object') objectEval(o[key], o, key)
+    });
+
+  })(obj)
+
+  return Array.from(roles)
 }

@@ -1,7 +1,3 @@
-const { readFileSync } = require('fs')
-
-const { join } = require('path')
-
 const bcrypt = require('bcryptjs')
 
 const crypto = require('crypto')
@@ -10,17 +6,11 @@ const acl = require('./acl')()
 
 const mailer = require('../mailer')
 
-const mails = require('./mails')
-
-const mail = (m, lang) => mails[m] && (mails[m][lang] || mails[m].en)
-
-const messages = require('./messages')
-
-const msg = (m, lang) => messages[m] && (messages[m][lang] || messages[m].en) || m
+const templates = require('../templates/_templates')
 
 module.exports = async (req, res) => {
 
-  if (!acl) return res.status(500).send(msg('acl_unavailable', req.params.language))
+  if (!acl) return res.status(500).send('ACL unavailable.')
 
   // Post request to register new user.
   if (req.body && req.body.register) return post(req, res)
@@ -29,33 +19,16 @@ module.exports = async (req, res) => {
   view(req, res)
 }
 
-function view(req, res) {
+async function view(req, res) {
 
-  let template
-
-  // The template should be read inside the view handler.
-  try {
-
-    // Attempt to read a language spcific registration view template.
-    template = readFileSync(join(__dirname, `../../public/views/register/_register_${req.params.language}.html`)).toString('utf8')
-
-  } catch {
-
-    // Read and assign the English registration view as fallback.
-    template = readFileSync(join(__dirname, `../../public/views/register/_register_en.html`)).toString('utf8')
-  }
-
-  const params = {
+  let template = await templates(req.params.reset && 'password_reset_view' || 'register_view', req.params.language, {
     dir: process.env.DIR
-  }
-
-  // Render the login template with params.
-  const html = template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
+  })
 
   // The login view will set the cookie to null.
   res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
 
-  res.send(html)
+  res.send(template)
 }
 
 async function post(req, res) {
@@ -76,7 +49,7 @@ async function post(req, res) {
     WHERE lower(email) = lower($1);`,
     [req.body.email])
 
-  if (rows instanceof Error) return res.status(500).send(msg('failed_query', req.params.language))
+  if (rows instanceof Error) return res.status(500).send(await templates('failed_query', req.params.language))
 
   const user = rows[0]
 
@@ -97,7 +70,7 @@ async function post(req, res) {
   if (user) {
 
     // Blocked user may not reset their password.
-    if (user.blocked) return res.status(500).send(msg('user_blocked', user.language || req.params.language)) 
+    if (user.blocked) return res.status(500).send(await templates('user_blocked', user.language || req.params.language)) 
 
     // Set new password and verification token.
     // New passwords will only apply after account verification.
@@ -109,23 +82,21 @@ async function post(req, res) {
       WHERE lower(email) = lower($1);`,
       [req.body.email])
 
-    if (rows instanceof Error) return res.status(500).send(msg('failed_query', req.params.language))
+    if (rows instanceof Error) return res.status(500).send(await templates('failed_query', req.params.language))
 
     // Sent mail with verification token to the account email address.
-    const mail_template = mail('verify_password_reset', user.language)
+    var mail_template = await templates('verify_password_reset', user.language, {
+      host: host,
+      link: `${protocol}${host}/api/user/verify/${verificationtoken}`,
+      address: req.headers['x-forwarded-for'] || 'localhost',
+    })
     
-    await mailer(Object.assign({
-        to: user.email
-      },
-      mail_template({
-        host: host,
-        protocol: protocol,
-        verificationtoken: verificationtoken,
-        address: req.headers['x-forwarded-for'] || 'localhost',
-      })))
+    await mailer(Object.assign(mail_template, {
+      to: user.email
+    }))
     
     // Return msg. No redirect for password reset.
-    return res.send(msg('password_reset_verification', user.language))
+    return res.send(await templates('password_reset_verification', user.language))
   }
   
   // Create new user account
@@ -144,22 +115,19 @@ async function post(req, res) {
       '${verificationtoken}' AS verificationtoken,
       array['${date}@${req.ips && req.ips.pop() || req.ip}'] AS access_log;`)
 
-  if (rows instanceof Error) return res.status(500).send(msg('failed_query', req.params.language))
+  if (rows instanceof Error) return res.status(500).send(await templates('failed_query', req.params.language))
 
   // Sent mail with verification token to the account email address.
-  const mail_template = mail('verify_account', req.body.language)
+  var mail_template = await templates('verify_account', req.body.language, {
+    host: host,
+    link: `${protocol}${host}/api/user/verify/${verificationtoken}`,
+    remote_address: req.headers['x-forwarded-for'] || 'localhost',
+  })
 
-  await mailer(Object.assign({
-      to: req.body.email
-    },
-    mail_template({
-      host: host,
-      protocol: protocol,
-      verificationtoken: verificationtoken,
-      remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
-    })))
+  await mailer(Object.assign(mail_template, {
+    to: req.body.email
+  }))
 
   // Return msg. No redirect for password reset.
-  res.send(msg('new_account_registered', req.body.language))
-
+  res.send(await templates('new_account_registered', req.body.language))
 }

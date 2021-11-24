@@ -58,6 +58,10 @@
   pointer-events: none;
 }
 
+.tabulator-header.tabulator-header-hidden {
+    display: none !important;
+}
+
 .tabulator .tabulator-header .tabulator-col .tabulator-col-content {
   box-sizing: border-box;
   position: relative;

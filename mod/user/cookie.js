@@ -1,8 +1,8 @@
 const login = require('./login')
 
-const messages = require('./messages')
-
 const jwt = require('jsonwebtoken')
+
+const templates = require('../templates/_templates')
 
 module.exports = async (req, res) => {
 
@@ -15,7 +15,7 @@ module.exports = async (req, res) => {
 
   if (!cookie && req.params.renew) return res.status(401).send('Failed to renew cookie')
 
-  if (!cookie) return login(req, res, messages.no_cookie_found[req.params.language || 'en'] || `No cookie relating to this application found on request`)
+  if (!cookie) return login(req, res, await templates('no_cookie_found', req.params.language))
 
   jwt.verify(
     cookie,

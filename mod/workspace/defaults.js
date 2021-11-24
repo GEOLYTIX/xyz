@@ -34,6 +34,11 @@ module.exports = defaults = {
         hidden: true
       }
     },
+    mbvectortiles: {
+      style: {
+        hidden: true
+      }
+    },
     geojson: {
       srid: '4326',
       style: {
@@ -41,13 +46,16 @@ module.exports = defaults = {
           strokeWidth: 1,
           strokeColor: '#333333',
           fillColor: '#333333',
-          fillOpacity: 0.1
+          fillOpacity: 0.1,
+          type: 'dot',
         },
         highlight: {
           strokeColor: '#1F964D',
           strokeWidth: 2,
           fillColor: '#cae0b8',
-          fillOpacity: 0.2
+          fillOpacity: 0.2,
+          type: 'dot',
+          scale: 1.3
         }
       },
       filter: {},
@@ -59,9 +67,8 @@ module.exports = defaults = {
           strokeColor: '#333',
           fillColor: '#333',
           fillOpacity: 0.1,
-          marker: {
-            type: 'dot',
-            fillColor: '#333'
+          icon: {
+            type: 'dot'
           }
         },
         highlight: {
@@ -69,9 +76,8 @@ module.exports = defaults = {
           strokeColor: '#1F964D',
           fillColor: '#cae0b8',
           fillOpacity: 0.2,
-          marker: {
+          icon: {
             type: 'dot',
-            fillColor: '#1F964D',
             scale: 1.3
           }
         }
@@ -81,7 +87,6 @@ module.exports = defaults = {
     cluster: {
       srid: '4326',
       style: {
-        size: 20,
         anchor: null,
         default: {
           type: 'target',
@@ -89,7 +94,7 @@ module.exports = defaults = {
           scale: 1,
         },
         cluster: {
-          scale: 1.2
+          clusterScale: 2
         },
         highlight: {
           scale: 1.3
