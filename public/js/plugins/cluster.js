@@ -34,7 +34,7 @@ function detail(_xyz) {
             <input 
               type="range"
               class="secondary-colour-bg"
-              min=1
+              min=0
               value=${parseInt(1 / layer.cluster_kmeans)}
               max=100
               step=1
