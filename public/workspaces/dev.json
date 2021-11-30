@@ -155,7 +155,8 @@
         "geojson_file": "/dev/js/plugins/geojson_file.js",
         "demand_chart": "/dev/js/plugins/demand_chart.js",
         "post_array": "/dev/js/plugins/post_array.js",
-        "post_json": "/dev/js/plugins/post_json.js"
+        "post_json": "/dev/js/plugins/post_json.js",
+        "cluster": "/dev/js/plugins/cluster.js"
       },
       "layers": {
         "Mapbox Base": {
@@ -249,7 +250,8 @@
           "cluster_cat": "retailer",
           "cluster_kmeans": 0.02,
           "plugins": [
-            "custom_list_filter"
+            "custom_list_filter",
+            "cluster"
           ],
           "hover": {
             "field": "store_name"

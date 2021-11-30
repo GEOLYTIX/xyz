@@ -34,13 +34,13 @@ function detail(_xyz) {
             <input 
               type="range"
               class="secondary-colour-bg"
-              min=0
+              min=1
               value=${parseInt(1 / layer.cluster_kmeans)}
               max=100
               step=1
               oninput=${ e =>{
-                        
-                layer.cluster_kmeans = parseInt(1 / e.target.value)
+                       
+                layer.cluster_kmeans = 1 / e.target.value
         
                 e.target.parentNode.previousSibling.previousSibling.textContent = e.target.value
         
