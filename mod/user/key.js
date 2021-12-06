@@ -18,7 +18,7 @@ module.exports = async (req, res) => {
   // Create signed api_token
   const api_user = {
     email: user.email,
-    roles: [],
+    roles: user.roles,
     api: true
   }
 
