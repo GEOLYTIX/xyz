@@ -20,11 +20,11 @@ module.exports = async (req, res) => {
   var rows = await acl(`
   UPDATE acl_schema.acl_table
   SET
-    ${req.params.field} = ${val}
+    ${req.params.field} = $2
     ${req.params.field === 'approved'
       && `, approved_by = '${req.params.user.email}|${new Date().toISOString().replace(/\..*/,'')}'`
       || ''}
-  WHERE lower(email) = lower($1);`, [email])
+  WHERE lower(email) = lower($1);`, [email, val])
 
   if (rows instanceof Error) return res.status(500).send(await templates('failed_query', req.params.language))
 
