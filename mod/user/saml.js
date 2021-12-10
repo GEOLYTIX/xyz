@@ -73,10 +73,11 @@ module.exports = (req, res) => {
  
       // Create token with 8 hour expiry.
       const token = jwt.sign({
-        email: saml_response.user.attributes.email && saml_response.user.attributes.email[0],
+        email: saml_response.user.name_id,
+        //email: saml_response.user.attributes.email && saml_response.user.attributes.email[0],
         language: 'en',
-        roles: saml_response.user.attributes.roles && saml_response.user.attributes.roles[0],
-        name_id: saml_response.user.name_id,
+        //roles: saml_response.user.attributes.roles && saml_response.user.attributes.roles[0],
+        //name_id: saml_response.user.name_id,
         session_index: saml_response.user.session_index,
       },
       process.env.SECRET, {
@@ -85,18 +86,16 @@ module.exports = (req, res) => {
 
       const cookie = `${process.env.TITLE}=${token};HttpOnly;`
         + `Max-Age=${process.env.COOKIE_TTL};`
-        + `Path=${process.env.DIR || '/'}`
-        + `${!req.headers.host.includes('localhost') && ';Secure' || ''}`
+        + `Path=${process.env.DIR || '/'};`
+        + `SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`
 
       res.setHeader('Set-Cookie', cookie)
 
-      if (process.env.SAML_LOGIN) {
+      res.setHeader('location', `${process.env.DIR}`)
 
-        res.setHeader('location', `${process.env.AUTH0_HOST}/${process.env.DIR}`)
-        return res.status(301).send()
-      }
+      return res.status(302).send()
 
-      res.send(saml_response.user)
+      //res.send(saml_response.user)
     })
 
   }
