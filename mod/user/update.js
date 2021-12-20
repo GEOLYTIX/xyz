@@ -13,9 +13,6 @@ module.exports = async (req, res) => {
     req.params.value = req.params.value.split(',')
   }
 
-  const val = req.params.value === 'false' && 'NULL'
-    || req.params.value
-
   // Get user to update from ACL.
   var rows = await acl(`
   UPDATE acl_schema.acl_table
@@ -24,7 +21,7 @@ module.exports = async (req, res) => {
     ${req.params.field === 'approved'
       && `, approved_by = '${req.params.user.email}|${new Date().toISOString().replace(/\..*/,'')}'`
       || ''}
-  WHERE lower(email) = lower($1);`, [email, val])
+  WHERE lower(email) = lower($1);`, [email, req.params.value])
 
   if (rows instanceof Error) return res.status(500).send(await templates('failed_query', req.params.language))
 
