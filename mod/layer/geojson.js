@@ -20,10 +20,11 @@ module.exports = async (req, res) => {
     && `AND ${sql_filter(Object.values(roles).filter(r => !!r), SQLparams)}`
     || ''}`
 
-
+  const fields = req.params.fields && Array.isArray(req.params.fields)?req.params.fields:[req.params.fields]
   var q = `
     SELECT
       ${layer.qID || null} AS id,
+      ${fields?fields.join(', ')+',':''}
       ST_asGeoJson(${layer.geom}) AS geomj
     FROM ${req.params.table || layer.table}
     WHERE true ${filter};`
@@ -36,6 +37,7 @@ module.exports = async (req, res) => {
     type: 'Feature',
     geometry: JSON.parse(row.geomj),
     id: row.id,
+    properties: fields && fields.reduce((pojo, field)=>({...pojo, [field]:row[field]}),{}) || undefined
   })))
 
 }
