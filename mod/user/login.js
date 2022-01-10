@@ -59,6 +59,8 @@ async function view(req, res, message) {
   const redirect = req.body && req.body.redirect ||
     req.url && decodeURIComponent(req.url).replace(/login\=true/, '')
 
+  if (decodeURIComponent(redirect).match(/[\<\>]/g)) return res.status(403).send('URL must not contain angle brackets.')
+
   let template = await templates('login_view', req.params.language, {
     dir: process.env.DIR,
     redirect: redirect,
