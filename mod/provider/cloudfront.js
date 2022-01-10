@@ -28,6 +28,12 @@ module.exports = async ref => {
       url: `https://${url}`,
       expires: Date.now() + 60 * 60 * 1000 // 1 hour
     })
+
+    if (ref.params?.signedURL) {
+
+      return signedURL;
+
+    }
     
     // console.time(url)
   
