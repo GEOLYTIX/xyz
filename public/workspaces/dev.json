@@ -311,7 +311,8 @@
             "label": {
               "count": true,
               "strokeColor": "#fff",
-              "strokeWidth": 3
+              "strokeWidth": 3,
+              "maxZoom": 13
             },
             "default": {
               "scale": 2
