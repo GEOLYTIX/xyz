@@ -25,6 +25,9 @@ phases:
       - echo "DBS_XYZ=${DBS_XYZ_database}://${DBS_XYZ_username}:${DBS_XYZ_password}@${DBS_XYZ_host}:${DBS_XYZ_port}/${DBS_XYZ_database}" >> .env
       - echo "MONGO_URL=${MONGO_URL}" >> .env
       - cat .env
+      - echo Logging in to Docker
+      - docker login -u $DOCKERHUB_USERNAME -p $DOCKERHUB_PASSWORD
+      - echo Building image
       - docker build -t $ECR_REPOSITORY_URI:$IMAGE_TAG .
   post_build:
     commands:
