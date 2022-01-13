@@ -40,12 +40,11 @@ document.dispatchEvent(new CustomEvent('hide_layers', {
 
             Object.values(_xyz.layers.list).forEach(layer => {
 
-              if (layer.view.classList.contains('disabled')) {
+              if (layer.view?.classList.contains('disabled')) {
                 layer.remove()
               }
 
               if (!layer.display && layer.view) {
-
                 layer.view.style.visibility = 'hidden'
                 layer.view.style.height = '0'
                 layer.view.style.borderTop = 'none'
