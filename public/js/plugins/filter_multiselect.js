@@ -64,8 +64,10 @@ document.dispatchEvent(new CustomEvent('filter_multiselect', {
 
       async function filter(layer, entry) {
 
-        const response = await _xyz.xhr(`${_xyz.host}/api/query/${entry.query}`)
-                    
+        let response = await _xyz.xhr(`${_xyz.host}/api/query/${entry.query}`)
+
+        response = response.length && response || [response]
+        
         if (entry.el && entry.el.parentNode) {
           return _xyz.layers.view.filter.reset(layer, entry)
         }
