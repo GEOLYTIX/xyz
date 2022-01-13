@@ -9,11 +9,15 @@ document.dispatchEvent(new CustomEvent('hide_layers', {
           title="Hide layer views which aren't displayed in the map view in the layer list view."
           onclick=${e => {
 
+            if (!_xyz.layers.list?.length) return;
+
             if (e.target.classList.contains('enabled')) {
 
               e.target.classList.remove('enabled')
 
               Object.values(_xyz.layers.list).forEach(layer => {
+
+                if (!layer.view) return;
 
                 layer.view.style.removeProperty('visibility');
                 layer.view.style.removeProperty('height');
@@ -22,10 +26,10 @@ document.dispatchEvent(new CustomEvent('hide_layers', {
               })
 
               Object.values(_xyz.layers.listview.groups).forEach(group => {
-  
-                layer.view.style.removeProperty('visibility');
-                layer.view.style.removeProperty('height');
-                layer.view.style.removeProperty('border-top');
+
+                group.drawer.style.removeProperty('visibility');
+                group.drawer.style.removeProperty('height');
+                group.drawer.style.removeProperty('border-top');
   
               })
               return;
@@ -40,7 +44,8 @@ document.dispatchEvent(new CustomEvent('hide_layers', {
                 layer.remove()
               }
 
-              if (!layer.display) {
+              if (!layer.display && layer.view) {
+
                 layer.view.style.visibility = 'hidden'
                 layer.view.style.height = '0'
                 layer.view.style.borderTop = 'none'
@@ -54,7 +59,7 @@ document.dispatchEvent(new CustomEvent('hide_layers', {
 
               group.drawer.style.visibility = 'hidden'
               group.drawer.style.height = '0'
-              layer.view.style.borderTop = 'none'
+              group.drawer.style.borderTop = 'none'
 
             })
 
