@@ -17,7 +17,7 @@ document.dispatchEvent(new CustomEvent('hide_layers', {
 
               Object.values(_xyz.layers.list).forEach(layer => {
 
-                if (!layer.view) return;
+                if(!layer.view) return
 
                 layer.view.style.removeProperty('visibility');
                 layer.view.style.removeProperty('height');
@@ -26,7 +26,7 @@ document.dispatchEvent(new CustomEvent('hide_layers', {
               })
 
               Object.values(_xyz.layers.listview.groups).forEach(group => {
-
+  
                 group.drawer.style.removeProperty('visibility');
                 group.drawer.style.removeProperty('height');
                 group.drawer.style.removeProperty('border-top');
