@@ -12,18 +12,20 @@ document.dispatchEvent(new CustomEvent('hide_layers', {
             if (e.target.classList.contains('enabled')) {
 
               e.target.classList.remove('enabled')
+
               Object.values(_xyz.layers.list).forEach(layer => {
 
-                //layer.view.style.display = 'block'
-                layer.view.style.visibility = 'visible'
-                layer.view.style.height = 'auto'
+                layer.view.style.removeProperty('visibility');
+                layer.view.style.removeProperty('height');
+                layer.view.style.removeProperty('borderTop');
   
               })
 
               Object.values(_xyz.layers.listview.groups).forEach(group => {
   
-                group.drawer.style.visibility = 'visible'
-                group.drawer.style.height = 'auto'
+                layer.view.style.removeProperty('visibility');
+                layer.view.style.removeProperty('height');
+                layer.view.style.removeProperty('borderTop');
   
               })
               return;
@@ -34,9 +36,14 @@ document.dispatchEvent(new CustomEvent('hide_layers', {
 
             Object.values(_xyz.layers.list).forEach(layer => {
 
+              if (layer.view.classList.contains('disabled')) {
+                layer.remove()
+              }
+
               if (!layer.display) {
                 layer.view.style.visibility = 'hidden'
                 layer.view.style.height = '0'
+                layer.view.style.borderTop = 'none'
               }
 
             })
@@ -47,6 +54,7 @@ document.dispatchEvent(new CustomEvent('hide_layers', {
 
               group.drawer.style.visibility = 'hidden'
               group.drawer.style.height = '0'
+              layer.view.style.borderTop = 'none'
 
             })
 
