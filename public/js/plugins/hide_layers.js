@@ -15,17 +15,19 @@ document.dispatchEvent(new CustomEvent('hide_layers', {
 
               Object.values(_xyz.layers.list).forEach(layer => {
 
-                layer.view?.style.removeProperty('visibility');
-                layer.view?.style.removeProperty('height');
-                layer.view?.style.removeProperty('border-top');
+                if(!layer.view) return
+
+                layer.view.style.removeProperty('visibility');
+                layer.view.style.removeProperty('height');
+                layer.view.style.removeProperty('border-top');
   
               })
 
               Object.values(_xyz.layers.listview.groups).forEach(group => {
   
-                layer.view?.style.removeProperty('visibility');
-                layer.view?.style.removeProperty('height');
-                layer.view?.style.removeProperty('border-top');
+                group.drawer.style.removeProperty('visibility');
+                group.drawer.style.removeProperty('height');
+                group.drawer.style.removeProperty('border-top');
   
               })
               return;
