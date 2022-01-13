@@ -17,7 +17,7 @@ document.dispatchEvent(new CustomEvent('hide_layers', {
 
                 layer.view.style.removeProperty('visibility');
                 layer.view.style.removeProperty('height');
-                layer.view.style.removeProperty('borderTop');
+                layer.view.style.removeProperty('border-top');
   
               })
 
@@ -25,7 +25,7 @@ document.dispatchEvent(new CustomEvent('hide_layers', {
   
                 layer.view.style.removeProperty('visibility');
                 layer.view.style.removeProperty('height');
-                layer.view.style.removeProperty('borderTop');
+                layer.view.style.removeProperty('border-top');
   
               })
               return;
