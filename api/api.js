@@ -6,7 +6,7 @@ const register = require('../mod/user/register')
 
 const auth = require('../mod/user/auth')
 
-const saml = require('../mod/user/saml')
+const saml = process.env.SAML_ENTITY_ID && require('../mod/user/saml')
 
 const workspaceCache = require('../mod/workspace/cache')
 
@@ -55,7 +55,10 @@ module.exports = async (req, res) => {
 
   logger(req.url, 'req_url')
 
-  if (req.url.match(/\/saml/)) return saml(req, res)
+  if (req.url.match(/\/saml/)) {
+    if (!saml) return;
+    return saml(req, res)
+  }
 
   // Merge request params and query params.
   req.params = Object.assign(req.params || {}, req.query || {})
