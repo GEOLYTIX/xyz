@@ -21,8 +21,7 @@
     "nanoid": "^3.1.20",
     "node-fetch": "^2.6.1",
     "nodemailer": "^6.6.0",
-    "pg": "^8.5.1",
-    "saml2-js": "^3.0.1"
+    "pg": "^8.5.1"
   },
   "devDependencies": {
     "@turf/circle": "^6.3.0",
