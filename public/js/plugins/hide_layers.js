@@ -54,7 +54,7 @@ document.dispatchEvent(new CustomEvent('hide_layers', {
 
               group.drawer.style.visibility = 'hidden'
               group.drawer.style.height = '0'
-              layer.view.style.borderTop = 'none'
+              group.view.style.borderTop = 'none'
 
             })
 
