@@ -4,27 +4,17 @@ const crypto = require('crypto')
 
 const jwt = require('jsonwebtoken')
 
-const { readFileSync } = require('fs')
-
-const { join } = require('path')
-
 const acl = require('./acl')()
 
 const mailer = require('../mailer')
 
-const mails = require('./mails')
-
-const mail = (m, lang) => mails[m] && (mails[m][lang] || mails[m].en)
-
-const messages = require('./messages')
-
-const msg = (m, lang) => messages[m] && (messages[m][lang] || messages[m].en) || m
+const templates = require('../templates/_templates')
 
 const { nanoid } = require('nanoid')
 
-module.exports = async (req, res, msg) => {
+module.exports = async (req, res, message) => {
 
-  if (!acl) return res.status(500).send(msg('acl_unavailable', req.params.language))
+  if (!acl) return res.status(500).send('ACL unavailable.')
 
   if (req.body && req.body.login) {
 
@@ -52,55 +42,42 @@ module.exports = async (req, res, msg) => {
 
     if (!req.body.redirect) return res.send(user)
 
-    res.setHeader('location', `${req.body.redirect}`)
+    res.setHeader('location', `${req.body.redirect.replace(/([?&])msg=[^&]+(&|$)/,'')}`)
 
     return res.status(302).send()
 
   }
 
-  view(req, res, msg)
+  message = await templates(req.params.msg || message, req.params.language)
+
+  view(req, res, message)
 }
 
-function view(req, res, msg) {
-
-  let template
-
-  // The template should be read inside the view handler.
-  try {
-
-    // Attempt to read a language spcific login view template.
-    template = readFileSync(join(__dirname, `../../public/views/login/_login_${req.params.language}.html`)).toString('utf8')
-
-  } catch {
-
-    // Read and assign the English login view as fallback.
-    template = readFileSync(join(__dirname, `../../public/views/login/_login_en.html`)).toString('utf8')
-  }
+async function view(req, res, message) {
 
   // The redirect for a successful login.
   const redirect = req.body && req.body.redirect ||
     req.url && decodeURIComponent(req.url).replace(/login\=true/, '')
 
-  const params = {
+  if (decodeURIComponent(redirect).match(/[\<\>]/g)) return res.status(403).send('URL must not contain angle brackets.')
+
+  let template = await templates('login_view', req.params.language, {
     dir: process.env.DIR,
     redirect: redirect,
-    msg: msg || ' '
-  }
-
-  // Render the login template with params.
-  const html = template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
+    msg: message || ' '
+  })
 
   // The login view will set the cookie to null.
   res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
 
-  res.send(html)
+  res.send(template)
 }
 
 async function post(req, res) {
 
-  if(!req.body.email) return new Error(msg('missing_email', req.params.language))
+  if(!req.body.email) return new Error(await templates('missing_email', req.params.language))
   
-  if(!req.body.password) return new Error(msg('missing_password', req.params.language))
+  if(!req.body.password) return new Error(await templates('missing_password', req.params.language))
 
   const date = new Date()
 
@@ -116,58 +93,65 @@ async function post(req, res) {
     RETURNING email, roles, language, blocked, approved, approved_by, verified, admin, password;`,
     [req.body.email])
 
-  if (rows instanceof Error) return new Error(msg('failed_query', req.params.language))
+  if (rows instanceof Error) return new Error(await templates('failed_query', req.params.language))
 
   // Get user record from first row.
   const user = rows[0]
 
-  // new Error(msg('user_not_found', req.params.language))
-  if (!user) return new Error(msg('auth_failed', req.params.language))
+  if (!user) return new Error(await templates('auth_failed', req.params.language))
 
   // Blocked user cannot login.
-  if (user.blocked) return new Error(msg('user_blocked', user.language || req.params.language))
+  if (user.blocked) return new Error(await templates('user_blocked', user.language || req.params.language))
   
-  // Get approvalDate for checking expiry.
-  const approvalDate = user.approved_by && new Date(user.approved_by.replace(/.*\|/,''))
-
   // Non admin accounts may expire.
-  if (!user.admin 
-    && process.env.APPROVAL_EXPIRY && approvalDate
-    && approvalDate.setDate(approvalDate.getDate() + parseInt(process.env.APPROVAL_EXPIRY || 0)) < date) {
+  if (!user.admin && process.env.APPROVAL_EXPIRY) {
 
-    if (user.approved) {
+    // Get approvalDate for checking expiry.
+    const approvalDate = user.approved_by && new Date(user.approved_by.replace(/.*\|/,''))
+  
+    // Check whether the approvalDate is valid.
+    if (approvalDate instanceof Date && !isNaN(approvalDate.getDate())) {
 
-      // Remove approval of expired user account.
-      var rows = await acl(`
-        UPDATE acl_schema.acl_table
-        SET approved = false
-        WHERE lower(email) = lower($1);`,
-        [req.body.email])
+      // Calculate the difference in days between approval and now.
+      const dateNow = new Date();
+      const diffTime = Math.abs(dateNow - approvalDate);
+      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
 
-      if (rows instanceof Error) return new Error(msg('failed_query', req.params.language))
+      // Check whether the difference exceeds the APPROVAL_EXPIRY
+      if (parseInt(process.env.APPROVAL_EXPIRY) < diffDays) {
 
+        // Remove user approval.
+        if (user.approved) {
+
+          // Remove approval of expired user account.
+          var rows = await acl(`
+            UPDATE acl_schema.acl_table
+            SET approved = false
+            WHERE lower(email) = lower($1);`,
+            [req.body.email])
+    
+          if (rows instanceof Error) return new Error(await templates('failed_query', req.params.language))
+        }
+    
+        return new Error(await templates('user_expired', user.language))
+      }
     }
-
-    return new Error(msg('user_expired', user.language))
   }
 
   // Accounts must be verified and approved for login
   if (!user.verified || !user.approved) {
 
-    const mail_template = mail('failed_login', user.language)
-
-    await mailer(Object.assign({
-      to: user.email
-    },
-    mail_template({
+    var mail_template = await templates('failed_login', user.language, {
       host: host,
       protocol: protocol,
-      verified: user.verified,
-      approved: user.approved,
       remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
-    })));
+    })
+  
+    await mailer(Object.assign(mail_template, {
+      to: user.email
+    }))
 
-    return new Error(msg('user_not_verified', user.language))
+    return new Error(await templates('user_not_verified', user.language))
   }
 
   // Check password from post body against encrypted password from ACL.
@@ -188,7 +172,7 @@ async function post(req, res) {
       WHERE lower(email) = lower($1)`,
       [req.body.email])
   
-      if (rows instanceof Error) return new Error(msg('failed_query', req.params.language))
+      if (rows instanceof Error) return new Error(await templates('failed_query', req.params.language))
 
     }
 
@@ -205,7 +189,7 @@ async function post(req, res) {
     WHERE lower(email) = lower($1)
     RETURNING failedattempts;`, [req.body.email])
 
-  if (rows instanceof Error) return new Error(msg('failed_query', req.params.language))
+  if (rows instanceof Error) return new Error(await templates('failed_query', req.params.language))
 
   // Check whether failed login attempts exceeds limit.
   if (rows[0].failedattempts >= parseInt(process.env.FAILED_ATTEMPTS || 3)) {
@@ -221,35 +205,32 @@ async function post(req, res) {
         verificationtoken = '${verificationtoken}'
       WHERE lower(email) = lower($1);`, [req.body.email])
 
-    if (rows instanceof Error) return new Error(msg('failed_query', req.params.language))
+    if (rows instanceof Error) return new Error(await templates('failed_query', req.params.language))
 
-    const mail_template = mail('locked_account', user.language)
-
-    await mailer(Object.assign({
-      to: user.email
-    },
-    mail_template({
+    var mail_template = await templates('locked_account', user.language, {
       host: host,
       failed_attempts: parseInt(process.env.FAILED_ATTEMPTS) || 3,
       protocol: protocol,
       verificationtoken: verificationtoken,
       remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
-    })));
+    })
+  
+    await mailer(Object.assign(mail_template, {
+      to: user.email
+    }))
 
-    return new Error(msg('locked_account', user.language))
+    return new Error(await templates('user_locked', user.language))
   }
 
   // Login has failed but account is not locked (yet).
-  const mail_template = mail('login_incorrect', user.language)
+  var mail_template = await templates('login_incorrect', user.language, {
+    host: host,
+    remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
+  })
 
-  await mailer(Object.assign({
-      to: user.email
-    },
-    mail_template({
-      host: host,
-      remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
-    })))
+  await mailer(Object.assign(mail_template, {
+    to: user.email
+  }))
 
-  // new Error(msg('token_failed', user.language))
-  return new Error(msg('auth_failed', req.params.language))
+  return new Error(await templates('auth_failed', req.params.language))
 }

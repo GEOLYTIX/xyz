@@ -4,7 +4,7 @@ module.exports = () => {
 
   const connection = process.env.PRIVATE && process.env.PRIVATE.split('|') || process.env.PUBLIC && process.env.PUBLIC.split('|')
 
-  if(!connection) return
+  if(!connection || !connection[1]) return
 
   const acl_table = connection[1].split('.').pop()
 

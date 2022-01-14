@@ -1,11 +1,6 @@
-window.onload = () => {
+window.onload = async () => {
 
-const xhr = new XMLHttpRequest();
-
-xhr.open('GET', document.head.dataset.dir + '/api/user/list');
-
-xhr.setRequestHeader('Content-Type', 'application/json');
-xhr.responseType = 'json';
+const rolesList = await xhrPromise(`${document.head.dataset.dir}/api/workspace/get/roles`)
 
 const params = {}
 
@@ -13,167 +8,173 @@ window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, (match, key, value) =>
   params[key] = decodeURI(value)
 })
 
-xhr.onload = e => {
+const response = await xhrPromise(`${document.head.dataset.dir}/api/user/list`)
 
-  if (e.target.status !== 200) return;
+const data = response.length && response || [response]
 
-  const userTable = new Tabulator(
-    document.getElementById('userTable'),
-    {
-      rowFormatter: row => {
-    
-        const user = row.getData()
+if (params.email) {
+  data.sort(function(x,y){ return x.email == params.email ? -1 : y.email == params.email ? 1 : 0; });
+}
 
-        console.log(user.email)
+new Tabulator(document.getElementById('userTable'),
+  {
+    rowFormatter: row => {
+  
+      const user = row.getData()
 
-        row.getElement().style.backgroundColor = user.email === params.email && '#fff9c4'
-    
-        row.getElement().style.backgroundColor = user.blocked && '#ef9a9a'
+      row.getElement().style.backgroundColor = user.email === params.email && '#fff9c4'
+  
+      row.getElement().style.backgroundColor = user.blocked && '#ef9a9a'
 
+    },
+    columns: [
+      {
+        field: 'email',
+        headerTooltip: 'Account EMail',
+        titleFormatter: ()=> '<div class="icon-face xyz-icon"></div>',
       },
-      columns: [
-        {
-          field: 'email',
-          headerTooltip: 'Account EMail',
-          titleFormatter: ()=> '<div class="icon-face xyz-icon"></div>',
+      {
+        field: 'verified',
+        align: 'center',
+        headerTooltip: 'The account email has been verified through a token sent to the email address.',
+        titleFormatter: ()=> '<div class="icon-tick-done xyz-icon"></div>',
+        formatter: 'tickCross',
+        cellClick: cellToggle,
+      },
+      {
+        field: 'approved',
+        align: 'center',
+        headerTooltip: 'The account has been approved by a site administrator and is permitted to access the application.',
+        titleFormatter: ()=> '<div class="icon-tick-done-all xyz-icon"></div>',
+        formatter: 'tickCross',
+        cellClick: cellToggle,
+      },
+      {
+        field: 'admin',
+        align: 'center',
+        headerTooltip: 'The account is an admin account which can access this page and change other account credentials.',
+        titleFormatter: ()=> '<div class="xyz-icon icon-supervisor-account"></div>',
+        formatter: 'tickCross',
+        cellClick: cellToggle,
+      },
+      {
+        field: 'api',
+        align: 'center',
+        headerTooltip: 'The account has priviliges to create API keys.',
+        titleFormatter: ()=> '<div class="xyz-icon icon-key"></div>',
+        formatter: 'tickCross',
+        cellClick: cellToggle,
+      },
+      {
+        field: 'failedattempts',
+        align: 'center',
+        headerTooltip: 'Failed login attempts.',
+        titleFormatter: ()=> '<div class="xyz-icon icon-warning"></div>',
+        formatter: (cell, formatterParams) => '<span style="color:red; font-weight:bold;">' + cell.getValue() + '</span>',
+      },
+      {
+        field: 'language',
+        align: 'center',
+        headerTooltip: 'Account language',
+        titleFormatter: () => '<div class="xyz-icon icon-translate"></div>',
+      },
+      {
+        field: 'roles',
+        title: 'Roles',
+        headerTooltip: 'Account roles',
+        headerSort: false,
+        editor: roleEdit,
+      },
+      {
+        field: 'access_log',
+        title: 'Access Log',
+        headerTooltip: 'Click last access log entry for full access log array.',
+        cellClick: getAccessLog,
+      },
+      {
+        field: 'approved_by',
+        title: 'Approved by',
+        headerTooltip: 'Admin who approved last modification to this account.',
+      },
+      {
+        field: 'expires_in',
+        title: 'Expires in Days',
+        headerTooltip: 'User approval expires in days.',
+        formatter: (cell) => {
+          const val = cell.getValue()
+          if (val < 0) return `<span style="color:red; font-weight:bold;">${val}</span>`
+          if (typeof val !== 'undefined') return `<span style="font-weight:bold;">${val}</span>`
         },
-        {
-          field: 'verified',
-          align: 'center',
-          headerTooltip: 'The account email has been verified through a token sent to the email address.',
-          titleFormatter: ()=> '<div class="icon-tick-done xyz-icon"></div>',
-          formatter: 'tickCross',
-          cellClick: cellToggle,
-        },
-        {
-          field: 'approved',
-          align: 'center',
-          headerTooltip: 'The account has been approved by a site administrator and is permitted to access the application.',
-          titleFormatter: ()=> '<div class="icon-tick-done-all xyz-icon"></div>',
-          formatter: 'tickCross',
-          cellClick: cellToggle,
-        },
-        {
-          field: 'admin',
-          align: 'center',
-          headerTooltip: 'The account is an admin account which can access this page and change other account credentials.',
-          titleFormatter: ()=> '<div class="xyz-icon icon-supervisor-account"></div>',
-          formatter: 'tickCross',
-          cellClick: cellToggle,
-        },
-        {
-          field: 'api',
-          align: 'center',
-          headerTooltip: 'The account has priviliges to create API keys.',
-          titleFormatter: ()=> '<div class="xyz-icon icon-key"></div>',
-          formatter: 'tickCross',
-          cellClick: cellToggle,
-        },
-        {
-          field: 'failedattempts',
-          align: 'center',
-          headerTooltip: 'Failed login attempts.',
-          titleFormatter: ()=> '<div class="xyz-icon icon-warning"></div>',
-          formatter: (cell, formatterParams) => '<span style="color:red; font-weight:bold;">' + cell.getValue() + '</span>',
-        },
-        {
-          field: 'language',
-          align: 'center',
-          headerTooltip: 'Account language',
-          titleFormatter: () => '<div class="xyz-icon icon-translate"></div>',
-        },
-        {
-          field: 'roles',
-          title: 'Roles',
-          headerTooltip: 'Account roles',
-          headerSort: false,
-          editor: roleEdit,
-        },
-        {
-          field: 'access_log',
-          title: 'Access Log',
-          headerTooltip: 'Click last access log entry for full access log array.',
-          cellClick: getAccessLog,
-        },
-        {
-          field: 'approved_by',
-          title: 'Approved by',
-          headerTooltip: 'Admin who approved last modification to this account.',
-        },
-        {
-          field: 'blocked',
-          align: 'center',
-          headerTooltip: 'Blocked accounts can no longer login or reset their password.',
-          titleFormatter: ()=> '<div class="icon-lock-closed xyz-icon"></div>',
-          formatter: 'tickCross',
-          cellClick: cellToggle,
-        },
-        {
-          field: 'delete',
-          headerSort: false,
-          formatter: ()=> '<span style="color:red; font-weight:bold;">DELETE</span>',
-          cellClick: rowDelete,
-        }
-      ],
-      resizableColumns: false,
-      resizableRows: false,
-      layout: 'fitDataFill',
-    });
+        cellClick: removeExpiry
+      },
+      {
+        field: 'blocked',
+        align: 'center',
+        headerTooltip: 'Blocked accounts can no longer login or reset their password.',
+        titleFormatter: ()=> '<div class="icon-lock-closed xyz-icon"></div>',
+        formatter: 'tickCross',
+        cellClick: cellToggle,
+      },
+      {
+        field: 'delete',
+        headerSort: false,
+        formatter: ()=> '<span style="color:red; font-weight:bold;">DELETE</span>',
+        cellClick: rowDelete,
+      }
+    ],
+    resizableColumns: false,
+    resizableRows: false,
+    layout: 'fitDataFill',
+    data: data
+  });
 
-  userTable.setData(e.target.response.length && e.target.response || [e.target.response]);
+async function removeExpiry(e, cell) {
 
-  userTable.redraw(true);
+  const user = cell.getData();
 
+  if (confirm('Remove expiry for ' + user.email)) {
+
+    const response = await xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${user.email}&field=approved_by&value=${document.head.dataset.user}`);
+
+    if (response.err) return console.error(response.err);
+  
+    cell.setValue('');
+  
+    const row = cell.getRow();
+  
+    row.reformat();
+  }
 };
 
-xhr.send();
-
-function cellToggle(e, cell) {
+async function cellToggle(e, cell) {
 
   const user = cell.getData();
 
   const col = cell.getColumn();
 
-  xhr.open('GET', document.head.dataset.dir + 
-    '/api/user/update' + 
-    '?email=' + user.email +
-    '&field=' + col.getField() +
-    '&value=' + !cell.getValue());
+  const response = await xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${user.email}&field=${col.getField()}&value=${!cell.getValue()}`);
 
-  xhr.setRequestHeader('Content-Type', 'application/json');
+  if (response.err) return console.error(response.err);
 
-  xhr.onload = () => {
-    if (xhr.status !== 200) return alert(xhr.response.message);
-    cell.setValue(!cell.getValue());
+  cell.setValue(!cell.getValue());
 
-    const row = cell.getRow()
+  const row = cell.getRow();
 
-    row.reformat()
-
-  };
-
-  xhr.send();
-
+  row.reformat();
 };
 
-function getAccessLog(e, cell) {
+async function getAccessLog(e, cell) {
 
   const user = cell.getData();
 
-  xhr.open('GET', `${document.head.dataset.dir}/api/user/log?email=${user.email}`);
+  const response = await xhrPromise(`${document.head.dataset.dir}/api/user/log?email=${user.email}`);
 
-  xhr.setRequestHeader('Content-Type', 'application/json');
-  xhr.responseType = 'json';
+  if (response.err) return console.error(response.err);
 
-  xhr.onload = e => {
-    if (xhr.status === 500) alert('Soz. It\'s me not you.');
-    if (xhr.status === 200) alert(e.target.response.access_log.join('\n'));
-  };
-
-  xhr.send();
+  alert(response.access_log.join('\n'));
 };
 
-function rowDelete(e, cell) {
+async function rowDelete(e, cell) {
 
   const user = cell.getData();
 
@@ -181,63 +182,111 @@ function rowDelete(e, cell) {
 
   if (confirm('Delete account ' + user.email)) {
 
-    xhr.open('GET', document.head.dataset.dir +
-      '/api/user/delete?' +
-      'email=' + user.email);
+    const response = await xhrPromise(`${document.head.dataset.dir}/api/user/delete?email=${user.email}`);
 
-    xhr.setRequestHeader('Content-Type', 'application/json');
+    if (response.err) return console.error(response.err);
 
-    xhr.onload = e => {
-      if (e.target.status === 500) alert('Soz. It\'s me not you.');
-      if (e.target.status === 200) row.delete();
-    };
-
-    xhr.send();
+    row.delete();
   }
 };
 
 function roleEdit(cell, onRendered, success, cancel, editorParams){
+ 
+  let cellValues = cell.getValue()
 
-  const editor = document.createElement('input');
+  const user = cell.getData()
 
-  editor.style.padding = '4px';
-  editor.style.width = '100%';
+  const cellElement = cell.getElement()
+  cellElement.style.overflow = 'visible';
+  cellElement.style.border = 'none';
+  
+  // cellElement.addEventListener("blur", blur, {once: true});
 
-  editor.value = cell.getValue();
+  // let successTimeout;
+  // function blur() {
+  //   console.log('setTimeout')
+  //   successTimeout = setTimeout(()=>{
+  //     console.log('cancel')
+  //     cancel(cellValues)
+  //     cellElement.removeEventListener("blur", blur);
+  //   },400)
+  // }
 
-  onRendered(()=>editor.focus());
+  const editor = uhtml.html.node`
+  <button
+    class="btn-drop active">
+      <div
+        class="head"
+        onclick=${(e) => {
+          cellElement.style.overflow = 'hidden';
+          success(cellValues)
+        }}>
+        <span>${cellValues}</span>
+        <div class="icon"></div>
+      </div>
+      <ul>${rolesList.map((val) => uhtml.html`
+        <li 
+        class="${cellValues.some(role => role === val) && 'selected' || ''}"
+        onclick=${async (e) => {
+          e.stopPropagation()
 
-  const user = cell.getData();
+          // clearTimeout(successTimeout)
+          // console.log('clearTimeout')
+          // cellElement.removeEventListener("blur", blur);
 
-  editor.addEventListener('keyup', e => {
-    let key = e.keyCode || e.charCode;
+          const drop = e.target.closest('.btn-drop')
+          drop.classList.toggle('active')
 
-    if (key === 13) {
+          e.target.classList.toggle('selected')
+        
+          if (e.target.classList.contains('selected')) {
+            
+            if (cellValues[0] === '') {
+              cellValues[0] = val
+            } else {
+              cellValues.push(val)
+            }
 
-      editor.blur();
+          } else {
+            cellValues = cellValues.filter(role => role !== val)
+          }
+                
+          const span = drop.querySelector('span')
+          span.textContent = cellValues
 
-      xhr.open('GET', document.head.dataset.dir + 
-        '/api/user/update' + 
-        '?email=' + user.email +
-        '&field=roles' +
-        '&value=' + editor.value);
-    
-      xhr.setRequestHeader('Content-Type', 'application/json');
-    
-      xhr.onload = () => {
-        if (xhr.status !== 200) return alert(xhr.response.message);
-        success(editor.value);
-      };
-    
-      xhr.send();
+          cellElement.style.overflow = 'hidden';
 
-    }
+          await xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${user
+            .email}&field=roles&value=${cellValues}`)
 
-  });
+          success(cellValues);
 
-  editor.addEventListener('blur', ()=>success(editor.value));
+        }}>${val}`)}`
 
-  return editor;
+  return editor
 };
 
+}
+
+function xhrPromise(req) {
+  return new Promise((resolve, reject) => {
+
+    const xhr = new XMLHttpRequest()
+
+    xhr.open('GET', req)
+
+    xhr.setRequestHeader('Content-Type', 'application/json')
+   
+    xhr.responseType = 'json'
+  
+    xhr.onload = e => {
+  
+      if (e.target.status >= 300) return reject({ err: e.target.status })
+   
+      resolve(e.target.response || {})
+    }
+  
+    xhr.send()
+
+  })
 }

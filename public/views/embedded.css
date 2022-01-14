@@ -70,6 +70,9 @@ body {
   grid-row: 1/4;
   background-color: #fff;
   opacity: 0.8;
+  display: grid;
+  grid-auto-rows: minmax(min-content, 50px);
+  width: 50px;
 }
 
 #ctrls {

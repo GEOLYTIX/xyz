@@ -139,7 +139,7 @@ document.dispatchEvent(new CustomEvent('scenario_panel', {
                 _xyz.mapview.interaction.draw.begin({
                   layer: _xyz.layers.list.scenario_region,
                   type: 'Polygon',
-                  geometryFunction: _xyz.mapview.interaction.draw.polygonKinks,
+                  //geometryFunction: _xyz.mapview.interaction.draw.polygonKinks,
                   callback: () => {
                     drawButton.classList.remove('active')
                   },

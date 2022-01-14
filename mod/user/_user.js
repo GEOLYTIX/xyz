@@ -1,5 +1,3 @@
-const messages = require('./messages')
-
 const methods = {
   admin: {
     handler: require('./admin'),
@@ -17,10 +15,6 @@ const methods = {
   },
   update: {
     handler: require('./update'),
-    admin: true
-  },
-  approve: {
-    handler: require('./approve'),
     admin: true
   },
   list: {

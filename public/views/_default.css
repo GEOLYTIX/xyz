@@ -74,7 +74,7 @@ html {
     opacity: 0.8;
     display: grid;
     grid-auto-rows: minmax(min-content, 50px);
-    width: 50px;
+    width: 44px;
   }
 
   #ctrls {
@@ -100,6 +100,7 @@ html {
     margin-bottom: 10px;
     padding: 3px;
     border-radius: 2px;
+    color: #fff;
   }
 
   #gazetteer {
@@ -167,13 +168,16 @@ html {
 
   #mapButton {
     position: fixed;
-    left: 10px;
+    display: grid;
+    grid-auto-rows: minmax(min-content, 50px);
+    width: 48px;
   }
 
   #mapButton>button,
   #mapButton>a {
     box-shadow: 1px 1px 3px 0 rgba(0, 0, 0, 0.2);
     border-radius: 50%;
+    margin-bottom: 10px;
   }
 
   #ctrls {
@@ -202,12 +206,12 @@ html {
     background-size: 30px;
     background-position: center;
     pointer-events: none;
-    border-bottom: 1px solid #1F964D;
-    filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%);
+    border-bottom: 1px solid #003D57;
+    filter: invert(16%) sepia(23%) saturate(4184%) hue-rotate(169deg) brightness(101%) contrast(102%);
   }
 
   #ctrls>div>.tab.active {
-    background-color: #1F964D;
+    background-color: #003D57;
   }
 
   #ctrls>div>.tab.active>.xyz-icon {

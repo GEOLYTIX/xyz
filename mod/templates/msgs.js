@@ -1,16 +1,4 @@
 module.exports = {
-  acl_unavailable: {
-    en: `ACL unavailable`
-  },
-	logout: {
-    en: `Logged out.`,
-    de: `Benutzer ausgelogt. Benutzerkonto Cookie wurde entfernt`,
-		fr: `Deconnecté.`,
-		pl: 'Wylogowano.',
-		ja: `ログアウト`,
-		ko: `당신은 로그 아웃되었습니다`,
-		zh: `您已註銷`
-	},
 	token_not_found: {
 		en: `Token not found. The token has probably been resolved already.`,
 		fr: `Token n’a pas été trouvé. Il a probablement déjà été utilisé.`,
@@ -46,14 +34,6 @@ module.exports = {
 		ko: `업데이트가 성공적으로 진행되었습니다.`,
 		zh: `更新成功`
 	},
-	account_not_found: {
-		en: `No matching account found.`,
-		fr: `Ce compte n’a pas été trouvé.`,
-		pl: `Nie znaleziono tego konta.`,
-		ja: `アカウントが見つかりません。`,
-		ko: `매칭되는 계정이 없습니다.`,
-		zh: `找不到匹配的帐户`
-	},
 	account_await_approval: {
 		en: `This account has been verified but requires administrator approval.`,
 		fr: `Le compte a été verifié mais il doit être approuvé par l'administrateur. `,
@@ -74,16 +54,7 @@ module.exports = {
     en: `Authentication failed.`,
     de: `Anmeldung gescheitert.`
 	},
-	user_not_found: {
-    en: `User not found.`,
-    de: `Benutzerkonto nicht gefunden.`,
-		fr: `Ce nom d’utilisateur n’a pas été trouvé.`,
-		pl: `Nie znaleziono tej nazwy użytkownika.`,
-		ja: `ユーザーが見つかりません`,
-		ko: `사용자 미발견`,
-		zh: `找不到用户`
-  },
-  locked_account: {
+  user_locked: {
     en: `User account has been locked due to failed login attempts.`,
     de: `Benutzerkonto gesperrt.`
   },
@@ -110,22 +81,6 @@ module.exports = {
 		ja: `ユーザーは確認または承認されていません`,
 		ko: `사용자 미확인 또는 미승인`,
 		zh: `用户未经验证或批准`
-	},
-	account_blocked: {
-		en: `Account is blocked, please check email.`,
-		fr: `Le comte a été bloqué. Consultez votre boîte e-mail.`,
-		pl: `To konto zostało zablokowane. Sprawdź wiadomości e-mail.`,
-		ja: `アカウントがブロックされています。メールを確認してください`,
-		ko: `계정이 봉쇄되었습니다. 이메일을 확인해주십시오`,
-		zh: `帐户已被封锁，请检查电子邮件`
-	},
-	token_failed: {
-		en: `Failed to create token`,
-		fr: `Impossible de créer token.`,
-		pl: `Nie można utworzyć tokenu.`,
-		ja: `トークンを作成できませんでした`,
-		ko: `토큰 생성에 실패했습니다.`,
-		zh: `创建令牌失败`
 	},
 	admin_approved: {
 		en: `The account has been approved by you. An email has been sent to the account holder.`,

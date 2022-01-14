@@ -22,7 +22,6 @@ CREATE TABLE acl_schema.acl_table (
   verified boolean default false,
   approved boolean default false,
   verificationtoken text,
-  approvaltoken text,
   failedattempts integer default 0,
   password_reset text,
   api text,

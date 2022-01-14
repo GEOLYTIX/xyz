@@ -37,7 +37,8 @@ module.exports = async (req, res) => {
 
     // Create params filter string from roleFilter filter params.
     req.params.filter =
-      ` ${req.params.filter && `AND ${sql_filter(JSON.parse(req.params.filter), SQLparams)}` || ''}
+      ` ${layer.filter?.default && 'AND '+layer.filter?.default || ''}
+      ${req.params.filter && `AND ${sql_filter(JSON.parse(req.params.filter), SQLparams)}` || ''}
       ${roles && Object.values(roles).some(r => !!r)
       && `AND ${sql_filter(Object.values(roles).filter(r => !!r), SQLparams)}`
       || ''}`
@@ -71,8 +72,8 @@ module.exports = async (req, res) => {
     delete req.params.viewport
   }
 
-  // Assign body to params to enable reserved %{body} parameter.
-  req.params.body = req.body
+  // Prevent automatic parsing of JSON string by adding leading spaces.
+  req.params.body = req.params.stringifyBody && JSON.stringify(req.body) || req.body
 
   // Reserved param keys may not be substituted from request query params.
   const reserved = new Set(['viewport', 'filter'])
@@ -111,7 +112,7 @@ module.exports = async (req, res) => {
       try {
 
         // Try to parse val if the string begins and ends with either [] or {}
-        val = /^[\[\{].*[\]\}]$/.test(val) && JSON.parse(val) || val
+        val = !param === 'body' && /^[\[\{].*[\]\}]$/.test(val) && JSON.parse(val) || val
       } catch(err) {
         console.error(err)
       }
