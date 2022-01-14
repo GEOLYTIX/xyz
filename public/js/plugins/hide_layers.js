@@ -9,7 +9,7 @@ document.dispatchEvent(new CustomEvent('hide_layers', {
           title="Hide layer views which aren't displayed in the map view in the layer list view."
           onclick=${e => {
 
-            if (!_xyz.layers.list?.length) return;
+            if (!_xyz.layers.list) return;
 
             if (e.target.classList.contains('enabled')) {
 
