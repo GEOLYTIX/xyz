@@ -1,15 +1,20 @@
 <!DOCTYPE html>
 <html>
 
-<head data-dir="${dir}">
+<head
+  data-user="${user}"
+  data-dir="${dir}">
     <title>XYZ | User Administration</title>
     <link rel="icon" type="image/x-icon" href="${dir}/icons/favicon.ico" />
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="${dir}/css/tabulator.css">
+    <link rel="stylesheet" href="${dir}/css/tabulator.css" />
+    <!-- <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet"> -->
 
-    <script src="${dir}/js/tabulator.min.js" defer></script>
+    <script src="https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.min.js" defer></script>
+
+    <script src="https://unpkg.com/uhtml" defer></script>
 
     <script src="${dir}/views/_user.js" defer></script>
 
@@ -83,6 +88,92 @@
           body, h1 {
             margin: 0
           }
+        }
+
+        #dropdown {
+          margin: 10px auto;
+          width: 50%;
+        }
+
+        * {
+          box-sizing: border-box;
+          margin: 0;
+          padding: 0;
+          border-spacing: 0;
+        }
+
+        button {
+          border: none;
+          outline: none;
+          background: none;
+        }
+        button:hover:enabled {
+          cursor: pointer;
+        }
+        button:disabled {
+          opacity: 0.3;
+        }
+
+        .btn-drop {
+          position: relative;
+          width: 100%;
+          background-color: white;
+          box-shadow: 1px 1px 3px 0 #ddd;
+        }
+        .btn-drop:disabled {
+          pointer-events: none;
+          opacity: 0.4;
+        }
+        .btn-drop > .head {
+          padding: 5px;
+          display: flex;
+          border: 1px solid #ccc;
+          align-items: center;
+        }
+        .btn-drop > .head > :first-child {
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+        }
+        .btn-drop > .head > .icon {
+          pointer-events: none;
+          margin-left: auto;
+          width: 18px;
+          content: url("https://fonts.gstatic.com/s/i/materialicons/expand_more/v1/24px.svg");
+        }
+        .btn-drop > ul {
+          display: none;
+          position: absolute;
+          list-style-type: none;
+          width: inherit;
+          box-shadow: 1px 1px 3px 0 #ddd;
+          max-height: 500px;
+          overflow-y: auto;
+          overflow-x: hidden;
+          border: 1px solid #ccc;
+          border-top: none;
+          text-align: left;
+          background-color: white;
+          z-index: 1;
+        }
+        .btn-drop > ul > li {
+          padding: 5px;
+        }
+        .btn-drop > ul > li:hover {
+          background-color: #eee;
+        }
+        .btn-drop > ul > li.selected {
+          background-color: #ccc;
+        }
+        .btn-drop.active > .head {
+          border-bottom: 1px solid #eee;
+        }
+        .btn-drop.active > ul {
+          display: block;
+          margin-top: -2px;
+        }
+        .btn-drop.active > .head > .icon {
+          content: url("https://fonts.gstatic.com/s/i/materialicons/expand_less/v1/24px.svg");
         }
 
     </style>

@@ -15,7 +15,8 @@ module.exports = async (req, res) => {
   const SQLparams = []
 
   const filter =
-    ` ${req.params.filter && `AND ${sql_filter(JSON.parse(req.params.filter), SQLparams)}` || ''}
+  ` ${layer.filter?.default && 'AND '+layer.filter?.default || ''}
+    ${req.params.filter && `AND ${sql_filter(JSON.parse(req.params.filter), SQLparams)}` || ''}
     ${roles && Object.values(roles).some(r => !!r)
     && `AND ${sql_filter(Object.values(roles).filter(r => !!r), SQLparams)}`
     || ''}`
@@ -24,9 +25,8 @@ module.exports = async (req, res) => {
   var q = `
     SELECT
       ${layer.qID || null} AS id,
-      ${req.params.cat || null} AS cat,
       ST_asGeoJson(${layer.geom}) AS geomj
-    FROM ${req.params.table}
+    FROM ${req.params.table || layer.table}
     WHERE true ${filter};`
 
   var rows = await dbs[layer.dbs](q, SQLparams)
@@ -36,10 +36,7 @@ module.exports = async (req, res) => {
   res.send(rows.map(row => ({
     type: 'Feature',
     geometry: JSON.parse(row.geomj),
-    properties: {
-      id: row.id,
-      cat: row.cat
-    }
+    id: row.id,
   })))
 
 }

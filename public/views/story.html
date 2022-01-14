@@ -163,14 +163,14 @@
           coordinates: location.marker,
         },
         zIndex: 2000,
-        style: new ol.style.Style({
-          image: xyz.mapview.icon({
+        style: _xyz.utils.style({
+          marker: {
             type: 'markerColor',
             colorMarker: '#64dd17',
             colorDot: '#33691e',
             scale: 0.05,
             anchor: [0.5, 1],
-          })
+          }
         })
       });
 

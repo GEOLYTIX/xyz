@@ -5,8 +5,8 @@
 }
 
 .enabled>.xyz-icon {
-  filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%);
-  -webkit-filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%);
+    filter: invert(49%) sepia(53%) saturate(3142%) hue-rotate(343deg) brightness(96%) contrast(93%);
+    -webkit-filter: invert(49%) sepia(53%) saturate(3142%) hue-rotate(343deg) brightness(96%) contrast(93%);
 }
 
 .icon-layers {
@@ -130,6 +130,10 @@
   background-image: url("../icons/icon-touch-app.svg");
 }
 
+.icon-receipt {
+  background-image: url("../icons/icon-receipt.svg");
+}
+
 .icon-toggle {
   background-image: url("../icons/icon-toggle-off.svg");
 }
@@ -181,6 +185,10 @@
 
 .icon-add-photo {
   background-image: url("../icons/icon-add-photo.svg");
+}
+
+.icon-image {
+  background-image: url("../icons/icon-image.svg");
 }
 
 .icon-view-list {
@@ -241,6 +249,10 @@
 
 .icon-city {
   background-image: url("../icons/icon-city.svg");
+}
+
+.icon-walk-drive {
+  background-image: url("../icons/icon-walk-drive.svg");
 }
 
 .sample-poly {

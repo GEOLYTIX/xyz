@@ -20,15 +20,14 @@
     <script src="${dir}/js/tabulator.min.js" defer></script>
     <script src="${dir}/js/chart.min.js" defer></script>
 
-    <!--these are charts js plugins -->
     <!--<script src="${dir}/js/chartjs-plugin-annotation.min.js" defer></script>
     <script src="${dir}/js/chartjs-plugin-datalabels.min.js" defer></script>-->
     
-    <script src="${dir}/js/geostats.min.js" defer></script>
-
     <!-- Load maplibre-gl library required for mbtiles layer. -->
     <!-- <script src="${dir}/js/mapbox-gl.js" defer></script> -->
-    <script src="${dir}/js/maplibre-gl.js" defer></script>
+    <!-- <script src="${dir}/js/maplibre-gl.js" defer></script> -->
+    <script src="https://unpkg.com/maplibre-gl@1.15.2/dist/maplibre-gl.js" defer></script>
+    
 
     <!-- Load XYZ / MAPP stylesheet and library. -->
     <link rel="stylesheet" href="${dir}/css/mapp.css" />
@@ -82,13 +81,13 @@
 
         <div class="tab active">
           <div class="xyz-icon icon-layers"></div>
-          <div id="layers_header" class="mobile-display-none listview-title secondary-colour-bg"></div>
+          <div id="layers_header" class="mobile-display-none listview-title primary-colour-bg"></div>
           <div id="layers" class="tab-display listview"></div>
         </div>
 
         <div class="tab" style="display: none;">
           <div class="xyz-icon icon-location"></div>
-          <div id="locations_header" class="mobile-display-none listview-title secondary-colour-bg"></div>
+          <div id="locations_header" class="mobile-display-none listview-title primary-colour-bg"></div>
           <div id="locations" class="tab-display listview"></div>
         </div>
 

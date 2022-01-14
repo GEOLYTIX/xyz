@@ -46,7 +46,7 @@ function addModule(_xyz) {
         onchange=${e => {
           if (e.target.checked) {
 
-            const slider = document.getElementById('hx_hour_slider')
+            const slider = legend.querySelector('input.hx_hour_slider')
 
             layer.style.theme.loop = setInterval(()=>{
 
@@ -74,8 +74,8 @@ function addModule(_xyz) {
         <span>Hour: </span>
         <span class="bold">0</span>
         <div class="input-range">
-        <input id="hx_hour_slider"
-          class="secondary-colour-bg"
+        <input
+          class="secondary-colour-bg hx_hour_slider"
           type="range"
           min=0
           value=0

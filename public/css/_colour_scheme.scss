@@ -31,49 +31,50 @@ a {
 
 /* Primary colour properties */
 .primary-colour {
-    color: #1f964d;
+    color: #003D57;
 }
 
 .primary-colour-filter {
-    filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%);
-    -webkit-filter: invert(45%) sepia(55%) saturate(608%) hue-rotate(90deg) brightness(93%) contrast(90%);
+    filter: invert(16%) sepia(23%) saturate(4184%) hue-rotate(169deg) brightness(101%) contrast(102%);
+    -webkit-filter: invert(16%) sepia(23%) saturate(4184%) hue-rotate(169deg) brightness(101%) contrast(102%);
 }
 
 .primary-colour-bg {
-    background-color: #1f964d;
+    background-color: #003D57;
 }
 
 .primary-colour-bb {
-	border-bottom: 1px solid #1f964d;
+	border-bottom: 1px solid #003D57;
 }
 
 input[type=range]::-webkit-slider-thumb {
-    background: #1f964d;
+    background: #003D57;
 }
 
 input[type=range]::-moz-range-thumb {
-    background: #1f964d;
+    background: #003D57;
 }
 
 /* Secondary colour properties */
 .secondary-colour {
-    color: #cae0b8;
+    color: #EC602D;
 }
 
 .secondary-colour-filter {
-    filter: invert(90%) sepia(21%) saturate(301%) hue-rotate(48deg) brightness(104%) contrast(93%);
+    filter: invert(49%) sepia(53%) saturate(3142%) hue-rotate(343deg) brightness(96%) contrast(93%);
     -webkit-filter: invert(90%) sepia(21%) saturate(301%) hue-rotate(48deg) brightness(104%) contrast(93%);
 }
 
 .secondary-colour-bg {
-    background-color: #cae0b8;
+    background-color: #EC602D;
 }
 
 .secondary-colour-bb {
-    border-bottom: solid 1px #cae0b8;
+    border-bottom: solid 1px #EC602D;
 }
 
 .secondary-colour-hover:hover {
-    background-color: #cae0b8;
+    background-color: #EC602D;
+    color: #fff;
     cursor: pointer;
 }

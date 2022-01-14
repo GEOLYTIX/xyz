@@ -1,12 +1,12 @@
 const cloudfront = require('../provider/cloudfront')
 
-const http = require('./http')
+const file = require('../provider/file')
 
-const file = require('./file')
+const http = require('./httpsAgent')
 
 const getFrom = {
   'https': ref => http(ref),
-  'file': ref => file(`../../public/${ref.split(':')[1]}`),
+  'file': ref => file(ref.split(':')[1]),
   'cloudfront': ref => cloudfront(ref.split(':')[1]),
 }
 

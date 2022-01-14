@@ -2,7 +2,7 @@ const acl = require('./acl')()
 
 const mailer = require('../mailer')
 
-const mail_templates = require('./mails')
+const templates = require('../templates/_templates')
 
 module.exports = async (req, res) => {
 
@@ -23,16 +23,14 @@ module.exports = async (req, res) => {
   const host = `${req.headers.host.includes('localhost') && req.headers.host || process.env.ALIAS || req.headers.host}${process.env.DIR}`
 
   // Sent email to inform user that their account has been deleted.
-  const deleted_account_mail = mail_templates.deleted_account[user.language || 'en'] ||  mail_templates.deleted_account.en;
-
-  await mailer(Object.assign({
+  var mail_template = await templates('deleted_account', user.language, {
+    host,
+    protocol
+  })
+  
+  await mailer(Object.assign(mail_template, {
     to: user.email
-  },
-  deleted_account_mail({
-    host: host,
-    protocol: protocol
-  })));
+  }))
 
   res.send('User account deleted.')
-
 }

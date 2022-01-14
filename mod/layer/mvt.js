@@ -29,12 +29,14 @@ module.exports = async (req, res) => {
     && ` AND ${sql_filter(Object.values(roles).filter(r => !!r), SQLparams)}` || ''}`
 
     // Construct array of fields queried
-  const mvt_fields = Object.values(layer.style.themes || {})
+  const mvt_fields = Object.values(layer.style?.themes || {})
     .map(theme => getField(theme))
     .filter(field => typeof field !== 'undefined')
 
   // Assign mvt_fields from single theme
-  layer.style.theme && mvt_fields.push(layer.style.theme && getField(layer.style.theme))
+  layer.style?.theme && mvt_fields.push(getField(layer.style.theme))
+
+  layer.style.label && mvt_fields.push(`${layer.style.label.field} AS label`)
 
   const geoms = layer.geoms && Object.keys(layer.geoms)
 

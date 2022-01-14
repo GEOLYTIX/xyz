@@ -1,0 +1,101 @@
+{
+    "templates": {
+        "Mapbox Base": {
+            "format": "mbtiles",
+            "mbStyle": "mapbox://styles/dbauszus/ciozrimi3002bdsm8bjtn2v1y",
+            "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2t2YXFxanU1MDNvbzJwbzhzbDZzcnk0OSJ9.S3FXNXK9e_hxAXB5C4V9ig",
+            "attribution": {
+                "© Mapbox": "https://www.mapbox.com/about/maps",
+                "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+            }
+        },
+        "Mapbox Colour No Labels": {
+            "format": "mbtiles",
+            "mbStyle": "mapbox://styles/dbauszus/ckisxbdwv1e0w19qkwjgguzn1",
+            "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2t2YXFxanU1MDNvbzJwbzhzbDZzcnk0OSJ9.S3FXNXK9e_hxAXB5C4V9ig",
+            "attribution": {
+                "© Mapbox": "https://www.mapbox.com/about/maps",
+                "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+            }
+        },
+        "Mapbox Label": {
+            "format": "mbtiles",
+            "mbStyle": "mapbox://styles/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z",
+            "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2t2YXFxanU1MDNvbzJwbzhzbDZzcnk0OSJ9.S3FXNXK9e_hxAXB5C4V9ig",
+            "attribution": {
+                "© Mapbox": "https://www.mapbox.com/about/maps",
+                "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+            },
+            "style": {
+                "zIndex": 20
+            }
+        },
+        "HERE Imagery": {
+            "format": "tiles",
+            "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?{HERE}",
+            "proxy": true,
+            "attribution": {
+                "© Here": "https://www.here.com/",
+                "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+            }
+        },
+        "HERE Hybrid": {
+            "format": "tiles",
+            "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?{HERE}",
+            "proxy": true,
+            "attribution": {
+                "© Here": "https://www.here.com/",
+                "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+            }
+        }
+    },
+    "locales": {
+        "UK": {
+            "name": "United Kingdom",
+            "gazetteer": {
+                "provider": "GOOGLE",
+                "country": "GB",
+                "placeholder": "eg. London",
+                "label": true,
+                "optional": true
+            },
+            "bounds": {
+                "north": 67,
+                "east": -25,
+                "south": 47.5,
+                "west": 15
+            },
+            "view": {
+                "lat": 50,
+                "lng": 0
+            },
+            "minZoom": 5,
+            "maxZoom": 18,
+            "showScaleBar": true,
+            "layers": {
+                "Mapbox Base": {
+                    "group": "Maps",
+                    "display": true,
+                    "template": "Mapbox Base"
+                },
+                "Mapbox Label": {
+                    "group": "Maps",
+                    "display": true,
+                    "template": "Mapbox Label"
+                },
+                "Mapbox Colour": {
+                    "group": "Maps",
+                    "template": "Mapbox Colour No Labels"
+                },
+                "HERE Imagery": {
+                    "group": "Maps",
+                    "template": "HERE Imagery"
+                },
+                "HERE Hybrid": {
+                    "group": "Maps",
+                    "template": "HERE Hybrid"
+                }
+            }
+        }
+    }
+}
