@@ -2,10 +2,14 @@ const jwt = require('jsonwebtoken')
 
 const acl = require('./acl')()
 
+const logger = require('../logger')
+
 module.exports = async (req, res) => {
 
   // Get token from params or cookie.
   const token = req.params.token || req.cookies && req.cookies[process.env.TITLE]
+
+  logger(token, 'auth_token')
 
   // Return if there is no token to decode
   if (!token) return null
@@ -17,7 +21,12 @@ module.exports = async (req, res) => {
     async (err, user) => {
 
     // Return error if verification fails.
-    if (err) return err
+    if (err) {
+      console.error(err)
+      return err
+    }
+
+    logger(user, 'user')
 
     if (process.env.NANO_SESSION) {
      

@@ -64,6 +64,7 @@ async function view(req, res, message) {
   let template = await templates('login_view', req.params.language, {
     dir: process.env.DIR,
     redirect: redirect,
+    saml_sso: process.env.SAML_SSO && `${process.env.DIR || ''}/saml/login` || '',
     msg: message || ' '
   })
 
