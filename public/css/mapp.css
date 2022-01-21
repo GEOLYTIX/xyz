@@ -2518,7 +2518,7 @@ li {
   font-weight: 700; }
 
 .display-none {
-  display: none; }
+  display: none !important; }
 
 .chartjs-render-monitor {
   width: 100% !important; }
