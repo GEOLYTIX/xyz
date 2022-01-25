@@ -62,7 +62,7 @@ app.post(`${process.env.DIR||''}/saml/acs`, express.urlencoded({extended: true})
 
 app.get(`${process.env.DIR||''}/view/:template?`, api)
 
-app.get(`${process.env.DIR||''}/`, api)
+app.get(`${process.env.DIR||''}/:locale?`, api)
 
 process.env.DIR && app.get(`/`, api)
 
