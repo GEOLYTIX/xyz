@@ -100,12 +100,7 @@ module.exports = (req, res) => {
             return res.status(401).send(acl_response.message)
           }
 
-          Object.assign(user, {
-            email: user.email,
-            admin: user.admin,
-            language: user.language,
-            roles: user.roles
-          })
+          Object.assign(user, acl_response)
         }
 
         // Create token with 8 hour expiry.
@@ -154,7 +149,9 @@ async function acl_lookup(email) {
   const user = rows[0]
 
   if (!user) {
-    return new Error('User not found in ACL')
+
+    // Return a blank
+    return {}
   }
 
   // Blocked user cannot login.
@@ -171,5 +168,9 @@ async function acl_lookup(email) {
     return new Error('User not approved in ACL')
   }
 
-  return user
+  return {
+    roles: user.roles,
+    language: user.language,
+    admin: user.admin
+  }
 }

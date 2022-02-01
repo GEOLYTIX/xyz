@@ -21,7 +21,8 @@
     "nanoid": "^3.2.0",
     "node-fetch": "^2.6.7",
     "nodemailer": "^6.6.0",
-    "pg": "^8.5.1"
+    "pg": "^8.5.1",
+    "saml2-js": "github:GEOLYTIX/saml2#glx"
   },
   "devDependencies": {
     "@turf/circle": "^6.3.0",
