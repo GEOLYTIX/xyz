@@ -110,6 +110,7 @@ module.exports = async (req, res) => {
         count(1) count,
         SUM(size) size,
         ${cat_sql || ''}
+        ${cid_sql || ''}
         ${label ? '(array_agg(label))[1] AS label,' : ''}
         ST_X(ST_PointOnSurface(ST_Union(geom))) AS x,
         ST_Y(ST_PointOnSurface(ST_Union(geom))) AS y
@@ -317,6 +318,7 @@ module.exports = async (req, res) => {
     } else {
       var agg_sql = `
         (SELECT
+          ${layer.key === 'Contributions'? 'contribution_id,' : ''}
           ${cat} AS cat,
           ${size} AS size,
           ${label ? label + ' AS label,' : ''}
@@ -342,6 +344,10 @@ module.exports = async (req, res) => {
 
     if (theme === 'categorized') var cat_sql = `array_agg(cat) cat,`;
 
+    if(layer.key === 'Contributions'){
+      var cid_sql = `array_agg(contribution_id) cid,`
+    }
+
     if (theme === 'graduated')
       var cat_sql = `${req.params.aggregate || 'sum'}(cat) cat,`;
 
@@ -352,10 +358,10 @@ module.exports = async (req, res) => {
       SUM(size) size,
       ${label ? 'label,' : ''}
       ${cat_sql || ''}
+      ${cid_sql || ''}
       ${xy_sql}
     FROM ${agg_sql}`;
   }
-
   var rows = await dbs[layer.dbs](q, SQLparams)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
@@ -379,6 +385,7 @@ module.exports = async (req, res) => {
       y: row.y,
     },
     properties: {
+      cid: row.cid,
       count: parseInt(row.count),
       size: parseInt(row.size),
       cat: row.cat.length === 1 && row.cat[0] || layer.cat_array && row.cat || null,
@@ -408,7 +415,7 @@ module.exports = async (req, res) => {
       count: parseInt(row.count),
       size: parseInt(row.size),
       cat: Object.assign({}, ...row.cat),
-      label: row.label
+      label: row.label,
     }
   })))
 
