@@ -343,7 +343,6 @@ module.exports = async (req, res) => {
     }
 
     if (theme === 'categorized') var cat_sql = `array_agg(cat) cat,`;
-
     if(layer.key === 'Contributions'){
       var cid_sql = `array_agg(contribution_id) cid,`
     }
@@ -379,19 +378,20 @@ module.exports = async (req, res) => {
     }
   })))
 
-  if (theme === 'categorized') return res.send(rows.map(row => ({
-    geometry: {
+  if (theme === 'categorized') return res.send(rows.map(row => {
+    return {geometry: {
       x: row.x,
       y: row.y,
     },
     properties: {
-      cid: row.cid,
+      cid: row.cid || 0,
       count: parseInt(row.count),
       size: parseInt(row.size),
       cat: row.cat.length === 1 && row.cat[0] || layer.cat_array && row.cat || null,
       label: count ? parseInt(row.count) > 1 ? row.count : row.label : row.label
     }
-  })))
+  }
+  }))
 
   if (theme === 'graduated') return res.send(rows.map(row => ({
     geometry: {
