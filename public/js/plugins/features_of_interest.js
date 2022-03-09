@@ -7,6 +7,8 @@ document.dispatchEvent(new CustomEvent('features_of_interest', {
 
           let label = _xyz.utils.html.node`<div>Add to Features of Interest`
 
+          let icon = _xyz.utils.html.node`<div style="height: 1em;" class="xyz-icon icon-add"></div>`
+
           entry.location.view.appendChild(_xyz.utils.html.node`<button class="primary-colour" style="margin-top: 10px;"
             onclick=${e => {
               e.stopPropagation()
@@ -17,9 +19,11 @@ document.dispatchEvent(new CustomEvent('features_of_interest', {
 
               label.textContent = idx === -1 ? 'Remove from Features of Interest' : 'Add to Features of Interest'
 
+              icon.classList = idx === -1 ? 'xyz-icon icon-remove' :  'xyz-icon icon-add'
+
             }}>
             <div style="display: grid; grid-template-columns: 1em auto; margin:auto;">
-            <div style="height: 1em;" class="xyz-icon icon-add"></div>${label}`)
+            ${icon}${label}`)
         
         }
     }
