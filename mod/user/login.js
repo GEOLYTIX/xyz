@@ -70,10 +70,8 @@ async function view(req, res, message) {
     msg: message || ' '
   })
 
+  // Set cookie with redirect value.
   res.setHeader('Set-Cookie', `${process.env.TITLE}=${redirect};HttpOnly;Max-Age=60000;Path=${process.env.DIR || '/'}`)
-
-  // The login view will set the cookie to null.
-  //res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
 
   res.send(template)
 }
