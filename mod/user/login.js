@@ -20,7 +20,7 @@ module.exports = async (req, res, message) => {
 
     const user = await post(req)
 
-    const redirect = req.cookies && req.cookies[process.env.TITLE]
+    const redirect = req.cookies && req.cookies[`${process.env.TITLE}_redirect`]
 
     if (user instanceof Error && redirect) return view(req, res, user.message)
 
@@ -70,8 +70,11 @@ async function view(req, res, message) {
     msg: message || ' '
   })
 
+  // Clear user token cookie.
+  res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
+
   // Set cookie with redirect value.
-  res.setHeader('Set-Cookie', `${process.env.TITLE}=${redirect};HttpOnly;Max-Age=60000;Path=${process.env.DIR || '/'}`)
+  res.setHeader('Set-Cookie', `${process.env.TITLE}_redirect=${redirect};HttpOnly;Max-Age=60000;Path=${process.env.DIR || '/'}`)
 
   res.send(template)
 }
