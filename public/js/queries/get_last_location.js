@@ -15,6 +15,7 @@ module.exports = {
 
         return `
           SELECT
+            ${layer.qID} as id,
             ${fields.join()}
           FROM ${table}
           ORDER BY ${layer.qID} DESC

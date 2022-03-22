@@ -735,7 +735,7 @@
         class="header primary-colour"
         style="text-align: left; grid-column: 1 / 3;"
         onclick=${t=>{e.utils.toggleExpanderParent(t.target)}}
-        ><span>${e.language.here_isoline_settings}</span>
+        ><span>${t.headerText||e.language.here_isoline_settings}</span>
         <span class="xyz-icon btn-header icon-expander primary-colour-filter">`,function(t){let a=e.utils.html.node`<span>${e.language.here_depart}`;t.edit.panel.appendChild(e.utils.html.node`
             <div style="padding-top: 5px; grid-column: 1 / 3;">
             <label class="input-checkbox">
