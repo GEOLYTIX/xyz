@@ -24,6 +24,7 @@ module.exports = async workspace => {
     infotip: require('../../public/js/queries/infotip'),
     labels: require('../../public/js/queries/labels'),
     layer_extent: require('../../public/js/queries/layer_extent'),
+    get_last_location: require('../../public/js/queries/get_last_location'),
     mvt_cache: require('../../public/js/queries/mvt_cache'),
     set_field_array: require('../../public/js/queries/set_field_array'),   
 
