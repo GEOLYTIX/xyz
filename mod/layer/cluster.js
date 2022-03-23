@@ -8,6 +8,14 @@ module.exports = async (req, res) => {
 
   const layer = req.params.layer
 
+  if (Object.values(req.params)
+    .filter(val => !!val)
+    .filter(val => typeof val !== 'object')
+    .some(val => val && !/^[A-Za-z0-9/\s/g.,_-]*$/.test(val))) {
+
+    return res.status(400).send('URL parameter validation failed.')
+  }
+
   let
     geom = layer.geom,
     style_theme = layer.style?.theme || layer.style?.themes && layer.style?.themes[req.params.theme],
@@ -17,7 +25,7 @@ module.exports = async (req, res) => {
     label = req.params.label,
     count = req.params.count,
     kmeans = parseInt(1 / req.params.kmeans),
-    dbscan = parseFloat(req.params.dbscan), 
+    dbscan = parseFloat(req.params.dbscan),
     viewport = req.params.viewport.split(','),
     z = parseFloat(req.params.z);
 
@@ -28,7 +36,7 @@ module.exports = async (req, res) => {
   const SQLparams = []
 
   const filter =
-    ` ${layer.filter?.default && 'AND '+layer.filter?.default || ''}
+    ` ${layer.filter?.default && 'AND ' + layer.filter?.default || ''}
     ${req.params.filter && `AND ${sql_filter(JSON.parse(req.params.filter), SQLparams)}` || ''}
     ${roles && Object.values(roles).some(r => !!r)
     && `AND ${sql_filter(Object.values(roles).filter(r => !!r), SQLparams)}`
@@ -141,7 +149,7 @@ module.exports = async (req, res) => {
   
       ) cluster GROUP BY kmeans_cid ${dbscan ? ', dbscan_cid;' : ';'}`
 
-  // Apply grid aggregation if KMeans is not defined.
+    // Apply grid aggregation if KMeans is not defined.
   } else {
 
     let r = parseInt(40075016.68 / Math.pow(2, z) * (layer.cluster_resolution || layer.cluster_hexresolution || 0.1));
