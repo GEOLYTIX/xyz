@@ -4,6 +4,14 @@ module.exports = async (req, res) => {
 
   const layer = req.params.layer
 
+  if (Object.values(req.params)
+    .filter(val => !!val)
+    .filter(val => typeof val !== 'object')
+    .some(val => val && !/^[A-Za-z0-9/\s/g.,_-]*$/.test(val))) {
+
+    return res.status(400).send('URL parameter validation failed.')
+  }
+
   let
     table = req.params.table,
     geom = layer.geom,
