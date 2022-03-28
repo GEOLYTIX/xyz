@@ -78,8 +78,6 @@ The domain and service layer may secure proxy access for services provided by Go
 
 [tabulator](https://github.com/olifolkerd/tabulator) - Javascript library for interactive tables and data grids.
 
-[flatpickr](https://www.npmjs.com/package/flatpickr) - A customisable JavaScript datetime picker.
-
 [chroma.js](https://github.com/gka/chroma.js) - A JavaScript library for all kinds of color manipulations.
 
 [TurfJS](https://github.com/Turfjs/turf) - A modular geospatial engine for geometry aggregation and transformations in the middleware and on the client side.

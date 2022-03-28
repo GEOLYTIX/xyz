@@ -34,7 +34,6 @@
     "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "flatpickr": "^4.6.9",
     "jwt-decode": "^2.2.0",
     "uhtml": "^2.5.3",
     "webpack": "^5.28.0",
