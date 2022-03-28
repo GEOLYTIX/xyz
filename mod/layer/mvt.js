@@ -8,7 +8,7 @@ module.exports = async (req, res) => {
 
   const layer = req.params.layer
 
-  if (Object.keys(params)
+  if (Object.keys(req.params)
     .filter(key => key !== 'filter')
     .filter(key => !!params[key])
     .filter(key => typeof params[key] !== 'object')
