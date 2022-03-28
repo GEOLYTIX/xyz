@@ -8,12 +8,13 @@ module.exports = async (req, res) => {
 
   const layer = req.params.layer
 
-  if (Object.values(req.params)
-    .filter(val => !!val)
-    .filter(val => typeof val !== 'object')
-    .some(val => val && !/^[A-Za-z0-9/\s/g.,_-]*$/.test(val))) {
+  if (Object.keys(params)
+    .filter(key => key !== 'filter')
+    .filter(key => !!params[key])
+    .filter(key => typeof params[key] !== 'object')
+    .some(key => !/^[A-Za-z0-9.,_-\s]*$/.test(params[key]))) {
 
-    return res.status(400).send('URL parameter validation failed.')
+      return res.status(400).send('URL parameter validation failed.')
   }
 
   let
