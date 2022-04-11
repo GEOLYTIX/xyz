@@ -23,7 +23,7 @@ module.exports = async (req, res) => {
     cat = style_theme && (style_theme.fieldfx || style_theme.field) || null,
     size = style_theme && style_theme.size || 1,
     theme = style_theme && style_theme.type,
-    label = req.params.label,
+    label= req.params.label_template && req.params.workspace.templates[req.params.label_template].template || req.params.label || null,
     count = req.params.count,
     kmeans = parseInt(1 / req.params.kmeans),
     dbscan = parseFloat(req.params.dbscan),

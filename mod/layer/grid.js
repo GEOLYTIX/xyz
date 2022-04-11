@@ -6,6 +6,7 @@ module.exports = async (req, res) => {
 
   if (Object.keys(req.params)
     .filter(key => key !== 'filter')
+    .filter(key => key !== 'label')
     .filter(key => !!req.params[key])
     .filter(key => typeof req.params[key] !== 'object')
     .some(key => !/^[A-Za-z0-9.,_-\s]*$/.test(req.params[key]))) {
