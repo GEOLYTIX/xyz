@@ -1,7 +1,7 @@
-document.dispatchEvent(new CustomEvent('magicWand', {
+document.dispatchEvent(new CustomEvent('mvtMagicWand', {
   detail: _xyz => {
 
-    _xyz.layers.plugins.magicWand = layer => {
+    _xyz.layers.plugins.mvtMagicWand = layer => {
 
         if(layer.format !== 'mvt') return // for mvt format only
 
