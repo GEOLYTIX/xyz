@@ -3,27 +3,35 @@ document.dispatchEvent(new CustomEvent('features_of_interest', {
 
         _xyz.locations.plugins.features_of_interest = entry => {
           
-          if(!_xyz.foi) _xyz.foi = []
+          if(!_xyz.foi) _xyz.foi = new Set()
 
-          let label = _xyz.utils.html.node`<div>Add to Features of Interest`
+          if(entry.pluginDomEl) return
 
-          let icon = _xyz.utils.html.node`<div style="height: 1em;" class="xyz-icon icon-add"></div>`
+          let label = _xyz.utils.html.node`<div class="foi-label">Add to Features of Interest`
 
-          entry.location.view.appendChild(_xyz.utils.html.node`<button class="primary-colour" style="margin-top: 10px;"
+          let icon = _xyz.utils.html.node`<div style="height: 1em;" class="xyz-icon icon-add foi-icon"></div>`
+
+          if(_xyz.foi.has(entry.location.hook)) label.textContent = 'Remove from Features of Interest'
+
+          if(_xyz.foi.has(entry.location.hook)) icon.classList = 'xyz-icon icon-remove foi-icon'
+
+          entry.pluginDomEl = _xyz.utils.html.node`<button class="primary-colour" style="margin-top: 10px;"
             onclick=${e => {
               e.stopPropagation()
 
-              let idx = _xyz.foi.indexOf(entry.location.hook)
+              _xyz.foi.has(entry.location.hook) ? _xyz.foi.delete(entry.location.hook) : _xyz.foi.add(entry.location.hook)
 
-              idx === -1 ? _xyz.foi.push(entry.location.hook) : _xyz.foi.splice(idx, 1)
+              label.textContent = _xyz.foi.has(entry.location.hook) ? 'Remove from Features of Interest' : 'Add to Features of Interest'
 
-              label.textContent = idx === -1 ? 'Remove from Features of Interest' : 'Add to Features of Interest'
+              icon.classList = _xyz.foi.has(entry.location.hook) ? 'xyz-icon icon-remove foi-icon' :  'xyz-icon icon-add foi-icon'
 
-              icon.classList = idx === -1 ? 'xyz-icon icon-remove' :  'xyz-icon icon-add'
+              document.dispatchEvent(new CustomEvent('features_of_interest_update'))
 
             }}>
             <div style="display: grid; grid-template-columns: 1em auto; margin:auto;">
-            ${icon}${label}`)
+            ${icon}${label}`
+
+           entry.location.view.appendChild(entry.pluginDomEl)
         
         }
     }
