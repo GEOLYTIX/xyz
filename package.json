@@ -22,7 +22,7 @@
     "node-fetch": "^2.6.7",
     "nodemailer": "^6.6.0",
     "pg": "^8.5.1",
-    "saml2-js": "github:GEOLYTIX/saml2#glx"
+    "saml2-js": "^3.0.1"
   },
   "devDependencies": {
     "@turf/circle": "^6.3.0",
