@@ -1,82 +1,321 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{language}}">
 
-<head 
-  data-dir="${dir}"
-  data-token=${token}
-  data-login=${login}>
+<head data-dir="{{dir}}">
 
-    <title>${title}</title>
+  <title>{{title}}</title>
 
-    <link rel="icon" type="image/x-icon" href="${dir}/icons/favicon.ico" />
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" type="image/x-icon" href="{{dir}}/icons/favicon.ico" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <!-- <script src="${dir}/js/mapbox-gl.js" defer></script> -->
-    <script src="${dir}/js/maplibre-gl.js" defer></script>
-    
-    <link rel="stylesheet" href="${dir}/css/ol.css" />
-    <script src="${dir}/js/ol.js" defer></script>
+  <!-- <script src="{{dir}}/js/ol.js" defer></script> -->
+  <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.9.0/build/ol.js" defer></script>
 
-    <link rel="stylesheet" href="${dir}/css/mapp.css" />
-    <script src="${dir}/js/mapp.js" defer></script>
 
-    <link rel="stylesheet" href="${dir}/views/embedded.css" />
-    <script src="${dir}/views/embedded.js" defer></script>
+  <!-- Load XYZ / MAPP stylesheet and library. -->
+  <link rel="stylesheet" href="{{dir}}/css/mapp.css" />
+  <link rel="stylesheet" href="{{dir}}/css/ui.css" />
+
+  <script type="module" src="{{dir}}/js/lib/mapp.js" defer></script>
+  <script type="module" src="{{dir}}/js/lib/ui.js" defer></script>
+
+  <style>
+    html {
+      height: 100%;
+    }
+
+    body {
+      grid-template-rows: auto 0 0;
+    }
+
+    #mapButton {
+      position: absolute;
+      left: 0;
+      height: 100%;
+    }
+
+    .listview.locations>button {
+      width: 100%;
+      text-align: right;
+    }
+
+    .listview>button.dropdown {
+      margin-top: 5px;
+    }
+
+    .desktop-display-none {
+      display: none;
+    }
+
+    body {
+      display: grid;
+      grid-template-columns: 333px 10px 50px auto;
+    }
+
+    body.fullscreen {
+      grid-template-columns: 0 0 50px auto !important;
+    }
+
+    #spacer {
+      grid-row: 1/4;
+      grid-column: 2;
+      background: repeating-linear-gradient(90deg, #ddd, #fff 3px);
+      box-shadow: 3px 0px 6px -3px #777;
+      z-index: 9999;
+    }
+
+    #spacer:hover {
+      cursor: col-resize;
+    }
+
+    #Map {
+      grid-row: 1;
+      grid-column: 3/5;
+      position: relative;
+    }
+
+    .map-container .ol-scale-line {
+      right: 5px;
+      top: 5px;
+      position: fixed;
+    }
+
+    #OL {
+      width: 100%;
+      height: 100vh;
+      position: absolute;
+    }
+
+    .layers_header {
+      position:  relative;
+      padding: 1em;
+    } 
+
+    .layers_header > .logo {
+      position:absolute;
+      z-index: 999;
+      height: 1em;
+      left: 5px;
+      bottom: 5px;
+      text-decoration: none;
+    }
+
+    .attribution-links {
+      max-width: calc(100% - 140px);
+    }
+
+    .background-fade {
+      padding: 1px;
+      border-radius: 2px;
+      background: -moz-linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 70%);
+      background: -webkit-linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 70%);
+      background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 70%);
+    }
+
+    #mapButton {
+      grid-column: 3;
+      grid-row: 1/4;
+      background-color: #fff;
+      opacity: 0.8;
+    }
+
+    #ctrls {
+      grid-row: 1/4;
+      grid-column: 1;
+      padding: 15px;
+      transform: rotateY(180deg);
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    .fullscreen #ctrls {
+      display: none;
+    }
+
+    #ctrls>div {
+      transform: rotateY(180deg);
+    }
+
+    #layers {
+      margin-bottom: 20px;
+    }
+
+    .tab>h1 {
+      padding: 3px;
+      padding-left: 7px;
+      border-radius: 5px;
+    }
+  </style>
 
 </head>
 
-<body style="grid-template-rows: auto 0 0;">
+<body>
 
-    <div id="Map">
-      <div id="OL"></div>
-    </div>
+  <div id="Map" class="map-container">
 
-    <div id="Attribution">
-      <div class="attribution">
-        <div id="ol-scale"></div>
-        <a
-          class="logo"
-          target="_blank"
-          href="https://geolytix.co.uk"
-          style="background-image: url('https://geolytix.github.io/public/geolytix.svg');"></a>
+    <div id="Attribution" class="attribution-links"></div>
+    <div id="OL"></div>
+  </div>
+
+  <div id="mapButton" class="btn-column"></div>
+
+  <div id="spacer"></div>
+
+  <div id="ctrls" class="lighter-background">
+
+    <div>
+
+      <div class="layers_header">
+          <a class="logo" target="_blank" href="https://geolytix.co.uk">
+            <img src="https://geolytix.github.io/public/geolytix_mapp.svg">
+          </a>
       </div>
-    </div>
 
-    <div id="mapButton" class="btn-column"></div>
+      <div class="tab active">
+        <div id="layers" class="tab-display listview"></div>
+      </div>
 
-    <div id="spacer"></div>
-
-    <div id="ctrls">
-
-      <div>
-
-        <div id="gazetteer" class="display-none">
-          <button id="closeGazetteer">
-            <div class="xyz-icon icon-close"></div>
-          </button>
-          <div class="input-drop">
-            <input type="text" placeholder="e.g. London">
-            <ul></ul>
-          </div>
-        </div>
-
-        <div class="tab active">
-          <div class="xyz-icon icon-layers"></div>
-          <div id="layers_header" class="mobile-display-none listview-title secondary-colour-bg"></div>
-          <div id="layers" class="tab-display listview"></div>
-        </div>
-
-        <div class="tab" style="display: none;">
-          <div class="xyz-icon icon-location"></div>
-          <div id="locations_header" class="mobile-display-none listview-title secondary-colour-bg"></div>
-          <div id="locations" class="tab-display listview"></div>
-        </div>
-
+      <div class="tab" style="display: none;">
+        <div id="locations" class="tab-display listview locations"></div>
       </div>
 
     </div>
+
+  </div>
 
 </body>
+
+<script>
+  window.onload = async () => {
+
+    // Set Openlayers node in order to move map object.
+    const OL = document.getElementById("OL");
+
+    // Vertical ResizeHandler
+    mapp.ui.resizeHandler({
+      target: document.getElementById("spacer"),
+      resizeEvent: (e) => {
+        let pageX = (e.touches && e.touches[0].pageX) || e.pageX;
+
+        if (pageX < 333) return;
+
+        // Half width snap.
+        if (pageX > window.innerWidth / 2) pageX = window.innerWidth / 2;
+
+        document.body.style.gridTemplateColumns = `${pageX}px 10px 50px auto`;
+      },
+    });
+
+    const btnColumn = document.getElementById("mapButton");
+
+    const host = document.head.dataset.dir || new String("");
+
+    // Load locales if locale is not defined in current hook.
+    const locales = !(mapp.hooks.current.locale) && await mapp.utils.xhr(`${host}/api/workspace/locales`);
+
+    const locale = await mapp.utils.xhr(`${host}/api/workspace/locale?`
+      + `locale=${mapp.hooks.current.locale || locales[0].key}`);
+
+    await mapp.utils.loadPlugins(locale.plugins);
+
+    Object.keys(locale).forEach((key) => {
+      mapp.plugins[key] && mapp.plugins[key](locale[key]);
+    });
+
+    const mapview = mapp.Mapview({
+      host: host,
+      target: OL,
+      locale: locale,
+      scrollWheelZoom: true,
+      scalebar: 'metric',//'imperial'
+      hooks: true,
+      attribution: {
+        target: document.getElementById('Attribution'),
+        links: {
+          [`XYZ v${mapp.version}`]: "https://geolytix.github.io/xyz",
+          ["SHA"]: `https://github.com/GEOLYTIX/xyz/commit/${mapp.hash}`,
+          Openlayers: "https://openlayers.org",
+        },
+      }
+    });
+
+    const layers = await mapp.utils.promiseAll(locale.layers.map(
+      layer => mapp.utils.xhr(`${host}/api/workspace/layer?`
+        + `locale=${locale.key}&layer=${layer}`)))
+
+    await mapview.addLayer(layers);
+
+    mapp.ui.layers.listview({
+      target: document.getElementById("layers"),
+      mapview: mapview,
+    });
+
+    mapp.ui.locations.listview({
+      target: document.getElementById("locations"),
+      mapview: mapview,
+    });
+
+    mapview.interactions.highlight();
+
+    // Select locations from hooks.
+    mapp.hooks.current.locations.forEach((_hook) => {
+      const hook = _hook.split("!");
+
+      mapp.location.get({
+        layer: mapview.layers[decodeURIComponent(hook[0])],
+        id: hook[1],
+      });
+    });
+
+    // Add zoomIn button.
+    const btnZoomIn = btnColumn.appendChild(mapp.utils.html.node`
+    <button
+      id="btnZoomIn"
+      class="mask-icon add"
+      .disabled=${mapview.Map.getView().getZoom() >= mapview.locale.maxZoom}
+      title=${mapp.dictionary.toolbar_zoom_in}
+      onclick=${(e) => {
+        const z = parseInt(mapview.Map.getView().getZoom() + 1);
+        mapview.Map.getView().setZoom(z);
+        e.target.disabled = z >= mapview.locale.maxZoom;
+      }}>`);
+
+    // Add zoomOut button.
+    const btnZoomOut = btnColumn.appendChild(mapp.utils.html.node`
+    <button
+      id="btnZoomOut"
+      class="mask-icon remove"
+      .disabled=${mapview.Map.getView().getZoom() <= mapview.locale.minZoom}
+      title=${mapp.dictionary.toolbar_zoom_out}
+      onclick=${(e) => {
+        const z = parseInt(mapview.Map.getView().getZoom() - 1);
+        mapview.Map.getView().setZoom(z);
+        e.target.disabled = z <= mapview.locale.minZoom;
+      }}>`);
+
+    // changeEnd event listener for zoom button.
+    OL.addEventListener('changeEnd', () => {
+      const z = mapview.Map.getView().getZoom();
+      btnZoomIn.disabled = z >= mapview.locale.maxZoom;
+      btnZoomOut.disabled = z <= mapview.locale.minZoom;
+    });
+
+    // Add fullscreen button.
+    btnColumn.appendChild(mapp.utils.html.node`
+    <button
+      class="mobile-display-none mask-icon map"
+      title=${mapp.dictionary.toolbar_fullscreen}
+      onclick=${(e) => {
+        e.target.classList.toggle("enabled");
+        document.body.classList.toggle("fullscreen");
+        mapview.Map.updateSize();
+        Object.values(mapview.layers.list).forEach((layer) => {
+          layer.mbMap?.resize();
+        });
+      }}>`);
+
+  };
+</script>
 
 </html>

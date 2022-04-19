@@ -1,10 +1,8 @@
-module.exports = {
-  admin: true,
-  render: _ => {
+module.exports = _ => {
 
-    const layer = _.workspace.locales[_.locale].layers[_.layer]
+  const layer = _.workspace.locales[_.locale].layers[_.layer]
   
-    return `
+  return `
     
     DROP table if exists ${layer.mvt_cache};
 
@@ -22,5 +20,4 @@ module.exports = {
     Create index IF NOT EXISTS ${layer.mvt_cache.replace(/\./, '_')}_tile on ${layer.mvt_cache} (tile);
 
     SELECT '${layer.mvt_cache} cache OK' as msg;`
-  }
 }

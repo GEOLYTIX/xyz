@@ -1,40 +1,33 @@
 {
   "name": "xyz",
-  "version": "3.7.4",
+  "version": "v4.0.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/geolytix/xyz"
   },
-  "license": "MIT",
   "scripts": {
-    "_start": "node express.js",
-    "_build": "webpack --mode production",
-    "_dev": "webpack --mode development"
+    "test": "web-test-runner \"test/**/*.test.js\" --node-resolve"
   },
+  "license": "MIT",
   "dependencies": {
-    "@geolytix/saml2-js": "^3.0.3",
+    "aws-sdk": "^2.820.0",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.24.0",
+    "data-api-client": "^1.2.0",
     "jsonwebtoken": "^8.5.1",
-    "lodash": "^4.17.21",
     "nanoid": "^3.2.0",
     "node-fetch": "^2.6.7",
     "nodemailer": "^6.6.0",
-    "pg": "^8.5.1"
+    "pg": "^8.7.3"
   },
   "devDependencies": {
-    "@turf/circle": "^6.3.0",
-    "@turf/flatten": "^6.3.0",
-    "@turf/kinks": "^6.3.0",
-    "@turf/point-on-feature": "^6.3.0",
-    "a-color-picker": "^1.2.1",
-    "chroma-js": "^2.1.0",
+    "@esm-bundle/chai": "^4.3.4-fix.0",
+    "@snowpack/web-test-runner-plugin": "^0.2.2",
+    "@web/test-runner": "^0.10.2",
     "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
-    "jwt-decode": "^2.2.0",
-    "uhtml": "^2.5.3",
-    "webpack": "^5.72.0",
-    "webpack-cli": "^4.9.2"
+    "snowpack": "^3.8.8",
+    "uhtml": "^2.8.0"
   }
 }

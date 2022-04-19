@@ -1,104 +1,75 @@
+@import 'colours';
+
 .drawer.layer-group,
 .drawer.layer-view {
-    border-top: 3px solid #f0f0f0;
-    background-color: #fff;
+  margin-top: 7px;
+  border-radius: 3px;
 
-    >* {
-        padding-left: 5px;
+  >.header {
+    padding-top: 5px;
+    padding-bottom: 5px;
+    ~.drawer.layer-view{
+      margin-top: 0
     }
-
-    >.header {
-        padding-top: 5px;
-        padding-bottom: 5px;
-        padding-right: 0;
-
-        >img {
-            width: 20px;
-        }
+    ~.drawer.layer-view~.drawer.layer-view{
+      margin-top: 7px
     }
+  }
+
+  >.meta {
+    padding-bottom: 5px;
+  }
+
+  &.expandable {
+    box-shadow: 1px 1px 3px $box_shadow_primary;
+  }
+
+  &.empty {
+    box-shadow: none;
+  }
+
+  &.expanded {
+    padding-bottom: 5px;
+    box-shadow: none;
+  }
+}
+
+.drawer.layer-view {
+  padding-left: 5px;
+  padding-right: 5px;
+  background-color: ghostwhite;
+
+  >.header {
+    font-weight: bold;
+  }
+
+  >.drawer.expandable {
+    box-shadow: 1px 1px 3px $primary-light;
+    margin-top: 6px;
+    padding: 0 5px;
+    border-radius: 3px;
+    border: 1px solid #eee;
+    background-color: white;
+  }
+
+  >.drawer.expanded {
+    box-shadow: none;
+    border: none;
+    padding-bottom: 5px;
+  }
 }
 
 .drawer.layer-group {
+  padding-left: 3px;
+  padding-right: 3px;
+  background: $light;
 
-    >.drawer.layer-view {
-        padding-left: 10px;
-    }
-}
-
-.drawer.layer-view {
-
-    >.header {
-        font-weight: bold;
-    }
-
-    >*:last-child {
-      padding-bottom: 5px;
-    }
-}
-
-
-.layer-view {
-
-  .title {
-    margin-bottom: 10px;
-    padding: 5px 0;
-    border-radius: 2px;
+  >.header>h2{
+    font-weight: 400;
   }
 
-  .meta {
-    font-size: 90%;
-    padding-bottom: 5px;
-    padding-right: 5px;
+  >* {
+    padding-left: 4px;
+    padding-right: 4px;
   }
-
-    .legend.grid {
-      margin-top: 5px;
-      display: grid;
-      grid-template-columns: min-content;
-      grid-gap: 5px;
-      align-items: center;
-      justify-content: start;
-    }
-
-    .legend .title {
-      font-size: 120%;
-      font-weight: bold;
-      margin: 0;
-      padding: 0;
-    }
-
-    .legend .label {
-      font-size: 12px;
-    }
-
-    .legend .switch {
-      cursor: pointer;
-    }
-
-    .legend .switch.disabled {
-      text-decoration: line-through;
-      opacity: 0.5;
-    }
-
-    .drawer.panel {
-        border-top: 1px solid #f0f0f0;
-        padding-bottom: 5px;
-        padding-right: 5px;
-        font-size: 90%;
-        box-sizing: border-box;
-
-        button {
-            font-size: 94%;
-        }
-
-        >.header {
-            font-weight: bold;
-            padding: 5px 0;
-            margin-right: -5px;
-        }
-
-        .btn-wide {
-          margin: 3px 0;
-        }
-    }
 }

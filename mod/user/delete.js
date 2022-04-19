@@ -1,6 +1,6 @@
 const acl = require('./acl')()
 
-const mailer = require('../mailer')
+const mailer = require('../utils/mailer')
 
 const templates = require('../templates/_templates')
 

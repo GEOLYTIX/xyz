@@ -1,398 +1,395 @@
-window.onload = () => {
+window.onload = async () => {
 
-  if ('scrollRestoration' in history) history.scrollRestoration = 'auto'
+  mapp.utils.merge(mapp.dictionaries, {
+    en: {
+      toolbar_zoom_in: "Zoom in",
+      toolbar_zoom_out: "Zoom out",
+      toolbar_zoom_to_area: "Zoom to area",
+      toolbar_current_location: "Current location",
+      toolbar_fullscreen: "Fullscreen mapview",
+      toolbar_admin: "Open account admin view",
+    },
+    de: {
+      toolbar_zoom_in: "Zoom rein",
+      toolbar_zoom_out: "Zoom raus",
+      toolbar_zoom_to_area: "Zoom Rechteck",
+      toolbar_current_location: "Standort",
+      toolbar_fullscreen: "Vollbild",
+      toolbar_admin: "Benutzerkontenverwaltung",
+    },
+    cn: {
+      toolbar_zoom_in: "放大",
+      toolbar_zoom_out: "缩小",
+      toolbar_zoom_to_area: "缩放至区域",
+      toolbar_current_location: "当前位置",
+      toolbar_fullscreen: "全屏显示地图",
+      toolbar_admin: "开启帐户管理员视图",
+    },
+    pl: {
+      toolbar_zoom_in: "Powiększ",
+      toolbar_zoom_out: "Pomniejsz",
+      toolbar_zoom_to_area: "Pokaż obszar",
+      toolbar_current_location: "Obecna lokalizacja",
+      toolbar_fullscreen: "Mapa na pełnym ekranie",
+      toolbar_admin: "Pokaż konto administratora",
+    },
+    ko: {
+      toolbar_zoom_in: "줌인",
+      toolbar_zoom_out: "줌아웃",
+      toolbar_zoom_to_area: "해당지역 줌(Zoom)",
+      toolbar_current_location: "현재 위치",
+      toolbar_fullscreen: "지도뷰 전체화면",
+      toolbar_admin: "계정관리뷰 오픈",
+    },
+    fr: {
+      toolbar_zoom_in: "Zoomer",
+      toolbar_zoom_out: "Dé-zoomer",
+      toolbar_zoom_to_area: "Zoomer sur un encadré",
+      toolbar_current_location: "Localisation actuelle",
+      toolbar_fullscreen: "Carte en plein écran",
+      toolbar_admin: "Afficher le compte administrateur",
+    },
+    ja: {
+      toolbar_zoom_in: "ズームイン",
+      toolbar_zoom_out: "ズームアウト",
+      toolbar_zoom_to_area: "エリアをズームに",
+      toolbar_current_location: "現在地",
+      toolbar_fullscreen: "フルスクリーン マップビュー",
+      toolbar_admin: "アカウントアドミンビューを開く",
+    }
+  })
+
+  mapp.user = document.head.dataset.user &&
+      JSON.parse(decodeURI(document.head.dataset.user))
+      || undefined
+
+  // Language as URL parameter will override user language.
+  mapp.language = mapp.hooks.current.language
+    || mapp.user?.language
+    || mapp.language
+
+  if ("scrollRestoration" in history) history.scrollRestoration = "auto";
 
   // Set Openlayers node in order to move map object.
-  const OL = document.getElementById('OL')
+  const OL = document.getElementById("OL");
 
   // Move map up on document scroll
-  document.addEventListener('scroll', () => {
-    OL.style['marginTop'] = `-${parseInt(window.pageYOffset / 2)}px`
-  })
+  document.addEventListener("scroll", () => {
+    OL.style["marginTop"] = `-${parseInt(window.pageYOffset / 2)}px`;
+  });
 
-  // Set vertDivider fo vertical resize of body grid.
-  const vertDivider = document.getElementById('spacer')
+  // Vertical ResizeHandler
+  mapp.ui.utils.resizeHandler({
+    target: document.getElementById("spacer"),
+    resizeEvent: (e) => {
+      let pageX = (e.touches && e.touches[0].pageX) || e.pageX;
 
-  vertDivider.addEventListener('mousedown', e => {
-    e.preventDefault()
-    document.body.style.cursor = 'grabbing'
-    window.addEventListener('mousemove', resize_x)
-    window.addEventListener('mouseup', stopResize_x)
-  })
-  
-  vertDivider.addEventListener('touchstart', e => {
-    e.preventDefault()
-    window.addEventListener('touchmove', resize_x)
-    window.addEventListener('touchend', stopResize_x)
-  }, {
-    passive: true
-  })
-  
-  // Vertical resize event
-  function resize_x(e) {
-    let pageX = (e.touches && e.touches[0].pageX) || e.pageX
+      if (pageX < 333) return;
 
-    if (pageX < 333) return
+      // Half width snap.
+      if (pageX > window.innerWidth / 2) pageX = window.innerWidth / 2;
 
-    // Half width snap.
-    if (pageX > (window.innerWidth / 2)) pageX = window.innerWidth / 2
+      document.body.style.gridTemplateColumns = `${pageX}px 10px 50px auto`;
+    },
+  });
 
-    document.body.style.gridTemplateColumns = `${pageX}px 10px 50px auto`
-  }
-  
-  // Remove vertical resize events.
-  function stopResize_x() {
-    document.body.style.cursor = 'auto'
-    window.removeEventListener('mousemove', resize_x)
-    window.removeEventListener('touchmove', resize_x)
-    window.removeEventListener('mouseup', stopResize_x)
-    window.removeEventListener('touchend', stopResize_x)
-  }
+  // Vertical ResizeHandler
+  mapp.ui.utils.resizeHandler({
+    target: document.getElementById("hozDivider"),
+    resizeEvent: (e) => {
 
-  // Set hoxDivider for horizontal resize of body grid.
-  const hozDivider = document.getElementById('hozDivider')
+      let pageY = (e.touches && e.touches[0].pageY) || e.pageY;
 
-  // Resize tabview while holding mousedown on hozDivider.
-  hozDivider.addEventListener('mousedown', () => {
-    document.body.style.cursor = 'grabbing'
-    window.addEventListener('mousemove', resize_y)
-    window.addEventListener('mouseup', stopResize_y)
-  }, true)
+      if (pageY < 0) return;
 
-  // Resize dataview while touching hozDivider.
-  hozDivider.addEventListener('touchstart', e => {
-    e.preventDefault()
-    window.addEventListener('touchmove', resize_y)
-    window.addEventListener('touchend', stopResize_y)
-  }, {
-    passive: true
-  })
+      let height = window.innerHeight - pageY;
 
-  // Resize the dataview container.
-  function resize_y(e) {
-    e.preventDefault()
+      // Min height snap.
+      if (height < 65) height = 50;
 
-    let pageY = (e.touches && e.touches[0].pageY) || e.pageY
+      // Full height snap.
+      if (height > window.innerHeight - 10) height = window.innerHeight;
 
-    if (pageY < 0) return
+      document.body.style.gridTemplateRows = `auto 10px ${height}px`;
 
-    let height = window.innerHeight - pageY
-
-    // Min height snap.
-    if (height < 65) height = 50
-
-    // Full height snap.
-    if (height > (window.innerHeight - 10)) height = window.innerHeight
-
-    document.body.style.gridTemplateRows = `auto 10px ${height}px`
-
-    OL.style.marginTop = `-${(height/2)}px`
-  }
-
-  // Remove horizontal resize events.
-  function stopResize_y() {
-    document.body.style.cursor = 'auto';
-    window.removeEventListener('mousemove', resize_y);
-    window.removeEventListener('touchmove', resize_y);
-    window.removeEventListener('mouseup', stopResize_y);
-    window.removeEventListener('touchend', stopResize_y);
-  }
+      OL.style.marginTop = `-${height / 2}px`;
+    },
+  });
 
   // Tab event for mobile view.
-  const tabs = document.querySelectorAll('.tab')
-  const locationsTab = document.getElementById('locations')
-  const layersTab = document.getElementById('layers')
+  const tabs = document.querySelectorAll(".tab");
+  const locationsTab = document.getElementById("locations");
+  const layersTab = document.getElementById("layers");
 
-  tabs.forEach(tab => {
+  tabs.forEach((tab) => {
+    tab.querySelector(".listview").addEventListener("scroll", (e) => {
+      if (e.target.scrollTop > 0) return e.target.classList.add("shadow");
+      e.target.classList.remove("shadow");
+    });
 
-    tab.querySelector('.listview').addEventListener('scroll', e => {
-      if (e.target.scrollTop > 0) return e.target.classList.add('shadow')
-      e.target.classList.remove('shadow')
-    })
+    tab.onclick = (e) => {
+      if (!e.target.classList.contains("tab")) return;
+      tabs.forEach((el) => el.classList.remove("active"));
+      e.target.classList.add("active");
+    };
+  });
 
-    tab.onclick = e => {
-      if (!e.target.classList.contains('tab')) return
-      e.preventDefault()
-      tabs.forEach(el => el.classList.remove('active'))
-      e.target.classList.add('active')
-    }
+  const tabview = document.getElementById("Tabview");
 
-  })
-
-  const btnColumn = document.getElementById('mapButton')
-
-  // Initialize xyz object
-  const xyz = _xyz({
-    host: document.head.dataset.dir || new String(''),
-    hooks: true
-  })
-
-  document.getElementById('layers_header').textContent = xyz.language.layers_header
-  document.getElementById('locations_header').textContent = xyz.language.locations_header
-
-  xyz.workspace.get.locales().then(getLocale)
-
-  // Get locale from host.
-  function getLocale(locales) {
-
-    if (!locales.length) {
-      userAdmin();
-      alert("No accessible locales");
-      return;
-    }
-
-    xyz.hooks.current.locale = document.head.dataset.locale
-
-    const locale = xyz.hooks && xyz.hooks.current.locale ? {
-      key: xyz.hooks.current.locale, 
-      name: locales.find(l => l.key === xyz.hooks.current.locale).name
-    } : locales[0];
-
-    xyz.workspace.get.locale({
-      locale: locale.key
-    }).then(createMap)
-
-    if (locales.length === 1) return
-
-    layersTab.appendChild(xyz.utils.html.node`
-      <div>${xyz.language.show_layers_for_locale}</div>
-      <button class="btn-drop">
-        <div class="head"
-          onclick=${e => {
-            e.preventDefault()
-            e.target.parentElement.classList.toggle('active')
-          }}>
-          <span>${locale.name || locale.key}</span>
-          <div class="icon"></div>
-        </div>
-        <ul>${locales.map(_locale => xyz.utils.html.node`
-            <li>
-              <a href="${xyz.host + '?locale=' + _locale.key + 
-                `${xyz.hooks.current.language && '&language=' + xyz.hooks.current.language || ''}`}">
-              ${_locale.name || _locale.key}`)}`)
-
-  }
-
-  // Create map element.
-  function createMap(locale) {
-
-    xyz.locale = locale
-
-    xyz.mapview.create({
-      target: OL,
-      attribution: {
-        target: document.querySelector('#Attribution > .attribution'),
-        links: {
-          [`XYZ v${xyz.version}`]: 'https://geolytix.github.io/xyz',
-          Openlayers: 'https://openlayers.org'
-        }
-      },
-      scrollWheelZoom: true,
-    })
-
-    // Add zoomIn button.
-    const btnZoomIn = btnColumn.appendChild(xyz.utils.html.node `
-      <button
-        id="btnZoomIn"
-        disabled=${xyz.map.getView().getZoom() >= xyz.locale.maxZoom}
-        title=${xyz.language.toolbar_zoom_in}
-        onclick=${e => {
-          const z = parseInt(xyz.map.getView().getZoom() + 1)
-          xyz.map.getView().setZoom(z)
-          e.target.disabled = (z >= xyz.locale.maxZoom)
-        }}><div class="xyz-icon icon-add">`)
-
-    // Add zoomOut button.
-    const btnZoomOut = btnColumn.appendChild(xyz.utils.html.node`
-      <button
-        id="btnZoomOut"
-        disabled=${xyz.map.getView().getZoom() <= xyz.locale.minZoom}
-        title=${xyz.language.toolbar_zoom_out}
-        onclick=${e => {
-          const z = parseInt(xyz.map.getView().getZoom() - 1)
-          xyz.map.getView().setZoom(z)
-          e.target.disabled = (z <= xyz.locale.minZoom)
-        }}><div class="xyz-icon icon-remove">`)
-
-    // changeEnd event listener for zoom button.
-    OL.addEventListener('changeEnd', () => {
-      const z = xyz.map.getView().getZoom()
-      btnZoomIn.disabled = z >= xyz.locale.maxZoom
-      btnZoomOut.disabled = z <= xyz.locale.minZoom
-    })
-
-    // Add zoom to area button.
-    btnColumn.appendChild(xyz.utils.html.node`
-      <button
-        class="mobile-display-none"
-        title=${xyz.language.toolbar_zoom_to_area}
-        onclick=${e => {
-          e.stopPropagation()
-          e.target.classList.toggle('enabled')
-
-          if (e.target.classList.contains('enabled')) {
-
-            return xyz.mapview.interaction.zoom.begin({
-              callback: () => {
-                e.target.classList.remove('enabled')
-              }
-            })
-          }
-
-          xyz.mapview.interaction.zoom.cancel()
-
-        }}>
-        <div class="xyz-icon icon-pageview">`)
-
-    // Add locator button.
-    btnColumn.appendChild(xyz.utils.html.node`
-      <button
-        title=${xyz.language.toolbar_current_location}
-        onclick=${e => {
-          xyz.mapview.locate.toggle();
-          e.target.classList.toggle('enabled');
-        }}>
-        <div class="xyz-icon icon-gps-not-fixed">`)
-
-    // Add fullscreen button.
-    btnColumn.appendChild(xyz.utils.html.node`
-      <button
-        class="mobile-display-none"
-        title=${xyz.language.toolbar_fullscreen}
-        onclick=${e => {
-          e.target.classList.toggle('enabled')
-          document.body.classList.toggle('fullscreen')
-          xyz.map.updateSize()
-          Object.values(xyz.layers.list).forEach(layer => {
-            layer.mbMap?.resize()
-          })
-        }}>
-        <div class="xyz-icon icon-map">`)
-
-    xyz.plugins()
-      .then(() => xyz.layers.load())
-      .then(() => mappUI())
-      .catch(error => console.error(error))
-  }
-
-  // Initialise listview controls.
-  function mappUI() {
-
-    // Add gazetteer control.
-    if (xyz.locale.gazetteer) {
-
-      const gazetteer = document.getElementById('gazetteer')
-
-      const gazetteerInput = gazetteer.querySelector('input')
-        
-      const btnGazetteer = btnColumn.insertBefore(xyz.utils.html.node`
-        <button id="btnGazetteer"
-          onclick=${e => {
-            e.preventDefault()
-
-            // Check whether gazetteer input is enabled but not in view.
-            if (btnGazetteer.classList.contains('enabled')) {
-              const inputBounds = gazetteerInput.getBoundingClientRect()
-              if (inputBounds.y < 0) return gazetteerInput.focus()
-            }
-
-            btnGazetteer.classList.toggle('enabled')
-            btnGazetteer.classList.toggle('mobile-hidden')
-            gazetteer.classList.toggle('display-none')
-            gazetteerInput.focus()
-          }}><div class="xyz-icon icon-search">`, btnColumn.firstChild)
-        
-      document.getElementById('closeGazetteer').onclick = e => {
-        e.preventDefault()
-        btnGazetteer.classList.toggle('enabled')
-        btnGazetteer.classList.toggle('mobile-hidden')
-        gazetteer.classList.toggle('display-none')
+  mapp.ui.Tabview({
+    node: tabview,
+    id: "tabview",
+    showTab: () => {
+      // Show the tabview if not already visible.
+      if (tabview.classList.contains("desktop-display-none")) {
+        tabview.classList.remove("desktop-display-none");
+        document.body.style.gridTemplateRows = "auto 10px 50px";
       }
-          
-      xyz.gazetteer.init({
-        group: gazetteer.querySelector('.input-drop')
-      })
-          
+    },
+    removeLastTab: () => {
+      // Hide tabview if tab had no siblings.
+      tabview.classList.add("desktop-display-none");
+      document.body.style.gridTemplateRows = "auto 0 0";
+      mapview.Map.getTargetElement().style.marginTop = 0;
+    },
+  });
+
+  const btnColumn = document.getElementById("mapButton");
+
+  const host = document.head.dataset.dir || new String("");
+
+  const locales = await mapp.utils.xhr(`${host}/api/workspace/locales`);
+
+  if (!locales.length) return alert("No accessible locales");
+  if (!locales.length) {
+    userAdmin();
+    alert("No accessible locales");
+    return;
+  }
+
+  const locale = await mapp.utils.xhr(
+    `${host}/api/workspace/locale?locale=${
+      document.head.dataset.locale || mapp.hooks.current.locale || locales[0].key
+    }`
+  );
+
+  if (locales.length > 1) {
+    const localesDropdown = mapp.ui.elements.dropdown({
+      data_id: "locales-dropdown",
+      span: locale.name || locale.key,
+      entries: locales.map((locale) => ({
+        title: locale.name || locale.key,
+        key: locale.key,
+      })),
+      callback: (e, entry) => {
+        window.location.assign(`${host}/${entry.key}`);
+      },
+    });
+
+    layersTab.appendChild(mapp.utils.html.node`${localesDropdown}`);
+  }
+
+  const mapview = mapp.Mapview({
+    host: host,
+    target: OL,
+    locale: locale,
+    hooks: true,
+    scrollWheelZoom: true,
+    scalebar: 'metric', //'imperial'
+    attribution: {
+      target: document.querySelector('#Map > .attribution-links'),
+      links: {
+        [`XYZ v${mapp.version}`]: "https://geolytix.github.io/xyz",
+        ["SHA"]: `https://github.com/GEOLYTIX/xyz/commit/${mapp.hash}`,
+        Openlayers: "https://openlayers.org",
+      },
+    }
+  });
+
+  await mapp.utils.loadPlugins(locale.plugins);
+
+  Object.keys(locale).forEach((key) => {
+    mapp.plugins[key] && mapp.plugins[key](locale[key], mapview);
+  });
+
+  const layers = await mapp.utils.promiseAll(locale.layers.map(
+    layer => mapp.utils.xhr(`${host}/api/workspace/layer?`
+      + `locale=${locale.key}&layer=${layer}`)))
+
+  await mapview.addLayer(layers);
+
+  mapp.ui.layers.listview({
+    target: layersTab,
+    mapview: mapview,
+  });
+
+  mapp.ui.locations.listview({
+    target: locationsTab,
+    mapview: mapview,
+  });
+
+  mapview.interactions.highlight();
+
+  // Select locations from hooks.
+  mapp.hooks.current.locations.forEach((_hook) => {
+    const hook = _hook.split("!");
+
+    mapp.location.get({
+      layer: mapview.layers[decodeURIComponent(hook[0])],
+      id: hook[1],
+    });
+  });
+
+  // Add zoomIn button.
+  const btnZoomIn = btnColumn.insertBefore(mapp.utils.html.node`
+    <button
+      id="btnZoomIn"
+      class="mask-icon add"
+      .disabled=${mapview.Map.getView().getZoom() >= mapview.locale.maxZoom}
+      title=${mapp.dictionary.toolbar_zoom_in}
+      onclick=${(e) => {
+        const z = parseInt(mapview.Map.getView().getZoom() + 1);
+        mapview.Map.getView().setZoom(z);
+        e.target.disabled = z >= mapview.locale.maxZoom;
+      }}>`, document.getElementById('plugin-btn'));
+
+  // Add zoomOut button.
+  const btnZoomOut = btnColumn.insertBefore(mapp.utils.html.node`
+    <button
+      id="btnZoomOut"
+      class="mask-icon remove"
+      .disabled=${mapview.Map.getView().getZoom() <= mapview.locale.minZoom}
+      title=${mapp.dictionary.toolbar_zoom_out}
+      onclick=${(e) => {
+        const z = parseInt(mapview.Map.getView().getZoom() - 1);
+        mapview.Map.getView().setZoom(z);
+        e.target.disabled = z <= mapview.locale.minZoom;
+      }}>`, document.getElementById('plugin-btn'));
+
+  // changeEnd event listener for zoom button.
+  OL.addEventListener('changeEnd', () => {
+    const z = mapview.Map.getView().getZoom();
+    btnZoomIn.disabled = z >= mapview.locale.maxZoom;
+    btnZoomOut.disabled = z <= mapview.locale.minZoom;
+  });
+
+  // Add zoom to area button.
+  btnColumn.insertBefore(mapp.utils.html.node`
+    <button
+      class="mobile-display-none mask-icon pageview"
+      title=${mapp.dictionary.toolbar_zoom_to_area}
+      onclick=${(e) => {
+
+        // If active cancel zoom and enable highlight interaction.
+        if (e.target.classList.contains('active')) {
+          return mapview.interactions.highlight()
+        }
+
+        // Add active class
+        e.target.classList.add('active')
+
+        // Make zoom interaction current.
+        mapview.interactions.zoom({
+
+          // The interaction callback is executed on cancel or finish.
+          callback: () => {
+            e.target.classList.remove('active');
+            mapview.interactions.highlight();
+          },
+        })
+
+      }}>`, document.getElementById('plugin-btn'));
+
+  // Add locator button.
+  mapview.locale.locator && btnColumn.appendChild(mapp.utils.html.node`
+    <button
+      class="mask-icon gps-not-fixed"
+      title=${mapp.dictionary.toolbar_current_location}
+      onclick=${(e) => {
+        mapview.locate();
+        e.target.classList.toggle("enabled");
+      }}>`);
+
+  // Add fullscreen button.
+  btnColumn.appendChild(mapp.utils.html.node`
+    <button
+      class="mobile-display-none mask-icon map"
+      title=${mapp.dictionary.toolbar_fullscreen}
+      onclick=${(e) => {
+        e.target.classList.toggle("enabled");
+        document.body.classList.toggle("fullscreen");
+        mapview.Map.updateSize();
+        Object.values(mapview.layers).forEach((layer) => {
+          layer.mbMap?.resize();
+        });
+      }}>`);
+
+  // Add gazetteer control.
+  if (mapview.locale.gazetteer) {
+
+    const gazetteer = document.getElementById("gazetteer");
+
+    const gazetteerInput = gazetteer.querySelector("input");
+
+    btnColumn.insertBefore(mapp.utils.html.node`
+      <button
+        id="btnGazetteer"
+        class="mask-icon search"
+        onclick=${toggleGazetteer}>`,
+      btnColumn.firstChild);
+
+    function toggleGazetteer(e) {
+
+      if (e.target.classList.contains("enabled")) {
+
+        // Get bounding rectangle for gazetteer input.
+        const inputBounds = gazetteerInput.getBoundingClientRect();
+
+        // Focus input if not in window viewport.
+        if (inputBounds.y < 0) gazetteerInput.focus();
+        return;
+      }
+
+      e.target.classList.toggle("enabled");
+      e.target.classList.toggle("mobile-hidden");
+      gazetteer.classList.toggle("display-none");
+      gazetteerInput.focus();
     }
 
-    xyz.tabview.init({
-      node: document.getElementById('tabview')
-    })
+    // Wire button to close gazetteer on mobile.
+    document
+      .getElementById("closeGazetteerMobile")
+      .addEventListener("click", toggleGazetteer);
 
-    xyz.layers.listview.init({
-      target: layersTab
-    })
-
-    xyz.locations.listview.init({
-      target: locationsTab
-    })
-
-    // Add clear all location button.
-    locationsTab.appendChild(xyz.utils.html.node`
-      <button 
-        class="tab-display bold primary-colour"
-        onclick=${e => {
-          e.preventDefault()
-          xyz.locations.list
-            .filter(record => !!record.location)
-            .forEach(record => record.location.remove())
-        }}>
-        ${xyz.language.clear_all_locations}`)
-
-    // Select locations from hooks.
-    xyz.hooks.current.locations.forEach(_hook => {
-
-      const hook = _hook.split('!');
-
-      xyz.locations.select({
-        locale: xyz.locale.key,
-        layer: xyz.layers.list[decodeURIComponent(hook[0])],
-        table: hook[1],
-        id: hook[2]
-      })
-    })
-
-    userAdmin()
-
+    mapp.ui.gazetteer(Object.assign({
+      mapview: mapview,
+      target: gazetteer.querySelector(".dropdown"),
+    }, mapview.locale.gazetteer));
   }
 
-  function userAdmin() {
+  mapp.user &&
+    mapp.ui.utils.idleMask({
+      host: mapview.host,
+      idle: mapview.locale.idle ?? 600,
+    });
 
-    xyz.user = document.head.dataset.user && JSON.parse(decodeURI(document.head.dataset.user))
+  // Append user admin link.
+  mapp.user?.admin &&
+    btnColumn.appendChild(mapp.utils.html.node`
+      <a
+        title=${mapp.dictionary.toolbar_admin}
+        class="mobile-display-none mask-icon supervisor-account"
+        href="${mapview.host + "/api/user/admin"}">`);
 
-    xyz.user && xyz.locale.idle && xyz.utils.idle({
-      host: xyz.host,
-      idle: xyz.locale.idle
-    })
-    
-    // Append user admin button.
-    xyz.user &&
-      xyz.user.admin &&
-      btnColumn.appendChild(xyz.utils.html.node`
-        <a
-          title=${xyz.language.toolbar_admin}
-          class="mobile-display-none"
-          href="${xyz.host + "/api/user/admin"}">
-          <div class="xyz-icon icon-supervisor-account">`);
+  // Append login/logout link.
+  document.head.dataset.login &&
+    btnColumn.appendChild(mapp.utils.html.node`
+      <a
+        class="${`mask-icon ${(mapp.user && "logout") || "lock-open"}`}"
+        title="${mapp.user && mapp.user.email || "Login"}"
+        href="${(mapp.user && "?logout=true") || "?login=true"}">`);
 
-    // Append logout button.
-    document.head.dataset.login &&
-      btnColumn.appendChild(xyz.utils.html.node`
-        <a
-          title="${
-            (xyz.user && `${xyz.language.toolbar_logout} ${xyz.user.email}`) ||
-            "Login"
-          }"
-          href="${(xyz.user && "?logout=true") || "?login=true"}">
-          <div
-            class="${`xyz-icon ${
-              (xyz.user && "icon-logout red-filter") ||
-              "icon-lock-open primary-colour-filter"
-            }`}">`);
-
-    // Append spacer for tableview
-    btnColumn.appendChild(xyz.utils.html.node`
-        <div class="mobile-display-none" style="height: 60px;">`);
-  }
-
-}
+  // Append spacer for tableview
+  btnColumn.appendChild(mapp.utils.html.node`
+    <div class="mobile-display-none" style="height: 60px;">`);
+};

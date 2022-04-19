@@ -4,7 +4,7 @@ const mail_templates = require('./mails')
 
 const msg_templates = require('./msgs')
 
-const merge = require('lodash/merge')
+const merge = require('../utils/merge')
 
 const cloudfront = require('../provider/cloudfront')
 
@@ -20,7 +20,7 @@ const getFrom = {
     if (ref.match(/\.json$/i)) {
       return await response.json()
     }
-
+  
     return await response.text()
   },
   file: ref => file(ref.split(':')[1]),
@@ -42,7 +42,7 @@ module.exports = async (name, language = 'en', params = {}) => {
 
   const templates = merge({}, view_templates, mail_templates, msg_templates, await custom_templates)
 
-  let template = templates[name] && (templates[name][language] || templates[name].en) || name
+  let template = templates[name] && (templates[name][language] || templates[name].en)
 
   if (!template) return;
 
@@ -66,10 +66,10 @@ module.exports = async (name, language = 'en', params = {}) => {
   }
 
   // Return template which is of type string.
-  if (typeof template === 'string') return template.replace(/\$\{(.*?)\}/g,
+  if (typeof template === 'string') return template.replace(/\{\{(.*?)\}\}/g,
 
     // Replace matched params in template string
-    matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
+    matched => params[matched.replace(/\{|\{|\}\}/g, '')] || '')
 
   // Iterate through obkect keys of template
   Object.keys(template).forEach(key => {

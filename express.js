@@ -36,7 +36,7 @@ app.post(`${process.env.DIR||''}/api/query/:template?`, express.json({limit: '5m
 app.get(`${process.env.DIR||''}/api/gazetteer`, api)
 
 
-app.get(`${process.env.DIR||''}/api/workspace/get/:key?`, api)
+app.get(`${process.env.DIR||''}/api/workspace/:key?`, api)
 
 
 app.get(`${process.env.DIR||''}/api/layer/:format?/:z?/:x?/:y?`, api)
@@ -51,6 +51,7 @@ app.get(`${process.env.DIR||''}/api/user/:method?/:key?`, api)
 
 app.post(`${process.env.DIR||''}/api/user/:method?/:key?`, express.urlencoded({extended: true}), api)
 
+//sudo ./caddy_linux_amd64 reverse-proxy --from localhost:443 --to localhost:3000
 //sudo ./caddy_linux_amd64 reverse-proxy --from localhost:443 --to localhost:3000
 app.get(`${process.env.DIR||''}/saml/metadata`, api)
 

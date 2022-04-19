@@ -1,6 +1,6 @@
 const defaults = require('./defaults')
 
-const merge = require('lodash/merge')
+const merge = require('../utils/merge')
 
 module.exports = async workspace => {
 
@@ -20,7 +20,7 @@ module.exports = async workspace => {
 
       layer.key = layer_key
 
-      layer = layer.template && Object.assign({},
+      layer = layer.template && merge({},
 
         // Assign layer template.
         workspace.templates[layer.template] || {},

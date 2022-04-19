@@ -1,8 +1,10 @@
-const dbs = require('./dbs')()
+const dbs_connections = require('./utils/dbs')()
 
-const sql_filter = require('./sql_filter')
+const sqlFilter = require('./utils/sqlFilter')
 
-const Roles = require('./roles.js')
+const Roles = require('./utils/roles.js')
+
+const logger = require("./utils/logger");
 
 module.exports = async (req, res) => {
 
@@ -18,10 +20,13 @@ module.exports = async (req, res) => {
   if (req.params.layer) {
 
     // Get locale for layer.
-    const locale = req.params.locale && req.params.workspace.locales[req.params.locale]
+    const locale = req.params.workspace.locales[req.params.locale]
 
-    // Get layer from workspace locale or layer template.
-    const layer = locale && locale.layers[req.params.layer] ||  req.params.workspace.templates[req.params.layer]
+    // A layer must be found if the layer param is set.
+    if (!locale) return res.status(400).send('Locale not found.')
+
+    // Get layer from locale.
+    const layer = locale.layers[req.params.layer]
 
     // A layer must be found if the layer param is set.
     if (!layer) return res.status(400).send('Layer not found.')
@@ -37,17 +42,17 @@ module.exports = async (req, res) => {
 
     // Create params filter string from roleFilter filter params.
     req.params.filter =
-      ` ${layer.filter?.default && 'AND '+layer.filter?.default || ''}
-      ${req.params.filter && `AND ${sql_filter(JSON.parse(req.params.filter), SQLparams)}` || ''}
-      ${req.params.filter && roles && Object.values(roles).some(r => !!r)
-      && `AND ${sql_filter(Object.values(roles).filter(r => !!r), SQLparams)}`
+      ` ${layer.filter?.default && 'AND ' + layer.filter?.default || ''}
+      ${req.params.filter && `AND ${sqlFilter(JSON.parse(req.params.filter), SQLparams)}` || ''}
+      ${roles && Object.values(roles).some(r => !!r)
+      && `AND ${sqlFilter(Object.values(roles).filter(r => !!r), SQLparams)}`
       || ''}`
 
     // Assign viewport params filter string.
     const viewport = req.params.viewport && req.params.viewport.split(',')
 
     req.params.geom = req.params.geom || layer.geom
-    
+
     req.params.viewport = viewport && `
       AND
         ST_Intersects(
@@ -67,98 +72,110 @@ module.exports = async (req, res) => {
 
   } else {
 
-    // Reserved will be deleted to prevent DDL injection.
+    // Reserved params will be deleted to prevent DDL injection.
     delete req.params.filter
     delete req.params.viewport
   }
 
-  // Prevent automatic parsing of JSON string by adding leading spaces.
+  // Get query pool from dbs module.
+  const dbs = dbs_connections[template.dbs || req.params.dbs]
+
+  if (!dbs) return res.status(400).send(`DBS connection not found.`)
+
+  // Assign body to params to enable reserved %{body} parameter.
   req.params.body = req.params.stringifyBody && JSON.stringify(req.body) || req.body
+
+  logger(req.params, 'queryParams')
 
   // Reserved param keys may not be substituted from request query params.
   const reserved = new Set(['viewport', 'filter'])
 
-  // Method to be applied if template does not have a render method.
-  const render = template => template
-
-    // Replace parameter for identifiers, e.g. table, schema, columns
-    .replace(/\$\{(.*?)\}/g, matched => {
-
-      // Remove template brackets from matched param.
-      const param = matched.replace(/\$|\{|\}/g, "")
-
-      // Get param value from request params object.
-      const change = req.params[param] || ""
-
-      // Change value may only contain a limited set of whitelisted characters.
-      if (!reserved.has(param) && !/^[A-Za-z0-9._-]*$/.test(change)) {
-
-        // Err and return empty string if the change value is invalid.
-        console.error("Change param no bueno")
-        return ""
-      }
-  
-      return change
-    })
-
-    // Replace params with placeholder, eg. $1, $2
-    .replace(/\%\{(.*?)\}/g, matched => {
-
-      // Remove template brackets from matched param.
-      const param = matched.replace(/\%|\{|\}/g, "")
-
-      var val = req.params[param] || ""
-
-      try {
-
-        // Try to parse val if the string begins and ends with either [] or {}
-        val = !param === 'body' && /^[\[\{].*[\]\}]$/.test(val) && JSON.parse(val) || val
-      } catch(err) {
-        console.error(err)
-      }
-
-      // Push value from request params object into params array.
-      SQLparams.push(val)
-  
-      return `\$${SQLparams.length}`
-    })
+  let query;
 
   // Render the query string q from tbe template and request params.
   try {
     template.template = template.render && template.render(req.params) || template.template
-    var q = render(template.template || template, req.params)
-  } catch(err) {
+
+    query = template.template
+
+      // Replace parameter for identifiers, e.g. table, schema, columns
+      .replace(/\$\{(.*?)\}/g, matched => {
+
+        // Remove template brackets from matched param.
+        const param = matched.replace(/\$|\{|\}/g, "")
+
+        // Get param value from request params object.
+        const change = req.params[param] || ""
+
+        // Change value may only contain a limited set of whitelisted characters.
+        if (!reserved.has(param) && !/^[A-Za-z0-9._-]*$/.test(change)) {
+
+          // Err and return empty string if the change value is invalid.
+          console.error("Change param no bueno")
+          return ""
+        }
+
+        return change
+      })
+
+      // Replace params with placeholder, eg. $1, $2
+      .replace(/\%\{(.*?)\}/g, matched => {
+
+        // Remove template brackets from matched param.
+        const param = matched.replace(/\%|\{|\}/g, "")
+
+        var val = req.params[param] || ""
+
+        try {
+
+          // Try to parse val if the string begins and ends with either [] or {}
+          val = !param === 'body' && /^[\[\{].*[\]\}]$/.test(val) && JSON.parse(val) || val
+        } catch (err) {
+          console.error(err)
+        }
+
+        // Push value from request params object into params array.
+        SQLparams.push(val)
+
+        return `\$${SQLparams.length}`
+      })
+
+    logger(query, 'query')
+
+  } catch (err) {
     res.status(500).send(err.message)
     return console.error(err)
   }
 
-  // Get query pool from dbs module.
-  const query = dbs[template.dbs || req.params.dbs]
-
-  if (!query) return res.status(400).send(`${template.dbs || req.params.dbs} connection not found.`)
-
   // Nonblocking queries will not wait for results but return immediately.
   if (template.nonblocking || req.params.nonblocking) {
 
-    query(q, SQLparams, req.params.statement_timeout || template.statement_timeout)
+    dbs(query, SQLparams, req.params.statement_timeout || template.statement_timeout)
 
     return res.send('Non blocking request sent.')
   }
 
-  const rows = await query(q, SQLparams, req.params.statement_timeout || template.statement_timeout)
+  const rows = await dbs(query, SQLparams, req.params.statement_timeout || template.statement_timeout)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
   // return 202 if no record was returned from database.
   if (!rows || !rows.length) return res.status(202).send('No rows returned from table.')
 
-  const checkEmptyRow = row => typeof row === 'object' && Object.values(row).some(val => val !== null)
+  // Checks whether row is an object with at least some value on any key.
+  const checkEmptyRow = row => typeof row === 'object'
+    && Object.values(row).some(val => val !== null)
 
-  if (rows.length && !rows.some(row => checkEmptyRow(row)) || !checkEmptyRow(rows)) {
+  // Check whether any row of the rows array is empty.
+  if (rows.length && !rows.some(row => checkEmptyRow(row))
+  
+    // Check whether a single rows is empty.
+    || !checkEmptyRow(rows)) {
+      
     return res.status(202).send('No rows returned from table.')
   }
 
   // Send the infoj object with values back to the client.
   res.send(rows.length === 1 && rows[0] || rows)
-  
+
 }

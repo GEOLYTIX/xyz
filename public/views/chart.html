@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head data-dir="{{dir}}" data-user="{{user}}" data-login="{{login}}">
+
+  <title>GEOLYTIX Skunkworks</title>
+
+  <link rel="icon" type="image/x-icon" href="{{dir}}/icons/favicon.ico" />
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="{{dir}}/css/mapp.css" />
+
+
+  <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.9.0/build/ol.js" defer></script>
+
+  <script type="module" src="{{dir}}/js/lib/mapp.js" defer></script>
+  <script type="module" src="{{dir}}/js/lib/ui.js" defer></script>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    body {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+    }
+
+    #CTRL {
+      grid-column: 1;
+      width: 100%;
+      height: 100%;
+      background: oldlace;
+      padding: 1em;
+      display: flex;
+      flex-direction: column;
+    }
+
+    #Map {
+      position: absolute;
+      grid-column: 2;
+      width: 100%;
+      height: 100%;
+    }
+
+    #CTRL>button {
+      font-size: 1.5em;
+      padding: 0.3em;
+      width: 100%;
+      margin-bottom: 5px;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div id="CTRL">
+    <button id="ToggleData">Toggle Data</button>
+  </div>
+  <div id="Map">
+  </div>
+
+</body>
+
+<script>
+
+  window.onload = async () => {
+
+    // const dataview = await mapp.ui.Dataview({
+    //   "target": "Map",
+    //   "display": true,
+    //   "data": chartData,
+    //   "chart": {
+    // "labels": [
+    //   "Owner Occupied",
+    //   "Renting",
+    //   "Social",
+    //   "Rent Free"
+    // ],
+    // "datasets": [
+    //   {
+    //     "backgroundColor": [
+    //       "#cddc39",
+    //       "#00bcd4",
+    //       "#ffc107",
+    //       "#33691e"
+    //     ]
+    //   }
+    // ]
+    //   }
+    // })
+
+    // const dataview = await mapp.ui.Dataview({
+    //   "target": "Map",
+    //   "chart": {
+    //     data: {
+    //       "datasets": [
+    //         {
+    //           "label": "UK",
+    //           "type": "line",
+    //           "tension": "0.2",
+    //           "borderColor": "#EC602D",
+    //           "fill": false,
+    //           "data": [
+    //             21.28,
+    //             9.42,
+    //             27.31,
+    //             19.55,
+    //             27.91
+    //           ]
+    //         },
+    //         {
+    //           "label": "Site(10 min)",
+    //           "type": "bar",
+    //           "backgroundColor": "#003D57",
+    //           "data": [
+    //             22.31,
+    //             6.59,
+    //             23.36,
+    //             22.92,
+    //             24.83
+    //           ]
+    //         }
+    //       ],
+    //       "labels": [
+    //         "<18",
+    //         "18-24",
+    //         "25-44",
+    //         "45-59",
+    //         "60+"
+    //       ]
+    //     }
+    //   }
+    // })
+
+    const dataview = await mapp.ui.Dataview({
+      "target": "Map",
+      host: "/latest",
+      query: "chartdata",
+      chart: {
+        type: 'pie',
+        datasets: [
+          {
+            "backgroundColor": [
+              "#cddc39",
+              "#00bcd4",
+              "#ffc107",
+              "#33691e"
+            ]
+          }
+        ],
+        labels: ["<18", "18-24", "25-44", "45-59", "60+"]
+      }
+    }).then(chart => chart.update())
+
+    // const dataview = await mapp.ui.Dataview({
+    //   "target": "Map",
+    //   data: null,
+    //   chart: {}
+    // })
+
+    document.getElementById('ToggleData').onclick = e => {
+
+      dataview.setData(null)
+    }
+
+  }
+
+  const sampleData = {
+    "datasets": [
+      {
+        "label": "UK",
+        "type": "line",
+        "tension": "0.2",
+        "borderColor": "#EC602D",
+        "fill": false,
+        "data": [
+          21.28,
+          9.42,
+          27.31,
+          19.55,
+          27.91
+        ]
+      },
+      {
+        "label": "Site(10 min)",
+        "type": "bar",
+        "backgroundColor": "#003D57",
+        "data": [
+          22.31,
+          6.59,
+          23.36,
+          22.92,
+          24.83
+        ]
+      }
+    ],
+    "labels": [
+      "<18",
+      "18-24",
+      "25-44",
+      "45-59",
+      "60+"
+    ]
+  }
+
+  const chartData = {
+    "datasets": [
+      {
+        "data": [
+          0.4168,
+          0.2782,
+          0.2912,
+          0.0137
+        ]
+      }
+    ]
+  }
+
+</script>
+
+</html>

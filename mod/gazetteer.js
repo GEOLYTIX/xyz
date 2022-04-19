@@ -1,10 +1,10 @@
 const fetch = require('node-fetch')
 
-const dbs = require('./dbs')()
+const dbs = require('./utils/dbs')()
 
-const sql_filter = require('./sql_filter')
+const sqlFilter = require('./utils/sqlFilter')
 
-const Roles = require('./roles.js')
+const Roles = require('./utils/roles.js')
 
 module.exports = async (req, res) => {
 
@@ -122,12 +122,11 @@ async function gaz_locale(req, locale, results) {
 
     const filter =
     ` ${layer.filter?.default && ` AND ${layer.filter?.default}` || ''}
-      ${req.params.filter && ` AND ${sql_filter(JSON.parse(req.params.filter), SQLparams)}` || ''}
+      ${req.params.filter && ` AND ${sqlFilter(JSON.parse(req.params.filter), SQLparams)}` || ''}
       ${dataset.filter && ` AND ${dataset.filter}` || ''}
       ${roles && Object.values(roles).some(r => !!r)
-        && `AND ${sql_filter(Object.values(roles).filter(r => !!r), SQLparams)}`
+        && `AND ${sqlFilter(Object.values(roles).filter(r => !!r), SQLparams)}`
         || ''}`
-
 
     // Build PostgreSQL query to fetch gazetteer results.
     var q = `

@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken')
 
 const acl = require('./acl')()
 
-const mailer = require('../mailer')
+const mailer = require('../utils/mailer')
 
 const templates = require('../templates/_templates')
 
@@ -16,7 +16,7 @@ module.exports = async (req, res, message) => {
 
   if (!acl) return res.status(500).send('ACL unavailable.')
 
-  if (req.body) {
+  if (req.body && req.body.login) {
 
     const user = await post(req)
 
@@ -30,7 +30,7 @@ module.exports = async (req, res, message) => {
     const token = jwt.sign({
         email: user.email,
         admin: user.admin,
-        language: req.body.language || user.language,
+        language: user.language,
         roles: user.roles,
         session: user.session
       },
@@ -42,19 +42,15 @@ module.exports = async (req, res, message) => {
 
     res.setHeader('Set-Cookie', cookie)
 
-    res.setHeader('location', `${redirect && redirect.replace(/([?&])msg=[^&]+(&|$)/,'') || process.env.DIR}`)
+    if (!redirect) return res.send(user)
+
+    res.setHeader('location', `${redirect.replace(/([?&])msg=[^&]+(&|$)/,'')}`)
 
     return res.status(302).send()
+
   }
 
   message = await templates(req.params.msg || message, req.params.language)
-
-  if (!message && req.params.user) {
-
-    res.setHeader('location', `${process.env.DIR}`)
-    res.status(302).send()
-    return;
-  }
 
   view(req, res, message)
 }
@@ -64,11 +60,8 @@ async function view(req, res, message) {
   // The redirect for a successful login.
   const redirect = req.url && decodeURIComponent(req.url).replace(/login\=true/, '')
 
-  //if (decodeURIComponent(redirect).match(/[\<\>\(\)]/g)) return res.status(403).send('URL must not contain angle brackets.')
-
   let template = await templates('login_view', req.params.language, {
     dir: process.env.DIR,
-    saml_sso: process.env.SAML_SSO && `${process.env.DIR || ''}/saml/login` || '',
     msg: message || ' '
   })
 
@@ -165,12 +158,6 @@ async function post(req, res) {
   // Check password from post body against encrypted password from ACL.
   if (bcrypt.compareSync(req.body.password, user.password)) {
 
-    // password must be removed after check
-    delete user.password
-
-    // Override the user language role with the login form language
-    user.roles.push(req.body.language || user.language)
-
     if (process.env.NANO_SESSION) {
 
       const nano_session = nanoid()
@@ -189,9 +176,6 @@ async function post(req, res) {
 
     return user
   }
-
-  // password must be removed after check
-  delete user.password
 
   // FAILED LOGIN
   // Password from login form does NOT match encrypted password in ACL!

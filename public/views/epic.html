@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head data-dir="${dir}">
+
+  <title>My EpicMap</title>
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet"
+    href="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.4.3/css/ol.css" />
+
+  <script src="https://cdn.jsdelivr.net/npm/markdown-it@11.0.0/dist/markdown-it.min.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.4.3/build/ol.js" defer></script>
+
+  <style>
+    * {
+      margin: 0;
+      box-sizing: border-box;
+      font-size: 18px;
+    }
+
+    #map {
+      position: absolute;
+      height: 100%;
+      width: 50%;
+      right: 0;
+    }
+
+    #epic {
+      position: absolute;
+      height: 100%;
+      width: 50%;
+      overflow-y: scroll;
+      left: 0;
+    }
+
+    #epic>div {
+      border-top: 1px solid #333;
+      padding: 20px;
+      min-height: 100%;
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div id="epic"></div>
+  <div id="map"></div>
+
+</body>
+
+<script>
+  window.onload = () => {
+
+    const map = new ol.Map({
+      target: "map",
+      layers: [
+        new ol.layer.Tile({
+          source: new ol.source.OSM()
+        })
+      ],
+      view: new ol.View({
+        center: ol.proj.fromLonLat([0, 0]),
+        zoom: 2
+      })
+    });
+
+    const md = window.markdownit();
+
+    md.options.html = true;
+
+    let current = null;
+
+    const myepic = [
+      "https://geolytix.github.io/public/epic/dennis.md",
+      "https://geolytix.github.io/public/epic/london.md",
+      "https://geolytix.github.io/public/epic/mexico.md",
+      "https://geolytix.github.io/public/epic/buenos_aires.md"
+    ];
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const stanza = entries[0].target;
+
+        if (!current) current = stanza;
+
+        if (current === stanza) return;
+
+        const myscript = stanza.querySelector("script");
+
+        myscript && eval(myscript.textContent);
+
+        current = stanza;
+      }, {
+        threshold: 0.7
+      }
+    );
+
+    const epic = [];
+
+    (async () => {
+      for (let index = 0; index < myepic.length; index++) {
+        const response = await fetch(myepic[index]);
+
+        const content = await response.text();
+
+        const stanza = document
+          .getElementById("epic")
+          .appendChild(document.createElement("div"));
+
+        stanza.innerHTML = md.render(content);
+
+        epic.push(stanza);
+      }
+
+      epic.forEach((stanza) => observer.observe(stanza));
+    })();
+
+
+  }
+</script>
+
+</html>

@@ -1,4 +1,4 @@
-const logger = require('../mod/logger')
+const logger = require('../mod/utils/logger')
 
 const login = require('../mod/user/login')
 
@@ -10,19 +10,16 @@ const saml = process.env.SAML_ENTITY_ID && require('../mod/user/saml')
 
 const workspaceCache = require('../mod/workspace/cache')
 
-const proxy = require('../mod/proxy')
-
-const provider = require('../mod/provider/_provider')
-
 const routes = {
+  gazetteer: require('../mod/gazetteer'),
   layer: require('../mod/layer/_layer'),
   location: require('../mod/location/_location'),
-  workspace: require('../mod/workspace/_workspace'),
+  provider: require('../mod/provider/_provider'),
+  proxy: require('../mod/proxy'),
+  query: require('../mod/query'),
   user: require('../mod/user/_user'),
   view: require('../mod/view'),
-  query: require('../mod/query'),
-  gazetteer: require('../mod/gazetteer'),
-  provider: provider,
+  workspace: require('../mod/workspace/_workspace'),
 }
 
 process.env.COOKIE_TTL = process.env.COOKIE_TTL || 3600
@@ -55,13 +52,10 @@ module.exports = async (req, res) => {
 
   logger(req.url, 'req_url')
 
+  // Request will be short circuited to the saml module.
   if (req.url.match(/\/saml/)) {
-
-    // if process.env.SAML_ENTITY_ID is not set
     if (!saml) return;
-
-    saml(req, res)
-    return;
+    return saml(req, res)
   }
 
   // Merge request params and query params.
@@ -122,38 +116,29 @@ module.exports = async (req, res) => {
   // Set user as request parameter.
   req.params.user = user
 
-  // Retrieve path component from request URL for method routing.
-  const path = req.url.match(/(?<=\/api\/)(.*?)[\/\?]/)
+  // Proxy route
+  if (req.url.match(/(?<=\/api\/proxy)/)) {
+    return routes.proxy(req, res)
+  }
 
-  // Short circuit proxy requests.
-  if (path && path[0] === 'proxy?') return proxy(req, res)
+  // Provider route
+  if (req.url.match(/(?<=\/api\/provider)/)) {
+    return routes.provider(req, res)
+  }
 
-  // Short circuit proxy requests.
-  if (path && path[1] === 'provider') return provider(req, res)
-
-  // The user path will short circuit since workspace or templates are not required.
-  if (path && path[1] === 'user') {
+  // User route
+  if (req.url.match(/(?<=\/api\/user)/)) {
 
     // A msg will be returned if the user does not met the required priviliges.
     const msg = routes.user(req, res)
 
     // Return the login view with the msg.
     msg && login(req, res, msg)
-    return;
+    return
   }
 
   // The login view will be returned for all PRIVATE requests without a valid user.
-  if (!user && process.env.PRIVATE) {
-
-    if (process.env.SAML_LOGIN) {
-      res.setHeader('location', `${process.env.DIR}/saml/login`)
-      res.status(302).send()
-      return;
-    }
-
-    login(req, res)
-    return;
-  }
+  if (!user && process.env.PRIVATE) return login(req, res)
 
   // Retrieve workspace and assign to request params.
   const workspace = await workspaceCache(req)
@@ -177,8 +162,31 @@ module.exports = async (req, res) => {
 
     req.params.template = template
   }
-  
-  if (path && path[1] && routes[path[1]]) return routes[path[1]](req, res)
+
+  // Gazetteer route
+  if (req.url.match(/(?<=\/api\/gazetteer)/)) {
+    return routes.gazetteer(req, res)
+  }
+
+  // Layer route
+  if (req.url.match(/(?<=\/api\/layer)/)) {
+    return routes.layer(req, res)
+  }
+
+  // Location route
+  if (req.url.match(/(?<=\/api\/location)/)) {
+    return routes.location(req, res)
+  }  
+
+  // Query route
+  if (req.url.match(/(?<=\/api\/query)/)) {
+    return routes.query(req, res)
+  }  
+
+  // Workspace route
+  if (req.url.match(/(?<=\/api\/workspace)/)) {
+    return routes.workspace(req, res)
+  }
 
   // Return the View API on the root.
   routes.view(req, res)

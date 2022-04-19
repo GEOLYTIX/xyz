@@ -1,0 +1,87 @@
+@import 'colours';
+
+@import url('https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,400;0,600;1,200;1,300&display=swap');
+
+body {
+  font-family: 'Titillium Web', sans-serif;
+  color: $off-black;
+  font-size: 12px;
+}
+
+a {
+  color: $primary;
+  text-decoration: none;
+  font-weight: 700;
+}
+
+li {
+  list-style-type: none;
+}
+
+h1 {
+  font-size: 1.3em;
+  font-weight: 700;
+}
+
+/* this is layer group header and layer drawer header */
+h2 {
+  font-size: 1.2em;
+  font-weight: 600;
+}
+
+h3 {
+  font-size: 1.1em;
+  font-weight: 600;
+}
+
+h4 {
+  font-size: 1em;
+  font-weight: 600;
+}
+
+.label, 
+.val {
+  font-size: 1.1em;
+}
+
+label.checkbox span {
+  font-size: 1em;
+}
+
+/* dropdown head text */
+button.dropdown > .head > span, 
+button.dropdown ul > li {
+  font-size: 0.9em;
+}
+
+button.wide {
+  font-size: 1em;
+}
+
+.bold {
+  font-weight: 700;
+}
+
+.lv-1 {
+  font-size: 1em;
+}
+
+.lv-2 {
+  font-size: 0.9em;
+}
+
+.lv-3 {
+  font-size: 0.8em;
+}
+
+/* this is text input text */
+/*
+input[type="text"] {}
+*/
+
+
+
+
+
+
+

@@ -3,6 +3,9 @@
     "blog": {
       "src": "file://public/views/blog.html"
     },
+    "contact": {
+      "src": "file://public/views/blog.html"
+    },
     "embedded": {
       "src": "file://public/views/embedded.html"
     },
@@ -19,7 +22,7 @@
       "format": "mbtiles",
       "mbStyle": "mapbox://styles/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z",
       "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2tqMXBtdnp6MGxpbDJ6cDh1eXQzZ2tlcCJ9.u5fDJVun8BTbnjGOqmrW8Q",
-      "zIndex": 999,
+      "zIndex": 99,
       "attribution": {
         "© Mapbox": "https://www.mapbox.com/about/maps",
         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
@@ -42,6 +45,10 @@
         "© Here": "https://www.here.com/",
         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
       }
+    },
+    "retail_points_list": {
+      "template": "select id, store_name, ST_Y(geom_p_4326) as lat, ST_X(geom_p_4326) as lon, retailer, fascia, add_one, add_two, locality, postcode, town, size_sqft, pqi from geodata.uk_glx_open_retail_points limit 100",
+      "dbs": "GEODATA"
     }
   },
   "locales": {
@@ -65,10 +72,9 @@
           "table": "website.global_glx_open_geolytix_offices",
           "geom": "geom_p_4326",
           "srid": "4326",
-          "qID": "id",
           "style": {
             "default": {
-              "marker": {
+              "icon": {
                 "type": "markerColor",
                 "colorMarker": "#003D57",
                 "colorDot": "#F0F0F0",
@@ -80,7 +86,7 @@
               }
             },
             "highlight": {
-              "marker": {
+              "icon": {
                 "type": "markerColor",
                 "colorMarker": "#EC602D",
                 "colorDot": "#F0F0F0",
@@ -107,13 +113,13 @@
         "lng": 121.4254,
         "z": 10
       },
-      "bounds": {
+      "extent": {
         "north": 34,
         "east": 123,
         "south": 28,
-        "west": 118
+        "west": 118,
+        "mask": true
       },
-      "maskBounds": true,
       "layers": {
         "Base": {
           "display": true,
@@ -129,7 +135,7 @@
           "qID": "id",
           "style": {
             "default": {
-              "marker": {
+              "icon": {
                 "type": "markerColor",
                 "colorMarker": "#003D57",
                 "colorDot": "#F0F0F0",
@@ -141,7 +147,7 @@
               }
             },
             "highlight": {
-              "marker": {
+              "icon": {
                 "type": "markerColor",
                 "colorMarker": "#EC602D",
                 "colorDot": "#F0F0F0",
@@ -161,7 +167,7 @@
       }
     },
     "London": {
-      "bounds": {
+      "extent": {
         "north": 51.686,
         "east": 0.236,
         "south": 51.28,
@@ -173,6 +179,9 @@
         "lat": 51.5073,
         "lng": -0.12755
       },
+      "__plugins": [
+        "${DIR}/js/plugins/download.js"
+      ],
       "layers": {
         "HERE Imagery": {
           "group": "Base maps",
@@ -195,6 +204,9 @@
           "table": "geodata.uk_glx_open_retail_points",
           "geom": "geom_p_4326",
           "srid": "4326",
+          "__download_data": {
+            "query": "retail_points_list"
+          },
           "cluster_label": "store_name",
           "cluster_kmeans": 0.02,
           "cluster_dbscan": 0.02,
@@ -202,7 +214,7 @@
           "infoj": [
             {
               "type": "pin",
-              "hidden": true,
+              "class": "display-none",
               "field": "pin",
               "fieldfx": "ARRAY[ST_X(geom_p_4326),ST_Y(geom_p_4326)]",
               "srid": "4326"
@@ -581,7 +593,7 @@
         },
         "LAD": {
           "group": "Admin Boundaries",
-          "groupmeta": "<p>The UK’s administrative boundaries in a consistent package. The geographics include hybrid zone, output area, lower super output area, local authority district, county, region, country. The core framework which all national statistics are published within.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=0Bxv47xHgfuJ4ZVpmYmFYd1JRTms\"target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Admin' target='_top'>Contact Us</a></p>",
+          "groupmeta": "<p>The UK’s administrative boundaries in a consistent package. The geographics include hybrid zone, output area, lower super output area, local authority district, county, region, country. The core framework which all national statistics are published within.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=0Bxv47xHgfuJ4ZVpmYmFYd1JRTms\"target=\"_blank\">Documentation</a></p><br><p style='text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Admin' target='_top'>Contact Us</a></p>",
           "format": "mvt",
           "dbs": "WEBSITE",
           "table": "website.vw_london_glx_geodata_admin_lad_5m",
@@ -591,15 +603,14 @@
           "qID": "id",
           "infoj": [
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "geometry",
               "display": true,
               "field": "geom_3857",
-              "fieldfx": "ST_asGeoJSON(geom_3857)",
-              "style": "location"
+              "fieldfx": "ST_asGeoJSON(geom_3857)"
             },
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "pin",
               "field": "pin",
               "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
@@ -649,15 +660,14 @@
           },
           "infoj": [
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "geometry",
               "display": true,
               "field": "geom_3857_5m",
-              "fieldfx": "ST_asGeoJSON(geom_3857_5m)",
-              "style": "location"
+              "fieldfx": "ST_asGeoJSON(geom_3857_5m)"
             },
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "pin",
               "field": "pin",
               "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857_5m)),ST_Y(ST_PointOnSurface(geom_3857_5m))]"
@@ -685,7 +695,7 @@
         },
         "Education": {
           "group": "Education",
-          "groupmeta": "<p>Spatial dataset of all early year locations, schools, colleges and further education establishments. All primary and secondary schools both private and state. Includes school roll data, ofsted results and pupil demographics.</p><p>All University buildings (academic, service, residential and campus boundary) & entrances digitised and attributed, with student counts.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1eibdMzjuQoydXeSgXJsJTG6FqRROs-G7\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Education' target='_top'>Contact Us</a></p>",
+          "groupmeta": "<p>Spatial dataset of all early year locations, schools, colleges and further education establishments. All primary and secondary schools both private and state. Includes school roll data, ofsted results and pupil demographics.</p><p>All University buildings (academic, service, residential and campus boundary) & entrances digitised and attributed, with student counts.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1eibdMzjuQoydXeSgXJsJTG6FqRROs-G7\" target=\"_blank\">Documentation</a></p><br><p style='text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Education' target='_top'>Contact Us</a></p>",
           "format": "cluster",
           "dbs": "WEBSITE",
           "table": "website.vw_london_glx_geodata_education",
@@ -698,7 +708,7 @@
           "infoj": [
             {
               "type": "pin",
-              "hidden": true,
+              "class": "display-none",
               "field": "pin",
               "fieldfx": "ARRAY[ST_X(geom_4326),ST_Y(geom_4326)]",
               "srid": "4326"
@@ -833,15 +843,14 @@
           "qID": "id",
           "infoj": [
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "geometry",
               "display": true,
               "field": "geom_3857",
-              "fieldfx": "ST_asGeoJSON(geom_3857)",
-              "style": "location"
+              "fieldfx": "ST_asGeoJSON(geom_3857)"
             },
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "pin",
               "field": "pin",
               "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
@@ -904,7 +913,7 @@
           }
         },
         "Grocery Demand": {
-          "meta": "<p>Weekly spend on grocery at output area. Also split into main, convenience, kiosk and online. This can help identify how consumers spend within the grocery retail in an area and support retailers with the driving business in each of these channels.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1w1A8Dp8V3YU2bBshCdA5XF51_PU1Nq-z\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £5,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Grocery Demand' target='_top'>Contact Us</a></p>",
+          "meta": "<p>Weekly spend on grocery at output area. Also split into main, convenience, kiosk and online. This can help identify how consumers spend within the grocery retail in an area and support retailers with the driving business in each of these channels.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1w1A8Dp8V3YU2bBshCdA5XF51_PU1Nq-z\" target=\"_blank\">Documentation</a></p><br><p style='text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Grocery Demand' target='_top'>Contact Us</a></p>",
           "format": "mvt",
           "dbs": "WEBSITE",
           "table": "website.vw_london_glx_geodata_demand_grocery_oa",
@@ -914,15 +923,14 @@
           "qID": "oa_code",
           "infoj": [
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "geometry",
               "display": true,
               "field": "geom_3857_5m",
-              "fieldfx": "ST_asGeoJSON(geom_3857_5m)",
-              "style": "location"
+              "fieldfx": "ST_asGeoJSON(geom_3857_5m)"
             },
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "pin",
               "field": "pin",
               "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857_5m)),ST_Y(ST_PointOnSurface(geom_3857_5m))]"
@@ -1020,7 +1028,7 @@
           }
         },
         "Points of Interest": {
-          "meta": "<p>A collection of points of interest across the UK including healthcare locations, law and order sites along with sport & leisure facilities, stadia, cinemas and service areas. Displays key features in an area, popularly used on property portals, allocating and routing of healthcare resources to vital locations and analysing law and order provisions.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1Nc_eNWdpsWNSJBP0m6huNF2BApnu67ol\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - POI' target='_top'>Contact Us</a></p>",
+          "meta": "<p>A collection of points of interest across the UK including healthcare locations, law and order sites along with sport & leisure facilities, stadia, cinemas and service areas. Displays key features in an area, popularly used on property portals, allocating and routing of healthcare resources to vital locations and analysing law and order provisions.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1Nc_eNWdpsWNSJBP0m6huNF2BApnu67ol\" target=\"_blank\">Documentation</a></p><br><p style='text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - POI' target='_top'>Contact Us</a></p>",
           "format": "cluster",
           "dbs": "WEBSITE",
           "table": "website.vw_london_glx_geodata_poi",
@@ -1033,7 +1041,7 @@
           "infoj": [
             {
               "type": "pin",
-              "hidden": true,
+              "class": "display-none",
               "field": "pin",
               "fieldfx": "ARRAY[ST_X(geom_p_4326),ST_Y(geom_p_4326)]",
               "srid": "4326"
@@ -1090,35 +1098,30 @@
               "type": "categorized",
               "other": true,
               "cat": {
-                "Airport": {
-                  "label": "Airport",
-                  "scale": 0.05,
-                  "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/poi_pin_filled/poi_transport_airport.svg"
-                },
                 "Cinema": {
                   "label": "Cinema",
                   "scale": 0.05,
-                  "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/poi_pin_filled/poi_entertainment_cinema.svg"
+                  "svg": "https://geolytix.github.io/MapIcons/poi_pin_filled/poi_entertainment_cinema.svg"
                 },
                 "Hospital": {
                   "label": "Hospital",
                   "scale": 0.05,
-                  "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/poi_pin_filled/poi_health_hospital.svg"
+                  "svg": "https://geolytix.github.io/MapIcons/poi_pin_filled/poi_health_hospital.svg"
                 },
                 "Pharmacy": {
                   "label": "Pharmacy",
                   "scale": 0.05,
-                  "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/poi_pin_filled/poi_health_pharmacy.svg"
+                  "svg": "https://geolytix.github.io/MapIcons/poi_pin_filled/poi_health_pharmacy.svg"
                 },
                 "Sport and Leisure": {
                   "label": "Sport and Leisure",
                   "scale": 0.05,
-                  "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/poi_pin_filled/poi_sports_leisure_sports_centre.svg"
+                  "svg": "https://geolytix.github.io/MapIcons/poi_pin_filled/poi_sports_leisure_sports_centre.svg"
                 },
                 "Stadium": {
                   "label": "Stadium",
                   "scale": 0.05,
-                  "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/poi_pin_filled/poi_entertainment_stadium.svg"
+                  "svg": "https://geolytix.github.io/MapIcons/poi_pin_filled/poi_entertainment_stadium.svg"
                 }
               }
             }
@@ -1126,7 +1129,7 @@
         },
         "Postal Sector": {
           "group": "Postal",
-          "groupmeta": "<p>Manually created postal boundaries at sector, district and area level, combining exceptional ‘enclosure’ accuracy with borders that follow real-world features. A key geography used within customer insight and marketing teams. An alternative reporting and display geography.  Download the 2012 postal sector boundaries released under the same terms as the OS Open Data license with the single addition of GEOLYTIX to the attribution list.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=185BP5LuT_QxC3MaIluxFk0lGuQtJi5yO\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Postal' target='_top'>Contact Us</a><br><br><p style='font-size:90%;text-align:right;'><b><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1V57a19QzaiqTP8wHVasfYNGwP-o6tDm-\" target=\"_blank\"> Open Data - download for free</a></b></p>",
+          "groupmeta": "<p>Manually created postal boundaries at sector, district and area level, combining exceptional ‘enclosure’ accuracy with borders that follow real-world features. A key geography used within customer insight and marketing teams. An alternative reporting and display geography.  Download the 2012 postal sector boundaries released under the same terms as the OS Open Data license with the single addition of GEOLYTIX to the attribution list.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=185BP5LuT_QxC3MaIluxFk0lGuQtJi5yO\" target=\"_blank\">Documentation</a></p><br><p style='text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Postal' target='_top'>Contact Us</a><br><br><p style='font-size:90%;text-align:right;'><b><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1V57a19QzaiqTP8wHVasfYNGwP-o6tDm-\" target=\"_blank\"> Open Data - download for free</a></b></p>",
           "format": "mvt",
           "dbs": "WEBSITE",
           "tables": {
@@ -1142,15 +1145,14 @@
           },
           "infoj": [
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "geometry",
               "display": true,
               "field": "geom_3857",
-              "fieldfx": "ST_asGeoJSON(geom_3857)",
-              "style": "location"
+              "fieldfx": "ST_asGeoJSON(geom_3857)"
             },
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "pin",
               "field": "pin",
               "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
@@ -1205,15 +1207,14 @@
           },
           "infoj": [
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "geometry",
               "display": true,
               "field": "geom_3857",
-              "fieldfx": "ST_asGeoJSON(geom_3857)",
-              "style": "location"
+              "fieldfx": "ST_asGeoJSON(geom_3857)"
             },
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "pin",
               "field": "pin",
               "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
@@ -1260,15 +1261,14 @@
           },
           "infoj": [
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "geometry",
               "display": true,
               "field": "geom_3857",
-              "fieldfx": "ST_asGeoJSON(geom_3857)",
-              "style": "location"
+              "fieldfx": "ST_asGeoJSON(geom_3857)"
             },
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "pin",
               "field": "pin",
               "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
@@ -1298,7 +1298,7 @@
         },
         "Rail Lines": {
           "group": "Public Transport",
-          "groupmeta": "<p>100% Transport locations including airports, bus stops, rail, underground, light rail stations and lines plus passenger counts where available. Perfect for accessibility studies and modelling on-street pedestrian volume.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1nzcRiMsuPAKClAlz2VOxgywKQfMzfZxt\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - Transport' target='_top'>Contact Us</a></p>",
+          "groupmeta": "<p>100% Transport locations including airports, bus stops, rail, underground, light rail stations and lines plus passenger counts where available. Perfect for accessibility studies and modelling on-street pedestrian volume.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1nzcRiMsuPAKClAlz2VOxgywKQfMzfZxt\" target=\"_blank\">Documentation</a></p><br><p style='text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - Transport' target='_top'>Contact Us</a></p>",
           "format": "mvt",
           "dbs": "WEBSITE",
           "table": "website.vw_london_glx_geodata_transport_line",
@@ -1308,15 +1308,14 @@
           "qID": "id",
           "infoj": [
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "geometry",
               "display": true,
               "field": "geom_l_3857",
-              "fieldfx": "ST_asGeoJSON(geom_l_3857)",
-              "style": "location"
+              "fieldfx": "ST_asGeoJSON(geom_l_3857)"
             },
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "pin",
               "field": "pin",
               "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_l_3857)),ST_Y(ST_PointOnSurface(geom_l_3857))]"
@@ -1396,7 +1395,7 @@
           "infoj": [
             {
               "type": "pin",
-              "hidden": true,
+              "class": "display-none",
               "field": "pin",
               "fieldfx": "ARRAY[ST_X(geom_p_4326),ST_Y(geom_p_4326)]",
               "srid": "4326"
@@ -1460,7 +1459,7 @@
           }
         },
         "Residential": {
-          "meta": "<p>Data relating to residential and population, current and forecasted figures. Disposable income and housing costs. Demographics can be used to understand areas and their residents providing local area insight. Forecasted population figures to aid planning future developments.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1QIOJq2XmbhgWheT3cSfYX0CEAvTZY6aS\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Seamless Town and Suburb' target='_top'>Contact Us</a></p>",
+          "meta": "<p>Data relating to residential and population, current and forecasted figures. Disposable income and housing costs. Demographics can be used to understand areas and their residents providing local area insight. Forecasted population figures to aid planning future developments.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1QIOJq2XmbhgWheT3cSfYX0CEAvTZY6aS\" target=\"_blank\">Documentation</a></p><br><p style='text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Seamless Town and Suburb' target='_top'>Contact Us</a></p>",
           "format": "grid",
           "dbs": "GEODATA",
           "table": "geodata.uk_glx_geodata_hex_1k",
@@ -1484,7 +1483,7 @@
         },
         "Retail Places": {
           "group": "Retail Places",
-          "groupmeta": "<p>More than 20k scored, profiled and named polygons detailing where people shop in the UK. Ideal for locating new sites and understanding micro location performance.</p><p>Additionally Retail Pitch can be purchased along side this pack which identifies hotspots across 2,000 Retail Places which can aid in portfolio rationalisation.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1ajWjVh9H5_70Mdzfxul5vlb_KQJeqvG_\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £5,500</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Retail Places' target='_top'>Contact Us</a><br><br><p style='font-size:90%;text-align:right;'><b><a class=\"docu_link\" href=\"https://drive.google.com/file/d/1kQH3Lqc5k5a87vFfHporsFkWMOdIDK70\" target=\"_blank\">Open Data - download for free</a></b></p>",
+          "groupmeta": "<p>More than 20k scored, profiled and named polygons detailing where people shop in the UK. Ideal for locating new sites and understanding micro location performance.</p><p>Additionally Retail Pitch can be purchased along side this pack which identifies hotspots across 2,000 Retail Places which can aid in portfolio rationalisation.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1ajWjVh9H5_70Mdzfxul5vlb_KQJeqvG_\" target=\"_blank\">Documentation</a></p><br><p style='text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Retail Places' target='_top'>Contact Us</a><br><br><p style='font-size:90%;text-align:right;'><b><a class=\"docu_link\" href=\"https://drive.google.com/file/d/1kQH3Lqc5k5a87vFfHporsFkWMOdIDK70\" target=\"_blank\">Open Data - download for free</a></b></p>",
           "format": "mvt",
           "dbs": "WEBSITE",
           "table": "website.vw_london_glx_geodata_retail_place",
@@ -1497,15 +1496,14 @@
           },
           "infoj": [
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "geometry",
               "display": true,
               "field": "geom_3857",
-              "fieldfx": "ST_asGeoJSON(geom_3857)",
-              "style": "location"
+              "fieldfx": "ST_asGeoJSON(geom_3857)"
             },
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "pin",
               "field": "pin",
               "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
@@ -1719,7 +1717,7 @@
           }
         },
         "Road Network": {
-          "meta": "<p>Routable Link/Node data with link-level mid-afternoon speeds based on Highways agency probe data and sophisticated speed model; painlessly integrates into multiple routing software tools. Traffic counts, road accidents and road poi.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1xGg0-tVjIB-KS21ageTb9k4yloWgPXQL\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Road Network' target='_top'>Contact Us</a></p>",
+          "meta": "<p>Routable Link/Node data with link-level mid-afternoon speeds based on Highways agency probe data and sophisticated speed model; painlessly integrates into multiple routing software tools. Traffic counts, road accidents and road poi.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1xGg0-tVjIB-KS21ageTb9k4yloWgPXQL\" target=\"_blank\">Documentation</a></p><br><p style='text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Road Network' target='_top'>Contact Us</a></p>",
           "format": "mvt",
           "dbs": "WEBSITE",
           "table": "website.vw_london_glx_geodata_road_detail",
@@ -1767,7 +1765,7 @@
           }
         },
         "Seamless towns and suburbs": {
-          "meta": "<p>100% Seamless UK definitions of natural markets at 4 levels, local, towns, district and region. Close match to true ‘markets’ at multiple scales.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=12t6Zan0dy5Bv3GWGJvj5A7w-3uFk-3v7\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Seamless Town and Suburb' target='_top'>Contact Us</a></p>",
+          "meta": "<p>100% Seamless UK definitions of natural markets at 4 levels, local, towns, district and region. Close match to true ‘markets’ at multiple scales.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=12t6Zan0dy5Bv3GWGJvj5A7w-3uFk-3v7\" target=\"_blank\">Documentation</a></p><br><p style='text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Seamless Town and Suburb' target='_top'>Contact Us</a></p>",
           "format": "mvt",
           "dbs": "WEBSITE",
           "table": "website.vw_london_glx_geodata_seamless_combined",
@@ -1780,15 +1778,14 @@
           "qID": "id",
           "infoj": [
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "geometry",
               "display": true,
               "field": "geom_3857",
-              "fieldfx": "ST_asGeoJSON(geom_3857)",
-              "style": "location"
+              "fieldfx": "ST_asGeoJSON(geom_3857)"
             },
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "pin",
               "field": "pin",
               "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
@@ -1821,7 +1818,7 @@
           }
         },
         "Town and suburb": {
-          "meta": "<p>A precise and intuitive set of 30,000 named ‘places’ across the UK richly attributed with data. Ideal base for UK wide profiling and benchmarking.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1aJ1Q9HBAxnW8V98mmED-GLjsINEPz6ih\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Town and Suburb' target='_top'>Contact Us</a></p>",
+          "meta": "<p>A precise and intuitive set of 30,000 named ‘places’ across the UK richly attributed with data. Ideal base for UK wide profiling and benchmarking.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1aJ1Q9HBAxnW8V98mmED-GLjsINEPz6ih\" target=\"_blank\">Documentation</a></p><br><p style='text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Town and Suburb' target='_top'>Contact Us</a></p>",
           "format": "mvt",
           "dbs": "WEBSITE",
           "table": "website.vw_london_glx_geodata_townsuburb_combined",
@@ -1831,15 +1828,14 @@
           "qID": "id",
           "infoj": [
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "geometry",
               "display": true,
               "field": "geom_3857",
-              "fieldfx": "ST_asGeoJSON(geom_3857)",
-              "style": "location"
+              "fieldfx": "ST_asGeoJSON(geom_3857)"
             },
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "pin",
               "field": "pin",
               "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
@@ -1934,7 +1930,7 @@
           }
         },
         "Urbanity": {
-          "meta": "<p>Output areas assigned with an urbanity (1-9), ranging from major centre to ultra rural. Helpful to know how urban/rural somewhere is which will affect how people shop and influence the type of retail offer (convenience vs supermarket) that should be favoured.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1KNfHDRbkEGkWuSj_mRHOIeiS5oKsBnpO\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Urbanity' target='_top'>Contact Us</a></p>",
+          "meta": "<p>Output areas assigned with an urbanity (1-9), ranging from major centre to ultra rural. Helpful to know how urban/rural somewhere is which will affect how people shop and influence the type of retail offer (convenience vs supermarket) that should be favoured.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1KNfHDRbkEGkWuSj_mRHOIeiS5oKsBnpO\" target=\"_blank\">Documentation</a></p><br><p style='text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Urbanity' target='_top'>Contact Us</a></p>",
           "format": "mvt",
           "dbs": "WEBSITE",
           "table": "website.vw_london_glx_geodata_urbanity_oa",
@@ -2027,7 +2023,7 @@
           }
         },
         "Workers": {
-          "meta": "<p>Up to date worker counts for more than 400,000 commercial postcodes across the UK. Worker counts, densities and occupation splits at hybrid zone level.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1R1eQj-S4BThQkcqFmFvhN3mo6FVfGIGd\" target=\"_blank\">Documentation</a></p><br><p style='font-size:90%;text-align:right;'><b>Price:  £3,000</b></p><p style='font-size:80%;text-align:right;'><i>Bundle pricing for multiple datasets available</i></p><p style='font-size:80%;text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Workers' target='_top'>Contact Us</a></p>",
+          "meta": "<p>Up to date worker counts for more than 400,000 commercial postcodes across the UK. Worker counts, densities and occupation splits at hybrid zone level.</p><br><p><a class=\"docu_link\" href=\"https://drive.google.com/open?id=1R1eQj-S4BThQkcqFmFvhN3mo6FVfGIGd\" target=\"_blank\">Documentation</a></p><br><p style='text-align:right;'><a href='mailto:info@geolytix.com?Subject=Geodata - UK Workers' target='_top'>Contact Us</a></p>",
           "format": "mvt",
           "dbs": "WEBSITE",
           "table": "website.vw_london_glx_geodata_workers_hybrid_zone",
@@ -2037,15 +2033,14 @@
           "qID": "id",
           "infoj": [
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "geometry",
               "display": true,
               "field": "geom_3857",
-              "fieldfx": "ST_asGeoJSON(geom_3857)",
-              "style": "location"
+              "fieldfx": "ST_asGeoJSON(geom_3857)"
             },
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "pin",
               "field": "pin",
               "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
@@ -2155,7 +2150,7 @@
       }
     },
     "Americas": {
-      "bounds": {
+      "extent": {
         "north": -22,
         "east": -43,
         "south": -24,
@@ -2263,15 +2258,14 @@
           },
           "infoj": [
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "geometry",
               "display": true,
               "field": "geom_3857",
-              "fieldfx": "ST_asGeoJSON(geom_3857)",
-              "style": "location"
+              "fieldfx": "ST_asGeoJSON(geom_3857)"
             },
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "pin",
               "field": "pin",
               "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
@@ -2343,15 +2337,14 @@
           "qID": "id",
           "infoj": [
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "geometry",
               "display": true,
               "field": "geom_3857",
-              "fieldfx": "ST_asGeoJSON(geom_3857)",
-              "style": "location"
+              "fieldfx": "ST_asGeoJSON(geom_3857)"
             },
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "pin",
               "field": "pin",
               "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
@@ -2368,8 +2361,7 @@
         },
         "Mapbox Label": {
           "display": true,
-          "template": "Mapbox Label",
-          "zIndex": 99
+          "template": "Mapbox Label"
         }
       }
     },
@@ -2633,15 +2625,14 @@
           },
           "infoj": [
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "geometry",
               "display": true,
               "field": "geom_3857",
-              "fieldfx": "ST_asGeoJSON(geom_3857)",
-              "style": "location"
+              "fieldfx": "ST_asGeoJSON(geom_3857)"
             },
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "pin",
               "field": "pin",
               "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
@@ -2712,15 +2703,14 @@
           },
           "infoj": [
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "geometry",
               "display": true,
               "field": "geom_3857",
-              "fieldfx": "ST_asGeoJSON(geom_3857)",
-              "style": "location"
+              "fieldfx": "ST_asGeoJSON(geom_3857)"
             },
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "pin",
               "field": "pin",
               "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
@@ -2743,15 +2733,14 @@
           "qID": "id",
           "infoj": [
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "geometry",
               "display": true,
               "field": "geom_3857",
-              "fieldfx": "ST_asGeoJSON(geom_3857)",
-              "style": "location"
+              "fieldfx": "ST_asGeoJSON(geom_3857)"
             },
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "pin",
               "field": "pin",
               "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
@@ -2834,13 +2823,12 @@
         },
         "Mapbox Label": {
           "display": true,
-          "template": "Mapbox Label",
-          "zIndex": 99
+          "template": "Mapbox Label"
         }
       }
     },
     "Europe": {
-      "bounds": {
+      "extent": {
         "north": 72,
         "east": 43,
         "south": 32,
@@ -2864,15 +2852,14 @@
           "srid": "3857",
           "infoj": [
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "geometry",
               "display": true,
               "field": "geom_3857",
-              "fieldfx": "ST_asGeoJSON(geom_3857)",
-              "style": "location"
+              "fieldfx": "ST_asGeoJSON(geom_3857)"
             },
             {
-              "hidden": true,
+              "class": "display-none",
               "type": "pin",
               "field": "pin",
               "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
@@ -3202,8 +3189,7 @@
         },
         "Mapbox Label": {
           "display": true,
-          "template": "Mapbox Label",
-          "zIndex": 99
+          "template": "Mapbox Label"
         }
       }
     }

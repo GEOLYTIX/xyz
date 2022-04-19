@@ -9,10 +9,6 @@ const methods = {
   verify: {
     handler: require('./verify')
   },
-  add: {
-    handler: require('./add'),
-    admin: true
-  },
   delete: {
     handler: require('./delete'),
     admin: true
@@ -39,9 +35,6 @@ const methods = {
   },
   cookie: {
     handler: require('./cookie')
-  },
-  login: {
-    handler: require('./login')
   }
 }
 

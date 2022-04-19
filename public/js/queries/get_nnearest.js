@@ -1,5 +1,4 @@
-module.exports = {
-  render: _ => `
+module.exports = _ => `
   
   SELECT
     \${qID} AS ID,
@@ -8,4 +7,3 @@ module.exports = {
   FROM \${table}
   WHERE true \${filter}
   ORDER BY ST_Point(%{x},%{y}) <#> \${geom} LIMIT ${parseInt(_.n) || 99};`
-}

@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="{{language}}">
+
+<head data-dir="{{dir}}">
+
+  <title>GEOLYTIX MAPP - Blog view</title>
+
+  <link rel="icon" type="image/x-icon" href="{{dir}}/icons/favicon.ico" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.12.0/build/ol.js" defer></script>
+
+  <!-- Load XYZ / MAPP stylesheet and library. -->
+  <link rel="stylesheet" href="{{dir}}/css/mapp.css" />
+  <link rel="stylesheet" href="{{dir}}/css/ui.css" />
+
+  <script type="module" src="{{dir}}/js/lib/mapp.js" defer></script>
+  <script type="module" src="{{dir}}/js/lib/ui.js" defer></script>
+  
+  <style>
+
+    body {
+      height: 100%;
+      display: grid;
+      grid-template-columns: min-content 1fr;
+      grid-template-rows: 1fr;
+      background-color: #f0f0f0;
+    }
+
+    #Location {
+      grid-row: 1;
+      grid-column: 1;
+      transform: rotateY(180deg);
+      overflow-x: auto;
+    }
+
+    #Location>* {
+      transform: rotateY(180deg);
+    }
+
+    #Map {
+      grid-row: 1;
+      grid-column: 2;
+      overflow: hidden;
+      position: relative;
+      height: 100%;
+    }
+
+    .ol-control button {
+      background-color: #003D57 !important
+    }
+
+    .location-view-grid {
+      width: 300px;
+      padding: 1em;
+    }
+
+    .map-container .ol-scale-line {
+      right: 5px;
+      top: 5px;
+      position: fixed;
+    }
+
+    @media only screen and (max-width: 600px) {
+
+      #Map {
+        grid-column: 1/3;
+        /* min-height: 300px; */
+      }
+
+      #Location {
+        grid-row: 2;
+        grid-column: 1/3;
+      }
+
+      .location-view-grid {
+        width: 100%;
+      }
+
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div id="Location" class="location-view"></div>
+
+  <div id="Map" class="map-container">
+    <div class="attribution-links"></div>
+  </div>
+
+</body>
+
+<script>
+
+  window.onload = async () => {
+
+    const host = document.head.dataset.dir || new String("");
+
+    // Load the current locale or the first locale from the array of available locales.
+    const locale = await mapp.utils.xhr(`${host}/api/workspace/locale?locale=UK`);
+
+    const mapview = mapp.Mapview({
+      host: host,
+      target: 'Map',
+      locale: locale,
+      scrollWheelZoom: true,
+      controls: [new ol.control.Zoom()],
+      attribution: {
+        target: document.querySelector('#Map > .attribution-links'),
+        links: {
+          [`XYZ v${mapp.version}`]: "https://geolytix.github.io/xyz",
+          ["SHA"]: `https://github.com/GEOLYTIX/xyz/commit/${mapp.hash}`,
+          Openlayers: "https://openlayers.org",
+        },
+      }
+    });
+   
+    const layers = await mapp.utils.promiseAll(["mapbox_base", "zoomgeom", "retail_points"].map(
+      layer => mapp.utils.xhr(`${host}/api/workspace/layer?`
+        + `locale=${locale.key}&layer=${layer}`)))
+
+
+    layers.forEach(layer => layer.display = true)
+    
+    await mapview.addLayer(layers);
+
+    const locations = {}
+
+    mapview.interactions.highlight({
+      layerFilter: featureLayer => mapview.layers.zoomgeom.L === featureLayer,
+      __highlight: feature => console.log(feature),
+      getLocation: async feature => {
+
+        let location = await mapp.location.get({
+          layer: feature.layer,
+          table: feature.layer.table || feature.layer.tableCurrent(),
+          id: feature.layer.highlight
+        }, locations)
+
+        if (!location) return;
+
+        let geomEntry = location.infoj.find(entry => entry.type === 'geometry')
+
+        geomEntry.style = {
+          "fillColor": "#f00",
+          "fillOpacity": 0.5
+        }
+
+        mapp.ui.locations.entries.geometry(geomEntry)
+      }
+    })
+
+  }
+
+</script>
+
+</html>

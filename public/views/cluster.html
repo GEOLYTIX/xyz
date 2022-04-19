@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head data-dir="{{dir}}" data-user="{{user}}" data-login="{{login}}">
+
+  <title>GEOLYTIX Skunkworks</title>
+
+  <link rel="icon" type="image/x-icon" href="{{dir}}/icons/favicon.ico" />
+
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <link rel="stylesheet" href="{{dir}}/css/mapp.css" />
+
+  <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.9.0/build/ol.js" defer></script>
+
+  <script type="module" src="{{dir}}/js/lib/mapp.js" defer></script>
+    
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    /* body {
+      display: grid;
+      grid-template-columns: 300px 1fr;
+    } */
+
+    #CTRL {
+      grid-column: 1;
+      width: 100%;
+      height: 100%;
+      background: oldlace;
+      padding: 1em;
+    }
+    
+    #Map {
+      grid-column: 2;
+      width: 100%;
+      height: 100%;
+    }
+
+    #CTRL button {
+      font-size: 1.5em;
+      padding: 0.3em;
+      width: 100%;
+    }
+
+  </style>
+
+</head>
+
+<body>
+
+  <!-- <div id="CTRL">
+    <button id="Draw">Draw</button>
+  </div> -->
+  <div id="Map"></div>
+
+</body>
+
+<script>
+
+  window.onload = async () => {
+
+    const mapview = mapp.Mapview({
+      host: document.head.dataset.dir || new String(""),
+      target: 'Map',
+      locale: {
+        extent: {
+          north: 51.6,
+          east: -2.7,
+          south: 51.4,
+          west: -2.5,
+          mask: true
+        },
+        minZoom: 2,
+        maxZoom: 17,
+      },
+      scrollWheelZoom: true,
+      controls: [new ol.control.Zoom()],
+      attribution: {
+        target: document.querySelector('#Map > .attribution-links'),
+        links: {
+          [`XYZ v${mapp.version}`]: "https://geolytix.github.io/xyz",
+          ["SHA"]: `https://github.com/GEOLYTIX/xyz/commit/${mapp.hash}`,
+          Openlayers: "https://openlayers.org",
+        },
+      }
+    });
+
+    mapview.addLayer([{
+      display: true,
+      "format": "mbtiles",
+      "mbStyle": "mapbox://styles/dbauszus/ciozrimi3002bdsm8bjtn2v1y",
+      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2t3NmJqZ3N4MG9zeDJ1bGprdzQ2ODllMCJ9.3xhSOxQLx1Egv5i8W7B57A",
+      "attribution": {
+        "© Mapbox": "https://www.mapbox.com/about/maps",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    }]);
+
+    const geoJSON = new ol.format.GeoJSON();
+
+    let sampleData = await mapp.utils.xhr(`${mapview.host}/api/query/bristol_sentiment`)
+
+    const features = sampleData.map(f => geoJSON.readFeature({
+      type: 'Feature',
+      geometry: JSON.parse(f.geom),
+      properties: {
+        sentiment: f.sentiment
+      }
+    }, {
+      dataProjection: 'EPSG:4326',
+      featureProjection: 'EPSG:3857'
+    }))
+
+    const sourceVector = new ol.source.Vector({
+      features
+    })
+
+    const clusterSource = new ol.source.Cluster({
+      distance: 100,
+      source: sourceVector,
+    })
+
+    const layerVector = new ol.layer.Vector({
+      source: clusterSource,
+      style: styleFunction
+    })
+
+    mapview.Map.addLayer(layerVector)
+
+    const xmlSerializer = new XMLSerializer();
+
+    const sentimentColour = {
+      0: '#00ac5d',
+      25: '#89c92d',
+      50: '#feb000',
+      75: '#ff7700',
+      100: '#e80030'
+    }
+
+    const memoizedStyles = {};
+
+    function styleFunction(feature) {
+
+      let highlight = feature.get('highlight')
+
+      let features = feature.get('features')
+
+      if (features.length === 1) {
+
+        let colour = sentimentColour[features[0].get('sentiment')]
+
+        if (!highlight && memoizedStyles[colour]) {
+          return memoizedStyles[colour]
+        }
+
+        let icon = mapp.utils.svg.node`
+        <svg width=24 height=24 viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
+          <circle cx=12 cy=12 r=12 fill=${colour}></circle>`;
+
+        let style = new ol.style.Style({
+          image: new ol.style.Icon({
+            src: `data:image/svg+xml,${encodeURIComponent(
+              xmlSerializer.serializeToString(icon)
+            )}`,
+            scale: highlight && 2 || 1,
+            anchor: [0.5, 0.5]
+          })
+        })
+
+        if (highlight) return style
+
+        memoizedStyles[colour] = style
+
+        return style;
+      }
+
+      let clusterSentiment = {
+        0: 0,
+        25: 0,
+        50: 0,
+        75: 0,
+        100: 0
+      }
+
+      for (let i = 0; i < features.length - 1; i++) {
+        clusterSentiment[features[i].get('sentiment')]++
+      }
+
+      let clusterSentimentString = JSON.stringify(clusterSentiment)
+
+      if (!highlight && memoizedStyles[clusterSentimentString]) {
+        return memoizedStyles[clusterSentimentString]
+      }
+
+      let start = 0
+
+      let icon = mapp.utils.svg.node`
+        <svg width=24 height=24 viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
+          <circle cx=12 cy=12 r=12 fill='#555'></circle>`;
+
+      Object.entries(clusterSentiment).map(sentVal => {
+
+        if (sentVal[1]) {
+
+          segment = (sentVal[1] / (features.length - 1)) * 100
+         
+          icon.appendChild(mapp.utils.svg.node`
+            <path
+              d=${createSvgArc([12, 12], 12, [start, segment-0.01])}
+              fill=${sentimentColour[sentVal[0]]}/>`)
+
+          start= start + segment
+        }
+
+      })
+
+      icon.appendChild(mapp.utils.svg.node`
+        <circle cx=12 cy=12 r=8 fill='#fff'></circle>`)
+
+      let style = new ol.style.Style({
+        image: new ol.style.Icon({
+          src: `data:image/svg+xml,${encodeURIComponent(
+            xmlSerializer.serializeToString(icon)
+          )}`,
+          scale: highlight && 3 || 2,
+          anchor: [0.5, 0.5]
+        }),
+        text: new ol.style.Text({
+          font: '16px sans-serif',
+          text: String(features.length),
+          fill: new ol.style.Fill({
+            color: '#000'
+          })
+        })
+      })
+
+      if (highlight) return style
+
+      memoizedStyles[clusterSentimentString] = style
+
+      return style
+    }
+
+
+    const sourceLocations = new ol.source.Vector()
+
+    const layerLocations = new ol.layer.Vector({
+      source: sourceLocations
+    })
+
+    mapview.Map.addLayer(layerLocations)
+
+
+    let featureHighlight;
+
+    mapview.interactions.highlight({
+      layerFilter: featureLayer => layerVector === featureLayer,
+      callback: f => {
+
+        if (!f) {
+          featureHighlight && featureHighlight.set('highlight', false)
+          featureHighlight && featureHighlight.setStyle(styleFunction(featureHighlight))
+          featureHighlight = null;
+          return;
+        }
+
+        if (featureHighlight === f.feature) return;
+
+        sourceLocations.clear()
+
+        let features = f.feature.get('features')
+
+        features?.length > 1 && features.forEach(loc => sourceLocations.addFeature(loc.clone()))
+
+        featureHighlight && featureHighlight.set('highlight', false)
+
+        featureHighlight && featureHighlight.setStyle(styleFunction(featureHighlight))
+
+        featureHighlight = f.feature
+
+        featureHighlight.set('highlight', true)
+
+        featureHighlight.setStyle(styleFunction(featureHighlight))
+      }
+    });
+
+  }
+
+  function createSvgArc([cx,cy],r,[start,sweep],φ = -1.5708){
+
+    let t1 = start * 0.062831853071796;
+
+    let Δ = sweep * 0.062831853071796;
+
+    /*
+      cx,cy → center of ellipse
+      r → radius
+      t1 → start angle, in radian.
+      Δ → angle to sweep, in radian. positive.
+      φ → rotation on the whole, in radian
+      URL: SVG Circle Arc http://xahlee.info/js/svg_circle_arc.html
+    */
+
+    const cos = Math.cos;
+    const sin = Math.sin;
+    const π = Math.PI;
+
+    const f_matrix_times = (( [[a,b], [c,d]], [x,y]) => [ a * x + b * y, c * x + d * y]);
+    const f_rotate_matrix = (x => [[cos(x),-sin(x)], [sin(x), cos(x)]]);
+    const f_vec_add = (([a1, a2], [b1, b2]) => [a1 + b1, a2 + b2]);
+
+    Δ = Δ % (2*π);
+    const rotMatrix = f_rotate_matrix (φ);
+    const [sX, sY] = ( f_vec_add ( f_matrix_times ( rotMatrix, [r * cos(t1), r * sin(t1)] ), [cx,cy] ) );
+    const [eX, eY] = ( f_vec_add ( f_matrix_times ( rotMatrix, [r * cos(t1+Δ), r * sin(t1+Δ)] ), [cx,cy] ) );
+    const fA = ( (  Δ > π ) ? 1 : 0 );
+    const fS = ( (  Δ > 0 ) ? 1 : 0 );
+
+    return ['M', cx, cy, 'L', sX, sY, 'A', r , r , φ / (2*π) *360, fA, fS, eX, eY, 'L', cx, cy].join(" ")
+  }
+
+</script>
+
+</html>

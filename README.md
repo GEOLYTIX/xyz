@@ -1,10 +1,4 @@
-**v3.7.4**
-
-Please use the v4 branch for new projects.
-
-This branch is now in long term support.
-
-No features will be added to this branch.
+**v3.5.1**
 
 # xyz
 
@@ -17,6 +11,8 @@ The pattern for the Node **domain and service layers** are that of a RESTful API
 Spatial data must be stored in a cloud accessible PostGIS database to allow for the creation and caching of vector tiles in the **data source layer**.
 
 **Application control and presentation layers** are provided as an ES6 javscript library. XYZ' client library utilizes the Openlayers mapping engine among other visualisation libraries such as Tabulator and ChartJS to power engaging application views.
+
+Please visit [geolytix.github.io/xyz/docs](https://geolytix.github.io/xyz/docs) for project documentation hosted from the development branch of this repository.
 
 ### JAMstack Application Views
 
@@ -82,7 +78,7 @@ The domain and service layer may secure proxy access for services provided by Go
 
 [tabulator](https://github.com/olifolkerd/tabulator) - Javascript library for interactive tables and data grids.
 
-[chroma.js](https://github.com/gka/chroma.js) - A JavaScript library for all kinds of color manipulations.
+[flatpickr](https://www.npmjs.com/package/flatpickr) - A customisable JavaScript datetime picker.
 
 [TurfJS](https://github.com/Turfjs/turf) - A modular geospatial engine for geometry aggregation and transformations in the middleware and on the client side.
 
@@ -91,9 +87,6 @@ The domain and service layer may secure proxy access for services provided by Go
 [nodemailer](https://github.com/nodemailer/nodemailer) - Send e-mails with Node – easy as cake!
 
 [node-fetch](https://github.com/bitinn/node-fetch) - A light-weight module that brings window.fetch to Node.
-
-[a-color-picker](https://narsenico.github.io/a-color-picker/) - a color picker for web app.
-
 
 ## License
 

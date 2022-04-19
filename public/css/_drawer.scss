@@ -1,48 +1,91 @@
+@import 'colours';
+@import 'font';
+
 .drawer {
-    box-sizing: content-box;
 
-    >.header {
-        -webkit-user-select: none;  /* Chrome all / Safari all */
-        -moz-user-select: none;     /* Firefox all */
-        -ms-user-select: none;      /* IE 10+ */
-        user-select: none; 
-        display: flex;
-        align-items: center;
+  &.expandable:not(.empty)>.header:hover {
+    cursor: pointer;
+  }
+    
+  &.expandable.empty>.header>.mask-icon.expander {
+    visibility: hidden;
+  }
 
-        >:nth-child(1) {
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-        }
+  &.expandable>.header>.mask-icon.expander {
+    -webkit-mask-image: url("../icons/icon-arrow-down.svg");
+    mask-image: url("../icons/icon-arrow-down.svg");
+  }
 
-        >:nth-child(2) {
-            margin-left: auto;
-        }
-    }
+  &.expandable:not(.expanded) > *:not(.header) {
+    display: none;
+  }
 
-    .display-grid {
-      display: grid; 
-    }
+  &.expanded>.header>.mask-icon.expander {
+    -webkit-mask-image: url("../icons/icon-arrow-up.svg");
+    mask-image: url("../icons/icon-arrow-up.svg");
+  }
 
-    &.expandable>.header:hover {
-      cursor: pointer;
-    }
+  &.disabled {
+    opacity: 0.4;
+    pointer-events: none;
+  }
 
-    &.expandable>.header>.icon-expander {
-      background-image: url("../icons/icon-arrow-down.svg");
-    }
+  >.header {
+    display: flex;
+    align-items: center;
 
-    &.expandable:not(.expanded) > *:not(.header) {
-      display: none;
-    }
-
-    &.expanded>.header>.icon-expander {
-      background-image: url("../icons/icon-arrow-up.svg");
-    }
-
-    &.disabled {
-      opacity: 0.4;
+    >:not(button):not(label):not(input) {
       pointer-events: none;
     }
 
+    >div,
+    >button {
+      margin-left: 5px;
+      width: 1.5em;
+      height: 1.5em;
+    }
+
+    >:nth-child(1) {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    >:nth-child(2) {
+      margin-left: auto;
+    }
+
+    >.mask-icon {
+      mask-position: right;
+      -webkit-mask-position: right;
+    }
+
+  }
+
+  &.expandable.flat {
+    border-radius: 2px;
+    box-shadow: 1px 1px 2px #ccc;
+    border: 1px solid #eee;
+    padding: 5px;
+  }
+
+  &.expandable.flat.expanded {
+    box-shadow: none;
+    border: none;
+    padding: 5px 0;
+  }
+}
+
+.drawer.lv-1,
+.drawer.lv-2,
+.drawer.lv-3  {
+  padding-bottom: 5px;
+
+  >.header {
+    padding: 3px 0;
+  }
+
+  >:not(.header) {
+    margin-top: 3px;
+  }
 }

@@ -1,68 +1,68 @@
-document.dispatchEvent(new CustomEvent('hide_layers', {
-  detail: _xyz => {
+export default (function(){
 
-      if(!document.getElementById('mapButton')) return
+  mapp.plugins.hide_layers = (options, mapview) => {
 
-      document.getElementById('mapButton').appendChild(_xyz.utils.html.node`
+    const pluginBtn = document.getElementById("plugin-btn");
+  
+    if(!pluginBtn) return;
+  
+    pluginBtn.after(mapp.utils.html.node`
       <button
-        class="mobile-display-none"
-          title="Hide layer views which aren't displayed in the map view in the layer list view."
-          onclick=${e => {
-
-            if (!_xyz.layers.list) return;
-
-            if (e.target.classList.contains('enabled')) {
-
-              e.target.classList.remove('enabled')
-
-              Object.values(_xyz.layers.list).forEach(layer => {
-
-                if(!layer.view) return
-
-                layer.view.style.removeProperty('visibility');
-                layer.view.style.removeProperty('height');
-                layer.view.style.removeProperty('border-top');
+        class="mask-icon visibility-off"
+        title="Hide layer views which aren't displayed in the map view in the layer list view."
+        onclick=${hide_layers}>`);
   
-              })
-
-              Object.values(_xyz.layers.listview.groups).forEach(group => {
+    function hide_layers(e){
   
-                group.drawer.style.removeProperty('visibility');
-                group.drawer.style.removeProperty('height');
-                group.drawer.style.removeProperty('border-top');
+      // Is the button active?
+      if (e.target.classList.contains('active')) {
   
-              })
-              return;
+        e.target.classList.remove('active')
+  
+        Object.values(mapview.layers).forEach(layer => {
 
-            }
+          // Only layer views which are HTMLElements can be hidden.
+          if (!layer.view instanceof HTMLElement) return;
 
-            e.target.classList.add('enabled')
+          // Remove the display property set inline by this plugin.
+          layer.view.style.removeProperty('display');
 
-            Object.values(_xyz.layers.list).forEach(layer => {
+          // Check whether the layer has a group.
+          if (!layer.group) return;
 
-              if (layer.view?.classList.contains('disabled')) {
-                layer.remove()
-              }
+          // Remove the display property set inline by this plugin.
+          layer.group.drawer.style.removeProperty('display')
+    
+        })
 
-              if (!layer.display && layer.view) {
-                layer.view.style.visibility = 'hidden'
-                layer.view.style.height = '0'
-                layer.view.style.borderTop = 'none'
-              }
+        return;
+      }
 
-            })
+      e.target.classList.add('active')
 
-            Object.values(_xyz.layers.listview.groups).forEach(group => {
+      Object.values(mapview.layers).forEach(layer => {
 
-              if (group.list.some(layerInGroup => layerInGroup.display)) return;
+        // Do not hide layers that are visible.
+        if (layer.display) return;
 
-              group.drawer.style.visibility = 'hidden'
-              group.drawer.style.height = '0'
-              group.drawer.style.borderTop = 'none'
+        // Layer must have a view to be hidden.
+        if (!layer.view instanceof HTMLElement) return;
 
-            })
+        // Hide the layer view.
+        layer.view.style.display = 'none'
+        
+        // Does the layer have a group?
+        if (!layer.group) return;
 
-          }}><div class="xyz-icon icon-receipt">`)
+        // Does the layer group contain visible layer?
+        if (layer.group.list.some(l => l.display === true)) return;
 
+        // Hide an empty layer group.
+        layer.group.drawer.style.display = 'none'
+        
+      })
+     
+    }
   }
-}))
+
+})()

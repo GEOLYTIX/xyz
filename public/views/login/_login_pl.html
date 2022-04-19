@@ -1,30 +1,32 @@
 <!doctype html>
 <html lang="pl">
 
-<head data-dir="${dir}">
+<head data-dir="{{dir}}">
   <title>XYZ | Logowanie</title>
-  <link rel="icon" type="image/x-icon" href="${dir}/icons/favicon.ico" />
+  <link rel="icon" type="image/x-icon" href="{{dir}}/icons/favicon.ico" />
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script src="${dir}/views/login/_login.js" defer></script>
-  <link rel="stylesheet" href="${dir}/views/login/_login.css" />
+  <script src="{{dir}}/views/login/_login.js" defer></script>
+  <link rel="stylesheet" href="{{dir}}/views/login/_login.css" />
 
 </head>
 
 <body class="login_form">
 
   <select id="language" onChange="window.location.href=this.value">
-    <option value="${dir}?language=pl">Polski</option>
-    <option value="${dir}?language=en">English</option>
-    <option value="${dir}?language=de">Deutsch</option>
-    <option value="${dir}?language=fr">Français</option>
-    <option value="${dir}?language=ja">日本語</option>
-    <option value="${dir}?language=ko">한국어</option>
-    <option value="${dir}?language=zh">中文简体</option>
+    <option value="{{dir}}?language=pl&login=true">Polski</option>
+    <option value="{{dir}}?language=en&login=true">English</option>
+    <option value="{{dir}}?language=de&login=true">Deutsch</option>
+    <option value="{{dir}}?language=fr&login=true">Français</option>
+    <option value="{{dir}}?language=ja&login=true">日本語</option>
+    <option value="{{dir}}?language=ko&login=true">한국어</option>
+    <option value="{{dir}}?language=zh&login=true">中文简体</option>
   </select>
 
-  <form action="${dir}/api/user/login" method="post" autocomplete="off">
+  <form action="{{dir}}/api/user/login" method="post" autocomplete="off">
+
+    <input style="display: none;" name="login" value=true>
 
     <input style="display:none;" name="language" required value="pl">
 
@@ -40,13 +42,13 @@
       <label for="auth_user_password">Hasło</label>
     </div>
 
-    <p class="msg">${msg}</p>
+    <p class="msg">{{msg}}</p>
 
     <button id="btnLogin" type="submit" disabled>Zaloguj się</button>
 
     <p>Logowanie jest możliwe po weryfikacji konta za pomocą linku wysłanego we wiadomości e-mail, a następnie
       zatwierdzonego przez administratora.</p>
-    <a class="switch" href="${dir}/api/user/register?register=true&language=pl">Zarejestruj nowe konto lub zmień hasło.</a>
+    <a class="switch" href="{{dir}}/api/user/register?register=true&language=pl">Zarejestruj nowe konto lub zmień hasło.</a>
     
   </form>
 

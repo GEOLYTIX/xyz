@@ -20,7 +20,7 @@ let workspace = null
 
 const { nanoid } = require('nanoid')
 
-const logger = require('../logger')
+const logger = require('../utils/logger')
 
 module.exports = async () => {
 

@@ -1,4 +1,4 @@
-const dbs = require('../dbs')()
+const dbs = require('../utils/dbs')()
 
 module.exports = async (req, res) => {
 

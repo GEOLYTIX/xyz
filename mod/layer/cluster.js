@@ -1,52 +1,60 @@
-const dbs = require('../dbs')()
+const dbs = require('../utils/dbs')()
 
-const sql_filter = require('../sql_filter')
+const sqlFilter = require('../utils/sqlFilter')
 
-const Roles = require('../roles.js')
+const validateRequestParams = require('../utils/validateRequestParams')
+
+const Roles = require('../utils/roles.js')
 
 module.exports = async (req, res) => {
 
-  const layer = req.params.layer
+  const layer = req.params.layer;
 
-  if (Object.keys(req.params)
-    .filter(key => key !== 'filter')
-    .filter(key => !!req.params[key])
-    .filter(key => typeof req.params[key] !== 'object')
-    .some(key => !/^[A-Za-z0-9.,_-\s]*$/.test(req.params[key]))) {
+  // Validate URL parameter
+  if (!validateRequestParams(req.params)) {
 
-      return res.status(400).send('URL parameter validation failed.')
+    return res.status(400).send('URL parameter validation failed.')
   }
 
-  let
-    geom = layer.geom,
-    style_theme = layer.style?.theme || layer.style?.themes && layer.style?.themes[req.params.theme],
-    cat = style_theme && (style_theme.fieldfx || style_theme.field) || null,
-    size = style_theme && style_theme.size || 1,
-    theme = style_theme && style_theme.type,
-    label= req.params.label_template && req.params.workspace.templates[req.params.label_template].template || req.params.label || null,
-    count = req.params.count,
-    kmeans = parseInt(1 / req.params.kmeans),
-    dbscan = parseFloat(req.params.dbscan),
-    viewport = req.params.viewport.split(','),
-    z = parseFloat(req.params.z);
+  let params = {
+    layer,
+    table: /^[A-Za-z0-9._-]*$/.test(req.params.table) && req.params.table,
+    kmeans: parseInt(1 / req.params.kmeans) || undefined,
+    dbscan: parseFloat(req.params.dbscan) || undefined,
+    resolution: parseFloat(req.params.resolution || layer.cluster_resolution) || 0.1,
+    hexgrid: req.params.hexgrid,
+    theme: req.params.theme,
+    cat: req.params.cat || null,
+    size: req.params.size || null,
+    geom: layer.geom,
+    label: req.params.label_template && req.params.workspace.templates[req.params.label_template].template || req.params.label || null,
+    geom: layer.geom,
+    z: parseFloat(req.params.z),
+    aggregate: req.params.aggregate || req.params.theme === 'categorized' && 'array_agg',
+    group_by: []
+  }
 
+  // Check for role based access.
   const roles = Roles.filter(layer, req.params.user && req.params.user.roles)
 
   if (!roles && layer.roles) return res.status(403).send('Access prohibited.');
 
+  // Array for storing filter params.
   const SQLparams = []
 
+  // Create filter from roles and provided filter param.
   const filter =
-    ` ${layer.filter?.default && 'AND ' + layer.filter?.default || ''}
-    ${req.params.filter && `AND ${sql_filter(JSON.parse(req.params.filter), SQLparams)}` || ''}
+    ` ${layer.filter?.default && 'AND '+layer.filter?.default || ''}
+    ${req.params.filter && `AND ${sqlFilter(JSON.parse(req.params.filter), SQLparams)}` || ''}
     ${roles && Object.values(roles).some(r => !!r)
-    && `AND ${sql_filter(Object.values(roles).filter(r => !!r), SQLparams)}`
+    && `AND ${sqlFilter(Object.values(roles).filter(r => !!r), SQLparams)}`
     || ''}`
 
+  // Split viewport param.
+  const viewport = req.params.viewport.split(',')
 
-  // Combine filter with envelope
-  const where_sql = `
-  WHERE
+  // Create where sql restriction from viewport and filter.
+  params.where_sql = `
   ST_Intersects(
     ST_MakeEnvelope(
       ${viewport[0]},
@@ -55,304 +63,292 @@ module.exports = async (req, res) => {
       ${viewport[3]},
       ${parseInt(layer.srid)}
     ),
-    ${geom}
+    ${params.geom}
   )
   ${filter}`
 
-  // Apply KMeans cluster algorithm.
-  if (kmeans) {
+  // Query location count and distance across viewport.
+  // Only required for kmeans or dbscan algorithm.
+  if (params.kmeans || params.dbscan) {
 
     var q = `
-    SELECT
-      count(1)::integer,
-      ST_Distance(
-        ST_Point(${viewport[0]}, ${viewport[1]}),
-        ST_Point(${viewport[2]}, ${viewport[3]})
-      ) AS xdistance
-    FROM ${req.params.table} ${where_sql}`
-
-    var rows = await dbs[layer.dbs](q, SQLparams)
+      SELECT
+        count(1)::integer,
+        ST_Distance(
+          ST_Point(${viewport[0]}, ${viewport[1]}),
+          ST_Point(${viewport[2]}, ${viewport[3]})
+        ) AS xdistance
+      FROM ${params.table}
+      WHERE ${params.where_sql}`
+  
+    var rows = await dbs[params.layer.dbs](q, SQLparams)
 
     if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
-    // return if no locations found within the envelope.
-    if (parseInt(rows[0].count) === 0) return res.send([])
+    // Location count
+    params.count = parseInt(rows[0].count)
 
-    if (kmeans >= rows[0].count) kmeans = rows[0].count
+    // Distance accross viewport
+    params.xdistance = rows[0].xdistance
 
+    // Return empty array if no locations are within filtered viewport.
+    if (params.count === 0) return res.send([])
+  }
+ 
+  // Generate KMeans cluster algorithm.
+  params.kmeans && kmeansAggregation(params)
 
-    // KMeans cluster algorithm
-    var cluster_sql = `
-    (SELECT
-      ${cat} AS cat,
-      ${size} AS size,
-      ${geom} AS geom,
-      ${label ? label + ' AS label,' : ''}
-      ST_ClusterKMeans(${geom}, ${kmeans}
-    ) OVER () kmeans_cid
-    FROM ${req.params.table} ${where_sql}) kmeans`
+  // ...and|or DBScan cluster algorithm.
+  params.dbscan && dbscanAggregation(params)
 
+  // Generate grid aggregation query if neither kmeans, nor dbscan are provided.
+  if (!params.kmeans && !params.dbscan) gridAggregation(params)
 
-    // Apply nested DBScan cluster algorithm.
-    if (dbscan) {
-
-      dbscan *= rows[0].xdistance
-
-      cluster_sql = `
-        (SELECT
-          cat,
-          size,
-          geom,
-          ${label ? 'label,' : ''}
-          kmeans_cid,
-          ST_ClusterDBSCAN(geom, ${dbscan}, 1
-        ) OVER (PARTITION BY kmeans_cid) dbscan_cid
-        FROM ${cluster_sql}) dbscan`
-
-    }
-
-    if (theme === 'categorized') var cat_sql = `array_agg(cat) cat,`
-
-    if (theme === 'graduated') var cat_sql = `${req.params.aggregate || 'sum'}(cat) cat,`
-
-    var q = `
-      SELECT
-        count(1) count,
-        SUM(size) size,
-        ${cat_sql || ''}
-        ${label ? '(array_agg(label))[1] AS label,' : ''}
-        ST_X(ST_PointOnSurface(ST_Union(geom))) AS x,
-        ST_Y(ST_PointOnSurface(ST_Union(geom))) AS y
-      FROM ${cluster_sql}
-      GROUP BY kmeans_cid ${dbscan ? ', dbscan_cid;' : ';'}`
-
-
-    if (theme === 'competition') var q = `
-      SELECT
-        SUM(size) count,
-        SUM(size) size,
-        JSON_Agg(JSON_Build_Object(cat, size)) cat,
-        ${label ? '(array_agg(label))[1] AS label,' : ''}
-        ST_X(ST_PointOnSurface(ST_Union(geom))) AS x,
-        ST_Y(ST_PointOnSurface(ST_Union(geom))) AS y
-  
-      FROM (
-        SELECT
-          SUM(size) size,
-          cat,
-          ${label ? '(array_agg(label))[1] AS label,' : ''}
-          ST_Union(geom) geom,
-          kmeans_cid,
-          dbscan_cid
-  
-        FROM ${cluster_sql}
-        GROUP BY cat, kmeans_cid ${dbscan ? ', dbscan_cid' : ''}
-  
-      ) cluster GROUP BY kmeans_cid ${dbscan ? ', dbscan_cid;' : ';'}`
-
-    // Apply grid aggregation if KMeans is not defined.
-  } else {
-
-    let r = parseInt(40075016.68 / Math.pow(2, z) * (layer.cluster_resolution || layer.cluster_hexresolution || 0.1));
-
-    if (layer.cluster_hexresolution) {
-
-      let
-        _width = r,
-        _height = r - ((r * 2 / Math.sqrt(3)) - r) / 2;
-
-      var with_sql = `
-        WITH first as (
-
-          SELECT
-            ${cat} AS cat,
-            ${size} AS size,
-            ${label ? label + ' AS label,' : ''}
-            ${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'} AS geom,
-            ST_X(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) x,
-            ST_Y(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) y,
-
-            ((ST_Y(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${_height})::integer % 2) odds,
-
-            CASE WHEN ((ST_Y(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${_height})::integer % 2) = 0 THEN
-              ST_Point(
-                round(ST_X(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${_width}) * ${_width},
-                round(ST_Y(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${_height}) * ${_height})
-
-            ELSE ST_Point(
-                round(ST_X(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${_width}) * ${_width} + ${_width / 2},
-                round(ST_Y(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${_height}) * ${_height})
-
-            END p0                
-
-          FROM ${req.params.table} ${where_sql}
-
-        ), second as (
-          
-          SELECT
-            cat,
-            size,
-            ${label ? 'label,' : ''}
-
-            CASE WHEN odds = 0 THEN CASE
-        
-              WHEN x < ST_X(p0) THEN CASE
-        
-                WHEN y < ST_Y(p0) THEN CASE
-                  WHEN (geom <#> ST_Translate(p0, -${_width / 2}, -${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, -${_height}), 1)
-                  ELSE ST_SnapToGrid(p0, 1)
-                  END
-        
-                ELSE CASE
-                  WHEN (geom <#> ST_Translate(p0, -${_width / 2}, ${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, ${_height}), 1)
-                  ELSE ST_SnapToGrid(p0, 1)
-                  END
-        
-                END
-        
-              ELSE CASE
-              
-                WHEN y < ST_Y(p0) THEN CASE
-                  WHEN (geom <#> ST_Translate(p0, ${_width / 2}, -${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, ${_width / 2}, -${_height}), 1)
-                  ELSE ST_SnapToGrid(p0, 1)
-                  END
-        
-                ELSE CASE
-                  WHEN (geom <#> ST_Translate(p0, ${_width / 2}, ${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, ${_width / 2}, ${_height}), 1)
-                  ELSE ST_SnapToGrid(p0, 1)
-                  END
-        
-                END          
-        
-              END
-              
-            ELSE CASE
-              WHEN x < (ST_X(p0) - ${_width / 2}) THEN CASE
-                WHEN y < ST_Y(p0) THEN CASE
-                  WHEN (geom <#> ST_Translate(p0, -${_width / 2}, -${_height})) < (geom <#> ST_Translate(p0, -${_width}, 0)) THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, -${_height}), 1)
-                  ELSE ST_SnapToGrid(ST_Translate(p0, -${_width}, 0), 1)
-                  END
-        
-                ELSE CASE
-                  WHEN (geom <#> ST_Translate(p0, -${_width / 2}, ${_height})) < (geom <#> ST_Translate(p0, -${_width}, 0)) THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, ${_height}), 1)
-                  ELSE ST_SnapToGrid(ST_Translate(p0, -${_width}, 0), 1)
-                  END
-        
-                END          
-        
-              ELSE CASE
-                WHEN y < ST_Y(p0) THEN CASE
-                  WHEN (geom <#> ST_Translate(p0, -${_width / 2}, -${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, -${_height}), 1)
-                  ELSE ST_SnapToGrid(p0, 1)
-                  END
-        
-                ELSE CASE
-                  WHEN (geom <#> ST_Translate(p0, -${_width / 2}, ${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, ${_height}), 1)
-                  ELSE ST_SnapToGrid(p0, 1)
-                  END
-        
-                END          
-        
-              END
-        
-            END as point
-          FROM first)`
-
-      var agg_sql = `second GROUP BY point ${label ? ',label' : ''};`;
-
-      var xy_sql = `
-        ST_X(${layer.srid == 3857 && 'point' || 'ST_Transform(ST_SetSRID(point, 3857), ' + parseInt(layer.srid) + ')'}) x,
-        ST_Y(${layer.srid == 3857 && 'point' || 'ST_Transform(ST_SetSRID(point, 3857), ' + parseInt(layer.srid) + ')'}) y`
-
-    } else {
-
-      var agg_sql = `
-        (SELECT
-          ${cat} AS cat,
-          ${size} AS size,
-          ${label ? label + ' AS label,' : ''}
-          ST_X(${geom}) AS x,
-          ST_Y(${geom}) AS y,
-          round(ST_X(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${r}) * ${r} x_round,
-          round(ST_Y(${layer.srid == 3857 && geom || 'ST_Transform(' + geom + ', 3857)'}) / ${r}) * ${r} y_round
-            
-        FROM ${req.params.table} ${where_sql}) agg_sql GROUP BY x_round, y_round ${label && label !== 'count' ? ', label' : ''};`
-
-      var xy_sql = `
-        percentile_disc(0.5) WITHIN GROUP (ORDER BY x) x,
-        percentile_disc(0.5) WITHIN GROUP (ORDER BY y) y`
-    }
-
-    if (theme === 'categorized') var cat_sql = `array_agg(cat) cat,`
-
-    if (theme === 'graduated') var cat_sql = `${req.params.aggregate || 'sum'}(cat) cat,`
-
-    var q = `
-    ${with_sql || ''}
+  // Assemble query string.
+  var q = `
+    ${params.with_sql || ''}
     SELECT
       count(1) count,
-      SUM(size) size,
-      ${label ? 'label,' : ''}
-      ${cat_sql || ''}
-      ${xy_sql}
-    FROM ${agg_sql}`
-
-  }
+      ${params.size && 'SUM(size) size,' || ''}
+      (array_agg(id))[1] AS id,
+      ${params.cat && (params.aggregate || 'sum') + '(cat) cat,' || ''}
+      (array_agg(label))[1] AS label,
+      ${params.xy_sql}
+    FROM ${params.cluster_sql}
+    GROUP BY ${params.group_by.join(',')};`
 
   var rows = await dbs[layer.dbs](q, SQLparams)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
-
-  if (!theme || theme === 'basic') return res.send(rows.map(row => ({
+  // Return cluster response.
+  return res.send(rows.map(row => ({
     geometry: {
       x: row.x,
       y: row.y,
     },
     properties: {
+      id: parseInt(row.count) === 1 && row.id || undefined,
+      label: row.label || undefined,
       count: parseInt(row.count),
-      size: parseInt(row.size),
-      label: count ? parseInt(row.count) > 1 ? row.count : row.label : row.label,
+      size: parseInt(row.size) || undefined,
+      cat: params.theme === 'graduated' && parseFloat(row.cat)
+        || req.params.aggregate === 'array_agg' && row.cat
+        || row.cat?.length === 1 && row.cat[0]
+        || undefined
     }
   })))
 
-  if (theme === 'categorized') return res.send(rows.map(row => ({
-    geometry: {
-      x: row.x,
-      y: row.y,
-    },
-    properties: {
-      count: parseInt(row.count),
-      size: parseInt(row.size),
-      cat: row.cat.length === 1 && row.cat[0] || layer.cat_array && row.cat || null,
-      label: count ? parseInt(row.count) > 1 ? row.count : row.label : row.label
-    }
-  })))
+}
 
-  if (theme === 'graduated') return res.send(rows.map(row => ({
-    geometry: {
-      x: row.x,
-      y: row.y,
-    },
-    properties: {
-      count: parseInt(row.count),
-      size: parseInt(row.size),
-      cat: parseFloat(row.cat),
-      label: count ? parseInt(row.count) > 1 ? row.count : row.label : row.label
-    }
-  })))
+function kmeansAggregation(params){
 
-  if (theme === 'competition') return res.send(rows.map(row => ({
-    geometry: {
-      x: row.x,
-      y: row.y,
-    },
-    properties: {
-      count: parseInt(row.count),
-      size: parseInt(row.size),
-      cat: Object.assign({}, ...row.cat),
-      label: row.label
-    }
-  })))
+  // kmeans must not be bigger than the number of rows in group.
+  params.kmeans = params.kmeans >= params.count ? params.count : params.kmeans
+
+  params.group_by.push('kmeans_cid')
+
+  params.xy_sql = `
+    ST_X(ST_PointOnSurface(ST_Union(geom))) AS x,
+    ST_Y(ST_PointOnSurface(ST_Union(geom))) AS y`
+
+  // KMeans cluster algorithm
+  params.cluster_sql = `
+    (SELECT
+      ${params.layer.qID} as id,
+      ${params.size} AS size,
+      ${params.cat} AS cat,
+      ${params.label} AS label,
+      ${params.geom} AS geom,
+      ST_ClusterKMeans(${params.geom}, ${params.kmeans}) OVER () kmeans_cid
+    FROM ${params.table}
+    WHERE ${params.where_sql}) kmeans`
+
+}
+
+function dbscanAggregation(params){
+
+  // Multiply dbscan fraction with cross distance accross viewport.
+  params.dbscan *= params.xdistance
+
+  params.group_by.push('dbscan_cid')
+
+  params.xy_sql = `
+    ST_X(ST_PointOnSurface(ST_Union(geom))) AS x,
+    ST_Y(ST_PointOnSurface(ST_Union(geom))) AS y`
+  
+  if (params.kmeans) {
+
+    // Nest the kmeans cluster_sql within the dbscan algorithm
+    params.cluster_sql = `
+      (SELECT
+        id,
+        size,
+        cat,
+        label,
+        geom,
+        kmeans_cid,
+        ST_ClusterDBSCAN(geom, ${params.dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
+      FROM ${params.cluster_sql}) dbscan`
+
+    return;
+  }
+
+  // Dbscan only cluster algorithm
+  params.cluster_sql = `
+    (SELECT
+      ${params.layer.qID} as id,
+      ${params.size} AS size,
+      ${params.cat} AS cat,
+      ${params.label} AS label,
+      ${params.geom} AS geom,
+      ST_ClusterDBSCAN(${params.geom}, ${params.dbscan}, 1) OVER () dbscan_cid
+    FROM ${params.table}
+    WHERE ${params.where_sql}) dbscan`
+
+}
+
+function gridAggregation(params){
+
+  // Calculate grid resolution (r) based on zoom level and resolution parameter.
+  let r = parseInt(40075016.68 / Math.pow(2, params.z) * params.resolution);
+
+  if (params.hexgrid) {
+
+    let
+      _width = r,
+      _height = r - ((r * 2 / Math.sqrt(3)) - r) / 2;
+    
+    params.with_sql = `
+      WITH
+      first as (
+    
+        SELECT
+          ${params.layer.qID} as id,
+          ${params.size} AS size,
+          ${params.cat} AS cat,
+          ${params.label} AS label,
+          ${params.layer.srid == 3857 && params.geom || 'ST_Transform(' + params.geom + ', 3857)'} AS geom,
+          ST_X(${params.layer.srid == 3857 && params.geom || 'ST_Transform(' + params.geom + ', 3857)'}) x,
+          ST_Y(${params.layer.srid == 3857 && params.geom || 'ST_Transform(' + params.geom + ', 3857)'}) y,
+    
+          ((ST_Y(${params.layer.srid == 3857 && params.geom || 'ST_Transform(' + params.geom + ', 3857)'}) / ${_height})::integer % 2) odds,
+    
+          CASE WHEN ((ST_Y(${params.layer.srid == 3857 && params.geom || 'ST_Transform(' + params.geom + ', 3857)'}) / ${_height})::integer % 2) = 0 THEN
+            ST_Point(
+              round(ST_X(${params.layer.srid == 3857 && params.geom || 'ST_Transform(' + params.geom + ', 3857)'}) / ${_width}) * ${_width},
+              round(ST_Y(${params.layer.srid == 3857 && params.geom || 'ST_Transform(' + params.geom + ', 3857)'}) / ${_height}) * ${_height})
+    
+          ELSE ST_Point(
+              round(ST_X(${params.layer.srid == 3857 && params.geom || 'ST_Transform(' + params.geom + ', 3857)'}) / ${_width}) * ${_width} + ${_width / 2},
+              round(ST_Y(${params.layer.srid == 3857 && params.geom || 'ST_Transform(' + params.geom + ', 3857)'}) / ${_height}) * ${_height})
+    
+          END p0                
+    
+        FROM ${params.table} 
+        WHERE ${params.where_sql})`
+    
+    params.cluster_sql = `
+      (SELECT
+        id,
+        size,
+        cat,
+        label,
+        
+        CASE WHEN odds = 0 THEN CASE
+      
+          WHEN x < ST_X(p0) THEN CASE
+      
+            WHEN y < ST_Y(p0) THEN CASE
+              WHEN (geom <#> ST_Translate(p0, -${_width / 2}, -${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, -${_height}), 1)
+              ELSE ST_SnapToGrid(p0, 1)
+            END
+      
+            ELSE CASE
+              WHEN (geom <#> ST_Translate(p0, -${_width / 2}, ${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, ${_height}), 1)
+              ELSE ST_SnapToGrid(p0, 1)
+            END
+      
+          END
+      
+          ELSE CASE
+            
+            WHEN y < ST_Y(p0) THEN CASE
+              WHEN (geom <#> ST_Translate(p0, ${_width / 2}, -${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, ${_width / 2}, -${_height}), 1)
+              ELSE ST_SnapToGrid(p0, 1)
+            END
+      
+            ELSE CASE
+              WHEN (geom <#> ST_Translate(p0, ${_width / 2}, ${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, ${_width / 2}, ${_height}), 1)
+              ELSE ST_SnapToGrid(p0, 1)
+            END
+      
+          END          
+      
+        END
+            
+        ELSE CASE
+          WHEN x < (ST_X(p0) - ${_width / 2}) THEN CASE
+            WHEN y < ST_Y(p0) THEN CASE
+              WHEN (geom <#> ST_Translate(p0, -${_width / 2}, -${_height})) < (geom <#> ST_Translate(p0, -${_width}, 0)) THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, -${_height}), 1)
+              ELSE ST_SnapToGrid(ST_Translate(p0, -${_width}, 0), 1)
+            END
+      
+            ELSE CASE
+              WHEN (geom <#> ST_Translate(p0, -${_width / 2}, ${_height})) < (geom <#> ST_Translate(p0, -${_width}, 0)) THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, ${_height}), 1)
+              ELSE ST_SnapToGrid(ST_Translate(p0, -${_width}, 0), 1)
+            END
+      
+          END          
+      
+          ELSE CASE
+            WHEN y < ST_Y(p0) THEN CASE
+              WHEN (geom <#> ST_Translate(p0, -${_width / 2}, -${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, -${_height}), 1)
+              ELSE ST_SnapToGrid(p0, 1)
+            END
+      
+            ELSE CASE
+              WHEN (geom <#> ST_Translate(p0, -${_width / 2}, ${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, ${_height}), 1)
+              ELSE ST_SnapToGrid(p0, 1)
+            END
+      
+          END          
+      
+        END
+      
+      END as point
+      FROM first) AS grid`
+    
+    params.group_by.push('point')
+    
+    params.xy_sql = `
+      ST_X(${params.layer.srid == 3857 && 'point' || 'ST_Transform(ST_SetSRID(point, 3857),'+parseInt(params.layer.srid)+')'}) x,
+      ST_Y(${params.layer.srid == 3857 && 'point' || 'ST_Transform(ST_SetSRID(point, 3857),'+parseInt(params.layer.srid)+')'}) y`
+
+    return;
+    
+  }
+
+  params.group_by.push('x_round')
+  params.group_by.push('y_round')
+
+  params.xy_sql = `
+    percentile_disc(0.5) WITHIN GROUP (ORDER BY x) x,
+    percentile_disc(0.5) WITHIN GROUP (ORDER BY y) y`
+  
+  params.cluster_sql = `
+    (SELECT
+      ${params.layer.qID} as id,
+      ${params.size} AS size,
+      ${params.cat} AS cat,
+      ${params.label} AS label,
+      ST_X(${params.geom}) AS x,
+      ST_Y(${params.geom}) AS y,
+      round(ST_X(${params.layer.srid == 3857 && params.geom
+        || 'ST_Transform('+params.geom+', 3857)'}) / ${r}) * ${r} x_round,
+      round(ST_Y(${params.layer.srid == 3857 && params.geom
+        || 'ST_Transform('+params.geom+', 3857)'}) / ${r}) * ${r} y_round
+    FROM ${params.table}
+    WHERE ${params.where_sql}) grid`
 
 }
