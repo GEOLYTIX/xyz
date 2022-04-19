@@ -1,5 +1,4 @@
-
-**v3.7.0**
+**v3.7.2**
 
 # xyz
 
@@ -78,8 +77,6 @@ The domain and service layer may secure proxy access for services provided by Go
 [chart.js](https://github.com/chartjs/Chart.js) - For the creation of HTML canvas charts in info panels and report views.
 
 [tabulator](https://github.com/olifolkerd/tabulator) - Javascript library for interactive tables and data grids.
-
-[flatpickr](https://www.npmjs.com/package/flatpickr) - A customisable JavaScript datetime picker.
 
 [chroma.js](https://github.com/gka/chroma.js) - A JavaScript library for all kinds of color manipulations.
 

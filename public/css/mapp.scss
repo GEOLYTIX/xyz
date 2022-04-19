@@ -16,7 +16,6 @@
 @import 'drawer';
 
 @import 'tabulator';
-@import 'flatpickr';
 
 @import 'mapview';
 @import 'tabview';
@@ -68,7 +67,7 @@ li {
 }
 
 .display-none {
-    display: none;
+    display: none !important;
 }
 
 .chartjs-render-monitor {

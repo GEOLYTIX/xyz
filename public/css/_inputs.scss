@@ -33,8 +33,17 @@ input[type=number] {
   -moz-appearance: textfield;
 }
 
+input[type=date], input[type=time], input[type=datetime-local] {
+  font-family: inherit;
+  font-size:inherit;
+  text-align: end;
+}
+
 input[type=text],
-input[type=number] {
+input[type=number],
+input[type=date],
+input[type=time],
+input[type=datetime-local] {
   border: 1px solid #ccc;
   padding: 5px;
 

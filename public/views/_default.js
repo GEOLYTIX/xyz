@@ -141,6 +141,8 @@ window.onload = () => {
       return;
     }
 
+    xyz.hooks.current.locale = document.head.dataset.locale
+
     const locale = xyz.hooks && xyz.hooks.current.locale ? {
       key: xyz.hooks.current.locale, 
       name: locales.find(l => l.key === xyz.hooks.current.locale).name

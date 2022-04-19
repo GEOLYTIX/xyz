@@ -20,7 +20,9 @@ module.exports = async (req, res, message) => {
 
     const user = await post(req)
 
-    if (user instanceof Error && req.body.redirect) return view(req, res, user.message)
+    const redirect = req.cookies && req.cookies[`${process.env.TITLE}_redirect`]
+
+    if (user instanceof Error && redirect) return view(req, res, user.message)
 
     if (user instanceof Error) return res.status(401).send(user.message)
 
@@ -36,13 +38,15 @@ module.exports = async (req, res, message) => {
         expiresIn: parseInt(process.env.COOKIE_TTL)
       })
 
+    
+
     const cookie = `${process.env.TITLE}=${token};HttpOnly;Max-Age=${process.env.COOKIE_TTL};Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`
 
     res.setHeader('Set-Cookie', cookie)
 
-    if (!req.body.redirect) return res.send(user)
+    if (!redirect) return res.send(user)
 
-    res.setHeader('location', `${req.body.redirect.replace(/([?&])msg=[^&]+(&|$)/,'')}`)
+    res.setHeader('location', `${redirect.replace(/([?&])msg=[^&]+(&|$)/,'')}`)
 
     return res.status(302).send()
 
@@ -56,19 +60,21 @@ module.exports = async (req, res, message) => {
 async function view(req, res, message) {
 
   // The redirect for a successful login.
-  const redirect = req.body && req.body.redirect ||
-    req.url && decodeURIComponent(req.url).replace(/login\=true/, '')
+  const redirect = req.url && decodeURIComponent(req.url).replace(/login\=true/, '')
 
-  if (decodeURIComponent(redirect).match(/[\<\>]/g)) return res.status(403).send('URL must not contain angle brackets.')
+  //if (decodeURIComponent(redirect).match(/[\<\>\(\)]/g)) return res.status(403).send('URL must not contain angle brackets.')
 
   let template = await templates('login_view', req.params.language, {
     dir: process.env.DIR,
-    redirect: redirect,
+    saml_sso: process.env.SAML_SSO && `${process.env.DIR || ''}/saml/login` || '',
     msg: message || ' '
   })
 
-  // The login view will set the cookie to null.
+  // Clear user token cookie.
   res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
+
+  // Set cookie with redirect value.
+  res.setHeader('Set-Cookie', `${process.env.TITLE}_redirect=${redirect};HttpOnly;Max-Age=60000;Path=${process.env.DIR || '/'}`)
 
   res.send(template)
 }

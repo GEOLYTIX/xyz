@@ -8,16 +8,25 @@ module.exports = async (req, res) => {
 
   const layer = req.params.layer
 
+  if (Object.keys(req.params)
+    .filter(key => key !== 'filter')
+    .filter(key => !!req.params[key])
+    .filter(key => typeof req.params[key] !== 'object')
+    .some(key => !/^[A-Za-z0-9.,_-\s]*$/.test(req.params[key]))) {
+
+      return res.status(400).send('URL parameter validation failed.')
+  }
+
   let
     geom = layer.geom,
-    style_theme = layer.style.theme || layer.style.themes && layer.style.themes[req.params.theme],
+    style_theme = layer.style?.theme || layer.style?.themes && layer.style?.themes[req.params.theme],
     cat = style_theme && (style_theme.fieldfx || style_theme.field) || null,
     size = style_theme && style_theme.size || 1,
     theme = style_theme && style_theme.type,
-    label = req.params.label,
+    label= req.params.label_template && req.params.workspace.templates[req.params.label_template].template || req.params.label || null,
     count = req.params.count,
     kmeans = parseInt(1 / req.params.kmeans),
-    dbscan = parseFloat(req.params.dbscan), 
+    dbscan = parseFloat(req.params.dbscan),
     viewport = req.params.viewport.split(','),
     z = parseFloat(req.params.z);
 
@@ -28,7 +37,7 @@ module.exports = async (req, res) => {
   const SQLparams = []
 
   const filter =
-    ` ${layer.filter?.default && 'AND '+layer.filter?.default || ''}
+    ` ${layer.filter?.default && 'AND ' + layer.filter?.default || ''}
     ${req.params.filter && `AND ${sql_filter(JSON.parse(req.params.filter), SQLparams)}` || ''}
     ${roles && Object.values(roles).some(r => !!r)
     && `AND ${sql_filter(Object.values(roles).filter(r => !!r), SQLparams)}`
@@ -141,7 +150,7 @@ module.exports = async (req, res) => {
   
       ) cluster GROUP BY kmeans_cid ${dbscan ? ', dbscan_cid;' : ';'}`
 
-  // Apply grid aggregation if KMeans is not defined.
+    // Apply grid aggregation if KMeans is not defined.
   } else {
 
     let r = parseInt(40075016.68 / Math.pow(2, z) * (layer.cluster_resolution || layer.cluster_hexresolution || 0.1));

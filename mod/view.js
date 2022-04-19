@@ -15,6 +15,7 @@ module.exports = async (req, res) => {
       dir: process.env.DIR,
       user: user,
       language: req.params.language,
+      locale: req.params.locale,
       login: (process.env.PRIVATE || process.env.PUBLIC) && 'true',
     },
     Object.fromEntries(Object.entries(process.env).filter(entry => entry[0].match(/^SRC_/))))

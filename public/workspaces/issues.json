@@ -94,6 +94,85 @@
                 "HERE Hybrid": {
                     "group": "Maps",
                     "template": "HERE Hybrid"
+                },
+                "Issue: 451": {
+                    "meta": "Issue #451",
+                    "edit": {
+                        "point": true,
+                        "delete": true,
+                        "geometry": true
+                    },
+                    "download": {},
+                    "format": "cluster",
+                    "srid": "4326",
+                    "geom": "geom_4326",
+                    "dbs": "XYZ",
+                    "qID": "id",
+                    "table": "dev.uk_glx_sites",
+                    "cluster_kmeans": 0.1,
+                    "cluster_label": "site_name",
+                    "infoj": [
+                        {
+                            "type": "key"
+                        },
+                        {
+                            "title": "Here's tomtom",
+                            "name": "TomTom Reachable Range",
+                            "display": true,
+                            "hidden": true,
+                            "type": "geometry",
+                            "field": "isoline_tomtom",
+                            "fieldfx": "ST_AsGeoJSON(isoline_tomtom)",
+                            "edit": {
+                                "meta": "isoline_tomtom_meta",
+                                "isoline_tomtom": {}
+                            }
+                        },
+                        {
+                            "field": "isoline_tomtom_meta",
+                            "type": "json"
+                        },
+                        {
+                            "title": "Here API v2",
+                            "name": "Display",
+                            "type": "geometry",
+                            "display": true,
+                            "hidden": true,
+                            "field": "here_isoline_v2",
+                            "fieldfx": "ST_AsGeoJSON(here_isoline_v2)",
+                            "edit": {
+                                "meta": "here_isoline_v2_meta",
+                                "isoline_here": {}
+                            },
+                            "style": {
+                                "fillColor": "steelblue",
+                                "strokeColor": "steelblue",
+                                "fillOpacity": 0.3
+                            }
+                        },
+                        {
+                            "field": "here_isoline_v2_meta",
+                            "type": "json"
+                        }
+                    ],
+                    "style": {
+                        "default": {
+                            "showInHeader": true,
+                            "layers": [
+                                {
+                                    "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/aga/red_pin.svg"
+                                },
+                                {
+                                    "svg": "https://cdn.jsdelivr.net/gh/GEOLYTIX/MapIcons/aga/spar.svg"
+                                }
+                            ]
+                        },
+                        "cluster": {
+                            "type": "dot",
+                            "fillColor": "rgba(0, 75, 168, 0.3)",
+                            "scale": 2
+                        }
+                    }
                 }
             }
         }

@@ -8,6 +8,14 @@ module.exports = async (req, res) => {
 
   const layer = req.params.layer
 
+  if (Object.values(req.params)
+    .filter(val => !!val)
+    .filter(val => typeof val !== 'object')
+    .some(val => val && !/^[A-Za-z0-9/\s/g.,_-]*$/.test(val))) {
+
+    return res.status(400).send('URL parameter validation failed.')
+  }
+
   const roles = Roles.filter(layer, req.params.user && req.params.user.roles)
 
   if (!roles && layer.roles) return res.status(403).send('Access prohibited.')
