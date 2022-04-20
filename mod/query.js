@@ -85,7 +85,7 @@ module.exports = async (req, res) => {
   // Assign body to params to enable reserved %{body} parameter.
   req.params.body = req.params.stringifyBody && JSON.stringify(req.body) || req.body
 
-  logger(req.params, 'queryParams')
+  logger(req.params, 'query_params')
 
   // Reserved param keys may not be substituted from request query params.
   const reserved = new Set(['viewport', 'filter'])
