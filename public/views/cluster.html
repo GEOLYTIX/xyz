@@ -23,29 +23,9 @@
       font-family: Arial, Helvetica, sans-serif;
     }
 
-    /* body {
-      display: grid;
-      grid-template-columns: 300px 1fr;
-    } */
-
-    #CTRL {
-      grid-column: 1;
-      width: 100%;
-      height: 100%;
-      background: oldlace;
-      padding: 1em;
-    }
-    
     #Map {
-      grid-column: 2;
       width: 100%;
       height: 100%;
-    }
-
-    #CTRL button {
-      font-size: 1.5em;
-      padding: 0.3em;
-      width: 100%;
     }
 
   </style>
@@ -54,9 +34,6 @@
 
 <body>
 
-  <!-- <div id="CTRL">
-    <button id="Draw">Draw</button>
-  </div> -->
   <div id="Map"></div>
 
 </body>
@@ -91,9 +68,32 @@
 
     sentiment_layer = layers.find(layer => layer.key === 'sentiment')
 
-    sentiment_layer.styleFunction = styleFunction
+    //sentiment_layer.styleFunction = styleFunction
+
+    sentiment_layer.style.default.icon = singleStyle
+
+    sentiment_layer.style.cluster.icon = clusterStyle
+
+    const sourceLocations = new ol.source.Vector()
+
+    const layerLocations = new ol.layer.Vector({
+      source: sourceLocations
+    })
+
+    sentiment_layer.hover = F => {
+
+      sourceLocations.clear()
+
+      let features = F.get('features')
+      
+      if (features.length > 1) {
+        features.forEach(f => sourceLocations.addFeature(f.clone()))
+      }
+    }
     
     await mapview.addLayer(layers);
+
+    mapview.Map.addLayer(layerLocations)
 
     const xmlSerializer = new XMLSerializer();
 
@@ -107,40 +107,45 @@
 
     const memoizedStyles = {};
 
-    function styleFunction(feature) {
+    function singleStyle(feature) {
 
       let highlight = feature.get('highlight')
 
       let features = feature.get('features')
 
-      if (features.length === 1) {
+      let colour = sentimentColour[features[0].getProperties().properties.sentiment]
 
-        let colour = sentimentColour[features[0].getProperties().properties.sentiment]
+      if (!highlight && memoizedStyles[colour]) {
+        return memoizedStyles[colour]
+      }
 
-        if (!highlight && memoizedStyles[colour]) {
-          return memoizedStyles[colour]
-        }
-
-        let icon = mapp.utils.svg.node`
+      let icon = mapp.utils.svg.node`
         <svg width=24 height=24 viewBox='0 0 24 24' xmlns='http://www.w3.org/2000/svg'>
           <circle cx=12 cy=12 r=12 fill=${colour}></circle>`;
 
-        let style = new ol.style.Style({
-          image: new ol.style.Icon({
-            src: `data:image/svg+xml,${encodeURIComponent(
-              xmlSerializer.serializeToString(icon)
-            )}`,
-            scale: highlight && 2 || 1,
-            anchor: [0.5, 0.5]
-          })
+      let style = new ol.style.Style({
+        image: new ol.style.Icon({
+          src: `data:image/svg+xml,${encodeURIComponent(
+            xmlSerializer.serializeToString(icon)
+          )}`,
+          scale: highlight && 2 || 1,
+          //scale: 1,
+          anchor: [0.5, 0.5]
         })
+      })
 
-        if (highlight) return style
+      if (highlight) return style
 
-        memoizedStyles[colour] = style
+      memoizedStyles[colour] = style
 
-        return style;
-      }
+      return style
+    }
+
+    function clusterStyle(feature) {
+
+      let highlight = feature.get('highlight')
+
+      let features = feature.get('features')
 
       let clusterSentiment = {
         0: 0,
@@ -191,6 +196,7 @@
             xmlSerializer.serializeToString(icon)
           )}`,
           scale: highlight && 3 || 2,
+          //scale: 2,
           anchor: [0.5, 0.5]
         }),
         text: new ol.style.Text({
@@ -207,50 +213,52 @@
       memoizedStyles[clusterSentimentString] = style
 
       return style
+
+    }
+
+    function styleFunction(feature) {
+
+      let features = feature.get('features')
+
+      return features.length === 1 ?
+        singleStyle(feature) :
+        clusterStyle(feature);
     }
 
 
-    const sourceLocations = new ol.source.Vector()
-
-    const layerLocations = new ol.layer.Vector({
-      source: sourceLocations
-    })
-
-    mapview.Map.addLayer(layerLocations)
-
-    let featureHighlight;
+    //let featureHighlight;
 
     mapview.interactions.highlight({
-      //layerFilter: featureLayer => sentiment_layer.L === featureLayer,
-      highlight: f => {
+      layerFilter: featureLayer => mapview.layers.sentiment.L === featureLayer,
+      // highlight: f => {
 
-        if (f === 'noChange') return;
+      //   if (f === 'noChange') return;
 
-        if (!f) {
-          featureHighlight && featureHighlight.set('highlight', false)
-          featureHighlight && featureHighlight.setStyle(styleFunction(featureHighlight))
-          featureHighlight = null;
-          return;
-        }
+      //   if (!f) {
+      //     featureHighlight && featureHighlight.set('highlight', false)
+      //     featureHighlight && featureHighlight.setStyle(styleFunction(featureHighlight))
+      //     featureHighlight = null;
+      //     return;
+      //   }
 
-        if (featureHighlight === f.F) return;
+      //   if (featureHighlight === f.F) return;
 
-        sourceLocations.clear()
+      //   sourceLocations.clear()
 
-        let features = f.F.get('features')
+      //   let features = f.F.get('features')
 
-        features?.length > 1 && features.forEach(loc => sourceLocations.addFeature(loc.clone()))
+      //   features?.length > 1 && features.forEach(loc => sourceLocations.addFeature(loc.clone()))
 
-        featureHighlight && featureHighlight.set('highlight', false)
+      //   featureHighlight && featureHighlight.set('highlight', false)
 
-        featureHighlight && featureHighlight.setStyle(styleFunction(featureHighlight))
+      //   featureHighlight && featureHighlight.setStyle(styleFunction(featureHighlight))
 
-        featureHighlight = f.F
+      //   featureHighlight = f.F
 
-        featureHighlight.set('highlight', true)
+      //   featureHighlight.set('highlight', true)
 
-        featureHighlight.setStyle(styleFunction(featureHighlight))
-      }
+      //   featureHighlight.setStyle(styleFunction(featureHighlight))
+      // }
     });
 
   }
