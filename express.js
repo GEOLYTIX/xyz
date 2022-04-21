@@ -52,7 +52,7 @@ app.get(`${process.env.DIR||''}/api/user/:method?/:key?`, api)
 app.post(`${process.env.DIR||''}/api/user/:method?/:key?`, express.urlencoded({extended: true}), api)
 
 //sudo ./caddy_linux_amd64 reverse-proxy --from localhost:443 --to localhost:3000
-//sudo ./caddy_linux_amd64 reverse-proxy --from localhost:443 --to localhost:3000
+
 app.get(`${process.env.DIR||''}/saml/metadata`, api)
 
 app.get(`${process.env.DIR||''}/saml/logout`, api)
