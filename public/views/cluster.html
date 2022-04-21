@@ -65,20 +65,14 @@
 
   window.onload = async () => {
 
+    const host = document.head.dataset.dir || new String("");
+
+    const locale = await mapp.utils.xhr(`${host}/api/workspace/locale?locale=Bristol`);
+
     const mapview = mapp.Mapview({
-      host: document.head.dataset.dir || new String(""),
+      host: host,
       target: 'Map',
-      locale: {
-        extent: {
-          north: 51.6,
-          east: -2.7,
-          south: 51.4,
-          west: -2.5,
-          mask: true
-        },
-        minZoom: 2,
-        maxZoom: 17,
-      },
+      locale: locale,
       scrollWheelZoom: true,
       controls: [new ol.control.Zoom()],
       attribution: {
@@ -91,47 +85,15 @@
       }
     });
 
-    mapview.addLayer([{
-      display: true,
-      "format": "mbtiles",
-      "mbStyle": "mapbox://styles/dbauszus/ciozrimi3002bdsm8bjtn2v1y",
-      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2t3NmJqZ3N4MG9zeDJ1bGprdzQ2ODllMCJ9.3xhSOxQLx1Egv5i8W7B57A",
-      "attribution": {
-        "© Mapbox": "https://www.mapbox.com/about/maps",
-        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-      }
-    }]);
+    const layers = await mapp.utils.promiseAll(locale.layers.map(
+      layer => mapp.utils.xhr(`${host}/api/workspace/layer?`
+        + `locale=${locale.key}&layer=${layer}`)))
 
-    const geoJSON = new ol.format.GeoJSON();
+    sentiment_layer = layers.find(layer => layer.key === 'sentiment')
 
-    let sampleData = await mapp.utils.xhr(`${mapview.host}/api/query/bristol_sentiment`)
-
-    const features = sampleData.map(f => geoJSON.readFeature({
-      type: 'Feature',
-      geometry: JSON.parse(f.geom),
-      properties: {
-        sentiment: f.sentiment
-      }
-    }, {
-      dataProjection: 'EPSG:4326',
-      featureProjection: 'EPSG:3857'
-    }))
-
-    const sourceVector = new ol.source.Vector({
-      features
-    })
-
-    const clusterSource = new ol.source.Cluster({
-      distance: 100,
-      source: sourceVector,
-    })
-
-    const layerVector = new ol.layer.Vector({
-      source: clusterSource,
-      style: styleFunction
-    })
-
-    mapview.Map.addLayer(layerVector)
+    sentiment_layer.styleFunction = styleFunction
+    
+    await mapview.addLayer(layers);
 
     const xmlSerializer = new XMLSerializer();
 
@@ -153,7 +115,7 @@
 
       if (features.length === 1) {
 
-        let colour = sentimentColour[features[0].get('sentiment')]
+        let colour = sentimentColour[features[0].getProperties().properties.sentiment]
 
         if (!highlight && memoizedStyles[colour]) {
           return memoizedStyles[colour]
@@ -189,7 +151,7 @@
       }
 
       for (let i = 0; i < features.length - 1; i++) {
-        clusterSentiment[features[i].get('sentiment')]++
+        clusterSentiment[features[i].getProperties().properties.sentiment]++
       }
 
       let clusterSentimentString = JSON.stringify(clusterSentiment)
@@ -256,12 +218,13 @@
 
     mapview.Map.addLayer(layerLocations)
 
-
     let featureHighlight;
 
     mapview.interactions.highlight({
-      layerFilter: featureLayer => layerVector === featureLayer,
-      callback: f => {
+      //layerFilter: featureLayer => sentiment_layer.L === featureLayer,
+      highlight: f => {
+
+        if (f === 'noChange') return;
 
         if (!f) {
           featureHighlight && featureHighlight.set('highlight', false)
@@ -270,11 +233,11 @@
           return;
         }
 
-        if (featureHighlight === f.feature) return;
+        if (featureHighlight === f.F) return;
 
         sourceLocations.clear()
 
-        let features = f.feature.get('features')
+        let features = f.F.get('features')
 
         features?.length > 1 && features.forEach(loc => sourceLocations.addFeature(loc.clone()))
 
@@ -282,7 +245,7 @@
 
         featureHighlight && featureHighlight.setStyle(styleFunction(featureHighlight))
 
-        featureHighlight = f.feature
+        featureHighlight = f.F
 
         featureHighlight.set('highlight', true)
 

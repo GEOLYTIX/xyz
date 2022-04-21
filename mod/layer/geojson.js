@@ -34,6 +34,10 @@ module.exports = async (req, res) => {
     SELECT
       ${layer.qID || null} AS id,
       ST_asGeoJson(${layer.geom}) AS geomj
+      ${layer.properties
+        && `, json_build_object(${Object.entries(layer.properties).map(e=>`'${e[0]}',${e[1]}`).join(', ')}) as properties`
+        || ''}
+
     FROM ${req.params.table || layer.table}
     WHERE true ${filter};`
 
@@ -44,6 +48,7 @@ module.exports = async (req, res) => {
   res.send(rows.map(row => ({
     type: 'Feature',
     geometry: JSON.parse(row.geomj),
+    properties: row.properties,
     id: row.id,
   })))
 

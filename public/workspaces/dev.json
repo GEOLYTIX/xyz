@@ -22,7 +22,7 @@
     "cluster": {
       "src": "file:public/views/cluster.html"
     },
-    "Mapbox Base": {
+    "mapbox_base": {
       "format": "mbtiles",
       "mbStyle": "mapbox://styles/dbauszus/ciozrimi3002bdsm8bjtn2v1y",
       "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2t3NmJqZ3N4MG9zeDJ1bGprdzQ2ODllMCJ9.3xhSOxQLx1Egv5i8W7B57A",
@@ -142,7 +142,7 @@
           "group": "Base"
         },
         "mapbox_base": {
-          "template": "Mapbox Base",
+          "template": "mapbox_base",
           "display": true,
           "group": "Base"
         },
@@ -1464,7 +1464,7 @@
       "layers": {
         "Base": {
           "display": true,
-          "template": "Mapbox Base"
+          "template": "mapbox_base"
         },
         "Offices": {
           "display": true,
@@ -1509,6 +1509,45 @@
     },
     "private": {
       "layers": {}
+    },
+    "Bristol": {
+      "extent": {
+        "north": 51.6,
+        "east": -2.7,
+        "south": 51.4,
+        "west": -2.5,
+        "mask": true
+      },
+      "minZoom": 2,
+      "maxZoom": 17,
+      "layers": {
+        "mapbox_base": {
+          "template": "mapbox_base",
+          "display": true
+        },
+        "sentiment": {
+          "display": true,
+          "format": "geojson",
+          "type": "cluster",
+          "cluster_distance": 100,
+          "dbs": "DEV",
+          "table": "dev.bristol_sentiment",
+          "geom": "geom_4326",
+          "properties": {
+            "sentiment": "sentiment"
+          },
+          "srid": "4326",
+          "qID": "id",
+          "style": {
+            "cluster": {
+              "icon": {
+                "type": "dot",
+                "scale": 2
+              }
+            }
+          }
+        }
+      }
     }
   }
 }
