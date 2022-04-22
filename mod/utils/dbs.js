@@ -11,7 +11,7 @@ module.exports = () => {
 
       if (process.env[key].match(/^postgres/)) return postgres(key.split('_')[1], process.env[key])
 
-      if (process.env[key].match(/^aurora/)) return aurora(key.split('_')[1], process.env[key])
+      // if (process.env[key].match(/^aurora/)) return aurora(key.split('_')[1], process.env[key])
 
     })
 
@@ -44,39 +44,39 @@ module.exports = () => {
 
   }
 
-  function aurora(key, connectionString) {
+  // function aurora(key, connectionString) {
 
-    const keyValueArr = connectionString.split('|')
+  //   const keyValueArr = connectionString.split('|')
     
-    const apiclient = require('data-api-client')({
-      engine: 'pg',
-      options: {
-        accessKeyId: keyValueArr[1],
-        secretAccessKey: keyValueArr[2],
-        region: keyValueArr[3],
-      },
-      resourceArn: keyValueArr[4],
-      secretArn: keyValueArr[5],
-      database: keyValueArr[6]
-    })
+  //   const apiclient = require('data-api-client')({
+  //     engine: 'pg',
+  //     options: {
+  //       accessKeyId: keyValueArr[1],
+  //       secretAccessKey: keyValueArr[2],
+  //       region: keyValueArr[3],
+  //     },
+  //     resourceArn: keyValueArr[4],
+  //     secretArn: keyValueArr[5],
+  //     database: keyValueArr[6]
+  //   })
 
-    dbs[key] = async (q) => {
+  //   dbs[key] = async (q) => {
 
-      // Request which accepts q and arr and will return rows or rows.err.
-      try {
+  //     // Request which accepts q and arr and will return rows or rows.err.
+  //     try {
   
-        const { records } = await apiclient.query(q);
+  //       const { records } = await apiclient.query(q);
   
-        return records
+  //       return records
   
-      } catch (err) {
-        console.error(err)
-        return err
-      }
+  //     } catch (err) {
+  //       console.error(err)
+  //       return err
+  //     }
   
-    }
+  //   }
 
-  }
+  // }
 
   return dbs
 
