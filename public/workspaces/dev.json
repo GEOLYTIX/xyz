@@ -1451,7 +1451,7 @@
               "type": "report",
               "report": {
                 "template": "v4",
-                "name": "Site Report"
+                "label": "Site Report"
               }
             },
             {
