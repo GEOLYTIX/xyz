@@ -116,7 +116,15 @@
       "gazetteer": {
         "provider": "GOOGLE",
         "country": "GB",
-        "placeholder": "eg. London"
+        "placeholder": "eg. London",
+        "datasets": [
+          {
+            "layer": "retail_points",
+            "table": "dev.retail_points",
+            "qterm": "store_name",
+            "label": "(store_name || ' - ' || fascia)"
+          }
+        ]
       },
       "plugins": [
         "${DIR}/js/plugins/cluster_panel.js",
