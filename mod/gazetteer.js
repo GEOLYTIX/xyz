@@ -107,12 +107,11 @@ async function gaz_locale(req, locale, results) {
 
     const layer = locale.layers[dataset.layer]
 
-    const roles = Roles.filter(layer, req.params.user && req.params.user.roles)
+    if (!Roles.check(layer, req.params.user?.roles)) {
+      continue;
+    }
 
-    if (!roles && layer.roles) {
-       console.log("User roles: Access prohibited.")
-       continue;
-    }//return res.status(403).send('Access prohibited.');
+    const roles = Roles.filter(layer, req.params.user?.roles)
 
     let phrase = dataset.space_wildcard 
       && `${decodeURIComponent(req.params.q).replace(new RegExp(/  */g), '% ')}%` 
