@@ -646,58 +646,6 @@
               },
               "query": "chartdata"
             },
-            "Chart(Data)": {
-              "target": "tabview",
-              "display": true,
-              "chart": {
-                "type": "pie",
-                "labels": [
-                  "Owner Occupied",
-                  "Renting",
-                  "Social",
-                  "Rent Free"
-                ],
-                "plugins": [
-                  "ChartDataLabels"
-                ],
-                "options": {
-                  "maintainAspectRatio": false,
-                  "plugins": {
-                    "datalabels": {
-                      "color": "#fff"
-                    }
-                  }
-                },
-                "datasets": [
-                  {
-                    "fields": [
-                      "Owner Occupied",
-                      "Renting",
-                      "Social",
-                      "Rent Free"
-                    ],
-                    "backgroundColor": [
-                      "#cddc39",
-                      "#00bcd4",
-                      "#ffc107",
-                      "#33691e"
-                    ]
-                  }
-                ]
-              },
-              "data": {
-                "datasets": [
-                  {
-                    "data": [
-                      0.4168,
-                      0.2782,
-                      0.2912,
-                      0.0137
-                    ]
-                  }
-                ]
-              }
-            },
             "F03": {
               "title": "This title is probably too long",
               "target": "tabview",
