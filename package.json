@@ -6,7 +6,8 @@
     "url": "https://github.com/geolytix/xyz"
   },
   "scripts": {
-    "test": "web-test-runner \"test/**/*.test.js\" --node-resolve"
+    "test": "web-test-runner \"test/**/*.test.js\" --node-resolve",
+    "build": "npx esbuild ./lib/mapp.mjs ./lib/ui.mjs --bundle --minify --tree-shaking=false --sourcemap  --format=esm --platform=browser --outdir=./public/js/lib"
   },
   "license": "MIT",
   "dependencies": {
@@ -22,8 +23,8 @@
   "devDependencies": {
     "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
+    "esbuild": "^0.14.38",
     "express": "^4.17.1",
-    "snowpack": "^3.8.8",
     "uhtml": "^2.8.0"
   }
 }
