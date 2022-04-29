@@ -12,6 +12,7 @@
     "_dev": "webpack --mode development"
   },
   "dependencies": {
+    "@geolytix/saml2-js": "^3.0.2",
     "aws-sdk": "^2.820.0",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.24.0",
@@ -20,8 +21,7 @@
     "nanoid": "^3.2.0",
     "node-fetch": "^2.6.7",
     "nodemailer": "^6.6.0",
-    "pg": "^8.5.1",
-    "saml2-js": "^3.0.1"
+    "pg": "^8.5.1"
   },
   "devDependencies": {
     "@turf/circle": "^6.3.0",
