@@ -1,4 +1,4 @@
-const saml2 = require("saml2-js");
+const saml2 = require("@geolytix/saml2-js");
 const { join } = require("path");
 const { readFileSync } = require("fs");
 const logger = require('../logger')
