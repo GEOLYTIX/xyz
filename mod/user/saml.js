@@ -38,32 +38,33 @@ const idp = new saml2.IdentityProvider({
 });
 
 module.exports = (req, res) => {
+
   if (req.url.match(/\/saml\/metadata/)) {
     res.setHeader("Content-Type", "application/xml");
     res.send(sp.create_metadata());
   }
 
-  // if (req.url.match(/\/saml\/logout/)) {
-  //   const cookie = req.cookies && req.cookies[process.env.TITLE];
+  if (req.url.match(/\/saml\/logout/)) {
+    const cookie = req.cookies && req.cookies[process.env.TITLE];
 
-  //   jwt.verify(cookie, process.env.SECRET, (err, user) => {
-  //     if (err) return err;
+    jwt.verify(cookie, process.env.SECRET, (err, user) => {
+      if (err) return err;
 
-  //     sp.create_logout_request_url(
-  //       idp,
-  //       {
-  //         name_id: user.name_id,
-  //         session_index: user.session_index,
-  //       },
-  //       (err, logout_url) => {
-  //         if (err != null) return res.send(500);
+      sp.create_logout_request_url(
+        idp,
+        {
+          name_id: user.name_id,
+          session_index: user.session_index,
+        },
+        (err, logout_url) => {
+          if (err != null) return res.send(500);
 
-  //         res.setHeader("location", logout_url);
-  //         res.status(301).send();
-  //       }
-  //     );
-  //   });
-  // }
+          res.setHeader("location", logout_url);
+          res.status(301).send();
+        }
+      );
+    });
+  }
 
   if (req.params?.login || req.url.match(/\/saml\/login/)) {
     sp.create_login_request_url(idp, {}, (err, login_url, request_id) => {
@@ -75,7 +76,6 @@ module.exports = (req, res) => {
   }
 
   if (req.url.match(/\/saml\/acs/)) {
-
     sp.post_assert(
       idp,
       {
@@ -98,6 +98,10 @@ module.exports = (req, res) => {
         if (process.env.SAML_ACL) {
 
           const acl_response = await acl_lookup(saml_response.user.name_id)
+
+          if (!acl_response) {
+            return res.status(401).send('User account not found')
+          }
 
           if (acl_response instanceof Error) {
             return res.status(401).send(acl_response.message)
@@ -154,7 +158,7 @@ async function acl_lookup(email) {
   if (!user) {
 
     // Return a blank
-    return {}
+    return null;
   }
 
   // Blocked user cannot login.

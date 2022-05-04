@@ -42,7 +42,7 @@ module.exports = async (name, language = 'en', params = {}) => {
 
   const templates = merge({}, view_templates, mail_templates, msg_templates, await custom_templates)
 
-  let template = templates[name] && (templates[name][language] || templates[name].en)
+  let template = templates[name] && (templates[name][language] || templates[name].en) || name
 
   if (!template) return;
 

@@ -13,7 +13,6 @@
   },
   "dependencies": {
     "@geolytix/saml2-js": "^3.0.3",
-    "aws-sdk": "^2.820.0",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.24.0",
     "jsonwebtoken": "^8.5.1",
@@ -35,7 +34,7 @@
     "express": "^4.17.1",
     "jwt-decode": "^2.2.0",
     "uhtml": "^2.5.3",
-    "webpack": "^5.28.0",
-    "webpack-cli": "^4.3.1"
+    "webpack": "^5.72.0",
+    "webpack-cli": "^4.9.2"
   }
 }

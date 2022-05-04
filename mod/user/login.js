@@ -16,7 +16,7 @@ module.exports = async (req, res, message) => {
 
   if (!acl) return res.status(500).send('ACL unavailable.')
 
-  if (req.body && req.body.login) {
+  if (req.body) {
 
     const user = await post(req)
 
@@ -54,7 +54,7 @@ module.exports = async (req, res, message) => {
 
   message = await templates(req.params.msg || message, req.params.language)
 
-  if (req.params.user) {
+  if (!message && req.params.user) {
 
     res.setHeader('location', `${process.env.DIR}`)
     res.status(302).send()
