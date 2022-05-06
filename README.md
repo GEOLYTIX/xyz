@@ -36,8 +36,6 @@ Dynamic module imports reduce the need to bundle 3rd party libraries such as [Ta
 
 Node.js v12+
 
-[aws-sdk](https://www.npmjs.com/package/aws-sdk) - Interface for Amazon Web Services.
-
 [bcryptjs](https://www.npmjs.com/package/bcryptjs) - Optimized bcrypt in JavaScript with zero dependencies.
 
 [cloudinary](https://www.npmjs.com/package/cloudinary) - Provides simple, yet comprehensive image and video upload, transformation, optimization, and delivery capabilities.
