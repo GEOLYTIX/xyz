@@ -12,7 +12,6 @@
   "license": "MIT",
   "dependencies": {
     "@geolytix/saml2-js": "^3.0.3",
-    "aws-sdk": "^2.1122.0",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.24.0",
     "jsonwebtoken": "^8.5.1",

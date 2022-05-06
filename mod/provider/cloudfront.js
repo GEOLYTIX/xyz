@@ -7,13 +7,13 @@ const httpsAgent = new https.Agent({
 
 const fetch = require('node-fetch')
 
-const AWS = require("aws-sdk")
+const { Signer } = require('./cloudfrontSigner')
 
 const { readFileSync } = require('fs')
 
 const { join } = require('path')
 
-const awsSigner = process.env.KEY_CLOUDFRONT && new AWS.CloudFront.Signer(
+const awsSigner = new Signer(
   process.env.KEY_CLOUDFRONT,
   String(readFileSync(join(__dirname, `../../${process.env.KEY_CLOUDFRONT}.pem`))))
 
@@ -23,7 +23,7 @@ module.exports = async ref => {
 
     const url = (ref.params?.url || ref).replace(/\{(.*?)\}/g,
       matched => process.env[`SRC_${matched.replace(/\{|\}/g, '')}`] || matched)
-  
+
     const signedURL = awsSigner.getSignedUrl({
       url: `https://${url}`,
       expires: Date.now() + 60 * 60 * 1000 // 1 hour

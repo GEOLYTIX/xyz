@@ -1,10 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-
 exports.Signer = void 0;
-
-const crypto = require("crypto");
-
+var crypto_1 = require("crypto");
 var queryEncode = function (string) {
     var replacements = {
         '+': '-',
@@ -15,7 +12,6 @@ var queryEncode = function (string) {
         return replacements[match];
     });
 };
-
 var determineScheme = function (url) {
     var parts = url.split('://');
     if (parts.length < 2) {
@@ -23,12 +19,10 @@ var determineScheme = function (url) {
     }
     return parts[0].replace('*', '');
 };
-
 var getRtmpUrl = function (rtmpUrl) {
     var parsed = new URL(rtmpUrl);
     return parsed.pathname.replace(/^\//, '') + parsed.search + parsed.hash;
 };
-
 var getResource = function (url) {
     switch (determineScheme(url)) {
         case 'http':
@@ -40,13 +34,11 @@ var getResource = function (url) {
             throw new Error('Invalid URI scheme. Scheme must be one of' + ' http, https, or rtmp');
     }
 };
-
 var signPolicy = function (policy, privateKey) {
-    var sign = crypto.createSign('RSA-SHA1');
+    var sign = crypto_1.createSign('RSA-SHA1');
     sign.write(policy);
     return queryEncode(sign.sign(privateKey, 'base64'));
 };
-
 var signWithCannedPolicy = function (url, expires, keyPairId, privateKey) {
     var policy = JSON.stringify({
         Statement: [
@@ -62,7 +54,6 @@ var signWithCannedPolicy = function (url, expires, keyPairId, privateKey) {
         Signature: signPolicy(policy.toString(), privateKey),
     };
 };
-
 var signWithCustomPolicy = function (policy, keyPairId, privateKey) {
     var modifiedPolicy = policy.replace(/\s/gm, '');
     return {
@@ -71,7 +62,6 @@ var signWithCustomPolicy = function (policy, keyPairId, privateKey) {
         Signature: signPolicy(policy, privateKey),
     };
 };
-
 var Signer = /** @class */ (function () {
     function Signer(keyPairId, privateKey) {
         if (keyPairId === void 0 || privateKey === void 0) {
@@ -116,5 +106,4 @@ var Signer = /** @class */ (function () {
     };
     return Signer;
 }());
-
 exports.Signer = Signer;
