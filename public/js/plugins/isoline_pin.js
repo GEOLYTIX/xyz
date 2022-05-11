@@ -1,10 +1,6 @@
 export default (function () {
 
-  const geoJSON = new ol.format.GeoJSON();
-
   mapp.ui.locations.entries.isoline_pin = entry => {
-
-    console.log(entry.location.layer.edit)
 
     let point;
 
