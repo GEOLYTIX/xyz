@@ -368,9 +368,10 @@ window.onload = async () => {
   }
 
   mapp.user &&
+    mapview.locale.idle &&
     mapp.ui.utils.idleMask({
       host: mapview.host,
-      idle: mapview.locale.idle ?? 600,
+      idle: mapview.locale.idle,
     });
 
   // Append user admin link.
