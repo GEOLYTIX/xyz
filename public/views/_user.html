@@ -192,6 +192,8 @@
 
   <h1>Account admin | <a style="color:#B71C1C" href="?logout=true">Logout</a></h1>
 
+  <label>Filter<input id="filterInput" type="text" placeholder="e.g. geolytix" style="margin: 10px;"></label>
+
   <div id="userTable"></div>
 
 </body>
@@ -211,11 +213,12 @@
 
     const data = response.length && response || [response]
 
+    // Sort data to promote email from url parameter to top.
     if (params.email) {
       data.sort(function (x, y) { return x.email == params.email ? -1 : y.email == params.email ? 1 : 0; });
     }
 
-    new Tabulator(document.getElementById('userTable'),
+    const userTable = new Tabulator(document.getElementById('userTable'),
       {
         rowFormatter: row => {
 
@@ -326,6 +329,13 @@
         layout: 'fitDataFill',
         data: data
       });
+
+    document.getElementById("filterInput").oninput = e => {
+
+      // Check whether email or role includes filter term.
+      userTable.setData(data.filter(user => user.email.includes(e.target.value)
+        || user.roles.some(role => role.includes(e.target.value))))
+    } 
 
     async function removeExpiry(e, cell) {
 
