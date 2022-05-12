@@ -38,6 +38,7 @@ const idp = new saml2.IdentityProvider({
 });
 
 module.exports = (req, res) => {
+  
   if (req.url.match(/\/saml\/metadata/)) {
     res.setHeader("Content-Type", "application/xml");
     res.send(sp.create_metadata());
@@ -99,6 +100,10 @@ module.exports = (req, res) => {
 
           const acl_response = await acl_lookup(saml_response.user.name_id)
 
+          if (!acl_response) {
+            return res.status(401).send('User account not found')
+          }
+
           if (acl_response instanceof Error) {
             return res.status(401).send(acl_response.message)
           }
@@ -151,11 +156,7 @@ async function acl_lookup(email) {
   // Get user record from first row.
   const user = rows[0]
 
-  if (!user) {
-
-    // Return a blank
-    return {}
-  }
+  if (!user) return null;
 
   // Blocked user cannot login.
   if (user.blocked) {

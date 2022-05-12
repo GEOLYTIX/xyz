@@ -571,12 +571,7 @@ mapp.utils.merge(mapp.dictionaries,{en:{layer_zoom_to_extent:"Zoom to filtered l
       action="${`${u.host}/api/user/login`}"
       method="post"
       autocomplete="off">
-     
-      <input
-        name="login"
-        class="display-none"
-        value=true>
-  
+       
       <input
         name="language"
         class="display-none"
