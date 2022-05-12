@@ -33,8 +33,13 @@ async function view(req, res) {
 
 async function post(req, res) {
 
-  // Test whether the provided email is valid.
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(req.body.email)) return res.status(403).send('Invalid email provided')
+  if (!req.body.email) return res.status(400).send('No email provided')
+
+  // Test email address
+  if (!/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/.test(req.body.email)) {
+
+    return res.status(400).send('Provided email address is invalid')
+  }
 
   // Test whether a password has been provided.
   if (!req.body.password) return res.status(400).send('No password provided')
