@@ -35,6 +35,9 @@ const methods = {
   },
   cookie: {
     handler: require('./cookie')
+  },
+  login: {
+    handler: require('./login')
   }
 }
 

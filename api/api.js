@@ -138,7 +138,15 @@ module.exports = async (req, res) => {
   }
 
   // The login view will be returned for all PRIVATE requests without a valid user.
-  if (!user && process.env.PRIVATE) return login(req, res)
+  if (!user && process.env.PRIVATE) {
+
+    if (process.env.SAML_LOGIN) {
+      res.setHeader('location', `${process.env.DIR}/saml/login`)
+      return res.status(302).send()
+    }
+
+    return login(req, res)
+  }
 
   // Retrieve workspace and assign to request params.
   const workspace = await workspaceCache(req)

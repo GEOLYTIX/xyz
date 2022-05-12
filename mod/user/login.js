@@ -52,6 +52,13 @@ module.exports = async (req, res, message) => {
 
   message = await templates(req.params.msg || message, req.params.language)
 
+  if (req.params.user) {
+
+    res.setHeader('location', `${process.env.DIR}`)
+    res.status(302).send()
+    return;
+  }
+
   view(req, res, message)
 }
 

@@ -65,7 +65,7 @@ module.exports = (req, res) => {
   //   });
   // }
 
-  if (req.url.match(/\/saml\/login/)) {
+  if (req.params?.login || req.url.match(/\/saml\/login/)) {
     sp.create_login_request_url(idp, {}, (err, login_url, request_id) => {
       if (err != null) return res.send(500);
 
