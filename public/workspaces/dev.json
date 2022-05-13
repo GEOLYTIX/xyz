@@ -172,7 +172,7 @@
         "google_roads": {
           "group": "Base",
           "format": "tiles",
-          "URI": "http://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}",
+          "URI": "https://mt0.google.com/vt/lyrs=m&hl=en&x={x}&y={y}&z={z}",
           "attribution": {
             "© Google": "https://cloud.google.com/maps-platform/terms"
           }
