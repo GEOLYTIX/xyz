@@ -6,21 +6,12 @@
     "embedded": {
       "src": "file:public/views/embedded.html"
     },
-    "chart": {
-      "src": "file:public/views/chart.html"
-    },
-    "table": {
-      "src": "file:public/views/table.html"
-    },
-    "highlight": {
-      "src": "file:public/views/highlight.html"
+    "edit": {
+      "src": "file:public/views/edit.html"
     },
     "bristol_sentiment": {
       "template": "select id, sentiment, st_asgeojson(geom_4326) as geom from dev.bristol_sentiment where not is_deleted;",
       "dbs": "DEV"
-    },
-    "cluster": {
-      "src": "file:public/views/cluster.html"
     },
     "mapbox_base": {
       "format": "mbtiles",

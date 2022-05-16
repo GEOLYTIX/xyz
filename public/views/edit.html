@@ -99,15 +99,24 @@
 
     const host = document.head.dataset.dir || new String("");
 
+    let locales
+
+    // An array locales can be queried if the current locale is not known.
+    if (!mapp.hooks.current.locale) {
+      locales = await mapp.utils.xhr(`${host}/api/workspace/locales`);
+    }
+
     // Load the current locale or the first locale from the array of available locales.
-    const locale = await mapp.utils.xhr(`${host}/api/workspace/locale?locale=UK`);
+    const locale = await mapp.utils.xhr(`${host}/api/workspace/locale?locale=${mapp.hooks.current.locale || locales[0].key}`);
 
     const mapview = mapp.Mapview({
       host: host,
       target: 'Map',
       locale: locale,
       scrollWheelZoom: true,
+      scalebar: 'metric',//'imperial'
       controls: [new ol.control.Zoom()],
+      hooks: true,
       attribution: {
         target: document.querySelector('#Map > .attribution-links'),
         links: {
@@ -117,41 +126,53 @@
         },
       }
     });
-   
-    const layers = await mapp.utils.promiseAll(["mapbox_base", "zoomgeom", "retail_points"].map(
+    
+    const layers = await mapp.utils.promiseAll(locale.layers.map(
       layer => mapp.utils.xhr(`${host}/api/workspace/layer?`
         + `locale=${locale.key}&layer=${layer}`)))
-
-
-    layers.forEach(layer => layer.display = true)
     
     await mapview.addLayer(layers);
 
-    const locations = {}
 
-    mapview.interactions.highlight({
-      layerFilter: featureLayer => mapview.layers.zoomgeom.L === featureLayer,
-      __highlight: feature => console.log(feature),
-      getLocation: async feature => {
+    let currentLocation;
 
-        let location = await mapp.location.get({
-          layer: feature.layer,
-          table: feature.layer.table || feature.layer.tableCurrent(),
-          id: feature.layer.highlight
-        }, locations)
+    mapview.locations = new Proxy(mapview.locations, {
+      set: function (target, key, location) {
+        Reflect.set(...arguments);
 
-        if (!location) return;
+        currentLocation && currentLocation.remove()
 
-        let geomEntry = location.infoj.find(entry => entry.type === 'geometry')
+        location.pinStyle = mapp.utils.style({
+          icon: {
+            type: 'markerColor',
+            colorMarker: '#003D57',
+            colorDot: '#EC602D',
+            anchor: [0.5, 1],
+            scale: 3,
+          }
+        })
 
-        geomEntry.style = {
-          "fillColor": "#f00",
-          "fillOpacity": 0.5
-        }
+        location.infoj = location.infoj
+          .filter(entry => !entry.type === 'dataview')
 
-        mapp.ui.locations.entries.geometry(geomEntry)
+        location.view = document.getElementById('Location')
+          .appendChild(mapp.ui.locations.infoj(location))
+
+        return true;
       }
-    })
+    });
+
+    mapview.interactions.highlight();
+
+    // Select locations from hooks.
+    mapp.hooks.current.locations.forEach((_hook) => {
+      const hook = _hook.split("!");
+
+      mapp.location.get({
+        layer: mapview.layers[decodeURIComponent(hook[0])],
+        id: hook[1],
+      });
+    });
 
   }
 
