@@ -132,7 +132,8 @@
         "${DIR}/js/plugins/measure_distance.js",
         "${DIR}/js/plugins/draw_circle_element.js",
         "${DIR}/js/plugins/modify_context_menu.js",
-        "${DIR}/js/plugins/pin_from_geom.js"
+        "${DIR}/js/plugins/pin_from_geom.js",
+        "${DIR}/js/plugins/screenshot.js"
       ],
       "measure_distance": {
         "tooltip": "length",
@@ -152,7 +153,8 @@
         "mapbox_base": {
           "template": "mapbox_base",
           "display": true,
-          "group": "Base"
+          "group": "Base",
+          "preserveDrawingBuffer": true
         },
         "mapbox_colour": {
           "template": "Mapbox Colour",

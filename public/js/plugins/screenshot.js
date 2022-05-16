@@ -1,15 +1,16 @@
-document.dispatchEvent(
-  new CustomEvent("screenshot", {
-    detail: (_xyz) => {
-      if (!document.getElementById("mapButton")) return;
+export default (function(){
 
-      document.getElementById("mapButton").appendChild(_xyz.utils.html.node`
+    const pluginBtn = document.getElementById("plugin-btn");
+  
+    if(!pluginBtn) return;
+  
+    pluginBtn.after(mapp.utils.html.node`
       <button
-        class="mobile-display-none"
-          title="Create screenshot from map canvas."
-          onclick=${(e) => {
+        class="mask-icon add-photo mobile-display-none"
+        title="Create screenshot from map canvas."
+        onclick=${(e) => {
 
-            html2canvas(_xyz.mapview.node).then((canvas) => {
+            html2canvas(document.getElementById('OL')).then((canvas) => {
 
               const byteArrays = [];
 
@@ -47,10 +48,9 @@ document.dispatchEvent(
               
               window.open(blobUrl, "_blank");
             });
-          }}><div class="xyz-icon icon-image">`);
-    },
-  })
-);
+          }}>`);
+
+})()
 
 /*!
  * html2canvas 1.3.2 <https://html2canvas.hertzen.com>
