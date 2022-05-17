@@ -9,7 +9,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.12.0/build/ol.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.14.1/build/ol.js" defer></script>
 
   <!-- Load XYZ / MAPP stylesheet and library. -->
   <link rel="stylesheet" href="{{dir}}/css/mapp.css" />
@@ -116,7 +116,7 @@
       scrollWheelZoom: true,
       scalebar: 'metric',//'imperial'
       controls: [new ol.control.Zoom()],
-      hooks: true,
+      //hooks: true,
       attribution: {
         target: document.querySelector('#Map > .attribution-links'),
         links: {
@@ -142,6 +142,8 @@
 
         currentLocation && currentLocation.remove()
 
+        currentLocation = location
+
         location.pinStyle = mapp.utils.style({
           icon: {
             type: 'markerColor',
@@ -151,9 +153,6 @@
             scale: 3,
           }
         })
-
-        location.infoj = location.infoj
-          .filter(entry => !entry.type === 'dataview')
 
         location.view = document.getElementById('Location')
           .appendChild(mapp.ui.locations.infoj(location))

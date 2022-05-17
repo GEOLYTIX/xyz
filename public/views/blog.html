@@ -9,7 +9,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.12.0/build/ol.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.14.1/build/ol.js" defer></script>
 
   <!-- Load XYZ / MAPP stylesheet and library. -->
   <link rel="stylesheet" href="{{dir}}/css/mapp.css" />
@@ -133,34 +133,35 @@
     
     await mapview.addLayer(layers);
 
-    // Use currentLocation to limit selection size to 1.
+
     let currentLocation;
 
-    mapp.location.get = mapp.utils.compose(
-      mapp.location.get,
-      select)
+    mapview.locations = new Proxy(mapview.locations, {
+      set: function (target, key, location) {
+        Reflect.set(...arguments);
 
-    async function select(getLocation) {
+        currentLocation && currentLocation.remove()
 
-      const location = await getLocation;
+        currentLocation = location
 
-      currentLocation && currentLocation.remove()
+        location.pinStyle = mapp.utils.style({
+          icon: {
+            type: 'markerColor',
+            colorMarker: '#003D57',
+            colorDot: '#EC602D',
+            anchor: [0.5, 1],
+            scale: 3,
+          }
+        })
 
-      currentLocation = location
+        location.infoj.filter(entry => entry.type !== 'dataview')
 
-      location.pinStyle = mapp.utils.style({
-        icon: {
-          type: 'markerColor',
-          colorMarker: '#003D57',
-          colorDot: '#EC602D',
-          anchor: [0.5, 1],
-          scale: 3,
-        }
-      })
+        location.view = document.getElementById('Location')
+          .appendChild(mapp.ui.locations.infoj(location, location.infoj.filter(entry => entry.type !== 'dataview')))
 
-      location.view = document.getElementById('Location')
-        .appendChild(mapp.ui.locations.infoj(location))
-    }
+        return true;
+      }
+    });
 
     mapview.interactions.highlight();
 
