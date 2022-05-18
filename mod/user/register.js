@@ -44,7 +44,7 @@ async function post(req, res) {
 
   // Attempt to retrieve ACL record with matching email field.
   var rows = await acl(`
-    SELECT email, language, blocked
+    SELECT email, password, language, blocked
     FROM acl_schema.acl_table 
     WHERE lower(email) = lower($1);`,
     [req.body.email])
@@ -52,6 +52,11 @@ async function post(req, res) {
   if (rows instanceof Error) return res.status(500).send(await templates('failed_query', req.params.language))
 
   const user = rows[0]
+
+  if (user?.password === null) {
+
+    return res.status(401).send('User account has restricted access')
+  }
 
   // Hash user the password from the body.
   const password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(8))

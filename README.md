@@ -1,4 +1,10 @@
-**v3.7.2**
+**v3.7.3**
+
+Please use the v4 branch for new projects.
+
+This branch is now in long term support.
+
+No features will be added to this branch.
 
 # xyz
 
@@ -11,8 +17,6 @@ The pattern for the Node **domain and service layers** are that of a RESTful API
 Spatial data must be stored in a cloud accessible PostGIS database to allow for the creation and caching of vector tiles in the **data source layer**.
 
 **Application control and presentation layers** are provided as an ES6 javscript library. XYZ' client library utilizes the Openlayers mapping engine among other visualisation libraries such as Tabulator and ChartJS to power engaging application views.
-
-Please visit [geolytix.github.io/xyz/docs](https://geolytix.github.io/xyz/docs) for project documentation hosted from the development branch of this repository.
 
 ### JAMstack Application Views
 

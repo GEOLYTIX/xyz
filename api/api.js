@@ -56,8 +56,12 @@ module.exports = async (req, res) => {
   logger(req.url, 'req_url')
 
   if (req.url.match(/\/saml/)) {
+
+    // if process.env.SAML_ENTITY_ID is not set
     if (!saml) return;
-    return saml(req, res)
+
+    saml(req, res)
+    return;
   }
 
   // Merge request params and query params.
@@ -135,11 +139,21 @@ module.exports = async (req, res) => {
 
     // Return the login view with the msg.
     msg && login(req, res, msg)
-    return
+    return;
   }
 
   // The login view will be returned for all PRIVATE requests without a valid user.
-  if (!user && process.env.PRIVATE) return login(req, res)
+  if (!user && process.env.PRIVATE) {
+
+    if (process.env.SAML_LOGIN) {
+      res.setHeader('location', `${process.env.DIR}/saml/login`)
+      res.status(302).send()
+      return;
+    }
+
+    login(req, res)
+    return;
+  }
 
   // Retrieve workspace and assign to request params.
   const workspace = await workspaceCache(req)
