@@ -1,7 +1,7 @@
 export default (function(){
 
   mapp.plugins.measure_distance = (options, mapview) => {
-    
+
     const pluginBtn = document.getElementById("plugin-btn");
   
     if(!pluginBtn) return;
@@ -151,6 +151,13 @@ export default (function(){
                 ${parseInt(section.summary.duration / 60)}min`}`
                   
           })
+        })
+
+        mapview.Map.on('contextmenu', e => {
+          e.preventDefault()
+          pluginBtn.nextSibling.classList.remove('active') 
+          mapview.interaction?.finish()
+          mapview.interactions.highlight()
         })
       }
 
