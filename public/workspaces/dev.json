@@ -955,6 +955,7 @@
             "polygon": true,
             "freehand": true,
             "circle": true,
+            "locator": true,
             "circle_from_center": {
               "units": "km",
               "radius": 500
