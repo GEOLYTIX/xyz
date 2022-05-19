@@ -1204,51 +1204,36 @@
               "display": true,
               "chart": {
                 "type": "pie",
-                "labels": [
-                  "Owner Occupied",
-                  "Renting",
-                  "Social",
-                  "Rent Free"
-                ],
-                "plugins": [
-                  "ChartDataLabels"
-                ],
-                "options": {
-                  "maintainAspectRatio": false,
-                  "plugins": {
-                    "datalabels": {
-                      "color": "#fff"
+                "data": {
+                  "labels": [
+                    "Owner Occupied",
+                    "Renting",
+                    "Social",
+                    "Rent Free"
+                  ],
+                  "datasets": [
+                    {
+                      "fields": [
+                        "Owner Occupied",
+                        "Renting",
+                        "Social",
+                        "Rent Free"
+                      ],
+                      "backgroundColor": [
+                        "#cddc39",
+                        "#00bcd4",
+                        "#ffc107",
+                        "#33691e"
+                      ],
+                      "data": [
+                        0.4168,
+                        0.2782,
+                        0.2912,
+                        0.0137
+                      ]
                     }
-                  }
-                },
-                "datasets": [
-                  {
-                    "fields": [
-                      "Owner Occupied",
-                      "Renting",
-                      "Social",
-                      "Rent Free"
-                    ],
-                    "backgroundColor": [
-                      "#cddc39",
-                      "#00bcd4",
-                      "#ffc107",
-                      "#33691e"
-                    ]
-                  }
-                ]
-              },
-              "data": {
-                "datasets": [
-                  {
-                    "data": [
-                      0.4168,
-                      0.2782,
-                      0.2912,
-                      0.0137
-                    ]
-                  }
-                ]
+                  ]
+                }
               }
             },
             {
@@ -1257,52 +1242,36 @@
               "type": "dataview",
               "target": "location",
               "chart": {
-                "type": "pie",
-                "labels": [
-                  "Owner Occupied",
-                  "Renting",
-                  "Social",
-                  "Rent Free"
-                ],
-                "plugins": [
-                  "ChartDataLabels"
-                ],
-                "options": {
-                  "maintainAspectRatio": false,
-                  "plugins": {
-                    "datalabels": {
-                      "color": "#fff"
+                "data": {
+                  "labels": [
+                    "Owner Occupied",
+                    "Renting",
+                    "Social",
+                    "Rent Free"
+                  ],
+                  "datasets": [
+                    {
+                      "fields": [
+                        "Owner Occupied",
+                        "Renting",
+                        "Social",
+                        "Rent Free"
+                      ],
+                      "backgroundColor": [
+                        "#cddc39",
+                        "#00bcd4",
+                        "#ffc107",
+                        "#33691e"
+                      ],
+                      "data": [
+                        0.4168,
+                        0.2782,
+                        0.2912,
+                        0.0137
+                      ]
                     }
-                  }
-                },
-                "datasets": [
-                  {
-                    "fields": [
-                      "Owner Occupied",
-                      "Renting",
-                      "Social",
-                      "Rent Free"
-                    ],
-                    "backgroundColor": [
-                      "#cddc39",
-                      "#00bcd4",
-                      "#ffc107",
-                      "#33691e"
-                    ]
-                  }
-                ]
-              },
-              "data": {
-                "datasets": [
-                  {
-                    "data": [
-                      0.4168,
-                      0.2782,
-                      0.2912,
-                      0.0137
-                    ]
-                  }
-                ]
+                  ]
+                }
               }
             },
             {
