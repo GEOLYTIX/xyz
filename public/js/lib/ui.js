@@ -468,8 +468,8 @@ mapp.utils.merge(mapp.dictionaries,{en:{layer_zoom_to_extent:"Zoom to filtered l
       height: ${e.height+"px"||"100%"};
       background-image:${t};`;return mapp.utils.html`<div style=${l}>`}if(!e.fillColor&&e.strokeColor){let t=`
       M 0,${e.height/2}
-      L ${e.width/2},0
-      ${e.width/2},${e.height}
+      L ${e.width/2},${e.height/2}
+      ${e.width/2},${e.height/2}
       ${e.width},${e.height/2}`,l=mapp.utils.svg.node`
       <svg height=${e.height} width=${e.width}>
         <path d=${t}
