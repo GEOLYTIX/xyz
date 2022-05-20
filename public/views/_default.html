@@ -59,20 +59,6 @@
       position: fixed;
     }
 
-    .layers_header {
-      position:  relative;
-      padding: 1em;
-    } 
-
-    .layers_header > .logo {
-      position:absolute;
-      z-index: 999;
-      height: 1em;
-      left: 5px;
-      bottom: 5px;
-      text-decoration: none;
-    }
-
     .attribution-links {
       max-width: calc(100% - 140px);
     }
@@ -85,11 +71,15 @@
       background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 70%);
     }
 
-    .logo_mobile {
-      display:  none;
-    }
-
     @media only screen and (min-width: 768px) {
+
+      #ctrl-panel {
+        transform: rotateY(180deg);
+      }
+
+      #ctrl-panel > .tab {
+        transform: rotateY(180deg);
+      }
 
       .desktop-display-none {
         display: none;
@@ -150,26 +140,16 @@
       #ctrls {
         grid-row: 1/4;
         grid-column: 1;
-        padding: 15px;
+        /* padding: 15px;
         transform: rotateY(180deg);
         overflow-y: auto;
-        overflow-x: hidden;
+        overflow-x: hidden; */
+
+        height: 100%;
+        overflow: hidden;
       }
 
       .fullscreen #ctrls {
-        display: none;
-      }
-
-      #ctrls>div {
-        transform: rotateY(180deg);
-      }
-
-      #gazetteer {
-        margin-bottom: 15px;
-        z-index: 9999;
-      }
-
-      #closeGazetteer {
         display: none;
       }
 
@@ -205,19 +185,6 @@
         pointer-events: none;
       }
 
-      .logo_mobile {
-        display:  block;
-      }
-
-      .logo_mobile > .logo {
-        position:absolute;
-        z-index: 999;
-        height: 1em;
-        left: 5px;
-        top: 5px;
-        text-decoration: none;
-      }
-
       body {
         overflow-y: scroll;
         overflow-x: hidden;
@@ -240,7 +207,6 @@
 
       #mapButton {
         position: fixed;
-        top: 2em;
         grid-auto-rows: minmax(min-content, 50px);
       }
 
@@ -252,98 +218,50 @@
       #ctrls {
         width: 100%;
         height: 100%;
-      }
-
-      #ctrls>div {
-        display: inline-flex;
-        position: absolute;
-        background: inherit;
-        width: 100%;
-        height: 100%;
-        box-shadow: 0 2px 10px #555;
-        z-index: 1000;
-        flex-wrap: wrap
-      }
-
-      #ctrls>div>.tab {
-        flex-grow: 1;
-        height: 100%;;
-        flex-basis: 50%;
-      }
-
-      #ctrls>div>.tab>.bg-icon {
-        width: 100%;
-        height: 50px;
-        background-size: 30px;
-        background-position: center;
-        pointer-events: none;
-      }
-
-      #ctrls>div>.tab>.mask-icon {
-        width: 100%;
-        height: 50px;
-        mask-size: 3em;
-        -webkit-mask-size: 3em;
-        mask-position: center;
-        -webkit-mask-position: center;
-        pointer-events: none;
-        background-color: #003D57;
-        /* border-bottom: 1px solid #555; */
-      }
-
-      #ctrls>div>.tab.active > .mask-icon {
-        background-color: #EC602D;
-      }
-
-      .tab:not(.active)>.tab-display {
-        display: none;
-      }
-
-      #ctrls .listview {
-        padding: 20px;
-        overflow-y: auto;
-        height: calc(100% - 50px);
-        position: absolute;
-        width: 100%;
-        left: 0;
-        top: 50px;
+        position: relative;
       }
 
       #ctrls .listview.shadow {
         box-shadow: inset 0px 4px 4px -4px #999;
       }
 
-      .layers_header {
-        display: none;
-      }
+    }
 
-      #gazetteer {
-        position: fixed;
-        top: 0;
-        width: 100%;
-        padding: 10px 3em 10px 10px;
-        background-color: #fff;
-        z-index: 9999
-      }
+    #ctrl-tabs {
+      height: 50px;
+      width: 100%;
+      display: flex;
+      background-color: #003D57;
+    }
 
-      #closeGazetteerMobile {
-        position: absolute;
-        -webkit-mask-image: url("../icons/icon-close.svg");
-        mask-image: url("../icons/icon-close.svg");
-        -webkit-mask-size: contain;
-        mask-size: contain;
-        -webkit-mask-repeat: no-repeat;
-        mask-repeat: no-repeat;
-        -webkit-mask-position: right;
-        mask-position: right;
-        background-color: #B71C1C;
-        width: 1.5em;
-        height: 100%;
-        top: 0;
-        right: 0.7em;
-      }
+    #ctrl-tabs > div {
+      flex-grow: 1;
+      mask-size: 3em;
+      -webkit-mask-size: 3em;
+      mask-position: center;
+      -webkit-mask-position: center;
+    }
 
-    }    
+    #ctrl-tabs > .active {
+      background-color: #E18335;
+    }
+
+    #ctrl-panel {
+      height: calc(100% - 50px);
+      overflow-y: auto;
+    }
+
+    #ctrl-panel > .tab {
+      display: none;
+    }
+
+    #ctrl-panel > .tab.active {
+      display: block;
+    }
+
+    #ctrl-panel > .tab > div {
+      padding: 10px;
+    }
 
   </style>
 
@@ -352,15 +270,7 @@
 <body style="grid-template-rows: auto 0 0;">
 
   <div id="Map" class="map-container">
-
-    <div class="logo_mobile">
-      <a class="logo" target="_blank" href="https://geolytix.co.uk">
-            <img src="https://geolytix.github.io/public/geolytix_mapp.svg">
-          </a>
-    </div>
-
     <div class="attribution-links"></div>
-    
     <div id="OL"></div>
   </div>
 
@@ -376,35 +286,23 @@
 
   <div id="ctrls" class="lighter-background">
 
-    <div>
+    <div id="ctrl-tabs">
+      <div data-id="layers" class="mask-icon layers active"></div>
+      <div data-id="locations" class="mask-icon location"></div>
+    </div>
 
-      <div class="layers_header">
-          <a class="logo" target="_blank" href="https://geolytix.co.uk">
-            <img src="https://geolytix.github.io/public/geolytix_mapp.svg">
-          </a>
-      </div>
-
-      <div id="gazetteer" class="display-none">
-        <div class="dropdown">
-          <input type="text" placeholder="e.g. London">
-          <ul></ul>
-        </div>
-        <div id="closeGazetteerMobile" class="desktop-display-none"></div>
-      </div>
-
+    <div id="ctrl-panel">
       <div class="tab active">
-
-        <div class="mask-icon layers"></div>
-        
         <div id="layers" class="tab-display listview"></div>
       </div>
-
-      <div class="tab" style="display: none;">
-        <div class="mask-icon location"></div>
+      <div class="tab">
         <div id="locations" class="tab-display listview locations"></div>
       </div>
-
     </div>
+
+    <!-- <a class="logo" target="_blank" href="https://geolytix.co.uk">
+      <img src="https://geolytix.github.io/public/geolytix_mapp.svg">
+      </a> -->
 
   </div>
 

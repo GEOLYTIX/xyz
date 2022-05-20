@@ -17,12 +17,6 @@
   color: white;
   background-color: #401505; }
 
-.lighter-background {
-  background-color: #E9E3DD; }
-
-.lighter-background {
-  background-color: #D5E1E6; }
-
 .on-colour {
   color: #E18335; }
 
@@ -46,12 +40,6 @@
 .dark-background {
   color: white;
   background-color: #401505; }
-
-.lighter-background {
-  background-color: #E9E3DD; }
-
-.lighter-background {
-  background-color: #D5E1E6; }
 
 .on-colour {
   color: #E18335; }
@@ -570,12 +558,6 @@ form.login {
   color: white;
   background-color: #401505; }
 
-.lighter-background {
-  background-color: #E9E3DD; }
-
-.lighter-background {
-  background-color: #D5E1E6; }
-
 .on-colour {
   color: #E18335; }
 
@@ -599,12 +581,6 @@ form.login {
 .dark-background {
   color: white;
   background-color: #401505; }
-
-.lighter-background {
-  background-color: #E9E3DD; }
-
-.lighter-background {
-  background-color: #D5E1E6; }
 
 .on-colour {
   color: #E18335; }
@@ -765,12 +741,6 @@ input[type="text"] {}
   color: white;
   background-color: #401505; }
 
-.lighter-background {
-  background-color: #E9E3DD; }
-
-.lighter-background {
-  background-color: #D5E1E6; }
-
 .on-colour {
   color: #E18335; }
 
@@ -889,12 +859,6 @@ label.checkbox {
   color: white;
   background-color: #401505; }
 
-.lighter-background {
-  background-color: #E9E3DD; }
-
-.lighter-background {
-  background-color: #D5E1E6; }
-
 .on-colour {
   color: #E18335; }
 
@@ -1009,12 +973,6 @@ label.checkbox {
 .dark-background {
   color: white;
   background-color: #401505; }
-
-.lighter-background {
-  background-color: #E9E3DD; }
-
-.lighter-background {
-  background-color: #D5E1E6; }
 
 .on-colour {
   color: #E18335; }
@@ -1136,12 +1094,6 @@ button {
   color: white;
   background-color: #401505; }
 
-.lighter-background {
-  background-color: #E9E3DD; }
-
-.lighter-background {
-  background-color: #D5E1E6; }
-
 .on-colour {
   color: #E18335; }
 
@@ -1221,12 +1173,6 @@ button {
 .dark-background {
   color: white;
   background-color: #401505; }
-
-.lighter-background {
-  background-color: #E9E3DD; }
-
-.lighter-background {
-  background-color: #D5E1E6; }
 
 .on-colour {
   color: #E18335; }
@@ -3122,5 +3068,11 @@ input[type=datetime-local] {
       width: 50px;
       height: 50px;
       background-color: #A21309; }
+
+.lighter-background {
+  background-color: #E9E3DD; }
+
+.lighter-background {
+  background-color: #D5E1E6; }
 
 /*# sourceMappingURL=ui.css.map */

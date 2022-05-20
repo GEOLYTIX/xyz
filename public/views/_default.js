@@ -116,21 +116,28 @@ window.onload = async () => {
     },
   });
 
-  // Tab event for mobile view.
-  const tabs = document.querySelectorAll(".tab");
   const locationsTab = document.getElementById("locations");
   const layersTab = document.getElementById("layers");
 
+  const tabs = document.querySelectorAll("#ctrl-tabs > div");
+  const tabPanels = document.querySelectorAll("#ctrl-panel > div");
+
   tabs.forEach((tab) => {
-    tab.querySelector(".listview").addEventListener("scroll", (e) => {
-      if (e.target.scrollTop > 0) return e.target.classList.add("shadow");
-      e.target.classList.remove("shadow");
-    });
+
+    //   tab.querySelector(".listview").addEventListener("scroll", (e) => {
+    //     if (e.target.scrollTop > 0) return e.target.classList.add("shadow");
+    //     e.target.classList.remove("shadow");
+    //   });
 
     tab.onclick = (e) => {
-      if (!e.target.classList.contains("tab")) return;
+
       tabs.forEach((el) => el.classList.remove("active"));
       e.target.classList.add("active");
+      
+      tabPanels.forEach((el) => el.classList.remove("active"));
+
+      document.getElementById(e.target.dataset.id)
+        .parentElement.classList.add('active')
     };
   });
 
@@ -217,6 +224,20 @@ window.onload = async () => {
       + `locale=${locale.key}&layer=${layer}`)))
 
   await mapview.addLayer(layers);
+
+  // Add gazetteer control.
+  if (mapview.locale.gazetteer) {
+
+    const gazetteer = locationsTab.appendChild(mapp.utils.html.node`
+        <div class="dropdown">
+          <input type="text" placeholder="e.g. London">
+          <ul></ul>`)
+
+    mapp.ui.gazetteer(Object.assign({
+      mapview: mapview,
+      target: gazetteer,
+    }, mapview.locale.gazetteer));
+  }
 
   mapp.ui.layers.listview({
     target: layersTab,
@@ -323,49 +344,6 @@ window.onload = async () => {
           layer.mbMap?.resize();
         });
       }}>`);
-
-  // Add gazetteer control.
-  if (mapview.locale.gazetteer) {
-
-    const gazetteer = document.getElementById("gazetteer");
-
-    const gazetteerInput = gazetteer.querySelector("input");
-
-    btnColumn.insertBefore(mapp.utils.html.node`
-      <button
-        id="btnGazetteer"
-        class="mask-icon search"
-        onclick=${toggleGazetteer}>`,
-      btnColumn.firstChild);
-
-    function toggleGazetteer(e) {
-
-      if (e.target.classList.contains("enabled")) {
-
-        // Get bounding rectangle for gazetteer input.
-        const inputBounds = gazetteerInput.getBoundingClientRect();
-
-        // Focus input if not in window viewport.
-        if (inputBounds.y < 0) gazetteerInput.focus();
-        return;
-      }
-
-      e.target.classList.toggle("enabled");
-      e.target.classList.toggle("mobile-hidden");
-      gazetteer.classList.toggle("display-none");
-      gazetteerInput.focus();
-    }
-
-    // Wire button to close gazetteer on mobile.
-    document
-      .getElementById("closeGazetteerMobile")
-      .addEventListener("click", toggleGazetteer);
-
-    mapp.ui.gazetteer(Object.assign({
-      mapview: mapview,
-      target: gazetteer.querySelector(".dropdown"),
-    }, mapview.locale.gazetteer));
-  }
 
   mapp.user &&
     mapview.locale.idle &&

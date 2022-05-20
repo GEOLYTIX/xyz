@@ -44,6 +44,11 @@
       "template": "SELECT * from ${table}",
       "dbs": "MAPP"
     },
+    "module_query": {
+      "src": "file:/public/js/queries/infotip.js",
+      "module": true,
+      "dbs": "MAPP"
+    },
     "array_input_query": {
       "template": "SELECT mapp.array_input_test(%{body})",
       "dbs": "MAPP"
@@ -1060,6 +1065,13 @@
               ],
               "type": "html",
               "edit": true
+            },
+            {
+              "title": "module query",
+              "query": "module_query",
+              "queryparams": {
+                "id": true
+              }
             },
             {
               "title": "integer_field",
