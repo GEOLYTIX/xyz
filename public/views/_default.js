@@ -59,6 +59,7 @@ window.onload = async () => {
     }
   })
 
+  // Parse user object from dataset attribute on document head.
   mapp.user = document.head.dataset.user &&
       JSON.parse(decodeURI(document.head.dataset.user))
       || undefined
@@ -68,6 +69,7 @@ window.onload = async () => {
     || mapp.user?.language
     || mapp.language
 
+  // Restore scroll
   if ("scrollRestoration" in history) history.scrollRestoration = "auto";
 
   // Set Openlayers node in order to move map object.

@@ -36,30 +36,21 @@
       height: 100%;
     }
 
-    .listview.locations>button{
-      width: 100%;
-      text-align: right;
-    }
-
-    .mask-icon.lock-open {
+    #mapButton .mask-icon.lock-open {
       background-color: #AFB42B;
     }
 
-    .mask-icon.logout {
+    #mapButton .mask-icon.logout {
       background-color: #B71C1C;
     }
 
-    .listview > button.dropdown {
-      margin-top: 5px;
-    }
-
-    .map-container .ol-scale-line {
+    #Map .ol-scale-line {
       right: 5px;
       top: 5px;
       position: fixed;
     }
 
-    .attribution-links {
+    #Map .attribution-links {
       max-width: calc(100% - 140px);
     }
 
@@ -71,15 +62,43 @@
       background: linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 70%);
     }
 
+    #ctrl-tabs {
+      height: 50px;
+      width: 100%;
+      display: flex;
+      background-color: #003D57;
+    }
+
+    #ctrl-tabs > div {
+      flex-grow: 1;
+      mask-size: 3em;
+      -webkit-mask-size: 3em;
+      mask-position: center;
+      -webkit-mask-position: center;
+    }
+
+    #ctrl-tabs > .active {
+      background-color: #E18335;
+    }
+
+    #ctrl-panel {
+      height: calc(100% - 50px);
+      overflow-y: auto;
+    }
+
+    #ctrl-panel > .tab {
+      display: none;
+    }
+
+    #ctrl-panel > .tab.active {
+      display: block;
+    }
+
+    #ctrl-panel > .tab > div {
+      padding: 10px;
+    }
+
     @media only screen and (min-width: 768px) {
-
-      #ctrl-panel {
-        transform: rotateY(180deg);
-      }
-
-      #ctrl-panel > .tab {
-        transform: rotateY(180deg);
-      }
 
       .desktop-display-none {
         display: none;
@@ -92,6 +111,10 @@
 
       body.fullscreen {
         grid-template-columns: 0 0 50px auto !important;
+      }
+
+      body.fullscreen #ctrls {
+        display: none;
       }
 
       #spacer {
@@ -135,39 +158,27 @@
         grid-row: 1/4;
         background-color: #fff;
         opacity: 0.8;
+      }      
+
+      #ctrl-panel {
+        transform: rotateY(180deg);
+      }
+
+      #ctrl-panel > .tab {
+        transform: rotateY(180deg);
       }
 
       #ctrls {
         grid-row: 1/4;
         grid-column: 1;
-        /* padding: 15px;
-        transform: rotateY(180deg);
-        overflow-y: auto;
-        overflow-x: hidden; */
-
         height: 100%;
         overflow: hidden;
-      }
-
-      .fullscreen #ctrls {
-        display: none;
-      }
-
-      #layers {
-        margin-bottom: 20px;
       }
 
       #Tabview {
         grid-row: 3;
         grid-column: 3/5;
       }
-
-      .tab > h1 {
-        padding: 3px;
-        padding-left: 7px;
-        border-radius: 3px;
-      }
-
     }
 
     @media only screen and (max-width: 768px) {
@@ -227,48 +238,9 @@
         height: 100%;
         position: relative;
       }
-
-      #ctrls .listview.shadow {
-        box-shadow: inset 0px 4px 4px -4px #999;
-      }
-
     }
 
-    #ctrl-tabs {
-      height: 50px;
-      width: 100%;
-      display: flex;
-      background-color: #003D57;
-    }
 
-    #ctrl-tabs > div {
-      flex-grow: 1;
-      mask-size: 3em;
-      -webkit-mask-size: 3em;
-      mask-position: center;
-      -webkit-mask-position: center;
-    }
-
-    #ctrl-tabs > .active {
-      background-color: #E18335;
-    }
-
-    #ctrl-panel {
-      height: calc(100% - 50px);
-      overflow-y: auto;
-    }
-
-    #ctrl-panel > .tab {
-      display: none;
-    }
-
-    #ctrl-panel > .tab.active {
-      display: block;
-    }
-
-    #ctrl-panel > .tab > div {
-      padding: 10px;
-    }
 
   </style>
 
