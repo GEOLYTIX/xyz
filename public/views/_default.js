@@ -265,27 +265,27 @@ window.onload = async () => {
   const btnZoomIn = btnColumn.insertBefore(mapp.utils.html.node`
     <button
       id="btnZoomIn"
-      class="mask-icon add"
       .disabled=${mapview.Map.getView().getZoom() >= mapview.locale.maxZoom}
       title=${mapp.dictionary.toolbar_zoom_in}
       onclick=${(e) => {
         const z = parseInt(mapview.Map.getView().getZoom() + 1);
         mapview.Map.getView().setZoom(z);
         e.target.disabled = z >= mapview.locale.maxZoom;
-      }}>`, document.getElementById('plugin-btn'));
+      }}>
+      <div class="mask-icon add">`, document.getElementById('plugin-btn'));
 
   // Add zoomOut button.
   const btnZoomOut = btnColumn.insertBefore(mapp.utils.html.node`
     <button
       id="btnZoomOut"
-      class="mask-icon remove"
       .disabled=${mapview.Map.getView().getZoom() <= mapview.locale.minZoom}
       title=${mapp.dictionary.toolbar_zoom_out}
       onclick=${(e) => {
         const z = parseInt(mapview.Map.getView().getZoom() - 1);
         mapview.Map.getView().setZoom(z);
         e.target.disabled = z <= mapview.locale.minZoom;
-      }}>`, document.getElementById('plugin-btn'));
+      }}>
+      <div class="mask-icon remove">`, document.getElementById('plugin-btn'));
 
   // changeEnd event listener for zoom button.
   OL.addEventListener('changeEnd', () => {
@@ -297,7 +297,7 @@ window.onload = async () => {
   // Add zoom to area button.
   btnColumn.insertBefore(mapp.utils.html.node`
     <button
-      class="mobile-display-none mask-icon pageview"
+      class="mobile-display-none"
       title=${mapp.dictionary.toolbar_zoom_to_area}
       onclick=${(e) => {
 
@@ -319,22 +319,23 @@ window.onload = async () => {
           },
         })
 
-      }}>`, document.getElementById('plugin-btn'));
+      }}>
+      <div class="mask-icon pageview">`, document.getElementById('plugin-btn'));
 
   // Add locator button.
   mapview.locale.locator && btnColumn.appendChild(mapp.utils.html.node`
     <button
-      class="mask-icon gps-not-fixed"
       title=${mapp.dictionary.toolbar_current_location}
       onclick=${(e) => {
         mapview.locate();
         e.target.classList.toggle("enabled");
-      }}>`);
+      }}>
+      <div class="mask-icon gps-not-fixed">`);
 
   // Add fullscreen button.
   btnColumn.appendChild(mapp.utils.html.node`
     <button
-      class="mobile-display-none mask-icon map"
+      class="mobile-display-none"
       title=${mapp.dictionary.toolbar_fullscreen}
       onclick=${(e) => {
         e.target.classList.toggle("enabled");
@@ -343,7 +344,8 @@ window.onload = async () => {
         Object.values(mapview.layers).forEach((layer) => {
           layer.mbMap?.resize();
         });
-      }}>`);
+      }}>
+      <div class="mask-icon map">`);
 
   mapp.user &&
     mapview.locale.idle &&
@@ -357,16 +359,17 @@ window.onload = async () => {
     btnColumn.appendChild(mapp.utils.html.node`
       <a
         title=${mapp.dictionary.toolbar_admin}
-        class="mobile-display-none mask-icon supervisor-account"
-        href="${mapview.host + "/api/user/admin"}">`);
+        class="mobile-display-none"
+        href="${mapview.host + "/api/user/admin"}">
+        <div class="mask-icon supervisor-account">`);
 
   // Append login/logout link.
   document.head.dataset.login &&
     btnColumn.appendChild(mapp.utils.html.node`
       <a
-        class="${`mask-icon ${(mapp.user && "logout") || "lock-open"}`}"
         title="${mapp.user && mapp.user.email || "Login"}"
-        href="${(mapp.user && "?logout=true") || "?login=true"}">`);
+        href="${(mapp.user && "?logout=true") || "?login=true"}">
+        <div class="${`mask-icon ${(mapp.user && "logout") || "lock-open"}`}">`);
 
   // Append spacer for tableview
   btnColumn.appendChild(mapp.utils.html.node`

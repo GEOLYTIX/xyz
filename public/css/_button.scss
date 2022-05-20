@@ -20,7 +20,7 @@ button {
     width: 100%;
   }
 
-  &.mask-icon {
+  &.mask-icon, .mask-icon {
     background-color: $primary;
   }
   
@@ -66,6 +66,11 @@ button {
     width: 2em;
     height: 2em;
     font-size: inherit;
+  }
+
+  a > div,
+  button > div {
+    height: 100%;
   }
 
   button:disabled,

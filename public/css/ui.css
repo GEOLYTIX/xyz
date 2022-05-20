@@ -993,7 +993,7 @@ button {
     cursor: default; }
   button.wide {
     width: 100%; }
-  button.mask-icon {
+  button.mask-icon, button .mask-icon {
     background-color: #003D57; }
   button.mask-icon.on {
     background-color: #E18335; }
@@ -1026,6 +1026,9 @@ button {
     width: 2em;
     height: 2em;
     font-size: inherit; }
+  .btn-column a > div,
+  .btn-column button > div {
+    height: 100%; }
   .btn-column button:disabled,
   .btn-column a:disabled {
     cursor: not-allowed; }

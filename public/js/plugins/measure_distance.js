@@ -8,9 +8,9 @@ export default (function(){
   
     pluginBtn.after(mapp.utils.html.node`
       <button
-        class="mask-icon straighten"
         title="Measure distance"
-        onclick=${measure_distance}>`);
+        onclick=${measure_distance}>
+        <div class="mask-icon straighten">`);
   
     function measure_distance(e){
   
