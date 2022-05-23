@@ -20,7 +20,7 @@ module.exports = async workspace => {
 
       layer.key = layer_key
 
-      layer = layer.template && merge({},
+      layer = layer.template && Object.assign({},
 
         // Assign layer template.
         workspace.templates[layer.template] || {},
@@ -43,6 +43,13 @@ module.exports = async workspace => {
 
         // Layer style must override default style.
         layer.style || {})
+
+      if (Array.isArray(layer.templates)) {
+
+        layer.templates.forEach(template => {
+          merge(layer, workspace.templates[template] || {})
+        })
+      }
 
       layer.name = layer.name || layer_key
 

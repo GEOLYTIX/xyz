@@ -95,6 +95,17 @@
     "chartdata": {
       "template": "SELECT array_agg(json_build_object('data', ARRAY [0.4168, 0.2782, 0.2912, 0.0137])) AS datasets",
       "dbs": "MAPP"
+    },
+    "infoj_report": {
+      "infoj": [
+        {
+          "type": "report",
+          "report": {
+            "template": "v4",
+            "label": "Site Report"
+          }
+        }
+      ]
     }
   },
   "locales": {
@@ -927,6 +938,7 @@
           "srid": "3857",
           "geom": "geom_3857",
           "qID": "id",
+          "templates": ["infoj_report"],
           "style": {
             "default": {
               "strokeColor": "#f00",
@@ -1368,13 +1380,6 @@
                 "strokeColor": "#f00",
                 "fillColor": "#fff",
                 "fillOpacity": 0
-              }
-            },
-            {
-              "type": "report",
-              "report": {
-                "template": "v4",
-                "label": "Site Report"
               }
             },
             {
