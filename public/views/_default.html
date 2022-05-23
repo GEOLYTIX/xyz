@@ -98,6 +98,16 @@
       padding: 10px;
     }
 
+    .locations.mask-icon {
+      -webkit-mask-image: url("./icons/icon-search.svg");
+      mask-image: url("./icons/icon-search.svg");
+    }
+
+    .locations.mask-icon.active {
+      -webkit-mask-image: url("./icons/icon-location.svg");
+      mask-image: url("./icons/icon-location.svg");
+    }
+
     @media only screen and (min-width: 768px) {
 
       .desktop-display-none {
@@ -240,8 +250,6 @@
       }
     }
 
-
-
   </style>
 
 </head>
@@ -267,7 +275,7 @@
 
     <div id="ctrl-tabs">
       <div data-id="layers" class="mask-icon layers active"></div>
-      <div data-id="locations" class="mask-icon location"></div>
+      <div data-id="locations" class="mask-icon locations"></div>
     </div>
 
     <div id="ctrl-panel">

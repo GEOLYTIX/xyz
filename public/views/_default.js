@@ -126,11 +126,6 @@ window.onload = async () => {
 
   tabs.forEach((tab) => {
 
-    //   tab.querySelector(".listview").addEventListener("scroll", (e) => {
-    //     if (e.target.scrollTop > 0) return e.target.classList.add("shadow");
-    //     e.target.classList.remove("shadow");
-    //   });
-
     tab.onclick = (e) => {
 
       tabs.forEach((el) => el.classList.remove("active"));
@@ -170,11 +165,6 @@ window.onload = async () => {
   const locales = await mapp.utils.xhr(`${host}/api/workspace/locales`);
 
   if (!locales.length) return alert("No accessible locales");
-  if (!locales.length) {
-    userAdmin();
-    alert("No accessible locales");
-    return;
-  }
 
   const locale = await mapp.utils.xhr(
     `${host}/api/workspace/locale?locale=${
