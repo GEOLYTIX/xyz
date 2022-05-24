@@ -1,8 +1,6 @@
 module.exports = {
     render: _ => {
 
-        console.log(_)
-
         const layer = _.workspace.locales[_.locale].layers[_.layer]
 
         const table = layer.table || Object.values(layer.tables).find(tab => !!tab);
