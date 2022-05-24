@@ -8,9 +8,9 @@ export default (function(){
   
     pluginBtn.after(mapp.utils.html.node`
       <button
-        class="mask-icon visibility-off"
         title="Hide layer views which aren't displayed in the map view in the layer list view."
-        onclick=${hide_layers}>`);
+        onclick=${hide_layers}>
+        <div class="mask-icon visibility-off">`);
   
     function hide_layers(e){
   

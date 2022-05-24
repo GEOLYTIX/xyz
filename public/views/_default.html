@@ -27,13 +27,11 @@
   <style>
 
     html {
+      position: fixed;
+      bottom: 0%;
+      top: 0%;
       height: 100%;
-    }
-
-    #mapButton {
-      position: absolute;
-      left: 0;
-      height: 100%;
+      width: 100%;
     }
 
     #mapButton .mask-icon.lock-open {
@@ -160,6 +158,8 @@
       }
 
       #mapButton {
+        position: absolute;
+        height: 100%;
         grid-column: 3;
         grid-row: 1/4;
         background-color: #fff;
@@ -189,6 +189,10 @@
 
     @media only screen and (max-width: 768px) {
 
+      html {
+        overflow: scroll;
+      }
+
       .mobile-hidden {
         visibility: hidden;
       }
@@ -208,7 +212,7 @@
       }
 
       #spacer {
-        height: calc(100% - 50px);
+        display: none;
       }
 
       #Map {
@@ -224,7 +228,9 @@
 
       #mapButton {
         position: fixed;
-        grid-auto-rows: minmax(min-content, 50px);
+        top: 0;
+        left: 0;
+        height: 100%;
       }
 
       #mapButton>button,
@@ -252,7 +258,7 @@
 
 <body style="grid-template-rows: auto 0 0;">
 
-  <div id="Map" class="map-container">
+  <div id="Map" class="map-container" style="position: relative;">
     <div id="OL"></div>
     <div class="attribution-links"></div>
   </div>

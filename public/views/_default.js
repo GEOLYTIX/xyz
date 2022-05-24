@@ -76,8 +76,12 @@ window.onload = async () => {
   const OL = document.getElementById("OL");
 
   // Move map up on document scroll
-  document.addEventListener("scroll", () => {
+  document.body.addEventListener("scroll", () => {
     OL.style["marginTop"] = `-${parseInt(window.pageYOffset / 2)}px`;
+
+    if (document.body.scrollTop > window.innerHeight) {
+      document.body.scrollTop = window.innerHeight
+    }
   });
 
   // Vertical ResizeHandler
