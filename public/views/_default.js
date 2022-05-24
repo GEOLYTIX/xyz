@@ -238,6 +238,9 @@ window.onload = async () => {
       mapview: mapview,
       target: gazetteer,
     }, mapview.locale.gazetteer));
+  } else {
+
+    document.querySelector("[data-id=locations]").style.display = 'none'
   }
 
   mapp.ui.layers.listview({
