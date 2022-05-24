@@ -135,6 +135,11 @@ window.onload = async () => {
 
       document.getElementById(e.target.dataset.id)
         .parentElement.classList.add('active')
+
+      if (e.target.dataset.id === 'locations') {
+        let gazetteerInput = document.getElementById('gazetteerInput')
+        gazetteerInput && gazetteerInput.focus()
+      }
     };
   });
 
@@ -222,7 +227,7 @@ window.onload = async () => {
 
     const gazetteer = locationsTab.appendChild(mapp.utils.html.node`
         <div class="dropdown">
-          <input type="text" placeholder="e.g. London">
+          <input id="gazetteerInput" type="text" placeholder="e.g. London">
           <ul></ul>`)
 
     mapp.ui.gazetteer(Object.assign({
