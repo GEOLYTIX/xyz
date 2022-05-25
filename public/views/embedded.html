@@ -1,7 +1,9 @@
 <!DOCTYPE html>
 <html lang="{{language}}">
 
-<head data-dir="{{dir}}">
+<head
+  data-dir="{{dir}}" 
+  data-locale="{{locale}}">
 
   <title>{{title}}</title>
 
@@ -22,51 +24,25 @@
 
   <style>
     html {
+      position: fixed;
+      bottom: 0%;
+      top: 0%;
       height: 100%;
-    }
-
-    body {
-      grid-template-rows: auto 0 0;
-    }
-
-    #mapButton {
-      position: absolute;
-      left: 0;
-      height: 100%;
-    }
-
-    .listview.locations>button {
       width: 100%;
-      text-align: right;
-    }
-
-    .listview>button.dropdown {
-      margin-top: 5px;
-    }
-
-    .desktop-display-none {
-      display: none;
     }
 
     body {
       display: grid;
       grid-template-columns: 333px 10px 50px auto;
+      grid-template-rows: auto 0 0;
     }
 
     body.fullscreen {
       grid-template-columns: 0 0 50px auto !important;
     }
 
-    #spacer {
-      grid-row: 1/4;
-      grid-column: 2;
-      background: repeating-linear-gradient(90deg, #ddd, #fff 3px);
-      box-shadow: 3px 0px 6px -3px #777;
-      z-index: 9999;
-    }
-
-    #spacer:hover {
-      cursor: col-resize;
+    body.fullscreen #ctrls {
+      display: none;
     }
 
     #Map {
@@ -75,7 +51,7 @@
       position: relative;
     }
 
-    .map-container .ol-scale-line {
+    #Map .ol-scale-line {
       right: 5px;
       top: 5px;
       position: fixed;
@@ -87,25 +63,25 @@
       position: absolute;
     }
 
-    .layers_header {
-      position:  relative;
-      padding: 1em;
-    } 
-
-    .layers_header > .logo {
-      position:absolute;
-      z-index: 999;
-      height: 1em;
-      left: 5px;
-      bottom: 5px;
-      text-decoration: none;
+    #Attribution {
+      position: absolute;
+      display: flex;
+      align-items: end;
+      bottom: 0;
+      right: 0;
+      width: 100%;
+      padding: 5px 5px 5px 45px;
     }
 
-    .attribution-links {
-      max-width: calc(100% - 140px);
+    #Attribution > .attribution-links {
+      flex-grow: 1;
     }
 
-    .background-fade {
+    #Attribution > .logo {
+      height: 1.5em;
+    }
+
+    #Attribution .background-fade {
       padding: 1px;
       border-radius: 2px;
       background: -moz-linear-gradient(180deg, rgba(255,255,255,0) 0%, rgba(255,255,255,0.6) 70%);
@@ -114,37 +90,87 @@
     }
 
     #mapButton {
+      position: absolute;
+      height: 100%;
       grid-column: 3;
       grid-row: 1/4;
       background-color: #fff;
       opacity: 0.8;
+    }    
+
+    #mapButton .mask-icon.lock-open {
+      background-color: #AFB42B;
+    }
+
+    #mapButton .mask-icon.logout {
+      background-color: #B71C1C;
     }
 
     #ctrls {
       grid-row: 1/4;
       grid-column: 1;
-      padding: 15px;
-      transform: rotateY(180deg);
+      height: 100%;
+      overflow: hidden;
+    }
+    
+    #ctrls-divider {
+      grid-row: 1/4;
+      grid-column: 2;
+      background: repeating-linear-gradient(90deg, #ddd, #fff 3px);
+      box-shadow: 3px 0px 6px -3px #777;
+      z-index: 9999;
+    }
+
+    #ctrls-divider:hover {
+      cursor: col-resize;
+    }    
+
+    #ctrl-tabs {
+      height: 50px;
+      width: 100%;
+      display: flex;
+      background-color: #003D57;
+    }
+
+    #ctrl-tabs > div {
+      flex-grow: 1;
+      mask-size: 3em;
+      -webkit-mask-size: 3em;
+      mask-position: center;
+      -webkit-mask-position: center;
+    }
+
+    #ctrl-tabs > .active {
+      background-color: #E18335;
+    }
+
+    #ctrl-tabs > .locations.mask-icon {
+      -webkit-mask-image: url("{{dir}}/icons/icon-search.svg");
+      mask-image: url("{{dir}}/icons/icon-search.svg");
+    }
+
+    #ctrl-tabs > .locations.mask-icon.active {
+      -webkit-mask-image: url("{{dir}}/icons/icon-location.svg");
+      mask-image: url("{{dir}}/icons/icon-location.svg");
+    }
+
+    #ctrl-panel {
+      height: calc(100% - 50px);
       overflow-y: auto;
-      overflow-x: hidden;
-    }
-
-    .fullscreen #ctrls {
-      display: none;
-    }
-
-    #ctrls>div {
       transform: rotateY(180deg);
     }
 
-    #layers {
-      margin-bottom: 20px;
+    #ctrl-panel > div {
+      transform: rotateY(180deg);
+    }  
+
+    #ctrl-panel > div {
+      display: none;
+      padding: 10px;
     }
 
-    .tab>h1 {
-      padding: 3px;
-      padding-left: 7px;
-      border-radius: 5px;
+    #ctrl-panel > div.active {
+      display: block;
     }
   </style>
 
@@ -152,34 +178,32 @@
 
 <body>
 
-  <div id="Map" class="map-container">
-
-    <div id="Attribution" class="attribution-links"></div>
+  <div id="Map">
     <div id="OL"></div>
+    <div id="Attribution">
+      <a class="logo" target="_blank" href="https://geolytix.co.uk">
+        <img src="https://geolytix.github.io/public/geolytix_mapp.svg">
+      </a>
+      <div class="attribution-links"></div>
+    </div>
   </div>
 
-  <div id="mapButton" class="btn-column"></div>
+  <div id="mapButton" class="btn-column">
+    <div id="plugin-btn" class="display-none"></div>
+  </div>
 
-  <div id="spacer"></div>
+  <div id="ctrls-divider"></div>
 
   <div id="ctrls" class="lighter-background">
 
-    <div>
+    <div id="ctrl-tabs">
+      <div data-id="layers" class="mask-icon layers active"></div>
+      <div data-id="locations" class="mask-icon locations"></div>
+    </div>
 
-      <div class="layers_header">
-          <a class="logo" target="_blank" href="https://geolytix.co.uk">
-            <img src="https://geolytix.github.io/public/geolytix_mapp.svg">
-          </a>
-      </div>
-
-      <div class="tab active">
-        <div id="layers" class="tab-display listview"></div>
-      </div>
-
-      <div class="tab" style="display: none;">
-        <div id="locations" class="tab-display listview locations"></div>
-      </div>
-
+    <div id="ctrl-panel">
+      <div id="layers" class="active"></div>
+      <div id="locations"></div>
     </div>
 
   </div>
@@ -187,135 +211,210 @@
 </body>
 
 <script>
-  window.onload = async () => {
+window.onload = async () => {
 
-    // Set Openlayers node in order to move map object.
-    const OL = document.getElementById("OL");
+  // Language as URL parameter will override user language.
+  mapp.language = mapp.hooks.current.language
+    || mapp.language
 
-    // Vertical ResizeHandler
-    mapp.ui.resizeHandler({
-      target: document.getElementById("spacer"),
-      resizeEvent: (e) => {
-        let pageX = (e.touches && e.touches[0].pageX) || e.pageX;
+  // Restore scroll
+  if ("scrollRestoration" in history) history.scrollRestoration = "auto";
 
-        if (pageX < 333) return;
+  // Set Openlayers node in order to move map object.
+  const OL = document.getElementById("OL");
 
-        // Half width snap.
-        if (pageX > window.innerWidth / 2) pageX = window.innerWidth / 2;
+  // ResizeHandler for #CTRLS
+  mapp.ui.utils.resizeHandler({
+    target: document.getElementById("ctrls-divider"),
+    resizeEvent: (e) => {
+      let pageX = (e.touches && e.touches[0].pageX) || e.pageX;
 
-        document.body.style.gridTemplateColumns = `${pageX}px 10px 50px auto`;
+      if (pageX < 333) return;
+
+      // Half width snap.
+      if (pageX > window.innerWidth / 2) pageX = window.innerWidth / 2;
+
+      document.body.style.gridTemplateColumns = `${pageX}px 10px 50px auto`;
+    },
+  });
+
+  const locationsTab = document.getElementById("locations");
+  const layersTab = document.getElementById("layers");
+
+  const tabs = document.querySelectorAll("#ctrl-tabs > div");
+  const tabPanels = document.querySelectorAll("#ctrl-panel > div");
+
+  tabs.forEach((tab) => tab.onclick = (e) => {
+
+    // Change active class for the tab.
+    tabs.forEach((el) => el.classList.remove("active"));
+    e.target.classList.add("active");
+
+    // Change active class for the panel.
+    tabPanels.forEach((el) => el.classList.remove("active"));
+    document.getElementById(e.target.dataset.id).classList.add('active')
+
+    // Put focus on the gazetteer if the locations tab is activated.
+    if (e.target.dataset.id === 'locations') {
+      let gazetteerInput = document.getElementById('gazetteerInput')
+      gazetteerInput && gazetteerInput.focus()
+    }
+  });
+
+  const btnColumn = document.getElementById("mapButton");
+
+  const host = document.head.dataset.dir || new String("");
+
+  // Get list of accessible locales from Workspace API.
+  const locales = await mapp.utils.xhr(`${host}/api/workspace/locales`);
+
+  if (!locales.length) return alert("No accessible locales");
+
+  // Get locale with list of layers from Workspace API.
+  const locale = await mapp.utils.xhr(
+    `${host}/api/workspace/locale?locale=${
+      document.head.dataset.locale || mapp.hooks.current.locale || locales[0].key
+    }`
+  );
+
+  // Create mapview
+  const mapview = mapp.Mapview({
+    host: host,
+    target: OL,
+    locale: locale,
+    scrollWheelZoom: true,
+    scalebar: 'metric', //'imperial'
+    attribution: {
+      target: document.querySelector('#Attribution > .attribution-links'),
+      links: {
+        [`XYZ v${mapp.version}`]: "https://geolytix.github.io/xyz",
+        ["SHA"]: `https://github.com/GEOLYTIX/xyz/commit/${mapp.hash}`,
+        Openlayers: "https://openlayers.org",
       },
-    });
+    }
+  });
 
-    const btnColumn = document.getElementById("mapButton");
+  // Load plugins
+  await mapp.utils.loadPlugins(locale.plugins);
 
-    const host = document.head.dataset.dir || new String("");
+  // Execute plugins with matching keys in locale.
+  Object.keys(locale).forEach((key) => {
+    mapp.plugins[key] && mapp.plugins[key](locale[key], mapview);
+  });
 
-    // Load locales if locale is not defined in current hook.
-    const locales = !(mapp.hooks.current.locale) && await mapp.utils.xhr(`${host}/api/workspace/locales`);
+  // Load JSON layers from Workspace API.
+  const layers = await mapp.utils.promiseAll(locale.layers.map(
+    layer => mapp.utils.xhr(`${host}/api/workspace/layer?`
+      + `locale=${locale.key}&layer=${layer}`)))
 
-    const locale = await mapp.utils.xhr(`${host}/api/workspace/locale?`
-      + `locale=${mapp.hooks.current.locale || locales[0].key}`);
+  // Add layers to mapview.
+  await mapview.addLayer(layers);
 
-    await mapp.utils.loadPlugins(locale.plugins);
+  if (mapview.locale.gazetteer) {
 
-    Object.keys(locale).forEach((key) => {
-      mapp.plugins[key] && mapp.plugins[key](locale[key]);
-    });
+    // Add gazetteer to location panel.
+    const gazetteer = locationsTab.appendChild(mapp.utils.html.node`
+        <div class="dropdown">
+          <input id="gazetteerInput" type="text" placeholder="e.g. London">
+          <ul></ul>`)
 
-    const mapview = mapp.Mapview({
-      host: host,
-      target: OL,
-      locale: locale,
-      scrollWheelZoom: true,
-      scalebar: 'metric',//'imperial'
-      hooks: true,
-      attribution: {
-        target: document.getElementById('Attribution'),
-        links: {
-          [`XYZ v${mapp.version}`]: "https://geolytix.github.io/xyz",
-          ["SHA"]: `https://github.com/GEOLYTIX/xyz/commit/${mapp.hash}`,
-          Openlayers: "https://openlayers.org",
-        },
-      }
-    });
-
-    const layers = await mapp.utils.promiseAll(locale.layers.map(
-      layer => mapp.utils.xhr(`${host}/api/workspace/layer?`
-        + `locale=${locale.key}&layer=${layer}`)))
-
-    await mapview.addLayer(layers);
-
-    mapp.ui.layers.listview({
-      target: document.getElementById("layers"),
+    mapp.ui.gazetteer(Object.assign({
       mapview: mapview,
+      target: gazetteer,
+    }, mapview.locale.gazetteer));
+  } else {
+
+    // Hide location panel without gazetteer.
+    document.querySelector("[data-id=locations]").style.display = 'none'
+  }
+
+  // Create layers listview.
+  mapp.ui.layers.listview({
+    target: layersTab,
+    mapview: mapview,
+  });
+
+  // Create locations listview.
+  mapp.ui.locations.listview({
+    target: locationsTab,
+    mapview: mapview,
+  });
+
+  // Begin highlight interaction.
+  mapview.interactions.highlight();
+
+  // Select locations from hooks.
+  mapp.hooks.current.locations.forEach((_hook) => {
+
+    // Split location hook into layer key and id.
+    const hook = _hook.split("!");
+
+    // Get the location.
+    // Will be added to listview in location panel.
+    mapp.location.get({
+      layer: mapview.layers[decodeURIComponent(hook[0])],
+      id: hook[1],
     });
+  });
 
-    mapp.ui.locations.listview({
-      target: document.getElementById("locations"),
-      mapview: mapview,
-    });
-
-    mapview.interactions.highlight();
-
-    // Select locations from hooks.
-    mapp.hooks.current.locations.forEach((_hook) => {
-      const hook = _hook.split("!");
-
-      mapp.location.get({
-        layer: mapview.layers[decodeURIComponent(hook[0])],
-        id: hook[1],
-      });
-    });
-
-    // Add zoomIn button.
-    const btnZoomIn = btnColumn.appendChild(mapp.utils.html.node`
+  // Add zoomIn button.
+  const btnZoomIn = btnColumn.insertBefore(mapp.utils.html.node`
     <button
       id="btnZoomIn"
-      class="mask-icon add"
       .disabled=${mapview.Map.getView().getZoom() >= mapview.locale.maxZoom}
       title=${mapp.dictionary.toolbar_zoom_in}
       onclick=${(e) => {
         const z = parseInt(mapview.Map.getView().getZoom() + 1);
         mapview.Map.getView().setZoom(z);
         e.target.disabled = z >= mapview.locale.maxZoom;
-      }}>`);
+      }}>
+      <div class="mask-icon add">`, document.getElementById('plugin-btn'));
 
-    // Add zoomOut button.
-    const btnZoomOut = btnColumn.appendChild(mapp.utils.html.node`
+  // Add zoomOut button.
+  const btnZoomOut = btnColumn.insertBefore(mapp.utils.html.node`
     <button
       id="btnZoomOut"
-      class="mask-icon remove"
       .disabled=${mapview.Map.getView().getZoom() <= mapview.locale.minZoom}
       title=${mapp.dictionary.toolbar_zoom_out}
       onclick=${(e) => {
         const z = parseInt(mapview.Map.getView().getZoom() - 1);
         mapview.Map.getView().setZoom(z);
         e.target.disabled = z <= mapview.locale.minZoom;
-      }}>`);
+      }}>
+      <div class="mask-icon remove">`, document.getElementById('plugin-btn'));
 
-    // changeEnd event listener for zoom button.
-    OL.addEventListener('changeEnd', () => {
-      const z = mapview.Map.getView().getZoom();
-      btnZoomIn.disabled = z >= mapview.locale.maxZoom;
-      btnZoomOut.disabled = z <= mapview.locale.minZoom;
-    });
+  // changeEnd event listener for zoom button.
+  OL.addEventListener('changeEnd', () => {
+    const z = mapview.Map.getView().getZoom();
+    btnZoomIn.disabled = z >= mapview.locale.maxZoom;
+    btnZoomOut.disabled = z <= mapview.locale.minZoom;
+  });
 
-    // Add fullscreen button.
-    btnColumn.appendChild(mapp.utils.html.node`
+  // Add locator button.
+  mapview.locale.locator && btnColumn.appendChild(mapp.utils.html.node`
     <button
-      class="mobile-display-none mask-icon map"
+      title=${mapp.dictionary.toolbar_current_location}
+      onclick=${(e) => {
+        mapview.locate();
+        e.target.classList.toggle("enabled");
+      }}>
+      <div class="mask-icon gps-not-fixed">`);
+
+  // Add fullscreen button.
+  btnColumn.appendChild(mapp.utils.html.node`
+    <button
+      class="mobile-display-none"
       title=${mapp.dictionary.toolbar_fullscreen}
       onclick=${(e) => {
         e.target.classList.toggle("enabled");
         document.body.classList.toggle("fullscreen");
         mapview.Map.updateSize();
-        Object.values(mapview.layers.list).forEach((layer) => {
-          layer.mbMap?.resize();
-        });
-      }}>`);
+        Object.values(mapview.layers)
+          .forEach((layer) => layer.mbMap?.resize());
+      }}>
+      <div class="mask-icon map">`);
 
-  };
+};
 </script>
 
 </html>
