@@ -1544,35 +1544,40 @@
                                     {
                                         "style":
                                         {
-                                            "strokeColor": "#DC241F"
+                                            "strokeColor": "#DC241F",
+                                            "strokeWidth": 2
                                         }
                                     },
                                     "Circle":
                                     {
                                         "style":
                                         {
-                                            "strokeColor": "#FFCE00"
+                                            "strokeColor": "#FFCE00",
+                                            "strokeWidth": 2
                                         }
                                     },
                                     "District":
                                     {
                                         "style":
                                         {
-                                            "strokeColor": "#007229"
+                                            "strokeColor": "#007229",
+                                            "strokeWidth": 2
                                         }
                                     },
                                     "DLR":
                                     {
                                         "style":
                                         {
-                                            "strokeColor": "#00AFAD"
+                                            "strokeColor": "#00AFAD",
+                                            "strokeWidth": 2
                                         }
                                     },
                                     "Elizabeth":
                                     {
                                         "style":
                                         {
-                                            "strokeColor": "#9364CC"
+                                            "strokeColor": "#9364CC",
+                                            "strokeWidth": 2
                                         }
                                     },
                                     "Hammersmith and City":
@@ -1580,63 +1585,72 @@
                                         "label": "Hammersmith & City",
                                         "style":
                                         {
-                                            "strokeColor": "#F4A9BE"
+                                            "strokeColor": "#F4A9BE",
+                                            "strokeWidth": 2
                                         }
                                     },
                                     "Jubilee":
                                     {
                                         "style":
                                         {
-                                            "strokeColor": "#A1A5A7"
+                                            "strokeColor": "#A1A5A7",
+                                            "strokeWidth": 2
                                         }
                                     },
                                     "Metropolitan":
                                     {
                                         "style":
                                         {
-                                            "strokeColor": "#9B0058"
+                                            "strokeColor": "#9B0058",
+                                            "strokeWidth": 2
                                         }
                                     },
                                     "Northern":
                                     {
                                         "style":
                                         {
-                                            "strokeColor": "#000000"
+                                            "strokeColor": "#000000",
+                                            "strokeWidth": 2
                                         }
                                     },
                                     "Piccadilly":
                                     {
                                         "style":
                                         {
-                                            "strokeColor": "#0019A8"
+                                            "strokeColor": "#0019A8",
+                                            "strokeWidth": 2
                                         }
                                     },
                                     "Victoria":
                                     {
                                         "style":
                                         {
-                                            "strokeColor": "#00A0E2"
+                                            "strokeColor": "#00A0E2",
+                                            "strokeWidth": 2
                                         }
                                     },
                                     "Waterloo & City":
                                     {
                                         "style":
                                         {
-                                            "strokeColor": "#93CEBA"
+                                            "strokeColor": "#93CEBA",
+                                            "strokeWidth": 2
                                         }
                                     },
                                     "Overground":
                                     {
                                         "style":
                                         {
-                                            "strokeColor": "#EF7B10"
+                                            "strokeColor": "#EF7B10",
+                                            "strokeWidth": 2
                                         }
                                     },
                                     "Tramlink":
                                     {
                                         "style":
                                         {
-                                            "strokeColor": "#00BD19"
+                                            "strokeColor": "#00BD19",
+                                            "strokeWidth": 2
                                         }
                                     }
                                 }
