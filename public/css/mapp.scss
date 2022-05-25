@@ -1,5 +1,4 @@
-@import 'popup';
-@import 'attribution';
+@import 'colours';
 
 *,
 *::after,
@@ -93,4 +92,66 @@ a > img {
   background-color: rgba(0,60,136,.5);
   border: none;
   border-radius: 2px;
+}
+
+.infotip {
+  position: fixed;
+  z-index: 998;
+  margin: 0;
+  padding: 5px;
+  background-color: white;
+  opacity: 0;
+  box-shadow: 2px 2px 3px #666;
+  transition-property: opacity;
+  transition-duration: 0.3s;
+  transition-delay: 0.2s;
+}
+
+.popup {
+  position: absolute;
+  background-color: white;
+  box-shadow: 3px 3px 15px #666;
+  bottom: 12px;
+  transform: translate(-50%, 0);
+
+  &::after,
+  &::before {
+    border: solid transparent;
+    content: " ";
+    position: absolute;
+    pointer-events: none;
+  }
+
+  &::after {
+    border-top-color: white;
+    border-width: 10px;
+    left: 50%;
+    margin-left: -10px;
+  }
+
+  li{
+    padding: 5px 10px;
+    white-space: nowrap;
+    line-height: 1.5;
+    list-style-type: none;
+  }
+
+  li:hover {
+    background-color: $light;
+    cursor: pointer;
+  }
+}
+
+.attribution-links {
+  // position: absolute;
+  // bottom: 5px;
+  // right: 5px;
+  z-index: 999;
+  text-align: right;
+  
+  a {
+    margin-left: 5px;
+    display: inline-block;
+    white-space: nowrap;
+  }
 }

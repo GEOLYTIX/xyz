@@ -61,8 +61,8 @@ window.onload = async () => {
 
   // Parse user object from dataset attribute on document head.
   mapp.user = document.head.dataset.user &&
-      JSON.parse(decodeURI(document.head.dataset.user))
-      || undefined
+    JSON.parse(decodeURI(document.head.dataset.user))
+    || undefined
 
   // Language as URL parameter will override user language.
   mapp.language = mapp.hooks.current.language
@@ -79,14 +79,15 @@ window.onload = async () => {
   document.body.addEventListener("scroll", () => {
     OL.style["marginTop"] = `-${parseInt(window.pageYOffset / 2)}px`;
 
+    // Limit scrollTop on mobile browser
     if (document.body.scrollTop > window.innerHeight) {
       document.body.scrollTop = window.innerHeight
     }
   });
 
-  // Vertical ResizeHandler
+  // ResizeHandler for #CTRLS
   mapp.ui.utils.resizeHandler({
-    target: document.getElementById("spacer"),
+    target: document.getElementById("ctrls-divider"),
     resizeEvent: (e) => {
       let pageX = (e.touches && e.touches[0].pageX) || e.pageX;
 
@@ -99,9 +100,9 @@ window.onload = async () => {
     },
   });
 
-  // Vertical ResizeHandler
+  // ResizeHandler for tabview
   mapp.ui.utils.resizeHandler({
-    target: document.getElementById("hozDivider"),
+    target: document.getElementById("tabview-divider"),
     resizeEvent: (e) => {
 
       let pageY = (e.touches && e.touches[0].pageY) || e.pageY;
@@ -128,23 +129,21 @@ window.onload = async () => {
   const tabs = document.querySelectorAll("#ctrl-tabs > div");
   const tabPanels = document.querySelectorAll("#ctrl-panel > div");
 
-  tabs.forEach((tab) => {
+  tabs.forEach((tab) => tab.onclick = (e) => {
 
-    tab.onclick = (e) => {
+    // Change active class for the tab.
+    tabs.forEach((el) => el.classList.remove("active"));
+    e.target.classList.add("active");
 
-      tabs.forEach((el) => el.classList.remove("active"));
-      e.target.classList.add("active");
-      
-      tabPanels.forEach((el) => el.classList.remove("active"));
+    // Change active class for the panel.
+    tabPanels.forEach((el) => el.classList.remove("active"));
+    document.getElementById(e.target.dataset.id).classList.add('active')
 
-      document.getElementById(e.target.dataset.id)
-        .parentElement.classList.add('active')
-
-      if (e.target.dataset.id === 'locations') {
-        let gazetteerInput = document.getElementById('gazetteerInput')
-        gazetteerInput && gazetteerInput.focus()
-      }
-    };
+    // Put focus on the gazetteer if the locations tab is activated.
+    if (e.target.dataset.id === 'locations') {
+      let gazetteerInput = document.getElementById('gazetteerInput')
+      gazetteerInput && gazetteerInput.focus()
+    }
   });
 
   const tabview = document.getElementById("Tabview");
@@ -171,16 +170,19 @@ window.onload = async () => {
 
   const host = document.head.dataset.dir || new String("");
 
+  // Get list of accessible locales from Workspace API.
   const locales = await mapp.utils.xhr(`${host}/api/workspace/locales`);
 
   if (!locales.length) return alert("No accessible locales");
 
+  // Get locale with list of layers from Workspace API.
   const locale = await mapp.utils.xhr(
     `${host}/api/workspace/locale?locale=${
       document.head.dataset.locale || mapp.hooks.current.locale || locales[0].key
     }`
   );
 
+  // Add locale dropdown to layers panel if multiple locales are accessible.
   if (locales.length > 1) {
     const localesDropdown = mapp.ui.elements.dropdown({
       data_id: "locales-dropdown",
@@ -197,6 +199,7 @@ window.onload = async () => {
     layersTab.appendChild(mapp.utils.html.node`${localesDropdown}`);
   }
 
+  // Create mapview
   const mapview = mapp.Mapview({
     host: host,
     target: OL,
@@ -214,21 +217,25 @@ window.onload = async () => {
     }
   });
 
+  // Load plugins
   await mapp.utils.loadPlugins(locale.plugins);
 
+  // Execute plugins with matching keys in locale.
   Object.keys(locale).forEach((key) => {
     mapp.plugins[key] && mapp.plugins[key](locale[key], mapview);
   });
 
+  // Load JSON layers from Workspace API.
   const layers = await mapp.utils.promiseAll(locale.layers.map(
     layer => mapp.utils.xhr(`${host}/api/workspace/layer?`
       + `locale=${locale.key}&layer=${layer}`)))
 
+  // Add layers to mapview.
   await mapview.addLayer(layers);
 
-  // Add gazetteer control.
   if (mapview.locale.gazetteer) {
 
+    // Add gazetteer to location panel.
     const gazetteer = locationsTab.appendChild(mapp.utils.html.node`
         <div class="dropdown">
           <input id="gazetteerInput" type="text" placeholder="e.g. London">
@@ -240,25 +247,33 @@ window.onload = async () => {
     }, mapview.locale.gazetteer));
   } else {
 
+    // Hide location panel without gazetteer.
     document.querySelector("[data-id=locations]").style.display = 'none'
   }
 
+  // Create layers listview.
   mapp.ui.layers.listview({
     target: layersTab,
     mapview: mapview,
   });
 
+  // Create locations listview.
   mapp.ui.locations.listview({
     target: locationsTab,
     mapview: mapview,
   });
 
+  // Begin highlight interaction.
   mapview.interactions.highlight();
 
   // Select locations from hooks.
   mapp.hooks.current.locations.forEach((_hook) => {
+
+    // Split location hook into layer key and id.
     const hook = _hook.split("!");
 
+    // Get the location.
+    // Will be added to listview in location panel.
     mapp.location.get({
       layer: mapview.layers[decodeURIComponent(hook[0])],
       id: hook[1],
@@ -345,12 +360,12 @@ window.onload = async () => {
         e.target.classList.toggle("enabled");
         document.body.classList.toggle("fullscreen");
         mapview.Map.updateSize();
-        Object.values(mapview.layers).forEach((layer) => {
-          layer.mbMap?.resize();
-        });
+        Object.values(mapview.layers)
+          .forEach((layer) => layer.mbMap?.resize());
       }}>
       <div class="mask-icon map">`);
 
+  // Configure idle mask if set in locale.
   mapp.user &&
     mapview.locale.idle &&
     mapp.ui.utils.idleMask({
