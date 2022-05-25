@@ -1540,6 +1540,12 @@
                                 "type": "categorized",
                                 "cat":
                                 {
+                                    "Bakerloo": {
+                                        "style": {
+                                            "strokeColor": "#994417",
+                                            "strokeWidth": 2
+                                        }
+                                    },
                                     "Central":
                                     {
                                         "style":
