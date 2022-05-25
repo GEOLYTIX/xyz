@@ -205,7 +205,7 @@ window.onload = async () => {
     scrollWheelZoom: true,
     scalebar: 'metric', //'imperial'
     attribution: {
-      target: document.querySelector('#Map > .attribution-links'),
+      target: document.querySelector('#Attribution > .attribution-links'),
       links: {
         [`XYZ v${mapp.version}`]: "https://geolytix.github.io/xyz",
         ["SHA"]: `https://github.com/GEOLYTIX/xyz/commit/${mapp.hash}`,

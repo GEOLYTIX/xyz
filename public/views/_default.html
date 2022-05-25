@@ -102,7 +102,29 @@
       mask-image: url("{{dir}}/icons/icon-location.svg");
     }
 
+    #Attribution {
+      position: absolute;
+      display: flex;
+      align-items: end;
+      bottom: 0;
+      right: 0;
+      width: 100%;
+      padding: 5px;
+    }
+
+    #Attribution > .attribution-links {
+      flex-grow: 1;
+    }
+
+    #Attribution > .logo {
+      height: 1.5em;
+    }
+
     @media only screen and (min-width: 768px) {
+
+      #Attribution {
+        padding-left: 45px;
+      }
 
       .desktop-display-none {
         display: none;
@@ -260,7 +282,12 @@
 
   <div id="Map" class="map-container" style="position: relative;">
     <div id="OL"></div>
-    <div class="attribution-links"></div>
+    <div id="Attribution">
+      <a class="logo" target="_blank" href="https://geolytix.co.uk">
+        <img src="https://geolytix.github.io/public/geolytix_mapp.svg">
+      </a>
+      <div class="attribution-links"></div>
+    </div>
   </div>
 
   <div id="mapButton" class="btn-column">
@@ -288,10 +315,6 @@
         <div id="locations" class="tab-display listview locations"></div>
       </div>
     </div>
-
-    <!-- <a class="logo" target="_blank" href="https://geolytix.co.uk">
-      <img src="https://geolytix.github.io/public/geolytix_mapp.svg">
-      </a> -->
 
   </div>
 
