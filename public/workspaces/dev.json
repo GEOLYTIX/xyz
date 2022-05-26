@@ -536,6 +536,10 @@
           "cluster_dbscan": 0.04,
           "cluster_resolution": 0.1,
           "cluster_panel": true,
+          "edit": {
+            "point": true,
+            "delete": true
+          },
           "dataviews": {
             "Retail Points": {
               "target": "tabview",
