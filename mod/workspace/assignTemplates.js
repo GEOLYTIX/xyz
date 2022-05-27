@@ -40,7 +40,6 @@ module.exports = async (workspace) => {
         template: require("../../public/js/queries/layer_extent"),
       },
       get_last_location: {
-        admin: true,
         render: require("../../public/js/queries/get_last_location"),
       },
       mvt_cache: {
