@@ -287,7 +287,7 @@
                 "cat": {
                   "Aldi": {
                     "svg": "https://geolytix.github.io/MapIcons/brands/aldi.svg",
-                    "scale": 0.1,
+                    "scale": 0.05,
                     "anchor": [
                       0.5,
                       0.95
@@ -295,7 +295,7 @@
                   },
                   "Asda": {
                     "svg": "https://geolytix.github.io/MapIcons/brands/asda.svg",
-                    "scale": 0.1,
+                    "scale": 0.05,
                     "anchor": [
                       0.5,
                       0.95
@@ -303,7 +303,7 @@
                   },
                   "Booths": {
                     "svg": "https://geolytix.github.io/MapIcons/brands/booths.svg",
-                    "scale": 0.1,
+                    "scale": 0.05,
                     "anchor": [
                       0.5,
                       0.95
@@ -311,7 +311,7 @@
                   },
                   "Budgens": {
                     "svg": "https://geolytix.github.io/MapIcons/brands/budgens.svg",
-                    "scale": 0.1,
+                    "scale": 0.05,
                     "anchor": [
                       0.5,
                       0.95
@@ -319,7 +319,7 @@
                   },
                   "Co-op": {
                     "svg": "https://geolytix.github.io/MapIcons/brands/coop.svg",
-                    "scale": 0.1,
+                    "scale": 0.05,
                     "anchor": [
                       0.5,
                       0.95
@@ -327,7 +327,7 @@
                   },
                   "Iceland": {
                     "svg": "https://geolytix.github.io/MapIcons/brands/iceland.svg",
-                    "scale": 0.1,
+                    "scale": 0.05,
                     "anchor": [
                       0.5,
                       0.95
@@ -335,7 +335,7 @@
                   },
                   "Lidl": {
                     "svg": "https://geolytix.github.io/MapIcons/brands/lidl.svg",
-                    "scale": 0.1,
+                    "scale": 0.05,
                     "anchor": [
                       0.5,
                       0.95
@@ -343,7 +343,7 @@
                   },
                   "Marks and Spencer": {
                     "svg": "https://geolytix.github.io/MapIcons/brands/mns.svg",
-                    "scale": 0.1,
+                    "scale": 0.05,
                     "anchor": [
                       0.5,
                       0.95
@@ -351,7 +351,7 @@
                   },
                   "Morrisons": {
                     "svg": "https://geolytix.github.io/MapIcons/brands/morrisons.svg",
-                    "scale": 0.1,
+                    "scale": 0.05,
                     "anchor": [
                       0.5,
                       0.95
@@ -360,7 +360,7 @@
                   "Sainsburys": {
                     "label": "Sainsbury's",
                     "svg": "https://geolytix.github.io/MapIcons/brands/sainsbury.svg",
-                    "scale": 0.1,
+                    "scale": 0.05,
                     "anchor": [
                       0.5,
                       0.95
@@ -368,7 +368,7 @@
                   },
                   "Tesco": {
                     "svg": "https://geolytix.github.io/MapIcons/brands/tesco.svg",
-                    "scale": 0.1,
+                    "scale": 0.05,
                     "anchor": [
                       0.5,
                       0.95
@@ -376,7 +376,7 @@
                   },
                   "Waitrose": {
                     "svg": "https://geolytix.github.io/MapIcons/brands/waitrose.svg",
-                    "scale": 0.1,
+                    "scale": 0.05,
                     "anchor": [
                       0.5,
                       0.95
@@ -384,7 +384,7 @@
                   },
                   "Whole Foods Market": {
                     "svg": "https://geolytix.github.io/MapIcons/brands/whole_foods.svg",
-                    "scale": 0.1,
+                    "scale": 0.05,
                     "anchor": [
                       0.5,
                       0.95
@@ -1748,6 +1748,7 @@
           "srid": "3857",
           "style": {
             "default": {
+              "strokeColor": null,
               "fillColor": "#000",
               "fillOpacity": 0.3
             },
