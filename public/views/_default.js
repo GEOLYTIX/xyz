@@ -142,7 +142,7 @@ window.onload = async () => {
     // Put focus on the gazetteer if the locations tab is activated.
     if (e.target.dataset.id === 'locations') {
       let gazetteerInput = document.getElementById('gazetteerInput')
-      gazetteerInput && gazetteerInput.focus()
+      gazetteerInput && window.innerWidth > 768 && gazetteerInput.focus()
     }
   });
 
