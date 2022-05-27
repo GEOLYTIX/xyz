@@ -8,6 +8,8 @@ env
 package-lock.json
 node_modules/*
 
+*.md 
+express.js
 
 public/css/.sass-cache/
 stats.json
