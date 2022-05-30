@@ -113,9 +113,6 @@ async function gaz_locale(req, locale, results) {
 
     const roles = Roles.filter(layer, req.params.user?.roles)
 
-    // Wildcard on space
-    //let phrase = `${decodeURIComponent(req.params.q).replace(new RegExp(/  */g), '% ')}%`
-
     // Asteriks wildcard
     let phrase = `${decodeURIComponent(req.params.q).replace(new RegExp(/\*/g), '%')}%`
 

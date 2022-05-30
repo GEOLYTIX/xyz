@@ -61,6 +61,15 @@
     >li.selected {
       background-color: $light;
     }
+
+    .label {
+      padding: 0 6px;
+      border-radius: 2px;
+      color: white;
+      font-size: 80%;
+      font-weight: 600;
+      background-color: $primary;
+    }
   }
 
   &.active>ul {

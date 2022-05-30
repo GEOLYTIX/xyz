@@ -793,6 +793,13 @@ input[type="text"] {}
       cursor: pointer; }
     .dropdown > ul > li.selected {
       background-color: #E9E3DD; }
+    .dropdown > ul .label {
+      padding: 0 6px;
+      border-radius: 2px;
+      color: white;
+      font-size: 80%;
+      font-weight: 600;
+      background-color: #003D57; }
   .dropdown.active > ul {
     display: block;
     max-height: 600px;
