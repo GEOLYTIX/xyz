@@ -1,27 +1,3 @@
-.off-black {
-  color: #3f3f3f; }
-
-.off-black-background {
-  color: white;
-  background-color: #3f3f3f; }
-
-.primary-colour {
-  color: #003D57; }
-
-.primary-background {
-  color: white;
-  background-color: #003D57; }
-
-.dark-background {
-  color: white;
-  background-color: #401505; }
-
-.on-colour {
-  color: #E18335; }
-
-.no-colour {
-  color: #A21309; }
-
 *,
 *::after,
 *::before {

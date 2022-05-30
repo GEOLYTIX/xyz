@@ -1,5 +1,7 @@
 @import 'colours';
 
+@import 'font';
+
 @import 'login';
 
 @import 'icons';
@@ -166,4 +168,35 @@ input[type=datetime-local] {
 
 .lighter-background {
   background-color: $lighter;
+}
+
+.primary-colour {
+  color: $primary;
+}
+
+.off-black {
+  color: $off-black;
+}
+
+.off-black-background {
+  color: white;
+  background-color: $off-black;
+}
+
+.primary-background {
+  color: white;
+  background-color: $primary;
+}
+
+.dark-background {
+  color: white;
+  background-color: $dark;
+}
+
+.on-colour {
+  color: $on;
+}
+
+.no-colour {
+  color: $no;
 }
