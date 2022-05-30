@@ -113,11 +113,15 @@ async function gaz_locale(req, locale, results) {
 
     const roles = Roles.filter(layer, req.params.user?.roles)
 
-    let phrase = dataset.space_wildcard 
-      && `${decodeURIComponent(req.params.q).replace(new RegExp(/  */g), '% ')}%` 
-      || `${decodeURIComponent(req.params.q)}%`;
+    // Wildcard on space
+    //let phrase = `${decodeURIComponent(req.params.q).replace(new RegExp(/  */g), '% ')}%`
 
-    const SQLparams = [`${dataset.leading_wildcard ? '%' : ''}${phrase}`]
+    // Asteriks wildcard
+    let phrase = `${decodeURIComponent(req.params.q).replace(new RegExp(/\*/g), '%')}%`
+
+    //console.log(phrase)
+
+    const SQLparams = [phrase]
 
     const filter =
     ` ${layer.filter?.default && ` AND ${layer.filter?.default}` || ''}
