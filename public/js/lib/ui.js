@@ -310,10 +310,7 @@ mapp.utils.merge(mapp.dictionaries,{en:{layer_zoom_to_extent:"Zoom to filtered l
     style="${`${e.css_val||""}`}">${t}`;return!e.edit&&e.type==="html"&&(i.innerHTML=e.value||""),i};var ne={key:Je,boolean:J,dataview:Z,date:x,datetime:x,defaults:X,documents:K,geometry:Q,html:E,images:Y,integer:S,isoline_here:L,isoline_mapbox:L,json:ee,numeric:S,pin:te,report:ae,streetview:ie,tab:le,text:oe,textarea:E};function Je(e){return mapp.utils.html.node`
   <div class="layer-key">
     <span>
-      ${e.location.layer.name}`}var re={view:H,listview:U,infoj:W,entries:ne};var se=async e=>{if(e.target=typeof e.target=="string"&&document.getElementById(e.target)||e.target,e.target=e.target instanceof HTMLElement&&e.target||mapp.utils.html.node`
-      <div
-        class="dataview-target"
-        style="position: absolute; width: 100%; height: 100%">`,e.update=async()=>{if(!e.query)return;let t=mapp.utils.queryParams(e),i=mapp.utils.paramString(t),a=await mapp.utils.xhr(`${e.host||e.location.layer.mapview.host}/api/query?${i}`);if(!(a instanceof Error)){if(typeof e.responseFunction=="function")return e.responseFunction(a);typeof e.setData=="function"&&e.setData(a)}},e.toolbar){e.target=mapp.utils.html.node`
+      ${e.location.layer.name}`}var re={view:H,listview:U,infoj:W,entries:ne};var se=async e=>{if(e.target=typeof e.target=="string"&&document.getElementById(e.target)||e.target,e.target=e.target instanceof HTMLElement&&e.target||mapp.utils.html.node`<div class="dataview-target">`,e.update=async()=>{if(!e.query)return;let t=mapp.utils.queryParams(e),i=mapp.utils.paramString(t),a=await mapp.utils.xhr(`${e.host||e.location.layer.mapview.host}/api/query?${i}`);if(!(a instanceof Error)){if(typeof e.responseFunction=="function")return e.responseFunction(a);typeof e.setData=="function"&&e.setData(a)}},e.toolbar){e.target=mapp.utils.html.node`
       <div class="dataview-target">`;let t=Object.keys(e.toolbar).map(i=>mapp.ui.elements.toolbar_el[i](e));e.panel=mapp.utils.html.node`
       <div class="grid">
         <div class="btn-row">${t}</div>

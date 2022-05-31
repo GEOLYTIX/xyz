@@ -686,7 +686,7 @@
               }
             }
           },
-          "hover": {
+          "__hover": {
             "field": "store_name"
           },
           "infoj": [
