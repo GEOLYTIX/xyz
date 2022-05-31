@@ -47,7 +47,7 @@
     "module_query": {
       "src": "file:/public/js/queries/infotip.js",
       "module": true,
-      "dbs": "MAPP"
+      "dbs": "DEV"
     },
     "array_input_query": {
       "template": "SELECT mapp.array_input_test(%{body})",
@@ -1091,10 +1091,14 @@
               "edit": true
             },
             {
-              "title": "module query",
+              "title": "module query (id)",
+              "inline": true,
               "query": "module_query",
               "queryparams": {
-                "id": true
+                "id": true,
+                "qID": "id",
+                "field": "id",
+                "table": "dev.scratch"
               }
             },
             {
