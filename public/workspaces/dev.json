@@ -111,11 +111,16 @@
   "locales": {
     "UK": {
       "extent": {
-        "north": 62,
-        "east": 5,
-        "south": 49,
-        "west": -13,
+        "north": 63,
+        "east": 7,
+        "south": 47,
+        "west": -15,
         "mask": true
+      },
+      "view": {
+        "lat": 54.3,
+        "lng": -4,
+        "z": 6
       },
       "idle": 0,
       "minZoom": 2,
