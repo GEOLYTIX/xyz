@@ -27,6 +27,11 @@ a > img {
   display: none !important;
 }
 
+.box-shadow {
+  border: 1px solid #eee;
+  box-shadow: 2px 2px 4px $primary-light;
+}
+
 .ol-scale-line {
   position: static;
   background: none;
@@ -92,7 +97,6 @@ a > img {
   padding: 5px;
   background-color: white;
   opacity: 0;
-  box-shadow: 2px 2px 3px #666;
   transition-property: opacity;
   transition-duration: 0.3s;
   transition-delay: 0.2s;
@@ -101,7 +105,6 @@ a > img {
 .popup {
   position: absolute;
   background-color: white;
-  box-shadow: 3px 3px 15px #666;
   bottom: 12px;
   transform: translate(-50%, 0);
 
@@ -134,9 +137,6 @@ a > img {
 }
 
 .attribution-links {
-  // position: absolute;
-  // bottom: 5px;
-  // right: 5px;
   z-index: 999;
   text-align: right;
   

@@ -2040,10 +2040,6 @@ input[type=datetime-local] {
   display: inline-block;
   vertical-align: middle; }
 
-.box-shadow {
-  border: 1px solid #eee;
-  box-shadow: 2px 2px 4px #939faa; }
-
 .dataview-target {
   position: absolute;
   width: 100%;
