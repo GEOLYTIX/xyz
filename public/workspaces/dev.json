@@ -145,7 +145,8 @@
         "${DIR}/js/plugins/draw_circle_element.js",
         "${DIR}/js/plugins/modify_context_menu.js",
         "${DIR}/js/plugins/pin_from_geom.js",
-        "${DIR}/js/plugins/screenshot.js"
+        "${DIR}/js/plugins/screenshot.js",
+        "${DIR}/js/plugins/chart_entry.js"
       ],
       "measure_distance": {
         "tooltip": "length",
@@ -1324,6 +1325,12 @@
                   ]
                 }
               }
+            },
+            {
+              "title": "Chart from plugin",
+              "label": "chart display false",
+              "type": "chart_plugin",
+              "target": "location"
             },
             {
               "title": "images",
