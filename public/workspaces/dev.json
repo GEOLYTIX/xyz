@@ -1173,12 +1173,11 @@
               "field": "datetime_integer_bogus",
               "fieldfx": "datetime_integer",
               "type": "datetime",
-              "locale": "de-DE",
+              "locale": "en-UK",
               "options": {
-                "weekday": "long",
                 "year": "numeric",
-                "month": "long",
-                "day": "numeric"
+                "month": "2-digit",
+                "day": "2-digit"
               }
             },
             {
