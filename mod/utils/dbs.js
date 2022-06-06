@@ -2,12 +2,16 @@ const { Pool } = require('pg');
 
 const dbs = {};
 
+const logger = require('./logger')
+
 module.exports = () => {
 
   Object.keys(process.env)
     .filter(key => key.split('_')[0] === 'DBS')
     .filter(key => !dbs[key.split('_')[1]])
     .forEach(key => {
+
+      logger(key, 'dbs')
 
       if (process.env[key].match(/^postgres/)) return postgres(key.split('_')[1], process.env[key])
 
