@@ -307,11 +307,11 @@ mapp.utils.merge(mapp.dictionaries,{en:{layer_zoom_to_extent:"Zoom to filtered l
       ${e.value||""}`);let i=mapp.utils.html.node`
   <div
     class="val"
-    style="${`${e.css_val||""}`}">${t}`;return!e.edit&&e.type==="html"&&(i.innerHTML=e.value||""),i};var ne=e=>{let t;return e.edit?t=mapp.utils.html.node`
+    style="${`${e.css_val||""}`}">${t}`;return!e.edit&&e.type==="html"&&(i.innerHTML=e.value||""),i};var ne=e=>{let t,i=e.value&&e.value.toString().replace(".",":");return i=i&&i.length<3&&`${i}:00`||i,e.edit?t=mapp.utils.html.node`
       <input
         type="time"
-        value="00:00"
-        onchange=${a=>{e.newValue=parseFloat(a.target.value.replace(":",".")),console.log(e.newValue.toString().replace(".",":"))}}>`:t="00:00",mapp.utils.html.node`
+        value=${i}
+        onchange=${l=>{e.newValue=parseFloat(l.target.value.replace(":",".")),e.location.view?.dispatchEvent(new CustomEvent("valChange",{detail:e}))}}>`:t=i,mapp.utils.html.node`
     <div
       class="val"
       style="${`${e.css_val||""}`}">
