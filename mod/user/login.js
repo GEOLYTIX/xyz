@@ -42,9 +42,7 @@ module.exports = async (req, res, message) => {
 
     res.setHeader('Set-Cookie', cookie)
 
-    if (!redirect) return res.send(user)
-
-    res.setHeader('location', `${redirect.replace(/([?&])msg=[^&]+(&|$)/,'')}`)
+    res.setHeader('location', `${redirect && redirect.replace(/([?&])msg=[^&]+(&|$)/,'') || process.env.DIR}`)
 
     return res.status(302).send()
 
@@ -165,6 +163,9 @@ async function post(req, res) {
   // Check password from post body against encrypted password from ACL.
   if (bcrypt.compareSync(req.body.password, user.password)) {
 
+    // password must be removed after check
+    delete user.password
+
     if (process.env.NANO_SESSION) {
 
       const nano_session = nanoid()
@@ -183,6 +184,9 @@ async function post(req, res) {
 
     return user
   }
+
+  // password must be removed after check
+  delete user.password
 
   // FAILED LOGIN
   // Password from login form does NOT match encrypted password in ACL!
