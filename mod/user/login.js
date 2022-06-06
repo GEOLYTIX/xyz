@@ -38,18 +38,13 @@ module.exports = async (req, res, message) => {
         expiresIn: parseInt(process.env.COOKIE_TTL)
       })
 
-    
-
     const cookie = `${process.env.TITLE}=${token};HttpOnly;Max-Age=${process.env.COOKIE_TTL};Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`
 
     res.setHeader('Set-Cookie', cookie)
 
-    if (!redirect) return res.send(user)
-
-    res.setHeader('location', `${redirect.replace(/([?&])msg=[^&]+(&|$)/,'')}`)
+    res.setHeader('location', `${redirect && redirect.replace(/([?&])msg=[^&]+(&|$)/,'') || process.env.DIR}`)
 
     return res.status(302).send()
-
   }
 
   message = await templates(req.params.msg || message, req.params.language)
@@ -170,6 +165,9 @@ async function post(req, res) {
   // Check password from post body against encrypted password from ACL.
   if (bcrypt.compareSync(req.body.password, user.password)) {
 
+    // password must be removed after check
+    delete user.password
+
     // Override the user language role with the login form language
     user.roles.push(req.body.language || user.language)
 
@@ -191,6 +189,9 @@ async function post(req, res) {
 
     return user
   }
+
+  // password must be removed after check
+  delete user.password
 
   // FAILED LOGIN
   // Password from login form does NOT match encrypted password in ACL!
