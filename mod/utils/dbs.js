@@ -31,7 +31,7 @@ module.exports = () => {
 
       // Request which accepts q and arr and will return rows or rows.err.
       try {
-        timeout && await pool.query(`SET statement_timeout = ${timeout}`)
+        timeout && await pool.query(`SET statement_timeout = $1`,[timeout])
 
         const { rows } = await pool.query(q, arr)
 
