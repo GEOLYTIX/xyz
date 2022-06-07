@@ -563,6 +563,7 @@
               "mapChange": true,
               "viewport": true,
               "table": {
+                "layout": "fitColumns",
                 "columns": [
                   {
                     "field": "id",
