@@ -18,7 +18,7 @@ export default (function(){
     
     if (!entry.location.remove) return;
 
-    const ZoomGeom = mapview.layers.ZoomGeom
+    const ZoomGeom = mapview.layers.zoomgeom
 
     const layer = {
       style: Object.assign({}, ZoomGeom.style),

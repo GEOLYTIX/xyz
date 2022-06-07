@@ -703,8 +703,7 @@
             },
             {
               "type": "styledLayer",
-              "query": "styled_layer",
-              "skipEntry": true
+              "query": "styled_layer"
             },
             {
               "type": "pin",

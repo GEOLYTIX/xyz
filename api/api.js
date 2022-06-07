@@ -22,7 +22,7 @@ const routes = {
   workspace: require('../mod/workspace/_workspace'),
 }
 
-process.env.COOKIE_TTL = process.env.COOKIE_TTL || 3600
+process.env.COOKIE_TTL = process.env.COOKIE_TTL || 36000
 
 process.env.TITLE = process.env.TITLE || 'GEOLYTIX | XYZ'
 
