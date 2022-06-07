@@ -58,7 +58,7 @@ export default (function () {
       })
     }`)
 
-    elements.push(textInput({
+    if(layer.style.label) elements.push(textInput({
       title: 'Label Style',
       style: 'label',
       field: 'font',
