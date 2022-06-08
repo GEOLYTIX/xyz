@@ -146,7 +146,8 @@
         "${DIR}/js/plugins/modify_context_menu.js",
         "${DIR}/js/plugins/pin_from_geom.js",
         "${DIR}/js/plugins/screenshot.js",
-        "${DIR}/js/plugins/chart_entry.js"
+        "${DIR}/js/plugins/chart_entry.js",
+        "${DIR}/js/plugins/add_layer_view.js"
       ],
       "measure_distance": {
         "tooltip": "length",
@@ -963,6 +964,9 @@
           "geom": "geom_3857",
           "qID": "id",
           "templates": ["infoj_report"],
+          "filter_view": {
+            "foo": "bar"
+          },
           "style": {
             "default": {
               "strokeColor": "#f00",

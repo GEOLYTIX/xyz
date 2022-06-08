@@ -245,6 +245,7 @@ window.onload = async () => {
       mapview: mapview,
       target: gazetteer,
     }, mapview.locale.gazetteer));
+    
   } else {
 
     // Hide location panel without gazetteer.
