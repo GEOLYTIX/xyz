@@ -11,8 +11,9 @@ export default (function () {
       field: 'fillColor'
     }))
 
-    elements.push(mapp.utils.html.node`<div>Fill Opacity</div><div>
+    elements.push(mapp.utils.html.node`
       ${mapp.ui.elements.slider({
+        label: 'Fill Opacity',
         min: 0,
         max: 1,
         step: 0.1,
@@ -30,8 +31,9 @@ export default (function () {
       field: 'strokeColor'
     }))
 
-    elements.push(mapp.utils.html.node`<div>Stroke Width</div><div>
+    elements.push(mapp.utils.html.node`
       ${mapp.ui.elements.slider({
+        label: 'Stroke Width',
         min: 1,
         max: 10,
         step: 1,
@@ -44,8 +46,9 @@ export default (function () {
       })
     }`)
 
-    elements.push(mapp.utils.html.node`<div>Stroke Opacity</div><div>
+    elements.push(mapp.utils.html.node`
       ${mapp.ui.elements.slider({
+        label: 'Stroke Opacity',
         min: 0,
         max: 1,
         step: 0.1,
@@ -70,7 +73,7 @@ export default (function () {
       header: mapp.utils.html`
         <h3>Visual Adjustment</h3>
         <div class="mask-icon expander"></div>`,
-      content: mapp.utils.html`<div style="display: grid; grid-template-columns: 1fr 1fr; grid-gap: 2px;">${elements}`
+      content: mapp.utils.html`${elements}`
     })
 
 
