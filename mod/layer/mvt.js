@@ -132,7 +132,7 @@ module.exports = async (req, res) => {
   function getField(theme) {
 
     return theme.fieldfx && `${theme.fieldfx} AS ${theme.field}` 
-      || theme.fields?.length && theme.fields.join(', ')
+      || Array.isArray(theme.fields) && theme.fields.join(', ')
       || typeof theme.fields === 'string' && theme.fields
       || theme.field
   }
