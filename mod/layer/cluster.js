@@ -111,7 +111,6 @@ module.exports = async (req, res) => {
         SUM(size) size,
         ${cat_sql || ''}
         ${cid_sql || ''}
-        ${pivot_sql || ''}
         ${label ? '(array_agg(label))[1] AS label,' : ''}
         ST_X(ST_PointOnSurface(ST_Union(geom))) AS x,
         ST_Y(ST_PointOnSurface(ST_Union(geom))) AS y
@@ -348,7 +347,6 @@ module.exports = async (req, res) => {
     if (theme === 'categorized') var cat_sql = `array_agg(cat) cat,`;
     if(layer.key === 'Contributions'){
       var cid_sql = `array_agg(contribution_id) cid, `
-      var pivot_sql = `array_agg(pivot) pivot,`
     }
 
     if (theme === 'graduated')
@@ -362,7 +360,6 @@ module.exports = async (req, res) => {
       ${label ? 'label,' : ''}
       ${cat_sql || ''}
       ${cid_sql || ''}
-      ${pivot_sql || ''}
       ${xy_sql}
     FROM ${agg_sql}`;
   }
