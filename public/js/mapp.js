@@ -923,7 +923,7 @@
       <ul>
       ${t.edit.options.map((r=>{let a=r,o=r;return"object"==typeof r&&(a=Object.keys(r)[0],o=Object.values(r)[0]),e.utils.html.node`<li onclick=${e=>{const r=e.target.closest(".btn-drop");r.classList.toggle("active"),r.querySelector(":first-child").textContent=a,r.querySelector(":first-child").value=o,t.location.view.dispatchEvent(new CustomEvent("valChange",{detail:{input:r.querySelector(":first-child"),entry:t,newValue:o}}))}}>${a}`}))}`)},gr=e=>t=>{const r=e.utils.html.node`<input 
   type="${"datetime"===t.type?"datetime-local":"date"}" 
-  value="${"datetime"===t.type&&e.utils.formatDateTime(t.value)||e.utils.formatDate(t.value)||""}"
+  value=${t.value&&("datetime"===t.type&&new Date(1e3*t.value).toISOString().split("Z")[0]||new Date(1e3*t.value).toISOString().split("T")[0])}
   placeholder=${e.language.layer_filter_pick} 
   style="text-align: end;"
   oninput=${a=>{a.stopPropagation();const o=e.utils.meltDateStr(a.target.value);t.location.view.dispatchEvent(new CustomEvent("valChange",{detail:{input:r,entry:t,newValue:o}}))}}>`;t.val.appendChild(r)},fr=e=>t=>t.val.appendChild(e.utils.html.node`
