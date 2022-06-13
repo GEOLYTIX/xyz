@@ -8,6 +8,8 @@ window.onload = async () => {
       toolbar_current_location: "Current location",
       toolbar_fullscreen: "Fullscreen mapview",
       toolbar_admin: "Open account admin view",
+      toolbar_login: "Log in",
+      toolbar_logout: "Log out"
     },
     de: {
       toolbar_zoom_in: "Zoom rein",
@@ -16,6 +18,8 @@ window.onload = async () => {
       toolbar_current_location: "Standort",
       toolbar_fullscreen: "Vollbild",
       toolbar_admin: "Benutzerkontenverwaltung",
+      toolbar_login: "Einloggen",
+      toolbar_logout: "Ausloggen"
     },
     cn: {
       toolbar_zoom_in: "放大",
@@ -387,7 +391,7 @@ window.onload = async () => {
   document.head.dataset.login &&
     btnColumn.appendChild(mapp.utils.html.node`
       <a
-        title="${mapp.user && mapp.user.email || "Login"}"
+        title="${mapp.user && mapp.dictionary.toolbar_logout || mapp.dictionary.toolbar_login}"
         href="${(mapp.user && "?logout=true") || "?login=true"}">
         <div class="${`mask-icon ${(mapp.user && "logout") || "lock-open"}`}">`);
 
