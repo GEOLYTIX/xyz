@@ -9,7 +9,10 @@ window.onload = async () => {
       toolbar_fullscreen: "Fullscreen mapview",
       toolbar_admin: "Open account admin view",
       toolbar_login: "Log in",
-      toolbar_logout: "Log out"
+      toolbar_logout: "Log out",
+      layers: "Layers",
+      locations: "Locations"
+
     },
     de: {
       toolbar_zoom_in: "Zoom rein",
@@ -19,7 +22,9 @@ window.onload = async () => {
       toolbar_fullscreen: "Vollbild",
       toolbar_admin: "Benutzerkontenverwaltung",
       toolbar_login: "Einloggen",
-      toolbar_logout: "Ausloggen"
+      toolbar_logout: "Ausloggen",
+      layers: "Ebenen",
+      locations: "Orte"
     },
     cn: {
       toolbar_zoom_in: "放大",
@@ -133,20 +138,26 @@ window.onload = async () => {
   const tabs = document.querySelectorAll("#ctrl-tabs > div");
   const tabPanels = document.querySelectorAll("#ctrl-panel > div");
 
-  tabs.forEach((tab) => tab.onclick = (e) => {
+  tabs.forEach((tab) => {
 
-    // Change active class for the tab.
-    tabs.forEach((el) => el.classList.remove("active"));
-    e.target.classList.add("active");
+    // Set help text from dictionary.
+    tab.title = mapp.dictionary[tab.dataset.id]
 
-    // Change active class for the panel.
-    tabPanels.forEach((el) => el.classList.remove("active"));
-    document.getElementById(e.target.dataset.id).classList.add('active')
+    tab.onclick = (e) => {
 
-    // Put focus on the gazetteer if the locations tab is activated.
-    if (e.target.dataset.id === 'locations') {
-      let gazetteerInput = document.getElementById('gazetteerInput')
-      gazetteerInput && window.innerWidth > 768 && gazetteerInput.focus()
+      // Change active class for the tab.
+      tabs.forEach((el) => el.classList.remove("active"));
+      e.target.classList.add("active");
+
+      // Change active class for the panel.
+      tabPanels.forEach((el) => el.classList.remove("active"));
+      document.getElementById(e.target.dataset.id).classList.add('active')
+
+      // Put focus on the gazetteer if the locations tab is activated.
+      if (e.target.dataset.id === 'locations') {
+        let gazetteerInput = document.getElementById('gazetteerInput')
+        gazetteerInput && window.innerWidth > 768 && gazetteerInput.focus()
+      }
     }
   });
 
