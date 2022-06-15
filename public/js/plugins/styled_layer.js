@@ -59,7 +59,7 @@ export default (function(){
     const L = new ol.layer.VectorTile({
       source: ZoomGeom.L.getSource(),
       renderBuffer: 200,
-      style: mapp.layer.style(layer)
+      style: mapp.layer.Style(layer)
     });
 
     entry.location.Layers.push(L)
