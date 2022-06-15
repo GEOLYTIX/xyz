@@ -34,6 +34,11 @@ module.exports = defaults = {
         hidden: true
       }
     },
+    mapboxgl: {
+      style: {
+        hidden: true
+      }
+    },
     geojson: {
       srid: '4326',
       style: {

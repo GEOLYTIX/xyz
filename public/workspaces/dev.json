@@ -23,7 +23,7 @@
       }
     },
     "Mapbox Colour": {
-      "format": "mbtiles",
+      "format": "mapboxgl",
       "mbStyle": "mapbox://styles/dbauszus/ck440h6990nii1co520go20i2",
       "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2t3NmJqZ3N4MG9zeDJ1bGprdzQ2ODllMCJ9.3xhSOxQLx1Egv5i8W7B57A",
       "attribution": {
