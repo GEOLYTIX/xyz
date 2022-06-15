@@ -31,6 +31,16 @@
         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
       }
     },
+    "mapbox_streets": {
+      "name": "Mapbox Streets v11",
+      "format": "mapboxgl",
+      "mbStyle": "mapbox://styles/mapbox/streets-v11",
+      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2t3NmJqZ3N4MG9zeDJ1bGprdzQ2ODllMCJ9.3xhSOxQLx1Egv5i8W7B57A",
+      "attribution": {
+        "© Mapbox": "https://www.mapbox.com/about/maps",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
     "Mapbox Label": {
       "format": "mbtiles",
       "mbStyle": "mapbox://styles/dbauszus/ckjk91u8b1da319o7dhpdhqln",
@@ -172,6 +182,10 @@
         },
         "mapbox_colour": {
           "template": "Mapbox Colour",
+          "group": "Base"
+        },
+        "mapbox_streets": {
+          "template": "mapbox_streets",
           "group": "Base"
         },
         "mapbox_mask": {
