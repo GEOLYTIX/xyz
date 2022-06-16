@@ -44,7 +44,7 @@ module.exports = async (req, res) => {
     req.params.filter =
       ` ${layer.filter?.default && 'AND ' + layer.filter?.default || ''}
       ${req.params.filter && `AND ${sqlFilter(JSON.parse(req.params.filter), SQLparams)}` || ''}
-      ${roles && Object.values(roles).some(r => !!r)
+      ${req.params.filter && roles && Object.values(roles).some(r => !!r)
       && `AND ${sqlFilter(Object.values(roles).filter(r => !!r), SQLparams)}`
       || ''}`
 
