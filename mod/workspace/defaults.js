@@ -24,21 +24,6 @@ module.exports = defaults = {
     },
   },
   layers: {
-    tiles: {
-      style: {
-        hidden: true
-      }
-    },
-    mbtiles: {
-      style: {
-        hidden: true
-      }
-    },
-    mapboxgl: {
-      style: {
-        hidden: true
-      }
-    },
     geojson: {
       srid: '4326',
       style: {

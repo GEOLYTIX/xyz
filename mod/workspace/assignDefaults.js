@@ -31,7 +31,7 @@ module.exports = async workspace => {
       layer = layer.format && Object.assign({},
 
         // Assign layer defaults.
-        defaults.layers[layer.format],
+        defaults.layers[layer.format] || {},
 
         // Layer entries must override template entries.
         layer) || layer
@@ -39,7 +39,11 @@ module.exports = async workspace => {
       layer.style = layer.format && merge({},
 
         // Assign layer style.
-        defaults.layers[layer.format].style,
+        defaults.layers[layer.format]?.style || {
+          style: {
+            hidden: true
+          }
+        },
 
         // Layer style must override default style.
         layer.style || {})
