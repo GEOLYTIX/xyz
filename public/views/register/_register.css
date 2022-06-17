@@ -86,7 +86,7 @@ button {
   padding: 8px;
   text-align: center;
   font: 18px "Open Sans", sans-serif;
-  font-weight: 700;
+  font-weight: bold;
   border-radius: 3px;
   border: 0;
   box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.2);
@@ -99,7 +99,7 @@ button {
 .switch {
   font-size: 120%;
   color: #003D57;
-  font-weight: 700;
+  font-weight: bold;
 }
 
 button:hover {

@@ -5,7 +5,7 @@ button {
   outline: none;
   background: none;
   text-align: center;
-  font-weight: 600; }
+  font-weight: bold; }
   button.mask-icon,
   button > .mask-icon {
     background-color: #003D57; }
@@ -197,7 +197,7 @@ label.checkbox {
       border-radius: 2px;
       color: white;
       font-size: 80%;
-      font-weight: 600;
+      font-weight: bold;
       background-color: #003D57; }
   .dropdown.active > ul {
     display: block;
@@ -765,8 +765,6 @@ input[type=datetime-local] {
   padding-left: 3px;
   padding-right: 3px;
   background: #E9E3DD; }
-  .drawer.layer-group > .header > h2 {
-    font-weight: 400; }
   .drawer.layer-group > * {
     padding-left: 4px;
     padding-right: 4px; }
@@ -1455,13 +1453,15 @@ form.login {
       border: 1px solid #1D68CD;
       outline: none;
       padding: 0; }
-      .tabulator-row .tabulator-cell.tabulator-editing input, .tabulator-row .tabulator-cell.tabulator-editing select {
+      .tabulator-row .tabulator-cell.tabulator-editing input,
+      .tabulator-row .tabulator-cell.tabulator-editing select {
         border: 1px;
         background: transparent;
         outline: none; }
     .tabulator-row .tabulator-cell.tabulator-validation-fail {
       border: 1px solid #dd0000; }
-      .tabulator-row .tabulator-cell.tabulator-validation-fail input, .tabulator-row .tabulator-cell.tabulator-validation-fail select {
+      .tabulator-row .tabulator-cell.tabulator-validation-fail input,
+      .tabulator-row .tabulator-cell.tabulator-validation-fail select {
         border: 1px;
         background: transparent;
         color: #dd0000; }
@@ -1688,13 +1688,17 @@ form.login {
     padding-top: 6px;
     color: #333;
     font-weight: bold; }
-  .tabulator-edit-list .tabulator-edit-list-item.tabulator-edit-list-group-level-2, .tabulator-edit-list .tabulator-edit-list-group.tabulator-edit-list-group-level-2 {
+  .tabulator-edit-list .tabulator-edit-list-item.tabulator-edit-list-group-level-2,
+  .tabulator-edit-list .tabulator-edit-list-group.tabulator-edit-list-group-level-2 {
     padding-left: 12px; }
-  .tabulator-edit-list .tabulator-edit-list-item.tabulator-edit-list-group-level-3, .tabulator-edit-list .tabulator-edit-list-group.tabulator-edit-list-group-level-3 {
+  .tabulator-edit-list .tabulator-edit-list-item.tabulator-edit-list-group-level-3,
+  .tabulator-edit-list .tabulator-edit-list-group.tabulator-edit-list-group-level-3 {
     padding-left: 20px; }
-  .tabulator-edit-list .tabulator-edit-list-item.tabulator-edit-list-group-level-4, .tabulator-edit-list .tabulator-edit-list-group.tabulator-edit-list-group-level-4 {
+  .tabulator-edit-list .tabulator-edit-list-item.tabulator-edit-list-group-level-4,
+  .tabulator-edit-list .tabulator-edit-list-group.tabulator-edit-list-group-level-4 {
     padding-left: 28px; }
-  .tabulator-edit-list .tabulator-edit-list-item.tabulator-edit-list-group-level-5, .tabulator-edit-list .tabulator-edit-list-group.tabulator-edit-list-group-level-5 {
+  .tabulator-edit-list .tabulator-edit-list-item.tabulator-edit-list-group-level-5,
+  .tabulator-edit-list .tabulator-edit-list-group.tabulator-edit-list-group-level-5 {
     padding-left: 36px; }
 
 .tabulator.tabulator-ltr {
