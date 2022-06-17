@@ -736,7 +736,7 @@ input[type=datetime-local] {
     padding-bottom: 5px; }
   .drawer.layer-group.expandable,
   .drawer.layer-view.expandable {
-    box-shadow: 1px 1px 3px #003D5788; }
+    box-shadow: 1px 1px 3px #939faa; }
   .drawer.layer-group.empty,
   .drawer.layer-view.empty {
     box-shadow: none; }
@@ -1919,10 +1919,6 @@ body.tabulator-print-fullscreen-hide > *:not(.tabulator-print-fullscreen) {
 .primary-background {
   color: white;
   background-color: #003D57; }
-
-.dark-background {
-  color: white;
-  background-color: #401505; }
 
 .on-colour {
   color: #E18335; }
