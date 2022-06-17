@@ -13,8 +13,15 @@ button {
     background-color: $primary
   }
 
+  &:hover {
+    cursor: pointer;
+  }
+
   &:disabled {
     opacity: 0.3;
+    &:hover {
+      cursor: auto
+    }
   }
 
   &.wide {
