@@ -15,9 +15,6 @@ body {
   width: 100%;
   height: 100%; }
 
-a > img {
-  height: 100%; }
-
 .display-none {
   display: none !important; }
 
@@ -49,32 +46,29 @@ a > img {
 .ol-zoom {
   top: 0.5em;
   left: 0.5em; }
-
-.ol-zoom .ol-zoom-in,
-.ol-zoom .ol-zoom-out {
-  border-radius: 2px 2px 0 0; }
+  .ol-zoom .ol-zoom-in, .ol-zoom .ol-zoom-out {
+    border-radius: 2px 2px 0 0; }
 
 .ol-control {
   position: absolute;
   background-color: rgba(255, 255, 255, 0.4);
   border-radius: 4px;
   padding: 2px; }
-
-.ol-control button {
-  display: block;
-  margin: 1px;
-  padding: 0;
-  color: #fff;
-  font-weight: 700;
-  text-decoration: none;
-  font-size: inherit;
-  text-align: center;
-  height: 1.375em;
-  width: 1.375em;
-  line-height: .4em;
-  background-color: rgba(0, 60, 136, 0.5);
-  border: none;
-  border-radius: 2px; }
+  .ol-control button {
+    display: block;
+    margin: 1px;
+    padding: 0;
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: inherit;
+    text-align: center;
+    height: 1.375em;
+    width: 1.375em;
+    line-height: .4em;
+    background-color: rgba(0, 60, 136, 0.5);
+    border: none;
+    border-radius: 2px; }
 
 .infotip {
   position: fixed;
@@ -110,6 +104,9 @@ a > img {
   .popup li:hover {
     background-color: #E9E3DD;
     cursor: pointer; }
+
+a > img {
+  height: 100%; }
 
 .attribution-links {
   z-index: 999;

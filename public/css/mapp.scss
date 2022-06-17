@@ -19,10 +19,6 @@ body {
   height: 100%;
 }
 
-a > img {
-  height: 100%;
-}
-
 .display-none {
   display: none !important;
 }
@@ -59,11 +55,11 @@ a > img {
 .ol-zoom {
   top: 0.5em;
   left: 0.5em;
-}
 
-.ol-zoom .ol-zoom-in,
-.ol-zoom .ol-zoom-out {
-  border-radius: 2px 2px 0 0;
+  .ol-zoom-in,
+  .ol-zoom-out {
+    border-radius: 2px 2px 0 0;
+  }
 }
 
 .ol-control {
@@ -71,23 +67,23 @@ a > img {
   background-color: rgba(255,255,255,.4);
   border-radius: 4px;
   padding: 2px;
-}
 
-.ol-control button {
-  display: block;
-  margin: 1px;
-  padding: 0;
-  color: #fff;
-  font-weight: 700;
-  text-decoration: none;
-  font-size: inherit;
-  text-align: center;
-  height: 1.375em;
-  width: 1.375em;
-  line-height: .4em;
-  background-color: rgba(0,60,136,.5);
-  border: none;
-  border-radius: 2px;
+  button {
+    display: block;
+    margin: 1px;
+    padding: 0;
+    color: #fff;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: inherit;
+    text-align: center;
+    height: 1.375em;
+    width: 1.375em;
+    line-height: .4em;
+    background-color: rgba(0,60,136,.5);
+    border: none;
+    border-radius: 2px;
+  }
 }
 
 .infotip {
@@ -134,6 +130,10 @@ a > img {
     background-color: $light;
     cursor: pointer;
   }
+}
+
+a > img {
+  height: 100%;
 }
 
 .attribution-links {
