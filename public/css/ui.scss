@@ -104,16 +104,21 @@
   }
 }
 
-.lighter-background {
+.primary-colour {
+  color: $primary;
+}
+
+.primary-background {
+  color: white;
+  background-color: $primary;
+}
+
+.light-background {
   background-color: $light;
 }
 
 .lighter-background {
   background-color: $lighter;
-}
-
-.primary-colour {
-  color: $primary;
 }
 
 .off-black {
@@ -123,11 +128,6 @@
 .off-black-background {
   color: white;
   background-color: $off-black;
-}
-
-.primary-background {
-  color: white;
-  background-color: $primary;
 }
 
 .on-colour {

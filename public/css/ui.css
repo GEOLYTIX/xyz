@@ -14,7 +14,7 @@ button {
   button:disabled {
     opacity: 0.3; }
     button:disabled:hover {
-      cursor: auto; }
+      cursor: not-allowed; }
   button.wide {
     width: 100%; }
   button.flat {
@@ -50,8 +50,6 @@ button {
   .btn-column button:disabled,
   .btn-column a:disabled {
     cursor: not-allowed; }
-  .btn-column .mask-icon.active {
-    background-color: #E18335; }
 
 .btn-row {
   display: flex; }
@@ -1040,26 +1038,18 @@ form.login {
   background-color: white;
   display: grid;
   grid-template-rows: 50px auto; }
-  .tabview > .panel {
-    position: relative; }
-    .tabview > .panel > .flex-col {
-      display: flex;
-      flex-direction: column;
-      position: absolute;
-      width: 100%;
-      height: 100%; }
   .tabview > .tabs {
     width: 100%;
     height: 50px;
     overflow-x: auto;
     display: flex;
-    background-color: #f0f0f0; }
+    background-color: #E9E3DD; }
     .tabview > .tabs > .tab > .header {
       height: 100%;
       display: flex;
       align-items: center;
       white-space: nowrap;
-      border-right: 1px solid #bbb;
+      border-right: 1px solid #939faa;
       padding: 10px;
       -webkit-user-select: none;
       -moz-user-select: none;
@@ -1070,6 +1060,14 @@ form.login {
       font-weight: bold; }
     .tabview > .tabs > .tab:not(.active) > .header:hover {
       cursor: pointer; }
+  .tabview > .panel {
+    position: relative; }
+    .tabview > .panel > .flex-col {
+      display: flex;
+      flex-direction: column;
+      position: absolute;
+      width: 100%;
+      height: 100%; }
 
 .tabulator {
   position: relative;
@@ -1900,14 +1898,18 @@ body.tabulator-print-fullscreen-hide > *:not(.tabulator-print-fullscreen) {
   .mask-icon.no {
     background-color: #A21309; }
 
-.lighter-background {
+.primary-colour {
+  color: #003D57; }
+
+.primary-background {
+  color: white;
+  background-color: #003D57; }
+
+.light-background {
   background-color: #E9E3DD; }
 
 .lighter-background {
   background-color: #D5E1E6; }
-
-.primary-colour {
-  color: #003D57; }
 
 .off-black {
   color: #3f3f3f; }
@@ -1915,10 +1917,6 @@ body.tabulator-print-fullscreen-hide > *:not(.tabulator-print-fullscreen) {
 .off-black-background {
   color: white;
   background-color: #3f3f3f; }
-
-.primary-background {
-  color: white;
-  background-color: #003D57; }
 
 .on-colour {
   color: #E18335; }

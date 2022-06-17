@@ -20,7 +20,7 @@ button {
   &:disabled {
     opacity: 0.3;
     &:hover {
-      cursor: auto
+      cursor: not-allowed;
     }
   }
 
@@ -76,10 +76,6 @@ button {
   button:disabled,
   a:disabled {
     cursor: not-allowed;
-  }
-
-  .mask-icon.active {
-    background-color: $on;
   }
 }
 
