@@ -52,3 +52,153 @@ input[type=datetime-local] {
     cursor: text;
   }
 }
+
+label.checkbox {
+  display: block;
+
+  &.disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  &.inline {
+    display: inline-block;
+  }
+
+  >span {
+    vertical-align: middle;
+  }
+
+  &.inline + span {
+    vertical-align: middle;
+  }
+
+  >input {
+    display: none;
+  }
+
+  >div {
+    display: inline-block;
+    vertical-align: middle;
+    height: 1em;
+    min-height: 1em;
+    width: 1em;
+    min-width: 1em;
+    margin-right: 0.5em;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    -webkit-background-size: contain;
+    background-image: url("../icons/icon-checkbox-unchecked.svg");
+  }
+
+  >div:hover {
+    cursor: pointer;
+  }
+
+  input:checked+div {
+    background-image: url("../icons/icon-checkbox-checked.svg");
+  }
+
+  input:disabled~* {
+    opacity: 0.4;
+  }
+}
+
+.dropdown {
+  font-family: inherit;
+  width: 100%;
+  overflow: visible;
+  position: relative;
+  background-color: white;
+  box-shadow: 1px 1px 3px 0 #ddd;
+
+  &:disabled {
+    pointer-events: none;
+    opacity: 0.4;
+  }
+
+  >.head {
+    padding: 5px;
+    display: flex;
+    border: 1px solid #ccc;
+    align-items: center;
+
+    >:first-child {
+      pointer-events: none;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    >.icon {
+      pointer-events: none;
+      margin-left: auto;
+      width: 18px;
+      content: url("../icons/icon-drop-down.svg");
+    }
+  }
+
+  >ul {
+    display: none;
+    position: absolute;
+    width: 100%;
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-shadow: 1px 1px 3px 0 #ddd;
+    border: 1px solid #ccc;
+    border-top: none;
+    margin-top: -2px;
+    text-align: left;
+    background-color: white;
+    z-index: 999;
+
+    >li {
+      padding: 5px;
+    }
+
+    >li:hover {
+      background-color: $lighter;
+      cursor: pointer;
+    }
+
+    >li.selected {
+      background-color: $light;
+    }
+
+    .label {
+      padding: 0 6px;
+      border-radius: 2px;
+      color: white;
+      font-size: 80%;
+      font-weight: bold;
+      background-color: $primary;
+    }
+  }
+
+  &.active>ul {
+    display: block;
+    max-height: 600px;
+    box-shadow: 1px 1px 3px 0 #ddd;
+    border: 1px solid#ccc;
+
+    >.head {
+      border-bottom: 1px solid #eee;
+
+      >.icon {
+        content: url("../icons/icon-drop-up.svg");
+      }
+    }
+  }
+}
+
+@media print {
+  .dropdown {
+    box-shadow: none;
+
+    >.head>.icon {
+      display: none;
+    }
+  }
+}

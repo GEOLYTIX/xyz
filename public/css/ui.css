@@ -56,39 +56,6 @@ button {
   .btn-row > * {
     margin: 10px 5px; }
 
-label.checkbox {
-  display: block; }
-  label.checkbox.disabled {
-    opacity: 0.3;
-    pointer-events: none; }
-  label.checkbox.inline {
-    display: inline-block; }
-  label.checkbox > span {
-    vertical-align: middle; }
-  label.checkbox.inline + span {
-    vertical-align: middle; }
-  label.checkbox > input {
-    display: none; }
-  label.checkbox > div {
-    display: inline-block;
-    vertical-align: middle;
-    height: 1em;
-    min-height: 1em;
-    width: 1em;
-    min-width: 1em;
-    margin-right: 0.5em;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    -webkit-background-size: contain;
-    background-image: url("../icons/icon-checkbox-unchecked.svg"); }
-  label.checkbox > div:hover {
-    cursor: pointer; }
-  label.checkbox input:checked + div {
-    background-image: url("../icons/icon-checkbox-checked.svg"); }
-  label.checkbox input:disabled ~ * {
-    opacity: 0.4; }
-
 .drawer.expandable:not(.empty) > .header:hover {
   cursor: pointer; }
 .drawer.expandable.empty > .header > .mask-icon.expander {
@@ -146,74 +113,6 @@ label.checkbox {
   .drawer.lv-3 > :not(.header) {
     margin-top: 3px; }
 
-.dropdown {
-  font-family: inherit;
-  width: 100%;
-  overflow: visible;
-  position: relative;
-  background-color: white;
-  box-shadow: 1px 1px 3px 0 #ddd; }
-  .dropdown:disabled {
-    pointer-events: none;
-    opacity: 0.4; }
-  .dropdown > .head {
-    padding: 5px;
-    display: flex;
-    border: 1px solid #ccc;
-    align-items: center; }
-    .dropdown > .head > :first-child {
-      pointer-events: none;
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis; }
-    .dropdown > .head > .icon {
-      pointer-events: none;
-      margin-left: auto;
-      width: 18px;
-      content: url("../icons/icon-drop-down.svg"); }
-  .dropdown > ul {
-    display: none;
-    position: absolute;
-    width: 100%;
-    max-height: 500px;
-    overflow-y: auto;
-    overflow-x: hidden;
-    box-shadow: 1px 1px 3px 0 #ddd;
-    border: 1px solid #ccc;
-    border-top: none;
-    margin-top: -2px;
-    text-align: left;
-    background-color: white;
-    z-index: 999; }
-    .dropdown > ul > li {
-      padding: 5px; }
-    .dropdown > ul > li:hover {
-      background-color: #D5E1E6;
-      cursor: pointer; }
-    .dropdown > ul > li.selected {
-      background-color: #E9E3DD; }
-    .dropdown > ul .label {
-      padding: 0 6px;
-      border-radius: 2px;
-      color: white;
-      font-size: 80%;
-      font-weight: bold;
-      background-color: #003D57; }
-  .dropdown.active > ul {
-    display: block;
-    max-height: 600px;
-    box-shadow: 1px 1px 3px 0 #ddd;
-    border: 1px solid #ccc; }
-    .dropdown.active > ul > .head {
-      border-bottom: 1px solid #eee; }
-      .dropdown.active > ul > .head > .icon {
-        content: url("../icons/icon-drop-up.svg"); }
-
-@media print {
-  .dropdown {
-    box-shadow: none; }
-    .dropdown > .head > .icon {
-      display: none; } }
 body {
   font-family: 'Titillium Web', sans-serif;
   color: #3f3f3f;
@@ -715,6 +614,107 @@ input[type=datetime-local] {
   input[type=datetime-local]:focus {
     cursor: text; }
 
+label.checkbox {
+  display: block; }
+  label.checkbox.disabled {
+    opacity: 0.3;
+    pointer-events: none; }
+  label.checkbox.inline {
+    display: inline-block; }
+  label.checkbox > span {
+    vertical-align: middle; }
+  label.checkbox.inline + span {
+    vertical-align: middle; }
+  label.checkbox > input {
+    display: none; }
+  label.checkbox > div {
+    display: inline-block;
+    vertical-align: middle;
+    height: 1em;
+    min-height: 1em;
+    width: 1em;
+    min-width: 1em;
+    margin-right: 0.5em;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    -webkit-background-size: contain;
+    background-image: url("../icons/icon-checkbox-unchecked.svg"); }
+  label.checkbox > div:hover {
+    cursor: pointer; }
+  label.checkbox input:checked + div {
+    background-image: url("../icons/icon-checkbox-checked.svg"); }
+  label.checkbox input:disabled ~ * {
+    opacity: 0.4; }
+
+.dropdown {
+  font-family: inherit;
+  width: 100%;
+  overflow: visible;
+  position: relative;
+  background-color: white;
+  box-shadow: 1px 1px 3px 0 #ddd; }
+  .dropdown:disabled {
+    pointer-events: none;
+    opacity: 0.4; }
+  .dropdown > .head {
+    padding: 5px;
+    display: flex;
+    border: 1px solid #ccc;
+    align-items: center; }
+    .dropdown > .head > :first-child {
+      pointer-events: none;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis; }
+    .dropdown > .head > .icon {
+      pointer-events: none;
+      margin-left: auto;
+      width: 18px;
+      content: url("../icons/icon-drop-down.svg"); }
+  .dropdown > ul {
+    display: none;
+    position: absolute;
+    width: 100%;
+    max-height: 500px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    box-shadow: 1px 1px 3px 0 #ddd;
+    border: 1px solid #ccc;
+    border-top: none;
+    margin-top: -2px;
+    text-align: left;
+    background-color: white;
+    z-index: 999; }
+    .dropdown > ul > li {
+      padding: 5px; }
+    .dropdown > ul > li:hover {
+      background-color: #D5E1E6;
+      cursor: pointer; }
+    .dropdown > ul > li.selected {
+      background-color: #E9E3DD; }
+    .dropdown > ul .label {
+      padding: 0 6px;
+      border-radius: 2px;
+      color: white;
+      font-size: 80%;
+      font-weight: bold;
+      background-color: #003D57; }
+  .dropdown.active > ul {
+    display: block;
+    max-height: 600px;
+    box-shadow: 1px 1px 3px 0 #ddd;
+    border: 1px solid #ccc; }
+    .dropdown.active > ul > .head {
+      border-bottom: 1px solid #eee; }
+      .dropdown.active > ul > .head > .icon {
+        content: url("../icons/icon-drop-up.svg"); }
+
+@media print {
+  .dropdown {
+    box-shadow: none; }
+    .dropdown > .head > .icon {
+      display: none; } }
 .drawer.layer-group,
 .drawer.layer-view {
   margin-top: 7px;
