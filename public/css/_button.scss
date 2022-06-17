@@ -5,52 +5,45 @@ button {
   border: none;
   outline: none;
   background: none;
+  text-align: center;
+  font-weight: 600;
 
-  &:hover:enabled {
-    cursor: pointer;
+  &.mask-icon,
+  >.mask-icon {
+    background-color: $primary
   }
 
   &:disabled {
     opacity: 0.3;
-    pointer-events: none;
-    cursor: default;
   }
 
   &.wide {
     width: 100%;
   }
 
-  &.mask-icon, .mask-icon {
-    background-color: $primary;
-  }
-  
-  &.mask-icon.on {
-    background-color: $on;
-  }
-  
-  &.mask-icon.no {
-    background-color: $no;
-  }
-
   &.flat {
-    border-radius: 2px;
-    text-align: center;
-    font-weight: 600;
-    /*box-shadow: 1px 1px 2px #ccc;*/
-    border-bottom: 1px solid #eee;
-    padding: 5px;
-    
-    &:hover:enabled {
-      cursor: pointer;
-      transition: opacity 300ms cubic-bezier(.694, 0, 0.335, 1),background-color 100ms cubic-bezier(.694, 0, 0.335, 1),color 100ms cubic-bezier(.694, 0, 0.335, 1);
-    }
-  
+    border-radius: 3px;
+    border-bottom: 1px solid $lighter;
+    padding: 0.3em;
+      
     &.active {
-      background-color: $on;
-      /*box-shadow: none;*/
-      box-shadow: 1px 1px 2px #ccc;
       border-bottom: 3px solid $on;
     }
+  }
+
+  &.raised {
+    border-radius: 3px;
+    border: 1px solid $lighter;
+    box-shadow: 1px 1px 2px $lighter;
+    padding: 0.3em;
+     
+    &.active {
+      box-shadow: none;
+    }
+  }
+
+  &.active {
+    background-color: $on;
   }
 }
 

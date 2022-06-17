@@ -3,36 +3,31 @@ button {
   font-family: inherit;
   border: none;
   outline: none;
-  background: none; }
-  button:hover:enabled {
-    cursor: pointer; }
+  background: none;
+  text-align: center;
+  font-weight: 600; }
+  button.mask-icon,
+  button > .mask-icon {
+    background-color: #003D57; }
   button:disabled {
-    opacity: 0.3;
-    pointer-events: none;
-    cursor: default; }
+    opacity: 0.3; }
   button.wide {
     width: 100%; }
-  button.mask-icon, button .mask-icon {
-    background-color: #003D57; }
-  button.mask-icon.on {
-    background-color: #E18335; }
-  button.mask-icon.no {
-    background-color: #A21309; }
   button.flat {
-    border-radius: 2px;
-    text-align: center;
-    font-weight: 600;
-    /*box-shadow: 1px 1px 2px #ccc;*/
-    border-bottom: 1px solid #eee;
-    padding: 5px; }
-    button.flat:hover:enabled {
-      cursor: pointer;
-      transition: opacity 300ms cubic-bezier(0.694, 0, 0.335, 1), background-color 100ms cubic-bezier(0.694, 0, 0.335, 1), color 100ms cubic-bezier(0.694, 0, 0.335, 1); }
+    border-radius: 3px;
+    border-bottom: 1px solid #D5E1E6;
+    padding: 0.3em; }
     button.flat.active {
-      background-color: #E18335;
-      /*box-shadow: none;*/
-      box-shadow: 1px 1px 2px #ccc;
       border-bottom: 3px solid #E18335; }
+  button.raised {
+    border-radius: 3px;
+    border: 1px solid #D5E1E6;
+    box-shadow: 1px 1px 2px #D5E1E6;
+    padding: 0.3em; }
+    button.raised.active {
+      box-shadow: none; }
+  button.active {
+    background-color: #E18335; }
 
 .btn-column {
   display: grid;
@@ -1901,6 +1896,10 @@ body.tabulator-print-fullscreen-hide > *:not(.tabulator-print-fullscreen) {
 
 .mask-icon {
   background-color: #939faa; }
+  .mask-icon.on {
+    background-color: #E18335; }
+  .mask-icon.no {
+    background-color: #A21309; }
 
 .lighter-background {
   background-color: #E9E3DD; }

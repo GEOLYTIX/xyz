@@ -101,7 +101,13 @@
 
 // Colour classes
 .mask-icon {
-  background-color: $primary-light
+  background-color: $primary-light;
+  &.on {
+    background-color: $on;
+  }
+  &.no {
+    background-color: $no;
+  }
 }
 
 .lighter-background {
