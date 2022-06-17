@@ -46,7 +46,8 @@ body {
 .ol-zoom {
   top: 0.5em;
   left: 0.5em; }
-  .ol-zoom .ol-zoom-in, .ol-zoom .ol-zoom-out {
+  .ol-zoom .ol-zoom-in,
+  .ol-zoom .ol-zoom-out {
     border-radius: 2px 2px 0 0; }
 
 .ol-control {
