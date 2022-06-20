@@ -1066,6 +1066,10 @@ form.login {
       position: absolute;
       width: 100%;
       height: 100%; }
+    .tabview > .panel > .dataview-target {
+      width: 100%;
+      height: 100%;
+      position: absolute; }
 
 .tabulator {
   position: relative;
