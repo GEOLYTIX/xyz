@@ -581,6 +581,7 @@
               "viewport": true,
               "table": {
                 "layout": "fitColumns",
+                "selectable": false,
                 "columns": [
                   {
                     "field": "id",
@@ -588,7 +589,8 @@
                   },
                   {
                     "field": "store_name",
-                    "title": "Store"
+                    "title": "Store",
+                    "editor": "input"
                   },
                   {
                     "field": "town",
@@ -597,31 +599,7 @@
                 ]
               }
             },
-            "F00": {
-              "target": "tabview",
-              "display": true,
-              "query": "retail_points_list",
-              "toolbar": {
-                "viewport": true
-              },
-              "table": {
-                "columns": [
-                  {
-                    "field": "id",
-                    "title": "ID"
-                  },
-                  {
-                    "field": "store_name",
-                    "title": "Store"
-                  },
-                  {
-                    "field": "town",
-                    "title": "Town"
-                  }
-                ]
-              }
-            },
-            "F01": {
+            "foo": {
               "title": "A longer than expected title",
               "display": true,
               "target": "tabview",
