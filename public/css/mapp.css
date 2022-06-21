@@ -117,4 +117,21 @@ a > img {
     display: inline-block;
     white-space: nowrap; }
 
+.legend > .grid {
+  margin-top: 5px;
+  display: grid;
+  grid-template-columns: min-content;
+  grid-gap: 5px;
+  align-items: center;
+  justify-content: start; }
+  .legend > .grid > .contents {
+    display: contents; }
+  .legend > .grid .label {
+    grid-column: 2; }
+.legend .switch {
+  cursor: pointer; }
+.legend .switch.disabled {
+  text-decoration: line-through;
+  opacity: 0.5; }
+
 /*# sourceMappingURL=mapp.css.map */
