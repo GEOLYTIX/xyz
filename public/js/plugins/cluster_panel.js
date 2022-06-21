@@ -86,10 +86,11 @@ export default (function(){
     }));
 
     const drawer = mapp.ui.elements.drawer({
+      data_id: 'cluster-drawer',
+      class: 'raised',
       header: mapp.utils.html`
         <h3>Cluster</h3>
         <div class="mask-icon expander"></div>`,
-      class: 'lv-1',
       content: mapp.utils.html`${elements}`
     });
 

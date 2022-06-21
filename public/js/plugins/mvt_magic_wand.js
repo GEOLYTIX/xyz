@@ -58,7 +58,7 @@ export default (() => {
         }
 
         layer.mvtMagicWand.btn = mapp.utils.html.node`
-        <button class="flat wide primary-colour"
+        <button class="flat bold wide primary-colour"
         onclick=${async e => {
         	e.stopPropagation()
 

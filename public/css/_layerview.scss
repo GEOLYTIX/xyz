@@ -6,8 +6,7 @@
   border-radius: 3px;
 
   >.header {
-    padding-top: 5px;
-    padding-bottom: 5px;
+
     ~.drawer.layer-view{
       margin-top: 0
     }
@@ -20,42 +19,17 @@
     padding-bottom: 5px;
   }
 
-  &.expandable {
-    box-shadow: 1px 1px 3px $primary-light;
-  }
-
-  &.empty {
-    box-shadow: none;
-  }
-
   &.expanded {
     padding-bottom: 5px;
-    box-shadow: none;
   }
 }
 
 .drawer.layer-view {
   padding-left: 5px;
   padding-right: 5px;
-  background-color: ghostwhite;
 
-  >.header {
-    font-weight: bold;
-  }
-
-  >.drawer.expandable {
-    box-shadow: 1px 1px 3px $primary-light;
-    margin-top: 6px;
-    padding: 0 5px;
-    border-radius: 3px;
-    border: 1px solid #eee;
-    background-color: white;
-  }
-
-  >.drawer.expanded {
-    box-shadow: none;
-    border: none;
-    padding-bottom: 5px;
+  >*:not(.header) {
+    margin-top: 5px;
   }
 }
 

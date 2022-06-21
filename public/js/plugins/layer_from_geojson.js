@@ -9,7 +9,7 @@ document.dispatchEvent(new CustomEvent('geojson_file', {
       layer.view.appendChild(_xyz.utils.html.node`
       <div style="padding-right: 5px">
       <button
-        class="btn-wide primary-colour"
+        class="raised wide bold primary-colour"
         onclick=${e => {
           e.stopPropagation()
           input.click()

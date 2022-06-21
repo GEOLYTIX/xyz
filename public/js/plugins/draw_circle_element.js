@@ -69,15 +69,14 @@ export default (function(){
 
     const btn = mapp.utils.html.node`
     <button
-      class="raised wide primary-colour"
+      class="raised wide bold primary-colour"
       onclick=${e=>draw(e, options)}>
       Set Centre`
 
     const drawer = mapp.ui.elements.drawer({
       header: mapp.utils.html`
-        <h2>Circle</h2>
+        <h3>Circle</h3>
         <div class="mask-icon expander"></div>`,
-      class: 'lv-3 raised',
       content: mapp.utils.html`<div class="panel">
         ${unitsDropDown}
         ${rangeSlider}

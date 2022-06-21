@@ -4,14 +4,18 @@
 
 body {
   font-family: 'Titillium Web', sans-serif;
+  font-size: 0.8em;
   color: $off-black;
-  font-size: 12px;
+}
+
+.bold {
+  font-weight: bold;
 }
 
 a {
-  color: $primary;
   text-decoration: none;
-  font-weight: 700;
+  font-weight: bold;
+  color: $primary;
 }
 
 li {
@@ -19,56 +23,16 @@ li {
 }
 
 h1 {
-  font-size: 1.3em;
+  font-size: 130%;
   font-weight: 700;
 }
 
 h2 {
-  font-size: 1.2em;
+  font-size: 120%;
   font-weight: 600;
 }
 
 h3 {
-  font-size: 1.1em;
+  font-size: 110%;
   font-weight: 600;
-}
-
-h4 {
-  font-size: 1em;
-  font-weight: 600;
-}
-
-.label, 
-.val {
-  font-size: 1.1em;
-}
-
-label.checkbox span {
-  font-size: 1em;
-}
-
-/* dropdown head text */
-button.dropdown > .head > span, 
-button.dropdown ul > li {
-  font-size: 0.9em;
-}
-
-button.wide {
-  font-size: 1em;
-}
-
-.bold {
-  font-weight: 700;
-}
-
-.lv-1 {
-  font-size: 1em;
-}
-
-.lv-2 {
-  font-size: 0.9em;
-}
-
-.lv-3 {
-  font-size: 0.8em;
 }

@@ -111,7 +111,8 @@ a > img {
 
 .attribution-links {
   z-index: 999;
-  text-align: right; }
+  text-align: right;
+  font-size: 95%; }
   .attribution-links a {
     margin-left: 5px;
     display: inline-block;

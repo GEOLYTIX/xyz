@@ -68,7 +68,7 @@ export default (function(){
 
       const btn = mapp.utils.html.node`
         <button
-          class="raised wide primary-colour"
+          class="raised wide bold primary-colour"
           onclick=${e=>entry.location.layer.compare_locations.add_location(entry.location)}>
           Add to comparison`
     

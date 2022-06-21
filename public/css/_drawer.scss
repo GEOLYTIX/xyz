@@ -1,6 +1,8 @@
 @import 'colours';
 
 .drawer {
+  padding: 5px;
+  background-color: white;
 
   &.expandable:not(.empty)>.header:hover {
     cursor: pointer;
@@ -61,30 +63,24 @@
 
   }
 
-  &.expandable.flat {
+  &.flat {
     border-radius: 2px;
-    box-shadow: 1px 1px 2px #ccc;
-    border: 1px solid #eee;
-    padding: 5px;
+    border: 1px solid $lighter;
   }
 
-  &.expandable.flat.expanded {
+  &.raised {
+    border-radius: 2px;
+    box-shadow: 1px 1px 3px $primary-light;
+    border: 1px solid $lighter;
+  }
+
+  &.raised.empty {
     box-shadow: none;
     border: none;
-    padding: 5px 0;
-  }
-}
-
-.drawer.lv-1,
-.drawer.lv-2,
-.drawer.lv-3  {
-  padding-bottom: 5px;
-
-  >.header {
-    padding: 3px 0;
   }
 
-  >:not(.header) {
-    margin-top: 3px;
+  &.expandable.expanded {
+    box-shadow: none;
+    border: none;
   }
 }
