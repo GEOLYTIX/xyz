@@ -8,10 +8,6 @@ body {
   color: $off-black;
 }
 
-.bold {
-  font-weight: bold;
-}
-
 a {
   text-decoration: none;
   font-weight: bold;
@@ -35,4 +31,8 @@ h2 {
 h3 {
   font-size: 110%;
   font-weight: 600;
+}
+
+.bold {
+  font-weight: bold;
 }
