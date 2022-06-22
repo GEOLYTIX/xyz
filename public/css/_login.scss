@@ -4,7 +4,7 @@ form.login {
   margin: 0 auto !important;
   padding: 50px;
   max-width: 600px;
-  font: 18px "Open Sans", sans-serif;
+  font-size: 120%;
 
   .input-group {
     width: 100%;
@@ -12,8 +12,7 @@ form.login {
   }
   
   input {
-    font-size: 18px;
-    padding: 10px 0;
+    padding: 5px;
     width: 100%;
     border: none;
     border-bottom: 1px solid #999;

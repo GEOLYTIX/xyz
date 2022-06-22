@@ -594,7 +594,7 @@ mapp.utils.merge(mapp.dictionaries,{en:{layer_zoom_to_extent:"Zoom to filtered l
           type="email"
           required maxlength="50">
         <span class="bar"></span>
-        <label style="color: #fff" for="auth_user_email">E-mail</label>
+        <label for="auth_user_email">E-mail</label>
       </div>
   
       <div class="input-group">
@@ -604,7 +604,7 @@ mapp.utils.merge(mapp.dictionaries,{en:{layer_zoom_to_extent:"Zoom to filtered l
           type="password"
           required minlength="8">
         <span class="bar"></span>
-        <label style="color: #fff" for="auth_user_password">Password</label>
+        <label for="auth_user_password">Password</label>
       </div>
      
       <button id="btnLogin" type="submit">Log In</button>

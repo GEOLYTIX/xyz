@@ -812,7 +812,7 @@ label.checkbox {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 5px 10px;
-    font-size: 0.9em; }
+    font-size: 90%; }
     .location-view-grid .drawer.group > .header {
       grid-column: 1 / 3; }
     .location-view-grid .drawer.group .label, .location-view-grid .drawer.group .val {
@@ -865,13 +865,12 @@ form.login {
   margin: 0 auto !important;
   padding: 50px;
   max-width: 600px;
-  font: 18px "Open Sans", sans-serif; }
+  font-size: 120%; }
   form.login .input-group {
     width: 100%;
     padding: 5px 0; }
   form.login input {
-    font-size: 18px;
-    padding: 10px 0;
+    padding: 5px;
     width: 100%;
     border: none;
     border-bottom: 1px solid #999; }
@@ -1782,7 +1781,7 @@ body.tabulator-print-fullscreen-hide > *:not(.tabulator-print-fullscreen) {
   top: 0;
   width: 100%;
   height: 100%;
-  z-index: infinity;
+  z-index: 999999;
   background-color: #eeed; }
   .interface-mask > .bg-image {
     margin: 5%;
