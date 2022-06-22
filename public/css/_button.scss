@@ -11,6 +11,12 @@ button {
     background-color: $primary
   }
 
+  &.mask-icon.active,
+  &.active>.mask-icon,
+  >.mask-icon.active {
+    background-color: $on
+  }
+
   &:hover {
     cursor: pointer;
   }

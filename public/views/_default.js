@@ -105,7 +105,7 @@ window.onload = async () => {
       // Half width snap.
       if (pageX > window.innerWidth / 2) pageX = window.innerWidth / 2;
 
-      document.body.style.gridTemplateColumns = `${pageX}px 10px 50px auto`;
+      document.body.style.gridTemplateColumns = `${pageX}px 10px auto`;
     },
   });
 
@@ -363,7 +363,7 @@ window.onload = async () => {
       title=${mapp.dictionary.toolbar_current_location}
       onclick=${(e) => {
         mapview.locate();
-        e.target.classList.toggle("enabled");
+        e.target.classList.toggle('active');
       }}>
       <div class="mask-icon gps-not-fixed">`);
 
@@ -373,8 +373,8 @@ window.onload = async () => {
       class="mobile-display-none"
       title=${mapp.dictionary.toolbar_fullscreen}
       onclick=${(e) => {
-        e.target.classList.toggle("enabled");
-        document.body.classList.toggle("fullscreen");
+        e.target.classList.toggle('active');
+        document.body.classList.toggle('fullscreen');
         mapview.Map.updateSize();
         Object.values(mapview.layers)
           .forEach((layer) => layer.mbMap?.resize());

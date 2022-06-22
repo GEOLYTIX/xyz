@@ -155,11 +155,11 @@
 
       body {
         display: grid;
-        grid-template-columns: 333px 10px 50px auto;
+        grid-template-columns: 333px 10px auto;
       }
 
       body.fullscreen {
-        grid-template-columns: 0 0 50px auto !important;
+        grid-template-columns: 0 0 auto !important;
       }
 
       body.fullscreen #ctrls {
@@ -168,7 +168,7 @@
 
       #Map {
         grid-row: 1;
-        grid-column: 3/5;
+        grid-column: 3;
         position: relative;
       }
 
@@ -185,8 +185,8 @@
       #mapButton {
         position: absolute;
         height: 100%;
-        grid-column: 3;
         grid-row: 1/4;
+        grid-column: 3;
         background-color: #fff;
         opacity: 0.8;
       }
@@ -208,7 +208,7 @@
 
       #Tabview {
         grid-row: 3;
-        grid-column: 3/5;
+        grid-column: 3;
       }
 
       #ctrls-divider {
@@ -226,7 +226,7 @@
       #tabview-divider {
         position: relative;
         grid-row: 2;
-        grid-column: 3/5;
+        grid-column: 3;
         background: repeating-linear-gradient(0deg, #ddd, #fff 3px);
         box-shadow: 0px -1px 6px -3px #777;
       }

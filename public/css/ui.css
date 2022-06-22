@@ -7,6 +7,9 @@ button {
   button.mask-icon,
   button > .mask-icon {
     background-color: #003D57; }
+  button.mask-icon.active, button.active > .mask-icon,
+  button > .mask-icon.active {
+    background-color: #E18335; }
   button:hover {
     cursor: pointer; }
   button:disabled {
@@ -1782,7 +1785,7 @@ body.tabulator-print-fullscreen-hide > *:not(.tabulator-print-fullscreen) {
   width: 100%;
   height: 100%;
   z-index: 999999;
-  background-color: #eeed; }
+  background-color: #eeea; }
   .interface-mask > .bg-image {
     margin: 5%;
     height: 90%;
