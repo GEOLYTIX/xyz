@@ -406,6 +406,12 @@ window.onload = async () => {
         href="${(mapp.user && "?logout=true") || "?login=true"}">
         <div class="${`mask-icon ${(mapp.user && "logout") || "lock-open"}`}">`);
 
+  // btnColumn.appendChild(mapp.utils.html.node`
+  //   <a
+  //     title="GEOLYTIX MAPP"
+  //     href="https://geolytix.com">
+  //     <div class="bg-icon mapp">`);
+
   // Append spacer for tableview
   btnColumn.appendChild(mapp.utils.html.node`
     <div class="mobile-display-none" style="height: 60px;">`);

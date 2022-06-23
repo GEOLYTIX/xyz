@@ -90,6 +90,10 @@
       "template": "SELECT id, store_name, town FROM dev.retail_points WHERE true ${viewport} LIMIT 100;",
       "dbs": "DEV"
     },
+    "scratch_table": {
+      "template": "SELECT id, char_field, numeric_field FROM dev.scratch WHERE true ${viewport} ${filter} LIMIT 100;",
+      "dbs": "DEV"
+    },
     "lad_intersect": {
       "template": "select lad_name, st_asgeojson(geom_3857_200m) from geodata.uk_glx_geodata_admin_lad where st_intersects(st_setsrid(st_point(%{x},%{y}),3857), geom_3857_200m)",
       "dbs": "MAPP"
@@ -594,7 +598,11 @@
                   },
                   {
                     "field": "town",
-                    "title": "Town"
+                    "title": "Town",
+                    "headerFilter": "custom",
+                    "headerFilterParams": {
+                      "type": "like"
+                    }
                   }
                 ]
               }
@@ -756,7 +764,11 @@
             },
             {
               "field": "town",
-              "css_val": "text-align: right;"
+              "css_val": "text-align: right;",
+              "filter": {
+                "type": "like",
+                "title": "Town"
+              }
             },
             {
               "field": "size_sqft",
@@ -960,6 +972,49 @@
           "templates": ["infoj_report"],
           "filter_view": {
             "foo": "bar"
+          },
+          "dataviews": {
+            "scratch": {
+              "display": true,
+              "target": "tabview",
+              "query": "scratch_table",
+              "queryparams": {
+                "layer": true,
+                "filter": true
+              },
+              "viewport": true,
+              "mapChange": true,
+              "toolbar": {
+                "viewport": true,
+                "download_csv": true,
+                "download_json": true
+              },
+              "table": {
+                "layout": "fitColumns",
+                "columns": [
+                  {
+                    "field": "id",
+                    "title": "ID"
+                  },
+                  {
+                    "field": "char_field",
+                    "title": "Char",
+                    "headerFilter": "input",
+                    "headerFilterParams": {
+                      "type": "like"
+                    }
+                  },
+                  {
+                    "field": "numeric_field",
+                    "title": "Num",
+                    "headerFilter": "input",
+                    "headerFilterParams": {
+                      "type": "numeric"
+                    }
+                  }
+                ]
+              }
+            }
           },
           "style": {
             "default": {
