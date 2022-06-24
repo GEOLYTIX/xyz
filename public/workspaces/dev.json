@@ -999,7 +999,7 @@
                   {
                     "field": "char_field",
                     "title": "Char",
-                    "headerFilter": "input",
+                    "headerFilter": true,
                     "headerFilterParams": {
                       "type": "like"
                     }
@@ -1007,7 +1007,7 @@
                   {
                     "field": "numeric_field",
                     "title": "Num",
-                    "headerFilter": "input",
+                    "headerFilter": true,
                     "headerFilterParams": {
                       "type": "numeric"
                     }
