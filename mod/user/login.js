@@ -27,14 +27,16 @@ module.exports = async (req, res, message) => {
     if (user instanceof Error) return res.status(401).send(user.message)
 
     // Create token with 8 hour expiry.
-    const token = jwt.sign({
+    const token = jwt.sign(
+      {
         email: user.email,
         admin: user.admin,
         language: user.language,
         roles: user.roles,
         session: user.session
       },
-      process.env.SECRET, {
+      process.env.SECRET,
+      {
         expiresIn: parseInt(process.env.COOKIE_TTL)
       })
 

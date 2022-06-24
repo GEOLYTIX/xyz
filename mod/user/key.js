@@ -22,11 +22,8 @@ module.exports = async (req, res) => {
     api: true
   }
 
-  const key = jwt.sign(
-    api_user,
-    process.env.SECRET)
+  const key = jwt.sign(api_user, process.env.SECRET)
  
-  
   // Store api_token in ACL.
   var rows = await acl(`
     UPDATE acl_schema.acl_table SET api = '${key}'

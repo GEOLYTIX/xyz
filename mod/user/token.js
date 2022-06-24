@@ -12,7 +12,8 @@ module.exports = async (req, res) => {
 
   const token = jwt.sign(
     req.params.user,
-    process.env.SECRET, {
+    process.env.SECRET,
+    {
       expiresIn: '8hr'
     })
 

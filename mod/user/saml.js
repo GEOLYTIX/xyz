@@ -117,8 +117,7 @@ module.exports = (req, res) => {
           process.env.SECRET,
           {
             expiresIn: parseInt(process.env.COOKIE_TTL),
-          }
-        );
+          });
 
         const cookie =
           `${process.env.TITLE}=${token};HttpOnly;` +
