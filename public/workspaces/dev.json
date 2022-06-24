@@ -94,6 +94,10 @@
       "template": "SELECT id, char_field, numeric_field FROM dev.scratch WHERE true ${viewport} ${filter} LIMIT 100;",
       "dbs": "DEV"
     },
+    "zoomgeom_table": {
+      "template": "SELECT id FROM geodata.uk_glx_geodata_seamless_shopper_town WHERE id = ANY(ARRAY[${ids}]);",
+      "dbs": "MAPP"
+    },
     "lad_intersect": {
       "template": "select lad_name, st_asgeojson(geom_3857_200m) from geodata.uk_glx_geodata_admin_lad where st_intersects(st_setsrid(st_point(%{x},%{y}),3857), geom_3857_200m)",
       "dbs": "MAPP"
@@ -162,7 +166,8 @@
         "${DIR}/js/plugins/screenshot.js",
         "${DIR}/js/plugins/chart_entry.js",
         "${DIR}/js/plugins/table_entry.js",
-        "${DIR}/js/plugins/custom_filter.js"
+        "${DIR}/js/plugins/custom_filter.js",
+        "${DIR}/js/plugins/mvtWand.js"
       ],
       "measure_distance": {
         "tooltip": "length",
@@ -246,6 +251,24 @@
               "display": true
             }
           ],
+          "mvtWand": {
+            "host": "/latest",
+            "tabview": "tabview",
+            "query": "zoomgeom_table",
+            "queryparams": {
+              "ids": 0
+            },
+            "table": {
+              "layout": "fitColumns",
+              "selectable": false,
+              "columns": [
+                {
+                  "field": "id",
+                  "title": "ID"
+                }
+              ]
+            }
+          },
           "style": {
             "default": {
               "fillColor": "#fff",

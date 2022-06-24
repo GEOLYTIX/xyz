@@ -108,7 +108,7 @@ module.exports = async (req, res) => {
         const change = req.params[param] || ""
 
         // Change value may only contain a limited set of whitelisted characters.
-        if (!reserved.has(param) && !/^[A-Za-z0-9._-]*$/.test(change)) {
+        if (!reserved.has(param) && !/^[A-Za-z0-9,"'._-]*$/.test(change)) {
 
           // Err and return empty string if the change value is invalid.
           console.error("Change param no bueno")
