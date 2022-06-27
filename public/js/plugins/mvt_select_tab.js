@@ -16,9 +16,10 @@ export default (function() {
     // Create OL style from style, or create default style.
     layer.mvt_select_tab.Style = mapp.utils
       .style(layer.mvt_select_tab.style || {
-        strokeColor: '#000',
-        fillColor: '#f00',
-        follOpacity: 0.5
+        strokeColor: '#311b92cc',
+        strokeWidth: 2
+        fillColor: '#5e35b166',
+        fillOpacity: 0.5
       })
     
     // Create clone of mvt layer.
