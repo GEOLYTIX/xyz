@@ -69,8 +69,6 @@ export default (function() {
         return
       }
 
-      createTabAndShow()
-
       // Custom highlight interaction.
       layer.mapview.interactions.highlight({
 
@@ -96,6 +94,8 @@ export default (function() {
             layer.mvt_select_tab.remove()
             return;
           }
+
+          createTabAndShow()
 
           // Add ID array to queryparams.
           layer.mvt_select_tab.queryparams.ids = idArr.join(',')
