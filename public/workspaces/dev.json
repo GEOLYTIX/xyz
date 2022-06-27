@@ -167,7 +167,7 @@
         "${DIR}/js/plugins/chart_entry.js",
         "${DIR}/js/plugins/table_entry.js",
         "${DIR}/js/plugins/custom_filter.js",
-        "${DIR}/js/plugins/mvtWand.js"
+        "${DIR}/js/plugins/mvt_select_tab.js"
       ],
       "measure_distance": {
         "tooltip": "length",
@@ -251,7 +251,7 @@
               "display": true
             }
           ],
-          "mvtWand": {
+          "mvt_select_tab": {
             "host": "/latest",
             "tabview": "tabview",
             "query": "zoomgeom_table",
@@ -267,6 +267,12 @@
                   "title": "ID"
                 }
               ]
+            },
+            "style": {
+              "strokeColor": "#6200ea",
+              "strokeWidth": 2,
+              "fillColor": "#c6ff00",
+              "fillOpacity": 0.4
             }
           },
           "style": {
