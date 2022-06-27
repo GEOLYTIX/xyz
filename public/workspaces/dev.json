@@ -254,6 +254,7 @@
           "mvt_select_tab": {
             "host": "/latest",
             "tabview": "tabview",
+            "popup": true,
             "query": "zoomgeom_table",
             "queryparams": {
               "ids": 0

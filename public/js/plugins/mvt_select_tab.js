@@ -38,34 +38,37 @@ export default (function() {
 
     layer.mapview.Map.addLayer(layer.mvt_select_tab.L)
 
+    layer.mvt_select_tab.chkBox = mapp.ui.elements.chkbox({
+      label: layer.mvt_select_tab.title,
+      checked: !!layer.mvt_select_tab.display,
+      onchange: (checked) => {
+  
+        layer.mvt_select_tab.display = checked
+
+        // Show or remove tab according to the checked/display value.
+        layer.mvt_select_tab.display ?
+          createTabAndShow() :
+          layer.mvt_select_tab.remove()
+    
+      }
+    })
+
+    layer.mvt_select_tab.btn = mapp.utils.html.node`
+      <button
+          class="flat bold wide primary-colour"
+          onclick=${click}>Select with a wand`
+
     // Return control to layer view
     return mapp.utils.html.node`
-      ${mapp.ui.elements.chkbox({
-        label: layer.mvt_select_tab.title,
-        checked: !!layer.mvt_select_tab.display,
-        onchange: (checked) => {
-    
-          layer.mvt_select_tab.display = checked
-  
-          // Show or remove tab according to the checked/display value.
-          layer.mvt_select_tab.display ?
-            createTabAndShow() :
-            layer.mvt_select_tab.remove()
-      
-        }
-      })}
-      <button
-        class="flat bold wide primary-colour"
-        onclick=${click}>Select with a wand`
+      ${layer.mvt_select_tab.chkBox}
+      ${layer.mvt_select_tab.btn}`
 
     function click(e) {
 
       e.target.classList.toggle('active')
 
       if (!e.target.classList.contains('active')) {
-
-        // Reset default highlight interaction.
-        layer.mapview.interactions.highlight()
+        cancel()
         return
       }
 
@@ -86,24 +89,55 @@ export default (function() {
           // Redraw the layer.
           layer.mvt_select_tab.L.changed()
 
-          // Create array from ID set.
-          let idArr = Array.from(layer.mvt_select_tab.selection)
-
-          // Remove tab if array / set is empty.
-          if (!idArr.length) {
-            layer.mvt_select_tab.remove()
-            return;
+          if (!layer.mvt_select_tab.popup) {
+            update()
+            return
           }
+       
+          // Set context menu popup on last vertex.
+          layer.mapview.popup({
+            content: mapp.utils.html.node`<ul>
+              <li onclick=${update}>Update</li>
+              <li onclick=${cancel}>Cancel</li>`,
+          })
 
-          createTabAndShow()
-
-          // Add ID array to queryparams.
-          layer.mvt_select_tab.queryparams.ids = idArr.join(',')
-
-          // Update table from query with ID as queryparams array.
-          layer.mvt_select_tab.update()
         }
       });
+    }
+
+    function update() {
+
+      // Create array from ID set.
+      let idArr = Array.from(layer.mvt_select_tab.selection)
+
+      // Remove tab if array / set is empty.
+      if (!idArr.length) {
+        layer.mvt_select_tab.remove()
+        return;
+      }
+
+      createTabAndShow()
+
+      // Add ID array to queryparams.
+      layer.mvt_select_tab.queryparams.ids = idArr.join(',')
+
+      // Update table from query with ID as queryparams array.
+      layer.mvt_select_tab.update()
+
+      // Cancel interaction after dataview update.
+      if (layer.mvt_select_tab.popup) cancel()
+    }
+
+    function cancel() {
+
+      // Remove active state on button.
+      layer.mvt_select_tab.btn.classList.remove('active')
+
+      // Remove popup.
+      layer.mapview.popup(null)
+
+      // Reset default highlight interaction.
+      layer.mapview.interactions.highlight()
     }
 
     function createTabAndShow() {
