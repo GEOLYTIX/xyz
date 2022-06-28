@@ -256,7 +256,7 @@ window.onload = async () => {
           <input id="gazetteerInput" type="text" placeholder="e.g. London">
           <ul></ul>`)
 
-    mapp.ui.gazetteer(Object.assign({
+    mapp.ui.Gazetteer(Object.assign({
       mapview: mapview,
       target: gazetteer,
     }, mapview.locale.gazetteer));

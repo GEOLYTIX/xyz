@@ -243,12 +243,6 @@
               "title": "ID",
               "field": "id",
               "inline": true
-            },
-            {
-              "type": "geometry",
-              "field": "geom_3857_5m",
-              "fieldfx": "ST_asGeoJSON(geom_3857_5m)",
-              "display": true
             }
           ],
           "mvt_select_tab": {
@@ -283,6 +277,10 @@
             },
             "highlight": {
               "strokeColor": "#f00",
+              "strokeWidth": 2
+            },
+            "selected": {
+              "strokeColor": "#09af00",
               "strokeWidth": 2
             }
           },
@@ -551,6 +549,11 @@
                 "type": "basic"
               }
             }
+          },
+          "gazetteer": {
+            "table": "dev.uk_glx_geodata_retail_place_working",
+            "qterm": "rp_name",
+            "placeholder": "e.g. Stratford"
           },
           "qID": "id",
           "infoj": [

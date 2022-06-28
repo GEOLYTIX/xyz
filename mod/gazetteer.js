@@ -6,6 +6,11 @@ const sqlFilter = require('./utils/sqlFilter')
 
 const Roles = require('./utils/roles.js')
 
+const provider = {
+  GOOGLE,
+  MAPBOX
+}
+
 module.exports = async (req, res) => {
 
   const locale = req.params.workspace.locales[req.params.locale]
@@ -16,29 +21,25 @@ module.exports = async (req, res) => {
     <a href="https://geolytix.github.io/xyz/docs/develop/api/gazetteer/">Gazetteer API</a>`)
   }
 
-  // Return 406 is gazetteer is not found in locale.
-  if (!locale.gazetteer) return res.status(400).send(new Error('Gazetteer not defined for locale.'))
-
   // Create an empty results object to be populated with the results from the different gazetteer methods.
   let results = []
 
+  // Return results for layer gazetteer.
+  if (req.params.layer) {
+    results = await layerGaz(req.params.q, locale.layers[req.params.layer])
+    return res.send(results)
+  }
+
   // Locale gazetteer which can query datasources in the same locale.
-  if (locale.gazetteer.datasets) await gaz_locale(req, locale, results)
+  if (locale.gazetteer.datasets) await datasets(req, locale, results)
 
-  // Query Google Maps API
-  if (locale.gazetteer.provider === 'GOOGLE') await gaz_google(req.params.q, locale.gazetteer, results)
-
-
-  if (locale.gazetteer.provider === 'OPENCAGE') await gaz_opencage(req.params.q, locale.gazetteer, results)
+  await provider[locale.gazetteer.provider](req.params.q, locale.gazetteer, results)
   
-  // Query Mapbox Geocoder API
-  if (locale.gazetteer.provider === 'MAPBOX') await gaz_mapbox(req.params.q, locale.gazetteer, results)
-
   // Return results to client.
   res.send(results)
 }
 
-async function gaz_google(term, gazetteer, results) {
+async function GOOGLE(term, gazetteer, results) {
 
   const response = await fetch(`https://maps.googleapis.com/maps/api/place/autocomplete/json?`
     + `input=${term}`
@@ -59,24 +60,7 @@ async function gaz_google(term, gazetteer, results) {
 
 }
 
-async function gaz_opencage(term, gazetteer, results) {
-
-  const response = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(term)}`
-    + `${gazetteer.countrycode ? `&countrycode=${gazetteer.countrycode}` : ''}`
-    + `${gazetteer.bounds ? '&bounds=' + decodeURIComponent(gazetteer.bounds) : ''}`
-    + `&${process.env.KEY_OPENCAGE}`)
-
-  const json = await response.json()
-
-  return json.results.map(f => (results.push({
-    id: f.annotations.geohash,
-    label: f.formatted,
-    marker: [f.geometry.lng, f.geometry.lat],
-    source: 'opencage'
-  })))
-}
-
-async function gaz_mapbox(term, gazetteer, results) {
+async function MAPBOX(term, gazetteer, results) {
 
   const response = await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${term}.json?`
     + `${gazetteer.country ? 'country=' + gazetteer.country : ''}`
@@ -96,7 +80,7 @@ async function gaz_mapbox(term, gazetteer, results) {
   })))
 }
 
-async function gaz_locale(req, locale, results) {
+async function datasets(req, locale, results) {
 
   const records = [];
 
@@ -170,4 +154,31 @@ async function gaz_locale(req, locale, results) {
       results.sort((a, b) => a.label.toString().localeCompare(b.label));
     }
   });
+}
+
+async function layerGaz(q, layer) {
+
+  // Asteriks wildcard
+  let phrase = `${decodeURIComponent(q).replace(new RegExp(/\*/g), '%')}%`
+
+  const SQLparams = [phrase]
+
+  // Build PostgreSQL query to fetch gazetteer results.
+  var q = `
+    SELECT
+      ${layer.gazetteer.label || layer.gazetteer.qterm} AS label,
+      ${layer.qID} AS id,
+      ST_X(ST_PointOnSurface(${layer.geom})) AS lng,
+      ST_Y(ST_PointOnSurface(${layer.geom})) AS lat,
+      '${layer.gazetteer.table || layer.table}' AS table,
+      '${layer.key}' AS layer,
+      'glx' AS source
+      FROM ${layer.gazetteer.table || layer.table}
+      WHERE ${layer.gazetteer.qterm}::text ILIKE $1
+      LIMIT ${layer.gazetteer.limit || 10}`
+
+  let rows = await dbs[layer.dbs](q, SQLparams);
+
+  return rows
+
 }
