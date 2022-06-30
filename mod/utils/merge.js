@@ -22,7 +22,9 @@ module.exports = function mergeDeep(target, ...sources) {
 
       } else if (Array.isArray(source[key])) {
 
-        target[key] = [...target[key]||[], ...source[key]]
+        // Do not merge arrays
+        // target[key] = [...target[key]||[], ...source[key]]
+        target[key] = source[key]
         
       } else {
 
