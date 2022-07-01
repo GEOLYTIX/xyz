@@ -384,7 +384,7 @@ window.onload = async () => {
   // Configure idle mask if set in locale.
   mapp.user &&
     mapview.locale.idle &&
-    mapp.ui.utils.idleMask({
+    mapp.ui.utils.idleLogout({
       host: mapview.host,
       idle: mapview.locale.idle,
     });
