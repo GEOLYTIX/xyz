@@ -17,7 +17,7 @@ export default (function() {
     layer.mvt_select_tab.Style = mapp.utils
       .style(layer.mvt_select_tab.style || {
         strokeColor: '#311b92cc',
-        strokeWidth: 2
+        strokeWidth: 2,
         fillColor: '#5e35b166',
         fillOpacity: 0.5
       })
