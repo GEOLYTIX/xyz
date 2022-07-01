@@ -22,10 +22,16 @@ module.exports = function mergeDeep(target, ...sources) {
 
       } else if (Array.isArray(source[key])) {
 
-        // Do not merge arrays
-        // target[key] = [...target[key]||[], ...source[key]]
-        target[key] = source[key]
-        
+        if (Array.isArray(target[key]) && source[key].every(item => target[key].includes(item))) {
+          
+          // Do not merge equal arrays
+          target[key] = source[key]
+          
+        } else {
+
+          target[key] = [...target[key]||[], ...source[key]]
+        }
+
       } else {
 
         // Assign key if not an object itself.
