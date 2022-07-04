@@ -263,7 +263,6 @@ window.onload = async () => {
     
   } else {
 
-    // Hide location panel without gazetteer.
     document.querySelector("[data-id=locations]").style.display = 'none'
   }
 
