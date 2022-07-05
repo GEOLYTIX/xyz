@@ -50,7 +50,7 @@ document.dispatchEvent(new CustomEvent('geojson_file', {
               key: 'foo',
               source: source,
               zIndex: layer.style.zIndex || 1,
-              style: _xyz.mapview.layer.styleFunction(layer)
+              style: mapview.layer.styleFunction(layer)
             })
 
             layer.select = feature => {
@@ -59,7 +59,7 @@ document.dispatchEvent(new CustomEvent('geojson_file', {
 
               const infoj = layer.infoj.map(_entry => {
 
-                const entry = _xyz.utils.clone(_entry)
+                const entry = mapp.utils.clone(_entry)
                 entry.title = entry.field
                 entry.value = jsonFeature.properties[entry.field]
 

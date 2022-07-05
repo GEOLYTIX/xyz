@@ -129,7 +129,7 @@ export default (function(){
 
         const metrics = {
           distance: (geometry) => ol.sphere.getLength(new ol.geom
-              .LineString([geometry.getInteriorPoint().getCoordinates(), _xyz.mapview.position])),
+              .LineString([geometry.getInteriorPoint().getCoordinates(), mapview.position])),
           area: (geometry) => ol.sphere.getArea(geometry),
           length: (geometry) => ol.sphere.getLength(geometry),
         }
