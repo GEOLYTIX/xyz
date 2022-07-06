@@ -330,7 +330,7 @@ mapp.utils.merge(mapp.dictionaries,{en:{layer_zoom_to_extent:"Zoom to filtered l
   <input
     type="text"
     placeholder="Filter"
-    oninput=${r=>{let n=t.getColumn().getField();e.Tabulator.setFilter([{field:n,type:"like",value:r.target.value}])}}>`}function at(e,t,i,a,l,o){return mapp.utils.html.node`<span>
+    oninput=${r=>{let n=t.getColumn().getField();if(!o.layer){e.Tabulator.setFilter([{field:n,type:"like",value:r.target.value}]);return}r.target.value.length?e.layer.filter.current[n]={[o.type]:encodeURIComponent(r.target.value)}:delete e.layer.filter.current[n],e.layer.reload(),e.update()}}>`}function at(e,t,i,a,l,o){return mapp.utils.html.node`<span>
     <input
       style="width: 50%"
       type="number"
