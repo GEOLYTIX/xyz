@@ -207,7 +207,7 @@ window.onload = async () => {
         key: locale.key,
       })),
       callback: (e, entry) => {
-        window.location.assign(`${host}/${entry.key}`);
+        window.location.assign(`${host}?locale=${entry.key}`);
       },
     });
 
