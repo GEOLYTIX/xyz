@@ -27,6 +27,12 @@ module.exports = async (workspace) => {
       field_stats: {
         template: require("../../public/js/queries/field_stats"),
       },
+      field_min: {
+        template: require("../../public/js/queries/field_min"),
+      },
+      field_max: {
+        template: require("../../public/js/queries/field_max"),
+      },
       get_nnearest: {
         render: require("../../public/js/queries/get_nnearest"),
       },
