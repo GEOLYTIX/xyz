@@ -1,3 +1,4 @@
 module.exports = `
   SELECT distinct(\${field})
-  FROM \${table};`
+  FROM \${table}
+  ORDER BY \${field};`
