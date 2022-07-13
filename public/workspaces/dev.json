@@ -1097,6 +1097,9 @@
             "isoline_here": true,
             "delete": true
           },
+          "filter": {
+            "exclude": ["bool_field"]
+          },
           "infoj": [
             {
               "type": "geometry",
