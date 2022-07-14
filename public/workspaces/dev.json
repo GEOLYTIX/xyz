@@ -1199,6 +1199,7 @@
                 "id": true,
                 "qID": "id",
                 "field": "id",
+                "fieldValues": ["char_field_bogus", "integer_field"],
                 "table": "dev.scratch"
               }
             },
