@@ -9,8 +9,8 @@ module.exports = async (req, res) => {
     columns += `, metadata`;
   }
   
-  if (req.query.slug) {
-    columns += `, slug`;
+  if (req.query.pageId) {
+    columns += `, pageId`;
   }
   
   if (req.query.project) {
@@ -21,7 +21,7 @@ module.exports = async (req, res) => {
   INSERT INTO ${req.params.table} ${columns})
   SELECT ST_SetSRID(ST_MakeValid(ST_GeomFromGeoJSON('${JSON.stringify(req.body.geometry)}')), ${layer.srid})
   ${req.body.properties.metadata ? `, '${JSON.stringify(req.body.properties.metadata)}'` : ''}
-  ${req.query.slug ? `, '${req.query.slug}'` : ''}
+  ${req.query.pageId ? `, '${req.query.pageId}'` : ''}
   ${req.query.project ? `, '${req.query.project}'` : ''}
   RETURNING ${layer.qID} AS id;`
 
