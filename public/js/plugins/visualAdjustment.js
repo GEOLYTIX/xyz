@@ -73,6 +73,7 @@ export default (function () {
       header: mapp.utils.html`
         <h3>Visual Adjustment</h3>
         <div class="mask-icon expander"></div>`,
+      class: 'raised',
       content: mapp.utils.html`${elements}`
     })
 
