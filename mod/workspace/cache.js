@@ -88,10 +88,10 @@ async function cache() {
 
 async function getDynamicWorkspace(req) {
   if (!req) return new Error('Not request found');
-  const { slug, project, lang } = req.query;
+  const { pageId, project, lang } = req.query;
   const { mongoClient } = req;
-  if (!slug) {
-    return new Error('No slug specified');
+  if (!pageId) {
+    return new Error('No pageId specified');
   }
   if (!project) {
     return new Error('No project specified');
@@ -102,12 +102,7 @@ async function getDynamicWorkspace(req) {
   const { ObjectId } = require('mongodb');
   const Page = mongoClient.db('acorn').collection('pages');
   const Version = mongoClient.db('acorn').collection('versions');
-  const proposalPage = await Page.findOne({
-    slug,
-    type: 'map',
-    projectId: new ObjectId(project),
-    active: true,
-  });
+  const proposalPage = await Page.findOne({ _id: pageId });
   if (!proposalPage) return;
   // get the most recent version id
   const contentVersionId = proposalPage?.content[lang][0];
