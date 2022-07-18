@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
     WHERE lower(email) = lower($1)
     RETURNING *;`, [email])
 
-  if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
+  if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table @ mod/user/delete.js')
 
   const user = rows[0]
 

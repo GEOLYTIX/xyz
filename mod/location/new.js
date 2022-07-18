@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
   }
   
   if (req.query.pageId) {
-    columns += `, pageId`;
+    columns += `, page_id`;
   }
   
   if (req.query.project) {
@@ -27,7 +27,9 @@ module.exports = async (req, res) => {
 
   var rows = await dbs[layer.dbs](q)
 
-  if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
+  if (rows instanceof Error) {
+    return res.status(500).send('Failed to query PostGIS table @ mod/location/new.js')
+  }
 
   if (layer.mvt_cache) await dbs[layer.dbs](`
   DELETE FROM ${layer.mvt_cache}

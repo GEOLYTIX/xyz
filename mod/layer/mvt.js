@@ -123,7 +123,7 @@ module.exports = async (req, res) => {
 
   var rows = dbs[layer.dbs] && await dbs[layer.dbs](tile, SQLparams)
 
-  if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
+  if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table @ mod/layer/mvt.js')
 
   // Return MVT to client.
   // res.setHeader('Cache-Control', 's-maxage=1, stale-while-revalidate')

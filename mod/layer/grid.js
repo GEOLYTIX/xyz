@@ -34,7 +34,7 @@ module.exports = async (req, res) => {
 
   var rows = await dbs[layer.dbs](q)
 
-  if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
+  if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table @ mod/layer/grid.js')
 
   if (rows.length === 0) return res.status(204).send()
 
