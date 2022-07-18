@@ -3,7 +3,7 @@ export default (function(){
   mapp.plugins.measure_distance = (options, mapview) => {
 
     // Find the btnColumn element.
-    const btnColumn = document.getElementById("mapButton")
+    const btnColumn = document.getElementById("mapButton");
 
     // Append the plugin btn to the btnColumn.
     btnColumn && btnColumn.append(mapp.utils.html.node`
@@ -19,11 +19,13 @@ export default (function(){
   
       // Style plugin button as active.
       e.target.classList.add('active')
-  
-      // Call drawing interaction with tooltip to show distance.
-      mapview.interactions.draw(Object.assign({
+
+      const config = Object.assign({
         type: 'LineString',
-        tooltip: options.tooltip,
+
+        tooltip: {
+          metric: 'length'
+        },
 
         // Prevent contextmenu showing at drawend event.
         contextMenu: null,
@@ -39,18 +41,20 @@ export default (function(){
           // Activate highlight interaction.
           mapview.interactions.highlight()
         }
+      }, options)
 
-      // Assign condition and metricFunction methods for route options.
-      }, options.hereRoute && {
-        condition,
-        metricFunction
-      }))
+      //config.condition = condition;
+      //config.metricFunction = metricFunction;
 
-      // Array for route waypoints.
-      const waypoints = []
+      mapview.interactions.draw(config)
+  
+      let 
+        waypoints = [], // Array for route waypoints.
+        routeLayer, // Layer to display route geometry.
+        section; // 
 
       // Condition method is called on click in drawing interaction.
-      function condition(e){
+      async function condition(e) {
 
         // Push waypoint from click into array.
         waypoints.push(ol.proj.toLonLat([
@@ -59,70 +63,65 @@ export default (function(){
         ], `EPSG:3857`))
 
         // Redraw route on each waypoint.
-        if (waypoints.length > 1) route()
+        if (waypoints.length > 1) {
 
-      }
-
-      let routeLayer, section;
-
-      async function route() {
-
-        // Set params for here request.
-        const params = {
-          transportMode: options.hereRoute,
-          origin: `${waypoints[0][1]},${waypoints[0][0]}`,
-          destination: `${waypoints[[waypoints.length-1]][1]},${waypoints[[waypoints.length-1]][0]}`,
-          return: 'polyline,summary'
-        }
-
-        // Create intermediate waypoints for route.
-        if (waypoints.length > 2) {
-
-          const via = []
-
-          for (let i=1; i<waypoints.length-1; i++) {
-            via.push(`${waypoints[i][1]},${waypoints[i][0]}!passThrough=true`)
+          // Set params for here request.
+          const params = {
+            transportMode: options.hereRoute,
+            origin: `${waypoints[0][1]},${waypoints[0][0]}`,
+            destination: `${waypoints[[waypoints.length - 1]][1]},${waypoints[[waypoints.length - 1]][0]}`,
+            return: 'polyline,summary'
           }
 
-          params.via = via.join('&via=')
-        }
+          // Create intermediate waypoints for route.
+          if (waypoints.length > 2) {
 
-        // Request route info from here API.
-        const response = await mapp.utils
-          .xhr(`${mapview.host}/api/proxy?url=`
-            +`${encodeURIComponent(`https://router.hereapi.com/v8/routes?`
-            +`${mapp.utils.paramString(params)}&{HERE}`)}`)
+            const via = []
 
-        if (!response.routes.length) return;
+            for (let i = 1; i < waypoints.length - 1; i++) {
+              via.push(`${waypoints[i][1]},${waypoints[i][0]}!passThrough=true`)
+            }
 
-        section = response.routes[0].sections[0]
+            params.via = via.join('&via=')
+          }
 
-        // Decode the section.polyline
-        const decoded = mapp.utils.here.decodeIsoline(section.polyline)
+          // Request route info from here API.
+          const response = await mapp.utils
+            .xhr(`${mapview.host}/api/proxy?url=`
+              + `${encodeURIComponent(`https://router.hereapi.com/v8/routes?`
+                + `${mapp.utils.paramString(params)}&{HERE}`)}`)
 
-        // Reverse coordinate order in decoded polyline.
-        decoded.polyline.forEach(p => p.reverse())
+          if (!response.routes.length) return;
 
-        // Remove existing routeLayer from map.
-        routeLayer && mapview.Map.removeLayer(routeLayer)
+          section = response.routes[0].sections[0]
 
-        // Create routeLayer with linestring geometry from polyline coordinates.
-        routeLayer = mapview.geoJSON({
-          zIndex: Infinity,
-          geometry: {
-            type: 'LineString',
-            coordinates: decoded.polyline,
-          },
-          dataProjection: '4326',
-          Style: new ol.style.Style({
-            stroke: new ol.style.Stroke({
-              color: '#f00',
-              opacity: 0.5,
-              width: 2
+          // Decode the section.polyline
+          const decoded = mapp.utils.here.decodeIsoline(section.polyline)
+
+          // Reverse coordinate order in decoded polyline.
+          decoded.polyline.forEach(p => p.reverse())
+
+          // Remove existing routeLayer from map.
+          routeLayer && mapview.Map.removeLayer(routeLayer)
+
+          // Create routeLayer with linestring geometry from polyline coordinates.
+          routeLayer = mapview.geoJSON({
+            zIndex: Infinity,
+            geometry: {
+              type: 'LineString',
+              coordinates: decoded.polyline,
+            },
+            dataProjection: '4326',
+            Style: new ol.style.Style({
+              stroke: new ol.style.Stroke({
+                color: '#f00',
+                opacity: 0.5,
+                width: 2
+              })
             })
           })
-        })
 
+        }
       }
 
       // The metricFunction is called on drawstart. 
