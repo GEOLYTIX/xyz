@@ -2,21 +2,22 @@ export default (function(){
 
   mapp.plugins.measure_distance = (options, mapview) => {
 
-    const pluginBtn = document.getElementById("plugin-btn");
-  
-    if(!pluginBtn) return;
-  
-    pluginBtn.after(mapp.utils.html.node`
-      <button
-        title="Measure distance"
-        onclick=${measure_distance}>
-        <div class="mask-icon straighten">`);
+    // Find the btnColumn element.
+    const btnColumn = document.getElementById("mapButton")
+
+    // Append the plugin btn to the btnColumn.
+    btnColumn && btnColumn.append(mapp.utils.html.node`
+    <button
+      title="Measure distance"
+      onclick=${measure_distance}>
+      <div class="mask-icon straighten">`);
   
     function measure_distance(e){
   
       // Cancel draw interaction if active.
       if (e.target.classList.contains('active')) return mapview.interactions.highlight()
   
+      // Style plugin button as active.
       e.target.classList.add('active')
   
       // Call drawing interaction with tooltip to show distance.
@@ -153,12 +154,6 @@ export default (function(){
           })
         })
 
-        mapview.Map.on('contextmenu', e => {
-          e.preventDefault()
-          pluginBtn.nextSibling.classList.remove('active') 
-          mapview.interaction?.finish()
-          mapview.interactions.highlight()
-        })
       }
 
     }

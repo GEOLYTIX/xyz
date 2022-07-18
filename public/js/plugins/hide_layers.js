@@ -2,11 +2,11 @@ export default (function(){
 
   mapp.plugins.hide_layers = (options, mapview) => {
 
-    const pluginBtn = document.getElementById("plugin-btn");
-  
-    if(!pluginBtn) return;
-  
-    pluginBtn.after(mapp.utils.html.node`
+    const btnColumn = document.getElementById("mapButton")
+
+    if(!btnColumn) return;
+
+    btnColumn.append(mapp.utils.html.node`
       <button
         title="Hide layer views which aren't displayed in the map view in the layer list view."
         onclick=${hide_layers}>

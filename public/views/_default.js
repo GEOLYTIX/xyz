@@ -232,6 +232,91 @@ window.onload = async () => {
     }
   });
 
+  // Add zoomIn button.
+  const btnZoomIn = btnColumn.appendChild(mapp.utils.html.node`
+    <button
+      id="btnZoomIn"
+      .disabled=${mapview.Map.getView().getZoom() >= mapview.locale.maxZoom}
+      title=${mapp.dictionary.toolbar_zoom_in}
+      onclick=${(e) => {
+        const z = parseInt(mapview.Map.getView().getZoom() + 1);
+        mapview.Map.getView().setZoom(z);
+        e.target.disabled = z >= mapview.locale.maxZoom;
+      }}>
+      <div class="mask-icon add">`)
+
+  // Add zoomOut button.
+  const btnZoomOut = btnColumn.appendChild(mapp.utils.html.node`
+    <button
+      id="btnZoomOut"
+      .disabled=${mapview.Map.getView().getZoom() <= mapview.locale.minZoom}
+      title=${mapp.dictionary.toolbar_zoom_out}
+      onclick=${(e) => {
+        const z = parseInt(mapview.Map.getView().getZoom() - 1);
+        mapview.Map.getView().setZoom(z);
+        e.target.disabled = z <= mapview.locale.minZoom;
+      }}>
+      <div class="mask-icon remove">`)
+
+  // changeEnd event listener for zoom button.
+  OL.addEventListener('changeEnd', () => {
+    const z = mapview.Map.getView().getZoom();
+    btnZoomIn.disabled = z >= mapview.locale.maxZoom;
+    btnZoomOut.disabled = z <= mapview.locale.minZoom;
+  });
+
+  // Add zoom to area button.
+  btnColumn.append(mapp.utils.html.node`
+    <button
+      class="mobile-display-none"
+      title=${mapp.dictionary.toolbar_zoom_to_area}
+      onclick=${(e) => {
+
+        // If active cancel zoom and enable highlight interaction.
+        if (e.target.classList.contains('active')) {
+          return mapview.interactions.highlight()
+        }
+
+        // Add active class
+        e.target.classList.add('active')
+
+        // Make zoom interaction current.
+        mapview.interactions.zoom({
+
+          // The interaction callback is executed on cancel or finish.
+          callback: () => {
+            e.target.classList.remove('active');
+            mapview.interactions.highlight();
+          },
+        })
+
+      }}>
+      <div class="mask-icon pageview">`)
+
+  // Add locator button.
+  mapview.locale.locator && btnColumn.appendChild(mapp.utils.html.node`
+    <button
+      title=${mapp.dictionary.toolbar_current_location}
+      onclick=${(e) => {
+        mapview.locate();
+        e.target.classList.toggle('active');
+      }}>
+      <div class="mask-icon gps-not-fixed">`);
+
+  // Add fullscreen button.
+  btnColumn.appendChild(mapp.utils.html.node`
+    <button
+      class="mobile-display-none"
+      title=${mapp.dictionary.toolbar_fullscreen}
+      onclick=${(e) => {
+        e.target.classList.toggle('active');
+        document.body.classList.toggle('fullscreen');
+        mapview.Map.updateSize();
+        Object.values(mapview.layers)
+          .forEach((layer) => layer.mbMap?.resize());
+      }}>
+      <div class="mask-icon map">`);
+
   // Load plugins
   await mapp.utils.loadPlugins(locale.plugins);
 
@@ -295,90 +380,6 @@ window.onload = async () => {
     });
   });
 
-  // Add zoomIn button.
-  const btnZoomIn = btnColumn.insertBefore(mapp.utils.html.node`
-    <button
-      id="btnZoomIn"
-      .disabled=${mapview.Map.getView().getZoom() >= mapview.locale.maxZoom}
-      title=${mapp.dictionary.toolbar_zoom_in}
-      onclick=${(e) => {
-        const z = parseInt(mapview.Map.getView().getZoom() + 1);
-        mapview.Map.getView().setZoom(z);
-        e.target.disabled = z >= mapview.locale.maxZoom;
-      }}>
-      <div class="mask-icon add">`, document.getElementById('plugin-btn'));
-
-  // Add zoomOut button.
-  const btnZoomOut = btnColumn.insertBefore(mapp.utils.html.node`
-    <button
-      id="btnZoomOut"
-      .disabled=${mapview.Map.getView().getZoom() <= mapview.locale.minZoom}
-      title=${mapp.dictionary.toolbar_zoom_out}
-      onclick=${(e) => {
-        const z = parseInt(mapview.Map.getView().getZoom() - 1);
-        mapview.Map.getView().setZoom(z);
-        e.target.disabled = z <= mapview.locale.minZoom;
-      }}>
-      <div class="mask-icon remove">`, document.getElementById('plugin-btn'));
-
-  // changeEnd event listener for zoom button.
-  OL.addEventListener('changeEnd', () => {
-    const z = mapview.Map.getView().getZoom();
-    btnZoomIn.disabled = z >= mapview.locale.maxZoom;
-    btnZoomOut.disabled = z <= mapview.locale.minZoom;
-  });
-
-  // Add zoom to area button.
-  btnColumn.insertBefore(mapp.utils.html.node`
-    <button
-      class="mobile-display-none"
-      title=${mapp.dictionary.toolbar_zoom_to_area}
-      onclick=${(e) => {
-
-        // If active cancel zoom and enable highlight interaction.
-        if (e.target.classList.contains('active')) {
-          return mapview.interactions.highlight()
-        }
-
-        // Add active class
-        e.target.classList.add('active')
-
-        // Make zoom interaction current.
-        mapview.interactions.zoom({
-
-          // The interaction callback is executed on cancel or finish.
-          callback: () => {
-            e.target.classList.remove('active');
-            mapview.interactions.highlight();
-          },
-        })
-
-      }}>
-      <div class="mask-icon pageview">`, document.getElementById('plugin-btn'));
-
-  // Add locator button.
-  mapview.locale.locator && btnColumn.appendChild(mapp.utils.html.node`
-    <button
-      title=${mapp.dictionary.toolbar_current_location}
-      onclick=${(e) => {
-        mapview.locate();
-        e.target.classList.toggle('active');
-      }}>
-      <div class="mask-icon gps-not-fixed">`);
-
-  // Add fullscreen button.
-  btnColumn.appendChild(mapp.utils.html.node`
-    <button
-      class="mobile-display-none"
-      title=${mapp.dictionary.toolbar_fullscreen}
-      onclick=${(e) => {
-        e.target.classList.toggle('active');
-        document.body.classList.toggle('fullscreen');
-        mapview.Map.updateSize();
-        Object.values(mapview.layers)
-          .forEach((layer) => layer.mbMap?.resize());
-      }}>
-      <div class="mask-icon map">`);
 
   // Configure idle mask if set in locale.
   mapp.user &&

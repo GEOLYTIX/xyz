@@ -1,54 +1,55 @@
 export default (function(){
 
-    const pluginBtn = document.getElementById("plugin-btn");
-  
-    if(!pluginBtn) return;
-  
-    pluginBtn.after(mapp.utils.html.node`
-      <button
-        class="mask-icon add-photo mobile-display-none"
-        title="Create screenshot from map canvas."
-        onclick=${(e) => {
+  const btnColumn = document.getElementById("mapButton")
 
-            html2canvas(document.getElementById('OL')).then((canvas) => {
+  if(!btnColumn) return;
 
-              const byteArrays = [];
+  btnColumn.append(mapp.utils.html.node`
+    <button
+      class="mask-icon add-photo mobile-display-none"
+      title="Create screenshot from map canvas."
+      onclick=${(e) => {
 
-              const base64ImageData = canvas.toDataURL("image/png");
+      html2canvas(document.getElementById('OL')).then((canvas) => {
 
-              const byteCharacters = atob(
-                base64ImageData.substr(`data:image/png;base64,`.length)
-              );
+        const byteArrays = [];
 
-              for (
-                let offset = 0;
-                offset < byteCharacters.length;
-                offset += 1024
-              ) {
-                const slice = byteCharacters.slice(offset, offset + 1024);
+        const base64ImageData = canvas.toDataURL("image/png");
 
-                const byteNumbers = new Array(slice.length);
-                for (let i = 0; i < slice.length; i++) {
-                  byteNumbers[i] = slice.charCodeAt(i);
-                }
+        const byteCharacters = atob(
+          base64ImageData.substr(`data:image/png;base64,`.length)
+        );
 
-                const byteArray = new Uint8Array(byteNumbers);
+        for (
+          let offset = 0;
+          offset < byteCharacters.length;
+          offset += 1024
+        ) {
+          const slice = byteCharacters.slice(offset, offset + 1024);
 
-                byteArrays.push(byteArray);
-              }
+          const byteNumbers = new Array(slice.length);
+          for (let i = 0; i < slice.length; i++) {
+            byteNumbers[i] = slice.charCodeAt(i);
+          }
 
-              const blob = new Blob(byteArrays, { type: "image/png" });
-              const blobUrl = URL.createObjectURL(blob);
+          const byteArray = new Uint8Array(byteNumbers);
 
-              // var link = document.createElement("a");
-              // link.href = blobUrl;
-              // link.download = "screenshot.png";
-              // document.body.appendChild(link);
-              // link.click();
-              
-              window.open(blobUrl, "_blank");
-            });
-          }}>`);
+          byteArrays.push(byteArray);
+        }
+
+        const blob = new Blob(byteArrays, { type: "image/png" });
+        const blobUrl = URL.createObjectURL(blob);
+
+        // var link = document.createElement("a");
+        // link.href = blobUrl;
+        // link.download = "screenshot.png";
+        // document.body.appendChild(link);
+        // link.click();
+
+        window.open(blobUrl, "_blank");
+      });
+      
+    }}>`);
 
 })()
 
