@@ -43,118 +43,119 @@ export default (function(){
         }
       }, options)
 
-      //config.condition = condition;
-      //config.metricFunction = metricFunction;
+      // Assign different routing methods to the routes object.
+      const routes = {
+        here
+      }
+
+      if (options.route) {
+
+        // Ammend routing methods to config
+        routes[options.route.provider] && routes[options.route.provider](config)
+      }
 
       mapview.interactions.draw(config)
-  
-      let 
-        waypoints = [], // Array for route waypoints.
-        routeLayer, // Layer to display route geometry.
-        section; // 
 
-      // Condition method is called on click in drawing interaction.
-      async function condition(e) {
+      function here(config) {
 
-        // Push waypoint from click into array.
-        waypoints.push(ol.proj.toLonLat([
-          e.coordinate[0],
-          e.coordinate[1]
-        ], `EPSG:3857`))
+        let 
+          waypoints = [], // Array for route waypoints.
+          routeLayer, // Layer to display route geometry.
+          section; // The section of the route.
 
-        // Redraw route on each waypoint.
-        if (waypoints.length > 1) {
+        config.condition = async e => {
 
-          // Set params for here request.
-          const params = {
-            transportMode: options.hereRoute,
-            origin: `${waypoints[0][1]},${waypoints[0][0]}`,
-            destination: `${waypoints[[waypoints.length - 1]][1]},${waypoints[[waypoints.length - 1]][0]}`,
-            return: 'polyline,summary'
-          }
+          // Push waypoint from click into array.
+          waypoints.push(ol.proj.toLonLat([
+            e.coordinate[0],
+            e.coordinate[1]
+          ], `EPSG:3857`))
 
-          // Create intermediate waypoints for route.
-          if (waypoints.length > 2) {
+          // Redraw route on each waypoint.
+          if (waypoints.length > 1) {
 
-            const via = []
-
-            for (let i = 1; i < waypoints.length - 1; i++) {
-              via.push(`${waypoints[i][1]},${waypoints[i][0]}!passThrough=true`)
+            // Set params for here request.
+            const params = {
+              transportMode: options.route.transportMode || 'car',
+              origin: `${waypoints[0][1]},${waypoints[0][0]}`,
+              destination: `${waypoints[[waypoints.length - 1]][1]},${waypoints[[waypoints.length - 1]][0]}`,
+              return: 'polyline,summary'
             }
 
-            params.via = via.join('&via=')
+            // Create intermediate waypoints for route.
+            if (waypoints.length > 2) {
+
+              const via = []
+
+              for (let i = 1; i < waypoints.length - 1; i++) {
+                via.push(`${waypoints[i][1]},${waypoints[i][0]}!passThrough=true`)
+              }
+
+              params.via = via.join('&via=')
+            }
+
+            // Request route info from here API.
+            const response = await mapp.utils
+              .xhr(`${mapview.host}/api/proxy?url=`
+                + `${encodeURIComponent(`https://router.hereapi.com/v8/routes?`
+                  + `${mapp.utils.paramString(params)}&{HERE}`)}`)
+
+            if (!response.routes.length) return;
+
+            section = response.routes[0].sections[0]
+
+            // Decode the section.polyline
+            const decoded = mapp.utils.here.decodeIsoline(section.polyline)
+
+            // Reverse coordinate order in decoded polyline.
+            decoded.polyline.forEach(p => p.reverse())
+
+            // Remove existing routeLayer from map.
+            routeLayer && mapview.Map.removeLayer(routeLayer)
+
+            // Create routeLayer with linestring geometry from polyline coordinates.
+            routeLayer = mapview.geoJSON({
+              zIndex: Infinity,
+              geometry: {
+                type: 'LineString',
+                coordinates: decoded.polyline,
+              },
+              dataProjection: '4326',
+              Style: new ol.style.Style({
+                stroke: new ol.style.Stroke({
+                  color: '#f00',
+                  opacity: 0.5,
+                  width: 2
+                })
+              })
+            })
+
           }
 
-          // Request route info from here API.
-          const response = await mapp.utils
-            .xhr(`${mapview.host}/api/proxy?url=`
-              + `${encodeURIComponent(`https://router.hereapi.com/v8/routes?`
-                + `${mapp.utils.paramString(params)}&{HERE}`)}`)
+        };
+      
+        config.metricFunction = (geometry, tooltip) => {
 
-          if (!response.routes.length) return;
-
-          section = response.routes[0].sections[0]
-
-          // Decode the section.polyline
-          const decoded = mapp.utils.here.decodeIsoline(section.polyline)
-
-          // Reverse coordinate order in decoded polyline.
-          decoded.polyline.forEach(p => p.reverse())
-
-          // Remove existing routeLayer from map.
-          routeLayer && mapview.Map.removeLayer(routeLayer)
-
-          // Create routeLayer with linestring geometry from polyline coordinates.
-          routeLayer = mapview.geoJSON({
-            zIndex: Infinity,
-            geometry: {
-              type: 'LineString',
-              coordinates: decoded.polyline,
-            },
-            dataProjection: '4326',
-            Style: new ol.style.Style({
-              stroke: new ol.style.Stroke({
-                color: '#f00',
-                opacity: 0.5,
-                width: 2
-              })
+          // A popup is set with metrics when the draw interaction geometry changes.
+          geometry.on('change', () => {
+            mapview.popup({
+              content: mapp.utils.html.node`
+                <div style="padding: 5px">
+                  ${mapp.utils.convert(mapview.metrics.length(geometry), tooltip)}
+                  ${section && mapp.utils.html`
+                  <br>
+                  Route(${options.route.transportMode || 'car'})
+                  <br>
+                  ${mapp.utils.convert(section.summary.length, tooltip)}
+                  <br>
+                  ${parseInt(section.summary.duration / 60)}min`}`
+                    
             })
           })
 
         }
       }
-
-      // The metricFunction is called on drawstart. 
-      function metricFunction(geometry, metric) {
-
-        const metrics = {
-          distance: (geometry) => ol.sphere.getLength(new ol.geom
-              .LineString([geometry.getInteriorPoint().getCoordinates(), mapview.position])),
-          area: (geometry) => ol.sphere.getArea(geometry),
-          length: (geometry) => ol.sphere.getLength(geometry),
-        }
-
-        // A popup is set with metrics when the draw interaction geometry changes.
-        geometry.on('change', () => {
-          mapview.popup({
-            content: mapp.utils.html.node`
-              <div style="padding: 5px">
-                ${parseInt(metrics[metric](geometry)).toLocaleString('en-GB') + (metric === 'area' ? 'sqm' : 'm')}
-                ${section && mapp.utils.html`
-                <br>
-                Distance(${options.hereRoute})
-                <br>
-                ${section.summary.length.toLocaleString('en-GB')}m
-                <br>
-                Time(${options.hereRoute})
-                <br>
-                ${parseInt(section.summary.duration / 60)}min`}`
-                  
-          })
-        })
-
-      }
-
+  
     }
 
   }
