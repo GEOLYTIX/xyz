@@ -1,36 +1,36 @@
-const file = require('../provider/file')
+const file = require("../provider/file");
 
-const cloudfront = require('../provider/cloudfront');
+const cloudfront = require("../provider/cloudfront");
 
-const http = require('./httpsAgent')
+const http = require("./httpsAgent");
 
 const getFrom = {
-  'https': ref => http(ref),
-  'file': ref => file(ref.split(':')[1]),
-  'cloudfront': ref => cloudfront(ref.split(':')[1]),
-}
+  https: (ref) => http(ref),
+  file: (ref) => file(ref.split(":")[1]),
+  cloudfront: (ref) => cloudfront(ref.split(":")[1]),
+};
 
-const assignTemplates = require('./assignTemplates')
+const assignTemplates = require("./assignTemplates");
 
-const defaults = require('./defaults');
+const defaults = require("./defaults");
 
-const assignDefaults = require('./assignDefaults');
+const assignDefaults = require("./assignDefaults");
 
 let workspace = null;
 
-const { nanoid } = require('nanoid');
+const { nanoid } = require("nanoid");
 
-const logger = require('../logger');
+const logger = require("../logger");
 
 module.exports = async (req) => {
-  if (process.env.WORKSPACE === 'dynamic') {
+  if (process.env.WORKSPACE === "dynamic") {
     return await getDynamicWorkspace(req);
   }
   const timestamp = Date.now();
 
   // Cache workspace if empty.
   if (!workspace) {
-    logger(`Workspace empty @${timestamp}`, 'workspace');
+    logger(`Workspace empty @${timestamp}`, "workspace");
     await cache();
   }
 
@@ -41,14 +41,14 @@ module.exports = async (req) => {
   if (timestamp - workspace.timestamp > 3600000) {
     logger(
       `Workspace ${workspace.nanoid} cache expired @${timestamp}`,
-      'workspace'
+      "workspace"
     );
     await cache();
     workspace.timestamp = timestamp;
   } else {
     logger(
       `Workspace ${workspace.nanoid} age ${timestamp - workspace.timestamp}`,
-      'workspace'
+      "workspace"
     );
   }
 
@@ -59,7 +59,7 @@ async function cache() {
   // Get workspace from source.
   workspace =
     (process.env.WORKSPACE &&
-      (await getFrom[process.env.WORKSPACE.split(':')[0]](
+      (await getFrom[process.env.WORKSPACE.split(":")[0]](
         process.env.WORKSPACE
       ))) ||
     {};
@@ -81,38 +81,50 @@ async function cache() {
     JSON.stringify(workspace.locales).replace(
       /\$\{(.*?)\}/g,
       (matched) =>
-        process.env[`SRC_${matched.replace(/\$|\{|\}/g, '')}`] || matched
+        process.env[`SRC_${matched.replace(/\$|\{|\}/g, "")}`] || matched
     )
   );
 }
 
 async function getDynamicWorkspace(req) {
-  if (!req) return new Error('Not request found');
-  const { pageId, project, lang } = req.query;
-  const { mongoClient } = req;
-  if (!pageId) {
-    return new Error('No pageId specified');
-  }
-  if (!project) {
-    return new Error('No project specified');
-  }
-  if (!lang) {
-    return new Error('No lang specified');
-  }
-  const { ObjectId } = require('mongodb');
-  const Page = mongoClient.db('acorn').collection('pages');
-  const Version = mongoClient.db('acorn').collection('versions');
-  const proposalPage = await Page.findOne({ _id: pageId });
-  if (!proposalPage) return;
-  // get the most recent version id
-  const contentVersionId = proposalPage?.content[lang][0];
-  if (!contentVersionId) return;
-  const proposalContent = await Version.findOne({
-    _id: ObjectId(contentVersionId),
-  });
-  workspace = proposalContent.content.geolytixWorkspace;
-  await assignTemplates(workspace);
+  try {
+    if (!req) return new Error("Not request found");
+    const { pageId, project, lang } = req.query;
+    const { mongoClient } = req;
+    if (!pageId) {
+      return new Error("No pageId specified");
+    }
+    if (!project) {
+      return new Error("No project specified");
+    }
+    if (!lang) {
+      return new Error("No lang specified");
+    }
+    const { ObjectId } = require("mongodb");
+    const Page = mongoClient.db("acorn").collection("pages");
+    const Version = mongoClient.db("acorn").collection("versions");
+    const proposalPage = await Page.findOne({ _id: ObjectId(pageId) });
+    if (!proposalPage) {
+      console.log('Proposal Page not found', pageId);
+      return;
+    }    // get the most recent version id
+    const contentVersionId = proposalPage?.content[lang][0];
+    if (!contentVersionId) {
+      console.log('Content Version Id not found');
+      return;
+    }
+    const proposalContent = await Version.findOne({
+      _id: ObjectId(contentVersionId),
+    });
+    workspace = proposalContent.content.geolytixWorkspace;
+    await assignTemplates(workspace);
 
-  await assignDefaults(workspace);
-  return workspace;
+    await assignDefaults(workspace);
+    if(!workspace){
+      console.log('No workspace found on cache.js');
+    }
+    return workspace;
+  } catch (err) {
+    return new Error("Error loading workspace:  " + err);
+  }
 }

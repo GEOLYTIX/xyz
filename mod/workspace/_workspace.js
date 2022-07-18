@@ -47,7 +47,10 @@ function getTemplate(req, res) {
 
 function getLocales(req, res) {
 
-  if (!req.params.workspace.locales) return res.send({})
+  if (!req?.params?.workspace?.locales) {
+    console.log('No workspace was given');
+    return res.send({})
+  }
 
   const roles = req.params.user && req.params.user.roles || []
 
