@@ -4,23 +4,22 @@ const cloudfront = require("../provider/cloudfront");
 
 const http = require("./httpsAgent");
 
-const getFrom = {
-  https: (ref) => http(ref),
-  file: (ref) => file(ref.split(":")[1]),
-  cloudfront: (ref) => cloudfront(ref.split(":")[1]),
-};
-
 const assignTemplates = require("./assignTemplates");
 
 const defaults = require("./defaults");
 
 const assignDefaults = require("./assignDefaults");
 
-let workspace = null;
-
 const { nanoid } = require("nanoid");
 
 const logger = require("../logger");
+const getFrom = {
+  https: (ref) => http(ref),
+  file: (ref) => file(ref.split(":")[1]),
+  cloudfront: (ref) => cloudfront(ref.split(":")[1]),
+};
+
+let workspace = null;
 
 module.exports = async (req) => {
   if (process.env.WORKSPACE === "dynamic") {
