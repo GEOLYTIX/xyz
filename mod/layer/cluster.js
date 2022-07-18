@@ -63,7 +63,7 @@ module.exports = async (req, res) => {
     var rows = await dbs[layer.dbs](q, SQLparams)
 
     if (rows instanceof Error)
-      return res.status(500).send('Failed to query PostGIS table.');
+      return res.status(500).send('Failed to query PostGIS table @ mod/layer/cluster.js');
 
     // return if no locations found within the envelope.
     if (parseInt(rows[0].count) === 0) return res.send([]);
@@ -365,7 +365,7 @@ module.exports = async (req, res) => {
   }
   var rows = await dbs[layer.dbs](q, SQLparams)
 
-  if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
+  if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table @ mod/layer/cluster.js')
 
 
   if (!theme || theme === 'basic') return res.send(rows.map(row => ({

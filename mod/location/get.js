@@ -21,7 +21,7 @@ module.exports = async (req, res) => {
 
   var rows = await dbs[layer.dbs](q, [req.params.id])
 
-  if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
+  if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table @ mod/layer/get.js')
 
   // return 204 if no record was returned from database.
   if (rows.length === 0) return res.status(202).send('No rows returned from table.')

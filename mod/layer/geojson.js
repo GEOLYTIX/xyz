@@ -31,7 +31,7 @@ module.exports = async (req, res) => {
 
   var rows = await dbs[layer.dbs](q, SQLparams)
 
-  if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
+  if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table @ mod/layer/geojson.js')
 
   res.send(rows.map(row => ({
     type: 'Feature',
