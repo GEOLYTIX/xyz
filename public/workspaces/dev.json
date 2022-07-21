@@ -107,7 +107,7 @@
       "dbs": "MAPP"
     },
     "styled_layer": {
-      "template": "select id, st_distance(st_pointonsurface(geom_4326), st_setsrid(st_point(%{lon},%{lat}), 4326)) distance from geodata.uk_glx_geodata_seamless_shopper_town order by st_distance(st_pointonsurface(geom_4326), st_setsrid(st_point(%{lon},%{lat}), 4326)) limit 10;",
+      "template": "select id, st_distance(st_pointonsurface(geom_4326), st_setsrid(st_point(${pin}), 4326)) distance from geodata.uk_glx_geodata_seamless_shopper_town order by st_distance(st_pointonsurface(geom_4326), st_setsrid(st_point(${pin}), 4326)) limit 10;",
       "dbs": "MAPP"
     },
     "chartdata": {
@@ -158,7 +158,6 @@
       },
       "plugins": [
         "${DIR}/js/plugins/cluster_panel.js",
-        "${DIR}/js/plugins/styled_layer.js",
         "${DIR}/js/plugins/measure_distance.js",
         "${DIR}/js/plugins/draw_circle_element.js",
         "${DIR}/js/plugins/modify_context_menu.js",
@@ -739,10 +738,6 @@
               "type": "key"
             },
             {
-              "type": "styledLayer",
-              "query": "styled_layer"
-            },
-            {
               "type": "pin",
               "field": "pin",
               "fieldfx": "ARRAY[ST_X(geom_p_4326),ST_Y(geom_p_4326)]",
@@ -754,6 +749,45 @@
                   "strokeColor": "#fff",
                   "strokeWidth": 3
                 }
+              }
+            },
+            {
+              "type": "mvt_clone",
+              "query": "styled_layer",
+              "queryparams": {
+                "fieldValues": ["pin"]
+              },
+              "layer": "zoomgeom",
+              "theme": {
+                "title": "Distance from centroid",
+                "type": "graduated",
+                "field": "distance",
+                "cat_arr": [
+                  {
+                    "value": "0",
+                    "fillColor": "#15773f"
+                  },
+                  {
+                    "value": "0.1",
+                    "fillColor": "#66bd63"
+                  },
+                  {
+                    "value": "0.2",
+                    "fillColor": "#a6d96a"
+                  },
+                  {
+                    "value": "0.3",
+                    "fillColor": "#d9ef8b"
+                  },
+                  {
+                    "value": "0.4",
+                    "fillColor": "#fdae61"
+                  },
+                  {
+                    "value": "0.5",
+                    "fillColor": "#f46d43"
+                  }
+                ]
               }
             },
             {
