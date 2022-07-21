@@ -26,7 +26,7 @@ module.exports = () => {
 
           const client = await pool.connect()
           
-          timeout && await client.query(`SET statement_timeout = $1`,[timeout])
+          timeout && await client.query(`SET statement_timeout = ${timeout}`)
   
           const { rows } = await client.query(q, arr)
   
