@@ -234,9 +234,18 @@
         },
         "zoomgeom": {
           "format": "mvt",
-          "geom": "geom_3857_5m",
-          "srid": "3857",
           "dbs": "MAPP",
+          "table": "geodata.uk_glx_geodata_seamless_shopper_town",
+          "geom": "geom_3857_5m",
+          "geoms": {
+            "7": "geom_3857_100m",
+            "8": "geom_3857_50m",
+            "9": "geom_3857_50m",
+            "10": "geom_3857_5m",
+            "11": "geom_3857_5m",
+            "12": "geom_3857"
+          },
+          "srid": "3857",
           "qID": "id",
           "infoj": [
             {
@@ -282,17 +291,12 @@
             "selected": {
               "strokeColor": "#09af00",
               "strokeWidth": 2
+            },
+            "theme": {
+              "type": "distributed",
+              "palette": ["#ffffcc","#ffeda0","#fed976","#feb24c","#fd8d3c","#fc4e2a","#e31a1c","#bd0026","#800026"]
             }
-          },
-          "geoms": {
-            "7": "geom_3857_100m",
-            "8": "geom_3857_50m",
-            "9": "geom_3857_50m",
-            "10": "geom_3857_5m",
-            "11": "geom_3857_5m",
-            "12": "geom_3857"
-          },
-          "table": "geodata.uk_glx_geodata_seamless_shopper_town"
+          }
         },
         "api_grid": {
           "group": "Grid",
