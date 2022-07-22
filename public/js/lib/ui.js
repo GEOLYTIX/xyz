@@ -460,7 +460,7 @@ mapp.utils.merge(mapp.dictionaries,{en:{layer_zoom_to_extent:"Zoom to filtered l
     <span>${mapp.dictionary.here_datetime_depart}`,l=mapp.utils.html.node`
     <input
       type="datetime-local"
-      onchange=${c=>{let d=s.querySelector("[data-id=reverse_direction] > input");c.target.value?(d.checked=!1,d.disabled=!0,e.dateISO=new Date(c.target.value).toISOString()):(d.disabled=!1,e.dateISO=void 0)}}>`,o=mapp.utils.html.node`
+      onchange=${c=>{let d=s.querySelector("[data-id=reverse_direction] > input");c.target.value?(d.checked=!1,e.reverseDirection=!1,d.disabled=!0,e.dateISO=new Date(c.target.value).toISOString()):(d.disabled=!1,e.dateISO=void 0)}}>`,o=mapp.utils.html.node`
     <div>
       ${a}
       ${l}`,n=mapp.ui.elements.slider({label:mapp.dictionary.here_range_minutes,min:e.rangeMin,max:e.rangeMax,val:10,callback:c=>{e.range=parseInt(c.target.value)}}),r=mapp.ui.elements.chkbox({label:"Reverse Direction Isoline",data_id:"reverse_direction",checked:!!e.reverseDirection,onchange:c=>{a.textContent=c&&mapp.dictionary.here_datetime_arrive||mapp.dictionary.here_datetime_depart,e.reverseDirection=c}}),s=mapp.ui.elements.drawer({header:mapp.utils.html`
