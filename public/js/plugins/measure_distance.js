@@ -33,7 +33,7 @@ export default (function(){
         callback: () => {
 
           // Remove routeLayer from map.
-          mapview.Map.removeLayer(routeLayer)
+          mapview.Map.removeLayer(options.L)
 
           // Remove active class from button.
           e.target.classList.remove('active')
@@ -60,7 +60,6 @@ export default (function(){
 
         let 
           waypoints = [], // Array for route waypoints.
-          routeLayer, // Layer to display route geometry.
           section; // The section of the route.
 
         config.condition = async e => {
@@ -111,10 +110,10 @@ export default (function(){
             decoded.polyline.forEach(p => p.reverse())
 
             // Remove existing routeLayer from map.
-            routeLayer && mapview.Map.removeLayer(routeLayer)
+            options.L && mapview.Map.removeLayer(options.L)
 
             // Create routeLayer with linestring geometry from polyline coordinates.
-            routeLayer = mapview.geoJSON({
+            options.L = mapview.geoJSON({
               zIndex: Infinity,
               geometry: {
                 type: 'LineString',
