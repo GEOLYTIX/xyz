@@ -294,7 +294,36 @@
             },
             "theme": {
               "type": "distributed",
-              "palette": ["#ffffcc","#ffeda0","#fed976","#feb24c","#fd8d3c","#fc4e2a","#e31a1c","#bd0026","#800026"]
+              "field": "id",
+              "cat_arr": [
+                {
+                  "fillColor": "#ffffcc"
+                },
+                {
+                  "fillColor": "#ffeda0"
+                },
+                {
+                  "fillColor": "#fed976"
+                },
+                {
+                  "fillColor": "#feb24c"
+                },
+                {
+                  "fillColor": "#fd8d3c"
+                },
+                {
+                  "fillColor": "#fc4e2a"
+                },
+                {
+                  "fillColor": "#e31a1c"
+                },
+                {
+                  "fillColor": "#bd0026"
+                },
+                {
+                  "fillColor": "#800026"
+                }
+              ]
             }
           }
         },
