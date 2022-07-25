@@ -9,7 +9,8 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.14.1/build/ol.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/gh/openlayers/openlayers.github.io@master/en/v6.14.1/build/ol.js"
+    defer></script>
 
   <!-- Load XYZ / MAPP stylesheet and library. -->
   <link rel="stylesheet" href="{{dir}}/css/mapp.css" />
@@ -17,9 +18,8 @@
 
   <script type="module" src="{{dir}}/js/lib/mapp.js" defer></script>
   <script type="module" src="{{dir}}/js/lib/ui.js" defer></script>
-  
-  <style>
 
+  <style>
     body {
       height: 100%;
       display: grid;
@@ -33,6 +33,7 @@
       grid-column: 1;
       transform: rotateY(180deg);
       overflow-x: auto;
+      background-color: white;
     }
 
     #Location>* {
@@ -68,7 +69,7 @@
       position: absolute;
     }
 
-    .attribution-links > a {
+    .attribution-links>a {
       text-shadow: 2px 2px #fff;
     }
 
@@ -136,21 +137,22 @@
         },
       }
     });
-    
+
     const layers = await mapp.utils.promiseAll(locale.layers.map(
       layer => mapp.utils.xhr(`${host}/api/workspace/layer?`
         + `locale=${locale.key}&layer=${layer}`)))
-    
+
     await mapview.addLayer(layers);
 
+    if (mapp.hooks.current.no_interaction) return;
 
-    let currentLocation;
+    let currentLocation = {};
 
     mapview.locations = new Proxy(mapview.locations, {
       set: function (target, key, location) {
         Reflect.set(...arguments);
 
-        currentLocation && currentLocation.remove()
+        currentLocation.remove && currentLocation.remove()
 
         currentLocation = location
 
