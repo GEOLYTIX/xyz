@@ -366,8 +366,6 @@ window.onload = async () => {
   // Begin highlight interaction.
   mapview.interactions.highlight();
 
-  mapp.
-
   // Select locations from hooks.
   mapp.hooks.current.locations.forEach((_hook) => {
 
