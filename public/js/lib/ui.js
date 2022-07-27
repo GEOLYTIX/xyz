@@ -571,7 +571,7 @@ mapp.utils.merge(mapp.dictionaries,{en:{layer_zoom_to_extent:"Zoom to filtered l
         max=${e.max}
         step=${e.step||1}
         value=${e.val_b}
-        oninput=${i}/>`;function i(a){a.target.value=a.target.value>e.max?e.max:a.target.value,a.target.value=a.target.value<e.min?e.min:a.target.value,t.style.setProperty(`--${a.target.id}`,a.target.value),t.querySelectorAll("input").forEach(l=>{l.id==a.target.id&&l!=a.target&&(l.value=a.target.value)}),a.target.id==="a"&&typeof e.callback_a=="function"&&e.callback_a(a),a.target.id==="b"&&typeof e.callback_b=="function"&&e.callback_b(a)}return t};var Se={viewport:ht,download_json:gt,download_csv:ft};function ht(e){return mapp.utils.html`
+        oninput=${i}/>`;function i(a){a.target.value=a.target.value>e.max?e.max:a.target.value,t.style.setProperty(`--${a.target.id}`,a.target.value),t.querySelectorAll("input").forEach(l=>{l.id==a.target.id&&l!=a.target&&(l.value=a.target.value)}),a.target.id==="a"&&typeof e.callback_a=="function"&&e.callback_a(a),a.target.id==="b"&&typeof e.callback_b=="function"&&e.callback_b(a)}return t};var Se={viewport:ht,download_json:gt,download_csv:ft};function ht(e){return mapp.utils.html`
     <button
       class=${`flat ${e.viewport&&"active"||""}`}
       onclick=${t=>{t.target.classList.toggle("active"),e.viewport=!e.viewport,e.update()}}>Viewport`}function gt(e){return mapp.utils.html`
