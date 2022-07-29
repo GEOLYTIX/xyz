@@ -134,7 +134,6 @@ a > img {
 .legend .switch {
   cursor: pointer; }
 .legend .switch.disabled {
-  text-decoration: line-through;
   opacity: 0.5; }
 
 /*# sourceMappingURL=mapp.css.map */
