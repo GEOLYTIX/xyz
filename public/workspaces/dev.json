@@ -169,9 +169,15 @@
         "${DIR}/js/plugins/mvt_select_tab.js"
       ],
       "measure_distance": {
+        "tooltip": {
+          "metric": "length",
+          "units": "meter",
+          "convertTo": "miles",
+          "decimals": 2,
+          "suffix": "miles"
+        },
         "route": {
-          "provider": "here",
-          "transportMode": "pedestrian"
+          "provider": "here"
         }
       },
       "locator": true,

@@ -136,16 +136,16 @@ export default (function(){
         config.metricFunction = (geometry, tooltip) => {
 
           // A popup is set with metrics when the draw interaction geometry changes.
-          geometry.on('change', () => {
+          geometry.on('change', async () => {
             mapview.popup({
               content: mapp.utils.html.node`
                 <div style="padding: 5px">
-                  ${mapp.utils.convert(mapview.metrics.length(geometry), tooltip)}
+                  ${await mapp.utils.convert(mapview.metrics.length(geometry), tooltip)}
                   ${section && mapp.utils.html`
                   <br>
                   Route(${options.route.transportMode || 'car'})
                   <br>
-                  ${mapp.utils.convert(section.summary.length, tooltip)}
+                  ${await mapp.utils.convert(section.summary.length, tooltip)}
                   <br>
                   ${parseInt(section.summary.duration / 60)}min`}`
                     
