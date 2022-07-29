@@ -245,6 +245,9 @@
             "11": "geom_3857_5m",
             "12": "geom_3857"
           },
+          "filter": {
+            "zoomToExtent": true
+          },
           "srid": "3857",
           "qID": "id",
           "infoj": [
@@ -665,10 +668,7 @@
                   {
                     "field": "town",
                     "title": "Town",
-                    "headerFilter": "custom",
-                    "headerFilterParams": {
-                      "type": "like"
-                    }
+                    "headerFilter": "like"
                   }
                 ]
               }
@@ -1100,18 +1100,12 @@
                   {
                     "field": "char_field",
                     "title": "Char",
-                    "headerFilter": "custom",
-                    "headerFilterParams": {
-                      "type": "like"
-                    }
+                    "headerFilter": "like"
                   },
                   {
                     "field": "numeric_field",
                     "title": "Num",
-                    "headerFilter": "custom",
-                    "headerFilterParams": {
-                      "type": "numeric"
-                    }
+                    "headerFilter": "numeric"
                   }
                 ]
               }
