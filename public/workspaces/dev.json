@@ -98,6 +98,9 @@
       "template": "SELECT id FROM geodata.uk_glx_geodata_seamless_shopper_town WHERE id = ANY(ARRAY[${ids}]);",
       "dbs": "MAPP"
     },
+    "storename_length": {
+      "template": "length(store_name)"
+    },
     "lad_intersect": {
       "template": "select lad_name, st_asgeojson(geom_3857_200m) from geodata.uk_glx_geodata_admin_lad where st_intersects(st_setsrid(st_point(%{x},%{y}),3857), geom_3857_200m)",
       "dbs": "MAPP"
@@ -1025,7 +1028,6 @@
               },
               "Basic": {
                 "type": "basic",
-                "size": "length(store_name)",
                 "label": "foo",
                 "style": {
                   "svg": null,
@@ -1035,7 +1037,7 @@
               },
               "Length": {
                 "type": "graduated",
-                "fieldfx": "length(store_name)",
+                "cat_template": "storename_length",
                 "aggregate": "avg",
                 "cat_arr": [
                   {

@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
     resolution: parseFloat(req.params.resolution || layer.cluster_resolution) || 0.1,
     hexgrid: req.params.hexgrid,
     theme: req.params.theme,
-    cat: req.params.cat || null,
+    cat: req.params.cat_template && req.params.workspace.templates[req.params.cat_template].template || req.params.cat || null,
     size: req.params.size || null,
     geom: layer.geom,
     label: req.params.label_template && req.params.workspace.templates[req.params.label_template].template || req.params.label || null,
