@@ -12,14 +12,6 @@ export default (function(){
       title="Create screenshot from map canvas."
       onclick=${(e) => {
 
-        // const blob = canvasToBlob(document.querySelector('.ol-layer canvas'))
-
-        // const blobUrl = URL.createObjectURL(blob);
-
-        // window.open(blobUrl, "_blank");
-
-        // return;
-
         html2canvas(document.querySelector('.ol-viewport')).then((canvas) => {
 
           const blob = canvasToBlob(canvas)
