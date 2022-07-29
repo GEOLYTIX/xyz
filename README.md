@@ -1,4 +1,4 @@
-**v3.7.3**
+**v3.7.4**
 
 Please use the v4 branch for new projects.
 

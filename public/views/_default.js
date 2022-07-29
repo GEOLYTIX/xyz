@@ -360,9 +360,9 @@ window.onload = () => {
 
     xyz.user = document.head.dataset.user && JSON.parse(decodeURI(document.head.dataset.user))
 
-    xyz.user && xyz.utils.idle({
+    xyz.user && xyz.locale.idle && xyz.utils.idle({
       host: xyz.host,
-      idle: xyz.locale.idle ?? 600
+      idle: xyz.locale.idle
     })
     
     // Append user admin button.
