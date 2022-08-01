@@ -904,7 +904,7 @@
             "label": {
               "_field": "store_name",
               "template": "retail_points_label",
-              "_count": true,
+              "count": true,
               "strokeColor": "#fff",
               "strokeWidth": 3
             },
