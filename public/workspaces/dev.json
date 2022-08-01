@@ -646,7 +646,14 @@
           "cluster_kmeans": 0.04,
           "cluster_dbscan": 0.04,
           "cluster_resolution": 0.1,
-          "cluster_panel": true,
+          "cluster_panel": {
+            "kmeans": true,
+            "dbscan": true,
+            "resolution": true,
+            "hexgrid": true,
+            "icon_scale": true,
+            "log_scale": true
+          },
           "edit": {
             "point": true,
             "delete": true

@@ -6,9 +6,8 @@ export default (function(){
 
     const elements = []
 
-    layer.cluster_kmeans && elements.push(mapp.ui.elements.slider({
-      label: 'kMeans',
-      title: 'The maximum number of cluster in the viewport.',
+    layer.cluster_kmeans && layer.cluster_panel.kmeans && elements.push(mapp.ui.elements.slider({
+      label: 'Maximum number of cluster as defined by the nearest mean (kmean).',
       min: 0,
       max: 100,
       val: parseInt(1 / layer.cluster_kmeans),
@@ -20,9 +19,8 @@ export default (function(){
       }
     }))
 
-    layer.cluster_dbscan && elements.push(mapp.ui.elements.slider({
-      label: 'dbScan',
-      title: 'The maximum distance between cluster locations as a fraction of the viewport.',
+    layer.cluster_dbscan && layer.cluster_panel.dbscan && elements.push(mapp.ui.elements.slider({
+      label: 'Maximum distance between locations in a cluster as a fraction of the viewport.',
       min: 0,
       max: 100,
       val: parseInt(0.5 / layer.cluster_dbscan),
@@ -34,7 +32,7 @@ export default (function(){
       }
     }))
 
-    elements.push(mapp.ui.elements.slider({
+    layer.cluster_panel.resolution && elements.push(mapp.ui.elements.slider({
       label: 'Resolution',
       title: 'The cluster grid resolution.',
       data_id: 'resolution',
@@ -49,7 +47,7 @@ export default (function(){
       }
     }))
 
-    elements.push(mapp.ui.elements.chkbox({
+    layer.cluster_panel.hexgrid && elements.push(mapp.ui.elements.chkbox({
       label: 'Use Hex Grid',
       data_id: 'hexgrid',
       checked: !!layer.cluster_hexgrid,
@@ -62,7 +60,7 @@ export default (function(){
 
     layer.style.cluster.clusterScale = layer.style.cluster.icon?.clusterScale || layer.style.cluster.clusterScale || 2
 
-    elements.push(mapp.ui.elements.slider({
+    layer.cluster_panel.icon_scale && elements.push(mapp.ui.elements.slider({
       label: 'Cluster Icon Scale',
       title: 'Scale applied in addition to the base scale of the largest cluster icon.',
       min: 0,
@@ -75,7 +73,7 @@ export default (function(){
       }
     }))
 
-    elements.push(mapp.ui.elements.chkbox({
+    layer.cluster_panel.log_scale && elements.push(mapp.ui.elements.chkbox({
       label: 'Use Log Scale',
       checked: !!layer.style.logScale,
       onchange: (checked) => {
@@ -96,12 +94,15 @@ export default (function(){
 
     function checkGridStatus() {
 
+      let res_slider = drawer.querySelector("[data-id=resolution]")
+      let hex_chk = drawer.querySelector("[data-id=hexgrid]")
+
       if (layer.cluster_kmeans > 0 || layer.cluster_dbscan > 0) {
-        drawer.querySelector("[data-id=resolution]").classList.add('disabled')
-        drawer.querySelector("[data-id=hexgrid]").classList.add('disabled')
+        res_slider && res_slider.classList.add('disabled')
+        hex_chk && hex_chk.classList.add('disabled')
       } else {
-        drawer.querySelector("[data-id=resolution]").classList.remove('disabled')
-        drawer.querySelector("[data-id=hexgrid]").classList.remove('disabled')
+        res_slider && res_slider.classList.remove('disabled')
+        hex_chk && hex_chk.classList.remove('disabled')
       }
 
     }
