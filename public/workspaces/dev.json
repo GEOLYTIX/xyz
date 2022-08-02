@@ -6,9 +6,6 @@
     "embedded": {
       "src": "file:public/views/embedded.html"
     },
-    "edit": {
-      "src": "file:public/views/edit.html"
-    },
     "bristol_sentiment": {
       "template": "select id, sentiment, st_asgeojson(geom_4326) as geom from dev.bristol_sentiment where not is_deleted;",
       "dbs": "DEV"
@@ -143,7 +140,6 @@
         "lng": -4,
         "z": 6
       },
-      "idle": 0,
       "minZoom": 2,
       "maxZoom": 17,
       "gazetteer": {
