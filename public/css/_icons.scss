@@ -425,6 +425,16 @@
   }
 }
 
+.radio-button-checked {
+  &.bg-icon {
+    background-image: url("../icons/icon-radio-button-checked.svg");
+  }
+  &.mask-icon {
+    -webkit-mask-image: url("../icons/icon-radio-button-checked.svg");
+    mask-image: url("../icons/icon-radio-button-checked.svg");
+  }
+}
+
 .remove {
   &.bg-icon {
     background-image: url("../icons/icon-remove.svg");

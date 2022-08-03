@@ -394,6 +394,12 @@ h3 {
   -webkit-mask-image: url("../icons/icon-pie-chart.svg");
   mask-image: url("../icons/icon-pie-chart.svg"); }
 
+.radio-button-checked.bg-icon {
+  background-image: url("../icons/icon-radio-button-checked.svg"); }
+.radio-button-checked.mask-icon {
+  -webkit-mask-image: url("../icons/icon-radio-button-checked.svg");
+  mask-image: url("../icons/icon-radio-button-checked.svg"); }
+
 .remove.bg-icon {
   background-image: url("../icons/icon-remove.svg"); }
 .remove.mask-icon {
