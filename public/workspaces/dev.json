@@ -110,10 +110,6 @@
       "template": "select id, st_distance(st_pointonsurface(geom_4326), st_setsrid(st_point(${pin}), 4326)) distance from geodata.uk_glx_geodata_seamless_shopper_town order by st_distance(st_pointonsurface(geom_4326), st_setsrid(st_point(${pin}), 4326)) limit 10;",
       "dbs": "MAPP"
     },
-    "foobar_title": {
-      "template": "select json_build_object('title', 'foo') as bar",
-      "dbs": "MAPP"
-    },
     "chartdata": {
       "template": "SELECT array_agg(json_build_object('data', ARRAY [0.4168, 0.2782, 0.2912, 0.0137])) AS datasets",
       "dbs": "MAPP"
@@ -1210,18 +1206,22 @@
               "type": "key"
             },
             {
+              "skipNullValue": true,
               "title": "char_field",
               "field": "char_field_bogus",
               "fieldfx": "char_field"
             },
             {
-              "title": "foobar json",
               "field": "foobar_title",
-              "query": "foobar_title",
+              "fieldfx": "json_build_object('title', 'foo')",
               "type": "json",
-              "params": {
-                "field": "bar"
-              }
+              "class": "display-none"
+            },
+            {
+              "title": "this won't matter",
+              "field": "bogus_bar",
+              "fieldfx": "'bar'",
+              "objectAssignFromField": "foobar_title"
             },
             {
               "title": "char_field edit",
