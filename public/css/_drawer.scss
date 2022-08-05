@@ -9,7 +9,7 @@
   }
     
   &.expandable.empty>.header>.mask-icon.expander {
-    visibility: hidden;
+    display: none;
   }
 
   &.expandable>.header>.mask-icon.expander {

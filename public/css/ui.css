@@ -61,7 +61,7 @@ button {
   .drawer.expandable:not(.empty) > .header:hover {
     cursor: pointer; }
   .drawer.expandable.empty > .header > .mask-icon.expander {
-    visibility: hidden; }
+    display: none; }
   .drawer.expandable > .header > .mask-icon.expander {
     -webkit-mask-image: url("../icons/icon-arrow-down.svg");
     mask-image: url("../icons/icon-arrow-down.svg"); }
