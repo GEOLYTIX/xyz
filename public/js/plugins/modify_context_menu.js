@@ -63,8 +63,8 @@ export default (async function () {
     // Add cancel option to contextmenu.
     menu.push(mapp.utils.html`
       <li
-        onclick=${() => finish()}>
-        ${mapp.dictionary.layer_draw_cancel}`)
+        onclick=${() => this.interaction.finish()}>
+        ${mapp.dictionary.cancel}`)
 
     // Set context menu popup on last vertex.
     this.popup({

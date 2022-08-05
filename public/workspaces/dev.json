@@ -787,13 +787,18 @@
               "field": "pin",
               "fieldfx": "ARRAY[ST_X(geom_p_4326),ST_Y(geom_p_4326)]",
               "srid": "4326",
-              "__style": {
-                "label": {
-                  "text": "foo",
-                  "font": "600 16px inter, sans-serif",
-                  "strokeColor": "#fff",
-                  "strokeWidth": 3
-                }
+              "class": "display-none"
+            },
+            {
+              "type": "geometry",
+              "field": "geom_p_4326",
+              "fieldfx": "ST_asGeoJSON(geom_p_4326)",
+              "srid": "4326",
+              "dependents": [
+                "pin"
+              ],
+              "edit": {
+                "geometry": true
               }
             },
             {
