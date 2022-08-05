@@ -1,4 +1,4 @@
-export default (function(){
+export default (function () {
 
   mapp.plugins.measure_distance = (options, mapview) => {
 
@@ -11,12 +11,12 @@ export default (function(){
       title="Measure distance"
       onclick=${measure_distance}>
       <div class="mask-icon straighten">`);
-  
-    function measure_distance(e){
-  
+
+    function measure_distance(e) {
+
       // Cancel draw interaction if active.
       if (e.target.classList.contains('active')) return mapview.interactions.highlight()
-  
+
       // Style plugin button as active.
       e.target.classList.add('active')
 
@@ -58,7 +58,7 @@ export default (function(){
 
       function here(config) {
 
-        let 
+        let
           waypoints = [], // Array for route waypoints.
           section; // The section of the route.
 
@@ -132,7 +132,7 @@ export default (function(){
           }
 
         };
-      
+
         config.metricFunction = (geometry, tooltip) => {
 
           // A popup is set with metrics when the draw interaction geometry changes.
@@ -148,13 +148,13 @@ export default (function(){
                   ${await mapp.utils.convert(section.summary.length, tooltip)}
                   <br>
                   ${parseInt(section.summary.duration / 60)}min`}`
-                    
+
             })
           })
 
         }
       }
-  
+
     }
 
   }
