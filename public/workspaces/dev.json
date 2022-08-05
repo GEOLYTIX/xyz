@@ -798,7 +798,8 @@
                 "pin"
               ],
               "edit": {
-                "geometry": true
+                "geometry": true,
+                "modifyBtnOnly": true
               }
             },
             {
