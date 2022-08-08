@@ -26,7 +26,9 @@ module.exports = async (req, res) => {
 
   // Return results for layer gazetteer.
   if (req.params.layer) {
-    results = await layerGaz(req.params.q, locale.layers[req.params.layer])
+    
+    let results = await layerGaz(req.params.q, locale.layers[req.params.layer])
+    
     return res.send(results)
   }
 
@@ -158,27 +160,48 @@ async function datasets(req, locale, results) {
 
 async function layerGaz(q, layer) {
 
+  let results = []
+
   // Asteriks wildcard
   let phrase = `${decodeURIComponent(q).replace(new RegExp(/\*/g), '%')}%`
 
   const SQLparams = [phrase]
 
-  // Build PostgreSQL query to fetch gazetteer results.
-  var q = `
+  if (Array.isArray(layer.gazetteer.datasets)) {
+
+    for (const _gaz of layer.gazetteer.datasets) {
+
+      let gaz = Object.assign({}, layer.gazetteer, _gaz)
+
+      await search(gaz)
+    }
+
+  } else {
+
+    await search(layer.gazetteer)
+  }
+
+  return results
+
+  async function search(gaz) {
+
+    var q = `
     SELECT
-      ${layer.gazetteer.label || layer.gazetteer.qterm} AS label,
+      ${gaz.label || gaz.qterm} AS label,
       ${layer.qID} AS id,
       ST_X(ST_PointOnSurface(${layer.geom})) AS lng,
       ST_Y(ST_PointOnSurface(${layer.geom})) AS lat,
-      '${layer.gazetteer.table || layer.table}' AS table,
+      '${gaz.table || layer.table}' AS table,
       '${layer.key}' AS layer,
+      '${gaz.title || ''}' AS title,
       'glx' AS source
-      FROM ${layer.gazetteer.table || layer.table}
-      WHERE ${layer.gazetteer.qterm}::text ILIKE $1
-      LIMIT ${layer.gazetteer.limit || 10}`
+      FROM ${gaz.table || layer.table}
+      WHERE ${gaz.qterm}::text ILIKE $1
+      LIMIT ${gaz.limit || 10}`
 
-  let rows = await dbs[layer.dbs](q, SQLparams);
+    let rows = await dbs[layer.dbs](q, SQLparams);
 
-  return rows
+    results = results.concat(rows)
+  }
 
 }
