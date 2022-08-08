@@ -1,8 +1,9 @@
 window.onload = () => {
 
-  const saml_sso = document.getElementById('saml_sso')
-  
-  saml_sso.style.display = saml_sso.href ? 'block' : 'none';
+  if (document.getElementById('saml_sso')) {
+    const saml_sso = document.getElementById('saml_sso');
+    saml_sso.style.display = saml_sso.href ? 'block' : 'none';
+  }
 
   const email = document.getElementById('auth_user_email');
   const password = document.getElementById('auth_user_password');
