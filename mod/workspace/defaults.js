@@ -60,7 +60,6 @@ module.exports = defaults = {
           type: 'dot',
           fillColor: '#999999',
           scale: 1,
-          clusterScale: 1.1
         },
         cluster: {
           clusterScale: 2

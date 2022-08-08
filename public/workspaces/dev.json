@@ -660,6 +660,14 @@
             }
           ]
         },
+        "zero_conf_cluster": {
+          "format": "cluster",
+          "dbs": "DEV",
+          "table": "dev.retail_points",
+          "qID": "id",
+          "geom": "geom_p_4326",
+          "srid": "4326"
+        },
         "retail_points": {
           "group": "Retail",
           "name": "Retail Points",
