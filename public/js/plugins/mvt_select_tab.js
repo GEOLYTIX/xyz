@@ -159,11 +159,6 @@ export default (function() {
         detail: layer.mvt_select_tab
       }))
 
-      // Add to layer tabs.
-      layer.tabs ?
-        layer.tabs.push(layer.mvt_select_tab) :
-        layer.tabs = [layer.mvt_select_tab];
-
     }
   
   }

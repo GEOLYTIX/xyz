@@ -92,11 +92,6 @@ export default (function(){
       detail: layer.compare_locations.tab
     }))
 
-    // Add tab to layer.tabs array.
-    layer.tabs ?
-      layer.tabs.push(layer.compare_locations.tab) :
-      layer.tabs = [layer.compare_locations.tab];
-
     // Show the tab is display flag is set.
     layer.compare_locations.display && layer.compare_locations.tab.show()
   }
