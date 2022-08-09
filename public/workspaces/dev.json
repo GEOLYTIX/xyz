@@ -821,6 +821,7 @@
           "hover": {
             "field": "store_name"
           },
+          "toggleLocationViewEdits": true,
           "infoj": [
             {
               "type": "key"
@@ -902,7 +903,8 @@
             {
               "field": "store_name",
               "title": "Name",
-              "css_val": "text-align: right;"
+              "css_val": "text-align: right;",
+              "edit": true
             },
             {
               "title": "Address",
