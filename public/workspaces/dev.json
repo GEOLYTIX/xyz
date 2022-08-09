@@ -697,6 +697,7 @@
             "point": true,
             "delete": true
           },
+          "hideDataviewPanel": true,
           "dataviews": {
             "Retail Points": {
               "target": "tabview",
