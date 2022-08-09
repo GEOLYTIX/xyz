@@ -68,9 +68,9 @@ mapp.utils.merge(mapp.dictionaries,{en:{layer_zoom_to_extent:"Zoom to filtered l
         ${mapp.ui.elements.dropdown({entries:Object.keys(e.style.themes).map(i=>({title:e.style.themes[i].title||i,option:i})),callback:(i,a)=>{e.style.theme=e.style.themes[a.option],e.style.drawer.querySelector(".drawer > .legend").innerHTML="",mapp.ui.layers.styles[e.style.theme.type]&&mapp.utils.render(e.style.drawer.querySelector(".drawer > .legend"),mapp.ui.layers.styles[e.style.theme.type](e)),e.reload()}})}`),e.style.theme?.title&&!e.style.themes&&t.push(mapp.utils.html`
       <h3>${e.style.theme.title}</h3>`),e.style.theme&&mapp.ui.layers.styles[e.style.theme.type]&&t.push(mapp.utils.html`
     <div class="legend">
-      ${mapp.ui.layers.styles[e.style.theme.type](e)}`),!!t.length)return e.style.drawer=mapp.ui.elements.drawer({data_id:"style-drawer",class:"raised",header:mapp.utils.html`
+      ${mapp.ui.layers.styles[e.style.theme.type](e)}`),!!t.length&&(e.style.drawer=mapp.ui.elements.drawer({data_id:"style-drawer",class:"raised",header:mapp.utils.html`
       <h3>${mapp.dictionary.layer_style_header}</h3>
-      <div class="mask-icon expander"></div>`,content:t}),e.style.drawer};var V=e=>{let t=e.style.theme,i=[];if(e.filter&&i.push(mapp.utils.html`
+      <div class="mask-icon expander"></div>`,content:t}),!e.hideStylePanel))return e.style.drawer};var V=e=>{let t=e.style.theme,i=[];if(e.filter&&i.push(mapp.utils.html`
     <div
       class="switch-all"
       style="grid-column: 1/3;">

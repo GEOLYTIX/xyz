@@ -948,6 +948,7 @@
               "type": "streetview"
             }
           ],
+          "hideStylePanel": true,
           "style": {
             "label": {
               "_field": "store_name",
