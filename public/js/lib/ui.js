@@ -415,7 +415,7 @@ mapp.utils.merge(mapp.dictionaries,{en:{layer_zoom_to_extent:"Zoom to filtered l
     <button
       class="flat wide bold primary-colour"
       onclick=${a=>t(a,i)}>
-      ${mapp.dictionary.draw_rectangle}`}function mt(e,t){let i=Object.assign({},e,{type:"Point",geometryFunction:r=>mapp.utils.here.geometryFunction(r,e.layer,l)});typeof i.edit.isoline_here!="object"&&(i.edit.isoline_here={});let a={"range[type]":"time",range:10,rangeMin:5,rangeMax:60,reverseDirection:!1,transportMode:"car",optimizeFor:"balanced"},l=Object.assign(i.edit.isoline_here,a),o=mapp.ui.elements.isoline_params_here(l);return o.append(mapp.utils.html.node`
+      ${mapp.dictionary.draw_rectangle}`}function mt(e,t){let i=Object.assign({},e,{type:"Point",geometryFunction:r=>mapp.utils.here.geometryFunction(r,e.layer,l)});typeof i.edit.isoline_here!="object"&&(i.edit.isoline_here={});let a={"range[type]":"time",range:10,rangeMin:5,rangeMax:60,transportMode:"car",optimizeFor:"balanced"},l=Object.assign(i.edit.isoline_here,a),o=mapp.ui.elements.isoline_params_here(l);return o.append(mapp.utils.html.node`
     <button
       class="flat wide bold primary-colour"
       onclick=${r=>t(r,i)}>
@@ -455,17 +455,17 @@ mapp.utils.merge(mapp.dictionaries,{en:{layer_zoom_to_extent:"Zoom to filtered l
     <span>${mapp.dictionary.here_datetime_depart}`,l=mapp.utils.html.node`
     <input
       type="datetime-local"
-      onchange=${c=>{let d=s.querySelector("[data-id=reverse_direction] > input");c.target.value?(d.checked=!1,e.reverseDirection=!1,d.disabled=!0,e.dateISO=new Date(c.target.value).toISOString()):(d.disabled=!1,e.dateISO=void 0)}}>`,o=mapp.utils.html.node`
+      onchange=${c=>{let d=s.querySelector("[data-id=reverse_direction] > input");c.target.value?(e.dateISO=new Date(c.target.value).toISOString(),d&&(e.reverseDirection=!1,d.checked=!1,d.disabled=!0)):(e.dateISO=void 0,d&&(d.disabled=!1))}}>`,o=mapp.utils.html.node`
     <div>
       ${a}
-      ${l}`,r=mapp.ui.elements.slider({label:mapp.dictionary.here_range_minutes,min:e.rangeMin,max:e.rangeMax,val:10,callback:c=>{e.range=parseInt(c.target.value)}}),n=mapp.ui.elements.chkbox({label:"Reverse Direction Isoline",data_id:"reverse_direction",checked:!!e.reverseDirection,onchange:c=>{a.textContent=c&&mapp.dictionary.here_datetime_arrive||mapp.dictionary.here_datetime_depart,e.reverseDirection=c}}),s=mapp.ui.elements.drawer({header:mapp.utils.html`
+      ${l}`,r=mapp.ui.elements.slider({label:mapp.dictionary.here_range_minutes,min:e.rangeMin,max:e.rangeMax,val:10,callback:c=>{e.range=parseInt(c.target.value)}}),n=typeof e.reverseDirection<"u"&&mapp.ui.elements.chkbox({label:"Reverse Direction Isoline",data_id:"reverse_direction",checked:!!e.reverseDirection,onchange:c=>{a.textContent=c&&mapp.dictionary.here_datetime_arrive||mapp.dictionary.here_datetime_depart,e.reverseDirection=c}}),s=mapp.ui.elements.drawer({header:mapp.utils.html`
       <h3>Here Isoline</h3>
       <div class="mask-icon expander"></div>`,content:mapp.utils.html`<div class="panel">
       <div style="display: grid; grid-row-gap: 5px;">
         ${t}
         ${i}
         ${o}
-        ${n}
+        ${n||""}
         ${r}`});return s};mapp.utils.merge(mapp.dictionaries,{en:{mapbox_mode:"Mode",mapbox_driving:"Driving",mapbox_walking:"Walking",mapbox_cycling:"Cycling",mapbox_travel_time:"Travel time in minutes"},de:{mapbox_mode:"Mode",mapbox_driving:"Kraftfahrzeug",mapbox_walking:"zu Fu\xDF",mapbox_cycling:"Fahrrad",mapbox_travel_time:"Fahrzeit in Minuten"},cn:{mapbox_mode:"\u6A21\u5F0F",mapbox_driving:"\u673A\u52A8\u8F66\u884C",mapbox_walking:"\u6B65\u884C",mapbox_cycling:"\u9A91\u884C",mapbox_travel_time:"\u4EE5\u5206\u949F\u8BA1\u4EA4\u901A\u65F6\u95F4"},pl:{mapbox_mode:"Typ",mapbox_driving:"Samochodem",mapbox_walking:"Piechot\u0105",mapbox_cycling:"Rowerem",mapbox_travel_time:"Czas podr\xF3\u017Cy w minutach"},ko:{mapbox_mode:"\uBAA8\uB4DC",mapbox_driving:"\uC6B4\uC804",mapbox_walking:"\uB3C4\uBCF4",mapbox_cycling:"\uC0AC\uC774\uD074",mapbox_travel_time:"\uC5EC\uD589\uC2DC\uAC04(\uBD84)"},fr:{mapbox_mode:"Mode",mapbox_driving:"En voiture",mapbox_walking:"\xC0 pied",mapbox_cycling:"\xC0 velo",mapbox_travel_time:"Temps du trajet en minutes "},ja:{mapbox_mode:"\u30E2\u30FC\u30C9",mapbox_driving:"\u30C9\u30E9\u30A4\u30D3\u30F3\u30B0",mapbox_walking:"\u30A6\u30A9\u30FC\u30AD\u30F3\u30B0",mapbox_cycling:"\u30B5\u30A4\u30AF\u30EA\u30F3\u30B0",mapbox_travel_time:"\u79FB\u52D5\u6642\u9593 (\u5206)"}});var $e=e=>{let t=mapp.utils.html.node`
     <div 
       style="display: grid; grid-template-columns: 100px 1fr; align-items: center;">
