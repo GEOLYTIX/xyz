@@ -920,8 +920,13 @@
               "css_val": "text-align: right;"
             },
             {
+              "skipNullValue": true,
+              "title": "Locality",
               "field": "locality",
-              "css_val": "text-align: right;"
+              "edit": true,
+              "filter": {
+                "type": "null"
+              }
             },
             {
               "field": "postcode",

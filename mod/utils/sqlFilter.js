@@ -11,6 +11,8 @@ const filterTypes = {
 
   boolean: (col, val) => `"${col}" IS ${!!val}`,
 
+  null: (col, val) => `"${col}" IS ${!val ? 'NOT' : ''} NULL`,
+
   ni: (col, val) => `NOT "${col}" = ANY (\$${addValues([val])})`,
 
   in: (col, val) => `"${col}" = ANY (\$${addValues([val])})`,
