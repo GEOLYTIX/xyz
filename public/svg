@@ -1,0 +1,22 @@
+/*
+Errno::ENOENT: No such file or directory @ rb_sysopen - public/svg
+
+Backtrace:
+/home/dennis/.rbenv/versions/2.5.1/lib/ruby/gems/2.5.0/gems/sass-3.7.4/lib/sass/plugin/compiler.rb:454:in `read'
+/home/dennis/.rbenv/versions/2.5.1/lib/ruby/gems/2.5.0/gems/sass-3.7.4/lib/sass/plugin/compiler.rb:454:in `update_stylesheet'
+/home/dennis/.rbenv/versions/2.5.1/lib/ruby/gems/2.5.0/gems/sass-3.7.4/lib/sass/plugin/compiler.rb:215:in `block in update_stylesheets'
+/home/dennis/.rbenv/versions/2.5.1/lib/ruby/gems/2.5.0/gems/sass-3.7.4/lib/sass/plugin/compiler.rb:209:in `each'
+/home/dennis/.rbenv/versions/2.5.1/lib/ruby/gems/2.5.0/gems/sass-3.7.4/lib/sass/plugin/compiler.rb:209:in `update_stylesheets'
+/home/dennis/.rbenv/versions/2.5.1/lib/ruby/gems/2.5.0/gems/sass-3.7.4/lib/sass/plugin.rb:82:in `update_stylesheets'
+/home/dennis/.rbenv/versions/2.5.1/lib/ruby/gems/2.5.0/gems/sass-3.7.4/lib/sass/exec/sass_scss.rb:338:in `watch_or_update'
+/home/dennis/.rbenv/versions/2.5.1/lib/ruby/gems/2.5.0/gems/sass-3.7.4/lib/sass/exec/sass_scss.rb:51:in `process_result'
+/home/dennis/.rbenv/versions/2.5.1/lib/ruby/gems/2.5.0/gems/sass-3.7.4/lib/sass/exec/base.rb:50:in `parse'
+/home/dennis/.rbenv/versions/2.5.1/lib/ruby/gems/2.5.0/gems/sass-3.7.4/lib/sass/exec/base.rb:18:in `parse!'
+/home/dennis/.rbenv/versions/2.5.1/lib/ruby/gems/2.5.0/gems/sass-3.7.4/bin/sass:13:in `<top (required)>'
+/home/dennis/.rbenv/versions/2.5.1/bin/sass:23:in `load'
+/home/dennis/.rbenv/versions/2.5.1/bin/sass:23:in `<main>'
+*/
+body:before {
+  white-space: pre;
+  font-family: monospace;
+  content: "Errno::ENOENT: No such file or directory @ rb_sysopen - public/svg"; }
