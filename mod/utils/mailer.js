@@ -20,9 +20,9 @@ module.exports = async mail => {
   const transporter = mailer.createTransport(  {
     host: process.env.TRANSPORT_HOST,
     name: email.match(/[^@]*$/)[0],
-    port: 587,
+    port: process.env.TRANSPORT_PORT || 587,
     secure: false,
-    requireTLS: true,
+    requireTLS: process.env.TRANSPORT_TLS || true,
     auth: {
       user: email,
       pass: process.env.TRANSPORT_PASSWORD
