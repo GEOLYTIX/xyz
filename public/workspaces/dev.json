@@ -1714,6 +1714,9 @@
       }
     },
     "Bristol": {
+      "plugins": [
+        "https://geolytix.github.io/public/mapp_v4/plugins/sentimentStyle.js"
+      ],
       "extent": {
         "north": 51.6,
         "east": -2.7,
@@ -1742,11 +1745,27 @@
           },
           "srid": "4326",
           "qID": "id",
+          "sentimentCluster": true
+        },
+        "sentiment_style": {
+          "format": "geojson",
+          "dbs": "DEV",
+          "table": "dev.bristol_sentiment",
+          "geom": "geom_4326",
+          "properties": {
+            "sentiment": "sentiment"
+          },
+          "srid": "4326",
+          "qID": "id",
           "style": {
-            "cluster": {
+            "default": {
               "icon": {
-                "type": "dot",
-                "scale": 2
+                "type": "sentimentIcon"
+              }
+            },
+            "highlight": {
+              "icon": {
+                "scale": 1.5
               }
             }
           }

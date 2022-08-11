@@ -7,7 +7,7 @@ export default (function(){
     const elements = []
 
     layer.cluster_kmeans && layer.cluster_panel.kmeans && elements.push(mapp.ui.elements.slider({
-      label: 'Maximum number of cluster as defined by the nearest mean (kmean).',
+      label: 'Minimum number of cluster as defined by the nearest mean (kmean).',
       min: 0,
       max: 100,
       val: parseInt(1 / layer.cluster_kmeans),
