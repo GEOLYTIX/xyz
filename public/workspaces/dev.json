@@ -51,6 +51,10 @@
       "template": "SELECT * from ${table}",
       "dbs": "MAPP"
     },
+    "nnearest_locations": {
+      "src": "file:/public/js/queries/nnearest_locations.sql",
+      "dbs": "DEV"
+    },
     "module_query": {
       "src": "file:/public/js/queries/infotip.js",
       "module": true,
