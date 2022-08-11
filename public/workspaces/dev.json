@@ -1727,8 +1727,7 @@
         "sentiment": {
           "display": true,
           "format": "geojson",
-          "vectorSource": {
-            "type": "cluster",
+          "clusterSource": {
             "distance": 100
           },
           "dbs": "DEV",
