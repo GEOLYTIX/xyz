@@ -1709,9 +1709,6 @@
         }
       }
     },
-    "private": {
-      "layers": {}
-    },
     "Bristol": {
       "extent": {
         "north": 51.6,
@@ -1730,8 +1727,10 @@
         "sentiment": {
           "display": true,
           "format": "geojson",
-          "type": "cluster",
-          "cluster_distance": 100,
+          "vectorSource": {
+            "type": "cluster",
+            "distance": 100
+          },
           "dbs": "DEV",
           "table": "dev.bristol_sentiment",
           "geom": "geom_4326",
