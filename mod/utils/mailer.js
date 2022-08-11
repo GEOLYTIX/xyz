@@ -22,7 +22,7 @@ module.exports = async mail => {
     name: email.match(/[^@]*$/)[0],
     port: process.env.TRANSPORT_PORT || 587,
     secure: false,
-    requireTLS: process.env.TRANSPORT_TLS || true,
+    requireTLS: process.env.TRANSPORT_TLS && true,
     auth: {
       user: email,
       pass: process.env.TRANSPORT_PASSWORD
