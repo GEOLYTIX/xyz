@@ -1,10 +1,10 @@
 export default (function () {
 
   // Create a clone of the original style method.
-  const graduatedStyleFunction = mapp.ui.layers.styles.graduated.bind({});
+  const graduatedStyleFunction = mapp.ui.layers.legends.graduated.bind({});
 
   // Re-assign a new method for graduated themes.
-  mapp.ui.layers.styles.graduated = layer => {
+  mapp.ui.layers.legends.graduated = layer => {
 
     // First run the clone of the original method.
     graduatedStyleFunction(layer)
