@@ -960,7 +960,8 @@
           "hideStylePanel": true,
           "style": {
             "label": {
-              "_field": "store_name",
+              "display": true,
+              "field": "store_name",
               "template": "retail_points_label",
               "count": true,
               "strokeColor": "#fff",
