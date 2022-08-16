@@ -205,6 +205,7 @@
         {
           "provider": "mapbox",
           "profile": "mapbox/walking",
+          "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2t3NmJqZ3N4MG9zeDJ1bGprdzQ2ODllMCJ9.3xhSOxQLx1Egv5i8W7B57A",
           "units": "meter",
           "convertTo": "miles",
           "decimals": 2,

@@ -1,8 +1,9 @@
+// required for converting mapbox route polyline to geojson.
 import mapboxPolyline from 'https://cdn.skypack.dev/@mapbox/polyline';
 
 export default (function () {
 
-  mapp.plugins.measure_distance = (options, mapview) => {
+  mapp.plugins.measure_distance = (plugin, mapview) => {
 
     // Find the btnColumn element.
     const btnColumn = document.getElementById("mapButton");
@@ -15,8 +16,6 @@ export default (function () {
       <div class="mask-icon straighten">`);
 
 
-    options.content = {}
-
     function measure_distance(e) {
 
       // Cancel draw interaction if active.
@@ -25,16 +24,24 @@ export default (function () {
       // Style plugin button as active.
       e.target.classList.add('active')
 
-      const config = Object.assign({
+      // Config for mapview draw interaction.
+      const config = {
         type: 'LineString',
 
         // Prevent contextmenu showing at drawend event.
         contextMenu: null,
 
+        // Tooltip for geometry drawn by interaction.
+        tooltip: Object.assign(plugin.tooltip, {
+          metric: 'length',
+          onChange
+        }),
+
+        // Callback for interaction finished/cancelled.
         callback: () => {
 
           // Remove routeLayer from map.
-          options.routes?.forEach(route => mapview.Map.removeLayer(route.L))
+          plugin.routes?.forEach(route => mapview.Map.removeLayer(route.L))
 
           // Remove active class from button.
           e.target.classList.remove('active')
@@ -42,29 +49,27 @@ export default (function () {
           // Activate highlight interaction.
           mapview.interactions.highlight()
         }
-      }, options)
+      }
 
-      Object.assign(config.tooltip, {
-        metric: 'length',
-        onChange
-      })
-
-      options.popup = ()=>{
+      // Assign popup method for async routing methods.
+      plugin.popup = ()=>{
         mapview.popup({
           content: mapp.utils.html.node`
             <div style="padding: 5px">
-            <span style="white-space: nowrap;">${options.val}</span>
-            ${options.routes
+            <span style="white-space: nowrap;">${plugin.val}</span>
+            ${plugin.routes
                 .filter(route=> route.val)
                 .map(route => {
                   return mapp.utils.html`<br><span style="white-space: nowrap;">${route.val}</span>`})}`
         })
       }
 
+      // Assigned to geometry onChange event on drawStart of interaction.
       async function onChange(e) {
 
-        options.val = await mapp.utils.convert(mapview.metrics.length(e.target), config.tooltip)
-        options.popup()
+        // Assign length value for drawing geometry.
+        plugin.val = await mapp.utils.convert(mapview.metrics.length(e.target), config.tooltip)
+        plugin.popup()
       }
 
       // Assign different routing methods to the routes object.
@@ -73,15 +78,17 @@ export default (function () {
         mapbox
       }
 
-      config.conditions = options.routes?.map(route => routes[route.provider](route))
+      // Create array of drawing geometry conditions from routing methods.
+      config.conditions = plugin.routes?.map(route => routes[route.provider](route))
 
+      // Initiate drawing on mapview with config as interaction argument.
       mapview.interactions.draw(config)
 
       function here(route) {
 
         route.waypoints = []; // Array for route waypoints.
         route.section; // The section of the route.
-        delete route.val;
+        delete route.val; // Delete value on new route.
 
         return async e => {
 
@@ -122,16 +129,18 @@ export default (function () {
 
             if (!response.routes.length) return;
 
-            //console.log(response.routes[0].sections[0])
-
+            // Assign val string from converted route section distance.
             route.val = await mapp.utils.convert(response.routes[0].sections[0].summary.length, route)
 
+            // Add route duration to display value.
             if (route.duration) {
 
+              // Convert route section duration into route.duration key-value.
               route.val += ` (${await mapp.utils.convert(response.routes[0].sections[0].summary.duration, {units: 'seconds', convertTo: route.duration})} ${route.duration})`
             }
 
-            options.popup()
+            // Redraw mapview popup.
+            plugin.popup()
 
             route.section = response.routes[0].sections[0]
 
@@ -152,6 +161,8 @@ export default (function () {
                 coordinates: decoded.polyline,
               },
               dataProjection: '4326',
+
+              // Assign style from route entry.
               Style: new ol.style.Style({
                 stroke: new ol.style.Stroke(Object.assign({
                   color: '#333',
@@ -179,25 +190,27 @@ export default (function () {
             e.coordinate[1]
           ], `EPSG:3857`))
 
-          route.profile = route.provile || 'mapbox/driving';
+          route.profile = route.profile || 'mapbox/driving';
 
           // Redraw route on each waypoint.
           if (route.waypoints.length > 1) {
 
             const response = await mapp.utils.xhr(`https://api.mapbox.com/directions/v5/${route.profile}/${route.waypoints.map(w => w.join(',')).join(';')}.json?access_token=${route.accessToken}`)
 
-            //console.log(response)
-
             if (!response.routes.length) return;
 
+            // Assign val string from converted route section distance.
             route.val = await mapp.utils.convert(response.routes[0].distance, route)
 
+            // Add route duration to display value.
             if (route.duration) {
 
+              // Convert route section duration into route.duration key-value.
               route.val += ` (${await mapp.utils.convert(response.routes[0].duration, {units: 'seconds', convertTo: route.duration})} ${route.duration})`
             }
 
-            options.popup()
+            // Redraw mapview popup.
+            plugin.popup()
 
             // Remove existing routeLayer from map.
             route.L && mapview.Map.removeLayer(route.L)
@@ -207,6 +220,8 @@ export default (function () {
               zIndex: Infinity,
               geometry: mapboxPolyline.toGeoJSON(response.routes[0].geometry),
               dataProjection: '4326',
+
+              // Assign style from route entry.
               Style: new ol.style.Style({
                 stroke: new ol.style.Stroke(Object.assign({
                   color: '#333',
