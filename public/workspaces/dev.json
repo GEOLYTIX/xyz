@@ -173,15 +173,44 @@
       ],
       "measure_distance": {
         "tooltip": {
-          "metric": "length",
           "units": "meter",
           "convertTo": "miles",
           "decimals": 2,
-          "suffix": "miles"
+          "suffix": " miles"
         },
-        "route": {
-          "provider": "here"
-        }
+        "routes": [{
+          "provider": "mapbox",
+          "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2t3NmJqZ3N4MG9zeDJ1bGprdzQ2ODllMCJ9.3xhSOxQLx1Egv5i8W7B57A",
+          "style": {
+            "color": "#f00"
+          },
+          "prefix": "Mapbox: "
+        },{
+          "provider": "here",
+          "units": "meter",
+          "convertTo": "miles",
+          "decimals": 2,
+          "suffix": "miles",
+          "duration": "minutes"
+        },{
+          "provider": "here",
+          "transportMode": "pedestrian",
+          "units": "meter",
+          "convertTo": "miles",
+          "decimals": 2,
+          "prefix": "Walking ",
+          "suffix": "miles",
+          "duration": "hours"
+        },
+        {
+          "provider": "mapbox",
+          "profile": "mapbox/walking",
+          "units": "meter",
+          "convertTo": "miles",
+          "decimals": 2,
+          "suffix": "miles",
+          "duration": "hours"
+        }]
       },
       "locator": true,
       "layers": {

@@ -1,3 +1,5 @@
+import mapboxPolyline from 'https://cdn.skypack.dev/@mapbox/polyline';
+
 export default (function () {
 
   mapp.plugins.measure_distance = (options, mapview) => {
@@ -12,6 +14,9 @@ export default (function () {
       onclick=${measure_distance}>
       <div class="mask-icon straighten">`);
 
+
+    options.content = {}
+
     function measure_distance(e) {
 
       // Cancel draw interaction if active.
@@ -23,17 +28,13 @@ export default (function () {
       const config = Object.assign({
         type: 'LineString',
 
-        tooltip: {
-          metric: 'length'
-        },
-
         // Prevent contextmenu showing at drawend event.
         contextMenu: null,
 
         callback: () => {
 
           // Remove routeLayer from map.
-          mapview.Map.removeLayer(options.L)
+          options.routes?.forEach(route => mapview.Map.removeLayer(route.L))
 
           // Remove active class from button.
           e.target.classList.remove('active')
@@ -43,51 +44,71 @@ export default (function () {
         }
       }, options)
 
+      Object.assign(config.tooltip, {
+        metric: 'length',
+        onChange
+      })
+
+      options.popup = ()=>{
+        mapview.popup({
+          content: mapp.utils.html.node`
+            <div style="padding: 5px">
+            <span style="white-space: nowrap;">${options.val}</span>
+            ${options.routes
+                .filter(route=> route.val)
+                .map(route => {
+                  return mapp.utils.html`<br><span style="white-space: nowrap;">${route.val}</span>`})}`
+        })
+      }
+
+      async function onChange(e) {
+
+        options.val = await mapp.utils.convert(mapview.metrics.length(e.target), config.tooltip)
+        options.popup()
+      }
+
       // Assign different routing methods to the routes object.
       const routes = {
-        here
+        here,
+        mapbox
       }
 
-      if (options.route) {
-
-        // Ammend routing methods to config
-        routes[options.route.provider] && routes[options.route.provider](config)
-      }
+      config.conditions = options.routes?.map(route => routes[route.provider](route))
 
       mapview.interactions.draw(config)
 
-      function here(config) {
+      function here(route) {
 
-        let
-          waypoints = [], // Array for route waypoints.
-          section; // The section of the route.
+        route.waypoints = []; // Array for route waypoints.
+        route.section; // The section of the route.
+        delete route.val;
 
-        config.condition = async e => {
+        return async e => {
 
           // Push waypoint from click into array.
-          waypoints.push(ol.proj.toLonLat([
+          route.waypoints.push(ol.proj.toLonLat([
             e.coordinate[0],
             e.coordinate[1]
           ], `EPSG:3857`))
 
           // Redraw route on each waypoint.
-          if (waypoints.length > 1) {
+          if (route.waypoints.length > 1) {
 
             // Set params for here request.
             const params = {
-              transportMode: options.route.transportMode || 'car',
-              origin: `${waypoints[0][1]},${waypoints[0][0]}`,
-              destination: `${waypoints[[waypoints.length - 1]][1]},${waypoints[[waypoints.length - 1]][0]}`,
+              transportMode: route.transportMode || 'car',
+              origin: `${route.waypoints[0][1]},${route.waypoints[0][0]}`,
+              destination: `${route.waypoints[[route.waypoints.length - 1]][1]},${route.waypoints[[route.waypoints.length - 1]][0]}`,
               return: 'polyline,summary'
             }
 
             // Create intermediate waypoints for route.
-            if (waypoints.length > 2) {
+            if (route.waypoints.length > 2) {
 
               const via = []
 
-              for (let i = 1; i < waypoints.length - 1; i++) {
-                via.push(`${waypoints[i][1]},${waypoints[i][0]}!passThrough=true`)
+              for (let i = 1; i < route.waypoints.length - 1; i++) {
+                via.push(`${route.waypoints[i][1]},${route.waypoints[i][0]}!passThrough=true`)
               }
 
               params.via = via.join('&via=')
@@ -101,19 +122,30 @@ export default (function () {
 
             if (!response.routes.length) return;
 
-            section = response.routes[0].sections[0]
+            //console.log(response.routes[0].sections[0])
+
+            route.val = await mapp.utils.convert(response.routes[0].sections[0].summary.length, route)
+
+            if (route.duration) {
+
+              route.val += ` (${await mapp.utils.convert(response.routes[0].sections[0].summary.duration, {units: 'seconds', convertTo: route.duration})} ${route.duration})`
+            }
+
+            options.popup()
+
+            route.section = response.routes[0].sections[0]
 
             // Decode the section.polyline
-            const decoded = mapp.utils.here.decodeIsoline(section.polyline)
+            const decoded = mapp.utils.here.decodeIsoline(route.section.polyline)
 
             // Reverse coordinate order in decoded polyline.
             decoded.polyline.forEach(p => p.reverse())
 
             // Remove existing routeLayer from map.
-            options.L && mapview.Map.removeLayer(options.L)
+            route.L && mapview.Map.removeLayer(route.L)
 
             // Create routeLayer with linestring geometry from polyline coordinates.
-            options.L = mapview.geoJSON({
+            route.L = mapview.geoJSON({
               zIndex: Infinity,
               geometry: {
                 type: 'LineString',
@@ -121,36 +153,70 @@ export default (function () {
               },
               dataProjection: '4326',
               Style: new ol.style.Style({
-                stroke: new ol.style.Stroke({
-                  color: '#f00',
+                stroke: new ol.style.Stroke(Object.assign({
+                  color: '#333',
                   opacity: 0.5,
                   width: 2
-                })
+                }, route.style || {}))
               })
             })
 
           }
 
         };
+      }
 
-        config.metricFunction = (geometry, tooltip) => {
+      function mapbox(route) {
 
-          // A popup is set with metrics when the draw interaction geometry changes.
-          geometry.on('change', async () => {
-            mapview.popup({
-              content: mapp.utils.html.node`
-                <div style="padding: 5px">
-                  ${await mapp.utils.convert(mapview.metrics.length(geometry), tooltip)}
-                  ${section && mapp.utils.html`
-                  <br>
-                  Route(${options.route.transportMode || 'car'})
-                  <br>
-                  ${await mapp.utils.convert(section.summary.length, tooltip)}
-                  <br>
-                  ${parseInt(section.summary.duration / 60)}min`}`
+        route.waypoints = [];
+        delete route.val;
 
+        return async e => {
+
+          // Push waypoint from click into array.
+          route.waypoints.push(ol.proj.toLonLat([
+            e.coordinate[0],
+            e.coordinate[1]
+          ], `EPSG:3857`))
+
+          route.profile = route.provile || 'mapbox/driving';
+
+          // Redraw route on each waypoint.
+          if (route.waypoints.length > 1) {
+
+            const response = await mapp.utils.xhr(`https://api.mapbox.com/directions/v5/${route.profile}/${route.waypoints.map(w => w.join(',')).join(';')}.json?access_token=${route.accessToken}`)
+
+            //console.log(response)
+
+            if (!response.routes.length) return;
+
+            route.val = await mapp.utils.convert(response.routes[0].distance, route)
+
+            if (route.duration) {
+
+              route.val += ` (${await mapp.utils.convert(response.routes[0].duration, {units: 'seconds', convertTo: route.duration})} ${route.duration})`
+            }
+
+            options.popup()
+
+            // Remove existing routeLayer from map.
+            route.L && mapview.Map.removeLayer(route.L)
+
+            // Create routeLayer with linestring geometry from polyline coordinates.
+            route.L = mapview.geoJSON({
+              zIndex: Infinity,
+              geometry: mapboxPolyline.toGeoJSON(response.routes[0].geometry),
+              dataProjection: '4326',
+              Style: new ol.style.Style({
+                stroke: new ol.style.Stroke(Object.assign({
+                  color: '#333',
+                  opacity: 0.5,
+                  width: 2
+                }, route.style || {}))
+              })
             })
-          })
+
+          }
 
         }
       }
