@@ -731,8 +731,8 @@
             "point": true,
             "delete": true
           },
-          "hideDataviewPanel": true,
           "dataviews": {
+            "hide": true,
             "Retail Points": {
               "target": "tabview",
               "display": true,
@@ -987,7 +987,6 @@
               "type": "streetview"
             }
           ],
-          "hideStylePanel": true,
           "style": {
             "label": {
               "display": true,
