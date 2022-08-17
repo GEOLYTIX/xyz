@@ -322,6 +322,8 @@
             }
           },
           "style": {
+            "opacity": 0.5,
+            "opacitySlider": true,
             "default": {
               "fillColor": "#fff",
               "fillOpacity": 0.5
