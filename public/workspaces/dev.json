@@ -577,6 +577,39 @@
               "fillOpacity": 0.8
             },
             "themes": {
+              "Distributed": {
+                "type": "distributed",
+                "field": "id",
+                "cat_arr": [
+                  {
+                    "fillColor": "#ffffcc"
+                  },
+                  {
+                    "fillColor": "#ffeda0"
+                  },
+                  {
+                    "fillColor": "#fed976"
+                  },
+                  {
+                    "fillColor": "#feb24c"
+                  },
+                  {
+                    "fillColor": "#fd8d3c"
+                  },
+                  {
+                    "fillColor": "#fc4e2a"
+                  },
+                  {
+                    "fillColor": "#e31a1c"
+                  },
+                  {
+                    "fillColor": "#bd0026"
+                  },
+                  {
+                    "fillColor": "#800026"
+                  }
+                ]
+              },
               "Retail Place type": {
                 "type": "categorized",
                 "field": "rp_type",
@@ -622,39 +655,6 @@
               },
               "Simple": {
                 "type": "basic"
-              },
-              "Distributed": {
-                "type": "distributed",
-                "field": "id",
-                "cat_arr": [
-                  {
-                    "fillColor": "#ffffcc"
-                  },
-                  {
-                    "fillColor": "#ffeda0"
-                  },
-                  {
-                    "fillColor": "#fed976"
-                  },
-                  {
-                    "fillColor": "#feb24c"
-                  },
-                  {
-                    "fillColor": "#fd8d3c"
-                  },
-                  {
-                    "fillColor": "#fc4e2a"
-                  },
-                  {
-                    "fillColor": "#e31a1c"
-                  },
-                  {
-                    "fillColor": "#bd0026"
-                  },
-                  {
-                    "fillColor": "#800026"
-                  }
-                ]
               }
             }
           },
