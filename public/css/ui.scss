@@ -83,6 +83,42 @@
   }
 }
 
+.modal {
+  position: fixed;
+  padding: 10px;
+  z-index: 999;
+  background-color: #fff;
+  box-shadow: 1px 1px 3px $primary-light;
+  cursor: 'grab';
+
+  >.header {
+    display: flex;
+    align-items: center;
+
+    >:not(button):not(label):not(input) {
+      pointer-events: none;
+    }
+
+    >div,
+    >button {
+      margin-left: 5px;
+      width: 1.5em;
+      height: 1.5em;
+    }
+
+    >:nth-child(1) {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    >:nth-child(2) {
+      margin-left: auto;
+    }
+  }
+
+}
+
 // Colour classes
 .mask-icon {
   background-color: $primary-light;

@@ -389,9 +389,19 @@
   &.bg-icon {
     background-image: url("../icons/icon-notes.svg");
   }
-  &.mask-icon.notes {
+  &.mask-icon {
     -webkit-mask-image: url("../icons/icon-notes.svg");
     mask-image: url("../icons/icon-notes.svg");
+  }
+}
+
+.open-in-new {
+  &.bg-icon {
+    background-image: url("../icons/icon-open-in-new.svg");
+  }
+  &.mask-icon {
+    -webkit-mask-image: url("../icons/icon-open-in-new.svg");
+    mask-image: url("../icons/icon-open-in-new.svg");
   }
 }
 

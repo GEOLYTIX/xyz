@@ -1008,11 +1008,11 @@
               "fillColor": "#006666"
             },
             "selected": null,
+            "allowModal": true,
             "themes": {
               "Retail - Simple": {
                 "type": "categorized",
                 "field": "retailer",
-                "other": true,
                 "cat": {
                   "Aldi": {
                     "label": "Aldi",
