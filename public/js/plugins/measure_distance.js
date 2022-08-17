@@ -45,9 +45,6 @@ export default (function () {
 
           // Remove active class from button.
           e.target.classList.remove('active')
-
-          // Activate highlight interaction.
-          mapview.interactions.highlight()
         }
       }
 
