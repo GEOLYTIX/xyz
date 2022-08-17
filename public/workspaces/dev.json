@@ -1065,18 +1065,6 @@
                       }
                     }
                   },
-                  "Marks & Spencer": {
-                    "label": "Marks & Spencer",
-                    "style": {
-                      "svg": null,
-                      "type": "target",
-                      "fillColor": "#0a0d10",
-                      "layers": {
-                        "0.5": "#def036",
-                        "0.25": "#0a0d10"
-                      }
-                    }
-                  },
                   "Morrisons": {
                     "label": "Morrisons",
                     "style": {
