@@ -1769,6 +1769,7 @@
         },
         "sentiment_style": {
           "format": "geojson",
+          "vectorImage": true,
           "dbs": "DEV",
           "table": "dev.bristol_sentiment",
           "geom": "geom_4326",
