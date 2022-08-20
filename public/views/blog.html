@@ -123,6 +123,8 @@
     // Load the current locale or the first locale from the array of available locales.
     const locale = await mapp.utils.xhr(`${host}/api/workspace/locale?locale=${mapp.hooks.current.locale || locales[0].key}`);
 
+    mapp.hooks.current.plugins && await mapp.utils.loadPlugins(locale.plugins);
+
     const mapview = mapp.Mapview({
       host: host,
       target: 'Map',
