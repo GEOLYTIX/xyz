@@ -1738,10 +1738,10 @@
         "https://geolytix.github.io/public/mapp_v4/plugins/sentimentStyle.js"
       ],
       "extent": {
-        "north": 51.6,
-        "east": -2.7,
-        "south": 51.4,
-        "west": -2.5,
+        "north": 51.5,
+        "east": -2.5,
+        "south": 51.44,
+        "west": -2.6,
         "mask": true
       },
       "minZoom": 2,
