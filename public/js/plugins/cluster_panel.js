@@ -7,7 +7,7 @@ export default (function(){
     const elements = []
 
     layer.cluster_kmeans && layer.cluster_panel.kmeans && elements.push(mapp.ui.elements.slider({
-      label: 'Minimum number of cluster as defined by the nearest mean (kmean).',
+      label: layer.cluster_panel.kmeans_desc || 'Minimum number of cluster as defined by the nearest mean (kmean).',
       min: 0,
       max: 100,
       val: parseInt(1 / layer.cluster_kmeans),
@@ -20,7 +20,7 @@ export default (function(){
     }))
 
     layer.cluster_dbscan && layer.cluster_panel.dbscan && elements.push(mapp.ui.elements.slider({
-      label: 'Maximum distance between locations in a cluster as a fraction of the viewport.',
+      label: layer.cluster_panel.dbscan_desc || 'Maximum distance between locations in a cluster as a fraction of the viewport.',
       min: 0,
       max: 100,
       val: parseInt(0.5 / layer.cluster_dbscan),
