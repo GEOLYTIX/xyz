@@ -1117,12 +1117,12 @@
                   "scale": 0.05,
                   "svg": "https://geolytix.github.io/MapIcons/poi_pin_filled/poi_health_pharmacy.svg"
                 },
-                "Sport and Leisure": {
-                  "label": "Sport and Leisure",
+                "Sport and Leisure Facility": {
+                  "label": "Sport & Leisure",
                   "scale": 0.05,
                   "svg": "https://geolytix.github.io/MapIcons/poi_pin_filled/poi_sports_leisure_sports_centre.svg"
                 },
-                "Stadium": {
+                "Stadia": {
                   "label": "Stadium",
                   "scale": 0.05,
                   "svg": "https://geolytix.github.io/MapIcons/poi_pin_filled/poi_entertainment_stadium.svg"
@@ -1907,7 +1907,7 @@
           ],
           "style": {
             "label": {
-              "field": "town_name"
+              "field": "sub_name"
             },
             "default": {
               "strokeColor": "#4F7CAC",
@@ -2045,6 +2045,32 @@
           "mvt_fields": [
             "urbanity"
           ],
+          "qID": "id",
+          "infoj": [
+            {
+              "class": "display-none",
+              "type": "geometry",
+              "display": true,
+              "field": "geom_3857_5m",
+              "fieldfx": "ST_asGeoJSON(geom_3857_5m)"
+            },
+            {
+              "class": "display-none",
+              "type": "pin",
+              "field": "pin",
+              "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857_5m)),ST_Y(ST_PointOnSurface(geom_3857_5m))]"
+            },
+            {
+              "field": "oa_code",
+              "title": "OA Code",
+              "inline": true
+            },
+            {
+              "field": "description",
+              "title": "Urbanity Class",
+              "inline": true
+            }
+          ],
           "style": {
             "default": {
               "strokeColor": "#ffffff",
@@ -2052,8 +2078,6 @@
               "fillOpacity": 0.8
             },
             "highlight": {
-              "strokeColor": "#56A3A6",
-              "fillColor": "#DBD56E",
               "fillOpacity": 0.3
             },
             "theme": {
