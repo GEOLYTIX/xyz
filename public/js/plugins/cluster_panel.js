@@ -34,10 +34,10 @@ export default (function(){
 
     layer.cluster_panel.resolution && elements.push(mapp.ui.elements.slider({
       label: 'Resolution',
-      title: 'The cluster grid resolution.',
+      title: 'Cluster grid resolution.',
       data_id: 'resolution',
-      min: 0,
-      max: 20,
+      min: 1,
+      max: 100,
       val: parseInt(1 / layer.cluster_resolution),
       callback: e => {
         layer.cluster_resolution = isFinite(1 / e.target.value) && (1 / e.target.value) || 0
