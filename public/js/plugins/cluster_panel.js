@@ -33,7 +33,7 @@ export default (function(){
     }))
 
     layer.cluster_panel.resolution && elements.push(mapp.ui.elements.slider({
-      label: 'Resolution',
+      label: typeof layer.cluster_panel.resolution === 'string' && layer.cluster_panel.resolution || 'Resolution',
       title: 'Cluster grid resolution.',
       data_id: 'resolution',
       min: 1,
