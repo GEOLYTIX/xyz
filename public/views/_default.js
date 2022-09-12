@@ -214,6 +214,8 @@ window.onload = async () => {
     layersTab.appendChild(mapp.utils.html.node`${localesDropdown}`);
   }
 
+  if (!window.ol) await mapp.utils.olScript()
+
   // Create mapview
   const mapview = mapp.Mapview({
     host: host,
