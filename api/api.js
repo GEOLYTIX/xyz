@@ -64,8 +64,19 @@ module.exports = async (req, res) => {
   // Url parameter keys must be white listed as letters and numbers only.
   if (Object.keys(req.params).some(key => !key.match(/^[A-Za-z0-9_-]*$/))) {
 
-    return res.status(403).send('Query params validation failed.')
+    return res.status(403).send('URL parameter key validation failed.')
   }
+
+  // Check for array URL parameter
+  Object.keys(req.params).forEach(key => {
+    
+    // Return if parameter isn't braced square.
+    if(!req.params[key].match(/^[\[].*[\]]$/)) return;
+
+    // Slice square brackets of string and split on comma.
+    req.params[key] = req.params[key].slice(1, -1).split(',')
+
+  })
 
   // Language param will default to english [en] is not explicitly set.
   req.params.language = req.params.language || 'en'
