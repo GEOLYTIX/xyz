@@ -61,6 +61,12 @@ module.exports = async (req, res) => {
   // Merge request params and query params.
   req.params = Object.assign(req.params || {}, req.query || {})
 
+  Object.keys(req.params).forEach(key => {
+
+    // Delete param keys with undefined values.
+    if(req.params[key] === undefined) delete req.params[key]
+  })
+
   // Url parameter keys must be white listed as letters and numbers only.
   if (Object.keys(req.params).some(key => !key.match(/^[A-Za-z0-9_-]*$/))) {
 
