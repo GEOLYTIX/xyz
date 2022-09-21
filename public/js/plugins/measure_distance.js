@@ -63,7 +63,7 @@ export default (function () {
 
       // Assigned to geometry onChange event on drawStart of interaction.
       async function onChange(e) {
-
+        
         // Assign length value for drawing geometry.
         plugin.val = await mapp.utils.convert(mapview.metrics.length(e.target), config.tooltip)
         plugin.popup()
