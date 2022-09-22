@@ -133,10 +133,10 @@
   "locales": {
     "UK": {
       "extent": {
-        "north": 63,
-        "east": 7,
-        "south": 47,
-        "west": -15,
+        "north": 65,
+        "east": 9,
+        "south": 45,
+        "west": -17,
         "mask": true
       },
       "view": {
@@ -1237,11 +1237,11 @@
             "polygon": true,
             "freehand": true,
             "circle": true,
-            "locator": true,
             "circle_from_center": {
               "units": "km",
               "radius": 500
             },
+            "locator": true,
             "rectangle": true,
             "line": true,
             "point": true,

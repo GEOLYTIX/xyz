@@ -15,11 +15,13 @@ export default (function(){
       type: 'Point',
       geometryFunction: (coordinates) => {
 
-        const radius = units[options.edit.circle_from_center.units](options.edit.circle_from_center.radius)
+        const polygonCircular = new ol.geom.Polygon.circular(
+          ol.proj.toLonLat(coordinates),
+          units[options.edit.circle_from_center.units](options.edit.circle_from_center.radius),
+          64
+        );
 
-        const circle = new ol.geom.Circle(coordinates, radius)
-
-        return new ol.geom.Polygon.fromCircle(circle);
+        return polygonCircular.transform("EPSG:4326", "EPSG:3857")
       }
     })
 
