@@ -83,6 +83,12 @@
   }
 }
 
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
 .modal {
   position: fixed;
   padding: 10px;

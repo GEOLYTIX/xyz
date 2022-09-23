@@ -1237,10 +1237,6 @@
             "polygon": true,
             "freehand": true,
             "circle": true,
-            "circle_from_center": {
-              "units": "km",
-              "radius": 500
-            },
             "locator": true,
             "rectangle": true,
             "line": true,
