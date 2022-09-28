@@ -25,6 +25,10 @@ body {
   display: none !important;
 }
 
+.hover:hover {
+  cursor: pointer;
+}
+
 .box-shadow {
   border: 1px solid #eee;
   box-shadow: 2px 2px 4px $primary-light;
