@@ -1,21 +1,21 @@
 const filterTypes = {
-  eq: (col, val) => `"${col}" = \$${addValues(val)}`,
+  eq: (col, val) => `${col} = \$${addValues(val)}`,
 
-  gt: (col, val) => `"${col}" > \$${addValues(val)}`,
+  gt: (col, val) => `${col} > \$${addValues(val)}`,
 
-  gte: (col, val) => `"${col}" >= \$${addValues(val)}`,
+  gte: (col, val) => `${col} >= \$${addValues(val)}`,
 
-  lt: (col, val) => `"${col}" < \$${addValues(val)}`,
+  lt: (col, val) => `${col} < \$${addValues(val)}`,
 
-  lte: (col, val) => `"${col}" <= \$${addValues(val)}`,
+  lte: (col, val) => `${col} <= \$${addValues(val)}`,
 
-  boolean: (col, val) => `"${col}" IS ${!!val}`,
+  boolean: (col, val) => `${col} IS ${!!val}`,
 
-  ni: (col, val) => `NOT "${col}" = ANY (\$${addValues([val])})`,
+  ni: (col, val) => `NOT ${col} = ANY (\$${addValues([val])})`,
 
-  in: (col, val) => `"${col}" = ANY (\$${addValues([val])})`,
+  in: (col, val) => `${col} = ANY (\$${addValues([val])})`,
 
-  null: (col, val) => `"${col}" IS ${!val?'NOT':''} NULL`,
+  null: (col, val) => `${col} IS ${!val?'NOT':''} NULL`,
 
   like: (col, val) =>
     `(${val
@@ -63,9 +63,8 @@ function mapFilterEntries(filter) {
         // Array entry values represent conditional OR
         if (value.length) return sqlfilter(value);
   
-
-        // Identifiers must be validated to prevent SQL injection
-        if (!/^[A-Za-z0-9._-]*$/.test(field)) {
+        // Identifiers must be validated to prevent SQL injection, if has ->> then it is a jsonb filter      
+        if (!/^[A-Za-z0-9._-]*$/.test(field) && !/->>/.test(field)) {
           console.log(`${field} - ¡no bueno!`)
           return
         }
