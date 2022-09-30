@@ -124,7 +124,7 @@ module.exports = async (req, res) => {
         // Remove template brackets from matched param.
         const param = matched.replace(/\%|\{|\}/g, "")
 
-        var val = req.params[param] || ""
+        var val = req.params[param]// || ""
 
         try {
 

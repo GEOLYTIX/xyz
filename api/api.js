@@ -63,8 +63,15 @@ module.exports = async (req, res) => {
 
   Object.keys(req.params).forEach(key => {
 
+    // Make null string params null.
+    if (req.params[key]?.toLowerCase() === 'null') {
+      req.params[key] = null
+    }
+
     // Delete param keys with undefined values.
-    if(req.params[key] === undefined) delete req.params[key]
+    if (req.params[key] === undefined) {
+      delete req.params[key]
+    }
   })
 
   // Url parameter keys must be white listed as letters and numbers only.
@@ -77,7 +84,7 @@ module.exports = async (req, res) => {
   Object.keys(req.params).forEach(key => {
     
     // Return if parameter isn't braced square.
-    if(!req.params[key].match(/^[\[].*[\]]$/)) return;
+    if(!req.params[key]?.match(/^[\[].*[\]]$/)) return;
 
     // Slice square brackets of string and split on comma.
     req.params[key] = req.params[key].slice(1, -1).split(',')
