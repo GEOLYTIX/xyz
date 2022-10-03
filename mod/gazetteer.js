@@ -35,8 +35,11 @@ module.exports = async (req, res) => {
   // Locale gazetteer which can query datasources in the same locale.
   if (locale.gazetteer.datasets) await datasets(req, locale, results)
 
-  await provider[locale.gazetteer.provider] && provider[locale.gazetteer.provider](req.params.q, locale.gazetteer, results)
-  
+  if (provider[locale.gazetteer.provider]) {
+
+    await provider[locale.gazetteer.provider](req.params.q, locale.gazetteer, results)
+  }
+
   // Return results to client.
   res.send(results)
 }
