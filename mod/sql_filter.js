@@ -15,7 +15,7 @@ const filterTypes = {
 
   in: (col, val) => `${col} = ANY (\$${addValues([val])})`,
 
-  null: (col, val) => `${col} IS ${!val?'NOT':''} NULL`,
+  null: (col, val) => `${col} IS ${!val ? 'NOT' : ''} NULL`,
 
   like: (col, val) =>
     `(${val
@@ -24,7 +24,10 @@ const filterTypes = {
       .map((val) => `"${col}" ILIKE \$${addValues(`${val}%`)}`)
       .join(" OR ")})`,
 
-  match: (col, val) => `"${col}"::text ILIKE \$${addValues(val)}`
+  match: (col, val) => `"${col}"::text ILIKE \$${addValues(val)}`,
+
+  elemMatch: (col, val) => `${col} @> \$${addValues(JSON.stringify(val))}` /* val must be an array of objects */
+
 }
 
 let SQLparams
@@ -37,14 +40,13 @@ function addValues(val) {
 module.exports = function sqlfilter(filter, params) {
 
   SQLparams = params
-
   // Filter in an array will be conditional OR
-  if (filter.length){
+  if (filter.length) {
     return `(${filter
 
-        // Map filter in array with OR conjuction
-        .map((filter) => mapFilterEntries(filter))
-        .join(' OR ')})`
+      // Map filter in array with OR conjuction
+      .map((filter) => mapFilterEntries(filter))
+      .join(' OR ')})`
   }
 
   // Filter in an object will be conditional AND
@@ -53,36 +55,36 @@ module.exports = function sqlfilter(filter, params) {
 
 function mapFilterEntries(filter) {
   return `(${Object.entries(filter)
-  
-      // Map filter entries
-      .map((entry) => {
 
-        const field = entry[0]
-        const value = entry[1]
+    // Map filter entries
+    .map((entry) => {
 
-        // Array entry values represent conditional OR
-        if (value.length) return sqlfilter(value);
-  
-        // Identifiers must be validated to prevent SQL injection, if has ->> then it is a jsonb filter      
-        if (!/^[A-Za-z0-9._-]*$/.test(field) && !/->>/.test(field)) {
-          console.log(`${field} - ¡no bueno!`)
-          return
-        }
-  
-        // Call filter type method for matching filter entry value
-        // Multiple filterTypes for the same field will be joined with AND
-        return Object.keys(value)
-            .filter(filterType => !!filterTypes[filterType])
-            .map((filterType) => filterTypes[filterType](field, value[filterType]))
-            .join(" AND ")
-            
-      })
+      const field = entry[0]
+      const value = entry[1]
 
-      // Filter out undefined / escaped filter
-      .filter(f=>typeof f !== 'undefined')
+      // Array entry values represent conditional OR
+      if (value?.length) return sqlfilter(value);
 
-      .filter((f) => f!=="")
-  
-      // Join filter with conjunction
-      .join(' AND ')})`;
+      // Identifiers must be validated to prevent SQL injection, if has -> then it is a jsonb filter      
+      if (!/^[A-Za-z0-9._-]*$/.test(field) && !/->/.test(field)) {
+        console.log(`${field} - ¡no bueno!`)
+        return
+      }
+
+      // Call filter type method for matching filter entry value
+      // Multiple filterTypes for the same field will be joined with AND
+      return Object.keys(value)
+        .filter(filterType => !!filterTypes[filterType])
+        .map((filterType) => filterTypes[filterType](field, value[filterType]))
+        .join(" AND ")
+
+    })
+
+    // Filter out undefined / escaped filter
+    .filter(f => typeof f !== 'undefined')
+
+    .filter((f) => f !== "")
+
+    // Join filter with conjunction
+    .join(' AND ')})`;
 }
