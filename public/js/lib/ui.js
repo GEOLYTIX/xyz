@@ -571,7 +571,7 @@ mapp.utils.merge(mapp.dictionaries,{en:{layer_zoom_to_extent:"Zoom to filtered l
         max=${e.max}
         value=${e.val}
         step=${e.step||1}
-        oninput=${t}>`;function t(l){l.target.closest(".input-range").style.setProperty(`--${l.target.id}`,l.target.value),l.target.closest(".input-range").querySelectorAll("input").forEach(a=>{a.id==l.target.id&&a!=l.target&&(a.value=l.target.value)}),e.callback&&e.callback(l)}};var Ce=e=>{let t=mapp.utils.html.node`
+        oninput=${t}>`;function t(l){let a=parseFloat(l.target.value),i=l.target.closest(".input-range");a>e.max&&(i.style.setProperty("--max",a),i.querySelectorAll("input").forEach(o=>o.max=a)),i.style.setProperty(`--${l.target.id}`,a),i.querySelectorAll("input").forEach(o=>{o.id==l.target.id&&o!=l.target&&(o.value=a)}),e.callback&&e.callback(l)}};var Ce=e=>{let t=mapp.utils.html.node`
     <div
       role="group"
       class="input-range multi"
