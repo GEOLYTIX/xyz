@@ -150,6 +150,7 @@
         "provider": "GOOGLE",
         "country": "GB",
         "placeholder": "eg. London",
+        "streetview": true,
         "datasets": [
           {
             "layer": "retail_points",
