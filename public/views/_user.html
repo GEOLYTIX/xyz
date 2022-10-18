@@ -301,12 +301,12 @@
       blocked = !blocked
 
       if (blocked) {
-        e.target.text = "Show blocked accounts"
+        e.target.textContent = "Show blocked accounts"
         userTable.setFilter("blocked", "!=", true)
         return;
       }
 
-      e.target.text = "Hide blocked accounts"
+      e.target.textContent = "Hide blocked accounts"
       userTable.removeFilter("blocked", "!=", true)
     }
 
