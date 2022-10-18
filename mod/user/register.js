@@ -41,6 +41,20 @@ async function post(req, res) {
     return res.status(400).send('Provided email address is invalid')
   }
 
+  // Test whether email domain is allowed to register
+  if (process.env.USER_DOMAINS) {
+
+    // Get array of allowed user email domains from split environment variable.
+    const domains = new Set(process.env.USER_DOMAINS.split(','))
+
+    // Check whether the Set has the domain.
+    if (!domains.has(req.body.email.match(/(?<=@)[^.]+(?=\.)/g)[0])) {
+
+      // Return if not...
+      return res.status(400).send('Provided email address is invalid');
+    }
+  }
+
   // Test whether a password has been provided.
   if (!req.body.password) return res.status(400).send('No password provided')
 
