@@ -85,6 +85,17 @@
       width: 36px;
     }
 
+    .btn-row {
+      align-items: center;
+      display: flex;
+    }
+
+    .btn-row > *:last-child {
+      margin-left: auto;
+      font-weight: bold;
+      color:#B71C1C;
+    }
+
     @media only screen and (max-width: 700px) {
 
       body,
@@ -101,9 +112,13 @@
 
   <div class="flex">
 
-    <h1>Account admin | <a style="color:#B71C1C" href="?logout=true">Logout</a></h1>
+    <h1>Account admin</h1>
 
-    <label>Filter<input id="filterInput" type="text" placeholder="e.g. geolytix" style="margin: 10px;"></label>
+    <div class="btn-row">
+      <label>Filter<input id="filterInput" type="text" placeholder="e.g. geolytix" style="margin: 10px;"></label>
+      <button id="toggleBlocked">Show blocked accounts</button>
+      <a href="?logout=true">Logout</a>
+    </div>
   
     <div id="userTable"></div>
     
@@ -276,6 +291,24 @@
           }
         ]
       });
+
+    
+
+    let blocked = true
+    userTable.setFilter("blocked", "!=", true);
+    document.getElementById("toggleBlocked").onclick = e => {
+
+      blocked = !blocked
+
+      if (blocked) {
+        e.target.text = "Show blocked accounts"
+        userTable.setFilter("blocked", "!=", true)
+        return;
+      }
+
+      e.target.text = "Hide blocked accounts"
+      userTable.removeFilter("blocked", "!=", true)
+    }
 
     document.getElementById("filterInput").oninput = e => {
 
