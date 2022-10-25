@@ -151,6 +151,7 @@
         "country": "GB",
         "placeholder": "eg. London",
         "streetview": true,
+        "zoom": 10,
         "datasets": [
           {
             "layer": "retail_points",
