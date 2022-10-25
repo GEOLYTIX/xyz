@@ -26,7 +26,9 @@ const filterTypes = {
 
   match: (col, val) => `"${col}"::text ILIKE \$${addValues(val)}`,
 
-  elemMatch: (col, val) => `${col} @> \$${addValues(JSON.stringify(val))}` /* val must be an array of objects */
+  elemMatch: (col, val) => `${col} @> \$${addValues(JSON.stringify(val))}`, /* val must be an array of objects */
+
+  iRgx: (col, val) => `${col} ~* \$${addValues(val)}`
 
 }
 
@@ -66,7 +68,7 @@ function mapFilterEntries(filter) {
       if (value?.length) return sqlfilter(value);
 
       // Identifiers must be validated to prevent SQL injection, if has -> then it is a jsonb filter      
-      if (!/^[A-Za-z0-9._-]*$/.test(field) && !/->/.test(field)) {
+      if (!/^[A-Za-z0-9._-]*$/.test(field) && !/->/.test(field) && !/!?~\*?/.test(field)) {
         console.log(`${field} - ¡no bueno!`)
         return
       }
