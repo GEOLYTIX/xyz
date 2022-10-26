@@ -103,7 +103,7 @@ async function datasets(req, locale, results) {
     const roles = Roles.filter(layer, req.params.user?.roles)
 
     //Asteriks & Leading Wild Card Expression
-    let phrase = dataset.leading_wildcard ? `%${decodeURIComponent(req.params.q).replace(new RegExp(/\*/g), '%')}%` : `${decodeURIComponent(req.params.q).replace(new RegExp(/\*/g), '%')}%`
+    let phrase = `${dataset.leading_wildcard && '%' ||''}${decodeURIComponent(req.params.q).replace(new RegExp(/\*/g), '%')}%`
 
     //console.log(phrase)
 
