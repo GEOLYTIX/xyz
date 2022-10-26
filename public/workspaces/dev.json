@@ -1311,7 +1311,8 @@
               ],
               "edit": true,
               "filter": {
-                "type": "like"
+                "type": "like",
+                "leading_wildcard": "true"
               }
             },
             {
