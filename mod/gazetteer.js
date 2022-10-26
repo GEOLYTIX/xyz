@@ -26,9 +26,9 @@ module.exports = async (req, res) => {
 
   // Return results for layer gazetteer.
   if (req.params.layer) {
-    
+
     let results = await layerGaz(req.params.q, locale.layers[req.params.layer])
-    
+
     return res.send(results)
   }
 
@@ -92,7 +92,7 @@ async function datasets(req, locale, results) {
   // Loop through dataset entries in gazetteer configuration.
   for (let dataset of locale.gazetteer.datasets) {
 
-    if(dataset.minLength && decodeURIComponent(req.params.q).trim().length < dataset.minLength) continue
+    if (dataset.minLength && decodeURIComponent(req.params.q).trim().length < dataset.minLength) continue
 
     const layer = locale.layers[dataset.layer]
 
@@ -102,20 +102,20 @@ async function datasets(req, locale, results) {
 
     const roles = Roles.filter(layer, req.params.user?.roles)
 
-    // Asteriks wildcard
-    let phrase = `${decodeURIComponent(req.params.q).replace(new RegExp(/\*/g), '%')}%`
+    //Asteriks & Leading Wild Card Expression
+    let phrase = dataset.leading_wildcard ? `%${decodeURIComponent(req.params.q).replace(new RegExp(/\*/g), '%')}%` : `${decodeURIComponent(req.params.q).replace(new RegExp(/\*/g), '%')}%`
 
     //console.log(phrase)
 
     const SQLparams = [phrase]
 
     const filter =
-    ` ${layer.filter?.default && ` AND ${layer.filter?.default}` || ''}
+      ` ${layer.filter?.default && ` AND ${layer.filter?.default}` || ''}
       ${req.params.filter && ` AND ${sqlFilter(JSON.parse(req.params.filter), SQLparams)}` || ''}
       ${dataset.filter && ` AND ${dataset.filter}` || ''}
       ${roles && Object.values(roles).some(r => !!r)
-        && `AND ${sqlFilter(Object.values(roles).filter(r => !!r), SQLparams)}`
-        || ''}`
+      && `AND ${sqlFilter(Object.values(roles).filter(r => !!r), SQLparams)}`
+      || ''}`
 
     // Build PostgreSQL query to fetch gazetteer results.
     var q = `
@@ -136,16 +136,16 @@ async function datasets(req, locale, results) {
 
   }
 
-  if(!records.length) return;
+  if (!records.length) return;
 
   return Promise.all(records).then(_records => {
-    for(let _record of _records){
-      if(_record instanceof Error) {
+    for (let _record of _records) {
+      if (_record instanceof Error) {
         console.log({ err: 'Error fetching gazetteer results.' });
         continue;
       }
 
-      if(_record.length > 0) _record.map(row => {
+      if (_record.length > 0) _record.map(row => {
         results.push({
           label: row.label,
           id: row.id,
