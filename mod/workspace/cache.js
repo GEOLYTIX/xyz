@@ -2,12 +2,15 @@ const file = require('../provider/file')
 
 const cloudfront = require('../provider/cloudfront')
 
+const mongodb = require('../provider/mongodb')
+
 const http = require('./httpsAgent')
 
 const getFrom = {
   'https': ref => http(ref),
   'file': ref => file(ref.split(':')[1]),
   'cloudfront': ref => cloudfront(ref.split(':')[1]),
+  'mongodb': ref => mongodb(ref.split(':')[1]),
 }
 
 const assignTemplates = require('./assignTemplates')
