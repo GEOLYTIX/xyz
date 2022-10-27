@@ -39,7 +39,7 @@ module.exports = async () => {
   workspace.timestamp = workspace.timestamp || timestamp
 
   // Cache workspace if expired.
-  if ((timestamp - workspace.timestamp) > 3600000) {
+  if ((timestamp - workspace.timestamp) > (+process.env.WORKSPACE_AGE || 3600000)) {
     logger(`Workspace ${workspace.nanoid} cache expired @${timestamp}`, 'workspace')
     await cache()
     workspace.timestamp = timestamp
