@@ -52,6 +52,10 @@
       "destination": "/api/api.js"
     },
     {
+      "source": "/api/module/:module?",
+      "destination": "/api/api.js"
+    },
+    {
       "source": "/api/location/:method?",
       "destination": "/api/api.js"
     },

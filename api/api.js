@@ -17,6 +17,7 @@ const routes = {
   provider: require('../mod/provider/_provider'),
   proxy: require('../mod/proxy'),
   query: require('../mod/query'),
+  module: require('../mod/module'),
   user: require('../mod/user/_user'),
   view: require('../mod/view'),
   workspace: require('../mod/workspace/_workspace'),
@@ -213,6 +214,11 @@ module.exports = async (req, res) => {
   // Query route
   if (req.url.match(/(?<=\/api\/query)/)) {
     return routes.query(req, res)
+  }
+
+  // Module route
+  if (req.url.match(/(?<=\/api\/module)/)) {
+    return routes.module(req, res)
   }  
 
   // Workspace route

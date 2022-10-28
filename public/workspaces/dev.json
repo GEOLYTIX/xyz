@@ -1,14 +1,15 @@
 {
+  "modules": {
+    "mongo_workspace": {
+      "src": "public/js/mongo_workspace.js"
+    }
+  },
   "templates": {
     "blog": {
       "src": "file:public/views/blog.html"
     },
     "embedded": {
       "src": "file:public/views/embedded.html"
-    },
-    "mongo_workspace": {
-      "src": "file:public/queries/module.js",
-      "type": "module"
     },
     "bristol_sentiment": {
       "template": "select id, sentiment, st_asgeojson(geom_4326) as geom from dev.bristol_sentiment where not is_deleted;",

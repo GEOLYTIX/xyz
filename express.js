@@ -33,6 +33,11 @@ app.get(`${process.env.DIR||''}/api/query/:template?`, api)
 app.post(`${process.env.DIR||''}/api/query/:template?`, express.json({limit: '5mb'}), api)
 
 
+app.get(`${process.env.DIR||''}/api/module/:module?`, api)
+
+app.post(`${process.env.DIR||''}/api/module/:module?`, express.json({limit: '5mb'}), api)
+
+
 app.get(`${process.env.DIR||''}/api/gazetteer`, api)
 
 
