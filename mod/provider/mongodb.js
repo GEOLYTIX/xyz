@@ -1,15 +1,18 @@
 const { MongoClient } = require('mongodb');
 
-module.exports = async ref => {
+module.exports = async params => {
+
+  if (!process.env.MONGODB) return;
 
   const client = new MongoClient(process.env.MONGODB);
 
   try {
     
-    const database = client.db(ref.split('/')[0]);
-    const collection = database.collection(ref.split('/')[1]);
-    const workspace = await collection.findOne({});
-    return workspace
+    const db = client.db(params.db);
+    const collection = db.collection(params.collection);
+    const response = await collection[params.cmd||'findOne'](params.query, params.options, params.lang);
+
+    return response;
 
   } finally {
 

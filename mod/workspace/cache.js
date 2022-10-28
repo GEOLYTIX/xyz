@@ -8,9 +8,9 @@ const http = require('./httpsAgent')
 
 const getFrom = {
   'https': ref => http(ref),
-  'file': ref => file(ref.split(':')[1]),
-  'cloudfront': ref => cloudfront(ref.split(':')[1]),
-  'mongodb': ref => mongodb(ref.split(':')[1]),
+  'file': ref => file(ref.split(/:(.*)/s)[1]),
+  'cloudfront': ref => cloudfront(ref.split(/:(.*)/s)[1]),
+  'mongodb': ref => mongodb(JSON.parse(ref.split(/:(.*)/s)[1]))
 }
 
 const assignTemplates = require('./assignTemplates')
@@ -21,8 +21,6 @@ const assignDefaults = require('./assignDefaults')
 
 let workspace = null
 
-const { nanoid } = require('nanoid')
-
 const logger = require('../utils/logger')
 
 module.exports = async () => {
@@ -31,8 +29,8 @@ module.exports = async () => {
 
   // Cache workspace if empty.
   if (!workspace) {
-    logger(`Workspace empty @${timestamp}`, 'workspace')
     await cache()
+    logger(`Workspace empty; Time to cache: ${Date.now()-timestamp}`, 'workspace')
   }
 
   // Logically assign timestamp.
@@ -40,12 +38,10 @@ module.exports = async () => {
 
   // Cache workspace if expired.
   if ((timestamp - workspace.timestamp) > (+process.env.WORKSPACE_AGE || 3600000)) {
-    logger(`Workspace ${workspace.nanoid} cache expired @${timestamp}`, 'workspace')
+    
     await cache()
+    logger(`Workspace cache expired; Time to cache: ${Date.now()-timestamp}`, 'workspace')
     workspace.timestamp = timestamp
-
-  } else {
-    logger(`Workspace ${workspace.nanoid} age ${timestamp - workspace.timestamp}`, 'workspace')
   }
 
   return workspace
@@ -60,8 +56,6 @@ async function cache() {
 
   // Return error if source failed.
   if (workspace instanceof Error) return workspace
-
-  workspace.nanoid = nanoid(6)
 
   // Assign default locale as locales if missing.
   workspace.locales = workspace.locales || { zero: defaults.locale }
