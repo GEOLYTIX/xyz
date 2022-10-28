@@ -6,6 +6,10 @@
     "embedded": {
       "src": "file:public/views/embedded.html"
     },
+    "mongo_workspace": {
+      "src": "file:public/queries/module.js",
+      "type": "module"
+    },
     "bristol_sentiment": {
       "template": "select id, sentiment, st_asgeojson(geom_4326) as geom from dev.bristol_sentiment where not is_deleted;",
       "dbs": "DEV"
