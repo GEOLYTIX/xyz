@@ -5,6 +5,11 @@ export default (function () {
 
   mapp.plugins.measure_distance = (plugin, mapview) => {
 
+    // Assign route as routes array.
+    if (plugin.route) {
+      plugin.routes = [plugin.route]
+    }
+
     // Find the btnColumn element.
     const btnColumn = document.getElementById("mapButton");
 
@@ -54,8 +59,7 @@ export default (function () {
           content: mapp.utils.html.node`
             <div style="padding: 5px">
             <span style="white-space: nowrap;">${plugin.val}</span>
-            ${plugin.routes
-                .filter(route=> route.val)
+            ${plugin.routes?.filter(route=> route.val)
                 .map(route => {
                   return mapp.utils.html`<br><span style="white-space: nowrap;">${route.val}</span>`})}`
         })
