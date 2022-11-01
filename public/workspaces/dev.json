@@ -898,36 +898,43 @@
                 "fieldValues": ["pin"]
               },
               "layer": "zoomgeom",
-              "theme": {
-                "title": "Distance from centroid",
-                "type": "graduated",
-                "field": "distance",
-                "cat_arr": [
-                  {
-                    "value": "0",
-                    "fillColor": "#15773f"
-                  },
-                  {
-                    "value": "0.1",
-                    "fillColor": "#66bd63"
-                  },
-                  {
-                    "value": "0.2",
-                    "fillColor": "#a6d96a"
-                  },
-                  {
-                    "value": "0.3",
-                    "fillColor": "#d9ef8b"
-                  },
-                  {
-                    "value": "0.4",
-                    "fillColor": "#fdae61"
-                  },
-                  {
-                    "value": "0.5",
-                    "fillColor": "#f46d43"
-                  }
-                ]
+              "style": {
+                "label": {
+                  "display": true,
+                  "field": "distance",
+                  "title": "Distance from Pin"
+                },
+                "theme": {
+                  "title": "Distance from centroid",
+                  "type": "graduated",
+                  "field": "distance",
+                  "cat_arr": [
+                    {
+                      "value": "0",
+                      "fillColor": "#15773f"
+                    },
+                    {
+                      "value": "0.1",
+                      "fillColor": "#66bd63"
+                    },
+                    {
+                      "value": "0.2",
+                      "fillColor": "#a6d96a"
+                    },
+                    {
+                      "value": "0.3",
+                      "fillColor": "#d9ef8b"
+                    },
+                    {
+                      "value": "0.4",
+                      "fillColor": "#fdae61"
+                    },
+                    {
+                      "value": "0.5",
+                      "fillColor": "#f46d43"
+                    }
+                  ]
+                }
               }
             },
             {
