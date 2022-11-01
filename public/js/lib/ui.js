@@ -83,14 +83,14 @@ mapp.utils.merge(mapp.dictionaries,{en:{layer_zoom_to_extent:"Zoom to filtered l
       ${mapp.dictionary.layer_style_switch_caption}
       <button
         class="primary-colour bold"
-        onclick=${i=>{i.target.closest(".legend").querySelectorAll(".switch").forEach(a=>a.click()),e.style.filter&&e.L.changed()||e.reload()}}>${mapp.dictionary.layer_style_switch_all}</button>.`),Object.entries(t.cat).forEach(i=>{let a=Object.assign({},e.style.default,i[1].style&&i[1].style.icon||i[1].style||i[1]),o=mapp.utils.html`
+        onclick=${i=>{i.target.closest(".legend").querySelectorAll(".switch").forEach(a=>a.click())(e.style.filter||t.filter)?e.L.changed():e.reload()}}>${mapp.dictionary.layer_style_switch_all}</button>.`),Object.entries(t.cat).forEach(i=>{let a=Object.assign({},e.style.default,i[1].style&&i[1].style.icon||i[1].style||i[1]),o=mapp.utils.html`
       <div
         style="height: 24px; width: 24px; grid-column: 1;">
         ${mapp.ui.elements.legendIcon(Object.assign({width:24,height:24},a))}`,n=mapp.utils.html`
       <div
         class=${`label ${e.filter&&"switch"||""} ${e.filter?.current[t.field]?.ni?.indexOf(i[0])===0?"disabled":""}`}
         style="grid-column: 2;"
-        onclick=${r=>{!e.filter||(r.target.classList.toggle("disabled"),r.target.classList.contains("disabled")?(e.filter.current[t.field]||(e.filter.current[t.field]={}),e.filter.current[t.field].ni||(e.filter.current[t.field].ni=[]),e.filter.current[t.field].ni.push(i[1].keys||i[0]),e.filter.current[t.field].ni=e.filter.current[t.field].ni.flat()):(Array.isArray(i[1].keys)?i[1].keys.forEach(s=>{e.filter.current[t.field].ni.splice(e.filter.current[t.field].ni.indexOf(s),1)}):e.filter.current[t.field].ni.splice(e.filter.current[t.field].ni.indexOf(i[0]),1),e.filter.current[t.field].ni.length||delete e.filter.current[t.field]),e.style.filter&&e.L.changed()||e.reload())}}>${i[1].label||i[0]}`;l.push(mapp.utils.html`
+        onclick=${r=>{!e.filter||(r.target.classList.toggle("disabled"),r.target.classList.contains("disabled")?(e.filter.current[t.field]||(e.filter.current[t.field]={}),e.filter.current[t.field].ni||(e.filter.current[t.field].ni=[]),e.filter.current[t.field].ni.push(i[1].keys||i[0]),e.filter.current[t.field].ni=e.filter.current[t.field].ni.flat()):(Array.isArray(i[1].keys)?i[1].keys.forEach(s=>{e.filter.current[t.field].ni.splice(e.filter.current[t.field].ni.indexOf(s),1)}):e.filter.current[t.field].ni.splice(e.filter.current[t.field].ni.indexOf(i[0]),1),e.filter.current[t.field].ni.length||delete e.filter.current[t.field]),e.style.filter||t.filter?e.L.changed():e.reload())}}>${i[1].label||i[0]}`;l.push(mapp.utils.html`
     <div 
       data-id=${i[0]}
       class="contents">

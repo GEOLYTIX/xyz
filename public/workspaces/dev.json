@@ -621,6 +621,7 @@
               },
               "Retail Place type": {
                 "type": "categorized",
+                "filter": true,
                 "field": "rp_type",
                 "other": true,
                 "cat": {
