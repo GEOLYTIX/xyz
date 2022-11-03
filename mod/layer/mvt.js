@@ -18,6 +18,10 @@ module.exports = async (req, res) => {
     return res.status(400).send('URL parameter validation failed.')
   }
 
+  if (!req.params.table) {
+    return res.send(null)
+  }
+
   let
     table = req.params.table,
     id = layer.qID || null,
