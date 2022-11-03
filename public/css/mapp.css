@@ -123,16 +123,16 @@ a > img {
     display: inline-block;
     white-space: nowrap; }
 
-.legend > .grid {
+.legend > .grid, .legend > .content > .grid {
   margin-top: 5px;
   display: grid;
   grid-template-columns: min-content;
   grid-gap: 5px;
   align-items: center;
   justify-content: start; }
-  .legend > .grid > .contents {
+  .legend > .grid > .contents, .legend > .content > .grid > .contents {
     display: contents; }
-  .legend > .grid .label {
+  .legend > .grid .label, .legend > .content > .grid .label {
     grid-column: 2; }
 .legend .switch {
   cursor: pointer; }

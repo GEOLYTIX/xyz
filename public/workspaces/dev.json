@@ -1387,11 +1387,13 @@
               "title": "integer_field",
               "field": "integer_field_bogus",
               "fieldfx": "integer_field",
+              "prefix": "£",
               "type": "integer"
             },
             {
               "title": "integer_field edit",
               "field": "integer_field",
+              "prefix": "£",
               "type": "integer",
               "dependents": [
                 "integer_field_bogus"

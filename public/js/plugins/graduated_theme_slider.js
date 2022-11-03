@@ -70,12 +70,11 @@ export default (function () {
       })
 
       // Re-render the layer.style.legend with the additional elements.
-      layer.style.legend = mapp.utils.html.node`
+      layer.style.legend = mapp.utils.html.node`<div class="content">
         ${layer.style.legend}
         ${loop_chkbox}
         ${hour_slider}
         ${transparency_slider}`
-
     }
 
     return layer.style.legend
