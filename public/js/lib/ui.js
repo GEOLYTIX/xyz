@@ -163,10 +163,10 @@ mapp.utils.merge(mapp.dictionaries,{en:{layer_zoom_to_extent:"Zoom to filtered l
     <button
       title = ${mapp.dictionary.location_zoom}
       class = "mask-icon search"
-      onclick = ${a=>{e.flyTo()}}>`),!e.new&&e.layer?.toggleLocationViewEdits){let a=function(){e.infoj.forEach(o=>{delete o.newValue,o.edit&&(o._edit=o.edit,delete o.edit)})};a(),e.updateCallbacks.push(()=>{i.classList.remove("on"),a(),l.remove(),l=mapp.ui.locations.infoj(e),e.view.appendChild(l)});let i=mapp.utils.html.node`
+      onclick = ${a=>{e.flyTo()}}>`),e.layer?.toggleLocationViewEdits){let a=function(){e.infoj.forEach(o=>{delete o.newValue,o.edit&&(o._edit=o.edit,delete o.edit)})};!e.new&&a(),e.updateCallbacks.push(()=>{i.classList.remove("on"),a(),l.remove(),l=mapp.ui.locations.infoj(e),e.view.appendChild(l)});let i=mapp.utils.html.node`
       <button
         title = "Enable edits"
-        class = "mask-icon build"
+        class = ${`mask-icon build ${e.new&&"on"||""}`}
         onclick = ${o=>{o.target.classList.contains("on")?(o.target.classList.remove("on"),a()):(o.target.classList.add("on"),e.infoj.forEach(n=>{!n._edit||(n.edit=n._edit,delete n._edit)})),l.remove(),l=mapp.ui.locations.infoj(e),e.view.appendChild(l)}}>`;t.push(i)}t.push(mapp.utils.html`
     <button
       title = ${mapp.dictionary.location_save}
