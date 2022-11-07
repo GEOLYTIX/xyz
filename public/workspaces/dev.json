@@ -1393,7 +1393,6 @@
             {
               "title": "integer_field edit",
               "field": "integer_field",
-              "prefix": "£",
               "type": "integer",
               "dependents": [
                 "integer_field_bogus"
