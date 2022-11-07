@@ -180,7 +180,7 @@
         "${DIR}/js/plugins/polygon_select.js"
       ],
       "polygon_select": {
-
+        "layer": "zoomgeom"
       },
       "measure_distance": {
         "tooltip": {

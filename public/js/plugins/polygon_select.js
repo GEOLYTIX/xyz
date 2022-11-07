@@ -8,7 +8,7 @@ export default (function () {
     // Append the plugin btn to the btnColumn.
     btnColumn && btnColumn.append(mapp.utils.html.node`
     <button
-      title="Measure distance"
+      title="Polygon Select"
       onclick=${polygon_select}>
       <div class="mask-icon area">`);
 
@@ -20,6 +20,12 @@ export default (function () {
 
       // Style plugin button as active.
       e.target.classList.add('active')
+
+      if (!mapview.layers[plugin.layer]) return;
+
+      if (plugin.L) mapview.Map.removeLayer(plugin.L)
+
+      mapview.layers[plugin.layer].show()
 
       // Config for mapview draw interaction.
       const config = {
@@ -36,8 +42,8 @@ export default (function () {
         }),
         drawend: e => {
 
-          let clone = new ol.layer.VectorTile({
-            source: mapview.layers.zoomgeom.L.getSource(),
+          plugin.L = new ol.layer.VectorTile({
+            source: mapview.layers[plugin.layer].L.getSource(),
             style: F => {
 
               let extent = F.getGeometry().getExtent()
@@ -47,7 +53,8 @@ export default (function () {
               if (geom.intersectsCoordinate([extent[0], extent[1]])
                 || geom.intersectsCoordinate([extent[2], extent[3]])
                 || geom.intersectsCoordinate([extent[0], extent[3]])
-                || geom.intersectsCoordinate([extent[1], extent[2]])) {
+                || geom.intersectsCoordinate([extent[1], extent[2]])
+                || geom.intersectsCoordinate([(extent[0]+extent[2])/2, (extent[1]+extent[3])/2])) {
 
                   return new ol.style.Style({
                     fill: new ol.style.Fill({
@@ -59,7 +66,7 @@ export default (function () {
             }
           });
 
-          mapview.Map.addLayer(clone)
+          mapview.Map.addLayer(plugin.L)
 
           mapview.interactions.highlight()
         },
