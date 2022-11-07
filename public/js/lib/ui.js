@@ -290,7 +290,7 @@ mapp.utils.merge(mapp.dictionaries,{en:{layer_zoom_to_extent:"Zoom to filtered l
       <input
         type="number"
         value="${e.value||""}"
-        onkeyup=${a=>{e.newValue=a.target.value,e.location.view?.dispatchEvent(new CustomEvent("valChange",{detail:e}))}}>`),mapp.utils.html.node`
+        onkeyup=${a=>{e.type==="integer"&&(a.target.value=parseInt(a.target.value)),e.newValue=a.target.value,e.location.view?.dispatchEvent(new CustomEvent("valChange",{detail:e}))}}>`),mapp.utils.html.node`
     <div
       class="val"
       style="${`${e.css_val||""}`}">
