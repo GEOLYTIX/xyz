@@ -1,56 +1,80 @@
-document.dispatchEvent(new CustomEvent('polygon_select', {
-  detail: _xyz => {
+export default (function () {
 
-    _xyz.locations.plugins.polygon_select = entry => {
+  mapp.plugins.polygon_select = (plugin, mapview) => {
 
-      _xyz.query({
-        query: 'polygon_select_query',
-        location: entry.location
-      }).then(response => {
+    // Find the btnColumn element.
+    const btnColumn = document.getElementById("mapButton");
 
-        entry.listview.appendChild(_xyz.utils.html.node`
-        <div class="label inline">Total Workers</div>
-        <div class="val inline">${response.workers}`)
+    // Append the plugin btn to the btnColumn.
+    btnColumn && btnColumn.append(mapp.utils.html.node`
+    <button
+      title="Measure distance"
+      onclick=${polygon_select}>
+      <div class="mask-icon area">`);
 
-        entry.listview.appendChild(_xyz.utils.html.node`
-        <div class="label inline">Total Population</div>
-        <div class="val inline">${response.pop}`)
 
-        entry.listview.appendChild(_xyz.utils.html.node`
-        <div class="label inline">Population aged 0-18</div>
-        <div class="val inline">${response.age0to18}`)
+    function polygon_select(e) {
 
-        entry.listview.appendChild(_xyz.utils.html.node`
-        <div class="label inline">Population aged 18-24</div>
-        <div class="val inline">${response.age18to24}`)
+      // Cancel draw interaction if active.
+      if (e.target.classList.contains('active')) return mapview.interactions.highlight()
 
-        entry.listview.appendChild(_xyz.utils.html.node`
-        <div class="label inline">Population aged 25-44</div>
-        <div class="val inline">${response.age25to44}`)
+      // Style plugin button as active.
+      e.target.classList.add('active')
 
-        entry.listview.appendChild(_xyz.utils.html.node`
-        <div class="label inline">Population aged 45-59</div>
-        <div class="val inline">${response.age45to59}`)
+      // Config for mapview draw interaction.
+      const config = {
+        type: 'Polygon',
 
-        entry.listview.appendChild(_xyz.utils.html.node`
-        <div class="label inline">Population aged 60+</div>
-        <div class="val inline">${response.age60plus}`)
+        // Prevent contextmenu showing at drawend event.
+        contextMenu: null,
 
-        entry.listview.appendChild(_xyz.utils.html.node`
-        <div class="label inline">Competition Count</div>
-        <div class="val inline">${response.comp_count}`)
+        style: new ol.style.Style({
+          stroke: new ol.style.Stroke({
+            color: '#FF69B4',
+            width: 2
+          })
+        }),
+        drawend: e => {
 
-        entry.listview.appendChild(_xyz.utils.html.node`
-        <div class="label inline">Population per competition</div>
-        <div class="val inline">${response.pop_per_comp}`)
+          let clone = new ol.layer.VectorTile({
+            source: mapview.layers.zoomgeom.L.getSource(),
+            style: F => {
 
-        entry.listview.appendChild(_xyz.utils.html.node`
-        <div class="label inline">Beauty salon count</div>
-        <div class="val inline">${response.beauty_salon_count}`)
-        
-      })
+              let extent = F.getGeometry().getExtent()
+
+              let geom = e.feature.getGeometry()
+
+              if (geom.intersectsCoordinate([extent[0], extent[1]])
+                || geom.intersectsCoordinate([extent[2], extent[3]])
+                || geom.intersectsCoordinate([extent[0], extent[3]])
+                || geom.intersectsCoordinate([extent[1], extent[2]])) {
+
+                  return new ol.style.Style({
+                    fill: new ol.style.Fill({
+                      color: '#FF69B4'
+                    })
+                  })
+
+                }
+            }
+          });
+
+          mapview.Map.addLayer(clone)
+
+          mapview.interactions.highlight()
+        },
+        callback: () => {
+
+          // Remove active class from button.
+          e.target.classList.remove('active')
+        }
+      }
+
+      // Initiate drawing on mapview with config as interaction argument.
+      mapview.interactions.draw(config)
 
     }
 
   }
-}))
+
+})()

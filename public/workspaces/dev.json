@@ -176,8 +176,12 @@
         "${DIR}/js/plugins/chart_entry.js",
         "${DIR}/js/plugins/table_entry.js",
         "${DIR}/js/plugins/custom_filter.js",
-        "${DIR}/js/plugins/mvt_select_tab.js"
+        "${DIR}/js/plugins/mvt_select_tab.js",
+        "${DIR}/js/plugins/polygon_select.js"
       ],
+      "polygon_select": {
+
+      },
       "measure_distance": {
         "tooltip": {
           "units": "meter",
