@@ -17,8 +17,7 @@ export default (function(){
     .comparison-grid .remove-btn{
       font-weight: bold;
       color: red;
-    }
-    `;
+    }`;
 
   document.head.appendChild(style);
 
@@ -62,6 +61,10 @@ export default (function(){
       layer.compare_locations.map.delete(key)
 
       layer.compare_locations.draw_callback(layer)
+
+      if (!layer.compare_locations.map.size) {
+        layer.compare_locations.tab.remove()
+      }
     }
 
     mapp.ui.locations.entries.add_to_comparison = entry => {
