@@ -1,87 +1,91 @@
 export default (function () {
 
-  mapp.plugins.polygon_select = (plugin, mapview) => {
+  mapp.utils.polygonSelect = (params) => {
 
-    // Find the btnColumn element.
-    const btnColumn = document.getElementById("mapButton");
+    // Style plugin button as active.
+    params.btn?.classList.add('active')
 
-    // Append the plugin btn to the btnColumn.
-    btnColumn && btnColumn.append(mapp.utils.html.node`
-    <button
-      title="Polygon Select"
-      onclick=${polygon_select}>
-      <div class="mask-icon area">`);
+    if (!params.layer) return;
 
-
-    function polygon_select(e) {
-
-      // Cancel draw interaction if active.
-      if (e.target.classList.contains('active')) return mapview.interactions.highlight()
-
-      // Style plugin button as active.
-      e.target.classList.add('active')
-
-      if (!mapview.layers[plugin.layer]) return;
-
-      if (plugin.L) mapview.Map.removeLayer(plugin.L)
-
-      mapview.layers[plugin.layer].show()
-
-      // Config for mapview draw interaction.
-      const config = {
-        type: 'Polygon',
-
-        // Prevent contextmenu showing at drawend event.
-        contextMenu: null,
-
-        style: new ol.style.Style({
-          stroke: new ol.style.Stroke({
-            color: '#FF69B4',
-            width: 2
-          })
-        }),
-        drawend: e => {
-
-          plugin.L = new ol.layer.VectorTile({
-            source: mapview.layers[plugin.layer].L.getSource(),
-            style: F => {
-
-              let extent = F.getGeometry().getExtent()
-
-              let geom = e.feature.getGeometry()
-
-              if (geom.intersectsCoordinate([extent[0], extent[1]])
-                || geom.intersectsCoordinate([extent[2], extent[3]])
-                || geom.intersectsCoordinate([extent[0], extent[3]])
-                || geom.intersectsCoordinate([extent[1], extent[2]])
-                || geom.intersectsCoordinate([(extent[0]+extent[2])/2, (extent[1]+extent[3])/2])) {
-
-                  return new ol.style.Style({
-                    fill: new ol.style.Fill({
-                      color: '#FF69B4'
-                    })
-                  })
-
-                }
-            }
-          });
-
-          mapview.Map.addLayer(plugin.L)
-
-          mapview.interactions.highlight()
-        },
-        callback: () => {
-
-          // Remove active class from button.
-          e.target.classList.remove('active')
-        }
-      }
-
-      // Initiate drawing on mapview with config as interaction argument.
-      mapview.interactions.draw(config)
-
+    // Remove existing layer and set to null.
+    if (params.L) {
+      params.mapview.Map.removeLayer(params.L)
+      params.L = null
     }
 
+    // Config for mapview draw interaction.
+    params = Object.assign({
+
+      // Draw polygon.
+      type: 'Polygon',
+
+      // Prevent contextmenu showing at drawend event.
+      contextMenu: null,
+
+      // Highlight style for intersecting features.
+      highlightStyle: new ol.style.Style({
+        fill: new ol.style.Fill({
+          color: '#FF69B4'
+        })
+      }),
+
+      // Style for draw interaction.
+      style: new ol.style.Style({
+        stroke: new ol.style.Stroke({
+          color: '#FF69B4',
+          width: 2
+        })
+      }),
+      drawend: e => {
+
+        // Get geometry of drawn polygon feature
+        const geom = e.feature.getGeometry()
+
+        // Create vector tile layer from param.layer source.
+        params.L = new ol.layer.VectorTile({
+          source: params.layer.L.getSource(),
+          style: F => {
+
+            // Get extent of vector tile render feature
+            const extent = F.getGeometry().getExtent()
+
+            if (geom.intersectsCoordinate([extent[0], extent[1]])
+              || geom.intersectsCoordinate([extent[2], extent[3]])
+              || geom.intersectsCoordinate([extent[0], extent[3]])
+              || geom.intersectsCoordinate([extent[1], extent[2]])
+              || geom.intersectsCoordinate([(extent[0] + extent[2]) / 2, (extent[1] + extent[3]) / 2])) {
+
+                // Push feature into features array.
+                params.features?.push(F)
+
+                // Return style for feature.
+                return params.highlightStyle
+            }
+          }
+        });
+
+        // Finish interaction after rendercomplete.
+        params.mapview.Map.once('rendercomplete', ()=>{
+          params.mapview.interaction?.finish()
+        })
+
+        // Add layer.
+        params.mapview.Map.addLayer(params.L)
+      },
+      // Will be called when draw interaction is finished.
+      callback: () => {
+
+        params.mapview.interactions.highlight()
+
+        // Remove active class from button.
+        params.btn?.classList.remove('active')
+      }
+    }, params)
+
+    // Initiate drawing on mapview with config as interaction argument.
+    params.mapview.interactions.draw(params)
+
+    return params
   }
 
 })()
