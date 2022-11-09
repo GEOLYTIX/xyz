@@ -1268,6 +1268,7 @@
             "polygon": {
               "snap": true
             },
+            "polygon_with_snap": true,
             "freehand": true,
             "circle": true,
             "locator": true,
