@@ -698,6 +698,7 @@
                 "type": "in",
                 "dropdown": true,
                 "in": [
+                  "A%26B",
                   "City Centre",
                   "Town Centre",
                   "Urban Centre",
@@ -1031,6 +1032,21 @@
                 "type": "categorized",
                 "field": "retailer",
                 "cat": {
+                  "A%26B": {
+                    "label": "A&B",
+                    "style": {
+                      "svg": null,
+                      "type": "target",
+                      "fillColor": "#ffbf45",
+                      "layers": {
+                        "0.875": "#fa6f08",
+                        "0.75": "#ef3c11",
+                        "0.625": "#001f79",
+                        "0.5": "#02bee3",
+                        "0.25": "ffffff"
+                      }
+                    }
+                  },
                   "Aldi": {
                     "label": "Aldi",
                     "style": {
@@ -1249,7 +1265,9 @@
             }
           },
           "edit": {
-            "polygon": true,
+            "polygon": {
+              "snap": true
+            },
             "freehand": true,
             "circle": true,
             "locator": true,
