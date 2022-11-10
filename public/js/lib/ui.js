@@ -374,7 +374,7 @@ mapp.utils.merge(mapp.dictionaries,{en:{layer_zoom_to_extent:"Zoom to filtered l
       ${mapp.dictionary.save}`),t.push(mapp.utils.html`
     <li
       onclick=${()=>this.interaction.finish()}>
-      ${mapp.dictionary.cancel}`),this.popup({coords:this.interaction.vertices[this.interaction.vertices.length-1],content:mapp.utils.html.node`<ul>${t}`})}function st(e){if(this.interaction.vertices.length===0)return;e&&e.preventDefault();let t=this.interaction.Layer.getSource().getFeatures(),l=[];t.length&&l.push(mapp.utils.html`
+      ${mapp.dictionary.cancel}`),this.popup({coords:this.interaction.vertices[this.interaction.vertices.length-1],content:mapp.utils.html.node`<ul>${t}`})}function st(e){if(this.interaction.vertices.length===0)return;e&&e.preventDefault();let t=this.interaction.source.getFeatures(),l=[];t.length&&l.push(mapp.utils.html`
   <li
     onclick=${()=>this.interaction.finish(this.interaction.getFeature())}>
       ${mapp.dictionary.save}`),!t.length&&l.push(mapp.utils.html`
