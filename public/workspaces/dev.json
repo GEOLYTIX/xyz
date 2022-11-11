@@ -135,46 +135,6 @@
       ]
     },
     "scratch": {
-      "filter_view": {
-        "foo": "bar"
-      },
-      "dataviews": {
-        "scratch": {
-          "display": true,
-          "target": "tabview",
-          "query": "scratch_table",
-          "queryparams": {
-            "layer": true,
-            "filter": true
-          },
-          "viewport": true,
-          "mapChange": true,
-          "toolbar": {
-            "viewport": true,
-            "download_csv": true,
-            "download_json": true
-          },
-          "table": {
-            "layout": "fitColumns",
-            "columns": [
-              {
-                "field": "id",
-                "title": "ID"
-              },
-              {
-                "field": "char_field",
-                "title": "Char",
-                "headerFilter": "like"
-              },
-              {
-                "field": "numeric_field",
-                "title": "Num",
-                "headerFilter": "numeric"
-              }
-            ]
-          }
-        }
-      },
       "style": {
         "default": {
           "strokeColor": "#f00",
@@ -220,461 +180,7 @@
         },
         "isoline_here": true,
         "delete": true
-      },
-      "filter": {
-        "exclude": ["bool_field"]
-      },
-      "infoj": [
-        {
-          "type": "geometry",
-          "display": true,
-          "field": "geom_3857",
-          "fieldfx": "ST_asGeoJSON(geom_3857)",
-          "dependents": [
-            "pin"
-          ],
-          "edit": {
-            "geometry": true,
-            "snap": true
-          }
-        },
-        {
-          "type": "pin",
-          "label": "ST_PointOnSurface",
-          "field": "pin",
-          "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
-        },
-        {
-          "type": "pin_from_geom",
-          "label": "Turf PointOnFeature",
-          "geomField": "geom_3857"
-        },
-        {
-          "title": "ID",
-          "field": "id",
-          "inline": true
-        },
-        {
-          "type": "key"
-        },
-        {
-          "skipNullValue": true,
-          "title": "char_field",
-          "field": "char_field_bogus",
-          "fieldfx": "char_field"
-        },
-        {
-          "field": "foobar_title",
-          "fieldfx": "json_build_object('title', 'foo')",
-          "type": "json",
-          "class": "display-none"
-        },
-        {
-          "title": "this won't matter",
-          "field": "bogus_bar",
-          "fieldfx": "'bar'",
-          "objectAssignFromField": "foobar_title"
-        },
-        {
-          "title": "char_field edit",
-          "field": "char_field",
-          "dependents": [
-            "char_field_bogus"
-          ],
-          "edit": true,
-          "filter": {
-            "type": "like",
-            "leading_wildcard": "true"
-          }
-        },
-        {
-          "title": "textarea",
-          "group": "texts",
-          "field": "textarea_bogus",
-          "fieldfx": "textarea",
-          "type": "textarea"
-        },
-        {
-          "title": "textarea edit",
-          "group": "texts",
-          "field": "textarea",
-          "dependents": [
-            "textarea_bogus"
-          ],
-          "type": "textarea",
-          "edit": true
-        },
-        {
-          "title": "html from query",
-          "group": "texts",
-          "query": "html_query",
-          "params": {
-            "field": "html"
-          },
-          "type": "html"
-        },
-        {
-          "title": "html",
-          "group": "texts",
-          "field": "html_bogus",
-          "fieldfx": "html",
-          "type": "html"
-        },
-        {
-          "title": "html edit",
-          "group": "texts",
-          "field": "html",
-          "dependents": [
-            "html_bogus"
-          ],
-          "type": "html",
-          "edit": true
-        },
-        {
-          "title": "module query (id)",
-          "inline": true,
-          "query": "module_query",
-          "queryparams": {
-            "id": true,
-            "qID": "id",
-            "field": "id",
-            "fieldValues": ["char_field_bogus", "integer_field"],
-            "table": "dev.scratch"
-          }
-        },
-        {
-          "title": "integer_field",
-          "field": "integer_field_bogus",
-          "fieldfx": "integer_field",
-          "prefix": "£",
-          "type": "integer"
-        },
-        {
-          "title": "integer_field edit",
-          "field": "integer_field",
-          "type": "integer",
-          "dependents": [
-            "integer_field_bogus"
-          ],
-          "edit": true
-        },
-        {
-          "title": "numeric_field",
-          "field": "numeric_field_bogus",
-          "fieldfx": "numeric_field",
-          "type": "numeric"
-        },
-        {
-          "title": "numeric_field edit",
-          "field": "numeric_field",
-          "type": "numeric",
-          "default": 10,
-          "edit": {
-            "range": {
-              "min": 5,
-              "max": 20,
-              "step": 0.5
-            }
-          },
-          "dependents": [
-            "numeric_field_bogus"
-          ],
-          "filter": {
-            "title": "range filter",
-            "type": "numeric",
-            "min": 5,
-            "step": 0.5
-          }
-        },
-        {
-          "field": "json_field_bogus",
-          "fieldfx": "json_field",
-          "title": "json_field",
-          "type": "json"
-        },
-        {
-          "field": "json_field",
-          "title": "json_field edit",
-          "type": "json",
-          "dependents": [
-            "json_field_bogus"
-          ],
-          "edit": true
-        },
-        {
-          "title": "datetime_integer",
-          "field": "datetime_integer_bogus",
-          "fieldfx": "datetime_integer",
-          "type": "datetime",
-          "locale": "en-UK",
-          "options": {
-            "year": "numeric",
-            "month": "2-digit",
-            "day": "2-digit"
-          }
-        },
-        {
-          "title": "datetime_integer",
-          "field": "datetime_integer",
-          "type": "datetime",
-          "dependents": [
-            "datetime_integer_bogus"
-          ],
-          "filter": {
-            "type": "datetime"
-          },
-          "edit": true
-        },
-        {
-          "title": "bool_field",
-          "label": "Boolean test",
-          "field": "bool_field_non_editable",
-          "fieldfx": "bool_field",
-          "type": "boolean"
-        },
-        {
-          "title": "bool_field",
-          "label": "Boolean editable",
-          "field": "bool_field",
-          "type": "boolean",
-          "edit": true,
-          "filter": {
-            "type": "foo"
-          }
-        },
-        {
-          "title": "options_field",
-          "field": "options_field",
-          "edit": {
-            "options": [
-              {
-                "Open": "1"
-              },
-              {
-                "Closed": "2"
-              },
-              "Other"
-            ]
-          }
-        },
-        {
-          "label": "dataview_table",
-          "type": "dataview",
-          "target": "tabview",
-          "display": true,
-          "query": "retail_points_list",
-          "table": {
-            "selectable": false,
-            "columns": [
-              {
-                "field": "id",
-                "title": "ID"
-              },
-              {
-                "field": "store_name",
-                "title": "Store"
-              },
-              {
-                "field": "town",
-                "title": "Town"
-              }
-            ]
-          }
-        },
-        {
-          "label": "table from plugin",
-          "type": "table_plugin",
-          "target": "tabview",
-          "query": "retail_points_list",
-          "table": {
-            "columns": [
-              {
-                "field": "id",
-                "title": "ID"
-              },
-              {
-                "field": "store_name",
-                "title": "Store"
-              },
-              {
-                "field": "town",
-                "title": "Town"
-              }
-            ]
-          }
-        },
-        {
-          "title": "This is a chart",
-          "label": "chart display true",
-          "type": "dataview",
-          "target": "location",
-          "display": true,
-          "chart": {
-            "type": "pie",
-            "data": {
-              "labels": [
-                "Owner Occupied",
-                "Renting",
-                "Social",
-                "Rent Free"
-              ],
-              "datasets": [
-                {
-                  "fields": [
-                    "Owner Occupied",
-                    "Renting",
-                    "Social",
-                    "Rent Free"
-                  ],
-                  "backgroundColor": [
-                    "#cddc39",
-                    "#00bcd4",
-                    "#ffc107",
-                    "#33691e"
-                  ],
-                  "data": [
-                    0.4168,
-                    0.2782,
-                    0.2912,
-                    0.0137
-                  ]
-                }
-              ]
-            }
-          }
-        },
-        {
-          "title": "This is the same chart (again)",
-          "label": "chart display false",
-          "type": "dataview",
-          "target": "location",
-          "chart": {
-            "data": {
-              "labels": [
-                "Owner Occupied",
-                "Renting",
-                "Social",
-                "Rent Free"
-              ],
-              "datasets": [
-                {
-                  "fields": [
-                    "Owner Occupied",
-                    "Renting",
-                    "Social",
-                    "Rent Free"
-                  ],
-                  "backgroundColor": [
-                    "#cddc39",
-                    "#00bcd4",
-                    "#ffc107",
-                    "#33691e"
-                  ],
-                  "data": [
-                    0.4168,
-                    0.2782,
-                    0.2912,
-                    0.0137
-                  ]
-                }
-              ]
-            }
-          }
-        },
-        {
-          "title": "Chart from plugin",
-          "label": "chart display false",
-          "type": "chart_plugin",
-          "target": "location"
-        },
-        {
-          "title": "images",
-          "field": "images_bogus",
-          "fieldfx": "images",
-          "type": "images"
-        },
-        {
-          "title": "images edit",
-          "field": "images",
-          "type": "images",
-          "edit": true
-        },
-        {
-          "title": "documents",
-          "field": "documents_bogus",
-          "fieldfx": "documents",
-          "type": "documents"
-        },
-        {
-          "title": "documents edit",
-          "field": "documents",
-          "type": "documents",
-          "edit": true
-        },
-        {
-          "label": "Here Isoline Immediate",
-          "field": "isoline_here",
-          "fieldfx": "ST_asGeoJSON(isoline_here)",
-          "display": true,
-          "type": "isoline_here",
-          "params": {
-            "minutes": 5
-          },
-          "style": {
-            "strokeColor": "#2196f3",
-            "fillColor": "#fff",
-            "fillOpacity": 0
-          }
-        },
-        {
-          "label": "Mapbox Isoline",
-          "field": "isoline_mapbox",
-          "fieldfx": "ST_asGeoJSON(isoline_mapbox)",
-          "display": true,
-          "type": "isoline_mapbox",
-          "params": {
-            "minutes": 30,
-            "profile": "driving",
-            "access_token": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2t3NmJqZ3N4MG9zeDJ1bGprdzQ2ODllMCJ9.3xhSOxQLx1Egv5i8W7B57A"
-          }
-        },
-        {
-          "title": "Title for geom_edit",
-          "label": "Show geom",
-          "field": "geom_edit",
-          "fieldfx": "ST_asGeoJSON(geom_edit)",
-          "type": "geometry",
-          "dependents": [
-            "geom_edit_bogus"
-          ],
-          "edit": {
-            "delete": true,
-            "geometry": true,
-            "polygon": true,
-            "point": true
-          },
-          "style": {
-            "strokeColor": "#009900",
-            "fillColor": "#fff",
-            "fillOpacity": 0
-          }
-        },
-        {
-          "label": "Bogus geom",
-          "field": "geom_edit_bogus",
-          "fieldfx": "ST_asGeoJSON(geom_edit)",
-          "type": "geometry",
-          "display": true,
-          "style": {
-            "strokeColor": "#f00",
-            "fillColor": "#fff",
-            "fillOpacity": 0
-          }
-        },
-        {
-          "type": "streetview"
-        }
-      ]
+      }
     }
   },
   "locales": {
@@ -1737,7 +1243,531 @@
           "geom": "geom_3857",
           "qID": "id",
           "template": "scratch",
-          "templates": ["infoj_report"]
+          "templates": ["infoj_report"],
+          "filter_view": {
+            "foo": "bar"
+          },
+          "dataviews": {
+            "scratch": {
+              "display": true,
+              "target": "tabview",
+              "query": "scratch_table",
+              "queryparams": {
+                "layer": true,
+                "filter": true
+              },
+              "viewport": true,
+              "mapChange": true,
+              "toolbar": {
+                "viewport": true,
+                "download_csv": true,
+                "download_json": true
+              },
+              "table": {
+                "layout": "fitColumns",
+                "columns": [
+                  {
+                    "field": "id",
+                    "title": "ID"
+                  },
+                  {
+                    "field": "char_field",
+                    "title": "Char",
+                    "headerFilter": "like"
+                  },
+                  {
+                    "field": "numeric_field",
+                    "title": "Num",
+                    "headerFilter": "numeric"
+                  }
+                ]
+              }
+            }
+          },
+          "filter": {
+            "exclude": ["bool_field"]
+          },
+          "infoj": [
+            {
+              "type": "geometry",
+              "display": true,
+              "field": "geom_3857",
+              "fieldfx": "ST_asGeoJSON(geom_3857)",
+              "dependents": [
+                "pin"
+              ],
+              "edit": {
+                "geometry": true,
+                "snap": true
+              }
+            },
+            {
+              "type": "pin",
+              "label": "ST_PointOnSurface",
+              "field": "pin",
+              "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
+            },
+            {
+              "type": "pin_from_geom",
+              "label": "Turf PointOnFeature",
+              "geomField": "geom_3857"
+            },
+            {
+              "title": "ID",
+              "field": "id",
+              "inline": true
+            },
+            {
+              "type": "key"
+            },
+            {
+              "skipNullValue": true,
+              "title": "char_field",
+              "field": "char_field_bogus",
+              "fieldfx": "char_field"
+            },
+            {
+              "field": "foobar_title",
+              "fieldfx": "json_build_object('title', 'foo')",
+              "type": "json",
+              "class": "display-none"
+            },
+            {
+              "title": "this won't matter",
+              "field": "bogus_bar",
+              "fieldfx": "'bar'",
+              "objectAssignFromField": "foobar_title"
+            },
+            {
+              "title": "char_field edit",
+              "field": "char_field",
+              "dependents": [
+                "char_field_bogus"
+              ],
+              "edit": true,
+              "filter": {
+                "type": "like",
+                "leading_wildcard": "true"
+              }
+            },
+            {
+              "title": "textarea",
+              "group": "texts",
+              "field": "textarea_bogus",
+              "fieldfx": "textarea",
+              "type": "textarea"
+            },
+            {
+              "title": "textarea edit",
+              "group": "texts",
+              "field": "textarea",
+              "dependents": [
+                "textarea_bogus"
+              ],
+              "type": "textarea",
+              "edit": true
+            },
+            {
+              "title": "html from query",
+              "group": "texts",
+              "query": "html_query",
+              "params": {
+                "field": "html"
+              },
+              "type": "html"
+            },
+            {
+              "title": "html",
+              "group": "texts",
+              "field": "html_bogus",
+              "fieldfx": "html",
+              "type": "html"
+            },
+            {
+              "title": "html edit",
+              "group": "texts",
+              "field": "html",
+              "dependents": [
+                "html_bogus"
+              ],
+              "type": "html",
+              "edit": true
+            },
+            {
+              "title": "module query (id)",
+              "inline": true,
+              "query": "module_query",
+              "queryparams": {
+                "id": true,
+                "qID": "id",
+                "field": "id",
+                "fieldValues": ["char_field_bogus", "integer_field"],
+                "table": "dev.scratch"
+              }
+            },
+            {
+              "title": "integer_field",
+              "field": "integer_field_bogus",
+              "fieldfx": "integer_field",
+              "prefix": "£",
+              "type": "integer"
+            },
+            {
+              "title": "integer_field edit",
+              "field": "integer_field",
+              "type": "integer",
+              "dependents": [
+                "integer_field_bogus"
+              ],
+              "edit": true
+            },
+            {
+              "title": "numeric_field",
+              "field": "numeric_field_bogus",
+              "fieldfx": "numeric_field",
+              "type": "numeric"
+            },
+            {
+              "title": "numeric_field edit",
+              "field": "numeric_field",
+              "type": "numeric",
+              "default": 10,
+              "edit": {
+                "range": {
+                  "min": 5,
+                  "max": 20,
+                  "step": 0.5
+                }
+              },
+              "dependents": [
+                "numeric_field_bogus"
+              ],
+              "filter": {
+                "title": "range filter",
+                "type": "numeric",
+                "min": 5,
+                "step": 0.5
+              }
+            },
+            {
+              "field": "json_field_bogus",
+              "fieldfx": "json_field",
+              "title": "json_field",
+              "type": "json"
+            },
+            {
+              "field": "json_field",
+              "title": "json_field edit",
+              "type": "json",
+              "dependents": [
+                "json_field_bogus"
+              ],
+              "edit": true
+            },
+            {
+              "title": "datetime_integer",
+              "field": "datetime_integer_bogus",
+              "fieldfx": "datetime_integer",
+              "type": "datetime",
+              "locale": "en-UK",
+              "options": {
+                "year": "numeric",
+                "month": "2-digit",
+                "day": "2-digit"
+              }
+            },
+            {
+              "title": "datetime_integer",
+              "field": "datetime_integer",
+              "type": "datetime",
+              "dependents": [
+                "datetime_integer_bogus"
+              ],
+              "filter": {
+                "type": "datetime"
+              },
+              "edit": true
+            },
+            {
+              "title": "bool_field",
+              "label": "Boolean test",
+              "field": "bool_field_non_editable",
+              "fieldfx": "bool_field",
+              "type": "boolean"
+            },
+            {
+              "title": "bool_field",
+              "label": "Boolean editable",
+              "field": "bool_field",
+              "type": "boolean",
+              "edit": true,
+              "filter": {
+                "type": "foo"
+              }
+            },
+            {
+              "title": "options_field",
+              "field": "options_field",
+              "edit": {
+                "options": [
+                  {
+                    "Open": "1"
+                  },
+                  {
+                    "Closed": "2"
+                  },
+                  "Other"
+                ]
+              }
+            },
+            {
+              "label": "dataview_table",
+              "type": "dataview",
+              "target": "tabview",
+              "display": true,
+              "query": "retail_points_list",
+              "table": {
+                "selectable": false,
+                "columns": [
+                  {
+                    "field": "id",
+                    "title": "ID"
+                  },
+                  {
+                    "field": "store_name",
+                    "title": "Store"
+                  },
+                  {
+                    "field": "town",
+                    "title": "Town"
+                  }
+                ]
+              }
+            },
+            {
+              "label": "table from plugin",
+              "type": "table_plugin",
+              "target": "tabview",
+              "query": "retail_points_list",
+              "table": {
+                "columns": [
+                  {
+                    "field": "id",
+                    "title": "ID"
+                  },
+                  {
+                    "field": "store_name",
+                    "title": "Store"
+                  },
+                  {
+                    "field": "town",
+                    "title": "Town"
+                  }
+                ]
+              }
+            },
+            {
+              "title": "This is a chart",
+              "label": "chart display true",
+              "type": "dataview",
+              "target": "location",
+              "display": true,
+              "chart": {
+                "type": "pie",
+                "data": {
+                  "labels": [
+                    "Owner Occupied",
+                    "Renting",
+                    "Social",
+                    "Rent Free"
+                  ],
+                  "datasets": [
+                    {
+                      "fields": [
+                        "Owner Occupied",
+                        "Renting",
+                        "Social",
+                        "Rent Free"
+                      ],
+                      "backgroundColor": [
+                        "#cddc39",
+                        "#00bcd4",
+                        "#ffc107",
+                        "#33691e"
+                      ],
+                      "data": [
+                        0.4168,
+                        0.2782,
+                        0.2912,
+                        0.0137
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "title": "This is the same chart (again)",
+              "label": "chart display false",
+              "type": "dataview",
+              "target": "location",
+              "chart": {
+                "data": {
+                  "labels": [
+                    "Owner Occupied",
+                    "Renting",
+                    "Social",
+                    "Rent Free"
+                  ],
+                  "datasets": [
+                    {
+                      "fields": [
+                        "Owner Occupied",
+                        "Renting",
+                        "Social",
+                        "Rent Free"
+                      ],
+                      "backgroundColor": [
+                        "#cddc39",
+                        "#00bcd4",
+                        "#ffc107",
+                        "#33691e"
+                      ],
+                      "data": [
+                        0.4168,
+                        0.2782,
+                        0.2912,
+                        0.0137
+                      ]
+                    }
+                  ]
+                }
+              }
+            },
+            {
+              "title": "Chart from plugin",
+              "label": "chart display false",
+              "type": "chart_plugin",
+              "target": "location"
+            },
+            {
+              "title": "images",
+              "field": "images_bogus",
+              "fieldfx": "images",
+              "type": "images"
+            },
+            {
+              "title": "images edit",
+              "field": "images",
+              "type": "images",
+              "edit": true
+            },
+            {
+              "title": "documents",
+              "field": "documents_bogus",
+              "fieldfx": "documents",
+              "type": "documents"
+            },
+            {
+              "title": "documents edit",
+              "field": "documents",
+              "type": "documents",
+              "edit": true
+            },
+            {
+              "label": "Here Isoline Immediate",
+              "field": "isoline_here",
+              "fieldfx": "ST_asGeoJSON(isoline_here)",
+              "display": true,
+              "type": "isoline_here",
+              "params": {
+                "minutes": 5
+              },
+              "style": {
+                "strokeColor": "#2196f3",
+                "fillColor": "#fff",
+                "fillOpacity": 0
+              }
+            },
+            {
+              "label": "Mapbox Isoline",
+              "field": "isoline_mapbox",
+              "fieldfx": "ST_asGeoJSON(isoline_mapbox)",
+              "display": true,
+              "type": "isoline_mapbox",
+              "params": {
+                "minutes": 30,
+                "profile": "driving",
+                "access_token": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2t3NmJqZ3N4MG9zeDJ1bGprdzQ2ODllMCJ9.3xhSOxQLx1Egv5i8W7B57A"
+              }
+            },
+            {
+              "title": "Title for geom_edit",
+              "label": "Show geom",
+              "field": "geom_edit",
+              "fieldfx": "ST_asGeoJSON(geom_edit)",
+              "type": "geometry",
+              "dependents": [
+                "geom_edit_bogus"
+              ],
+              "edit": {
+                "delete": true,
+                "geometry": true,
+                "polygon": true,
+                "point": true
+              },
+              "style": {
+                "strokeColor": "#009900",
+                "fillColor": "#fff",
+                "fillOpacity": 0
+              }
+            },
+            {
+              "label": "Bogus geom",
+              "field": "geom_edit_bogus",
+              "fieldfx": "ST_asGeoJSON(geom_edit)",
+              "type": "geometry",
+              "display": true,
+              "style": {
+                "strokeColor": "#f00",
+                "fillColor": "#fff",
+                "fillOpacity": 0
+              }
+            },
+            {
+              "type": "streetview"
+            }
+          ]
+        },
+        "scratch_geojson": {
+          "format": "geojson",
+          "dbs": "DEV",
+          "table": "dev.scratch",
+          "srid": "3857",
+          "geom": "geom_3857",
+          "qID": "id",
+          "template": "scratch",
+          "infoj": [
+            {
+              "type": "geometry",
+              "display": true,
+              "field": "geom_3857",
+              "fieldfx": "ST_asGeoJSON(geom_3857)",
+              "dependents": [
+                "pin"
+              ],
+              "edit": {
+                "geometry": true,
+                "snap": true
+              }
+            },
+            {
+              "type": "pin",
+              "label": "ST_PointOnSurface",
+              "field": "pin",
+              "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
+            }
+          ]
         }
       }
     },
