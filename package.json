@@ -7,7 +7,7 @@
   },
   "scripts": {
     "test": "web-test-runner \"test/**/*.test.js\" --node-resolve",
-    "_build": "npx esbuild ./lib/mapp.mjs ./lib/ui.mjs --bundle --minify --tree-shaking=false --sourcemap --format=esm --platform=browser --outdir=./public/js/lib"
+    "_build": "npx esbuild ./lib/mapp.mjs ./lib/ui.mjs --bundle --minify --tree-shaking=false --sourcemap --format=iife --outdir=./public/js/lib"
   },
   "license": "MIT",
   "dependencies": {
