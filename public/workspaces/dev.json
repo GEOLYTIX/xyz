@@ -948,6 +948,7 @@
               },
               "layer": "zoomgeom",
               "style": {
+                "opacitySlider": true,
                 "label": {
                   "display": true,
                   "field": "distance",
