@@ -2,14 +2,10 @@ const jwt = require('jsonwebtoken')
 
 const acl = require('./acl')()
 
-const logger = require('../logger')
-
 module.exports = async (req, res) => {
 
   // Get token from params or cookie.
   const token = req.params.token || req.cookies && req.cookies[process.env.TITLE]
-
-  logger(token, 'auth_token')
 
   // Return if there is no token to decode
   if (!token) return null
@@ -21,12 +17,7 @@ module.exports = async (req, res) => {
     async (err, user) => {
 
     // Return error if verification fails.
-    if (err) {
-      console.error(err)
-      return err
-    }
-
-    logger(user, 'user')
+    if (err) return err
 
     if (process.env.NANO_SESSION) {
      
@@ -73,6 +64,7 @@ module.exports = async (req, res) => {
 
         // Create and assign a new cookie from the token user.
         const cookie = jwt.sign(user, process.env.SECRET)
+        
         res.setHeader('Set-Cookie', `${process.env.TITLE}=${cookie};HttpOnly;Max-Age=${user.exp && (user.exp - user.iat) || process.env.COOKIE_TTL};Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
       }
 

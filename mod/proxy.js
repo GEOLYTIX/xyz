@@ -1,5 +1,3 @@
-const logger = require('./logger')
-
 const https = require('https')
 
 module.exports = (req, res) => {
@@ -11,9 +9,6 @@ module.exports = (req, res) => {
 
     // Substitute matched variable with key value from process environment.
     matched => process.env[`KEY_${matched.replace(/\{|\}/g, '')}`] || matched)
-
-
-  logger(url, 'proxy')
 
   const proxy = https.request(url, _res => {
     res.writeHead(_res.statusCode, _res.headers)

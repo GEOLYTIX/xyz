@@ -1,9 +1,10 @@
 {
   "templates": {
     "blog": {
-      "src": "file:/views/blog.html"
+      "src": "file:public/views/blog.html"
     },
-    "Mapbox Base": {
+    "mapbox_base": {
+      "name": "Mapbox Base",
       "format": "mbtiles",
       "mbStyle": "mapbox://styles/dbauszus/ciozrimi3002bdsm8bjtn2v1y",
       "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2p5Nmt3bm4wMGhzeTNjbGVxOGZyZG5qZCJ9.9naYTbockHur5X8WO3nsjQ",
@@ -12,8 +13,8 @@
         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
       }
     },
-    "Mapbox Colour": {
-      "display": true,
+    "mapbox_colour": {
+      "name": "Mapbox Colour",
       "format": "mbtiles",
       "mbStyle": "mapbox://styles/dbauszus/ck440h6990nii1co520go20i2",
       "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2p5Nmt3bm4wMGhzeTNjbGVxOGZyZG5qZCJ9.9naYTbockHur5X8WO3nsjQ",
@@ -22,7 +23,8 @@
         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
       }
     },
-    "Mapbox Labels": {
+    "mapbox_labels": {
+      "name": "Mapbox Labels",
       "format": "mbtiles",
       "mbStyle": "mapbox://styles/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z",
       "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2p5Nmt3bm4wMGhzeTNjbGVxOGZyZG5qZCJ9.9naYTbockHur5X8WO3nsjQ",
@@ -31,7 +33,8 @@
         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
       }
     },
-    "HERE Imagery": {
+    "here_imagery": {
+      "name": "HERE Imagery",
       "format": "tiles",
       "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?{HERE}",
       "proxy": true,
@@ -40,7 +43,8 @@
         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
       }
     },
-    "HERE Hybrid": {
+    "here_hybrid": {
+      "name": "HERE Hybrid",
       "format": "tiles",
       "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?{HERE}",
       "proxy": true,
@@ -49,74 +53,49 @@
         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
       }
     },
-    "Mapbox Dark": {
-      "format": "mbtiles",
-      "mbStyle": "mapbox://styles/dbauszus/ck87sxnow12c31ikbcl1suce5",
-      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2p5Nmt3bm4wMGhzeTNjbGVxOGZyZG5qZCJ9.9naYTbockHur5X8WO3nsjQ",
-      "attribution": {
-        "© Mapbox": "https://www.mapbox.com/about/maps",
-        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-      }
-    },
-    "Mapbox Blues": {
-      "format": "mbtiles",
-      "mbStyle": "mapbox://styles/dbauszus/ckhuwgi7c037m19nzvmof1dzf",
-      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2p5Nmt3bm4wMGhzeTNjbGVxOGZyZG5qZCJ9.9naYTbockHur5X8WO3nsjQ",
-      "attribution": {
-        "© Mapbox": "https://www.mapbox.com/about/maps",
-        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-      }
-    },
     "global_cities": {
-      "src": "cloudfront:${CDN}/mapp/layers/global_cities.json"
+      "src": "${TEMPLATES}/blog/global_cities.json",
+      "dbs": "MAPP"
     },
     "global_cities_query": {
-      "template": "select id, city_name, country, pop_ghs, area, pop_den from geodata.global_glx_open_citiesoftheworld WHERE true ${viewport} ${filter} limit 99;"
-    },
-    "global_airports": {
-      "src": "cloudfront:${CDN}/mapp/layers/global_airports.json"
-    },
-    "global_airports_query": {
-      "template": "select id, full_name, main_city, country, iata, icao, rank_group, rank from geodata.global_glx_geodata_transport_airport WHERE true ${viewport} ${filter} limit 99;"
-    },
-    "riverford": {
-      "src": "cloudfront:${CDN}/blog/layers/riverford.json"
+      "template": "select id, city_name, country, pop_ghs, area, pop_den from geodata.global_glx_open_citiesoftheworld WHERE true ${viewport} ${filter} limit 99;",
+      "dbs": "MAPP"
     },
     "geolytix_projects": {
-      "src": "cloudfront:${CDN}/blog/layers/geolytix_projects.json"
+      "src": "${TEMPLATES}/blog/geolytix_projects.json",
+      "dbs": "BLOG"
+    },
+    "lush": {
+      "src": "${TEMPLATES}/blog/lush.json",
+      "dbs": "BLOG"
+    },
+    "riverford": {
+      "src": "${TEMPLATES}/blog/riverford.json",
+      "dbs": "BLOG"
     },
     "uk_grocery": {
-      "src": "cloudfront:${CDN}/templates/uk/grocery.json"
+      "src": "${TEMPLATES}/templates_v4/uk/grocery/layer.json",
+      "dbs": "MAPP"
     },
-    "uk_grocery table": {
-      "template": "SELECT id as id, store_name, retailer, fascia, size_sqft FROM geodata.uk_glx_open_retail_points WHERE true ${viewport} ${filter} limit 99;"
+    "uk_grocery_table": {
+      "template": "SELECT id as id, store_name, retailer, fascia, size_sqft FROM ${table} WHERE true ${viewport} ${filter} limit 99;",
+      "dbs": "MAPP"
     },
-    "blackwells": {
-      "src": "cloudfront:${CDN}/blog/layers/blackwells.json"
+    "seamless_leeds": {
+      "src": "${TEMPLATES}/blog/seamless_leeds.json",
+      "dbs": "BLOG"
     },
     "mumbai_retail_venues": {
-      "src": "cloudfront:${CDN}/blog/layers/mumbai_retail_venues.json"
+      "src": "${TEMPLATES}/blog/mumbai_retail_venues.json",
+      "dbs": "BLOG"
     },
-    "wall_of_china": {
-      "src": "cloudfront:${CDN}/blog/layers/wall_of_china.json"
+    "london_boroughs": {
+      "src": "${TEMPLATES}/blog/football_boroughs.json",
+      "dbs": "MAPP"
     },
-    "walkingthewall": {
-      "src": "cloudfront:${CDN}/blog/templates/wall_of_china/walkingthewall.html"
-    },
-    "walking_america": {
-      "src": "cloudfront:${CDN}/blog/layers/walking_america.json"
-    },
-    "state_query": {
-      "template": "SELECT CONCAT(stusps, ' - ', statename) AS label FROM geodata.usa_glx_geodata_admin_state WHERE id = %{id}"
-    },
-    "usa_landmarks": {
-      "src": "cloudfront:${CDN}/blog/layers/usa_landmarks.json"
-    },
-    "usa_route": {
-      "src": "cloudfront:${CDN}/blog/layers/usa_route.json"
-    },
-    "walkusa": {
-      "src": "cloudfront:${CDN}/blog/templates/walking_america/walkusa.html"
+    "london_clubs": {
+      "src": "${TEMPLATES}/blog/london_clubs.json",
+      "dbs": "MAPP"
     }
   },
   "locales": {
@@ -124,135 +103,68 @@
       "minZoom": 3,
       "maxZoom": 15,
       "showScaleBar": true,
+      "plugins": [
+        "${DIR}/js/plugins/cluster_panel.js"
+      ],
       "layers": {
-        "Mapbox": {
-          "template": "Mapbox Base",
-          "display": true,
-          "group": "Maps"
+        "mapbox_base": {
+          "template": "mapbox_base",
+          "display": true
         },
-        "Mapbox Labels": {
-          "template": "Mapbox Labels",
-          "display": true,
-          "group": "Maps"
+        "mapbox_labels": {
+          "template": "mapbox_labels",
+          "display": true
         },
-        "HERE Imagery": {
-          "template": "HERE Imagery",
-          "group": "Maps"
+        "here_imagery": {
+          "template": "here_imagery"
         },
-        "HERE Hybrid": {
-          "template": "HERE Hybrid",
-          "group": "Maps"
+        "here_hybrid": {
+          "template": "here_hybrid"
         },
-        "World Cities": {
+        "global_cities": {
           "template": "global_cities"
         },
-        "Global Airports": {
-          "template": "global_airports"
-        },
-        "Riverford": {
-          "template": "riverford"
-        }
-      }
-    },
-    "Geolytix": {
-      "minZoom": 2,
-      "maxZoom": 15,
-      "view": {
-        "lat": 45,
-        "lng": 60,
-        "z": 2
-      },
-      "showScaleBar": true,
-      "layers": {
-        "Mapbox": {
-          "display": true,
-          "template": "Mapbox Base"
-        },
-        "Geolytix Projects": {
-          "display": true,
+        "geolytix_projects": {
           "template": "geolytix_projects"
+        },
+        "riverford": {
+          "template": "riverford"
+        },
+        "lush": {
+          "template": "lush"
         }
       }
     },
     "UK": {
       "name": "United Kingdom",
-      "gazetteer": {
-        "provider": "GOOGLE",
-        "country": "GB",
-        "placeholder": "eg. London"
+      "extent": {
+        "north": 63,
+        "east": 7,
+        "south": 47,
+        "west": -15,
+        "mask": true
       },
-      "bounds": {
-        "north": 48,
-        "east": -13,
-        "south": 62,
-        "west": 5
-      },
-      "minZoom": 6,
-      "maxZoom": 17,
-      "showScaleBar": true,
-      "layers": {
-        "Mapbox": {
-          "template": "Mapbox Base",
-          "display": true,
-          "group": "Maps"
-        },
-        "Mapbox Labels": {
-          "template": "Mapbox Label",
-          "display": true,
-          "group": "Maps"
-        },
-        "Retail Points": {
-          "template": "uk_grocery"
-        },
-        "Blackwells": {
-          "template": "blackwells"
-        },
-        "Seamless Leeds": {
-          "meta": "View for Seamless Town & Suburb dataset in Leeds",
-          "format": "mvt",
-          "geom": "geom_3857",
-          "srid": "3857",
-          "dbs": "BLOG",
-          "qID": "id",
-          "table": "blog.vw_leeds_glx_geodata_seamless_combined",
-          "infoj": [{
-              "type": "key"
-            },
-            {
-              "field": "comb_name",
-              "title": "Name"
-            },
-            {
-              "field": "pop",
-              "title": "Population",
-              "inline": true
-            }
-          ]
-        }
-      }
-    },
-    "Lush": {
-      "minZoom": 2,
-      "maxZoom": 15,
       "view": {
-        "lat": 45,
-        "lng": 60,
-        "z": 2
+        "lat": 54.3,
+        "lng": -4,
+        "z": 6
       },
-      "showScaleBar": true,
+      "minZoom": 2,
+      "maxZoom": 17,
       "layers": {
-        "Mapbox": {
-          "template": "Mapbox Base",
+        "mapbox_base": {
+          "template": "mapbox_base",
           "display": true
         },
-        "Lush Locations": {
-          "display": true,
-          "template": "lush",
-          "format": "mvt",
-          "geom": "geom_3857_1000m",
-          "srid": "3857",
-          "dbs": "BLOG",
-          "table": "blog.global_glx_open_locations_lush"
+        "mapbox_labels": {
+          "template": "mapbox_labels",
+          "display": true
+        },
+        "uk_grocery": {
+          "template": "uk_grocery"
+        },
+        "seamless_leeds": {
+          "template": "seamless_leeds"
         }
       }
     },
@@ -264,72 +176,24 @@
         "west": 70
       },
       "view": {
-        "lat": 19.0108,
-        "lng": 72.8502,
+        "lat": 19,
+        "lng": 73,
         "z": 2
       },
       "minZoom": 12,
       "maxZoom": 15,
-      "showScaleBar": true,
       "layers": {
-        "Mapbox": {
-          "template": "Mapbox Base",
-          "display": true,
-          "group": "Maps"
+        "mapbox_base": {
+          "template": "mapbox_base",
+          "display": true
         },
-        "Mapbox Labels": {
-          "template": "Mapbox Label",
+        "mapbox_labels": {
           "display": true,
-          "group": "Maps"
+          "template": "mapbox_labels"
         },
-        "Mumbai Retail Venues": {
+        "retail_venues": {
           "display": true,
           "template": "mumbai_retail_venues"
-        }
-      }
-    },
-    "Walking The Great Wall of China": {
-      "minZoom": 5,
-      "maxZoom": 19,
-      "view": {
-        "lat": 39.602,
-        "lng": 107.578,
-        "z": 5
-      },
-      "layers": {
-        "Mapbox": {
-          "template": "Mapbox Dark",
-          "display": true
-        },
-        "The Great Wall": {
-          "template": "wall_of_china"
-        }
-      }
-    },
-    "Walking America": {
-      "minZoom": 3,
-      "maxZoom": 19,
-      "view": {
-        "lat": 42.001,
-        "lng": -101.158,
-        "z": 5
-      },
-      "layers": {
-        "Mapbox": {
-          "template": "Mapbox Blues",
-          "display": true
-        },
-        "Walking America": {
-          "template": "walking_america",
-          "hover": {
-            "query": "state_query"
-          }
-        },
-        "Landmarks": {
-          "template": "usa_landmarks"
-        },
-        "Route": {
-          "template": "usa_route"
         }
       }
     },
@@ -348,135 +212,21 @@
         "lng": -0.12755
       },
       "layers": {
-        "Mapbox": {
-          "template": "Mapbox Base",
+        "mapbox_base": {
+          "template": "mapbox_base",
           "display": true
         },
-        "Mapbox Labels": {
-          "template": "Mapbox Labels",
+        "mapbox_labels": {
+          "template": "mapbox_labels",
           "display": true
         },
         "Boroughs": {
-          "display": true,
-          "format": "mvt",
-          "dbs": "MAPP",
-          "table": "mapp.uk_glx_london_football_boroughs_blog",
-          "mvt_cache": "mapp.uk_glx_london_football_boroughs_blog__mvts",
-          "geom": "geom_3857",
-          "srid": "3857",
-          "style": {
-            "zIndex": 99,
-            "theme": {
-              "field": "team",
-              "type": "categorized",
-              "other": true,
-              "cat": {
-                "Arsenal": {
-                  "fillColor": "#FF0000",
-                  "strokeColor": "#fff",
-                  "strokeWidth": 2,
-                  "fillOpacity": 0.5
-                },
-                "Arsenal_Chelsea": {
-                  "fillColor": "#85234B",
-                  "strokeColor": "#0A4595",
-                  "strokeWidth": 2,
-                  "fillOpacity": 0.5
-                },
-                "Arsenal_Spurs": {
-                  "fillColor": "#FB7B7B",
-                  "strokeColor": "#0F204B",
-                  "strokeWidth": 2,
-                  "fillOpacity": 0.5
-                },
-                "Chelsea": {
-                  "fillColor": "#0A4595",
-                  "strokeColor": "#fff",
-                  "strokeWidth": 2,
-                  "fillOpacity": 0.5
-                },
-                "Spurs": {
-                  "fillColor": "#F6F6F6",
-                  "strokeColor": "#0F204B",
-                  "strokeWidth": 2,
-                  "fillOpacity": 0.5
-                },
-                "West Ham": {
-                  "fillColor": "#540D1A",
-                  "strokeColor": "#2CAADE",
-                  "strokeWidth": 2,
-                  "fillOpacity": 0.5
-                },
-                "Crystal Palace": {
-                  "fillColor": "#D80081",
-                  "strokeColor": "#0055A5",
-                  "strokeWidth": 2,
-                  "fillOpacity": 0.5
-                }
-              }
-            }
-          }
+          "template": "london_boroughs",
+          "display": true
         },
         "Logos": {
-          "display": true,
-          "format": "geojson",
-          "dbs": "MAPP",
-          "table": "mapp.uk_glx_london_football_boroughs_blog",
-          "geom": "geom_p_4326",
-          "srid": "4326",
-          "qID": "id",
-          "style": {
-            "zIndex": 999,
-            "theme": {
-              "field": "team",
-              "type": "categorized",
-              "other": true,
-              "cat": {
-                "Arsenal": {
-                  "marker": {
-                    "svg": "https://geolytix.github.io/public/football/arsenal.svg",
-                    "scale": 0.1
-                  }
-                },
-                "Arsenal_Chelsea": {
-                  "marker": {
-                    "svg": "https://geolytix.github.io/public/football/arsenal_chelsea.svg",
-                    "scale": 0.1
-                  }
-                },
-                "Arsenal_Spurs": {
-                  "marker": {
-                    "svg": "https://geolytix.github.io/public/football/arsenal_spurs.svg",
-                    "scale": 0.1
-                  }
-                },
-                "Chelsea": {
-                  "marker": {
-                    "svg": "https://geolytix.github.io/public/football/chelsea.svg",
-                    "scale": 0.2
-                  }
-                },
-                "Spurs": {
-                  "marker": {
-                    "svg": "https://geolytix.github.io/public/football/spurs.svg",
-                    "scale": 0.1
-                  }
-                },
-                "West Ham": {
-                  "marker": {
-                    "svg": "https://geolytix.github.io/public/football/west_ham.svg",
-                    "scale": 0.1
-                  }
-                },
-                "Crystal Palace": {
-                  "marker": {
-                    "svg": "https://geolytix.github.io/public/football/crystal_palace.svg",
-                    "scale": 0.7
-                  }
-                }
-              }
-            }
-          }
+          "template": "london_clubs",
+          "display": true
         }
       }
     }

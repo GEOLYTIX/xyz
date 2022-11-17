@@ -1,66 +1,93 @@
-document.dispatchEvent(new CustomEvent('download', {
-  detail: _xyz => {
+export default (function(){
 
-    _xyz.layers.plugins.download = layer => {
+  mapp.ui.layers.panels.download_data = layer => {
 
-      layer.view.appendChild(_xyz.utils.html.node`
-      <div style="padding-right: 5px;">
-      <button
-        class="btn-wide primary-colour"
-        onclick=${download}>Download CSV`)
+    const btn = mapp.utils.html.node`
+    <button
+      class="flat wide"
+      onclick=${download}>
+      Download Data`
 
-      async function download() {
+    return btn
 
-        const scenarios = await _xyz.query({
-          query: 'scenario_list'
-        })
+    async function download(e) {
+      let response = await mapp.utils.xhr({
+        url: `${layer.mapview.host}/api/query/${layer.download_data.query}?stream=true`,
+        responseType: 'arraybuffer'
+      })
 
-        _xyz.query({
-          query: 'blueprint_csv',
-          locale: _xyz.locale.key,
-          layer: layer
-        }).then(response => {
 
-          const rows = response.map(record=>{
-    
-            return Object.values(record).map(record => {
-      
-              return isNaN(record) && `"${record}"` || record
-      
-            }).join(',')
-          })
+      var byteArray = new Uint8Array(response);
 
-          rows.unshift([
-            '"GLID"', 
-            '"FAD"', 
-            '"NAME"', 
-            '"CURRENT TYPE"', 
-            '"NEW TYPE"', 
-            '"CURRENT AWS"', 
-            '"FORECAST AWS"', 
-            '"X"', 
-            '"Y"', 
-            '"Closest Postcode"', 
-            '"Post Office Market"'
-          ])
-          
-          const csv = rows.join('\r\n')
-      
-          const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+      var enc = new TextDecoder("utf-8");
 
-          const link = _xyz.utils.html.node `
-          <a
-            href=${URL.createObjectURL(blob)}
-            download=${scenarios
-              .find(s => s.scenario_id === layer.filter.current.scenario_id.eq)
-              .scenario_name}}.csv>`
+      let decoded = enc.decode(byteArray)
 
-          link.click()
+      console.log(decoded)
 
-        })
-      }
+      // for (var i = 0; i < byteArray.byteLength; i++) {
+      //   console.log(byteArray[i])
+      // }
 
     }
 
   }
-}))
+
+  function downloadLink(layer) {
+
+    layer.download.layer = layer
+
+    _xyz.query(layer.download).then(response => {
+
+      const blob = layer.download.format === 'json' && blobJson(response) || blobCSV(response)
+     
+      const link = mapp.utils.html.node`<a
+        href=${URL.createObjectURL(blob)}
+        download=${`${layer.key}.${layer.download.format || 'csv'}`}>`
+
+      link.click()
+
+    })
+  }
+
+  function blobJson(response) {
+
+    const rows = response.map(record=>{
+
+      const feature = {
+        type: 'Feature',
+        properties: record
+      }
+
+      feature.geometry = JSON.parse(record.geometry)
+
+      delete feature.properties.geometry
+
+      return feature
+    })
+
+    const json = JSON.stringify({
+      type: 'FeatureCollection',
+      features: rows
+    })
+
+    return new Blob([json], {type: 'application/json'})
+  }
+
+  function blobCSV(response) {
+
+    const rows = response.map(record=>{
+
+      return Object.values(record).map(record => {
+
+        return isNaN(record) && `"${record}"` || record
+
+      }).join(',')
+    })
+    
+    const csv = rows.join('\r\n')
+
+    return new Blob([csv], { type: 'text/csv;charset=utf-8;' })
+  }
+
+})()

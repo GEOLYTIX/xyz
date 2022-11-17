@@ -24,39 +24,17 @@ module.exports = defaults = {
     },
   },
   layers: {
-    tiles: {
-      style: {
-        hidden: true
-      }
-    },
-    mbtiles: {
-      style: {
-        hidden: true
-      }
-    },
-    mbvectortiles: {
-      style: {
-        hidden: true
-      }
-    },
     geojson: {
       srid: '4326',
       style: {
         default: {
-          strokeWidth: 1,
-          strokeColor: '#333333',
-          fillColor: '#333333',
-          fillOpacity: 0.1,
-          type: 'dot',
+          strokeColor: '#333',
+          fillColor: '#fff1',
+          icon: {
+            type: 'dot'
+          }
         },
-        highlight: {
-          strokeColor: '#EC602D',
-          strokeWidth: 2,
-          fillColor: '#cae0b8',
-          fillOpacity: 0.2,
-          type: 'dot',
-          scale: 1.3
-        }
+        highlight: {}
       },
       filter: {},
     },
@@ -65,40 +43,28 @@ module.exports = defaults = {
       style: {
         default: {
           strokeColor: '#333',
-          fillColor: '#333',
-          fillOpacity: 0.1,
+          fillColor: '#fff1',
           icon: {
             type: 'dot'
           }
         },
-        highlight: {
-          strokeWidth: 2,
-          strokeColor: '#EC602D',
-          fillColor: '#cae0b8',
-          fillOpacity: 0.2,
-          icon: {
-            type: 'dot',
-            scale: 1.3
-          }
-        }
+        highlight: {}
       },
       filter: {},
     },
     cluster: {
       srid: '4326',
-      style: {
-        anchor: null,
+      cluster_resolution: 0.1,
+      style: {       
         default: {
-          type: 'target',
+          type: 'dot',
           fillColor: '#999999',
           scale: 1,
         },
         cluster: {
           clusterScale: 2
         },
-        highlight: {
-          scale: 1.3
-        }
+        highlight: {}
       },
       filter: {},
     },

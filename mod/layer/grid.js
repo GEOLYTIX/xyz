@@ -1,17 +1,15 @@
-const dbs = require('../../mod/dbs')()
+const dbs = require('../utils/dbs')()
+
+const validateRequestParams = require('../utils/validateRequestParams')
 
 module.exports = async (req, res) => {
 
   const layer = req.params.layer
 
-  if (Object.keys(req.params)
-    .filter(key => key !== 'filter')
-    .filter(key => key !== 'label')
-    .filter(key => !!req.params[key])
-    .filter(key => typeof req.params[key] !== 'object')
-    .some(key => !/^[A-Za-z0-9.,_-\s]*$/.test(req.params[key]))) {
+  // Validate URL parameter
+  if (!validateRequestParams(req.params)) {
 
-      return res.status(400).send('URL parameter validation failed.')
+    return res.status(400).send('URL parameter validation failed.')
   }
 
   let

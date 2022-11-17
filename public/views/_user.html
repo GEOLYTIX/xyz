@@ -1,191 +1,406 @@
 <!DOCTYPE html>
 <html>
 
-<head
-  data-user="${user}"
-  data-dir="${dir}">
-    <title>XYZ | User Administration</title>
-    <link rel="icon" type="image/x-icon" href="${dir}/icons/favicon.ico" />
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<head data-user="{{user}}" data-dir="{{dir}}">
+  <title>XYZ | User Administration</title>
+  <link rel="icon" type="image/x-icon" href="{{dir}}/icons/favicon.ico" />
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <link rel="stylesheet" href="${dir}/css/tabulator.css" />
-    <!-- <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet"> -->
+  <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
 
-    <script src="https://unpkg.com/tabulator-tables@4.9.3/dist/js/tabulator.min.js" defer></script>
+  <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
 
-    <script src="https://unpkg.com/uhtml" defer></script>
+  <script src="https://unpkg.com/uhtml" defer></script>
 
-    <script src="${dir}/views/_user.js" defer></script>
+  <style>
 
-    <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      border-spacing: 0;
+    }
 
-        body {
-            margin: 40px;
-            padding: 0;
-            font: 14px "Open Sans", sans-serif;
-        }
+    body {
+      position: absolute;
+      height: 100%;
+      width: 100%;
+      padding: 40px;
+      font: 14px "Open Sans", sans-serif;
+    }
 
-        .tabulator-row .tabulator-cell {
-            margin: 2px;
-        }
+    body > .flex {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
 
-        .tabulator .tabulator-header .tabulator-col {
-            margin: 2px;
-            padding-bottom:10px;
-        }
+    .icon-face {
+      background-image: url("{{dir}}/icons/icon-face.svg");
+    }
 
-        .icon-face {
-            background-image: url("${dir}/icons/icon-face.svg");
-        }
+    .icon-logout {
+      background-image: url("{{dir}}/icons/icon-logout.svg");
+    }
 
-        .icon-logout {
-            background-image: url("${dir}/icons/icon-logout.svg");
-        }
+    .icon-tick-done {
+      background-image: url("{{dir}}/icons/icon-tick-done.svg");
+    }
 
-        .icon-tick-done {
-            background-image: url("${dir}/icons/icon-tick-done.svg");
-        }
+    .icon-tick-done-all {
+      background-image: url("{{dir}}/icons/icon-tick-done-all.svg");
+    }
 
-        .icon-tick-done-all {
-            background-image: url("${dir}/icons/icon-tick-done-all.svg");
-        }
+    .icon-warning {
+      background-image: url("{{dir}}/icons/icon-warning.svg");
+    }
 
-        .icon-warning {
-            background-image: url("${dir}/icons/icon-warning.svg");
-        }
+    .icon-translate {
+      background-image: url("{{dir}}/icons/icon-translate.svg");
+    }
 
-        .icon-translate {
-            background-image: url("${dir}/icons/icon-translate.svg");
-        }
+    .icon-supervisor-account {
+      background-image: url("{{dir}}/icons/icon-supervisor-account.svg");
+    }
 
-        .icon-supervisor-account {
-            background-image: url("${dir}/icons/icon-supervisor-account.svg");
-        }
+    .icon-settings {
+      background-image: url("{{dir}}/icons/icon-settings.svg");
+    }
 
-        .icon-settings {
-            background-image: url("${dir}/icons/icon-settings.svg");
-        }
+    .icon-key {
+      background-image: url("{{dir}}/icons/icon-key.svg");
+    }
 
-        .icon-key {
-            background-image: url("${dir}/icons/icon-key.svg");
-        }
+    .icon-lock-closed {
+      background-image: url("{{dir}}/icons/icon-lock-closed.svg");
+      height: 40px;
+      width: 30px;
+    }
 
-        .icon-lock-closed {
-            background-image: url("${dir}/icons/icon-lock-closed.svg");
-            height:40px;
-            width:30px;
-        }
+    .xyz-icon {
+      background-repeat: no-repeat;
+      background-position: center;
+      height: 36px;
+      width: 36px;
+    }
 
-        .xyz-icon {
-            background-repeat: no-repeat;
-            background-position: center;
-            height: 36px;
-            width:36px;
-        }
+    .btn-row {
+      align-items: center;
+      display: flex;
+    }
 
-        @media only screen and (max-width: 700px) {
-          body, h1 {
-            margin: 0
-          }
-        }
+    .btn-row > *:last-child {
+      margin-left: auto;
+      font-weight: bold;
+      color:#B71C1C;
+    }
 
-        #dropdown {
-          margin: 10px auto;
-          width: 50%;
-        }
+    @media only screen and (max-width: 700px) {
 
-        * {
-          box-sizing: border-box;
-          margin: 0;
-          padding: 0;
-          border-spacing: 0;
-        }
+      body,
+      h1 {
+        margin: 0
+      }
+    }
 
-        button {
-          border: none;
-          outline: none;
-          background: none;
-        }
-        button:hover:enabled {
-          cursor: pointer;
-        }
-        button:disabled {
-          opacity: 0.3;
-        }
+  </style>
 
-        .btn-drop {
-          position: relative;
-          width: 100%;
-          background-color: white;
-          box-shadow: 1px 1px 3px 0 #ddd;
-        }
-        .btn-drop:disabled {
-          pointer-events: none;
-          opacity: 0.4;
-        }
-        .btn-drop > .head {
-          padding: 5px;
-          display: flex;
-          border: 1px solid #ccc;
-          align-items: center;
-        }
-        .btn-drop > .head > :first-child {
-          overflow: hidden;
-          white-space: nowrap;
-          text-overflow: ellipsis;
-        }
-        .btn-drop > .head > .icon {
-          pointer-events: none;
-          margin-left: auto;
-          width: 18px;
-          content: url("https://fonts.gstatic.com/s/i/materialicons/expand_more/v1/24px.svg");
-        }
-        .btn-drop > ul {
-          display: none;
-          position: absolute;
-          list-style-type: none;
-          width: inherit;
-          box-shadow: 1px 1px 3px 0 #ddd;
-          max-height: 500px;
-          overflow-y: auto;
-          overflow-x: hidden;
-          border: 1px solid #ccc;
-          border-top: none;
-          text-align: left;
-          background-color: white;
-          z-index: 1;
-        }
-        .btn-drop > ul > li {
-          padding: 5px;
-        }
-        .btn-drop > ul > li:hover {
-          background-color: #eee;
-        }
-        .btn-drop > ul > li.selected {
-          background-color: #ccc;
-        }
-        .btn-drop.active > .head {
-          border-bottom: 1px solid #eee;
-        }
-        .btn-drop.active > ul {
-          display: block;
-          margin-top: -2px;
-        }
-        .btn-drop.active > .head > .icon {
-          content: url("https://fonts.gstatic.com/s/i/materialicons/expand_less/v1/24px.svg");
-        }
-
-    </style>
-    
 </head>
 
 <body>
 
-    <h1>Account admin | <a style="color:red" href="?logout=true">Logout</a></h1>
+  <div class="flex">
 
+    <h1>Account admin</h1>
+
+    <div class="btn-row">
+      <label>Filter<input id="filterInput" type="text" placeholder="e.g. geolytix" style="margin: 10px;"></label>
+      <button id="toggleBlocked">Show blocked accounts</button>
+      <a href="?logout=true">Logout</a>
+    </div>
+  
     <div id="userTable"></div>
+    
+  </div>
 
 </body>
+
+<script>
+  window.onload = async () => {
+
+    // Get list of available roles from workspace.
+    const rolesList = await xhrPromise(`${document.head.dataset.dir}/api/workspace/roles`)
+
+    const params = {}
+
+    // Get URL params.
+    window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, (match, key, value) => {
+      params[key] = decodeURI(value)
+    })
+
+    // Get user list from host.
+    const response = await xhrPromise(`${document.head.dataset.dir}/api/user/list`)
+
+    // Data must be an array if only 1 record returned in response.
+    const data = Array.isArray(response) && response || [response]
+
+    // Sort data to promote email from url parameter to top.
+    if (params.email) {
+      data.sort(function (x, y) { return x.email == params.email ? -1 : y.email == params.email ? 1 : 0; });
+    }
+
+    const userTable = new Tabulator(document.getElementById('userTable'),
+      {
+        data: data,
+        rowFormatter: row => {
+          const user = row.getData()
+
+          // Highlight user row.
+          row.getElement().style.backgroundColor = user.email === params.email && '#fff9c4'
+
+          // Style blocked user row.
+          row.getElement().style.backgroundColor = user.blocked && '#ef9a9a'
+        },
+        columnHeaderVertAlign: 'middle',
+        rowHeight: 30,
+        columns: [
+          {
+            field: 'email',
+            vertAlign: 'middle',
+            headerTooltip: 'Account EMail',
+            titleFormatter: () => '<div class="icon-face xyz-icon"></div>',
+            resizable: false
+          },
+          {
+            field: 'verified',
+            hozAlign: 'center',
+            vertAlign: 'middle',
+            headerTooltip: 'The account email has been verified through a token sent to the email address.',
+            titleFormatter: () => '<div class="icon-tick-done xyz-icon"></div>',
+            formatter: 'tickCross',
+            cellClick: cellToggle,
+            resizable: false
+          },
+          {
+            field: 'approved',
+            hozAlign: 'center',
+            vertAlign: 'middle',
+            headerTooltip: 'The account has been approved by a site administrator and is permitted to access the application.',
+            titleFormatter: () => '<div class="icon-tick-done-all xyz-icon"></div>',
+            formatter: 'tickCross',
+            cellClick: cellToggle,
+            resizable: false
+          },
+          {
+            field: 'admin',
+            hozAlign: 'center',
+            vertAlign: 'middle',
+            headerTooltip: 'The account is an admin account which can access this page and change other account credentials.',
+            titleFormatter: () => '<div class="xyz-icon icon-supervisor-account"></div>',
+            formatter: 'tickCross',
+            cellClick: cellToggle,
+            resizable: false
+          },
+          {
+            field: 'api',
+            hozAlign: 'center',
+            vertAlign: 'middle',
+            headerTooltip: 'The account has priviliges to create API keys.',
+            titleFormatter: () => '<div class="xyz-icon icon-key"></div>',
+            formatter: 'tickCross',
+            cellClick: cellToggle,
+            resizable: false
+          },
+          {
+            field: 'failedattempts',
+            hozAlign: 'center',
+            vertAlign: 'middle',
+            headerTooltip: 'Failed login attempts.',
+            titleFormatter: () => '<div class="xyz-icon icon-warning"></div>',
+            formatter: (cell, formatterParams) => '<span style="color:red; font-weight:bold;">' + cell.getValue() + '</span>',
+            resizable: false
+          },
+          {
+            field: 'language',
+            hozAlign: 'center',
+            vertAlign: 'middle',
+            headerTooltip: 'Account language',
+            titleFormatter: () => '<div class="xyz-icon icon-translate"></div>',
+            resizable: false
+          },
+          {
+            field: 'roles',
+            title: 'Roles',
+            vertAlign: 'middle',
+            headerTooltip: 'Account roles',
+            headerSort: false,
+            editor:"list",
+            editorParams: {
+              values: rolesList,
+              multiselect: true
+            },
+            cellEdited: rolesEdited,
+            resizable: false
+          },
+          {
+            field: 'access_log',
+            title: 'Access Log',
+            vertAlign: 'middle',
+            headerTooltip: 'Click last access log entry for full access log array.',
+            cellClick: getAccessLog,
+            resizable: false
+          },
+          {
+            field: 'approved_by',
+            title: 'Approved by',
+            vertAlign: 'middle',
+            headerTooltip: 'Admin who approved last modification to this account.',
+            resizable: false
+          },
+          {
+            field: 'expires_in',
+            title: 'Expires in Days',
+            vertAlign: 'middle',
+            headerTooltip: 'User approval expires in days.',
+            formatter: (cell) => {
+              const val = cell.getValue()
+              if (val < 0) return `<span style="color:red; font-weight:bold;">${val}</span>`
+              if (typeof val !== 'undefined') return `<span style="font-weight:bold;">${val}</span>`
+            },
+            cellClick: removeExpiry,
+            resizable: false
+          },
+          {
+            field: 'blocked',
+            hozAlign: 'center',
+            vertAlign: 'middle',
+            headerTooltip: 'Blocked accounts can no longer login or reset their password.',
+            titleFormatter: () => '<div class="icon-lock-closed xyz-icon"></div>',
+            formatter: 'tickCross',
+            cellClick: cellToggle,
+            resizable: false
+          },
+          {
+            field: 'delete',
+            vertAlign: 'middle',
+            headerSort: false,
+            formatter: () => '<span style="color:red; font-weight:bold;">DELETE</span>',
+            cellClick: rowDelete,
+            resizable: false
+          }
+        ]
+      });
+
+    
+
+    let blocked = true
+    userTable.setFilter("blocked", "!=", true);
+    document.getElementById("toggleBlocked").onclick = e => {
+
+      blocked = !blocked
+
+      if (blocked) {
+        e.target.textContent = "Show blocked accounts"
+        userTable.setFilter("blocked", "!=", true)
+        return;
+      }
+
+      e.target.textContent = "Hide blocked accounts"
+      userTable.removeFilter("blocked", "!=", true)
+    }
+
+    document.getElementById("filterInput").oninput = e => {
+
+      // Check whether email or role includes filter term.
+      userTable.setData(data.filter(user => user.email.includes(e.target.value)
+        || user.roles.some(role => role.includes(e.target.value))))
+    } 
+
+    async function removeExpiry(e, cell) {
+
+      const user = cell.getData();
+
+      if (confirm('Remove expiry for ' + user.email)) {
+
+        const response = await xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${user.email}&field=approved_by&value=${document.head.dataset.user}`);
+
+        if (response.err) return console.error(response.err);
+
+        cell.setValue('');
+
+        const row = cell.getRow();
+
+        row.reformat();
+      }
+    };
+
+    async function cellToggle(e, cell) {
+
+      const user = cell.getData();
+
+      const col = cell.getColumn();
+
+      const response = await xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${user.email}&field=${col.getField()}&value=${!cell.getValue()}`);
+
+      if (response.err) return console.error(response.err);
+
+      cell.setValue(!cell.getValue());
+
+      const row = cell.getRow();
+
+      row.reformat();
+    };
+
+    async function getAccessLog(e, cell) {
+
+      const user = cell.getData();
+
+      const response = await xhrPromise(`${document.head.dataset.dir}/api/user/log?email=${user.email}`);
+
+      if (response.err) return console.error(response.err);
+
+      alert(response.access_log.join('\n'));
+    };
+
+    async function rowDelete(e, cell) {
+
+      const user = cell.getData();
+
+      const row = cell.getRow();
+
+      if (confirm('Delete account ' + user.email)) {
+
+        const response = await xhrPromise(`${document.head.dataset.dir}/api/user/delete?email=${user.email}`);
+
+        if (response.err) return console.error(response.err);
+
+        row.delete();
+      }
+    };
+
+    function rolesEdited(e) {
+      xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${e._cell.row.data.email}&field=roles&value=${e._cell.value}`)
+    }
+  }
+
+  function xhrPromise(req) {
+    return new Promise((resolve, reject) => {
+
+      const xhr = new XMLHttpRequest()
+
+      xhr.open('GET', req)
+      xhr.setRequestHeader('Content-Type', 'application/json')
+      xhr.responseType = 'json'
+
+      xhr.onload = e => {
+        if (e.target.status >= 300) return reject({ err: e.target.status })
+        resolve(e.target.response || {})
+      }
+
+      xhr.send()
+    })
+  } 
+</script>
 
 </html>

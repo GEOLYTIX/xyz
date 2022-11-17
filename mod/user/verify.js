@@ -2,7 +2,7 @@ const crypto = require('crypto')
 
 const acl = require('./acl')()
 
-const mailer = require('../mailer')
+const mailer = require('../utils/mailer')
 
 const templates = require('../templates/_templates')
 
@@ -29,7 +29,7 @@ module.exports = async (req, res) => {
 
     return res.status(302).send()
   }
-  
+
   // Update user account in ACL with the approval token and remove verification token.
   var rows = await acl(`
     UPDATE acl_schema.acl_table SET

@@ -1,17 +1,17 @@
-const dbs = require('../dbs')()
+const dbs = require('../utils/dbs')()
 
-const sql_filter = require('../sql_filter')
+const sqlFilter = require('../utils/sqlFilter')
 
-const Roles = require('../roles.js')
+const validateRequestParams = require('../utils/validateRequestParams')
+
+const Roles = require('../utils/roles.js')
 
 module.exports = async (req, res) => {
 
   const layer = req.params.layer
 
-  if (Object.values(req.params)
-    .filter(val => !!val)
-    .filter(val => typeof val !== 'object')
-    .some(val => val && !/^[A-Za-z0-9/\s/g.,_-]*$/.test(val))) {
+  // Validate URL parameter
+  if (!validateRequestParams(req.params)) {
 
     return res.status(400).send('URL parameter validation failed.')
   }
@@ -24,9 +24,9 @@ module.exports = async (req, res) => {
 
   const filter =
   ` ${layer.filter?.default && 'AND '+layer.filter?.default || ''}
-    ${req.params.filter && `AND ${sql_filter(JSON.parse(req.params.filter), SQLparams)}` || ''}
+    ${req.params.filter && `AND ${sqlFilter(JSON.parse(req.params.filter), SQLparams)}` || ''}
     ${roles && Object.values(roles).some(r => !!r)
-    && `AND ${sql_filter(Object.values(roles).filter(r => !!r), SQLparams)}`
+    && `AND ${sqlFilter(Object.values(roles).filter(r => !!r), SQLparams)}`
     || ''}`
 
 
@@ -34,6 +34,10 @@ module.exports = async (req, res) => {
     SELECT
       ${layer.qID || null} AS id,
       ST_asGeoJson(${layer.geom}) AS geomj
+      ${layer.properties
+        && `, json_build_object(${Object.entries(layer.properties).map(e=>`'${e[0]}',${e[1]}`).join(', ')}) as properties`
+        || ''}
+
     FROM ${req.params.table || layer.table}
     WHERE true ${filter};`
 
@@ -44,6 +48,7 @@ module.exports = async (req, res) => {
   res.send(rows.map(row => ({
     type: 'Feature',
     geometry: JSON.parse(row.geomj),
+    properties: row.properties,
     id: row.id,
   })))
 

@@ -1,11 +1,10 @@
-module.exports = {
-  render: _ => {
+module.exports = _ => {
 
-    const fields = _.layer.filter.infoj.map(entry => `(${entry.fieldfx || entry.field}) AS ${entry.field}`)
+  const fields = _.layer.filter.infoj.map(entry => `(${entry.fieldfx || entry.field}) AS ${entry.field}`)
     
-    const geom_extent = `ST_Transform(ST_SetSRID(ST_Extent(${_.layer.geom}), ${_.layer.srid}), 4326)`
+  const geom_extent = `ST_Transform(ST_SetSRID(ST_Extent(${_.layer.geom}), ${_.layer.srid}), 4326)`
 
-    return `
+  return `
     SELECT
     ST_asGeoJson(
       ST_Transform(
@@ -38,5 +37,5 @@ module.exports = {
     ${fields.join(',')}
     FROM ${_.table}
     WHERE true ${_.filter};`
-  }
+
 }

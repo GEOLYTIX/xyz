@@ -1,30 +1,30 @@
 <!doctype html>
 <html lang="de">
 
-<head data-dir="${dir}">
+<head data-dir="{{dir}}">
   <title>XYZ | Login (Deutsch)</title>
-  <link rel="icon" type="image/x-icon" href="${dir}/icons/favicon.ico" />
+  <link rel="icon" type="image/x-icon" href="{{dir}}/icons/favicon.ico" />
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <script src="${dir}/views/login/_login.js" defer></script>
-  <link rel="stylesheet" href="${dir}/views/login/_login.css" />
+  <script src="{{dir}}/views/login/_login.js" defer></script>
+  <link rel="stylesheet" href="{{dir}}/views/login/_login.css" />
 
 </head>
 
 <body class="login_form">
 
   <select id="language" onChange="window.location.href=this.value">
-    <option value="${dir}?language=de">Deutsch</option>
-    <option value="${dir}?language=en">English</option>
-    <option value="${dir}?language=fr">Français</option>
-    <option value="${dir}?language=pl">Polski</option>
-    <option value="${dir}?language=ja">日本語</option>
-    <option value="${dir}?language=ko">한국어</option>
-    <option value="${dir}?language=zh">中文简体</option>
+    <option value="{{dir}}?language=de&login=true">Deutsch</option>
+    <option value="{{dir}}?language=en&login=true">English</option>
+    <option value="{{dir}}?language=fr&login=true">Français</option>
+    <option value="{{dir}}?language=pl&login=true">Polski</option>
+    <option value="{{dir}}?language=ja&login=true">日本語</option>
+    <option value="{{dir}}?language=ko&login=true">한국어</option>
+    <option value="{{dir}}?language=zh&login=true">中文简体</option>
   </select>
 
-  <form action="${dir}/api/user/login" method="post" autocomplete="off">
+  <form action="{{dir}}/api/user/login" method="post" autocomplete="off">
 
     <input style="display:none;" name="language" required value="de">
 
@@ -40,15 +40,13 @@
       <label for="auth_user_password">Passwort</label>
     </div>
 
-    <p class="msg">${msg}</p>
+    <p class="msg">{{msg}}</p>
 
     <button id="btnLogin" type="submit" disabled>Einloggen</button>
 
     <p>Benutzerkontos müssen mit einem Email Link verifiziert und anschließend von einem Administrator genehmigt werden.</p>
 
-    <a class="switch" href="${dir}/api/user/register?register=true&language=de">Passwort zurücksetzen oder neues Benutzerkonto registrieren.</a>
-
-    <a id="saml_sso" style="display: none; margin-top: 20px;" class="switch" href="${saml_sso}">Login via SAML.</a>
+    <a class="switch" href="{{dir}}/api/user/register?register=true&language=de">Passwort zurücksetzen oder neues Benutzerkonto registrieren.</a>
 
   </form>
 

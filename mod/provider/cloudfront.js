@@ -11,17 +11,7 @@ const { readFileSync } = require('fs')
 
 const { join } = require('path')
 
-// const AWS = require("aws-sdk")
-
-// const awsSigner = process.env.KEY_CLOUDFRONT && new AWS.CloudFront.Signer(
-//   process.env.KEY_CLOUDFRONT,
-//   String(readFileSync(join(__dirname, `../../${process.env.KEY_CLOUDFRONT}.pem`))))
-
-const { Signer } = require('./cloudfrontSigner')
-
-const awsSigner = new Signer(
-  process.env.KEY_CLOUDFRONT,
-  String(readFileSync(join(__dirname, `../../${process.env.KEY_CLOUDFRONT}.pem`))))  
+const { getSignedUrl } = require("@aws-sdk/cloudfront-signer");
 
 module.exports = async ref => {
 
@@ -29,20 +19,25 @@ module.exports = async ref => {
 
     const url = (ref.params?.url || ref).replace(/\{(.*?)\}/g,
       matched => process.env[`SRC_${matched.replace(/\{|\}/g, '')}`] || matched)
- 
-    const signedURL = awsSigner.getSignedUrl({
+
+    const date = new Date(Date.now())
+    date.setDate(date.getDate() + 1);
+
+    const signedURL = getSignedUrl({
       url: `https://${url}`,
-      expires: Date.now() + 60 * 60 * 1000 // 1 hour
+      keyPairId: process.env.KEY_CLOUDFRONT,
+      dateLessThan: date.toDateString(),
+      privateKey: String(readFileSync(join(__dirname, `../../${process.env.KEY_CLOUDFRONT}.pem`)))
+    });
+
+    const response = await fetch(signedURL, {
+      agent: process.env.CUSTOM_AGENT && httpsAgent
     })
 
     if (ref.params?.signedURL) {
 
       return signedURL;
     }
-  
-    const response = await fetch(signedURL, {
-      agent: process.env.CUSTOM_AGENT && httpsAgent
-    })
   
     if (response.status >= 300) return new Error(`${response.status} ${ref}`)
 

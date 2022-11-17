@@ -1,48 +1,41 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{{language}}">
 
-<head data-dir="${dir}">
+<head data-dir="{{dir}}">
 
-  <title>GEOLYTIX | Blog</title>
+  <title>GEOLYTIX MAPP - Blog view</title>
 
-  <link rel="icon" type="image/x-icon" href="${dir}/icons/favicon.ico" />
-
+  <link rel="icon" type="image/x-icon" href="{{dir}}/icons/favicon.ico" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <!-- <script src="${dir}/js/mapbox-gl.js" defer></script> -->
-  <script src="${dir}/js/maplibre-gl.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/ol@v7.1.0/dist/ol.js" defer></script>
 
-  <link rel="stylesheet" href="${dir}/css/ol.css" />
-  <script src="${dir}/js/ol.js" defer></script>
-  
-  <link rel="stylesheet" href="${dir}/css/mapp.css" />
-  <script src="${dir}/js/mapp.js" defer></script>
-  
+  <!-- Load XYZ / MAPP stylesheet and library. -->
+  <link rel="stylesheet" href="{{dir}}/css/mapp.css" />
+  <link rel="stylesheet" href="{{dir}}/css/ui.css" />
+
+  <script type="module" src="{{dir}}/js/lib/mapp.js" defer></script>
+  <script type="module" src="{{dir}}/js/lib/ui.js" defer></script>
+
   <style>
-    * {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, Helvetica, sans-serif;
-    }
-
     body {
       height: 100%;
       display: grid;
-      grid-template-columns: 0 1fr;
+      grid-template-columns: min-content 1fr;
       grid-template-rows: 1fr;
       background-color: #f0f0f0;
     }
 
-    #Locale {
+    #Location {
       grid-row: 1;
       grid-column: 1;
-      margin: 0;
       transform: rotateY(180deg);
       overflow-x: auto;
+      background-color: white;
     }
 
-    #Locale>* {
+    #Location>* {
       transform: rotateY(180deg);
     }
 
@@ -54,79 +47,48 @@
       height: 100%;
     }
 
-    #_Attribution {
-      z-index: 999;
-      position: absolute;
-      bottom: 0;
-      width: 100%;
-      text-overflow: ellipsis;
-      overflow: hidden;
-      text-align: left;
-      white-space: nowrap;
-      background-color: #fff;
-      opacity: 0.9;
-      padding: 5px;
-      font-size: 10px;
-      font-weight: bold;
-    }
-
-    #_Attribution a {
-      padding: 2px 5px;
-    }
-
-    #ol-scale {
-      bottom: 20px;
-      position: absolute;
-      right: 0;
-      z-index: 999;
-    }
-
     .ol-control button {
-      color: #000;
-      font-size: 1.5em;
-      height: 1.5em;
-      width: 1.5em;
-      background-color: #fff;
+      background-color: #003D57 !important
     }
 
     .location-view-grid {
-      grid-gap: 5px;
+      width: 300px;
+      padding: 1em;
     }
 
-    .showLocation {
-
-      grid-template-columns: 300px 1fr;
-
+    .map-container .ol-scale-line {
+      right: 5px;
+      top: 5px;
+      position: fixed;
     }
 
-    .showLocation #Locale {
-
-      column-gap: 10px;
-      padding: 10px;
-
+    .attribution-links {
+      right: 5px;
+      bottom: 5px;
+      position: absolute;
+      background: #fff9;
+      padding-right: 3px;
+      border-radius: 3px;
     }
 
-    @media only screen and (max-width: 500px) {
+    .attribution-links>a {
+      text-shadow: 2px 2px #fff;
+    }
 
-      body {
-        grid-template-columns: 1fr 1fr;
-      }
+    @media only screen and (max-width: 600px) {
 
       #Map {
         grid-column: 1/3;
-        min-height: 300px;
+        /* min-height: 300px; */
       }
 
-      #Locale {
+      #Location {
         grid-row: 2;
         grid-column: 1/3;
       }
 
-      .showLocation {
-
-        grid-template-columns: 0 1fr;
-        grid-template-rows: 1fr min-content;
-
+      .location-view-grid {
+        width: 100%;
       }
 
     }
@@ -136,154 +98,98 @@
 
 <body>
 
-  <div id="Locale" class="location-view"></div>
+  <div id="Location" class="location-view"></div>
 
-  <div id="Map">
-    <div id="ol-scale"></div>
-    <div id="_Attribution"></div>
+  <div id="Map" class="map-container">
+    <div class="attribution-links"></div>
   </div>
 
 </body>
 
 <script>
 
-  window.onload = () => {
+  window.onload = async () => {
 
-    // Assign location origin as host.
-    const params = {
-      host: window.location.origin,
+    const host = document.head.dataset.dir || new String("");
+
+    let locales
+
+    // An array locales can be queried if the current locale is not known.
+    if (!mapp.hooks.current.locale) {
+      locales = await mapp.utils.xhr(`${host}/api/workspace/locales`);
     }
 
-    // Take hooks from URL and store as current hooks.
-    // It should be possible to override params.host.
-    window.location.href.replace(/[?&]+([^=&]+)=([^&]*)/gi, (match, key, value) => {
-      params[key] = decodeURI(value);
-    })
+    // Load the current locale or the first locale from the array of available locales.
+    const locale = await mapp.utils.xhr(`${host}/api/workspace/locale?locale=${mapp.hooks.current.locale || locales[0].key}`);
 
-    const xyz = _xyz({
-      host: params.host + document.head.dataset.dir,
-      hooks: true
-    })
+    mapp.hooks.current.plugins && await mapp.utils.loadPlugins(locale.plugins);
 
-    const locale = document.getElementById('Locale')
-
-    // Define locations list and selectCallback.
-    xyz.locations.list = [
-      {
-        style: { strokeColor: '#090', strokeWidth: 2 },
-        colorFilter: 'invert(22%) sepia(80%) saturate(1933%) hue-rotate(272deg) brightness(97%) contrast(104%)'
-      }
-    ]
-
-    xyz.locations.selectCallback = location => {
-
-      document.body.classList.add('showLocation')
-
-      location.draw()
-
-      location.Marker = xyz.mapview.geoJSON({
-        geometry: {
-          type: 'Point',
-          coordinates: location.marker,
+    const mapview = mapp.Mapview({
+      host: host,
+      target: 'Map',
+      locale: locale,
+      scrollWheelZoom: true,
+      scalebar: 'metric',//'imperial'
+      controls: [new ol.control.Zoom()],
+      hooks: true,
+      attribution: {
+        target: document.querySelector('#Map > .attribution-links'),
+        links: {
+          [`XYZ v${mapp.version}`]: "https://geolytix.github.io/xyz",
+          ["SHA"]: `https://github.com/GEOLYTIX/xyz/commit/${mapp.hash}`,
+          Openlayers: "https://openlayers.org",
         },
-        zIndex: 2000,
-        style: _xyz.utils.style({
-          marker: {
+      }
+    });
+
+    const layers = await mapp.utils.promiseAll(locale.layers.map(
+      layer => mapp.utils.xhr(`${host}/api/workspace/layer?`
+        + `locale=${locale.key}&layer=${layer}`)))
+
+    await mapview.addLayer(layers);
+
+    if (mapp.hooks.current.no_interaction) return;
+
+    let currentLocation = {};
+
+    mapview.locations = new Proxy(mapview.locations, {
+      set: function (target, key, location) {
+        Reflect.set(...arguments);
+
+        currentLocation.remove && currentLocation.remove()
+
+        currentLocation = location
+
+        location.pinStyle = mapp.utils.style({
+          icon: {
             type: 'markerColor',
-            colorMarker: '#64dd17',
-            colorDot: '#33691e',
-            scale: 0.05,
+            colorMarker: '#003D57',
+            colorDot: '#EC602D',
             anchor: [0.5, 1],
+            scale: 3,
           }
         })
-      })
 
-      locale.innerHTML = ''
+        location.infoj.filter(entry => entry.type !== 'dataview')
 
-      locale.appendChild(xyz.utils.html.node`
-      <div 
-        style="height: 20px;"
-        class="xyz-icon icon-close"
-        onclick=${e=>{
-          location.remove()
-        }}>`)
+        location.view = document.getElementById('Location')
+          .appendChild(mapp.ui.locations.infoj(location, location.infoj.filter(entry => entry.type !== 'dataview')))
 
-      location.view = xyz.locations.view.infoj(location)
+        return true;
+      }
+    });
 
-      locale.appendChild(location.view)
+    mapview.interactions.highlight();
 
-      xyz.map.updateSize()
-      Object.values(xyz.layers.list).forEach(layer => layer.mbMap && layer.mbMap.resize())
+    // Select locations from hooks.
+    mapp.hooks.current.locations.forEach((_hook) => {
+      const hook = _hook.split("!");
 
-      location.removeCallback = () => setTimeout(function () {
-
-        if (xyz.locations.list[0].location) return
-
-        locale.innerHTML = ''
-        document.body.classList.remove('showLocation')
-        xyz.map.updateSize()
-        Object.values(xyz.layers.list).forEach(layer => layer.mbMap && layer.mbMap.resize())
-
-      }, 1000)
-    }
-
-    // Load locale if defined
-    if (params.locale) return getLocale(params.locale)
-
-    // Load first locale if no locale has been defined.
-    xyz.workspace.get.locales().then(locales => {
-
-      if (!locales.length) return console.log('No accessible locales')
-
-      getLocale(locales[0].key)
-    })
-
-    function getLocale(locale) {
-
-      xyz.workspace.get.locale({
-        locale: locale
-      }).then(locale => {
-        xyz.locale = locale
-        createMap()
-      })
-
-    }
-
-    function createMap() {
-
-      xyz.mapview.create({
-        target: document.getElementById('Map'),
-        scrollWheelZoom: true,
-        attribution: {
-          target: document.getElementById('_Attribution'),
-          links: {
-            ['XYZ v'+xyz.version]: 'https://geolytix.github.io/xyz',
-            Openlayers: 'https://openlayers.org'
-          }
-        }
-      })
-
-      xyz.plugins()
-        .then(() => xyz.layers.load(xyz.hooks.current.layers))
-        .then(() => {
-
-          xyz.hooks.current.locations.forEach(_hook => {
-
-            let hook = _hook.split('!');
-
-            xyz.locations.select({
-              locale: xyz.workspace.locale.key,
-              layer: xyz.layers.list[decodeURIComponent(hook[0])],
-              table: hook[1],
-              id: hook[2]
-            })
-
-          })
-
-        })
-        .catch(error => console.error(error))
-
-    }
+      mapp.location.get({
+        layer: mapview.layers[decodeURIComponent(hook[0])],
+        id: hook[1],
+      });
+    });
 
   }
 

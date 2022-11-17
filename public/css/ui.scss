@@ -1,0 +1,171 @@
+@import 'colours';
+
+@import 'button';
+
+@import 'drawer';
+
+@import 'font';
+
+@import 'icons';
+
+@import 'inputs';
+
+@import 'layerview';
+
+@import 'locationview';
+
+@import 'tabview';
+
+@import 'tabulator';
+
+.no-select {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+}
+
+.flex-spacer {
+  display: flex;
+  align-items: center;
+  > :nth-child(2) {
+    margin-left: auto;
+  }
+}
+
+.link-with-img {
+
+  >button,
+  >.mask-icon,
+  >.bg-icon {
+    width: 1.5em;
+    height: 1.5em;
+  }
+
+  >* {
+    display: inline-block;
+    vertical-align: middle;
+  }
+}
+
+.dataview-mask {
+  width: 100%; 
+  height: 100%;
+  text-align: center;
+  line-height: 2
+}
+
+.interface-mask {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 999999;
+  background-color: #eeea;
+
+  > .bg-image{
+    margin: 5%;
+    height: 90%;
+    width: 90%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+
+    > .btn-close{
+      position: absolute;
+      top: 5%;
+      right: 5%;
+      width: 50px;
+      height: 50px;
+      background-color: $no;
+    }
+  }
+}
+
+.flex-col {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.modal {
+  position: fixed;
+  padding: 10px;
+  z-index: 10001;
+  background-color: #fff;
+  box-shadow: 1px 1px 3px $primary-light;
+  cursor: 'grab';
+
+  >.header {
+    display: flex;
+    align-items: center;
+
+    >:not(button):not(label):not(input) {
+      pointer-events: none;
+    }
+
+    >div,
+    >button {
+      margin-left: 5px;
+      width: 1.5em;
+      height: 1.5em;
+    }
+
+    >:nth-child(1) {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    >:nth-child(2) {
+      margin-left: auto;
+    }
+  }
+
+}
+
+// Colour classes
+.mask-icon {
+  background-color: $primary-light;
+  &.on {
+    background-color: $on;
+  }
+  &.no {
+    background-color: $no;
+  }
+}
+
+.primary-colour {
+  color: $primary;
+}
+
+.primary-background {
+  color: white;
+  background-color: $primary;
+}
+
+.light-background {
+  background-color: $light;
+}
+
+.lighter-background {
+  background-color: $lighter;
+}
+
+.off-black {
+  color: $off-black;
+}
+
+.off-black-background {
+  color: white;
+  background-color: $off-black;
+}
+
+.on-colour {
+  color: $on;
+}
+
+.no-colour {
+  color: $no;
+}

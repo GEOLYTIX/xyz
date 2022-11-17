@@ -1,212 +1,184 @@
-@import url('https://fonts.googleapis.com/css?family=Open+Sans|Open+Sans:300,400,500,700');
-
-// @import url('https://cdn.jsdelivr.net/gh/tonsky/FiraCode@1.207/distr/fira_code.css');
-
-// @import url('https://fonts.googleapis.com/css?family=Ubuntu|Ubuntu:300,400,500,700');
-
-// @import url('https://fonts.googleapis.com/css?family=Lato|Lato:300,400,500,700');
-
-// @import url('https://fonts.googleapis.com/css?family=Sintony|Sintony:300,400,500,700');
-
-@import 'colour_scheme';
-
-@import 'icons';
-@import 'inputs';
-@import 'button';
-@import 'drawer';
-
-@import 'tabulator';
-
-@import 'mapview';
-@import 'tabview';
-@import 'layerview';
-@import 'locationview';
-
+@import 'colours';
 
 *,
 *::after,
 *::before {
-    -webkit-box-sizing: border-box;
-    -moz-box-sizing: border-box;
-    -ms-box-sizing: border-box;
-    -o-box-sizing: border-box;
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-    border-spacing: 0;
+  -webkit-box-sizing: border-box;
+  -moz-box-sizing: border-box;
+  -ms-box-sizing: border-box;
+  -o-box-sizing: border-box;
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  border-spacing: 0;
+  font-family: inherit;
+  font-size: inherit;
 }
 
 body {
-    font-family: 'Open Sans', sans-serif;
-    position: absolute; 
-    width: 100%;
-    height: 100%;
-    font-size: 13px;
-    font-weight: 400;
-}
-
-a {
-    text-decoration: none;
-    background-color: transparent;
-}
-
-li {
-    list-style-type: none;
-}
-
-.no-select {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-}
-
-.bold {
-    font-weight: 700;
+  position: absolute; 
+  width: 100%;
+  height: 100%;
 }
 
 .display-none {
-    display: none !important;
+  display: none !important;
 }
 
-.chartjs-render-monitor {
-  width: 100% !important
-}
-
-#InputMask {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 999999;
-  background:rgba(255,255,255, 0.9);
-}
-
-.hover:hover{
+.hover:hover {
   cursor: pointer;
 }
 
-#loginForm {
-  margin: 0 auto !important;
-  padding: 50px;
-  max-width: 600px;
-  font: 18px "Open Sans", sans-serif;
+.box-shadow {
+  border: 1px solid #eee;
+  box-shadow: 2px 2px 4px $primary-light;
+}
 
-  p {
-    line-height: 1.5;
+.ol-scale-line {
+  position: static;
+  background: none;
+}
+
+.ol-scale-line-inner {
+  border: 2px solid #222;
+  border-top: none;
+  color: #222;
+  text-align: center;
+  margin: 1px;
+  will-change: contents, width
+}
+
+.ol-unselectable,
+.ol-viewport {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.ol-zoom {
+  top: 0.5em;
+  left: 0.5em;
+
+  .ol-zoom-in,
+  .ol-zoom-out {
+    border-radius: 2px 2px 0 0;
   }
-  
-  label {
-    color: #555;
-  }
-  
-  .input-group {
-    width: 100%;
-    padding: 5px 0;
-  }
-  
-  input {
-    font-size: 18px;
-    padding: 10px 0;
-    width: 100%;
-    border: none;
-    border-bottom: 1px solid #999;
-  }
-  
-  input:focus {
-    outline: none;
-  }
-  
-  input:-webkit-autofill {
-    box-shadow: 0 0 0px 1000px white inset;
-  }
-  
-  .bar {
-    position: relative;
+}
+
+.ol-control {
+  position: absolute;
+  background-color: rgba(255,255,255,.4);
+  border-radius: 4px;
+  padding: 2px;
+
+  button {
     display: block;
-    width: 100%;
-  }
-  
-  .bar:before,
-  .bar:after {
-    content: '';
-    height: 2px;
-    width: 0;
-    bottom: 0;
-    position: absolute;
-    background: #003D57;
-    transition: 0.2s ease all;
-    -moz-transition: 0.2s ease all;
-    -webkit-transition: 0.2s ease all;
-  }
-  
-  input:invalid+.bar:before,
-  input:invalid+.bar:after {
-    background: orangered;
-  }
-  
-  .bar:before {
-    left: 50%;
-  }
-  
-  .bar:after {
-    right: 50%;
-  }
-  
-  input:focus~.bar:before,
-  input:focus~.bar:after {
-    width: 50%;
-  }
-  
-  button {
-    font-size: 100%;
-    color: white;
-    background-color: #003D57;
-    margin: 10px 0;
-    padding: 8px;
-    text-align: center;
-    border-radius: 3px;
-    border: 0;
-    box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.2);
-    font-weight: bold;
-  }
-  
-  button:hover:enabled {
-    cursor: pointer;
-    color: #003D57;
-    background-color: white;
-  }
-  
-  .bold {
-    font-weight: bold;
-  }
-  
-  .switch {
-    color: #003D57;
-    font-weight: bold;
-  }
-  
-  .switch:hover {
-    cursor: pointer;
-  }
-  
-  button:disabled {
-    background-color: darkslategrey;
-  }
-  
-  .msg {
-    color: #f57c00;
-  }
-  
-  .mailto {
-    color: #003D57;
+    margin: 1px;
+    padding: 0;
+    color: #fff;
+    font-weight: 700;
     text-decoration: none;
+    font-size: inherit;
+    text-align: center;
+    height: 1.375em;
+    width: 1.375em;
+    line-height: .4em;
+    background-color: rgba(0,60,136,.5);
+    border: none;
+    border-radius: 2px;
   }
-  
-  a,
-  button {
-    outline: 0;
+}
+
+.infotip {
+  position: fixed;
+  z-index: 998;
+  margin: 0;
+  padding: 5px;
+  background-color: white;
+  opacity: 0;
+  transition-property: opacity;
+  transition-duration: 0.3s;
+  transition-delay: 0.2s;
+}
+
+.popup {
+  position: absolute;
+  background-color: white;
+  bottom: 12px;
+  transform: translate(-50%, 0);
+
+  &::after,
+  &::before {
+    border: solid transparent;
+    content: " ";
+    position: absolute;
+    pointer-events: none;
   }
+
+  &::after {
+    border-top-color: white;
+    border-width: 10px;
+    left: 50%;
+    margin-left: -10px;
+  }
+
+  li{
+    padding: 5px 10px;
+    white-space: nowrap;
+    line-height: 1.5;
+    list-style-type: none;
+  }
+
+  li:hover {
+    background-color: $light;
+    cursor: pointer;
+  }
+}
+
+a > img {
+  height: 100%;
+}
+
+.attribution-links {
+  z-index: 999;
+  text-align: right;
+  font-size: 95%;
   
+  a {
+    margin-left: 5px;
+    display: inline-block;
+    white-space: nowrap;
+  }
+}
+
+.legend {
+
+  >.grid, >.content>.grid {
+    margin-top: 5px;
+    display: grid;
+    grid-template-columns: min-content;
+    grid-gap: 5px;
+    align-items: center;
+    justify-content: start;
+
+    >.contents {
+      display: contents;
+    }
+
+    .label {
+      grid-column: 2;
+    }
+  }
+
+  .switch {
+    cursor: pointer;
+  }
+
+  .switch.disabled {
+    // text-decoration: line-through;
+    opacity: 0.5;
+  }
 }

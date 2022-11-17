@@ -6,7 +6,7 @@ const jwt = require('jsonwebtoken')
 
 const acl = require('./acl')()
 
-const mailer = require('../mailer')
+const mailer = require('../utils/mailer')
 
 const templates = require('../templates/_templates')
 
@@ -27,14 +27,16 @@ module.exports = async (req, res, message) => {
     if (user instanceof Error) return res.status(401).send(user.message)
 
     // Create token with 8 hour expiry.
-    const token = jwt.sign({
+    const token = jwt.sign(
+      {
         email: user.email,
         admin: user.admin,
-        language: req.body.language || user.language,
+        language: user.language,
         roles: user.roles,
         session: user.session
       },
-      process.env.SECRET, {
+      process.env.SECRET,
+      {
         expiresIn: parseInt(process.env.COOKIE_TTL)
       })
 
@@ -45,6 +47,7 @@ module.exports = async (req, res, message) => {
     res.setHeader('location', `${redirect && redirect.replace(/([?&])msg=[^&]+(&|$)/,'') || process.env.DIR}`)
 
     return res.status(302).send()
+
   }
 
   message = await templates(req.params.msg || message, req.params.language)
@@ -64,11 +67,8 @@ async function view(req, res, message) {
   // The redirect for a successful login.
   const redirect = req.url && decodeURIComponent(req.url).replace(/login\=true/, '')
 
-  //if (decodeURIComponent(redirect).match(/[\<\>\(\)]/g)) return res.status(403).send('URL must not contain angle brackets.')
-
   let template = await templates('login_view', req.params.language, {
     dir: process.env.DIR,
-    saml_sso: process.env.SAML_SSO && `${process.env.DIR || ''}/saml/login` || '',
     msg: message || ' '
   })
 
@@ -167,9 +167,6 @@ async function post(req, res) {
 
     // password must be removed after check
     delete user.password
-
-    // Override the user language role with the login form language
-    user.roles.push(req.body.language || user.language)
 
     if (process.env.NANO_SESSION) {
 

@@ -30,7 +30,6 @@ module.exports = async (req, res) => {
       email,
       verified,
       approved )
-
     SELECT
       '${email}' AS email,
       true AS verified,
@@ -41,4 +40,4 @@ module.exports = async (req, res) => {
   }
 
   res.send(`${email} added to ACL.`)
-}
+} 

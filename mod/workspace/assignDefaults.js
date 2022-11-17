@@ -1,6 +1,6 @@
 const defaults = require('./defaults')
 
-const merge = require('lodash/merge')
+const merge = require('../utils/merge')
 
 module.exports = async workspace => {
 
@@ -31,7 +31,7 @@ module.exports = async workspace => {
       layer = layer.format && Object.assign({},
 
         // Assign layer defaults.
-        defaults.layers[layer.format],
+        defaults.layers[layer.format] || {},
 
         // Layer entries must override template entries.
         layer) || layer
@@ -39,10 +39,21 @@ module.exports = async workspace => {
       layer.style = layer.format && merge({},
 
         // Assign layer style.
-        defaults.layers[layer.format].style,
+        defaults.layers[layer.format]?.style || {
+          style: {
+            hidden: true
+          }
+        },
 
         // Layer style must override default style.
         layer.style || {})
+
+      if (Array.isArray(layer.templates)) {
+
+        layer.templates.forEach(template => {
+          merge(layer, workspace.templates[template] || {})
+        })
+      }
 
       layer.name = layer.name || layer_key
 

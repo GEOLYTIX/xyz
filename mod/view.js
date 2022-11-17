@@ -5,7 +5,8 @@ module.exports = async (req, res) => {
   const user = req.params.user && encodeURI(JSON.stringify({
     email: req.params.user.email,
     admin: req.params.user.admin,
-    roles: req.params.user.roles
+    roles: req.params.user.roles,
+    language: req.params.user.language
   }))
 
   const params = Object.assign(
@@ -23,7 +24,7 @@ module.exports = async (req, res) => {
   // Template is provided from workspace
   if (req.params.template?.template) {
 
-    return res.send(req.params.template?.template.replace(/\$\{(.*?)\}/g, matched => params[matched.replace(/\$|\{|\}/g, '')] || ''))
+    return res.send(req.params.template?.template.replace(/\{\{(.*?)\}\}/g, matched => params[matched.replace(/\{|\{|\}\}/g, '')] || ''))
   }
 
   let template = await templates(

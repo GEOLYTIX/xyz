@@ -4,7 +4,7 @@ const crypto = require('crypto')
 
 const acl = require('./acl')()
 
-const mailer = require('../mailer')
+const mailer = require('../utils/mailer')
 
 const templates = require('../templates/_templates')
 
@@ -33,14 +33,36 @@ async function view(req, res) {
 
 async function post(req, res) {
 
-  // Test whether the provided email is valid.
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(req.body.email)) return res.status(403).send('Invalid email provided')
+  if (!req.body.email) return res.status(400).send('No email provided')
+
+  // Test email address
+  if (!/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/.test(req.body.email)) {
+
+    return res.status(400).send('Provided email address is invalid')
+  }
+
+  // Test whether email domain is allowed to register
+  if (process.env.USER_DOMAINS) {
+
+    // Get array of allowed user email domains from split environment variable.
+    const domains = new Set(process.env.USER_DOMAINS.split(','))
+
+    // Check whether the Set has the domain.
+    if (!domains.has(req.body.email.match(/(?<=@)[^.]+(?=\.)/g)[0])) {
+
+      // Return if not...
+      return res.status(400).send('Provided email address is invalid');
+    }
+  }
 
   // Test whether a password has been provided.
   if (!req.body.password) return res.status(400).send('No password provided')
 
+  // Create regex to text password complexity from env or set default.
+  const passwordRgx = new RegExp(process.env.PASSWORD_REGEXP || '(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{10,}$')
+
   // Test whether the provided password is valid.
-  if (!/(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{10,}$/.test(req.body.password)) return res.status(403).send('Invalid password provided')
+  if (!passwordRgx.test(req.body.password)) return res.status(403).send('Invalid password provided')
 
   // Attempt to retrieve ACL record with matching email field.
   var rows = await acl(`

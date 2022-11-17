@@ -31,7 +31,7 @@ input {
   width: 100%;
   border: none;
   border-bottom: 1px solid #999;
-  font-size: 18px;
+  font-size: 120%;
 }
 
 input:focus {
@@ -55,7 +55,7 @@ input:-webkit-autofill {
   width: 0;
   bottom: 0;
   position: absolute;
-  background: #003D57;
+  background: #AFB42B;
   transition: 0.2s ease all;
   -moz-transition: 0.2s ease all;
   -webkit-transition: 0.2s ease all;
@@ -63,7 +63,7 @@ input:-webkit-autofill {
 
 input:invalid+.bar:before,
 input:invalid+.bar:after {
-  background: orangered;
+  background: #B71C1C;
 }
 
 .bar:before {
@@ -81,12 +81,12 @@ input:focus~.bar:after {
 
 button {
   color: white;
-  background-color: #EC602D;
+  background-color: #003D57;
   margin: 10px 0;
   padding: 8px;
   text-align: center;
   font: 18px "Open Sans", sans-serif;
-  font-weight: 700;
+  font-weight: bold;
   border-radius: 3px;
   border: 0;
   box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.2);
@@ -97,25 +97,27 @@ button {
 }
 
 .switch {
-  font-size: 18px;
-  color: #EC602D;
-  font-weight: 700;
+  font-size: 120%;
+  color: #003D57;
+  font-weight: bold;
 }
 
 button:hover {
   cursor: pointer;
+  color: #EC602D;
+  background-color: white;
 }
 
 button:disabled {
-  background-color: darkslategrey;
+  background-color: #939faa;
 }
 
 .msg {
-  color: #f57c00;
+  color: #EC602D;
 }
 
 .mailto {
-  color: #003D57;
+  color: #401505;
   text-decoration: none;
 }
 

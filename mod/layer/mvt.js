@@ -1,21 +1,25 @@
-const dbs = require('../dbs')()
+const dbs = require('../utils/dbs')()
 
-const sql_filter = require('../sql_filter')
+const sqlFilter = require('../utils/sqlFilter')
 
-const Roles = require('../roles.js')
+const validateRequestParams = require('../utils/validateRequestParams')
+
+const Roles = require('../utils/roles.js')
+
+const logger = require('../utils/logger')
 
 module.exports = async (req, res) => {
 
   const layer = req.params.layer
 
-  if (Object.keys(req.params)
-    .filter(key => key !== 'filter')
-    .filter(key => key !== 'label')
-    .filter(key => !!req.params[key])
-    .filter(key => typeof req.params[key] !== 'object')
-    .some(key => !/^[A-Za-z0-9.,_-\s]*$/.test(req.params[key]))) {
+  // Validate URL parameter
+  if (!validateRequestParams(req.params)) {
 
-      return res.status(400).send('URL parameter validation failed.')
+    return res.status(400).send('URL parameter validation failed.')
+  }
+
+  if (!req.params.table) {
+    return res.send(null)
   }
 
   let
@@ -34,19 +38,24 @@ module.exports = async (req, res) => {
   const SQLparams = []
 
   const filter =
-    `${req.params.filter && ` AND ${sql_filter(JSON.parse(req.params.filter), SQLparams)}` || ''}`
+    `${req.params.filter && ` AND ${sqlFilter(JSON.parse(req.params.filter), SQLparams)}` || ''}`
     +`${roles && Object.values(roles).some(r => !!r)
-    && ` AND ${sql_filter(Object.values(roles).filter(r => !!r), SQLparams)}` || ''}`
+    && ` AND ${sqlFilter(Object.values(roles).filter(r => !!r), SQLparams)}` || ''}`
 
     // Construct array of fields queried
-  const mvt_fields = Object.values(layer.style?.themes || {})
+  let mvt_fields = Object.values(layer.style?.themes || {})
     .map(theme => getField(theme))
     .filter(field => typeof field !== 'undefined')
 
   // Assign mvt_fields from single theme
-  layer.style?.theme && mvt_fields.push(getField(layer.style.theme))
+  layer.style?.theme && mvt_fields.push(layer.style.theme && getField(layer.style.theme))
 
-  layer.style.label && mvt_fields.push(`${layer.style.label.field} AS label`)
+  mvt_fields = mvt_fields.filter(field => typeof field !== 'undefined')
+
+  if (layer.style?.label) {
+
+    mvt_fields.push(`${layer.style.label.field} AS label`)
+  }
 
   const geoms = layer.geoms && Object.keys(layer.geoms)
 
@@ -129,13 +138,16 @@ module.exports = async (req, res) => {
   function getField(theme) {
 
     return theme.fieldfx && `${theme.fieldfx} AS ${theme.field}` 
-      || theme.fields
+      || Array.isArray(theme.fields) && theme.fields.join(', ')
+      || typeof theme.fields === 'string' && theme.fields
       || theme.field
   }
 
   var rows = dbs[layer.dbs] && await dbs[layer.dbs](tile, SQLparams)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
+
+  logger(`Get tile ${z}/${x}/${y}`, 'mvt')
 
   // Return MVT to client.
   // res.setHeader('Cache-Control', 's-maxage=1, stale-while-revalidate')

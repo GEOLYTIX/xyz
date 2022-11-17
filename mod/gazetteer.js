@@ -1,10 +1,15 @@
 const fetch = require('node-fetch')
 
-const dbs = require('./dbs')()
+const dbs = require('./utils/dbs')()
 
-const sql_filter = require('./sql_filter')
+const sqlFilter = require('./utils/sqlFilter')
 
-const Roles = require('./roles.js')
+const Roles = require('./utils/roles.js')
+
+const provider = {
+  GOOGLE,
+  MAPBOX
+}
 
 module.exports = async (req, res) => {
 
@@ -16,29 +21,30 @@ module.exports = async (req, res) => {
     <a href="https://geolytix.github.io/xyz/docs/develop/api/gazetteer/">Gazetteer API</a>`)
   }
 
-  // Return 406 is gazetteer is not found in locale.
-  if (!locale.gazetteer) return res.status(400).send(new Error('Gazetteer not defined for locale.'))
-
   // Create an empty results object to be populated with the results from the different gazetteer methods.
   let results = []
 
+  // Return results for layer gazetteer.
+  if (req.params.layer) {
+
+    let results = await layerGaz(req.params.q, locale.layers[req.params.layer])
+
+    return res.send(results)
+  }
+
   // Locale gazetteer which can query datasources in the same locale.
-  if (locale.gazetteer.datasets) await gaz_locale(req, locale, results)
+  if (locale.gazetteer.datasets) await datasets(req, locale, results)
 
-  // Query Google Maps API
-  if (locale.gazetteer.provider === 'GOOGLE') await gaz_google(req.params.q, locale.gazetteer, results)
+  if (provider[locale.gazetteer.provider]) {
 
-
-  if (locale.gazetteer.provider === 'OPENCAGE') await gaz_opencage(req.params.q, locale.gazetteer, results)
-  
-  // Query Mapbox Geocoder API
-  if (locale.gazetteer.provider === 'MAPBOX') await gaz_mapbox(req.params.q, locale.gazetteer, results)
+    await provider[locale.gazetteer.provider](req.params.q, locale.gazetteer, results)
+  }
 
   // Return results to client.
   res.send(results)
 }
 
-async function gaz_google(term, gazetteer, results) {
+async function GOOGLE(term, gazetteer, results) {
 
   const response = await fetch(`https://maps.googleapis.com/maps/api/place/autocomplete/json?`
     + `input=${term}`
@@ -59,24 +65,7 @@ async function gaz_google(term, gazetteer, results) {
 
 }
 
-async function gaz_opencage(term, gazetteer, results) {
-
-  const response = await fetch(`https://api.opencagedata.com/geocode/v1/json?q=${encodeURIComponent(term)}`
-    + `${gazetteer.countrycode ? `&countrycode=${gazetteer.countrycode}` : ''}`
-    + `${gazetteer.bounds ? '&bounds=' + decodeURIComponent(gazetteer.bounds) : ''}`
-    + `&${process.env.KEY_OPENCAGE}`)
-
-  const json = await response.json()
-
-  return json.results.map(f => (results.push({
-    id: f.annotations.geohash,
-    label: f.formatted,
-    marker: [f.geometry.lng, f.geometry.lat],
-    source: 'opencage'
-  })))
-}
-
-async function gaz_mapbox(term, gazetteer, results) {
+async function MAPBOX(term, gazetteer, results) {
 
   const response = await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${term}.json?`
     + `${gazetteer.country ? 'country=' + gazetteer.country : ''}`
@@ -96,38 +85,37 @@ async function gaz_mapbox(term, gazetteer, results) {
   })))
 }
 
-async function gaz_locale(req, locale, results) {
+async function datasets(req, locale, results) {
 
   const records = [];
 
   // Loop through dataset entries in gazetteer configuration.
   for (let dataset of locale.gazetteer.datasets) {
 
-    if(dataset.minLength && decodeURIComponent(req.params.q).trim().length < dataset.minLength) continue
+    if (dataset.minLength && decodeURIComponent(req.params.q).trim().length < dataset.minLength) continue
 
     const layer = locale.layers[dataset.layer]
 
-    const roles = Roles.filter(layer, req.params.user && req.params.user.roles)
+    if (!Roles.check(layer, req.params.user?.roles)) {
+      continue;
+    }
 
-    if (!roles && layer.roles) {
-       console.log("User roles: Access prohibited.")
-       continue;
-    }//return res.status(403).send('Access prohibited.');
+    const roles = Roles.filter(layer, req.params.user?.roles)
 
-    let phrase = dataset.space_wildcard 
-      && `${decodeURIComponent(req.params.q).replace(new RegExp(/  */g), '% ')}%` 
-      || `${decodeURIComponent(req.params.q)}%`;
+    //Asteriks & Leading Wild Card Expression
+    let phrase = `${dataset.leading_wildcard && '%' ||''}${decodeURIComponent(req.params.q).replace(new RegExp(/\*/g), '%')}%`
 
-    const SQLparams = [`${dataset.leading_wildcard ? '%' : ''}${phrase}`]
+    //console.log(phrase)
+
+    const SQLparams = [phrase]
 
     const filter =
-    ` ${layer.filter?.default && ` AND ${layer.filter?.default}` || ''}
-      ${req.params.filter && ` AND ${sql_filter(JSON.parse(req.params.filter), SQLparams)}` || ''}
+      ` ${layer.filter?.default && ` AND ${layer.filter?.default}` || ''}
+      ${req.params.filter && ` AND ${sqlFilter(JSON.parse(req.params.filter), SQLparams)}` || ''}
       ${dataset.filter && ` AND ${dataset.filter}` || ''}
       ${roles && Object.values(roles).some(r => !!r)
-        && `AND ${sql_filter(Object.values(roles).filter(r => !!r), SQLparams)}`
-        || ''}`
-
+      && `AND ${sqlFilter(Object.values(roles).filter(r => !!r), SQLparams)}`
+      || ''}`
 
     // Build PostgreSQL query to fetch gazetteer results.
     var q = `
@@ -148,16 +136,16 @@ async function gaz_locale(req, locale, results) {
 
   }
 
-  if(!records.length) return;
+  if (!records.length) return;
 
   return Promise.all(records).then(_records => {
-    for(let _record of _records){
-      if(_record instanceof Error) {
+    for (let _record of _records) {
+      if (_record instanceof Error) {
         console.log({ err: 'Error fetching gazetteer results.' });
         continue;
       }
 
-      if(_record.length > 0) _record.map(row => {
+      if (_record.length > 0) _record.map(row => {
         results.push({
           label: row.label,
           id: row.id,
@@ -171,4 +159,52 @@ async function gaz_locale(req, locale, results) {
       results.sort((a, b) => a.label.toString().localeCompare(b.label));
     }
   });
+}
+
+async function layerGaz(q, layer) {
+
+  let results = []
+
+  // Asteriks wildcard
+  let phrase = `${decodeURIComponent(q).replace(new RegExp(/\*/g), '%')}%`
+
+  const SQLparams = [phrase]
+
+  if (Array.isArray(layer.gazetteer.datasets)) {
+
+    for (const _gaz of layer.gazetteer.datasets) {
+
+      let gaz = Object.assign({}, layer.gazetteer, _gaz)
+
+      await search(gaz)
+    }
+
+  } else {
+
+    await search(layer.gazetteer)
+  }
+
+  return results
+
+  async function search(gaz) {
+
+    var q = `
+    SELECT
+      ${gaz.label || gaz.qterm} AS label,
+      ${layer.qID} AS id,
+      ST_X(ST_PointOnSurface(${layer.geom})) AS lng,
+      ST_Y(ST_PointOnSurface(${layer.geom})) AS lat,
+      '${gaz.table || layer.table}' AS table,
+      '${layer.key}' AS layer,
+      '${gaz.title || ''}' AS title,
+      'glx' AS source
+      FROM ${gaz.table || layer.table}
+      WHERE ${gaz.qterm}::text ILIKE $1
+      LIMIT ${gaz.limit || 10}`
+
+    let rows = await dbs[layer.dbs](q, SQLparams);
+
+    results = results.concat(rows)
+  }
+
 }
