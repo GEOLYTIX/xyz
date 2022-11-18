@@ -1,0 +1,25 @@
+.idea/
+.vscode/
+.env
+.DS_Store
+.sass-cache/
+.vercel
+
+env
+package-lock.json
+node_modules/*
+
+*.pem
+*.crt
+
+public/css/.sass-cache/
+stats.json
+
+caddy_linux_amd64
+
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+!.elasticbeanstalk/*.cfg.yml
+!.elasticbeanstalk/*.global.yml
+.ebextensions/*
+\.ebextensions/

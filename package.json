@@ -1,0 +1,32 @@
+{
+  "name": "xyz",
+  "version": "v4.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/geolytix/xyz"
+  },
+  "scripts": {
+    "test": "web-test-runner \"test/**/*.test.js\" --node-resolve",
+    "_build": "npx esbuild ./lib/mapp.mjs ./lib/ui.mjs --bundle --minify --tree-shaking=false --sourcemap --format=iife --outdir=./public/js/lib"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "@aws-sdk/cloudfront-signer": "^3.90.0",
+    "@geolytix/saml2-js": "^3.0.5",
+    "bcryptjs": "^2.4.3",
+    "cloudinary": "^1.24.0",
+    "jsonwebtoken": "^8.5.1",
+    "mongodb": "^4.11.0",
+    "nanoid": "^3.2.0",
+    "node-fetch": "^2.6.7",
+    "nodemailer": "^6.6.0",
+    "pg": "^8.7.3"
+  },
+  "devDependencies": {
+    "cookie-parser": "^1.4.5",
+    "dotenv": "^8.2.0",
+    "esbuild": "^0.14.39",
+    "express": "^4.17.1",
+    "uhtml": "^3.0.1"
+  }
+}

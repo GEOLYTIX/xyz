@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="{{language}}">
+
+<head data-dir="{{dir}}">
+
+  <title>GEOLYTIX MAPP - Blog view</title>
+
+  <link rel="icon" type="image/x-icon" href="{{dir}}/icons/favicon.ico" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <script src="https://cdn.jsdelivr.net/npm/ol@v7.1.0/dist/ol.js" defer></script>
+
+  <!-- Load XYZ / MAPP stylesheet and library. -->
+  <link rel="stylesheet" href="{{dir}}/css/mapp.css" />
+  <link rel="stylesheet" href="{{dir}}/css/ui.css" />
+
+  <script type="module" src="{{dir}}/js/lib/mapp.js" defer></script>
+  <script type="module" src="{{dir}}/js/lib/ui.js" defer></script>
+
+  <style>
+    body {
+      height: 100%;
+      display: grid;
+      grid-template-columns: min-content 1fr;
+      grid-template-rows: 1fr;
+      background-color: #f0f0f0;
+    }
+
+    #Location {
+      grid-row: 1;
+      grid-column: 1;
+      transform: rotateY(180deg);
+      overflow-x: auto;
+      background-color: white;
+    }
+
+    #Location>* {
+      transform: rotateY(180deg);
+    }
+
+    #Map {
+      grid-row: 1;
+      grid-column: 2;
+      overflow: hidden;
+      position: relative;
+      height: 100%;
+    }
+
+    .ol-control button {
+      background-color: #003D57 !important
+    }
+
+    .location-view-grid {
+      width: 300px;
+      padding: 1em;
+    }
+
+    .map-container .ol-scale-line {
+      right: 5px;
+      top: 5px;
+      position: fixed;
+    }
+
+    .attribution-links {
+      right: 5px;
+      bottom: 5px;
+      position: absolute;
+      background: #fff9;
+      padding-right: 3px;
+      border-radius: 3px;
+    }
+
+    .attribution-links>a {
+      text-shadow: 2px 2px #fff;
+    }
+
+    @media only screen and (max-width: 600px) {
+
+      #Map {
+        grid-column: 1/3;
+        /* min-height: 300px; */
+      }
+
+      #Location {
+        grid-row: 2;
+        grid-column: 1/3;
+      }
+
+      .location-view-grid {
+        width: 100%;
+      }
+
+    }
+  </style>
+
+</head>
+
+<body>
+
+  <div id="Location" class="location-view"></div>
+
+  <div id="Map" class="map-container">
+    <div class="attribution-links"></div>
+  </div>
+
+</body>
+
+<script>
+
+  window.onload = async () => {
+
+    const host = document.head.dataset.dir || new String("");
+
+    let locales
+
+    // An array locales can be queried if the current locale is not known.
+    if (!mapp.hooks.current.locale) {
+      locales = await mapp.utils.xhr(`${host}/api/workspace/locales`);
+    }
+
+    // Load the current locale or the first locale from the array of available locales.
+    const locale = await mapp.utils.xhr(`${host}/api/workspace/locale?locale=${mapp.hooks.current.locale || locales[0].key}`);
+
+    mapp.hooks.current.plugins && await mapp.utils.loadPlugins(locale.plugins);
+
+    const mapview = mapp.Mapview({
+      host: host,
+      target: 'Map',
+      locale: locale,
+      scrollWheelZoom: true,
+      scalebar: 'metric',//'imperial'
+      controls: [new ol.control.Zoom()],
+      hooks: true,
+      attribution: {
+        target: document.querySelector('#Map > .attribution-links'),
+        links: {
+          [`XYZ v${mapp.version}`]: "https://geolytix.github.io/xyz",
+          ["SHA"]: `https://github.com/GEOLYTIX/xyz/commit/${mapp.hash}`,
+          Openlayers: "https://openlayers.org",
+        },
+      }
+    });
+
+    const layers = await mapp.utils.promiseAll(locale.layers.map(
+      layer => mapp.utils.xhr(`${host}/api/workspace/layer?`
+        + `locale=${locale.key}&layer=${layer}`)))
+
+    await mapview.addLayer(layers);
+
+    if (mapp.hooks.current.no_interaction) return;
+
+    let currentLocation = {};
+
+    mapview.locations = new Proxy(mapview.locations, {
+      set: function (target, key, location) {
+        Reflect.set(...arguments);
+
+        currentLocation.remove && currentLocation.remove()
+
+        currentLocation = location
+
+        location.pinStyle = mapp.utils.style({
+          icon: {
+            type: 'markerColor',
+            colorMarker: '#003D57',
+            colorDot: '#EC602D',
+            anchor: [0.5, 1],
+            scale: 3,
+          }
+        })
+
+        location.infoj.filter(entry => entry.type !== 'dataview')
+
+        location.view = document.getElementById('Location')
+          .appendChild(mapp.ui.locations.infoj(location, location.infoj.filter(entry => entry.type !== 'dataview')))
+
+        return true;
+      }
+    });
+
+    mapview.interactions.highlight();
+
+    // Select locations from hooks.
+    mapp.hooks.current.locations.forEach((_hook) => {
+      const hook = _hook.split("!");
+
+      mapp.location.get({
+        layer: mapview.layers[decodeURIComponent(hook[0])],
+        id: hook[1],
+      });
+    });
+
+  }
+
+</script>
+
+</html>

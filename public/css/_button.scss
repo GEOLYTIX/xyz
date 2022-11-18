@@ -1,0 +1,89 @@
+@import 'colours';
+
+button {
+  border: none;
+  outline: none;
+  background: none;
+  text-align: center;
+
+  &.mask-icon,
+  >.mask-icon {
+    background-color: $primary
+  }
+
+  &.mask-icon.active,
+  &.active>.mask-icon,
+  >.mask-icon.active {
+    background-color: $on
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    &:hover {
+      cursor: not-allowed;
+    }
+  }
+
+  &.wide {
+    width: 100%;
+  }
+
+  &.flat {
+    border-radius: 3px;
+    border-bottom: 1px solid $lighter;
+    padding: 0.3em;
+      
+    &.active {
+      border-bottom: 3px solid $on;
+    }
+  }
+
+  &.raised {
+    border-radius: 3px;
+    border: 1px solid $lighter;
+    box-shadow: 1px 1px 2px $lighter;
+    padding: 0.3em;
+     
+    &.active {
+      box-shadow: none;
+    }
+  }
+
+  &.active {
+    background-color: $on;
+  }
+}
+
+.btn-column {
+  display: grid;
+  grid-auto-rows: minmax(min-content, 4em);
+  padding: 0.7em;
+
+  button,
+  >div,
+  >a {
+    width: 2em;
+    height: 2em;
+  }
+
+  a > div,
+  button > div {
+    height: 100%;
+  }
+
+  button:disabled,
+  a:disabled {
+    cursor: not-allowed;
+  }
+}
+
+.btn-row {
+  display: flex;
+  > * {
+    margin: 10px 5px;
+  }
+}

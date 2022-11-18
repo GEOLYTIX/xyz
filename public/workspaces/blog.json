@@ -1,0 +1,234 @@
+{
+  "templates": {
+    "blog": {
+      "src": "file:public/views/blog.html"
+    },
+    "mapbox_base": {
+      "name": "Mapbox Base",
+      "format": "mbtiles",
+      "mbStyle": "mapbox://styles/dbauszus/ciozrimi3002bdsm8bjtn2v1y",
+      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2p5Nmt3bm4wMGhzeTNjbGVxOGZyZG5qZCJ9.9naYTbockHur5X8WO3nsjQ",
+      "attribution": {
+        "© Mapbox": "https://www.mapbox.com/about/maps",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "mapbox_colour": {
+      "name": "Mapbox Colour",
+      "format": "mbtiles",
+      "mbStyle": "mapbox://styles/dbauszus/ck440h6990nii1co520go20i2",
+      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2p5Nmt3bm4wMGhzeTNjbGVxOGZyZG5qZCJ9.9naYTbockHur5X8WO3nsjQ",
+      "attribution": {
+        "© Mapbox": "https://www.mapbox.com/about/maps",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "mapbox_labels": {
+      "name": "Mapbox Labels",
+      "format": "mbtiles",
+      "mbStyle": "mapbox://styles/dbauszus/cj9puo8pr5o0c2sovhdwhkc7z",
+      "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2p5Nmt3bm4wMGhzeTNjbGVxOGZyZG5qZCJ9.9naYTbockHur5X8WO3nsjQ",
+      "attribution": {
+        "© Mapbox": "https://www.mapbox.com/about/maps",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "here_imagery": {
+      "name": "HERE Imagery",
+      "format": "tiles",
+      "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/satellite.day/{z}/{x}/{y}/256/png8?{HERE}",
+      "proxy": true,
+      "attribution": {
+        "© Here": "https://www.here.com/",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "here_hybrid": {
+      "name": "HERE Hybrid",
+      "format": "tiles",
+      "URI": "https://2.aerial.maps.ls.hereapi.com/maptile/2.1/maptile/newest/hybrid.day/{z}/{x}/{y}/256/png8?{HERE}",
+      "proxy": true,
+      "attribution": {
+        "© Here": "https://www.here.com/",
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "global_cities": {
+      "src": "${TEMPLATES}/blog/global_cities.json",
+      "dbs": "MAPP"
+    },
+    "global_cities_query": {
+      "template": "select id, city_name, country, pop_ghs, area, pop_den from geodata.global_glx_open_citiesoftheworld WHERE true ${viewport} ${filter} limit 99;",
+      "dbs": "MAPP"
+    },
+    "geolytix_projects": {
+      "src": "${TEMPLATES}/blog/geolytix_projects.json",
+      "dbs": "BLOG"
+    },
+    "lush": {
+      "src": "${TEMPLATES}/blog/lush.json",
+      "dbs": "BLOG"
+    },
+    "riverford": {
+      "src": "${TEMPLATES}/blog/riverford.json",
+      "dbs": "BLOG"
+    },
+    "uk_grocery": {
+      "src": "${TEMPLATES}/templates_v4/uk/grocery/layer.json",
+      "dbs": "MAPP"
+    },
+    "uk_grocery_table": {
+      "template": "SELECT id as id, store_name, retailer, fascia, size_sqft FROM ${table} WHERE true ${viewport} ${filter} limit 99;",
+      "dbs": "MAPP"
+    },
+    "seamless_leeds": {
+      "src": "${TEMPLATES}/blog/seamless_leeds.json",
+      "dbs": "BLOG"
+    },
+    "mumbai_retail_venues": {
+      "src": "${TEMPLATES}/blog/mumbai_retail_venues.json",
+      "dbs": "BLOG"
+    },
+    "london_boroughs": {
+      "src": "${TEMPLATES}/blog/football_boroughs.json",
+      "dbs": "MAPP"
+    },
+    "london_clubs": {
+      "src": "${TEMPLATES}/blog/london_clubs.json",
+      "dbs": "MAPP"
+    }
+  },
+  "locales": {
+    "Global": {
+      "minZoom": 3,
+      "maxZoom": 15,
+      "showScaleBar": true,
+      "plugins": [
+        "${DIR}/js/plugins/cluster_panel.js"
+      ],
+      "layers": {
+        "mapbox_base": {
+          "template": "mapbox_base",
+          "display": true
+        },
+        "mapbox_labels": {
+          "template": "mapbox_labels",
+          "display": true
+        },
+        "here_imagery": {
+          "template": "here_imagery"
+        },
+        "here_hybrid": {
+          "template": "here_hybrid"
+        },
+        "global_cities": {
+          "template": "global_cities"
+        },
+        "geolytix_projects": {
+          "template": "geolytix_projects"
+        },
+        "riverford": {
+          "template": "riverford"
+        },
+        "lush": {
+          "template": "lush"
+        }
+      }
+    },
+    "UK": {
+      "name": "United Kingdom",
+      "extent": {
+        "north": 63,
+        "east": 7,
+        "south": 47,
+        "west": -15,
+        "mask": true
+      },
+      "view": {
+        "lat": 54.3,
+        "lng": -4,
+        "z": 6
+      },
+      "minZoom": 2,
+      "maxZoom": 17,
+      "layers": {
+        "mapbox_base": {
+          "template": "mapbox_base",
+          "display": true
+        },
+        "mapbox_labels": {
+          "template": "mapbox_labels",
+          "display": true
+        },
+        "uk_grocery": {
+          "template": "uk_grocery"
+        },
+        "seamless_leeds": {
+          "template": "seamless_leeds"
+        }
+      }
+    },
+    "Mumbai": {
+      "bounds": {
+        "north": 22,
+        "east": 76,
+        "south": 18,
+        "west": 70
+      },
+      "view": {
+        "lat": 19,
+        "lng": 73,
+        "z": 2
+      },
+      "minZoom": 12,
+      "maxZoom": 15,
+      "layers": {
+        "mapbox_base": {
+          "template": "mapbox_base",
+          "display": true
+        },
+        "mapbox_labels": {
+          "display": true,
+          "template": "mapbox_labels"
+        },
+        "retail_venues": {
+          "display": true,
+          "template": "mumbai_retail_venues"
+        }
+      }
+    },
+    "London": {
+      "bounds": {
+        "north": 52.686,
+        "east": 1.236,
+        "south": 50.28,
+        "west": -1.489
+      },
+      "maskBounds": true,
+      "minZoom": 10,
+      "maxZoom": 18,
+      "view": {
+        "lat": 51.5073,
+        "lng": -0.12755
+      },
+      "layers": {
+        "mapbox_base": {
+          "template": "mapbox_base",
+          "display": true
+        },
+        "mapbox_labels": {
+          "template": "mapbox_labels",
+          "display": true
+        },
+        "Boroughs": {
+          "template": "london_boroughs",
+          "display": true
+        },
+        "Logos": {
+          "template": "london_clubs",
+          "display": true
+        }
+      }
+    }
+  }
+}
