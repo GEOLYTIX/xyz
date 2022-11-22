@@ -23,3 +23,5 @@ caddy_linux_amd64
 !.elasticbeanstalk/*.global.yml
 .ebextensions/*
 \.ebextensions/
+
+public/js/lib/*
