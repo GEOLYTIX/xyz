@@ -1064,19 +1064,29 @@
               "strokeWidth": 3
             },
             "default": {
-              "svg": "https://geolytix.github.io/MapIcons/pins/amber.svg"
+              "icon": [
+                {
+                  "svg": "https://geolytix.github.io/MapIcons/templates/circle.svg"
+                },
+                {
+                  "svg": "https://geolytix.github.io/MapIcons/templates/home.svg",
+                  "scale": 0.8
+                }
+              ]
             },
             "highlight": {
               "scale": 1.3
             },
             "cluster": {
-              "svg": null,
-              "type": "target",
-              "fillColor": "#006666"
+              "clusterScale": 1.3,
+              "icon": [{
+                "type": "target",
+                "fillColor": "#006666"
+              }]
             },
             "selected": null,
             "allowModal": true,
-            "themes": {
+            "__themes": {
               "Retail - Simple": {
                 "type": "categorized",
                 "field": "retailer",
