@@ -224,7 +224,8 @@
         "${DIR}/js/plugins/chart_entry.js",
         "${DIR}/js/plugins/table_entry.js",
         "${DIR}/js/plugins/custom_filter.js",
-        "${DIR}/js/plugins/mvt_select_tab.js"
+        "${DIR}/js/plugins/mvt_select_tab.js",
+        "${DIR}/js/plugins/svg_templates.js"
       ],
       "measure_distance": {
         "tooltip": {
@@ -269,6 +270,12 @@
         }]
       },
       "locator": true,
+      "svg_templates": {
+        "circle": "https://geolytix.github.io/MapIcons/templates/circle.svg",
+        "home": "https://geolytix.github.io/MapIcons/templates/home.svg",
+        "rocket": "https://geolytix.github.io/MapIcons/templates/rocket.svg",
+        "shopping": "https://geolytix.github.io/MapIcons/templates/shopping.svg"
+      },
       "layers": {
         "OSM": {
           "format": "tiles",
@@ -1064,7 +1071,13 @@
               "strokeWidth": 3
             },
             "default": {
-              "icon": [
+              "__svg": "https://geolytix.github.io/MapIcons/templates/circle.svg",
+              "type": "template",
+              "template": "circle",
+              "substitute": {
+                "stroke:#ff0000": "stroke:#0f0; stroke-width: 3"
+              },
+              "__icon": [
                 {
                   "svg": "https://geolytix.github.io/MapIcons/templates/circle.svg"
                 },
@@ -1086,7 +1099,7 @@
             },
             "selected": null,
             "allowModal": true,
-            "__themes": {
+            "themes": {
               "Retail - Simple": {
                 "type": "categorized",
                 "field": "retailer",
@@ -1135,14 +1148,16 @@
                   },
                   "Co-op": {
                     "label": "The Co-Operative",
-                    "layers": [
-                      {
-                        "svg": "https://geolytix.github.io/MapIcons/pins/pale_spring.svg"
-                      },
-                      {
-                        "svg": "https://geolytix.github.io/MapIcons/logos/coop.svg"
-                      }
-                    ]
+                    "style": {
+                      "icon": [
+                        {
+                          "svg": "https://geolytix.github.io/MapIcons/pins/pale_spring.svg"
+                        },
+                        {
+                          "svg": "https://geolytix.github.io/MapIcons/logos/coop.svg"
+                        }
+                      ]
+                    }
                   },
                   "Lidl": {
                     "label": "Lidl",
@@ -1181,12 +1196,12 @@
                     }
                   },
                   "Tesco": {
-                    "svg": "https://geolytix.github.io/MapIcons/brands/tesco.svg",
-                    "scale": 0.07,
-                    "anchor": [
-                      0.5,
-                      0.95
-                    ]
+                    "type": "template",
+                    "template": "circle",
+                    "substitute": {
+                      "stroke:#ff0000": "stroke:blue; stroke-width: 3",
+                      "fill:#ffff00": "fill:red"
+                    }
                   },
                   "Waitrose": {
                     "label": "Waitrose",
@@ -1293,6 +1308,12 @@
                   }
                 ]
               }
+            }
+          },
+          "style": {
+            "highlight": {
+              "scale": 1.3,
+              "strokeColor": "#090"
             }
           },
           "filter": {
