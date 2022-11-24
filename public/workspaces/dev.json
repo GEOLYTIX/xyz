@@ -1186,13 +1186,26 @@
                   "Sainsburys": {
                     "label": "Sainsbury's",
                     "style": {
-                      "svg": null,
-                      "type": "target",
-                      "fillColor": "#ee8a00",
-                      "layers": {
-                        "0.625": "#ffffff",
-                        "0.325": "#ee8a00"
-                      }
+                      "icon": [
+                        {
+                          "type": "template",
+                          "template": "circle",
+                          "substitute": {
+                            "stroke:#ff0000": "stroke:#ee8a00; stroke-width: 4",
+                            "fill:#ffff00": "fill:#fff"
+                          },
+                          "scale": 0.8
+                        },
+                        {
+                          "type": "template",
+                          "template": "circle",
+                          "substitute": {
+                            "stroke:#ff0000": "stroke-width: 0",
+                            "fill:#ffff00": "fill:#ee8a00"
+                          },
+                          "scale": 0.5
+                        }
+                      ]
                     }
                   },
                   "Tesco": {

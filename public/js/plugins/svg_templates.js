@@ -13,7 +13,7 @@ export default (function () {
     if (!svgString) return;
 
     // Iterate through the icon.substitute entries.
-    icon.substitutes && Object.entries(icon.substitute).forEach((entry) => {
+    icon.substitute && Object.entries(icon.substitute).forEach((entry) => {
 
       // Replace substitute key with values.
       svgString = svgString.replaceAll(entry[0], entry[1]);
