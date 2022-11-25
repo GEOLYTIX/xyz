@@ -488,7 +488,7 @@
                 {
                   "value": "0",
                   "style": {
-                    "marker": {
+                    "icon": {
                       "type": "dot",
                       "fillColor": "#15773f"
                     }
@@ -497,7 +497,7 @@
                 {
                   "value": "250",
                   "style": {
-                    "marker": {
+                    "icon": {
                       "type": "dot",
                       "fillColor": "#66bd63"
                     }
@@ -506,7 +506,7 @@
                 {
                   "value": "500",
                   "style": {
-                    "marker": {
+                    "icon": {
                       "type": "dot",
                       "fillColor": "#a6d96a"
                     }
@@ -515,7 +515,7 @@
                 {
                   "value": "1000",
                   "style": {
-                    "marker": {
+                    "icon": {
                       "type": "dot",
                       "fillColor": "#d9ef8b"
                     }
@@ -524,7 +524,7 @@
                 {
                   "value": "1500",
                   "style": {
-                    "marker": {
+                    "icon": {
                       "type": "dot",
                       "fillColor": "#fdae61"
                     }
@@ -533,7 +533,7 @@
                 {
                   "value": "3000",
                   "style": {
-                    "marker": {
+                    "icon": {
                       "type": "dot",
                       "fillColor": "#f46d43"
                     }
@@ -542,7 +542,7 @@
                 {
                   "value": "5000",
                   "style": {
-                    "marker": {
+                    "icon": {
                       "type": "dot",
                       "fillColor": "#d73027"
                     }
@@ -555,49 +555,49 @@
                 "cat_arr": [
                   {
                     "style": {
-                      "marker": {
+                      "icon": {
                         "scale": 0.4
                       }
                     }
                   },
                   {
                     "style": {
-                      "marker": {
+                      "icon": {
                         "scale": 0.5
                       }
                     }
                   },
                   {
                     "style": {
-                      "marker": {
+                      "icon": {
                         "scale": 0.6
                       }
                     }
                   },
                   {
                     "style": {
-                      "marker": {
+                      "icon": {
                         "scale": 0.7
                       }
                     }
                   },
                   {
                     "style": {
-                      "marker": {
+                      "icon": {
                         "scale": 0.8
                       }
                     }
                   },
                   {
                     "style": {
-                      "marker": {
+                      "icon": {
                         "scale": 0.9
                       }
                     }
                   },
                   {
                     "style": {
-                      "marker": {
+                      "icon": {
                         "scale": 1
                       }
                     }
