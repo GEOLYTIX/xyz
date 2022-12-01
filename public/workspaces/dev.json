@@ -1056,7 +1056,6 @@
           ],
           "style": {
             "label": {
-              "display": true,
               "field": "store_name",
               "template": "retail_points_label",
               "count": true,
