@@ -1776,6 +1776,32 @@
               "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
             }
           ]
+        },
+        "multigeom": {
+          "format": "geojson",
+          "dbs": "DEV",
+          "table": "dev.multipolygon_features",
+          "srid": "3857",
+          "geom": "geom_3857",
+          "qID": "id",
+          "infoj": [
+            {
+              "type": "geometry",
+              "display": true,
+              "field": "geom_3857",
+              "fieldfx": "ST_asGeoJSON(geom_3857)",
+              "edit": {
+                "geometry": true,
+                "snap": true
+              }
+            },
+            {
+              "type": "pin",
+              "label": "ST_PointOnSurface",
+              "field": "pin",
+              "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
+            }
+          ]
         }
       }
     },
