@@ -2583,7 +2583,7 @@
       "layers": {
         "mapbox_base": {
           "display": true,
-          "template": "Mapbox Base"
+          "template": "mapbox_base"
         },
         "grid": {
           "name": "Demography Grid",
@@ -2786,7 +2786,7 @@
         },
         "mapbox_label": {
           "display": true,
-          "template": "Mapbox Label"
+          "template": "mapbox_label"
         }
       }
     },
@@ -2800,7 +2800,7 @@
       "layers": {
         "mapbox_base": {
           "display": true,
-          "template": "Mapbox Base"
+          "template": "mapbox_base"
         },
         "Chomoku": {
           "format": "mvt",
@@ -3250,7 +3250,7 @@
         },
         "mapbox_label": {
           "display": true,
-          "template": "Mapbox Label"
+          "template": "mapbox_label"
         }
       }
     },
@@ -3266,7 +3266,7 @@
       "layers": {
         "mapbox_base": {
           "display": true,
-          "template": "Mapbox Base"
+          "template": "mapbox_base"
         },
         "indicators": {
           "name": "European Indicators",
@@ -3617,7 +3617,7 @@
         },
         "mapbox_label": {
           "display": true,
-          "template": "Mapbox Label"
+          "template": "mapbox_label"
         }
       }
     }

@@ -226,6 +226,7 @@
         "${DIR}/js/plugins/custom_filter.js",
         "${DIR}/js/plugins/mvt_select_tab.js",
         "${DIR}/js/plugins/svg_templates.js"
+        "${DIR}/js/plugins/update_entry.js"
       ],
       "measure_distance": {
         "tooltip": {
@@ -1063,7 +1064,6 @@
           ],
           "style": {
             "label": {
-              "display": true,
               "field": "store_name",
               "template": "retail_points_label",
               "count": true,
@@ -1370,6 +1370,12 @@
               "title": "char_field",
               "field": "char_field_bogus",
               "fieldfx": "char_field"
+            },
+            {
+              "type": "update_entry",
+              "params": {
+                "field": "char_field"
+              }
             },
             {
               "field": "foobar_title",
@@ -1801,6 +1807,32 @@
               "dependents": [
                 "pin"
               ],
+              "edit": {
+                "geometry": true,
+                "snap": true
+              }
+            },
+            {
+              "type": "pin",
+              "label": "ST_PointOnSurface",
+              "field": "pin",
+              "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
+            }
+          ]
+        },
+        "multigeom": {
+          "format": "geojson",
+          "dbs": "DEV",
+          "table": "dev.multipolygon_features",
+          "srid": "3857",
+          "geom": "geom_3857",
+          "qID": "id",
+          "infoj": [
+            {
+              "type": "geometry",
+              "display": true,
+              "field": "geom_3857",
+              "fieldfx": "ST_asGeoJSON(geom_3857)",
               "edit": {
                 "geometry": true,
                 "snap": true

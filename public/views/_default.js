@@ -100,7 +100,7 @@ window.onload = async () => {
     resizeEvent: (e) => {
       let pageX = (e.touches && e.touches[0].pageX) || e.pageX;
 
-      if (pageX < 333) return;
+      if (pageX < 350) return;
 
       // Half width snap.
       if (pageX > window.innerWidth / 2) pageX = window.innerWidth / 2;
