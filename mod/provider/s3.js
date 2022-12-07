@@ -3,20 +3,20 @@ const { S3Client, CreateMultipartUploadCommand, UploadPartCommand, CompleteMulti
 
 module.exports = async req => {
 
-  if(!req.params.completeUpload)
+  if (!req.params.completeUpload)
     req.body = req.body && await bodyData(req) || null
 
   const s3Client = new S3Client({ credentials: { accessKeyId: process.env.KEY_AWSACCESSKEYID, secretAccessKey: process.env.KEY_AWSSECRETACCESSKEY }, region: 'eu-west-2' })
 
   try {
 
-    if (req.params.upload) 
+    if (req.params.upload)
       return upload(s3Client, req)
 
     if (req.params.getuploadID)
       return createMultiPartUpload(s3Client, req)
 
-    if (req.params.uploadpart) 
+    if (req.params.uploadpart)
       return uploadpart(s3Client, req)
 
     if (req.params.completeUpload)
@@ -25,28 +25,6 @@ module.exports = async req => {
   } catch (e) {
     console.log(e);
   }
-
-  // try {
-  //   const parallelUploads3 = new Upload({
-  //     client: new S3Client({ credentials: { accessKeyId: process.env.KEY_AWSACCESSKEYID, secretAccessKey: process.env.KEY_AWSSECRETACCESSKEY }, region: 'eu-west-2' }),
-  //     params: { Bucket: process.env.KEY_AWSBUCKET, Key: req.params.filename, Body: req.body },
-  //     tags: [
-  //       /*...*/
-  //     ], // optional tags
-  //     queueSize: 4, // optional concurrency configuration
-  //     partSize: 1024 * 1024 * 5, // optional size of each part, in bytes, at least 5MB
-  //     leavePartsOnError: false, // optional manually handle dropped parts
-  //   });
-
-  //   parallelUploads3.on("httpUploadProgress", (progress) => {
-  //     console.log(progress);
-  //   });
-
-  //   await parallelUploads3.done();
-
-  // } catch (e) {
-  //   console.log(e);
-  // }
 
 }
 
