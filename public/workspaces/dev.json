@@ -225,7 +225,8 @@
         "${DIR}/js/plugins/table_entry.js",
         "${DIR}/js/plugins/custom_filter.js",
         "${DIR}/js/plugins/mvt_select_tab.js",
-        "${DIR}/js/plugins/update_entry.js"
+        "${DIR}/js/plugins/update_entry.js",
+        "${DIR}/js/plugins/s3.js"
       ],
       "measure_distance": {
         "tooltip": {
@@ -791,6 +792,7 @@
             "point": true,
             "delete": true
           },
+          "s3bucket_upload": {},
           "dataviews": {
             "hide": true,
             "Retail Points": {
