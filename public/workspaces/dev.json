@@ -225,7 +225,7 @@
         "${DIR}/js/plugins/table_entry.js",
         "${DIR}/js/plugins/custom_filter.js",
         "${DIR}/js/plugins/mvt_select_tab.js",
-        "${DIR}/js/plugins/svg_templates.js"
+        "${DIR}/js/plugins/svg_templates.js",
         "${DIR}/js/plugins/update_entry.js"
       ],
       "measure_distance": {
@@ -1074,7 +1074,7 @@
               "__svg": "https://geolytix.github.io/MapIcons/templates/circle.svg",
               "type": "template",
               "template": "circle",
-              "substitute": {
+              "params": {
                 "stroke:#ff0000": "stroke:#0f0; stroke-width: 3"
               },
               "__icon": [

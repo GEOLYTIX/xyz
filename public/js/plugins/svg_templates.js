@@ -13,11 +13,14 @@ export default (function () {
     if (!svgString) return;
 
     // Iterate through the icon.substitute entries.
-    icon.substitute && Object.entries(icon.substitute).forEach((entry) => {
+    if (typeof icon.substitute === 'Object') {
 
-      // Replace substitute key with values.
-      svgString = svgString.replaceAll(entry[0], entry[1]);
-    });
+      Object.entries(icon.substitute).forEach((entry) => {
+
+        // Replace substitute key with values.
+        svgString = svgString.replaceAll(entry[0], entry[1]);
+      });
+    }
 
     // Return encoded string.
     return `data:image/svg+xml,${encodeURIComponent(svgString)}`;
