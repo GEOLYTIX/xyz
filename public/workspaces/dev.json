@@ -235,40 +235,44 @@
           "decimals": 2,
           "suffix": " miles"
         },
-        "routes": [{
-          "provider": "mapbox",
-          "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2t3NmJqZ3N4MG9zeDJ1bGprdzQ2ODllMCJ9.3xhSOxQLx1Egv5i8W7B57A",
-          "style": {
-            "color": "#f00"
+        "routes": [
+          {
+            "provider": "mapbox",
+            "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2t3NmJqZ3N4MG9zeDJ1bGprdzQ2ODllMCJ9.3xhSOxQLx1Egv5i8W7B57A",
+            "style": {
+              "color": "#f00"
+            },
+            "prefix": "Mapbox: "
           },
-          "prefix": "Mapbox: "
-        },{
-          "provider": "here",
-          "units": "meter",
-          "convertTo": "miles",
-          "decimals": 2,
-          "suffix": "miles",
-          "duration": "minutes"
-        },{
-          "provider": "here",
-          "transportMode": "pedestrian",
-          "units": "meter",
-          "convertTo": "miles",
-          "decimals": 2,
-          "prefix": "Walking ",
-          "suffix": "miles",
-          "duration": "hours"
-        },
-        {
-          "provider": "mapbox",
-          "profile": "mapbox/walking",
-          "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2t3NmJqZ3N4MG9zeDJ1bGprdzQ2ODllMCJ9.3xhSOxQLx1Egv5i8W7B57A",
-          "units": "meter",
-          "convertTo": "miles",
-          "decimals": 2,
-          "suffix": "miles",
-          "duration": "hours"
-        }]
+          {
+            "provider": "here",
+            "units": "meter",
+            "convertTo": "miles",
+            "decimals": 2,
+            "suffix": "miles",
+            "duration": "minutes"
+          },
+          {
+            "provider": "here",
+            "transportMode": "pedestrian",
+            "units": "meter",
+            "convertTo": "miles",
+            "decimals": 2,
+            "prefix": "Walking ",
+            "suffix": "miles",
+            "duration": "hours"
+          },
+          {
+            "provider": "mapbox",
+            "profile": "mapbox/walking",
+            "accessToken": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2t3NmJqZ3N4MG9zeDJ1bGprdzQ2ODllMCJ9.3xhSOxQLx1Egv5i8W7B57A",
+            "units": "meter",
+            "convertTo": "miles",
+            "decimals": 2,
+            "suffix": "miles",
+            "duration": "hours"
+          }
+        ]
       },
       "locator": true,
       "svg_templates": {
@@ -810,7 +814,8 @@
               "mapChange": true,
               "viewport": true,
               "events": {
-                "rowClick": "select"
+                "rowClick": "select",
+                "rowDblClick": "zoomToFeature"
               },
               "table": {
                 "layout": "fitColumns",
@@ -955,7 +960,9 @@
               "type": "mvt_clone",
               "query": "styled_layer",
               "queryparams": {
-                "fieldValues": ["pin"]
+                "fieldValues": [
+                  "pin"
+                ]
               },
               "layer": "zoomgeom",
               "style": {
@@ -1095,10 +1102,12 @@
             },
             "cluster": {
               "clusterScale": 1.3,
-              "icon": [{
-                "type": "target",
-                "fillColor": "#006666"
-              }]
+              "icon": [
+                {
+                  "type": "target",
+                  "fillColor": "#006666"
+                }
+              ]
             },
             "selected": null,
             "allowModal": true,
@@ -1285,7 +1294,9 @@
           "geom": "geom_3857",
           "qID": "id",
           "template": "scratch",
-          "templates": ["infoj_report"],
+          "templates": [
+            "infoj_report"
+          ],
           "filter_view": {
             "foo": "bar"
           },
@@ -1333,7 +1344,9 @@
             }
           },
           "filter": {
-            "exclude": ["bool_field"]
+            "exclude": [
+              "bool_field"
+            ]
           },
           "infoj": [
             {
@@ -1455,7 +1468,10 @@
                 "id": true,
                 "qID": "id",
                 "field": "id",
-                "fieldValues": ["char_field_bogus", "integer_field"],
+                "fieldValues": [
+                  "char_field_bogus",
+                  "integer_field"
+                ],
                 "table": "dev.scratch"
               }
             },
