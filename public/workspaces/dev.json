@@ -815,7 +815,10 @@
               "viewport": true,
               "events": {
                 "rowClick": "select",
-                "rowDblClick": "zoomToFeature"
+                "rowDblClick": {
+                  "util": "select",
+                  "zoomToLocation": true
+                }
               },
               "table": {
                 "layout": "fitColumns",
