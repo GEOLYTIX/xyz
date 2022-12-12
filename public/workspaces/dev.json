@@ -809,9 +809,12 @@
               },
               "mapChange": true,
               "viewport": true,
+              "events": {
+                "rowClick": "select"
+              },
               "table": {
                 "layout": "fitColumns",
-                "selectable": false,
+                "selectable": true,
                 "columns": [
                   {
                     "field": "id",
