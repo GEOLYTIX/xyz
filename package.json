@@ -26,6 +26,11 @@
     "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
     "esbuild": "^0.14.39",
+    "eslint": "^8.29.0",
+    "eslint-config-standard": "^17.0.0",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-n": "^15.6.0",
+    "eslint-plugin-promise": "^6.1.1",
     "express": "^4.17.1",
     "uhtml": "^3.0.1"
   }
