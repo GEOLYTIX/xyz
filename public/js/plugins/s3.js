@@ -24,12 +24,11 @@ export default (function () {
 
                 // console.log(multipartUpload.UploadId);
 
-                var chunkSize = 1024 * 1024; var fileSize = csvFile.size;
+                var chunkSize = 1024 * 1024 * 5; var fileSize = csvFile.size;
                 var chunks = Math.ceil(csvFile.size / chunkSize, chunkSize);
                 var chunk = 0;
                 var uploadPartResults = []
                 var uploadPromises = []
-                var uploadPromisesTest = []
 
                 console.log('file size..', fileSize);
                 console.log('chunks...', chunks);
@@ -39,28 +38,31 @@ export default (function () {
                     console.log('current chunk..', chunk);
                     console.log('offset...', chunk * chunkSize);
                     console.log('file blob from offset...', offset);
-                    //csvFile.slice(offset, offset + chunkSize);
 
-                    var uploadPromise = mapp.utils.xhr({
-                        method: "POST",
+                    var signedURL = await mapp.utils.xhr({
+                        method: "GET",
                         url: `${layer.mapview.host}/api/provider/s3?` +
                             mapp.utils.paramString({
                                 uploadpart: true,
                                 uploadid: multipartUpload.UploadId,
                                 filename: layer.s3bucket_upload.btn.files[0].name,
-                                partnumber: chunk+1
-                            }),
+                                partnumber: chunk + 1
+                            })
+                    });
+
+                    console.log(signedURL);
+
+                    var uploadPromise = mapp.utils.xhr({
+                        method: "PUT",
+                        url: signedURL,
                         body: csvFile.slice(offset, offset + chunkSize),
-                        contentType: 'application/blob'
+                        contentType: 'application/octet-stream',
+                        resolveTarget: true
                     });
 
                     uploadPromises.push(uploadPromise);
-                    uploadPromisesTest.push({ chunk: chunk, promise: uploadPromise });
                     chunk++;
                 }
-
-                console.log(uploadPromises);
-                console.log(uploadPromisesTest);
 
                 var count = 1;
 
@@ -68,11 +70,8 @@ export default (function () {
                     then((results) => results.forEach((result) => {
                         uploadPartResults.push({
                             PartNumber: count,
-                            ETag: result.value.ETag
+                            ETag: result.value.getResponseHeader('ETag')
                         });
-
-                        console.log(`count: ${count}`);
-                        console.log(`ETAG: ${result.value.ETag}`);
                         count++;
                     }
                     )).then(() => {
