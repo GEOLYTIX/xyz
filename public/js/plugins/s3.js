@@ -8,12 +8,15 @@ export default (function () {
 
         async function upload(e) {
 
-            var csvFile = new Blob([layer.s3bucket_upload.btn.files[0]], { type: 'text/csv' });
-            var fileSize = csvFile.size;
+            //Getting the file from the input and setting the size
+            const csvFile = new Blob([layer.s3bucket_upload.btn.files[0]], { type: 'text/csv' });
+            const fileSize = csvFile.size;
 
+            //We will need to use a multipart upload if the file is greater than 10mb
             if (fileSize >= 1024 * 1024 * 10) {
 
-                var multipartUpload = await mapp.utils.xhr({
+                //Init the multipart upload. This will return an object with id from the api.
+                const multipartUpload = await mapp.utils.xhr({
                     method: "GET",
                     url: `${layer.mapview.host}/api/provider/s3?` +
                         mapp.utils.paramString({
@@ -22,24 +25,25 @@ export default (function () {
                         })
                 });
 
-                // console.log(multipartUpload.UploadId);
+                //Set the chunk size and determine the number of chunks by dividing the file size by the chunk size and then round up.
+                const chunkSize = 1024 * 1024 * 5;
+                const chunks = Math.ceil(csvFile.size / chunkSize, chunkSize);
 
-                var chunkSize = 1024 * 1024 * 5; var fileSize = csvFile.size;
-                var chunks = Math.ceil(csvFile.size / chunkSize, chunkSize);
-                var chunk = 0;
-                var uploadPartResults = []
-                var uploadPromises = []
+                //Chunk has to start at 0, but when referenced in the part number we have to increment by 1.
+                let chunk = 0;
+                let uploadPartResults = []
+                let uploadPromises = []
 
-                console.log('file size..', fileSize);
-                console.log('chunks...', chunks);
-
+                //Push the chunks of data to a UploadPart promise
                 while (chunk < chunks) {
-                    var offset = chunk * chunkSize;
-                    console.log('current chunk..', chunk);
-                    console.log('offset...', chunk * chunkSize);
-                    console.log('file blob from offset...', offset);
 
-                    var signedURL = await mapp.utils.xhr({
+                    //Determine the offset of data per chunk
+                    let offset = chunk * chunkSize;
+
+                    //get the signedurl from the s3 provider
+                    //You need to provide what kind of method to the provider, 
+                    //the uploadid, filename, and what part we are uploading.
+                    let signedURL = await mapp.utils.xhr({
                         method: "GET",
                         url: `${layer.mapview.host}/api/provider/s3?` +
                             mapp.utils.paramString({
@@ -50,9 +54,9 @@ export default (function () {
                             })
                     });
 
-                    console.log(signedURL);
-
-                    var uploadPromise = mapp.utils.xhr({
+                    //Creating the promise to push into an array
+                    //This promise also need to resolve the entire target, so we can return the ETag header.
+                    let uploadPromise = mapp.utils.xhr({
                         method: "PUT",
                         url: signedURL,
                         body: csvFile.slice(offset, offset + chunkSize),
@@ -60,12 +64,16 @@ export default (function () {
                         resolveTarget: true
                     });
 
+                    //Push promise and increment the chunk counter.
                     uploadPromises.push(uploadPromise);
                     chunk++;
                 }
 
-                var count = 1;
+                //Count for the part number when pushing upload results.
+                let count = 1;
 
+                //After all promises have been settled, then we will push the upload results
+                //These results are required to complete the upload.
                 Promise.allSettled(uploadPromises).
                     then((results) => results.forEach((result) => {
                         uploadPartResults.push({
@@ -74,8 +82,10 @@ export default (function () {
                         });
                         count++;
                     }
-                    )).then(() => {
-                        mapp.utils.xhr({
+                    )).then(async () => {
+
+                        //After all settled and pushed, we complete the Multipartupload.
+                        let completeUploadRes = await mapp.utils.xhr({
                             method: "POST",
                             url: `${layer.mapview.host}/api/provider/s3?` +
                                 mapp.utils.paramString({
@@ -85,6 +95,10 @@ export default (function () {
                                 }),
                             body: JSON.stringify(uploadPartResults)
                         });
+
+                        if(completeUploadRes.$metadata.httpStatusCode === 200)
+                            alert(`File ${layer.s3bucket_upload.btn.files[0].name} successfully uploaded`)
+
                     });
 
             } else {

@@ -14,7 +14,7 @@ module.exports = async req => {
       accessKeyId: process.env.KEY_AWSACCESSKEYID,
       secretAccessKey: process.env.KEY_AWSSECRETACCESSKEY
     },
-    region: 'eu-west-2',
+    region: 'eu-west-2', //TODO set region from env.
     Bucket: process.env.KEY_AWSBUCKET
   })
 
@@ -81,7 +81,7 @@ async function completeMultiPartUpload(s3Client, req) {
     },
     UploadId: req.params.uploadid
   })
-  await s3Client.send(command);
+  return await s3Client.send(command);
 }
 
 function bodyData(req) {
