@@ -12,8 +12,8 @@ export default (function () {
             const csvFile = new Blob([layer.s3bucket_upload.btn.files[0]], { type: 'text/csv' });
             const fileSize = csvFile.size;
 
-            //We will need to use a multipart upload if the file is greater than 10mb
-            if (fileSize >= 1024 * 1024 * 10) {
+            //We will need to use a multipart upload if the file is greater than 4.5mb
+            if (fileSize >= 1024 * 1024 * 4.5) {
 
                 //Init the multipart upload. This will return an object with id from the api.
                 const multipartUpload = await mapp.utils.xhr({
