@@ -3,7 +3,7 @@ export default (function () {
     mapp.ui.layers.panels.s3bucket_upload = layer => {
 
         layer.s3bucket_upload.btn = mapp.utils.html.node`
-                <input type=file accept=".csv" style="font-size: 11px;" class="flat bold wide primary-colour"
+                <input type=file style="font-size: 11px;" class="flat bold wide primary-colour"
                 onchange=${upload}>`
 
         async function upload(e) {
@@ -33,6 +33,7 @@ export default (function () {
                 let chunk = 0;
                 let uploadPartResults = []
                 let uploadPromises = []
+                let uploadCount = 0;
 
                 //Push the chunks of data to a UploadPart promise
                 while (chunk < chunks) {
@@ -62,6 +63,10 @@ export default (function () {
                         body: csvFile.slice(offset, offset + chunkSize),
                         contentType: 'application/octet-stream',
                         resolveTarget: true
+                    }).then( (result) => {
+                        uploadCount++;
+                        console.log(`${Math.round(uploadCount/chunks*100,0)}%`)
+                        return result;
                     });
 
                     //Push promise and increment the chunk counter.
