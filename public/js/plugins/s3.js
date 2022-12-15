@@ -107,7 +107,7 @@ export default (function () {
                     });
 
             } else {
-                await mapp.utils.xhr({
+                var uploadRes = await mapp.utils.xhr({
                     method: "POST",
                     url: `${layer.mapview.host}/api/provider/s3?` +
                         mapp.utils.paramString({
@@ -117,6 +117,9 @@ export default (function () {
                     body: csvFile,
                     contentType: 'application/blob'
                 });
+
+                if(uploadRes.$metadata.httpStatusCode === 200)
+                            alert(`File ${layer.s3bucket_upload.btn.files[0].name} successfully uploaded`)
             }
         }
 

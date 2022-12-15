@@ -1,5 +1,10 @@
 //const { Upload } = require('@aws-sdk/lib-storage');
-const { S3Client, CreateMultipartUploadCommand, UploadPartCommand, CompleteMultipartUploadCommand, PutObjectCommand } = require('@aws-sdk/client-s3');
+const { S3Client,
+        CreateMultipartUploadCommand,
+        UploadPartCommand,
+        CompleteMultipartUploadCommand,
+        PutObjectCommand } = require('@aws-sdk/client-s3');
+        
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
 module.exports = async req => {
@@ -8,7 +13,7 @@ module.exports = async req => {
   if (!req.params.completeUpload)
     req.body = req.body && await bodyData(req) || null
 
-    //init of s3Client used to execute commands
+  //init of s3Client used to execute commands
   const s3Client = new S3Client({
     credentials: {
       accessKeyId: process.env.KEY_AWSACCESSKEYID,
@@ -20,17 +25,13 @@ module.exports = async req => {
 
   try {
 
-    if (req.params.upload)
-      return upload(s3Client, req)
+    if (req.params.upload) return upload(s3Client, req)
 
-    if (req.params.getuploadID)
-      return createMultiPartUpload(s3Client, req)
+    if (req.params.getuploadID) return createMultiPartUpload(s3Client, req)
 
-    if (req.params.uploadpart)
-      return uploadpart(s3Client, req)
+    if (req.params.uploadpart) return uploadpart(s3Client, req)
 
-    if (req.params.completeUpload)
-      return completeMultiPartUpload(s3Client, req)
+    if (req.params.completeUpload) return completeMultiPartUpload(s3Client, req)
 
   } catch (e) {
     console.log(e);
