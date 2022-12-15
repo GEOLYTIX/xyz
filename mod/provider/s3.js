@@ -72,18 +72,20 @@ async function uploadpart(s3Client, req) {
   return JSON.stringify(presignedurl);
 }
 
+//Function that will execute the CompleteMulti Part upload
 async function completeMultiPartUpload(s3Client, req) {
   const command = new CompleteMultipartUploadCommand({
     Bucket: process.env.KEY_AWSBUCKET,
     Key: req.params.filename,
     MultipartUpload: {
-      Parts: req.body
+      Parts: req.body //Requires an array of Etag's with their corresponding part numbers
     },
     UploadId: req.params.uploadid
   })
   return await s3Client.send(command);
 }
 
+//function to push data into an array
 function bodyData(req) {
 
   return new Promise((resolve, reject) => {
