@@ -19,7 +19,7 @@ module.exports = async req => {
       accessKeyId: process.env.KEY_AWSACCESSKEYID,
       secretAccessKey: process.env.KEY_AWSSECRETACCESSKEY
     },
-    region: 'eu-west-2', //TODO set region from env.
+    region: process.env.KEY_AWSREGION,
     Bucket: process.env.KEY_AWSBUCKET
   })
 
