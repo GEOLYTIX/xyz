@@ -1,12 +1,3 @@
-mapp.utils.merge(mapp.dictionaries, {
-  en: {
-    delete_vertex: "Remove vertex"
-  },
-  de: {
-    delete_vertex: "Entferne Scheitelpunkt"
-  }
-})
-
 export default (async function () {
 
   if (!window.turf) {
