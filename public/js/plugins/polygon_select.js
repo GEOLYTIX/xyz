@@ -19,9 +19,6 @@ export default (function () {
       // Draw polygon.
       type: 'Polygon',
 
-      // Prevent contextmenu showing at drawend event.
-      contextMenu: null,
-
       // Highlight style for intersecting features.
       highlightStyle: new ol.style.Style({
         fill: new ol.style.Fill({

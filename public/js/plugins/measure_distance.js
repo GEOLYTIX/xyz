@@ -11,7 +11,7 @@ export default (function () {
     }
 
     // Find the btnColumn element.
-    const btnColumn = document.getElementById("mapButton");
+    const btnColumn = document.getElementById('mapButton');
 
     // Append the plugin btn to the btnColumn.
     btnColumn && btnColumn.append(mapp.utils.html.node`
@@ -34,7 +34,7 @@ export default (function () {
         type: 'LineString',
 
         // Prevent contextmenu showing at drawend event.
-        contextMenu: null,
+        drawend: null,
 
         // Tooltip for geometry drawn by interaction.
         tooltip: Object.assign(plugin.tooltip, {
@@ -97,7 +97,7 @@ export default (function () {
           route.waypoints.push(ol.proj.toLonLat([
             e.coordinate[0],
             e.coordinate[1]
-          ], `EPSG:3857`))
+          ], 'EPSG:3857'))
 
           // Redraw route on each waypoint.
           if (route.waypoints.length > 1) {
@@ -125,7 +125,7 @@ export default (function () {
             // Request route info from here API.
             const response = await mapp.utils
               .xhr(`${mapview.host}/api/proxy?url=`
-                + `${encodeURIComponent(`https://router.hereapi.com/v8/routes?`
+                + `${encodeURIComponent('https://router.hereapi.com/v8/routes?'
                   + `${mapp.utils.paramString(params)}&{HERE}`)}`)
 
             if (!response.routes.length) return;
@@ -189,7 +189,7 @@ export default (function () {
           route.waypoints.push(ol.proj.toLonLat([
             e.coordinate[0],
             e.coordinate[1]
-          ], `EPSG:3857`))
+          ], 'EPSG:3857'))
 
           route.profile = route.profile || 'mapbox/driving';
 
