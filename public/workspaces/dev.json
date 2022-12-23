@@ -934,6 +934,17 @@
             "field": "store_name"
           },
           "toggleLocationViewEdits": true,
+          "filter": {
+            "current": {
+              "fascia": {
+                "in": [
+                  "Aldi",
+                  "Aldi Local",
+                  "Amazon Fresh"
+                ]
+              }
+            }
+          },
           "infoj": [
             {
               "type": "key"
@@ -1020,7 +1031,11 @@
               "group": "test",
               "field": "fascia",
               "title": "Fascia",
-              "inline": true
+              "inline": true,
+              "filter":{
+                "type":"in",
+                "distinct":true
+              }
             },
             {
               "field": "store_name",
