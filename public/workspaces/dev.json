@@ -1348,7 +1348,8 @@
                   {
                     "field": "numeric_field",
                     "title": "Num",
-                    "headerFilter": "numeric"
+                    "headerFilter": "numeric",
+                    "formatter":"toLocalString"
                   }
                 ]
               }
