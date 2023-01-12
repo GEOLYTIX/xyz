@@ -1135,6 +1135,7 @@
             "themes": {
               "Retail - Simple": {
                 "type": "categorized",
+                "meta": "yada yada",
                 "field": "retailer",
                 "cat": {
                   "A%26B": {
