@@ -781,6 +781,10 @@
           "format": "cluster",
           "dbs": "DEV",
           "table": "dev.retail_points",
+          "tables": {
+            "6": null,
+            "7": "dev.retail_points"
+          },
           "qID": "id",
           "geom": "geom_p_4326",
           "srid": "4326",
@@ -1133,6 +1137,7 @@
             "themes": {
               "Retail - Simple": {
                 "type": "categorized",
+                "meta": "yada yada",
                 "field": "retailer",
                 "cat": {
                   "A%26B": {
@@ -1350,7 +1355,8 @@
                   {
                     "field": "numeric_field",
                     "title": "Num",
-                    "headerFilter": "numeric"
+                    "headerFilter": "numeric",
+                    "formatter":"toLocalString"
                   }
                 ]
               }
