@@ -1753,7 +1753,8 @@
               "title": "images edit",
               "field": "images",
               "type": "images",
-              "edit": true
+              "edit": true,
+              "cloudinary_folder": "dev"
             },
             {
               "title": "documents",
@@ -1765,7 +1766,8 @@
               "title": "documents edit",
               "field": "documents",
               "type": "documents",
-              "edit": true
+              "edit": true,
+              "cloudinary_folder": "dev"
             },
             {
               "label": "Here Isoline Immediate",
