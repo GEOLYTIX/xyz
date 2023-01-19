@@ -25,3 +25,5 @@ caddy_linux_amd64
 \.ebextensions/
 
 public/js/lib/*
+
+vercel.json
