@@ -13,6 +13,7 @@ node_modules/*
 *.crt
 
 public/css/.sass-cache/
+public/js/plugins/*
 stats.json
 
 caddy_linux_amd64

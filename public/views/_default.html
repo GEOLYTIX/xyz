@@ -9,15 +9,15 @@
 
   <title>{{title}}</title>
 
-  <link rel="icon" type="image/x-icon" href="{{dir}}/icons/favicon.ico" />
+  <link rel="icon" type="image/x-icon" href="{{dir}}/public/icons/favicon.ico" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   
   <script src="https://cdn.jsdelivr.net/npm/ol@v7.2.2/dist/ol.js" defer></script>
 
   <!-- Load XYZ / MAPP stylesheet and library. -->
-  <link rel="stylesheet" href="{{dir}}/css/mapp.css" />
-  <link rel="stylesheet" href="{{dir}}/css/ui.css" />
+  <link rel="stylesheet" href="{{dir}}/public/css/mapp.css" />
+  <link rel="stylesheet" href="{{dir}}/public/css/ui.css" />
 
   <!-- Loader for Google Maps API
     <script src="https://unpkg.com/@googlemaps/js-api-loader@1.14.3/dist/index.min.js"></script> -->
@@ -35,10 +35,10 @@
   <!-- ChartJS will not be imported from skypack if loaded here
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>-->
 
-  <script type="module" src="{{dir}}/js/lib/mapp.js" defer></script>
-  <script type="module" src="{{dir}}/js/lib/ui.js" defer></script>
+  <script type="module" src="{{dir}}/public/js/lib/mapp.js" defer></script>
+  <script type="module" src="{{dir}}/public/js/lib/ui.js" defer></script>
 
-  <script src="{{dir}}/views/_default.js" defer></script>
+  <script src="{{dir}}/public/views/_default.js" defer></script>
 
   <style>
 
@@ -124,13 +124,13 @@
     }
 
     #ctrl-tabs > .locations.mask-icon {
-      -webkit-mask-image: url("{{dir}}/icons/icon-search.svg");
-      mask-image: url("{{dir}}/icons/icon-search.svg");
+      -webkit-mask-image: url("{{dir}}/public/icons/icon-search.svg");
+      mask-image: url("{{dir}}/public/icons/icon-search.svg");
     }
 
     #ctrl-tabs > .locations.mask-icon.active {
-      -webkit-mask-image: url("{{dir}}/icons/icon-location.svg");
-      mask-image: url("{{dir}}/icons/icon-location.svg");
+      -webkit-mask-image: url("{{dir}}/public/icons/icon-location.svg");
+      mask-image: url("{{dir}}/public/icons/icon-location.svg");
     }
 
     #ctrl-panel {
@@ -214,7 +214,7 @@
       #ctrls-divider {
         grid-row: 1/4;
         grid-column: 2;
-        background-image: url("{{dir}}/icons/pill-vertical.svg");
+        background-image: url("{{dir}}/public/icons/pill-vertical.svg");
         background-repeat: no-repeat;
         background-position: center;
         box-shadow: 3px 0px 6px -3px #777;
@@ -229,7 +229,7 @@
         position: relative;
         grid-row: 2;
         grid-column: 3;
-        background-image: url("{{dir}}/icons/pill-horizontal.svg");
+        background-image: url("{{dir}}/public/icons/pill-horizontal.svg");
         background-repeat: no-repeat;
         background-position: center;
         background-color: white;
