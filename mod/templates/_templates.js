@@ -10,8 +10,6 @@ const cloudfront = require('../provider/cloudfront')
 
 const file = require('../provider/file')
 
-const fetch = require('node-fetch')
-
 const getFrom = {
   https: async ref => {
 

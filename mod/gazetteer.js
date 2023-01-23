@@ -1,5 +1,3 @@
-const fetch = require('node-fetch')
-
 const dbs = require('./utils/dbs')()
 
 const sqlFilter = require('./utils/sqlFilter')

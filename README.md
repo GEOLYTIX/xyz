@@ -46,8 +46,6 @@ Node.js v12+
 
 [nanoid](https://www.npmjs.com/package/nanoid) - A tiny, secure, URL-friendly, unique string ID generator for JavaScript.
 
-[node-fetch](https://github.com/bitinn/node-fetch) - A light-weight module that brings window.fetch to Node.
-
 [Node-Postgres](https://github.com/brianc/node-postgres) - PostgreSQL client for Node.
 
 [nodemailer](https://github.com/nodemailer/nodemailer) - Send e-mails with Node – easy as cake!
