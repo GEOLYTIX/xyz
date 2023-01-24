@@ -3,7 +3,8 @@ const { S3Client,
   CreateMultipartUploadCommand,
   UploadPartCommand,
   CompleteMultipartUploadCommand,
-  PutObjectCommand } = require('@aws-sdk/client-s3');
+  PutObjectCommand,
+  ListObjectsCommand } = require('@aws-sdk/client-s3');
 
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
@@ -27,11 +28,18 @@ module.exports = async req => {
     upload,
     getuploadID,
     uploadpart,
-    completeUpload
+    completeUpload,
+    list
   }
 
   return commands[req.params.command](s3Client, req)
 
+}
+
+async function list(s3Client, req) {
+
+  const command = new ListObjectsCommand({ Bucket: req.params.bucket })
+  return s3Client.send(command);
 }
 
 //upload function for files that are lower than 4.5mb
