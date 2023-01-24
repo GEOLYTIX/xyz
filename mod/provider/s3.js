@@ -1,16 +1,16 @@
 //const { Upload } = require('@aws-sdk/lib-storage');
 const { S3Client,
-        CreateMultipartUploadCommand,
-        UploadPartCommand,
-        CompleteMultipartUploadCommand,
-        PutObjectCommand } = require('@aws-sdk/client-s3');
-        
+  CreateMultipartUploadCommand,
+  UploadPartCommand,
+  CompleteMultipartUploadCommand,
+  PutObjectCommand } = require('@aws-sdk/client-s3');
+
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
 
 module.exports = async req => {
 
   //dont data concatination if completing the upload.
-  if (!req.params.completeUpload)
+  if (!req.params.command === 'completeUpload')
     req.body = req.body && await bodyData(req) || null
 
   //init of s3Client used to execute commands
@@ -23,19 +23,14 @@ module.exports = async req => {
     Bucket: process.env.KEY_AWSBUCKET
   })
 
-  try {
-
-    if (req.params.upload) return upload(s3Client, req)
-
-    if (req.params.getuploadID) return createMultiPartUpload(s3Client, req)
-
-    if (req.params.uploadpart) return uploadpart(s3Client, req)
-
-    if (req.params.completeUpload) return completeMultiPartUpload(s3Client, req)
-
-  } catch (e) {
-    console.log(e);
+  const commands = {
+    upload,
+    getuploadID,
+    uploadpart,
+    completeUpload
   }
+
+  return commands[req.params.command](s3Client, req)
 
 }
 
@@ -50,7 +45,7 @@ async function upload(s3Client, req) {
 }
 
 //inits the multipart upload that returns an id. The id is used for the uploadpart commands
-async function createMultiPartUpload(s3Client, req) {
+async function getuploadID(s3Client, req) {
   const command = new CreateMultipartUploadCommand({
     Bucket: process.env.KEY_AWSBUCKET,
     Key: req.params.filename
@@ -74,7 +69,7 @@ async function uploadpart(s3Client, req) {
 }
 
 //Function that will execute the CompleteMulti Part upload
-async function completeMultiPartUpload(s3Client, req) {
+async function completeUpload(s3Client, req) {
   const command = new CompleteMultipartUploadCommand({
     Bucket: process.env.KEY_AWSBUCKET,
     Key: req.params.filename,
