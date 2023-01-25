@@ -1,9 +1,10 @@
-//const { Upload } = require('@aws-sdk/lib-storage');
-const { S3Client,
+const { 
+  S3Client,
   CreateMultipartUploadCommand,
   UploadPartCommand,
   CompleteMultipartUploadCommand,
   PutObjectCommand,
+  GetObjectCommand,
   ListObjectsCommand } = require('@aws-sdk/client-s3');
 
 const { getSignedUrl } = require("@aws-sdk/s3-request-presigner");
@@ -25,6 +26,7 @@ module.exports = async req => {
   })
 
   const commands = {
+    get,
     upload,
     getuploadID,
     uploadpart,
@@ -34,6 +36,20 @@ module.exports = async req => {
 
   return commands[req.params.command](s3Client, req)
 
+}
+
+async function get(s3Client, req) {
+
+  const command = new GetObjectCommand({ 
+    Bucket: req.params.bucket,
+    Key: req.params.key
+  })
+
+  const signedURL = await getSignedUrl(s3Client, command, {
+    expiresIn: 3600,
+  });
+
+  return JSON.stringify(signedURL);
 }
 
 async function list(s3Client, req) {
