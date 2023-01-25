@@ -21,8 +21,8 @@ module.exports = async req => {
       accessKeyId: process.env.KEY_AWSACCESSKEYID,
       secretAccessKey: process.env.KEY_AWSSECRETACCESSKEY
     },
-    region: process.env.KEY_AWSREGION,
-    Bucket: process.env.KEY_AWSBUCKET
+    region: req.params.region,
+    Bucket: req.params.bucket
   })
 
   const commands = {
