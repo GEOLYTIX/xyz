@@ -5,6 +5,9 @@
     "type": "git",
     "url": "https://github.com/geolytix/xyz"
   },
+  "engines": {
+    "node": "18.x"
+  },
   "scripts": {
     "test": "web-test-runner \"test/**/*.test.js\" --node-resolve",
     "_build": "npx esbuild ./lib/mapp.mjs ./lib/ui.mjs --bundle --minify --tree-shaking=false --sourcemap --format=iife --outdir=./public/js/lib"
@@ -15,10 +18,9 @@
     "@geolytix/saml2-js": "^3.0.5",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.33.0",
-    "jsonwebtoken": "^8.5.1",
+    "jsonwebtoken": "^9.0.0",
     "mongodb": "^4.11.0",
     "nanoid": "^3.2.0",
-    "node-fetch": "^2.6.7",
     "nodemailer": "^6.6.0",
     "pg": "^8.7.3"
   },
