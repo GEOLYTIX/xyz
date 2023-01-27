@@ -17,7 +17,7 @@
     "@aws-sdk/cloudfront-signer": "^3.90.0",
     "@geolytix/saml2-js": "^3.0.5",
     "bcryptjs": "^2.4.3",
-    "cloudinary": "^1.24.0",
+    "cloudinary": "^1.33.0",
     "jsonwebtoken": "^9.0.0",
     "mongodb": "^4.11.0",
     "nanoid": "^3.2.0",
