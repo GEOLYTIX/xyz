@@ -178,7 +178,11 @@
         "isoline_mapbox": {
           "access_token": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2t3NmJqZ3N4MG9zeDJ1bGprdzQ2ODllMCJ9.3xhSOxQLx1Egv5i8W7B57A"
         },
-        "isoline_here": true,
+        "isoline_here": {
+          "transportMode": "pedestrian",
+          "optimizeFor": "balanced",
+          "dateISO": null
+        },
         "delete": true
       }
     }
