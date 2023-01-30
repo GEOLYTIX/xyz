@@ -1,6 +1,14 @@
-const { MongoClient } = require('mongodb');
+try {
+
+  const { MongoClient } = require('mongodb');
+} catch {
+
+  console.log('MONOGODB module is not available.')
+}
 
 module.exports = async params => {
+
+  if (!MongoClient) return;
 
   if (!process.env.MONGODB) return;
 
