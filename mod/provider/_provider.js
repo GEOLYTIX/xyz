@@ -4,12 +4,15 @@ const cloudfront = require('./cloudfront')
 
 const cloudinary = require('./cloudinary')
 
+const s3 = require('./s3')
+
 module.exports = async (req, res) => {
 
   const _provider = {
     cloudfront: cloudfront,
     cloudinary: cloudinary,
     file: file,
+    s3: s3
   }
 
   const provider = _provider[req.params.provider]
