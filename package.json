@@ -6,7 +6,7 @@
     "url": "https://github.com/geolytix/xyz"
   },
   "engines": {
-    "node": "18.x"
+    "node": ">=18.x"
   },
   "scripts": {
     "test": "web-test-runner \"test/**/*.test.js\" --node-resolve",
