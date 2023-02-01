@@ -24,7 +24,8 @@
     "jsonwebtoken": "^9.0.0",
     "nanoid": "^3.2.0",
     "nodemailer": "^6.6.0",
-    "pg": "^8.7.3"
+    "pg": "^8.7.3",
+    "sass": "^1.58.0"
   },
   "devDependencies": {
     "cookie-parser": "^1.4.5",
