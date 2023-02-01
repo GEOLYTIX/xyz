@@ -24,8 +24,7 @@
     "jsonwebtoken": "^9.0.0",
     "nanoid": "^3.2.0",
     "nodemailer": "^6.6.0",
-    "pg": "^8.7.3",
-    "sass": "^1.58.0"
+    "pg": "^8.7.3"
   },
   "devDependencies": {
     "cookie-parser": "^1.4.5",
@@ -37,6 +36,7 @@
     "eslint-plugin-n": "^15.6.0",
     "eslint-plugin-promise": "^6.1.1",
     "express": "^4.17.1",
-    "uhtml": "^3.0.1"
+    "uhtml": "^3.0.1",
+    "sass": "^1.58.0"
   }
 }
