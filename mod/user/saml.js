@@ -1,41 +1,48 @@
-const saml2 = require("@geolytix/saml2-js");
+let acl, sp, idp;
 
-const { join } = require("path");
-
-const { readFileSync } = require("fs");
-
-const logger = require('../utils/logger')
-
-const acl = require('./acl')()
+const logger = require('../utils/logger');
 
 const jwt = require("jsonwebtoken");
 
-const sp = new saml2.ServiceProvider({
-  entity_id: process.env.SAML_ENTITY_ID,
-  private_key:
-    process.env.SAML_SP_CRT &&
-    String(
-      readFileSync(join(__dirname, `../../${process.env.SAML_SP_CRT}.pem`))
-    ),
-  certificate:
-    process.env.SAML_SP_CRT &&
-    String(
-      readFileSync(join(__dirname, `../../${process.env.SAML_SP_CRT}.crt`))
-    ),
-  assert_endpoint: process.env.SAML_ACS,
-  allow_unencrypted_assertion: true,
-});
+try {
+  const saml2 = require("saml2-js");
 
-const idp = new saml2.IdentityProvider({
-  sso_login_url: process.env.SAML_SSO,
-  sso_logout_url: process.env.SAML_SLO,
-  certificates: process.env.SAML_IDP_CRT && [
-    String(
-      readFileSync(join(__dirname, `../../${process.env.SAML_IDP_CRT}.crt`))
-    ),
-  ],
-  sign_get_request: true,
-});
+  const { join } = require("path");
+
+  const { readFileSync } = require("fs");
+
+  acl = require('./acl')();
+
+  sp = new saml2.ServiceProvider({
+    entity_id: process.env.SAML_ENTITY_ID,
+    private_key:
+      process.env.SAML_SP_CRT &&
+      String(
+        readFileSync(join(__dirname, `../../${process.env.SAML_SP_CRT}.pem`))
+      ),
+    certificate:
+      process.env.SAML_SP_CRT &&
+      String(
+        readFileSync(join(__dirname, `../../${process.env.SAML_SP_CRT}.crt`))
+      ),
+    assert_endpoint: process.env.SAML_ACS,
+    allow_unencrypted_assertion: true,
+  });
+
+  idp = new saml2.IdentityProvider({
+    sso_login_url: process.env.SAML_SSO,
+    sso_logout_url: process.env.SAML_SLO,
+    certificates: process.env.SAML_IDP_CRT && [
+      String(
+        readFileSync(join(__dirname, `../../${process.env.SAML_IDP_CRT}.crt`))
+      ),
+    ],
+    sign_get_request: true,
+  });
+
+} catch {
+  console.log('SAML2 module is not available.')
+}
 
 module.exports = (req, res) => {
   

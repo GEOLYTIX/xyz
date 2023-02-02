@@ -18,7 +18,6 @@
     "@aws-sdk/cloudfront-signer": "^3.90.0",
     "@aws-sdk/lib-storage": "^3.223.0",
     "@aws-sdk/s3-request-presigner": "^3.229.0",
-    "@geolytix/saml2-js": "^3.0.5",
     "bcryptjs": "^2.4.3",
     "cloudinary": "^1.33.0",
     "jsonwebtoken": "^9.0.0",
