@@ -1,4 +1,4 @@
-**v4.1.1**
+**v4.2.0**
 
 **Open source presentation, controller, domain and service layers for cloud native spatial data and application interfaces.**
 
@@ -45,8 +45,6 @@ Node.js v12+
 [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) - A Node implementation of JSON Web Token.
 
 [nanoid](https://www.npmjs.com/package/nanoid) - A tiny, secure, URL-friendly, unique string ID generator for JavaScript.
-
-[node-fetch](https://github.com/bitinn/node-fetch) - A light-weight module that brings window.fetch to Node.
 
 [Node-Postgres](https://github.com/brianc/node-postgres) - PostgreSQL client for Node.
 

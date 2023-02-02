@@ -1,5 +1,3 @@
-const fetch = require('node-fetch')
-
 const logs = new Set(process.env.LOGS?.split(',') || [])
 
 const { nanoid } = require('nanoid')

@@ -1,9 +1,12 @@
 {
   "name": "xyz",
-  "version": "v4.1.1",
+  "version": "v4.2.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/geolytix/xyz"
+  },
+  "engines": {
+    "node": ">=18.x"
   },
   "scripts": {
     "test": "web-test-runner \"test/**/*.test.js\" --node-resolve",
@@ -11,13 +14,14 @@
   },
   "license": "MIT",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.218.0",
     "@aws-sdk/cloudfront-signer": "^3.90.0",
+    "@aws-sdk/lib-storage": "^3.223.0",
+    "@aws-sdk/s3-request-presigner": "^3.229.0",
     "bcryptjs": "^2.4.3",
-    "cloudinary": "^1.24.0",
+    "cloudinary": "^1.33.0",
     "jsonwebtoken": "^9.0.0",
-    "mongodb": "^4.11.0",
     "nanoid": "^3.2.0",
-    "node-fetch": "^2.6.7",
     "nodemailer": "^6.6.0",
     "pg": "^8.7.3"
   },
@@ -31,6 +35,7 @@
     "eslint-plugin-n": "^15.6.0",
     "eslint-plugin-promise": "^6.1.1",
     "express": "^4.17.1",
-    "uhtml": "^3.0.1"
+    "uhtml": "^3.0.1",
+    "sass": "^1.58.0"
   }
 }

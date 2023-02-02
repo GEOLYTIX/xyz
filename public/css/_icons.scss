@@ -681,3 +681,43 @@
     mask-image: url("../icons/icon-wysiwyg.svg");
   }
 }
+
+.info {
+  &.bg-icon {
+    background-image: url("../icons/icon-info.svg");
+  }
+  &.mask-icon {
+    -webkit-mask-image: url("../icons/icon-info.svg");
+    mask-image: url("../icons/icon-info.svg");
+  }
+}
+
+.question-mark {
+  &.bg-icon {
+    background-image: url("../icons/icon-question-mark.svg");
+  }
+  &.mask-icon {
+    -webkit-mask-image: url("../icons/icon-question-mark.svg");
+    mask-image: url("../icons/icon-question-mark.svg");
+  }
+}
+
+.lightbulb {
+  &.bg-icon {
+    background-image: url("../icons/icon-lightbulb.svg");
+  }
+  &.mask-icon {
+    -webkit-mask-image: url("../icons/icon-lightbulb.svg");
+    mask-image: url("../icons/icon-lightbulb.svg");
+  }
+}
+
+.info-report {
+  &.bg-icon {
+    background-image: url("../icons/icon-info-report.svg");
+  }
+  &.mask-icon {
+    -webkit-mask-image: url("../icons/icon-info-report.svg");
+    mask-image: url("../icons/icon-info-report.svg");
+  }
+}

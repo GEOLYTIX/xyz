@@ -178,7 +178,11 @@
         "isoline_mapbox": {
           "access_token": "pk.eyJ1IjoiZGJhdXN6dXMiLCJhIjoiY2t3NmJqZ3N4MG9zeDJ1bGprdzQ2ODllMCJ9.3xhSOxQLx1Egv5i8W7B57A"
         },
-        "isoline_here": true,
+        "isoline_here": {
+          "transportMode": "pedestrian",
+          "optimizeFor": "balanced",
+          "dateISO": null
+        },
         "delete": true
       }
     }
@@ -225,7 +229,8 @@
         "${DIR}/js/plugins/table_entry.js",
         "${DIR}/js/plugins/custom_filter.js",
         "${DIR}/js/plugins/mvt_select_tab.js",
-        "${DIR}/js/plugins/update_entry.js"
+        "${DIR}/js/plugins/update_entry.js",
+        "${DIR}/js/plugins/s3.js"
       ],
       "measure_distance": {
         "tooltip": {
@@ -805,6 +810,7 @@
             "point": true,
             "delete": true
           },
+          "s3bucket_upload": {},
           "dataviews": {
             "hide": true,
             "Retail Points": {
@@ -1753,7 +1759,8 @@
               "title": "images edit",
               "field": "images",
               "type": "images",
-              "edit": true
+              "edit": true,
+              "cloudinary_folder": "dev"
             },
             {
               "title": "documents",
@@ -1765,7 +1772,8 @@
               "title": "documents edit",
               "field": "documents",
               "type": "documents",
-              "edit": true
+              "edit": true,
+              "cloudinary_folder": "dev"
             },
             {
               "label": "Here Isoline Immediate",
