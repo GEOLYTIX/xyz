@@ -227,7 +227,7 @@ window.onload = async () => {
     attribution: {
       target: document.querySelector('#Attribution > .attribution-links'),
       links: {
-        [`XYZ v${mapp.version}`]: "https://geolytix.github.io/xyz",
+        [`XYZ v${mapp.version}`]: "https://github.com/GEOLYTIX/xyz",
         ["SHA"]: `https://github.com/GEOLYTIX/xyz/commit/${mapp.hash}`,
         Openlayers: "https://openlayers.org",
       },
