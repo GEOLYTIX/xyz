@@ -148,9 +148,13 @@ a > img {
   font-size: 95%;
   
   a {
+    pointer-events: auto;
     margin-left: 5px;
     display: inline-block;
     white-space: nowrap;
+    line-height: 1;
+    background: #fff9;
+    border-bottom: 2px solid $primary-light;
   }
 }
 
