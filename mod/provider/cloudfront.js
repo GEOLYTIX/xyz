@@ -9,7 +9,7 @@ const { readFileSync } = require('fs')
 
 const { join } = require('path')
 
-const { getSignedUrl } = require("@aws-sdk/cloudfront-signer");
+const { getSignedUrl } = require('@aws-sdk/cloudfront-signer');
 
 module.exports = async ref => {
 

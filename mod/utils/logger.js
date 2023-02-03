@@ -27,7 +27,7 @@ module.exports = (msg, log) => {
       method: 'post',
       headers: { 
         'Content-Type': 'application/json',
-        "X-API-KEY": keySource[0],
+        'X-API-KEY': keySource[0],
       },
       body: JSON.stringify({
         msg: msg
