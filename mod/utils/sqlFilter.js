@@ -19,10 +19,10 @@ const filterTypes = {
 
   like: (col, val) =>
     `(${val
-      .split(",")
+      .split(',')
       .filter((val) => val.length > 0)
       .map((val) => `"${col}" ILIKE \$${addValues(`${val}%`, true)}`)
-      .join(" OR ")})`,
+      .join(' OR ')})`,
 
   match: (col, val) => `"${col}"::text ILIKE \$${addValues(val)}`
 }
@@ -79,7 +79,7 @@ function mapFilterEntries(filter) {
         return Object.keys(value)
             .filter(filterType => !!filterTypes[filterType])
             .map(filterType => filterTypes[filterType](field, value[filterType]))
-            .join(" AND ")
+            .join(' AND ')
             
       })
 

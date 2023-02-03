@@ -12,6 +12,6 @@ module.exports = {
   },
   rules: {
     eqeqeq: 'off',
-    quotes: ['error', 'single']
+    quotes: ['error', 'single' , { 'allowTemplateLiterals': true }]
   }
 }

@@ -2,14 +2,14 @@ let acl, sp, idp;
 
 const logger = require('../utils/logger');
 
-const jwt = require("jsonwebtoken");
+const jwt = require('jsonwebtoken');
 
 try {
-  const saml2 = require("saml2-js");
+  const saml2 = require('saml2-js');
 
-  const { join } = require("path");
+  const { join } = require('path');
 
-  const { readFileSync } = require("fs");
+  const { readFileSync } = require('fs');
 
   acl = require('./acl')();
 
@@ -47,7 +47,7 @@ try {
 module.exports = (req, res) => {
   
   if (req.url.match(/\/saml\/metadata/)) {
-    res.setHeader("Content-Type", "application/xml");
+    res.setHeader('Content-Type', 'application/xml');
     res.send(sp.create_metadata());
   }
 
@@ -77,7 +77,7 @@ module.exports = (req, res) => {
     sp.create_login_request_url(idp, {}, (err, login_url, request_id) => {
       if (err != null) return res.send(500);
 
-      res.setHeader("location", login_url);
+      res.setHeader('location', login_url);
       res.status(301).send();
     });
   }
@@ -129,11 +129,11 @@ module.exports = (req, res) => {
         const cookie =
           `${process.env.TITLE}=${token};HttpOnly;` +
           `Max-Age=${process.env.COOKIE_TTL};` +
-          `Path=${process.env.DIR || "/"};`;
+          `Path=${process.env.DIR || '/'};`;
 
-        res.setHeader("Set-Cookie", cookie);
+        res.setHeader('Set-Cookie', cookie);
 
-        res.setHeader("location", `${process.env.DIR || '/'}`);
+        res.setHeader('location', `${process.env.DIR || '/'}`);
 
         return res.status(302).send();
       }

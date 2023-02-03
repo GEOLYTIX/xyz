@@ -30,13 +30,13 @@ process.env.TITLE = process.env.TITLE || 'GEOLYTIX | XYZ'
 process.env.DIR = process.env.DIR || ''
 
 function IEdetect(sUsrAg) {
-  if (sUsrAg.indexOf("Firefox") > -1) return false
+  if (sUsrAg.indexOf('Firefox') > -1) return false
 
-  if (sUsrAg.indexOf("SamsungBrowser") > -1) return false
+  if (sUsrAg.indexOf('SamsungBrowser') > -1) return false
   
-  if (sUsrAg.indexOf("Opera") > -1 || sUsrAg.indexOf("OPR") > -1) return false
+  if (sUsrAg.indexOf('Opera') > -1 || sUsrAg.indexOf('OPR') > -1) return false
   
-  if (sUsrAg.indexOf("Trident") > -1) return true
+  if (sUsrAg.indexOf('Trident') > -1) return true
 }
 
 module.exports = async (req, res) => {
