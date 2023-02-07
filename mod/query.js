@@ -4,7 +4,7 @@ const sqlFilter = require('./utils/sqlFilter')
 
 const Roles = require('./utils/roles.js')
 
-const logger = require("./utils/logger");
+const logger = require('./utils/logger');
 
 module.exports = async (req, res) => {
 
@@ -102,17 +102,17 @@ module.exports = async (req, res) => {
       .replace(/\$\{(.*?)\}/g, matched => {
 
         // Remove template brackets from matched param.
-        const param = matched.replace(/\$|\{|\}/g, "")
+        const param = matched.replace(/\$|\{|\}/g, '')
 
         // Get param value from request params object.
-        const change = req.params[param] || ""
+        const change = req.params[param] || ''
 
         // Change value may only contain a limited set of whitelisted characters.
         if (!reserved.has(param) && !/^[A-Za-z0-9,"'._-\s]*$/.test(change)) {
 
           // Err and return empty string if the change value is invalid.
-          console.error("Change param no bueno")
-          return ""
+          console.error('Change param no bueno')
+          return ''
         }
 
         return change
@@ -122,7 +122,7 @@ module.exports = async (req, res) => {
       .replace(/\%\{(.*?)\}/g, matched => {
 
         // Remove template brackets from matched param.
-        const param = matched.replace(/\%|\{|\}/g, "")
+        const param = matched.replace(/\%|\{|\}/g, '')
 
         var val = req.params[param]// || ""
 
