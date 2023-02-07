@@ -1,16 +1,16 @@
-const cloudfront = require("../provider/cloudfront");
+const cloudfront = require('../provider/cloudfront');
 
-const file = require("../provider/file");
+const file = require('../provider/file');
 
-const http = require("./httpsAgent");
+const http = require('./httpsAgent');
 
 const getFrom = {
   https: (ref) => http(ref),
-  file: (ref) => file(ref.split(":")[1]),
-  cloudfront: (ref) => cloudfront(ref.split(":")[1]),
+  file: (ref) => file(ref.split(':')[1]),
+  cloudfront: (ref) => cloudfront(ref.split(':')[1]),
 };
 
-const logger = require("../utils/logger");
+const logger = require('../utils/logger');
 
 module.exports = async (workspace) => {
 
@@ -19,41 +19,41 @@ module.exports = async (workspace) => {
     {
       // Query templates:
       count_locations: {
-        template: require("../../public/js/queries/count_locations"),
+        template: require('../../public/js/queries/count_locations'),
       },
       distinct_values: {
-        template: require("../../public/js/queries/distinct_values"),
+        template: require('../../public/js/queries/distinct_values'),
       },
       field_stats: {
-        template: require("../../public/js/queries/field_stats"),
+        template: require('../../public/js/queries/field_stats'),
       },
       field_min: {
-        template: require("../../public/js/queries/field_min"),
+        template: require('../../public/js/queries/field_min'),
       },
       field_max: {
-        template: require("../../public/js/queries/field_max"),
+        template: require('../../public/js/queries/field_max'),
       },
       get_nnearest: {
-        render: require("../../public/js/queries/get_nnearest"),
+        render: require('../../public/js/queries/get_nnearest'),
       },
       infotip: {
-        render: require("../../public/js/queries/infotip"),
+        render: require('../../public/js/queries/infotip'),
       },
       labels: {
-        render: require("../../public/js/queries/labels"),
+        render: require('../../public/js/queries/labels'),
       },
       layer_extent: {
-        template: require("../../public/js/queries/layer_extent"),
+        template: require('../../public/js/queries/layer_extent'),
       },
       get_last_location: {
-        render: require("../../public/js/queries/get_last_location"),
+        render: require('../../public/js/queries/get_last_location'),
       },
       mvt_cache: {
         admin: true,
-        render: require("../../public/js/queries/mvt_cache"),
+        render: require('../../public/js/queries/mvt_cache'),
       },
       set_field_array: {
-        template: require("../../public/js/queries/set_field_array"),
+        template: require('../../public/js/queries/set_field_array'),
       },
 
       // Default templates can be overridden by assigning a template with the same name.
@@ -75,11 +75,11 @@ module.exports = async (workspace) => {
       // Substitute parameter in src string.
       entry[1].src = entry[1].src.replace(
         /\$\{(.*?)\}/g,
-        (matched) => process.env[`SRC_${matched.replace(/\$|\{|\}/g, "")}`] || matched
+        (matched) => process.env[`SRC_${matched.replace(/\$|\{|\}/g, '')}`] || matched
       );
 
       // Get template from src.
-      getFrom[entry[1].src.split(":")[0]](entry[1].src).then(resolveFrom);
+      getFrom[entry[1].src.split(':')[0]](entry[1].src).then(resolveFrom);
 
       function resolveFrom(_template) {
 
@@ -94,7 +94,7 @@ module.exports = async (workspace) => {
         }
 
         // Template is a module.
-        if (entry[1].module || (entry[1].type && entry[1].type === "module")) {
+        if (entry[1].module || (entry[1].type && entry[1].type === 'module')) {
           try {
 
             // Attempt to construct module from string.
@@ -144,7 +144,7 @@ module.exports = async (workspace) => {
       .then((arr) => {
 
         // Log set of template objects from resolved promises.
-        logger(arr, "templates");
+        logger(arr, 'templates');
 
         // Spread array of template objects and assign to workspace.
         Object.assign(workspace.templates, ...arr);
