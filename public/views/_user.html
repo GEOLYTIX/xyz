@@ -292,7 +292,8 @@
         ]
       });
 
-    
+
+    await new Promise(resolve => userTable.on('tableBuilt', resolve))
 
     let blocked = true
     userTable.setFilter("blocked", "!=", true);
