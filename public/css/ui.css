@@ -879,8 +879,7 @@ label.checkbox input:disabled ~ * {
 }
 .dropdown > ul {
   display: none;
-  position: absolute;
-  width: 100%;
+  position: fixed;
   max-height: 500px;
   overflow-y: auto;
   overflow-x: hidden;
