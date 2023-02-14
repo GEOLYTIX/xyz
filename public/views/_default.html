@@ -140,6 +140,21 @@
       display: block;
     }
 
+    #ctrl-hide-btn {
+      display: none;
+      padding: 0.3em;
+      background: #E9E3DD;
+      cursor: pointer;
+    }
+
+    #ctrl-hide-btn .icon {
+      display: block;
+      width: 1.5em;
+      margin: auto;
+      /* filter to obtain #003d57 for svg */
+      filter: invert(17%) sepia(81%) saturate(1196%) hue-rotate(168deg) brightness(87%) contrast(102%);
+    }
+
     .bg-icon.mapp {
       background-image: url("https://geolytix.github.io/public/mapp_v4/emblem.svg");
     }
@@ -245,12 +260,11 @@
       }
 
       body {
-        overflow-y: scroll;
-        overflow-x: hidden;
+        overflow: hidden;
       }
 
       #Map {
-        height: calc(100% - 50px);
+        height: 100%;
         width: 100%;
       }
 
@@ -278,10 +292,26 @@
         height: 3em;
       }
 
+      /* selectors for specificity */
+      #mapButton>#ctrl-reveal-btn {
+        background-color: #003D57;
+      }
+      #mapButton>#ctrl-reveal-btn .mask-icon {
+        background-color: #e18335 ;
+      }
+
       #ctrls {
-        width: 100%;
+        width: 70vw;
         height: 100%;
-        position: relative;
+        position: absolute;
+        top: 0;
+        right: -100%;
+        transition: right 0.3s ease-in-out;
+        overflow-y: hidden;
+      }
+
+      #ctrls.active {
+        right: 0;
       }
 
       #ctrls-divider {
@@ -299,6 +329,15 @@
       .mobile-disabled {
         opacity: 0.3;
         pointer-events: none;
+      }
+    }
+
+    @media only screen and (max-width: 300px) {
+      #ctrls {
+        width: 100%;
+      }
+      #ctrls #ctrl-hide-btn {
+        display: block;
       }
     }
 
@@ -330,6 +369,12 @@
   <div id="ctrls-divider"></div>
 
   <div id="ctrls" class="lighter-background">
+
+    <div>
+      <div id="ctrl-hide-btn">
+        <img class="icon" src="{{dir}}/public/icons/icon-close.svg" />
+      </div>
+    </div>
 
     <div id="ctrl-tabs" class="hover">
       <div data-id="layers" class="mask-icon layers active"></div>

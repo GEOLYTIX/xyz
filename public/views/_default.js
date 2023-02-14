@@ -234,6 +234,21 @@ window.onload = async () => {
     }
   });
 
+  // Add mobile reveal panel button.
+  btnColumn.appendChild(mapp.utils.html.node`
+    <button
+      id="ctrl-reveal-btn"
+      class="desktop-display-none"
+      onclick=${(e) => {
+        document.querySelector("#ctrls").classList.toggle("active");
+      }}>
+      <div class="mask-icon panel-reveal">`)
+
+  // Add click event to hide panel button
+  document.querySelector("#ctrl-hide-btn").addEventListener("click", () => {
+    document.querySelector("#ctrls").classList.toggle("active");
+  })
+
   // Add zoomIn button.
   const btnZoomIn = btnColumn.appendChild(mapp.utils.html.node`
     <button

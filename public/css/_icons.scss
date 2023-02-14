@@ -415,6 +415,16 @@
   }
 }
 
+.panel-reveal {
+  &.bg-icon {
+    background-image: url("../icons/icon-panel-reveal.svg");
+  }
+  &.mask-icon {
+    -webkit-mask-image: url("../icons/icon-panel-reveal.svg");
+    mask-image: url("../icons/icon-panel-reveal.svg");
+  }
+}
+
 .people {
   &.bg-icon {
     background-image: url("../icons/icon-people.svg");
