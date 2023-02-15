@@ -19,7 +19,7 @@ module.exports = async (req, res) => {
   }
 
   if (!req.params.table) {
-    return res.send(null)
+    return res.status(204).send(null)
   }
 
   let
@@ -64,6 +64,10 @@ module.exports = async (req, res) => {
   var geom = geoms && z < parseInt(geoms[0]) && Object.values(layer.geoms)[0] || geom
   
   var geom = geoms && z > parseInt(geoms[geoms.length -1]) && Object.values(layer.geoms)[geoms.length -1]  || geom
+
+  if (!geom) {
+    return res.status(204).send(null)
+  }
 
   const tile = `
     SELECT
