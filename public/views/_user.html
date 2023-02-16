@@ -3,7 +3,7 @@
 
 <head data-user="{{user}}" data-dir="{{dir}}">
   <title>XYZ | User Administration</title>
-  <link rel="icon" type="image/x-icon" href="{{dir}}/icons/favicon.ico" />
+  <link rel="icon" type="image/x-icon" href="{{dir}}/public/icons/favicon.ico" />
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
@@ -37,43 +37,43 @@
     }
 
     .icon-face {
-      background-image: url("{{dir}}/icons/icon-face.svg");
+      background-image: url("{{dir}}/public/icons/icon-face.svg");
     }
 
     .icon-logout {
-      background-image: url("{{dir}}/icons/icon-logout.svg");
+      background-image: url("{{dir}}/public/icons/icon-logout.svg");
     }
 
     .icon-tick-done {
-      background-image: url("{{dir}}/icons/icon-tick-done.svg");
+      background-image: url("{{dir}}/public/icons/icon-tick-done.svg");
     }
 
     .icon-tick-done-all {
-      background-image: url("{{dir}}/icons/icon-tick-done-all.svg");
+      background-image: url("{{dir}}/public/icons/icon-tick-done-all.svg");
     }
 
     .icon-warning {
-      background-image: url("{{dir}}/icons/icon-warning.svg");
+      background-image: url("{{dir}}/public/icons/icon-warning.svg");
     }
 
     .icon-translate {
-      background-image: url("{{dir}}/icons/icon-translate.svg");
+      background-image: url("{{dir}}/public/icons/icon-translate.svg");
     }
 
     .icon-supervisor-account {
-      background-image: url("{{dir}}/icons/icon-supervisor-account.svg");
+      background-image: url("{{dir}}/public/icons/icon-supervisor-account.svg");
     }
 
     .icon-settings {
-      background-image: url("{{dir}}/icons/icon-settings.svg");
+      background-image: url("{{dir}}/public/icons/icon-settings.svg");
     }
 
     .icon-key {
-      background-image: url("{{dir}}/icons/icon-key.svg");
+      background-image: url("{{dir}}/public/icons/icon-key.svg");
     }
 
     .icon-lock-closed {
-      background-image: url("{{dir}}/icons/icon-lock-closed.svg");
+      background-image: url("{{dir}}/public/icons/icon-lock-closed.svg");
       height: 40px;
       width: 30px;
     }
@@ -292,7 +292,8 @@
         ]
       });
 
-    
+
+    await new Promise(resolve => userTable.on('tableBuilt', resolve))
 
     let blocked = true
     userTable.setFilter("blocked", "!=", true);

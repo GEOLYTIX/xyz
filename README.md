@@ -34,13 +34,11 @@ Dynamic module imports reduce the need to bundle 3rd party libraries such as [Ta
 
 ## XYZ Dependencies
 
-Node.js v12+
+Node.js v18+
 
 [bcryptjs](https://www.npmjs.com/package/bcryptjs) - Optimized bcrypt in JavaScript with zero dependencies.
 
 [cloudinary](https://www.npmjs.com/package/cloudinary) - Provides simple, yet comprehensive image and video upload, transformation, optimization, and delivery capabilities.
-
-[Express](https://www.npmjs.com/package/express) - Fast, unopinionated, minimalist web framework for Node.
 
 [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) - A Node implementation of JSON Web Token.
 
@@ -50,11 +48,29 @@ Node.js v12+
 
 [nodemailer](https://github.com/nodemailer/nodemailer) - Send e-mails with Node – easy as cake!
 
+[aws-sdk](https://github.com/aws/aws-sdk-js-v3) - Several modules are required in order to access resources on cloudfront or S3.
+
+### Development dependencies
+
+Following development dependencies are required to build the library and run a local instance of the XYZ host.
+
+[Express](https://www.npmjs.com/package/express) - Fast, unopinionated, minimalist web framework for Node.
+
+[cookie-parser](https://www.npmjs.com/package/cookie-parser) - Parse cookie header for express.js.
+
+[dotenv](https://www.npmjs.com/package/dotenv) - Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env.
+
+[esbuild](https://www.npmjs.com/package/esbuild) - A JavaScript bundler and minifier.
+
+[µhtml](https://github.com/WebReflection/uhtml) - A micro HTML/SVG render which is bundled as utils into the MAPP library.
+
+[SASS](https://www.npmjs.com/package/sass) - A pure JavaScript implementation of Sass.
+
+[eslint](https://www.npmjs.com/package/eslint) - A tool for identifying and reporting on patterns found in ECMAScript/JavaScript code.
+
 ## Mapp Dependencies
 
 [Openlayers](https://github.com/openlayers/openlayers) - High-performance web mapping engine.
-
-[µhtml](https://github.com/WebReflection/uhtml) - A micro HTML/SVG render.
 
 ## License
 

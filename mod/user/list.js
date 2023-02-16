@@ -15,7 +15,8 @@ module.exports = async (req, res) => {
     failedattempts,
     approved_by,
     blocked
-  FROM acl_schema.acl_table;`)
+  FROM acl_schema.acl_table
+  ORDER BY email;`)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 

@@ -14,6 +14,7 @@ node_modules/*
 
 public/css/.sass-cache/
 public/workspaces/*
+public/js/plugins/*
 stats.json
 
 caddy_linux_amd64
