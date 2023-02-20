@@ -20,13 +20,13 @@ module.exports = async workspace => {
 
       layer.key = layer_key
 
-      layer = layer.template && Object.assign({},
+      layer = Object.assign({},
 
-        // Assign layer template.
-        workspace.templates[layer.template] || {},
+        // Assign layer template implicit or from key lookup.
+        workspace.templates[layer.template || layer.key] || {},
 
         // Layer entries must override template entries.
-        layer) || layer
+        layer)
 
       layer = layer.format && Object.assign({},
 
