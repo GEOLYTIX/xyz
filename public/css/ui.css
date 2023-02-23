@@ -879,7 +879,7 @@ label.checkbox input:disabled ~ * {
 }
 .dropdown > ul {
   display: none;
-  position: fixed;
+  position: absolute;
   max-height: 500px;
   overflow-y: auto;
   overflow-x: hidden;
@@ -1213,6 +1213,9 @@ label.checkbox input:disabled ~ * {
 }
 .tabview > .panel > .dataview-target {
   position: absolute;
+}
+.tabview .dropdown > ul {
+  position: fixed;
 }
 
 .no-select {
