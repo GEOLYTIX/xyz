@@ -55,4 +55,8 @@
       position: absolute;
     }
   }
+
+  .dropdown > ul {
+    position: fixed;
+  }
 }
