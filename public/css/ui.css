@@ -1173,6 +1173,16 @@ label.checkbox input:disabled ~ * {
   display: grid;
   grid-template-rows: 50px auto;
 }
+.tabview.disabled::after {
+  content: "";
+  height: 100%;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
+  background-color: #fff;
+  opacity: 0.7;
+}
 .tabview > .tabs {
   width: 100%;
   height: 50px;
