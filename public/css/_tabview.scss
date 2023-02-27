@@ -6,6 +6,17 @@
   background-color: white;
   display: grid;
   grid-template-rows: 50px auto;
+
+  &.disabled::after {
+    content: "";
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    top: 0;
+    background-color: #fff;
+    opacity: 0.7;
+  }
  
   > .tabs {
     width: 100%;
