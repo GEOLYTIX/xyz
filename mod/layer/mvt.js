@@ -120,12 +120,12 @@ module.exports = async (req, res) => {
 
   if (!filter && layer.mvt_cache) {
 
-    var rows = await dbs[layer.dbs](`SELECT mvt FROM ${layer.mvt_cache} WHERE z = ${z} AND x = ${x} AND y = ${y}`)
+    var rows = await dbs[layer.dbs || req.params.workspace.dbs](`SELECT mvt FROM ${layer.mvt_cache} WHERE z = ${z} AND x = ${x} AND y = ${y}`)
 
     if (rows instanceof Error) console.log('failed to query mvt cache')
 
     if(!rows.length) {
-      rows = await dbs[layer.dbs](`
+      rows = await dbs[layer.dbs || req.params.workspace.dbs](`
         WITH n AS (
           INSERT INTO ${layer.mvt_cache}
           ${tile} ON CONFLICT (z, x, y) DO NOTHING RETURNING mvt
@@ -147,7 +147,7 @@ module.exports = async (req, res) => {
       || theme.field
   }
 
-  var rows = dbs[layer.dbs] && await dbs[layer.dbs](tile, SQLparams)
+  var rows = await dbs[layer.dbs || req.params.workspace.dbs](tile, SQLparams)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 

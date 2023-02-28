@@ -78,7 +78,7 @@ module.exports = async (req, res) => {
   }
 
   // Get query pool from dbs module.
-  const dbs = dbs_connections[template.dbs || req.params.dbs]
+  const dbs = dbs_connections[template.dbs || req.params.dbs || req.params.workspace.dbs]
 
   if (!dbs) return res.status(400).send(`DBS connection not found.`)
 

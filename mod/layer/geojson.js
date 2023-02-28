@@ -41,7 +41,7 @@ module.exports = async (req, res) => {
     FROM ${req.params.table || layer.table}
     WHERE true ${filter};`
 
-  var rows = await dbs[layer.dbs](q, SQLparams)
+  var rows = await dbs[layer.dbs || req.params.workspace.dbs](q, SQLparams)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 

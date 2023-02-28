@@ -40,7 +40,7 @@ module.exports = async (req, res) => {
     AND ${size} >= 1 LIMIT 10000;`
 
 
-  var rows = await dbs[layer.dbs](q)
+  var rows = await dbs[layer.dbs || req.params.workspace.dbs](q)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
