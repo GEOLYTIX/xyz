@@ -1,4 +1,4 @@
-const templates = require('./templates/_templates')
+const templates = require('./templates/_templates');
 
 module.exports = async (req, res) => {
 
@@ -7,7 +7,7 @@ module.exports = async (req, res) => {
     admin: req.params.user.admin,
     roles: req.params.user.roles,
     language: req.params.user.language
-  }))
+  }));
 
   const params = Object.assign(
     req.params || {},
@@ -19,18 +19,26 @@ module.exports = async (req, res) => {
       locale: req.params.locale,
       login: (process.env.PRIVATE || process.env.PUBLIC) && 'true',
     },
-    Object.fromEntries(Object.entries(process.env).filter(entry => entry[0].match(/^SRC_/))))
+    // regex matches SRC_ at the start of string
+    Object.fromEntries(Object.entries(process.env).filter(entry => entry[0].match(/^SRC_/)))
+  );
 
   // Template is provided from workspace
   if (req.params.template?.template) {
 
-    return res.send(req.params.template?.template.replace(/\{\{(.*?)\}\}/g, matched => params[matched.replace(/\{|\{|\}\}/g, '')] || ''))
+    // regex captures characters inside {{ }}
+    return res.send(req.params.template?.template.replace(/\{\{(.*?)\}\}/g, matched => {
+
+      // regex matches {{ or }}
+      return params[matched.replace(/\{\{|\}\}/g, '')] || '';
+    }));
   }
 
   let template = await templates(
     'default_view',
     req.params.language || req.params.user?.language,
-    params)
+    params
+  );
 
-  res.send(template)
+  res.send(template);
 }
