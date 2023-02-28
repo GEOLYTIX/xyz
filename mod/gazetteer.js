@@ -130,7 +130,7 @@ async function datasets(req, locale, results) {
       ${filter}
       LIMIT ${dataset.limit || locale.gazetteer.limit || 10}`
 
-    records.push(dbs[dataset.dbs || layer && layer.dbs](q, SQLparams));
+    records.push(dbs[dataset.dbs || layer && layer.dbs || req.params.workspace.dbs](q, SQLparams));
 
   }
 
@@ -200,7 +200,7 @@ async function layerGaz(q, layer) {
       WHERE ${gaz.qterm}::text ILIKE $1
       LIMIT ${gaz.limit || 10}`
 
-    let rows = await dbs[layer.dbs](q, SQLparams);
+    let rows = await dbs[layer.dbs || req.params.workspace.dbs](q, SQLparams);
 
     results = results.concat(rows)
   }
