@@ -57,9 +57,7 @@ module.exports = defaults = {
       cluster_resolution: 0.1,
       style: {       
         default: {
-          type: 'dot',
-          fillColor: '#999999',
-          scale: 1,
+          type: 'dot'
         },
         cluster: {
           clusterScale: 2
