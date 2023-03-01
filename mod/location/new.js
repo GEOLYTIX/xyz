@@ -23,12 +23,12 @@ module.exports = async (req, res) => {
   SELECT ${vals.join(',')}
   RETURNING ${layer.qID} AS id;`
 
-  var rows = await dbs[layer.dbs](q)
+  var rows = await dbs[layer.dbs || req.params.workspace.dbs](q)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
   // Cached tiles which intersect the geometry must be retired.
-  if (layer.mvt_cache) await dbs[layer.dbs](`
+  if (layer.mvt_cache) await dbs[layer.dbs || req.params.workspace.dbs](`
     DELETE 
     FROM ${layer.mvt_cache}
     WHERE ST_Intersects(tile, (
