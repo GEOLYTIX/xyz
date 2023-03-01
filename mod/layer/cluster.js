@@ -81,7 +81,7 @@ module.exports = async (req, res) => {
       FROM ${params.table}
       WHERE ${params.where_sql}`
   
-    var rows = await dbs[params.layer.dbs](q, SQLparams)
+    var rows = await dbs[layer.dbs || req.params.workspace.dbs](q, SQLparams)
 
     if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
@@ -117,7 +117,7 @@ module.exports = async (req, res) => {
     FROM ${params.cluster_sql}
     GROUP BY ${params.group_by.join(',')};`
 
-  var rows = await dbs[layer.dbs](q, SQLparams)
+  var rows = await dbs[layer.dbs || req.params.workspace.dbs](q, SQLparams)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
