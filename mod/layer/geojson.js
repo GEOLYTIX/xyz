@@ -10,6 +10,8 @@ module.exports = async (req, res) => {
 
   const layer = req.params.layer
 
+  const geom = req.params.geom || layer.geom
+
   // Validate URL parameter
   if (!validateRequestParams(req.params)) {
 
@@ -33,13 +35,13 @@ module.exports = async (req, res) => {
   var q = `
     SELECT
       ${layer.qID || null} AS id,
-      ST_asGeoJson(${layer.geom}) AS geomj
+      ST_asGeoJson(${geom}) AS geomj
       ${layer.properties
         && `, json_build_object(${Object.entries(layer.properties).map(e=>`'${e[0]}',${e[1]}`).join(', ')}) as properties`
         || ''}
 
     FROM ${req.params.table || layer.table}
-    WHERE true ${filter};`
+    WHERE ${geom} IS NOT NULL ${filter};`
 
   var rows = await dbs[layer.dbs](q, SQLparams)
 
