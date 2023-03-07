@@ -20,7 +20,8 @@ module.exports = async workspace => {
 
       layer.key = layer_key
 
-      layer = Object.assign({},
+      // Merge layer templates
+      layer = merge({},
 
         // Assign layer template implicit or from key lookup.
         workspace.templates[layer.template || layer.key] || {},
@@ -50,6 +51,7 @@ module.exports = async workspace => {
 
       if (Array.isArray(layer.templates)) {
 
+        // Merge templates from templates array into layer.
         layer.templates.forEach(template => {
           merge(layer, workspace.templates[template] || {})
         })
