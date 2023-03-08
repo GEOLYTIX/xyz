@@ -56,6 +56,13 @@ button {
   &.active {
     background-color: $on;
   }
+
+  &.btn-icon {
+    padding: 0.3em 1em;
+    border: 1px solid $lighter;
+    border-radius: 3px;
+    box-shadow: 1px 1px 3px $primary-light;
+  }
 }
 
 .btn-column {
@@ -86,4 +93,10 @@ button {
   > * {
     margin: 10px 5px;
   }
+}
+
+.btn-icon {
+  border: 1px solid $lighter;
+  border-radius: 3px;
+  box-shadow: 1px 1px 3px $primary-light;
 }

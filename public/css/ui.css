@@ -73,6 +73,12 @@ button.active {
   margin: 10px 5px;
 }
 
+.btn-icon {
+  border: 1px solid #D5E1E6;
+  border-radius: 3px;
+  box-shadow: 1px 1px 3px #939faa;
+}
+
 .drawer {
   padding: 5px;
   background-color: white;
