@@ -74,9 +74,21 @@ button.active {
 }
 
 .btn-icon {
+  padding: 0.3em 0.5em;
+  background-color: white;
   border: 1px solid #D5E1E6;
   border-radius: 3px;
   box-shadow: 1px 1px 3px #939faa;
+}
+.btn-icon .header {
+  display: flex;
+  align-items: center;
+}
+.btn-icon .mask-icon {
+  width: 1.5em;
+  height: 1.5em;
+  -webkit-mask-position: right;
+  mask-position: right;
 }
 .btn-icon.active {
   background-color: #E18335;
