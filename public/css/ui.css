@@ -84,6 +84,11 @@ button.active {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  overflow: hidden;
+}
+.btn-icon .header h3 {
+  text-overflow: ellipsis;
+  overflow: hidden;
 }
 .btn-icon .mask-icon {
   width: 1.5em;

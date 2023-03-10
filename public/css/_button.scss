@@ -99,6 +99,12 @@ button {
     display: flex;
     justify-content: space-between;
     align-items: center;
+    overflow: hidden;
+
+    h3 {
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
   }
   .mask-icon {
     width: 1.5em;
