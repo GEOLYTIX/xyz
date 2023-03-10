@@ -78,6 +78,13 @@ button.active {
   border-radius: 3px;
   box-shadow: 1px 1px 3px #939faa;
 }
+.btn-icon.active {
+  background-color: #E18335;
+  color: #fff;
+}
+.btn-icon.active .mask-icon {
+  background-color: #fff;
+}
 
 .drawer {
   padding: 5px;

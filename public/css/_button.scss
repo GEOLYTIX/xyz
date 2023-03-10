@@ -93,3 +93,12 @@ button {
   border-radius: 3px;
   box-shadow: 1px 1px 3px $primary-light;
 }
+
+.btn-icon.active {
+  background-color: #E18335;
+  color: #fff;
+
+  .mask-icon {
+    background-color: #fff;
+  }
+}
