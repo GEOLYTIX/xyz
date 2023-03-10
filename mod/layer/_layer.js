@@ -2,6 +2,7 @@ const _format = {
   cluster: require('./cluster'),
   mvt: require('./mvt'),
   geojson: require('./geojson'),
+  wkt: require('./wkt'),
   grid: require('./grid')
 }
 
