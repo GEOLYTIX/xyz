@@ -73,6 +73,37 @@ button.active {
   margin: 10px 5px;
 }
 
+.btn-icon {
+  padding: 0.3em 0.5em;
+  background-color: white;
+  border: 1px solid #D5E1E6;
+  border-radius: 3px;
+  box-shadow: 1px 1px 3px #939faa;
+}
+.btn-icon .header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  overflow: hidden;
+}
+.btn-icon .header h3 {
+  text-overflow: ellipsis;
+  overflow: hidden;
+}
+.btn-icon .mask-icon {
+  width: 1.5em;
+  height: 1.5em;
+  -webkit-mask-position: right;
+  mask-position: right;
+}
+.btn-icon.active {
+  background-color: #E18335;
+  color: #fff;
+}
+.btn-icon.active .mask-icon {
+  background-color: #fff;
+}
+
 .drawer {
   padding: 5px;
   background-color: white;
