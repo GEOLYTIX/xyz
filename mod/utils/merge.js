@@ -25,15 +25,17 @@ module.exports = function mergeDeep(target, ...sources) {
       // Target and Source are both arrays.
       } else if (Array.isArray(source[key]) && Array.isArray(target[key])) {
 
+
         // Target and Source arrays are equal.
         if (source[key].every(item => target[key].includes(item))) {
           
-          // Do not merge equal arrays
+          // Do not merge.
           target[key] = source[key]
-          
+
         } else {
 
           // Merge unequal arrays.
+
           target[key] = [...target[key]||[], ...source[key]]
         }
 
@@ -49,5 +51,5 @@ module.exports = function mergeDeep(target, ...sources) {
 }
 
 function isObject(item) {
-  return (item && typeof item === 'object' && !Array.isArray(item));
+  return (!Array.isArray(item) && item instanceof Object);
 }
