@@ -73,6 +73,11 @@ button.active {
   margin: 10px 5px;
 }
 
+.disabled > .drawer {
+  opacity: 0.4;
+  pointer-events: none;
+}
+
 .drawer {
   padding: 5px;
   background-color: white;
