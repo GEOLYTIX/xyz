@@ -87,3 +87,38 @@ button {
     margin: 10px 5px;
   }
 }
+
+.btn-icon {
+  border: 1px solid $lighter;
+  border-radius: 3px;
+  box-shadow: 1px 1px 3px $primary-light;
+  padding: 0.3em 0.5em;
+  background-color: white;
+
+  .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+
+    h3 {
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+  .mask-icon {
+    width: 1.5em;
+    height: 1.5em;
+    -webkit-mask-position: right;
+    mask-position: right;
+  }
+}
+
+.btn-icon.active {
+  background-color: #E18335;
+  color: #fff;
+
+  .mask-icon {
+    background-color: #fff;
+  }
+}
