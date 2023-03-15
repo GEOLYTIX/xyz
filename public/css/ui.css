@@ -1093,6 +1093,32 @@ label.checkbox input:disabled ~ * {
   padding-right: 4px;
 }
 
+.panel-container.popup {
+  position: relative;
+}
+.panel.popup {
+  display: block;
+  position: absolute;
+  width: 100%;
+  bottom: 15em;
+  left: 50%;
+  right: 0;
+  z-index: 99;
+  background: white;
+  overflow: hidden;
+  padding: 1em 1.5em;
+  opacity: 0;
+  border-radius: 3px;
+  box-shadow: 1px 1px 3px #939faa;
+  pointer-events: none;
+  transition: 0.2s ease-in-out;
+}
+.panel.popup.active {
+  bottom: 0;
+  pointer-events: auto;
+  opacity: 1;
+}
+
 .location-view.drawer {
   margin-top: 5px;
   border-radius: 5px;
