@@ -24,7 +24,7 @@
     <option value="{{dir}}?language=zh&login=true">中文简体</option>
   </select>
 
-  <form action="{{dir}}/public/api/user/login" method="post" autocomplete="off">
+  <form action="{{dir}}/api/user/login" method="post" autocomplete="off">
 
     <input style="display:none;" name="language" required value="ja">
 
@@ -45,7 +45,7 @@
     <button id="btnLogin" type="submit" disabled>ログイン</button>
 
     <p>ログインするにはE-メールアドレス宛に送信された検証リンクに基づくアカウント検証が必要。</p>
-    <a class="switch" href="{{dir}}/public/api/user/register?register=true&language=ja">新規アカウント登録或いはパスワードをリセット</a>
+    <a class="switch" href="{{dir}}/api/user/register?register=true&language=ja">新規アカウント登録或いはパスワードをリセット</a>
     
   </form>
 
