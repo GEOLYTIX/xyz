@@ -89,6 +89,7 @@ button.active {
   justify-content: space-between;
   align-items: center;
   overflow: hidden;
+  pointer-events: none;
 }
 .btn-icon .header h3 {
   text-overflow: ellipsis;
@@ -1097,7 +1098,7 @@ label.checkbox input:disabled ~ * {
   padding-right: 4px;
 }
 
-.panel-container.popup {
+.panel-popup-container {
   position: relative;
 }
 .panel.popup {
