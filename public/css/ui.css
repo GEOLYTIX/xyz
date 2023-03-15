@@ -73,6 +73,10 @@ button.active {
   margin: 10px 5px;
 }
 
+.disabled > .drawer {
+  opacity: 0.4;
+  pointer-events: none;
+}
 .btn-icon {
   padding: 0.3em 0.5em;
   background-color: white;

@@ -5,8 +5,10 @@ module.exports = function mergeDeep(target, ...sources) {
     return target;
   }
 
+  // Shift first entry from sources array as source.
   const source = sources.shift();
 
+  // Source and Target are both objects.
   if (isObject(target) && isObject(source)) {
 
     // Iterate over object keys in source.
@@ -20,20 +22,20 @@ module.exports = function mergeDeep(target, ...sources) {
         // Call recursive merge for target key object.
         mergeDeep(target[key], source[key]);
 
-      } else if (Array.isArray(source[key])) {
+      // Target and Source are both arrays.
+      } else if (Array.isArray(source[key]) && Array.isArray(target[key])) {
 
-        // Target is object, Source is array
-        if (isObject(target[key])
-        
-        // Target and Source are equal arrays.
-        || Array.isArray(target[key]) && source[key].every(item => target[key].includes(item))) {
+
+        // Target and Source arrays are equal.
+        if (source[key].every(item => target[key].includes(item))) {
           
           // Do not merge.
           target[key] = source[key]
 
         } else {
 
-          // Merge arrays.
+          // Merge unequal arrays.
+
           target[key] = [...target[key]||[], ...source[key]]
         }
 
