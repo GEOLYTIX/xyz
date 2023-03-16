@@ -1135,6 +1135,9 @@ label.checkbox input:disabled ~ * {
 .panel.popup.active.downward {
   bottom: -7.5em;
 }
+.popup::after {
+  content: initial;
+}
 
 .location-view.drawer {
   margin-top: 5px;
