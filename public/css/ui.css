@@ -1119,9 +1119,12 @@ label.checkbox input:disabled ~ * {
   transition: 0.2s ease-in-out;
 }
 .panel.popup.active {
-  bottom: 0;
+  bottom: 2em;
   pointer-events: auto;
   opacity: 1;
+}
+.panel.popup .content {
+  padding: 1em;
 }
 
 .location-view.drawer {
