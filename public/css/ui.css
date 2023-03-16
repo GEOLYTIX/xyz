@@ -1110,6 +1110,7 @@ label.checkbox input:disabled ~ * {
   left: 50%;
   right: 0;
   z-index: 99;
+  color: black;
   background: white;
   overflow: hidden;
   padding: 1em 1.5em;
@@ -1126,6 +1127,13 @@ label.checkbox input:disabled ~ * {
 }
 .panel.popup .content {
   padding: 1em;
+}
+
+.panel.popup.downward {
+  bottom: -15em;
+}
+.panel.popup.active.downward {
+  bottom: -7.5em;
 }
 
 .location-view.drawer {
