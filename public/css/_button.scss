@@ -142,11 +142,6 @@ button {
     &::after {
       content: initial;
     }
-
-    &.downward {
-      bottom: -15em;
-    }
-
   }
 
   &.active {
@@ -161,10 +156,14 @@ button {
       bottom: 2em;
       pointer-events: auto;
       opacity: 1;
-      
-      &.downward {
-        bottom: -7em; /* places adjacent to the bottom border of parent */
-      }
     }
+
+    &.downward .panel {
+      bottom: -7em; /* places adjacent to the bottom border of parent */
+    }
+  }
+
+  &.downward .panel {
+    bottom: -15em;
   }
 }

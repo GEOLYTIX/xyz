@@ -123,9 +123,6 @@ button.active {
 .btn-panel .panel::after {
   content: initial;
 }
-.btn-panel .panel.downward {
-  bottom: -15em;
-}
 .btn-panel.active {
   background-color: #E18335;
   color: #fff;
@@ -138,8 +135,11 @@ button.active {
   pointer-events: auto;
   opacity: 1;
 }
-.btn-panel.active .panel.downward {
+.btn-panel.active.downward .panel {
   bottom: -7em; /* places adjacent to the bottom border of parent */
+}
+.btn-panel.downward .panel {
+  bottom: -15em;
 }
 
 .disabled > .drawer {
