@@ -75,7 +75,6 @@ button.active {
 
 .btn-panel {
   width: 100%;
-  position: relative;
   padding: 0.3em 0.5em;
   background-color: white;
   border: 1px solid #D5E1E6;
@@ -124,7 +123,7 @@ button.active {
   content: initial;
 }
 .btn-panel.active {
-  background-color: #E18335;
+  background-color: #003D57;
   color: #fff;
 }
 .btn-panel.active .mask-icon {
