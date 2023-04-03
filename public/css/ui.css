@@ -73,39 +73,77 @@ button.active {
   margin: 10px 5px;
 }
 
-.disabled > .drawer {
-  opacity: 0.4;
-  pointer-events: none;
-}
-.btn-icon {
+.btn-panel {
+  width: 100%;
   padding: 0.3em 0.5em;
   background-color: white;
   border: 1px solid #D5E1E6;
   border-radius: 3px;
   box-shadow: 1px 1px 3px #939faa;
 }
-.btn-icon .header {
+.btn-panel .header {
   display: flex;
   justify-content: space-between;
   align-items: center;
   overflow: hidden;
+  pointer-events: none;
 }
-.btn-icon .header h3 {
+.btn-panel .header h3 {
   text-overflow: ellipsis;
   overflow: hidden;
 }
-.btn-icon .mask-icon {
+.btn-panel .mask-icon {
   width: 1.5em;
   height: 1.5em;
   -webkit-mask-position: right;
   mask-position: right;
 }
-.btn-icon.active {
-  background-color: #E18335;
+.btn-panel .panel {
+  display: block;
+  position: absolute;
+  width: 100%;
+  bottom: 15em;
+  left: 0;
+  right: 0;
+  z-index: 99;
+  color: black;
+  background: white;
+  overflow: hidden;
+  padding: 1em 1.5em;
+  opacity: 0;
+  border-radius: 3px;
+  box-shadow: 1px 1px 3px #939faa;
+  pointer-events: none;
+  transition: 0.2s ease-in-out;
+}
+.btn-panel .panel .content {
+  padding: 1em;
+}
+.btn-panel .panel::after {
+  content: initial;
+}
+.btn-panel.active {
+  background-color: #003D57;
   color: #fff;
 }
-.btn-icon.active .mask-icon {
+.btn-panel.active .mask-icon {
   background-color: #fff;
+}
+.btn-panel.active .panel {
+  bottom: 2em;
+  pointer-events: auto;
+  opacity: 1;
+}
+.btn-panel.active.downward .panel {
+  bottom: -7em; /* places adjacent to the bottom border of parent */
+}
+.btn-panel.downward .panel {
+  bottom: -15em;
+}
+
+.disabled > .drawer {
+  opacity: 0.4;
+  pointer-events: none;
 }
 
 .drawer {
