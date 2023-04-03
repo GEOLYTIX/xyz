@@ -38,6 +38,20 @@ module.exports = defaults = {
       },
       filter: {},
     },
+    wkt: {
+      srid: '4326',
+      style: {
+        default: {
+          strokeColor: '#333',
+          fillColor: '#fff1',
+          icon: {
+            type: 'dot'
+          }
+        },
+        highlight: {}
+      },
+      filter: {},
+    },
     mvt: {
       srid: '3857',
       style: {
