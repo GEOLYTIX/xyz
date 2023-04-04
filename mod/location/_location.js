@@ -9,7 +9,7 @@ module.exports = async (req, res) => {
 
   const method = methods[req.params.method]
 
-  if (!(method instanceof Function)) {
+  if (typeof method !== 'function') {
     return res.send(`Failed to evaluate 'method' param.<br><br>
     <a href="https://geolytix.github.io/xyz/docs/develop/api/location/">Location API</a>`)
   }
