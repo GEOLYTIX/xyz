@@ -1,13 +1,13 @@
-const methods = {
-  new: require('./new'),
-  get: require('./get'),
-  update: require('./update'),
-  delete: require('./delete'),
-}
+const methods = new Map()
+
+methods.set('new', require('./new'))
+methods.set('get', require('./get'))
+methods.set('update', require('./update'))
+methods.set('delete', require('./delete'))
 
 module.exports = async (req, res) => {
 
-  const method = methods[req.params.method]
+  const method = methods.get(req.params.method)
 
   if (typeof method !== 'function') {
     return res.send(`Failed to evaluate 'method' param.<br><br>
