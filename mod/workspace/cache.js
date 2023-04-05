@@ -64,6 +64,23 @@ async function cache() {
 
   await assignDefaults(workspace)
 
+  Object.values(workspace.locales).forEach(locale => {
+
+    // The workspace has an array of plugins to be used for all locales.
+    if (Array.isArray(workspace.plugins)) {
+
+      // Are locale plugins defined.
+      locale.plugins = Array.isArray(locale.plugins)
+
+        // Concat the workspace plugins with locale plugins
+        ? locale.plugins.concat(workspace.plugins)
+
+        // Assign workspace plugins as locale plugins.
+        : workspace.plugins
+    }
+
+  })
+
   // Substitute all SRC_* variables in locales.
   workspace.locales = JSON.parse(
     JSON.stringify(workspace.locales).replace(/\$\{(.*?)\}/g,
