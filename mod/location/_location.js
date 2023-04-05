@@ -7,13 +7,15 @@ const methods = {
 
 module.exports = async (req, res) => {
 
-  const method = methods[req.params.method]
-
-  if (typeof method !== 'function') {
+  if (!methods.hasOwnProperty(req.params.method)) {
     return res.send(`Failed to evaluate 'method' param.<br><br>
     <a href="https://geolytix.github.io/xyz/docs/develop/api/location/">Location API</a>`)
   }
 
+  const method = methods[req.params.method]
+
+  if (typeof method !== 'function') return;
+  
   const locale = req.params.locale && req.params.workspace.locales[req.params.locale]
 
   const layer = locale && locale.layers[req.params.layer] ||  req.params.workspace.templates[req.params.layer]
