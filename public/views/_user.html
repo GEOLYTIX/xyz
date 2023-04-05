@@ -88,13 +88,21 @@
     .btn-row {
       align-items: center;
       display: flex;
+      gap: 10px;
+      margin: 10px 0;
     }
 
-    .btn-row > *:last-child {
+    a.default-view {
       margin-left: auto;
+      font-weight: bold;
+    }
+
+
+    a.logout {
       font-weight: bold;
       color:#B71C1C;
     }
+
 
     @media only screen and (max-width: 700px) {
 
@@ -115,9 +123,10 @@
     <h1>Account admin</h1>
 
     <div class="btn-row">
-      <label>Filter<input id="filterInput" type="text" placeholder="e.g. geolytix" style="margin: 10px;"></label>
+      <label>Filter<input id="filterInput" type="text" placeholder="e.g. geolytix" style="margin-left: 10px;"></label>
       <button id="toggleBlocked">Show blocked accounts</button>
-      <a href="?logout=true">Logout</a>
+      <a class="default-view" href="{{dir}}">{{dir}}</a>
+      <a class="logout" href="?logout=true">Logout</a>
     </div>
   
     <div id="userTable"></div>
