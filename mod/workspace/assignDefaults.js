@@ -10,6 +10,15 @@ module.exports = async workspace => {
     // Get locale object from key.
     const locale = workspace.locales[locale_key]
 
+    console.log(typeof workspace.templates[locale_key])
+
+    // A template exists for the workspace key.
+    if (Object.hasOwn(workspace.templates, locale_key) && typeof workspace.templates[locale_key] === 'object') {
+
+      // Merge the workspace template into workspace.
+      merge(locale, workspace.templates[locale_key])
+    }
+
     // Assign key value as key on locale object.
     locale.key = locale_key
 
