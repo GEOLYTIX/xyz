@@ -1,4 +1,4 @@
-const _method = {
+const methods = {
   new: require('./new'),
   get: require('./get'),
   update: require('./update'),
@@ -7,9 +7,9 @@ const _method = {
 
 module.exports = async (req, res) => {
 
-  const method = _method[req.params.method]
+  const method = methods[req.params.method]
 
-  if (!method) {
+  if (typeof method !== 'function') {
     return res.send(`Failed to evaluate 'method' param.<br><br>
     <a href="https://geolytix.github.io/xyz/docs/develop/api/location/">Location API</a>`)
   }
