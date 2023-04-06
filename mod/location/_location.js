@@ -7,7 +7,7 @@ const methods = {
 
 module.exports = async (req, res) => {
 
-  if (!methods.hasOwnProperty(req.params.method)) {
+  if (!Object.hasOwn(methods, req.params.method)) {
     return res.send(`Failed to evaluate 'method' param.<br><br>
     <a href="https://geolytix.github.io/xyz/docs/develop/api/location/">Location API</a>`)
   }
