@@ -16,6 +16,10 @@ module.exports = async (req, res) => {
     return res.status(400).send('URL parameter validation failed.')
   }
 
+  // console.log(req.params)
+
+  // console.log(layer.style)
+
   let params = {
     layer,
     table: /^[A-Za-z0-9._-]*$/.test(req.params.table) && req.params.table,
