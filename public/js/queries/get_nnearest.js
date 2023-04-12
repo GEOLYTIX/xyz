@@ -2,7 +2,7 @@ module.exports = _ => `
   
   SELECT
     \${qID} AS ID,
-    \${cluster_label} AS label,
+    \${label} AS label,
     array[st_x(st_centroid(\${geom})), st_y(st_centroid(\${geom}))] AS coords
   FROM \${table}
   WHERE true \${filter}

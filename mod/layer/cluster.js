@@ -8,51 +8,45 @@ const Roles = require('../utils/roles.js')
 
 module.exports = async (req, res) => {
 
-  const layer = req.params.layer;
-
   // Validate URL parameter
   if (!validateRequestParams(req.params)) {
 
     return res.status(400).send('URL parameter validation failed.')
   }
 
-  // console.log(req.params)
-
-  // console.log(layer.style)
-
-  let params = {
-    layer,
-    table: /^[A-Za-z0-9._-]*$/.test(req.params.table) && req.params.table,
+  const params = {
+    layer: req.params.layer,
+    table: req.params.table,
     kmeans: parseInt(1 / req.params.kmeans) || undefined,
     dbscan: parseFloat(req.params.dbscan) || undefined,
-    resolution: parseFloat(req.params.resolution || layer.cluster_resolution) || 0.1,
+    resolution: parseFloat(req.params.resolution) || 0.1,
     hexgrid: req.params.hexgrid,
-    theme: req.params.theme,
-    cat: req.params.cat_template && req.params.workspace.templates[req.params.cat_template].template || req.params.cat || null,
-    size: req.params.size || null,
-    geom: layer.geom,
-    label: req.params.label_template && req.params.workspace.templates[req.params.label_template].template || req.params.label || null,
-    geom: layer.geom,
+    cat: req.params.workspace.templates[req.params.cat]?.template || req.params.cat || null,      
+    label: req.params.workspace.templates[req.params.label]?.template || req.params.label || null,
     z: parseFloat(req.params.z),
-    aggregate: req.params.aggregate || req.params.theme === 'categorized' && 'array_agg',
+    aggregate: req.params.aggregate,
     group_by: []
   }
 
   // Check for role based access.
-  const roles = Roles.filter(layer, req.params.user && req.params.user.roles)
+  const roles = Roles.filter(params.layer, req.params.user?.roles)
 
-  if (!roles && layer.roles) return res.status(403).send('Access prohibited.');
+    // No roles found for layer which has roles configured.
+    if (!roles && params.layer.roles) {
+  
+      return res.status(403).send('Access prohibited.');
+    }
 
   // Array for storing filter params.
   const SQLparams = []
 
   // Create filter from roles and provided filter param.
-  const filter =
-    ` ${layer.filter?.default && 'AND '+layer.filter?.default || ''}
+  const filter = `
+    ${params.layer.filter?.default && 'AND '+params.layer.filter?.default || ''}
     ${req.params.filter && `AND ${sqlFilter(JSON.parse(req.params.filter), SQLparams)}` || ''}
     ${roles && Object.values(roles).some(r => !!r)
-    && `AND ${sqlFilter(Object.values(roles).filter(r => !!r), SQLparams)}`
-    || ''}`
+      && `AND ${sqlFilter(Object.values(roles).filter(r => !!r), SQLparams)}`
+      || ''}`
 
   // Split viewport param.
   const viewport = req.params.viewport.split(',')
@@ -65,10 +59,9 @@ module.exports = async (req, res) => {
       ${viewport[1]},
       ${viewport[2]},
       ${viewport[3]},
-      ${parseInt(layer.srid)}
+      ${parseInt(params.layer.srid)}
     ),
-    ${params.geom}
-  )
+    ${params.layer.geom})
   ${filter}`
 
   // Query location count and distance across viewport.
@@ -85,7 +78,7 @@ module.exports = async (req, res) => {
       FROM ${params.table}
       WHERE ${params.where_sql}`
   
-    var rows = await dbs[layer.dbs || req.params.workspace.dbs](q, SQLparams)
+    var rows = await dbs[params.layer.dbs || req.params.workspace.dbs](q, SQLparams)
 
     if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
@@ -113,35 +106,31 @@ module.exports = async (req, res) => {
     ${params.with_sql || ''}
     SELECT
       count(1) count,
-      ${params.size && 'SUM(size) size,' || ''}
       (array_agg(id))[1] AS id,
-      ${params.cat && (params.aggregate || 'sum') + '(cat) cat,' || ''}
+      ${params.cat && `${params.aggregate || 'array_agg'}(cat) cat,` || ''}
       (array_agg(label))[1] AS label,
       ${params.xy_sql}
     FROM ${params.cluster_sql}
     GROUP BY ${params.group_by.join(',')};`
 
-  var rows = await dbs[layer.dbs || req.params.workspace.dbs](q, SQLparams)
+  var rows = await dbs[params.layer.dbs || req.params.workspace.dbs](q, SQLparams)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
-  // Return cluster response.
-  return res.send(rows.map(row => ({
-    geometry: {
-      x: row.x,
-      y: row.y,
-    },
+  let response = rows.map(row => ({
+    geometry: [row.x, row.y],
     properties: {
       id: parseInt(row.count) === 1 && row.id || undefined,
       label: row.label || undefined,
       count: parseInt(row.count),
-      size: parseInt(row.size) || undefined,
-      cat: params.theme === 'graduated' && parseFloat(row.cat)
-        || req.params.aggregate === 'array_agg' && row.cat
-        || row.cat?.length === 1 && row.cat[0]
-        || undefined
+      cat: (req.params.aggregate === 'array_agg' && row.cat)
+        || (!Array.isArray(row.cat) && row.cat)
+        || (row.cat?.length === 1 ? row.cat[0] : undefined)
     }
-  })))
+  }))
+
+  // Return cluster response.
+  return res.send(response)
 
 }
 
@@ -160,11 +149,10 @@ function kmeansAggregation(params){
   params.cluster_sql = `
     (SELECT
       ${params.layer.qID} as id,
-      ${params.size} AS size,
       ${params.cat} AS cat,
       ${params.label} AS label,
-      ${params.geom} AS geom,
-      ST_ClusterKMeans(${params.geom}, ${params.kmeans}) OVER () kmeans_cid
+      ${params.layer.geom} AS geom,
+      ST_ClusterKMeans(${params.layer.geom}, ${params.kmeans}) OVER () kmeans_cid
     FROM ${params.table}
     WHERE ${params.where_sql}) kmeans`
 
@@ -187,7 +175,6 @@ function dbscanAggregation(params){
     params.cluster_sql = `
       (SELECT
         id,
-        size,
         cat,
         label,
         geom,
@@ -202,11 +189,10 @@ function dbscanAggregation(params){
   params.cluster_sql = `
     (SELECT
       ${params.layer.qID} as id,
-      ${params.size} AS size,
       ${params.cat} AS cat,
       ${params.label} AS label,
-      ${params.geom} AS geom,
-      ST_ClusterDBSCAN(${params.geom}, ${params.dbscan}, 1) OVER () dbscan_cid
+      ${params.layer.geom} AS geom,
+      ST_ClusterDBSCAN(${params.layer.geom}, ${params.dbscan}, 1) OVER () dbscan_cid
     FROM ${params.table}
     WHERE ${params.where_sql}) dbscan`
 
@@ -229,23 +215,22 @@ function gridAggregation(params){
     
         SELECT
           ${params.layer.qID} as id,
-          ${params.size} AS size,
           ${params.cat} AS cat,
           ${params.label} AS label,
-          ${params.layer.srid == 3857 && params.geom || 'ST_Transform(' + params.geom + ', 3857)'} AS geom,
-          ST_X(${params.layer.srid == 3857 && params.geom || 'ST_Transform(' + params.geom + ', 3857)'}) x,
-          ST_Y(${params.layer.srid == 3857 && params.geom || 'ST_Transform(' + params.geom + ', 3857)'}) y,
+          ${params.layer.srid == 3857 && params.layer.geom || 'ST_Transform(' + params.layer.geom + ', 3857)'} AS geom,
+          ST_X(${params.layer.srid == 3857 && params.layer.geom || 'ST_Transform(' + params.layer.geom + ', 3857)'}) x,
+          ST_Y(${params.layer.srid == 3857 && params.layer.geom || 'ST_Transform(' + params.layer.geom + ', 3857)'}) y,
     
-          ((ST_Y(${params.layer.srid == 3857 && params.geom || 'ST_Transform(' + params.geom + ', 3857)'}) / ${_height})::integer % 2) odds,
+          ((ST_Y(${params.layer.srid == 3857 && params.layer.geom || 'ST_Transform(' + params.layer.geom + ', 3857)'}) / ${_height})::integer % 2) odds,
     
-          CASE WHEN ((ST_Y(${params.layer.srid == 3857 && params.geom || 'ST_Transform(' + params.geom + ', 3857)'}) / ${_height})::integer % 2) = 0 THEN
+          CASE WHEN ((ST_Y(${params.layer.srid == 3857 && params.layer.geom || 'ST_Transform(' + params.layer.geom + ', 3857)'}) / ${_height})::integer % 2) = 0 THEN
             ST_Point(
-              round(ST_X(${params.layer.srid == 3857 && params.geom || 'ST_Transform(' + params.geom + ', 3857)'}) / ${_width}) * ${_width},
-              round(ST_Y(${params.layer.srid == 3857 && params.geom || 'ST_Transform(' + params.geom + ', 3857)'}) / ${_height}) * ${_height})
+              round(ST_X(${params.layer.srid == 3857 && params.layer.geom || 'ST_Transform(' + params.layer.geom + ', 3857)'}) / ${_width}) * ${_width},
+              round(ST_Y(${params.layer.srid == 3857 && params.layer.geom || 'ST_Transform(' + params.layer.geom + ', 3857)'}) / ${_height}) * ${_height})
     
           ELSE ST_Point(
-              round(ST_X(${params.layer.srid == 3857 && params.geom || 'ST_Transform(' + params.geom + ', 3857)'}) / ${_width}) * ${_width} + ${_width / 2},
-              round(ST_Y(${params.layer.srid == 3857 && params.geom || 'ST_Transform(' + params.geom + ', 3857)'}) / ${_height}) * ${_height})
+              round(ST_X(${params.layer.srid == 3857 && params.layer.geom || 'ST_Transform(' + params.layer.geom + ', 3857)'}) / ${_width}) * ${_width} + ${_width / 2},
+              round(ST_Y(${params.layer.srid == 3857 && params.layer.geom || 'ST_Transform(' + params.layer.geom + ', 3857)'}) / ${_height}) * ${_height})
     
           END p0                
     
@@ -255,7 +240,6 @@ function gridAggregation(params){
     params.cluster_sql = `
       (SELECT
         id,
-        size,
         cat,
         label,
         
@@ -343,15 +327,14 @@ function gridAggregation(params){
   params.cluster_sql = `
     (SELECT
       ${params.layer.qID} as id,
-      ${params.size} AS size,
       ${params.cat} AS cat,
       ${params.label} AS label,
-      ST_X(${params.geom}) AS x,
-      ST_Y(${params.geom}) AS y,
-      round(ST_X(${params.layer.srid == 3857 && params.geom
-        || 'ST_Transform('+params.geom+', 3857)'}) / ${r}) * ${r} x_round,
-      round(ST_Y(${params.layer.srid == 3857 && params.geom
-        || 'ST_Transform('+params.geom+', 3857)'}) / ${r}) * ${r} y_round
+      ST_X(${params.layer.geom}) AS x,
+      ST_Y(${params.layer.geom}) AS y,
+      round(ST_X(${params.layer.srid == 3857 && params.layer.geom
+        || 'ST_Transform('+params.layer.geom+', 3857)'}) / ${r}) * ${r} x_round,
+      round(ST_Y(${params.layer.srid == 3857 && params.layer.geom
+        || 'ST_Transform('+params.layer.geom+', 3857)'}) / ${r}) * ${r} y_round
     FROM ${params.table}
     WHERE ${params.where_sql}) grid`
 
