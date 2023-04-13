@@ -141,10 +141,23 @@ module.exports = async (req, res) => {
 
   function getField(theme) {
 
-    return theme.fieldfx && `${theme.fieldfx} AS ${theme.field}` 
-      || Array.isArray(theme.fields) && theme.fields.join(', ')
-      || typeof theme.fields === 'string' && theme.fields
-      || theme.field
+    if (theme.fieldfx) {
+
+      console.warn('fieldfx is no longer supported for themes. please use field with a template lookup.')
+    }
+
+    if (typeof theme.fields === 'string' && theme.fields) {
+
+      console.warn('theme fields must be an array.')
+    }
+
+    if (Array.isArray(theme.fields)) {
+
+      return theme.fields.map(field => `${req.params.workspace.templates[field]?.template || field} AS ${field}`).join(', ')
+    }
+
+    
+    return `${req.params.workspace.templates[theme.field]?.template || theme.field} AS ${theme.field}`
   }
 
   var rows = await dbs[layer.dbs || req.params.workspace.dbs](tile, SQLparams)
