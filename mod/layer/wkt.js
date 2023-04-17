@@ -31,14 +31,16 @@ module.exports = async (req, res) => {
     && `AND ${sqlFilter(Object.values(roles).filter(r => !!r), SQLparams)}`
     || ''}`
 
+  // Get fields array from query params.
+  const fields = req.params.fields?.split(',')
+    .map(field => req.params.workspace.templates[field]?.template || field)
+    .filter(field => !!field)
 
   var q = `
     SELECT
       ${layer.qID || null},
       ST_AsText(${geom})
-      ${layer.properties
-        && `, ${Object.values(layer.properties).join(', ')}`
-        || ''}
+      ${fields.length && `, ${fields.join(', ')}` || ''}
 
     FROM ${req.params.table || layer.table}
     WHERE ${geom} IS NOT NULL ${filter};`
