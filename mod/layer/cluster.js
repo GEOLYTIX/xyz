@@ -48,21 +48,30 @@ module.exports = async (req, res) => {
       && `AND ${sqlFilter(Object.values(roles).filter(r => !!r), SQLparams)}`
       || ''}`
 
-  // Split viewport param.
-  const viewport = req.params.viewport.split(',')
+  
+  if (req.params.viewport) {
 
-  // Create where sql restriction from viewport and filter.
-  params.where_sql = `
-  ST_Intersects(
-    ST_MakeEnvelope(
-      ${viewport[0]},
-      ${viewport[1]},
-      ${viewport[2]},
-      ${viewport[3]},
-      ${parseInt(params.layer.srid)}
-    ),
-    ${params.layer.geom})
-  ${filter}`
+    // Split viewport param.
+    const viewport = req.params.viewport.split(',')
+
+    // Create where sql restriction from viewport and filter.
+    params.where_sql = `
+      ST_Intersects(
+        ST_MakeEnvelope(
+          ${viewport[0]},
+          ${viewport[1]},
+          ${viewport[2]},
+          ${viewport[3]},
+          ${parseInt(params.layer.srid)}
+        ),
+        ${params.layer.geom})
+      ${filter}`
+
+  } else {
+
+    params.where_sql = `true ${filter}`
+
+  }
 
   // Query location count and distance across viewport.
   // Only required for kmeans or dbscan algorithm.
@@ -200,6 +209,12 @@ function dbscanAggregation(params){
 
 function gridAggregation(params){
 
+  if (params.layer.srid !== '3857') {
+
+    console.warn('Grid resolution cluster layer geometries must be SRID:3857.')
+    return;
+  }
+
   // Calculate grid resolution (r) based on zoom level and resolution parameter.
   let r = parseInt(40075016.68 / Math.pow(2, params.z) * params.resolution);
 
@@ -214,23 +229,23 @@ function gridAggregation(params){
       first as (
     
         SELECT
-          ${params.layer.qID} as id,
+          ${params.layer.qID} AS id,
           ${params.cat} AS cat,
           ${params.label} AS label,
-          ${params.layer.srid == 3857 && params.layer.geom || 'ST_Transform(' + params.layer.geom + ', 3857)'} AS geom,
-          ST_X(${params.layer.srid == 3857 && params.layer.geom || 'ST_Transform(' + params.layer.geom + ', 3857)'}) x,
-          ST_Y(${params.layer.srid == 3857 && params.layer.geom || 'ST_Transform(' + params.layer.geom + ', 3857)'}) y,
+          ${params.layer.geom} AS geom,
+          ST_X(${params.layer.geom}) AS x,
+          ST_Y(${params.layer.geom}) AS y,
     
-          ((ST_Y(${params.layer.srid == 3857 && params.layer.geom || 'ST_Transform(' + params.layer.geom + ', 3857)'}) / ${_height})::integer % 2) odds,
+          ((ST_Y(${params.layer.geom}) / ${_height})::integer % 2) odds,
     
-          CASE WHEN ((ST_Y(${params.layer.srid == 3857 && params.layer.geom || 'ST_Transform(' + params.layer.geom + ', 3857)'}) / ${_height})::integer % 2) = 0 THEN
+          CASE WHEN ((ST_Y(${params.layer.geom}) / ${_height})::integer % 2) = 0 THEN
             ST_Point(
-              round(ST_X(${params.layer.srid == 3857 && params.layer.geom || 'ST_Transform(' + params.layer.geom + ', 3857)'}) / ${_width}) * ${_width},
-              round(ST_Y(${params.layer.srid == 3857 && params.layer.geom || 'ST_Transform(' + params.layer.geom + ', 3857)'}) / ${_height}) * ${_height})
+              round(ST_X(${params.layer.geom}) / ${_width}) * ${_width},
+              round(ST_Y(${params.layer.geom}) / ${_height}) * ${_height})
     
           ELSE ST_Point(
-              round(ST_X(${params.layer.srid == 3857 && params.layer.geom || 'ST_Transform(' + params.layer.geom + ', 3857)'}) / ${_width}) * ${_width} + ${_width / 2},
-              round(ST_Y(${params.layer.srid == 3857 && params.layer.geom || 'ST_Transform(' + params.layer.geom + ', 3857)'}) / ${_height}) * ${_height})
+              round(ST_X(${params.layer.geom}) / ${_width}) * ${_width} + ${_width / 2},
+              round(ST_Y(${params.layer.geom}) / ${_height}) * ${_height})
     
           END p0                
     
@@ -248,12 +263,14 @@ function gridAggregation(params){
           WHEN x < ST_X(p0) THEN CASE
       
             WHEN y < ST_Y(p0) THEN CASE
-              WHEN (geom <#> ST_Translate(p0, -${_width / 2}, -${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, -${_height}), 1)
+              WHEN (geom <#> ST_Translate(p0, -${_width / 2}, -${_height})) < (geom <#> p0) 
+                THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, -${_height}), 1)
               ELSE ST_SnapToGrid(p0, 1)
             END
       
             ELSE CASE
-              WHEN (geom <#> ST_Translate(p0, -${_width / 2}, ${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, ${_height}), 1)
+              WHEN (geom <#> ST_Translate(p0, -${_width / 2}, ${_height})) < (geom <#> p0) 
+                THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, ${_height}), 1)
               ELSE ST_SnapToGrid(p0, 1)
             END
       
@@ -262,12 +279,14 @@ function gridAggregation(params){
           ELSE CASE
             
             WHEN y < ST_Y(p0) THEN CASE
-              WHEN (geom <#> ST_Translate(p0, ${_width / 2}, -${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, ${_width / 2}, -${_height}), 1)
+              WHEN (geom <#> ST_Translate(p0, ${_width / 2}, -${_height})) < (geom <#> p0) 
+                THEN ST_SnapToGrid(ST_Translate(p0, ${_width / 2}, -${_height}), 1)
               ELSE ST_SnapToGrid(p0, 1)
             END
       
             ELSE CASE
-              WHEN (geom <#> ST_Translate(p0, ${_width / 2}, ${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, ${_width / 2}, ${_height}), 1)
+              WHEN (geom <#> ST_Translate(p0, ${_width / 2}, ${_height})) < (geom <#> p0) 
+                THEN ST_SnapToGrid(ST_Translate(p0, ${_width / 2}, ${_height}), 1)
               ELSE ST_SnapToGrid(p0, 1)
             END
       
@@ -278,12 +297,14 @@ function gridAggregation(params){
         ELSE CASE
           WHEN x < (ST_X(p0) - ${_width / 2}) THEN CASE
             WHEN y < ST_Y(p0) THEN CASE
-              WHEN (geom <#> ST_Translate(p0, -${_width / 2}, -${_height})) < (geom <#> ST_Translate(p0, -${_width}, 0)) THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, -${_height}), 1)
+              WHEN (geom <#> ST_Translate(p0, -${_width / 2}, -${_height})) < (geom <#> ST_Translate(p0, -${_width}, 0)) 
+                THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, -${_height}), 1)
               ELSE ST_SnapToGrid(ST_Translate(p0, -${_width}, 0), 1)
             END
       
             ELSE CASE
-              WHEN (geom <#> ST_Translate(p0, -${_width / 2}, ${_height})) < (geom <#> ST_Translate(p0, -${_width}, 0)) THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, ${_height}), 1)
+              WHEN (geom <#> ST_Translate(p0, -${_width / 2}, ${_height})) < (geom <#> ST_Translate(p0, -${_width}, 0)) 
+                THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, ${_height}), 1)
               ELSE ST_SnapToGrid(ST_Translate(p0, -${_width}, 0), 1)
             END
       
@@ -291,12 +312,14 @@ function gridAggregation(params){
       
           ELSE CASE
             WHEN y < ST_Y(p0) THEN CASE
-              WHEN (geom <#> ST_Translate(p0, -${_width / 2}, -${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, -${_height}), 1)
+              WHEN (geom <#> ST_Translate(p0, -${_width / 2}, -${_height})) < (geom <#> p0) 
+                THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, -${_height}), 1)
               ELSE ST_SnapToGrid(p0, 1)
             END
       
             ELSE CASE
-              WHEN (geom <#> ST_Translate(p0, -${_width / 2}, ${_height})) < (geom <#> p0) THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, ${_height}), 1)
+              WHEN (geom <#> ST_Translate(p0, -${_width / 2}, ${_height})) < (geom <#> p0) 
+                THEN ST_SnapToGrid(ST_Translate(p0, -${_width / 2}, ${_height}), 1)
               ELSE ST_SnapToGrid(p0, 1)
             END
       
@@ -305,36 +328,32 @@ function gridAggregation(params){
         END
       
       END as point
-      FROM first) AS grid`
+      FROM first
+      ) AS grid`
     
     params.group_by.push('point')
     
     params.xy_sql = `
-      ST_X(${params.layer.srid == 3857 && 'point' || 'ST_Transform(ST_SetSRID(point, 3857),'+parseInt(params.layer.srid)+')'}) x,
-      ST_Y(${params.layer.srid == 3857 && 'point' || 'ST_Transform(ST_SetSRID(point, 3857),'+parseInt(params.layer.srid)+')'}) y`
+      ST_X(point) x,
+      ST_Y(point) y`
 
     return;
-    
   }
 
   params.group_by.push('x_round')
   params.group_by.push('y_round')
 
   params.xy_sql = `
-    percentile_disc(0.5) WITHIN GROUP (ORDER BY x) x,
-    percentile_disc(0.5) WITHIN GROUP (ORDER BY y) y`
+    x_round x,
+    y_round y`
   
   params.cluster_sql = `
     (SELECT
       ${params.layer.qID} as id,
       ${params.cat} AS cat,
       ${params.label} AS label,
-      ST_X(${params.layer.geom}) AS x,
-      ST_Y(${params.layer.geom}) AS y,
-      round(ST_X(${params.layer.srid == 3857 && params.layer.geom
-        || 'ST_Transform('+params.layer.geom+', 3857)'}) / ${r}) * ${r} x_round,
-      round(ST_Y(${params.layer.srid == 3857 && params.layer.geom
-        || 'ST_Transform('+params.layer.geom+', 3857)'}) / ${r}) * ${r} y_round
+      round(ST_X(${params.layer.geom}) / ${r}) * ${r} x_round,
+      round(ST_Y(${params.layer.geom}) / ${r}) * ${r} y_round
     FROM ${params.table}
     WHERE ${params.where_sql}) grid`
 
