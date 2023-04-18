@@ -10,6 +10,8 @@ module.exports = async (req, res) => {
 
   const layer = req.params.layer
 
+  const geom = req.params.geom || layer.geom
+
   // Validate URL parameter
   if (!validateRequestParams(req.params)) {
 
@@ -29,26 +31,25 @@ module.exports = async (req, res) => {
     && `AND ${sqlFilter(Object.values(roles).filter(r => !!r), SQLparams)}`
     || ''}`
 
+  // Get fields array from query params.
+  const fields = req.params.fields?.split(',')
+    .map(field => req.params.workspace.templates[field]?.template || field)
+    .filter(field => !!field)
+
   var q = `
     SELECT
-      ${layer.qID || null} AS id,
-      ST_asGeoJson(${req.params.geom || layer.geom}) AS geomj
-      ${Array.isArray(layer.properties)
-        && `, json_build_object(${layer.properties.map(field=>`'${field}',${req.params.workspace.templates[field]?.template || field}`).join(', ')}) as properties`
-        || ''}
+      ${layer.qID || null},
+      ST_AsText(${geom})
+      ${fields.length && `, ${fields.join(', ')}` || ''}
 
     FROM ${req.params.table || layer.table}
-    WHERE ${req.params.geom || layer.geom} IS NOT NULL ${filter};`
+    WHERE ${geom} IS NOT NULL ${filter};`
 
   var rows = await dbs[layer.dbs || req.params.workspace.dbs](q, SQLparams)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
+  
+  const reduce = rows.map(row=>Object.values(row))
 
-  res.send(rows.map(row => ({
-    type: 'Feature',
-    geometry: JSON.parse(row.geomj),
-    properties: row.properties,
-    id: row.id,
-  })))
-
+  return res.send(reduce)
 }
