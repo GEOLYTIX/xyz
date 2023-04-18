@@ -68,7 +68,9 @@ module.exports = defaults = {
     },
     cluster: {
       srid: '4326',
-      cluster_resolution: 0.1,
+      cluster: {
+        resolution: 0.1
+      },
       style: {       
         default: {
           type: 'dot'
