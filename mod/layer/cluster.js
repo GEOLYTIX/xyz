@@ -232,7 +232,12 @@ module.exports = async (req, res) => {
     FROM ${params.cluster_sql}
     GROUP BY ${params.group_by.join(',')};`
 
-  var rows = await dbs[params.layer.dbs || req.params.workspace.dbs](q, SQLparams)
+  const query = dbs[params.layer.dbs || req.params.workspace.dbs];
+
+  // Validate query method type.
+  if (typeof query !== 'function') return;
+
+  var rows = await query(q, SQLparams)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
