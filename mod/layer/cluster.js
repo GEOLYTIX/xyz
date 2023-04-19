@@ -17,8 +17,6 @@ module.exports = async (req, res) => {
   const params = {
     layer: req.params.layer,
     table: req.params.table,
-    kmeans: parseInt(1 / req.params.kmeans) || undefined,
-    dbscan: parseFloat(req.params.dbscan) || undefined,
     resolution: parseFloat(req.params.resolution) || 0.1,
     hexgrid: req.params.hexgrid,
     cat: req.params.workspace.templates[req.params.cat]?.template || req.params.cat || null,      
@@ -70,148 +68,11 @@ module.exports = async (req, res) => {
   } else {
 
     params.where_sql = `true ${filter}`
-
   }
-
-  // Query location count and distance across viewport.
-  // Only required for kmeans or dbscan algorithm.
-  if (params.kmeans || params.dbscan) {
-
-    var q = `
-      SELECT
-        count(1)::integer,
-        ST_Distance(
-          ST_Point(${viewport[0]}, ${viewport[1]}),
-          ST_Point(${viewport[2]}, ${viewport[3]})
-        ) AS xdistance
-      FROM ${params.table}
-      WHERE ${params.where_sql}`
-  
-    var rows = await dbs[params.layer.dbs || req.params.workspace.dbs](q, SQLparams)
-
-    if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
-
-    // Location count
-    params.count = parseInt(rows[0].count)
-
-    // Distance accross viewport
-    params.xdistance = rows[0].xdistance
-
-    // Return empty array if no locations are within filtered viewport.
-    if (params.count === 0) return res.send([])
-  }
- 
-  // Generate KMeans cluster algorithm.
-  params.kmeans && kmeansAggregation(params)
-
-  // ...and|or DBScan cluster algorithm.
-  params.dbscan && dbscanAggregation(params)
-
-  // Generate grid aggregation query if neither kmeans, nor dbscan are provided.
-  if (!params.kmeans && !params.dbscan) gridAggregation(params)
-
-  // Assemble query string.
-  var q = `
-    ${params.with_sql || ''}
-    SELECT
-      count(1) count,
-      (array_agg(id))[1] AS id,
-      ${params.cat && `${params.aggregate || 'array_agg'}(cat) cat,` || ''}
-      (array_agg(label))[1] AS label,
-      ${params.xy_sql}
-    FROM ${params.cluster_sql}
-    GROUP BY ${params.group_by.join(',')};`
-
-  var rows = await dbs[params.layer.dbs || req.params.workspace.dbs](q, SQLparams)
-
-  if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
-
-  let response = rows.map(row => ({
-    geometry: [row.x, row.y],
-    properties: {
-      id: parseInt(row.count) === 1 && row.id || undefined,
-      label: row.label || undefined,
-      count: parseInt(row.count),
-      cat: (req.params.aggregate === 'array_agg' && row.cat)
-        || (!Array.isArray(row.cat) && row.cat)
-        || (row.cat?.length === 1 ? row.cat[0] : undefined)
-    }
-  }))
-
-  // Return cluster response.
-  return res.send(response)
-
-}
-
-function kmeansAggregation(params){
-
-  // kmeans must not be bigger than the number of rows in group.
-  params.kmeans = params.kmeans >= params.count ? params.count : params.kmeans
-
-  params.group_by.push('kmeans_cid')
-
-  params.xy_sql = `
-    ST_X(ST_PointOnSurface(ST_Union(geom))) AS x,
-    ST_Y(ST_PointOnSurface(ST_Union(geom))) AS y`
-
-  // KMeans cluster algorithm
-  params.cluster_sql = `
-    (SELECT
-      ${params.layer.qID} as id,
-      ${params.cat} AS cat,
-      ${params.label} AS label,
-      ${params.layer.geom} AS geom,
-      ST_ClusterKMeans(${params.layer.geom}, ${params.kmeans}) OVER () kmeans_cid
-    FROM ${params.table}
-    WHERE ${params.where_sql}) kmeans`
-
-}
-
-function dbscanAggregation(params){
-
-  // Multiply dbscan fraction with cross distance accross viewport.
-  params.dbscan *= params.xdistance
-
-  params.group_by.push('dbscan_cid')
-
-  params.xy_sql = `
-    ST_X(ST_PointOnSurface(ST_Union(geom))) AS x,
-    ST_Y(ST_PointOnSurface(ST_Union(geom))) AS y`
-  
-  if (params.kmeans) {
-
-    // Nest the kmeans cluster_sql within the dbscan algorithm
-    params.cluster_sql = `
-      (SELECT
-        id,
-        cat,
-        label,
-        geom,
-        kmeans_cid,
-        ST_ClusterDBSCAN(geom, ${params.dbscan}, 1) OVER (PARTITION BY kmeans_cid) dbscan_cid
-      FROM ${params.cluster_sql}) dbscan`
-
-    return;
-  }
-
-  // Dbscan only cluster algorithm
-  params.cluster_sql = `
-    (SELECT
-      ${params.layer.qID} as id,
-      ${params.cat} AS cat,
-      ${params.label} AS label,
-      ${params.layer.geom} AS geom,
-      ST_ClusterDBSCAN(${params.layer.geom}, ${params.dbscan}, 1) OVER () dbscan_cid
-    FROM ${params.table}
-    WHERE ${params.where_sql}) dbscan`
-
-}
-
-function gridAggregation(params){
 
   if (params.layer.srid !== '3857') {
 
-    console.warn('Grid resolution cluster layer geometries must be SRID:3857.')
+    console.warn(`Grid resolution cluster layer ${layer.key} geometries must be SRID:3857.`)
     return;
   }
 
@@ -337,24 +198,57 @@ function gridAggregation(params){
       ST_X(point) x,
       ST_Y(point) y`
 
-    return;
+  } else {
+
+    // Regular grid aggregation.
+    params.group_by.push('x_round')
+    params.group_by.push('y_round')
+  
+    params.xy_sql = `
+      x_round x,
+      y_round y`
+    
+    params.cluster_sql = `
+      (SELECT
+        ${params.layer.qID} as id,
+        ${params.cat} AS cat,
+        ${params.label} AS label,
+        round(ST_X(${params.layer.geom}) / ${r}) * ${r} x_round,
+        round(ST_Y(${params.layer.geom}) / ${r}) * ${r} y_round
+      FROM ${params.table}
+      WHERE ${params.where_sql}) grid`    
   }
 
-  params.group_by.push('x_round')
-  params.group_by.push('y_round')
 
-  params.xy_sql = `
-    x_round x,
-    y_round y`
-  
-  params.cluster_sql = `
-    (SELECT
-      ${params.layer.qID} as id,
-      ${params.cat} AS cat,
-      ${params.label} AS label,
-      round(ST_X(${params.layer.geom}) / ${r}) * ${r} x_round,
-      round(ST_Y(${params.layer.geom}) / ${r}) * ${r} y_round
-    FROM ${params.table}
-    WHERE ${params.where_sql}) grid`
+  // Assemble query string.
+  var q = `
+    ${params.with_sql || ''}
+    SELECT
+      count(1) count,
+      (array_agg(id))[1] AS id,
+      ${params.cat && `${params.aggregate || 'array_agg'}(cat) cat,` || ''}
+      (array_agg(label))[1] AS label,
+      ${params.xy_sql}
+    FROM ${params.cluster_sql}
+    GROUP BY ${params.group_by.join(',')};`
+
+  var rows = await dbs[params.layer.dbs || req.params.workspace.dbs](q, SQLparams)
+
+  if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
+
+  let response = rows.map(row => ({
+    geometry: [row.x, row.y],
+    properties: {
+      id: parseInt(row.count) === 1 && row.id || undefined,
+      label: row.label || undefined,
+      count: parseInt(row.count),
+      cat: (req.params.aggregate === 'array_agg' && row.cat)
+        || (!Array.isArray(row.cat) && row.cat)
+        || (row.cat?.length === 1 ? row.cat[0] : undefined)
+    }
+  }))
+
+  // Return cluster response.
+  return res.send(response)
 
 }
