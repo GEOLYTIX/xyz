@@ -15,7 +15,13 @@ module.exports = async (req, res) => {
 
   if (!cookie && req.params.renew) return res.status(401).send('Failed to renew cookie')
 
-  if (!cookie) return login(req, res, await templates('no_cookie_found', req.params.language))
+  if (!cookie) {
+
+    // Get login view template.
+    const loginView = await templates('no_cookie_found', req.params.language)
+    
+    return login(req, res, loginView)
+  }
 
   jwt.verify(
     cookie,

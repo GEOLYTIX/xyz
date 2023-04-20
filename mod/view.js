@@ -34,11 +34,12 @@ module.exports = async (req, res) => {
     }));
   }
 
-  let template = await templates(
+  // Get view template.
+  const view = await templates(
     'default_view',
     req.params.language || req.params.user?.language,
     params
   );
 
-  res.send(template);
+  res.send(view);
 }

@@ -23,14 +23,17 @@ module.exports = async (req, res) => {
   const host = `${req.headers.host.includes('localhost') && req.headers.host || process.env.ALIAS || req.headers.host}${process.env.DIR}`
 
   // Sent email to inform user that their account has been deleted.
-  var mail_template = await templates('deleted_account', user.language, {
+  const mail_template = await templates('deleted_account', user.language, {
     host,
     protocol
   })
-  
-  await mailer(Object.assign(mail_template, {
+
+  // Assign user email to mail_template.
+  Object.assign(mail_template, {
     to: user.email
-  }))
+  })
+  
+  await mailer(mail_template)
 
   res.send('User account deleted.')
 }
