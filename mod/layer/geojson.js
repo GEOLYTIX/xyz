@@ -40,6 +40,9 @@ module.exports = async (req, res) => {
     FROM ${req.params.table || layer.table}
     WHERE ${req.params.geom || layer.geom} IS NOT NULL ${filter};`
 
+  // Validate dynamic method call.
+  if (typeof dbs[layer.dbs || req.params.workspace.dbs] !== 'function') return;    
+
   var rows = await dbs[layer.dbs || req.params.workspace.dbs](q, SQLparams)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
