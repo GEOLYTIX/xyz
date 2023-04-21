@@ -14,7 +14,7 @@
 
 <body class="login_form">
 
-  <select id="language" onChange="window.location.href=this.value">
+  <select id="language" onChange="(function(e){location=e.target.value})(event)">
     <option value="{{dir}}?language=zh&login=true">中文简体</option>
     <option value="{{dir}}?language=en&login=true">English</option>
     <option value="{{dir}}?language=de&login=true">Deutsch</option>
