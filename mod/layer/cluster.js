@@ -72,7 +72,7 @@ module.exports = async (req, res) => {
 
   if (params.layer.srid !== '3857') {
 
-    console.warn(`Grid resolution cluster layer ${layer.key} geometries must be SRID:3857.`)
+    console.warn(`Grid resolution cluster layer ${params.layer.key} geometries must be SRID:3857.`)
     return;
   }
 
