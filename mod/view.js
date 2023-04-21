@@ -27,10 +27,10 @@ module.exports = async (req, res) => {
   if (req.params.template?.template) {
 
     // regex captures characters inside {{ }}
-    return res.send(req.params.template?.template.replace(/\{\{(.*?)\}\}/g, matched => {
+    return res.send(req.params.template?.template.replace(/[{]{2}([A-Za-z][A-Za-z0-9]*)[}]{2}/g, matched => {
 
       // regex matches {{ or }}
-      return params[matched.replace(/\{\{|\}\}/g, '')] || '';
+      return params[matched.replace(/[{]{2}|[}]{2}/g, '')] || '';
     }));
   }
 
