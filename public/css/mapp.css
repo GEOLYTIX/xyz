@@ -162,6 +162,17 @@ a > img {
 .legend > .grid .label, .legend > .content > .grid .label {
   grid-column: 2;
 }
+.legend > .grid.flex, .legend > .content > .grid.flex {
+  display: flex;
+  flex-wrap: wrap;
+  flex-grow: 1;
+  justify-content: start;
+}
+.legend > .grid.flex .contents, .legend > .content > .grid.flex .contents {
+  display: block;
+  flex-basis: 30%;
+  flex-shrink: 1;
+}
 .legend .switch {
   cursor: pointer;
 }

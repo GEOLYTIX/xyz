@@ -175,6 +175,19 @@ a > img {
     .label {
       grid-column: 2;
     }
+
+    &.flex {
+      display: flex;
+      flex-wrap: wrap;
+      flex-grow: 1;
+      justify-content: start;
+
+      .contents {
+        display: block;
+        flex-basis: 30%;
+        flex-shrink: 1;
+      }
+    }
   }
 
   .switch {
