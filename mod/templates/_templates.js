@@ -74,7 +74,7 @@ module.exports = async (name, language = 'en', params = {}) => {
     if (typeof template[key] !== 'string') return;
 
     // Replace matched params in string values
-    template[key] = template[key].replace(/\$\{+(.*?)\}+/g,
+    template[key] = template[key].replace(/\$\{{1}(.*?)\}{1}/g,
       matched => params[matched.replace(/\$\{{1}|\}{1}/g, '')] || '')
 
   })

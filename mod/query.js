@@ -119,7 +119,7 @@ module.exports = async (req, res) => {
       })
 
       // Replace params with placeholder, eg. $1, $2
-      .replace(/\%\{+(.*?)\}+/g, matched => {
+      .replace(/\%{{1}(.*?)\}{1}/g, matched => {
 
         // Remove template brackets from matched param.
         const param = matched.replace(/\%\{{1}|\}{1}/g, '')
