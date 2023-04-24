@@ -143,7 +143,7 @@ module.exports = async (req, res) => {
   if (!filter && layer.mvt_cache) {
 
     // Validate dynamic method call.
-    if (typeof dbs[layer.dbs || req.params.workspace.dbs] !== 'function') return;    
+    if (!Object.hasOwn(dbs, layer.dbs || req.params.workspace.dbs) || typeof dbs[layer.dbs || req.params.workspace.dbs] !== 'function') return;    
 
     var rows = await dbs[layer.dbs || req.params.workspace.dbs](`SELECT mvt FROM ${layer.mvt_cache} WHERE z = ${z} AND x = ${x} AND y = ${y}`)
 
