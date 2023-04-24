@@ -99,10 +99,10 @@ module.exports = async (req, res) => {
     query = template.template
 
       // Replace parameter for identifiers, e.g. table, schema, columns
-      .replace(/\$\{+(.*?)\}+/g, matched => {
+      .replace(/\$\{{1}(.*?)\}{1}/g, matched => {
 
         // Remove template brackets from matched param.
-        const param = matched.replace(/\$+|\{+|\}+/g, '')
+        const param = matched.replace(/\$\{{1}|\}{1}/g, '')
 
         // Get param value from request params object.
         const change = req.params[param] || ''
@@ -122,7 +122,7 @@ module.exports = async (req, res) => {
       .replace(/\%\{+(.*?)\}+/g, matched => {
 
         // Remove template brackets from matched param.
-        const param = matched.replace(/\%+|\{+|\}+/g, '')
+        const param = matched.replace(/\%\{{1}|\}{1}/g, '')
 
         var val = req.params[param]// || ""
 

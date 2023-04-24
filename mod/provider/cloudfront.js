@@ -15,8 +15,8 @@ module.exports = async ref => {
 
   try {
 
-    const url = (ref.params?.url || ref).replace(/\{+(.*?)\}+/g,
-      matched => process.env[`SRC_${matched.replace(/\{+|\}+/g, '')}`] || matched)
+    const url = (ref.params?.url || ref).replace(/\{{1}(.+?)\}{1}/g,
+      matched => process.env[`SRC_${matched.replace(/\{{1}|\}{1}/g, '')}`] || matched)
 
     const date = new Date(Date.now())
     date.setDate(date.getDate() + 1);
