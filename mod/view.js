@@ -34,7 +34,7 @@ module.exports = async (req, res) => {
     }));
   }
 
-  let template = await templates(
+  const template = await templates(
     'default_view',
     req.params.language || req.params.user?.language,
     params

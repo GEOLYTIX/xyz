@@ -17,7 +17,7 @@ module.exports = async (req, res) => {
     })
 
   // Validate dynamic method call.
-  if (typeof dbs[layer.dbs || req.params.workspace.dbs] !== 'function') return;    
+  if (!Object.hasOwn(dbs, layer.dbs || req.params.workspace.dbs) || typeof dbs[layer.dbs || req.params.workspace.dbs] !== 'function') return;    
 
   // Remove tiles from mvt_cache.
   if (layer.mvt_cache) await dbs[layer.dbs || req.params.workspace.dbs](`
