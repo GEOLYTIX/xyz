@@ -173,6 +173,13 @@ a > img {
   flex-basis: 30%;
   flex-shrink: 1;
 }
+.legend > .grid.flex .contents.centered, .legend > .content > .grid.flex .contents.centered {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  margin-bottom: 1em;
+}
 .legend .switch {
   cursor: pointer;
 }

@@ -186,6 +186,14 @@ a > img {
         display: block;
         flex-basis: 30%;
         flex-shrink: 1;
+        
+        &.centered {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+          margin-bottom: 1em;
+        }
       }
     }
   }
