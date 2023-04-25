@@ -195,6 +195,12 @@ a > img {
           margin-bottom: 1em;
           text-align: center;
         }
+
+        &.row {
+          display: flex;
+          align-items: center;
+          margin-bottom: 1em;
+        }
       }
     }
   }

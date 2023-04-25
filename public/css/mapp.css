@@ -181,6 +181,11 @@ a > img {
   margin-bottom: 1em;
   text-align: center;
 }
+.legend > .grid.flex .contents.row, .legend > .content > .grid.flex .contents.row {
+  display: flex;
+  align-items: center;
+  margin-bottom: 1em;
+}
 .legend .switch {
   cursor: pointer;
 }
