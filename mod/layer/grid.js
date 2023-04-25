@@ -40,7 +40,7 @@ module.exports = async (req, res) => {
     AND ${size} >= 1 LIMIT 10000;`
 
   // Validate dynamic method call.
-  if (typeof dbs[layer.dbs || req.params.workspace.dbs] !== 'function') return;
+  if (!Object.hasOwn(dbs, layer.dbs || req.params.workspace.dbs) || typeof dbs[layer.dbs || req.params.workspace.dbs] !== 'function') return;
 
   var rows = await dbs[layer.dbs || req.params.workspace.dbs](q)
 

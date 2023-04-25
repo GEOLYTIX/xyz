@@ -39,7 +39,7 @@ module.exports = async (req, res) => {
   RETURNING ${layer.qID} AS id;`
 
   // Validate dynamic method call.
-  if (typeof dbs[layer.dbs || req.params.workspace.dbs] !== 'function') return;
+  if (!Object.hasOwn(dbs, layer.dbs || req.params.workspace.dbs) || typeof dbs[layer.dbs || req.params.workspace.dbs] !== 'function') return;
 
   var rows = await dbs[layer.dbs || req.params.workspace.dbs](q, vals)
 

@@ -201,7 +201,7 @@ async function layerGaz(q, layer) {
       LIMIT ${gaz.limit || 10}`
 
     // Validate dynamic method call.
-    if (typeof dbs[layer.dbs || req.params.workspace.dbs] !== 'function') return;
+    if (!Object.hasOwn(dbs, layer.dbs || req.params.workspace.dbs) || typeof dbs[layer.dbs || req.params.workspace.dbs] !== 'function') return;
 
     let rows = await dbs[layer.dbs || req.params.workspace.dbs](q, SQLparams);
 
