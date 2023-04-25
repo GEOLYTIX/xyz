@@ -18,6 +18,6 @@ module.exports = async ref => {
 
   } catch (err) {
     console.error(err)
-    return err
+    return;
   }
 }
