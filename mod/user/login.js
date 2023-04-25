@@ -44,7 +44,7 @@ module.exports = async (req, res, message) => {
 
     res.setHeader('Set-Cookie', cookie)
 
-    res.setHeader('location', `${redirect && redirect.replace(/([?&])msg=[^&]+(&|$)/,'') || process.env.DIR}`)
+    res.setHeader('location', `${redirect && redirect.replace(/([?&]{1})msg={1}[^&]+(&|$)/,'') || process.env.DIR}`)
 
     return res.status(302).send()
 

@@ -64,18 +64,18 @@ module.exports = async (name, language = 'en', params = {}) => {
   }
 
   // Return template which is of type string.
-  if (typeof template === 'string') return template.replace(/\{\{(.*?)\}\}/g,
+  if (typeof template === 'string') return template.replace(/[{]{2}(.*?)[}]{2}/g,
 
     // Replace matched params in template string
-    matched => params[matched.replace(/\{|\{|\}\}/g, '')] || '')
+    matched => params[matched.replace(/[{]{2}|[}]{2}/g, '')] || '')
 
   // Iterate through obkect keys of template
   Object.keys(template).forEach(key => {
     if (typeof template[key] !== 'string') return;
 
     // Replace matched params in string values
-    template[key] = template[key].replace(/\$\{(.*?)\}/g,
-      matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
+    template[key] = template[key].replace(/\$\{{1}(.*?)\}{1}/g,
+      matched => params[matched.replace(/\$\{{1}|\}{1}/g, '')] || '')
 
   })
 
