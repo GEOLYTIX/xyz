@@ -200,6 +200,9 @@ async function layerGaz(q, layer) {
       WHERE ${gaz.qterm}::text ILIKE $1
       LIMIT ${gaz.limit || 10}`
 
+    // Validate dynamic method call.
+    if (!Object.hasOwn(dbs, layer.dbs || req.params.workspace.dbs) || typeof dbs[layer.dbs || req.params.workspace.dbs] !== 'function') return;
+
     let rows = await dbs[layer.dbs || req.params.workspace.dbs](q, SQLparams);
 
     results = results.concat(rows)
