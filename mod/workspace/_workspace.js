@@ -72,7 +72,8 @@ function getLocale(req, res) {
     return res.status(400).send('Locale key missing.')
   }
 
-  if (!req.params.workspace.locales[req.params.locale]) {
+  // The locale object must have an own property for the locales key.
+  if (!Object.hasOwn(req.params.workspace.locales, req.params.locale)) {
     return res.status(404).send('Locale not found.')
   }
 

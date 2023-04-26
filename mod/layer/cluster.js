@@ -232,6 +232,8 @@ module.exports = async (req, res) => {
     FROM ${params.cluster_sql}
     GROUP BY ${params.group_by.join(',')};`
 
+  if (!Object.hasOwn(dbs, params.layer.dbs || req.params.workspace.dbs)) return;
+
   const query = dbs[params.layer.dbs || req.params.workspace.dbs];
 
   // Validate query method type.
