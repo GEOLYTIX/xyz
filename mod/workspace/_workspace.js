@@ -14,11 +14,15 @@ module.exports = async (req, res) => {
     timestamp: () => res.send(req.params.workspace.timestamp.toString()),
   }
 
-  if (keys[req.params.key]) return keys[req.params.key](req, res)
+  // The keys object must own a user provided lookup key
+  if (!Object.hasOwn(keys, req.params.key)) {
 
-  res.send(`
-    Failed to evaluate 'key' param.<br><br>
-    <a href="https://github.com/GEOLYTIX/xyz/wiki/XYZ---API#workspacekey">Workspace API</a>`)
+    return res.send(`
+      Failed to evaluate 'key' param.<br><br>
+      <a href="https://github.com/GEOLYTIX/xyz/wiki/XYZ---API#workspacekey">Workspace API</a>`)
+  }
+
+  return keys[req.params.key](req, res)
 }
 
 async function getLayer(req, res) {
