@@ -66,13 +66,9 @@ module.exports = async (name, language = 'en', params = {}) => {
   }
 
   // Return template which is of type string.
-<<<<<<< HEAD
   if (typeof template === 'string') {
     
     return template.replace(/\{\{(.*?)\}\}/g,
-=======
-  if (typeof template === 'string') return template.replace(/[{]{2}(.*?)[}]{2}/g,
->>>>>>> main
 
     // Replace matched params in template string
     matched => params[matched.replace(/[{]{2}|[}]{2}/g, '')] || '')
@@ -84,7 +80,6 @@ module.exports = async (name, language = 'en', params = {}) => {
 
     if (typeof template[key] !== 'string') return;
 
-<<<<<<< HEAD
     if (Object.hasOwn(template, key)) {
 
       // Replace matched params in string values
@@ -92,11 +87,6 @@ module.exports = async (name, language = 'en', params = {}) => {
         matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
 
     }
-=======
-    // Replace matched params in string values
-    template[key] = template[key].replace(/\$\{{1}(.*?)\}{1}/g,
-      matched => params[matched.replace(/\$\{{1}|\}{1}/g, '')] || '')
->>>>>>> main
 
   })
 

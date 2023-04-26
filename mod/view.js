@@ -34,12 +34,8 @@ module.exports = async (req, res) => {
     }));
   }
 
-<<<<<<< HEAD
   // Get view template.
   const view = await templates(
-=======
-  const template = await templates(
->>>>>>> main
     'default_view',
     req.params.language || req.params.user?.language,
     params
