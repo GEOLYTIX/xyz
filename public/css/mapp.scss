@@ -160,13 +160,10 @@ a > img {
 
 .legend {
 
-  >.grid, >.content>.grid {
-    margin-top: 5px;
-    display: grid;
-    grid-template-columns: min-content;
-    grid-gap: 5px;
-    align-items: center;
-    justify-content: start;
+  >.contents-wrapper,
+  >.content>.contents-wrapper {
+    margin-top: 0.5em;
+    gap: 0.5em;
 
     >.contents {
       display: contents;
@@ -174,6 +171,41 @@ a > img {
 
     .label {
       grid-column: 2;
+    }
+
+    &.flex {
+      display: flex;
+      flex-wrap: wrap;
+      flex-grow: 1;
+      justify-content: start;
+
+      .contents {
+        display: block;
+        flex-basis: 30%;
+        flex-shrink: 1;
+        
+        &.centered {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+          margin-bottom: 1em;
+          text-align: center;
+        }
+
+        &.row {
+          display: flex;
+          align-items: center;
+          margin-bottom: 1em;
+        }
+      }
+    }
+
+    &.grid {
+      display: grid;
+      grid-template-columns: min-content;
+      align-items: center;
+      justify-content: start;
     }
   }
 
