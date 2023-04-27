@@ -27,23 +27,23 @@ module.exports = async (req, res) => {
 
 async function getLayer(req, res) {
 
-  if (!req.params.layer) return res.status(400).send('Layer param missing.')
-
-  if (!req.params.locale) return res.status(400).send('Locale param missing.')
-
-  const roles = req.params.user && req.params.user.roles || []
+  if (!Object.hasOwn(req.params.workspace.locales, req.params.locale)) {
+    return res.status(400).send(`Unable to validate locale param.`)
+  }
 
   const locale = req.params.workspace.locales[req.params.locale]
 
-  if (!locale) return res.status(404).send('Locale not found.')
+  const roles = req.params.user?.roles || []
 
   if (!Roles.check(locale, roles)) {
     return res.status(403).send('Role access denied.')
   }
 
-  const layer = clone(locale.layers[req.params.layer])
+  if (!Object.hasOwn(locale.layers, req.params.layer)) {
+    return res.status(400).send(`Unable to validate layer param.`)
+  }
 
-  if (!layer) return res.status(404).send('Layer not found.')
+  const layer = clone(locale.layers[req.params.layer])
 
   if (!Roles.check(layer, roles)) {
     return res.status(403).send('Role access denied.')
@@ -72,13 +72,8 @@ function getLocales(req, res) {
 
 function getLocale(req, res) {
 
-  if (!req.params.locale) {
-    return res.status(400).send('Locale key missing.')
-  }
-
-  // The locale object must have an own property for the locales key.
   if (!Object.hasOwn(req.params.workspace.locales, req.params.locale)) {
-    return res.status(404).send('Locale not found.')
+    return res.status(400).send(`Unable to validate locale param.`)
   }
 
   const locale = clone(req.params.workspace.locales[req.params.locale])
