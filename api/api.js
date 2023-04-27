@@ -41,6 +41,12 @@ function IEdetect(sUsrAg) {
 
 module.exports = async (req, res) => {
 
+  // redirect if dir is missing in url path.
+  if (process.env.DIR && req.url.length === 1) {
+    res.setHeader('location', `${process.env.DIR}`)
+    return res.status(302).send()
+  }
+
   if (req.headers && req.headers['user-agent'] && IEdetect(req.headers['user-agent'])) return res.send('Uh Oh... It looks like your request comes from an unsupported user agent (e.g. Internet Explorer)')
 
   logger(req, 'req')
