@@ -72,6 +72,12 @@ function getLocales(req, res) {
 
 function getLocale(req, res) {
 
+  if (typeof req.params.workspace !== 'object' 
+    && !Object.hasOwn(req.params.workspace, 'locales')) {
+
+    return res.status(400).send(`Unable to validate workspace.locales.`)
+  }
+
   if (!Object.hasOwn(req.params.workspace.locales, req.params.locale)) {
     return res.status(400).send(`Unable to validate locale param.`)
   }
