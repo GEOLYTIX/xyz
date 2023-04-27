@@ -176,7 +176,9 @@ module.exports = async (req, res) => {
   // Retrieve workspace and assign to request params.
   const workspace = await workspaceCache(req)
 
-  if (workspace instanceof Error) return res.status(500).send(workspace.message)
+  if (workspace instanceof Error) {
+    return res.status(500).send(workspace.message)
+  }
 
   req.params.workspace = workspace
 
