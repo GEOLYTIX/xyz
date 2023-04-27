@@ -51,7 +51,7 @@ async function getLayer(req, res) {
 
   await Roles.reduce(layer, roles)
 
-  res.send(layer)
+  res.json(layer)
 }
 
 function getLocales(req, res) {
