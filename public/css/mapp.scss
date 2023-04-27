@@ -160,13 +160,10 @@ a > img {
 
 .legend {
 
-  >.grid, >.content>.grid {
-    margin-top: 5px;
-    display: grid;
-    grid-template-columns: min-content;
-    grid-gap: 5px;
-    align-items: center;
-    justify-content: start;
+  >.contents-wrapper,
+  >.content>.contents-wrapper {
+    margin-top: 0.5em;
+    gap: 0.5em;
 
     >.contents {
       display: contents;
@@ -202,6 +199,13 @@ a > img {
           margin-bottom: 1em;
         }
       }
+    }
+
+    &.grid {
+      display: grid;
+      grid-template-columns: min-content;
+      align-items: center;
+      justify-content: start;
     }
   }
 
