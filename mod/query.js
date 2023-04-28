@@ -77,10 +77,13 @@ module.exports = async (req, res) => {
     delete req.params.viewport
   }
 
+  if (!Object.hasOwn(dbs_connections, template.dbs || req.params.dbs || req.params.workspace.dbs)) {
+
+    res.status(400).send(`Failed to validate database connection method.`)
+  }
+
   // Get query pool from dbs module.
   const dbs = dbs_connections[template.dbs || req.params.dbs || req.params.workspace.dbs]
-
-  if (!dbs) return res.status(400).send(`DBS connection not found.`)
 
   // Assign body to params to enable reserved %{body} parameter.
   req.params.body = req.params.stringifyBody && JSON.stringify(req.body) || req.body
