@@ -42,7 +42,7 @@ function IEdetect(sUsrAg) {
 module.exports = async (req, res) => {
 
   // redirect if dir is missing in url path.
-  if (process.env.DIR && !req.url.match(process.env.DIR)) {
+  if (process.env.DIR && req.url.length === 1) {
     res.setHeader('location', `${process.env.DIR}`)
     return res.status(302).send()
   }
