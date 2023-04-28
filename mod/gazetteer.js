@@ -13,7 +13,7 @@ module.exports = async (req, res) => {
 
   // Return 406 is gazetteer is not found in locale.
   if (!Object.hasOwn(req.params.workspace.locales, req.params.locale)) {
-    return res.send(`Failed to validate 'locale' param.<br><br>
+    return res.status(400).send(`Failed to validate 'locale' param.<br><br>
     <a href="https://geolytix.github.io/xyz/docs/develop/api/gazetteer/">Gazetteer API</a>`)
   }
 
@@ -210,7 +210,7 @@ async function layerGaz(q, layer) {
       LIMIT ${gaz.limit || 10}`
 
     // Validate dynamic method call.
-    if (!Object.hasOwn(dbs, layer.dbs || req.params.workspace.dbs) || typeof dbs[layer.dbs || req.params.workspace.dbs] !== 'function') return;
+    if (!Object.hasOwn(dbs, layer.dbs || req.params.workspace.dbs)) return;
 
     let rows = await dbs[layer.dbs || req.params.workspace.dbs](q, SQLparams);
 

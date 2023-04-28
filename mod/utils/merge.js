@@ -20,7 +20,7 @@ module.exports = function mergeDeep(target, ...sources) {
         if (!target[key]) Object.assign(target, { [key]: {} });
 
         // Call recursive merge for target key object.
-        mergeDeep(target[key], source[key]);
+        Object.hasOwn(target, key) && mergeDeep(target[key], source[key]);
 
       // Target and Source are both arrays.
       } else if (Array.isArray(source[key]) && Array.isArray(target[key])) {
