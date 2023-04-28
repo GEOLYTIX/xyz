@@ -19,7 +19,7 @@ module.exports = async (req, res) => {
     return res.send(`Failed to validate 'provider' param.`)
   }
 
-  const response = await provider(req)
+  const response = await provider[req.params.provider](req)
 
   req.params.content_type && res.setHeader('content-type', req.params.content_type)
 
