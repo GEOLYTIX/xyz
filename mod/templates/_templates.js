@@ -70,10 +70,10 @@ module.exports = async (name, language = 'en', params = {}) => {
   // Return template which is of type string.
   if (typeof template === 'string') {
     
-    return template.replace(/\{\{(.*?)\}\}/g,
+    return template.replace(/\{{2}(.*?)\}{2}/g,
 
-    // Replace matched params in template string
-    matched => params[matched.replace(/[{]{2}|[}]{2}/g, '')] || '')
+      // Replace matched params in template string
+      matched => params[matched.replace(/\{{2}|\}{2}/g, '')] || '')
 
   }
 
@@ -84,9 +84,10 @@ module.exports = async (name, language = 'en', params = {}) => {
 
     if (Object.hasOwn(template, key)) {
 
-      // Replace matched params in string values
-      template[key] = template[key].replace(/\$\{(.*?)\}/g,
-        matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
+      template[key] = template[key].replace(/\$\{{1}(.*?)\}{1}/g,
+
+        // Replace matched params in string values
+        matched => params[matched.replace(/\$\{{1}|\}{1}/g, '')] || '')
 
     }
 
