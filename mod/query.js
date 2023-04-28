@@ -77,11 +77,6 @@ module.exports = async (req, res) => {
     delete req.params.viewport
   }
 
-  // Get query pool from dbs module.
-  const dbs = dbs_connections[template.dbs || req.params.dbs || req.params.workspace.dbs]
-
-  if (!dbs) return res.status(400).send(`DBS connection not found.`)
-
   // Assign body to params to enable reserved %{body} parameter.
   req.params.body = req.params.stringifyBody && JSON.stringify(req.body) || req.body
 
@@ -146,6 +141,14 @@ module.exports = async (req, res) => {
     res.status(500).send(err.message)
     return console.error(err)
   }
+
+  if (!Object.hasOwn(dbs_connections, template.dbs || req.params.dbs || req.params.workspace.dbs)) {
+
+    return res.status(400).send(`Failed to validate database connection method.`)
+  }
+
+  // Get query pool from dbs module.
+  const dbs = dbs_connections[template.dbs || req.params.dbs || req.params.workspace.dbs]
 
   // Nonblocking queries will not wait for results but return immediately.
   if (template.nonblocking || req.params.nonblocking) {
