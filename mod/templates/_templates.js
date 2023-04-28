@@ -57,9 +57,9 @@ module.exports = async (name, language = 'en', params = {}) => {
     for (key in template) {
 
       // Template key / value is a string with a valid get method.
-      if (Object.hasOwn(template, key) 
-        && typeof template[key] === 'string' 
-        && getFrom[template[key].split(':')[0]] instanceof Function) {
+      if (typeof template[key] === 'string'
+        && Object.hasOwn(template, key) 
+        && Object.hasOwn(getFrom, template[key].split(':')[0])) {
 
         // Assign template key value from method.
         template[key] = await getFrom[template[key].split(':')[0]](template[key])
