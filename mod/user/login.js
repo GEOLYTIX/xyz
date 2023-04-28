@@ -12,7 +12,7 @@ const templates = require('../templates/_templates')
 
 const { nanoid } = require('nanoid')
 
-module.exports = async (req, res, message) => {
+module.exports = async (req, res, _message) => {
 
   if (!acl) return res.status(500).send('ACL unavailable.')
 
@@ -50,7 +50,8 @@ module.exports = async (req, res, message) => {
 
   }
 
-  message = await templates(req.params.msg || message, req.params.language)
+  // Get message from templates.
+  const message = await templates(req.params.msg || _message, req.params.language)
 
   if (!message && req.params.user) {
 

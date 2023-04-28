@@ -25,8 +25,6 @@ const getFrom = {
   cloudfront: ref => cloudfront(ref.split(':')[1]),
 }
 
-//const custom_templates = require('./custom')
-
 const custom_templates = new Promise(async (resolve, reject)=>{
 
   if (!process.env.CUSTOM_TEMPLATES) return resolve({})
@@ -36,46 +34,61 @@ const custom_templates = new Promise(async (resolve, reject)=>{
 
 module.exports = async (name, language = 'en', params = {}) => {
 
-  if (!name) return;
+  const templates = merge({},
+    view_templates,
+    mail_templates,
+    msg_templates,
+    await custom_templates)
 
-  const templates = merge({}, view_templates, mail_templates, msg_templates, await custom_templates)
+  let template = templates[name]?.[language] || templates[name]?.en || name
 
-  let template = templates[name] && (templates[name][language] || templates[name].en) || name
+  if (typeof template === 'string') {
 
-  if (!template) return;
+    // Template string has a valid getFrom method.
+    if (getFrom[template.split(':')[0]] instanceof Function) {
 
-  if (typeof template === 'string' && getFrom[template.split(':')[0]]) {
-
-    template = await getFrom[template.split(':')[0]](template)
+      // Get template from method.
+      template = await getFrom[template.split(':')[0]](template)
+    }
   }
  
   if (typeof template === 'object') {
 
     for (key in template) {
 
-      if (typeof template[key] === 'string' && getFrom[template[key].split(':')[0]]) {
+      // Template key / value is a string with a valid get method.
+      if (Object.hasOwn(template, key) 
+        && typeof template[key] === 'string' 
+        && getFrom[template[key].split(':')[0]] instanceof Function) {
 
+        // Assign template key value from method.
         template[key] = await getFrom[template[key].split(':')[0]](template[key])
-
       }
-
     }
-
   }
 
   // Return template which is of type string.
-  if (typeof template === 'string') return template.replace(/[{]{2}(.*?)[}]{2}/g,
+  if (typeof template === 'string') {
+    
+    return template.replace(/\{\{(.*?)\}\}/g,
 
     // Replace matched params in template string
     matched => params[matched.replace(/[{]{2}|[}]{2}/g, '')] || '')
 
+  }
+
   // Iterate through obkect keys of template
   Object.keys(template).forEach(key => {
+
     if (typeof template[key] !== 'string') return;
 
-    // Replace matched params in string values
-    template[key] = template[key].replace(/\$\{{1}(.*?)\}{1}/g,
-      matched => params[matched.replace(/\$\{{1}|\}{1}/g, '')] || '')
+    if (Object.hasOwn(template, key)) {
+
+      // Replace matched params in string values
+      template[key] = template[key].replace(/\$\{(.*?)\}/g,
+        matched => params[matched.replace(/\$|\{|\}/g, '')] || '')
+
+    }
 
   })
 

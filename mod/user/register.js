@@ -21,14 +21,15 @@ module.exports = async (req, res) => {
 
 async function view(req, res) {
 
-  let template = await templates(req.params.reset && 'password_reset_view' || 'register_view', req.params.language, {
+  // Get password reset or account registration view from templates.
+  const view = await templates(req.params.reset && 'password_reset_view' || 'register_view', req.params.language, {
     dir: process.env.DIR
   })
 
   // The login view will set the cookie to null.
   res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
 
-  res.send(template)
+  res.send(view)
 }
 
 async function post(req, res) {
