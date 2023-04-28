@@ -79,7 +79,7 @@ module.exports = async (req, res) => {
 
   if (!Object.hasOwn(dbs_connections, template.dbs || req.params.dbs || req.params.workspace.dbs)) {
 
-    res.status(400).send(`Failed to validate database connection method.`)
+    return res.status(400).send(`Failed to validate database connection method.`)
   }
 
   // Get query pool from dbs module.
