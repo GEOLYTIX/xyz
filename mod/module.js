@@ -2,9 +2,9 @@ const { join } = require('path')
 
 module.exports = async (req, res) => {
 
-  const mod = req.params.workspace.modules[req.params.module];
+  if (!Object.hasOwn(req.params.workspace.modules, req.params.module)) return;
 
-  if (!mod) return;
+  const mod = req.params.workspace.modules[req.params.module];
 
   if (!mod.mod) {
 
