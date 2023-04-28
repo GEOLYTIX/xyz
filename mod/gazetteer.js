@@ -25,7 +25,7 @@ module.exports = async (req, res) => {
   // Return results for layer gazetteer.
   if (req.params.layer) {
 
-    if (!Object.hasOwn(locale.layers, req.params.layer)) {
+    if (!Object.hasOwn(locale.layers, req.params.layer) || typeof locale.layers[req.params.layer] !== 'object') {
       return res.status(400).send(`Failed to validate layer param for gazetteer query`)
     }
 
