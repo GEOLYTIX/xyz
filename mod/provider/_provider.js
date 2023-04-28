@@ -8,17 +8,15 @@ const s3 = require('./s3')
 
 module.exports = async (req, res) => {
 
-  const _provider = {
+  const provider = {
     cloudfront: cloudfront,
     cloudinary: cloudinary,
     file: file,
     s3: s3
   }
 
-  const provider = _provider[req.params.provider]
-
-  if (!provider) {
-    return res.send(`Failed to evaluate 'provider' param.`)
+  if (!Object.hasOwn(provider, req.params.provider)) {
+    return res.send(`Failed to validate 'provider' param.`)
   }
 
   const response = await provider(req)
