@@ -23,7 +23,13 @@ module.exports = async (req, res) => {
       || ''}
   WHERE lower(email) = lower($1);`, [email, req.params.value])
 
-  if (rows instanceof Error) return res.status(500).send(await templates('failed_query', req.params.language))
+  if (rows instanceof Error) {
+
+    // Get error message from templates.
+    const error_message = await templates('failed_query', req.params.language)
+
+    return res.status(500).send(error_message)
+  }
 
   const protocol = `${req.headers.host.includes('localhost') && 'http' || 'https'}://`
 
@@ -32,15 +38,17 @@ module.exports = async (req, res) => {
   // Send email to the user account if an account has been approved.
   if (req.params.field === 'approved' && req.params.value === 'true') {
 
-    var mail_template = await templates('approved_account', req.params.user.language, {
+    const mail_template = await templates('approved_account', req.params.user.language, {
       host: host,
       protocol: protocol
     })
-    
-    await mailer(Object.assign(mail_template, {
-      to: email
-    }))
 
+    // Assign email to mail template
+    Object.assign(mail_template, {
+      to: email
+    })
+    
+    await mailer(mail_template)
   }
 
   return res.send(await templates('update_ok', req.params.user.language))

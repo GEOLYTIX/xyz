@@ -142,11 +142,18 @@ module.exports = async (req, res) => {
 
   if (!filter && layer.mvt_cache) {
 
+    // Validate dynamic method call.
+    if (!Object.hasOwn(dbs, layer.dbs || req.params.workspace.dbs) || typeof dbs[layer.dbs || req.params.workspace.dbs] !== 'function') return;    
+
     var rows = await dbs[layer.dbs || req.params.workspace.dbs](`SELECT mvt FROM ${layer.mvt_cache} WHERE z = ${z} AND x = ${x} AND y = ${y}`)
 
     if (rows instanceof Error) console.log('failed to query mvt cache')
 
     if(!rows.length) {
+
+      // Validate dynamic method call.
+      if (typeof dbs[layer.dbs || req.params.workspace.dbs] !== 'function') return;
+
       rows = await dbs[layer.dbs || req.params.workspace.dbs](`
         WITH n AS (
           INSERT INTO ${layer.mvt_cache}
@@ -160,6 +167,9 @@ module.exports = async (req, res) => {
     if (rows.length === 1)  return res.send(rows[0].mvt) // If found return the cached MVT to client.
 
   }
+
+  // Validate dynamic method call.
+  if (typeof dbs[layer.dbs || req.params.workspace.dbs] !== 'function') return;  
 
   var rows = await dbs[layer.dbs || req.params.workspace.dbs](tile, SQLparams)
 

@@ -4,6 +4,9 @@ module.exports = async (req, res) => {
 
   const layer = req.params.layer
 
+  // Validate dynamic method call.
+  if (typeof dbs[layer.dbs || req.params.workspace.dbs] !== 'function') return;
+
   if (layer.mvt_cache) await dbs[layer.dbs || req.params.workspace.dbs](`
   DELETE FROM ${layer.mvt_cache}
   WHERE ST_Intersects(tile, (

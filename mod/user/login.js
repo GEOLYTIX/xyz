@@ -12,7 +12,7 @@ const templates = require('../templates/_templates')
 
 const { nanoid } = require('nanoid')
 
-module.exports = async (req, res, message) => {
+module.exports = async (req, res, _message) => {
 
   if (!acl) return res.status(500).send('ACL unavailable.')
 
@@ -44,13 +44,14 @@ module.exports = async (req, res, message) => {
 
     res.setHeader('Set-Cookie', cookie)
 
-    res.setHeader('location', `${redirect && redirect.replace(/([?&])msg=[^&]+(&|$)/,'') || process.env.DIR}`)
+    res.setHeader('location', `${redirect && redirect.replace(/([?&]{1})msg={1}[^&]+(&|$)/,'') || process.env.DIR}`)
 
     return res.status(302).send()
 
   }
 
-  message = await templates(req.params.msg || message, req.params.language)
+  // Get message from templates.
+  const message = await templates(req.params.msg || _message, req.params.language)
 
   if (!message && req.params.user) {
 

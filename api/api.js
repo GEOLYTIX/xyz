@@ -42,7 +42,7 @@ function IEdetect(sUsrAg) {
 module.exports = async (req, res) => {
 
   // redirect if dir is missing in url path.
-  if (process.env.DIR && !req.url.match(process.env.DIR)) {
+  if (process.env.DIR && req.url.length === 1) {
     res.setHeader('location', `${process.env.DIR}`)
     return res.status(302).send()
   }
@@ -117,7 +117,7 @@ module.exports = async (req, res) => {
     res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
 
     // Remove logout parameter.
-    res.setHeader('location', req.url && decodeURIComponent(req.url).replace(/logout\=true/, ''))
+    res.setHeader('location', '/')
 
     return res.status(302).send()
   }
@@ -174,9 +174,11 @@ module.exports = async (req, res) => {
   }
 
   // Retrieve workspace and assign to request params.
-  const workspace = await workspaceCache(req)
+  const workspace = await workspaceCache()
 
-  if (workspace instanceof Error) return res.status(500).send(workspace.message)
+  if (workspace instanceof Error) {
+    return res.status(500).send(workspace.message)
+  }
 
   req.params.workspace = workspace
 
