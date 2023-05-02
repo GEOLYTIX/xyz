@@ -174,8 +174,8 @@ a > img {
   flex-basis: 30%;
   flex-shrink: 1;
 }
-.legend > .contents-wrapper.flex .contents.centered,
-.legend > .content > .contents-wrapper.flex .contents.centered {
+.legend > .contents-wrapper.flex .contents.center,
+.legend > .content > .contents-wrapper.flex .contents.center {
   display: flex;
   align-items: center;
   justify-content: center;
