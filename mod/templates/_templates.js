@@ -78,20 +78,23 @@ module.exports = async (name, language = 'en', params = {}) => {
   }
 
   // Iterate through obkect keys of template
-  Object.keys(template).forEach(key => {
+  if (typeof template === 'object') {
 
-    if (typeof template[key] !== 'string') return;
+    Object.keys(template).forEach(key => {
 
-    if (Object.hasOwn(template, key)) {
-
-      template[key] = template[key].replace(/\$\{{1}(.*?)\}{1}/g,
-
-        // Replace matched params in string values
-        matched => params[matched.replace(/\$\{{1}|\}{1}/g, '')] || '')
-
-    }
-
-  })
+      if (typeof template[key] !== 'string') return;
+  
+      if (Object.hasOwn(template, key)) {
+  
+        template[key] = template[key].replace(/\$\{{1}(.*?)\}{1}/g,
+  
+          // Replace matched params in string values
+          matched => params[matched.replace(/\$\{{1}|\}{1}/g, '')] || '')
+  
+      }
+  
+    })
+  }
 
   return template
 }
