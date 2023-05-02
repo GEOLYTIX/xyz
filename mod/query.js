@@ -77,11 +77,6 @@ module.exports = async (req, res) => {
     delete req.params.viewport
   }
 
-  // Get query pool from dbs module.
-  const dbs = dbs_connections[template.dbs || req.params.dbs || req.params.workspace.dbs]
-
-  if (!dbs) return res.status(400).send(`DBS connection not found.`)
-
   // Assign body to params to enable reserved %{body} parameter.
   req.params.body = req.params.stringifyBody && JSON.stringify(req.body) || req.body
 
@@ -99,10 +94,10 @@ module.exports = async (req, res) => {
     query = template.template
 
       // Replace parameter for identifiers, e.g. table, schema, columns
-      .replace(/\$\{(.*?)\}/g, matched => {
+      .replace(/\$\{{1}(.*?)\}{1}/g, matched => {
 
         // Remove template brackets from matched param.
-        const param = matched.replace(/\$|\{|\}/g, '')
+        const param = matched.replace(/\$\{{1}|\}{1}/g, '')
 
         // Get param value from request params object.
         const change = req.params[param] || ''
@@ -119,17 +114,17 @@ module.exports = async (req, res) => {
       })
 
       // Replace params with placeholder, eg. $1, $2
-      .replace(/\%\{(.*?)\}/g, matched => {
+      .replace(/\%{{1}(.*?)\}{1}/g, matched => {
 
         // Remove template brackets from matched param.
-        const param = matched.replace(/\%|\{|\}/g, '')
+        const param = matched.replace(/\%\{{1}|\}{1}/g, '')
 
         var val = req.params[param]// || ""
 
         try {
 
           // Try to parse val if the string begins and ends with either [] or {}
-          val = !param === 'body' && /^[\[\{].*[\]\}]$/.test(val) && JSON.parse(val) || val
+          val = !param === 'body' && /^[\[\{]{1}.*[\]\}]{1}$/.test(val) && JSON.parse(val) || val
         } catch (err) {
           console.error(err)
         }
@@ -146,6 +141,14 @@ module.exports = async (req, res) => {
     res.status(500).send(err.message)
     return console.error(err)
   }
+
+  if (!Object.hasOwn(dbs_connections, template.dbs || req.params.dbs || req.params.workspace.dbs)) {
+
+    return res.status(400).send(`Failed to validate database connection method.`)
+  }
+
+  // Get query pool from dbs module.
+  const dbs = dbs_connections[template.dbs || req.params.dbs || req.params.workspace.dbs]
 
   // Nonblocking queries will not wait for results but return immediately.
   if (template.nonblocking || req.params.nonblocking) {

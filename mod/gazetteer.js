@@ -11,19 +11,23 @@ const provider = {
 
 module.exports = async (req, res) => {
 
-  const locale = req.params.workspace.locales[req.params.locale]
-
   // Return 406 is gazetteer is not found in locale.
-  if (!locale) {
-    return res.send(`Failed to evaluate 'locale' param.<br><br>
+  if (!Object.hasOwn(req.params.workspace.locales, req.params.locale)) {
+    return res.status(400).send(`Failed to validate 'locale' param.<br><br>
     <a href="https://geolytix.github.io/xyz/docs/develop/api/gazetteer/">Gazetteer API</a>`)
   }
+
+  const locale = req.params.workspace.locales[req.params.locale]
 
   // Create an empty results object to be populated with the results from the different gazetteer methods.
   let results = []
 
   // Return results for layer gazetteer.
   if (req.params.layer) {
+
+    if (!Object.hasOwn(locale.layers, req.params.layer) || typeof locale.layers[req.params.layer] !== 'object') {
+      return res.status(400).send(`Failed to validate layer param for gazetteer query`)
+    }
 
     let results = await layerGaz(req.params.q, locale.layers[req.params.layer])
 
@@ -33,7 +37,8 @@ module.exports = async (req, res) => {
   // Locale gazetteer which can query datasources in the same locale.
   if (locale.gazetteer.datasets) await datasets(req, locale, results)
 
-  if (provider[locale.gazetteer.provider]) {
+  // Validate provider.
+  if (Object.hasOwn(provider, locale.gazetteer.provider)) {
 
     await provider[locale.gazetteer.provider](req.params.q, locale.gazetteer, results)
   }
@@ -90,7 +95,9 @@ async function datasets(req, locale, results) {
   // Loop through dataset entries in gazetteer configuration.
   for (let dataset of locale.gazetteer.datasets) {
 
-    if (dataset.minLength && decodeURIComponent(req.params.q).trim().length < dataset.minLength) continue
+    if (dataset.minLength && decodeURIComponent(req.params.q).trim().length < dataset.minLength) continue;
+
+    if (!Object.hasOwn(locale.layers, dataset.layer)) continue;
 
     const layer = locale.layers[dataset.layer]
 
@@ -102,8 +109,6 @@ async function datasets(req, locale, results) {
 
     //Asteriks & Leading Wild Card Expression
     let phrase = `${dataset.leading_wildcard && '%' ||''}${decodeURIComponent(req.params.q).replace(new RegExp(/\*/g), '%')}%`
-
-    //console.log(phrase)
 
     const SQLparams = [phrase]
 
@@ -129,6 +134,10 @@ async function datasets(req, locale, results) {
       WHERE ${dataset.qterm || dataset.label}::text ILIKE $1
       ${filter}
       LIMIT ${dataset.limit || locale.gazetteer.limit || 10}`
+
+    if (!Object.hasOwn(dbs, dataset.dbs || layer && layer.dbs || req.params.workspace.dbs)) {
+      continue;
+    }
 
     records.push(dbs[dataset.dbs || layer && layer.dbs || req.params.workspace.dbs](q, SQLparams));
 
@@ -199,6 +208,9 @@ async function layerGaz(q, layer) {
       FROM ${gaz.table || layer.table}
       WHERE ${gaz.qterm}::text ILIKE $1
       LIMIT ${gaz.limit || 10}`
+
+    // Validate dynamic method call.
+    if (!Object.hasOwn(dbs, layer.dbs || req.params.workspace.dbs)) return;
 
     let rows = await dbs[layer.dbs || req.params.workspace.dbs](q, SQLparams);
 

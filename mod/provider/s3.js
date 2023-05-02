@@ -11,7 +11,7 @@ const {
 
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 
-module.exports = async req => {
+module.exports = async (req, res) => {
 
   const s3Client = new S3Client({
     credentials: {
@@ -29,6 +29,10 @@ module.exports = async req => {
     uploadpart,
     completeUpload,
     list
+  }
+
+  if (!Object.hasOwn(commands, req.params.command)) {
+    return res.status(400).send(`S3 command validation failed.`)
   }
 
   return commands[req.params.command](s3Client, req)

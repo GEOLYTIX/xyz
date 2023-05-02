@@ -14,32 +14,36 @@ module.exports = async (req, res) => {
     timestamp: () => res.send(req.params.workspace.timestamp.toString()),
   }
 
-  if (keys[req.params.key]) return keys[req.params.key](req, res)
+  // The keys object must own a user provided lookup key
+  if (!Object.hasOwn(keys, req.params.key)) {
 
-  res.send(`
-    Failed to evaluate 'key' param.<br><br>
-    <a href="https://github.com/GEOLYTIX/xyz/wiki/XYZ---API#workspacekey">Workspace API</a>`)
+    return res.send(`
+      Failed to evaluate 'key' param.<br><br>
+      <a href="https://github.com/GEOLYTIX/xyz/wiki/XYZ---API#workspacekey">Workspace API</a>`)
+  }
+
+  return keys[req.params.key](req, res)
 }
 
 async function getLayer(req, res) {
 
-  if (!req.params.layer) return res.status(400).send('Layer param missing.')
-
-  if (!req.params.locale) return res.status(400).send('Locale param missing.')
-
-  const roles = req.params.user && req.params.user.roles || []
+  if (!Object.hasOwn(req.params.workspace.locales, req.params.locale)) {
+    return res.status(400).send(`Unable to validate locale param.`)
+  }
 
   const locale = req.params.workspace.locales[req.params.locale]
 
-  if (!locale) return res.status(404).send('Locale not found.')
+  const roles = req.params.user?.roles || []
 
   if (!Roles.check(locale, roles)) {
     return res.status(403).send('Role access denied.')
   }
 
-  const layer = clone(locale.layers[req.params.layer])
+  if (!Object.hasOwn(locale.layers, req.params.layer)) {
+    return res.status(400).send(`Unable to validate layer param.`)
+  }
 
-  if (!layer) return res.status(404).send('Layer not found.')
+  const layer = clone(locale.layers[req.params.layer])
 
   if (!Roles.check(layer, roles)) {
     return res.status(403).send('Role access denied.')
@@ -47,7 +51,7 @@ async function getLayer(req, res) {
 
   await Roles.reduce(layer, roles)
 
-  res.send(layer)
+  res.json(layer)
 }
 
 function getLocales(req, res) {
@@ -68,12 +72,8 @@ function getLocales(req, res) {
 
 function getLocale(req, res) {
 
-  if (!req.params.locale) {
-    return res.status(400).send('Locale key missing.')
-  }
-
-  if (!req.params.workspace.locales[req.params.locale]) {
-    return res.status(404).send('Locale not found.')
+  if (!Object.hasOwn(req.params.workspace.locales, req.params.locale)) {
+    return res.status(400).send(`Unable to validate locale param.`)
   }
 
   const locale = clone(req.params.workspace.locales[req.params.locale])
@@ -88,7 +88,7 @@ function getLocale(req, res) {
     .filter(layer => !!Roles.check(layer[1], roles))
     .map(layer => layer[0])
 
-  res.send(locale)
+  res.json(locale)
 }
 
 function getRoles(req, res) {

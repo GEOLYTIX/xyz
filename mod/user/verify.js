@@ -19,7 +19,13 @@ module.exports = async (req, res) => {
     WHERE verificationtoken = $1;`,
     [req.params.key])
 
-  if (rows instanceof Error) return res.status(500).send(await templates('failed_query', req.params.language))
+  if (rows instanceof Error) {
+
+    // Get error message from templates.
+    const error_message = await templates('failed_query', req.params.language)
+    
+    return res.status(500).send(error_message)
+  }
 
   const user = rows[0]
 
@@ -41,7 +47,13 @@ module.exports = async (req, res) => {
       verificationtoken = null
     WHERE lower(email) = lower($1);`, [user.email])
 
-  if (rows instanceof Error) return res.status(500).send(await templates('failed_query', req.params.language))
+  if (rows instanceof Error) {
+
+    // Get error message from templates.
+    const error_message = await templates('failed_query', req.params.language)
+    
+    return res.status(500).send(error_message)
+  }
 
   if (user.approved) {
 
@@ -61,7 +73,13 @@ module.exports = async (req, res) => {
     FROM acl_schema.acl_table
     WHERE admin = true;`)
 
-  if (rows instanceof Error) return res.status(500).send(await templates('failed_query', req.params.language))
+  if (rows instanceof Error) {
+
+    // Get error message from templates.
+    const error_message = await templates('failed_query', req.params.language)
+
+    return res.status(500).send(error_message)
+  }
 
   // One or more administrator have been 
   if (rows.length > 0) {
@@ -73,16 +91,18 @@ module.exports = async (req, res) => {
     // Get array of mail promises.
     const mail_promises = rows.map(async row => {
 
-      var mail_template = await templates('admin_email', row.language || req.params.language, {
+      const mail_template = await templates('admin_email', row.language || req.params.language, {
         email: user.email,
         host: host,
         protocol: protocol
       })
-      
-      return mailer(Object.assign(mail_template, {
-        to: row.email
-      }))
 
+      // Assign email to mail template.
+      Object.assign(mail_template, {
+        to: row.email
+      })
+      
+      return mailer(mail_template)
     })
 
     // Continue after all mail promises have been resolved.
