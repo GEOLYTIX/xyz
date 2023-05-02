@@ -160,8 +160,8 @@ a > img {
 
 .legend {
 
-  >.contents-wrapper,
-  >.content>.contents-wrapper {
+  .contents-wrapper,
+  .content .contents-wrapper {
     margin-top: 0.5em;
     gap: 0.5em;
 
