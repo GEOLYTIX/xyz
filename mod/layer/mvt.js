@@ -126,7 +126,7 @@ module.exports = async (req, res) => {
         ) geom
       FROM ${table}
       WHERE
-        ${layer.z_field && `${layer.z_field} >= ${z}` ||''}
+        ${layer.z_field && `${layer.z_field} >= ${z} AND` ||''}
         ST_Intersects(
           ${layer.srid !== '3857' && `ST_Transform(` ||''}
             ST_MakeEnvelope(

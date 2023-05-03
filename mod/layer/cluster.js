@@ -54,6 +54,7 @@ module.exports = async (req, res) => {
 
     // Create where sql restriction from viewport and filter.
     params.where_sql = `
+      ${layer.z_field && `${layer.z_field} >= ${z} AND` ||''}
       ST_Intersects(
         ST_MakeEnvelope(
           ${viewport[0]},
@@ -67,7 +68,7 @@ module.exports = async (req, res) => {
 
   } else {
 
-    params.where_sql = `true ${filter}`
+    params.where_sql = `${layer.z_field && `${layer.z_field} >= ${z} AND` ||'true'} ${filter}`
   }
 
   if (params.layer.srid !== '3857') {
