@@ -24,6 +24,9 @@ module.exports = async (workspace) => {
       distinct_values: {
         template: require('../../public/js/queries/distinct_values'),
       },
+      distinct_values_filter: {
+        template: require('../../public/js/queries/distinct_values_filter'),
+      },
       field_stats: {
         template: require('../../public/js/queries/field_stats'),
       },
