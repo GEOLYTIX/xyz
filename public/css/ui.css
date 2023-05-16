@@ -1301,6 +1301,16 @@ label.checkbox input:disabled ~ * {
   position: fixed;
 }
 
+:root {
+  --color-primary: #003D57;
+  --color-primary-light: #939faa;
+  --color-off-black: #3f3f3f;
+  --color-light: #E9E3DD;
+  --color-lighter: #D5E1E6;
+  --color-on: #E18335;
+  --color-no: #A21309;
+}
+
 .no-select {
   -webkit-touch-callout: none;
   -webkit-user-select: none;

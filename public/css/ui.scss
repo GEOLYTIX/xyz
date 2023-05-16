@@ -18,6 +18,22 @@
 
 // @import 'tabulator';
 
+:root {
+  --color-primary: #{$primary};
+
+  --color-primary-light: #{$primary-light};
+
+  --color-off-black: #{$off-black};
+
+  --color-light: #{$light};
+
+  --color-lighter: #{$lighter};
+
+  --color-on: #{$on};
+
+  --color-no: #{$no};
+}
+
 .no-select {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
