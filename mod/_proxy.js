@@ -2,7 +2,10 @@ const https = require('https')
 
 module.exports = (req, res) => {
 
-  if (!Object.hasOwn(process.env, `PROXY_${req.params.proxy}`)) return;
+  if (!Object.hasOwn(process.env, `PROXY_${req.params.proxy}`)) {
+    console.warn('Missing Proxy Key!')
+    return;
+  }
 
   // Find variables to be substituted.
   const url_params = req.params.params?.replace(/\{{1}(.+?)\}{1}/g,
@@ -20,5 +23,5 @@ module.exports = (req, res) => {
   req.pipe(proxy, {
     end: true
   })
-  
+
 }
