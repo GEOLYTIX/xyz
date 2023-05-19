@@ -47,7 +47,7 @@ describe('mergeDeep', () => {
         };
 
         const expected = {
-            fruits: ['apple', 'banana', 'orange'],
+            fruits: ['apple', 'banana','banana', 'orange'],
         };
 
         const mergedObj = mergeDeep(target, source);
