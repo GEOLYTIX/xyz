@@ -1,4 +1,4 @@
-const sqlfilter = require('../../mod/utils/sqlFilter');
+const sqlfilter = require('../../../mod/utils/sqlFilter');
 
 describe('sqlfilter', () => {
   test('should generate a valid SQL filter string for single filter entry', () => {

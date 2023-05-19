@@ -1,4 +1,4 @@
-const clone = require('../../mod/utils/clone');
+const clone = require('../../../mod/utils/clone');
 
 describe('clone', () => {
   test('should return the cloned object', () => {

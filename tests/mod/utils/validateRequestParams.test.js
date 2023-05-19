@@ -1,4 +1,4 @@
-const validateParams = require('../../mod/utils/validateRequestParams');
+const validateParams = require('../../../mod/utils/validateRequestParams');
 
 describe('validateParams', () => {
     test('should return true when all params are valid', () => {

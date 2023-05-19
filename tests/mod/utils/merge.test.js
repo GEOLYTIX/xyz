@@ -1,4 +1,4 @@
-const mergeDeep = require('../../mod/utils/merge');
+const mergeDeep = require('../../../mod/utils/merge');
 
 describe('mergeDeep', () => {
     test('should merge objects deeply', () => {

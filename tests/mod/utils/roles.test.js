@@ -3,7 +3,7 @@ const {
     reduce,
     filter,
     get
-} = require('../../mod/utils/roles');
+} = require('../../../mod/utils/roles');
 
 describe('Module', () => {
     describe('check', () => {
