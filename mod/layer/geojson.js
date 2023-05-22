@@ -10,6 +10,12 @@ module.exports = async (req, res) => {
 
   const layer = req.params.layer
 
+  // Check whether layer exists.
+  if (!layer) {
+
+    return res.status(400).send('Layer not found in workspace.')
+  }  
+
   // Validate URL parameter
   if (!validateRequestParams(req.params)) {
 
