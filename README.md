@@ -1,4 +1,4 @@
-**v4.4.1α**
+**v4.4.1**
 
 **Open source presentation, controller, domain and service layers for cloud native spatial data and application interfaces.**
 
