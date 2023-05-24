@@ -9,7 +9,8 @@ function check(obj, roles) {
 
   if (!obj.roles) return obj
 
-  if (!roles) return false
+  // Roles must be an array.
+  if (!Array.isArray(roles)) return false
 
   // Check whether negated role is matched with user.
   const someNegatedRole = Object.keys(obj.roles)
