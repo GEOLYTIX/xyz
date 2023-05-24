@@ -34,9 +34,6 @@ module.exports = async (req, res) => {
     // Set layer dbs as fallback param if not defined.
     req.params.dbs = req.params.dbs || layer.dbs
 
-    // Return if User Roles is not an array.
-    if(!Array.isArray(req.params.user.roles)) return;
-
     // Get array of role filter from layer configuration.
     const roles = Roles.filter(layer, req.params.user && req.params.user.roles)
 
