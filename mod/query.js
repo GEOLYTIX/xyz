@@ -35,7 +35,7 @@ module.exports = async (req, res) => {
     req.params.dbs = req.params.dbs || layer.dbs
 
     // Get array of role filter from layer configuration.
-    const roles = Roles.filter(layer, req.params.user && req.params.user.roles)
+    const roles = Roles.filter(layer, req.params.user?.roles)
 
     // Access is prohibited if the layer has roles assigned but the roleFilter is falsy.
     if (!roles && layer.roles) return res.status(403).send('Access prohibited.');

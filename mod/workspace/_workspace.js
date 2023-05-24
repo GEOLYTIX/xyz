@@ -58,7 +58,7 @@ function getLocales(req, res) {
 
   if (!req.params.workspace.locales) return res.send({})
 
-  const roles = req.params.user && req.params.user.roles || []
+  const roles = req.params.user?.roles || []
 
   const locales = Object.values(req.params.workspace.locales)
     .filter(locale => !!Roles.check(locale, roles))
@@ -78,7 +78,7 @@ function getLocale(req, res) {
 
   const locale = clone(req.params.workspace.locales[req.params.locale])
 
-  const roles = req.params.user && req.params.user.roles || []
+  const roles = req.params.user?.roles || []
 
   if (!Roles.check(locale, roles)) {
     return res.status(403).send('Role access denied.')
