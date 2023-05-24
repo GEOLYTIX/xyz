@@ -63,7 +63,8 @@ function filter(obj, roles) {
 
   if (!obj.roles) return;
 
-  if (!roles) return;
+    // Roles must be an array.
+    if (!Array.isArray(roles)) return false
 
   const roleFilter = Object.keys(obj.roles)
     .filter(key => roles.includes(key)
