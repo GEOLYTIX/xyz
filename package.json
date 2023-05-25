@@ -19,7 +19,7 @@
     "@aws-sdk/lib-storage": "^3.223.0",
     "@aws-sdk/s3-request-presigner": "^3.229.0",
     "bcryptjs": "^2.4.3",
-    "cloudinary": "^1.33.0",
+    "cloudinary": "^1.37.0",
     "jsonwebtoken": "^9.0.0",
     "nanoid": "^3.2.0",
     "nodemailer": "^6.6.0",
