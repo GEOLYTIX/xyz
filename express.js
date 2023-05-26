@@ -19,10 +19,6 @@ const _api = require('./api/api')
 const api = (req, res) => _api(req, res)
 
 
-app.get(`${process.env.DIR||''}/api/proxy`, api)
-app.get(`${process.env.DIR||''}/api/_proxy/:proxy?`, api)
-
-
 app.get(`${process.env.DIR||''}/api/provider/:provider?`, api)
 
 app.post(`${process.env.DIR||''}/api/provider/:provider?`, express.json({limit: '5mb'}), api)
