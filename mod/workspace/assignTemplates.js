@@ -89,12 +89,11 @@ module.exports = async (workspace) => {
 
         // Failed to fetch template from src.
         if (_template instanceof Error) {
-          resolve({
+          return reject({
             [entry[0]]: Object.assign(entry[1], {
               err: _template,
             }),
           });
-          return;
         }
 
         // Template is a module.
@@ -107,29 +106,27 @@ module.exports = async (workspace) => {
             Module._compile(_template, entry[1].src);
 
             // Assign module exports as template function
-            resolve({
+            return resolve({
               [entry[0]]: Object.assign(entry[1], {
                 render: Module.exports,
               }),
             });
-            return;
+
           } catch (err) {
-            resolve({
+            return resolve({
               [entry[0]]: Object.assign(entry[1], {
                 err: err,
               }),
             });
-            return;
           }
         }
 
         if (typeof _template === 'object') {
 
           // Assign template object to the entry
-          resolve({
+          return resolve({
             [entry[0]]: Object.assign(_template, entry[1])
           });
-          return;
         }
 
         // Resolve template as string.
