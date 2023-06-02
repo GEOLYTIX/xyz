@@ -104,6 +104,7 @@ async function post(req, res) {
     // New passwords will only apply after account verification.
     var rows = await acl(`
       UPDATE acl_schema.acl_table SET
+        ${process.env.APPROVAL_EXPIRY ? `expires_on = ${parseInt((new Date().getTime() + process.env.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24)/1000)},` : ''}
         password_reset = '${password}',
         verificationtoken = '${verificationtoken}',
         access_log = array_append(access_log, '${date}@${req.headers['x-forwarded-for'] || 'localhost'}')
@@ -133,6 +134,7 @@ async function post(req, res) {
       email,
       password,
       language,
+      ${process.env.APPROVAL_EXPIRY ? 'expires_on,' : ''}
       verificationtoken,
       access_log )
 
@@ -140,6 +142,7 @@ async function post(req, res) {
       '${req.body.email}' AS email,
       '${password}' AS password,
       '${req.body.language}' AS language,
+      ${process.env.APPROVAL_EXPIRY ? `${parseInt((new Date().getTime() + process.env.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24)/1000)} AS expires_on,` : ''}
       '${verificationtoken}' AS verificationtoken,
       array['${date}@${req.ips && req.ips.pop() || req.ip}'] AS access_log;`)
 
