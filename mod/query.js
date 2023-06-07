@@ -142,13 +142,17 @@ module.exports = async (req, res) => {
     return console.error(err)
   }
 
-  if (!Object.hasOwn(dbs_connections, template.dbs || req.params.dbs || req.params.workspace.dbs)) {
+  // The dbs param or workspace dbs will be used as fallback if the dbs is not implicit in the template object.
+  const dbs_connection = String(template.dbs || req.params.dbs || req.params.workspace.dbs);
+
+  // Validate that the dbs_connection string exists as a stored connection method in dbs_connections.
+  if (!Object.hasOwn(dbs_connections, dbs_connection)) {
 
     return res.status(400).send(`Failed to validate database connection method.`)
   }
 
   // Get query pool from dbs module.
-  const dbs = dbs_connections[template.dbs || req.params.dbs || req.params.workspace.dbs]
+  const dbs = dbs_connections[dbs_connection]
 
   // Nonblocking queries will not wait for results but return immediately.
   if (template.nonblocking || req.params.nonblocking) {

@@ -1,6 +1,6 @@
 {
   "name": "xyz",
-  "version": "v4.4.1",
+  "version": "v4.5.0",
   "repository": {
     "type": "git",
     "url": "https://github.com/geolytix/xyz"
@@ -10,7 +10,8 @@
   },
   "scripts": {
     "test": "jest",
-    "_build": "npx esbuild ./lib/mapp.mjs ./lib/ui.mjs --bundle --minify --tree-shaking=false --sourcemap --format=iife --outdir=./public/js/lib"
+    "_build": "npx esbuild ./lib/mapp.mjs ./lib/ui.mjs --bundle --minify --tree-shaking=false --sourcemap --format=iife --outdir=./public/js/lib",
+    "version": "node version.js"
   },
   "license": "MIT",
   "dependencies": {
