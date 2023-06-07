@@ -45,6 +45,11 @@ input[type=datetime-local] {
   }
 }
 
+input[type=search]:focus + ul,
+input[type=search] + ul:active {
+  display: block;
+}
+
 label.checkbox {
   display: block;
 

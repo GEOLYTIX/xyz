@@ -337,15 +337,9 @@ window.onload = async () => {
 
   if (mapview.locale.gazetteer) {
 
-    // Add gazetteer to location panel.
-    const gazetteer = locationsTab.appendChild(mapp.utils.html.node`
-        <div class="dropdown active">
-          <input id="gazetteerInput" type="search" placeholder="e.g. London">
-          <ul></ul>`)
-
     mapp.ui.Gazetteer(Object.assign({
       mapview: mapview,
-      target: gazetteer,
+      target: locationsTab.appendChild(mapp.utils.html.node`<div>`),
     }, mapview.locale.gazetteer));
     
   } else {
