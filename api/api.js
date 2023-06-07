@@ -15,8 +15,6 @@ const routes = {
   layer: require('../mod/layer/_layer'),
   location: require('../mod/location/_location'),
   provider: require('../mod/provider/_provider'),
-  proxy: require('../mod/proxy'),
-  _proxy: require('../mod/_proxy'),
   query: require('../mod/query'),
   module: require('../mod/module'),
   user: require('../mod/user/_user'),
@@ -144,15 +142,6 @@ module.exports = async (req, res) => {
 
   // Set user as request parameter.
   req.params.user = user
-
-  // Proxy route
-  if (req.url.match(/(?<=\/api\/proxy)/)) {
-    return routes.proxy(req, res)
-  }
-
-  if (req.url.match(/(?<=\/api\/_proxy)/)) {
-    return routes._proxy(req, res)
-  }
 
   // Provider route
   if (req.url.match(/(?<=\/api\/provider)/)) {
