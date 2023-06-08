@@ -62,14 +62,13 @@ module.exports = async (workspace) => {
   );
 
   const templatePromises = Object.entries(workspace.templates)
-    .map((entry) => new Promise((resolve) => {
+    .map((entry) => new Promise((resolve, reject) => {
 
       // Entries without a src value must not be fetched.
       if (!entry[1].src) {
-        resolve({
+        return resolve({
           [entry[0]]: entry[1]
         });
-        return;
       }
 
       // Substitute parameter in src string.
@@ -78,6 +77,10 @@ module.exports = async (workspace) => {
         (matched) => process.env[`SRC_${matched.replace(/\$|\{|\}/g, '')}`] || matched
       );
 
+      if (!Object.hasOwn(getFrom, entry[1].src.split(':')[0])) {
+        return reject({[entry[0]]: entry[1]});
+      }
+
       // Get template from src.
       getFrom[entry[1].src.split(':')[0]](entry[1].src).then(resolveFrom);
 
@@ -85,12 +88,11 @@ module.exports = async (workspace) => {
 
         // Failed to fetch template from src.
         if (_template instanceof Error) {
-          resolve({
+          return reject({
             [entry[0]]: Object.assign(entry[1], {
               err: _template,
             }),
           });
-          return;
         }
 
         // Template is a module.
@@ -103,29 +105,27 @@ module.exports = async (workspace) => {
             Module._compile(_template, entry[1].src);
 
             // Assign module exports as template function
-            resolve({
+            return resolve({
               [entry[0]]: Object.assign(entry[1], {
                 render: Module.exports,
               }),
             });
-            return;
+
           } catch (err) {
-            resolve({
+            return resolve({
               [entry[0]]: Object.assign(entry[1], {
                 err: err,
               }),
             });
-            return;
           }
         }
 
         if (typeof _template === 'object') {
 
           // Assign template object to the entry
-          resolve({
+          return resolve({
             [entry[0]]: Object.assign(_template, entry[1])
           });
-          return;
         }
 
         // Resolve template as string.
@@ -140,14 +140,18 @@ module.exports = async (workspace) => {
     );
 
   return new Promise((resolve, reject) => {
-    Promise.all(templatePromises)
+    Promise.allSettled(templatePromises)
       .then((arr) => {
 
         // Log set of template objects from resolved promises.
         logger(arr, 'templates');
 
+        let assign = arr
+          .filter(o => o.value instanceof Object)
+          .map(o => o.value)
+
         // Spread array of template objects and assign to workspace.
-        Object.assign(workspace.templates, ...arr);
+        Object.assign(workspace.templates, ...assign);
 
         // Resolve Promise for all template promises.
         resolve();
