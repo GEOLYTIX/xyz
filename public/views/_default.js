@@ -337,10 +337,10 @@ window.onload = async () => {
 
   if (mapview.locale.gazetteer) {
 
-    mapp.ui.Gazetteer(Object.assign({
-      mapview: mapview,
+    mapp.ui.Gazetteer(Object.assign(mapview.locale.gazetteer, {
+      mapview,
       target: locationsTab.appendChild(mapp.utils.html.node`<div>`),
-    }, mapview.locale.gazetteer));
+    }));
     
   } else {
 
