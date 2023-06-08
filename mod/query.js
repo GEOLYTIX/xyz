@@ -121,6 +121,11 @@ module.exports = async (req, res) => {
 
         var val = req.params[param]// || ""
 
+        if (req.params.wildcard) {
+
+          val = val.replace(req.params.wildcard, '%')
+        }
+
         try {
 
           // Try to parse val if the string begins and ends with either [] or {}
