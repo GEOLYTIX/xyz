@@ -123,7 +123,7 @@ module.exports = async (req, res) => {
 
         if (req.params.wildcard) {
 
-          val = val.replace(req.params.wildcard, '%')
+          val = val.replaceAll(req.params.wildcard, '%')
         }
 
         try {
