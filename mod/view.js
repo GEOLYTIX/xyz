@@ -4,7 +4,11 @@ const Roles = require('./utils/roles.js')
 
 const login = require('./user/login')
 
+const logger = require('./utils/logger')
+
 module.exports = async (req, res) => {
+
+  logger(req.url, 'view-req-url')
 
   const roles = req.params.user?.roles || []
 
