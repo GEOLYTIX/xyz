@@ -154,8 +154,6 @@
     // Data must be an array if only 1 record returned in response.
     const data = Array.isArray(response) && response || [response]
 
-    console.log(typeof data[0].expires_on !== 'undefined')
-
     // Sort data to promote email from url parameter to top.
     if (params.email) {
       data.sort(function (x, y) { return x.email == params.email ? -1 : y.email == params.email ? 1 : 0; });
