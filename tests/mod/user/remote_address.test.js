@@ -14,7 +14,7 @@ describe('extractRemoteAddress', () => {
     expect(result).toEqual('192.168.0.1, 172.16.0.1');
   });
 
-  it('should return "unknown" if the x-forwarded-for header is invalid', () => {
+  it('should return "invalid" if the x-forwarded-for header is invalid', () => {
     const mockReq = {
       headers: {
         'x-forwarded-for': 'invalid#header'
@@ -23,16 +23,16 @@ describe('extractRemoteAddress', () => {
 
     const result = extractRemoteAddress(mockReq);
 
-    expect(result).toEqual('unknown');
+    expect(result).toEqual('invalid');
   });
 
-  it('should return "unknown" if the x-forwarded-for header is not present', () => {
+  it('should return "invalid" if the x-forwarded-for header is not present', () => {
     const mockReq = {
       headers: {}
     };
 
     const result = extractRemoteAddress(mockReq);
 
-    expect(result).toEqual('unknown');
+    expect(result).toEqual('invalid');
   });
 });
