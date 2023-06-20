@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Jest unit tests
 
 on:
   push:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   build:
-
+    name: Build & Run Tests
     runs-on: ubuntu-latest
 
     strategy:

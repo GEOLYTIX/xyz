@@ -1,6 +1,24 @@
 const templates = require('./templates/_templates');
 
+const Roles = require('./utils/roles.js')
+
+const login = require('./user/login')
+
 module.exports = async (req, res) => {
+
+  const roles = req.params.user?.roles || []
+
+  const locales = Object.values(req.params.workspace.locales)
+    .filter(locale => !!Roles.check(locale, roles))
+    .map(locale => ({
+      key: locale.key,
+      name: locale.name
+    }))
+
+  if (!locales.length) {
+
+    return login(req, res, 'no_locales')
+  }
 
   const user = req.params.user && encodeURI(JSON.stringify({
     email: req.params.user.email,

@@ -34,6 +34,10 @@ async function view(req, res) {
 
 async function post(req, res) {
 
+  const remote_address = req.headers['x-forwarded-for']
+    && /^[A-Za-z0-9.,_-\s]*$/.test(req.headers['x-forwarded-for']) ? req.headers['x-forwarded-for'] : 'invalid'
+    || 'unknown';
+
   if (!req.body.email) return res.status(400).send('No email provided')
 
   // Test email address
@@ -107,7 +111,7 @@ async function post(req, res) {
         ${process.env.APPROVAL_EXPIRY && user.expires_on ? `expires_on = ${parseInt((new Date().getTime() + process.env.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24)/1000)},` : ''}
         password_reset = '${password}',
         verificationtoken = '${verificationtoken}',
-        access_log = array_append(access_log, '${date}@${req.headers['x-forwarded-for'] || 'localhost'}')
+        access_log = array_append(access_log, '${date}@${remote_address}')
       WHERE lower(email) = lower($1);`,
       [req.body.email])
 
@@ -117,7 +121,7 @@ async function post(req, res) {
     var mail_template = await templates('verify_password_reset', user.language, {
       host: host,
       link: `${protocol}${host}/api/user/verify/${verificationtoken}`,
-      address: req.headers['x-forwarded-for'] || 'localhost',
+      remote_address
     })
     
     await mailer(Object.assign(mail_template, {
@@ -127,6 +131,8 @@ async function post(req, res) {
     // Return msg. No redirect for password reset.
     return res.send(await templates('password_reset_verification', user.language))
   }
+
+  const language = Intl.Collator.supportedLocalesOf([req.body.language], { localeMatcher: 'lookup' })[0] || 'en';
   
   // Create new user account
   var rows = await acl(`
@@ -149,10 +155,10 @@ async function post(req, res) {
   if (rows instanceof Error) return res.status(500).send(await templates('failed_query', req.params.language))
 
   // Sent mail with verification token to the account email address.
-  var mail_template = await templates('verify_account', req.body.language, {
+  var mail_template = await templates('verify_account', language, {
     host: host,
     link: `${protocol}${host}/api/user/verify/${verificationtoken}`,
-    remote_address: req.headers['x-forwarded-for'] || 'localhost',
+    remote_address
   })
 
   await mailer(Object.assign(mail_template, {
@@ -160,5 +166,5 @@ async function post(req, res) {
   }))
 
   // Return msg. No redirect for password reset.
-  res.send(await templates('new_account_registered', req.body.language))
+  res.send(await templates('new_account_registered', language))
 }
