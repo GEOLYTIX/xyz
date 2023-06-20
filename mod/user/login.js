@@ -86,6 +86,10 @@ async function view(req, res, message) {
 
 async function post(req, res) {
 
+  const remote_address = req.headers['x-forwarded-for']
+    && /^[A-Za-z0-9.,_-\s]*$/.test(req.headers['x-forwarded-for']) ? req.headers['x-forwarded-for'] : 'invalid'
+    || 'unknown';
+
   if(!req.body.email) return new Error(await templates('missing_email', req.params.language))
   
   if(!req.body.password) return new Error(await templates('missing_password', req.params.language))
@@ -99,7 +103,7 @@ async function post(req, res) {
   // Update access_log and return user record matched by email.
   var rows = await acl(`
     UPDATE acl_schema.acl_table
-    SET access_log = array_append(access_log, '${date.toISOString().replace(/\..*/,'')}@${req.headers['x-forwarded-for'] || 'localhost'}')
+    SET access_log = array_append(access_log, '${date.toISOString().replace(/\..*/,'')}@${remote_address}')
     WHERE lower(email) = lower($1)
     RETURNING email, roles, language, blocked, approved, approved_by, verified, admin, password;`,
     [req.body.email])
@@ -155,7 +159,7 @@ async function post(req, res) {
     var mail_template = await templates('failed_login', user.language, {
       host: host,
       protocol: protocol,
-      remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
+      remote_address
     })
   
     await mailer(Object.assign(mail_template, {
@@ -226,7 +230,7 @@ async function post(req, res) {
       failed_attempts: parseInt(process.env.FAILED_ATTEMPTS) || 3,
       protocol: protocol,
       verificationtoken: verificationtoken,
-      remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
+      remote_address
     })
   
     await mailer(Object.assign(mail_template, {
@@ -239,7 +243,7 @@ async function post(req, res) {
   // Login has failed but account is not locked (yet).
   var mail_template = await templates('login_incorrect', user.language, {
     host: host,
-    remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
+    remote_address
   })
 
   await mailer(Object.assign(mail_template, {
