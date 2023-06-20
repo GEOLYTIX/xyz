@@ -84,7 +84,9 @@ async function view(req, res, message) {
 
 async function post(req, res) {
 
-  const remote_address = /^[A-Za-z0-9.,_-\s]*$/.test(req.headers['x-forwarded-for']) ? req.headers['x-forwarded-for'] : 'unknown';
+  const remote_address = req.headers['x-forwarded-for']
+    && /^[A-Za-z0-9.,_-\s]*$/.test(req.headers['x-forwarded-for']) ? req.headers['x-forwarded-for'] : 'invalid'
+    || 'unknown';
 
   if(!req.body.email) return new Error(await templates('missing_email', req.params.language))
   
