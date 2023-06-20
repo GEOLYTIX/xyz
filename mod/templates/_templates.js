@@ -32,7 +32,7 @@ const custom_templates = new Promise(async (resolve, reject)=>{
   resolve(await getFrom[process.env.CUSTOM_TEMPLATES.split(':')[0]](process.env.CUSTOM_TEMPLATES))
 })
 
-module.exports = async (name, language = 'en', params = {}) => {
+module.exports = async (key, language = 'en', params = {}) => {
 
   const templates = merge({},
     view_templates,
@@ -40,7 +40,17 @@ module.exports = async (name, language = 'en', params = {}) => {
     msg_templates,
     await custom_templates)
 
-  let template = templates[name]?.[language] || templates[name]?.en || name
+  if (typeof key !== 'string') {
+
+    console.warn('Template keys must be of type string.')
+    return;
+  }
+
+  let template = Object.hasOwn(templates, key) ?
+
+    // Any template 
+    templates[key]?.[language] || templates[key]?.en || key
+    : key;
 
   if (typeof template === 'string') {
 
