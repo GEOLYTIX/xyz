@@ -154,6 +154,8 @@
     // Data must be an array if only 1 record returned in response.
     const data = Array.isArray(response) && response || [response]
 
+    console.log(typeof data[0].expires_on !== 'undefined')
+
     // Sort data to promote email from url parameter to top.
     if (params.email) {
       data.sort(function (x, y) { return x.email == params.email ? -1 : y.email == params.email ? 1 : 0; });
@@ -171,13 +173,6 @@
           // Style blocked user row.
           row.getElement().style.backgroundColor = user.blocked && '#ef9a9a'
         },
-        // selectable: false,
-        // rowClick: function (e, row) {
-
-        //   console.log(e)
-
-        //   //row.toggleSelect();
-        // },
         columnHeaderVertAlign: 'middle',
         rowHeight: 30,
         columns: [
@@ -275,6 +270,7 @@
             resizable: false
           },
           {
+            visible: typeof data[0].expires_on !== 'undefined',
             field: 'expires_on',
             title: 'Expires on',
             vertAlign: 'middle',
