@@ -36,14 +36,15 @@ module.exports = async (key, language = 'en', params = {}) => {
 
   if (key === undefined) return;
 
-  // Prevent prototype polluting assignment.
-  if (/__proto__/.test(key)) return;
-
+  // key must be string.
   if (typeof key !== 'string') {
 
     console.warn('Template keys must be of type string.')
     return;
   }
+
+  // Prevent prototype polluting assignment.
+  if (/__proto__/.test(key)) return;
 
   const templates = merge({},
     view_templates,
