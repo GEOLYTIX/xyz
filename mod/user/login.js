@@ -105,7 +105,7 @@ async function post(req, res) {
     UPDATE acl_schema.acl_table
     SET access_log = array_append(access_log, '${date.toISOString().replace(/\..*/,'')}@${remote_address}')
     WHERE lower(email) = lower($1)
-    RETURNING email, roles, language, blocked, approved, approved_by, verified, admin, password;`,
+    RETURNING email, roles, language, blocked, approved, approved_by, verified, admin, password ${process.env.APPROVAL_EXPIRY ? ', expires_on;' : ';'}`,
     [req.body.email])
 
   if (rows instanceof Error) return new Error(await templates('failed_query', req.params.language))
@@ -121,36 +121,26 @@ async function post(req, res) {
   // Non admin accounts may expire.
   if (!user.admin && process.env.APPROVAL_EXPIRY) {
 
-    // Get approvalDate for checking expiry.
-    const approvalDate = user.approved_by && new Date(user.approved_by.replace(/.*\|/,''))
-  
-    // Check whether the approvalDate is valid.
-    if (approvalDate instanceof Date && !isNaN(approvalDate.getDate())) {
+    // User account has expired.
+    if (user.expires_on < new Date()/1000) {
 
-      // Calculate the difference in days between approval and now.
-      const dateNow = new Date();
-      const diffTime = Math.abs(dateNow - approvalDate);
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+      // Remove user approval.
+      if (user.approved) {
 
-      // Check whether the difference exceeds the APPROVAL_EXPIRY
-      if (parseInt(process.env.APPROVAL_EXPIRY) < diffDays) {
-
-        // Remove user approval.
-        if (user.approved) {
-
-          // Remove approval of expired user account.
-          var rows = await acl(`
-            UPDATE acl_schema.acl_table
-            SET approved = false
-            WHERE lower(email) = lower($1);`,
-            [req.body.email])
-    
-          if (rows instanceof Error) return new Error(await templates('failed_query', req.params.language))
-        }
-    
-        return new Error(await templates('user_expired', user.language))
+        // Remove approval of expired user account.
+        var rows = await acl(`
+          UPDATE acl_schema.acl_table
+          SET approved = false
+          WHERE lower(email) = lower($1);`,
+          [req.body.email])
+          
+        if (rows instanceof Error) return new Error(await templates('failed_query', req.params.language))
       }
+
+      return new Error(await templates('user_expired', user.language))
+
     }
+
   }
 
   // Accounts must be verified and approved for login
