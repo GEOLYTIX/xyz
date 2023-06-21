@@ -147,7 +147,7 @@ async function post(req, res) {
     SELECT
       '${req.body.email}' AS email,
       '${password}' AS password,
-      '${req.body.language}' AS language,
+      '${language}' AS language,
       ${process.env.APPROVAL_EXPIRY ? `${parseInt((new Date().getTime() + process.env.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24)/1000)} AS expires_on,` : ''}
       '${verificationtoken}' AS verificationtoken,
       array['${date}@${req.ips && req.ips.pop() || req.ip}'] AS access_log;`)
