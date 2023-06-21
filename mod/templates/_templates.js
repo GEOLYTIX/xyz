@@ -36,6 +36,9 @@ module.exports = async (key, language = 'en', params = {}) => {
 
   if (key === undefined) return;
 
+  // Prevent prototype polluting assignment.
+  if (key === '__proto__') return;
+
   const templates = merge({},
     view_templates,
     mail_templates,
@@ -94,6 +97,9 @@ module.exports = async (key, language = 'en', params = {}) => {
   Object.freeze(Object.getPrototypeOf(template));
 
   for (key in template) {
+
+    // Prevent prototype polluting assignment.
+    if (key === '__proto__') continue;
 
     // Template key / value is a string with a valid get method.
     if (typeof template[key] === 'string'
