@@ -34,6 +34,8 @@ const custom_templates = new Promise(async (resolve, reject)=>{
 
 module.exports = async (key, language = 'en', params = {}) => {
 
+  if (key === undefined) return;
+
   const templates = merge({},
     view_templates,
     mail_templates,
