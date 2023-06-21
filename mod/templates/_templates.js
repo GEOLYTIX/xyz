@@ -73,49 +73,47 @@ module.exports = async (key, language = 'en', params = {}) => {
       template = await getFrom[template.split(':')[0]](template)
     }
   }
- 
-  if (typeof template === 'object') {
-
-    for (key in template) {
-
-      // Template key / value is a string with a valid get method.
-      if (typeof template[key] === 'string'
-        && Object.hasOwn(template, key) 
-        && Object.hasOwn(getFrom, template[key].split(':')[0])) {
-
-        // Assign template key value from method.
-        template[key] = await getFrom[template[key].split(':')[0]](template[key])
-      }
-    }
-  }
 
   // Return template which is of type string.
   if (typeof template === 'string') {
-    
+
     return template.replace(/\{{2}(.*?)\}{2}/g,
 
       // Replace matched params in template string
       matched => params[matched.replace(/\{{2}|\}{2}/g, '')] || '')
-
   }
 
-  // Iterate through obkect keys of template
-  if (typeof template === 'object') {
+  // Template must be of type object at this stage.
+  if (typeof template !== 'object') {
 
-    Object.keys(template).forEach(key => {
+    console.warn(`Template ${key} must be an object type.`)
+    return key
+  }
 
-      if (typeof template[key] !== 'string') return;
-  
-      if (Object.hasOwn(template, key)) {
-  
-        template[key] = template[key].replace(/\$\{{1}(.*?)\}{1}/g,
-  
-          // Replace matched params in string values
-          matched => params[matched.replace(/\$\{{1}|\}{1}/g, '')] || '')
-  
-      }
-  
-    })
+  // Prevent prototype polluting assignment.
+  Object.freeze(Object.getPrototypeOf(template));
+
+  for (key in template) {
+
+    // Template key / value is a string with a valid get method.
+    if (typeof template[key] === 'string'
+      && Object.hasOwn(template, key)
+      && Object.hasOwn(getFrom, template[key].split(':')[0])) {
+
+      // Assign template key value from method.
+      template[key] = await getFrom[template[key].split(':')[0]](template[key])
+    }
+
+    // Template key value is still string after assignment
+    if (typeof template[key] === 'string') {
+
+      // Look for template params to be substituted.
+      template[key] = template[key].replace(/\$\{{1}(.*?)\}{1}/g,
+
+        // Replace matched params in string values
+        matched => params[matched.replace(/\$\{{1}|\}{1}/g, '')] || '')
+    }
+
   }
 
   return template
