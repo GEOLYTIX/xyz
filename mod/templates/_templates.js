@@ -48,11 +48,21 @@ module.exports = async (key, language = 'en', params = {}) => {
     return;
   }
 
-  let template = Object.hasOwn(templates, key) ?
+  if (!Object.hasOwn(templates, key)) {
 
-    // Any template 
-    templates[key]?.[language] || templates[key]?.en || key
-    : key;
+    console.warn(`Template key ${key} not found in templates`)
+
+    return key;
+  }
+
+  let template =  templates[key]?.[language] || templates[key]?.en
+
+  if (!template) {
+
+    console.warn(`No language template for key ${found}`)
+
+    return key;
+  }
 
   if (typeof template === 'string') {
 
