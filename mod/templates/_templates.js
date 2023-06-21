@@ -37,19 +37,19 @@ module.exports = async (key, language = 'en', params = {}) => {
   if (key === undefined) return;
 
   // Prevent prototype polluting assignment.
-  if (key === '__proto__') return;
-
-  const templates = merge({},
-    view_templates,
-    mail_templates,
-    msg_templates,
-    await custom_templates)
+  if (/__proto__/.test(key)) return;
 
   if (typeof key !== 'string') {
 
     console.warn('Template keys must be of type string.')
     return;
   }
+
+  const templates = merge({},
+    view_templates,
+    mail_templates,
+    msg_templates,
+    await custom_templates)
 
   if (!Object.hasOwn(templates, key)) {
 
@@ -99,7 +99,7 @@ module.exports = async (key, language = 'en', params = {}) => {
   for (key in template) {
 
     // Prevent prototype polluting assignment.
-    if (key === '__proto__') continue;
+    if (/__proto__/.test(key)) continue;
 
     // Template key / value is a string with a valid get method.
     if (typeof template[key] === 'string'
