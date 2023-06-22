@@ -43,6 +43,7 @@ async function reduce(obj, roles) {
   (function objectEval(o, parent, key) {
 
     if (!check(o, roles)) {
+
       // if the parent is an array splice the key index.
       if (parent.length > 0) return parent.splice(parseInt(key), 1)
 
@@ -52,6 +53,10 @@ async function reduce(obj, roles) {
 
     // iterate through the object tree.
     Object.keys(o).forEach((key) => {
+
+      // Do not remove infoj entries.
+      if (key === 'infoj') return;
+
       if (o[key] && typeof o[key] === 'object') objectEval(o[key], o, key)
     });
 
