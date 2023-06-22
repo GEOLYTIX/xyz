@@ -32,7 +32,19 @@ const custom_templates = new Promise(async (resolve, reject)=>{
   resolve(await getFrom[process.env.CUSTOM_TEMPLATES.split(':')[0]](process.env.CUSTOM_TEMPLATES))
 })
 
-module.exports = async (name, language = 'en', params = {}) => {
+module.exports = async (key, language = 'en', params = {}) => {
+
+  if (key === undefined) return;
+
+  // key must be string.
+  if (typeof key !== 'string') {
+
+    console.warn('Template keys must be of type string.')
+    return;
+  }
+
+  // Prevent prototype polluting assignment.
+  if (/__proto__/.test(key)) return;
 
   const templates = merge({},
     view_templates,
@@ -40,7 +52,21 @@ module.exports = async (name, language = 'en', params = {}) => {
     msg_templates,
     await custom_templates)
 
-  let template = templates[name]?.[language] || templates[name]?.en || name
+  if (!Object.hasOwn(templates, key)) {
+
+    console.warn(`Template key ${key} not found in templates`)
+
+    return key;
+  }
+
+  let template =  templates[key]?.[language] || templates[key]?.en
+
+  if (!template) {
+
+    console.warn(`No language template for key ${found}`)
+
+    return key;
+  }
 
   if (typeof template === 'string') {
 
@@ -51,49 +77,50 @@ module.exports = async (name, language = 'en', params = {}) => {
       template = await getFrom[template.split(':')[0]](template)
     }
   }
- 
-  if (typeof template === 'object') {
-
-    for (key in template) {
-
-      // Template key / value is a string with a valid get method.
-      if (typeof template[key] === 'string'
-        && Object.hasOwn(template, key) 
-        && Object.hasOwn(getFrom, template[key].split(':')[0])) {
-
-        // Assign template key value from method.
-        template[key] = await getFrom[template[key].split(':')[0]](template[key])
-      }
-    }
-  }
 
   // Return template which is of type string.
   if (typeof template === 'string') {
-    
+
     return template.replace(/\{{2}(.*?)\}{2}/g,
 
       // Replace matched params in template string
       matched => params[matched.replace(/\{{2}|\}{2}/g, '')] || '')
-
   }
 
-  // Iterate through obkect keys of template
-  if (typeof template === 'object') {
+  // Template must be of type object at this stage.
+  if (typeof template !== 'object') {
 
-    Object.keys(template).forEach(key => {
+    console.warn(`Template ${key} must be an object type.`)
+    return key
+  }
 
-      if (typeof template[key] !== 'string') return;
-  
-      if (Object.hasOwn(template, key)) {
-  
-        template[key] = template[key].replace(/\$\{{1}(.*?)\}{1}/g,
-  
-          // Replace matched params in string values
-          matched => params[matched.replace(/\$\{{1}|\}{1}/g, '')] || '')
-  
-      }
-  
-    })
+  // Prevent prototype polluting assignment.
+  Object.freeze(Object.getPrototypeOf(template));
+
+  for (key in template) {
+
+    // Prevent prototype polluting assignment.
+    if (/__proto__/.test(key)) continue;
+
+    // Template key / value is a string with a valid get method.
+    if (typeof template[key] === 'string'
+      && Object.hasOwn(template, key)
+      && Object.hasOwn(getFrom, template[key].split(':')[0])) {
+
+      // Assign template key value from method.
+      template[key] = await getFrom[template[key].split(':')[0]](template[key])
+    }
+
+    // Template key value is still string after assignment
+    if (typeof template[key] === 'string') {
+
+      // Look for template params to be substituted.
+      template[key] = template[key].replace(/\$\{{1}(.*?)\}{1}/g,
+
+        // Replace matched params in string values
+        matched => params[matched.replace(/\$\{{1}|\}{1}/g, '')] || '')
+    }
+
   }
 
   return template

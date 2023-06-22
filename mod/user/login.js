@@ -73,6 +73,8 @@ async function view(req, res, message) {
     msg: message || ' '
   })
 
+  //res.clearCookie(process.env.TITLE)
+
   // Clear user token cookie.
   res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
 
@@ -83,6 +85,10 @@ async function view(req, res, message) {
 }
 
 async function post(req, res) {
+
+  const remote_address = req.headers['x-forwarded-for']
+    && /^[A-Za-z0-9.,_-\s]*$/.test(req.headers['x-forwarded-for']) ? req.headers['x-forwarded-for'] : 'invalid'
+    || 'unknown';
 
   if(!req.body.email) return new Error(await templates('missing_email', req.params.language))
   
@@ -97,9 +103,9 @@ async function post(req, res) {
   // Update access_log and return user record matched by email.
   var rows = await acl(`
     UPDATE acl_schema.acl_table
-    SET access_log = array_append(access_log, '${date.toISOString().replace(/\..*/,'')}@${req.headers['x-forwarded-for'] || 'localhost'}')
+    SET access_log = array_append(access_log, '${date.toISOString().replace(/\..*/,'')}@${remote_address}')
     WHERE lower(email) = lower($1)
-    RETURNING email, roles, language, blocked, approved, approved_by, verified, admin, password;`,
+    RETURNING email, roles, language, blocked, approved, approved_by, verified, admin, password ${process.env.APPROVAL_EXPIRY ? ', expires_on;' : ';'}`,
     [req.body.email])
 
   if (rows instanceof Error) return new Error(await templates('failed_query', req.params.language))
@@ -115,36 +121,26 @@ async function post(req, res) {
   // Non admin accounts may expire.
   if (!user.admin && process.env.APPROVAL_EXPIRY) {
 
-    // Get approvalDate for checking expiry.
-    const approvalDate = user.approved_by && new Date(user.approved_by.replace(/.*\|/,''))
-  
-    // Check whether the approvalDate is valid.
-    if (approvalDate instanceof Date && !isNaN(approvalDate.getDate())) {
+    // User account has expired.
+    if (user.expires_on < new Date()/1000) {
 
-      // Calculate the difference in days between approval and now.
-      const dateNow = new Date();
-      const diffTime = Math.abs(dateNow - approvalDate);
-      const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24)); 
+      // Remove user approval.
+      if (user.approved) {
 
-      // Check whether the difference exceeds the APPROVAL_EXPIRY
-      if (parseInt(process.env.APPROVAL_EXPIRY) < diffDays) {
-
-        // Remove user approval.
-        if (user.approved) {
-
-          // Remove approval of expired user account.
-          var rows = await acl(`
-            UPDATE acl_schema.acl_table
-            SET approved = false
-            WHERE lower(email) = lower($1);`,
-            [req.body.email])
-    
-          if (rows instanceof Error) return new Error(await templates('failed_query', req.params.language))
-        }
-    
-        return new Error(await templates('user_expired', user.language))
+        // Remove approval of expired user account.
+        var rows = await acl(`
+          UPDATE acl_schema.acl_table
+          SET approved = false
+          WHERE lower(email) = lower($1);`,
+          [req.body.email])
+          
+        if (rows instanceof Error) return new Error(await templates('failed_query', req.params.language))
       }
+
+      return new Error(await templates('user_expired', user.language))
+
     }
+
   }
 
   // Accounts must be verified and approved for login
@@ -153,7 +149,7 @@ async function post(req, res) {
     var mail_template = await templates('failed_login', user.language, {
       host: host,
       protocol: protocol,
-      remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
+      remote_address
     })
   
     await mailer(Object.assign(mail_template, {
@@ -224,7 +220,7 @@ async function post(req, res) {
       failed_attempts: parseInt(process.env.FAILED_ATTEMPTS) || 3,
       protocol: protocol,
       verificationtoken: verificationtoken,
-      remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
+      remote_address
     })
   
     await mailer(Object.assign(mail_template, {
@@ -237,7 +233,7 @@ async function post(req, res) {
   // Login has failed but account is not locked (yet).
   var mail_template = await templates('login_incorrect', user.language, {
     host: host,
-    remote_address: `${req.headers['x-forwarded-for'] || 'localhost'}`
+    remote_address
   })
 
   await mailer(Object.assign(mail_template, {

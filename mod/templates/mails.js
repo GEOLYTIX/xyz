@@ -4,42 +4,42 @@ module.exports = {
       subject: `Please verify your password reset for \${host}`,
       text: `A new password has been set for this account.
       Please verify that you are the account holder: \${link}
-      The reset occured from this remote address \${address}
+      The reset occured from this remote address \${remote_address}
       This wasn't you? Please let your manager know.`
     },
     fr: {
     	subject: `Vérifiez votre mot de passe réinitialisé sur \${host}.`,
     	text: `Le nouveau mot de passe a été défini pour ce compte.
     	Vérifiez que vous disposez des droits d'accès du compte \${link}
-    	La réinitialisation a été exécutée par \${address}
+    	La réinitialisation a été exécutée par \${remote_address}
     	Vous ne l’avez pas demandé? Veuillez informer votre directeur.`
     },
     pl: {
       subject: `Zweryfikuj nowe hasło \${host}.`,
       text: `Dla tego konta ustawiono nowe hasło.
       Potwierdź swoje prawa dostępu do \${link}
-      Proces zmiany hasła rozpoczęto z tego adresu \${address}
+      Proces zmiany hasła rozpoczęto z tego adresu \${remote_address}
       To nie Ty? Zgłoś to osobie odpowiedzialnej.`
     },
     ja: {
     	subject: `リセットするパスワードを検証してください \${host}`,
     	text: `このアカウントに新規パスワードが設定されました.
       アカウントホールダーであることを検証してください \${link}
-      このリモートアドレスによりリセットがされました \${address}
+      このリモートアドレスによりリセットがされました \${remote_address}
       あなたではなかった場合、マネージャーに連絡をして下さい`
     },
     ko: {
       subject: `비밀번호 재설정을 확인해주십시오. \${host}`,
       text: `이 계정의 새로운 비밀번호가 설정되었습니다.
       계정 소유자임을 확인해주십시오. \${link}
-      기기의 고유주소로부터 재설정이 되었습니다. \${address}
+      기기의 고유주소로부터 재설정이 되었습니다. \${remote_address}
       본인이 아니면 담당매니저에게 알려주십시오.`
     },
     zh: {
       subject: `请验证您的密码重置 \${host}`,
       text: `为此帐户设置了新密码
       请确认您是帐户持有人 \${link}
-      账户重置发生于远程地址 \${address}
+      账户重置发生于远程地址 \${remote_address}
       如果这不是您本人的操作，请告知您的相关负责人`
     }
   },

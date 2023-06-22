@@ -244,7 +244,7 @@
             vertAlign: 'middle',
             headerTooltip: 'Account roles',
             headerSort: false,
-            editor:"list",
+            editor: 'list',
             editorParams: {
               values: rolesList,
               multiselect: true
@@ -268,16 +268,28 @@
             resizable: false
           },
           {
-            field: 'expires_in',
-            title: 'Expires in Days',
+            visible: typeof data[0].expires_on !== 'undefined',
+            field: 'expires_on',
+            title: 'Expires on',
             vertAlign: 'middle',
-            headerTooltip: 'User approval expires in days.',
-            formatter: (cell) => {
-              const val = cell.getValue()
-              if (val < 0) return `<span style="color:red; font-weight:bold;">${val}</span>`
-              if (typeof val !== 'undefined') return `<span style="font-weight:bold;">${val}</span>`
+            minWidth: 120,
+            headerTooltip: 'Date when user approval expires.',
+            formatter: (cell, formatterParams, onRendered) => {
+
+              let val = parseInt(cell.getValue())
+
+              if (isNaN(val)) return;
+
+              let str = new Date(val * 1000).toLocaleString('en-GB', {
+                year: "numeric",
+                month: "short",
+                day: "numeric",
+              })
+
+              // Colour text red if account has expired.
+              return val < new Date()/1000 ? `<span style="color:red;">${str}</span>` : str;
             },
-            cellClick: removeExpiry,
+            editor: expiryEdit,
             resizable: false
           },
           {
@@ -327,22 +339,39 @@
         || user.roles.some(role => role.includes(e.target.value))))
     } 
 
-    async function removeExpiry(e, cell) {
 
-      const user = cell.getData();
+    function expiryEdit(cell, onRendered, success, cancel) {
 
-      if (confirm('Remove expiry for ' + user.email)) {
+      let rowData = cell.getRow().getData()
 
-        const response = await xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${user.email}&field=approved_by&value=${document.head.dataset.user}`);
+      //create and style editor
+      var editor = document.createElement("input");
 
-        if (response.err) return console.error(response.err);
+      editor.setAttribute("type", "date");
 
-        cell.setValue('');
+      editor.valueAsNumber = rowData.expires_on * 1000
 
-        const row = cell.getRow();
+      //create and style input
+      editor.style.padding = "3px";
+      editor.style.width = "100%";
+      editor.style.boxSizing = "border-box";
 
-        row.reformat();
+      onRendered(function () {
+        editor.focus();
+      });
+
+      //when the value has been set, trigger the cell to update
+      function successFunc() {
+        const val = new Date(editor.value).getTime() / 1000 || null;
+        xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${rowData.email}&field=expires_on&value=${val}`)
+        cell.setValue(val);
       }
+
+      editor.addEventListener("change", successFunc);
+      //editor.addEventListener("blur", blurFunc);
+
+      //return the editor element
+      return editor;
     };
 
     async function cellToggle(e, cell) {

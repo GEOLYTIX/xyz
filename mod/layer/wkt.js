@@ -40,7 +40,7 @@ module.exports = async (req, res) => {
     SELECT
       ${layer.qID || null},
       ST_AsText(${geom})
-      ${fields.length && `, ${fields.join(', ')}` || ''}
+      ${fields && `, ${fields.join(', ')}` || ''}
 
     FROM ${req.params.table || layer.table}
     WHERE ${geom} IS NOT NULL ${filter};`

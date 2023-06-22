@@ -7,6 +7,10 @@ module.exports = {
 		ko: `토근이 발견되지 않았습니다. 이미 해결된 것 같습니다.`,
 		zh: `未找到相关令牌， 该令牌可能已解析`
 	},
+	no_locales: {
+		en: `No accessible locales for user account.`,
+		de: `Keine Locale zugreifbar fuer den User.`
+	},
 	password_reset_verification: {
 		en: `Password will be reset after email verification.`,
 		fr: `Le mot de passe sera réinitialisé après la vérification par e-mail.`,
