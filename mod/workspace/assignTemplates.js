@@ -21,6 +21,9 @@ module.exports = async (workspace) => {
       count_locations: {
         template: require('../../public/js/queries/count_locations'),
       },
+      gaz_query: {
+        template: require('../../public/js/queries/gaz_query'),
+      },
       distinct_values: {
         template: require('../../public/js/queries/distinct_values'),
       },

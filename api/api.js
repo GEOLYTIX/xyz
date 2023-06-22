@@ -11,7 +11,6 @@ const saml = process.env.SAML_ENTITY_ID && require('../mod/user/saml')
 const workspaceCache = require('../mod/workspace/cache')
 
 const routes = {
-  gazetteer: require('../mod/gazetteer'),
   layer: require('../mod/layer/_layer'),
   location: require('../mod/location/_location'),
   provider: require('../mod/provider/_provider'),
@@ -193,11 +192,6 @@ module.exports = async (req, res) => {
     if (user && (!user.admin && template.admin)) return login(req, res, 'Route requires admin priviliges')
 
     req.params.template = template
-  }
-
-  // Gazetteer route
-  if (req.url.match(/(?<=\/api\/gazetteer)/)) {
-    return routes.gazetteer(req, res)
   }
 
   // Layer route
