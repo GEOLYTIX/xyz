@@ -2,15 +2,6 @@ module.exports = defaults = {
   locale: {
     key: 'zero',
     name: 'zero',
-    minZoom: 0,
-    maxZoom: 20,
-    bounds: {
-      north: 90,
-      east: 180,
-      south: -90,
-      west: -180
-    },
-    view: {},
     layers: {
       OSM: {
         key: 'OSM',
