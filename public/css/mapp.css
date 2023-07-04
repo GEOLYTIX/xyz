@@ -189,6 +189,14 @@ a > img {
   align-items: center;
   margin-bottom: 1em;
 }
+.legend .contents-wrapper.flex .contents.horizontal,
+.legend .content .contents-wrapper.flex .contents.horizontal {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  flex-basis: auto;
+  flex-grow: 1;
+}
 .legend .contents-wrapper.grid,
 .legend .content .contents-wrapper.grid {
   display: grid;
