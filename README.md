@@ -1,5 +1,8 @@
 **v4.5.0**
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+![example workflow](https://github.com/GEOLYTIX/xyz/actions/workflows/unit_tests.yml/badge.svg)
+
 **Open source presentation, controller, domain and service layers for cloud native spatial data and application interfaces.**
 
 ## XYZ
