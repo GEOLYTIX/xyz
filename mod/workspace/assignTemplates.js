@@ -39,6 +39,12 @@ module.exports = async (workspace) => {
       get_nnearest: {
         render: require('../../public/js/queries/get_nnearest'),
       },
+      geojson: {
+        render: require('../../public/js/queries/geojson'),
+      },
+      wkt: {
+        render: require('../../public/js/queries/wkt'),
+      },
       infotip: {
         render: require('../../public/js/queries/infotip'),
       },
