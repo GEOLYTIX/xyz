@@ -81,6 +81,9 @@ module.exports = async (workspace) => {
       );
 
       if (!Object.hasOwn(getFrom, entry[1].src.split(':')[0])) {
+
+        // Unable to determine getFrom method.
+        console.warn(`${entry[0]} template cannot be retrieved from src:"${entry[1].src}"`);
         return reject({[entry[0]]: entry[1]});
       }
 
