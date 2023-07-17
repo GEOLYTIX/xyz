@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
 
   const roles = Roles.filter(layer, req.params.user?.roles)
 
-  if (!roles && layer.roles) return res.status(403).send('Access prohibited.')
+  if (!Object.keys(roles).length && layer.roles) return res.status(403).send('Access prohibited.')
 
   const SQLparams = [req.params.id]
 

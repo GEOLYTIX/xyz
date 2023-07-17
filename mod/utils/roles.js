@@ -69,18 +69,15 @@ function filter(obj, roles) {
   if (!obj.roles) return;
 
   // Roles must be an array.
-  if (!Array.isArray(roles)) return false;
+  if (!Array.isArray(roles)) return;
 
   const roleFilter = Object.keys(obj.roles)
     .filter(key => roles.includes(key)
       || key.match(/^\!/) && !roles.includes(key.replace(/^\!/, '')))
-    .filter(key => !!obj.roles[key])
     .reduce((o, key) => {
       o[key] = obj.roles[key]
       return o
     }, {})
-
-  if (!Object.values(roleFilter).length) return false;
 
   return roleFilter
 }
