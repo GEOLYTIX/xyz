@@ -25,7 +25,7 @@ module.exports = async (req, res) => {
     .filter(entry => entry.field)
     .map(entry => `(${entry.fieldfx || entry.field}) AS ${entry.field}`)
 
-  var q = `
+  const q = `
   SELECT
     ${fields.join()}
   FROM ${req.params.table}
@@ -35,7 +35,7 @@ module.exports = async (req, res) => {
   // Validate dynamic method call.
   if (!Object.hasOwn(dbs, layer.dbs || req.params.workspace.dbs) || typeof dbs[layer.dbs || req.params.workspace.dbs] !== 'function') return;  
 
-  var rows = await dbs[layer.dbs || req.params.workspace.dbs](q, SQLparams)
+  const rows = await dbs[layer.dbs || req.params.workspace.dbs](q, SQLparams)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 

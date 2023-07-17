@@ -80,6 +80,8 @@ function filter(obj, roles) {
       return o
     }, {})
 
+  if (!Object.values(roleFilter).length) return false;
+
   return roleFilter
 }
 
