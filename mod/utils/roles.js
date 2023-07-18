@@ -72,8 +72,13 @@ function filter(obj, roles) {
   if (!Array.isArray(roles)) return;
 
   const roleFilter = Object.keys(obj.roles)
+
+    // filter roles included in the roles array.
     .filter(key => roles.includes(key)
-      || key.match(/^\!/) && !roles.includes(key.replace(/^\!/, '')))
+
+      // or negated roles (!) NOT included in the array.
+      || !roles.includes(key.match(/(?<=^\!)(.*)/g)?.[0]))
+      
     .reduce((o, key) => {
       o[key] = obj.roles[key]
       return o
@@ -91,9 +96,8 @@ function get(obj) {
     if (key === 'roles') {
       Object.keys(parent.roles).forEach(role => {
 
-        let _role = role.replace(/^\!/, '')
-
-        !roles.has(_role) && roles.add(_role)
+        // Add role without nagation ! to roles set.
+        roles.add(role.replace(/^\!/, ''))
 
       })
     }

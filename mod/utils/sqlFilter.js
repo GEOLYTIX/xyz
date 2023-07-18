@@ -39,9 +39,13 @@ function addValues(val, skip) {
   return SQLparams.length
 }
 
-module.exports = function sqlfilter(filter, params) {
+module.exports = function sqlfilter(arr, params) {
 
   SQLparams = params
+
+  let filter = arr
+    .filter(role => role.filter)
+    .map(role => role.filter)
 
   // Filter in an array will be conditional OR
   if (filter.length)
