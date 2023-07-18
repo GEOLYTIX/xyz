@@ -14,14 +14,14 @@ function check(obj, roles) {
 
   // Check whether negated role is matched with user.
   const someNegatedRole = Object.keys(obj.roles)
-    .some(role => role.match(/^\!/) && roles.includes(role.replace(/^\!/, '')))
+    .some(role => role.match(/^!/) && roles.includes(role.replace(/^!/, '')))
 
   // Return undefined if some negated role is matched.
   if (someNegatedRole) return false
   
   // Check whether every role is negated.
   const everyNegatedRoles = Object.keys(obj.roles)
-    .every(role => role.match(/^\!/))
+    .every(role => role.match(/^!/))
   
   // Return locale if every role is negated.
   if (everyNegatedRoles) return obj
@@ -77,7 +77,7 @@ function filter(obj, roles) {
     .filter(key => roles.includes(key)
 
       // or negated roles (!) NOT included in the array.
-      || !roles.includes(key.match(/(?<=^\!)(.*)/g)?.[0]))
+      || !roles.includes(key.match(/(?<=^!)(.*)/g)?.[0]))
       
     .reduce((o, key) => {
       o[key] = obj.roles[key]
@@ -97,7 +97,7 @@ function get(obj) {
       Object.keys(parent.roles).forEach(role => {
 
         // Add role without nagation ! to roles set.
-        roles.add(role.replace(/^\!/, ''))
+        roles.add(role.replace(/^!/, ''))
 
       })
     }
