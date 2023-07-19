@@ -4,40 +4,67 @@ const { nanoid } = require('nanoid')
 
 const process_nanoid = nanoid(6)
 
-module.exports = (msg, log) => {
+const logout = {
+  logflare,
+  postgresql
+}
 
-  if (!logs.has(log)) return;
+const dbs_connections = require('./dbs')()
 
-  // Append the process_nanoid to the log msg.
-  if (typeof msg === 'object') {
+const logger = logout[process.env.LOGGER.split(':')[0]]()
 
-    msg.process_nanoid = process_nanoid
-  } else {
+module.exports = (log, key) => {
 
-    msg = `${process_nanoid} - ${msg}`
-  }
+  // The log key should not be written out.
+  if (!logs.has(key)) return;
 
-  // Send log to logflare if configured.
-  if (process.env.KEY_LOGFLARE) {
+  // Write log to logger if configured.
+  logger && logger(log, key)
 
-    const keySource = process.env.KEY_LOGFLARE.split('|')
+  console.log(log)
+}
 
-    fetch(`https://api.logflare.app/logs/json?source=${keySource[1]}`,
+function logflare() {
+
+  const params = Object.fromEntries(new URLSearchParams(process.env.LOGGER.split(':')[1]).entries())
+
+  return log => {
+
+    fetch(`https://api.logflare.app/logs/json?source=${params.source}`,
     {
       method: 'post',
       headers: { 
         'Content-Type': 'application/json',
-        'X-API-KEY': keySource[0],
+        'X-API-KEY': params.apikey,
       },
       body: JSON.stringify({
-        msg: msg
+        [process_nanoid]: log
       })
     }).then(resp=>{
-      !resp.ok && console.log(msg)
+      console.log(resp)
     }).catch(err=>{
       console.error(err)
     })
-  }
 
-  console.log(msg)
+  }    
+
+}
+
+function postgresql() {
+
+  const params = Object.fromEntries(new URLSearchParams(process.env.LOGGER.split(':')[1]).entries())
+
+  const dbs = dbs_connections[params.dbs]
+
+  if (!dbs) console.warn(`Logger module unable to find dbs=${params.dbs}`)
+
+  return async (log, key) => {
+
+    const logstring = typeof log === 'string' ? log : JSON.stringify(log);
+
+    await dbs(`
+      INSERT INTO ${params.table} (process, datetime, key, log)
+      SELECT $1 process, $2 datetime, $3 key, $4 log`, [process_nanoid, Date.now(), key, logstring])
+
+  }
 }

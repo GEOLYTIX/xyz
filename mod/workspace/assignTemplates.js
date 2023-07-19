@@ -150,7 +150,9 @@ module.exports = async (workspace) => {
       .then((arr) => {
 
         // Log set of template objects from resolved promises.
-        logger(arr, 'templates');
+        logger(arr
+          .filter(o => o.value instanceof Object)
+          .map(o => `${Object.keys(o.value)[0]} - ${o.status}`), 'templates');
 
         let assign = arr
           .filter(o => o.value instanceof Object)
