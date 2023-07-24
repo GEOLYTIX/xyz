@@ -36,7 +36,7 @@ describe('sqlfilter function', () => {
         }
       }
     ];
-    expect(sqlfilter(arr, params)).toBe('(("fieldName1\" = $3 AND \"fieldName2\" > $4))');
+    expect(sqlfilter(arr, params)).toBe('(("fieldName1" = $3 AND "fieldName2" > $4))');
   });
 
   it('should return correct string for multiple filters in array', () => {
@@ -70,6 +70,7 @@ describe('sqlfilter function', () => {
         }
       }
     ];
-    expect(sqlfilter(arr, params)).toBe('(("invalid-field-name" = $3))');
+    expect(sqlfilter(arr, params)).toBe('invalid field');
+    expect(console.log).toHaveBeenCalledWith('invalid-field-name - ¡no bueno!');
   });
 });
