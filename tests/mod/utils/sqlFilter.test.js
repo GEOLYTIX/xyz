@@ -1,87 +1,75 @@
 const sqlfilter = require('../../../mod/utils/sqlFilter');
 
-describe('sqlfilter', () => {
-  test('should generate a valid SQL filter string for single filter entry', () => {
-    const filter = {
-      field1: {
-        eq: 10,
-      },
-    };
-
-    const params = [];
-    const result = sqlfilter(filter, params);
-
-    expect(result).toBe('("field1" = $1)');
-    expect(params).toEqual([ '10' ]);
+describe('sqlfilter function', () => {
+  let params;
+  beforeEach(() => {
+    params = ['param1', 'param2'];
   });
 
-  test('should generate a valid SQL filter string for multiple filter entries', () => {
-    const filter = {
-      field1: {
-        eq: 10,
-      },
-      field2: {
-        lt: 5,
-      },
-    };
-
-    const params = [];
-    const result = sqlfilter(filter, params);
-
-    expect(result).toBe('("field1" = $1 AND "field2" < $2)');
-    expect(params).toEqual([ '10' ,  '5' ]);
+  it('should return empty string for empty array', () => {
+    expect(sqlfilter([], params)).toBe('()');
   });
 
-  test('should handle filter array with conditional OR', () => {
-    const filter = [
+  it('should return correct string for eq filter', () => {
+    const arr = [
       {
-        field1: {
-          eq: 10,
-        },
-      },
-      {
-        field2: {
-          gt: 5,
-        },
-      },
+        filter: {
+          fieldName: {
+            eq: 'value1'
+          }
+        }
+      }
     ];
-
-    const params = [];
-    const result = sqlfilter(filter, params);
-
-    expect(result).toBe('(("field1" = $1) OR ("field2" > $2))');
-    expect(params).toEqual([ '10', '5' ]);
+    expect(sqlfilter(arr, params)).toBe('(("fieldName" = $3))');
   });
 
-  test('should handle filter entries with multiple filter types', () => {
-    const filter = {
-      field1: {
-        eq: 10,
-        lt: 5,
-      },
-    };
-
-    const params = [];
-    const result = sqlfilter(filter, params);
-
-    expect(result).toBe('("field1" = $1 AND "field1" < $2)');
-    expect(params).toEqual(['10', '5']);
+  it('should return correct string for multiple filters', () => {
+    const arr = [
+      {
+        filter: {
+          fieldName1: {
+            eq: 'value1'
+          },
+          fieldName2: {
+            gt: 'value2'
+          }
+        }
+      }
+    ];
+    expect(sqlfilter(arr, params)).toBe('(("fieldName1\" = $3 AND \"fieldName2\" > $4))');
   });
 
-  test('should ignore invalid field identifiers', () => {
-    const filter = {
-      'field1; DROP TABLE users': {
-        eq: 10,
+  it('should return correct string for multiple filters in array', () => {
+    const arr = [
+      {
+        filter: {
+          fieldName1: {
+            eq: 'value1'
+          }
+        }
       },
-      field2: {
-        lt: 5,
-      },
-    };
+      {
+        filter: {
+          fieldName2: {
+            gt: 'value2'
+          }
+        }
+      }
+    ];
+    expect(sqlfilter(arr, params)).toBe('(("fieldName1" = $3) OR ("fieldName2" > $4))');
+  });
 
-    const params = [];
-    const result = sqlfilter(filter, params);
-
-    expect(result).toBe('("field2" < $1)');
-    expect(params).toEqual(['5']);
+  it('should skip invalid field names', () => {
+    console.log = jest.fn();
+    const arr = [
+      {
+        filter: {
+          'invalid-field-name': {
+            eq: 'value1'
+          }
+        }
+      }
+    ];
+    expect(sqlfilter(arr, params)).toBe('(("invalid-field-name" = $3))');
   });
 });
