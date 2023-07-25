@@ -141,7 +141,7 @@ module.exports = async (req, res) => {
         ) ${filter}
       ) tile`
 
-  if (!filter && layer.mvt_cache) {
+  if (!filter || filter === '' && layer.mvt_cache) {
 
     // Validate dynamic method call.
     if (!Object.hasOwn(dbs, layer.dbs || req.params.workspace.dbs) || typeof dbs[layer.dbs || req.params.workspace.dbs] !== 'function') return;    
