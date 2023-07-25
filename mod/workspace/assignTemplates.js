@@ -39,6 +39,12 @@ module.exports = async (workspace) => {
       get_nnearest: {
         render: require('../../public/js/queries/get_nnearest'),
       },
+      geojson: {
+        render: require('../../public/js/queries/geojson'),
+      },
+      wkt: {
+        render: require('../../public/js/queries/wkt'),
+      },
       infotip: {
         render: require('../../public/js/queries/infotip'),
       },
@@ -81,6 +87,9 @@ module.exports = async (workspace) => {
       );
 
       if (!Object.hasOwn(getFrom, entry[1].src.split(':')[0])) {
+
+        // Unable to determine getFrom method.
+        console.warn(`${entry[0]} template cannot be retrieved from src:"${entry[1].src}"`);
         return reject({[entry[0]]: entry[1]});
       }
 
