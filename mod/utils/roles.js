@@ -64,23 +64,27 @@ async function reduce(obj, roles) {
 
 }
 
-function filter(obj, roles) {
+// Return filter objects for user_roles matched with layer.roles
+function filter(layer, user_roles) {
 
-  if (!obj.roles) return;
+  if (!layer.roles) return;
 
   // Roles must be an array.
-  if (!Array.isArray(roles)) return;
+  if (!Array.isArray(user_roles)) return;
 
-  const roleFilter = Object.keys(obj.roles)
+  const roleFilter = Object.keys(layer.roles)
+  
+    // filter roles with a filter object.
+    .filter(key => layer.roles[key] && typeof layer.roles[key].filter === 'object')
 
-    // filter roles included in the roles array.
-    .filter(key => roles.includes(key)
+    // filter roles included in the user_roles array.
+    .filter(key => user_roles.includes(key)
 
       // or negated roles (!) NOT included in the array.
-      || !roles.includes(key.match(/(?<=^!)(.*)/g)?.[0]))
+      || !user_roles.includes(key.match(/(?<=^!)(.*)/g)?.[0]))
       
     .reduce((o, key) => {
-      o[key] = obj.roles[key]
+      o[key] = layer.roles[key].filter
       return o
     }, {})
 

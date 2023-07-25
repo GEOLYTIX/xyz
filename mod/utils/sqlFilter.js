@@ -39,13 +39,9 @@ function addValues(val, skip) {
   return SQLparams.length
 }
 
-module.exports = function sqlfilter(arr, params) {
+module.exports = function sqlfilter(filter, params) {
 
   SQLparams = params
-
-  let filter = arr
-    .filter(role => role.filter)
-    .map(role => role.filter)
 
   // Filter in an array will be conditional OR
   if (filter.length)
@@ -60,8 +56,17 @@ module.exports = function sqlfilter(arr, params) {
 }
 
 function mapFilterEntries(filter) {
+
+  if (Object.keys(filter).some(key => !/^[A-Za-z0-9._-]*$/.test(key))) {
+
+    let unvalidatedKey = Object.keys(filter).find(key => !/^[A-Za-z0-9._-]*$/.test(key))
+
+    console.warn(`"${unvalidatedKey}" field didn't pass SQL parameter validation`)
+    return;
+  }
+
   return `(${Object.entries(filter)
-  
+ 
       // Map filter entries
       .map((entry) => {
 
@@ -70,14 +75,7 @@ function mapFilterEntries(filter) {
 
         // Array entry values represent conditional OR
         if (value.length) return sqlfilter(value);
-  
-
-        // Identifiers must be validated to prevent SQL injection
-        if (!/^[A-Za-z0-9._-]*$/.test(field)) {
-          console.log(`${field} - ¡no bueno!`)
-          return
-        }
-  
+    
         // Call filter type method for matching filter entry value
         // Multiple filterTypes for the same field will be joined with AND
         return Object.keys(value)
