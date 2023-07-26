@@ -13,14 +13,14 @@ function check(obj, roles) {
 
   // Check whether negated role is matched with user.
   const someNegatedRole = Object.keys(obj.roles)
-    .some(role => role.match(/^!/) && roles.includes(role.replace(/^!/, '')))
+    .some(role => /^!/.exec(role) && roles.includes(role.replace(/^!/, '')))
 
   // Return undefined if some negated role is matched.
   if (someNegatedRole) return false
   
   // Check whether every role is negated.
   const everyNegatedRoles = Object.keys(obj.roles)
-    .every(role => role.match(/^!/))
+    .every(role => /^!/.exec(role))
   
   // Return locale if every role is negated.
   if (everyNegatedRoles) return obj
