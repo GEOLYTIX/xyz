@@ -57,13 +57,15 @@ module.exports = function sqlfilter(filter, params) {
 
 function mapFilterEntries(filter) {
 
-  if (Object.keys(filter).some(key => !/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(key))) {
+  const SQLvalidation = /^[a-zA-Z_][\w]*$/
 
-    let unvalidatedKey = Object.keys(filter).find(key => !/^[a-zA-Z_][a-zA-Z0-9_]*$/.test(key))
+  if (Object.keys(filter).some(key => !SQLvalidation.test(key))) {
+
+    let unvalidatedKey = Object.keys(filter).find(key => !SQLvalidation.test(key))
 
     console.warn(`"${unvalidatedKey}" field didn't pass SQL parameter validation`)
     return;
-}
+  }
 
   return `(${Object.entries(filter)
  
