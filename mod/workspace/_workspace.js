@@ -49,8 +49,6 @@ async function getLayer(req, res) {
     return res.status(403).send('Role access denied.')
   }
 
-  await Roles.reduce(layer, roles)
-
   res.json(layer)
 }
 
