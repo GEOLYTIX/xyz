@@ -1,6 +1,5 @@
 module.exports = {
   check,
-  reduce,
   filter,
   get
 }
@@ -34,34 +33,6 @@ function check(obj, roles) {
   if (somePositiveRole) return obj
   
   return false
-}
-
-async function reduce(obj, roles) {
-
-  if (!roles) return;
-
-  (function objectEval(o, parent, key) {
-
-    if (!check(o, roles)) {
-
-      // if the parent is an array splice the key index.
-      if (parent.length > 0) return parent.splice(parseInt(key), 1)
-
-      // if the parent is an object delete the key from the parent.
-      return delete parent[key]
-    }
-
-    // iterate through the object tree.
-    Object.keys(o).forEach((key) => {
-
-      // Do not remove infoj entries.
-      if (key === 'infoj') return;
-
-      if (o[key] && typeof o[key] === 'object') objectEval(o[key], o, key)
-    });
-
-  })(obj)
-
 }
 
 // Return filter objects for user_roles matched with layer.roles
