@@ -57,7 +57,7 @@ module.exports = function sqlfilter(filter, params) {
 
 function mapFilterEntries(filter) {
 
-  const SQLvalidation = /^[a-zA-Z_][\w]*$/
+  const SQLvalidation = /^[a-zA-Z_]\w*$/
 
   if (Object.keys(filter).some(key => !SQLvalidation.test(key))) {
 
