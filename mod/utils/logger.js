@@ -19,7 +19,7 @@ module.exports = (log, key) => {
   if (!logs.has(key)) return;
 
   // Write log to logger if configured.
-  logger && logger(log, key)
+  logger?.(log, key);
 
   console.log(log)
 }
