@@ -97,7 +97,6 @@ module.exports = async (req, res) => {
 
       // Slice square brackets of string and split on comma.
       req.params[key] = req.params[key].slice(1, -1).split(',')
-      return;
     }
   })
 
