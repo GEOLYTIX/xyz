@@ -44,7 +44,7 @@ function logflare() {
         [process_nanoid]: log
       })
     }).then(resp=>{
-      console.log(resp)
+      //console.log(resp)
     }).catch(err=>{
       console.error(err)
     })
