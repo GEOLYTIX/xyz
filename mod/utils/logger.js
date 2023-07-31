@@ -11,7 +11,9 @@ const logout = {
 
 const dbs_connections = require('./dbs')()
 
-const logger = logout[process.env.LOGGER.split(':')[0]]()
+const logger = process.env.LOGGER
+  && Object.hasOwn(logout, process.env.LOGGER.split(':')[0])
+  && logout[process.env.LOGGER.split(':')[0]]()
 
 module.exports = (log, key) => {
 
@@ -19,6 +21,7 @@ module.exports = (log, key) => {
   if (!logs.has(key)) return;
 
   // Write log to logger if configured.
+  
   logger?.(log, key);
 
   console.log(log)
