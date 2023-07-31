@@ -39,6 +39,12 @@ module.exports = async (workspace) => {
       get_nnearest: {
         render: require('../../public/js/queries/get_nnearest'),
       },
+      geojson: {
+        render: require('../../public/js/queries/geojson'),
+      },
+      wkt: {
+        render: require('../../public/js/queries/wkt'),
+      },
       infotip: {
         render: require('../../public/js/queries/infotip'),
       },
@@ -81,6 +87,9 @@ module.exports = async (workspace) => {
       );
 
       if (!Object.hasOwn(getFrom, entry[1].src.split(':')[0])) {
+
+        // Unable to determine getFrom method.
+        console.warn(`${entry[0]} template cannot be retrieved from src:"${entry[1].src}"`);
         return reject({[entry[0]]: entry[1]});
       }
 
@@ -147,7 +156,9 @@ module.exports = async (workspace) => {
       .then((arr) => {
 
         // Log set of template objects from resolved promises.
-        logger(arr, 'templates');
+        logger(arr
+          .filter(o => o.value instanceof Object)
+          .map(o => `${Object.keys(o.value)[0]} - ${o.status}`), 'templates');
 
         let assign = arr
           .filter(o => o.value instanceof Object)
