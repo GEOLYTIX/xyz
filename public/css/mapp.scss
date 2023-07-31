@@ -207,6 +207,18 @@ a > img {
           flex-grow: 1;
         }
       }
+
+      &.nowrap {
+        flex-wrap: nowrap;
+
+        .contents {
+          justify-content: flex-start;
+
+          .label {
+            text-align: center;
+          }
+        }
+      }
     }
 
     &.grid {

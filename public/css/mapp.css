@@ -197,6 +197,18 @@ a > img {
   flex-basis: auto;
   flex-grow: 1;
 }
+.legend .contents-wrapper.flex.nowrap,
+.legend .content .contents-wrapper.flex.nowrap {
+  flex-wrap: nowrap;
+}
+.legend .contents-wrapper.flex.nowrap .contents,
+.legend .content .contents-wrapper.flex.nowrap .contents {
+  justify-content: flex-start;
+}
+.legend .contents-wrapper.flex.nowrap .contents .label,
+.legend .content .contents-wrapper.flex.nowrap .contents .label {
+  text-align: center;
+}
 .legend .contents-wrapper.grid,
 .legend .content .contents-wrapper.grid {
   display: grid;
