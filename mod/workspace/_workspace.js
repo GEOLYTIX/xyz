@@ -2,6 +2,8 @@ const clone = require('../utils/clone.js')
 
 const Roles = require('../utils/roles.js')
 
+const logger = require('../utils/logger')
+
 module.exports = async (req, res) => {
 
   const keys = {
@@ -71,6 +73,8 @@ function getLocales(req, res) {
 }
 
 function getLocale(req, res) {
+
+  logger(`"${req.params.locale}" locale requested`, 'locale');
 
   if (!Object.hasOwn(req.params.workspace.locales, req.params.locale)) {
     return res.status(400).send(`Unable to validate locale param.`)
