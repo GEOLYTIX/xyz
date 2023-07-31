@@ -328,9 +328,18 @@ window.onload = async () => {
   });
 
   // Load JSON layers from Workspace API.
-  const layers = await mapp.utils.promiseAll(locale.layers.map(
+  const layers = locale.layers.length ? await mapp.utils.promiseAll(locale.layers.map(
     layer => mapp.utils.xhr(`${host}/api/workspace/layer?`
       + `locale=${locale.key}&layer=${layer}`)))
+    : [{
+      key: 'OSM',
+      display: true,
+      format: 'tiles',
+      URI: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      style: {
+        hidden: true
+      }
+    }]
 
   // Add layers to mapview.
   await mapview.addLayer(layers);
@@ -401,12 +410,6 @@ window.onload = async () => {
         title="${mapp.user && mapp.dictionary.toolbar_logout || mapp.dictionary.toolbar_login}"
         href="${(mapp.user && '?logout=true') || '?login=true'}">
         <div class="${`mask-icon ${(mapp.user && 'logout') || 'lock-open'}`}">`);
-
-  // btnColumn.appendChild(mapp.utils.html.node`
-  //   <a
-  //     title="GEOLYTIX MAPP"
-  //     href="https://geolytix.com">
-  //     <div class="bg-icon mapp">`);
 
   // Append spacer for tableview
   btnColumn.appendChild(mapp.utils.html.node`

@@ -62,14 +62,42 @@ module.exports = async (req, res) => {
 
   Object.keys(req.params).forEach(key => {
 
-    // Make null string params null.
+    // Set null from string.
     if (req.params[key]?.toLowerCase() === 'null') {
       req.params[key] = null
+      return;
+    }
+
+    // Set boolean false from string.
+    if (req.params[key]?.toLowerCase() === 'false') {
+      req.params[key] = false
+      return;
+    }
+
+    // Set boolean true from string.
+    if (req.params[key]?.toLowerCase() === 'true') {
+      req.params[key] = true
+      return;
     }
 
     // Delete param keys with undefined values.
     if (req.params[key] === undefined) {
       delete req.params[key]
+      return;
+    }
+    
+    // Delete param keys with empty string value.
+    if (req.params[key] === '') {
+      delete req.params[key]
+      return;
+    }
+
+    // Check whether param begins and ends with square braces.
+    if (req.params[key].match(/^[\[].*[\]]$/)) {
+
+      // Slice square brackets of string and split on comma.
+      req.params[key] = req.params[key].slice(1, -1).split(',')
+      return;
     }
   })
 
@@ -78,20 +106,6 @@ module.exports = async (req, res) => {
 
     return res.status(403).send('URL parameter key validation failed.')
   }
-
-  // Check for array URL parameter
-  Object.keys(req.params).forEach(key => {
-    
-    // Return if parameter isn't braced square.
-    if(!req.params[key]?.match(/^[\[].*[\]]$/)) return;
-
-    // Return if key param is not a string.
-    if(typeof req.params[key] !== 'string') return;
-
-    // Slice square brackets of string and split on comma.
-    req.params[key] = req.params[key].slice(1, -1).split(',')
-
-  })
 
   // Language param will default to english [en] is not explicitly set.
   req.params.language = req.params.language || 'en'
