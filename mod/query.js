@@ -187,7 +187,7 @@ module.exports = async (req, res) => {
     return res.status(202).send('No rows returned from table.')
   }
 
-  if (req.params.reduce) {
+  if (req.params.template?.reduce) {
     
     // Reduce row values to an values array.
     return res.send(rows.map(row=>Object.values(row)))

@@ -44,6 +44,7 @@ module.exports = async (workspace) => {
       },
       wkt: {
         render: require('../../public/js/queries/wkt'),
+        reduce: true
       },
       infotip: {
         render: require('../../public/js/queries/infotip'),
