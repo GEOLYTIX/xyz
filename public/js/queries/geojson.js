@@ -1,11 +1,9 @@
 module.exports = _ => {
 
-    const layer = _.workspace.locales[_.locale].layers[_.layer]
-
     let properties = '';
 
-    if (Array.isArray(layer.properties)) {
-        const propertyKeyValuePairs = layer.properties.map(field => {
+    if (_.fields) {
+        const propertyKeyValuePairs = _.fields?.split(',').map(field => {
             const value = _.workspace.templates[field]?.template || field;
             return `'${field}',${value}`;
         });
