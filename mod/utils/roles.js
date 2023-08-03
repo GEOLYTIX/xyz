@@ -4,43 +4,39 @@ module.exports = {
   get
 }
 
-function check(obj, roles) {
+function check(obj, user_roles) {
+  
+  // The object to check has no roles assigned.
+  if (!obj.roles) return obj;
 
-  if (!obj.roles) return obj
+  // There are no user roles or user_roles are not an array.
+  if (!user_roles || !Array.isArray(user_roles)) return false;
 
-  // Roles must be an array.
-  if (!Array.isArray(roles)) return false
+  // Some negated role is included in user_roles[]
+  const someNegatedRole = Object.keys(obj.roles).some(
+    (role) => /^!/.exec(role) && user_roles.includes(role.replace(/^!/, ""))
+  );
 
-  // Check whether negated role is matched with user.
-  const someNegatedRole = Object.keys(obj.roles)
-    .some(role => /^!/.exec(role) && roles.includes(role.replace(/^!/, '')))
+  if (someNegatedRole) return false;
 
-  // Return undefined if some negated role is matched.
-  if (someNegatedRole) return false
-  
-  // Check whether every role is negated.
-  const everyNegatedRoles = Object.keys(obj.roles)
-    .every(role => /^!/.exec(role))
-  
-  // Return locale if every role is negated.
-  if (everyNegatedRoles) return obj
-  
-  // Check if some positive role is matched.
-  const somePositiveRole = Object.keys(obj.roles)
-    .some(role => roles.includes(role))
-  
-  // Return locale if some positive role is matched.
-  if (somePositiveRole) return obj
-  
-  return false
+  // Some positive role is included in user_roles[]
+  const somePositiveRole = Object.keys(obj.roles).some((role) =>
+    user_roles.includes(role)
+  );
+
+  if (somePositiveRole) return obj;
+
+  // The check fails by default.
+  return false;
 }
 
-// Return filter objects for user_roles matched with layer.roles
+// Return an object with filter matching the layer.roles with user_roles.
 function filter(layer, user_roles) {
 
+  // The layer must have roles.
   if (!layer.roles) return;
 
-  // Roles must be an array.
+  // user_roles must be an array.
   if (!Array.isArray(user_roles)) return;
 
   const roleFilter = Object.keys(layer.roles)

@@ -14,6 +14,11 @@ module.exports = async (req, res) => {
     return res.status(400).send('URL parameter validation failed.')
   }
 
+  // Check the layer.roles{} against the user.roles[]
+  if (!Roles.check(req.params.layer, req.params.user?.roles)) {
+    return res.status(403).send('Access prohibited.')
+  }
+
   const params = {
     layer: req.params.layer,
     table: req.params.table,
@@ -29,12 +34,6 @@ module.exports = async (req, res) => {
   // Check for role based access.
   const roles = Roles.filter(params.layer, req.params.user?.roles)
 
-    // No roles found for layer which has roles configured.
-    if (!roles && params.layer.roles) {
-  
-      return res.status(403).send('Access prohibited.');
-    }
-
   // Array for storing filter params.
   const SQLparams = []
 
@@ -43,8 +42,8 @@ module.exports = async (req, res) => {
     ${params.layer.filter?.default && 'AND '+params.layer.filter?.default || ''}
     ${req.params.filter && `AND ${sqlFilter(JSON.parse(req.params.filter), SQLparams)}` || ''}
     ${roles && Object.values(roles).some(r => !!r)
-      && `AND ${sqlFilter(Object.values(roles).filter(r => !!r), SQLparams)}`
-      || ''}`
+      ? `AND ${sqlFilter(Object.values(roles).filter(r => !!r), SQLparams)}`
+      : ''}`
 
   
   if (req.params.viewport) {

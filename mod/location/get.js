@@ -6,11 +6,16 @@ const Roles = require('../utils/roles.js')
 
 module.exports = async (req, res) => {
 
-  const layer = req.params.layer
+  // Check the layer.roles{} against the user.roles[]
+  const layer = Roles.check(req.params.layer, req.params.user?.roles)
 
+  // The layer object did not pass the Roles.check()
+  if (!layer) {
+    return res.status(403).send('Access prohibited.')
+  }
+
+  // Get role filter.
   const roles = Roles.filter(layer, req.params.user?.roles)
-
-  if (roles && layer.roles && !Object.keys(roles).length ) return res.status(403).send('Access prohibited.')
 
   const SQLparams = [req.params.id]
 
