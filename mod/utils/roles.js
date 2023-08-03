@@ -5,7 +5,7 @@ module.exports = {
 }
 
 function check(obj, user_roles) {
-  
+
   // The object to check has no roles assigned.
   if (!obj.roles) return obj;
 
@@ -18,6 +18,13 @@ function check(obj, user_roles) {
   );
 
   if (someNegatedRole) return false;
+
+  // Check whether every role is negated.
+  const everyNegatedRoles = Object.keys(obj.roles).every((role) =>
+    /^!/.exec(role)
+  );
+
+  if (everyNegatedRoles) return obj;
 
   // Some positive role is included in user_roles[]
   const somePositiveRole = Object.keys(obj.roles).some((role) =>
