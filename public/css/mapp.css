@@ -189,6 +189,26 @@ a > img {
   align-items: center;
   margin-bottom: 1em;
 }
+.legend .contents-wrapper.flex .contents.horizontal,
+.legend .content .contents-wrapper.flex .contents.horizontal {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  flex-basis: auto;
+  flex-grow: 1;
+}
+.legend .contents-wrapper.flex.nowrap,
+.legend .content .contents-wrapper.flex.nowrap {
+  flex-wrap: nowrap;
+}
+.legend .contents-wrapper.flex.nowrap .contents,
+.legend .content .contents-wrapper.flex.nowrap .contents {
+  justify-content: flex-start;
+}
+.legend .contents-wrapper.flex.nowrap .contents .label,
+.legend .content .contents-wrapper.flex.nowrap .contents .label {
+  text-align: center;
+}
 .legend .contents-wrapper.grid,
 .legend .content .contents-wrapper.grid {
   display: grid;

@@ -198,6 +198,26 @@ a > img {
           align-items: center;
           margin-bottom: 1em;
         }
+
+        &.horizontal {
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          flex-basis: auto;
+          flex-grow: 1;
+        }
+      }
+
+      &.nowrap {
+        flex-wrap: nowrap;
+
+        .contents {
+          justify-content: flex-start;
+
+          .label {
+            text-align: center;
+          }
+        }
       }
     }
 
