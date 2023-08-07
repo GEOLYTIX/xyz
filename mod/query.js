@@ -25,11 +25,18 @@ module.exports = async (req, res) => {
     // A layer must be found if the layer param is set.
     if (!locale) return res.status(400).send('Locale not found.')
 
-    // Get layer from locale.
-    const layer = locale.layers[req.params.layer]
+    if (!Object.hasOwn(locale.layers, req.params.layer)) {
 
-    // A layer must be found if the layer param is set.
-    if (!layer) return res.status(400).send('Layer not found.')
+      return res.status(400).send('Layer not found.')
+    }
+
+    // Get layer from locale.
+    const layer = Roles.check(locale.layers[req.params.layer], req.params.user?.roles)
+
+    if (!layer) {
+
+      return res.status(403).send('Access prohibited.')
+    }
 
     // Set layer dbs as fallback param if not defined.
     req.params.dbs = req.params.dbs || layer.dbs
@@ -37,16 +44,13 @@ module.exports = async (req, res) => {
     // Get array of role filter from layer configuration.
     const roles = Roles.filter(layer, req.params.user?.roles)
 
-    // Access is prohibited if the layer has roles assigned but the roleFilter is falsy.
-    if (!roles && layer.roles) return res.status(403).send('Access prohibited.');
-
     // Create params filter string from roleFilter filter params.
     req.params.filter =
       ` ${layer.filter?.default && 'AND ' + layer.filter?.default || ''}
       ${req.params.filter && `AND ${sqlFilter(JSON.parse(req.params.filter), SQLparams)}` || ''}
-      ${req.params.filter && roles && Object.values(roles).some(r => !!r)
-      && `AND ${sqlFilter(Object.values(roles).filter(r => !!r), SQLparams)}`
-      || ''}`
+      ${roles && Object.values(roles).some(r => !!r)
+        ? `AND ${sqlFilter(Object.values(roles).filter(r => !!r), SQLparams)}`
+        : ''}`
 
     // Assign viewport params filter string.
     const viewport = req.params.viewport && req.params.viewport.split(',')

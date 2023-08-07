@@ -1,82 +1,64 @@
 module.exports = {
   check,
-  reduce,
   filter,
   get
 }
 
-function check(obj, roles) {
+function check(obj, user_roles) {
 
-  if (!obj.roles) return obj
+  // The object to check has no roles assigned.
+  if (!obj.roles) return obj;
 
-  // Roles must be an array.
-  if (!Array.isArray(roles)) return false
+  // There are no user roles or user_roles are not an array.
+  if (!user_roles || !Array.isArray(user_roles)) return false;
 
-  // Check whether negated role is matched with user.
-  const someNegatedRole = Object.keys(obj.roles)
-    .some(role => role.match(/^\!/) && roles.includes(role.replace(/^\!/, '')))
+  // Some negated role is included in user_roles[]
+  const someNegatedRole = Object.keys(obj.roles).some(
+    (role) => /^!/.exec(role) && user_roles.includes(role.replace(/^!/, ""))
+  );
 
-  // Return undefined if some negated role is matched.
-  if (someNegatedRole) return false
-  
+  if (someNegatedRole) return false;
+
   // Check whether every role is negated.
-  const everyNegatedRoles = Object.keys(obj.roles)
-    .every(role => role.match(/^\!/))
-  
-  // Return locale if every role is negated.
-  if (everyNegatedRoles) return obj
-  
-  // Check if some positive role is matched.
-  const somePositiveRole = Object.keys(obj.roles)
-    .some(role => roles.includes(role))
-  
-  // Return locale if some positive role is matched.
-  if (somePositiveRole) return obj
-  
-  return false
+  const everyNegatedRoles = Object.keys(obj.roles).every((role) =>
+    /^!/.exec(role)
+  );
+
+  if (everyNegatedRoles) return obj;
+
+  // Some positive role is included in user_roles[]
+  const somePositiveRole = Object.keys(obj.roles).some((role) =>
+    user_roles.includes(role)
+  );
+
+  if (somePositiveRole) return obj;
+
+  // The check fails by default.
+  return false;
 }
 
-async function reduce(obj, roles) {
+// Return an object with filter matching the layer.roles with user_roles.
+function filter(layer, user_roles) {
 
-  if (!roles) return;
+  // The layer must have roles.
+  if (!layer.roles) return;
 
-  (function objectEval(o, parent, key) {
+  // user_roles must be an array.
+  if (!Array.isArray(user_roles)) return;
 
-    if (!check(o, roles)) {
+  const roleFilter = Object.keys(layer.roles)
+  
+    // filter roles with a filter object.
+    .filter(key => layer.roles[key] && typeof layer.roles[key].filter === 'object')
 
-      // if the parent is an array splice the key index.
-      if (parent.length > 0) return parent.splice(parseInt(key), 1)
+    // filter roles included in the user_roles array.
+    .filter(key => user_roles.includes(key)
 
-      // if the parent is an object delete the key from the parent.
-      return delete parent[key]
-    }
-
-    // iterate through the object tree.
-    Object.keys(o).forEach((key) => {
-
-      // Do not remove infoj entries.
-      if (key === 'infoj') return;
-
-      if (o[key] && typeof o[key] === 'object') objectEval(o[key], o, key)
-    });
-
-  })(obj)
-
-}
-
-function filter(obj, roles) {
-
-  if (!obj.roles) return;
-
-  // Roles must be an array.
-  if (!Array.isArray(roles)) return false;
-
-  const roleFilter = Object.keys(obj.roles)
-    .filter(key => roles.includes(key)
-      || key.match(/^\!/) && !roles.includes(key.replace(/^\!/, '')))
-    .filter(key => !!obj.roles[key])
+      // or negated roles (!) NOT included in the array.
+      || !user_roles.includes(key.match(/(?<=^!)(.*)/g)?.[0]))
+      
     .reduce((o, key) => {
-      o[key] = obj.roles[key]
+      o[key] = layer.roles[key].filter
       return o
     }, {})
 
@@ -92,9 +74,8 @@ function get(obj) {
     if (key === 'roles') {
       Object.keys(parent.roles).forEach(role => {
 
-        let _role = role.replace(/^\!/, '')
-
-        !roles.has(_role) && roles.add(_role)
+        // Add role without nagation ! to roles set.
+        roles.add(role.replace(/^!/, ''))
 
       })
     }

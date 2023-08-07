@@ -56,8 +56,19 @@ module.exports = function sqlfilter(filter, params) {
 }
 
 function mapFilterEntries(filter) {
+
+  const SQLvalidation = /^[a-zA-Z_]\w*$/
+
+  if (Object.keys(filter).some(key => !SQLvalidation.test(key))) {
+
+    let unvalidatedKey = Object.keys(filter).find(key => !SQLvalidation.test(key))
+
+    console.warn(`"${unvalidatedKey}" field didn't pass SQL parameter validation`)
+    return;
+  }
+
   return `(${Object.entries(filter)
-  
+ 
       // Map filter entries
       .map((entry) => {
 
@@ -66,14 +77,7 @@ function mapFilterEntries(filter) {
 
         // Array entry values represent conditional OR
         if (value.length) return sqlfilter(value);
-  
-
-        // Identifiers must be validated to prevent SQL injection
-        if (!/^[A-Za-z0-9._-]*$/.test(field)) {
-          console.log(`${field} - ¡no bueno!`)
-          return
-        }
-  
+    
         // Call filter type method for matching filter entry value
         // Multiple filterTypes for the same field will be joined with AND
         return Object.keys(value)

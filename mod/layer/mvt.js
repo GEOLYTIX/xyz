@@ -10,7 +10,13 @@ const logger = require('../utils/logger')
 
 module.exports = async (req, res) => {
 
-  const layer = req.params.layer
+  // Check the layer.roles{} against the user.roles[]
+  const layer = Roles.check(req.params.layer, req.params.user?.roles)
+
+  // The layer object did not pass the Roles.check()
+  if (!layer) {
+    return res.status(403).send('Access prohibited.')
+  }
 
   // Validate URL parameter
   if (!validateRequestParams(req.params)) {
@@ -33,14 +39,13 @@ module.exports = async (req, res) => {
 
   const roles = Roles.filter(layer, req.params.user && req.params.user.roles)
 
-  if (!roles && layer.roles) return res.status(403).send('Access prohibited.');
-
   const SQLparams = []
 
   const filter =
     `${req.params.filter && ` AND ${sqlFilter(JSON.parse(req.params.filter), SQLparams)}` || ''}`
     +`${roles && Object.values(roles).some(r => !!r)
-    && ` AND ${sqlFilter(Object.values(roles).filter(r => !!r), SQLparams)}` || ''}`
+      ? `AND ${sqlFilter(Object.values(roles).filter(r => !!r), SQLparams)}`
+      : ''}`
 
     // Construct array of fields queried
   let mvt_fields = Object.values(layer.style?.themes || {})
