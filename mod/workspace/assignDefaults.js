@@ -4,6 +4,14 @@ const merge = require('../utils/merge')
 
 module.exports = async workspace => {
 
+  workspace.locale ??= {
+    layers: {}
+  }
+
+  workspace.locales ??= {
+    locale: workspace.locale
+  }
+
   // Loop through locale keys in workspace.
   Object.keys(workspace.locales).forEach(locale_key => {
 
@@ -17,7 +25,7 @@ module.exports = async workspace => {
       merge(locale, workspace.locale)
     }
 
-    // A template exists for the workspace key.
+    // A template exists for the locale key.
     if (Object.hasOwn(workspace.templates, locale_key) && typeof workspace.templates[locale_key] === 'object') {
 
       // Merge the workspace template into workspace.

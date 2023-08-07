@@ -1,19 +1,4 @@
 module.exports = defaults = {
-  locale: {
-    key: 'zero',
-    name: 'zero',
-    layers: {
-      OSM: {
-        key: 'OSM',
-        display: true,
-        format: 'tiles',
-        URI: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-        style: {
-          hidden: true
-        }
-      }
-    },
-  },
   layers: {
     geojson: {
       srid: '4326',
