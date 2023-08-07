@@ -56,8 +56,6 @@ async function getLayer(req, res) {
 
 function getLocales(req, res) {
 
-  if (!req.params.workspace.locales) return res.send({})
-
   const roles = req.params.user?.roles || []
 
   const locales = Object.values(req.params.workspace.locales)
@@ -72,13 +70,11 @@ function getLocales(req, res) {
 
 function getLocale(req, res) {
 
-  logger(`"${req.params.locale}" locale requested`, 'locale');
-
-  if (!Object.hasOwn(req.params.workspace.locales, req.params.locale)) {
+  if (req.params.locale && !Object.hasOwn(req.params.workspace.locales, req.params.locale)) {
     return res.status(400).send(`Unable to validate locale param.`)
   }
 
-  const locale = clone(req.params.workspace.locales[req.params.locale])
+  const locale = clone(req.params.workspace.locales?.[req.params.locale] || req.params.workspace.locale || {})
 
   const roles = req.params.user?.roles || []
 
@@ -86,7 +82,8 @@ function getLocale(req, res) {
     return res.status(403).send('Role access denied.')
   }
 
-  locale.layers = Object.entries(locale.layers)
+  // Check layer access.
+  locale.layers = locale.layers && Object.entries(locale.layers)
     .filter(layer => !!Roles.check(layer[1], roles))
     .map(layer => layer[0])
 

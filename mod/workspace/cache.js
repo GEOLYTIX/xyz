@@ -15,8 +15,6 @@ const getFrom = {
 
 const assignTemplates = require('./assignTemplates')
 
-const defaults = require('./defaults')
-
 const assignDefaults = require('./assignDefaults')
 
 let workspace = null
@@ -57,33 +55,19 @@ async function cache() {
   // Return error if source failed.
   if (workspace instanceof Error) return workspace
 
-  // Assign default locale as locales if missing.
-  workspace.locales = workspace.locales || { zero: defaults.locale }
-
   await assignTemplates(workspace)
 
   await assignDefaults(workspace)
 
-  Object.values(workspace.locales).forEach(locale => {
+  if (workspace.plugins) {
 
-    // The workspace has an array of plugins to be used for all locales.
-    if (Array.isArray(workspace.plugins)) {
-
-      // Are locale plugins defined.
-      locale.plugins = Array.isArray(locale.plugins)
-
-        // Concat the workspace plugins with locale plugins
-        ? locale.plugins.concat(workspace.plugins)
-
-        // Assign workspace plugins as locale plugins.
-        : workspace.plugins
-    }
-
-  })
+    console.warn(`Defult plugins should be defined in the default workspace.locale{}`)
+  }
 
   // Substitute all SRC_* variables in locales.
   workspace.locales = JSON.parse(
     JSON.stringify(workspace.locales).replace(/\$\{(.*?)\}/g,
       matched => process.env[`SRC_${matched.replace(/\$|\{|\}/g, '')}`] || matched)
   )
+
 }
