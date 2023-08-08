@@ -9,8 +9,7 @@ module.exports = defaults = {
           icon: {
             type: 'dot'
           }
-        },
-        highlight: {}
+        }
       },
       filter: {},
     },
@@ -23,8 +22,7 @@ module.exports = defaults = {
           icon: {
             type: 'dot'
           }
-        },
-        highlight: {}
+        }
       },
       filter: {},
     },
@@ -37,8 +35,7 @@ module.exports = defaults = {
           icon: {
             type: 'dot'
           }
-        },
-        highlight: {}
+        }
       },
       filter: {},
     },
@@ -50,8 +47,7 @@ module.exports = defaults = {
         },
         cluster: {
           clusterScale: 2
-        },
-        highlight: {}
+        }
       },
       filter: {},
     },
