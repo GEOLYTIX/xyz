@@ -172,8 +172,11 @@ module.exports = async (req, res) => {
   }
 
   const rows = await dbs(query, SQLparams, req.params.statement_timeout || template.statement_timeout)
-
-  if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
+  
+  if (rows instanceof Error) {
+    console.log("Attempted Query:", query);
+    return res.status(500).send('Failed to query PostGIS table.');
+  }
 
   // return 202 if no record was returned from database.
   if (!rows || !rows.length) return res.status(202).send('No rows returned from table.')
