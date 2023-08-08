@@ -1,5 +1,7 @@
 const { Pool } = require('pg');
 
+const logger = require('./logger');
+
 const dbs = {};
 
 module.exports = () => {
@@ -37,8 +39,22 @@ module.exports = () => {
           return rows
   
         } catch (err) {
-          console.error(err)
-          return err
+          const msg = `  
+            ---  
+            ${err}
+            
+            attempted query: ${q}
+            
+            params: ${arr}
+
+            timeout: ${timeout}
+            ---
+          `;
+
+          console.error(msg);
+          logger(msg);
+
+          throw new Error(err);
         }
   
       }
