@@ -171,10 +171,10 @@ module.exports = async (req, res) => {
     return res.send('Non blocking request sent.')
   }
 
-  let rows;
-  try {
-    rows = await dbs(query, SQLparams, req.params.statement_timeout || template.statement_timeout);
-  } catch {
+  let rows = await dbs(query, SQLparams, req.params.statement_timeout || template.statement_timeout);
+  
+  if (rows instanceof Error) {
+    
     return res.status(500).send('Failed to query PostGIS table.');
   }
 

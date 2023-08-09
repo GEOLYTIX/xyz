@@ -32,29 +32,16 @@ module.exports = () => {
   
           const { rows } = await client.query(q, arr)
   
-          timeout && await client.query(`SET statement_timeout = 10000`)
+          timeout && await client.query(`SET statement_timeout = ${parseInt(process.env.STATEMENT_TIMEOUT) || 10000}`)
 
           client.release()
   
           return rows
   
         } catch (err) {
-          const msg = `  
-            ---  
-            ${err}
-            
-            attempted query: ${q}
-            
-            params: ${arr}
 
-            timeout: ${timeout}
-            ---
-          `;
-
-          console.error(msg);
-          logger(msg);
-
-          throw new Error(err);
+          logger({err, q, arr})
+          return err;
         }
   
       }
