@@ -17,11 +17,7 @@ const logger = process.env.LOGGER
 
 module.exports = (log, key) => {
 
-  // The log key should not be written out.
-  if (!logs.has(key)) return;
-
   // Write log to logger if configured.
-  
   logger?.(log, key);
 
   console.log(log)
@@ -61,7 +57,7 @@ function postgresql() {
 
   if (!dbs) console.warn(`Logger module unable to find dbs=${params.dbs}`)
 
-  return async (log, key) => {
+  return async (log, key="") => {
 
     const logstring = typeof log === 'string' ? log : JSON.stringify(log);
 
