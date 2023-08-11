@@ -46,32 +46,32 @@ function logflare() {
   return (log, key) => {
 
     fetch(`https://api.logflare.app/logs/json?source=${params.source}`,
-    {
-      method: 'post',
-      headers: { 
-        'Content-Type': 'application/json',
-        'X-API-KEY': params.apikey,
-      },
-      body: JSON.stringify({
-        [process_nanoid]: log,
-        key
+      {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-KEY': params.apikey,
+        },
+        body: JSON.stringify({
+          [process_nanoid]: log,
+          key
+        })
+      }).catch(err => {
+        console.error(err)
       })
-    }).catch(err=>{
-      console.error(err)
-    })
 
-  }    
+  }
 
 }
 
 function postgresql() {
 
-  const params = Object.fromEntries(new URLSearchParams(process.env.LOGGER.split(':')[1]).entries())
+  const params = Object.fromEntries(new URLSearchParams(process.env.LOGGER.split(':')[1]).entries());
 
-  const connectionString = process.env[`DBS_${params.dbs}`]
+  const connectionString = process.env[`DBS_${params.dbs}`];
 
   if (!connectionString) {
-    console.warn(`Logger module unable to find dbs=${params.dbs}`)
+    console.warn(`Logger module unable to find dbs=${params.dbs}`);
     return;
   }
 
@@ -86,13 +86,19 @@ function postgresql() {
     // Objects must be parsed as string for the PostgreSQL log table schema.
     const logstring = typeof log === 'string' ? log : JSON.stringify(log);
 
-    const client = await pool.connect()
+    //This is to pull the short Error message from the stack
+    const errorMessage = log.err?.toString().split('\n')[0];
 
-    await client.query(`
-    INSERT INTO ${params.table} (process, datetime, key, log)
-    SELECT $1 process, $2 datetime, $3 key, $4 log`,
-    [process_nanoid, Date.now(), key, logstring])
-
-    client.release()
-  }
+    const client = await pool.connect();
+    try {
+      await client.query(
+        `INSERT INTO ${params.table} (process, datetime, key, log, message) 
+        VALUES ($1, $2, $3, $4, $5)`, 
+        [process_nanoid, Date.now(), key, logstring, errorMessage]);
+    } catch (error) {
+      console.error('Error while logging to database:', error);
+    } finally {
+      client.release();
+    }
+  };
 }
