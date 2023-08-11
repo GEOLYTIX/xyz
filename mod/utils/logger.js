@@ -1,5 +1,8 @@
 const logs = new Set(process.env.LOGS?.split(',') || [])
 
+// Errors should always be logged.
+logs.add('err')
+
 const { nanoid } = require('nanoid')
 
 const process_nanoid = nanoid(6)
@@ -9,21 +12,30 @@ const logout = {
   postgresql
 }
 
-const dbs_connections = require('./dbs')()
+// Required to initialse PostgreSQL logger.
+const { Pool } = require('pg');
 
 const logger = process.env.LOGGER
   && Object.hasOwn(logout, process.env.LOGGER.split(':')[0])
   && logout[process.env.LOGGER.split(':')[0]]()
 
-module.exports = (log, key) => {
+// The default key is 'err' which should always be logged.
+module.exports = (log, key = 'err') => {
 
-  // The log key should not be written out.
+  // Check whether the log for the key should be logged.
   if (!logs.has(key)) return;
 
   // Write log to logger if configured.
-  
   logger?.(log, key);
 
+  if (key === 'err') {
+
+    // Log errors as such.
+    console.error(log)
+    return
+  }
+
+  // Log to stdout.
   console.log(log)
 }
 
@@ -31,43 +43,64 @@ function logflare() {
 
   const params = Object.fromEntries(new URLSearchParams(process.env.LOGGER.split(':')[1]).entries())
 
-  return log => {
+  return (log, key) => {
 
     fetch(`https://api.logflare.app/logs/json?source=${params.source}`,
-    {
-      method: 'post',
-      headers: { 
-        'Content-Type': 'application/json',
-        'X-API-KEY': params.apikey,
-      },
-      body: JSON.stringify({
-        [process_nanoid]: log
+      {
+        method: 'post',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-API-KEY': params.apikey,
+        },
+        body: JSON.stringify({
+          [process_nanoid]: log,
+          key
+        })
+      }).catch(err => {
+        console.error(err)
       })
-    }).then(resp=>{
-      //console.log(resp)
-    }).catch(err=>{
-      console.error(err)
-    })
 
-  }    
+  }
 
 }
 
 function postgresql() {
 
-  const params = Object.fromEntries(new URLSearchParams(process.env.LOGGER.split(':')[1]).entries())
+  const params = Object.fromEntries(new URLSearchParams(process.env.LOGGER.split(':')[1]).entries());
 
-  const dbs = dbs_connections[params.dbs]
+  const connectionString = process.env[`DBS_${params.dbs}`];
 
-  if (!dbs) console.warn(`Logger module unable to find dbs=${params.dbs}`)
+  if (!connectionString) {
+    console.warn(`Logger module unable to find dbs=${params.dbs}`);
+    return;
+  }
+
+  const pool = new Pool({
+    connectionString,
+    statement_timeout: 3000
+  });
 
   return async (log, key) => {
 
+    //Sanitize the params.table to ensure no SQL injection
+    const table = params.table.replace(/[^a-zA-Z0-9_.]/g, '');
+    // Log messages can be string or objects
+    // Objects must be parsed as string for the PostgreSQL log table schema.
     const logstring = typeof log === 'string' ? log : JSON.stringify(log);
 
-    await dbs(`
-      INSERT INTO ${params.table} (process, datetime, key, log)
-      SELECT $1 process, $2 datetime, $3 key, $4 log`, [process_nanoid, Date.now(), key, logstring])
+    //This is to pull the short Error message from the stack
+    const errorMessage = log.err?.toString().split('\n')[0];
 
-  }
+    const client = await pool.connect();
+    try {
+      await client.query(
+        `INSERT INTO ${table} (process, datetime, key, log, message) 
+        VALUES ($1, $2, $3, $4, $5)`, 
+        [process_nanoid, Date.now(), key, logstring, errorMessage]);
+    } catch (error) {
+      console.error('Error while logging to database:', error);
+    } finally {
+      client.release();
+    }
+  };
 }

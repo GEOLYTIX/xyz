@@ -1,5 +1,7 @@
 const { Pool } = require('pg');
 
+const logger = require('./logger');
+
 const dbs = {};
 
 module.exports = () => {
@@ -30,15 +32,16 @@ module.exports = () => {
   
           const { rows } = await client.query(q, arr)
   
-          timeout && await client.query(`SET statement_timeout = 10000`)
+          timeout && await client.query(`SET statement_timeout = ${parseInt(process.env.STATEMENT_TIMEOUT) || 10000}`)
 
           client.release()
   
           return rows
   
         } catch (err) {
-          console.error(err)
-          return err
+
+          logger({err, q, arr})
+          return err;
         }
   
       }
