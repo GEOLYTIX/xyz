@@ -82,6 +82,8 @@ function postgresql() {
 
   return async (log, key) => {
 
+    //Sanitize the params.table to ensure no SQL injection
+    const table = params.table.replace(/[^a-zA-Z0-9_.]/g, '');
     // Log messages can be string or objects
     // Objects must be parsed as string for the PostgreSQL log table schema.
     const logstring = typeof log === 'string' ? log : JSON.stringify(log);
@@ -92,7 +94,7 @@ function postgresql() {
     const client = await pool.connect();
     try {
       await client.query(
-        `INSERT INTO ${params.table} (process, datetime, key, log, message) 
+        `INSERT INTO ${table} (process, datetime, key, log, message) 
         VALUES ($1, $2, $3, $4, $5)`, 
         [process_nanoid, Date.now(), key, logstring, errorMessage]);
     } catch (error) {
