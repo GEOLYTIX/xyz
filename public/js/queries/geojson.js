@@ -10,6 +10,8 @@ module.exports = _ => {
         properties = ', json_build_object(' + propertyKeyValuePairs.join(', ') + ') as properties';
     }
 
+    const where = _.viewport || `AND ${_.geom || layer.geom} IS NOT NULL`
+
     return `
         SELECT
         'Feature' AS type,
@@ -17,5 +19,5 @@ module.exports = _ => {
         ST_asGeoJson(\${geom})::json AS geometry
         ${properties}
         FROM \${table}
-        WHERE \${geom} IS NOT NULL \${filter};`
+        WHERE TRUE ${where} IS NOT NULL \${filter};`
 }

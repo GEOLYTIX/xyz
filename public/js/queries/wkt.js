@@ -6,12 +6,14 @@ module.exports = _ => {
     const fields = _.fields?.split(',')
         .map(field => _.workspace.templates[field]?.template || field)
         .filter(field => !!field)
-   
+
+    const where = _.viewport || `AND ${_.geom || layer.geom} IS NOT NULL`
+
     return `
         SELECT
         \${qID} AS id,
         ST_AsText(${_.geom || layer.geom}) AS geometry
         ${fields && `, ${fields.join(', ')}` || ''}
         FROM \${table}
-        WHERE ${_.geom || layer.geom} IS NOT NULL \${filter};`
-  }
+        WHERE TRUE ${where} \${filter};`
+}
