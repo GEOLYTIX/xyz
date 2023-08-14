@@ -1,5 +1,3 @@
-const defaults = require('./defaults')
-
 const merge = require('../utils/merge')
 
 module.exports = async workspace => {
@@ -55,24 +53,6 @@ module.exports = async workspace => {
 
         // Layer entries must override template entries.
         layer)
-
-      // Assign layer format defaults.
-      layer = layer.format && Object.assign({},
-
-        // Assign layer defaults.
-        defaults.layers[layer.format] || {},
-
-        // Layer entries must override template entries.
-        layer) || layer
-
-      // Merge default layer style.
-      layer.style = layer.format && merge({},
-
-        // Assign layer format default style first.
-        defaults.layers[layer.format]?.style || {},
-
-        // Layer style must override the default style.
-        layer.style || {})
 
       if (Array.isArray(layer.templates)) {
 
