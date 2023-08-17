@@ -68,7 +68,7 @@ module.exports = async (req, res) => {
               ${viewport[3]},
               ${parseInt(viewport[4])}
             ),
-            ${layer.srid}),
+            ${req.params.srid || layer.srid}),
           ${req.params.geom}
         )` || ''
 

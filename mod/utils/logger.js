@@ -96,7 +96,7 @@ function postgresql() {
       await client.query(
         `INSERT INTO ${table} (process, datetime, key, log, message) 
         VALUES ($1, $2, $3, $4, $5)`, 
-        [process_nanoid, Date.now(), key, logstring, errorMessage]);
+        [process_nanoid, parseInt(Date.now() / 1000), key, logstring, errorMessage]);
     } catch (error) {
       console.error('Error while logging to database:', error);
     } finally {
