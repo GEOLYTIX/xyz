@@ -1,13 +1,13 @@
 module.exports = async (req, res) => {
 
-  const template = req.params.template
+  const template = req.options.template
 
-  if (typeof template.params.body !== 'string') {
+  if (typeof template.options.body !== 'string') {
 
-    template.params.body = JSON.stringify(template.params.body)
+    template.options.body = JSON.stringify(template.options.body)
   }
 
-  const response = await fetch(template.url, template.params);
+  const response = await fetch(template.resource, template.options);
 
   const data = await response.json()
 

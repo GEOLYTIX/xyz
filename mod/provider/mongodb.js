@@ -23,7 +23,7 @@ module.exports = async searchparams => {
     body: JSON.stringify(body)
   }
 
-  const response = await fetch(params.url, options);
+  const response = await fetch(params.resource, options);
 
   let r = await response.json()
 
