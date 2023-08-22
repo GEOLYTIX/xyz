@@ -1,31 +1,31 @@
-try {
+module.exports = async searchparams => {
 
-  const { MongoClient } = require('mongodb');
-} catch {
+  const params = Object.fromEntries(new URLSearchParams(searchparams).entries())
 
-  console.log('MONOGODB module is not available.')
-}
-
-module.exports = async params => {
-
-  if (!MongoClient) return;
-
-  if (!process.env.MONGODB) return;
-
-  const client = new MongoClient(process.env.MONGODB);
-
-  try {
-    
-    const db = client.db(params.db);
-    const collection = db.collection(params.collection);
-    const response = await collection.findOne(params.query, params.options, params.lang);
-
-    return response;
-
-  } finally {
-
-    // Ensures that the client will close when you finish/error
-    await client.close();
+  let body = {
+    "collection": params.collection,
+    "database": params.database,
+    "dataSource": params.dataSource,
+    "limit": 1,
+    "sort": { _id: -1 }
   }
 
+  let options = {
+    method: "POST",
+    mode: "cors",
+    cache: "no-cache",
+    credentials: "same-origin",
+    headers: {
+      "Content-Type": "application/json",
+      "apiKey": params.apiKey,
+      "Access-Control-Request-Headers": "*"
+    },
+    body: JSON.stringify(body)
+  }
+
+  const response = await fetch(params.url, options);
+
+  let r = await response.json()
+
+  return r.documents?.[0]
 }

@@ -2,8 +2,6 @@ const clone = require('../utils/clone.js')
 
 const Roles = require('../utils/roles.js')
 
-const logger = require('../utils/logger')
-
 module.exports = async (req, res) => {
 
   const keys = {
@@ -12,7 +10,6 @@ module.exports = async (req, res) => {
     locale: getLocale,
     locales: getLocales,
     roles: getRoles,
-    templates: getTemplates,
     timestamp: () => res.send(req.params.workspace.timestamp.toString()),
   }
 
@@ -97,9 +94,4 @@ function getRoles(req, res) {
   let roles = Roles.get(req.params.workspace)
 
   res.send(roles)
-}
-
-function getTemplates(req, res) {
-
-  res.send(Object.keys(req.params.workspace.templates))
 }
