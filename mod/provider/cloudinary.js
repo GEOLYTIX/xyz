@@ -12,29 +12,11 @@ module.exports = async req => {
     return
   }
 
+  // Destroy cloudinary resource.
+  if (req.params.destroy) return await destroy(req)
+
   // The timestamp is required for the signature which is valid for 1hr.
   const timestamp = Date.now()
-
-  if (req.params.destroy) {
-
-    const toSign = `public_id=${req.params.public_id}&timestamp=${timestamp}${cloudinary[2]}`
-
-    const signature = createHash('sha256').update(toSign).digest('hex')
-  
-    const data = new FormData();
-  
-    data.append('public_id', req.params.public_id)
-    data.append('api_key', cloudinary[1])
-    data.append('timestamp', timestamp)
-    data.append('signature', signature);
-
-    const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudinary[3]}/image/destroy`, {
-      method: "post",
-      body: data,
-    });
-
-    return await response.json()
-  }
 
   const toSign = `folder=${req.params.folder}&public_id=${req.params.public_id}&timestamp=${timestamp}${cloudinary[2]}`
 
@@ -55,6 +37,30 @@ module.exports = async req => {
   data.append('file', file);
 
   const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudinary[3]}/upload`, {
+    method: "post",
+    body: data,
+  });
+
+  return await response.json()
+}
+
+async function destroy(req) {
+
+  // The timestamp is required for the signature which is valid for 1hr.
+  const timestamp = Date.now()
+
+  const toSign = `public_id=${req.params.public_id}&timestamp=${timestamp}${cloudinary[2]}`
+
+  const signature = createHash('sha256').update(toSign).digest('hex')
+
+  const data = new FormData();
+
+  data.append('public_id', req.params.public_id)
+  data.append('api_key', cloudinary[1])
+  data.append('timestamp', timestamp)
+  data.append('signature', signature);
+
+  const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudinary[3]}/image/destroy`, {
     method: "post",
     body: data,
   });
