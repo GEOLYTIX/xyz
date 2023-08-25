@@ -1,4 +1,4 @@
-@import 'colours';
+
 
 button {
   border: none;
@@ -7,14 +7,14 @@ button {
   text-align: center;
 
   &.mask-icon,
-  >.mask-icon {
-    background-color: $primary
+  & >.mask-icon {
+    background-color: --primary
   }
 
   &.mask-icon.active,
   &.active>.mask-icon,
-  >.mask-icon.active {
-    background-color: $on
+  & >.mask-icon.active {
+    background-color: var(--color-on)
   }
 
   &:hover {
@@ -34,18 +34,18 @@ button {
 
   &.flat {
     border-radius: 3px;
-    border-bottom: 1px solid $lighter;
+    border-bottom: 1px solid var(--color-lighter);
     padding: 0.3em;
       
     &.active {
-      border-bottom: 3px solid $on;
+      border-bottom: 3px solid var(--color-on);
     }
   }
 
   &.raised {
     border-radius: 3px;
-    border: 1px solid $lighter;
-    box-shadow: 1px 1px 2px $lighter;
+    border: 1px solid var(--color-lighter);
+    box-shadow: 1px 1px 2px var(--color-lighter);
     padding: 0.3em;
      
     &.active {
@@ -54,7 +54,7 @@ button {
   }
 
   &.active {
-    background-color: $on;
+    background-color: var(--color-on);
   }
 }
 
@@ -63,27 +63,27 @@ button {
   grid-auto-rows: minmax(min-content, 4em);
   padding: 0.7em;
 
-  button,
-  >div,
-  >a {
+  & button,
+  & >div,
+  & >a {
     width: 2em;
     height: 2em;
   }
 
-  a > div,
-  button > div {
+  & a > div,
+  & button > div {
     height: 100%;
   }
 
-  button:disabled,
-  a:disabled {
+  & button:disabled,
+  & a:disabled {
     cursor: not-allowed;
   }
 }
 
 .btn-row {
   display: flex;
-  > * {
+  & > * {
     margin: 10px 5px;
   }
 }
@@ -92,31 +92,31 @@ button {
   width: 100%;
   padding: 0.3em 0.5em;
   background-color: white;
-  border: 1px solid $lighter;
+  border: 1px solid var(--color-lighter);
   border-radius: 3px;
-  box-shadow: 1px 1px 3px $primary-light;
+  box-shadow: 1px 1px 3px var(--color-primary-light);
 
-  .header {
+  & .header {
     display: flex;
     justify-content: space-between;
     align-items: center;
     overflow: hidden;
     pointer-events: none;
 
-    h3 {
+    & h3 {
       text-overflow: ellipsis;
       overflow: hidden;
     }
   }
 
-  .mask-icon {
+  & .mask-icon {
     width: 1.5em;
     height: 1.5em;
     -webkit-mask-position: right;
     mask-position: right;
   }
 
-  .panel {
+  & .panel {
     display: block;
     position: absolute;
     width: 100%;
@@ -130,11 +130,11 @@ button {
     padding: 1em 1.5em;
     opacity: 0;
     border-radius: 3px;
-    box-shadow: 1px 1px 3px $primary-light;
+    box-shadow: 1px 1px 3px var(--color-primary-light);
     pointer-events: none;
     transition: 0.2s ease-in-out;
 
-    .content {
+    & .content {
       padding: 1em;
     }
 
@@ -144,14 +144,14 @@ button {
   }
 
   &.active {
-    background-color: $primary;
+    background-color: var(--color-primary);
     color: #fff;
 
-    .mask-icon {
+    & .mask-icon {
       background-color: #fff;
     }
 
-    .panel {
+    & .panel {
       bottom: 2em;
       pointer-events: auto;
       opacity: 1;
