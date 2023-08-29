@@ -1,7 +1,6 @@
 const formats = {
   cluster: require('./cluster'),
-  mvt: require('./mvt'),
-  grid: require('./grid')
+  mvt: require('./mvt')
 }
 
 module.exports = async (req, res) => {

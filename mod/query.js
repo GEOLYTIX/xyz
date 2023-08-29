@@ -72,7 +72,7 @@ module.exports = async (req, res) => {
           ${req.params.geom}
         )` || ''
 
-    req.params.qID = req.params.qID || layer.qID
+    req.params.qID = req.params.qID || layer.qID || 'NULL'
 
   } else {
 
