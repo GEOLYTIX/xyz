@@ -276,7 +276,10 @@ window.onload = async () => {
 
         // If active cancel zoom and enable highlight interaction.
         if (e.target.classList.contains('active')) {
-          return mapview.interactions.highlight()
+          
+          e.target.classList.remove('active')
+          mapview.interactions.highlight()
+          return;
         }
 
         // Add active class
@@ -288,7 +291,6 @@ window.onload = async () => {
           // The interaction callback is executed on cancel or finish.
           callback: () => {
             e.target.classList.remove('active');
-            mapview.interactions.highlight();
           },
         })
 
