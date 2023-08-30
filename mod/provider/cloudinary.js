@@ -3,7 +3,7 @@ const { createHash } = require('crypto');
 // 1: api_key
 // 2: api_secret
 // 3: cloud_name
-const cloudinary = process.env.CLOUDINARY_URL?.replaceAll("://", " ").replaceAll(":", " ").replaceAll("@", " ").split(" ")
+const cloudinary = process.env.CLOUDINARY_URL?.replaceAll('://', ' ').replaceAll(':', ' ').replaceAll('@', ' ').split(' ')
 
 module.exports = async req => {
 
@@ -37,7 +37,7 @@ module.exports = async req => {
   data.append('file', file);
 
   const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudinary[3]}/upload`, {
-    method: "post",
+    method: 'post',
     body: data,
   });
 
@@ -61,7 +61,7 @@ async function destroy(req) {
   data.append('signature', signature);
 
   const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudinary[3]}/image/destroy`, {
-    method: "post",
+    method: 'post',
     body: data,
   });
 
