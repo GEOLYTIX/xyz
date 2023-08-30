@@ -1167,6 +1167,7 @@ label.checkbox input:disabled ~ * {
 .location-view-grid .contents.inline > .val {
   grid-column: 2;
   text-align: right;
+  word-break: break-word;
 }
 .location-view-grid .label {
   align-items: center;
