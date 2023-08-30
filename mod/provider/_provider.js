@@ -9,10 +9,10 @@ const s3 = require('./s3')
 module.exports = async (req, res) => {
 
   const provider = {
-    cloudfront: cloudfront,
-    cloudinary: cloudinary,
-    file: file,
-    s3: s3
+    cloudfront,
+    cloudinary,
+    file,
+    s3
   }
 
   if (!Object.hasOwn(provider, req.params.provider)) {
