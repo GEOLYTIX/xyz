@@ -1,8 +1,5 @@
 const {
   S3Client,
-  CreateMultipartUploadCommand,
-  UploadPartCommand,
-  CompleteMultipartUploadCommand,
   PutObjectCommand,
   GetObjectCommand,
   DeleteObjectCommand,
@@ -13,21 +10,18 @@ const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 
 module.exports = async (req, res) => {
 
+  const credentials = Object.fromEntries(new URLSearchParams(process.env.AWS_S3_CLIENT))
+
   const s3Client = new S3Client({
-    credentials: {
-      accessKeyId: process.env.KEY_AWSACCESSKEYID,
-      secretAccessKey: process.env.KEY_AWSSECRETACCESSKEY
-    },
+    credentials,
     region: req.params.region
   })
 
+
   const commands = {
     get,
-    upload,
+    put,
     trash,
-    getuploadID,
-    uploadpart,
-    completeUpload,
     list
   }
 
@@ -50,80 +44,55 @@ async function trash(s3Client, req) {
 
 async function get(s3Client, req) {
 
-  const command = new GetObjectCommand({
-    Key: req.params.key,
-    Bucket: req.params.bucket
-  })
+  try {
 
-  const signedURL = await getSignedUrl(s3Client, command, {
-    expiresIn: 3600,
-  });
+    const command = new GetObjectCommand({
+      Key: req.params.key,
+      Bucket: req.params.bucket
+    })
 
-  return JSON.stringify(signedURL);
+    const signedURL = await getSignedUrl(s3Client, command, {
+      expiresIn: 3600,
+    });
+
+    return JSON.stringify(signedURL);
+    
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+async function put(s3Client, req) {
+
+  try {
+
+    const command = new PutObjectCommand({
+      Key: req.params.key,
+      Bucket: req.params.bucket,
+      Region: req.params.region
+    });
+
+    const signedURL = await getSignedUrl(s3Client, command, {
+      expiresIn: 3600,
+    });
+
+    return JSON.stringify(signedURL);
+    
+  } catch (err) {
+    console.error(err)
+  }
 }
 
 async function list(s3Client, req) {
 
-  const command = new ListObjectsCommand({ Bucket: req.params.bucket })
-  return s3Client.send(command);
-}
+  try {
 
-//upload function for files that are lower than 4.5mb
-async function upload(s3Client, req) {
+    const command = new ListObjectsCommand({ Bucket: req.params.bucket })
+    const response = await s3Client.send(command);
 
-  const Body = await new Promise((resolve, reject) => {
+    return response
 
-    const chunks = []
-
-    req.on('data', chunk => chunks.push(chunk))
-
-    req.on('end', () => resolve(Buffer.concat(chunks)))
-
-    req.on('error', error => reject(error))
-
-  })
-
-  const command = new PutObjectCommand({
-    Key: req.params.key,
-    Bucket: req.params.bucket,
-    Body
-  })
-  return s3Client.send(command);
-}
-
-//inits the multipart upload that returns an id. The id is used for the uploadpart commands
-async function getuploadID(s3Client, req) {
-  const command = new CreateMultipartUploadCommand({
-    Key: req.params.key,
-    Bucket: req.params.bucket
-  });
-  return await s3Client.send(command);
-}
-
-//uploadpart function that will provide a signed put url.
-async function uploadpart(s3Client, req) {
-
-  const command = new UploadPartCommand({
-    Key: req.params.key,
-    Bucket: req.params.bucket,
-    PartNumber: req.params.partnumber,
-    UploadId: req.params.uploadid
-  })
-
-  const presignedurl = await getSignedUrl(s3Client, command);
-
-  return JSON.stringify(presignedurl);
-}
-
-//Function that will execute the CompleteMulti Part upload
-async function completeUpload(s3Client, req) {
-  const command = new CompleteMultipartUploadCommand({
-    Key: req.params.key,
-    Bucket: req.params.bucket,
-    MultipartUpload: {
-      Parts: req.body //Requires an array of Etag's with their corresponding part numbers
-    },
-    UploadId: req.params.uploadid
-  })
-  return await s3Client.send(command);
+  } catch (err) {
+    console.error(err)
+  }
 }
