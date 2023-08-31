@@ -343,13 +343,19 @@
     function expiryEdit(cell, onRendered, success, cancel) {
 
       let rowData = cell.getRow().getData()
-
       //create and style editor
       var editor = document.createElement("input");
 
       editor.setAttribute("type", "date");
 
-      editor.valueAsNumber = rowData.expires_on * 1000
+      // Set the value to the current date if the value is null and you are editing the cell.
+      if (!rowData.expires_on) {
+        const date = new Date();
+        editor.value = date.toISOString().slice(0, 10);
+      } else {
+        const date = new Date(rowData.expires_on * 1000);
+        editor.value = date.toISOString().slice(0, 10);
+      }
 
       //create and style input
       editor.style.padding = "3px";
@@ -367,8 +373,8 @@
         cell.setValue(val);
       }
 
-      editor.addEventListener("change", successFunc);
-      //editor.addEventListener("blur", blurFunc);
+      //editor.addEventListener("change", successFunc);
+      editor.addEventListener("blur", successFunc);
 
       //return the editor element
       return editor;
