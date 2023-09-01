@@ -65,7 +65,7 @@ module.exports = async workspace => {
       // Check for layer geom[s].
       if ((layer.table || layer.tables) && (!layer.geom && !layer.geoms)) {
 
-        console.warn(`Layer ${layer?.name || layer.key} has a table or tables defined, but no geom or geoms.`)
+        console.warn(`Layer: ${layer.key},has a table or tables defined, but no geom or geoms.`)
       }
 
       // Assign layer key as name with no existing name on layer object.
