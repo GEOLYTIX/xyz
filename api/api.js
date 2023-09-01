@@ -200,9 +200,9 @@ module.exports = async (req, res) => {
 
     if (template.err) return res.status(500).send(template.err.message)
 
-    if (!user && (template.login || template.admin)) return login(req, res, 'Route requires login')
+    if (!user && (template.login || template.admin)) return login(req, res, 'login_required')
 
-    if (user && (!user.admin && template.admin)) return login(req, res, 'Route requires admin priviliges')
+    if (user && (!user.admin && template.admin)) return login(req, res, 'admin_required')
 
     req.params.template = template
   }

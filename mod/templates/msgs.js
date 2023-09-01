@@ -1,4 +1,10 @@
 module.exports = {
+	login_required: {
+		en: `Login required.`
+	},
+	admin_required: {
+		en: `Admin priviliges required.`
+	},
 	token_not_found: {
 		en: `Token not found. The token has probably been resolved already.`,
 		fr: `Token n’a pas été trouvé. Il a probablement déjà été utilisé.`,
@@ -26,10 +32,10 @@ module.exports = {
 		ja: `新規アカウントの登録完了にてE-メール検証待ち`,
 		ko: `새로운 계정이 등록되었고 이메일 확인을 기다리고 있습니다.`,
 		zh: `已注册一个新帐户，正在等待电子邮件验证。`
-  },
-  no_cookie_found: {
-    en: `No cookie relating to this application found on request`
-  },
+	},
+	no_cookie_found: {
+		en: `No cookie relating to this application found on request`
+	},
 	update_ok: {
 		en: `Update successful`,
 		fr: `Cette mise à jour a réussi.`,
@@ -53,15 +59,15 @@ module.exports = {
 		ja: `パスワードがリセットされました`,
 		ko: `비밀번호가 재설정되었습니다.`,
 		zh: `密码已重设`
-  },
-  auth_failed: {
-    en: `Authentication failed.`,
-    de: `Anmeldung gescheitert.`
 	},
-  user_locked: {
-    en: `User account has been locked due to failed login attempts.`,
-    de: `Benutzerkonto gesperrt.`
-  },
+	auth_failed: {
+		en: `Authentication failed.`,
+		de: `Anmeldung gescheitert.`
+	},
+	user_locked: {
+		en: `User account has been locked due to failed login attempts.`,
+		de: `Benutzerkonto gesperrt.`
+	},
 	user_blocked: {
 		en: `User blocked`,
 		fr: `Cet utilisateur est bloqué.`,
