@@ -111,6 +111,9 @@ module.exports = async (req, res) => {
       .then(async arr => res.send(await templates('account_await_approval', user.language)))
       .catch(error => console.error(error))
 
+  } else {
+
+    res.send('The account has been verified but there is no administrator to approve the account.')
   }
 
 }
