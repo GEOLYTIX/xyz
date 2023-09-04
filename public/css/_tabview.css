@@ -18,19 +18,19 @@
     opacity: 0.7;
   }
  
-  > .tabs {
+  & > .tabs {
     width: 100%;
     height: 50px;
     overflow-x: auto;
     display: flex;
-    background-color: $light;
+    background-color: var(--color-light);
 
-    > .tab > .header {
+    & > .tab > .header {
       height: 100%;
       display: flex;
       align-items: center;
       white-space: nowrap;
-      border-right: 1px solid $primary-light;
+      border-right: 1px solid var(--color-primary-light);
       padding: 10px;
       -webkit-user-select: none;
       -moz-user-select: none;
@@ -38,37 +38,37 @@
       user-select: none;
     }
 
-    > .tab.active > .header {
+    & > .tab.active > .header {
       background-color: white;
       font-weight: bold;
     }
     
-    > .tab:not(.active) > .header:hover {
+    & > .tab:not(.active) > .header:hover {
       cursor: pointer;
     }
   }
 
-  > .panel {
+  & > .panel {
     position: relative;
 
-    >.flex-col {
+    & >.flex-col {
       position: absolute;
       width: 100%;
       height: 100%;
     }
 
-    .dataview-target {
+    & .dataview-target {
       width: 100%;
       height: 100%;
       overflow-y: auto;
     }
     
-    >.dataview-target {
+    & >.dataview-target {
       position: absolute;
     }
   }
 
-  .dropdown > ul {
+  & .dropdown > ul {
     position: fixed;
   }
 }

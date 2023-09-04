@@ -1,4 +1,4 @@
-@import 'colours';
+@import url('./_colours.css');
 
 *,
 *::after,
@@ -31,7 +31,7 @@ body {
 
 .box-shadow {
   border: 1px solid #eee;
-  box-shadow: 2px 2px 4px $primary-light;
+  box-shadow: 2px 2px 4px var(--color-primary-light);
 }
 
 .ol-scale-line {
@@ -62,8 +62,8 @@ body {
   top: 0.5em;
   left: 0.5em;
 
-  .ol-zoom-in,
-  .ol-zoom-out {
+  & .ol-zoom-in,
+  & .ol-zoom-out {
     border-radius: 2px 2px 0 0;
   }
 }
@@ -74,7 +74,7 @@ body {
   border-radius: 4px;
   padding: 2px;
 
-  button {
+  & button {
     display: block;
     margin: 1px;
     padding: 0;
@@ -125,15 +125,15 @@ body {
     margin-left: -10px;
   }
 
-  li{
+  & li{
     padding: 5px 10px;
     white-space: nowrap;
     line-height: 1.5;
     list-style-type: none;
   }
 
-  li:hover {
-    background-color: $light;
+  & li:hover {
+    background-color: var(--color-light);
     cursor: pointer;
   }
 }
@@ -147,39 +147,39 @@ a > img {
   text-align: right;
   font-size: 95%;
   
-  a {
+  & a {
     pointer-events: auto;
     margin-left: 5px;
     display: inline-block;
     white-space: nowrap;
     line-height: 1;
     background: #fff9;
-    border-bottom: 2px solid $primary-light;
+    border-bottom: 2px solid var(--color-primary-light);
   }
 }
 
 .legend {
 
-  .contents-wrapper,
-  .content .contents-wrapper {
+  & .contents-wrapper,
+  & .content .contents-wrapper {
     margin-top: 0.5em;
     gap: 0.5em;
 
-    >.contents {
+    & >.contents {
       display: contents;
     }
 
-    .label {
+    & .label {
       grid-column: 2;
     }
 
-    &.flex {
+    & .flex {
       display: flex;
       flex-wrap: wrap;
       flex-grow: 1;
       justify-content: start;
 
-      .contents {
+      & .contents {
         display: block;
         flex-basis: 30%;
         flex-shrink: 1;
@@ -211,10 +211,10 @@ a > img {
       &.nowrap {
         flex-wrap: nowrap;
 
-        .contents {
+        & .contents {
           justify-content: flex-start;
 
-          .label {
+          & .label {
             text-align: center;
           }
         }
@@ -229,12 +229,12 @@ a > img {
     }
   }
 
-  .switch {
+  & .switch {
     cursor: pointer;
   }
 
-  .switch.disabled {
-    // text-decoration: line-through;
+  & .switch.disabled {
+    /* text-decoration: line-through; */
     opacity: 0.5;
   }
 }
