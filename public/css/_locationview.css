@@ -30,6 +30,7 @@
     &.inline > .val {
       grid-column: 2;
       text-align: right;
+      word-break: break-word;
     }
   }
 

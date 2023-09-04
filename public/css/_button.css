@@ -8,7 +8,7 @@ button {
 
   &.mask-icon,
   & >.mask-icon {
-    background-color: --primary
+    background-color: var(--color-primary)
   }
 
   &.mask-icon.active,

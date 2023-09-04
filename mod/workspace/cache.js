@@ -2,7 +2,7 @@ const file = require('../provider/file')
 
 const cloudfront = require('../provider/cloudfront')
 
-//const mongodb = require('../provider/mongodb')
+const mongodb = require('../provider/mongodb')
 
 const http = require('./httpsAgent')
 
@@ -10,7 +10,7 @@ const getFrom = {
   'https': ref => http(ref),
   'file': ref => file(ref.split(/:(.*)/s)[1]),
   'cloudfront': ref => cloudfront(ref.split(/:(.*)/s)[1]),
-  //'mongodb': ref => mongodb(JSON.parse(ref.split(/:(.*)/s)[1]))
+  'mongodb': ref => mongodb(ref.split(/:(.*)/s)[1])
 }
 
 const assignTemplates = require('./assignTemplates')
@@ -61,7 +61,7 @@ async function cache() {
 
   if (workspace.plugins) {
 
-    console.warn(`Defult plugins should be defined in the default workspace.locale{}`)
+    console.warn(`Default plugins should be defined in the default workspace.locale{}`)
   }
 
   // Substitute all SRC_* variables in locales.
