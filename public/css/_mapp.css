@@ -161,19 +161,19 @@ a > img {
 .legend {
 
   & .contents-wrapper,
-  & .content .contents-wrapper {
+  &.content .contents-wrapper {
     margin-top: 0.5em;
     gap: 0.5em;
 
-    & >.contents {
+    &>.contents {
       display: contents;
     }
 
-    & .label {
+    &.label {
       grid-column: 2;
     }
 
-    & .flex {
+    &.flex {
       display: flex;
       flex-wrap: wrap;
       flex-grow: 1;
@@ -229,11 +229,11 @@ a > img {
     }
   }
 
-  & .switch {
+  &.switch {
     cursor: pointer;
   }
 
-  & .switch.disabled {
+  &.switch.disabled {
     /* text-decoration: line-through; */
     opacity: 0.5;
   }
