@@ -44,7 +44,7 @@ module.exports = async (workspace) => {
       },
       cluster: {
         render: require('../../public/js/queries/cluster'),
-        //reduce: true
+        reduce: true
       },
       wkt: {
         render: require('../../public/js/queries/wkt'),
