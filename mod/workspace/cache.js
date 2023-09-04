@@ -61,7 +61,7 @@ async function cache() {
 
   if (workspace.plugins) {
 
-    console.warn(`Defult plugins should be defined in the default workspace.locale{}`)
+    console.warn(`Default plugins should be defined in the default workspace.locale{}`)
   }
 
   // Substitute all SRC_* variables in locales.
