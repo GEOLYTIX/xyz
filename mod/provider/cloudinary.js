@@ -1,45 +1,80 @@
-const cloudinary_v2 = require('cloudinary').v2
+const { createHash } = require('crypto');
+
+// 1: api_key
+// 2: api_secret
+// 3: cloud_name
+const cloudinary = process.env.CLOUDINARY_URL?.replaceAll('://', ' ').replaceAll(':', ' ').replaceAll('@', ' ').split(' ');
 
 module.exports = async req => {
 
-  req.body = req.body && await bodyData(req) || null
-
-  req.params.folder = req.params.folder || process.env.CLOUDINARY.split(' ')[3]
-
-  if (!process.env.CLOUDINARY_URL) {
-
-    cloudinary_v2.config({
-      api_key: process.env.CLOUDINARY.split(' ')[0],
-      api_secret: process.env.CLOUDINARY.split(' ')[1],
-      cloud_name: process.env.CLOUDINARY.split(' ')[2],
-    })
-
+  if (!cloudinary) {
+    console.warn(`process.env.CLOUDINARY_URL not set`);
+    return;
   }
 
-  if (req.params.destroy) return await cloudinary_v2.uploader.destroy(`${req.params.folder}/${req.params.public_id}`)
+  // Destroy cloudinary resource.
+  if (req.params.destroy) return await destroy(req);
 
-  const ressource = req.params.resource_type === 'raw' && req.body.toString() || `data:image/jpeg;base64,${req.body.toString('base64')}`
+  const data = generateData(req, 'upload');
 
-  return await cloudinary_v2.uploader.upload(ressource,
-    {
-      resource_type: req.params.resource_type,
-      public_id: `${req.params.folder}/${req.params.public_id}`, //${Date.now()}`,
-      overwrite: true
-    })
+  req.body = req.body && await bodyData(req) || null;
 
+  // Convert body to appropriate format
+  const file = req.params.resource_type === 'raw' ? req.body.toString() : `data:image/jpeg;base64,${req.body.toString('base64')}`;
+  data.append('file', file);
+
+  const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudinary[3]}/upload`, {
+    method: 'post',
+    body: data,
+  });
+
+  return await response.json();
+}
+
+async function destroy(req) {
+  const data = generateData(req, 'destroy');
+  const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudinary[3]}/image/destroy`, {
+    method: 'post',
+    body: data,
+  });
+
+  return await response.json();
+}
+
+function generateData(req, action) {
+  // The timestamp is required for the signature which is valid for 1hr.
+  const timestamp = Date.now();
+  let toSign = '';
+
+  // Define signature string based on the action (upload/destroy)
+  if (action === 'upload') {
+    toSign = `folder=${req.params.folder}&public_id=${req.params.public_id}&timestamp=${timestamp}${cloudinary[2]}`;
+  } else if (action === 'destroy') {
+    toSign = `public_id=${req.params.public_id}&timestamp=${timestamp}${cloudinary[2]}`;
+  }
+
+  const signature = createHash('sha256').update(toSign).digest('hex');
+  const data = new FormData();
+
+  data.append('public_id', req.params.public_id);
+  data.append('api_key', cloudinary[1]);
+  data.append('timestamp', timestamp);
+  data.append('signature', signature);
+
+  // Append folder for upload action
+  if (action === 'upload') {
+    data.append('folder', req.params.folder);
+  }
+
+  return data;
 }
 
 function bodyData(req) {
-
   return new Promise((resolve, reject) => {
+    const chunks = [];
 
-    const chunks = []
-
-    req.on('data', chunk => chunks.push(chunk))
-
-    req.on('end', () => resolve(Buffer.concat(chunks)))
-
-    req.on('error', error => reject(error))
-
-  })
+    req.on('data', chunk => chunks.push(chunk));
+    req.on('end', () => resolve(Buffer.concat(chunks)));
+    req.on('error', error => reject(error));
+  });
 }

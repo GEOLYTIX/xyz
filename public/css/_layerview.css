@@ -1,21 +1,19 @@
-@import 'colours';
-
 .drawer.layer-group,
 .drawer.layer-view {
   margin-top: 7px;
   border-radius: 3px;
 
-  >.header {
+  & >.header {
 
-    ~.drawer.layer-view{
+    & ~.drawer.layer-view{
       margin-top: 0
     }
-    ~.drawer.layer-view~.drawer.layer-view{
+    & ~.drawer.layer-view~.drawer.layer-view{
       margin-top: 7px
     }
   }
 
-  >.meta {
+  & >.meta {
     padding-bottom: 5px;
   }
 
@@ -28,7 +26,7 @@
   padding-left: 5px;
   padding-right: 5px;
 
-  >*:not(.header) {
+  & >*:not(.header) {
     margin-top: 5px;
   }
 }
@@ -36,9 +34,9 @@
 .drawer.layer-group {
   padding-left: 3px;
   padding-right: 3px;
-  background: $light;
+  background: var(--color-light);
 
-  >* {
+  & >* {
     padding-left: 4px;
     padding-right: 4px;
   }

@@ -1,4 +1,4 @@
-@import 'colours';
+
 
 .disabled >  .drawer {
   opacity: 0.4;
@@ -36,32 +36,32 @@
     pointer-events: none;
   }
 
-  >.header {
+  & >.header {
     display: flex;
     align-items: center;
 
-    >:not(button):not(label):not(input) {
+    & >:not(button):not(label):not(input) {
       pointer-events: none;
     }
 
-    >div,
-    >button {
+    & >div,
+    & >button {
       margin-left: 5px;
       width: 1.5em;
       height: 1.5em;
     }
 
-    >:nth-child(1) {
+    & >:nth-child(1) {
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
     }
 
-    >:nth-child(2) {
+    & >:nth-child(2) {
       margin-left: auto;
     }
 
-    >.mask-icon {
+    & >.mask-icon {
       mask-position: right;
       -webkit-mask-position: right;
     }
@@ -70,13 +70,13 @@
 
   &.flat {
     border-radius: 2px;
-    border: 1px solid $lighter;
+    border: 1px solid var(--color-lighter);
   }
 
   &.raised {
     border-radius: 2px;
-    box-shadow: 1px 1px 3px $primary-light;
-    border: 1px solid $lighter;
+    box-shadow: 1px 1px 3px var(--color-primary-light);
+    border: 1px solid var(--color-lighter);
   }
 
   &.raised.empty {

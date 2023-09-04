@@ -1,38 +1,20 @@
-@import 'colours';
+@import url('./_colours.css');
 
-@import 'button';
+@import url('./_button.css');
 
-@import 'drawer';
+@import url('./_drawer.css');
 
-@import 'font';
+@import url('./_font.css');
 
-@import 'icons';
+@import url('./_icons.css');
 
-@import 'inputs';
+@import url('./_inputs.css');
 
-@import 'layerview';
+@import url('./_layerview.css');
 
-@import 'locationview';
+@import url('./_locationview.css');
 
-@import 'tabview';
-
-// @import 'tabulator';
-
-:root {
-  --color-primary: #{$primary};
-
-  --color-primary-light: #{$primary-light};
-
-  --color-off-black: #{$off-black};
-
-  --color-light: #{$light};
-
-  --color-lighter: #{$lighter};
-
-  --color-on: #{$on};
-
-  --color-no: #{$no};
-}
+@import url('./_tabview.css');
 
 .no-select {
   -webkit-touch-callout: none;
@@ -45,21 +27,21 @@
 .flex-spacer {
   display: flex;
   align-items: center;
-  > :nth-child(2) {
+  & > :nth-child(2) {
     margin-left: auto;
   }
 }
 
 .link-with-img {
 
-  >button,
-  >.mask-icon,
-  >.bg-icon {
+  & >button,
+  & >.mask-icon,
+  & >.bg-icon {
     width: 1.5em;
     height: 1.5em;
   }
 
-  >* {
+  & >* {
     display: inline-block;
     vertical-align: middle;
   }
@@ -80,7 +62,7 @@
   z-index: 999999;
   background-color: #eeea;
 
-  > .bg-image{
+  & > .bg-image{
     margin: 5%;
     height: 90%;
     width: 90%;
@@ -88,13 +70,13 @@
     background-size: contain;
     background-position: center;
 
-    > .btn-close{
+    & > .btn-close{
       position: absolute;
       top: 5%;
       right: 5%;
       width: 50px;
       height: 50px;
-      background-color: $no;
+      background-color: var(--color-no);
     }
   }
 }
@@ -110,78 +92,77 @@
   padding: 10px;
   z-index: 10001;
   background-color: #fff;
-  box-shadow: 1px 1px 3px $primary-light;
+  box-shadow: 1px 1px 3px var(--color-primary-light);
   cursor: 'grab';
 
-  >.header {
+  & >.header {
     display: flex;
     align-items: center;
 
-    >:not(button):not(label):not(input) {
+    & >:not(button):not(label):not(input) {
       pointer-events: none;
     }
 
-    >div,
-    >button {
+    & >div,
+    & >button {
       margin-left: 5px;
       width: 1.5em;
       height: 1.5em;
     }
 
-    >:nth-child(1) {
+    & >:nth-child(1) {
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
     }
 
-    >:nth-child(2) {
+    & >:nth-child(2) {
       margin-left: auto;
     }
   }
 
 }
 
-// Colour classes
 .mask-icon {
-  background-color: $primary-light;
+  background-color: var(--color-primary-light);
   &.on {
-    background-color: $on;
+    background-color: var(--color-on);
   }
   &.no {
-    background-color: $no;
+    background-color: var(--color-no);
   }
 }
 
 .primary-colour {
-  color: $primary;
+  color: var(--color-primary);
 }
 
 .primary-background {
   color: white;
-  background-color: $primary;
+  background-color: var(--color-primary);
 }
 
 .light-background {
-  background-color: $light;
+  background-color: var(--color-light);
 }
 
 .lighter-background {
-  background-color: $lighter;
+  background-color: var(--color-lighter);
 }
 
 .off-black {
-  color: $off-black;
+  color: var(--color-off-black);
 }
 
 .off-black-background {
   color: white;
-  background-color: $off-black;
+  background-color: var(--color-off-black);
 }
 
 .on-colour {
-  color: $on;
+  color: var(--color-on);
 }
 
 .no-colour {
-  color: $no;
+  color: var(--color-no);
 }
