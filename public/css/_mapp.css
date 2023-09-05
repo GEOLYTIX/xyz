@@ -229,11 +229,11 @@ a > img {
     }
   }
 
-  &.switch {
+  & .switch {
     cursor: pointer;
   }
 
-  &.switch.disabled {
+  & .switch.disabled {
     /* text-decoration: line-through; */
     opacity: 0.5;
   }
