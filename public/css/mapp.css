@@ -205,10 +205,10 @@ a > img {
       justify-content: start;
     }
   }
-  &.switch {
+  & .switch {
     cursor: pointer;
   }
-  &.switch.disabled {
+  & .switch.disabled {
     opacity: 0.5;
   }
 }
