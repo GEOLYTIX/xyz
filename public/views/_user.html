@@ -425,6 +425,11 @@
     };
 
     function rolesEdited(e) {
+
+      if (JSON.stringify(e._cell.value) === JSON.stringify(e._cell.oldValue)) return;
+
+      //if (e._cell.value.every((val, i) => val === e._cell.oldValue[i])) return;
+
       xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${e._cell.row.data.email}&field=roles&value=${e._cell.value}`)
     }
   }

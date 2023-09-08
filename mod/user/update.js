@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
   const email = req.params.email.replace(/\s+/g, '')
 
   if (req.params.field === 'roles') {
-    req.params.value = req.params.value.split(',')
+    req.params.value = req.params.value?.split(',') || []
   }
 
   // Get user to update from ACL.
