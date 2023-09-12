@@ -20,11 +20,23 @@ To install the Node.js dependencies run
 
 Please check the full list of dependencies as defined in the [package.json](https://github.com/GEOLYTIX/xyz/blob/main/package.json)
 
-## Building the MAPP library
+## ESBuild
 
 The MAPP and MAPP.UI library must be build with [esbuild](https://esbuild.github.io/) prior to launching the host.
 
+    $ npx esbuild ./lib/mapp.mjs ./lib/ui.mjs --bundle --minify --tree-shaking=false --sourcemap --format=iife --outdir=./public/js/lib
+
+The build command is stored in the package.json as `_build` script.
+
     $ npm run _build
+
+ESBuild must also be used to compile the CSS supporting the MAPP and MAPP.UI elements.
+
+    $ npx esbuild --bundle public/css/_mapp.css --outfile=public/css/mapp.css
+
+    $ npx esbuild --bundle public/css/_ui.css --outfile=public/css/ui.css --loader:.svg=dataurl
+
+## Express
 
 [Express.js](https://expressjs.com/) will be installed by npm as a development dependency. You can run a zero config instance by loading the express.js script in your node runtime.
 
