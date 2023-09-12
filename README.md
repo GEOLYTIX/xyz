@@ -41,8 +41,6 @@ Node.js v18+
 
 [bcryptjs](https://www.npmjs.com/package/bcryptjs) - Optimized bcrypt in JavaScript with zero dependencies.
 
-[cloudinary](https://www.npmjs.com/package/cloudinary) - Provides simple, yet comprehensive image and video upload, transformation, optimization, and delivery capabilities.
-
 [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) - A Node implementation of JSON Web Token.
 
 [nanoid](https://www.npmjs.com/package/nanoid) - A tiny, secure, URL-friendly, unique string ID generator for JavaScript.
@@ -66,8 +64,6 @@ Following development dependencies are required to build the library and run a l
 [esbuild](https://www.npmjs.com/package/esbuild) - A JavaScript bundler and minifier.
 
 [µhtml](https://github.com/WebReflection/uhtml) - A micro HTML/SVG render which is bundled as utils into the MAPP library.
-
-[SASS](https://www.npmjs.com/package/sass) - A pure JavaScript implementation of Sass.
 
 [eslint](https://www.npmjs.com/package/eslint) - A tool for identifying and reporting on patterns found in ECMAScript/JavaScript code.
 
