@@ -10,7 +10,7 @@
   },
   "scripts": {
     "test": "jest",
-    "_build": "npx esbuild ./lib/mapp.mjs ./lib/ui.mjs --bundle --minify --tree-shaking=false --sourcemap --format=iife --outdir=./public/js/lib",
+    "_build": "bun build ./lib/mapp.mjs ./lib/ui.mjs --minify --sourcemap=external --target=browser --outdir=./public/js/lib",
     "version": "node version.js"
   },
   "license": "MIT",
