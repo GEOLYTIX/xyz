@@ -93,34 +93,39 @@
   z-index: 10001;
   background-color: #fff;
   box-shadow: 1px 1px 3px var(--color-primary-light);
-  cursor: 'grab';
+  cursor: grab;
 
-  & >.header {
+  & > .header {
     display: flex;
     align-items: center;
+    user-select: none;
 
-    & >:not(button):not(label):not(input) {
+    & > :not(button):not(label):not(input) {
       pointer-events: none;
     }
 
-    & >div,
-    & >button {
+    & > div,
+    & > button {
       margin-left: 5px;
       width: 1.5em;
       height: 1.5em;
     }
 
-    & >:nth-child(1) {
+    & > :nth-child(1) {
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
     }
 
-    & >:nth-child(2) {
+    & > :nth-child(2) {
       margin-left: auto;
     }
-  }
 
+    & > input, 
+    & > label {
+      user-select: text;
+    }
+  }
 }
 
 .mask-icon {
