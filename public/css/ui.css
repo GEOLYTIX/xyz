@@ -1445,6 +1445,9 @@ label.checkbox {
   box-shadow: 1px 1px 3px var(--color-primary-light);
   cursor: grab;
   user-select: none;
+  &.dragging {
+    opacity: 0.01;
+  }
   & > .header {
     display: flex;
     align-items: center;
