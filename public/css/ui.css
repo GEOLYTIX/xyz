@@ -1444,10 +1444,10 @@ label.checkbox {
   background-color: #fff;
   box-shadow: 1px 1px 3px var(--color-primary-light);
   cursor: grab;
+  user-select: none;
   & > .header {
     display: flex;
     align-items: center;
-    user-select: none;
     & > :not(button):not(label):not(input) {
       pointer-events: none;
     }
@@ -1465,8 +1465,7 @@ label.checkbox {
     & > :nth-child(2) {
       margin-left: auto;
     }
-    & > input,
-    & > label {
+    & > input {
       user-select: text;
     }
   }
