@@ -96,10 +96,6 @@
   cursor: grab;
   user-select: none;
 
-  &.dragging {
-    opacity: 0.01;
-  }
-
   & > .header {
     display: flex;
     align-items: center;
