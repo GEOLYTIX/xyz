@@ -1443,7 +1443,8 @@ label.checkbox {
   z-index: 10001;
   background-color: #fff;
   box-shadow: 1px 1px 3px var(--color-primary-light);
-  cursor: "grab";
+  cursor: grab;
+  user-select: none;
   & > .header {
     display: flex;
     align-items: center;
@@ -1463,6 +1464,9 @@ label.checkbox {
     }
     & > :nth-child(2) {
       margin-left: auto;
+    }
+    & > input {
+      user-select: text;
     }
   }
 }
