@@ -235,6 +235,16 @@
   }
 }
 
+.edit {
+  &.bg-icon {
+    background-image: url("../icons/icon-edit.svg");
+  }
+  &.mask-icon {
+    -webkit-mask-image: url("../icons/icon-edit.svg");
+    mask-image: url("../icons/icon-edit.svg");
+  }
+}
+
 .event-note {
   &.bg-icon {
     background-image: url("../icons/icon-event-note.svg");
@@ -482,6 +492,16 @@
   &.mask-icon {
     -webkit-mask-image: url("../icons/icon-room.svg");
     mask-image: url("../icons/icon-room.svg");
+  }
+}
+
+.save {
+  &.bg-icon {
+    background-image: url("../icons/icon-save.svg");
+  }
+  &.mask-icon {
+    -webkit-mask-image: url("../icons/icon-save.svg");
+    mask-image: url("../icons/icon-save.svg");
   }
 }
 
