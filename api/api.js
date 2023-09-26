@@ -93,7 +93,7 @@ module.exports = async (req, res) => {
     }
 
     // Check whether param begins and ends with square braces.
-    if (req.params[key].match(/^\[.*\]$/)) {
+    if (typeof req.params[key] === 'string' && req.params[key].match(/^\[.*\]$/)) {
 
       // Slice square brackets of string and split on comma.
       req.params[key] = req.params[key].slice(1, -1).split(',')
