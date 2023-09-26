@@ -122,7 +122,7 @@ async function post(req, res) {
   if (!user.admin && process.env.APPROVAL_EXPIRY) {
 
     // User account has expired.
-    if (user.expires_on < new Date()/1000) {
+    if (user.expires_on !== null && user.expires_on < new Date()/1000) {
 
       // Remove user approval.
       if (user.approved) {

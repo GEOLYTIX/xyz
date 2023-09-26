@@ -66,9 +66,6 @@ module.exports = async (workspace) => {
         admin: true,
         render: require('../../public/js/queries/mvt_cache'),
       },
-      set_field_array: {
-        template: require('../../public/js/queries/set_field_array'),
-      },
 
       // Default templates can be overridden by assigning a template with the same name.
     },

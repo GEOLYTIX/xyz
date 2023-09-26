@@ -80,6 +80,7 @@ async function post(req, res) {
 
   const user = rows[0]
 
+  // Setting the password to NULL will disable access to the account and prevent resetting the password.
   if (user?.password === null) {
 
     return res.status(401).send('User account has restricted access')

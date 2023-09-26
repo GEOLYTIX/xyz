@@ -325,9 +325,12 @@ window.onload = async () => {
   await mapp.utils.loadPlugins(locale.plugins);
 
   // Execute plugins with matching keys in locale.
-  Object.keys(locale).forEach((key) => {
-    mapp.plugins[key] && mapp.plugins[key](locale[key], mapview);
+  const plugins = Object.keys(locale).map((key) => {
+    return mapp.plugins[key] && mapp.plugins[key](locale[key], mapview);
   });
+
+  // Ensure that all plugin promises are resolved
+  await Promise.all(plugins)
 
   // Load JSON layers from Workspace API.
   const layers = locale.layers.length ? await mapp.utils.promiseAll(locale.layers.map(

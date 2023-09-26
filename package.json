@@ -1,6 +1,6 @@
 {
   "name": "xyz",
-  "version": "v4.6.0",
+  "version": "v4.7.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/geolytix/xyz"
@@ -35,7 +35,6 @@
     "eslint-plugin-promise": "^6.1.1",
     "express": "^4.17.1",
     "jest": "^29.5.0",
-    "sass": "^1.66.1",
     "uhtml": "^3.1.0"
   }
 }
