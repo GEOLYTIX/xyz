@@ -2,6 +2,9 @@ module.exports = _ => {
 
     const layer = _.workspace.locales[_.locale].layers[_.layer]
 
+    _.qID ??= layer.qID || null
+    _.geom ??= layer.geom
+
     // Get fields array from query params.
     const fields = _.fields?.split(',')
         .map(field => `${_.workspace.templates[field]?.template || field} as ${field}`)
@@ -9,7 +12,7 @@ module.exports = _ => {
     const aggFields = _.fields?.split(',')
         .map(field => `CASE WHEN count(*)::int = 1 THEN (array_agg(${field}))[1] END as ${field}`)
 
-    const where = _.viewport || `AND ${_.geom || layer.geom} IS NOT NULL`
+    const where = _.viewport || `AND ${_.geom} IS NOT NULL`
 
       // Calculate grid resolution (r) based on zoom level and resolution parameter.
     const r = parseInt(40075016.68 / Math.pow(2, _.z) * _.resolution);
@@ -20,19 +23,19 @@ module.exports = _ => {
     SELECT
       ARRAY[x_round, y_round],
       count(*)::int,
-      CASE 
+      CASE
         WHEN count(*)::int = 1 THEN (array_agg(id))[1]::varchar
         ELSE CONCAT('!',(array_agg(id))[1]::varchar)
-      END AS id
+        END AS id
       
       ${_.fields ? ',' + aggFields.join() : ''}
 
     FROM (
       SELECT
-        ${layer.qID || null} as id,
+        ${_.qID} as id,
         ${_.fields ? fields.join() + ',' : ''}
-        round(ST_X(${_.geom || layer.geom}) / ${r}) * ${r} x_round,
-        round(ST_Y(${_.geom || layer.geom}) / ${r}) * ${r} y_round
+        round(ST_X(${_.geom}) / ${r}) * ${r} x_round,
+        round(ST_Y(${_.geom}) / ${r}) * ${r} y_round
       FROM ${_.table}
       WHERE TRUE ${where} \${filter}) grid
 
