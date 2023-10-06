@@ -276,8 +276,8 @@ window.onload = async () => {
 
         // If active cancel zoom and enable highlight interaction.
         if (e.target.classList.contains('active')) {
-          
-          e.target.classList.remove('active')
+
+          // Will remove the 'active' class in callback of zoom interaction.
           mapview.interactions.highlight()
           return;
         }
@@ -291,7 +291,13 @@ window.onload = async () => {
           // The interaction callback is executed on cancel or finish.
           callback: () => {
             e.target.classList.remove('active');
-          },
+            delete mapview.interaction
+
+            // Set highlight interaction if no other interaction is current after 400ms.
+            setTimeout(() => {
+              !mapview.interaction && mapview.interactions.highlight()
+            }, 400)
+          }
         })
 
       }}>

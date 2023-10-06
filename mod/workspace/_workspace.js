@@ -71,8 +71,17 @@ function getLocale(req, res) {
     return res.status(400).send(`Unable to validate locale param.`)
   }
 
-  const locale = clone(req.params.workspace.locales?.[req.params.locale] || req.params.workspace.locale || {})
+  let locale = {};
 
+  if (Object.hasOwn(req.params.workspace.locales, req.params.locale)) {
+
+    locale = clone(req.params.workspace.locales?.[req.params.locale])
+
+  } else if (typeof req.params.workspace.locale === 'object') {
+
+    locale = clone(req.params.workspace.locale)
+  }
+  
   const roles = req.params.user?.roles || []
 
   if (!Roles.check(locale, roles)) {

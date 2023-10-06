@@ -205,6 +205,16 @@
   }
 }
 
+.done {
+  &.bg-icon {
+    background-image: url("../icons/icon-done.svg");
+  }
+  &.mask-icon {
+    -webkit-mask-image: url("../icons/icon-done.svg");
+    mask-image: url("../icons/icon-done.svg");
+  }
+}
+
 .donut-small {
   &.bg-icon {
     background-image: url("../icons/icon-donut-small.svg");
@@ -232,6 +242,16 @@
   &.mask-icon {
     -webkit-mask-image: url("../icons/icon-drop-up.svg");
     mask-image: url("../icons/icon-drop-up.svg");
+  }
+}
+
+.edit {
+  &.bg-icon {
+    background-image: url("../icons/icon-edit.svg");
+  }
+  &.mask-icon {
+    -webkit-mask-image: url("../icons/icon-edit.svg");
+    mask-image: url("../icons/icon-edit.svg");
   }
 }
 
@@ -482,6 +502,16 @@
   &.mask-icon {
     -webkit-mask-image: url("../icons/icon-room.svg");
     mask-image: url("../icons/icon-room.svg");
+  }
+}
+
+.save {
+  &.bg-icon {
+    background-image: url("../icons/icon-save.svg");
+  }
+  &.mask-icon {
+    -webkit-mask-image: url("../icons/icon-save.svg");
+    mask-image: url("../icons/icon-save.svg");
   }
 }
 
