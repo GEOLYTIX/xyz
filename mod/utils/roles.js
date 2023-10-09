@@ -9,6 +9,9 @@ function check(obj, user_roles) {
   // The object to check has no roles assigned.
   if (!obj.roles) return obj;
 
+  // Always return object with '*' asterisk role.
+  if (Object.hasOwn(obj.roles,'*')) return obj;
+
   // There are no user roles or user_roles are not an array.
   if (!user_roles || !Array.isArray(user_roles)) return false;
 
@@ -86,6 +89,9 @@ function get(obj) {
     });
 
   })(obj)
+
+  // Delete restricted Asterisk role.
+  roles.delete('*')
 
   return Array.from(roles)
 }
