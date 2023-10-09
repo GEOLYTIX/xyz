@@ -1,6 +1,8 @@
 module.exports = _ => {
 
   const layer = _.workspace.locales[_.locale].layers[_.layer]
+
+  if (!layer.mvt_cache) return;
   
   return `
     

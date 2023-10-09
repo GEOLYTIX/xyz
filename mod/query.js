@@ -95,6 +95,11 @@ module.exports = async (req, res) => {
   try {
     template.template = template.render && template.render(req.params) || template.template
 
+    if (!template.template) {
+
+      return res.status(400).send('Unable to parse template string.')
+    }
+
     query = template.template
 
       // Replace parameter for identifiers, e.g. table, schema, columns

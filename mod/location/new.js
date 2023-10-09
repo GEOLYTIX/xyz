@@ -45,17 +45,6 @@ module.exports = async (req, res) => {
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
-  // Cached tiles which intersect the geometry must be retired.
-  if (layer.mvt_cache) await dbs[layer.dbs || req.params.workspace.dbs](`
-    DELETE 
-    FROM ${layer.mvt_cache}
-    WHERE ST_Intersects(tile, (
-      SELECT ${layer.geom}
-      FROM ${req.params.table}
-      WHERE ${layer.qID} = $1
-    ));`, [rows[0].id])
-
   // Return id of newly created location.
   res.send(Array.isArray(rows) && rows[0].id?.toString() || null)
-
 }

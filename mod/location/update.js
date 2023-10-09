@@ -47,28 +47,11 @@ module.exports = async (req, res) => {
   // Validate dynamic method call.
   if (!Object.hasOwn(dbs, layer.dbs || req.params.workspace.dbs) || typeof dbs[layer.dbs || req.params.workspace.dbs] !== 'function') return;    
 
-  // Remove tiles from mvt_cache.
-  if (layer.mvt_cache) await dbs[layer.dbs || req.params.workspace.dbs](`
-    DELETE FROM ${layer.mvt_cache}
-    WHERE ST_Intersects(tile, (
-      SELECT ${layer.geom}
-      FROM ${req.params.table}
-      WHERE ${layer.qID} = $1));`, [req.params.id])
- 
   var q = `UPDATE ${req.params.table} SET ${fields.join()} WHERE ${layer.qID} = $1;`
 
   var rows = await dbs[layer.dbs || req.params.workspace.dbs](q, [req.params.id])
 
   if (rows instanceof Error) return res.status(500).send('PostgreSQL query error - please check backend logs.')
 
-  // Remove tiles from mvt_cache.
-  if (layer.mvt_cache) await dbs[layer.dbs || req.params.workspace.dbs](`
-    DELETE FROM ${layer.mvt_cache}
-    WHERE ST_Intersects(tile, (
-      SELECT ${layer.geom}
-      FROM ${req.params.table}
-      WHERE ${layer.qID} = $1));`, [req.params.id])
-
   res.send('This is fine.')
-
 }
