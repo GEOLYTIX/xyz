@@ -1,4 +1,4 @@
 module.exports = `
-  SELECT count(1)
+  SELECT count(*)
   FROM \${table}
   WHERE true \${filter};`

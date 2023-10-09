@@ -42,6 +42,14 @@ module.exports = async (workspace) => {
       geojson: {
         render: require('../../public/js/queries/geojson'),
       },
+      cluster: {
+        render: require('../../public/js/queries/cluster'),
+        reduce: true
+      },
+      cluster_hex: {
+        render: require('../../public/js/queries/cluster_hex'),
+        reduce: true
+      },
       wkt: {
         render: require('../../public/js/queries/wkt'),
         reduce: true
