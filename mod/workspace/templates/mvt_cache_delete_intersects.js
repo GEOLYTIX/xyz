@@ -4,4 +4,4 @@ DELETE
     WHERE ST_Intersects(tile, (
       SELECT \${geom}
       FROM \${table}
-      WHERE \${qID} = \%{id}));`
+      WHERE \${qID} = %{id}));`
