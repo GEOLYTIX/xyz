@@ -52,12 +52,11 @@ module.exports = async (req, res) => {
         ? `AND ${sqlFilter(Object.values(roles).filter(r => !!r), SQLparams)}`
         : ''}`
 
-    // Assign viewport params filter string.
-    const viewport = req.params.viewport && req.params.viewport.split(',')
+    // Split viewport param.
+    const viewport = req.params.viewport?.split(',')
 
-    req.params.geom = req.params.geom || layer.geom
-
-    req.params.viewport = viewport && `
+    // Assign viewport SQL
+    req.params.viewport &&= `
       AND
         ST_Intersects(
           ST_Transform(
@@ -69,8 +68,8 @@ module.exports = async (req, res) => {
               ${parseInt(viewport[4])}
             ),
             ${req.params.srid || layer.srid}),
-          ${req.params.geom}
-        )` || ''
+          ${req.params.geom || layer.geom}
+        )`
 
     req.params.qID = req.params.qID || layer.qID || 'NULL'
 

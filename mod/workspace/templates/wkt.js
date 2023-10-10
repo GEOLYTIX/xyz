@@ -7,6 +7,9 @@ module.exports = _ => {
         .map(field => _.workspace.templates[field]?.template || field)
         .filter(field => !!field)
 
+    // Push label (cluster) into fields
+    _.label && fields.push(_.workspace.templates[_.label]?.template || _.label)
+
     const where = _.viewport || `AND ${_.geom || layer.geom} IS NOT NULL`
 
     return `

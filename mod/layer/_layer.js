@@ -1,5 +1,4 @@
 const formats = {
-  cluster: require('./cluster'),
   mvt: require('./mvt')
 }
 
