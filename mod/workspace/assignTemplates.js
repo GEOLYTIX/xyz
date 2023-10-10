@@ -21,6 +21,9 @@ module.exports = async (workspace) => {
       gaz_query: {
         template: require('./templates/gaz_query'),
       },
+      get_last_location: {
+        template: require('./templates/get_last_location'),
+      },
       distinct_values: {
         template: require('./templates/distinct_values'),
       },
