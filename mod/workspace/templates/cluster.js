@@ -12,7 +12,7 @@ module.exports = _ => {
     const aggFields = _.fields?.split(',')
         .map(field => `CASE WHEN count(*)::int = 1 THEN (array_agg(${field}))[1] END as ${field}`)
 
-    const where = _.viewport || `AND ${_.geom} IS NOT NULL`
+    const where = _.viewport || `AND ${_.geom} IS NOT NULL` 
 
       // Calculate grid resolution (r) based on zoom level and resolution parameter.
     const r = parseInt(40075016.68 / Math.pow(2, _.z) * _.resolution);

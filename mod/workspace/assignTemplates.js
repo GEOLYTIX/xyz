@@ -18,57 +18,51 @@ module.exports = async (workspace) => {
   workspace.templates = Object.assign(
     {
       // Query templates:
-      count_locations: {
-        template: require('../../public/js/queries/count_locations'),
-      },
       gaz_query: {
-        template: require('../../public/js/queries/gaz_query'),
+        template: require('./templates/gaz_query'),
+      },
+      get_last_location: {
+        template: require('./templates/get_last_location'),
       },
       distinct_values: {
-        template: require('../../public/js/queries/distinct_values'),
+        template: require('./templates/distinct_values'),
       },
       field_stats: {
-        template: require('../../public/js/queries/field_stats'),
+        template: require('./templates/field_stats'),
       },
       field_min: {
-        template: require('../../public/js/queries/field_min'),
+        template: require('./templates/field_min'),
       },
       field_max: {
-        template: require('../../public/js/queries/field_max'),
+        template: require('./templates/field_max'),
       },
       get_nnearest: {
-        render: require('../../public/js/queries/get_nnearest'),
+        render: require('./templates/get_nnearest'),
       },
       geojson: {
-        render: require('../../public/js/queries/geojson'),
+        render: require('./templates/geojson'),
       },
       cluster: {
-        render: require('../../public/js/queries/cluster'),
+        render: require('./templates/cluster'),
         reduce: true
       },
       cluster_hex: {
-        render: require('../../public/js/queries/cluster_hex'),
+        render: require('./templates/cluster_hex'),
         reduce: true
       },
       wkt: {
-        render: require('../../public/js/queries/wkt'),
+        render: require('./templates/wkt'),
         reduce: true
       },
       infotip: {
-        render: require('../../public/js/queries/infotip'),
-      },
-      labels: {
-        render: require('../../public/js/queries/labels'),
+        render: require('./templates/infotip'),
       },
       layer_extent: {
-        template: require('../../public/js/queries/layer_extent'),
-      },
-      get_last_location: {
-        render: require('../../public/js/queries/get_last_location'),
+        template: require('./templates/layer_extent'),
       },
       mvt_cache: {
         admin: true,
-        render: require('../../public/js/queries/mvt_cache'),
+        render: require('./templates/mvt_cache'),
       },
 
       // Default templates can be overridden by assigning a template with the same name.
