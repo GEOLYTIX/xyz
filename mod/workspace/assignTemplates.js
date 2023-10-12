@@ -64,6 +64,9 @@ module.exports = async (workspace) => {
         admin: true,
         render: require('./templates/mvt_cache'),
       },
+      mvt_cache_delete_intersects: {
+        template: require('./templates/mvt_cache_delete_intersects'),
+      },
 
       // Default templates can be overridden by assigning a template with the same name.
     },
