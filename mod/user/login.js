@@ -73,8 +73,6 @@ async function view(req, res, message) {
     msg: message || ' '
   })
 
-  //res.clearCookie(process.env.TITLE)
-
   // Clear user token cookie.
   res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
 
