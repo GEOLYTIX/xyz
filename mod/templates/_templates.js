@@ -46,12 +46,14 @@ module.exports = async (key, language = 'en', params = {}) => {
   // Prevent prototype polluting assignment.
   if (/__proto__/.test(key)) return;
 
+  const _templates = await custom_templates;
+
   const templates = merge({},
     view_templates,
     mail_templates,
     msg_templates,
-    await custom_templates)
-
+    _templates)
+    
   if (!Object.hasOwn(templates, key)) {
 
     console.warn(`Template key ${key} not found in templates`)
