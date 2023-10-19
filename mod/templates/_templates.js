@@ -4,6 +4,8 @@ const mail_templates = require('./mails')
 
 const msg_templates = require('./msgs')
 
+const merge = require('../utils/merge')
+
 const cloudfront = require('../provider/cloudfront')
 
 const file = require('../provider/file')
@@ -46,13 +48,12 @@ module.exports = async (key, language = 'en', params = {}) => {
 
   const _templates = await custom_templates;
 
-  const templates = {
-    ...view_templates,
-    ...mail_templates,
-    ...msg_templates,
-    ..._templates
-  }
-
+  const templates = merge({},
+    view_templates,
+    mail_templates,
+    msg_templates,
+    _templates)
+    
   if (!Object.hasOwn(templates, key)) {
 
     console.warn(`Template key ${key} not found in templates`)
