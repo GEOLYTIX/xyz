@@ -10,16 +10,28 @@ const cloudfront = require('../provider/cloudfront')
 
 const file = require('../provider/file')
 
+const logger = require('../utils/logger')
+
 const getFrom = {
-  https: async ref => {
+  https: async url => {
 
-    const response = await fetch(ref)
+    try {
 
-    if (ref.match(/\.json$/i)) {
-      return await response.json()
+      const response = await fetch(url)
+
+      logger(`${response.status} - ${url}`,'fetch')
+
+      if (url.match(/\.json$/i)) {
+        return await response.json()
+      }
+    
+      return await response.text()
+
+    } catch (err) {
+      console.error(err)
+      return;
     }
-  
-    return await response.text()
+
   },
   file: ref => file(ref.split(':')[1]),
   cloudfront: ref => cloudfront(ref.split(':')[1]),
