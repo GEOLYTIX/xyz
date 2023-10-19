@@ -4,8 +4,6 @@ const mail_templates = require('./mails')
 
 const msg_templates = require('./msgs')
 
-const merge = require('../utils/merge')
-
 const cloudfront = require('../provider/cloudfront')
 
 const file = require('../provider/file')
@@ -46,11 +44,14 @@ module.exports = async (key, language = 'en', params = {}) => {
   // Prevent prototype polluting assignment.
   if (/__proto__/.test(key)) return;
 
-  const templates = merge({},
-    view_templates,
-    mail_templates,
-    msg_templates,
-    await custom_templates)
+  const _templates = await custom_templates;
+
+  const templates = {
+    ...view_templates,
+    ...mail_templates,
+    ...msg_templates,
+    ..._templates
+  }
 
   if (!Object.hasOwn(templates, key)) {
 
