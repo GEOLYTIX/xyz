@@ -11,6 +11,8 @@ const { join } = require('path')
 
 const { getSignedUrl } = require('@aws-sdk/cloudfront-signer');
 
+const logger = require('../utils/logger')
+
 module.exports = async ref => {
 
   try {
@@ -28,15 +30,18 @@ module.exports = async ref => {
       privateKey: String(readFileSync(join(__dirname, `../../${process.env.KEY_CLOUDFRONT}.pem`)))
     });
 
-    const response = await fetch(signedURL, {
-      agent: process.env.CUSTOM_AGENT && httpsAgent
-    })
-
+    // Return signedURL only from request.
     if (ref.params?.signedURL) {
 
       return signedURL;
     }
-  
+
+    const response = await fetch(signedURL, {
+      agent: process.env.CUSTOM_AGENT && httpsAgent
+    })
+
+    logger(`${response.status} - ${url}`,'cloudfront')
+
     if (response.status >= 300) return new Error(`${response.status} ${ref}`)
 
     if (url.match(/\.json$/i)) return await response.json()
