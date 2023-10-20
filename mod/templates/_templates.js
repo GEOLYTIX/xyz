@@ -51,11 +51,11 @@ module.exports = async (key, language = 'en', params = {}) => {
   // Prevent prototype polluting assignment.
   if (/__proto__/.test(key)) return;
 
-  const custom_templates = await new Promise(async (resolve, reject)=>{
+  const custom_templates = await new Promise((resolve)=>{
 
     if (!process.env.CUSTOM_TEMPLATES) return resolve({})
   
-    resolve(await getFrom[process.env.CUSTOM_TEMPLATES.split(':')[0]](process.env.CUSTOM_TEMPLATES))
+    resolve(getFrom[process.env.CUSTOM_TEMPLATES.split(':')[0]](process.env.CUSTOM_TEMPLATES))
   })
 
   const templates = merge({},

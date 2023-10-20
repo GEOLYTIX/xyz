@@ -2,11 +2,11 @@ const clone = require('../utils/clone.js')
 
 const Roles = require('../utils/roles.js')
 
-const merge = require('../utils/merge')
+//const merge = require('../utils/merge')
 
 const _getLayer = require('./getLayer')
 
-const getTemplate = require('./getTemplate')
+//const getTemplate = require('./getTemplate')
 
 module.exports = async (req, res) => {
 
