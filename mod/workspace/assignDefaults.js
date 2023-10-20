@@ -35,48 +35,6 @@ module.exports = async workspace => {
 
     // Assign locale key as name with no existing name on locale object.
     locale.name = locale.name || locale_key
-
-    return;
-
-    // Loop through layer keys in locale.
-    Object.keys(locale.layers).forEach(layer_key => {
-
-      // Get layer object from key.
-      let layer = locale.layers[layer_key]
-
-      // Assign key value as key on layer object.
-      layer.key = layer_key
-
-      // Merge layer object with layer template object.
-      layer = merge({},
-
-        // Assign layer template implicit or from key lookup.
-        workspace.templates[layer.template || layer.key] || {},
-
-        // Layer entries must override template entries.
-        layer)
-
-      if (Array.isArray(layer.templates)) {
-
-        // Merge templates from templates array into layer.
-        layer.templates.forEach(template => {
-          merge(layer, workspace.templates[template] || {})
-        })
-      }
-
-      // Check for layer geom[s].
-      if ((layer.table || layer.tables) && (!layer.geom && !layer.geoms)) {
-
-        console.warn(`Layer: ${layer.key},has a table or tables defined, but no geom or geoms.`)
-      }
-
-      // Assign layer key as name with no existing name on layer object.
-      layer.name = layer.name || layer_key
-
-      // Assign layer to workspace locale
-      locale.layers[layer_key] = layer
-    })
-
   })
 
 }
