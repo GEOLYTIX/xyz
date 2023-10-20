@@ -6,6 +6,8 @@ const Roles = require('./utils/roles.js')
 
 const logger = require('./utils/logger');
 
+const getLayer = require('./workspace/getLayer');
+
 module.exports = async (req, res) => {
 
   const template = req.params.template
@@ -30,8 +32,10 @@ module.exports = async (req, res) => {
       return res.status(400).send('Layer not found.')
     }
 
+    let layer = await getLayer(req)
+
     // Get layer from locale.
-    const layer = Roles.check(locale.layers[req.params.layer], req.params.user?.roles)
+    layer = Roles.check(layer, req.params.user?.roles)
 
     if (!layer) {
 
