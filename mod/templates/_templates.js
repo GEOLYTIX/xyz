@@ -73,6 +73,16 @@ module.exports = async (key, language = 'en', params = {}) => {
     return key;
   }
 
+  if (key === 'login_view') {
+
+    console.log(templates.login_view)
+  }
+
+  if (key === 'user_admin_view') {
+
+    console.log(templates.user_admin_view)
+  }
+
   let template =  templates[key]?.[language] || templates[key]?.en
 
   if (!template) {
