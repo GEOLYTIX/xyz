@@ -73,6 +73,8 @@ module.exports = async (workspace) => {
     workspace.templates
   );
 
+  return;
+
   const templatePromises = Object.entries(workspace.templates)
     .map((entry) => new Promise((resolve, reject) => {
 

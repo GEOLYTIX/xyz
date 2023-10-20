@@ -2,8 +2,6 @@ const templates = require('../templates/_templates')
 
 module.exports = async (req, res) => {
 
-  console.log(req.params.user.email)
-
   // Get admin view template.
   const adminView = await templates('user_admin_view', 'en', {
     dir: process.env.DIR,

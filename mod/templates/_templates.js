@@ -37,13 +37,6 @@ const getFrom = {
   cloudfront: ref => cloudfront(ref.split(':')[1]),
 }
 
-const custom_templates = new Promise(async (resolve, reject)=>{
-
-  if (!process.env.CUSTOM_TEMPLATES) return resolve({})
-
-  resolve(await getFrom[process.env.CUSTOM_TEMPLATES.split(':')[0]](process.env.CUSTOM_TEMPLATES))
-})
-
 module.exports = async (key, language = 'en', params = {}) => {
 
   if (key === undefined) return;
@@ -58,29 +51,24 @@ module.exports = async (key, language = 'en', params = {}) => {
   // Prevent prototype polluting assignment.
   if (/__proto__/.test(key)) return;
 
-  const _templates = await custom_templates;
+  const custom_templates = await new Promise(async (resolve, reject)=>{
+
+    if (!process.env.CUSTOM_TEMPLATES) return resolve({})
+  
+    resolve(await getFrom[process.env.CUSTOM_TEMPLATES.split(':')[0]](process.env.CUSTOM_TEMPLATES))
+  })
 
   const templates = merge({},
     view_templates,
     mail_templates,
     msg_templates,
-    _templates)
+    custom_templates)
     
   if (!Object.hasOwn(templates, key)) {
 
     console.warn(`Template key ${key} not found in templates`)
 
     return key;
-  }
-
-  if (key === 'login_view') {
-
-    console.log(templates.login_view)
-  }
-
-  if (key === 'user_admin_view') {
-
-    console.log(templates.user_admin_view)
   }
 
   let template =  templates[key]?.[language] || templates[key]?.en

@@ -17,6 +17,8 @@ const assignTemplates = require('./assignTemplates')
 
 const assignDefaults = require('./assignDefaults')
 
+process.env.WORKSPACE_AGE ??= 3600000
+
 let workspace = null
 
 const logger = require('../utils/logger')
@@ -32,10 +34,10 @@ module.exports = async () => {
   }
 
   // Logically assign timestamp.
-  workspace.timestamp = workspace.timestamp || timestamp
+  workspace.timestamp ??= timestamp
 
   // Cache workspace if expired.
-  if ((timestamp - workspace.timestamp) > (+process.env.WORKSPACE_AGE || 3600000)) {
+  if ((timestamp - workspace.timestamp) > +process.env.WORKSPACE_AGE) {
     
     await cache()
     logger(`Workspace cache expired; Time to cache: ${Date.now()-timestamp}`, 'workspace')
@@ -48,9 +50,8 @@ module.exports = async () => {
 async function cache() {
 
   // Get workspace from source.
-  workspace = process.env.WORKSPACE
-    && await getFrom[process.env.WORKSPACE.split(':')[0]](process.env.WORKSPACE)
-    || {}
+  workspace = process.env.WORKSPACE ?
+    await getFrom[process.env.WORKSPACE.split(':')[0]](process.env.WORKSPACE) : {}
 
   // Return error if source failed.
   if (workspace instanceof Error) return workspace

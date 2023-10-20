@@ -10,6 +10,8 @@ const saml = process.env.SAML_ENTITY_ID && require('../mod/user/saml')
 
 const workspaceCache = require('../mod/workspace/cache')
 
+const getTemplate = require('../mod/workspace/getTemplate')
+
 const routes = {
   layer: require('../mod/layer/_layer'),
   location: require('../mod/location/_location'),
@@ -194,9 +196,12 @@ module.exports = async (req, res) => {
   // Retrieve query or view template from workspace
   if (req.params.template) {
 
-    const template = workspace.templates[req.params.template]
+    if (!Object.hasOwn(workspace.templates, req.params.template)) {
 
-    if (!template) return res.status(404).send('Template not found.')
+      return res.status(404).send('Template not found.')
+    }
+
+    const template = await getTemplate(workspace.templates[req.params.template])
 
     if (template.err) return res.status(500).send(template.err.message)
 

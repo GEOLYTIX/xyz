@@ -2,6 +2,10 @@ const clone = require('../utils/clone.js')
 
 const Roles = require('../utils/roles.js')
 
+const merge = require('../utils/merge')
+
+const getTemplate = require('./getTemplate')
+
 module.exports = async (req, res) => {
 
   const keys = {
@@ -26,11 +30,13 @@ module.exports = async (req, res) => {
 
 async function getLayer(req, res) {
 
-  if (!Object.hasOwn(req.params.workspace.locales, req.params.locale)) {
+  const workspace = req.params.workspace
+
+  if (!Object.hasOwn(workspace.locales, req.params.locale)) {
     return res.status(400).send(`Unable to validate locale param.`)
   }
 
-  const locale = req.params.workspace.locales[req.params.locale]
+  const locale = workspace.locales[req.params.locale]
 
   const roles = req.params.user?.roles || []
 
@@ -42,7 +48,34 @@ async function getLayer(req, res) {
     return res.status(400).send(`Unable to validate layer param.`)
   }
 
-  const layer = clone(locale.layers[req.params.layer])
+  let layer = locale.layers[req.params.layer]
+
+  // Assign key value as key on layer object.
+  layer.key ??= req.params.layer
+
+  if (Object.hasOwn(workspace.templates, layer.template || layer.key)) {
+
+    merge(layer, await getTemplate(workspace.templates[layer.template || layer.key]))
+  }
+
+  if (Array.isArray(layer.templates)) {
+
+    // Merge templates from templates array into layer.
+    layer.templates.forEach(async template => {
+      merge(layer, await getTemplate(workspace.templates[template]))
+    })
+  }
+
+  // Check for layer geom[s].
+  if ((layer.table || layer.tables) && (!layer.geom && !layer.geoms)) {
+
+    console.warn(`Layer: ${layer.key},has a table or tables defined, but no geom or geoms.`)
+  }
+
+  // Assign layer key as name with no existing name on layer object.
+  layer.name ??= layer.key
+
+  //const layer = clone(locale.layers[req.params.layer])
 
   if (!Roles.check(layer, roles)) {
     return res.status(403).send('Role access denied.')

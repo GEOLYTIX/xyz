@@ -36,6 +36,8 @@ module.exports = async workspace => {
     // Assign locale key as name with no existing name on locale object.
     locale.name = locale.name || locale_key
 
+    return;
+
     // Loop through layer keys in locale.
     Object.keys(locale.layers).forEach(layer_key => {
 
