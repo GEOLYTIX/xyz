@@ -13,8 +13,6 @@ const getFrom = {
   'mongodb': ref => mongodb(ref.split(/:(.*)/s)[1])
 }
 
-const assignTemplates = require('./assignTemplates')
-
 const assignDefaults = require('./assignDefaults')
 
 process.env.WORKSPACE_AGE ??= 3600000
@@ -30,7 +28,7 @@ module.exports = async () => {
   // Cache workspace if empty.
   if (!workspace) {
     await cache()
-    logger(`Workspace empty; Time to cache: ${Date.now()-timestamp}`, 'workspace')
+    logger(`Workspace empty; Time to cache: ${Date.now() - timestamp}`, 'workspace')
   }
 
   // Logically assign timestamp.
@@ -38,9 +36,9 @@ module.exports = async () => {
 
   // Cache workspace if expired.
   if ((timestamp - workspace.timestamp) > +process.env.WORKSPACE_AGE) {
-    
+
     await cache()
-    logger(`Workspace cache expired; Time to cache: ${Date.now()-timestamp}`, 'workspace')
+    logger(`Workspace cache expired; Time to cache: ${Date.now() - timestamp}`, 'workspace')
     workspace.timestamp = timestamp
   }
 
@@ -56,7 +54,62 @@ async function cache() {
   // Return error if source failed.
   if (workspace instanceof Error) return workspace
 
-  await assignTemplates(workspace)
+  // Assign default view and query templates to workspace.
+  workspace.templates = {
+    // Query templates:
+    gaz_query: {
+      template: require('./templates/gaz_query'),
+    },
+    get_last_location: {
+      template: require('./templates/get_last_location'),
+    },
+    distinct_values: {
+      template: require('./templates/distinct_values'),
+    },
+    field_stats: {
+      template: require('./templates/field_stats'),
+    },
+    field_min: {
+      template: require('./templates/field_min'),
+    },
+    field_max: {
+      template: require('./templates/field_max'),
+    },
+    get_nnearest: {
+      render: require('./templates/get_nnearest'),
+    },
+    geojson: {
+      render: require('./templates/geojson'),
+    },
+    cluster: {
+      render: require('./templates/cluster'),
+      reduce: true
+    },
+    cluster_hex: {
+      render: require('./templates/cluster_hex'),
+      reduce: true
+    },
+    wkt: {
+      render: require('./templates/wkt'),
+      reduce: true
+    },
+    infotip: {
+      render: require('./templates/infotip'),
+    },
+    layer_extent: {
+      template: require('./templates/layer_extent'),
+    },
+    mvt_cache: {
+      admin: true,
+      render: require('./templates/mvt_cache'),
+    },
+    mvt_cache_delete_intersects: {
+      template: require('./templates/mvt_cache_delete_intersects'),
+    },
+
+    // Default templates can be overridden by assigning a template with the same name.
+    ...workspace.templates
+  }
 
   await assignDefaults(workspace)
 
