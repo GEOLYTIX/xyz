@@ -24,7 +24,7 @@ module.exports = async (req) => {
     return new Error('Unable to validate layer param.') //400
   }
 
-  let layer = locale.layers[req.params.layer]
+  const layer = locale.layers[req.params.layer]
 
   // Assign key value as key on layer object.
   layer.key ??= req.params.layer
