@@ -1,5 +1,10 @@
 module.exports = async (req, res) => {
 
+  if (!req.options?.template) {
+    res.status(400).send();
+    return;
+  }
+
   const template = req.options.template
 
   if (typeof template.options.body !== 'string') {
