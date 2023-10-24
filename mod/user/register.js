@@ -8,6 +8,8 @@ const mailer = require('../utils/mailer')
 
 const templates = require('../templates/_templates')
 
+const languageTemplates = require('../utils/languageTemplates')
+
 module.exports = async (req, res) => {
 
   if (!acl) return res.status(500).send('ACL unavailable.')
@@ -130,7 +132,12 @@ async function post(req, res) {
     }))
     
     // Return msg. No redirect for password reset.
-    return res.send(await templates('password_reset_verification', user.language))
+    //return res.send(await templates('password_reset_verification', user.language))
+
+    return res.send(await languageTemplates(req, {
+      template: 'password_reset_verification',
+      language: user.language
+    }))
   }
 
   const language = Intl.Collator.supportedLocalesOf([req.body.language], { localeMatcher: 'lookup' })[0] || 'en';

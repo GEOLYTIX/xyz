@@ -1,17 +1,4 @@
-const file = require('../provider/file')
-
-const cloudfront = require('../provider/cloudfront')
-
-const mongodb = require('../provider/mongodb')
-
-const http = require('./httpsAgent')
-
-const getFrom = {
-  'https': ref => http(ref),
-  'file': ref => file(ref.split(/:(.*)/s)[1]),
-  'cloudfront': ref => cloudfront(ref.split(/:(.*)/s)[1]),
-  'mongodb': ref => mongodb(ref.split(/:(.*)/s)[1])
-}
+const getFrom = require('../provider/getFrom')
 
 const merge = require('../utils/merge')
 

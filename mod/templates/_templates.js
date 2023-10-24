@@ -6,36 +6,7 @@ const msg_templates = require('./msgs')
 
 const merge = require('../utils/merge')
 
-const cloudfront = require('../provider/cloudfront')
-
-const file = require('../provider/file')
-
-const logger = require('../utils/logger')
-
-const getFrom = {
-  https: async url => {
-
-    try {
-
-      const response = await fetch(url)
-
-      logger(`${response.status} - ${url}`,'fetch')
-
-      if (url.match(/\.json$/i)) {
-        return await response.json()
-      }
-    
-      return await response.text()
-
-    } catch (err) {
-      console.error(err)
-      return;
-    }
-
-  },
-  file: ref => file(ref.split(':')[1]),
-  cloudfront: ref => cloudfront(ref.split(':')[1]),
-}
+const getFrom = require('../provider/getFrom')
 
 module.exports = async (key, language = 'en', params = {}) => {
 
