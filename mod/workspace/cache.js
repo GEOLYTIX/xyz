@@ -45,6 +45,12 @@ module.exports = async () => {
   return workspace
 }
 
+const view_templates = require('./templates/views')
+
+const mail_templates = require('./templates/mails')
+
+const msg_templates = require('./templates/msgs')
+
 async function cache() {
 
   // Get workspace from source.
@@ -54,8 +60,17 @@ async function cache() {
   // Return error if source failed.
   if (workspace instanceof Error) return workspace
 
+  const custom_templates = process.env.CUSTOM_TEMPLATES
+    && await getFrom[process.env.CUSTOM_TEMPLATES.split(':')[0]](process.env.CUSTOM_TEMPLATES)
+
   // Assign default view and query templates to workspace.
   workspace.templates = {
+
+    ...view_templates,
+    ...mail_templates,
+    ...msg_templates,
+    ...custom_templates,
+
     // Query templates:
     gaz_query: {
       template: require('./templates/gaz_query'),
