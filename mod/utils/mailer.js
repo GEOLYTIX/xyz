@@ -73,8 +73,8 @@ module.exports = async params => {
 
 function replaceStringParams(string, params) {
 
-  return string.replace(/\$\{{1}(.*?)\}{1}/g,
+  return string.replace(/\$\{(.*?)\}/g,
 
     // Replace matched params in string values
-    matched => params[matched.replace(/\$\{{1}|\}{1}/g, '')] || '')
+    matched => params[matched.replace(/\$\{|\}/g, '')] || '')
 }
