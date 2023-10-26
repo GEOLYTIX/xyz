@@ -150,15 +150,15 @@ async function post(req, res) {
 
   // Accounts must be verified and approved for login
   if (!user.verified || !user.approved) {
-
-    var mail_template = await languageTemplates('failed_login', user.language)
-  
-    await mailer(Object.assign(mail_template, {
+ 
+    await mailer({
+      template: 'failed_login',
+      language: user.language,
       to: user.email,
       host: host,
       protocol: protocol,
       remote_address
-    }))
+    })
 
     return new Error(await languageTemplates('user_not_verified', user.language))
   }
@@ -218,29 +218,29 @@ async function post(req, res) {
       WHERE lower(email) = lower($1);`, [req.body.email])
 
     if (rows instanceof Error) return new Error(await languageTemplates('failed_query', req.params.language))
-
-    var mail_template = await languageTemplates('locked_account', user.language)
-  
-    await mailer(Object.assign(mail_template, {
+ 
+    await mailer({
+      template: 'locked_account',
+      language: user.language,
       to: user.email,
       host: host,
       failed_attempts: parseInt(process.env.FAILED_ATTEMPTS) || 3,
       protocol: protocol,
       verificationtoken: verificationtoken,
       remote_address
-    }))
+    })
 
     return new Error(await languageTemplates('user_locked', user.language))
   }
 
   // Login has failed but account is not locked (yet).
-  var mail_template = await languageTemplates('login_incorrect', user.language)
-
-  await mailer(Object.assign(mail_template, {
+  await mailer({
+    template: 'login_incorrect',
+    language: user.language,
     to: user.email,
     host: host,
     remote_address
-  }))
+  })
 
   return new Error(await languageTemplates('auth_failed', req.params.language))
 }

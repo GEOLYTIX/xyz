@@ -1,10 +1,3 @@
-const https = require('https')
-
-const httpsAgent = new https.Agent({
-	keepAlive: true,
-  maxSockets: parseInt(process.env.CUSTOM_AGENT) || 1
-})
-
 const { readFileSync } = require('fs')
 
 const { join } = require('path')
@@ -36,9 +29,7 @@ module.exports = async ref => {
       return signedURL;
     }
 
-    const response = await fetch(signedURL, {
-      agent: process.env.CUSTOM_AGENT && httpsAgent
-    })
+    const response = await fetch(signedURL)
 
     logger(`${response.status} - ${url}`,'cloudfront')
 

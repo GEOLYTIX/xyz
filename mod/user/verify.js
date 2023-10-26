@@ -82,30 +82,27 @@ module.exports = async (req, res) => {
   // One or more administrator have been 
   if (rows.length > 0) {
 
-    // Create protocol and host for mail templates.
-    const protocol = `${req.headers.host.includes('localhost') && 'http' || 'https'}://`
-    const host = `${req.headers.host.includes('localhost') && req.headers.host || process.env.ALIAS || req.headers.host}${process.env.DIR}`
-
     // Get array of mail promises.
     const mail_promises = rows.map(async row => {
 
-      const mail_template = await languageTemplates('admin_email', row.language || req.params.language)
-
-      // Assign email to mail template.
-      Object.assign(mail_template, {
+      await mailer({
+        template: 'admin_email',
+        language: row.language,
         to: row.email,
         email: user.email,
-        host: host,
-        protocol: protocol
+        host: `${req.headers.host.includes('localhost') && req.headers.host || process.env.ALIAS || req.headers.host}${process.env.DIR}`,
+        protocol: `${req.headers.host.includes('localhost') && 'http' || 'https'}://`
       })
-      
-      return mailer(mail_template)
     })
 
     // Continue after all mail promises have been resolved.
     Promise
-      .all(mail_promises)
-      .then(async arr => res.send(await languageTemplates('account_await_approval', user.language)))
+      .allSettled(mail_promises)
+      .then(async arr => {
+
+        console.log(arr)
+        res.send(await languageTemplates('account_await_approval', user.language))
+      })
       .catch(error => console.error(error))
 
   } else {

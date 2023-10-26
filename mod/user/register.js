@@ -114,15 +114,15 @@ async function post(req, res) {
 
     if (rows instanceof Error) return res.status(500).send(await languageTemplates('failed_query', req.params.language))
 
-    // Sent mail with verification token to the account email address.
-    var mail_template = await languageTemplates('verify_password_reset', user.language)
-    
-    await mailer(Object.assign(mail_template, {
+    // Sent mail with verification token to the account email address.  
+    await mailer({
+      template: 'verify_password_reset',
+      language: user.language,
       to: user.email,
       host: host,
       link: `${protocol}${host}/api/user/verify/${verificationtoken}`,
       remote_address
-    }))
+    })
     
     const password_reset_verification = await languageTemplates('password_reset_verification', user.language)
 
@@ -151,15 +151,14 @@ async function post(req, res) {
 
   if (rows instanceof Error) return res.status(500).send(await languageTemplates('failed_query', req.params.language))
 
-  // Sent mail with verification token to the account email address.
-  var mail_template = await languageTemplates('verify_account', language)
-
-  await mailer(Object.assign(mail_template, {
+  await mailer({
+    template: 'verify_account',
+    language,
     to: req.body.email,
     host: host,
     link: `${protocol}${host}/api/user/verify/${verificationtoken}`,
     remote_address
-  }))
+  })
 
   // Return msg. No redirect for password reset.
   res.send(await languageTemplates('new_account_registered', language))

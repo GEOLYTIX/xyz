@@ -37,17 +37,14 @@ module.exports = async (req, res) => {
 
   // Send email to the user account if an account has been approved.
   if (req.params.field === 'approved' && req.params.value === 'true') {
-
-    const mail_template = await languageTemplates('approved_account', req.params.user.language)
-
-    // Assign email to mail template
-    Object.assign(mail_template, {
+   
+    await mailer({
+      template: 'approved_account',
+      language: req.params.user.language,
       to: email,
       host: host,
       protocol: protocol
     })
-    
-    await mailer(mail_template)
   }
 
   const update_ok = await languageTemplates('update_ok', req.params.user.language)
