@@ -26,12 +26,13 @@ module.exports = async (template) => {
     return template
   }
 
-  let reponse;
-
-  if (Object.hasOwn(getFrom, template.src.split(':')[0])) {
-
-    response =  await getFrom[template.src.split(':')[0]](template.src)
+  if (typeof getFrom[template.src.split(':')[0]] !== 'function') {
+    
+    console.warn(`getFrom[${template.src.split(':')[0]}] is not a method.`);
+    return template
   }
+
+  const response =  await getFrom[template.src.split(':')[0]]?.(template.src)
 
   if (response instanceof Error) {
 
