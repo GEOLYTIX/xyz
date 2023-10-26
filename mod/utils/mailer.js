@@ -38,9 +38,14 @@ module.exports = async params => {
 
   if (template.text) {
 
+    // Prevent mail template from having text and html
+    delete template.html
+
     if (Object.hasOwn(getFrom, template.text?.split(':')[0])) {
 
       template.text =  await getFrom[template.text.split(':')[0]](template.text)
+
+      if (!template.text) return;
     }
 
     template.text = replaceStringParams(template.text, params)
@@ -51,6 +56,8 @@ module.exports = async params => {
   if (Object.hasOwn(getFrom, template.html?.split(':')[0])) {
 
     template.html = await getFrom[template.html.split(':')[0]](template.html)
+
+    if (!template.text) return;
 
     template.html = replaceStringParams(template.html, params)
   }
