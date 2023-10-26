@@ -4,9 +4,11 @@ const merge = require('../utils/merge')
 
 const getTemplate = require('./getTemplate')
 
+const workspaceCache = require('./cache')
+
 module.exports = async (req) => {
 
-  const workspace = req.params.workspace
+  const workspace = await workspaceCache()
 
   if (!Object.hasOwn(workspace.locales, req.params.locale)) {
     return new Error('Unable to validate locale param.') //400
