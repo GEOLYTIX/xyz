@@ -26,7 +26,8 @@ module.exports = async (template) => {
     return template
   }
 
-  const response = await getFrom[template.src.split(':')[0]](template.src)
+  const response = Object.hasOwn(getFrom, template.src.split(':')[0])
+    && await getFrom[template.src.split(':')[0]](template.src)
 
   if (response instanceof Error) {
 
