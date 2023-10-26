@@ -19,9 +19,7 @@ module.exports = async params => {
 
   if (!transport) {
 
-    transport = process.env.TRANSPORT ?
-      mailer.createTransport(process.env.TRANSPORT) :
-      mailer.createTransport({
+    transport = mailer.createTransport({
         host: process.env.TRANSPORT_HOST,
         name: email.match(/[^@]*$/)[0],
         port: process.env.TRANSPORT_PORT || 587,
