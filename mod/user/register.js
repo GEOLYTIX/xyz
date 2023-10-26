@@ -70,7 +70,10 @@ async function post(req, res) {
     WHERE lower(email) = lower($1);`,
     [req.body.email])
 
-  const failed_query = await languageTemplates('failed_query', req.params.language)
+  const failed_query = await languageTemplates({
+    template: 'failed_query',
+    language: req.params.language
+  })
 
   if (rows instanceof Error) return res.status(500).send(failed_query)
 
@@ -99,7 +102,10 @@ async function post(req, res) {
   if (user) {
 
     // Blocked user may not reset their password.
-    if (user.blocked) return res.status(500).send(await languageTemplates('user_blocked', user.language || req.params.language)) 
+    if (user.blocked) return res.status(500).send(await languageTemplates({
+      template: 'user_blocked',
+      language: user.language || req.params.language
+    })) 
 
     // Set new password and verification token.
     // New passwords will only apply after account verification.
@@ -112,7 +118,10 @@ async function post(req, res) {
       WHERE lower(email) = lower($1);`,
       [req.body.email])
 
-    if (rows instanceof Error) return res.status(500).send(await languageTemplates('failed_query', req.params.language))
+    if (rows instanceof Error) return res.status(500).send(await languageTemplates({
+      template: 'failed_query',
+      language: req.params.language
+    }))
 
     // Sent mail with verification token to the account email address.  
     await mailer({
@@ -124,7 +133,10 @@ async function post(req, res) {
       remote_address
     })
     
-    const password_reset_verification = await languageTemplates('password_reset_verification', user.language)
+    const password_reset_verification = await languageTemplates({
+      template: 'password_reset_verification',
+      language: user.language
+    })
 
     return res.send(password_reset_verification)
   }
@@ -149,7 +161,10 @@ async function post(req, res) {
       '${verificationtoken}' AS verificationtoken,
       array['${date}@${req.ips && req.ips.pop() || req.ip}'] AS access_log;`)
 
-  if (rows instanceof Error) return res.status(500).send(await languageTemplates('failed_query', req.params.language))
+  if (rows instanceof Error) return res.status(500).send(await languageTemplates({
+    template: 'failed_query',
+    language: req.params.language
+  }))
 
   await mailer({
     template: 'verify_account',
@@ -161,5 +176,8 @@ async function post(req, res) {
   })
 
   // Return msg. No redirect for password reset.
-  res.send(await languageTemplates('new_account_registered', language))
+  res.send(await languageTemplates({
+    template: 'new_account_registered',
+    language
+  }))
 }

@@ -18,7 +18,10 @@ module.exports = async (req, res) => {
   if (!cookie) {
 
     // Get login view template.
-    const no_cookie_found = await languageTemplates('no_cookie_found', req.params.language)
+    const no_cookie_found = await languageTemplates({
+      template: 'no_cookie_found',
+      language: req.params.language
+    })
     
     return login(req, res, no_cookie_found)
   }

@@ -34,7 +34,7 @@ module.exports = async params => {
       })
   }
 
-  const template = await languageTemplates(params.template, params.language)
+  const template = await languageTemplates(params)
 
   if (template.text) {
 

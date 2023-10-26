@@ -59,7 +59,7 @@ module.exports = async (req, res) => {
   //   .filter(entry => entry[0].match(/^SRC_/))
   //   .forEach(entry => params[entry[0].replace(/^SRC_/, '')]=entry[1])
 
-  const template = await languageTemplates(params.template, params.language)
+  const template = await languageTemplates(params)
 
   const view = template.replace(/[{]{2}([A-Za-z][A-Za-z0-9]*)[}]{2}/g, matched => {
 

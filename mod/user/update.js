@@ -26,7 +26,10 @@ module.exports = async (req, res) => {
   if (rows instanceof Error) {
 
     // Get error message from templates.
-    const error_message = await languageTemplates('failed_query', req.params.language)
+    const error_message = await languageTemplates({
+      template: 'failed_query',
+      language: req.params.language
+    })
 
     return res.status(500).send(error_message)
   }
@@ -47,7 +50,10 @@ module.exports = async (req, res) => {
     })
   }
 
-  const update_ok = await languageTemplates('update_ok', req.params.user.language)
+  const update_ok = await languageTemplates({
+    template: 'update_ok',
+    language: req.params.user.language
+  })
 
   return res.send(update_ok)
 }

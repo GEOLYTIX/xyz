@@ -20,7 +20,10 @@ module.exports = async (req, res) => {
   if (rows instanceof Error) {
 
     // Get error message from templates.
-    const error_message = await languageTemplates('failed_query', req.params.language)
+    const error_message = await languageTemplates({
+      template: 'failed_query',
+      language: req.params.language
+    })
     
     return res.status(500).send(error_message)
   }
@@ -48,7 +51,10 @@ module.exports = async (req, res) => {
   if (rows instanceof Error) {
 
     // Get error message from templates.
-    const error_message = await languageTemplates('failed_query', req.params.language)
+    const error_message = await languageTemplates({
+      template: 'failed_query',
+      language: req.params.language
+    })
     
     return res.status(500).send(error_message)
   }
@@ -74,7 +80,10 @@ module.exports = async (req, res) => {
   if (rows instanceof Error) {
 
     // Get error message from templates.
-    const error_message = await languageTemplates('failed_query', req.params.language)
+    const error_message = await languageTemplates({
+      template: 'failed_query',
+      language: req.params.language
+    })
 
     return res.status(500).send(error_message)
   }
@@ -99,9 +108,10 @@ module.exports = async (req, res) => {
     Promise
       .allSettled(mail_promises)
       .then(async arr => {
-
-        console.log(arr)
-        res.send(await languageTemplates('account_await_approval', user.language))
+        res.send(await languageTemplates({
+          template: 'account_await_approval',
+          language: user.language
+        }))
       })
       .catch(error => console.error(error))
 

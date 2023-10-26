@@ -59,7 +59,10 @@ module.exports = async (req, res, _message) => {
   }
 
   // Get message from templates.
-  const message = await languageTemplates(req.params.msg || _message, req.params.language)
+  const message = await languageTemplates({
+    template: req.params.msg || _message,
+    language: req.params.language
+  })
 
   if (!message && req.params.user) {
 
@@ -95,9 +98,15 @@ async function post(req, res) {
     && /^[A-Za-z0-9.,_-\s]*$/.test(req.headers['x-forwarded-for']) ? req.headers['x-forwarded-for'] : 'invalid'
     || 'unknown';
 
-  if(!req.body.email) return new Error(await languageTemplates('missing_email', req.params.language))
+  if (!req.body.email) return new Error(await languageTemplates({
+    template: 'missing_email',
+    language: req.params.language
+  }))
   
-  if(!req.body.password) return new Error(await languageTemplates('missing_password', req.params.language))
+  if (!req.body.password) return new Error(await languageTemplates({
+    template: 'missing_password',
+    language: req.params.language
+  }))
 
   const date = new Date()
 
@@ -113,15 +122,24 @@ async function post(req, res) {
     RETURNING email, roles, language, blocked, approved, approved_by, verified, admin, password ${process.env.APPROVAL_EXPIRY ? ', expires_on;' : ';'}`,
     [req.body.email])
 
-  if (rows instanceof Error) return new Error(await languageTemplates('failed_query', req.params.language))
+  if (rows instanceof Error) return new Error(await languageTemplates({
+    template: 'failed_query',
+    language: req.params.language
+  }))
 
   // Get user record from first row.
   const user = rows[0]
 
-  if (!user) return new Error(await languageTemplates('auth_failed', req.params.language))
+  if (!user) return new Error(await languageTemplates({
+    template: 'auth_failed',
+    language: req.params.language
+  }))
 
   // Blocked user cannot login.
-  if (user.blocked) return new Error(await languageTemplates('user_blocked', user.language || req.params.language))
+  if (user.blocked) return new Error(await languageTemplates({
+    template: 'user_blocked',
+    language: user.language || req.params.language
+  }))
   
   // Non admin accounts may expire.
   if (!user.admin && process.env.APPROVAL_EXPIRY) {
@@ -139,10 +157,16 @@ async function post(req, res) {
           WHERE lower(email) = lower($1);`,
           [req.body.email])
           
-        if (rows instanceof Error) return new Error(await languageTemplates('failed_query', req.params.language))
+        if (rows instanceof Error) return new Error(await languageTemplates({
+          template: 'failed_query',
+          language: req.params.language
+        }))
       }
 
-      return new Error(await languageTemplates('user_expired', user.language))
+      return new Error(await languageTemplates({
+        template: 'user_expired',
+        language: user.language
+      }))
 
     }
 
@@ -160,7 +184,10 @@ async function post(req, res) {
       remote_address
     })
 
-    return new Error(await languageTemplates('user_not_verified', user.language))
+    return new Error(await languageTemplates({
+      template: 'user_not_verified',
+      language: user.language
+    }))
   }
 
   // Check password from post body against encrypted password from ACL.
@@ -181,7 +208,10 @@ async function post(req, res) {
       WHERE lower(email) = lower($1)`,
       [req.body.email])
   
-      if (rows instanceof Error) return new Error(await languageTemplates('failed_query', req.params.language))
+      if (rows instanceof Error) return new Error(await languageTemplates({
+        template: 'failed_query',
+        language: req.params.language
+      }))
 
     }
 
@@ -201,7 +231,10 @@ async function post(req, res) {
     WHERE lower(email) = lower($1)
     RETURNING failedattempts;`, [req.body.email])
 
-  if (rows instanceof Error) return new Error(await languageTemplates('failed_query', req.params.language))
+  if (rows instanceof Error) return new Error(await languageTemplates({
+    template: 'failed_query',
+    language: req.params.language
+  }))
 
   // Check whether failed login attempts exceeds limit.
   if (rows[0].failedattempts >= parseInt(process.env.FAILED_ATTEMPTS || 3)) {
@@ -217,7 +250,10 @@ async function post(req, res) {
         verificationtoken = '${verificationtoken}'
       WHERE lower(email) = lower($1);`, [req.body.email])
 
-    if (rows instanceof Error) return new Error(await languageTemplates('failed_query', req.params.language))
+    if (rows instanceof Error) return new Error(await languageTemplates({
+      template: 'failed_query',
+      language: req.params.language
+    }))
  
     await mailer({
       template: 'locked_account',
@@ -230,7 +266,10 @@ async function post(req, res) {
       remote_address
     })
 
-    return new Error(await languageTemplates('user_locked', user.language))
+    return new Error(await languageTemplates({
+      template: 'user_locked',
+      language: user.language
+    }))
   }
 
   // Login has failed but account is not locked (yet).
@@ -242,5 +281,8 @@ async function post(req, res) {
     remote_address
   })
 
-  return new Error(await languageTemplates('auth_failed', req.params.language))
+  return new Error(await languageTemplates({
+    template: 'auth_failed',
+    language: req.params.language
+  }))
 }
