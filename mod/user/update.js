@@ -2,7 +2,7 @@ const acl = require('./acl')()
 
 const mailer = require('../utils/mailer')
 
-const templates = require('../templates/_templates')
+const languageTemplates = require('../utils/languageTemplates')
 
 module.exports = async (req, res) => {
 
@@ -26,7 +26,7 @@ module.exports = async (req, res) => {
   if (rows instanceof Error) {
 
     // Get error message from templates.
-    const error_message = await templates('failed_query', req.params.language)
+    const error_message = await languageTemplates('failed_query', req.params.language)
 
     return res.status(500).send(error_message)
   }
@@ -38,18 +38,19 @@ module.exports = async (req, res) => {
   // Send email to the user account if an account has been approved.
   if (req.params.field === 'approved' && req.params.value === 'true') {
 
-    const mail_template = await templates('approved_account', req.params.user.language, {
-      host: host,
-      protocol: protocol
-    })
+    const mail_template = await languageTemplates('approved_account', req.params.user.language)
 
     // Assign email to mail template
     Object.assign(mail_template, {
-      to: email
+      to: email,
+      host: host,
+      protocol: protocol
     })
     
     await mailer(mail_template)
   }
 
-  return res.send(await templates('update_ok', req.params.user.language))
+  const update_ok = await languageTemplates('update_ok', req.params.user.language)
+
+  return res.send(update_ok)
 }

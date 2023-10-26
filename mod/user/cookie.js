@@ -2,7 +2,7 @@ const login = require('./login')
 
 const jwt = require('jsonwebtoken')
 
-const templates = require('../templates/_templates')
+const languageTemplates = require('../utils/languageTemplates')
 
 module.exports = async (req, res) => {
 
@@ -18,9 +18,9 @@ module.exports = async (req, res) => {
   if (!cookie) {
 
     // Get login view template.
-    const loginView = await templates('no_cookie_found', req.params.language)
+    const no_cookie_found = await languageTemplates('no_cookie_found', req.params.language)
     
-    return login(req, res, loginView)
+    return login(req, res, no_cookie_found)
   }
 
   jwt.verify(

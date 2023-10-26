@@ -6,9 +6,9 @@ const acl = require('./acl')()
 
 const mailer = require('../utils/mailer')
 
-const templates = require('../templates/_templates')
-
 const languageTemplates = require('../utils/languageTemplates')
+
+const view = require('../view')
 
 module.exports = async (req, res) => {
 
@@ -17,21 +17,13 @@ module.exports = async (req, res) => {
   // Post request to register new user.
   if (req.body && req.body.register) return post(req, res)
 
-  // Get request for registration form view.
-  view(req, res)
-}
-
-async function view(req, res) {
-
-  // Get password reset or account registration view from templates.
-  const view = await templates(req.params.reset && 'password_reset_view' || 'register_view', req.params.language, {
-    dir: process.env.DIR
-  })
+  req.params.template = req.params.reset? 'password_reset_view': 'register_view';
 
   // The login view will set the cookie to null.
   res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
 
-  res.send(view)
+  // Get request for registration form view.
+  view(req, res)
 }
 
 async function post(req, res) {
@@ -78,7 +70,9 @@ async function post(req, res) {
     WHERE lower(email) = lower($1);`,
     [req.body.email])
 
-  if (rows instanceof Error) return res.status(500).send(await templates('failed_query', req.params.language))
+  const failed_query = await languageTemplates('failed_query', req.params.language)
+
+  if (rows instanceof Error) return res.status(500).send(failed_query)
 
   const user = rows[0]
 
@@ -105,7 +99,7 @@ async function post(req, res) {
   if (user) {
 
     // Blocked user may not reset their password.
-    if (user.blocked) return res.status(500).send(await templates('user_blocked', user.language || req.params.language)) 
+    if (user.blocked) return res.status(500).send(await languageTemplates('user_blocked', user.language || req.params.language)) 
 
     // Set new password and verification token.
     // New passwords will only apply after account verification.
@@ -118,26 +112,21 @@ async function post(req, res) {
       WHERE lower(email) = lower($1);`,
       [req.body.email])
 
-    if (rows instanceof Error) return res.status(500).send(await templates('failed_query', req.params.language))
+    if (rows instanceof Error) return res.status(500).send(await languageTemplates('failed_query', req.params.language))
 
     // Sent mail with verification token to the account email address.
-    var mail_template = await templates('verify_password_reset', user.language, {
+    var mail_template = await languageTemplates('verify_password_reset', user.language)
+    
+    await mailer(Object.assign(mail_template, {
+      to: user.email,
       host: host,
       link: `${protocol}${host}/api/user/verify/${verificationtoken}`,
       remote_address
-    })
-    
-    await mailer(Object.assign(mail_template, {
-      to: user.email
     }))
     
-    // Return msg. No redirect for password reset.
-    //return res.send(await templates('password_reset_verification', user.language))
+    const password_reset_verification = await languageTemplates('password_reset_verification', user.language)
 
-    return res.send(await languageTemplates(req, {
-      template: 'password_reset_verification',
-      language: user.language
-    }))
+    return res.send(password_reset_verification)
   }
 
   const language = Intl.Collator.supportedLocalesOf([req.body.language], { localeMatcher: 'lookup' })[0] || 'en';
@@ -160,19 +149,18 @@ async function post(req, res) {
       '${verificationtoken}' AS verificationtoken,
       array['${date}@${req.ips && req.ips.pop() || req.ip}'] AS access_log;`)
 
-  if (rows instanceof Error) return res.status(500).send(await templates('failed_query', req.params.language))
+  if (rows instanceof Error) return res.status(500).send(await languageTemplates('failed_query', req.params.language))
 
   // Sent mail with verification token to the account email address.
-  var mail_template = await templates('verify_account', language, {
+  var mail_template = await languageTemplates('verify_account', language)
+
+  await mailer(Object.assign(mail_template, {
+    to: req.body.email,
     host: host,
     link: `${protocol}${host}/api/user/verify/${verificationtoken}`,
     remote_address
-  })
-
-  await mailer(Object.assign(mail_template, {
-    to: req.body.email
   }))
 
   // Return msg. No redirect for password reset.
-  res.send(await templates('new_account_registered', language))
+  res.send(await languageTemplates('new_account_registered', language))
 }

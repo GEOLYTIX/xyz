@@ -1,10 +1,8 @@
-const crypto = require('crypto')
-
 const acl = require('./acl')()
 
 const mailer = require('../utils/mailer')
 
-const templates = require('../templates/_templates')
+const languageTemplates = require('../utils/languageTemplates')
 
 const login = require('./login')
 
@@ -22,7 +20,7 @@ module.exports = async (req, res) => {
   if (rows instanceof Error) {
 
     // Get error message from templates.
-    const error_message = await templates('failed_query', req.params.language)
+    const error_message = await languageTemplates('failed_query', req.params.language)
     
     return res.status(500).send(error_message)
   }
@@ -50,7 +48,7 @@ module.exports = async (req, res) => {
   if (rows instanceof Error) {
 
     // Get error message from templates.
-    const error_message = await templates('failed_query', req.params.language)
+    const error_message = await languageTemplates('failed_query', req.params.language)
     
     return res.status(500).send(error_message)
   }
@@ -76,7 +74,7 @@ module.exports = async (req, res) => {
   if (rows instanceof Error) {
 
     // Get error message from templates.
-    const error_message = await templates('failed_query', req.params.language)
+    const error_message = await languageTemplates('failed_query', req.params.language)
 
     return res.status(500).send(error_message)
   }
@@ -91,15 +89,14 @@ module.exports = async (req, res) => {
     // Get array of mail promises.
     const mail_promises = rows.map(async row => {
 
-      const mail_template = await templates('admin_email', row.language || req.params.language, {
-        email: user.email,
-        host: host,
-        protocol: protocol
-      })
+      const mail_template = await languageTemplates('admin_email', row.language || req.params.language)
 
       // Assign email to mail template.
       Object.assign(mail_template, {
-        to: row.email
+        to: row.email,
+        email: user.email,
+        host: host,
+        protocol: protocol
       })
       
       return mailer(mail_template)
@@ -108,7 +105,7 @@ module.exports = async (req, res) => {
     // Continue after all mail promises have been resolved.
     Promise
       .all(mail_promises)
-      .then(async arr => res.send(await templates('account_await_approval', user.language)))
+      .then(async arr => res.send(await languageTemplates('account_await_approval', user.language)))
       .catch(error => console.error(error))
 
   } else {
