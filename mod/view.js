@@ -67,11 +67,11 @@ module.exports = async (req, res) => {
 
   const template = await languageTemplates(params)
 
-  const view = template.replace(/[{]{2}([A-Za-z][A-Za-z0-9]*)[}]{2}/g, matched => {
+  const view = template.replace(/{{2}([A-Za-z][A-Za-z0-9]*)}{2}/g, matched => {
 
-      // regex matches {{ or }}
-      return params[matched.replace(/[{]{2}|[}]{2}/g, '')] || '';
-    });
+    // regex matches {{ or }}
+    return params[matched.replace(/(^{{)|(}}$)/g, '')] || ''
+  });
 
   res.send(view);
 }
