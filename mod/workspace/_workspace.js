@@ -22,9 +22,7 @@ module.exports = async (req, res) => {
   // The keys object must own a user provided lookup key
   if (!Object.hasOwn(keys, req.params.key)) {
 
-    return res.send(`
-      Failed to evaluate 'key' param.<br><br>
-      <a href="https://github.com/GEOLYTIX/xyz/wiki/XYZ---API#workspacekey">Workspace API</a>`)
+    return res.status(400).send(`Failed to evaluate '${req.params.key}' param.`)
   }
 
   return keys[req.params.key](req, res)
