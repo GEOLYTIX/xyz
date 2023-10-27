@@ -94,11 +94,11 @@ module.exports = async (req, res) => {
 
   const geoms = layer.geoms && Object.keys(layer.geoms)
 
-  var geom = geoms && layer.geoms[z] || layer.geom
+  let geom = geoms && layer.geoms[z] || layer.geom
 
-  var geom = geoms && z < parseInt(geoms[0]) && Object.values(layer.geoms)[0] || geom
+  geom = geoms && z < parseInt(geoms[0]) && Object.values(layer.geoms)[0] || geom
   
-  var geom = geoms && z > parseInt(geoms[geoms.length -1]) && Object.values(layer.geoms)[geoms.length -1]  || geom
+  geom = geoms && z > parseInt(geoms[geoms.length -1]) && Object.values(layer.geoms)[geoms.length -1]  || geom
 
   if (!geom) {
     return res.status(204).send(null)
@@ -172,14 +172,13 @@ module.exports = async (req, res) => {
         WITH n AS (
           INSERT INTO ${layer.mvt_cache}
           ${tile} ON CONFLICT (z, x, y) DO NOTHING RETURNING mvt
-        ) SELECT mvt FROM n;
-      `)
+        ) SELECT mvt FROM n;`)
 
       if (rows instanceof Error) console.log('failed to cache mvt')
     }
     
-    if (rows.length === 1)  return res.send(rows[0].mvt) // If found return the cached MVT to client.
-
+    // If found return the cached MVT to client.
+    if (rows.length === 1)  return res.send(rows[0].mvt)
   }
 
   // Validate dynamic method call.
@@ -191,8 +190,5 @@ module.exports = async (req, res) => {
 
   logger(`Get tile ${z}/${x}/${y}`, 'mvt')
 
-  // Return MVT to client.
-  // res.setHeader('Cache-Control', 's-maxage=1, stale-while-revalidate')
   res.send(rows[0].mvt)
-
 }
