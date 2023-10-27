@@ -1,25 +1,29 @@
-const dbs = require('../utils/dbs')()
+const dbs = require('./utils/dbs')()
 
-const sqlFilter = require('../utils/sqlFilter')
+const sqlFilter = require('./utils/sqlFilter')
 
-const validateRequestParams = require('../utils/validateRequestParams')
+const validateRequestParams = require('./utils/validateRequestParams')
 
-const Roles = require('../utils/roles.js')
+const Roles = require('./utils/roles.js')
 
-const logger = require('../utils/logger')
+const logger = require('./utils/logger')
 
-const workspaceCache = require('../workspace/cache')
+const workspaceCache = require('./workspace/cache')
+
+const getLayer = require('./workspace/getLayer')
 
 module.exports = async (req, res) => {
 
   const workspace = await workspaceCache()
 
-  // Check the layer.roles{} against the user.roles[]
-  const layer = Roles.check(req.params.layer, req.params.user?.roles)
+  const layer = await getLayer(req.params)
 
-  // The layer object did not pass the Roles.check()
   if (!layer) {
-    return res.status(403).send('Access prohibited.')
+    return res.status(403).send('Layer not found.')
+  }
+
+  if (!Roles.check(layer, req.params.user?.roles)) {
+    return res.status(403).send('Role access denied for layer.')
   }
 
   // Validate URL parameter

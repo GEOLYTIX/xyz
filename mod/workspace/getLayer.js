@@ -6,30 +6,30 @@ const getTemplate = require('./getTemplate')
 
 const workspaceCache = require('./cache')
 
-module.exports = async (req) => {
+module.exports = async (params) => {
 
   const workspace = await workspaceCache()
 
-  if (!Object.hasOwn(workspace.locales, req.params.locale)) {
+  if (!Object.hasOwn(workspace.locales, params.locale)) {
     return new Error('Unable to validate locale param.') //400
   }
 
-  const locale = workspace.locales[req.params.locale]
+  const locale = workspace.locales[params.locale]
 
-  const roles = req.params.user?.roles || []
+  const roles = params.user?.roles || []
 
   if (!Roles.check(locale, roles)) {
     return new Error('Role access denied.') //403
   }
 
-  if (!Object.hasOwn(locale.layers, req.params.layer)) {
+  if (!Object.hasOwn(locale.layers, params.layer)) {
     return new Error('Unable to validate layer param.') //400
   }
 
-  const layer = locale.layers[req.params.layer]
+  const layer = locale.layers[params.layer]
 
   // Assign key value as key on layer object.
-  layer.key ??= req.params.layer
+  layer.key ??= params.layer
 
   if (Object.hasOwn(workspace.templates, layer.template || layer.key)) {
 
@@ -52,12 +52,6 @@ module.exports = async (req) => {
 
   // Assign layer key as name with no existing name on layer object.
   layer.name ??= layer.key
-
-  //const layer = clone(locale.layers[req.params.layer])
-
-  // if (!Roles.check(layer, roles)) {
-  //   return res.status(403).send('Role access denied.')
-  // }
 
   return layer
 }

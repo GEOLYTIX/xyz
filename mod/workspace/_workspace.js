@@ -2,7 +2,7 @@ const clone = require('../utils/clone.js')
 
 const Roles = require('../utils/roles.js')
 
-const _getLayer = require('./getLayer')
+const getLayer = require('./getLayer')
 
 const workspaceCache = require('./cache')
 
@@ -13,10 +13,10 @@ module.exports = async (req, res) => {
   workspace = await workspaceCache()
 
   const keys = {
-    layer: getLayer,
-    locale: getLocale,
-    locales: getLocales,
-    roles: getRoles,
+    layer,
+    locale,
+    locales,
+    roles,
   }
 
   // The keys object must own a user provided lookup key
@@ -30,7 +30,7 @@ module.exports = async (req, res) => {
   return keys[req.params.key](req, res)
 }
 
-async function getLayer(req, res) {
+async function layer(req, res) {
 
   if (!Object.hasOwn(workspace.locales, req.params.locale)) {
     return res.status(400).send(`Unable to validate locale param.`)
@@ -41,23 +41,23 @@ async function getLayer(req, res) {
   const roles = req.params.user?.roles || []
 
   if (!Roles.check(locale, roles)) {
-    return res.status(403).send('Role access denied.')
+    return res.status(403).send('Role access denied for locale.')
   }
 
   if (!Object.hasOwn(locale.layers, req.params.layer)) {
     return res.status(400).send(`Unable to validate layer param.`)
   }
 
-  const layer = await _getLayer(req)
+  const layer = await getLayer(req.params)
 
   if (!Roles.check(layer, roles)) {
-    return res.status(403).send('Role access denied.')
+    return res.status(403).send('Role access denied for layer.')
   }
 
   res.json(layer)
 }
 
-function getLocales(req, res) {
+function locales(req, res) {
 
   const roles = req.params.user?.roles || []
 
@@ -71,7 +71,7 @@ function getLocales(req, res) {
   res.send(locales)
 }
 
-function getLocale(req, res) {
+function locale(req, res) {
 
   if (req.params.locale && !Object.hasOwn(workspace.locales, req.params.locale)) {
     return res.status(400).send(`Unable to validate locale param.`)
@@ -102,7 +102,7 @@ function getLocale(req, res) {
   res.json(locale)
 }
 
-function getRoles(req, res) {
+function roles(req, res) {
 
   if (!workspace.locales) return res.send({})
 

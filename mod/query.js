@@ -61,14 +61,10 @@ module.exports = async (req, res) => {
       return res.status(400).send('Layer not found.')
     }
 
-    let layer = await getLayer(req)
+    const layer = await getLayer(req.params)
 
-    // Get layer from locale.
-    layer = Roles.check(layer, req.params.user?.roles)
-
-    if (!layer) {
-
-      return res.status(403).send('Access prohibited.')
+    if (!Roles.check(layer, req.params.user?.roles)) {
+      return res.status(403).send('Role access denied for layer.')
     }
 
     // Set layer dbs as fallback param if not defined.
