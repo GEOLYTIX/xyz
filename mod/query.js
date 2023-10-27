@@ -6,11 +6,36 @@ const Roles = require('./utils/roles.js')
 
 const logger = require('./utils/logger');
 
+const login = require('./user/login')
+
+const workspaceCache = require('./workspace/cache')
+
+const getTemplate = require('./workspace/getTemplate')
+
 const getLayer = require('./workspace/getLayer');
 
 module.exports = async (req, res) => {
 
-  const template = req.params.template
+  const workspace = await workspaceCache()
+
+  if (!Object.hasOwn(workspace.templates, req.params.template)) {
+
+    return res.status(404).send('Template not found.')
+  }
+
+  const template = await getTemplate(workspace.templates[req.params.template])
+
+  if (template.err) return res.status(500).send(template.err.message)
+
+  if (!req.params.user && (template.login || template.admin)) {
+    login(req, res, 'login_required')
+    return 
+  }
+
+  if (req.params.user && (!req.params.user.admin && template.admin)) {
+    login(req, res, 'admin_required')
+    return
+  }
 
   // Array of params for parameterized queries with node-pg.
   const SQLparams = []
@@ -22,7 +47,7 @@ module.exports = async (req, res) => {
   if (req.params.layer) {
 
     // Get locale for layer.
-    const locale = req.params.workspace.locales[req.params.locale]
+    const locale = workspace.locales[req.params.locale]
 
     // A layer must be found if the layer param is set.
     if (!locale) return res.status(400).send('Locale not found.')
@@ -96,7 +121,11 @@ module.exports = async (req, res) => {
 
   // Render the query string q from tbe template and request params.
   try {
-    template.template = template.render && template.render(req.params) || template.template
+    if (typeof template.render === 'function') {
+
+      req.params.workspace = workspace
+      template.template = template.render(req.params)
+    }
 
     if (!template.template) {
 
@@ -160,7 +189,7 @@ module.exports = async (req, res) => {
   }
 
   // The dbs param or workspace dbs will be used as fallback if the dbs is not implicit in the template object.
-  const dbs_connection = String(template.dbs || req.params.dbs || req.params.workspace.dbs);
+  const dbs_connection = String(template.dbs || req.params.dbs || workspace.dbs);
 
   // Validate that the dbs_connection string exists as a stored connection method in dbs_connections.
   if (!Object.hasOwn(dbs_connections, dbs_connection)) {
@@ -202,7 +231,7 @@ module.exports = async (req, res) => {
     return res.status(202).send('No rows returned from table.')
   }
 
-  if (req.params.reduced || req.params.template?.reduce) {
+  if (req.params.reduce || template?.reduce) {
     
     // Reduce row values to an values array.
     return res.send(rows.map(row=>Object.values(row)))

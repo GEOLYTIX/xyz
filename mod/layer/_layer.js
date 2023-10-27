@@ -2,7 +2,11 @@ const formats = {
   mvt: require('./mvt')
 }
 
+const workspaceCache = require('../workspace/cache')
+
 module.exports = async (req, res) => {
+
+  const workspace = workspaceCache()
 
   if (!req.params.layer) {
     return res.send(`Failed to evaluate 'layer' param.<br><br>
@@ -18,11 +22,11 @@ module.exports = async (req, res) => {
   if (req.params.locale) {
     
     // The locale key must be an own property of the workspace.locales, and must be an object.
-    if (Object.hasOwn(req.params.workspace.locales, req.params.locale)
-      && typeof req.params.workspace.locales[req.params.locale] === 'object') {
+    if (Object.hasOwn(workspace.locales, req.params.locale)
+      && typeof workspace.locales[req.params.locale] === 'object') {
 
         // Assign layer from locale in workspace.
-        req.params.layer = req.params.workspace.locales[req.params.locale].layers[req.params.layer]
+        req.params.layer = workspace.locales[req.params.locale].layers[req.params.layer]
 
     } else {
 
@@ -31,11 +35,11 @@ module.exports = async (req, res) => {
     }
 
   // A layer must be specified in the templates without a locale specifier, and must be an object
-  } else if (Object.hasOwn(req.params.workspace.templates, req.params.layer)
-    && typeof req.params.workspace.templates[req.params.layer] === 'object') {
+  } else if (Object.hasOwn(workspace.templates, req.params.layer)
+    && typeof workspace.templates[req.params.layer] === 'object') {
 
     // Assign layer object from templates.
-    req.params.layer = req.params.workspace.templates[req.params.layer]
+    req.params.layer = workspace.templates[req.params.layer]
 
   } else {
 

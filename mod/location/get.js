@@ -4,7 +4,11 @@ const sqlFilter = require('../utils/sqlFilter.js')
 
 const Roles = require('../utils/roles.js')
 
+const workspaceCache = require('../workspace/cache')
+
 module.exports = async (req, res) => {
+
+  const workspace = workspaceCache()
 
   // Check the layer.roles{} against the user.roles[]
   const layer = Roles.check(req.params.layer, req.params.user?.roles)
@@ -38,9 +42,9 @@ module.exports = async (req, res) => {
   ${roleFilter}`
 
   // Validate dynamic method call.
-  if (!Object.hasOwn(dbs, layer.dbs || req.params.workspace.dbs) || typeof dbs[layer.dbs || req.params.workspace.dbs] !== 'function') return;  
+  if (!Object.hasOwn(dbs, layer.dbs || workspace.dbs) || typeof dbs[layer.dbs || workspace.dbs] !== 'function') return;  
 
-  const rows = await dbs[layer.dbs || req.params.workspace.dbs](q, SQLparams)
+  const rows = await dbs[layer.dbs || workspace.dbs](q, SQLparams)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 

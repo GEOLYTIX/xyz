@@ -8,7 +8,11 @@ const Roles = require('../utils/roles.js')
 
 const logger = require('../utils/logger')
 
+const workspaceCache = require('../workspace/cache')
+
 module.exports = async (req, res) => {
+
+  const workspace = workspaceCache()
 
   // Check the layer.roles{} against the user.roles[]
   const layer = Roles.check(req.params.layer, req.params.user?.roles)
@@ -76,12 +80,12 @@ module.exports = async (req, res) => {
 
     if (Array.isArray(theme.fields)) {
 
-      return theme.fields.map(field => `${req.params.workspace.templates[field]?.template || field} AS ${field}`).join(', ')
+      return theme.fields.map(field => `${workspace.templates[field]?.template || field} AS ${field}`).join(', ')
     }
 
     if (!theme.field) return;
 
-    return `${req.params.workspace.templates[theme.field]?.template || theme.field} AS ${theme.field}`
+    return `${workspace.templates[theme.field]?.template || theme.field} AS ${theme.field}`
   }
 
   const geoms = layer.geoms && Object.keys(layer.geoms)
@@ -149,18 +153,18 @@ module.exports = async (req, res) => {
   if ((!filter || filter === '') && layer.mvt_cache) {
 
     // Validate dynamic method call.
-    if (!Object.hasOwn(dbs, layer.dbs || req.params.workspace.dbs) || typeof dbs[layer.dbs || req.params.workspace.dbs] !== 'function') return;    
+    if (!Object.hasOwn(dbs, layer.dbs || workspace.dbs) || typeof dbs[layer.dbs || workspace.dbs] !== 'function') return;    
 
-    var rows = await dbs[layer.dbs || req.params.workspace.dbs](`SELECT mvt FROM ${layer.mvt_cache} WHERE z = ${z} AND x = ${x} AND y = ${y}`)
+    var rows = await dbs[layer.dbs || workspace.dbs](`SELECT mvt FROM ${layer.mvt_cache} WHERE z = ${z} AND x = ${x} AND y = ${y}`)
 
     if (rows instanceof Error) console.log('failed to query mvt cache')
 
     if(!rows.length) {
 
       // Validate dynamic method call.
-      if (typeof dbs[layer.dbs || req.params.workspace.dbs] !== 'function') return;
+      if (typeof dbs[layer.dbs || workspace.dbs] !== 'function') return;
 
-      rows = await dbs[layer.dbs || req.params.workspace.dbs](`
+      rows = await dbs[layer.dbs || workspace.dbs](`
         WITH n AS (
           INSERT INTO ${layer.mvt_cache}
           ${tile} ON CONFLICT (z, x, y) DO NOTHING RETURNING mvt
@@ -175,9 +179,9 @@ module.exports = async (req, res) => {
   }
 
   // Validate dynamic method call.
-  if (typeof dbs[layer.dbs || req.params.workspace.dbs] !== 'function') return;  
+  if (typeof dbs[layer.dbs || workspace.dbs] !== 'function') return;  
 
-  var rows = await dbs[layer.dbs || req.params.workspace.dbs](tile, SQLparams)
+  var rows = await dbs[layer.dbs || workspace.dbs](tile, SQLparams)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 

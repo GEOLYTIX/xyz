@@ -5,7 +5,11 @@ const methods = {
   delete: require('./delete'),
 }
 
+const workspaceCache = require('../workspace/cache')
+
 module.exports = async (req, res) => {
+
+  const workspace = workspaceCache()
 
   if (!Object.hasOwn(methods, req.params.method)) {
     return res.send(`Failed to evaluate 'method' param.<br><br>
@@ -16,9 +20,9 @@ module.exports = async (req, res) => {
 
   if (typeof method !== 'function') return;
   
-  const locale = req.params.locale && req.params.workspace.locales[req.params.locale]
+  const locale = req.params.locale && workspace.locales[req.params.locale]
 
-  const layer = locale && locale.layers[req.params.layer] ||  req.params.workspace.templates[req.params.layer]
+  const layer = locale && locale.layers[req.params.layer] ||  workspace.templates[req.params.layer]
 
   if (!layer) return res.status(400).send('Layer not found.')
 

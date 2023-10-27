@@ -1,6 +1,10 @@
 const dbs = require('../utils/dbs')()
 
+const workspaceCache = require('../workspace/cache')
+
 module.exports = async (req, res) => {
+
+  const workspace = workspaceCache()
 
   const layer = req.params.layer
 
@@ -45,11 +49,11 @@ module.exports = async (req, res) => {
     })
 
   // Validate dynamic method call.
-  if (!Object.hasOwn(dbs, layer.dbs || req.params.workspace.dbs) || typeof dbs[layer.dbs || req.params.workspace.dbs] !== 'function') return;    
+  if (!Object.hasOwn(dbs, layer.dbs || workspace.dbs) || typeof dbs[layer.dbs || workspace.dbs] !== 'function') return;    
 
   var q = `UPDATE ${req.params.table} SET ${fields.join()} WHERE ${layer.qID} = $1;`
 
-  var rows = await dbs[layer.dbs || req.params.workspace.dbs](q, [req.params.id])
+  var rows = await dbs[layer.dbs || workspace.dbs](q, [req.params.id])
 
   if (rows instanceof Error) return res.status(500).send('PostgreSQL query error - please check backend logs.')
 

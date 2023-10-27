@@ -1,6 +1,10 @@
 const dbs = require('../utils/dbs')()
 
+const workspaceCache = require('../workspace/cache')
+
 module.exports = async (req, res) => {
+
+  const workspace = workspaceCache()
 
   const layer = req.params.layer
 
@@ -39,9 +43,9 @@ module.exports = async (req, res) => {
   RETURNING ${layer.qID} AS id;`
 
   // Validate dynamic method call.
-  if (!Object.hasOwn(dbs, layer.dbs || req.params.workspace.dbs) || typeof dbs[layer.dbs || req.params.workspace.dbs] !== 'function') return;
+  if (!Object.hasOwn(dbs, layer.dbs || workspace.dbs) || typeof dbs[layer.dbs || workspace.dbs] !== 'function') return;
 
-  var rows = await dbs[layer.dbs || req.params.workspace.dbs](q, vals)
+  var rows = await dbs[layer.dbs || workspace.dbs](q, vals)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 

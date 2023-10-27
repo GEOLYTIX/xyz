@@ -4,15 +4,19 @@ const Roles = require('../utils/roles.js')
 
 const _getLayer = require('./getLayer')
 
+const workspaceCache = require('./cache')
+
+let workspace;
+
 module.exports = async (req, res) => {
 
+  workspace = await workspaceCache()
+
   const keys = {
-    defaults: () => res.send(defaults),
     layer: getLayer,
     locale: getLocale,
     locales: getLocales,
     roles: getRoles,
-    timestamp: () => res.send(req.params.workspace.timestamp.toString()),
   }
 
   // The keys object must own a user provided lookup key
@@ -27,8 +31,6 @@ module.exports = async (req, res) => {
 }
 
 async function getLayer(req, res) {
-
-  const workspace = req.params.workspace
 
   if (!Object.hasOwn(workspace.locales, req.params.locale)) {
     return res.status(400).send(`Unable to validate locale param.`)
@@ -59,7 +61,7 @@ function getLocales(req, res) {
 
   const roles = req.params.user?.roles || []
 
-  const locales = Object.values(req.params.workspace.locales)
+  const locales = Object.values(workspace.locales)
     .filter(locale => !!Roles.check(locale, roles))
     .map(locale => ({
       key: locale.key,
@@ -71,19 +73,19 @@ function getLocales(req, res) {
 
 function getLocale(req, res) {
 
-  if (req.params.locale && !Object.hasOwn(req.params.workspace.locales, req.params.locale)) {
+  if (req.params.locale && !Object.hasOwn(workspace.locales, req.params.locale)) {
     return res.status(400).send(`Unable to validate locale param.`)
   }
 
   let locale = {};
 
-  if (Object.hasOwn(req.params.workspace.locales, req.params.locale)) {
+  if (Object.hasOwn(workspace.locales, req.params.locale)) {
 
-    locale = clone(req.params.workspace.locales?.[req.params.locale])
+    locale = clone(workspace.locales?.[req.params.locale])
 
-  } else if (typeof req.params.workspace.locale === 'object') {
+  } else if (typeof workspace.locale === 'object') {
 
-    locale = clone(req.params.workspace.locale)
+    locale = clone(workspace.locale)
   }
   
   const roles = req.params.user?.roles || []
@@ -102,9 +104,9 @@ function getLocale(req, res) {
 
 function getRoles(req, res) {
 
-  if (!req.params.workspace.locales) return res.send({})
+  if (!workspace.locales) return res.send({})
 
-  let roles = Roles.get(req.params.workspace)
+  let roles = Roles.get(workspace)
 
   res.send(roles)
 }

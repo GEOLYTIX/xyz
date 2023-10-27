@@ -8,10 +8,6 @@ const auth = require('../mod/user/auth')
 
 const saml = process.env.SAML_ENTITY_ID && require('../mod/user/saml')
 
-const workspaceCache = require('../mod/workspace/cache')
-
-const getTemplate = require('../mod/workspace/getTemplate')
-
 const routes = {
   layer: require('../mod/layer/_layer'),
   location: require('../mod/location/_location'),
@@ -111,7 +107,8 @@ module.exports = async (req, res) => {
   // Language param will default to english [en] is not explicitly set.
   req.params.language = req.params.language || 'en'
 
-  req.params.template = req.params._template || req.params.template
+  // Assign from _template if provided as path param.
+  req.params.template ??= req.params._template
 
   // Decode string params.
   Object.entries(req.params)
@@ -182,34 +179,6 @@ module.exports = async (req, res) => {
     }
 
     return login(req, res)
-  }
-
-  // Retrieve workspace and assign to request params.
-  const workspace = await workspaceCache()
-
-  if (workspace instanceof Error) {
-    return res.status(500).send(workspace.message)
-  }
-
-  req.params.workspace = workspace
-
-  // Retrieve query or view template from workspace
-  if (req.params.template) {
-
-    if (!Object.hasOwn(workspace.templates, req.params.template)) {
-
-      return res.status(404).send('Template not found.')
-    }
-
-    const template = await getTemplate(workspace.templates[req.params.template])
-
-    if (template.err) return res.status(500).send(template.err.message)
-
-    if (!user && (template.login || template.admin)) return login(req, res, 'login_required')
-
-    if (user && (!user.admin && template.admin)) return login(req, res, 'admin_required')
-
-    req.params.template = template
   }
 
   // Layer route
