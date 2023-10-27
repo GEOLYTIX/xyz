@@ -16,7 +16,7 @@ module.exports = async (template) => {
 
   // Substitute parameter in src string.
   template.src = template.src.replace(/\$\{(.*?)\}/g,
-    (matched) => process.env[`SRC_${matched.replace(/^\$|\{|\}$/g, '')}`]);
+    (matched) => process.env[`SRC_${matched.replace(/(^\${)|(}$)/g, '')}`]);
 
 
   if (!Object.hasOwn(getFrom, template.src.split(':')[0])) {
