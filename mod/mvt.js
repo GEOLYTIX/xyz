@@ -45,17 +45,17 @@ module.exports = async (req, res) => {
     m = 20037508.34,
     r = (m * 2) / (Math.pow(2, z))
 
-  const roles = Roles.filter(layer, req.params.user && req.params.user.roles)
+  const roleFilter = Roles.filter(layer, req.params.user?.roles)
 
   const SQLparams = []
 
-  const filter =
-    `${req.params.filter && ` AND ${sqlFilter(JSON.parse(req.params.filter), SQLparams)}` || ''}`
-    +`${roles && Object.values(roles).some(r => !!r)
-      ? `AND ${sqlFilter(Object.values(roles).filter(r => !!r), SQLparams)}`
-      : ''}`
+  const filter = [
+    req.params.filter?
+      ` AND ${sqlFilter(JSON.parse(req.params.filter), SQLparams)}`: '',
+    roleFilter && Object.values(roleFilter).some(r => !!r)?
+      ` AND ${sqlFilter(Object.values(roles).filter(r => !!r), SQLparams)}`: ''].join('')
 
-    // Construct array of fields queried
+  // Construct array of fields queried
   let mvt_fields = Object.values(layer.style?.themes || {})
     .map(theme => getField(theme))
     .filter(field => typeof field !== 'undefined')
