@@ -44,13 +44,22 @@ module.exports = async (req, res) => {
     // Get array of role filter from layer configuration.
     const roles = Roles.filter(layer, req.params.user?.roles)
 
-    // Create params filter string from roleFilter filter params.
-    req.params.filter =
-      ` ${layer.filter?.default && 'AND ' + layer.filter?.default || ''}
-      ${req.params.filter && `AND ${sqlFilter(JSON.parse(req.params.filter), SQLparams)}` || ''}
-      ${roles && Object.values(roles).some(r => !!r)
-        ? `AND ${sqlFilter(Object.values(roles).filter(r => !!r), SQLparams)}`
-        : ''}`
+    // Create a params filter string from roleFilter filter params.
+    // Include 'AND' followed by layer.filter?.default if it exists.
+    const layerFilterPart = layer.filter?.default ? `AND ${layer.filter.default}` : '';
+    console.log('layerFilterPart', layerFilterPart);
+    // Include 'AND' followed by the result of sqlFilter if req.params.filter is provided.
+    console.log('Filter', req.params.filter);
+    const reqFilterPart = req.params.filter ? `AND ${sqlFilter(JSON.parse(req.params.filter), SQLparams)}` : '';
+    console.log('reqFilterPart', reqFilterPart);
+    // Include 'AND' followed by the result of sqlFilter applied to roles with truthy values.
+    const rolesFilterPart = roles && Object.values(roles).some(r => !!r)
+      ? `AND ${sqlFilter(Object.values(roles).filter(r => !!r), SQLparams)}`
+      : '';
+    console.log('rolesFilterPart', rolesFilterPart);
+    // Combine the parts into a single filter string with spaces.
+    req.params.filter = `${layerFilterPart} ${reqFilterPart} ${rolesFilterPart}`;
+    console.log('req.params.filter', req.params.filter);
 
     // Split viewport param.
     const viewport = req.params.viewport?.split(',')
@@ -176,9 +185,9 @@ module.exports = async (req, res) => {
   }
 
   let rows = await dbs(query, SQLparams, req.params.statement_timeout || template.statement_timeout);
-  
+
   if (rows instanceof Error) {
-    
+
     return res.status(500).send('Failed to query PostGIS table.');
   }
 
@@ -191,17 +200,17 @@ module.exports = async (req, res) => {
 
   // Check whether any row of the rows array is empty.
   if (rows.length && !rows.some(row => checkEmptyRow(row))
-  
+
     // Check whether a single rows is empty.
     || !checkEmptyRow(rows)) {
-      
+
     return res.status(202).send('No rows returned from table.')
   }
 
   if (req.params.reduced || req.params.template?.reduce) {
-    
+
     // Reduce row values to an values array.
-    return res.send(rows.map(row=>Object.values(row)))
+    return res.send(rows.map(row => Object.values(row)))
   }
 
   // Send the infoj object with values back to the client.

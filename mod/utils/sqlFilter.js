@@ -30,11 +30,11 @@ const filterTypes = {
 let SQLparams
 
 function addValues(val, skip) {
-
+console.log('addValues',val);
   SQLparams.push(Array.isArray(val)
-    && val[0].map(v=>decodeURIComponent(v))
+    && val[0].map(v=>decodeURIComponent(encodeURIComponent(v)))
     || skip && val
-    || decodeURIComponent(val))
+    || decodeURIComponent(encodeURIComponent(val)))
 
   return SQLparams.length
 }

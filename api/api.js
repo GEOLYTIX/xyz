@@ -115,7 +115,7 @@ module.exports = async (req, res) => {
   Object.entries(req.params)
     .filter(entry => typeof entry[1] === 'string')
     .forEach(entry => {
-      req.params[entry[0]] = decodeURIComponent(entry[1])
+      req.params[entry[0]] = decodeURIComponent(encodeURIComponent(entry[1]))
     })
 
   // Short circuit login view or post request.
