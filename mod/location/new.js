@@ -45,7 +45,7 @@ module.exports = async (req, res) => {
   // Validate dynamic method call.
   if (!Object.hasOwn(dbs, layer.dbs || workspace.dbs) || typeof dbs[layer.dbs || workspace.dbs] !== 'function') return;
 
-  var rows = await dbs[layer.dbs || workspace.dbs](q, vals)
+  let rows = await dbs[layer.dbs || workspace.dbs](q, vals)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 

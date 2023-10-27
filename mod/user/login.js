@@ -107,7 +107,7 @@ async function post(req, res) {
   const host = `${req.headers.host.includes('localhost') && req.headers.host || process.env.ALIAS || req.headers.host}${process.env.DIR}`
 
   // Update access_log and return user record matched by email.
-  var rows = await acl(`
+  let rows = await acl(`
     UPDATE acl_schema.acl_table
     SET access_log = array_append(access_log, '${date.toISOString().replace(/\..*/,'')}@${remote_address}')
     WHERE lower(email) = lower($1)
@@ -140,7 +140,7 @@ async function post(req, res) {
       if (user.approved) {
 
         // Remove approval of expired user account.
-        var rows = await acl(`
+        rows = await acl(`
           UPDATE acl_schema.acl_table
           SET approved = false
           WHERE lower(email) = lower($1);`,
@@ -188,7 +188,7 @@ async function post(req, res) {
 
       user.session = nano_session
 
-      var rows = await acl(`
+      rows = await acl(`
       UPDATE acl_schema.acl_table
       SET session = '${nano_session}'
       WHERE lower(email) = lower($1)`,
@@ -211,7 +211,7 @@ async function post(req, res) {
   // Password from login form does NOT match encrypted password in ACL!
 
   // Increase failed login attempts counter by 1.
-  var rows = await acl(`
+  rows = await acl(`
     UPDATE acl_schema.acl_table
     SET failedattempts = failedattempts + 1
     WHERE lower(email) = lower($1)
@@ -229,7 +229,7 @@ async function post(req, res) {
     const verificationtoken = crypto.randomBytes(20).toString('hex')
 
     // Store verificationtoken and remove verification status.
-    var rows = await acl(`
+    rows = await acl(`
       UPDATE acl_schema.acl_table
       SET
         verified = false,

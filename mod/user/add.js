@@ -12,7 +12,7 @@ module.exports = async (req, res) => {
   const email = req.params.email.replace(/\s+/g, '')
 
   // Delete exsiting user account with same email in ACL.
-  var rows = await acl(`
+  let rows = await acl(`
     SELECT email FROM acl_schema.acl_table
     WHERE lower(email) = lower($1);`, [email])
 
@@ -25,7 +25,7 @@ module.exports = async (req, res) => {
   }
 
   // Create new user account
-  var rows = await acl(`
+  rows = await acl(`
     INSERT INTO acl_schema.acl_table (
       email,
       verified,

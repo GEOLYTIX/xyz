@@ -150,7 +150,7 @@ async function acl_lookup(email) {
   const date = new Date()
 
   // Update access_log and return user record matched by email.
-  var rows = await acl(`
+  let rows = await acl(`
     UPDATE acl_schema.acl_table
     SET access_log = array_append(access_log, '${date.toISOString().replace(/\..*/,'')}')
     WHERE lower(email) = lower($1)

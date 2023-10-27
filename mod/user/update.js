@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
   }
 
   // Get user to update from ACL.
-  var rows = await acl(`
+  let rows = await acl(`
   UPDATE acl_schema.acl_table
   SET
     ${req.params.field} = $2

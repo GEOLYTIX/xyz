@@ -155,7 +155,7 @@ module.exports = async (req, res) => {
     // Validate dynamic method call.
     if (!Object.hasOwn(dbs, layer.dbs || workspace.dbs) || typeof dbs[layer.dbs || workspace.dbs] !== 'function') return;    
 
-    var rows = await dbs[layer.dbs || workspace.dbs](`SELECT mvt FROM ${layer.mvt_cache} WHERE z = ${z} AND x = ${x} AND y = ${y}`)
+    let rows = await dbs[layer.dbs || workspace.dbs](`SELECT mvt FROM ${layer.mvt_cache} WHERE z = ${z} AND x = ${x} AND y = ${y}`)
 
     if (rows instanceof Error) console.log('failed to query mvt cache')
 
@@ -181,7 +181,7 @@ module.exports = async (req, res) => {
   // Validate dynamic method call.
   if (typeof dbs[layer.dbs || workspace.dbs] !== 'function') return;  
 
-  var rows = await dbs[layer.dbs || workspace.dbs](tile, SQLparams)
+  let rows = await dbs[layer.dbs || workspace.dbs](tile, SQLparams)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 

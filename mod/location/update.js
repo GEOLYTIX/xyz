@@ -53,7 +53,7 @@ module.exports = async (req, res) => {
 
   var q = `UPDATE ${req.params.table} SET ${fields.join()} WHERE ${layer.qID} = $1;`
 
-  var rows = await dbs[layer.dbs || workspace.dbs](q, [req.params.id])
+  let rows = await dbs[layer.dbs || workspace.dbs](q, [req.params.id])
 
   if (rows instanceof Error) return res.status(500).send('PostgreSQL query error - please check backend logs.')
 

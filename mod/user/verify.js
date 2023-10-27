@@ -11,7 +11,7 @@ module.exports = async (req, res) => {
   if (!acl) return res.status(500).send('ACL unavailable.')
 
   // Find user record with matching verificationtoken.
-  var rows = await acl(`
+  let rows = await acl(`
     SELECT email, language, approved, password_reset
     FROM acl_schema.acl_table
     WHERE verificationtoken = $1;`,
@@ -41,7 +41,7 @@ module.exports = async (req, res) => {
   }
 
   // Update user account in ACL with the approval token and remove verification token.
-  var rows = await acl(`
+  rows = await acl(`
     UPDATE acl_schema.acl_table SET
       failedattempts = 0,
       ${user.password_reset ?
@@ -75,7 +75,7 @@ module.exports = async (req, res) => {
   }
 
   // Get all admin accounts from the ACL.
-  var rows = await acl(`
+  rows = await acl(`
     SELECT email, language
     FROM acl_schema.acl_table
     WHERE admin = true;`)

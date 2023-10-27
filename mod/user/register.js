@@ -64,7 +64,7 @@ async function post(req, res) {
   if (!passwordRgx.test(req.body.password)) return res.status(403).send('Invalid password provided')
 
   // Attempt to retrieve ACL record with matching email field.
-  var rows = await acl(`
+  let rows = await acl(`
     SELECT email, password, language, blocked
     FROM acl_schema.acl_table 
     WHERE lower(email) = lower($1);`,
@@ -109,7 +109,7 @@ async function post(req, res) {
 
     // Set new password and verification token.
     // New passwords will only apply after account verification.
-    var rows = await acl(`
+    rows = await acl(`
       UPDATE acl_schema.acl_table SET
         ${process.env.APPROVAL_EXPIRY && user.expires_on ? `expires_on = ${parseInt((new Date().getTime() + process.env.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24)/1000)},` : ''}
         password_reset = '${password}',
@@ -144,7 +144,7 @@ async function post(req, res) {
   const language = Intl.Collator.supportedLocalesOf([req.body.language], { localeMatcher: 'lookup' })[0] || 'en';
   
   // Create new user account
-  var rows = await acl(`
+  rows = await acl(`
     INSERT INTO acl_schema.acl_table (
       email,
       password,

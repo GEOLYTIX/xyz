@@ -7,7 +7,7 @@ module.exports = async (req, res) => {
   const email = req.params.email.replace(/\s+/g, '')
 
   // Delete user account in ACL.
-  var rows = await acl(`
+  let rows = await acl(`
     DELETE FROM acl_schema.acl_table
     WHERE lower(email) = lower($1)
     RETURNING *;`, [email])
