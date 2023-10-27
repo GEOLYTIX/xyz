@@ -14,7 +14,7 @@ module.exports = async (params) => {
     if (!Object.hasOwn(workspace.templates, params.template)) {
 
         console.warn(`Template ${params.template} not found.`)
-        return;
+        return params.template;
     }
 
     const allLanguages = workspace.templates[params.template]

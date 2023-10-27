@@ -28,12 +28,16 @@ module.exports = async (req, res) => {
   if (template.err) return res.status(500).send(template.err.message)
 
   if (!req.params.user && (template.login || template.admin)) {
-    login(req, res, 'login_required')
+
+    req.params.msg = 'login_required'
+    login(req, res)
     return 
   }
 
   if (req.params.user && (!req.params.user.admin && template.admin)) {
-    login(req, res, 'admin_required')
+
+    req.params.msg = 'admin_required'
+    login(req, res)
     return
   }
 

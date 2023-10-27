@@ -9,7 +9,7 @@ const workspaceCache = require('../workspace/cache')
 
 module.exports = async (req, res) => {
 
-  const workspace = workspaceCache()
+  const workspace = await workspaceCache()
 
   if (!Object.hasOwn(methods, req.params.method)) {
     return res.send(`Failed to evaluate 'method' param.<br><br>

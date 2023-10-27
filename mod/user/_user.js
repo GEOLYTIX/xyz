@@ -54,10 +54,17 @@ module.exports = (req, res) => {
     <a href="https://geolytix.github.io/xyz/docs/develop/api/user/">User API</a>`)
   }
 
-  if (!req.params.user && (method.login || method.admin)) return 'login_required'
+  if (!req.params.user && (method.login || method.admin)) {
 
-  if (req.params.user && (!req.params.user.admin && method.admin)) return 'admin_required'
+    req.params.msg = 'login_required'
+    return 
+  }
+
+  if (req.params.user && (!req.params.user.admin && method.admin)) {
+
+    req.params.msg = 'admin_required'
+    return 
+  }
 
   method.handler(req, res)
-  
 }

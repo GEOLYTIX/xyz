@@ -4,7 +4,7 @@ const workspaceCache = require('../workspace/cache')
 
 module.exports = async (req, res) => {
 
-  const workspace = workspaceCache()
+  const workspace = await workspaceCache()
 
   const layer = req.params.layer
 

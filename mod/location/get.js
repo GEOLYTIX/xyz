@@ -8,7 +8,7 @@ const workspaceCache = require('../workspace/cache')
 
 module.exports = async (req, res) => {
 
-  const workspace = workspaceCache()
+  const workspace = await workspaceCache()
 
   // Check the layer.roles{} against the user.roles[]
   const layer = Roles.check(req.params.layer, req.params.user?.roles)

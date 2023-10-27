@@ -32,9 +32,12 @@ module.exports = async (req, res) => {
 
   if (!user) {
 
-    res.setHeader('location', `${process.env.DIR}?msg=token_not_found`)
+    const token_not_found = await languageTemplates({
+      template: 'token_not_found',
+      language: req.params.language
+    })
 
-    return res.status(302).send()
+    return res.status(302).send(token_not_found)
   }
 
   // Update user account in ACL with the approval token and remove verification token.

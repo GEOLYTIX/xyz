@@ -28,6 +28,11 @@ module.exports = async (req, res) => {
 
   params.title ??= process.env.TITLE
 
+  params.msg = req.params.msg && await languageTemplates({
+    template: req.params.msg,
+    language: req.params.language
+  })
+
   if (req.params.user && typeof req.params.user === 'object') {
 
     params.language ??= req.params.user.language
@@ -42,8 +47,9 @@ module.exports = async (req, res) => {
       }))
   
     if (!locales.length) {
-  
-      return login(req, res, 'no_locales')
+
+      req.params.msg = 'no_locales'
+      return login(req, res)
     }
 
     // Encode stringified user for template.

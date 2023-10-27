@@ -6,7 +6,7 @@ const workspaceCache = require('../workspace/cache')
 
 module.exports = async (req, res) => {
 
-  const workspace = workspaceCache()
+  const workspace = await workspaceCache()
 
   if (!req.params.layer) {
     return res.send(`Failed to evaluate 'layer' param.<br><br>

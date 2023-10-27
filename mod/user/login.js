@@ -14,7 +14,7 @@ const view = require('../view')
 
 const { nanoid } = require('nanoid')
 
-module.exports = async (req, res, _message) => {
+module.exports = async (req, res) => {
 
   if (!acl) return res.status(500).send('ACL unavailable.')
 
@@ -58,20 +58,12 @@ module.exports = async (req, res, _message) => {
 
   }
 
-  // Get message from templates.
-  const message = await languageTemplates({
-    template: req.params.msg || _message,
-    language: req.params.language
-  })
-
-  if (!message && req.params.user) {
+  if (!req.params.msg && req.params.user) {
 
     res.setHeader('location', `${process.env.DIR}`)
     res.status(302).send()
     return;
   }
-
-  req.params.msg = message || ' '
 
   loginView(req, res)
 }
@@ -130,10 +122,7 @@ async function post(req, res) {
   // Get user record from first row.
   const user = rows[0]
 
-  if (!user) return new Error(await languageTemplates({
-    template: 'auth_failed',
-    language: req.params.language
-  }))
+  if (!user) return new Error('auth_failed')
 
   // Blocked user cannot login.
   if (user.blocked) return new Error(await languageTemplates({
@@ -184,10 +173,7 @@ async function post(req, res) {
       remote_address
     })
 
-    return new Error(await languageTemplates({
-      template: 'user_not_verified',
-      language: user.language
-    }))
+    return new Error('user_not_verified')
   }
 
   // Check password from post body against encrypted password from ACL.
@@ -281,8 +267,5 @@ async function post(req, res) {
     remote_address
   })
 
-  return new Error(await languageTemplates({
-    template: 'auth_failed',
-    language: req.params.language
-  }))
+  return new Error('auth_failed')
 }

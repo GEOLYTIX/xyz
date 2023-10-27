@@ -105,7 +105,7 @@ module.exports = async (req, res) => {
   }
 
   // Language param will default to english [en] is not explicitly set.
-  req.params.language = req.params.language || 'en'
+  req.params.language ??= 'en'
 
   // Assign from _template if provided as path param.
   req.params.template ??= req.params._template
@@ -147,8 +147,10 @@ module.exports = async (req, res) => {
     // Remove cookie.
     res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
 
+    req.params.msg = user.msg
+
     // Return login view with error message.
-    return login(req, res, user.msg)
+    return login(req, res)
   }
 
   // Set user as request parameter.
@@ -163,11 +165,7 @@ module.exports = async (req, res) => {
   if (req.url.match(/(?<=\/api\/user)/)) {
 
     // A msg will be returned if the user does not met the required priviliges.
-    const msg = routes.user(req, res)
-
-    // Return the login view with the msg.
-    msg && login(req, res, msg)
-    return
+    return routes.user(req, res)
   }
 
   // The login view will be returned for all PRIVATE requests without a valid user.
