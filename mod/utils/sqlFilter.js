@@ -21,7 +21,7 @@ const filterTypes = {
     `(${val
       .split(',')
       .filter((val) => val.length > 0)
-      .map((val) => `"${col}" ILIKE \$${addValues(`${val}%`, true)}`)
+      .map((val) => `"${col}" ILIKE \$${addValues(`${val}%`)}`)
       .join(' OR ')})`,
 
   match: (col, val) => `"${col}"::text ILIKE \$${addValues(val)}`
@@ -29,12 +29,9 @@ const filterTypes = {
 
 let SQLparams
 
-function addValues(val, skip) {
+function addValues(val) {
 
-  SQLparams.push(Array.isArray(val)
-    && val[0].map(v=>decodeURIComponent(v))
-    || skip && val
-    || decodeURIComponent(val))
+  SQLparams.push(val)
 
   return SQLparams.length
 }
