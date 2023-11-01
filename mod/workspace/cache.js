@@ -21,7 +21,7 @@ module.exports = () => {
   if ((Date.now() - timestamp) > +process.env.WORKSPACE_AGE) {
 
     // current time minus cached timestamp exceeds WORKSPACE_AGE
-    delete cache
+    cache = null
 
     logger(`Workspace cache expired;`, 'workspace')
 
@@ -42,7 +42,7 @@ const query_templates = require('./templates/queries')
 async function cacheWorkspace() {
 
   // Get workspace from source.
-  workspace = process.env.WORKSPACE ?
+  const workspace = process.env.WORKSPACE ?
     await getFrom[process.env.WORKSPACE.split(':')[0]](process.env.WORKSPACE) : {}
 
   // Return error if source failed.
