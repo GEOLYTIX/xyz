@@ -11,7 +11,7 @@ module.exports = async ref => {
   try {
 
     // Subtitutes {*} with process.env.SRC_* key values.
-    const url = (ref.params?.url || ref).replace(/{(.*?)}/g,
+    const url = (ref.params?.url || ref).replace(/{{1}(.*?)}{1}/g,
       matched => process.env[`SRC_${matched.replace(/(^{)|(}$)/g, '')}`])
 
     const date = new Date(Date.now())
