@@ -96,10 +96,10 @@ async function locale(req, res) {
     return res.status(403).send('Role access denied.')
   }
 
-  // Subtitutes ${*} in locale with process.env.SRC_* values.
+  // Subtitutes ${*} with process.env.SRC_* key values.
   locale = JSON.parse(
     JSON.stringify(locale).replace(/\$\{(.*?)\}/g,
-      matched => process.env[`SRC_${matched.replace(/\$|\{|\}/g, '')}`] || matched)
+      matched => process.env[`SRC_${matched.replace(/(^\${)|(}$)/g, '')}`])
   )
   
   // Check layer access.

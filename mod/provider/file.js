@@ -5,8 +5,9 @@ const { join } = require('path')
 module.exports = async ref => {
   try {
 
-    const path = (ref.params?.url || ref).replace(/\{{1}(.+?)\}{1}/g,
-      matched => process.env[`SRC_${matched.replace(/\{{1}|\}{1}/g, '')}`] || matched)
+    // Subtitutes {*} with process.env.SRC_* key values.
+    const path = (ref.params?.url || ref).replace(/{(.*?)}/g,
+      matched => process.env[`SRC_${matched.replace(/(^{)|(}$)/g, '')}`])
 
     const file = readFileSync(join(__dirname, `../../${path}`))
 
