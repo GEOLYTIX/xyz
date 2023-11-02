@@ -2,7 +2,7 @@ const dbs_connections = require('./utils/dbs')()
 
 const sqlFilter = require('./utils/sqlFilter')
 
-const Roles = require('./utils/roles.js')
+const Roles = require('./utils/roles')
 
 const logger = require('./utils/logger');
 
@@ -50,18 +50,11 @@ module.exports = async (req, res) => {
   // Assign role filter and viewport params from layer object.
   if (req.params.layer) {
 
-    // Get locale for layer.
-    const locale = workspace.locales[req.params.locale]
-
-    // A layer must be found if the layer param is set.
-    if (!locale) return res.status(400).send('Locale not found.')
-
-    if (!Object.hasOwn(locale.layers, req.params.layer)) {
-
-      return res.status(400).send('Layer not found.')
-    }
-
     const layer = await getLayer(req.params)
+
+    if (layer instanceof Error) {
+      return res.status(400).send('Failed to access layer.')
+    }
 
     if (!Roles.check(layer, req.params.user?.roles)) {
       return res.status(403).send('Role access denied for layer.')

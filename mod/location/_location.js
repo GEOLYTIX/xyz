@@ -5,34 +5,27 @@ const methods = {
   delete: require('./delete'),
 }
 
-const workspaceCache = require('../workspace/cache')
+const Roles = require('../utils/roles')
+
+const getLayer = require('../workspace/getLayer')
 
 module.exports = async (req, res) => {
 
-  const workspace = await workspaceCache()
-
   if (!Object.hasOwn(methods, req.params.method)) {
-    return res.send(`Failed to evaluate 'method' param.<br><br>
-    <a href="https://geolytix.github.io/xyz/docs/develop/api/location/">Location API</a>`)
+    return res.send(`Failed to evaluate 'method' param.`)
   }
 
-  const method = methods[req.params.method]
+  const layer = await getLayer(req.params)
 
-  if (typeof method !== 'function') return;
+  if (layer instanceof Error) {
+    return res.status(400).send('Failed to access layer.')
+  }
+
+  if (!Roles.check(layer, req.params.user?.roles)) {
+    return res.status(403).send('Role access denied for layer.')
+  }
   
-  const locale = req.params.locale && workspace.locales[req.params.locale]
-
-  const layer = locale?.layers[req.params.layer] ||  workspace.templates[req.params.layer]
-
-  if (!layer) return res.status(400).send('Layer not found.')
-
   req.params.layer = layer
-
-  if (!req.params.layer) {
-    return res.status(400).send(`Failed to evaluate 'layer' param.<br><br>
-    <a href="https://geolytix.github.io/xyz/docs/develop/api/location/">Location API</a>`)
-  }
-  
-  return method(req, res)
-  
+ 
+  return methods[req.params.method](req, res)  
 }

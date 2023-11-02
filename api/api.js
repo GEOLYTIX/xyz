@@ -130,7 +130,7 @@ module.exports = async (req, res) => {
     res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
 
     // Remove logout parameter.
-    res.setHeader('location', `${process.env.DIR || '/'}`)
+    res.setHeader('location', (process.env.DIR || '/') + (req.params.msg && `?msg=${req.params.msg}`||''))
 
     return res.status(302).send()
   }

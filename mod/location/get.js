@@ -1,8 +1,8 @@
 const dbs = require('../utils/dbs')()
 
-const sqlFilter = require('../utils/sqlFilter.js')
+const sqlFilter = require('../utils/sqlFilter')
 
-const Roles = require('../utils/roles.js')
+const Roles = require('../utils/roles')
 
 const workspaceCache = require('../workspace/cache')
 

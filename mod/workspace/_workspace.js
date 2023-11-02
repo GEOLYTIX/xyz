@@ -1,10 +1,10 @@
-const clone = require('../utils/clone.js')
-
-const Roles = require('../utils/roles.js')
-
-const getLayer = require('./getLayer')
+const Roles = require('../utils/roles')
 
 const workspaceCache = require('./cache')
+
+const getLocale = require('./getLocale')
+
+const getLayer = require('./getLayer')
 
 let workspace;
 
@@ -69,21 +69,25 @@ function locales(req, res) {
   res.send(locales)
 }
 
-function locale(req, res) {
+async function locale(req, res) {
 
   if (req.params.locale && !Object.hasOwn(workspace.locales, req.params.locale)) {
     return res.status(400).send(`Unable to validate locale param.`)
   }
 
-  let locale = {};
+  let locale;
 
   if (Object.hasOwn(workspace.locales, req.params.locale)) {
 
-    locale = clone(workspace.locales?.[req.params.locale])
+    locale = await getLocale(req.params)
 
   } else if (typeof workspace.locale === 'object') {
 
-    locale = clone(workspace.locale)
+    locale = workspace.locale
+  }
+
+  if (locale instanceof Error) {
+    return res.status(400).send('Failed to access locale.')
   }
   
   const roles = req.params.user?.roles || []
@@ -92,6 +96,12 @@ function locale(req, res) {
     return res.status(403).send('Role access denied.')
   }
 
+  // Subtitutes ${*} in locale with process.env.SRC_* values.
+  locale = JSON.parse(
+    JSON.stringify(locale).replace(/\$\{(.*?)\}/g,
+      matched => process.env[`SRC_${matched.replace(/\$|\{|\}/g, '')}`] || matched)
+  )
+  
   // Check layer access.
   locale.layers = locale.layers && Object.entries(locale.layers)
     .filter(layer => !!Roles.check(layer[1], roles))

@@ -1,16 +1,8 @@
-const Roles = require('./utils/roles.js')
-
-const login = require('./user/login')
-
 const logger = require('./utils/logger')
 
 const languageTemplates = require('./utils/languageTemplates')
 
-const workspaceCache = require('./workspace/cache')
-
 module.exports = async (req, res) => {
-
-  const workspace = await workspaceCache()
 
   logger(req.url, 'view-req-url')
 
@@ -37,21 +29,6 @@ module.exports = async (req, res) => {
 
     params.language ??= req.params.user.language
 
-    const roles = req.params.user?.roles || []
-
-    const locales = Object.values(workspace.locales)
-      .filter(locale => !!Roles.check(locale, roles))
-      .map(locale => ({
-        key: locale.key,
-        name: locale.name
-      }))
-  
-    if (!locales.length) {
-
-      req.params.msg = 'no_locales'
-      return login(req, res)
-    }
-
     // Encode stringified user for template.
     params.user ??= encodeURI(JSON.stringify({
       email: req.params.user.email,
@@ -60,10 +37,6 @@ module.exports = async (req, res) => {
       language: req.params.user.language
     }));
   }
-
-  // Object.entries(process.env)
-  //   .filter(entry => entry[0].match(/^SRC_/))
-  //   .forEach(entry => params[entry[0].replace(/^SRC_/, '')]=entry[1])
 
   const template = await languageTemplates(params)
 

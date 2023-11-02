@@ -1,29 +1,36 @@
-const Roles = require('../utils/roles.js')
+const Roles = require('../utils/roles')
 
 const merge = require('../utils/merge')
 
-const getTemplate = require('./getTemplate')
-
 const workspaceCache = require('./cache')
+
+const getLocale = require('./getLocale')
+
+const getTemplate = require('./getTemplate')
 
 module.exports = async (params) => {
 
   const workspace = await workspaceCache()
 
   if (!Object.hasOwn(workspace.locales, params.locale)) {
-    return new Error('Unable to validate locale param.') //400
+    return new Error('Unable to validate locale param.')
   }
 
-  const locale = workspace.locales[params.locale]
+  const locale = await getLocale(params)
+
+  if (locale instanceof Error) {
+
+    return locale
+  }
 
   const roles = params.user?.roles || []
 
   if (!Roles.check(locale, roles)) {
-    return new Error('Role access denied.') //403
+    return new Error('Role access denied.')
   }
 
   if (!Object.hasOwn(locale.layers, params.layer)) {
-    return new Error('Unable to validate layer param.') //400
+    return new Error('Unable to validate layer param.')
   }
 
   const layer = locale.layers[params.layer]

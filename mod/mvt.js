@@ -4,7 +4,7 @@ const sqlFilter = require('./utils/sqlFilter')
 
 const validateRequestParams = require('./utils/validateRequestParams')
 
-const Roles = require('./utils/roles.js')
+const Roles = require('./utils/roles')
 
 const logger = require('./utils/logger')
 

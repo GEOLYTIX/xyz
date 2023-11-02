@@ -82,37 +82,20 @@ async function cacheWorkspace() {
     // Get locale object from key.
     const locale = workspace.locales[locale_key]
 
-    // A default locale has been defined in the workspace.
-    if (typeof workspace.locale === 'object') {
-
-      // Merge the workspace template into workspace.
-      merge(locale, workspace.locale)
-    }
-
-    // A template exists for the locale key.
-    if (Object.hasOwn(workspace.templates, locale_key) && typeof workspace.templates[locale_key] === 'object') {
-
-      // Merge the workspace template into workspace.
-      merge(locale, workspace.templates[locale_key])
-    }
+    // Merge the workspace template into workspace.
+    merge(locale, workspace.locale)
 
     // Assign key value as key on locale object.
     locale.key = locale_key
 
     // Assign locale key as name with no existing name on locale object.
-    locale.name = locale.name || locale_key
+    locale.name ??= locale_key
   })
 
   if (workspace.plugins) {
 
     console.warn(`Default plugins should be defined in the default workspace.locale{}`)
   }
-
-  // Substitute all SRC_* variables in locales.
-  workspace.locales = JSON.parse(
-    JSON.stringify(workspace.locales).replace(/\$\{(.*?)\}/g,
-      matched => process.env[`SRC_${matched.replace(/\$|\{|\}/g, '')}`] || matched)
-  )
 
   timestamp = Date.now()
 
