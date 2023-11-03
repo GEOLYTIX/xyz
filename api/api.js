@@ -110,13 +110,6 @@ module.exports = async (req, res) => {
   // Assign from _template if provided as path param.
   req.params.template ??= req.params._template
 
-  // Decode string params.
-  Object.entries(req.params)
-    .filter(entry => typeof entry[1] === 'string')
-    .forEach(entry => {
-      req.params[entry[0]] = decodeURIComponent(entry[1])
-    })
-
   // Short circuit login view or post request.
   if (req.params.login || req.body && req.body.login) return login(req, res)
 
