@@ -23,8 +23,6 @@ module.exports = () => {
     // current time minus cached timestamp exceeds WORKSPACE_AGE
     cache = null
 
-    logger(`Workspace cache expired;`, 'workspace')
-
     return cacheWorkspace()
   }
 
@@ -96,6 +94,8 @@ async function cacheWorkspace() {
 
     console.warn(`Default plugins should be defined in the default workspace.locale{}`)
   }
+
+  logger(`Workspace cached;`, 'workspace')
 
   timestamp = Date.now()
 
