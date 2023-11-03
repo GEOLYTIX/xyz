@@ -6,7 +6,8 @@ on:
   pull_request:
     branches: [ main ]
 
-jobs:
+runs:
+  using: 'node20'
   build:
     name: Build & Run Tests
     runs-on: ubuntu-latest
