@@ -32,19 +32,17 @@
   }
 }
 
-.link-with-img {
+.link-with-img>* {
+  height: 1.2em;
+  line-height: 1.2em;
+  display: inline-block;
+  vertical-align: middle;
+}
 
-  & >button,
-  & >.mask-icon,
-  & >.bg-icon {
-    width: 1.5em;
-    height: 1.5em;
-  }
-
-  & >* {
-    display: inline-block;
-    vertical-align: middle;
-  }
+.link-with-img>button,
+.link-with-img>.mask-icon,
+.link-with-img>.bg-icon {
+  width: 1.5em;
 }
 
 .dataview-mask {
