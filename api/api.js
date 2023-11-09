@@ -8,10 +8,8 @@ const auth = require('../mod/user/auth')
 
 const saml = process.env.SAML_ENTITY_ID && require('../mod/user/saml')
 
-const workspaceCache = require('../mod/workspace/cache')
-
 const routes = {
-  layer: require('../mod/layer/_layer'),
+  mvt: require('../mod/mvt'),
   location: require('../mod/location/_location'),
   provider: require('../mod/provider/_provider'),
   query: require('../mod/query'),
@@ -107,9 +105,10 @@ module.exports = async (req, res) => {
   }
 
   // Language param will default to english [en] is not explicitly set.
-  req.params.language = req.params.language || 'en'
+  req.params.language ??= 'en'
 
-  req.params.template = req.params._template || req.params.template
+  // Assign from _template if provided as path param.
+  req.params.template ??= req.params._template
 
   // Short circuit login view or post request.
   if (req.params.login || req.body && req.body.login) return login(req, res)
@@ -124,7 +123,7 @@ module.exports = async (req, res) => {
     res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
 
     // Remove logout parameter.
-    res.setHeader('location', `${process.env.DIR || '/'}`)
+    res.setHeader('location', (process.env.DIR || '/') + (req.params.msg && `?msg=${req.params.msg}`||''))
 
     return res.status(302).send()
   }
@@ -141,8 +140,10 @@ module.exports = async (req, res) => {
     // Remove cookie.
     res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
 
+    req.params.msg = user.msg
+
     // Return login view with error message.
-    return login(req, res, user.msg)
+    return login(req, res)
   }
 
   // Set user as request parameter.
@@ -157,11 +158,7 @@ module.exports = async (req, res) => {
   if (req.url.match(/(?<=\/api\/user)/)) {
 
     // A msg will be returned if the user does not met the required priviliges.
-    const msg = routes.user(req, res)
-
-    // Return the login view with the msg.
-    msg && login(req, res, msg)
-    return
+    return routes.user(req, res)
   }
 
   // The login view will be returned for all PRIVATE requests without a valid user.
@@ -175,34 +172,9 @@ module.exports = async (req, res) => {
     return login(req, res)
   }
 
-  // Retrieve workspace and assign to request params.
-  const workspace = await workspaceCache()
-
-  if (workspace instanceof Error) {
-    return res.status(500).send(workspace.message)
-  }
-
-  req.params.workspace = workspace
-
-  // Retrieve query or view template from workspace
-  if (req.params.template) {
-
-    const template = workspace.templates[req.params.template]
-
-    if (!template) return res.status(404).send('Template not found.')
-
-    if (template.err) return res.status(500).send(template.err.message)
-
-    if (!user && (template.login || template.admin)) return login(req, res, 'login_required')
-
-    if (user && (!user.admin && template.admin)) return login(req, res, 'admin_required')
-
-    req.params.template = template
-  }
-
   // Layer route
   if (req.url.match(/(?<=\/api\/layer)/)) {
-    return routes.layer(req, res)
+    return routes.mvt(req, res)
   }
 
   // Location route

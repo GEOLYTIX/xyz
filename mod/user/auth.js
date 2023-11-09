@@ -21,7 +21,7 @@ module.exports = async (req, res) => {
 
     if (process.env.NANO_SESSION) {
      
-      var rows = await acl(`
+      let rows = await acl(`
         SELECT session
         FROM acl_schema.acl_table
         WHERE lower(email) = lower($1);`,
@@ -39,7 +39,7 @@ module.exports = async (req, res) => {
       if (user.api) {
 
         // Retrieve the original api key for the user from ACL.
-        var rows = await acl(`
+        let rows = await acl(`
           SELECT api, blocked
           FROM acl_schema.acl_table
           WHERE lower(email) = lower($1);`, [user.email])

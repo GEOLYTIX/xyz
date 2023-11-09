@@ -5,7 +5,7 @@ const jwt = require('jsonwebtoken')
 module.exports = async (req, res) => {
 
   // Get user from ACL.
-  var rows = await acl(`
+  let rows = await acl(`
     SELECT * FROM acl_schema.acl_table
     WHERE lower(email) = lower($1);`, [req.params.user.email])
     
@@ -25,7 +25,7 @@ module.exports = async (req, res) => {
   const key = jwt.sign(api_user, process.env.SECRET)
  
   // Store api_token in ACL.
-  var rows = await acl(`
+  rows = await acl(`
     UPDATE acl_schema.acl_table SET api = '${key}'
     WHERE lower(email) = lower($1);`, [user.email])
     

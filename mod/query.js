@@ -2,13 +2,44 @@ const dbs_connections = require('./utils/dbs')()
 
 const sqlFilter = require('./utils/sqlFilter')
 
-const Roles = require('./utils/roles.js')
+const Roles = require('./utils/roles')
 
 const logger = require('./utils/logger');
 
+const login = require('./user/login')
+
+const workspaceCache = require('./workspace/cache')
+
+const getTemplate = require('./workspace/getTemplate')
+
+const getLayer = require('./workspace/getLayer');
+
 module.exports = async (req, res) => {
 
-  const template = req.params.template
+  const workspace = await workspaceCache()
+
+  if (!Object.hasOwn(workspace.templates, req.params.template)) {
+
+    return res.status(404).send('Template not found.')
+  }
+
+  const template = await getTemplate(workspace.templates[req.params.template])
+
+  if (template.err) return res.status(500).send(template.err.message)
+
+  if (!req.params.user && (template.login || template.admin)) {
+
+    req.params.msg = 'login_required'
+    login(req, res)
+    return 
+  }
+
+  if (req.params.user && (!req.params.user.admin && template.admin)) {
+
+    req.params.msg = 'admin_required'
+    login(req, res)
+    return
+  }
 
   // Array of params for parameterized queries with node-pg.
   const SQLparams = []
@@ -19,23 +50,14 @@ module.exports = async (req, res) => {
   // Assign role filter and viewport params from layer object.
   if (req.params.layer) {
 
-    // Get locale for layer.
-    const locale = req.params.workspace.locales[req.params.locale]
+    const layer = await getLayer(req.params)
 
-    // A layer must be found if the layer param is set.
-    if (!locale) return res.status(400).send('Locale not found.')
-
-    if (!Object.hasOwn(locale.layers, req.params.layer)) {
-
-      return res.status(400).send('Layer not found.')
+    if (layer instanceof Error) {
+      return res.status(400).send('Failed to access layer.')
     }
 
-    // Get layer from locale.
-    const layer = Roles.check(locale.layers[req.params.layer], req.params.user?.roles)
-
-    if (!layer) {
-
-      return res.status(403).send('Access prohibited.')
+    if (!Roles.check(layer, req.params.user?.roles)) {
+      return res.status(403).send('Role access denied for layer.')
     }
 
     // Set layer dbs as fallback param if not defined.
@@ -92,7 +114,11 @@ module.exports = async (req, res) => {
 
   // Render the query string q from tbe template and request params.
   try {
-    template.template = template.render && template.render(req.params) || template.template
+    if (typeof template.render === 'function') {
+
+      req.params.workspace = workspace
+      template.template = template.render(req.params)
+    }
 
     if (!template.template) {
 
@@ -156,7 +182,7 @@ module.exports = async (req, res) => {
   }
 
   // The dbs param or workspace dbs will be used as fallback if the dbs is not implicit in the template object.
-  const dbs_connection = String(template.dbs || req.params.dbs || req.params.workspace.dbs);
+  const dbs_connection = String(template.dbs || req.params.dbs || workspace.dbs);
 
   // Validate that the dbs_connection string exists as a stored connection method in dbs_connections.
   if (!Object.hasOwn(dbs_connections, dbs_connection)) {
@@ -198,7 +224,7 @@ module.exports = async (req, res) => {
     return res.status(202).send('No rows returned from table.')
   }
 
-  if (req.params.reduced || req.params.template?.reduce) {
+  if (req.params.reduce || template?.reduce) {
     
     // Reduce row values to an values array.
     return res.send(rows.map(row=>Object.values(row)))

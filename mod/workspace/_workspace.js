@@ -1,61 +1,65 @@
-const clone = require('../utils/clone.js')
+const Roles = require('../utils/roles')
 
-const Roles = require('../utils/roles.js')
+const workspaceCache = require('./cache')
+
+const getLocale = require('./getLocale')
+
+const getLayer = require('./getLayer')
+
+let workspace;
 
 module.exports = async (req, res) => {
 
+  workspace = await workspaceCache()
+
   const keys = {
-    defaults: () => res.send(defaults),
-    layer: getLayer,
-    locale: getLocale,
-    locales: getLocales,
-    roles: getRoles,
-    timestamp: () => res.send(req.params.workspace.timestamp.toString()),
+    layer,
+    locale,
+    locales,
+    roles,
   }
 
   // The keys object must own a user provided lookup key
   if (!Object.hasOwn(keys, req.params.key)) {
 
-    return res.send(`
-      Failed to evaluate 'key' param.<br><br>
-      <a href="https://github.com/GEOLYTIX/xyz/wiki/XYZ---API#workspacekey">Workspace API</a>`)
+    return res.status(400).send(`Failed to evaluate '${req.params.key}' param.`)
   }
 
   return keys[req.params.key](req, res)
 }
 
-async function getLayer(req, res) {
+async function layer(req, res) {
 
-  if (!Object.hasOwn(req.params.workspace.locales, req.params.locale)) {
+  if (!Object.hasOwn(workspace.locales, req.params.locale)) {
     return res.status(400).send(`Unable to validate locale param.`)
   }
 
-  const locale = req.params.workspace.locales[req.params.locale]
+  const locale = workspace.locales[req.params.locale]
 
   const roles = req.params.user?.roles || []
 
   if (!Roles.check(locale, roles)) {
-    return res.status(403).send('Role access denied.')
+    return res.status(403).send('Role access denied for locale.')
   }
 
   if (!Object.hasOwn(locale.layers, req.params.layer)) {
     return res.status(400).send(`Unable to validate layer param.`)
   }
 
-  const layer = clone(locale.layers[req.params.layer])
+  const layer = await getLayer(req.params)
 
   if (!Roles.check(layer, roles)) {
-    return res.status(403).send('Role access denied.')
+    return res.status(403).send('Role access denied for layer.')
   }
 
   res.json(layer)
 }
 
-function getLocales(req, res) {
+function locales(req, res) {
 
   const roles = req.params.user?.roles || []
 
-  const locales = Object.values(req.params.workspace.locales)
+  const locales = Object.values(workspace.locales)
     .filter(locale => !!Roles.check(locale, roles))
     .map(locale => ({
       key: locale.key,
@@ -65,21 +69,25 @@ function getLocales(req, res) {
   res.send(locales)
 }
 
-function getLocale(req, res) {
+async function locale(req, res) {
 
-  if (req.params.locale && !Object.hasOwn(req.params.workspace.locales, req.params.locale)) {
+  if (req.params.locale && !Object.hasOwn(workspace.locales, req.params.locale)) {
     return res.status(400).send(`Unable to validate locale param.`)
   }
 
-  let locale = {};
+  let locale;
 
-  if (Object.hasOwn(req.params.workspace.locales, req.params.locale)) {
+  if (Object.hasOwn(workspace.locales, req.params.locale)) {
 
-    locale = clone(req.params.workspace.locales?.[req.params.locale])
+    locale = await getLocale(req.params)
 
-  } else if (typeof req.params.workspace.locale === 'object') {
+  } else if (typeof workspace.locale === 'object') {
 
-    locale = clone(req.params.workspace.locale)
+    locale = workspace.locale
+  }
+
+  if (locale instanceof Error) {
+    return res.status(400).send('Failed to access locale.')
   }
   
   const roles = req.params.user?.roles || []
@@ -88,6 +96,12 @@ function getLocale(req, res) {
     return res.status(403).send('Role access denied.')
   }
 
+  // Subtitutes ${*} with process.env.SRC_* key values.
+  locale = JSON.parse(
+    JSON.stringify(locale).replace(/\$\{(.*?)\}/g,
+      matched => process.env[`SRC_${matched.replace(/(^\${)|(}$)/g, '')}`])
+  )
+  
   // Check layer access.
   locale.layers = locale.layers && Object.entries(locale.layers)
     .filter(layer => !!Roles.check(layer[1], roles))
@@ -96,11 +110,11 @@ function getLocale(req, res) {
   res.json(locale)
 }
 
-function getRoles(req, res) {
+function roles(req, res) {
 
-  if (!req.params.workspace.locales) return res.send({})
+  if (!workspace.locales) return res.send({})
 
-  let roles = Roles.get(req.params.workspace)
+  let roles = Roles.get(workspace)
 
   res.send(roles)
 }

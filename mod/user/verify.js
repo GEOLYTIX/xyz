@@ -1,10 +1,8 @@
-const crypto = require('crypto')
-
 const acl = require('./acl')()
 
 const mailer = require('../utils/mailer')
 
-const templates = require('../templates/_templates')
+const languageTemplates = require('../utils/languageTemplates')
 
 const login = require('./login')
 
@@ -13,7 +11,7 @@ module.exports = async (req, res) => {
   if (!acl) return res.status(500).send('ACL unavailable.')
 
   // Find user record with matching verificationtoken.
-  var rows = await acl(`
+  let rows = await acl(`
     SELECT email, language, approved, password_reset
     FROM acl_schema.acl_table
     WHERE verificationtoken = $1;`,
@@ -22,7 +20,10 @@ module.exports = async (req, res) => {
   if (rows instanceof Error) {
 
     // Get error message from templates.
-    const error_message = await templates('failed_query', req.params.language)
+    const error_message = await languageTemplates({
+      template: 'failed_query',
+      language: req.params.language
+    })
     
     return res.status(500).send(error_message)
   }
@@ -31,13 +32,16 @@ module.exports = async (req, res) => {
 
   if (!user) {
 
-    res.setHeader('location', `${process.env.DIR}?msg=token_not_found`)
+    const token_not_found = await languageTemplates({
+      template: 'token_not_found',
+      language: req.params.language
+    })
 
-    return res.status(302).send()
+    return res.status(302).send(token_not_found)
   }
 
   // Update user account in ACL with the approval token and remove verification token.
-  var rows = await acl(`
+  rows = await acl(`
     UPDATE acl_schema.acl_table SET
       failedattempts = 0,
       ${user.password_reset ?
@@ -50,7 +54,10 @@ module.exports = async (req, res) => {
   if (rows instanceof Error) {
 
     // Get error message from templates.
-    const error_message = await templates('failed_query', req.params.language)
+    const error_message = await languageTemplates({
+      template: 'failed_query',
+      language: req.params.language
+    })
     
     return res.status(500).send(error_message)
   }
@@ -68,7 +75,7 @@ module.exports = async (req, res) => {
   }
 
   // Get all admin accounts from the ACL.
-  var rows = await acl(`
+  rows = await acl(`
     SELECT email, language
     FROM acl_schema.acl_table
     WHERE admin = true;`)
@@ -76,7 +83,10 @@ module.exports = async (req, res) => {
   if (rows instanceof Error) {
 
     // Get error message from templates.
-    const error_message = await templates('failed_query', req.params.language)
+    const error_message = await languageTemplates({
+      template: 'failed_query',
+      language: req.params.language
+    })
 
     return res.status(500).send(error_message)
   }
@@ -84,31 +94,28 @@ module.exports = async (req, res) => {
   // One or more administrator have been 
   if (rows.length > 0) {
 
-    // Create protocol and host for mail templates.
-    const protocol = `${req.headers.host.includes('localhost') && 'http' || 'https'}://`
-    const host = `${req.headers.host.includes('localhost') && req.headers.host || process.env.ALIAS || req.headers.host}${process.env.DIR}`
-
     // Get array of mail promises.
     const mail_promises = rows.map(async row => {
 
-      const mail_template = await templates('admin_email', row.language || req.params.language, {
+      await mailer({
+        template: 'admin_email',
+        language: row.language,
+        to: row.email,
         email: user.email,
-        host: host,
-        protocol: protocol
+        host: `${req.headers.host.includes('localhost') && req.headers.host || process.env.ALIAS || req.headers.host}${process.env.DIR}`,
+        protocol: `${req.headers.host.includes('localhost') && 'http' || 'https'}://`
       })
-
-      // Assign email to mail template.
-      Object.assign(mail_template, {
-        to: row.email
-      })
-      
-      return mailer(mail_template)
     })
 
     // Continue after all mail promises have been resolved.
     Promise
-      .all(mail_promises)
-      .then(async arr => res.send(await templates('account_await_approval', user.language)))
+      .allSettled(mail_promises)
+      .then(async arr => {
+        res.send(await languageTemplates({
+          template: 'account_await_approval',
+          language: user.language
+        }))
+      })
       .catch(error => console.error(error))
 
   } else {

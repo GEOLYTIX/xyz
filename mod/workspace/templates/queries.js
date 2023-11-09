@@ -1,0 +1,51 @@
+module.exports = {
+  gaz_query: {
+    template: require('./gaz_query'),
+  },
+  get_last_location: {
+    template: require('./get_last_location'),
+  },
+  distinct_values: {
+    template: require('./distinct_values'),
+  },
+  field_stats: {
+    template: require('./field_stats'),
+  },
+  field_min: {
+    template: require('./field_min'),
+  },
+  field_max: {
+    template: require('./field_max'),
+  },
+  get_nnearest: {
+    render: require('./get_nnearest'),
+  },
+  geojson: {
+    render: require('./geojson'),
+  },
+  cluster: {
+    render: require('./cluster'),
+    reduce: true
+  },
+  cluster_hex: {
+    render: require('./cluster_hex'),
+    reduce: true
+  },
+  wkt: {
+    render: require('./wkt'),
+    reduce: true
+  },
+  infotip: {
+    render: require('./infotip'),
+  },
+  layer_extent: {
+    template: require('./layer_extent'),
+  },
+  mvt_cache: {
+    admin: true,
+    render: require('./mvt_cache'),
+  },
+  mvt_cache_delete_intersects: {
+    template: require('./mvt_cache_delete_intersects'),
+  }
+}

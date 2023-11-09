@@ -50,14 +50,20 @@ module.exports = (req, res) => {
   const method = methods[req.params.method]
 
   if (!method) {
-    return res.send(`Failed to evaluate 'method' param.<br><br>
-    <a href="https://geolytix.github.io/xyz/docs/develop/api/user/">User API</a>`)
+    return res.send(`Failed to evaluate 'method' param.`)
   }
 
-  if (!req.params.user && (method.login || method.admin)) return 'login_required'
+  if (!req.params.user && (method.login || method.admin)) {
 
-  if (req.params.user && (!req.params.user.admin && method.admin)) return 'admin_required'
+    req.params.msg = 'login_required'
+    return 
+  }
+
+  if (req.params.user && (!req.params.user.admin && method.admin)) {
+
+    req.params.msg = 'admin_required'
+    return 
+  }
 
   method.handler(req, res)
-  
 }

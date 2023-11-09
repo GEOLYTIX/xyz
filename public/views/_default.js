@@ -188,14 +188,21 @@ window.onload = async () => {
   // Get list of accessible locales from Workspace API.
   const locales = await mapp.utils.xhr(`${host}/api/workspace/locales`);
 
-  if (!locales.length) return alert('No accessible locales');
+  if (!locales.length) {
+
+    location.href = '?logout=true&msg=no_locales'
+    return;
+  }
 
   // Get locale with list of layers from Workspace API.
   const locale = await mapp.utils.xhr(
-    `${host}/api/workspace/locale?locale=${
-      document.head.dataset.locale || mapp.hooks.current.locale || locales[0].key
-    }`
-  );
+    `${host}/api/workspace/locale?locale=${mapp.hooks.current.locale || locales[0].key}`);
+
+  if(locale instanceof Error){
+
+    location.href = '?logout=true&msg=no_locale'
+    return;
+  }
 
   // Add locale dropdown to layers panel if multiple locales are accessible.
   if (locales.length > 1) {

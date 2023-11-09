@@ -1,21 +1,29 @@
-const dbs = require('../utils/dbs')()
+const dbs = require('./utils/dbs')()
 
-const sqlFilter = require('../utils/sqlFilter')
+const sqlFilter = require('./utils/sqlFilter')
 
-const validateRequestParams = require('../utils/validateRequestParams')
+const validateRequestParams = require('./utils/validateRequestParams')
 
-const Roles = require('../utils/roles.js')
+const Roles = require('./utils/roles')
 
-const logger = require('../utils/logger')
+const logger = require('./utils/logger')
+
+const workspaceCache = require('./workspace/cache')
+
+const getLayer = require('./workspace/getLayer')
 
 module.exports = async (req, res) => {
 
-  // Check the layer.roles{} against the user.roles[]
-  const layer = Roles.check(req.params.layer, req.params.user?.roles)
+  const workspace = await workspaceCache()
 
-  // The layer object did not pass the Roles.check()
+  const layer = await getLayer(req.params)
+
   if (!layer) {
-    return res.status(403).send('Access prohibited.')
+    return res.status(403).send('Layer not found.')
+  }
+
+  if (!Roles.check(layer, req.params.user?.roles)) {
+    return res.status(403).send('Role access denied for layer.')
   }
 
   // Validate URL parameter
@@ -37,17 +45,17 @@ module.exports = async (req, res) => {
     m = 20037508.34,
     r = (m * 2) / (Math.pow(2, z))
 
-  const roles = Roles.filter(layer, req.params.user && req.params.user.roles)
+  const roleFilter = Roles.filter(layer, req.params.user?.roles)
 
   const SQLparams = []
 
-  const filter =
-    `${req.params.filter && ` AND ${sqlFilter(JSON.parse(req.params.filter), SQLparams)}` || ''}`
-    +`${roles && Object.values(roles).some(r => !!r)
-      ? `AND ${sqlFilter(Object.values(roles).filter(r => !!r), SQLparams)}`
-      : ''}`
+  const filter = [
+    req.params.filter?
+      ` AND ${sqlFilter(JSON.parse(req.params.filter), SQLparams)}`: '',
+    roleFilter && Object.values(roleFilter).some(r => !!r)?
+      ` AND ${sqlFilter(Object.values(roles).filter(r => !!r), SQLparams)}`: ''].join('')
 
-    // Construct array of fields queried
+  // Construct array of fields queried
   let mvt_fields = Object.values(layer.style?.themes || {})
     .map(theme => getField(theme))
     .filter(field => typeof field !== 'undefined')
@@ -76,21 +84,21 @@ module.exports = async (req, res) => {
 
     if (Array.isArray(theme.fields)) {
 
-      return theme.fields.map(field => `${req.params.workspace.templates[field]?.template || field} AS ${field}`).join(', ')
+      return theme.fields.map(field => `${workspace.templates[field]?.template || field} AS ${field}`).join(', ')
     }
 
     if (!theme.field) return;
 
-    return `${req.params.workspace.templates[theme.field]?.template || theme.field} AS ${theme.field}`
+    return `${workspace.templates[theme.field]?.template || theme.field} AS ${theme.field}`
   }
 
   const geoms = layer.geoms && Object.keys(layer.geoms)
 
-  var geom = geoms && layer.geoms[z] || layer.geom
+  let geom = geoms && layer.geoms[z] || layer.geom
 
-  var geom = geoms && z < parseInt(geoms[0]) && Object.values(layer.geoms)[0] || geom
+  geom = geoms && z < parseInt(geoms[0]) && Object.values(layer.geoms)[0] || geom
   
-  var geom = geoms && z > parseInt(geoms[geoms.length -1]) && Object.values(layer.geoms)[geoms.length -1]  || geom
+  geom = geoms && z > parseInt(geoms[geoms.length -1]) && Object.values(layer.geoms)[geoms.length -1]  || geom
 
   if (!geom) {
     return res.status(204).send(null)
@@ -149,42 +157,38 @@ module.exports = async (req, res) => {
   if ((!filter || filter === '') && layer.mvt_cache) {
 
     // Validate dynamic method call.
-    if (!Object.hasOwn(dbs, layer.dbs || req.params.workspace.dbs) || typeof dbs[layer.dbs || req.params.workspace.dbs] !== 'function') return;    
+    if (!Object.hasOwn(dbs, layer.dbs || workspace.dbs) || typeof dbs[layer.dbs || workspace.dbs] !== 'function') return;    
 
-    var rows = await dbs[layer.dbs || req.params.workspace.dbs](`SELECT mvt FROM ${layer.mvt_cache} WHERE z = ${z} AND x = ${x} AND y = ${y}`)
+    let rows = await dbs[layer.dbs || workspace.dbs](`SELECT mvt FROM ${layer.mvt_cache} WHERE z = ${z} AND x = ${x} AND y = ${y}`)
 
     if (rows instanceof Error) console.log('failed to query mvt cache')
 
     if(!rows.length) {
 
       // Validate dynamic method call.
-      if (typeof dbs[layer.dbs || req.params.workspace.dbs] !== 'function') return;
+      if (typeof dbs[layer.dbs || workspace.dbs] !== 'function') return;
 
-      rows = await dbs[layer.dbs || req.params.workspace.dbs](`
+      rows = await dbs[layer.dbs || workspace.dbs](`
         WITH n AS (
           INSERT INTO ${layer.mvt_cache}
           ${tile} ON CONFLICT (z, x, y) DO NOTHING RETURNING mvt
-        ) SELECT mvt FROM n;
-      `)
+        ) SELECT mvt FROM n;`)
 
       if (rows instanceof Error) console.log('failed to cache mvt')
     }
     
-    if (rows.length === 1)  return res.send(rows[0].mvt) // If found return the cached MVT to client.
-
+    // If found return the cached MVT to client.
+    if (rows.length === 1)  return res.send(rows[0].mvt)
   }
 
   // Validate dynamic method call.
-  if (typeof dbs[layer.dbs || req.params.workspace.dbs] !== 'function') return;  
+  if (typeof dbs[layer.dbs || workspace.dbs] !== 'function') return;  
 
-  var rows = await dbs[layer.dbs || req.params.workspace.dbs](tile, SQLparams)
+  let rows = await dbs[layer.dbs || workspace.dbs](tile, SQLparams)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
   logger(`Get tile ${z}/${x}/${y}`, 'mvt')
 
-  // Return MVT to client.
-  // res.setHeader('Cache-Control', 's-maxage=1, stale-while-revalidate')
   res.send(rows[0].mvt)
-
 }

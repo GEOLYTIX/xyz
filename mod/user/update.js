@@ -2,7 +2,7 @@ const acl = require('./acl')()
 
 const mailer = require('../utils/mailer')
 
-const templates = require('../templates/_templates')
+const languageTemplates = require('../utils/languageTemplates')
 
 module.exports = async (req, res) => {
 
@@ -14,7 +14,7 @@ module.exports = async (req, res) => {
   }
 
   // Get user to update from ACL.
-  var rows = await acl(`
+  let rows = await acl(`
   UPDATE acl_schema.acl_table
   SET
     ${req.params.field} = $2
@@ -26,7 +26,10 @@ module.exports = async (req, res) => {
   if (rows instanceof Error) {
 
     // Get error message from templates.
-    const error_message = await templates('failed_query', req.params.language)
+    const error_message = await languageTemplates({
+      template: 'failed_query',
+      language: req.params.language
+    })
 
     return res.status(500).send(error_message)
   }
@@ -37,19 +40,20 @@ module.exports = async (req, res) => {
 
   // Send email to the user account if an account has been approved.
   if (req.params.field === 'approved' && req.params.value === 'true') {
-
-    const mail_template = await templates('approved_account', req.params.user.language, {
+   
+    await mailer({
+      template: 'approved_account',
+      language: req.params.user.language,
+      to: email,
       host: host,
       protocol: protocol
     })
-
-    // Assign email to mail template
-    Object.assign(mail_template, {
-      to: email
-    })
-    
-    await mailer(mail_template)
   }
 
-  return res.send(await templates('update_ok', req.params.user.language))
+  const update_ok = await languageTemplates({
+    template: 'update_ok',
+    language: req.params.user.language
+  })
+
+  return res.send(update_ok)
 }
