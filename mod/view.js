@@ -40,6 +40,11 @@ module.exports = async (req, res) => {
 
   const template = await languageTemplates(params)
 
+  if (!template) {
+    res.status(400).send(`Template undefined`)
+    return;
+  }
+
   const view = template.replace(/{{2}([A-Za-z][A-Za-z0-9]*)}{2}/g, matched => {
 
     // regex matches {{ or }}
