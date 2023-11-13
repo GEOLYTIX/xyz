@@ -55,7 +55,7 @@ module.exports = async (template) => {
   if (typeof response === 'object') {
 
     // Get template from src.
-    merge(template, response)
+    template = merge(response, template)
 
   } else if (typeof response === 'string') {
 

@@ -39,18 +39,18 @@ module.exports = async (params) => {
   layer.key ??= params.layer
 
   if (Object.hasOwn(workspace.templates, layer.template || layer.key)) {
+
     // Merge the workspace template into the layer.
-    layer = 
-    merge(await getTemplate(workspace.templates[layer.template || layer.key]),layer)
+    layer =  merge(await getTemplate(workspace.templates[layer.template || layer.key]), layer)
   }
 
   if (Array.isArray(layer.templates)) {
 
     // Merge templates from templates array into layer.
     layer.templates.forEach(async template => {
+      
       // Merge the workspace template into the layer.
-      layer =
-      merge(await getTemplate(workspace.templates[template]),layer)
+      layer = merge(await getTemplate(workspace.templates[template]), layer)
     })
   }
 

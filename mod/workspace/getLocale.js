@@ -14,7 +14,7 @@ module.exports = async (params) => {
     return new Error('Unable to validate locale param.')
   }
 
-  const locale = workspace.locales[params.locale]
+  let locale = workspace.locales[params.locale]
 
   const roles = params.user?.roles || []
 
@@ -26,7 +26,7 @@ module.exports = async (params) => {
   if (Object.hasOwn(workspace.templates, params.locale)) {
 
     // Merge the workspace template into workspace.
-    merge(locale, await getTemplate(workspace.templates[params.locale]))
+    locale = merge(await getTemplate(workspace.templates[params.locale]), locale)
   }
 
   return locale
