@@ -1,31 +1,43 @@
 const getFrom = require('../provider/getFrom')
 
+const getTemplate = require('../workspace/getTemplate')
+
 const workspaceCache = require('../workspace/cache')
 
 module.exports = async (params) => {
 
-    if (params.template === undefined) return;
+  if (params.template === undefined) return;
 
-    // Set english as default template language.
-    params.language ??= 'en'
+  // Set english as default template language.
+  params.language ??= 'en'
 
-    const workspace = await workspaceCache()
+  const workspace = await workspaceCache()
 
-    if (!Object.hasOwn(workspace.templates, params.template)) {
+  if (!Object.hasOwn(workspace.templates, params.template)) {
 
-        console.warn(`Template ${params.template} not found.`)
-        return params.template;
-    }
+    console.warn(`Template ${params.template} not found.`)
+    return params.template;
+  }
 
-    const allLanguages = workspace.templates[params.template]
+  // NOT a language template
+  if (workspace.templates[params.template].src) {
 
-    let template = Object.hasOwn(allLanguages, params.language)? allLanguages[params.language]: allLanguages.en;
+    const nonLanguage = await getTemplate(workspace.templates[params.template])
 
-    if (typeof template === 'string' && Object.hasOwn(getFrom, template.split(':')[0])) {
+    return nonLanguage.template
+  }
 
-        // Get template from method.
-        template = await getFrom[template.split(':')[0]](template)
-    }
+  const allLanguages = workspace.templates[params.template]
 
-    return template
+  let template = Object.hasOwn(allLanguages, params.language)
+    ? allLanguages[params.language]
+    : allLanguages.en;
+
+  if (typeof template === 'string' && Object.hasOwn(getFrom, template.split(':')[0])) {
+
+    // Get template from method.
+    template = await getFrom[template.split(':')[0]](template)
+  }
+
+  return template
 }
