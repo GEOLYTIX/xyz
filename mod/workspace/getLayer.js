@@ -33,21 +33,24 @@ module.exports = async (params) => {
     return new Error('Unable to validate layer param.')
   }
 
-  const layer = locale.layers[params.layer]
+  let layer = locale.layers[params.layer]
 
   // Assign key value as key on layer object.
   layer.key ??= params.layer
 
   if (Object.hasOwn(workspace.templates, layer.template || layer.key)) {
-
-    merge(layer, await getTemplate(workspace.templates[layer.template || layer.key]))
+    // Merge the workspace template into the layer.
+    layer = 
+    merge(await getTemplate(workspace.templates[layer.template || layer.key]),layer)
   }
 
   if (Array.isArray(layer.templates)) {
 
     // Merge templates from templates array into layer.
     layer.templates.forEach(async template => {
-      merge(layer, await getTemplate(workspace.templates[template]))
+      // Merge the workspace template into the layer.
+      layer =
+      merge(await getTemplate(workspace.templates[template]),layer)
     })
   }
 
