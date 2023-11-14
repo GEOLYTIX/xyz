@@ -104,7 +104,7 @@ async function post(req, res) {
 
   // Get the protocol and host for account verification email.
   const protocol = `${req.headers.host.includes('localhost') && 'http' || 'https'}://`
-  const host = `${req.headers.host.includes('localhost') && req.headers.host || process.env.ALIAS || req.headers.host}${process.env.DIR}`
+  const host = `${req.headers.host.includes('localhost') && req.headers.host || req.headers.origin || req.headers.host}${process.env.DIR}`
 
   // Update access_log and return user record matched by email.
   let rows = await acl(`
