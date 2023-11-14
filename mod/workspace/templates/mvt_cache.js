@@ -1,25 +1,23 @@
 module.exports = _ => {
 
-  const layer = _.workspace.locales[_.locale].layers[_.layer]
-
-  if (!layer.mvt_cache) return;
+  if (!_.layer.mvt_cache) return;
   
   return `
     
-    DROP table if exists ${layer.mvt_cache};
+    DROP table if exists ${_.layer.mvt_cache};
 
-    Create UNLOGGED table ${layer.mvt_cache}
+    Create UNLOGGED table ${_.layer.mvt_cache}
     (
       z integer not null,
       x integer not null,
       y integer not null,
       mvt bytea,
       tile geometry(Polygon, ${layer.srid}),
-      constraint ${layer.mvt_cache.replace(/\./, '_')}_z_x_y_pk
+      constraint ${_.layer.mvt_cache.replace(/\./, '_')}_z_x_y_pk
         primary key (z, x, y)
     );
 
-    Create index IF NOT EXISTS ${layer.mvt_cache.replace(/\./, '_')}_tile on ${layer.mvt_cache} (tile);
+    Create index IF NOT EXISTS ${_.layer.mvt_cache.replace(/\./, '_')}_tile on ${_.layer.mvt_cache} (tile);
 
-    SELECT '${layer.mvt_cache} cache OK' as msg;`
+    SELECT '${_.layer.mvt_cache} cache OK' as msg;`
 }
