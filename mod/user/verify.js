@@ -102,8 +102,7 @@ module.exports = async (req, res) => {
         language: row.language,
         to: row.email,
         email: user.email,
-        host: `${req.headers.host.includes('localhost') && req.headers.host || req.headers.origin || req.headers.host}${process.env.DIR}`,
-        protocol: `${req.headers.host.includes('localhost') && 'http' || 'https'}://`
+        host: `${req.headers.origin}${process.env.DIR}`
       })
     })
 
