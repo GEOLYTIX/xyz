@@ -1,9 +1,7 @@
 module.exports = _ => {
 
-    const layer = _.workspace.locales[_.locale].layers[_.layer]
-
-    _.qID ??= layer.qID || null
-    _.geom ??= layer.geom
+    _.qID ??= _.layer.qID || null
+    _.geom ??= _.layer.geom
 
     // Get fields array from query params.
     const fields = _.fields?.split(',')

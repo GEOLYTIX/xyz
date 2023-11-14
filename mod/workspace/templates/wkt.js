@@ -1,7 +1,5 @@
 module.exports = _ => {
 
-    const layer = _.workspace.locales[_.locale].layers[_.layer]
-
     // Get fields array from query params.
     const fields = _.fields?.split(',')
         .map(field => _.workspace.templates[field]?.template || field)
@@ -10,12 +8,12 @@ module.exports = _ => {
     // Push label (cluster) into fields
     _.label && fields.push(_.workspace.templates[_.label]?.template || _.label)
 
-    const where = _.viewport || `AND ${_.geom || layer.geom} IS NOT NULL`
+    const where = _.viewport || `AND ${_.geom || _.layer.geom} IS NOT NULL`
 
     return `
         SELECT
         \${qID} AS id,
-        ST_AsText(${_.geom || layer.geom}) AS geometry
+        ST_AsText(${_.geom || _.layer.geom}) AS geometry
         ${fields && `, ${fields.join(', ')}` || ''}
         FROM \${table}
         WHERE TRUE ${where} \${filter};`

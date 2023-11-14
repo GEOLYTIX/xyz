@@ -50,25 +50,25 @@ module.exports = async (req, res) => {
   // Assign role filter and viewport params from layer object.
   if (req.params.layer) {
 
-    const layer = await getLayer(req.params)
+    req.params.layer = await getLayer(req.params)
 
-    if (layer instanceof Error) {
+    if (req.params.layer instanceof Error) {
       return res.status(400).send('Failed to access layer.')
     }
 
-    if (!Roles.check(layer, req.params.user?.roles)) {
+    if (!Roles.check(req.params.layer, req.params.user?.roles)) {
       return res.status(403).send('Role access denied for layer.')
     }
 
     // Set layer dbs as fallback param if not defined.
-    req.params.dbs = req.params.dbs || layer.dbs
+    req.params.dbs = req.params.dbs || req.params.layer.dbs
 
     // Get array of role filter from layer configuration.
-    const roles = Roles.filter(layer, req.params.user?.roles)
+    const roles = Roles.filter(req.params.layer, req.params.user?.roles)
 
     // Create params filter string from roleFilter filter params.
     req.params.filter =
-      ` ${layer.filter?.default && 'AND ' + layer.filter?.default || ''}
+      ` ${req.params.layer.filter?.default && 'AND ' + req.params.layer.filter?.default || ''}
       ${req.params.filter && `AND ${sqlFilter(JSON.parse(req.params.filter), SQLparams)}` || ''}
       ${roles && Object.values(roles).some(r => !!r)
         ? `AND ${sqlFilter(Object.values(roles).filter(r => !!r), SQLparams)}`
@@ -89,11 +89,11 @@ module.exports = async (req, res) => {
               ${viewport[3]},
               ${parseInt(viewport[4])}
             ),
-            ${req.params.srid || layer.srid}),
-          ${req.params.geom || layer.geom}
+            ${req.params.srid || req.params.layer.srid}),
+          ${req.params.geom || req.params.layer.geom}
         )`
 
-    req.params.qID = req.params.qID || layer.qID || 'NULL'
+    req.params.qID = req.params.qID || req.params.layer.qID || 'NULL'
 
   } else {
 
