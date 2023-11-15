@@ -102,7 +102,7 @@ module.exports = async (req, res) => {
         language: row.language,
         to: row.email,
         email: user.email,
-        host: `${req.headers.origin || 'https://' + req.headers.host}${process.env.DIR}`
+        host: `${req.headers.origin || new URL(req.headers.referer).origin}${process.env.DIR}`
       })
     })
 

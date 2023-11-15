@@ -95,7 +95,7 @@ async function post(req, res) {
   const date = new Date().toISOString().replace(/\..*/,'')
 
   // Get the host for account verification email.
-  const host = `${req.headers.origin || 'https://' + req.headers.host}${process.env.DIR}`
+  const host = `${req.headers.origin || new URL(req.headers.referer).origin}${process.env.DIR}`
 
   // The password will be reset for exisiting user accounts.
   if (user) {
