@@ -1,8 +1,12 @@
+const view = require('../view')
+
 const methods = {
   admin: {
     handler: (req,res) => {
-      res.setHeader('location', `${process.env.DIR}/view/user_admin_view`)
-      return res.status(302).send()
+      req.params.template = 'user_admin_view'
+      req.params.language = req.params.user.language
+      req.params.user = req.params.user.email
+      view(req, res)
     },
     admin: true
   },
