@@ -47,8 +47,6 @@ module.exports = async params => {
     }
 
     template.text = replaceStringParams(template.text, params)
-
-    template.text = template.text.replace(/^(?!\s+$)\s+/gm, '')
   }
 
   if (Object.hasOwn(getFrom, template.html?.split(':')[0])) {

@@ -1,6 +1,9 @@
 const methods = {
   admin: {
-    handler: require('./admin'),
+    handler: (req,res) => {
+      res.setHeader('location', `${process.env.DIR}/view/user_admin_view`)
+      return res.status(302).send()
+    },
     admin: true
   },
   register: {
@@ -56,13 +59,13 @@ module.exports = (req, res) => {
   if (!req.params.user && (method.login || method.admin)) {
 
     req.params.msg = 'login_required'
-    return 
+    return methods.login.handler(req,res)
   }
 
   if (req.params.user && (!req.params.user.admin && method.admin)) {
 
     req.params.msg = 'admin_required'
-    return 
+    return methods.login.handler(req,res)
   }
 
   method.handler(req, res)
