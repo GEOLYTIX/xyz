@@ -620,6 +620,10 @@
       mask-image: url("../icons/icon-toggle-on.svg");
     }
   }
+  &.disabled {
+    background-color: var(--color-primary-light);
+    pointer-events: none;
+  }
 }
 
 .touch-app {

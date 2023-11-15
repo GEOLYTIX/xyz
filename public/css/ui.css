@@ -816,6 +816,10 @@ h3 {
       mask-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij4KPHBhdGggZD0iTTE3IDdIN2MtMi43NiAwLTUgMi4yNC01IDVzMi4yNCA1IDUgNWgxMGMyLjc2IDAgNS0yLjI0IDUtNXMtMi4yNC01LTUtNXptMCA4Yy0xLjY2IDAtMy0xLjM0LTMtM3MxLjM0LTMgMy0zIDMgMS4zNCAzIDMtMS4zNCAzLTMgM3oiLz4KPC9zdmc+);
     }
   }
+  &.disabled {
+    background-color: var(--color-primary-light);
+    pointer-events: none;
+  }
 }
 .touch-app {
   &.bg-icon {
