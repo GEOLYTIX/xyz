@@ -104,8 +104,7 @@ module.exports = async (req, res) => {
         email: user.email,
         host: `${req.headers.origin 
           || req.headers.referer && new URL(req.headers.referer).origin 
-          || process.env.ALIAS 
-          || req.headers.host}${process.env.DIR}`
+          || 'https://' + (process.env.ALIAS || req.headers.host)}${process.env.DIR}`
       })
     })
 
@@ -113,7 +112,6 @@ module.exports = async (req, res) => {
     Promise
       .allSettled(mail_promises)
       .then(async arr => {
-        console.log(arr)
         res.send(await languageTemplates({
           template: 'account_await_approval',
           language: user.language

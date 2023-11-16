@@ -23,8 +23,7 @@ module.exports = async (req, res) => {
     to: user.email,
     host: `${req.headers.origin 
       || req.headers.referer && new URL(req.headers.referer).origin 
-      || process.env.ALIAS 
-      || req.headers.host}${process.env.DIR}`
+      || 'https://' + (process.env.ALIAS || req.headers.host)}${process.env.DIR}`
   })
 
   res.send('User account deleted.')

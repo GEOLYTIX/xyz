@@ -36,8 +36,7 @@ module.exports = async (req, res) => {
 
   const host = `${req.headers.origin 
     || req.headers.referer && new URL(req.headers.referer).origin 
-    || process.env.ALIAS 
-    || req.headers.host}${process.env.DIR}`
+    || 'https://' + (process.env.ALIAS || req.headers.host)}${process.env.DIR}`
 
   // Send email to the user account if an account has been approved.
   if (req.params.field === 'approved' && req.params.value === 'true') {

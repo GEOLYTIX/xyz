@@ -34,6 +34,24 @@ module.exports = async params => {
 
   const template = await languageTemplates(params)
 
+  await getBody(template)
+
+  const mailTemplate = {
+    to: params.to,
+    from: email,
+    sender: email,
+    subject: replaceStringParams(template.subject, params),
+    html: template.html ? replaceStringParams(template.html, params) : undefined,
+    text: template.text ? replaceStringParams(template.text, params) : undefined
+  }
+ 
+  const result = await transport.sendMail(mailTemplate).catch(err => console.error(err))
+
+  logger(result, 'mailer')
+}
+
+async function getBody(template){
+
   if (template.text) {
 
     // Prevent mail template from having text and html
@@ -41,12 +59,8 @@ module.exports = async params => {
 
     if (Object.hasOwn(getFrom, template.text.split(':')[0])) {
 
-      template.text =  await getFrom[template.text.split(':')[0]](template.text)
-
-      if (!template.text) return;
+      template.text = await getFrom[template.text.split(':')[0]](template.text)
     }
-
-    template.text = replaceStringParams(template.text, params)
   }
 
   if (template.html) {
@@ -54,22 +68,8 @@ module.exports = async params => {
     if (Object.hasOwn(getFrom, template.html.split(':')[0])) {
 
       template.html =  await getFrom[template.html.split(':')[0]](template.html)
-
-      if (!template.html) return;
     }
-
-    template.html = replaceStringParams(template.html, params)
   }
-
-  template.subject = replaceStringParams(template.subject, params)
-
-  template.to = params.to
-  template.from = email
-  template.sender = email
-  
-  const result = await transport.sendMail(template).catch(err => console.error(err))
-
-  logger(result, 'mailer')
 }
 
 function replaceStringParams(string, params) {
