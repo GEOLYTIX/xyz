@@ -21,7 +21,10 @@ module.exports = async (req, res) => {
     template: 'deleted_account',
     language: user.language,
     to: user.email,
-    host: `${req.headers.origin || new URL(req.headers.referer).origin}${process.env.DIR}`
+    host: `${req.headers.origin 
+      || req.headers.referer && new URL(req.headers.referer).origin 
+      || process.env.ALIAS 
+      || req.headers.host}${process.env.DIR}`
   })
 
   res.send('User account deleted.')

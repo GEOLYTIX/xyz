@@ -34,7 +34,10 @@ module.exports = async (req, res) => {
     return res.status(500).send(error_message)
   }
 
-  const host = `${req.headers.origin || new URL(req.headers.referer).origin}${process.env.DIR}`
+  const host = `${req.headers.origin 
+    || req.headers.referer && new URL(req.headers.referer).origin 
+    || process.env.ALIAS 
+    || req.headers.host}${process.env.DIR}`
 
   // Send email to the user account if an account has been approved.
   if (req.params.field === 'approved' && req.params.value === 'true') {
