@@ -149,7 +149,7 @@
 }
 
 .lighter-background {
-  background-color: var(--color-lighter);
+  background-color: var(--color-light-secondary);
 }
 
 .off-black {

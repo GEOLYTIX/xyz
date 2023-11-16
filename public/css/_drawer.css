@@ -7,7 +7,7 @@
 
 .drawer {
   padding: 5px;
-  background-color: white;
+  background-color: var(--color-light-tertiary);
 
   &.expandable:not(.empty)>.header:hover {
     cursor: pointer;
@@ -70,13 +70,13 @@
 
   &.flat {
     border-radius: 2px;
-    border: 1px solid var(--color-lighter);
+    border: 1px solid var(--color-light-secondary);
   }
 
   &.raised {
     border-radius: 2px;
     box-shadow: 1px 1px 3px var(--color-primary-light);
-    border: 1px solid var(--color-lighter);
+    border: 1px solid var(--color-light-secondary);
   }
 
   &.raised.empty {
