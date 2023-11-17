@@ -102,9 +102,10 @@ async function post(req, res) {
 
   const date = new Date()
 
-  // Get the protocol and host for account verification email.
-  const protocol = `${req.headers.host.includes('localhost') && 'http' || 'https'}://`
-  const host = `${req.headers.host.includes('localhost') && req.headers.host || process.env.ALIAS || req.headers.host}${process.env.DIR}`
+  // Get the host for the account verification email.
+  const host = `${req.headers.origin 
+    || req.headers.referer && new URL(req.headers.referer).origin 
+    || 'https://' + (process.env.ALIAS || req.headers.host)}${process.env.DIR}`
 
   // Update access_log and return user record matched by email.
   let rows = await acl(`
@@ -169,7 +170,6 @@ async function post(req, res) {
       language: user.language,
       to: user.email,
       host: host,
-      protocol: protocol,
       remote_address
     })
 
@@ -247,7 +247,6 @@ async function post(req, res) {
       to: user.email,
       host: host,
       failed_attempts: parseInt(process.env.FAILED_ATTEMPTS) || 3,
-      protocol: protocol,
       verificationtoken: verificationtoken,
       remote_address
     })
