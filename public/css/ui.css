@@ -1309,8 +1309,7 @@ label.checkbox {
       font-weight: bold;
       font-size: 0.8em;
       color: black;
-      background-color: var(--color-light);
-      background: #e3e3e3;
+      background-color: var(--color-mid);
     }
   }
   & .textarea {
