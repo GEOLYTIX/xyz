@@ -8,6 +8,7 @@
   --color-light: #ffffff;
   --color-light-secondary: #f2f2f2;
   --color-light-tertiary: #fafafa;
+  --color-mid: #e3e3e3;
   --color-on: #E18335;
   --color-no: #A21309;
 }
@@ -1306,7 +1307,10 @@ label.checkbox {
       cursor: help;
       border-radius: 2px;
       font-weight: bold;
+      font-size: 0.8em;
+      color: black;
       background-color: var(--color-light);
+      background: #e3e3e3;
     }
   }
   & .textarea {
@@ -1379,7 +1383,7 @@ label.checkbox {
     height: 50px;
     overflow-x: auto;
     display: flex;
-    background-color: var(--color-light);
+    background-color: var(--color-light-secondary);
     & > .tab > .header {
       height: 100%;
       display: flex;

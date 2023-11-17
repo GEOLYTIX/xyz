@@ -67,7 +67,10 @@
       cursor: help;
       border-radius: 2px;
       font-weight: bold;
+      font-size: 0.8em;
+      color: black;
       background-color: var(--color-light);
+      background: #e3e3e3;
     }
   }
 

@@ -23,7 +23,7 @@
     height: 50px;
     overflow-x: auto;
     display: flex;
-    background-color: var(--color-light);
+    background-color: var(--color-light-secondary);
 
     & > .tab > .header {
       height: 100%;
