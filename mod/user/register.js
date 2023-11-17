@@ -94,9 +94,10 @@ async function post(req, res) {
   // Get the date for logs.
   const date = new Date().toISOString().replace(/\..*/,'')
 
-  // Get the protocol and host for account verification email.
-  const protocol = `${req.headers.host.includes('localhost') && 'http' || 'https'}://`
-  const host = `${req.headers.host.includes('localhost') && req.headers.host || process.env.ALIAS || req.headers.host}${process.env.DIR}`
+  // Get the host for account verification email.
+  const host = `${req.headers.origin 
+    || req.headers.referer && new URL(req.headers.referer).origin 
+    || 'https://' + (process.env.ALIAS || req.headers.host)}${process.env.DIR}`
 
   // The password will be reset for exisiting user accounts.
   if (user) {
@@ -129,7 +130,7 @@ async function post(req, res) {
       language: user.language,
       to: user.email,
       host: host,
-      link: `${protocol}${host}/api/user/verify/${verificationtoken}`,
+      link: `${host}/api/user/verify/${verificationtoken}`,
       remote_address
     })
     
@@ -171,7 +172,7 @@ async function post(req, res) {
     language,
     to: req.body.email,
     host: host,
-    link: `${protocol}${host}/api/user/verify/${verificationtoken}`,
+    link: `${host}/api/user/verify/${verificationtoken}`,
     remote_address
   })
 

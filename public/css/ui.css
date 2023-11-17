@@ -817,6 +817,10 @@ h3 {
       mask-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHdpZHRoPSIyNCIgaGVpZ2h0PSIyNCIgdmlld0JveD0iMCAwIDI0IDI0Ij4NCjxwYXRoIGQ9Ik0xNyA3SDdjLTIuNzYgMC01IDIuMjQtNSA1czIuMjQgNSA1IDVoMTBjMi43NiAwIDUtMi4yNCA1LTVzLTIuMjQtNS01LTV6bTAgOGMtMS42NiAwLTMtMS4zNC0zLTNzMS4zNC0zIDMtMyAzIDEuMzQgMyAzLTEuMzQgMy0zIDN6Ii8+DQo8L3N2Zz4=);
     }
   }
+  &.disabled {
+    background-color: var(--color-primary-light);
+    pointer-events: none;
+  }
 }
 .touch-app {
   &.bg-icon {

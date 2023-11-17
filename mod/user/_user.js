@@ -1,6 +1,13 @@
+const view = require('../view')
+
 const methods = {
   admin: {
-    handler: require('./admin'),
+    handler: (req,res) => {
+      req.params.template = 'user_admin_view'
+      req.params.language = req.params.user.language
+      req.params.user = req.params.user.email
+      view(req, res)
+    },
     admin: true
   },
   register: {
@@ -56,13 +63,13 @@ module.exports = (req, res) => {
   if (!req.params.user && (method.login || method.admin)) {
 
     req.params.msg = 'login_required'
-    return 
+    return methods.login.handler(req,res)
   }
 
   if (req.params.user && (!req.params.user.admin && method.admin)) {
 
     req.params.msg = 'admin_required'
-    return 
+    return methods.login.handler(req,res)
   }
 
   method.handler(req, res)
