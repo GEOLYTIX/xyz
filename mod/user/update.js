@@ -39,7 +39,7 @@ module.exports = async (req, res) => {
     || 'https://' + (process.env.ALIAS || req.headers.host)}${process.env.DIR}`
 
   // Send email to the user account if an account has been approved.
-  if (req.params.field === 'approved' && req.params.value === 'true') {
+  if (req.params.field === 'approved' && req.params.value === true) {
    
     await mailer({
       template: 'approved_account',
