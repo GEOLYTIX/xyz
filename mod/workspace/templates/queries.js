@@ -41,11 +41,12 @@ module.exports = {
   layer_extent: {
     template: require('./layer_extent'),
   },
+  mvt: {
+    render: require('./mvt'),
+    mvt: true
+  },
   mvt_cache: {
     admin: true,
     render: require('./mvt_cache'),
-  },
-  mvt_cache_delete_intersects: {
-    template: require('./mvt_cache_delete_intersects'),
   }
 }
