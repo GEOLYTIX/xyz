@@ -44,12 +44,13 @@ module.exports = async (params) => {
     layer =  merge(await getTemplate(workspace.templates[layer.template || layer.key]), layer)
   }
 
+  // If we have an array of templates in the layer object, merge them into the layer.
   if (Array.isArray(layer.templates)) for (const key of layer.templates){
 
     let template = Object.hasOwn(workspace.templates, key) && await getTemplate(workspace.templates[key])
       
-    // Merge the workspace template into the layer.
-    layer = merge(template, layer)
+    // Merge the layer into the template
+    layer = merge(layer, template)
   }
 
   // Check for layer geom[s].
