@@ -25,8 +25,10 @@ module.exports = async (params) => {
   // A template exists for the locale key.
   if (Object.hasOwn(workspace.templates, params.locale)) {
 
+    let template = structuredClone(await getTemplate(workspace.templates[params.locale]))
+
     // Merge the workspace template into workspace.
-    locale = merge(await getTemplate(workspace.templates[params.locale]), locale)
+    locale = merge(template, locale)
   }
 
   return locale
