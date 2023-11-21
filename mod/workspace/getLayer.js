@@ -18,10 +18,7 @@ module.exports = async (params) => {
 
   const locale = await getLocale(params)
 
-  if (locale instanceof Error) {
-
-    return locale
-  }
+  if (locale instanceof Error) return locale
 
   const roles = params.user?.roles || []
 
@@ -46,7 +43,7 @@ module.exports = async (params) => {
     layer =  merge(template, layer)
   }
 
-  if (Array.isArray(layer.templates)) for (const key of layer.templates){
+  for (const key of layer.templates || []){
 
     if (!Object.hasOwn(workspace.templates, key)) continue;
 
@@ -54,12 +51,6 @@ module.exports = async (params) => {
      
     // Merge the workspace template into the layer.
     layer = merge(template, layer)
-  }
-
-  // Check for layer geom[s].
-  if ((layer.table || layer.tables) && (!layer.geom && !layer.geoms)) {
-
-    console.warn(`Layer: ${layer.key},has a table or tables defined, but no geom or geoms.`)
   }
 
   // Assign layer key as name with no existing name on layer object.
