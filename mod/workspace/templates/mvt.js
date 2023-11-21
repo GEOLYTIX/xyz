@@ -13,7 +13,7 @@ module.exports = _ => {
     y = parseInt(_.y),
     z = parseInt(_.z)
 
-  const tile = `
+  return `
     SELECT
       ST_AsMVT(tile, '${_.layer.key}', 4096, 'geom') mvt
     FROM (
@@ -34,7 +34,5 @@ module.exports = _ => {
           ST_TileEnvelope(${z},${x},${y}),
           ${_.geom || _.layer.geom}
         )
-      ) tile`        
-
-  return tile
+      ) tile`
 }

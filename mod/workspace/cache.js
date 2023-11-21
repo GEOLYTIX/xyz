@@ -29,13 +29,13 @@ module.exports = () => {
   return cache
 }
 
-const view_templates = require('./templates/views')
+const view_templates = require('./templates/_views')
 
-const mail_templates = require('./templates/mails')
+const mail_templates = require('./templates/_mails')
 
-const msg_templates = require('./templates/msgs')
+const msg_templates = require('./templates/_msgs')
 
-const query_templates = require('./templates/queries')
+const query_templates = require('./templates/_queries')
 
 async function cacheWorkspace() {
 

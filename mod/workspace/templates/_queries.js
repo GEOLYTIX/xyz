@@ -43,7 +43,7 @@ module.exports = {
   },
   mvt: {
     render: require('./mvt'),
-    mvt: true
+    value_only: true
   },
   mvt_cache: {
     admin: true,
