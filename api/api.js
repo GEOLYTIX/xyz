@@ -9,7 +9,6 @@ const auth = require('../mod/user/auth')
 const saml = process.env.SAML_ENTITY_ID && require('../mod/user/saml')
 
 const routes = {
-  mvt: require('../mod/mvt'),
   location: require('../mod/location/_location'),
   provider: require('../mod/provider/_provider'),
   query: require('../mod/query'),
@@ -170,11 +169,6 @@ module.exports = async (req, res) => {
     }
 
     return login(req, res)
-  }
-
-  // Layer route
-  if (req.url.match(/(?<=\/api\/layer)/)) {
-    return routes.mvt(req, res)
   }
 
   // Location route
