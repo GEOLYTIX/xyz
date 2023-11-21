@@ -34,5 +34,6 @@ module.exports = _ => {
           ST_TileEnvelope(${z},${x},${y}),
           ${_.geom || _.layer.geom}
         )
+        \${filter}
       ) tile`
 }
