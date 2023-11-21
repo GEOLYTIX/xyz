@@ -34,7 +34,7 @@ button {
 
   &.flat {
     border-radius: 3px;
-    border-bottom: 1px solid var(--color-lighter);
+    border-bottom: 1px solid var(--color-light-secondary);
     padding: 0.3em;
       
     &.active {
@@ -44,8 +44,8 @@ button {
 
   &.raised {
     border-radius: 3px;
-    border: 1px solid var(--color-lighter);
-    box-shadow: 1px 1px 2px var(--color-lighter);
+    border: 1px solid var(--color-light-secondary);
+    box-shadow: 1px 1px 2px var(--color-light-secondary);
     padding: 0.3em;
      
     &.active {
@@ -92,7 +92,7 @@ button {
   width: 100%;
   padding: 0.3em 0.5em;
   background-color: white;
-  border: 1px solid var(--color-lighter);
+  border: 1px solid var(--color-light-secondary);
   border-radius: 3px;
   box-shadow: 1px 1px 3px var(--color-primary-light);
 

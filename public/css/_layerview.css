@@ -41,3 +41,20 @@
     padding-right: 4px;
   }
 }
+
+#layers>.drawer.layer-group .drawer.layer-view {
+  background: var(--color-light);
+  border: none;
+  box-shadow: none;
+  border-top: 2px solid var(--color-light-secondary);
+}
+
+#layers>.layer-view>.drawer,
+#layers .drawer.layer-view .drawer {
+  border: none;
+  box-shadow: none;
+}
+
+#layers>.layer-view>.drawer {
+  background: var(--color-light);
+}
