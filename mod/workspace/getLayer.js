@@ -32,9 +32,13 @@ module.exports = async (params) => {
 
   let layer = locale.layers[params.layer]
 
+  // Return already merged layer.
+  if (layer.merged) return layer
+
   // Assign key value as key on layer object.
   layer.key ??= params.layer
 
+  // Merge layer --> template
   if (Object.hasOwn(workspace.templates, layer.template || layer.key)) {
 
     let template = structuredClone(await getTemplate(workspace.templates[layer.template || layer.key]))
@@ -43,6 +47,7 @@ module.exports = async (params) => {
     layer =  merge(template, layer)
   }
 
+  // Merge templates --> layer
   for (const key of layer.templates || []){
 
     if (!Object.hasOwn(workspace.templates, key)) continue;
@@ -50,11 +55,13 @@ module.exports = async (params) => {
     let template =  structuredClone(await getTemplate(workspace.templates[key]))
      
     // Merge the workspace template into the layer.
-    layer = merge(template, layer)
+    layer = merge(layer, template)
   }
 
   // Assign layer key as name with no existing name on layer object.
   layer.name ??= layer.key
+
+  layer.merged = true
 
   return layer
 }
