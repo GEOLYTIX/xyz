@@ -18,10 +18,7 @@ module.exports = async (params) => {
 
   const locale = await getLocale(params)
 
-  if (locale instanceof Error) {
-
-    return locale
-  }
+  if (locale instanceof Error) return locale
 
   const roles = params.user?.roles || []
 
@@ -35,31 +32,36 @@ module.exports = async (params) => {
 
   let layer = locale.layers[params.layer]
 
+  // Return already merged layer.
+  if (layer.merged) return layer
+
   // Assign key value as key on layer object.
   layer.key ??= params.layer
 
+  // Merge layer --> template
   if (Object.hasOwn(workspace.templates, layer.template || layer.key)) {
 
+    let template = structuredClone(await getTemplate(workspace.templates[layer.template || layer.key]))
+
     // Merge the workspace template into the layer.
-    layer =  merge(await getTemplate(workspace.templates[layer.template || layer.key]), layer)
+    layer =  merge(template, layer)
   }
 
-  if (Array.isArray(layer.templates)) for (const key of layer.templates){
+  // Merge templates --> layer
+  for (const key of layer.templates || []){
 
-    let template = Object.hasOwn(workspace.templates, key) && await getTemplate(workspace.templates[key])
-      
+    if (!Object.hasOwn(workspace.templates, key)) continue;
+
+    let template =  structuredClone(await getTemplate(workspace.templates[key]))
+     
     // Merge the workspace template into the layer.
-    layer = merge(template, layer)
-  }
-
-  // Check for layer geom[s].
-  if ((layer.table || layer.tables) && (!layer.geom && !layer.geoms)) {
-
-    console.warn(`Layer: ${layer.key},has a table or tables defined, but no geom or geoms.`)
+    layer = merge(layer, template)
   }
 
   // Assign layer key as name with no existing name on layer object.
   layer.name ??= layer.key
+
+  layer.merged = true
 
   return layer
 }

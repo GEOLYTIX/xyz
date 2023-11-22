@@ -22,21 +22,20 @@ module.exports = function mergeDeep(target, ...sources) {
         // Call recursive merge for target key object.
         Object.hasOwn(target, key) && mergeDeep(target[key], source[key]);
 
-      // Target and Source are both arrays.
+        // Target and Source are both arrays.
       } else if (Array.isArray(source[key]) && Array.isArray(target[key])) {
 
 
         // Target and Source arrays are equal.
         if (source[key].every(item => target[key].includes(item))) {
-          
+
           // Do not merge.
           target[key] = source[key]
 
         } else {
 
           // Merge unequal arrays.
-
-          target[key] = [...target[key]||[], ...source[key]]
+          target[key] = [...target[key] || [], ...source[key]]
         }
 
       } else {
