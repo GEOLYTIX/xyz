@@ -230,6 +230,11 @@ module.exports = async (req, res) => {
     return res.send(rows.map(row=>Object.values(row)))
   }
 
+  if (req.params.value_only || template?.value_only) {
+
+    return res.send(Object.values(rows[0])[0])
+  }  
+
   // Send the infoj object with values back to the client.
   res.send(rows.length === 1 && rows[0] || rows)
 
