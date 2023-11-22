@@ -37,9 +37,6 @@ app.post(`${process.env.DIR||''}/api/fetch/:template?`, express.json({limit: '5m
 app.get(`${process.env.DIR||''}/api/workspace/:key?`, api)
 
 
-app.get(`${process.env.DIR||''}/api/layer/:format?/:z?/:x?/:y?`, api)
-
-
 app.get(`${process.env.DIR||''}/api/location/:method?`, api)
 
 app.post(`${process.env.DIR||''}/api/location/:method?`, express.json({limit: '5mb'}), api)
