@@ -44,9 +44,5 @@ module.exports = {
   mvt: {
     render: require('./mvt'),
     value_only: true
-  },
-  mvt_cache: {
-    admin: true,
-    render: require('./mvt_cache'),
   }
 }
