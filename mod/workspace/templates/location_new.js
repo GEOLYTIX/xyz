@@ -4,7 +4,7 @@ module.exports = _ => {
   const selects = []
 
   // keys array for insert statement
-  const fields = Object.keys(_.body).map((key, i)=> {
+  const fields = Object.keys(_.body).map(key => {
 
     if (key === _.layer.geom) {
 
@@ -22,9 +22,9 @@ module.exports = _ => {
 
     // push value into params.
     _[key] = _.body[key]
-    
+
     return key
-  })  
+  })
 
   return `
     INSERT INTO ${_.table} (${fields.join(',')})

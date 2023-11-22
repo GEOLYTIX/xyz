@@ -1,44 +1,45 @@
 module.exports = _ => {
 
-  const fields = Object.entries(_.body)
-    .map(entry => {
+  const fields = Object.keys(_.body).map(key => {
 
-      if (entry[1] === null) {
+    // Value is null
+    if (_.body[key] === null) {
 
-        // Value is null
-        return ` ${entry[0]} = null`
-      }
+      return `${key} = null`
+    }
 
-      if (typeof entry[1] === 'string') {
+    // Value is string. Escape quotes.
+    if (typeof _.body[key] === 'string') {
 
-        // Value is string. Escape quotes.
-        return ` ${entry[0]} = '${entry[1].replace(/\'/gi, `''`)}'`
-      }
+      _[key] = _.body[key].replace(/\'/gi, `''`)
+    }
 
-      if (entry[1].coordinates) {
+    // Value is geometry.
+    if (_.body[key].coordinates) {
 
-        // Value is geometry.
-        return ` ${entry[0]} = ST_SetSRID(ST_MakeValid(ST_GeomFromGeoJSON('${JSON.stringify(entry[1])}')),${_.layer.srid})`
-      }
+      return `${key} = ST_SetSRID(ST_MakeValid(ST_GeomFromGeoJSON('${JSON.stringify(_.body[key])}')),${_.layer.srid})`
+    }
 
-      if (Array.isArray(entry[1])) {
+    // Value is an array (of strings)
+    if (Array.isArray(_.body[key])) {
 
-        // Value is an array (of strings)
-        return ` ${entry[0]} = ARRAY['${entry[1].join("','")}']`
-      }
+      _[key] = _.body[key] //ARRAY['${_.body[key].join("','")}']
+    }
 
-      if (typeof entry[1] === 'object') {
+    // Value is an object and must be stringified.
+    if (typeof _.body[key] === 'object') {
 
-        // Value is an object and must be stringified.
-        return ` ${entry[0]} = '${JSON.stringify(entry[1])}'`
-      }
+      _[key] = JSON.stringify(_.body[key])
+    }
 
-      if (typeof entry[1] === 'boolean' || typeof entry[1] === 'number') {
+    // Value is boolean or number.
+    if (typeof _.body[key] === 'boolean' || typeof _.body[key] === 'number') {
 
-        // Value is boolean or number.
-        return ` ${entry[0]} = ${entry[1]}`
-      }
-    })
+      _[key] = _.body[key]
+    }
+
+    return `${key} = %{${key}}`
+  })
 
   var q = `
     UPDATE ${_.table}
