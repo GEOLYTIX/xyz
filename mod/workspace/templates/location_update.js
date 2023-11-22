@@ -11,7 +11,7 @@ module.exports = _ => {
     // Value is string. Escape quotes.
     if (typeof _.body[key] === 'string') {
 
-      _[key] = _.body[key].replace(/\'/gi, `''`)
+      _[key] = _.body[key].replace(/'/gi, `''`)
     }
 
     // Value is geometry.
@@ -41,10 +41,8 @@ module.exports = _ => {
     return `${key} = %{${key}}`
   })
 
-  var q = `
+  return `
     UPDATE ${_.table}
     SET ${fields.join()}
     WHERE ${_.layer.qID} = %{id};`
-
-  return q
 }
