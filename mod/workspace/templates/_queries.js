@@ -54,11 +54,8 @@ module.exports = {
   location_update: {
     render: require('./location_update'),
   },
-  mvt_cache: {
-    admin: true,
-    render: require('./mvt_cache'),
-  },
-  mvt_cache_delete_intersects: {
-    template: require('./mvt_cache_delete_intersects'),
+  mvt: {
+    render: require('./mvt'),
+    value_only: true
   }
 }
