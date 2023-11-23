@@ -13,7 +13,6 @@ Object.keys(process.env)
 
     const pool = new Pool({
       connectionString: process.env[key],
-      options: `-c statement_timeout=${parseInt(process.env.STATEMENT_TIMEOUT) || 10000}`
     });
 
     dbs[key.split('_')[1]] = async (query, variables, timeout) => {
@@ -22,12 +21,11 @@ Object.keys(process.env)
 
         const client = await pool.connect()
 
-        timeout && await client.query(`SET statement_timeout = ${parseInt(timeout)}`)
+        if (timeout || process.env.STATEMENT_TIMEOUT) {
+          await client.query(`SET statement_timeout = ${parseInt(timeout) || parseInt(process.env.STATEMENT_TIMEOUT)}`)
+        }
 
         const { rows } = await client.query(query, variables)
-
-        // Reset the statement timeout to value from process.env or default 10000 (10 seconds).
-        timeout && await client.query(`SET statement_timeout = ${parseInt(process.env.STATEMENT_TIMEOUT) || 10000}`)
 
         client.release()
 
