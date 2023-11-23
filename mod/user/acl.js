@@ -1,11 +1,11 @@
 const { Pool } = require('pg');
 
+const connection = process.env.PRIVATE && process.env.PRIVATE.split('|')
+|| process.env.PUBLIC && process.env.PUBLIC.split('|')
+
 let pool = null
 
 module.exports = () => {
-
-  const connection = process.env.PRIVATE && process.env.PRIVATE.split('|')
-    || process.env.PUBLIC && process.env.PUBLIC.split('|')
 
   if(!connection || !connection[1]) return
 
