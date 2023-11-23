@@ -7,7 +7,7 @@ const dbs = {};
 Object.keys(process.env)
 
   // Filter keys which start with DBS 
-  .filter(key => /^DBS_/.test(key))
+  .filter(key => key.startsWith('DBS_'))
 
   .forEach(key => {
 
