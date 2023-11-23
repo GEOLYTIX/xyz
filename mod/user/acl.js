@@ -1,7 +1,6 @@
 const { Pool } = require('pg');
 
-const connection = process.env.PRIVATE && process.env.PRIVATE.split('|')
-|| process.env.PUBLIC && process.env.PUBLIC.split('|')
+const connection = process.env.PRIVATE?.split('|') || process.env.PUBLIC?.split('|')
 
 let pool = null
 
