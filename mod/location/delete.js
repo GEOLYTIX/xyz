@@ -1,4 +1,4 @@
-const dbs = require('../utils/dbs')()
+const dbs = require('../utils/dbs')
 
 const workspaceCache = require('../workspace/cache')
 

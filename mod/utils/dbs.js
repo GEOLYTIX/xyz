@@ -4,49 +4,40 @@ const logger = require('./logger');
 
 const dbs = {};
 
-module.exports = () => {
+Object.keys(process.env)
 
-  Object.keys(process.env)
+  // Filter keys which start with DBS 
+  .filter(key => /^DBS_/.test(key))
 
-    // Filter keys which start with DBS 
-    .filter(key => key.split('_')[0] === 'DBS')
+  .forEach(key => {
 
-    // Filter keys which are not yet assigned to dbs object.
-    .filter(key => !dbs[key.split('_')[1]])
+    const pool = new Pool({
+      connectionString: process.env[key],
+      options: `-c statement_timeout=${parseInt(process.env.STATEMENT_TIMEOUT)||10000}`
+    });
 
-    .forEach(key => {
+    dbs[key.split('_')[1]] = async (q, arr, timeout) => {
 
-      const pool = new Pool({
-        connectionString: process.env[key],
-        statement_timeout: parseInt(process.env.STATEMENT_TIMEOUT) || 10000
-      });
-  
-      dbs[key.split('_')[1]] = async (q, arr, timeout) => {
-  
-        // Request which accepts q and arr and will return rows or rows.err.
-        try {
+      try {
 
-          const client = await pool.connect()
-          
-          timeout && await client.query(`SET statement_timeout = ${parseInt(timeout)}`)
-  
-          const { rows } = await client.query(q, arr)
-  
-          timeout && await client.query(`SET statement_timeout = ${parseInt(process.env.STATEMENT_TIMEOUT) || 10000}`)
+        const client = await pool.connect()
 
-          client.release()
-  
-          return rows
-  
-        } catch (err) {
+        timeout && await client.query(`SET statement_timeout = ${parseInt(timeout)}`)
 
-          logger({err, q, arr})
-          return err;
-        }
-  
+        const { rows } = await client.query(q, arr)
+
+        timeout && await client.query(`SET statement_timeout = ${parseInt(process.env.STATEMENT_TIMEOUT) || 10000}`)
+
+        client.release()
+
+        return rows
+
+      } catch (err) {
+
+        logger({ err, q, arr })
+        return err;
       }
+    }
+  })
 
-    })
-
-  return dbs
-};
+module.exports = dbs
