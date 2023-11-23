@@ -137,7 +137,7 @@ module.exports = async (req, res) => {
         // Push value from request params object into params array.
         req.params.SQL.push(val)
 
-        return `\$${req.params.SQL.length}`
+        return `$${req.params.SQL.length}`
       })
 
     logger(query, 'query')
