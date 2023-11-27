@@ -13,6 +13,7 @@ Object.keys(process.env)
 
     const pool = new Pool({
       connectionString: process.env[key],
+      keepAlive: true
     });
 
     dbs[key.split('_')[1]] = async (query, variables, timeout) => {
