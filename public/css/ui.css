@@ -1068,11 +1068,11 @@ label.checkbox {
       padding: 5px;
     }
     & > li:hover {
-      background-color: var(--color-light);
+      background-color: var(--color-mid);
       cursor: pointer;
     }
     & > li.selected {
-      background-color: var(--color-light-secondary);
+      background-color: var(--color-mid);
     }
     & .label {
       padding: 0 6px;
