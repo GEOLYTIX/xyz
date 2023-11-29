@@ -6,7 +6,7 @@ module.exports = _ => {
     .filter(field => !!field)
 
   // Push label (cluster) into fields
-  _.label && field.push(_.workspace.templates[_.label]?.template || _.label)
+  _.label && fields.push(`${_.workspace.templates[_.label]?.template || _.label} AS ${_.label}`)
 
   let
     x = parseInt(_.x),
