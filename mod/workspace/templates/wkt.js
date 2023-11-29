@@ -2,7 +2,7 @@ module.exports = _ => {
 
     // Get fields array from query params.
     const fields = _.fields?.split(',')
-        .map(field => _.workspace.templates[field]?.template || field)
+        .map(field => `${_.workspace.templates[field]?.template || field} AS ${field}`)
         .filter(field => !!field)
 
     // Push label (cluster) into fields
