@@ -24,7 +24,7 @@ module.exports = async (req, res) => {
       template: 'failed_query',
       language: req.params.language
     })
-    
+
     return res.status(500).send(error_message)
   }
 
@@ -45,7 +45,7 @@ module.exports = async (req, res) => {
     UPDATE acl_schema.acl_table SET
       failedattempts = 0,
       ${user.password_reset ?
-        `password = '${user.password_reset}',
+      `password = '${user.password_reset}',
         password_reset = null,` : ''}
       verified = true,
       verificationtoken = null
@@ -58,7 +58,7 @@ module.exports = async (req, res) => {
       template: 'failed_query',
       language: req.params.language
     })
-    
+
     return res.status(500).send(error_message)
   }
 
@@ -102,8 +102,8 @@ module.exports = async (req, res) => {
         language: row.language,
         to: row.email,
         email: user.email,
-        host: `${req.headers.origin 
-          || req.headers.referer && new URL(req.headers.referer).origin 
+        host: `${req.headers.origin
+          || req.headers.referer && new URL(req.headers.referer).origin
           || 'https://' + (process.env.ALIAS || req.headers.host)}${process.env.DIR}`
       })
     })
@@ -121,7 +121,10 @@ module.exports = async (req, res) => {
 
   } else {
 
-    res.send('The account has been verified but there is no administrator to approve the account.')
+    res.send(await languageTemplates({
+      template: 'account_approved_no_admin',
+      language: user.language
+    }))
   }
 
 }
