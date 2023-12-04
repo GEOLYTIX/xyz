@@ -23,16 +23,6 @@ process.env.TITLE = process.env.TITLE || 'GEOLYTIX | XYZ'
 
 process.env.DIR = process.env.DIR || ''
 
-function IEdetect(sUsrAg) {
-  if (sUsrAg.indexOf('Firefox') > -1) return false
-
-  if (sUsrAg.indexOf('SamsungBrowser') > -1) return false
-  
-  if (sUsrAg.indexOf('Opera') > -1 || sUsrAg.indexOf('OPR') > -1) return false
-  
-  if (sUsrAg.indexOf('Trident') > -1) return true
-}
-
 module.exports = async (req, res) => {
 
   // redirect if dir is missing in url path.
@@ -40,8 +30,6 @@ module.exports = async (req, res) => {
     res.setHeader('location', `${process.env.DIR}`)
     return res.status(302).send()
   }
-
-  if (req.headers && req.headers['user-agent'] && IEdetect(req.headers['user-agent'])) return res.send('Uh Oh... It looks like your request comes from an unsupported user agent (e.g. Internet Explorer)')
 
   logger(req, 'req')
 
