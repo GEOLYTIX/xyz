@@ -9,7 +9,6 @@ const auth = require('../mod/user/auth')
 const saml = process.env.SAML_ENTITY_ID && require('../mod/user/saml')
 
 const routes = {
-  location: require('../mod/location/_location'),
   provider: require('../mod/provider/_provider'),
   query: require('../mod/query'),
   fetch: require('../mod/fetch'),
@@ -173,7 +172,10 @@ module.exports = async (req, res) => {
 
   // Location route
   if (req.url.match(/(?<=\/api\/location)/)) {
-    return routes.location(req, res)
+
+    // Set template and route to query mod.
+    req.params.template = `location_${req.params.method}`
+    return routes.query(req, res)
   }  
 
   // Query route
