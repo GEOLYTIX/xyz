@@ -2,11 +2,11 @@ module.exports = _ => {
 
   // Get fields array from query params.
   const fields = _.fields?.split(',')
-    .map(field => _.workspace.templates[field]?.template || field)
+    .map(field => `${_.workspace.templates[field]?.template || field} AS ${field}`)
     .filter(field => !!field)
 
   // Push label (cluster) into fields
-  _.label && field.push(_.workspace.templates[_.label]?.template || _.label)
+  _.label && fields.push(`${_.workspace.templates[_.label]?.template || _.label} AS ${_.label}`)
 
   let
     x = parseInt(_.x),
@@ -29,7 +29,7 @@ module.exports = _ => {
         ) geom
       FROM ${_.table}
       WHERE
-        ${_.layer.z_field && `${_.layer.z_field} < ${z} AND` ||''}
+        ${_.layer.z_field && `${_.layer.z_field} < ${z} AND` || ''}
         ST_Intersects(
           ST_TileEnvelope(${z},${x},${y}),
           ${_.geom || _.layer.geom}
