@@ -29,7 +29,7 @@ module.exports = _ => {
         ) geom
       FROM ${_.table}
       WHERE
-        ${_.layer.z_field && `${_layer.z_field} < ${z} AND` ||''}
+        ${_.layer.z_field && `${_.layer.z_field} < ${z} AND` ||''}
         ST_Intersects(
           ST_TileEnvelope(${z},${x},${y}),
           ${_.geom || _.layer.geom}
