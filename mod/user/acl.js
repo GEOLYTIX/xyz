@@ -1,8 +1,10 @@
 const { Pool } = require('pg');
 
-module.exports = () => {
+const connection = process.env.PRIVATE?.split('|') || process.env.PUBLIC?.split('|')
 
-  const connection = process.env.PRIVATE && process.env.PRIVATE.split('|') || process.env.PUBLIC && process.env.PUBLIC.split('|')
+let pool = null
+
+module.exports = () => {
 
   if(!connection || !connection[1]) return
 
@@ -11,9 +13,8 @@ module.exports = () => {
   const acl_schema = connection[1].split('.')[0] === acl_table ? 'public' : connection[1].split('.')[0]
 
   // Create PostgreSQL connection pool for ACL table.
-  const pool = new Pool({
-    connectionString: connection[0],
-    statement_timeout: 1000
+  pool ??= new Pool({
+    connectionString: connection[0]
   })
 
   // Method to query ACL. arr must be empty array by default.
@@ -21,14 +22,17 @@ module.exports = () => {
 
     try {
 
-      const { rows } = await pool.query(q.replace(/acl_table/g, acl_table).replace(/acl_schema/g, acl_schema), arr)
+      const client = await pool.connect()
+
+      const { rows } = await client.query(q.replace(/acl_table/g, acl_table).replace(/acl_schema/g, acl_schema), arr)
+
+      client.release()
+      
       return rows
     
     } catch (err) {
       console.error(err)
       return err
     }
-
   }
-
 }

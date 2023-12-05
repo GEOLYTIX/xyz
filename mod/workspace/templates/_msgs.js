@@ -115,5 +115,8 @@ module.exports = {
     en: `Missing email`,
     fr: `E-mail manquant`,
     pl: `Nie podano adresu e-mail.`
+  }, 
+  account_approved_no_admin: { 
+    en: `The account has been verified but there is no administrator to approve the account.`
   }
 }

@@ -4,49 +4,40 @@ const logger = require('./logger');
 
 const dbs = {};
 
-module.exports = () => {
+Object.keys(process.env)
 
-  Object.keys(process.env)
+  // Filter keys which start with DBS 
+  .filter(key => key.startsWith('DBS_'))
 
-    // Filter keys which start with DBS 
-    .filter(key => key.split('_')[0] === 'DBS')
+  .forEach(key => {
 
-    // Filter keys which are not yet assigned to dbs object.
-    .filter(key => !dbs[key.split('_')[1]])
+    const pool = new Pool({
+      connectionString: process.env[key],
+      keepAlive: true
+    });
 
-    .forEach(key => {
+    dbs[key.split('_')[1]] = async (query, variables, timeout) => {
 
-      const pool = new Pool({
-        connectionString: process.env[key],
-        statement_timeout: parseInt(process.env.STATEMENT_TIMEOUT) || 10000
-      });
-  
-      dbs[key.split('_')[1]] = async (q, arr, timeout) => {
-  
-        // Request which accepts q and arr and will return rows or rows.err.
-        try {
+      try {
 
-          const client = await pool.connect()
-          
-          timeout && await client.query(`SET statement_timeout = ${parseInt(timeout)}`)
-  
-          const { rows } = await client.query(q, arr)
-  
-          timeout && await client.query(`SET statement_timeout = ${parseInt(process.env.STATEMENT_TIMEOUT) || 10000}`)
+        const client = await pool.connect()
 
-          client.release()
-  
-          return rows
-  
-        } catch (err) {
-
-          logger({err, q, arr})
-          return err;
+        if (timeout || process.env.STATEMENT_TIMEOUT) {
+          await client.query(`SET statement_timeout = ${parseInt(timeout) || parseInt(process.env.STATEMENT_TIMEOUT)}`)
         }
-  
+
+        const { rows } = await client.query(query, variables)
+
+        client.release()
+
+        return rows
+
+      } catch (err) {
+
+        logger({ err, query, variables })
+        return err;
       }
+    }
+  })
 
-    })
-
-  return dbs
-};
+module.exports = dbs

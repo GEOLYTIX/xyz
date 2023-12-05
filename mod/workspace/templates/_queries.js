@@ -41,6 +41,19 @@ module.exports = {
   layer_extent: {
     template: require('./layer_extent'),
   },
+  location_get: {
+    render: require('./location_get'),
+  },
+  location_new: {
+    render: require('./location_new'),
+    value_only: true
+  },
+  location_delete: {
+    render: require('./location_delete'),
+  },
+  location_update: {
+    render: require('./location_update'),
+  },
   mvt: {
     render: require('./mvt'),
     value_only: true

@@ -9,7 +9,6 @@ const auth = require('../mod/user/auth')
 const saml = process.env.SAML_ENTITY_ID && require('../mod/user/saml')
 
 const routes = {
-  location: require('../mod/location/_location'),
   provider: require('../mod/provider/_provider'),
   query: require('../mod/query'),
   fetch: require('../mod/fetch'),
@@ -24,16 +23,6 @@ process.env.TITLE = process.env.TITLE || 'GEOLYTIX | XYZ'
 
 process.env.DIR = process.env.DIR || ''
 
-function IEdetect(sUsrAg) {
-  if (sUsrAg.indexOf('Firefox') > -1) return false
-
-  if (sUsrAg.indexOf('SamsungBrowser') > -1) return false
-  
-  if (sUsrAg.indexOf('Opera') > -1 || sUsrAg.indexOf('OPR') > -1) return false
-  
-  if (sUsrAg.indexOf('Trident') > -1) return true
-}
-
 module.exports = async (req, res) => {
 
   // redirect if dir is missing in url path.
@@ -41,8 +30,6 @@ module.exports = async (req, res) => {
     res.setHeader('location', `${process.env.DIR}`)
     return res.status(302).send()
   }
-
-  if (req.headers && req.headers['user-agent'] && IEdetect(req.headers['user-agent'])) return res.send('Uh Oh... It looks like your request comes from an unsupported user agent (e.g. Internet Explorer)')
 
   logger(req, 'req')
 
@@ -173,7 +160,10 @@ module.exports = async (req, res) => {
 
   // Location route
   if (req.url.match(/(?<=\/api\/location)/)) {
-    return routes.location(req, res)
+
+    // Set template and route to query mod.
+    req.params.template = `location_${req.params.method}`
+    return routes.query(req, res)
   }  
 
   // Query route
