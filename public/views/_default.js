@@ -417,7 +417,6 @@ window.onload = async () => {
     btnColumn.appendChild(mapp.utils.html.node`
       <a
         title=${mapp.dictionary.toolbar_admin}
-        class="mobile-display-none"
         href="${mapview.host + '/api/user/admin'}">
         <div class="mask-icon supervisor-account">`);
 

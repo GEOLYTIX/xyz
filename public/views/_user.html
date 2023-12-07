@@ -14,7 +14,6 @@
   <script src="https://unpkg.com/uhtml@3.2.1/es.js" defer></script>
 
   <style>
-
     * {
       box-sizing: border-box;
       margin: 0;
@@ -30,7 +29,7 @@
       font: 14px "Open Sans", sans-serif;
     }
 
-    body > .flex {
+    body>.flex {
       height: 100%;
       display: flex;
       flex-direction: column;
@@ -100,7 +99,7 @@
 
     a.logout {
       font-weight: bold;
-      color:#B71C1C;
+      color: #B71C1C;
     }
 
 
@@ -111,7 +110,6 @@
         margin: 0
       }
     }
-
   </style>
 
 </head>
@@ -128,9 +126,9 @@
       <a class="default-view" href="{{dir}}">{{dir}}</a>
       <a class="logout" href="?logout=true">Logout</a>
     </div>
-  
+
     <div id="userTable"></div>
-    
+
   </div>
 
 </body>
@@ -166,6 +164,7 @@
 
     const userTable = new Tabulator(document.getElementById('userTable'),
       {
+        responsiveLayout: "hide", // hide rows that no longer fit
         data: data,
         rowFormatter: row => {
           const user = row.getData()
@@ -184,7 +183,8 @@
             vertAlign: 'middle',
             headerTooltip: 'Account EMail',
             titleFormatter: () => '<div class="icon-face xyz-icon"></div>',
-            resizable: false
+            resizable: false,
+            responsive: 0 // Never hide
           },
           {
             field: 'verified',
@@ -194,7 +194,8 @@
             titleFormatter: () => '<div class="icon-tick-done xyz-icon"></div>',
             formatter: 'tickCross',
             cellClick: cellToggle,
-            resizable: false
+            resizable: false,
+            responsive: 0 // Never hide
           },
           {
             field: 'approved',
@@ -204,7 +205,8 @@
             titleFormatter: () => '<div class="icon-tick-done-all xyz-icon"></div>',
             formatter: 'tickCross',
             cellClick: cellToggle,
-            resizable: false
+            resizable: false,
+            responsive: 0 // Never hide
           },
           {
             field: 'admin',
@@ -214,7 +216,8 @@
             titleFormatter: () => '<div class="xyz-icon icon-supervisor-account"></div>',
             formatter: 'tickCross',
             cellClick: cellToggle,
-            resizable: false
+            resizable: false,
+            responsive: 0 // Never hide
           },
           {
             field: 'api',
@@ -224,7 +227,8 @@
             titleFormatter: () => '<div class="xyz-icon icon-key"></div>',
             formatter: 'tickCross',
             cellClick: cellToggle,
-            resizable: false
+            resizable: false,
+            responsive: 1 // Hide first
           },
           {
             field: 'failedattempts',
@@ -233,7 +237,8 @@
             headerTooltip: 'Failed login attempts.',
             titleFormatter: () => '<div class="xyz-icon icon-warning"></div>',
             formatter: (cell, formatterParams) => '<span style="color:red; font-weight:bold;">' + cell.getValue() + '</span>',
-            resizable: false
+            resizable: false,
+            responsive: 2 // Hide first
           },
           {
             field: 'language',
@@ -241,7 +246,8 @@
             vertAlign: 'middle',
             headerTooltip: 'Account language',
             titleFormatter: () => '<div class="xyz-icon icon-translate"></div>',
-            resizable: false
+            resizable: false,
+            responsive: 2 // Hide first
           },
           {
             field: 'roles',
@@ -255,7 +261,8 @@
               multiselect: true
             },
             cellEdited: rolesEdited,
-            resizable: false
+            resizable: false,
+            responsive: 0 // Never hide
           },
           {
             field: 'access_log',
@@ -263,14 +270,16 @@
             vertAlign: 'middle',
             headerTooltip: 'Click last access log entry for full access log array.',
             cellClick: getAccessLog,
-            resizable: false
+            resizable: false,
+            responsive: 1 // Hide first
           },
           {
             field: 'approved_by',
             title: 'Approved by',
             vertAlign: 'middle',
             headerTooltip: 'Admin who approved last modification to this account.',
-            resizable: false
+            resizable: false,
+            responsive: 1 // Hide first
           },
           {
             visible: typeof data[0].expires_on !== 'undefined',
@@ -279,6 +288,7 @@
             vertAlign: 'middle',
             minWidth: 120,
             headerTooltip: 'Date when user approval expires.',
+            responsive: 1, // Hide first
             formatter: (cell, formatterParams, onRendered) => {
 
               let val = parseInt(cell.getValue())
@@ -292,7 +302,7 @@
               })
 
               // Colour text red if account has expired.
-              return val < new Date()/1000 ? `<span style="color:red;">${str}</span>` : str;
+              return val < new Date() / 1000 ? `<span style="color:red;">${str}</span>` : str;
             },
             editor: expiryEdit,
             resizable: false
@@ -305,7 +315,8 @@
             titleFormatter: () => '<div class="icon-lock-closed xyz-icon"></div>',
             formatter: 'tickCross',
             cellClick: cellToggle,
-            resizable: false
+            resizable: false,
+            responsive: 2 // Hide second
           },
           {
             field: 'delete',
@@ -313,7 +324,8 @@
             headerSort: false,
             formatter: () => '<span style="color:red; font-weight:bold;">DELETE</span>',
             cellClick: rowDelete,
-            resizable: false
+            resizable: false,
+            responsive: 2 // Hide second
           }
         ]
       });
@@ -342,7 +354,7 @@
       // Check whether email or role includes filter term.
       userTable.setData(data.filter(user => user.email.includes(e.target.value)
         || user.roles.some(role => role.includes(e.target.value))))
-    } 
+    }
 
 
     function expiryEdit(cell, onRendered, success, cancel) {
