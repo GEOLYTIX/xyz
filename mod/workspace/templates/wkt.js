@@ -1,20 +1,25 @@
 module.exports = _ => {
 
-    // Get fields array from query params.
-    const fields = _.fields?.split(',')
-        .map(field => `${_.workspace.templates[field]?.template || field} AS ${field}`)
-        .filter(field => !!field)
+  // Get fields array from query params.
+  const fields = _.fields?.split(',')
+    .map(field => `${_.workspace.templates[field]?.template || field} AS ${field}`)
+    .filter(field => !!field)
 
-    // Push label (cluster) into fields
-    _.label && fields.push(`${_.workspace.templates[_.label]?.template || _.label} AS ${_.label}`)
+  // Unshift the geom field into the array.
+  if (_.geom && !_.no_geom) {
 
-    const where = _.viewport || `AND ${_.geom || _.layer.geom} IS NOT NULL`
+    fields.unshift(`ST_AsText(${_.geom}) AS geometry`)
+  }
 
-    return `
-        SELECT
-        \${qID} AS id,
-        ST_AsText(${_.geom || _.layer.geom}) AS geometry
-        ${fields && `, ${fields.join(', ')}` || ''}
-        FROM \${table}
-        WHERE TRUE ${where} \${filter};`
+  // Push label (cluster) into fields
+  _.label && fields.push(`${_.workspace.templates[_.label]?.template || _.label} AS ${_.label}`)
+
+  const where = _.viewport || `AND ${_.geom} IS NOT NULL`
+
+  return `
+    SELECT
+      \${qID} AS id
+      ${fields && `, ${fields.join(', ')}` || ''}
+      FROM \${table}
+      WHERE TRUE ${where} \${filter};`
 }

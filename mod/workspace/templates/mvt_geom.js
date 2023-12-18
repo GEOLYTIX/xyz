@@ -1,13 +1,5 @@
 module.exports = _ => {
 
-  // Get fields array from query params.
-  const fields = _.fields?.split(',')
-    .map(field => `${_.workspace.templates[field]?.template || field} AS ${field}`)
-    .filter(field => !!field)
-
-  // Push label (cluster) into fields
-  _.label && fields.push(`${_.workspace.templates[_.label]?.template || _.label} AS ${_.label}`)
-
   let
     x = parseInt(_.x),
     y = parseInt(_.y),
@@ -19,7 +11,6 @@ module.exports = _ => {
     FROM (
       SELECT
         ${_.layer.qID || null} as id,
-        ${Array.isArray(fields) ? fields.toString() + ',' : ''}
         ST_AsMVTGeom(
           ${_.geom},
           ST_TileEnvelope(${z},${x},${y}),
@@ -29,11 +20,9 @@ module.exports = _ => {
         ) geom
       FROM ${_.table}
       WHERE
-        ${_.layer.z_field && `${_.layer.z_field} < ${z} AND` || ''}
         ST_Intersects(
           ST_TileEnvelope(${z},${x},${y}),
           ${_.geom}
         )
-        \${filter}
       ) tile`
 }
