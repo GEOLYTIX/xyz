@@ -12,9 +12,12 @@ const { nanoid } = require('nanoid')
 
 module.exports = async (req) => {
 
-  let email = req.body?.email
-
-  let password = req.body?.password
+  const request = {
+    email: req.body?.email,
+    password: req.body?.password,
+    language: req.params.language,
+    headers: req.headers
+  }
 
   if (req.headers.authorization) {
 
@@ -22,42 +25,110 @@ module.exports = async (req) => {
 
     let email_password = user_string.split(':')
 
-    email ??= email_password[0]
+    request.email = email_password[0]
 
-    password ??= email_password[1]
+    request.password = email_password[1]
   }
 
-  const remote_address = /^[A-Za-z0-9.,_-\s]*$/.test(req.headers['x-forwarded-for'])
-   ? req.headers['x-forwarded-for'] : undefined;
+  request.remote_address = /^[A-Za-z0-9.,_-\s]*$/.test(req.headers['x-forwarded-for'])
+    ? req.headers['x-forwarded-for'] : undefined;
 
-  if (!email) return new Error(await languageTemplates({
+  if (!request.email) return new Error(await languageTemplates({
     template: 'missing_email',
-    language: req.params.language
+    language: request.language
   }))
 
-  if (!password) return new Error(await languageTemplates({
+  if (!request.password) return new Error(await languageTemplates({
     template: 'missing_password',
-    language: req.params.language
+    language: request.language
   }))
 
-  const date = new Date()
+  request.date = new Date()
 
   // Get the host for the account verification email.
-  const host = `${req.headers.origin
+  request.host = `${req.headers.origin
     || req.headers.referer && new URL(req.headers.referer).origin
     || 'https://' + (process.env.ALIAS || req.headers.host)}${process.env.DIR}`
+
+  const user = await getUser(request)
+
+  if (user instanceof Error) {
+
+    // Increase failed login attempts counter by 1.
+    let rows = await acl(`
+      UPDATE acl_schema.acl_table
+      SET failedattempts = failedattempts + 1
+      WHERE lower(email) = lower($1)
+      RETURNING failedattempts;`, [request.email])
+
+    if (rows instanceof Error) return new Error(await languageTemplates({
+      template: 'failed_query',
+      language: request.language
+    }))
+
+    // Check whether failed login attempts exceeds limit.
+    if (rows[0].failedattempts >= parseInt(process.env.FAILED_ATTEMPTS || 3)) {
+
+      // Create a verificationtoken.
+      const verificationtoken = crypto.randomBytes(20).toString('hex')
+
+      // Store verificationtoken and remove verification status.
+      rows = await acl(`
+        UPDATE acl_schema.acl_table
+        SET
+          verified = false,
+          verificationtoken = '${verificationtoken}'
+        WHERE lower(email) = lower($1);`, [request.email])
+
+      if (rows instanceof Error) return new Error(await languageTemplates({
+        template: 'failed_query',
+        language: request.language
+      }))
+
+      await mailer({
+        template: 'locked_account',
+        language: request.language,
+        to: request.email,
+        host: request.host,
+        failed_attempts: parseInt(process.env.FAILED_ATTEMPTS) || 3,
+        remote_address: request.remote_address,
+        verificationtoken
+      })
+
+      return new Error(await languageTemplates({
+        template: 'user_locked',
+        language: request.language
+      }))
+    }
+
+    // Login has failed but account is not locked (yet).
+    await mailer({
+      template: 'login_incorrect',
+      language: request.language,
+      to: request.email,
+      host: request.host,
+      remote_address: request.remote_address
+    })
+
+    return new Error('auth_failed')
+  }
+
+  return user
+}
+
+async function getUser(request) {
 
   // Update access_log and return user record matched by email.
   let rows = await acl(`
     UPDATE acl_schema.acl_table
-    SET access_log = array_append(access_log, '${date.toISOString().replace(/\..*/, '')}@${remote_address}')
+    SET access_log = array_append(access_log, '${request.date.toISOString().replace(/\..*/, '')}@${request.remote_address}')
     WHERE lower(email) = lower($1)
     RETURNING email, roles, language, blocked, approved, approved_by, verified, admin, password ${process.env.APPROVAL_EXPIRY ? ', expires_on;' : ';'}`,
-    [email])
+    [request.email])
 
   if (rows instanceof Error) return new Error(await languageTemplates({
     template: 'failed_query',
-    language: req.params.language
+    language: request.language
   }))
 
   // Get user record from first row.
@@ -68,7 +139,7 @@ module.exports = async (req) => {
   // Blocked user cannot login.
   if (user.blocked) return new Error(await languageTemplates({
     template: 'user_blocked',
-    language: user.language || req.params.language
+    language: user.language || request.language
   }))
 
   // Non admin accounts may expire.
@@ -85,11 +156,11 @@ module.exports = async (req) => {
           UPDATE acl_schema.acl_table
           SET approved = false
           WHERE lower(email) = lower($1);`,
-          [email])
+          [request.email])
 
         if (rows instanceof Error) return new Error(await languageTemplates({
           template: 'failed_query',
-          language: req.params.language
+          language: request.language
         }))
       }
 
@@ -97,9 +168,7 @@ module.exports = async (req) => {
         template: 'user_expired',
         language: user.language
       }))
-
     }
-
   }
 
   // Accounts must be verified and approved for login
@@ -109,15 +178,15 @@ module.exports = async (req) => {
       template: 'failed_login',
       language: user.language,
       to: user.email,
-      host: host,
-      remote_address
+      host: request.host,
+      remote_address: request.remote_address
     })
 
     return new Error('user_not_verified')
   }
 
   // Check password from post body against encrypted password from ACL.
-  if (bcrypt.compareSync(password, user.password)) {
+  if (bcrypt.compareSync(request.password, user.password)) {
 
     // password must be removed after check
     delete user.password
@@ -132,11 +201,11 @@ module.exports = async (req) => {
         UPDATE acl_schema.acl_table
         SET session = '${nano_session}'
         WHERE lower(email) = lower($1)`,
-        [email])
+        [request.email])
 
       if (rows instanceof Error) return new Error(await languageTemplates({
         template: 'failed_query',
-        language: req.params.language
+        language: request.language
       }))
 
     }
@@ -144,67 +213,5 @@ module.exports = async (req) => {
     return user
   }
 
-  // password must be removed after check
-  delete user.password
-
-  // FAILED LOGIN
-  // Password from login form does NOT match encrypted password in ACL!
-
-  // Increase failed login attempts counter by 1.
-  rows = await acl(`
-    UPDATE acl_schema.acl_table
-    SET failedattempts = failedattempts + 1
-    WHERE lower(email) = lower($1)
-    RETURNING failedattempts;`, [email])
-
-  if (rows instanceof Error) return new Error(await languageTemplates({
-    template: 'failed_query',
-    language: req.params.language
-  }))
-
-  // Check whether failed login attempts exceeds limit.
-  if (rows[0].failedattempts >= parseInt(process.env.FAILED_ATTEMPTS || 3)) {
-
-    // Create a verificationtoken.
-    const verificationtoken = crypto.randomBytes(20).toString('hex')
-
-    // Store verificationtoken and remove verification status.
-    rows = await acl(`
-      UPDATE acl_schema.acl_table
-      SET
-        verified = false,
-        verificationtoken = '${verificationtoken}'
-      WHERE lower(email) = lower($1);`, [email])
-
-    if (rows instanceof Error) return new Error(await languageTemplates({
-      template: 'failed_query',
-      language: req.params.language
-    }))
-
-    await mailer({
-      template: 'locked_account',
-      language: user.language,
-      to: user.email,
-      host: host,
-      failed_attempts: parseInt(process.env.FAILED_ATTEMPTS) || 3,
-      verificationtoken: verificationtoken,
-      remote_address
-    })
-
-    return new Error(await languageTemplates({
-      template: 'user_locked',
-      language: user.language
-    }))
-  }
-
-  // Login has failed but account is not locked (yet).
-  await mailer({
-    template: 'login_incorrect',
-    language: user.language,
-    to: user.email,
-    host: host,
-    remote_address
-  })
-
-  return new Error('auth_failed')
+  return new Error('compare_sync_fail')
 }
