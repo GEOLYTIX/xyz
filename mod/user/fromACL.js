@@ -81,38 +81,18 @@ async function getUser(request) {
   if (!user) return new Error('auth_failed')
 
   // Blocked user cannot login.
-  if (user.blocked) return new Error(await languageTemplates({
-    template: 'user_blocked',
-    language: user.language || request.language
-  }))
+  if (user.blocked) {
+    return new Error(await languageTemplates({
+      template: 'user_blocked',
+      language: user.language
+    }))
+  }
 
-  // Non admin accounts may expire.
-  if (!user.admin && process.env.APPROVAL_EXPIRY) {
-
-    // User account has expired.
-    if (user.expires_on !== null && user.expires_on < new Date() / 1000) {
-
-      // Remove user approval.
-      if (user.approved) {
-
-        // Remove approval of expired user account.
-        rows = await acl(`
-          UPDATE acl_schema.acl_table
-          SET approved = false
-          WHERE lower(email) = lower($1);`,
-          [request.email])
-
-        if (rows instanceof Error) return new Error(await languageTemplates({
-          template: 'failed_query',
-          language: request.language
-        }))
-      }
-
-      return new Error(await languageTemplates({
-        template: 'user_expired',
-        language: user.language
-      }))
-    }
+  if (await userExpiry(user, request)) {
+    return new Error(await languageTemplates({
+      template: 'user_expired',
+      language: user.language
+    })) 
   }
 
   // Accounts must be verified and approved for login
@@ -158,6 +138,32 @@ async function getUser(request) {
   }
 
   return new Error('compare_sync_fail')
+}
+
+async function userExpiry(user, request) {
+
+  // Admin accounts do not not expire.
+  if (user.admin) return false;
+
+  // APPROVAL_EXPIRY is not configured.
+  if (!process.env.APPROVAL_EXPIRY) return false;
+  
+  // Check whether user is expired.
+  if (user.expires_on !== null && user.expires_on < new Date() / 1000) {
+
+    if (user.approved) {
+
+      // Remove approval of expired user.
+      await acl(`
+        UPDATE acl_schema.acl_table
+        SET approved = false
+        WHERE lower(email) = lower($1);`,
+        [request.email])
+    }
+
+    // User approval has expired.
+    return true;
+  }
 }
 
 async function failedLogin(request) {
