@@ -27,9 +27,8 @@ module.exports = async (req) => {
     password ??= email_password[1]
   }
 
-  const remote_address = req.headers['x-forwarded-for']
-    && /^[A-Za-z0-9.,_-\s]*$/.test(req.headers['x-forwarded-for']) ? req.headers['x-forwarded-for'] : 'invalid'
-    || 'unknown';
+  const remote_address = /^[A-Za-z0-9.,_-\s]*$/.test(req.headers['x-forwarded-for'])
+   ? req.headers['x-forwarded-for'] : undefined;
 
   if (!email) return new Error(await languageTemplates({
     template: 'missing_email',
