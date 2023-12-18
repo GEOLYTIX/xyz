@@ -21,9 +21,9 @@ module.exports = async (req) => {
 
   if (req.headers.authorization) {
 
-    let user_string = Buffer.from(req.headers.authorization.split(" ")[1], 'base64').toString()
+    const user_string = Buffer.from(req.headers.authorization.split(" ")[1], 'base64').toString()
 
-    let email_password = user_string.split(':')
+    const email_password = user_string.split(':')
 
     request.email = email_password[0]
 
