@@ -57,5 +57,9 @@ module.exports = {
   mvt: {
     render: require('./mvt'),
     value_only: true
+  },
+  mvt_geom: {
+    render: require('./mvt_geom'),
+    value_only: true
   }
 }
