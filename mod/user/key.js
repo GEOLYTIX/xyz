@@ -1,4 +1,4 @@
-const acl = require('./acl')()
+const acl = require('./acl')
 
 const jwt = require('jsonwebtoken')
 
@@ -13,8 +13,8 @@ module.exports = async (req, res) => {
   
   const user = rows[0]
   
-  if (!user || user.api === 'false' || !user.verified || !user.approved || user.blocked) {
-    return res.status(401).send('Invalid token.')
+  if (!user || !user.api || !user.verified || !user.approved || user.blocked) {
+    return res.status(401).send('Unauthorized access.')
   }
   
   // Create signed api_token

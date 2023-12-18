@@ -1,8 +1,15 @@
 const jwt = require('jsonwebtoken')
 
-const acl = require('./acl')()
+const acl = require('./acl')
+
+const fromACL = require('./fromACL')
 
 module.exports = async (req, res) => {
+
+  if (req.headers.authorization) {
+
+    return await fromACL(req)
+  }
 
   // Get token from params or cookie.
   const token = req.params.token || req.cookies && req.cookies[process.env.TITLE]

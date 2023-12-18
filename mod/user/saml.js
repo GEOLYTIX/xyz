@@ -11,7 +11,7 @@ try {
 
   const { readFileSync } = require('fs');
 
-  acl = require('./acl')();
+  acl = require('./acl');
 
   sp = new saml2.ServiceProvider({
     entity_id: process.env.SAML_ENTITY_ID,
