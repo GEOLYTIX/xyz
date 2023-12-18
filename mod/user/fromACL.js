@@ -54,63 +54,7 @@ module.exports = async (req) => {
 
   if (user instanceof Error) {
 
-    // Increase failed login attempts counter by 1.
-    let rows = await acl(`
-      UPDATE acl_schema.acl_table
-      SET failedattempts = failedattempts + 1
-      WHERE lower(email) = lower($1)
-      RETURNING failedattempts;`, [request.email])
-
-    if (rows instanceof Error) return new Error(await languageTemplates({
-      template: 'failed_query',
-      language: request.language
-    }))
-
-    // Check whether failed login attempts exceeds limit.
-    if (rows[0].failedattempts >= parseInt(process.env.FAILED_ATTEMPTS || 3)) {
-
-      // Create a verificationtoken.
-      const verificationtoken = crypto.randomBytes(20).toString('hex')
-
-      // Store verificationtoken and remove verification status.
-      rows = await acl(`
-        UPDATE acl_schema.acl_table
-        SET
-          verified = false,
-          verificationtoken = '${verificationtoken}'
-        WHERE lower(email) = lower($1);`, [request.email])
-
-      if (rows instanceof Error) return new Error(await languageTemplates({
-        template: 'failed_query',
-        language: request.language
-      }))
-
-      await mailer({
-        template: 'locked_account',
-        language: request.language,
-        to: request.email,
-        host: request.host,
-        failed_attempts: parseInt(process.env.FAILED_ATTEMPTS) || 3,
-        remote_address: request.remote_address,
-        verificationtoken
-      })
-
-      return new Error(await languageTemplates({
-        template: 'user_locked',
-        language: request.language
-      }))
-    }
-
-    // Login has failed but account is not locked (yet).
-    await mailer({
-      template: 'login_incorrect',
-      language: request.language,
-      to: request.email,
-      host: request.host,
-      remote_address: request.remote_address
-    })
-
-    return new Error('auth_failed')
+    return await failedLogin(request)
   }
 
   return user
@@ -214,4 +158,65 @@ async function getUser(request) {
   }
 
   return new Error('compare_sync_fail')
+}
+
+async function failedLogin(request) {
+
+  // Increase failed login attempts counter by 1.
+  let rows = await acl(`
+    UPDATE acl_schema.acl_table
+    SET failedattempts = failedattempts + 1
+    WHERE lower(email) = lower($1)
+    RETURNING failedattempts;`, [request.email])
+
+  if (rows instanceof Error) return new Error(await languageTemplates({
+    template: 'failed_query',
+    language: request.language
+  }))
+
+  // Check whether failed login attempts exceeds limit.
+  if (rows[0].failedattempts >= parseInt(process.env.FAILED_ATTEMPTS || 3)) {
+
+    // Create a verificationtoken.
+    const verificationtoken = crypto.randomBytes(20).toString('hex')
+
+    // Store verificationtoken and remove verification status.
+    rows = await acl(`
+      UPDATE acl_schema.acl_table
+      SET
+        verified = false,
+        verificationtoken = '${verificationtoken}'
+      WHERE lower(email) = lower($1);`, [request.email])
+
+    if (rows instanceof Error) return new Error(await languageTemplates({
+      template: 'failed_query',
+      language: request.language
+    }))
+
+    await mailer({
+      template: 'locked_account',
+      language: request.language,
+      to: request.email,
+      host: request.host,
+      failed_attempts: parseInt(process.env.FAILED_ATTEMPTS) || 3,
+      remote_address: request.remote_address,
+      verificationtoken
+    })
+
+    return new Error(await languageTemplates({
+      template: 'user_locked',
+      language: request.language
+    }))
+  }
+
+  // Login has failed but account is not locked (yet).
+  await mailer({
+    template: 'login_incorrect',
+    language: request.language,
+    to: request.email,
+    host: request.host,
+    remote_address: request.remote_address
+  })
+
+  return new Error('auth_failed')
 }
