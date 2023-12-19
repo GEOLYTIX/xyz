@@ -104,6 +104,11 @@ async function locale(req, res) {
   
   // Check layer access.
   locale.layers = locale.layers && Object.entries(locale.layers)
+
+    // filter layers which are null
+    .filter(layer => layer[1] !== null)
+
+    // check layer for user roles
     .filter(layer => !!Roles.check(layer[1], roles))
     .map(layer => layer[0])
 
