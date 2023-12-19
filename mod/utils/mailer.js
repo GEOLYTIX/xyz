@@ -15,19 +15,23 @@ module.exports = async params => {
     return;
   }
 
-  const email = process.env.TRANSPORT_EMAIL || process.env.TRANSPORT.split(':')[1]
+  const user = process.env.TRANSPORT_EMAIL || process.env.TRANSPORT.split(':')[1]
+
+  const pass = process.env.TRANSPORT_PASSWORD || process.env.TRANSPORT.split(':')[2].split('@')[0]
+
+  const host = process.env.TRANSPORT_HOST || process.env.TRANSPORT.split(':')[2].split('@')[1]
 
   if (!transport) {
 
     transport = mailer.createTransport({
-        host: process.env.TRANSPORT_HOST,
-        name: email.match(/[^@]*$/)[0],
+        host: host,
+        name: user.match(/[^@]*$/)[0],
         port: process.env.TRANSPORT_PORT || 587,
         secure: false,
         requireTLS: process.env.TRANSPORT_TLS && true,
         auth: {
-          user: email,
-          pass: process.env.TRANSPORT_PASSWORD
+          user: user,
+          pass: pass
         }
       })
   }
@@ -38,8 +42,8 @@ module.exports = async params => {
 
   const mailTemplate = {
     to: params.to,
-    from: email,
-    sender: email,
+    from: user,
+    sender: user,
     subject: replaceStringParams(template.subject, params),
     html: template.html ? replaceStringParams(template.html, params) : undefined,
     text: template.text ? replaceStringParams(template.text, params) : undefined
