@@ -25,7 +25,7 @@ module.exports = async params => {
 
     transport = mailer.createTransport({
         host: host,
-        name: user.match(/[^@]*$/)[0],
+        name: user.split('@')[0],
         port: process.env.TRANSPORT_PORT || 587,
         secure: false,
         requireTLS: process.env.TRANSPORT_TLS && true,
