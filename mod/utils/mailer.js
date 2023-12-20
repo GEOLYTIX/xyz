@@ -10,28 +10,38 @@ let transport
 
 module.exports = async params => {
 
-  if (!process.env.TRANSPORT && !process.env.TRANSPORT_HOST) {
-    console.warn('No transport method set for mail.')
+  if (process.env.TRANSPORT) {
+
+    console.warn('Please replace process.env.TRANSPORT with TRANSPORT_HOST,TRANSPORT_EMAIL, and TRANSPORT_PASSWORD')
+  }
+
+   
+  if (!process.env.TRANSPORT_HOST) {
+    console.warn('process.env.TRANSPORT_HOST missing.')
     return;
   }
 
-  const user = process.env.TRANSPORT_EMAIL || process.env.TRANSPORT.split(':')[1]
+  if (!process.env.TRANSPORT_EMAIL) {
+    console.warn('process.env.TRANSPORT_EMAIL missing.')
+    return;
+  }
 
-  const pass = process.env.TRANSPORT_PASSWORD || process.env.TRANSPORT.split(':')[2].split('@')[0]
-
-  const host = process.env.TRANSPORT_HOST || process.env.TRANSPORT.split(':')[2].split('@')[1]
+  if (!process.env.TRANSPORT_PASSWORD) {
+    console.warn('process.env.TRANSPORT_PASSWORD missing.')
+    return;
+  }
 
   if (!transport) {
 
     transport = mailer.createTransport({
-        host: host,
-        name: user.split('@')[0],
+        host: process.env.TRANSPORT_HOST,
+        name: process.env.TRANSPORT_EMAIL.split('@')[0],
         port: process.env.TRANSPORT_PORT || 587,
         secure: false,
         requireTLS: process.env.TRANSPORT_TLS && true,
         auth: {
-          user: user,
-          pass: pass
+          user: process.env.TRANSPORT_EMAIL,
+          pass: process.env.TRANSPORT_PASSWORD
         }
       })
   }
@@ -42,8 +52,8 @@ module.exports = async params => {
 
   const mailTemplate = {
     to: params.to,
-    from: user,
-    sender: user,
+    from: process.env.TRANSPORT_EMAIL,
+    sender: process.env.TRANSPORT_EMAIL,
     subject: replaceStringParams(template.subject, params),
     html: template.html ? replaceStringParams(template.html, params) : undefined,
     text: template.text ? replaceStringParams(template.text, params) : undefined
