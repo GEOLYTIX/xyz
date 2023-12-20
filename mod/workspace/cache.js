@@ -77,17 +77,21 @@ async function cacheWorkspace() {
   // Loop through locale keys in workspace.
   Object.keys(workspace.locales).forEach(locale_key => {
 
-    // Get locale object from key.
-    const locale = workspace.locales[locale_key]
+    // workspace has a locale prototype.
+    if (workspace.locale) {
 
-    // Merge the workspace template into workspace.
-    merge(locale, workspace.locale)
+      const locale = structuredClone(workspace.locale)
+
+      merge(locale, workspace.locales[locale_key])
+
+      workspace.locales[locale_key] = locale
+    }
 
     // Assign key value as key on locale object.
-    locale.key = locale_key
+    workspace.locales[locale_key].key = locale_key
 
     // Assign locale key as name with no existing name on locale object.
-    locale.name ??= locale_key
+    workspace.locales[locale_key].name ??= locale_key
   })
 
   if (workspace.plugins) {
