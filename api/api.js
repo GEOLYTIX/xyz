@@ -123,6 +123,11 @@ module.exports = async (req, res) => {
   // The authentication method returns an error.
   if (user && user instanceof Error) {
 
+    if (req.headers.authorization) {
+
+      return res.status(401).send(user.message)
+    }
+
     // Remove cookie.
     res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
 

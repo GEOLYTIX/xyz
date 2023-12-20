@@ -52,7 +52,7 @@ const methods = {
   }
 }
 
-module.exports = (req, res) => {
+module.exports = async (req, res) => {
 
   const method = methods[req.params.method]
 

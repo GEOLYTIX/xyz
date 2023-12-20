@@ -1,4 +1,4 @@
-const acl = require('./acl')()
+const acl = require('./acl')
 
 module.exports = async (req, res) => {
 
