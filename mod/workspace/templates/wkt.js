@@ -4,6 +4,7 @@ module.exports = _ => {
   const fields = _.fields?.split(',')
     .map(field => `${_.workspace.templates[field]?.template || field} AS ${field}`)
     .filter(field => !!field)
+    || []
 
   // Unshift the geom field into the array.
   if (_.geom && !_.no_geom) {

@@ -78,7 +78,8 @@ async function cacheWorkspace() {
   Object.keys(workspace.locales).forEach(locale_key => {
 
     // workspace has a locale prototype.
-    if (workspace.locale) {
+    // don't merge workspace.locale with itself.
+    if (workspace.locale && locale_key !== 'locale') {
 
       const locale = structuredClone(workspace.locale)
 
