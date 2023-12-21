@@ -144,6 +144,17 @@
     // Get list of available roles from workspace.
     const rolesList = await xhrPromise(`${document.head.dataset.dir}/api/workspace/roles`)
 
+    // List of languages key values. 
+    const languagesList = {
+      "en": "English",
+      "de": "German",
+      "cn": "Chinese",
+      "pl": "Polish",
+      "ko": "Korean",
+      "fr": "French",
+      "ja": "Japanese"
+    };
+
     const params = {}
 
     // Get URL params.
@@ -246,8 +257,22 @@
             vertAlign: 'middle',
             headerTooltip: 'Account language',
             titleFormatter: () => '<div class="xyz-icon icon-translate"></div>',
+            editor: 'list',
+            editorParams: {
+              // show the label of the language in the dropdown list
+              values: Object.keys(languagesList).map(key => ({ label: languagesList[key], value: key })),
+            },
+            cellEdited: languageEdited,
             resizable: false,
-            responsive: 2 // Hide first
+            responsive: 1,
+            formatter: (cell, formatterParams, onRendered) => {
+
+              let val = cell.getValue()
+
+              if (!val) return;
+
+              return languagesList[val];
+            }
           },
           {
             field: 'roles',
@@ -396,6 +421,14 @@
       //return the editor element
       return editor;
     };
+
+
+    function languageEdited(e) {
+
+      if (JSON.stringify(e._cell.value) === JSON.stringify(e._cell.oldValue)) return;
+
+      xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${e._cell.row.data.email}&field=language&value=${e._cell.value}`)
+    }
 
     async function cellToggle(e, cell) {
 
