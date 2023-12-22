@@ -51,6 +51,8 @@ Node.js v18+
 
 [aws-sdk](https://github.com/aws/aws-sdk-js-v3) - Several modules are required in order to access resources on cloudfront or S3.
 
+[simple-statistics](https://github.com/simple-statistics/simple-statistics) - A JavaScript implementation of descriptive, regression, and inference statistics.
+
 ### Development dependencies
 
 Following development dependencies are required to build the library and run a local instance of the XYZ host.
