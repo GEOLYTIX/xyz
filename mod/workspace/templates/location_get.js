@@ -1,9 +1,6 @@
 module.exports = _ => {
 
-  const fields = _.layer.infoj
-
-    // Entry must NOT have a query defined.
-    .filter(entry => !entry.query)
+  const fields = _.layer.infoj?.filter(entry => !entry.query)
 
     // Entry must have a field defined.
     .filter(entry => entry.field)
@@ -13,6 +10,9 @@ module.exports = _ => {
 
     // Map either fieldfx or template SQL if available.
     .map(entry => `(${entry.fieldfx || _.workspace.templates[entry.field]?.template || entry.field}) AS ${entry.field}`)
+
+    // Assign qID as default field without layer.infoj
+    || [_.layer.qID]
 
   return `
     SELECT ${fields.join()}
