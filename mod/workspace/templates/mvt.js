@@ -4,6 +4,7 @@ module.exports = _ => {
   const fields = _.fields?.split(',')
     .map(field => `${_.workspace.templates[field]?.template || field} AS ${field}`)
     .filter(field => !!field)
+    || []
 
   // Push label (cluster) into fields
   _.label && fields.push(`${_.workspace.templates[_.label]?.template || _.label} AS ${_.label}`)
