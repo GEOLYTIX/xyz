@@ -20,7 +20,7 @@ module.exports = _ => {
     FROM (
       SELECT
         ${_.layer.qID || null} as id,
-        ${Array.isArray(fields) ? fields.toString() + ',' : ''}
+        ${fields.length ? fields.toString() + ',' : ''}
         ST_AsMVTGeom(
           ${_.geom},
           ST_TileEnvelope(${z},${x},${y}),
@@ -36,5 +36,5 @@ module.exports = _ => {
           ${_.geom}
         )
         \${filter}
-      ) tile`
+  ) tile`
 }
