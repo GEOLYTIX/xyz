@@ -107,7 +107,7 @@ label.checkbox {
   overflow: visible;
   position: relative;
   background-color: white;
-  box-shadow: 1px 1px 3px var(--color-primary-light);
+  box-shadow: var(--color-mid) 0px 8px 24px;
 
   &:disabled {
     pointer-events: none;
