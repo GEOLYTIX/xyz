@@ -27,7 +27,7 @@
   "devDependencies": {
     "cookie-parser": "^1.4.5",
     "dotenv": "^8.2.0",
-    "esbuild": "^0.14.39",
+    "esbuild": "^0.19.11",
     "eslint": "^8.29.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
