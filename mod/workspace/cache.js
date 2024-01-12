@@ -37,15 +37,19 @@ const msg_templates = require('./templates/_msgs')
 
 const query_templates = require('./templates/_queries')
 
+const workspace_src = process.env.WORKSPACE.split(':')[0]
+
 async function cacheWorkspace() {
 
+  let workspace;
+
   // Get workspace from source.
-  const workspace = process.env.WORKSPACE ?
-    await getFrom[process.env.WORKSPACE.split(':')[0]](process.env.WORKSPACE) : {}
+  workspace = Object.hasOwn(getFrom, workspace_src) ?
+    await getFrom[workspace_src](process.env.WORKSPACE) : {}
 
   // Return error if source failed.
   if (workspace instanceof Error) {
-    return {};
+    workspace = {};
   }
 
   const custom_templates = process.env.CUSTOM_TEMPLATES
