@@ -1,5 +1,3 @@
-
-
 .location-view.drawer {
   margin-top: 5px;
   border-radius: 5px;
@@ -23,11 +21,11 @@
       grid-column: 1 / 3;
     }
 
-    &.inline > .label {
+    &.inline>.label {
       grid-column: 1;
     }
 
-    &.inline > .val {
+    &.inline>.val {
       grid-column: 2;
       text-align: right;
       word-break: break-word;
@@ -38,6 +36,13 @@
     align-items: center;
     display: flex;
     font-weight: bold;
+    height: 1.5em;
+  }
+
+  & .label>.tooltip {
+    -webkit-user-select: none;
+    user-select: none;
+    height: 100%;
   }
 
   & .drawer.group {
@@ -48,7 +53,7 @@
     font-size: 90%;
     padding: 0;
 
-    & >.header {
+    &>.header {
       grid-column: 1 / 3;
     }
 
@@ -61,7 +66,7 @@
   & .layer-key {
     grid-column: 1 / 3;
 
-    & >span {
+    &>span {
       float: right;
       padding: 3px;
       cursor: help;
@@ -93,7 +98,7 @@
   display: flex;
   flex-wrap: wrap;
 
-  & >div {
+  &>div {
     position: relative;
     width: 90px;
     height: 90px;
@@ -121,7 +126,7 @@
     }
   }
 
-  & >div:first-child{
+  &>div:first-child {
     width: 100%;
     height: 180px;
   }
