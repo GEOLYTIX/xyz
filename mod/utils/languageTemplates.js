@@ -13,6 +13,10 @@ module.exports = async (params) => {
 
   const workspace = await workspaceCache()
 
+  if (workspace instanceof Error) {
+    return 'Failed to load workspace.'
+  }
+
   if (!Object.hasOwn(workspace.templates, params.template)) {
 
     console.warn(`Template ${params.template} not found.`)

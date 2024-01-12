@@ -49,7 +49,7 @@ async function cacheWorkspace() {
 
   // Return error if source failed.
   if (workspace instanceof Error) {
-    workspace = {};
+    return workspace
   }
 
   const custom_templates = process.env.CUSTOM_TEMPLATES
