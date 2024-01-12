@@ -1031,7 +1031,7 @@ label.checkbox {
   overflow: visible;
   position: relative;
   background-color: white;
-  box-shadow: 1px 1px 3px var(--color-primary-light);
+  box-shadow: var(--color-mid) 0px 8px 24px;
   &:disabled {
     pointer-events: none;
     opacity: 0.4;
@@ -1068,11 +1068,11 @@ label.checkbox {
       padding: 5px;
     }
     & > li:hover {
-      background-color: var(--color-mid);
+      background-color: var(--color-light);
       cursor: pointer;
     }
     & > li.selected {
-      background-color: var(--color-mid);
+      background-color: var(--color-light-secondary);
     }
     & .label {
       padding: 0 6px;

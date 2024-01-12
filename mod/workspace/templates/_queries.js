@@ -3,7 +3,7 @@ module.exports = {
     template: require('./gaz_query'),
   },
   get_last_location: {
-    template: require('./get_last_location'),
+    render: require('./get_last_location'),
   },
   distinct_values: {
     template: require('./distinct_values'),
