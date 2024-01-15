@@ -1283,12 +1283,11 @@ label.checkbox {
     align-items: center;
     display: flex;
     font-weight: bold;
-    height: 1.5em;
   }
   & .label > .tooltip {
     -webkit-user-select: none;
     user-select: none;
-    height: 100%;
+    height: 1.5em;
   }
   & .drawer.group {
     grid-column: 1 / 3;
