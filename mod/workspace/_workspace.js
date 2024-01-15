@@ -12,6 +12,10 @@ module.exports = async (req, res) => {
 
   workspace = await workspaceCache()
 
+  if (workspace instanceof Error) {
+    return res.status(500).send('Failed to load workspace.')
+  }
+
   const keys = {
     layer,
     locale,

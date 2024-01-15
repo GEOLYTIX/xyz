@@ -38,6 +38,8 @@ function addValues(val) {
 
 module.exports = function sqlfilter(filter, params) {
 
+  if (typeof filter === 'string') return filter;
+
   SQLparams = params
 
   // Filter in an array will be conditional OR

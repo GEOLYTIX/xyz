@@ -19,6 +19,10 @@ module.exports = async (req, res) => {
   // Get workspace from cache.
   const workspace = await workspaceCache()
 
+  if (workspace instanceof Error) {
+    return res.status(500).send('Failed to load workspace.')
+  }
+
   // Check whether query template exists.
   if (!Object.hasOwn(workspace.templates, req.params.template)) {
 
@@ -245,8 +249,8 @@ async function layerQuery(req, res) {
   const roles = Roles.filter(req.params.layer, req.params.user?.roles)
 
   // Create params filter string from roleFilter filter params.
-  req.params.filter =
-    ` ${req.params.layer.filter?.default && 'AND ' + req.params.layer.filter?.default || ''}
+  req.params.filter = `
+    ${req.params.layer.filter?.default && `AND ${sqlFilter(req.params.layer.filter.default, req.params.SQL)}` || ''}
     ${req.params.filter && `AND ${sqlFilter(JSON.parse(req.params.filter), req.params.SQL)}` || ''}
     ${roles && Object.values(roles).some(r => !!r)
       ? `AND ${sqlFilter(Object.values(roles).filter(r => !!r), req.params.SQL)}`

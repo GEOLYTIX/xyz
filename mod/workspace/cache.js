@@ -37,15 +37,19 @@ const msg_templates = require('./templates/_msgs')
 
 const query_templates = require('./templates/_queries')
 
+const workspace_src = process.env.WORKSPACE.split(':')[0]
+
 async function cacheWorkspace() {
 
+  let workspace;
+
   // Get workspace from source.
-  const workspace = process.env.WORKSPACE ?
-    await getFrom[process.env.WORKSPACE.split(':')[0]](process.env.WORKSPACE) : {}
+  workspace = Object.hasOwn(getFrom, workspace_src) ?
+    await getFrom[workspace_src](process.env.WORKSPACE) : {}
 
   // Return error if source failed.
   if (workspace instanceof Error) {
-    return {};
+    return workspace
   }
 
   const custom_templates = process.env.CUSTOM_TEMPLATES
@@ -78,7 +82,8 @@ async function cacheWorkspace() {
   Object.keys(workspace.locales).forEach(locale_key => {
 
     // workspace has a locale prototype.
-    if (workspace.locale) {
+    // don't merge workspace.locale with itself.
+    if (workspace.locale && locale_key !== 'locale') {
 
       const locale = structuredClone(workspace.locale)
 
