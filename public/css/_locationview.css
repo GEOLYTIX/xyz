@@ -42,6 +42,7 @@
     -webkit-user-select: none;
     user-select: none;
     height: 1.5em;
+    width: 1.5em;
   }
 
   & .drawer.group {
