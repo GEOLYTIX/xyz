@@ -12,6 +12,10 @@ module.exports = async (params) => {
 
   const workspace = await workspaceCache()
 
+  if (workspace instanceof Error) {
+    return workspace
+  }
+
   if (!Object.hasOwn(workspace.locales, params.locale)) {
     return new Error('Unable to validate locale param.')
   }

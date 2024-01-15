@@ -19,6 +19,10 @@ module.exports = async (req, res) => {
   // Get workspace from cache.
   const workspace = await workspaceCache()
 
+  if (workspace instanceof Error) {
+    return res.status(500).send('Failed to load workspace.')
+  }
+
   // Check whether query template exists.
   if (!Object.hasOwn(workspace.templates, req.params.template)) {
 
