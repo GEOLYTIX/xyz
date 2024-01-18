@@ -78,7 +78,3 @@ Free use of the code in this repository is allowed through a [MIT license](https
 ## BrowserStack
 
 BrowserStack supports this OpenSource project and provides us with valuable tools to test the Mapp library on different client platforms.
-
-### Repository Visualisation
-
-![Visualization of the codebase](./diagram.svg)
