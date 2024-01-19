@@ -230,7 +230,7 @@ window.onload = async () => {
     locale: locale,
     hooks: true,
     scrollWheelZoom: true,
-    scalebar: locale.scaleBar || 'metric', //'imperial'
+    scalebar: locale.scaleBar === 'imperial' ? 'imperial' : 'metric',
     attribution: {
       target: document.querySelector('#Attribution > .attribution-links'),
       links: {
