@@ -120,7 +120,19 @@ window.onload = async () => {
       toolbar_logout: 'Log out',
       layers: 'Layers',
       locations: 'Località',
-    }
+    },
+    th: {
+      toolbar_zoom_in: 'ขยายเข้า',
+      toolbar_zoom_out: 'ซูมออก',
+      toolbar_zoom_to_area: 'ซูมไปที่พื้นที่',
+      toolbar_current_location: 'สถานที่ปัจจุบัน',
+      toolbar_fullscreen: 'มุมมองแผนที่แบบเต็มหน้าจอ',
+      toolbar_admin: 'เปิดมุมมองผู้ดูแลระบบ',
+      toolbar_login: 'เข้าสู่ระบบ',
+      toolbar_logout: 'ออกจากระบบ',
+      layers: 'ชั้น',
+      locations: 'สถานที่',
+    },
   })
 
   // Parse user object from dataset attribute on document head.
