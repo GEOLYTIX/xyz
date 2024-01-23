@@ -181,7 +181,7 @@ async function failedLogin(request) {
   }))
 
   // Check whether failed login attempts exceeds limit.
-  if (rows[0].failedattempts >= parseInt(process.env.FAILED_ATTEMPTS || 3)) {
+  if (rows[0]?.failedattempts >= parseInt(process.env.FAILED_ATTEMPTS || 3)) {
 
     // Create a verificationtoken.
     const verificationtoken = crypto.randomBytes(20).toString('hex')
