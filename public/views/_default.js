@@ -403,7 +403,8 @@ window.onload = async () => {
 
   // Execute plugins with matching keys in locale.
   const plugins = Object.keys(locale).map((key) => {
-    return mapp.plugins[key] && mapp.plugins[key](locale[key], mapview);
+    // Check if mapp.plugins[key] is a function before executing it
+    return typeof mapp.plugins[key] === 'function' && mapp.plugins[key](locale[key], mapview);
   });
 
   // Ensure that all plugin promises are resolved
