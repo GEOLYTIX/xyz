@@ -6,11 +6,11 @@ module.exports = async (req, res) => {
     cloudinary
   }
 
-  if (!Object.hasOwn(platform, req.params.sign)) {
-    return res.send(`Failed to validate 'sign' param.`)
+  if (!Object.hasOwn(platform, req.params.provider)) {
+    return res.send(`Failed to validate 'provider' param.`)
   }
 
-  const response = await platform[req.params.sign](req)
+  const response = await platform[req.params.provider](req)
 
   req.params.content_type && res.setHeader('content-type', req.params.content_type)
 
