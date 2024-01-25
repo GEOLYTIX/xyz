@@ -4,9 +4,10 @@ const { createHash } = require('crypto');
 // 2: api_secret
 // 3: cloud_name
 const cloudinary = process.env.CLOUDINARY_URL?.replaceAll('://', ' ').replaceAll(':', ' ').replaceAll('@', ' ').split(' ');
+const baseUrl = `https://api.cloudinary.com/v1_1/${cloudinary[3]}/upload`
 
 module.exports = async req => {
-    const action = req.params.upload || req.params.destroy
+    const action = req.params.destroy ? 'destroy' : 'upload'
     // The timestamp is required for the signature which is valid for 1hr.
     const timestamp = Date.now();
     let toSign = '';
@@ -19,17 +20,8 @@ module.exports = async req => {
     }
 
     const signature = createHash('sha256').update(toSign).digest('hex');
-    const data = new FormData();
-
-    data.append('public_id', req.params.public_id);
-    data.append('api_key', cloudinary[1]);
-    data.append('timestamp', timestamp);
-    data.append('signature', signature);
-
-    // Append folder for upload action
-    if (action === 'upload') {
-        data.append('folder', req.params.folder);
-    }
-
-    return data;
+    console.log(toSign)
+    const params = `${toSign}&signature=${signature}&timestamp=${timestamp}&api_key=${cloudinary[1]}`;
+    const signedUrl = `${baseUrl}?${params}`
+    return {signedUrl:signedUrl};
 }

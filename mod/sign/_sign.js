@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
     return res.send(`Failed to validate 'sign' param.`)
   }
 
-  const response = await provider[req.params.sign](req)
+  const response = await platform[req.params.sign](req)
 
   req.params.content_type && res.setHeader('content-type', req.params.content_type)
 
