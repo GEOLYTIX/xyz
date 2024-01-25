@@ -290,7 +290,6 @@ window.onload = async () => {
 
   // Create mapview
   const mapview = mapp.Mapview({
-    host: mapp.host,
     target: OL,
     locale: locale,
     hooks: true,
