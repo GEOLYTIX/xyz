@@ -289,7 +289,7 @@ window.onload = async () => {
   if (!window.ol) await mapp.utils.olScript()
 
   // Create mapview
-  const mapview = mapp.Mapview({
+  const mapview = await mapp.Mapview({
     host: mapp.host,
     target: OL,
     locale: locale,
