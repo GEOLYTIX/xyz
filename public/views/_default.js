@@ -250,10 +250,8 @@ window.onload = async () => {
 
   const btnColumn = document.getElementById('mapButton');
 
-  const host = document.head.dataset.dir || new String('');
-
   // Get list of accessible locales from Workspace API.
-  const locales = await mapp.utils.xhr(`${host}/api/workspace/locales`);
+  const locales = await mapp.utils.xhr(`${mapp.host}/api/workspace/locales`);
 
   if (!locales.length) {
 
@@ -263,7 +261,7 @@ window.onload = async () => {
 
   // Get locale with list of layers from Workspace API.
   const locale = await mapp.utils.xhr(
-    `${host}/api/workspace/locale?locale=${mapp.hooks.current.locale || locales[0].key}`);
+    `${mapp.host}/api/workspace/locale?locale=${mapp.hooks.current.locale || locales[0].key}`);
 
   if (locale instanceof Error) {
 
@@ -281,7 +279,7 @@ window.onload = async () => {
         key: locale.key,
       })),
       callback: (e, entry) => {
-        window.location.assign(`${host}?locale=${entry.key}`);
+        window.location.assign(`${mapp.host}?locale=${entry.key}`);
       },
     });
 
@@ -292,7 +290,7 @@ window.onload = async () => {
 
   // Create mapview
   const mapview = mapp.Mapview({
-    host: host,
+    host: mapp.host,
     target: OL,
     locale: locale,
     hooks: true,
@@ -304,7 +302,10 @@ window.onload = async () => {
         ['SHA']: `https://github.com/GEOLYTIX/xyz/commit/${mapp.hash}`,
         Openlayers: 'https://openlayers.org',
       },
-    }
+    },
+    
+    // mapp.Mapview must be awaited.
+    loadPlugins: true
   });
 
   // Add zoomIn button.
@@ -400,21 +401,9 @@ window.onload = async () => {
     }}>
       <div class="mask-icon map">`);
 
-  // Load plugins
-  await mapp.utils.loadPlugins(locale.plugins);
-
-  // Execute plugins with matching keys in locale.
-  const plugins = Object.keys(locale).map((key) => {
-    // Check if mapp.plugins[key] is a function before executing it
-    return typeof mapp.plugins[key] === 'function' && mapp.plugins[key](locale[key], mapview);
-  });
-
-  // Ensure that all plugin promises are resolved
-  await Promise.all(plugins)
-
   // Load JSON layers from Workspace API.
   const layers = locale.layers.length ? await mapp.utils.promiseAll(locale.layers.map(
-    layer => mapp.utils.xhr(`${host}/api/workspace/layer?`
+    layer => mapp.utils.xhr(`${mapp.host}/api/workspace/layer?`
       + `locale=${locale.key}&layer=${layer}`)))
     : [{
       key: 'OSM',
@@ -475,7 +464,7 @@ window.onload = async () => {
   mapp.user &&
     mapview.locale.idle &&
     mapp.ui.utils.idleLogout({
-      host: mapview.host,
+      host: mapp.host,
       idle: mapview.locale.idle,
     });
 
@@ -484,7 +473,7 @@ window.onload = async () => {
     btnColumn.appendChild(mapp.utils.html.node`
       <a
         title=${mapp.dictionary.toolbar_admin}
-        href="${mapview.host + '/api/user/admin'}">
+        href="${mapp.host + '/api/user/admin'}">
         <div class="mask-icon supervisor-account">`);
 
   // Append login/logout link.
