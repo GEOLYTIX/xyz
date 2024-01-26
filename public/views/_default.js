@@ -341,10 +341,6 @@ window.onload = async () => {
     btnZoomOut.disabled = z <= mapview.locale.minZoom;
   });
 
-  // Default plugins
-  mapview.locale.zoomToArea = true
-  mapview.locale.fullscreen = true
-
   // Load JSON layers from Workspace API.
   const layers = locale.layers.length ? await mapp.utils.promiseAll(locale.layers.map(
     layer => mapp.utils.xhr(`${mapp.host}/api/workspace/layer?`
