@@ -289,7 +289,7 @@ window.onload = async () => {
   if (!window.ol) await mapp.utils.olScript()
 
   // Create mapview
-  const mapview = mapp.Mapview({
+  const mapview = await mapp.Mapview({
     host: mapp.host,
     target: OL,
     locale: locale,
@@ -302,7 +302,10 @@ window.onload = async () => {
         ['SHA']: `https://github.com/GEOLYTIX/xyz/commit/${mapp.hash}`,
         Openlayers: 'https://openlayers.org',
       },
-    }
+    },
+    
+    // mapp.Mapview must be awaited.
+    loadPlugins: true
   });
 
   // Add zoomIn button.
@@ -341,18 +344,6 @@ window.onload = async () => {
   // Default plugins
   mapview.locale.zoomToArea = true
   mapview.locale.fullscreen = true
-
-  // Load plugins
-  await mapp.utils.loadPlugins(locale.plugins);
-
-  // Execute plugins with matching keys in locale.
-  const plugins = Object.keys(locale).map((key) => {
-    // Check if mapp.plugins[key] is a function before executing it
-    return typeof mapp.plugins[key] === 'function' && mapp.plugins[key](locale[key], mapview);
-  });
-
-  // Ensure that all plugin promises are resolved
-  await Promise.all(plugins)
 
   // Load JSON layers from Workspace API.
   const layers = locale.layers.length ? await mapp.utils.promiseAll(locale.layers.map(
