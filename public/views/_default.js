@@ -339,8 +339,8 @@ window.onload = async () => {
   });
 
   // Default plugins
-  mapview.locale.zoomToArea ??= {}
-  mapview.locale.fullscreen ??= {}
+  mapview.locale.zoomToArea = true
+  mapview.locale.fullscreen = true
 
   // Load plugins
   await mapp.utils.loadPlugins(locale.plugins);
