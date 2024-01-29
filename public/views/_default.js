@@ -261,7 +261,7 @@ window.onload = async () => {
 
   // Get locale with list of layers from Workspace API.
   const locale = await mapp.utils.xhr(
-    `${mapp.host}/api/workspace/locale?locale=${mapp.hooks.current.locale || locales[0].key}`);
+    `${mapp.host}/api/workspace/locale?locale=${mapp.hooks.current.locale || locales[0].key}&layers=true`);
 
   if (locale instanceof Error) {
 
@@ -308,6 +308,9 @@ window.onload = async () => {
     loadPlugins: true
   });
 
+  // Add layers to mapview.
+  await mapview.addLayer(locale.layers);
+
   // Add zoomIn button.
   const btnZoomIn = btnColumn.appendChild(mapp.utils.html.node`
     <button
@@ -340,23 +343,6 @@ window.onload = async () => {
     btnZoomIn.disabled = z >= mapview.locale.maxZoom;
     btnZoomOut.disabled = z <= mapview.locale.minZoom;
   });
-
-  // Load JSON layers from Workspace API.
-  const layers = locale.layers.length ? await mapp.utils.promiseAll(locale.layers.map(
-    layer => mapp.utils.xhr(`${mapp.host}/api/workspace/layer?`
-      + `locale=${locale.key}&layer=${layer}`)))
-    : [{
-      key: 'OSM',
-      display: true,
-      format: 'tiles',
-      URI: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      style: {
-        hidden: true
-      }
-    }]
-
-  // Add layers to mapview.
-  await mapview.addLayer(layers);
 
   if (mapview.locale.gazetteer) {
 

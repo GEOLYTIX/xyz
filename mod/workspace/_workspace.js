@@ -105,6 +105,28 @@ async function locale(req, res) {
     JSON.stringify(locale).replace(/\$\{(.*?)\}/g,
       matched => process.env[`SRC_${matched.replace(/(^\${)|(}$)/g, '')}`])
   )
+
+  // Return layer object instead of array of layer keys
+  if (req.params.layers) {
+
+    const layers = []
+
+    for (const key of Object.keys(locale.layers)) {
+
+      const layer = await getLayer({
+        locale: req.params.locale,
+        layer: key
+      })
+
+      if (!Roles.check(layer, roles)) continue;
+
+      layers.push(layer)
+    }
+
+    locale.layers = layers
+
+    return res.json(locale)
+  }
   
   // Check layer access.
   locale.layers = locale.layers && Object.entries(locale.layers)
