@@ -344,65 +344,22 @@ window.onload = async () => {
     btnZoomOut.disabled = z <= mapview.locale.minZoom;
   });
 
-  // Add zoom to area button.
-  btnColumn.append(mapp.utils.html.node`
-    <button
-      class="mobile-display-none"
-      title=${mapp.dictionary.toolbar_zoom_to_area}
-      onclick=${(e) => {
-
-      // If active cancel zoom and enable highlight interaction.
-      if (e.target.classList.contains('active')) {
-
-        // Will remove the 'active' class in callback of zoom interaction.
-        mapview.interactions.highlight()
-        return;
+  // Load JSON layers from Workspace API.
+  const layers = locale.layers.length ? await mapp.utils.promiseAll(locale.layers.map(
+    layer => mapp.utils.xhr(`${mapp.host}/api/workspace/layer?`
+      + `locale=${locale.key}&layer=${layer}`)))
+    : [{
+      key: 'OSM',
+      display: true,
+      format: 'tiles',
+      URI: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png',
+      style: {
+        hidden: true
       }
+    }]
 
-      // Add active class
-      e.target.classList.add('active')
-
-      // Make zoom interaction current.
-      mapview.interactions.zoom({
-
-        // The interaction callback is executed on cancel or finish.
-        callback: () => {
-          e.target.classList.remove('active');
-          delete mapview.interaction
-
-          // Set highlight interaction if no other interaction is current after 400ms.
-          setTimeout(() => {
-            !mapview.interaction && mapview.interactions.highlight()
-          }, 400)
-        }
-      })
-
-    }}>
-      <div class="mask-icon pageview">`)
-
-  // Add locator button.
-  mapview.locale.locator && btnColumn.appendChild(mapp.utils.html.node`
-    <button
-      title=${mapp.dictionary.toolbar_current_location}
-      onclick=${(e) => {
-      mapview.locate();
-      e.target.classList.toggle('active');
-    }}>
-      <div class="mask-icon gps-not-fixed">`);
-
-  // Add fullscreen button.
-  btnColumn.appendChild(mapp.utils.html.node`
-    <button
-      class="mobile-display-none"
-      title=${mapp.dictionary.toolbar_fullscreen}
-      onclick=${(e) => {
-      e.target.classList.toggle('active');
-      document.body.classList.toggle('fullscreen');
-      mapview.Map.updateSize();
-      Object.values(mapview.layers)
-        .forEach((layer) => layer.mbMap?.resize());
-    }}>
-      <div class="mask-icon map">`);
+  // Add layers to mapview.
+  await mapview.addLayer(layers);
 
   if (mapview.locale.gazetteer) {
 
