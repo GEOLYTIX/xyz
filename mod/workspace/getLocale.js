@@ -20,9 +20,7 @@ module.exports = async (params) => {
 
   let locale = workspace.locales[params.locale]
 
-  const roles = params.user?.roles || []
-
-  if (!Roles.check(locale, roles)) {
+  if (!Roles.check(locale, params.user?.roles)) {
     return new Error('Role access denied.')
   }
 
