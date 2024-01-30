@@ -44,19 +44,7 @@
       position: fixed;
     }
 
-    #Attribution {
-      position: absolute;
-      display: flex;
-      justify-content: space-between;
-      align-items: end;
-      bottom: 0;
-      right: 0;
-      width: 100%;
-      padding: 5px;
-      pointer-events: none;
-    }
-
-    #Attribution > .logo {
+    .map-attribution > .logo {
       pointer-events: auto;
       height: 1em;
     }
@@ -155,7 +143,7 @@
         position: absolute;
       }
 
-      #Attribution {
+      .map-attribution {
         padding-left: 4em;
       }
 
@@ -293,14 +281,9 @@
 <body style="grid-template-rows: auto 0 0;">
 
   <div id="Map">
-    
+  
     <div id="OL"></div>
-    <div id="Attribution">
-      <a class="logo" target="_blank" href="https://geolytix.co.uk">
-        <img src="https://geolytix.github.io/public/geolytix_mapp.svg">
-      </a>
-      <div class="attribution-links"></div>
-    </div>
+
   </div>
 
   <div id="mapButton" class="btn-column"></div>
