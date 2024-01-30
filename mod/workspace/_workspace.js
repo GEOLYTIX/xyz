@@ -91,15 +91,9 @@ async function locale(req, res) {
   }
 
   if (locale instanceof Error) {
-    return res.status(400).send('Failed to access locale.')
+    return res.status(400).send(locale.message)
   }
   
-  const roles = req.params.user?.roles || []
-
-  if (!Roles.check(locale, roles)) {
-    return res.status(403).send('Role access denied.')
-  }
-
   // Subtitutes ${*} with process.env.SRC_* key values.
   locale = JSON.parse(
     JSON.stringify(locale).replace(/\$\{(.*?)\}/g,
@@ -114,11 +108,11 @@ async function locale(req, res) {
     for (const key of Object.keys(locale.layers)) {
 
       const layer = await getLayer({
-        locale: req.params.locale,
+        ...req.params,
         layer: key
       })
 
-      if (!Roles.check(layer, roles)) continue;
+      if (layer instanceof Error) continue;
 
       layers.push(layer)
     }
