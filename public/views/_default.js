@@ -11,8 +11,7 @@ window.onload = async () => {
       toolbar_login: 'Log in',
       toolbar_logout: 'Log out',
       layers: 'Layers',
-      locations: 'Locations'
-
+      locations: 'Locations',
     },
     de: {
       toolbar_zoom_in: 'Zoom rein',
@@ -24,48 +23,116 @@ window.onload = async () => {
       toolbar_login: 'Einloggen',
       toolbar_logout: 'Ausloggen',
       layers: 'Ebenen',
-      locations: 'Orte'
+      locations: 'Orte',
     },
-    cn: {
+    zn: {
       toolbar_zoom_in: '放大',
       toolbar_zoom_out: '缩小',
       toolbar_zoom_to_area: '缩放至区域',
       toolbar_current_location: '当前位置',
-      toolbar_fullscreen: '全屏显示地图',
-      toolbar_admin: '开启帐户管理员视图',
+      toolbar_fullscreen: '全屏地图视图',
+      toolbar_admin: '打开帐户管理视图',
+      toolbar_login: '登录',
+      toolbar_logout: '登出',
+      layers: '图层',
+      locations: '地点',
+    },
+    zn_tw: {
+      toolbar_zoom_in: '放大',
+      toolbar_zoom_out: '縮小',
+      toolbar_zoom_to_area: '縮放至區域',
+      toolbar_current_location: '當前位置',
+      toolbar_fullscreen: '全屏地圖視圖',
+      toolbar_admin: '打開帳戶管理視圖',
+      toolbar_login: '登錄',
+      toolbar_logout: '登出',
+      layers: '圖層',
+      locations: '地點',
     },
     pl: {
-      toolbar_zoom_in: 'Powiększ',
-      toolbar_zoom_out: 'Pomniejsz',
-      toolbar_zoom_to_area: 'Pokaż obszar',
-      toolbar_current_location: 'Obecna lokalizacja',
-      toolbar_fullscreen: 'Mapa na pełnym ekranie',
-      toolbar_admin: 'Pokaż konto administratora',
-    },
-    ko: {
-      toolbar_zoom_in: '줌인',
-      toolbar_zoom_out: '줌아웃',
-      toolbar_zoom_to_area: '해당지역 줌(Zoom)',
-      toolbar_current_location: '현재 위치',
-      toolbar_fullscreen: '지도뷰 전체화면',
-      toolbar_admin: '계정관리뷰 오픈',
+      toolbar_zoom_in: 'Przybliż',
+      toolbar_zoom_out: 'Oddal',
+      toolbar_zoom_to_area: 'Przybliż do obszaru',
+      toolbar_current_location: 'Obezha lokalizcja',
+      toolbar_fullscreen: 'Mapa na całym ekranie',
+      toolbar_admin: 'Otwórz widok administratora',
+      toolbar_login: 'Zaloguj się',
+      toolbar_logout: 'Wyloguj się',
+      layers: 'Warstwy',
+      locations: 'Lokalizacje',
     },
     fr: {
-      toolbar_zoom_in: 'Zoomer',
-      toolbar_zoom_out: 'Dé-zoomer',
-      toolbar_zoom_to_area: 'Zoomer sur un encadré',
-      toolbar_current_location: 'Localisation actuelle',
+      toolbar_zoom_in: 'Zoom +',
+      toolbar_zoom_out: 'Zoom -',
+      toolbar_zoom_to_area: 'Zoomer sur la zone',
+      toolbar_current_location: 'Emplacement actuel',
       toolbar_fullscreen: 'Carte en plein écran',
-      toolbar_admin: 'Afficher le compte administrateur',
+      toolbar_admin: 'Ouvrir le menu administrateur',
+      toolbar_login: 'Se connecter',
+      toolbar_logout: 'Déconnexion',
+      layers: 'Couches cartographiques',
+      locations: 'Sites',
     },
     ja: {
       toolbar_zoom_in: 'ズームイン',
       toolbar_zoom_out: 'ズームアウト',
       toolbar_zoom_to_area: 'エリアをズームに',
-      toolbar_current_location: '現在地',
+      toolbar_current_location: '現地',
       toolbar_fullscreen: 'フルスクリーン マップビュー',
       toolbar_admin: 'アカウントアドミンビューを開く',
-    }
+      toolbar_login: 'ログイン',
+      toolbar_logout: 'ログアウト',
+      layers: 'レイヤー',
+      locations: 'ロケーション',
+    },
+    es: {
+      toolbar_zoom_in: 'Zoom +',
+      toolbar_zoom_out: 'Zoom -',
+      toolbar_zoom_to_area: 'Zoom al área',
+      toolbar_current_location: 'Ubicación actual',
+      toolbar_fullscreen: 'Vista de mapa en pantalla completa',
+      toolbar_admin: 'Abrir vista de administrador de cuenta',
+      toolbar_login: 'Iniciar sesión',
+      toolbar_logout: 'Desconexión',
+      layers: 'Capas',
+      locations: 'Ubicaciones',
+    },
+    tr: {
+      toolbar_zoom_in: 'Yaklas',
+      toolbar_zoom_out: 'Uzaklas',
+      toolbar_zoom_to_area: 'Bolgeye yaklas',
+      toolbar_current_location: 'Mevcut konum',
+      toolbar_fullscreen: 'Tam ekran harita',
+      toolbar_admin: 'Hesap yoneticisini ac',
+      toolbar_login: 'Oturum ac',
+      toolbar_logout: 'Oturumu kapat',
+      layers: 'Katmanlar',
+      locations: 'Konumlar',
+    },
+    it: {
+      toolbar_zoom_in: 'Ingrandisci',
+      toolbar_zoom_out: 'Rimpicciolisci',
+      toolbar_zoom_to_area: 'Zoom nell\'area',
+      toolbar_current_location: 'Posizione attuale',
+      toolbar_fullscreen: 'Mappa a schermo intero',
+      toolbar_admin: 'Apri il menù amministratore',
+      toolbar_login: 'Log in',
+      toolbar_logout: 'Log out',
+      layers: 'Layers',
+      locations: 'Località',
+    },
+    th: {
+      toolbar_zoom_in: 'ขยายเข้า',
+      toolbar_zoom_out: 'ซูมออก',
+      toolbar_zoom_to_area: 'ซูมไปที่พื้นที่',
+      toolbar_current_location: 'สถานที่ปัจจุบัน',
+      toolbar_fullscreen: 'มุมมองแผนที่แบบเต็มหน้าจอ',
+      toolbar_admin: 'เปิดมุมมองผู้ดูแลระบบ',
+      toolbar_login: 'เข้าสู่ระบบ',
+      toolbar_logout: 'ออกจากระบบ',
+      layers: 'ชั้น',
+      locations: 'สถานที่',
+    },
   })
 
   // Parse user object from dataset attribute on document head.
@@ -183,10 +250,8 @@ window.onload = async () => {
 
   const btnColumn = document.getElementById('mapButton');
 
-  const host = document.head.dataset.dir || new String('');
-
   // Get list of accessible locales from Workspace API.
-  const locales = await mapp.utils.xhr(`${host}/api/workspace/locales`);
+  const locales = await mapp.utils.xhr(`${mapp.host}/api/workspace/locales`);
 
   if (!locales.length) {
 
@@ -196,9 +261,9 @@ window.onload = async () => {
 
   // Get locale with list of layers from Workspace API.
   const locale = await mapp.utils.xhr(
-    `${host}/api/workspace/locale?locale=${mapp.hooks.current.locale || locales[0].key}`);
+    `${mapp.host}/api/workspace/locale?locale=${mapp.hooks.current.locale || locales[0].key}&layers=true`);
 
-  if(locale instanceof Error){
+  if (locale instanceof Error) {
 
     location.href = '?logout=true&msg=no_locale'
     return;
@@ -214,7 +279,7 @@ window.onload = async () => {
         key: locale.key,
       })),
       callback: (e, entry) => {
-        window.location.assign(`${host}?locale=${entry.key}`);
+        window.location.assign(`${mapp.host}?locale=${entry.key}`);
       },
     });
 
@@ -224,13 +289,12 @@ window.onload = async () => {
   if (!window.ol) await mapp.utils.olScript()
 
   // Create mapview
-  const mapview = mapp.Mapview({
-    host: host,
+  const mapview = await mapp.Mapview({
+    host: mapp.host,
     target: OL,
     locale: locale,
     hooks: true,
     scrollWheelZoom: true,
-    scalebar: 'metric', //'imperial'
     attribution: {
       target: document.querySelector('#Attribution > .attribution-links'),
       links: {
@@ -238,8 +302,14 @@ window.onload = async () => {
         ['SHA']: `https://github.com/GEOLYTIX/xyz/commit/${mapp.hash}`,
         Openlayers: 'https://openlayers.org',
       },
-    }
+    },
+    
+    // mapp.Mapview must be awaited.
+    loadPlugins: true
   });
+
+  // Add layers to mapview.
+  await mapview.addLayer(locale.layers);
 
   // Add zoomIn button.
   const btnZoomIn = btnColumn.appendChild(mapp.utils.html.node`
@@ -248,10 +318,10 @@ window.onload = async () => {
       .disabled=${mapview.Map.getView().getZoom() >= mapview.locale.maxZoom}
       title=${mapp.dictionary.toolbar_zoom_in}
       onclick=${(e) => {
-        const z = parseInt(mapview.Map.getView().getZoom() + 1);
-        mapview.Map.getView().setZoom(z);
-        e.target.disabled = z >= mapview.locale.maxZoom;
-      }}>
+      const z = parseInt(mapview.Map.getView().getZoom() + 1);
+      mapview.Map.getView().setZoom(z);
+      e.target.disabled = z >= mapview.locale.maxZoom;
+    }}>
       <div class="mask-icon add">`)
 
   // Add zoomOut button.
@@ -261,10 +331,10 @@ window.onload = async () => {
       .disabled=${mapview.Map.getView().getZoom() <= mapview.locale.minZoom}
       title=${mapp.dictionary.toolbar_zoom_out}
       onclick=${(e) => {
-        const z = parseInt(mapview.Map.getView().getZoom() - 1);
-        mapview.Map.getView().setZoom(z);
-        e.target.disabled = z <= mapview.locale.minZoom;
-      }}>
+      const z = parseInt(mapview.Map.getView().getZoom() - 1);
+      mapview.Map.getView().setZoom(z);
+      e.target.disabled = z <= mapview.locale.minZoom;
+    }}>
       <div class="mask-icon remove">`)
 
   // changeEnd event listener for zoom button.
@@ -274,101 +344,13 @@ window.onload = async () => {
     btnZoomOut.disabled = z <= mapview.locale.minZoom;
   });
 
-  // Add zoom to area button.
-  btnColumn.append(mapp.utils.html.node`
-    <button
-      class="mobile-display-none"
-      title=${mapp.dictionary.toolbar_zoom_to_area}
-      onclick=${(e) => {
-
-        // If active cancel zoom and enable highlight interaction.
-        if (e.target.classList.contains('active')) {
-
-          // Will remove the 'active' class in callback of zoom interaction.
-          mapview.interactions.highlight()
-          return;
-        }
-
-        // Add active class
-        e.target.classList.add('active')
-
-        // Make zoom interaction current.
-        mapview.interactions.zoom({
-
-          // The interaction callback is executed on cancel or finish.
-          callback: () => {
-            e.target.classList.remove('active');
-            delete mapview.interaction
-
-            // Set highlight interaction if no other interaction is current after 400ms.
-            setTimeout(() => {
-              !mapview.interaction && mapview.interactions.highlight()
-            }, 400)
-          }
-        })
-
-      }}>
-      <div class="mask-icon pageview">`)
-
-  // Add locator button.
-  mapview.locale.locator && btnColumn.appendChild(mapp.utils.html.node`
-    <button
-      title=${mapp.dictionary.toolbar_current_location}
-      onclick=${(e) => {
-        mapview.locate();
-        e.target.classList.toggle('active');
-      }}>
-      <div class="mask-icon gps-not-fixed">`);
-
-  // Add fullscreen button.
-  btnColumn.appendChild(mapp.utils.html.node`
-    <button
-      class="mobile-display-none"
-      title=${mapp.dictionary.toolbar_fullscreen}
-      onclick=${(e) => {
-        e.target.classList.toggle('active');
-        document.body.classList.toggle('fullscreen');
-        mapview.Map.updateSize();
-        Object.values(mapview.layers)
-          .forEach((layer) => layer.mbMap?.resize());
-      }}>
-      <div class="mask-icon map">`);
-
-  // Load plugins
-  await mapp.utils.loadPlugins(locale.plugins);
-
-  // Execute plugins with matching keys in locale.
-  const plugins = Object.keys(locale).map((key) => {
-    return mapp.plugins[key] && mapp.plugins[key](locale[key], mapview);
-  });
-
-  // Ensure that all plugin promises are resolved
-  await Promise.all(plugins)
-
-  // Load JSON layers from Workspace API.
-  const layers = locale.layers.length ? await mapp.utils.promiseAll(locale.layers.map(
-    layer => mapp.utils.xhr(`${host}/api/workspace/layer?`
-      + `locale=${locale.key}&layer=${layer}`)))
-    : [{
-      key: 'OSM',
-      display: true,
-      format: 'tiles',
-      URI: 'https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-      style: {
-        hidden: true
-      }
-    }]
-
-  // Add layers to mapview.
-  await mapview.addLayer(layers);
-
   if (mapview.locale.gazetteer) {
 
     mapp.ui.Gazetteer(Object.assign(mapview.locale.gazetteer, {
       mapview,
       target: locationsTab.appendChild(mapp.utils.html.node`<div>`),
     }));
-    
+
   } else {
 
     document.querySelector('[data-id=locations]').style.display = 'none'
@@ -408,7 +390,7 @@ window.onload = async () => {
   mapp.user &&
     mapview.locale.idle &&
     mapp.ui.utils.idleLogout({
-      host: mapview.host,
+      host: mapp.host,
       idle: mapview.locale.idle,
     });
 
@@ -417,7 +399,7 @@ window.onload = async () => {
     btnColumn.appendChild(mapp.utils.html.node`
       <a
         title=${mapp.dictionary.toolbar_admin}
-        href="${mapview.host + '/api/user/admin'}">
+        href="${mapp.host + '/api/user/admin'}">
         <div class="mask-icon supervisor-account">`);
 
   // Append login/logout link.
