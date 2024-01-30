@@ -135,6 +135,17 @@ body {
 a > img {
   height: 100%;
 }
+.map-attribution {
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  padding: 5px;
+  pointer-events: none;
+}
 .attribution-links {
   z-index: 999;
   text-align: right;
