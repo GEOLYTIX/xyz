@@ -42,22 +42,31 @@ module.exports = async (params) => {
   // Assign key value as key on layer object.
   layer.key ??= params.layer
 
-  // Merge layer --> template
-  if (Object.hasOwn(workspace.templates, layer.template || layer.key)) {
+  // Check whether template matches layer template.
+  if (Object.hasOwn(workspace.templates, layer.template)) {
 
-    let template = structuredClone(await getTemplate(workspace.templates[layer.template || layer.key]))
+    let template = structuredClone(await getTemplate(workspace.templates[layer.template]))
 
     // Merge the workspace template into the layer.
-    layer =  merge(template, layer)
+    layer = merge(template, layer)
+  }
+
+  // Check whether template matches layer key.
+  if (Object.hasOwn(workspace.templates, layer.key)) {
+
+    let template = structuredClone(await getTemplate(workspace.templates[layer.key]))
+
+    // Merge the workspace template into the layer.
+    layer = merge(template, layer)
   }
 
   // Merge templates --> layer
-  for (const key of layer.templates || []){
+  for (const key of layer.templates || []) {
 
     if (!Object.hasOwn(workspace.templates, key)) continue;
 
-    let template =  structuredClone(await getTemplate(workspace.templates[key]))
-     
+    let template = structuredClone(await getTemplate(workspace.templates[key]))
+
     // Merge the workspace template into the layer.
     layer = merge(layer, template)
   }
