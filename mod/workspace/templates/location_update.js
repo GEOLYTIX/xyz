@@ -21,7 +21,7 @@ module.exports = _ => {
     }
 
     // Value is an object and must be stringified.
-    if (typeof _.body[key] === 'object') {
+    if (typeof _.body[key] === 'object' && !Array.isArray(_.body[key])) {
 
       _[key] = JSON.stringify(_.body[key])
     }
