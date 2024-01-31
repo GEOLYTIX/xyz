@@ -296,6 +296,7 @@ window.onload = async () => {
     hooks: true,
     scrollWheelZoom: true,
     attribution: {
+      target: document.getElementById('Map'),
       logo: mapp.utils.html.node`
         <a class="logo" target="_blank" href="https://geolytix.co.uk">
           <img src="https://geolytix.github.io/public/geolytix_mapp.svg">`,
