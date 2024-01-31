@@ -92,34 +92,12 @@
   cursor: grab;
   user-select: none;
 
-  & > .header {
-    display: flex;
-    align-items: center;
-
-    & > :not(button):not(label):not(input) {
-      pointer-events: none;
-    }
-
-    & > div,
-    & > button {
-      margin-left: 5px;
-      width: 1.5em;
-      height: 1.5em;
-    }
-
-    & > :nth-child(1) {
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-    }
-
-    & > :nth-child(2) {
-      margin-left: auto;
-    }
-
-    & > input{
-      user-select: text;
-    }
+  & > button.close {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    height: 1em;
+    width: 1em;
   }
 }
 
