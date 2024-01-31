@@ -296,12 +296,14 @@ window.onload = async () => {
     hooks: true,
     scrollWheelZoom: true,
     attribution: {
-      target: document.querySelector('#Attribution > .attribution-links'),
+      logo: mapp.utils.html.node`
+        <a class="logo" target="_blank" href="https://geolytix.co.uk">
+          <img src="https://geolytix.github.io/public/geolytix_mapp.svg">`,
       links: {
         [`XYZ v${mapp.version}`]: 'https://github.com/GEOLYTIX/xyz',
         ['SHA']: `https://github.com/GEOLYTIX/xyz/commit/${mapp.hash}`,
         Openlayers: 'https://openlayers.org',
-      },
+      }
     },
     
     // mapp.Mapview must be awaited.
