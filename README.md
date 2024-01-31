@@ -1,4 +1,4 @@
-**v4.7.7**
+**v4.7.8-alpha**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![example workflow](https://github.com/GEOLYTIX/xyz/actions/workflows/unit_tests.yml/badge.svg)
