@@ -58,6 +58,7 @@ module.exports = async (req, res) => {
 
   // Array of params for parameterized queries with node-pg.
   if (!Array.isArray(req.params.SQL)) {
+    
     // If req.params.SQL is not an array, initialize it as an empty array
     req.params.SQL = [];
   }
