@@ -26,11 +26,25 @@ module.exports = async (req, res) => {
   view(req, res)
 }
 
+const previousAddress = {}
+
 async function post(req, res) {
 
   const remote_address = req.headers['x-forwarded-for']
     && /^[A-Za-z0-9.,_-\s]*$/.test(req.headers['x-forwarded-for']) ? req.headers['x-forwarded-for'] : 'invalid'
     || 'unknown';
+
+  // The remote_address has been previously used
+  if (Object.hasOwn(previousAddress, remote_address)
+
+    // within 30 seconds or less.
+    && new Date() - previousAddress[remote_address] < 30000) {
+
+    return res.status(403).send(`Address ${remote_address} temporarily locked.`)
+  }
+
+  // Log the remote_address with the current datetime.
+  previousAddress[remote_address] = new Date()
 
   if (!req.body.email) return res.status(400).send('No email provided')
 
