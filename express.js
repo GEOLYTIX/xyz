@@ -23,6 +23,10 @@ app.get(`${process.env.DIR||''}/api/provider/:provider?`, api)
 
 app.post(`${process.env.DIR||''}/api/provider/:provider?`, express.json({limit: '5mb'}), api)
 
+app.get(`${process.env.DIR||''}/api/sign/:provider?`, api)
+
+app.post(`${process.env.DIR||''}/api/sign/:provider?`, express.json({limit: '5mb'}), api)
+
 
 app.get(`${process.env.DIR||''}/api/query/:template?`, api)
 

@@ -10,6 +10,7 @@ const saml = process.env.SAML_ENTITY_ID && require('../mod/user/saml')
 
 const routes = {
   provider: require('../mod/provider/_provider'),
+  sign: require('../mod/sign/_sign'),
   query: require('../mod/query'),
   fetch: require('../mod/fetch'),
   user: require('../mod/user/_user'),
@@ -143,6 +144,11 @@ module.exports = async (req, res) => {
   // Provider route
   if (req.url.match(/(?<=\/api\/provider)/)) {
     return routes.provider(req, res)
+  }
+
+  // Signing route
+  if (req.url.match(/(?<=\/api\/sign)/)) {
+    return routes.sign(req, res)
   }
 
   // User route
