@@ -1,12 +1,11 @@
 const { createHash } = require('crypto');
 
-// 1: api_key
-// 2: api_secret
-// 3: cloud_name
-const cloudinary = process.env.CLOUDINARY_URL?.replaceAll('://', ' ').replaceAll(':', ' ').replaceAll('@', ' ').split(' ');
-const baseUrl = `https://api.cloudinary.com/v1_1/${cloudinary[3]}/`
-
 module.exports = async req => {
+    // 1: api_key
+    // 2: api_secret
+    // 3: cloud_name
+    const cloudinary = process.env.CLOUDINARY_URL?.replaceAll('://', ' ').replaceAll(':', ' ').replaceAll('@', ' ').split(' ');
+    const baseUrl = `https://api.cloudinary.com/v1_1/${cloudinary[3]}/`
 
     const folder = (!req.params.folder) ? '' : `${req.params.folder}/`
 
