@@ -4,6 +4,8 @@ const acl = require('./acl')
 
 const fromACL = require('./fromACL')
 
+const user_sessions = {}
+
 module.exports = async (req, res) => {
 
   if (req.headers.authorization) {
@@ -26,17 +28,37 @@ module.exports = async (req, res) => {
     // Return error if verification fails.
     if (err) return err
 
+    // user [nano] sessions are enabled in the env.
     if (process.env.NANO_SESSION) {
-     
-      let rows = await acl(`
+
+      // The session token is stored in the user_session object.
+      if (Object.hasOwn(user_sessions, user.email)) {
+
+        // The stored session doesn't match the token user session.
+        if (user_sessions[user.email] !== user.session) {
+
+          // Delete the user_session
+          delete user_sessions[user.email]
+        }
+      }
+      
+      if (!Object.hasOwn(user_sessions, user.email)) {
+
+        // Get session from the ACL.
+        let rows = await acl(`
         SELECT session
         FROM acl_schema.acl_table
         WHERE lower(email) = lower($1);`,
-        [user.email])
-        
-      if (rows instanceof Error) return rows
+          [user.email])
 
-      if (user.session !== rows[0].session) return new Error('Session ID mismatch')
+        if (rows instanceof Error) return rows
+
+        // The session stored in the ACL doesn't match the token user session.
+        if (user.session !== rows[0].session) return new Error('Session ID mismatch')
+
+        // Store the user.session in the user_sessions object.
+        user_sessions[user.email] = user.session
+      }
     }
 
     // The token was provided as param.
