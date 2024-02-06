@@ -1,5 +1,8 @@
 module.exports = _ => {
 
+  // The SQL array may be populated by a default filter which is not required for this query template.
+  _.SQL = []
+
   const fields = _.layer.infoj?.filter(entry => !entry.query)
 
     // Entry must have a field defined.
