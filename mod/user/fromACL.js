@@ -52,6 +52,12 @@ module.exports = async (req) => {
 
   const user = await getUser(request)
 
+  if (user === undefined) {
+
+    // This will happen when a user has a null password.
+    return new Error('auth_failed')
+  }
+
   if (user instanceof Error) {
 
     return await failedLogin(request)
@@ -80,7 +86,7 @@ async function getUser(request) {
 
   if (!user) return new Error('auth_failed')
 
-  if (!user.password) return new Error('no_user_password')
+  if (!user.password) return;
 
   // Blocked user cannot login.
   if (user.blocked) {
