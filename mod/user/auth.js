@@ -29,7 +29,7 @@ module.exports = async (req, res) => {
     if (err) return err
 
     // user [nano] sessions are enabled in the env.
-    if (process.env.NANO_SESSION) {
+    if (process.env.NANO_SESSION && user.session) {
 
       // The session token is stored in the user_session object.
       if (Object.hasOwn(user_sessions, user.email)) {

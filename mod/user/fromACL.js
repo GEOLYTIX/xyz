@@ -127,10 +127,11 @@ async function getUser(request) {
         WHERE lower(email) = lower($1)`,
         [request.email])
 
-      if (rows instanceof Error) return new Error(await languageTemplates({
-        template: 'failed_query',
-        language: request.language
-      }))
+      // The ACL table may not have a session column.
+      if (rows instanceof Error) {
+
+        delete user.session
+      }
 
     }
 
