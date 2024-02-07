@@ -80,6 +80,8 @@ async function getUser(request) {
 
   if (!user) return new Error('auth_failed')
 
+  if (!user.password) return new Error('no_user_password')
+
   // Blocked user cannot login.
   if (user.blocked) {
     return new Error(await languageTemplates({
