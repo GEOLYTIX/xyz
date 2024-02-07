@@ -68,6 +68,8 @@ module.exports = async (req, res) => {
     // Assign role filter and viewport params from layer object.
     await layerQuery(req, res)
 
+    if (res.finished) return;
+    
   } else {
 
     // Reserved params will be deleted to prevent DDL injection.
