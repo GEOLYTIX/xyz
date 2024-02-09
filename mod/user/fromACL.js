@@ -52,6 +52,12 @@ module.exports = async (req) => {
 
   const user = await getUser(request)
 
+  if (user === undefined) {
+
+    // This will happen when a user has a null password.
+    return new Error('auth_failed')
+  }
+
   if (user instanceof Error) {
 
     return await failedLogin(request)
@@ -79,6 +85,8 @@ async function getUser(request) {
   const user = rows[0]
 
   if (!user) return new Error('auth_failed')
+
+  if (!user.password) return;
 
   // Blocked user cannot login.
   if (user.blocked) {
@@ -127,10 +135,11 @@ async function getUser(request) {
         WHERE lower(email) = lower($1)`,
         [request.email])
 
-      if (rows instanceof Error) return new Error(await languageTemplates({
-        template: 'failed_query',
-        language: request.language
-      }))
+      // The ACL table may not have a session column.
+      if (rows instanceof Error) {
+
+        delete user.session
+      }
 
     }
 

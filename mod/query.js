@@ -58,6 +58,7 @@ module.exports = async (req, res) => {
 
   // Array of params for parameterized queries with node-pg.
   if (!Array.isArray(req.params.SQL)) {
+    
     // If req.params.SQL is not an array, initialize it as an empty array
     req.params.SQL = [];
   }
@@ -67,6 +68,8 @@ module.exports = async (req, res) => {
     // Assign role filter and viewport params from layer object.
     await layerQuery(req, res)
 
+    if (res.finished) return;
+    
   } else {
 
     // Reserved params will be deleted to prevent DDL injection.

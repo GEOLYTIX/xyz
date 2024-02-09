@@ -20,16 +20,16 @@ module.exports = _ => {
       return `${key} = ST_SetSRID(ST_MakeValid(ST_GeomFromGeoJSON('${JSON.stringify(_.body[key])}')),${_.layer.srid})`
     }
 
+    // Value is an object and must be stringified.
+    if (typeof _.body[key] === 'object' && !Array.isArray(_.body[key])) {
+
+      _[key] = JSON.stringify(_.body[key])
+    }
+
     // Value is an array (of strings)
     if (Array.isArray(_.body[key])) {
 
-      _[key] = _.body[key] //ARRAY['${_.body[key].join("','")}']
-    }
-
-    // Value is an object and must be stringified.
-    if (typeof _.body[key] === 'object') {
-
-      _[key] = JSON.stringify(_.body[key])
+      _[key] = `{${_.body[key].join(',')}}`
     }
 
     // Value is boolean or number.
