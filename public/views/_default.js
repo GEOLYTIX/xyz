@@ -12,6 +12,8 @@ window.onload = async () => {
       toolbar_logout: 'Log out',
       layers: 'Layers',
       locations: 'Locations',
+      no_locale: 'Failed to load locale.',
+      no_locales: 'User has no accessible locales.'
     },
     de: {
       toolbar_zoom_in: 'Zoom rein',
@@ -253,20 +255,15 @@ window.onload = async () => {
   // Get list of accessible locales from Workspace API.
   const locales = await mapp.utils.xhr(`${mapp.host}/api/workspace/locales`);
 
-  if (!locales.length) {
-
-    location.href = '?logout=true&msg=no_locales'
-    return;
-  }
-
   // Get locale with list of layers from Workspace API.
   const locale = await mapp.utils.xhr(
-    `${mapp.host}/api/workspace/locale?locale=${mapp.hooks.current.locale || locales[0].key}&layers=true`);
+    `${mapp.host}/api/workspace/locale?locale=${mapp.hooks.current.locale || locales[0]?.key}&layers=true`);
 
   if (locale instanceof Error) {
 
-    location.href = '?logout=true&msg=no_locale'
-    return;
+    !locales.length ?
+      alert(mapp.dictionary.no_locales) :
+      alert(mapp.dictionary.no_locale)
   }
 
   // Add locale dropdown to layers panel if multiple locales are accessible.
