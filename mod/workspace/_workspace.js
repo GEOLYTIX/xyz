@@ -113,6 +113,7 @@ async function locale(req, res) {
       })
 
       if (layer instanceof Error) continue;
+      if(!Roles.check(layer, req.params.user?.roles)) continue;
 
       layers.push(layer)
     }
