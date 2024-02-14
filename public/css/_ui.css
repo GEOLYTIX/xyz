@@ -102,9 +102,11 @@
 }
 
 .modal-dialog {
-  margin: 50%;
+  margin: 20%;
+  z-index: 9999;
   padding: 10px;
-  text-wrap: nowrap;
+  text-wrap: wrap;
+  font-size: large;
 }
 
 .mask-icon {

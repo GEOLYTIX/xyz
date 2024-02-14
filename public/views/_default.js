@@ -12,8 +12,7 @@ window.onload = async () => {
       toolbar_logout: 'Log out',
       layers: 'Layers',
       locations: 'Locations',
-      no_locale: 'Failed to load locale.',
-      no_locales: 'User has no accessible locales.'
+      no_locales: 'Your account has been verified and approved, but you do not have access to any locales. This is likely as an administrator has not given you the required roles. Please contact an administrator to resolve this.',
     },
     de: {
       toolbar_zoom_in: 'Zoom rein',
@@ -263,7 +262,7 @@ window.onload = async () => {
 
     document.body.append(mapp.utils.html.node`
       <dialog open class="modal-dialog">
-        ${!locales.length? mapp.dictionary.no_locales : mapp.dictionary.no_locale}`)
+        ${mapp.dictionary.no_locales}`)
   }
 
   // Add locale dropdown to layers panel if multiple locales are accessible.
