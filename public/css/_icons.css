@@ -621,7 +621,7 @@
     }
   }
   &.disabled {
-    background-color: var(--color-primary-light);
+    opacity: 0.5;
     pointer-events: none;
   }
 }
