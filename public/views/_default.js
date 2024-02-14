@@ -253,7 +253,7 @@ window.onload = async () => {
   const btnColumn = document.getElementById('mapButton');
 
   // Get list of accessible locales from Workspace API.
-  const locales = []//await mapp.utils.xhr(`${mapp.host}/api/workspace/locales`);
+  const locales = await mapp.utils.xhr(`${mapp.host}/api/workspace/locales`);
 
   // Get locale with list of layers from Workspace API.
   const locale = await mapp.utils.xhr(
