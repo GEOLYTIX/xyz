@@ -253,7 +253,7 @@ window.onload = async () => {
   const btnColumn = document.getElementById('mapButton');
 
   // Get list of accessible locales from Workspace API.
-  const locales = await mapp.utils.xhr(`${mapp.host}/api/workspace/locales`);
+  const locales = []//await mapp.utils.xhr(`${mapp.host}/api/workspace/locales`);
 
   // Get locale with list of layers from Workspace API.
   const locale = await mapp.utils.xhr(
@@ -261,9 +261,9 @@ window.onload = async () => {
 
   if (locale instanceof Error) {
 
-    !locales.length ?
-      alert(mapp.dictionary.no_locales) :
-      alert(mapp.dictionary.no_locale)
+    document.body.append(mapp.utils.html.node`
+      <dialog open class="modal-dialog">
+        ${!locales.length? mapp.dictionary.no_locales : mapp.dictionary.no_locale}`)
   }
 
   // Add locale dropdown to layers panel if multiple locales are accessible.

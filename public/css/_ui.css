@@ -101,6 +101,12 @@
   }
 }
 
+.modal-dialog {
+  margin: 50%;
+  padding: 10px;
+  text-wrap: nowrap;
+}
+
 .mask-icon {
   background-color: var(--color-primary-light);
   &.on {
