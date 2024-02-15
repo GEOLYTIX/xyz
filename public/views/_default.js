@@ -251,6 +251,8 @@ window.onload = async () => {
 
   const btnColumn = document.getElementById('mapButton');
 
+  // Set btnColumn to display none.
+  btnColumn.style.display = 'none';
   // Get list of accessible locales from Workspace API.
   const locales = await mapp.utils.xhr(`${mapp.host}/api/workspace/locales`);
 
@@ -302,7 +304,7 @@ window.onload = async () => {
         Openlayers: 'https://openlayers.org',
       }
     },
-    
+
     // mapp.Mapview must be awaited.
     loadPlugins: true
   });
@@ -311,30 +313,34 @@ window.onload = async () => {
   await mapview.addLayer(locale.layers);
 
   // Add zoomIn button.
-  const btnZoomIn = btnColumn.appendChild(mapp.utils.html.node`
-    <button
-      id="btnZoomIn"
-      .disabled=${mapview.Map.getView().getZoom() >= mapview.locale.maxZoom}
-      title=${mapp.dictionary.toolbar_zoom_in}
-      onclick=${(e) => {
+  const btnZoomIn = mapp.utils.html.node`
+      <button
+        id="btnZoomIn"
+        .disabled=${mapview.Map.getView().getZoom() >= mapview.locale.maxZoom}
+        title=${mapp.dictionary.toolbar_zoom_in}
+        onclick=${(e) => {
       const z = parseInt(mapview.Map.getView().getZoom() + 1);
       mapview.Map.getView().setZoom(z);
       e.target.disabled = z >= mapview.locale.maxZoom;
     }}>
-      <div class="mask-icon add">`)
+        <div class="mask-icon add">`
 
   // Add zoomOut button.
-  const btnZoomOut = btnColumn.appendChild(mapp.utils.html.node`
-    <button
-      id="btnZoomOut"
-      .disabled=${mapview.Map.getView().getZoom() <= mapview.locale.minZoom}
-      title=${mapp.dictionary.toolbar_zoom_out}
-      onclick=${(e) => {
+  const btnZoomOut = mapp.utils.html.node`
+      <button
+        id="btnZoomOut"
+        .disabled=${mapview.Map.getView().getZoom() <= mapview.locale.minZoom}
+        title=${mapp.dictionary.toolbar_zoom_out}
+        onclick=${(e) => {
       const z = parseInt(mapview.Map.getView().getZoom() - 1);
       mapview.Map.getView().setZoom(z);
       e.target.disabled = z <= mapview.locale.minZoom;
     }}>
-      <div class="mask-icon remove">`)
+        <div class="mask-icon remove">`
+
+  // Add both buttons to the button container.
+  btnColumn.appendChild(btnZoomIn);
+  btnColumn.appendChild(btnZoomOut);
 
   // changeEnd event listener for zoom button.
   OL.addEventListener('changeEnd', () => {
@@ -397,6 +403,7 @@ window.onload = async () => {
   mapp.user?.admin &&
     btnColumn.appendChild(mapp.utils.html.node`
       <a
+        id="btnAdmin"
         title=${mapp.dictionary.toolbar_admin}
         href="${mapp.host + '/api/user/admin'}">
         <div class="mask-icon supervisor-account">`);
@@ -405,6 +412,7 @@ window.onload = async () => {
   document.head.dataset.login &&
     btnColumn.appendChild(mapp.utils.html.node`
       <a
+        id="btnLogin"
         title="${mapp.user && mapp.dictionary.toolbar_logout || mapp.dictionary.toolbar_login}"
         href="${(mapp.user && '?logout=true') || '?login=true'}">
         <div class="${`mask-icon ${(mapp.user && 'logout') || 'lock-open'}`}">`);
@@ -412,4 +420,28 @@ window.onload = async () => {
   // Append spacer for tableview
   btnColumn.appendChild(mapp.utils.html.node`
     <div class="mobile-display-none" style="height: 60px;">`);
+
+  // Re-order the buttons, based on the order provided in the button_order array.
+  if (locale?.button_order) {
+    // create a new div to hold the buttons
+    const buttonDiv = document.createElement('div');
+    // Re-order the buttons, based on the order provided in the button_order array.
+    locale.button_order.forEach((buttonId, index) => {
+      // Try and access using the button id.
+      let button = btnColumn.querySelector(`#${buttonId}`);
+      // If the button is not found, log a warning.
+      if (!button) {
+        console.warn(`Button with class or id "${buttonId}" not found.`);
+      } else {
+        buttonDiv.appendChild(button);
+      }
+    });
+
+    // overwrite the original button container with the new div.
+    btnColumn.innerHTML = buttonDiv.innerHTML;
+  }
+
+  // Set style to grid for the button container.
+  btnColumn.style.display = 'grid';
+
 };
