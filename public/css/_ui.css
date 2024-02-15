@@ -101,6 +101,14 @@
   }
 }
 
+.modal-dialog {
+  margin: 20%;
+  z-index: 9999;
+  padding: 10px;
+  text-wrap: wrap;
+  font-size: large;
+}
+
 .mask-icon {
   background-color: var(--color-primary-light);
   &.on {
