@@ -12,6 +12,10 @@ app.use(`${process.env.DIR||''}/public`, express.static('public'))
 
 app.use(process.env.DIR||'', express.static('public'))
 
+app.use(`${process.env.DIR||''}/docs`, express.static('docs'))
+
+app.use(process.env.DIR||'', express.static('docs'))
+
 app.use(cookieParser())
 
 const _api = require('./api/api')
