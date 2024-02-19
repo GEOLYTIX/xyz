@@ -12,6 +12,7 @@ window.onload = async () => {
       toolbar_logout: 'Log out',
       layers: 'Layers',
       locations: 'Locations',
+      no_locales: 'Your account has been verified and approved, but you do not have access to any locales. This is likely as an administrator has not given you the required roles. Please contact an administrator to resolve this.',
     },
     de: {
       toolbar_zoom_in: 'Zoom rein',
@@ -253,20 +254,15 @@ window.onload = async () => {
   // Get list of accessible locales from Workspace API.
   const locales = await mapp.utils.xhr(`${mapp.host}/api/workspace/locales`);
 
-  if (!locales.length) {
-
-    location.href = '?logout=true&msg=no_locales'
-    return;
-  }
-
   // Get locale with list of layers from Workspace API.
   const locale = await mapp.utils.xhr(
-    `${mapp.host}/api/workspace/locale?locale=${mapp.hooks.current.locale || locales[0].key}&layers=true`);
+    `${mapp.host}/api/workspace/locale?locale=${mapp.hooks.current.locale || locales[0]?.key}&layers=true`);
 
   if (locale instanceof Error) {
 
-    location.href = '?logout=true&msg=no_locale'
-    return;
+    document.body.append(mapp.utils.html.node`
+      <dialog open class="modal-dialog">
+        ${mapp.dictionary.no_locales}`)
   }
 
   // Add locale dropdown to layers panel if multiple locales are accessible.
