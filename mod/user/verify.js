@@ -44,12 +44,11 @@ module.exports = async (req, res) => {
   rows = await acl(`
     UPDATE acl_schema.acl_table SET
       failedattempts = 0,
-      ${user.password_reset ?
-      `password = '${user.password_reset}',
-        password_reset = null,` : ''}
+      password = $3,
       verified = true,
-      verificationtoken = null
-    WHERE lower(email) = lower($1);`, [user.email])
+      verificationtoken = null,
+      language = $2
+    WHERE lower(email) = lower($1);`, [user.email, req.params.language || user.language, user.password_reset])
 
   if (rows instanceof Error) {
 
