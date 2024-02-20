@@ -136,10 +136,8 @@ window.onload = async () => {
     },
   })
 
-  // Parse user object from dataset attribute on document head.
-  mapp.user = document.head.dataset.user &&
-    JSON.parse(decodeURI(document.head.dataset.user))
-    || undefined
+  // Refresh cookie and get user with updated credentials.
+  mapp.user = await mapp.utils.xhr(`${mapp.host}/api/user/cookie`);
 
   // Language as URL parameter will override user language.
   mapp.language = mapp.hooks.current.language
