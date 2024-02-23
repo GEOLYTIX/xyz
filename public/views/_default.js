@@ -136,10 +136,8 @@ window.onload = async () => {
     },
   })
 
-  // Parse user object from dataset attribute on document head.
-  mapp.user = document.head.dataset.user &&
-    JSON.parse(decodeURI(document.head.dataset.user))
-    || undefined
+  // Refresh cookie and get user with updated credentials.
+  mapp.user = await mapp.utils.xhr(`${mapp.host}/api/user/cookie`);
 
   // Language as URL parameter will override user language.
   mapp.language = mapp.hooks.current.language
@@ -284,6 +282,8 @@ window.onload = async () => {
 
   if (!window.ol) await mapp.utils.olScript()
 
+  locale.syncPlugins ??= ['zoomBtn', 'admin', 'login']
+
   // Create mapview
   const mapview = await mapp.Mapview({
     host: mapp.host,
@@ -309,39 +309,6 @@ window.onload = async () => {
 
   // Add layers to mapview.
   await mapview.addLayer(locale.layers);
-
-  // Add zoomIn button.
-  const btnZoomIn = btnColumn.appendChild(mapp.utils.html.node`
-    <button
-      id="btnZoomIn"
-      .disabled=${mapview.Map.getView().getZoom() >= mapview.locale.maxZoom}
-      title=${mapp.dictionary.toolbar_zoom_in}
-      onclick=${(e) => {
-      const z = parseInt(mapview.Map.getView().getZoom() + 1);
-      mapview.Map.getView().setZoom(z);
-      e.target.disabled = z >= mapview.locale.maxZoom;
-    }}>
-      <div class="mask-icon add">`)
-
-  // Add zoomOut button.
-  const btnZoomOut = btnColumn.appendChild(mapp.utils.html.node`
-    <button
-      id="btnZoomOut"
-      .disabled=${mapview.Map.getView().getZoom() <= mapview.locale.minZoom}
-      title=${mapp.dictionary.toolbar_zoom_out}
-      onclick=${(e) => {
-      const z = parseInt(mapview.Map.getView().getZoom() - 1);
-      mapview.Map.getView().setZoom(z);
-      e.target.disabled = z <= mapview.locale.minZoom;
-    }}>
-      <div class="mask-icon remove">`)
-
-  // changeEnd event listener for zoom button.
-  OL.addEventListener('changeEnd', () => {
-    const z = mapview.Map.getView().getZoom();
-    btnZoomIn.disabled = z >= mapview.locale.maxZoom;
-    btnZoomOut.disabled = z <= mapview.locale.minZoom;
-  });
 
   if (mapview.locale.gazetteer) {
 
@@ -384,7 +351,6 @@ window.onload = async () => {
     });
   });
 
-
   // Configure idle mask if set in locale.
   mapp.user &&
     mapview.locale.idle &&
@@ -392,22 +358,6 @@ window.onload = async () => {
       host: mapp.host,
       idle: mapview.locale.idle,
     });
-
-  // Append user admin link.
-  mapp.user?.admin &&
-    btnColumn.appendChild(mapp.utils.html.node`
-      <a
-        title=${mapp.dictionary.toolbar_admin}
-        href="${mapp.host + '/api/user/admin'}">
-        <div class="mask-icon supervisor-account">`);
-
-  // Append login/logout link.
-  document.head.dataset.login &&
-    btnColumn.appendChild(mapp.utils.html.node`
-      <a
-        title="${mapp.user && mapp.dictionary.toolbar_logout || mapp.dictionary.toolbar_login}"
-        href="${(mapp.user && '?logout=true') || '?login=true'}">
-        <div class="${`mask-icon ${(mapp.user && 'logout') || 'lock-open'}`}">`);
 
   // Append spacer for tableview
   btnColumn.appendChild(mapp.utils.html.node`
