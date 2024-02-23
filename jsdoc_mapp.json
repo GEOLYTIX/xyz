@@ -10,7 +10,7 @@
   ],
   "opts": {
     "encoding": "utf8",
-    "readme": "./README.md",
+    "readme": "./lib/README.md",
     "destination": "docs/mapp/",
     "recurse": true,
     "verbose": true,
