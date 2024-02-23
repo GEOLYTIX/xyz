@@ -1,3 +1,10 @@
+/**
+
+The view module retrieves a view template, and substitutes parameter before sending the view to the client. 
+
+@module view
+*/
+
 const logger = require('./utils/logger')
 
 const languageTemplates = require('./utils/languageTemplates')

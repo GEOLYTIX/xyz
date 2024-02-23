@@ -30,3 +30,4 @@ public/js/lib/*
 *.crt
 *.json
 !package.json
+!jsdoc*.json

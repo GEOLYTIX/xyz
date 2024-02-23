@@ -1,12 +1,9 @@
 {
   "source": {
     "include": [
-      "lib",
-      "package.json",
-      "README.md"
+      "lib"
     ],
-    "includePattern": ".js$",
-    "excludePattern": "(node_modules/|docs)"
+    "includePattern": ".js$"
   },
   "plugins": [
     "plugins/markdown"
@@ -14,7 +11,7 @@
   "opts": {
     "encoding": "utf8",
     "readme": "./README.md",
-    "destination": "docs/",
+    "destination": "docs/mapp/",
     "recurse": true,
     "verbose": true,
     "template": "./node_modules/clean-jsdoc-theme"

@@ -12,7 +12,8 @@
     "test": "jest",
     "_build": "npx esbuild ./lib/mapp.mjs ./lib/ui.mjs --bundle --minify --tree-shaking=false --sourcemap --format=iife --outdir=./public/js/lib",
     "version": "node version.js",
-    "generate-docs": "jsdoc --configure jsdoc.json --verbose"
+    "generate-docs-mapp": "jsdoc --configure jsdoc_mapp.json --verbose",
+    "generate-docs-xyz": "jsdoc --configure jsdoc_xyz.json --verbose"
   },
   "license": "MIT",
   "dependencies": {
