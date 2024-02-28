@@ -39,7 +39,7 @@
     "eslint-plugin-promise": "^6.1.1",
     "express": "^4.17.1",
     "jest": "^29.5.0",
-    "jsdocs": "^1.0.0",
+    "jsdocs": "^0.0.1",
     "uhtml": "^3.1.0"
   }
 }
