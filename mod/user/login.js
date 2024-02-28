@@ -1,3 +1,7 @@
+/**
+@module /user/login
+*/
+
 const jwt = require('jsonwebtoken')
 
 const fromACL = require('./fromACL')

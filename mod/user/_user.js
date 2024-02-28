@@ -1,3 +1,7 @@
+/**
+@module /user
+*/
+
 const view = require('../view')
 
 const methods = {
