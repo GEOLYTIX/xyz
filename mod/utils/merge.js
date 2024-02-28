@@ -1,3 +1,7 @@
+/**
+@module /utils/merge
+*/
+
 module.exports = function mergeDeep(target, ...sources) {
 
   // No sources to merge.

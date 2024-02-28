@@ -1,3 +1,7 @@
+/**
+@module /workspace
+*/
+
 const Roles = require('../utils/roles')
 
 const workspaceCache = require('./cache')

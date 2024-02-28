@@ -1,3 +1,7 @@
+/**
+@module /user/register
+*/
+
 const bcrypt = require('bcryptjs')
 
 const crypto = require('crypto')

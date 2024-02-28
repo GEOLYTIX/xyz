@@ -13,6 +13,7 @@ public/css/.sass-cache/
 public/workspaces/*
 public/js/plugins/*
 stats.json
+docs/*
 
 caddy_linux_amd64
 
@@ -29,3 +30,4 @@ public/js/lib/*
 *.crt
 *.json
 !package.json
+!jsdoc*.json

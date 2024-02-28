@@ -1,3 +1,7 @@
+/**
+@module /workspace/templates/views
+*/
+
 module.exports = {
   default_view: {
     en: 'file:/public/views/_default.html'

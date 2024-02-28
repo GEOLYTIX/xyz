@@ -1,3 +1,7 @@
+/**
+@module /workspace/templates/queries
+*/
+
 module.exports = {
   gaz_query: {
     template: require('./gaz_query'),

@@ -1,3 +1,7 @@
+/**
+@module /user/log
+*/
+
 const acl = require('./acl')
 
 module.exports = async (req, res) => {

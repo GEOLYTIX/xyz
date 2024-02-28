@@ -1,0 +1,23 @@
+{
+  "source": {
+    "include": [
+      "lib"
+    ],
+    "includePattern": ".js$"
+  },
+  "plugins": [
+    "plugins/markdown"
+  ],
+  "opts": {
+    "encoding": "utf8",
+    "readme": "./lib/README.md",
+    "destination": "docs/mapp/",
+    "recurse": true,
+    "verbose": true,
+    "template": "./node_modules/clean-jsdoc-theme"
+  },
+  "markdown": {
+    "hardwrap": false,
+    "idInHeadings": true
+  }
+}

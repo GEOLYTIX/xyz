@@ -1,3 +1,7 @@
+/**
+@module /utils/roles
+*/
+
 module.exports = {
   check,
   filter,

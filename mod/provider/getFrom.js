@@ -1,3 +1,7 @@
+/**
+@module /provider/getFrom
+*/
+
 const logger = require('../utils/logger')
 
 const cloudfront = require('../provider/cloudfront')

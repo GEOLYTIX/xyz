@@ -1,3 +1,7 @@
+/**
+@module /user/cookie
+*/
+
 const login = require('./login')
 
 const jwt = require('jsonwebtoken')

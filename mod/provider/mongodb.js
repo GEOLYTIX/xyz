@@ -1,3 +1,7 @@
+/**
+@module /provider/mongodb
+*/
+
 module.exports = async searchparams => {
 
   const params = Object.fromEntries(new URLSearchParams(searchparams).entries())
