@@ -1,3 +1,7 @@
+/**
+@module /workspace/getLayer
+*/
+
 const Roles = require('../utils/roles')
 
 const merge = require('../utils/merge')

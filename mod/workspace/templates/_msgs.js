@@ -1,3 +1,7 @@
+/**
+@module /workspace/templates/msgs
+*/
+
 module.exports = {
   login_required: {
     en: `Login required.`

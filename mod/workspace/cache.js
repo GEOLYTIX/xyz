@@ -1,3 +1,7 @@
+/**
+@module /workspace/cache
+*/
+
 const getFrom = require('../provider/getFrom')
 
 const merge = require('../utils/merge')

@@ -1,3 +1,7 @@
+/**
+@module /user/auth
+*/
+
 const jwt = require('jsonwebtoken')
 
 const acl = require('./acl')

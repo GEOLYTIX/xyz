@@ -1,3 +1,7 @@
+/**
+@module /provider/s3
+*/
+
 const {
   S3Client,
   PutObjectCommand,

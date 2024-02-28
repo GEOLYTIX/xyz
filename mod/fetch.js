@@ -1,3 +1,7 @@
+/**
+@module fetch
+*/
+
 module.exports = async (req, res) => {
 
   if (!req.options?.template) {

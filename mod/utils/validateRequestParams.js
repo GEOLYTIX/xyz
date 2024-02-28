@@ -1,3 +1,7 @@
+/**
+@module /utils/validateRequestParams
+*/
+
 module.exports = (params) => !Object.keys(params)
   .filter(key => key !== 'filter')
   .filter(key => !!params[key])
