@@ -1,3 +1,7 @@
+/**
+@module /user/verify
+*/
+
 const acl = require('./acl')
 
 const mailer = require('../utils/mailer')

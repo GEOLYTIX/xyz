@@ -1,3 +1,7 @@
+/**
+@module query
+*/
+
 const dbs_connections = require('./utils/dbs')
 
 const sqlFilter = require('./utils/sqlFilter')

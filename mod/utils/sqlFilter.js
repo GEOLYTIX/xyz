@@ -1,3 +1,7 @@
+/**
+@module /utils/sqlFilter
+*/
+
 const filterTypes = {
   eq: (col, val) => `"${col}" = \$${addValues(val)}`,
 

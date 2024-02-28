@@ -1,3 +1,7 @@
+/**
+@module /workspace/getLocale
+*/
+
 const Roles = require('../utils/roles')
 
 const merge = require('../utils/merge')

@@ -1,3 +1,7 @@
+/**
+@module /workspace/getTemplate
+*/
+
 const getFrom = require('../provider/getFrom')
 
 const merge = require('../utils/merge')

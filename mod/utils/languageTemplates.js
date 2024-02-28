@@ -1,3 +1,7 @@
+/**
+@module /utils/languageTemplates
+*/
+
 const getFrom = require('../provider/getFrom')
 
 const getTemplate = require('../workspace/getTemplate')
