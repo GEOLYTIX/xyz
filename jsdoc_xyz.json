@@ -17,9 +17,9 @@
       "template": "./node_modules/clean-jsdoc-theme",
       "theme_opts": {
         "title": "XYZ",
+        "homepageTitle": "XYZ",
         "static_dir": ["./public"],
-        "favicon": "./public/icons/favicon.ico",
-        "homepageTitle": "XYZ"
+        "favicon": "./public/icons/favicon.ico"
       }
     },
     "markdown": {
