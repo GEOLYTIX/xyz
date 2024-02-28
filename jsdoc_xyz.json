@@ -14,7 +14,13 @@
       "destination": "docs/",
       "recurse": true,
       "verbose": true,
-      "template": "./node_modules/clean-jsdoc-theme"
+      "template": "./node_modules/clean-jsdoc-theme",
+      "theme_opts": {
+        "title": "XYZ",
+        "homepageTitle": "XYZ",
+        "static_dir": ["./public/icons"],
+        "favicon": "./public/icons/favicon.ico"
+      }
     },
     "markdown": {
       "hardwrap": false,
