@@ -16,7 +16,9 @@
     "verbose": true,
     "template": "./node_modules/clean-jsdoc-theme",
     "theme_opts": {
-      "homepageTitle": "Mapp"
+      "title": "Mapp",
+      "homepageTitle": "Mapp",
+      "favicon": "../public/icons/favicon.ico"
     }
   },
   "markdown": {

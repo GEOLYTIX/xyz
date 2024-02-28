@@ -16,6 +16,9 @@
       "verbose": true,
       "template": "./node_modules/clean-jsdoc-theme",
       "theme_opts": {
+        "title": "XYZ",
+        "static_dir": ["./public"],
+        "favicon": "./public/icons/favicon.ico",
         "homepageTitle": "XYZ"
       }
     },
