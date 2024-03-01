@@ -1,3 +1,7 @@
+/**
+@module /user/add
+*/
+
 const acl = require('./acl')
 
 module.exports = async (req, res) => {

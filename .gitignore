@@ -9,13 +9,11 @@ env
 package-lock.json
 node_modules/*
 
-*.pem
-*.crt
-
 public/css/.sass-cache/
 public/workspaces/*
 public/js/plugins/*
 stats.json
+docs/*
 
 caddy_linux_amd64
 
@@ -28,4 +26,8 @@ caddy_linux_amd64
 
 public/js/lib/*
 
-vercel.json
+*.pem
+*.crt
+*.json
+!package.json
+!jsdoc*.json

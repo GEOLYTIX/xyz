@@ -1,3 +1,7 @@
+/**
+@module /user/register
+*/
+
 const bcrypt = require('bcryptjs')
 
 const crypto = require('crypto')
@@ -77,6 +81,8 @@ async function post(req, res) {
   // Test whether the provided password is valid.
   if (!passwordRgx.test(req.body.password)) return res.status(403).send('Invalid password provided')
 
+  const language = Intl.Collator.supportedLocalesOf([req.body.language], { localeMatcher: 'lookup' })[0] || 'en';
+
   // Attempt to retrieve ACL record with matching email field.
   let rows = await acl(`
     SELECT email, password, language, blocked
@@ -86,7 +92,7 @@ async function post(req, res) {
 
   const failed_query = await languageTemplates({
     template: 'failed_query',
-    language: req.params.language
+    language
   })
 
   if (rows instanceof Error) return res.status(500).send(failed_query)
@@ -119,8 +125,8 @@ async function post(req, res) {
     // Blocked user may not reset their password.
     if (user.blocked) return res.status(500).send(await languageTemplates({
       template: 'user_blocked',
-      language: user.language || req.params.language
-    })) 
+      language
+    }))
 
     // Set new password and verification token.
     // New passwords will only apply after account verification.
@@ -135,28 +141,28 @@ async function post(req, res) {
 
     if (rows instanceof Error) return res.status(500).send(await languageTemplates({
       template: 'failed_query',
-      language: req.params.language
+      language
     }))
 
     // Sent mail with verification token to the account email address.  
     await mailer({
       template: 'verify_password_reset',
-      language: user.language,
+      language,
       to: user.email,
       host: host,
-      link: `${host}/api/user/verify/${verificationtoken}`,
+      link: `${host}/api/user/verify/${verificationtoken}/?language=${language}`,
       remote_address
     })
     
     const password_reset_verification = await languageTemplates({
       template: 'password_reset_verification',
-      language: user.language
+      language
     })
 
     return res.send(password_reset_verification)
   }
 
-  const language = Intl.Collator.supportedLocalesOf([req.body.language], { localeMatcher: 'lookup' })[0] || 'en';
+  
   
   // Create new user account
   rows = await acl(`
@@ -178,7 +184,7 @@ async function post(req, res) {
 
   if (rows instanceof Error) return res.status(500).send(await languageTemplates({
     template: 'failed_query',
-    language: req.params.language
+    language
   }))
 
   await mailer({

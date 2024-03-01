@@ -1,3 +1,7 @@
+/**
+@module /cloudinary
+*/
+
 const { createHash } = require('crypto');
 
 // 1: api_key

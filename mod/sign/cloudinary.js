@@ -1,3 +1,7 @@
+/**
+@module /sign/cloudinary
+*/
+
 const { createHash } = require('crypto');
 
 module.exports = async req => {

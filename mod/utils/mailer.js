@@ -1,3 +1,7 @@
+/**
+@module /utils/mailer
+*/
+
 const logger = require('./logger')
 
 const languageTemplates = require('./languageTemplates')

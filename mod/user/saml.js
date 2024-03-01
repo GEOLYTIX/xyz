@@ -1,3 +1,7 @@
+/**
+@module /user/saml
+*/
+
 let acl, sp, idp;
 
 const logger = require('../utils/logger');

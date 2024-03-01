@@ -1,3 +1,7 @@
+/**
+@module /provider
+*/
+
 const file = require('./file')
 
 const cloudfront = require('./cloudfront')

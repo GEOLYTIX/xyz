@@ -1,3 +1,7 @@
+/**
+@module /workspace/templates/mails
+*/
+
 module.exports = {
   verify_password_reset: {
     en: {

@@ -1,3 +1,7 @@
+/**
+@module /utils/dbs
+*/
+
 const { Pool } = require('pg');
 
 const logger = require('./logger');

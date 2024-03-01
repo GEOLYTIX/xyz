@@ -1,3 +1,7 @@
+/**
+@module /sign
+*/
+
 const cloudinary = require('./cloudinary')
 
 module.exports = async (req, res) => {

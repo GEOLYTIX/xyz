@@ -1,0 +1,29 @@
+{
+    "source": {
+      "include": [
+        "mod"
+      ],
+      "includePattern": ".js$"
+    },
+    "plugins": [
+      "plugins/markdown"
+    ],
+    "opts": {
+      "encoding": "utf8",
+      "readme": "./mod/README.md",
+      "destination": "docs/",
+      "recurse": true,
+      "verbose": true,
+      "template": "./node_modules/clean-jsdoc-theme",
+      "theme_opts": {
+        "title": "XYZ",
+        "homepageTitle": "XYZ",
+        "static_dir": ["./public/icons"],
+        "favicon": "./public/icons/favicon.ico"
+      }
+    },
+    "markdown": {
+      "hardwrap": false,
+      "idInHeadings": true
+    }
+  }

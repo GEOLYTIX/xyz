@@ -1,3 +1,7 @@
+/**
+@module /utils/logger
+*/
+
 const logs = new Set(process.env.LOGS?.split(',') || [])
 
 // Errors should always be logged.
