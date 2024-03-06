@@ -88,7 +88,8 @@ async function getUser(request) {
   // Get user record from first row.
   const user = rows[0]
 
-  if (!user) return new Error('auth_failed')
+  //If there is no user in the ACL do not throw error.
+  if (!user) return;
 
   if (!user.password) return;
 
