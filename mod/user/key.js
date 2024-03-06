@@ -1,4 +1,20 @@
 /**
+## User Key 🔑
+The endpoint `/api/user/key` allows a user with the the api-key privileges to create an api key.
+Each time this end point is run it will replace the key in the ACL.
+
+> URL /api/user/key
+
+### Example URL : 
+```
+https://yourdomain.com/api/user/key
+```
+
+### Example Response:
+
+```
+eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
+```
 @module /user/key
 */
 
