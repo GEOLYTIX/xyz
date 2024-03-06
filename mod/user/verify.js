@@ -109,8 +109,8 @@ module.exports = async (req, res) => {
 
     // Get the host for approval email.
     const host = `${req.headers.origin 
+      || req.headers.host && 'https://' + (process.env.ALIAS || req.headers.host)}${process.env.DIR}`
       || req.headers.referer && new URL(req.headers.referer).origin 
-      || 'https://' + (process.env.ALIAS || req.headers.host)}${process.env.DIR}`
 
     // Get array of mail promises.
     const mail_promises = rows.map(async row => {

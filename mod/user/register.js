@@ -116,8 +116,8 @@ async function post(req, res) {
 
   // Get the host for account verification email.
   const host = `${req.headers.origin 
+    || req.headers.host && 'https://' + (process.env.ALIAS || req.headers.host)}${process.env.DIR}`
     || req.headers.referer && new URL(req.headers.referer).origin 
-    || 'https://' + (process.env.ALIAS || req.headers.host)}${process.env.DIR}`
 
   // The password will be reset for exisiting user accounts.
   if (user) {
