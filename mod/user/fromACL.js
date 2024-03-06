@@ -12,6 +12,8 @@ const crypto = require('crypto')
 
 const mailer = require('../utils/mailer')
 
+const reqHost = require('../utils/reqHost')
+
 const languageTemplates = require('../utils/languageTemplates')
 
 const acl = require('./acl')
@@ -60,9 +62,7 @@ module.exports = async (req) => {
   request.date = new Date()
 
   // Get the host for the account verification email.
-  request.host = `${req.headers.origin
-    || req.headers.host && 'https://' + (process.env.ALIAS || req.headers.host)}${process.env.DIR}`
-    || req.headers.referer && new URL(req.headers.referer).origin 
+  request.host = reqHost(req)
 
   const user = await getUser(request)
 

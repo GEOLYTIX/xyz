@@ -2,6 +2,8 @@
 @module /user
 */
 
+const reqHost = require('../utils/reqHost')
+
 const view = require('../view')
 
 const methods = {
@@ -64,9 +66,7 @@ module.exports = async (req, res) => {
     return res.send(`Failed to evaluate 'method' param.`)
   }
 
-  req.params.host = `${req.headers.origin 
-    || req.headers.host && 'https://' + (process.env.ALIAS || req.headers.host)}${process.env.DIR}`
-    || req.headers.referer && new URL(req.headers.referer).origin 
+  req.params.host = reqHost(req)
 
   if (!req.params.user && (method.login || method.admin)) {
 

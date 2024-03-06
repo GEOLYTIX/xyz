@@ -10,6 +10,8 @@ const acl = require('./acl')
 
 const mailer = require('../utils/mailer')
 
+const reqHost = require('../utils/reqHost')
+
 const languageTemplates = require('../utils/languageTemplates')
 
 const view = require('../view')
@@ -18,9 +20,7 @@ module.exports = async (req, res) => {
 
   if (!acl) return res.status(500).send('ACL unavailable.')
 
-  req.params.host = `${req.headers.origin 
-    || req.headers.host && 'https://' + (process.env.ALIAS || req.headers.host)}${process.env.DIR}`
-    || req.headers.referer && new URL(req.headers.referer).origin 
+  req.params.host = reqHost(req)
 
   // Post request to register new user.
   if (req.body && req.body.register) return post(req, res)
@@ -105,7 +105,7 @@ async function post(req, res) {
 
   // Setting the password to NULL will disable access to the account and prevent resetting the password.
   // Checking for password reset to allow registering again before verification.
-  if (!user.password_reset && user?.password === null) {
+  if (!user?.password_reset && user?.password === null) {
 
     return res.status(401).send('User account has restricted access')
   }
