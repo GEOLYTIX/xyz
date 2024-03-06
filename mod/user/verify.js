@@ -58,17 +58,14 @@ module.exports = async (req, res) => {
   user.password_reset && params.push(user.password_reset)
 
   // Update user account in ACL with the approval token and remove verification token.
-  rows = await acl(`
+  await acl(`
     UPDATE acl_schema.acl_table SET
       failedattempts = 0,
       ${user.password_reset && `password = $3,` ||''}
       verified = true,
       verificationtoken = null,
       language = $2
-    WHERE lower(email) = lower($1);`, substitute_params)
-
-// Execute the SQL query
-await acl(query, [user.email, req.params.language || user.language, user.password_reset]);
+    WHERE lower(email) = lower($1);`, substitute_params);
 
   if (rows instanceof Error) {
 
