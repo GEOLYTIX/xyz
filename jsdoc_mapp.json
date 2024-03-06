@@ -17,12 +17,16 @@
     "verbose": true,
     "template": "./node_modules/clean-jsdoc-theme",
     "theme_opts": {
-      "include_js": [
-        "./public/js/docs/navbar.js"
-    ],
       "title": "Mapp",
       "homepageTitle": "Mapp",
-      "favicon": "../public/icons/favicon.ico"
+      "favicon": "../public/icons/favicon.ico",
+      "menu": [
+        {
+            "title": "Github",
+            "id": "github",
+            "link": "https://github.com/GEOLYTIX/xyz"
+        }
+      ]
     }
   },
   "markdown": {

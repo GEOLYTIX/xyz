@@ -1,4 +1,8 @@
 /**
+### fromACL
+
+This module exports a function to authenticate a user based on a provided email and password.
+
 @module /user/fromACL
 */
 
@@ -14,6 +18,12 @@ const acl = require('./acl')
 
 const { nanoid } = require('nanoid')
 
+/**
+ * Exported function fromACL that will authenticate user. 
+ * @function fromACL
+ * @param {Object} req 
+ * @returns {Obect} user
+ */
 module.exports = async (req) => {
 
   const request = {
@@ -70,6 +80,12 @@ module.exports = async (req) => {
   return user
 }
 
+/**
+ * Function that will get the User from the ACL and update the access_log property.
+ * @function getUser
+ * @param {Object} request 
+ * @returns {Object} user
+ */
 async function getUser(request) {
 
   // Update access_log and return user record matched by email.
@@ -154,6 +170,13 @@ async function getUser(request) {
   return new Error('compare_sync_fail')
 }
 
+/**
+ * Function to check the exiry of the user.
+ * @function userExpiry
+ * @param {Object} user 
+ * @param {Obejct} request 
+ * @returns {boolean}
+ */
 async function userExpiry(user, request) {
 
   // Admin accounts do not not expire.
@@ -180,6 +203,12 @@ async function userExpiry(user, request) {
   }
 }
 
+/**
+ * Function to fail the login attempt of a user and increase the failed attempts on the ACL.
+ * @function failedLogin
+ * @param {Object} request 
+ * @returns {Error} auth_failed
+ */
 async function failedLogin(request) {
 
   // Increase failed login attempts counter by 1.

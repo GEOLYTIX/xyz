@@ -19,7 +19,14 @@
         "title": "XYZ",
         "homepageTitle": "XYZ",
         "static_dir": ["./public/icons", "./public/js/docs"],
-        "favicon": "./public/icons/favicon.ico"
+        "favicon": "./public/icons/favicon.ico",
+        "menu": [
+          {
+              "title": "Github",
+              "id": "github",
+              "link": "https://github.com/GEOLYTIX/xyz"
+          }
+        ]
       }
     },
     "markdown": {
