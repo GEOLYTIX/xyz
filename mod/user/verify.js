@@ -1,4 +1,7 @@
 /**
+ * ### verify
+
+This module exports a function that gets triggers from an endpoint to verify and reset a user's password email and password.
 @module /user/verify
 */
 
@@ -10,6 +13,12 @@ const languageTemplates = require('../utils/languageTemplates')
 
 const login = require('./login')
 
+/**
+ * @function verify
+ * @param {Object} req 
+ * @param {Object} res 
+ * @returns {Obect} res
+ */
 module.exports = async (req, res) => {
 
   if (!acl) return res.status(500).send('ACL unavailable.')
