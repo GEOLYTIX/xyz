@@ -1,7 +1,7 @@
 /**
  * ### verify
 
-This module exports a function that gets triggers from an endpoint to verify and reset a user's password email and password.
+This module exports a function that gets triggers from an endpoint to verify and reset a user's password.
 @module /user/verify
 */
 
