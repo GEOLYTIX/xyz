@@ -10,10 +10,6 @@ const view = require('../view')
 
 module.exports = async (req, res) => {
 
-  req.params.host = `${req.headers.origin 
-    || req.headers.host && 'https://' + (process.env.ALIAS || req.headers.host)}${process.env.DIR}`
-    || req.headers.referer && new URL(req.headers.referer).origin 
-
   if (req.body) {
 
     const user = await fromACL(req)
