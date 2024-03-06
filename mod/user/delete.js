@@ -20,16 +20,12 @@ module.exports = async (req, res) => {
 
   const user = rows[0]
 
-  const host = `${req.headers.origin 
-    || req.headers.host && 'https://' + (process.env.ALIAS || req.headers.host)}${process.env.DIR}`
-    || req.headers.referer && new URL(req.headers.referer).origin 
-
   // Sent email to inform user that their account has been deleted.
   await mailer({
     template: 'deleted_account',
     language: user.language,
     to: user.email,
-    host
+    host: req.params.host
   })
 
   res.send('User account deleted.')

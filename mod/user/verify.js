@@ -107,11 +107,6 @@ module.exports = async (req, res) => {
   // One or more administrator have been 
   if (rows.length > 0) {
 
-    // Get the host for approval email.
-    const host = `${req.headers.origin 
-      || req.headers.host && 'https://' + (process.env.ALIAS || req.headers.host)}${process.env.DIR}`
-      || req.headers.referer && new URL(req.headers.referer).origin 
-
     // Get array of mail promises.
     const mail_promises = rows.map(async row => {
 
@@ -120,7 +115,7 @@ module.exports = async (req, res) => {
         language: row.language,
         to: row.email,
         email: user.email,
-        host
+        host: req.params.host
       })
     })
 

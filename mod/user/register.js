@@ -18,6 +18,10 @@ module.exports = async (req, res) => {
 
   if (!acl) return res.status(500).send('ACL unavailable.')
 
+  req.params.host = `${req.headers.origin 
+    || req.headers.host && 'https://' + (process.env.ALIAS || req.headers.host)}${process.env.DIR}`
+    || req.headers.referer && new URL(req.headers.referer).origin 
+
   // Post request to register new user.
   if (req.body && req.body.register) return post(req, res)
 
@@ -85,7 +89,7 @@ async function post(req, res) {
 
   // Attempt to retrieve ACL record with matching email field.
   let rows = await acl(`
-    SELECT email, password, language, blocked
+    SELECT email, password, password_reset, language, blocked
     FROM acl_schema.acl_table 
     WHERE lower(email) = lower($1);`,
     [req.body.email])
@@ -100,7 +104,8 @@ async function post(req, res) {
   const user = rows[0]
 
   // Setting the password to NULL will disable access to the account and prevent resetting the password.
-  if (user?.password === null) {
+  // Checking for password reset to allow registering again before verification.
+  if (!user.password_reset && user?.password === null) {
 
     return res.status(401).send('User account has restricted access')
   }
@@ -113,11 +118,6 @@ async function post(req, res) {
 
   // Get the date for logs.
   const date = new Date().toISOString().replace(/\..*/,'')
-
-  // Get the host for account verification email.
-  const host = `${req.headers.origin 
-    || req.headers.host && 'https://' + (process.env.ALIAS || req.headers.host)}${process.env.DIR}`
-    || req.headers.referer && new URL(req.headers.referer).origin 
 
   // The password will be reset for exisiting user accounts.
   if (user) {
@@ -149,8 +149,8 @@ async function post(req, res) {
       template: 'verify_password_reset',
       language,
       to: user.email,
-      host: host,
-      link: `${host}/api/user/verify/${verificationtoken}/?language=${language}`,
+      host: req.params.host,
+      link: `${req.params.host}/api/user/verify/${verificationtoken}/?language=${language}`,
       remote_address
     })
     
@@ -189,8 +189,8 @@ async function post(req, res) {
     template: 'verify_account',
     language,
     to: req.body.email,
-    host: host,
-    link: `${host}/api/user/verify/${verificationtoken}`,
+    host: req.params.host,
+    link: `${req.params.host}/api/user/verify/${verificationtoken}`,
     remote_address
   })
 

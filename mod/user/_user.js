@@ -6,7 +6,7 @@ const view = require('../view')
 
 const methods = {
   admin: {
-    handler: (req,res) => {
+    handler: (req, res) => {
       req.params.template = 'user_admin_view'
       req.params.language = req.params.user.language
       req.params.user = req.params.user.email
@@ -64,16 +64,20 @@ module.exports = async (req, res) => {
     return res.send(`Failed to evaluate 'method' param.`)
   }
 
+  req.params.host = `${req.headers.origin 
+    || req.headers.host && 'https://' + (process.env.ALIAS || req.headers.host)}${process.env.DIR}`
+    || req.headers.referer && new URL(req.headers.referer).origin 
+
   if (!req.params.user && (method.login || method.admin)) {
 
     req.params.msg = 'login_required'
-    return methods.login.handler(req,res)
+    return methods.login.handler(req, res)
   }
 
   if (req.params.user && (!req.params.user.admin && method.admin)) {
 
     req.params.msg = 'admin_required'
-    return methods.login.handler(req,res)
+    return methods.login.handler(req, res)
   }
 
   method.handler(req, res)
