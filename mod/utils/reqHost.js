@@ -9,7 +9,7 @@ module.exports = req => {
     host = `http://${process.env.ALIAS||req.headers.host}${process.env.DIR}`
   } else if (req.headers.host) {
 
-    host = `http://${process.env.ALIAS||req.headers.host}${process.env.DIR}`
+    host = `https://${process.env.ALIAS||req.headers.host}${process.env.DIR}`
   } else if (req.headers.referer) {
 
     host = new URL(req.headers.referer).origin
