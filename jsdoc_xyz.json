@@ -18,7 +18,7 @@
       "theme_opts": {
         "title": "XYZ",
         "homepageTitle": "XYZ",
-        "static_dir": ["./public/icons", "./public/js/docs"],
+        "static_dir": ["./public/icons"],
         "favicon": "./public/icons/favicon.ico",
         "menu": [
           {
