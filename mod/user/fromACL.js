@@ -60,7 +60,7 @@ module.exports = async (req) => {
   request.date = new Date()
 
   // Get the host for the account verification email.
-  const host = `${req.headers.origin 
+  request.host = `${req.headers.origin 
     || req.headers.host && 'https://' + (process.env.ALIAS || req.headers.host)}${process.env.DIR}`
     || req.headers.referer && new URL(req.headers.referer).origin 
 
