@@ -162,13 +162,11 @@ async function post(req, res) {
     return res.send(password_reset_verification)
   }
 
-  
-  
   // Create new user account
   rows = await acl(`
     INSERT INTO acl_schema.acl_table (
       email,
-      password,
+      password_reset,
       language,
       ${process.env.APPROVAL_EXPIRY ? 'expires_on,' : ''}
       verificationtoken,
@@ -176,7 +174,7 @@ async function post(req, res) {
 
     SELECT
       '${req.body.email}' AS email,
-      '${password}' AS password,
+      '${password}' AS password_reset,
       '${language}' AS language,
       ${process.env.APPROVAL_EXPIRY ? `${parseInt((new Date().getTime() + process.env.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24)/1000)} AS expires_on,` : ''}
       '${verificationtoken}' AS verificationtoken,

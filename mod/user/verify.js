@@ -55,7 +55,7 @@ module.exports = async (req, res) => {
 
   let substitute_params = [user.email, req.params.language || user.language]
 
-  user.password_reset && params.push(user.password_reset)
+  user.password_reset && substitute_params.push(user.password_reset)
 
   // Update user account in ACL with the approval token and remove verification token.
   await acl(`
@@ -110,6 +110,11 @@ module.exports = async (req, res) => {
   // One or more administrator have been 
   if (rows.length > 0) {
 
+    // Get the host for approval email.
+    const host = `${req.headers.origin 
+      || req.headers.referer && new URL(req.headers.referer).origin 
+      || 'https://' + (process.env.ALIAS || req.headers.host)}${process.env.DIR}`
+
     // Get array of mail promises.
     const mail_promises = rows.map(async row => {
 
@@ -118,9 +123,7 @@ module.exports = async (req, res) => {
         language: row.language,
         to: row.email,
         email: user.email,
-        host: `${req.headers.origin
-          || req.headers.referer && new URL(req.headers.referer).origin
-          || 'https://' + (process.env.ALIAS || req.headers.host)}${process.env.DIR}`
+        host
       })
     })
 
