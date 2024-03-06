@@ -48,7 +48,7 @@ module.exports = async (req, res) => {
   rows = await acl(`
     UPDATE acl_schema.acl_table SET
       failedattempts = 0,
-      password = $3,
+      ${user.password_reset ? `password = $3, password_reset = null,` : ''}
       verified = true,
       verificationtoken = null,
       language = $2
