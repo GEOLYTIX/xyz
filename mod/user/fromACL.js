@@ -72,11 +72,6 @@ module.exports = async (req) => {
     return new Error('auth_failed')
   }
 
-  if (user instanceof Error) {
-
-    return await failedLogin(request)
-  }
-
   return user
 }
 
@@ -167,7 +162,7 @@ async function getUser(request) {
     return user
   }
 
-  return new Error('compare_sync_fail')
+  return await failedLogin(request)
 }
 
 /**
