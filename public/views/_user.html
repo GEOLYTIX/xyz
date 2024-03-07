@@ -179,7 +179,6 @@
 
     const userTable = new Tabulator(document.getElementById('userTable'),
       {
-        responsiveLayout: "hide", // hide rows that no longer fit
         data: data,
         rowFormatter: row => {
           const user = row.getData()
