@@ -19,7 +19,8 @@ module.exports = async (req, res) => {
     failedattempts,
     approved_by,
     ${process.env.APPROVAL_EXPIRY ? 'expires_on,' : ''}
-    blocked
+    blocked,
+    verificationtoken
   FROM acl_schema.acl_table
   ORDER BY email;`)
 
