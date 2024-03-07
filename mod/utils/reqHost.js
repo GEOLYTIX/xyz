@@ -6,7 +6,7 @@ module.exports = req => {
 
   if (req.headers.host.startsWith('localhost')) {
 
-    host = `http://${process.env.ALIAS||req.headers.host}${process.env.DIR}`
+    host = `http://${req.headers.host}${process.env.DIR}`
   } else if (req.headers.host) {
 
     host = `https://${process.env.ALIAS||req.headers.host}${process.env.DIR}`
