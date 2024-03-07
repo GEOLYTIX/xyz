@@ -123,7 +123,7 @@ async function post(req, res) {
   if (user) {
 
     // Blocked user may not reset their password.
-    if (user.blocked) return res.status(500).send(await languageTemplates({
+    if (user.blocked) return res.status(403).send(await languageTemplates({
       template: 'user_blocked',
       language
     }))
