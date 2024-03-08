@@ -12,6 +12,8 @@ const crypto = require('crypto')
 
 const mailer = require('../utils/mailer')
 
+const reqHost = require('../utils/reqHost')
+
 const languageTemplates = require('../utils/languageTemplates')
 
 const acl = require('./acl')
@@ -60,9 +62,7 @@ module.exports = async (req) => {
   request.date = new Date()
 
   // Get the host for the account verification email.
-  request.host = `${req.headers.origin
-    || req.headers.referer && new URL(req.headers.referer).origin
-    || 'https://' + (process.env.ALIAS || req.headers.host)}${process.env.DIR}`
+  request.host = reqHost(req)
 
   const user = await getUser(request)
 
@@ -70,11 +70,6 @@ module.exports = async (req) => {
 
     // This will happen when a user has a null password.
     return new Error('auth_failed')
-  }
-
-  if (user instanceof Error) {
-
-    return await failedLogin(request)
   }
 
   return user
@@ -167,7 +162,7 @@ async function getUser(request) {
     return user
   }
 
-  return new Error('compare_sync_fail')
+  return await failedLogin(request)
 }
 
 /**
