@@ -1,4 +1,7 @@
 /**
+ * ### verify
+
+This module exports a function that gets triggers from an endpoint to verify and reset a user's password.
 @module /user/verify
 */
 
@@ -10,6 +13,12 @@ const languageTemplates = require('../utils/languageTemplates')
 
 const login = require('./login')
 
+/**
+ * @function verify
+ * @param {Object} req 
+ * @param {Object} res 
+ * @returns {Obect} res
+ */
 module.exports = async (req, res) => {
 
   if (!acl) return res.status(500).send('ACL unavailable.')
@@ -45,14 +54,15 @@ module.exports = async (req, res) => {
   }
 
   // Update user account in ACL with the approval token and remove verification token.
-  rows = await acl(`
+  await acl(`
     UPDATE acl_schema.acl_table SET
       failedattempts = 0,
       password = $3,
       verified = true,
       verificationtoken = null,
       language = $2
-    WHERE lower(email) = lower($1);`, [user.email, req.params.language || user.language, user.password_reset])
+    WHERE lower(email) = lower($1);`,
+    [user.email, req.params.language || user.language, user.password_reset]);
 
   if (rows instanceof Error) {
 
@@ -105,9 +115,7 @@ module.exports = async (req, res) => {
         language: row.language,
         to: row.email,
         email: user.email,
-        host: `${req.headers.origin
-          || req.headers.referer && new URL(req.headers.referer).origin
-          || 'https://' + (process.env.ALIAS || req.headers.host)}${process.env.DIR}`
+        host: req.params.host
       })
     })
 

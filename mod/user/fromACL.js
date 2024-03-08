@@ -1,4 +1,8 @@
 /**
+### fromACL
+
+This module exports a function to authenticate a user based on a provided email and password.
+
 @module /user/fromACL
 */
 
@@ -8,12 +12,20 @@ const crypto = require('crypto')
 
 const mailer = require('../utils/mailer')
 
+const reqHost = require('../utils/reqHost')
+
 const languageTemplates = require('../utils/languageTemplates')
 
 const acl = require('./acl')
 
 const { nanoid } = require('nanoid')
 
+/**
+ * Exported function fromACL that will authenticate user. 
+ * @function fromACL
+ * @param {Object} req 
+ * @returns {Obect} user
+ */
 module.exports = async (req) => {
 
   const request = {
@@ -50,9 +62,7 @@ module.exports = async (req) => {
   request.date = new Date()
 
   // Get the host for the account verification email.
-  request.host = `${req.headers.origin
-    || req.headers.referer && new URL(req.headers.referer).origin
-    || 'https://' + (process.env.ALIAS || req.headers.host)}${process.env.DIR}`
+  request.host = reqHost(req)
 
   const user = await getUser(request)
 
@@ -62,14 +72,15 @@ module.exports = async (req) => {
     return new Error('auth_failed')
   }
 
-  if (user instanceof Error) {
-
-    return await failedLogin(request)
-  }
-
   return user
 }
 
+/**
+ * Function that will get the User from the ACL and update the access_log property.
+ * @function getUser
+ * @param {Object} request 
+ * @returns {Object} user
+ */
 async function getUser(request) {
 
   // Update access_log and return user record matched by email.
@@ -88,7 +99,8 @@ async function getUser(request) {
   // Get user record from first row.
   const user = rows[0]
 
-  if (!user) return new Error('auth_failed')
+  //If there is no user in the ACL do not throw error.
+  if (!user) return;
 
   if (!user.password) return;
 
@@ -150,9 +162,16 @@ async function getUser(request) {
     return user
   }
 
-  return new Error('compare_sync_fail')
+  return await failedLogin(request)
 }
 
+/**
+ * Function to check the exiry of the user.
+ * @function userExpiry
+ * @param {Object} user 
+ * @param {Obejct} request 
+ * @returns {boolean}
+ */
 async function userExpiry(user, request) {
 
   // Admin accounts do not not expire.
@@ -179,6 +198,12 @@ async function userExpiry(user, request) {
   }
 }
 
+/**
+ * Function to fail the login attempt of a user and increase the failed attempts on the ACL.
+ * @function failedLogin
+ * @param {Object} request 
+ * @returns {Error} auth_failed
+ */
 async function failedLogin(request) {
 
   // Increase failed login attempts counter by 1.

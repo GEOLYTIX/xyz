@@ -8,6 +8,7 @@
   "plugins": [
     "plugins/markdown"
   ],
+  
   "opts": {
     "encoding": "utf8",
     "readme": "./lib/README.md",
@@ -18,7 +19,14 @@
     "theme_opts": {
       "title": "Mapp",
       "homepageTitle": "Mapp",
-      "favicon": "../public/icons/favicon.ico"
+      "favicon": "../public/icons/favicon.ico",
+      "menu": [
+        {
+            "title": "Github",
+            "id": "github",
+            "link": "https://github.com/GEOLYTIX/xyz"
+        }
+      ]
     }
   },
   "markdown": {
