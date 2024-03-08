@@ -43,8 +43,6 @@ Node.js v18+
 
 [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) - A Node implementation of JSON Web Token.
 
-[nanoid](https://www.npmjs.com/package/nanoid) - A tiny, secure, URL-friendly, unique string ID generator for JavaScript.
-
 [Node-Postgres](https://github.com/brianc/node-postgres) - PostgreSQL client for Node.
 
 [nodemailer](https://github.com/nodemailer/nodemailer) - Send e-mails with Node – easy as cake!

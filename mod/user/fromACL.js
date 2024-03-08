@@ -18,8 +18,6 @@ const languageTemplates = require('../utils/languageTemplates')
 
 const acl = require('./acl')
 
-const { nanoid } = require('nanoid')
-
 /**
  * Exported function fromACL that will authenticate user. 
  * @function fromACL
@@ -139,15 +137,13 @@ async function getUser(request) {
     // password must be removed after check
     delete user.password
 
-    if (process.env.NANO_SESSION) {
+    if (process.env.USER_SESSION) {
 
-      const nano_session = nanoid()
-
-      user.session = nano_session
+      user.session = crypto.randomBytes(10).toString('hex')
 
       rows = await acl(`
         UPDATE acl_schema.acl_table
-        SET session = '${nano_session}'
+        SET session = '${user.session}'
         WHERE lower(email) = lower($1)`,
         [request.email])
 

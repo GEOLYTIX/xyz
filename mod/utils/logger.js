@@ -2,14 +2,14 @@
 @module /utils/logger
 */
 
+const crypto = require('crypto')
+
 const logs = new Set(process.env.LOGS?.split(',') || [])
 
 // Errors should always be logged.
 logs.add('err')
 
-const { nanoid } = require('nanoid')
-
-const process_nanoid = nanoid(6)
+const process_id = crypto.randomBytes(3).toString('hex')
 
 const logout = {
   logflare,
@@ -57,7 +57,7 @@ function logflare() {
           'X-API-KEY': params.apikey,
         },
         body: JSON.stringify({
-          [process_nanoid]: log,
+          [process_id]: log,
           key
         })
       }).catch(err => {
@@ -100,7 +100,7 @@ function postgresql() {
       await client.query(
         `INSERT INTO ${table} (process, datetime, key, log, message) 
         VALUES ($1, $2, $3, $4, $5)`, 
-        [process_nanoid, parseInt(Date.now() / 1000), key, logstring, errorMessage]);
+        [process_id, parseInt(Date.now() / 1000), key, logstring, errorMessage]);
     } catch (error) {
       console.error('Error while logging to database:', error);
     } finally {
