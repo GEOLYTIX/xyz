@@ -1,5 +1,5 @@
 /**
-### fromACL
+## fromACL
 
 This module exports a function to authenticate a user based on a provided email and password.
 
@@ -19,10 +19,17 @@ const languageTemplates = require('../utils/languageTemplates')
 const acl = require('./acl')
 
 /**
- * Exported function fromACL that will authenticate user. 
- * @function fromACL
- * @param {Object} req 
- * @returns {Obect} user
+ * Authenticates a user based on the provided email and password.
+ @function fromACL
+ @async
+ @param {Object} req - The request object.
+ @param {string} [req.body.email] - The email address of the user.
+ @param {string} [req.body.password] - The password of the user.
+ @param {string} [req.params.language] - The language for the user.
+ @param {Object} req.headers - The request headers.
+ @param {string} [req.headers.authorization] - The authorization header containing the email and password.
+ @param {string} [req.headers['x-forwarded-for']] - The IP address of the client.
+ @returns {Promise<Object|Error>} A Promise that resolves with the user object or an Error if authentication fails.
  */
 module.exports = async (req) => {
 
@@ -74,10 +81,16 @@ module.exports = async (req) => {
 }
 
 /**
- * Function that will get the User from the ACL and update the access_log property.
- * @function getUser
- * @param {Object} request 
- * @returns {Object} user
+ * Retrieves the user from the ACL and updates the access_log property.
+ @function getUser
+ @async
+ @param {Object} request - The request object.
+ @param {string} request.email - The email address of the user.
+ @param {Date} request.date - The current date and time.
+ @param {string} request.remote_address - The IP address of the client.
+ @param {string} request.language - The language for the user.
+ @param {string} request.host - The host for the account verification email.
+ @returns {Promise<Object|Error>} A Promise that resolves with the user object or an Error if the user is not found or authentication fails.
  */
 async function getUser(request) {
 
@@ -162,11 +175,14 @@ async function getUser(request) {
 }
 
 /**
- * Function to check the exiry of the user.
- * @function userExpiry
- * @param {Object} user 
- * @param {Obejct} request 
- * @returns {boolean}
+ * Checks if the user account has expired.
+ @function userExpiry
+ @async
+ @param {Object} user - The user object.
+ @param {Object} request - The request object.
+ @param {string} request.email - The email address of the user.
+ @param {string} request.language - The language for the user.
+ @returns {Promise<boolean>} A Promise that resolves with a boolean indicating if the user account has expired.
  */
 async function userExpiry(user, request) {
 
@@ -195,10 +211,15 @@ async function userExpiry(user, request) {
 }
 
 /**
- * Function to fail the login attempt of a user and increase the failed attempts on the ACL.
- * @function failedLogin
- * @param {Object} request 
- * @returns {Error} auth_failed
+ * Handles a failed login attempt and increases the failed attempts on the ACL.
+ @function failedLogin
+ @async
+ @param {Object} request - The request object.
+ @param {string} request.email - The email address of the user.
+ @param {string} request.language - The language for the user.
+ @param {string} request.host - The host for the account verification email.
+ @param {string} request.remote_address - The IP address of the client.
+ @returns {Promise<Error>} A Promise that resolves with an Error indicating that authentication failed.
  */
 async function failedLogin(request) {
 

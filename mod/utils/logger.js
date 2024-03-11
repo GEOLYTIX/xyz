@@ -1,31 +1,38 @@
 /**
-@module /utils/logger
-*/
+## logger 🪵
+This module provides a logging utility for the xyz.
+ * @module /utils/logger
+ */
 
-const crypto = require('crypto')
+const crypto = require('crypto');
 
-const logs = new Set(process.env.LOGS?.split(',') || [])
+const logs = new Set(process.env.LOGS?.split(',') || []);
 
 // Errors should always be logged.
-logs.add('err')
+logs.add('err');
 
-const process_id = crypto.randomBytes(3).toString('hex')
+const process_id = crypto.randomBytes(3).toString('hex');
 
 const logout = {
   logflare,
   postgresql
-}
+};
 
 // Required to initialse PostgreSQL logger.
 const { Pool } = require('pg');
 
 const logger = process.env.LOGGER
   && Object.hasOwn(logout, process.env.LOGGER.split(':')[0])
-  && logout[process.env.LOGGER.split(':')[0]]()
+  && logout[process.env.LOGGER.split(':')[0]]();
 
-// The default key is 'err' which should always be logged.
+/**
+ * Logs a message to the configured logger or console.
+ * @function logger
+ * @param {string|Object} log - The message or object to log.
+ * @param {string} [key='err'] - The log level or key.
+ * @returns {void}
+ */
 module.exports = (log, key = 'err') => {
-
   // Check whether the log for the key should be logged.
   if (!logs.has(key)) return;
 
@@ -33,43 +40,46 @@ module.exports = (log, key = 'err') => {
   logger?.(log, key);
 
   if (key === 'err') {
-
     // Log errors as such.
-    console.error(log)
-    return
+    console.error(log);
+    return;
   }
 
   // Log to stdout.
-  console.log(log)
-}
+  console.log(log);
+};
 
+/**
+ * Configures the Logflare logger.
+ * @function logflare
+ * @returns {Function} A function that logs messages to Logflare.
+ */
 function logflare() {
-
-  const params = Object.fromEntries(new URLSearchParams(process.env.LOGGER.split(':')[1]).entries())
+  const params = Object.fromEntries(new URLSearchParams(process.env.LOGGER.split(':')[1]).entries());
 
   return (log, key) => {
-
-    fetch(`https://api.logflare.app/logs/json?source=${params.source}`,
-      {
-        method: 'post',
-        headers: {
-          'Content-Type': 'application/json',
-          'X-API-KEY': params.apikey,
-        },
-        body: JSON.stringify({
-          [process_id]: log,
-          key
-        })
-      }).catch(err => {
-        console.error(err)
+    fetch(`https://api.logflare.app/logs/json?source=${params.source}`, {
+      method: 'post',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-KEY': params.apikey,
+      },
+      body: JSON.stringify({
+        [process_id]: log,
+        key
       })
-
-  }
-
+    }).catch(err => {
+      console.error(err);
+    });
+  };
 }
 
+/**
+ * Configures the PostgreSQL logger.
+ * @function postgresql
+ * @returns {Function} A function that logs messages to a PostgreSQL database.
+ */
 function postgresql() {
-
   const params = Object.fromEntries(new URLSearchParams(process.env.LOGGER.split(':')[1]).entries());
 
   const connectionString = process.env[`DBS_${params.dbs}`];
@@ -85,7 +95,6 @@ function postgresql() {
   });
 
   return async (log, key) => {
-
     //Sanitize the params.table to ensure no SQL injection
     const table = params.table.replace(/[^a-zA-Z0-9_.]/g, '');
     // Log messages can be string or objects
@@ -99,8 +108,9 @@ function postgresql() {
     try {
       await client.query(
         `INSERT INTO ${table} (process, datetime, key, log, message) 
-        VALUES ($1, $2, $3, $4, $5)`, 
-        [process_id, parseInt(Date.now() / 1000), key, logstring, errorMessage]);
+        VALUES ($1, $2, $3, $4, $5)`,
+        [process_id, parseInt(Date.now() / 1000), key, logstring, errorMessage]
+      );
     } catch (error) {
       console.error('Error while logging to database:', error);
     } finally {
