@@ -2,7 +2,7 @@
 @module /user/register
 */
 
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcrypt')
 
 const crypto = require('crypto')
 
@@ -111,7 +111,7 @@ async function post(req, res) {
   }
 
   // Hash user the password from the body.
-  const password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(8))
+  const password = bcrypt.hashSync(req.body.password, 8)
 
   // Create random verification token.
   const verificationtoken = crypto.randomBytes(20).toString('hex')

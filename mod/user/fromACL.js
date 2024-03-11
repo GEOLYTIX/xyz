@@ -6,7 +6,7 @@ This module exports a function to authenticate a user based on a provided email 
 @module /user/fromACL
 */
 
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcrypt')
 
 const crypto = require('crypto')
 

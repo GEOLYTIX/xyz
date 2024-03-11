@@ -1,6 +1,6 @@
 {
   "name": "xyz",
-  "version": "v4.8.1-alpha",
+  "version": "v4.8.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/geolytix/xyz"
@@ -20,8 +20,9 @@
     "@aws-sdk/client-s3": "^3.398.0",
     "@aws-sdk/cloudfront-signer": "^3.398.0",
     "@aws-sdk/s3-request-presigner": "^3.398.0",
-    "bcryptjs": "^2.4.3",
-    "jsonwebtoken": "^9.0.0",
+    "bcrypt": "^5.1.1",
+    "jsonwebtoken": "^9.0.2",
+    "nanoid": "^3.2.0",
     "nodemailer": "^6.9.7",
     "pg": "^8.7.3",
     "simple-statistics": "^7.8.3"
@@ -29,14 +30,14 @@
   "devDependencies": {
     "clean-jsdoc-theme": "^4.2.17",
     "cookie-parser": "^1.4.5",
-    "dotenv": "^8.2.0",
+    "dotenv": "^16.4.5",
     "esbuild": "^0.19.11",
     "eslint": "^8.29.0",
     "eslint-config-standard": "^17.0.0",
     "eslint-plugin-import": "^2.26.0",
     "eslint-plugin-n": "^15.6.0",
     "eslint-plugin-promise": "^6.1.1",
-    "express": "^4.17.1",
+    "express": "^4.18.3",
     "jest": "^29.5.0",
     "jsdocs": "^0.0.1",
     "uhtml": "^3.1.0"
