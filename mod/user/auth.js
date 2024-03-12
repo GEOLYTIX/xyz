@@ -1,4 +1,6 @@
 /**
+## User Auth
+This module handles user authentication and authorization.
 @module /user/auth
 */
 
@@ -10,6 +12,18 @@ const fromACL = require('./fromACL')
 
 const user_sessions = {}
 
+/**
+ * Authenticates the user based on the provided token or authorization header.
+ * @function auth
+ * @async
+ * @param {Object} req - The request object.
+ * @param {string} [req.headers.authorization] - The authorization header.
+ * @param {string} [req.params.token] - The token provided as a query parameter.
+ * @param {Object} [req.cookies] - The cookies object.
+ * @param {string} [req.cookies[process.env.TITLE]] - The cookie containing the token.
+ * @param {Object} res - The response object.
+ * @returns {Promise<Object|Error>} A Promise that resolves with the user object or an Error if authentication fails.
+ */
 module.exports = async (req, res) => {
 
   if (req.headers.authorization) {
@@ -32,8 +46,8 @@ module.exports = async (req, res) => {
     // Return error if verification fails.
     if (err) return err
 
-    // user [nano] sessions are enabled in the env.
-    if (process.env.NANO_SESSION && user.session) {
+    // user sessions are enabled in the env.
+    if (process.env.USER_SESSION && user.session) {
 
       // The session token is stored in the user_session object.
       if (Object.hasOwn(user_sessions, user.email)) {
