@@ -1,4 +1,4 @@
-**v4.8.1-alpha**
+**v4.8.1**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![example workflow](https://github.com/GEOLYTIX/xyz/actions/workflows/unit_tests.yml/badge.svg)
@@ -39,11 +39,9 @@ Dynamic module imports reduce the need to bundle 3rd party libraries such as [Ta
 
 Node.js v18+
 
-[bcryptjs](https://www.npmjs.com/package/bcryptjs) - Optimized bcrypt in JavaScript with zero dependencies.
+[bcrypt](https://www.npmjs.com/package/bcrypt) - A library to help you hash passwords.
 
 [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) - A Node implementation of JSON Web Token.
-
-[nanoid](https://www.npmjs.com/package/nanoid) - A tiny, secure, URL-friendly, unique string ID generator for JavaScript.
 
 [Node-Postgres](https://github.com/brianc/node-postgres) - PostgreSQL client for Node.
 

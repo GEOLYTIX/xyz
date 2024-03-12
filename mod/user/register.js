@@ -2,13 +2,15 @@
 @module /user/register
 */
 
-const bcrypt = require('bcryptjs')
+const bcrypt = require('bcrypt')
 
 const crypto = require('crypto')
 
 const acl = require('./acl')
 
 const mailer = require('../utils/mailer')
+
+const reqHost = require('../utils/reqHost')
 
 const languageTemplates = require('../utils/languageTemplates')
 
@@ -17,6 +19,8 @@ const view = require('../view')
 module.exports = async (req, res) => {
 
   if (!acl) return res.status(500).send('ACL unavailable.')
+
+  req.params.host = reqHost(req)
 
   // Post request to register new user.
   if (req.body && req.body.register) return post(req, res)
@@ -85,7 +89,7 @@ async function post(req, res) {
 
   // Attempt to retrieve ACL record with matching email field.
   let rows = await acl(`
-    SELECT email, password, language, blocked
+    SELECT email, password, password_reset, language, blocked
     FROM acl_schema.acl_table 
     WHERE lower(email) = lower($1);`,
     [req.body.email])
@@ -100,13 +104,14 @@ async function post(req, res) {
   const user = rows[0]
 
   // Setting the password to NULL will disable access to the account and prevent resetting the password.
-  if (user?.password === null) {
+  // Checking for password reset to allow registering again before verification.
+  if (!user?.password_reset && user?.password === null) {
 
     return res.status(401).send('User account has restricted access')
   }
 
   // Hash user the password from the body.
-  const password = bcrypt.hashSync(req.body.password, bcrypt.genSaltSync(8))
+  const password = bcrypt.hashSync(req.body.password, 8)
 
   // Create random verification token.
   const verificationtoken = crypto.randomBytes(20).toString('hex')
@@ -114,16 +119,11 @@ async function post(req, res) {
   // Get the date for logs.
   const date = new Date().toISOString().replace(/\..*/,'')
 
-  // Get the host for account verification email.
-  const host = `${req.headers.origin 
-    || req.headers.referer && new URL(req.headers.referer).origin 
-    || 'https://' + (process.env.ALIAS || req.headers.host)}${process.env.DIR}`
-
   // The password will be reset for exisiting user accounts.
   if (user) {
 
     // Blocked user may not reset their password.
-    if (user.blocked) return res.status(500).send(await languageTemplates({
+    if (user.blocked) return res.status(403).send(await languageTemplates({
       template: 'user_blocked',
       language
     }))
@@ -149,8 +149,8 @@ async function post(req, res) {
       template: 'verify_password_reset',
       language,
       to: user.email,
-      host: host,
-      link: `${host}/api/user/verify/${verificationtoken}/?language=${language}`,
+      host: req.params.host,
+      link: `${req.params.host}/api/user/verify/${verificationtoken}/?language=${language}`,
       remote_address
     })
     
@@ -162,13 +162,12 @@ async function post(req, res) {
     return res.send(password_reset_verification)
   }
 
-  
-  
   // Create new user account
   rows = await acl(`
     INSERT INTO acl_schema.acl_table (
       email,
       password,
+      password_reset,
       language,
       ${process.env.APPROVAL_EXPIRY ? 'expires_on,' : ''}
       verificationtoken,
@@ -177,6 +176,7 @@ async function post(req, res) {
     SELECT
       '${req.body.email}' AS email,
       '${password}' AS password,
+      '${password}' AS password_reset,
       '${language}' AS language,
       ${process.env.APPROVAL_EXPIRY ? `${parseInt((new Date().getTime() + process.env.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24)/1000)} AS expires_on,` : ''}
       '${verificationtoken}' AS verificationtoken,
@@ -191,8 +191,8 @@ async function post(req, res) {
     template: 'verify_account',
     language,
     to: req.body.email,
-    host: host,
-    link: `${host}/api/user/verify/${verificationtoken}`,
+    host: req.params.host,
+    link: `${req.params.host}/api/user/verify/${verificationtoken}`,
     remote_address
   })
 
