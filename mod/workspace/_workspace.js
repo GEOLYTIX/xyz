@@ -107,23 +107,19 @@ async function locale(req, res) {
   // Return layer object instead of array of layer keys
   if (req.params.layers) {
 
-    const layers = []
-
-    for (const key of Object.keys(locale.layers)) {
-
-      const layer = await getLayer({
+    const layers = Object.keys(locale.layers)
+      .map(async key => await getLayer({
         ...req.params,
         layer: key
-      })
+      }))
 
-      if (!layer) continue;
-      if (layer instanceof Error) continue;
-      if (!Roles.check(layer, req.params.user?.roles)) continue;
+    await Promise.all(layers).then(layers=>{
 
-      layers.push(layer)
-    }
-
-    locale.layers = layers
+      locale.layers = layers
+        .filter(layer => !!layer)
+        .filter(layer => !(layer instanceof Error))
+        .filter(layer => Roles.check(layer, req.params.user?.roles))
+    })
 
     return res.json(locale)
   }
