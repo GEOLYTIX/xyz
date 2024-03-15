@@ -113,10 +113,7 @@ function objMerge(obj, user_roles) {
 
     if (typeof clone.roles[role] !== 'object') continue;
 
-    if (user_roles.includes(role)) {
-      merge(clone, clone.roles[role]);
-
-    } else if (!user_roles.includes(role.match(/(?<=^!)(.*)/g)?.[0])) {
+    if (user_roles.includes(role) || !user_roles.includes(role.match(/(?<=^!)(.*)/g)?.[0])) {
       merge(clone, clone.roles[role]);
     }
   }
