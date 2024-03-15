@@ -41,7 +41,11 @@ module.exports = async (params) => {
   let layer = locale.layers[params.layer]
 
   // Return already merged layer.
-  if (layer.merged) return layer
+  if (layer.merged) {
+
+    let L = Roles.objMerge(layer, roles)    
+    return L
+  }
 
   // Assign key value as key on layer object.
   layer.key ??= params.layer
@@ -71,5 +75,6 @@ module.exports = async (params) => {
 
   layer.merged = true
 
-  return layer
+  let L = Roles.objMerge(layer, roles)    
+  return L
 }
