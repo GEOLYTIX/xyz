@@ -103,7 +103,7 @@ function objMerge(obj, user_roles) {
 
   if (typeof obj.roles === 'function') return obj;
 
-  clone = structuredClone(obj)
+  const clone = structuredClone(obj)
 
   for (const role in clone.roles) {
 
