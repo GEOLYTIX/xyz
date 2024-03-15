@@ -105,18 +105,13 @@ function objMerge(obj, user_roles) {
 
   const clone = structuredClone(obj)
 
-  for (const role in clone.roles) {
-
-    if (clone.roles[role] === true) continue;
-
-    if (clone.roles[role] === null) continue;
-
-    if (typeof clone.roles[role] !== 'object') continue;
-
-    if (user_roles.includes(role) || !user_roles.includes(role.match(/(?<=^!)(.*)/g)?.[0])) {
-      merge(clone, clone.roles[role]);
-    }
-  }
+  Object.keys(clone.roles)
+    .filter(role => clone.roles[role] !== true)
+    .filter(role => clone.roles[role] !== null)
+    .filter(role => typeof clone.roles[role] === 'object')
+    .filter(role => !Array.isArray(clone.roles[role]))
+    .filter(role => user_roles.includes(role) || !user_roles.includes(role.match(/(?<=^!)(.*)/g)?.[0]))
+    .forEach(role => merge(clone, clone.roles[role]))
 
   delete clone.roles
 
