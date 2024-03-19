@@ -31,18 +31,7 @@ module.exports = async (req, res) => {
     language: req.params.language
   })
 
-  if (req.params.user && typeof req.params.user === 'object') {
-
-    params.language ??= req.params.user.language
-
-    // Encode stringified user for template.
-    params.user ??= encodeURI(JSON.stringify({
-      email: req.params.user.email,
-      admin: req.params.user.admin,
-      roles: req.params.user.roles,
-      language: req.params.user.language
-    }));
-  }
+  params.language ??= req.params.user?.language || 'en'
 
   const template = await languageTemplates(params)
 
