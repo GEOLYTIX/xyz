@@ -54,21 +54,21 @@ async function layer(req, res) {
     return res.status(400).send(`Unable to validate layer param.`)
   }
 
-  const layer = await getLayer(req.params)
+  let layer = await getLayer(req.params)
 
   if (!Roles.check(layer, roles)) {
     return res.status(403).send('Role access denied for layer.')
   }
+
+  layer = Roles.objMerge(layer, roles)
 
   res.json(layer)
 }
 
 function locales(req, res) {
 
-  const roles = req.params.user?.roles || []
-
   const locales = Object.values(workspace.locales)
-    .filter(locale => !!Roles.check(locale, roles))
+    .filter(locale => !!Roles.check(locale, req.params.user?.roles))
     .map(locale => ({
       key: locale.key,
       name: locale.name
@@ -120,6 +120,8 @@ async function locale(req, res) {
         .filter(layer => !(layer instanceof Error))
         .filter(layer => Roles.check(layer, req.params.user?.roles))
     })
+
+    locale = Roles.objMerge(locale, req.params.user?.roles)
 
     return res.json(locale)
   }
