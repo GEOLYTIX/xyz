@@ -45,6 +45,8 @@ async function layer(req, res) {
   const locale = workspace.locales[req.params.locale]
 
   const roles = req.params.user?.roles || []
+  
+  roles.push('*')
 
   if (!Roles.check(locale, roles)) {
     return res.status(403).send('Role access denied for locale.')
@@ -104,6 +106,10 @@ async function locale(req, res) {
       matched => process.env[`SRC_${matched.replace(/(^\${)|(}$)/g, '')}`])
   )
 
+  const roles = req.params.user?.roles || []
+  
+  roles.push('*')
+
   // Return layer object instead of array of layer keys
   if (req.params.layers) {
 
@@ -118,13 +124,16 @@ async function locale(req, res) {
       locale.layers = layers
         .filter(layer => !!layer)
         .filter(layer => !(layer instanceof Error))
-        .filter(layer => Roles.check(layer, req.params.user?.roles))
+        .filter(layer => Roles.check(layer, roles))
     })
 
-    locale = Roles.objMerge(locale, req.params.user?.roles)
+    // Also merges roles in layer objects.
+    locale = Roles.objMerge(locale, roles)
 
     return res.json(locale)
   }
+
+  locale = Roles.objMerge(locale, roles)
   
   // Check layer access.
   locale.layers = locale.layers && Object.entries(locale.layers)
