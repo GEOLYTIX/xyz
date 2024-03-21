@@ -9,7 +9,7 @@
     "node": ">=18.x"
   },
   "scripts": {
-    "test": "jest",
+    "test": "codi tests",
     "_build": "npx esbuild ./lib/mapp.mjs ./lib/ui.mjs --bundle --minify --tree-shaking=false --sourcemap --format=iife --outdir=./public/js/lib",
     "version": "node version.js",
     "generate-docs-mapp": "jsdoc --configure jsdoc_mapp.json --verbose",
@@ -29,6 +29,7 @@
   },
   "devDependencies": {
     "clean-jsdoc-theme": "^4.2.17",
+    "codi-test-framework": "^0.0.6",
     "cookie-parser": "^1.4.5",
     "dotenv": "^16.4.5",
     "esbuild": "^0.19.11",
