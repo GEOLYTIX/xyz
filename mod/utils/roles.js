@@ -105,13 +105,22 @@ function objMerge(obj, user_roles) {
 
   const clone = structuredClone(obj)
 
+  function notIncludesNegatedRole(role, user_roles) {
+
+    return role.match(/(?<=^!)(.*)/g)?.[0]?
+      !user_roles.includes(role.match(/(?<=^!)(.*)/g)?.[0]):
+      false
+  }
+
   Object.keys(clone.roles)
     .filter(role => clone.roles[role] !== true)
     .filter(role => clone.roles[role] !== null)
     .filter(role => typeof clone.roles[role] === 'object')
     .filter(role => !Array.isArray(clone.roles[role]))
-    .filter(role => user_roles.includes(role) || !user_roles.includes(role.match(/(?<=^!)(.*)/g)?.[0]))
-    .forEach(role => merge(clone, clone.roles[role]))
+    .filter(role => user_roles.includes(role) || notIncludesNegatedRole(role, user_roles))
+    .forEach(role => {
+      merge(clone, clone.roles[role])
+    })
 
   delete clone.roles
 
