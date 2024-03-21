@@ -10,6 +10,8 @@ const { getSignedUrl } = require('@aws-sdk/cloudfront-signer');
 
 const logger = require('../utils/logger')
 
+const nodeFetch = require('node-fetch')
+
 module.exports = async ref => {
 
   try {
@@ -34,13 +36,15 @@ module.exports = async ref => {
       return signedURL;
     }
 
-    const response = await fetch(signedURL)
+    const response = await nodeFetch(signedURL)
 
     logger(`${response.status} - ${url}`,'cloudfront')
 
     if (response.status >= 300) return new Error(`${response.status} ${ref}`)
 
     if (url.match(/\.json$/i)) return await response.json()
+
+    if (ref.params.buffer) return await response.buffer()
 
     return await response.text()
 
