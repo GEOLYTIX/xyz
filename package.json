@@ -29,7 +29,7 @@
   },
   "devDependencies": {
     "clean-jsdoc-theme": "^4.2.17",
-    "codi-test-framework": "^0.0.7",
+    "codi-test-framework": "^0.0.8",
     "cookie-parser": "^1.4.5",
     "dotenv": "^16.4.5",
     "esbuild": "^0.19.11",
