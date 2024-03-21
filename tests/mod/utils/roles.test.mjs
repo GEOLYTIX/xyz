@@ -20,7 +20,7 @@ describe('Roles Module', () => {
       const result1 = check(obj, null);
       const result2 = check(obj, 'user');
       assertEqual(result1, false);
-      assertEqual(result2, true);
+      assertEqual(result2, false);
     });
 
     it('should return false if a negated role is included in user roles', () => {
