@@ -44,7 +44,7 @@ module.exports = async ref => {
 
     if (url.match(/\.json$/i)) return await response.json()
 
-    if (ref.params.buffer) return await response.buffer()
+    if (ref.params?.buffer) return await response.buffer()
 
     return await response.text()
 
