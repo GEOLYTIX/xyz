@@ -1,7 +1,7 @@
-import { describe, it, assertDeepEqual } from 'codi-test-framework';
+import { describe, it, assertEqual } from 'codi-test-framework';
 import mergeDeep from '../../../mod/utils/merge.js'
 
-describe('mergeDeep', () => {
+describe('mergeDeep Module', () => {
 
     it('should merge objects deeply', () => {
         const target = {
@@ -36,7 +36,7 @@ describe('mergeDeep', () => {
 
         const mergedObj = mergeDeep(target, source);
 
-        assertDeepEqual(mergedObj, expected)
+        assertEqual(mergedObj, expected)
     });
 
     it('should merge arrays deeply', () => {
@@ -54,7 +54,7 @@ describe('mergeDeep', () => {
 
         const mergedObj = mergeDeep(target, source);
 
-        assertDeepEqual(mergedObj, expected)
+        assertEqual(mergedObj, expected)
     });
 
     it('should handle merging with null or undefined values', () => {
@@ -74,8 +74,8 @@ describe('mergeDeep', () => {
         const mergedObj1 = mergeDeep(target, source1);
         const mergedObj2 = mergeDeep(target, source2);
 
-        assertDeepEqual(mergedObj1, expected);
-        assertDeepEqual(mergedObj2, expected);
+        assertEqual(mergedObj1, expected);
+        assertEqual(mergedObj2, expected);
     });
 
 });

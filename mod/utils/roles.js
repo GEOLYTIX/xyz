@@ -2,10 +2,12 @@
 @module /utils/roles
 */
 
+const merge = require('./merge')
+
 module.exports = {
   check,
-  filter,
-  get
+  get,
+  objMerge
 }
 
 function check(obj, user_roles) {
@@ -14,10 +16,9 @@ function check(obj, user_roles) {
   if (!obj.roles) return obj;
 
   // Always return object with '*' asterisk role.
-  if (Object.hasOwn(obj.roles,'*')) return obj;
+  if (Object.hasOwn(obj.roles, '*')) return obj;
 
-  // There are no user roles or user_roles are not an array.
-  if (!user_roles || !Array.isArray(user_roles)) return false;
+  if (user_roles === undefined) return false
 
   // Some negated role is included in user_roles[]
   const someNegatedRole = Object.keys(obj.roles).some(
@@ -42,34 +43,6 @@ function check(obj, user_roles) {
 
   // The check fails by default.
   return false;
-}
-
-// Return an object with filter matching the layer.roles with user_roles.
-function filter(layer, user_roles) {
-
-  // The layer must have roles.
-  if (!layer.roles) return;
-
-  // user_roles must be an array.
-  if (!Array.isArray(user_roles)) return;
-
-  const roleFilter = Object.keys(layer.roles)
-  
-    // filter roles with a filter object.
-    .filter(key => layer.roles[key] && typeof layer.roles[key].filter === 'object')
-
-    // filter roles included in the user_roles array.
-    .filter(key => user_roles.includes(key)
-
-      // or negated roles (!) NOT included in the array.
-      || !user_roles.includes(key.match(/(?<=^!)(.*)/g)?.[0]))
-      
-    .reduce((o, key) => {
-      o[key] = layer.roles[key].filter
-      return o
-    }, {})
-
-  return roleFilter
 }
 
 function get(obj) {
@@ -98,4 +71,57 @@ function get(obj) {
   roles.delete('*')
 
   return Array.from(roles)
+}
+
+function objMerge(obj, user_roles) {
+
+  if (typeof obj !== 'object') return obj;
+
+  if (user_roles === undefined) return obj
+
+  if (Array.isArray(obj)) {
+
+    return obj.map(arrEntry => objMerge(arrEntry, user_roles))
+  }
+
+  Object.keys(obj)
+    .filter(key => typeof obj[key] === 'object')
+    .forEach(key => {
+
+      // Cannot convert undefined or null to object.
+      if (!obj[key]) return;
+
+      obj[key] = objMerge(obj[key], user_roles)
+    })
+
+  if (!obj.roles) return obj;
+
+  if (typeof obj.roles !== 'object') return obj;
+
+  if (Array.isArray(obj.roles)) return obj;
+
+  if (typeof obj.roles === 'function') return obj;
+
+  const clone = structuredClone(obj)
+
+  function notIncludesNegatedRole(role, user_roles) {
+
+    return role.match(/(?<=^!)(.*)/g)?.[0]?
+      !user_roles.includes(role.match(/(?<=^!)(.*)/g)?.[0]):
+      false
+  }
+
+  Object.keys(clone.roles)
+    .filter(role => clone.roles[role] !== true)
+    .filter(role => clone.roles[role] !== null)
+    .filter(role => typeof clone.roles[role] === 'object')
+    .filter(role => !Array.isArray(clone.roles[role]))
+    .filter(role => user_roles.includes(role) || notIncludesNegatedRole(role, user_roles))
+    .forEach(role => {
+      merge(clone, clone.roles[role])
+    })
+
+  delete clone.roles
+
+  return clone
 }

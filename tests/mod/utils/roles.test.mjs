@@ -1,105 +1,106 @@
-import { describe, it, assertEqual, assertDeepEqual } from 'codi-test-framework';
-import { check, filter, get } from '../../../mod/utils/roles.js';
+import { describe, it, assertEqual } from 'codi-test-framework';
+import { check, objMerge, get } from '../../../mod/utils/roles.js';
 
 describe('Roles Module', () => {
   describe('check()', () => {
-    it('should return the object if no roles are assigned', () => {
-      const obj = { name: 'John' };
+    it('should return the object if it has no roles', () => {
+      const obj = { layer: 'I am a layer!' };
       const result = check(obj, ['user']);
       assertEqual(result, obj);
     });
 
-    it('should return the object if the asterisk role is present', () => {
-      const obj = { name: 'John', roles: { '*': true } };
+    it('should return the object if it has the * role', () => {
+      const obj = { layer: 'I am a layer!', roles: { '*': true } };
       const result = check(obj, ['user']);
       assertEqual(result, obj);
     });
 
-    it('should return false if user roles are not provided or not an array', () => {
-      const obj = { name: 'John', roles: { user: true } };
-      const result1 = check(obj, null);
-      const result2 = check(obj, 'user');
-      assertEqual(result1, false);
-      assertEqual(result2, false);
-    });
-
-    it('should return false if a negated role is included in user roles', () => {
-      const obj = { name: 'John', roles: { '!admin': true } };
-      const result = check(obj, ['user', 'admin']);
+    it('should return false if user_roles is undefined', () => {
+      const obj = { roles: { admin: true } };
+      const result = check(obj, undefined);
       assertEqual(result, false);
     });
 
-    it('should return the object if all roles are negated and not included in user roles', () => {
-      const obj = { name: 'John', roles: { '!admin': true, '!superuser': true } };
-      const result = check(obj, ['user']);
-      assertEqual(result, obj);
-    });
-
-    it('should return the object if a positive role is included in user roles', () => {
-      const obj = { name: 'John', roles: { user: true, admin: true } };
-      const result = check(obj, ['user']);
-      assertEqual(result, obj);
-    });
-
-    it('should return false if no positive role is included in user roles', () => {
-      const obj = { name: 'John', roles: { admin: true } };
-      const result = check(obj, ['user']);
+    it('should return false if a negated role is included in user_roles', () => {
+      const obj = { roles: { '!guest': true } };
+      const result = check(obj, ['guest']);
       assertEqual(result, false);
     });
-  });
 
-  describe('filter()', () => {
-    it('should return undefined if the layer has no roles', () => {
-      const layer = { name: 'Layer' };
-      const result = filter(layer, ['user']);
-      assertEqual(result, undefined);
+    it('should return the object if all roles are negated and none match user_roles', () => {
+      const obj = { roles: { '!admin': true, '!user': true } };
+      const result = check(obj, ['guest', 'users']);
+      assertEqual(result, obj);
     });
 
-    it('should return undefined if user roles are not an array', () => {
-      const layer = { name: 'Layer', roles: { user: { filter: { status: 'active' } } } };
-      const result = filter(layer, 'user');
-      assertEqual(result, undefined);
+    it('should return the object if a positive role is included in user_roles', () => {
+      const obj = { roles: { admin: true, user: true } };
+      const result = check(obj, ['admin']);
+      assertEqual(result, obj);
     });
 
-    it('should return the role filter for matching roles', () => {
-      const layer = { name: 'Layer', roles: { user: { filter: { status: 'active' } } } };
-      const result = filter(layer, ['user']);
-      assertDeepEqual(result, { user: { status: 'active' } });
-    });
-
-    it('should return the role filter for negated roles not included in user roles', () => {
-      const layer = { name: 'Layer', roles: { '!admin': { filter: { status: 'active' } } } };
-      const result = filter(layer, ['user']);
-      assertDeepEqual(result, { '!admin': { status: 'active' } });
+    it('should return false if no role matches user_roles', () => {
+      const obj = { roles: { admin: true, user: true } };
+      const result = check(obj, ['guest']);
+      assertEqual(result, false);
     });
   });
 
   describe('get()', () => {
-    it('should return an array of unique roles from the object tree', () => {
-      const obj = {
-        roles: { user: true, admin: true },
-        foo: { roles: { superuser: true } },
-      };
+    it('should return an array of roles from the object', () => {
+      const obj = { roles: { admin: true, user: true, '!guest': true } };
       const result = get(obj);
-      assertDeepEqual(result, ['user', 'admin', 'superuser']);
+      assertEqual(result, ['admin', 'user', 'guest']);
     });
 
-    it('should remove the negation prefix from roles', () => {
-      const obj = {
-        roles: { '!user': true, admin: true },
-        foo: { roles: { '!superuser': true } },
-      };
+    it('should not include the * role in the returned array', () => {
+      const obj = { roles: { '*': true, admin: true } };
       const result = get(obj);
-      assertDeepEqual(result, ['user', 'admin', 'superuser']);
+      assertEqual(result, ['admin']);
+    });
+  });
+
+  describe('objMerge()', () => {
+    it('should return the input value if it is not an object', () => {
+      assertEqual(objMerge(5), 5);
+      assertEqual(objMerge('hello'), 'hello');
+      assertEqual(objMerge(null), null);
     });
 
-    it('should exclude the restricted asterisk role', () => {
+    it('should return the input object if user_roles is undefined', () => {
+      const obj = { a: 1, b: 2 };
+      assertEqual(objMerge(obj, undefined), obj);
+    });
+
+    it('should merge nested objects', () => {
       const obj = {
-        roles: { '*': true, user: true },
-        foo: { roles: { admin: true } },
+        foo: 'bar',
+        bar: { foo: 'bar', bar: { foo: 'bar' } },
+        roles: { 'admin': { foo: 'bar' }, 'user': { foo: 'bar' } }
       };
-      const result = get(obj);
-      assertDeepEqual(result, ['user', 'admin']);
+      const user_roles = ['admin'];
+      const expected = {
+        foo: 'bar',
+        bar: { foo: 'bar', bar: { foo: 'bar' } },
+        foo: 'bar'
+      };
+      assertEqual(objMerge(obj, user_roles), expected);
+    });
+
+    it('should handle negated roles', () => {
+      const obj = {
+        roles: { '!guest': { foo: 'bar' }, 'user': { foo: 'bar' } }
+      };
+      const user_roles = ['user'];
+      const expected = { foo: 'bar', foo: 'bar' };
+      assertEqual(objMerge(obj, user_roles), expected);
+    });
+
+    it('should handle arrays', () => {
+      const obj = [{ foo: 'afoo' }, { bar: 'abar' }, [{ foo: 'afoo' }]];
+      const user_roles = [];
+      const expected = [{ foo: 'afoo' }, { bar: 'abar' }, [{ foo: 'afoo' }]];
+      assertEqual(objMerge(obj, user_roles), expected);
     });
   });
 });

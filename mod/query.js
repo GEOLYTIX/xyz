@@ -168,9 +168,7 @@ module.exports = async (req, res) => {
         // Change value may only contain a limited set of whitelisted characters.
         if (!reserved.has(param) && !/^[A-Za-z0-9,"'._-\s]*$/.test(change)) {
 
-          // Err and return empty string if the change value is invalid.
-          console.error('Change param no bueno')
-          return ''
+          throw new Error(`Substitute \${${param}} value rejected: ${change}`);
         }
 
         return change
@@ -302,16 +300,11 @@ async function layerQuery(req, res) {
   // Layer queries must have a geom param.
   req.params.geom ??= req.params.layer.geom
 
-  // Get array of role filter from layer configuration.
-  const roles = Roles.filter(req.params.layer, req.params.user?.roles)
-
   // Create params filter string from roleFilter filter params.
-  req.params.filter = `
-    ${req.params.layer.filter?.default && `AND ${sqlFilter(req.params.layer.filter.default, req.params.SQL)}` || ''}
-    ${req.params.filter && `AND ${sqlFilter(JSON.parse(req.params.filter), req.params.SQL)}` || ''}
-    ${roles && Object.values(roles).some(r => !!r)
-      ? `AND ${sqlFilter(Object.values(roles).filter(r => !!r), req.params.SQL)}`
-      : ''}`
+  req.params.filter = [
+    req.params.layer.filter?.default && `AND ${sqlFilter(req.params.layer.filter.default, req.params.SQL)}` || '',
+    req.params.filter && `AND ${sqlFilter(JSON.parse(req.params.filter), req.params.SQL)}` || '']
+    .join(' ')
 
   if (req.params.viewport) {
 
