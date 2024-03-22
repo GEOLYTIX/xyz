@@ -45,6 +45,8 @@ async function layer(req, res) {
   const locale = workspace.locales[req.params.locale]
 
   const roles = req.params.user?.roles || []
+  
+  roles.push('*')
 
   if (!Roles.check(locale, roles)) {
     return res.status(403).send('Role access denied for locale.')
@@ -54,21 +56,21 @@ async function layer(req, res) {
     return res.status(400).send(`Unable to validate layer param.`)
   }
 
-  const layer = await getLayer(req.params)
+  let layer = await getLayer(req.params)
 
   if (!Roles.check(layer, roles)) {
     return res.status(403).send('Role access denied for layer.')
   }
+
+  layer = Roles.objMerge(layer, roles)
 
   res.json(layer)
 }
 
 function locales(req, res) {
 
-  const roles = req.params.user?.roles || []
-
   const locales = Object.values(workspace.locales)
-    .filter(locale => !!Roles.check(locale, roles))
+    .filter(locale => !!Roles.check(locale, req.params.user?.roles))
     .map(locale => ({
       key: locale.key,
       name: locale.name
@@ -104,28 +106,34 @@ async function locale(req, res) {
       matched => process.env[`SRC_${matched.replace(/(^\${)|(}$)/g, '')}`])
   )
 
+  const roles = req.params.user?.roles || []
+  
+  roles.push('*')
+
   // Return layer object instead of array of layer keys
   if (req.params.layers) {
 
-    const layers = []
-
-    for (const key of Object.keys(locale.layers)) {
-
-      const layer = await getLayer({
+    const layers = Object.keys(locale.layers)
+      .map(async key => await getLayer({
         ...req.params,
         layer: key
-      })
+      }))
 
-      if (layer instanceof Error) continue;
-      if(!Roles.check(layer, req.params.user?.roles)) continue;
+    await Promise.all(layers).then(layers=>{
 
-      layers.push(layer)
-    }
+      locale.layers = layers
+        .filter(layer => !!layer)
+        .filter(layer => !(layer instanceof Error))
+        .filter(layer => Roles.check(layer, roles))
+    })
 
-    locale.layers = layers
+    // Also merges roles in layer objects.
+    locale = Roles.objMerge(locale, roles)
 
     return res.json(locale)
   }
+
+  locale = Roles.objMerge(locale, roles)
   
   // Check layer access.
   locale.layers = locale.layers && Object.entries(locale.layers)
