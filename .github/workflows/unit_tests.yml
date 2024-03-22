@@ -1,4 +1,4 @@
-name: Jest unit tests
+name: Codi unit tests
 
 on:
   push:
