@@ -1,4 +1,4 @@
-import { describe, it, assertEqual, assertDeepEqual } from 'codi-test-framework';
+import { describe, it, assertDeepEqual } from 'codi-test-framework';
 import mergeDeep from '../../../mod/utils/merge.js'
 
 describe('mergeDeep', () => {
