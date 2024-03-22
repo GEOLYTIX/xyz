@@ -24,7 +24,7 @@ describe('mergeDeep', () => {
             hobbies: ['cooking'],
         };
 
-        const expected = {
+        const expected = { 
             name: 'Rob',
             age: 28,
             address: {
