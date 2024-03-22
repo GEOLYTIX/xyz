@@ -300,16 +300,11 @@ async function layerQuery(req, res) {
   // Layer queries must have a geom param.
   req.params.geom ??= req.params.layer.geom
 
-  // Get array of role filter from layer configuration.
-  const roles = Roles.filter(req.params.layer, req.params.user?.roles)
-
   // Create params filter string from roleFilter filter params.
-  req.params.filter = `
-    ${req.params.layer.filter?.default && `AND ${sqlFilter(req.params.layer.filter.default, req.params.SQL)}` || ''}
-    ${req.params.filter && `AND ${sqlFilter(JSON.parse(req.params.filter), req.params.SQL)}` || ''}
-    ${roles && Object.values(roles).some(r => !!r)
-      ? `AND ${sqlFilter(Object.values(roles).filter(r => !!r), req.params.SQL)}`
-      : ''}`
+  req.params.filter = [
+    req.params.layer.filter?.default && `AND ${sqlFilter(req.params.layer.filter.default, req.params.SQL)}` || '',
+    req.params.filter && `AND ${sqlFilter(JSON.parse(req.params.filter), req.params.SQL)}` || '']
+    .join(' ')
 
   if (req.params.viewport) {
 

@@ -40,6 +40,9 @@ module.exports = async (params) => {
 
   let layer = locale.layers[params.layer]
 
+  // layer maybe null or undefined.
+  if (!layer) return;
+
   // Return already merged layer.
   if (layer.merged) return layer
 
