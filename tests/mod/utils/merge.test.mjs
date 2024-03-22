@@ -11,7 +11,7 @@ describe('mergeDeep', () => {
                 street: '6 fourteenth street',
                 city: 'Johannesburg',
             },
-            hobbies: ['squash', 'guitar'],
+            hobbies: ['squash', 'guitar'], 
         };
 
         const source = {
