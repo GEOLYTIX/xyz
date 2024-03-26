@@ -14,7 +14,7 @@ describe('Mapview test', async () => {
     const tabview = document.getElementById('Tabview');
 
     //Testcase: Merge Dictionaries
-    it('should merge dictionaries correctly', () => {
+    await it('should merge dictionaries correctly', () => {
         // Store the initial length of the English dictionary
         const initialLength = Object.keys(mapp.dictionaries.en).length;
 
@@ -166,7 +166,7 @@ describe('Mapview test', async () => {
     });
 
     //Testcase: Ensure User refreshes cookie
-    it('should refresh cookie and get user with updated credentials', async () => {
+    await it('should refresh cookie and get user with updated credentials', async () => {
         // Store the current user object
         const currentUser = mapp.user;
 
@@ -184,7 +184,7 @@ describe('Mapview test', async () => {
     });
 
     //Testcase: Ensure language is set correctly.
-    it('should set the language correctly', () => {
+    await it('should set the language correctly', () => {
         // Store the current language
         const currentLanguage = mapp.language;
 
@@ -202,7 +202,7 @@ describe('Mapview test', async () => {
     });
 
     //Testcase: ensure restore scroll is supported
-    it('should restore scroll if supported', () => {
+    await it('should restore scroll if supported', () => {
         // Check if scroll restoration is supported
         if ('scrollRestoration' in history) {
             // Set scroll restoration to 'auto'
@@ -288,7 +288,7 @@ describe('Mapview test', async () => {
     });
 
     //Testcase: Set help tesxt from dictionary
-    it('should set help text from dictionary', () => {
+    await it('should set help text from dictionary', () => {
         tabs.forEach((tab) => {
             // Set help text from dictionary
             tab.title = mapp.dictionary[tab.dataset.id];
@@ -299,7 +299,7 @@ describe('Mapview test', async () => {
     });
 
     //Tesecase: Handle tab click events
-    it('should handle tab click events', () => {
+    await it('should handle tab click events', () => {
         tabs.forEach((tab) => {
             // Simulate a click event on the tab
             tab.click();
@@ -388,7 +388,7 @@ describe('Mapview test', async () => {
     }
 
     //Testcase: Retrieve accesible locales
-    it('should retrieve accessible locales from Workspace API', async () => {
+    await it('should retrieve accessible locales from Workspace API', async () => {
         // Assert that locales is an array
         assertTrue(Array.isArray(locales), 'Locales should be an array');
 
@@ -397,7 +397,7 @@ describe('Mapview test', async () => {
     });
 
     //Testcase: Retrieve locale with list of layers
-    it('should retrieve locale with list of layers from Workspace API', async () => {
+    await it('should retrieve locale with list of layers from Workspace API', async () => {
         // Assert that locale is not an instance of Error
         assertFalse(locale instanceof Error, 'Locale should not be an instance of Error');
 
@@ -409,7 +409,7 @@ describe('Mapview test', async () => {
 
     //Testcase: Should error if no locales accsible
     if (locale instanceof Error) {
-        it('should display an error dialog if locale is an instance of Error', async () => {
+        await it('should display an error dialog if locale is an instance of Error', async () => {
 
             // Assert that the error dialog is appended to the document body
             const errorDialog = document.querySelector('.modal-dialog');
@@ -422,7 +422,7 @@ describe('Mapview test', async () => {
 
     //Testcase: Dropdown for locales should be present if locales are present.
     if (locales.length > 1) {
-        it('should add locale dropdown to layers panel if multiple locales are accessible', async () => {
+        await it('should add locale dropdown to layers panel if multiple locales are accessible', async () => {
             // Assert that the locale dropdown is appended to the layers tab
             const dropdown = layersTab.querySelector('[data-id="locales-dropdown"]');
             assertNotEqual(dropdown, null, 'Locale dropdown should be appended to the layers tab');
@@ -502,7 +502,7 @@ describe('Mapview test', async () => {
     });
 
     //Testcase: Create mapview
-    it('should create a mapview', async () => {
+    await it('should create a mapview', async () => {
         // Assert that mapview is created
         assertNotEqual(mapview, undefined, 'Mapview should be created');
 
@@ -516,13 +516,13 @@ describe('Mapview test', async () => {
     });
 
     //Testcase: Add layers to mapview
-    it('should add layers to mapview', async () => {
+    await it('should add layers to mapview', async () => {
         // Assert that layers are added to mapview
         assertTrue(Object.keys(mapview.layers).length > 0, 'Mapview should have layers');
     });
 
     //Testcase: Create a gazetteer if in locale
-    it('should create a gazetteer if available in the locale', async () => {
+    await it('should create a gazetteer if available in the locale', async () => {
         if (mapview.locale.gazetteer) {
             const gazetteer = locationsTab.querySelector('div');
             assertNotEqual(gazetteer, null, 'Gazetteer should be created');
@@ -534,7 +534,7 @@ describe('Mapview test', async () => {
     });
 
     //Testcase: Should create a layers listview
-    it('should create a layers listview', async () => {
+    await it('should create a layers listview', async () => {
         // Assert that the layers listview is created
         const listview = layersTab.querySelector('div');
         assertNotEqual(listview, null, 'Layers listview should be created');
@@ -542,7 +542,7 @@ describe('Mapview test', async () => {
 
     //Testcase: Check for locations list view if gazetteer is present or if there is a selection
     if (mapview.locale.gazetteer) {
-        it('should create a locations listview', async () => {
+        await it('should create a locations listview', async () => {
             // Assert that the locations listview is created
             const listview = locationsTab.querySelector('div');
             assertNotEqual(listview, null, 'Locations listview should be created');
@@ -550,7 +550,7 @@ describe('Mapview test', async () => {
     }
 
     //Testcase: Ensure mapview has highlight interaction.
-    it('should begin highlight interaction', async () => {
+    await it('should begin highlight interaction', async () => {
         // Assert that highlight interaction is added to mapview
         assertTrue(mapview.interactions.hasOwnProperty('highlight'), 'Mapview should have a "highlight" interaction');
     });
@@ -570,7 +570,7 @@ describe('Mapview test', async () => {
     //Tests that have to run after everything else.
 
     //Testcase: Should show the tabview.
-    it('should show the tabview when showTab is called', () => {
+    await it('should show the tabview when showTab is called', () => {
         // Add the 'desktop-display-none' class to the tabview
         tabview.classList.add('desktop-display-none');
 
@@ -585,7 +585,7 @@ describe('Mapview test', async () => {
     });
 
     //Testcase: Should hide the tabview
-    it('should hide the tabview when removeLastTab is called', () => {
+    await it('should hide the tabview when removeLastTab is called', () => {
         // Remove the 'desktop-display-none' class from the tabview
         tabview.classList.remove('desktop-display-none');
 
