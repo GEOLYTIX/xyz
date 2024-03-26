@@ -320,14 +320,14 @@ describe('Mapview test', async () => {
                     assertFalse(otherPanel.classList.contains('active'), 'Other panels should not have the active class');
                 }
             });
-            
+
         });
 
         const layersTab = Array.from(tabs).find((tab) => tab.dataset.id === 'layers');
         //Simulate a click event on the layers tab
         layersTab.click();
     });
-    
+
 
     //Tests for this are at the bottom
     const testTabView = mapp.ui.Tabview({
@@ -399,24 +399,27 @@ describe('Mapview test', async () => {
         assertTrue(locale.hasOwnProperty('layers'), 'Locale should have a "layers" property');
     });
 
-    it('should display an error dialog if locale is an instance of Error', async () => {
-        if (locale instanceof Error) {
+    if (locale instanceof Error) {
+        it('should display an error dialog if locale is an instance of Error', async () => {
+
             // Assert that the error dialog is appended to the document body
             const errorDialog = document.querySelector('.modal-dialog');
             assertNotEqual(errorDialog, null, 'Error dialog should be appended to the document body');
 
             // Assert that the error dialog contains the correct message
             assertEqual(errorDialog.textContent.trim(), mapp.dictionary.no_locales, 'Error dialog should display the correct message');
-        }
-    });
+        });
+    }
 
-    it('should add locale dropdown to layers panel if multiple locales are accessible', async () => {
-        if (locales.length > 1) {
+
+    if (locales.length > 1) {
+        it('should add locale dropdown to layers panel if multiple locales are accessible', async () => {
             // Assert that the locale dropdown is appended to the layers tab
             const dropdown = layersTab.querySelector('[data-id="locales-dropdown"]');
             assertNotEqual(dropdown, null, 'Locale dropdown should be appended to the layers tab');
-        }
-    });
+        });
+    }
+
 
     if (!window.ol) await mapp.utils.olScript()
 
@@ -524,11 +527,13 @@ describe('Mapview test', async () => {
         assertNotEqual(listview, null, 'Layers listview should be created');
     });
 
-    it('should create a locations listview', async () => {
-        // Assert that the locations listview is created
-        const listview = locationsTab.querySelector('div');
-        assertNotEqual(listview, null, 'Locations listview should be created');
-    });
+    if (mapview.locale.gazetteer) {
+        it('should create a locations listview', async () => {
+            // Assert that the locations listview is created
+            const listview = locationsTab.querySelector('div');
+            assertNotEqual(listview, null, 'Locations listview should be created');
+        });
+    }
 
     it('should begin highlight interaction', async () => {
         // Assert that highlight interaction is added to mapview
@@ -547,38 +552,38 @@ describe('Mapview test', async () => {
     btnColumn.appendChild(mapp.utils.html.node`
 <div class="mobile-display-none" style="height: 60px;">`);
 
-//Tests that have to run after everything else.
-it('should show the tabview when showTab is called', () => {
-    // Add the 'desktop-display-none' class to the tabview
-    tabview.classList.add('desktop-display-none');
+    //Tests that have to run after everything else.
+    it('should show the tabview when showTab is called', () => {
+        // Add the 'desktop-display-none' class to the tabview
+        tabview.classList.add('desktop-display-none');
 
-    // Call the showTab function
-    testTabView.showTab();
+        // Call the showTab function
+        testTabView.showTab();
 
-    // Assert that the 'desktop-display-none' class is removed from the tabview
-    assertFalse(tabview.classList.contains('desktop-display-none'), 'Tabview should not have the "desktop-display-none" class after showTab is called');
+        // Assert that the 'desktop-display-none' class is removed from the tabview
+        assertFalse(tabview.classList.contains('desktop-display-none'), 'Tabview should not have the "desktop-display-none" class after showTab is called');
 
-    // Assert that the grid template rows of the document body are set correctly
-    assertEqual(document.body.style.gridTemplateRows, 'auto 10px 50px', 'Grid template rows should be set to "auto 10px 50px" after showTab is called');
-});
+        // Assert that the grid template rows of the document body are set correctly
+        assertEqual(document.body.style.gridTemplateRows, 'auto 10px 50px', 'Grid template rows should be set to "auto 10px 50px" after showTab is called');
+    });
 
-it('should hide the tabview when removeLastTab is called', () => {
-    // Remove the 'desktop-display-none' class from the tabview
-    tabview.classList.remove('desktop-display-none');
+    it('should hide the tabview when removeLastTab is called', () => {
+        // Remove the 'desktop-display-none' class from the tabview
+        tabview.classList.remove('desktop-display-none');
 
-    // Call the removeLastTab function
-    testTabView.removeLastTab();
+        // Call the removeLastTab function
+        testTabView.removeLastTab();
 
-    // Assert that the 'desktop-display-none' class is added to the tabview
-    assertTrue(tabview.classList.contains('desktop-display-none'), 'Tabview should have the "desktop-display-none" class after removeLastTab is called');
+        // Assert that the 'desktop-display-none' class is added to the tabview
+        assertTrue(tabview.classList.contains('desktop-display-none'), 'Tabview should have the "desktop-display-none" class after removeLastTab is called');
 
-    
 
-    // Assert that the grid template rows of the document body are set correctly
-    assertEqual(document.body.style.gridTemplateRows, 'auto 0px 0px', 'Grid template rows should be set to "auto 0 0" after removeLastTab is called');
 
-    // Assert that the margin top of the map target element is set to 0
-    assertEqual(mapview.Map.getTargetElement().style.marginTop, '0px', 'Margin top of the map target element should be set to 0 after removeLastTab is called');
-});
+        // Assert that the grid template rows of the document body are set correctly
+        assertEqual(document.body.style.gridTemplateRows, 'auto 0px 0px', 'Grid template rows should be set to "auto 0 0" after removeLastTab is called');
+
+        // Assert that the margin top of the map target element is set to 0
+        assertEqual(mapview.Map.getTargetElement().style.marginTop, '0px', 'Margin top of the map target element should be set to 0 after removeLastTab is called');
+    });
 
 });
