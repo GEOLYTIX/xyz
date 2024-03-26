@@ -8,6 +8,8 @@ export async function layerTest(mapview) {
                 it(`Layer test : ${key}`, async () => {
                     const layer = mapview.layers[key];
 
+                    layer.show();
+
                     if (!['maplibre', 'tiles'].includes(layer.format) || layer.infoj) {
 
                         const lastLocation = await mapp.utils.xhr(`${mapp.host}/api/query?template=get_last_location&locale=${encodeURIComponent(mapview.locale.key)}&layer=${key}`);
