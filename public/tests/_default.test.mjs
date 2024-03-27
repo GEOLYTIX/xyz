@@ -1,5 +1,5 @@
 import { describe, it, assertEqual, assertNotEqual, assertTrue, assertFalse, assertThrows } from 'https://esm.sh/codi-test-framework@0.0.12';
-
+import { layerTest } from './layer.test.mjs';
 
 describe('Mapview test', async () => {
 
@@ -380,7 +380,7 @@ describe('Mapview test', async () => {
                 key: locale.key,
             })),
             callback: (e, entry) => {
-                window.location.assign(`${mapp.host}?locale=${entry.key}`);
+                window.location.assign(`${mapp.host}?template=test_view&locale=${entry.key}`);
             },
         });
 
@@ -603,5 +603,7 @@ describe('Mapview test', async () => {
         // Assert that the margin top of the map target element is set to 0
         assertEqual(mapview.Map.getTargetElement().style.marginTop, '0px', 'Margin top of the map target element should be set to 0 after removeLastTab is called');
     });
+
+    layerTest(mapview);
 
 });
