@@ -8,7 +8,7 @@ module.exports = _ => {
           SELECT
           ${_.layer.qID} as id
           FROM ${table}
-          WHERE ${geom} IS NOT NULL AND ${_.layer.qID} IS NOT NULL
+          WHERE ${geom} IS NOT NULL AND ${_.layer.qID} IS NOT NULL \${filter}
           ORDER BY ${_.layer.qID} DESC
           LIMIT 1`
 }
