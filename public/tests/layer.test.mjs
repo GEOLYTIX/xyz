@@ -26,6 +26,12 @@ export async function layerTest(mapview) {
                         //console.log(mapview.Map.getView().getZoom());
                     }
 
+                    if(layer.dataviews){
+                        for(const dataview in layer.dataview){
+                            dataview = { ...dataview, display: true}
+                        }
+                    }
+
                     layer.show();
 
                     if (!['maplibre', 'tiles'].includes(layer.format) && layer.infoj) {
