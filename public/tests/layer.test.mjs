@@ -2,11 +2,23 @@ import { describe, it, assertEqual, assertNotEqual, assertTrue, assertFalse, ass
 
 export async function layerTest(mapview) {
 
-     describe(`${mapview.host} : Layer Test`, () => {
+    const default_zoom = mapview.view.z;
+
+    describe(`${mapview.host} : Layer Test`, async () => {
         for (const key in mapview.layers) {
             if (mapview.layers.hasOwnProperty(key)) {
-                it(`Layer test : ${key}`, async () => {
+                await it(`Layer test : ${key}`, async () => {
                     const layer = mapview.layers[key];
+
+                    if (layer.tables) {
+                        const layerZoom = parseInt(Object.entries(layer.tables).find(([key, value]) => value !== null)[0]);
+                        mapview.Map.getView().setZoom(layerZoom);
+                        //console.log(mapview.Map.getView().getZoom());
+                    }
+                    else {
+                        mapview.Map.getView().setZoom(default_zoom);
+                        //console.log(mapview.Map.getView().getZoom());
+                    }
 
                     layer.show();
 
@@ -26,7 +38,9 @@ export async function layerTest(mapview) {
                         }
                     }
 
-                    layer.hide();
+                    if (!['maplibre', 'tiles'].includes(layer.format)) {
+                        layer.hide();
+                    }
                 });
             }
         }
