@@ -2,6 +2,12 @@ import { describe, it, assertEqual, assertNotEqual, assertTrue, assertFalse, ass
 
 export async function layerTest(mapview) {
 
+    function delayFunction(delay) {
+        return new Promise(resolve => {
+          setTimeout(resolve, delay);
+        });
+      }
+
     const default_zoom = mapview.view.z;
 
     describe(`${mapview.host} : Layer Test`, async () => {
@@ -29,11 +35,20 @@ export async function layerTest(mapview) {
                         assertTrue(lastLocation.id !== undefined, 'Last Location is undefined');
 
                         if (lastLocation.id) {
+
+                            layer.infoj = layer.infoj.map(entry => {
+                                if(entry.type === 'dataview'){
+                                    return { ...entry, display: true}
+                                }
+                                return entry;
+                            });
+
                             const location = await mapp.location.get({
                                 layer: layer,
                                 id: lastLocation.id,
                             });
 
+                            //await delayFunction(3000);
                             location.remove();
                         }
                     }
