@@ -20,7 +20,7 @@ module.exports = _ => {
   return `
     SELECT
       \${qID} AS id
-      ${fields && `, ${fields.join(', ')}` || ''}
+      ${fields.length && `, ${fields.join(', ')}` || ''}
       FROM \${table}
       WHERE TRUE ${where} \${filter};`
 }
