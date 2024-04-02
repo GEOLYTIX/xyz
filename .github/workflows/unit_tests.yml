@@ -20,5 +20,8 @@ jobs:
     - name: Install Dependencies
       run: npm install
 
+    - name: Install Dependencies
+      run: npm install bun -g
+
     - name: Run tests
       run: npm run test
