@@ -1,8 +1,8 @@
 import { describe, it, assertEqual } from 'codi-test-framework';
 import { check, objMerge, get } from '../../../mod/utils/roles.js';
 
-describe('Roles Module', () => {
-  describe('check()', () => {
+await describe('Roles Module', async () => {
+  await describe('check()', () => {
     it('should return the object if it has no roles', () => {
       const obj = { layer: 'I am a layer!' };
       const result = check(obj, ['user']);
@@ -46,7 +46,7 @@ describe('Roles Module', () => {
     });
   });
 
-  describe('get()', () => {
+  await describe('get()', () => {
     it('should return an array of roles from the object', () => {
       const obj = { roles: { admin: true, user: true, '!guest': true } };
       const result = get(obj);

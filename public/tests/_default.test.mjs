@@ -1,4 +1,4 @@
-import { describe, it, assertEqual, assertNotEqual, assertTrue, assertFalse, assertThrows } from 'https://esm.sh/codi-test-framework@0.0.12';
+import { describe, it, assertEqual, assertNotEqual, assertTrue, assertFalse, assertThrows } from 'https://esm.sh/codi-test-framework@0.0.15';
 import { layerTest } from './layer.test.mjs';
 
 describe('Mapview test', async () => {
