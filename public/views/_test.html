@@ -18,7 +18,7 @@
     <script type="importmap">
         {
           "imports": {
-            "codi": "https://esm.sh/codi-test-framework@0.0.23"
+            "codi": "https://esm.sh/codi-test-framework@0.0.26"
           }
         }
       </script>
@@ -314,7 +314,32 @@
         const testFiles = [`${window.location.origin}{{dir}}/public/tests/_default.test.mjs`];
 
         try {
-            await runWebTests(testFiles);
+            let results = await runWebTests(testFiles);
+            
+            const urlParams = new URLSearchParams(window.location.search);
+            const shouldDownload = urlParams.get('download') === 'true';
+
+            if (shouldDownload) {
+                const jsonString = JSON.stringify(results, null, 2);
+
+                const blob = new Blob([jsonString], { type: 'application/json' });
+
+                const url = URL.createObjectURL(blob);
+
+                const link = document.createElement('a');
+                link.href = url;
+                link.download = `${window.location.origin}{{dir}}-${Date.now()}.json`;
+
+                document.body.appendChild(link);
+
+                link.click();
+
+                document.body.removeChild(link);
+
+                URL.revokeObjectURL(url);
+            }
+
+
         } catch (error) {
             console.error('Error running tests:', error);
         }
