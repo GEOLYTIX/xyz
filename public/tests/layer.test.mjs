@@ -1,4 +1,4 @@
-import { describe, it, assertEqual, assertNotEqual, assertTrue, assertFalse, assertThrows } from 'https://esm.sh/codi-test-framework@0.0.12';
+import { describe, it, assertEqual, assertNotEqual, assertTrue, assertFalse, assertThrows } from 'https://esm.sh/codi-test-framework@0.0.26';
 
 export async function layerTest(mapview) {
 
@@ -10,7 +10,7 @@ export async function layerTest(mapview) {
 
     const default_zoom = mapview.view.z;
 
-    describe(`${mapview.host} : Layer Test`, async () => {
+    await describe(`${mapview.host} : Layer Test`, async () => {
         for (const key in mapview.layers) {
             if (mapview.layers.hasOwnProperty(key)) {
                 await it(`Layer test : ${key}`, async () => {

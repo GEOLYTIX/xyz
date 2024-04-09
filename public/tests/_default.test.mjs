@@ -1,7 +1,7 @@
-import { describe, it, assertEqual, assertNotEqual, assertTrue, assertFalse, assertThrows } from 'https://esm.sh/codi-test-framework@0.0.12';
+import { describe, it, assertEqual, assertNotEqual, assertTrue, assertFalse, assertThrows } from 'https://esm.sh/codi-test-framework@0.0.26';
 import { layerTest } from './layer.test.mjs';
 
-describe('Mapview test', async () => {
+await describe('Mapview test', async () => {
 
     console.log(`MAPP v${mapp.version}`)
     // Set Openlayers node in order to move map object.
@@ -604,6 +604,6 @@ describe('Mapview test', async () => {
         assertEqual(mapview.Map.getTargetElement().style.marginTop, '0px', 'Margin top of the map target element should be set to 0 after removeLastTab is called');
     });
 
-    layerTest(mapview);
+    await layerTest(mapview);
 
 });
