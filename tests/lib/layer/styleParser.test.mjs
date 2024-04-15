@@ -153,4 +153,21 @@ describe('styleParser', () => {
     assertEqual(layer.style.theme.graduated_breaks, 'greater_than', 'graduated_breaks should be greater_than');
     assertEqual(layer.style.theme.categories[0].value, 30, 'categories should be reversed for greater_than breaks');
   });
+
+  it('should handle deprecated layer.hover configuration', () => {
+    const layer = {
+      key: 'test-layer',
+      default: {},
+      hover: {
+        method: 'customHoverMethod',
+      },
+      style: {}
+    };
+
+    styleParser(layer);
+
+    assertEqual(layer.style.hover.method, 'customHoverMethod', 'hover configuration should be moved to layer.style.hover');
+    assertFalse(layer.hasOwnProperty('hover'), 'layer.hover should be deleted');
+  });
+
 });
