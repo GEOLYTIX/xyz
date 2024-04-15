@@ -38,9 +38,7 @@ export async function layerTest(mapview) {
 
                         const lastLocation = await mapp.utils.xhr(`${mapp.host}/api/query?template=get_last_location&locale=${encodeURIComponent(mapview.locale.key)}&layer=${key}`);
 
-                        assertTrue(lastLocation.id !== undefined, 'Last Location is undefined');
-
-                        if (lastLocation.id) {
+                        if (lastLocation?.id) {
 
                             layer.infoj = layer.infoj.map(entry => {
                                 if(entry.type === 'dataview'){
@@ -54,6 +52,7 @@ export async function layerTest(mapview) {
                                 id: lastLocation.id,
                             });
 
+                            assertTrue(location !== undefined, 'The location is undefined');
                             //await delayFunction(3000);
                             location.remove();
                         }
