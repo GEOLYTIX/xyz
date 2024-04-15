@@ -129,4 +129,28 @@ describe('styleParser', () => {
     assertEqual(layer.style.theme.graduated_breaks, 'less_than', 'graduated_breaks should default to less_than');
     assertEqual(layer.style.theme.categories, expected_categories, 'categories should remain in the original order');
   });
+
+  it('should handle graduated theme with greater_than breaks', () => {
+    const layer = {
+      key: 'test-layer',
+      style: {
+        default: {},
+        theme: {
+          type: 'graduated',
+          field: 'value',
+          graduated_breaks: 'greater_than',
+          categories: [
+            { value: 10, style: { fillColor: 'red' } },
+            { value: 20, style: { fillColor: 'green' } },
+            { value: 30, style: { fillColor: 'blue' } },
+          ],
+        },
+      },
+    };
+
+    styleParser(layer);
+
+    assertEqual(layer.style.theme.graduated_breaks, 'greater_than', 'graduated_breaks should be greater_than');
+    assertEqual(layer.style.theme.categories[0].value, 30, 'categories should be reversed for greater_than breaks');
+  });
 });
