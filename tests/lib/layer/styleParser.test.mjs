@@ -44,7 +44,7 @@ describe('styleParser', () => {
     const layer = {
       key: 'test-layer',
       style: {
-        default:{},
+        default: {},
         themes: {
           theme1: {
             title: 'Theme 1',
@@ -66,7 +66,7 @@ describe('styleParser', () => {
     const layer = {
       key: 'test-layer',
       style: {
-      default: {},
+        default: {},
         hovers: {
           hover1: {
             method: 'customHoverMethod',
@@ -84,7 +84,7 @@ describe('styleParser', () => {
     const layer = {
       key: 'test-layer',
       style: {
-      default:{},
+        default: {},
         labels: {
           label1: {
             field: 'label1Field',
@@ -99,5 +99,34 @@ describe('styleParser', () => {
     styleParser(layer);
 
     assertEqual(layer.style.label.field, 'label1Field', 'selected label should match the specified label');
+  });
+
+  it('should handle graduated theme with less_than breaks by default', () => {
+    const layer = {
+      key: 'test-layer',
+      style: {
+        default: {},
+        theme: {
+          type: 'graduated',
+          field: 'value',
+          categories: [
+            { value: 10, style: { fillColor: 'red' } },
+            { value: 20, style: { fillColor: 'green' } },
+            { value: 30, style: { fillColor: 'blue' } },
+          ],
+        },
+      },
+    };
+
+    const expected_categories = [
+      { value: 10, style: { fillColor: "red" }, label: 10 }, 
+      { value: 20, style: { fillColor: "green" }, label: 20 },
+      { value: 30, style: { fillColor: "blue" }, label: 30 }
+    ];
+
+    styleParser(layer);
+
+    assertEqual(layer.style.theme.graduated_breaks, 'less_than', 'graduated_breaks should default to less_than');
+    assertEqual(layer.style.theme.categories, expected_categories, 'categories should remain in the original order');
   });
 });
