@@ -170,4 +170,25 @@ describe('styleParser', () => {
     assertFalse(layer.hasOwnProperty('hover'), 'layer.hover should be deleted');
   });
 
+  it('should handle deprecated layer.style.hover and layer.style.hovers', () => {
+    const layer = {
+      key: 'test-layer',
+      style: {
+        default: {},
+        hover: {
+          method: 'customHoverMethod',
+        },
+        hovers: {
+          hover1: {},
+          hover2: {},
+        },
+      },
+    };
+
+    styleParser(layer);
+
+    assertFalse(layer.style.hasOwnProperty('hover'), 'layer.style.hover should be deleted');
+    assertTrue(layer.style.hasOwnProperty('hovers'), 'layer.style.hovers should be preserved');
+  });
+
 });
