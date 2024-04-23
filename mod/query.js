@@ -154,6 +154,14 @@ module.exports = async (req, res) => {
     // Reserved params may not be substituted.
     const reserved = new Set(['viewport', 'filter'])
 
+    // Returns -1 if ${filter} not found in template
+    if (template.template.search(/\$\{filter\}/)<0) {
+
+      // Ensure that the $n substitute params match the SQL length on layer queries without a ${filter}
+      delete req.params.filter
+      req.params.SQL = []
+    }
+
     query = template.template
 
       // Replace parameter for identifiers, e.g. table, schema, columns
