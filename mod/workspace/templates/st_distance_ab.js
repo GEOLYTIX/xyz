@@ -1,13 +1,15 @@
 module.exports = `
-
 SELECT 
-    b.\${field_b} AS \${as},
-    ST_DISTANCE(a.\${geom_a}, b.\${geom_b}) AS dist
-    
+    ST_DISTANCE(st_transform(a.\${geom},4326)::geography, closest.geom ) AS dist
 FROM 
-    \${table_a} a, 
-    \${table_b} b 
-
-WHERE a.\${id_a} = %{id} 
-ORDER BY dist 
-LIMIT 1`
+    \${table} a
+LEFT JOIN LATERAL (
+    SELECT
+        st_transform(b.\${geom_b},4326)::geography as geom
+    FROM \${table_b} b 
+    ORDER BY st_transform(b.\${geom_b},4326)::geography <-> st_transform(a.\${geom},4326)::geography
+    LIMIT 1
+) closest
+on true
+WHERE a.\${qID} = %{id}
+`

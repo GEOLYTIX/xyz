@@ -1,12 +1,10 @@
 module.exports = `
-
 SELECT 
     b.\${field_b} AS \${as} 
-
 FROM
-    \${table_a} a,
+    \${table} a
+LEFT JOIN
     \${table_b} b
-
-WHERE
-    ST_INTERSECTS(a.\${geom_a}, b.\${geom_b})
-    AND a.\${id_a} = %{id}`
+ON ST_INTERSECTS(a.\${geom}, b.\${geom_b})
+WHERE a.\${qID} = %{id}
+`
