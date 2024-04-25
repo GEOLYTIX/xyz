@@ -568,6 +568,15 @@
         ${mapp.dictionary.no_locales}`)
   }
 
+  let userLocale = await mapp.utils.userIndexedDB.get('locales', locale.key)
+
+  console.log(userLocale)
+
+  if (!userLocale) {
+    let userLocaleKey = await mapp.utils.userIndexedDB.add('locales', locale)
+    console.log(userLocaleKey)
+  }
+
   // Add locale dropdown to layers panel if multiple locales are accessible.
   if (locales.length > 1) {
     const localesDropdown = mapp.ui.elements.dropdown({
