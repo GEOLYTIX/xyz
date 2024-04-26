@@ -558,7 +558,7 @@
   const locales = await mapp.utils.xhr(`${mapp.host}/api/workspace/locales`);
 
   // Get locale with list of layers from Workspace API.
-  const locale = await mapp.utils.xhr(
+  let locale = await mapp.utils.xhr(
     `${mapp.host}/api/workspace/locale?locale=${mapp.hooks.current.locale || locales[0]?.key}&layers=true`);
 
   if (locale instanceof Error) {
@@ -568,15 +568,17 @@
         ${mapp.dictionary.no_locales}`)
   }
 
-  let userLocale = await mapp.utils.userIndexedDB.get('locales', locale.key)
+  if (mapp.hooks.current.useridb) {
 
-  console.log(userLocale)
+    let userLocale = await mapp.utils.userIndexedDB.get('locales', locale.key)
 
-  if (!userLocale) {
-    let userLocaleKey = await mapp.utils.userIndexedDB.add('locales', locale)
-    console.log(userLocaleKey)
+    if (!userLocale) {
+      await mapp.utils.userIndexedDB.add('locales', locale)
+    } else {
+      locale = userLocale
+    }
   }
-
+ 
   // Add locale dropdown to layers panel if multiple locales are accessible.
   if (locales.length > 1) {
     const localesDropdown = mapp.ui.elements.dropdown({
