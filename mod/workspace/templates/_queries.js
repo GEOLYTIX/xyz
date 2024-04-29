@@ -45,6 +45,15 @@ module.exports = {
   layer_extent: {
     template: require('./layer_extent'),
   },
+  st_intersects_ab: {
+    template: require('./st_intersects_ab'),
+  },
+  st_distance_ab: {
+    template: require('./st_distance_ab'),
+  },  
+  st_distance_ab_multiple: {
+    template: require('./st_distance_ab_multiple'),
+  },  
   location_get: {
     render: require('./location_get'),
   },
