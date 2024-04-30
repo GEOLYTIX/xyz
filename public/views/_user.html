@@ -483,7 +483,7 @@
 
       if (JSON.stringify(e._cell.value) === JSON.stringify(e._cell.oldValue)) return;
 
-      xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${e._cell.row.data.email}&field=roles&value=${e._cell.value}`)
+      xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${e._cell.row.data.email}&field=roles&value=${encodeURIComponent(e._cell.value)}`)
     }
   }
 
