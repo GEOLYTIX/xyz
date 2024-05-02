@@ -68,10 +68,16 @@ module.exports = async (params) => {
     // Merge the workspace template into the layer.
     layer = merge(layer, template)
   }
+
   // Subtitutes ${*} with process.env.SRC_* key values.
   layer = JSON.parse(
     JSON.stringify(layer).replace(/\$\{(.*?)\}/g,
-      matched => process.env[`SRC_${matched.replace(/(^\${)|(}$)/g, '')}`])
+      matched => {
+        const SRC_x = `SRC_${matched.replace(/(^\${)|(}$)/g, '')}`
+        return Object.hasOwn(process.env, SRC_x)
+          ? process.env[SRC_x]
+          : matched
+      })
   )
   
   // Assign layer key as name with no existing name on layer object.
