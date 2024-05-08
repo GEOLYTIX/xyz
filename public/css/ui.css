@@ -1113,7 +1113,7 @@ label.checkbox {
       padding: 5px;
     }
     & > li:hover {
-      background-color: var(--color-light);
+      background-color: var(--color-primary-light);
       cursor: pointer;
     }
     & > li.selected {
