@@ -67,6 +67,9 @@ module.exports = {
   location_update: {
     render: require('./location_update'),
   },
+  location_update_json: {
+    render: require('./location_update_json'),
+  },
   mvt: {
     render: require('./mvt'),
     value_only: true
