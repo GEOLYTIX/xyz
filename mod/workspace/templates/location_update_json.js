@@ -4,7 +4,7 @@ module.exports = _ => {
 
     let body = _.body[field]
 
-    values = []
+    let values = []
 
     Object.keys(body).forEach( key => {
         if(typeof body[key] !== 'string'){
