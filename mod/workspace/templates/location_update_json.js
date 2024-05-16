@@ -1,7 +1,5 @@
 module.exports = _ => {
 
-    console.log(_.body)
-
     let updateBody = {}
     Object.keys(_.body).forEach(field => {
         let values = []
