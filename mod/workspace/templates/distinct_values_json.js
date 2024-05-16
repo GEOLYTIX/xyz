@@ -1,10 +1,10 @@
 module.exports =
     `SELECT DISTINCT distinct_field 
     FROM (
-           SELECT \${field} ->> \${key} as distinct_field 
+           SELECT \${field} ->> '\${key}' as distinct_field 
            FROM \${table} 
            WHERE true \${filter}
-         ) 
+         ) values
    ORDER BY distinct_field;`
 
   
