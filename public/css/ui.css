@@ -1580,6 +1580,23 @@ label.checkbox {
   text-wrap: wrap;
   font-size: large;
 }
+.pill-container {
+  display: flex;
+  gap: 4px;
+  flex-flow: row wrap;
+  padding: 0.5em 0;
+}
+.pill-container div {
+  cursor: pointer;
+  padding: 1px 1px 1px 2px;
+  border-radius: 2px;
+  font-size: 0.9em;
+  font-weight: bold;
+}
+.pill-container div button {
+  font-size: 0.8em;
+  padding: 0 2px;
+}
 .mask-icon {
   background-color: var(--color-primary-light);
   &.on {
