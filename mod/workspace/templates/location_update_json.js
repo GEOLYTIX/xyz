@@ -1,22 +1,32 @@
 module.exports = _ => {
 
-    let field = Object.keys(_.body)[0]
+    console.log(_.body)
 
-    let body = _.body[field]
+    let updateBody = {}
+    Object.keys(_.body).forEach(field => {
+        let values = []
 
-    let values = []
+        Object.keys(_.body[field]).forEach( key => {
+            if(typeof _.body[field][key] !== 'string'){
+                values.push(`"${key}":${_.body[field][key]}`)
+            }
+            else{
+                values.push(`"${key}":"${_.body[field][key]}"`)
+            }
+        })
 
-    Object.keys(body).forEach( key => {
-        if(typeof body[key] !== 'string'){
-            values.push(body[key])
-        }
-        else{
-            values.push(`"${body[key]}"`)
-        }
+        updateBody[field] = `(${field}::jsonb || '{${values.join(',')}}'::jsonb)::json`
     })
+
+    if(Object.keys(updateBody).length === 1){
+        return `
+            UPDATE ${_.table}
+            SET ${Object.keys(updateBody).join(',')} = ${Object.values(updateBody).join(',')}
+            WHERE ${_.layer.qID} = %{id};`    
+    }
 
     return `
             UPDATE ${_.table}
-            SET ${field} = jsonb_set(${field}::jsonb ,'{${Object.keys(body)}}'::text[],[${values.join(',')}]::jsonb)::json
+            SET (${Object.keys(updateBody).join(',')}) = (${Object.values(updateBody).join(',')}) 
             WHERE ${_.layer.qID} = %{id};`
 }
