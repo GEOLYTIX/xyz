@@ -1586,14 +1586,16 @@ label.checkbox {
   flex-flow: row wrap;
   padding: 0.5em 0;
 }
-.pill-container div {
+.pill-container .pill {
   cursor: pointer;
   padding: 1px 1px 1px 2px;
   border-radius: 2px;
   font-size: 0.9em;
   font-weight: bold;
+  color: var(--color-light);
+  background-color: var(--color-primary);
 }
-.pill-container div button {
+.pill-container .pill button {
   font-size: 0.8em;
   padding: 0 2px;
 }
