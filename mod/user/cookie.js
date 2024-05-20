@@ -10,6 +10,8 @@ const acl = require('./acl')
 
 module.exports = async (req, res) => {
 
+  if (!acl) return res.status(500).send('ACL unavailable.')
+
   const cookie = req.cookies && req.cookies[process.env.TITLE]
 
   if (!cookie) {

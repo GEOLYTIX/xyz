@@ -24,6 +24,18 @@ const jwt = require('jsonwebtoken')
 
 module.exports = async (req, res) => {
 
+  if (!acl) return res.status(500).send('ACL unavailable.')
+
+  if (!req.params.email) {
+
+    return res.status(500).send('Missing email param')
+  }
+
+  if (!req.params.user) {
+
+    return new Error('login_required')
+  }
+
   // Get user from ACL.
   let rows = await acl(`
     SELECT * FROM acl_schema.acl_table

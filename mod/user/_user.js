@@ -4,81 +4,35 @@
 
 const reqHost = require('../utils/reqHost')
 
-const view = require('../view')
-
 const methods = {
-  admin: {
-    handler: (req, res) => {
-      req.params.template = 'user_admin_view'
-      req.params.language = req.params.user.language
-      req.params.user = req.params.user.email
-      view(req, res)
-    },
-    admin: true
-  },
-  register: {
-    handler: require('./register')
-  },
-  verify: {
-    handler: require('./verify')
-  },
-  add: {
-    handler: require('./add'),
-    admin: true
-  },
-  delete: {
-    handler: require('./delete'),
-    admin: true
-  },
-  update: {
-    handler: require('./update'),
-    admin: true
-  },
-  list: {
-    handler: require('./list'),
-    admin: true
-  },
-  log: {
-    handler: require('./log'),
-    admin: true
-  },
-  key: {
-    handler: require('./key'),
-    login: true
-  },
-  token: {
-    handler: require('./token'),
-    login: true
-  },
-  cookie: {
-    handler: require('./cookie')
-  },
-  login: {
-    handler: require('./login')
-  }
+  admin: require('./admin'),
+  register: require('./register'),
+  verify: require('./verify'),
+  add: require('./add'),
+  delete: require('./delete'),
+  update: require('./update'),
+  list: require('./list'),
+  log: require('./log'),
+  key: require('./key'),
+  token: require('./token'),
+  cookie: require('./cookie'),
+  login: require('./login')
 }
 
 module.exports = async (req, res) => {
 
-  const method = methods[req.params.method]
+  if (!Object.hasOwn(methods, req.params.method)) {
 
-  if (!method) {
     return res.send(`Failed to evaluate 'method' param.`)
   }
 
   req.params.host = reqHost(req)
 
-  if (!req.params.user && (method.login || method.admin)) {
+  const method = await methods[req.params.method](req, res)
 
-    req.params.msg = 'login_required'
-    return methods.login.handler(req, res)
+  if (method instanceof Error) {
+
+    req.params.msg = method.message
+    methods.login(req, res)
   }
-
-  if (req.params.user && (!req.params.user.admin && method.admin)) {
-
-    req.params.msg = 'admin_required'
-    return methods.login.handler(req, res)
-  }
-
-  method.handler(req, res)
 }

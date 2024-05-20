@@ -13,6 +13,16 @@ module.exports = async (req, res) => {
     return res.status(500).send('Missing email param')
   }
 
+  if (!req.params.user) {
+
+    return new Error('login_required')
+  }
+
+  if (!req.params.user?.admin) {
+
+    return new Error('admin_required')
+  }
+
   const email = req.params.email.replace(/\s+/g, '')
 
   // Delete exsiting user account with same email in ACL.

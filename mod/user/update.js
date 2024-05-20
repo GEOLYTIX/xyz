@@ -10,6 +10,18 @@ const languageTemplates = require('../utils/languageTemplates')
 
 module.exports = async (req, res) => {
 
+  if (!acl) return res.status(500).send('ACL unavailable.')
+
+  if (!req.params.user) {
+
+    return new Error('login_required')
+  }
+
+  if (!req.params.user?.admin) {
+
+    return new Error('admin_required')
+  }
+
   // Remove spaces from email.
   const email = req.params.email.replace(/\s+/g, '')
 

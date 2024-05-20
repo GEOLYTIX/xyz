@@ -17,40 +17,34 @@ const acl = require('./acl')
  */
 module.exports = async (req, res) => {
 
-  /**
-  @typedef {Object} acl
-  @property {string} email
-  @property {bool} verified
-  @property {bool} approved
-  @property {bool} admin
-  @property {bool} api
-  @property {array} roles
-  @property {string} language
-  @property {array} access_log
-  @property {int} failedattempts
-  @property {string} approved_by
-  @property {string} expires_on
-  @property {bool} blocked
-  @property {string} verificationtoken
-  */
+  if (!req.params.user) {
+
+    return new Error('login_required')
+  }
+
+  if (!req.params.user?.admin) {
+
+    return new Error('admin_required')
+  }
+
   let rows = await acl(`
-  SELECT
-    email,
-    verified,
-    approved,
-    admin,
-    length(api)::boolean AS api,
-    roles,
-    language,
-    access_log[array_upper(access_log, 1)],
-    failedattempts,
-    approved_by,
-    ${process.env.APPROVAL_EXPIRY ? 'expires_on,' : ''}
-    blocked,
-    verificationtoken
-  FROM acl_schema.acl_table
-  ${req.params.email ? `WHERE email='${req.params.email}'`: ''}
-  ORDER BY email;`)
+    SELECT
+      email,
+      verified,
+      approved,
+      admin,
+      length(api)::boolean AS api,
+      roles,
+      language,
+      access_log[array_upper(access_log, 1)],
+      failedattempts,
+      approved_by,
+      ${process.env.APPROVAL_EXPIRY ? 'expires_on,' : ''}
+      blocked,
+      verificationtoken
+    FROM acl_schema.acl_table
+    ${req.params.email ? `WHERE email='${req.params.email}'`: ''}
+    ORDER BY email;`)
 
   if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
 
