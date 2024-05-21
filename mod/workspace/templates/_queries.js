@@ -12,6 +12,9 @@ module.exports = {
   distinct_values: {
     template: require('./distinct_values'),
   },
+  distinct_values_json: {
+    template: require('./distinct_values_json'),
+  },
   field_stats: {
     template: require('./field_stats'),
   },
