@@ -53,10 +53,13 @@ module.exports = {
   },
   st_distance_ab: {
     template: require('./st_distance_ab'),
-  },  
+  },
   st_distance_ab_multiple: {
     template: require('./st_distance_ab_multiple'),
-  },  
+  },
+  st_count_intersects: {
+    template: require('./st_count_intersects'),
+  },
   location_get: {
     render: require('./location_get'),
   },
