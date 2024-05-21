@@ -29,9 +29,13 @@ module.exports = _ => {
 
         const jsonb_field = Object.keys(jsonb)[0]
 
-        const jsonb_entry = Object.entries(jsonb[jsonb_field])[0]
+        let updateObject = []
+        for(let key of Object.keys(jsonb[jsonb_field])){
+          let value = typeof jsonb[jsonb_field][key] === 'string' ? `"${jsonb[jsonb_field][key]}"`: jsonb[jsonb_field][key]
+          updateObject.push(`"${key}":${value}`)
+        }
 
-        return `${jsonb_field} = coalesce(json_field::jsonb,'{}'::jsonb)::jsonb || '{"${jsonb_entry[0]}":${jsonb_entry[1]}}'::jsonb`
+        return `${jsonb_field} = coalesce(json_field::jsonb,'{}'::jsonb)::jsonb || '{${updateObject.join(',')}}'::jsonb`
 
       } else {
 
