@@ -23,7 +23,20 @@ module.exports = _ => {
     // Value is an object and must be stringified.
     if (typeof _.body[key] === 'object' && !Array.isArray(_.body[key])) {
 
-      _[key] = JSON.stringify(_.body[key])
+      if (_.body[key]['jsonb']) {
+
+        const jsonb = _.body[key]['jsonb']
+
+        const jsonb_field = Object.keys(jsonb)[0]
+
+        const jsonb_entry = Object.entries(jsonb[jsonb_field])[0]
+
+        return `${jsonb_field} = coalesce(json_field::jsonb,'{}'::jsonb)::jsonb || '{"${jsonb_entry[0]}":${jsonb_entry[1]}}'::jsonb`
+
+      } else {
+
+        _[key] = JSON.stringify(_.body[key])
+      }      
     }
 
     // Value is an array (of strings)
