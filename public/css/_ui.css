@@ -124,6 +124,7 @@
   font-weight: bold;
   color: var(--color-light);
   background-color: var(--color-primary);
+  user-select: none;
 }
 
 .pill-container .pill button {
