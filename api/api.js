@@ -18,11 +18,11 @@ const routes = {
   workspace: require('../mod/workspace/_workspace'),
 }
 
-process.env.COOKIE_TTL = process.env.COOKIE_TTL || 36000
+process.env.COOKIE_TTL ??= 36000
 
-process.env.TITLE = process.env.TITLE || 'GEOLYTIX | XYZ'
+process.env.TITLE ??= 'GEOLYTIX | XYZ'
 
-process.env.DIR = process.env.DIR || ''
+process.env.DIR ??= ''
 
 module.exports = async (req, res) => {
 

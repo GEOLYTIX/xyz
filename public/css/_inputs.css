@@ -6,6 +6,10 @@ input {
   }
 }
 
+input.invalid {
+  opacity: 0.5
+}
+
 input::placeholder {
   text-align: left;
 }
