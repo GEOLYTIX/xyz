@@ -1,16 +1,17 @@
 module.exports = _ => {
 
+  // The location ID must not be altered.
+  if (Object.keys(_.body).some(key => key === _.layer.qID)) {
+
+    throw new Error('You cannot update the id field as it is a reserved parameter.')
+  }
+
   const fields = Object.keys(_.body).map(key => {
 
     // Value is null
     if (_.body[key] === null) {
 
       return `${key} = null`
-    }
-
-    // Key is id. Throw error.
-    if (key === 'id') {
-      throw new Error('You cannot update the id field as it is a reserved parameter.')
     }
 
     // Value is string. Escape quotes.
@@ -59,7 +60,7 @@ module.exports = _ => {
 
     return `${key} = %{${key}}`
   })
-  console.log(`UPDATE ${_.table} SET ${fields.join()} WHERE ${_.layer.qID} = %{id};`)
+
   return `
     UPDATE ${_.table}
     SET ${fields.join()}
