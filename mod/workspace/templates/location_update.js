@@ -8,6 +8,11 @@ module.exports = _ => {
       return `${key} = null`
     }
 
+    // Key is id. Throw error.
+    if (key === 'id') {
+      throw new Error('You cannot update the id field as it is a reserved parameter.')
+    }
+
     // Value is string. Escape quotes.
     if (typeof _.body[key] === 'string') {
 
@@ -22,7 +27,7 @@ module.exports = _ => {
 
     // Value is an object and must be stringified.
     if (typeof _.body[key] === 'object' && !Array.isArray(_.body[key])) {
-      
+
       _[key] = JSON.stringify(_.body[key])
       if (_.body[key]['jsonb']) {
 
@@ -31,13 +36,13 @@ module.exports = _ => {
         const jsonb_field = Object.keys(jsonb)[0]
 
         let updateObject = []
-        Object.keys(jsonb[jsonb_field]).forEach( key => {
-          let value = typeof jsonb[jsonb_field][key] === 'string' ? `"${jsonb[jsonb_field][key]}"`: jsonb[jsonb_field][key]
+        Object.keys(jsonb[jsonb_field]).forEach(key => {
+          let value = typeof jsonb[jsonb_field][key] === 'string' ? `"${jsonb[jsonb_field][key]}"` : jsonb[jsonb_field][key]
           updateObject.push(`"${key}":${value}`)
         })
 
         return `${jsonb_field} = coalesce(json_field::jsonb,'{}'::jsonb)::jsonb || '{${updateObject.join(',')}}'::jsonb`
-      }      
+      }
     }
 
     // Value is an array (of strings)
@@ -54,7 +59,7 @@ module.exports = _ => {
 
     return `${key} = %{${key}}`
   })
-
+  console.log(`UPDATE ${_.table} SET ${fields.join()} WHERE ${_.layer.qID} = %{id};`)
   return `
     UPDATE ${_.table}
     SET ${fields.join()}
