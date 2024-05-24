@@ -3,7 +3,7 @@ module.exports = _ => {
   // The location ID must not be altered.
   if (Object.keys(_.body).some(key => key === _.layer.qID)) {
 
-    throw new Error('You cannot update the id field as it is a reserved parameter.')
+    throw new Error(`Layer ${_.layer}: You cannot update the ${key} field as it is a reserved parameter.`)
   }
 
   const fields = Object.keys(_.body).map(key => {
