@@ -102,5 +102,42 @@ await describe('Roles Module', async () => {
       const expected = [{ foo: 'afoo' }, { bar: 'abar' }, [{ foo: 'afoo' }]];
       assertEqual(objMerge(obj, user_roles), expected);
     });
+
+    it('should merge unequal arrays for multiple roles', () => {
+      const obj = { layer: {name: 'Test Me'} };
+      const roles = {
+        foo: {
+          filter:{
+            current: {
+              "country": {
+                "in": ["ROI"]
+              }
+            }
+          
+          }
+        },
+        bar: {
+          filter:{
+            current: {
+              "country": {
+                "in": ["UK"]
+              }
+            }
+          }
+        }
+      };
+      const expected = {
+        layer: {name: 'Test Me', 
+          filter:{
+            current: {
+              "country": {
+                "in": ["ROI", "UK"]
+              }
+            }
+          }
+        }
+      };
+      assertEqual(objMerge(obj, roles), expected);
+    });
   });
 });
