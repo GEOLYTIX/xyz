@@ -104,29 +104,35 @@ await describe('Roles Module', async () => {
     });
 
     it('should merge unequal arrays for multiple roles', () => {
-      const obj = { layer: { name: 'Test Me' } };
-      const user_roles = [{
-        foo: {
-          filter: {
-            current: {
-              "country": {
-                "in": ["ROI"]
-              }
-            }
+      const obj = {
+        layer: {
+          name: 'Test Me',
+          roles: {
+            foo: {
+              filter: {
+                current: {
+                  "country": {
+                    "in": ["ROI"]
+                  }
+                }
 
-          }
-        },
-        bar: {
-          filter: {
-            current: {
-              "country": {
-                "in": ["UK"]
+              }
+            },
+            bar: {
+              filter: {
+                current: {
+                  "country": {
+                    "in": ["UK"]
+                  }
+                }
               }
             }
           }
         }
-      }
-      ];
+      };
+      
+      const user_roles = ["foo", "bar"];
+    
       const expected = {
         layer: {
           name: 'Test Me',
