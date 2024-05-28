@@ -11,6 +11,7 @@
   --color-mid: #e3e3e3;
   --color-on: #E18335;
   --color-no: #A21309;
+  --color-changed: #ffffa7;
 }
 
 /* public/css/_button.css */
@@ -1640,5 +1641,5 @@ label.checkbox {
   color: var(--color-no);
 }
 .val-changed input {
-  background-color: #ffffa7;
+  background-color: var(--color-changed);
 }

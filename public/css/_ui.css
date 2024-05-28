@@ -177,6 +177,6 @@
   color: var(--color-no);
 }
 
-.val-changed input  { 
-  background-color: #ffffa7;
+.val-changed input {
+  background-color: var(--color-changed)
 }
