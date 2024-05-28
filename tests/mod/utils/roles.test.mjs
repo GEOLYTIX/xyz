@@ -104,20 +104,20 @@ await describe('Roles Module', async () => {
     });
 
     it('should merge unequal arrays for multiple roles', () => {
-      const obj = { layer: {name: 'Test Me'} };
-      const roles = {
+      const obj = { layer: { name: 'Test Me' } };
+      const user_roles = [{
         foo: {
-          filter:{
+          filter: {
             current: {
               "country": {
                 "in": ["ROI"]
               }
             }
-          
+
           }
         },
         bar: {
-          filter:{
+          filter: {
             current: {
               "country": {
                 "in": ["UK"]
@@ -125,10 +125,12 @@ await describe('Roles Module', async () => {
             }
           }
         }
-      };
+      }
+      ];
       const expected = {
-        layer: {name: 'Test Me', 
-          filter:{
+        layer: {
+          name: 'Test Me',
+          filter: {
             current: {
               "country": {
                 "in": ["ROI", "UK"]
@@ -137,7 +139,7 @@ await describe('Roles Module', async () => {
           }
         }
       };
-      assertEqual(objMerge(obj, roles), expected);
+      assertEqual(objMerge(obj, user_roles), expected);
     });
   });
 });
