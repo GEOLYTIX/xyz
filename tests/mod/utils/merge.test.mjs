@@ -97,7 +97,7 @@ describe('mergeDeep Module', () => {
         const expected = {
             current: {
                 "country": {
-                    "in": ["UK", "ROI"]
+                    "in": ["ROI","UK"]
                 }
             }
         };
