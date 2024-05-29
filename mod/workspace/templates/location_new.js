@@ -4,9 +4,9 @@ module.exports = _ => {
   const selects = []
 
   // The location ID must not be altered.
-  if (Object.keys(_.body).some(key => key === _.layer.qID)) {
+  if (Object.keys(_.body).some(key => key === _.layer.qID || key === 'id')) {
 
-    throw new Error(`Layer ${_.layer}: You cannot update the ${_.layer.qID} field as it is a reserved parameter.`)
+    throw new Error(`Layer ${_.layer}: You cannot update the ${_.layer.qID} or ID field as it is a reserved parameter.`)
   }
 
   // keys array for insert statement
