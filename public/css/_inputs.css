@@ -226,7 +226,10 @@ label.checkbox {
 
     &>.head>.icon {
       content: url("../icons/icon-drop-up.svg");
-    }
+    }  
+  }
+  &.dropdown-reverse > ul {
+    bottom: 30px;
   }
 }
 

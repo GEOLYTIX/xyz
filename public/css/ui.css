@@ -1143,6 +1143,9 @@ label.checkbox {
       content: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">%0D%0A<path d="M7 14l5-5 5 5z"/>%0D%0A</svg>');
     }
   }
+  &.dropdown-reverse > ul {
+    bottom: 30px;
+  }
 }
 @media print {
   .dropdown {
