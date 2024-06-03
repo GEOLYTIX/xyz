@@ -112,26 +112,26 @@ export async function layerTest(mapview) {
                                     layer.reload();
 
                                     // Get the newly created location.
-                                    const newLoc = await mapp.location.get(newLocation);
-
-                                    // If layer.deleteLocation is defined, delete the location
-                                    if (layer.deleteLocation) {
-
-                                        await it('Delete the location', async () => {
-                                            // Test deleting a location
-                                            await mapp.utils.xhr(`${mapp.host}/api/query?` +
-                                                mapp.utils.paramString({
-                                                    template: 'location_delete',
-                                                    locale: mapview.locale.key,
-                                                    layer: newLocation.layer.key,
-                                                    table: newLocation.table,
-                                                    id: newLocation.id
-                                                }));
-
-                                            newLoc.remove();
-                                        });
-                                    }
+                                    await mapp.location.get(newLocation);
                                 });
+
+                                // If layer.deleteLocation is defined, delete the location
+                                if (layer.deleteLocation === true) {
+
+                                    await it('Delete the location', async () => {
+                                        // Test deleting a location
+                                        await mapp.utils.xhr(`${mapp.host}/api/query?` +
+                                            mapp.utils.paramString({
+                                                template: 'location_delete',
+                                                locale: mapview.locale.key,
+                                                layer: newLocation.layer.key,
+                                                table: newLocation.table,
+                                                id: newLocation.id
+                                            }));
+
+                                        newLoc.remove();
+                                    });
+                                }
                             }
 
                             location.remove();
