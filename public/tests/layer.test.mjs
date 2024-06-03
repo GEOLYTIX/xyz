@@ -76,8 +76,12 @@ export async function layerTest(mapview) {
 
                                     if (layer?.draw?.point) {
                                         geometry = pin.geometry;
-                                    } else {
+                                    } else if (layer?.draw?.polygon || layer?.draw?.line || layer?.draw?.rectangle || layer?.draw?.circle) {
                                         geometry = polygon.geometry;
+                                    } else {
+                                        // We don't want to test this layer as it doesn't have a core draw object method
+                                        // If may have plugin draw methods but we can't test those
+                                        return;
                                     }
 
                                     // Create a new location
