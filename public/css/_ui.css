@@ -117,16 +117,18 @@
 }
 
 .pill-container .pill {
-  cursor: pointer;
+  cursor: default;
   padding: 1px 1px 1px 2px;
   border-radius: 2px;
   font-size: 0.9em;
   font-weight: bold;
   color: var(--color-light);
   background-color: var(--color-primary);
+  user-select: none;
 }
 
 .pill-container .pill button {
+  cursor: pointer;
   font-size: 0.8em;
   padding: 0 2px;
 }
@@ -173,4 +175,8 @@
 
 .no-colour {
   color: var(--color-no);
+}
+
+.val-changed input {
+  background-color: var(--color-changed)
 }
