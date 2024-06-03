@@ -14,6 +14,9 @@ const getTemplate = require('./getTemplate')
 
 module.exports = async (params) => {
 
+  // Set locale as default
+  params.locale ??= 'locale'
+
   const workspace = await workspaceCache()
 
   if (workspace instanceof Error) {
