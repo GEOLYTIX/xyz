@@ -62,6 +62,13 @@ export async function layerTest(mapview) {
 
                             assertTrue(location !== undefined, 'The location is undefined');
 
+                            // Create a new location
+                            const newLocation = {
+                                layer,
+                                table: layer.tableCurrent(),
+                                new: true
+                            };
+
                             // Add a new location to the layer using the last location
                             if (layer?.draw) {
                                 await it('Add a new location to the layer using the last location coordinates', async () => {
@@ -84,13 +91,6 @@ export async function layerTest(mapview) {
                                         return;
                                     }
 
-                                    // Create a new location
-                                    const newLocation = {
-                                        layer,
-                                        table: layer.tableCurrent(),
-                                        new: true
-                                    };
-
                                     newLocation.id = await mapp.utils.xhr({
                                         method: "POST",
                                         url: `${mapp.host}/api/query?` +
@@ -112,7 +112,10 @@ export async function layerTest(mapview) {
                                     layer.reload();
 
                                     // Get the newly created location.
-                                    await mapp.location.get(newLocation);
+                                    const newLoc = await mapp.location.get(newLocation);
+
+                                    // Remove the location
+                                    newLoc.remove();
                                 });
 
                                 // If layer.deleteLocation is defined, delete the location
@@ -128,8 +131,6 @@ export async function layerTest(mapview) {
                                                 table: newLocation.table,
                                                 id: newLocation.id
                                             }));
-
-                                        newLoc.remove();
                                     });
                                 }
                             }
