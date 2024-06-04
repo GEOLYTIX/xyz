@@ -1,5 +1,22 @@
 /**
-@module /user
+## /mod/user/_user
+
+The _user module exports the user method to route User API requests.
+
+- admin
+- register
+- verify
+- add
+- delete
+- update
+- list
+- log
+- key
+- token
+- cookie
+- login
+
+@module /mod/user/_user
 */
 
 const reqHost = require('../utils/reqHost')
@@ -19,7 +36,7 @@ const methods = {
   login: require('./login')
 }
 
-module.exports = async (req, res) => {
+module.exports = async function user(req, res) {
 
   if (!Object.hasOwn(methods, req.params.method)) {
 
