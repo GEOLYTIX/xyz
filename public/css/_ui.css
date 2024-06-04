@@ -176,3 +176,7 @@
 .no-colour {
   color: var(--color-no);
 }
+
+.val-changed input {
+  background-color: var(--color-changed)
+}
