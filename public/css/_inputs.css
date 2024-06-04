@@ -6,6 +6,10 @@ input {
   }
 }
 
+input.invalid {
+  opacity: 0.5
+}
+
 input::placeholder {
   text-align: left;
 }
@@ -222,7 +226,10 @@ label.checkbox {
 
     &>.head>.icon {
       content: url("../icons/icon-drop-up.svg");
-    }
+    }  
+  }
+  &.dropdown-reverse > ul {
+    bottom: 30px;
   }
 }
 

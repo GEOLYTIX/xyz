@@ -34,6 +34,16 @@ export async function layerTest(mapview) {
 
                     layer.show();
 
+                    // Turn on every theme on the layer to test if they work
+                    if (layer.style?.themes) {
+                        for (const theme in layer.style.themes) {
+                            console.log(`Testing theme ${theme}`);
+                            layer.style.theme = layer.style.themes[theme];
+                            layer.reload();
+                            await delayFunction(1000);
+                        }
+                    }
+
                     if (!['maplibre', 'tiles'].includes(layer.format) && layer.infoj) {
 
                         const lastLocation = await mapp.utils.xhr(`${mapp.host}/api/query?template=get_last_location&locale=${encodeURIComponent(mapview.locale.key)}&layer=${key}`);

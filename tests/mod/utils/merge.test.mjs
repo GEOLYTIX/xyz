@@ -78,4 +78,33 @@ describe('mergeDeep Module', () => {
         assertEqual(mergedObj2, expected);
     });
 
+    it('should handle merging with unequal arrays', () => {
+        const filter = {
+            current: {
+                'country': {
+                    'in': ['ROI']
+                }
+            }
+        };
+        const filter2 = {
+            current: {
+                'country': {
+                    'in': ['UK']
+                }
+            }
+        };
+
+        const expected = {
+            current: {
+                'country': {
+                    'in': ['ROI','UK']
+                }
+            }
+        };
+
+        const mergedObj1 = mergeDeep(filter, filter2);
+        assertEqual(mergedObj1, expected);
+    });
+
+
 });

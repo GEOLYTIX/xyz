@@ -46,6 +46,9 @@ module.exports = async (req, res) => {
       }
 
       const user = rows[0]
+
+      // Assign title identifier to user object.
+      user.title = process.env.TITLE
     
       if (user.blocked) {
         res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
