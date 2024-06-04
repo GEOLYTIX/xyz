@@ -70,6 +70,9 @@ module.exports = {
   location_delete: {
     render: require('./location_delete'),
   },
+  locations_delete: {
+    render: require('./locations_delete'),
+  },
   location_update: {
     render: require('./location_update'),
   },
