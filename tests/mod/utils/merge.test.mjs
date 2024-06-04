@@ -81,23 +81,23 @@ describe('mergeDeep Module', () => {
     it('should handle merging with unequal arrays', () => {
         const filter = {
             current: {
-                "country": {
-                    "in": ["ROI"]
+                'country': {
+                    'in': ['ROI']
                 }
             }
         };
         const filter2 = {
             current: {
-                "country": {
-                    "in": ["UK"]
+                'country': {
+                    'in': ['UK']
                 }
             }
         };
 
         const expected = {
             current: {
-                "country": {
-                    "in": ["ROI","UK"]
+                'country': {
+                    'in': ['ROI','UK']
                 }
             }
         };
