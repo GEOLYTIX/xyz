@@ -180,3 +180,11 @@
 .val-changed input {
   background-color: var(--color-changed)
 }
+
+.val-changed textarea {
+  background-color: var(--color-changed)
+}
+
+.val-changed button {
+  background-color: var(--color-changed)
+}
