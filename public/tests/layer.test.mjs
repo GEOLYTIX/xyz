@@ -92,7 +92,7 @@ export async function layerTest(mapview) {
                                     }
 
                                     newLocation.id = await mapp.utils.xhr({
-                                        method: "POST",
+                                        method: 'POST',
                                         url: `${mapp.host}/api/query?` +
                                             mapp.utils.paramString({
                                                 template: 'location_new',
