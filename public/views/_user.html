@@ -86,23 +86,41 @@
 
     .btn-row {
       align-items: center;
+      justify-content: space-between;
       flex-wrap: wrap;
       display: flex;
       gap: 10px;
       margin: 10px 0;
     }
+    button {
+  border: none;
+  outline: none;
+  background: none;
+  text-align: center;
+  background-color: #003D57;
+  color: white;
 
-    a.default-view {
-      margin-left: auto;
-      font-weight: bold;
-    }
+  &:hover {
+    cursor: pointer;
+  }
 
+  &.flat {
+    border-radius: 3px;
+    border-bottom: 1px solid #f2f2f2;
+    padding: 0.3em;
+  }
 
-    a.logout {
-      font-weight: bold;
-      color: #B71C1C;
-    }
+  &.raised {
+    border-radius: 3px;
+    border: 1px solid #f2f2f2;
+    box-shadow: 1px 1px 2px #f2f2f2;
+    padding: 0.3em;
+  }
 
+  &.red {
+    background-color: #f44336;
+  }
+}
 
     @media only screen and (max-width: 700px) {
 
@@ -119,14 +137,18 @@
 
   <div class="flex">
 
-    <h1>Account admin</h1>
+    <h1>Account Administration</h1>
 
     <div class="btn-row">
-      <span>Filter</span>
-      <input id="filterInput" type="text" placeholder="e.g. geolytix" style="max-width: 100%;">
-      <button id="toggleBlocked">Show blocked accounts</button>
-      <a class="default-view" href="{{dir}}">{{dir}}</a>
-      <a class="logout" href="?logout=true">Logout</a>
+      <div <span>Filter</span>
+        <input id="filterInput" type="text" placeholder="e.g. geolytix" style="max-width: 100%;">
+        <button class="raised primary-colour" id="toggleBlocked">Show blocked accounts</button>
+      </div>
+      <div>
+        <button class="raised primary-colour" id="default-view" onclick="window.location.href = '{{dir}}'">{{dir}}</button>
+        <button class="raised primary-colour" id="test-view" onclick="window.location.href = '{{dir}}?template=test_view'">Open Test View</button>
+        <button class="raised primary-colour red" id="logout" onclick="window.location.href = '{{dir}}?logout=true'">Logout</button>
+      </div>
     </div>
 
     <div id="userTable"></div>
@@ -151,7 +173,7 @@
       "en": "English",
       "de": "German",
       "zh": "Chinese",
-      "zh_tw":"Chinese (Traditional)",
+      "zh_tw": "Chinese (Traditional)",
       "pl": "Polish",
       "ja": "Japanese",
       "es": "Spanish",
