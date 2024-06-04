@@ -1,51 +1,50 @@
-const validateParams = require('../../../mod/utils/validateRequestParams');
+import { describe, it, assertEqual, assertThrows } from 'codi-test-framework';
+import params from '../../../mod/utils/validateRequestParams';
 
-describe('validateParams', () => {
+describe('validateParams Module', () => {
     test('should return true when all params are valid', () => {
-        const params = {
+        const parameters = {
             param1: 'abc',
             param2: '123',
             param3: 'test,123',
             filter: 'test'
         };
 
-        const result = validateParams(params);
-
-        expect(result).toBe(true);
+        const result = params(parameters);
+        assertEqual(result, true);
     });
 
     test('should return false when a param is invalid', () => {
-        const params = {
+        const parameters = {
             param1: 'abc',
             param2: 'inval!d',
             param3: 'test,123',
             filter: 'test'
         };
 
-        const result = validateParams(params);
+        const result = params(parameters);
 
-        expect(result).toBe(false);
+        assertEqual(result, false);
     });
 
     test('should return true when all params are objects', () => {
-        const params = {
+        const parameters = {
             param1: { prop: 'value' },
             param2: { nested: { prop: 'value' } },
             filter: 'test'
         };
 
-        const result = validateParams(params);
+        const result = params(parameters);
 
-        expect(result).toBe(true);
+        assertEqual(result, true);
     });
 
     test('should return true when no params are provided', () => {
-        const params = {
+        const parameters = {
             filter: 'test'
         };
 
-        const result = validateParams(params);
-
-        expect(result).toBe(true);
+        const result = params(parameters);
+        assertEqual(result, true);
     });
 });
