@@ -1,5 +1,5 @@
 /**
-## /mod/user/_user
+## /user/_user
 
 The _user module exports the user method to route User API requests.
 
@@ -16,7 +16,7 @@ The _user module exports the user method to route User API requests.
 - cookie
 - login
 
-@module /mod/user/_user
+@module /user
 */
 
 const reqHost = require('../utils/reqHost')
@@ -35,6 +35,22 @@ const methods = {
   cookie: require('./cookie'),
   login: require('./login')
 }
+
+/**
+### user(req, res)
+
+The Mapp API uses the user method to lookup and route User API requests.
+
+The route method assigns the host param from /utils/reqHost before the request and response arguments are passed a User API method identified by the method param.
+
+The method request parameter must be an own member of the methods object, eg. `admin`, `register`, `verify`, `add`, `delete`, `update`, `list`, `log`, `key`, `token`, `cookie`, or `login`.
+
+@function user
+@param {Object} [req] HTTP request.
+@param {Object} [res] HTTP response.
+@param {Object} [req.params] Request parameter.
+@param {string} [req.params.method] Method request parameter.
+*/
 
 module.exports = async function user(req, res) {
 
