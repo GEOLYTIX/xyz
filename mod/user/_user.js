@@ -3,10 +3,10 @@
 
 The _user module exports the user method to route User API requests.
 
+- add
 - admin
 - register
 - verify
-- add
 - delete
 - update
 - list

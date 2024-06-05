@@ -1,10 +1,38 @@
 /**
+## /user/add
+
+The user add module requires requires access to the ACL.
+
 @module /user/add
 */
 
 const acl = require('./acl')
 
-module.exports = async (req, res) => {
+/**
+### add(req, res)
+
+/api/user/add?email=dennis@geolytix.co.uk
+
+The add [user] method is routed by the User API module.
+
+The method must be requested by a user with admin priviliges.
+
+The request will return if the user already exists.
+
+Otherwise a new user record for the email provided as parameter will be added to the ACL.
+
+The new user added to the ACL via the [user] add method will automatically be verified and approved by the requesting admin user.
+
+@function add
+@param {Object} req HTTP request.
+@param {Object} res HTTP response.
+@param {Object} req.params Request parameter.
+@param {string} req.params.email Email to add.
+@param {Object} req.params.user Requesting user.
+@param {boolean} req.params.user.admin Requesting user is admin.
+*/
+
+module.exports = async function add(req, res) {
 
   if (!acl) return res.status(500).send('ACL unavailable.')
 
@@ -25,7 +53,7 @@ module.exports = async (req, res) => {
 
   const email = req.params.email.replace(/\s+/g, '')
 
-  // Delete exsiting user account with same email in ACL.
+  // Check for exsiting user account with same email in ACL.
   let rows = await acl(`
     SELECT email FROM acl_schema.acl_table
     WHERE lower(email) = lower($1);`, [email])
@@ -47,7 +75,7 @@ module.exports = async (req, res) => {
     SELECT
       '${email}' AS email,
       true AS verified,
-      true as approved;`)
+      true AS approved;`)
 
   if (rows instanceof Error) {
     return res.status(500).send('Failed to add user account to ACL.')
