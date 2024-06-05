@@ -26,8 +26,10 @@ const pool = new Pool({
 The acl method will connect to pg pool and query the ACL with a provided query template. The `/acl_table/` and `/acl_schema/` in the query template will be replaced with values provided as `PRIVATE` or `PUBLIC` environment variable.
 
 @function acl
-@param {string} q Query template.
-@param {array} arr Parameters to be substrituted in query template.
+@param {string} q 
+Query template.
+@param {array} arr 
+Parameters to be substrituted in query template.
 */
 
 module.exports = async function acl(q, arr) {

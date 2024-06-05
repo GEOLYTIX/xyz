@@ -163,7 +163,7 @@ async function getUser(request) {
       // The ACL table may not have a session column.
       if (rows instanceof Error) {
 
-        delete user.session
+        return new Error('Unable to store session.')
       }
 
     }

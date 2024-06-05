@@ -24,12 +24,18 @@ Otherwise a new user record for the email provided as parameter will be added to
 The new user added to the ACL via the [user] add method will automatically be verified and approved by the requesting admin user.
 
 @function add
-@param {Object} req HTTP request.
-@param {Object} res HTTP response.
-@param {Object} req.params Request parameter.
-@param {string} req.params.email Email to add.
-@param {Object} req.params.user Requesting user.
-@param {boolean} req.params.user.admin Requesting user is admin.
+@param {Object} req 
+HTTP request.
+@param {Object} res 
+HTTP response.
+@param {Object} req.params 
+Request parameter.
+@param {string} req.params.email 
+Email to add.
+@param {Object} req.params.user 
+Requesting user.
+@param {boolean} req.params.user.admin 
+Requesting user is admin.
 */
 
 module.exports = async function add(req, res) {
