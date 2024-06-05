@@ -44,11 +44,13 @@ Request parameter.
 Authorization token.
 @param {Object} [req.cookies] 
 Request cookies.
+@param {Object} res 
+HTTP response.
 @return {Object} 
 User
 */
 
-module.exports = async function auth(req) {
+module.exports = async function auth(req, res) {
 
   if (req.headers.authorization) {
 
