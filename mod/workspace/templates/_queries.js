@@ -51,12 +51,15 @@ module.exports = {
   st_intersects_ab: {
     template: require('./st_intersects_ab'),
   },
+  st_intersects_count: {
+    template: require('./st_intersects_count'),
+  },
   st_distance_ab: {
     template: require('./st_distance_ab'),
-  },  
+  },
   st_distance_ab_multiple: {
     template: require('./st_distance_ab_multiple'),
-  },  
+  },
   location_get: {
     render: require('./location_get'),
   },
@@ -66,6 +69,9 @@ module.exports = {
   },
   location_delete: {
     render: require('./location_delete'),
+  },
+  locations_delete: {
+    render: require('./locations_delete'),
   },
   location_update: {
     render: require('./location_update'),
