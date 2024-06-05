@@ -46,10 +46,10 @@ The route method assigns the host param from /utils/reqHost before the request a
 The method request parameter must be an own member of the methods object, eg. `admin`, `register`, `verify`, `add`, `delete`, `update`, `list`, `log`, `key`, `token`, `cookie`, or `login`.
 
 @function user
-@param {Object} [req] HTTP request.
-@param {Object} [res] HTTP response.
-@param {Object} [req.params] Request parameter.
-@param {string} [req.params.method] Method request parameter.
+@param {Object} req HTTP request.
+@param {Object} res HTTP response.
+@param {Object} req.params Request parameter.
+@param {string} req.params.method Method request parameter.
 */
 
 module.exports = async function user(req, res) {
