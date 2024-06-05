@@ -127,8 +127,6 @@ async function checkSession(user) {
   // USER_SESSION has not been enabled.
   if (!process.env.USER_SESSION) return;
 
-  return new Error('No user.session provided.')
-
   // A user.session must be provided if enabled.
   if (!user.session) {
 
