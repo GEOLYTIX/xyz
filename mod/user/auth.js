@@ -115,9 +115,13 @@ module.exports = async function auth(req, res) {
 /**
 ### checkSession(user)
 
-Will check the user.session if enabled with USER_SESSION environment variable.
+Will return if sessions are not enabled via USER_SESSION environment variable.
 
-Returns the session key or Error if the check has failed.
+A user must have a session key which is either stored in the user_sessions object or will be validated against the session key in the ACL.
+
+Validated session keys are stored in the user_sessions object to prevent excessive requests to the ACL for the same user from the same process.
+
+The session key will be updated on login, eg. on a different device. This will invalidate the existing session key on devices previously logged in.
 
 @function checkSession
 @param {Object} user
@@ -172,9 +176,15 @@ async function checkSession(user) {
 }
 
 /**
-### checkToken(req, user)
+### checkToken(token, user)
 
-Checks the request parameter token.
+An API key can be provided as a request parameter token.
+
+API key access does not have admin rights.
+
+Every request will validate the API key against the key stored in the ACL.
+
+API keys do not expire. But changing the key in the ACL will immediately invalidate the key on successive checks.
 
 @function checkToken
 @param {string} token Authorization token.
