@@ -92,35 +92,39 @@
       gap: 10px;
       margin: 10px 0;
     }
+
     button {
-  border: none;
-  outline: none;
-  background: none;
-  text-align: center;
-  background-color: #003D57;
-  color: white;
+      border: none;
+      outline: none;
+      background: none;
+      text-align: center;
+      color: white;
 
-  &:hover {
-    cursor: pointer;
-  }
+      &:hover {
+        cursor: pointer;
+      }
 
-  &.flat {
-    border-radius: 3px;
-    border-bottom: 1px solid #f2f2f2;
-    padding: 0.3em;
-  }
+      &.flat {
+        border-radius: 3px;
+        border-bottom: 1px solid #f2f2f2;
+        padding: 0.3em;
+      }
 
-  &.raised {
-    border-radius: 3px;
-    border: 1px solid #f2f2f2;
-    box-shadow: 1px 1px 2px #f2f2f2;
-    padding: 0.3em;
-  }
+      &.raised {
+        border-radius: 3px;
+        border: 1px solid #f2f2f2;
+        box-shadow: 1px 1px 2px #f2f2f2;
+        padding: 0.3em;
+      }
 
-  &.red {
-    background-color: #f44336;
-  }
-}
+      &.primary-colour {
+        background-color: #003D57;
+      }
+
+      &.red {
+        background-color: #f44336;
+      }
+    }
 
     @media only screen and (max-width: 700px) {
 
@@ -145,9 +149,11 @@
         <button class="raised primary-colour" id="toggleBlocked">Show blocked accounts</button>
       </div>
       <div>
-        <button class="raised primary-colour" id="default-view" onclick="window.location.href = '{{dir}}'">{{dir}}</button>
-        <button class="raised primary-colour" id="test-view" onclick="window.location.href = '{{dir}}?template=test_view&download=true'">Open Test View</button>
-        <button class="raised primary-colour red" id="logout" onclick="window.location.href = '{{dir}}?logout=true'">Logout</button>
+        <button class="raised primary-colour" id="default-view"
+          onclick="window.location.href = '{{dir}}'">{{dir}}</button>
+        <button class="raised primary-colour" id="test-view"
+          onclick="window.location.href = '{{dir}}?template=test_view&download=true'">Open Test View</button>
+        <button class="raised red" id="logout" onclick="window.location.href = '{{dir}}?logout=true'">Logout</button>
       </div>
     </div>
 
