@@ -42,8 +42,6 @@ HTTP request.
 Request headers.
 @param {Object} [req.headers.authorization] 
 User authorization object.
-@param {Object} req.params 
-Request parameter.
 @param {string} [req.params.token] 
 Authorization token.
 @param {Object} [req.cookies] 
@@ -62,7 +60,7 @@ module.exports = async function auth(req, res) {
   }
 
   // Get token from params or cookie.
-  const token = req.params.token || req.cookies && req.cookies[process.env.TITLE]
+  const token = req.params.token || req.cookies?.[process.env.TITLE]
 
   // Return if there is no token to decode
   if (!token) return null
@@ -78,42 +76,96 @@ module.exports = async function auth(req, res) {
     return err
   }
 
-  // The token was provided as param.
-  if (req.params.token) {
+  // Check req.param.token
+  const tokenCheck = await checkParamToken(req, res, user)
 
-    // Check token
-    const token = await checkToken(req.params.token, user)
+  if (tokenCheck instanceof Error) {
 
-    if (token instanceof Error) {
+    // The token check has failed.
+    return tokenCheck
+  }
 
-      // The token check has failed.
-      return token
-    }
+  // Check user.session
+  const sessionCheck = await checkSession(req, user)
 
-    // Check whether the token matches cookie.
-    if (req.cookies?.[process.env.TITLE] !== token) {
+  if (sessionCheck instanceof Error) {
 
-      // Create and assign a new cookie for the user.
-      const cookie = jwt.sign(user, process.env.SECRET)
-
-      res.setHeader('Set-Cookie',
-        `${process.env.TITLE}=${cookie};HttpOnly;Max-Age=${user.exp && (user.exp - user.iat) || process.env.COOKIE_TTL};Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
-    }
-
-  } else {
-
-    // Check user.session
-    // Not applicable for requests with token.
-    const session = await checkSession(user)
-
-    if (session instanceof Error) {
-
-      // The session check has failed.
-      return session
-    }
+    // The session check has failed.
+    return sessionCheck
   }
 
   return user
+}
+
+/**
+@function checkParamToken
+
+@description
+An API key can be provided as a request parameter token.
+
+API key access does not have admin rights.
+
+Every request will validate the API key against the key stored in the ACL.
+
+API keys do not expire. But changing the key in the ACL will immediately invalidate the key on successive checks.
+
+@param {Object} req 
+HTTP request.
+@param {string} [req.params.token] 
+Authorization token.
+@param {Object} [req.cookies] 
+Request cookies.
+@param {Object} res 
+HTTP response.
+@param {Object} user
+*/
+
+async function checkParamToken(req, res, user) {
+
+  if (req.params.token) return;
+
+  // The user object has an API key.
+  if (user.api) {
+
+    // Retrieve stored API key from ACL.
+    const rows = await acl(`
+      SELECT api, blocked
+      FROM acl_schema.acl_table
+      WHERE lower(email) = lower($1);`, [user.email])
+
+    // The request for the stored API key has failed.
+    if (rows instanceof Error) return rows
+
+    if (rows.blocked) {
+      
+      // The user is blocked.
+      return new Error('Account is blocked')
+    }
+
+    if (rows[0].api !== req.params.token) {
+
+      // API keys do not expire.
+      // The stored key must match the request param token.
+      return new Error('API Key mismatch')
+    }
+  }
+
+  // Token access must not have admin rights.
+  delete user.admin
+
+  // Flag the user to be created from a token.
+  // It must not be possible created a new token from a token user.
+  user.from_token = true
+
+  // Check whether the token matches cookie.
+  if (req.cookies?.[process.env.TITLE] !== req.params.token) {
+
+    // Create and assign a new cookie for the user.
+    const cookie = jwt.sign(user, process.env.SECRET)
+
+    res.setHeader('Set-Cookie',
+      `${process.env.TITLE}=${cookie};HttpOnly;Max-Age=${user.exp && (user.exp - user.iat) || process.env.COOKIE_TTL};Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
+  }
 }
 
 /**
@@ -128,11 +180,18 @@ Validated session keys are stored in the user_sessions object to prevent excessi
 
 The session key will be updated on login, eg. on a different device. This will invalidate the existing session key on devices previously logged in.
 
+@param {Object} req 
+HTTP request.
+@param {string} [req.params.token] 
+Authorization token.
 @param {Object} user
 @return {string} user.session
 */
 
-async function checkSession(user) {
+async function checkSession(req, user) {
+
+  // Session checks are not applicable for requests with token.
+  if (req.params.token) return;
 
   // USER_SESSION has not been enabled.
   if (!process.env.USER_SESSION) return;
@@ -175,60 +234,4 @@ async function checkSession(user) {
     // Store user.session in user_sessions object.
     user_sessions[user.email] = user.session
   }
-
-  return user.session
-}
-
-/**
-@function checkToken
-
-@description
-An API key can be provided as a request parameter token.
-
-API key access does not have admin rights.
-
-Every request will validate the API key against the key stored in the ACL.
-
-API keys do not expire. But changing the key in the ACL will immediately invalidate the key on successive checks.
-
-@param {string} token Authorization token.
-@param {Object} user
-*/
-
-async function checkToken(token, user) {
-
-  // The user object has an API key.
-  if (user.api) {
-
-    // Retrieve stored API key from ACL.
-    const rows = await acl(`
-      SELECT api, blocked
-      FROM acl_schema.acl_table
-      WHERE lower(email) = lower($1);`, [user.email])
-
-    // The request for the stored API key has failed.
-    if (rows instanceof Error) return rows
-
-    if (rows.blocked) {
-      
-      // The user is blocked.
-      return new Error('Account is blocked')
-    }
-
-    if (rows[0].api !== token) {
-
-      // API keys do not expire.
-      // The stored key must match the request param token.
-      return new Error('API Key mismatch')
-    }
-  }
-
-  // Token access must not have admin rights.
-  delete user.admin
-
-  // Flag the user to be created from a token.
-  // It must not be possible created a new token from a token user.
-  user.from_token = true
-
-  return token
 }
