@@ -24,7 +24,7 @@ process.env.TITLE ??= 'GEOLYTIX | XYZ'
 
 process.env.DIR ??= ''
 
-module.exports = async (req, res) => {
+module.exports = async function api(req, res) {
 
   // redirect if dir is missing in url path.
   if (process.env.DIR && req.url.length === 1) {
