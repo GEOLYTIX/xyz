@@ -3,6 +3,8 @@
 
 The acl module provides access to the ACL table for all User API methods.
 
+@requires pg
+
 @module /user/acl
 */
 
@@ -21,11 +23,11 @@ const pool = new Pool({
 })
 
 /**
-### acl(q, arr)
+@function acl
 
+@description
 The acl method will connect to pg pool and query the ACL with a provided query template. The `/acl_table/` and `/acl_schema/` in the query template will be replaced with values provided as `PRIVATE` or `PUBLIC` environment variable.
 
-@function acl
 @param {string} q 
 Query template.
 @param {array} arr 

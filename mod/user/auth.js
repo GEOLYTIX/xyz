@@ -5,20 +5,25 @@ The auth module is required by the XYZ API for request authorization.
 
 A user_sessions{} object is declared in the module to store user sessions.
 
+@requires module:/user/acl
+@requires module:/user/fromACL
+@requires jsonwebtoken
+
 @module /user/auth
 */
-
-const jwt = require('jsonwebtoken')
 
 const acl = require('./acl')
 
 const fromACL = require('./fromACL')
 
+const jwt = require('jsonwebtoken')
+
 const user_sessions = {}
 
 /**
-### auth(req)
+@function auth
 
+@description
 The auth method returns a user object to be assigned as request parameter if a request is successfully authenticated.
 
 Requests with authorization headers will return the user fromACL method.
@@ -31,7 +36,6 @@ With a valid signature the token will be resolved as a user object by the verify
 
 The auth method checks either the request parameter token or user.session if enabled.
 
-@function auth
 @param {Object} req 
 HTTP request.
 @param {Object} req.headers 
@@ -64,57 +68,57 @@ module.exports = async function auth(req, res) {
   if (!token) return null
 
   // Verify the token signature.
-  return jwt.verify(
-    token,
-    process.env.SECRET,
-    async (err, user) => {
+  let user;
+  try {
+    user = jwt.verifyAsync(token, process.env.SECRET)
 
-    // Return error if verification fails.
-    if (err) return err
+  } catch (err) {
 
-    // The token was provided as param.
-    if (req.params.token) {
+    return err
+  }
 
-      // Check token
-      const token = await checkToken(req.params.token, user)
+  // The token was provided as param.
+  if (req.params.token) {
 
-      if (token instanceof Error) {
+    // Check token
+    const token = await checkToken(req.params.token, user)
 
-        // The token check has failed.
-        return token
-      }
+    if (token instanceof Error) {
 
-      // Check whether the token matches cookie.
-      if (req.cookies?.[process.env.TITLE] !== token) {
-
-        // Create and assign a new cookie for the user.
-        const cookie = jwt.sign(user, process.env.SECRET)
-
-        res.setHeader('Set-Cookie',
-          `${process.env.TITLE}=${cookie};HttpOnly;Max-Age=${user.exp && (user.exp - user.iat) || process.env.COOKIE_TTL};Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
-      }
-
-    } else {
-
-      // Check user.session
-      // Not applicable for requests with token.
-      const session = await checkSession(user)
-
-      if (session instanceof Error) {
-
-        // The session check has failed.
-        return session
-      }
+      // The token check has failed.
+      return token
     }
 
-    return user
-  })
+    // Check whether the token matches cookie.
+    if (req.cookies?.[process.env.TITLE] !== token) {
 
+      // Create and assign a new cookie for the user.
+      const cookie = jwt.sign(user, process.env.SECRET)
+
+      res.setHeader('Set-Cookie',
+        `${process.env.TITLE}=${cookie};HttpOnly;Max-Age=${user.exp && (user.exp - user.iat) || process.env.COOKIE_TTL};Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
+    }
+
+  } else {
+
+    // Check user.session
+    // Not applicable for requests with token.
+    const session = await checkSession(user)
+
+    if (session instanceof Error) {
+
+      // The session check has failed.
+      return session
+    }
+  }
+
+  return user
 }
 
 /**
-### checkSession(user)
+@function checkSession
 
+@description
 Will return if sessions are not enabled via USER_SESSION environment variable.
 
 A user must have a session key which is either stored in the user_sessions object or will be validated against the session key in the ACL.
@@ -123,7 +127,6 @@ Validated session keys are stored in the user_sessions object to prevent excessi
 
 The session key will be updated on login, eg. on a different device. This will invalidate the existing session key on devices previously logged in.
 
-@function checkSession
 @param {Object} user
 @return {string} user.session
 */
@@ -176,8 +179,9 @@ async function checkSession(user) {
 }
 
 /**
-### checkToken(token, user)
+@function checkToken
 
+@description
 An API key can be provided as a request parameter token.
 
 API key access does not have admin rights.
@@ -186,7 +190,6 @@ Every request will validate the API key against the key stored in the ACL.
 
 API keys do not expire. But changing the key in the ACL will immediately invalidate the key on successive checks.
 
-@function checkToken
 @param {string} token Authorization token.
 @param {Object} user
 */

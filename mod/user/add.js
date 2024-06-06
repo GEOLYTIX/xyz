@@ -1,7 +1,9 @@
 /**
 ## /user/add
 
-The user add module requires requires access to the ACL.
+Exports the addUser method for the /api/user/add route.
+
+@requires module:/user/acl
 
 @module /user/add
 */
@@ -9,11 +11,12 @@ The user add module requires requires access to the ACL.
 const acl = require('./acl')
 
 /**
-### add(req, res)
+@function addUser
 
+@description
 /api/user/add?email=dennis@geolytix.co.uk
 
-The add [user] method is routed by the User API module.
+The addUser method is routed by the User API module.
 
 The method must be requested by a user with admin priviliges.
 
@@ -23,7 +26,6 @@ Otherwise a new user record for the email provided as parameter will be added to
 
 The new user added to the ACL via the [user] add method will automatically be verified and approved by the requesting admin user.
 
-@function add
 @param {Object} req 
 HTTP request.
 @param {Object} res 
@@ -38,7 +40,7 @@ Requesting user.
 Requesting user is admin.
 */
 
-module.exports = async function add(req, res) {
+module.exports = async function addUser(req, res) {
 
   if (!acl) return res.status(500).send('ACL unavailable.')
 

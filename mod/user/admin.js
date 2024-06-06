@@ -1,7 +1,7 @@
 /**
 ## /user/admin
 
-Exports a User API route for the admin view with user checks.
+Exports the admin view method for the /api/user/admin route.
 
 @module /user/admin
 */
@@ -9,13 +9,13 @@ Exports a User API route for the admin view with user checks.
 const view = require('../view')
 
 /**
-### admin(req, res)
+@function admin
 
-/api/user/admin
+@description
+
 
 The admin function checks whether the request parameter user has admin priviliges before returnig the View API with the admin view as template.
 
-@function admin
 @param {Object} req 
 HTTP request.
 @param {Object} res 
