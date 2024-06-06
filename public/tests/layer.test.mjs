@@ -4,9 +4,9 @@ export async function layerTest(mapview) {
 
     function delayFunction(delay) {
         return new Promise(resolve => {
-          setTimeout(resolve, delay);
+            setTimeout(resolve, delay);
         });
-      }
+    }
 
     const default_zoom = mapview.view.z;
 
@@ -19,16 +19,14 @@ export async function layerTest(mapview) {
                     if (layer.tables) {
                         const layerZoom = parseInt(Object.entries(layer.tables).find(([key, value]) => value !== null)[0]);
                         mapview.Map.getView().setZoom(layerZoom);
-                        //console.log(mapview.Map.getView().getZoom());
                     }
                     else {
                         mapview.Map.getView().setZoom(default_zoom);
-                        //console.log(mapview.Map.getView().getZoom());
                     }
 
-                    if(layer.dataviews){
-                        for(const dataview in layer.dataview){
-                            dataview = { ...dataview, display: true}
+                    if (layer.dataviews) {
+                        for (const dataview in layer.dataview) {
+                            dataview = { ...dataview, display: true }
                         }
                     }
 
@@ -51,8 +49,8 @@ export async function layerTest(mapview) {
                         if (lastLocation?.id) {
 
                             layer.infoj = layer.infoj.map(entry => {
-                                if(entry.type === 'dataview'){
-                                    return { ...entry, display: true}
+                                if (entry.type === 'dataview') {
+                                    return { ...entry, display: true };
                                 }
                                 return entry;
                             });
@@ -63,13 +61,86 @@ export async function layerTest(mapview) {
                             });
 
                             assertTrue(location !== undefined, 'The location is undefined');
-                            //await delayFunction(3000);
-                            location.remove();
-                        }
-                    }
 
-                    if (!['maplibre', 'tiles'].includes(layer.format)) {
-                        layer.hide();
+                            // Create a new location
+                            const newLocation = {
+                                layer,
+                                table: layer.tableCurrent(),
+                                new: true
+                            };
+
+                            // Add a new location to the layer using the last location
+                            if (layer?.draw) {
+                                await it('Add a new location to the layer using the last location coordinates', async () => {
+                                    // Use the value of the infoj pin field to create a new location
+                                    const pin = location.infoj.find(entry => entry.type === 'pin');
+
+                                    // Get the geometry of the last location (for polygon layers)
+                                    const polygon = location.infoj.find(entry => entry.type === 'geometry' && entry.field === layer.geomCurrent());
+
+                                    // Set the pin or polygon based on the draw object
+                                    let geometry;
+
+                                    if (layer?.draw?.point) {
+                                        geometry = pin.geometry;
+                                    } else if (layer?.draw?.polygon || layer?.draw?.line || layer?.draw?.rectangle || layer?.draw?.circle) {
+                                        geometry = polygon.geometry;
+                                    } else {
+                                        // We don't want to test this layer as it doesn't have a core draw object method
+                                        // If may have plugin draw methods but we can't test those
+                                        return;
+                                    }
+
+                                    newLocation.id = await mapp.utils.xhr({
+                                        method: 'POST',
+                                        url: `${mapp.host}/api/query?` +
+                                            mapp.utils.paramString({
+                                                template: 'location_new',
+                                                locale: layer.mapview.locale.key,
+                                                layer: layer.key,
+                                                table: newLocation.table
+                                            }),
+                                        body: JSON.stringify({
+                                            [layer.geom]: geometry,
+
+                                            // Spread in defaults.
+                                            ...layer.draw?.defaults
+                                        })
+                                    });
+
+                                    // Layer must be reloaded to reflect geometry changes.
+                                    layer.reload();
+
+                                    // Get the newly created location.
+                                    const newLoc = await mapp.location.get(newLocation);
+
+                                    // Remove the location
+                                    newLoc.remove();
+                                });
+
+                                // If layer.deleteLocation is defined, delete the location
+                                if (layer.deleteLocation === true) {
+
+                                    await it('Delete the location', async () => {
+                                        // Test deleting a location
+                                        await mapp.utils.xhr(`${mapp.host}/api/query?` +
+                                            mapp.utils.paramString({
+                                                template: 'location_delete',
+                                                locale: mapview.locale.key,
+                                                layer: newLocation.layer.key,
+                                                table: newLocation.table,
+                                                id: newLocation.id
+                                            }));
+                                    });
+                                }
+                            }
+
+                            location.remove();
+
+                            if (!['maplibre', 'tiles'].includes(layer.format)) {
+                                layer.hide();
+                            }
+                        }
                     }
                 });
             }

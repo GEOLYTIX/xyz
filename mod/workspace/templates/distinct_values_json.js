@@ -1,5 +1,5 @@
 module.exports = `
-  SELECT DISTINCT distinct_field 
+  SELECT DISTINCT distinct_field as \${key}
   FROM (
     SELECT \${field} ->> '\${key}' as distinct_field 
     FROM \${table} 
