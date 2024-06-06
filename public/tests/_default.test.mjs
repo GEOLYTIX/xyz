@@ -366,7 +366,7 @@ await describe('Mapview test', async () => {
     if (locale instanceof Error) {
 
         document.body.append(mapp.utils.html.node`
-  <dialog open class="modal-dialog">
+  <dialog open class="modal-map">
     ${mapp.dictionary.no_locales}`)
     }
 
