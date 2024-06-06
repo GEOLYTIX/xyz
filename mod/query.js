@@ -154,6 +154,12 @@ module.exports = async (req, res) => {
     // Reserved params may not be substituted.
     const reserved = new Set(['viewport', 'filter'])
 
+    // The sqlFilter must not override the filter set by the layer query.
+    if (req.params.sqlFilter) {
+      req.params.filter = req.params.filter 
+      || `AND ${sqlFilter(JSON.parse(req.params.sqlFilter), req.params.SQL)}`
+    }
+
     // Returns -1 if ${filter} not found in template
     if (template.template.search(/\$\{filter\}/)<0) {
 
@@ -289,7 +295,7 @@ async function layerQuery(req, res) {
   req.params.layer = await getLayer(req.params)
 
   if (req.params.layer instanceof Error) {
-    return res.status(400).send('Failed to access layer.')
+    return res.status(400).send(req.params.layer.message)
   }
 
   if (!Roles.check(req.params.layer, req.params.user?.roles)) {
