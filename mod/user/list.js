@@ -1,20 +1,31 @@
 /**
-### List Users
+## /user/list
 
-This module provides an endpoint to return a list of users from the ACL.
+Exports the [user] list method for the /api/user/list route.
 
-@module /user/list
+@requires module:/user/acl
+
+@module /user/cookie
 */
 
 const acl = require('./acl')
 
 /**
- * > Optional Params : email
- * @function export
- * @param {Object} req 
- * @param {Object} res 
- * @returns {acl} acl
- */
+@function list
+
+@description
+/api/user/list returns a list of all ACL records.
+
+@param {Object} req 
+HTTP request.
+@param {Object} res 
+HTTP response.
+@param {Object} req.params.user 
+Requesting user.
+@param {boolean} req.params.user.admin 
+Requesting user is admin.
+*/
+
 module.exports = async (req, res) => {
 
   if (!req.params.user) {
@@ -43,13 +54,16 @@ module.exports = async (req, res) => {
       blocked,
       verificationtoken
     FROM acl_schema.acl_table
-    ${req.params.email ? `WHERE email='${req.params.email}'`: ''}
     ORDER BY email;`)
 
-  if (rows instanceof Error) return res.status(500).send('Failed to query PostGIS table.')
+  if (rows instanceof Error) {
+    return res.status(500).send('Failed to access ACL.')
+  }
 
   // return 204 if no record was returned from database.
-  if (!rows || !rows.length) return res.status(202).send('No rows returned from table.')
+  if (!rows || !rows.length) {
+    return res.status(202).send('No rows returned from table.')
+  }
 
   // rows must be returned as an array.
   rows = rows.length === 1 && rows[0] || rows
