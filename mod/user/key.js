@@ -25,10 +25,8 @@ The newly generated API key does not expire but will overwrite any existing API 
 
 An API key can be revoked by setting the api field in the ACL record to null.
 
-@param {Object} req 
-HTTP request.
-@param {Object} res 
-HTTP response.
+@param {Object} req HTTP request.
+@param {Object} res HTTP response.
 @param {Object} req.params 
 Request parameter.
 @param {Object} req.params.user 

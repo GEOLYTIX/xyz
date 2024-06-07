@@ -34,13 +34,11 @@ The `process.env.COOKIE_TTL` will be set as time to life for the cookie set on t
 
 The token user will be sent back to the client.
 
-@param {Object} req 
-HTTP request.
-@param {Object} res 
-HTTP response.
+@param {Object} req HTTP request.
+@param {Object} res HTTP response.
 @param {Object} [req.cookies] 
 The request cookies object.
-@param {Object} [req.params.destroy] 
+@param {Truthy} [req.params.destroy] 
 The cookie should be destroyed.
 */
 

@@ -16,10 +16,8 @@ const acl = require('./acl')
 @description
 /api/user/list returns a list of all ACL records.
 
-@param {Object} req 
-HTTP request.
-@param {Object} res 
-HTTP response.
+@param {Object} req HTTP request.
+@param {Object} res HTTP response.
 @param {Object} req.params.user 
 Requesting user.
 @param {boolean} req.params.user.admin 

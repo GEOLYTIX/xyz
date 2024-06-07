@@ -26,10 +26,8 @@ Otherwise a new user record for the email provided as parameter will be added to
 
 The new user added to the ACL via the [user] add method will automatically be verified and approved by the requesting admin user.
 
-@param {Object} req 
-HTTP request.
-@param {Object} res 
-HTTP response.
+@param {Object} req HTTP request.
+@param {Object} res HTTP response.
 @param {Object} req.params 
 Request parameter.
 @param {string} req.params.email 

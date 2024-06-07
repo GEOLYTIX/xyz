@@ -36,10 +36,8 @@ With a valid signature the token will be resolved as a user object by the verify
 
 The auth method checks either the request parameter token or user.session if enabled.
 
-@param {Object} req 
-HTTP request.
-@param {Object} req.headers 
-Request headers.
+@param {Object} req HTTP request.
+@param {Object} req.headers Request headers.
 @param {Object} [req.headers.authorization] 
 User authorization object.
 @param {string} [req.params.token] 
@@ -48,8 +46,8 @@ Authorization token.
 Request cookies.
 @param {Object} res 
 HTTP response.
-@return {Object} 
-User
+
+@return {Object} User
 */
 
 module.exports = async function auth(req, res) {

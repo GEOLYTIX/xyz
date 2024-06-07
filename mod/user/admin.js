@@ -14,10 +14,8 @@ const view = require('../view')
 @description
 The admin function checks whether the request parameter user has admin priviliges before returnig the View API with the admin view as template.
 
-@param {Object} req 
-HTTP request.
-@param {Object} res 
-HTTP response.
+@param {Object} req HTTP request.
+@param {Object} res HTTP response.
 @param {Object} req.params 
 Request parameter.
 @param {Object} req.params.user 

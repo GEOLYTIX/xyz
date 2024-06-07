@@ -1,12 +1,20 @@
 /**
+## /user/login
+
+Exports the login method for the /api/user/login route.
+
+@requires module:/user/fromACL
+@requires module:/view
+@requires jsonwebtoken
+
 @module /user/login
 */
-
-const jwt = require('jsonwebtoken')
 
 const fromACL = require('./fromACL')
 
 const view = require('../view')
+
+const jwt = require('jsonwebtoken')
 
 module.exports = async (req, res) => {
 
@@ -24,9 +32,10 @@ module.exports = async (req, res) => {
       return 
     }
 
-    if (user instanceof Error) return res.status(401).send(user.message)
+    if (user instanceof Error) {
+      return res.status(401).send(user.message)
+    }
 
-    // Create token with 8 hour expiry.
     const token = jwt.sign(
       {
         email: user.email,
@@ -51,7 +60,7 @@ module.exports = async (req, res) => {
 
   if (!req.params.msg && req.params.user) {
 
-    res.setHeader('location', `${process.env.DIR}`)
+    res.setHeader('location', `${process.env.DIR || '/'}`)
     res.status(302).send()
     return;
   }

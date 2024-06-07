@@ -18,10 +18,8 @@ The `/api/user/token` endpoint requests a jsonwebtoken for the user object.
 
 The encoded user token expires in 8hours and does not carry admin rights.
 
-@param {Object} req 
-HTTP request.
-@param {Object} res 
-HTTP response.
+@param {Object} req HTTP request.
+@param {Object} res HTTP response.
 @param {Object} req.params 
 Request parameter.
 @param {Object} req.params.user 

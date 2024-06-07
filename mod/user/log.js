@@ -20,10 +20,8 @@ The accessLog method is routed by the User API module.
 
 The method must be requested by a user with admin priviliges or by a user wanting to access their own record.
 
-@param {Object} req 
-HTTP request.
-@param {Object} res 
-HTTP response.
+@param {Object} req HTTP request.
+@param {Object} res HTTP response.
 @param {Object} req.params 
 Request parameter.
 @param {string} req.params.email 
