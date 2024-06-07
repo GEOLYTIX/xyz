@@ -111,7 +111,7 @@ API keys do not expire. But changing the key in the ACL will immediately invalid
 
 @param {Object} req 
 HTTP request.
-@param {string} [req.params.token] 
+@param {string} req.params.token
 Authorization token.
 @param {Object} [req.cookies] 
 Request cookies.
@@ -122,7 +122,8 @@ HTTP response.
 
 async function checkParamToken(req, res, user) {
 
-  if (req.params.token) return;
+  // A parameter token is required to be checked.
+  if (!req.params.token) return;
 
   // The user object has an API key.
   if (user.api) {
