@@ -91,6 +91,8 @@ module.exports = async function cookie(req, res) {
         return res.status(403).send('Account is blocked');
       }
 
+      delete user.blocked
+
       if (payload.session) {
 
         user.session = payload.session

@@ -123,6 +123,8 @@ async function getUser(request) {
     }))
   }
 
+  delete user.blocked
+
   if (await userExpiry(user, request)) {
     return new Error(await languageTemplates({
       template: 'user_expired',
