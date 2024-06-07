@@ -29,6 +29,8 @@ Update `failedattempts=0`, `verified=true`, and `password=passwordreset` in the 
 
 The verification token can only be used once and will be nulled in the ACL.
 
+An email will be sent to all admin accounts requesting approval of the newly verified user account.
+
 @param {Object} req HTTP request.
 @param {Object} res HTTP response.
 @param {Object} req.params 
