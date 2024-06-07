@@ -14,7 +14,7 @@ const acl = require('./acl')
 @function addUser
 
 @description
-/api/user/add?email=dennis@geolytix.co.uk
+The `/api/user/add?email=dennis@geolytix.co.uk` endpoint requests to add the email param as a new record to the ACL.
 
 The addUser method is routed by the User API module.
 
@@ -67,7 +67,7 @@ module.exports = async function addUser(req, res) {
     WHERE lower(email) = lower($1);`, [email])
 
   if (rows instanceof Error) {
-    return res.status(500).send('Failed to query PostGIS table.')
+    return res.status(500).send('Failed to access ACL.')
   }
 
   if (rows[0]) {

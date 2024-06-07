@@ -1,20 +1,11 @@
 /**
-## User Key 🔑
-The endpoint `/api/user/key` allows a user with the the api-key privileges to create an api key.
-Each time this end point is run it will replace the key in the ACL.
+## /user/key 🔑
 
-> URL /api/user/key
+Exports the apiKey method for the /api/user/key route.
 
-### Example URL : 
-```
-https://yourdomain.com/api/user/key
-```
+@requires module:/user/acl
+@requires jsonwebtoken
 
-### Example Response:
-
-```
-eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c
-```
 @module /user/key
 */
 
@@ -22,14 +13,31 @@ const acl = require('./acl')
 
 const jwt = require('jsonwebtoken')
 
-module.exports = async (req, res) => {
+/**
+@function apiKey
+
+@description
+The `/api/user/key` endpoint requests a new API key for the requesting user.
+
+The requesting user must have an ACL record with the `api` field not being null.
+
+The newly generated API key does not expire but will overwrite any existing API key for the user in the ACL record.
+
+An API key can be revoked by setting the api field in the ACL record to null.
+
+@param {Object} req 
+HTTP request.
+@param {Object} res 
+HTTP response.
+@param {Object} req.params 
+Request parameter.
+@param {Object} req.params.user 
+Requesting user.
+*/
+
+module.exports = async function apiKey(req, res) {
 
   if (!acl) return res.status(500).send('ACL unavailable.')
-
-  if (!req.params.email) {
-
-    return res.status(500).send('Missing email param')
-  }
 
   if (!req.params.user) {
 
@@ -40,8 +48,10 @@ module.exports = async (req, res) => {
   let rows = await acl(`
     SELECT * FROM acl_schema.acl_table
     WHERE lower(email) = lower($1);`, [req.params.user.email])
-    
-  if (rows instanceof Error) return res.status(500).send('Bad config.')
+
+  if (rows instanceof Error) {
+    return res.status(500).send('Failed to access ACL.')
+  }
   
   const user = rows[0]
   
@@ -61,9 +71,12 @@ module.exports = async (req, res) => {
   // Store api_token in ACL.
   rows = await acl(`
     UPDATE acl_schema.acl_table SET api = '${key}'
-    WHERE lower(email) = lower($1);`, [user.email])
-    
-  if (rows instanceof Error) return res.status(500).send('Bad config.')
+    WHERE lower(email) = lower($1);`,
+    [user.email])
+
+  if (rows instanceof Error) {
+    return res.status(500).send('Failed to access ACL.')
+  }
   
   // Send ACL token.
   res.send(key)
