@@ -71,7 +71,7 @@ module.exports = async function accessLog(req, res) {
   }
 
   // return 204 if no record was returned from database.
-  if (!rows || !rows.length) {
+  if (!rows?.length) {
     return res.status(202).send('No rows returned from table.')
   }
 
