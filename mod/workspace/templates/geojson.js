@@ -19,5 +19,5 @@ module.exports = _ => {
         ST_asGeoJson(${_.geom || _.layer.geom})::json AS geometry
         ${properties}
         FROM \${table}
-        WHERE TRUE ${where} IS NOT NULL \${filter};`
+        WHERE TRUE ${where} \${filter};`
 }
