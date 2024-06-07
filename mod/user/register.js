@@ -103,7 +103,7 @@ async function registerUserBody(req, res) {
   const expiry_date = parseInt((new Date().getTime() + process.env.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24) / 1000)
 
   // Create new user account
-  rows = await acl(`
+  const rows = await acl(`
     INSERT INTO acl_schema.acl_table (
       email,
       password,
