@@ -1,7 +1,13 @@
 /**
- * ### verify
+## /user/verify
 
-This module exports a function that gets triggers from an endpoint to verify and reset a user's password.
+Exports the [user] verify method for the /api/user/verify route.
+
+@requires module:/user/acl
+@requires module:/user/login
+@requires module:/utils/mailer
+@requires module:/utils/languageTemplates
+
 @module /user/verify
 */
 
@@ -14,11 +20,25 @@ const languageTemplates = require('../utils/languageTemplates')
 const login = require('./login')
 
 /**
- * @function verify
- * @param {Object} req 
- * @param {Object} res 
- * @returns {Obect} res
- */
+@function verify
+
+@description
+Attemps to find a user record with matching params.key verificationtoken.
+
+Update `failedattempts=0`, `verified=true`, and `password=passwordreset` in the user record.
+
+The verification token can only be used once and will be nulled in the ACL.
+
+@param {Object} req HTTP request.
+@param {Object} res HTTP response.
+@param {Object} req.params 
+Request parameter.
+@param {string} req.params.key 
+Verification key
+@param {string} req.params.language
+Request messaging language
+*/
+
 module.exports = async (req, res) => {
 
   if (!acl) return res.status(500).send('ACL unavailable.')
@@ -31,14 +51,7 @@ module.exports = async (req, res) => {
     [req.params.key])
 
   if (rows instanceof Error) {
-
-    // Get error message from templates.
-    const error_message = await languageTemplates({
-      template: 'failed_query',
-      language: req.params.language
-    })
-
-    return res.status(500).send(error_message)
+    return res.status(500).send('Failed to access ACL.')
   }
 
   const user = rows[0]
@@ -61,25 +74,25 @@ module.exports = async (req, res) => {
       verified = true,
       verificationtoken = null,
       language = $2
-    WHERE lower(email) = lower($1);`,
-    [user.email, req.params.language || user.language, user.password_reset]);
+    WHERE lower(email) = lower($1);`,[
+      user.email,
+      req.params.language || user.language,
+      user.password_reset
+    ]);
 
   if (rows instanceof Error) {
-
-    // Get error message from templates.
-    const error_message = await languageTemplates({
-      template: 'failed_query',
-      language: req.params.language
-    })
-
-    return res.status(500).send(error_message)
+    return res.status(500).send('Failed to access ACL.')
   }
 
+  // Account is already approved.
+  // eg. on password reset
   if (user.approved) {
 
     // Login with message if account is approved and password reset.
     if (user.password_reset) {
-      res.setHeader('location', `${process.env.DIR}?msg=password_reset_ok`)
+
+      // Set root location which will open the login view.
+      res.setHeader('location', `${process.env.DIR || '/'}?msg=password_reset_ok`)
 
       return res.status(302).send()
     }
@@ -94,14 +107,7 @@ module.exports = async (req, res) => {
     WHERE admin = true;`)
 
   if (rows instanceof Error) {
-
-    // Get error message from templates.
-    const error_message = await languageTemplates({
-      template: 'failed_query',
-      language: req.params.language
-    })
-
-    return res.status(500).send(error_message)
+    return res.status(500).send('Failed to access ACL.')
   }
 
   // One or more administrator have been 
@@ -132,10 +138,10 @@ module.exports = async (req, res) => {
 
   } else {
 
+    // No admin accounts found in ACL.
     res.send(await languageTemplates({
       template: 'account_approved_no_admin',
       language: user.language
     }))
   }
-
 }

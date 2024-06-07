@@ -1,4 +1,17 @@
 /**
+## /user/register
+
+Exports the [user] register method for the /api/user/register route.
+
+@requires module:/view
+@requires module:/user/acl
+@requires module:/user/login
+@requires module:/utils/reqHost
+@requires module:/utils/mailer
+@requires module:/utils/languageTemplates
+@requires bcrypt
+@requires crypto
+
 @module /user/register
 */
 
@@ -8,27 +21,47 @@ const crypto = require('crypto')
 
 const acl = require('./acl')
 
-const mailer = require('../utils/mailer')
-
 const reqHost = require('../utils/reqHost')
+
+const mailer = require('../utils/mailer')
 
 const languageTemplates = require('../utils/languageTemplates')
 
 const view = require('../view')
 
-module.exports = async (req, res) => {
+/**
+@function register
+
+@description
+Returns the user regestration or password reset form depending on the reset request parameter.
+
+Returns the `registerUserBody` method with a request [user] body present.
+
+@param {Object} req HTTP request.
+@param {Object} res HTTP response.
+@param {Object} req.params 
+Request parameter.
+@param {boolean} [req.params.reset]
+Request password reset form.
+@param {Object} [req.body] 
+Post body object with user data.
+*/
+
+module.exports = async function register(req, res) {
 
   if (!acl) return res.status(500).send('ACL unavailable.')
 
   req.params.host = reqHost(req)
 
-  // Post request to register new user.
-  if (req.body && req.body.register) return post(req, res)
-
-  req.params.template = req.params.reset? 'password_reset_view': 'register_view';
+  // Register request [post] body.
+  if (req.body && req.body.register) return registerUserBody(req, res)
 
   // The login view will set the cookie to null.
   res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
+
+  req.params.template = req.params.reset
+    ? 'password_reset_view'
+    : 'register_view';  
 
   // Get request for registration form view.
   view(req, res)
@@ -36,7 +69,30 @@ module.exports = async (req, res) => {
 
 const previousAddress = {}
 
-async function post(req, res) {
+/**
+@function registerUserBody
+
+@description
+Will attempt to register the user object provided as request body as a new user.
+
+The remote_address determined from the request header is stored in the previousAddress module variable. Regsitration requests from the same address within 30 seconds will be bounced.
+
+A valid email address is required for the registration of a new user.
+
+A password reset is attempted if a record for the email address already exists in the ACL.
+
+@param {Object} req HTTP request.
+@param {Object} res HTTP response.
+@param {Object} req.params 
+Request parameter.
+@param {boolean} [req.params.reset]
+Request password reset form.
+@param {Object} req.body 
+Post body object with user data.
+@param {string} req.body.email 
+User account email.
+*/
+async function registerUserBody(req, res) {
 
   const remote_address = req.headers['x-forwarded-for']
     && /^[A-Za-z0-9.,_-\s]*$/.test(req.headers['x-forwarded-for']) ? req.headers['x-forwarded-for'] : 'invalid'

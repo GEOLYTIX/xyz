@@ -1,5 +1,5 @@
 /**
-## /user/admin
+## /user/cookie
 
 Exports the [user] cookie method for the /api/user/cookie route.
 
