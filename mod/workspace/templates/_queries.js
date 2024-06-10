@@ -24,6 +24,9 @@ module.exports = {
   field_max: {
     template: require('./field_max'),
   },
+  field_minmax: {
+    template: require('./field_minmax'),
+  },
   get_nnearest: {
     render: require('./get_nnearest'),
   },
