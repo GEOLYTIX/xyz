@@ -1566,7 +1566,7 @@ label.checkbox {
   flex-direction: column;
   gap: 5px;
 }
-.modal-dialog {
+.dialog {
   position: absolute;
   background-color: #fff;
   box-shadow: 1px 1px 3px var(--color-primary-light);

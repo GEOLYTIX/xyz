@@ -366,7 +366,7 @@ await describe('Mapview test', async () => {
     if (locale instanceof Error) {
 
         document.body.append(mapp.utils.html.node`
-  <dialog open class="modal-map">
+  <dialog open class="dialog-map">
     ${mapp.dictionary.no_locales}`)
     }
 
@@ -412,7 +412,7 @@ await describe('Mapview test', async () => {
         await it('should display an error dialog if locale is an instance of Error', async () => {
 
             // Assert that the error dialog is appended to the document body
-            const errorDialog = document.querySelector('.modal-dialog');
+            const errorDialog = document.querySelector('.dialog-modal');
             assertNotEqual(errorDialog, null, 'Error dialog should be appended to the document body');
 
             // Assert that the error dialog contains the correct message
