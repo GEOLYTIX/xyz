@@ -5,7 +5,7 @@ Exports the [user] cookie method for the /api/user/cookie route.
 
 @requires module:/user/acl
 @requires module:/user/login
-@requires jsonwebtokenv
+@requires jsonwebtoken
 
 @module /user/cookie
 */

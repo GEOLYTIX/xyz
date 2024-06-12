@@ -1,4 +1,22 @@
 /**
+## /user/saml
+
+The SAML user module exports the saml method as an enpoint for request authentication via SAML.
+
+The module requires the saml2-js module library to be installed. The availability of the module [required] is tries during the module initialisation.
+
+The SAML Service Provider [sp] and Identity Provider [idp] are stored in module variables.
+
+Succesful declaration of the sp and idp requires a Service Provider certificatate key pair `${process.env.SAML_SP_CRT}.pem` and `${process.env.SAML_SP_CRT}.crt` in the XYZ process root.
+
+An Assertation Consumer Service [ACS] endpoint must be provided as `process.env.SAML_ACS`
+
+The idp requires a certificate `${process.env.SAML_IDP_CRT}.crt`, single sign-on [SSO] login url `process.env.SAML_SSO` and logout url `process.env.SAML_SLO`.
+
+@requires module:/utils/logger
+@requires jsonwebtoken
+@requires saml2-js
+
 @module /user/saml
 */
 
@@ -48,42 +66,53 @@ try {
   console.log('SAML2 module is not available.')
 }
 
-module.exports = (req, res) => {
+/**
+@function saml
+
+@description
+The saml method requires the sp and idp module variables to be declared as saml2 Service and Identity provider.
+
+The `req.url` path is matched with either the `metadata`, `login`, or `acs` methods.
+
+The saml metadata will be sent as `application/xml` content if requested.
+
+The `saml/login` request path will redirect the request to a saml login request url created by the Service Provider [sp].
+
+The sp will assert a post body sent to the `saml/acs` endpoint.
+
+A lookup of the ACL user record will be attempted by the acl_lookup method.
+
+The acl record with the user roles will be assigned to the user object from the saml token email.
+
+The user object is signed as a JSON Web Token and set as a cookie to the HTTP response header.
+
+@param {Object} req HTTP request.
+@param {string} req.url Request path.
+@param {Object} res HTTP response.
+*/
+
+module.exports = function saml(req, res) {
+
+  if (!sp || !idp) {
+    console.warn(`SAML SP or IDP are not available in XYZ instance.`)
+    return;
+  }
   
+  // Return metadata.
   if (req.url.match(/\/saml\/metadata/)) {
     res.setHeader('Content-Type', 'application/xml');
     res.send(sp.create_metadata());
   }
 
-  // if (req.url.match(/\/saml\/logout/)) {
-  //   const cookie = req.cookies && req.cookies[process.env.TITLE];
-
-  //   jwt.verify(cookie, process.env.SECRET, (err, user) => {
-  //     if (err) return err;
-
-  //     sp.create_logout_request_url(
-  //       idp,
-  //       {
-  //         name_id: user.name_id,
-  //         session_index: user.session_index,
-  //       },
-  //       (err, logout_url) => {
-  //         if (err != null) return res.send(500);
-
-  //         res.setHeader("location", logout_url);
-  //         res.status(301).send();
-  //       }
-  //     );
-  //   });
-  // }
-
+  // Create Service Provider login request url.
   if (req.params?.login || req.url.match(/\/saml\/login/)) {
-    sp.create_login_request_url(idp, {}, (err, login_url, request_id) => {
-      if (err != null) return res.send(500);
+    sp.create_login_request_url(idp, {},
+      (err, login_url, request_id) => {
+        if (err != null) return res.send(500);
 
-      res.setHeader('location', login_url);
-      res.status(301).send();
-    });
+        res.setHeader('location', login_url);
+        res.status(301).send();
+      });
   }
 
   if (req.url.match(/\/saml\/acs/)) {
@@ -144,6 +173,20 @@ module.exports = (req, res) => {
     );
   }
 };
+
+/**
+@function acl_lookup
+
+@description
+The acl_lookup attempts to find a user record by it's email in the ACL.
+
+The user record will be validated and returned to the requesting saml Assertion Consumer Service [ACS].
+
+@param {string} email User email.
+
+@returns {Promise<Object|Error>}
+User object or Error.
+*/
 
 async function acl_lookup(email) {
 
