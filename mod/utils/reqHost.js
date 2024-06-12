@@ -1,18 +1,25 @@
 /**
+## reqHost
+
+Exports the reqHost utility method.
+
+@requires module:/utils/logger
+
 @module /utils/reqHost
 */
 
 const logger = require('./logger')
 
 /**
-### reqHost(req)
+@function reqHost
 
+@description
 The reqHost utility method inspects the HTTP req[quest] object header to return the host as a string.
 
 The host value can be logged with the `reqHost` logger key.
 
-@function reqHost
 @param {Object} req HTTP request.
+
 @returns {string} host
 */
 

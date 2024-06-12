@@ -1,7 +1,14 @@
 /**
 ## fromACL
 
-This module exports a function to authenticate a user based on a provided email and password.
+This module exports the fromACL method to request and validate a user from the ACL.
+
+@requires module:/user/acl
+@requires module:/utils/reqHost
+@requires module:/utils/mailer
+@requires module:/utils/languageTemplates
+@requires bcrypt
+@requires crypto
 
 @module /user/fromACL
 */
@@ -10,34 +17,42 @@ const bcrypt = require('bcrypt')
 
 const crypto = require('crypto')
 
-const mailer = require('../utils/mailer')
+const acl = require('./acl')
 
 const reqHost = require('../utils/reqHost')
 
+const mailer = require('../utils/mailer')
+
 const languageTemplates = require('../utils/languageTemplates')
 
-const acl = require('./acl')
-
 /**
- * Authenticates a user based on the provided email and password.
- @function fromACL
- @async
- @param {Object} req - The request object.
- @param {string} [req.body.email] - The email address of the user.
- @param {string} [req.body.password] - The password of the user.
- @param {string} [req.params.language] - The language for the user.
- @param {Object} req.headers - The request headers.
- @param {string} [req.headers.authorization] - The authorization header containing the email and password.
- @param {string} [req.headers['x-forwarded-for']] - The IP address of the client.
- @returns {Promise<Object|Error>} A Promise that resolves with the user object or an Error if authentication fails.
- */
-module.exports = async (req) => {
+@function fromACL
+@async
+
+@description
+Creates a request object for the getUser(request) method argument.
+The request.email and request.password are taken from the req.body or authorization header.
+
+@param {Object} req The request object.
+@param {string} [req.body.email] The email address of the user.
+@param {string} [req.body.password] The password of the user.
+@param {string} [req.params.language] The language for the user.
+@param {Object} req.headers The request headers.
+@param {string} [req.headers.authorization] The authorization header containing the email and password.
+
+@returns {Promise<Object|Error>}
+Validated user object or an Error if authentication fails.
+*/
+
+module.exports = async function fromACL(req) {
 
   const request = {
     email: req.body?.email,
     password: req.body?.password,
     language: req.params.language,
-    headers: req.headers
+    headers: req.headers,
+    date: new Date(),
+    host: reqHost(req)
   }
 
   if (req.headers.authorization) {
@@ -51,8 +66,11 @@ module.exports = async (req) => {
     request.password = email_password[1]
   }
 
-  request.remote_address = /^[A-Za-z0-9.,_-\s]*$/.test(req.headers['x-forwarded-for'])
-    ? req.headers['x-forwarded-for'] : undefined;
+  // Get remote_address param from request headers.
+  request.remote_address = /^[A-Za-z0-9.,_-\s]*$/
+    .test(req.headers['x-forwarded-for'])
+    ? req.headers['x-forwarded-for']
+    : undefined;
 
   if (!request.email) return new Error(await languageTemplates({
     template: 'missing_email',
@@ -63,11 +81,6 @@ module.exports = async (req) => {
     template: 'missing_password',
     language: request.language
   }))
-
-  request.date = new Date()
-
-  // Get the host for the account verification email.
-  request.host = reqHost(req)
 
   const user = await getUser(request)
 
@@ -81,17 +94,28 @@ module.exports = async (req) => {
 }
 
 /**
- * Retrieves the user from the ACL and updates the access_log property.
- @function getUser
- @async
- @param {Object} request - The request object.
- @param {string} request.email - The email address of the user.
- @param {Date} request.date - The current date and time.
- @param {string} request.remote_address - The IP address of the client.
- @param {string} request.language - The language for the user.
- @param {string} request.host - The host for the account verification email.
- @returns {Promise<Object|Error>} A Promise that resolves with the user object or an Error if the user is not found or authentication fails.
- */
+@function getUser
+
+@description
+Retrieves the user from the ACL and updates the access_log property.
+
+Will call userExpiry method to check whether user approval has expired.
+
+Will check whether the request.password matches stored user password.
+
+Will call failedLogin method if user object can not be validated.
+
+Returns a validated user object or Error.
+
+@param {Object} request The request object.
+@param {string} request.email The email address of the user.
+@param {Date} request.date The current date and time.
+@param {string} request.remote_address The IP address of the client.
+@param {string} request.language The language for the user.
+@param {string} request.host The host for the account verification email.
+@returns {Promise<Object|Error>} A Promise that resolves with the user object, an Error, or null if the user is not found.
+*/
+
 async function getUser(request) {
 
   // Update access_log and return user record matched by email.
@@ -110,9 +134,10 @@ async function getUser(request) {
   // Get user record from first row.
   const user = rows[0]
 
-  //If there is no user in the ACL do not throw error.
+  // If there is no user in the ACL do not throw error.
   if (!user) return;
 
+  // No password check is required.
   if (!user.password) return;
 
   // Blocked user cannot login.
@@ -123,9 +148,12 @@ async function getUser(request) {
     }))
   }
 
+  // Removes blocked.false flag from user object.
   delete user.blocked
 
+  // Check whether the user approval may have expired.
   if (await userExpiry(user, request)) {
+
     return new Error(await languageTemplates({
       template: 'user_expired',
       language: user.language
@@ -154,8 +182,10 @@ async function getUser(request) {
 
     if (process.env.USER_SESSION) {
 
+      // Create a random session token.
       user.session = crypto.randomBytes(10).toString('hex')
 
+      // Store session token in ACL.
       rows = await acl(`
         UPDATE acl_schema.acl_table
         SET session = '${user.session}'
@@ -177,15 +207,25 @@ async function getUser(request) {
 }
 
 /**
- * Checks if the user account has expired.
- @function userExpiry
- @async
- @param {Object} user - The user object.
- @param {Object} request - The request object.
- @param {string} request.email - The email address of the user.
- @param {string} request.language - The language for the user.
- @returns {Promise<boolean>} A Promise that resolves with a boolean indicating if the user account has expired.
- */
+@function userExpiry
+@async
+
+@description
+Checks whether an user approval has expired if enabled with `process.env.APPROVAL_EXPIRY`.
+
+A user account will expire if the user object has an expires_on integer data which is smaller than the current Date.
+
+The approval will be removed from the user record in the ACL.
+
+Admin user accounts do not expire.
+
+@param {Object} user The user object.
+@param {Object} request The request object.
+@param {string} request.email - The email address of the user.
+@param {string} request.language - The language for the user.
+@returns {Promise<boolean>} A Promise that resolves with a boolean indicating if the user account has expired.
+*/
+
 async function userExpiry(user, request) {
 
   // Admin accounts do not not expire.
@@ -213,16 +253,33 @@ async function userExpiry(user, request) {
 }
 
 /**
- * Handles a failed login attempt and increases the failed attempts on the ACL.
- @function failedLogin
- @async
- @param {Object} request - The request object.
- @param {string} request.email - The email address of the user.
- @param {string} request.language - The language for the user.
- @param {string} request.host - The host for the account verification email.
- @param {string} request.remote_address - The IP address of the client.
- @returns {Promise<Error>} A Promise that resolves with an Error indicating that authentication failed.
- */
+@function failedLogin
+@async
+
+@description
+Handles a failed login attempts.
+
+Increases a counter of failed attempts in the user ACL record.
+
+The user account will be locked if the failed attempts exceed the maxFailed attempts from `process.env.FAILED_ATTEMPTS`. maxFailed attempts defaults to 3.
+
+Verification will be removed and a verification token will stored in the ACL if a user account is getting locked.
+
+An email with the verification token is sent to the user notifying that the account has been locked and asking to renew verification.
+
+It is recommended to reset the password for the account if this happens.
+
+@param {Object} request The request object.
+@param {string} request.email The email address of the user.
+@param {string} request.language The language for the user.
+@param {string} request.host The host for the account verification email.
+@param {string} request.remote_address The IP address of the client.
+
+@returns {Promise<Error>} A Promise that resolves with an Error.
+*/
+
+const maxFailedAttempts = parseInt(process.env.FAILED_ATTEMPTS || 3)
+
 async function failedLogin(request) {
 
   // Increase failed login attempts counter by 1.
@@ -232,13 +289,15 @@ async function failedLogin(request) {
     WHERE lower(email) = lower($1)
     RETURNING failedattempts;`, [request.email])
 
-  if (rows instanceof Error) return new Error(await languageTemplates({
-    template: 'failed_query',
-    language: request.language
-  }))
+  if (rows instanceof Error) {
+    return new Error(await languageTemplates({
+      template: 'failed_query',
+      language: request.language
+    }))
+  }
 
   // Check whether failed login attempts exceeds limit.
-  if (rows[0]?.failedattempts >= parseInt(process.env.FAILED_ATTEMPTS || 3)) {
+  if (rows[0]?.failedattempts >= maxFailedAttempts) {
 
     // Create a verificationtoken.
     const verificationtoken = crypto.randomBytes(20).toString('hex')
@@ -251,17 +310,19 @@ async function failedLogin(request) {
         verificationtoken = '${verificationtoken}'
       WHERE lower(email) = lower($1);`, [request.email])
 
-    if (rows instanceof Error) return new Error(await languageTemplates({
-      template: 'failed_query',
-      language: request.language
-    }))
+    if (rows instanceof Error) {
+      return new Error(await languageTemplates({
+        template: 'failed_query',
+        language: request.language
+      }))
+    }
 
     await mailer({
       template: 'locked_account',
       language: request.language,
       to: request.email,
       host: request.host,
-      failed_attempts: parseInt(process.env.FAILED_ATTEMPTS) || 3,
+      failed_attempts: maxFailedAttempts,
       remote_address: request.remote_address,
       verificationtoken
     })

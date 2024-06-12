@@ -18,6 +18,7 @@ const jwt = require('jsonwebtoken')
 
 /**
 @function cookie
+@async
 
 @description
 The cookie method attempts to find a request cookie matching the `process.env.TITLE` variable.

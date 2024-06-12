@@ -22,6 +22,7 @@ const user_sessions = {}
 
 /**
 @function auth
+@async
 
 @description
 The auth method returns a user object to be assigned as request parameter if a request is successfully authenticated.
@@ -97,6 +98,7 @@ module.exports = async function auth(req, res) {
 
 /**
 @function checkParamToken
+@async
 
 @description
 An API key can be provided as a request parameter token.
@@ -169,6 +171,7 @@ async function checkParamToken(req, res, user) {
 
 /**
 @function checkSession
+@async
 
 @description
 Will return if sessions are not enabled via USER_SESSION environment variable.
