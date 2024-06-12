@@ -85,9 +85,10 @@
   gap: 5px;
 }
 
-.modal {
+.dialog {
   position: absolute;
   background-color: #fff;
+  border-color: #fff;  
   box-shadow: 1px 1px 3px var(--color-primary-light);
   cursor: grab;
   user-select: none;
@@ -101,9 +102,26 @@
   }
 }
 
-.modal-dialog {
+.modal {
+  text-wrap: wrap;
+  position: fixed; 
+  top: 50%; 
+  left: 50%; 
+  transform: translate(-50%, -50%); 
+  border-color: #fff;
+  z-index: 9999; 
+
+  & > button.close {
+    position: absolute;
+    top: 1em;
+    right: 1em;
+    height: 1em;
+    width: 1em;
+  }
+}
+
+.modal-map {
   margin: 20%;
-  z-index: 9999;
   padding: 10px;
   text-wrap: wrap;
   font-size: large;
