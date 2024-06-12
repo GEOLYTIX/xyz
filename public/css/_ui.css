@@ -88,6 +88,7 @@
 .dialog {
   position: absolute;
   background-color: #fff;
+  border-color: #fff;
   box-shadow: 1px 1px 3px var(--color-primary-light);
   cursor: grab;
   user-select: none;
@@ -103,7 +104,9 @@
 
 .modal {
   text-wrap: wrap;
-  
+  position: absolute;
+  border-color: #fff;
+
   & > button.close {
     position: absolute;
     top: 1em;
