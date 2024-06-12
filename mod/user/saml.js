@@ -99,13 +99,13 @@ module.exports = function saml(req, res) {
   }
   
   // Return metadata.
-  if (req.url.match(/\/saml\/metadata/)) {
+  if (/\/saml\/metadata/.exec(req.url)) {
     res.setHeader('Content-Type', 'application/xml');
     res.send(sp.create_metadata());
   }
 
   // Create Service Provider login request url.
-  if (req.params?.login || req.url.match(/\/saml\/login/)) {
+  if (req.params?.login || /\/saml\/login/.exec(req.url)) {
     sp.create_login_request_url(idp, {},
       (err, login_url, request_id) => {
         if (err != null) return res.send(500);
@@ -115,7 +115,7 @@ module.exports = function saml(req, res) {
       });
   }
 
-  if (req.url.match(/\/saml\/acs/)) {
+  if (/\/saml\/acs/.exec(req.url)) {
 
     sp.post_assert(
       idp,
