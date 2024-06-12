@@ -1386,7 +1386,6 @@ label.checkbox {
     & button {
       float: right;
       padding: 3px;
-      cursor: help;
       border-radius: 2px;
       font-weight: bold;
       font-size: 0.8em;
