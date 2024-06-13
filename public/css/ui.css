@@ -1381,16 +1381,14 @@ label.checkbox {
     }
   }
   & .layer-key {
-    grid-column: 1 / 3;
-    & > span {
-      float: right;
-      padding: 3px;
-      cursor: help;
-      border-radius: 2px;
-      font-weight: bold;
-      font-size: 0.8em;
-      color: black;
-      background-color: var(--color-mid);
+    float: right;
+    padding: 3px;
+    border-radius: 2px;
+    font-weight: bold;
+    font-size: 0.8em;
+    background-color: var(--color-mid);
+    &.active {
+      background-color: var(--color-on);
     }
   }
   & .textarea {
