@@ -7,7 +7,8 @@ input {
 }
 
 input.invalid {
-  opacity: 0.5
+  opacity: 0.5;
+  outline: 1px solid var(--color-no);
 }
 
 input::placeholder {
