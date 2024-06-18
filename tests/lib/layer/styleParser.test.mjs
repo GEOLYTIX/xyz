@@ -191,18 +191,16 @@ describe('styleParser', () => {
     styleParser(layer);
 
     const expected = {
-      style: {
-        'hovers': {
-          'hover1': {
-            'method': 'customHoverMethod1'
-          },
-          'hover2': {
-            'method': 'customHoverMethod2'
-          }
+      'hovers': {
+        'hover1': {
+          'method': 'customHoverMethod1'
         },
-        'highlight': { 'zIndex': null },
-        'default': { 'strokeColor': '#333', 'fillColor': '#fff9' }
-      }
+        'hover2': {
+          'method': 'customHoverMethod2'
+        }
+      },
+      'highlight': { 'zIndex': null },
+      'default': { 'strokeColor': '#333', 'fillColor': '#fff9' }
     }
 
     assertEqual(layer.style, expected);
