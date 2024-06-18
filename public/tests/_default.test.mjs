@@ -604,6 +604,237 @@ await describe('Mapview test', async () => {
         assertEqual(mapview.Map.getTargetElement().style.marginTop, '0px', 'Margin top of the map target element should be set to 0 after removeLastTab is called');
     });
 
-    await layerTest(mapview);
+
+
+
+
+
+    await describe('styleParser', async () => {
+        await it('should assign default highlight style and zIndex', () => {
+            const layer = {
+                key: 'test-layer',
+                style: {
+                    default: {}
+                },
+            };
+
+            mapp.layer.styleParser(layer);
+
+            assertTrue(layer.style.highlight !== undefined, 'highlight style should be assigned');
+            assertEqual(layer.style.highlight.zIndex, Infinity, 'zIndex should be set to Infinity');
+        });
+
+        await it('should assign default style', () => {
+            const layer = {
+                key: 'test-layer',
+                style: {
+                },
+            };
+
+            mapp.layer.styleParser(layer);
+
+            const expected = {
+                key: 'test-layer',
+                style: {
+                    highlight: { 'zIndex': null },
+                    default: {
+                        strokeColor: '#333',
+                        fillColor: '#fff9',
+                      }
+                }
+            }
+            assertEqual(layer, expected);
+        });
+
+        await it('should parse theme styles', () => {
+            const layer = {
+                key: 'test-layer',
+                style: {
+                    default: {},
+                    theme: {
+                        cat: {
+                            category1: {
+                                value: 'category1',
+                            },
+                            category2: {
+                                value: 'category2',
+                            },
+                        },
+                    },
+                },
+            };
+
+            mapp.layer.styleParser(layer);
+
+            assertTrue(Array.isArray(layer.style.theme.categories), 'theme categories should be an array');
+            assertEqual(layer.style.theme.categories.length, 2, 'theme categories should have 2 items');
+        });
+
+        await it('should handle multiple themes', () => {
+            const layer = {
+                key: 'test-layer',
+                style: {
+                    default: {},
+                    themes: {
+                        theme1: {
+                            title: 'Theme 1',
+                        },
+                        theme2: {
+                            title: 'Theme 2',
+                        },
+                    },
+                    theme: 'theme1',
+                },
+            };
+
+            mapp.layer.styleParser(layer);
+
+            assertEqual(layer.style.theme.title, 'Theme 1', 'selected theme should match the specified theme');
+        });
+
+        await it('should handle multiple hovers', () => {
+            const layer = {
+                key: 'test-layer',
+                style: {
+                    default: {},
+                    hovers: {
+                        hover1: {
+                            method: 'customHoverMethod',
+                        }
+                    }
+                },
+            };
+
+            mapp.layer.styleParser(layer);
+
+            assertEqual(layer.style.hover.method, 'customHoverMethod', 'selected hover should match the specified hover');
+        });
+
+        await it('should handle multiple labels', () => {
+            const layer = {
+                key: 'test-layer',
+                style: {
+                    default: {},
+                    labels: {
+                        label1: {
+                            field: 'label1Field',
+                        },
+                        label2: {
+                            field: 'label2Field',
+                        },
+                    }
+                },
+            };
+
+            mapp.layer.styleParser(layer);
+
+            assertEqual(layer.style.label.field, 'label1Field', 'selected label should match the specified label');
+        });
+
+        await it('should handle graduated theme with less_than breaks by default', () => {
+            const layer = {
+                key: 'test-layer',
+                style: {
+                    default: {},
+                    theme: {
+                        type: 'graduated',
+                        field: 'value',
+                        categories: [
+                            { value: 10, style: { fillColor: 'red' } },
+                            { value: 20, style: { fillColor: 'green' } },
+                            { value: 30, style: { fillColor: 'blue' } },
+                        ],
+                    },
+                },
+            };
+
+            const expected_categories = [
+                { value: 10, style: { fillColor: 'red' }, label: 10 },
+                { value: 20, style: { fillColor: 'green' }, label: 20 },
+                { value: 30, style: { fillColor: 'blue' }, label: 30 }
+            ];
+
+            mapp.layer.styleParser(layer);
+
+            assertEqual(layer.style.theme.graduated_breaks, 'less_than', 'graduated_breaks should default to less_than');
+            assertEqual(layer.style.theme.categories, expected_categories, 'categories should remain in the original order');
+        });
+
+        await it('should handle graduated theme with greater_than breaks', () => {
+            const layer = {
+                key: 'test-layer',
+                style: {
+                    default: {},
+                    theme: {
+                        type: 'graduated',
+                        field: 'value',
+                        graduated_breaks: 'greater_than',
+                        categories: [
+                            { value: 10, style: { fillColor: 'red' } },
+                            { value: 20, style: { fillColor: 'green' } },
+                            { value: 30, style: { fillColor: 'blue' } },
+                        ],
+                    },
+                },
+            };
+
+            mapp.layer.styleParser(layer);
+
+            assertEqual(layer.style.theme.graduated_breaks, 'greater_than', 'graduated_breaks should be greater_than');
+            assertEqual(layer.style.theme.categories[0].value, 30, 'categories should be reversed for greater_than breaks');
+        });
+
+        await it('should handle deprecated layer.hover configuration', () => {
+            const layer = {
+                key: 'test-layer',
+                default: {},
+                hover: {
+                    method: 'customHoverMethod',
+                },
+                style: {}
+            };
+
+            mapp.layer.styleParser(layer);
+
+            assertEqual(layer.style.hover.method, 'customHoverMethod', 'hover configuration should be moved to layer.style.hover');
+            assertFalse(layer.hasOwnProperty('hover'), 'layer.hover should be deleted');
+        });
+
+        await it('should remove keys that are not in the default icon object', () => {
+            const layer = {
+                format: 'wkt',
+                key: 'test-layer',
+                style: {
+                    default: {
+                        testkey: 'test',
+                        icon: {
+                            type: 'target',
+                            fillColor: '#000000',
+                        }
+                    }
+                }
+            };
+
+            const expected = {
+                format: 'wkt',
+                key: 'test-layer',
+                style: {
+                    default: {
+                        icon: {
+                            type: 'target',
+                            fillColor: '#000000',
+                        }
+                    },
+                    'highlight': { 'zIndex': null }
+
+                }
+            }
+
+            // Non-icon key should be removed 
+            assertEqual(layer, expected);
+        });
+    });
+
+   // await layerTest(mapview);
 
 });
