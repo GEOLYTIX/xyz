@@ -154,6 +154,12 @@ module.exports = async (req, res) => {
     // Reserved params may not be substituted.
     const reserved = new Set(['viewport', 'filter'])
 
+    // The sqlFilter must not override the filter set by the layer query.
+    if (req.params.sqlFilter) {
+      req.params.filter = req.params.filter 
+      || `AND ${sqlFilter(JSON.parse(req.params.sqlFilter), req.params.SQL)}`
+    }
+
     // Returns -1 if ${filter} not found in template
     if (template.template.search(/\$\{filter\}/)<0) {
 
