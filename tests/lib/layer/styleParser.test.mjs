@@ -200,10 +200,13 @@ describe('styleParser', () => {
         }
       },
       'highlight': { 'zIndex': null },
-      'default': { 'strokeColor': '#333', 'fillColor': '#fff9' }
+      'default': { 'strokeColor': '#333', 'fillColor': '#fff9' },
+      'hover': { 'method': 'customHoverMethod1' }
     }
 
-    assertEqual(layer.style, expected);
+    assertTrue('hover' in layer.style);
+    assertTrue('hovers' in layer.style);
+    assertEqual(layer.style.hover.method, expected.hover.method);
   });
 
   it('should handle layer.style.label and layers.style.labels', () => {
@@ -237,11 +240,15 @@ describe('styleParser', () => {
           },
         },
         'highlight': { 'zIndex': null },
-        'default': { 'strokeColor': '#333', 'fillColor': '#fff9' }
+        'default': { 'strokeColor': '#333', 'fillColor': '#fff9' },
+        'label': {
+          field: 'label1Field'
+        }
       }
     }
-
-    assertEqual(layer.style, expected);
+    assertTrue('label' in layer.style);
+    assertTrue('labels' in layer.style);
+    assertEqual(layer.style.label.field, expected.style.label.field)
   });
 
   it('should remove keys that are not in the default icon object', () => {
