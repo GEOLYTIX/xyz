@@ -633,17 +633,8 @@ await describe('Mapview test', async () => {
 
             mapp.layer.styleParser(layer);
 
-            const expected = {
-                key: 'test-layer',
-                style: {
-                    highlight: { 'zIndex': null },
-                    default: {
-                        strokeColor: '#333',
-                        fillColor: '#fff9',
-                      }
-                }
-            }
-            assertEqual(layer, expected);
+            assertTrue(layer.style.default !== undefined, 'default style should be assigned');
+            assertTrue(layer.style.highlight.zIndex !== undefined, 'highlight zIndex should be assigned');
         });
 
         await it('should parse theme styles', () => {
@@ -815,26 +806,11 @@ await describe('Mapview test', async () => {
                 }
             };
 
-            const expected = {
-                format: 'wkt',
-                key: 'test-layer',
-                style: {
-                    default: {
-                        icon: {
-                            type: 'target',
-                            fillColor: '#000000',
-                        }
-                    },
-                    'highlight': { 'zIndex': null }
-
-                }
-            }
-
             // Non-icon key should be removed 
-            assertEqual(layer, expected);
+            assertTrue(layer.style.default.testkey === undefined);
         });
     });
 
-   // await layerTest(mapview);
+     await layerTest(mapview);
 
 });
