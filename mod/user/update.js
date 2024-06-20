@@ -63,11 +63,25 @@ module.exports = async function update(req, res) {
     ? `, approved_by = '${req.params.user.email}|${ISODate}'`
     : '';
 
+  let verification_by_admin = ''
+  if (req.params.field === 'verified' && req.params.value === true) {
+
+    verification_by_admin = `
+      , password = password_reset
+      , password_reset = NULL
+      , failedattempts = 0
+      , verificationtoken = NULL
+      , approved = true
+      , approved_by = '${req.params.user.email}|${ISODate}'
+    `
+  }
+
   // Get user to update from ACL.
   const rows = await acl(`
     UPDATE acl_schema.acl_table
     SET
       ${req.params.field} = $2
+      ${verification_by_admin}
       ${approved_by}
     WHERE lower(email) = lower($1);`,
     [email, req.params.value])
