@@ -138,7 +138,7 @@ async function checkParamToken(req, res, user) {
     if (rows instanceof Error) return rows
 
     if (rows.blocked) {
-      
+
       // The user is blocked.
       return new Error('Account is blocked')
     }
@@ -230,7 +230,7 @@ async function checkSession(req, user) {
     if (user.session !== rows[0].session) {
 
       // The stored session doesn't match user.session.
-      return new Error('Session ID mismatch')
+      return new Error('Session has been terminated. Please login again.')
     }
 
     // Store user.session in user_sessions object.
