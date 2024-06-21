@@ -119,9 +119,9 @@ describe('styleParser', () => {
     };
 
     const expected_categories = [
-      { value: 10, style: { fillColor: "red" }, label: 10 }, 
-      { value: 20, style: { fillColor: "green" }, label: 20 },
-      { value: 30, style: { fillColor: "blue" }, label: 30 }
+      { value: 10, style: { fillColor: 'red' }, label: 10 },
+      { value: 20, style: { fillColor: 'green' }, label: 20 },
+      { value: 30, style: { fillColor: 'blue' }, label: 30 }
     ];
 
     styleParser(layer);
@@ -168,6 +168,123 @@ describe('styleParser', () => {
 
     assertEqual(layer.style.hover.method, 'customHoverMethod', 'hover configuration should be moved to layer.style.hover');
     assertFalse(layer.hasOwnProperty('hover'), 'layer.hover should be deleted');
+  });
+
+  it('should handle layer.style.hover and layers.style.hovers', () => {
+    const layer = {
+      key: 'test-layer',
+      style: {
+        hover: {
+          method: 'customHoverMethod',
+        },
+        hovers: {
+          hover1: {
+            method: 'customHoverMethod1',
+          },
+          hover2: {
+            method: 'customHoverMethod2',
+          },
+        }
+      }
+    };
+
+    styleParser(layer);
+
+    const expected = {
+      'hovers': {
+        'hover1': {
+          'method': 'customHoverMethod1'
+        },
+        'hover2': {
+          'method': 'customHoverMethod2'
+        }
+      },
+      'highlight': { 'zIndex': null },
+      'default': { 'strokeColor': '#333', 'fillColor': '#fff9' },
+      'hover': { 'method': 'customHoverMethod1' }
+    }
+
+    assertTrue('hover' in layer.style);
+    assertTrue('hovers' in layer.style);
+    assertEqual(layer.style.hover.method, expected.hover.method);
+  });
+
+  it('should handle layer.style.label and layers.style.labels', () => {
+    const layer = {
+      key: 'test-layer',
+      style: {
+        label: {
+          field: 'labelField',
+        },
+        labels: {
+          label1: {
+            field: 'label1Field',
+          },
+          label2: {
+            field: 'label2Field',
+          },
+        }
+      }
+    };
+
+    styleParser(layer);
+
+    const expected = {
+      style: {
+        labels: {
+          label1: {
+            field: 'label1Field',
+          },
+          label2: {
+            field: 'label2Field',
+          },
+        },
+        'highlight': { 'zIndex': null },
+        'default': { 'strokeColor': '#333', 'fillColor': '#fff9' },
+        'label': {
+          field: 'label1Field'
+        }
+      }
+    }
+    assertTrue('label' in layer.style);
+    assertTrue('labels' in layer.style);
+    assertEqual(layer.style.label.field, expected.style.label.field)
+  });
+
+  it('should remove keys that are not in the default icon object', () => {
+    const layer = {
+      format: 'wkt',
+      key: 'test-layer',
+      style: {
+        default: {
+          testkey: 'test',
+          icon: {
+            type: 'target',
+            fillColor: '#000000',
+          }
+        }
+      }
+    };
+
+    styleParser(layer);
+
+    const expected = {
+      format: 'wkt',
+      key: 'test-layer',
+      style: {
+        default: {
+          icon: {
+            type: 'target',
+            fillColor: '#000000',
+          }
+        },
+        'highlight': { 'zIndex': null }
+
+      }
+    }
+
+    // Non-icon key should be removed 
+    assertFalse('testkey' in layer.style.default, 'There should be no other keys other than icon and scale in the default style');
   });
 
 });
