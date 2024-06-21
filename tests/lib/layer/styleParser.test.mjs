@@ -255,11 +255,13 @@ describe('styleParser', () => {
     const layer = {
       format: 'wkt',
       key: 'test-layer',
+      cluster: {},
       style: {
         default: {
+          scale: 2,
           key_to_be_removed: 'remove me',
           icon: {
-            type: 'target',
+            type: 'dot',
             fillColor: '#000000',
           }
         }
@@ -267,21 +269,6 @@ describe('styleParser', () => {
     };
 
     styleParser(layer);
-
-    const expected = {
-      format: 'wkt',
-      key: 'test-layer',
-      style: {
-        default: {
-          icon: {
-            type: 'target',
-            fillColor: '#000000',
-          }
-        },
-        'highlight': { 'zIndex': null }
-
-      }
-    }
 
     // Non-icon key should be removed 
     assertFalse('key_to_be_removed' in layer.style.default, 'There should be no other keys other than icon and scale in the default style');
