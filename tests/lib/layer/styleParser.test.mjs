@@ -257,7 +257,7 @@ describe('styleParser', () => {
       key: 'test-layer',
       style: {
         default: {
-          testkey: 'test',
+          key_to_be_removed: 'remove me',
           icon: {
             type: 'target',
             fillColor: '#000000',
@@ -284,7 +284,7 @@ describe('styleParser', () => {
     }
 
     // Non-icon key should be removed 
-    assertFalse('testkey' in layer.style.default, 'There should be no other keys other than icon and scale in the default style');
+    assertFalse('key_to_be_removed' in layer.style.default, 'There should be no other keys other than icon and scale in the default style');
   });
 
 });
