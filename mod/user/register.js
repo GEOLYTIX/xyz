@@ -6,6 +6,7 @@ Exports the [user] register method for the /api/user/register route.
 @requires module:/view
 @requires module:/user/acl
 @requires module:/user/login
+@requires module:/utils/reqHost
 @requires module:/utils/mailer
 @requires module:/utils/languageTemplates
 @requires bcrypt
@@ -19,6 +20,8 @@ const bcrypt = require('bcrypt')
 const crypto = require('crypto')
 
 const acl = require('./acl')
+
+const reqHost = require('../utils/reqHost')
 
 const mailer = require('../utils/mailer')
 
@@ -47,6 +50,8 @@ Post body object with user data.
 module.exports = async function register(req, res) {
 
   if (!acl) return res.status(500).send('ACL unavailable.')
+
+  req.params.host = reqHost(req)
 
   // Register request [post] body.
   if (req.body) return registerUserBody(req, res)
