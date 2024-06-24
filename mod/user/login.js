@@ -1,14 +1,42 @@
 /**
+## /user/login
+
+Exports the login method for the /api/user/login route.
+
+@requires module:/user/fromACL
+@requires module:/view
+@requires jsonwebtoken
+
 @module /user/login
 */
-
-const jwt = require('jsonwebtoken')
 
 const fromACL = require('./fromACL')
 
 const view = require('../view')
 
-module.exports = async (req, res) => {
+const jwt = require('jsonwebtoken')
+
+/**
+@function login
+@async
+
+@description
+Request which require authentication will return the login method if the authentication fails.
+
+The login method will request the fromACL() method for a user with login details in the Post Request body.
+
+A user cookie will be assigned for the user returned from the fromACL() method and the response will be redirected to the intended target location.
+
+The loginView method will be returned with a message from a failed user validation or if no login post request body is provided.
+
+@param {Object} req HTTP request.
+@param {Object} req.params HTTP request parameter.
+@param {Object} [req.params.user] Mapp User object.
+@param {Object} req.body HTTP POST request body.
+@param {Object} res HTTP response.
+*/
+
+module.exports = async function login(req, res) {
 
   if (req.body) {
 
@@ -24,9 +52,10 @@ module.exports = async (req, res) => {
       return 
     }
 
-    if (user instanceof Error) return res.status(401).send(user.message)
+    if (user instanceof Error) {
+      return res.status(401).send(user.message)
+    }
 
-    // Create token with 8 hour expiry.
     const token = jwt.sign(
       {
         email: user.email,
@@ -51,15 +80,31 @@ module.exports = async (req, res) => {
 
   if (!req.params.msg && req.params.user) {
 
-    res.setHeader('location', `${process.env.DIR}`)
+    res.setHeader('location', `${process.env.DIR || '/'}`)
     res.status(302).send()
     return;
   }
 
-  loginView(req, res)
+  return loginView(req, res)
 }
 
-async function loginView(req, res) {
+
+/**
+@function loginView
+
+@description
+Any existing user cookie for the XYZ instance will be removed [set to null].
+
+A redirect cookie will be set to the response header for a redirect to the location after sucessful login.
+
+The default `login_view` will be set as template request parameter before the XYZ View API method will be returned.
+
+@param {Object} req HTTP request.
+@param {Object} req.params HTTP request parameter.
+@param {Object} res HTTP response.
+*/
+
+function loginView(req, res) {
 
   // Clear user token cookie.
   res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)

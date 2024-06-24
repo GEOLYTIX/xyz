@@ -24,7 +24,7 @@ process.env.TITLE ??= 'GEOLYTIX | XYZ'
 
 process.env.DIR ??= ''
 
-module.exports = async (req, res) => {
+module.exports = async function api(req, res) {
 
   // redirect if dir is missing in url path.
   if (process.env.DIR && req.url.length === 1) {
@@ -132,7 +132,7 @@ module.exports = async (req, res) => {
     // Remove cookie.
     res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
 
-    req.params.msg = user.msg
+    req.params.msg = user.msg || user.message
 
     // Return login view with error message.
     return login(req, res)
