@@ -107,27 +107,27 @@ async function registerUserBody(req, res) {
 
   const expiry_date = parseInt((new Date().getTime() + process.env.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24) / 1000)
 
+  const USER = {
+    email: req.body.email,
+    password: req.body.password,
+    password_reset: req.body.password,
+    language: req.body.language,
+    verificationtoken: req.body.verificationtoken,
+    access_log: [`${date}@${req.ips && req.ips.pop() || req.ip}`]
+  }
+
+  if (process.env.APPROVAL_EXPIRY) {
+    INSERTS.push('expires_on')
+    VALUES.push(expiry_date)
+    USER['expires_on'] = expiry_date
+  }
+
   // Create new user account
   const rows = await acl(`
-    INSERT INTO acl_schema.acl_table (
-      email,
-      password,
-      password_reset,
-      language,
-      ${process.env.APPROVAL_EXPIRY ? 'expires_on,' : ''}
-      verificationtoken,
-      access_log
-    )
-
-    SELECT
-      '${req.body.email}' AS email,
-      '${req.body.password}' AS password,
-      '${req.body.password}' AS password_reset,
-      '${req.body.language}' AS language,
-      ${process.env.APPROVAL_EXPIRY? `${expiry_date} AS expires_on,` : ''}
-      '${req.body.verificationtoken}' AS verificationtoken,
-      array['${date}@${req.ips && req.ips.pop() || req.ip}'] AS access_log;`)
-
+    INSERT INTO acl_schema.acl_table (${Object.keys(USER).join(',')})
+    VALUES (${Object.keys(USER).map((NULL,i) => `\$${i+1}`)})`,
+    Object.values(USER))
+  
   if (rows instanceof Error) {
     return res.status(500).send('Failed to access ACL.')
   }
@@ -280,9 +280,9 @@ async function passwordReset(req, res) {
 
   // Attempt to retrieve ACL record with matching email field.
   let rows = await acl(`
-      SELECT email, password, password_reset, language, blocked
-      FROM acl_schema.acl_table 
-      WHERE lower(email) = lower($1);`,
+    SELECT email, password, password_reset, language, blocked
+    FROM acl_schema.acl_table 
+    WHERE lower(email) = lower($1);`,
     [req.body.email])
 
   if (rows instanceof Error) {

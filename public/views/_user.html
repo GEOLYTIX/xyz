@@ -7,9 +7,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link href="https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator.min.css" rel="stylesheet">
+  <link href="https://unpkg.com/tabulator-tables@6.2.0/dist/css/tabulator.min.css" rel="stylesheet">
 
-  <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
+  <script type="text/javascript" src="https://unpkg.com/tabulator-tables@6.2.0/dist/js/tabulator.min.js"></script>
 
   <script src="https://unpkg.com/uhtml@3.2.1/es.js" defer></script>
 
@@ -470,7 +470,6 @@
       return editor;
     };
 
-
     function languageEdited(e) {
 
       if (JSON.stringify(e._cell.value) === JSON.stringify(e._cell.oldValue)) return;
@@ -497,12 +496,18 @@
 
       const row = cell.getRow();
 
-      if (field === 're_verification') {
-        verified_cell = row.getCell('verified')
+      if (field === 're_verification'
+      || (field === 'verified' && cell.getValue())) {
+
+        let re_verification_cell = row.getCell('re_verification')
+        re_verification_cell.setValue(true)
+
+        let verified_cell = row.getCell('verified')
         verified_cell.setValue(true)
-        approved_cell = row.getCell('approved')
+
+        let approved_cell = row.getCell('approved')
         approved_cell.setValue(true)
-      };    
+      };
 
       row.reformat();
     };
