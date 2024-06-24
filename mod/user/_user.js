@@ -1,84 +1,74 @@
 /**
+## /user/_user
+
+The _user module exports the user method to route User API requests.
+
+- add
+- admin
+- cookie
+- delete
+- key
+- list
+- log
+- login
+- register
+- token
+- update
+- verify
+
+@requires module:/utils/reqHost
+
 @module /user
 */
 
 const reqHost = require('../utils/reqHost')
 
-const view = require('../view')
-
 const methods = {
-  admin: {
-    handler: (req, res) => {
-      req.params.template = 'user_admin_view'
-      req.params.language = req.params.user.language
-      req.params.user = req.params.user.email
-      view(req, res)
-    },
-    admin: true
-  },
-  register: {
-    handler: require('./register')
-  },
-  verify: {
-    handler: require('./verify')
-  },
-  add: {
-    handler: require('./add'),
-    admin: true
-  },
-  delete: {
-    handler: require('./delete'),
-    admin: true
-  },
-  update: {
-    handler: require('./update'),
-    admin: true
-  },
-  list: {
-    handler: require('./list'),
-    admin: true
-  },
-  log: {
-    handler: require('./log'),
-    admin: true
-  },
-  key: {
-    handler: require('./key'),
-    login: true
-  },
-  token: {
-    handler: require('./token'),
-    login: true
-  },
-  cookie: {
-    handler: require('./cookie')
-  },
-  login: {
-    handler: require('./login')
-  }
+  add: require('./add'),
+  admin: require('./admin'),
+  cookie: require('./cookie'),
+  delete: require('./delete'),
+  key: require('./key'),
+  list: require('./list'),
+  log: require('./log'),
+  login: require('./login'),
+  register: require('./register'),
+  token: require('./token'),
+  update: require('./update'),
+  verify: require('./verify'),
 }
 
-module.exports = async (req, res) => {
+/**
+@function user
+@async
 
-  const method = methods[req.params.method]
+@description
+The Mapp API uses the user method to lookup and route User API requests.
 
-  if (!method) {
+The route method assigns the host param from /utils/reqHost before the request and response arguments are passed a User API method identified by the method param.
+
+The method request parameter must be an own member of the methods object, eg. `admin`, `register`, `verify`, `add`, `delete`, `update`, `list`, `log`, `key`, `token`, `cookie`, or `login`.
+
+@param {Object} req HTTP request.
+@param {Object} res HTTP response.
+@param {Object} req.params Request parameter.
+@param {string} req.params.method Method request parameter.
+*/
+
+module.exports = async function user(req, res) {
+
+  if (!Object.hasOwn(methods, req.params.method)) {
+
     return res.send(`Failed to evaluate 'method' param.`)
   }
 
   req.params.host = reqHost(req)
 
-  if (!req.params.user && (method.login || method.admin)) {
+  const method = await methods[req.params.method](req, res)
 
-    req.params.msg = 'login_required'
-    return methods.login.handler(req, res)
+  if (method instanceof Error) {
+
+    req.params.msg = method.message
+    methods.login(req, res)
   }
-
-  if (req.params.user && (!req.params.user.admin && method.admin)) {
-
-    req.params.msg = 'admin_required'
-    return methods.login.handler(req, res)
-  }
-
-  method.handler(req, res)
 }

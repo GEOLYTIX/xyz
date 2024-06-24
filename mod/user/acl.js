@@ -1,4 +1,10 @@
 /**
+## /user/acl
+
+The acl module provides access to the ACL table for all User API methods.
+
+@requires pg
+
 @module /user/acl
 */
 
@@ -16,7 +22,19 @@ const pool = new Pool({
   connectionString: connection[0]
 })
 
-module.exports = async (q, arr) => {
+/**
+@function acl
+
+@description
+The acl method will connect to pg pool and query the ACL with a provided query template. The `/acl_table/` and `/acl_schema/` in the query template will be replaced with values provided as `PRIVATE` or `PUBLIC` environment variable.
+
+@param {string} q 
+Query template.
+@param {array} arr 
+Parameters to be substrituted in query template.
+*/
+
+module.exports = async function acl(q, arr) {
 
   try {
 
