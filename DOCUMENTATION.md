@@ -14,7 +14,7 @@ The [XYZ repository wiki](https://github.com/GEOLYTIX/xyz/wiki) is intended as a
 
 ## JSDOCS
 
-XYZ/MAPP source code is annotated via JSDoc markup language.
+XYZ/MAPP source code is annotated via [JSDoc](https://jsdoc.app/) markup language.
 
 We are using the [clean-jsdoc-theme](https://github.com/ankitskvmdam/clean-jsdoc-theme-example) which is installed as one of the devDependencies.
 
@@ -84,3 +84,7 @@ Validated user object or an Error if authentication fails.
 ### /docs express route
 
 The /docs express route can be used to preview the built pages on `http://localhost:3000/docs/`
+
+### docs in vscode
+- Docs can also be previewed right in vsdocs by right clicking on any .html page in the docs directory. This will provide a live working preview of the docs in the editor.
+- You will need an extension written by microsoft called [Live Preview](https://marketplace.visualstudio.com/items?itemName=ms-vscode.live-server)
