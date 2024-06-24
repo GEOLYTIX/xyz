@@ -1,6 +1,6 @@
 import { describe, it, assertEqual, assertNotEqual, assertTrue, assertFalse, assertThrows } from 'https://esm.sh/codi-test-framework@0.0.26';
 import { layerTest } from './layer.test.mjs';
-
+import { uiElementsTest } from './lib/ui/_ui.test.mjs';
 await describe('Mapview test', async () => {
 
     console.log(`MAPP v${mapp.version}`)
@@ -605,5 +605,6 @@ await describe('Mapview test', async () => {
     });
 
     await layerTest(mapview);
+    await uiElementsTest(mapview);
 
 });
