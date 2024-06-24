@@ -7,9 +7,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link href="https://unpkg.com/tabulator-tables@5.5.2/dist/css/tabulator.min.css" rel="stylesheet">
+  <link href="https://unpkg.com/tabulator-tables@6.2.0/dist/css/tabulator.min.css" rel="stylesheet">
 
-  <script type="text/javascript" src="https://unpkg.com/tabulator-tables@5.5.2/dist/js/tabulator.min.js"></script>
+  <script type="text/javascript" src="https://unpkg.com/tabulator-tables@6.2.0/dist/js/tabulator.min.js"></script>
 
   <script src="https://unpkg.com/uhtml@3.2.1/es.js" defer></script>
 
@@ -202,6 +202,10 @@
     // Data must be an array if only 1 record returned in response.
     const data = Array.isArray(response) && response || [response]
 
+    data.forEach(row => {
+      row.re_verification = !row.verificationtoken
+    })
+
     // Sort data to promote email from url parameter to top.
     if (params.email) {
       data.sort(function (x, y) { return x.email == params.email ? -1 : y.email == params.email ? 1 : 0; });
@@ -236,6 +240,17 @@
             vertAlign: 'middle',
             headerTooltip: 'The account email has been verified through a token sent to the email address.',
             titleFormatter: () => '<div class="icon-tick-done xyz-icon"></div>',
+            formatter: 'tickCross',
+            cellClick: cellToggle,
+            resizable: false,
+            responsive: 0 // Never hide
+          },
+          {
+            field: 're_verification',
+            hozAlign: 'center',
+            vertAlign: 'middle',
+            headerTooltip: 'The account has an outstanding password reset to be verified.',
+            titleFormatter: () => '<div class="xyz-icon" style="background-image:url(https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/check_circle/default/24px.svg)"></div>',
             formatter: 'tickCross',
             cellClick: cellToggle,
             resizable: false,
@@ -455,7 +470,6 @@
       return editor;
     };
 
-
     function languageEdited(e) {
 
       if (JSON.stringify(e._cell.value) === JSON.stringify(e._cell.oldValue)) return;
@@ -469,13 +483,31 @@
 
       const col = cell.getColumn();
 
-      const response = await xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${user.email}&field=${col.getField()}&value=${!cell.getValue()}`);
+      const field = col.getField();
+
+      // Re-verification cannot be undone.
+      if (field === 're_verification' && cell.getValue()) return;
+
+      const response = await xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${user.email}&field=${field === 're_verification'? 'verified': field}&value=${!cell.getValue()}`);
 
       if (response.err) return console.error(response.err);
 
       cell.setValue(!cell.getValue());
 
       const row = cell.getRow();
+
+      if (field === 're_verification'
+      || (field === 'verified' && cell.getValue())) {
+
+        let re_verification_cell = row.getCell('re_verification')
+        re_verification_cell.setValue(true)
+
+        let verified_cell = row.getCell('verified')
+        verified_cell.setValue(true)
+
+        let approved_cell = row.getCell('approved')
+        approved_cell.setValue(true)
+      };
 
       row.reformat();
     };
