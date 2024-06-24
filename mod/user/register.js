@@ -317,17 +317,30 @@ async function passwordReset(req, res) {
   const expires_on = process.env.APPROVAL_EXPIRY && user.expires_on
     ? `expires_on = ${expiry_date},` : ''
 
+
+  const VALUES = [
+    req.body.email,
+    req.body.password,
+    req.body.verificationtoken,
+    `${date}@${req.params.remote_address}`
+  ]
+
+  if (process.env.APPROVAL_EXPIRY && user.expires_on) {
+
+    VALUES.push(expiry_date)
+  }
+
   // Set new password and verification token.
   // New passwords will only apply after account verification.
   rows = await acl(`
     UPDATE acl_schema.acl_table 
     SET
-      ${expires_on}
-      password_reset = '${req.body.password}',
-      verificationtoken = '${req.body.verificationtoken}',
-      access_log = array_append(access_log, '${date}@${req.params.remote_address}')
+      password_reset = $2,
+      verificationtoken = $3,
+      access_log = array_append(access_log, $4)
+      ${process.env.APPROVAL_EXPIRY && user.expires_on? ',expires_on = $5': ''}
     WHERE lower(email) = lower($1);`,
-    [req.body.email])
+    VALUES)
 
   if (rows instanceof Error) {
     return res.status(500).send('Failed to access ACL.')
