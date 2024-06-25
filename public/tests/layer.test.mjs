@@ -8,7 +8,7 @@ export async function layerTest(mapview) {
         });
     }
 
-    const default_zoom = mapview.view.z;
+    const default_zoom = mapview.view?.z || 0;
 
     await describe(`${mapview.host} : Layer Test`, async () => {
         for (const key in mapview.layers) {
@@ -21,7 +21,9 @@ export async function layerTest(mapview) {
                         mapview.Map.getView().setZoom(layerZoom);
                     }
                     else {
-                        mapview.Map.getView().setZoom(default_zoom);
+                        if (default_zoom !== 0) {
+                            mapview.Map.getView().setZoom(default_zoom);
+                        }
                     }
 
                     if (layer.dataviews) {

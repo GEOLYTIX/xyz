@@ -24,7 +24,7 @@ process.env.TITLE ??= 'GEOLYTIX | XYZ'
 
 process.env.DIR ??= ''
 
-module.exports = async (req, res) => {
+module.exports = async function api(req, res) {
 
   // redirect if dir is missing in url path.
   if (process.env.DIR && req.url.length === 1) {
@@ -70,7 +70,7 @@ module.exports = async (req, res) => {
       delete req.params[key]
       return;
     }
-    
+
     // Delete param keys with empty string value.
     if (req.params[key] === '') {
       delete req.params[key]
@@ -110,7 +110,7 @@ module.exports = async (req, res) => {
     res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
 
     // Remove logout parameter.
-    res.setHeader('location', (process.env.DIR || '/') + (req.params.msg && `?msg=${req.params.msg}`||''))
+    res.setHeader('location', (process.env.DIR || '/') + (req.params.msg && `?msg=${req.params.msg}` || ''))
 
     return res.status(302).send()
   }
@@ -132,7 +132,7 @@ module.exports = async (req, res) => {
     // Remove cookie.
     res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
 
-    req.params.msg = user.msg
+    req.params.msg = user.msg || user.message
 
     // Return login view with error message.
     return login(req, res)
@@ -140,16 +140,6 @@ module.exports = async (req, res) => {
 
   // Set user as request parameter.
   req.params.user = user
-
-  // Provider route
-  if (req.url.match(/(?<=\/api\/provider)/)) {
-    return routes.provider(req, res)
-  }
-
-  // Signing route
-  if (req.url.match(/(?<=\/api\/sign)/)) {
-    return routes.sign(req, res)
-  }
 
   // User route
   if (req.url.match(/(?<=\/api\/user)/)) {
@@ -169,13 +159,23 @@ module.exports = async (req, res) => {
     return login(req, res)
   }
 
+  // Provider route
+  if (req.url.match(/(?<=\/api\/provider)/)) {
+    return routes.provider(req, res)
+  }
+
+  // Signing route
+  if (req.url.match(/(?<=\/api\/sign)/)) {
+    return routes.sign(req, res)
+  }
+
   // Location route
   if (req.url.match(/(?<=\/api\/location)/)) {
 
     // Set template and route to query mod.
     req.params.template = `location_${req.params.method}`
     return routes.query(req, res)
-  }  
+  }
 
   // Query route
   if (req.url.match(/(?<=\/api\/query)/)) {
@@ -185,7 +185,7 @@ module.exports = async (req, res) => {
   // Fetch route
   if (req.url.match(/(?<=\/api\/fetch)/)) {
     return routes.fetch(req, res)
-  }  
+  }
 
   // Workspace route
   if (req.url.match(/(?<=\/api\/workspace)/)) {
