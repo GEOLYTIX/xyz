@@ -56,7 +56,11 @@ Comments for functions begin with the `@function` tag. Functions should not be a
 
 Each function comment should include an `@description` tag. It is recommended to use a new line for multiline descriptions.
 
-The `@param` tag list should incluide nested params only if these are required or optional in the commented function itself. An optional [param] is marked in square brackets.
+The `@param` tag list should include only params used as function arguments.
+
+Parameter properties should be included if used in the method. Any optional [property] are marked in square brackets.
+
+A global typedef should be created for common Mapp objects.
 
 The `@return` comment tag should state whether a promise is returned which may return an Error object, eg. `@returns {Promise<Object|Error>}`
 
@@ -70,14 +74,34 @@ Creates a request object for the getUser(request) method argument.
 The request.email and request.password are taken from the req.body or authorization header.
 
 @param {Object} req The request object.
-@param {string} [req.body.email] The email address of the user.
-@param {string} [req.body.password] The password of the user.
-@param {string} [req.params.language] The language for the user.
-@param {Object} req.headers The request headers.
-@param {string} [req.headers.authorization] The authorization header containing the email and password.
+@property {string} [req.body.email] The email address of the user.
+@property {string} [req.body.password] The password of the user.
+@property {string} [req.params.language] The language for the user.
+@property {Object} req.headers The request headers.
+@property {string} [req.headers.authorization] The authorization header containing the email and password.
 
 @returns {Promise<Object|Error>}
 Validated user object or an Error if authentication fails.
+*/
+```
+#### Decorator methods
+
+Decorator methods should always return a typedef.
+
+### @typedef [GLOBAL]
+
+Mapp type object should be defined as global typedefs.
+
+Typedef properties should be defined as typedef using a dash naming convention. eg. The style object property of a `layer` typedef will be defined as `layer-style`, the theme object of a layer-style typedef will be type defined as `layer-style-theme`.
+
+```js
+/**
+@global
+@typedef {Object} layer
+A mapp-layer object is a decorated JSON layer object which has been added to a mapview.
+@property {boolean} display Whether the layer should be displayed.
+@property {layer-style} style The mapp-layer style configuration.
+@property {layer-cluster} [cluster] Point layer cluster configuration.
 */
 ```
 
