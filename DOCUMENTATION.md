@@ -105,6 +105,10 @@ A mapp-layer object is a decorated JSON layer object which has been added to a m
 */
 ```
 
+### @example 
+
+An @example does not require a code block [\`\`\`JS] definition. At examples should be reserved for codepen examples which can be run. Code blocks should be used for code syntax highlighting in the rendered markdown.
+
 ### /docs express route
 
 The /docs express route can be used to preview the built pages on `http://localhost:3000/docs/`
