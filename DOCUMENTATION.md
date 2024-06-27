@@ -88,6 +88,29 @@ Validated user object or an Error if authentication fails.
 
 Decorator methods should always return a typedef.
 
+#### @deprecated methods.
+
+Functions no longer in use but kept with a warning for legacy configurations should be marked as `@deprecated`.
+
+```js
+/**
+@function Style
+@deprecated
+
+@description
+The deprectaed mapp.layer.Style() method will warn if use and return the featureStyle() method which supersedes the Style() method.
+
+@param {Object} layer 
+
+@return {Function} featureStyle
+*/
+
+function Style(layer) {
+  console.warn(`The mapp.layer.Style() method has been superseeded by the mapp.layer.featureStyle() method.`)
+  return featureStyle(layer)
+}
+```
+
 ### @typedef [GLOBAL]
 
 Mapp type object should be defined as global typedefs.
