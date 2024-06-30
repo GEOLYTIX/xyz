@@ -380,7 +380,7 @@ await describe('Mapview test', async () => {
                 key: locale.key,
             })),
             callback: (e, entry) => {
-                window.location.assign(`${mapp.host}?template=test_view&locale=${entry.key}`);
+                window.location.assign(`${mapp.host}?template=integrity_view&locale=${entry.key}`);
             },
         });
 
