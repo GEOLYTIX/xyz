@@ -168,9 +168,10 @@
       padding: 0.3em;
     }
 
-    .form form li input[type="email"] {
+    .form input[type="email"], input[type="text"], input[type="number"] {
       width: 100%;
     }
+
     /* end form style */
 
     .icon-face {
@@ -386,6 +387,7 @@
       onreset=${e => {}}
       onchange=${e => {}}
       onsubmit=${e => {}}>
+      <div><h2>Account Details</h2></div>
       <ul>
         <li>
         <fieldset>
@@ -395,20 +397,92 @@
         </li>
         <li>
           <fieldset>
-            <input type="checkbox" name="verified" checked=${user.verified} disabled>
+            <label for="language">Language</label>
+            <input type="text" name="language" disabled value=${user.language}>
+          </fieldset>  
+        </li>
+        <li>
+          <fieldset>
+            ${() => {
+              let chk = uhtml.html.node`<input type="checkbox" disabled name="verified">`;
+              chk.checked = user.verified;
+              return chk;
+            }}
             <label for="verified">Verified</label>
           </fieldset>  
         </li>
         <li>
           <fieldset>
-            <input type="checkbox" name="re_verification" checked=${user.re_verification} disabled>
+            ${() => {
+              let chk = uhtml.html.node`<input type="checkbox" disabled name="re_verification">`;
+              chk.checked = user.re_verification;
+              return chk;
+            }}
             <label for="re_verification">Re-verification</label>
           </fieldset>  
         </li>
         <li>
           <fieldset>
-            <input type="checkbox" name="approved" checked=${user.approved}>
+            ${() => {
+              let chk = uhtml.html.node`<input type="checkbox" name="approved">`;
+              chk.checked = user.approved;
+              return chk;
+            }}
             <label for="approved">Approved</label>
+          </fieldset>  
+        </li>
+        <li>
+          <fieldset>
+            ${() => {
+              let chk = uhtml.html.node`<input type="checkbox" name="admin">`;
+              chk.checked = user.admin;
+              return chk;
+            }}
+            <label for="admin">Administrator</label>
+          </fieldset>  
+        </li>
+        <li>
+          <fieldset>
+            ${() => {
+              let chk = uhtml.html.node`<input type="checkbox" name="api">`;
+              chk.checked = user.api;
+              return chk;
+            }}
+            <label for="api">API</label>
+          </fieldset>  
+        </li>
+        <li>
+          <fieldset>
+            <label for="approved_by">Approved by</label>
+            <input type="text" name="approved_by" disabled value=${user.approved_by}>
+          </fieldset>  
+        </li>
+        <li>
+          <fieldset>
+            <label for="access_log">Access Log</label>
+            <input type="text" name="access_log" disabled value=${user.access_log}>
+          </fieldset>  
+        </li>
+        <li>
+          <fieldset>
+            <label for="verificationtoken">Verification Token</label>
+            <input type="text" name="verificationtoken" disabled value=${user.verificationtoken}>
+          </fieldset>  
+        </li>
+        <li>
+          <fieldset>
+            <label for="failedattempts">Failed Login Attempts</label>
+            <input type="number" name="failedattempts" disabled value=${user.failedattempts}>
+          </fieldset>  
+        </li>
+        <li>
+          <fieldset>
+            ${() => {
+              let chk = uhtml.html.node`<input type="checkbox" disabled name="blocked">`;
+              chk.checked = user.blocked;
+              return chk;
+            }}
+            <label for="blocked">User Blocked</label>
           </fieldset>  
         </li>
         `;
