@@ -14,19 +14,23 @@
   <script src="https://unpkg.com/uhtml@3.2.1/es.js" defer></script>
 
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,400;0,600;1,200;1,300&display=swap');
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
       border-spacing: 0;
+      font-family: 'Titillium Web', sans-serif;
+      color: #3f3f3f;
     }
 
     body {
       position: absolute;
       height: 100%;
       width: 100%;
-      padding: 40px;
-      font: 14px "Open Sans", sans-serif;
+      padding: 2em;
+      font-size: 0.8em;
     }
 
     body>.flex {
@@ -34,6 +38,89 @@
       display: flex;
       flex-direction: column;
     }
+
+    a {
+      text-decoration: none;
+      font-weight: bold;
+      color: #003D57;
+    }
+
+    /* begin agaTable styling */
+
+    #userTable {
+      height: 100%;
+      width: 100%;
+      overflow-y: scroll;
+      overflow-x: hidden;
+    }
+
+    table {
+      position: relative;
+      width: 100%;
+      border: 1px solid #00000033;
+      border-radius: 3px; 
+      background-color: white;
+      padding: 0 0.25em;
+      display: table;
+      overflow: scroll;
+      cursor: pointer;
+      /*grid-template-columns: repeat(3, 1fr); max-height: 90%;*/
+    }
+
+    table tr td {
+      border-bottom: 1px solid #00000011; 
+      padding: 0.2em;
+      text-overflow: ellipsis;
+    }
+
+    table tr:nth-child(even) {
+      background-color: #e3e3e3;
+    }
+
+    .sticky-top {
+      position: sticky;
+      top: 0;
+      background-color: white;
+    }
+
+    table thead {
+      text-align: left;
+      font-weight: bold; 
+      border-bottom: 1px solid #00000011;
+    }
+
+    table thead th {
+      position: sticky;
+      top: 0;
+      background-color: white;
+      box-shadow: 0 1px 2px -1px rgba(0, 0, 0, 0.4);
+    }
+
+    td .dot {
+      margin-right: 2px;
+      height: 0.8em;
+      width: 0.8em;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .col-hl {
+      background-color: #D3E4E1;
+    }
+
+    .col-grey {
+      background-color: #EEEEEE;
+    }
+
+    .col-white {
+      background-color: white;
+    }
+
+    .contents {
+      display: contents;
+    }
+
+    /* end agaTable styling */
 
     .icon-face {
       background-image: url("{{dir}}/public/icons/icon-face.svg");
@@ -144,7 +231,7 @@
     <h1>Account Administration</h1>
 
     <div class="btn-row">
-      <div <span>Filter</span>
+      <div><span>Filter</span>
         <input id="filterInput" type="text" placeholder="e.g. geolytix" style="max-width: 100%;">
         <button class="raised primary-colour" id="toggleBlocked">Show blocked accounts</button>
       </div>
@@ -210,6 +297,85 @@
     if (params.email) {
       data.sort(function (x, y) { return x.email == params.email ? -1 : y.email == params.email ? 1 : 0; });
     }
+
+    function clearNode(node) {
+      if(!node) return;
+      while(node.firstChild) {
+        node.removeChild(node.firstChild)
+      }
+    }
+
+    function checkUserStatus(user) {
+      let state = {label: 'New', color: '#880e4f'};
+      if(user.verified) state = {label: 'Verified', color: '#ff9800'}
+      if(user.approved) state = {label: 'Approved', color: '#43a047'}
+      if(user.blocked) state = {label: 'Blocked', color: '#ef9a9a'}
+      let bg = `background-color: ${state.color}`;
+      return uhtml.html.node`<span class="dot" style=${bg}></span>${state.label}`
+    }
+
+    async function createUserTable() {
+
+      let el = document.getElementById('userTable');
+      clearNode(el);
+
+      const table = uhtml.html.node`<table>
+        <thead>
+          <tr>
+          <th>email</th>
+          <th>Status`;
+
+        const tbody = uhtml.html.node`<tbody>`
+
+        Object.values(data).map(i => {
+          tbody.appendChild(uhtml.html.node`<tr onclick=${e => {
+            alert('hello this is ' + i.email);
+          }}>
+            <td>${i.email}</td>
+            <td>${checkUserStatus(i)}</td>
+            </tr>
+            `)
+        });
+
+        table.appendChild(tbody);
+
+        el.appendChild(table);
+
+    }
+
+    async function __createUserTable(){
+
+      let el = document.getElementById('userTable');
+
+      clearNode(el);
+
+      const table = uhtml.html.node`<div class="table-view">
+          <div class="contents">
+            <div class="table-header sticky-top">email</div>
+            <div class="table-header sticky-top">Status</div>
+            <div class="table-header sticky-top">Details</div>
+          </div>`;
+
+      Object.values(data).map(i => {
+
+           let contents = uhtml.html.node`<div class="contents">`
+
+            contents.appendChild(uhtml.html.node`
+                <div>${i.email}</div>
+                <div>${checkUserStatus(i)}</div>
+                <div><button>Edit</button></div>`);
+
+            table.appendChild(contents);
+
+        });
+
+        el.appendChild(table);
+
+    }
+
+    await createUserTable();
+
+    return console.log(data);
 
     const userTable = new Tabulator(document.getElementById('userTable'),
       {
@@ -547,7 +713,7 @@
     }
   }
 
-  function xhrPromise(req) {
+  function xhrPromise(req){
     return new Promise((resolve, reject) => {
 
       const xhr = new XMLHttpRequest()
@@ -564,6 +730,7 @@
       xhr.send()
     })
   } 
+
 </script>
 
 </html>
