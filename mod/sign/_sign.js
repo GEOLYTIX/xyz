@@ -3,11 +3,13 @@
 */
 
 const cloudinary = require('./cloudinary')
+const firebase = require('./firebase')
 
 module.exports = async (req, res) => {
 
   const signer = {
-    cloudinary
+    cloudinary,
+    firebase
   }
 
   if (!Object.hasOwn(signer, req.params.provider)) {
