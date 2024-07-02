@@ -14,19 +14,23 @@
   <script src="https://unpkg.com/uhtml@3.2.1/es.js" defer></script>
 
   <style>
+    @import url('https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,400;0,600;1,200;1,300&display=swap');
+
     * {
       box-sizing: border-box;
       margin: 0;
       padding: 0;
       border-spacing: 0;
+      font-family: 'Titillium Web', sans-serif;
+      color: #3f3f3f;
     }
 
     body {
       position: absolute;
       height: 100%;
       width: 100%;
-      padding: 40px;
-      font: 14px "Open Sans", sans-serif;
+      padding: 2em;
+      font-size: 0.8em;
     }
 
     body>.flex {
@@ -34,6 +38,146 @@
       display: flex;
       flex-direction: column;
     }
+
+    a {
+      text-decoration: none;
+      font-weight: bold;
+      color: #003D57;
+    }
+
+    /* begin agaTable styling */
+
+    #userTable {
+      height: 100%;
+      width: 100%;
+      overflow-y: scroll;
+      overflow-x: hidden;
+    }
+
+    table {
+      position: relative;
+      width: 100%;
+      border: 1px solid #00000033;
+      border-radius: 3px; 
+      background-color: white;
+      padding: 0 0.25em;
+      display: table;
+      overflow: scroll;
+      cursor: pointer;
+      /*grid-template-columns: repeat(3, 1fr); max-height: 90%;*/
+    }
+
+    table tr td {
+      border-bottom: 1px solid #00000011; 
+      padding: 0.2em;
+      text-overflow: ellipsis;
+    }
+
+    table tr:nth-child(even) {
+      background-color: #e3e3e3;
+    }
+
+    .sticky-top {
+      position: sticky;
+      top: 0;
+      background-color: white;
+    }
+
+    table thead {
+      text-align: left;
+      font-weight: bold; 
+      border-bottom: 1px solid #00000011;
+    }
+
+    table thead th {
+      position: sticky;
+      top: 0;
+      background-color: white;
+      box-shadow: 0 1px 2px -1px rgba(0, 0, 0, 0.4);
+    }
+
+    td .dot {
+      margin-right: 2px;
+      height: 0.8em;
+      width: 0.8em;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .col-hl {
+      background-color: #D3E4E1;
+    }
+
+    .col-grey {
+      background-color: #EEEEEE;
+    }
+
+    .col-white {
+      background-color: white;
+    }
+
+    .contents {
+      display: contents;
+    }
+
+    /* end agaTable styling */
+
+    /* begin form style */
+    .mask {
+      position: fixed; 
+      top:0; 
+      left: 0; 
+      width: 100%; 
+      height: 100%;
+      background-color: #00000033; 
+      z-index: 10000;
+    }
+
+    .none {
+      display: none;
+    }
+
+    .form {
+      position: sticky; 
+      z-index: 10001; 
+      border-radius: 3px; 
+      margin: 1em auto;
+      max-height: 100%; 
+      overflow: auto; 
+      background-color: #ffffff;
+      box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+    }
+
+    .form *:focus {
+      outline: none;
+    }
+
+    .form fieldset {
+     border: none;
+    }
+   
+    .form form {
+      padding: 10px;
+    }
+
+    .form form ul {
+      list-style-type: none;
+    }
+    
+    .form form li {
+      padding: 0.3em;
+    }
+
+    .form input[type="email"], input[type="text"], input[type="number"] {
+      width: 100%;
+    }
+
+    .form select {
+      width: 100%;
+      border: solid 1px #00000033; 
+    }
+
+    /* end form style */
 
     .icon-face {
       background-image: url("{{dir}}/public/icons/icon-face.svg");
@@ -126,11 +270,21 @@
       }
     }
 
+    @media only screen and (min-width: 768px) {
+      .form {
+        width: 400px;
+      }
+    }
+
     @media only screen and (max-width: 700px) {
 
       body,
       h1 {
         margin: 0
+      }
+
+      .form {
+        width: 95%;
       }
     }
   </style>
@@ -139,12 +293,14 @@
 
 <body>
 
+  <div class="mask none"></div>
+
   <div class="flex">
 
     <h1>Account Administration</h1>
 
     <div class="btn-row">
-      <div <span>Filter</span>
+      <div><span>Filter</span>
         <input id="filterInput" type="text" placeholder="e.g. geolytix" style="max-width: 100%;">
         <button class="raised primary-colour" id="toggleBlocked">Show blocked accounts</button>
       </div>
@@ -210,6 +366,203 @@
     if (params.email) {
       data.sort(function (x, y) { return x.email == params.email ? -1 : y.email == params.email ? 1 : 0; });
     }
+
+    document.querySelector('.mask').addEventListener('click', e => {
+      let form = document.querySelector('.form');
+      if(form && form.contains(e.target)) return;
+      document.querySelector('.mask').classList.add('none');
+    })
+
+    function clearNode(node) {
+      if(!node) return;
+      while(node.firstChild) {
+        node.removeChild(node.firstChild)
+      }
+    }
+
+    function checkUserStatus(user) {
+      let state = {label: 'New', color: '#880e4f'};
+      if(user.verified) state = {label: 'Verified', color: '#ff9800'}
+      if(user.approved) state = {label: 'Approved', color: '#43a047'}
+      if(user.blocked) state = {label: 'Blocked', color: '#ef9a9a'}
+      let bg = `background-color: ${state.color}`;
+      return uhtml.html.node`<span class="dot" style=${bg}></span>${state.label}`
+    }
+
+    function userForm(user) {
+      const form = uhtml.html.node`<form
+      onreset=${e => {}}
+      onchange=${e => {}}
+      onsubmit=${e => {}}>
+      <div><h2>Account Details</h2></div>
+      <ul>
+        <li>
+        <fieldset>
+          <label for="email">email</label>
+          <input type="email" id="email" name="email" value=${user.email} disabled>
+        </fieldset>  
+        </li>
+        <li>
+          <fieldset>
+            <label for="language">Language</label>
+            <select name="language" id="language">
+              ${Object.entries(languagesList).map(l => {
+                if(l[0] === user.langues) return uhtml.html.node`<option selected value=${l[0]}>${l[1]}`
+                return uhtml.html.node`<option value=${l[0]}>${l[1]}`
+              })}
+            </select>
+          </fieldset>  
+        </li>
+        <li>
+          <fieldset>
+            ${() => {
+              let chk = uhtml.html.node`<input type="checkbox" id="verified" name="verified">`;
+              chk.checked = user.verified;
+              return chk;
+            }}
+            <label for="verified">Verified</label>
+          </fieldset>  
+        </li>
+        <li>
+          <fieldset>
+            ${() => {
+              let chk = uhtml.html.node`<input type="checkbox" id="re_verification" name="re_verification">`;
+              chk.checked = user.re_verification;
+              return chk;
+            }}
+            <label for="re_verification">Re-verification</label>
+          </fieldset>  
+        </li>
+        <li>
+          <fieldset>
+            ${() => {
+              let chk = uhtml.html.node`<input type="checkbox" id="approved" name="approved">`;
+              chk.checked = user.approved;
+              return chk;
+            }}
+            <label for="approved">Approved</label>
+          </fieldset>  
+        </li>
+        <li>
+          <fieldset>
+            ${() => {
+              let chk = uhtml.html.node`<input type="checkbox" id="admin" name="admin">`;
+              chk.checked = user.admin;
+              return chk;
+            }}
+            <label for="admin">Administrator</label>
+          </fieldset>  
+        </li>
+        <li>
+          <fieldset>
+            ${() => {
+              let chk = uhtml.html.node`<input type="checkbox" id="api" name="api">`;
+              chk.checked = user.api;
+              return chk;
+            }}
+            <label for="api">API</label>
+          </fieldset>  
+        </li>
+        <li>
+          <fieldset>
+            <label for="approved_by">Approved by</label>
+            <input type="text" id="approved_by" name="approved_by" disabled value=${user.approved_by}>
+          </fieldset>  
+        </li>
+        <li>
+          <fieldset>
+            <label for="access_log">Access Log</label>
+            <input type="text" id="access_log" name="access_log" disabled value=${user.access_log}>
+          </fieldset>  
+        </li>
+        <li>
+          <fieldset>
+            <label for="verificationtoken">Verification Token</label>
+            <input type="text" id="verificationtoken" name="verificationtoken" disabled value=${user.verificationtoken}>
+          </fieldset>  
+        </li>
+        <li>
+          <fieldset>
+            <label for="failedattempts">Failed Login Attempts</label>
+            <input type="number" id="failedattempts" name="failedattempts" disabled value=${user.failedattempts}>
+          </fieldset>  
+        </li>
+        <li>
+          <fieldset>
+            ${() => {
+              let chk = uhtml.html.node`<input type="checkbox" id="blocked" name="blocked">`;
+              chk.checked = user.blocked;
+              return chk;
+            }}
+            <label for="blocked">User Blocked</label>
+          </fieldset>  
+        </li>
+        <div style="display: grid; grid-template-columns: 1fr 1fr;">
+          <button class="raised primary-colour">Save</button>
+          <button class="raised primary-colour">Cancel</button>
+        `;
+
+        return form;
+    }
+
+    async function createUserTable() {
+
+      let el = document.getElementById('userTable');
+      clearNode(el);
+
+      const table = uhtml.html.node`<table>
+      <thead>
+        <tr>
+          <th>email</th>
+          <th>Status`;
+
+        const tbody = uhtml.html.node`<tbody>`
+
+        Object.values(data).map(i => {
+          tbody.appendChild(uhtml.html.node`<tr onclick=${e => {
+            e.stopPropagation();
+            let mask = document.querySelector('.mask');
+            clearNode(mask);
+            mask.classList.remove('none');
+            const div = uhtml.html.node`<div class="form">`
+            const form = userForm(i);
+            div.appendChild(form);
+            mask.appendChild(div);
+          }}>
+          <td>${i.email}</td>
+          <td>${checkUserStatus(i)}</td>
+          </tr>`)
+        });
+
+        table.appendChild(tbody);
+
+        el.appendChild(table);
+
+    }
+
+
+    await createUserTable();
+
+    function xhrPromise(req){
+      
+      return new Promise((resolve, reject) => {
+
+      const xhr = new XMLHttpRequest()
+
+        xhr.open('GET', req)
+        xhr.setRequestHeader('Content-Type', 'application/json')
+        xhr.responseType = 'json'
+
+        xhr.onload = e => {
+          if (e.target.status >= 300) return reject({ err: e.target.status })
+          resolve(e.target.response || {})
+        }
+
+        xhr.send()
+      })
+    }
+
+    return console.log(data);
 
     const userTable = new Tabulator(document.getElementById('userTable'),
       {
@@ -545,25 +898,8 @@
 
       xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${e._cell.row.data.email}&field=roles&value=${encodeURIComponent(e._cell.value)}`)
     }
-  }
-
-  function xhrPromise(req) {
-    return new Promise((resolve, reject) => {
-
-      const xhr = new XMLHttpRequest()
-
-      xhr.open('GET', req)
-      xhr.setRequestHeader('Content-Type', 'application/json')
-      xhr.responseType = 'json'
-
-      xhr.onload = e => {
-        if (e.target.status >= 300) return reject({ err: e.target.status })
-        resolve(e.target.response || {})
-      }
-
-      xhr.send()
-    })
   } 
+
 </script>
 
 </html>
