@@ -392,19 +392,19 @@
         <li>
         <fieldset>
           <label for="email">email</label>
-          <input type="email" name="email" value=${user.email} disabled>
+          <input type="email" id="email" name="email" value=${user.email} disabled>
         </fieldset>  
         </li>
         <li>
           <fieldset>
             <label for="language">Language</label>
-            <input type="text" name="language" disabled value=${user.language}>
+            <input type="text" id="language" name="language" disabled value=${user.language}>
           </fieldset>  
         </li>
         <li>
           <fieldset>
             ${() => {
-              let chk = uhtml.html.node`<input type="checkbox" disabled name="verified">`;
+              let chk = uhtml.html.node`<input type="checkbox" disabled id="verified" name="verified">`;
               chk.checked = user.verified;
               return chk;
             }}
@@ -414,7 +414,7 @@
         <li>
           <fieldset>
             ${() => {
-              let chk = uhtml.html.node`<input type="checkbox" disabled name="re_verification">`;
+              let chk = uhtml.html.node`<input type="checkbox" disabled id="re_verification" name="re_verification">`;
               chk.checked = user.re_verification;
               return chk;
             }}
@@ -424,7 +424,7 @@
         <li>
           <fieldset>
             ${() => {
-              let chk = uhtml.html.node`<input type="checkbox" name="approved">`;
+              let chk = uhtml.html.node`<input type="checkbox" id="approved" name="approved">`;
               chk.checked = user.approved;
               return chk;
             }}
@@ -434,7 +434,7 @@
         <li>
           <fieldset>
             ${() => {
-              let chk = uhtml.html.node`<input type="checkbox" name="admin">`;
+              let chk = uhtml.html.node`<input type="checkbox" id="admin" name="admin">`;
               chk.checked = user.admin;
               return chk;
             }}
@@ -444,7 +444,7 @@
         <li>
           <fieldset>
             ${() => {
-              let chk = uhtml.html.node`<input type="checkbox" name="api">`;
+              let chk = uhtml.html.node`<input type="checkbox" id="api" name="api">`;
               chk.checked = user.api;
               return chk;
             }}
@@ -454,31 +454,31 @@
         <li>
           <fieldset>
             <label for="approved_by">Approved by</label>
-            <input type="text" name="approved_by" disabled value=${user.approved_by}>
+            <input type="text" id="approved_by" name="approved_by" disabled value=${user.approved_by}>
           </fieldset>  
         </li>
         <li>
           <fieldset>
             <label for="access_log">Access Log</label>
-            <input type="text" name="access_log" disabled value=${user.access_log}>
+            <input type="text" id="access_log" name="access_log" disabled value=${user.access_log}>
           </fieldset>  
         </li>
         <li>
           <fieldset>
             <label for="verificationtoken">Verification Token</label>
-            <input type="text" name="verificationtoken" disabled value=${user.verificationtoken}>
+            <input type="text" id="verificationtoken" name="verificationtoken" disabled value=${user.verificationtoken}>
           </fieldset>  
         </li>
         <li>
           <fieldset>
             <label for="failedattempts">Failed Login Attempts</label>
-            <input type="number" name="failedattempts" disabled value=${user.failedattempts}>
+            <input type="number" id="failedattempts" name="failedattempts" disabled value=${user.failedattempts}>
           </fieldset>  
         </li>
         <li>
           <fieldset>
             ${() => {
-              let chk = uhtml.html.node`<input type="checkbox" disabled name="blocked">`;
+              let chk = uhtml.html.node`<input type="checkbox" disabled id="blocked" name="blocked">`;
               chk.checked = user.blocked;
               return chk;
             }}
