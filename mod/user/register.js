@@ -3,12 +3,12 @@
 
 Exports the [user] register method for the /api/user/register route.
 
-@requires module:/view
-@requires module:/user/acl
-@requires module:/user/login
-@requires module:/utils/reqHost
-@requires module:/utils/mailer
-@requires module:/utils/languageTemplates
+@requires /view
+@requires /user/acl
+@requires /user/login
+@requires /utils/reqHost
+@requires /utils/mailer
+@requires /utils/languageTemplates
 @requires bcrypt
 @requires crypto
 
@@ -33,17 +33,14 @@ const view = require('../view')
 @function register
 
 @description
-Returns the user regestration or password reset form depending on the reset request parameter.
+Returns the user regestration or password reset form depending on the reset request parameter flag.
 
 Returns the `registerUserBody` method with a request [user] body present.
 
-@param {Object} req HTTP request.
-@param {Object} res HTTP response.
-@param {Object} req.params 
-Request parameter.
-@param {boolean} [req.params.reset]
-Request password reset form.
-@param {Object} [req.body] 
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {Object} req.params HTTP request parameter.
+@property {Object} [req.body] 
 Post body object with user data.
 */
 
@@ -73,18 +70,17 @@ const previousAddress = {}
 @function registerUserBody
 
 @description
-Will attempt to register the user object provided as request body as a new user.
+Will attempt to register the user object provided as request body as a new user. The request body JSON object must contain a user email, and password as string entries.
 
 An email with a verification token will be sent to verify a newly registered account.
 
-@param {Object} req HTTP request.
-@param {Object} res HTTP response.
-@param {Object} req.params 
-Request parameter.
-@param {Object} req.body 
+The `host=string` request parameter is required for the link passed to the user verification mail template.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {Object} req.params HTTP request parameter.
+@property {Object} req.body
 Post body object with user data.
-@param {string} req.body.email 
-User account email.
 */
 
 async function registerUserBody(req, res) {
@@ -117,8 +113,6 @@ async function registerUserBody(req, res) {
   }
 
   if (process.env.APPROVAL_EXPIRY) {
-    INSERTS.push('expires_on')
-    VALUES.push(expiry_date)
     USER['expires_on'] = expiry_date
   }
 
@@ -154,12 +148,10 @@ async function registerUserBody(req, res) {
 @description
 The remote_address determined from the request header is stored in the previousAddress module variable. Requests from the same address within 30 seconds will be bounced.
 
-@param {Object} req HTTP request.
-@param {Object} res HTTP response.
-@param {Object} req.params 
-Request parameter.
-@param {Object} req.header
-Request header.
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {Object} req.params HTTP request parameter.
+@property {Object} req.header HTTP request header.
 */
 
 function debounceRequest(req, res) {
@@ -187,7 +179,9 @@ function debounceRequest(req, res) {
 @function checkUserBody
 
 @description
-A valid email address is required for the registration or password reset.
+The request body JSON object must contain a user email, and password as string entries.
+
+The email address is tested against following regex: `/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/`.
 
 The ACL can be restricted for email addresses provided as `process.env.USER_DOMAINS`.
 
@@ -199,16 +193,11 @@ A `req.body.verificationtoken` will be created with crypto.
 
 The `req.body.language` will be checked against Intl.Collator.supportedLocalesOf.
 
-@param {Object} req HTTP request.
-@param {Object} res HTTP response.
-@param {Object} req.params 
-Request parameter.
-@param {Object} req.body 
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {Object} req.params HTTP request parameter.
+@property {Object} req.body
 Post body object with user data.
-@param {string} req.body.email 
-A valid email must be provided.
-@param {string} req.body.password 
-A valid password must be provided.
 */
 
 function checkUserBody(req, res) {
@@ -266,14 +255,11 @@ The passwordReset method checks whether a user record exists for the email provi
 
 An email with a verification token will be sent to verify the password reset.
 
-@param {Object} req HTTP request.
-@param {Object} res HTTP response.
-@param {Object} req.params 
-Request parameter.
-@param {Object} req.body 
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {Object} req.params HTTP request parameter.
+@property {Object} req.body
 Post body object with user data.
-@param {string} req.body.email 
-User account email.
 */
 
 async function passwordReset(req, res) {
