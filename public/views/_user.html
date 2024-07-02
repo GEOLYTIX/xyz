@@ -172,6 +172,11 @@
       width: 100%;
     }
 
+    .form select {
+      width: 100%;
+      border: solid 1px #00000033; 
+    }
+
     /* end form style */
 
     .icon-face {
@@ -363,7 +368,9 @@
     }
 
     document.querySelector('.mask').addEventListener('click', e => {
-      e.target.classList.add('none');
+      let form = document.querySelector('.form');
+      if(form && form.contains(e.target)) return;
+      document.querySelector('.mask').classList.add('none');
     })
 
     function clearNode(node) {
@@ -398,13 +405,18 @@
         <li>
           <fieldset>
             <label for="language">Language</label>
-            <input type="text" id="language" name="language" disabled value=${user.language}>
+            <select name="language" id="language">
+              ${Object.entries(languagesList).map(l => {
+                if(l[0] === user.langues) return uhtml.html.node`<option selected value=${l[0]}>${l[1]}`
+                return uhtml.html.node`<option value=${l[0]}>${l[1]}`
+              })}
+            </select>
           </fieldset>  
         </li>
         <li>
           <fieldset>
             ${() => {
-              let chk = uhtml.html.node`<input type="checkbox" disabled id="verified" name="verified">`;
+              let chk = uhtml.html.node`<input type="checkbox" id="verified" name="verified">`;
               chk.checked = user.verified;
               return chk;
             }}
@@ -414,7 +426,7 @@
         <li>
           <fieldset>
             ${() => {
-              let chk = uhtml.html.node`<input type="checkbox" disabled id="re_verification" name="re_verification">`;
+              let chk = uhtml.html.node`<input type="checkbox" id="re_verification" name="re_verification">`;
               chk.checked = user.re_verification;
               return chk;
             }}
@@ -478,7 +490,7 @@
         <li>
           <fieldset>
             ${() => {
-              let chk = uhtml.html.node`<input type="checkbox" disabled id="blocked" name="blocked">`;
+              let chk = uhtml.html.node`<input type="checkbox" id="blocked" name="blocked">`;
               chk.checked = user.blocked;
               return chk;
             }}
