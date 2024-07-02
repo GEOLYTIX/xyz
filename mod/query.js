@@ -49,7 +49,7 @@ The response of a query will typically result in a text/json response.
 ```
 
 > All status codes are defined by [RFC 9110](https://httpwg.org/specs/rfc9110.html#overview.of.status.codes)
-@module query
+@module /query
 */
 
 const dbs_connections = require('./utils/dbs')
