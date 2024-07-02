@@ -497,6 +497,9 @@
             <label for="blocked">User Blocked</label>
           </fieldset>  
         </li>
+        <div style="display: grid; grid-template-columns: 1fr 1fr;">
+          <button class="raised primary-colour">Save</button>
+          <button class="raised primary-colour">Cancel</button>
         `;
 
         return form;
@@ -539,6 +542,25 @@
 
 
     await createUserTable();
+
+    function xhrPromise(req){
+      
+      return new Promise((resolve, reject) => {
+
+      const xhr = new XMLHttpRequest()
+
+        xhr.open('GET', req)
+        xhr.setRequestHeader('Content-Type', 'application/json')
+        xhr.responseType = 'json'
+
+        xhr.onload = e => {
+          if (e.target.status >= 300) return reject({ err: e.target.status })
+          resolve(e.target.response || {})
+        }
+
+        xhr.send()
+      })
+    }
 
     return console.log(data);
 
@@ -876,24 +898,6 @@
 
       xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${e._cell.row.data.email}&field=roles&value=${encodeURIComponent(e._cell.value)}`)
     }
-  }
-
-  function xhrPromise(req){
-    return new Promise((resolve, reject) => {
-
-      const xhr = new XMLHttpRequest()
-
-      xhr.open('GET', req)
-      xhr.setRequestHeader('Content-Type', 'application/json')
-      xhr.responseType = 'json'
-
-      xhr.onload = e => {
-        if (e.target.status >= 300) return reject({ err: e.target.status })
-        resolve(e.target.response || {})
-      }
-
-      xhr.send()
-    })
   } 
 
 </script>
