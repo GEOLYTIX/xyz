@@ -172,6 +172,13 @@
       width: 100%;
     }
 
+    .form input[type="reset"] {
+      background: none;
+      outline: none;
+      border: none;
+      color: inherit;
+    }
+
     .form select {
       width: 100%;
       border: solid 1px #00000033; 
@@ -391,15 +398,30 @@
 
     function userForm(user) {
       const form = uhtml.html.node`<form
-      onreset=${e => {}}
-      onchange=${e => {}}
-      onsubmit=${e => {}}>
+      onreset=${e => {
+        e.preventDefault();
+        document.querySelector('.mask').classList.add('none');
+      }}
+      onchange=${e => {
+        e.preventDefault();
+      }}
+      onsubmit=${e => {
+        e.preventDefault();
+        const formData = new FormData(form);
+        Object.entries(user).forEach(i => {
+          let updated = [...formData].find(j => j[0] === i[0]);
+          if(updated === undefined) return;
+          user[i[0]] = updated[1] === 'on' ? true : updated[1];
+        });
+        console.log('user ready for account update and table refresh');
+        console.log(user);
+      }}>
       <div><h2>Account Details</h2></div>
       <ul>
         <li>
         <fieldset>
           <label for="email">email</label>
-          <input type="email" id="email" name="email" value=${user.email} disabled>
+          <input type="email" id="email" name="email" required value=${user.email} disabled>
         </fieldset>  
         </li>
         <li>
@@ -407,7 +429,7 @@
             <label for="language">Language</label>
             <select name="language" id="language">
               ${Object.entries(languagesList).map(l => {
-                if(l[0] === user.langues) return uhtml.html.node`<option selected value=${l[0]}>${l[1]}`
+                if(l[0] === user.language) return uhtml.html.node`<option selected value=${l[0]}>${l[1]}`
                 return uhtml.html.node`<option value=${l[0]}>${l[1]}`
               })}
             </select>
@@ -421,6 +443,7 @@
               return chk;
             }}
             <label for="verified">Verified</label>
+            <input type="hidden" name="verified" value=false/>
           </fieldset>  
         </li>
         <li>
@@ -431,6 +454,7 @@
               return chk;
             }}
             <label for="re_verification">Re-verification</label>
+            <input type="hidden" name="re_verification" value=false/>
           </fieldset>  
         </li>
         <li>
@@ -441,6 +465,7 @@
               return chk;
             }}
             <label for="approved">Approved</label>
+            <input type="hidden" name="approved" value=false/>
           </fieldset>  
         </li>
         <li>
@@ -451,6 +476,7 @@
               return chk;
             }}
             <label for="admin">Administrator</label>
+            <input type="hidden" name="admin" value=false/>
           </fieldset>  
         </li>
         <li>
@@ -461,6 +487,7 @@
               return chk;
             }}
             <label for="api">API</label>
+            <input type="hidden" name="api" value=false/>
           </fieldset>  
         </li>
         <li>
@@ -495,11 +522,13 @@
               return chk;
             }}
             <label for="blocked">User Blocked</label>
+            <input type="hidden" name="blocked" value=false/>
           </fieldset>  
         </li>
         <div style="display: grid; grid-template-columns: 1fr 1fr;">
           <button class="raised primary-colour">Save</button>
-          <button class="raised primary-colour">Cancel</button>
+          <button class="raised primary-colour">
+            <input type="reset" value="Cancel"/></button>
         `;
 
         return form;
