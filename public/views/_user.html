@@ -408,13 +408,31 @@
       onsubmit=${e => {
         e.preventDefault();
         const formData = new FormData(form);
+        
+        const userUpdated = {};
+
         Object.entries(user).forEach(i => {
           let updated = [...formData].find(j => j[0] === i[0]);
+          // skip unchanged fields
           if(updated === undefined) return;
-          user[i[0]] = updated[1] === 'on' ? true : updated[1];
+          // skip checked options if no change
+          if(updated[1] === 'on' && i[1]) return;
+          // skip unchecked options if no change
+          if(updated[1] === 'no' && !i[1]) return;
+          // set changes on user updated payload
+          switch(updated[1]) {
+            case 'on':
+              userUpdated[i[0]] = true; // flags on 
+              break;
+            case 'no': 
+              userUpdated[i[0]] = false; // flags off
+              break;
+            default:
+            userUpdated[i[0]] = updated[1]; // new value
+          }
         });
         console.log('user ready for account update and table refresh');
-        console.log(user);
+        console.log(userUpdated);
       }}>
       <div><h2>Account Details</h2></div>
       <ul>
@@ -443,7 +461,7 @@
               return chk;
             }}
             <label for="verified">Verified</label>
-            <input type="hidden" name="verified" value=false/>
+            <input type="hidden" name="verified" value="no"/>
           </fieldset>  
         </li>
         <li>
@@ -454,7 +472,7 @@
               return chk;
             }}
             <label for="re_verification">Re-verification</label>
-            <input type="hidden" name="re_verification" value=false/>
+            <input type="hidden" name="re_verification" value="no"/>
           </fieldset>  
         </li>
         <li>
@@ -465,7 +483,7 @@
               return chk;
             }}
             <label for="approved">Approved</label>
-            <input type="hidden" name="approved" value=false/>
+            <input type="hidden" name="approved" value="no"/>
           </fieldset>  
         </li>
         <li>
@@ -476,7 +494,7 @@
               return chk;
             }}
             <label for="admin">Administrator</label>
-            <input type="hidden" name="admin" value=false/>
+            <input type="hidden" name="admin" value="no"/>
           </fieldset>  
         </li>
         <li>
@@ -487,7 +505,7 @@
               return chk;
             }}
             <label for="api">API</label>
-            <input type="hidden" name="api" value=false/>
+            <input type="hidden" name="api" value="no"/>
           </fieldset>  
         </li>
         <li>
@@ -522,7 +540,7 @@
               return chk;
             }}
             <label for="blocked">User Blocked</label>
-            <input type="hidden" name="blocked" value=false/>
+            <input type="hidden" name="blocked" value="no"/>
           </fieldset>  
         </li>
         <div style="display: grid; grid-template-columns: 1fr 1fr;">
