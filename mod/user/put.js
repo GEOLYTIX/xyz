@@ -62,7 +62,7 @@ module.exports = async function put(req, res) {
   if (req.body.verified) {
 
     verification_by_admin = `
-      password = password_reset
+      , password = password_reset
       , password_reset = NULL
       , failedattempts = 0
       , verificationtoken = NULL
@@ -71,20 +71,19 @@ module.exports = async function put(req, res) {
     `
   }
 
-  let updates = Object.entries(req.body)
+  let updatedUser = Object.entries(req.body)
   .filter(i => i[0] !== 'email')
   .map(i => {
-    return `${i[0]} = ${i[1]}`;
+    return `${i[0]} = '${i[1]}'`;
   })
-
-  updates.push(verification_by_admin)
-  updates.push(approved_by);
 
   // Get user to update from ACL.
   const rows = await acl(`
     UPDATE acl_schema.acl_table
-    SET ${updates.join(', ')}
-    WHERE lower(email) = lower(${req.body.email});`)
+    SET ${updatedUser.join(', ')}
+    ${verification_by_admin}
+    ${approved_by}
+    WHERE lower(email) = lower('${req.body.email}');`)
 
   if (rows instanceof Error) {
     return res.status(500).send('Failed to access ACL.')

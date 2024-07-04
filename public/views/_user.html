@@ -335,7 +335,9 @@
     }
 
     // Get list of available roles from workspace.
-    const rolesList = await xhrPromise(`${document.head.dataset.dir}/api/workspace/roles`)
+    //const rolesList = await xhrPromise(`${document.head.dataset.dir}/api/workspace/roles`)
+    // temporary
+    const rolesList = ['isurf', 'super', 'ROI'];
 
     // List of languages key values. 
     const languagesList = {
@@ -359,21 +361,6 @@
       params[key] = decodeURI(value)
     })
 
-    // Get user list from host.
-    const response = await xhrPromise(`${document.head.dataset.dir}/api/user/list`)
-
-    // Data must be an array if only 1 record returned in response.
-    const data = Array.isArray(response) && response || [response]
-
-    data.forEach(row => {
-      row.re_verification = !row.verificationtoken
-    })
-
-    // Sort data to promote email from url parameter to top.
-    if (params.email) {
-      data.sort(function (x, y) { return x.email == params.email ? -1 : y.email == params.email ? 1 : 0; });
-    }
-
     document.querySelector('.mask').addEventListener('click', e => {
       let form = document.querySelector('.form');
       if(form && form.contains(e.target)) return;
@@ -396,6 +383,24 @@
       return uhtml.html.node`<span class="dot" style=${bg}></span>${state.label}`
     }
 
+    function submit(user) {
+
+      console.log(user);
+      
+      fetch(`${document.head.dataset.dir}/api/user/put?`, {
+        method: "POST",
+        body: JSON.stringify(user),
+        headers: {
+          "Content-type": "application/json; charset=UTF-8"
+        }
+      })
+      .then(response => {
+        document.querySelector('.mask').classList.add('none');
+        createUserTable();
+      });
+
+    }
+
     function userForm(user) {
       const form = uhtml.html.node`<form
       onreset=${e => {
@@ -408,7 +413,7 @@
       onsubmit=${e => {
         e.preventDefault();
         const formData = new FormData(form);
-        
+
         // will store updated user settings
         const userUpdated = {};
 
@@ -432,19 +437,21 @@
             userUpdated[i[0]] = updated[1]; // new value
           }
         });
-        console.log('user ready for account update and table refresh');
-        console.log(userUpdated);
+
+        userUpdated.email = user.email;
+        submit(userUpdated);
+
       }}>
       <div><h2>Account Details</h2></div>
       <ul>
         <li>
-        <fieldset>
+        <fieldset title="Account e-mail address">
           <label for="email">email</label>
           <input type="email" id="email" name="email" required value=${user.email} disabled>
         </fieldset>  
         </li>
         <li>
-          <fieldset>
+          <fieldset title="Account Language">
             <label for="language">Language</label>
             <select name="language" id="language">
               ${Object.entries(languagesList).map(l => {
@@ -455,7 +462,7 @@
           </fieldset>  
         </li>
         <li>
-          <fieldset>
+          <fieldset title="The account email has been verified through a token sent to the email address">
             ${() => {
               let chk = uhtml.html.node`<input type="checkbox" id="verified" name="verified">`;
               chk.checked = user.verified;
@@ -466,7 +473,7 @@
           </fieldset>  
         </li>
         <li>
-          <fieldset>
+          <fieldset title="The account has an outstanding password reset to be verified">
             ${() => {
               let chk = uhtml.html.node`<input type="checkbox" id="re_verification" name="re_verification">`;
               chk.checked = user.re_verification;
@@ -477,7 +484,7 @@
           </fieldset>  
         </li>
         <li>
-          <fieldset>
+          <fieldset title="The account has been approved by a site administrator and is permitted to access the application">
             ${() => {
               let chk = uhtml.html.node`<input type="checkbox" id="approved" name="approved">`;
               chk.checked = user.approved;
@@ -488,7 +495,7 @@
           </fieldset>  
         </li>
         <li>
-          <fieldset>
+          <fieldset title="The account is an admin account which can access this page and change other account credentials">
             ${() => {
               let chk = uhtml.html.node`<input type="checkbox" id="admin" name="admin">`;
               chk.checked = user.admin;
@@ -499,7 +506,7 @@
           </fieldset>  
         </li>
         <li>
-          <fieldset>
+          <fieldset title="The account has priviliges to create API keys">
             ${() => {
               let chk = uhtml.html.node`<input type="checkbox" id="api" name="api">`;
               chk.checked = user.api;
@@ -510,13 +517,13 @@
           </fieldset>  
         </li>
         <li>
-          <fieldset>
+          <fieldset title="Administrator who approved last modification to this account">
             <label for="approved_by">Approved by</label>
             <input type="text" id="approved_by" name="approved_by" disabled value=${user.approved_by}>
           </fieldset>  
         </li>
         <li>
-          <fieldset>
+          <fieldset title="User Access History">
             <label for="access_log">Access Log</label>
             <input type="text" id="access_log" name="access_log" disabled value=${user.access_log}>
           </fieldset>  
@@ -528,15 +535,16 @@
           </fieldset>  
         </li>
         <li>
-          <fieldset>
+          <fieldset title="Failed Login Attempts">
             <label for="failedattempts">Failed Login Attempts</label>
             <input type="number" id="failedattempts" name="failedattempts" disabled value=${user.failedattempts}>
           </fieldset>  
         </li>
         <li>
-          <fieldset>
+          <fieldset title="Blocked accounts can no longer login or reset their password">
             ${() => {
-              let chk = uhtml.html.node`<input type="checkbox" id="blocked" name="blocked">`;
+              let chk = uhtml.html.node`<input 
+              type="checkbox" id="blocked" name="blocked">`;
               chk.checked = user.blocked;
               return chk;
             }}
@@ -555,6 +563,8 @@
 
     async function createUserTable() {
 
+      const userList = await getUserList();
+
       let el = document.getElementById('userTable');
       clearNode(el);
 
@@ -566,7 +576,7 @@
 
         const tbody = uhtml.html.node`<tbody>`
 
-        Object.values(data).map(i => {
+        Object.values(userList).map(i => {
           tbody.appendChild(uhtml.html.node`<tr onclick=${e => {
             e.stopPropagation();
             let mask = document.querySelector('.mask');
@@ -588,6 +598,27 @@
 
     }
 
+    async function getUserList(){
+      
+      // Get user list from host.
+      const response = await xhrPromise(`${document.head.dataset.dir}/api/user/list`)
+      
+      // Data must be an array if only 1 record returned in response.
+      const data = Array.isArray(response) && response || [response]
+      
+      data.forEach(row => {
+        row.re_verification = !row.verificationtoken
+      })
+      
+      // Sort data to promote email from url parameter to top.
+      if (params.email) {
+        data.sort(function (x, y) { return x.email == params.email ? -1 : y.email == params.email ? 1 : 0; });
+      }
+
+      return data;
+    
+    }
+
 
     await createUserTable();
 
@@ -598,6 +629,7 @@
       const xhr = new XMLHttpRequest()
 
         xhr.open('GET', req)
+        //xhr.open('POST', req)
         xhr.setRequestHeader('Content-Type', 'application/json')
         xhr.responseType = 'json'
 
@@ -610,7 +642,9 @@
       })
     }
 
-    return console.log(data);
+
+    return;
+    // the code below is just a reference from the previous design 
 
     const userTable = new Tabulator(document.getElementById('userTable'),
       {
@@ -629,104 +663,34 @@
         columns: [
           {
             field: 'email',
-            vertAlign: 'middle',
-            headerTooltip: 'Account EMail',
             titleFormatter: () => '<div class="icon-face xyz-icon"></div>',
             resizable: false,
             responsive: 0 // Never hide
           },
           {
-            field: 'verified',
-            hozAlign: 'center',
-            vertAlign: 'middle',
-            headerTooltip: 'The account email has been verified through a token sent to the email address.',
-            titleFormatter: () => '<div class="icon-tick-done xyz-icon"></div>',
-            formatter: 'tickCross',
-            cellClick: cellToggle,
-            resizable: false,
-            responsive: 0 // Never hide
+            field: 'verified'
           },
           {
-            field: 're_verification',
-            hozAlign: 'center',
-            vertAlign: 'middle',
-            headerTooltip: 'The account has an outstanding password reset to be verified.',
-            titleFormatter: () => '<div class="xyz-icon" style="background-image:url(https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/check_circle/default/24px.svg)"></div>',
-            formatter: 'tickCross',
-            cellClick: cellToggle,
-            resizable: false,
-            responsive: 0 // Never hide
+            field: 're_verification'
           },
           {
-            field: 'approved',
-            hozAlign: 'center',
-            vertAlign: 'middle',
-            headerTooltip: 'The account has been approved by a site administrator and is permitted to access the application.',
-            titleFormatter: () => '<div class="icon-tick-done-all xyz-icon"></div>',
-            formatter: 'tickCross',
-            cellClick: cellToggle,
-            resizable: false,
-            responsive: 0 // Never hide
+            field: 'approved'
           },
           {
-            field: 'admin',
-            hozAlign: 'center',
-            vertAlign: 'middle',
-            headerTooltip: 'The account is an admin account which can access this page and change other account credentials.',
-            titleFormatter: () => '<div class="xyz-icon icon-supervisor-account"></div>',
-            formatter: 'tickCross',
-            cellClick: cellToggle,
-            resizable: false,
-            responsive: 0 // Never hide
+            field: 'admin'
           },
           {
-            field: 'api',
-            hozAlign: 'center',
-            vertAlign: 'middle',
-            headerTooltip: 'The account has priviliges to create API keys.',
-            titleFormatter: () => '<div class="xyz-icon icon-key"></div>',
-            formatter: 'tickCross',
-            cellClick: cellToggle,
-            resizable: false,
-            responsive: 1 // Hide first
+            field: 'api'
           },
           {
-            field: 'failedattempts',
-            hozAlign: 'center',
-            vertAlign: 'middle',
-            headerTooltip: 'Failed login attempts.',
-            titleFormatter: () => '<div class="xyz-icon icon-warning"></div>',
-            formatter: (cell, formatterParams) => '<span style="color:red; font-weight:bold;">' + cell.getValue() + '</span>',
-            resizable: false,
-            responsive: 2 // Hide first
+            field: 'failedattempts'
           },
           {
-            field: 'language',
-            hozAlign: 'center',
-            vertAlign: 'middle',
-            headerTooltip: 'Account language',
-            titleFormatter: () => '<div class="xyz-icon icon-translate"></div>',
-            editor: 'list',
-            editorParams: {
-              // show the label of the language in the dropdown list
-              values: Object.keys(languagesList).map(key => ({ label: languagesList[key], value: key })),
-            },
-            cellEdited: languageEdited,
-            resizable: false,
-            responsive: 1,
-            formatter: (cell, formatterParams, onRendered) => {
-
-              let val = cell.getValue()
-
-              if (!val) return;
-
-              return languagesList[val];
-            }
+            field: 'language'
           },
           {
             field: 'roles',
             title: 'Roles',
-            vertAlign: 'middle',
             headerTooltip: 'Account roles',
             headerSort: false,
             editor: 'list',
@@ -734,9 +698,7 @@
               values: rolesList,
               multiselect: true
             },
-            cellEdited: rolesEdited,
-            resizable: false,
-            responsive: 0 // Never hide
+            cellEdited: rolesEdited
           },
           {
             field: 'access_log',
@@ -748,12 +710,7 @@
             responsive: 1 // Hide first
           },
           {
-            field: 'approved_by',
-            title: 'Approved by',
-            vertAlign: 'middle',
-            headerTooltip: 'Admin who approved last modification to this account.',
-            resizable: false,
-            responsive: 1 // Hide first
+            field: 'approved_by'
           },
           {
             visible: typeof data[0].expires_on !== 'undefined',
@@ -782,15 +739,7 @@
             resizable: false
           },
           {
-            field: 'blocked',
-            hozAlign: 'center',
-            vertAlign: 'middle',
-            headerTooltip: 'Blocked accounts can no longer login or reset their password.',
-            titleFormatter: () => '<div class="icon-lock-closed xyz-icon"></div>',
-            formatter: 'tickCross',
-            cellClick: cellToggle,
-            resizable: false,
-            responsive: 2 // Hide second
+            field: 'blocked'
           },
           {
             field: 'delete',
@@ -869,48 +818,6 @@
 
       //return the editor element
       return editor;
-    };
-
-    function languageEdited(e) {
-
-      if (JSON.stringify(e._cell.value) === JSON.stringify(e._cell.oldValue)) return;
-
-      xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${e._cell.row.data.email}&field=language&value=${e._cell.value}`)
-    }
-
-    async function cellToggle(e, cell) {
-
-      const user = cell.getData();
-
-      const col = cell.getColumn();
-
-      const field = col.getField();
-
-      // Re-verification cannot be undone.
-      if (field === 're_verification' && cell.getValue()) return;
-
-      const response = await xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${user.email}&field=${field === 're_verification'? 'verified': field}&value=${!cell.getValue()}`);
-
-      if (response.err) return console.error(response.err);
-
-      cell.setValue(!cell.getValue());
-
-      const row = cell.getRow();
-
-      if (field === 're_verification'
-      || (field === 'verified' && cell.getValue())) {
-
-        let re_verification_cell = row.getCell('re_verification')
-        re_verification_cell.setValue(true)
-
-        let verified_cell = row.getCell('verified')
-        verified_cell.setValue(true)
-
-        let approved_cell = row.getCell('approved')
-        approved_cell.setValue(true)
-      };
-
-      row.reformat();
     };
 
     async function getAccessLog(e, cell) {
