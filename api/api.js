@@ -51,6 +51,8 @@ process.env.DIR ??= ''
 @typedef {Object} req
 The req object represents the HTTP request and has properties for the request query string, parameters, body, HTTP headers, and so on.
 @property {Object} params HTTP request parameter.
+@property {Object} [body] HTTP POST request body.
+@property {Object} header HTTP request header.
 */
 
 /**
