@@ -313,7 +313,7 @@
       </div>
       <div>
         <button class="raised primary-colour" id="default-view"
-          onclick="window.location.href = `${window.location.origin}{{dir}}`">Default View</button>
+          onclick="window.location.href = `${window.location.origin}{{dir}}`">&#8592;&nbsp;Back to Mapp</button>
         <button class="raised primary-colour" id="test-view"
           onclick="window.location.href = `${window.location.origin}{{dir}}?template=test_view&download=true`">Test View</button>
         <button class="raised red" id="logout" onclick="window.location.href = `${window.location.origin}{{dir}}?logout=true`">Logout</button>
@@ -384,14 +384,12 @@
     }
 
     function submit(user) {
-
-      console.log(user);
       
       fetch(`${document.head.dataset.dir}/api/user/put?`, {
         method: "POST",
         body: JSON.stringify(user),
         headers: {
-          "Content-type": "application/json; charset=UTF-8"
+          "Content-type": "application/json"
         }
       })
       .then(response => {
@@ -552,10 +550,24 @@
             <input type="hidden" name="blocked" value="no"/>
           </fieldset>  
         </li>
-        <div style="display: grid; grid-template-columns: 1fr 1fr;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr 1fr;">
           <button class="raised primary-colour">Save</button>
           <button class="raised primary-colour">
-            <input type="reset" value="Cancel"/></button>
+            <input type="reset" value="Cancel"/>
+          </button>
+          <button class="raised red"
+          onclick=${async e => {
+            e.preventDefault();
+            console.log('delete user');
+            if(!confirm(`Are you sure to delete ${user.email} account?`)) return;
+            
+            const response = await xhrPromise(`${document.head.dataset.dir}/api/user/delete?email=${user.email}`);
+            document.querySelector('.mask').classList.add('none');
+            if (response.err) return console.error(response.err);
+            document.querySelector(`#userTable table tr[data-email='${user.email}']`).remove();
+
+          }}>Delete User
+          </button>
         `;
 
         return form;
@@ -577,7 +589,9 @@
         const tbody = uhtml.html.node`<tbody>`
 
         Object.values(userList).map(i => {
-          tbody.appendChild(uhtml.html.node`<tr onclick=${e => {
+          tbody.appendChild(uhtml.html.node`<tr 
+          data-email=${i.email}
+          onclick=${e => {
             e.stopPropagation();
             let mask = document.querySelector('.mask');
             clearNode(mask);
