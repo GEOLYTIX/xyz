@@ -6,7 +6,9 @@ const cookieParser = require('cookie-parser')
 
 const app = express()
 
-app.use('/docs', express.static('docs'))
+app.use('/docs', express.static('docs', {
+    extensions: ['html']
+}))
 
 app.use(`${process.env.DIR||''}/public`, express.static('public'))
 
