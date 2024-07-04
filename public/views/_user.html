@@ -185,6 +185,10 @@
       border: solid 1px #00000033; 
     }
 
+    .account-blocked {
+      background-color: #ef9a9a !important;
+    }
+
     /* end form style */
 
     .btn-row {
@@ -264,8 +268,8 @@
 
     <div class="btn-row">
       <div><span>Filter</span>
-        <input id="filterInput" type="text" placeholder="e.g. geolytix" style="max-width: 100%;">
-        <button class="raised primary-colour" id="toggleBlocked">Blocked accounts</button>
+        <input id="filterInput" type="text" placeholder="Search email addresses" style="max-width: 100%;">
+        <button class="raised primary-colour" id="toggleBlocked">Show Blocked accounts</button>
       </div>
       <div>
         <button class="raised primary-colour" id="default-view"
@@ -382,6 +386,7 @@
           if(updated[1] === 'no' && !i[1]) return;
           // process expiry date if it was changed
           if(updated[0] === 'expires_on') {
+            if(!updated[1]) return;
             const prevExpiryDate = (new Date(user.expires_on*1000)).toLocaleDateString('fr-CA');
             if(prevExpiryDate === updated[1]) return;
             userUpdated[i[0]] = parseInt(new Date(updated[1]).getTime() / 1000);
@@ -553,6 +558,7 @@
 
         return form;
     }
+  
 
     async function createUserTable() {
 
@@ -570,7 +576,12 @@
         const tbody = uhtml.html.node`<tbody>`
 
         Object.values(userList).map(i => {
+
+          let bg = i.email === params.email ? `background-color: #fff9c4; font-weight: bold` : ``;
+
           tbody.appendChild(uhtml.html.node`<tr 
+          class="${i.blocked ? `account-blocked none`: ``}"
+          style=${bg}
           data-email=${i.email}
           onclick=${e => {
             e.stopPropagation();
@@ -636,7 +647,37 @@
         xhr.send()
       })
     }
+    
+    // email address search
+    document.getElementById("filterInput").addEventListener('input', e => {
+      let table = document.querySelector('#userTable table');
+      let filter = e.target.value.toLowerCase();
+      let trs = table.querySelectorAll("tr");
 
+      for(let tr of trs) {
+        let td = tr.querySelector("td");
+        if(!td) continue;
+        tr.style.display = td.textContent.toLowerCase().indexOf(filter) > -1 ? "" : "none";
+      }
+    })
+
+    let blocked = true;
+    document.getElementById("toggleBlocked").onclick = e => {
+
+      blocked = !blocked
+
+      if (blocked) {
+        e.target.textContent = "Show blocked users"
+        Array.from(document.querySelectorAll('#userTable table tr.account-blocked')
+        ).map(el => el.classList.add('none'));
+        createUserTable();
+        return;
+      }
+
+      e.target.textContent = "Hide blocked users"
+      Array.from(document.querySelectorAll('#userTable table tr.account-blocked'))
+      .map(el => el.classList.remove('none'));
+    }
 
     return;
     // the code below is just a reference from the previous design 
@@ -644,43 +685,12 @@
     const userTable = new Tabulator(document.getElementById('userTable'),
       {
         data: data,
-        rowFormatter: row => {
-          const user = row.getData()
-
-          // Highlight user row.
-          row.getElement().style.backgroundColor = user.email === params.email && '#fff9c4'
-
-          // Style blocked user row.
-          row.getElement().style.backgroundColor = user.blocked && '#ef9a9a'
-        },
-        columnHeaderVertAlign: 'middle',
         rowHeight: 30,
         columns: [
           {
             field: 'email',
             resizable: false,
             responsive: 0 // Never hide
-          },
-          {
-            field: 'verified'
-          },
-          {
-            field: 're_verification'
-          },
-          {
-            field: 'approved'
-          },
-          {
-            field: 'admin'
-          },
-          {
-            field: 'api'
-          },
-          {
-            field: 'failedattempts'
-          },
-          {
-            field: 'language'
           },
           {
             field: 'roles',
@@ -702,117 +712,10 @@
             cellClick: getAccessLog,
             resizable: false,
             responsive: 1 // Hide first
-          },
-          {
-            field: 'approved_by'
-          },
-          {
-            visible: typeof data[0].expires_on !== 'undefined',
-            field: 'expires_on',
-            title: 'Expires on',
-            vertAlign: 'middle',
-            minWidth: 120,
-            headerTooltip: 'Date when user approval expires.',
-            responsive: 1, // Hide first
-            formatter: (cell, formatterParams, onRendered) => {
-
-              let val = parseInt(cell.getValue())
-
-              if (isNaN(val)) return;
-
-              let str = new Date(val * 1000).toLocaleString('en-GB', {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-              })
-
-              // Colour text red if account has expired.
-              return val < new Date() / 1000 ? `<span style="color:red;">${str}</span>` : str;
-            },
-            editor: expiryEdit,
-            resizable: false
-          },
-          {
-            field: 'blocked'
-          },
-          {
-            field: 'delete',
-            vertAlign: 'middle',
-            headerSort: false,
-            formatter: () => '<span style="color:red; font-weight:bold;">DELETE</span>',
-            cellClick: rowDelete,
-            resizable: false,
-            responsive: 2 // Hide second
           }
         ]
       });
 
-
-    await new Promise(resolve => userTable.on('tableBuilt', resolve))
-
-    let blocked = true
-    userTable.setFilter("blocked", "!=", true);
-    document.getElementById("toggleBlocked").onclick = e => {
-
-      blocked = !blocked
-
-      if (blocked) {
-        e.target.textContent = "Show blocked accounts"
-        userTable.setFilter("blocked", "!=", true)
-        return;
-      }
-
-      e.target.textContent = "Hide blocked accounts"
-      userTable.removeFilter("blocked", "!=", true)
-    }
-
-    document.getElementById("filterInput").oninput = e => {
-
-      // Check whether email or role includes filter term.
-      userTable.setData(data.filter(user => user.email.includes(e.target.value)
-        || user.roles.some(role => role.includes(e.target.value))))
-    }
-
-
-    function expiryEdit(cell, onRendered, success, cancel) {
-
-      let rowData = cell.getRow().getData()
-      //create and style editor
-      var editor = document.createElement("input");
-
-      editor.setAttribute("type", "date");
-
-      // Set the value to the current date if the value is null and you are editing the cell.
-      if (!rowData.expires_on) {
-        const date = new Date();
-        editor.value = date.toISOString().slice(0, 10);
-      } else {
-        const date = new Date(rowData.expires_on * 1000);
-        editor.value = date.toISOString().slice(0, 10);
-      }
-
-      //create and style input
-      editor.style.padding = "3px";
-      editor.style.width = "100%";
-      editor.style.boxSizing = "border-box";
-
-      onRendered(function () {
-        editor.focus();
-      });
-
-      //when the value has been set, trigger the cell to update
-      function successFunc() {
-        const val = new Date(editor.value).getTime() / 1000 || null;
-        xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${rowData.email}&field=expires_on&value=${val}`)
-        cell.setValue(val);
-      }
-
-      //editor.addEventListener("change", successFunc);
-      editor.addEventListener("blur", successFunc);
-
-      //return the editor element
-      return editor;
-    };
 
     async function getAccessLog(e, cell) {
 
