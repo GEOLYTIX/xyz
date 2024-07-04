@@ -116,10 +116,6 @@
       background-color: white;
     }
 
-    .contents {
-      display: contents;
-    }
-
     /* end agaTable styling */
 
     /* begin form style */
@@ -168,7 +164,7 @@
       padding: 0.3em;
     }
 
-    .form input[type="email"], input[type="text"], input[type="number"] {
+    .form input[type="email"], input[type="text"], input[type="number"], input[type="date"] {
       width: 100%;
     }
 
@@ -185,48 +181,6 @@
     }
 
     /* end form style */
-
-    .icon-face {
-      background-image: url("{{dir}}/public/icons/icon-face.svg");
-    }
-
-    .icon-logout {
-      background-image: url("{{dir}}/public/icons/icon-logout.svg");
-    }
-
-    .icon-tick-done {
-      background-image: url("{{dir}}/public/icons/icon-tick-done.svg");
-    }
-
-    .icon-tick-done-all {
-      background-image: url("{{dir}}/public/icons/icon-tick-done-all.svg");
-    }
-
-    .icon-warning {
-      background-image: url("{{dir}}/public/icons/icon-warning.svg");
-    }
-
-    .icon-translate {
-      background-image: url("{{dir}}/public/icons/icon-translate.svg");
-    }
-
-    .icon-supervisor-account {
-      background-image: url("{{dir}}/public/icons/icon-supervisor-account.svg");
-    }
-
-    .icon-settings {
-      background-image: url("{{dir}}/public/icons/icon-settings.svg");
-    }
-
-    .icon-key {
-      background-image: url("{{dir}}/public/icons/icon-key.svg");
-    }
-
-    .icon-lock-closed {
-      background-image: url("{{dir}}/public/icons/icon-lock-closed.svg");
-      height: 40px;
-      width: 30px;
-    }
 
     .xyz-icon {
       background-repeat: no-repeat;
@@ -278,6 +232,10 @@
     }
 
     @media only screen and (min-width: 768px) {
+      #userTable {
+        width: 70%;
+        margin: auto;
+      }
       .form {
         width: 400px;
       }
@@ -309,7 +267,7 @@
     <div class="btn-row">
       <div><span>Filter</span>
         <input id="filterInput" type="text" placeholder="e.g. geolytix" style="max-width: 100%;">
-        <button class="raised primary-colour" id="toggleBlocked">Show blocked accounts</button>
+        <button class="raised primary-colour" id="toggleBlocked">Blocked accounts</button>
       </div>
       <div>
         <button class="raised primary-colour" id="default-view"
@@ -417,12 +375,20 @@
 
         Object.entries(user).forEach(i => {
           let updated = [...formData].find(j => j[0] === i[0]);
+
           // skip unchanged fields
           if(updated === undefined) return;
           // skip checked options if no change
           if(updated[1] === 'on' && i[1]) return;
           // skip unchecked options if no change
           if(updated[1] === 'no' && !i[1]) return;
+          // process expiry date if it was changed
+          if(updated[0] === 'expires_on') {
+            const prevExpiryDate = (new Date(user.expires_on*1000)).toLocaleDateString('fr-CA');
+            if(prevExpiryDate === updated[1]) return;
+            userUpdated[i[0]] = parseInt(new Date(updated[1]).getTime() / 1000);
+            return;
+          }
           // set changes on user updated payload
           switch(updated[1]) {
             case 'on':
@@ -521,6 +487,17 @@
           </fieldset>  
         </li>
         <li>
+          <fieldset title="Date when user access expires">
+            <label for="expires_on">Account expires on</label>
+            <input type="date" id="expires_on" name="expires_on"
+            value=${((e) => {
+              if(!user.expires_on) return;
+              const expiryDate = new Date(user.expires_on*1000);
+              return expiryDate.toLocaleDateString('fr-CA')
+            })()}>
+          </fieldset>  
+        </li>
+        <li>
           <fieldset title="User Access History">
             <label for="access_log">Access Log</label>
             <input type="text" id="access_log" name="access_log" disabled value=${user.access_log}>
@@ -558,7 +535,7 @@
           <button class="raised red"
           onclick=${async e => {
             e.preventDefault();
-            console.log('delete user');
+
             if(!confirm(`Are you sure to delete ${user.email} account?`)) return;
             
             const response = await xhrPromise(`${document.head.dataset.dir}/api/user/delete?email=${user.email}`);
