@@ -25,6 +25,11 @@
             "title": "Github",
             "id": "github",
             "link": "https://github.com/GEOLYTIX/xyz"
+        },
+        {
+          "title": "XYZ",
+          "id": "xyz",
+          "link": "/docs"
         }
       ]
     }

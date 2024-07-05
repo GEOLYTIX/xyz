@@ -568,7 +568,7 @@
         ${mapp.dictionary.no_locales}`)
   }
 
-  if (mapp.hooks.current.useridb) {
+  if (mapp.hooks.current.useridb || locale.useridb) {
 
     let userLocale = await mapp.utils.userIndexedDB.get('locales', locale.key)
 
