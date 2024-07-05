@@ -342,10 +342,10 @@
     }
 
     function checkUserStatus(user) {
-      let state = {label: 'New', color: '#880e4f'};
-      if(user.verified) state = {label: 'Verified', color: '#ff9800'}
+      let state = {label: 'New', color: '#e91e63'};
+      if(user.verified) state = {label: 'Verified', color: '#ff5722'}
       if(user.approved) state = {label: 'Approved', color: '#43a047'}
-      if(user.blocked) state = {label: 'Blocked', color: '#d50000'}
+      if(user.blocked) state = {label: 'Blocked', color: '#263238'}
       let bg = `background-color: ${state.color}`;
       return uhtml.html.node`<span class="dot" style=${bg}></span>${state.label}`
     }
