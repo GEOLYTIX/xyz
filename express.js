@@ -45,7 +45,7 @@ app.get(`${process.env.DIR||''}/api/workspace/:key?`, api)
 
 app.get(`${process.env.DIR||''}/api/user/:method?/:key?`, api)
 
-app.post(`${process.env.DIR||''}/api/user/:method?`, express.json({limit: '5mb'}), api)
+app.post(`${process.env.DIR||''}/api/user/put`, express.json({limit: '5mb'}), api)
 
 app.post(`${process.env.DIR||''}/api/user/:method?/:key?`, express.urlencoded({extended: true}), api)
 
