@@ -39,6 +39,13 @@ module.exports = async function update(req, res) {
 
   if (!acl) return res.status(500).send('ACL unavailable.')
 
+  if (req.body) {
+
+    console.log(req.body)
+
+    return;
+  }
+
   if (!req.params.user) {
 
     return new Error('login_required')

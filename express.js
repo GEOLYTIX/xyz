@@ -43,12 +43,10 @@ app.post(`${process.env.DIR||''}/api/fetch/:template?`, express.json({limit: '5m
 app.get(`${process.env.DIR||''}/api/workspace/:key?`, api)
 
 
-app.get(`${process.env.DIR||''}/api/user/:method?/:key?`, api)
+app.get(`${process.env.DIR||''}/api/user/:method?`, api)
 
 // this route allows to update user data with payload but is in conflict with the one below
-app.post(`${process.env.DIR||''}/api/user/:method`, express.json({limit: '5mb'}), api)
-
-app.post(`${process.env.DIR||''}/api/user/:method?/:key?`, express.urlencoded({extended: true}), api)
+app.post(`${process.env.DIR||''}/api/user/:method?`, express.json({limit: '5mb'}), api)
 
 //sudo ./caddy_linux_amd64 reverse-proxy --from localhost:443 --to localhost:3000
 
