@@ -67,14 +67,18 @@
       /*grid-template-columns: repeat(3, 1fr); max-height: 90%;*/
     }
 
+    table tr {
+      border-bottom: 1px solid #00000011; 
+    }
+
+    table tr:hover {
+      background-color: #ffffa733;
+    }
+
     table tr td {
       border-bottom: 1px solid #00000011; 
       padding: 0.2em;
       text-overflow: ellipsis;
-    }
-
-    table tr:nth-child(even) {
-      background-color: #e3e3e3;
     }
 
     .sticky-top {
@@ -164,13 +168,12 @@
       padding: 0.3em;
     }
 
-    .form input[type="email"], input[type="text"], input[type="number"], input[type="date"] {
+    input[type="email"], input[type="text"], input[type="number"], input[type="date"] {
       width: 100%;
-    }
-
-    .form input[type="checkbox"] {
-      vertical-align: middle;
-      accent-color: #003D57;
+      outline: none;
+      border: solid 1px #ccccccee;
+      border-radius: 2px;
+      padding: 0.2em;
     }
 
     .form input[type="reset"] {
@@ -182,11 +185,17 @@
 
     .form select {
       width: 100%;
-      border: solid 1px #00000033; 
+      border: solid 1px #ccccccee;
+      border-radius: 2px;
     }
 
     .account-blocked {
       background-color: #ef9a9a !important;
+    }
+
+    input[type="checkbox"] {
+      vertical-align: middle;
+      accent-color: #003D57;
     }
 
     /* end form style */
@@ -197,7 +206,7 @@
       flex-wrap: wrap;
       display: flex;
       gap: 10px;
-      margin: 10px 0;
+      margin: 1em 0;
     }
 
     button {
@@ -241,6 +250,11 @@
       .form {
         width: 400px;
       }
+
+      .btn-row {
+        width: 70%;
+        margin: 1em auto;
+      }
     }
 
     @media only screen and (max-width: 700px) {
@@ -266,11 +280,10 @@
 
     <h1>Account Administration</h1>
 
+    <p>Logged in as <span id="logged-in"></span></p>
+
     <div class="btn-row">
-      <div><span>Filter</span>
-        <input id="filterInput" type="text" placeholder="Search email addresses" style="max-width: 100%;">
-        <button class="raised primary-colour" id="toggleBlocked">Show Blocked accounts</button>
-      </div>
+      
       <div>
         <button class="raised primary-colour" id="default-view"
           onclick="window.location.href = `${window.location.origin}{{dir}}`">&#8592;&nbsp;Back to Mapp</button>
@@ -278,6 +291,19 @@
           onclick="window.location.href = `${window.location.origin}{{dir}}?template=test_view&download=true`">Test View</button>
         <button class="raised red" id="logout" onclick="window.location.href = `${window.location.origin}{{dir}}?logout=true`">Logout</button>
       </div>
+
+
+
+    </div>
+
+    <div class="btn-row">
+      <button class="raised primary-colour none" id="toggleBlocked">Show Blocked accounts</button>
+
+      <input type="text" id="filterInput" placeholder="Search accounts">
+
+        <label for="showBlocked">
+          <input id="showBlocked" type="checkbox" style="margin-right: 4px;">Show blocked accounts</label>
+      
     </div>
 
     <div id="userTable"></div>
@@ -320,6 +346,10 @@
     window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, (match, key, value) => {
       params[key] = decodeURI(value)
     })
+
+    const cookie = await fetch(`${document.head.dataset.dir}/api/user/cookie`)
+
+    document.getElementById('logged-in').textContent = cookie.email || 'Unknown';
 
     document.querySelector('.mask').addEventListener('click', e => {
       let form = document.querySelector('.form');
