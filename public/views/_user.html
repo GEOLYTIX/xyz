@@ -190,7 +190,7 @@
     }
 
     .account-blocked {
-      background-color: #ef9a9a !important;
+      color: #546e7a;
     }
 
     input[type="checkbox"] {
@@ -292,12 +292,9 @@
         <button class="raised red" id="logout" onclick="window.location.href = `${window.location.origin}{{dir}}?logout=true`">Logout</button>
       </div>
 
-
-
     </div>
 
     <div class="btn-row">
-      <button class="raised primary-colour none" id="toggleBlocked">Show Blocked accounts</button>
 
       <input type="text" id="filterInput" placeholder="Search accounts">
 
@@ -368,7 +365,7 @@
       let state = {label: 'New', color: '#880e4f'};
       if(user.verified) state = {label: 'Verified', color: '#ff9800'}
       if(user.approved) state = {label: 'Approved', color: '#43a047'}
-      if(user.blocked) state = {label: 'Blocked', color: '#ef9a9a'}
+      if(user.blocked) state = {label: 'Blocked', color: '#d50000'}
       let bg = `background-color: ${state.color}`;
       return uhtml.html.node`<span class="dot" style=${bg}></span>${state.label}`
     }
@@ -691,23 +688,20 @@
       }
     })
 
-    let blocked = true;
-    document.getElementById("toggleBlocked").onclick = e => {
+    document.getElementById("showBlocked").addEventListener('click', e => {
 
-      blocked = !blocked
+      let blocked = e.target.checked;
 
       if (blocked) {
-        e.target.textContent = "Show blocked users"
         Array.from(document.querySelectorAll('#userTable table tr.account-blocked')
-        ).map(el => el.classList.add('none'));
-        createUserTable();
+        ).map(el => el.classList.remove('none'));
+        //createUserTable();
         return;
       }
 
-      e.target.textContent = "Hide blocked users"
       Array.from(document.querySelectorAll('#userTable table tr.account-blocked'))
-      .map(el => el.classList.remove('none'));
-    }
+      .map(el => el.classList.add('none'));
+    })
 
     return;
     // the code below is just a reference from the previous design 
