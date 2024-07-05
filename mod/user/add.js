@@ -57,6 +57,13 @@ module.exports = async function addUser(req, res) {
     return new Error('admin_required')
   }
 
+  if (req.body) {
+
+    console.log(req.body)
+
+    return;
+  }
+
   const email = req.params.email.replace(/\s+/g, '')
 
   // Check for exsiting user account with same email in ACL.
