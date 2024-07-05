@@ -41,7 +41,7 @@ const msg_templates = require('./templates/_msgs')
 
 const query_templates = require('./templates/_queries')
 
-const workspace_src = process.env.WORKSPACE.split(':')[0]
+const workspace_src = process.env.WORKSPACE?.split(':')[0]
 
 async function cacheWorkspace() {
 
