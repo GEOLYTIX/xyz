@@ -336,10 +336,10 @@
     }
 
     // Get list of available roles from workspace.
-    //const rolesList = await xhrPromise(`${document.head.dataset.dir}/api/workspace/roles`)
+    const rolesList = await xhrPromise(`${document.head.dataset.dir}/api/workspace/roles`)
 
-    // temporary
-    const rolesList = ['isurf', 'super', 'ROI', 'leedsmobility'];
+    // temporary for local testing
+    //const rolesList = ['isurf', 'super', 'ROI', 'leedsmobility'];
 
     // List of languages key values. 
     const languagesList = {
