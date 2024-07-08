@@ -150,7 +150,7 @@
       padding: 0.3em;
     }
 
-    input[type="email"], input[type="text"], input[type="number"], input[type="date"] {
+    input[type="email"], input[type="text"], input[type="number"], input[type="date"], input[type="search"] {
       width: 100%;
       outline: none;
       border: solid 1px #ccccccee;
@@ -186,6 +186,37 @@
     }
 
     /* end form style */
+
+    /* begin pill style */
+    .pill-container {
+      display: flex;
+      gap: 4px;
+      flex-flow: row wrap;
+      padding: 0.5em 0;
+    }
+    
+    .pill-container .pill {
+      cursor: default;
+      padding: 1px 1px 1px 2px;
+      border-radius: 2px;
+      font-size: 0.9em;
+      font-weight: bold;
+      color: #f2f2f2;
+      background-color: #003D57;
+      user-select: none;
+    }
+    
+    .pill-container .pill button {
+      cursor: pointer;
+      font-size: 0.8em;
+      padding: 0 2px;
+    }
+    
+    .li-role {
+      border-bottom: solid 1px #ccc;
+    }
+    
+    /* end pill style */
 
     .btn-row {
       align-items: center;
@@ -354,7 +385,7 @@
 
     function submit(user) {
       
-      fetch(`${document.head.dataset.dir}/api/user/update`, {
+      fetch(`${document.head.dataset.dir}/api/user/put`, {
         method: "POST",
         body: JSON.stringify(user),
         headers: {
@@ -503,7 +534,59 @@
 
         <div style="padding: 0.5em">
           <div>Access Roles</div>
-          
+          ${
+            (() => {
+
+              const rolesContainer = mapp.utils.html.node`<div>`
+
+              const pills = mapp.ui.elements.pills({
+                target: rolesContainer,
+                pills: user.roles,
+                addCallback: (val, pills) => {
+                  console.log('pill added, do something')
+                },
+                removeCallback: (val, pills) => {
+                  console.log('pill removed, do something')
+                }
+              })
+
+              const searchbox = mapp.ui.elements.searchbox({
+                target: rolesContainer,
+                placeholder: 'Search access roles',
+                searchFunction: (e) => {
+                  
+                  searchbox.list.innerHTML = '';
+                  
+                  if(!e.target.value) return; // nothing to match
+                  
+                  const pattern = e.target.value;
+                  
+                  let filtered = rolesList.filter(val =>
+                  val.toLowerCase().startsWith(pattern.toLowerCase()))
+                  
+                  if (!filtered.length) {
+                    
+                    searchbox.list.append(mapp.utils.html.node`<li><span>${mapp.dictionary.no_results}`);
+                      
+                    return;
+                  }
+                  
+                  filtered
+                  .filter(val => !pills.pills.has(val))
+                  .filter((val, i) => i < 9)
+                  .forEach(val => {
+                    
+                    searchbox.list.append(mapp.utils.html.node`<li class="li-role" onclick=${() => {
+                      !pills.pills.has(val) && pills.add(val);
+                    }}>${val}`)
+                  });
+                }
+              })
+
+              return rolesContainer;
+
+            })()
+          }
         </div>
 
         <ul>
