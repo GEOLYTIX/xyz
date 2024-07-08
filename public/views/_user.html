@@ -380,6 +380,9 @@
       }
     }
 
+    // function to compare if 2 ets have the same elements
+    const eqSet = (xs, ys) => xs.size === ys.size && [...xs].every((x) => ys.has(x));
+
     function checkUserStatus(user) {
       let state = {label: 'New', color: '#e91e63'};
       if(user.verified) state = {label: 'Verified', color: '#ff5722'}
@@ -438,8 +441,6 @@
           if(updated[0] === 'roles') {
             let initial_roles = new Set(user.roles);
             let new_roles = new Set(updated[1].split(","));
-            // compare if these 2 sets have the same elements
-            const eqSet = (xs, ys) => xs.size === ys.size && [...xs].every((x) => ys.has(x));
             // check if roles have been altered
             let rolesUnchanged = eqSet(initial_roles, new_roles);
             if(rolesUnchanged) return;
