@@ -404,6 +404,7 @@
       .then(response => {
         document.querySelector('.mask').classList.add('none');
         createUserTable();
+        setTimeout(() => (alert('Changes have been saved.')), 500);
       });
 
     }
