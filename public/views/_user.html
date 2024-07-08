@@ -214,6 +214,11 @@
     
     .li-role {
       border-bottom: solid 1px #ccc;
+      cursor: pointer;
+    }
+
+    .li-role:hover {
+      background-color: #ffffa733;
     }
     
     /* end pill style */
@@ -419,6 +424,7 @@
         const userUpdated = {};
 
         Object.entries(user).forEach(i => {
+
           let updated = [...formData].find(j => j[0] === i[0]);
 
           // skip unchanged fields
@@ -427,6 +433,18 @@
           if(updated[1] === 'on' && i[1]) return;
           // skip unchecked options if no change
           if(updated[1] === 'no' && !i[1]) return;
+          // check if roles have been edited
+          if(updated[0] === 'roles') {
+            let initial_roles = new Set(user.roles);
+            let new_roles = new Set(updated[1].split(","));
+            // compare if these 2 sets have the same elements
+            const eqSet = (xs, ys) => xs.size === ys.size && [...xs].every((x) => ys.has(x));
+            // check if roles have been altered
+            let rolesUnchanged = eqSet(initial_roles, new_roles);
+            if(rolesUnchanged) return;
+            userUpdated.roles = `{${updated[1]}}`
+            return;
+          }
           // process expiry date if it was changed
           if(updated[0] === 'expires_on') {
             if(!updated[1]) return;
@@ -449,6 +467,7 @@
         });
 
         userUpdated.email = user.email;
+        //return console.log(userUpdated);
         submit(userUpdated);
 
       }}>
@@ -543,12 +562,21 @@
                 target: rolesContainer,
                 pills: user.roles,
                 addCallback: (val, pills) => {
-                  console.log('pill added, do something')
+                  let roles_input_el = document.querySelector('.form input[type="hidden"][name="roles"]');
+                  if(!roles_input_el) return;
+                  roles_input.value = [...pills].join(',');
+
+                  // reset searchbox and results
+                  searchbox.list.innerHTML = '';
+                  searchbox.input.value = '';
                 },
                 removeCallback: (val, pills) => {
-                  console.log('pill removed, do something')
+                  roles_input.value = [...pills].join(',');
+
                 }
               })
+
+              const roles_input = mapp.utils.html.node`<input type="hidden" name="roles"/>`;
 
               const searchbox = mapp.ui.elements.searchbox({
                 target: rolesContainer,
@@ -557,7 +585,7 @@
                   
                   searchbox.list.innerHTML = '';
                   
-                  if(!e.target.value) return; // nothing to match
+                  if(!e.target.value) return;
                   
                   const pattern = e.target.value;
                   
@@ -576,12 +604,17 @@
                   .filter((val, i) => i < 9)
                   .forEach(val => {
                     
-                    searchbox.list.append(mapp.utils.html.node`<li class="li-role" onclick=${() => {
-                      !pills.pills.has(val) && pills.add(val);
+                    searchbox.list.append(mapp.utils.html.node`<li class="li-role" onclick=${e => {
+                      e.stopPropagation();
+                      if(pills.pills.has(val)) return;
+                      pills.add(val);
+                      roles_input.value = [...pills.pills].join(',')
                     }}>${val}`)
                   });
                 }
               })
+
+              rolesContainer.appendChild(roles_input)
 
               return rolesContainer;
 
