@@ -337,6 +337,7 @@
 
     // Get list of available roles from workspace.
     //const rolesList = await xhrPromise(`${document.head.dataset.dir}/api/workspace/roles`)
+
     // temporary
     const rolesList = ['isurf', 'super', 'ROI', 'leedsmobility'];
 
@@ -492,7 +493,7 @@
         </li>
         </ul>
 
-        <div style="display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 0.5em; padding: 0.5em;">
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 0.5em; padding: 0.2em;">
           <div style="grid-column: 1 / span 3;">User Status</div>
 
           <fieldset title="The account email has been verified through a token sent to the email address">
@@ -551,10 +552,13 @@
 
         </div>
 
-        <div style="padding: 0.5em">
+        <div style="padding: 0.2em">
           <div>Access Roles</div>
           ${
             (() => {
+
+              if(!rolesList.length) return mapp.utils.html.node`
+              <input type="text" disabled value="No access roles defined">`;
 
               const rolesContainer = mapp.utils.html.node`<div>`
 
