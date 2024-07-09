@@ -67,6 +67,8 @@ module.exports = async function auth(req, res) {
   // Verify the token signature.
   let user;
 
+  if (!process.env.SECRET) return null
+
   try {
     user = jwt.verify(token, process.env.SECRET)
 
