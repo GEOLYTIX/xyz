@@ -144,6 +144,7 @@
 
     .form form ul {
       list-style-type: none;
+      box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
     }
     
     .form form li {
@@ -608,6 +609,15 @@
 
               const roles_input = mapp.utils.html.node`<input type="hidden" name="roles"/>`;
 
+              function li(val) {
+                return mapp.utils.html.node`<li class="li-role" onclick=${e => {
+                  e.stopPropagation();
+                  if(pills.pills.has(val)) return;
+                  pills.add(val);
+                  roles_input.value = [...pills.pills].join(',')
+                }}>${val}`
+              }
+
               const searchbox = mapp.ui.elements.searchbox({
                 target: rolesContainer,
                 placeholder: 'Search access roles',
@@ -615,7 +625,14 @@
                   
                   searchbox.list.innerHTML = '';
                   
-                  if(!e.target.value) return;
+                  if(!e.target.value) {
+                    // show suggested
+                    rolesList
+                    .filter(val => !pills.pills.has(val))
+                    .filter((val, i) => i < 3)
+                    .forEach(val => (searchbox.list.append(li(val))));
+                    return;
+                  }
                   
                   const pattern = e.target.value;
                   
@@ -639,17 +656,13 @@
                   filtered
                   .filter(val => !pills.pills.has(val))
                   .filter((val, i) => i < 9)
-                  .forEach(val => {
-                    
-                    searchbox.list.append(mapp.utils.html.node`<li class="li-role" onclick=${e => {
-                      e.stopPropagation();
-                      if(pills.pills.has(val)) return;
-                      pills.add(val);
-                      roles_input.value = [...pills.pills].join(',')
-                    }}>${val}`)
-                  });
+                  .forEach(val => (searchbox.list.append(li(val))));
                 }
               })
+
+              searchbox.input.onblur = e => {
+                setTimeout(() => (searchbox.list.innerHTML = ''), 500);
+              }
 
               rolesContainer.appendChild(roles_input)
 
