@@ -708,6 +708,8 @@
             if (response.err) return console.error(response.err);
             document.querySelector(`#userTable table tr[data-email='${user.email}']`).remove();
 
+            setTimeout(() => (alert(`Account for ${user.email} has been permanently deleted.`)), 400)
+
           }}>Delete User
           </button>
         `;
