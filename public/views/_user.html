@@ -270,6 +270,10 @@
       }
     }
 
+    .txt-red {
+      color: #f44336;
+    }
+
     @media only screen and (min-width: 768px) {
       #userTable {
         width: 70%;
@@ -568,7 +572,7 @@
               chk.checked = user.blocked;
               return chk;
             }}
-            <label for="blocked"><b><span style="color: #f44336;">Blocked</span></b></label>
+            <label for="blocked"><b><span class="txt-red">Blocked</span></b></label>
             <input type="hidden" name="blocked" value="no"/>
           </fieldset>  
 
