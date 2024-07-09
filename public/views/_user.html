@@ -561,6 +561,17 @@
             <input type="hidden" name="api" value="no"/>
           </fieldset>  
 
+          <fieldset title="Blocked accounts can no longer login or reset their password">
+            ${() => {
+              let chk = mapp.utils.html.node`<input 
+              type="checkbox" id="blocked" name="blocked">`;
+              chk.checked = user.blocked;
+              return chk;
+            }}
+            <label for="blocked"><b><span style="color: #f44336;">Blocked</span></b></label>
+            <input type="hidden" name="blocked" value="no"/>
+          </fieldset>  
+
         </div>
 
         <div style="padding: 0.2em">
@@ -680,18 +691,7 @@
             <input type="number" id="failedattempts" name="failedattempts" disabled value=${user.failedattempts}>
           </fieldset>  
         </li>
-        <li>
-          <fieldset title="Blocked accounts can no longer login or reset their password">
-            ${() => {
-              let chk = mapp.utils.html.node`<input 
-              type="checkbox" id="blocked" name="blocked">`;
-              chk.checked = user.blocked;
-              return chk;
-            }}
-            <label for="blocked">User Blocked</label>
-            <input type="hidden" name="blocked" value="no"/>
-          </fieldset>  
-        </li>
+
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); padding: 0.5em;">
           <button class="raised primary-colour">Save</button>
           <button class="raised primary-colour">
