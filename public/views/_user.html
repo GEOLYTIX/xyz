@@ -211,14 +211,25 @@
       font-size: 0.8em;
       padding: 0 2px;
     }
+
+    .searchbox {
+      position: relative;
+    }
+
+    .searchbox ul {
+      position: absolute;
+      width: 100%;
+    }
     
     .li-role {
       border-bottom: solid 1px #ccc;
       cursor: pointer;
+      background-color: white;
+      width: 100%;
     }
 
     .li-role:hover {
-      background-color: #ffffa733;
+      background-color: #ffffa7;
     }
     
     /* end pill style */
@@ -337,9 +348,6 @@
 
     // Get list of available roles from workspace.
     const rolesList = await xhrPromise(`${document.head.dataset.dir}/api/workspace/roles`)
-
-    // temporary for local testing
-    //const rolesList = ['isurf', 'super', 'ROI', 'leedsmobility'];
 
     // List of languages key values. 
     const languagesList = {
@@ -600,7 +608,14 @@
                   
                   if (!filtered.length) {
                     
-                    searchbox.list.append(mapp.utils.html.node`<li><span>${mapp.dictionary.no_results}`);
+                    searchbox.list.append(mapp.utils.html.node`
+                    <li class="li-role"
+                    onclick=${e => {
+                      e.stopPropagation();
+                      searchbox.list.innerHTML = '';
+                      searchbox.input.value = '';
+                    }}
+                    ><span>${mapp.dictionary.no_results}`);
                       
                     return;
                   }
