@@ -402,6 +402,7 @@
       let form = document.querySelector('.form');
       if(form && form.contains(e.target)) return;
       document.querySelector('.mask').classList.add('none');
+      removeSearch();
     })
 
     function clearNode(node) {
@@ -436,7 +437,7 @@
       .then(response => {
         document.querySelector('.mask').classList.add('none');
         createUserTable();
-        window.location.search = '';
+
         setTimeout(() => (alert('Changes have been saved.')), 500);
       });
 
@@ -450,7 +451,8 @@
       onreset=${e => {
         e.preventDefault();
         document.querySelector('.mask').classList.add('none');
-        window.location.search = '';
+        removeSearch();
+      
       }}
       onchange=${e => {
         e.preventDefault();
@@ -504,8 +506,8 @@
         });
 
         userUpdated.email = user.email;
-        //return console.log(userUpdated);
         submit(userUpdated);
+        removeSearch();
 
       }}>
       <div><h2>Account Details</h2></div>
@@ -600,7 +602,7 @@
         </div>
 
         <div style="padding: 0.2em">
-          <div>Access Roles</div>
+          <div>Access Roles&nbsp;<a>&#8505;Information</a></div>
           ${
             (() => {
 
@@ -750,7 +752,8 @@
             document.querySelector('.mask').classList.add('none');
             if (response.err) return console.error(response.err);
             document.querySelector(`#userTable table tr[data-email='${user.email}']`).remove();
-            window.location.search = '';
+            
+            removeSearch();
 
             setTimeout(() => (alert(`Account for ${user.email} has been permanently deleted.`)), 400)
 
@@ -762,6 +765,14 @@
     }
     
     function openForm(user) {
+
+      // check if there's an email param passed
+      let url = new URL(window.location);
+      if(!url.searchParams.has('email')) {
+        url.searchParams.append('email', user.email);
+        history.pushState({}, "", url);
+      }
+      
       let mask = document.querySelector('.mask');
       clearNode(mask);
       mask.classList.remove('none');
@@ -835,6 +846,12 @@
 
     await createUserTable();
 
+    function removeSearch() {
+      // this function clears email parameter from window query string
+      let url = new URL(window.location);
+      url.searchParams.delete('email');
+      history.pushState({}, "", url);
+    }
 
     function xhrPromise(req){
       
