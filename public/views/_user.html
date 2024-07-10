@@ -138,6 +138,10 @@
       padding: 10px;
     }
 
+    .form form a {
+      cursor: pointer;
+    }
+
     .form form ul {
       list-style-type: none;
     }
@@ -702,7 +706,13 @@
         </li>
         <li>
           <fieldset title="User Access History">
-            <label for="access_log">Access Log</label>
+            <label for="access_log">Access Log&nbsp;<a onclick=${async e => {
+              
+              const response = await xhrPromise(`${document.head.dataset.dir}/api/user/log?email=${user.email}`);
+              if (response.err) return console.error(response.err);
+              alert(response.access_log.join('\n'));
+            
+            }}>View</a></label>
             <input type="text" id="access_log" name="access_log" disabled value=${user.access_log}>
           </fieldset>  
         </li>
@@ -888,20 +898,6 @@
       Array.from(document.querySelectorAll('#userTable table tr.account-blocked'))
       .map(el => el.classList.add('none'));
     })
-
-    return;
-    // the code below is just a reference from the previous design 
-
-    async function getAccessLog(e, cell) {
-
-      const user = cell.getData();
-
-      const response = await xhrPromise(`${document.head.dataset.dir}/api/user/log?email=${user.email}`);
-
-      if (response.err) return console.error(response.err);
-
-      alert(response.access_log.join('\n'));
-    };
 
   } 
 
