@@ -144,11 +144,14 @@
 
     .form form ul {
       list-style-type: none;
-      box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
     }
     
     .form form li {
       padding: 0.3em;
+    }
+
+    .form .searchbox ul {
+      box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
     }
 
     input[type="email"], input[type="text"], input[type="number"], input[type="date"], input[type="search"] {
@@ -735,7 +738,16 @@
 
         return form;
     }
-  
+    
+    function openForm(user) {
+      let mask = document.querySelector('.mask');
+      clearNode(mask);
+      mask.classList.remove('none');
+      const div = mapp.utils.html.node`<div class="form">`
+      const form = userForm(user);
+      div.appendChild(form);
+      mask.appendChild(div);
+    }
 
     async function createUserTable() {
 
@@ -762,13 +774,7 @@
           data-email=${i.email}
           onclick=${e => {
             e.stopPropagation();
-            let mask = document.querySelector('.mask');
-            clearNode(mask);
-            mask.classList.remove('none');
-            const div = mapp.utils.html.node`<div class="form">`
-            const form = userForm(i);
-            div.appendChild(form);
-            mask.appendChild(div);
+            openForm(i);
           }}>
           <td>${i.email}</td>
           <td>${checkUserStatus(i)}</td>
@@ -867,12 +873,6 @@
       alert(response.access_log.join('\n'));
     };
 
-    function rolesEdited(e) {
-
-      if (JSON.stringify(e._cell.value) === JSON.stringify(e._cell.oldValue)) return;
-
-      xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${e._cell.row.data.email}&field=roles&value=${encodeURIComponent(e._cell.value)}`)
-    }
   } 
 
 </script>
