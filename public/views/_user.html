@@ -766,7 +766,7 @@
 
         Object.values(userList).map(i => {
 
-          let bg = i.email === params.email ? `background-color: #fff9c4; font-weight: bold` : ``;
+          let bg = i.email === response.email ? `background-color: #fff9c4; font-weight: bold` : ``;
 
           tbody.appendChild(mapp.utils.html.node`<tr 
           class="${i.blocked ? `account-blocked none`: ``}"
@@ -784,6 +784,13 @@
         table.appendChild(tbody);
 
         el.appendChild(table);
+
+        if(params.email) { 
+
+          const findUser = Object.values(userList).find(i => i.email === params.email);
+          if(findUser) openForm(findUser);
+        
+        }
 
     }
 
@@ -810,6 +817,7 @@
 
 
     await createUserTable();
+
 
     function xhrPromise(req){
       
