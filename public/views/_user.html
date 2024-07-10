@@ -7,10 +7,6 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link href="https://unpkg.com/tabulator-tables@6.2.0/dist/css/tabulator.min.css" rel="stylesheet">
-
-  <script type="text/javascript" src="https://unpkg.com/tabulator-tables@6.2.0/dist/js/tabulator.min.js"></script>
-
   <script type="module" src="{{dir}}/public/js/lib/mapp.js" defer></script>
   <script type="module" src="{{dir}}/public/js/lib/ui.js" defer></script>
 
@@ -385,12 +381,8 @@
       "th": "Thai",
     };
 
-    const params = {}
-
     // Get URL params.
-    window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, (match, key, value) => {
-      params[key] = decodeURI(value)
-    })
+    const params = new URLSearchParams(window.location.search);
 
     const cookie = await fetch(`${document.head.dataset.dir}/api/user/cookie`)
 
@@ -798,9 +790,9 @@
 
         el.appendChild(table);
 
-        if(params.email) { 
+        if(params.get('email')) { 
 
-          const findUser = Object.values(userList).find(i => i.email === params.email);
+          const findUser = Object.values(userList).find(i => i.email === params.get('email'));
           if(findUser) openForm(findUser);
         
         }
@@ -820,8 +812,8 @@
       })
       
       // Sort data to promote email from url parameter to top.
-      if (params.email) {
-        data.sort(function (x, y) { return x.email == params.email ? -1 : y.email == params.email ? 1 : 0; });
+      if (params.get('email')) {
+        data.sort(function (x, y) { return x.email == params.get('email') ? -1 : y.email == params.get('email') ? 1 : 0; });
       }
 
       return data;
