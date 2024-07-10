@@ -1,5 +1,5 @@
 /**
-@module fetch
+@module /fetch
 */
 
 module.exports = async (req, res) => {

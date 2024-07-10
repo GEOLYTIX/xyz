@@ -1,3 +1,25 @@
+/**
+## XYZ API
+
+The XYX API module exports the api function which serves as the entry point for all XYZ API requests.
+
+A node.js express app will require the api module and reference the exported api method for all request routes.
+
+```js
+const app = express()
+const api = require('./api/api')
+app.get(`/`, api)
+```
+
+@requires /view
+@requires /query
+@requires /fetch
+@requires /sign
+@requires /user/auth
+
+@module /api
+*/
+
 const logger = require('../mod/utils/logger')
 
 const login = require('../mod/user/login')
@@ -24,7 +46,37 @@ process.env.TITLE ??= 'GEOLYTIX | XYZ'
 
 process.env.DIR ??= ''
 
-module.exports = async (req, res) => {
+/**
+@global
+@typedef {Object} req
+The req object represents the HTTP request and has properties for the request query string, parameters, body, HTTP headers, and so on.
+@property {Object} params HTTP request parameter.
+@property {Object} [body] HTTP POST request body.
+@property {Object} header HTTP request header.
+*/
+
+/**
+@global
+@typedef {Object} res
+The res object represents the HTTP response that an [Express] app sends when it gets an HTTP request.
+*/
+
+/**
+@function api
+@async
+
+@description
+The XYZ api method will validate request parameter.
+
+The API module method requires the user/auth module to authenticate private API requests.
+
+Requests are passed to individual API modules from the api() method.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+*/
+
+module.exports = async function api(req, res) {
 
   // redirect if dir is missing in url path.
   if (process.env.DIR && req.url.length === 1) {
@@ -132,7 +184,7 @@ module.exports = async (req, res) => {
     // Remove cookie.
     res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
 
-    req.params.msg = user.msg
+    req.params.msg = user.msg || user.message
 
     // Return login view with error message.
     return login(req, res)
