@@ -382,9 +382,9 @@
 
     const cookie = await fetch(`${document.head.dataset.dir}/api/user/cookie`)
 
-    const response = await cookie.json();
+    const cookieResponse = await cookie.json();
 
-    document.getElementById('logged-in').textContent = response.email || 'Unknown';
+    document.getElementById('logged-in').textContent = cookieResponse.email || 'Unknown';
 
     document.querySelector('.mask').addEventListener('click', e => {
       let form = document.querySelector('.form');
@@ -766,7 +766,7 @@
 
         Object.values(userList).map(i => {
 
-          let bg = i.email === response.email ? `background-color: #fff9c4; font-weight: bold` : ``;
+          let bg = i.email === cookieResponse.email ? `background-color: #fff9c4; font-weight: bold` : ``;
 
           tbody.appendChild(mapp.utils.html.node`<tr 
           class="${i.blocked ? `account-blocked none`: ``}"
