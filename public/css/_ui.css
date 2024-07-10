@@ -121,10 +121,13 @@
 }
 
 .modal-map {
-  margin: 20%;
+  z-index: 999999;
   padding: 10px;
   text-wrap: wrap;
   font-size: large;
+  top: 30%;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
 .pill-container {
