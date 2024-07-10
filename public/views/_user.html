@@ -235,6 +235,14 @@
     .li-role:hover {
       background-color: #fffde7;
     }
+
+    dialog {
+      margin: auto;
+      padding: 0.5em;
+      box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+      border: none !important;
+      border-radius: 2px;
+    }
     
     /* end pill style */
 
@@ -602,7 +610,21 @@
         </div>
 
         <div style="padding: 0.2em">
-          <div>Access Roles&nbsp;<a>&#8505;Information</a></div>
+          ${
+          (() => {
+            if(!roles.description) return mapp.utils.html.node`<div>Access Roles`;
+            let dialog = mapp.utils.html.node`<dialog onclick=${e => {
+              e.stopPropagation();
+              e.target.close();
+            }}>Hello`;
+            return mapp.utils.html.node`<div onclick=${
+              e => {
+                e.stopPropagation();
+                dialog.showModal();
+              }
+            }>${dialog}<a title="View information on access roles">Access Roles&#8505;`
+          })()
+          }
           ${
             (() => {
 
@@ -718,9 +740,15 @@
               
               const response = await xhrPromise(`${document.head.dataset.dir}/api/user/log?email=${user.email}`);
               if (response.err) return console.error(response.err);
-              alert(response.access_log.join('\n'));
-            
-            }}>View</a></label>
+              let dialog = e.target.nextSibling
+              dialog.textContent = response.access_log.join('\n');
+              dialog.showModal();
+
+            }}>View</a><dialog onclick=${e => {
+              e.stopPropagation();
+              e.target.close();
+            }}></dialog></label>
+
             <input type="text" id="access_log" name="access_log" disabled value=${user.access_log}>
           </fieldset>  
         </li>
