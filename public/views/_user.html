@@ -854,6 +854,9 @@
     
     // email address search
     document.getElementById("filterInput").addEventListener('input', e => {
+      // reset status search
+      document.getElementById("filterStatus").value = '';
+
       let table = document.querySelector('#userTable table');
       let filter = e.target.value.toLowerCase();
       let trs = table.querySelectorAll("tr");
@@ -867,6 +870,9 @@
 
     // status filter
     document.getElementById("filterStatus").addEventListener('input', e => {
+
+      // reset email search
+      document.getElementById("filterInput").value = '';
       
       let table = document.querySelector('#userTable table');
       
