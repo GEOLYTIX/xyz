@@ -278,6 +278,13 @@
       color: #f44336;
     }
 
+    .filtering {
+      width: 100%;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      grid-gap: 0.2em;
+    }
+
     @media only screen and (min-width: 768px) {
       #userTable {
         width: 70%;
@@ -332,11 +339,16 @@
     </div>
 
     <div class="btn-row">
-
+      <div class="filtering">
       <input type="text" id="filterInput" placeholder="Search accounts">
 
+      <input type="text" id="filterStatus" placeholder="Filter status">
+    </div>
+      <div>
         <label for="showBlocked">
           <input id="showBlocked" type="checkbox" style="margin-right: 4px;">Show blocked accounts</label>
+          <p style="margin-top: 0.5em;">Click on a row in the table to make changes to the users permissions and roles</p>
+        </div>
       
     </div>
 
@@ -403,8 +415,9 @@
     const eqSet = (xs, ys) => xs.size === ys.size && [...xs].every((x) => ys.has(x));
 
     function checkUserStatus(user) {
-      let state = {label: 'New', color: '#e91e63'};
-      if(user.verified) state = {label: 'Verified', color: '#ff5722'}
+      let state = {label: 'New', color: '#e64a19'};
+      if(user.re_verification) state = {label: 'Re-verification', color: '#b71c1c'}
+      if(user.verified) state = {label: 'Verified', color: '#9c27b0'}
       if(user.approved) state = {label: 'Approved', color: '#43a047'}
       if(user.blocked) state = {label: 'Blocked', color: '#263238'}
       let bg = `background-color: ${state.color}`;
@@ -497,7 +510,7 @@
       <ul>
         <li>
         <fieldset title="Account e-mail address">
-          <label for="email">email</label>
+          <label for="email">E-mail</label>
           <input type="email" id="email" name="email" required value=${user.email} disabled>
         </fieldset>  
         </li>
@@ -517,7 +530,7 @@
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 0.5em; padding: 0.2em;">
           <div style="grid-column: 1 / span 3;">User Status</div>
 
-          <fieldset title="The account email has been verified through a token sent to the email address">
+          <fieldset title="Check the box to verify a user">
             ${() => {
               let chk = mapp.utils.html.node`<input type="checkbox" id="verified" name="verified">`;
               chk.checked = user.verified;
@@ -528,7 +541,7 @@
           </fieldset>  
 
 
-          <fieldset title="The account has an outstanding password reset to be verified">
+          <fieldset title="Check the box to re-verify after password reset">
             ${() => {
               let chk = mapp.utils.html.node`<input type="checkbox" id="re_verification" name="re_verification">`;
               chk.checked = user.re_verification;
@@ -539,7 +552,7 @@
           </fieldset>  
 
 
-          <fieldset title="The account has been approved by a site administrator and is permitted to access the application">
+          <fieldset title="Check the box to approve a user">
             ${() => {
               let chk = mapp.utils.html.node`<input type="checkbox" id="approved" name="approved">`;
               chk.checked = user.approved;
@@ -550,7 +563,7 @@
           </fieldset>  
 
 
-          <fieldset title="The account is an admin account which can access this page and change other account credentials">
+          <fieldset title="Check the box to make user an administrator">
             ${() => {
               let chk = mapp.utils.html.node`<input type="checkbox" id="admin" name="admin">`;
               chk.checked = user.admin;
@@ -561,7 +574,7 @@
           </fieldset>  
 
 
-          <fieldset title="The account has priviliges to create API keys">
+          <fieldset title="Check the box to allow the user API privileges">
             ${() => {
               let chk = mapp.utils.html.node`<input type="checkbox" id="api" name="api">`;
               chk.checked = user.api;
@@ -571,7 +584,7 @@
             <input type="hidden" name="api" value="no"/>
           </fieldset>  
 
-          <fieldset title="Blocked accounts can no longer login or reset their password">
+          <fieldset title="Check the box to block the user">
             ${() => {
               let chk = mapp.utils.html.node`<input 
               type="checkbox" id="blocked" name="blocked">`;
@@ -686,7 +699,7 @@
         </li>
         <li>
           <fieldset title="Date when user access expires">
-            <label for="expires_on">Account expires on</label>
+            <label for="expires_on">Account Expiry</label>
             <input type="date" id="expires_on" name="expires_on"
             value=${((e) => {
               if(!user.expires_on) return;
@@ -759,7 +772,7 @@
       const table = mapp.utils.html.node`<table>
       <thead>
         <tr>
-          <th>email</th>
+          <th>E-mail</th>
           <th>Status`;
 
         const tbody = mapp.utils.html.node`<tbody>`
@@ -847,6 +860,22 @@
 
       for(let tr of trs) {
         let td = tr.querySelector("td");
+        if(!td) continue;
+        tr.style.display = td.textContent.toLowerCase().indexOf(filter) > -1 ? "" : "none";
+      }
+    })
+
+    // status filter
+    document.getElementById("filterStatus").addEventListener('input', e => {
+      
+      let table = document.querySelector('#userTable table');
+      
+      let filter = e.target.value.toLowerCase();
+      
+      let trs = table.querySelectorAll("tr");
+
+      for(let tr of trs) {
+        let td = tr.querySelectorAll("td")[1];
         if(!td) continue;
         tr.style.display = td.textContent.toLowerCase().indexOf(filter) > -1 ? "" : "none";
       }
