@@ -370,7 +370,7 @@
     const roles = await xhrPromise(`${document.head.dataset.dir}/api/workspace/roles`)
 
     // Get list of available roles from workspace.
-    const rolesList = roles.roles;
+    const rolesList = roles.roles || roles;
 
     console.log(roles.description);
 
