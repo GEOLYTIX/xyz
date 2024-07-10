@@ -314,7 +314,7 @@
     <div><img src="https://geolytix.github.io/public/geolytix_mapp.svg" height="10"></div>
     <h1>Account Administration</h1>
 
-    <p>Logged in as <span id="logged-in"></span></p>
+    <p>Logged in as <b><span id="logged-in"></span></b></p>
 
     <div class="btn-row">
       
@@ -379,7 +379,9 @@
 
     const cookie = await fetch(`${document.head.dataset.dir}/api/user/cookie`)
 
-    document.getElementById('logged-in').textContent = cookie.email || 'Unknown';
+    const response = await cookie.json();
+
+    document.getElementById('logged-in').textContent = response.email || 'Unknown';
 
     document.querySelector('.mask').addEventListener('click', e => {
       let form = document.querySelector('.form');
