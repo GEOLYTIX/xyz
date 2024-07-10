@@ -436,6 +436,7 @@
       .then(response => {
         document.querySelector('.mask').classList.add('none');
         createUserTable();
+        window.location.search = '';
         setTimeout(() => (alert('Changes have been saved.')), 500);
       });
 
@@ -449,6 +450,7 @@
       onreset=${e => {
         e.preventDefault();
         document.querySelector('.mask').classList.add('none');
+        window.location.search = '';
       }}
       onchange=${e => {
         e.preventDefault();
@@ -748,6 +750,7 @@
             document.querySelector('.mask').classList.add('none');
             if (response.err) return console.error(response.err);
             document.querySelector(`#userTable table tr[data-email='${user.email}']`).remove();
+            window.location.search = '';
 
             setTimeout(() => (alert(`Account for ${user.email} has been permanently deleted.`)), 400)
 
