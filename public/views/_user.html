@@ -810,11 +810,6 @@
       data.forEach(row => {
         row.re_verification = !row.verificationtoken
       })
-      
-      // Sort data to promote email from url parameter to top.
-      if (params.get('email')) {
-        data.sort(function (x, y) { return x.email == params.get('email') ? -1 : y.email == params.get('email') ? 1 : 0; });
-      }
 
       return data;
     
