@@ -238,10 +238,14 @@
 
     dialog {
       margin: auto;
-      padding: 0.5em;
+      padding: 1em;
       box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
       border: none !important;
       border-radius: 2px;
+      min-width: 350px;
+      max-width: 70%;
+      max-height: 70%;
+      white-space: pre;
     }
     
     /* end pill style */
@@ -616,10 +620,16 @@
             let dialog = mapp.utils.html.node`<dialog onclick=${e => {
               e.stopPropagation();
               e.target.close();
-            }}>Hello`;
+            }}>`;
             return mapp.utils.html.node`<div onclick=${
               e => {
                 e.stopPropagation();
+                let msg = '';
+                console.log(roles.description);
+                Object.entries(roles.description).map(i => {
+                  msg += `${[i[0]]} - ${i[1].label}\n`
+                })
+                dialog.textContent = msg;
                 dialog.showModal();
               }
             }>${dialog}<a title="View information on access roles">Access Roles&#8505;`
@@ -740,8 +750,10 @@
               
               const response = await xhrPromise(`${document.head.dataset.dir}/api/user/log?email=${user.email}`);
               if (response.err) return console.error(response.err);
+              if(!response.access_log) return;
               let dialog = e.target.nextSibling
               dialog.textContent = response.access_log.join('\n');
+              console.log(response);
               dialog.showModal();
 
             }}>View</a><dialog onclick=${e => {
