@@ -316,6 +316,7 @@
       layers: 'Layers',
       locations: 'Locations',
       no_locales: 'Your account has been verified and approved, but you do not have access to any locales. This is likely as an administrator has not given you the required roles. Please contact an administrator to resolve this.',
+      no_layers: 'No accessible layers in locale.',
     },
     de: {
       toolbar_zoom_in: 'Zoom rein',
@@ -622,6 +623,13 @@
     // mapp.Mapview must be awaited.
     loadPlugins: true
   });
+
+  if (!locale.layers?.length) {
+
+    document.body.append(mapp.utils.html.node`
+      <dialog open class="modal-map">
+        ${mapp.dictionary.no_layers}`)
+  }
 
   // Add layers to mapview.
   await mapview.addLayer(locale.layers);
