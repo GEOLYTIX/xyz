@@ -238,14 +238,28 @@
 
     dialog {
       margin: auto;
-      padding: 1em;
       box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
       border: none !important;
       border-radius: 2px;
       min-width: 350px;
       max-width: 70%;
       max-height: 70%;
+      z-index: 1001;
+    }
+
+    dialog * {
+      padding: 1em;
+    }
+
+    .ws-pre {
       white-space: pre;
+    }
+
+    dialog.alert button {
+      float: right;
+      font-size: 0.9em;
+      color: #003D57;
+      z-index: 1005;
     }
 
     dialog:focus {
@@ -299,6 +313,12 @@
       display: grid;
       grid-template-columns: 2fr 1fr;
       grid-gap: 0.2em;
+    }
+
+    .sticky-top {
+      position: sticky;
+      top: 0;
+      background-color: white;
     }
 
     @media only screen and (min-width: 768px) {
@@ -422,10 +442,17 @@
       removeSearch();
     })
 
-    const dialog = mapp.utils.html.node`<dialog onclick=${e => {
+    const dialog = mapp.utils.html.node`<dialog class="alert" onclick=${e => {
       e.stopPropagation();
       e.target.close();
-    }}>`
+    }}><button class="sticky-top"
+    onclick=${e => {
+      e.stopPropagation();
+      dialog.close();
+    }}
+    >&#10005;</button>
+    <h4 class="sticky-top">&#8505;Information</h4>
+    <p>`
 
     document.getElementById('dialog').appendChild(dialog);
 
@@ -463,8 +490,9 @@
         createUserTable();
 
         setTimeout(() => {
-          let dialog = document.querySelector('dialog');
-          dialog.textContent = `Changes have been saved.`;
+          let dialog =  document.querySelector('dialog.alert');
+          let p = document.querySelector('dialog.alert p');
+          p.textContent = `Changes have been saved.`;
           dialog.showModal();
         }, 500);
 
@@ -481,8 +509,7 @@
       onreset=${e => {
         e.preventDefault();
         document.querySelector('.mask').classList.add('none');
-        
-      
+        removeSearch();
       }}
       onchange=${e => {
         e.preventDefault();
@@ -645,8 +672,11 @@
                 Object.entries(roles.description).map(i => {
                   msg += `${[i[0]]} - ${i[1].label}\n`
                 })
-                let dialog = document.querySelector('dialog');
-                dialog.textContent = msg;
+                let dialog = document.querySelector('dialog.alert');
+                let h = document.querySelector('dialog.alert h4');
+                let p = document.querySelector('dialog.alert p');
+                h.textContent = 'Information on Access Roles';
+                p.textContent = msg;
                 dialog.showModal();
               }
             }><a title="View information on access roles">Access Roles&#8505;`
@@ -664,6 +694,7 @@
                 target: rolesContainer,
                 pills: user.roles,
                 addCallback: (val, pills) => {
+
                   let roles_input_el = document.querySelector('.form input[type="hidden"][name="roles"]');
                   if(!roles_input_el) return;
                   roles_input.value = [...pills].join(',');
@@ -768,8 +799,12 @@
               const response = await xhrPromise(`${document.head.dataset.dir}/api/user/log?email=${user.email}`);
               if (response.err) return console.error(response.err);
               if(!response.access_log) return;
-              let dialog = document.querySelector('dialog');
-              dialog.textContent = response.access_log.join('\n');
+              let dialog = document.querySelector('dialog.alert');
+              let h = document.querySelector('dialog.alert h4');
+              let p = document.querySelector('dialog.alert p');
+              p.classList.add('ws-pre');
+              h.textContent = 'User Access History';
+              p.textContent = response.access_log.join('\n');
               dialog.showModal();
 
             }}>View</a></label>
@@ -809,7 +844,7 @@
             removeSearch();
 
             setTimeout(() => {
-              let dialog = document.querySelector('dialog');
+              let dialog = document.querySelector('dialog.alert');
               dialog.textContent = `Account for ${user.email} has been permanently deleted.`;
               dialog.showModal();
             }, 400)
