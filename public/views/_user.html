@@ -247,6 +247,10 @@
       max-height: 70%;
       white-space: pre;
     }
+
+    dialog:focus {
+      outline: none;
+    }
     
     /* end pill style */
 
@@ -361,6 +365,7 @@
           <input id="showBlocked" type="checkbox" style="margin-right: 4px;">Show blocked accounts</label>
           <p style="margin-top: 0.5em;">Click on a row in the table to make changes to the users permissions and roles</p>
         </div>
+        <div id="dialog"></div>
       
     </div>
 
@@ -417,6 +422,13 @@
       removeSearch();
     })
 
+    const dialog = mapp.utils.html.node`<dialog onclick=${e => {
+      e.stopPropagation();
+      e.target.close();
+    }}>`
+
+    document.getElementById('dialog').appendChild(dialog);
+
     function clearNode(node) {
       if(!node) return;
       while(node.firstChild) {
@@ -450,7 +462,13 @@
         document.querySelector('.mask').classList.add('none');
         createUserTable();
 
-        setTimeout(() => (alert('Changes have been saved.')), 500);
+        setTimeout(() => {
+          let dialog = document.querySelector('dialog');
+          dialog.textContent = `Changes have been saved.`;
+          dialog.showModal();
+        }, 500);
+
+        
       });
 
     }
@@ -463,7 +481,7 @@
       onreset=${e => {
         e.preventDefault();
         document.querySelector('.mask').classList.add('none');
-        removeSearch();
+        
       
       }}
       onchange=${e => {
@@ -471,6 +489,10 @@
       }}
       onsubmit=${e => {
         e.preventDefault();
+
+        removeSearch();
+        document.querySelector('.mask').classList.add('none');
+        
         const formData = new FormData(form);
 
         // will store updated user settings
@@ -519,7 +541,6 @@
 
         userUpdated.email = user.email;
         submit(userUpdated);
-        removeSearch();
 
       }}>
       <div><h2>Account Details</h2></div>
@@ -617,22 +638,18 @@
           ${
           (() => {
             if(!roles.description) return mapp.utils.html.node`<div>Access Roles`;
-            let dialog = mapp.utils.html.node`<dialog onclick=${e => {
-              e.stopPropagation();
-              e.target.close();
-            }}>`;
             return mapp.utils.html.node`<div onclick=${
               e => {
                 e.stopPropagation();
                 let msg = '';
-                console.log(roles.description);
                 Object.entries(roles.description).map(i => {
                   msg += `${[i[0]]} - ${i[1].label}\n`
                 })
+                let dialog = document.querySelector('dialog');
                 dialog.textContent = msg;
                 dialog.showModal();
               }
-            }>${dialog}<a title="View information on access roles">Access Roles&#8505;`
+            }><a title="View information on access roles">Access Roles&#8505;`
           })()
           }
           ${
@@ -751,15 +768,11 @@
               const response = await xhrPromise(`${document.head.dataset.dir}/api/user/log?email=${user.email}`);
               if (response.err) return console.error(response.err);
               if(!response.access_log) return;
-              let dialog = e.target.nextSibling
+              let dialog = document.querySelector('dialog');
               dialog.textContent = response.access_log.join('\n');
-              console.log(response);
               dialog.showModal();
 
-            }}>View</a><dialog onclick=${e => {
-              e.stopPropagation();
-              e.target.close();
-            }}></dialog></label>
+            }}>View</a></label>
 
             <input type="text" id="access_log" name="access_log" disabled value=${user.access_log}>
           </fieldset>  
@@ -795,10 +808,13 @@
             
             removeSearch();
 
-            setTimeout(() => (alert(`Account for ${user.email} has been permanently deleted.`)), 400)
+            setTimeout(() => {
+              let dialog = document.querySelector('dialog');
+              dialog.textContent = `Account for ${user.email} has been permanently deleted.`;
+              dialog.showModal();
+            }, 400)
 
-          }}>Delete User
-          </button>
+          }}>Delete User</button>
         `;
 
         return form;
