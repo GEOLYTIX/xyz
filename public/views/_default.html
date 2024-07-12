@@ -627,14 +627,10 @@
 
   if (!locale.layers?.length) {
 
-    // If there's no dialog already open (as you have no locale), then open one with the no_layers message.
-    if (!document.querySelector('dialog')) {
-
-      mapp.ui.elements.dialog({
-        css_style: 'width: 10%;',
-        content: mapp.dictionary.no_layers
-      });
-    }
+    mapp.ui.elements.dialog({
+      css_style: 'padding: 1em;',
+      content: mapp.dictionary.no_layers
+    });
   }
 
   // Add layers to mapview.
