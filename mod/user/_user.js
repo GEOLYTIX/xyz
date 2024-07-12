@@ -11,7 +11,6 @@ The _user module exports the user method to route User API requests.
 - list
 - log
 - login
-- put
 - register
 - token
 - update
@@ -33,7 +32,6 @@ const methods = {
   list: require('./list'),
   log: require('./log'),
   login: require('./login'),
-  put: require('./put'),
   register: require('./register'),
   token: require('./token'),
   update: require('./update'),
