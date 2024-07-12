@@ -85,6 +85,9 @@
   gap: 5px;
 }
 
+.headerDrag {
+  cursor: grab;
+}
 .dialog {
   position: absolute;
   background-color: #fff;
