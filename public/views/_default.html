@@ -8,7 +8,7 @@
   <link rel="icon" type="image/x-icon" href="{{dir}}/public/icons/favicon.ico" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  
+
   <script src="https://cdn.jsdelivr.net/npm/ol@v9.1.0/dist/ol.js" defer></script>
 
   <!-- Load XYZ / MAPP stylesheet and library. -->
@@ -564,9 +564,10 @@
 
   if (locale instanceof Error) {
 
-    document.body.append(mapp.utils.html.node`
-      <dialog open class="modal-map">
-        ${mapp.dictionary.no_locales}`)
+    // Create the helpDialog.node
+    mapp.ui.elements.dialog({
+      content: mapp.dictionary.no_locales
+    });
   }
 
   if (mapp.hooks.current.useridb || locale.useridb) {
@@ -579,7 +580,7 @@
       locale = userLocale
     }
   }
- 
+
   // Add locale dropdown to layers panel if multiple locales are accessible.
   if (locales.length > 1) {
     const localesDropdown = mapp.ui.elements.dropdown({
@@ -626,15 +627,14 @@
 
   if (!locale.layers?.length) {
 
+    // If there's no dialog already open (as you have no locale), then open one with the no_layers message.
+    if (!document.querySelector('dialog')) {
 
-    // Create the helpDialog.node
-    mapp.ui.elements.dialog({
-      content: mapp.dictionary.no_layers
-    });
-
-    // document.body.append(mapp.utils.html.node`
-    //   <dialog open class="modal-map">
-    //     ${mapp.dictionary.no_layers}`)
+      mapp.ui.elements.dialog({
+        css_style: 'width: 10%;',
+        content: mapp.dictionary.no_layers
+      });
+    }
   }
 
   // Add layers to mapview.

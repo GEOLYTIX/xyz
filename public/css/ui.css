@@ -1581,6 +1581,7 @@ label.checkbox {
     right: 1em;
     height: 1em;
     width: 1em;
+    margin: 0.4em;
   }
 }
 .modal {
@@ -1597,6 +1598,7 @@ label.checkbox {
     right: 1em;
     height: 1em;
     width: 1em;
+    margin: 0.4em;
   }
 }
 .modal-map {
