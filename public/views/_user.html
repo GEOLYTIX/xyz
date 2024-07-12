@@ -621,7 +621,29 @@
         </ul>
 
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); grid-gap: 0.5em; padding: 0.2em;">
-          <div style="grid-column: 1 / span 3;">User Status</div>
+          <div style="grid-column: 1 / span 3;" onclick=${e => {
+            e.stopPropagation();
+            let msg = '';
+            const statusDescription = {
+              "Verified": "check the box to verify a user",
+              "Re-verification": "check the box to re-verify after password reset",
+              "Approved": "check the box to approve a user",
+              "Administrator": "check the box to make user an administrator",
+              "API": "check the box to allow the user API privileges",
+              "Blocked": "check the box to block the user"
+            }
+            Object.keys(statusDescription).map(k => {
+                  msg += `${k} - ${statusDescription[k]}\n`
+                })
+                let dialog = document.querySelector('dialog.alert');
+                let h = document.querySelector('dialog.alert h4');
+                let p = document.querySelector('dialog.alert p');
+                p.classList.add('ws-pre');
+                h.textContent = 'Information on Status';
+                p.textContent = msg;
+                dialog.showModal();
+
+          }}><a>User Status&nbsp;&#8505;</a></div>
 
           <fieldset title="Check the box to verify a user">
             ${() => {
