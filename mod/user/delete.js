@@ -37,7 +37,10 @@ Requesting user is admin.
 
 module.exports = async function deleteUser(req, res) {
 
-  if (!acl) return res.status(500).send('ACL unavailable.')
+  // acl module will export an empty require object without the ACL being configured.
+  if (typeof acl !== 'function') {
+    return res.status(500).send('ACL unavailable.')
+  }
 
   if (!req.params.email) {
 

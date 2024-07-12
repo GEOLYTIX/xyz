@@ -43,7 +43,10 @@ Request messaging language
 
 module.exports = async (req, res) => {
 
-  if (!acl) return res.status(500).send('ACL unavailable.')
+  // acl module will export an empty require object without the ACL being configured.
+  if (typeof acl !== 'function') {
+    return res.status(500).send('ACL unavailable.')
+  }
 
   // Find user record with matching verificationtoken.
   let rows = await acl(`
