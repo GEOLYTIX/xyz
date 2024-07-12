@@ -566,6 +566,7 @@
 
     // Create the helpDialog.node
     mapp.ui.elements.dialog({
+      css_style: 'padding: 1em; border-color: #000',
       content: mapp.dictionary.no_locales
     });
   }
@@ -628,7 +629,7 @@
   if (!locale.layers?.length) {
 
     mapp.ui.elements.dialog({
-      css_style: 'padding: 1em;',
+      css_style: 'padding: 1em; border-color: #000',
       content: mapp.dictionary.no_layers
     });
   }
