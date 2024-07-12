@@ -443,7 +443,7 @@
   console.log(`MAPP v${mapp.version}`)
 
   // Refresh cookie and get user with updated credentials.
-  //mapp.user = await mapp.utils.xhr(`${mapp.host}/api/user/cookie`);
+  mapp.user = await mapp.utils.xhr(`${mapp.host}/api/user/cookie`);
 
   // Language as URL parameter will override user language.
   mapp.language = mapp.hooks.current.language
