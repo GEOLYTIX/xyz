@@ -265,6 +265,11 @@
     dialog:focus {
       outline: none;
     }
+
+    .txt-hl {
+      background-color: #fff9c4; 
+      font-weight: bold
+    }
     
     /* end pill style */
 
@@ -346,6 +351,10 @@
       .form {
         width: 95%;
       }
+
+      .desktop-only {
+        display: none;
+      }
     }
   </style>
 
@@ -409,8 +418,6 @@
     // Get list of available roles from workspace.
     const rolesList = roles.roles || roles;
 
-    console.log(roles.description);
-
     // List of languages key values. 
     const languagesList = {
       "en": "English",
@@ -426,15 +433,15 @@
       "th": "Thai",
     };
 
-    // Get URL params.
+    // Get current URL params.
     const params = new URLSearchParams(window.location.search);
 
+    // get logged in user details
     const cookie = await fetch(`${document.head.dataset.dir}/api/user/cookie`)
-
     const cookieResponse = await cookie.json();
-
     document.getElementById('logged-in').textContent = cookieResponse.email || 'Unknown';
 
+    // destroy form and clear selection when mask is clicked
     document.querySelector('.mask').addEventListener('click', e => {
       let form = document.querySelector('.form');
       if(form && form.contains(e.target)) return;
@@ -444,7 +451,7 @@
 
     const dialog = mapp.utils.html.node`<dialog class="alert" onclick=${e => {
       e.stopPropagation();
-      e.target.close();
+      dialog.close();
     }}><button class="sticky-top"
     onclick=${e => {
       e.stopPropagation();
@@ -455,6 +462,25 @@
     <p>`
 
     document.getElementById('dialog').appendChild(dialog);
+
+    const confirmDialog = mapp.utils.html.node`<dialog class="confirm" onclick=${e => {
+      e.preventDefault();
+      confirmDialog.close();
+    }}>
+    <h4>Confirm</h4>
+    <p class="ws-pre"></p>
+    <div style="display: grid; grid-template-columns: repeat(2, 1fr); grid-gap: 0.2em">
+    <button class="raised red del" onclick=${e => {
+      e.stopPropagation();
+      confirmDialog.close();
+    }}>Delete</button>
+    <button class="raised primary-colour" onclick=${e => {
+      e.stopPropagation();
+      confirmDialog.close();
+    }}>Cancel</button>
+    `;
+
+    document.getElementById('dialog').appendChild(confirmDialog);
 
     function clearNode(node) {
       if(!node) return;
@@ -487,6 +513,7 @@
       })
       .then(response => {
         document.querySelector('.mask').classList.add('none');
+        removeSearch();
         createUserTable();
 
         setTimeout(() => {
@@ -502,8 +529,6 @@
     }
 
     function userForm(user) {
-      
-      console.log(user);
 
       const form = mapp.utils.html.node`<form
       onreset=${e => {
@@ -515,16 +540,15 @@
         e.preventDefault();
       }}
       onsubmit=${e => {
+        // important: overrride default function
         e.preventDefault();
 
-        removeSearch();
-        document.querySelector('.mask').classList.add('none');
-        
         const formData = new FormData(form);
 
         // will store updated user settings
         const userUpdated = {};
 
+        // process form data
         Object.entries(user).forEach(i => {
 
           let updated = [...formData].find(j => j[0] === i[0]);
@@ -567,6 +591,7 @@
         });
 
         userUpdated.email = user.email;
+        // submit updated user
         submit(userUpdated);
 
       }}>
@@ -675,6 +700,7 @@
                 let dialog = document.querySelector('dialog.alert');
                 let h = document.querySelector('dialog.alert h4');
                 let p = document.querySelector('dialog.alert p');
+                p.classList.add('ws-pre');
                 h.textContent = 'Information on Access Roles';
                 p.textContent = msg;
                 dialog.showModal();
@@ -833,21 +859,33 @@
           <button class="raised red"
           onclick=${async e => {
             e.preventDefault();
+            // get confirm dialog element
+            let confirmDialog = document.querySelector('dialog.confirm');
+            let p = confirmDialog.querySelector('p');
+            // set message 
+            p.textContent = `Are you sure to delete ${user.email} account?\nThis cannot be undone`;
 
-            if(!confirm(`Are you sure to delete ${user.email} account?`)) return;
-            
-            const response = await xhrPromise(`${document.head.dataset.dir}/api/user/delete?email=${user.email}`);
-            document.querySelector('.mask').classList.add('none');
-            if (response.err) return console.error(response.err);
-            document.querySelector(`#userTable table tr[data-email='${user.email}']`).remove();
-            
-            removeSearch();
-
-            setTimeout(() => {
-              let dialog = document.querySelector('dialog.alert');
-              dialog.textContent = `Account for ${user.email} has been permanently deleted.`;
-              dialog.showModal();
-            }, 400)
+            // delete button action
+            confirmDialog.querySelector('button.del').onclick = async ev => {
+              ev.stopPropagation();
+              const response = await xhrPromise(`${document.head.dataset.dir}/api/user/delete?email=${user.email}`);
+              if (response.err) return console.error(response.err);
+              // hide form and mask
+              document.querySelector('.mask').classList.add('none');
+              removeSearch();
+              // remove deleted row
+              document.querySelector(`#userTable table tr[data-email='${user.email}']`).remove();
+              // show confirmation
+              setTimeout(() => {
+                let dialog = document.querySelector('dialog.alert');
+                let p = document.querySelector('dialog.alert p');
+                p.textContent = `Account for ${user.email} has been permanently deleted.`;
+                dialog.showModal();
+              }, 400)
+              
+            }
+            // open confirm modal
+            confirmDialog.showModal();
 
           }}>Delete User</button>
         `;
@@ -884,17 +922,22 @@
       <thead>
         <tr>
           <th>E-mail</th>
-          <th>Status`;
+          <th>Status</th>
+          <th class="desktop-only">Last active</th>
+          <th class="desktop-only">Access roles</th>`;
 
         const tbody = mapp.utils.html.node`<tbody>`
 
         Object.values(userList).map(i => {
 
-          let bg = i.email === cookieResponse.email ? `background-color: #fff9c4; font-weight: bold` : ``;
+          let css = `${i.blocked ? `account-blocked none`: ``} ${i.email === cookieResponse.email ? `txt-hl` : ``}`;
+
+          let last_active = i.access_log ? new Date(i.access_log.split('@')[0]).toLocaleString('en-GB') : ``;
+
+          let active_roles = i.roles.join(', ');
 
           tbody.appendChild(mapp.utils.html.node`<tr 
-          class="${i.blocked ? `account-blocked none`: ``}"
-          style=${bg}
+          class="${css}"
           data-email=${i.email}
           onclick=${e => {
             e.stopPropagation();
@@ -902,6 +945,8 @@
           }}>
           <td>${i.email}</td>
           <td>${checkUserStatus(i)}</td>
+          <td class="desktop-only" title=${last_active}>${last_active}</td>
+          <td class="desktop-only" title=${active_roles}>${active_roles}</td>
           </tr>`)
         });
 
@@ -909,9 +954,9 @@
 
         el.appendChild(table);
 
-        if(params.get('email')) { 
-
-          const findUser = Object.values(userList).find(i => i.email === params.get('email'));
+        let current_url = new URL(window.location);
+        if(current_url.searchParams.has('email')) { 
+          const findUser = Object.values(userList).find(i => i.email === current_url.searchParams.get('email'));
           if(findUser) openForm(findUser);
         
         }
@@ -951,7 +996,6 @@
       const xhr = new XMLHttpRequest()
 
         xhr.open('GET', req)
-        //xhr.open('POST', req)
         xhr.setRequestHeader('Content-Type', 'application/json')
         xhr.responseType = 'json'
 
@@ -1006,7 +1050,6 @@
       if (blocked) {
         Array.from(document.querySelectorAll('#userTable table tr.account-blocked')
         ).map(el => el.classList.remove('none'));
-        //createUserTable();
         return;
       }
 
