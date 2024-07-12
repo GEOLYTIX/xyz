@@ -443,7 +443,7 @@
   console.log(`MAPP v${mapp.version}`)
 
   // Refresh cookie and get user with updated credentials.
-  mapp.user = await mapp.utils.xhr(`${mapp.host}/api/user/cookie`);
+  //mapp.user = await mapp.utils.xhr(`${mapp.host}/api/user/cookie`);
 
   // Language as URL parameter will override user language.
   mapp.language = mapp.hooks.current.language
@@ -626,9 +626,15 @@
 
   if (!locale.layers?.length) {
 
-    document.body.append(mapp.utils.html.node`
-      <dialog open class="modal-map">
-        ${mapp.dictionary.no_layers}`)
+
+    // Create the helpDialog.node
+    mapp.ui.elements.dialog({
+      content: mapp.dictionary.no_layers
+    });
+
+    // document.body.append(mapp.utils.html.node`
+    //   <dialog open class="modal-map">
+    //     ${mapp.dictionary.no_layers}`)
   }
 
   // Add layers to mapview.
