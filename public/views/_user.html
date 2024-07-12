@@ -320,6 +320,10 @@
       }
     }
 
+    button span {
+      color: white;
+    }
+
     .txt-red {
       color: #f44336;
     }
@@ -380,30 +384,30 @@
     <div><img src="https://geolytix.github.io/public/geolytix_mapp.svg" height="10"></div>
     <h1>Account Administration</h1>
 
-    <p>Logged in as <b><span id="logged-in"></span></b></p>
+    <p><span id="logged-in-label">Logged in as</span>&nbsp;<b><span id="logged-in"></span></b></p>
 
     <div class="btn-row">
       
       <div>
         <button class="raised primary-colour" id="default-view"
-          onclick="window.location.href = `${window.location.origin}{{dir}}`">&#8592;&nbsp;Back to Mapp</button>
+          onclick="window.location.href = `${window.location.origin}{{dir}}`">&#8592;&nbsp;<span id="back">Back to Mapp</span></button>
         <button class="raised primary-colour" id="test-view"
-          onclick="window.location.href = `${window.location.origin}{{dir}}?template=test_view&download=true`">Test View</button>
-        <button class="raised red" id="logout" onclick="window.location.href = `${window.location.origin}{{dir}}?logout=true`">Logout</button>
+          onclick="window.location.href = `${window.location.origin}{{dir}}?template=test_view&download=true`"><span id="test-view">Test View</span></button>
+        <button class="raised red" id="logout" onclick="window.location.href = `${window.location.origin}{{dir}}?logout=true`"><span id="logout">Logout</span></button>
       </div>
 
     </div>
 
     <div class="btn-row">
       <div class="filtering">
-      <input type="text" id="filterInput" placeholder="Search accounts">
+      <input type="text" id="filterInput">
 
-      <input type="text" id="filterStatus" placeholder="Filter status">
+      <input type="text" id="filterStatus">
     </div>
       <div>
         <label for="showBlocked">
-          <input id="showBlocked" type="checkbox" style="margin-right: 4px;">Show blocked accounts</label>
-          <p style="margin-top: 0.5em;">Click on a row in the table to make changes to the users permissions and roles</p>
+          <input id="showBlocked" type="checkbox" style="margin-right: 4px;"><span id="show-blocked-label">Show blocked accounts</span></label>
+          <p style="margin-top: 0.5em;"><span id="top-info">Click on a row in the table to make changes to the users permissions and roles</span></p>
         </div>
         <div id="dialog"></div>
       
@@ -424,25 +428,89 @@
       return;
     }
 
+    // expand dictionary
+    mapp.utils.merge(mapp.dictionaries, {
+      en: {
+        admin_view: {
+          languages: {
+            "en": "English",
+            "de": "German",
+            "zh": "Chinese",
+            "zh_tw": "Chinese (Traditional)",
+            "pl": "Polish",
+            "ja": "Japanese",
+            "es": "Spanish",
+            "fr": "French",
+            "tr": "Turkish",
+            "it": "Italian",
+            "th": "Thai"
+          },
+          info: "Information",
+          view: "View",
+          save: "Save",
+          confirm: "Confirm",
+          cancel: "Cancel",
+          delete: "Delete",
+          new: "New",
+          re_verification: "Re-verification",
+          verified: "Verified",
+          approved: "Approved",
+          blocked: "Blocked",
+          admin: "Administrator",
+          api: "API",
+          acc_details: "Account Details",
+          email: "E-mail",
+          email_label: "Account e-mail address",
+          lang: "Language",
+          lang_label: "Account Language",
+          status: "Status",
+          status_description: {
+              "Verified": "check the box to verify a user",
+              "Re-verification": "check the box to re-verify after password reset",
+              "Approved": "check the box to approve a user",
+              "Administrator": "check the box to make user an administrator",
+              "API": "check the box to allow the user API privileges",
+              "Blocked": "check the box to block the user"
+            },
+          status_info: "Information on Status",
+          roles: "Access Roles",
+          roles_info: "Information on Access Roles",
+          roles_view: "View information on access roles",
+          roles_no: "No access roles defined",
+          roles_search: "Search access roles",
+          approved_by: "Approved by",
+          approved_label: "Administrator who approved last modification to this account",
+          expiry: "Account Expiry",
+          expiry_label: "Date when user access expires",
+          access_log: "Access Log",
+          access_log_label: "User Access History",
+          verification_token: "Verification Token",
+          failed_login: "Failed Login Attempts",
+          sure: "Are you sure to delete this user account?",
+          undone: "This cannot be undone",
+          deleted: "Account for this user has been permanently deleted.",
+          delete_user: "Delete User",
+          last_active: "Last active",
+          logged_in_label: "Logged in as",
+          back: "Back to Mapp",
+          test_view: "Test View",
+          logout: "Logout",
+          search_accounts: "Search accounts",
+          filter_status: "Filter status",
+          unknown: "Unknown",
+          show_blocked: "Show blocked accounts",
+          top_info: "Click on a row in the table to make changes to the users permissions and roles"
+        }
+      }
+    });
+
     const roles = await xhrPromise(`${document.head.dataset.dir}/api/workspace/roles`)
 
     // Get list of available roles from workspace.
     const rolesList = roles.roles || roles;
 
     // List of languages key values. 
-    const languagesList = {
-      "en": "English",
-      "de": "German",
-      "zh": "Chinese",
-      "zh_tw": "Chinese (Traditional)",
-      "pl": "Polish",
-      "ja": "Japanese",
-      "es": "Spanish",
-      "fr": "French",
-      "tr": "Turkish",
-      "it": "Italian",
-      "th": "Thai",
-    };
+    const languagesList = mapp.dictionary.admin_view.languages;
 
     // Get current URL params.
     const params = new URLSearchParams(window.location.search);
@@ -450,7 +518,15 @@
     // get logged in user details
     const cookie = await fetch(`${document.head.dataset.dir}/api/user/cookie`)
     const cookieResponse = await cookie.json();
-    document.getElementById('logged-in').textContent = cookieResponse.email || 'Unknown';
+    document.getElementById('logged-in').textContent = cookieResponse.email || mapp.dictionary.admin_view.unknown;
+    document.getElementById('logged-in-label').textContent = mapp.dictionary.admin_view.logged_in_label;
+    // set button text
+    document.getElementById('back').textContent = mapp.dictionary.admin_view.back;
+    document.getElementById('test-view').textContent = mapp.dictionary.admin_view.test_view;
+    document.getElementById('logout').textContent = mapp.dictionary.admin_view.logout;
+
+    document.getElementById('show-blocked-label').textContent = mapp.dictionary.admin_view.show_blocked;
+    document.getElementById('top-info').textContent = mapp.dictionary.admin_view.top_info;
 
     // destroy form and clear selection when mask is clicked
     document.querySelector('.mask').addEventListener('click', e => {
@@ -469,7 +545,7 @@
       dialog.close();
     }}
     >&#10005;</button>
-    <h4 class="sticky-top">&#8505;Information</h4>
+    <h4 class="sticky-top">&#8505;${mapp.dictionary.admin_view.info}</h4>
     <p>`
 
     document.getElementById('dialog').appendChild(dialog);
@@ -478,17 +554,17 @@
       e.preventDefault();
       confirmDialog.close();
     }}>
-    <h4>Confirm</h4>
+    <h4>${mapp.dictionary.admin_view.confirm}</h4>
     <p class="ws-pre"></p>
     <div style="display: grid; grid-template-columns: repeat(2, 1fr); grid-gap: 0.2em">
     <button class="raised red del" onclick=${e => {
       e.stopPropagation();
       confirmDialog.close();
-    }}>Delete</button>
+    }}>${mapp.dictionary.admin_view.delete}</button>
     <button class="raised primary-colour" onclick=${e => {
       e.stopPropagation();
       confirmDialog.close();
-    }}>Cancel</button>
+    }}>${mapp.dictionary.admin_view.cancel}</button>
     `;
 
     document.getElementById('dialog').appendChild(confirmDialog);
@@ -504,11 +580,11 @@
     const eqSet = (xs, ys) => xs.size === ys.size && [...xs].every((x) => ys.has(x));
 
     function checkUserStatus(user) {
-      let state = {label: 'New', color: '#e64a19'};
-      if(user.re_verification) state = {label: 'Re-verification', color: '#b71c1c'}
-      if(user.verified) state = {label: 'Verified', color: '#9c27b0'}
-      if(user.approved) state = {label: 'Approved', color: '#43a047'}
-      if(user.blocked) state = {label: 'Blocked', color: '#263238'}
+      let state = {label: mapp.dictionary.admin_view.new, color: '#e64a19'};
+      if(user.re_verification) state = {label: mapp.dictionary.admin_view.re_verification, color: '#b71c1c'}
+      if(user.verified) state = {label: mapp.dictionary.admin_view.verified, color: '#9c27b0'}
+      if(user.approved) state = {label: mapp.dictionary.admin_view.approved, color: '#43a047'}
+      if(user.blocked) state = {label: mapp.dictionary.admin_view.blocked, color: '#263238'}
       let bg = `background-color: ${state.color}`;
       return mapp.utils.html.node`<span class="dot" style=${bg}></span>${state.label}`
     }
@@ -599,17 +675,17 @@
         submit(userUpdated);
 
       }}>
-      <div><h2>Account Details</h2></div>
+      <div><h2>${mapp.dictionary.admin_view.acc_details}</h2></div>
       <ul>
         <li>
-        <fieldset title="Account e-mail address">
-          <label for="email">E-mail</label>
+        <fieldset title="${mapp.dictionary.admin_view.email_label}">
+          <label for="email">${mapp.dictionary.admin_view.email}</label>
           <input type="email" id="email" name="email" required value=${user.email} disabled>
         </fieldset>  
         </li>
         <li>
-          <fieldset title="Account Language">
-            <label for="language">Language</label>
+          <fieldset title="${mapp.dictionary.admin_view.lang_label}">
+            <label for="language">${mapp.dictionary.admin_view.lang}</label>
             <select name="language" id="language">
               ${Object.entries(languagesList).map(l => {
                 if(l[0] === user.language) return mapp.utils.html.node`<option selected value=${l[0]}>${l[1]}`
@@ -624,89 +700,83 @@
           <div style="grid-column: 1 / span 3;" onclick=${e => {
             e.stopPropagation();
             let msg = '';
-            const statusDescription = {
-              "Verified": "check the box to verify a user",
-              "Re-verification": "check the box to re-verify after password reset",
-              "Approved": "check the box to approve a user",
-              "Administrator": "check the box to make user an administrator",
-              "API": "check the box to allow the user API privileges",
-              "Blocked": "check the box to block the user"
-            }
-            Object.keys(statusDescription).map(k => {
-                  msg += `${k} - ${statusDescription[k]}\n`
+
+            Object.keys(mapp.dictionary.admin_view.status_description).map(k => {
+                  msg += `${k} - ${mapp.dictionary.admin_view.status_description[k]}\n`
                 })
                 let dialog = document.querySelector('dialog.alert');
                 let h = document.querySelector('dialog.alert h4');
                 let p = document.querySelector('dialog.alert p');
                 p.classList.add('ws-pre');
-                h.textContent = 'Information on Status';
+                h.textContent = mapp.dictionary.admin_view.status_info;
                 p.textContent = msg;
                 dialog.showModal();
 
-          }}><a>User Status&nbsp;&#8505;</a></div>
+          }}><a>${mapp.dictionary.admin_view.status}&nbsp;&#8505;</a></div>
 
-          <fieldset title="Check the box to verify a user">
+          <fieldset 
+          title="${mapp.dictionary.admin_view.status_description["Verified"]}">
             ${() => {
               let chk = mapp.utils.html.node`<input type="checkbox" id="verified" name="verified">`;
               chk.checked = user.verified;
               return chk;
             }}
-            <label for="verified"><b>Verified</b></label>
+            <label for="verified"><b>${mapp.dictionary.admin_view.verified}</b></label>
             <input type="hidden" name="verified" value="no"/>
           </fieldset>  
 
 
-          <fieldset title="Check the box to re-verify after password reset">
+          <fieldset title="${mapp.dictionary.admin_view.status_description["Re-verification"]}">
             ${() => {
               let chk = mapp.utils.html.node`<input type="checkbox" id="re_verification" name="re_verification">`;
               chk.checked = user.re_verification;
               return chk;
             }}
-            <label for="re_verification"><b>Re-verification</b></label>
+            <label for="re_verification"><b>${mapp.dictionary.admin_view.re_verification}</b></label>
             <input type="hidden" name="re_verification" value="no"/>
           </fieldset>  
 
 
-          <fieldset title="Check the box to approve a user">
+          <fieldset title="${mapp.dictionary.admin_view.status_description["Approved"]}">
             ${() => {
               let chk = mapp.utils.html.node`<input type="checkbox" id="approved" name="approved">`;
               chk.checked = user.approved;
               return chk;
             }}
-            <label for="approved"><b>Approved</b></label>
+            <label for="approved"><b>${mapp.dictionary.admin_view.approved}</b></label>
             <input type="hidden" name="approved" value="no"/>
           </fieldset>  
 
 
-          <fieldset title="Check the box to make user an administrator">
+          <fieldset title="${mapp.dictionary.admin_view.status_description["Administrator"]}">
             ${() => {
               let chk = mapp.utils.html.node`<input type="checkbox" id="admin" name="admin">`;
               chk.checked = user.admin;
               return chk;
             }}
-            <label for="admin">Administrator</label>
+            <label for="admin">${mapp.dictionary.admin_view.admin}</label>
             <input type="hidden" name="admin" value="no"/>
           </fieldset>  
 
 
-          <fieldset title="Check the box to allow the user API privileges">
+          <fieldset title="${mapp.dictionary.admin_view.status_description["API"]}">
             ${() => {
               let chk = mapp.utils.html.node`<input type="checkbox" id="api" name="api">`;
               chk.checked = user.api;
               return chk;
             }}
-            <label for="api">API</label>
+            <label for="api">${mapp.dictionary.admin_view.api}</label>
             <input type="hidden" name="api" value="no"/>
           </fieldset>  
 
-          <fieldset title="Check the box to block the user">
+          <fieldset title="${mapp.dictionary.admin_view.status_description["Blocked"]}">
             ${() => {
               let chk = mapp.utils.html.node`<input 
               type="checkbox" id="blocked" name="blocked">`;
               chk.checked = user.blocked;
               return chk;
             }}
-            <label for="blocked"><b><span class="txt-red">Blocked</span></b></label>
+            <label for="blocked"><b><span class="txt-red">${mapp.dictionary.admin_view.blocked}</span></b></label>
             <input type="hidden" name="blocked" value="no"/>
           </fieldset>  
 
@@ -715,7 +785,7 @@
         <div style="padding: 0.2em">
           ${
           (() => {
-            if(!roles.description) return mapp.utils.html.node`<div>Access Roles`;
+            if(!roles.description) return mapp.utils.html.node`<div>${mapp.dictionary.admin_view.roles}`;
             return mapp.utils.html.node`<div onclick=${
               e => {
                 e.stopPropagation();
@@ -727,18 +797,18 @@
                 let h = document.querySelector('dialog.alert h4');
                 let p = document.querySelector('dialog.alert p');
                 p.classList.add('ws-pre');
-                h.textContent = 'Information on Access Roles';
+                h.textContent = mapp.dictionary.admin_view.roles_info;
                 p.textContent = msg;
                 dialog.showModal();
               }
-            }><a title="View information on access roles">Access Roles&nbsp;&#8505;`
+            }><a title="${mapp.dictionary.admin_view.roles_view}">${mapp.dictionary.admin_view.roles}&nbsp;&#8505;`
           })()
           }
           ${
             (() => {
 
               if(!rolesList.length) return mapp.utils.html.node`
-              <input type="text" disabled value="No access roles defined">`;
+              <input type="text" disabled value="${mapp.dictionary.admin_view.roles_no}">`;
 
               const rolesContainer = mapp.utils.html.node`<div>`
 
@@ -774,7 +844,7 @@
 
               const searchbox = mapp.ui.elements.searchbox({
                 target: rolesContainer,
-                placeholder: 'Search access roles',
+                placeholder: mapp.dictionary.admin_view.roles_no,
                 searchFunction: (e) => {
                   
                   searchbox.list.innerHTML = '';
@@ -828,14 +898,14 @@
 
         <ul>
         <li>
-          <fieldset title="Administrator who approved last modification to this account">
-            <label for="approved_by">Approved by</label>
+          <fieldset title="${mapp.dictionary.admin_view.approved_label}">
+            <label for="approved_by">${mapp.dictionary.admin_view.approved_by}</label>
             <input type="text" id="approved_by" name="approved_by" disabled value=${user.approved_by}>
           </fieldset>  
         </li>
         <li>
-          <fieldset title="Date when user access expires">
-            <label for="expires_on">Account Expiry</label>
+          <fieldset title="${mapp.dictionary.admin_view.expiry_label}">
+            <label for="expires_on">${mapp.dictionary.admin_view.expiry}</label>
             <input type="date" id="expires_on" name="expires_on"
             value=${((e) => {
               if(!user.expires_on) return;
@@ -845,8 +915,8 @@
           </fieldset>  
         </li>
         <li>
-          <fieldset title="User Access History">
-            <label for="access_log">Access Log&nbsp;<a onclick=${async e => {
+          <fieldset title="${mapp.dictionary.admin_view.access_log_label}">
+            <label for="access_log">${mapp.dictionary.admin_view.access_log}&nbsp;<a onclick=${async e => {
               
               const response = await xhrPromise(`${document.head.dataset.dir}/api/user/log?email=${user.email}`);
               if (response.err) return console.error(response.err);
@@ -859,28 +929,28 @@
               p.textContent = response.access_log.join('\n');
               dialog.showModal();
 
-            }}>View</a></label>
+            }}>${mapp.dictionary.admin_view.view}</a></label>
 
             <input type="text" id="access_log" name="access_log" disabled value=${user.access_log}>
           </fieldset>  
         </li>
         <li>
           <fieldset>
-            <label for="verificationtoken">Verification Token</label>
+            <label for="verificationtoken">${mapp.dictionary.admin_view.verification_token}</label>
             <input type="text" id="verificationtoken" name="verificationtoken" disabled value=${user.verificationtoken}>
           </fieldset>  
         </li>
         <li>
-          <fieldset title="Failed Login Attempts">
-            <label for="failedattempts">Failed Login Attempts</label>
+          <fieldset title="${mapp.dictionary.admin_view.failed_login}">
+            <label for="failedattempts">${mapp.dictionary.admin_view.failed_login}</label>
             <input type="number" id="failedattempts" name="failedattempts" disabled value=${user.failedattempts}>
           </fieldset>  
         </li>
 
         <div style="display: grid; grid-template-columns: repeat(3, 1fr); padding: 0.5em;">
-          <button class="raised primary-colour">Save</button>
+          <button class="raised primary-colour">${mapp.dictionary.admin_view.save}</button>
           <button class="raised primary-colour">
-            <input type="reset" value="Cancel"/>
+            <input type="reset" value="${mapp.dictionary.admin_view.cancel}"/>
           </button>
           <button class="raised red"
           onclick=${async e => {
@@ -889,7 +959,7 @@
             let confirmDialog = document.querySelector('dialog.confirm');
             let p = confirmDialog.querySelector('p');
             // set message 
-            p.textContent = `Are you sure to delete ${user.email} account?\nThis cannot be undone`;
+            p.textContent = `${user.email}\n${mapp.dictionary.admin_view.sure}\n${mapp.dictionary.admin_view.undone}`;
 
             // delete button action
             confirmDialog.querySelector('button.del').onclick = async ev => {
@@ -905,7 +975,8 @@
               setTimeout(() => {
                 let dialog = document.querySelector('dialog.alert');
                 let p = document.querySelector('dialog.alert p');
-                p.textContent = `Account for ${user.email} has been permanently deleted.`;
+                p.classList.add('ws-pre');
+                p.textContent = `${user.email}\n${mapp.dictionary.admin_view.deleted}`;
                 dialog.showModal();
               }, 400)
               
@@ -913,7 +984,7 @@
             // open confirm modal
             confirmDialog.showModal();
 
-          }}>Delete User</button>
+          }}>${mapp.dictionary.admin_view.delete_user}</button>
         `;
 
         return form;
@@ -947,10 +1018,10 @@
       const table = mapp.utils.html.node`<table>
       <thead>
         <tr>
-          <th>E-mail</th>
-          <th>Status</th>
-          <th class="desktop-only">Last active</th>
-          <th class="desktop-only">Access roles</th>`;
+          <th>${mapp.dictionary.admin_view.email}</th>
+          <th>${mapp.dictionary.admin_view.status}</th>
+          <th class="desktop-only">${mapp.dictionary.admin_view.last_active}</th>
+          <th class="desktop-only">${mapp.dictionary.admin_view.roles}</th>`;
 
         const tbody = mapp.utils.html.node`<tbody>`
 
@@ -1035,9 +1106,11 @@
     }
     
     // email address search
-    document.getElementById("filterInput").addEventListener('input', e => {
+    const searchAccounts = document.getElementById("filterInput");
+    searchAccounts.placeholder = mapp.dictionary.admin_view.search_accounts;
+    searchAccounts.addEventListener('input', e => {
       // reset status search
-      document.getElementById("filterStatus").value = '';
+      filterStatus.value = '';
 
       let table = document.querySelector('#userTable table');
       let filter = e.target.value.toLowerCase();
@@ -1050,11 +1123,13 @@
       }
     })
 
+    const filterStatus = document.getElementById("filterStatus");
+    filterStatus.placeholder = mapp.dictionary.admin_view.filter_status;
     // status filter
-    document.getElementById("filterStatus").addEventListener('input', e => {
+    filterStatus.addEventListener('input', e => {
 
       // reset email search
-      document.getElementById("filterInput").value = '';
+      searchAccounts.value = '';
       
       let table = document.querySelector('#userTable table');
       
