@@ -1565,6 +1565,17 @@ label.checkbox {
   flex-direction: column;
   gap: 5px;
 }
+.headerDrag {
+  cursor: grab;
+}
+dialog > button.close {
+  position: absolute;
+  top: 0em;
+  right: 0em;
+  height: 1em;
+  width: 1em;
+  margin: 0.4em;
+}
 .dialog {
   position: absolute;
   background-color: #fff;
@@ -1572,13 +1583,6 @@ label.checkbox {
   box-shadow: 1px 1px 3px var(--color-primary-light);
   cursor: grab;
   user-select: none;
-  & > button.close {
-    position: absolute;
-    top: 1em;
-    right: 1em;
-    height: 1em;
-    width: 1em;
-  }
 }
 .modal {
   text-wrap: wrap;
@@ -1588,22 +1592,6 @@ label.checkbox {
   transform: translate(-50%, -50%);
   border-color: #fff;
   z-index: 9999;
-  & > button.close {
-    position: absolute;
-    top: 1em;
-    right: 1em;
-    height: 1em;
-    width: 1em;
-  }
-}
-.modal-map {
-  z-index: 999999;
-  padding: 10px;
-  text-wrap: wrap;
-  font-size: large;
-  top: 30%;
-  left: 50%;
-  transform: translateX(-50%);
 }
 .pill-container {
   display: flex;
