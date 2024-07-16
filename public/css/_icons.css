@@ -285,6 +285,16 @@
   }
 }
 
+.feature-info {
+  &.bg-icon {
+    background-image: url("../icons/icon-feature-info.svg");
+  }
+  &.mask-icon {
+    -webkit-mask-image: url("../icons/icon-feature-info.svg");
+    mask-image: url("../icons/icon-feature-info.svg");
+  }
+}
+
 .filter-list {
   &.bg-icon {
     background-image: url("../icons/icon-filter-list.svg");
