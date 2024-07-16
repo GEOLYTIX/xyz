@@ -577,12 +577,18 @@
 
   if (mapp.hooks.current.useridb || locale.useridb) {
 
-    let userLocale = await mapp.utils.userIndexedDB.get('locales', locale.key)
+    if (mapp.hooks.current?.useridb === 'delete') {
 
-    if (!userLocale) {
-      await mapp.utils.userIndexedDB.add('locales', locale)
+      await mapp.utils.userIndexedDB.deleteDB()
     } else {
-      locale = userLocale
+
+      let userLocale = await mapp.utils.userIndexedDB.get('locales', locale.key)
+
+      if (!userLocale) {
+        await mapp.utils.userIndexedDB.add('locales', locale)
+      } else {
+        locale = userLocale
+      }
     }
   }
 
