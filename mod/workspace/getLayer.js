@@ -57,6 +57,9 @@ module.exports = async (params) => {
 
     let template = structuredClone(await getTemplate(workspace.templates[layer.template || layer.key]))
 
+    // Assign the error message to the template
+    template.err &&= template.err.message;
+
     // Merge the workspace template into the layer.
     layer =  merge(template, layer)
   }
