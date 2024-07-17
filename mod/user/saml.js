@@ -190,7 +190,7 @@ User object or Error.
 
 async function acl_lookup(email) {
 
-  if (!acl) {
+  if (typeof acl !== 'function') {
     return new Error('ACL unavailable.')
   }
 

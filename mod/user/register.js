@@ -46,7 +46,10 @@ Post body object with user data.
 
 module.exports = async function register(req, res) {
 
-  if (!acl) return res.status(500).send('ACL unavailable.')
+  // acl module will export an empty require object without the ACL being configured.
+  if (typeof acl !== 'function') {
+    return res.status(500).send('ACL unavailable.')
+  }
 
   req.params.host = reqHost(req)
 

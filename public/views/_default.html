@@ -8,7 +8,7 @@
   <link rel="icon" type="image/x-icon" href="{{dir}}/public/icons/favicon.ico" />
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
-  
+
   <script src="https://cdn.jsdelivr.net/npm/ol@v9.1.0/dist/ol.js" defer></script>
 
   <!-- Load XYZ / MAPP stylesheet and library. -->
@@ -443,7 +443,11 @@
   console.log(`MAPP v${mapp.version}`)
 
   // Refresh cookie and get user with updated credentials.
-  mapp.user = await mapp.utils.xhr(`${mapp.host}/api/user/cookie`);
+  await mapp.utils.xhr(`${mapp.host}/api/user/cookie`).then(user => {
+
+    // The cookie request will Err without an ACL being configured for public access.
+    mapp.user = user instanceof Error? false: user
+  })
 
   // Language as URL parameter will override user language.
   mapp.language = mapp.hooks.current.language
@@ -564,9 +568,11 @@
 
   if (locale instanceof Error) {
 
-    document.body.append(mapp.utils.html.node`
-      <dialog open class="modal-map">
-        ${mapp.dictionary.no_locales}`)
+    // Create the helpDialog.node
+    mapp.ui.elements.dialog({
+      css_style: 'padding: 1em; border-color: #000',
+      content: mapp.dictionary.no_locales
+    });
   }
 
   if (mapp.hooks.current.useridb || locale.useridb) {
@@ -579,7 +585,7 @@
       locale = userLocale
     }
   }
- 
+
   // Add locale dropdown to layers panel if multiple locales are accessible.
   if (locales.length > 1) {
     const localesDropdown = mapp.ui.elements.dropdown({
@@ -626,9 +632,10 @@
 
   if (!locale.layers?.length) {
 
-    document.body.append(mapp.utils.html.node`
-      <dialog open class="modal-map">
-        ${mapp.dictionary.no_layers}`)
+    mapp.ui.elements.dialog({
+      css_style: 'padding: 1em; border-color: #000',
+      content: mapp.dictionary.no_layers
+    });
   }
 
   // Add layers to mapview.
