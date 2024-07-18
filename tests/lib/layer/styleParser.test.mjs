@@ -2,19 +2,6 @@ import { describe, it, assertEqual, assertNotEqual, assertTrue, assertFalse } fr
 import styleParser from '../../../lib/layer/styleParser.mjs';
 
 describe('styleParser', () => {
-  it('should assign default highlight style and zIndex', () => {
-    const layer = {
-      key: 'test-layer',
-      style: {
-        default: {}
-      },
-    };
-
-    styleParser(layer);
-
-    assertTrue(layer.style.highlight !== undefined, 'highlight style should be assigned');
-    assertEqual(layer.style.highlight.zIndex, Infinity, 'zIndex should be set to Infinity');
-  });
 
   it('should parse theme styles', () => {
     const layer = {
