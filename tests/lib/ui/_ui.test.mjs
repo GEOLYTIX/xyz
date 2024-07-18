@@ -1,5 +1,5 @@
 import { booleanTest } from './locations/entries/boolean.test.mjs'
-import { describe } from 'https://esm.sh/codi-test-framework@0.0.28';
+import { describe } from 'https://esm.sh/codi-test-framework@0.0.29';
 
 export async function uiElementsTest(mapview) {
     await describe('UI elements test', async () => {
