@@ -45,8 +45,6 @@ The cookie should be destroyed.
 
 module.exports = async function cookie(req, res) {
 
-  console.log(typeof acl)
-
   // acl module will export an empty require object without the ACL being configured.
   if (typeof acl !== 'function') {
     return res.status(500).send('ACL unavailable.')
