@@ -1,6 +1,6 @@
-import { it, assertEqual, assertTrue } from 'https://esm.sh/codi-test-framework@0.0.29';
+import { it, describe, assertEqual, assertTrue } from 'https://esm.sh/codi-test-framework@0.0.29';
 export async function baseDictionaryTest() {
-    it('All languages should have the same base language entries', () => {
+    describe('All languages should have the same base language entries', () => {
         const base_dictionary = {
             save: '',
             cancel: '',
@@ -8,19 +8,13 @@ export async function baseDictionaryTest() {
             invalid_geometry: '',
             no_results: '',
         }
-
         Object.keys(mapp.dictionaries).forEach(language => {
-            Object.keys(base_dictionary).forEach(key => {
-                assertTrue(!!mapp.dictionaries[language][key], `${language} should have ${key}`);
-                //console.log(mapp.dictionaries[language][key])
+            it(`${language} dictionary should have all the base keys`, () => {
+                Object.keys(base_dictionary).forEach(key => {
+                    assertTrue(!!mapp.dictionaries[language][key], `${language} should have ${key}`);
+                    //console.log(mapp.dictionaries[language][key])
+                });
             });
         });
-        //console.log(Object.keys(base_dictionary));
-
-        // const entry = { title: 'title', field: 'booleanField', inline: true, value: false };
-        // const checkboxElement = mapp.ui.locations.entries.boolean(entry);
-
-        // assertEqual(checkboxElement.className, 'link-with-img', 'The Checkbox element should have a class of link-with-img');
-        // assertEqual(checkboxElement.children[0].className, 'mask-icon close', 'The checbox should have a first child with a close class');
     });
 }
