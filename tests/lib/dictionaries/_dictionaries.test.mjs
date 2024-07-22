@@ -8,11 +8,11 @@ export async function baseDictionaryTest() {
             invalid_geometry: '',
             no_results: '',
         }
+
         Object.keys(mapp.dictionaries).forEach(language => {
             it(`${language} dictionary should have all the base keys`, () => {
                 Object.keys(base_dictionary).forEach(key => {
                     assertTrue(!!mapp.dictionaries[language][key], `${language} should have ${key}`);
-                    //console.log(mapp.dictionaries[language][key])
                 });
             });
         });
