@@ -6,7 +6,8 @@
 /**
 * @description Creates a signed url for object storage within firebase.
 * @function sign_firebase
-* @param {req} - request parameters.
+* @param {req} req.email - The users email address.
+* @param {req} req.instance - The instance the user is on.
 * @returns {Object} - Object containing the signed url e.g {signedUrl: xxxxxx}
 */
 async function sign_firebase(req){
