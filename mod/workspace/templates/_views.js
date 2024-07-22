@@ -9,6 +9,9 @@ module.exports = {
   integrity_view: {
     en: 'file:/public/views/_integrity.html'
   },
+  test_view: {
+    en: 'file:/public/views/_test.html'
+  },
   user_admin_view: {
     en: 'file:/public/views/_user.html'
   },
