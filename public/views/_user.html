@@ -1050,6 +1050,8 @@
 
           let last_active = i.access_log ? new Date(i.access_log.split('@')[0]).toLocaleString('en-GB') : ``;
 
+          let last_active_iso = i.access_log.split('@')[0];
+
           let active_roles = i.roles.join(', ');
 
           tbody.appendChild(mapp.utils.html.node`<tr 
@@ -1061,7 +1063,7 @@
           }}>
           <td>${i.email}</td>
           <td>${checkUserStatus(i)}</td>
-          <td class="desktop-only" data-name="last_active" title=${last_active}>${last_active}</td>
+          <td class="desktop-only" data-iso=${last_active_iso} title=${last_active}>${last_active}</td>
           <td class="desktop-only" title=${active_roles}>${active_roles}</td>
           </tr>`)
         });
@@ -1185,12 +1187,14 @@
     
     // Sort each row
     const sortedRows = rows.sort((a, b) => {
-      const aColText = a.querySelector(`td:nth-child(${ column + 1 })`).textContent.trim().toLowerCase();
-      const bColText = b.querySelector(`td:nth-child(${ column + 1 })`).textContent.trim().toLowerCase();
+      const td_a = a.querySelector(`td:nth-child(${ column + 1 })`);
+      const td_b = b.querySelector(`td:nth-child(${ column + 1 })`);
+      const aColText = td_a.textContent.trim().toLowerCase();
+      const bColText = td_b.textContent.trim().toLowerCase();
 
       // check if column is a date
-      if(a.dataset.name === 'last_active') {
-        return new Date(aColText) > new Date(bColText) ? (1 * dirModifier) : (-1 * dirModifier);
+      if(td_a.dataset.iso) {
+        return new Date(td_a.dataset.iso) > new Date(td_b.dataset.iso) ? (1 * dirModifier) : (-1 * dirModifier);
       }
 
       return aColText > bColText ? (1 * dirModifier) : (-1 * dirModifier);
