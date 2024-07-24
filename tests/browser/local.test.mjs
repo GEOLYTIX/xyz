@@ -1,7 +1,19 @@
 import { base } from './_base.test.mjs';
 import { baseDictionaryTest } from '../lib/dictionaries/_dictionaries.test.mjs';
+import { layerTest } from '../lib/layer/_layer.test.mjs';
+
 import { booleanTest } from '../lib/ui/locations/entries/boolean.test.mjs';
 
 const mapview = await base();
-baseDictionaryTest();
-booleanTest();
+await baseDictionaryTest();
+
+await layerTest.changeEndTest();
+await layerTest.decorateTest();
+await layerTest.fadeTest();
+await layerTest.featureFieldsTest();
+await layerTest.featureFilterTest();
+await layerTest.featureFormatsTest();
+await layerTest.featureHoverTest();
+await layerTest.featureStyleTest();
+await layerTest.styleParserTest();
+// await booleanTest();

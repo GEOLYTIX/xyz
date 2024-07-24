@@ -31,3 +31,4 @@ public/js/lib/*
 *.json
 !package.json
 !jsdoc*.json
+!codi.json
