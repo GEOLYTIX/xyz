@@ -1,6 +1,7 @@
 import { base } from './_base.test.mjs';
 import { baseDictionaryTest } from '../lib/dictionaries/_dictionaries.test.mjs';
 import { layerTest } from '../lib/layer/_layer.test.mjs';
+import { locationTest } from '../lib/location/_location.test.mjs';
 
 import { booleanTest } from '../lib/ui/locations/entries/boolean.test.mjs';
 
@@ -16,4 +17,6 @@ await layerTest.featureFormatsTest();
 await layerTest.featureHoverTest();
 await layerTest.featureStyleTest();
 await layerTest.styleParserTest();
+
+await locationTest.createTest();
 // await booleanTest();
