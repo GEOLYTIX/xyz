@@ -98,6 +98,25 @@
       display: inline-block;
     }
 
+    /* begin table sorting */
+    table th.asc::after {
+      /*content: "\25b4";*/
+      content: "\25be";
+      display: inline-block;
+      vertical-align: middle;
+      transform: rotate(180deg);
+    }
+    
+    table th.desc::after {
+      content: "\25be";
+    }
+    
+    table th.asc::after, table th.desc::after {
+      margin-left: 5px;
+    }
+    
+    /* end table sorting */
+
     /* end agaTable styling */
 
     /* begin form style */
@@ -576,7 +595,7 @@
       }
     }
 
-    // function to compare if 2 ets have the same elements
+    // function to compare if 2 sets have the same elements
     const eqSet = (xs, ys) => xs.size === ys.size && [...xs].every((x) => ys.has(x));
 
     function checkUserStatus(user) {
@@ -1042,7 +1061,7 @@
           }}>
           <td>${i.email}</td>
           <td>${checkUserStatus(i)}</td>
-          <td class="desktop-only" title=${last_active}>${last_active}</td>
+          <td class="desktop-only" data-name="last_active" title=${last_active}>${last_active}</td>
           <td class="desktop-only" title=${active_roles}>${active_roles}</td>
           </tr>`)
         });
@@ -1158,7 +1177,47 @@
       .map(el => el.classList.add('none'));
     })
 
-  } 
+  // table sorting
+  function sortTableByColumn(table, column, asc = true) {
+    const dirModifier = asc ? 1 : -1;
+    const tBody = table.tBodies[0];
+    const rows = Array.from(tBody.querySelectorAll("tr"));
+    
+    // Sort each row
+    const sortedRows = rows.sort((a, b) => {
+      const aColText = a.querySelector(`td:nth-child(${ column + 1 })`).textContent.trim().toLowerCase();
+      const bColText = b.querySelector(`td:nth-child(${ column + 1 })`).textContent.trim().toLowerCase();
+
+      // check if column is a date
+      if(a.dataset.name === 'last_active') {
+        return new Date(aColText) > new Date(bColText) ? (1 * dirModifier) : (-1 * dirModifier);
+      }
+
+      return aColText > bColText ? (1 * dirModifier) : (-1 * dirModifier);
+    });
+    
+    clearNode(tBody);
+    
+    tBody.append(...sortedRows);
+    
+    table.querySelectorAll("th").forEach(th => th.classList.remove("asc", "desc"));
+    table.querySelector(`th:nth-child(${ column + 1})`).classList.toggle("asc", asc);
+    table.querySelector(`th:nth-child(${ column + 1})`).classList.toggle("desc", !asc);
+  
+  }
+  
+  document.querySelectorAll("#userTable table th").forEach(headerCell => {
+    headerCell.addEventListener("click", () => {
+      const tableElement = document.querySelector('#userTable table');
+      const headerIndex = Array.prototype.indexOf.call(headerCell.parentElement.children, headerCell);
+      const currentIsAscending = headerCell.classList.contains("asc");
+      sortTableByColumn(tableElement, headerIndex, !currentIsAscending);
+    });
+  });
+
+} 
+
+
 
 </script>
 
