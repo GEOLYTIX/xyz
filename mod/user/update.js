@@ -33,6 +33,8 @@ Update value for user record field.
 Requesting user.
 @param {boolean} req.params.user.admin 
 Requesting user is admin.
+@param {Object} [req.body] 
+User payload to update
 */
 
 module.exports = async function update(req, res) {
@@ -52,6 +54,51 @@ module.exports = async function update(req, res) {
     return new Error('admin_required')
   }
 
+  const ISODate = new Date().toISOString().replace(/\..*/, '');
+  let approved_by = '';
+  let verification_by_admin = ''
+
+  if (req.body) {
+    
+    // Set approved_by field when updating the approved field in record.
+    approved_by = req.body.approved ? `approved_by = '${req.params.user.email}|${ISODate}'` : '';
+
+    if (req.body.verified) verification_by_admin = `
+      , password = password_reset
+      , password_reset = NULL
+      , failedattempts = 0
+      , verificationtoken = NULL
+      , approved = true
+      , approved_by = '${req.params.user.email}|${ISODate}'
+    `
+    
+    let updatedUser = Object.entries(req.body)
+    .filter(i => i[0] !== 'email')
+    .map(i => { return `${i[0]} = '${i[1]}'` })
+
+    // Get user to update from ACL.
+    const rows = await acl(`UPDATE acl_schema.acl_table
+    SET ${updatedUser.join(', ')}
+    ${verification_by_admin}
+    ${approved_by}
+    WHERE lower(email) = lower('${req.body.email}');`)
+
+    if (rows instanceof Error) {
+      return res.status(500).send('Failed to access ACL.')
+    }
+
+    // Send email to the user account if an account has been approved.
+    if (req.body.approved) await mailer({
+      template: 'approved_account',
+      language: req.body.language,
+      to: req.body.email,
+      host: req.params.host
+    })
+    
+    return res.send('Update success')
+  
+  }
+
   // Remove spaces from email.
   const email = req.params.email.replace(/\s+/g, '')
 
@@ -59,14 +106,13 @@ module.exports = async function update(req, res) {
     req.params.value = req.params.value?.split(',') || []
   }
 
-  const ISODate = new Date().toISOString().replace(/\..*/, '')
+  
 
   // Set approved_by field when updating the approved field in record.
-  const approved_by = req.params.field === 'approved'
+  approved_by = req.params.field === 'approved'
     ? `, approved_by = '${req.params.user.email}|${ISODate}'`
     : '';
 
-  let verification_by_admin = ''
   if (req.params.field === 'verified' && req.params.value === true) {
 
     verification_by_admin = `

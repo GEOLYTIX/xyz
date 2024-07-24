@@ -20,7 +20,6 @@ const _api = require('./api/api')
 
 const api = (req, res) => _api(req, res)
 
-
 app.get(`${process.env.DIR||''}/api/provider/:provider?`, api)
 
 app.post(`${process.env.DIR||''}/api/provider/:provider?`, express.json({limit: '5mb'}), api)
@@ -29,25 +28,19 @@ app.get(`${process.env.DIR||''}/api/sign/:provider?`, api)
 
 app.post(`${process.env.DIR||''}/api/sign/:provider?`, express.json({limit: '5mb'}), api)
 
-
 app.get(`${process.env.DIR||''}/api/query/:template?`, api)
 
 app.post(`${process.env.DIR||''}/api/query/:template?`, express.json({limit: '5mb'}), api)
-
 
 app.get(`${process.env.DIR||''}/api/fetch/:template?`, api)
 
 app.post(`${process.env.DIR||''}/api/fetch/:template?`, express.json({limit: '5mb'}), api)
 
-
 app.get(`${process.env.DIR||''}/api/workspace/:key?`, api)
 
+app.get(`${process.env.DIR||''}/api/user/:method?`, api)
 
-app.get(`${process.env.DIR||''}/api/user/:method?/:key?`, api)
-
-app.post(`${process.env.DIR||''}/api/user/:method?/:key?`, express.urlencoded({extended: true}), api)
-
-//sudo ./caddy_linux_amd64 reverse-proxy --from localhost:443 --to localhost:3000
+app.post(`${process.env.DIR||''}/api/user/:method?`, [express.urlencoded({extended: true}), express.json({limit: '5mb'})], api)
 
 app.get(`${process.env.DIR||''}/saml/metadata`, api)
 
