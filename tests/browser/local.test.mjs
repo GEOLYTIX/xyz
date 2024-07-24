@@ -19,4 +19,7 @@ await layerTest.featureStyleTest();
 await layerTest.styleParserTest();
 
 await locationTest.createTest();
+await locationTest.getTest();
+await locationTest.decorateTest();
+await locationTest.nnearestTest();
 // await booleanTest();
