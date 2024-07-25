@@ -4,7 +4,7 @@ import { layerTest } from '../lib/layer/_layer.test.mjs';
 import { locationTest } from '../lib/location/_location.test.mjs';
 import { mapviewTest } from '../lib/mapview/_mapview.test.mjs';
 
-import { booleanTest } from '../lib/ui/locations/entries/boolean.test.mjs';
+// import { booleanTest } from '../lib/ui/locations/entries/boolean.test.mjs';
 
 const mapview = await base();
 await baseDictionaryTest();
