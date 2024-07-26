@@ -9,7 +9,7 @@ import { mapviewTest } from '../lib/mapview/_mapview.test.mjs';
 const mapview = await base();
 await baseDictionaryTest();
 
-await layerTest.changeEndTest();
+await layerTest.changeEndTest(mapview);
 await layerTest.decorateTest();
 await layerTest.fadeTest();
 await layerTest.featureFieldsTest();

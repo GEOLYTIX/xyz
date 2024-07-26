@@ -32,3 +32,4 @@ public/js/lib/*
 !package.json
 !jsdoc*.json
 !codi.json
+!tests/workspace.json
