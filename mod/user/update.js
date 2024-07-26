@@ -44,14 +44,9 @@ module.exports = async function update(req, res) {
     return res.status(500).send('ACL unavailable.')
   }
 
-  if (!req.params.user) {
+  if (!req.params.user || !req.params.user?.admin) {
 
-    return new Error('login_required')
-  }
-
-  if (!req.params.user?.admin) {
-
-    return new Error('admin_required')
+    return new Error('admin user login required')
   }
 
   const ISODate = new Date().toISOString().replace(/\..*/, '');
