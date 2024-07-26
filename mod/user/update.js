@@ -55,15 +55,22 @@ module.exports = async function update(req, res) {
   }
 
   const ISODate = new Date().toISOString().replace(/\..*/, '');
+  let approved = null;
   let approved_by = '';
-  let verification_by_admin = ''
+  let verified = null;
+  let verification_by_admin = '';
+  let update_query = '';
+  let mailer_options = {};
 
+  // payload in the request
   if (req.body) {
-    
-    // Set approved_by field when updating the approved field in record.
-    approved_by = req.body.approved ? `approved_by = '${req.params.user.email}|${ISODate}'` : '';
 
-    if (req.body.verified) verification_by_admin = `
+    verified = req.body.verified;
+    approved = req.body.approved;
+    // Set approved_by field when updating the approved field in record.
+    approved_by = approved ? `approved_by = '${req.params.user.email}|${ISODate}'` : '';
+
+    if (verified) verification_by_admin = `
       , password = password_reset
       , password_reset = NULL
       , failedattempts = 0
@@ -76,78 +83,75 @@ module.exports = async function update(req, res) {
     .filter(i => i[0] !== 'email')
     .map(i => { return `${i[0]} = '${i[1]}'` })
 
-    // Get user to update from ACL.
-    const rows = await acl(`UPDATE acl_schema.acl_table
+    update_query = `UPDATE acl_schema.acl_table
     SET ${updatedUser.join(', ')}
     ${verification_by_admin}
     ${approved_by}
-    WHERE lower(email) = lower('${req.body.email}');`)
+    WHERE lower(email) = lower('${req.body.email}');`
 
-    if (rows instanceof Error) {
-      return res.status(500).send('Failed to access ACL.')
-    }
-
-    // Send email to the user account if an account has been approved.
-    if (req.body.approved) await mailer({
+    mailer_options = {
       template: 'approved_account',
       language: req.body.language,
       to: req.body.email,
       host: req.params.host
-    })
+    }
+  
+  }
+  // no payload
+  else {
+
+    // Remove spaces from email.
+    const email = req.params.email.replace(/\s+/g, '');
+
+    if(req.params.field === 'roles') {
+      req.params.value = req.params.value?.split(',') || [];
+    }
     
-    return res.send('Update success')
-  
-  }
+    verified = req.params.field === 'verified' && req.params.value === true;
+    approved = req.params.field === 'approved' && req.params.value === true; 
 
-  // Remove spaces from email.
-  const email = req.params.email.replace(/\s+/g, '')
+    // Set approved_by field when updating the approved field in record.
+    approved_by = req.params.field === 'approved' ? `, approved_by = '${req.params.user.email}|${ISODate}'` : '';
 
-  if (req.params.field === 'roles') {
-    req.params.value = req.params.value?.split(',') || []
-  }
+    verification_by_admin = verified ? `
+    , password = password_reset
+    , password_reset = NULL
+    , failedattempts = 0
+    , verificationtoken = NULL
+    , approved = true
+    , approved_by = '${req.params.user.email}|${ISODate}'` : ``;
 
-  
-
-  // Set approved_by field when updating the approved field in record.
-  approved_by = req.params.field === 'approved'
-    ? `, approved_by = '${req.params.user.email}|${ISODate}'`
-    : '';
-
-  if (req.params.field === 'verified' && req.params.value === true) {
-
-    verification_by_admin = `
-      , password = password_reset
-      , password_reset = NULL
-      , failedattempts = 0
-      , verificationtoken = NULL
-      , approved = true
-      , approved_by = '${req.params.user.email}|${ISODate}'
-    `
-  }
-
-  // Get user to update from ACL.
-  const rows = await acl(`
-    UPDATE acl_schema.acl_table
-    SET
-      ${req.params.field} = $2
+    update_query = `
+      UPDATE acl_schema.acl_table
+      SET
+      ${req.params.field} = ${req.params.value}
       ${verification_by_admin}
       ${approved_by}
-    WHERE lower(email) = lower($1);`,
-    [email, req.params.value])
+      WHERE lower(email) = lower(${email});`
+      
+    mailer_options = {
+      template: 'approved_account',
+      language: req.params.user.language,
+      to: email,
+      host: req.params.host
+    };
+
+  }
+
+ 
+
+
+  // Get user to update from ACL.
+  const rows = await acl(update_query);
 
   if (rows instanceof Error) {
     return res.status(500).send('Failed to access ACL.')
   }
   
   // Send email to the user account if an account has been approved.
-  if (req.params.field === 'approved' && req.params.value === true) {
+  if (approved) {
    
-    await mailer({
-      template: 'approved_account',
-      language: req.params.user.language,
-      to: email,
-      host: req.params.host
-    })
+    await mailer(mailer_options);
   }
 
   return res.send('Update success')
