@@ -52,6 +52,7 @@ module.exports = async function update(req, res) {
   const ISODate = new Date().toISOString().replace(/\..*/, '');
   
   let update_query = '';
+  
   let mailer_options = {};
 
   const verification_by_admin = (req.body?.verified || (req.params.field === 'verified' && req.params.value === true)) ? `
@@ -67,11 +68,11 @@ module.exports = async function update(req, res) {
 
   const approved_by = approved ? `approved_by = '${req.params.user.email}|${ISODate}'` : '';
 
-
-  // payload in the request
-  if (req.body) {
-
+  // handle request payload
+  function user_payload() {
     
+    if(!req.body) return;
+
     let updatedUser = Object.entries(req.body)
     .filter(i => i[0] !== 'email')
     .map(i => { return `${i[0]} = '${i[1]}'` })
@@ -82,16 +83,18 @@ module.exports = async function update(req, res) {
     ${approved_by}
     WHERE lower(email) = lower('${req.body.email}');`
 
-    mailer_options = {
+    mailer_options = { ...mailer_options, ...{
       template: 'approved_account',
       language: req.body.language,
       to: req.body.email,
       host: req.params.host
-    }
-  
+    }}
   }
-  // no payload
-  else {
+
+  // handle request parameters
+  function value_update() {
+    
+    if(req.body) return;
 
     // Remove spaces from email.
     const email = req.params.email.replace(/\s+/g, '');
@@ -108,14 +111,19 @@ module.exports = async function update(req, res) {
       ${approved_by}
       WHERE lower(email) = lower(${email});`
       
-    mailer_options = {
+    mailer_options = {...mailer_options, ...{
       template: 'approved_account',
       language: req.params.user.language,
       to: email,
       host: req.params.host
-    };
+    }};
 
   }
+
+
+  user_payload();
+
+  value_update();
 
   // Get user to update from ACL.
   const rows = await acl(update_query);
