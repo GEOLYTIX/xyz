@@ -59,9 +59,7 @@ module.exports = async function update(req, res) {
   let update_query = '';
   let mailer_options = {};
 
-  const verified = req.body?.verified || (req.params.field === 'verified' && req.params.value === true);
-
-  const verification_by_admin = verified ? `
+  const verification_by_admin = (req.body?.verified || (req.params.field === 'verified' && req.params.value === true)) ? `
   , password = password_reset
   , password_reset = NULL
   , failedattempts = 0
