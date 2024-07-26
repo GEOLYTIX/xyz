@@ -55,29 +55,29 @@ module.exports = async function update(req, res) {
   }
 
   const ISODate = new Date().toISOString().replace(/\..*/, '');
-  let approved = null;
-  let approved_by = '';
-  let verified = null;
-  let verification_by_admin = '';
+  
   let update_query = '';
   let mailer_options = {};
+
+  const verified = req.body ? req.body.verified : (req.params.field === 'verified' && req.params.value === true);
+
+  const verification_by_admin = verified ? `
+  , password = password_reset
+  , password_reset = NULL
+  , failedattempts = 0
+  , verificationtoken = NULL
+  , approved = true
+  , approved_by = '${req.params.user.email}|${ISODate}'
+  ` : ``;
+
+  const approved = req.body ? req.body.approved : (req.params.field === 'approved' && req.params.value === true);
+
+  const approved_by = approved ? `approved_by = '${req.params.user.email}|${ISODate}'` : '';
+
 
   // payload in the request
   if (req.body) {
 
-    verified = req.body.verified;
-    approved = req.body.approved;
-    // Set approved_by field when updating the approved field in record.
-    approved_by = approved ? `approved_by = '${req.params.user.email}|${ISODate}'` : '';
-
-    if (verified) verification_by_admin = `
-      , password = password_reset
-      , password_reset = NULL
-      , failedattempts = 0
-      , verificationtoken = NULL
-      , approved = true
-      , approved_by = '${req.params.user.email}|${ISODate}'
-    `
     
     let updatedUser = Object.entries(req.body)
     .filter(i => i[0] !== 'email')
@@ -106,20 +106,6 @@ module.exports = async function update(req, res) {
     if(req.params.field === 'roles') {
       req.params.value = req.params.value?.split(',') || [];
     }
-    
-    verified = req.params.field === 'verified' && req.params.value === true;
-    approved = req.params.field === 'approved' && req.params.value === true; 
-
-    // Set approved_by field when updating the approved field in record.
-    approved_by = req.params.field === 'approved' ? `, approved_by = '${req.params.user.email}|${ISODate}'` : '';
-
-    verification_by_admin = verified ? `
-    , password = password_reset
-    , password_reset = NULL
-    , failedattempts = 0
-    , verificationtoken = NULL
-    , approved = true
-    , approved_by = '${req.params.user.email}|${ISODate}'` : ``;
 
     update_query = `
       UPDATE acl_schema.acl_table
@@ -137,9 +123,6 @@ module.exports = async function update(req, res) {
     };
 
   }
-
- 
-
 
   // Get user to update from ACL.
   const rows = await acl(update_query);
