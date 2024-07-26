@@ -1,4 +1,5 @@
 import { it, describe, assertFalse, assertTrue } from 'https://esm.sh/codi-test-framework@0.0.29';
+import { resetView } from '../../utils/reset_view.js';
 export async function changeEndTest(mapview) {
 
     function delayFunction(delay) {
