@@ -59,7 +59,7 @@ module.exports = async function update(req, res) {
   let update_query = '';
   let mailer_options = {};
 
-  const verified = req.body ? req.body.verified : (req.params.field === 'verified' && req.params.value === true);
+  const verified = req.body?.verified || (req.params.field === 'verified' && req.params.value === true);
 
   const verification_by_admin = verified ? `
   , password = password_reset
@@ -70,7 +70,7 @@ module.exports = async function update(req, res) {
   , approved_by = '${req.params.user.email}|${ISODate}'
   ` : ``;
 
-  const approved = req.body ? req.body.approved : (req.params.field === 'approved' && req.params.value === true);
+  const approved = req.body?.approved || (req.params.field === 'approved' && req.params.value === true);
 
   const approved_by = approved ? `approved_by = '${req.params.user.email}|${ISODate}'` : '';
 
