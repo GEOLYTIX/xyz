@@ -8,7 +8,7 @@ export async function changeEndTest(mapview) {
         });
     }
 
-    await describe('TODO: Layer: changeEndTest', async () => {
+    await describe('Layer: changeEndTest', async () => {
         await it('After dispatching the event the layer should not display.', async () => {
             const layer = mapview.layers['changeEnd'];
             const changeEndEvent = new Event('changeEnd');
