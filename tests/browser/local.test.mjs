@@ -13,7 +13,9 @@ await baseDictionaryTest();
 resetView(mapview);
 await layerTest.changeEndTest(mapview);
 
-await layerTest.decorateTest();
+resetView(mapview);
+await layerTest.decorateTest(mapview);
+
 await layerTest.fadeTest();
 await layerTest.featureFieldsTest();
 await layerTest.featureFilterTest();

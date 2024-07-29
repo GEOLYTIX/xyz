@@ -1,5 +1,4 @@
 import { it, describe, assertFalse, assertTrue } from 'https://esm.sh/codi-test-framework@0.0.29';
-import { resetView } from '../../utils/reset_view.js';
 export async function changeEndTest(mapview) {
 
     function delayFunction(delay) {
@@ -28,7 +27,6 @@ export async function changeEndTest(mapview) {
             const target = layer.mapview.Map.getTargetElement();
 
             target.dispatchEvent(changeEndEvent);
-            console.log(layer);
             assertTrue(layer.display, 'The changeEnd() layer should display at zoom level 6')
         });
     });
