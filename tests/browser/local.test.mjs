@@ -3,17 +3,16 @@ import { baseDictionaryTest } from '../lib/dictionaries/_dictionaries.test.mjs';
 import { layerTest } from '../lib/layer/_layer.test.mjs';
 import { locationTest } from '../lib/location/_location.test.mjs';
 import { mapviewTest } from '../lib/mapview/_mapview.test.mjs';
-import { resetView } from '../utils/reset_view.js';
+import { setView } from '../utils/view.js';
 
 // import { booleanTest } from '../lib/ui/locations/entries/boolean.test.mjs';
 
 const mapview = await base();
-await baseDictionaryTest();
-
-resetView(mapview);
+//await baseDictionaryTest();
+setView(mapview, 2.56, 'default');
 await layerTest.changeEndTest(mapview);
 
-resetView(mapview);
+setView(mapview, 2.56, 'default');
 await layerTest.decorateTest(mapview);
 
 await layerTest.fadeTest();
