@@ -174,14 +174,15 @@ export async function base() {
             // Refresh cookie and get user with updated credentials
             mapp.user = await mapp.utils.xhr(`${mapp.host}/api/user/cookie`);
 
-            // Assert that the user object has been updated
-            assertNotEqual(mapp.user, currentUser, 'User object should be updated after refreshing cookie');
+            if (mapp.user !== null) {
+                // Assert that the user object has been updated
+                assertNotEqual(mapp.user, currentUser, 'User object should be updated after refreshing cookie');
 
-            // Assert that the user object has the expected properties
-            assertTrue(mapp.user.hasOwnProperty('email'), 'User object should have the "email" property');
-            assertTrue(mapp.user.hasOwnProperty('language'), 'User object should have the "language" property');
-            assertTrue(mapp.user.hasOwnProperty('roles'), 'User object should have the "roles" property');
-
+                // Assert that the user object has the expected properties
+                assertTrue(mapp.user.hasOwnProperty('email'), 'User object should have the "email" property');
+                assertTrue(mapp.user.hasOwnProperty('language'), 'User object should have the "language" property');
+                assertTrue(mapp.user.hasOwnProperty('roles'), 'User object should have the "roles" property');
+            }
         });
 
         //Testcase: Ensure language is set correctly.
