@@ -17,7 +17,7 @@ setView(mapview, 2, 'default');
 await layerTest.decorateTest(mapview);
 
 setView(mapview, 2, 'default');
-// await layerTest.fadeTest();
+await layerTest.fadeTest(mapview);
 // await layerTest.featureFieldsTest();
 // await layerTest.featureFilterTest();
 // await layerTest.featureFormatsTest();
