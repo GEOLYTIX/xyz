@@ -154,7 +154,9 @@ function roles(req, res) {
 
   let roles = Roles.get(workspace)
 
-  if(workspace.roles) return res.send({roles: roles, description: workspace.roles})
+  if(workspace.roles) {
+    return res.send({roles: roles, description: workspace.roles})
+  }
 
   res.send(roles)
 }

@@ -16,9 +16,7 @@ app.use(process.env.DIR||'', express.static('public'))
 
 app.use(cookieParser())
 
-const _api = require('./api/api')
-
-const api = (req, res) => _api(req, res)
+const api = require('./api/api')
 
 app.get(`${process.env.DIR||''}/api/provider/:provider?`, api)
 
