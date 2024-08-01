@@ -23,7 +23,7 @@ The user object to update can be provided as request body.
 
 Property values to be updated must be provided as a substitutes array to prevent SQL injection.
 
-
+The update_user keys must be validated to contain white listed characters only to prevent SQL injection.
 
 @param {req} req HTTP request.
 @param {req} res HTTP response.
@@ -61,7 +61,7 @@ module.exports = async function update(req, res) {
     email: req.params.email
   }
 
-  if(req.params.field === 'roles') {
+  if (req.params.field === 'roles') {
 
     // The value string must be split into an array for the roles field params.
     req.params.value = req.params.value?.split(',') || [];
@@ -88,7 +88,7 @@ module.exports = async function update(req, res) {
       approved_by: `${req.params.user.email}|${ISODate}`
     })
 
-    password_reset = 'password = password_reset,'
+    password_reset = `password = password_reset,`
   }
 
   if (update_user.approved) {
@@ -127,7 +127,7 @@ module.exports = async function update(req, res) {
   if (rows instanceof Error) {
     return res.status(500).send('Failed to access ACL.')
   }
-  
+
   // Send email to the user account if an account has been approved.
   if (update_user.approved) {
 
@@ -137,7 +137,7 @@ module.exports = async function update(req, res) {
       to: update_user.email,
       host: req.params.host
     }
-   
+
     await mailer(approval_mail);
   }
 
