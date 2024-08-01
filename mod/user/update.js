@@ -17,7 +17,13 @@ const mailer = require('../utils/mailer')
 @function update
 
 @description
-The update method will send a request to the ACL to set param.field = param.value for the param.email user record.
+The update method will send a request to the ACL to update a user record in the ACL.
+
+The user object to update can be provided as request body.
+
+Property values to be updated must be provided as a substitutes array to prevent SQL injection.
+
+
 
 @param {req} req HTTP request.
 @param {req} res HTTP response.
@@ -46,28 +52,34 @@ module.exports = async function update(req, res) {
 
   if (!req.params.user?.admin) {
 
+    // The update request can only be made by an administrator.
     return new Error('admin_user_login_required')
   }
 
-  //const update_user = getUpdateUser(req)
-
+  // Create update_user from request body or create Object with email from params.
   const update_user = req.body || {
     email: req.params.email
   }
 
   if(req.params.field === 'roles') {
+
+    // The value string must be split into an array for the roles field params.
     req.params.value = req.params.value?.split(',') || [];
-  }
 
-  if (req.params.field) {
+  } else if (req.params.field) {
 
+    // Assign field property from request params.
     update_user[req.params.field] = req.params.value
   }
 
+  // Create ISODate for administrator request log.
   const ISODate = new Date().toISOString().replace(/\..*/, '');
+
+  let password_reset = ''
 
   if (update_user.verified) {
 
+    // Verifying a user will also approve the user, reset password, and failed login attempts.
     Object.assign(user, {
       password_reset: null,
       failedattempts: 0,
@@ -75,34 +87,34 @@ module.exports = async function update(req, res) {
       approved: true,
       approved_by: `${req.params.user.email}|${ISODate}`
     })
+
+    password_reset = 'password = password_reset,'
   }
 
   if (update_user.approved) {
 
+    // Log who and when approved a user.
     update_user.approved_by = `${req.params.user.email}|${ISODate}`
   }
 
-  const params = []
+  const properties = []
   const substitutes = [update_user.email]
 
+  // Populate properties, substitutes array for update_query.
   Object.keys(update_user)
     .filter(key => key !== 'email')
     .forEach(key => {
       substitutes.push(update_user[key])
-      params.push(`${key} = $${substitutes.length}`)
+      properties.push(`${key} = $${substitutes.length}`)
     })
-
-  const password_reset = update_user.verified
-    ? `password = password_reset,` : '';
 
   const update_query = `
     UPDATE acl_schema.acl_table
     SET 
       ${password_reset}
-      ${params.join(',')}
+      ${properties.join(',')}
     WHERE lower(email) = lower($1);`
 
-  // Get user to update from ACL.
   const rows = await acl(update_query, substitutes);
 
   if (rows instanceof Error) {
@@ -123,42 +135,4 @@ module.exports = async function update(req, res) {
   }
 
   return res.send('Update success')
-}
-
-function getUpdateUser(req) {
-
-  const user = req.body || {
-    email: req.params.email
-  }
-
-  if(req.params.field === 'roles') {
-    req.params.value = req.params.value?.split(',') || [];
-  }
-
-  if (req.params.field) {
-
-    user[req.params.field] = req.params.value
-  }
-
-  const ISODate = new Date().toISOString().replace(/\..*/, '');
-
-  if (user.verified) {
-
-    Object.assign(user, {
-      password_reset: null,
-      failedattempts: 0,
-      verificationtoken: null,
-      approved: true,
-      approved_by: `${req.params.user.email}|${ISODate}`
-    })
-  }
-
-  if (user.approved) {
-
-    Object.assign(user, {
-      approved_by: `${req.params.user.email}|${ISODate}`
-    })
-  }
-
-  return user
 }
