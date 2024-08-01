@@ -80,7 +80,7 @@ module.exports = async function update(req, res) {
   if (update_user.verified) {
 
     // Verifying a user will also approve the user, reset password, and failed login attempts.
-    Object.assign(user, {
+    Object.assign(update_user, {
       password_reset: null,
       failedattempts: 0,
       verificationtoken: null,
@@ -95,6 +95,13 @@ module.exports = async function update(req, res) {
 
     // Log who and when approved a user.
     update_user.approved_by = `${req.params.user.email}|${ISODate}`
+  }
+
+  // Validate update_user keys.
+  if (Object.keys(update_user).some(key => !/^[A-Za-z0-9.,_-\s]*$/.test(key))) {
+
+    // Return bad request 400 if an update_user key contains not white listed characters.
+    return res.status(400).send('Invalid key in user object for SQL update.')
   }
 
   const properties = []
