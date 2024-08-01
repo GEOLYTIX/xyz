@@ -1,5 +1,14 @@
 /**
+### Workspace API
+
+The workspace module exports the Workspace API endpoint to request JSON objects from the workspace.
+
 @module /workspace
+
+@requires /utils/roles
+@requires /workspace/cache
+@requires /workspace/getLocale
+@requires /workspace/getLayer
 */
 
 const Roles = require('../utils/roles')
@@ -12,7 +21,24 @@ const getLayer = require('./getLayer')
 
 let workspace;
 
-module.exports = async (req, res) => {
+/**
+@function workspace_api
+
+@description
+
+@param {req} req HTTP request.
+@param {req} res HTTP response.
+
+@property {Object} [req.body] 
+HTTP Post request body containing the update information.
+@property {Object} req.params 
+HTTP request parameter.
+@property {Boolean} params.detail 
+Whether the roles should be returned as an object with details.
+
+@returns {Array|Object} Returns either an array of roles as string, or an object with roles as properties.
+*/
+module.exports = async function workspace_api (req, res) {
 
   workspace = await workspaceCache()
 
@@ -148,11 +174,40 @@ async function locale(req, res) {
   res.json(locale)
 }
 
+/**
+@function roles
+
+@description
+The roles method returns an array of roles returned from the roles utility.
+
+An object with detailed workspace.roles{} can be requested with the `detail=true` url parameter for the workspace/roles request.
+
+@param {req} req HTTP request.
+@param {req} res HTTP response.
+
+@property {Object} req.params 
+HTTP request parameter.
+@property {Boolean} params.detail 
+Whether the roles should be returned as an object with details.
+
+@returns {Array|Object} Returns either an array of roles as string, or an object with roles as properties.
+*/
 function roles(req, res) {
 
-  if (!workspace.locales) return res.send({})
-
+  // Get all roles found in workspace.
   let roles = Roles.get(workspace)
+
+  if(req.params.detail) {
+
+    workspace.roles ??= {}
+
+    // Assign roles from array to workspace.roles{} if missing.
+    roles
+      .filter(role => !Object.hasOwn(workspace.roles, role))
+      .forEach(role => workspace.roles[role] = {})
+
+    return res.send(workspace.roles)
+  }
 
   res.send(roles)
 }
