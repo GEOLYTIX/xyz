@@ -226,6 +226,10 @@
                 "cluster": {
                     "distance": 30
                 },
+                "hover": {
+                    "field": "_id",
+                    "display": "true"
+                },
                 "style": {
                     "cluster": {
                         "style": {
@@ -234,6 +238,18 @@
                             "icon": {
                                 "type": "dot"
                             }
+                        }
+                    },
+                    "label": {
+                        "field": "_id",
+                        "display": "true",
+                        "title": "This is an ID"
+                    },
+                    "labels": {
+                        "ID": {
+                            "display": true,
+                            "field": "_id",
+                            "title": "This is an ID"
                         }
                     },
                     "highlight": {
