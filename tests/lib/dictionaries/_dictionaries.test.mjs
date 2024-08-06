@@ -1,4 +1,12 @@
 import { it, describe, assertEqual, assertTrue } from 'https://esm.sh/codi-test-framework@0.0.30';
+/**
+ * @module _dictionaries
+ */
+
+/**
+ * This test is used to see if all the language options at least have all of these base entries.
+ * @function baseDictionaryTest
+ */
 export async function baseDictionaryTest() {
     describe('All languages should have the same base language entries', () => {
         const base_dictionary = {
