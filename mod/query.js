@@ -87,19 +87,10 @@ module.exports = async function query(req, res) {
     req.params.SQL = [];
   }
 
-  if (req.params.layer) {
+  // Assign role filter and viewport params from layer object.
+  await layerQuery(req, res)
 
-    // Assign role filter and viewport params from layer object.
-    await layerQuery(req, res)
-
-    if (res.finished) return;
-    
-  } else {
-
-    // Reserved params will be deleted to prevent DDL injection.
-    delete req.params.filter
-    delete req.params.viewport
-  }
+  if (res.finished) return;
 
   // Assign body to params to enable reserved %{body} parameter.
   req.params.body = req.params.stringifyBody && JSON.stringify(req.body) || req.body
@@ -150,6 +141,14 @@ module.exports = async function query(req, res) {
 }
 
 async function layerQuery(req, res) {
+
+  if (!req.params.layer) {
+
+    // Reserved params will be deleted to prevent DDL injection.
+    delete req.params.filter
+    delete req.params.viewport
+    return;
+  }
 
   // Assign layer object to req.params.
   req.params.layer = await getLayer(req.params)
