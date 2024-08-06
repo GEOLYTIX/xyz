@@ -8,7 +8,7 @@ const merge = require('../utils/merge')
 
 const workspaceCache = require('./cache')
 
-const getTemplate = require('./getTemplate')
+const getTemplate = require('./template')
 
 module.exports = async (params) => {
 
@@ -24,17 +24,21 @@ module.exports = async (params) => {
 
   let locale = workspace.locales[params.locale]
 
-  if (!Roles.check(locale, params.user?.roles)) {
-    return new Error('Role access denied.')
+  const localeTemplate = await getTemplate(params.locale)
+
+  if (localeTemplate) {
+
+    if (localeTemplate instanceof Error) {
+
+      return localeTemplate
+    } else {
+
+      locale = merge(localeTemplate, locale)
+    }
   }
 
-  // A template exists for the locale key.
-  if (Object.hasOwn(workspace.templates, params.locale)) {
-
-    let template = structuredClone(await getTemplate(workspace.templates[params.locale]))
-
-    // Merge the workspace template into workspace.
-    locale = merge(template, locale)
+  if (!Roles.check(locale, params.user?.roles)) {
+    return new Error('Role access denied.')
   }
 
   return locale

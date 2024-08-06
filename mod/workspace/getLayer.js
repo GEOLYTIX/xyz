@@ -10,32 +10,21 @@ const workspaceCache = require('./cache')
 
 const getLocale = require('./getLocale')
 
-const getTemplate = require('./getTemplate')
+const getTemplate = require('./template')
+
+let workspace
 
 module.exports = async (params) => {
+
+  workspace = await workspaceCache()
 
   // Set locale as default
   params.locale ??= 'locale'
 
-  const workspace = await workspaceCache()
-
-  if (workspace instanceof Error) {
-    return workspace
-  }
-
-  if (!Object.hasOwn(workspace.locales, params.locale)) {
-    return new Error('Unable to validate locale param.')
-  }
-
   const locale = await getLocale(params)
 
+  // getLocale will return err if role.check fails.
   if (locale instanceof Error) return locale
-
-  const roles = params.user?.roles || []
-
-  if (!Roles.check(locale, roles)) {
-    return new Error('Role access denied.')
-  }
 
   if (!Object.hasOwn(locale.layers, params.layer)) {
     return new Error('Unable to validate layer param.')
@@ -43,42 +32,45 @@ module.exports = async (params) => {
 
   let layer = locale.layers[params.layer]
 
-  // layer maybe null or undefined.
+  // layer maybe null.
   if (!layer) return;
-
-  // Return already merged layer.
-  if (layer.merged) return layer
 
   // Assign key value as key on layer object.
   layer.key ??= params.layer
 
-  // Merge layer --> template
-  if (Object.hasOwn(workspace.templates, layer.template || layer.key)) {
+  const layerTemplate = await getTemplate(layer.template || layer.key)
 
-    let template = structuredClone(await getTemplate(workspace.templates[layer.template || layer.key]))
+  if (layerTemplate) {
 
-    // Assign the error message to the template
-    template.err &&= [template.err.message];
+    if (layerTemplate instanceof Error) {
 
-    // Merge the workspace template into the layer.
-    layer =  merge(template, layer)
+      // A layer may not have a template 
+    } else {
+
+      // Merge layer --> template
+      layer = merge(layerTemplate, layer)
+    }
   }
 
   // Merge templates --> layer
-  for (const key of layer.templates || []){
+  for (const template_key of layer.templates || []){
 
-    if (!Object.hasOwn(workspace.templates, key)) continue;
+    const layerTemplate = await getTemplate(template_key)
 
-    let template =  structuredClone(await getTemplate(workspace.templates[key]))
-     // Assign the error message to the template 
-     if (Array.isArray(template.err)) {
-      template.err = template.err.map(err => err.message)
-     } else {
-      template.err &&= [template.err.message];
-     }
+    if (layerTemplate) {
+  
+      if (layerTemplate instanceof Error) {
+  
+        return layerTemplate
+      } else {
+  
+        layer = merge(layer, layerTemplate)
+      }
+    }
+  }
 
-    // Merge the workspace template into the layer.
-    layer = merge(layer, template)
+  if (!Roles.check(layer, params.user?.roles)) {
+    return new Error('Role access denied.')
   }
 
   // Subtitutes ${*} with process.env.SRC_* key values.
@@ -95,7 +87,36 @@ module.exports = async (params) => {
   // Assign layer key as name with no existing name on layer object.
   layer.name ??= layer.key
 
-  layer.merged = true
+  mergeObjectTemplates(layer)
 
   return layer
+}
+
+function mergeObjectTemplates(obj) {
+
+  if (obj === null) return;
+
+  if (obj instanceof Object && !Object.keys(obj)) return;
+
+  Object.entries(obj).forEach(entry => {
+
+    if (entry[0] === 'template' && entry[1].key) {
+
+      workspace.templates[entry[1].key] = Object.assign(workspace.templates[entry[1].key] || {}, entry[1])
+
+      return;
+    }
+
+    if (Array.isArray(entry[1])) {
+
+      entry[1].forEach(mergeObjectTemplates)
+      return;
+    }
+
+    if (entry[1] instanceof Object) {
+
+      Object.values(entry[1])?.forEach(mergeObjectTemplates)
+    }
+
+  })
 }

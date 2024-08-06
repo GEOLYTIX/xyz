@@ -6,11 +6,28 @@ const getFrom = require('../provider/getFrom')
 
 const merge = require('../utils/merge')
 
-module.exports = async (template) => {
+const workspaceCache = require('./cache')
+
+module.exports = async (template_key) => {
+
+  const workspace = await workspaceCache()
+
+  if (!Object.hasOwn(workspace.templates, template_key)) {
+    return new Error('Template not found.')
+  }
+
+  let template = workspace.templates[template_key]
 
   if (!template.src) {
 
     return template
+  }
+
+  let response;
+
+  if (template.cached) {
+
+    return template.cached
   }
 
   // Subtitutes ${*} with process.env.SRC_* key values.
@@ -25,7 +42,7 @@ module.exports = async (template) => {
     return template
   }
 
-  const response =  await getFrom[template.src.split(':')[0]](template.src)
+  response = await getFrom[template.src.split(':')[0]](template.src)
 
   if (response instanceof Error) {
 
@@ -54,7 +71,9 @@ module.exports = async (template) => {
   if (typeof response === 'object') {
 
     // Get template from src.
-    template = merge(response, template)
+    template.cached = merge(response, template)
+
+    return template.cached
 
   } else if (typeof response === 'string') {
 
