@@ -101,43 +101,7 @@ module.exports = async function query(req, res) {
 
   const query = getQueryFromTemplate(req, template)
 
-  logger(query, 'query')
-
-  if (query instanceof Error) {
-
-    return res.status(400).send(query.message);
-  }
-
-  // The dbs param or workspace dbs will be used as fallback if the dbs is not implicit in the template object.
-  const dbs_connection = String(template.dbs || req.params.dbs || workspace.dbs);
-
-  // Validate that the dbs_connection string exists as a stored connection method in dbs_connections.
-  if (!Object.hasOwn(dbs_connections, dbs_connection)) {
-
-    return res.status(400).send(`Failed to validate database connection method.`)
-  }
-
-  // Get query pool from dbs module.
-  const dbs = dbs_connections[dbs_connection]
-
-  // Nonblocking queries will not wait for results but return immediately.
-  if (req.params.nonblocking || template.nonblocking) {
-
-    dbs(
-      query,
-      req.params.SQL,
-      req.params.statement_timeout || template.statement_timeout)
-
-    return res.send('Non blocking request sent.')
-  }
-
-  // Run the query
-  let rows = await dbs(
-    query,
-    req.params.SQL,
-    req.params.statement_timeout || template.statement_timeout);
-
-  sendRows(req, res, template, rows)
+  executeQuery(req, res, template, query)
 }
 
 async function layerQuery(req, res) {
@@ -286,6 +250,47 @@ function getQueryFromTemplate(req, template) {
 
     return err
   }
+}
+
+async function executeQuery(req, res, template, query) {
+
+  logger(query, 'query')
+
+  if (query instanceof Error) {
+
+    return res.status(400).send(query.message);
+  }
+
+  // The dbs param or workspace dbs will be used as fallback if the dbs is not implicit in the template object.
+  const dbs_connection = String(template.dbs || req.params.dbs || req.params.workspace.dbs);
+
+  // Validate that the dbs_connection string exists as a stored connection method in dbs_connections.
+  if (!Object.hasOwn(dbs_connections, dbs_connection)) {
+
+    return res.status(400).send(`Failed to validate database connection method.`)
+  }
+
+  // Get query pool from dbs module.
+  const dbs = dbs_connections[dbs_connection]
+
+  // Nonblocking queries will not wait for results but return immediately.
+  if (req.params.nonblocking || template.nonblocking) {
+
+    dbs(
+      query,
+      req.params.SQL,
+      req.params.statement_timeout || template.statement_timeout)
+
+    return res.send('Non blocking request sent.')
+  }
+
+  // Run the query
+  let rows = await dbs(
+    query,
+    req.params.SQL,
+    req.params.statement_timeout || template.statement_timeout);
+
+  sendRows(req, res, template, rows)
 }
 
 function sendRows(req, res, template, rows) {
