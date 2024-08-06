@@ -1,4 +1,4 @@
-import { it, describe, assertFalse, assertTrue } from 'https://esm.sh/codi-test-framework@0.0.29';
+import { it, describe, assertFalse, assertTrue } from 'https://esm.sh/codi-test-framework@0.0.30';
 import { setView } from '../../utils/view.js';
 import { delayFunction } from '../../utils/delay.js';
 export async function changeEndTest(mapview) {

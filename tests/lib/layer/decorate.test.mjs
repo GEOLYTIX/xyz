@@ -1,4 +1,4 @@
-import { it, describe, assertEqual, assertTrue, assertFalse } from 'https://esm.sh/codi-test-framework@0.0.29';
+import { it, describe, assertEqual, assertTrue, assertFalse } from 'https://esm.sh/codi-test-framework@0.0.30';
 import { setView } from '../../utils/view.js';
 
 export async function decorateTest(mapview) {
