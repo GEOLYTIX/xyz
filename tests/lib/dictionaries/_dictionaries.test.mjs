@@ -1,6 +1,6 @@
 import { it, describe, assertEqual, assertTrue } from 'https://esm.sh/codi-test-framework@0.0.30';
 /**
- * @module _dictionaries
+ * @module dictionaries
  */
 
 /**

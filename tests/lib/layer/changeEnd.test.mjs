@@ -1,6 +1,16 @@
+/**
+ * ## layer.changeEndTest()
+ * @module layer/changeEndTest
+ */
+
 import { it, describe, assertFalse, assertTrue } from 'https://esm.sh/codi-test-framework@0.0.30';
 import { setView } from '../../utils/view.js';
 import { delayFunction } from '../../utils/delay.js';
+
+/**
+ * @function changeEndTest 
+ * @param {Object} mapview 
+*/
 export async function changeEndTest(mapview) {
 
     await describe('Layer: changeEndTest', async () => {
