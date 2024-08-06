@@ -7,7 +7,7 @@
 /**
  * @typedef {Object} layerTest
  * @property {changeEndTest} changeEndTest 
- * @property {Function} decorateTest
+ * @property {decorateTest} decorateTest
  * @property {Function} fadeTest
  * @property {Function} featureFieldsTest
  * @property {Function} featureFilterTest
