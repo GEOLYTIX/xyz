@@ -146,34 +146,61 @@ module.exports = async function query(req, res) {
     req.params.SQL,
     req.params.statement_timeout || template.statement_timeout);
 
+  sendRows(req, res, template, rows)
+}
 
-  if (rows instanceof Error) {
+async function layerQuery(req, res) {
 
-    return res.status(500).send('Failed to query PostGIS table.');
+  // Assign layer object to req.params.
+  req.params.layer = await getLayer(req.params)
+
+  if (req.params.layer instanceof Error) {
+    return res.status(400).send(req.params.layer.message)
   }
 
-  // return 202 if no record was returned from database.
-  if (!rows || !rows.length) return res.status(202).send('No rows returned from table.')
-
-  // Check whether any row of the rows array is empty or whether a single row is empty.
-  if (rows.length && !rows.some(row => checkEmptyRow(row)) || !checkEmptyRow(rows)) {
-
-    return res.status(202).send('No rows returned from table.')
+  if (!Roles.check(req.params.layer, req.params.user?.roles)) {
+    return res.status(403).send('Role access denied for layer.')
   }
 
-  if (req.params.reduce || template?.reduce) {
+  // Set layer dbs as fallback if not implicit.
+  req.params.dbs ??= req.params.layer.dbs
 
-    // Reduce row values to an values array.
-    return res.send(rows.map(row => Object.values(row)))
+  // Layer queries must have a qID param.
+  req.params.qID ??= req.params.layer.qID || 'NULL'
+
+  // Layer queries must have an srid param.
+  req.params.srid ??= req.params.layer.srid
+
+  // Layer queries must have a geom param.
+  req.params.geom ??= req.params.layer.geom
+
+  // Create params filter string from roleFilter filter params.
+  req.params.filter = [
+    req.params.layer.filter?.default && `AND ${sqlFilter(req.params.layer.filter.default, req.params.SQL)}` || '',
+    req.params.filter && `AND ${sqlFilter(JSON.parse(req.params.filter), req.params.SQL)}` || '']
+    .join(' ')
+
+  if (req.params.viewport) {
+
+    const viewport = req.params.viewport?.split(',')
+
+    // Assign viewport SQL string
+    req.params.viewport &&= `
+      AND
+        ST_Intersects(
+          ST_Transform(
+            ST_MakeEnvelope(
+              ${viewport[0]},
+              ${viewport[1]},
+              ${viewport[2]},
+              ${viewport[3]},
+              ${parseInt(viewport[4])}
+            ),
+            ${req.params.srid}
+          ),
+          ${req.params.geom}
+        )`
   }
-
-  if (req.params.value_only || template?.value_only) {
-
-    return res.send(Object.values(rows[0])[0])
-  }
-
-  // Send the infoj object with values back to the client.
-  res.send(rows.length === 1 && rows[0] || rows)
 }
 
 function getQueryFromTemplate(req, template) {
@@ -262,62 +289,39 @@ function getQueryFromTemplate(req, template) {
   }
 }
 
+function sendRows(req, res, template, rows) {
+
+  if (rows instanceof Error) {
+
+    return res.status(500).send('Failed to query PostGIS table.');
+  }
+
+  // return 202 if no record was returned from database.
+  if (!rows || !rows.length) return res.status(202).send('No rows returned from table.')
+
+  // Check whether any row of the rows array is empty or whether a single row is empty.
+  if (rows.length && !rows.some(row => checkEmptyRow(row)) || !checkEmptyRow(rows)) {
+
+    return res.status(202).send('No rows returned from table.')
+  }
+
+  if (req.params.reduce || template?.reduce) {
+
+    // Reduce row values to an values array.
+    return res.send(rows.map(row => Object.values(row)))
+  }
+
+  if (req.params.value_only || template?.value_only) {
+
+    return res.send(Object.values(rows[0])[0])
+  }
+
+  // Send the infoj object with values back to the client.
+  res.send(rows.length === 1 && rows[0] || rows)
+}
+
 function checkEmptyRow(row) {
 
   // row is typeof object with at least some value which is not null.
   return typeof row === 'object' && Object.values(row).some(val => val !== null)
-}
-
-async function layerQuery(req, res) {
-
-  // Assign layer object to req.params.
-  req.params.layer = await getLayer(req.params)
-
-  if (req.params.layer instanceof Error) {
-    return res.status(400).send(req.params.layer.message)
-  }
-
-  if (!Roles.check(req.params.layer, req.params.user?.roles)) {
-    return res.status(403).send('Role access denied for layer.')
-  }
-
-  // Set layer dbs as fallback if not implicit.
-  req.params.dbs ??= req.params.layer.dbs
-
-  // Layer queries must have a qID param.
-  req.params.qID ??= req.params.layer.qID || 'NULL'
-
-  // Layer queries must have an srid param.
-  req.params.srid ??= req.params.layer.srid
-
-  // Layer queries must have a geom param.
-  req.params.geom ??= req.params.layer.geom
-
-  // Create params filter string from roleFilter filter params.
-  req.params.filter = [
-    req.params.layer.filter?.default && `AND ${sqlFilter(req.params.layer.filter.default, req.params.SQL)}` || '',
-    req.params.filter && `AND ${sqlFilter(JSON.parse(req.params.filter), req.params.SQL)}` || '']
-    .join(' ')
-
-  if (req.params.viewport) {
-
-    const viewport = req.params.viewport?.split(',')
-
-    // Assign viewport SQL string
-    req.params.viewport &&= `
-      AND
-        ST_Intersects(
-          ST_Transform(
-            ST_MakeEnvelope(
-              ${viewport[0]},
-              ${viewport[1]},
-              ${viewport[2]},
-              ${viewport[3]},
-              ${parseInt(viewport[4])}
-            ),
-            ${req.params.srid}
-          ),
-          ${req.params.geom}
-        )`
-  }
 }
