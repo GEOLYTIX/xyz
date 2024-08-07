@@ -1,4 +1,16 @@
 /**
+The Workspace API module exports the getKeyMethod() which returns a method from the keyMethods{} object.
+
+- layer
+- locale
+- locales
+- roles
+
+@requires /utils/roles
+@requires /workspace/cache
+@requires /workspace/getLocale
+@requires /workspace/getLayer
+
 @module /workspace
 */
 
@@ -10,9 +22,30 @@ const getLocale = require('./getLocale')
 
 const getLayer = require('./getLayer')
 
+const keyMethods = {
+  layer,
+  locale,
+  locales,
+  roles,
+}
+
 let workspace;
 
-module.exports = async (req, res) => {
+/**
+@function getKeyMethod
+@async
+
+@description
+The cached workspace requested from the workspaceCache() will be assigned to the workspace variable declared in the module scope.
+
+The method checks whether the req.params.key matches a keyMethods property and returns the matching method.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {Object} req.params HTTP request params.
+@property {string} params.key Workspace API method requested.
+*/
+module.exports = async function getKeyMethod(req, res) {
 
   workspace = await workspaceCache()
 
@@ -20,20 +53,15 @@ module.exports = async (req, res) => {
     return res.status(500).send('Failed to load workspace.')
   }
 
-  const keys = {
-    layer,
-    locale,
-    locales,
-    roles,
-  }
+
 
   // The keys object must own a user provided lookup key
-  if (!Object.hasOwn(keys, req.params.key)) {
+  if (!Object.hasOwn(keyMethods, req.params.key)) {
 
     return res.status(400).send(`Failed to evaluate '${req.params.key}' param.`)
   }
 
-  return keys[req.params.key](req, res)
+  return keyMethods[req.params.key](req, res)
 }
 
 async function layer(req, res) {
