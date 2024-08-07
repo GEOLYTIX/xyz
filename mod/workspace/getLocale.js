@@ -8,7 +8,7 @@ const merge = require('../utils/merge')
 
 const workspaceCache = require('./cache')
 
-const getTemplate = require('./template')
+const getTemplate = require('./getTemplate')
 
 module.exports = async (params) => {
 

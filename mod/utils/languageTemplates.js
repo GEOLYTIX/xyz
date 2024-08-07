@@ -4,7 +4,7 @@
 
 const getFrom = require('../provider/getFrom')
 
-const getTemplate = require('../workspace/template')
+const getTemplate = require('../workspace/getTemplate')
 
 module.exports = async (params) => {
 

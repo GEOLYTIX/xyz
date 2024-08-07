@@ -40,23 +40,12 @@ The [SQL] query method builds a parameterised query from a query template and pa
 */
 module.exports = async function query(req, res) {
 
-  // Get workspace from cache.
-  const workspace = await workspaceCache()
-
-  if (workspace instanceof Error) {
-    return res.status(500).send('Failed to load workspace.')
-  }
-
-  // Check whether query template exists.
-  if (!Object.hasOwn(workspace.templates, req.params.template)) {
-
-    return res.status(404).send('Template not found.')
-  }
-
   // Get the template.
-  const template = await getTemplate(workspace.templates[req.params.template])
+  const template = await getTemplate(req.params.template)
 
-  if (template.err) return res.status(500).send(template.err.message)
+  if (template instanceof Error) {
+    return res.status(500).send(template.message)
+  }
 
   // The template requires user login.
   if (!req.params.user && (template.login || template.admin || template.roles)) {
@@ -92,14 +81,15 @@ module.exports = async function query(req, res) {
 
   if (res.finished) return;
 
+  // Get workspace from cache.
+  req.params.workspace = await workspaceCache()
+
   // Assign body to params to enable reserved %{body} parameter.
   req.params.body = req.params.stringifyBody && JSON.stringify(req.body) || req.body
 
   logger(req.params, 'query_params')
 
-  req.params.workspace = workspace
-
-  const query = getQueryFromTemplate(req, template)
+  const query = await getQueryFromTemplate(req, template)
 
   executeQuery(req, res, template, query)
 }

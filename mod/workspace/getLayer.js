@@ -10,7 +10,7 @@ const workspaceCache = require('./cache')
 
 const getLocale = require('./getLocale')
 
-const getTemplate = require('./template')
+const getTemplate = require('./getTemplate')
 
 let workspace
 
