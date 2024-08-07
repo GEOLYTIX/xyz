@@ -382,7 +382,7 @@ export async function base() {
                     key: locale.key,
                 })),
                 callback: (e, entry) => {
-                    window.location.assign(`${mapp.host}?template=integrity_view&locale=${entry.key}`);
+                    window.location.assign(`${mapp.host}?template=test_view&integrity=true&locale=${entry.key}`);
                 },
             });
 
