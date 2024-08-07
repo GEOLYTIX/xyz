@@ -6,9 +6,6 @@ module.exports = {
   default_view: {
     en: 'file:/public/views/_default.html'
   },
-  integrity_view: {
-    en: 'file:/public/views/_integrity.html'
-  },
   test_view: {
     en: 'file:/public/views/_test.html'
   },
