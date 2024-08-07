@@ -4,9 +4,7 @@
 
 const getFrom = require('../provider/getFrom')
 
-const getTemplate = require('../workspace/getTemplate')
-
-const workspaceCache = require('../workspace/cache')
+const getTemplate = require('../workspace/template')
 
 module.exports = async (params) => {
 
@@ -15,35 +13,29 @@ module.exports = async (params) => {
   // Set english as default template language.
   params.language ??= 'en'
 
-  const workspace = await workspaceCache()
+  const languageTemplate = await getTemplate(params.template)
 
-  if (workspace instanceof Error) {
-    return 'Failed to load workspace.'
-  }
+  if (languageTemplate instanceof Error) {
 
-  if (!Object.hasOwn(workspace.templates, params.template)) {
-
-    console.warn(`Template ${params.template} not found.`)
-    return params.template;
+    // Return the template string value if the template is not available in workspace.
+    return params.template
   }
 
   // NOT a language template
-  if (workspace.templates[params.template].src) {
+  if (languageTemplate.src) {
 
-    const nonLanguage = await getTemplate(workspace.templates[params.template])
-
-    return nonLanguage.template
+    return languageTemplate.template
   }
 
-  const allLanguages = workspace.templates[params.template]
+  let template = Object.hasOwn(languageTemplate, params.language)
+    ? languageTemplate[params.language]
+    : languageTemplate.en;
 
-  let template = Object.hasOwn(allLanguages, params.language)
-    ? allLanguages[params.language]
-    : allLanguages.en;
-
+  // HTML Templates must be gotten as string from [template] string.
   if (typeof template === 'string' && Object.hasOwn(getFrom, template.split(':')[0])) {
 
     // Get template from method.
+    
     template = await getFrom[template.split(':')[0]](template)
   }
 
