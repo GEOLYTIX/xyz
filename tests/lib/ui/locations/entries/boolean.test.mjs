@@ -1,4 +1,4 @@
-import { it, assertEqual } from 'https://esm.sh/codi-test-framework@0.0.30';
+import { it, assertEqual } from 'codi';
 export async function booleanTest() {
     it('Should return a checkbox', () => {
         const entry = { title: 'title', field: 'booleanField', inline: true, value: false };

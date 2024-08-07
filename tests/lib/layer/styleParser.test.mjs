@@ -1,4 +1,4 @@
-import { it, describe, assertTrue } from 'https://esm.sh/codi-test-framework@0.0.30';
+import { it, describe, assertTrue } from 'codi';
 export async function styleParserTest(mapview) {
   await describe('TODO: Layer: styleParserTest', async () => {
     const workspace = await mapp.utils.xhr(`/test/tests/workspace.json`);

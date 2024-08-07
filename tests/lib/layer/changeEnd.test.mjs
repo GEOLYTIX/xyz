@@ -3,7 +3,7 @@
  * @module layer/changeEndTest
  */
 
-import { it, describe, assertFalse, assertTrue } from 'https://esm.sh/codi-test-framework@0.0.30';
+import { it, describe, assertFalse, assertTrue } from 'codi';
 import { setView } from '../../utils/view.js';
 import { delayFunction } from '../../utils/delay.js';
 

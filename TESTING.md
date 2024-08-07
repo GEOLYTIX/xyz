@@ -53,7 +53,7 @@ import {} from 'codi-test-framework';
 > module (Browser)
 
 ```js
-import {} from 'https://esm.sh/codi-test-framework@0.0.30';
+import {} from 'codi';
 ```
 
 2. Include the describe and it functions. These are used as the building blocks to the tests. The describe block is used to describe the overall function and what the test suite is actually trying to achive. The It block is used to make more granular descriptions of different elements/functions of the code.
@@ -62,7 +62,7 @@ In this example we describe what the main output should be. And then we assert t
 Part of this code is the `assertTrue` function that is used to check if a value is true.
 
 ```js
-import { describe, it, assertTrue } from 'https://esm.sh/codi-test-framework@0.0.30';
+import { describe, it, assertTrue } from 'codi';
 describe('All languages should have the same base language entries', () => {
 ...
         Object.keys(mapp.dictionaries).forEach(language => {

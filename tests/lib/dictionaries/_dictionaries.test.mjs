@@ -1,4 +1,4 @@
-import { it, describe, assertEqual, assertTrue } from 'https://esm.sh/codi-test-framework@0.0.30';
+import { it, describe, assertEqual, assertTrue } from 'codi';
 /**
  * @module dictionaries
  */
