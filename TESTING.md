@@ -32,9 +32,9 @@ You will see the output of the tests running in the console with any passes/fail
 ## integrity
 
 The integrity tests are designed to check data integrity on deployed appications.
-To run these test naviate to any deployed instance and ensure that you have `?template=integrity_view` is included in the params of the URL.
+To run these test naviate to any deployed instance and ensure that you have `?template=test_view&integrity=true` is included in the params of the URL.
 
-This will give you a similar output to the test_view.
+This will give you a similar output to the normal test_view.
 
 ## Writing tests
 
