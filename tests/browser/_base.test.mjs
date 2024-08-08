@@ -1,8 +1,6 @@
-import { describe, it, assertEqual, assertNotEqual, assertTrue, assertFalse, assertThrows } from 'codi';
-
 export async function base() {
     let mapview = {};
-    await describe('Mapview test', async () => {
+    await codi.describe('Mapview test', async () => {
 
         console.log(`MAPP v${mapp.version}`)
         // Set Openlayers node in order to move map object.
@@ -15,7 +13,7 @@ export async function base() {
         const tabview = document.getElementById('Tabview');
 
         //Testcase: Merge Dictionaries
-        await it('should merge dictionaries correctly', () => {
+        await codi.it('should merge dictionaries correctly', () => {
             // Store the initial length of the English dictionary
             const initialLength = Object.keys(mapp.dictionaries.en).length;
 
@@ -158,16 +156,16 @@ export async function base() {
 
             // Assert that the English dictionary has been updated with new entries
             const updatedLength = Object.keys(mapp.dictionaries.en).length;
-            assertTrue(updatedLength > initialLength, 'English dictionary should have new entries');
+            codi.assertTrue(updatedLength > initialLength, 'English dictionary should have new entries');
 
             // Assert that the merged dictionaries have the expected properties
-            assertEqual(mapp.dictionaries.en.toolbar_zoom_in, 'Zoom in', 'English dictionary should have the correct value for toolbar_zoom_in');
-            assertEqual(mapp.dictionaries.de.toolbar_zoom_in, 'Zoom rein', 'German dictionary should have the correct value for toolbar_zoom_in');
+            codi.assertEqual(mapp.dictionaries.en.toolbar_zoom_in, 'Zoom in', 'English dictionary should have the correct value for toolbar_zoom_in');
+            codi.assertEqual(mapp.dictionaries.de.toolbar_zoom_in, 'Zoom rein', 'German dictionary should have the correct value for toolbar_zoom_in');
 
         });
 
         //Testcase: Ensure User refreshes cookie
-        await it('should refresh cookie and get user with updated credentials', async () => {
+        await codi.it('should refresh cookie and get user with updated credentials', async () => {
             // Store the current user object
             const currentUser = mapp.user;
 
@@ -176,17 +174,17 @@ export async function base() {
 
             if (mapp.user !== null) {
                 // Assert that the user object has been updated
-                assertNotEqual(mapp.user, currentUser, 'User object should be updated after refreshing cookie');
+                codi.assertNotEqual(mapp.user, currentUser, 'User object should be updated after refreshing cookie');
 
                 // Assert that the user object has the expected properties
-                assertTrue(mapp.user.hasOwnProperty('email'), 'User object should have the "email" property');
-                assertTrue(mapp.user.hasOwnProperty('language'), 'User object should have the "language" property');
-                assertTrue(mapp.user.hasOwnProperty('roles'), 'User object should have the "roles" property');
+                codi.assertTrue(mapp.user.hasOwnProperty('email'), 'User object should have the "email" property');
+                codi.assertTrue(mapp.user.hasOwnProperty('language'), 'User object should have the "language" property');
+                codi.assertTrue(mapp.user.hasOwnProperty('roles'), 'User object should have the "roles" property');
             }
         });
 
         //Testcase: Ensure language is set correctly.
-        await it('should set the language correctly', () => {
+        await codi.it('should set the language correctly', () => {
             // Store the current language
             const currentLanguage = mapp.language;
 
@@ -195,26 +193,26 @@ export async function base() {
 
             // Assert that the language has been set correctly
             if (mapp.hooks.current.language) {
-                assertEqual(mapp.language, mapp.hooks.current.language, 'Language should be set to the value from mapp.hooks.current.language');
+                codi.assertEqual(mapp.language, mapp.hooks.current.language, 'Language should be set to the value from mapp.hooks.current.language');
             } else if (mapp.user?.language) {
-                assertEqual(mapp.language, mapp.user.language, 'Language should be set to the value from mapp.user.language');
+                codi.assertEqual(mapp.language, mapp.user.language, 'Language should be set to the value from mapp.user.language');
             } else {
-                assertEqual(mapp.language, currentLanguage, 'Language should remain unchanged if no overrides are present');
+                codi.assertEqual(mapp.language, currentLanguage, 'Language should remain unchanged if no overrides are present');
             }
         });
 
         //Testcase: ensure restore scroll is supported
-        await it('should restore scroll if supported', () => {
+        await codi.it('should restore scroll if supported', () => {
             // Check if scroll restoration is supported
             if ('scrollRestoration' in history) {
                 // Set scroll restoration to 'auto'
                 history.scrollRestoration = 'auto';
 
                 // Assert that scroll restoration is set to 'auto'
-                assertEqual(history.scrollRestoration, 'auto', 'Scroll restoration should be set to "auto"');
+                codi.assertEqual(history.scrollRestoration, 'auto', 'Scroll restoration should be set to "auto"');
             } else {
                 // Assert that scroll restoration is not supported
-                assertFalse('scrollRestoration' in history, 'Scroll restoration is not supported');
+                codi.assertFalse('scrollRestoration' in history, 'Scroll restoration is not supported');
             }
         });
 
@@ -290,29 +288,29 @@ export async function base() {
         });
 
         //Testcase: Set help tesxt from dictionary
-        await it('should set help text from dictionary', () => {
+        await codi.it('should set help text from dictionary', () => {
             tabs.forEach((tab) => {
                 // Set help text from dictionary
                 tab.title = mapp.dictionary[tab.dataset.id];
 
                 // Assert that the title is set correctly
-                assertEqual(tab.title, mapp.dictionary[tab.dataset.id], 'Title should be set from the dictionary');
+                codi.assertEqual(tab.title, mapp.dictionary[tab.dataset.id], 'Title should be set from the dictionary');
             });
         });
 
         //Tesecase: Handle tab click events
-        await it('should handle tab click events', () => {
+        await codi.it('should handle tab click events', () => {
             tabs.forEach((tab) => {
                 // Simulate a click event on the tab
                 tab.click();
 
                 // Assert that the active class is added to the clicked tab
-                assertTrue(tab.classList.contains('active'), 'Clicked tab should have the active class');
+                codi.assertTrue(tab.classList.contains('active'), 'Clicked tab should have the active class');
 
                 // Assert that the active class is removed from other tabs
                 tabs.forEach((otherTab) => {
                     if (otherTab !== tab) {
-                        assertFalse(otherTab.classList.contains('active'), 'Other tabs should not have the active class');
+                        codi.assertFalse(otherTab.classList.contains('active'), 'Other tabs should not have the active class');
                     }
                 });
 
@@ -320,12 +318,12 @@ export async function base() {
                 const panel = document.getElementById(tab.dataset.id);
 
                 // Assert that the active class is added to the corresponding panel
-                assertTrue(panel.classList.contains('active'), 'Corresponding panel should have the active class');
+                codi.assertTrue(panel.classList.contains('active'), 'Corresponding panel should have the active class');
 
                 // Assert that the active class is removed from other panels
                 tabPanels.forEach((otherPanel) => {
                     if (otherPanel !== panel) {
-                        assertFalse(otherPanel.classList.contains('active'), 'Other panels should not have the active class');
+                        codi.assertFalse(otherPanel.classList.contains('active'), 'Other panels should not have the active class');
                     }
                 });
 
@@ -390,44 +388,44 @@ export async function base() {
         }
 
         //Testcase: Retrieve accesible locales
-        await it('should retrieve accessible locales from Workspace API', async () => {
+        await codi.it('should retrieve accessible locales from Workspace API', async () => {
             // Assert that locales is an array
-            assertTrue(Array.isArray(locales), 'Locales should be an array');
+            codi.assertTrue(Array.isArray(locales), 'Locales should be an array');
 
             // Assert that locales array is not empty
-            assertNotEqual(locales.length, 0, 'Locales array should not be empty');
+            codi.assertNotEqual(locales.length, 0, 'Locales array should not be empty');
         });
 
         //Testcase: Retrieve locale with list of layers
-        await it('should retrieve locale with list of layers from Workspace API', async () => {
+        await codi.it('should retrieve locale with list of layers from Workspace API', async () => {
             // Assert that locale is not an instance of Error
-            assertFalse(locale instanceof Error, 'Locale should not be an instance of Error');
+            codi.assertFalse(locale instanceof Error, 'Locale should not be an instance of Error');
 
             // Assert that locale has the expected properties
-            assertTrue(locale.hasOwnProperty('name'), 'Locale should have a "name" property');
-            assertTrue(locale.hasOwnProperty('key'), 'Locale should have a "key" property');
-            assertTrue(locale.hasOwnProperty('layers'), 'Locale should have a "layers" property');
+            codi.assertTrue(locale.hasOwnProperty('name'), 'Locale should have a "name" property');
+            codi.assertTrue(locale.hasOwnProperty('key'), 'Locale should have a "key" property');
+            codi.assertTrue(locale.hasOwnProperty('layers'), 'Locale should have a "layers" property');
         });
 
         //Testcase: Should error if no locales accsible
         if (locale instanceof Error) {
-            await it('should display an error dialog if locale is an instance of Error', async () => {
+            await codi.it('should display an error dialog if locale is an instance of Error', async () => {
 
                 // Assert that the error dialog is appended to the document body
                 const errorDialog = document.querySelector('.dialog-modal');
-                assertNotEqual(errorDialog, null, 'Error dialog should be appended to the document body');
+                codi.assertNotEqual(errorDialog, null, 'Error dialog should be appended to the document body');
 
                 // Assert that the error dialog contains the correct message
-                assertEqual(errorDialog.textContent.trim(), mapp.dictionary.no_locales, 'Error dialog should display the correct message');
+                codi.assertEqual(errorDialog.textContent.trim(), mapp.dictionary.no_locales, 'Error dialog should display the correct message');
             });
         }
 
         //Testcase: Dropdown for locales should be present if locales are present.
         if (locales.length > 1) {
-            await it('should add locale dropdown to layers panel if multiple locales are accessible', async () => {
+            await codi.it('should add locale dropdown to layers panel if multiple locales are accessible', async () => {
                 // Assert that the locale dropdown is appended to the layers tab
                 const dropdown = layersTab.querySelector('[data-id="locales-dropdown"]');
-                assertNotEqual(dropdown, null, 'Locale dropdown should be appended to the layers tab');
+                codi.assertNotEqual(dropdown, null, 'Locale dropdown should be appended to the layers tab');
             });
         }
 
@@ -504,57 +502,57 @@ export async function base() {
         });
 
         //Testcase: Create mapview
-        await it('should create a mapview', async () => {
+        await codi.it('should create a mapview', async () => {
             // Assert that mapview is created
-            assertNotEqual(mapview, undefined, 'Mapview should be created');
+            codi.assertNotEqual(mapview, undefined, 'Mapview should be created');
 
             // Assert that mapview has the expected properties
-            assertTrue(mapview.hasOwnProperty('host'), 'Mapview should have a "host" property');
-            assertTrue(mapview.hasOwnProperty('target'), 'Mapview should have a "target" property');
-            assertTrue(mapview.hasOwnProperty('locale'), 'Mapview should have a "locale" property');
-            assertTrue(mapview.hasOwnProperty('hooks'), 'Mapview should have a "hooks" property');
-            assertTrue(mapview.hasOwnProperty('scrollWheelZoom'), 'Mapview should have a "scrollWheelZoom" property');
-            assertTrue(mapview.hasOwnProperty('attribution'), 'Mapview should have an "attribution" property');
+            codi.assertTrue(mapview.hasOwnProperty('host'), 'Mapview should have a "host" property');
+            codi.assertTrue(mapview.hasOwnProperty('target'), 'Mapview should have a "target" property');
+            codi.assertTrue(mapview.hasOwnProperty('locale'), 'Mapview should have a "locale" property');
+            codi.assertTrue(mapview.hasOwnProperty('hooks'), 'Mapview should have a "hooks" property');
+            codi.assertTrue(mapview.hasOwnProperty('scrollWheelZoom'), 'Mapview should have a "scrollWheelZoom" property');
+            codi.assertTrue(mapview.hasOwnProperty('attribution'), 'Mapview should have an "attribution" property');
         });
 
         //Testcase: Add layers to mapview
-        await it('should add layers to mapview', async () => {
+        await codi.it('should add layers to mapview', async () => {
             // Assert that layers are added to mapview
-            assertTrue(Object.keys(mapview.layers).length > 0, 'Mapview should have layers');
+            codi.assertTrue(Object.keys(mapview.layers).length > 0, 'Mapview should have layers');
         });
 
         //Testcase: Create a gazetteer if in locale
-        await it('should create a gazetteer if available in the locale', async () => {
+        await codi.it('should create a gazetteer if available in the locale', async () => {
             if (mapview.locale.gazetteer) {
                 const gazetteer = locationsTab.querySelector('div');
-                assertNotEqual(gazetteer, null, 'Gazetteer should be created');
+                codi.assertNotEqual(gazetteer, null, 'Gazetteer should be created');
             } else {
                 // Assert that the locations tab is hidden
                 const locationsTabElement = document.querySelector('[data-id=locations]');
-                assertEqual(locationsTabElement.style.display, 'none', 'Locations tab should be hidden');
+                codi.assertEqual(locationsTabElement.style.display, 'none', 'Locations tab should be hidden');
             }
         });
 
         //Testcase: Should create a layers listview
-        await it('should create a layers listview', async () => {
+        await codi.it('should create a layers listview', async () => {
             // Assert that the layers listview is created
             const listview = layersTab.querySelector('div');
-            assertNotEqual(listview, null, 'Layers listview should be created');
+            codi.assertNotEqual(listview, null, 'Layers listview should be created');
         });
 
         //Testcase: Check for locations list view if gazetteer is present or if there is a selection
         if (mapview.locale.gazetteer) {
-            await it('should create a locations listview', async () => {
+            await codi.it('should create a locations listview', async () => {
                 // Assert that the locations listview is created
                 const listview = locationsTab.querySelector('div');
-                assertNotEqual(listview, null, 'Locations listview should be created');
+                codi.assertNotEqual(listview, null, 'Locations listview should be created');
             });
         }
 
         //Testcase: Ensure mapview has highlight interaction.
-        await it('should begin highlight interaction', async () => {
+        await codi.it('should begin highlight interaction', async () => {
             // Assert that highlight interaction is added to mapview
-            assertTrue(mapview.interactions.hasOwnProperty('highlight'), 'Mapview should have a "highlight" interaction');
+            codi.assertTrue(mapview.interactions.hasOwnProperty('highlight'), 'Mapview should have a "highlight" interaction');
         });
 
         // Configure idle mask if set in locale.
@@ -572,7 +570,7 @@ export async function base() {
         //Tests that have to run after everything else.
 
         //Testcase: Should show the tabview.
-        await it('should show the tabview when showTab is called', () => {
+        await codi.it('should show the tabview when showTab is called', () => {
             // Add the 'desktop-display-none' class to the tabview
             tabview.classList.add('desktop-display-none');
 
@@ -580,14 +578,14 @@ export async function base() {
             testTabView.showTab();
 
             // Assert that the 'desktop-display-none' class is removed from the tabview
-            assertFalse(tabview.classList.contains('desktop-display-none'), 'Tabview should not have the "desktop-display-none" class after showTab is called');
+            codi.assertFalse(tabview.classList.contains('desktop-display-none'), 'Tabview should not have the "desktop-display-none" class after showTab is called');
 
             // Assert that the grid template rows of the document body are set correctly
-            assertEqual(document.body.style.gridTemplateRows, 'auto 10px 50px', 'Grid template rows should be set to "auto 10px 50px" after showTab is called');
+            codi.assertEqual(document.body.style.gridTemplateRows, 'auto 10px 50px', 'Grid template rows should be set to "auto 10px 50px" after showTab is called');
         });
 
         //Testcase: Should hide the tabview
-        await it('should hide the tabview when removeLastTab is called', () => {
+        await codi.it('should hide the tabview when removeLastTab is called', () => {
             // Remove the 'desktop-display-none' class from the tabview
             tabview.classList.remove('desktop-display-none');
 
@@ -595,15 +593,15 @@ export async function base() {
             testTabView.removeLastTab();
 
             // Assert that the 'desktop-display-none' class is added to the tabview
-            assertTrue(tabview.classList.contains('desktop-display-none'), 'Tabview should have the "desktop-display-none" class after removeLastTab is called');
+            codi.assertTrue(tabview.classList.contains('desktop-display-none'), 'Tabview should have the "desktop-display-none" class after removeLastTab is called');
 
 
 
             // Assert that the grid template rows of the document body are set correctly
-            assertEqual(document.body.style.gridTemplateRows, 'auto 0px 0px', 'Grid template rows should be set to "auto 0 0" after removeLastTab is called');
+            codi.assertEqual(document.body.style.gridTemplateRows, 'auto 0px 0px', 'Grid template rows should be set to "auto 0 0" after removeLastTab is called');
 
             // Assert that the margin top of the map target element is set to 0
-            assertEqual(mapview.Map.getTargetElement().style.marginTop, '0px', 'Margin top of the map target element should be set to 0 after removeLastTab is called');
+            codi.assertEqual(mapview.Map.getTargetElement().style.marginTop, '0px', 'Margin top of the map target element should be set to 0 after removeLastTab is called');
         });
 
     });
