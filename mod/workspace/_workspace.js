@@ -53,8 +53,6 @@ module.exports = async function getKeyMethod(req, res) {
     return res.status(500).send('Failed to load workspace.')
   }
 
-
-
   // The keys object must own a user provided lookup key
   if (!Object.hasOwn(keyMethods, req.params.key)) {
 
@@ -64,41 +62,68 @@ module.exports = async function getKeyMethod(req, res) {
   return keyMethods[req.params.key](req, res)
 }
 
+/**
+@function layer
+@async
+
+@description
+The method requests a JSON layer from the getLayer module.
+
+Role objects in the layer are merged with their respective parent objects.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {Object} req.params HTTP request params.
+@property {string} [params.locale] Locale key.
+@property {boolean} [params.layer] Layer key.
+@property {Object} [params.user] User requesting the layer.
+
+@returns {res} The HTTP response with either an error.message or the JSON layer.
+*/
 async function layer(req, res) {
 
-  if (!Object.hasOwn(workspace.locales, req.params.locale)) {
-    return res.status(400).send(`Unable to validate locale param.`)
-  }
+  // Add default role * to all users.
+  if (Array.isArray(req.params.user && req.params.user.roles)) {
 
-  const locale = workspace.locales[req.params.locale]
-
-  const roles = req.params.user?.roles || []
-  
-  roles.push('*')
-
-  if (!Roles.check(locale, roles)) {
-    return res.status(403).send('Role access denied for locale.')
-  }
-
-  if (!Object.hasOwn(locale.layers, req.params.layer)) {
-    return res.status(400).send(`Unable to validate layer param.`)
+    req.params.user.roles.push('*')
   }
 
   let layer = await getLayer(req.params)
 
-  if (!Roles.check(layer, roles)) {
-    return res.status(403).send('Role access denied for layer.')
+  if (layer instanceof Error) {
+    return res.status(400).send(layer.message)
   }
 
-  layer = Roles.objMerge(layer, roles)
+  layer = Roles.objMerge(layer, req.params.user && req.params.user.roles)
 
   res.json(layer)
 }
 
+/**
+@function locales
+
+@description
+The locales method reduces the workspace.locales{} object to an array locales with only the key and name properties.
+
+The locales are not merged with templates and only roles defined inside the workspace.locales{} locale object are considered for access.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {Object} req.params HTTP request params.
+@property {Object} [params.user] User requesting the locales.
+
+@returns {res} The HTTP response with either an error.message or JSON array of locales in workspace.
+*/
 function locales(req, res) {
 
+  // Add default role * to all users.
+  if (Array.isArray(req.params.user && req.params.user.roles)) {
+
+    req.params.user.roles.push('*')
+  }
+
   const locales = Object.values(workspace.locales)
-    .filter(locale => !!Roles.check(locale, req.params.user?.roles))
+    .filter(locale => !!Roles.check(locale, req.params.user && req.params.user.roles))
     .map(locale => ({
       key: locale.key,
       name: locale.name
@@ -107,36 +132,41 @@ function locales(req, res) {
   res.send(locales)
 }
 
+/**
+@function locale
+@async
+
+@description
+The method requests a JSON locale from the getLocale module.
+
+All locale layers are requested from the getLayer module with `params.layers` flag.
+
+Role objects in the locale and nested layers are merged with their respective parent objects.
+
+The locale.layers{} object is reduced to an array of layer keys without the `params.layers` flag.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {Object} req.params HTTP request params.
+@property {string} [params.locale] Locale key.
+@property {boolean} [params.layers] Whether layer objects should be returned with the locale.
+@property {Object} [params.user] User requesting the locale.
+
+@returns {res} The HTTP response with either an error.message or the JSON locale.
+*/
 async function locale(req, res) {
 
-  if (req.params.locale && !Object.hasOwn(workspace.locales, req.params.locale)) {
-    return res.status(400).send(`Unable to validate locale param.`)
+  // Add default role * to all users.
+  if (Array.isArray(req.params.user && req.params.user.roles)) {
+
+    req.params.user.roles.push('*')
   }
 
-  let locale;
-
-  if (Object.hasOwn(workspace.locales, req.params.locale)) {
-
-    locale = await getLocale(req.params)
-
-  } else if (typeof workspace.locale === 'object') {
-
-    locale = workspace.locale
-  }
+  let locale = await getLocale(req.params)
 
   if (locale instanceof Error) {
     return res.status(400).send(locale.message)
   }
-  
-  // Subtitutes ${*} with process.env.SRC_* key values.
-  locale = JSON.parse(
-    JSON.stringify(locale).replace(/\$\{(.*?)\}/g,
-      matched => process.env[`SRC_${matched.replace(/(^\${)|(}$)/g, '')}`])
-  )
-
-  const roles = req.params.user?.roles || []
-  
-  roles.push('*')
 
   // Return layer object instead of array of layer keys
   if (req.params.layers) {
@@ -151,17 +181,17 @@ async function locale(req, res) {
 
       locale.layers = layers
         .filter(layer => !!layer)
+
+        // The getLayer method will return an Error if role access is prevented.
         .filter(layer => !(layer instanceof Error))
-        .filter(layer => Roles.check(layer, roles))
     })
 
-    // Also merges roles in layer objects.
-    locale = Roles.objMerge(locale, roles)
+    locale = Roles.objMerge(locale, req.params.user && req.params.user.roles)
 
     return res.json(locale)
   }
 
-  locale = Roles.objMerge(locale, roles)
+  locale = Roles.objMerge(locale, req.params.user && req.params.user.roles)
   
   // Check layer access.
   locale.layers = locale.layers && Object.entries(locale.layers)
@@ -170,7 +200,7 @@ async function locale(req, res) {
     .filter(layer => layer[1] !== null)
 
     // check layer for user roles
-    .filter(layer => !!Roles.check(layer[1], roles))
+    .filter(layer => !!Roles.check(layer[1], req.params.user && req.params.user.roles))
     .map(layer => layer[0])
 
   res.json(locale)

@@ -18,7 +18,7 @@ function check(obj, user_roles) {
   // Always return object with '*' asterisk role.
   if (Object.hasOwn(obj.roles, '*')) return obj;
 
-  if (user_roles === undefined) return false
+  if (!user_roles) return false
 
   // Some negated role is included in user_roles[]
   const someNegatedRole = Object.keys(obj.roles).some(

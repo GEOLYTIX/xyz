@@ -1,4 +1,12 @@
 /**
+The getLayer module exports the getLayer method which is required by the query and workspace modules.
+
+@requires /utils/roles
+@requires /utils/merge
+@requires /workspace/cache
+@requires /workspace/getLocale
+@requires /workspace/getTemplate
+
 @module /workspace/getLayer
 */
 
@@ -14,12 +22,36 @@ const getTemplate = require('./getTemplate')
 
 let workspace
 
-module.exports = async (params) => {
+/**
+@function getLayer
+@async
+
+@description
+The layer locale is requested from the getLocale module.
+
+The layer object from the locale will be merged into a layer template matching the layer key.
+
+An array layer templates defined in the layer.templates[] will be merged into the layer object.
+
+A role check is performed to check whether the requesting user has access to the locale.
+
+${*} template parameter are substituted with values from SRC_* environment variables.
+
+The layer.key and layer.name will be assigned if missing.
+
+The mergeObjectTemplates(layer) method will be called.
+
+@param {Object} params 
+@property {string} [params.locale] Locale key.
+@property {string} [params.layer] Layer key.
+@property {Object} [params.user] Requesting user.
+@property {Array} [user.roles] User roles.
+
+@returns {locale} JSON Layer.
+*/
+module.exports = async function getLayer(params) {
 
   workspace = await workspaceCache()
-
-  // Set locale as default
-  params.locale ??= 'locale'
 
   const locale = await getLocale(params)
 
@@ -40,16 +72,10 @@ module.exports = async (params) => {
 
   const layerTemplate = await getTemplate(layer.template || layer.key)
 
-  if (layerTemplate) {
+  if (layerTemplate && !(layerTemplate instanceof Error)) {
 
-    if (layerTemplate instanceof Error) {
-
-      // A layer may not have a template 
-    } else {
-
-      // Merge layer --> template
-      layer = merge(layerTemplate, layer)
-    }
+    // Merge layer --> template
+    layer = merge(layerTemplate, layer)
   }
 
   // Merge templates --> layer
@@ -57,19 +83,14 @@ module.exports = async (params) => {
 
     const layerTemplate = await getTemplate(template_key)
 
-    if (layerTemplate) {
-  
-      if (layerTemplate instanceof Error) {
-  
-        return layerTemplate
-      } else {
-  
-        layer = merge(layer, layerTemplate)
-      }
+    if (layerTemplate && !(layerTemplate instanceof Error)) {
+
+      // Merge template --> layer
+      layer = merge(layer, layerTemplate)
     }
   }
 
-  if (!Roles.check(layer, params.user?.roles)) {
+  if (!Roles.check(layer, params.user && params.user.roles)) {
     return new Error('Role access denied.')
   }
 
