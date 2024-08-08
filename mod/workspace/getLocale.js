@@ -1,4 +1,5 @@
 /**
+## Workspace API
 The getLocale module exports the getLocale method which is required by the getLayer and workspace modules.
 
 @requires /utils/roles

@@ -1,4 +1,5 @@
 /**
+## /workspace
 The Workspace API module exports the getKeyMethod() which returns a method from the keyMethods{} object.
 
 - layer

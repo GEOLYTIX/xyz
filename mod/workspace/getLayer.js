@@ -1,4 +1,5 @@
 /**
+## /workspace/getLayer
 The getLayer module exports the getLayer method which is required by the query and workspace modules.
 
 @requires /utils/roles
