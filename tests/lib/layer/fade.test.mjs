@@ -1,7 +1,6 @@
-import { it, describe } from 'codi';
 export async function fadeTest(mapview) {
-    describe('TODO: Layer: fadeTest', () => {
-        it('Should should test for something', () => {
+    codi.describe('TODO: Layer: fadeTest', () => {
+        codi.it('Should should test for something', () => {
             console.warn('The Fade module needs to be re-reviewed.')
         });
     });

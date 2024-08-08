@@ -9,7 +9,7 @@ import { delayFunction } from '../utils/delay.js';
 // import { booleanTest } from '../lib/ui/locations/entries/boolean.test.mjs';
 
 const mapview = await base();
-//await baseDictionaryTest();
+await baseDictionaryTest();
 setView(mapview, 2, 'default');
 await layerTest.changeEndTest(mapview);
 

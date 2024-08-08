@@ -309,7 +309,18 @@
     </div>
 
     <script type="module">
-        import { runWebTests } from "codi";
+        import { runWebTests, it, describe, assertEqual, assertTrue, assertFalse } from "codi";
+
+        const _codi = {
+            runWebTests,
+            describe,
+            assertEqual,
+            it,
+            assertTrue,
+            assertFalse
+        };
+
+        self.codi = _codi;
 
         const urlParams = new URLSearchParams(window.location.search);
         const testFiles = urlParams.get('integrity') ? [`${window.location.origin}{{dir}}/tests/browser/integrity.test.mjs`] : [`${window.location.origin}{{dir}}/tests/browser/local.test.mjs`];

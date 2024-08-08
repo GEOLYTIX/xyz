@@ -1,4 +1,3 @@
-import { it, describe, assertEqual, assertTrue } from 'codi';
 /**
  * @module dictionaries
  */
@@ -8,7 +7,7 @@ import { it, describe, assertEqual, assertTrue } from 'codi';
  * @function baseDictionaryTest
  */
 export async function baseDictionaryTest() {
-    describe('All languages should have the same base language entries', () => {
+    codi.describe('All languages should have the same base language entries', () => {
         const base_dictionary = {
             save: '',
             cancel: '',
@@ -18,9 +17,9 @@ export async function baseDictionaryTest() {
         }
 
         Object.keys(mapp.dictionaries).forEach(language => {
-            it(`${language} dictionary should have all the base keys`, () => {
+            codi.it(`${language} dictionary should have all the base keys`, () => {
                 Object.keys(base_dictionary).forEach(key => {
-                    assertTrue(!!mapp.dictionaries[language][key], `${language} should have ${key}`);
+                    codi.assertTrue(!!mapp.dictionaries[language][key], `${language} should have ${key}`);
                 });
             });
         });

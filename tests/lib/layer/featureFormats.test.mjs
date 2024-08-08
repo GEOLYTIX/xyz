@@ -1,7 +1,6 @@
-import { it, describe } from 'codi';
 export async function featureFormatsTest() {
-    describe('TODO: Layer: featureFormatsTest', () => {
-        it('Should should test for something', () => {
+    codi.describe('TODO: Layer: featureFormatsTest', () => {
+        codi.it('Should should test for something', () => {
             //TODO
         });
     });

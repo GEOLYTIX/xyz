@@ -14,7 +14,7 @@ import { delayFunction } from '../../utils/delay.js';
 */
 export async function changeEndTest(mapview) {
 
-    await describe('Layer: changeEndTest', async () => {
+    await codi.describe('Layer: changeEndTest', async () => {
 
         /**
          * ### should dispatch the event and the layer should not display
@@ -22,7 +22,7 @@ export async function changeEndTest(mapview) {
          * 2. We assert that the `layer.display` is not set to true.
          * @function it
          */
-        await it('should dispatch the event and the layer should not display.', async () => {
+        await codi.it('should dispatch the event and the layer should not display.', async () => {
             const layer = mapview.layers['changeEnd'];
             const changeEndEvent = new Event('changeEnd');
             const target = layer.mapview.Map.getTargetElement();
@@ -41,7 +41,7 @@ export async function changeEndTest(mapview) {
          * 3. And asserts that the `layer.display` is true.
          * @function it
          */
-        await it('should display at zoom level 6', async () => {
+        await codi.it('should display at zoom level 6', async () => {
             setView(mapview, 11, 'london')
             const layer = mapview.layers['changeEnd'];
             const changeEndEvent = new Event('changeEnd');
