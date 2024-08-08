@@ -1,7 +1,6 @@
-import { it, describe } from 'codi';
 export async function attributionTest() {
-    describe('TODO: Mapview: attributionTest', () => {
-        it('Should should test for something', () => {
+    codi.describe('TODO: Mapview: attributionTest', () => {
+        codi.it('Should should test for something', () => {
             //TODO
         });
     });

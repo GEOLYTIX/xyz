@@ -1,7 +1,6 @@
-import { it, describe } from 'codi';
 export async function geometryTest() {
-    describe('TODO: Mapview: geometryTest', () => {
-        it('Should should test for something', () => {
+    codi.describe('TODO: Mapview: geometryTest', () => {
+        codi.it('Should should test for something', () => {
             //TODO
         });
     });

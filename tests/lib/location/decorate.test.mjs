@@ -1,7 +1,6 @@
-import { it, describe } from 'codi';
 export async function decorateTest() {
-    describe('TODO: Location: decorateTest', () => {
-        it('Should should test for something', () => {
+    codi.describe('TODO: Location: decorateTest', () => {
+        codi.it('Should should test for something', () => {
             //TODO
         });
     });

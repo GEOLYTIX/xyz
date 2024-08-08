@@ -1,7 +1,6 @@
-import { it, describe } from 'codi';
 export async function infotipTest() {
-    describe('TODO: Mapview: infotipTest', () => {
-        it('Should should test for something', () => {
+    codi.describe('TODO: Mapview: infotipTest', () => {
+        codi.it('Should should test for something', () => {
             //TODO
         });
     });
