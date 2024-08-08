@@ -77,7 +77,7 @@ function objMerge(obj, user_roles) {
 
   if (typeof obj !== 'object') return obj;
 
-  if (user_roles === undefined) return obj
+  if (!user_roles) return obj
 
   if (Array.isArray(obj)) {
 

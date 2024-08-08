@@ -84,7 +84,7 @@ Role objects in the layer are merged with their respective parent objects.
 async function layer(req, res) {
 
   // Add default role * to all users.
-  if (Array.isArray(req.params.user && req.params.user.roles)) {
+  if (Array.isArray(req.params.user?.roles)) {
 
     req.params.user.roles.push('*')
   }
@@ -95,7 +95,7 @@ async function layer(req, res) {
     return res.status(400).send(layer.message)
   }
 
-  layer = Roles.objMerge(layer, req.params.user && req.params.user.roles)
+  layer = Roles.objMerge(layer, req.params.user?.roles)
 
   res.json(layer)
 }
@@ -118,13 +118,13 @@ The locales are not merged with templates and only roles defined inside the work
 function locales(req, res) {
 
   // Add default role * to all users.
-  if (Array.isArray(req.params.user && req.params.user.roles)) {
+  if (Array.isArray(req.params.user?.roles)) {
 
     req.params.user.roles.push('*')
   }
 
   const locales = Object.values(workspace.locales)
-    .filter(locale => !!Roles.check(locale, req.params.user && req.params.user.roles))
+    .filter(locale => !!Roles.check(locale, req.params.user?.roles))
     .map(locale => ({
       key: locale.key,
       name: locale.name
@@ -158,7 +158,7 @@ The locale.layers{} object is reduced to an array of layer keys without the `par
 async function locale(req, res) {
 
   // Add default role * to all users.
-  if (Array.isArray(req.params.user && req.params.user.roles)) {
+  if (Array.isArray(req.params.user?.roles)) {
 
     req.params.user.roles.push('*')
   }
@@ -187,12 +187,12 @@ async function locale(req, res) {
         .filter(layer => !(layer instanceof Error))
     })
 
-    locale = Roles.objMerge(locale, req.params.user && req.params.user.roles)
+    locale = Roles.objMerge(locale, req.params.user?.roles)
 
     return res.json(locale)
   }
 
-  locale = Roles.objMerge(locale, req.params.user && req.params.user.roles)
+  locale = Roles.objMerge(locale, req.params.user?.roles)
   
   // Check layer access.
   locale.layers = locale.layers && Object.entries(locale.layers)
@@ -201,7 +201,7 @@ async function locale(req, res) {
     .filter(layer => layer[1] !== null)
 
     // check layer for user roles
-    .filter(layer => !!Roles.check(layer[1], req.params.user && req.params.user.roles))
+    .filter(layer => !!Roles.check(layer[1], req.params.user?.roles))
     .map(layer => layer[0])
 
   res.json(locale)
