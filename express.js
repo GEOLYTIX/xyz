@@ -20,10 +20,7 @@ app.use(process.env.DIR || '', express.static('tests'))
 
 app.use(cookieParser())
 
-const _api = require('./api/api')
-
-const api = (req, res) => _api(req, res)
-
+const api = require('./api/api')
 
 app.get(`${process.env.DIR || ''}/api/provider/:provider?`, api)
 
@@ -49,9 +46,7 @@ app.get(`${process.env.DIR || ''}/api/workspace/:key?`, api)
 
 app.get(`${process.env.DIR || ''}/api/user/:method?/:key?`, api)
 
-app.post(`${process.env.DIR || ''}/api/user/:method?/:key?`, express.urlencoded({ extended: true }), api)
-
-//sudo ./caddy_linux_amd64 reverse-proxy --from localhost:443 --to localhost:3000
+app.post(`${process.env.DIR || ''}/api/user/:method?`, [express.urlencoded({ extended: true }), express.json({ limit: '5mb' })], api)
 
 app.get(`${process.env.DIR || ''}/saml/metadata`, api)
 
