@@ -2,6 +2,8 @@
 ## /workspace/getLayer
 The getLayer module exports the getLayer method which is required by the query and workspace modules.
 
+The workspace is cached in the module scope to allow for the mergeObjectTemplates(layer) method to assign template objects defined in a JSON layer to the workspace.templates{}.
+
 @requires /utils/roles
 @requires /utils/merge
 @requires /workspace/cache
@@ -48,7 +50,7 @@ The mergeObjectTemplates(layer) method will be called.
 @property {Object} [params.user] Requesting user.
 @property {Array} [user.roles] User roles.
 
-@returns {locale} JSON Layer.
+@returns {Object} JSON Layer.
 */
 module.exports = async function getLayer(params) {
 
@@ -114,6 +116,16 @@ module.exports = async function getLayer(params) {
   return layer
 }
 
+/**
+@function mergeObjectTemplates
+
+@description
+The method parses an object for a template object property. The template property value will be assigned to the workspace.templates{} object matching the template key value.
+
+The method will call itself for nested objects.
+
+@param {Object} obj 
+*/
 function mergeObjectTemplates(obj) {
 
   if (obj === null) return;

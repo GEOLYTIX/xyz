@@ -1,4 +1,11 @@
 /**
+## /workspace/getTemplate
+The module exports the getTemplate method which is required by the query, languageTemplates, getLayer, and getLocale modules.
+
+@requires /provider/getFrom
+@requires /utils/merge
+@requires /workspace/cache
+
 @module /workspace/getTemplate
 */
 
@@ -8,7 +15,24 @@ const merge = require('../utils/merge')
 
 const workspaceCache = require('./cache')
 
-module.exports = async (template_key) => {
+/**
+@function getTemplate
+@async
+
+@description
+The workspace will be requested from the workspace/cache module.
+
+A template object matching the template_key param in the workspace.templates{} object will be returned from the getTemplate method.
+
+The template will be retrieved from its src if not cached.
+
+Module templates will be constructed before being returned.
+
+@param {string} template_key 
+
+@returns {Object} JSON Template
+*/
+module.exports = async function getTemplate(template_key) {
 
   const workspace = await workspaceCache()
 
