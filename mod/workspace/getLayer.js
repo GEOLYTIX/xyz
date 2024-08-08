@@ -91,7 +91,7 @@ module.exports = async function getLayer(params) {
     }
   }
 
-  if (!Roles.check(layer, params.user && params.user.roles)) {
+  if (!Roles.check(layer, params.user?.roles)) {
     return new Error('Role access denied.')
   }
 

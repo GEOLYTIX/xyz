@@ -64,7 +64,7 @@ module.exports = async function getLocale(params) {
     locale = merge(localeTemplate, locale)
   }
 
-  if (!Roles.check(locale, params.user && params.user.roles)) {
+  if (!Roles.check(locale, params.user?.roles)) {
     return new Error('Role access denied.')
   }
 
