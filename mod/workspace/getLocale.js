@@ -31,6 +31,8 @@ The locale will be merged into template matching the params.locale key.
 
 A role check is performed to check whether the requesting user has access to the locale.
 
+Role objects in the locale and nested layers are merged with their respective parent objects.
+
 ${*} template parameter are substituted with values from SRC_* environment variables.
 
 @param {Object} params 
@@ -67,6 +69,8 @@ module.exports = async function getLocale(params) {
   if (!Roles.check(locale, params.user?.roles)) {
     return new Error('Role access denied.')
   }
+
+  locale = Roles.objMerge(locale, params.user?.roles)  
 
   // Subtitutes ${*} with process.env.SRC_* key values.
   locale = JSON.parse(

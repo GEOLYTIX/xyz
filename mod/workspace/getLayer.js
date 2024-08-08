@@ -38,6 +38,8 @@ An array layer templates defined in the layer.templates[] will be merged into th
 
 A role check is performed to check whether the requesting user has access to the locale.
 
+Role objects in the layer are merged with their respective parent objects.
+
 ${*} template parameter are substituted with values from SRC_* environment variables.
 
 The layer.key and layer.name will be assigned if missing.
@@ -96,6 +98,8 @@ module.exports = async function getLayer(params) {
   if (!Roles.check(layer, params.user?.roles)) {
     return new Error('Role access denied.')
   }
+
+  layer = Roles.objMerge(layer, params.user?.roles)
 
   // Subtitutes ${*} with process.env.SRC_* key values.
   layer = JSON.parse(

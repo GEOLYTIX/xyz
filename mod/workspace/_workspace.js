@@ -70,8 +70,6 @@ module.exports = async function getKeyMethod(req, res) {
 @description
 The method requests a JSON layer from the getLayer module.
 
-Role objects in the layer are merged with their respective parent objects.
-
 @param {req} req HTTP request.
 @param {res} res HTTP response.
 @property {Object} req.params HTTP request params.
@@ -94,8 +92,6 @@ async function layer(req, res) {
   if (layer instanceof Error) {
     return res.status(400).send(layer.message)
   }
-
-  layer = Roles.objMerge(layer, req.params.user?.roles)
 
   res.json(layer)
 }
@@ -142,8 +138,6 @@ The method requests a JSON locale from the getLocale module.
 
 All locale layers are requested from the getLayer module with `params.layers` flag.
 
-Role objects in the locale and nested layers are merged with their respective parent objects.
-
 The locale.layers{} object is reduced to an array of layer keys without the `params.layers` flag.
 
 @param {req} req HTTP request.
@@ -187,12 +181,8 @@ async function locale(req, res) {
         .filter(layer => !(layer instanceof Error))
     })
 
-    locale = Roles.objMerge(locale, req.params.user?.roles)
-
     return res.json(locale)
   }
-
-  locale = Roles.objMerge(locale, req.params.user?.roles)
   
   // Check layer access.
   locale.layers = locale.layers && Object.entries(locale.layers)
