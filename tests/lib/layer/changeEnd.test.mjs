@@ -3,7 +3,6 @@
  * @module layer/changeEndTest
  */
 
-import { it, describe, assertFalse, assertTrue } from 'codi';
 import { setView } from '../../utils/view.js';
 import { delayFunction } from '../../utils/delay.js';
 
@@ -29,7 +28,7 @@ export async function changeEndTest(mapview) {
 
             target.dispatchEvent(changeEndEvent);
 
-            await assertFalse(layer.display, 'The changeEnd() layer should not display at the default zoom level.')
+            await codi.assertFalse(layer.display, 'The changeEnd() layer should not display at the default zoom level.')
 
             await delayFunction(1000);
         });
@@ -48,7 +47,7 @@ export async function changeEndTest(mapview) {
             const target = layer.mapview.Map.getTargetElement();
 
             target.dispatchEvent(changeEndEvent);
-            assertTrue(layer.display, 'The changeEnd() layer should display at zoom level 6');
+            codi.assertTrue(layer.display, 'The changeEnd() layer should display at zoom level 6');
             await delayFunction(1000);
         });
     });
