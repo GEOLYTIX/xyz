@@ -40,23 +40,7 @@ This will give you a similar output to the normal test_view.
 
 When writing tests you will need to make use of different Codi elements to make up your test.
 
-1. The first thing will be the imports for each test.
-
-> [!NOTE]
-> cli
-
-```js
-import {} from 'codi-test-framework';
-```
-
-> [!NOTE]
-> module (Browser)
-
-```js
-import {} from 'codi';
-```
-
-2. Include the describe and it functions. These are used as the building blocks to the tests. The describe block is used to describe the overall function and what the test suite is actually trying to achive. The It block is used to make more granular descriptions of different elements/functions of the code.
+Include the describe and it functions. These are used as the building blocks to the tests. The describe block is used to describe the overall function and what the test suite is actually trying to achive. The It block is used to make more granular descriptions of different elements/functions of the code.
 
 In this example we describe what the main output should be. And then we assert the different elements that are part of the module.
 Part of this code is the `assertTrue` function that is used to check if a value is true.
