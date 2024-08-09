@@ -281,6 +281,19 @@ function getQueryFromTemplate(req, template) {
   }
 }
 
+/**
+@function executeQuery
+@async
+
+@description
+The method send a parameterised query to a database connection.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@param {Object} template Request template.
+@param {string} query SQL query.
+@property {Object} [req.params] Request params.
+*/
 async function executeQuery(req, res, template, query) {
 
   logger(query, 'query')
@@ -322,6 +335,17 @@ async function executeQuery(req, res, template, query) {
   sendRows(req, res, template, rows)
 }
 
+/**
+@function sendRows
+
+@description
+The method formats the rows returned from a SQL query and sends the formated rows through the HTTP response object.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@param {Object} template Request template.
+@param {array} rows The response from a SQL query.
+*/
 function sendRows(req, res, template, rows) {
 
   if (rows instanceof Error) {
