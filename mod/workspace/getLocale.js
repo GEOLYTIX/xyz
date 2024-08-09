@@ -40,7 +40,7 @@ ${*} template parameter are substituted with values from SRC_* environment varia
 @property {Object} [params.user] Requesting user.
 @property {Array} [user.roles] User roles.
 
-@returns {Object} JSON Locale.
+@returns {Promise<Object|Error>} JSON Locale.
 */
 module.exports = async function getLocale(params) {
 

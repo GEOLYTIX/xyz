@@ -52,7 +52,7 @@ The mergeObjectTemplates(layer) method will be called.
 @property {Object} [params.user] Requesting user.
 @property {Array} [user.roles] User roles.
 
-@returns {Object} JSON Layer.
+@returns {Promise<Object|Error>} JSON Layer.
 */
 module.exports = async function getLayer(params) {
 
