@@ -29,5 +29,6 @@ public/js/lib/*
 *.pem
 *.crt
 *.json
+!tests/assets/*.json
 !package.json
 !jsdoc*.json
