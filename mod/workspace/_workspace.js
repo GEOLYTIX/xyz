@@ -194,8 +194,34 @@ Whether the roles should be returned as an object with details.
 */
 function roles(req, res) {
 
-  // Get all roles found in workspace.
-  let roles = Roles.get(workspace)
+  const rolesSet = new Set();
+
+  (function objectEval(o, parent, key) {
+
+    if (key === 'roles') {
+      Object.keys(parent.roles).forEach(role => {
+
+        // Add role without nagation ! to roles set.
+        // The same role can not be added multiple times to the rolesSet.
+        rolesSet.add(role.replace(/^!/, ''))
+      })
+    }
+
+    // Iterate through the object tree.
+    Object.keys(o).forEach((key) => {
+      if (o[key] && typeof o[key] === 'object') {
+
+        // Call method recursive for nested objects.
+        objectEval(o[key], o, key)
+      }
+    });
+
+  })(workspace)
+
+  // Delete restricted Asterisk role.
+  rolesSet.delete('*')
+
+  const roles = Array.from(rolesSet)
 
   if(req.params.detail) {
 

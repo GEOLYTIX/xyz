@@ -6,7 +6,6 @@ const merge = require('./merge')
 
 module.exports = {
   check,
-  get,
   objMerge
 }
 
@@ -43,50 +42,6 @@ function check(obj, user_roles) {
 
   // The check fails by default.
   return false;
-}
-
-/**
-@function get
-
-@description
-The roles.get() method parses the object argument for nested roles properties.
-
-Any key from a roles object will added to Set and returned as an array from the method.
-
-@param {Object} obj Workspace object to parse for roles.
-
-@returns {Array} Returns an array of role keys from the workspace.
-*/
-function get(obj) {
-
-  const roles = new Set();
-
-  (function objectEval(o, parent, key) {
-
-    if (key === 'roles') {
-      Object.keys(parent.roles).forEach(role => {
-
-        // Add role without nagation ! to roles set.
-        // The same role can not be added multiple times to the roles set.
-        roles.add(role.replace(/^!/, ''))
-      })
-    }
-
-    // Iterate through the object tree.
-    Object.keys(o).forEach((key) => {
-      if (o[key] && typeof o[key] === 'object') {
-
-        // Call method recursive for nested objects.
-        objectEval(o[key], o, key)
-      }
-    });
-
-  })(obj)
-
-  // Delete restricted Asterisk role.
-  roles.delete('*')
-
-  return Array.from(roles)
 }
 
 function objMerge(obj, user_roles) {
