@@ -2,6 +2,8 @@
 ## /workspace/cache
 The module exports the cacheWorkspace method which returns a workspace from the module scope cache variable or call the cacheWorkspace method to cache the workspace.
 
+Default templates can be overwritten in the workspace or by providing a CUSTOM_TEMPLATES environment variable which references a JSON with templates to be merged into the workspace.
+
 @requires /provider/getFrom
 @requires /utils/merge
 
@@ -108,10 +110,12 @@ async function cacheWorkspace() {
     ...workspace.templates
   }
 
+  // A workspace must have a default locale [template]
   workspace.locale ??= {
     layers: {}
   }
 
+  // The default locale is assigned as locale in the locales object if the locales are not configured in the JSON workspace.
   workspace.locales ??= {
     locale: workspace.locale
   }

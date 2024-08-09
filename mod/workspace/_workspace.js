@@ -7,12 +7,24 @@ The Workspace API module exports the getKeyMethod() which returns a method from 
 - locales
 - roles
 
-@requires /utils/roles
+The workspace typedef object has templates, locale, locales, dbs, and roles properties. The workspace will be cached in the process by the workspace/cache module.
+
 @requires /workspace/cache
 @requires /workspace/getLocale
 @requires /workspace/getLayer
+@requires /utils/roles
 
 @module /workspace
+*/
+
+/**
+@global
+@typedef {Object} workspace
+The workspace object defines the mapp resources available in an XYZ instance.
+@property {Object} [roles] Each property of the roles object is a role which can be assigned to a user.
+@property {string} [dbs] The fallback dbs connection if not implicit in [query] template.
+@property {Object} locale The default locale which serves as a templates for all locales in workspace.
+@property {Object} locales Each property in the locales object is a locale available from this workspace.
 */
 
 const Roles = require('../utils/roles')
