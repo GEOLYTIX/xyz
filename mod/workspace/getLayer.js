@@ -1,4 +1,15 @@
 /**
+## /workspace/getLayer
+The getLayer module exports the getLayer method which is required by the query and workspace modules.
+
+The workspace is cached in the module scope to allow for the mergeObjectTemplates(layer) method to assign template objects defined in a JSON layer to the workspace.templates{}.
+
+@requires /utils/roles
+@requires /utils/merge
+@requires /workspace/cache
+@requires /workspace/getLocale
+@requires /workspace/getTemplate
+
 @module /workspace/getLayer
 */
 
@@ -12,30 +23,45 @@ const getLocale = require('./getLocale')
 
 const getTemplate = require('./getTemplate')
 
-module.exports = async (params) => {
+let workspace
 
-  // Set locale as default
-  params.locale ??= 'locale'
+/**
+@function getLayer
+@async
 
-  const workspace = await workspaceCache()
+@description
+The layer locale is requested from the getLocale module.
 
-  if (workspace instanceof Error) {
-    return workspace
-  }
+The layer object from the locale will be merged into a layer template matching the layer key.
 
-  if (!Object.hasOwn(workspace.locales, params.locale)) {
-    return new Error('Unable to validate locale param.')
-  }
+An array layer templates defined in the layer.templates[] will be merged into the layer object.
+
+A role check is performed to check whether the requesting user has access to the locale.
+
+Role objects in the layer are merged with their respective parent objects.
+
+${*} template parameter are substituted with values from SRC_* environment variables.
+
+The layer.key and layer.name will be assigned if missing.
+
+The mergeObjectTemplates(layer) method will be called.
+
+@param {Object} params 
+@property {string} [params.locale] Locale key.
+@property {string} [params.layer] Layer key.
+@property {Object} [params.user] Requesting user.
+@property {Array} [user.roles] User roles.
+
+@returns {Promise<Object|Error>} JSON Layer.
+*/
+module.exports = async function getLayer(params) {
+
+  workspace = await workspaceCache()
 
   const locale = await getLocale(params)
 
+  // getLocale will return err if role.check fails.
   if (locale instanceof Error) return locale
-
-  const roles = params.user?.roles || []
-
-  if (!Roles.check(locale, roles)) {
-    return new Error('Role access denied.')
-  }
 
   if (!Object.hasOwn(locale.layers, params.layer)) {
     return new Error('Unable to validate layer param.')
@@ -43,43 +69,37 @@ module.exports = async (params) => {
 
   let layer = locale.layers[params.layer]
 
-  // layer maybe null or undefined.
+  // layer maybe null.
   if (!layer) return;
-
-  // Return already merged layer.
-  if (layer.merged) return layer
 
   // Assign key value as key on layer object.
   layer.key ??= params.layer
 
-  // Merge layer --> template
-  if (Object.hasOwn(workspace.templates, layer.template || layer.key)) {
+  const layerTemplate = await getTemplate(layer.template || layer.key)
 
-    let template = structuredClone(await getTemplate(workspace.templates[layer.template || layer.key]))
+  if (layerTemplate && !(layerTemplate instanceof Error)) {
 
-    // Assign the error message to the template
-    template.err &&= [template.err.message];
-
-    // Merge the workspace template into the layer.
-    layer =  merge(template, layer)
+    // Merge layer --> template
+    layer = merge(layerTemplate, layer)
   }
 
   // Merge templates --> layer
-  for (const key of layer.templates || []){
+  for (const template_key of layer.templates || []){
 
-    if (!Object.hasOwn(workspace.templates, key)) continue;
+    const layerTemplate = await getTemplate(template_key)
 
-    let template =  structuredClone(await getTemplate(workspace.templates[key]))
-     // Assign the error message to the template 
-     if (Array.isArray(template.err)) {
-      template.err = template.err.map(err => err.message)
-     } else {
-      template.err &&= [template.err.message];
-     }
+    if (layerTemplate && !(layerTemplate instanceof Error)) {
 
-    // Merge the workspace template into the layer.
-    layer = merge(layer, template)
+      // Merge template --> layer
+      layer = merge(layer, layerTemplate)
+    }
   }
+
+  if (!Roles.check(layer, params.user?.roles)) {
+    return new Error('Role access denied.')
+  }
+
+  layer = Roles.objMerge(layer, params.user?.roles)
 
   // Subtitutes ${*} with process.env.SRC_* key values.
   layer = JSON.parse(
@@ -95,7 +115,46 @@ module.exports = async (params) => {
   // Assign layer key as name with no existing name on layer object.
   layer.name ??= layer.key
 
-  layer.merged = true
+  mergeObjectTemplates(layer)
 
   return layer
+}
+
+/**
+@function mergeObjectTemplates
+
+@description
+The method parses an object for a template object property. The template property value will be assigned to the workspace.templates{} object matching the template key value.
+
+The method will call itself for nested objects.
+
+@param {Object} obj 
+*/
+function mergeObjectTemplates(obj) {
+
+  if (obj === null) return;
+
+  if (obj instanceof Object && !Object.keys(obj)) return;
+
+  Object.entries(obj).forEach(entry => {
+
+    if (entry[0] === 'template' && entry[1].key) {
+
+      workspace.templates[entry[1].key] = Object.assign(workspace.templates[entry[1].key] || {}, entry[1])
+
+      return;
+    }
+
+    if (Array.isArray(entry[1])) {
+
+      entry[1].forEach(mergeObjectTemplates)
+      return;
+    }
+
+    if (entry[1] instanceof Object) {
+
+      Object.values(entry[1])?.forEach(mergeObjectTemplates)
+    }
+
+  })
 }

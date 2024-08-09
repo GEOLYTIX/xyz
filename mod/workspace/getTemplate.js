@@ -1,4 +1,11 @@
 /**
+## /workspace/getTemplate
+The module exports the getTemplate method which is required by the query, languageTemplates, getLayer, and getLocale modules.
+
+@requires /provider/getFrom
+@requires /utils/merge
+@requires /workspace/cache
+
 @module /workspace/getTemplate
 */
 
@@ -6,16 +13,45 @@ const getFrom = require('../provider/getFrom')
 
 const merge = require('../utils/merge')
 
-module.exports = async (template) => {
+const workspaceCache = require('./cache')
+
+/**
+@function getTemplate
+@async
+
+@description
+The workspace will be requested from the workspace/cache module.
+
+A template object matching the template_key param in the workspace.templates{} object will be returned from the getTemplate method.
+
+The template will be retrieved from its src if not cached.
+
+Module templates will be constructed before being returned.
+
+@param {string} template_key 
+
+@returns {Promise<Object|Error>} JSON Template
+*/
+module.exports = async function getTemplate(template_key) {
+
+  const workspace = await workspaceCache()
+
+  if (!Object.hasOwn(workspace.templates, template_key)) {
+    return new Error('Template not found.')
+  }
+
+  let template = workspace.templates[template_key]
 
   if (!template.src) {
 
     return template
   }
 
-  if (template.loaded) {
+  let response;
 
-    return template
+  if (template.cached) {
+
+    return template.cached
   }
 
   // Subtitutes ${*} with process.env.SRC_* key values.
@@ -30,7 +66,7 @@ module.exports = async (template) => {
     return template
   }
 
-  const response =  await getFrom[template.src.split(':')[0]](template.src)
+  response = await getFrom[template.src.split(':')[0]](template.src)
 
   if (response instanceof Error) {
 
@@ -59,14 +95,14 @@ module.exports = async (template) => {
   if (typeof response === 'object') {
 
     // Get template from src.
-    template = merge(response, template)
+    template.cached = merge(response, template)
+
+    return template.cached
 
   } else if (typeof response === 'string') {
 
     template.template = response
   }
-
-  template.loaded = true
 
   return template
 }
