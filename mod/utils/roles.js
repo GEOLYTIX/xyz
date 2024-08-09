@@ -6,7 +6,6 @@ const merge = require('./merge')
 
 module.exports = {
   check,
-  get,
   objMerge
 }
 
@@ -43,34 +42,6 @@ function check(obj, user_roles) {
 
   // The check fails by default.
   return false;
-}
-
-function get(obj) {
-
-  const roles = new Set();
-
-  (function objectEval(o, parent, key) {
-
-    if (key === 'roles') {
-      Object.keys(parent.roles).forEach(role => {
-
-        // Add role without nagation ! to roles set.
-        roles.add(role.replace(/^!/, ''))
-
-      })
-    }
-
-    // iterate through the object tree.
-    Object.keys(o).forEach((key) => {
-      if (o[key] && typeof o[key] === 'object') objectEval(o[key], o, key)
-    });
-
-  })(obj)
-
-  // Delete restricted Asterisk role.
-  roles.delete('*')
-
-  return Array.from(roles)
 }
 
 function objMerge(obj, user_roles) {
