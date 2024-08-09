@@ -33,10 +33,19 @@ const getLayer = require('./workspace/getLayer');
 @async
 
 @description
-The [SQL] query method builds a parameterised query from a query template and params provided as URL params or in a POST request.body.
+The [SQL] query method requests a query template from the getTemplate method and checks whether the requesting user is permitted to execute the query.
+
+The layerQuery() method must be awaited for queries that reference a layer.
+
+A template is turned into a query by the getQueryFromTemplate() method.
+
+The query is executed by the executeQuery() method.
 
 @param {req} req HTTP request.
 @param {res} res HTTP response.
+@property {Object} [req.params] Request params.
+@property {Object} [params.user] Requesting user.
+@property {Array} [user.roles] User roles.
 */
 module.exports = async function query(req, res) {
 
@@ -69,12 +78,8 @@ module.exports = async function query(req, res) {
     return res.status(403).send('Role access denied for query template.')
   }
 
-  // Array of params for parameterized queries with node-pg.
-  if (!Array.isArray(req.params.SQL)) {
-    
-    // If req.params.SQL is not an array, initialize it as an empty array
-    req.params.SQL = [];
-  }
+  // The SQL param is restricted to hold substitute values.
+  req.params.SQL = [];
 
   // Assign role filter and viewport params from layer object.
   await layerQuery(req, res)
@@ -94,6 +99,21 @@ module.exports = async function query(req, res) {
   executeQuery(req, res, template, query)
 }
 
+/**
+@function layerQuery
+@async
+
+@description
+Queries which reference a layer must be checked against the layer JSON in the workspace.
+
+Layer queries have restricted viewport and filter params. These params can not be substituted in the database but must be replaced in the SQL query string.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {Object} [req.params] Request params.
+@property {Object} [params.user] Requesting user.
+@property {Array} [user.roles] User roles.
+*/
 async function layerQuery(req, res) {
 
   if (!req.params.layer) {
@@ -107,12 +127,9 @@ async function layerQuery(req, res) {
   // Assign layer object to req.params.
   req.params.layer = await getLayer(req.params)
 
+  // getLayer will return error on role restrictions.
   if (req.params.layer instanceof Error) {
     return res.status(400).send(req.params.layer.message)
-  }
-
-  if (!Roles.check(req.params.layer, req.params.user?.roles)) {
-    return res.status(403).send('Role access denied for layer.')
   }
 
   // Set layer dbs as fallback if not implicit.
@@ -127,17 +144,17 @@ async function layerQuery(req, res) {
   // Layer queries must have a geom param.
   req.params.geom ??= req.params.layer.geom
 
-  // Create params filter string from roleFilter filter params.
+  // Create filter condition for SQL query.
   req.params.filter = [
     req.params.layer.filter?.default && `AND ${sqlFilter(req.params.layer.filter.default, req.params.SQL)}` || '',
     req.params.filter && `AND ${sqlFilter(JSON.parse(req.params.filter), req.params.SQL)}` || '']
     .join(' ')
 
+  // Create viewport condition for SQL query.
   if (req.params.viewport) {
 
     const viewport = req.params.viewport?.split(',')
 
-    // Assign viewport SQL string
     req.params.viewport &&= `
       AND
         ST_Intersects(
@@ -156,6 +173,28 @@ async function layerQuery(req, res) {
   }
 }
 
+/**
+@function getQueryFromTemplate
+
+@description
+In order to prevent SQL injections queries must be build from templates stored in the workspace.templates{}.
+
+A template may have a render method which returns a query string assigned as template.template.
+
+Parameter to be replaced in the SQL query string must be checked to only contain whitelisted character to prevent SQL injection.
+
+Any variables to be replaced on query execution in the database must be replaced with indices in the query string. eg. $1, $2, ...
+
+The substitute values are stored in the ordered params.SQL[] array.
+
+An error will be returned if the substitution fails.
+
+@param {req} req HTTP request.
+@param {Object} template Request template.
+@property {Object} [req.params] Request params.
+@property {Function} template.render Method to render template string.
+@property {string} template.template SQL template string.
+*/
 function getQueryFromTemplate(req, template) {
 
   try {
