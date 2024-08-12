@@ -1,7 +1,7 @@
 {
     "locale": {
         "plugins": [
-            "${PLUGINS}v4.8.0/coordinates.js"
+            "${PLUGINS}/v4.8.0/coordinates.js"
         ],
         "syncPlugins": [
             "zoomBtn",
