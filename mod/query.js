@@ -108,6 +108,12 @@ Queries which reference a layer must be checked against the layer JSON in the wo
 
 Layer queries have restricted viewport and filter params. These params can not be substituted in the database but must be replaced in the SQL query string.
 
+Any query which references a layer and locale will be passed through the layer query method. The getLayer method will fail return an error if the locale is not defined as param or the layer is not a member of the locale.
+
+```
+/api/query?template=query&locale=uk&layer=retail
+```
+
 @param {req} req HTTP request.
 @param {res} res HTTP response.
 @property {Object} [req.params] Request params.
