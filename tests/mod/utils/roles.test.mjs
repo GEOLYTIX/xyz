@@ -111,8 +111,8 @@ await describe('Roles Module', async () => {
             foo: {
               filter: {
                 current: {
-                  "country": {
-                    "in": ["ROI"]
+                  'country': {
+                    'in': ['ROI']
                   }
                 }
 
@@ -121,8 +121,8 @@ await describe('Roles Module', async () => {
             bar: {
               filter: {
                 current: {
-                  "country": {
-                    "in": ["UK"]
+                  'country': {
+                    'in': ['UK']
                   }
                 }
               }
@@ -130,16 +130,16 @@ await describe('Roles Module', async () => {
           }
         }
       };
-      
-      const user_roles = ["foo", "bar"];
-    
+
+      const user_roles = ['foo', 'bar'];
+
       const expected = {
         layer: {
           name: 'Test Me',
           filter: {
             current: {
-              "country": {
-                "in": ["ROI", "UK"]
+              'country': {
+                'in': ['ROI', 'UK']
               }
             }
           }

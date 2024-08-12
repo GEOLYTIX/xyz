@@ -184,7 +184,7 @@ async function locale(req, res) {
         layer: key
       }))
 
-    await Promise.all(layers).then(layers=>{
+    await Promise.all(layers).then(layers => {
 
       locale.layers = layers
         .filter(layer => !!layer)
@@ -195,7 +195,7 @@ async function locale(req, res) {
 
     return res.json(locale)
   }
-  
+
   // Check layer access.
   locale.layers = locale.layers && Object.entries(locale.layers)
 
