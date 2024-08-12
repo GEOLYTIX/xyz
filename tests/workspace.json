@@ -10,6 +10,28 @@
             "admin",
             "login"
         ],
+        "link_button": [
+            {
+                "href": "/url/url",
+                "title": "TITLE HERE",
+                "target": "_blank",
+                "css_class": "mask-icon",
+                "css_style": "mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg); -webkit-mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg);"
+            },
+            {
+                "title": "WILL NOT BE ADDED AS NO HREF",
+                "target": "_blank",
+                "css_class": "mask-icon",
+                "css_style": "mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg); -webkit-mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg);"
+            },
+            {
+                "title": "WILL BE ADDED AS HREF",
+                "href": "/url/url2",
+                "target": "_blank",
+                "css_class": "mask-icon",
+                "css_style": "mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg); -webkit-mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg);"
+            }
+        ],
         "coordinates": {},
         "layers": {
             "OSM": {
