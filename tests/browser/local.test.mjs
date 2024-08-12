@@ -10,8 +10,8 @@ import { delayFunction } from '../utils/delay.js';
 
 const mapview = await base();
 // Run the dictionary Tests
-await dictionaryTest.baseDictionaryTest();
-await dictionaryTest.keyValueDictionaryTest();
+await dictionaryTest.baseDictionaryTest(mapview);
+await dictionaryTest.keyValueDictionaryTest(mapview);
 
 
 setView(mapview, 2, 'default');

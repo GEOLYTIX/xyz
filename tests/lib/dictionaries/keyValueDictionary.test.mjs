@@ -8,34 +8,29 @@ export async function keyValueDictionaryTest(mapview) {
 
         await codi.it('should replace the key value dictionary for default value on a layer', async () => {
             // Get the OSM layer from the mapview
-            const osm = mapview.layers['osm'];
-            console.log(mapview);
+            const osm = mapview.locale.layers.find(layer => layer.key === 'OSM');
             // Check the OSM layer has the correct name
             codi.assertEqual(osm.name, 'OpenStreetMap KeyValue Dictionary');
         });
 
         await codi.it('should replace the key value dictionary for default value in an infoj', async () => {
             // Get the changeEnd layer from the mapview
-            const changeEnd = mapview.layers['changeEnd'];
-            // Check the changeEnd infoj entry of field textarea has the correct name
-            const entry = changeEnd.infoj.find(entry => entry.key === 'field');
-            // Check the changeEnd infoj entry of field textarea has the correct name
-            codi.assertEqual(entry.textarea, 'Change End KeyValue Dictionary');
+            const changeEnd = mapview.locale.layers.find(layer => layer.key === 'changeEnd');
+            // Check the changeEnd infoj entry of field textarea has the correct title
+            const entry = changeEnd.infoj.find(entry => entry.field === 'textarea');
+            // Check the changeEnd infoj entry of field textarea has the correct title
+            codi.assertEqual(entry.title, 'TextArea KeyValue Dictionary');
 
         });
 
         await codi.it('should not replace the key value dictionary for an array', async () => {
             // Get the changeEnd layer from the mapview
-            const changeEnd = mapview.layers['changeEnd'];
-            // Check the changeEnd infoj entry of field textarea has the correct name
+            const changeEnd = mapview.locale.layers.find(layer => layer.key === 'changeEnd');
+            // Check the changeEnd test_array has the correct value
             const array = changeEnd.test_array
-            const expected = {
-                'test_array': [
-                    'TEST KEYVALUE'
-                ]
-            };
+            const expected = ['TEST KEYVALUE'];
 
-            // Check the changeEnd infoj entry of field textarea has the correct name
+            // Check the changeEnd infoj entry of field textarea has the correct array value
             codi.assertEqual(array, expected);
         });
     });
