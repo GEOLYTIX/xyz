@@ -238,6 +238,10 @@ a {
   text-decoration: none;
   font-weight: bold;
   color: var(--color-primary);
+  &.mask-icon,
+  & > .mask-icon {
+    background-color: var(--color-primary);
+  }
 }
 li {
   list-style-type: none;
@@ -1666,10 +1670,4 @@ dialog > button.close {
 }
 .val-changed button {
   background-color: var(--color-changed);
-}
-a {
-  &.mask-icon,
-  & > .mask-icon {
-    background-color: var(--color-primary);
-  }
 }
