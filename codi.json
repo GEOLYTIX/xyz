@@ -1,0 +1,6 @@
+{
+    "excludeDirectories": [
+        "lib",
+        "browser"
+    ]
+}
