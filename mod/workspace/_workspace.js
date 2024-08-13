@@ -201,7 +201,7 @@ function roles(req, res) {
     if (key === 'roles') {
       Object.keys(parent.roles).forEach(role => {
 
-        // Add role without nagation ! to roles set.
+        // Add role without negation ! to roles set.
         // The same role can not be added multiple times to the rolesSet.
         rolesSet.add(role.replace(/^!/, ''))
       })
@@ -223,15 +223,17 @@ function roles(req, res) {
 
   const roles = Array.from(rolesSet)
 
+  // If detail=true, return workspace.roles{} object (so you can specify information for each role).
   if(req.params.detail) {
 
     workspace.roles ??= {}
 
-    // Assign roles from array to workspace.roles{} if missing.
+    // If the role is missing, add it to the workspace.roles{} object as an empty object.
     roles
       .filter(role => !Object.hasOwn(workspace.roles, role))
       .forEach(role => workspace.roles[role] = {})
 
+    // Return the workspace.roles{} object.
     return res.send(workspace.roles)
   }
 
