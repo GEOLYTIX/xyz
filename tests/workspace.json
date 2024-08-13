@@ -120,6 +120,10 @@
                 "draw": {
                     "circle_2pt": true,
                     "circle": {
+                        "roles": {
+                            "test": null,
+                            "super_test": null
+                        },
                         "hidePanel": true
                     },
                     "polygon": true,
