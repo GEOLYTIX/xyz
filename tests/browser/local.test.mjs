@@ -5,7 +5,7 @@ import { locationTest } from '../lib/location/_location.test.mjs';
 import { mapviewTest } from '../lib/mapview/_mapview.test.mjs';
 import { setView } from '../utils/view.js';
 import { delayFunction } from '../utils/delay.js';
-
+import {apiTest} from './_api.test.mjs';
 // import { booleanTest } from '../lib/ui/locations/entries/boolean.test.mjs';
 
 const mapview = await base();
@@ -46,3 +46,4 @@ await layerTest.styleParserTest(mapview);
 // await mapviewTest.popupTest();
 // await booleanTest();
 
+await apiTest();
