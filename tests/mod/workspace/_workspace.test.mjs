@@ -28,8 +28,9 @@ export async function workspaceTest() {
         });
 
         await codi.it('Workspace: Getting Layer', async () => {
-            const layer = await mapp.utils.xhr(`/test/api/workspace/layer?layer=fade`);
-            codi.assertEqual(layer.key, 'fade', 'Ensure that we get the fade layer from the API')
+            const layer = await mapp.utils.xhr(`/test/api/workspace/layer?layer=template_test`);
+            console.log(layer);
+            codi.assertEqual(layer.key, 'template_test', 'Ensure that we get the fade layer from the API')
         });
 
         await codi.it('Workspace: Getting Roles', async () => {
