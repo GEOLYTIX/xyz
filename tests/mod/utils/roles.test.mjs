@@ -1,5 +1,5 @@
 import { describe, it, assertEqual } from 'codi-test-framework';
-import { check, objMerge, get } from '../../../mod/utils/roles.js';
+import { check, objMerge } from '../../../mod/utils/roles.js';
 
 await describe('Roles Module', async () => {
   await describe('check()', () => {
@@ -43,20 +43,6 @@ await describe('Roles Module', async () => {
       const obj = { roles: { admin: true, user: true } };
       const result = check(obj, ['guest']);
       assertEqual(result, false);
-    });
-  });
-
-  await describe('get()', () => {
-    it('should return an array of roles from the object', () => {
-      const obj = { roles: { admin: true, user: true, '!guest': true } };
-      const result = get(obj);
-      assertEqual(result, ['admin', 'user', 'guest']);
-    });
-
-    it('should not include the * role in the returned array', () => {
-      const obj = { roles: { '*': true, admin: true } };
-      const result = get(obj);
-      assertEqual(result, ['admin']);
     });
   });
 

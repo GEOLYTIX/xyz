@@ -209,11 +209,69 @@ async function locale(req, res) {
   res.json(locale)
 }
 
+/**
+@function roles
+
+@description
+The roles method returns an array of roles returned from the roles utility.
+
+An object with detailed workspace.roles{} can be requested with the `detail=true` url parameter for the workspace/roles request.
+
+@param {req} req HTTP request.
+@param {req} res HTTP response.
+
+@property {Object} req.params 
+HTTP request parameter.
+@property {Boolean} params.detail 
+Whether the roles should be returned as an object with details.
+
+@returns {Array|Object} Returns either an array of roles as string, or an object with roles as properties.
+*/
 function roles(req, res) {
 
-  if (!workspace.locales) return res.send({})
+  const rolesSet = new Set();
 
-  let roles = Roles.get(workspace)
+  (function objectEval(o, parent, key) {
+
+    if (key === 'roles') {
+      Object.keys(parent.roles).forEach(role => {
+
+        // Add role without negation ! to roles set.
+        // The same role can not be added multiple times to the rolesSet.
+        rolesSet.add(role.replace(/^!/, ''))
+      })
+    }
+
+    // Iterate through the object tree.
+    Object.keys(o).forEach((key) => {
+      if (o[key] && typeof o[key] === 'object') {
+
+        // Call method recursive for nested objects.
+        objectEval(o[key], o, key)
+      }
+    });
+
+  })(workspace)
+
+  // Delete restricted Asterisk role.
+  rolesSet.delete('*')
+
+  const roles = Array.from(rolesSet)
+
+  // If detail=true, return workspace.roles{} object (so you can specify information for each role).
+  if (req.params.detail) {
+
+    workspace.roles ??= {}
+
+    // If the role is missing, add it to the workspace.roles{} object as an empty object.
+    roles
+      .filter(role => !Object.hasOwn(workspace.roles, role))
+      .forEach(role => workspace.roles[role] = {})
+
+    // Return the workspace.roles{} object.
+    return res.send(workspace.roles)
+  }
 
   res.send(roles)
 }
+
