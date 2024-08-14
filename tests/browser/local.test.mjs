@@ -1,4 +1,4 @@
-import { base } from '../../public/js/test/_base.test.mjs';
+import { base } from '../../public/tests/_base.test.mjs';
 import { baseDictionaryTest } from '../lib/dictionaries/_dictionaries.test.mjs';
 import { layerTest } from '../lib/layer/_layer.test.mjs';
 import { dictionaryTest } from '../lib/dictionaries/_dictionaries.test.mjs';
@@ -6,7 +6,7 @@ import { locationTest } from '../lib/location/_location.test.mjs';
 import { mapviewTest } from '../lib/mapview/_mapview.test.mjs';
 import { setView } from '../utils/view.js';
 import { delayFunction } from '../utils/delay.js';
-import {apiTest} from './_api.test.mjs';
+import { apiTest } from './_api.test.mjs';
 // import { booleanTest } from '../lib/ui/locations/entries/boolean.test.mjs';
 
 const mapview = await base();
