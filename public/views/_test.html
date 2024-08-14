@@ -324,7 +324,7 @@
         self.codi = _codi;
 
         const urlParams = new URLSearchParams(window.location.search);
-        const testFiles = urlParams.get('integrity') ? [`${window.location.origin}{{dir}}/tests/browser/integrity.test.mjs`] : [`${window.location.origin}{{dir}}/tests/browser/local.test.mjs`];
+        const testFiles = urlParams.get('integrity') ? [`${window.location.origin}{{dir}}/public/tests/integrity.test.mjs`] : [`${window.location.origin}{{dir}}/tests/browser/local.test.mjs`];
 
         try {
             let results = await runWebTests(testFiles);
