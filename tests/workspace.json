@@ -1,5 +1,15 @@
 {
+    "roles": {
+        "A": "Text about A",
+        "B": "Text about B"
+    },
     "locale": {
+        "roles": {
+            "A": null,
+            "B": null,
+            "C": null,
+            "*": null
+        },
         "plugins": [
             "${PLUGINS}v4.8.0/coordinates.js"
         ],
@@ -10,9 +20,27 @@
             "admin",
             "login"
         ],
+        "keyvalue_dictionary": [
+            {
+                "key": "name",
+                "value": "OpenStreetMap",
+                "default": "OpenStreetMap KeyValue Dictionary"
+            },
+            {
+                "key": "title",
+                "value": "textarea",
+                "default": "TextArea KeyValue Dictionary"
+            },
+            {
+                "key": "test_array",
+                "value": "TEST KEYVALUE",
+                "default": "WILL NOT BE SEEN AS ARRAY CANNOT BE UPDATED"
+            }
+        ],
         "coordinates": {},
         "layers": {
             "OSM": {
+                "name": "OpenStreetMap",
                 "display": true,
                 "format": "tiles",
                 "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
@@ -37,6 +65,9 @@
                 "geom": "geom_3857",
                 "qID": "id",
                 "toggleLocationViewEdits": true,
+                "test_array": [
+                    "TEST KEYVALUE"
+                ],
                 "style": {
                     "default": {
                         "strokeColor": "#333",

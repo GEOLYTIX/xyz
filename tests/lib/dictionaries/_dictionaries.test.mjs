@@ -1,27 +1,18 @@
 /**
- * @module dictionaries
+ * ## dictionaryTest{}
+ * The dictionary test modules are exported as an object to be used in the local.test.mjs module in the browser tests
+ * @module dictionaries 
  */
 
 /**
- * This test is used to see if all the language options at least have all of these base entries.
- * @function baseDictionaryTest
+ * @typedef {Object} dictionaryTest
+ * @property {baseDictionaryTest} baseDictionaryTest 
+ * @property {keyValueDictionaryTest} keyValueDictionaryTest
  */
-export async function baseDictionaryTest() {
-    codi.describe('All languages should have the same base language entries', () => {
-        const base_dictionary = {
-            save: '',
-            cancel: '',
-            confirm_delete: '',
-            invalid_geometry: '',
-            no_results: '',
-        }
+import { baseDictionaryTest } from './baseDictionary.test.mjs';
+import { keyValueDictionaryTest } from './keyValueDictionary.test.mjs';
 
-        Object.keys(mapp.dictionaries).forEach(language => {
-            codi.it(`${language} dictionary should have all the base keys`, () => {
-                Object.keys(base_dictionary).forEach(key => {
-                    codi.assertTrue(!!mapp.dictionaries[language][key], `${language} should have ${key}`);
-                });
-            });
-        });
-    });
-}
+export const dictionaryTest = {
+    baseDictionaryTest,
+    keyValueDictionaryTest
+};
