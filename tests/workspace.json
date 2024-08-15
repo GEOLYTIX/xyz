@@ -1,4 +1,5 @@
 {
+    "dbs": "NEON",
     "roles": {
         "A": "Text about A",
         "B": "Text about B"
@@ -393,7 +394,6 @@
                         "label": "foo",
                         "query": "data_array",
                         "template": {
-                            "dbs": "NEON",
                             "key": "data_array",
                             "template": "select array[1, 2,5,3,4]",
                             "value_only": true
