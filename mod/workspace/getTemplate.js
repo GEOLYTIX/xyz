@@ -36,6 +36,10 @@ module.exports = async function getTemplate(template_key) {
 
   const workspace = await workspaceCache()
 
+  if (workspace instanceof Error) {
+    return workspace
+  }
+
   if (!Object.hasOwn(workspace.templates, template_key)) {
     return new Error('Template not found.')
   }
