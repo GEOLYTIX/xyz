@@ -1,5 +1,5 @@
 /**
- * ## workspace()
+ * ## workspaceTest()
  * @module mod/workspace
  */
 

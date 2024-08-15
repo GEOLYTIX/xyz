@@ -6,11 +6,13 @@ import { mapviewTest } from '../lib/mapview/_mapview.test.mjs';
 import { setView } from '../utils/view.js';
 import { delayFunction } from '../utils/delay.js';
 import { workspaceTest } from '../mod/workspace/_workspace.test.mjs'
+import { queryTest } from '../mod/query.test.mjs';
 import { apiTest } from './_api.test.mjs';
 // import { booleanTest } from '../lib/ui/locations/entries/boolean.test.mjs';
 
 //API Tests
 await workspaceTest();
+await queryTest();
 
 const mapview = await base();
 // Run the dictionary Tests
