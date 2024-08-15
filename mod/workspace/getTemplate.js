@@ -89,7 +89,6 @@ module.exports = async function getTemplate(template_key) {
       template.err = err
       return template
     }
-    console.log(template);
     return template;
   }
 
