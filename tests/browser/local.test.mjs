@@ -1,5 +1,4 @@
 import { base } from '../../public/tests/_base.test.mjs';
-import { baseDictionaryTest } from '../lib/dictionaries/_dictionaries.test.mjs';
 import { layerTest } from '../lib/layer/_layer.test.mjs';
 import { dictionaryTest } from '../lib/dictionaries/_dictionaries.test.mjs';
 import { locationTest } from '../lib/location/_location.test.mjs';
