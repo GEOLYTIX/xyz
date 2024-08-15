@@ -11,7 +11,8 @@
             "*": null
         },
         "plugins": [
-            "${PLUGINS}v4.8.0/coordinates.js"
+            "${PLUGINS}v4.8.0/coordinates.js",
+            "${PLUGINS}v4.8.0/chartjs.js"
         ],
         "syncPlugins": [
             "zoomBtn",
@@ -387,15 +388,26 @@
                         "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
                     },
                     {
-                        "title": "textarea",
-                        "field": "textarea",
+                        "display": true,
+                        "type": "dataview",
+                        "label": "foo",
                         "query": "data_array",
-                        "run": true,
                         "template": {
                             "dbs": "NEON",
                             "key": "data_array",
-                            "template": "select array[1, 2,5,3,4];",
+                            "template": "select array[1, 2,5,3,4]",
                             "value_only": true
+                        },
+                        "noDataMask": "¡No Bueno!",
+                        "reload": true,
+                        "chart": {
+                            "labels": [
+                                "a",
+                                "b",
+                                "c",
+                                "d",
+                                "e"
+                            ]
                         }
                     }
                 ]
