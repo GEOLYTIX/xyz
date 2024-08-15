@@ -28,9 +28,12 @@ export async function workspaceTest() {
         });
 
         await codi.it('Workspace: Getting Layer', async () => {
-            const layer = await mapp.utils.xhr(`/test/api/workspace/layer?layer=template_test`);
-            console.log(layer);
+            let layer = await mapp.utils.xhr(`/test/api/workspace/layer?layer=template_test`);
             codi.assertEqual(layer.key, 'template_test', 'Ensure that we get the fade layer from the API')
+            codi.assertEqual(layer.infoj.length, 4, 'The infoj should always have 4 infoj entries')
+
+            layer = await mapp.utils.xhr(`/test/api/workspace/layer?layer=template_test`);
+            codi.assertEqual(layer.infoj.length, 4, 'The infoj should always have 4 infoj entries')
         });
 
         await codi.it('Workspace: Getting Roles', async () => {
