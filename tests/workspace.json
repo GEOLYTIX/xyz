@@ -7,6 +7,14 @@
     "templates": {
         "template_test": {
             "src": "file:/tests/assets/template_test.json"
+        },
+        "module_test": {
+            "type": "module",
+            "src": "file:/tests/assets/queries/get_last_location.js"
+        },
+        "get_last_location": {
+            "type": "module",
+            "src": "file:/tests/assets/queries/get_last_location.js"
         }
     },
     "locale": {
@@ -325,7 +333,38 @@
                     }
                 ]
             },
-            "template_test": {}
+            "template_test": {
+                "infoj": [
+                    {
+                        "type": "pin",
+                        "label": "ST_PointOnSurface",
+                        "field": "pin",
+                        "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
+                    },
+                    {
+                        "display": true,
+                        "type": "dataview",
+                        "label": "foo",
+                        "query": "data_array",
+                        "template": {
+                            "key": "data_array",
+                            "template": "select array[1,2,5,3,4]",
+                            "value_only": true
+                        },
+                        "noDataMask": "¡No Bueno!",
+                        "reload": true,
+                        "chart": {
+                            "labels": [
+                                "a",
+                                "b",
+                                "c",
+                                "d",
+                                "e"
+                            ]
+                        }
+                    }
+                ]
+            }
         }
     }
 }

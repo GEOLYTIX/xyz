@@ -50,8 +50,7 @@ module.exports = async function getTemplate(template_key) {
   let response;
 
   if (template.cached) {
-
-    return template.cached
+    return structuredClone(template.cached)
   }
 
   // Subtitutes ${*} with process.env.SRC_* key values.
@@ -90,6 +89,8 @@ module.exports = async function getTemplate(template_key) {
       template.err = err
       return template
     }
+    console.log(template);
+    return template;
   }
 
   if (typeof response === 'object') {
@@ -97,7 +98,7 @@ module.exports = async function getTemplate(template_key) {
     // Get template from src.
     template.cached = merge(response, template)
 
-    return template.cached
+    return structuredClone(template.cached)
 
   } else if (typeof response === 'string') {
 
