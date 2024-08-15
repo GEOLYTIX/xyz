@@ -389,12 +389,14 @@
                     {
                         "title": "textarea",
                         "field": "textarea",
+                        "query": "data_array",
+                        "run": true,
                         "template": {
+                            "dbs": "NEON",
                             "key": "data_array",
-                            "template": "select array[1, 2, 5,3,4]",
+                            "template": "select array[1, 2,5,3,4];",
                             "value_only": true
-                        },
-                        "edit": true
+                        }
                     }
                 ]
             }
