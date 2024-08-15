@@ -9,6 +9,9 @@ import { workspaceTest } from '../mod/workspace/_workspace.test.mjs'
 import { apiTest } from './_api.test.mjs';
 // import { booleanTest } from '../lib/ui/locations/entries/boolean.test.mjs';
 
+//API Tests
+await workspaceTest();
+
 const mapview = await base();
 // Run the dictionary Tests
 await dictionaryTest.baseDictionaryTest(mapview);
@@ -46,6 +49,3 @@ await layerTest.styleParserTest(mapview);
 // await mapviewTest.locateTest();
 // await mapviewTest.popupTest();
 // await booleanTest();
-
-await workspaceTest();
-await apiTest();

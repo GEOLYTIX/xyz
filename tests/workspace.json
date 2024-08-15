@@ -326,13 +326,13 @@
                 "table": "test.scratch",
                 "srid": "3857",
                 "geom": "geom_3857",
-                "qID": "_id",
+                "qID": "id",
                 "toggleLocationViewEdits": true,
                 "cluster": {
                     "distance": 30
                 },
                 "hover": {
-                    "field": "_id",
+                    "field": "id",
                     "display": "true"
                 },
                 "style": {
@@ -346,14 +346,14 @@
                         }
                     },
                     "label": {
-                        "field": "_id",
+                        "field": "id",
                         "display": "true",
                         "title": "This is an ID"
                     },
                     "labels": {
                         "ID": {
                             "display": true,
-                            "field": "_id",
+                            "field": "id",
                             "title": "This is an ID"
                         }
                     },
@@ -374,7 +374,7 @@
                 "infoj": [
                     {
                         "title": "qID",
-                        "field": "_id",
+                        "field": "id",
                         "inline": true
                     },
                     {
