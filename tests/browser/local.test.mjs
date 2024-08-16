@@ -4,6 +4,7 @@ import { layerTest } from '../lib/layer/_layer.test.mjs';
 import { dictionaryTest } from '../lib/dictionaries/_dictionaries.test.mjs';
 import { locationTest } from '../lib/location/_location.test.mjs';
 import { mapviewTest } from '../lib/mapview/_mapview.test.mjs';
+import { pluginsTest } from '../lib/plugins/_plugins.test.mjs';
 import { setView } from '../utils/view.js';
 import { delayFunction } from '../utils/delay.js';
 import { apiTest } from './_api.test.mjs';
@@ -14,7 +15,7 @@ const mapview = await base();
 await dictionaryTest.baseDictionaryTest(mapview);
 await dictionaryTest.keyValueDictionaryTest(mapview);
 
-
+await pluginsTest.linkButtonTest();
 setView(mapview, 2, 'default');
 await layerTest.changeEndTest(mapview);
 
