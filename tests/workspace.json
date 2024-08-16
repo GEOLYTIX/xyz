@@ -313,6 +313,7 @@
                 ]
             },
             "template_test": {
+                "display": true,
                 "templates": [
                     "template_infoj",
                     "template_style"
