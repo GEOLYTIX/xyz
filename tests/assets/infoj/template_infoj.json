@@ -1,0 +1,27 @@
+{
+    "infoj": [
+        {
+            "type": "pin",
+            "label": "ST_PointOnSurface",
+            "field": "pin",
+            "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
+        },
+        {
+            "display": true,
+            "type": "dataview",
+            "label": "foo",
+            "query": "data_array",
+            "noDataMask": "¡No Bueno!",
+            "reload": true,
+            "chart": {
+                "labels": [
+                    "a",
+                    "b",
+                    "c",
+                    "d",
+                    "e"
+                ]
+            }
+        }
+    ]
+}

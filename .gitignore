@@ -30,7 +30,7 @@ public/js/lib/*
 *.crt
 *.json
 !tests/*.json
-!tests/assets/*.json
+!tests/**
 !package.json
 !jsdoc*.json
 !codi.json

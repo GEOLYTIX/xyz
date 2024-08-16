@@ -1,0 +1,21 @@
+{
+    "style": {
+        "default": {
+            "icon": {
+                "fillColor": "#009992",
+                "type": "dot"
+            }
+        },
+        "labels": {
+            "ID": {
+                "display": true,
+                "field": "id",
+                "title": "This is an ID"
+            }
+        },
+        "highlight": {
+            "scale": 1.3,
+            "strokeColor": "#090"
+        }
+    }
+}
