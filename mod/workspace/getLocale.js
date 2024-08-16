@@ -18,6 +18,7 @@ const workspaceCache = require('./cache')
 
 const getTemplate = require('./getTemplate')
 
+const safeEnvReplace = require('../utils/envReplace')
 /**
 @function getLocale
 @async
@@ -72,11 +73,8 @@ module.exports = async function getLocale(params) {
 
   locale = Roles.objMerge(locale, params.user?.roles)
 
-  // Subtitutes ${*} with process.env.SRC_* key values.
-  locale = JSON.parse(
-    JSON.stringify(locale).replace(/\$\{(.*?)\}/g,
-      matched => process.env[`SRC_${matched.replace(/(^\${)|(}$)/g, '')}`])
-  )
+  // Apply the safe environment variable replacement to the locale object
+  locale = safeEnvReplace(locale);
 
   return locale
 }
