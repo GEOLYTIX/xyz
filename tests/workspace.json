@@ -15,6 +15,12 @@
         "get_last_location": {
             "type": "module",
             "src": "file:/tests/assets/queries/get_last_location.js"
+        },
+        "template_1": {
+            "src": "file:/tests/assets/infoj/template_infoj.json"
+        },
+        "template_2": {
+            "src": "file:/tests/assets/styles/template_style.json"
         }
     },
     "locale": {
@@ -310,6 +316,14 @@
                 "templates": [
                     "template_infoj",
                     "template_style"
+                ]
+            },
+            "template_test_vanilla": {
+                "hidden": true,
+                "template": "template_test",
+                "templates": [
+                    "template_1",
+                    "template_2"
                 ]
             }
         }
