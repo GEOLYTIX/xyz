@@ -72,7 +72,9 @@ module.exports = async function getTemplate(template) {
     return template
   }
 
-  response = await getFrom[template.src.split(':')[0]](template.src)
+  if (['file', 'https', 'cloudfront', 'mongodb'].includes(template.src.split(':')[0])) {
+    response = await getFrom[template.src.split(':')[0]](template.src)
+  }
 
   if (response instanceof Error) {
 
