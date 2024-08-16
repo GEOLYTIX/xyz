@@ -81,7 +81,6 @@ module.exports = async function getLayer(params) {
 
     // Merge layer --> template
     layer = merge(layerTemplate, layer)
-    mergeObjectTemplates(layer)
   }
 
   // Merge templates --> layer
@@ -93,7 +92,6 @@ module.exports = async function getLayer(params) {
 
       // Merge template --> layer
       layer = merge(layer, layerTemplate)
-      mergeObjectTemplates(layer)
     }
   }
 
@@ -116,6 +114,8 @@ module.exports = async function getLayer(params) {
 
   // Assign layer key as name with no existing name on layer object.
   layer.name ??= layer.key
+
+  mergeObjectTemplates(layer)
 
   return layer
 }
