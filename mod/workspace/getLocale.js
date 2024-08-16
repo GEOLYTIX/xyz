@@ -74,7 +74,7 @@ module.exports = async function getLocale(params) {
 
   // Subtitutes ${*} with process.env.SRC_* key values.
   locale = JSON.parse(
-    JSON.stringify(locale).replace(/\$\{([^}]+)\}/g,
+    JSON.stringify(locale).replace(/\$\{(.*?)\}/g,
       matched => process.env[`SRC_${matched.replace(/(^\${)|(}$)/g, '')}`])
   )
 

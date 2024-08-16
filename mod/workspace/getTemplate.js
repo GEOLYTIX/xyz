@@ -61,7 +61,7 @@ module.exports = async function getTemplate(template) {
   }
 
   // Subtitutes ${*} with process.env.SRC_* key values.
-  template.src = template.src.replace(/\$\{([^}]+)\}/g,
+  template.src = template.src.replace(/\$\{(.*?)\}/g,
     matched => process.env[`SRC_${matched.replace(/(^\${)|(}$)/g, '')}`]);
 
 
