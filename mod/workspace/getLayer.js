@@ -81,10 +81,11 @@ module.exports = async function getLayer(params) {
 
     // Merge layer --> template
     layer = merge(layerTemplate, layer)
+    mergeObjectTemplates(layer)
   }
 
   // Merge templates --> layer
-  for (const template_key of layer.templates || []){
+  for (const template_key of layer.templates || []) {
 
     const layerTemplate = await getTemplate(template_key)
 
@@ -92,6 +93,7 @@ module.exports = async function getLayer(params) {
 
       // Merge template --> layer
       layer = merge(layer, layerTemplate)
+      mergeObjectTemplates(layer)
     }
   }
 
@@ -111,11 +113,9 @@ module.exports = async function getLayer(params) {
           : matched
       })
   )
-  
+
   // Assign layer key as name with no existing name on layer object.
   layer.name ??= layer.key
-
-  mergeObjectTemplates(layer)
 
   return layer
 }
@@ -128,15 +128,15 @@ The method parses an object for a template object property. The template propert
 
 The method will call itself for nested objects.
 
-@param {Object} obj 
+@param {Object} layer 
 */
-function mergeObjectTemplates(obj) {
+function mergeObjectTemplates(layer) {
 
-  if (obj === null) return;
+  if (layer === null) return;
 
-  if (obj instanceof Object && !Object.keys(obj)) return;
+  if (layer instanceof Object && !Object.keys(layer)) return;
 
-  Object.entries(obj).forEach(entry => {
+  Object.entries(layer).forEach(entry => {
 
     if (entry[0] === 'template' && entry[1].key) {
 

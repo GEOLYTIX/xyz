@@ -11,6 +11,11 @@
             "type": "dataview",
             "label": "foo",
             "query": "data_array",
+            "template": {
+                "key": "data_array",
+                "template": "select array[1,2,5,3,4]",
+                "value_only": true
+            },
             "noDataMask": "¡No Bueno!",
             "reload": true,
             "chart": {

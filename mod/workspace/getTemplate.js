@@ -28,23 +28,26 @@ The template will be retrieved from its src if not cached.
 
 Module templates will be constructed before being returned.
 
-@param {string} template_key 
+@param {string} template 
 
 @returns {Promise<Object|Error>} JSON Template
 */
-module.exports = async function getTemplate(template_key) {
+module.exports = async function getTemplate(template) {
 
-  const workspace = await workspaceCache()
+  if (typeof template === 'string') {
+    const workspace = await workspaceCache()
 
-  if (workspace instanceof Error) {
-    return workspace
+    if (workspace instanceof Error) {
+      return workspace
+    }
+
+    if (!Object.hasOwn(workspace.templates, template)) {
+      return new Error('Template not found.')
+    }
+
+    template = workspace.templates[template]
+
   }
-
-  if (!Object.hasOwn(workspace.templates, template_key)) {
-    return new Error('Template not found.')
-  }
-
-  let template = workspace.templates[template_key]
 
   if (!template.src) {
 

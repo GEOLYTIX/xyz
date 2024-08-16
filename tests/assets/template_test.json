@@ -7,27 +7,6 @@
     "geom": "geom_3857",
     "qID": "id",
     "toggleLocationViewEdits": true,
-    "syncTemplates": [
-        {
-            "template": {
-                "template_key": "template_infoj",
-                "src": "file:/tests/assets/infoj/template_infoj.json"
-            }
-        },
-        {
-            "template": {
-                "template_key": "data_array",
-                "template": "select array[1,2,5,3,4]",
-                "value_only": true
-            }
-        },
-        {
-            "template": {
-                "template_key": "template_style",
-                "src": "file:/tests/assets/styles/template_style.json"
-            }
-        }
-    ],
     "cluster": {
         "distance": 30
     },
