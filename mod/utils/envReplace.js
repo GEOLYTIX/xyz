@@ -5,20 +5,26 @@
 /**
  * @function safeEnvReplace 
  * @description
- * This function safely replaces ${...} patterns in a JSON object with corresponding environment variables. Here's a breakdown of how it works:
+The function takes an object (obj) as input. This object may contain values with ${...} patterns that need to be replaced with environment variable values.
 
-1.It starts by converting the input object to a JSON string.
+It first converts the input object to a JSON string. This allows us to process the entire object structure as a single string.
 
-2.It uses a regex to find all ${...} patterns in the string. The regex /${([^}]+)}/g is safer than the original as it doesn't use a greedy quantifier, preventing potential exponential backtracking.
+The string is then split into chunks using a regex. This regex looks for ${...} patterns and splits the string so that these patterns are isolated in their own chunks.
 
-3.For each match:
-    - It adds the part of the string before the match to the result.
-    - It looks up the corresponding environment variable (prefixed with 'SRC_').
-    - It adds the value of the environment variable (or an empty string if not found) to the result.
+We set a MAX_REPLACEMENTS constant to limit the number of replacements, preventing potential DOS attacks from inputs with an excessive number of ${...} patterns.
 
-4. After processing all matches, it adds any remaining part of the string to the result.
+We use `Array.prototype.map()` to process each chunk:
 
-5. Finally, it parses the resulting string back into an object.
+If a chunk is a ${...} pattern (starts with '${' and ends with '}'):
+
+We increment a counter and check if we've exceeded MAX_REPLACEMENTS.
+We extract the content inside ${...} and prepend 'SRC_' to create the environment variable key.
+We look up this key in process.env and return its value (or an empty string if not found).
+
+If a chunk is not a ${...} pattern, we return it unchanged.
+
+After processing all chunks, we join them back into a single string.
+Finally, we parse this string back into an object and return it.
  * @param {Obeckt} obj 
  * @returns {json} safeObject 
  */
@@ -26,38 +32,34 @@ module.exports = function safeEnvReplace(obj) {
     // Convert the input object to a JSON string
     const str = JSON.stringify(obj);
 
-    // Initialize an empty result string
-    let result = '';
+    // Split the string into chunks
+    // This regex splits on ${...} patterns, keeping the patterns as separate chunks
+    const chunks = str.split(/(\$\{[^}]+\})/);
 
-    // Keep track of where we last ended in the string
-    let lastIndex = 0;
+    // Set a maximum number of replacements to prevent potential DOS attacks
+    const MAX_REPLACEMENTS = 1000; // Adjust this number based on your needs
+    let replacementCount = 0;
 
-    // Define a regex to match ${...} patterns
-    // This regex is safer as it doesn't use a greedy quantifier
-    const regex = /\$\{([^}]+)\}/g;
+    // Process each chunk
+    const result = chunks.map(chunk => {
+        // Check if the chunk is a ${...} pattern
+        if (chunk.startsWith('${') && chunk.endsWith('}')) {
+            // Increment and check the replacement count
+            if (++replacementCount > MAX_REPLACEMENTS) {
+                throw new Error('Too many replacements');
+            }
 
-    let match;
+            // Extract the environment variable name and add the 'SRC_' prefix
+            const envKey = `SRC_${chunk.slice(2, -1)}`;
 
-    // Iterate through all matches in the string
-    while ((match = regex.exec(str)) !== null) {
-        // Add the part of the string from the last match up to this match
-        result += str.slice(lastIndex, match.index);
+            // Return the environment variable value, or an empty string if not found
+            return process.env[envKey] || '';
+        }
 
-        // Construct the environment variable key
-        // match[1] is the content inside ${...}
-        const envKey = `SRC_${match[1]}`;
+        // If it's not a ${...} pattern, return the chunk as-is
+        return chunk;
+    }).join(''); // Join all processed chunks back into a single string
 
-        // Add the value of the environment variable to the result
-        // If the env variable doesn't exist, add an empty string
-        result += process.env[envKey] || '';
-
-        // Update the last index to the end of this match
-        lastIndex = regex.lastIndex;
-    }
-
-    // Add any remaining part of the string after the last match
-    result += str.slice(lastIndex);
-
-    // Parse the resulting string back into an object
+    // Parse the resulting string back into an object and return it
     return JSON.parse(result);
 }
