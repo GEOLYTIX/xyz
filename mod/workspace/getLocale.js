@@ -59,7 +59,7 @@ module.exports = async function getLocale(params) {
     ? workspace.locale
     : workspace.locales[params.locale]
 
-  const localeTemplate = params.locale && await getTemplate(params.locale.replace(/[^a-zA-Z0-9_]/g, ''))
+  const localeTemplate = params.locale && await getTemplate(params.locale.replace(/\W/g, ''))
 
   if (localeTemplate && !(localeTemplate instanceof Error)) {
 
