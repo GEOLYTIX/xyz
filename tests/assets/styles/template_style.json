@@ -2,20 +2,22 @@
     "style": {
         "default": {
             "icon": {
-                "fillColor": "#009992",
-                "type": "dot"
+                "type": "dot",
+                "fillColor": "#13336B"
             }
         },
-        "labels": {
-            "ID": {
-                "display": true,
-                "field": "id",
-                "title": "This is an ID"
+        "cluster": {
+            "icon": {
+                "type": "target",
+                "fillColor": "#E6FFFF",
+                "layers": {
+                    "1": "#13336B",
+                    "0.85": "#E6FFFF"
+                }
             }
         },
         "highlight": {
-            "scale": 1.3,
-            "strokeColor": "#090"
+            "scale": 1.3
         }
     }
 }

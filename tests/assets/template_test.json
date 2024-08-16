@@ -32,10 +32,6 @@
     "cluster": {
         "distance": 30
     },
-    "hover": {
-        "field": "id",
-        "display": "true"
-    },
     "draw": {
         "circle_2pt": true,
         "circle": {
