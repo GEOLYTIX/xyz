@@ -37,7 +37,7 @@ module.exports = function safeEnvReplace(obj) {
     const chunks = str.split(/(\$\{[^}]+\})/);
 
     // Set a maximum number of replacements to prevent potential DOS attacks
-    const MAX_REPLACEMENTS = 1000; // Adjust this number based on your needs
+    const MAX_REPLACEMENTS = 1000;
     let replacementCount = 0;
 
     // Process each chunk
