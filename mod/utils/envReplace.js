@@ -17,10 +17,10 @@ Template variables not defined in the process.env will not be replaced.
 module.exports = function envReplace(obj) {
 
   // Convert the input object to a JSON string
-  const str = JSON.stringify(obj).replace(/\$\{{1}(.*?)\}{1}/g, matched => {
+  const str = JSON.stringify(obj).replace(/\$\{([A-Za-z0-9_\s]*)\}/g, matched => {
 
     // Remove template brackets from matched param.
-    const param = matched.replace(/\$\{{1}|\}{1}/g, '')
+    const param = matched.replace(/\$\{|\}/g, '')
 
     // Find substitute value from process.env SRC_* variable.
     const change = process.env[`SRC_${param}`] || matched
