@@ -65,14 +65,16 @@ module.exports = async function getTemplate(template) {
   // Subtitutes ${*} with process.env.SRC_* key values.
   template.src = envReplace(template.src);
 
-  if (!Object.hasOwn(getFrom, template.src.split(':')[0])) {
+  const method = template.src.split(':')[0]
+
+  if (!Object.hasOwn(getFrom, method)) {
 
     // Unable to determine getFrom method.
     console.warn(`Cannot get: "${template.src}"`);
     return template
   }
 
-  response = await getFrom[template.src.split(':')[0]](template.src)
+  response = await getFrom[method](template.src)
 
   if (response instanceof Error) {
 
