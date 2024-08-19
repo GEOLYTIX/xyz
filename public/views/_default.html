@@ -640,7 +640,7 @@
     loadPlugins: true
   });
 
-  if (!locale.layers?.length && !locale instanceof Error) {
+  if (!locale.layers?.length && !(locale instanceof Error)) {
 
     mapp.ui.elements.dialog({
       css_style: 'padding: 1em; border-color: #000;',
