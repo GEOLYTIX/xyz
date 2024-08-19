@@ -15,7 +15,7 @@ const merge = require('../utils/merge')
 
 const workspaceCache = require('./cache')
 
-const safeEnvReplace = require('../utils/envReplace')
+const envReplace = require('../utils/envReplace')
 
 /**
 @function getTemplate
@@ -63,7 +63,7 @@ module.exports = async function getTemplate(template) {
   }
 
   // Subtitutes ${*} with process.env.SRC_* key values.
-  template.src = safeEnvReplace(template.src);
+  template.src = envReplace(template.src);
 
   if (!Object.hasOwn(getFrom, template.src.split(':')[0])) {
 

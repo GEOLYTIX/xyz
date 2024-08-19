@@ -18,7 +18,7 @@ const workspaceCache = require('./cache')
 
 const getTemplate = require('./getTemplate')
 
-const safeEnvReplace = require('../utils/envReplace')
+const envReplace = require('../utils/envReplace')
 /**
 @function getLocale
 @async
@@ -74,7 +74,7 @@ module.exports = async function getLocale(params) {
   locale = Roles.objMerge(locale, params.user?.roles)
 
   // Apply the safe environment variable replacement to the locale object
-  locale = safeEnvReplace(locale);
+  locale = envReplace(locale);
 
   return locale
 }
