@@ -35,6 +35,7 @@ export async function workspaceTest() {
 
             layer = await mapp.utils.xhr(`/test/api/workspace/layer?layer=template_test`);
             codi.assertEqual(layer.infoj.length, 4, 'The infoj should always have 4 infoj entries')
+            codi.assertTrue(!!layer.style, 'The layer needs to have a style object from another template')
         });
 
         await codi.it('Workspace: Getting template_test_vanilla Layer', async () => {
