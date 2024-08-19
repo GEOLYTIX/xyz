@@ -54,11 +54,15 @@ module.exports = async function languageTemplates(params) {
     ? languageTemplate[params.language]
     : languageTemplate.en;
 
+  if (typeof template !== 'string') return template
+
+  const method = template.split(':')[0]
+
   // HTML Templates must be gotten as string from [template] string.
-  if (typeof template === 'string' && Object.hasOwn(getFrom, template.split(':')[0])) {
+  if (Object.hasOwn(getFrom, method)) {
 
     // Get template from method.
-    return await getFrom[template.split(':')[0]](template)
+    return await getFrom[method](template)
   }
 
   return template
