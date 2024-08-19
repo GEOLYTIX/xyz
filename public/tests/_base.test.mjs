@@ -31,6 +31,7 @@ export async function base() {
                     layers: 'Layers',
                     locations: 'Locations',
                     no_locales: 'Your account has been verified and approved, but you do not have access to any locales. This is likely as an administrator has not given you the required roles. Please contact an administrator to resolve this.',
+                    no_layers: 'No accessible layers in locale.',
                 },
                 de: {
                     toolbar_zoom_in: 'Zoom rein',
@@ -365,9 +366,13 @@ export async function base() {
 
         if (locale instanceof Error) {
 
-            document.body.append(mapp.utils.html.node`
-  <dialog open class="modal-map">
-    ${mapp.dictionary.no_locales}`)
+            // Create the helpDialog.node
+            mapp.ui.elements.dialog({
+                css_style: 'padding: 1em; border-color: #000',
+                content: mapp.dictionary.no_locales,
+                top: '50%',
+                left: '10%'
+            });
         }
 
         // Add locale dropdown to layers panel if multiple locales are accessible.
@@ -456,6 +461,19 @@ export async function base() {
             // mapp.Mapview must be awaited.
             loadPlugins: true
         });
+
+
+        if (!locale.layers?.length) {
+
+            mapp.ui.elements.dialog({
+                css_style: 'padding: 1em; border-color: #000;',
+                content: mapp.dictionary.no_layers,
+                target: document.getElementById('Map'),
+                top: '50%',
+                left: '50%'
+            });
+
+        }
 
         // Add layers to mapview.
         await mapview.addLayer(locale.layers);
