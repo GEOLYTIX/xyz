@@ -9,11 +9,13 @@ import { delayFunction } from '../utils/delay.js';
 import { workspaceTest } from '../mod/workspace/_workspace.test.mjs'
 import { queryTest } from '../mod/query.test.mjs';
 import { apiTest } from './_api.test.mjs';
+import { userTest } from '../mod/user/_user.test.js';
 // import { booleanTest } from '../lib/ui/locations/entries/boolean.test.mjs';
 
 //API Tests
 await workspaceTest();
 await queryTest();
+await userTest.updateTest();
 
 const mapview = await base();
 // Run the dictionary Tests
