@@ -9,7 +9,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
-    <script src="https://cdn.jsdelivr.net/npm/ol@v9.1.0/dist/ol.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/ol@v10.0.0/dist/ol.js" defer></script>
 
     <!-- Load XYZ / MAPP stylesheet and library. -->
     <link rel="stylesheet" href="{{dir}}/public/css/mapp.css" />
@@ -324,7 +324,7 @@
         self.codi = _codi;
 
         const urlParams = new URLSearchParams(window.location.search);
-        const testFiles = urlParams.get('integrity') ? [`${window.location.origin}{{dir}}/tests/browser/integrity.test.mjs`] : [`${window.location.origin}{{dir}}/tests/browser/local.test.mjs`];
+        const testFiles = urlParams.get('integrity') ? [`${window.location.origin}{{dir}}/public/tests/integrity.test.mjs`] : [`${window.location.origin}{{dir}}/tests/browser/local.test.mjs`];
 
         try {
             let results = await runWebTests(testFiles);
