@@ -20,10 +20,18 @@ export async function queryTest() {
 
         await codi.it('Query: Testing Module defined in templates', async () => {
             const expected_result = {
-                '?column?': 'bar'
+                'bar': 'foo'
             }
-            const results = await mapp.utils.xhr(`/test/api/query?template=module_test&layer=template_test`);
-            codi.assertEqual(results, expected_result, 'Overding the get_last_location template should result in bar being retured from the query');
+            const results = await mapp.utils.xhr(`/test/api/query?template=module_test`);
+            codi.assertEqual(results, expected_result, 'The Module should return the basic query');
+        });
+
+        await codi.it('Query: Testing template override', async () => {
+            const expected_result = {
+                'bar': 'foo'
+            }
+            const results = await mapp.utils.xhr(`/test/api/query?template=get_last_location`);
+            codi.assertEqual(results, expected_result, 'We should we able to ovverride the get_last_location(core) template');
         });
 
     });

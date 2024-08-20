@@ -50,7 +50,8 @@ export async function workspaceTest() {
 
         await codi.it('Workspace: Getting Roles', async () => {
             const roles = await mapp.utils.xhr(`/test/api/workspace/roles`);
-            const expected_roles = ['A', 'B', 'C', 'test', 'super_test']
+
+            const expected_roles = ['A', 'B', 'C']
             codi.assertEqual(roles, expected_roles, 'Ensure that we get the correct roles from the API')
         });
 

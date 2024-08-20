@@ -6,15 +6,15 @@
     },
     "templates": {
         "template_test": {
-            "src": "file:foo"
+            "src": "file:/tests/assets/layer/template_test.json"
         },
         "module_test": {
             "type": "module",
-            "src": "file:/tests/assets/queries/get_last_location.js"
+            "src": "file:/tests/assets/queries/foo.js"
         },
         "get_last_location": {
             "type": "module",
-            "src": "file:/tests/assets/queries/get_last_location.js"
+            "src": "file:/tests/assets/queries/foo.js"
         },
         "template_1": {
             "src": "file:/tests/assets/infoj/template_infoj.json"
