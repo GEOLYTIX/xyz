@@ -12,7 +12,7 @@ module.exports = async function mergeTemplates(obj) {
     obj.err ??= []
     obj.err.push(template.err.message)
 
-    // A template matching the layer key may not exist.
+  // The template is not in the workspace.templates{}
   } else if (template instanceof Error) {
 
     // Only log error if obj.template is implicit.

@@ -3,7 +3,7 @@
 The getLocale module exports the getLocale method which is required by the getLayer and workspace modules.
 
 @requires /utils/roles
-@requires /utils/merge
+@requires /workspace/mergeTemplates
 @requires /workspace/cache
 @requires /workspace/getTemplate
 
@@ -12,11 +12,9 @@ The getLocale module exports the getLocale method which is required by the getLa
 
 const Roles = require('../utils/roles')
 
-const merge = require('../utils/merge')
+const mergeTemplates = require('./mergeTemplates')
 
 const workspaceCache = require('./cache')
-
-const getTemplate = require('./getTemplate')
 
 const envReplace = require('../utils/envReplace')
 /**
@@ -60,12 +58,7 @@ module.exports = async function getLocale(params) {
     ? workspace.locale
     : workspace.locales[params.locale]
 
-  const localeTemplate = params.locale && await getTemplate(params.locale.replace(/\W/g, ''))
-
-  if (localeTemplate && !(localeTemplate instanceof Error)) {
-
-    locale = merge(localeTemplate, locale)
-  }
+  await mergeTemplates(locale)
 
   if (!Roles.check(locale, params.user?.roles)) {
     return new Error('Role access denied.')
