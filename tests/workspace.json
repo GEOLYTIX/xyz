@@ -342,6 +342,9 @@
                     },
                     {
                         "src": "file:/tests/assets/styles/template_style.json"
+                    },
+                    {
+                        "src": "file:/tests/assets/styles/bogus_file.json"
                     }
                 ]
             },
