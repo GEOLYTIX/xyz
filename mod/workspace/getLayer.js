@@ -2,11 +2,8 @@
 ## /workspace/getLayer
 The getLayer module exports the getLayer method which is required by the query and workspace modules.
 
-The workspace is cached in the module scope to allow for the mergeObjectTemplates(layer) method to assign template objects defined in a JSON layer to the workspace.templates{}.
-
 @requires /utils/roles
 @requires /workspace/mergeTemplates
-@requires /workspace/cache
 @requires /workspace/getLocale
 
 @module /workspace/getLayer
@@ -16,11 +13,7 @@ const Roles = require('../utils/roles')
 
 const mergeTemplates = require('./mergeTemplates')
 
-const workspaceCache = require('./cache')
-
 const getLocale = require('./getLocale')
-
-let workspace
 
 /**
 @function getLayer
@@ -52,8 +45,6 @@ The mergeObjectTemplates(layer) method will be called.
 @returns {Promise<Object|Error>} JSON Layer.
 */
 module.exports = async function getLayer(params) {
-
-  workspace = await workspaceCache()
 
   const locale = await getLocale(params)
 

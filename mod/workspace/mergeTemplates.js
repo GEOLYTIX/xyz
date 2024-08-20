@@ -1,10 +1,46 @@
+/**
+## /workspace/mergeTemplates
+
+The workspace is cached in the module scope to allow for the mergeObjectTemplates(layer) method to assign template objects defined in a JSON layer to the workspace.templates{}.
+
+@requires /utils/merge
+@requires /utils/envReplace
+@requires /workspace/getTemplate
+@requires /workspace/cache
+
+@module /workspace/mergeTemplates
+*/
+
 const merge = require('../utils/merge')
 
 const envReplace = require('../utils/envReplace')
 
 const getTemplate = require('./getTemplate')
 
+const workspaceCache = require('./cache')
+
+let workspace
+
+/**
+@function mergeTemplates
+
+@description
+The mergeTemplates method will be called for a layer or locale obj.
+
+The locale or layer object will be merged with a template defined as obj.template string property.
+
+The method will check for a template matching the obj.key string property if obj.template is undefined.
+
+An array of templates can be defined as obj.templates[]. The templates will be merged into the obj in the order the template keys are in the templates[] array.
+
+@param {Object} obj 
+
+@return {Object} The layer or locale provided as obj param.
+*/
 module.exports = async function mergeTemplates(obj) {
+
+  // Cache workspace in module scope for template assignment.
+  workspace = await workspaceCache()
 
   const template = await getTemplate(obj.template || obj.key)
 
