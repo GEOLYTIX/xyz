@@ -22,19 +22,13 @@ const getLocale = require('./getLocale')
 @description
 The layer locale is requested from the getLocale module.
 
-The layer object from the locale will be merged into a layer template matching the layer key.
-
-An array layer templates defined in the layer.templates[] will be merged into the layer object.
+The mergeTemplate module will be called to merge templates into the locale object and substitute SRC_* environment variables.
 
 A role check is performed to check whether the requesting user has access to the locale.
 
 Role objects in the layer are merged with their respective parent objects.
 
-${*} template parameter are substituted with values from SRC_* environment variables.
-
 The layer.key and layer.name will be assigned if missing.
-
-The mergeObjectTemplates(layer) method will be called.
 
 @param {Object} params 
 @property {string} [params.locale] Locale key.

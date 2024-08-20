@@ -1,5 +1,5 @@
 /**
-## Workspace API
+## /workspace/getLocale
 The getLocale module exports the getLocale method which is required by the getLayer and workspace modules.
 
 @requires /utils/roles
@@ -25,13 +25,11 @@ The getLocale method requests the workspace from cache and checks whether the re
 
 The workspace.locale is assigned as locale if params.locale is undefined.
 
-The locale will be merged into template matching the params.locale key.
+The mergeTemplate module will be called to merge templates into the locale object and substitute SRC_* environment variables.
 
 A role check is performed to check whether the requesting user has access to the locale.
 
 Role objects in the locale and nested layers are merged with their respective parent objects.
-
-${*} template parameter are substituted with values from SRC_* environment variables.
 
 @param {Object} params 
 @property {string} [params.locale] Locale key.
