@@ -13,7 +13,7 @@
             "query": "data_array",
             "template": {
                 "key": "data_array",
-                "template": "select array[1,2,5,3,4]",
+                "src": "file:/tests/assets/queries/data_array.sql",
                 "value_only": true
             },
             "noDataMask": "¡No Bueno!",

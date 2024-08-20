@@ -83,7 +83,7 @@ module.exports = async function getLayer(params) {
     layer.err ??= []
     layer.err.push(layerTemplate.err.message)
 
-  // A template matching the layer key may not exist.
+    // A template matching the layer key may not exist.
   } else if (layerTemplate instanceof Error) {
 
     // This is the default condition nothing needs to be logged.
@@ -104,7 +104,7 @@ module.exports = async function getLayer(params) {
       layer.err ??= []
       layer.err.push(layerTemplate.err.message)
 
-    // A template matching the template_key does not exist.
+      // A template matching the template_key does not exist.
     } else if (layerTemplate instanceof Error) {
 
       layer.err ??= []
@@ -149,15 +149,15 @@ The method parses an object for a template object property. The template propert
 
 The method will call itself for nested objects.
 
-@param {Object} layer 
+@param {Object} obj 
 */
-function mergeObjectTemplates(layer) {
+function mergeObjectTemplates(obj) {
 
-  if (layer === null) return;
+  if (obj === null) return;
 
-  if (layer instanceof Object && !Object.keys(layer)) return;
+  if (obj instanceof Object && !Object.keys(obj)) return;
 
-  Object.entries(layer).forEach(entry => {
+  Object.entries(obj).forEach(entry => {
 
     if (entry[0] === 'template' && entry[1].key) {
 

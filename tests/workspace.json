@@ -6,7 +6,7 @@
     },
     "templates": {
         "template_test": {
-            "src": "file:/tests/assets/template_test.json"
+            "src": "file:foo"
         },
         "module_test": {
             "type": "module",
@@ -344,6 +344,10 @@
                         "src": "file:/tests/assets/styles/template_style.json"
                     }
                 ]
+            },
+            "template_foo": {
+                "template": "foo",
+                "display": true
             },
             "template_test_vanilla": {
                 "hidden": true,
