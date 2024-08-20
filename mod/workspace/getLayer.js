@@ -5,23 +5,19 @@ The getLayer module exports the getLayer method which is required by the query a
 The workspace is cached in the module scope to allow for the mergeObjectTemplates(layer) method to assign template objects defined in a JSON layer to the workspace.templates{}.
 
 @requires /utils/roles
-@requires /utils/merge
+@requires /workspace/mergeTemplates
 @requires /workspace/cache
 @requires /workspace/getLocale
-@requires /workspace/getTemplate
-
 @module /workspace/getLayer
 */
 
 const Roles = require('../utils/roles')
 
-const merge = require('../utils/merge')
+const mergeTemplates = require('./mergeTemplates')
 
 const workspaceCache = require('./cache')
 
 const getLocale = require('./getLocale')
-
-const getTemplate = require('./getTemplate')
 
 let workspace
 
@@ -75,52 +71,7 @@ module.exports = async function getLayer(params) {
   // Assign key value as key on layer object.
   layer.key ??= params.layer
 
-  const layerTemplate = await getTemplate(layer.template || layer.key)
-
-  // Failed to get template matching layer.template from template.src!
-  if (layerTemplate.err instanceof Error) {
-
-    layer.err ??= []
-    layer.err.push(layerTemplate.err.message)
-
-    // A template matching the layer key may not exist.
-  } else if (layerTemplate instanceof Error) {
-
-    // Only log error if layer.template is implicit.
-    // It is not presumed that a layer.key has a matching template.
-    if (layer.template) {
-      layer.err ??= []
-      layer.err.push(layerTemplate.message)
-    }
-
-  } else {
-
-    // Merge layer --> template
-    layer = merge(layerTemplate, layer)
-  }
-
-  // Merge templates --> layer
-  for (const template_key of layer.templates || []) {
-
-    const layerTemplate = await getTemplate(template_key)
-
-    // Failed to retrieve template matching template_key
-    if (layerTemplate.err instanceof Error) {
-
-      layer.err ??= []
-      layer.err.push(layerTemplate.err.message)
-
-      // A template matching the template_key does not exist.
-    } else if (layerTemplate instanceof Error) {
-
-      layer.err ??= []
-      layer.err.push(`${template_key}: ${layerTemplate.message}`)
-    } else {
-
-      // Merge template --> layer
-      layer = merge(layer, layerTemplate)
-    }
-  }
+  await mergeTemplates(layer)
 
   if (!Roles.check(layer, params.user?.roles)) {
     return new Error('Role access denied.')
