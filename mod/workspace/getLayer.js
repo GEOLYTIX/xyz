@@ -5,7 +5,7 @@ The getLayer module exports the getLayer method which is required by the query a
 The workspace is cached in the module scope to allow for the mergeObjectTemplates(layer) method to assign template objects defined in a JSON layer to the workspace.templates{}.
 
 @requires /utils/roles
-@requires /workspace/merge
+@requires /workspace/mergeTemplates
 @requires /workspace/cache
 @requires /workspace/getLocale
 
@@ -80,60 +80,8 @@ module.exports = async function getLayer(params) {
 
   layer = Roles.objMerge(layer, params.user?.roles)
 
-  // Subtitutes ${*} with process.env.SRC_* key values.
-  layer = JSON.parse(
-    JSON.stringify(layer).replace(/\$\{(.*?)\}/g,
-      matched => {
-        const SRC_x = `SRC_${matched.replace(/(^\${)|(}$)/g, '')}`
-        return Object.hasOwn(process.env, SRC_x)
-          ? process.env[SRC_x]
-          : matched
-      })
-  )
-
   // Assign layer key as name with no existing name on layer object.
   layer.name ??= layer.key
 
-  mergeObjectTemplates(layer)
-
   return layer
-}
-
-/**
-@function mergeObjectTemplates
-
-@description
-The method parses an object for a template object property. The template property value will be assigned to the workspace.templates{} object matching the template key value.
-
-The method will call itself for nested objects.
-
-@param {Object} obj 
-*/
-function mergeObjectTemplates(obj) {
-
-  if (obj === null) return;
-
-  if (obj instanceof Object && !Object.keys(obj)) return;
-
-  Object.entries(obj).forEach(entry => {
-
-    if (entry[0] === 'template' && entry[1].key) {
-
-      workspace.templates[entry[1].key] = Object.assign(workspace.templates[entry[1].key] || {}, entry[1])
-
-      return;
-    }
-
-    if (Array.isArray(entry[1])) {
-
-      entry[1].forEach(mergeObjectTemplates)
-      return;
-    }
-
-    if (entry[1] instanceof Object) {
-
-      Object.values(entry[1])?.forEach(mergeObjectTemplates)
-    }
-
-  })
 }
