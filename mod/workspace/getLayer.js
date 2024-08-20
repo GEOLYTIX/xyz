@@ -5,9 +5,10 @@ The getLayer module exports the getLayer method which is required by the query a
 The workspace is cached in the module scope to allow for the mergeObjectTemplates(layer) method to assign template objects defined in a JSON layer to the workspace.templates{}.
 
 @requires /utils/roles
-@requires /workspace/mergeTemplates
+@requires /workspace/merge
 @requires /workspace/cache
 @requires /workspace/getLocale
+
 @module /workspace/getLayer
 */
 
@@ -71,7 +72,7 @@ module.exports = async function getLayer(params) {
   // Assign key value as key on layer object.
   layer.key ??= params.layer
 
-  await mergeTemplates(layer)
+  layer = await mergeTemplates(layer)
 
   if (!Roles.check(layer, params.user?.roles)) {
     return new Error('Role access denied.')

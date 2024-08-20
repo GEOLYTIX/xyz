@@ -49,4 +49,6 @@ module.exports = async function mergeTemplates(obj) {
       obj = merge(obj, template)
     }
   }
+
+  return obj
 }

@@ -58,7 +58,7 @@ module.exports = async function getLocale(params) {
     ? workspace.locale
     : workspace.locales[params.locale]
 
-  await mergeTemplates(locale)
+  locale = await mergeTemplates(locale)
 
   if (!Roles.check(locale, params.user?.roles)) {
     return new Error('Role access denied.')
