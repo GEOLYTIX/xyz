@@ -86,7 +86,13 @@ module.exports = async function getLayer(params) {
     // A template matching the layer key may not exist.
   } else if (layerTemplate instanceof Error) {
 
-    // This is the default condition nothing needs to be logged.
+    // Only log error if layer.template is implicit.
+    // It is not presumed that a layer.key has a matching template.
+    if (layer.template) {
+      layer.err ??= []
+      layer.err.push(layerTemplate.message)
+    }
+
   } else {
 
     // Merge layer --> template
