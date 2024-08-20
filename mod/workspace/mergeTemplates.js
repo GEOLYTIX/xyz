@@ -23,6 +23,7 @@ let workspace
 
 /**
 @function mergeTemplates
+@async
 
 @description
 The mergeTemplates method will be called for a layer or locale obj.
@@ -39,7 +40,7 @@ An array of templates can be defined as obj.templates[]. The templates will be m
 @property {string} obj.key Fallback for lookup of template if not an implicit property.
 @property {array} [obj.templates] An array of template keys to be merged into the object.
 
-@return {Object} The layer or locale provided as obj param.
+@returns {Promise<Object>} The layer or locale provided as obj param.
 */
 module.exports = async function mergeTemplates(obj) {
 
