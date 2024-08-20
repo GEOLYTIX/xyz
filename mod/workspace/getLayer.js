@@ -77,7 +77,17 @@ module.exports = async function getLayer(params) {
 
   const layerTemplate = await getTemplate(layer.template || layer.key)
 
-  if (layerTemplate && !(layerTemplate instanceof Error)) {
+  // Failed to get template matching layer.template from template.src!
+  if (layerTemplate.err instanceof Error) {
+
+    layer.err ??= []
+    layer.err.push(layerTemplate.err.message)
+
+  // A template matching the layer key may not exist.
+  } else if (layerTemplate instanceof Error) {
+
+    // This is the default condition nothing needs to be logged.
+  } else {
 
     // Merge layer --> template
     layer = merge(layerTemplate, layer)
@@ -88,7 +98,18 @@ module.exports = async function getLayer(params) {
 
     const layerTemplate = await getTemplate(template_key)
 
-    if (layerTemplate && !(layerTemplate instanceof Error)) {
+    // Failed to retrieve template matching template_key
+    if (layerTemplate.err instanceof Error) {
+
+      layer.err ??= []
+      layer.err.push(layerTemplate.err.message)
+
+    // A template matching the template_key does not exist.
+    } else if (layerTemplate instanceof Error) {
+
+      layer.err ??= []
+      layer.err.push(`${template_key}: ${layerTemplate.message}`)
+    } else {
 
       // Merge template --> layer
       layer = merge(layer, layerTemplate)
