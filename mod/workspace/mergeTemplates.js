@@ -35,6 +35,10 @@ An array of templates can be defined as obj.templates[]. The templates will be m
 
 @param {Object} obj 
 
+@property {string} [obj.template] Key of template for the object.
+@property {string} obj.key Fallback for lookup of template if not an implicit property.
+@property {array} [obj.templates] An array of template keys to be merged into the object.
+
 @return {Object} The layer or locale provided as obj param.
 */
 module.exports = async function mergeTemplates(obj) {
