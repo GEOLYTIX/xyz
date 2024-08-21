@@ -7,7 +7,10 @@ import { pluginsTest } from '../plugins/_plugins.test.mjs';
 import { setView } from '../utils/view.js';
 import { delayFunction } from '../utils/delay.js';
 import { apiTest } from './_api.test.mjs';
+import { userTest } from '../mod/user/_user.test.js';
 // import { booleanTest } from '../lib/ui/locations/entries/boolean.test.mjs';
+
+await userTest.updateTest();
 
 const mapview = await base();
 // Run the dictionary Tests
