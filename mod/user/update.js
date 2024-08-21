@@ -65,8 +65,8 @@ module.exports = async function update(req, res) {
 
     // The value string must be split into an array for the roles field params.
     req.params.value = req.params.value?.split(',') || [];
-
   }
+
   // Assign field property from request params.
   update_user[req.params.field] = req.params.value
 
