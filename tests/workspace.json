@@ -2,7 +2,8 @@
     "dbs": "NEON",
     "roles": {
         "A": "Text about A",
-        "B": "Text about B"
+        "B": "Text about B",
+        "*": null
     },
     "templates": {
         "template_test": {
@@ -27,7 +28,8 @@
         "roles": {
             "A": null,
             "B": null,
-            "C": null
+            "C": null,
+            "*": null
         },
         "plugins": [
             "${PLUGINS}v4.8.0/coordinates.js",
