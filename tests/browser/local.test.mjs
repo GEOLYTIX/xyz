@@ -1,20 +1,23 @@
 import { base } from '../../public/tests/_base.test.mjs';
-import { baseDictionaryTest } from '../lib/dictionaries/_dictionaries.test.mjs';
 import { layerTest } from '../lib/layer/_layer.test.mjs';
 import { dictionaryTest } from '../lib/dictionaries/_dictionaries.test.mjs';
 import { locationTest } from '../lib/location/_location.test.mjs';
 import { mapviewTest } from '../lib/mapview/_mapview.test.mjs';
+import { pluginsTest } from '../plugins/_plugins.test.mjs';
 import { setView } from '../utils/view.js';
 import { delayFunction } from '../utils/delay.js';
 import { apiTest } from './_api.test.mjs';
+import { userTest } from '../mod/user/_user.test.js';
 // import { booleanTest } from '../lib/ui/locations/entries/boolean.test.mjs';
+
+await userTest.updateTest();
 
 const mapview = await base();
 // Run the dictionary Tests
 await dictionaryTest.baseDictionaryTest(mapview);
 await dictionaryTest.keyValueDictionaryTest(mapview);
 
-
+await pluginsTest.linkButtonTest();
 setView(mapview, 2, 'default');
 await layerTest.changeEndTest(mapview);
 
