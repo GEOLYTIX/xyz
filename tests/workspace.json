@@ -11,7 +11,8 @@
             "*": null
         },
         "plugins": [
-            "${PLUGINS}v4.8.0/coordinates.js"
+            "${PLUGINS}v4.8.0/coordinates.js",
+            "${PLUGINS}/v4.8.0/icon_scaling.js"
         ],
         "syncPlugins": [
             "zoomBtn",
@@ -337,6 +338,7 @@
                 ]
             },
             "feature_fields": {
+                "dbs": "NEON",
                 "icon_scaling": {
                     "icon": true
                 },
@@ -385,41 +387,6 @@
                         "field": "field_6",
                         "avgCluster": true,
                         "maxFactor": 50
-                    },
-                    "themes": {
-                        "pie_chart": {
-                            "title": "PIE CHART",
-                            "type": "pie_chart",
-                            "meta": "This is a pie chart theme, they are proportionally sized based on the value of field_6",
-                            "fields": [
-                                "field_1",
-                                "field_2",
-                                "field_3",
-                                "field_4"
-                            ],
-                            "segments": [
-                                {
-                                    "field": "field_1",
-                                    "label": "Field 1",
-                                    "fillColor": "#FF69B4"
-                                },
-                                {
-                                    "field": "field_2",
-                                    "label": "Field 2",
-                                    "fillColor": "#FFD700"
-                                },
-                                {
-                                    "field": "field_3",
-                                    "label": "Field 3",
-                                    "fillColor": "#FF4500"
-                                },
-                                {
-                                    "field": "field_4",
-                                    "label": "Field 4",
-                                    "fillColor": "#00FF00"
-                                }
-                            ]
-                        }
                     }
                 }
             }
