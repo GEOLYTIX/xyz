@@ -128,6 +128,11 @@ A mapp-layer object is a decorated JSON layer object which has been added to a m
 */
 ```
 
+### @link
+The link tag creates an inline link element which can be used to create a link inline the description.
+
+The link can reference a module and it's inline members like methods. `{@link module:/location/decorate~flyTo}`
+
 ### @example 
 
 An @example does not require a code block [\`\`\`JS] definition. At examples should be reserved for codepen examples which can be run. Code blocks should be used for code syntax highlighting in the rendered markdown.
