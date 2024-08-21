@@ -7,7 +7,8 @@
         "roles": {
             "A": null,
             "B": null,
-            "C": null
+            "C": null,
+            "*": null
         },
         "plugins": [
             "${PLUGINS}v4.8.0/coordinates.js"
