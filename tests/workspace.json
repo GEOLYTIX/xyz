@@ -396,15 +396,19 @@
                 "display": true,
                 "templates": [
                     {
+                        "key":"template_infoj",
                         "src": "file:/tests/assets/infoj/template_infoj.json"
                     },
                     {
+                        "key":"chart_queryparams",
                         "src": "file:/tests/assets/infoj/chart_queryparams.json"
                     },
                     {
+                        "key":"template_style",
                         "src": "file:/tests/assets/styles/template_style.json"
                     },
                     {
+                        "key":"bogus_file",
                         "src": "file:/tests/assets/styles/bogus_file.json"
                     }
                 ]
