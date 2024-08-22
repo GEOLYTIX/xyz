@@ -54,6 +54,4 @@ await layerTest.styleParserTest(mapview);
 // await mapviewTest.infotipTest();
 // await mapviewTest.locateTest();
 // await mapviewTest.popupTest();
-
 await ui_elementsTest.sliderTest();
-// await booleanTest();
