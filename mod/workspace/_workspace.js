@@ -35,11 +35,14 @@ const getLocale = require('./getLocale')
 
 const getLayer = require('./getLayer')
 
+const getTemplate = require('./getTemplate')
+
 const keyMethods = {
   layer,
   locale,
   locales,
   roles,
+  test,
 }
 
 let workspace;
@@ -275,3 +278,23 @@ function roles(req, res) {
   res.send(roles)
 }
 
+async function test(req, res) {
+
+  const errArr = []
+
+  for (localeKey of Object.keys(workspace.locales)) {
+
+    // Will get layer and assignTemplates to workspace.
+    await getLocale({locale: localeKey})
+  }
+
+  // From here on its Templates all the way down.
+  for (key of Object.keys(workspace.templates)) {
+
+    const template = await getTemplate(key)
+
+    if (template.err) errArr.push(`${key}: ${template.err.path}`)
+  }
+
+  res.send(errArr.flat())
+}
