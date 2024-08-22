@@ -1,0 +1,26 @@
+{
+    "infoj": [
+        {
+            "display": true,
+            "type": "dataview",
+            "label": "I'm wrong",
+            "query": "data_array_wrong",
+            "template": {
+                "key": "data_array_wrong",
+                "src": "file:/tests/assets/queries/data_arrayssssss.sql",
+                "value_only": true
+            },
+            "noDataMask": "¡No Bueno!",
+            "reload": true,
+            "chart": {
+                "labels": [
+                    "a",
+                    "b",
+                    "c",
+                    "d",
+                    "e"
+                ]
+            }
+        }
+    ]
+}

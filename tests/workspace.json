@@ -399,6 +399,12 @@
                         "src": "file:/tests/assets/infoj/template_infoj.json"
                     },
                     {
+                        "src": "file:/tests/assets/infoj/template_infoj_incorrect_src.json"
+                    },
+                    {
+                        "src": "file:/tests/assets/infoj/chart_queryparams.json"
+                    },
+                    {
                         "src": "file:/tests/assets/styles/template_style.json"
                     },
                     {
