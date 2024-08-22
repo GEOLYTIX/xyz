@@ -45,7 +45,7 @@ export async function base() {
                     layers: 'Ebenen',
                     locations: 'Orte',
                 },
-                zn: {
+                zh: {
                     toolbar_zoom_in: '放大',
                     toolbar_zoom_out: '缩小',
                     toolbar_zoom_to_area: '缩放至区域',
@@ -57,7 +57,7 @@ export async function base() {
                     layers: '图层',
                     locations: '地点',
                 },
-                zn_tw: {
+                zh_tw: {
                     toolbar_zoom_in: '放大',
                     toolbar_zoom_out: '縮小',
                     toolbar_zoom_to_area: '縮放至區域',
@@ -105,7 +105,7 @@ export async function base() {
                     layers: 'レイヤー',
                     locations: 'ロケーション',
                 },
-                es: {
+                esp: {
                     toolbar_zoom_in: 'Zoom +',
                     toolbar_zoom_out: 'Zoom -',
                     toolbar_zoom_to_area: 'Zoom al área',
