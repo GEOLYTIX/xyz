@@ -1,0 +1,23 @@
+{
+    "style": {
+        "default": {
+            "icon": {
+                "type": "dot",
+                "fillColor": "#13336B"
+            }
+        },
+        "cluster": {
+            "icon": {
+                "type": "target",
+                "fillColor": "#E6FFFF",
+                "layers": {
+                    "1": "#13336B",
+                    "0.85": "#E6FFFF"
+                }
+            }
+        },
+        "highlight": {
+            "scale": 1.3
+        }
+    }
+}
