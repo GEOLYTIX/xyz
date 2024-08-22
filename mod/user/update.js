@@ -65,12 +65,10 @@ module.exports = async function update(req, res) {
 
     // The value string must be split into an array for the roles field params.
     req.params.value = req.params.value?.split(',') || [];
-
-  } else if (req.params.field) {
-
-    // Assign field property from request params.
-    update_user[req.params.field] = req.params.value
   }
+
+  // Assign field property from request params.
+  update_user[req.params.field] = req.params.value
 
   // Create ISODate for administrator request log.
   const ISODate = new Date().toISOString().replace(/\..*/, '');
