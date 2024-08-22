@@ -11,8 +11,7 @@
             "*": null
         },
         "plugins": [
-            "${PLUGINS}v4.8.0/coordinates.js",
-            "${PLUGINS}/v4.8.0/icon_scaling.js"
+            "${PLUGINS}v4.8.0/coordinates.js"
         ],
         "syncPlugins": [
             "zoomBtn",
@@ -334,116 +333,6 @@
                         "label": "ST_PointOnSurface",
                         "field": "pin",
                         "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
-                    }
-                ]
-            },
-            "feature_fields": {
-                "dbs": "NEON",
-                "icon_scaling": {
-                    "icon": true
-                },
-                "cluster": {
-                    "distance": 50
-                },
-                "display": true,
-                "format": "wkt",
-                "table": "test.feature_fields",
-                "srid": "3857",
-                "geom": "geom_p_3857",
-                "qID": "id",
-                "draw": {
-                    "point": true
-                },
-                "toggleLocationViewEdits": true,
-                "deleteLocation": true,
-                "infoj": [
-                    {
-                        "type": "pin",
-                        "label": "ST_PointOnSurface",
-                        "field": "pin",
-                        "fieldfx": "ARRAY[ST_X(geom_p_3857),ST_Y(geom_p_3857)]",
-                        "class": "display-none"
-                    }
-                ],
-                "style": {
-                    "default": {
-                        "icon": {
-                            "type": "dot",
-                            "fillColor": "#FF0000",
-                            "scale": 1
-                        }
-                    },
-                    "cluster": {
-                        "clusterScale": 0,
-                        "icon": {
-                            "type": "dot",
-                            "fillColor": "#FF0000"
-                        }
-                    },
-                    "highlight": {
-                        "scale": 1.3
-                    },
-                    "icon_scaling": {
-                        "field": "field_6",
-                        "avgCluster": true,
-                        "maxFactor": 50
-                    }
-                }
-            },
-            "input_slider": {
-                "display": true,
-                "group": "ui_elements",
-                "format": "wkt",
-                "dbs": "NEON",
-                "table": "test.scratch",
-                "srid": "3857",
-                "geom": "geom_3857",
-                "qID": "id",
-                "toggleLocationViewEdits": true,
-                "style": {
-                    "default": {
-                        "strokeColor": "#333",
-                        "fillColor": "#fff9",
-                        "icon": {
-                            "type": "dot"
-                        }
-                    },
-                    "highlight": {
-                        "scale": 1.3,
-                        "strokeColor": "#090"
-                    }
-                },
-                "deleteLocation": true,
-                "infoj": [
-                    {
-                        "title": "qID",
-                        "field": "id",
-                        "inline": true
-                    },
-                    {
-                        "type": "key"
-                    },
-                    {
-                        "type": "pin",
-                        "label": "ST_PointOnSurface",
-                        "field": "pin",
-                        "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
-                    },
-                    {
-                        "title": "int",
-                        "field": "integer_field",
-                        "type": "integer",
-                        "formatterParams": null,
-                        "default": 0,
-                        "edit": {
-                            "range": true
-                        },
-                        "min": -100000,
-                        "max": 10000,
-                        "prefix": "£",
-                        "filter": {
-                            "type": "integer"
-                        }
                     }
                 ]
             }
