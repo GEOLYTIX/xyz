@@ -55,7 +55,7 @@ module.exports = async function mergeTemplates(obj) {
     obj.err ??= []
     obj.err.push(template.err.message)
 
-  // The template is not in the workspace.templates{}
+    // The template is not in the workspace.templates{}
   } else if (template instanceof Error) {
 
     // Only log error if obj.template is implicit.
@@ -88,6 +88,8 @@ module.exports = async function mergeTemplates(obj) {
       obj.err.push(`${template_key}: ${template.message}`)
     } else {
 
+      //The object key must not be overwritten by a template key
+      delete template.key;
       // Merge template --> obj
       obj = merge(obj, template)
     }

@@ -18,9 +18,6 @@ module.exports = function mergeDeep(target, ...sources) {
     // Iterate over object keys in source.
     for (const key in source) {
 
-      // An object key should never be overwritten in a merge process.
-      if (key === 'key') continue;
-
       if (isObject(source[key])) {
 
         // Assign empty object on key.
