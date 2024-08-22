@@ -288,7 +288,7 @@ async function test(req, res) {
     await getLocale({locale: localeKey})
   }
 
-  // From here on its Templates all the way down.
+  // From here on its 🐢 Templates all the way down.
   for (const key of Object.keys(workspace.templates)) {
 
     const template = await getTemplate(key)
