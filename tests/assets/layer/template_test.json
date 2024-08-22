@@ -1,4 +1,5 @@
 {
+    "key": "foo",
     "group": "layer",
     "format": "wkt",
     "dbs": "NEON",
