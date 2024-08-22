@@ -8,6 +8,7 @@ import { setView } from '../utils/view.js';
 import { delayFunction } from '../utils/delay.js';
 import { apiTest } from './_api.test.mjs';
 import { userTest } from '../mod/user/_user.test.js';
+import { ui_elementsTest } from '../lib/ui/elements/_elements.test.mjs';
 // import { booleanTest } from '../lib/ui/locations/entries/boolean.test.mjs';
 
 await userTest.updateTest();
@@ -48,6 +49,8 @@ await layerTest.styleParserTest(mapview);
 // await mapviewTest.infotipTest();
 // await mapviewTest.locateTest();
 // await mapviewTest.popupTest();
+
+await ui_elementsTest.sliderTest();
 // await booleanTest();
 
 await apiTest();
