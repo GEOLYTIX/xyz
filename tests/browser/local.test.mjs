@@ -10,6 +10,7 @@ import { workspaceTest } from '../mod/workspace/_workspace.test.mjs'
 import { queryTest } from '../mod/query.test.mjs';
 import { apiTest } from './_api.test.mjs';
 import { userTest } from '../mod/user/_user.test.js';
+import { ui_elementsTest } from '../lib/ui/elements/_elements.test.mjs';
 // import { booleanTest } from '../lib/ui/locations/entries/boolean.test.mjs';
 
 //API Tests
@@ -53,4 +54,6 @@ await layerTest.styleParserTest(mapview);
 // await mapviewTest.infotipTest();
 // await mapviewTest.locateTest();
 // await mapviewTest.popupTest();
+
+await ui_elementsTest.sliderTest();
 // await booleanTest();
