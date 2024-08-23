@@ -1,4 +1,12 @@
 /**
+## /workspace/cache
+The module exports the cacheWorkspace method which returns a workspace from the module scope cache variable or call the cacheWorkspace method to cache the workspace.
+
+Default templates can be overwritten in the workspace or by providing a CUSTOM_TEMPLATES environment variable which references a JSON with templates to be merged into the workspace.
+
+@requires /provider/getFrom
+@requires /utils/merge
+
 @module /workspace/cache
 */
 
@@ -14,7 +22,19 @@ let timestamp = Infinity
 
 const logger = require('../utils/logger')
 
-module.exports = () => {
+/**
+@function checkWorkspaceCache
+
+@description
+The method checks whether the module scope variable cache has been populated.
+
+The age of the cached timestamp is checked against the WORKSPACE_AGE environment variable.
+
+The cacheWorkspace method is called if the cache is invalid.
+
+@returns {workspace} JSON Workspace.
+*/
+module.exports = function checkWorkspaceCache() {
 
   // cache is null on first request for workspace.
   // cacheWorkspace is async and must be awaited.
@@ -43,6 +63,22 @@ const query_templates = require('./templates/_queries')
 
 const workspace_src = process.env.WORKSPACE?.split(':')[0]
 
+/**
+@function cacheWorkspace
+
+@description
+The workspace is retrived from the source defined in the WORKSPACE environment variable.
+
+Templates defined in the CUSTOM_TEMPLATES environment variable are spread into the default workspace.templates{}.
+
+Each locale from the workspace.locale{} is merged into the workspace.locale{} template.
+
+Locale objects get their key and name properties assigned if falsy.
+
+The workspace is assigned to the module scope cache variable and the timestamp is recorded.
+
+@returns {workspace} JSON Workspace.
+*/
 async function cacheWorkspace() {
 
   let workspace;
@@ -74,10 +110,12 @@ async function cacheWorkspace() {
     ...workspace.templates
   }
 
+  // A workspace must have a default locale [template]
   workspace.locale ??= {
     layers: {}
   }
 
+  // The default locale is assigned as locale in the locales object if the locales are not configured in the JSON workspace.
   workspace.locales ??= {
     locale: workspace.locale
   }
@@ -89,6 +127,7 @@ async function cacheWorkspace() {
     // don't merge workspace.locale with itself.
     if (workspace.locale && locale_key !== 'locale') {
 
+      // Create clone to prevent the workspace.locale from being modified.
       const locale = structuredClone(workspace.locale)
 
       merge(locale, workspace.locales[locale_key])

@@ -1,7 +1,28 @@
 {
+    "dbs": "NEON",
     "roles": {
         "A": "Text about A",
-        "B": "Text about B"
+        "B": "Text about B",
+        "*": null
+    },
+    "templates": {
+        "template_test": {
+            "src": "file:/tests/assets/layer/template_test.json"
+        },
+        "module_test": {
+            "type": "module",
+            "src": "file:/tests/assets/queries/foo.js"
+        },
+        "get_last_location": {
+            "type": "module",
+            "src": "file:/tests/assets/queries/foo.js"
+        },
+        "template_1": {
+            "src": "file:/tests/assets/infoj/template_infoj.json"
+        },
+        "template_2": {
+            "src": "file:/tests/assets/styles/template_style.json"
+        }
     },
     "locale": {
         "roles": {
@@ -11,7 +32,8 @@
             "*": null
         },
         "plugins": [
-            "${PLUGINS}v4.8.0/coordinates.js"
+            "${PLUGINS}v4.8.0/coordinates.js",
+            "${PLUGINS}v4.8.0/chartjs.js"
         ],
         "syncPlugins": [
             "zoomBtn",
@@ -173,6 +195,10 @@
                 "draw": {
                     "circle_2pt": true,
                     "circle": {
+                        "roles": {
+                            "test": null,
+                            "super_test": null
+                        },
                         "hidePanel": true
                     },
                     "polygon": true,
@@ -283,33 +309,6 @@
                     "field": "_id",
                     "display": "true"
                 },
-                "style": {
-                    "cluster": {
-                        "style": {
-                            "strokeColor": "#333",
-                            "fillColor": "#fff9",
-                            "icon": {
-                                "type": "dot"
-                            }
-                        }
-                    },
-                    "label": {
-                        "field": "_id",
-                        "display": "true",
-                        "title": "This is an ID"
-                    },
-                    "labels": {
-                        "ID": {
-                            "display": true,
-                            "field": "_id",
-                            "title": "This is an ID"
-                        }
-                    },
-                    "highlight": {
-                        "scale": 1.3,
-                        "strokeColor": "#090"
-                    }
-                },
                 "draw": {
                     "circle_2pt": true,
                     "circle": {
@@ -334,6 +333,96 @@
                         "field": "pin",
                         "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
                     }
+                ]
+            },
+            "input_slider": {
+                "display": true,
+                "group": "ui_elements",
+                "format": "wkt",
+                "dbs": "NEON",
+                "table": "test.scratch",
+                "srid": "3857",
+                "geom": "geom_3857",
+                "qID": "id",
+                "toggleLocationViewEdits": true,
+                "style": {
+                    "default": {
+                        "strokeColor": "#333",
+                        "fillColor": "#fff9",
+                        "icon": {
+                            "type": "dot"
+                        }
+                    },
+                    "highlight": {
+                        "scale": 1.3,
+                        "strokeColor": "#090"
+                    }
+                },
+                "deleteLocation": true,
+                "infoj": [
+                    {
+                        "title": "qID",
+                        "field": "id",
+                        "inline": true
+                    },
+                    {
+                        "type": "key"
+                    },
+                    {
+                        "type": "pin",
+                        "label": "ST_PointOnSurface",
+                        "field": "pin",
+                        "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
+                    },
+                    {
+                        "title": "int",
+                        "field": "integer_field",
+                        "type": "integer",
+                        "formatterParams": null,
+                        "default": 0,
+                        "edit": {
+                            "range": true
+                        },
+                        "min": -100000,
+                        "max": 10000,
+                        "prefix": "£",
+                        "filter": {
+                            "type": "integer"
+                        }
+                    }
+                ]
+            },
+            "template_test": {
+                "display": true,
+                "templates": [
+                    {
+                        "key":"template_infoj",
+                        "src": "file:/tests/assets/infoj/template_infoj.json"
+                    },
+                    {
+                        "key":"chart_queryparams",
+                        "src": "file:/tests/assets/infoj/chart_queryparams.json"
+                    },
+                    {
+                        "key":"template_style",
+                        "src": "file:/tests/assets/styles/template_style.json"
+                    },
+                    {
+                        "key":"bogus_file",
+                        "src": "file:/tests/assets/styles/bogus_file.json"
+                    }
+                ]
+            },
+            "template_foo": {
+                "template": "foo",
+                "display": true
+            },
+            "template_test_vanilla": {
+                "hidden": true,
+                "template": "template_test",
+                "templates": [
+                    "template_1",
+                    "template_2"
                 ]
             }
         }
