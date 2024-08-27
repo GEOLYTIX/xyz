@@ -22,6 +22,9 @@
         },
         "template_2": {
             "src": "file:/tests/assets/styles/template_style.json"
+        },
+        "icon_scaling_scratch": {
+            "src": "file:/tests/assets/queries/icon_scaling_scratch.sql"
         }
     },
     "locale": {
@@ -108,6 +111,10 @@
                         "src": "file:/tests/assets/layers/scratch/style.json"
                     }
                 ],
+                "tables": {
+                    "5": null,
+                    "6": "test.scratch"
+                },
                 "test_array": [
                     "TEST KEYVALUE"
                 ]
@@ -195,6 +202,20 @@
                         "filter": {
                             "type": "integer"
                         }
+                    }
+                ]
+            },
+            "icon_scaling": {
+                "display": true,
+                "templates": [
+                    {
+                        "src": "file:/tests/assets/layers/scratch/layer.json"
+                    },
+                    {
+                        "src": "file:/tests/assets/layers/scratch/style.json"
+                    },
+                    {
+                        "src": "file:/tests/assets/layers/scratch/style_icon_scaling.json"
                     }
                 ]
             },
