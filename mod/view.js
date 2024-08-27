@@ -22,12 +22,15 @@ const languageTemplates = require('./utils/languageTemplates')
 @description
 The View API method will request a view [template] from the languageTemplates module method.
 
+The optional params.msg string property may have a languageTemplate which should be assigned to the params string before the substitution of template variables.
+
 The view [template] is a HTML string. Template variables defined within a set of brackets `{{var}}` will be substituted with params property values before the view string is sent from the HTTP Response object.
 
 @param {req} req HTTP request.
 @param {res} res HTTP response.
 @property {Object} [req.params] Request params.
 @property {string} [params.template="default_view"] The view template reference.
+@property {string} [params.msg] The view template reference.
 @property {Object} [params.user] Requesting user.
 */
 module.exports = async function view(req, res) {
@@ -58,6 +61,16 @@ module.exports = async function view(req, res) {
     return;
   }
 
+  if (req.params.msg) {
+
+    // Check for languageTemplate for a message to be displayed in the template.
+    params.msg = await languageTemplates({
+      template: req.params.msg,
+      language: req.params.language
+    })
+  }
+
+  // Susbtitute template variables with string properties in params.
   const view = template.replace(/{{2}([A-Za-z][A-Za-z0-9]*)}{2}/g, matched => {
 
     // regex matches {{ or }}
