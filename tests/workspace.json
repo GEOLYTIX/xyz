@@ -7,7 +7,7 @@
     },
     "templates": {
         "template_test": {
-            "src": "file:/tests/assets/layer/template_test.json"
+            "src": "file:/tests/assets/layers/template_test.json"
         },
         "module_test": {
             "type": "module",
@@ -22,6 +22,9 @@
         },
         "template_2": {
             "src": "file:/tests/assets/styles/template_style.json"
+        },
+        "icon_scaling_scratch": {
+            "src": "file:/tests/assets/queries/icon_scaling_scratch.sql"
         }
     },
     "locale": {
@@ -97,101 +100,38 @@
             },
             "changeEnd": {
                 "display": true,
-                "group": "layer",
-                "format": "wkt",
-                "dbs": "NEON",
+                "templates": [
+                    {
+                        "src": "file:/tests/assets/layers/scratch/layer.json"
+                    },
+                    {
+                        "src": "file:/tests/assets/layers/scratch/infoj.json"
+                    },
+                    {
+                        "src": "file:/tests/assets/layers/scratch/style.json"
+                    }
+                ],
                 "tables": {
                     "5": null,
                     "6": "test.scratch"
                 },
-                "table": "test.scratch",
-                "srid": "3857",
-                "geom": "geom_3857",
-                "qID": "id",
-                "toggleLocationViewEdits": true,
                 "test_array": [
                     "TEST KEYVALUE"
-                ],
-                "style": {
-                    "default": {
-                        "strokeColor": "#333",
-                        "fillColor": "#fff9",
-                        "icon": {
-                            "type": "dot"
-                        }
-                    },
-                    "highlight": {
-                        "scale": 1.3,
-                        "strokeColor": "#090"
-                    }
-                },
-                "draw": {
-                    "circle_2pt": true,
-                    "circle": {
-                        "hidePanel": true
-                    },
-                    "polygon": true,
-                    "point": true
-                },
-                "deleteLocation": true,
-                "infoj": [
-                    {
-                        "title": "qID",
-                        "field": "id",
-                        "inline": true
-                    },
-                    {
-                        "type": "key"
-                    },
-                    {
-                        "type": "pin",
-                        "label": "ST_PointOnSurface",
-                        "field": "pin",
-                        "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
-                    },
-                    {
-                        "title": "textarea",
-                        "field": "textarea",
-                        "edit": true
-                    },
-                    {
-                        "title": "char_field",
-                        "field": "char_field"
-                    },
-                    {
-                        "title": "minutes",
-                        "field": "integer_field",
-                        "inline": true
-                    }
                 ]
             },
             "decorate": {
                 "display": false,
-                "group": "layer",
-                "format": "wkt",
-                "dbs": "NEON",
-                "tables": {
-                    "5": null,
-                    "6": "test.scratch"
-                },
-                "table": "test.scratch",
-                "srid": "3857",
-                "geom": "geom_3857",
-                "qID": "id",
-                "toggleLocationViewEdits": true,
-                "style": {
-                    "default": {
-                        "strokeColor": "#333",
-                        "fillColor": "#fff9",
-                        "icon": {
-                            "type": "dot"
-                        }
+                "templates": [
+                    {
+                        "src": "file:/tests/assets/layers/scratch/layer.json"
                     },
-                    "highlight": {
-                        "scale": 1.3,
-                        "strokeColor": "#090"
+                    {
+                        "src": "file:/tests/assets/layers/scratch/infoj.json"
+                    },
+                    {
+                        "src": "file:/tests/assets/layers/scratch/style.json"
                     }
-                },
+                ],
                 "draw": {
                     "circle_2pt": true,
                     "circle": {
@@ -204,176 +144,49 @@
                     "polygon": true,
                     "point": true
                 },
-                "deleteLocation": true,
                 "infoj_skip": [
                     "textarea"
-                ],
-                "infoj": [
-                    {
-                        "title": "qID",
-                        "field": "id",
-                        "inline": true
-                    },
-                    {
-                        "type": "key"
-                    },
-                    {
-                        "type": "pin",
-                        "label": "ST_PointOnSurface",
-                        "field": "pin",
-                        "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
-                    },
-                    {
-                        "title": "textarea",
-                        "field": "textarea",
-                        "edit": true
-                    },
-                    {
-                        "title": "char_field",
-                        "field": "char_field"
-                    },
-                    {
-                        "title": "minutes",
-                        "field": "integer_field",
-                        "inline": true
-                    }
                 ]
             },
             "fade": {
                 "display": true,
-                "group": "layer",
-                "fade": true,
-                "format": "wkt",
-                "dbs": "NEON",
-                "table": "test.uk_geometries",
-                "srid": "3857",
-                "geom": "geom_3857",
-                "qID": "_id",
-                "toggleLocationViewEdits": true,
-                "cluster": {
-                    "distance": 30
-                },
-                "style": {
-                    "default": {
-                        "strokeColor": "#333",
-                        "fillColor": "#fff9",
-                        "icon": {
-                            "type": "dot"
-                        }
-                    },
-                    "highlight": {
-                        "scale": 1.3,
-                        "strokeColor": "#090"
-                    }
-                },
-                "draw": {
-                    "circle_2pt": true,
-                    "circle": {
-                        "hidePanel": true
-                    },
-                    "polygon": true,
-                    "point": true
-                },
-                "deleteLocation": true,
-                "infoj": [
+                "templates": [
                     {
-                        "title": "qID",
-                        "field": "_id",
-                        "inline": true
+                        "src": "file:/tests/assets/layers/scratch/layer.json"
                     },
                     {
-                        "type": "key"
+                        "src": "file:/tests/assets/layers/scratch/infoj.json"
                     },
                     {
-                        "type": "pin",
-                        "label": "ST_PointOnSurface",
-                        "field": "pin",
-                        "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
+                        "src": "file:/tests/assets/layers/scratch/style.json"
                     }
                 ]
             },
             "styleParser": {
-                "display": true,
-                "group": "layer",
-                "format": "wkt",
-                "dbs": "NEON",
-                "table": "test.uk_geometries",
-                "srid": "3857",
-                "geom": "geom_3857",
-                "qID": "_id",
-                "toggleLocationViewEdits": true,
-                "cluster": {
-                    "distance": 30
-                },
-                "hover": {
-                    "field": "_id",
-                    "display": "true"
-                },
-                "draw": {
-                    "circle_2pt": true,
-                    "circle": {
-                        "hidePanel": true
-                    },
-                    "polygon": true,
-                    "point": true
-                },
-                "deleteLocation": true,
-                "infoj": [
+                "templates": [
                     {
-                        "title": "qID",
-                        "field": "_id",
-                        "inline": true
+                        "src": "file:/tests/assets/layers/uk_geometries/layer.json"
                     },
                     {
-                        "type": "key"
-                    },
-                    {
-                        "type": "pin",
-                        "label": "ST_PointOnSurface",
-                        "field": "pin",
-                        "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
+                        "src": "file:/tests/assets/layers/uk_geometries/infoj.json"
                     }
                 ]
             },
             "input_slider": {
                 "display": true,
                 "group": "ui_elements",
-                "format": "wkt",
-                "dbs": "NEON",
-                "table": "test.scratch",
-                "srid": "3857",
-                "geom": "geom_3857",
-                "qID": "id",
-                "toggleLocationViewEdits": true,
-                "style": {
-                    "default": {
-                        "strokeColor": "#333",
-                        "fillColor": "#fff9",
-                        "icon": {
-                            "type": "dot"
-                        }
+                "templates": [
+                    {
+                        "src": "file:/tests/assets/layers/scratch/layer.json"
                     },
-                    "highlight": {
-                        "scale": 1.3,
-                        "strokeColor": "#090"
+                    {
+                        "src": "file:/tests/assets/layers/scratch/infoj.json"
+                    },
+                    {
+                        "src": "file:/tests/assets/layers/scratch/style.json"
                     }
-                },
-                "deleteLocation": true,
+                ],
                 "infoj": [
-                    {
-                        "title": "qID",
-                        "field": "id",
-                        "inline": true
-                    },
-                    {
-                        "type": "key"
-                    },
-                    {
-                        "type": "pin",
-                        "label": "ST_PointOnSurface",
-                        "field": "pin",
-                        "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
-                    },
                     {
                         "title": "int",
                         "field": "integer_field",
@@ -392,23 +205,37 @@
                     }
                 ]
             },
+            "icon_scaling": {
+                "display": true,
+                "templates": [
+                    {
+                        "src": "file:/tests/assets/layers/scratch/layer.json"
+                    },
+                    {
+                        "src": "file:/tests/assets/layers/scratch/style.json"
+                    },
+                    {
+                        "src": "file:/tests/assets/layers/scratch/style_icon_scaling.json"
+                    }
+                ]
+            },
             "template_test": {
                 "display": true,
                 "templates": [
                     {
-                        "key":"template_infoj",
+                        "key": "template_infoj",
                         "src": "file:/tests/assets/infoj/template_infoj.json"
                     },
                     {
-                        "key":"chart_queryparams",
+                        "key": "chart_queryparams",
                         "src": "file:/tests/assets/infoj/chart_queryparams.json"
                     },
                     {
-                        "key":"template_style",
+                        "key": "template_style",
                         "src": "file:/tests/assets/styles/template_style.json"
                     },
                     {
-                        "key":"bogus_file",
+                        "key": "bogus_file",
                         "src": "file:/tests/assets/styles/bogus_file.json"
                     }
                 ]
