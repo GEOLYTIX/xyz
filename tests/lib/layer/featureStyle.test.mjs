@@ -27,7 +27,7 @@ export async function featureStyleTest(mapview) {
             //Setting the dataset's icon_scaling value to null
             await mapp.utils.xhr(`/test/api/query?template=icon_scaling_scratch&value=null`);
             //Getting the layer from the mapview
-            const layer = mapview.layers['icon_scaling'];
+            let layer = mapview.layers['icon_scaling'];
             //Get a location id to perform a get with
             const lastLocation = await mapp.utils.xhr(`${mapp.host}/api/query?template=get_last_location&locale=locale&layer=icon_scaling`);
 
@@ -48,9 +48,8 @@ export async function featureStyleTest(mapview) {
             //Update the location (This should retrigger the process)
             await location.update();
             //Check that the layers icon_scale.max is no longer 0 but 300
-            codi.assertEqual(layer.style.icon_scaling.max, 300, `After updating the location we should now have a max value of 300, we got ${layer.style.icon_scaling.max}`);
+            codi.assertEqual(maxFeatureFields, '300', `After updating the location we should now have a max value of 300, we got ${maxFeatureFields}`);
 
-            //Reset everything to null after the test is done
             await mapp.utils.xhr(`/test/api/query?template=icon_scaling_scratch&value=null`);
         });
     });
