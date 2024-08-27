@@ -36,7 +36,7 @@ await layerTest.fadeTest(mapview);
 // await layerTest.featureFilterTest();
 // await layerTest.featureFormatsTest();
 // await layerTest.featureHoverTest();
-// await layerTest.featureStyleTest();
+await layerTest.featureStyleTest(mapview);
 await layerTest.styleParserTest(mapview);
 
 // await locationTest.createTest();
