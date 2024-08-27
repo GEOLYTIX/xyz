@@ -212,6 +212,9 @@
                         "src": "file:/tests/assets/layers/scratch/layer.json"
                     },
                     {
+                        "src": "file:/tests/assets/layers/scratch/style.json"
+                    },
+                    {
                         "src": "file:/tests/assets/layers/scratch/style_icon_scaling.json"
                     }
                 ]
