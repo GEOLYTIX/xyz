@@ -11,13 +11,5 @@
             "scale": 1.3,
             "strokeColor": "#090"
         }
-    },
-    "draw": {
-        "circle_2pt": true,
-        "circle": {
-            "hidePanel": true
-        },
-        "polygon": true,
-        "point": true
     }
 }
