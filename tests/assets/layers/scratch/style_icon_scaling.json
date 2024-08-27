@@ -10,6 +10,10 @@
         "highlight": {
             "scale": 1.3,
             "strokeColor": "#090"
+        },
+        "icon_scaling": {
+            "field": "icon_scale",
+            "cluster": "avg"
         }
     }
 }
