@@ -1,0 +1,8 @@
+{
+    "style": {
+        "icon_scaling": {
+            "field": "icon_scale",
+            "cluster": "avg"
+        }
+    }
+}
