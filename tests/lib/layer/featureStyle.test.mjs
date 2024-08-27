@@ -17,8 +17,8 @@ export async function featureStyleTest(mapview) {
                 return entry;
             });
 
-            location.update();
-            console.log(layer);
+            await location.update();
+            codi.assertEqual(layer.style.icon_scaling.max, 300, 'After updating a location the max value should be 300');
         });
     });
 }
