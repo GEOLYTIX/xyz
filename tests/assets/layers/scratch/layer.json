@@ -1,0 +1,46 @@
+{
+    "display": true,
+    "group": "layer",
+    "format": "wkt",
+    "dbs": "NEON",
+    "tables": {
+        "5": null,
+        "6": "test.scratch"
+    },
+    "table": "test.scratch",
+    "srid": "3857",
+    "geom": "geom_3857",
+    "qID": "id",
+    "toggleLocationViewEdits": true,
+    "deleteLocation": true,
+    "infoj": [
+        {
+            "title": "qID",
+            "field": "id",
+            "inline": true
+        },
+        {
+            "type": "key"
+        },
+        {
+            "type": "pin",
+            "label": "ST_PointOnSurface",
+            "field": "pin",
+            "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
+        },
+        {
+            "title": "textarea",
+            "field": "textarea",
+            "edit": true
+        },
+        {
+            "title": "char_field",
+            "field": "char_field"
+        },
+        {
+            "title": "minutes",
+            "field": "integer_field",
+            "inline": true
+        }
+    ]
+}
