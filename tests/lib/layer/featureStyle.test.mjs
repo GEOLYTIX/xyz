@@ -13,6 +13,14 @@ export async function featureStyleTest(mapview) {
 
         /**
          * ### The max value should be set after we update a location.
+         * 1. Reset the datasets's icon_scaling field to null
+         * 2. Get the layer from the mapview
+         * 3. Get an id to perform a select on.
+         * 4. Get the location.
+         * 5. Set the newValue of the icon_scale field 
+         * 6. Update the location.
+         * 7. Assert that we have a new max value
+         * 8. Reset the icon_scale field to null
          * @function it
         */
         await codi.it('featureStyle: Icon Scaling', async () => {
