@@ -143,54 +143,15 @@
             },
             "fade": {
                 "display": true,
-                "group": "layer",
-                "fade": true,
-                "format": "wkt",
-                "dbs": "NEON",
-                "table": "test.uk_geometries",
-                "srid": "3857",
-                "geom": "geom_3857",
-                "qID": "_id",
-                "toggleLocationViewEdits": true,
-                "cluster": {
-                    "distance": 30
-                },
-                "style": {
-                    "default": {
-                        "strokeColor": "#333",
-                        "fillColor": "#fff9",
-                        "icon": {
-                            "type": "dot"
-                        }
-                    },
-                    "highlight": {
-                        "scale": 1.3,
-                        "strokeColor": "#090"
-                    }
-                },
-                "draw": {
-                    "circle_2pt": true,
-                    "circle": {
-                        "hidePanel": true
-                    },
-                    "polygon": true,
-                    "point": true
-                },
-                "deleteLocation": true,
-                "infoj": [
+                "templates": [
                     {
-                        "title": "qID",
-                        "field": "_id",
-                        "inline": true
+                        "src": "file:/tests/assets/layers/scratch/layer.json"
                     },
                     {
-                        "type": "key"
+                        "src": "file:/tests/assets/layers/scratch/infoj.json"
                     },
                     {
-                        "type": "pin",
-                        "label": "ST_PointOnSurface",
-                        "field": "pin",
-                        "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
+                        "src": "file:/tests/assets/layers/scratch/style.json"
                     }
                 ]
             },
