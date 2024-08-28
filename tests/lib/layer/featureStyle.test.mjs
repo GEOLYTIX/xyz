@@ -47,8 +47,9 @@ export async function featureStyleTest(mapview) {
 
             //Update the location (This should retrigger the process)
             await location.update();
-            //Check that the layers icon_scale.max is no longer 0 but 300
-            // codi.assertEqual(maxFeatureFields, '300', `After updating the location we should now have a max value of 300, we got ${maxFeatureFields}`);
+            console.log(mapview);
+            //WE NEED AN ASSERTION HERE
+            // codi.assertEqual(CONDITION, EXPECT, `We are expecting the condition to equal the expect`);
 
             await mapp.utils.xhr(`/test/api/query?template=icon_scaling_scratch&value=null`);
         });
