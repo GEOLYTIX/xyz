@@ -28,6 +28,50 @@
         }
     },
     "locale": {
+        "pinscale":6,
+        "listview_record": [
+            {
+              "symbol": "A",
+              "colour": "#2E6F9E",
+              "scale": 12
+            },
+            {
+              "symbol": "B",
+              "colour": "#EC602D"
+            },
+            {
+              "symbol": "C",
+              "colour": "#5B8C5A"
+            },
+            {
+              "symbol": "D",
+              "colour": "#B84444"
+            },
+            {
+              "symbol": "E",
+              "colour": "#514E7E"
+            },
+            {
+              "symbol": "F",
+              "colour": "#E7C547"
+            },
+            {
+              "symbol": "G",
+              "colour": "#368F8B"
+            },
+            {
+              "symbol": "H",
+              "colour": "#841C47"
+            },
+            {
+              "symbol": "I",
+              "colour": "#61A2D1"
+            },
+            {
+              "symbol": "J",
+              "colour": "#37327F"
+            }
+        ],
         "roles": {
             "A": null,
             "B": null,
@@ -250,6 +294,29 @@
                 "templates": [
                     "template_1",
                     "template_2"
+                ]
+            },
+            "pin": {
+                "dbs": "NEON",
+                "table": "scratch",
+                "format": "wkt",
+                "geom": "geom_3857",
+                "group": "layer",
+                "qID": "id",
+                "srid": 3857,
+                "templates": [
+                    "template_2"
+                ],
+                "infoj":[
+                    {
+                        "type": "pin",
+                        "label": "ST_PointOnSurface",
+                        "field": "pin",
+                        "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]",
+                        "style":{
+                            "scale": 1
+                        }
+                    }
                 ]
             }
         }
