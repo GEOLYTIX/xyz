@@ -19,8 +19,10 @@ await queryTest();
 await userTest.updateTest();
 
 const mapview = await base();
+
 // Run the dictionary Tests
 await dictionaryTest.baseDictionaryTest(mapview);
+await dictionaryTest.unknownLanguageTest(mapview);
 await dictionaryTest.keyValueDictionaryTest(mapview);
 
 await pluginsTest.linkButtonTest();
