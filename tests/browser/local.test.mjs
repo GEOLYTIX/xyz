@@ -19,8 +19,10 @@ await queryTest();
 await userTest.updateTest();
 
 const mapview = await base();
+
 // Run the dictionary Tests
 await dictionaryTest.baseDictionaryTest(mapview);
+await dictionaryTest.unknownLanguageTest(mapview);
 await dictionaryTest.keyValueDictionaryTest(mapview);
 
 await pluginsTest.linkButtonTest();
@@ -34,9 +36,9 @@ setView(mapview, 2, 'default');
 await layerTest.fadeTest(mapview);
 // await layerTest.featureFieldsTest();
 // await layerTest.featureFilterTest();
-// await layerTest.featureFormatsTest();
+await layerTest.featureFormatsTest();
 // await layerTest.featureHoverTest();
-// await layerTest.featureStyleTest();
+//await layerTest.featureStyleTest(mapview);
 await layerTest.styleParserTest(mapview);
 
 // await locationTest.createTest();
