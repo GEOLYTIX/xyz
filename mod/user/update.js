@@ -107,7 +107,6 @@ module.exports = async function update(req, res) {
     return res.status(400).send('Invalid key in user object for SQL update.')
   }
 
-
   const properties = []
   const substitutes = [update_user.email]
 
