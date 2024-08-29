@@ -118,7 +118,6 @@ module.exports = async function update(req, res) {
       properties.push(`${key} = $${substitutes.length}`)
     })
 
-
   const update_query = `
     UPDATE acl_schema.acl_table
     SET 
