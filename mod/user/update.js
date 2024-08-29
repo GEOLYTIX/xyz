@@ -115,6 +115,8 @@ module.exports = async function update(req, res) {
       properties.push(`${key} = $${substitutes.length}`)
     })
 
+  if (!update_user.email) { return res.status(500).send('Email address required.') }
+
   const update_query = `
     UPDATE acl_schema.acl_table
     SET 
