@@ -1,7 +1,15 @@
-export async function featureStyleTest() {
-    codi.describe('TODO: Layer: featureStyleTest', () => {
-        codi.it('Should should test for something', () => {
-            //TODO
-        });
+/**
+ * ## queryTest()
+ * @module lib/layer/featureStyle
+ */
+
+/**
+ * This function is used to test the query API endpoint
+ * @function featureStyleTest
+ * @param {Object} mapview 
+*/
+export async function featureStyleTest(mapview) {
+    await codi.describe('TODO: Layer: featureStyleTest', async () => {
+        //TODO
     });
 }

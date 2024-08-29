@@ -444,7 +444,7 @@ export async function base() {
             host: mapp.host,
             target: OL,
             locale: locale,
-            hooks: true,
+            hooks: false,
             scrollWheelZoom: true,
             attribution: {
                 target: document.getElementById('Map'),
