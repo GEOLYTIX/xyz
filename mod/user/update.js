@@ -104,6 +104,8 @@ module.exports = async function update(req, res) {
     return res.status(400).send('Invalid key in user object for SQL update.')
   }
 
+  if (!update_user.email) { return res.status(500).send('Email address required.') }
+
   const properties = []
   const substitutes = [update_user.email]
 
@@ -115,7 +117,6 @@ module.exports = async function update(req, res) {
       properties.push(`${key} = $${substitutes.length}`)
     })
 
-  if (!update_user.email) { return res.status(500).send('Email address required.') }
 
   const update_query = `
     UPDATE acl_schema.acl_table
