@@ -3,19 +3,19 @@ export async function featureFormatsTest() {
     codi.it('Test style.icon_scaling for WKT features', () => {
 
       const mapview = {
-        'srid': '3857'
+        srid: '3857'
       }
 
       const layer = {
-        'format': 'wkt',
-        'params': {
-          'fields': [
-            'size'
+        format: 'wkt',
+        params: {
+          fields: [
+            size
           ]
         },
-        'style': {
-          'icon_scaling': {
-            'field': 'size'
+        style: {
+          icon_scaling: {
+            field: 'size'
           }
         },
         mapview
