@@ -57,9 +57,9 @@ module.exports = async function update(req, res) {
   }
 
   // Create update_user from request body or create Object with email from params.
-  const update_user = req.body || {
-    email: req.params.email
-  }
+  const update_user = (Object.keys(req.body || {}).length === 0 || req.body === undefined)
+    ? { email: req.params.email }
+    : req.body;
 
   if (req.params.field) {
     if (req.params.field === 'roles') {
