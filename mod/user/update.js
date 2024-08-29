@@ -104,7 +104,8 @@ module.exports = async function update(req, res) {
     return res.status(400).send('Invalid key in user object for SQL update.')
   }
 
-  if (!update_user.email) { return res.status(500).send('Email address required.') }
+  //If the client has provided a request with a body/param that does not have an email we will return a 400
+  if (!update_user.email) { return res.status(400).send('Email address required.') }
 
   const properties = []
   const substitutes = [update_user.email]
