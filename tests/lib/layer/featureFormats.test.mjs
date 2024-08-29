@@ -10,7 +10,7 @@ export async function featureFormatsTest() {
         format: 'wkt',
         params: {
           fields: [
-            size
+            'size'
           ]
         },
         style: {
