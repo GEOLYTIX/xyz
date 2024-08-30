@@ -487,15 +487,19 @@
 
       const field = col.getField();
 
+      const cellValue = !cell.getValue();
+
+      const apiValue = field === 'api' ? (cellValue === false ? null : cellValue) : cellValue;
+
       // Re-verification cannot be undone.
       if (field === 're_verification' && cell.getValue()) return;
 
       //The value of the field will be set to null if the field is an api and the new value from the cell is false.
-      const response = await xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${user.email}&field=${field === 're_verification' ? 'verified' : field}&value=${field === 'api' ? (!cell.getValue() === false ? null : !cell.getValue()) : !cell.getValue()}`);
+      const response = await xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${user.email}&field=${field === 're_verification' ? 'verified' : field}&value=${apiValue}`);
 
       if (response.err) return console.error(response.err);
 
-      cell.setValue(!cell.getValue());
+      cell.setValue(cellValue);
 
       const row = cell.getRow();
 
