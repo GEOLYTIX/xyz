@@ -489,7 +489,9 @@
 
       const cellValue = !cell.getValue();
 
-      const apiValue = field === 'api' ? (cellValue === false ? null : cellValue) : cellValue;
+      const cellFalsy = cellValue === false ? null : cellValue;
+
+      const apiValue = field === 'api' ? cellFalsy : cellValue;
 
       // Re-verification cannot be undone.
       if (field === 're_verification' && cell.getValue()) return;
