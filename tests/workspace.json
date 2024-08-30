@@ -13,10 +13,6 @@
             "type": "module",
             "src": "file:/tests/assets/queries/foo.js"
         },
-        "get_last_location": {
-            "type": "module",
-            "src": "file:/tests/assets/queries/foo.js"
-        },
         "template_1": {
             "src": "file:/tests/assets/infoj/template_infoj.json"
         },
@@ -212,10 +208,25 @@
                         "src": "file:/tests/assets/layers/scratch/layer.json"
                     },
                     {
+                        "src": "file:/tests/assets/layers/scratch/infoj.json"
+                    },
+                    {
                         "src": "file:/tests/assets/layers/scratch/style.json"
                     },
                     {
                         "src": "file:/tests/assets/layers/scratch/style_icon_scaling.json"
+                    }
+                ],
+                "infoj": [
+                    {
+                        "title": "icon_scale",
+                        "field": "icon_scale",
+                        "type": "integer",
+                        "edit": {
+                            "range": true
+                        },
+                        "min": 1,
+                        "max": 10000
                     }
                 ]
             },

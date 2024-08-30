@@ -11,8 +11,10 @@
  */
 import { baseDictionaryTest } from './baseDictionary.test.mjs';
 import { keyValueDictionaryTest } from './keyValueDictionary.test.mjs';
+import { unknownLanguageTest } from './unknownLanguageTest.test.mjs';
 
 export const dictionaryTest = {
     baseDictionaryTest,
-    keyValueDictionaryTest
+    keyValueDictionaryTest,
+    unknownLanguageTest
 };
