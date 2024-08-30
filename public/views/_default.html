@@ -454,7 +454,7 @@
 
     mapp.language = mapp.hooks.current.language
 
-  } else if (mapp.user.language) {
+  } else if (mapp.user?.language) {
 
     if (!Object.hasOwn(mapp.dictionaries, mapp.user.language)) {
 
