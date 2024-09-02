@@ -1,5 +1,12 @@
 /**
-The view module retrieves a view template, and substitutes parameter before sending the view to the client. 
+## /view
+
+The XYZ View API module export the view method required to request application views from the workspace.
+
+View templates maybe localised and must be requested from the languageTemplates utility module.
+
+@requires /utils/logger
+@requires /utils/languageTemplates
 
 @module /view
 */
@@ -8,7 +15,25 @@ const logger = require('./utils/logger')
 
 const languageTemplates = require('./utils/languageTemplates')
 
-module.exports = async (req, res) => {
+/**
+@function view
+@async
+
+@description
+The View API method will request a view [template] from the languageTemplates module method.
+
+The optional params.msg string property may have a languageTemplate which should be assigned to the params string before the substitution of template variables.
+
+The view [template] is a HTML string. Template variables defined within a set of brackets `{{var}}` will be substituted with params property values before the view string is sent from the HTTP Response object.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {Object} [req.params] Request params.
+@property {string} [params.template="default_view"] The view template reference.
+@property {string} [params.msg] The view template reference.
+@property {Object} [params.user] Requesting user.
+*/
+module.exports = async function view(req, res) {
 
   logger(req.url, 'view-req-url')
 
@@ -18,6 +43,7 @@ module.exports = async (req, res) => {
     .filter(key => typeof req.params[key] === 'string')
     .forEach(key => params[key] = req.params[key])
 
+  // The default_view is assumed without an implicit template value.
   params.template ??= 'default_view'
 
   params.dir ??= process.env.DIR
@@ -25,11 +51,6 @@ module.exports = async (req, res) => {
   params.login ??= (process.env.PRIVATE || process.env.PUBLIC) && 'true'
 
   params.title ??= process.env.TITLE
-
-  params.msg = req.params.msg && await languageTemplates({
-    template: req.params.msg,
-    language: req.params.language
-  })
 
   params.language ??= req.params.user?.language || 'en'
 
@@ -40,6 +61,16 @@ module.exports = async (req, res) => {
     return;
   }
 
+  if (req.params.msg) {
+
+    // Check for languageTemplate for a message to be displayed in the template.
+    params.msg = await languageTemplates({
+      template: req.params.msg,
+      language: req.params.language
+    })
+  }
+
+  // Susbtitute template variables with string properties in params.
   const view = template.replace(/{{2}([A-Za-z][A-Za-z0-9]*)}{2}/g, matched => {
 
     // regex matches {{ or }}
