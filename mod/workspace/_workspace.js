@@ -278,7 +278,34 @@ function roles(req, res) {
   res.send(roles)
 }
 
+/**
+@function test
+
+@description
+The workspace/test method which is only available to user with admin credentials requests all locales in workspace.
+
+Requesting all locales should add any additional templates to the workspace.
+
+The test method will iterate over all workspace.templates and get from the getTemplate method to check whether any errors are logged on a template in regards to its src parameter.
+
+A flat array of template.err will be returned from the workspace/test method.
+
+@param {req} req HTTP request.
+@param {req} res HTTP response.
+
+@property {Object} req.params 
+HTTP request parameter.
+@property {Object} params.user 
+The user requesting the test method.
+@property {Boolean} user.admin
+The user is required to have admin priviliges.
+*/
 async function test(req, res) {
+
+  if (!req.params.user?.admin) {
+    res.status(403).send(`Admin credentials are required to test the workspace sources.`)
+    return
+  }
 
   const errArr = []
 
