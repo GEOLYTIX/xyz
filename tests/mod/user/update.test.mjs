@@ -13,7 +13,6 @@ export async function updateTest() {
     if (mapp.user) {
         await codi.describe('User: update', async () => {
 
-            console.log(mapp);
             /**
              * ### update endpoint should be able to process a body
              * The user update endpoint should be able to take a body as the request.
