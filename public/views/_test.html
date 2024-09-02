@@ -327,6 +327,31 @@
         const testFiles = urlParams.get('integrity') ? [`${window.location.origin}{{dir}}/public/tests/integrity.test.mjs`] : [`${window.location.origin}{{dir}}/tests/browser/local.test.mjs`];
 
         try {
+
+            // Set mapp.language to TEST 
+            mapp.user ??= {};
+
+            mapp.user.language = 'TEST';
+            mapp.language = 'TEST';
+
+            // Language as URL parameter will override user language.
+            if (mapp.hooks.current.language) {
+
+                mapp.language = mapp.hooks.current.language
+
+            } else if (mapp?.user?.language) {
+
+                if (!Object.hasOwn(mapp.dictionaries, mapp.user.language)) {
+
+                    // Set mapp.language to english if user.language is not supported by mapp.dictionaries.
+                    console.warn(`'${mapp.user.language}' mapp.language is not supported by mapp.dictionaries.`)
+                    mapp.language = 'en'
+                } else {
+
+                    mapp.language = mapp.user.language
+                }
+            }
+
             let results = await runWebTests(testFiles);
 
             const shouldDownload = urlParams.get('download') === 'true';

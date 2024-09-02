@@ -6,15 +6,23 @@ import { mapviewTest } from '../lib/mapview/_mapview.test.mjs';
 import { pluginsTest } from '../plugins/_plugins.test.mjs';
 import { setView } from '../utils/view.js';
 import { delayFunction } from '../utils/delay.js';
+import { workspaceTest } from '../mod/workspace/_workspace.test.mjs'
+import { queryTest } from '../mod/query.test.mjs';
 import { apiTest } from './_api.test.mjs';
 import { userTest } from '../mod/user/_user.test.js';
+import { ui_elementsTest } from '../lib/ui/elements/_elements.test.mjs';
 // import { booleanTest } from '../lib/ui/locations/entries/boolean.test.mjs';
 
+//API Tests
+await workspaceTest();
+await queryTest();
 await userTest.updateTest();
 
 const mapview = await base();
+
 // Run the dictionary Tests
 await dictionaryTest.baseDictionaryTest(mapview);
+await dictionaryTest.unknownLanguageTest(mapview);
 await dictionaryTest.keyValueDictionaryTest(mapview);
 
 await pluginsTest.linkButtonTest();
@@ -28,9 +36,9 @@ setView(mapview, 2, 'default');
 await layerTest.fadeTest(mapview);
 // await layerTest.featureFieldsTest();
 // await layerTest.featureFilterTest();
-// await layerTest.featureFormatsTest();
+await layerTest.featureFormatsTest();
 // await layerTest.featureHoverTest();
-// await layerTest.featureStyleTest();
+//await layerTest.featureStyleTest(mapview);
 await layerTest.styleParserTest(mapview);
 
 // await locationTest.createTest();
@@ -48,6 +56,4 @@ await layerTest.styleParserTest(mapview);
 // await mapviewTest.infotipTest();
 // await mapviewTest.locateTest();
 // await mapviewTest.popupTest();
-// await booleanTest();
-
-await apiTest();
+await ui_elementsTest.sliderTest();

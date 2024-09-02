@@ -57,16 +57,19 @@ module.exports = async function update(req, res) {
   }
 
   // Create update_user from request body or create Object with email from params.
-  const update_user = req.body || {
-    email: req.params.email
-  }
+  const update_user = (Object.keys(req.body || {}).length === 0 || req.body === undefined)
+    ? { email: req.params.email }
+    : req.body;
 
-  if (req.params.field === 'roles') {
+  //If the client has provided a request with a body/params that does not have an email we will return a 400
+  if (!update_user.email) { return res.status(400).send('Email address required.') }
 
-    // The value string must be split into an array for the roles field params.
-    req.params.value = req.params.value?.split(',') || [];
+  if (req.params.field) {
+    if (req.params.field === 'roles') {
 
-  } else if (req.params.field) {
+      // The value string must be split into an array for the roles field params.
+      req.params.value = req.params.value?.split(',') || [];
+    }
 
     // Assign field property from request params.
     update_user[req.params.field] = req.params.value

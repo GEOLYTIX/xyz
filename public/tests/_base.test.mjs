@@ -31,6 +31,7 @@ export async function base() {
                     layers: 'Layers',
                     locations: 'Locations',
                     no_locales: 'Your account has been verified and approved, but you do not have access to any locales. This is likely as an administrator has not given you the required roles. Please contact an administrator to resolve this.',
+                    no_layers: 'No accessible layers in locale.',
                 },
                 de: {
                     toolbar_zoom_in: 'Zoom rein',
@@ -44,7 +45,7 @@ export async function base() {
                     layers: 'Ebenen',
                     locations: 'Orte',
                 },
-                zn: {
+                zh: {
                     toolbar_zoom_in: '放大',
                     toolbar_zoom_out: '缩小',
                     toolbar_zoom_to_area: '缩放至区域',
@@ -56,7 +57,7 @@ export async function base() {
                     layers: '图层',
                     locations: '地点',
                 },
-                zn_tw: {
+                zh_tw: {
                     toolbar_zoom_in: '放大',
                     toolbar_zoom_out: '縮小',
                     toolbar_zoom_to_area: '縮放至區域',
@@ -104,7 +105,7 @@ export async function base() {
                     layers: 'レイヤー',
                     locations: 'ロケーション',
                 },
-                es: {
+                esp: {
                     toolbar_zoom_in: 'Zoom +',
                     toolbar_zoom_out: 'Zoom -',
                     toolbar_zoom_to_area: 'Zoom al área',
@@ -365,9 +366,13 @@ export async function base() {
 
         if (locale instanceof Error) {
 
-            document.body.append(mapp.utils.html.node`
-  <dialog open class="modal-map">
-    ${mapp.dictionary.no_locales}`)
+            // Create the helpDialog.node
+            mapp.ui.elements.dialog({
+                css_style: 'padding: 1em; border-color: #000',
+                content: mapp.dictionary.no_locales,
+                top: '50%',
+                left: '10%'
+            });
         }
 
         // Add locale dropdown to layers panel if multiple locales are accessible.
@@ -439,7 +444,7 @@ export async function base() {
             host: mapp.host,
             target: OL,
             locale: locale,
-            hooks: true,
+            hooks: false,
             scrollWheelZoom: true,
             attribution: {
                 target: document.getElementById('Map'),
@@ -456,6 +461,19 @@ export async function base() {
             // mapp.Mapview must be awaited.
             loadPlugins: true
         });
+
+
+        if (!locale.layers?.length) {
+
+            mapp.ui.elements.dialog({
+                css_style: 'padding: 1em; border-color: #000;',
+                content: mapp.dictionary.no_layers,
+                target: document.getElementById('Map'),
+                top: '50%',
+                left: '50%'
+            });
+
+        }
 
         // Add layers to mapview.
         await mapview.addLayer(locale.layers);
