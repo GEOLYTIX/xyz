@@ -35,11 +35,14 @@ const getLocale = require('./getLocale')
 
 const getLayer = require('./getLayer')
 
+const getTemplate = require('./getTemplate')
+
 const keyMethods = {
   layer,
   locale,
   locales,
   roles,
+  test,
 }
 
 let workspace;
@@ -275,3 +278,50 @@ function roles(req, res) {
   res.send(roles)
 }
 
+/**
+@function test
+
+@description
+The workspace/test method which is only available to user with admin credentials requests all locales in workspace.
+
+Requesting all locales should add any additional templates to the workspace.
+
+The test method will iterate over all workspace.templates and get from the getTemplate method to check whether any errors are logged on a template in regards to its src parameter.
+
+A flat array of template.err will be returned from the workspace/test method.
+
+@param {req} req HTTP request.
+@param {req} res HTTP response.
+
+@property {Object} req.params 
+HTTP request parameter.
+@property {Object} params.user 
+The user requesting the test method.
+@property {Boolean} user.admin
+The user is required to have admin priviliges.
+*/
+async function test(req, res) {
+
+  if (!req.params.user?.admin) {
+    res.status(403).send(`Admin credentials are required to test the workspace sources.`)
+    return
+  }
+
+  const errArr = []
+
+  for (const localeKey of Object.keys(workspace.locales)) {
+
+    // Will get layer and assignTemplates to workspace.
+    await getLocale({locale: localeKey})
+  }
+
+  // From here on its 🐢 Templates all the way down.
+  for (const key of Object.keys(workspace.templates)) {
+
+    const template = await getTemplate(key)
+
+    if (template.err) errArr.push(`${key}: ${template.err.path}`)
+  }
+
+  res.send(errArr.flat())
+}
