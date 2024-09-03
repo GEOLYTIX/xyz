@@ -42,7 +42,7 @@ await layerTest.featureFormatsTest();
 await layerTest.styleParserTest(mapview);
 
 // await locationTest.createTest();
-// await locationTest.getTest();
+await locationTest.getTest(mapview);
 // await locationTest.decorateTest();
 // await locationTest.nnearestTest();
 
