@@ -22,6 +22,7 @@ export async function getTest(mapview) {
             codi.assertEqual(location.infoj.length, 3, 'We expect to see three infoj entries');
             codi.assertTrue(!!location.record, 'The location needs a record object');
             codi.assertTrue(!!location.remove, 'The location needs a remove function');
+            codi.assertTrue(!!location.layer && typeof(location.layer) === 'object', 'The location needs a layer object');
         });
     });
 }
