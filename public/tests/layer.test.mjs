@@ -8,7 +8,26 @@ export async function layerTest(mapview) {
 
     const default_zoom = mapview.view?.z || 0;
 
+    await codi.describe(`${mapview.host} : Template Paths Test`, async () => {
+
+        await codi.it('All the templates are valid', async () => {
+            // Call the /test workspace method - which should return an empty array if all templates are valid.
+            const test = await mapp.utils.xhr(`${mapp.host}/api/workspace/test`);
+
+               // If the test fails, print out the invalid templates.
+               if (test.length > 0) {
+                test.forEach(template => {
+                    console.error('INVALID PATH:', template);
+                });
+            }
+
+            codi.assertTrue(test.length === 0, `There are ${test.length} invalid paths for templates`);
+
+        });
+    });
+
     await codi.describe(`${mapview.host} : Layer Test`, async () => {
+
         for (const key in mapview.layers) {
             if (mapview.layers.hasOwnProperty(key)) {
                 await codi.it(`Layer test : ${key}`, async () => {
