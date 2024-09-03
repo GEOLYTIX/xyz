@@ -4,7 +4,7 @@
  * @param {object} mapview 
  */
 export async function getTest(mapview) {
-    await codi.describe('TODO: Location: getTest', async () => {
+    await codi.describe('Location: getTest', async () => {
 
         /**
          * This tests the functionality to mock a location by passing in a template that returns values from the query
