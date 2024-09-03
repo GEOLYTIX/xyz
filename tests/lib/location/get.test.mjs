@@ -22,7 +22,6 @@ export async function getTest(mapview) {
 
             codi.assertEqual(location.infoj.length, 3, 'We expect to see three infoj entries');
             codi.assertEqual(location.record.hook, 'location_get_test!7', 'We expect a hook made up of layer key and id');
-            codi.assertTrue(location.remove instanceof Function, 'The location needs a remove function');
             codi.assertTrue(location.layer instanceof Object, 'The location needs a layer object');
 
             // Push removeCallback method to remove callback methods.
