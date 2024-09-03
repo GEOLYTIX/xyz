@@ -21,6 +21,9 @@
         },
         "icon_scaling_scratch": {
             "src": "file:/tests/assets/queries/icon_scaling_scratch.sql"
+        },
+        "get_location_mock": {
+            "src": "file:/tests/assets/queries/get_location_mock.sql"
         }
     },
     "locale": {
@@ -261,6 +264,17 @@
                 "templates": [
                     "template_1",
                     "template_2"
+                ]
+            },
+            "location_get_test": {
+                "hidden": true,
+                "templates": [
+                    {
+                        "src": "file:/tests/assets/layers/location_mock/layer.json"
+                    },
+                    {
+                        "src": "file:/tests/assets/layers/location_mock/infoj.json"
+                    }
                 ]
             }
         }
