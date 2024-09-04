@@ -204,6 +204,21 @@
                     }
                 ]
             },
+            "pin": {
+                "display": true,
+                "group": "ui_elements",
+                "templates": [
+                    {
+                        "src": "file:/tests/assets/layers/scratch/layer.json"
+                    },
+                    {
+                        "src": "file:/tests/assets/layers/scratch/infoj.json"
+                    },
+                    {
+                        "src": "file:/tests/assets/layers/scratch/style.json"
+                    }
+                ]
+            },
             "icon_scaling": {
                 "display": true,
                 "templates": [
