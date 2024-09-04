@@ -15,6 +15,16 @@ export async function layerStyleTest(mapview) {
             //Style object that we will use to create the entire panel
             const style = {
                 opacitySlider: true,
+                cluster: {
+                    clusterScale: 5
+                },
+                icon_scaling: {
+                    field: 'size',
+                    icon: true,
+                    clusterScale: true,
+                    zoomInScale: true,
+                    zoomOutScale: true
+                },
                 hover: {
                     display: true,
                     title: 'Hover title',
@@ -102,14 +112,30 @@ export async function layerStyleTest(mapview) {
 
             const opacitySlider = panel.querySelector('[data-id="opacitySlider"]')
             codi.assertTrue(!!opacitySlider, 'The panel should have a opacitySlider');
+
             const hoverCheckBox = panel.querySelector('[data-id="hoverCheckbox"]');
             codi.assertTrue(!!hoverCheckBox, 'The panel should have a hoverCheckBox');
+
             const hoversDropDown = panel.querySelector('[data-id="hoversDropdown"]');
             codi.assertTrue(!!hoversDropDown, 'The panel should have a hoversDropdown');
+
             const layerTheme = panel.querySelector('[data-id="layerTheme"]');
             codi.assertTrue(!!layerTheme, 'The panel should have a layerTheme');
 
+            const iconScalingFieldCheckBox = panel.querySelector('[data-id="iconScalingFieldCheckbox"]');
+            codi.assertTrue(!!iconScalingFieldCheckBox, 'The panel should have an icon scaling field check box');
 
+            const iconScalingSlider = panel.querySelector('[data-id="iconScalingSlider"]');
+            codi.assertTrue(!!iconScalingSlider, 'The panel should have an icon scaling slider');
+
+            const iconScalingClusterSlider = panel.querySelector('[data-id="iconScalingClusterSlider"]');
+            codi.assertTrue(!!iconScalingClusterSlider, 'The panel should have an icon scaling cluser slider');
+
+            const iconScalingZoomInSlider = panel.querySelector('[data-id="iconScalingZoomInSlider"]');
+            codi.assertTrue(!!iconScalingZoomInSlider, 'The panel should have an icon scaling zoom in slider');
+
+            const iconScalingZoomOutSlider = panel.querySelector('[data-id="iconScalingZoomOutSlider"]');
+            codi.assertTrue(!!iconScalingZoomOutSlider, 'The panel should have an icon scaling zoom out slider');
         });
     });
 }
