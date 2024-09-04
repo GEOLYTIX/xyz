@@ -33,7 +33,23 @@ export async function layerStyleTest(mapview) {
                     }
                 },
                 label: {
-
+                    title: 'Label Title',
+                    display: true,
+                    field: 'label_1'
+                },
+                labels: {
+                    label_1: {
+                        title: 'Label title',
+                        filed: 'label_1',
+                        display: true,
+                        label: 'I am labels label'
+                    },
+                    label_2: {
+                        title: 'Label title 2',
+                        filed: 'label_2',
+                        display: true,
+                        label: 'I am a labels label'
+                    }
                 }
             };
 
@@ -43,7 +59,12 @@ export async function layerStyleTest(mapview) {
             layer.style = { ...layer.style, ...style };
 
             const panel = await mapp.ui.elements.layerStyle.panel(layer);
+
             console.log(panel);
+            const hoverCheckBox = panel.querySelector('[data-id="hoverCheckbox"]');
+            codi.assertTrue(!!hoverCheckBox, 'The panel should have a hoverCheckBox');
+            const hoverDropDown = panel.querySelector('[data-id="dropdown"]');
+            console.log(hoverDropDown);
         });
     });
 }
