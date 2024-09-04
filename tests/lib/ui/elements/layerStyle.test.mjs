@@ -170,6 +170,8 @@ export async function layerStyleTest(mapview) {
         //get the workspace from the local files
         const layer = await mapview.layers['location_get_test'];
 
+        //This will be defaulted on decorated layers. 
+        //We need to remove this for new elements to be passed in on the panel function.
         delete layer.style.elements;
 
         //spreading the style to the layer style object
@@ -178,51 +180,61 @@ export async function layerStyleTest(mapview) {
         //Calling the panel function to create the panel with the layers style
         const panel = await mapp.ui.elements.layerStyle.panel(layer);
 
+        //Opacity Slider
         await codi.it('The panel function should return a opacitySlider', async () => {
             const opacitySlider = panel.querySelector('[data-id="opacitySlider"]')
             codi.assertTrue(!!opacitySlider, 'The panel should have a opacitySlider');
         });
 
+        //Hover checkbox 
         await codi.it('The panel function should return a hover check box', () => {
             const hoverCheckBox = panel.querySelector('[data-id="hoverCheckbox"]');
             codi.assertTrue(!!hoverCheckBox, 'The panel should have a hoverCheckBox');
         });
 
+        //hovers dropdown
         await codi.it('The panel function should return a hovers dropdown', () => {
             const hoversDropDown = panel.querySelector('[data-id="hoversDropdown"]');
             codi.assertTrue(!!hoversDropDown, 'The panel should have a hoversDropdown');
         });
 
+        //layer theme
         await codi.it('The panel function should return a layerTheme', () => {
             const layerTheme = panel.querySelector('[data-id="layerTheme"]');
             codi.assertTrue(!!layerTheme, 'The panel should have a layerTheme');
         });
 
-        await codi.it('The panel function should return a themes drop down', () => {
+        //Themes dropdown
+        await codi.it('The panel function should return a themes dropdown', () => {
             const themesDropdown = panel.querySelector('[data-id="themesDropdown"]');
-            codi.assertTrue(!!themesDropdown, 'The panel should have a themes drop down');
+            codi.assertTrue(!!themesDropdown, 'The panel should have a themes dropdown');
         });
 
+        //icon scaling checkbox
         await codi.it('The panel function should return an icon scaling field checkbox', () => {
             const iconScalingFieldCheckBox = panel.querySelector('[data-id="iconScalingFieldCheckbox"]');
             codi.assertTrue(!!iconScalingFieldCheckBox, 'The panel should have an icon scaling field check box');
         });
 
+        //icon scaling slider
         await codi.it('The panel function should return an icon scaling slider', () => {
             const iconScalingSlider = panel.querySelector('[data-id="iconScalingSlider"]');
             codi.assertTrue(!!iconScalingSlider, 'The panel should have an icon scaling slider');
         });
 
+        //icon scaling cluster slider
         await codi.it('The panel function should return an icon scaling cluster slider', () => {
             const iconScalingClusterSlider = panel.querySelector('[data-id="iconScalingClusterSlider"]');
             codi.assertTrue(!!iconScalingClusterSlider, 'The panel should have an icon scaling cluser slider');
         });
 
+        //icon scaling zoom in slider
         await codi.it('The panel function should return an icon scaling zoom in slider', () => {
             const iconScalingZoomInSlider = panel.querySelector('[data-id="iconScalingZoomInSlider"]');
             codi.assertTrue(!!iconScalingZoomInSlider, 'The panel should have an icon scaling zoom in slider');
         });
 
+        //icon scaling zoom out slider
         await codi.it('The panel function should return an icon scaling zoom out slider', () => {
             const iconScalingZoomOutSlider = panel.querySelector('[data-id="iconScalingZoomOutSlider"]');
             codi.assertTrue(!!iconScalingZoomOutSlider, 'The panel should have an icon scaling zoom out slider');
