@@ -11,6 +11,8 @@
 export async function layerStyleTest(mapview) {
     await codi.describe('UI elements: layerStyle', async () => {
         await codi.it('Should return a full layer style panel', async () => {
+
+            //Style object that we will use to create the entire panel
             const style = {
                 hover: {
                     display: true,
@@ -56,8 +58,10 @@ export async function layerStyleTest(mapview) {
             //get the workspace from the local files
             const layer = await mapview.layers['location_get_test'];
 
+            //spreading the style to the layer style object
             layer.style = { ...layer.style, ...style };
 
+            //Calling the panel function to create the panel with the layers style
             const panel = await mapp.ui.elements.layerStyle.panel(layer);
 
             console.log(panel);
