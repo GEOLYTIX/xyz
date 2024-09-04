@@ -60,18 +60,18 @@ module.exports = async function mergeTemplates(obj) {
 
     // Failed to get template matching obj.template from template.src!
     if (template.err instanceof Error) {
-  
+
       obj.err ??= []
       obj.err.push(template.err.message)
-  
-    // The template is not in the workspace.templates{}
+
+      // The template is not in the workspace.templates{}
     } else if (template instanceof Error) {
-  
+
       obj.err ??= []
       obj.err.push(template.message)
-  
+
     } else {
-  
+
       // Merge obj --> template
       // Template must be cloned to prevent cross polination and array aggregation.
       obj = merge(structuredClone(template), obj)
