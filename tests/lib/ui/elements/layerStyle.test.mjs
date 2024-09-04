@@ -31,6 +31,9 @@ export async function layerStyleTest(mapview) {
                         display: true,
                         label: 'I am a hover label'
                     }
+                },
+                label: {
+
                 }
             };
 
