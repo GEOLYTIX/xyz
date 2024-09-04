@@ -312,7 +312,15 @@ async function test(req, res) {
   for (const localeKey of Object.keys(workspace.locales)) {
 
     // Will get layer and assignTemplates to workspace.
-    await getLocale({locale: localeKey})
+    const locale = await getLocale({locale: localeKey})
+
+    for (const layerKey of Object.keys(locale.layers)) {
+
+      // Will get layer and assignTemplates to workspace.
+      const layer = await getLayer({locale: localeKey, layer: layerKey})
+
+      if (layer.err) errArr.push(`${layerKey}: ${layer.err}`)
+    }
   }
 
   // From here on its 🐢 Templates all the way down.
