@@ -14,6 +14,7 @@ export async function layerStyleTest(mapview) {
 
             //Style object that we will use to create the entire panel
             const style = {
+                opacitySlider: true,
                 hover: {
                     display: true,
                     title: 'Hover title',
@@ -23,40 +24,73 @@ export async function layerStyleTest(mapview) {
                 hovers: {
                     hover_1: {
                         title: 'Hover title',
-                        filed: 'hover_1',
+                        field: 'hover_1',
                         display: true,
                         label: 'I am a hover label'
                     },
                     hover_2: {
                         title: 'Hover title 2',
-                        filed: 'hover_2',
+                        field: 'hover_2',
                         display: true,
                         label: 'I am a hover label'
                     }
                 },
-                label: {
-                    title: 'Label Title',
-                    display: true,
-                    field: 'label_1'
-                },
+                label: 'label_2',
                 labels: {
                     label_1: {
                         title: 'Label title',
-                        filed: 'label_1',
                         display: true,
+                        field: 'label_1',
                         label: 'I am labels label'
                     },
                     label_2: {
                         title: 'Label title 2',
-                        filed: 'label_2',
                         display: true,
+                        field: 'label_2',
                         label: 'I am a labels label'
                     }
+                },
+                theme: {
+                    title: 'Theme title',
+                    type: 'categorized',
+                    field: 'foo',
+                    other: true,
+                    categories: [
+                        {
+                            key: 'category_1',
+                            style: {
+                                strokeColor: '#000',
+                                fillColor: '#000',
+                                fillOpacity: 0.5,
+                                strokeWidth: 3
+                            }
+                        },
+                        {
+                            key: 'category_2',
+                            style: {
+                                strokeColor: '#000',
+                                fillColor: '#000',
+                                fillOpacity: 0.5,
+                                strokeWidth: 3
+                            }
+                        },
+                        {
+                            key: 'category_3',
+                            style: {
+                                strokeColor: '#000',
+                                fillColor: '#000',
+                                fillOpacity: 0.5,
+                                strokeWidth: 3
+                            }
+                        }
+                    ]
                 }
             };
 
             //get the workspace from the local files
             const layer = await mapview.layers['location_get_test'];
+
+            delete layer.style.elements;
 
             //spreading the style to the layer style object
             layer.style = { ...layer.style, ...style };
@@ -65,10 +99,17 @@ export async function layerStyleTest(mapview) {
             const panel = await mapp.ui.elements.layerStyle.panel(layer);
 
             console.log(panel);
+
+            const opacitySlider = panel.querySelector('[data-id="opacitySlider"]')
+            codi.assertTrue(!!opacitySlider, 'The panel should have a opacitySlider');
             const hoverCheckBox = panel.querySelector('[data-id="hoverCheckbox"]');
             codi.assertTrue(!!hoverCheckBox, 'The panel should have a hoverCheckBox');
-            const hoverDropDown = panel.querySelector('[data-id="dropdown"]');
-            console.log(hoverDropDown);
+            const hoversDropDown = panel.querySelector('[data-id="hoversDropdown"]');
+            codi.assertTrue(!!hoversDropDown, 'The panel should have a hoversDropdown');
+            const layerTheme = panel.querySelector('[data-id="layerTheme"]');
+            codi.assertTrue(!!layerTheme, 'The panel should have a layerTheme');
+
+
         });
     });
 }
