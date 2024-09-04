@@ -58,4 +58,5 @@ await locationTest.getTest(mapview);
 // await mapviewTest.locateTest();
 // await mapviewTest.popupTest();
 await ui_elementsTest.sliderTest();
+await ui_elementsTest.layerStyleTest(mapview);
 await entriesTest.pinTest(mapview);
