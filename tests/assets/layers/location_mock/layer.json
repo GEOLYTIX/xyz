@@ -2,7 +2,6 @@
     "display": false,
     "group": "layer",
     "format": "wkt",
-    "table": "foo.bar",
     "srid": "3857",
     "geom": "geom_3857",
     "qID": "_id"
