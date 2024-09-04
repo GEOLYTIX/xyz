@@ -92,6 +92,78 @@ export async function layerStyleTest(mapview) {
                         }
                     }
                 ]
+            },
+            themes: {
+                first_theme: {
+                    title: 'Theme title',
+                    type: 'categorized',
+                    field: 'foo',
+                    other: true,
+                    categories: [
+                        {
+                            key: 'category_1',
+                            style: {
+                                strokeColor: '#000',
+                                fillColor: '#000',
+                                fillOpacity: 0.5,
+                                strokeWidth: 3
+                            }
+                        },
+                        {
+                            key: 'category_2',
+                            style: {
+                                strokeColor: '#000',
+                                fillColor: '#000',
+                                fillOpacity: 0.5,
+                                strokeWidth: 3
+                            }
+                        },
+                        {
+                            key: 'category_3',
+                            style: {
+                                strokeColor: '#000',
+                                fillColor: '#000',
+                                fillOpacity: 0.5,
+                                strokeWidth: 3
+                            }
+                        }
+                    ]
+                },
+                second_theme: {
+                    title: 'Theme title',
+                    type: 'categorized',
+                    field: 'foo',
+                    other: true,
+                    categories: [
+                        {
+                            key: 'category_1',
+                            style: {
+                                strokeColor: '#000',
+                                fillColor: '#000',
+                                fillOpacity: 0.5,
+                                strokeWidth: 3
+                            }
+                        },
+                        {
+                            key: 'category_2',
+                            style: {
+                                strokeColor: '#000',
+                                fillColor: '#000',
+                                fillOpacity: 0.5,
+                                strokeWidth: 3
+                            }
+                        },
+                        {
+                            key: 'category_3',
+                            style: {
+                                strokeColor: '#000',
+                                fillColor: '#000',
+                                fillOpacity: 0.5,
+                                strokeWidth: 3
+                            }
+                        }
+                    ]
+                }
             }
         };
 
@@ -124,6 +196,11 @@ export async function layerStyleTest(mapview) {
         await codi.it('The panel function should return a layerTheme', () => {
             const layerTheme = panel.querySelector('[data-id="layerTheme"]');
             codi.assertTrue(!!layerTheme, 'The panel should have a layerTheme');
+        });
+
+        await codi.it('The panel function should return a themes drop down', () => {
+            const themesDropdown = panel.querySelector('[data-id="themesDropdown"]');
+            codi.assertTrue(!!themesDropdown, 'The panel should have a themes drop down');
         });
 
         await codi.it('The panel function should return an icon scaling field checkbox', () => {
