@@ -50,7 +50,7 @@ module.exports = async function mergeTemplates(obj) {
   if (Object.hasOwn(workspace.templates, obj.key)) {
 
     obj.err ??= []
-    obj.err.push[`Template matching ${obj.key} exists in workspace.`]
+    obj.err.push(`Template matching ${obj.key} exists in workspace.`)
   }
 
   // The object has an implicit template to merge into.
