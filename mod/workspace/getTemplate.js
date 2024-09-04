@@ -44,7 +44,7 @@ module.exports = async function getTemplate(template) {
     }
 
     if (!Object.hasOwn(workspace.templates, template)) {
-      return new Error('Template not found.')
+      return new Error(`Template: ${template} not found.`)
     }
 
     template = workspace.templates[template]

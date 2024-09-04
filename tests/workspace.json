@@ -6,10 +6,14 @@
         "*": null
     },
     "templates": {
-        "template_test": {
+        "template_test_temp": {
             "src": "file:/tests/assets/layers/template_test.json"
         },
         "module_test": {
+            "type": "module",
+            "src": "file:/tests/assets/queries/foo.js"
+        },
+        "location_get": {
             "type": "module",
             "src": "file:/tests/assets/queries/foo.js"
         },
@@ -204,6 +208,21 @@
                     }
                 ]
             },
+            "pin": {
+                "display": true,
+                "group": "ui_elements",
+                "templates": [
+                    {
+                        "src": "file:/tests/assets/layers/scratch/layer.json"
+                    },
+                    {
+                        "src": "file:/tests/assets/layers/scratch/infoj.json"
+                    },
+                    {
+                        "src": "file:/tests/assets/layers/scratch/style.json"
+                    }
+                ]
+            },
             "icon_scaling": {
                 "display": true,
                 "templates": [
@@ -235,6 +254,7 @@
             },
             "template_test": {
                 "display": true,
+                "template": "template_test_temp",
                 "templates": [
                     {
                         "key": "template_infoj",
@@ -260,7 +280,7 @@
             },
             "template_test_vanilla": {
                 "hidden": true,
-                "template": "template_test",
+                "template": "template_test_temp",
                 "templates": [
                     "template_1",
                     "template_2"

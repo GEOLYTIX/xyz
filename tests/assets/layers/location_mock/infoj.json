@@ -2,7 +2,7 @@
     "infoj": [
         {
             "title": "qID",
-            "field": "_id",
+            "field": "id",
             "inline": true
         },
         {
@@ -12,6 +12,12 @@
             "type": "pin",
             "label": "ST_PointOnSurface",
             "field": "pin",
+            "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
+        },
+        {
+            "type": "pin",
+            "label": "ST_PointOnSurface",
+            "field": "pin2",
             "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
         }
     ]
