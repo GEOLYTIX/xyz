@@ -47,28 +47,35 @@ module.exports = async function mergeTemplates(obj) {
   // Cache workspace in module scope for template assignment.
   workspace = await workspaceCache()
 
-  const template = await getTemplate(obj.template || obj.key)
-
-  // Failed to get template matching obj.template from template.src!
-  if (template.err instanceof Error) {
+  if (Object.hasOwn(workspace.templates, obj.key)) {
 
     obj.err ??= []
-    obj.err.push(template.err.message)
+    obj.err.push(`Template matching ${obj.key} exists in workspace.`)
+  }
 
-    // The template is not in the workspace.templates{}
-  } else if (template instanceof Error) {
+  // The object has an implicit template to merge into.
+  if (obj.template) {
 
-    // Only log error if obj.template is implicit.
-    // It is not presumed that a obj.key has a matching template.
-    if (obj.template) {
+    const template = await getTemplate(obj.template)
+
+    // Failed to get template matching obj.template from template.src!
+    if (template.err instanceof Error) {
+
+      obj.err ??= []
+      obj.err.push(template.err.message)
+
+      // The template is not in the workspace.templates{}
+    } else if (template instanceof Error) {
+
       obj.err ??= []
       obj.err.push(template.message)
+
+    } else {
+
+      // Merge obj --> template
+      // Template must be cloned to prevent cross polination and array aggregation.
+      obj = merge(structuredClone(template), obj)
     }
-
-  } else {
-
-    // Merge obj --> template
-    obj = merge(template, obj)
   }
 
   for (const template_key of obj.templates || []) {
