@@ -570,8 +570,6 @@
     },
   });
 
-  const btnColumn = document.getElementById('mapButton');
-
   // Get list of accessible locales from Workspace API.
   const locales = await mapp.utils.xhr(`${mapp.host}/api/workspace/locales`);
 
@@ -718,7 +716,7 @@
     });
 
   // Append spacer for tableview
-  btnColumn.appendChild(mapp.utils.html.node`
+  document.getElementById('mapButton').append(mapp.utils.html.node`
     <div class="mobile-display-none" style="height: 60px;">`);
 
 </script>
