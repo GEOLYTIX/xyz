@@ -9,7 +9,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
-    <script src="https://cdn.jsdelivr.net/npm/ol@v9.1.0/dist/ol.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/ol@v10.0.0/dist/ol.js" defer></script>
 
     <!-- Load XYZ / MAPP stylesheet and library. -->
     <link rel="stylesheet" href="{{dir}}/public/css/mapp.css" />
@@ -18,7 +18,7 @@
     <script type="importmap">
         {
           "imports": {
-            "codi": "https://esm.sh/codi-test-framework@0.0.26"
+            "codi": "https://esm.sh/codi-test-framework@0.0.30"
           }
         }
       </script>
@@ -309,14 +309,51 @@
     </div>
 
     <script type="module">
-        import { runWebTests } from "codi";
+        import { runWebTests, it, describe, assertEqual, assertNotEqual, assertTrue, assertFalse } from "codi";
 
-        const testFiles = [`${window.location.origin}{{dir}}/public/tests/_default.test.mjs`];
+        const _codi = {
+            runWebTests,
+            describe,
+            it,
+            assertEqual,
+            assertNotEqual,
+            assertTrue,
+            assertFalse
+        };
+
+        self.codi = _codi;
+
+        const urlParams = new URLSearchParams(window.location.search);
+        const testFiles = urlParams.get('integrity') ? [`${window.location.origin}{{dir}}/public/tests/integrity.test.mjs`] : [`${window.location.origin}{{dir}}/tests/browser/local.test.mjs`];
 
         try {
+
+            // Set mapp.language to TEST 
+            mapp.user ??= {};
+
+            mapp.user.language = 'TEST';
+            mapp.language = 'TEST';
+
+            // Language as URL parameter will override user language.
+            if (mapp.hooks.current.language) {
+
+                mapp.language = mapp.hooks.current.language
+
+            } else if (mapp?.user?.language) {
+
+                if (!Object.hasOwn(mapp.dictionaries, mapp.user.language)) {
+
+                    // Set mapp.language to english if user.language is not supported by mapp.dictionaries.
+                    console.warn(`'${mapp.user.language}' mapp.language is not supported by mapp.dictionaries.`)
+                    mapp.language = 'en'
+                } else {
+
+                    mapp.language = mapp.user.language
+                }
+            }
+
             let results = await runWebTests(testFiles);
-            
-            const urlParams = new URLSearchParams(window.location.search);
+
             const shouldDownload = urlParams.get('download') === 'true';
 
             if (shouldDownload) {

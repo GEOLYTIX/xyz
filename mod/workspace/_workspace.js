@@ -1,5 +1,30 @@
 /**
+## /workspace
+The Workspace API module exports the getKeyMethod() which returns a method from the keyMethods{} object.
+
+- layer
+- locale
+- locales
+- roles
+
+The workspace typedef object has templates, locale, locales, dbs, and roles properties. The workspace will be cached in the process by the workspace/cache module.
+
+@requires /workspace/cache
+@requires /workspace/getLocale
+@requires /workspace/getLayer
+@requires /utils/roles
+
 @module /workspace
+*/
+
+/**
+@global
+@typedef {Object} workspace
+The workspace object defines the mapp resources available in an XYZ instance.
+@property {Object} [roles] Each property of the roles object is a role which can be assigned to a user.
+@property {string} [dbs] The fallback dbs connection if not implicit in [query] template.
+@property {Object} locale The default locale which serves as a templates for all locales in workspace.
+@property {Object} locales Each property in the locales object is a locale available from this workspace.
 */
 
 const Roles = require('../utils/roles')
@@ -10,9 +35,33 @@ const getLocale = require('./getLocale')
 
 const getLayer = require('./getLayer')
 
+const getTemplate = require('./getTemplate')
+
+const keyMethods = {
+  layer,
+  locale,
+  locales,
+  roles,
+  test,
+}
+
 let workspace;
 
-module.exports = async (req, res) => {
+/**
+@function getKeyMethod
+@async
+
+@description
+The cached workspace requested from the workspaceCache() will be assigned to the workspace variable declared in the module scope.
+
+The method checks whether the req.params.key matches a keyMethods property and returns the matching method.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {Object} req.params HTTP request params.
+@property {string} params.key Workspace API method requested.
+*/
+module.exports = async function getKeyMethod(req, res) {
 
   workspace = await workspaceCache()
 
@@ -20,54 +69,70 @@ module.exports = async (req, res) => {
     return res.status(500).send('Failed to load workspace.')
   }
 
-  const keys = {
-    layer,
-    locale,
-    locales,
-    roles,
-  }
-
   // The keys object must own a user provided lookup key
-  if (!Object.hasOwn(keys, req.params.key)) {
+  if (!Object.hasOwn(keyMethods, req.params.key)) {
 
     return res.status(400).send(`Failed to evaluate '${req.params.key}' param.`)
   }
 
-  return keys[req.params.key](req, res)
+  return keyMethods[req.params.key](req, res)
 }
 
+/**
+@function layer
+@async
+
+@description
+The method requests a JSON layer from the getLayer module.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {Object} req.params HTTP request params.
+@property {string} [params.locale] Locale key.
+@property {boolean} [params.layer] Layer key.
+@property {Object} [params.user] User requesting the layer.
+
+@returns {res} The HTTP response with either an error.message or the JSON layer.
+*/
 async function layer(req, res) {
 
-  if (!Object.hasOwn(workspace.locales, req.params.locale)) {
-    return res.status(400).send(`Unable to validate locale param.`)
-  }
+  // Add default role * to all users.
+  if (Array.isArray(req.params.user?.roles)) {
 
-  const locale = workspace.locales[req.params.locale]
-
-  const roles = req.params.user?.roles || []
-  
-  roles.push('*')
-
-  if (!Roles.check(locale, roles)) {
-    return res.status(403).send('Role access denied for locale.')
-  }
-
-  if (!Object.hasOwn(locale.layers, req.params.layer)) {
-    return res.status(400).send(`Unable to validate layer param.`)
+    req.params.user.roles.push('*')
   }
 
   let layer = await getLayer(req.params)
 
-  if (!Roles.check(layer, roles)) {
-    return res.status(403).send('Role access denied for layer.')
+  if (layer instanceof Error) {
+    return res.status(400).send(layer.message)
   }
-
-  layer = Roles.objMerge(layer, roles)
 
   res.json(layer)
 }
 
+/**
+@function locales
+
+@description
+The locales method reduces the workspace.locales{} object to an array locales with only the key and name properties.
+
+The locales are not merged with templates and only roles defined inside the workspace.locales{} locale object are considered for access.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {Object} req.params HTTP request params.
+@property {Object} [params.user] User requesting the locales.
+
+@returns {res} The HTTP response with either an error.message or JSON array of locales in workspace.
+*/
 function locales(req, res) {
+
+  // Add default role * to all users.
+  if (Array.isArray(req.params.user?.roles)) {
+
+    req.params.user.roles.push('*')
+  }
 
   const locales = Object.values(workspace.locales)
     .filter(locale => !!Roles.check(locale, req.params.user?.roles))
@@ -79,36 +144,39 @@ function locales(req, res) {
   res.send(locales)
 }
 
+/**
+@function locale
+@async
+
+@description
+The method requests a JSON locale from the getLocale module.
+
+All locale layers are requested from the getLayer module with `params.layers` flag.
+
+The locale.layers{} object is reduced to an array of layer keys without the `params.layers` flag.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {Object} req.params HTTP request params.
+@property {string} [params.locale] Locale key.
+@property {boolean} [params.layers] Whether layer objects should be returned with the locale.
+@property {Object} [params.user] User requesting the locale.
+
+@returns {res} The HTTP response with either an error.message or the JSON locale.
+*/
 async function locale(req, res) {
 
-  if (req.params.locale && !Object.hasOwn(workspace.locales, req.params.locale)) {
-    return res.status(400).send(`Unable to validate locale param.`)
+  // Add default role * to all users.
+  if (Array.isArray(req.params.user?.roles)) {
+
+    req.params.user.roles.push('*')
   }
 
-  let locale;
-
-  if (Object.hasOwn(workspace.locales, req.params.locale)) {
-
-    locale = await getLocale(req.params)
-
-  } else if (typeof workspace.locale === 'object') {
-
-    locale = workspace.locale
-  }
+  let locale = await getLocale(req.params)
 
   if (locale instanceof Error) {
     return res.status(400).send(locale.message)
   }
-  
-  // Subtitutes ${*} with process.env.SRC_* key values.
-  locale = JSON.parse(
-    JSON.stringify(locale).replace(/\$\{(.*?)\}/g,
-      matched => process.env[`SRC_${matched.replace(/(^\${)|(}$)/g, '')}`])
-  )
-
-  const roles = req.params.user?.roles || []
-  
-  roles.push('*')
 
   // Return layer object instead of array of layer keys
   if (req.params.layers) {
@@ -119,22 +187,18 @@ async function locale(req, res) {
         layer: key
       }))
 
-    await Promise.all(layers).then(layers=>{
+    await Promise.all(layers).then(layers => {
 
       locale.layers = layers
         .filter(layer => !!layer)
-        .filter(layer => !(layer instanceof Error))
-        .filter(layer => Roles.check(layer, roles))
-    })
 
-    // Also merges roles in layer objects.
-    locale = Roles.objMerge(locale, roles)
+        // The getLayer method will return an Error if role access is prevented.
+        .filter(layer => !(layer instanceof Error))
+    })
 
     return res.json(locale)
   }
 
-  locale = Roles.objMerge(locale, roles)
-  
   // Check layer access.
   locale.layers = locale.layers && Object.entries(locale.layers)
 
@@ -142,17 +206,130 @@ async function locale(req, res) {
     .filter(layer => layer[1] !== null)
 
     // check layer for user roles
-    .filter(layer => !!Roles.check(layer[1], roles))
+    .filter(layer => !!Roles.check(layer[1], req.params.user?.roles))
     .map(layer => layer[0])
 
   res.json(locale)
 }
 
+/**
+@function roles
+
+@description
+The roles method returns an array of roles returned from the roles utility.
+
+An object with detailed workspace.roles{} can be requested with the `detail=true` url parameter for the workspace/roles request.
+
+@param {req} req HTTP request.
+@param {req} res HTTP response.
+
+@property {Object} req.params 
+HTTP request parameter.
+@property {Boolean} params.detail 
+Whether the roles should be returned as an object with details.
+
+@returns {Array|Object} Returns either an array of roles as string, or an object with roles as properties.
+*/
 function roles(req, res) {
 
-  if (!workspace.locales) return res.send({})
+  const rolesSet = new Set();
 
-  let roles = Roles.get(workspace)
+  (function objectEval(o, parent, key) {
+
+    if (key === 'roles') {
+      Object.keys(parent.roles).forEach(role => {
+
+        // Add role without negation ! to roles set.
+        // The same role can not be added multiple times to the rolesSet.
+        rolesSet.add(role.replace(/^!/, ''))
+      })
+    }
+
+    // Iterate through the object tree.
+    Object.keys(o).forEach((key) => {
+      if (o[key] && typeof o[key] === 'object') {
+
+        // Call method recursive for nested objects.
+        objectEval(o[key], o, key)
+      }
+    });
+
+  })(workspace)
+
+  // Delete restricted Asterisk role.
+  rolesSet.delete('*')
+
+  const roles = Array.from(rolesSet)
+
+  // If detail=true, return workspace.roles{} object (so you can specify information for each role).
+  if (req.params.detail) {
+
+    workspace.roles ??= {}
+
+    // If the role is missing, add it to the workspace.roles{} object as an empty object.
+    roles
+      .filter(role => !Object.hasOwn(workspace.roles, role))
+      .forEach(role => workspace.roles[role] = {})
+
+    // Return the workspace.roles{} object.
+    return res.send(workspace.roles)
+  }
 
   res.send(roles)
+}
+
+/**
+@function test
+
+@description
+The workspace/test method which is only available to user with admin credentials requests all locales in workspace.
+
+Requesting all locales should add any additional templates to the workspace.
+
+The test method will iterate over all workspace.templates and get from the getTemplate method to check whether any errors are logged on a template in regards to its src parameter.
+
+A flat array of template.err will be returned from the workspace/test method.
+
+@param {req} req HTTP request.
+@param {req} res HTTP response.
+
+@property {Object} req.params 
+HTTP request parameter.
+@property {Object} params.user 
+The user requesting the test method.
+@property {Boolean} user.admin
+The user is required to have admin priviliges.
+*/
+async function test(req, res) {
+
+  if (!req.params.user?.admin) {
+    res.status(403).send(`Admin credentials are required to test the workspace sources.`)
+    return
+  }
+
+  const errArr = []
+
+  for (const localeKey of Object.keys(workspace.locales)) {
+
+    // Will get layer and assignTemplates to workspace.
+    const locale = await getLocale({locale: localeKey})
+
+    for (const layerKey of Object.keys(locale.layers)) {
+
+      // Will get layer and assignTemplates to workspace.
+      const layer = await getLayer({locale: localeKey, layer: layerKey})
+
+      if (layer.err) errArr.push(`${layerKey}: ${layer.err}`)
+    }
+  }
+
+  // From here on its 🐢 Templates all the way down.
+  for (const key of Object.keys(workspace.templates)) {
+
+    const template = await getTemplate(key)
+
+    if (template.err) errArr.push(`${key}: ${template.err.path}`)
+  }
+
+  res.send(errArr.flat())
 }

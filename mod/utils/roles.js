@@ -6,7 +6,6 @@ const merge = require('./merge')
 
 module.exports = {
   check,
-  get,
   objMerge
 }
 
@@ -18,7 +17,7 @@ function check(obj, user_roles) {
   // Always return object with '*' asterisk role.
   if (Object.hasOwn(obj.roles, '*')) return obj;
 
-  if (user_roles === undefined) return false
+  if (!user_roles) return false
 
   // Some negated role is included in user_roles[]
   const someNegatedRole = Object.keys(obj.roles).some(
@@ -45,39 +44,11 @@ function check(obj, user_roles) {
   return false;
 }
 
-function get(obj) {
-
-  const roles = new Set();
-
-  (function objectEval(o, parent, key) {
-
-    if (key === 'roles') {
-      Object.keys(parent.roles).forEach(role => {
-
-        // Add role without nagation ! to roles set.
-        roles.add(role.replace(/^!/, ''))
-
-      })
-    }
-
-    // iterate through the object tree.
-    Object.keys(o).forEach((key) => {
-      if (o[key] && typeof o[key] === 'object') objectEval(o[key], o, key)
-    });
-
-  })(obj)
-
-  // Delete restricted Asterisk role.
-  roles.delete('*')
-
-  return Array.from(roles)
-}
-
 function objMerge(obj, user_roles) {
 
   if (typeof obj !== 'object') return obj;
 
-  if (user_roles === undefined) return obj
+  if (!user_roles) return obj
 
   if (Array.isArray(obj)) {
 
