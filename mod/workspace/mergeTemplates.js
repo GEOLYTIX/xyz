@@ -47,12 +47,6 @@ module.exports = async function mergeTemplates(obj) {
   // Cache workspace in module scope for template assignment.
   workspace = await workspaceCache()
 
-  if (Object.hasOwn(workspace.templates, obj.key)) {
-
-    obj.err ??= []
-    obj.err.push(`Template matching ${obj.key} exists in workspace.`)
-  }
-
   // The object has an implicit template to merge into.
   if (obj.template) {
 
@@ -76,6 +70,12 @@ module.exports = async function mergeTemplates(obj) {
       // Template must be cloned to prevent cross polination and array aggregation.
       obj = merge(structuredClone(template), obj)
     }
+
+  // Check whether the object key exist as template if no implicit template has been defined.
+  } else if (Object.hasOwn(workspace.templates, obj.key)) {
+
+    obj.err ??= []
+    obj.err.push(`Template matching ${obj.key} exists in workspace.`)
   }
 
   for (const template_key of obj.templates || []) {

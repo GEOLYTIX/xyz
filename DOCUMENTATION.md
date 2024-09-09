@@ -24,9 +24,9 @@ The documentation pages are generated in the local `/docs` directory. The docs d
 
 The built documentation pages can be accessed via the repositories github pages.
 
-https://geolytix.github.io/xyz/
+<https://geolytix.github.io/xyz/>
 
-MAPP library modules are accessed through https://geolytix.github.io/xyz/mapp/
+MAPP library modules are accessed through <https://geolytix.github.io/xyz/mapp/>
 
 ### Modules
 
@@ -84,11 +84,12 @@ The request.email and request.password are taken from the req.body or authorizat
 Validated user object or an Error if authentication fails.
 */
 ```
+
 #### Decorator methods
 
 Decorator methods should always return a typedef.
 
-#### @deprecated methods.
+#### @deprecated methods
 
 Functions no longer in use but kept with a warning for legacy configurations should be marked as `@deprecated`.
 
@@ -129,11 +130,12 @@ A mapp-layer object is a decorated JSON layer object which has been added to a m
 ```
 
 ### @link
+
 The link tag creates an inline link element which can be used to create a link inline the description.
 
 The link can reference a module and it's inline members like methods. `{@link module:/location/decorate~flyTo}`
 
-### @example 
+### @example
 
 An @example does not require a code block [\`\`\`JS] definition. At examples should be reserved for codepen examples which can be run. Code blocks should be used for code syntax highlighting in the rendered markdown.
 
@@ -142,5 +144,6 @@ An @example does not require a code block [\`\`\`JS] definition. At examples sho
 The /docs express route can be used to preview the built pages on `http://localhost:3000/docs/`
 
 ### docs in vscode
+
 - Docs can also be previewed right in vsdocs by right clicking on any .html page in the docs directory. This will provide a live working preview of the docs in the editor.
 - You will need an extension written by microsoft called [Live Preview](https://marketplace.visualstudio.com/items?itemName=ms-vscode.live-server)
