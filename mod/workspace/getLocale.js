@@ -50,10 +50,10 @@ module.exports = async function getLocale(params) {
     return new Error('Unable to validate locale param.')
   }
 
-  // The workspace.locale is assigned as locale if params.locale is undefined.
-  let locale = !params.locale
-    ? workspace.locale
-    : workspace.locales[params.locale]
+  // The workspace.locale is assigned as locale if params.locale is not a property of workspace.locales
+  let locale = Object.hasOwn(workspace.locales, params.locale)
+    ? workspace.locales[params.locale]
+    : workspace.locale
 
   locale = await mergeTemplates(locale)
 
