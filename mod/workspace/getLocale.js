@@ -40,6 +40,10 @@ Role objects in the locale and nested layers are merged with their respective pa
 */
 module.exports = async function getLocale(params) {
 
+  if (Object.keys(params).find(key => key === '__proto__' || key === 'prototype')) {
+    return new Error('Prototype Polution')
+  }
+
   const workspace = await workspaceCache()
 
   if (workspace instanceof Error) {
@@ -64,4 +68,5 @@ module.exports = async function getLocale(params) {
   locale = Roles.objMerge(locale, params.user?.roles)
 
   return locale
+  caches
 }
