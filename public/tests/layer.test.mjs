@@ -1,5 +1,3 @@
-import { describe, it, assertEqual, assertNotEqual, assertTrue, assertFalse, assertThrows } from 'https://esm.sh/codi-test-framework@0.0.26';
-
 export async function layerTest(mapview) {
 
     function delayFunction(delay) {
@@ -10,10 +8,29 @@ export async function layerTest(mapview) {
 
     const default_zoom = mapview.view?.z || 0;
 
-    await describe(`${mapview.host} : Layer Test`, async () => {
+    await codi.describe(`${mapview.host} : Template Paths Test`, async () => {
+
+        await codi.it('All the templates are valid', async () => {
+            // Call the /test workspace method - which should return an empty array if all templates are valid.
+            const test = await mapp.utils.xhr(`${mapp.host}/api/workspace/test`);
+
+               // If the test fails, print out the invalid templates.
+               if (test.length > 0) {
+                test.forEach(template => {
+                    console.error('INVALID PATH:', template);
+                });
+            }
+
+            codi.assertTrue(test.length === 0, `There are ${test.length} invalid paths for templates`);
+
+        });
+    });
+
+    await codi.describe(`${mapview.host} : Layer Test`, async () => {
+
         for (const key in mapview.layers) {
             if (mapview.layers.hasOwnProperty(key)) {
-                await it(`Layer test : ${key}`, async () => {
+                await codi.it(`Layer test : ${key}`, async () => {
                     const layer = mapview.layers[key];
 
                     if (layer.tables) {
@@ -27,7 +44,7 @@ export async function layerTest(mapview) {
                     }
 
                     if (layer.dataviews) {
-                        for (const dataview in layer.dataview) {
+                        for (let dataview in layer.dataview) {
                             dataview = { ...dataview, display: true }
                         }
                     }
@@ -62,7 +79,7 @@ export async function layerTest(mapview) {
                                 id: lastLocation.id,
                             });
 
-                            assertTrue(location !== undefined, 'The location is undefined');
+                            codi.assertTrue(location !== undefined, 'The location is undefined');
 
                             // Create a new location
                             const newLocation = {
@@ -73,7 +90,7 @@ export async function layerTest(mapview) {
 
                             // Add a new location to the layer using the last location
                             if (layer?.draw) {
-                                await it('Add a new location to the layer using the last location coordinates', async () => {
+                                await codi.it('Add a new location to the layer using the last location coordinates', async () => {
                                     // Use the value of the infoj pin field to create a new location
                                     const pin = location.infoj.find(entry => entry.type === 'pin');
 
@@ -123,7 +140,7 @@ export async function layerTest(mapview) {
                                 // If layer.deleteLocation is defined, delete the location
                                 if (layer.deleteLocation === true) {
 
-                                    await it('Delete the location', async () => {
+                                    await codi.it('Delete the location', async () => {
                                         // Test deleting a location
                                         await mapp.utils.xhr(`${mapp.host}/api/query?` +
                                             mapp.utils.paramString({

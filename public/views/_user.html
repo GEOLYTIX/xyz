@@ -152,8 +152,10 @@
         <button class="raised primary-colour" id="default-view"
           onclick="window.location.href = `${window.location.origin}{{dir}}`">Default View</button>
         <button class="raised primary-colour" id="test-view"
-          onclick="window.location.href = `${window.location.origin}{{dir}}?template=test_view&download=true`">Test View</button>
-        <button class="raised red" id="logout" onclick="window.location.href = `${window.location.origin}{{dir}}?logout=true`">Logout</button>
+          onclick="window.location.href = `${window.location.origin}{{dir}}?template=test_view&integrity=true&download=true`">Test
+          View</button>
+        <button class="raised red" id="logout"
+          onclick="window.location.href = `${window.location.origin}{{dir}}?logout=true`">Logout</button>
       </div>
     </div>
 
@@ -485,19 +487,25 @@
 
       const field = col.getField();
 
+      const cellValue = !cell.getValue();
+
+      //The value of the field will be set to null if the field is an api and the new value from the cell is false.
+      const cellFalsy = cellValue === false ? null : cellValue;
+      const apiValue = field === 'api' ? cellFalsy : cellValue;
+
       // Re-verification cannot be undone.
       if (field === 're_verification' && cell.getValue()) return;
 
-      const response = await xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${user.email}&field=${field === 're_verification'? 'verified': field}&value=${!cell.getValue()}`);
+      const response = await xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${user.email}&field=${field === 're_verification' ? 'verified' : field}&value=${apiValue}`);
 
       if (response.err) return console.error(response.err);
 
-      cell.setValue(!cell.getValue());
+      cell.setValue(cellValue);
 
       const row = cell.getRow();
 
       if (field === 're_verification'
-      || (field === 'verified' && cell.getValue())) {
+        || (field === 'verified' && cell.getValue())) {
 
         let re_verification_cell = row.getCell('re_verification')
         re_verification_cell.setValue(true)
