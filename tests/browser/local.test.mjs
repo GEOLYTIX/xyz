@@ -11,6 +11,8 @@ import { queryTest } from '../mod/query.test.mjs';
 import { apiTest } from './_api.test.mjs';
 import { userTest } from '../mod/user/_user.test.js';
 import { ui_elementsTest } from '../lib/ui/elements/_elements.test.mjs';
+
+import { ui_layers } from '../lib/ui/layers/_layers.test.mjs';
 import { entriesTest } from '../lib/ui/locations/entries/_entires.test.mjs';
 // import { booleanTest } from '../lib/ui/locations/entries/boolean.test.mjs';
 
@@ -62,3 +64,5 @@ await ui_elementsTest.sliderTest();
 await ui_elementsTest.layerStyleTest(mapview);
 await entriesTest.pinTest(mapview);
 await ui_elementsTest.pillsTest();
+
+await ui_layers.filtersTest();
