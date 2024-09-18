@@ -61,4 +61,5 @@ await mapviewTest.olControlsTest(mapview);
 await ui_elementsTest.sliderTest();
 await ui_elementsTest.layerStyleTest(mapview);
 await entriesTest.pinTest(mapview);
+await entriesTest.geometryTest(mapview);
 await ui_elementsTest.pillsTest();
