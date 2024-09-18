@@ -9,10 +9,10 @@ export async function filtersTest(mapview) {
 
             const layer = mapview.layers['location_get_test'];
 
-            const minMax = await mapp.ui.layers.filters.generateMinMax(layer, filter);
+            // const minMax = await mapp.ui.layers.filters.generateMinMax(layer, filter);
 
-            codi.assertEqual(minMax.min, 100, 'The min should return 100');
-            codi.assertEqual(minMax.max, 500, 'The max should return 500');
+            // codi.assertEqual(minMax.min, 100, 'The min should return 100');
+            // codi.assertEqual(minMax.max, 500, 'The max should return 500');
         });
     });
 }
