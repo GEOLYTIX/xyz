@@ -47,6 +47,7 @@ await locationTest.getTest(mapview);
 // await locationTest.decorateTest();
 // await locationTest.nnearestTest();
 
+await mapviewTest.addLayerTest(mapview);
 await mapviewTest.olControlsTest(mapview);
 // await mapviewTest.addLayerTest();
 // await mapviewTest.allfeaturesTest();
