@@ -113,8 +113,7 @@ dialog.mapp-says {
   box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
   border: none !important;
   border-radius: 2px;
-  min-width: 350px;
-  max-width: 70%;
+  width: 350px;
   max-height: 70%;
   z-index: 1001;
   user-select: none;
@@ -154,6 +153,15 @@ dialog.mapp-says button {
   font-size: 0.9em;
   color: var(--color-primary);
   z-index: 1005;
+}
+
+@media only screen and (max-width: 768px) {
+
+  dialog.mapp-says {
+    min-width: 350px;
+    max-width: 70%;
+  }
+
 }
 /* end system message */
 
