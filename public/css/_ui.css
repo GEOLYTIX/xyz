@@ -107,6 +107,56 @@ dialog > button.close {
   user-select: none;
 }
 
+/* begin system message */
+dialog.mapp-says {
+  margin: auto;
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  border: none !important;
+  border-radius: 2px;
+  min-width: 350px;
+  max-width: 70%;
+  max-height: 70%;
+  z-index: 1001;
+  user-select: none;
+}
+
+dialog.mapp-says::-webkit-scrollbar {
+  display: none;
+}
+
+dialog.mapp-says:focus {
+  outline: none;
+}
+
+dialog.mapp-says h4 {
+  padding: 0.5em 1em;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 10001;
+  background-color: var(--color-primary);
+  border-bottom: solid 2px var(--color-primary-light);
+  color: var(--color-light)
+}
+
+dialog.mapp-says div {
+  padding: 1em;
+}
+
+dialog.mapp-says p {
+  white-space: pre;
+  text-align: center;
+  padding: 1em;
+}
+
+dialog.mapp-says button {
+  float: right;
+  font-size: 0.9em;
+  color: var(--color-primary);
+  z-index: 1005;
+}
+/* end system message */
+
 .modal {
   text-wrap: wrap;
   position: fixed; 
