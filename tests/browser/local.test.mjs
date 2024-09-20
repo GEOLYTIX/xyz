@@ -35,7 +35,7 @@ await layerTest.decorateTest(mapview);
 
 setView(mapview, 2, 'default');
 await layerTest.fadeTest(mapview);
-// await layerTest.featureFieldsTest();
+await layerTest.featureFieldsTest();
 // await layerTest.featureFilterTest();
 await layerTest.featureFormatsTest();
 // await layerTest.featureHoverTest();
@@ -47,6 +47,7 @@ await locationTest.getTest(mapview);
 // await locationTest.decorateTest();
 // await locationTest.nnearestTest();
 
+await mapviewTest.addLayerTest(mapview);
 await mapviewTest.olControlsTest(mapview);
 // await mapviewTest.addLayerTest();
 // await mapviewTest.allfeaturesTest();
@@ -61,3 +62,5 @@ await mapviewTest.olControlsTest(mapview);
 await ui_elementsTest.sliderTest();
 await ui_elementsTest.layerStyleTest(mapview);
 await entriesTest.pinTest(mapview);
+await entriesTest.geometryTest(mapview);
+await ui_elementsTest.pillsTest();
