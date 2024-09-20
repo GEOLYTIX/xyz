@@ -136,6 +136,12 @@ body {
     background: var(--color-light-secondary);
     cursor: pointer;
   }
+
+  .list {
+    max-width: 66vw;
+    max-height: 300px;
+    overflow-x: hidden;
+  }
 }
 
 a > img {
