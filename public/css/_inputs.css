@@ -197,7 +197,7 @@ label.checkbox {
     margin-top: -1px;
     text-align: left;
     background-color: white;
-    z-index: 999;
+    z-index: 997;
 
     &>li {
       padding: 5px;
