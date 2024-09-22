@@ -28,6 +28,9 @@
         },
         "get_location_mock": {
             "src": "file:/tests/assets/queries/get_location_mock.sql"
+        },
+        "minmax_query_mock": {
+            "src": "file:/tests/assets/queries/minmax_mock.sql"
         }
     },
     "locale": {
