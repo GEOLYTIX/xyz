@@ -56,7 +56,6 @@ await mapviewTest.olControlsTest(mapview);
 // await mapviewTest.attributionTest();
 // await mapviewTest.fitViewTest();
 // await mapviewTest.geoJSONTest();
-// await mapviewTest.geometryTest();
 // await mapviewTest.getBoundsTest();
 // await mapviewTest.infotipTest();
 // await mapviewTest.locateTest();
