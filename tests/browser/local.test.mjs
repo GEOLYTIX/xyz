@@ -65,4 +65,4 @@ await ui_elementsTest.layerStyleTest(mapview);
 await entriesTest.pinTest(mapview);
 await ui_elementsTest.pillsTest();
 
-// await ui_layers.filtersTest(mapview);
+await ui_layers.filtersTest(mapview);
