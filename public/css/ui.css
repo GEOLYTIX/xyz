@@ -1598,7 +1598,6 @@ dialog > button.close {
   user-select: none;
 }
 dialog.mapp-says {
-  margin: auto;
   box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
   border: none !important;
   border-radius: 2px;
