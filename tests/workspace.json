@@ -28,6 +28,9 @@
         },
         "get_location_mock": {
             "src": "file:/tests/assets/queries/get_location_mock.sql"
+        },
+        "minmax_query_mock": {
+            "src": "file:/tests/assets/queries/minmax_mock.sql"
         }
     },
     "locale": {
@@ -37,6 +40,9 @@
             "C": null,
             "*": null
         },
+        "mapviewControls": [
+            "Zoom"
+        ],
         "plugins": [
             "${PLUGINS}v4.8.0/coordinates.js",
             "${PLUGINS}v4.8.0/chartjs.js"
