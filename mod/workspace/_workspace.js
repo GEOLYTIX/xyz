@@ -317,7 +317,7 @@ async function test(req, res) {
     for (const layerKey of Object.keys(locale.layers)) {
 
       // Will get layer and assignTemplates to workspace.
-      const layer = await getLayer({ locale: localeKey, layer: layerKey })
+      const layer = await getLayer({ locale: localeKey, layer: layerKey, user: req.params.user })
 
       if (layer.err) errArr.push(`${layerKey}: ${layer.err}`)
     }
