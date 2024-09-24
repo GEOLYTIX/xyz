@@ -307,21 +307,44 @@ async function test(req, res) {
     return
   }
 
+  const testResults = {};
   const errArr = []
+  let custom_templates = {};
+  let templateUsage = {};
 
   for (const localeKey of Object.keys(workspace.locales)) {
 
     // Will get layer and assignTemplates to workspace.
     const locale = await getLocale({ locale: localeKey, user: req.params.user })
 
+    custom_templates = {
+      ...Object.fromEntries(
+        Object.entries(workspace.templates).filter(([key, value]) => !value._core)
+      )
+    };
+
     for (const layerKey of Object.keys(locale.layers)) {
 
       // Will get layer and assignTemplates to workspace.
       const layer = await getLayer({ locale: localeKey, layer: layerKey, user: req.params.user })
 
+      if (layer.template) {
+        checkTemplate(layer.template, custom_templates, templateUsage);
+      }
+
+      layer.templates?.forEach(template => {
+        checkTemplate(template, custom_templates, templateUsage);
+      });
+
       if (layer.err) errArr.push(`${layerKey}: ${layer.err}`)
     }
+
   }
+
+  const unused_templates = Object.keys(custom_templates).filter(template => !Object.keys(templateUsage).includes(template))
+
+  testResults.usage = templateUsage;
+  testResults.unused_templates = unused_templates;
 
   // From here on its 🐢 Templates all the way down.
   for (const key of Object.keys(workspace.templates)) {
@@ -331,5 +354,26 @@ async function test(req, res) {
     if (template.err) errArr.push(`${key}: ${template.err.path}`)
   }
 
-  res.send(errArr.flat())
+  testResults.errors = errArr.flat();
+
+  res.setHeader('content-type', 'application/json');
+
+  res.send(JSON.stringify(testResults));
+}
+
+function updateTemplateUsage(templateKey, templateUsage) {
+  if (!templateKey) return;
+
+  if (templateUsage[templateKey]) {
+    templateUsage[templateKey].count++;
+  } else {
+    templateUsage[templateKey] = { count: 1 };
+  }
+}
+
+function checkTemplate(template, custom_templates, templateUsage) {
+  const workspace_template = custom_templates[template.key];
+  if (template.key && workspace_template) {
+    updateTemplateUsage(template.key, templateUsage);
+  }
 }

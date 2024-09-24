@@ -98,15 +98,23 @@ async function cacheWorkspace() {
   // Assign default view and query templates to workspace.
   workspace.templates = {
 
-    ...view_templates,
-    ...mail_templates,
-    ...msg_templates,
-    ...query_templates,
-
+    ...Object.fromEntries(
+      Object.entries(view_templates).map(([key, template]) => [key, { ...template, _core: true }])
+    ),
+    ...Object.fromEntries(
+      Object.entries(mail_templates).map(([key, template]) => [key, { ...template, _core: true }])
+    ),
+    ...Object.fromEntries(
+      Object.entries(msg_templates).map(([key, template]) => [key, { ...template, _core: true }])
+    ),
+    ...Object.fromEntries(
+      Object.entries(query_templates).map(([key, template]) => [key, { ...template, _core: true }])
+    ),
     // Can override default templates.
-    ...custom_templates,
-
-    // Default templates can be overridden by assigning a template with the same name.
+    ...Object.fromEntries(
+      Object.entries(custom_templates).map(([key, template]) => [key, { ...template, _core: true }])
+    ),
+    // Default templates can be overridden by assigning a template with the same key.
     ...workspace.templates
   }
 
