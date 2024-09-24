@@ -108,7 +108,7 @@ dialog > button.close {
 }
 
 /* begin system message */
-dialog.mapp-says {
+dialog.alert-confirm {
   box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
   border: none !important;
   border-radius: 2px;
@@ -118,15 +118,15 @@ dialog.mapp-says {
   user-select: none;
 }
 
-dialog.mapp-says::-webkit-scrollbar {
+dialog.alert-confirm::-webkit-scrollbar {
   display: none;
 }
 
-dialog.mapp-says:focus {
+dialog.alert-confirm:focus {
   outline: none;
 }
 
-dialog.mapp-says h4 {
+dialog.alert-confirm h4 {
   padding: 0.5em 1em;
   position: sticky;
   top: 0;
@@ -137,18 +137,18 @@ dialog.mapp-says h4 {
   color: var(--color-light)
 }
 
-dialog.mapp-says div {
+dialog.alert-confirm div {
   padding: 1em;
 }
 
-dialog.mapp-says p {
+dialog.alert-confirm p {
   white-space: pre;
   text-wrap: pretty;
   text-align: center;
   padding: 1em;
 }
 
-dialog.mapp-says button {
+dialog.alert-confirm button {
   float: right;
   font-size: 0.9em;
   color: var(--color-primary);
@@ -157,7 +157,7 @@ dialog.mapp-says button {
 
 @media only screen and (max-width: 768px) {
 
-  dialog.mapp-says {
+  dialog.alert-confirm {
     min-width: 350px;
     max-width: 70%;
   }
