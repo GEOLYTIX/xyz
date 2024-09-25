@@ -2,7 +2,7 @@
     "dataviews": {
         "json_1": {
             "display": true,
-            "dataview": "json",
+            "dataview": "Json",
             "query": "num_999",
             "template": {
                 "key": "num_999",
@@ -12,7 +12,7 @@
         },
         "json_2": {
             "display": true,
-            "dataview": "json",
+            "dataview": "Json",
             "query": "num_2012",
             "target": "tabview",
             "template": {
