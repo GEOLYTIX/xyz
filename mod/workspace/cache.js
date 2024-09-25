@@ -95,25 +95,33 @@ async function cacheWorkspace() {
   const custom_templates = process.env.CUSTOM_TEMPLATES
     && await getFrom[process.env.CUSTOM_TEMPLATES.split(':')[0]](process.env.CUSTOM_TEMPLATES)
 
+  /**
+  @function mark_core
+
+  @description
+  The method maps the Object.entries of the templates_object param and assigns the _core: true property to the object marking this as a system template.
+
+  @param {Object} templates_object 
+  @returns {Object} templates_object with _core: true property.
+  */
+  function mark_core(templates_object) {
+
+    return Object.fromEntries(
+      Object.entries(templates_object)
+        .map(([key, template]) => [key, { ...template, _core: true }])
+    )
+  }
+
   // Assign default view and query templates to workspace.
   workspace.templates = {
 
-    ...Object.fromEntries(
-      Object.entries(view_templates).map(([key, template]) => [key, { ...template, _core: true }])
-    ),
-    ...Object.fromEntries(
-      Object.entries(mail_templates).map(([key, template]) => [key, { ...template, _core: true }])
-    ),
-    ...Object.fromEntries(
-      Object.entries(msg_templates).map(([key, template]) => [key, { ...template, _core: true }])
-    ),
-    ...Object.fromEntries(
-      Object.entries(query_templates).map(([key, template]) => [key, { ...template, _core: true }])
-    ),
-    // Can override default templates.
-    ...Object.fromEntries(
-      Object.entries(custom_templates).map(([key, template]) => [key, { ...template, _core: true }])
-    ),
+    ...mark_core(view_templates),
+    ...mark_core(mail_templates),
+    ...mark_core(msg_templates),
+    ...mark_core(query_templates),
+
+    ...custom_templates,
+
     // Default templates can be overridden by assigning a template with the same key.
     ...workspace.templates
   }
