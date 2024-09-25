@@ -133,6 +133,7 @@ function assignWorkspaceTemplates(obj) {
 
     if (entry[0] === 'template' && entry[1].key) {
 
+      entry[1]._type = 'workspace_template';
       workspace.templates[entry[1].key] = Object.assign(workspace.templates[entry[1].key] || {}, entry[1])
 
       return;

@@ -319,7 +319,7 @@ async function test(req, res) {
 
     custom_templates = {
       ...Object.fromEntries(
-        Object.entries(workspace.templates).filter(([key, value]) => !value._core)
+        Object.entries(workspace.templates).filter(([key, value]) => value._type === 'workspace_template')
       )
     };
 
@@ -341,8 +341,10 @@ async function test(req, res) {
 
   }
 
+  //Finding the unused templates from the custom_template where we don't see any count in the templateUsage object.
   const unused_templates = Object.keys(custom_templates).filter(template => !Object.keys(templateUsage).includes(template))
 
+  //Adding the results to the testResults object.
   testResults.usage = templateUsage;
   testResults.unused_templates = unused_templates;
 
@@ -361,9 +363,12 @@ async function test(req, res) {
   res.send(JSON.stringify(testResults));
 }
 
+//Helper function to update the template usage
 function updateTemplateUsage(templateKey, templateUsage) {
   if (!templateKey) return;
 
+  //if we find a templatekey in the usage object then incremenet the count by 1.
+  // else we will add a new entry to the object with a count of 1. 
   if (templateUsage[templateKey]) {
     templateUsage[templateKey].count++;
   } else {
@@ -371,9 +376,15 @@ function updateTemplateUsage(templateKey, templateUsage) {
   }
 }
 
+//Helper function used to check against a template coming from either a layer.template or a layer.templates entries.
 function checkTemplate(template, custom_templates, templateUsage) {
-  const workspace_template = custom_templates[template.key];
-  if (template.key && workspace_template) {
-    updateTemplateUsage(template.key, templateUsage);
+  //We set a template_key based on if the template is a string or an object.
+  const template_key = typeof template === 'string' ? template : template.key;
+  //Get the template from the workspace.templates
+  const workspace_template = custom_templates[template_key];
+
+  //If we get the template and have a key, then we will increase the usage counter.
+  if (template_key && workspace_template) {
+    updateTemplateUsage(template_key, templateUsage);
   }
 }

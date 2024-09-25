@@ -96,7 +96,7 @@ async function cacheWorkspace() {
     && await getFrom[process.env.CUSTOM_TEMPLATES.split(':')[0]](process.env.CUSTOM_TEMPLATES)
 
   /**
-  @function mark_core
+  @function mark_template
 
   @description
   The method maps the Object.entries of the templates_object param and assigns the _core: true property to the object marking this as a system template.
@@ -104,26 +104,26 @@ async function cacheWorkspace() {
   @param {Object} templates_object 
   @returns {Object} templates_object with _core: true property.
   */
-  function mark_core(templates_object) {
+  function mark_template(templates_object, type) {
 
     return Object.fromEntries(
       Object.entries(templates_object)
-        .map(([key, template]) => [key, { ...template, _core: true }])
+        .map(([key, template]) => [key, { ...template, _type: type }])
     )
   }
 
   // Assign default view and query templates to workspace.
   workspace.templates = {
 
-    ...mark_core(view_templates),
-    ...mark_core(mail_templates),
-    ...mark_core(msg_templates),
-    ...mark_core(query_templates),
+    ...mark_template(view_templates, 'core'),
+    ...mark_template(mail_templates, 'core'),
+    ...mark_template(msg_templates, 'core'),
+    ...mark_template(query_templates, 'core'),
 
-    ...custom_templates,
+    ...mark_template(custom_templates, 'custom_templates'),
 
     // Default templates can be overridden by assigning a template with the same key.
-    ...workspace.templates
+    ...mark_template(workspace.templates, 'workspace_template')
   }
 
   // A workspace must have a default locale [template]
