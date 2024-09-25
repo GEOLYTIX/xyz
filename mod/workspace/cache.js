@@ -64,13 +64,6 @@ const query_templates = require('./templates/_queries')
 const workspace_src = process.env.WORKSPACE?.split(':')[0]
 
 /**
-@global
-@typedef {string} _type
-The _type property on a template used to distinguish templates that get added to the workspace.templates object for further testing.
-Expected values for this are 'core', 'custom_template',  'workspace_template'
-*/
-
-/**
 @function cacheWorkspace
 
 @description

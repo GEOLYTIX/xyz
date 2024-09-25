@@ -329,11 +329,11 @@ async function test(req, res) {
       const layer = await getLayer({ locale: localeKey, layer: layerKey, user: req.params.user })
 
       if (layer.template) {
-        checkTemplate(layer.template, custom_templates, templateUsage);
+        update_templateUsage(layer.template, custom_templates, templateUsage);
       }
 
       layer.templates?.forEach(template => {
-        checkTemplate(template, custom_templates, templateUsage);
+        update_templateUsage(template, custom_templates, templateUsage);
       });
 
       if (layer.err) errArr.push(`${layerKey}: ${layer.err}`)
@@ -363,28 +363,36 @@ async function test(req, res) {
   res.send(JSON.stringify(testResults));
 }
 
-//Helper function to update the template usage
-function updateTemplateUsage(templateKey, templateUsage) {
-  if (!templateKey) return;
+/**
+@function update_templateUsage
 
-  //if we find a templatekey in the usage object then incremenet the count by 1.
-  // else we will add a new entry to the object with a count of 1. 
-  if (templateUsage[templateKey]) {
-    templateUsage[templateKey].count++;
-  } else {
-    templateUsage[templateKey] = { count: 1 };
-  }
-}
+@description
+Checks how many times a custom_template is used by layers.
 
-//Helper function used to check against a template coming from either a layer.template or a layer.templates entries.
-function checkTemplate(template, custom_templates, templateUsage) {
-  //We set a template_key based on if the template is a string or an object.
+@param {string||object} template The template maybe a string or an object.
+@param {Object} custom_templates An object of _type='workspace_template' templates.
+@param {Object} templateUsage Also an object of _type='workspace_template' templates with an added count property.
+*/
+function update_templateUsage(template, custom_templates, templateUsage) {
+
+  // We set a template_key based on if the template is a string or an object.
   const template_key = typeof template === 'string' ? template : template.key;
-  //Get the template from the workspace.templates
+
+  // Get the template from the workspace.templates
   const workspace_template = custom_templates[template_key];
 
-  //If we get the template and have a key, then we will increase the usage counter.
+  // If we get the template and have a key, then we will increase the usage counter.
   if (template_key && workspace_template) {
-    updateTemplateUsage(template_key, templateUsage);
+
+    if (templateUsage[templateKey]) {
+
+      // Increase counter for existing templateKey in templateUsage.
+      templateUsage[templateKey].count++;
+
+    } else {
+
+      // Create templateKey in templateUsage with count 1.
+      templateUsage[templateKey] = { count: 1 };
+    }
   }
 }

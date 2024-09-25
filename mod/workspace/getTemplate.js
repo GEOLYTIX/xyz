@@ -18,6 +18,17 @@ const workspaceCache = require('./cache')
 const envReplace = require('../utils/envReplace')
 
 /**
+@global
+@typedef {Object} template A template is an object property of the workspace.templates
+@property {Object} _type The _type property distinguish the origin of a template. 'core' templates are added from the /mod/workspace/templates directory. A 'custom_template' is added from a custom_template JSON file defined in the process.env. A 'workspace_template' is added from the workspace itself.
+@property {String} src The source is a location from which a template object is loaded when required. Once loaded the template will be cached.
+@property {Object} cached The cached template.
+@property {String} template The string representation of a template, eg. html, sql.
+@property {Function} render A method which resolves in a template string.
+@property {Boolean} module The template is a module.
+*/
+
+/**
 @function getTemplate
 @async
 

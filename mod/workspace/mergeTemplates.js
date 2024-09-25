@@ -119,6 +119,8 @@ module.exports = async function mergeTemplates(obj) {
 @description
 The method parses an object for a template object property. The template property value will be assigned to the workspace.templates{} object matching the template key value.
 
+The template._type property will be set to 'workspace_template' indicating that the templates origin is in the workspace. It is possible to overassign _type:'core' templates which are loaded from the /mod/workspace/templates directory.
+
 The method will call itself for nested objects.
 
 @param {Object} obj 
