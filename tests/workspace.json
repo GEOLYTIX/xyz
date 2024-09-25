@@ -277,6 +277,10 @@
                     {
                         "key": "bogus_file",
                         "src": "file:/tests/assets/styles/bogus_file.json"
+                    },
+                    {
+                        "key": "dataviews_json",
+                        "src": "file:/tests/assets/dataviews/dataviews_json.json"
                     }
                 ]
             },
