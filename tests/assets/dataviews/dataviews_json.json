@@ -1,0 +1,24 @@
+{
+    "dataviews": {
+        "json_1": {
+            "display": true,
+            "dataview": "Json",
+            "query": "num_999",
+            "template": {
+                "key": "num_999",
+                "template": "SELECT 999.999 as value"
+            },
+            "target": "tabview"
+        },
+        "json_2": {
+            "display": true,
+            "dataview": "Json",
+            "query": "num_2012",
+            "target": "tabview",
+            "template": {
+                "key": "num_2012",
+                "template": "SELECT 2012 as value"
+            }
+        }
+    }
+}
