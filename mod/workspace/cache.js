@@ -64,6 +64,13 @@ const query_templates = require('./templates/_queries')
 const workspace_src = process.env.WORKSPACE?.split(':')[0]
 
 /**
+@global
+@typedef {string} _type
+The _type property on a template used to distinguish templates that get added to the workspace.templates object for further testing.
+Expected values for this are 'core', 'custom_template',  'workspace_template'
+*/
+
+/**
 @function cacheWorkspace
 
 @description
@@ -99,8 +106,9 @@ async function cacheWorkspace() {
   @function mark_template
 
   @description
-  The method maps the Object.entries of the templates_object param and assigns the _core: true property to the object marking this as a system template.
+  The method maps the Object.entries of the templates_object param and assigns the _type property on the object marking is a different types of templates.
 
+  
   @param {Object} templates_object 
   @returns {Object} templates_object with _core: true property.
   */
