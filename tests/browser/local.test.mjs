@@ -48,6 +48,7 @@ await ui_elementsTest.layerStyleTest(mapview);
 await ui_elementsTest.pillsTest();
 await ui_elementsTest.alertTest();
 await ui_elementsTest.confirmTest();
+await ui_elementsTest.dialogTest();
 
 await entriesTest.pinTest(mapview);
 await entriesTest.geometryTest(mapview);
