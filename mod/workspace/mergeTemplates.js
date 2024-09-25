@@ -71,7 +71,7 @@ module.exports = async function mergeTemplates(obj) {
       obj = merge(structuredClone(template), obj)
     }
 
-  // Check whether the object key exist as template if no implicit template has been defined.
+    // Check whether the object key exist as template if no implicit template has been defined.
   } else if (Object.hasOwn(workspace.templates, obj.key)) {
 
     obj.err ??= []
@@ -95,8 +95,10 @@ module.exports = async function mergeTemplates(obj) {
       obj.err.push(`${template_key}: ${template.message}`)
     } else {
 
-      //The object key must not be overwritten by a template key
+      //The object key must not be overwritten by a template key.
       delete template.key;
+      //The object template must not be overwritten by a templates template.
+      delete template.template;
       // Merge template --> obj
       obj = merge(obj, template)
     }
@@ -131,6 +133,7 @@ function assignWorkspaceTemplates(obj) {
 
     if (entry[0] === 'template' && entry[1].key) {
 
+      entry[1]._type = 'workspace_template';
       workspace.templates[entry[1].key] = Object.assign(workspace.templates[entry[1].key] || {}, entry[1])
 
       return;
