@@ -1631,6 +1631,11 @@ dialog.alert-confirm p {
   text-align: center;
   padding: 1em;
 }
+dialog.alert-confirm .buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 0.2em;
+}
 dialog.alert-confirm button {
   float: right;
   font-size: 0.9em;
