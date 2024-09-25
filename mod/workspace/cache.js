@@ -111,9 +111,7 @@ async function cacheWorkspace() {
       Object.entries(query_templates).map(([key, template]) => [key, { ...template, _core: true }])
     ),
     // Can override default templates.
-    ...Object.fromEntries(
-      Object.entries(custom_templates).map(([key, template]) => [key, { ...template, _core: true }])
-    ),
+    ...custom_templates,
     // Default templates can be overridden by assigning a template with the same key.
     ...workspace.templates
   }
