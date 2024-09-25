@@ -1,8 +1,5 @@
-import { booleanTest } from './locations/entries/boolean.test.mjs'
-import { describe } from 'codi';
+import { Tabview } from './Tabview.test.mjs';
 
-export async function uiElementsTest(mapview) {
-    await describe('UI elements test', async () => {
-        await booleanTest();
-    })
+export const uiTest = {
+    Tabview
 }
