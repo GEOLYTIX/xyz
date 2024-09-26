@@ -28,7 +28,7 @@ const filterTypes = {
       .map((val) => `"${col}" ILIKE \$${addValues(`${val}%`)}`)
       .join(' OR ')})`,
 
-  match: (col, val) => `"${col}"::text ILIKE \$${addValues(val)}`
+  match: (col, val) => `"${col}"::text = \$${addValues(val)}`
 }
 
 let SQLparams
