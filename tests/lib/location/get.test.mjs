@@ -39,7 +39,7 @@ export async function getTest(mapview) {
          * This tests that no location is returned if no infoj is provided
          * @function it
          */
-        await codi.it('Location get should not return anything if no inoj is present', async () => {
+        await codi.it('Location get should return undefined if location.layer.info is undefined.', async () => {
 
             //Keep the infoj and remove it for the test
             const infoj = {'infoj': locationLayer.infoj}
@@ -52,7 +52,7 @@ export async function getTest(mapview) {
                 id: 6,
             });
 
-            codi.assertEqual(location, undefined, 'We expect to see no infoj');
+            codi.assertEqual(location, undefined, 'Location is undefined');
 
             //Restore the infoj for subsequent tests
             Object.assign(locationLayer, infoj)
