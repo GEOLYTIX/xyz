@@ -333,10 +333,10 @@ async function test(req, res) {
 
       if (layer.err) test.errArr.push(`${layerKey}: ${layer.err}`)
     }
-
-    // Test locale and all of its layers as nested object.
-    templateUse(locale, test);
   }
+
+  // Test locale and all of its layers as nested object.
+  templateUse(workspace.locales, test);
 
   // From here on its 🐢 Templates all the way down.
   for (const key of Object.keys(workspace.templates)) {
@@ -376,10 +376,8 @@ Add template keys to test.used_templates Array.
 */
 function templateUse(obj, test) {
 
-  if (obj === null) return;
-
-  if (obj instanceof Object && !Object.keys(obj)) return;
-
+  if (typeof obj !== 'object') return;
+  
   Object.entries(obj).forEach(entry => {
 
     // entry key === ['template', 'templates', 'query']
@@ -398,11 +396,10 @@ function templateUse(obj, test) {
       if (typeof entry[1] === 'object' && Object.hasOwn(entry[1], 'key')) {
         test.unused_templates.delete(entry[1].key)
         test.used_templates.push(entry[1].key)
-        return
+        return;
       }
 
       if (typeof entry[1] === 'string') {
-
         test.unused_templates.delete(entry[1])
         test.used_templates.push(entry[1])
       }
@@ -412,14 +409,11 @@ function templateUse(obj, test) {
     if (Array.isArray(entry[1])) {
 
       entry[1].forEach(entry => templateUse(entry, test))
-      return;
+
+    // Iterate through nested objects eg. layers      
+    } else if (entry[1] instanceof Object) {
+
+      templateUse(entry[1], test)
     }
-
-    // Iterate through nested objects eg. layers
-    if (entry[1] instanceof Object) {
-
-      Object.values(entry[1])?.forEach(value => templateUse(value, test))
-    }
-
   })
 }

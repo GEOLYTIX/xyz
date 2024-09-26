@@ -97,8 +97,10 @@ module.exports = async function mergeTemplates(obj) {
 
       //The object key must not be overwritten by a template key.
       delete template.key;
+
       //The object template must not be overwritten by a templates template.
       delete template.template;
+      
       // Merge template --> obj
       obj = merge(obj, template)
     }
