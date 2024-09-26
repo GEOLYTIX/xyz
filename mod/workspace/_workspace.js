@@ -329,7 +329,7 @@ async function test(req, res) {
       // Will get layer and assignTemplates to workspace.
       const layer = await getLayer({ locale: localeKey, layer: layerKey, user: req.params.user })
 
-      locale.layers[layerKey] = layer; 
+      locale.layers[layerKey] = layer;
 
       if (layer.err) test.errArr.push(`${layerKey}: ${layer.err}`)
     }
@@ -385,12 +385,6 @@ function templateUse(obj, test) {
     // entry key === ['template', 'templates', 'query']
     if (test.properties.has(entry[0])) {
 
-      if (typeof entry[1] === 'string') {
-
-        test.unused_templates.delete(entry[1])
-        test.used_templates.push(entry[1])
-      }
-
       if (Array.isArray(entry[1])) {
 
         entry[1]
@@ -399,6 +393,18 @@ function templateUse(obj, test) {
             test.unused_templates.delete(item)
             test.used_templates.push(item)
           })
+      }
+
+      if (typeof entry[1] === 'object' && Object.hasOwn(entry[1], 'key')) {
+        test.unused_templates.delete(entry[1].key)
+        test.used_templates.push(entry[1].key)
+        return
+      }
+
+      if (typeof entry[1] === 'string') {
+
+        test.unused_templates.delete(entry[1])
+        test.used_templates.push(entry[1])
       }
     }
 
