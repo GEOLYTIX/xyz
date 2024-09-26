@@ -107,7 +107,6 @@ async function cacheWorkspace() {
   */
   function mark_template(templates_object, type) {
 
-    // custom_templates may be undefined.
     if (!templates_object) return;
 
     return Object.fromEntries(
@@ -124,10 +123,10 @@ async function cacheWorkspace() {
     ...mark_template(msg_templates, 'core'),
     ...mark_template(query_templates, 'core'),
 
-    ...mark_template(custom_templates, 'custom_templates'),
+    ...mark_template(custom_templates, 'custom'),
 
     // Default templates can be overridden by assigning a template with the same key.
-    ...mark_template(workspace.templates, 'workspace_template')
+    ...mark_template(workspace.templates, 'workspace')
   }
 
   // A workspace must have a default locale [template]

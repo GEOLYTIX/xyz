@@ -307,93 +307,111 @@ async function test(req, res) {
     return
   }
 
-  const testResults = {};
-  const errArr = []
-  let custom_templates = {};
-  let templateUsage = {};
+  const test = {
+    results: {},
+    errArr: [],
+    unused_templates: new Set(),
+    used_templates: [],
+    properties: new Set(['template', 'templates', 'query'])
+  }
 
   for (const localeKey of Object.keys(workspace.locales)) {
 
     // Will get layer and assignTemplates to workspace.
     const locale = await getLocale({ locale: localeKey, user: req.params.user })
 
-    //We get the initial custom templates from the workspace.templates as we want to see usage of templates before we merge templates from layers.
-    custom_templates = {
-      ...Object.fromEntries(
-        Object.entries(workspace.templates).filter(([key, value]) => value._type === 'workspace_template')
-      )
-    };
+    Object.entries(workspace.templates)
+      .filter(([key, value]) => value._type === 'workspace')
+      .forEach(([key, value]) => test.unused_templates.add(key))
 
     for (const layerKey of Object.keys(locale.layers)) {
 
       // Will get layer and assignTemplates to workspace.
       const layer = await getLayer({ locale: localeKey, layer: layerKey, user: req.params.user })
 
-      if (layer.template) {
-        update_templateUsage(layer.template, custom_templates, templateUsage);
-      }
-
-      layer.templates?.forEach(template => {
-        update_templateUsage(template, custom_templates, templateUsage);
-      });
-
-      if (layer.err) errArr.push(`${layerKey}: ${layer.err}`)
+      if (layer.err) test.errArr.push(`${layerKey}: ${layer.err}`)
     }
 
+    // Test locale and all of its layers as nested object.
+    templateUse(locale, test);
   }
-
-  //Finding the unused templates from the custom_template where we don't see any count in the templateUsage object.
-  const unused_templates = Object.keys(custom_templates).filter(template => !Object.keys(templateUsage).includes(template))
-
-  //Adding the results to the testResults object.
-  testResults.usage = templateUsage;
-  testResults.unused_templates = unused_templates;
 
   // From here on its 🐢 Templates all the way down.
   for (const key of Object.keys(workspace.templates)) {
 
     const template = await getTemplate(key)
 
-    if (template.err) errArr.push(`${key}: ${template.err.path}`)
+    if (template.err) test.errArr.push(`${key}: ${template.err.path}`)
   }
 
-  testResults.errors = errArr.flat();
+  test.results.errors = test.errArr.flat();
+
+  test.results.unused_templates = Array.from(test.unused_templates);
+
+  // Reduce the test.used_templates array to count the occurance of each template.
+  test.results.usage = Object.fromEntries(test.used_templates
+    .reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map()));
 
   res.setHeader('content-type', 'application/json');
 
-  res.send(JSON.stringify(testResults));
+  res.send(JSON.stringify(test.results));
 }
 
 /**
-@function update_templateUsage
+@function templateUse
 
 @description
-Checks how many times a custom_template is used by layers.
+Iterates through all nested object properties.
+Test properties found in the test.properties Set.
+Removes template keys from test.unused_templates Set.
+Add template keys to test.used_templates Array.
 
-@param {string||object} template The template maybe a string or an object.
-@param {Object} custom_templates An object of _type='workspace_template' templates.
-@param {Object} templateUsage Also an object of _type='workspace_template' templates with an added count property.
+@param {Object} obj The object to test.
+@param {Object} test The test config object.
+@property {Set} test.properties Set of properties to test ['template', 'templates', 'query']
+@property {Set} test.unused_templates Set of templates not (yet) used.
+@property {Arry} test.used_templates Array of template keys for each usage.
 */
-function update_templateUsage(template, custom_templates, templateUsage) {
+function templateUse(obj, test) {
 
-  // We set a template_key based on if the template is a string or an object.
-  const template_key = typeof template === 'string' ? template : template.key;
+  if (obj === null) return;
 
-  // Get the template from the workspace.templates
-  const workspace_template = custom_templates[template_key];
+  if (obj instanceof Object && !Object.keys(obj)) return;
 
-  // If we get the template and have a key, then we will increase the usage counter.
-  if (template_key && workspace_template) {
+  Object.entries(obj).forEach(entry => {
 
-    if (templateUsage[template_key]) {
+    // entry key === ['template', 'templates', 'query']
+    if (test.properties.has(entry[0])) {
 
-      // Increase counter for existing templateKey in templateUsage.
-      templateUsage[template_key].count++;
+      if (typeof entry[1] === 'string') {
 
-    } else {
+        test.unused_templates.delete(entry[1])
+        test.used_templates.push(entry[1])
+      }
 
-      // Create templateKey in templateUsage with count 1.
-      templateUsage[template_key] = { count: 1 };
+      if (Array.isArray(entry[1])) {
+
+        entry[1]
+          .filter(item => typeof item === 'string')
+          .forEach(item => {
+            test.unused_templates.delete(item)
+            test.used_templates.push(item)
+          })
+      }
     }
-  }
+
+    // Iterate through each array, eg. infoj
+    if (Array.isArray(entry[1])) {
+
+      entry[1].forEach(entry => templateUse(entry, test))
+      return;
+    }
+
+    // Iterate through nested objects eg. layers
+    if (entry[1] instanceof Object) {
+
+      Object.values(entry[1])?.forEach(value => templateUse(value, test))
+    }
+
+  })
 }
