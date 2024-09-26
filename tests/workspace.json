@@ -13,10 +13,6 @@
             "type": "module",
             "src": "file:/tests/assets/queries/foo.js"
         },
-        "location_get": {
-            "type": "module",
-            "src": "file:/tests/assets/queries/foo.js"
-        },
         "template_1": {
             "src": "file:/tests/assets/infoj/template_infoj.json"
         },
@@ -277,6 +273,10 @@
                     {
                         "key": "bogus_file",
                         "src": "file:/tests/assets/styles/bogus_file.json"
+                    },
+                    {
+                        "key": "dataviews_json",
+                        "src": "file:/tests/assets/dataviews/dataviews_json.json"
                     }
                 ]
             },
@@ -300,6 +300,14 @@
                     },
                     {
                         "src": "file:/tests/assets/layers/location_mock/infoj.json"
+                    }
+                ]
+            },
+            "location_get_test_no_infoj": {
+                "hidden": true,
+                "templates": [
+                    {
+                        "src": "file:/tests/assets/layers/location_mock/layer.json"
                     }
                 ]
             }
