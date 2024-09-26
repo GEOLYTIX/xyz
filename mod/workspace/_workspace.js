@@ -317,6 +317,7 @@ async function test(req, res) {
     // Will get layer and assignTemplates to workspace.
     const locale = await getLocale({ locale: localeKey, user: req.params.user })
 
+    //We get the initial custom templates from the workspace.templates as we want to see usage of templates before we merge templates from layers.
     custom_templates = {
       ...Object.fromEntries(
         Object.entries(workspace.templates).filter(([key, value]) => value._type === 'workspace_template')
@@ -384,15 +385,15 @@ function update_templateUsage(template, custom_templates, templateUsage) {
   // If we get the template and have a key, then we will increase the usage counter.
   if (template_key && workspace_template) {
 
-    if (templateUsage[templateKey]) {
+    if (templateUsage[template_key]) {
 
       // Increase counter for existing templateKey in templateUsage.
-      templateUsage[templateKey].count++;
+      templateUsage[template_key].count++;
 
     } else {
 
       // Create templateKey in templateUsage with count 1.
-      templateUsage[templateKey] = { count: 1 };
+      templateUsage[template_key] = { count: 1 };
     }
   }
 }
