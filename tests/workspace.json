@@ -31,6 +31,9 @@
         },
         "minmax_query_mock": {
             "src": "file:/tests/assets/queries/minmax_mock.sql"
+        },
+        "data_array": {
+            "src": "file:/tests/assets/queries/data_array.sql"
         }
     },
     "locale": {
