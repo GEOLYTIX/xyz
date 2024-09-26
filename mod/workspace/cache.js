@@ -107,6 +107,9 @@ async function cacheWorkspace() {
   */
   function mark_template(templates_object, type) {
 
+    // custom_templates may be undefined.
+    if (!templates_object) return;
+
     return Object.fromEntries(
       Object.entries(templates_object)
         .map(([key, template]) => [key, { ...template, _type: type }])
