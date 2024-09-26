@@ -310,7 +310,8 @@
                         "src": "file:/tests/assets/layers/location_mock/layer.json"
                     }
                 ]
-            }
+            },
+            "cluster_test": {}
         }
     }
 }
