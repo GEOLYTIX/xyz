@@ -48,7 +48,7 @@ export async function filtersTest(mapview) {
             //Delete the min value from the filter
             delete filter.min;
 
-            //Delte the lte value of the current filter otherwise it will not be changed in the next test
+            //Delete the lte value of the current filter otherwise it will not be changed in the next test
             delete layer.filter.current[filter.field].lte;
         });
 
@@ -67,5 +67,22 @@ export async function filtersTest(mapview) {
             codi.assertEqual(minInput.value, '100', 'The min should return 100.');
             codi.assertEqual(maxInput.value, '1000', 'The max should return 1000');
         });
+
+        await codi.it('Numeric Filter: layer.current specified as `lte: 200` and `gte: 800`', async () => {
+
+            layer.filter.current[filter.field].lte = 800
+            layer.filter.current[filter.field].gte = 200
+
+            const numericFilter = await mapp.ui.layers.filters.numeric(layer, filter);
+            const minInput = numericFilter.querySelector('div > input[type=range]:nth-child(3)');
+            const maxInput = numericFilter.querySelector('div > input[type=range]:nth-child(4)');
+
+            codi.assertEqual(minInput.value, '200', 'The min should return 200.');
+            codi.assertEqual(maxInput.value, '800', 'The max should return 800');
+
+            //Delete the lte/gte value of the current filter otherwise it will not be changed in the next test
+            delete layer.filter.current[filter.field].lte;
+            delete layer.filter.current[filter.field].gte;
+        })
     });
 }
