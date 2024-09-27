@@ -13,7 +13,7 @@ export async function dialogTest() {
 
             const params = {
                 target: document.getElementById('Map'),
-                close: true,
+                closeBtn: true,
                 headerDrag: true,
                 header: 'I am a header',
                 content: 'I am so content',
