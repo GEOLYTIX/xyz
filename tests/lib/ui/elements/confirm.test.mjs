@@ -34,11 +34,11 @@ export async function confirmTest() {
             const confirm_buttons = confirm.querySelectorAll('button');
 
             await codi.it('Should have an OK button', async () => {
-                codi.assertEqual(confirm_buttons[1].innerText, 'OK', 'We expect to see the OK button');
+                codi.assertEqual(confirm_buttons[0].innerText, 'OK', 'We expect to see the OK button');
             })
 
             await codi.it('Should have a Cancel button', async () => {
-                codi.assertEqual(confirm_buttons[2].innerText, 'Cancel', 'We expect to see the Cancel button');
+                codi.assertEqual(confirm_buttons[1].innerText, 'Cancel', 'We expect to see the Cancel button');
             });
 
             // Close the confirm 
@@ -71,11 +71,11 @@ export async function confirmTest() {
             const confirm_buttons = confirm.querySelectorAll('button');
 
             await codi.it('Should have an OK button', async () => {
-                codi.assertEqual(confirm_buttons[1].innerText, 'OK', 'We expect to see the OK button');
+                codi.assertEqual(confirm_buttons[0].innerText, 'OK', 'We expect to see the OK button');
             })
 
             await codi.it('Should have a Cancel button', async () => {
-                codi.assertEqual(confirm_buttons[2].innerText, 'Cancel', 'We expect to see the Cancel button');
+                codi.assertEqual(confirm_buttons[1].innerText, 'Cancel', 'We expect to see the Cancel button');
             });
 
             // Close the confirm 
