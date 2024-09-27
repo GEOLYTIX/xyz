@@ -22,18 +22,16 @@ export async function dialogTest() {
                 contained: true
             };
 
-            mapp.ui.elements.dialog(params);
-            let dialog = document.querySelector('#Map > dialog');
+            const dialog = mapp.ui.elements.dialog(params);
 
             /**
              * The dialog should be able to close
              * @function it
              */
             await codi.it('Dialog should be able to close', async () => {
-                const closeBtn = dialog.childNodes[1];
-                closeBtn.click();
-                dialog = document.querySelector('#Map > dialog');
-                codi.assertEqual(dialog, undefined, 'The dialog should be removed from the DOM on close');
+                dialog.close();
+                const dialog_element = document.querySelector('#Map > dialog');
+                codi.assertEqual(dialog_element, null, 'The dialog should be removed from the DOM on close');
             });
         });
     });
