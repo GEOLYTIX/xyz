@@ -64,13 +64,6 @@ const query_templates = require('./templates/_queries')
 const workspace_src = process.env.WORKSPACE?.split(':')[0]
 
 /**
-@global
-@typedef {string} _type
-The _type property on a template used to distinguish templates that get added to the workspace.templates object for further testing.
-Expected values for this are 'core', 'custom_template',  'workspace_template'
-*/
-
-/**
 @function cacheWorkspace
 
 @description
@@ -114,6 +107,8 @@ async function cacheWorkspace() {
   */
   function mark_template(templates_object, type) {
 
+    if (!templates_object) return;
+
     return Object.fromEntries(
       Object.entries(templates_object)
         .map(([key, template]) => [key, { ...template, _type: type }])
@@ -128,10 +123,10 @@ async function cacheWorkspace() {
     ...mark_template(msg_templates, 'core'),
     ...mark_template(query_templates, 'core'),
 
-    ...mark_template(custom_templates, 'custom_templates'),
+    ...mark_template(custom_templates, 'custom'),
 
     // Default templates can be overridden by assigning a template with the same key.
-    ...mark_template(workspace.templates, 'workspace_template')
+    ...mark_template(workspace.templates, 'workspace')
   }
 
   // A workspace must have a default locale [template]
