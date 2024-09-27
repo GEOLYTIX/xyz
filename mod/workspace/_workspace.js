@@ -377,7 +377,9 @@ Add template keys to test.used_templates Array.
 @param {Object} obj The object to test.
 @param {Object} test The test config object.
 @property {Set} test.properties Set of properties to test ['template', 'templates', 'query']
+@property {Set} test.workspace_templates Set of templates _type=workspace templates.
 @property {Set} test.unused_templates Set of templates not (yet) used.
+@property {Set} test.overwritten_templates Set of _type=workspace templates which have been overwritten.
 @property {Array} test.used_templates Array of template keys for each usage.
 */
 function templateUse(obj, test) {
