@@ -54,6 +54,13 @@ export async function infojTest() {
         }
       ];
 
+      // Get listview element from the infoj object
+      const infoj = mapp.ui.locations.infoj(location, infoj_order);
+
+      // Get textvalues from location listview elements.
+      const results = Array.from(infoj.children)
+        .map(el => el.firstChild.innerText.trim())
+
       // Expected results
       const expected = [
         'value_2',
@@ -61,14 +68,7 @@ export async function infojTest() {
         'value_4',
         'value_5',
         'value_6'
-      ];
-
-      // Get listview element from the infoj object
-      const infoj = mapp.ui.locations.infoj(location, infoj_order);
-
-      // Get textvalues from location listview elements.
-      const results = Array.from(infoj.children)
-        .map(el => el.firstChild.innerText.trim())
+      ];        
 
       // Asserting we get the expected results and order
       codi.assertEqual(results, expected, 'The infoj order needs to be as defined in the expected');
