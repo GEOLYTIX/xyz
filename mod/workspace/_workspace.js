@@ -356,14 +356,10 @@ async function test(req, res) {
 
   test.results.overwritten_templates = Array.from(test.overwritten_templates);
 
+  test.used_templates.sort()
+
   // Reduce the test.used_templates array to count the occurance of each template.
   test.results.usage = Object.fromEntries(test.used_templates
-    // sort by usage
-    .sort((a, b) => {
-      if (a > b) return 1
-      if (a < b) return -1
-      return 0
-    })
     .reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map()));
 
   res.setHeader('content-type', 'application/json');
