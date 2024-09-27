@@ -310,19 +310,23 @@ async function test(req, res) {
   const test = {
     results: {},
     errArr: [],
-    unused_templates: new Set(),
     used_templates: [],
     properties: new Set(['template', 'templates', 'query'])
   }
+
+  test.workspace_templates = new Set(Object.entries(workspace.templates)
+    .filter(([key, value]) => value._type === 'workspace')
+    .map(([key, value]) => key))
+
+  // Create clone of workspace_templates
+  test.unused_templates = new Set([...test.workspace_templates])
+
+  test.overwritten_templates = new Set()
 
   for (const localeKey of Object.keys(workspace.locales)) {
 
     // Will get layer and assignTemplates to workspace.
     const locale = await getLocale({ locale: localeKey, user: req.params.user })
-
-    Object.entries(workspace.templates)
-      .filter(([key, value]) => value._type === 'workspace')
-      .forEach(([key, value]) => test.unused_templates.add(key))
 
     for (const layerKey of Object.keys(locale.layers)) {
 
@@ -349,6 +353,8 @@ async function test(req, res) {
   test.results.errors = test.errArr.flat();
 
   test.results.unused_templates = Array.from(test.unused_templates);
+
+  test.results.overwritten_templates = Array.from(test.overwritten_templates);
 
   // Reduce the test.used_templates array to count the occurance of each template.
   test.results.usage = Object.fromEntries(test.used_templates
@@ -393,10 +399,12 @@ function templateUse(obj, test) {
           })
       }
 
-      if (typeof entry[1] === 'object' && Object.hasOwn(entry[1], 'key')) {
-        test.unused_templates.delete(entry[1].key)
-        test.used_templates.push(entry[1].key)
-        return;
+      if (typeof entry[1] === 'object' 
+        && Object.hasOwn(entry[1], 'key')
+        && test.workspace_templates.has(entry[1].key)
+      ) {
+        
+        test.overwritten_templates.add(entry[1].key)
       }
 
       if (typeof entry[1] === 'string') {
