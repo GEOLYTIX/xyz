@@ -358,6 +358,8 @@ async function test(req, res) {
 
   // Reduce the test.used_templates array to count the occurance of each template.
   test.results.usage = Object.fromEntries(test.used_templates
+    // sort by usage
+    .sort((a,b) => a>b ? 1: a<b ? -1 : 0)
     .reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map()));
 
   res.setHeader('content-type', 'application/json');
@@ -385,7 +387,7 @@ Add template keys to test.used_templates Array.
 function templateUse(obj, test) {
 
   if (typeof obj !== 'object') return;
-  
+
   Object.entries(obj).forEach(entry => {
 
     // entry key === ['template', 'templates', 'query']
@@ -401,12 +403,14 @@ function templateUse(obj, test) {
           })
       }
 
-      if (typeof entry[1] === 'object' 
+      if (typeof entry[1] === 'object'
         && Object.hasOwn(entry[1], 'key')
-        && test.workspace_templates.has(entry[1].key)
+
       ) {
-        
-        test.overwritten_templates.add(entry[1].key)
+        if (test.workspace_templates.has(entry[1].key)) {
+          test.overwritten_templates.add(entry[1].key)
+        }
+        return;
       }
 
       if (typeof entry[1] === 'string') {
@@ -420,7 +424,7 @@ function templateUse(obj, test) {
 
       entry[1].forEach(entry => templateUse(entry, test))
 
-    // Iterate through nested objects eg. layers      
+      // Iterate through nested objects eg. layers      
     } else if (entry[1] instanceof Object) {
 
       templateUse(entry[1], test)
