@@ -14,7 +14,7 @@ import { ui_layers } from '../lib/ui/layers/_layers.test.mjs';
 import { entriesTest } from '../lib/ui/locations/entries/_entries.test.mjs';
 import { uiTest } from '../lib/ui/_ui.test.mjs';
 import { utilsTest } from '../lib/utils/_utils.test.mjs';
-
+import { formatTest } from '../lib/layer/format/_format.test.mjs';
 //API Tests
 await workspaceTest();
 await queryTest();
@@ -56,3 +56,5 @@ await ui_layers.filtersTest(mapview);
 await uiTest.Tabview();
 
 await utilsTest.numericFormatterTest();
+
+await formatTest.vectorTest(mapview);
