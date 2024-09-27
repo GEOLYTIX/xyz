@@ -333,10 +333,10 @@ async function test(req, res) {
 
       if (layer.err) test.errArr.push(`${layerKey}: ${layer.err}`)
     }
-  }
 
-  // Test locale and all of its layers as nested object.
-  templateUse(workspace.locales, test);
+    // Test locale and all of its layers as nested object.
+    templateUse(locale, test);
+  }
 
   // From here on its 🐢 Templates all the way down.
   for (const key of Object.keys(workspace.templates)) {
