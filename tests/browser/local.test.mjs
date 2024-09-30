@@ -48,7 +48,7 @@ await runAllTests(uiTest);
 
 await runAllTests(formatTest, mapview);
 
-await runAllTests(ui_locations);
+await runAllTests(ui_locations, mapview);
 
 async function runAllTests(tests, mapview) {
     const testFunctions = Object.values(tests).filter(item => typeof item === 'function');
