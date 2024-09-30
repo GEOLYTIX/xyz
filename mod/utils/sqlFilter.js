@@ -135,12 +135,14 @@ function mapFilterEntries(filter) {
 }
 
 /**
- * Helper function that is used to validate params
- * @function isValidParam 
- * @param {string|number|boolean|bigint} param 
- * @returns boolean 
- */
-function isValidParam(param) {
+@function isValidParam 
+@description
+The method validates the val parameter type.
+
+@param {string|number|boolean|bigint} val 
+@returns boolean 
+*/
+function isValidParam(val) {
   const validTypes = ['string', 'number', 'boolean', 'bigint', 'object'];
-  return validTypes.includes(typeof param);
+  return validTypes.includes(typeof val);
 }
