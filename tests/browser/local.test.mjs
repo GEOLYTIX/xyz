@@ -4,7 +4,6 @@ import { dictionaryTest } from '../lib/dictionaries/_dictionaries.test.mjs';
 import { locationTest } from '../lib/location/_location.test.mjs';
 import { mapviewTest } from '../lib/mapview/_mapview.test.mjs';
 import { pluginsTest } from '../plugins/_plugins.test.mjs';
-import { setView } from '../utils/view.js';
 import { workspaceTest } from '../mod/workspace/_workspace.test.mjs'
 import { queryTest } from '../mod/query.test.mjs';
 import { userTest } from '../mod/user/_user.test.js';
@@ -72,5 +71,3 @@ async function runAllTests(tests, mapview) {
         }
     }
 }
-
-await utilsTest.mergeTest();
