@@ -19,46 +19,45 @@ import { ui_locations } from '../lib/ui/locations/_locations.test.mjs';
 //API Tests
 await workspaceTest();
 await queryTest();
-await userTest.updateTest();
+
+await runAllTests(userTest);
 
 const mapview = await base();
 
 // Run the dictionary Tests
-await dictionaryTest.baseDictionaryTest(mapview);
-await dictionaryTest.unknownLanguageTest(mapview);
-await dictionaryTest.keyValueDictionaryTest(mapview);
+await runAllTests(dictionaryTest, mapview);
 
-await pluginsTest.linkButtonTest();
+//Plugins Tests
+await runAllTests(pluginsTest);
 
-setView(mapview, 2, 'default');
-await layerTest.changeEndTest(mapview);
-setView(mapview, 2, 'default');
-await layerTest.decorateTest(mapview);
-setView(mapview, 2, 'default');
-await layerTest.fadeTest(mapview);
-await layerTest.featureFieldsTest();
-await layerTest.featureFormatsTest();
-await layerTest.styleParserTest(mapview);
+//Layer Tests
+await runAllTests(layerTest, mapview);
 
-await locationTest.getTest(mapview);
+//Location Tests
+await runAllTests(locationTest, mapview);
 
-await mapviewTest.addLayerTest(mapview);
-await mapviewTest.olControlsTest(mapview);
+await runAllTests(mapviewTest, mapview);
 
-await ui_elementsTest.sliderTest();
-await ui_elementsTest.layerStyleTest(mapview);
-await ui_elementsTest.pillsTest();
-await ui_elementsTest.alertTest();
-await ui_elementsTest.confirmTest();
-await ui_elementsTest.dialogTest();
+await runAllTests(ui_elementsTest, mapview);
 
-await entriesTest.pinTest(mapview);
-await entriesTest.geometryTest(mapview);
+await runAllTests(entriesTest, mapview);
 
-await ui_layers.filtersTest(mapview);
+await runAllTests(ui_layers, mapview);
 
-await uiTest.Tabview();
+await runAllTests(uiTest);
 
-await formatTest.vectorTest(mapview);
+await runAllTests(formatTest, mapview);
 
-await ui_locations.infojTest();
+await runAllTests(ui_locations);
+
+async function runAllTests(tests, mapview) {
+    const testFunctions = Object.values(tests).filter(item => typeof item === 'function');
+
+    for (const testFn of testFunctions) {
+        try {
+            await testFn(mapview);
+        } catch (error) {
+            console.error(`Error in test ${testFn.name}:`, error);
+        }
+    }
+}

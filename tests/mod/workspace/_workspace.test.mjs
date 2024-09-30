@@ -9,7 +9,7 @@
  * @function workspaceTest 
  * @param {Object} mapview 
 */
-export async function workspaceTest() {
+export async function workspaceTest(mapview) {
 
     await codi.describe('Workspace: Testing Workspace API', async () => {
 

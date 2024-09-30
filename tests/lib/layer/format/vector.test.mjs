@@ -8,8 +8,8 @@
  * @function vectorTest 
  * @param {object} mapview 
  */
-export async function vectorTest(mapview) {
-    codi.describe('Layer Format: Vector', async () => {
+export function vectorTest(mapview) {
+    codi.describe('Layer Format: Vector', () => {
 
         /**
          * ### Should be able to create a cluster layer
