@@ -144,5 +144,11 @@ The method validates the val parameter type.
 */
 function isValidParam(val) {
   const validTypes = ['string', 'number', 'boolean', 'bigint', 'object'];
+
+  //If the value is an array, check each entry of the array.
+  if (Array.isArray(val)) {
+    return val.every(isValidParam);
+  }
+
   return validTypes.includes(typeof val);
 }
