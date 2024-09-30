@@ -13,8 +13,6 @@ export async function alertTest() {
         await codi.describe('Should create an alert with params provided', async () => {
             const alert = await mapp.ui.elements.alert({ title: 'ALERT TITLE', text: 'ALERT TEXT' });
 
-            console.log(alert);
-
             codi.assertTrue(alert !== undefined, 'We expect to see the alert element');
 
             await codi.it('Should have a title of ALERT TITLE', async () => {

@@ -13,6 +13,7 @@ import { ui_elementsTest } from '../lib/ui/elements/_elements.test.mjs';
 import { ui_layers } from '../lib/ui/layers/_layers.test.mjs';
 import { entriesTest } from '../lib/ui/locations/entries/_entries.test.mjs';
 import { uiTest } from '../lib/ui/_ui.test.mjs';
+import { utilsTest } from '../lib/utils/_utils.test.mjs';
 import { formatTest } from '../lib/layer/format/_format.test.mjs';
 import { ui_locations } from '../lib/ui/locations/_locations.test.mjs';
 
@@ -36,19 +37,29 @@ await runAllTests(layerTest, mapview);
 //Location Tests
 await runAllTests(locationTest, mapview);
 
+//Mapview Tests
 await runAllTests(mapviewTest, mapview);
 
+//UI Elements Tests
 await runAllTests(ui_elementsTest, mapview);
 
+//Entries Tests
 await runAllTests(entriesTest, mapview);
 
+//UI Layers Tests
 await runAllTests(ui_layers, mapview);
 
+//UI tests
 await runAllTests(uiTest);
 
+//Format Tests
 await runAllTests(formatTest, mapview);
 
+//UI Locations Tests
 await runAllTests(ui_locations, mapview);
+
+//Utils Tests
+await runAllTests(utilsTest);
 
 async function runAllTests(tests, mapview) {
     const testFunctions = Object.values(tests).filter(item => typeof item === 'function');

@@ -9,7 +9,7 @@ export async function filtersTest(mapview) {
         //Creating the filter to be used in other tests
         let filter = {
             field: 'id',
-            minmax_query: 'minmax_query_mock'
+            minmax_query: 'minmax_query'
         };
 
         //Getting a layer
