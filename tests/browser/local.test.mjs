@@ -61,6 +61,7 @@ await ui_layers.filtersTest(mapview);
 await uiTest.Tabview();
 
 await utilsTest.numericFormatterTest();
+await utilsTest.mergeTest();
 
 await formatTest.vectorTest(mapview);
 
