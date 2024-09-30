@@ -10,7 +10,7 @@
 */
 export async function sliderTest() {
     await codi.describe('UI elements: slider', async () => {
-        await codi.it('Should return an slider', async () => {
+        await codi.it('Should return the slider', async () => {
             //get the workspace from the local files
             const workspace = await mapp.utils.xhr(`/test/tests/workspace.json`);
             const layer = workspace.locale.layers['input_slider'];//Get the input slider layer that we can get the params for.
