@@ -72,3 +72,5 @@ async function runAllTests(tests, mapview) {
         }
     }
 }
+
+await utilsTest.mergeTest();
