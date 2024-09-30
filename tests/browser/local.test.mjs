@@ -60,6 +60,12 @@ await runAllTests(ui_locations, mapview);
 //Utils Tests
 await runAllTests(utilsTest);
 
+/**
+ * This function is used to execute all the test functions on the exported test object. 
+ * @function runAllTests
+ * @param {object} tests 
+ * @param {object} mapview 
+ */
 async function runAllTests(tests, mapview) {
     const testFunctions = Object.values(tests).filter(item => typeof item === 'function');
 
