@@ -47,7 +47,6 @@ The addValues method is used to add values to the SQLparams array.
 function addValues(val) {
 
   if (!isValidParam(val)) {
-    console.log(val);
     throw new TypeError(`Expected params to be an array of valid types (string, number, boolean, object, or bigint)`);
   }
 
