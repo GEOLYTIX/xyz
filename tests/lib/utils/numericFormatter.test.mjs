@@ -78,8 +78,6 @@ export async function numericFormatterTest() {
         });
 
         await codi.it('Should unformat PL locale strings', async () => {
-            //Settings the locale to 'PL'
-            params.formatterParams.locale = 'PL';
             mapp.utils.formatNumericValue(params);
 
             const unformattedString = mapp.utils.unformatStringValue(params)
@@ -101,8 +99,6 @@ export async function numericFormatterTest() {
         });
 
         await codi.it('Should unformat RUB locale strings', async () => {
-            //Settings the locale to 'RUB'
-            params.formatterParams.locale = 'RUB';
             mapp.utils.formatNumericValue(params);
 
             const unformattedString = mapp.utils.unformatStringValue(params)
