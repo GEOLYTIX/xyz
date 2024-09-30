@@ -46,9 +46,12 @@ The addValues method is used to add values to the SQLparams array.
 */
 function addValues(val) {
 
-  SQLparams.push(val)
+  if (!isValidParam(val)) {
+    throw new TypeError(`Expected val to be one of: ${validTypes.join(', ')}`);
+  }
 
-  return SQLparams.length
+  SQLparams.push(val);
+  return SQLparams.length;
 }
 /**
 @function sqlfilter
@@ -62,6 +65,10 @@ If the filter is a string, the filter will be returned as is.
 @returns {string} SQL query string
 */
 module.exports = function sqlfilter(filter, params) {
+  //Check to see that params is an array and that the values of the params are of valid type.
+  if (!Array.isArray(params) || !params.every(isValidParam)) {
+    throw new TypeError('Expected params to be an array of valid types (string, number, boolean, object, or bigint)');
+  }
 
   if (typeof filter === 'string') return filter;
 
@@ -125,4 +132,15 @@ function mapFilterEntries(filter) {
 
     // Join filter with conjunction
     .join(' AND ')})`;
+}
+
+/**
+ * Helper function that is used to validate params
+ * @function isValidParam 
+ * @param {string|number|boolean|bigint} param 
+ * @returns boolean 
+ */
+function isValidParam(param) {
+  const validTypes = ['string', 'number', 'boolean', 'bigint'];
+  return validTypes.includes(typeof param);
 }
