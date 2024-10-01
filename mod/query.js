@@ -228,7 +228,7 @@ function getQueryFromTemplate(req, template) {
 
       // Ensure that the $n substitute params match the SQL length on layer queries without a ${filter}
       delete req.params.filter
-      req.params.SQL = []
+      req.params.SQL = Array.isArray(req.params.SQL) ? req.params.SQL : []
     }
 
     const query_template = template.template
@@ -274,7 +274,7 @@ function getQueryFromTemplate(req, template) {
         }
 
         // Push value from request params object into params array.
-        req.params.SQL.push(val)
+        req.params.SQL.push(val);
 
         return `$${req.params.SQL.length}`
       })
