@@ -51,6 +51,7 @@ function addValues(val, type) {
   if (err instanceof Error) {
 
     console.error(err)
+    SQLparams.push(err)
     return;
   }
 
