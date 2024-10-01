@@ -6,32 +6,32 @@
 
 // The filterTypes object contains methods for each filter type.
 const filterTypes = {
-  eq: (col, val) => `"${col}" = \$${addValues(val)}`,
+  eq: (col, val) => `"${col}" = \$${addValues(val, 'numeric')}`,
 
-  gt: (col, val) => `"${col}" > \$${addValues(val)}`,
+  gt: (col, val) => `"${col}" > \$${addValues(val, 'numeric')}`,
 
-  gte: (col, val) => `"${col}" >= \$${addValues(val)}`,
+  gte: (col, val) => `"${col}" >= \$${addValues(val, 'numeric')}`,
 
-  lt: (col, val) => `"${col}" < \$${addValues(val)}`,
+  lt: (col, val) => `"${col}" < \$${addValues(val, 'numeric')}`,
 
-  lte: (col, val) => `"${col}" <= \$${addValues(val)}`,
+  lte: (col, val) => `"${col}" <= \$${addValues(val, 'numeric')}`,
 
   boolean: (col, val) => `"${col}" IS ${!!val}`,
 
   null: (col, val) => `"${col}" IS ${!val ? 'NOT' : ''} NULL`,
 
-  ni: (col, val) => `NOT "${col}" = ANY (\$${addValues([val])})`,
+  ni: (col, val) => `NOT "${col}" = ANY (\$${addValues([val], 'array')})`,
 
-  in: (col, val) => `"${col}" = ANY (\$${addValues([val])})`,
+  in: (col, val) => `"${col}" = ANY (\$${addValues([val], 'array')})`,
 
   like: (col, val) =>
     `(${val
       .split(',')
       .filter((val) => val.length > 0)
-      .map((val) => `"${col}" ILIKE \$${addValues(`${val}%`)}`)
+      .map((val) => `"${col}" ILIKE \$${addValues(`${val}%`, 'string')}`)
       .join(' OR ')})`,
 
-  match: (col, val) => `"${col}"::text = \$${addValues(val)}`
+  match: (col, val) => `"${col}"::text = \$${addValues(val, 'string')}`
 }
 
 let SQLparams;
@@ -44,12 +44,21 @@ The addValues method is used to add values to the SQLparams array.
 @param {string} val 
 @returns {number} SQLparams.length
 */
-function addValues(val) {
+function addValues(val, type) {
 
-  SQLparams.push(val)
+  const err = isValidParam(val, type)
 
-  return SQLparams.length
+  if (err instanceof Error) {
+
+    console.error(err)
+    SQLparams.push(err)
+    return;
+  }
+
+  SQLparams.push(val);
+  return SQLparams.length;
 }
+
 /**
 @function sqlfilter
 @description
@@ -62,6 +71,11 @@ If the filter is a string, the filter will be returned as is.
 @returns {string} SQL query string
 */
 module.exports = function sqlfilter(filter, params) {
+
+  //Check to see that params is an array and that the values of the params are of valid type.
+  if (!Array.isArray(params)) {
+    throw new TypeError('Expected params to be an array of valid types (string, number, boolean, object, or bigint)');
+  }
 
   if (typeof filter === 'string') return filter;
 
@@ -125,4 +139,42 @@ function mapFilterEntries(filter) {
 
     // Join filter with conjunction
     .join(' AND ')})`;
+}
+
+/**
+@function isValidParam 
+@description
+Check whether val param is of expected type.
+
+@param {*} val 
+@param {string} type
+@returns boolean 
+*/
+function isValidParam(val, type) {
+  // Object containing type checking functions for each supported type
+  const typeCheckers = {
+    // Uses native Array.isArray for array checking
+    array: Array.isArray,
+    // Checks if value is strictly a string using typeof
+    string: (val) => typeof val === 'string',
+    // Checks if value is a valid number and not null
+    // Note: isNaN('123') returns false, so this also accepts numeric strings
+    numeric: (val) => !isNaN(val) && val !== null
+  };
+
+  // Check if the requested type is supported
+  if (!typeCheckers.hasOwnProperty(type)) {
+    return new Error(`Unsupported type: ${type}`);
+  }
+
+  // Perform the type check using the appropriate function
+  if (!typeCheckers[type](val)) {
+    // Determine the actual type of the value
+    // Special handling for arrays since typeof [] returns 'object'
+    const actualType = Array.isArray(val) ? 'array' : typeof val;
+    return new Error(`Expected ${type} type val param, got ${actualType}`);
+  }
+
+  // If we reach here, the value is valid
+  return null;
 }

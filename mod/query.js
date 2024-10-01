@@ -318,6 +318,17 @@ async function executeQuery(req, res, template, query) {
     return res.status(400).send(`Failed to validate database connection method.`)
   }
 
+  // Return without executing the query if a param errs.
+  if (req.params.SQL.some(param => param instanceof Error)) {
+
+    const paramsArray = req.params.SQL.map(param => param instanceof Error? param.message : param)
+
+    paramsArray.unshift('Parameter validation failed.')
+
+    res.status(500).send(paramsArray)
+    return;
+  }
+
   // Get query pool from dbs module.
   const dbs = dbs_connections[dbs_connection]
 
