@@ -321,7 +321,7 @@ async function executeQuery(req, res, template, query) {
   // Return without executing the query if a param errs.
   if (req.params.SQL.some(param => param instanceof Error)) {
 
-    paramsArray = req.params.SQL.map(param => param instanceof Error? param.message : param)
+    const paramsArray = req.params.SQL.map(param => param instanceof Error? param.message : param)
 
     paramsArray.unshift('Parameter validation failed.')
 
