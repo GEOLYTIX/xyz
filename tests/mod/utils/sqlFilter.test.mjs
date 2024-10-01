@@ -10,7 +10,7 @@ describe('sqlFilter', () => {
     // 'value1' is passed as $2 in the query
     const filter = {
       fieldname: {
-        eq: 'value1'
+        eq: '100'
       }
     };
 

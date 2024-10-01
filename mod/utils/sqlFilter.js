@@ -6,7 +6,7 @@
 
 // The filterTypes object contains methods for each filter type.
 const filterTypes = {
-  eq: (col, val) => `"${col}" = \$${addValues(val, 'string')}`,
+  eq: (col, val) => `"${col}" = \$${addValues(val, 'numeric')}`,
 
   gt: (col, val) => `"${col}" > \$${addValues(val, 'numeric')}`,
 
@@ -150,17 +150,30 @@ Check whether val param is of expected type.
 @returns boolean 
 */
 function isValidParam(val, type) {
+  // Object containing type checking functions for each supported type
+  const typeCheckers = {
+    // Uses native Array.isArray for array checking
+    array: Array.isArray,
+    // Checks if value is strictly a string using typeof
+    string: (val) => typeof val === 'string',
+    // Checks if value is a valid number and not null
+    // Note: isNaN('123') returns false, so this also accepts numeric strings
+    numeric: (val) => !isNaN(val) && val !== null
+  };
 
-  if (type === 'array' && !Array.isArray(val)) {
-
-    return new Error(`Expected ${type} type val param.`)
-
-  } else if (type === 'string' && typeof val !== 'string') {
-
-    return new Error(`Expected ${type} type val param.`)
-
-  } else if (type === 'numeric' && isNaN(val)) {
-
-    return new Error(`Expected ${type} type val param.`)
+  // Check if the requested type is supported
+  if (!typeCheckers.hasOwnProperty(type)) {
+    return new Error(`Unsupported type: ${type}`);
   }
+
+  // Perform the type check using the appropriate function
+  if (!typeCheckers[type](val)) {
+    // Determine the actual type of the value
+    // Special handling for arrays since typeof [] returns 'object'
+    const actualType = Array.isArray(val) ? 'array' : typeof val;
+    return new Error(`Expected ${type} type val param, got ${actualType}`);
+  }
+
+  // If we reach here, the value is valid
+  return null;
 }
