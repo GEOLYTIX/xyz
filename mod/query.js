@@ -232,7 +232,9 @@ function getQueryFromTemplate(req, template) {
 
       // Ensure that the $n substitute params match the SQL length on layer queries without a ${filter}
       delete req.params.filter
-      req.params.SQL = []
+      //We remove the SQL params because there is no filter at this stage so we don't have any values to substitute.
+      //If there are any other substitues they get added after.
+      req.params.SQL.length = 0
     }
 
     const query_template = template.template
@@ -278,7 +280,7 @@ function getQueryFromTemplate(req, template) {
         }
 
         // Push value from request params object into params array.
-        req.params.SQL.push(val)
+        req.params.SQL.push(val);
 
         return `$${req.params.SQL.length}`
       })
@@ -325,7 +327,7 @@ async function executeQuery(req, res, template, query) {
   // Return without executing the query if a param errs.
   if (req.params.SQL.some(param => param instanceof Error)) {
 
-    const paramsArray = req.params.SQL.map(param => param instanceof Error? param.message : param)
+    const paramsArray = req.params.SQL.map(param => param instanceof Error ? param.message : param)
 
     paramsArray.unshift('Parameter validation failed.')
 
