@@ -3,7 +3,7 @@
  * @function injojTest
  */
 export async function infojTest() {
-  codi.describe('UI Locations: infojTest', async () => {
+  await codi.describe('UI Locations: infojTest', async () => {
     /**
      * ### It should create an infoj with a correct order
      * 1. We define an infoj with a combination of different entries with keys, fields and queries
@@ -68,7 +68,7 @@ export async function infojTest() {
         'value_4',
         'value_5',
         'value_6'
-      ];        
+      ];
 
       // Asserting we get the expected results and order
       codi.assertEqual(results, expected, 'The infoj order needs to be as defined in the expected');

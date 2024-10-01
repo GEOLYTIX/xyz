@@ -13,6 +13,7 @@ import { ui_elementsTest } from '../lib/ui/elements/_elements.test.mjs';
 import { ui_layers } from '../lib/ui/layers/_layers.test.mjs';
 import { entriesTest } from '../lib/ui/locations/entries/_entries.test.mjs';
 import { uiTest } from '../lib/ui/_ui.test.mjs';
+import { utilsTest } from '../lib/utils/_utils.test.mjs';
 import { formatTest } from '../lib/layer/format/_format.test.mjs';
 import { ui_locations } from '../lib/ui/locations/_locations.test.mjs';
 
@@ -58,6 +59,9 @@ await entriesTest.geometryTest(mapview);
 await ui_layers.filtersTest(mapview);
 
 await uiTest.Tabview();
+
+await utilsTest.numericFormatterTest();
+await utilsTest.mergeTest();
 
 await formatTest.vectorTest(mapview);
 
