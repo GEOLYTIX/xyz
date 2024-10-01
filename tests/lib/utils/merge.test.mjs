@@ -23,7 +23,7 @@ export async function mergeTest() {
 
             const source = {
                 name: 'Rob',
-                age: 28,
+                age: 26,
                 address: {
                     street: '6 fourteenth street',
                     city: 'Johannesburg',
@@ -33,7 +33,7 @@ export async function mergeTest() {
 
             const expected = {
                 name: 'Rob',
-                age: 28,
+                age: 26,
                 address: {
                     street: '6 fourteenth street',
                     city: 'Johannesburg',
@@ -68,20 +68,20 @@ export async function mergeTest() {
         });
 
         await codi.it('should prevent _proto merging', async () => {
-            const filter = {
+            const target = {
                 current: {
                     'country': {
                         'in': ['ROI']
                     }
                 }
             };
-           
-            const filter2 = {
+
+            const source = {
                 current: {
                     'country': {
                         'in': ['UK']
                     }
-                }, 
+                },
                 __proto__: {
                     'polluted': 'polluted'
                 }
@@ -90,13 +90,13 @@ export async function mergeTest() {
             const expected = {
                 current: {
                     'country': {
-                        'in': ['UK']
+                        'in': ['ROI']
                     }
                 }
             };
-            
-            const mergedObj1 = mapp.utils.merge(filter, filter2);
-            codi.assertEqual(mergedObj1, expected);
+
+            const mergedObj1 = mapp.utils.merge(target, source);
+            codi.assertEqual(mergedObj1, expected, 'The merge should not happen if a __proto__ is found on an object');
         });
 
     });
