@@ -43,7 +43,7 @@ The query is executed by the executeQuery() method.
 
 @param {req} req HTTP request.
 @param {res} res HTTP response.
-@property {Object} [req.params] Request params.
+@property {Object} req.params Request params.
 @property {Object} [params.user] Requesting user.
 @property {Array} [user.roles] User roles.
 */
@@ -116,7 +116,9 @@ Any query which references a layer and locale will be passed through the layer q
 
 @param {req} req HTTP request.
 @param {res} res HTTP response.
-@property {Object} [req.params] Request params.
+@property {Object} req.params Request params.
+@property {Object} params.filter JSON filter which must be turned into a SQL filter string for substitution.
+@property {Array} params.SQL Substitute parameter for SQL query.
 @property {Object} [params.user] Requesting user.
 @property {Array} [user.roles] User roles.
 */
@@ -197,7 +199,9 @@ An error will be returned if the substitution fails.
 
 @param {req} req HTTP request.
 @param {Object} template Request template.
-@property {Object} [req.params] Request params.
+@property {Object} req.params Request params.
+@property {Object} params.filter JSON filter which must be turned into a SQL filter string for substitution.
+@property {Array} params.SQL Substitute parameter for SQL query.
 @property {Function} template.render Method to render template string.
 @property {string} template.template SQL template string.
 */
