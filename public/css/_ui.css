@@ -107,6 +107,70 @@ dialog > button.close {
   user-select: none;
 }
 
+/* begin system message */
+dialog.alert-confirm {
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  border: none !important;
+  border-radius: 2px;
+  width: 350px;
+  max-height: 70%;
+  z-index: 1001;
+  user-select: none;
+}
+
+dialog.alert-confirm::-webkit-scrollbar {
+  display: none;
+}
+
+dialog.alert-confirm:focus {
+  outline: none;
+}
+
+dialog.alert-confirm h4 {
+  padding: 0.5em 1em;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 10001;
+  background-color: var(--color-primary);
+  border-bottom: solid 2px var(--color-primary-light);
+  color: var(--color-light)
+}
+
+dialog.alert-confirm div {
+  padding: 1em;
+}
+
+dialog.alert-confirm p {
+  white-space: pre;
+  text-wrap: pretty;
+  text-align: center;
+  padding: 1em;
+}
+
+dialog.alert-confirm .buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 0.2em
+}
+
+dialog.alert-confirm button {
+  float: right;
+  font-size: 0.9em;
+  color: var(--color-primary);
+  z-index: 1005;
+}
+
+@media only screen and (max-width: 768px) {
+
+  dialog.alert-confirm {
+    min-width: 350px;
+    max-width: 70%;
+  }
+
+}
+/* end system message */
+
 .modal {
   text-wrap: wrap;
   position: fixed; 

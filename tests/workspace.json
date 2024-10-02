@@ -25,8 +25,11 @@
         "get_location_mock": {
             "src": "file:/tests/assets/queries/get_location_mock.sql"
         },
-        "minmax_query_mock": {
+        "minmax_query": {
             "src": "file:/tests/assets/queries/minmax_mock.sql"
+        },
+        "data_array": {
+            "src": "file:/tests/assets/queries/data_array.sql"
         }
     },
     "locale": {
@@ -310,7 +313,8 @@
                         "src": "file:/tests/assets/layers/location_mock/layer.json"
                     }
                 ]
-            }
+            },
+            "cluster_test": {}
         }
     }
 }
