@@ -7,6 +7,21 @@
             "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
         },
         {
+            "label": "minmax",
+            "field": "numeric_field",
+            "type": "numeric",
+            "filter": {
+                "minmax_query": "minmax_query",
+                "type": "numeric"
+            },
+            "edit": {
+                "range": true
+            },
+            "formatterParams": {
+                "locale": "DE"
+            }
+        },
+        {
             "display": true,
             "type": "dataview",
             "label": "foo",

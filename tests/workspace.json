@@ -13,10 +13,6 @@
             "type": "module",
             "src": "file:/tests/assets/queries/foo.js"
         },
-        "location_get": {
-            "type": "module",
-            "src": "file:/tests/assets/queries/foo.js"
-        },
         "template_1": {
             "src": "file:/tests/assets/infoj/template_infoj.json"
         },
@@ -29,8 +25,11 @@
         "get_location_mock": {
             "src": "file:/tests/assets/queries/get_location_mock.sql"
         },
-        "minmax_query_mock": {
+        "minmax_query": {
             "src": "file:/tests/assets/queries/minmax_mock.sql"
+        },
+        "data_array": {
+            "src": "file:/tests/assets/queries/data_array.sql"
         }
     },
     "locale": {
@@ -277,6 +276,10 @@
                     {
                         "key": "bogus_file",
                         "src": "file:/tests/assets/styles/bogus_file.json"
+                    },
+                    {
+                        "key": "dataviews_json",
+                        "src": "file:/tests/assets/dataviews/dataviews_json.json"
                     }
                 ]
             },
@@ -302,7 +305,16 @@
                         "src": "file:/tests/assets/layers/location_mock/infoj.json"
                     }
                 ]
-            }
+            },
+            "location_get_test_no_infoj": {
+                "hidden": true,
+                "templates": [
+                    {
+                        "src": "file:/tests/assets/layers/location_mock/layer.json"
+                    }
+                ]
+            },
+            "cluster_test": {}
         }
     }
 }
