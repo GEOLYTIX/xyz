@@ -80,7 +80,8 @@ module.exports = {
     render: require('./location_update'),
   },
   location_count: {
-    template: require('./location_count')
+    template: require('./location_count'),
+    value_only: true
   },
   mvt: {
     render: require('./mvt'),
