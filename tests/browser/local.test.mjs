@@ -58,7 +58,7 @@ await runAllTests(formatTest, mapview);
 await runAllTests(ui_locations, mapview);
 
 //Utils Tests
-await runAllTests(utilsTest);
+await runAllTests(utilsTest, mapview);
 
 /**
  * This function is used to execute all the test functions on the exported test object. 
