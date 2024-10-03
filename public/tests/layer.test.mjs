@@ -94,16 +94,16 @@ export async function layerTest(mapview) {
                                     // Use the value of the infoj pin field to create a new location
                                     const pin = location.infoj.find(entry => entry.type === 'pin');
 
-                                    // Get the geometry of the last location (for polygon layers)
-                                    const polygon = location.infoj.find(entry => entry.type === 'geometry' && entry.field === layer.geomCurrent());
+                                    // If no pin, return as we can't create a new location
+                                    if (!pin) {
+                                        return;
+                                    };
 
                                     // Set the pin or polygon based on the draw object
                                     let geometry;
 
-                                    if (layer?.draw?.point) {
+                                    if (layer?.draw?.point || layer?.draw?.polygon || layer?.draw?.line || layer?.draw?.rectangle || layer?.draw?.circle) {
                                         geometry = pin.geometry;
-                                    } else if (layer?.draw?.polygon || layer?.draw?.line || layer?.draw?.rectangle || layer?.draw?.circle) {
-                                        geometry = polygon.geometry;
                                     } else {
                                         // We don't want to test this layer as it doesn't have a core draw object method
                                         // If may have plugin draw methods but we can't test those
