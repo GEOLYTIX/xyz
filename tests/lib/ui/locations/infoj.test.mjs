@@ -2,15 +2,15 @@
  * This function is used as an entry point for the infoj test
  * @function injojTest
  */
-export async function infojTest() {
-  await codi.describe('UI Locations: infojTest', async () => {
+export function infojTest() {
+  codi.describe('UI Locations: infojTest', () => {
     /**
      * ### It should create an infoj with a correct order
      * 1. We define an infoj with a combination of different entries with keys, fields and queries
      * 2. We assert against the order
      * @function it
      */
-    await codi.it('It should create an infoj with certain order', async () => {
+    codi.it('It should create an infoj with certain order', () => {
 
       const location = {
         infoj: [
