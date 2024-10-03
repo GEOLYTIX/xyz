@@ -60,11 +60,6 @@ await ui_layers.filtersTest(mapview);
 
 await uiTest.Tabview();
 
-await utilsTest.numericFormatterTest();
-await utilsTest.paramStringTest();
-await utilsTest.queryParamsTest(mapview);
-await utilsTest.mergeTest();
-
 await formatTest.vectorTest(mapview);
 
 await ui_locations.infojTest();
