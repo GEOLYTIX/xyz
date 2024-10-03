@@ -16,6 +16,9 @@ import { setView } from '../../utils/view.js';
  * @param {Object} mapview 
 */
 export async function decorateTest(mapview) {
+
+    setView(mapview, 2, 'default');
+
     await codi.describe('Layer: decorateTest', async () => {
         const decorated_layer = mapview.layers['decorate'];
         const workspace_layer = await mapp.utils.xhr(`/test/api/workspace/layer?layer=decorate`);
