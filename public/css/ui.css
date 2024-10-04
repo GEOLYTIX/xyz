@@ -1661,6 +1661,7 @@ label.checkbox {
       color: white;
       border-radius: 3px;
       padding-left: 3px;
+      padding-right: 3px;
     }
 
     & .label,
