@@ -1,11 +1,5 @@
 export async function layerTest(mapview) {
 
-    function delayFunction(delay) {
-        return new Promise(resolve => {
-            setTimeout(resolve, delay);
-        });
-    }
-
     await codi.describe(`${mapview.host} : Layer Test`, async () => {
 
         for (const key of Object.getOwnPropertyNames(mapview.layers)) {
@@ -36,9 +30,10 @@ export async function layerTest(mapview) {
                         console.log(`Testing theme ${theme}`);
                         layer.style.theme = layer.style.themes[theme];
                         layer.reload();
+
                         //This is to allow errors being logged into the console.
                         //There is no test being asserted on.
-                        await delayFunction(1000);
+                        await new Promise(resolve => setTimeout(resolve, 1000));
                     }
                 }
 
