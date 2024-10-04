@@ -109,7 +109,7 @@ function loginView(req, res) {
   res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
 
   // The redirect for a successful login.
-  req.params.redirect = req.url && decodeURIComponent(req.url).replace(/login\=true/, '')
+  req.params.redirect = req.url && decodeURIComponent(req.url).replace(/login=true/, '')
 
   // Set cookie with redirect value.
   res.setHeader('Set-Cookie', `${process.env.TITLE}_redirect=${req.params.redirect};HttpOnly;Max-Age=60000;Path=${process.env.DIR || '/'}`)
