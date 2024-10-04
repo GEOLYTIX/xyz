@@ -66,15 +66,12 @@ module.exports = async function login(req, res) {
         expiresIn: parseInt(process.env.COOKIE_TTL)
       })
 
-    const cookies = [`${process.env.TITLE}=${token};HttpOnly;Max-Age=${process.env.COOKIE_TTL};Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`]
+    const user_cookie = `${process.env.TITLE}=${token};HttpOnly;Max-Age=${process.env.COOKIE_TTL};Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`
 
-    if (redirect) {
+    const redirect_null_cookie = `${process.env.TITLE}_redirect=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`
 
-      cookies.push(`${process.env.TITLE}_redirect=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
-      res.setHeader('location', `${redirect.replace(/([?&]{1})msg={1}[^&]+(&|$)/,'') || process.env.DIR}`)
-    }
-
-    res.setHeader('Set-Cookie', cookies)
+    res.setHeader('Set-Cookie', [user_cookie, redirect_null_cookie])
+    res.setHeader('location', `${redirect || process.env.DIR}`)
 
     return res.status(302).send()
   }
