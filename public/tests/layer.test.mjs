@@ -75,8 +75,16 @@ export async function layerTest(mapview) {
 
                             await codi.it('Add a new location to the layer using the last location coordinates', async () => {
 
+                                // Use the value of the infoj pin field to create a new location
+                                const pin = location.infoj.find(entry => entry.type === 'pin');
+
+                                // If no pin, just use the center of the mapview as the location.
+                                const center = mapview.Map.getView().getCenter();
+
+                                const geometry = pin?.geometry || center;
+
                                 //Creating the new point
-                                //We don't need a geometry for this. We just need a returned ID.
+                                //We need to pass a geometry for the new location query 
                                 newLocation.id = await mapp.utils.xhr({
                                     method: 'POST',
                                     url: `${mapp.host}/api/query?` +
@@ -84,8 +92,13 @@ export async function layerTest(mapview) {
                                             template: 'location_new',
                                             locale: layer.mapview.locale.key,
                                             layer: layer.key,
-                                            table: newLocation.table
-                                        })
+                                            table: newLocation.table,
+                                        }),
+                                    body: JSON.stringify({
+                                        [layer.geom]: geometry,
+                                        // Spread in defaults.
+                                        ...layer.draw?.defaults,
+                                    })
                                 });
 
                                 // Get the newly created location.
