@@ -58,8 +58,7 @@
       background-color: var(--color-primary);
       color: white;
       border-radius: 3px;
-      padding-left: 3px;
-      padding-right: 3px;
+      padding: 0 0.5em;
     }
 
     & .label,
