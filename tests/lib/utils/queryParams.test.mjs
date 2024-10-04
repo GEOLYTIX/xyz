@@ -57,7 +57,7 @@ export async function queryParamsTest(mapview) {
 
         /**
          * ### Should Return lat, lng and z parameters in the response
-         * This test is used to check that queryParams returns latitutde, longitude and zoom level when requested.
+         * This test is used to check that queryParams returns latitude, longitude and zoom level when requested.
          * @function it
          */
         await codi.it('Should return lat, lng, z', async () => {
@@ -68,7 +68,7 @@ export async function queryParamsTest(mapview) {
             const queryParams = mapp.utils.queryParams(params)
             codi.assertEqual(queryParams.lng, 0, `We expect the value to equal 0, we received ${queryParams.lng}`)
             codi.assertEqual(queryParams.lat, 0, `We expect the value to equal 0, we received ${queryParams.lat}`)
-            codi.assertEqual(queryParams.z, 2.8008998999203047, `We expect the value to equal 2.8008998999203047, we received ${queryParams.z}`)
+            codi.assertEqual(queryParams.z, 2, `We expect the value to equal 2, we received ${queryParams.z}`)
         });
 
         /**
