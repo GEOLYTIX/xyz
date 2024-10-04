@@ -10,7 +10,7 @@
 
 The pattern for the Node.js **domain and service layer** are that of a RESTful API which provides secure gateways for spatial data sources and 3rd party service providers.
 
-The domain layer handles API routing, rewrites, and ressource caching.
+The domain layer handles API routing, rewrites, and resource caching.
 
 The service layer manages authentication and transaction script. URL parameter (and payloads) from the application control layer (mapp) are assigned to query templates and passed to the data source (service) layer. The response being parsed and returned to the (mapp) presentation layer.
 
