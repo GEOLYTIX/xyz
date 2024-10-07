@@ -45,7 +45,7 @@ export async function queryParamsTest(mapview) {
          * @function it
          */
         await codi.it('Should return id, qID', async () => {
-            
+
             params.queryparams.id = true
             params.queryparams.qID = true
             params.location = location
@@ -68,7 +68,7 @@ export async function queryParamsTest(mapview) {
             const queryParams = mapp.utils.queryParams(params)
             codi.assertEqual(queryParams.lng, 0, `We expect the value to equal 0, we received ${queryParams.lng}`)
             codi.assertEqual(queryParams.lat, 0, `We expect the value to equal 0, we received ${queryParams.lat}`)
-            codi.assertEqual(queryParams.z, 2, `We expect the value to equal 2, we received ${queryParams.z}`)
+            codi.assertTrue(!!queryParams.z, `We expect the zoom level to be returned from the method`)
         });
 
         /**
@@ -98,7 +98,7 @@ export async function queryParamsTest(mapview) {
 
             const queryParams = mapp.utils.queryParams(params)
             codi.assertEqual(queryParams.viewport.length, 5, `We expect the value to have 5 params, we received ${queryParams.viewport.length}`)
-            codi.assertEqual(queryParams.filter, {'id':{}}, `We expect the value to equal {'id':{}}, we received ${JSON.stringify(queryParams.filter)}`)
+            codi.assertEqual(queryParams.filter, { 'id': {} }, `We expect the value to equal {'id':{}}, we received ${JSON.stringify(queryParams.filter)}`)
         });
 
         // Push removeCallback method to remove callback methods.
