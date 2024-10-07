@@ -112,5 +112,14 @@ export async function workspaceTest(mapview) {
                 codi.assertTrue(!roles['*']);
             });
         });
+
+        await codi.it('Workspace: Testing the test endpoint', async () => {
+            const workspace_test = await mapp.utils.xhr(`/test/api/workspace/test`);
+
+            codi.assertTrue(workspace_test.errors.length > 0, 'The errors array needs to have more than 1 entry')
+            codi.assertTrue(workspace_test.overwritten_templates.length > 0, 'The overwritten templates array needs to have more than 1 entry')
+            codi.assertTrue(workspace_test.unused_templates.length > 0, 'The unsused templates array needs to have more than 1 entry')
+            codi.assertTrue(Object.keys(workspace_test.usage).length > 0, 'The usage object needs to have keys')
+        });
     });
 }
