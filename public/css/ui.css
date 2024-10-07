@@ -1388,6 +1388,10 @@ label.checkbox {
     padding: 0;
     & > .header {
       grid-column: 1 / 3;
+      background-color: var(--color-primary);
+      color: white;
+      border-radius: 3px;
+      padding: 0 0.5em;
     }
     & .label,
     & .val {
