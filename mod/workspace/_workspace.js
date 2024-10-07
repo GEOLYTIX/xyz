@@ -328,6 +328,16 @@ async function test(req, res) {
     // Will get layer and assignTemplates to workspace.
     const locale = await getLocale({ locale: localeKey, user: req.params.user })
 
+    // If you can't get the locale, access is denied, add the error to the errArr.
+    if (locale.message === 'Role access denied') {
+      test.errArr.push(`${localeKey}: ${locale.message}`)
+      continue;
+    };
+
+    // If the locale has no layers, just skip it.
+    if (!locale.layers) continue;
+    
+
     for (const layerKey of Object.keys(locale.layers)) {
 
       // Will get layer and assignTemplates to workspace.

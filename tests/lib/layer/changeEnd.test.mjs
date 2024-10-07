@@ -13,6 +13,8 @@ import { delayFunction } from '../../utils/delay.js';
 */
 export async function changeEndTest(mapview) {
 
+    setView(mapview, 2, 'default');
+
     await codi.describe('Layer: changeEndTest', async () => {
 
         /**
