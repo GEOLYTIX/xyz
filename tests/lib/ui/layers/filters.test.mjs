@@ -68,6 +68,10 @@ export async function filtersTest(mapview) {
             codi.assertEqual(maxInput.value, '1000', 'The max should return 1000');
         });
 
+        /**
+         * Testing providing a layer.current as explicit values.
+         * @function it
+         */
         await codi.it('Numeric Filter: layer.current specified as `lte: 200` and `gte: 800`', async () => {
 
             layer.filter.current[filter.field].lte = 800
