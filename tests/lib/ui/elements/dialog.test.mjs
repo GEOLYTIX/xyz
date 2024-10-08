@@ -50,17 +50,22 @@ export function dialogTest() {
         });
 
         /**
-         * Created dialog should not have a show method
+         * Created dialog should not call show method
          * @function it
          */
-        codi.it('Should create a basic dialog without a show method', () => {
+        codi.it('Should recreate a basic dialog', () => {
 
             params.new = true;
-            const dialog = mapp.ui.elements.dialog({ ...params });
+            const new_params = {...params}
 
-            codi.assertEqual(typeof dialog.show, 'undefined', 'The dialog show method should not be available');
+            const dialog = mapp.ui.elements.dialog(new_params);
+            dialog.close();
 
-            dialog.close()
+            const new_dialog = mapp.ui.elements.dialog(new_params);
+
+            codi.assertEqual(dialog, new_dialog, 'The dialog should be recreated');
+
+            new_dialog.close();
         });
     });
 }
