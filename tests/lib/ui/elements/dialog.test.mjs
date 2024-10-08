@@ -9,6 +9,7 @@ export function dialogTest() {
         const params = {
             target: document.getElementById('Map'),
             closeBtn: true,
+            data_id: 'dialog-test',
             headerDrag: true,
             header: 'I am a header',
             content: 'I am so content',
@@ -31,7 +32,7 @@ export function dialogTest() {
              */
             codi.it('Dialog should be able to close', () => {
                 dialog.close();
-                const dialog_element = document.querySelector('#Map > dialog');
+                const dialog_element = document.querySelector('[data-id="dialog-test"]')
                 codi.assertEqual(dialog_element, null, 'The dialog should be removed from the DOM on close');
             });
 
@@ -41,7 +42,7 @@ export function dialogTest() {
              */
             codi.it('Dialog should be able to be shown again', () => {
                 dialog.show();
-                const dialog_element = document.querySelector('#Map > dialog');
+                const dialog_element = document.querySelector('[data-id="dialog-test"]')
                 codi.assertEqual(dialog_element, dialog.node, 'The dialog should be in the DOM again');
             });
 
