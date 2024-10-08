@@ -29,6 +29,8 @@ A user cookie will be assigned for the user returned from the fromACL() method a
 
 The loginView method will be returned with a message from a failed user validation or if no login post request body is provided.
 
+The _redirect cookie set by the loginView method will be removed on redirect.
+
 @param {req} req HTTP request.
 @param {res} res HTTP response.
 @property {Object} req.params HTTP request parameter.
