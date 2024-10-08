@@ -17,7 +17,7 @@ export async function alertTest() {
 
             await codi.it('Should have a title of ALERT TITLE', async () => {
                 // Get the alert title
-                const alert_title = alert.header.values[0];
+                const alert_title = alert.header.innerText;
                 codi.assertEqual(alert_title, 'ALERT TITLE', 'We expect to see the alert title');
 
             });
@@ -40,7 +40,7 @@ export async function alertTest() {
 
             await codi.it('Should have a title of Information', async () => {
                 // Get the alert title
-                const alert_title = alert.header.values[0];
+                const alert_title = alert.header.innerText;
                 codi.assertEqual(alert_title, 'Information', 'We expect to see the alert title');
 
             });

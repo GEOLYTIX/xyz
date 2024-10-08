@@ -56,7 +56,7 @@ export function dialogTest() {
         codi.it('Should recreate a basic dialog', () => {
 
             params.new = true;
-            const new_params = {...params}
+            const new_params = { ...params }
 
             const dialog = mapp.ui.elements.dialog(new_params);
             dialog.close();
@@ -75,7 +75,7 @@ export function dialogTest() {
         codi.it('Should create a dialog that can minimize/maximize', () => {
 
             params.minimizeBtn = true;
-            const new_params = {...params}
+            const new_params = { ...params }
 
             const dialog = mapp.ui.elements.dialog(new_params);
             dialog.node.querySelector('[data-id=minimize]').dispatchEvent(new Event('click'))
@@ -84,7 +84,7 @@ export function dialogTest() {
             dialog.node.querySelector('[data-id=minimize]').dispatchEvent(new Event('click'))
 
             codi.assertFalse(dialog.node.querySelector('[data-id="dialog-content"]').hidden, 'The dialog content should be visible');
-            dialog.close();
+            // dialog.close
         });
 
     });
