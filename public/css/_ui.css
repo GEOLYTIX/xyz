@@ -107,6 +107,19 @@ dialog > button.close {
   user-select: none;
 }
 
+header {
+  & button {
+    height: 1em;
+    width: 1em;
+    margin: 0.4em;
+  }
+}
+
+dialog > header {
+  display: flex;
+  justify-content: space-between;
+}
+
 /* begin system message */
 dialog.alert-confirm {
   box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;

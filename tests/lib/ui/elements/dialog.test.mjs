@@ -67,5 +67,25 @@ export function dialogTest() {
 
             new_dialog.close();
         });
+
+        /**
+         * Created dialog should have minimize/maximize functionality
+         * @function it
+         */
+        codi.it('Should create a dialog that can minimize/maximize', () => {
+
+            params.minimizeBtn = true;
+            const new_params = {...params}
+
+            const dialog = mapp.ui.elements.dialog(new_params);
+            dialog.node.querySelector('[data-id=minimize]').dispatchEvent(new Event('click'))
+
+            codi.assertTrue(dialog.node.querySelector('[data-id="dialog-content"]').hidden, 'The dialog content should not be visible');
+            dialog.node.querySelector('[data-id=minimize]').dispatchEvent(new Event('click'))
+
+            codi.assertFalse(dialog.node.querySelector('[data-id="dialog-content"]').hidden, 'The dialog content should be visible');
+            dialog.close();
+        });
+
     });
 }
