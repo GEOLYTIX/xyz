@@ -228,6 +228,112 @@ button {
   }
 }
 
+/* public/css/_dialog.css */
+.headerDrag {
+  cursor: grab;
+}
+dialog > button.close {
+  position: absolute;
+  top: 0em;
+  right: 0em;
+  height: 1em;
+  width: 1em;
+  margin: 0.4em;
+}
+.dialog {
+  position: absolute;
+  background-color: #fff;
+  border-color: #fff;
+  box-shadow: 1px 1px 3px var(--color-primary-light);
+  cursor: grab;
+  user-select: none;
+}
+header {
+  & button {
+    height: 1em;
+    width: 1em;
+    margin: 0.4em;
+  }
+}
+.dialog > header {
+  display: flex;
+  justify-content: space-between;
+  & > :nth-child(2) {
+    margin-left: auto;
+  }
+}
+dialog.alert-confirm {
+  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
+  border: none !important;
+  border-radius: 2px;
+  width: 350px;
+  max-height: 70%;
+  z-index: 1001;
+  user-select: none;
+}
+dialog.alert-confirm::-webkit-scrollbar {
+  display: none;
+}
+dialog.alert-confirm:focus {
+  outline: none;
+}
+dialog.alert-confirm h4 {
+  padding: 0.5em 1em;
+  position: sticky;
+  top: 0;
+  left: 0;
+  z-index: 10001;
+  background-color: var(--color-primary);
+  border-bottom: solid 2px var(--color-primary-light);
+  color: var(--color-light);
+}
+dialog.alert-confirm div {
+  padding: 1em;
+}
+dialog.alert-confirm p {
+  white-space: pre;
+  text-wrap: pretty;
+  text-align: center;
+  padding: 1em;
+}
+dialog.alert-confirm .buttons {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 0.2em;
+}
+dialog.alert-confirm button {
+  float: right;
+  font-size: 0.9em;
+  color: var(--color-primary);
+  z-index: 1005;
+}
+dialog.minimized .content {
+  display: none;
+}
+dialog .minimize-btn.mask-icon {
+  -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">%0A<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>%0A</svg>');
+  mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">%0A<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>%0A</svg>');
+}
+dialog.minimized .minimize-btn.mask-icon {
+  -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">%0A<path d="M19 13H5v-2h14v2z"/>%0A</svg>');
+  mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">%0A<path d="M19 13H5v-2h14v2z"/>%0A</svg>');
+}
+@media only screen and (max-width: 768px) {
+  dialog.alert-confirm {
+    min-width: 350px;
+    max-width: 70%;
+  }
+}
+.modal {
+  text-wrap: wrap;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  border-color: #fff;
+  z-index: 9999;
+}
+
 /* public/css/_font.css */
 body {
   font-family: "Titillium Web", sans-serif;
@@ -702,11 +808,11 @@ h3 {
 }
 .remove {
   &.bg-icon {
-    background-image: url('data:image/svg+xml,<svg width="800" height="800" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1" fill="%230D0D0D"/></svg>');
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">%0A<path d="M19 13H5v-2h14v2z"/>%0A</svg>');
   }
   &.mask-icon {
-    -webkit-mask-image: url('data:image/svg+xml,<svg width="800" height="800" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1" fill="%230D0D0D"/></svg>');
-    mask-image: url('data:image/svg+xml,<svg width="800" height="800" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M4 12a1 1 0 0 1 1-1h14a1 1 0 1 1 0 2H5a1 1 0 0 1-1-1" fill="%230D0D0D"/></svg>');
+    -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">%0A<path d="M19 13H5v-2h14v2z"/>%0A</svg>');
+    mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">%0A<path d="M19 13H5v-2h14v2z"/>%0A</svg>');
   }
 }
 .reply {
@@ -1581,96 +1687,6 @@ label.checkbox {
   display: flex;
   flex-direction: column;
   gap: 5px;
-}
-.headerDrag {
-  cursor: grab;
-}
-dialog > button.close {
-  position: absolute;
-  top: 0em;
-  right: 0em;
-  height: 1em;
-  width: 1em;
-  margin: 0.4em;
-}
-.dialog {
-  position: absolute;
-  background-color: #fff;
-  border-color: #fff;
-  box-shadow: 1px 1px 3px var(--color-primary-light);
-  cursor: grab;
-  user-select: none;
-}
-header {
-  & button {
-    height: 1em;
-    width: 1em;
-    margin: 0.4em;
-  }
-}
-.dialog > header {
-  display: flex;
-  justify-content: space-between;
-}
-dialog.alert-confirm {
-  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-  border: none !important;
-  border-radius: 2px;
-  width: 350px;
-  max-height: 70%;
-  z-index: 1001;
-  user-select: none;
-}
-dialog.alert-confirm::-webkit-scrollbar {
-  display: none;
-}
-dialog.alert-confirm:focus {
-  outline: none;
-}
-dialog.alert-confirm h4 {
-  padding: 0.5em 1em;
-  position: sticky;
-  top: 0;
-  left: 0;
-  z-index: 10001;
-  background-color: var(--color-primary);
-  border-bottom: solid 2px var(--color-primary-light);
-  color: var(--color-light);
-}
-dialog.alert-confirm div {
-  padding: 1em;
-}
-dialog.alert-confirm p {
-  white-space: pre;
-  text-wrap: pretty;
-  text-align: center;
-  padding: 1em;
-}
-dialog.alert-confirm .buttons {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 0.2em;
-}
-dialog.alert-confirm button {
-  float: right;
-  font-size: 0.9em;
-  color: var(--color-primary);
-  z-index: 1005;
-}
-@media only screen and (max-width: 768px) {
-  dialog.alert-confirm {
-    min-width: 350px;
-    max-width: 70%;
-  }
-}
-.modal {
-  text-wrap: wrap;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border-color: #fff;
-  z-index: 9999;
 }
 .pill-container {
   display: flex;
