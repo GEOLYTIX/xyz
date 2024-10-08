@@ -5,9 +5,9 @@ import { queryParamsTest } from './queryParams.test.mjs';
 import { composeTest } from './compose.test.mjs';
 
 export const utilsTest = {
-  numericFormatterTest,
-  mergeTest,
-  paramStringTest,
-  queryParamsTest,
-  composeTest
+    numericFormatterTest,
+    mergeTest,
+    paramStringTest,
+    queryParamsTest,
+    composeTest
 }

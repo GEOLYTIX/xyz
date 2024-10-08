@@ -307,6 +307,9 @@ async function test(req, res) {
     return
   }
 
+  // Force re-caching of workspace.
+  workspace = await workspaceCache(true)
+
   const test = {
     results: {},
     errArr: [],
