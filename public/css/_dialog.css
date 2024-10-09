@@ -16,6 +16,7 @@ dialog.dialog {
   background-color: #fff;
   border: none !important;
   border-radius: 2px;
+  box-shadow: 1px 1px 3px var(--color-primary-light);
   cursor: grab;
   user-select: none;
 }

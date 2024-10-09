@@ -1514,11 +1514,6 @@ label.checkbox {
   & .textarea {
     white-space: break-spaces;
   }
-  & .streetview {
-    & img {
-      width: 100%;
-    }
-  }
   & .dataview {
     text-align: left;
   }
