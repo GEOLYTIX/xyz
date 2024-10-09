@@ -719,6 +719,35 @@
   document.getElementById('mapButton').append(mapp.utils.html.node`
     <div class="mobile-display-none" style="height: 60px;">`);
 
+
+  mapp.ui.elements.dialog({
+    header: 'Machine Fucking Head',
+    minimizeBtn: true,
+    closeBtn: true,
+    headerDrag: true,
+    content: mapp.ui.elements.dropdown({
+      entries: [{
+        title: 'Ten Ton Hammer',
+        option: 1
+      },{
+        title: 'A Farewell To Arms',
+        option: 2
+      },{
+        title: 'Darkness Within',
+        option: 3
+      },{
+        title: 'Block',
+        option: 4
+      },{
+        title: 'Aesthetics Of Hate',
+        option: 5
+      },{
+        title: 'Imperium',
+        option: 6
+      }],
+    })
+  })
+
 </script>
 
 </html>
