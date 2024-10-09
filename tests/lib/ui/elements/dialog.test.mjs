@@ -78,13 +78,16 @@ export function dialogTest() {
             const new_params = { ...params }
 
             const dialog = mapp.ui.elements.dialog(new_params);
-            dialog.node.querySelector('[data-id=minimize]').dispatchEvent(new Event('click'))
 
-            codi.assertTrue(dialog.node.querySelector('[data-id="dialog-content"]').hidden, 'The dialog content should not be visible');
-            dialog.node.querySelector('[data-id=minimize]').dispatchEvent(new Event('click'))
+            dialog.node.querySelector('header > button.mask-icon.minimize-btn').dispatchEvent(new Event('click'))
+            let minimized = dialog.node.classList.contains('minimized');
+            codi.assertTrue(minimized, 'The dialog content should not be visible');
 
-            codi.assertFalse(dialog.node.querySelector('[data-id="dialog-content"]').hidden, 'The dialog content should be visible');
-            // dialog.close
+            dialog.node.querySelector('header > button.mask-icon.minimize-btn').dispatchEvent(new Event('click'))
+            minimized = dialog.node.classList.contains('minimized');
+            codi.assertFalse(minimized, 'The dialog content should not be visible');
+
+            dialog.close();
         });
 
     });
