@@ -240,13 +240,25 @@ dialog > button.close {
   width: 1em;
   margin: 0.4em;
 }
-.dialog {
+dialog.dialog {
   position: absolute;
   background-color: #fff;
-  border-color: #fff;
+  border: none !important;
+  border-radius: 2px;
   box-shadow: 1px 1px 3px var(--color-primary-light);
   cursor: grab;
   user-select: none;
+}
+dialog.modal {
+  position: fixed;
+  background-color: #fff;
+  border: none !important;
+  border-radius: 2px;
+  text-wrap: wrap;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 9999;
 }
 header {
   & button {
@@ -263,9 +275,6 @@ header {
   }
 }
 dialog.alert-confirm {
-  box-shadow: rgba(0, 0, 0, 0.15) 1.95px 1.95px 2.6px;
-  border: none !important;
-  border-radius: 2px;
   width: 350px;
   max-height: 70%;
   z-index: 1001;
@@ -279,15 +288,11 @@ dialog.alert-confirm:focus {
 }
 dialog.alert-confirm h4 {
   padding: 0.5em 1em;
-  position: sticky;
-  top: 0;
-  left: 0;
-  z-index: 10001;
   background-color: var(--color-primary);
   border-bottom: solid 2px var(--color-primary-light);
   color: var(--color-light);
 }
-dialog.alert-confirm div {
+dialog.alert-confirm .content {
   padding: 1em;
 }
 dialog.alert-confirm p {
@@ -323,15 +328,6 @@ dialog.minimized .minimize-btn.mask-icon {
     min-width: 350px;
     max-width: 70%;
   }
-}
-.modal {
-  text-wrap: wrap;
-  position: fixed;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  border-color: #fff;
-  z-index: 9999;
 }
 
 /* public/css/_font.css */
