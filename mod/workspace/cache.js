@@ -32,9 +32,17 @@ The age of the cached timestamp is checked against the WORKSPACE_AGE environment
 
 The cacheWorkspace method is called if the cache is invalid.
 
+@param {Boolean} [force] The workspace cache will be cleared with the force param flag.
+
 @returns {workspace} JSON Workspace.
 */
-module.exports = function checkWorkspaceCache() {
+module.exports = function checkWorkspaceCache(force) {
+
+  if (force) {
+
+    // Reset the cache with force flag.
+    cache = null
+  }
 
   // cache is null on first request for workspace.
   // cacheWorkspace is async and must be awaited.

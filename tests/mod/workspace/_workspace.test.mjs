@@ -112,5 +112,28 @@ export async function workspaceTest(mapview) {
                 codi.assertTrue(!roles['*']);
             });
         });
+
+        await codi.it('Workspace: Testing the test endpoint', async () => {
+            let workspace_test = await mapp.utils.xhr(`/test/api/workspace/test`);
+
+            const counts = {
+                errors: workspace_test.errors.length,
+                overwritten_templates: workspace_test.overwritten_templates.length,
+                unused_templates: workspace_test.unused_templates.length,
+                usage: Object.keys(workspace_test.usage).length
+            }
+
+            codi.assertTrue(workspace_test.errors.length > 0, 'The errors array needs to have more than 1 entry')
+            codi.assertTrue(workspace_test.overwritten_templates.length > 0, 'The overwritten templates array needs to have more than 1 entry')
+            codi.assertTrue(workspace_test.unused_templates.length > 0, 'The unsused templates array needs to have more than 1 entry')
+            codi.assertTrue(Object.keys(workspace_test.usage).length > 0, 'The usage object needs to have keys')
+
+            workspace_test = await mapp.utils.xhr(`/test/api/workspace/test`);
+
+            codi.assertEqual(workspace_test.errors.length, counts.errors, 'The errors array needs to have the same number of entries we did the first run')
+            codi.assertEqual(workspace_test.overwritten_templates.length, counts.overwritten_templates, 'The overwritten templates array needs to have the same number of entries we did the first run')
+            codi.assertEqual(workspace_test.unused_templates.length, counts.unused_templates, 'The unused templates array needs to have the same number of entries we did the first run')
+            codi.assertEqual(Object.keys(workspace_test.usage).length, counts.usage, 'The usage templates object needs to have the same number of entries we did the first run')
+        });
     });
 }
