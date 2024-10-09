@@ -50,7 +50,7 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 5px 10px;
-    font-size: 90%;
+    border-bottom: 0.1em solid var(--color-mid);
     padding: 0;
 
     &>.header {
