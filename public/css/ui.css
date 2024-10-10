@@ -249,6 +249,9 @@ dialog.dialog {
   cursor: grab;
   user-select: none;
   padding: 5px;
+  & .dropdown > ul {
+    position: fixed;
+  }
 }
 dialog.modal {
   position: fixed;
@@ -1327,6 +1330,8 @@ label.checkbox {
     & > .label-row {
       display: flex;
       justify-content: space-between;
+      padding-bottom: 3px;
+      padding-top: 3px;
       & > div {
         flex-grow: 1;
       }
