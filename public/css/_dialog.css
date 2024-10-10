@@ -16,8 +16,10 @@ dialog.dialog {
   background-color: #fff;
   border: none !important;
   border-radius: 2px;
+  box-shadow: 1px 1px 3px var(--color-primary-light);
   cursor: grab;
   user-select: none;
+  padding: 5px;
 }
 
 dialog.modal {
@@ -73,6 +75,10 @@ dialog.alert-confirm h4 {
 
 dialog.alert-confirm .content {
   padding: 1em;
+}
+
+dialog > .content{
+  padding: 2px;
 }
 
 dialog.alert-confirm p {
