@@ -12,7 +12,6 @@
   --color-on: #E18335;
   --color-no: #A21309;
   --color-changed: #ffffa7;
-  --color-light-off-black: #c9c9c933 ;
 }
 
 /* public/css/_button.css */
@@ -249,9 +248,6 @@ dialog.dialog {
   cursor: grab;
   user-select: none;
   padding: 5px;
-  & .dropdown > ul {
-    position: fixed;
-  }
 }
 dialog.modal {
   position: fixed;
@@ -298,9 +294,6 @@ dialog.alert-confirm h4 {
 }
 dialog.alert-confirm .content {
   padding: 1em;
-}
-dialog > .content {
-  padding: 2px;
 }
 dialog.alert-confirm p {
   white-space: pre;
@@ -1118,7 +1111,7 @@ input[type=text],
 input[type=number] {
   padding: 5px;
   border: none;
-  background-color: var(--color-light-off-black);
+  background-color: var(--color-light-secondary);
   border-bottom: 0.5px dotted;
   display: inline-block;
   width: 100%;
@@ -1243,7 +1236,7 @@ label.checkbox {
   }
   & > ul {
     display: none;
-    position: absolute;
+    position: fixed;
     max-height: 500px;
     overflow-y: auto;
     overflow-x: hidden;
@@ -1330,8 +1323,6 @@ label.checkbox {
     & > .label-row {
       display: flex;
       justify-content: space-between;
-      padding-bottom: 3px;
-      padding-top: 3px;
       & > div {
         flex-grow: 1;
       }

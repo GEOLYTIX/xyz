@@ -19,10 +19,6 @@ dialog.dialog {
   cursor: grab;
   user-select: none;
   padding: 5px;
-
-  & .dropdown > ul {
-    position: fixed;
-  }
 }
 
 dialog.modal {
@@ -78,10 +74,6 @@ dialog.alert-confirm h4 {
 
 dialog.alert-confirm .content {
   padding: 1em;
-}
-
-dialog > .content{
-  padding: 2px;
 }
 
 dialog.alert-confirm p {
