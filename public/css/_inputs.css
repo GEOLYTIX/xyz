@@ -291,7 +291,10 @@ label.checkbox {
    
   &.multi {
     & >.label-row {
-      display: inline-block;
+      display: flex;
+      justify-content: space-between;
+      padding-bottom: 3px;
+      padding-top: 3px;
 
       & >div {
         flex-grow: 1
