@@ -11,10 +11,11 @@ export async function confirmTest() {
 
         // Test providing params
         await codi.describe('Should create a confirm dialog with params provided', async () => {
-            mapp.ui.elements.confirm({ title: 'CONFIRM TITLE', text: 'CONFIRM TEXT' });
+            mapp.ui.elements.confirm({ title: 'CONFIRM TITLE', text: 'CONFIRM TEXT', data_id: 'confirm-test' });
 
             // Get the confirm element
-            const confirm = document.querySelector('body > dialog');
+
+            const confirm = document.querySelector('[data-id=confirm-test]');
             codi.assertTrue(confirm !== undefined, 'We expect to see the confirm element');
 
             await codi.it('Should have a title of CONFIRM TITLE', async () => {
@@ -48,10 +49,10 @@ export async function confirmTest() {
 
         // Test providing no params
         await codi.describe('Should create a confirm dialog with no params provided', async () => {
-            mapp.ui.elements.confirm({});
+            mapp.ui.elements.confirm({ data_id: 'confirm-test' });
 
             // Get the confirm element
-            const confirm = document.querySelector('body > dialog');
+            const confirm = document.querySelector('[data-id=confirm-test]');
             codi.assertTrue(confirm !== undefined, 'We expect to see the confirm element');
 
             await codi.it('Should have a title of Information', async () => {

@@ -1,7 +1,15 @@
 import { numericFormatterTest } from './numericFormatter.test.mjs';
-import {mergeTest} from './merge.test.mjs';
+import { mergeTest } from './merge.test.mjs';
+import { paramStringTest } from './paramString.test.mjs';
+import { queryParamsTest } from './queryParams.test.mjs';
+import { composeTest } from './compose.test.mjs';
+import { svgTemplatesTest } from './svgTemplates.test.mjs';
 
-export const utilsTest = { 
+export const utilsTest = {
     numericFormatterTest,
-    mergeTest
- }
+    mergeTest,
+    paramStringTest,
+    queryParamsTest,
+    composeTest,
+    svgTemplatesTest
+}

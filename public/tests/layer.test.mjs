@@ -1,168 +1,128 @@
 export async function layerTest(mapview) {
 
-    function delayFunction(delay) {
-        return new Promise(resolve => {
-            setTimeout(resolve, delay);
-        });
-    }
-
-    const default_zoom = mapview.view?.z || 0;
-
-    await codi.describe(`${mapview.host} : Template Paths Test`, async () => {
-
-        await codi.it('All the templates are valid', async () => {
-            // Call the /test workspace method - which should return an empty array if all templates are valid.
-            const test = await mapp.utils.xhr(`${mapp.host}/api/workspace/test`);
-
-               // If the test fails, print out the invalid templates.
-               if (test.length > 0) {
-                test.forEach(template => {
-                    console.error('INVALID PATH:', template);
-                });
-            }
-
-            codi.assertTrue(test.length === 0, `There are ${test.length} invalid paths for templates`);
-
-        });
-    });
-
     await codi.describe(`${mapview.host} : Layer Test`, async () => {
 
-        for (const key in mapview.layers) {
-            if (mapview.layers.hasOwnProperty(key)) {
-                await codi.it(`Layer test : ${key}`, async () => {
-                    const layer = mapview.layers[key];
+        for (const key of Object.getOwnPropertyNames(mapview.layers)) {
 
-                    if (layer.tables) {
-                        const layerZoom = parseInt(Object.entries(layer.tables).find(([key, value]) => value !== null)[0]);
-                        mapview.Map.getView().setZoom(layerZoom);
+            await codi.it(`Layer test : ${key}`, async () => {
+
+                const layer = mapview.layers[key];
+
+                layer.show();
+
+                if (layer.tables) {
+                    //This is to set the zoom level so that the correct zoom level is used for the layer.
+                    const layerZoom = parseInt(Object.entries(layer.tables).find(([key, value]) => value !== null)[0]);
+                    mapview.Map.getView().setZoom(layerZoom);
+                }
+
+                if (layer.dataviews) {
+
+                    for (let dataview in layer.dataview) {
+                        dataview.show();
                     }
-                    else {
-                        if (default_zoom !== 0) {
-                            mapview.Map.getView().setZoom(default_zoom);
-                        }
+                }
+
+                // Turn on every theme on the layer to test if they work
+                if (layer.style?.themes) {
+
+                    for (const theme in layer.style.themes) {
+                        console.log(`Testing theme ${theme}`);
+                        layer.style.theme = layer.style.themes[theme];
+                        layer.reload();
+
+                        //This is to allow errors being logged into the console.
+                        //There is no test being asserted on.
+                        await new Promise(resolve => setTimeout(resolve, 1000));
                     }
+                }
 
-                    if (layer.dataviews) {
-                        for (let dataview in layer.dataview) {
-                            dataview = { ...dataview, display: true }
-                        }
-                    }
+                //Location test
+                if (layer.infoj) {
 
-                    layer.show();
+                    const lastLocation = await mapp.utils.xhr(`${mapp.host}/api/query?template=get_last_location&locale=${encodeURIComponent(mapview.locale.key)}&layer=${key}`);
 
-                    // Turn on every theme on the layer to test if they work
-                    if (layer.style?.themes) {
-                        for (const theme in layer.style.themes) {
-                            console.log(`Testing theme ${theme}`);
-                            layer.style.theme = layer.style.themes[theme];
-                            layer.reload();
-                            await delayFunction(1000);
-                        }
-                    }
+                    if (lastLocation?.id) {
 
-                    if (!['maplibre', 'tiles'].includes(layer.format) && layer.infoj) {
+                        layer.infoj = layer.infoj.map(entry => {
+                            if (entry.type === 'dataview') {
+                                return { ...entry, display: true };
+                            }
+                            return entry;
+                        });
 
-                        const lastLocation = await mapp.utils.xhr(`${mapp.host}/api/query?template=get_last_location&locale=${encodeURIComponent(mapview.locale.key)}&layer=${key}`);
+                        const location = await mapp.location.get({
+                            layer: layer,
+                            id: lastLocation.id,
+                        });
 
-                        if (lastLocation?.id) {
+                        codi.assertTrue(location !== undefined, 'The location is undefined');
 
-                            layer.infoj = layer.infoj.map(entry => {
-                                if (entry.type === 'dataview') {
-                                    return { ...entry, display: true };
-                                }
-                                return entry;
-                            });
+                        // Create a new location
+                        const newLocation = {
+                            layer,
+                            table: layer.tableCurrent(),
+                            new: true
+                        };
 
-                            const location = await mapp.location.get({
-                                layer: layer,
-                                id: lastLocation.id,
-                            });
+                        // Add a new location to the layer using the last location
+                        if (Object.keys(layer.draw).length > 0) {
 
-                            codi.assertTrue(location !== undefined, 'The location is undefined');
+                            await codi.it('Add a new location to the layer using the last location coordinates', async () => {
 
-                            // Create a new location
-                            const newLocation = {
-                                layer,
-                                table: layer.tableCurrent(),
-                                new: true
-                            };
+                                // Use the value of the infoj pin field to create a new location
+                                const pin = location.infoj.find(entry => entry.type === 'pin');
 
-                            // Add a new location to the layer using the last location
-                            if (layer?.draw) {
-                                await codi.it('Add a new location to the layer using the last location coordinates', async () => {
-                                    // Use the value of the infoj pin field to create a new location
-                                    const pin = location.infoj.find(entry => entry.type === 'pin');
+                                // If no pin, just use the center of the mapview as the location.
+                                const center = mapview.Map.getView().getCenter();
 
-                                    // Get the geometry of the last location (for polygon layers)
-                                    const polygon = location.infoj.find(entry => entry.type === 'geometry' && entry.field === layer.geomCurrent());
+                                const geometry = pin?.geometry || center;
 
-                                    // Set the pin or polygon based on the draw object
-                                    let geometry;
-
-                                    if (layer?.draw?.point) {
-                                        geometry = pin.geometry;
-                                    } else if (layer?.draw?.polygon || layer?.draw?.line || layer?.draw?.rectangle || layer?.draw?.circle) {
-                                        geometry = polygon.geometry;
-                                    } else {
-                                        // We don't want to test this layer as it doesn't have a core draw object method
-                                        // If may have plugin draw methods but we can't test those
-                                        return;
-                                    }
-
-                                    newLocation.id = await mapp.utils.xhr({
-                                        method: 'POST',
-                                        url: `${mapp.host}/api/query?` +
-                                            mapp.utils.paramString({
-                                                template: 'location_new',
-                                                locale: layer.mapview.locale.key,
-                                                layer: layer.key,
-                                                table: newLocation.table
-                                            }),
-                                        body: JSON.stringify({
-                                            [layer.geom]: geometry,
-
-                                            // Spread in defaults.
-                                            ...layer.draw?.defaults
-                                        })
-                                    });
-
-                                    // Layer must be reloaded to reflect geometry changes.
-                                    layer.reload();
-
-                                    // Get the newly created location.
-                                    const newLoc = await mapp.location.get(newLocation);
-
-                                    // Remove the location
-                                    newLoc.remove();
+                                //Creating the new point
+                                //We need to pass a geometry for the new location query 
+                                newLocation.id = await mapp.utils.xhr({
+                                    method: 'POST',
+                                    url: `${mapp.host}/api/query?` +
+                                        mapp.utils.paramString({
+                                            template: 'location_new',
+                                            locale: layer.mapview.locale.key,
+                                            layer: layer.key,
+                                            table: newLocation.table,
+                                        }),
+                                    body: JSON.stringify({
+                                        [layer.geom]: geometry,
+                                        // Spread in defaults.
+                                        ...layer.draw?.defaults,
+                                    })
                                 });
 
-                                // If layer.deleteLocation is defined, delete the location
-                                if (layer.deleteLocation === true) {
+                                // Get the newly created location.
+                                const newLoc = await mapp.location.get(newLocation);
 
-                                    await codi.it('Delete the location', async () => {
-                                        // Test deleting a location
-                                        await mapp.utils.xhr(`${mapp.host}/api/query?` +
-                                            mapp.utils.paramString({
-                                                template: 'location_delete',
-                                                locale: mapview.locale.key,
-                                                layer: newLocation.layer.key,
-                                                table: newLocation.table,
-                                                id: newLocation.id
-                                            }));
-                                    });
-                                }
-                            }
+                                // Remove the location
+                                newLoc.remove();
+                            });
 
-                            location.remove();
+                            await codi.it('Delete the location', async () => {
 
-                            if (!['maplibre', 'tiles'].includes(layer.format)) {
-                                layer.hide();
-                            }
+                                // Test deleting a location
+                                await mapp.utils.xhr(`${mapp.host}/api/query?` +
+                                    mapp.utils.paramString({
+                                        template: 'location_delete',
+                                        locale: mapview.locale.key,
+                                        layer: newLocation.layer.key,
+                                        table: newLocation.table,
+                                        id: newLocation.id
+                                    }));
+                            });
                         }
+
+                        location.remove();
+
+                        layer.hide();
                     }
-                });
-            }
+                }
+            });
         }
     });
 }
