@@ -23,6 +23,9 @@ input::-moz-focus-outer {
 textarea {
   width: 100%;
   resize: none;
+  border: none;
+  border-bottom: 0.5px dotted;
+  background-color: var(--color-light-secondary);
 }
 
 input[type=number] {
