@@ -202,7 +202,7 @@ label.checkbox {
 
   &>ul {
     display: none;
-    position: fixed;
+    position: absolute;
     max-height: 500px;
     overflow-y: auto;
     overflow-x: hidden;
