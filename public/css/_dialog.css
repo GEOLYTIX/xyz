@@ -19,6 +19,7 @@ dialog.dialog {
   cursor: grab;
   user-select: none;
   padding: 5px;
+  overflow: unset !important;
 }
 
 dialog.modal {
