@@ -41,8 +41,6 @@ A template is turned into a query by the getQueryFromTemplate() method.
 
 The query is executed by the executeQuery() method.
 
-The dbs parameter is deleted from the request parameter. The dbs must be infered from either the template, layer, locale, or workspace.
-
 @param {req} req HTTP request.
 @param {res} res HTTP response.
 @property {Object} req.params Request params.
@@ -79,9 +77,6 @@ module.exports = async function query(req, res) {
 
     return res.status(403).send('Role access denied for query template.')
   }
-
-  // The dbs must not be provided as a parameter.
-  delete req.params.dbs
 
   // The SQL param is restricted to hold substitute values.
   req.params.SQL = [];
@@ -301,6 +296,8 @@ function getQueryFromTemplate(req, template) {
 
 @description
 The method send a parameterised query to a database connection.
+
+The dbs for the query is determined primarily by the template. The layer.dbs is used for layer queries if the dbs on the template is not implicit. The locale.dbs is assumed as the layer.dbs if not defined in JSON layer. The workspace.dbs will be used as fallback if no template, layer, or locale dbs can be determined.
 
 @param {req} req HTTP request.
 @param {res} res HTTP response.
