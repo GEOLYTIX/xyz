@@ -442,6 +442,9 @@
 
   console.log(`MAPP v${mapp.version}`)
 
+  // Set the maxWidth for mobile responsive display.
+  mapp.utils.mobile(765)
+
   // Refresh cookie and get user with updated credentials.
   await mapp.utils.xhr(`${mapp.host}/api/user/cookie`).then(user => {
 
