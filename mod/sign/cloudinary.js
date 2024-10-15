@@ -1,33 +1,55 @@
 /**
+### /sign/cloudinary
+
+Exports the cloudinary signer method.
+
 @module /sign/cloudinary
 */
 
 const { createHash } = require('crypto');
 
-module.exports = async req => {
-    // 1: api_key
-    // 2: api_secret
-    // 3: cloud_name
-    const cloudinary = process.env.CLOUDINARY_URL?.replaceAll('://', ' ').replaceAll(':', ' ').replaceAll('@', ' ').split(' ');
-    const baseUrl = `https://api.cloudinary.com/v1_1/${cloudinary[3]}/`
+module.exports = async function cloudinary(req, res) {
 
-    const folder = (!req.params.folder) ? '' : `${req.params.folder}/`
+  if (!process.env.CLOUDINARY_URL) return new Error('CLOUDINARY_URL not provided in process.env')
 
-    // The timestamp is required for the signature which is valid for 1hr.
-    const timestamp = Date.now();
-    let toSign = '';
+  // Split CLOUDINARY_URL string into array of ['cloudinary', api_key, api_secret, cloud_name]
+  const cloudinary = process.env.CLOUDINARY_URL
+    .replaceAll('://', '|')
+    .replaceAll(':', '|')
+    .replaceAll('@', '|')
+    .split('|');
 
-    // Define signature string based on the action (upload/destroy)
-    if (!req.params.destroy) {
-        toSign = `folder=${req.params.folder}&public_id=${req.params.public_id}&timestamp=${timestamp}${cloudinary[2]}`;
+  const folder = req.params.folder += '/'
 
-    } else if (req.params.destroy) {
-        toSign = `public_id=${folder}${req.params.public_id}&timestamp=${timestamp}${cloudinary[2]}`;
-    }
+  // The timestamp is required for the signature which is valid for 1hr.
+  const timestamp = Date.now();
 
-    const signature = createHash('sha256').update(toSign).digest('hex');
-    const params = `${toSign}&signature=${signature}&timestamp=${timestamp}&api_key=${cloudinary[1]}`;
-    const signedUrl = `${baseUrl}${req.params.destroy ? 'image/destroy' : 'upload'}?${params}`
-    
-    return {signedUrl:signedUrl};
+  const params = [
+    `timestamp=${timestamp}${cloudinary[2]}`
+  ]
+
+  if (req.params.destroy) {
+
+    params.unshift(`public_id=${folder}${req.params.public_id}`)
+  } else {
+
+    params.unshift(`public_id=${req.params.public_id}`)
+    params.unshift(`folder=${req.params.folder}`)
+  }
+
+  const toSign = params.join('&')
+
+  const signature = createHash('sha256').update(toSign).digest('hex');
+
+  params.push(`signature=${signature}`)
+
+  params.push(`timestamp=${timestamp}`)
+
+  params.push(`api_key=${cloudinary[1]}`)
+
+  const method = req.params.destroy? 'image/destroy': 'upload';
+
+  const signedUrl = `https://api.cloudinary.com/v1_1/${cloudinary[3]}/${method}?${params.join('&')}`
+
+  return signedUrl;
 }
