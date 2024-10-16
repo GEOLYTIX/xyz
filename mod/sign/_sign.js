@@ -38,5 +38,10 @@ module.exports = async function signer(req, res) {
 
   const response = await signerModules[req.params.signer](req, res)
 
+  if (response instanceof Error) {
+
+    return res.status(500).send(response.message)
+  }
+    
   res.send(response)
 }

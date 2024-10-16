@@ -3,14 +3,42 @@
 
 Exports the cloudinary signer method.
 
+@requires crypto
+
 @module /sign/cloudinary
 */
 
 const { createHash } = require('crypto');
 
+/**
+@function cloudinary
+@async
+
+@description
+The cloudinary signer method signs requests for the cloudinary service.
+
+The default request for uploading resources to cloudinary.
+
+A request to destroy a resource stored in the cloudinary service can be signed with the destroy request parameter being truthy.
+
+A folder and public_id parameter for resources to be uploaded or destroyed are required.
+
+@param {Object} req HTTP request.
+@param {Object} res HTTP response.
+@param {Object} req.params Request parameter.
+@param {string} params.folder
+@param {string} params.public_id
+@param {string} params.destroy
+
+@returns {Promise} The promise resolves into the response from the signerModules method.
+*/
 module.exports = async function cloudinary(req, res) {
 
   if (!process.env.CLOUDINARY_URL) return new Error('CLOUDINARY_URL not provided in process.env')
+
+  if (!req.params.folder) return new Error('A folder request param is required for the cloudinary signer.')
+
+  if (!req.params.public_id) return new Error('A public_id request param is required for the cloudinary signer.')
 
   // Split CLOUDINARY_URL string into array of ['cloudinary', api_key, api_secret, cloud_name]
   const cloudinary = process.env.CLOUDINARY_URL
@@ -33,6 +61,7 @@ module.exports = async function cloudinary(req, res) {
     params.unshift(`public_id=${folder}${req.params.public_id}`)
   } else {
 
+    // Request is to upload a resource.
     params.unshift(`public_id=${req.params.public_id}`)
     params.unshift(`folder=${req.params.folder}`)
   }
