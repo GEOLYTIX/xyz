@@ -314,6 +314,17 @@
                     }
                 ]
             },
+            "query_params_layer": {
+                "hidden": true,
+                "templates": [
+                    {
+                        "src": "file:/tests/assets/layers/location_mock/layer.json"
+                    },
+                    {
+                        "src": "file:/tests/assets/layers/location_mock/infoj.json"
+                    }
+                ]
+            },
             "cluster_test": {}
         }
     }

@@ -35,14 +35,12 @@ The `process.env.COOKIE_TTL` will be set as time to life for the cookie set on t
 
 The token user will be sent back to the client.
 
-@param {Object} req HTTP request.
-@param {Object} res HTTP response.
-@param {Object} [req.cookies] 
-The request cookies object.
-@param {Truthy} [req.params.destroy] 
-The cookie should be destroyed.
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {Object} [req.cookies] The request cookies object.
+@property {boolean} [req.params.destroy] URL parameter flag whether the cookie should be destroyed.
+@property {boolean} [req.params.create] URL parameter flag whether a new cookie should be created.
 */
-
 module.exports = async function cookie(req, res) {
 
   // acl module will export an empty require object without the ACL being configured.
@@ -50,11 +48,14 @@ module.exports = async function cookie(req, res) {
     return res.status(500).send('ACL unavailable.')
   }
 
+  if (req.params.create) {
+    return login(req, res)
+  }
+
   const cookie = req.cookies && req.cookies[process.env.TITLE]
 
   if (!cookie) {
-    req.params.msg = 'no_cookie_found'
-    return login(req, res)
+    return res.send(false);
   }
 
   if (req.params.destroy) {
@@ -110,5 +111,4 @@ module.exports = async function cookie(req, res) {
 
       res.send(user)
     })
-
 }

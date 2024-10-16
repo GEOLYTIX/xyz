@@ -10,7 +10,7 @@ export async function queryParamsTest(mapview) {
 
     await codi.describe('Utils: queryParams Test', async () => {
 
-        const location_layer = mapview.layers['location_get_test'];
+        const location_layer = mapview.layers['query_params_layer'];
 
         //Get the location
         const location = await mapp.location.get({
@@ -98,7 +98,7 @@ export async function queryParamsTest(mapview) {
 
             const queryParams = mapp.utils.queryParams(params)
             codi.assertEqual(queryParams.viewport.length, 5, `We expect the value to have 5 params, we received ${queryParams.viewport.length}`)
-            codi.assertEqual(queryParams.filter, { 'id': {} }, `We expect the value to equal {'id':{}}, we received ${JSON.stringify(queryParams.filter)}`)
+            codi.assertEqual(queryParams.filter, {}, `We expect the value to equal {'id':{}}, we received ${JSON.stringify(queryParams.filter)}`)
         });
 
         // Push removeCallback method to remove callback methods.

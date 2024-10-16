@@ -6,6 +6,8 @@
 
 **Open source presentation, controller, domain, and service layers for cloud native spatial data and application interfaces.**
 
+[![OSGeo Community Project](https://www.osgeo.org/wp-content/themes/roots/assets/img/badge-community-project.png)](https://www.osgeo.org/projects/xyz-mapp/)
+
 ## XYZ
 
 The pattern for the Node.js **domain and service layer** are that of a RESTful API which provides secure gateways for spatial data sources and 3rd party service providers.
