@@ -1,4 +1,7 @@
 /**
+ * @module lib/ui/elements/layers/panels/filters
+ */
+/**
  * This is the entry point function for the ui/layers/panels/filter test
  * @function panelFilterTest
  */
@@ -11,10 +14,10 @@ export function panelFilterTest() {
             */
         codi.it('Create a filter panel', () => {
             const layer = {
-                reload: () => {},
+                reload: () => { },
                 mapview: {
                     Map: {
-                        getTargetElement: () => {return document.getElementById('Map')}
+                        getTargetElement: () => { return document.getElementById('Map') }
                     }
                 },
                 key: 'panel_test',
@@ -51,7 +54,7 @@ export function panelFilterTest() {
 
             const resetButton = filterPanel.querySelector('[data-id=resetall]')
 
-            layer.filter.current['field_1'] ??= {'like':'a'}
+            layer.filter.current['field_1'] ??= { 'like': 'a' }
 
             resetButton.dispatchEvent(new Event('click'))
 
