@@ -49,6 +49,11 @@ button {
       border-bottom: 3px solid var(--color-on);
     }
   }
+  &.underline {
+    display: none;
+    margin-bottom: 5px;
+    text-decoration: underline;
+  }
   &.raised {
     border-radius: 3px;
     border: 1px solid var(--color-light-secondary);
