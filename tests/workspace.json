@@ -30,6 +30,10 @@
         },
         "data_array": {
             "src": "file:/tests/assets/queries/data_array.sql"
+        },
+        "bogus_data_array": {
+            "src": "file:/tests/assets/queries/data_array.sql",
+            "dbs": "bogus"
         }
     },
     "locale": {
