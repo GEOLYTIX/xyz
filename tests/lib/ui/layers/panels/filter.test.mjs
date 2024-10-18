@@ -1,4 +1,7 @@
 /**
+ * @module lib/ui/elements/layers/panels/filters
+ */
+/**
  * This is the entry point function for the ui/layers/panels/filter test
  * @function panelFilterTest
  */
@@ -11,6 +14,12 @@ export function panelFilterTest() {
             */
         codi.it('Create a filter panel', () => {
             const layer = {
+                reload: () => { },
+                mapview: {
+                    Map: {
+                        getTargetElement: () => { return document.getElementById('Map') }
+                    }
+                },
                 key: 'panel_test',
                 filter: {
                     current: {}
@@ -38,6 +47,18 @@ export function panelFilterTest() {
             const drop_down_elements = filterPanelDropDown.querySelector('ul');
 
             codi.assertEqual(drop_down_elements.children.length, 2, 'We expect two entries into the dropdown from the infoj')
+
+            filterPanel.querySelector('ul').children[0].dispatchEvent(new Event('click'))
+
+            codi.assertEqual(filterPanel.querySelector('ul').children[0].classList.contains('selected'), true, 'Expect an element to be selected')
+
+            const resetButton = filterPanel.querySelector('[data-id=resetall]')
+
+            layer.filter.current['field_1'] ??= { 'like': 'a' }
+
+            resetButton.dispatchEvent(new Event('click'))
+
+            codi.assertEqual(layer.filter.current, {}, ' `layer.current.filter` should be empty')
 
         });
     });
