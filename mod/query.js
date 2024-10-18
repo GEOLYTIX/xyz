@@ -140,9 +140,6 @@ async function layerQuery(req, res) {
     return res.status(400).send(req.params.layer.message)
   }
 
-  // Set layer dbs as fallback if not implicit.
-  req.params.dbs ??= req.params.layer.dbs
-
   // Layer queries must have a qID param.
   req.params.qID ??= req.params.layer.qID || 'NULL'
 
@@ -300,6 +297,8 @@ function getQueryFromTemplate(req, template) {
 @description
 The method send a parameterised query to a database connection.
 
+The dbs for the query is determined primarily by the template. The layer.dbs is used for layer queries if the dbs on the template is not implicit. The locale.dbs is assumed as the layer.dbs if not defined in JSON layer. The workspace.dbs will be used as fallback if no template, layer, or locale dbs can be determined.
+
 @param {req} req HTTP request.
 @param {res} res HTTP response.
 @param {Object} template Request template.
@@ -316,10 +315,10 @@ async function executeQuery(req, res, template, query) {
   }
 
   // The dbs param or workspace dbs will be used as fallback if the dbs is not implicit in the template object.
-  const dbs_connection = String(template.dbs || req.params.dbs || req.params.workspace.dbs);
+  const dbs = String(template.dbs || req.params.layer?.dbs || req.params.workspace.dbs);
 
-  // Validate that the dbs_connection string exists as a stored connection method in dbs_connections.
-  if (!Object.hasOwn(dbs_connections, dbs_connection)) {
+  // Validate that the dbs string exists as a stored connection method in dbs_connections.
+  if (!Object.hasOwn(dbs_connections, dbs)) {
 
     return res.status(400).send(`Failed to validate database connection method.`)
   }
@@ -335,13 +334,10 @@ async function executeQuery(req, res, template, query) {
     return;
   }
 
-  // Get query pool from dbs module.
-  const dbs = dbs_connections[dbs_connection]
-
   // Nonblocking queries will not wait for results but return immediately.
   if (req.params.nonblocking || template.nonblocking) {
 
-    dbs(
+    dbs_connections[dbs](
       query,
       req.params.SQL,
       req.params.statement_timeout || template.statement_timeout)
@@ -350,7 +346,7 @@ async function executeQuery(req, res, template, query) {
   }
 
   // Run the query
-  let rows = await dbs(
+  let rows = await dbs_connections[dbs](
     query,
     req.params.SQL,
     req.params.statement_timeout || template.statement_timeout);

@@ -23,6 +23,9 @@ input::-moz-focus-outer {
 textarea {
   width: 100%;
   resize: none;
+  border: none;
+  border-bottom: 0.5px dotted;
+  background-color: var(--color-light-secondary);
 }
 
 input[type=number] {
@@ -36,14 +39,27 @@ input[type=number]::-webkit-outer-spin-button {
   margin: 0;
 }
 
-input[type=text],
 input[type=search],
-input[type=number],
 input[type=date],
 input[type=time],
 input[type=datetime-local] {
   border: 1px solid #ccc;
   padding: 5px;
+
+  &:focus {
+    cursor: text;
+  }
+}
+
+input[type=text],
+input[type=number] {
+  padding: 5px;
+  border: none;
+  background-color: var(--color-light-secondary);
+  border-bottom: 0.5px dotted;
+  display: inline-block;
+  width: 100%;
+  min-width: 2.4ch;
 
   &:focus {
     cursor: text;
@@ -278,9 +294,8 @@ label.checkbox {
    
   &.multi {
     & >.label-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      grid-gap: 5px;
+      display: flex;
+      justify-content: space-between;
 
       & >div {
         flex-grow: 1
