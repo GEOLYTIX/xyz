@@ -68,5 +68,8 @@ module.exports = async function getLayer(params) {
   // Assign layer key as name with no existing name on layer object.
   layer.name ??= layer.key
 
+  // Assign dbs from locale if nullish on layer.
+  layer.dbs ??= locale.dbs
+
   return layer
 }

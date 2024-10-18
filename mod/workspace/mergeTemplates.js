@@ -112,6 +112,9 @@ module.exports = async function mergeTemplates(obj) {
   // Assign templates to workspace.
   assignWorkspaceTemplates(obj)
 
+  // Assign default workspace dbs if not defined in template.
+  obj.dbs ??= workspace.dbs
+
   return obj
 }
 
