@@ -57,7 +57,7 @@ module.exports = async function getLayer(params) {
     // A layer maybe defined as a template only.
     layer = await getTemplate(params.layer)
 
-    if (!layer) {
+    if (!layer || layer instanceof Error) {
 
       return new Error('Unable to validate layer param.')
     }
