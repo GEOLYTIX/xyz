@@ -55,7 +55,7 @@ module.exports = async function getLayer(params) {
   if (!Object.hasOwn(locale.layers, params.layer)) {
 
     // A layer maybe defined as a template only.
-    layer = await getTemplate(String(params.layer))
+    layer = await getTemplate(params.layer)
 
     if (!layer || layer instanceof Error) {
 
