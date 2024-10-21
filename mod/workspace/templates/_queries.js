@@ -31,6 +31,7 @@ module.exports = {
     render: require('./get_nnearest'),
   },
   geojson: {
+    layer: true,
     render: require('./geojson'),
   },
   cluster: {
