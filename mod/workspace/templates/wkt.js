@@ -1,3 +1,10 @@
+/**
+### /workspace/templates/wkt
+
+The wkt layer query template returns feature records from a layer table as an ordered array.
+
+@module /workspace/templates/wkt
+*/
 module.exports = _ => {
 
   // Get fields array from query params.

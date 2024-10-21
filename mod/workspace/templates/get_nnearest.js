@@ -1,5 +1,4 @@
 module.exports = _ => `
-  
   SELECT
     \${qID} AS ID,
     \${label} AS label,

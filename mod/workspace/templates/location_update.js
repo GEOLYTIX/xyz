@@ -1,3 +1,10 @@
+/**
+### /workspace/templates/location_update
+
+The location_update layer query updates a record in the layer table identified where layer qID matches the provided id property.
+
+@module /workspace/templates/location_update
+*/
 module.exports = _ => {
 
   // The location ID must not be altered.

@@ -1,3 +1,10 @@
+/**
+### /workspace/templates/location_get
+
+The location_get layer query returns the field values from a location record in the layer table where the location qID matches the provided id param.
+
+@module /workspace/templates/location_get
+*/
 module.exports = _ => {
 
   // The SQL array may be populated by a default filter which is not required for this query template.
