@@ -159,6 +159,25 @@
                     "polygon": true,
                     "point": true
                 },
+                "infoj": [
+                    {
+                        "label": "check",
+                        "field": "bool_field",
+                        "edit": true,
+                        "inline": true,
+                        "type": "boolean",
+                        "dependents": [
+                            "integer_field"
+                        ]
+                    },
+                    {
+                        "title": "minutes",
+                        "field": "integer_field",
+                        "value": null,
+                        "edit": "true",
+                        "inline": true
+                    }
+                ],
                 "infoj_skip": [
                     "textarea"
                 ]
