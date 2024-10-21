@@ -105,7 +105,7 @@ async function layer(req, res) {
   let layer = await getLayer(req.params)
 
   if (layer instanceof Error) {
-    return res.status(400).send(layer.message)
+    return res.status(400).send(String(layer.message))
   }
 
   res.json(layer)
