@@ -266,13 +266,13 @@ function validateRequestParams(req, res) {
   req.params.template === undefined && delete req.params.template
 
   // Short circuit login view or post request.
-  if (req.params.login || req.body && req.body.login) {
+  if (req.params.login || req.body?.login) {
     login(req, res)
     return;
   }
 
   // Short circuit register view or post request.
-  if (req.params.register || req.body && req.body.register) return register(req, res)
+  if (req.params.register || req.body?.register) return register(req, res)
 
   // Short circuit logout request
   if (req.params.logout) {
