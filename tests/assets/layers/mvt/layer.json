@@ -76,6 +76,61 @@
                         }
                     }
                 }
+            },
+            "theme_2": {
+                "title": "theme_2",
+                "type": "categorized",
+                "field": "numeric_field",
+                "cat": {
+                    "1": {
+                        "label": "Lowest",
+                        "style": {
+                            "fillColor": "#3193ED"
+                        }
+                    },
+                    "2": {
+                        "label": "-",
+                        "style": {
+                            "fillColor": "#5DC29A"
+                        }
+                    },
+                    "3": {
+                        "label": "-",
+                        "style": {
+                            "fillColor": "#8FE15A"
+                        }
+                    },
+                    "4": {
+                        "label": "-",
+                        "style": {
+                            "fillColor": "#D8D758"
+                        }
+                    },
+                    "5": {
+                        "label": "-",
+                        "style": {
+                            "fillColor": "#FFB956"
+                        }
+                    },
+                    "6": {
+                        "label": "-",
+                        "style": {
+                            "fillColor": "#FE8355"
+                        }
+                    },
+                    "7": {
+                        "label": "-",
+                        "style": {
+                            "fillColor": "#FA5652"
+                        }
+                    },
+                    "8": {
+                        "label": "Highest",
+                        "style": {
+                            "fillColor": "#F0304D"
+                        }
+                    }
+                }
             }
         }
     }
