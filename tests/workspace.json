@@ -366,10 +366,19 @@
                         "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
                     },
                     {
+                        "key": "test_mvt_clone",
+                        "label": "entry_mvt_clone",
+                        "type": "mvt_clone",
+                        "display": "true",
+                        "name": "mvt clone",
+                        "layer": "mvt_test"
+                    },
+                    {
                         "key": "test_layer",
                         "label": "entry_layer",
                         "type": "layer",
                         "display": "true",
+                        "name": "layer entry",
                         "layer": "mvt_test"
                     }
                 ]
