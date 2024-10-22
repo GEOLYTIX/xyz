@@ -11,32 +11,38 @@ const api = require('./api/api')
 app.get(`/`, api)
 ```
 
-@requires /view
-@requires /query
 @requires /fetch
+@requires /query
+@requires /view
+@requires /provider
 @requires /sign
+@requires /user
+@requires /workspace
+@requires /user/login
 @requires /user/auth
-
+@requires /user/saml
+@requires /user/register
+@requires /utils/logger
 @module /api
 */
 
-const logger = require('../mod/utils/logger')
-
 const login = require('../mod/user/login')
-
-const register = require('../mod/user/register')
 
 const auth = require('../mod/user/auth')
 
 const saml = process.env.SAML_ENTITY_ID && require('../mod/user/saml')
 
+const register = require('../mod/user/register')
+
+const logger = require('../mod/utils/logger')
+
 const routes = {
+  fetch: require('../mod/fetch'),
+  query: require('../mod/query'),
+  view: require('../mod/view'),
   provider: require('../mod/provider/_provider'),
   sign: require('../mod/sign/_sign'),
-  query: require('../mod/query'),
-  fetch: require('../mod/fetch'),
   user: require('../mod/user/_user'),
-  view: require('../mod/view'),
   workspace: require('../mod/workspace/_workspace'),
 }
 
@@ -66,7 +72,15 @@ The res object represents the HTTP response that an [Express] app sends when it 
 @async
 
 @description
-The XYZ api method will validate request parameter.
+The API method will redirect requests with a request url length 1 and DIR process.env.
+
+eg. A request to localhost:3000 with a DIR = "/mapp" will be redirected to localhost:3000/mapp
+
+The request object itself or the request object url will be logged with the `req` or `req_url` keys in process.env.LOGS.
+
+Requests with the url matching the /saml/ path will be passed to the [saml module]{@link module:/user/saml}.
+
+The api method will validate all request parameter.
 
 The API module method requires the user/auth module to authenticate private API requests.
 
@@ -75,7 +89,6 @@ Requests are passed to individual API modules from the api() method.
 @param {req} req HTTP request.
 @param {res} res HTTP response.
 */
-
 module.exports = async function api(req, res) {
 
   // redirect if dir is missing in url path.
@@ -94,77 +107,16 @@ module.exports = async function api(req, res) {
     return saml(req, res)
   }
 
-  // Merge request params and query params.
-  req.params = Object.assign(req.params || {}, req.query || {})
+  req.params = validateRequestParams(req, res)
 
-  Object.keys(req.params).forEach(key => {
+  console.log(req.params)
 
-    // Set null from string.
-    if (req.params[key]?.toLowerCase() === 'null') {
-      req.params[key] = null
-      return;
-    }
+  // validateRequestParams method does not return a params object.
+  if (!req.params) return;
 
-    // Set boolean false from string.
-    if (req.params[key]?.toLowerCase() === 'false') {
-      req.params[key] = false
-      return;
-    }
+  if (req.params instanceof Error) {
 
-    // Set boolean true from string.
-    if (req.params[key]?.toLowerCase() === 'true') {
-      req.params[key] = true
-      return;
-    }
-
-    // Delete param keys with undefined values.
-    if (req.params[key] === undefined) {
-      delete req.params[key]
-      return;
-    }
-
-    // Delete param keys with empty string value.
-    if (req.params[key] === '') {
-      delete req.params[key]
-      return;
-    }
-
-    // Check whether param begins and ends with square braces.
-    if (typeof req.params[key] === 'string' && req.params[key].match(/^\[.*\]$/)) {
-
-      // Slice square brackets of string and split on comma.
-      req.params[key] = req.params[key].slice(1, -1).split(',')
-    }
-  })
-
-  // Url parameter keys must be white listed as letters and numbers only.
-  if (Object.keys(req.params).some(key => !key.match(/^[A-Za-z0-9_-]*$/))) {
-
-    return res.status(403).send('URL parameter key validation failed.')
-  }
-
-  // Language param will default to english [en] is not explicitly set.
-  req.params.language ??= 'en'
-
-  // Assign from _template if provided as path param.
-  req.params.template ??= req.params._template
-
-  // Short circuit login view or post request.
-  if (req.params.login || req.body && req.body.login) return login(req, res)
-
-  // Short circuit register view or post request.
-  if (req.params.register || req.body && req.body.register) return register(req, res)
-
-  // Short circuit logout request
-  if (req.params.logout) {
-
-    // Remove cookie.
-    res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
-
-    // Remove logout parameter.
-    res.setHeader('location', (process.env.DIR || '/') + (req.params.msg && `?msg=${req.params.msg}` || ''))
-
-    return res.status(302).send()
+    return res.status(400).send(req.params.message)
   }
 
   // Validate signature of either request token or cookie.
@@ -246,4 +198,94 @@ module.exports = async function api(req, res) {
 
   // Return the View API on the root.
   routes.view(req, res)
+}
+
+function validateRequestParams(req, res) {
+
+  // Merge request params and query params.
+  req.params = Object.assign(req.params || {}, req.query || {})
+
+  Object.keys(req.params).forEach(key => {
+
+    if (key === 'user') {
+      console.warn(`user is a restricted request parameter.`)
+      delete req.params.user
+    }
+
+    // Set null from string.
+    if (req.params[key]?.toLowerCase() === 'null') {
+      req.params[key] = null
+      return;
+    }
+
+    // Set boolean false from string.
+    if (req.params[key]?.toLowerCase() === 'false') {
+      req.params[key] = false
+      return;
+    }
+
+    // Set boolean true from string.
+    if (req.params[key]?.toLowerCase() === 'true') {
+      req.params[key] = true
+      return;
+    }
+
+    // Delete param keys with undefined values.
+    if (req.params[key] === undefined) {
+      delete req.params[key]
+      return;
+    }
+
+    // Delete param keys with empty string value.
+    if (req.params[key] === '') {
+      delete req.params[key]
+      return;
+    }
+
+    // Check whether param begins and ends with square braces.
+    if (typeof req.params[key] === 'string' && req.params[key].match(/^\[.*\]$/)) {
+
+      // Slice square brackets of string and split on comma.
+      req.params[key] = req.params[key].slice(1, -1).split(',')
+    }
+  })
+
+  // Url parameter keys must be white listed as letters and numbers only.
+  if (Object.keys(req.params).some(key => !key.match(/^[A-Za-z0-9_-]*$/))) {
+
+    return new Error('URL parameter key validation failed.')
+  }
+
+  // Language param will default to english [en] is not explicitly set.
+  req.params.language ??= 'en'
+
+  // Assign from _template if provided as path param.
+  req.params.template ??= req.params._template
+
+  // Delete undefined params.template property.
+  req.params.template === undefined && delete req.params.template
+
+  // Short circuit login view or post request.
+  if (req.params.login || req.body && req.body.login) {
+    login(req, res)
+    return;
+  }
+
+  // Short circuit register view or post request.
+  if (req.params.register || req.body && req.body.register) return register(req, res)
+
+  // Short circuit logout request
+  if (req.params.logout) {
+
+    // Remove cookie.
+    res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
+
+    // Remove logout parameter.
+    res.setHeader('location', (process.env.DIR || '/') + (req.params.msg && `?msg=${req.params.msg}` || ''))
+
+    res.status(302).send()
+    return;
+  }
+
+  return req.params
 }
