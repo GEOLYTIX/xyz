@@ -253,7 +253,7 @@ function validateRequestParams(req) {
   const params = Object.assign(req.params || {}, req.query || {})
 
   // URL parameter keys must match white listed letters and numbers only.
-  if (Object.keys(params).some(key => !key.match(/^[A-Za-z0-9_-]*$/))) {
+  if (Object.keys(params).some(key => !/^[A-Za-z0-9_-]*$/.exec(key))) {
 
     return new Error('URL parameter key validation failed.')
   }
