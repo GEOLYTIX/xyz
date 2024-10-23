@@ -80,7 +80,14 @@ The request object itself or the request object url will be logged with the `req
 
 Requests with the url matching the /saml/ path will be passed to the [saml module]{@link module:/user/saml}.
 
-The api method will validate all request parameter.
+Requests with a logout parameter property will set the header cookie to null and return with a redirect to the application domain path [process.env.DIR].
+
+Request parameter will be assigned once validated with the validateRequestParams method.
+
+Requests with a login param or login property in the request body object will shortcircuit to the [user/login]{@link module:/user/login} module.
+
+Requests with a register param or register property in the request body object will shortcircuit to the [user/register]{@link module:/user/register} module.
+
 
 The API module method requires the user/auth module to authenticate private API requests.
 
@@ -101,12 +108,24 @@ module.exports = async function api(req, res) {
 
   logger(req.url, 'req_url')
 
-  // Request will be short circuited to the saml module.
+  // SAML request.
   if (req.url.match(/\/saml/)) {
 
     // saml will be undefined without a process.env.SAML_ENTITY_ID
     if (!saml) return;
+
     return saml(req, res)
+  }
+
+  if (req.params.logout) {
+
+    // Remove cookie.
+    res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
+
+    // Set location to the domain path.
+    res.setHeader('location', (process.env.DIR || '/') + (req.params.msg && `?msg=${req.params.msg}` || ''))
+
+    return res.status(302).send()
   }
 
   req.params = validateRequestParams(req)
@@ -116,24 +135,14 @@ module.exports = async function api(req, res) {
     return res.status(400).send(req.params.message)
   }
 
-  // Short circuit login view or post request.
+  // Short circuit to user/login.
   if (req.params.login || req.body?.login) {
     return login(req, res)
   }
 
-  // Short circuit register view or post request.
-  if (req.params.register || req.body?.register) return register(req, res)
-
-  // Short circuit logout request
-  if (req.params.logout) {
-
-    // Remove cookie.
-    res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
-
-    // Remove logout parameter.
-    res.setHeader('location', (process.env.DIR || '/') + (req.params.msg && `?msg=${req.params.msg}` || ''))
-
-    return res.status(302).send()
+  // Short circuit to user/register
+  if (req.params.register || req.body?.register) {
+    return register(req, res)
   }
 
   // Validate signature of either request token or cookie.
@@ -195,6 +204,7 @@ module.exports = async function api(req, res) {
 
     // Set template and route to query mod.
     req.params.template = `location_${req.params.method}`
+    
     return routes.query(req, res)
   }
 
