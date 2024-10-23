@@ -9,7 +9,7 @@ module.exports = _ => {
     .filter(entry => entry.field)
 
     // Only include fields from the fields[] array param.
-    .filter(entry => !_.fields || _.fields?.split(',').includes(entry.field))
+    .filter(entry => !_.fields || _.fields?.includes(entry.field))
 
     // Map either fieldfx or template SQL if available.
     .map(entry => `(${entry.fieldfx || _.workspace.templates[entry.field]?.template || entry.field}) AS ${entry.field}`))

@@ -1,8 +1,7 @@
 module.exports = _ => {
 
   // Get fields array from query params.
-  const fields = _.fields?.split(',')
-    .map(field => `${_.workspace.templates[field]?.template || field} AS ${field}`)
+  const fields = _.fields?.map(field => `${_.workspace.templates[field]?.template || field} AS ${field}`)
     .filter(field => !!field)
     || []
 

@@ -4,11 +4,9 @@ module.exports = _ => {
     _.geom ??= _.layer.geom
 
     // Get fields array from query params.
-    const fields = _.fields?.split(',')
-        .map(field => `${_.workspace.templates[field]?.template || field} as ${field}`)
+    const fields = _.fields?.map(field => `${_.workspace.templates[field]?.template || field} as ${field}`)
 
-    const aggFields = _.fields?.split(',')
-        .map(field => `CASE WHEN count(*)::int = 1 THEN (array_agg(${field}))[1] END as ${field}`)
+    const aggFields = _.fields?.map(field => `CASE WHEN count(*)::int = 1 THEN (array_agg(${field}))[1] END as ${field}`)
 
     const where = _.viewport || `AND ${_.geom} IS NOT NULL`
 
