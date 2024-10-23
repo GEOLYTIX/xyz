@@ -3,7 +3,7 @@ module.exports = _ => {
     let properties = '';
 
     if (_.fields) {
-        const propertyKeyValuePairs = _.fields?.split(',').map(field => {
+        const propertyKeyValuePairs = _.fields?.map(field => {
             const value = _.workspace.templates[field]?.template || field;
             return `'${field}',${value}`;
         });
