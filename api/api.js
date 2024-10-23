@@ -88,10 +88,9 @@ Requests with a login param or login property in the request body object will sh
 
 Requests with a register param or register property in the request body object will shortcircuit to the [user/register]{@link module:/user/register} module.
 
+The [user/auth]{@link module:/user/auth} module is called to return a user object. Private instances must return a user object and will return an error if authentication fails.
 
-The API module method requires the user/auth module to authenticate private API requests.
-
-Requests are passed to individual API modules from the api() method.
+Finally check whether the request should be passed to an API module or the default [/view]{@link module:/view} module.
 
 @param {req} req HTTP request.
 @param {res} res HTTP response.
@@ -145,7 +144,7 @@ module.exports = async function api(req, res) {
     return register(req, res)
   }
 
-  // Validate signature of either request token or cookie.
+  // Validate signature of either request token, authorization header, or cookie.
   const user = await auth(req, res)
 
   // Remove token from params object.
@@ -156,12 +155,14 @@ module.exports = async function api(req, res) {
 
     if (req.headers.authorization) {
 
+      // Request with failed authorization headers are not passed to login.
       return res.status(401).send(user.message)
     }
 
     // Remove cookie.
     res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
 
+    // Set msg parameter for the login view.
     req.params.msg = user.msg || user.message
 
     // Return login view with error message.
