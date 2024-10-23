@@ -284,22 +284,20 @@ function validateRequestParams(req) {
       continue;
     }
 
-    // Set null from string.
-    if (params[key].toLowerCase() === 'null') {
-      params[key] = null
-      continue;
-    }
+    // Parse lowerCase object value.
+    switch (params[key].toLowerCase()) {
 
-    // Set boolean false from string.
-    if (params[key].toLowerCase() === 'false') {
-      params[key] = false
-      continue;
-    }
+      case ('null'):
+        params[key] = null
+        continue;
 
-    // Set boolean true from string.
-    if (params[key].toLowerCase() === 'true') {
-      params[key] = true
-      continue;
+      case ('false'):
+        params[key] = false
+        continue;
+
+      case ('true'):
+        params[key] = true
+        continue;
     }
 
     // Check whether the params value begins and ends with square braces.
