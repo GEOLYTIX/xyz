@@ -9,6 +9,9 @@
         "template_test_temp": {
             "src": "file:/tests/assets/layers/template_test.json"
         },
+        "mvt_test_temp": {
+            "src": "file:/tests/assets/layers/mvt/layer.json"
+        },
         "module_test": {
             "type": "module",
             "src": "file:/tests/assets/queries/foo.js"
@@ -348,7 +351,38 @@
                     }
                 ]
             },
-            "cluster_test": {}
+            "cluster_test": {},
+            "mvt_test": {
+                "template": "mvt_test_temp"
+            },
+            "entry_layer": {
+                "display": true,
+                "template": "template_test_temp",
+                "infoj": [
+                    {
+                        "type": "pin",
+                        "label": "ST_PointOnSurface",
+                        "field": "pin",
+                        "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
+                    },
+                    {
+                        "key": "test_mvt_clone",
+                        "label": "entry_mvt_clone",
+                        "type": "mvt_clone",
+                        "display": "true",
+                        "name": "mvt clone",
+                        "layer": "mvt_test"
+                    },
+                    {
+                        "key": "test_layer",
+                        "label": "entry_layer",
+                        "type": "layer",
+                        "display": "true",
+                        "name": "layer entry",
+                        "layer": "mvt_test"
+                    }
+                ]
+            }
         }
     }
 }
