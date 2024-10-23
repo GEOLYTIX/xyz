@@ -103,20 +103,37 @@ module.exports = async function api(req, res) {
 
   // Request will be short circuited to the saml module.
   if (req.url.match(/\/saml/)) {
+
+    // saml will be undefined without a process.env.SAML_ENTITY_ID
     if (!saml) return;
     return saml(req, res)
   }
 
-  req.params = validateRequestParams(req, res)
-
-  console.log(req.params)
-
-  // validateRequestParams method does not return a params object.
-  if (!req.params) return;
+  req.params = validateRequestParams(req)
 
   if (req.params instanceof Error) {
 
     return res.status(400).send(req.params.message)
+  }
+
+  // Short circuit login view or post request.
+  if (req.params.login || req.body?.login) {
+    return login(req, res)
+  }
+
+  // Short circuit register view or post request.
+  if (req.params.register || req.body?.register) return register(req, res)
+
+  // Short circuit logout request
+  if (req.params.logout) {
+
+    // Remove cookie.
+    res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
+
+    // Remove logout parameter.
+    res.setHeader('location', (process.env.DIR || '/') + (req.params.msg && `?msg=${req.params.msg}` || ''))
+
+    return res.status(302).send()
   }
 
   // Validate signature of either request token or cookie.
@@ -200,92 +217,88 @@ module.exports = async function api(req, res) {
   routes.view(req, res)
 }
 
-function validateRequestParams(req, res) {
+/**
+@function validateRequestParams
+
+@description
+The method assigns a params object from the request params and query objects.
+
+The method will return an error if some params key contains non whitelisted character or if the restricted user param is detected.
+
+The template param will be set from _template if not explicit. This is required for the vercel router logic which does not allow to use URL path parameter to have the same key as request parameter.
+
+The params object will have a language property which is set to `en` if not explicit.
+
+The params object properties will be iterated through to parse Object values [eg null, boolean, array], and remove undefined parameter properties.
+
+@param {req} req HTTP request.
+@property {Object} req.params The request params object.
+@property {Object} req.query The request query object.
+
+@returns {Object} Returns a validated params object.
+*/
+function validateRequestParams(req) {
 
   // Merge request params and query params.
-  req.params = Object.assign(req.params || {}, req.query || {})
+  params = Object.assign(req.params || {}, req.query || {})
 
-  Object.keys(req.params).forEach(key => {
-
-    if (key === 'user') {
-      console.warn(`user is a restricted request parameter.`)
-      delete req.params.user
-    }
-
-    // Set null from string.
-    if (req.params[key]?.toLowerCase() === 'null') {
-      req.params[key] = null
-      return;
-    }
-
-    // Set boolean false from string.
-    if (req.params[key]?.toLowerCase() === 'false') {
-      req.params[key] = false
-      return;
-    }
-
-    // Set boolean true from string.
-    if (req.params[key]?.toLowerCase() === 'true') {
-      req.params[key] = true
-      return;
-    }
-
-    // Delete param keys with undefined values.
-    if (req.params[key] === undefined) {
-      delete req.params[key]
-      return;
-    }
-
-    // Delete param keys with empty string value.
-    if (req.params[key] === '') {
-      delete req.params[key]
-      return;
-    }
-
-    // Check whether param begins and ends with square braces.
-    if (typeof req.params[key] === 'string' && req.params[key].match(/^\[.*\]$/)) {
-
-      // Slice square brackets of string and split on comma.
-      req.params[key] = req.params[key].slice(1, -1).split(',')
-    }
-  })
-
-  // Url parameter keys must be white listed as letters and numbers only.
-  if (Object.keys(req.params).some(key => !key.match(/^[A-Za-z0-9_-]*$/))) {
+  // URL parameter keys must match white listed letters and numbers only.
+  if (Object.keys(params).some(key => !key.match(/^[A-Za-z0-9_-]*$/))) {
 
     return new Error('URL parameter key validation failed.')
   }
 
+  // URL parameter keys must match white listed letters and numbers only.
+  if (Object.keys(params).some(key => key === 'user')) {
+
+    return new Error('user is a restricted request parameter.')
+  }
+
   // Language param will default to english [en] is not explicitly set.
-  req.params.language ??= 'en'
+  params.language ??= 'en'
 
   // Assign from _template if provided as path param.
-  req.params.template ??= req.params._template
+  params.template ??= params._template
 
-  // Delete undefined params.template property.
-  req.params.template === undefined && delete req.params.template
+  for (const key in params) {
 
-  // Short circuit login view or post request.
-  if (req.params.login || req.body?.login) {
-    login(req, res)
-    return;
+    // Delete param keys with undefined values.
+    if (params[key] === undefined) {
+      delete params[key]
+      continue;
+    }
+
+    // Delete param keys with empty string value.
+    if (params[key] === '') {
+      delete params[key]
+      continue;
+    }
+
+    // Set null from string.
+    if (params[key].toLowerCase() === 'null') {
+      params[key] = null
+      continue;
+    }
+
+    // Set boolean false from string.
+    if (params[key].toLowerCase() === 'false') {
+      params[key] = false
+      continue;
+    }
+
+    // Set boolean true from string.
+    if (params[key].toLowerCase() === 'true') {
+      params[key] = true
+      continue;
+    }
+
+    // Check whether the params value begins and ends with square braces.
+    if (params[key].match(/^\[.*\]$/)) {
+
+      // Match the string between square brackets and split into an array with undefined array values filtered out.
+      params[key] = match(/^\[(.*)\]$/)[1].split(',').filter(Boolean)
+    }
   }
 
-  // Short circuit register view or post request.
-  if (req.params.register || req.body?.register) return register(req, res)
-
-  // Short circuit logout request
-  if (req.params.logout) {
-
-    // Remove cookie.
-    res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
-
-    // Remove logout parameter.
-    res.setHeader('location', (process.env.DIR || '/') + (req.params.msg && `?msg=${req.params.msg}` || ''))
-
-    res.status(302).send()
-    return;
-  }
-
-  return req.params
+  return params
 }
