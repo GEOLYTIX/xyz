@@ -204,7 +204,7 @@ module.exports = async function api(req, res) {
 
     // Set template and route to query mod.
     req.params.template = `location_${req.params.method}`
-    
+
     return routes.query(req, res)
   }
 
@@ -250,7 +250,7 @@ The params object properties will be iterated through to parse Object values [eg
 function validateRequestParams(req) {
 
   // Merge request params and query params.
-  params = Object.assign(req.params || {}, req.query || {})
+  const params = Object.assign(req.params || {}, req.query || {})
 
   // URL parameter keys must match white listed letters and numbers only.
   if (Object.keys(params).some(key => !key.match(/^[A-Za-z0-9_-]*$/))) {
