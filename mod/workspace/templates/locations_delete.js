@@ -1,3 +1,10 @@
+/**
+### /workspace/templates/locations_delete
+
+The locations_delete layer query deletes multiple records in a layer table which pass the provided viewport and/or SQL filter.
+
+@module /workspace/templates/locations_delete
+*/
 module.exports = _ => {
 
   // If no layer parameter, return 

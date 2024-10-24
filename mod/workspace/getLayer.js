@@ -5,6 +5,7 @@ The getLayer module exports the getLayer method which is required by the query a
 @requires /utils/roles
 @requires /workspace/mergeTemplates
 @requires /workspace/getLocale
+@requires /workspace/getTemplate
 
 @module /workspace/getLayer
 */
@@ -15,12 +16,16 @@ const mergeTemplates = require('./mergeTemplates')
 
 const getLocale = require('./getLocale')
 
+const getTemplate = require('./getTemplate')
+
 /**
 @function getLayer
 @async
 
 @description
 The layer locale is requested from the getLocale module.
+
+A layer template lookup will be attempted if a layer is not found in locale.layers.
 
 The mergeTemplate module will be called to merge templates into the locale object and substitute SRC_* environment variables.
 
@@ -45,11 +50,22 @@ module.exports = async function getLayer(params) {
   // getLocale will return err if role.check fails.
   if (locale instanceof Error) return locale
 
-  if (!Object.hasOwn(locale.layers, params.layer)) {
-    return new Error('Unable to validate layer param.')
-  }
+  let layer;
 
-  let layer = locale.layers[params.layer]
+  if (!Object.hasOwn(locale.layers, params.layer)) {
+
+    // A layer maybe defined as a template only.
+    layer = await getTemplate(params.layer)
+
+    if (!layer || layer instanceof Error) {
+
+      return new Error('Unable to validate layer param.')
+    }
+    
+  } else {
+
+    layer = locale.layers[params.layer]
+  }
 
   // layer maybe null.
   if (!layer) return;

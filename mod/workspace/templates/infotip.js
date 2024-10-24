@@ -1,3 +1,10 @@
+/**
+### /workspace/templates/infotip
+
+The infotip layer query returns a field property value from the location nearest to the provided coordinate.
+
+@module /workspace/templates/infotip
+*/
 module.exports = _ => {
 
   if (!_.coords) return `
