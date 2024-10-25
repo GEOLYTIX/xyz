@@ -13,7 +13,6 @@ dialog>button.close {
 
 dialog.dialog {
   position: absolute;
-  background-color: #fff;
   border: none !important;
   border-radius: 2px;
   cursor: grab;
@@ -24,7 +23,6 @@ dialog.dialog {
 
 dialog.modal {
   position: fixed;
-  background-color: #fff;
   border: none !important;
   border-radius: 2px;
   text-wrap: wrap;
