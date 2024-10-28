@@ -6,7 +6,7 @@ An example Express application script is provided in the project root.
 
 XYZ API modules should be run with a Node.js runtime v18 or higher.
 
-The [XYZ API](/docs/module-_api.html) module is located in the api folder as a requirement for using the offical Node.js runtime in Vercel's Edge Network.
+The [XYZ API](/xyz/module-_api.html) module is located in the api folder as a requirement for using the offical Node.js runtime in Vercel's Edge Network.
 
 All other XYZ API modules are located in the /mod directory.
 
@@ -16,12 +16,12 @@ The [clean-jsdoc-theme](https://www.npmjs.com/package/clean-jsdoc-theme) is used
 
 The XYZ API modules are:
 
-### [Workspace](/docs/module-_workspace)
+### [Workspace](/xyz/module-_workspace)
 
-### [View](/docs/module-_view)
+### [View](/xyz/module-_view)
 
-### [Query](/docs/module-_query)
+### [Query](/xyz/module-_query)
 
-### [User](/docs/module-_user)
+### [User](/xyz/module-_user)
 
-### [Sign](/docs/module-_sign)
+### [Sign](/xyz/module-_sign)
