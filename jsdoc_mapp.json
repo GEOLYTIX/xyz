@@ -8,7 +8,6 @@
   "plugins": [
     "plugins/markdown"
   ],
-  
   "opts": {
     "encoding": "utf8",
     "readme": "./lib/README.md",
@@ -22,14 +21,14 @@
       "favicon": "../public/icons/favicon.ico",
       "menu": [
         {
-            "title": "Github",
-            "id": "github",
-            "link": "https://github.com/GEOLYTIX/xyz"
+          "title": "Github",
+          "id": "github",
+          "link": "https://github.com/GEOLYTIX/xyz"
         },
         {
           "title": "XYZ",
           "id": "xyz",
-          "link": "/docs"
+          "link": "/xyz"
         }
       ]
     }
