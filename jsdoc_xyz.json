@@ -1,7 +1,8 @@
 {
   "source": {
     "include": [
-      "api", "mod"
+      "api",
+      "mod"
     ],
     "includePattern": ".js$"
   },
