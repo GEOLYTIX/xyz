@@ -2,6 +2,8 @@
  * @module utils/queryParams
  */
 
+import { setView } from '../../utils/view.js';
+
 /**
  * This function is used as an entry point for the queryParams Test
  * @function queryParamsTest
@@ -26,6 +28,8 @@ export async function queryParamsTest(mapview) {
                 table: 'fake_table',
             },
         };
+
+        setView(mapview, 2, 'default');
 
         /**
          * ### Should Return undefined
