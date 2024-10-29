@@ -1,7 +1,7 @@
 export default [
   {
     files: ['**/*.js', '**/*.mjs'],
-    ignores: ['public/js/lib/*'],
+    ignores: ['public/js/lib/*', 'docs/**/*.js'],
     rules: {
       quotes: ['error', 'single', { 'allowTemplateLiterals': true }],
       'prefer-const': ['error', {
@@ -12,7 +12,9 @@ export default [
         {
           'max': 4
         }
-      ]
+      ],
+      'complexity': ['error', { 'max': 15 }],
+      'no-nested-ternary': 'error'
     }
   }
 ];
