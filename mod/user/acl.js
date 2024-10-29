@@ -22,7 +22,7 @@ const pool = new Pool({
 
 // The acl module will export an empty require object instead of a function if no ACL connection has been defined.
 if (!connection?.[1]) {
-  module.exports = null;
+  module.exports = {};
 }
 else {
   /**
