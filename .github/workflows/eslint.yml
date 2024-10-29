@@ -22,5 +22,3 @@ jobs:
       
     - name: Run ESLint
       run: npx eslint . --max-warnings=0
-      # Alternatively, you can use your package.json script if you have one:
-      # run: npm run lint
