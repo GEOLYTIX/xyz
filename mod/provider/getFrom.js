@@ -8,8 +8,6 @@ const cloudfront = require('../provider/cloudfront')
 
 const file = require('../provider/file')
 
-const mongodb = require('../provider/mongodb')
-
 module.exports = {
   https: async url => {
 
@@ -32,6 +30,5 @@ module.exports = {
 
   },
   file: ref => file(ref.split(':')[1]),
-  cloudfront: ref => cloudfront(ref.split(':')[1]),
-  mongodb: ref => mongodb(ref.split(/:(.*)/s)[1])
+  cloudfront: ref => cloudfront(ref.split(':')[1])
 }
