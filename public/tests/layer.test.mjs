@@ -18,7 +18,7 @@ export async function layerTest(mapview) {
 
                 if (layer.dataviews) {
 
-                    for (let dataview in layer.dataview) {
+                    for (const dataview in layer.dataview) {
                         dataview.show();
                     }
                 }

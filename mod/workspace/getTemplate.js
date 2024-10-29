@@ -67,8 +67,6 @@ module.exports = async function getTemplate(template) {
     return template
   }
 
-  let response;
-
   if (template.cached) {
     return structuredClone(template.cached)
   }
@@ -85,7 +83,7 @@ module.exports = async function getTemplate(template) {
     return template
   }
 
-  response = await getFrom[method](template.src)
+  const response = await getFrom[method](template.src)
 
   if (response instanceof Error) {
 

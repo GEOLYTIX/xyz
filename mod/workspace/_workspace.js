@@ -102,7 +102,7 @@ async function layer(req, res) {
     req.params.user.roles.push('*')
   }
 
-  let layer = await getLayer(req.params)
+  const layer = await getLayer(req.params)
 
   if (layer instanceof Error) {
     return res.status(400).send(layer.message)
@@ -172,7 +172,7 @@ async function locale(req, res) {
     req.params.user.roles.push('*')
   }
 
-  let locale = await getLocale(req.params)
+  const locale = await getLocale(req.params)
 
   if (locale instanceof Error) {
     return res.status(400).send(locale.message)

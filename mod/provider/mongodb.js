@@ -6,7 +6,7 @@ module.exports = async searchparams => {
 
   const params = Object.fromEntries(new URLSearchParams(searchparams).entries())
 
-  let body = {
+  const body = {
     'collection': params.collection,
     'database': params.database,
     'dataSource': params.dataSource,
@@ -14,7 +14,7 @@ module.exports = async searchparams => {
     'sort': { _id: -1 }
   }
 
-  let options = {
+  const options = {
     method: 'POST',
     mode: 'cors',
     cache: 'no-cache',
@@ -29,7 +29,7 @@ module.exports = async searchparams => {
 
   const response = await fetch(params.resource, options);
 
-  let r = await response.json()
+  const r = await response.json()
 
   return r.documents?.[0]
 }

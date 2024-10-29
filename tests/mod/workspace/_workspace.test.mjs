@@ -44,7 +44,7 @@ export async function workspaceTest(mapview) {
         });
 
         await codi.it('Workspace: Getting template_test_vanilla Layer', async () => {
-            let layer = await mapp.utils.xhr(`/test/api/workspace/layer?layer=template_test_vanilla`);
+            const layer = await mapp.utils.xhr(`/test/api/workspace/layer?layer=template_test_vanilla`);
             codi.assertEqual(layer.key, 'template_test_vanilla', 'Ensure that we get the template_test_vanilla layer from the API')
             codi.assertEqual(layer.infoj.length, 6, 'The infoj should always have 6 infoj entries')
             codi.assertTrue(!!layer.style, 'The layer needs to have a style object from another template')
