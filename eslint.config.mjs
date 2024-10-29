@@ -6,8 +6,13 @@ export default [
       quotes: ['error', 'single', { 'allowTemplateLiterals': true }],
       'prefer-const': ['error', {
         'destructuring': 'any',
-        'ignoreReadBeforeAssign': false
-      }]
+        'ignoreReadBeforeAssign': true
+      }],
+      'max-depth': ['error',
+        {
+          'max': 4
+        }
+      ]
     }
   }
 ];
