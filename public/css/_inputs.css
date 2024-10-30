@@ -73,8 +73,8 @@ input[type=search]+ul:active {
 
 input[type="search"]::-webkit-search-cancel-button,
 input[type="search"]::-webkit-search-decoration:hover,
-input[type="search"]::-webkit-search-cancel-button:hover { 
-  cursor:pointer; 
+input[type="search"]::-webkit-search-cancel-button:hover {
+  cursor: pointer;
 }
 
 label.checkbox {
@@ -243,9 +243,10 @@ label.checkbox {
 
     &>.head>.icon {
       content: url("../icons/icon-drop-up.svg");
-    }  
+    }
   }
-  &.dropdown-reverse > ul {
+
+  &.dropdown-reverse>ul {
     bottom: 30px;
   }
 }
@@ -291,13 +292,13 @@ label.checkbox {
     z-index: 2;
     width: calc((var(--a) - var(--min)) / var(--dif) * (100% - 10px));
   }
-   
+
   &.multi {
-    & >.label-row {
+    &>.label-row {
       display: flex;
       justify-content: space-between;
 
-      & >div {
+      &>div {
         flex-grow: 1
       }
     }
