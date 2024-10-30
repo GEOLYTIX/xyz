@@ -253,6 +253,7 @@ dialog.dialog {
   user-select: none;
   padding: 5px;
   overflow: unset !important;
+  isolation: isolate;
 }
 dialog.modal {
   position: fixed;
