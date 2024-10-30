@@ -29,8 +29,6 @@ const languageTemplates = require('../utils/languageTemplates')
 
 const view = require('../view')
 
-process.env.PASSWORD_REGEXP ??= '(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{10,}$'
-
 /**
 @function register
 
@@ -233,7 +231,7 @@ function checkUserBody(req, res) {
   if (!req.body.password) return res.status(400).send('No password provided')
 
   // Create regex to text password complexity from env or set default.
-  const passwordRgx = new RegExp(process.env.PASSWORD_REGEXP)
+  const passwordRgx = new RegExp(process.env.PASSWORD_REGEXP || '(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{10,}$')
 
   // Test whether the provided password is valid.
   if (!passwordRgx.test(req.body.password)) {
