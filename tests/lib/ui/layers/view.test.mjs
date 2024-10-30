@@ -1,21 +1,22 @@
+
 /**
- * ## layer.changeEndTest()
- * @module layer/changeEndTest
+ * 
+ * @module /ui/layers/view
  */
 
-import { setView } from '../../utils/view.js';
-import { delayFunction } from '../../utils/delay.js';
+import { setView } from '../../../utils/view.js';
+import { delayFunction } from '../../../utils/delay.js';
 
 /**
  * This function is used as an entry point for the changeEndTest
- * @function changeEndTest 
+ * @function viewTest 
  * @param {Object} mapview 
 */
-export async function changeEndTest(mapview) {
+export async function viewTest(mapview) {
 
     setView(mapview, 2, 'default');
 
-    await codi.describe('Layer: changeEndTest', async () => {
+    await codi.describe('UI Layers: viewTest', async () => {
 
         /**
          * ### should dispatch the event and the layer should not display
