@@ -284,6 +284,8 @@ function roles(req, res) {
 @description
 The workspace/test method which is only available to user with admin credentials requests all locales in workspace.
 
+The cached workspace will be flushed for the test method.
+
 Requesting all locales should add any additional templates to the workspace.
 
 The test method will iterate over all workspace.templates and get from the getTemplate method to check whether any errors are logged on a template in regards to its src parameter.

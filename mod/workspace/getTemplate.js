@@ -33,7 +33,7 @@ const envReplace = require('../utils/envReplace')
 @async
 
 @description
-The workspace will be requested from the workspace/cache module.
+The workspace will checked and cached by the [Workspace API checkWorkspaceCache]{@link module:/workspace/cache~checkWorkspaceCache} method.
 
 A template object matching the template_key param in the workspace.templates{} object will be returned from the getTemplate method.
 
