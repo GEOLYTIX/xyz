@@ -45,15 +45,11 @@ To run the lint you can execute `npx eslint .` in the root of the application. T
 
 eslint command
 
-```
-npx esbuild .
-```
+    npx esbuild .
 
 eslint command with fix
 
-```
-npx esbuild . --fix
-```
+    npx esbuild . --fix
 
 There are other extensions you can use in your editor to get on the fly error highlighting where any rules are broken. Please look into what eslint supports in your environment.
 
