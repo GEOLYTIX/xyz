@@ -1,7 +1,9 @@
 export default [
   {
+    ignores: ['public/js/lib/*', 'docs/**/*'],
+  },
+  {
     files: ['**/*.js', '**/*.mjs'],
-    ignores: ['public/js/lib/*', 'docs/**/*.js'],
     rules: {
       quotes: ['error', 'single', { 'allowTemplateLiterals': true }],
       'prefer-const': ['error', {
