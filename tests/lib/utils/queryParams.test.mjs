@@ -21,7 +21,7 @@ export async function queryParamsTest(mapview) {
             id: 6,
         });
 
-        let params = {
+        const params = {
             layer: location_layer,
             queryparams: {
                 layer: location_layer,
@@ -38,7 +38,7 @@ export async function queryParamsTest(mapview) {
          */
         await codi.it('Should return undefined with null queryparams', async () => {
 
-            let null_params = {};
+            const null_params = {};
             const formattedValue = mapp.utils.queryParams(null_params);
             codi.assertEqual(formattedValue, undefined, `We expect the value to equal undefined, we received ${formattedValue}`)
         });

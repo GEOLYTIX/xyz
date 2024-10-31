@@ -1,6 +1,6 @@
 module.exports = _ => {
 
-  let
+  const
     x = parseInt(_.x),
     y = parseInt(_.y),
     z = parseInt(_.z)

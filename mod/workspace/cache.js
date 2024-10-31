@@ -92,10 +92,8 @@ The workspace is assigned to the module scope cache variable and the timestamp i
 */
 async function cacheWorkspace() {
 
-  let workspace;
-
   // Get workspace from source.
-  workspace = Object.hasOwn(getFrom, workspace_src) ?
+  const workspace = Object.hasOwn(getFrom, workspace_src) ?
     await getFrom[workspace_src](process.env.WORKSPACE) : {}
 
   // Return error if source failed.
