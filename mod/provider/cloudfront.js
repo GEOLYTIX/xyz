@@ -20,7 +20,7 @@ const logger = require('../utils/logger')
 @function cloudfront
 @async
 
-@decsription
+@description
 The method creates a signed URL for a cloudfront resource, fetches the resource and returns the fetched resource.
 
 A buffer is returned with the ref.params.buffer flag.
@@ -38,6 +38,7 @@ The fetch response will be parsed as text by default.
 @returns {Promise<String|JSON|Buffer|Error>} The method resolves to either JSON, Text, or Buffer dependent ref.params.
 */
 module.exports = async function cloudfront(ref) {
+
   try {
 
     // Substitutes {*} with process.env.SRC_* key values.
