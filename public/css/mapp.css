@@ -132,6 +132,11 @@ body {
     background: var(--color-light-secondary);
     cursor: pointer;
   }
+  .list {
+    max-width: 66vw;
+    max-height: 300px;
+    overflow-x: hidden;
+  }
 }
 a > img {
   height: 100%;
@@ -146,9 +151,9 @@ a > img {
   width: 100%;
   padding: 5px;
   pointer-events: none;
+  user-select: none;
 }
 .attribution-links {
-  z-index: 999;
   text-align: right;
   font-size: 95%;
   & a {

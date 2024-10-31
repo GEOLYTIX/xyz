@@ -12,7 +12,7 @@ export async function pinTest(mapview) {
         await codi.it('Needs to be able to create a pin element with a scale of 4', async () => {
 
             //Set the one pin style to have a scale of 4
-            mapview.layers['location_get_test'].infoj.find(entry => entry.type === 'pin').style ??= { scale: 4 };
+            mapview.layers['location_get_test'].infoj.find(entry => entry.type === 'pin').style ??= { icon: { scale: 4 } };
 
             //Mock the location
             const location = await mockLocation(mapview);

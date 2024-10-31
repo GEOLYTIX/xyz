@@ -9,11 +9,10 @@
         "template_test_temp": {
             "src": "file:/tests/assets/layers/template_test.json"
         },
-        "module_test": {
-            "type": "module",
-            "src": "file:/tests/assets/queries/foo.js"
+        "mvt_test_temp": {
+            "src": "file:/tests/assets/layers/mvt/layer.json"
         },
-        "location_get": {
+        "module_test": {
             "type": "module",
             "src": "file:/tests/assets/queries/foo.js"
         },
@@ -28,6 +27,16 @@
         },
         "get_location_mock": {
             "src": "file:/tests/assets/queries/get_location_mock.sql"
+        },
+        "minmax_query": {
+            "src": "file:/tests/assets/queries/minmax_mock.sql"
+        },
+        "data_array": {
+            "src": "file:/tests/assets/queries/data_array.sql"
+        },
+        "bogus_data_array": {
+            "src": "file:/tests/assets/queries/data_array.sql",
+            "dbs": "bogus"
         }
     },
     "locale": {
@@ -37,6 +46,9 @@
             "C": null,
             "*": null
         },
+        "mapviewControls": [
+            "Zoom"
+        ],
         "plugins": [
             "${PLUGINS}v4.8.0/coordinates.js",
             "${PLUGINS}v4.8.0/chartjs.js"
@@ -147,6 +159,25 @@
                     "polygon": true,
                     "point": true
                 },
+                "infoj": [
+                    {
+                        "label": "check",
+                        "field": "bool_field",
+                        "edit": true,
+                        "inline": true,
+                        "type": "boolean",
+                        "dependents": [
+                            "integer_field"
+                        ]
+                    },
+                    {
+                        "title": "minutes",
+                        "field": "integer_field",
+                        "value": null,
+                        "edit": "true",
+                        "inline": true
+                    }
+                ],
                 "infoj_skip": [
                     "textarea"
                 ]
@@ -271,6 +302,10 @@
                     {
                         "key": "bogus_file",
                         "src": "file:/tests/assets/styles/bogus_file.json"
+                    },
+                    {
+                        "key": "dataviews_json",
+                        "src": "file:/tests/assets/dataviews/dataviews_json.json"
                     }
                 ]
             },
@@ -294,6 +329,57 @@
                     },
                     {
                         "src": "file:/tests/assets/layers/location_mock/infoj.json"
+                    }
+                ]
+            },
+            "location_get_test_no_infoj": {
+                "hidden": true,
+                "templates": [
+                    {
+                        "src": "file:/tests/assets/layers/location_mock/layer.json"
+                    }
+                ]
+            },
+            "query_params_layer": {
+                "hidden": true,
+                "templates": [
+                    {
+                        "src": "file:/tests/assets/layers/location_mock/layer.json"
+                    },
+                    {
+                        "src": "file:/tests/assets/layers/location_mock/infoj.json"
+                    }
+                ]
+            },
+            "cluster_test": {},
+            "mvt_test": {
+                "template": "mvt_test_temp"
+            },
+            "entry_layer": {
+                "display": true,
+                "template": "template_test_temp",
+                "infoj": [
+                    {
+                        "type": "pin",
+                        "label": "ST_PointOnSurface",
+                        "field": "pin",
+                        "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
+                    },
+                    {
+                        "key": "test_mvt_clone",
+                        "label": "entry_mvt_clone",
+                        "type": "mvt_clone",
+                        "display": "true",
+                        "name": "mvt clone",
+                        "layer": "mvt_test"
+                    },
+                    {
+                        "key": "test_layer",
+                        "label": "entry_layer",
+                        "type": "layer",
+                        "display": "true",
+                        "name": "layer entry",
+                        "layer": "mvt_test"
                     }
                 ]
             }

@@ -9,7 +9,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
-  <script src="https://cdn.jsdelivr.net/npm/ol@v10.0.0/dist/ol.js" defer></script>
+  <script src="https://cdn.jsdelivr.net/npm/ol@v10.2.1/dist/ol.js" defer></script>
 
   <!-- Load XYZ / MAPP stylesheet and library. -->
   <link rel="stylesheet" href="{{dir}}/public/css/mapp.css" />
@@ -258,7 +258,7 @@
       }
 
       .mobile-display-none {
-        display: none;
+        display: none !important;
       }
 
       .mobile-disabled {
@@ -441,6 +441,9 @@
   })
 
   console.log(`MAPP v${mapp.version}`)
+
+  // Set the maxWidth for mobile responsive display.
+  mapp.utils.mobile(765)
 
   // Refresh cookie and get user with updated credentials.
   await mapp.utils.xhr(`${mapp.host}/api/user/cookie`).then(user => {
@@ -648,7 +651,7 @@
     },
 
     // mapp.Mapview must be awaited.
-    loadPlugins: true
+    syncPlugins: locale.syncPlugins
   });
 
   if (!locale.layers?.length && !(locale instanceof Error)) {

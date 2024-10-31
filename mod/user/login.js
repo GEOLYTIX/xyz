@@ -21,21 +21,22 @@ const jwt = require('jsonwebtoken')
 @async
 
 @description
-Request which require authentication will return the login method if the authentication fails.
+Requests which require authentication will return the login method if the authentication fails.
 
-The login method will request the fromACL() method for a user with login details in the Post Request body.
+The login method will request a user from the fromACL() method.
 
 A user cookie will be assigned for the user returned from the fromACL() method and the response will be redirected to the intended target location.
 
 The loginView method will be returned with a message from a failed user validation or if no login post request body is provided.
 
-@param {Object} req HTTP request.
-@param {Object} req.params HTTP request parameter.
-@param {Object} [req.params.user] Mapp User object.
-@param {Object} req.body HTTP POST request body.
-@param {Object} res HTTP response.
-*/
+The _redirect cookie set by the loginView method will be removed on redirect.
 
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {Object} req.params HTTP request parameter.
+@property {Object} [req.params.user] Mapp User object.
+@property {Object} req.body HTTP POST request body.
+*/
 module.exports = async function login(req, res) {
 
   if (req.body) {
@@ -47,9 +48,7 @@ module.exports = async function login(req, res) {
     if (user instanceof Error && redirect) {
 
       req.params.msg = user.message
-      
-      loginView(req, res)
-      return 
+      return loginView(req, res)
     }
 
     if (user instanceof Error) {
@@ -69,11 +68,12 @@ module.exports = async function login(req, res) {
         expiresIn: parseInt(process.env.COOKIE_TTL)
       })
 
-    const cookie = `${process.env.TITLE}=${token};HttpOnly;Max-Age=${process.env.COOKIE_TTL};Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`
+    const user_cookie = `${process.env.TITLE}=${token};HttpOnly;Max-Age=${process.env.COOKIE_TTL};Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`
 
-    res.setHeader('Set-Cookie', cookie)
+    const redirect_null_cookie = `${process.env.TITLE}_redirect=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`
 
-    res.setHeader('location', `${redirect && redirect.replace(/([?&]{1})msg={1}[^&]+(&|$)/,'') || process.env.DIR}`)
+    res.setHeader('Set-Cookie', [user_cookie, redirect_null_cookie])
+    res.setHeader('location', `${redirect || process.env.DIR}`)
 
     return res.status(302).send()
   }
@@ -88,7 +88,6 @@ module.exports = async function login(req, res) {
   return loginView(req, res)
 }
 
-
 /**
 @function loginView
 
@@ -99,21 +98,20 @@ A redirect cookie will be set to the response header for a redirect to the locat
 
 The default `login_view` will be set as template request parameter before the XYZ View API method will be returned.
 
-@param {Object} req HTTP request.
-@param {Object} req.params HTTP request parameter.
-@param {Object} res HTTP response.
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {Object} req.params HTTP request parameter.
 */
-
 function loginView(req, res) {
 
   // Clear user token cookie.
   res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
 
   // The redirect for a successful login.
-  const redirect = req.url && decodeURIComponent(req.url).replace(/login\=true/, '')
+  req.params.redirect = req.url && decodeURIComponent(req.url).replace(/login=true/, '')
 
   // Set cookie with redirect value.
-  res.setHeader('Set-Cookie', `${process.env.TITLE}_redirect=${redirect};HttpOnly;Max-Age=60000;Path=${process.env.DIR || '/'}`)
+  res.setHeader('Set-Cookie', `${process.env.TITLE}_redirect=${req.params.redirect};HttpOnly;Max-Age=60000;Path=${process.env.DIR || '/'}`)
 
   req.params.template = 'login_view'
 

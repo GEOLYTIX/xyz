@@ -4,59 +4,76 @@ import { dictionaryTest } from '../lib/dictionaries/_dictionaries.test.mjs';
 import { locationTest } from '../lib/location/_location.test.mjs';
 import { mapviewTest } from '../lib/mapview/_mapview.test.mjs';
 import { pluginsTest } from '../plugins/_plugins.test.mjs';
-import { setView } from '../utils/view.js';
-import { delayFunction } from '../utils/delay.js';
 import { workspaceTest } from '../mod/workspace/_workspace.test.mjs'
 import { queryTest } from '../mod/query.test.mjs';
-import { apiTest } from './_api.test.mjs';
 import { userTest } from '../mod/user/_user.test.js';
 import { ui_elementsTest } from '../lib/ui/elements/_elements.test.mjs';
-import { entriesTest } from '../lib/ui/locations/entries/_entires.test.mjs';
-// import { booleanTest } from '../lib/ui/locations/entries/boolean.test.mjs';
+
+import { ui_layers } from '../lib/ui/layers/_layers.test.mjs';
+import { entriesTest } from '../lib/ui/locations/entries/_entries.test.mjs';
+import { uiTest } from '../lib/ui/_ui.test.mjs';
+import { utilsTest } from '../lib/utils/_utils.test.mjs';
+import { formatTest } from '../lib/layer/format/_format.test.mjs';
+import { ui_locations } from '../lib/ui/locations/_locations.test.mjs';
 
 //API Tests
 await workspaceTest();
 await queryTest();
-await userTest.updateTest();
+
+await runAllTests(userTest);
 
 const mapview = await base();
 
 // Run the dictionary Tests
-await dictionaryTest.baseDictionaryTest(mapview);
-await dictionaryTest.unknownLanguageTest(mapview);
-await dictionaryTest.keyValueDictionaryTest(mapview);
+await runAllTests(dictionaryTest, mapview);
 
-await pluginsTest.linkButtonTest();
-setView(mapview, 2, 'default');
-await layerTest.changeEndTest(mapview);
+//Plugins Tests
+await runAllTests(pluginsTest);
 
-setView(mapview, 2, 'default');
-await layerTest.decorateTest(mapview);
+//Layer Tests
+await runAllTests(layerTest, mapview);
 
-setView(mapview, 2, 'default');
-await layerTest.fadeTest(mapview);
-// await layerTest.featureFieldsTest();
-// await layerTest.featureFilterTest();
-await layerTest.featureFormatsTest();
-// await layerTest.featureHoverTest();
-//await layerTest.featureStyleTest(mapview);
-await layerTest.styleParserTest(mapview);
+//Location Tests
+await runAllTests(locationTest, mapview);
 
-// await locationTest.createTest();
-await locationTest.getTest(mapview);
-// await locationTest.decorateTest();
-// await locationTest.nnearestTest();
+//Mapview Tests
+await runAllTests(mapviewTest, mapview);
 
-// await mapviewTest.addLayerTest();
-// await mapviewTest.allfeaturesTest();
-// await mapviewTest.attributionTest();
-// await mapviewTest.fitViewTest();
-// await mapviewTest.geoJSONTest();
-// await mapviewTest.geometryTest();
-// await mapviewTest.getBoundsTest();
-// await mapviewTest.infotipTest();
-// await mapviewTest.locateTest();
-// await mapviewTest.popupTest();
-await ui_elementsTest.sliderTest();
-await ui_elementsTest.layerStyleTest(mapview);
-await entriesTest.pinTest(mapview);
+//UI Elements Tests
+await runAllTests(ui_elementsTest, mapview);
+
+//Entries Tests
+await runAllTests(entriesTest, mapview);
+
+//UI Layers Tests
+await runAllTests(ui_layers, mapview);
+
+//UI tests
+await runAllTests(uiTest);
+
+//Format Tests
+await runAllTests(formatTest, mapview);
+
+//UI Locations Tests
+await runAllTests(ui_locations, mapview);
+
+//Utils Tests
+await runAllTests(utilsTest, mapview);
+
+/**
+ * This function is used to execute all the test functions on the exported test object. 
+ * @function runAllTests
+ * @param {object} tests 
+ * @param {object} mapview 
+ */
+async function runAllTests(tests, mapview) {
+    const testFunctions = Object.values(tests).filter(item => typeof item === 'function');
+  
+    for (const testFn of testFunctions) {
+        try {
+            await testFn(mapview);
+        } catch (error) {
+            console.error(`Error in test ${testFn.name}:`, error);
+        }
+    }
+}

@@ -71,7 +71,7 @@ module.exports = async function mergeTemplates(obj) {
       obj = merge(structuredClone(template), obj)
     }
 
-  // Check whether the object key exist as template if no implicit template has been defined.
+    // Check whether the object key exist as template if no implicit template has been defined.
   } else if (Object.hasOwn(workspace.templates, obj.key)) {
 
     obj.err ??= []
@@ -95,8 +95,12 @@ module.exports = async function mergeTemplates(obj) {
       obj.err.push(`${template_key}: ${template.message}`)
     } else {
 
-      //The object key must not be overwritten by a template key
+      //The object key must not be overwritten by a template key.
       delete template.key;
+
+      //The object template must not be overwritten by a templates template.
+      delete template.template;
+      
       // Merge template --> obj
       obj = merge(obj, template)
     }
@@ -108,6 +112,9 @@ module.exports = async function mergeTemplates(obj) {
   // Assign templates to workspace.
   assignWorkspaceTemplates(obj)
 
+  // Assign default workspace dbs if not defined in template.
+  obj.dbs ??= workspace.dbs
+
   return obj
 }
 
@@ -116,6 +123,8 @@ module.exports = async function mergeTemplates(obj) {
 
 @description
 The method parses an object for a template object property. The template property value will be assigned to the workspace.templates{} object matching the template key value.
+
+The template._type property will be set to 'template' indicating that the templates origin is in the workspace. It is possible to overassign _type:'core' templates which are loaded from the /mod/workspace/templates directory.
 
 The method will call itself for nested objects.
 
@@ -131,6 +140,7 @@ function assignWorkspaceTemplates(obj) {
 
     if (entry[0] === 'template' && entry[1].key) {
 
+      entry[1]._type = 'template';
       workspace.templates[entry[1].key] = Object.assign(workspace.templates[entry[1].key] || {}, entry[1])
 
       return;

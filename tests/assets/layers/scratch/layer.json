@@ -7,5 +7,9 @@
     "geom": "geom_3857",
     "qID": "id",
     "toggleLocationViewEdits": true,
-    "deleteLocation": true
+    "deleteLocation": true,
+    "icon_scaling": {
+        "icon": {},
+        "clusterScale": {}
+    }
 }

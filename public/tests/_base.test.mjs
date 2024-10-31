@@ -457,9 +457,7 @@ export async function base() {
                     Openlayers: 'https://openlayers.org',
                 }
             },
-
-            // mapp.Mapview must be awaited.
-            loadPlugins: true
+            syncPlugins: locale.syncPlugins
         });
 
 

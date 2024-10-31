@@ -23,6 +23,9 @@ input::-moz-focus-outer {
 textarea {
   width: 100%;
   resize: none;
+  border: none;
+  border-bottom: 0.5px dotted;
+  background-color: var(--color-light-secondary);
 }
 
 input[type=number] {
@@ -36,14 +39,27 @@ input[type=number]::-webkit-outer-spin-button {
   margin: 0;
 }
 
-input[type=text],
 input[type=search],
-input[type=number],
 input[type=date],
 input[type=time],
 input[type=datetime-local] {
   border: 1px solid #ccc;
   padding: 5px;
+
+  &:focus {
+    cursor: text;
+  }
+}
+
+input[type=text],
+input[type=number] {
+  padding: 5px;
+  border: none;
+  background-color: var(--color-light-secondary);
+  border-bottom: 0.5px dotted;
+  display: inline-block;
+  width: 100%;
+  min-width: 2.4ch;
 
   &:focus {
     cursor: text;
@@ -57,8 +73,8 @@ input[type=search]+ul:active {
 
 input[type="search"]::-webkit-search-cancel-button,
 input[type="search"]::-webkit-search-decoration:hover,
-input[type="search"]::-webkit-search-cancel-button:hover { 
-  cursor:pointer; 
+input[type="search"]::-webkit-search-cancel-button:hover {
+  cursor: pointer;
 }
 
 label.checkbox {
@@ -197,7 +213,7 @@ label.checkbox {
     margin-top: -1px;
     text-align: left;
     background-color: white;
-    z-index: 999;
+    z-index: 997;
 
     &>li {
       padding: 5px;
@@ -227,9 +243,10 @@ label.checkbox {
 
     &>.head>.icon {
       content: url("../icons/icon-drop-up.svg");
-    }  
+    }
   }
-  &.dropdown-reverse > ul {
+
+  &.dropdown-reverse>ul {
     bottom: 30px;
   }
 }
@@ -275,14 +292,13 @@ label.checkbox {
     z-index: 2;
     width: calc((var(--a) - var(--min)) / var(--dif) * (100% - 10px));
   }
-   
-  &.multi {
-    & >.label-row {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
-      grid-gap: 5px;
 
-      & >div {
+  &.multi {
+    &>.label-row {
+      display: flex;
+      justify-content: space-between;
+
+      &>div {
         flex-grow: 1
       }
     }

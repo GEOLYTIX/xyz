@@ -9,7 +9,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
 
-    <script src="https://cdn.jsdelivr.net/npm/ol@v10.0.0/dist/ol.js" defer></script>
+    <script src="https://cdn.jsdelivr.net/npm/ol@v10.2.1/dist/ol.js" defer></script>
 
     <!-- Load XYZ / MAPP stylesheet and library. -->
     <link rel="stylesheet" href="{{dir}}/public/css/mapp.css" />
@@ -18,7 +18,7 @@
     <script type="importmap">
         {
           "imports": {
-            "codi": "https://esm.sh/codi-test-framework@0.0.30"
+            "codi": "https://esm.sh/codi-test-framework@0.0.33"
           }
         }
       </script>
@@ -309,7 +309,7 @@
     </div>
 
     <script type="module">
-        import { runWebTests, it, describe, assertEqual, assertNotEqual, assertTrue, assertFalse } from "codi";
+        import { runWebTests, it, describe, assertEqual, assertNotEqual, assertTrue, assertFalse, assertNoDuplicates } from "codi";
 
         const _codi = {
             runWebTests,
@@ -318,7 +318,8 @@
             assertEqual,
             assertNotEqual,
             assertTrue,
-            assertFalse
+            assertFalse,
+            assertNoDuplicates
         };
 
         self.codi = _codi;

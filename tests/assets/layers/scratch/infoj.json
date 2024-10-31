@@ -22,11 +22,6 @@
         {
             "title": "char_field",
             "field": "char_field"
-        },
-        {
-            "title": "minutes",
-            "field": "integer_field",
-            "inline": true
         }
     ]
 }

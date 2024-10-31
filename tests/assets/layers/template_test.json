@@ -24,6 +24,11 @@
         {
             "title": "qID",
             "field": "id",
+            "type": "numeric",
+            "filter": {
+                "minmax_query": "minmax_query",
+                "type": "numeric"
+            },
             "inline": true
         },
         {

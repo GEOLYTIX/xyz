@@ -1,6 +1,6 @@
 {
   "name": "xyz",
-  "version": "v4.11.0β",
+  "version": "v4.12.1",
   "repository": {
     "type": "git",
     "url": "https://github.com/geolytix/xyz"
@@ -30,7 +30,7 @@
   },
   "devDependencies": {
     "clean-jsdoc-theme": "^4.3.0",
-    "codi-test-framework": "^0.0.30",
+    "codi-test-framework": "^0.0.33",
     "cookie-parser": "^1.4.5",
     "dotenv": "^16.4.5",
     "esbuild": "^0.19.11",

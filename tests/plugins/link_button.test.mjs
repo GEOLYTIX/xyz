@@ -3,19 +3,19 @@
  * This test is used to see if the link_button plugin is working as expected.
  * @function linkButtonTest
  */
-export async function linkButtonTest() {
-    await codi.describe('Link Button Test', async () => {
-        await codi.it('Should add a link button to the mapButton panel', async () => {
+export function linkButtonTest() {
+    codi.describe('Link Button Test', () => {
+        codi.it('Should add a link button to the mapButton panel', () => {
             // Get the mapButton element
             const mapButton = document.getElementById('mapButton');
             // Get the link_button from the mapButton (a tag with the title="TITLE HERE")
             const linkButton = mapButton.querySelector('a[title="TITLE HERE"]');
-           
+
             // Check if the linkButton has the correct href
             codi.assertEqual(linkButton.getAttribute('href'), '/url/url');
         });
 
-        await codi.it('Should not add a button if no href is provided', async () => {
+        codi.it('Should not add a button if no href is provided', () => {
             // Get the mapButton element
             const mapButton = document.getElementById('mapButton');
             // Get the link_button from the mapButton (a tag with the title="SHOULD NOT BE ADDED AS NO HREF")
@@ -25,7 +25,7 @@ export async function linkButtonTest() {
             codi.assertTrue(!linkButton);
         });
 
-        await codi.it('Should add multiple buttons if the link_button config is an array', async () => {
+        codi.it('Should add multiple buttons if the link_button config is an array', () => {
             // Get the mapButton element
             const mapButton = document.getElementById('mapButton');
             // Get the link_button from the mapButton (a tag with the title="TITLE HERE")

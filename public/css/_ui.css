@@ -4,6 +4,8 @@
 
 @import url('./_drawer.css');
 
+@import url('./_dialog.css');
+
 @import url('./_font.css');
 
 @import url('./_icons.css');
@@ -27,7 +29,8 @@
 .flex-spacer {
   display: flex;
   align-items: center;
-  & > :nth-child(2) {
+
+  &> :nth-child(2) {
     margin-left: auto;
   }
 }
@@ -46,7 +49,7 @@
 }
 
 .dataview-mask {
-  width: 100%; 
+  width: 100%;
   height: 100%;
   text-align: center;
   line-height: 2
@@ -60,7 +63,7 @@
   z-index: 999999;
   background-color: #eeea;
 
-  & > .bg-image{
+  &>.bg-image {
     margin: 5%;
     height: 90%;
     width: 90%;
@@ -68,7 +71,7 @@
     background-size: contain;
     background-position: center;
 
-    & > .btn-close{
+    &>.btn-close {
       position: absolute;
       top: 5%;
       right: 5%;
@@ -83,38 +86,6 @@
   display: flex;
   flex-direction: column;
   gap: 5px;
-}
-
-.headerDrag {
-  cursor: grab;
-}
-
-dialog > button.close {
-  position: absolute;
-  top: 0em;
-  right: 0em;
-  height: 1em;
-  width: 1em;
-  margin: 0.4em;
-}
-
-.dialog {
-  position: absolute;
-  background-color: #fff;
-  border-color: #fff;  
-  box-shadow: 1px 1px 3px var(--color-primary-light);
-  cursor: grab;
-  user-select: none;
-}
-
-.modal {
-  text-wrap: wrap;
-  position: fixed; 
-  top: 50%; 
-  left: 50%; 
-  transform: translate(-50%, -50%); 
-  border-color: #fff;
-  z-index: 9999; 
 }
 
 .pill-container {
@@ -143,9 +114,11 @@ dialog > button.close {
 
 .mask-icon {
   background-color: var(--color-primary-light);
+
   &.on {
     background-color: var(--color-on);
   }
+
   &.no {
     background-color: var(--color-no);
   }

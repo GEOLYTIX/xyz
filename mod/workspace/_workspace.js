@@ -307,20 +307,52 @@ async function test(req, res) {
     return
   }
 
-  const errArr = []
+  // Force re-caching of workspace.
+  workspace = await workspaceCache(true)
+
+  const test = {
+    results: {},
+    errArr: [],
+    used_templates: [],
+    properties: new Set(['template', 'templates', 'query'])
+  }
+
+  test.workspace_templates = new Set(Object.entries(workspace.templates)
+    .filter(([key, value]) => value._type === 'workspace')
+    .map(([key, value]) => key))
+
+  // Create clone of workspace_templates
+  test.unused_templates = new Set([...test.workspace_templates])
+
+  test.overwritten_templates = new Set()
 
   for (const localeKey of Object.keys(workspace.locales)) {
 
     // Will get layer and assignTemplates to workspace.
-    const locale = await getLocale({locale: localeKey})
+    const locale = await getLocale({ locale: localeKey, user: req.params.user })
+
+    // If you can't get the locale, access is denied, add the error to the errArr.
+    if (locale.message === 'Role access denied') {
+      test.errArr.push(`${localeKey}: ${locale.message}`)
+      continue;
+    };
+
+    // If the locale has no layers, just skip it.
+    if (!locale.layers) continue;
+    
 
     for (const layerKey of Object.keys(locale.layers)) {
 
       // Will get layer and assignTemplates to workspace.
-      const layer = await getLayer({locale: localeKey, layer: layerKey})
+      const layer = await getLayer({ locale: localeKey, layer: layerKey, user: req.params.user })
 
-      if (layer.err) errArr.push(`${layerKey}: ${layer.err}`)
+      locale.layers[layerKey] = layer;
+
+      if (layer.err) test.errArr.push(`${layerKey}: ${layer.err}`)
     }
+
+    // Test locale and all of its layers as nested object.
+    templateUse(locale, test);
   }
 
   // From here on its 🐢 Templates all the way down.
@@ -328,8 +360,92 @@ async function test(req, res) {
 
     const template = await getTemplate(key)
 
-    if (template.err) errArr.push(`${key}: ${template.err.path}`)
+    if (template.err) test.errArr.push(`${key}: ${template.err.path}`)
   }
 
-  res.send(errArr.flat())
+  test.results.errors = test.errArr.flat();
+
+  test.results.unused_templates = Array.from(test.unused_templates);
+
+  test.results.overwritten_templates = Array.from(test.overwritten_templates);
+
+  // Sort the array.
+  test.used_templates.sort((a, b) => {
+    if (a > b) return 1
+    if (a < b) return -1
+    return 0
+  })
+
+  // Reduce the test.used_templates array to count the occurance of each template.
+  test.results.usage = Object.fromEntries(test.used_templates
+    .reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map()));
+
+  res.setHeader('content-type', 'application/json');
+
+  res.send(JSON.stringify(test.results));
+}
+
+/**
+@function templateUse
+
+@description
+Iterates through all nested object properties.
+Test properties found in the test.properties Set.
+Removes template keys from test.unused_templates Set.
+Add template keys to test.used_templates Array.
+
+@param {Object} obj The object to test.
+@param {Object} test The test config object.
+@property {Set} test.properties Set of properties to test ['template', 'templates', 'query']
+@property {Set} test.workspace_templates Set of templates _type=workspace templates.
+@property {Set} test.unused_templates Set of templates not (yet) used.
+@property {Set} test.overwritten_templates Set of _type=workspace templates which have been overwritten.
+@property {Array} test.used_templates Array of template keys for each usage.
+*/
+function templateUse(obj, test) {
+
+  if (typeof obj !== 'object') return;
+
+  Object.entries(obj).forEach(entry => {
+
+    // entry key === ['template', 'templates', 'query']
+    if (test.properties.has(entry[0])) {
+
+      if (Array.isArray(entry[1])) {
+
+        entry[1]
+          .filter(item => typeof item === 'string')
+          .forEach(item => {
+            test.unused_templates.delete(item)
+            test.used_templates.push(item)
+          })
+      }
+
+      if (typeof entry[1] === 'object'
+        && Object.hasOwn(entry[1], 'key')
+
+      ) {
+        if (test.workspace_templates.has(entry[1].key)) {
+          test.overwritten_templates.add(entry[1].key)
+        }
+        return;
+      }
+
+      if (typeof entry[1] === 'string') {
+        test.unused_templates.delete(entry[1])
+        test.used_templates.push(entry[1])
+      }
+    }
+
+    // Iterate through each array, eg. infoj
+    if (Array.isArray(entry[1])) {
+
+      entry[1].forEach(entry => templateUse(entry, test))
+
+      // Iterate through nested objects eg. layers      
+    } else if (entry[1] instanceof Object) {
+
+      templateUse(entry[1], test)
+    }
+  })
 }

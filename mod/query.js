@@ -43,7 +43,7 @@ The query is executed by the executeQuery() method.
 
 @param {req} req HTTP request.
 @param {res} res HTTP response.
-@property {Object} [req.params] Request params.
+@property {Object} req.params Request params.
 @property {Object} [params.user] Requesting user.
 @property {Array} [user.roles] User roles.
 */
@@ -116,7 +116,9 @@ Any query which references a layer and locale will be passed through the layer q
 
 @param {req} req HTTP request.
 @param {res} res HTTP response.
-@property {Object} [req.params] Request params.
+@property {Object} req.params Request params.
+@property {Object} params.filter JSON filter which must be turned into a SQL filter string for substitution.
+@property {Array} params.SQL Substitute parameter for SQL query.
 @property {Object} [params.user] Requesting user.
 @property {Array} [user.roles] User roles.
 */
@@ -137,9 +139,6 @@ async function layerQuery(req, res) {
   if (req.params.layer instanceof Error) {
     return res.status(400).send(req.params.layer.message)
   }
-
-  // Set layer dbs as fallback if not implicit.
-  req.params.dbs ??= req.params.layer.dbs
 
   // Layer queries must have a qID param.
   req.params.qID ??= req.params.layer.qID || 'NULL'
@@ -197,7 +196,9 @@ An error will be returned if the substitution fails.
 
 @param {req} req HTTP request.
 @param {Object} template Request template.
-@property {Object} [req.params] Request params.
+@property {Object} req.params Request params.
+@property {Object} params.filter JSON filter which must be turned into a SQL filter string for substitution.
+@property {Array} params.SQL Substitute parameter for SQL query.
 @property {Function} template.render Method to render template string.
 @property {string} template.template SQL template string.
 */
@@ -228,7 +229,9 @@ function getQueryFromTemplate(req, template) {
 
       // Ensure that the $n substitute params match the SQL length on layer queries without a ${filter}
       delete req.params.filter
-      req.params.SQL = []
+      //We remove the SQL params because there is no filter at this stage so we don't have any values to substitute.
+      //If there are any other substitues they get added after.
+      req.params.SQL.length = 0
     }
 
     const query_template = template.template
@@ -274,7 +277,7 @@ function getQueryFromTemplate(req, template) {
         }
 
         // Push value from request params object into params array.
-        req.params.SQL.push(val)
+        req.params.SQL.push(val);
 
         return `$${req.params.SQL.length}`
       })
@@ -294,6 +297,8 @@ function getQueryFromTemplate(req, template) {
 @description
 The method send a parameterised query to a database connection.
 
+The dbs for the query is determined primarily by the template. The layer.dbs is used for layer queries if the dbs on the template is not implicit. The locale.dbs is assumed as the layer.dbs if not defined in JSON layer. The workspace.dbs will be used as fallback if no template, layer, or locale dbs can be determined.
+
 @param {req} req HTTP request.
 @param {res} res HTTP response.
 @param {Object} template Request template.
@@ -310,21 +315,29 @@ async function executeQuery(req, res, template, query) {
   }
 
   // The dbs param or workspace dbs will be used as fallback if the dbs is not implicit in the template object.
-  const dbs_connection = String(template.dbs || req.params.dbs || req.params.workspace.dbs);
+  const dbs = String(template.dbs || req.params.layer?.dbs || req.params.workspace.dbs);
 
-  // Validate that the dbs_connection string exists as a stored connection method in dbs_connections.
-  if (!Object.hasOwn(dbs_connections, dbs_connection)) {
+  // Validate that the dbs string exists as a stored connection method in dbs_connections.
+  if (!Object.hasOwn(dbs_connections, dbs)) {
 
     return res.status(400).send(`Failed to validate database connection method.`)
   }
 
-  // Get query pool from dbs module.
-  const dbs = dbs_connections[dbs_connection]
+  // Return without executing the query if a param errs.
+  if (req.params.SQL.some(param => param instanceof Error)) {
+
+    const paramsArray = req.params.SQL.map(param => param instanceof Error ? param.message : param)
+
+    paramsArray.unshift('Parameter validation failed.')
+
+    res.status(500).send(paramsArray)
+    return;
+  }
 
   // Nonblocking queries will not wait for results but return immediately.
   if (req.params.nonblocking || template.nonblocking) {
 
-    dbs(
+    dbs_connections[dbs](
       query,
       req.params.SQL,
       req.params.statement_timeout || template.statement_timeout)
@@ -333,7 +346,7 @@ async function executeQuery(req, res, template, query) {
   }
 
   // Run the query
-  let rows = await dbs(
+  let rows = await dbs_connections[dbs](
     query,
     req.params.SQL,
     req.params.statement_timeout || template.statement_timeout);

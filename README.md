@@ -1,20 +1,34 @@
-**v4.11.0β**
+**v4.12.1**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Codi Unit Tests](https://github.com/GEOLYTIX/xyz/actions/workflows/unit_tests.yml/badge.svg)
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=GEOLYTIX_xyz&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=GEOLYTIX_xyz)
 
-**Open source presentation, controller, domain and service layers for cloud native spatial data and application interfaces.**
+**Open source presentation, controller, domain, and service layers for cloud native spatial data and application interfaces.**
+
+[![OSGeo Community Project](https://www.osgeo.org/wp-content/themes/roots/assets/img/badge-community-project.png)](https://www.osgeo.org/projects/xyz-mapp/)
 
 ## XYZ
 
-The pattern for the Node.js **domain and service layer** are that of a RESTful API which provides secure gateways for spatial data sources and 3rd party service providers. The domain layer handles API routing, rewrites, and ressource caching. The service layer manages authentication and transaction script. URL parameter (and payloads) from the application control layer are assigned to query templates and passed to the data source layer. The response being parsed and returned to the presentation layer. The Node.js application layers may be served by an Express web server or deployed as cloud native serverless functions.
+The pattern for the Node.js **domain and service layer** are that of a RESTful API which provides secure gateways for spatial data sources and 3rd party service providers.
+
+The domain layer handles API routing, rewrites, and resource caching.
+
+The service layer manages authentication and transaction script. URL parameter (and payloads) from the application control layer (mapp) are assigned to query templates and passed to the data source (service) layer. The response being parsed and returned to the (mapp) presentation layer.
+
+The Node.js application layers may be served by an [Express](https://github.com/expressjs/express) application or deployed as cloud native serverless functions to node.js runtime.
+
+The data source (service) layer is build on the non blocking [node-postgres](https://github.com/brianc/node-postgres) library to allow access to PostGIS extended relational Postgres databases.
+
+Postgres being able to handle object records allows for the Access Control Lists (ACL) to be stored as Postgres tables.
 
 ## MAPP
 
-**Application control and presentation layers** are provided as ES6 javscript libraries. **MAPP** utilizes the Openlayers map engine for mapviews and provides an interface to the XYZ API. The library abstracts away the complexities of handling spatial data objects such as layers and locations.
+**Application control and presentation layers** are provided as ES6 javscript libraries. **MAPP** utilizes the openlayers map engine for mapviews and provides an interface to the XYZ API. The library abstracts away the complexities of handling spatial data objects such as layers and locations.
 
 **MAPP.UI** contains utilities to build engaging user interfaces around mapviews. The application views can be dashboards made up of multiple data views such as maps, tables, lists, or graphs.
+
+The MAPP library can be extended at runtime by dynamically importing [mapp plugins](https://github.com/GEOLYTIX/mapp/tree/main/plugins) which may use third party modules.
 
 ## Documentation
 

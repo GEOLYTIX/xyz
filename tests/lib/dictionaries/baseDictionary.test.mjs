@@ -3,22 +3,23 @@
  * This test is used to see if all the language options at least have all of these base entries.
  * @function baseDictionaryTest
  */
-export async function baseDictionaryTest() {
+export function baseDictionaryTest() {
     codi.describe('All languages should have the same base language entries', () => {
+
         const base_dictionary = {
             save: '',
             cancel: '',
             confirm_delete: '',
             invalid_geometry: '',
             no_results: '',
-        }
+        };
 
-        Object.keys(mapp.dictionaries).forEach(language => {
+        for (const language of Object.keys(mapp.dictionaries)) {
             codi.it(`${language} dictionary should have all the base keys`, () => {
-                Object.keys(base_dictionary).forEach(key => {
+                for (const key of Object.keys(base_dictionary)) {
                     codi.assertTrue(!!mapp.dictionaries[language][key], `${language} should have ${key}`);
-                });
+                }
             });
-        });
+        }
     });
 }

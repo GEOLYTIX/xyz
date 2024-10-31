@@ -6,7 +6,7 @@ const cookieParser = require('cookie-parser')
 
 const app = express()
 
-app.use('/docs', express.static('docs', {
+app.use('/xyz', express.static('docs', {
     extensions: ['html']
 }))
 
