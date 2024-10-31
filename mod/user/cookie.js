@@ -74,7 +74,7 @@ module.exports = async function cookie(req, res) {
       if (err) return err
 
       // Get updated user credentials from ACL
-      let rows = await acl(`
+      const rows = await acl(`
         SELECT email, admin, language, roles, blocked
         FROM acl_schema.acl_table
         WHERE lower(email) = lower($1);`, [payload.email])

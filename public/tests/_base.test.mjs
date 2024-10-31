@@ -247,7 +247,7 @@ export async function base() {
             target: document.getElementById('tabview-divider'),
             resizeEvent: (e) => {
 
-                let pageY = (e.touches && e.touches[0].pageY) || e.pageY;
+                const pageY = (e.touches && e.touches[0].pageY) || e.pageY;
 
                 if (pageY < 0) return;
 
@@ -282,7 +282,7 @@ export async function base() {
 
                 // Put focus on the gazetteer if the locations tab is activated.
                 if (e.target.dataset.id === 'locations') {
-                    let gazetteerInput = document.getElementById('gazetteerInput')
+                    const gazetteerInput = document.getElementById('gazetteerInput')
                     gazetteerInput && window.innerWidth > 768 && gazetteerInput.focus()
                 }
             }
