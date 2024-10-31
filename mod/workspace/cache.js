@@ -14,6 +14,7 @@ const getFrom = require('../provider/getFrom')
 
 const merge = require('../utils/merge')
 
+// Assign default age in ms.
 process.env.WORKSPACE_AGE ??= 3600000
 
 let cache = null
@@ -28,7 +29,9 @@ const logger = require('../utils/logger')
 @description
 The method checks whether the module scope variable cache has been populated.
 
-The age of the cached timestamp is checked against the WORKSPACE_AGE environment variable.
+The timestamp set by cacheWorkspace is checked against the current time. The [workspace] cache will be invalidated if the difference exceeds the WORKSPACE_AGE environment variable.
+
+Setting the WORKSPACE_AGE to 0 is not recommended as this could cause the cache to be flushed while a request is passed through the XYZ API. A layer query processed by the [Query API module]{@link module:/query~layerQuery} will request the layer and associated locale which could be defined in remote templates. Each request to the [Workspace API getTemplate]{@link module:/workspace/getTemplate~getTemplate} method for the locale, layer, and query templates will call the checkWorkspaceCache method which will cause the workspace to be flushed and templates previously cached from their src no longer available.
 
 The cacheWorkspace method is called if the cache is invalid.
 
@@ -89,10 +92,8 @@ The workspace is assigned to the module scope cache variable and the timestamp i
 */
 async function cacheWorkspace() {
 
-  let workspace;
-
   // Get workspace from source.
-  workspace = Object.hasOwn(getFrom, workspace_src) ?
+  const workspace = Object.hasOwn(getFrom, workspace_src) ?
     await getFrom[workspace_src](process.env.WORKSPACE) : {}
 
   // Return error if source failed.

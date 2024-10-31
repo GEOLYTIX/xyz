@@ -110,7 +110,7 @@ function mapFilterEntries(filter) {
 
   if (Object.keys(filter).some(key => !SQLvalidation.test(key))) {
 
-    let unvalidatedKey = Object.keys(filter).find(key => !SQLvalidation.test(key))
+    const unvalidatedKey = Object.keys(filter).find(key => !SQLvalidation.test(key))
 
     console.warn(`"${unvalidatedKey}" field didn't pass SQL parameter validation`)
     return;
