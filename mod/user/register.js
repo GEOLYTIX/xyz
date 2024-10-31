@@ -15,7 +15,7 @@ Exports the [user] register method for the /api/user/register route.
 @module /user/register
 */
 
-const bcrypt = require('bcrypt')
+const bcrypt = require('../utils/bcrypt')
 
 const crypto = require('crypto')
 

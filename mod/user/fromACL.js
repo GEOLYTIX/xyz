@@ -13,7 +13,7 @@ This module exports the fromACL method to request and validate a user from the A
 @module /user/fromACL
 */
 
-const bcrypt = require('bcrypt')
+const bcrypt = require('../utils/bcrypt')
 
 const crypto = require('crypto')
 
