@@ -21,7 +21,7 @@ function check(obj, user_roles) {
 
   // Some negated role is included in user_roles[]
   const someNegatedRole = Object.keys(obj.roles).some(
-    (role) => /^!/.exec(role) && user_roles.includes(role.replace(/^!/, ""))
+    (role) => /^!/.exec(role) && user_roles.includes(role.replace(/^!/, ''))
   );
 
   if (someNegatedRole) return false;
