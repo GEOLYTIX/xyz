@@ -10,6 +10,15 @@
         "cluster": {
             "clusterScale": 1
         },
+        "labels": {
+            "id": {
+                "field": "id",
+                "display": true,
+                "title": "id",
+                "minZoom": 12,
+                "strokeColor": "#FEF2F2"
+            }
+        },
         "highlight": {
             "scale": 1.3,
             "strokeColor": "#090"
