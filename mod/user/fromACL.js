@@ -57,7 +57,7 @@ module.exports = async function fromACL(req) {
 
   if (req.headers.authorization) {
 
-    const user_string = Buffer.from(req.headers.authorization.split(" ")[1], 'base64').toString()
+    const user_string = Buffer.from(req.headers.authorization.split(' ')[1], 'base64').toString()
 
     const email_password = user_string.split(':')
 
