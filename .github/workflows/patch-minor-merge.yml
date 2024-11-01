@@ -28,8 +28,8 @@ jobs:
         env:
             TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-            git config user.name "GitHub Actions Bot"
-            git config user.email "actions@github.com"
+            git config user.name "RobAndrewHurst"
+            git config user.email "robert.hurst@geolytix.co.uk"
             git config --global url."https://$TOKEN@github.com/".insteadOf "https://github.com/"
 
       - name: Merge patch into minor
