@@ -17,10 +17,12 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        env:
+            PAT_TOKEN: ${{secrets.PAT_TOKEN}}
         with:
           fetch-depth: 0
           # Use a personal access token with necessary permissions to bypass branch restrictions
-          token: ${{secrets.PAT_TOKEN}}
+          token: PAT_TOKEN
 
       - name: Configure Git
         run: |
