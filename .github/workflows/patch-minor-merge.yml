@@ -20,6 +20,7 @@ jobs:
         uses: devmasx/merge-branch@master
         with:
           type: now
+          from_branch: patch
           target_branch: minor
           message: Merge patch into minor
           github_token: ${{ secrets.PAT_TOKEN }}
