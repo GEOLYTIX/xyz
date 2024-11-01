@@ -1,3 +1,16 @@
+/**
+## /utils/bcrypt
+
+The bcrypt utility module exports methods to hash and compare password stored in the ACL.
+
+The script has been taken from the built distribution of https://github.com/dcodeIO/bcrypt.js
+
+@license bcrypt.js (c) 2013 Daniel Wirtz <dcode@dcode.io>
+Released under the Apache License, Version 2.0
+
+@module /utils/bcrypt
+*/
+
 /*
  Copyright (c) 2012 Nevins Bartolomeo <nevins.bartolomeo@gmail.com>
  Copyright (c) 2012 Shane Girish <shaneGirish@gmail.com>
@@ -24,13 +37,8 @@
  THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
  (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF
  THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
+*/
 
-/**
- * @license bcrypt.js (c) 2013 Daniel Wirtz <dcode@dcode.io>
- * Released under the Apache License, Version 2.0
- * see: https://github.com/dcodeIO/bcrypt.js for details
- */
 (function(global, factory) {
 
     /* AMD */ if (typeof define === 'function' && define['amd'])
@@ -173,6 +181,7 @@
 
     /**
      * Synchronously generates a hash for the given string.
+     * @function hashSync
      * @param {string} s String to hash
      * @param {(number|string)=} salt Salt length to generate or salt to use, default to 10
      * @returns {string} Resulting hash
@@ -243,6 +252,7 @@
 
     /**
      * Synchronously tests a string against a hash.
+     * @function compareSync
      * @param {string} s String to compare
      * @param {string} hash Hash to test against
      * @returns {boolean} true if matching, otherwise false
