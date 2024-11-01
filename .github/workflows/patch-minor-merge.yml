@@ -11,18 +11,15 @@ permissions:
   pull-requests: write
 
 jobs:
-  dependabot:
+  merge-branch:
     runs-on: ubuntu-latest
-    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'GEOLYTIX/xyz'
     steps:
-      - name: Dependabot metadata
-        id: metadata
-        uses: dependabot/fetch-metadata@4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d
+      - uses: actions/checkout@master
+
+      - name: Merge patch -> minor
+        uses: devmasx/merge-branch@master
         with:
-          github-token: "${{ secrets.GITHUB_TOKEN }}"
-      - name: Enable auto-merge for Dependabot PRs
-        if: contains(steps.metadata.outputs.dependency-names, 'minor') && steps.metadata.outputs.update-type == 'version-update:semver-patch'
-        run: gh pr merge --auto --merge "$PR_URL"
-        env:
-          PR_URL: ${{github.event.pull_request.html_url}}
-          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
+          type: now
+          target_branch: minor
+          message: Merge patch into minor
+          github_token: ${{ secrets.PAT_TOKEN }}
