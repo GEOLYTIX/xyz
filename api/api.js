@@ -155,6 +155,13 @@ module.exports = async function api(req, res) {
     return saml(req, res)
   }
 
+  req.params = validateRequestParams(req)
+
+  if (req.params instanceof Error) {
+
+    return res.status(400).send(req.params.message)
+  }
+
   if (req.params.logout) {
 
     // Remove cookie.
@@ -164,13 +171,6 @@ module.exports = async function api(req, res) {
     res.setHeader('location', (process.env.DIR || '/') + (req.params.msg && `?msg=${req.params.msg}` || ''))
 
     return res.status(302).send()
-  }
-
-  req.params = validateRequestParams(req)
-
-  if (req.params instanceof Error) {
-
-    return res.status(400).send(req.params.message)
   }
 
   // Short circuit to user/login.
