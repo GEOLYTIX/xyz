@@ -28,6 +28,8 @@ export async function base() {
             const updatedLength = Object.keys(mapp.dictionaries.en).length;
             codi.assertTrue(updatedLength > initialLength, 'English dictionary should have new entries');
 
+            // Delete the test entry from the English dictionary
+            delete mapp.dictionaries.en.test_merge;
         });
 
         //Testcase: Ensure User refreshes cookie
