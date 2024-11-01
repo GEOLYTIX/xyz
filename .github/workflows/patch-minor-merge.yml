@@ -3,6 +3,7 @@ on:
   push:
     branches:
       - 'patch'
+
 permissions:
   contents: write
   pull-requests: write
@@ -19,4 +20,4 @@ jobs:
           type: now
           target_branch: minor
           message: Merge patch into minor
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.PAT_TOKEN }}
