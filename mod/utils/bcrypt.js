@@ -33,15 +33,15 @@
  */
 (function(global, factory) {
 
-    /* AMD */ if (typeof define === 'function' && define["amd"])
+    /* AMD */ if (typeof define === 'function' && define['amd'])
         define([], factory);
-    /* CommonJS */ else if (typeof require === 'function' && typeof module === "object" && module && module["exports"])
-        module["exports"] = factory();
+    /* CommonJS */ else if (typeof require === 'function' && typeof module === 'object' && module && module['exports'])
+        module['exports'] = factory();
     /* Global */ else
-        (global["dcodeIO"] = global["dcodeIO"] || {})["bcrypt"] = factory();
+        (global['dcodeIO'] = global['dcodeIO'] || {})['bcrypt'] = factory();
 
 }(this, function() {
-    "use strict";
+    'use strict';
 
     /**
      * bcrypt namespace.
@@ -67,14 +67,14 @@
     function random(len) {
         /* node */ if (typeof module !== 'undefined' && module && module['exports'])
             try {
-                return require("crypto")['randomBytes'](len);
+                return require('crypto')['randomBytes'](len);
             } catch (e) {}
         /* WCA */ try {
             var a; (self['crypto']||self['msCrypto'])['getRandomValues'](a = new Uint32Array(len));
             return Array.prototype.slice.call(a);
         } catch (e) {}
         /* fallback */ if (!randomFallback)
-            throw Error("Neither WebCryptoAPI nor a crypto module is available. Use bcrypt.setRandomFallback to set an alternative");
+            throw Error('Neither WebCryptoAPI nor a crypto module is available. Use bcrypt.setRandomFallback to set an alternative');
         return randomFallback(len);
     }
 
@@ -110,15 +110,15 @@
     bcrypt.genSaltSync = function(rounds, seed_length) {
         rounds = rounds || GENSALT_DEFAULT_LOG2_ROUNDS;
         if (typeof rounds !== 'number')
-            throw Error("Illegal arguments: "+(typeof rounds)+", "+(typeof seed_length));
+            throw Error('Illegal arguments: '+(typeof rounds)+', '+(typeof seed_length));
         if (rounds < 4)
             rounds = 4;
         else if (rounds > 31)
             rounds = 31;
         var salt = [];
-        salt.push("$2a$");
+        salt.push('$2a$');
         if (rounds < 10)
-            salt.push("0");
+            salt.push('0');
         salt.push(rounds.toString());
         salt.push('$');
         salt.push(base64_encode(random(BCRYPT_SALT_LEN), BCRYPT_SALT_LEN)); // May throw
@@ -143,7 +143,7 @@
         if (typeof rounds === 'undefined')
             rounds = GENSALT_DEFAULT_LOG2_ROUNDS;
         else if (typeof rounds !== 'number')
-            throw Error("illegal arguments: "+(typeof rounds));
+            throw Error('illegal arguments: '+(typeof rounds));
 
         function _async(callback) {
             nextTick(function() { // Pretty thin, but salting is fast enough
@@ -157,7 +157,7 @@
 
         if (callback) {
             if (typeof callback !== 'function')
-                throw Error("Illegal callback: "+typeof(callback));
+                throw Error('Illegal callback: '+typeof(callback));
             _async(callback);
         } else
             return new Promise(function(resolve, reject) {
@@ -183,7 +183,7 @@
         if (typeof salt === 'number')
             salt = bcrypt.genSaltSync(salt);
         if (typeof s !== 'string' || typeof salt !== 'string')
-            throw Error("Illegal arguments: "+(typeof s)+', '+(typeof salt));
+            throw Error('Illegal arguments: '+(typeof s)+', '+(typeof salt));
         return _hash(s, salt);
     };
 
@@ -207,12 +207,12 @@
             else if (typeof s === 'string' && typeof salt === 'string')
                 _hash(s, salt, callback, progressCallback);
             else
-                nextTick(callback.bind(this, Error("Illegal arguments: "+(typeof s)+', '+(typeof salt))));
+                nextTick(callback.bind(this, Error('Illegal arguments: '+(typeof s)+', '+(typeof salt))));
         }
 
         if (callback) {
             if (typeof callback !== 'function')
-                throw Error("Illegal callback: "+typeof(callback));
+                throw Error('Illegal callback: '+typeof(callback));
             _async(callback);
         } else
             return new Promise(function(resolve, reject) {
@@ -249,8 +249,8 @@
      * @throws {Error} If an argument is illegal
      */
     bcrypt.compareSync = function(s, hash) {
-        if (typeof s !== "string" || typeof hash !== "string")
-            throw Error("Illegal arguments: "+(typeof s)+', '+(typeof hash));
+        if (typeof s !== 'string' || typeof hash !== 'string')
+            throw Error('Illegal arguments: '+(typeof s)+', '+(typeof hash));
         if (hash.length !== 60)
             return false;
         return safeStringCompare(bcrypt.hashSync(s, hash.substr(0, hash.length-31)), hash);
@@ -269,8 +269,8 @@
     bcrypt.compare = function(s, hash, callback, progressCallback) {
 
         function _async(callback) {
-            if (typeof s !== "string" || typeof hash !== "string") {
-                nextTick(callback.bind(this, Error("Illegal arguments: "+(typeof s)+', '+(typeof hash))));
+            if (typeof s !== 'string' || typeof hash !== 'string') {
+                nextTick(callback.bind(this, Error('Illegal arguments: '+(typeof s)+', '+(typeof hash))));
                 return;
             }
             if (hash.length !== 60) {
@@ -287,7 +287,7 @@
 
         if (callback) {
             if (typeof callback !== 'function')
-                throw Error("Illegal callback: "+typeof(callback));
+                throw Error('Illegal callback: '+typeof(callback));
             _async(callback);
         } else
             return new Promise(function(resolve, reject) {
@@ -308,9 +308,9 @@
      * @throws {Error} If `hash` is not a string
      */
     bcrypt.getRounds = function(hash) {
-        if (typeof hash !== "string")
-            throw Error("Illegal arguments: "+(typeof hash));
-        return parseInt(hash.split("$")[2], 10);
+        if (typeof hash !== 'string')
+            throw Error('Illegal arguments: '+(typeof hash));
+        return parseInt(hash.split('$')[2], 10);
     };
 
     /**
@@ -321,9 +321,9 @@
      */
     bcrypt.getSalt = function(hash) {
         if (typeof hash !== 'string')
-            throw Error("Illegal arguments: "+(typeof hash));
+            throw Error('Illegal arguments: '+(typeof hash));
         if (hash.length !== 60)
-            throw Error("Illegal hash length: "+hash.length+" != 60");
+            throw Error('Illegal hash length: '+hash.length+' != 60');
         return hash.substring(0, 29);
     };
 
@@ -333,6 +333,7 @@
      * @param {function(...[*])} callback Callback to execute
      * @inner
      */
+    // eslint-disable-next-line no-nested-ternary
     var nextTick = typeof process !== 'undefined' && process && typeof process.nextTick === 'function'
         ? (typeof setImmediate === 'function' ? setImmediate : process.nextTick)
         : setTimeout;
@@ -407,7 +408,7 @@
      * @const
      * @inner
      **/
-    var BASE64_CODE = "./ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789".split('');
+    var BASE64_CODE = './ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789'.split('');
 
     /**
      * @type {!Array.<number>}
@@ -441,7 +442,7 @@
             rs = [],
             c1, c2;
         if (len <= 0 || len > b.length)
-            throw Error("Illegal len: "+len);
+            throw Error('Illegal len: '+len);
         while (off < len) {
             c1 = b[off++] & 0xff;
             rs.push(BASE64_CODE[(c1 >> 2) & 0x3f]);
@@ -480,7 +481,7 @@
             rs = [],
             c1, c2, c3, c4, o, code;
         if (len <= 0)
-            throw Error("Illegal len: "+len);
+            throw Error('Illegal len: '+len);
         while (off < slen - 1 && olen < len) {
             code = s.charCodeAt(off++);
             c1 = code < BASE64_INDEX.length ? BASE64_INDEX[code] : -1;
@@ -1004,7 +1005,7 @@
 
         // Validate
         if (rounds < 4 || rounds > 31) {
-            err = Error("Illegal number of rounds (4-31): "+rounds);
+            err = Error('Illegal number of rounds (4-31): '+rounds);
             if (callback) {
                 nextTick(callback.bind(this, err));
                 return;
@@ -1012,7 +1013,7 @@
                 throw err;
         }
         if (salt.length !== BCRYPT_SALT_LEN) {
-            err =Error("Illegal salt length: "+salt.length+" != "+BCRYPT_SALT_LEN);
+            err =Error('Illegal salt length: '+salt.length+' != '+BCRYPT_SALT_LEN);
             if (callback) {
                 nextTick(callback.bind(this, err));
                 return;
@@ -1097,7 +1098,7 @@
     function _hash(s, salt, callback, progressCallback) {
         var err;
         if (typeof s !== 'string' || typeof salt !== 'string') {
-            err = Error("Invalid string / salt: Not a string");
+            err = Error('Invalid string / salt: Not a string');
             if (callback) {
                 nextTick(callback.bind(this, err));
                 return;
@@ -1109,7 +1110,7 @@
         // Validate the salt
         var minor, offset;
         if (salt.charAt(0) !== '$' || salt.charAt(1) !== '2') {
-            err = Error("Invalid salt version: "+salt.substring(0,2));
+            err = Error('Invalid salt version: '+salt.substring(0,2));
             if (callback) {
                 nextTick(callback.bind(this, err));
                 return;
@@ -1123,7 +1124,7 @@
         else {
             minor = salt.charAt(2);
             if ((minor !== 'a' && minor !== 'b' && minor !== 'y') || salt.charAt(3) !== '$') {
-                err = Error("Invalid salt revision: "+salt.substring(2,4));
+                err = Error('Invalid salt revision: '+salt.substring(2,4));
                 if (callback) {
                     nextTick(callback.bind(this, err));
                     return;
@@ -1135,7 +1136,7 @@
 
         // Extract number of rounds
         if (salt.charAt(offset + 2) > '$') {
-            err = Error("Missing salt rounds");
+            err = Error('Missing salt rounds');
             if (callback) {
                 nextTick(callback.bind(this, err));
                 return;
@@ -1146,7 +1147,7 @@
             r2 = parseInt(salt.substring(offset + 1, offset + 2), 10),
             rounds = r1 + r2,
             real_salt = salt.substring(offset + 3, offset + 25);
-        s += minor >= 'a' ? "\x00" : "";
+        s += minor >= 'a' ? '\x00' : '';
 
         var passwordb = stringToBytes(s),
             saltb = base64_decode(real_salt, BCRYPT_SALT_LEN);
@@ -1159,14 +1160,14 @@
          */
         function finish(bytes) {
             var res = [];
-            res.push("$2");
+            res.push('$2');
             if (minor >= 'a')
                 res.push(minor);
-            res.push("$");
+            res.push('$');
             if (rounds < 10)
-                res.push("0");
+                res.push('0');
             res.push(rounds.toString());
-            res.push("$");
+            res.push('$');
             res.push(base64_encode(saltb, saltb.length));
             res.push(base64_encode(bytes, C_ORIG.length * 4 - 1));
             return res.join('');
