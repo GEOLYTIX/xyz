@@ -16,19 +16,20 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-
         with:
           fetch-depth: 0
 
       - name: Configure Git
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           git config user.name "RobAndrewHurst"
           git config user.email "robert.hurst@geolytix.co.uk"
-          # Set the remote URL with authentication token
+          git remote set-url origin "https://${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
 
       - name: Merge patch into minor
         env:
-          GITHUB_TOKEN: ${{ secrets.PAT_TOKEN }}
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
           echo "Fetching branches..."
           git fetch origin
@@ -40,8 +41,7 @@ jobs:
           echo "Attempting merge..."
           if git merge origin/patch --no-edit; then
             echo "Merge successful, pushing changes..."
-            # Push using the authenticated remote URL
-            git push origin minor
+            git push "https://${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" minor
             echo "Successfully merged patch into minor"
           else
             echo "Merge conflicts detected. Manual intervention required."
