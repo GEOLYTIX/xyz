@@ -25,24 +25,28 @@ jobs:
           token: PAT_TOKEN
 
       - name: Configure Git
+        env:
+            TOKEN: ${{ secrets.PAT_TOKEN }}
         run: |
-          git config user.name "GitHub Actions Bot"
-          git config user.email "actions@github.com"
+            git config user.name "GitHub Actions Bot"
+            git config user.email "actions@github.com"
+            git config --global url."https://$TOKEN@github.com/".insteadOf "https://github.com/"
 
       - name: Merge patch into minor
         run: |
-          # Fetch all branches
-          git fetch origin
-          
-          # Checkout minor branch
-          git checkout minor
-          git pull origin minor
-          
-          # Merge patch into minor
-          if git merge origin/patch --no-edit; then
-            git push origin minor
-            echo "Successfully merged patch into minor"
-          else
-            echo "Merge conflicts detected. Manual intervention required."
-            exit 1
-          fi
+            echo "Fetching branches..."
+            git fetch origin
+        
+            echo "Checking out minor branch..."
+            git checkout minor
+            git pull origin minor
+            
+            echo "Attempting merge..."
+            if git merge origin/patch --no-edit; then
+                echo "Merge successful, pushing changes..."
+                git push origin minor
+                echo "Successfully merged patch into minor"
+            else
+                echo "Merge conflicts detected. Manual intervention required."
+                exit 1
+            fi
