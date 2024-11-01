@@ -7,7 +7,7 @@ export async function filtersTest(mapview) {
     await codi.describe('UI Layers: Filters test', async () => {
 
         //Creating the filter to be used in other tests
-        let filter = {
+        const filter = {
             field: 'id',
             minmax_query: 'minmax_query'
         };
