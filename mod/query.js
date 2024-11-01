@@ -356,7 +356,7 @@ async function executeQuery(req, res, template, query) {
   }
 
   // Run the query
-  let rows = await dbs_connections[dbs](
+  const rows = await dbs_connections[dbs](
     query,
     req.params.SQL,
     req.params.statement_timeout || template.statement_timeout);

@@ -43,7 +43,7 @@ module.exports = _ => {
 
         const jsonb_field = Object.keys(jsonb)[0]
 
-        let updateObject = []
+        const updateObject = []
         Object.keys(jsonb[jsonb_field]).forEach(key => {
           let value = typeof jsonb[jsonb_field][key] === 'string' ? `"${jsonb[jsonb_field][key]}"` : jsonb[jsonb_field][key]
 
