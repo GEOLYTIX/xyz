@@ -1,5 +1,10 @@
 name: patch-merge 
-on: pull_request
+on:
+    pull_request:
+      types:
+        - closed
+      branches:
+        - patch
 
 permissions:
   contents: write
