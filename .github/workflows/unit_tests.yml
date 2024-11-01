@@ -2,9 +2,9 @@ name: Codi unit tests
 
 on:
   push:
-    branches: [ main ]
+    branches: [ "main", "major", "minor", "patch" ]
   pull_request:
-    branches: [ main ]
+    branches: [ "main", "major", "minor", "patch" ]
 
 jobs:
   build:
