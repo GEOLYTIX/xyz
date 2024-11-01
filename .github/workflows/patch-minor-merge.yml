@@ -21,8 +21,7 @@ jobs:
             PAT_TOKEN: ${{secrets.PAT_TOKEN}}
         with:
           fetch-depth: 0
-          # Use a personal access token with necessary permissions to bypass branch restrictions
-          token: PAT_TOKEN
+
 
       - name: Configure Git
         env:
