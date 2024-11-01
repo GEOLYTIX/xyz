@@ -84,7 +84,7 @@ const login = require('../mod/user/login')
 
 const auth = require('../mod/user/auth')
 
-const saml = process.env.SAML_ENTITY_ID && require('../mod/user/saml')
+const saml = require('../mod/user/saml')
 
 const register = require('../mod/user/register')
 
@@ -108,7 +108,6 @@ process.env.DIR ??= ''
 
 /**
 @function api
-@async
 
 @description
 The API method will redirect requests with a request url length 1 and DIR process.env.
@@ -119,17 +118,15 @@ The request object itself or the request object url will be logged with the `req
 
 Requests with the url matching the /saml/ path will be passed to the [saml module]{@link module:/user/saml}.
 
-Requests with a logout parameter property will set the header cookie to null and return with a redirect to the application domain path [process.env.DIR].
-
 Request parameter will be assigned once validated with the validateRequestParams method.
+
+Requests with a logout parameter property will set the header cookie to null and return with a redirect to the application domain path [process.env.DIR].
 
 Requests with a login param or login property in the request body object will shortcircuit to the [user/login]{@link module:/user/login} module.
 
 Requests with a register param or register property in the request body object will shortcircuit to the [user/register]{@link module:/user/register} module.
 
-The [user/auth]{@link module:/user/auth} module is called to return a user object. Private instances must return a user object and will return an error if authentication fails.
-
-Finally check whether the request should be passed to an API module or the default [/view]{@link module:/view} module.
+All other requests will passed to the async validateRequestAuth method.
 
 @param {req} req HTTP request.
 @param {res} res HTTP response.
@@ -138,7 +135,7 @@ Finally check whether the request should be passed to an API module or the defau
 @property {Boolean} params.login The request should redirect to user/login.
 @property {Boolean} params.register The request should redirect to user/register.
 */
-module.exports = async function api(req, res) {
+module.exports = function api(req, res) {
 
   // redirect if dir is missing in url path.
   if (process.env.DIR && req.url.length === 1) {
@@ -152,9 +149,6 @@ module.exports = async function api(req, res) {
 
   // SAML request.
   if (req.url.match(/\/saml/)) {
-
-    // saml will be undefined without a process.env.SAML_ENTITY_ID
-    if (!saml) return;
 
     return saml(req, res)
   }
@@ -171,8 +165,10 @@ module.exports = async function api(req, res) {
     // Remove cookie.
     res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
 
+    const msg = req.params.msg? `?msg=${req.params.msg}`: '';
+
     // Set location to the domain path.
-    res.setHeader('location', (process.env.DIR || '/') + (req.params.msg && `?msg=${req.params.msg}` || ''))
+    res.setHeader('location', `${process.env.DIR || '/'}${msg}`)
 
     return res.status(302).send()
   }
@@ -186,6 +182,31 @@ module.exports = async function api(req, res) {
   if (req.params.register || req.body?.register) {
     return register(req, res)
   }
+
+  validateRequestAuth(req, res)
+}
+
+/**
+@function validateRequestAuth
+@async
+
+@description
+The async validateRequestAuth will wait for the [user/auth]{@link module:/user/auth} module to return a user object.
+
+Requests without authorization headers will be redirected to the login if the user authentication errs.
+
+The user object will be assigned as to the req.params.
+
+PRIVATE processes require user auth for all requests and will shortcircuit to the user/login if the user authentication failed to resolve a user object.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {Object} req.params The request params which will be parsed by the validateRequestParams method.
+@property {Object} req.headers The request headers.
+@property {Object} [headers.authorization] The request carries an authorization header.
+@property {string} req.url The request url.
+*/
+async function validateRequestAuth(req, res) {
 
   // Validate signature of either request token, authorization header, or cookie.
   const user = await auth(req, res)
@@ -206,6 +227,7 @@ module.exports = async function api(req, res) {
     res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
 
     // Set msg parameter for the login view.
+    // The msg provides information in regards to failed logins.
     req.params.msg = user.msg || user.message
 
     // Return login view with error message.
@@ -218,13 +240,14 @@ module.exports = async function api(req, res) {
   // User route
   if (req.url.match(/(?<=\/api\/user)/)) {
 
-    // A msg will be returned if the user does not met the required priviliges.
+    //Requests to the User API maybe for login or registration and must be routed before the check for PRIVATE processes.
     return routes.user(req, res)
   }
 
-  // The login view will be returned for all PRIVATE requests without a valid user.
-  if (!user && process.env.PRIVATE) {
+  // PRIVATE instances require user auth for all requests.
+  if (!req.params.user && process.env.PRIVATE) {
 
+    // Redirect to the SAML login.
     if (process.env.SAML_LOGIN) {
       res.setHeader('location', `${process.env.DIR}/saml/login`)
       return res.status(302).send()
@@ -233,42 +256,63 @@ module.exports = async function api(req, res) {
     return login(req, res)
   }
 
-  // Provider route
-  if (req.url.match(/(?<=\/api\/provider)/)) {
-    return routes.provider(req, res)
+  requestRouter(req, res)
+}
+
+/**
+@function requestRouter
+
+@description
+The requestRouter switch tests the request URL for an API case.
+
+By default requests will be passed to the [View API]{@link module:/view} module.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {string} req.url The request url.
+*/
+function requestRouter(req, res) {
+
+  switch (true) {
+
+    // Provider API
+    case /(?<=\/api\/provider)/.test(req.url):
+      routes.provider(req, res)
+      break;
+
+    // Signer API
+    case /(?<=\/api\/sign)/.test(req.url):
+      routes.sign(req, res)
+      break;
+
+    // Location API [deprecated]
+    case /(?<=\/api\/location)/.test(req.url):
+
+      // Route to Query API with location template
+      req.params.template = `location_${req.params.method}`
+      routes.query(req, res)
+      break;
+
+    // Query API
+    case /(?<=\/api\/query)/.test(req.url):
+
+      routes.query(req, res)
+      break;
+
+    // Fetch API
+    case /(?<=\/api\/fetch)/.test(req.url):
+
+      routes.fetch(req, res)
+      break;
+
+    case /(?<=\/api\/workspace)/.test(req.url):
+
+      routes.workspace(req, res)
+      break;
+
+    // View API is the default route.
+    default: routes.view(req, res)
   }
-
-  // Signing route
-  if (req.url.match(/(?<=\/api\/sign)/)) {
-    return routes.sign(req, res)
-  }
-
-  // Location route
-  if (req.url.match(/(?<=\/api\/location)/)) {
-
-    // Set template and route to query mod.
-    req.params.template = `location_${req.params.method}`
-
-    return routes.query(req, res)
-  }
-
-  // Query route
-  if (req.url.match(/(?<=\/api\/query)/)) {
-    return routes.query(req, res)
-  }
-
-  // Fetch route
-  if (req.url.match(/(?<=\/api\/fetch)/)) {
-    return routes.fetch(req, res)
-  }
-
-  // Workspace route
-  if (req.url.match(/(?<=\/api\/workspace)/)) {
-    return routes.workspace(req, res)
-  }
-
-  // Return the View API on the root.
-  routes.view(req, res)
 }
 
 /**
