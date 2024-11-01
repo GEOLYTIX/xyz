@@ -22,4 +22,4 @@ jobs:
           type: now
           target_branch: minor
           message: Merge patch into minor
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          github_token: ${{ secrets.PAT_TOKEN }}
