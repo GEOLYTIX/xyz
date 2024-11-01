@@ -133,6 +133,10 @@ Finally check whether the request should be passed to an API module or the defau
 
 @param {req} req HTTP request.
 @param {res} res HTTP response.
+@property {Object} req.params The request params which will be parsed by the validateRequestParams method.
+@property {Boolean} params.logout The request should destroy the user cookie and shortciircuit.
+@property {Boolean} params.login The request should redirect to user/login.
+@property {Boolean} params.register The request should redirect to user/register.
 */
 module.exports = async function api(req, res) {
 
@@ -273,6 +277,8 @@ module.exports = async function api(req, res) {
 @description
 The method assigns a params object from the request params and query objects.
 
+The restricted params.user will be deleted. The params.user can only be assigned from a user object returned from the [user/auth]{@link module:/user/auth} module.
+
 The method will return an error if some params key contains non whitelisted character or if the restricted user param is detected.
 
 The template param will be set from _template if not explicit. This is required for the vercel router logic which does not allow to use URL path parameter to have the same key as request parameter.
@@ -291,6 +297,9 @@ function validateRequestParams(req) {
 
   // Merge request params and query params.
   const params = Object.assign(req.params || {}, req.query || {})
+
+  // User is a restricted parameter.
+  delete params.user
 
   // URL parameter keys must match white listed letters and numbers only.
   if (Object.keys(params).some(key => !/^[A-Za-z0-9_-]*$/.exec(key))) {
