@@ -1,0 +1,46 @@
+name: Direct Merge Patch to Minor
+
+on:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - patch
+
+jobs:
+  direct-merge:
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          # Use a personal access token with necessary permissions to bypass branch restrictions
+          token: ${{ secrets.BYPASS_TOKEN }}
+
+      - name: Configure Git
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "actions@github.com"
+
+      - name: Merge patch into minor
+        run: |
+          # Fetch all branches
+          git fetch origin
+          
+          # Checkout minor branch
+          git checkout minor
+          git pull origin minor
+          
+          # Merge patch into minor
+          if git merge origin/patch --no-edit; then
+            git push origin minor
+            echo "Successfully merged patch into minor"
+          else
+            echo "Merge conflicts detected. Manual intervention required."
+            exit 1
+          fi
