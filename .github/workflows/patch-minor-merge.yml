@@ -20,7 +20,7 @@ jobs:
         with:
           fetch-depth: 0
           # Use a personal access token with necessary permissions to bypass branch restrictions
-          token: ${{ secrets.BYPASS_TOKEN }}
+          token: ${{secrets.PAT_TOKEN}}
 
       - name: Configure Git
         run: |
