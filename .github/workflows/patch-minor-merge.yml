@@ -16,8 +16,11 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        env:
+          GH_TOKEN: ${{ secrets.PAT_TOKEN }}
         with:
           fetch-depth: 0
+          token: ${{ secrets.PAT_TOKEN }}
 
       - name: Configure Git
         env:
@@ -25,7 +28,7 @@ jobs:
         run: |
           git config user.name "RobAndrewHurst"
           git config user.email "robert.hurst@geolytix.co.uk"
-          git remote set-url origin "https://${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git"
+          git config --global credential.helper store
 
       - name: Merge patch into minor
         env:
@@ -41,7 +44,8 @@ jobs:
           echo "Attempting merge..."
           if git merge origin/patch --no-edit; then
             echo "Merge successful, pushing changes..."
-            git push "https://${GH_TOKEN}@github.com/${GITHUB_REPOSITORY}.git" minor
+            # Using stored credentials for push
+            git push origin minor
             echo "Successfully merged patch into minor"
           else
             echo "Merge conflicts detected. Manual intervention required."
