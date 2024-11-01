@@ -1,46 +1,23 @@
-name: Direct Merge Patch to Minor
+name: patch-merge 
+on: pull_request
 
-on:
-  pull_request:
-    types:
-      - closed
-    branches:
-      - patch
+permissions:
+  contents: write
+  pull-requests: write
 
 jobs:
-  direct-merge:
-    if: github.event.pull_request.merged == true
+  dependabot:
     runs-on: ubuntu-latest
-    permissions:
-      contents: write
-
+    if: github.event.pull_request.user.login == 'dependabot[bot]' && github.repository == 'owner/my_repo'
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - name: Dependabot metadata
+        id: metadata
+        uses: dependabot/fetch-metadata@4c5d6e7f8a9b0c1d2e3f4a5b6c7d8e9f0a1b2c3d
         with:
-          fetch-depth: 0
-          # Use a personal access token with necessary permissions to bypass branch restrictions
-          token: ${{ secrets.BYPASS_TOKEN }}
-
-      - name: Configure Git
-        run: |
-          git config user.name "GitHub Actions Bot"
-          git config user.email "actions@github.com"
-
-      - name: Merge patch into minor
-        run: |
-          # Fetch all branches
-          git fetch origin
-          
-          # Checkout minor branch
-          git checkout minor
-          git pull origin minor
-          
-          # Merge patch into minor
-          if git merge origin/patch --no-edit; then
-            git push origin minor
-            echo "Successfully merged patch into minor"
-          else
-            echo "Merge conflicts detected. Manual intervention required."
-            exit 1
-          fi
+          github-token: "${{ secrets.GITHUB_TOKEN }}"
+      - name: Enable auto-merge for Dependabot PRs
+        if: contains(steps.metadata.outputs.dependency-names, 'minor') && steps.metadata.outputs.update-type == 'version-update:semver-patch'
+        run: gh pr merge --auto --merge "$PR_URL"
+        env:
+          PR_URL: ${{github.event.pull_request.html_url}}
+          GH_TOKEN: ${{secrets.GITHUB_TOKEN}}
