@@ -1,11 +1,8 @@
 name: patch-merge 
 on:
-    pull_request:
-      types:
-        - closed
-      branches:
-        - patch
-
+  push:
+    branches:
+      - 'patch'
 permissions:
   contents: write
   pull-requests: write
@@ -20,7 +17,6 @@ jobs:
         uses: devmasx/merge-branch@master
         with:
           type: now
-          from_branch: patch
           target_branch: minor
           message: Merge patch into minor
-          github_token: ${{ secrets.PAT_TOKEN }}
+          github_token: ${{ secrets.GITHUB_TOKEN }}
