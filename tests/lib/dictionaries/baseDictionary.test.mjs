@@ -14,10 +14,10 @@ export function baseDictionaryTest() {
                 continue;
             }
 
-            // Test other languages have the same keys as English.
+            // Ensure that there are no keys that the english language doesn't have.
             codi.it(`${language} dictionary should have the same keys as English`, () => {
-                for (const key of Object.keys(mapp.dictionaries['en'])) {
-                    codi.assertTrue(Object.hasOwn(mapp.dictionaries[language], key), `${language} should have ${key}`);
+                for (const key of Object.keys(mapp.dictionaries[language])) {
+                    codi.assertTrue(Object.hasOwn(mapp.dictionaries['en'], key), `${language} has ${key} the base english`);
                 }
             });
         }
