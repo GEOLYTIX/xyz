@@ -1,8 +1,9 @@
 /**
 ## logger 🪵
 This module provides a logging utility for the xyz.
- * @module /utils/logger
- */
+
+@module /utils/logger
+*/
 
 const crypto = require('crypto');
 
