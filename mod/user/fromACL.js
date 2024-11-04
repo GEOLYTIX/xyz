@@ -7,13 +7,13 @@ This module exports the fromACL method to request and validate a user from the A
 @requires module:/utils/reqHost
 @requires module:/utils/mailer
 @requires module:/utils/languageTemplates
-@requires bcrypt
+@requires module:/utils/bcrypt
 @requires crypto
 
 @module /user/fromACL
 */
 
-const bcrypt = require('bcrypt')
+const bcrypt = require('../utils/bcrypt')
 
 const crypto = require('crypto')
 
