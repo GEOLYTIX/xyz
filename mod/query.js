@@ -81,13 +81,15 @@ module.exports = async function query(req, res) {
   // The SQL param is restricted to hold substitute values.
   req.params.SQL = [];
 
+  // Get workspace from cache.
+  req.params.workspace = await workspaceCache()
+
   // Assign role filter and viewport params from layer object.
   await layerQuery(req, res, template)
 
   if (res.finished) return;
 
-  // Get workspace from cache.
-  req.params.workspace = await workspaceCache()
+  await fieldsParam(req, res)
 
   // Assign body to params to enable reserved %{body} parameter.
   req.params.body = req.params.stringifyBody && JSON.stringify(req.body) || req.body
@@ -116,6 +118,8 @@ Any query which references a layer and locale will be passed through the layer q
 /api/query?template=query&locale=uk&layer=retail
 ```
 
+The fields request param property may be provided as an array. The string should be replaced with the template property of a matching workspace template.
+
 @param {req} req HTTP request.
 @param {res} res HTTP response.
 @param {Object} template The query template.
@@ -123,6 +127,7 @@ Any query which references a layer and locale will be passed through the layer q
 @property {Object} req.params Request params.
 @property {Object} params.filter JSON filter which must be turned into a SQL filter string for substitution.
 @property {Array} params.SQL Substitute parameter for SQL query.
+@property {Array} params.fields An array of string fields is provided for a layer query.
 @property {Object} [params.user] Requesting user.
 @property {Array} [user.roles] User roles.
 */
@@ -185,6 +190,31 @@ async function layerQuery(req, res, template) {
           ),
           ${req.params.geom}
         )`
+  }
+}
+
+/**
+@function fieldsParam
+@async
+
+@description
+The fields request param property may be provided as an array. The string should be replaced with the template property of a matching workspace template.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {Array} params.fields An array of string fields is provided for a layer query.
+*/
+async function fieldsParam(req, res) {
+  
+  if (!Array.isArray(req.params.fields)) return;
+
+  req.params.fieldsMap = new Map();
+
+  for (const field of req.params.fields) {
+
+    console.log(field)
+
+    req.params.fieldsMap.set(field, field)
   }
 }
 

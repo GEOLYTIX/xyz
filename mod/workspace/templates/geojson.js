@@ -9,10 +9,12 @@ module.exports = _ => {
 
   let properties = '';
 
-  if (_.fields) {
-    const propertyKeyValuePairs = _.fields?.split(',').map(field => {
-      const value = _.workspace.templates[field]?.template || field;
-      return `'${field}',${value}`;
+  if (_.fieldsMap) {
+    const propertyKeyValuePairs = _.fieldsMap?.entries().map(entry => {
+    
+    //_.fields?.split(',').map(field => {
+      //const value = _.workspace.templates[field]?.template || field;
+      return `'${entry[0]}',${entry[1]}`;
     });
     properties = ', json_build_object(' + propertyKeyValuePairs.join(', ') + ') as properties';
   }

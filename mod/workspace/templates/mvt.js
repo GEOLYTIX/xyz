@@ -8,10 +8,12 @@ The mvt layer query template returns a vector tile (st_asmvt) with mvt geometrie
 module.exports = _ => {
 
   // Get fields array from query params.
-  const fields = _.fields?.split(',')
-    .map(field => `${_.workspace.templates[field]?.template || field} AS ${field}`)
-    .filter(field => !!field)
-    || []
+  const fields = []
+  
+  for (let [key, value] of _.fieldsMap?.entries()) {
+
+    fields.push(`${key} as ${value}`)
+  }
 
   // Push label (cluster) into fields
   _.label && fields.push(`${_.workspace.templates[_.label]?.template || _.label} AS ${_.label}`)
