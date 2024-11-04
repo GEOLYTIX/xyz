@@ -54,5 +54,14 @@ export async function queryTest() {
             const results = await mapp.utils.xhr(`/test/api/query?template=bogus_data_array`);
             codi.assertTrue(results instanceof Error, 'We should return an error for a bogus DBS connection');
         });
+
+        /**
+         * @description Query: Testing a query with a bogus dbs on the template
+         * @function it 
+         */
+        await codi.it('Query: Testing a query with a bogus dbs on the template', async () => {
+            const results = await mapp.utils.xhr(`/test/api/query?template=cluster`);
+            codi.assertTrue(results instanceof Error, 'We should get an error because we didnt provide a layer param');
+        });
     });
 }

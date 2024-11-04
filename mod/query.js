@@ -82,7 +82,7 @@ module.exports = async function query(req, res) {
   req.params.SQL = [];
 
   // Assign role filter and viewport params from layer object.
-  await layerQuery(req, res)
+  await layerQuery(req, res, template)
 
   if (res.finished) return;
 
@@ -106,6 +106,8 @@ module.exports = async function query(req, res) {
 @description
 Queries which reference a layer must be checked against the layer JSON in the workspace.
 
+Layer query templates must have a layer request property.
+
 Layer queries have restricted viewport and filter params. These params can not be substituted in the database but must be replaced in the SQL query string.
 
 Any query which references a layer and locale will be passed through the layer query method. The getLayer method will fail return an error if the locale is not defined as param or the layer is not a member of the locale.
@@ -116,15 +118,23 @@ Any query which references a layer and locale will be passed through the layer q
 
 @param {req} req HTTP request.
 @param {res} res HTTP response.
+@param {Object} template The query template.
+@property {Boolean} template.layer A layer query template.
 @property {Object} req.params Request params.
 @property {Object} params.filter JSON filter which must be turned into a SQL filter string for substitution.
 @property {Array} params.SQL Substitute parameter for SQL query.
 @property {Object} [params.user] Requesting user.
 @property {Array} [user.roles] User roles.
 */
-async function layerQuery(req, res) {
+async function layerQuery(req, res, template) {
 
   if (!req.params.layer) {
+
+    if (template.layer) {
+
+      // Layer query templates must have a layer request property.
+      return res.status(400).send(`${req.params.template} query requires a valid layer request parameter.`)
+    }
 
     // Reserved params will be deleted to prevent DDL injection.
     delete req.params.filter
