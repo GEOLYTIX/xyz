@@ -1,7 +1,7 @@
 /**
 ## XYZ API
 
-The XYX API module exports the api function which serves as the entry point for all XYZ API requests.
+The XYZ API module exports the api function which serves as the entry point for all XYZ API requests.
 
 A node.js express app will require the api module and reference the exported api method for all request routes.
 
@@ -165,7 +165,7 @@ module.exports = function api(req, res) {
     // Remove cookie.
     res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
 
-    const msg = req.params.msg? `?msg=${req.params.msg}`: '';
+    const msg = req.params.msg ? `?msg=${req.params.msg}` : '';
 
     // Set location to the domain path.
     res.setHeader('location', `${process.env.DIR || '/'}${msg}`)
