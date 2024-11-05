@@ -254,7 +254,7 @@ async function infojMap(req, res) {
 
   req.params.infojMap = new Map();
 
-  for (const entry of req.params.layer?.infoj) {
+  for (const entry of req.params.layer.infoj) {
 
     // An entry must have a field.
     if (!entry.field) break;
