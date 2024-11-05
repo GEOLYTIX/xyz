@@ -10,7 +10,8 @@
   },
   "scripts": {
     "test": "codi tests",
-    "_build": "npx esbuild ./lib/mapp.mjs ./lib/ui.mjs --bundle --minify --tree-shaking=false --sourcemap --format=iife --outdir=./public/js/lib",
+    "_build": "node esbuild.config.mjs",
+    "_watch": "node esbuild.config.mjs --watch",
     "version": "node version.js",
     "generate-docs": "jsdoc --configure jsdoc_mapp.json --verbose && jsdoc --configure jsdoc_xyz.json --verbose && jsdoc --configure jsdoc_test.json --verbose",
     "mapp-docs": "jsdoc --configure jsdoc_mapp.json --verbose",
