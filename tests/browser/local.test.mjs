@@ -1,4 +1,5 @@
 import { base } from '../../public/tests/_base.test.mjs';
+import { mappTest } from '../lib/mapp.test.mjs';
 import { layerTest } from '../lib/layer/_layer.test.mjs';
 import { dictionaryTest } from '../lib/dictionaries/_dictionaries.test.mjs';
 import { locationTest } from '../lib/location/_location.test.mjs';
@@ -23,6 +24,8 @@ await queryTest();
 await runAllTests(userTest);
 
 const mapview = await base();
+
+await runAllTests(mappTest);
 
 // Run the dictionary Tests
 await runAllTests(dictionaryTest, mapview);
@@ -68,7 +71,7 @@ await runAllTests(utilsTest, mapview);
  */
 async function runAllTests(tests, mapview) {
     const testFunctions = Object.values(tests).filter(item => typeof item === 'function');
-  
+
     for (const testFn of testFunctions) {
         try {
             await testFn(mapview);
