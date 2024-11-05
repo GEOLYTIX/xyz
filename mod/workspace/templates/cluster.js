@@ -10,13 +10,21 @@ module.exports = _ => {
   _.qID ??= _.layer.qID || null
   _.geom ??= _.layer.geom
 
-  // Get fields array from query params.
-  const fields = _.fieldsMap?.entries().map(entry => {
-    return `${entry[0]} as ${entry[1]}`
-  })
+  const fields = []
 
-  const aggFields = _.fields?.split(',')
-    .map(field => `CASE WHEN count(*)::int = 1 THEN (array_agg(${field}))[1] END as ${field}`)
+  const aggFields = []  
+
+  _.fieldsMap && Array.from(_.fieldsMap.entries())
+    .forEach(entry => {
+
+      const [key, value] = entry
+      fields.push(`${value} as ${key}`)
+
+      aggFields.push(`
+        CASE WHEN count(*)::int = 1 
+        THEN (array_agg(${value}))[1] 
+        END as ${key}`)
+    })
 
   const where = _.viewport || `AND ${_.geom} IS NOT NULL` 
 
@@ -32,12 +40,12 @@ module.exports = _ => {
         ELSE CONCAT('!',(array_agg(id))[1]::varchar)
         END AS id
       
-      ${_.fields ? ',' + aggFields.join() : ''}
+      ${fields.length ? ',' + aggFields.join() : ''}
 
     FROM (
       SELECT
         ${_.qID} as id,
-        ${_.fields ? fields.join() + ',' : ''}
+        ${fields.length ? fields.join() + ',' : ''}
         round(ST_X(${_.geom}) / ${r}) * ${r} x_round,
         round(ST_Y(${_.geom}) / ${r}) * ${r} y_round
       FROM ${_.table}

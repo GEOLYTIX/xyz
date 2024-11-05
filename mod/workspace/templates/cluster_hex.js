@@ -10,17 +10,22 @@ module.exports = _ => {
   _.qID ??= _.layer.qID || null
   _.geom ??= _.layer.geom
 
-  // Get fields array from query params.
-  // const fields = _.fields?.map(field => `${field} as ${field}`)
+  const fields = []
 
-  const fields = _.fieldsMap?.entries().map(entry => {
-    return `${entry[0]} as ${entry[1]}`
-  })
+  const aggFields = []
 
-  const aggFields = _.fields?.map(field => `
-    CASE WHEN count(*)::int = 1 
-    THEN (array_agg(${field}))[1] 
-    END as ${field}`)
+  _.fieldsMap && Array.from(_.fieldsMap.entries())
+    .forEach(entry => {
+
+      const [key, value] = entry
+
+      fields.push(`${value} as ${key}`)
+
+      aggFields.push(`
+      CASE WHEN count(*)::int = 1 
+      THEN (array_agg(${value}))[1] 
+      END as ${key}`)
+    })
 
   const where = _.viewport || `AND ${_.geom} IS NOT NULL`
 
@@ -35,7 +40,7 @@ module.exports = _ => {
 
     SELECT
       ${_.qID} AS id,
-      ${_.fields ? fields.join() + ',' : ''}
+      ${fields.length ? fields.join() + ',' : ''}
       ${_.geom} AS geom,
       ST_X(${_.geom}) AS x,
       ST_Y(${_.geom}) AS y,
@@ -64,12 +69,12 @@ module.exports = _ => {
         ELSE CONCAT('!',(array_agg(id))[1]::varchar)
         END AS id
 
-      ${_.fields ? ',' + aggFields.join() : ''}
+      ${fields.length ? ',' + aggFields.join() : ''}
 
     FROM (
     SELECT
       ${_.qID} as id,
-      ${_.fields ? fields.join() + ',' : ''}
+      ${fields.length ? fields.join() + ',' : ''}
 
       CASE WHEN odds = 0 THEN CASE
 

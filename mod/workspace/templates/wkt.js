@@ -7,11 +7,15 @@ The wkt layer query template returns feature records from a layer table as an or
 */
 module.exports = _ => {
 
-  // Get fields array from query params.
-  const fields = _.fields?.split(',')
-    .map(field => `${_.workspace.templates[field]?.template || field} AS ${field}`)
-    .filter(field => !!field)
-    || []
+  const fields = []
+
+  _.fieldsMap && Array.from(_.fieldsMap.entries())
+    .forEach(entry => {
+
+      const [key, value] = entry
+
+      fields.push(`${value} as ${key}`)
+    })
 
   // Unshift the geom field into the array.
   if (_.geom && !_.no_geom) {
