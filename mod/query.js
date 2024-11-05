@@ -205,12 +205,16 @@ The fields request param property may be provided as an array. The string should
 @property {Array} params.fields An array of string fields is provided for a layer query.
 */
 async function fieldsParam(req, res) {
+
+  if (!req.params.fields) return;
+
+  const fields = req.params.fields.split(',')
   
-  if (!Array.isArray(req.params.fields)) return;
+  //if (!Array.isArray(req.params.fields)) return;
 
   req.params.fieldsMap = new Map();
 
-  for (const field of req.params.fields) {
+  for (const field of fields) {
 
     console.log(field)
 
