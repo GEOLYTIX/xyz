@@ -231,6 +231,10 @@ button {
     box-shadow: none;
     border: none;
   }
+  p {
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+  }
 }
 
 /* public/css/_dialog.css */
