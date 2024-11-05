@@ -17,9 +17,6 @@ module.exports = _ => {
       fields.push(`${value} as ${key}`)
     })
 
-  // Push label (cluster) into fields
-  _.label && fields.push(`${_.workspace.templates[_.label]?.template || _.label} AS ${_.label}`)
-
   const
     x = parseInt(_.x),
     y = parseInt(_.y),

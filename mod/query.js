@@ -89,8 +89,6 @@ module.exports = async function query(req, res) {
 
   if (res.finished) return;
 
-  await fieldsParam(req, res)
-
   // Assign body to params to enable reserved %{body} parameter.
   req.params.body = req.params.stringifyBody && JSON.stringify(req.body) || req.body
 
@@ -156,7 +154,7 @@ async function layerQuery(req, res, template) {
   }
 
   // Layer queries must have a qID param.
-  req.params.qID ??= req.params.layer.qID || 'NULL'
+  req.params.qID ??= req.params.layer.qID
 
   // Layer queries must have an srid param.
   req.params.srid ??= req.params.layer.srid
@@ -191,34 +189,100 @@ async function layerQuery(req, res, template) {
           ${req.params.geom}
         )`
   }
+
+  await fieldsMap(req, res)
+
+  await infojMap(req, res)
 }
 
 /**
-@function fieldsParam
+@function fieldsMap
 @async
 
 @description
-The fields request param property may be provided as an array. The string should be replaced with the template property of a matching workspace template.
+The method assigns the fieldsMap object property to the request params for layer queries with a fields request parameter.
+
+The fields param is split into an array and template strings of workspace.templates matching a field are set as value to the field key in the fieldsMap object.
 
 @param {req} req HTTP request.
 @param {res} res HTTP response.
+@property {Object} req.params The request params.
 @property {Array} params.fields An array of string fields is provided for a layer query.
 */
-async function fieldsParam(req, res) {
+async function fieldsMap(req, res) {
 
   if (!req.params.fields) return;
 
   const fields = req.params.fields.split(',')
   
-  //if (!Array.isArray(req.params.fields)) return;
-
   req.params.fieldsMap = new Map();
 
   for (const field of fields) {
 
-    console.log(field)
+    let value = field
 
-    req.params.fieldsMap.set(field, field)
+    if (Object.hasOwn(req.params.workspace.templates, field)) {
+
+      const fieldTemplate = await getTemplate(field)
+
+      value = fieldTemplate.template || ''
+    }
+
+    req.params.fieldsMap.set(field, value)
+  }
+}
+
+/**
+@function infojMap
+@async
+
+@description
+The method assigns the infojMap object property to the request params for layer requests.
+
+The method iterates over the layer.infoj entries and only assigns entry fields valid for a location_get request.
+
+A lookup of template strings in the workspace.templates for the infojMap entry.field key/value is attempted.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {Object} req.params The request params.
+@property {Array} params.layer The layer object assigned by the layerQuery
+*/
+async function infojMap(req, res) {
+
+  if (!req.params.layer?.infoj) return;
+
+  req.params.infojMap = new Map();
+
+  for (const entry of req.params.layer?.infoj) {
+
+    // An entry must have a field.
+    if (!entry.field) break;
+
+    // Query entries are not included in the infojMap
+    if (entry.query) break;
+
+    // Only entries with fields included in the fieldsMap should be added if a fieldsMap has been provided.
+    if (req.params.fieldsMap && !req.params.fieldsMap?.has(entry.field)) break;
+
+    // The fieldfx has precendence over templates.
+    if (entry.fieldfx) {
+
+      req.params.infojMap.set(entry.field, entry.fieldfx)
+      break;
+    }
+
+    let value = entry.field
+
+    // Check for workspace.template matching the entry.field.
+    if (Object.hasOwn(req.params.workspace.templates, entry.field)) {
+
+      const fieldTemplate = await getTemplate(entry.field)
+
+      value = fieldTemplate.template || ''
+    }
+
+    req.params.infojMap.set(entry.field, value)
   }
 }
 

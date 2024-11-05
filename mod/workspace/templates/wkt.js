@@ -23,9 +23,6 @@ module.exports = _ => {
     fields.unshift(`ST_AsText(${_.geom}) AS geometry`)
   }
 
-  // Push label (cluster) into fields
-  _.label && fields.push(`${_.workspace.templates[_.label]?.template || _.label} AS ${_.label}`)
-
   const where = _.viewport || `AND ${_.geom} IS NOT NULL`
 
   return `
