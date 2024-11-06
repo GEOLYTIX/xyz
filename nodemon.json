@@ -2,7 +2,8 @@
     "watch": [
         "lib/**/*",
         "tests/**/*",
-        "public/css/*"
+        "public/css/*",
+        "../xyz_resources/**/*"
     ],
     "ext": ".js,.mjs,.json,.css,.svg",
     "ignore": [
@@ -13,7 +14,7 @@
     "env": {
         "NODE_ENV": "DEVELOPMENT"
     },
-    "exec": "npx concurrently \"node esbuild.config.mjs\" \"npm run ui_css\" \"npm run mapp_css\" && browser-sync reload",
+    "exec": "npx concurrently \"node esbuild.config.mjs\" \"npm run ui_css\" \"npm run mapp_css\"",
     "events": {
         "start": "echo \"Watching for changes...\"",
         "exit": "echo \"Build complete\""
