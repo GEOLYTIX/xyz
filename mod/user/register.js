@@ -9,13 +9,13 @@ Exports the [user] register method for the /api/user/register route.
 @requires /utils/reqHost
 @requires /utils/mailer
 @requires /utils/languageTemplates
-@requires bcrypt
+@requires /utils/bcrypt
 @requires crypto
 
 @module /user/register
 */
 
-const bcrypt = require('bcrypt')
+const bcrypt = require('../utils/bcrypt')
 
 const crypto = require('crypto')
 
