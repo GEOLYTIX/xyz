@@ -36,6 +36,95 @@ ESBuild must also be used to compile the CSS supporting the MAPP and MAPP.UI ele
 
     npx esbuild --bundle public/css/_ui.css --outfile=public/css/ui.css --loader:.svg=dataurl
 
+### Development with VSCode Debugger and Live Reload
+
+We've set up a development environment that includes automatic rebuilding, browser reloading, and VSCode debugging capabilities.
+
+#### Setup
+
+Configure VSCode for debugging:
+
+`.vscode/launch.json`:
+
+```json
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "type": "node",
+        "request": "launch",
+        "name": "Launch Server",
+        "program": "${workspaceFolder}/express.js",
+        "preLaunchTask": "start-watch",
+        "console": "integratedTerminal",
+        "skipFiles": [
+            "<node_internals>/**",
+            "node_modules/**"
+        ],
+        "internalConsoleOptions": "openOnSessionStart",
+        "env": {
+            "NODE_ENV": "development"
+        }
+    },
+    {
+        "type": "chrome",
+        "request": "launch",
+        "name": "Debug in Chrome",
+        "url": "http://localhost:3001",
+        "webRoot": "${workspaceFolder}/xyz/lib", //Please check your worksapceFolder
+        "sourceMaps": true,
+        "pauseForSourceMap": true
+    }
+  ]
+}
+```
+
+`.vscode/tasks.json`:
+
+```json
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "start-watch",
+            "type": "shell",
+            "command": "npx concurrently \"npx nodemon\" \"npm run browser-sync\"",
+            "isBackground": true,
+            "problemMatcher": {
+                "pattern": {
+                    "regexp": "^.*$"
+                },
+                "background": {
+                    "activeOnStart": true,
+                    "beginsPattern": "Watching for changes...",
+                    "endsPattern": "Build complete"
+                }
+            }
+        }
+    ]
+}
+```
+
+#### Usage
+
+1. Open the project in VSCode
+2. Launch the server first by executing "Launch Server"
+3. Then if you want to debugg chrome directly in vscode run "Debug in Chrome";
+4. Access the site at `http://localhost:3001`
+
+This setup provides:
+
+* Automatic rebuilding of files when changes are detected in the `lib`, 'tests' and `public/css' directories
+* Automatic browser reload after successful builds
+* VSCode debugging capabilities
+* Source maps for better debugging experience
+* Express server running on port 3000
+* Browser-sync proxy on port 3001 with Portal on port 3002
+
+The browser will automatically reload whenever you make changes to files in the `lib`, 'tests' and `public/css' directories. You can set breakpoints in VSCode for debugging both the frontend and backend code.
+
+```
+
 ## ESLint
 
 The codebase makes use of the [eslint](eslint.org) package to ensure that our code adhere to different rules and coding guidelines.

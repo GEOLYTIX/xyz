@@ -1,12 +1,13 @@
 // esbuild.config.mjs
 import * as esbuild from 'esbuild'
 
+const isDev = process.env.NODE_ENV !== 'production';
+
 const buildOptions = {
     entryPoints: ['./lib/mapp.mjs', './lib/ui.mjs'],
     bundle: true,
-    minify: true,
-    treeShaking: false,
-    sourcemap: 'inline',
+    minify: !isDev,
+    sourcemap: true,
     sourceRoot: '/lib',
     format: 'iife',
     outdir: './public/js/lib',
@@ -14,5 +15,9 @@ const buildOptions = {
     logLevel: 'info'
 };
 
-await esbuild.build(buildOptions)
-    .catch(() => process.exit(1));
+try {
+    await esbuild.build(buildOptions);
+} catch (err) {
+    console.error('Build failed:', err);
+    process.exit(1);
+}
