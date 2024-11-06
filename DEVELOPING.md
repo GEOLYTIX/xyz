@@ -61,7 +61,8 @@ Configure VSCode for debugging:
             "<node_internals>/**",
             "node_modules/**"
         ],
-        "internalConsoleOptions": "openOnSessionStart"
+        "internalConsoleOptions": "openOnSessionStart",
+        "env": {}
     },
     {
         "type": "chrome",
