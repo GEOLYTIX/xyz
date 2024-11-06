@@ -214,7 +214,7 @@ async function fieldsMap(req, res) {
   if (!req.params.fields) return;
 
   const fields = req.params.fields.split(',')
-  
+
   req.params.fieldsMap = new Map();
 
   for (const field of fields) {
@@ -257,19 +257,19 @@ async function infojMap(req, res) {
   for (const entry of req.params.layer.infoj) {
 
     // An entry must have a field.
-    if (!entry.field) break;
+    if (!entry.field) continue;
 
     // Query entries are not included in the infojMap
-    if (entry.query) break;
+    if (entry.query) continue;
 
     // Only entries with fields included in the fieldsMap should be added if a fieldsMap has been provided.
-    if (req.params.fieldsMap && !req.params.fieldsMap?.has(entry.field)) break;
+    if (req.params.fieldsMap && !req.params.fieldsMap?.has(entry.field)) continue;
 
     // The fieldfx has precendence over templates.
     if (entry.fieldfx) {
 
       req.params.infojMap.set(entry.field, entry.fieldfx)
-      break;
+      continue;
     }
 
     let value = entry.field
