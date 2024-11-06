@@ -10,6 +10,9 @@
         "public/css/mapp.css",
         "public/css/ui.css"
     ],
+    "env": {
+        "NODE_ENV": "DEVELOPMENT"
+    },
     "exec": "npx concurrently \"node esbuild.config.mjs\" \"npm run ui_css\" \"npm run mapp_css\" && browser-sync reload",
     "events": {
         "start": "echo \"Watching for changes...\"",

@@ -1,12 +1,12 @@
 // esbuild.config.mjs
 import * as esbuild from 'esbuild'
 
-const isDev = process.env.NODE_ENV !== 'production';
+const isDev = process.env.NODE_ENV !== 'DEVELOPMENT';
 
 const buildOptions = {
     entryPoints: ['./lib/mapp.mjs', './lib/ui.mjs'],
     bundle: true,
-    minify: !isDev,
+    minify: isDev,
     sourcemap: true,
     sourceRoot: '/lib',
     format: 'iife',
