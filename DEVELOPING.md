@@ -61,10 +61,7 @@ Configure VSCode for debugging:
             "<node_internals>/**",
             "node_modules/**"
         ],
-        "internalConsoleOptions": "openOnSessionStart",
-        "env": {
-            "NODE_ENV": "development" //This is to ensure that the bundle isn't minified so we can see variables locally.
-        }
+        "internalConsoleOptions": "openOnSessionStart"
     },
     {
         "type": "chrome",
