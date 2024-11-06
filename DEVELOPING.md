@@ -79,13 +79,14 @@ Configure VSCode for debugging:
 `.vscode/tasks.json`:
 
 ```json
+// .vscode/tasks.json
 {
     "version": "2.0.0",
     "tasks": [
         {
             "label": "start-watch",
             "type": "shell",
-            "command": "npx concurrently \"npx nodemon\" \"npm run browser-sync\"",
+            "command": "npx concurrently 'npx nodemon' 'npm run browser-sync'",
             "isBackground": true,
             "problemMatcher": {
                 "pattern": {
