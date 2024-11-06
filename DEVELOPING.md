@@ -122,6 +122,36 @@ This setup provides:
 
 The browser will automatically reload whenever you make changes to files in the `lib`, 'tests' and `public/css' directories. You can set breakpoints in VSCode for debugging both the frontend and backend code.
 
+#### Additional settings for VSCode
+
+Here are some additional settings to use in your ./vscode/settings.json file
+
+```json
+{
+  // Enables debugging when clicking links in the terminal or debug console
+  "debug.javascript.debugByLinkOptions": "always",
+
+  // Automatically opens the debug view when a breakpoint is hit
+  "debug.openDebug": "openOnDebugBreak",
+
+  // Shows variable values directly in the editor while debugging
+  "debug.inlineValues": "on",
+
+  // Always shows the debug status (running/stopped) in the status bar
+  "debug.showInStatusBar": "always",
+
+  // Keeps the debug toolbar fixed at the top of the editor
+  "debug.toolBarLocation": "docked",
+
+  // Shows breakpoint markers in the scroll bar for easy navigation
+  "debug.showBreakpointsInOverviewRuler": true,
+
+  // Shows dots in the editor gutter where breakpoints can be placed
+  "debug.showInlineBreakpointCandidates": true,
+
+  // Pauses execution if there's an error in a conditional breakpoint
+  "debug.javascript.breakOnConditionalError": true
+}
 ```
 
 ## ESLint
