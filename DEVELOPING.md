@@ -107,7 +107,7 @@ Configure VSCode for debugging:
 #### Usage
 
 1. Open the project in VSCode
-2. Launch the server first by executing "Launch Server"
+2. Launch the server first by executing "Launch Server" this site for automatic reload will be at `http://localhost:3001`
 3. Then if you want to debugg chrome directly in vscode run "Debug in Chrome";
 4. Access the site at `http://localhost:3001`
 
