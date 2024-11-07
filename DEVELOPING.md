@@ -36,6 +36,107 @@ ESBuild must also be used to compile the CSS supporting the MAPP and MAPP.UI ele
 
     npx esbuild --bundle public/css/_ui.css --outfile=public/css/ui.css --loader:.svg=dataurl
 
+### Hot rebuild with VSCode Debugger
+
+A task can be added to the `.vscode/tasks.json` to execute `nodemon` and `browser-sync` concurrently. This will allow VSCode to rebuild the application on script changes in the editor.
+
+```json
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "start-watch",
+      "type": "shell",
+      "command": "npx concurrently 'npx nodemon' 'npm run browser-sync'",
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^.*$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Watching for changes...",
+          "endsPattern": "Build complete"
+        }
+      }
+    }
+  ]
+}
+```
+
+`start-watch` is a `preLaunchTask` which must be added to the debug configuration in the `.vscode/launch.json`.
+
+```json
+{
+  "type": "node",
+  "request": "launch",
+  "name": "Launch Server",
+  "program": "${workspaceFolder}/express.js",
+  "preLaunchTask": "start-watch",
+  "console": "integratedTerminal",
+  "internalConsoleOptions": "openOnSessionStart",
+  "env": {}
+}
+```
+
+The `browser-sync` script is defined in the `package.json` as `"npx browser-sync start --proxy localhost:3000 --port 3001 --ui-port 3002 --files public/js/lib/**/* --no-open --no-notify"`
+
+The application running on port 3000 will be proxied to port 3001 for the browser-sync event. The browser window will refresh when the node application rebuilds after changes to the script in a VSCode editor.
+
+#### VSCode / Chrome Debugging 
+
+An additional debug configuration in `.vscode/launch.json` is required to debug the mapp lib code in VSCode. 
+
+```json
+{
+  "type": "chrome",
+  "request": "launch",
+  "name": "Debug in Chrome",
+  "url": "http://localhost:3001",
+  "webRoot": "${workspaceFolder}/xyz/lib", //Please check your worksapceFolder
+  "sourceMaps": true,
+  "pauseForSourceMap": true
+}
+```
+
+The Chrome debug config must be launched as an additional session. VSCode run and debug panel will show 2 active sessions. A chrome instance should open with the url defined in the Chrome debug config.
+
+Breakpoints set in the mapp lib script will now be respected in the VSCode debug editor window. Breakpoints set in the Chrome dev tools will also break in the VSCode editor.
+
+The browser will automatically reload on changes to files in the `lib`, 'tests' and `public/css' directories. 
+
+#### Additional settings for VSCode
+
+Here are some additional settings to use in your ./vscode/settings.json file
+
+```json
+{
+  // Enables debugging when clicking links in the terminal or debug console
+  "debug.javascript.debugByLinkOptions": "always",
+
+  // Automatically opens the debug view when a breakpoint is hit
+  "debug.openDebug": "openOnDebugBreak",
+
+  // Shows variable values directly in the editor while debugging
+  "debug.inlineValues": "on",
+
+  // Always shows the debug status (running/stopped) in the status bar
+  "debug.showInStatusBar": "always",
+
+  // Keeps the debug toolbar fixed at the top of the editor
+  "debug.toolBarLocation": "docked",
+
+  // Shows breakpoint markers in the scroll bar for easy navigation
+  "debug.showBreakpointsInOverviewRuler": true,
+
+  // Shows dots in the editor gutter where breakpoints can be placed
+  "debug.showInlineBreakpointCandidates": true,
+
+  // Pauses execution if there's an error in a conditional breakpoint
+  "debug.javascript.breakOnConditionalError": true
+}
+```
+
 ## ESLint
 
 The codebase makes use of the [eslint](eslint.org) package to ensure that our code adhere to different rules and coding guidelines.
