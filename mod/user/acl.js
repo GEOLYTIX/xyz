@@ -12,31 +12,29 @@ const { Pool } = require('pg');
 
 const connection = process.env.PRIVATE?.split('|') || process.env.PUBLIC?.split('|')
 
-const acl_table = connection[1]?.split('.').pop()
-
-const acl_schema = connection[1]?.split('.')[0] === acl_table ? 'public' : connection[1]?.split('.')[0]
-
-const pool = new Pool({
-  connectionString: connection[0]
-})
-
 // The acl module will export an empty require object instead of a function if no ACL connection has been defined.
 if (!connection?.[1]) {
-  module.exports = {};
-}
-else {
+  module.exports = null;
+
+} else {
+
+  const acl_table = connection[1]?.split('.').pop()
+
+  const acl_schema = connection[1]?.split('.')[0] === acl_table ? 'public' : connection[1]?.split('.')[0]
+
+  const pool = new Pool({
+    connectionString: connection[0]
+  })
+
   /**
   @function acl
   
   @description
   The acl method will connect to pg pool and query the ACL with a provided query template. The `/acl_table/` and `/acl_schema/` in the query template will be replaced with values provided as `PRIVATE` or `PUBLIC` environment variable.
   
-  @param {string} q 
-  Query template.
-  @param {array} arr 
-  Parameters to be substrituted in query template.
+  @param {string} q Query template.
+  @param {array} arr Parameters to be substrituted in query template.
   */
-
   module.exports = async function acl(q, arr) {
 
     try {

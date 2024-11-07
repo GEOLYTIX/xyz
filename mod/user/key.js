@@ -36,7 +36,7 @@ Requesting user.
 module.exports = async function apiKey(req, res) {
 
   // acl module will export an empty require object without the ACL being configured.
-  if (typeof acl !== 'function') {
+  if (typeof acl === null) {
     return res.status(500).send('ACL unavailable.')
   }
 
