@@ -16,44 +16,49 @@ const { Pool } = require('pg');
 
 const connection = process.env.PRIVATE?.split('|') || process.env.PUBLIC?.split('|')
 
+// These variables can only be reassigned if the connection is an array.
+let acl_table, acl_schema, pool;
+
 // The acl module will export an empty require object instead of a function if no ACL connection has been defined.
 if (!connection?.[1]) {
   module.exports = null;
 
 } else {
 
-  const acl_table = connection[1]?.split('.').pop()
+  acl_table = connection[1]?.split('.').pop()
 
-  const acl_schema = connection[1]?.split('.')[0] === acl_table ? 'public' : connection[1]?.split('.')[0]
+  acl_schema = connection[1]?.split('.')[0] === acl_table ? 'public' : connection[1]?.split('.')[0]
 
-  const pool = new Pool({
+  pool = new Pool({
     connectionString: connection[0]
   })
 
-  /**
-  @function acl
-  
-  @description
-  The acl method will connect to pg pool and query the ACL with a provided query template. The `/acl_table/` and `/acl_schema/` in the query template will be replaced with values provided as `PRIVATE` or `PUBLIC` environment variable.
-  
-  @param {string} q Query template.
-  @param {array} arr Parameters to be substrituted in query template.
-  */
-  module.exports = async function acl(q, arr) {
+  module.exports = acl
+}
 
-    try {
+/**
+@function acl
+ 
+@description
+The acl method will connect to pg pool and query the ACL with a provided query template. The `/acl_table/` and `/acl_schema/` in the query template will be replaced with values provided as `PRIVATE` or `PUBLIC` environment variable.
+ 
+@param {string} q Query template.
+@param {array} arr Parameters to be substrituted in query template.
+*/
+async function acl(q, arr) {
 
-      const client = await pool.connect()
+  try {
 
-      const { rows } = await client.query(q.replace(/acl_table/g, acl_table).replace(/acl_schema/g, acl_schema), arr)
+    const client = await pool.connect()
 
-      client.release()
+    const { rows } = await client.query(q.replace(/acl_table/g, acl_table).replace(/acl_schema/g, acl_schema), arr)
 
-      return rows
+    client.release()
 
-    } catch (err) {
-      console.error(err)
-      return err
-    }
+    return rows
+
+  } catch (err) {
+    console.error(err)
+    return err
   }
 }

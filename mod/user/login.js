@@ -39,6 +39,11 @@ The _redirect cookie set by the loginView method will be removed on redirect.
 */
 module.exports = async function login(req, res) {
 
+  if (fromACL === null) {
+    res.status(405).send('The ACL has not been configured to support login.')
+    return;
+  }
+
   if (req.body) {
 
     const user = await fromACL(req)
