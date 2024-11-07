@@ -18,7 +18,7 @@ module.exports = _ => {
 
     const [key, value] = entry
 
-    fields.push(`${value} as ${key}`)
+    fields.push(`(${value}) as ${key}`)
   })
 
   return `

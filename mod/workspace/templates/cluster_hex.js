@@ -19,7 +19,7 @@ module.exports = _ => {
 
       const [key, value] = entry
 
-      fields.push(`${value} as ${key}`)
+      fields.push(`(${value}) as ${key}`)
 
       aggFields.push(`
       CASE WHEN count(*)::int = 1 

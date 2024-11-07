@@ -14,7 +14,7 @@ module.exports = _ => {
 
       const [key, value] = entry
 
-      fields.push(`${value} as ${key}`)
+      fields.push(`(${value}) as ${key}`)
     })
 
   // Unshift the geom field into the array.
