@@ -6,6 +6,7 @@ import { locationTest } from '../lib/location/_location.test.mjs';
 import { mapviewTest } from '../lib/mapview/_mapview.test.mjs';
 import { pluginsTest } from '../plugins/_plugins.test.mjs';
 import { workspaceTest } from '../mod/workspace/_workspace.test.mjs'
+import { templatesTest } from '../mod/workspace/templates/_templates.test.mjs';
 import { queryTest } from '../mod/query.test.mjs';
 import { userTest } from '../mod/user/_user.test.js';
 import { ui_elementsTest } from '../lib/ui/elements/_elements.test.mjs';
@@ -20,6 +21,7 @@ import { ui_locations } from '../lib/ui/locations/_locations.test.mjs';
 //API Tests
 await workspaceTest();
 await queryTest();
+await runAllTests(templatesTest);
 
 await runAllTests(userTest);
 
