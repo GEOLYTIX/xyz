@@ -3,6 +3,10 @@
 
 The acl module provides access to the ACL table for all User API methods.
 
+The module will split either the PRIVATE or PUBLIC process.env variables as an array of connection strings.
+
+The module will export null if neither a PRIVATE or PUBLIC process.env are provided.
+
 @requires pg
 
 @module /user/acl
