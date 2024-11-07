@@ -7,15 +7,19 @@ The geojson layer query template returns an array of records including a geojson
 */
 module.exports = _ => {
 
-  let properties = '';
+  const fields = []
 
-  if (_.fields) {
-    const propertyKeyValuePairs = _.fields?.split(',').map(field => {
-      const value = _.workspace.templates[field]?.template || field;
-      return `'${field}',${value}`;
-    });
-    properties = ', json_build_object(' + propertyKeyValuePairs.join(', ') + ') as properties';
-  }
+  _.fieldsMap && Array.from(_.fieldsMap.entries())
+    .forEach(entry => {
+
+      const [key, value] = entry
+
+      fields.push(`(${value}) as ${key}`)
+    })
+
+  const properties = fields.length
+    ? `, json_build_object('${fields.join(', ')}') as properties`
+    : ''
 
   const where = _.viewport || `AND ${_.geom || _.layer.geom} IS NOT NULL`
 

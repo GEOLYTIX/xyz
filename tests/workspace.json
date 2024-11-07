@@ -382,6 +382,14 @@
                         "layer": "mvt_test"
                     }
                 ]
+            },
+            "fields_test": {
+                "display": true,
+                "templates": [
+                    {
+                        "src": "file:/tests/assets/layers/scratch/layer_fields.json"
+                    }
+                ]
             }
         }
     }
