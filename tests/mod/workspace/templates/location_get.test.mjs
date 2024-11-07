@@ -1,11 +1,10 @@
-
 /**
  * @module mod/workspace/templates/location_get.test.mjs
  */
 
 /**
- * @description Entry point for the cluster template module
- * @function geomjsonTemplate
+ * @description Entry point for the location_get template module
+ * @function locationGetTemplate
  */
 export async function locationGetTemplate() {
     await codi.describe('Workspace Templates: location_get Template', async () => {

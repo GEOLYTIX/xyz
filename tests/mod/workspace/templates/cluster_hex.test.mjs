@@ -4,7 +4,7 @@
  */
 
 /**
- * @description Entry point for the cluster template module
+ * @description Entry point for the cluster hex template module
  * @function clusterHexTemplate
  */
 export async function clusterHexTemplate() {

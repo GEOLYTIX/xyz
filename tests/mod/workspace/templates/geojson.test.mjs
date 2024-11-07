@@ -3,8 +3,8 @@
  */
 
 /**
- * @description Entry point for the cluster template module
- * @function geomjsonTemplate
+ * @description Entry point for the geojson template module
+ * @function geojsonTemplate
  */
 export async function geojsonTemplate() {
     await codi.describe('Workspace Templates: geojson Template', async () => {
