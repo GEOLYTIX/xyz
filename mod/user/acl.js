@@ -10,10 +10,20 @@ The acl module provides access to the ACL table for all User API methods.
 
 const { Pool } = require('pg');
 
+const connection = process.env.PRIVATE?.split('|') || process.env.PUBLIC?.split('|') || []
 const connection = process.env.PRIVATE?.split('|') || process.env.PUBLIC?.split('|')
 
+// Early return if connection is not properly defined
+if (!connection[1]) {
+  console.warn('ACL connection not properly defined. PRIVATE or PUBLIC environment variable is missing or invalid.')
+  module.exports = {}
+  return
+}
+
+const acl_table = connection[1].split('.').pop()
 const acl_table = connection[1]?.split('.').pop()
 
+const acl_schema = connection[1].split('.')[0] === acl_table ? 'public' : connection[1].split('.')[0]
 const acl_schema = connection[1]?.split('.')[0] === acl_table ? 'public' : connection[1]?.split('.')[0]
 
 const pool = new Pool({
@@ -21,10 +31,6 @@ const pool = new Pool({
 })
 
 // The acl module will export an empty require object instead of a function if no ACL connection has been defined.
-if (!connection?.[1]) {
-  module.exports = {};
-}
-else {
   /**
   @function acl
   
