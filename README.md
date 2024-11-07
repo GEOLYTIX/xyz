@@ -54,8 +54,6 @@ Dynamic module imports reduce the need to bundle 3rd party libraries such as [Ta
 
 Node.js v18+
 
-[bcrypt](https://www.npmjs.com/package/bcrypt) - A library to help you hash passwords.
-
 [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) - A Node implementation of JSON Web Token.
 
 [Node-Postgres](https://github.com/brianc/node-postgres) - PostgreSQL client for Node.
