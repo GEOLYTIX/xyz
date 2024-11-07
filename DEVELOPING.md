@@ -36,91 +36,74 @@ ESBuild must also be used to compile the CSS supporting the MAPP and MAPP.UI ele
 
     npx esbuild --bundle public/css/_ui.css --outfile=public/css/ui.css --loader:.svg=dataurl
 
-### Development with VSCode Debugger and Live Reload
+### Hot rebuild with VSCode Debugger
 
-We've set up a development environment that includes automatic rebuilding, browser reloading, and VSCode debugging capabilities.
-
-#### Setup
-
-Configure VSCode for debugging:
-
-`.vscode/launch.json`:
+A task can be added to the `.vscode/tasks.json` to execute `nodemon` and `browser-sync` concurrently. This will allow VSCode to rebuild the application on script changes in the editor.
 
 ```json
 {
-  "version": "0.2.0",
-  "configurations": [
+  "version": "2.0.0",
+  "tasks": [
     {
-      "type": "node",
-        "request": "launch",
-        "name": "Launch Server",
-        "program": "${workspaceFolder}/express.js",
-        "preLaunchTask": "start-watch",
-        "console": "integratedTerminal",
-        "skipFiles": [
-            "<node_internals>/**",
-            "node_modules/**"
-        ],
-        "internalConsoleOptions": "openOnSessionStart",
-        "env": {}
-    },
-    {
-        "type": "chrome",
-        "request": "launch",
-        "name": "Debug in Chrome",
-        "url": "http://localhost:3001",
-        "webRoot": "${workspaceFolder}/xyz/lib", //Please check your worksapceFolder
-        "sourceMaps": true,
-        "pauseForSourceMap": true
+      "label": "start-watch",
+      "type": "shell",
+      "command": "npx concurrently 'npx nodemon' 'npm run browser-sync'",
+      "isBackground": true,
+      "problemMatcher": {
+        "pattern": {
+          "regexp": "^.*$"
+        },
+        "background": {
+          "activeOnStart": true,
+          "beginsPattern": "Watching for changes...",
+          "endsPattern": "Build complete"
+        }
+      }
     }
   ]
 }
 ```
 
-`.vscode/tasks.json`:
+`start-watch` is a `preLaunchTask` which must be added to the debug configuration in the `.vscode/launch.json`.
 
 ```json
-// .vscode/tasks.json
 {
-    "version": "2.0.0",
-    "tasks": [
-        {
-            "label": "start-watch",
-            "type": "shell",
-            "command": "npx concurrently 'npx nodemon' 'npm run browser-sync'",
-            "isBackground": true,
-            "problemMatcher": {
-                "pattern": {
-                    "regexp": "^.*$"
-                },
-                "background": {
-                    "activeOnStart": true,
-                    "beginsPattern": "Watching for changes...",
-                    "endsPattern": "Build complete"
-                }
-            }
-        }
-    ]
+  "type": "node",
+  "request": "launch",
+  "name": "Launch Server",
+  "program": "${workspaceFolder}/express.js",
+  "preLaunchTask": "start-watch",
+  "console": "integratedTerminal",
+  "internalConsoleOptions": "openOnSessionStart",
+  "env": {}
 }
 ```
 
-#### Usage
+The `browser-sync` script is defined in the `package.json` as `"npx browser-sync start --proxy localhost:3000 --port 3001 --ui-port 3002 --files public/js/lib/**/* --no-open --no-notify"`
 
-1. Open the project in VSCode
-2. Launch the server first by executing "Launch Server" this site for automatic reload will be at `http://localhost:3001`
-3. Then if you want to debugg chrome directly in vscode run "Debug in Chrome";
-4. Access the site at `http://localhost:3001`
+The application running on port 3000 will be proxied to port 3001 for the browser-sync event. The browser window will refresh when the node application rebuilds after changes to the script in a VSCode editor.
 
-This setup provides:
+#### VSCode / Chrome Debugging 
 
-* Automatic rebuilding of files when changes are detected in the `lib`, 'tests' and `public/css' directories
-* Automatic browser reload after successful builds
-* VSCode debugging capabilities
-* Source maps for better debugging experience
-* Express server running on port 3000
-* Browser-sync proxy on port 3001 with Portal on port 3002
+An additional debug configuration in `.vscode/launch.json` is required to debug the mapp lib code in VSCode. 
 
-The browser will automatically reload whenever you make changes to files in the `lib`, 'tests' and `public/css' directories. You can set breakpoints in VSCode for debugging both the frontend and backend code.
+```json
+{
+  "type": "chrome",
+  "request": "launch",
+  "name": "Debug in Chrome",
+  "url": "http://localhost:3001",
+  "webRoot": "${workspaceFolder}/xyz/lib", //Please check your worksapceFolder
+  "sourceMaps": true,
+  "pauseForSourceMap": true
+}
+```
+
+The Chrome debug config must be launched as an additional session. VSCode run and debug panel will show 2 active sessions. A chrome instance should open with the url defined in the Chrome debug config.
+
+Breakpoints set in the mapp lib script will now be respected in the VSCode debug editor window. Breakpoints set in the Chrome dev tools will also break in the VSCode editor.
+
+The browser will automatically reload on changes to files in the `lib`, 'tests' and `public/css' directories. 
 
 #### Additional settings for VSCode
 
