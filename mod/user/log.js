@@ -35,7 +35,7 @@ Requesting user is admin.
 module.exports = async function accessLog(req, res) {
 
   // acl module will export an empty require object without the ACL being configured.
-  if (typeof acl === null) {
+  if (acl === null) {
     return res.status(500).send('ACL unavailable.')
   }
 

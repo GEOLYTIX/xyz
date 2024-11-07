@@ -44,7 +44,7 @@ The token user will be sent back to the client.
 module.exports = async function cookie(req, res) {
 
   // acl module will export an empty require object without the ACL being configured.
-  if (typeof acl === null) {
+  if (acl === null) {
     return res.status(500).send('ACL unavailable.')
   }
 
@@ -78,7 +78,7 @@ module.exports = async function cookie(req, res) {
         SELECT email, admin, language, roles, blocked
         FROM acl_schema.acl_table
         WHERE lower(email) = lower($1);`, [payload.email])
-    
+
       if (rows instanceof Error) {
         res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
         return res.status(500).send('Failed to retrieve user from ACL');
@@ -88,7 +88,7 @@ module.exports = async function cookie(req, res) {
 
       // Assign title identifier to user object.
       user.title = process.env.TITLE
-    
+
       if (user.blocked) {
         res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
         return res.status(403).send('Account is blocked');

@@ -36,7 +36,7 @@ Requesting user.
 module.exports = async function apiKey(req, res) {
 
   // acl module will export an empty require object without the ACL being configured.
-  if (typeof acl === null) {
+  if (acl === null) {
     return res.status(500).send('ACL unavailable.')
   }
 
@@ -53,13 +53,13 @@ module.exports = async function apiKey(req, res) {
   if (rows instanceof Error) {
     return res.status(500).send('Failed to access ACL.')
   }
-  
+
   const user = rows[0]
-  
+
   if (!user || !user.api || !user.verified || !user.approved || user.blocked) {
     return res.status(401).send('Unauthorized access.')
   }
-  
+
   // Create signed api_token
   const api_user = {
     email: user.email,
@@ -68,7 +68,7 @@ module.exports = async function apiKey(req, res) {
   }
 
   const key = jwt.sign(api_user, process.env.SECRET)
- 
+
   // Store api_token in ACL.
   rows = await acl(`
     UPDATE acl_schema.acl_table SET api = '${key}'
@@ -78,7 +78,7 @@ module.exports = async function apiKey(req, res) {
   if (rows instanceof Error) {
     return res.status(500).send('Failed to access ACL.')
   }
-  
+
   // Send ACL token.
   res.send(key)
 }
