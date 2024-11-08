@@ -113,6 +113,11 @@ export async function workspaceTest(mapview) {
             });
         });
 
+        await codi.it('Should return a layer with roles defined', async () => {
+            const layer = await mapp.utils.xhr(`/test/api/workspace/layer?layer=roles_test`);
+            codi.assertTrue(layer.roles === 'object', 'The layer should have a roles object assigned to it.');
+        });
+
         await codi.it('Workspace: Testing the test endpoint', async () => {
             let workspace_test = await mapp.utils.xhr(`/test/api/workspace/test`);
 

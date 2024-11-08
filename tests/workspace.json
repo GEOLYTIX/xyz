@@ -382,6 +382,12 @@
                         "layer": "mvt_test"
                     }
                 ]
+            },
+            "roles_test": {
+                "template": "mvt_test_temp",
+                "roles": {
+                    "A": null
+                }
             }
         }
     }
