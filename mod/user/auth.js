@@ -53,6 +53,8 @@ HTTP response.
 
 module.exports = async function auth(req, res) {
 
+  if (acl === null) return null;
+
   if (req.headers.authorization) {
 
     return await fromACL(req)
