@@ -37,6 +37,12 @@
         "bogus_data_array": {
             "src": "file:/tests/assets/queries/data_array.sql",
             "dbs": "bogus"
+        },
+        "merge_into": {
+            "name": "merge_into",
+            "roles": {
+                "merge_into": null
+            }
         }
     },
     "locale": {
@@ -384,9 +390,13 @@
                 ]
             },
             "roles_test": {
+                "name": "You should not see me",
                 "template": "mvt_test_temp",
+                "templates": [
+                    "merge_into"
+                ],
                 "roles": {
-                    "A": null
+                    "roles_test": null
                 }
             }
         }

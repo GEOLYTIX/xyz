@@ -77,8 +77,8 @@ function objMerge(obj, user_roles) {
 
   function notIncludesNegatedRole(role, user_roles) {
 
-    return role.match(/(?<=^!)(.*)/g)?.[0]?
-      !user_roles.includes(role.match(/(?<=^!)(.*)/g)?.[0]):
+    return role.match(/(?<=^!)(.*)/g)?.[0] ?
+      !user_roles.includes(role.match(/(?<=^!)(.*)/g)?.[0]) :
       false
   }
 
@@ -91,8 +91,6 @@ function objMerge(obj, user_roles) {
     .forEach(role => {
       merge(clone, clone.roles[role])
     })
-
-  delete clone.roles
 
   return clone
 }
