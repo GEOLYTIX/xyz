@@ -20,11 +20,11 @@
           "imports": {
             "codi": "https://esm.sh/codi-test-framework@0.0.33"
           }
-        }
-      </script>
+        } </script>
 
     <script type="module" src="{{dir}}/public/js/lib/mapp.js" defer></script>
     <script type="module" src="{{dir}}/public/js/lib/ui.js" defer></script>
+    <script type="module" src="{{dir}}/public/js/tests/_mapp.test.js" defer></script>
 
     <style>
         html {
@@ -309,18 +309,8 @@
     </div>
 
     <script type="module">
-        import { runWebTests, it, describe, assertEqual, assertNotEqual, assertTrue, assertFalse, assertNoDuplicates } from "codi";
 
-        const _codi = {
-            runWebTests,
-            describe,
-            it,
-            assertEqual,
-            assertNotEqual,
-            assertTrue,
-            assertFalse,
-            assertNoDuplicates
-        };
+        import * as _codi from "codi";
 
         self.codi = _codi;
 
@@ -353,7 +343,7 @@
                 }
             }
 
-            let results = await runWebTests(testFiles);
+            const results = await codi.runWebTests(testFiles);
 
             const shouldDownload = urlParams.get('download') === 'true';
 
