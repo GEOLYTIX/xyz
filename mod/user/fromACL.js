@@ -19,6 +19,14 @@ const crypto = require('crypto')
 
 const acl = require('./acl')
 
+if (acl === null) {
+  module.exports = null;
+
+} else {
+
+  module.exports = fromACL
+}
+
 const reqHost = require('../utils/reqHost')
 
 const mailer = require('../utils/mailer')
@@ -43,8 +51,7 @@ The request.email and request.password are taken from the req.body or authorizat
 @returns {Promise<Object|Error>}
 Validated user object or an Error if authentication fails.
 */
-
-module.exports = async function fromACL(req) {
+async function fromACL(req) {
 
   const request = {
     email: req.body?.email,
