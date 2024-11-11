@@ -1,6 +1,16 @@
 /**
-@module /utils/roles
-*/
+ * Roles utility module for handling role-based access control and object merging
+ * @module /utils/roles
+ */
+
+/**
+ * @global
+ * @typedef {Object} roles
+ * @property {Object} roles - roles configuration object
+ * @property {boolean} [roles.*] - Wildcard role indicating unrestricted access
+ * @property {Object} [roles.key] - Role-specific properties to merge
+ * @property {Object} [roles.'!key'] - Negated role properties (applied when user doesn't have the role)
+ */
 
 const merge = require('./merge')
 
@@ -9,6 +19,25 @@ module.exports = {
   objMerge
 }
 
+/**
+ * Checks if an object should be accessible based on user roles
+ * @param {Object} obj - The object to check access for
+ * @param {roles} obj.roles - Role configuration object
+ * @param {Array<string>} user_roles - Array of roles assigned to the user
+ * @returns {(Object|boolean)} Returns the original object if access is granted, false otherwise
+ * 
+ * @example
+ * // Object with unrestricted access
+ * check({ roles: { '*': true }, data: 'content' }, ['user']) // returns object
+ * 
+ * // Object with role restriction
+ * check({ roles: { admin: true }, data: 'content' }, ['user']) // returns false
+ * check({ roles: { admin: true }, data: 'content' }, ['admin']) // returns object
+ * 
+ * // Object with negated roles
+ * check({ roles: { '!guest': true }, data: 'content' }, ['guest']) // returns false
+ * check({ roles: { '!guest': true }, data: 'content' }, ['user']) // returns object
+ */
 function check(obj, user_roles) {
 
   // The object to check has no roles assigned.
@@ -44,6 +73,38 @@ function check(obj, user_roles) {
   return false;
 }
 
+/**
+ * Recursively merges role-specific object properties based on user roles
+ * @param {Object} obj - The object to process
+ * @param {roles} obj.roles - Role configuration object
+ * @param {Array<string>} user_roles - Array of roles assigned to the user
+ * @returns {Object} Processed object with merged role-specific properties
+ * 
+ * @example
+ * const obj = {
+ *   name: 'layer',
+ *   roles: {
+ *     admin: { secretField: 'sensitive' },
+ *     user: { publicField: 'visible' }
+ *   }
+ * };
+ * 
+ * // With admin role
+ * objMerge(obj, ['admin']); 
+ * // Returns: { name: 'layer', secretField: 'sensitive', roles: {...} }
+ * 
+ * // With user role
+ * objMerge(obj, ['user']);
+ * // Returns: { name: 'layer', publicField: 'visible', roles: {...} }
+ * 
+ * @description
+ * The function handles several special cases:
+ * - Recursively processes nested objects
+ * - Handles arrays by mapping over their elements
+ * - Processes negated roles (prefixed with '!')
+ * - Preserves the original object if conditions aren't met
+ * - Skip null or undefined values
+ */
 function objMerge(obj, user_roles) {
 
   if (typeof obj !== 'object') return obj;
