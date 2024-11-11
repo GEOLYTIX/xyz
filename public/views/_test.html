@@ -18,7 +18,7 @@
     <script type="importmap">
         {
           "imports": {
-            "codi": "https://esm.sh/codi-test-framework@0.0.33"
+            "codi": "https://esm.sh/codi-test-framework@0.0.34"
           }
         } </script>
 
@@ -315,7 +315,8 @@
         self.codi = _codi;
 
         const urlParams = new URLSearchParams(window.location.search);
-        const testFiles = urlParams.get('integrity') ? [`${window.location.origin}{{dir}}/public/tests/integrity.test.mjs`] : [`${window.location.origin}{{dir}}/tests/browser/local.test.mjs`];
+        const integrity = urlParams.get('integrity');
+        const testFiles = integrity ? [`${window.location.origin}{{dir}}/public/tests/integrity.test.mjs`] : [`${window.location.origin}{{dir}}/tests/browser/local.test.mjs`];
 
         try {
 
@@ -343,7 +344,11 @@
                 }
             }
 
-            const results = await codi.runWebTests(testFiles);
+            if (integrity) {
+                const results = await codi.runWebTests(testFiles);
+            } else {
+                const results = await codi.runTestFunction(_mappTest.coreTest);
+            }
 
             const shouldDownload = urlParams.get('download') === 'true';
 

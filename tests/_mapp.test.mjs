@@ -1,4 +1,5 @@
 import { base } from '../public/tests/_base.test.mjs';
+import { coreTest } from './browser/local.test.mjs';
 import { mappTest } from './lib/mapp.test.mjs';
 import { layerTest } from './lib/layer/_layer.test.mjs';
 import { dictionaryTest } from './lib/dictionaries/_dictionaries.test.mjs';
@@ -18,6 +19,7 @@ import { ui_locations } from './lib/ui/locations/_locations.test.mjs';
 
 self._mappTest = {
     base,
+    coreTest,
     mappTest,
     layerTest,
     dictionaryTest,

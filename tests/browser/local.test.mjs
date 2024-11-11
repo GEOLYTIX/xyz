@@ -1,36 +1,36 @@
-//API Tests
-await _mappTest.workspaceTest();
-await _mappTest.queryTest();
-
-const mapview = await _mappTest.base();
-
-await runAllTests(_mappTest.userTest);
-//Run Map Object test
-await runAllTests(_mappTest.mappTest);
-// Run the dictionary Tests
-await runAllTests(_mappTest.dictionaryTest, mapview);
-//Plugins Tests
-await runAllTests(_mappTest.pluginsTest);
-//Layer Tests
-await runAllTests(_mappTest.layerTest, mapview);
-//Location Tests
-await runAllTests(_mappTest.locationTest, mapview);
-//Mapview Tests
-await runAllTests(_mappTest.mapviewTest, mapview);
-//UI Elements Tests
-await runAllTests(_mappTest.ui_elementsTest, mapview);
-//Entries Tests
-await runAllTests(_mappTest.entriesTest, mapview);
-//UI Layers Tests
-await runAllTests(_mappTest.ui_layers, mapview);
-//UI tests
-await runAllTests(_mappTest.uiTest);
-//Format Tests
-await runAllTests(_mappTest.formatTest, mapview);
-//UI Locations Tests
-await runAllTests(_mappTest.ui_locations, mapview);
-//Utils Tests
-await runAllTests(_mappTest.utilsTest, mapview);
+export async function coreTest() {
+    //API Tests
+    await _mappTest.workspaceTest();
+    await _mappTest.queryTest();
+    const mapview = await _mappTest.base();
+    await runAllTests(_mappTest.userTest);
+    //Run Map Object test
+    await runAllTests(_mappTest.mappTest);
+    // Run the dictionary Tests
+    await runAllTests(_mappTest.dictionaryTest, mapview);
+    //Plugins Tests
+    await runAllTests(_mappTest.pluginsTest);
+    //Layer Tests
+    await runAllTests(_mappTest.layerTest, mapview);
+    //Location Tests
+    await runAllTests(_mappTest.locationTest, mapview);
+    //Mapview Tests
+    await runAllTests(_mappTest.mapviewTest, mapview);
+    //UI Elements Tests
+    await runAllTests(_mappTest.ui_elementsTest, mapview);
+    //Entries Tests
+    await runAllTests(_mappTest.entriesTest, mapview);
+    //UI Layers Tests
+    await runAllTests(_mappTest.ui_layers, mapview);
+    //UI tests
+    await runAllTests(_mappTest.uiTest);
+    //Format Tests
+    await runAllTests(_mappTest.formatTest, mapview);
+    //UI Locations Tests
+    await runAllTests(_mappTest.ui_locations, mapview);
+    //Utils Tests
+    await runAllTests(_mappTest.utilsTest, mapview);
+}
 
 /**
  * This function is used to execute all the test functions on the exported test object. 
