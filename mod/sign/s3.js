@@ -60,6 +60,22 @@ module.exports = async function s3(req, res){
   return commands[req.params.command]()
 }
 
+/**
+@function objectAction
+@async
+
+@description
+Generates the signed url for the command and parameters specified from the request
+
+@param {Function} objectCommand The S3 function to be carried out.
+@param {Object} reqParams Request parameters.
+@property {string} reqParams.region
+@property {string} reqParams.bucket
+@property {string} reqParams.key
+@property {string} reqParams.command
+
+@returns {String} The signed url associated to the request params.
+**/
 async function objectAction(reqParams, objectCommand) {
 
     //The parameters required per action for S3
