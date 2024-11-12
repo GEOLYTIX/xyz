@@ -1436,6 +1436,15 @@ label.checkbox {
     margin-top: 5px;
   }
 }
+.layer-view {
+  & .layer-view {
+    > .header {
+      h2 {
+        font-weight: normal;
+      }
+    }
+  }
+}
 .drawer.layer-group {
   padding-left: 3px;
   padding-right: 3px;
@@ -1443,6 +1452,11 @@ label.checkbox {
   & > * {
     padding-left: 4px;
     padding-right: 4px;
+  }
+  & .layer-view {
+    h2 {
+      font-weight: normal;
+    }
   }
 }
 #layers > .drawer.layer-group .drawer.layer-view {
