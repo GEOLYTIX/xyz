@@ -1,52 +1,55 @@
 export async function coreTest() {
-    //API Tests
+    const startTime = performance.now();
+
+    // Essential setup that needs to run first and sequentially
     await _mappTest.workspaceTest();
     await _mappTest.queryTest();
     const mapview = await _mappTest.base();
 
-    await runAllTests(_mappTest.userTest);
-    //Run Map Object test
-    await runAllTests(_mappTest.mappTest);
-    // Run the dictionary Tests
-    await runAllTests(_mappTest.dictionaryTest, mapview);
-    //Plugins Tests
-    await runAllTests(_mappTest.pluginsTest);
-    //Layer Tests
-    await runAllTests(_mappTest.layerTest, mapview);
-    //Location Tests
-    await runAllTests(_mappTest.locationTest, mapview);
-    //Mapview Tests
-    await runAllTests(_mappTest.mapviewTest, mapview);
-    //UI Elements Tests
-    await runAllTests(_mappTest.ui_elementsTest, mapview);
-    //Entries Tests
-    await runAllTests(_mappTest.entriesTest, mapview);
-    //UI Layers Tests
-    await runAllTests(_mappTest.ui_layers, mapview);
-    //UI tests
-    await runAllTests(_mappTest.uiTest);
-    //Format Tests
-    await runAllTests(_mappTest.formatTest, mapview);
-    //UI Locations Tests
-    await runAllTests(_mappTest.ui_locations, mapview);
-    //Utils Tests
-    await runAllTests(_mappTest.utilsTest, mapview);
+    // Group tests that don't depend on mapview - these can run in parallel
+    const independentTests = Promise.all([
+        runAllTests(_mappTest.userTest),
+        runAllTests(_mappTest.mappTest),
+        runAllTests(_mappTest.pluginsTest),
+        runAllTests(_mappTest.uiTest),
+    ]);
+
+    // Group tests that depend on mapview - these can run in parallel with each other
+    const mapviewDependentTests = Promise.all([
+        runAllTests(_mappTest.dictionaryTest, mapview),
+        runAllTests(_mappTest.layerTest, mapview),
+        runAllTests(_mappTest.locationTest, mapview),
+        runAllTests(_mappTest.mapviewTest, mapview),
+        runAllTests(_mappTest.ui_elementsTest, mapview),
+        runAllTests(_mappTest.entriesTest, mapview),
+        runAllTests(_mappTest.ui_layers, mapview),
+        runAllTests(_mappTest.formatTest, mapview),
+        runAllTests(_mappTest.ui_locations, mapview),
+        runAllTests(_mappTest.utilsTest, mapview),
+    ]);
+
+    // Wait for all test groups to complete
+    await Promise.all([independentTests, mapviewDependentTests]);
+
+    const duration = performance.now() - startTime;
+    console.log(`All tests completed in ${duration.toFixed(2)}ms`);
 }
 
 /**
- * This function is used to execute all the test functions on the exported test object. 
+ * Executes all test functions in parallel
  * @function runAllTests
  * @param {object} tests 
  * @param {object} mapview 
  */
 async function runAllTests(tests, mapview) {
     const testFunctions = Object.values(tests).filter(item => typeof item === 'function');
-
-    for (const testFn of testFunctions) {
-        try {
-            await testFn(mapview);
-        } catch (error) {
-            console.error(`Error in test ${testFn.name}:`, error);
-        }
-    }
+    return Promise.all(
+        testFunctions.map(testFn =>
+            Promise.resolve().then(() => testFn(mapview))
+                .catch(error => {
+                    console.error(`Error in test ${testFn.name}:`, error);
+                    throw error;
+                })
+        )
+    );
 }

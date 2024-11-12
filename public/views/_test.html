@@ -18,7 +18,7 @@
     <script type="importmap">
         {
           "imports": {
-            "codi": "https://esm.sh/codi-test-framework@0.0.34"
+            "codi": "https://esm.sh/codi-test-framework@0.0.36"
           }
         } </script>
 
@@ -344,11 +344,27 @@
                 }
             }
 
+            let results = {};
+
             if (integrity) {
-                const results = await codi.runWebTests(testFiles);
+                results = await codi.runWebTests(testFiles);
             } else {
-                const results = await codi.runTestFunction(_mappTest.coreTest);
+                results = await codi.runTestFunction(_mappTest.coreTest, { quiet: true });
+                console.log(results);
             }
+
+            mapp.ui.elements.dialog(
+                {
+                    target: document.getElementById('Map'),
+                    content: `${results}`,
+                    height: 'auto',
+                    css_style: 'padding: 0.5em;',
+                    top: '3em',
+                    left: '6em',
+                    contained: true,
+                    close: true
+                }
+            );
 
             const shouldDownload = urlParams.get('download') === 'true';
 
