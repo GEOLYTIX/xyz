@@ -6,14 +6,11 @@ const file = require('./file')
 
 const cloudfront = require('./cloudfront')
 
-const s3 = require('./s3')
-
 module.exports = async (req, res) => {
 
   const provider = {
     cloudfront,
-    file,
-    s3
+    file
   }
 
   if (!Object.hasOwn(provider, req.params.provider)) {
