@@ -97,7 +97,7 @@ module.exports = function saml(req, res) {
     console.warn(`SAML SP or IDP are not available in XYZ instance.`)
     return;
   }
-  
+
   // Return metadata.
   if (/\/saml\/metadata/.exec(req.url)) {
     res.setHeader('Content-Type', 'application/xml');
@@ -123,7 +123,7 @@ module.exports = function saml(req, res) {
         request_body: req.body,
       },
       async (err, saml_response) => {
-        
+
         if (err != null) {
           console.error(err);
           return res.send(500);
@@ -190,7 +190,7 @@ User object or Error.
 
 async function acl_lookup(email) {
 
-  if (typeof acl !== 'function') {
+  if (acl === null) {
     return new Error('ACL unavailable.')
   }
 
@@ -199,7 +199,7 @@ async function acl_lookup(email) {
   // Update access_log and return user record matched by email.
   const rows = await acl(`
     UPDATE acl_schema.acl_table
-    SET access_log = array_append(access_log, '${date.toISOString().replace(/\..*/,'')}')
+    SET access_log = array_append(access_log, '${date.toISOString().replace(/\..*/, '')}')
     WHERE lower(email) = lower($1)
     RETURNING email, roles, language, blocked, approved, approved_by, verified, admin, password;`,
     [email])

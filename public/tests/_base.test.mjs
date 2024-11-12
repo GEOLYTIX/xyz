@@ -324,7 +324,8 @@ export async function base() {
                     Openlayers: 'https://openlayers.org',
                 }
             },
-            syncPlugins: locale.syncPlugins
+            syncPlugins: locale.syncPlugins,
+            svgTemplates: locale.svg_templates
         });
 
 
