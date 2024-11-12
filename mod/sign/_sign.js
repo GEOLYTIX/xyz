@@ -9,9 +9,11 @@ The sign module provides access to different request signer methods.
 */
 
 const cloudinary = require('./cloudinary')
+const s3 = require('./s3')
 
 const signerModules = {
-  cloudinary
+  cloudinary,
+  s3
 }
 
 /**
