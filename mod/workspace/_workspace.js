@@ -196,7 +196,7 @@ async function locale(req, res) {
         .filter(layer => !(layer instanceof Error))
     })
 
-    return res.json(locale)
+    return res.json(removeRoles(locale))
   }
 
   // Check layer access.
@@ -209,7 +209,7 @@ async function locale(req, res) {
     .filter(layer => !!Roles.check(layer[1], req.params.user?.roles))
     .map(layer => layer[0])
 
-  res.json(locale)
+  res.json(removeRoles(locale))
 }
 
 /**
@@ -341,7 +341,6 @@ async function test(req, res) {
 
     // If the locale has no layers, just skip it.
     if (!locale.layers) continue;
-    
 
     for (const layerKey of Object.keys(locale.layers)) {
 
@@ -450,4 +449,42 @@ function templateUse(obj, test) {
       templateUse(entry[1], test)
     }
   })
+}
+
+/**
+ * @function removeRoles
+ * @description 
+ * Recursively removes all 'roles' objects from the provided locale.
+ * This function is designed to sanitize locale configuration objects before sending to the client,
+ * ensuring that role-based permissions data is not exposed.
+ * @param {object} obj 
+ * @returns {object}
+ */
+function removeRoles(obj) {
+
+  // If param is not an object or is null, return as is
+  if (typeof obj !== 'object' || obj === null) {
+    return obj;
+  }
+
+  // If object is an array, process each element
+  if (Array.isArray(obj)) {
+    return obj.map(item => removeRoles(item));
+  }
+
+  // Create a new object to store cleaned properties
+  const cleanedObj = {};
+
+  // Process each property in the object
+  for (const [key, value] of Object.entries(obj)) {
+    // Skip 'roles' properties
+    if (key === 'roles') {
+      continue;
+    }
+
+    // Recursively clean nested objects
+    cleanedObj[key] = removeRoles(value);
+  }
+
+  return cleanedObj;
 }

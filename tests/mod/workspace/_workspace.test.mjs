@@ -3,6 +3,8 @@
  * @module mod/workspace
  */
 
+import { hasRoles } from '../../utils/roles.js'
+
 /**
  * This function is used as an entry point for the changeEndTest
  * This function is also in a function as to not execute in the CLI environment and only execute in a browser.
@@ -25,6 +27,11 @@ export async function workspaceTest(mapview) {
             codi.assertTrue(!!locale.name, 'The locale should have a name');
             codi.assertTrue(!!locale.plugins, 'The locale should have plugins');
             codi.assertTrue(!!locale.syncPlugins, 'The locale should have syncPlugins');
+        });
+
+        await codi.it('Workspace: Checking locale for roles', async () => {
+            const locale = await mapp.utils.xhr(`/test/api/workspace/locale?locale=locale&layers=true`);
+            codi.assertFalse(hasRoles(locale), 'The locale object should have no roles object returned')
         });
 
         await codi.it('Workspace: Getting template_test Layer', async () => {
@@ -53,7 +60,16 @@ export async function workspaceTest(mapview) {
         await codi.it('Workspace: Getting Roles', async () => {
             const roles = await mapp.utils.xhr(`/test/api/workspace/roles`);
 
-            const expected_roles = ['A', 'B', 'C', 'test', 'super_test']
+            const expected_roles = [
+                'A',
+                'B',
+                'merge_into',
+                'C',
+                'test',
+                'super_test',
+                'roles_test'
+            ]
+
             codi.assertEqual(roles, expected_roles, 'Ensure that we get the correct roles from the API')
         });
 
@@ -111,6 +127,11 @@ export async function workspaceTest(mapview) {
                 // Check the reserved role '*' is not included in the object
                 codi.assertTrue(!roles['*']);
             });
+        });
+
+        await codi.it('Should not return a layer with roles defined', async () => {
+            const layer = await mapp.utils.xhr(`/test/api/workspace/layer?layer=roles_test`);
+            codi.assertTrue(layer instanceof Error, 'we should receive an error when trying to access this layer');
         });
 
         await codi.it('Workspace: Testing the test endpoint', async () => {
