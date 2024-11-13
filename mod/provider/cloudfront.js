@@ -62,14 +62,17 @@ module.exports = async function cloudfront(ref) {
     }
 
     const response = await fetch(signedURL)
-    
+
     logger(`${response.status} - ${url}`, 'cloudfront')
 
     if (response.status >= 300) return new Error(`${response.status} ${ref}`)
 
     if (url.match(/\.json$/i)) return await response.json()
 
-    if (ref.params?.buffer) return await response.buffer()
+    if (ref.params?.buffer) {
+      const arrayBuffer = await response.arrayBuffer()
+      return Buffer.from(arrayBuffer)
+    }
 
     return await response.text()
 
