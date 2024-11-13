@@ -1454,8 +1454,10 @@ label.checkbox {
     padding-right: 4px;
   }
   & .layer-view {
-    h2 {
-      font-weight: normal;
+    > .header {
+      h2 {
+        font-weight: normal;
+      }
     }
   }
 }

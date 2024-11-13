@@ -52,8 +52,10 @@
   }
   
   & .layer-view{
-    h2 {
-      font-weight: normal
+    > .header{
+      h2 {
+        font-weight: normal
+      }
     }
   }
 }
