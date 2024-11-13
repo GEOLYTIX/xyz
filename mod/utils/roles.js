@@ -77,7 +77,7 @@ function check(obj, user_roles) {
 @function objMerge
 
 @description
-Recursively merges role-specific object properties based on user roles
+Recursively merges role-specific object properties based on user roles.
 The function handles several special cases:
 - Recursively processes nested objects
 - Handles arrays by mapping over their elements
