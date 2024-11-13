@@ -35,7 +35,7 @@ module.exports = async function provider(req, res){
     s3: {deprecated: true, fn: s3}
   }
 
-  if (provider[req.params.provider] && provider[req.params.provider].deprecated){
+  if (provider[req.params.provider]?.deprecated){
     return await provider[req.params.provider].fn(req, res)
   }
 
