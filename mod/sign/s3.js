@@ -1,18 +1,55 @@
 /**
 @module /sign/s3
-
+@requires aws-sdk/client-s3
+@requires aws-sdk/s3-request-presigner
 Signs requests to S3. Provides functions for get, list, delete and put to S3. 
 */
 
-const {
-    S3Client,
-    PutObjectCommand,
-    GetObjectCommand,
-    DeleteObjectCommand,
-    ListObjectsCommand
-} = require('@aws-sdk/client-s3')
+//The S3 packages are optional. 
+//Need a temporary assignment to determine if they are available.
+let 
+  S3Client,
+  PutObjectCommand,
+  GetObjectCommand,
+  DeleteObjectCommand,
+  ListObjectsCommand,
+  getSignedUrl;
 
-const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
+//Check for credentials 
+if(!process.env?.AWS_S3_CLIENT){
+  console.log('S3 Sign: Missing credentials from env: AWS_S3_CLIENT')
+  module.exports = null
+} 
+else{
+
+  //Attempt import if credentials are found
+  try{
+
+    //Assign constructors and functions from the sdks.
+    const clientSDK = require('@aws-sdk/client-s3');
+    
+    S3Client = clientSDK.S3Client
+    PutObjectCommand = clientSDK.PutObjectCommand
+    GetObjectCommand = clientSDK.GetObjectCommand
+    DeleteObjectCommand = clientSDK.DeleteObjectCommand
+    ListObjectsCommand = clientSDK.ListObjectsCommand
+  
+    getSignedUrl = require('@aws-sdk/s3-request-presigner').getSignedUrl;
+  
+    //Export the function .
+    module.exports = s3
+  }
+  catch(err){
+  
+    //The module has not been installed.
+    if(err.code === 'MODULE_NOT_FOUND'){
+      console.log('AWS-SDK is not available')
+      module.exports = null
+    }
+    else throw err
+  }
+}
+
 
 /**
 @function s3
@@ -33,8 +70,8 @@ Provides methods for list, get, trash and put
 
 @returns {Promise<String>} The signed url associated to the request params.
 **/
-module.exports = async function s3(req, res){
-    
+async function s3(req, res){
+
   //Read credentials from an env key
   const credentials = Object.fromEntries(new URLSearchParams(process.env.AWS_S3_CLIENT))
 
