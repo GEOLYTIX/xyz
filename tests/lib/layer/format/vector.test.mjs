@@ -14,7 +14,7 @@ export async function vectorTest(mapview, layer) {
 
     layer ??= cluster_layer_default;
 
-    await codi.describe('Layer Format: Vector', () => {
+    await codi.describe('Layer Format: Vector', async () => {
 
         /**
          * ### Should be able to create a cluster layer
@@ -24,7 +24,7 @@ export async function vectorTest(mapview, layer) {
          * 4. We expect the format of the layer to change to 'cluster'
          * @function it
          */
-        codi.it('Should create a cluster layer', async () => {
+        await codi.it('Should create a cluster layer', async () => {
 
             const layer_params = {
                 mapview: mapview,

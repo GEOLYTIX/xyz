@@ -24,7 +24,7 @@ export async function decorateTest(mapview, layer, infoj, style) {
     infoj ??= wkt_infoj_default;
     style ??= wkt_style_default;
 
-    setView(mapview, 2, 'default');
+    await setView(mapview, 2, 'default');
 
     await codi.describe('Layer: decorateTest', async () => {
 
@@ -98,7 +98,7 @@ export async function decorateTest(mapview, layer, infoj, style) {
             });
         });
 
-        setView(mapview, 11, 'london');
+        await setView(mapview, 11, 'london');
 
         /**
          * ### Should get `test.public` table at zoom level 11.
