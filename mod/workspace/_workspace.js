@@ -108,7 +108,7 @@ async function layer(req, res) {
     return res.status(400).send(layer.message)
   }
 
-  res.json(layer)
+  res.json(removeRoles(layer))
 }
 
 /**
@@ -452,14 +452,14 @@ function templateUse(obj, test) {
 }
 
 /**
- * @function removeRoles
- * @description 
- * Recursively removes all 'roles' objects from the provided locale.
- * This function is designed to sanitize locale configuration objects before sending to the client,
- * ensuring that role-based permissions data is not exposed.
- * @param {object} obj 
- * @returns {object}
- */
+@function removeRoles
+@description 
+Recursively removes all 'roles' objects from the provided object [locale, layer].
+This function is designed to sanitize locale configuration objects before sending to the client,
+ensuring that role-based permissions data is not exposed.
+@param {object} obj A locale or layer JSON object.
+@returns {object}
+*/
 function removeRoles(obj) {
 
   // If param is not an object or is null, return as is
@@ -477,6 +477,7 @@ function removeRoles(obj) {
 
   // Process each property in the object
   for (const [key, value] of Object.entries(obj)) {
+
     // Skip 'roles' properties
     if (key === 'roles') {
       continue;
