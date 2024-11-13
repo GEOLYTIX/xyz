@@ -59,38 +59,92 @@ await describe('Roles Module', async () => {
     });
 
     it('should merge nested objects', () => {
+
       const obj = {
-        foo: 'bar',
-        bar: { foo: 'bar', bar: { foo: 'bar' } },
-        roles: { 'admin': { foo: 'bar' }, 'user': { foo: 'bar' } }
+        'foo': 'bar',
+        'bar': {
+          'foo': 'bar',
+          'bar': {
+            'foo': 'bar'
+          }
+        },
+        'roles': {
+          'admin': {
+            'foo': 'bar'
+          },
+          'user': {
+            'foo': 'bar'
+          }
+        }
       };
       const user_roles = ['admin'];
+
       const expected = {
-        foo: 'bar',
-        bar: { foo: 'bar', bar: { foo: 'bar' } },
-        foo: 'bar'
-      };
+        'foo': 'bar',
+        'bar': {
+          'foo': 'bar',
+          'bar': {
+            'foo': 'bar'
+          }
+        },
+        'roles': {
+          'admin': {
+            'foo': 'bar'
+          },
+          'user': {
+            'foo': 'bar'
+          }
+        }
+      }
+
       assertEqual(objMerge(obj, user_roles), expected);
     });
 
     it('should handle negated roles', () => {
-      const obj = {
-        roles: { '!guest': { foo: 'bar' }, 'user': { foo: 'bar' } }
+
+      let obj = {
+        roles: {
+          'admin': {
+            text: 'admin'
+          },
+          '!guest': {
+            text: 'guest'
+          },
+          'user': {
+            text: 'user'
+          }
+        }
       };
+
       const user_roles = ['user'];
-      const expected = { foo: 'bar', foo: 'bar' };
-      assertEqual(objMerge(obj, user_roles), expected);
+
+      const expected = {
+        text: 'user',
+      }
+
+      obj = objMerge(obj, user_roles);
+
+      assertEqual(obj.text, expected.text);
     });
 
     it('should handle arrays', () => {
-      const obj = [{ foo: 'afoo' }, { bar: 'abar' }, [{ foo: 'afoo' }]];
+      const obj = [
+        { foo: 'afoo' },
+        { bar: 'abar' },
+        [
+          { foo: 'afoo' }
+        ]
+      ];
       const user_roles = [];
+
       const expected = [{ foo: 'afoo' }, { bar: 'abar' }, [{ foo: 'afoo' }]];
+
       assertEqual(objMerge(obj, user_roles), expected);
     });
 
     it('should merge unequal arrays for multiple roles', () => {
-      const obj = {
+
+      let obj = {
         layer: {
           name: 'Test Me',
           roles: {
@@ -119,19 +173,17 @@ await describe('Roles Module', async () => {
 
       const user_roles = ['foo', 'bar'];
 
-      const expected = {
-        layer: {
-          name: 'Test Me',
-          filter: {
-            current: {
-              'country': {
-                'in': ['ROI', 'UK']
-              }
-            }
+      const expected_filter = {
+        current: {
+          'country': {
+            'in': ['ROI', 'UK']
           }
         }
       };
-      assertEqual(objMerge(obj, user_roles), expected);
+
+      obj = objMerge(obj, user_roles);
+
+      assertEqual(obj.layer.filter, expected_filter);
     });
   });
 });

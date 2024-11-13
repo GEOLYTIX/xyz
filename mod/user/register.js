@@ -9,13 +9,13 @@ Exports the [user] register method for the /api/user/register route.
 @requires /utils/reqHost
 @requires /utils/mailer
 @requires /utils/languageTemplates
-@requires bcrypt
+@requires /utils/bcrypt
 @requires crypto
 
 @module /user/register
 */
 
-const bcrypt = require('bcrypt')
+const bcrypt = require('../utils/bcrypt')
 
 const crypto = require('crypto')
 
@@ -47,7 +47,7 @@ Post body object with user data.
 module.exports = async function register(req, res) {
 
   // acl module will export an empty require object without the ACL being configured.
-  if (typeof acl !== 'function') {
+  if (acl === null) {
     return res.status(500).send('ACL unavailable.')
   }
 
@@ -61,7 +61,7 @@ module.exports = async function register(req, res) {
 
   req.params.template = req.params.reset
     ? 'password_reset_view'
-    : 'register_view';  
+    : 'register_view';
 
   // Get request for registration form view.
   view(req, res)
@@ -122,9 +122,9 @@ async function registerUserBody(req, res) {
   // Create new user account
   const rows = await acl(`
     INSERT INTO acl_schema.acl_table (${Object.keys(USER).join(',')})
-    VALUES (${Object.keys(USER).map((NULL,i) => `\$${i+1}`)})`,
+    VALUES (${Object.keys(USER).map((NULL, i) => `\$${i + 1}`)})`,
     Object.values(USER))
-  
+
   if (rows instanceof Error) {
     return res.status(500).send('Failed to access ACL.')
   }
@@ -161,7 +161,7 @@ function debounceRequest(req, res) {
 
   req.params.remote_address = req.headers['x-forwarded-for']
     && /^[A-Za-z0-9.,_-\s]*$/.test(req.headers['x-forwarded-for']) ? req.headers['x-forwarded-for'] : 'invalid'
-    || 'unknown';
+  || 'unknown';
 
   // The remote_address has been previously used
   if (Object.hasOwn(previousAddress, req.params.remote_address)
@@ -245,7 +245,7 @@ function checkUserBody(req, res) {
 
   // Create random verification token.
   req.body.verificationtoken = crypto.randomBytes(20).toString('hex')
-  
+
   // Lookup the provided language key.
   req.body.language = Intl.Collator.supportedLocalesOf([req.body.language], { localeMatcher: 'lookup' })[0] || 'en';
 }
@@ -327,7 +327,7 @@ async function passwordReset(req, res) {
       password_reset = $2,
       verificationtoken = $3,
       access_log = array_append(access_log, $4)
-      ${process.env.APPROVAL_EXPIRY && user.expires_on? ',expires_on = $5': ''}
+      ${process.env.APPROVAL_EXPIRY && user.expires_on ? ',expires_on = $5' : ''}
     WHERE lower(email) = lower($1);`,
     VALUES)
 

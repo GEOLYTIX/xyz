@@ -37,6 +37,12 @@
         "bogus_data_array": {
             "src": "file:/tests/assets/queries/data_array.sql",
             "dbs": "bogus"
+        },
+        "merge_into": {
+            "name": "merge_into",
+            "roles": {
+                "merge_into": null
+            }
         }
     },
     "locale": {
@@ -60,6 +66,14 @@
             "admin",
             "login"
         ],
+        "svg_templates": {
+            "dot_test": "https://geolytix.github.io/MapIcons/templates/dot_10px.svg",
+            "target_test": "https://geolytix.github.io/MapIcons/templates/target.svg",
+            "square_test": "https://geolytix.github.io/MapIcons/templates/square_10px.svg",
+            "diamond_test": "https://geolytix.github.io/MapIcons/templates/diamond_10px.svg",
+            "triangle_test": "https://geolytix.github.io/MapIcons/templates/triangle_10px.svg",
+            "template_pin_test": "https://geolytix.github.io/MapIcons/pins/pink_master_pin.svg"
+        },
         "link_button": [
             {
                 "href": "/url/url",
@@ -382,6 +396,16 @@
                         "layer": "mvt_test"
                     }
                 ]
+            },
+            "roles_test": {
+                "name": "You should not see me",
+                "template": "mvt_test_temp",
+                "templates": [
+                    "merge_into"
+                ],
+                "roles": {
+                    "roles_test": null
+                }
             }
         }
     }
