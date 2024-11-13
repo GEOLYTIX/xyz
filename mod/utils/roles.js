@@ -138,14 +138,6 @@ function objMerge(obj, user_roles) {
 
   const clone = structuredClone(obj)
 
-  function notIncludesNegatedRole(role, user_roles) {
-
-    // A negated role is prefixes with an exclamation mark.
-    return role.match(/(?<=^!)(.*)/g)?.[0] ?
-      !user_roles.includes(role.match(/(?<=^!)(.*)/g)?.[0]) :
-      false
-  }
-
   Object.keys(clone.roles)
     .filter(role => clone.roles[role] !== true)
     .filter(role => clone.roles[role] !== null)
@@ -157,4 +149,22 @@ function objMerge(obj, user_roles) {
     })
 
   return clone
+}
+
+/**
+@function notIncludesNegatedRole
+
+@description
+The utility method checks whether a negated role [prefixed with an exclamation mark !] is not included in the array of user roles.
+
+@param {String} role A role name
+@param {Array<string>} user_roles Array of roles assigned to the user
+@returns {Boolean} True if the negated role is not included in the user_roles array.
+*/
+function notIncludesNegatedRole(role, user_roles) {
+
+  // A negated role is prefixes with an exclamation mark.
+  return role.match(/(?<=^!)(.*)/g)?.[0] ?
+    !user_roles.includes(role.match(/(?<=^!)(.*)/g)?.[0]) :
+    false
 }
