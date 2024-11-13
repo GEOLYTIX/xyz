@@ -74,42 +74,44 @@ function check(obj, user_roles) {
 }
 
 /**
- * Recursively merges role-specific object properties based on user roles
- * @param {Object} obj - The object to process
- * @param {roles} obj.roles - Role configuration object
- * @param {Array<string>} user_roles - Array of roles assigned to the user
- * @returns {Object} Processed object with merged role-specific properties
- * 
- * @example
- * const obj = {
- *   name: 'layer',
- *   roles: {
- *     admin: { secretField: 'sensitive' },
- *     user: { publicField: 'visible' }
- *   }
- * };
- * 
- * // With admin role
- * objMerge(obj, ['admin']); 
- * // Returns: { name: 'layer', secretField: 'sensitive', roles: {...} }
- * 
- * // With user role
- * objMerge(obj, ['user']);
- * // Returns: { name: 'layer', publicField: 'visible', roles: {...} }
- * 
- * @description
- * The function handles several special cases:
- * - Recursively processes nested objects
- * - Handles arrays by mapping over their elements
- * - Processes negated roles (prefixed with '!')
- * - Preserves the original object if conditions aren't met
- * - Skip null or undefined values
- */
+@function objMerge
+
+@description
+Recursively merges role-specific object properties based on user roles
+The function handles several special cases:
+- Recursively processes nested objects
+- Handles arrays by mapping over their elements
+- Processes negated roles (prefixed with '!')
+- Preserves the original object if conditions aren't met
+- Skip null or undefined values
+
+```js
+const obj = {
+  name: 'layer',
+  roles: {
+    admin: { secretField: 'sensitive' },
+    user: { publicField: 'visible' }
+  }
+};
+
+// With admin role
+objMerge(obj, ['admin']); 
+// Returns: { name: 'layer', secretField: 'sensitive', roles: {...} }
+
+// With user role
+objMerge(obj, ['user']);
+// Returns: { name: 'layer', publicField: 'visible', roles: {...} }
+```
+@param {Object} obj The object to process
+@param {Array<string>} user_roles Array of roles assigned to the user
+@property {roles} obj.roles Role configuration object
+@returns {Object} Processed object with merged role-specific properties
+*/
 function objMerge(obj, user_roles) {
 
   if (typeof obj !== 'object') return obj;
 
-  if (!user_roles) return obj
+  if (!Array.isArray(user_roles)) return obj
 
   if (Array.isArray(obj)) {
 
@@ -138,6 +140,7 @@ function objMerge(obj, user_roles) {
 
   function notIncludesNegatedRole(role, user_roles) {
 
+    // A negated role is prefixes with an exclamation mark.
     return role.match(/(?<=^!)(.*)/g)?.[0] ?
       !user_roles.includes(role.match(/(?<=^!)(.*)/g)?.[0]) :
       false
