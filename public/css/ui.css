@@ -1435,6 +1435,11 @@ label.checkbox {
   & > *:not(.header) {
     margin-top: 5px;
   }
+  > .header {
+    h2 {
+      font-weight: normal;
+    }
+  }
 }
 .drawer.layer-group {
   padding-left: 3px;
