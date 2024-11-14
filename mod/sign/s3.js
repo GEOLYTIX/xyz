@@ -13,6 +13,7 @@ The aws-sdk/client-s3 and aws-sdk/s3-request-presigner are optional dependencies
 */
 
 let
+  clientSDK,
   S3Client,
   PutObjectCommand,
   GetObjectCommand,
@@ -26,22 +27,21 @@ if(!process.env.AWS_S3_CLIENT){
   console.log('Sign S3: AWS_S3_CLIENT was not found in the env')
 
   module.exports = null
-
-}
-else{
+} else{
 
   //Attempt import if credentials are found
   try {
 
     //Assign constructors and functions from the sdks.
-    const clientSDK = require('@aws-sdk/client-s3');
+    clientSDK = require('@aws-sdk/client-s3');
+
     getSignedUrl = require('@aws-sdk/s3-request-presigner').getSignedUrl;
   
     S3Client = clientSDK.S3Client
     PutObjectCommand = clientSDK.PutObjectCommand
     GetObjectCommand = clientSDK.GetObjectCommand
     DeleteObjectCommand = clientSDK.DeleteObjectCommand
-    ListObjectsCommand = clientSDK.ListObjectsCommand
+    ListObjectsCommand = clientSDK.ListObjectsV2Command
   
     //Export the function .
     module.exports = s3
@@ -89,12 +89,10 @@ async function s3(req, res) {
   //Read credentials from an env key
   const credentials = Object.fromEntries(new URLSearchParams(process.env.AWS_S3_CLIENT))
 
-  const s3Client = new S3Client({
+  req.params.S3Client = new clientSDK.S3Client({
     credentials,
     region: req.params.region
   })
-
-  req.params.s3Client = s3Client
 
   if (!Object.hasOwn(commands, req.params.command)) {
     return res.status(400).send(`S3 command validation failed.`)
@@ -144,11 +142,11 @@ async function objectAction(reqParams, objectCommand) {
 
     const command = new objectCommand(commandParams)
 
-    const signedURL = await getSignedUrl(reqParams.s3Client, command, {
+    const signedURL = await getSignedUrl(reqParams.S3Client, command, {
       expiresIn: 3600,
     });
 
-    return JSON.stringify(signedURL);
+    return signedURL;
 
   } catch (err) {
     console.error(err)
