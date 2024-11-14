@@ -32,11 +32,7 @@ module.exports = async function provider(req, res){
   const provider = {
     cloudfront,
     file,
-    s3: {deprecated: true, fn: s3}
-  }
-
-  if (provider[req.params.provider]?.deprecated){
-    return await provider[req.params.provider].fn(req, res)
+    s3,
   }
 
   if (!Object.hasOwn(provider, req.params.provider)) {

@@ -1,44 +1,35 @@
 /**
+### /provider/s3
+
+The S3 provider module requires the [S3 signer]{@link module:/sign/s3} and will return a signed request URL.
+
+@requires /sign/s3
+
 @module /provider/s3
-@deprecated
-
-@description
-Provides a way to call get, put, trash and list. Directly interfaces with s3
-
-This module has been deprecated and replaced with {@link module:/sign/s3~s3}
 */
 
+const s3_signer = require('../sign/s3')
+
+if (!s3_signer) {
+
+  module.exports = null
+} else {
+
+  module.exports = s3_provider
+}
+
 /**
-@function s3
-@async
+@function s3_provider
 
 @description
-The s3 provider method will redirect requests to the signer.
-
-Provides methods for list, get, trash and put
+The s3_provider method returns the s3_signer method.
 
 @param {Object} req HTTP request.
 @param {Object} res HTTP response.
-@param {Object} req.params Request parameter.
 
-@returns {Request} A redirect to the s3 signer.
+@returns {Function} The s3_signer module method.
 **/
-module.exports = async function s3(req, res) {
-  
-    // const commands = {
-    //   get,
-    //   put,
-    //   trash,
-    //   list
-    // }
-  
-    // if (!Object.hasOwn(commands, req.params.command)) {
-    //   return res.status(400).send(`S3 command validation failed.`)
-    // }
-  
-    const paramString = Object.keys(req.params).filter(param => ['command','bucket','key','region'].includes(param)).map(param => `${param}=${req.params[param]}`).join('&')
-
-    res.setHeader('location', `${process.env.DIR}/api/sign/s3?${paramString}`)
-
-    return res.status(301).send()
+async function s3_provider(req, res) {
+   
+  return s3_signer(req, res)
 }
