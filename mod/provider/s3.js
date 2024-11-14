@@ -25,16 +25,16 @@ Provides methods for list, get, trash and put
 **/
 module.exports = async function s3(req, res) {
   
-    const commands = {
-      get,
-      put,
-      trash,
-      list
-    }
+    // const commands = {
+    //   get,
+    //   put,
+    //   trash,
+    //   list
+    // }
   
-    if (!Object.hasOwn(commands, req.params.command)) {
-      return res.status(400).send(`S3 command validation failed.`)
-    }
+    // if (!Object.hasOwn(commands, req.params.command)) {
+    //   return res.status(400).send(`S3 command validation failed.`)
+    // }
   
     const paramString = Object.keys(req.params).filter(param => ['command','bucket','key','region'].includes(param)).map(param => `${param}=${req.params[param]}`).join('&')
 

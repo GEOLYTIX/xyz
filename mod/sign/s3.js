@@ -1,13 +1,19 @@
 /**
-@module /sign/s3
+### /sign/s3
+Signs requests to S3. Provides functions for get, list, delete and put to S3.
+
+The module requires AWS_S3_CLIENT credentials in the process.env and will export as null if the credentials are not provided. The credentials consist of two parts: an access key ID and a secret access key eg: `AWS_S3_CLIENT="accessKeyId=AKIAIOSFODNN7EXAMPLE&secretAccessKey=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"`. [Both the access key ID and secret access key together are required to authenticate your requests]{@link https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html}.
+
+The aws-sdk/client-s3 and aws-sdk/s3-request-presigner are optional dependencies. The require will fail and the module will export as null if these optional dependencies are not installed.
+
 @requires aws-sdk/client-s3
 @requires aws-sdk/s3-request-presigner
-Signs requests to S3. Provides functions for get, list, delete and put to S3. 
+
+@module /sign/s3
 */
 
-//The S3 packages are optional. 
-//Need a temporary assignment to determine if they are available.
 let
+  credentials,
   S3Client,
   PutObjectCommand,
   GetObjectCommand,
@@ -15,12 +21,15 @@ let
   ListObjectsCommand,
   getSignedUrl;
 
-//Check for credentials 
+// Check for credentials 
 if (!process.env?.AWS_S3_CLIENT) {
   console.log('S3 Sign: Missing credentials from env: AWS_S3_CLIENT')
   module.exports = null
-}
-else {
+
+} else {
+
+  //Read credentials from an env key
+  credentials = Object.fromEntries(new URLSearchParams(process.env.AWS_S3_CLIENT))
 
   //Attempt import if credentials are found
   try {
@@ -70,9 +79,6 @@ Provides methods for list, get, trash and put
 @returns {Promise<String>} The signed url associated to the request params.
 **/
 async function s3(req, res) {
-
-  //Read credentials from an env key
-  const credentials = Object.fromEntries(new URLSearchParams(process.env.AWS_S3_CLIENT))
 
   const s3Client = new S3Client({
     credentials,
