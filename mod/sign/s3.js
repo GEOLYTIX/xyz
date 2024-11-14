@@ -25,8 +25,7 @@ if(!process.env.AWS_S3_CLIENT){
   //Assume the bucket is public if no credentials are supplied
   console.log('Sign S3: AWS_S3_CLIENT was not found in the env')
 
-  s3 = public_s3
-  module.exports = s3
+  module.exports = null
 
 }
 else{
@@ -64,38 +63,6 @@ const commands = {
   trash: (req) => objectAction(req.params, DeleteObjectCommand),
   put: (req) => objectAction(req.params, PutObjectCommand),
   list: (req) => objectAction(req.params, ListObjectsCommand)
-}
-
-/**
-@function public_s3
-@async
-
-@description
-The public s3 method returns a url for the bucket.
-
-Provides methods for list, get, trash and put.
-
-@param {Object} req HTTP request.
-@param {Object} res HTTP response.
-@param {Object} req.params Request parameter.
-@param {string} params.region
-@param {string} params.bucket
-@param {string} params.key
-@param {string} params.command
-
-@returns {Promise<String>} The signed url associated to the request params.
-**/
-async function public_s3(req, res){
-
-  if (!Object.hasOwn(commands, req.params.command)) {
-    return res.status(400).send(`S3 command validation failed.`)
-  }
-
-  //Public bucket URL 
-  let signedUrl = `https://${req.params.bucket}.s3.${req.params.region}.amazonaws.com`
-  signedUrl = req.params.command !== 'list' ? signedUrl+`/${req.params.key}` : signedUrl
-  
-  return (async () => {return JSON.stringify(signedUrl)})()
 }
 
 /**
