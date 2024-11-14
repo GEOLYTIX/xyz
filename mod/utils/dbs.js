@@ -1,6 +1,9 @@
 /**
+
  * @module /utils/dbs
- * @description Database connection and query management module that creates connection pools for multiple databases
+ * @description
+ * ## /utils/dbs
+ *  Database connection and query management module that creates connection pools for multiple databases
  * based on environment variables prefixed with 'DBS_'.
 */
 
