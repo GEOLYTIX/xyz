@@ -18,6 +18,17 @@ const RETRY_LIMIT = 3;
 /** @constant {number} INITIAL_RETRY_DELAY Base delay in milliseconds between retry attempts */
 const INITIAL_RETRY_DELAY = 1000;
 
+/** 
+ * Error codes that are safe to retry 
+ * @constant {Set<string>}*/
+const RETRYABLE_ERROR_CODES = new Set([
+  err.code === 'ECONNRESET' ||    // Connection reset by peer
+  err.code === 'ECONNREFUSED' ||  // Connection refused
+  err.code === '57P01' ||         // Admin shutdown
+  err.code === '57P02' ||         // Crash shutdown
+  err.code === '57P03'            // Cannot connect now
+]);
+
 /**
  * Helper function to pause execution
  * @param {number} ms - Time to sleep in milliseconds
@@ -97,12 +108,8 @@ Object.keys(process.env)
            * @type {boolean}
            * @private
            */
-          const isRetryable = (
-            err.code === 'ECONNRESET' ||    // Connection reset by peer
-            err.code === 'ECONNREFUSED' ||  // Connection refused
-            err.code === '57P01' ||         // Admin shutdown
-            err.code === '57P02' ||         // Crash shutdown
-            err.code === '57P03' ||         // Cannot connect now
+          const isRetryable = (err) => (
+            RETRYABLE_ERROR_CODES.has(err.code) ||
             err.message.includes('Connection terminated unexpectedly')
           );
 
