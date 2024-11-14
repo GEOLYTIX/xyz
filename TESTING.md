@@ -1,78 +1,184 @@
 # Testing
 
-Testing in xyz is split up into 3 different sections.
+Testing in xyz is split into 3 different sections:
 
 1. cli (console)
 2. module (browser)
 3. integrity
 
-## cli (console)
+## Testing Environment Setup
 
-The cli tests are normal vanilla javascript tests that execute with the nodejs runtime using the [Codi Test framework](https://www.npmjs.com/package/codi-test-framework).
-These tests focus on the xyz (mod) directory to test as many things as possible. These tests mostly focus on code that does not require things that would only be found in the browser.
+### Prerequisites
 
-1. Setup
-    - Ensure that you have installed the node modules `npm install`
-    - Ensure that you have bun.sh installed in your enviroment
-    - To run the tests you can execute `npm run test`
+The minimum requirements are:
 
-2. Output
-    - You will find an output of a summary of all the past/failed tests.
+* Node.js (version 18 and above)
+* [Bun.sh](https://bun.sh) (version 1.1.0 and above for Codi v0.0.47)
+* Node modules installed via `npm install`
 
-## module (browser)
+## Test Structure
 
-The module tests are designed to make use of the browser environment by having full access to the DOM.  
-With these tests will have full access to the mapp library and a mapview for the loaded application. This allows us to not need to mock different module imports. Everything will be part of the build. All these tests also make use of the Codi test framework, and make use of the test runner, that is designed to run specifically in a view.
+Tests are organized in the `/tests` directory with two main subdirectories:
 
-To run these tests you will need to lauch the application with specific test settings. These will be provided only to GEOLYTIX developers.
+* `/tests/mod`: CLI tests for the xyz (mod) directory
+* `/tests/lib`: Module tests for browser environment
 
-Launch the application and navigate to localhost:3000/test?template=test_view and open the console of the window.
-You will see the output of the tests running in the console with any passes/failures.
+Example structure:
 
-## integrity
-
-The integrity tests are designed to check data integrity on deployed appications.
-To run these test naviate to any deployed instance and ensure that you have `?template=test_view&integrity=true` is included in the params of the URL.
-
-This will give you a similar output to the normal test_view.
-
-## Writing tests
-
-When writing tests you will need to make use of different Codi elements to make up your test.
-
-Include the describe and it functions. These are used as the building blocks to the tests. The describe block is used to describe the overall function and what the test suite is actually trying to achive. The It block is used to make more granular descriptions of different elements/functions of the code.
-
-In this example we describe what the main output should be. And then we assert the different elements that are part of the module.
-Part of this code is the `assertTrue` function that is used to check if a value is true.
-
-```js
-import { describe, it, assertTrue } from 'codi';
-describe('All languages should have the same base language entries', () => {
-...
-        Object.keys(mapp.dictionaries).forEach(language => {
-            it(`The ${language} dictionary should have all the base keys`, () => {
-                Object.keys(base_dictionary).forEach(key => {
-                    assertTrue(!!mapp.dictionaries[language][key], `${language} should have ${key}`);
-                });
-            });
-        });
-...
-    });
 ```
 
-Assertion Functions 🧪
-Codi provides several assertion functions to compare expected and actual values:
+xyz/
+├── mod/
+│   ├── module1/
+│   │   └── feature1.mjs
+├── lib/
+│   ├── module2/
+│   │   └── feature2.mjs
+├── tests/
+│   ├── mod/
+│   │   ├── module1/
+│   │   │   ├── feature1.test.mjs
+│   │   │   └── index.mjs
+│   └── lib/
+│       └── module2/
+│           ├── feature2.test.mjs
+│           └── index.mjs
 
-- `assertEqual(actual, expected, message)`: Asserts that the actual value is equal to the expected value. ⚖️
-- `assertNotEqual(actual, expected, message)`: Asserts that the actual value is not equal to the expected value. 🙅‍♂️
-- `assertTrue(actual, message)`: Asserts that the actual value is true. ✅
-- `assertFalse(actual, message)`: Asserts that the actual value is false. ❌
-- `assertThrows(callback, errorMessage, message)`: Asserts that the provided callback function throws an error with the specified error message. 💥
+```
 
-### cli
+Each test folder exports an object matching its corresponding directory structure:
 
-The directory that you need to add these cli tests are in the `tests/mod` directory. This directory needs to replicate the same kind of structure as the mod directory. Reason we do this is to ensure that test correlates to the position in the project that they are referencing.
+```javascript
+// tests/mod/module1/index.mjs
+export default {
+  feature1: () => import('./feature1.test.mjs')
+};
+```
 
-### module
+## Test Types
 
-The directory that you need to add these module tests are in the `tests/lib` directory.
+### 1. CLI (Console) Tests
+
+CLI tests are vanilla JavaScript tests that execute in the Node.js runtime using the Codi Test framework. These tests focus on the xyz (mod) directory and code that doesn't require browser-specific features.
+
+#### Running CLI Tests
+
+```bash
+npm run test
+```
+
+With quiet mode (v0.0.47+):
+
+```bash
+npm run test -- --quiet
+```
+
+### 2. Module (Browser) Tests
+
+Module tests are designed for the browser environment with full access to:
+
+* DOM
+* Mapp library
+* Mapview for loaded application
+* No mocking required for module imports
+
+#### Running Module Tests
+
+1. Launch the application with specific test settings (provided to GEOLYTIX developers)
+2. Navigate to `localhost:3000/test?template=test_view`, just the base /test url if using settings
+3. Open browser console to view test results, can also be viewed in vscode with the chrome debugger. (See developer notes)
+
+### 3. Integrity Tests
+
+Integrity tests check data integrity on deployed applications.
+
+#### Running Integrity Tests
+
+1. Navigate to any deployed instance
+2. Add `?template=test_view&integrity=true` to the URL parameters
+3. View results in browser console
+
+## Writing Tests
+
+### Test Structure
+
+Tests use the describe-it pattern for organization:
+
+```javascript
+import { describe, it, assertTrue } from 'codi';
+
+describe('Feature Description', () => {
+  it('should behave in a specific way', () => {
+    // Test code
+  });
+});
+```
+
+Example with multiple assertions:
+
+```javascript
+describe('All languages should have the same base language entries', () => {
+  Object.keys(mapp.dictionaries).forEach(language => {
+    it(`The ${language} dictionary should have all the base keys`, () => {
+      Object.keys(base_dictionary).forEach(key => {
+        assertTrue(!!mapp.dictionaries[language][key], 
+          `${language} should have ${key}`);
+      });
+    });
+  });
+});
+```
+
+### Available Assertions
+
+Codi provides several built-in assertions:
+
+* `assertEqual(actual, expected, message)` ⚖️
+  * Asserts that the actual value equals the expected value
+* `assertNotEqual(actual, expected, message)` 🙅‍♂️
+  * Asserts that the actual value does not equal the expected value
+* `assertTrue(actual, message)` ✅
+  * Asserts that the actual value is true
+* `assertFalse(actual, message)` ❌
+  * Asserts that the actual value is false
+* `assertThrows(callback, errorMessage, message)` 💥
+  * Asserts that the callback throws an error with the specified message
+* `assertNoDuplicates(callback, errorMessage, message)` 👬
+  * Asserts that there are no duplicates in a provided array.
+
+### Test Output Control
+
+Codi v0.0.47 features:
+
+* `--quiet`: Shows only test failures (recommended for CI/CD pipelines)
+* Default mode: Shows all test results with colorful output
+
+## Best Practices
+
+1. Maintain parallel structure between source and test directories
+2. Use descriptive test names
+3. One describe per test suite
+4. Group related tests in the same describe block
+5. Use test bundles for reusable configurations
+6. Keep tests focused and isolated
+7. Use `--quiet` flag in CI/CD pipelines. (can also be used on other test fuctions).
+
+## Common Issues and Solutions
+
+### Test Discovery
+
+Codi automatically discovers tests in files with the pattern:
+
+* `*.test.mjs`
+
+### Error Handling
+
+If tests fail to run:
+
+1. Ensure Bun.sh version is compatible (v1.1.0+ for Codi v0.0.47)
+2. Check file extensions are `.mjs`
+3. Verify import/export syntax is ESM compatible
+4. Confirm test directory structure matches source directories
+5. Verify test settings in xyz_settings/tests/launch.json
+
+For more information, please visit the [Codi GitHub repository](https://github.com/RobAndrewHurst/codi).
