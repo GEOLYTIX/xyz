@@ -29,6 +29,12 @@
   & >*:not(.header) {
     margin-top: 5px;
   }
+
+  > .header {
+    h2{
+      font-weight: normal;
+    }
+  }
 }
 
 .drawer.layer-group {
@@ -40,6 +46,7 @@
     padding-left: 4px;
     padding-right: 4px;
   }
+  
 }
 
 #layers>.drawer.layer-group .drawer.layer-view {
