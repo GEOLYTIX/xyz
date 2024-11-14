@@ -4,6 +4,45 @@ Signs requests to S3. Provides functions for get, list, delete and put to S3.
 
 The module requires AWS_S3_CLIENT credentials in the process.env and will export as null if the credentials are not provided. The credentials consist of two parts: an access key ID and a secret access key eg: `AWS_S3_CLIENT="accessKeyId=AKIAIOSFODNN7EXAMPLE&secretAccessKey=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"`. [Both the access key ID and secret access key together are required to authenticate your requests]{@link https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html}.
 
+Sample requests for common S3 SDK commands. Please refer to the S3 SDK documentation for detailed information in regards to the Command methods.
+
+```js
+let url; // URL to be signed.
+
+// List S3 Bucket
+url = `${host}/api/sign/s3?` + mapp.utils.paramString({
+  command: 'ListObjectsV2Command',
+  Bucket,
+  Region})
+
+// Get object from S3 Bucket
+url = `${host}/api/sign/s3?` + mapp.utils.paramString({
+  command: 'GetObjectCommand',
+  Key, //file name
+  Bucket,
+  Region})
+
+// Get object from S3 Bucket
+url = `${host}/api/sign/s3?` + mapp.utils.paramString({
+  command: 'PutObjectCommand',
+  Key, //file name
+  Bucket,
+  Region})
+  
+// Get object from S3 Bucket
+url = `${host}/api/sign/s3?` + mapp.utils.paramString({
+  command: 'DeleteObjectCommand',
+  Key, //file name
+  Bucket,
+  Region})  
+
+// Sign URL
+const signedURL = await mapp.utils.xhr({
+  url,
+  responseType: 'text'
+})
+```
+
 The aws-sdk/client-s3 and aws-sdk/s3-request-presigner are optional dependencies. The require will fail and the module will export as null if these optional dependencies are not installed.
 
 @requires aws-sdk/client-s3
@@ -12,14 +51,9 @@ The aws-sdk/client-s3 and aws-sdk/s3-request-presigner are optional dependencies
 @module /sign/s3
 */
 
-let
-  clientSDK,
-  S3Client,
-  PutObjectCommand,
-  GetObjectCommand,
-  DeleteObjectCommand,
-  ListObjectsCommand,
-  getSignedUrl;
+let clientSDK;
+let getSignedUrl;
+let credentials;
 
 if(!process.env.AWS_S3_CLIENT){
 
@@ -27,128 +61,62 @@ if(!process.env.AWS_S3_CLIENT){
   console.log('Sign S3: AWS_S3_CLIENT was not found in the env')
 
   module.exports = null
-} else{
+} else {
 
   //Attempt import if credentials are found
   try {
 
-    //Assign constructors and functions from the sdks.
-    clientSDK = require('@aws-sdk/client-s3');
+    // Create credentials object from AWS_S3_CLIENT
+    credentials = Object.fromEntries(new URLSearchParams(process.env.AWS_S3_CLIENT))
 
+    // Require will err if installed without optional dependencies.
+    clientSDK = require('@aws-sdk/client-s3');
     getSignedUrl = require('@aws-sdk/s3-request-presigner').getSignedUrl;
-  
-    S3Client = clientSDK.S3Client
-    PutObjectCommand = clientSDK.PutObjectCommand
-    GetObjectCommand = clientSDK.GetObjectCommand
-    DeleteObjectCommand = clientSDK.DeleteObjectCommand
-    ListObjectsCommand = clientSDK.ListObjectsV2Command
-  
-    //Export the function .
-    module.exports = s3
+    
+    module.exports = s3_signer
   }
   catch (err) {
-  
-    //The module has not been installed.
-    if (err.code === 'MODULE_NOT_FOUND') {
-      console.log('AWS-SDK is not available')
-      module.exports = null
-    }
-    else throw err
+
+    module.exports = null
   }  
 }
 
-//Assign the corresponding function to the requested command
-const commands = {
-  get: (req) => objectAction(req.params, GetObjectCommand),
-  trash: (req) => objectAction(req.params, DeleteObjectCommand),
-  put: (req) => objectAction(req.params, PutObjectCommand),
-  list: (req) => objectAction(req.params, ListObjectsCommand)
-}
-
 /**
-@function s3
+@function s3_signer
 @async
 
 @description
-The s3 signer method signs requests for the s3 service.
+The S3 signer method checks whether the command string parameter exists in the S3 clientSDK.
 
-Provides methods for list, get, trash and put
+The provided request params will be spread into the Command object created from the S3 clientSDK.
 
 @param {Object} req HTTP request.
 @param {Object} res HTTP response.
-@param {Object} req.params Request parameter.
-@param {string} params.region
-@param {string} params.bucket
-@param {string} params.key
-@param {string} params.command
+@property {Object} req.params Request parameter.
+@property {String} params.command S3Client SDK command.
 
 @returns {Promise<String>} The signed url associated to the request params.
 **/
-async function s3(req, res) {
+async function s3_signer(req, res) {
 
-  //Read credentials from an env key
-  const credentials = Object.fromEntries(new URLSearchParams(process.env.AWS_S3_CLIENT))
-
-  req.params.S3Client = new clientSDK.S3Client({
+  const S3Client = new clientSDK.S3Client({
     credentials,
-    region: req.params.region
+    region: req.params.Region
   })
 
-  if (!Object.hasOwn(commands, req.params.command)) {
-    return res.status(400).send(`S3 command validation failed.`)
+  if (!Object.hasOwn(clientSDK, req.params.command)) {
+    return res.status(400).send(`S3 clientSDK command validation failed.`)
   }
 
-  return commands[req.params.command](req)
-}
+  // Spread req.params into the clientSDK Command.
+  const Command = new clientSDK[req.params.command]({...req.params})
 
-/**
-@function objectAction
-@async
-
-@description
-Generates the signed url for the command and parameters specified from the request
-
-@param {Function} objectCommand The S3 function to be carried out.
-@param {Object} reqParams Request parameters.
-@property {string} reqParams.region
-@property {string} reqParams.bucket
-@property {string} reqParams.key
-@property {string} reqParams.command
-
-@returns {String} The signed url associated to the request params.
-**/
-async function objectAction(reqParams, objectCommand) {
-
-  //The parameters required per action for S3
-  //S3 Parameters are capitalised
-  const actionParams = {
-    get: { 'key': 'Key', 'bucket': 'Bucket' },
-    list: { 'bucket': 'Bucket' },
-    put: { 'key': 'Key', 'bucket': 'Bucket', 'region': 'Region' },
-    trash: { 'key': 'Key', 'bucket': 'Bucket' }
-  }
-
-  try {
-
-    //Transfrom our keys into aws key names
-    const commandParams = Object.keys(reqParams)
-      .filter(key => Object.keys(actionParams[reqParams.command]).includes(key))
-      .reduce((acc, key) => ({
-        ...acc,
-        ...{ [actionParams[reqParams.command][key]]: reqParams[key] }
-      }),
-        {}
-      )
-
-    const command = new objectCommand(commandParams)
-
-    const signedURL = await getSignedUrl(reqParams.S3Client, command, {
+  const signedURL = await getSignedUrl(
+    S3Client,
+    Command,
+    {
       expiresIn: 3600,
     });
 
-    return signedURL;
-
-  } catch (err) {
-    console.error(err)
-  }
+  return signedURL;
 }
