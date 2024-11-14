@@ -1,9 +1,10 @@
 /**
 ## /sign
 
-The sign module provides access to different request signer methods.
+The sign API provides access to different request signer modules. Signer modules which are unavailable will export as null and won't be available from the signerModules object methods.
 
 @requires /sign/cloudinary
+@requires /sign/s3
 
 @module /sign
 */
