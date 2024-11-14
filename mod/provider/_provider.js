@@ -32,7 +32,7 @@ module.exports = async function provider(req, res){
   const provider = {
     cloudfront,
     file,
-    s3,
+    s3
   }
 
   if (!Object.hasOwn(provider, req.params.provider)) {

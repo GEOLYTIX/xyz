@@ -13,7 +13,6 @@ The aws-sdk/client-s3 and aws-sdk/s3-request-presigner are optional dependencies
 */
 
 let
-  credentials,
   S3Client,
   PutObjectCommand,
   GetObjectCommand,
@@ -21,15 +20,16 @@ let
   ListObjectsCommand,
   getSignedUrl;
 
-// Check for credentials 
-if (!process.env?.AWS_S3_CLIENT) {
-  console.log('S3 Sign: Missing credentials from env: AWS_S3_CLIENT')
-  module.exports = null
+if(!process.env.AWS_S3_CLIENT){
 
-} else {
+  //Assume the bucket is public if no credentials are supplied
+  console.log('Sign S3: AWS_S3_CLIENT was not found in the env')
 
-  //Read credentials from an env key
-  credentials = Object.fromEntries(new URLSearchParams(process.env.AWS_S3_CLIENT))
+  s3 = public_s3
+  module.exports = s3
+
+}
+else{
 
   //Attempt import if credentials are found
   try {
@@ -37,27 +37,66 @@ if (!process.env?.AWS_S3_CLIENT) {
     //Assign constructors and functions from the sdks.
     const clientSDK = require('@aws-sdk/client-s3');
     getSignedUrl = require('@aws-sdk/s3-request-presigner').getSignedUrl;
-
+  
     S3Client = clientSDK.S3Client
     PutObjectCommand = clientSDK.PutObjectCommand
     GetObjectCommand = clientSDK.GetObjectCommand
     DeleteObjectCommand = clientSDK.DeleteObjectCommand
     ListObjectsCommand = clientSDK.ListObjectsCommand
-
+  
     //Export the function .
     module.exports = s3
   }
   catch (err) {
-
+  
     //The module has not been installed.
     if (err.code === 'MODULE_NOT_FOUND') {
       console.log('AWS-SDK is not available')
       module.exports = null
     }
     else throw err
-  }
+  }  
 }
 
+//Assign the corresponding function to the requested command
+const commands = {
+  get: (req) => objectAction(req.params, GetObjectCommand),
+  trash: (req) => objectAction(req.params, DeleteObjectCommand),
+  put: (req) => objectAction(req.params, PutObjectCommand),
+  list: (req) => objectAction(req.params, ListObjectsCommand)
+}
+
+/**
+@function public_s3
+@async
+
+@description
+The public s3 method returns a url for the bucket.
+
+Provides methods for list, get, trash and put.
+
+@param {Object} req HTTP request.
+@param {Object} res HTTP response.
+@param {Object} req.params Request parameter.
+@param {string} params.region
+@param {string} params.bucket
+@param {string} params.key
+@param {string} params.command
+
+@returns {Promise<String>} The signed url associated to the request params.
+**/
+async function public_s3(req, res){
+
+  if (!Object.hasOwn(commands, req.params.command)) {
+    return res.status(400).send(`S3 command validation failed.`)
+  }
+
+  //Public bucket URL 
+  let signedUrl = `https://${req.params.bucket}.s3.${req.params.region}.amazonaws.com`
+  signedUrl = req.params.command !== 'list' ? signedUrl+`/${req.params.key}` : signedUrl
+  
+  return (async () => {return JSON.stringify(signedUrl)})()
+}
 
 /**
 @function s3
@@ -80,6 +119,9 @@ Provides methods for list, get, trash and put
 **/
 async function s3(req, res) {
 
+  //Read credentials from an env key
+  const credentials = Object.fromEntries(new URLSearchParams(process.env.AWS_S3_CLIENT))
+
   const s3Client = new S3Client({
     credentials,
     region: req.params.region
@@ -87,19 +129,11 @@ async function s3(req, res) {
 
   req.params.s3Client = s3Client
 
-  //Assign the corresponding function to the requested command
-  const commands = {
-    get: () => objectAction(req.params, GetObjectCommand),
-    trash: () => objectAction(req.params, DeleteObjectCommand),
-    put: () => objectAction(req.params, PutObjectCommand),
-    list: () => objectAction(req.params, ListObjectsCommand)
-  }
-
   if (!Object.hasOwn(commands, req.params.command)) {
     return res.status(400).send(`S3 command validation failed.`)
   }
 
-  return commands[req.params.command]()
+  return commands[req.params.command](req)
 }
 
 /**
