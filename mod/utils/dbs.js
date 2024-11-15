@@ -28,11 +28,13 @@ Object.keys(process.env)
   .filter(key => key.startsWith('DBS_'))
   .forEach(key => {
 
+    const id = key.split('_')[1]
+
     /** 
     @type {Pool} @private
     */
     const pool = new Pool({
-      dbs: key.split('_')[1],
+      dbs: id,
       connectionString: process.env[key],
       keepAlive: true,
       connectionTimeoutMillis: 5000, // 5 seconds
@@ -45,12 +47,12 @@ Object.keys(process.env)
       logger({
         err,
         message: 'Unexpected error on idle client',
-        pool: key.split('_')[1]
+        pool: id
       });
     });
 
     // Assigning clientQuery method to dbs property.
-    dbs[key.split('_')[1]] = async (query, variables, timeout) => 
+    dbs[id] = async (query, variables, timeout) => 
       await clientQuery(pool, query, variables, timeout)
   });
 
@@ -91,7 +93,7 @@ async function clientQuery(pool, query, variables, timeout) {
       }
 
       const { rows } = await client.query(query, variables);
-      
+
       return rows;
 
     } catch (err) {
