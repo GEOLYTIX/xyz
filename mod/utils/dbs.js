@@ -1,9 +1,13 @@
 /**
- * @module /utils/dbs
- * @description
- * ## /utils/dbs
- *  Database connection and query management module that creates connection pools for multiple databases
- * based on environment variables prefixed with 'DBS_'.
+@module /utils/dbs
+@description
+## /utils/dbs
+Database connection and query management module that creates connection pools for multiple databases based on environment variables prefixed with 'DBS_'.
+
+The [node-postgres]{@link https://www.npmjs.com/package/pg} package is required to create a [new connection Pool]{@link https://node-postgres.com/apis/pool} for DBS connections.
+
+@requires pg
+@requires /utils/logger
 */
 
 const { Pool } = require('pg');
@@ -21,6 +25,7 @@ const INITIAL_RETRY_DELAY = 1000;
 /** 
  * Error codes that are safe to retry 
  * @constant {Set<string>}*/
+
 const RETRYABLE_ERROR_CODES = new Set([
   err.code === 'ECONNRESET' ||    // Connection reset by peer
   err.code === 'ECONNREFUSED' ||  // Connection refused
