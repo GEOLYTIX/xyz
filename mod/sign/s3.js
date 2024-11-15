@@ -2,6 +2,9 @@
 ### /sign/s3
 Signs requests to S3. Provides functions for get, list, delete and put to S3.
 
+> For public buckets you do not need to use the s3 sign in order to get or list from the bucket. 
+> See bellow for examples of how public interactions 
+
 The module requires AWS_S3_CLIENT credentials in the process.env and will export as null if the credentials are not provided. The credentials consist of two parts: an access key ID and a secret access key eg: `AWS_S3_CLIENT="accessKeyId=AKIAIOSFODNN7EXAMPLE&secretAccessKey=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"`. [Both the access key ID and secret access key together are required to authenticate your requests]{@link https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html}.
 
 Sample requests for common S3 SDK commands. Please refer to the S3 SDK documentation for detailed information in regards to the Command methods.
@@ -41,7 +44,15 @@ const signedURL = await mapp.utils.xhr({
   url,
   responseType: 'text'
 })
+
+// Public Bucket Operations (No credentials needed)
+// List bucket contents
+url = `https://${Bucket}.s3.${Region}.amazonaws.com?list-type=2`
+
+// Get object
+url = `https://${Bucket}.s3.${Region}.amazonaws.com/${Key}`
 ```
+Note: Write operations (PUT, DELETE) are not available for public buckets.
 
 The aws-sdk/client-s3 and aws-sdk/s3-request-presigner are optional dependencies. The require will fail and the module will export as null if these optional dependencies are not installed.
 
@@ -55,7 +66,7 @@ let clientSDK;
 let getSignedUrl;
 let credentials;
 
-if(!process.env.AWS_S3_CLIENT){
+if (!process.env.AWS_S3_CLIENT) {
 
   //Assume the bucket is public if no credentials are supplied
   console.log('Sign S3: AWS_S3_CLIENT was not found in the env')
@@ -72,13 +83,13 @@ if(!process.env.AWS_S3_CLIENT){
     // Require will err if installed without optional dependencies.
     clientSDK = require('@aws-sdk/client-s3');
     getSignedUrl = require('@aws-sdk/s3-request-presigner').getSignedUrl;
-    
+
     module.exports = s3_signer
   }
   catch (err) {
 
     module.exports = null
-  }  
+  }
 }
 
 /**
@@ -109,7 +120,7 @@ async function s3_signer(req, res) {
   }
 
   // Spread req.params into the clientSDK Command.
-  const Command = new clientSDK[req.params.command]({...req.params})
+  const Command = new clientSDK[req.params.command]({ ...req.params })
 
   const signedURL = await getSignedUrl(
     S3Client,
