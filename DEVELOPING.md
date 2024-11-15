@@ -36,7 +36,95 @@ ESBuild must also be used to compile the CSS supporting the MAPP and MAPP.UI ele
 
     npx esbuild --bundle public/css/_ui.css --outfile=public/css/ui.css --loader:.svg=dataurl
 
-### Hot rebuild with VSCode Debugger
+## Hot rebuild with nodemon & VSCode Chrome Debugger
+
+### nodemon
+
+The development environment uses nodemon to watch for changes and automatically rebuild the necessary files. This is configured in `nodemon.json`:
+
+```json
+{
+    "watch": [
+        "lib/**/*",
+        "tests/**/*",
+        "public/css/*",
+        "../xyz_resources/**/*"
+    ],
+    "ext": ".js,.mjs,.json,.css,.svg",
+    "ignore": [
+        "public/js/**/*",
+        "public/css/mapp.css",
+        "public/css/ui.css"
+    ],
+    "env": {
+        "NODE_ENV": "DEVELOPMENT"
+    },
+    "exec": "npx concurrently \"node esbuild.config.mjs\" \"npm run ui_css\" \"npm run mapp_css\"",
+    "events": {
+        "start": "echo \"Watching for changes...\"",
+        "exit": "echo \"Build complete\""
+    }
+}
+```
+
+#### Watched Directories
+
+* `lib/**/*`: All files in the lib directory
+
+* `tests/**/*`: All test files
+* `public/css/*`: CSS source files
+* `../xyz_resources/**/*`: Resource files
+
+#### File Types Watched
+
+* JavaScript files (`.js`)
+
+* ES Modules (`.mjs`)
+* JSON files (`.json`)
+* CSS files (`.css`)
+* SVG files (`.svg`)
+
+#### Ignored Files
+
+* Built JavaScript files (`public/js/**/*`)
+
+* Compiled CSS files:
+  * `public/css/mapp.css`
+  * `public/css/ui.css`
+
+#### Automatic Actions
+
+When changes are detected:
+
+1. Rebuilds JavaScript using esbuild
+2. Recompiles UI CSS
+3. Recompiles MAPP CSS
+4. All tasks run concurrently for faster builds
+
+### Running nodemon
+
+1. Start the watch mode:
+
+```bash
+  npx nodemon
+```
+
+2. Nodemon will:
+   * Set `NODE_ENV` to "DEVELOPMENT"
+   * Watch for file changes
+   * Automatically rebuild affected files
+   * Display "Watching for changes..." when started
+   * Show "Build complete" after each rebuild
+
+3. The application will rebuild automatically when you:
+   * Modify test files
+   * Change source code
+   * Update CSS
+   * Modify resources
+
+This ensures that your test environment always has the latest changes without manual rebuilds.
+
+### VSCode Tasks & Launch
 
 A task can be added to the `.vscode/tasks.json` to execute `nodemon` and `browser-sync` concurrently. This will allow VSCode to rebuild the application on script changes in the editor.
 

@@ -25,7 +25,7 @@ Tests are organized in the `/tests` directory with two main subdirectories:
 
 Example structure:
 
-```
+```bash
 
 xyz/
 ├── mod/
@@ -182,3 +182,89 @@ If tests fail to run:
 5. Verify test settings in xyz_settings/tests/launch.json
 
 For more information, please visit the [Codi GitHub repository](https://github.com/RobAndrewHurst/codi).
+
+## Browser Tests Development Environment Setup
+
+### Environment Variables
+
+The testing environment requires specific environment variable settings:
+
+```bash
+NODE_ENV=DEVELOPMENT
+```
+
+This environment variable is crucial because:
+
+1. It enables the build system to include test files
+2. It prevents code minification, allowing for proper debugging
+
+### Build Configuration
+
+Tests require an unminified build to enable proper debugging and stepping through code. This is handled automatically by the build system (`esbuild.config.mjs`):
+
+```javascript
+// esbuild.config.mjs
+import * as esbuild from 'esbuild'
+
+const isDev = process.env.NODE_ENV !== 'DEVELOPMENT';
+
+const buildOptions = {
+    entryPoints: isDev 
+        ? ['./lib/mapp.mjs', './lib/ui.mjs'] 
+        : ['./lib/mapp.mjs', './lib/ui.mjs', './tests/_mapp.test.mjs'],
+    bundle: true,
+    minify: isDev,  // Code won't be minified in development
+    sourcemap: true,
+    sourceRoot: '/lib',
+    format: 'iife',
+    outbase: '.',
+    outdir: 'public/js',
+    metafile: true,
+    logLevel: 'info'
+};
+
+try {
+    await esbuild.build(buildOptions);
+} catch (err) {
+    console.error('Build failed:', err);
+    process.exit(1);
+}
+```
+
+### Running Tests in Development Mode
+
+1. Set the environment variable:
+
+   ```bash
+   NODE_ENV=DEVELOPMENT
+   ```
+
+> This can be defined in your .env or in your nodemon.json config.
+
+2. Build the project:
+
+   ```bash
+   npm run _build
+   ```
+
+3. Verify that:
+   * Test files are included in the build
+   * Source maps are generated
+   * Code is not minified
+
+4. Launch the application and navigate to `localhost:3000/test?template=test_view`
+
+5. Open Chrome DevTools to:
+   * View test results in the console
+   * Debug and step through unminified code
+   * Use source maps for accurate file locations
+
+### Debugging Benefits
+
+The unminified development build provides several advantages:
+
+* Clear, readable code in Chrome DevTools
+* Accurate source mapping to original files
+* Ability to set breakpoints in original source files
+* Step-through debugging from Chrome to VSCode
+* Easier identification of test failures

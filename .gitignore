@@ -34,4 +34,3 @@ public/js/*
 !package.json
 !jsdoc*.json
 !codi.json
-!nodemon.json
