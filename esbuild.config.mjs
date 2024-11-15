@@ -4,7 +4,7 @@ import * as esbuild from 'esbuild'
 const isDev = process.env.NODE_ENV !== 'DEVELOPMENT';
 
 const buildOptions = {
-    entryPoints: isDev ? ['./lib/mapp.mjs', './lib/ui.mjs'] : ['./lib/mapp.mjs', './lib/ui.mjs', './tests/_mapp.test.mjs'],
+    entryPoints: ['./lib/mapp.mjs', './lib/ui.mjs', './tests/_mapp.test.mjs'],
     bundle: true,
     minify: isDev,
     sourcemap: true,
