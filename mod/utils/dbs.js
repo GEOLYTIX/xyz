@@ -11,10 +11,8 @@ The [node-postgres]{@link https://www.npmjs.com/package/pg} package is required 
 */
 
 const { Pool } = require('pg');
-const logger = require('./logger');
 
-/** @type {Object.<string, Function>} Object containing database query functions */
-const dbs = {};
+const logger = require('./logger');
 
 /** @constant {number} RETRY_LIMIT Maximum number of retry attempts for failed queries */
 const RETRY_LIMIT = 3;
@@ -22,40 +20,24 @@ const RETRY_LIMIT = 3;
 /** @constant {number} INITIAL_RETRY_DELAY Base delay in milliseconds between retry attempts */
 const INITIAL_RETRY_DELAY = 1000;
 
-/** 
- * Error codes that are safe to retry 
- * @constant {Set<string>}*/
-
-const RETRYABLE_ERROR_CODES = new Set([
-  err.code === 'ECONNRESET' ||    // Connection reset by peer
-  err.code === 'ECONNREFUSED' ||  // Connection refused
-  err.code === '57P01' ||         // Admin shutdown
-  err.code === '57P02' ||         // Crash shutdown
-  err.code === '57P03'            // Cannot connect now
-]);
-
-/**
- * Helper function to pause execution
- * @param {number} ms - Time to sleep in milliseconds
- * @returns {Promise<void>}
- * @private
- */
-const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+/** @constant {Object.<string, Function>} dbs containing database query functions */
+const dbs = {};
 
 // Initialize database pools and create query functions
 Object.keys(process.env)
   .filter(key => key.startsWith('DBS_'))
   .forEach(key => {
-    /**
-     * @type {Pool}
-     * @private
-     */
+
+    /** 
+    @type {Pool} @private
+    */
     const pool = new Pool({
+      dbs: key.split('_')[1],
       connectionString: process.env[key],
       keepAlive: true,
-      connectionTimeoutMillis: 5000,    // 5 seconds
-      idleTimeoutMillis: 30000,         // 30 seconds
-      max: 20                           // Maximum number of clients in the pool
+      connectionTimeoutMillis: 5000, // 5 seconds
+      idleTimeoutMillis: 30000,      // 30 seconds
+      max: 20                        // Maximum number of clients in the pool
     });
 
     // Handle pool errors
@@ -67,83 +49,91 @@ Object.keys(process.env)
       });
     });
 
-    /**
-     * Executes a database query with retry logic
-     * @async
-     * @param {string} query - SQL query to execute
-     * @param {Array} [variables] - Parameters for the SQL query
-     * @param {number} [timeout] - Statement timeout in milliseconds
-     * @returns {Promise<Array|Error>} Query results or error object
-     * @throws {Error} Database connection or query errors
-     */
-    dbs[key.split('_')[1]] = async (query, variables, timeout) => {
-      let retryCount = 0;
-      let lastError;
-
-      while (retryCount < RETRY_LIMIT) {
-        /** @type {import('pg').PoolClient} */
-        let client;
-
-        try {
-          client = await pool.connect();
-
-          // Set statement timeout if specified
-          if (timeout || process.env.STATEMENT_TIMEOUT) {
-            await client.query(`SET statement_timeout = ${parseInt(timeout) || parseInt(process.env.STATEMENT_TIMEOUT)
-              }`);
-          }
-
-          const { rows } = await client.query(query, variables);
-          return rows;
-
-        } catch (err) {
-          lastError = err;
-
-          // Log the error with retry information
-          logger({
-            err,
-            query,
-            variables,
-            retry: retryCount + 1,
-            pool: key.split('_')[1]
-          });
-
-          /**
-           * Determine if error is retryable
-           * @type {boolean}
-           * @private
-           */
-          const isRetryable = (err) => (
-            RETRYABLE_ERROR_CODES.has(err.code) ||
-            err.message.includes('Connection terminated unexpectedly')
-          );
-
-          if (!isRetryable) {
-            return err;
-          }
-
-          retryCount++;
-
-          if (retryCount < RETRY_LIMIT) {
-            // Exponential backoff
-            const delay = INITIAL_RETRY_DELAY * Math.pow(2, retryCount - 1);
-            await sleep(delay);
-          }
-
-        } finally {
-          if (client) {
-            client.release(true);  // Force release in case of errors
-          }
-        }
-      }
-
-      // If we've exhausted all retries, return the last error
-      return lastError;
-    };
+    // Assigning clientQuery method to dbs property.
+    dbs[key.split('_')[1]] = async (query, variables, timeout) => 
+      await clientQuery(pool, query, variables, timeout)
   });
 
-/**
- * Database interface object containing query functions for each configured database
- * @type {Object.<string, function(string, Array=, number=): Promise<Array|Error>>}
- */
+// Export dbs constant
 module.exports = dbs;
+
+/**
+@function clientQuery
+@async
+
+@description
+The clientQuery method creates a client connection from the provided Pool and executes a query on this pool.
+
+@param {Pool} pool The node-postgres connection Pool for a Client connection.
+@param {string} query SQL query to execute
+@param {Array} [variables] Parameters for the SQL query
+@param {number} [timeout] Statement timeout in milliseconds
+@returns {Promise<Array|Error>} Query results or error object
+@throws {Error} Database connection or query errors
+*/
+async function clientQuery(pool, query, variables, timeout) {
+
+  let retryCount = 0;
+  let lastError;
+  let client;
+
+  while (retryCount < RETRY_LIMIT) {
+
+    try {
+      client = await pool.connect();
+
+      timeout ??= process.env.STATEMENT_TIMEOUT
+
+      // Set statement timeout if specified
+      if (timeout) {
+
+        await client.query(`SET statement_timeout = ${parseInt(timeout)}`);
+      }
+
+      const { rows } = await client.query(query, variables);
+      
+      return rows;
+
+    } catch (err) {
+
+      // Log the error with retry information
+      logger({
+        err,
+        query,
+        variables,
+        retry: retryCount + 1,
+        pool: pool.options.dbs
+      });
+
+      retryCount++;
+
+      if (retryCount < RETRY_LIMIT) {
+        // Exponential backoff
+        const delay = INITIAL_RETRY_DELAY * Math.pow(2, retryCount - 1);
+        await sleep(delay);
+      }
+
+      lastError = err
+
+    } finally {
+      if (client) {
+        client.release(true);  // Force release in case of errors
+      }
+    }
+  }
+
+  // If we've exhausted all retries, return the last error
+  return lastError;
+};
+
+/**
+@function sleep
+@description
+Helper function to pause execution
+
+@param {number} ms Time to sleep in milliseconds
+@returns {Promise<void>}
+*/
+function sleep(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
