@@ -9,12 +9,14 @@ The sign API provides access to different request signer modules. Signer modules
 @module /sign
 */
 
+const cloudfront = require('./cloudfront')
 const cloudinary = require('./cloudinary')
 const s3 = require('./s3')
 
 const signerModules = {
   cloudinary,
-  s3
+  s3,
+  cloudfront
 }
 
 /**

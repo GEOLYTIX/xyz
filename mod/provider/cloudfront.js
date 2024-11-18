@@ -3,17 +3,13 @@
 
 The cloudfront provider module exports a method to fetch resources from an AWS cloudfront service.
 
-@requires fs
-@requires path
 @requires module:/utils/logger
-@requires @aws-sdk/cloudfront-signer
+@requires module:/sign/cloudfront
 
 @module /provider/cloudfront
 */
 
-const { readFileSync } = require('fs')
-const { join } = require('path')
-const { getSignedUrl } = require('@aws-sdk/cloudfront-signer');
+const cloudfront_signer = require('../sign/cloudfront');
 const logger = require('../utils/logger')
 
 /**
@@ -41,20 +37,7 @@ module.exports = async function cloudfront(ref) {
 
   try {
 
-    // Substitutes {*} with process.env.SRC_* key values.
-    const url = (ref.params?.url || ref).replace(/{(?!{)(.*?)}/g,
-      matched => process.env[`SRC_${matched.replace(/(^{)|(}$)/g, '')}`])
-
-    const date = new Date(Date.now())
-
-    date.setDate(date.getDate() + 1);
-
-    const signedURL = getSignedUrl({
-      url: `https://${url}`,
-      keyPairId: process.env.KEY_CLOUDFRONT,
-      dateLessThan: date.toDateString(),
-      privateKey: String(readFileSync(join(__dirname, `../../${process.env.KEY_CLOUDFRONT}.pem`)))
-    });
+    const signedURL = JSON.parse(cloudfront_signer(ref))
 
     // Return signedURL only from request.
     if (ref.params?.signedURL) {
