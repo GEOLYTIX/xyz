@@ -14,13 +14,10 @@ const { Pool } = require('pg');
 
 const logger = require('./logger');
 
-/** @constant {number} RETRY_LIMIT Maximum number of retry attempts for failed queries */
 const RETRY_LIMIT = 3;
 
-/** @constant {number} INITIAL_RETRY_DELAY Base delay in milliseconds between retry attempts */
 const INITIAL_RETRY_DELAY = 1000;
 
-/** @constant {Object.<string, Function>} dbs containing database query functions */
 const dbs = {};
 
 // Initialize database pools and create query functions
@@ -52,7 +49,7 @@ Object.keys(process.env)
     });
 
     // Assigning clientQuery method to dbs property.
-    dbs[id] = async (query, variables, timeout) => 
+    dbs[id] = async (query, variables, timeout) =>
       await clientQuery(pool, query, variables, timeout)
   });
 
