@@ -70,15 +70,13 @@ The development environment uses nodemon to watch for changes and automatically 
 #### Watched Directories
 
 * `lib/**/*`: All files in the lib directory
-
 * `tests/**/*`: All test files
 * `public/css/*`: CSS source files
-* `../xyz_resources/**/*`: Resource files
+* `../xyz_resources/**/*`: External resource files.
 
 #### File Types Watched
 
 * JavaScript files (`.js`)
-
 * ES Modules (`.mjs`)
 * JSON files (`.json`)
 * CSS files (`.css`)
