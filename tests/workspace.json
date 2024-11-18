@@ -57,7 +57,8 @@
         ],
         "plugins": [
             "${PLUGINS}v4.8.0/coordinates.js",
-            "${PLUGINS}v4.8.0/chartjs.js"
+            "${PLUGINS}v4.8.0/chartjs.js",
+            "/test/api/provider/file?content_type=application/javascript&url=./tests/assets/plugins/assignMapview.js"
         ],
         "syncPlugins": [
             "zoomBtn",
@@ -96,6 +97,7 @@
                 "css_style": "mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg); -webkit-mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg);"
             }
         ],
+        "assignMapview": {},
         "keyvalue_dictionary": [
             {
                 "key": "name",
