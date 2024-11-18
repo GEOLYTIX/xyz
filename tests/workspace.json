@@ -7,7 +7,7 @@
     },
     "templates": {
         "template_test_temp": {
-            "src": "file:/tests/assets/layers/template_test.json"
+            "src": "file:/tests/assets/layers/template_test/layer.json"
         },
         "mvt_test_temp": {
             "src": "file:/tests/assets/layers/mvt/layer.json"
@@ -32,7 +32,8 @@
             "src": "file:/tests/assets/queries/minmax_mock.sql"
         },
         "data_array": {
-            "src": "file:/tests/assets/queries/data_array.sql"
+            "src": "file:/tests/assets/queries/data_array.sql",
+            "value_only": true
         },
         "bogus_data_array": {
             "src": "file:/tests/assets/queries/data_array.sql",
