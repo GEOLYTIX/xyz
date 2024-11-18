@@ -1,17 +1,20 @@
 /**
 ## /sign
 
-The sign module provides access to different request signer methods.
+The sign API provides access to different request signer modules. Signer modules which are unavailable will export as null and won't be available from the signerModules object methods.
 
 @requires /sign/cloudinary
+@requires /sign/s3
 
 @module /sign
 */
 
 const cloudinary = require('./cloudinary')
+const s3 = require('./s3')
 
 const signerModules = {
-  cloudinary
+  cloudinary,
+  s3
 }
 
 /**
@@ -32,8 +35,8 @@ The response from the method is returned with the HTTP response.
 */
 module.exports = async function signer(req, res) {
 
-  if (!Object.hasOwn(signerModules, req.params.signer)) {
-    return res.send(`Failed to validate 'provider' param.`)
+  if (!Object.hasOwn(signerModules, req.params.signer) || !signerModules[req.params.signer]) {
+    return res.send(`Failed to validate 'sign' param.`)
   }
 
   const response = await signerModules[req.params.signer](req, res)
