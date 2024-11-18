@@ -6,7 +6,7 @@ import { dictionaryTest } from './lib/dictionaries/_dictionaries.test.mjs';
 import { locationTest } from './lib/location/_location.test.mjs';
 import { mapviewTest } from './lib/mapview/_mapview.test.mjs';
 import { pluginsTest } from './plugins/_plugins.test.mjs';
-import { workspaceTest } from './mod/workspace/_workspace.test.mjs';
+import { workspaceSuite } from './mod/workspace/_workspace.test.mjs';
 import { queryTest } from './mod/query.test.mjs';
 import { userTest } from './mod/user/_user.test.js';
 import { ui_elementsTest } from './lib/ui/elements/_elements.test.mjs';
@@ -26,7 +26,7 @@ self._mappTest = {
     locationTest,
     mapviewTest,
     pluginsTest,
-    workspaceTest,
+    workspaceSuite,
     queryTest,
     userTest,
     ui_elementsTest,
