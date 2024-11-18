@@ -1,6 +1,6 @@
 export async function coreTest() {
     //API Tests
-    await _mappTest.workspaceTest();
+    await runAllTests(_mappTest.workspaceSuite);
     await _mappTest.queryTest();
     const mapview = await _mappTest.base();
     await runAllTests(_mappTest.userTest);
