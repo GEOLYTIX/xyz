@@ -48,3 +48,4 @@ async function runAllTests(tests, mapview) {
             console.error(`Error in test ${testFn.name}:`, error);
         }
     }
+}
