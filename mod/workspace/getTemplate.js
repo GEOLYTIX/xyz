@@ -45,10 +45,10 @@ Module templates will be constructed before being returned.
 
 @returns {Promise<Object|Error>} JSON Template
 */
-module.exports = async function getTemplate(template, purge) {
+module.exports = async function getTemplate(template) {
 
   if (typeof template === 'string') {
-    const workspace = await workspaceCache(purge)
+    const workspace = await workspaceCache()
 
     if (workspace instanceof Error) {
       return workspace

@@ -35,7 +35,7 @@ const getLayer = require('./workspace/getLayer');
 @description
 The [SQL] query method requests a query template from the getTemplate method and checks whether the requesting user is permitted to execute the query.
 
-The layerQuery() method must be awaited for queries that reference a layer.
+The layerQuery() method must be awaited for queries that reference a layer. The layerQuery must be run before the getTemplate() request since the query template may be defined in the layer [template].
 
 A template is turned into a query by the getQueryFromTemplate() method.
 
@@ -49,8 +49,16 @@ The query is executed by the executeQuery() method.
 */
 module.exports = async function query(req, res) {
 
+  // The SQL param is restricted to hold substitute values.
+  req.params.SQL = [];
+
+  // Assign role filter and viewport params from layer object.
+  await layerQuery(req, res)
+
+  if (res.finished) return;  
+
   // Get the template.
-  const template = await getTemplate(req.params.template, req.params.purge)
+  const template = await getTemplate(req.params.template)
 
   if (template instanceof Error) {
     return res.status(500).send(template.message)
@@ -77,14 +85,6 @@ module.exports = async function query(req, res) {
 
     return res.status(403).send('Role access denied for query template.')
   }
-
-  // The SQL param is restricted to hold substitute values.
-  req.params.SQL = [];
-
-  // Assign role filter and viewport params from layer object.
-  await layerQuery(req, res)
-
-  if (res.finished) return;
 
   // Get workspace from cache.
   req.params.workspace = await workspaceCache()
