@@ -11,7 +11,6 @@
 */
 export async function queryTest() {
 
-
     await codi.describe('Query: Testing Query API', async () => {
         /**
          * @description Query: Testing Query defined on infoj entry
