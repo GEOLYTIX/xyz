@@ -35,8 +35,12 @@ module.exports = async function provider(req, res){
     s3
   }
 
-  if (!Object.hasOwn(provider, req.params.provider) || !provider[req.params.provider]) {
-    return res.send(`Failed to validate 'provider' param.`)
+  if (!Object.hasOwn(provider, req.params.provider)) {
+    return res.status(404).send(`Failed to validate 'provider=${req.params.provider}' param.`)
+  }
+
+  if (provider[req.params.provider] === null) {
+    return res.status(405).send(`Provider: ${req.params.provider} is not configured.`)
   }
 
   const response = await provider[req.params.provider](req, res)
