@@ -39,7 +39,9 @@ async function cloudfront(ref) {
 
   try {
 
-    const signedURL = JSON.parse(await cloudfront_signer(ref))
+    const url = ref.params?.url || ref
+
+    const signedURL = await cloudfront_signer(url)
 
     // Return signedURL only from request.
     if (ref.params?.signedURL) {
@@ -48,11 +50,11 @@ async function cloudfront(ref) {
 
     const response = await fetch(signedURL)
 
-    logger(`${response.status} - ${ref.params.url}`, 'cloudfront')
+    logger(`${response.status} - ${url}`, 'cloudfront')
 
-    if (response.status >= 300) return new Error(`${response.status} ${ref}`)
+    if (response.status >= 300) return new Error(`${response.status} ${url}`)
 
-    if (ref.params.url.match(/\.json$/i)) return await response.json()
+    if (url.match(/\.json$/i)) return await response.json()
 
     if (ref.params?.buffer) {
       const arrayBuffer = await response.arrayBuffer()
