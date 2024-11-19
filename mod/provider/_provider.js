@@ -35,7 +35,7 @@ module.exports = async function provider(req, res){
     s3
   }
 
-  if (!Object.hasOwn(provider, req.params.provider)) {
+  if (!Object.hasOwn(provider, req.params.provider) || !provider[req.params.provider]) {
     return res.send(`Failed to validate 'provider' param.`)
   }
 

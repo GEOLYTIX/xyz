@@ -33,11 +33,13 @@ The fetch response will be parsed as text by default.
 
 @returns {Promise<String|JSON|Buffer|Error>} The method resolves to either JSON, Text, or Buffer dependent ref.params.
 */
-module.exports = async function cloudfront(ref) {
+module.exports = cloudfront_signer ? cloudfront : null
+
+async function cloudfront(ref) {
 
   try {
 
-    const signedURL = JSON.parse(cloudfront_signer(ref))
+    const signedURL = JSON.parse(await cloudfront_signer(ref))
 
     // Return signedURL only from request.
     if (ref.params?.signedURL) {
