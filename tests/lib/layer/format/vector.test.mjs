@@ -47,16 +47,16 @@ export async function vectorTest(mapview, layer) {
             layer.hide();
         });
 
-          /**
-         * ### Should be able to create a vector layer
-         * 1. It takes layer params.
-         * 2. Decorates the layer.
-         * 3. We then give the vector function the layer.
-         * 4. We expect the format of the layer to be 'wkt'
-         * 5. We expect the featureFormat of the layer to be 'test_format'
-         * @function it
-         */
-          codi.it('Should create a wkt layer with a custom featureFormat', async () => {
+        /**
+       * ### Should be able to create a vector layer
+       * 1. It takes layer params.
+       * 2. Decorates the layer.
+       * 3. We then give the vector function the layer.
+       * 4. We expect the format of the layer to be 'wkt'
+       * 5. We expect the featureFormat of the layer to be 'test_format'
+       * @function it
+       */
+        codi.it('Should create a wkt layer with a custom featureFormat', async () => {
             const layer_params = {
                 mapview: mapview,
                 'key': 'feature_format_test',
@@ -106,3 +106,4 @@ export async function vectorTest(mapview, layer) {
             layer.hide();
         });
     });
+}
