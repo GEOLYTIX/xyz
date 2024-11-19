@@ -38,13 +38,13 @@ export async function vectorTest(mapview, layer) {
             mapp.layer.formats.vector(clusterLayer);
 
             //Showing the layer
-            layer.show();
-            codi.assertTrue(typeof layer.show === 'function', 'The layer should have a show function');
-            codi.assertTrue(typeof layer.reload === 'function', 'The layer should have a reload function');
-            codi.assertTrue(typeof layer.setSource === 'function', 'The layer should have a setSource function');
-            codi.assertTrue(layer.format === 'cluster', 'The layer should have the format cluster');
-            codi.assertTrue(layer.featureFormat === 'wkt', 'The layer should have the featureFormat set to wkt');
-            layer.hide();
+            clusterLayer.show();
+            codi.assertTrue(typeof clusterLayer.show === 'function', 'The layer should have a show function');
+            codi.assertTrue(typeof clusterLayer.reload === 'function', 'The layer should have a reload function');
+            codi.assertTrue(typeof clusterLayer.setSource === 'function', 'The layer should have a setSource function');
+            codi.assertTrue(clusterLayer.format === 'cluster', 'The layer should have the format cluster');
+            codi.assertTrue(clusterLayer.featureFormat === 'wkt', 'The layer should have the featureFormat set to wkt');
+            clusterLayer.hide();
         });
 
         /**
