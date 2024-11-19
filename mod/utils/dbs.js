@@ -14,7 +14,7 @@ const { Pool } = require('pg');
 
 const logger = require('./logger');
 
-const RETRY_LIMIT = 3;
+let RETRY_LIMIT = 3;
 
 const INITIAL_RETRY_DELAY = 1000;
 
@@ -27,12 +27,20 @@ Object.keys(process.env)
 
     const id = key.split('_')[1]
 
+    //Splitting the dbs string
+    const dbs_string = process.env[key].split('|');
+
+    //The first argument in the dbs_string is the retry limit. 
+    if (dbs_string[1]) {
+      RETRY_LIMIT = parseInt(dbs_string[1]);
+    }
+
     /** 
     @type {Pool} @private
     */
     const pool = new Pool({
       dbs: id,
-      connectionString: process.env[key],
+      connectionString: dbs_string[0],//This is the connection string without other arguments.
       keepAlive: true,
       connectionTimeoutMillis: 5000, // 5 seconds
       idleTimeoutMillis: 30000,      // 30 seconds
