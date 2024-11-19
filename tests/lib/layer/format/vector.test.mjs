@@ -59,51 +59,25 @@ export async function vectorTest(mapview, layer) {
         codi.it('Should create a wkt layer with a custom featureFormat', async () => {
             const layer_params = {
                 mapview: mapview,
-                'key': 'feature_format_test',
-                'display': true,
-                'group': 'layer',
-                'format': 'wkt',
-                'featureFormat': 'test_format',
-                'dbs': 'NEON',
-                'table': 'test.scratch',
-                'srid': '3857',
-                'geom': 'geom_3857',
-                'qID': 'id',
-                'infoj': [
-                    {
-                        'type': 'pin',
-                        'label': 'ST_PointOnSurface',
-                        'field': 'pin',
-                        'fieldfx': 'ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]'
-                    }
-                ],
-                'style': {
-                    'default': {
-                        'icon': {
-                            'type': 'dot',
-                            'fillColor': '#13336B'
-                        }
-                    },
-                    'highlight': {
-                        'scale': 1.3
-                    }
-                }
+                ...layer,
+                key: 'feature_format_test',
+                featureFormat: 'test_format'
             }
 
             //Decorating layer
-            const layer = await mapp.layer.decorate(layer_params);
+            const custom_layer = await mapp.layer.decorate(layer_params);
 
             //Passing the layer to the format method
-            mapp.layer.formats.vector(layer);
+            mapp.layer.formats.vector(custom_layer);
 
             //Showing the layer
-            layer.show();
-            codi.assertTrue(typeof layer.show === 'function', 'The layer should have a show function');
-            codi.assertTrue(typeof layer.reload === 'function', 'The layer should have a reload function');
-            codi.assertTrue(typeof layer.setSource === 'function', 'The layer should have a setSource function');
-            codi.assertTrue(layer.format === 'wkt', 'The layer should have the format wkt');
-            codi.assertTrue(layer.featureFormat === 'test_format', 'The layer should have the featureFormat set to test_format');
-            layer.hide();
+            custom_layer.show();
+            codi.assertTrue(typeof custom_layer.show === 'function', 'The layer should have a show function');
+            codi.assertTrue(typeof custom_layer.reload === 'function', 'The layer should have a reload function');
+            codi.assertTrue(typeof custom_layer.setSource === 'function', 'The layer should have a setSource function');
+            codi.assertTrue(custom_layer.format === 'wkt', 'The layer should have the format wkt');
+            codi.assertTrue(custom_layer.featureFormat === 'test_format', 'The layer should have the featureFormat set to test_format');
+            custom_layer.hide();
         });
     });
 }
