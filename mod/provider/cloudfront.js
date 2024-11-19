@@ -43,6 +43,8 @@ async function cloudfront(ref) {
 
     const signedURL = await cloudfront_signer(url)
 
+    if(signedURL instanceof Error) return
+
     // Return signedURL only from request.
     if (ref.params?.signedURL) {
       return signedURL;

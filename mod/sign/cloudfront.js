@@ -73,5 +73,6 @@ async function cloudfront_signer(req_url) {
 
   } catch(err){
     console.error(err)
+    return err
   }
 }
