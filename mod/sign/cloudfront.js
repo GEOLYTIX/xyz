@@ -13,6 +13,7 @@ The cloudfront sign module exports a method to sign requests to an AWS cloudfron
 
 let getSignedUrl;
 
+//Export nothing if the cloudfront key is not provided
 if(!process.env.KEY_CLOUDFRONT){
 
     console.log('Cloudfront Sign: Missing credentials from env: KEY_CLOUDFRONT')
@@ -24,7 +25,7 @@ else{
     //Third party sources are optional
     try{
 
-        getSignedUrl = require('@aws-sdk/cloudfront-signer');
+        getSignedUrl = require('@aws-sdk/cloudfront-signer').getSignedUrl;
         module.exports = cloudfront_signer
     
     }catch(err){
