@@ -14,7 +14,7 @@ import { delayFunction } from '../../../utils/delay.js';
 */
 export async function viewTest(mapview) {
 
-    setView(mapview, 2, 'default');
+    await setView(mapview, 2, 'default');
 
     await codi.describe('UI Layers: viewTest', async () => {
 
@@ -44,7 +44,7 @@ export async function viewTest(mapview) {
          * @function it
          */
         await codi.it('should display at zoom level 6', async () => {
-            setView(mapview, 11, 'london')
+            await setView(mapview, 11, 'london')
             const layer = mapview.layers['changeEnd'];
             const changeEndEvent = new Event('changeEnd');
             const target = layer.mapview.Map.getTargetElement();

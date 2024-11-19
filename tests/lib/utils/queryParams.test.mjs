@@ -29,7 +29,7 @@ export async function queryParamsTest(mapview) {
             },
         };
 
-        setView(mapview, 2, 'default');
+        await setView(mapview, 2, 'default');
 
         /**
          * ### Should Return undefined
