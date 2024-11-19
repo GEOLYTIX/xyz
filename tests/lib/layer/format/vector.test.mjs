@@ -3,13 +3,18 @@
  * @module layer/format/vector
  */
 
+import cluster_layer_default from '../../../assets/layers/cluster/layer.json';
+
 /**
  * This is the entry point function for the vector test module.
  * @function vectorTest 
  * @param {object} mapview 
  */
-export async function vectorTest(mapview) {
-    await codi.describe('Layer Format: Vector', () => {
+export async function vectorTest(mapview, layer) {
+
+    layer ??= cluster_layer_default;
+
+    await codi.describe('Layer Format: Vector', async () => {
 
         /**
          * ### Should be able to create a cluster layer
@@ -23,78 +28,14 @@ export async function vectorTest(mapview) {
         codi.it('Should create a cluster layer with a wkt featureFormat', async () => {
             const layer_params = {
                 mapview: mapview,
-                'key': 'cluster_test',
-                'display': true,
-                'group': 'layer',
-                'format': 'wkt', //This should change to cluster when used in the vector function
-                'dbs': 'NEON',
-                'table': 'test.scratch',
-                'srid': '3857',
-                'geom': 'geom_3857',
-                'qID': 'id',
-                'cluster': {
-                    'resolution': 0.005,
-                    'hexgrid': true
-                },
-                'infoj': [
-                    {
-                        'type': 'pin',
-                        'label': 'ST_PointOnSurface',
-                        'field': 'pin',
-                        'fieldfx': 'ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]'
-                    }
-                ],
-                'style': {
-                    'default': {
-                        'icon': {
-                            'type': 'dot',
-                            'fillColor': '#13336B'
-                        }
-                    },
-                    'cluster': {
-                        'icon': {
-                            'type': 'target',
-                            'fillColor': '#E6FFFF',
-                            'layers': {
-                                '1': '#13336B',
-                                '0.85': '#E6FFFF'
-                            }
-                        }
-                    },
-                    'highlight': {
-                        'scale': 1.3
-                    },
-                    'theme': {
-                        'title': 'theme_1',
-                        'type': 'graduated',
-                        'field': 'test_template_style',
-                        'graduated_breaks': 'greater_than',
-                        'template': {
-                            'key': 'test_template_style',
-                            'template': '100-99',
-                            'value_only': true
-                        },
-                        'cat_arr': [
-                            {
-                                'value': 0,
-                                'label': '0 to 5%',
-                                'style': {
-                                    'icon': {
-                                        'fillColor': '#ffffcc',
-                                        'fillOpacity': 0.8
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                }
+                ...layer
             }
 
             //Decorating layer
-            const layer = await mapp.layer.decorate(layer_params);
+            const clusterLayer = await mapp.layer.decorate(layer_params);
 
             //Passing the layer to the format method
-            mapp.layer.formats.vector(layer);
+            mapp.layer.formats.vector(clusterLayer);
 
             //Showing the layer
             layer.show();
@@ -165,4 +106,3 @@ export async function vectorTest(mapview) {
             layer.hide();
         });
     });
-}

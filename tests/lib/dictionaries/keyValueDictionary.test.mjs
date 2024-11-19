@@ -3,17 +3,17 @@
  * @description This test is used to see if the key value dictionary is working correctly
  * @function keyValueDictionaryTest
  */
-export function keyValueDictionaryTest(mapview) {
-    codi.describe('Key Value Dictionary Tests', () => {
+export async function keyValueDictionaryTest(mapview) {
+    await codi.describe('Key Value Dictionary Tests', async () => {
 
-        codi.it('should replace the key value dictionary for default value on a layer', () => {
+        await codi.it('should replace the key value dictionary for default value on a layer', () => {
             // Get the OSM layer from the mapview
             const osm = mapview.locale.layers.find(layer => layer.key === 'OSM');
             // Check the OSM layer has the correct name
             codi.assertEqual(osm.name, 'OpenStreetMap KeyValue Dictionary');
         });
 
-        codi.it('should replace the key value dictionary for default value in an infoj', () => {
+        await codi.it('should replace the key value dictionary for default value in an infoj', () => {
             // Get the changeEnd layer from the mapview
             const changeEnd = mapview.locale.layers.find(layer => layer.key === 'changeEnd');
             // Check the changeEnd infoj entry of field textarea has the correct title
@@ -23,7 +23,7 @@ export function keyValueDictionaryTest(mapview) {
 
         });
 
-        codi.it('should not replace the key value dictionary for an array', () => {
+        await codi.it('should not replace the key value dictionary for an array', () => {
             // Get the changeEnd layer from the mapview
             const changeEnd = mapview.locale.layers.find(layer => layer.key === 'changeEnd');
             // Check the changeEnd test_array has the correct value

@@ -25,9 +25,9 @@
             "display": true,
             "type": "dataview",
             "label": "foo",
-            "query": "data_array",
+            "query": "layer_data_aray",
             "template": {
-                "key": "data_array",
+                "key": "layer_data_array",
                 "src": "file:/tests/assets/queries/data_array.sql",
                 "value_only": true
             },

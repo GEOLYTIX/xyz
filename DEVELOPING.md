@@ -24,7 +24,7 @@ Please check the full list of dependencies as defined in the [package.json](http
 
 The MAPP and MAPP.UI library must be build with [esbuild](https://esbuild.github.io/) prior to launching the host.
 
-    npx esbuild ./lib/mapp.mjs ./lib/ui.mjs --bundle --minify --tree-shaking=false --sourcemap --format=iife --outdir=./public/js/lib
+    npx esbuild ./lib/mapp.mjs ./lib/ui.mjs --bundle --minify --tree-shaking=false --sourcemap --format=iife --outdir=./public/js
 
 The build command is stored in the package.json as `_build` script.
 
@@ -36,7 +36,93 @@ ESBuild must also be used to compile the CSS supporting the MAPP and MAPP.UI ele
 
     npx esbuild --bundle public/css/_ui.css --outfile=public/css/ui.css --loader:.svg=dataurl
 
-### Hot rebuild with VSCode Debugger
+## Hot rebuild with nodemon & VSCode Chrome Debugger
+
+### nodemon
+
+The development environment uses nodemon to watch for changes and automatically rebuild the necessary files. This is configured in `nodemon.json`:
+
+```json
+{
+    "watch": [
+        "lib/**/*",
+        "tests/**/*",
+        "public/css/*",
+        "../xyz_resources/**/*"
+    ],
+    "ext": ".js,.mjs,.json,.css,.svg",
+    "ignore": [
+        "public/js/**/*",
+        "public/css/mapp.css",
+        "public/css/ui.css"
+    ],
+    "env": {
+        "NODE_ENV": "DEVELOPMENT"
+    },
+    "exec": "npx concurrently \"node esbuild.config.mjs\" \"npm run ui_css\" \"npm run mapp_css\"",
+    "events": {
+        "start": "echo \"Watching for changes...\"",
+        "exit": "echo \"Build complete\""
+    }
+}
+```
+
+#### Watched Directories
+
+* `lib/**/*`: All files in the lib directory
+* `tests/**/*`: All test files
+* `public/css/*`: CSS source files
+* `../xyz_resources/**/*`: External resource files.
+
+#### File Types Watched
+
+* JavaScript files (`.js`)
+* ES Modules (`.mjs`)
+* JSON files (`.json`)
+* CSS files (`.css`)
+* SVG files (`.svg`)
+
+#### Ignored Files
+
+* Built JavaScript files (`public/js/**/*`)
+
+* Compiled CSS files:
+  * `public/css/mapp.css`
+  * `public/css/ui.css`
+
+#### Automatic Actions
+
+When changes are detected:
+
+1. Rebuilds JavaScript using esbuild
+2. Recompiles UI CSS
+3. Recompiles MAPP CSS
+4. All tasks run concurrently for faster builds
+
+### Running nodemon
+
+1. Start the watch mode:
+
+```bash
+  npx nodemon
+```
+
+2. Nodemon will:
+   * Set `NODE_ENV` to "DEVELOPMENT"
+   * Watch for file changes
+   * Automatically rebuild affected files
+   * Display "Watching for changes..." when started
+   * Show "Build complete" after each rebuild
+
+3. The application will rebuild automatically when you:
+   * Modify test files
+   * Change source code
+   * Update CSS
+   * Modify resources
+
+This ensures that your test environment always has the latest changes without manual rebuilds.
+
+### VSCode Tasks & Launch
 
 A task can be added to the `.vscode/tasks.json` to execute `nodemon` and `browser-sync` concurrently. This will allow VSCode to rebuild the application on script changes in the editor.
 
@@ -79,13 +165,13 @@ A task can be added to the `.vscode/tasks.json` to execute `nodemon` and `browse
 }
 ```
 
-The `browser-sync` script is defined in the `package.json` as `"npx browser-sync start --proxy localhost:3000 --port 3001 --ui-port 3002 --files public/js/lib/**/* --no-open --no-notify"`
+The `browser-sync` script is defined in the `package.json` as `"npx browser-sync start --proxy localhost:3000 --port 3001 --ui-port 3002 --files public/js/**/* --no-open --no-notify"`
 
 The application running on port 3000 will be proxied to port 3001 for the browser-sync event. The browser window will refresh when the node application rebuilds after changes to the script in a VSCode editor.
 
-#### VSCode / Chrome Debugging 
+#### VSCode / Chrome Debugging
 
-An additional debug configuration in `.vscode/launch.json` is required to debug the mapp lib code in VSCode. 
+An additional debug configuration in `.vscode/launch.json` is required to debug the mapp lib code in VSCode.
 
 ```json
 {
@@ -103,7 +189,7 @@ The Chrome debug config must be launched as an additional session. VSCode run an
 
 Breakpoints set in the mapp lib script will now be respected in the VSCode debug editor window. Breakpoints set in the Chrome dev tools will also break in the VSCode editor.
 
-The browser will automatically reload on changes to files in the `lib`, 'tests' and `public/css' directories. 
+The browser will automatically reload on changes to files in the `lib`, 'tests' and `public/css' directories.
 
 #### Additional settings for VSCode
 
