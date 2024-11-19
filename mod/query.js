@@ -50,7 +50,7 @@ The query is executed by the executeQuery() method.
 module.exports = async function query(req, res) {
 
   // Get the template.
-  const template = await getTemplate(req.params.template)
+  const template = await getTemplate(req.params.template, req.params.purge)
 
   if (template instanceof Error) {
     return res.status(500).send(template.message)
