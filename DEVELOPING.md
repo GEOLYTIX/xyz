@@ -145,12 +145,17 @@ A task can be added to the `.vscode/tasks.json` to execute `nodemon` and `browse
           "endsPattern": "Build complete"
         }
       }
+    },
+    {
+        "label": "kill-watch",
+        "type": "shell",
+        "command": "pkill -f nodemon; pkill -f browser-sync"
     }
   ]
 }
 ```
 
-`start-watch` is a `preLaunchTask` which must be added to the debug configuration in the `.vscode/launch.json`.
+`start-watch` (preLaunchTask) and `kill-watch` (postDebugTask) must be added to your debug configuration in `.vscode/launch.json` to ensure the watch process starts before debugging and stops after each debugging session.
 
 ```json
 {
@@ -161,6 +166,7 @@ A task can be added to the `.vscode/tasks.json` to execute `nodemon` and `browse
   "preLaunchTask": "start-watch",
   "console": "integratedTerminal",
   "internalConsoleOptions": "openOnSessionStart",
+  "postDebugTest": "kill-background",
   "env": {}
 }
 ```
