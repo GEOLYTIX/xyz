@@ -3,7 +3,9 @@
  * @module layer/format/vector
  */
 
-import cluster_layer_default from '../../../assets/layers/cluster/layer.json';
+import clusterLayerDefault from '../../../assets/layers/cluster/layer.json';
+import geojsonLayerDefault from '../../../assets/layers/geojson/layer.json';
+import ukFeatures from '../../../assets/data/uk.json';
 
 /**
  * This is the entry point function for the vector test module.
@@ -12,40 +14,9 @@ import cluster_layer_default from '../../../assets/layers/cluster/layer.json';
  */
 export async function vectorTest(mapview, layer) {
 
-    layer ??= cluster_layer_default;
+    layer ??= clusterLayerDefault;
 
     await codi.describe('Layer Format: Vector', async () => {
-
-        /**
-         * ### Should be able to create a cluster layer
-         * 1. It takes layer params.
-         * 2. Decorates the layer.
-         * 3. We then give the vector function the layer.
-         * 4. We expect the format of the layer to change to 'cluster'
-         * 5. We expect the featureFormat of the layer to be 'wkt'
-         * @function it
-         */
-        codi.it('Should create a cluster layer with a wkt featureFormat', async () => {
-            const layer_params = {
-                mapview: mapview,
-                ...layer
-            }
-
-            //Decorating layer
-            const clusterLayer = await mapp.layer.decorate(layer_params);
-
-            //Passing the layer to the format method
-            mapp.layer.formats.vector(clusterLayer);
-
-            //Showing the layer
-            clusterLayer.show();
-            codi.assertTrue(typeof clusterLayer.show === 'function', 'The layer should have a show function');
-            codi.assertTrue(typeof clusterLayer.reload === 'function', 'The layer should have a reload function');
-            codi.assertTrue(typeof clusterLayer.setSource === 'function', 'The layer should have a setSource function');
-            codi.assertTrue(clusterLayer.format === 'cluster', 'The layer should have the format cluster');
-            codi.assertTrue(clusterLayer.featureFormat === 'wkt', 'The layer should have the featureFormat set to wkt');
-            clusterLayer.hide();
-        });
 
         /**
        * ### Should be able to create a vector layer
@@ -56,28 +27,83 @@ export async function vectorTest(mapview, layer) {
        * 5. We expect the featureFormat of the layer to be 'test_format'
        * @function it
        */
+
         codi.it('Should create a wkt layer with a custom featureFormat', async () => {
-            const layer_params = {
-                mapview: mapview,
-                ...layer,
+            const custom_config = {
                 key: 'feature_format_test',
-                featureFormat: 'test_format'
+                featureFormat: 'customFeatureFormat'
             }
 
-            //Decorating layer
-            const custom_layer = await mapp.layer.decorate(layer_params);
+            const layer_params = {
+                // mapview: mapview,
+                ...geojsonLayerDefault,
+                ...custom_config
+            }
 
-            //Passing the layer to the format method
-            mapp.layer.formats.vector(custom_layer);
+            mapp.layer.featureFormats.customFeatureFormat = customFeatureFormat;
 
-            //Showing the layer
-            custom_layer.show();
-            codi.assertTrue(typeof custom_layer.show === 'function', 'The layer should have a show function');
-            codi.assertTrue(typeof custom_layer.reload === 'function', 'The layer should have a reload function');
-            codi.assertTrue(typeof custom_layer.setSource === 'function', 'The layer should have a setSource function');
-            codi.assertTrue(custom_layer.format === 'wkt', 'The layer should have the format wkt');
-            codi.assertTrue(custom_layer.featureFormat === 'test_format', 'The layer should have the featureFormat set to test_format');
-            custom_layer.hide();
+            layer_params.features = ukFeatures.features;
+
+            layer_params.params = {
+                fields: ['id', 'name', 'description', 'geom_4326']
+            }
+
+            // mapview.Map.addLayer(layer_params.L);
+            mapview.addLayer(layer_params);
+
+        });
+
+    });
+}
+
+function customFeatureFormat(layer, features) {
+    const formatGeojson = new ol.format.GeoJSON();
+
+    function getPointOnSurface(geometry) {
+        if (geometry instanceof ol.geom.Point) {
+            const coords = geometry.getCoordinates();
+            return [coords[0], coords[1]];
+        }
+
+        if (geometry instanceof ol.geom.Polygon ||
+            geometry instanceof ol.geom.MultiPolygon) {
+            const coords = geometry.getInteriorPoint().getCoordinates();
+            return [coords[0], coords[1]];
+        }
+
+        const extent = geometry.getExtent();
+        const center = ol.extent.getCenter(extent);
+        return [center[0], center[1]];
+    }
+
+    mapp.layer.featureFields.reset(layer);
+
+
+    return features.map((feature) => {
+        // Populate featureFields values array with feature property values
+        layer.params.fields?.forEach(field => {
+            layer.featureFields[field].values.push(feature.properties[field]);
+        });
+
+        // Create the OpenLayers geometry
+        const olGeometry = formatGeojson.readGeometry(feature.geometry, {
+            dataProjection: 'EPSG:' + layer.srid,
+            featureProjection: 'EPSG:' + layer.mapview.srid,
+        });
+
+        // Get point on surface coordinates
+        const pointOnSurface = getPointOnSurface(olGeometry);
+
+        // Add pointOnSurface to properties if needed
+        feature.properties = {
+            ...feature.properties,
+            pin: pointOnSurface
+        };
+
+        return new ol.Feature({
+            id: feature.id,
+            geometry: olGeometry,
+            ...feature.properties
         });
     });
 }
