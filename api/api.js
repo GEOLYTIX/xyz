@@ -46,6 +46,7 @@ The res object represents the HTTP response that an [Express] app sends when it 
 @typedef {Object} env
 The process.ENV object holds configuration provided to the node process from the launch environment. The environment configuration allows the provision of keys and secrets which must not be accessible from the client. All env properties are limited to string type.
 @property {String} [DIR=''] The XYZ API path which concatenated with the domain for all requests.
+@property {String} [DBS_=''] DBS_* values are the connections used to establish connections to pg servers with the [dbs]{@link module:/utils/dbs} module. 
 @property {String} [PORT='3000'] The port on which the express app listens to for requests.
 @property {String} [COOKIE_TTL='36000'] The Time To Live for all cookies issued by the XYZ API.
 @property {String} [TITLE='GEOLYTIX | XYZ'] The TITLE value is used to identify cookies and is provided to as a param to Application View templates.
@@ -59,6 +60,7 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [FAILED_ATTEMPTS='3'] The [user/fromACL module]{@link module:/user/fromACL} will expire user validation if failed login attempts exceed the FAILED_ATTEMPTS value.
 @property {String} [PASSWORD_REGEXP='(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{10,}$'] The [user/register module]{@link module:/user/register} will apply PASSWORD_REGEXP value to check the complexity of provided user passwords.
 @property {String} [STATEMENT_TIMEOUT] The [utils/dbs module]{@link module:/utils/dbs} will apply the STATEMENT_TIMEOUT to the query.client.
+@property {String} [RETRY_LIMIT='3'] The [utils/dbs module]{@link module:/utils/dbs} will apply the RETRY_LIMIT to the query.client.
 @property {String} [WORKSPACE_AGE] The [workspace/cache module]{@link module:/mod/workspace/cache} flashes the workspace cache after the WORKSPACE_AGE is reached.
 @property {String} [CUSTOM_TEMPLATES] The [workspace/cache module]{@link module:/mod/workspace/cache} caches templates defined as a src in the CUSTOM_TEMPLATES env.
 @property {String} [TRANSPORT] The [utils/mailer module]{@link module:/utils/mailer} requires a TRANSPORT env.
