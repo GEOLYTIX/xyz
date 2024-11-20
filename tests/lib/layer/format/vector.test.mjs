@@ -48,8 +48,13 @@ export async function vectorTest(mapview, layer) {
                 fields: ['id', 'name', 'description', 'geom_4326']
             }
 
-            // mapview.Map.addLayer(layer_params.L);
-            mapview.addLayer(layer_params);
+            const layer = await mapview.addLayer(layer_params);
+
+            codi.assertTrue(Object.hasOwn(layer[0], 'show'), 'The layer should have a show function');
+            codi.assertTrue(Object.hasOwn(layer[0], 'display'), 'The layer should have a display property');
+            codi.assertTrue(Object.hasOwn(layer[0], 'hide'), 'The layer should have a hide function');
+            codi.assertTrue(Object.hasOwn(layer[0], 'reload'), 'The layer should have a reload function');
+            codi.assertTrue(Object.hasOwn(layer[0], 'tableCurrent'), 'The layer should have a tableCurrent function');
 
         });
 
