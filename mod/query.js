@@ -52,10 +52,7 @@ module.exports = async function query(req, res) {
   // The SQL param is restricted to hold substitute values.
   req.params.SQL = [];
 
-  // Assign role filter and viewport params from layer object.
-  await layerQuery(req, res)
-
-  if (res.finished) return;  
+  if (res.finished) return;
 
   // Get the template.
   const template = await getTemplate(req.params.template)
@@ -85,6 +82,9 @@ module.exports = async function query(req, res) {
 
     return res.status(403).send('Role access denied for query template.')
   }
+
+  // The SQL param is restricted to hold substitute values.
+  req.params.SQL = [];
 
   // Get workspace from cache.
   req.params.workspace = await workspaceCache()
