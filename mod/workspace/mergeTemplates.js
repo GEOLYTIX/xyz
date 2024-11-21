@@ -100,7 +100,7 @@ module.exports = async function mergeTemplates(obj) {
 
       //The object template must not be overwritten by a templates template.
       delete template.template;
-      
+
       // Merge template --> obj
       obj = merge(obj, template)
     }
@@ -154,7 +154,7 @@ function assignWorkspaceTemplates(obj) {
 
     if (entry[1] instanceof Object) {
 
-      Object.values(entry[1])?.forEach(assignWorkspaceTemplates)
+      assignWorkspaceTemplates(entry[1]);
     }
 
   })
