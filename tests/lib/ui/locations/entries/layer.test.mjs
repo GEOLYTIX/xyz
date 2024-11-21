@@ -77,12 +77,12 @@ export async function layerTest(mapview) {
                 'layer': 'mvt_test',
                 'tables': {
                     '12': null,
-                    '13':'test.mvt_test'
+                    '13': 'test.mvt_test'
                 }
             };
 
             //Zoom out
-            setView(mapview, 11, 'london');
+            await setView(mapview, 11, 'london');
 
             await mapp.ui.locations.entries.layer(newEntry);
 
@@ -92,7 +92,7 @@ export async function layerTest(mapview) {
             codi.assertTrue(mapview.layers[newEntry.key].display_toggle.classList.contains('disabled'), 'Toggle should be disabled')
 
             //Zoom in
-            setView(mapview, 14, 'london');
+            await setView(mapview, 14, 'london');
 
             codi.assertFalse(!mapview.layers[newEntry.key].display_toggle.classList.contains('disabled'), 'Toggle should be enabled')
 

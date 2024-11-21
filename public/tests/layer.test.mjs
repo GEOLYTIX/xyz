@@ -27,7 +27,7 @@ export async function layerTest(mapview) {
                 if (layer.style?.themes) {
 
                     for (const theme in layer.style.themes) {
-                        console.log(`Testing theme ${theme}`);
+                        console.log(`Testing -- Layer: ${layer.key}: Theme: ${theme}`);
                         layer.style.theme = layer.style.themes[theme];
                         layer.reload();
 

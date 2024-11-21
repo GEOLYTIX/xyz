@@ -3,105 +3,112 @@
  * @module layer/format/vector
  */
 
+import clusterLayerDefault from '../../../assets/layers/cluster/layer.json';
+import geojsonLayerDefault from '../../../assets/layers/geojson/layer.json';
+import ukFeatures from '../../../assets/data/uk.json';
+
 /**
  * This is the entry point function for the vector test module.
  * @function vectorTest 
  * @param {object} mapview 
  */
-export async function vectorTest(mapview) {
-    await codi.describe('Layer Format: Vector', () => {
+export async function vectorTest(mapview, layer) {
+
+    layer ??= clusterLayerDefault;
+
+    await codi.describe('Layer Format: Vector', async () => {
 
         /**
-         * ### Should be able to create a cluster layer
-         * 1. It takes layer params.
-         * 2. Decorates the layer.
-         * 3. We then give the vector function the layer.
-         * 4. We expect the format of the layer to change to 'cluster'
-         * @function it
-         */
-        codi.it('Should create a cluster layer', async () => {
-            const layer_params = {
-                mapview: mapview,
-                'key': 'cluster_test',
-                'display': true,
-                'group': 'layer',
-                'format': 'wkt', //This should change to cluster when used in the vector function
-                'dbs': 'NEON',
-                'table': 'test.scratch',
-                'srid': '3857',
-                'geom': 'geom_3857',
-                'qID': 'id',
-                'cluster': {
-                    'resolution': 0.005,
-                    'hexgrid': true
-                },
-                'infoj': [
-                    {
-                        'type': 'pin',
-                        'label': 'ST_PointOnSurface',
-                        'field': 'pin',
-                        'fieldfx': 'ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]'
-                    }
-                ],
-                'style': {
-                    'default': {
-                        'icon': {
-                            'type': 'dot',
-                            'fillColor': '#13336B'
-                        }
-                    },
-                    'cluster': {
-                        'icon': {
-                            'type': 'target',
-                            'fillColor': '#E6FFFF',
-                            'layers': {
-                                '1': '#13336B',
-                                '0.85': '#E6FFFF'
-                            }
-                        }
-                    },
-                    'highlight': {
-                        'scale': 1.3
-                    },
-                    'theme': {
-                        'title': 'theme_1',
-                        'type': 'graduated',
-                        'field': 'test_template_style',
-                        'graduated_breaks': 'greater_than',
-                        'template': {
-                            'key': 'test_template_style',
-                            'template': '100-99',
-                            'value_only': true
-                        },
-                        'cat_arr': [
-                            {
-                                'value': 0,
-                                'label': '0 to 5%',
-                                'style': {
-                                    'icon': {
-                                        'fillColor': '#ffffcc',
-                                        'fillOpacity': 0.8
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                }
+       * ### Should be able to create a vector layer
+       * 1. It takes layer params.
+       * 2. Decorates the layer.
+       * 3. We then give the vector function the layer.
+       * 4. We expect the format of the layer to be 'wkt'
+       * 5. We expect the featureFormat of the layer to be 'test_format'
+       * @function it
+       */
+
+        codi.it('Should create a wkt layer with a custom featureFormat', async () => {
+            const custom_config = {
+                key: 'feature_format_test',
+                featureFormat: 'customFeatureFormat'
             }
 
-            //Decorating layer
-            const layer = await mapp.layer.decorate(layer_params);
+            const layer_params = {
+                // mapview: mapview,
+                ...geojsonLayerDefault,
+                ...custom_config
+            }
 
-            //Passing the layer to the format method
-            mapp.layer.formats.vector(layer);
+            mapp.layer.featureFormats.customFeatureFormat = customFeatureFormat;
 
-            //Showing the layer
-            layer.show();
-            codi.assertTrue(typeof layer.show === 'function', 'The layer should have a show function');
-            codi.assertTrue(typeof layer.reload === 'function', 'The layer should have a reload function');
-            codi.assertTrue(typeof layer.setSource === 'function', 'The layer should have a setSource function');
-            codi.assertTrue(layer.format === 'cluster', 'The layer should have the format cluster');
-            layer.hide();
+            layer_params.features = ukFeatures.features;
+
+            layer_params.params = {
+                fields: ['id', 'name', 'description', 'geom_4326']
+            }
+
+            const layer = await mapview.addLayer(layer_params);
+
+            codi.assertTrue(Object.hasOwn(layer[0], 'show'), 'The layer should have a show function');
+            codi.assertTrue(Object.hasOwn(layer[0], 'display'), 'The layer should have a display property');
+            codi.assertTrue(Object.hasOwn(layer[0], 'hide'), 'The layer should have a hide function');
+            codi.assertTrue(Object.hasOwn(layer[0], 'reload'), 'The layer should have a reload function');
+            codi.assertTrue(Object.hasOwn(layer[0], 'tableCurrent'), 'The layer should have a tableCurrent function');
+
+        });
+
+    });
+}
+
+function customFeatureFormat(layer, features) {
+    const formatGeojson = new ol.format.GeoJSON();
+
+    function getPointOnSurface(geometry) {
+        if (geometry instanceof ol.geom.Point) {
+            const coords = geometry.getCoordinates();
+            return [coords[0], coords[1]];
+        }
+
+        if (geometry instanceof ol.geom.Polygon ||
+            geometry instanceof ol.geom.MultiPolygon) {
+            const coords = geometry.getInteriorPoint().getCoordinates();
+            return [coords[0], coords[1]];
+        }
+
+        const extent = geometry.getExtent();
+        const center = ol.extent.getCenter(extent);
+        return [center[0], center[1]];
+    }
+
+    mapp.layer.featureFields.reset(layer);
+
+
+    return features.map((feature) => {
+        // Populate featureFields values array with feature property values
+        layer.params.fields?.forEach(field => {
+            layer.featureFields[field].values.push(feature.properties[field]);
+        });
+
+        // Create the OpenLayers geometry
+        const olGeometry = formatGeojson.readGeometry(feature.geometry, {
+            dataProjection: 'EPSG:' + layer.srid,
+            featureProjection: 'EPSG:' + layer.mapview.srid,
+        });
+
+        // Get point on surface coordinates
+        const pointOnSurface = getPointOnSurface(olGeometry);
+
+        // Add pointOnSurface to properties if needed
+        feature.properties = {
+            ...feature.properties,
+            pin: pointOnSurface
+        };
+
+        return new ol.Feature({
+            id: feature.id,
+            geometry: olGeometry,
+            ...feature.properties
         });
     });
 }

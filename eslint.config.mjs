@@ -1,6 +1,6 @@
 export default [
   {
-    ignores: ['public/js/lib/*', 'docs/**/*'],
+    ignores: ['public/js/**/*', 'docs/**/*'],
   },
   {
     files: ['**/*.js', '**/*.mjs'],
@@ -15,7 +15,7 @@ export default [
           'max': 4
         }
       ],
-      // 'complexity': ['error', { 'max': 15 }],
+      //'complexity': ['error', { 'max': 15 }],
       'no-nested-ternary': 'error'
     }
   }
