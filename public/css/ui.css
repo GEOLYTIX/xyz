@@ -1637,6 +1637,23 @@ label.checkbox {
 }
 
 /* public/css/_ui.css */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-primary-light);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+  border-radius: 2px;
+}
 .no-select {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
