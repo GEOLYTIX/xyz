@@ -53,5 +53,29 @@ export async function viewTest(mapview) {
             codi.assertTrue(layer.display, 'The changeEnd() layer should display at zoom level 6');
             await delayFunction(1000);
         });
+
+        /**
+         * ### should not have a zoom button.
+         * 1. The Test sets the mapview to London at zoom level 11.
+         * 2. Creates the `changeEnd` event and dispatches it.
+         * 3. Checks the magnifying glass is not present.
+         * @function it
+         */
+        await codi.it('should not display a zoom button', async () => {
+            await setView(mapview, 11, 'london')
+            const layer = mapview.layers['changeEnd'];
+            layer.viewConfig = {
+                                displayToggle: true,
+                                zoomToExtentBtn: true,
+                                panelOrder: true
+                               }
+
+            mapp.ui.layers.view(layer)
+
+            codi.assertEqual(layer.view.querySelector('[data-id=zoom-to]'), null, 'No magnifying glass should be present');
+            await delayFunction(1000);
+        });
+
+        
     });
 }
