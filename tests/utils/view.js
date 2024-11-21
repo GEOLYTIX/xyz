@@ -14,7 +14,7 @@ const views =
     }
 }
 
-export function setView(mapview, z, view) {
-    mapview.Map.getView().setZoom(z);
-    mapview.Map.getView().setCenter([views[view].lat, views[view].long])
+export async function setView(mapview, z, view) {
+    await mapview.Map.getView().setZoom(z);
+    await mapview.Map.getView().setCenter([views[view].lat, views[view].long])
 }

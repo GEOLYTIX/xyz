@@ -37,20 +37,16 @@ With a valid signature the token will be resolved as a user object by the verify
 
 The auth method checks either the request parameter token or user.session if enabled.
 
-@param {Object} req HTTP request.
-@param {Object} req.headers Request headers.
-@param {Object} [req.headers.authorization] 
-User authorization object.
-@param {string} [req.params.token] 
-Authorization token.
-@param {Object} [req.cookies] 
-Request cookies.
-@param {Object} res 
-HTTP response.
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {Object} req.headers Request headers.
+@property {Object} [headers.authorization] User authorization object.
+@property {Object} req.params Request parameters.
+@property {string} [params.token] JWT.
+@property {Object} [req.cookies] Request cookies.
 
-@return {Object} User
+@returns {Promise<Object|Error>} Method resolves to either a user object or Error
 */
-
 module.exports = async function auth(req, res) {
 
   if (acl === null) return null;
@@ -69,6 +65,7 @@ module.exports = async function auth(req, res) {
   // Verify the token signature.
   let user;
 
+  // A secret string is required to verify a token.
   if (!process.env.SECRET) return null
 
   try {
@@ -113,15 +110,13 @@ Every request will validate the API key against the key stored in the ACL.
 
 API keys do not expire. But changing the key in the ACL will immediately invalidate the key on successive checks.
 
-@param {Object} req 
-HTTP request.
-@param {string} req.params.token
-Authorization token.
-@param {Object} [req.cookies] 
-Request cookies.
-@param {Object} res 
-HTTP response.
-@param {Object} user
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {Object} req.params Request parameters.
+@property {string} params.token JWT.
+@property {Object} [req.cookies] Request cookies.
+
+@returns {Promise<Object|Error>} Method resolves to either a user object or Error
 */
 
 async function checkParamToken(req, res, user) {
@@ -186,12 +181,12 @@ Validated session keys are stored in the user_sessions object to prevent excessi
 
 The session key will be updated on login, eg. on a different device. This will invalidate the existing session key on devices previously logged in.
 
-@param {Object} req 
-HTTP request.
-@param {string} [req.params.token] 
-Authorization token.
-@param {Object} user
-@return {string} user.session
+@param {req} req HTTP request.
+@param {user} user User object.
+@property {Object} req.params Request parameters.
+@property {string} [params.token] JWT.
+
+@returns {Promise<Object|Error>} Method resolves to either a user object or Error
 */
 
 async function checkSession(req, user) {
