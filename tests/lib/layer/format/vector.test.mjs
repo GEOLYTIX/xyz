@@ -18,6 +18,48 @@ export async function vectorTest(mapview, layer) {
 
     await codi.describe('Layer Format: Vector', async () => {
 
+        codi.it('Should create a geojson layer', async () => {
+            const custom_config = {
+                key: 'geojson_test',
+                featureLocation: true
+            }
+
+            const layer_params = {
+                ...geojsonLayerDefault,
+                ...custom_config
+            }
+
+            layer_params.features = ukFeatures.features;
+
+            layer_params.params = {
+                fields: ['id', 'name', 'description', 'geom_4326']
+            }
+
+
+            const layer = await mapview.addLayer(layer_params);
+
+            const layersTab = document.getElementById('layers');
+
+            const layers = {
+                [custom_config.key]: mapview.layers[custom_config.key]
+            }
+
+            // Create layers listview.
+            mapp.ui.layers.listview({
+                target: layersTab,
+                layers: layers
+            });
+
+            codi.assertTrue(Object.hasOwn(layer[0], 'show'), 'The layer should have a show function');
+            codi.assertTrue(Object.hasOwn(layer[0], 'display'), 'The layer should have a display property');
+            codi.assertTrue(Object.hasOwn(layer[0], 'hide'), 'The layer should have a hide function');
+            codi.assertTrue(Object.hasOwn(layer[0], 'reload'), 'The layer should have a reload function');
+            codi.assertTrue(Object.hasOwn(layer[0], 'tableCurrent'), 'The layer should have a tableCurrent function');
+
+            layer[0].hide();
+
+        });
+
         /**
        * ### Should be able to custom vector layer
        * 1. It takes layer params.
@@ -42,17 +84,21 @@ export async function vectorTest(mapview, layer) {
             layer_params.features = ukFeatures.features;
 
             layer_params.params = {
-                fields: ['id', 'name', 'description', 'geom_4326']
+                fields: ['id', 'pin', 'name', 'description', 'geom_4326']
             }
 
             const layer = await mapview.addLayer(layer_params);
 
             const layersTab = document.getElementById('layers');
 
+            const layers = {
+                [custom_config.key]: mapview.layers[custom_config.key]
+            }
+
             // Create layers listview.
             mapp.ui.layers.listview({
                 target: layersTab,
-                mapview: mapview,
+                layers: layers
             });
 
             codi.assertTrue(Object.hasOwn(layer[0], 'show'), 'The layer should have a show function');
@@ -60,6 +106,8 @@ export async function vectorTest(mapview, layer) {
             codi.assertTrue(Object.hasOwn(layer[0], 'hide'), 'The layer should have a hide function');
             codi.assertTrue(Object.hasOwn(layer[0], 'reload'), 'The layer should have a reload function');
             codi.assertTrue(Object.hasOwn(layer[0], 'tableCurrent'), 'The layer should have a tableCurrent function');
+
+            layer[0].hide();
 
         });
 
@@ -79,36 +127,10 @@ function customFeatureFormat(layer, features) {
             featureProjection: 'EPSG:' + layer.mapview.srid,
         });
 
-        // Get point on surface coordinates
-        const pointOnSurface = getPointOnSurface(olGeometry);
-
-        // Add pointOnSurface to properties if needed
-        feature.properties = {
-            ...feature.properties,
-            pin: pointOnSurface
-        };
-
         return new ol.Feature({
             id: feature.id,
             geometry: olGeometry,
             ...feature.properties
         });
     });
-}
-
-function getPointOnSurface(geometry) {
-    if (geometry instanceof ol.geom.Point) {
-        const coords = geometry.getCoordinates();
-        return [coords[0], coords[1]];
-    }
-
-    if (geometry instanceof ol.geom.Polygon ||
-        geometry instanceof ol.geom.MultiPolygon) {
-        const coords = geometry.getInteriorPoint().getCoordinates();
-        return [coords[0], coords[1]];
-    }
-
-    const extent = geometry.getExtent();
-    const center = ol.extent.getCenter(extent);
-    return [center[0], center[1]];
 }

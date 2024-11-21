@@ -2,7 +2,6 @@
     "key": "geojson_test",
     "format": "geojson",
     "display": true,
-    "group": "layer",
     "geom": "geometry",
     "srid": "4326",
     "qID": "id",
@@ -10,8 +9,7 @@
         {
             "type": "pin",
             "label": "ST_PointOnSurface",
-            "field": "pin",
-            "srid": "3857"
+            "field": "pin"
         },
         {
             "field": "name"
