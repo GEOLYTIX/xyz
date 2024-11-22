@@ -1,6 +1,6 @@
 export default [
   {
-    ignores: ['public/js/lib/*', 'docs/**/*'],
+    ignores: ['public/js/**/*', 'docs/**/*'],
   },
   {
     files: ['**/*.js', '**/*.mjs'],

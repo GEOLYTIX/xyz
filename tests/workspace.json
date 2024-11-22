@@ -7,7 +7,7 @@
     },
     "templates": {
         "template_test_temp": {
-            "src": "file:/tests/assets/layers/template_test.json"
+            "src": "file:/tests/assets/layers/template_test/layer.json"
         },
         "mvt_test_temp": {
             "src": "file:/tests/assets/layers/mvt/layer.json"
@@ -32,7 +32,8 @@
             "src": "file:/tests/assets/queries/minmax_mock.sql"
         },
         "data_array": {
-            "src": "file:/tests/assets/queries/data_array.sql"
+            "src": "file:/tests/assets/queries/data_array.sql",
+            "value_only": true
         },
         "bogus_data_array": {
             "src": "file:/tests/assets/queries/data_array.sql",
@@ -57,7 +58,8 @@
         ],
         "plugins": [
             "${PLUGINS}v4.8.0/coordinates.js",
-            "${PLUGINS}v4.8.0/chartjs.js"
+            "${PLUGINS}v4.8.0/chartjs.js",
+            "/test/api/provider/file?content_type=application/javascript&url=./tests/assets/plugins/assignMapview.js"
         ],
         "syncPlugins": [
             "zoomBtn",
@@ -96,6 +98,7 @@
                 "css_style": "mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg); -webkit-mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg);"
             }
         ],
+        "assignMapview": {},
         "keyvalue_dictionary": [
             {
                 "key": "name",
@@ -308,10 +311,6 @@
                     {
                         "key": "chart_queryparams",
                         "src": "file:/tests/assets/infoj/chart_queryparams.json"
-                    },
-                    {
-                        "key": "template_style",
-                        "src": "file:/tests/assets/styles/template_style.json"
                     },
                     {
                         "key": "bogus_file",

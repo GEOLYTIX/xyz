@@ -1,6 +1,6 @@
 {
   "name": "xyz",
-  "version": "v4.12.3",
+  "version": "v4.12.4",
   "repository": {
     "type": "git",
     "url": "https://github.com/geolytix/xyz"
@@ -11,7 +11,7 @@
   "scripts": {
     "test": "codi tests",
     "_build": "node esbuild.config.mjs",
-    "browser-sync": "npx browser-sync start --proxy localhost:3000 --port 3001 --ui-port 3002 --files public/js/lib/**/* --no-open --no-notify",
+    "browser-sync": "npx browser-sync start --proxy localhost:3000 --port 3001 --ui-port 3002 --files public/js/**/* --no-open --no-notify",
     "ui_css": "npx esbuild --bundle public/css/_ui.css --outfile=public/css/ui.css --loader:.svg=dataurl",
     "mapp_css": "npx esbuild --bundle public/css/_mapp.css --outfile=public/css/mapp.css",
     "generate-docs": "jsdoc --configure jsdoc_mapp.json --verbose && jsdoc --configure jsdoc_xyz.json --verbose && jsdoc --configure jsdoc_test.json --verbose",
@@ -33,7 +33,7 @@
     "@eslint/js": "^9.13.0",
     "browser-sync": "^3.0.3",
     "clean-jsdoc-theme": "^4.3.0",
-    "codi-test-framework": "^0.0.33",
+    "codi-test-framework": "^0.0.47",
     "concurrently": "^9.1.0",
     "cookie-parser": "^1.4.5",
     "dotenv": "^16.4.5",
