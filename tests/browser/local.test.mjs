@@ -23,7 +23,7 @@ export async function coreTest() {
     //UI Layers Tests
     await runAllTests(_mappTest.ui_layers, mapview);
     //UI tests
-    await runAllTests(_mappTest.uiTest);
+    await runAllTests(_mappTest.uiTest, mapview);
     //Format Tests
     await runAllTests(_mappTest.formatTest, mapview);
     //UI Locations Tests
