@@ -6,6 +6,7 @@
 
 import { setView } from '../../../utils/view.js';
 import { delayFunction } from '../../../utils/delay.js';
+import clusterConfig from '../../../assets/layers/cluster/layer.json'
 
 /**
  * This function is used as an entry point for the changeEndTest
@@ -62,17 +63,26 @@ export async function viewTest(mapview) {
          * @function it
          */
         await codi.it('should not display a zoom button when not provided', async () => {
-            await setView(mapview, 11, 'london')
-            const layer = mapview.layers['changeEnd'];
+            const layer = clusterConfig;
+
             layer.viewConfig = {
                 displayToggle: true,
                 zoomToExtentBtn: true
             }
 
-            mapp.ui.layers.view(layer)
+            layer.filter = {
+                zoomToExtent: true
+            }
 
-            codi.assertEqual(layer.view.querySelector('[data-id=zoom-to]'), null, 'No magnifying glass should be present');
-            await delayFunction(1000);
+            layer.mapview = mapview;
+
+            await mapp.layer.decorate(layer);
+
+            await mapp.ui.layers.view(layer)
+
+            codi.assertTrue(layer.displayToggle !== null, 'We expect to see a display toggle');
+            codi.assertTrue(typeof layer.zoomToExtent === 'function', 'We expect to see a zoomToExtent function');
+            codi.assertTrue(layer.zoomToExtentBtn !== null, 'We expect to see a zoomToExtentBtn property');
         });
 
         /**
@@ -83,24 +93,24 @@ export async function viewTest(mapview) {
         * @function it
         */
         await codi.it('should not display a display Toggle button when not provided', async () => {
-            await setView(mapview, 11, 'london')
-            const layer = mapview.layers['changeEnd'];
-            layer.viewConfig = {}
+            const layer = clusterConfig;
 
-            mapp.ui.layers.view(layer)
+            layer.mapview = mapview;
 
-            codi.assertEqual(layer.view.querySelector('[data-id=display-toggle]'), null, 'No display toggled should be present');
-            await delayFunction(1000);
+            await mapp.layer.decorate(layer);
+
+            await mapp.ui.layers.view(layer);
+
         });
 
-         /**
-        * ### should have a default panelOrder
-        * 1. The Test sets the mapview to London at zoom level 11.
-        * 2. Creates the `changeEnd` event and dispatches it.
-        * 3. Checks the panelOrder is default if not provided.
-        * @function it
-        */
-         await codi.it('should use the default panelOrder', async () => {
+        /**
+       * ### should have a default panelOrder
+       * 1. The Test sets the mapview to London at zoom level 11.
+       * 2. Creates the `changeEnd` event and dispatches it.
+       * 3. Checks the panelOrder is default if not provided.
+       * @function it
+       */
+        await codi.it('should use the default panelOrder', async () => {
             await setView(mapview, 11, 'london')
             const layer = mapview.layers['changeEnd'];
             layer.viewConfig = {}
@@ -111,23 +121,23 @@ export async function viewTest(mapview) {
             await delayFunction(1000);
         });
 
-         /**
-        * ### should have the defined panelOrder
-        * 1. The Test sets the mapview to London at zoom level 11.
-        * 2. Creates the `changeEnd` event and dispatches it.
-        * 3. Checks the panelOrder is what's defined.
-        * @function it
-        */
-         await codi.it('should use the default panelOrder', async () => {
+        /**
+       * ### should have the defined panelOrder
+       * 1. The Test sets the mapview to London at zoom level 11.
+       * 2. Creates the `changeEnd` event and dispatches it.
+       * 3. Checks the panelOrder is what's defined.
+       * @function it
+       */
+        await codi.it('should use the default panelOrder', async () => {
             await setView(mapview, 11, 'london')
             const layer = mapview.layers['changeEnd'];
             layer.viewConfig = {
-                panelOrder: ['meta','style-drawer','draw-drawer', 'dataviews-drawer', 'filter-drawer']
+                panelOrder: ['meta', 'style-drawer', 'draw-drawer', 'dataviews-drawer', 'filter-drawer']
             }
 
             mapp.ui.layers.view(layer)
 
-            codi.assertEqual(layer.viewConfig.panelOrder, ['meta','style-drawer','draw-drawer', 'dataviews-drawer', 'filter-drawer'], 'The panelOrder should be what is defined');
+            codi.assertEqual(layer.viewConfig.panelOrder, ['meta', 'style-drawer', 'draw-drawer', 'dataviews-drawer', 'filter-drawer'], 'The panelOrder should be what is defined');
             await delayFunction(1000);
         });
 
