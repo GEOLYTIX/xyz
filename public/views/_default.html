@@ -593,20 +593,13 @@
     });
   }
 
-  if (mapp.hooks.current.useridb || locale.useridb) {
+  if (locale.userLocale) {
 
-    if (mapp.hooks.current?.useridb === 'delete') {
+    const userLocale = await mapp.utils.userLocale.get(locale)
 
-      await mapp.utils.userIndexedDB.deleteDB()
-    } else {
+    if (userLocale) {
 
-      let userLocale = await mapp.utils.userIndexedDB.get('locales', locale.key)
-
-      if (!userLocale) {
-        await mapp.utils.userIndexedDB.add('locales', locale)
-      } else {
-        locale = userLocale
-      }
+      locale = userLocale
     }
   }
 
