@@ -3,7 +3,6 @@
  * @module layer/format/vector
  */
 
-import clusterLayerDefault from '../../../assets/layers/cluster/layer.json';
 import geojsonLayerDefault from '../../../assets/layers/geojson/layer.json';
 import ukFeatures from '../../../assets/data/uk.json';
 
@@ -12,9 +11,7 @@ import ukFeatures from '../../../assets/data/uk.json';
  * @function vectorTest 
  * @param {object} mapview 
  */
-export async function vectorTest(mapview, layer) {
-
-    layer ??= clusterLayerDefault;
+export async function vectorTest(mapview) {
 
     await codi.describe('Layer Format: Vector', async () => {
 

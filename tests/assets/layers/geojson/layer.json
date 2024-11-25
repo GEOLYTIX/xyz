@@ -12,6 +12,7 @@
             "field": "pin"
         },
         {
+            "edit": true,
             "field": "name"
         },
         {
@@ -30,7 +31,9 @@
             }
         },
         "highlight": {
-            "scale": 1.3
+            "scale": 1.3,
+            "strokeWidth": 2,
+            "strokeColor": "hotpink"
         }
     }
 }
