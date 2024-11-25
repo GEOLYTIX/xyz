@@ -13,10 +13,14 @@
         },
         {
             "edit": true,
-            "field": "name"
+            "field": "name",
+            "inline": true,
+            "title": "name"
         },
         {
-            "field": "description"
+            "field": "description",
+            "inline": true,
+            "title": "description"
         }
     ],
     "style": {
