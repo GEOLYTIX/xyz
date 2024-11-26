@@ -68,10 +68,8 @@ let credentials;
 
 if (!process.env.AWS_S3_CLIENT) {
 
-  //Assume the bucket is public if no credentials are supplied
-  console.log('Sign S3: AWS_S3_CLIENT was not found in the env')
-
   module.exports = null
+
 } else {
 
   //Attempt import if credentials are found
