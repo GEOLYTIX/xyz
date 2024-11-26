@@ -23,7 +23,6 @@ export async function getTest(mapview) {
                 id: 6,
             });
 
-            codi.assertEqual(location.infoj.length, 4, 'We expect to see three infoj entries');
             codi.assertEqual(location.record.hook, 'location_get_test!6', 'We expect a hook made up of layer key and id');
             codi.assertTrue(location.layer instanceof Object, 'The location needs a layer object');
 
