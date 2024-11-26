@@ -8,7 +8,7 @@
     "geom": "geom_3857",
     "qID": "id",
     "cluster": {
-        "distance": 40
+        "distance": 30
     },
     "infoj": [
         {
