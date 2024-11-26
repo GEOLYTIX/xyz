@@ -1,5 +1,5 @@
 /**
-## /user/_user
+## /user
 
 The _user module exports the user method to route User API requests.
 

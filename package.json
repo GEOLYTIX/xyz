@@ -1,6 +1,6 @@
 {
   "name": "xyz",
-  "version": "v4.12.4",
+  "version": "v4.13.0-alpha",
   "repository": {
     "type": "git",
     "url": "https://github.com/geolytix/xyz"
@@ -20,13 +20,15 @@
     "test-docs": "jsdoc --configure jsdoc_test.json --verbose"
   },
   "license": "MIT",
+  "optionalDependencies": {
+    "@aws-sdk/client-s3": "^3.691.0",
+    "@aws-sdk/s3-request-presigner": "^3.691.0",
+    "@aws-sdk/cloudfront-signer": "^3.621.0"
+  },
   "dependencies": {
-    "@aws-sdk/client-s3": "^3.621.0",
-    "@aws-sdk/cloudfront-signer": "^3.621.0",
-    "@aws-sdk/s3-request-presigner": "^3.621.0",
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^6.9.7",
-    "pg": "^8.7.3",
+    "pg": "^8.13.1",
     "simple-statistics": "^7.8.3"
   },
   "devDependencies": {
