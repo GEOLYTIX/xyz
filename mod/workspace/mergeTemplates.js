@@ -100,7 +100,7 @@ module.exports = async function mergeTemplates(obj) {
 
       //The object template must not be overwritten by a templates template.
       delete template.template;
-      
+
       // Merge template --> obj
       obj = merge(obj, template)
     }
@@ -131,13 +131,13 @@ The method will call itself for nested objects.
 @param {Object} obj 
 */
 function assignWorkspaceTemplates(obj) {
-
+  // Return early if object is null or empty
   if (obj === null) return;
 
   if (obj instanceof Object && !Object.keys(obj)) return;
 
   Object.entries(obj).forEach(entry => {
-
+    // Process template objects - if found, add type and merge into workspace templates
     if (entry[0] === 'template' && entry[1].key) {
 
       entry[1]._type = 'template';
@@ -146,15 +146,17 @@ function assignWorkspaceTemplates(obj) {
       return;
     }
 
+    // Recursively process each item if we find an array
     if (Array.isArray(entry[1])) {
 
       entry[1].forEach(assignWorkspaceTemplates)
       return;
     }
 
+    // Recursively process nested objects
     if (entry[1] instanceof Object) {
 
-      Object.values(entry[1])?.forEach(assignWorkspaceTemplates)
+      assignWorkspaceTemplates(entry[1]);
     }
 
   })
