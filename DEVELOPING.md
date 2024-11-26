@@ -125,6 +125,7 @@ This ensures that your test environment always has the latest changes without ma
 ### VSCode Tasks & Launch
 
 A task can be added to the `.vscode/tasks.json` to execute `nodemon` and `browser-sync` concurrently. This will allow VSCode to rebuild the application on script changes in the editor.
+Along side this there is an optional `kill-watch` task that is used to tear down the `start-watch` process once finished with debugging.
 
 ```json
 {
@@ -166,7 +167,7 @@ A task can be added to the `.vscode/tasks.json` to execute `nodemon` and `browse
   "preLaunchTask": "start-watch",
   "console": "integratedTerminal",
   "internalConsoleOptions": "openOnSessionStart",
-  "postDebugTest": "kill-background",
+  "postDebugTest": "kill-watch",
   "env": {}
 }
 ```
