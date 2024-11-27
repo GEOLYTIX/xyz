@@ -26,12 +26,12 @@ The idp requires a certificate `${process.env.SAML_IDP_CRT}.crt`, single sign-on
 
 let acl, sp, idp;
 
-const logger = require('../utils/logger');
-
-const jwt = require('jsonwebtoken');
-
 try {
   const saml2 = require('saml2-js');
+
+  const logger = require('../utils/logger');
+
+  const jwt = require('jsonwebtoken');
 
   const { join } = require('path');
 
