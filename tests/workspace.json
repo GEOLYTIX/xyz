@@ -384,7 +384,12 @@
                         "type": "mvt_clone",
                         "display": "true",
                         "name": "mvt clone",
-                        "layer": "mvt_test"
+                        "layer": "mvt_test",
+                        "query": "mvt_lookup",
+                        "template": {
+                            "key": "mvt_lookup",
+                            "template": "select id, numeric_field from test.mvt_test"
+                        }
                     },
                     {
                         "key": "test_layer",
@@ -392,7 +397,8 @@
                         "type": "layer",
                         "display": "true",
                         "name": "layer entry",
-                        "layer": "mvt_test"
+                        "layer": "mvt_test",
+                        "query": "mvt_lookup"
                     }
                 ]
             },
