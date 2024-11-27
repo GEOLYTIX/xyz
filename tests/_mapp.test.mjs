@@ -17,7 +17,7 @@ import { utilsTest } from './lib/utils/_utils.test.mjs';
 import { formatTest } from './lib/layer/format/_format.test.mjs';
 import { ui_locations } from './lib/ui/locations/_locations.test.mjs';
 
-self._mappTest = {
+globalThis._mappTest = {
     base,
     coreTest,
     mappTest,
