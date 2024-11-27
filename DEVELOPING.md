@@ -167,7 +167,7 @@ Along side this there is an optional `kill-watch` task that is used to tear down
   "preLaunchTask": "start-watch",
   "console": "integratedTerminal",
   "internalConsoleOptions": "openOnSessionStart",
-  "postDebugTest": "kill-watch",
+  "postDebugTask": "kill-watch",
   "env": {}
 }
 ```
