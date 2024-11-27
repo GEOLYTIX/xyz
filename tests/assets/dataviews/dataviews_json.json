@@ -3,9 +3,6 @@
         "json_1": {
             "display": true,
             "dataview": "Json",
-            "toolbar": {
-                "button": true
-            },
             "query": "num_999",
             "template": {
                 "key": "num_999",
@@ -18,9 +15,6 @@
             "dataview": "Json",
             "query": "num_2012",
             "target": "tabview",
-            "toolbar": {
-                "button": true
-            },
             "template": {
                 "key": "num_2012",
                 "template": "SELECT 2012 as value"
