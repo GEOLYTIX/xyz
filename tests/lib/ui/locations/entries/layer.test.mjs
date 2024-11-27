@@ -21,11 +21,19 @@ export async function layerTest(mapview) {
                 hook: 'entry_layer!23',
                 removeCallbacks: []
             },
-            'key': 'test_layer',
-            'label': 'entry_layer',
-            'type': 'layer',
+            'key': 'test_mvt_clone',
+            'label': 'entry_mvt_clone',
+            'type': 'mvt_clone',
             'display': 'true',
-            'layer': 'mvt_test'
+            'name': 'mvt clone',
+            'layer': 'mvt_test',
+            'query': 'mvt_lookup',
+            'queryparams': {},
+            'template': {
+                'key': 'mvt_lookup',
+                'template': 'select id, numeric_field from test.mvt_test'
+            }
+
         };
 
         /**
@@ -75,10 +83,17 @@ export async function layerTest(mapview) {
                 'type': 'layer',
                 'display': 'true',
                 'layer': 'mvt_test',
+                'query': 'mvt_lookup',
+                'template': {
+                    'key': 'mvt_lookup',
+                    'template': 'select id, numeric_field from test.mvt_test'
+                },
+                'queryparams': {},
                 'tables': {
                     '12': null,
                     '13': 'test.mvt_test'
                 }
+
             };
 
             //Zoom out
