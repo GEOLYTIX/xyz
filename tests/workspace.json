@@ -66,8 +66,10 @@
             "zoomToArea",
             "coordinates",
             "admin",
-            "login"
+            "login",
+            "userLocale"
         ],
+        "userLocale": {},
         "svg_templates": {
             "dot_test": "https://geolytix.github.io/MapIcons/templates/dot_10px.svg",
             "target_test": "https://geolytix.github.io/MapIcons/templates/target.svg",
