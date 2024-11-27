@@ -9,12 +9,14 @@ The sign API provides access to different request signer modules. Signer modules
 @module /sign
 */
 
+const cloudfront = require('./cloudfront')
 const cloudinary = require('./cloudinary')
 const s3 = require('./s3')
 
 const signerModules = {
   cloudinary,
-  s3
+  s3,
+  cloudfront
 }
 
 /**
@@ -35,8 +37,12 @@ The response from the method is returned with the HTTP response.
 */
 module.exports = async function signer(req, res) {
 
-  if (!Object.hasOwn(signerModules, req.params.signer) || !signerModules[req.params.signer]) {
-    return res.send(`Failed to validate 'sign' param.`)
+  if (!Object.hasOwn(signerModules, req.params.signer)) {
+    return res.status(404).send(`Failed to validate 'signer=${req.params.signer}' param.`)
+  }
+
+  if (signerModules[req.params.signer] === null) {
+    return res.status(405).send(`Signer: ${req.params.signer} is not configured.`)
   }
 
   const response = await signerModules[req.params.signer](req, res)
