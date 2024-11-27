@@ -1,9 +1,13 @@
 /**
 ## /user/saml
 
-The SAML user module exports the saml method as an enpoint for request authentication via SAML.
+The SAML user module exports the saml method as an endpoint for request authentication via SAML.
 
-The module requires the saml2-js module library to be installed. The availability of the module [required] is tries during the module initialisation.
+The module requires the saml2-js module library to be installed. 
+
+The availability of the module [required] is tried during the module initialisation.
+
+If the module is not available, a warning is logged to the console.
 
 The SAML Service Provider [sp] and Identity Provider [idp] are stored in module variables.
 
