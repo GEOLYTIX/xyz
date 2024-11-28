@@ -18,13 +18,13 @@
     <script type="importmap">
         {
           "imports": {
-            "codi": "https://esm.sh/codi-test-framework@0.0.33"
+            "codi": "https://esm.sh/codi-test-framework@0.0.47"
           }
-        }
-      </script>
+        } </script>
 
     <script type="module" src="{{dir}}/public/js/lib/mapp.js" defer></script>
     <script type="module" src="{{dir}}/public/js/lib/ui.js" defer></script>
+    <script type="module" src="{{dir}}/public/js/tests/_mapp.test.js" defer></script>
 
     <style>
         html {
@@ -309,23 +309,14 @@
     </div>
 
     <script type="module">
-        import { runWebTests, it, describe, assertEqual, assertNotEqual, assertTrue, assertFalse, assertNoDuplicates } from "codi";
 
-        const _codi = {
-            runWebTests,
-            describe,
-            it,
-            assertEqual,
-            assertNotEqual,
-            assertTrue,
-            assertFalse,
-            assertNoDuplicates
-        };
+        import * as _codi from "codi";
 
-        self.codi = _codi;
+        globalThis.codi = _codi;
 
         const urlParams = new URLSearchParams(window.location.search);
-        const testFiles = urlParams.get('integrity') ? [`${window.location.origin}{{dir}}/public/tests/integrity.test.mjs`] : [`${window.location.origin}{{dir}}/tests/browser/local.test.mjs`];
+        const integrity = urlParams.get('integrity');
+        const testFiles = integrity ? [`${window.location.origin}{{dir}}/public/tests/integrity.test.mjs`] : [`${window.location.origin}{{dir}}/tests/browser/local.test.mjs`];
 
         try {
 
@@ -353,7 +344,13 @@
                 }
             }
 
-            let results = await runWebTests(testFiles);
+            let results = {};
+
+            if (integrity) {
+                results = await codi.runWebTests(testFiles);
+            } else {
+                results = await codi.runWebTestFunction(_mappTest.coreTest);
+            }
 
             const shouldDownload = urlParams.get('download') === 'true';
 

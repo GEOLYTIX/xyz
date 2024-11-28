@@ -7,7 +7,7 @@
     },
     "templates": {
         "template_test_temp": {
-            "src": "file:/tests/assets/layers/template_test.json"
+            "src": "file:/tests/assets/layers/template_test/layer.json"
         },
         "mvt_test_temp": {
             "src": "file:/tests/assets/layers/mvt/layer.json"
@@ -32,11 +32,18 @@
             "src": "file:/tests/assets/queries/minmax_mock.sql"
         },
         "data_array": {
-            "src": "file:/tests/assets/queries/data_array.sql"
+            "src": "file:/tests/assets/queries/data_array.sql",
+            "value_only": true
         },
         "bogus_data_array": {
             "src": "file:/tests/assets/queries/data_array.sql",
             "dbs": "bogus"
+        },
+        "merge_into": {
+            "name": "merge_into",
+            "roles": {
+                "merge_into": null
+            }
         }
     },
     "locale": {
@@ -51,7 +58,8 @@
         ],
         "plugins": [
             "${PLUGINS}v4.8.0/coordinates.js",
-            "${PLUGINS}v4.8.0/chartjs.js"
+            "${PLUGINS}v4.8.0/chartjs.js",
+            "/test/api/provider/file?content_type=application/javascript&url=./tests/assets/plugins/assignMapview.js"
         ],
         "syncPlugins": [
             "zoomBtn",
@@ -60,6 +68,14 @@
             "admin",
             "login"
         ],
+        "svg_templates": {
+            "dot_test": "https://geolytix.github.io/MapIcons/templates/dot_10px.svg",
+            "target_test": "https://geolytix.github.io/MapIcons/templates/target.svg",
+            "square_test": "https://geolytix.github.io/MapIcons/templates/square_10px.svg",
+            "diamond_test": "https://geolytix.github.io/MapIcons/templates/diamond_10px.svg",
+            "triangle_test": "https://geolytix.github.io/MapIcons/templates/triangle_10px.svg",
+            "template_pin_test": "https://geolytix.github.io/MapIcons/pins/pink_master_pin.svg"
+        },
         "link_button": [
             {
                 "href": "/url/url",
@@ -82,6 +98,7 @@
                 "css_style": "mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg); -webkit-mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg);"
             }
         ],
+        "assignMapview": {},
         "keyvalue_dictionary": [
             {
                 "key": "name",
@@ -296,10 +313,6 @@
                         "src": "file:/tests/assets/infoj/chart_queryparams.json"
                     },
                     {
-                        "key": "template_style",
-                        "src": "file:/tests/assets/styles/template_style.json"
-                    },
-                    {
                         "key": "bogus_file",
                         "src": "file:/tests/assets/styles/bogus_file.json"
                     },
@@ -371,7 +384,12 @@
                         "type": "mvt_clone",
                         "display": "true",
                         "name": "mvt clone",
-                        "layer": "mvt_test"
+                        "layer": "mvt_test",
+                        "query": "mvt_lookup",
+                        "template": {
+                            "key": "mvt_lookup",
+                            "template": "select id, numeric_field from test.mvt_test"
+                        }
                     },
                     {
                         "key": "test_layer",
@@ -379,7 +397,26 @@
                         "type": "layer",
                         "display": "true",
                         "name": "layer entry",
-                        "layer": "mvt_test"
+                        "layer": "mvt_test",
+                        "query": "mvt_lookup"
+                    }
+                ]
+            },
+            "roles_test": {
+                "name": "You should not see me",
+                "template": "mvt_test_temp",
+                "templates": [
+                    "merge_into"
+                ],
+                "roles": {
+                    "roles_test": null
+                }
+            },
+            "fields_test": {
+                "display": true,
+                "templates": [
+                    {
+                        "src": "file:/tests/assets/layers/scratch/layer_fields.json"
                     }
                 ]
             }

@@ -231,6 +231,10 @@ button {
     box-shadow: none;
     border: none;
   }
+  p {
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+  }
 }
 
 /* public/css/_dialog.css */
@@ -1435,6 +1439,11 @@ label.checkbox {
   & > *:not(.header) {
     margin-top: 5px;
   }
+  > .header {
+    h2 {
+      font-weight: normal;
+    }
+  }
 }
 .drawer.layer-group {
   padding-left: 3px;
@@ -1644,6 +1653,23 @@ label.checkbox {
 }
 
 /* public/css/_ui.css */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-primary-light);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+  border-radius: 2px;
+}
 .no-select {
   -webkit-touch-callout: none;
   -webkit-user-select: none;

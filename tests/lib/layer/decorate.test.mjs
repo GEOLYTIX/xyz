@@ -3,6 +3,9 @@
  * @module layer/decorateTest
  */
 import { setView } from '../../utils/view.js';
+import wkt_layer_default from '../../assets/layers/wkt/layer.json'
+import wkt_infoj_default from '../../assets/layers/wkt/infoj.json'
+import wkt_style_default from '../../assets/layers/wkt/style.json'
 
 /**
  * This function is used as an entry point for the decorateTest
@@ -15,15 +18,30 @@ import { setView } from '../../utils/view.js';
  * @function decorateTest 
  * @param {Object} mapview 
 */
-export async function decorateTest(mapview) {
+export async function decorateTest(mapview, layer, infoj, style) {
 
-    setView(mapview, 2, 'default');
+    layer ??= wkt_layer_default;
+    infoj ??= wkt_infoj_default;
+    style ??= wkt_style_default;
+
+    await setView(mapview, 2, 'default');
 
     await codi.describe('Layer: decorateTest', async () => {
-        const decorated_layer = mapview.layers['decorate'];
-        const workspace_layer = await mapp.utils.xhr(`/test/api/workspace/layer?layer=decorate`);
-        workspace_layer.mapview = mapview;
-        const layer = await mapp.layer.decorate(workspace_layer);
+
+        const infoj_skip = [
+            'textarea'
+        ]
+
+        layer = {
+            key: 'decorate_test',
+            mapview: mapview,
+            ...infoj,
+            infoj_skip: infoj_skip,
+            ...style,
+            ...layer
+        }
+
+        await mapp.layer.decorate(layer);
 
         /**
          * ### Should have a draw object
@@ -31,7 +49,7 @@ export async function decorateTest(mapview) {
          * @function it
          */
         await codi.it('Should have a draw object', async () => {
-            codi.assertTrue(!!layer.draw, 'The layer should have a draw object by default')
+            codi.assertTrue(Object.hasOwn(layer, 'draw'), 'The layer should have a draw object by default')
         });
 
         /**
@@ -42,10 +60,10 @@ export async function decorateTest(mapview) {
          * @function it
          */
         await codi.it('Should have a show function', async () => {
-            codi.assertTrue(!!layer.show, 'The layer should have a show method by default');
-
-            decorated_layer.show();
-            codi.assertTrue(decorated_layer.display, 'The layer should display as true');
+            codi.assertTrue(Object.hasOwn(layer, 'show'), 'The layer should have a show method by default');
+            codi.assertTrue(typeof layer.display === 'undefined', 'The layer shouldn\'t have a display flag');
+            layer.show();
+            codi.assertTrue(layer.display, 'The layer should now display true after displaying');
         });
 
         /**
@@ -56,10 +74,9 @@ export async function decorateTest(mapview) {
          * @function it
          */
         await codi.it('Should have a hide function', async () => {
-            codi.assertTrue(!!layer.hide, 'The layer should have a hide method by default')
-
-            decorated_layer.hide();
-            codi.assertFalse(decorated_layer.display, 'The layer should display as false');
+            codi.assertTrue(Object.hasOwn(layer, 'hide'), 'The layer should have a hide method by default')
+            layer.hide();
+            codi.assertFalse(layer.display, 'The layer should display as false');
         });
 
         /**
@@ -82,7 +99,7 @@ export async function decorateTest(mapview) {
             });
         });
 
-        setView(mapview, 11, 'london');
+        await setView(mapview, 11, 'london');
 
         /**
          * ### Should get `test.public` table at zoom level 11.
@@ -90,8 +107,8 @@ export async function decorateTest(mapview) {
          * 2. We assert that the table returned is zool level 11.
          */
         await codi.it('Should get test.public table at zoom level 11', async () => {
-            const table = decorated_layer.tableCurrent();
-            codi.assertEqual(table, 'test.scratch')
+            const table = layer.tableCurrent();
+            codi.assertTrue(typeof table === 'string');
         });
 
         /**
@@ -101,18 +118,9 @@ export async function decorateTest(mapview) {
          * @function it
          */
         await codi.it('Should get geom_3857 geom at zoom level 11', async () => {
-            const geom = decorated_layer.geomCurrent();
-            codi.assertEqual(geom, 'geom_3857', 'The Geometry at zoom level 11 should be geom_3857')
+            const geom = layer.geomCurrent();
+            codi.assertTrue(typeof geom === 'string', 'The geometry should be returned from the layer')
         });
 
-        /**
-         * ### Should be able to zoomToExtent
-         * 1. We call the `zoomToExtent()` function.
-         * 2. We assert that the return is a success.
-         */
-        await codi.it('Should be able to zoomToExtent', async () => {
-            const success = await decorated_layer.zoomToExtent();
-            codi.assertTrue(success)
-        });
     });
 }

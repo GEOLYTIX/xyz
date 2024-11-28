@@ -49,6 +49,8 @@ The auth method checks either the request parameter token or user.session if ena
 */
 module.exports = async function auth(req, res) {
 
+  if (acl === null) return null;
+
   if (req.headers.authorization) {
 
     return await fromACL(req)

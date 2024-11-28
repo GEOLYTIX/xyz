@@ -44,7 +44,7 @@ Request messaging language
 module.exports = async (req, res) => {
 
   // acl module will export an empty require object without the ACL being configured.
-  if (typeof acl !== 'function') {
+  if (acl === null) {
     return res.status(500).send('ACL unavailable.')
   }
 
@@ -79,11 +79,11 @@ module.exports = async (req, res) => {
       verified = true,
       verificationtoken = null,
       language = $2
-    WHERE lower(email) = lower($1);`,[
-      user.email,
-      req.params.language || user.language,
-      user.password_reset
-    ]);
+    WHERE lower(email) = lower($1);`, [
+    user.email,
+    req.params.language || user.language,
+    user.password_reset
+  ]);
 
   if (rows instanceof Error) {
     return res.status(500).send('Failed to access ACL.')

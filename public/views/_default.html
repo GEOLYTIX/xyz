@@ -513,9 +513,6 @@
         Openlayers: 'https://openlayers.org',
       }
     },
-
-    // mapp.Mapview must be awaited.
-    syncPlugins: locale.syncPlugins
   });
 
   if (!locale.layers?.length && !(locale instanceof Error)) {
@@ -548,7 +545,7 @@
   // Create layers listview.
   mapp.ui.layers.listview({
     target: layersTab,
-    mapview: mapview,
+    layers: mapview.layers,
   });
 
   // Create locations listview.

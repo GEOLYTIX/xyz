@@ -24,7 +24,7 @@ caddy_linux_amd64
 .ebextensions/*
 \.ebextensions/
 
-public/js/lib/*
+public/js/*
 
 *.pem
 *.crt

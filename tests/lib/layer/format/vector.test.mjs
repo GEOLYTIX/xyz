@@ -3,105 +3,131 @@
  * @module layer/format/vector
  */
 
+import geojsonLayerDefault from '../../../assets/layers/geojson/layer.json';
+import ukFeatures from '../../../assets/data/uk.json';
+
 /**
  * This is the entry point function for the vector test module.
  * @function vectorTest 
  * @param {object} mapview 
  */
 export async function vectorTest(mapview) {
-    await codi.describe('Layer Format: Vector', () => {
 
-        /**
-         * ### Should be able to create a cluster layer
-         * 1. It takes layer params.
-         * 2. Decorates the layer.
-         * 3. We then give the vector function the layer.
-         * 4. We expect the format of the layer to change to 'cluster'
-         * @function it
-         */
-        codi.it('Should create a cluster layer', async () => {
-            const layer_params = {
-                mapview: mapview,
-                'key': 'cluster_test',
-                'display': true,
-                'group': 'layer',
-                'format': 'wkt', //This should change to cluster when used in the vector function
-                'dbs': 'NEON',
-                'table': 'test.scratch',
-                'srid': '3857',
-                'geom': 'geom_3857',
-                'qID': 'id',
-                'cluster': {
-                    'resolution': 0.005,
-                    'hexgrid': true
-                },
-                'infoj': [
-                    {
-                        'type': 'pin',
-                        'label': 'ST_PointOnSurface',
-                        'field': 'pin',
-                        'fieldfx': 'ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]'
-                    }
-                ],
-                'style': {
-                    'default': {
-                        'icon': {
-                            'type': 'dot',
-                            'fillColor': '#13336B'
-                        }
-                    },
-                    'cluster': {
-                        'icon': {
-                            'type': 'target',
-                            'fillColor': '#E6FFFF',
-                            'layers': {
-                                '1': '#13336B',
-                                '0.85': '#E6FFFF'
-                            }
-                        }
-                    },
-                    'highlight': {
-                        'scale': 1.3
-                    },
-                    'theme': {
-                        'title': 'theme_1',
-                        'type': 'graduated',
-                        'field': 'test_template_style',
-                        'graduated_breaks': 'greater_than',
-                        'template': {
-                            'key': 'test_template_style',
-                            'template': '100-99',
-                            'value_only': true
-                        },
-                        'cat_arr': [
-                            {
-                                'value': 0,
-                                'label': '0 to 5%',
-                                'style': {
-                                    'icon': {
-                                        'fillColor': '#ffffcc',
-                                        'fillOpacity': 0.8
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                }
+    await codi.describe('Layer Format: Vector', async () => {
+
+        codi.it('Should create a geojson layer', async () => {
+            const custom_config = {
+                key: 'geojson_test',
+                featureLocation: true
             }
 
-            //Decorating layer
-            const layer = await mapp.layer.decorate(layer_params);
+            const layer_params = {
+                ...geojsonLayerDefault,
+                ...custom_config
+            }
 
-            //Passing the layer to the format method
-            mapp.layer.formats.vector(layer);
+            layer_params.features = ukFeatures.features;
 
-            //Showing the layer
-            layer.show();
-            codi.assertTrue(typeof layer.show === 'function', 'The layer should have a show function');
-            codi.assertTrue(typeof layer.reload === 'function', 'The layer should have a reload function');
-            codi.assertTrue(typeof layer.setSource === 'function', 'The layer should have a setSource function');
-            codi.assertTrue(layer.format === 'cluster', 'The layer should have the format cluster');
-            layer.hide();
+            layer_params.params = {
+                fields: ['id', 'name', 'description', 'geom_4326']
+            }
+
+
+            const layer = await mapview.addLayer(layer_params);
+
+            const layersTab = document.getElementById('layers');
+
+            const layers = {
+                [custom_config.key]: mapview.layers[custom_config.key]
+            }
+
+            // Create layers listview.
+            mapp.ui.layers.listview({
+                target: layersTab,
+                layers: layers
+            });
+
+            codi.assertTrue(Object.hasOwn(layer[0], 'show'), 'The layer should have a show function');
+            codi.assertTrue(Object.hasOwn(layer[0], 'display'), 'The layer should have a display property');
+            codi.assertTrue(Object.hasOwn(layer[0], 'hide'), 'The layer should have a hide function');
+            codi.assertTrue(Object.hasOwn(layer[0], 'reload'), 'The layer should have a reload function');
+            codi.assertTrue(Object.hasOwn(layer[0], 'tableCurrent'), 'The layer should have a tableCurrent function');
+
+            layer[0].hide();
+
+        });
+
+        /**
+       * ### Should be able to custom vector layer
+       * 1. It takes layer params.
+       * 2. Decorates the layer.
+       * @function it
+       */
+        codi.it('Should create a wkt layer with a custom featureFormat', async () => {
+            const custom_config = {
+                key: 'feature_format_test',
+                featureFormat: 'customFeatureFormat',
+                featureLocation: true
+            }
+
+            const layer_params = {
+                // mapview: mapview,
+                ...geojsonLayerDefault,
+                ...custom_config
+            }
+
+            mapp.layer.featureFormats.customFeatureFormat = customFeatureFormat;
+
+            layer_params.features = ukFeatures.features;
+
+            layer_params.params = {
+                fields: ['id', 'pin', 'name', 'description', 'geom_4326']
+            }
+
+            const layer = await mapview.addLayer(layer_params);
+
+            const layersTab = document.getElementById('layers');
+
+            const layers = {
+                [custom_config.key]: mapview.layers[custom_config.key]
+            }
+
+            // Create layers listview.
+            mapp.ui.layers.listview({
+                target: layersTab,
+                layers: layers
+            });
+
+            codi.assertTrue(Object.hasOwn(layer[0], 'show'), 'The layer should have a show function');
+            codi.assertTrue(Object.hasOwn(layer[0], 'display'), 'The layer should have a display property');
+            codi.assertTrue(Object.hasOwn(layer[0], 'hide'), 'The layer should have a hide function');
+            codi.assertTrue(Object.hasOwn(layer[0], 'reload'), 'The layer should have a reload function');
+            codi.assertTrue(Object.hasOwn(layer[0], 'tableCurrent'), 'The layer should have a tableCurrent function');
+
+            layer[0].hide();
+
+        });
+
+    });
+}
+
+function customFeatureFormat(layer, features) {
+    const formatGeojson = new ol.format.GeoJSON();
+
+    mapp.layer.featureFields.reset(layer);
+
+    return features.map((feature) => {
+
+        // Create the OpenLayers geometry
+        const olGeometry = formatGeojson.readGeometry(feature.geometry, {
+            dataProjection: 'EPSG:' + layer.srid,
+            featureProjection: 'EPSG:' + layer.mapview.srid,
+        });
+
+        return new ol.Feature({
+            id: feature.id,
+            geometry: olGeometry,
+            ...feature.properties
         });
     });
 }

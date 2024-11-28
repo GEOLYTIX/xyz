@@ -11,5 +11,5 @@
 import { linkButtonTest } from './link_button.test.mjs';
 
 export const pluginsTest = {
-    linkButtonTest
+    linkButtonTest,
 };

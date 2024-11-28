@@ -324,7 +324,8 @@ export async function base() {
                     Openlayers: 'https://openlayers.org',
                 }
             },
-            syncPlugins: locale.syncPlugins
+            syncPlugins: locale.syncPlugins,
+            svgTemplates: locale.svg_templates
         });
 
 
@@ -358,7 +359,7 @@ export async function base() {
         // Create layers listview.
         mapp.ui.layers.listview({
             target: layersTab,
-            mapview: mapview,
+            layers: mapview.layers
         });
 
         // Create locations listview.
