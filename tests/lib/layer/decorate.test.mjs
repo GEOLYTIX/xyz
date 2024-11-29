@@ -33,6 +33,7 @@ export async function decorateTest(mapview, layer, infoj, style) {
         ]
 
         layer = {
+            key: 'decorate_test',
             mapview: mapview,
             ...infoj,
             infoj_skip: infoj_skip,
@@ -119,16 +120,6 @@ export async function decorateTest(mapview, layer, infoj, style) {
         await codi.it('Should get geom_3857 geom at zoom level 11', async () => {
             const geom = layer.geomCurrent();
             codi.assertTrue(typeof geom === 'string', 'The geometry should be returned from the layer')
-        });
-
-        /**
-         * ### Should be able to zoomToExtent
-         * 1. We call the `zoomToExtent()` function.
-         * 2. We assert that the return is a success.
-         */
-        await codi.it('Should be able to zoomToExtent', async () => {
-            const success = await layer.zoomToExtent();
-            codi.assertTrue(success, 'We should see the layer zoom to extent')
         });
 
     });

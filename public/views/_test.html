@@ -312,7 +312,7 @@
 
         import * as _codi from "codi";
 
-        self.codi = _codi;
+        globalThis.codi = _codi;
 
         const urlParams = new URLSearchParams(window.location.search);
         const integrity = urlParams.get('integrity');

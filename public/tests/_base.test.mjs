@@ -359,7 +359,7 @@ export async function base() {
         // Create layers listview.
         mapp.ui.layers.listview({
             target: layersTab,
-            mapview: mapview,
+            layers: mapview.layers
         });
 
         // Create locations listview.

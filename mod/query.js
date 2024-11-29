@@ -141,12 +141,6 @@ async function layerQuery(req, res) {
 
   if (!req.params.layer) {
 
-    // if (template.layer) {
-
-    //   // Layer query templates must have a layer request property.
-    //   return res.status(400).send(`${req.params.template} query requires a valid layer request parameter.`)
-    // }
-
     // Reserved params will be deleted to prevent DDL injection.
     delete req.params.filter
     delete req.params.viewport
