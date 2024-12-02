@@ -325,7 +325,8 @@ export async function base() {
                 }
             },
             syncPlugins: locale.syncPlugins,
-            svgTemplates: locale.svg_templates
+            svgTemplates: locale.svg_templates,
+            loadPlugins: true
         });
 
 
