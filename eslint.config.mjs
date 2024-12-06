@@ -15,7 +15,7 @@ export default [
           'max': 4
         }
       ],
-      //'complexity': ['error', { 'max': 15 }],
+      // 'complexity': ['error', { 'max': 15 }],
       'no-nested-ternary': 'error'
     }
   }
