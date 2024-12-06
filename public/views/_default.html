@@ -502,6 +502,7 @@
     locale: locale,
     hooks: true,
     scrollWheelZoom: true,
+    loadPlugins: true,
     attribution: {
       target: document.getElementById('Map'),
       logo: mapp.utils.html.node`
@@ -545,7 +546,7 @@
   // Create layers listview.
   mapp.ui.layers.listview({
     target: layersTab,
-    mapview: mapview,
+    layers: mapview.layers,
   });
 
   // Create locations listview.

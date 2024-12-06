@@ -24,6 +24,8 @@ export function panelFilterTest() {
                 filter: {
                     current: {}
                 },
+                hideCallbacks: [],
+                showCallbacks: [],
                 infoj: [
                     {
                         'field': 'field_1',

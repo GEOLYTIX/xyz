@@ -2,7 +2,6 @@
     "key": "geojson_test",
     "format": "geojson",
     "display": true,
-    "group": "layer",
     "geom": "geometry",
     "srid": "4326",
     "qID": "id",
@@ -10,14 +9,18 @@
         {
             "type": "pin",
             "label": "ST_PointOnSurface",
-            "field": "pin",
-            "srid": "3857"
+            "field": "pin"
         },
         {
-            "field": "name"
+            "edit": true,
+            "field": "name",
+            "inline": true,
+            "title": "name"
         },
         {
-            "field": "description"
+            "field": "description",
+            "inline": true,
+            "title": "description"
         }
     ],
     "style": {
@@ -32,7 +35,9 @@
             }
         },
         "highlight": {
-            "scale": 1.3
+            "scale": 1.3,
+            "strokeWidth": 2,
+            "strokeColor": "hotpink"
         }
     }
 }

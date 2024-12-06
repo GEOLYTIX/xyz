@@ -14,11 +14,11 @@ module.exports = _ => {
 
       const [key, value] = entry
 
-      fields.push(`(${value}) as ${key}`)
+      fields.push(`'${key}', ${value}`)
     })
 
   const properties = fields.length
-    ? `, json_build_object('${fields.join(', ')}') as properties`
+    ? `, json_build_object(${fields.join(', ')}) as properties`
     : ''
 
   const where = _.viewport || `AND ${_.geom || _.layer.geom} IS NOT NULL`

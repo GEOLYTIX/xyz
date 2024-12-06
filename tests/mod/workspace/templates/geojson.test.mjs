@@ -19,7 +19,8 @@ export async function geojsonTemplate() {
                 geom: 'geom_3857',
                 template: 'geojson',
                 layer: 'changeEnd',
-                table: 'test.scratch'
+                table: 'test.scratch',
+                fields: ['textarea']
             }
 
             const results = await mapp.utils.xhr(`/test/api/query?${mapp.utils.paramString(params)}`);
@@ -36,6 +37,7 @@ export async function geojsonTemplate() {
                 codi.assertTrue(Object.hasOwn(feature.geometry, 'crs'), 'The geometry need to have crs property');
                 codi.assertTrue(Object.hasOwn(feature.geometry.crs, 'properties'), 'The crs needs to have properties');
                 codi.assertTrue(Object.hasOwn(feature.geometry.crs, 'type'), 'The crs needs to have type');
+                codi.assertTrue(Object.hasOwn(feature.properties, 'textarea'), 'The feature should have a textarea property');
 
             });
         });

@@ -325,7 +325,8 @@ export async function base() {
                 }
             },
             syncPlugins: locale.syncPlugins,
-            svgTemplates: locale.svg_templates
+            svgTemplates: locale.svg_templates,
+            loadPlugins: true
         });
 
 
@@ -359,7 +360,7 @@ export async function base() {
         // Create layers listview.
         mapp.ui.layers.listview({
             target: layersTab,
-            mapview: mapview,
+            layers: mapview.layers
         });
 
         // Create locations listview.
