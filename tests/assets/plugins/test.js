@@ -1,18 +1,24 @@
 import * as codi from 'https://esm.sh/codi-test-framework@1.0.8';
 
+globalThis.codi = codi;
+
 mapp.plugins.test = test;
 
 async function test(plugin, mapview) {
 
-    console.log(plugin.core);
-
-    globalThis.codi = codi;
-
     if (plugin.core) {
         await codi.runWebTestFunction(_mappTest.coreTest, plugin.options);
+        return;
     }
 }
 
-async function testLayer(plugin, mapview) {
+mapp.plugins.testLayer = testLayer;
 
+async function testLayer(plugin, mapview) {
+    console.log(plugin);
+
+    if (plugin.testLayer?.key) {
+        console.log(plugin.testLayer.key);
+        await codi.runWebTestFunction(_mappTest[plugin.testLayer.key])
+    }
 }
