@@ -445,6 +445,7 @@ export async function base() {
             target: OL,
             locale: locale,
             hooks: false,
+            loadPlugins: true,
             scrollWheelZoom: true,
             attribution: {
                 target: document.getElementById('Map'),
@@ -456,9 +457,7 @@ export async function base() {
                     ['SHA']: `https://github.com/GEOLYTIX/xyz/commit/${mapp.hash}`,
                     Openlayers: 'https://openlayers.org',
                 }
-            },
-            syncPlugins: locale.syncPlugins,
-            svgTemplates: locale.svg_templates
+            }
         });
 
 
