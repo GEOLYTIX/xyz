@@ -59,7 +59,8 @@
         "plugins": [
             "${PLUGINS}v4.8.0/coordinates.js",
             "${PLUGINS}v4.8.0/chartjs.js",
-            "/test/api/provider/file?content_type=application/javascript&url=./tests/assets/plugins/assignMapview.js"
+            "/test/api/provider/file?content_type=application/javascript&url=./tests/assets/plugins/assignMapview.js",
+            "/test/api/provider/file?content_type=application/javascript&url=./tests/assets/plugins/test.js"
         ],
         "syncPlugins": [
             "zoomBtn",
@@ -68,6 +69,13 @@
             "admin",
             "login"
         ],
+        "test": {
+            "core": true,
+            "options": {
+                "quiet": false,
+                "showSummary": true
+            }
+        },
         "svg_templates": {
             "dot_test": "https://geolytix.github.io/MapIcons/templates/dot_10px.svg",
             "target_test": "https://geolytix.github.io/MapIcons/templates/target.svg",

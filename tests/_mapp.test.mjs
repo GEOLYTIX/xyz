@@ -1,4 +1,3 @@
-import { base } from '../public/tests/_base.test.mjs';
 import { coreTest } from './browser/local.test.mjs';
 import { mappTest } from './lib/mapp.test.mjs';
 import { layerTest } from './lib/layer/_layer.test.mjs';
@@ -19,7 +18,6 @@ import { formatTest } from './lib/layer/format/_format.test.mjs';
 import { ui_locations } from './lib/ui/locations/_locations.test.mjs';
 
 globalThis._mappTest = {
-    base,
     coreTest,
     mappTest,
     layerTest,
