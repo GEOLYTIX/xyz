@@ -7,13 +7,13 @@
  * @description Entry point for the cluster hex template module
  * @function clusterHexTemplate
  */
-export async function clusterHexTemplate() {
-    await codi.describe('Workspace Templates: Cluster Hex Template', async () => {
+export function clusterHexTemplate() {
+    codi.describe({ name: 'Workspace Templates: Cluster Hex Template', id: 'api_template_cluster_hex' }, () => {
         /**
          * @description Cluster Test
          * @function it
          */
-        await codi.it('Cluster Hex Test', async () => {
+        codi.it({ name: 'Cluster Hex Test', parentId: 'api_template_cluster_hex' }, async () => {
 
             const params = {
                 qID: 'id',

@@ -6,13 +6,13 @@
  * @description Entry point for the geojson template module
  * @function geojsonTemplate
  */
-export async function geojsonTemplate() {
-    await codi.describe('Workspace Templates: geojson Template', async () => {
+export function geojsonTemplate() {
+    codi.describe({ name: 'Workspace Templates: geojson Template', id: 'api_template_geojson' }, () => {
         /**
          * @description geojson Template Test
          * @function it
          */
-        await codi.it('geojson Template Test', async () => {
+        codi.it({ name: 'geojson Template Test', parentId: 'api_template_geojson' }, async () => {
 
             const params = {
                 qID: 'id',

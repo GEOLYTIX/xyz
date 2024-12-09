@@ -6,13 +6,13 @@
  * @description Entry point for the wkt template module
  * @function wktTemplate
  */
-export async function wktTemplate() {
-    await codi.describe('Workspace Templates: wkt Template', async () => {
+export function wktTemplate() {
+    codi.describe({ name: 'Workspace Templates: wkt Template', id: 'api_template_wkt' }, () => {
         /**
          * @description Cluster Test
          * @function it
          */
-        await codi.it('wkt Test', async () => {
+        codi.it({ name: 'wkt Test', parentId: 'api_template_wkt' }, async () => {
 
             const params = {
                 template: 'wkt',

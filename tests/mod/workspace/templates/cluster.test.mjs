@@ -6,13 +6,13 @@
  * @description Entry point for the cluster template module
  * @function clusterTemplate
  */
-export async function clusterTemplate() {
-    await codi.describe('Workspace Templates: Cluster Template', async () => {
+export function clusterTemplate() {
+    codi.describe({ name: 'Workspace Templates: Cluster Template', id: 'api_template_cluster' }, () => {
         /**
          * @description Cluster Test
          * @function it
          */
-        await codi.it('Cluster Test', async () => {
+        codi.it({ name: 'Cluster Test', parentId: 'api_template_cluster' }, async () => {
 
             const params = {
                 qID: 'id',
