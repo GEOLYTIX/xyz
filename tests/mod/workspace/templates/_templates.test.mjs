@@ -11,5 +11,5 @@ export const templatesTest = {
     geojsonTemplate,
     locationGetTemplate,
     mvtTemplate,
-    // wktTemplate
+    wktTemplate
 }
