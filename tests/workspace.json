@@ -160,9 +160,6 @@
                 ]
             },
             "decorate": {
-                "testLayer": {
-                    "key": "queryTest"
-                },
                 "display": false,
                 "templates": [
                     {

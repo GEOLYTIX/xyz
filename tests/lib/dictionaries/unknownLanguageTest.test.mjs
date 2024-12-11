@@ -3,14 +3,14 @@
  * If not, it should return a warning and default to 'en'.
  * @function unknownLanguageTest
  */
-export async function unknownLanguageTest() {
+export function unknownLanguageTest() {
     // Describe the test
-    await codi.describe('Language TEST should default language to English', async () => {
+    codi.describe({ name: 'Language TEST should default language to English', id: 'unknown_dictionary' }, () => {
 
         // The language was set to 'TEST' in _test.html, which is not a valid language
 
         // Assert that the language has been reset to 'en'
-        await codi.it('Should default to English', () => {
+        codi.it({ name: 'Should default to English', parentId: 'unknown_dictionary' }, () => {
             codi.assertEqual(mapp.language, 'en');
         });
     });

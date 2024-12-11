@@ -1,4 +1,4 @@
-export async function coreTest() {
+export async function coreTest(mapview) {
     //API Tests
     await runAllTests(_mappTest.workspaceSuite);
 
@@ -10,7 +10,7 @@ export async function coreTest() {
     // //Run Map Object test
     // await runAllTests(_mappTest.mappTest);
     // // Run the dictionary Tests
-    // await runAllTests(_mappTest.dictionaryTest, mapview);
+    await runAllTests(_mappTest.dictionaryTest, mapview);
     // //Plugins Tests
     // await runAllTests(_mappTest.pluginsTest);
     // //Layer Tests
