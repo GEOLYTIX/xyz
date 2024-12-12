@@ -24,10 +24,10 @@ import { styleParserTest } from './styleParser.test.mjs';
 
 export const layerTest = {
     decorateTest,
-    fadeTest,
-    featureFieldsTest,
-    featureFormatsTest,
-    featureHoverTest,
-    featureStyleTest,
-    styleParserTest
+    // fadeTest,
+    // featureFieldsTest,
+    // featureFormatsTest,
+    // featureHoverTest,
+    // featureStyleTest,
+    // styleParserTest
 };
