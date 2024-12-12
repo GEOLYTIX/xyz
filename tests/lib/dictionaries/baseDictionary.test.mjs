@@ -5,7 +5,7 @@
  * @function baseDictionaryTest
  */
 export function baseDictionaryTest() {
-    codi.describe({ name: 'All languages should have the keys as English', id: 'base_dictionary' }, () => {
+    codi.describe({ name: 'All languages should have the keys as English', id: 'dictionary_base', parentId: 'dictionary' }, () => {
 
         // English is the base, so we check that all other languages have the same keys as English.
         for (const language of Object.keys(mapp.dictionaries)) {
@@ -15,7 +15,7 @@ export function baseDictionaryTest() {
             }
 
             // Ensure that there are no keys that the english language doesn't have
-            codi.it({ name: `${language} dictionary should have the same keys as English`, parentId: 'base_dictionary' }, () => {
+            codi.it({ name: `${language} dictionary should have the same keys as English`, parentId: 'dictionary_base' }, () => {
                 for (const key of Object.keys(mapp.dictionaries[language])) {
                     codi.assertTrue(Object.hasOwn(mapp.dictionaries['en'], key), `${language} has ${key} the base english`);
                 }

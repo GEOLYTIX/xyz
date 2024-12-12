@@ -1,6 +1,4 @@
-import * as codi from 'https://esm.sh/codi-test-framework@1.0.8';
-
-globalThis.codi = codi;
+import * as codi from 'https://esm.sh/codi-test-framework@1.0.12';
 
 mapp.plugins.test = test;
 

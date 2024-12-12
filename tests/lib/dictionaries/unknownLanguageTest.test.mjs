@@ -5,12 +5,12 @@
  */
 export function unknownLanguageTest() {
     // Describe the test
-    codi.describe({ name: 'Language TEST should default language to English', id: 'unknown_dictionary' }, () => {
+    codi.describe({ name: 'Language TEST should default language to English', id: 'dictionary_unknown' }, () => {
 
         // The language was set to 'TEST' in _test.html, which is not a valid language
 
         // Assert that the language has been reset to 'en'
-        codi.it({ name: 'Should default to English', parentId: 'unknown_dictionary' }, () => {
+        codi.it({ name: 'Should default to English', parentId: 'dictionary_unknown' }, () => {
             codi.assertEqual(mapp.language, 'en');
         });
     });

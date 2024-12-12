@@ -19,7 +19,12 @@ import { featureFields } from './featureFields.test.mjs';
 import { featureFormats } from './featureFormats.test.mjs';
 
 export const layerTest = {
+    setup,
     decorate,
     featureFields,
     featureFormats
 };
+
+function setup() {
+    codi.describe({ name: 'Layer:', id: 'layer' }, () => { });
+}

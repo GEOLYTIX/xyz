@@ -3,16 +3,16 @@
  * @function keyValueDictionaryTest
  */
 export async function keyValueDictionaryTest(mapview) {
-    codi.describe({ name: 'Key Value Dictionary Tests', id: 'key_value_dictionary' }, () => {
+    codi.describe({ name: 'Key Value Dictionary Tests', id: 'dictionary_key_value', parentId: 'dictionary' }, () => {
 
-        codi.it({ name: 'should replace the key value dictionary for default value on a layer', parentId: 'key_value_dictionary' }, () => {
+        codi.it({ name: 'should replace the key value dictionary for default value on a layer', parentId: 'dictionary_key_value' }, () => {
             // Get the OSM layer from the mapview
             const osm = mapview.locale.layers.find(layer => layer.key === 'OSM');
             // Check the OSM layer has the correct name
             codi.assertEqual(osm.name, 'OpenStreetMap KeyValue Dictionary');
         });
 
-        codi.it({ name: 'should replace the key value dictionary for default value in an infoj', parentId: 'key_value_dictionary' }, () => {
+        codi.it({ name: 'should replace the key value dictionary for default value in an infoj', parentId: 'dictionary_key_value' }, () => {
             // Get the changeEnd layer from the mapview
             const changeEnd = mapview.locale.layers.find(layer => layer.key === 'changeEnd');
             // Check the changeEnd infoj entry of field textarea has the correct title
@@ -22,7 +22,7 @@ export async function keyValueDictionaryTest(mapview) {
 
         });
 
-        codi.it({ name: 'should not replace the key value dictionary for an array', parentId: 'key_value_dictionary' }, () => {
+        codi.it({ name: 'should not replace the key value dictionary for an array', parentId: 'dictionary_key_value' }, () => {
             // Get the changeEnd layer from the mapview
             const changeEnd = mapview.locale.layers.find(layer => layer.key === 'changeEnd');
             // Check the changeEnd test_array has the correct value

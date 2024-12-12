@@ -13,7 +13,7 @@ import ukFeatures from '../../../assets/data/uk.json';
  */
 export function vectorTest(mapview) {
 
-    codi.describe({ name: 'Layer Format: Vector', id: 'layer_format_vector' }, () => {
+    codi.describe({ name: 'Vector:', id: 'layer_format_vector', parentId: 'layer_format' }, () => {
 
         codi.it({ name: 'Should create a geojson layer', parentId: 'layer_format_vector' }, async () => {
             const custom_config = {

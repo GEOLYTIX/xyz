@@ -31,6 +31,8 @@ export function get(mapview) {
 
         const location_layer_no_infoj = mapview.layers[layer_params.key];
 
+        mapview.removeLayer(layer_params.key);
+
         /**
          * This tests the functionality to mock a location by passing in a template that returns values from the query
          * @function it

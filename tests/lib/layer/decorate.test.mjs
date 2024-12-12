@@ -23,7 +23,7 @@ export function decorate(mapview, layer, infoj, style) {
     infoj ??= wkt_infoj_default;
     style ??= wkt_style_default;
 
-    codi.describe({ name: 'Layer: decorate test', id: 'layer_decorate' }, async () => {
+    codi.describe({ name: 'decorate test', id: 'layer_decorate', parentId: 'layer' }, async () => {
 
         const infoj_skip = [
             'textarea'

@@ -4,7 +4,7 @@ export function mvt(mapview, layer) {
 
     layer ??= mvt_layer_default;
 
-    codi.describe({ name: 'Layer Format: MVT', id: 'layer_format_mvt' }, () => {
+    codi.describe({ name: 'MVT:', id: 'layer_format_mvt', parentId: 'layer_format' }, () => {
         /**
          * @description MVT: Create basic layer
          * @function it

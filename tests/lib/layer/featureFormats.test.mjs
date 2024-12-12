@@ -1,5 +1,5 @@
 export function featureFormats() {
-  codi.describe({ name: 'Layer: featureFormats test', id: 'layer_feature_formats' }, () => {
+  codi.describe({ name: 'featureFormats test', id: 'layer_feature_formats', parentId: 'layer' }, () => {
 
     const mapview = {
       srid: '3857'

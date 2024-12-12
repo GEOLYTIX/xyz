@@ -1,5 +1,5 @@
 export function featureFields() {
-    codi.describe({ name: 'Layer: featureFields test', id: 'layer_feature_fields' }, () => {
+    codi.describe({ name: 'featureFields test', id: 'layer_feature_fields', parentId: 'layer' }, () => {
         codi.it({ name: 'The fields array on on a theme should not be duplicated', parentId: 'layer_feature_fields' }, () => {
 
             const layer = {
