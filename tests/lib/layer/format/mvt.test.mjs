@@ -1,15 +1,15 @@
 import mvt_layer_default from '../../../assets/layers/mvt/layer.json';
 
-export function mvtTest(mapview, layer) {
+export function mvt(mapview, layer) {
 
     layer ??= mvt_layer_default;
 
-    codi.describe('Layer Format: MVT', () => {
+    codi.describe({ name: 'Layer Format: MVT', id: 'layer_format_mvt' }, () => {
         /**
          * @description MVT: Create basic layer
          * @function it
          */
-        codi.it('MVT: Create basic layer', () => {
+        codi.it({ name: 'Create basic layer', parentId: 'layer_format_mvt' }, () => {
             mapp.layer.formats[layer.format]?.(layer);
 
             codi.assertTrue(Object.hasOwn(layer, 'reload'), 'The mvt layer needs to have a reload function')
@@ -22,7 +22,7 @@ export function mvtTest(mapview, layer) {
          * @description MVT: Reload should remove sourceTiles
          * @function it
          */
-        codi.it('MVT: Reload should remove sourceTiles', () => {
+        codi.it({ name: 'Reload should remove sourceTiles', parentId: 'layer_format_mvt' }, () => {
             mapp.layer.formats[layer.format]?.(layer);
 
             layer.source.sourceTiles_ = { tile: 'foo' };

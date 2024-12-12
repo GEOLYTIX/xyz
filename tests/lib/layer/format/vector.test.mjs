@@ -11,11 +11,11 @@ import ukFeatures from '../../../assets/data/uk.json';
  * @function vectorTest 
  * @param {object} mapview 
  */
-export async function vectorTest(mapview) {
+export function vectorTest(mapview) {
 
-    await codi.describe('Layer Format: Vector', async () => {
+    codi.describe({ name: 'Layer Format: Vector', id: 'layer_format_vector' }, () => {
 
-        codi.it('Should create a geojson layer', async () => {
+        codi.it({ name: 'Should create a geojson layer', parentId: 'layer_format_vector' }, async () => {
             const custom_config = {
                 key: 'geojson_test',
                 featureLocation: true
@@ -63,7 +63,7 @@ export async function vectorTest(mapview) {
        * 2. Decorates the layer.
        * @function it
        */
-        codi.it('Should create a wkt layer with a custom featureFormat', async () => {
+        codi.it({ name: 'Should create a wkt layer with a custom featureFormat', parentId: 'layer_format_vector' }, async () => {
             const custom_config = {
                 key: 'feature_format_test',
                 featureFormat: 'customFeatureFormat',

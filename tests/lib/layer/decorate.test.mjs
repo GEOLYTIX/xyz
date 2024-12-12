@@ -17,15 +17,13 @@ import wkt_style_default from '../../assets/layers/wkt/style.json'
  * @function decorateTest 
  * @param {Object} mapview 
 */
-export function decorateTest(mapview, layer, infoj, style) {
+export function decorate(mapview, layer, infoj, style) {
 
     layer ??= wkt_layer_default;
     infoj ??= wkt_infoj_default;
     style ??= wkt_style_default;
 
-    // setView(mapview, 2, 'default');
-
-    codi.describe({ name: 'Layer: decorateTest', id: 'layer_decorate' }, async () => {
+    codi.describe({ name: 'Layer: decorate test', id: 'layer_decorate' }, async () => {
 
         const infoj_skip = [
             'textarea'
