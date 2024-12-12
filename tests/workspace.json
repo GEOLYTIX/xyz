@@ -342,25 +342,6 @@
                     "template_2"
                 ]
             },
-            "location_get_test": {
-                "hidden": true,
-                "templates": [
-                    {
-                        "src": "file:/tests/assets/layers/location_mock/layer.json"
-                    },
-                    {
-                        "src": "file:/tests/assets/layers/location_mock/infoj.json"
-                    }
-                ]
-            },
-            "location_get_test_no_infoj": {
-                "hidden": true,
-                "templates": [
-                    {
-                        "src": "file:/tests/assets/layers/location_mock/layer.json"
-                    }
-                ]
-            },
             "query_params_layer": {
                 "hidden": true,
                 "templates": [
