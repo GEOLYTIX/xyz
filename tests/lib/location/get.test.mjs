@@ -18,11 +18,18 @@ export function get(mapview) {
 
         layer_params.features = ukFeatures.features;
 
-        const layer = await mapview.addLayer(layer_params);
+        //Adding layer with infoj
+        await mapview.addLayer(layer_params);
 
         const location_layer = mapview.layers[layer_params.key];
 
-        // const location_layer_no_infoj = mapview.layers['location_get_test_no_infoj'];
+        mapview.removeLayer(layer_params.key);
+
+        delete layer_params.infoj;
+
+        await mapview.addLayer(layer_params);
+
+        const location_layer_no_infoj = mapview.layers[layer_params.key];
 
         /**
          * This tests the functionality to mock a location by passing in a template that returns values from the query
@@ -50,37 +57,38 @@ export function get(mapview) {
             codi.assertTrue(!location.removeCallbacks, 'removeCallbacks should have removed themselves.');
         });
 
-        // /**
-        //  * This tests that no location is returned if no infoj is provided
-        //  * @function it
-        //  */
-        // codi.it('Location get should return undefined if location.layer.info is undefined.', async () => {
+        /**
+         * This tests that no location is returned if no infoj is provided
+         * @function it
+         */
+        codi.it({ name: 'Location get should return undefined if location.layer.info is undefined.', parentId: 'location_get' }, async () => {
 
-        //     //Get the location with the id returned from the query above
-        //     const location = await mapp.location.get({
-        //         layer: location_layer_no_infoj,
-        //         getTemplate: 'get_location_mock',
-        //         id: 6,
-        //     });
+            //Get the location with the id returned from the query above
+            const location = await mapp.location.get({
+                layer: location_layer_no_infoj,
+                getTemplate: 'get_location_mock',
+                id: 6,
+            });
 
-        //     codi.assertEqual(location, undefined, 'The Location should be undefined');
+            codi.assertEqual(location, undefined, 'The Location should be undefined');
 
-        // });
+        });
 
-        // /**
-        //  * This tests that no location is returned if no infoj is provided
-        //  * @function it
-        //  */
-        // codi.it('The getInfoj method should return an infoj if none is provided on the layer present.', async () => {
+        /**
+         * This tests that no location is returned if no infoj is provided
+         * @function it
+         */
+        codi.it({ name: 'The getInfoj method should return an infoj if none is provided on the layer present.', parentId: 'location_get' }, async () => {
 
-        //     //Get the location with the id returned from the query above
-        //     const infoj = await mapp.location.getInfoj({
-        //         layer: location_layer_no_infoj,
-        //         getTemplate: 'get_location_mock',
-        //         id: 6,
-        //     });
+            //Get the location with the id returned from the query above
+            const infoj = await mapp.location.getInfoj({
+                layer: location_layer_no_infoj,
+                getTemplate: 'get_location_mock',
+                id: 6,
+            });
 
-        //     codi.assertTrue(infoj !== undefined, 'The Location should be undefined');
-        // });
+            codi.assertTrue(infoj !== undefined, 'The Location should be undefined');
+        });
+
     });
 }
