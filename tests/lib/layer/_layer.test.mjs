@@ -15,19 +15,11 @@
  * @property {Function} styleParserTest
  */
 import { decorateTest } from './decorate.test.mjs';
-import { fadeTest } from './fade.test.mjs';
 import { featureFieldsTest } from './featureFields.test.mjs';
 import { featureFormatsTest } from './featureFormats.test.mjs';
-import { featureHoverTest } from './featureHover.test.mjs';
-import { featureStyleTest } from './featureStyle.test.mjs';
-import { styleParserTest } from './styleParser.test.mjs';
 
 export const layerTest = {
     decorateTest,
-    // fadeTest,
-    // featureFieldsTest,
-    // featureFormatsTest,
-    // featureHoverTest,
-    // featureStyleTest,
-    // styleParserTest
+    featureFieldsTest,
+    featureFormatsTest
 };
