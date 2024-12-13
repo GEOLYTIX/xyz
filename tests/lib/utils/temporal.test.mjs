@@ -25,7 +25,6 @@ export function temporal() {
 
         /**
          * ### Should format en-GB locale Date/Time
-         * This test is used to check if a epoch value gets formatted to the correct localised UK Date String.
          * @function it
          */
         codi.it('Should format en-GB locale Date/Time', () => {
@@ -37,6 +36,10 @@ export function temporal() {
 
         });
 
+        /**
+         * ### Should convert date string to Unix timestamp
+         * @function it
+         */
         codi.it('Should convert date string to Unix timestamp', () => {
 
             const testCases = [
@@ -55,6 +58,10 @@ export function temporal() {
 
         });
 
+        /**
+         * ### Should throw an error for invalid date strings
+         * @function it
+         */
         codi.it('Should throw an error for invalid date strings', () => {
             const errors = [];
 
@@ -88,6 +95,10 @@ export function temporal() {
 
         });
 
+        /**
+         * ### Should format unix timestamps to date time
+         * @function it
+         */
         codi.it('Should format unix timestamps to date time', () => {
 
             const epoch = 1704067200;
@@ -97,6 +108,10 @@ export function temporal() {
 
         });
 
+        /**
+         * ### Should format unix timestamps to date
+         * @function it
+         */
         codi.it('Should format unix timestamps to date', () => {
 
             const epoch = 1704067200;
