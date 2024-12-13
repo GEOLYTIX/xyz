@@ -490,3 +490,4 @@ export async function base() {
     });
 
     return mapview;
+}
