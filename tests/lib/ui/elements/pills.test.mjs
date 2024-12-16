@@ -8,7 +8,7 @@
  * This is the entry function for the pills test.
  * @function pillsTest
  */
-export function pillsTest() {
+export function pills() {
     codi.describe({ name: 'Pills test:', id: 'ui_elements_pills', parentId: 'ui_elements' }, () => {
         //creating the pills component without any params
         const pillsComponent = mapp.ui.elements.pills();

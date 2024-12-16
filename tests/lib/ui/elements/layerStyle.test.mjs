@@ -1,5 +1,5 @@
 import geojsonLayer from '../../../assets/layers/geojson/layer.json';
-import layerStyle from '../../../assets/styles/ui_elements_layer_style.json'
+import layerStyleJson from '../../../assets/styles/ui_elements_layer_style.json'
 /**
  * ## layer.layerStyleTest()
  * @module ui/elements/layerStyle
@@ -9,12 +9,12 @@ import layerStyle from '../../../assets/styles/ui_elements_layer_style.json'
  * This test is used to test the creation of the style panel ui elements.
  * @function layerStyleTest 
 */
-export function layerStyleTest(mapview) {
+export function layerStyle(mapview) {
     codi.describe({ name: 'LayerStyle test:', id: 'ui_elements_layer_style', parentId: 'ui_elements' }, async () => {
 
         const layerParams = {
             ...geojsonLayer,
-            ...layerStyle
+            ...layerStyleJson
         }
 
         layerParams.key = 'layer_style_test';

@@ -1,7 +1,6 @@
 import geojsonLayer from '../../../assets/layers/geojson/layer.json';
 import sliderInfoj from '../../../assets/infoj/slider.json';
 /**
- * ## layer.decorateTest()
  * @module ui/elements/slider
  */
 
@@ -11,7 +10,7 @@ import sliderInfoj from '../../../assets/infoj/slider.json';
  * **Note: I still want to figure out event management for these elements to trigger the oninput function to simulate sliding the element**
  * @function sliderTest 
 */
-export async function sliderTest(mapview) {
+export async function slider(mapview) {
     codi.describe({ name: 'Slider test:', id: 'ui_elements_slider', parentId: 'ui_elements' }, () => {
         codi.it({ name: 'Should return the slider', parentId: 'ui_elements_slider' }, async () => {
 

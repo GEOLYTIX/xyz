@@ -6,7 +6,7 @@
  * This function is used to test the alert method
  * @function alertTest 
 */
-export function alertTest() {
+export function alert() {
     codi.describe({ name: 'Alert test:', id: 'ui_elements_alert', parentId: 'ui_elements' }, () => {
 
         // Test providing params

@@ -3,7 +3,7 @@
  * This function is used to test the dialog ui element.
  * @function dialogTest
  */
-export function dialogTest() {
+export function dialog() {
     codi.describe({ name: 'UI Elements: dialog/modal', id: 'ui_elements_dialog', parentId: 'ui_elements' }, () => {
 
         const params = {

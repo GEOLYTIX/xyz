@@ -6,7 +6,7 @@
  * This function is used to test the confirm method
  * @function confirmTest 
 */
-export function confirmTest() {
+export function confirm() {
     codi.describe({ name: 'Confirm:', id: 'ui_elements_confirm', parentId: 'ui_elements' }, () => {
 
         // Test providing params
