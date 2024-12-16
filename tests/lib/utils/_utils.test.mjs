@@ -19,4 +19,3 @@ export const utilsTest = {
 
 function setup() {
     codi.describe({ name: 'Utils:', id: 'utils' }, () => { });
-}
