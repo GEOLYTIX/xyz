@@ -11,7 +11,7 @@ export const ui_elementsTest = {
     layerStyleTest,
     pillsTest,
     alertTest,
-    // confirmTest,
+    confirmTest,
     // dialogTest
 };
 
