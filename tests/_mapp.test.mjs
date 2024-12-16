@@ -1,6 +1,6 @@
 import { coreTest } from './browser/local.test.mjs';
 import { mappTest } from './lib/mapp.test.mjs';
-import { layerTest } from './lib/layer/_layer.test.mjs';
+import { layer } from './lib/layer/_layer.test.mjs';
 import { dictionaryTest } from './lib/dictionaries/_dictionaries.test.mjs';
 import { locationTest } from './lib/location/_location.test.mjs';
 import { mapviewTest } from './lib/mapview/_mapview.test.mjs';
@@ -11,12 +11,11 @@ import { queryTest } from './mod/query.test.mjs';
 import { userTest } from './mod/user/_user.test.js';
 import { uiTest } from './lib/_ui.test.mjs';
 import { utilsTest } from './lib/utils/_utils.test.mjs';
-import { formatTest } from './lib/layer/format/_format.test.mjs';
 
 globalThis._mappTest = {
     coreTest,
     mappTest,
-    layerTest,
+    layer,
     dictionaryTest,
     locationTest,
     mapviewTest,
@@ -26,6 +25,5 @@ globalThis._mappTest = {
     queryTest,
     userTest,
     uiTest,
-    utilsTest,
-    formatTest,
+    utilsTest
 }

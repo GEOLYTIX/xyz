@@ -14,7 +14,7 @@ export async function coreTest(mapview) {
     // //Plugins Tests
     // await runAllTests(_mappTest.pluginsTest);
     // //Layer Tests
-    await runAllTests(_mappTest.layerTest, mapview);
+    await runAllTests(_mappTest.layer, mapview);
     // //Location Tests
     await runAllTests(_mappTest.locationTest, mapview);
     // //Mapview Tests
@@ -27,13 +27,13 @@ export async function coreTest(mapview) {
     // //UI tests
     // await runAllTests(_mappTest.uiTest, mapview);
     // //Format Tests
-    await runAllTests(_mappTest.formatTest, mapview);
+    await runAllTests(_mappTest.layer.formats, mapview);
     // //UI Locations Tests
     await runAllTests(_mappTest.uiTest.locations, mapview);
     // //Entries Tests
     await runAllTests(_mappTest.uiTest.locations.entries, mapview);
     // //Utils Tests
-    // await runAllTests(_mappTest.utilsTest, mapview);
+    await runAllTests(_mappTest.utilsTest, mapview);
 
 }
 

@@ -1,9 +1,9 @@
-import { vectorTest } from './vector.test.mjs';
+import { vector } from './vector.test.mjs';
 import { mvt } from './mvt.test.mjs';
 
-export const formatTest = {
+export const formats = {
     setup,
-    vectorTest,
+    vector,
     mvt
 }
 

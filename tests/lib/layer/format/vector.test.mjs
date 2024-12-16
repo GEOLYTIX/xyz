@@ -11,7 +11,7 @@ import ukFeatures from '../../../assets/data/uk.json';
  * @function vectorTest 
  * @param {object} mapview 
  */
-export function vectorTest(mapview) {
+export function vector(mapview) {
 
     codi.describe({ name: 'Vector:', id: 'layer_format_vector', parentId: 'layer_format' }, () => {
 

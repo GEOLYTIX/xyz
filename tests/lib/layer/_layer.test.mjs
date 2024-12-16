@@ -6,20 +6,18 @@
 
 /**
  * @typedef {Object} layerTest
- * @property {decorateTest} decorateTest
- * @property {Function} fadeTest
- * @property {Function} featureFieldsTest
- * @property {Function} featureFormatsTest
- * @property {Function} featureHoverTest
- * @property {Function} featureStyleTest
- * @property {Function} styleParserTest
+ * @property {Function} decorate 
+ * @property {Function} featureFields 
+ * @property {Function} featureFormats 
  */
 import { decorate } from './decorate.test.mjs';
 import { featureFields } from './featureFields.test.mjs';
 import { featureFormats } from './featureFormats.test.mjs';
+import { formats } from './format/_format.test.mjs'
 
-export const layerTest = {
+export const layer = {
     setup,
+    formats,
     decorate,
     featureFields,
     featureFormats

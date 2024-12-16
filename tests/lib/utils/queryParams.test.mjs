@@ -8,7 +8,7 @@ import { setView } from '../../utils/view.js';
  * This function is used as an entry point for the queryParams Test
  * @function queryParamsTest
  */
-export async function queryParamsTest(mapview) {
+export async function queryParams(mapview) {
 
     await codi.describe('Utils: queryParams Test', async () => {
 
