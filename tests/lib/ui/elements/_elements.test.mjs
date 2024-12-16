@@ -12,7 +12,7 @@ export const ui_elementsTest = {
     pillsTest,
     alertTest,
     confirmTest,
-    // dialogTest
+    dialogTest
 };
 
 function setup() {

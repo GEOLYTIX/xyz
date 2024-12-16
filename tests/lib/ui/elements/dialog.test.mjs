@@ -4,7 +4,7 @@
  * @function dialogTest
  */
 export function dialogTest() {
-    codi.describe('UI Elements: dialog/modal', () => {
+    codi.describe({ name: 'UI Elements: dialog/modal', id: 'ui_elements_dialog', parentId: 'ui_elements' }, () => {
 
         const params = {
             target: document.getElementById('Map'),
@@ -22,7 +22,7 @@ export function dialogTest() {
          * We should be able to create a basic dialog with some params
          * @function it
          */
-        codi.it('Should create a basic dialog', () => {
+        codi.it({ name: 'Should create a basic dialog', parentId: 'ui_elements_dialog' }, () => {
 
             const dialog = mapp.ui.elements.dialog({ ...params });
 
@@ -30,7 +30,7 @@ export function dialogTest() {
              * The dialog should be able to close
              * @function it
              */
-            codi.it('Dialog should be able to close', () => {
+            codi.it({ name: 'Dialog should be able to close', parentId: 'ui_elements_dialog' }, () => {
                 dialog.close();
                 const dialog_element = document.querySelector('[data-id="dialog-test"]')
                 codi.assertEqual(dialog_element, null, 'The dialog should be removed from the DOM on close');
@@ -40,7 +40,7 @@ export function dialogTest() {
              * The dialog should be able to be shown again
              * @function it
              */
-            codi.it('Dialog should be able to be shown again', () => {
+            codi.it({ name: 'Dialog should be able to be shown again', parentId: 'ui_elements_dialog' }, () => {
                 dialog.show();
                 const dialog_element = document.querySelector('[data-id="dialog-test"]')
                 codi.assertEqual(dialog_element, dialog.node, 'The dialog should be in the DOM again');
@@ -53,7 +53,7 @@ export function dialogTest() {
          * Created dialog should not call show method
          * @function it
          */
-        codi.it('Should recreate a basic dialog', () => {
+        codi.it({ name: 'Should recreate a basic dialog', parentId: 'ui_elements_dialog' }, () => {
 
             params.new = true;
             const new_params = { ...params }
@@ -72,7 +72,7 @@ export function dialogTest() {
          * Created dialog should have minimize/maximize functionality
          * @function it
          */
-        codi.it('Should create a dialog that can minimize/maximize', () => {
+        codi.it({ name: 'Should create a dialog that can minimize/maximize', parentId: 'ui_elements_dialog' }, () => {
 
             params.minimizeBtn = true;
             const new_params = { ...params }
