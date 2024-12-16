@@ -76,7 +76,7 @@ export function infoj() {
 
     });
 
-    codi.it('It should create an infoj with certain order as defined on the layer', () => {
+    codi.it({ name: 'It should create an infoj with certain order as defined on the layer', parentId: 'ui_locations_infoj' }, () => {
 
       const location = {
         infoj: [
