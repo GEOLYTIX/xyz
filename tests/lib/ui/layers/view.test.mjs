@@ -12,7 +12,7 @@ import clusterConfig from '../../../assets/layers/cluster/layer.json'
  * @function viewTest 
  * @param {Object} mapview 
 */
-export async function viewTest(mapview) {
+export async function view(mapview) {
 
     await codi.describe({ name: 'View test:', id: 'ui_layers_view', parentId: 'ui_layers' }, async () => {
 

@@ -5,7 +5,7 @@ import { alertTest } from './alert.test.mjs';
 import { confirmTest } from './confirm.test.mjs';
 import { dialogTest } from './dialog.test.mjs';
 
-export const ui_elementsTest = {
+export const elements = {
     setup,
     sliderTest,
     layerStyleTest,

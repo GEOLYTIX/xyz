@@ -4,7 +4,7 @@ import geojsonLayer from '../../../assets/layers/geojson/layer.json'
  * @function filtersTest 
  * @param {object} mapview 
  */
-export function filtersTest(mapview) {
+export function filters(mapview) {
     codi.describe({ name: 'Filters test:', id: 'ui_layers_filters', parentId: 'ui_layers' }, async () => {
 
         //Creating the filter to be used in other tests

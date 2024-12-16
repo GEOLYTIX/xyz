@@ -1,12 +1,14 @@
-import { filtersTest } from './filters.test.mjs';
-import { panelFilterTest } from './panels/filter.test.mjs'
-import { viewTest } from './view.test.mjs';
+import { filters } from './filters.test.mjs';
+import { filter } from './panels/filter.test.mjs'
+import { view } from './view.test.mjs';
 
-export const ui_layers = {
+export const layers = {
     setup,
-    filtersTest,
-    panelFilterTest,
-    viewTest
+    filters,
+    panels: {
+        filter,
+    },
+    view
 }
 
 function setup() {

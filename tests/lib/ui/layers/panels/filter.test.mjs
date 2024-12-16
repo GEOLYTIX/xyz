@@ -5,7 +5,7 @@
  * This is the entry point function for the ui/layers/panels/filter test
  * @function panelFilterTest
  */
-export function panelFilterTest() {
+export function filter() {
 
     codi.describe({ name: 'Panel Filter test:', id: 'ui_layers_panel_filter', parentId: 'ui_layers' }, () => {
         /**

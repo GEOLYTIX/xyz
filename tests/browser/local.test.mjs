@@ -20,11 +20,12 @@ export async function coreTest(mapview) {
     // //Mapview Tests
     await runAllTests(_mappTest.mapviewTest, mapview);
     // //UI Elements Tests
-    await runAllTests(_mappTest.ui_elementsTest, mapview);
+    await runAllTests(_mappTest.uiTest.elements, mapview);
     // //Entries Tests
     // await runAllTests(_mappTest.entriesTest, mapview);
     // //UI Layers Tests
-    await runAllTests(_mappTest.ui_layers, mapview);
+    await runAllTests(_mappTest.uiTest.layers, mapview);
+    await runAllTests(_mappTest.uiTest.layers.panels, mapview);
     // //UI tests
     // await runAllTests(_mappTest.uiTest, mapview);
     // //Format Tests
