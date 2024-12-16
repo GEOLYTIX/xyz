@@ -2,15 +2,15 @@
  * This function is used as an entry point for the infoj test
  * @function injojTest
  */
-export function infojTest() {
-  codi.describe('UI Locations: infojTest', () => {
+export function infoj() {
+  codi.describe({ name: 'infoj test:', id: 'ui_locations_infoj', parentId: 'ui_locations' }, () => {
     /**
      * ### It should create an infoj with a correct order
      * 1. We define an infoj with a combination of different entries with keys, fields and queries
      * 2. We assert against the order
      * @function it
      */
-    codi.it('It should create an infoj with certain order', () => {
+    codi.it({ name: 'It should create an infoj with certain order', parentId: 'ui_locations_infoj' }, () => {
 
       const location = {
         infoj: [

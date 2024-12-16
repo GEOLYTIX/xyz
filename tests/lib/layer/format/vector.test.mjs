@@ -32,7 +32,6 @@ export function vectorTest(mapview) {
                 fields: ['id', 'name', 'description', 'geom_4326']
             }
 
-
             const [layer] = await mapview.addLayer(layer_params);
 
             const layersTab = document.getElementById('layers');
