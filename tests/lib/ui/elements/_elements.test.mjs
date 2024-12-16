@@ -8,8 +8,8 @@ import { dialogTest } from './dialog.test.mjs';
 export const ui_elementsTest = {
     setup,
     sliderTest,
-    layerStyleTest
-    // pillsTest,
+    layerStyleTest,
+    pillsTest,
     // alertTest,
     // confirmTest,
     // dialogTest
