@@ -10,7 +10,7 @@ export const ui_elementsTest = {
     sliderTest,
     layerStyleTest,
     pillsTest,
-    // alertTest,
+    alertTest,
     // confirmTest,
     // dialogTest
 };

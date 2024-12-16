@@ -10,7 +10,7 @@ import layer_style from '../../../assets/styles/ui_elements_layer_style.json'
  * @function layerStyleTest 
 */
 export function layerStyleTest(mapview) {
-    codi.describe({ name: 'layerStyle test', id: 'ui_elements_layer_style', parentId: 'ui_elements' }, async () => {
+    codi.describe({ name: 'LayerStyle test:', id: 'ui_elements_layer_style', parentId: 'ui_elements' }, async () => {
 
         const layer_params = {
             ...geojson_layer,
@@ -27,7 +27,7 @@ export function layerStyleTest(mapview) {
         const panel = await mapp.ui.elements.layerStyle.panel(layer);
 
         //Opacity Slider
-        codi.it({ name: 'The panel function should return a opacitySlider', parentId: 'ui_elements_layer_style' }, async () => {
+        codi.it({ name: 'The panel function should return a opacitySlider', parentId: 'ui_elements_layer_style' }, () => {
             const opacitySlider = panel.querySelector('[data-id="opacitySlider"]')
             codi.assertTrue(!!opacitySlider, 'The panel should have a opacitySlider');
         });

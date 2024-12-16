@@ -12,7 +12,7 @@ import slider_infoj from '../../../assets/infoj/slider.json';
  * @function sliderTest 
 */
 export async function sliderTest(mapview) {
-    codi.describe({ name: 'slider test', id: 'ui_elements_slider', parentId: 'ui_elements' }, () => {
+    codi.describe({ name: 'Slider test:', id: 'ui_elements_slider', parentId: 'ui_elements' }, () => {
         codi.it({ name: 'Should return the slider', parentId: 'ui_elements_slider' }, async () => {
 
             const layer_params = {
@@ -35,7 +35,7 @@ export async function sliderTest(mapview) {
             const assert_input = `<input data-id="a" name="rangeInput" type="range" min="-100000" max="10000" step="1">`;
             codi.assertEqual(input_slider_element.outerHTML, assert_input, 'We expect to see the input defined in the test');
 
-            await mapview.removeLayer('slider_test');
+            await mapview.removeLayer('slider_test')
         });
     });
 }
