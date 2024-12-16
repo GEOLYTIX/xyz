@@ -7,7 +7,7 @@ import ukFeatures from '../../assets/data/uk.json';
  * @param {object} mapview 
  */
 export function get(mapview) {
-    codi.describe({ name: 'Location: getTest', id: 'location_get' }, async () => {
+    codi.describe({ name: 'Location: getTest', id: 'location_get', parentId: 'location' }, async () => {
 
         const layer_params = {
             key: 'location_mock',
