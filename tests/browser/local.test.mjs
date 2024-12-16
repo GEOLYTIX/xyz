@@ -8,7 +8,7 @@ export async function coreTest(mapview) {
     // const mapview = await _mappTest.base();
     // await runAllTests(_mappTest.userTest);
     // //Run Map Object test
-    // await runAllTests(_mappTest.mappTest);
+    await runAllTests(_mappTest.mappTest);
     // // Run the dictionary Tests
     await runAllTests(_mappTest.dictionaryTest, mapview);
     // //Plugins Tests
