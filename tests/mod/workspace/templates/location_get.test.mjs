@@ -7,7 +7,7 @@
  * @function locationGetTemplate
  */
 export function locationGetTemplate() {
-    codi.describe({ name: 'Workspace Templates: location_get Template', id: 'api_template_location_get' }, () => {
+    codi.describe({ name: 'location_get Template', id: 'api_template_location_get', parentId: 'api_workspace_template' }, () => {
         /**
          * @description location_get Template Test
          * @function it

@@ -7,7 +7,7 @@
  * @function clusterTemplate
  */
 export function clusterTemplate() {
-    codi.describe({ name: 'Workspace Templates: Cluster Template', id: 'api_template_cluster' }, () => {
+    codi.describe({ name: 'Cluster Template', id: 'api_template_cluster', parentId: 'api_workspace_template' }, () => {
         /**
          * @description Cluster Test
          * @function it

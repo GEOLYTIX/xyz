@@ -7,7 +7,7 @@
  * @function geojsonTemplate
  */
 export function geojsonTemplate() {
-    codi.describe({ name: 'Workspace Templates: geojson Template', id: 'api_template_geojson' }, () => {
+    codi.describe({ name: 'geojson Template', id: 'api_template_geojson', parentId: 'api_workspace_template' }, () => {
         /**
          * @description geojson Template Test
          * @function it

@@ -8,7 +8,7 @@
  * @function clusterHexTemplate
  */
 export function clusterHexTemplate() {
-    codi.describe({ name: 'Workspace Templates: Cluster Hex Template', id: 'api_template_cluster_hex' }, () => {
+    codi.describe({ name: 'Cluster Hex Template', id: 'api_template_cluster_hex', parentId: 'api_workspace_template' }, () => {
         /**
          * @description Cluster Test
          * @function it

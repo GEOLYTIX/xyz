@@ -7,7 +7,7 @@
  * @function wktTemplate
  */
 export function wktTemplate() {
-    codi.describe({ name: 'Workspace Templates: wkt Template', id: 'api_template_wkt' }, () => {
+    codi.describe({ name: 'wkt Template', id: 'api_template_wkt', parentId: 'api_workspace_template' }, () => {
         /**
          * @description Cluster Test
          * @function it

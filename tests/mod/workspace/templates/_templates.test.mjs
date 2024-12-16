@@ -6,10 +6,15 @@ import { mvtTemplate } from './mvt.test.mjs';
 import { wktTemplate } from './wkt.test.mjs';
 
 export const templatesTest = {
+    setup,
     clusterTemplate,
     clusterHexTemplate,
     geojsonTemplate,
     locationGetTemplate,
     mvtTemplate,
     wktTemplate
+}
+
+function setup() {
+    codi.describe({ name: 'Workspace Templates:', id: 'api_workspace_template', parentId: 'api_workspace' }, () => { });
 }

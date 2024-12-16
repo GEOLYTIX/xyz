@@ -7,7 +7,7 @@
  * @function mvtTemplate
  */
 export function mvtTemplate() {
-    codi.describe({ name: 'Workspace Templates: mvt Template', id: 'api_template_mvt' }, () => {
+    codi.describe({ name: 'mvt Template', id: 'api_template_mvt', parentId: 'api_workspace_template' }, () => {
         /**
          * @description mvt Template Test
          * @function it
