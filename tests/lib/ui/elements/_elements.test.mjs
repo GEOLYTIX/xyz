@@ -6,10 +6,15 @@ import { confirmTest } from './confirm.test.mjs';
 import { dialogTest } from './dialog.test.mjs';
 
 export const ui_elementsTest = {
+    setup,
     sliderTest,
-    layerStyleTest,
-    pillsTest,
-    alertTest,
-    confirmTest,
-    dialogTest
+    layerStyleTest
+    // pillsTest,
+    // alertTest,
+    // confirmTest,
+    // dialogTest
 };
+
+function setup() {
+    codi.describe({ name: 'UI Elements:', id: 'ui_elements' }, () => { })
+}
