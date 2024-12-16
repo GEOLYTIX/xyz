@@ -33,7 +33,7 @@ export function vectorTest(mapview) {
             }
 
 
-            const layer = await mapview.addLayer(layer_params);
+            const [layer] = await mapview.addLayer(layer_params);
 
             const layersTab = document.getElementById('layers');
 
@@ -47,13 +47,13 @@ export function vectorTest(mapview) {
                 layers: layers
             });
 
-            codi.assertTrue(Object.hasOwn(layer[0], 'show'), 'The layer should have a show function');
-            codi.assertTrue(Object.hasOwn(layer[0], 'display'), 'The layer should have a display property');
-            codi.assertTrue(Object.hasOwn(layer[0], 'hide'), 'The layer should have a hide function');
-            codi.assertTrue(Object.hasOwn(layer[0], 'reload'), 'The layer should have a reload function');
-            codi.assertTrue(Object.hasOwn(layer[0], 'tableCurrent'), 'The layer should have a tableCurrent function');
+            codi.assertTrue(Object.hasOwn(layer, 'show'), 'The layer should have a show function');
+            codi.assertTrue(Object.hasOwn(layer, 'display'), 'The layer should have a display property');
+            codi.assertTrue(Object.hasOwn(layer, 'hide'), 'The layer should have a hide function');
+            codi.assertTrue(Object.hasOwn(layer, 'reload'), 'The layer should have a reload function');
+            codi.assertTrue(Object.hasOwn(layer, 'tableCurrent'), 'The layer should have a tableCurrent function');
 
-            layer[0].hide();
+            await mapview.removeLayer(layer.key);
 
         });
 
@@ -84,7 +84,7 @@ export function vectorTest(mapview) {
                 fields: ['id', 'pin', 'name', 'description', 'geom_4326']
             }
 
-            const layer = await mapview.addLayer(layer_params);
+            const [layer] = await mapview.addLayer(layer_params);
 
             const layersTab = document.getElementById('layers');
 
@@ -98,13 +98,13 @@ export function vectorTest(mapview) {
                 layers: layers
             });
 
-            codi.assertTrue(Object.hasOwn(layer[0], 'show'), 'The layer should have a show function');
-            codi.assertTrue(Object.hasOwn(layer[0], 'display'), 'The layer should have a display property');
-            codi.assertTrue(Object.hasOwn(layer[0], 'hide'), 'The layer should have a hide function');
-            codi.assertTrue(Object.hasOwn(layer[0], 'reload'), 'The layer should have a reload function');
-            codi.assertTrue(Object.hasOwn(layer[0], 'tableCurrent'), 'The layer should have a tableCurrent function');
+            codi.assertTrue(Object.hasOwn(layer, 'show'), 'The layer should have a show function');
+            codi.assertTrue(Object.hasOwn(layer, 'display'), 'The layer should have a display property');
+            codi.assertTrue(Object.hasOwn(layer, 'hide'), 'The layer should have a hide function');
+            codi.assertTrue(Object.hasOwn(layer, 'reload'), 'The layer should have a reload function');
+            codi.assertTrue(Object.hasOwn(layer, 'tableCurrent'), 'The layer should have a tableCurrent function');
 
-            layer[0].hide();
+            await mapview.removeLayer(layer.key);
 
         });
 

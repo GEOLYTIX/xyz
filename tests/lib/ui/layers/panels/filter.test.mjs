@@ -7,12 +7,12 @@
  */
 export function panelFilterTest() {
 
-    codi.describe('UI Layers Panels: Filter', () => {
+    codi.describe({ name: 'Panel Filter test:', id: 'ui_layers_panel_filter', parentId: 'ui_layers' }, () => {
         /**
             * This function is used to test the creation of a filter panel
             * @function it
             */
-        codi.it('Create a filter panel', () => {
+        codi.it({ name: 'Create a filter panel', parentId: 'ui_layers_panel_filter' }, () => {
             const layer = {
                 reload: () => { },
                 mapview: {
@@ -43,9 +43,7 @@ export function panelFilterTest() {
             }
 
             const filterPanel = mapp.ui.layers.panels.filter(layer)
-
             const filterPanelDropDown = filterPanel.querySelector('[data-id=panel_test-filter-dropdown]')
-
             const drop_down_elements = filterPanelDropDown.querySelector('ul');
 
             codi.assertEqual(drop_down_elements.children.length, 2, 'We expect two entries into the dropdown from the infoj')

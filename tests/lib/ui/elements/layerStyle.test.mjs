@@ -1,5 +1,5 @@
-import geojson_layer from '../../../assets/layers/geojson/layer.json';
-import layer_style from '../../../assets/styles/ui_elements_layer_style.json'
+import geojsonLayer from '../../../assets/layers/geojson/layer.json';
+import layerStyle from '../../../assets/styles/ui_elements_layer_style.json'
 /**
  * ## layer.layerStyleTest()
  * @module ui/elements/layerStyle
@@ -12,16 +12,14 @@ import layer_style from '../../../assets/styles/ui_elements_layer_style.json'
 export function layerStyleTest(mapview) {
     codi.describe({ name: 'LayerStyle test:', id: 'ui_elements_layer_style', parentId: 'ui_elements' }, async () => {
 
-        const layer_params = {
-            ...geojson_layer,
-            ...layer_style
+        const layerParams = {
+            ...geojsonLayer,
+            ...layerStyle
         }
 
-        layer_params.key = 'layer_style_test';
+        layerParams.key = 'layer_style_test';
 
-        const layers = await mapview.addLayer(layer_params)
-
-        const layer = layers[0];
+        const [layer] = await mapview.addLayer(layerParams)
 
         //Calling the panel function to create the panel with the layers style
         const panel = await mapp.ui.elements.layerStyle.panel(layer);
@@ -85,5 +83,7 @@ export function layerStyleTest(mapview) {
             const iconScalingZoomOutSlider = panel.querySelector('[data-id="iconScalingZoomOutSlider"]');
             codi.assertTrue(!!iconScalingZoomOutSlider, 'The panel should have an icon scaling zoom out slider');
         });
+
+        await mapview.removeLayer(layerParams.key);
     });
 }
