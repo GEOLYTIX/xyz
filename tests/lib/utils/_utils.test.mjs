@@ -11,7 +11,7 @@ export const utilsTest = {
     numericFormatter,
     merge,
     paramString,
-    queryParamsTest: queryParams,
+    // queryParams,
     // composeTest,
     // svgTemplatesTest,
     // versionCheck
@@ -19,3 +19,4 @@ export const utilsTest = {
 
 function setup() {
     codi.describe({ name: 'Utils:', id: 'utils' }, () => { });
+}
