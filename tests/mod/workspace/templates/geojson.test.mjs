@@ -5,6 +5,7 @@
 /**
  * @description Entry point for the geojson template module
  * @function geojsonTemplate
+ * @deprecated
  */
 export function geojsonTemplate() {
     codi.describe({ name: 'geojson Template', id: 'api_template_geojson', parentId: 'api_workspace_template' }, () => {
@@ -18,7 +19,7 @@ export function geojsonTemplate() {
                 qID: 'id',
                 geom: 'geom_3857',
                 template: 'geojson',
-                layer: 'changeEnd',
+                layer: 'geojson_layer',
                 table: 'test.scratch',
                 fields: ['textarea']
             }

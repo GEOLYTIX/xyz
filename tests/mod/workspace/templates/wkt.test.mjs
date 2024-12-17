@@ -5,6 +5,7 @@
 /**
  * @description Entry point for the wkt template module
  * @function wktTemplate
+ * @deprecated
  */
 export function wktTemplate() {
     codi.describe({ name: 'wkt Template', id: 'api_template_wkt', parentId: 'api_workspace_template' }, () => {
@@ -17,11 +18,10 @@ export function wktTemplate() {
             const params = {
                 template: 'wkt',
                 locale: 'locale',
-                layer: 'template_test',
+                layer: 'wkt_layer',
                 table: 'test.scratch',
                 geom: 'geom_3857',
-                srid: '3857',
-                fields: 'test_template_style',
+                srid: '3857'
             }
 
             const results = await mapp.utils.xhr(`/test/api/query?${mapp.utils.paramString(params)}`);

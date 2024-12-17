@@ -55,10 +55,7 @@ async function workspaceTest(mapview) {
                 'A',
                 'B',
                 'merge_into',
-                'C',
-                'test',
-                'super_test',
-                'roles_test'
+                'C'
             ]
 
             codi.it({ name: 'Check base roles', parentId: 'api_workspace_roles' }, () => {

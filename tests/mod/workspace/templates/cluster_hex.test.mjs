@@ -6,6 +6,7 @@
 /**
  * @description Entry point for the cluster hex template module
  * @function clusterHexTemplate
+ * @deprecated
  */
 export function clusterHexTemplate() {
     codi.describe({ name: 'Cluster Hex Template', id: 'api_template_cluster_hex', parentId: 'api_workspace_template' }, () => {
@@ -19,7 +20,7 @@ export function clusterHexTemplate() {
                 qID: 'id',
                 geom: 'geom_3857',
                 template: 'cluster_hex',
-                layer: 'changeEnd',
+                layer: 'wkt_layer',
                 table: 'test.scratch',
                 z: 12,
                 resolution: 10

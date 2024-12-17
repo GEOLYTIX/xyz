@@ -5,6 +5,7 @@
 /**
  * @description Entry point for the location_get template module
  * @function locationGetTemplate
+ * @deprecated
  */
 export function locationGetTemplate() {
     codi.describe({ name: 'location_get Template', id: 'api_template_location_get', parentId: 'api_workspace_template' }, () => {
@@ -17,7 +18,7 @@ export function locationGetTemplate() {
             const params = {
                 id: 22,
                 template: 'location_get',
-                layer: 'changeEnd',
+                layer: 'wkt_layer',
                 table: 'test.scratch'
             }
 

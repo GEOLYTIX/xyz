@@ -5,6 +5,7 @@
 /**
  * @description Entry point for the cluster template module
  * @function clusterTemplate
+ * @deprecated 
  */
 export function clusterTemplate() {
     codi.describe({ name: 'Cluster Template', id: 'api_template_cluster', parentId: 'api_workspace_template' }, () => {
@@ -18,7 +19,7 @@ export function clusterTemplate() {
                 qID: 'id',
                 geom: 'geom_3857',
                 template: 'cluster',
-                layer: 'changeEnd',
+                layer: 'wkt_layer',
                 table: 'test.scratch',
                 z: 12,
                 resolution: 10
