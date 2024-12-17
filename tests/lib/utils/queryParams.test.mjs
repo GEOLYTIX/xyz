@@ -2,6 +2,9 @@
  * @module utils/queryParams
  */
 
+import geoJsonLayer from '../../assets/layers/geojson/layer.json';
+import basicInfoj from '../../assets/infoj/basic.json';
+import ukFeatures from '../../assets/data/uk.json';
 import { setView } from '../../utils/view.js';
 
 /**
@@ -10,14 +13,23 @@ import { setView } from '../../utils/view.js';
  */
 export async function queryParams(mapview) {
 
-    await codi.describe('Utils: queryParams Test', async () => {
+    await codi.describe({ name: 'queryParams Test:', id: 'utils_queryparams', parentId: 'utils' }, async () => {
 
-        const location_layer = mapview.layers['query_params_layer'];
+        const layerParams = {
+            ...geoJsonLayer,
+            featureLocation: true,
+            key: 'query_params_test'
+        }
+
+        layerParams.infoj = [...layerParams.infoj, ...basicInfoj.infoj];
+
+        layerParams.features = ukFeatures.features;
+
+        const [location_layer] = await mapview.addLayer(layerParams);
 
         //Get the location
         const location = await mapp.location.get({
             layer: location_layer,
-            getTemplate: 'get_location_mock',
             id: 6,
         });
 
@@ -36,7 +48,7 @@ export async function queryParams(mapview) {
          * This test is used to check that queryParams returns undefined if queryparams is null/undefined
          * @function it
          */
-        await codi.it('Should return undefined with null queryparams', async () => {
+        await codi.it({ name: 'Should return undefined with null queryparams', parentId: 'utils_queryparams' }, async () => {
 
             const null_params = {};
             const formattedValue = mapp.utils.queryParams(null_params);
@@ -48,7 +60,7 @@ export async function queryParams(mapview) {
          * This test is used to check that queryParams returns the correct field values for id and qID when supplied.
          * @function it
          */
-        await codi.it('Should return id, qID', async () => {
+        await codi.it({ name: 'Should return id, qID', parentId: 'utils_queryparams' }, async () => {
 
             params.queryparams.id = true
             params.queryparams.qID = true
@@ -56,7 +68,7 @@ export async function queryParams(mapview) {
 
             const queryParams = mapp.utils.queryParams(params)
             codi.assertEqual(queryParams.id, 6, `We expect the value to equal 6, we received ${queryParams.id}`)
-            codi.assertEqual(queryParams.qID, '_id', `We expect the value to equal id, we received ${queryParams.qID}`)
+            codi.assertEqual(queryParams.qID, 'id', `We expect the value to equal id, we received ${queryParams.qID}`)
         });
 
         /**
@@ -64,7 +76,7 @@ export async function queryParams(mapview) {
          * This test is used to check that queryParams returns latitude, longitude and zoom level when requested.
          * @function it
          */
-        await codi.it('Should return lat, lng, z', async () => {
+        await codi.it({ name: 'Should return lat, lng, z', parentId: 'utils_queryparams' }, async () => {
 
             params.queryparams.center = true
             params.queryparams.z = true
@@ -80,7 +92,7 @@ export async function queryParams(mapview) {
          * This test is used to check that queryParams returns locale, template and layer when requested.
          * @function it
          */
-        await codi.it('Should return locale, template, layer', async () => {
+        await codi.it({ name: 'Should return locale, template, layer', parentId: 'utils_queryparams' }, async () => {
 
             params.query = 'not_real'
 
@@ -95,7 +107,7 @@ export async function queryParams(mapview) {
          * This test is used to check that queryParams returns viewport and filter when requested
          * @function it
          */
-        await codi.it('Should return viewport, filter', async () => {
+        await codi.it({ name: 'Should return viewport, filter', parentId: 'utils_queryparams' }, async () => {
 
             params.viewport = true
             params.queryparams.filter = true
