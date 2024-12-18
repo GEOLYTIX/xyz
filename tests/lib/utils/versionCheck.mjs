@@ -6,20 +6,20 @@
  * This function is used to test the versionCheck function
  * @function versionCheck
  */
-export async function versionCheck() {
+export function versionCheck() {
 
-    await codi.describe('Utils: versionCheck Test', async () => {
+    codi.describe({ name: 'versionCheck Test:', id: 'utils_versionCheck', parentId: 'utils' }, async () => {
 
-        await codi.it('should return false if the major and minor are the same but version patch exceeds', async () => {
+        codi.it({ name: 'should return false if the major and minor are the same but version patch exceeds', parentId: 'utils_versionCheck' }, () => {
 
             mapp.version = '4.11.1';
 
-            const result = await mapp.utils.versionCheck('4.11');
+            const result = mapp.utils.versionCheck('4.11');
 
             codi.assertEqual(result, true);
         });
 
-        await codi.it('should return true if the major version is more than', async () => {
+        codi.it({ name: 'should return true if the major version is more than', parentId: 'utils_versionCheck' }, () => {
 
             mapp.version = '4.9.1';
 
@@ -28,7 +28,7 @@ export async function versionCheck() {
             codi.assertEqual(result, true);
         });
 
-        await codi.it('should return false if the major version is the same and the minor version is less', async () => {
+        codi.it({ name: 'should return false if the major version is the same and the minor version is less', parentId: 'utils_versionCheck' }, () => {
 
             mapp.version = '4.9.0';
 
@@ -37,20 +37,20 @@ export async function versionCheck() {
             codi.assertEqual(result, false);
         });
 
-        await codi.it('should return true if the major version is the same and the minor version is more', async () => {
+        codi.it({ name: 'should return true if the major version is the same and the minor version is more', parentId: 'utils_versionCheck' }, () => {
 
             mapp.version = '4.11.0';
 
-            const result = await mapp.utils.versionCheck('4.10.0');
+            const result = mapp.utils.versionCheck('4.10.0');
 
             codi.assertEqual(result, true);
         });
 
-        await codi.it('should return true if the major version is the same and the minor version is the same', async () => {
+        codi.it({ name: 'should return true if the major version is the same and the minor version is the same', parentId: 'utils_versionCheck' }, () => {
 
             mapp.version = '4.11.2';
 
-            const result = await mapp.utils.versionCheck('4.11.1');
+            const result = mapp.utils.versionCheck('4.11.1');
 
             codi.assertEqual(result, true);
         });

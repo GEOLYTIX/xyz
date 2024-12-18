@@ -1,7 +1,12 @@
-import { vectorTest } from './vector.test.mjs';
-import { mvtTest } from './mvt.test.mjs';
+import { vector } from './vector.test.mjs';
+import { mvt } from './mvt.test.mjs';
 
-export const formatTest = {
-    vectorTest,
-    mvtTest
-} 
+export const formats = {
+    setup,
+    vector,
+    mvt
+}
+
+function setup() {
+    codi.describe({ name: 'format:', id: 'layer_format', parentId: 'layer' }, () => { });
+}
