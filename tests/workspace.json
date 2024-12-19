@@ -74,6 +74,7 @@
                 "showSummary": true
             }
         },
+        "userLocale": {},
         "layers": {
             "OSM": {
                 "name": "OpenStreetMap",
