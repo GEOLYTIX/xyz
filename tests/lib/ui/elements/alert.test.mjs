@@ -6,23 +6,26 @@
  * This function is used to test the alert method
  * @function alertTest 
 */
-export async function alertTest() {
-    await codi.describe('UI elements: Alert', async () => {
+export function alert() {
+    codi.describe({ name: 'Alert test:', id: 'ui_elements_alert', parentId: 'ui_elements' }, () => {
 
         // Test providing params
-        await codi.describe('Should create an alert with params provided', async () => {
+        codi.describe({ name: 'Should create an alert with params provided', id: 'ui_elements_alert_with_params', parentId: 'ui_elements_alert' }, async () => {
             const alert = await mapp.ui.elements.alert({ title: 'ALERT TITLE', text: 'ALERT TEXT' });
 
-            codi.assertTrue(alert !== undefined, 'We expect to see the alert element');
 
-            await codi.it('Should have a title of ALERT TITLE', async () => {
+            codi.it({ name: 'we expect to see an alert', parentId: 'ui_elements_alert_with_params' }, () => {
+                codi.assertTrue(alert !== undefined, 'We expect to see the alert element');
+            });
+
+            codi.it({ name: 'Should have a title of ALERT TITLE', parentId: 'ui_elements_alert_with_params' }, () => {
                 // Get the alert title
                 const alert_title = alert.title;
                 codi.assertEqual(alert_title, 'ALERT TITLE', 'We expect to see the alert title');
 
             });
 
-            await codi.it('Should have a text of ALERT TEXT', async () => {
+            codi.it({ name: 'Should have a text of ALERT TEXT', parentId: 'ui_elements_alert_with_params' }, () => {
                 // Get the alert text
                 const alert_text = alert.text;
                 codi.assertEqual(alert_text, 'ALERT TEXT', 'We expect to see the alert text');
@@ -33,19 +36,21 @@ export async function alertTest() {
         });
 
         // Test providing no params
-        await codi.describe('Should create an alert with no params provided', async () => {
+        codi.describe({ name: 'Should create an alert with no params provided', id: 'ui_elements_alert_no_params', parentId: 'ui_elements_alert' }, async () => {
             const alert = await mapp.ui.elements.alert({});
 
-            codi.assertTrue(alert !== undefined, 'We expect to see the alert element');
+            codi.it({ name: 'We expect to see the alert element', parentId: 'ui_elements_alert_no_params' }, () => {
+                codi.assertTrue(alert !== undefined,);
+            });
 
-            await codi.it('Should have a title of Information', async () => {
+            codi.it({ name: 'Should have a title of Information', parentId: 'ui_elements_alert_no_params' }, () => {
                 // Get the alert title
                 const alert_title = alert.title;
                 codi.assertEqual(alert_title, 'Information', 'We expect to see the alert title');
 
             });
 
-            await codi.it('Should have no text', async () => {
+            codi.it({ name: 'Should have no text', parentId: 'ui_elements_alert_no_params' }, () => {
                 // Get the alert text
                 const alert_text = alert.text;
                 codi.assertEqual(alert_text, undefined, 'We expect to see no alert text');
