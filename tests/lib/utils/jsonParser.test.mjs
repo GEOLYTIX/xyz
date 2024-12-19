@@ -37,6 +37,14 @@ export function jsonParser() {
 
         });
 
+        codi.it({ name: 'Check stringyfied json', parentId: 'utils_jsonParser' }, () => {
+
+            const jsonParserAssetString = JSON.stringify(jsonParserAsset);
+            const jsonObjectString = JSON.stringify(jsonObject);
+
+            codi.assertEqual(jsonParserAssetString, jsonObjectString, 'The test asset and object returned from the util function need to be equal stringified');
+        });
+
     });
 
 }
