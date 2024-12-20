@@ -5,6 +5,7 @@ import { queryParams } from './queryParams.test.mjs';
 import { compose } from './compose.test.mjs';
 import { svgTemplates } from './svgTemplates.test.mjs';
 import { versionCheck } from './versionCheck.mjs';
+import { jsonParser } from './jsonParser.test.mjs';
 
 export const utilsTest = {
     setup,
@@ -14,7 +15,8 @@ export const utilsTest = {
     queryParams,
     compose,
     svgTemplates,
-    versionCheck
+    versionCheck,
+    jsonParser
 }
 
 function setup() {
