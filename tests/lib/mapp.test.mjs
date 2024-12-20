@@ -7,8 +7,8 @@ export const mappTest = {
  * @function base
  */
 function base() {
-    codi.describe('Mapp base object test', () => {
-        codi.it('Mapp: Ensure we have base objects', () => {
+    codi.describe({ name: 'Mapp:', id: 'mapp' }, () => {
+        codi.it({ name: 'Ensure we have base objects', parentId: 'mapp' }, () => {
             codi.assertTrue(Object.hasOwn(mapp, 'ol', 'The mapp object needs to have an ol object'));
             codi.assertTrue(Object.hasOwn(mapp, 'version', 'The mapp object needs to have an version object'));
             codi.assertTrue(Object.hasOwn(mapp, 'hash', 'The mapp object needs to have an hash object'));

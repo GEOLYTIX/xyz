@@ -12,8 +12,8 @@ import { delayFunction } from '../../../../utils/delay.js';
 
 import { setView } from '../../../../utils/view.js';
 
-export async function layerTest(mapview) {
-    await codi.describe('Layer Entry Test', async () => {
+export function layer(mapview) {
+    codi.describe({ name: 'Layer Entry Test', id: 'ui_locations_entries_layer', parentId: 'ui_locations_entries' }, async () => {
         const entry = {
             mapview: mapview,
             zIndex: 99,
@@ -40,7 +40,7 @@ export async function layerTest(mapview) {
          * @function it
          * A basic layer should be created from a entry.type = layer
          */
-        await codi.it('We should get a basic layer entry', async () => {
+        await codi.it({ name: 'We should get a basic layer entry', parentId: 'ui_locations_entries_layer' }, async () => {
             await mapp.ui.locations.entries.layer(entry);
             //Need to delay for async functions 
             await delayFunction(1000);
@@ -55,7 +55,7 @@ export async function layerTest(mapview) {
          * @function it
          * The layer entry should fail, with warning if the layer doesnt exist in the mapview
          */
-        await codi.it('Layer entry should fail with warning', async () => {
+        await codi.it({ name: 'Layer entry should fail with warning', parentId: 'ui_locations_entries_layer' }, async () => {
             entry.layer = 'bogus_layer'
             await mapp.ui.locations.entries.layer(entry);
             //Need to delay for async functions 
@@ -69,7 +69,7 @@ export async function layerTest(mapview) {
          * The entry.layer should have a layer toggle if tables is defined
          * 
          */
-        await codi.it('Layer entry should adhere to zoom restrictions', async () => {
+        await codi.it({ name: 'Layer entry should adhere to zoom restrictions', parentId: 'ui_locations_entries_layer' }, async () => {
 
             const newEntry = {
                 mapview: mapview,

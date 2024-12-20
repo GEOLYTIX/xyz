@@ -1,6 +1,4 @@
-
-
-.disabled >  .drawer {
+.disabled>.drawer {
   opacity: 0.4;
   pointer-events: none;
 }
@@ -12,7 +10,7 @@
   &.expandable:not(.empty)>.header:hover {
     cursor: pointer;
   }
-    
+
   &.expandable.empty>.header>.mask-icon.expander {
     display: none;
   }
@@ -22,7 +20,7 @@
     mask-image: url("../icons/icon-arrow-down.svg");
   }
 
-  &.expandable:not(.expanded) > *:not(.header) {
+  &.expandable:not(.expanded)>*:not(.header) {
     display: none;
   }
 
@@ -36,32 +34,32 @@
     pointer-events: none;
   }
 
-  & >.header {
+  &>.header {
     display: flex;
     align-items: center;
 
-    & >:not(button):not(label):not(input) {
+    &>:not(button):not(label):not(input) {
       pointer-events: none;
     }
 
-    & >div,
-    & >button {
+    &>div,
+    &>button {
       margin-left: 5px;
       width: 1.5em;
       height: 1.5em;
     }
 
-    & >:nth-child(1) {
+    &>:nth-child(1) {
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
     }
 
-    & >:nth-child(2) {
+    &>:nth-child(2) {
       margin-left: auto;
     }
 
-    & >.mask-icon {
+    &>.mask-icon {
       mask-position: right;
       -webkit-mask-position: right;
     }
@@ -87,5 +85,10 @@
   &.expandable.expanded {
     box-shadow: none;
     border: none;
+  }
+
+  p {
+    padding-left: 0.3em;
+    padding-right: 0.3em;
   }
 }

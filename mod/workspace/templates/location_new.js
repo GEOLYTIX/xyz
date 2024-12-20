@@ -1,3 +1,10 @@
+/**
+### /workspace/templates/location_new
+
+The location_new layer query returns the serial id for a new location record inserted into the table property.
+
+@module /workspace/templates/location_new
+*/
 module.exports = _ => {
 
   // select array for insert statement

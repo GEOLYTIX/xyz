@@ -1,16 +1,27 @@
 
 import { hasRoles } from '../../utils/roles.js'
 
-export function getLocaleTest() {
-    codi.describe('Workspace: Get Locale Test', async () => {
+export async function getLocaleTest() {
+    codi.describe({
+        name: 'Locales',
+        id: 'api_workspace_locale',
+        parentId: 'api_workspace'
+    }, () => {
 
-        await codi.it('Workspace: Getting Locales', async () => {
+        codi.it({
+            name: 'Getting Locales',
+            parentId: 'api_workspace_locale'
+        }, async () => {
             const locales = await mapp.utils.xhr(`/test/api/workspace/locales`);
             codi.assertEqual(locales[0].key, 'locale', 'Ensure that we are getting a locale back from the API')
         });
 
-        await codi.it('Workspace: Getting a Locale', async () => {
+        codi.it({
+            name: 'Getting a Locale',
+            parentId: 'api_workspace_locale'
+        }, async () => {
             const locale = await mapp.utils.xhr(`/test/api/workspace/locale?locale=locale`);
+
             codi.assertTrue(!!locale.key, 'The locale should have a key property');
             codi.assertTrue(!!locale.layers, 'The locale should have layers');
             codi.assertTrue(!!locale.name, 'The locale should have a name');
@@ -18,7 +29,10 @@ export function getLocaleTest() {
             codi.assertTrue(!!locale.syncPlugins, 'The locale should have syncPlugins');
         });
 
-        await codi.it('Workspace: Checking locale for roles', async () => {
+        codi.it({
+            name: 'Checking locale for roles',
+            parentId: 'api_workspace_locale'
+        }, async () => {
             const locale = await mapp.utils.xhr(`/test/api/workspace/locale?locale=locale&layers=true`);
             codi.assertFalse(hasRoles(locale), 'The locale object should have no roles object returned')
         });

@@ -1,33 +1,84 @@
 /**
+### /sign/cloudinary
+
+Exports the cloudinary signer method.
+
+@requires crypto
+
 @module /sign/cloudinary
 */
 
 const { createHash } = require('crypto');
 
-module.exports = async req => {
-    // 1: api_key
-    // 2: api_secret
-    // 3: cloud_name
-    const cloudinary = process.env.CLOUDINARY_URL?.replaceAll('://', ' ').replaceAll(':', ' ').replaceAll('@', ' ').split(' ');
-    const baseUrl = `https://api.cloudinary.com/v1_1/${cloudinary[3]}/`
+/**
+@function cloudinary
+@async
 
-    const folder = (!req.params.folder) ? '' : `${req.params.folder}/`
+@description
+The cloudinary signer method signs requests for the cloudinary service.
 
-    // The timestamp is required for the signature which is valid for 1hr.
-    const timestamp = Date.now();
-    let toSign = '';
+The default request for uploading resources to cloudinary.
 
-    // Define signature string based on the action (upload/destroy)
-    if (!req.params.destroy) {
-        toSign = `folder=${req.params.folder}&public_id=${req.params.public_id}&timestamp=${timestamp}${cloudinary[2]}`;
+A request to destroy a resource stored in the cloudinary service can be signed with the destroy request parameter being truthy.
 
-    } else if (req.params.destroy) {
-        toSign = `public_id=${folder}${req.params.public_id}&timestamp=${timestamp}${cloudinary[2]}`;
-    }
+A folder and public_id parameter for resources to be uploaded or destroyed are required.
 
-    const signature = createHash('sha256').update(toSign).digest('hex');
-    const params = `${toSign}&signature=${signature}&timestamp=${timestamp}&api_key=${cloudinary[1]}`;
-    const signedUrl = `${baseUrl}${req.params.destroy ? 'image/destroy' : 'upload'}?${params}`
-    
-    return {signedUrl:signedUrl};
+@param {Object} req HTTP request.
+@param {Object} res HTTP response.
+@param {Object} req.params Request parameter.
+@param {string} params.folder
+@param {string} params.public_id
+@param {string} params.destroy
+
+@returns {Promise} The promise resolves into the response from the signerModules method.
+*/
+module.exports = async function cloudinary(req, res) {
+
+  if (!process.env.CLOUDINARY_URL) return new Error('CLOUDINARY_URL not provided in process.env')
+
+  if (!req.params.folder) return new Error('A folder request param is required for the cloudinary signer.')
+
+  if (!req.params.public_id) return new Error('A public_id request param is required for the cloudinary signer.')
+
+  // Split CLOUDINARY_URL string into array of ['cloudinary', api_key, api_secret, cloud_name]
+  const cloudinary = process.env.CLOUDINARY_URL
+    .replaceAll('://', '|')
+    .replaceAll(':', '|')
+    .replaceAll('@', '|')
+    .split('|');
+
+  const folder = req.params.folder += '/'
+
+  // The timestamp is required for the signature which is valid for 1hr.
+  const timestamp = Date.now();
+
+  const params = [
+    `timestamp=${timestamp}${cloudinary[2]}`
+  ]
+
+  if (req.params.destroy) {
+
+    params.unshift(`public_id=${folder}${req.params.public_id}`)
+  } else {
+
+    // Request is to upload a resource.
+    params.unshift(`public_id=${req.params.public_id}`)
+    params.unshift(`folder=${req.params.folder}`)
+  }
+
+  const toSign = params.join('&')
+
+  const signature = createHash('sha256').update(toSign).digest('hex');
+
+  params.push(`signature=${signature}`)
+
+  params.push(`timestamp=${timestamp}`)
+
+  params.push(`api_key=${cloudinary[1]}`)
+
+  const method = req.params.destroy? 'image/destroy': 'upload';
+
+  const signedUrl = `https://api.cloudinary.com/v1_1/${cloudinary[3]}/${method}?${params.join('&')}`
+
+  return signedUrl;
 }

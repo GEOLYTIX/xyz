@@ -1,9 +1,13 @@
 /**
 ## /user/saml
 
-The SAML user module exports the saml method as an enpoint for request authentication via SAML.
+The SAML user module exports the saml method as an endpoint for request authentication via SAML.
 
-The module requires the saml2-js module library to be installed. The availability of the module [required] is tries during the module initialisation.
+The module requires the saml2-js module library to be installed. 
+
+The availability of the module [required] is tried during the module initialisation.
+
+If the module is not available, a warning is logged to the console.
 
 The SAML Service Provider [sp] and Identity Provider [idp] are stored in module variables.
 
@@ -22,12 +26,12 @@ The idp requires a certificate `${process.env.SAML_IDP_CRT}.crt`, single sign-on
 
 let acl, sp, idp;
 
-const logger = require('../utils/logger');
-
-const jwt = require('jsonwebtoken');
-
 try {
   const saml2 = require('saml2-js');
+
+  const logger = require('../utils/logger');
+
+  const jwt = require('jsonwebtoken');
 
   const { join } = require('path');
 
@@ -62,8 +66,20 @@ try {
     sign_get_request: true,
   });
 
+  module.exports = saml;
+
 } catch {
-  console.log('SAML2 module is not available.')
+
+  //Check if there are any SAML keys in the process.
+  const samlKeys = Object.keys(process.env).filter(key => key.startsWith('SAML'));
+
+  //If we have keys then log we that the module is not present
+  if (samlKeys.length > 0) {
+    console.log('SAML2 module is not available.')
+  }
+
+  module.exports = null;
+
 }
 
 /**
@@ -91,7 +107,7 @@ The user object is signed as a JSON Web Token and set as a cookie to the HTTP re
 @param {Object} res HTTP response.
 */
 
-module.exports = function saml(req, res) {
+function saml(req, res) {
 
   if (!sp || !idp) {
     console.warn(`SAML SP or IDP are not available in XYZ instance.`)
