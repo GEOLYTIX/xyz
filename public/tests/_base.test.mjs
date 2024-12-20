@@ -20,149 +20,16 @@ export async function base() {
             // Merge the dictionaries
             mapp.utils.merge(mapp.dictionaries, {
                 en: {
-                    toolbar_zoom_in: 'Zoom in',
-                    toolbar_zoom_out: 'Zoom out',
-                    toolbar_zoom_to_area: 'Zoom to area',
-                    toolbar_current_location: 'Current location',
-                    toolbar_fullscreen: 'Fullscreen mapview',
-                    toolbar_admin: 'Open account admin view',
-                    toolbar_login: 'Log in',
-                    toolbar_logout: 'Log out',
-                    layers: 'Layers',
-                    locations: 'Locations',
-                    no_locales: 'Your account has been verified and approved, but you do not have access to any locales. This is likely as an administrator has not given you the required roles. Please contact an administrator to resolve this.',
-                    no_layers: 'No accessible layers in locale.',
-                },
-                de: {
-                    toolbar_zoom_in: 'Zoom rein',
-                    toolbar_zoom_out: 'Zoom raus',
-                    toolbar_zoom_to_area: 'Zoom Rechteck',
-                    toolbar_current_location: 'Standort',
-                    toolbar_fullscreen: 'Vollbild',
-                    toolbar_admin: 'Benutzerkontenverwaltung',
-                    toolbar_login: 'Einloggen',
-                    toolbar_logout: 'Ausloggen',
-                    layers: 'Ebenen',
-                    locations: 'Orte',
-                },
-                zh: {
-                    toolbar_zoom_in: '放大',
-                    toolbar_zoom_out: '缩小',
-                    toolbar_zoom_to_area: '缩放至区域',
-                    toolbar_current_location: '当前位置',
-                    toolbar_fullscreen: '全屏地图视图',
-                    toolbar_admin: '打开帐户管理视图',
-                    toolbar_login: '登录',
-                    toolbar_logout: '登出',
-                    layers: '图层',
-                    locations: '地点',
-                },
-                zh_tw: {
-                    toolbar_zoom_in: '放大',
-                    toolbar_zoom_out: '縮小',
-                    toolbar_zoom_to_area: '縮放至區域',
-                    toolbar_current_location: '當前位置',
-                    toolbar_fullscreen: '全屏地圖視圖',
-                    toolbar_admin: '打開帳戶管理視圖',
-                    toolbar_login: '登錄',
-                    toolbar_logout: '登出',
-                    layers: '圖層',
-                    locations: '地點',
-                },
-                pl: {
-                    toolbar_zoom_in: 'Przybliż',
-                    toolbar_zoom_out: 'Oddal',
-                    toolbar_zoom_to_area: 'Przybliż do obszaru',
-                    toolbar_current_location: 'Obezha lokalizcja',
-                    toolbar_fullscreen: 'Mapa na całym ekranie',
-                    toolbar_admin: 'Otwórz widok administratora',
-                    toolbar_login: 'Zaloguj się',
-                    toolbar_logout: 'Wyloguj się',
-                    layers: 'Warstwy',
-                    locations: 'Lokalizacje',
-                },
-                fr: {
-                    toolbar_zoom_in: 'Zoom +',
-                    toolbar_zoom_out: 'Zoom -',
-                    toolbar_zoom_to_area: 'Zoomer sur la zone',
-                    toolbar_current_location: 'Emplacement actuel',
-                    toolbar_fullscreen: 'Carte en plein écran',
-                    toolbar_admin: 'Ouvrir le menu administrateur',
-                    toolbar_login: 'Se connecter',
-                    toolbar_logout: 'Déconnexion',
-                    layers: 'Couches cartographiques',
-                    locations: 'Sites',
-                },
-                ja: {
-                    toolbar_zoom_in: 'ズームイン',
-                    toolbar_zoom_out: 'ズームアウト',
-                    toolbar_zoom_to_area: 'エリアをズームに',
-                    toolbar_current_location: '現地',
-                    toolbar_fullscreen: 'フルスクリーン マップビュー',
-                    toolbar_admin: 'アカウントアドミンビューを開く',
-                    toolbar_login: 'ログイン',
-                    toolbar_logout: 'ログアウト',
-                    layers: 'レイヤー',
-                    locations: 'ロケーション',
-                },
-                esp: {
-                    toolbar_zoom_in: 'Zoom +',
-                    toolbar_zoom_out: 'Zoom -',
-                    toolbar_zoom_to_area: 'Zoom al área',
-                    toolbar_current_location: 'Ubicación actual',
-                    toolbar_fullscreen: 'Vista de mapa en pantalla completa',
-                    toolbar_admin: 'Abrir vista de administrador de cuenta',
-                    toolbar_login: 'Iniciar sesión',
-                    toolbar_logout: 'Desconexión',
-                    layers: 'Capas',
-                    locations: 'Ubicaciones',
-                },
-                tr: {
-                    toolbar_zoom_in: 'Yaklas',
-                    toolbar_zoom_out: 'Uzaklas',
-                    toolbar_zoom_to_area: 'Bolgeye yaklas',
-                    toolbar_current_location: 'Mevcut konum',
-                    toolbar_fullscreen: 'Tam ekran harita',
-                    toolbar_admin: 'Hesap yoneticisini ac',
-                    toolbar_login: 'Oturum ac',
-                    toolbar_logout: 'Oturumu kapat',
-                    layers: 'Katmanlar',
-                    locations: 'Konumlar',
-                },
-                it: {
-                    toolbar_zoom_in: 'Ingrandisci',
-                    toolbar_zoom_out: 'Rimpicciolisci',
-                    toolbar_zoom_to_area: 'Zoom nell\'area',
-                    toolbar_current_location: 'Posizione attuale',
-                    toolbar_fullscreen: 'Mappa a schermo intero',
-                    toolbar_admin: 'Apri il menù amministratore',
-                    toolbar_login: 'Log in',
-                    toolbar_logout: 'Log out',
-                    layers: 'Layers',
-                    locations: 'Località',
-                },
-                th: {
-                    toolbar_zoom_in: 'ขยายเข้า',
-                    toolbar_zoom_out: 'ซูมออก',
-                    toolbar_zoom_to_area: 'ซูมไปที่พื้นที่',
-                    toolbar_current_location: 'สถานที่ปัจจุบัน',
-                    toolbar_fullscreen: 'มุมมองแผนที่แบบเต็มหน้าจอ',
-                    toolbar_admin: 'เปิดมุมมองผู้ดูแลระบบ',
-                    toolbar_login: 'เข้าสู่ระบบ',
-                    toolbar_logout: 'ออกจากระบบ',
-                    layers: 'ชั้น',
-                    locations: 'สถานที่',
-                },
+                    test_merge: 'Test merge to english',
+                }
             })
 
             // Assert that the English dictionary has been updated with new entries
             const updatedLength = Object.keys(mapp.dictionaries.en).length;
             codi.assertTrue(updatedLength > initialLength, 'English dictionary should have new entries');
 
-            // Assert that the merged dictionaries have the expected properties
-            codi.assertEqual(mapp.dictionaries.en.toolbar_zoom_in, 'Zoom in', 'English dictionary should have the correct value for toolbar_zoom_in');
-            codi.assertEqual(mapp.dictionaries.de.toolbar_zoom_in, 'Zoom rein', 'German dictionary should have the correct value for toolbar_zoom_in');
-
+            // Delete the test entry from the English dictionary
+            delete mapp.dictionaries.en.test_merge;
         });
 
         //Testcase: Ensure User refreshes cookie
@@ -491,7 +358,7 @@ export async function base() {
         // Create layers listview.
         mapp.ui.layers.listview({
             target: layersTab,
-            mapview: mapview,
+            layers: mapview.layers
         });
 
         // Create locations listview.
