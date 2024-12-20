@@ -231,6 +231,10 @@ button {
     box-shadow: none;
     border: none;
   }
+  p {
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+  }
 }
 
 /* public/css/_dialog.css */
@@ -1544,6 +1548,13 @@ label.checkbox {
   & .dataview {
     text-align: left;
   }
+  > .contents.image .trash {
+    position: absolute;
+    width: 2em;
+    height: 2em;
+    right: 0.5em;
+    top: 0.5em;
+  }
 }
 .images-grid {
   position: relative;
@@ -1646,6 +1657,23 @@ label.checkbox {
 }
 
 /* public/css/_ui.css */
+::-webkit-scrollbar {
+  width: 7px;
+  height: 7px;
+  border-radius: 2px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-primary-light);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
+  border-radius: 2px;
+}
+::-webkit-scrollbar-corner {
+  background: transparent;
+  border-radius: 2px;
+}
 .no-select {
   -webkit-touch-callout: none;
   -webkit-user-select: none;

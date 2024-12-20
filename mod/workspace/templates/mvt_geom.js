@@ -1,3 +1,10 @@
+/**
+### /workspace/templates/mvt_geom
+
+The mvt layer query template returns a vector tile (st_asmvt) with mvt geometries but without field properties.
+
+@module /workspace/templates/mvt_geom
+*/
 module.exports = _ => {
 
   const
