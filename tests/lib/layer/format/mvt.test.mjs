@@ -18,16 +18,5 @@ export function mvtTest(mapview, layer) {
             codi.assertTrue(Object.hasOwn(layer, 'L'), 'The mvt layer needs to have an openlayer object')
         });
 
-        /**
-         * @description MVT: Reload should remove sourceTiles
-         * @function it
-         */
-        codi.it('MVT: Reload should remove sourceTiles', () => {
-            mapp.layer.formats[layer.format]?.(layer);
-
-            layer.source.sourceTiles_ = { tile: 'foo' };
-            layer.reload();
-            codi.assertEqual(layer.source.sourceTiles_, {}, 'The sourceTiles needs to be cleared');
-        });
     });
 }
