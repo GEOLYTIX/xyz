@@ -1,6 +1,6 @@
-export async function featureFieldsTest() {
-    await codi.describe('TODO: Layer: featureFieldsTest', async () => {
-        await codi.it('The fields array on on a theme should not be duplicated', () => {
+export function featureFields() {
+    codi.describe({ name: 'featureFields test', id: 'layer_feature_fields', parentId: 'layer' }, () => {
+        codi.it({ name: 'The fields array on on a theme should not be duplicated', parentId: 'layer_feature_fields' }, () => {
 
             const layer = {
                 params: {

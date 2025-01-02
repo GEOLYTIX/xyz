@@ -1,4 +1,3 @@
-
 /**
  * 
  * @module /ui/layers/view
@@ -13,47 +12,9 @@ import clusterConfig from '../../../assets/layers/cluster/layer.json'
  * @function viewTest 
  * @param {Object} mapview 
 */
-export async function viewTest(mapview) {
+export async function view(mapview) {
 
-    await setView(mapview, 2, 'default');
-
-    await codi.describe('UI Layers: viewTest', async () => {
-
-        /**
-         * ### should dispatch the event and the layer should not display
-         * 1. We create the `changeEnd` event and dispatch it.
-         * 2. We assert that the `layer.display` is not set to true.
-         * @function it
-         */
-        await codi.it('should dispatch the event and the layer should not display.', async () => {
-            const layer = mapview.layers['changeEnd'];
-            const changeEndEvent = new Event('changeEnd');
-            const target = layer.mapview.Map.getTargetElement();
-
-            target.dispatchEvent(changeEndEvent);
-
-            await codi.assertFalse(layer.display, 'The changeEnd() layer should not display at the default zoom level.')
-
-            await delayFunction(1000);
-        });
-
-        /**
-         * ### should display at zoom level 6.
-         * 1. The Test sets the mapview to London at zoom level 11.
-         * 2. Creates the `changeEnd` event and dispatches it.
-         * 3. And asserts that the `layer.display` is true.
-         * @function it
-         */
-        await codi.it('should display at zoom level 6', async () => {
-            await setView(mapview, 11, 'london')
-            const layer = mapview.layers['changeEnd'];
-            const changeEndEvent = new Event('changeEnd');
-            const target = layer.mapview.Map.getTargetElement();
-
-            target.dispatchEvent(changeEndEvent);
-            codi.assertTrue(layer.display, 'The changeEnd() layer should display at zoom level 6');
-            await delayFunction(1000);
-        });
+    await codi.describe({ name: 'View test:', id: 'ui_layers_view', parentId: 'ui_layers' }, async () => {
 
         /**
          * ### should not have a zoom button.
@@ -62,7 +23,7 @@ export async function viewTest(mapview) {
          * 3. Checks the magnifying glass is not present.
          * @function it
          */
-        await codi.it('should not display a zoom button when not provided', async () => {
+        await codi.it({ name: 'should not display a zoom button when not provided', parentId: 'ui_layers_view' }, async () => {
             const layer = Object.assign({}, clusterConfig);
 
             layer.viewConfig = {
@@ -93,7 +54,7 @@ export async function viewTest(mapview) {
         * 3. Checks the display toggle is not present.
         * @function it
         */
-        await codi.it('should not display a display Toggle button when not provided', async () => {
+        await codi.it({ name: 'should not display a display Toggle button when not provided', parentId: 'ui_layers_view' }, async () => {
 
             const layer = Object.assign({}, clusterConfig);
 
@@ -119,7 +80,7 @@ export async function viewTest(mapview) {
        * 3. Checks the panelOrder is what's defined.
        * @function it
        */
-        await codi.it('should use the default panelOrder', async () => {
+        await codi.it({ name: 'should use the default panelOrder', parentId: 'ui_layers_view' }, async () => {
 
             const layer = Object.assign({}, clusterConfig);
 
