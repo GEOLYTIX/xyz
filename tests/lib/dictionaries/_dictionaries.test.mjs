@@ -7,14 +7,16 @@
 /**
  * @typedef {Object} dictionaryTest
  * @property {baseDictionaryTest} baseDictionaryTest 
- * @property {keyValueDictionaryTest} keyValueDictionaryTest
  */
 import { baseDictionaryTest } from './baseDictionary.test.mjs';
-import { keyValueDictionaryTest } from './keyValueDictionary.test.mjs';
 import { unknownLanguageTest } from './unknownLanguageTest.test.mjs';
 
 export const dictionaryTest = {
+    setup,
     baseDictionaryTest,
-    keyValueDictionaryTest,
     unknownLanguageTest
 };
+
+function setup() {
+    codi.describe({ name: 'Dictionary:', id: 'dictionary' }, () => { });
+}

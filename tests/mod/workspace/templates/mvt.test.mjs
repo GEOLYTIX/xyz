@@ -5,14 +5,15 @@
 /**
  * @description Entry point for the mvt template module
  * @function mvtTemplate
+ * @deprecated
  */
-export async function mvtTemplate() {
-    await codi.describe('Workspace Templates: mvt Template', async () => {
+export function mvtTemplate() {
+    codi.describe({ name: 'mvt Template', id: 'api_template_mvt', parentId: 'api_workspace_template' }, () => {
         /**
          * @description mvt Template Test
          * @function it
          */
-        await codi.it('mvt Template Test', async () => {
+        codi.it({ name: 'mvt Template Test', parentId: 'api_template_mvt' }, async () => {
 
             const params = {
                 template: 'mvt',

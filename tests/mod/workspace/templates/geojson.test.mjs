@@ -5,21 +5,23 @@
 /**
  * @description Entry point for the geojson template module
  * @function geojsonTemplate
+ * @deprecated
  */
-export async function geojsonTemplate() {
-    await codi.describe('Workspace Templates: geojson Template', async () => {
+export function geojsonTemplate() {
+    codi.describe({ name: 'geojson Template', id: 'api_template_geojson', parentId: 'api_workspace_template' }, () => {
         /**
          * @description geojson Template Test
          * @function it
          */
-        await codi.it('geojson Template Test', async () => {
+        codi.it({ name: 'geojson Template Test', parentId: 'api_template_geojson' }, async () => {
 
             const params = {
                 qID: 'id',
                 geom: 'geom_3857',
                 template: 'geojson',
-                layer: 'changeEnd',
-                table: 'test.scratch'
+                layer: 'geojson_layer',
+                table: 'test.scratch',
+                fields: ['textarea']
             }
 
             const results = await mapp.utils.xhr(`/test/api/query?${mapp.utils.paramString(params)}`);
@@ -36,6 +38,7 @@ export async function geojsonTemplate() {
                 codi.assertTrue(Object.hasOwn(feature.geometry, 'crs'), 'The geometry need to have crs property');
                 codi.assertTrue(Object.hasOwn(feature.geometry.crs, 'properties'), 'The crs needs to have properties');
                 codi.assertTrue(Object.hasOwn(feature.geometry.crs, 'type'), 'The crs needs to have type');
+                codi.assertTrue(Object.hasOwn(feature.properties, 'textarea'), 'The feature should have a textarea property');
 
             });
         });

@@ -5,19 +5,20 @@
 /**
  * @description Entry point for the location_get template module
  * @function locationGetTemplate
+ * @deprecated
  */
-export async function locationGetTemplate() {
-    await codi.describe('Workspace Templates: location_get Template', async () => {
+export function locationGetTemplate() {
+    codi.describe({ name: 'location_get Template', id: 'api_template_location_get', parentId: 'api_workspace_template' }, () => {
         /**
          * @description location_get Template Test
          * @function it
          */
-        await codi.it('location_get Template Test', async () => {
+        codi.it({ name: 'location_get Template Test', parentId: 'api_template_location_get' }, async () => {
 
             const params = {
                 id: 22,
                 template: 'location_get',
-                layer: 'changeEnd',
+                layer: 'wkt_layer',
                 table: 'test.scratch'
             }
 

@@ -1,16 +1,22 @@
-import { numericFormatterTest } from './numericFormatter.test.mjs';
-import { mergeTest } from './merge.test.mjs';
-import { paramStringTest } from './paramString.test.mjs';
-import { queryParamsTest } from './queryParams.test.mjs';
-import { composeTest } from './compose.test.mjs';
-import { svgTemplatesTest } from './svgTemplates.test.mjs';
+import { numericFormatter } from './numericFormatter.test.mjs';
+import { merge } from './merge.test.mjs';
+import { paramString } from './paramString.test.mjs';
+import { queryParams } from './queryParams.test.mjs';
+import { compose } from './compose.test.mjs';
+import { svgTemplates } from './svgTemplates.test.mjs';
 import { versionCheck } from './versionCheck.mjs';
+
 export const utilsTest = {
-    numericFormatterTest,
-    mergeTest,
-    paramStringTest,
-    queryParamsTest,
-    composeTest,
-    svgTemplatesTest,
+    setup,
+    numericFormatter,
+    merge,
+    paramString,
+    queryParams,
+    compose,
+    svgTemplates,
     versionCheck
+}
+
+function setup() {
+    codi.describe({ name: 'Utils:', id: 'utils' }, () => { });
 }
