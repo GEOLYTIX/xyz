@@ -20,6 +20,8 @@ app.get(`/`, api)
 @module /api
 */
 
+const env = require('../mapp_env.js');
+
 const logger = require('../mod/utils/logger')
 
 const login = require('../mod/user/login')
@@ -28,7 +30,7 @@ const register = require('../mod/user/register')
 
 const auth = require('../mod/user/auth')
 
-const saml = process.env.SAML_ENTITY_ID && require('../mod/user/saml')
+const saml = env.saml_entity_id && require('../mod/user/saml')
 
 const routes = {
   provider: require('../mod/provider/_provider'),
@@ -39,12 +41,6 @@ const routes = {
   view: require('../mod/view'),
   workspace: require('../mod/workspace/_workspace'),
 }
-
-process.env.COOKIE_TTL ??= 36000
-
-process.env.TITLE ??= 'GEOLYTIX | XYZ'
-
-process.env.DIR ??= ''
 
 /**
 @global
@@ -79,8 +75,8 @@ Requests are passed to individual API modules from the api() method.
 module.exports = async function api(req, res) {
 
   // redirect if dir is missing in url path.
-  if (process.env.DIR && req.url.length === 1) {
-    res.setHeader('location', `${process.env.DIR}`)
+  if (env.dir && req.url.length === 1) {
+    res.setHeader('location', `${env.dir}`)
     return res.status(302).send()
   }
 
@@ -159,10 +155,10 @@ module.exports = async function api(req, res) {
   if (req.params.logout) {
 
     // Remove cookie.
-    res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
+    res.setHeader('Set-Cookie', `${env.title}=null;HttpOnly;Max-Age=0;Path=${env.dir || '/'}`)
 
     // Remove logout parameter.
-    res.setHeader('location', (process.env.DIR || '/') + (req.params.msg && `?msg=${req.params.msg}` || ''))
+    res.setHeader('location', (env.dir || '/') + (req.params.msg && `?msg=${req.params.msg}` || ''))
 
     return res.status(302).send()
   }
@@ -182,7 +178,7 @@ module.exports = async function api(req, res) {
     }
 
     // Remove cookie.
-    res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
+    res.setHeader('Set-Cookie', `${env.title}=null;HttpOnly;Max-Age=0;Path=${env.dir || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
 
     req.params.msg = user.msg || user.message
 
@@ -201,10 +197,10 @@ module.exports = async function api(req, res) {
   }
 
   // The login view will be returned for all PRIVATE requests without a valid user.
-  if (!user && process.env.PRIVATE) {
+  if (!user && env.private) {
 
-    if (process.env.SAML_LOGIN) {
-      res.setHeader('location', `${process.env.DIR}/saml/login`)
+    if (env.saml_login) {
+      res.setHeader('location', `${env.dir}/saml/login`)
       return res.status(302).send()
     }
 
