@@ -14,7 +14,9 @@
 
 <body class="login_form">
 
-  <select id="language" onChange="(function(e){location=e.target.value})(event)">
+  <div style="margin-bottom: 2%;">
+  Choose Language: 
+    <select id="language" onChange="(function(e){location=e.target.value})(event)">
     <option value="{{dir}}?language=en&login=true">English</option>
     <option value="{{dir}}?language=de&login=true">Deutsch</option>
     <option value="{{dir}}?language=fr&login=true">Français</option>
@@ -23,13 +25,17 @@
     <option value="{{dir}}?language=ko&login=true">한국어</option>
     <option value="{{dir}}?language=zh&login=true">中文简体</option>
   </select>
+</div>
 
   <form action="{{dir}}/api/user/login" method="post" autocomplete="off">
-    
+
     <input style="display:none;" name="language" required value="en">
     <input style="display:none;" name="redirect" value="{{redirect}}">
 
+
     <div class="input-group">
+      <p><b>Please note we have recently introduced a minimum 12 character password policy for security purposes.
+        If your password does not meet these requirements you need to reset your password in order to access MAPP.</b></p>
       <input id="auth_user_email" name="email" type="email" required maxlength="50">
       <span class="bar"></span>
       <label for="auth_user_email">E-mail</label>
@@ -39,6 +45,7 @@
       <input id="auth_user_password" name="password" type="password" required minlength="12">
       <span class="bar"></span>
       <label for="auth_user_password">Password</label>
+      <br><br><b><span id="disabled_info"></span></b>
     </div>
 
     <p class="msg">{{msg}}</p>
@@ -49,7 +56,7 @@
       an administrator before you are able to log in.</p>
 
     <a class="switch" href="{{dir}}/api/user/register?register=true">Register a new account or reset your password.</a>
-    
+
   </form>
 
 </body>
