@@ -7,8 +7,8 @@
  * @function geometryTest 
  * @param {object} mapview 
  */
-export async function geometryTest(mapview) {
-    await codi.describe('UI Entries: Geometry', async () => {
+export function geometry(mapview) {
+    codi.describe({ name: 'Geometry Test:', id: 'ui_locations_entries_geometry', parentId: 'ui_locations_entries' }, () => {
         const entry = {
             mapview: mapview,
             key: 'geometry-test',
@@ -30,7 +30,7 @@ export async function geometryTest(mapview) {
          * @description Should return geometry checkbox
          * @function it
          */
-        await codi.it('Should return geometry checkbox', async () => {
+        codi.it({ name: 'Should return geometry checkbox', parentId: 'ui_locations_entries_geometry' }, async () => {
 
             const geometryCheckBox = mapp.ui.locations.entries.geometry(entry);
             codi.assertTrue(!!geometryCheckBox, 'A checkbox needs to be returned');
@@ -40,7 +40,7 @@ export async function geometryTest(mapview) {
          * @description Should return 0 if no entry value is provided
          * @function it
          */
-        await codi.it('Should return 0 if no entry value is provided', async () => {
+        codi.it({ name: 'Should return 0 if no entry value is provided', parentId: 'ui_locations_entries_geometry' }, async () => {
             entry.value = null;
             const geometryCheckBox = await mapp.ui.locations.entries.geometry(entry);
             codi.assertTrue(typeof geometryCheckBox === 'undefined', 'We need to get no geometry checkbox returned');

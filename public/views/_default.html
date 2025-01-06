@@ -18,6 +18,8 @@
   <script type="module" src="{{dir}}/public/js/lib/mapp.js" defer></script>
   <script type="module" src="{{dir}}/public/js/lib/ui.js" defer></script>
 
+  <script type="module" src="{{dir}}/public/js/tests/_mapp.test.js" defer></script>
+
   <style>
     html {
       position: fixed;
@@ -502,6 +504,7 @@
     locale: locale,
     hooks: true,
     scrollWheelZoom: true,
+    loadPlugins: true,
     attribution: {
       target: document.getElementById('Map'),
       logo: mapp.utils.html.node`
