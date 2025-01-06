@@ -34,3 +34,4 @@ public/js/*
 !package.json
 !jsdoc*.json
 !codi.json
+!.prettierrc.json
