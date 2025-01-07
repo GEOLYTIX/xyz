@@ -55,6 +55,7 @@ try {
     logoutUrl: process.env.SAML_SLO,
   };
 
+  /** @type {SAML} */
   strategy = new SAML(samlConfig);
 
   module.exports = saml;
@@ -97,7 +98,7 @@ The user object is signed as a JSON Web Token and set as a cookie to the HTTP re
 @param {Object} res HTTP response.
 */
 
-function saml(req, res) {
+async function saml(req, res) {
   if (!strategy) {
     console.warn(`SAML is not available in XYZ instance.`);
     return;
@@ -113,15 +114,29 @@ function saml(req, res) {
     res.send(metadata);
   }
 
-  // // Create Service Provider login request url.
-  // if (req.params?.login || /\/saml\/login/.exec(req.url)) {
-  //   sp.create_login_request_url(idp, {}, (err, login_url, request_id) => {
-  //     if (err != null) return res.send(500);
-  //
-  //     res.setHeader('location', login_url);
-  //     res.status(301).send();
-  //   });
-  // }
+  // Create Service Provider login request url.
+  if (req.params?.login || /\/saml\/login/.exec(req.url)) {
+    try {
+      // RelayState can be used to store the URL to redirect to after login
+      const relayState = req.query.returnTo || process.env.DIR;
+
+      const url = await strategy.getAuthorizeUrlAsync(
+        relayState,
+        req.get('host'), // Get host from request
+        {
+          additionalParams: {
+            // Add any additional params needed
+          },
+        },
+      );
+
+      res.redirect(url);
+    } catch (error) {
+      console.error('SAML authorization error:', error);
+      res.status(500).send('Authentication failed');
+    }
+  }
+
   //
   // if (/\/saml\/acs/.exec(req.url)) {
   //   sp.post_assert(
