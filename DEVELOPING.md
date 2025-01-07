@@ -244,7 +244,7 @@ There are other extensions you can use in your editor to get on the fly error hi
 For formatting we have implemented [prettier.io](prettier.io).
 This is so we can ensure that there is consistent formatting across xyz.
 
-To get prettier.io working in your editor you will need to follow one of the setups bellow:
+To get prettier.io working in your editor you will need to follow one of the setups below:
 
 - [VSCode](https://prettier.io/docs/en/editors#visual-studio-code)
 - [Sublime](https://prettier.io/docs/en/editors#sublime-text)
