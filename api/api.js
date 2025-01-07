@@ -82,15 +82,15 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [SAML_IDP_CRT] Required authentication via [SAML]{@link module:/user/saml}.
 */
 
-const login = require('../mod/user/login')
+const login = require('../mod/user/login');
 
-const auth = require('../mod/user/auth')
+const auth = require('../mod/user/auth');
 
-const saml = require('../mod/user/saml')
+const saml = require('../mod/user/saml');
 
-const register = require('../mod/user/register')
+const register = require('../mod/user/register');
 
-const logger = require('../mod/utils/logger')
+const logger = require('../mod/utils/logger');
 
 const routes = {
   fetch: require('../mod/fetch'),
@@ -100,13 +100,13 @@ const routes = {
   sign: require('../mod/sign/_sign'),
   user: require('../mod/user/_user'),
   workspace: require('../mod/workspace/_workspace'),
-}
+};
 
-process.env.COOKIE_TTL ??= '36000'
+process.env.COOKIE_TTL ??= '36000';
 
-process.env.TITLE ??= 'GEOLYTIX | XYZ'
+process.env.TITLE ??= 'GEOLYTIX | XYZ';
 
-process.env.DIR ??= ''
+process.env.DIR ??= '';
 
 /**
 @function api
@@ -138,55 +138,54 @@ All other requests will passed to the async validateRequestAuth method.
 @property {Boolean} params.register The request should redirect to user/register.
 */
 module.exports = function api(req, res) {
-
   // redirect if dir is missing in url path.
   if (process.env.DIR && req.url.length === 1) {
-    res.setHeader('location', `${process.env.DIR}`)
-    return res.status(302).send()
+    res.setHeader('location', `${process.env.DIR}`);
+    return res.status(302).send();
   }
 
-  logger(req, 'req')
+  logger(req, 'req');
 
-  logger(req.url, 'req_url')
+  logger(req.url, 'req_url');
 
   // SAML request.
   if (req.url.match(/\/saml/)) {
-
-    return saml(req, res)
+    return saml(req, res);
   }
 
-  req.params = validateRequestParams(req)
+  req.params = validateRequestParams(req);
 
   if (req.params instanceof Error) {
-
-    return res.status(400).send(req.params.message)
+    return res.status(400).send(req.params.message);
   }
 
   if (req.params.logout) {
-
     // Remove cookie.
-    res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
+    res.setHeader(
+      'Set-Cookie',
+      `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`,
+    );
 
     const msg = req.params.msg ? `?msg=${req.params.msg}` : '';
 
     // Set location to the domain path.
-    res.setHeader('location', `${process.env.DIR || '/'}${msg}`)
+    res.setHeader('location', `${process.env.DIR || '/'}${msg}`);
 
-    return res.status(302).send()
+    return res.status(302).send();
   }
 
   // Short circuit to user/login.
   if (req.params.login || req.body?.login) {
-    return login(req, res)
+    return login(req, res);
   }
 
   // Short circuit to user/register
   if (req.params.register || req.body?.register) {
-    return register(req, res)
+    return register(req, res);
   }
 
-  validateRequestAuth(req, res)
-}
+  validateRequestAuth(req, res);
+};
 
 /**
 @function validateRequestAuth
@@ -209,56 +208,54 @@ PRIVATE processes require user auth for all requests and will shortcircuit to th
 @property {string} req.url The request url.
 */
 async function validateRequestAuth(req, res) {
-
   // Validate signature of either request token, authorization header, or cookie.
-  const user = await auth(req, res)
+  const user = await auth(req, res);
 
   // Remove token from params object.
-  delete req.params.token
+  delete req.params.token;
 
   // The authentication method returns an error.
   if (user && user instanceof Error) {
-
     if (req.headers.authorization) {
-
       // Request with failed authorization headers are not passed to login.
-      return res.status(401).send(user.message)
+      return res.status(401).send(user.message);
     }
 
     // Remove cookie.
-    res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
+    res.setHeader(
+      'Set-Cookie',
+      `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'};SameSite=Strict${(!req.headers.host.includes('localhost') && ';Secure') || ''}`,
+    );
 
     // Set msg parameter for the login view.
     // The msg provides information in regards to failed logins.
-    req.params.msg = user.msg || user.message
+    req.params.msg = user.msg || user.message;
 
     // Return login view with error message.
-    return login(req, res)
+    return login(req, res);
   }
 
   // Set user as request parameter.
-  req.params.user = user
+  req.params.user = user;
 
   // User route
   if (req.url.match(/(?<=\/api\/user)/)) {
-
     //Requests to the User API maybe for login or registration and must be routed before the check for PRIVATE processes.
-    return routes.user(req, res)
+    return routes.user(req, res);
   }
 
   // PRIVATE instances require user auth for all requests.
   if (!req.params.user && process.env.PRIVATE) {
-
     // Redirect to the SAML login.
     if (process.env.SAML_LOGIN) {
-      res.setHeader('location', `${process.env.DIR}/saml/login`)
-      return res.status(302).send()
+      res.setHeader('location', `${process.env.DIR}/saml/login`);
+      return res.status(302).send();
     }
 
-    return login(req, res)
+    return login(req, res);
   }
 
-  requestRouter(req, res)
+  requestRouter(req, res);
 }
 
 /**
@@ -274,46 +271,41 @@ By default requests will be passed to the [View API]{@link module:/view} module.
 @property {string} req.url The request url.
 */
 function requestRouter(req, res) {
-
   switch (true) {
-
     // Provider API
     case /(?<=\/api\/provider)/.test(req.url):
-      routes.provider(req, res)
+      routes.provider(req, res);
       break;
 
     // Signer API
     case /(?<=\/api\/sign)/.test(req.url):
-      routes.sign(req, res)
+      routes.sign(req, res);
       break;
 
     // Location API [deprecated]
     case /(?<=\/api\/location)/.test(req.url):
-
       // Route to Query API with location template
-      req.params.template = `location_${req.params.method}`
-      routes.query(req, res)
+      req.params.template = `location_${req.params.method}`;
+      routes.query(req, res);
       break;
 
     // Query API
     case /(?<=\/api\/query)/.test(req.url):
-
-      routes.query(req, res)
+      routes.query(req, res);
       break;
 
     // Fetch API
     case /(?<=\/api\/fetch)/.test(req.url):
-
-      routes.fetch(req, res)
+      routes.fetch(req, res);
       break;
 
     case /(?<=\/api\/workspace)/.test(req.url):
-
-      routes.workspace(req, res)
+      routes.workspace(req, res);
       break;
 
     // View API is the default route.
-    default: routes.view(req, res)
+    default:
+      routes.view(req, res);
   }
 }
 
@@ -340,68 +332,64 @@ The params object properties will be iterated through to parse Object values [eg
 @returns {Object} Returns a validated params object.
 */
 function validateRequestParams(req) {
-
   // Merge request params and query params.
-  const params = Object.assign(req.params || {}, req.query || {})
+  const params = Object.assign(req.params || {}, req.query || {});
 
   // User is a restricted parameter.
-  delete params.user
+  delete params.user;
 
   // URL parameter keys must match white listed letters and numbers only.
-  if (Object.keys(params).some(key => !/^[A-Za-z0-9_-]*$/.exec(key))) {
-
-    return new Error('URL parameter key validation failed.')
+  if (Object.keys(params).some((key) => !/^[A-Za-z0-9_-]*$/.exec(key))) {
+    return new Error('URL parameter key validation failed.');
   }
 
   // URL parameter keys must match white listed letters and numbers only.
-  if (Object.keys(params).some(key => key === 'user')) {
-
-    return new Error('user is a restricted request parameter.')
+  if (Object.keys(params).some((key) => key === 'user')) {
+    return new Error('user is a restricted request parameter.');
   }
 
   // Language param will default to english [en] is not explicitly set.
-  params.language ??= 'en'
+  params.language ??= 'en';
 
   // Assign from _template if provided as path param.
-  params.template ??= params._template
+  params.template ??= params._template;
 
   for (const key in params) {
-
     // Delete param keys with undefined values.
     if (params[key] === undefined) {
-      delete params[key]
+      delete params[key];
       continue;
     }
 
     // Delete param keys with empty string value.
     if (params[key] === '') {
-      delete params[key]
+      delete params[key];
       continue;
     }
 
     // Parse lowerCase object value.
     switch (params[key].toLowerCase()) {
-
-      case ('null'):
-        params[key] = null
+      case 'null':
+        params[key] = null;
         continue;
 
-      case ('false'):
-        params[key] = false
+      case 'false':
+        params[key] = false;
         continue;
 
-      case ('true'):
-        params[key] = true
+      case 'true':
+        params[key] = true;
         continue;
     }
 
     // Check whether the params value begins and ends with square braces.
     if (params[key].match(/^\[.*\]$/)) {
-
       // Match the string between square brackets and split into an array with undefined array values filtered out.
-      params[key] = match(/^\[(.*)\]$/)[1].split(',').filter(Boolean)
+      params[key] = match(/^\[(.*)\]$/)[1]
+        .split(',')
+        .filter(Boolean);
     }
   }
 
-  return params
+  return params;
 }

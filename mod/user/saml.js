@@ -24,62 +24,52 @@ The idp requires a certificate `${process.env.SAML_IDP_CRT}.crt`, single sign-on
 @module /user/saml
 */
 
-let acl, sp, idp;
+let strategy, samlConfig;
 
 try {
-  const saml2 = require('saml2-js');
-
-  const logger = require('../utils/logger');
-
-  const jwt = require('jsonwebtoken');
+  const { SAML } = require('@node-saml/node-saml');
 
   const { join } = require('path');
 
   const { readFileSync } = require('fs');
 
-  acl = require('./acl');
-
-  sp = new saml2.ServiceProvider({
-    entity_id: process.env.SAML_ENTITY_ID,
-    private_key:
+  samlConfig = {
+    callbackUrl: process.env.SAML_ACS,
+    entryPoint: process.env.SAML_SSO,
+    issuer: process.env.SAML_ENTITY_ID,
+    idpCert:
+      process.env.SAML_IDP_CRT &&
+      String(
+        readFileSync(join(__dirname, `../../${process.env.SAML_IDP_CRT}.crt`)),
+      ),
+    privateKey:
       process.env.SAML_SP_CRT &&
       String(
-        readFileSync(join(__dirname, `../../${process.env.SAML_SP_CRT}.pem`))
+        readFileSync(join(__dirname, `../../${process.env.SAML_SP_CRT}.pem`)),
       ),
-    certificate:
+    publicKey:
       process.env.SAML_SP_CRT &&
       String(
-        readFileSync(join(__dirname, `../../${process.env.SAML_SP_CRT}.crt`))
+        readFileSync(join(__dirname, `../../${process.env.SAML_SP_CRT}.crt`)),
       ),
-    assert_endpoint: process.env.SAML_ACS,
-    allow_unencrypted_assertion: true,
-  });
+    logoutUrl: process.env.SAML_SLO,
+  };
 
-  idp = new saml2.IdentityProvider({
-    sso_login_url: process.env.SAML_SSO,
-    sso_logout_url: process.env.SAML_SLO,
-    certificates: process.env.SAML_IDP_CRT && [
-      String(
-        readFileSync(join(__dirname, `../../${process.env.SAML_IDP_CRT}.crt`))
-      ),
-    ],
-    sign_get_request: true,
-  });
+  strategy = new SAML(samlConfig);
 
   module.exports = saml;
-
 } catch {
-
   //Check if there are any SAML keys in the process.
-  const samlKeys = Object.keys(process.env).filter(key => key.startsWith('SAML'));
+  const samlKeys = Object.keys(process.env).filter((key) =>
+    key.startsWith('SAML'),
+  );
 
   //If we have keys then log we that the module is not present
   if (samlKeys.length > 0) {
-    console.log('SAML2 module is not available.')
+    console.log('SAML2 module is not available.');
   }
 
   module.exports = null;
-
 }
 
 /**
@@ -108,87 +98,83 @@ The user object is signed as a JSON Web Token and set as a cookie to the HTTP re
 */
 
 function saml(req, res) {
-
-  if (!sp || !idp) {
-    console.warn(`SAML SP or IDP are not available in XYZ instance.`)
+  if (!strategy) {
+    console.warn(`SAML is not available in XYZ instance.`);
     return;
   }
 
   // Return metadata.
   if (/\/saml\/metadata/.exec(req.url)) {
     res.setHeader('Content-Type', 'application/xml');
-    res.send(sp.create_metadata());
-  }
-
-  // Create Service Provider login request url.
-  if (req.params?.login || /\/saml\/login/.exec(req.url)) {
-    sp.create_login_request_url(idp, {},
-      (err, login_url, request_id) => {
-        if (err != null) return res.send(500);
-
-        res.setHeader('location', login_url);
-        res.status(301).send();
-      });
-  }
-
-  if (/\/saml\/acs/.exec(req.url)) {
-
-    sp.post_assert(
-      idp,
-      {
-        request_body: req.body,
-      },
-      async (err, saml_response) => {
-
-        if (err != null) {
-          console.error(err);
-          return res.send(500);
-        }
-
-        logger(saml_response, 'saml_response')
-
-        const user = {
-          email: saml_response.user.name_id,
-          session_index: saml_response.user.session_index,
-        }
-
-        if (process.env.SAML_ACL) {
-
-          const acl_response = await acl_lookup(saml_response.user.name_id)
-
-          if (!acl_response) {
-            return res.status(401).send('User account not found')
-          }
-
-          if (acl_response instanceof Error) {
-            return res.status(401).send(acl_response.message)
-          }
-
-          Object.assign(user, acl_response)
-        }
-
-        // Create token with 8 hour expiry.
-        const token = jwt.sign(
-          user,
-          process.env.SECRET,
-          {
-            expiresIn: parseInt(process.env.COOKIE_TTL),
-          });
-
-        const cookie =
-          `${process.env.TITLE}=${token};HttpOnly;` +
-          `Max-Age=${process.env.COOKIE_TTL};` +
-          `Path=${process.env.DIR || '/'};`;
-
-        res.setHeader('Set-Cookie', cookie);
-
-        res.setHeader('location', `${process.env.DIR || '/'}`);
-
-        return res.status(302).send();
-      }
+    const metadata = strategy.generateServiceProviderMetadata(
+      null,
+      samlConfig.idpCert,
     );
+    res.send(metadata);
   }
-};
+
+  // // Create Service Provider login request url.
+  // if (req.params?.login || /\/saml\/login/.exec(req.url)) {
+  //   sp.create_login_request_url(idp, {}, (err, login_url, request_id) => {
+  //     if (err != null) return res.send(500);
+  //
+  //     res.setHeader('location', login_url);
+  //     res.status(301).send();
+  //   });
+  // }
+  //
+  // if (/\/saml\/acs/.exec(req.url)) {
+  //   sp.post_assert(
+  //     idp,
+  //     {
+  //       request_body: req.body,
+  //     },
+  //     async (err, saml_response) => {
+  //       if (err != null) {
+  //         console.error(err);
+  //         return res.send(500);
+  //       }
+  //
+  //       logger(saml_response, 'saml_response');
+  //
+  //       const user = {
+  //         email: saml_response.user.name_id,
+  //         session_index: saml_response.user.session_index,
+  //       };
+  //
+  //       if (process.env.SAML_ACL) {
+  //         const acl_response = await acl_lookup(saml_response.user.name_id);
+  //
+  //         if (!acl_response) {
+  //           return res.status(401).send('User account not found');
+  //         }
+  //
+  //         if (acl_response instanceof Error) {
+  //           return res.status(401).send(acl_response.message);
+  //         }
+  //
+  //         Object.assign(user, acl_response);
+  //       }
+  //
+  //       // Create token with 8 hour expiry.
+  //       const token = jwt.sign(user, process.env.SECRET, {
+  //         expiresIn: parseInt(process.env.COOKIE_TTL),
+  //       });
+  //
+  //       const cookie =
+  //         `${process.env.TITLE}=${token};HttpOnly;` +
+  //         `Max-Age=${process.env.COOKIE_TTL};` +
+  //         `Path=${process.env.DIR || '/'};`;
+  //
+  //       res.setHeader('Set-Cookie', cookie);
+  //
+  //       res.setHeader('location', `${process.env.DIR || '/'}`);
+  //
+  //       return res.status(302).send();
+  //     },
+  //   );
+  // }
+}
 
 /**
 @function acl_lookup
@@ -205,45 +191,46 @@ User object or Error.
 */
 
 async function acl_lookup(email) {
-
   if (acl === null) {
-    return new Error('ACL unavailable.')
+    return new Error('ACL unavailable.');
   }
 
-  const date = new Date()
+  const date = new Date();
 
   // Update access_log and return user record matched by email.
-  const rows = await acl(`
+  const rows = await acl(
+    `
     UPDATE acl_schema.acl_table
     SET access_log = array_append(access_log, '${date.toISOString().replace(/\..*/, '')}')
     WHERE lower(email) = lower($1)
     RETURNING email, roles, language, blocked, approved, approved_by, verified, admin, password;`,
-    [email])
+    [email],
+  );
 
-  if (rows instanceof Error) return new Error('Failed to query to ACL.')
+  if (rows instanceof Error) return new Error('Failed to query to ACL.');
 
   // Get user record from first row.
-  const user = rows[0]
+  const user = rows[0];
 
   if (!user) return null;
 
   // Blocked user cannot login.
   if (user.blocked) {
-    return new Error('User blocked in ACL.')
+    return new Error('User blocked in ACL.');
   }
 
   // Accounts must be verified and approved for login
   if (!user.verified) {
-    return new Error('User not verified in ACL')
+    return new Error('User not verified in ACL');
   }
 
   if (!user.approved) {
-    return new Error('User not approved in ACL')
+    return new Error('User not approved in ACL');
   }
 
   return {
     roles: user.roles,
     language: user.language,
-    admin: user.admin
-  }
+    admin: user.admin,
+  };
 }
