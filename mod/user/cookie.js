@@ -100,7 +100,6 @@ module.exports = async function cookie(req, res) {
       delete user.blocked
 
       if (payload.session) {
-
         user.session = payload.session
       }
 

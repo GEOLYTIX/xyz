@@ -38,7 +38,11 @@
       "properties": {
         "id": 1,
         "name": "Greater London",
-        "description": "A polygon covering central London"
+        "description": "A polygon covering central London",
+        "pin": [
+          -0.1625,
+          51.5
+        ]
       }
     },
     {
@@ -54,7 +58,11 @@
       "properties": {
         "id": 2,
         "name": "Manchester City Centre",
-        "description": "Point marking Manchester city centre"
+        "description": "Point marking Manchester city centre",
+        "pin": [
+          -2.2426,
+          53.4808
+        ]
       }
     },
     {
@@ -94,7 +102,11 @@
       "properties": {
         "id": 3,
         "name": "Edinburgh Castle Area",
-        "description": "Area around Edinburgh Castle"
+        "description": "Area around Edinburgh Castle",
+        "pin": [
+          -3.201,
+          55.949
+        ]
       }
     },
     {
@@ -127,7 +139,11 @@
       "properties": {
         "id": 4,
         "name": "Cardiff Bay Walk",
-        "description": "Walking path along Cardiff Bay"
+        "description": "Walking path along Cardiff Bay",
+        "pin": [
+          -3.16,
+          51.464
+        ]
       }
     },
     {
@@ -167,7 +183,11 @@
       "properties": {
         "id": 5,
         "name": "Belfast Harbour",
-        "description": "Area covering Belfast Harbour"
+        "description": "Area covering Belfast Harbour",
+        "pin": [
+          -5.915,
+          54.613
+        ]
       }
     },
     {
@@ -191,7 +211,7 @@
             0
           ],
           [
-            -3,
+            -3.0,
             53.408,
             0
           ]
@@ -200,7 +220,11 @@
       "properties": {
         "id": 6,
         "name": "Liverpool Docks",
-        "description": "Path along Liverpool's famous docks"
+        "description": "Path along Liverpool's famous docks",
+        "pin": [
+          -3.002,
+          53.407
+        ]
       }
     },
     {
@@ -240,7 +264,11 @@
       "properties": {
         "id": 7,
         "name": "Glasgow City Center",
-        "description": "Central area of Glasgow"
+        "description": "Central area of Glasgow",
+        "pin": [
+          -4.265,
+          55.8605
+        ]
       }
     },
     {
@@ -256,7 +284,11 @@
       "properties": {
         "id": 8,
         "name": "Oxford University",
-        "description": "Central point of Oxford University"
+        "description": "Central point of Oxford University",
+        "pin": [
+          -1.2544,
+          51.7548
+        ]
       }
     },
     {
@@ -289,7 +321,11 @@
       "properties": {
         "id": 9,
         "name": "Brighton Beach",
-        "description": "Brighton Beach shoreline"
+        "description": "Brighton Beach shoreline",
+        "pin": [
+          -0.14,
+          50.821
+        ]
       }
     },
     {
@@ -329,7 +365,11 @@
       "properties": {
         "id": 10,
         "name": "Cambridge City Center",
-        "description": "Historic center of Cambridge"
+        "description": "Historic center of Cambridge",
+        "pin": [
+          0.1175,
+          52.2075
+        ]
       }
     }
   ]

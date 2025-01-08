@@ -28,9 +28,8 @@ app.get(`${env.DIR}/api/provider/:provider?`, api)
 
 app.post(`${env.DIR}/api/provider/:provider?`, express.json({ limit: '5mb' }), api)
 
-app.get(`${env.DIR}/api/sign/:provider?`, api)
 
-app.post(`${env.DIR}/api/sign/:provider?`, express.json({ limit: '5mb' }), api)
+app.get(`${env.DIR || ''}/api/sign/:signer?`, api)
 
 
 app.get(`${env.DIR}/api/query/:template?`, api)

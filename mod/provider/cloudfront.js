@@ -3,17 +3,13 @@
 
 The cloudfront provider module exports a method to fetch resources from an AWS cloudfront service.
 
-@requires fs
-@requires path
 @requires module:/utils/logger
-@requires @aws-sdk/cloudfront-signer
+@requires module:/sign/cloudfront
 
 @module /provider/cloudfront
 */
 
-const { readFileSync } = require('fs')
-const { join } = require('path')
-const { getSignedUrl } = require('@aws-sdk/cloudfront-signer');
+const cloudfront_signer = require('../sign/cloudfront');
 const logger = require('../utils/logger')
 
 const env = require('../../mapp_env.js')
@@ -38,24 +34,21 @@ The fetch response will be parsed as text by default.
 
 @returns {Promise<String|JSON|Buffer|Error>} The method resolves to either JSON, Text, or Buffer dependent ref.params.
 */
-module.exports = async function cloudfront(ref) {
+module.exports = cloudfront_signer ? cloudfront : null
+
+async function cloudfront(ref) {
 
   try {
 
-    // Substitutes {*} with env.SRC_* key values.
-    const url = (ref.params?.url || ref).replace(/{(?!{)(.*?)}/g,
-      matched => env[`SRC_${matched.replace(/(^{)|(}$)/g, '')}`])
+    const url = ref.params?.url || ref
 
-    const date = new Date(Date.now())
 
-    date.setDate(date.getDate() + 1);
+    const signedURL = await cloudfront_signer(url)
 
-    const signedURL = getSignedUrl({
-      url: `https://${url}`,
-      keyPairId: env.KEY_CLOUDFRONT,
-      dateLessThan: date.toDateString(),
-      privateKey: String(readFileSync(join(__dirname, `../../${env.KEY_CLOUDFRONT}.pem`)))
-    });
+    if(signedURL instanceof Error) {
+      return signedURL;
+    }
+
 
     // Return signedURL only from request.
     if (ref.params?.signedURL) {
@@ -66,7 +59,7 @@ module.exports = async function cloudfront(ref) {
 
     logger(`${response.status} - ${url}`, 'cloudfront')
 
-    if (response.status >= 300) return new Error(`${response.status} ${ref}`)
+    if (response.status >= 300) return new Error(`${response.status} ${url}`)
 
     if (url.match(/\.json$/i)) return await response.json()
 

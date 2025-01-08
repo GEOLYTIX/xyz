@@ -6,7 +6,7 @@ Exports the [user] list method for the /api/user/list route.
 @requires module:/user/acl
 @requires mapp_env
 
-@module /user/cookie
+@module /user/list
 */
 
 const env = require('../../mapp_env.js')

@@ -6,11 +6,11 @@
  * This function is used to test the merge function
  * @function mergeTest
  */
-export async function mergeTest() {
+export function merge() {
 
-    await codi.describe('Utils: mergeTest Test', async () => {
+    codi.describe({ name: 'merge Test:', id: 'utils_merge', parentId: 'utils' }, () => {
 
-        await codi.it('Hobbies should be overwritten in the merge', async () => {
+        codi.it({ name: 'Hobbies should be overwritten in the merge', parentId: 'utils_merge' }, () => {
             const target = {
                 name: 'Rob',
                 age: 28,
@@ -46,7 +46,7 @@ export async function mergeTest() {
             codi.assertEqual(mergedObj, expected)
         });
 
-        await codi.it('should handle merging with null or undefined values', async () => {
+        codi.it({ name: 'should handle merging with null or undefined values', parentId: 'utils_merge' }, async () => {
             const target = {
                 name: 'John',
                 age: 30,
@@ -67,7 +67,7 @@ export async function mergeTest() {
             codi.assertEqual(mergedObj2, expected);
         });
 
-        await codi.it('should prevent _proto merging', async () => {
+        codi.it({ name: 'should prevent _proto merging', parentId: 'utils_merge' }, async () => {
             const target = {
                 current: {
                     'country': {
