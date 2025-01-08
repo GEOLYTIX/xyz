@@ -10,7 +10,7 @@ Exports the apiKey method for the /api/user/key route.
 @module /user/key
 */
 
-const env = require('../../mapp_env.js')
+const env = require('../utils/processEnv.js')
 
 const acl = require('./acl')
 

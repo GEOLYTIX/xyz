@@ -11,7 +11,7 @@ Exports the userToken method for the /api/user/token route.
 
 const jwt = require('jsonwebtoken')
 
-const env = require('../../mapp_env.js')
+const env = require('../utils/processEnv.js')
 
 /**
 @function userToken

@@ -11,7 +11,7 @@ Exports the [user] verify method for the /api/user/verify route.
 
 @module /user/verify
 */
-const env = require('../../mapp_env.js')
+const env = require('../utils/processEnv.js')
 
 const acl = require('./acl')
 

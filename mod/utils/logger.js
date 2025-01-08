@@ -7,7 +7,7 @@ This module provides a logging utility for the xyz.
 
 const crypto = require('crypto');
 
-const env = require('../../mapp_env.js')
+const env = require('./processEnv.js')
 
 const logs = new Set(env.LOGS?.split(',') || []);
 

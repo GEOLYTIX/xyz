@@ -10,7 +10,7 @@ Exports the deleteUser method for the /api/user/delete route.
 @module /user/add
 */
 
-const env = require('../../mapp_env.js')
+const env = require('../utils/processEnv.js')
 
 const acl = require('./acl')
 

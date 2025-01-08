@@ -20,7 +20,7 @@ const bcrypt = require('../utils/bcrypt')
 
 const crypto = require('crypto')
 
-const env = require('../../mapp_env.js')
+const env = require('../utils/processEnv.js')
 
 const acl = require('./acl')
 

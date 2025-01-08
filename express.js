@@ -10,7 +10,7 @@ app.use('/xyz', express.static('docs', {
     extensions: ['html']
 }))
 
-const env = require('./mapp_env.js');
+const env = require('./mod/utils/processEnv.js');
 
 app.use(`${env.DIR}/public`, express.static('public'))
 

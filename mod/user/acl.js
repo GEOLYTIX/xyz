@@ -14,7 +14,7 @@ The module will export null if neither a PRIVATE or PUBLIC env are provided.
 
 const { Pool } = require('pg');
 
-const env = require('../../mapp_env.js')
+const env = require('../utils/processEnv.js')
 
 const connection = env.PRIVATE?.split('|') || env.PUBLIC?.split('|')
 

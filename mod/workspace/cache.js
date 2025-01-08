@@ -11,7 +11,7 @@ Default templates can be overwritten in the workspace or by providing a CUSTOM_T
 @module /workspace/cache
 */
 
-const env = require('../../mapp_env.js')
+const env = require('../utils/processEnv.js')
 
 const getFrom = require('../provider/getFrom')
 

@@ -11,7 +11,7 @@ Exports the [user] cookie method for the /api/user/cookie route.
 @module /user/cookie
 */
 
-const env = require('../../mapp_env.js')
+const env = require('../utils/processEnv.js')
 
 const acl = require('./acl')
 

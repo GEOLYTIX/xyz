@@ -12,7 +12,7 @@ A user_sessions{} object is declared in the module to store user sessions.
 
 @module /user/auth
 */
-const env = require('../../mapp_env.js')
+const env = require('../utils/processEnv.js')
 
 const acl = require('./acl')
 

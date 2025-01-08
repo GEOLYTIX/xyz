@@ -9,7 +9,7 @@ Exports the [user] list method for the /api/user/list route.
 @module /user/list
 */
 
-const env = require('../../mapp_env.js')
+const env = require('../utils/processEnv.js')
 
 const acl = require('./acl')
 

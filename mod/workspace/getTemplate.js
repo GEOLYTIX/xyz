@@ -10,7 +10,7 @@ The module exports the getTemplate method which is required by the query, langua
 @module /workspace/getTemplate
 */
 
-const env = require('../../mapp_env.js')
+const env = require('../utils/processEnv.js')
 
 const getFrom = require('../provider/getFrom')
 

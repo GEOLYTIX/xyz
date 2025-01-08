@@ -13,7 +13,7 @@ View templates maybe localised and must be requested from the languageTemplates 
 
 const logger = require('./utils/logger')
 
-const env = require('../mapp_env.js')
+const env = require('./utils/processEnv.js')
 
 const languageTemplates = require('./utils/languageTemplates')
 

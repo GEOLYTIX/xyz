@@ -27,7 +27,7 @@ The idp requires a certificate `${env.SAML_IDP_CRT}.crt`, single sign-on [SSO] l
 
 let acl, sp, idp;
 
-const env = require('../../mapp_env.js')
+const env = require('../utils/processEnv.js')
 
 try {
   const saml2 = require('saml2-js');

@@ -15,7 +15,7 @@ Template variables not defined in the env will not be replaced.
 @returns {json} safeObject 
 */
 
-const env = require('../../mapp_env.js')
+const env = require('./processEnv.js')
 
 module.exports = function envReplace(obj) {
 

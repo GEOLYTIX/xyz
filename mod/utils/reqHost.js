@@ -9,7 +9,7 @@ Exports the reqHost utility method.
 @module /utils/reqHost
 */
 
-const env = require('../../mapp_env.js')
+const env = require('./processEnv.js')
 
 const logger = require('./logger')
 

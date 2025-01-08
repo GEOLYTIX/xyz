@@ -10,7 +10,7 @@ Exports the login method for the /api/user/login route.
 
 @module /user/login
 */
-const env = require('../../mapp_env.js')
+const env = require('../utils/processEnv.js')
 
 const fromACL = require('./fromACL')
 

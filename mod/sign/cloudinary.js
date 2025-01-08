@@ -10,7 +10,7 @@ Exports the cloudinary signer method.
 
 const { createHash } = require('crypto');
 
-const env = require('../../mapp_env.js')
+const env = require('../utils/processEnv.js')
 
 /**
 @function cloudinary

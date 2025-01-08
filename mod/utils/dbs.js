@@ -12,7 +12,7 @@ The [node-postgres]{@link https://www.npmjs.com/package/pg} package is required 
 
 const { Pool } = require('pg');
 
-const env = require('../../mapp_env.js')
+const env = require('./processEnv.js')
 
 const logger = require('./logger');
 

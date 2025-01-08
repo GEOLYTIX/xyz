@@ -2,7 +2,7 @@
 @module /utils/mailer
 */
 
-const env = require('../../mapp_env.js')
+const env = require('./processEnv.js')
 
 const logger = require('./logger')
 

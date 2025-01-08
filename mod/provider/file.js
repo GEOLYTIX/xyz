@@ -6,7 +6,7 @@ const { readFileSync } = require('fs')
 
 const { join } = require('path')
 
-const env = require('../../mapp_env.js')
+const env = require('../utils/processEnv.js')
 
 module.exports = async ref => {
   try {
