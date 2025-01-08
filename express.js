@@ -12,56 +12,56 @@ app.use('/xyz', express.static('docs', {
 
 const env = require('./mapp_env.js');
 
-app.use(`${env.dir || ''}/public`, express.static('public'))
+app.use(`${env.DIR}/public`, express.static('public'))
 
-app.use(env.dir || '', express.static('public'))
+app.use(env.DIR, express.static('public'))
 
-app.use(`${env.dir || ''}/tests`, express.static('tests'))
+app.use(`${env.DIR}/tests`, express.static('tests'))
 
-app.use(env.dir || '', express.static('tests'))
+app.use(env.DIR, express.static('tests'))
 
 app.use(cookieParser())
 
 const api = require('./api/api')
 
-app.get(`${env.dir || ''}/api/provider/:provider?`, api)
+app.get(`${env.DIR}/api/provider/:provider?`, api)
 
-app.post(`${env.dir || ''}/api/provider/:provider?`, express.json({ limit: '5mb' }), api)
+app.post(`${env.DIR}/api/provider/:provider?`, express.json({ limit: '5mb' }), api)
 
-app.get(`${env.dir || ''}/api/sign/:provider?`, api)
+app.get(`${env.DIR}/api/sign/:provider?`, api)
 
-app.post(`${env.dir || ''}/api/sign/:provider?`, express.json({ limit: '5mb' }), api)
-
-
-app.get(`${env.dir || ''}/api/query/:template?`, api)
-
-app.post(`${env.dir || ''}/api/query/:template?`, express.json({ limit: '5mb' }), api)
+app.post(`${env.DIR}/api/sign/:provider?`, express.json({ limit: '5mb' }), api)
 
 
-app.get(`${env.dir || ''}/api/fetch/:template?`, api)
+app.get(`${env.DIR}/api/query/:template?`, api)
 
-app.post(`${env.dir || ''}/api/fetch/:template?`, express.json({ limit: '5mb' }), api)
-
-
-app.get(`${env.dir || ''}/api/workspace/:key?`, api)
+app.post(`${env.DIR}/api/query/:template?`, express.json({ limit: '5mb' }), api)
 
 
-app.get(`${env.dir || ''}/api/user/:method?/:key?`, api)
+app.get(`${env.DIR}/api/fetch/:template?`, api)
 
-app.post(`${env.dir || ''}/api/user/:method?`, [express.urlencoded({ extended: true }), express.json({ limit: '5mb' })], api)
+app.post(`${env.DIR}/api/fetch/:template?`, express.json({ limit: '5mb' }), api)
 
-app.get(`${env.dir || ''}/saml/metadata`, api)
 
-app.get(`${env.dir || ''}/saml/logout`, api)
+app.get(`${env.DIR}/api/workspace/:key?`, api)
 
-app.get(`${env.dir || ''}/saml/login`, api)
 
-app.post(`${env.dir || ''}/saml/acs`, express.urlencoded({ extended: true }), api)
+app.get(`${env.DIR}/api/user/:method?/:key?`, api)
 
-app.get(`${env.dir || ''}/view/:template?`, api)
+app.post(`${env.DIR}/api/user/:method?`, [express.urlencoded({ extended: true }), express.json({ limit: '5mb' })], api)
 
-app.get(`${env.dir || ''}/:locale?`, api)
+app.get(`${env.DIR}/saml/metadata`, api)
 
-env.dir && app.get(`/`, api)
+app.get(`${env.DIR}/saml/logout`, api)
 
-app.listen(env.port || 3000)
+app.get(`${env.DIR}/saml/login`, api)
+
+app.post(`${env.DIR}/saml/acs`, express.urlencoded({ extended: true }), api)
+
+app.get(`${env.DIR}/view/:template?`, api)
+
+app.get(`${env.DIR}/:locale?`, api)
+
+app.get(`/`, api)
+
+app.listen(env.PORT)
