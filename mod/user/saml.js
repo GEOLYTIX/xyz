@@ -24,7 +24,7 @@ The idp requires a certificate `${process.env.SAML_IDP_CRT}.crt`, single sign-on
 @module /user/saml
 */
 
-let strategy, samlConfig;
+let strategy, samlConfig, logger, jwt, acl;
 
 try {
   const { SAML } = require('@node-saml/node-saml');
@@ -32,6 +32,12 @@ try {
   const { join } = require('path');
 
   const { readFileSync } = require('fs');
+
+  logger = require('../../mod/utils/logger');
+
+  jwt = require('jsonwebtoken');
+
+  acl = require('../user/acl.js');
 
   samlConfig = {
     callbackUrl: process.env.SAML_ACS,
@@ -53,6 +59,8 @@ try {
         readFileSync(join(__dirname, `../../${process.env.SAML_SP_CRT}.crt`)),
       ),
     logoutUrl: process.env.SAML_SLO,
+    wantAuthnResponseSigned: false,
+    acceptedClockSkewMs: -1, // Set to -1 to disable time validation
   };
 
   /** @type {SAML} */
@@ -114,8 +122,32 @@ async function saml(req, res) {
     res.send(metadata);
   }
 
-  // Create Service Provider login request url.
+  if (/\/saml\/logout/.exec(req.url)) {
+    try {
+      const user = await jwt.decode(req.cookies[`${process.env.TITLE}_SAML`]);
+      const url = await strategy.getLogoutUrlAsync(user);
+
+      res.cookie(`${process.env.TITLE}_SAML`, '', {
+        httpOnly: true,
+        expires: new Date(0),
+        path: process.env.DIR || '/',
+      });
+
+      res.cookie(process.env.TITLE, '', {
+        httpOnly: true,
+        expires: new Date(0),
+        path: process.env.DIR || '/',
+      });
+
+      res.redirect(url);
+    } catch (error) {
+      console.error('Logout process failed:', error);
+      return res.redirect('/');
+    }
+  }
+
   if (req.params?.login || /\/saml\/login/.exec(req.url)) {
+    // Create Service Provider login request url.
     try {
       // RelayState can be used to store the URL to redirect to after login
       const relayState = req.query.returnTo || process.env.DIR;
@@ -124,9 +156,7 @@ async function saml(req, res) {
         relayState,
         req.get('host'), // Get host from request
         {
-          additionalParams: {
-            // Add any additional params needed
-          },
+          additionalParams: {},
         },
       );
 
@@ -137,65 +167,64 @@ async function saml(req, res) {
     }
   }
 
-  //
-  // if (/\/saml\/acs/.exec(req.url)) {
-  //   sp.post_assert(
-  //     idp,
-  //     {
-  //       request_body: req.body,
-  //     },
-  //     async (err, saml_response) => {
-  //       if (err != null) {
-  //         console.error(err);
-  //         return res.send(500);
-  //       }
-  //
-  //       logger(saml_response, 'saml_response');
-  //
-  //       const user = {
-  //         email: saml_response.user.name_id,
-  //         session_index: saml_response.user.session_index,
-  //       };
-  //
-  //       if (process.env.SAML_ACL) {
-  //         const acl_response = await acl_lookup(saml_response.user.name_id);
-  //
-  //         if (!acl_response) {
-  //           return res.status(401).send('User account not found');
-  //         }
-  //
-  //         if (acl_response instanceof Error) {
-  //           return res.status(401).send(acl_response.message);
-  //         }
-  //
-  //         Object.assign(user, acl_response);
-  //       }
-  //
-  //       // Create token with 8 hour expiry.
-  //       const token = jwt.sign(user, process.env.SECRET, {
-  //         expiresIn: parseInt(process.env.COOKIE_TTL),
-  //       });
-  //
-  //       const cookie =
-  //         `${process.env.TITLE}=${token};HttpOnly;` +
-  //         `Max-Age=${process.env.COOKIE_TTL};` +
-  //         `Path=${process.env.DIR || '/'};`;
-  //
-  //       res.setHeader('Set-Cookie', cookie);
-  //
-  //       res.setHeader('location', `${process.env.DIR || '/'}`);
-  //
-  //       return res.status(302).send();
-  //     },
-  //   );
-  // }
+  if (/\/saml\/acs/.exec(req.url)) {
+    try {
+      const samlResponse = await strategy.validatePostResponseAsync(req.body);
+
+      logger(samlResponse, 'saml_response');
+
+      const user = {
+        email: samlResponse.profile.nameID,
+        nameID: samlResponse.profile.nameID,
+        sessionIndex: samlResponse.profile.sessionIndex,
+        nameIDFormat: samlResponse.profile.nameIDFormat,
+        nameQualifier: samlResponse.profile.nameQualifier,
+        spNameQualifier: samlResponse.profile.spNameQualifier,
+      };
+
+      if (process.env.SAML_ACL) {
+        const aclResponse = await aclLookUp(user.email);
+
+        if (!aclResponse) {
+          return res.status(401).send('User account not found');
+        }
+
+        if (aclResponse instanceof Error) {
+          return res.status(401).send(aclResponse.message);
+        }
+
+        Object.assign(user, aclResponse);
+      }
+
+      // Create token with 8 hour expiry.
+      const token = jwt.sign(user, process.env.SECRET, {
+        expiresIn: parseInt(process.env.COOKIE_TTL),
+      });
+
+      const samlCookie =
+        `${process.env.TITLE}_SAML=${token};HttpOnly;` +
+        `Max-Age=${process.env.COOKIE_TTL};` +
+        `Path=${process.env.DIR || '/'};`;
+
+      const cookie =
+        `${process.env.TITLE}=${token};HttpOnly;` +
+        `Max-Age=${process.env.COOKIE_TTL};` +
+        `Path=${process.env.DIR || '/'};`;
+
+      res.setHeader('Set-Cookie', [cookie, samlCookie]);
+
+      res.redirect(`${process.env.DIR || '/'}`);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 }
 
 /**
-@function acl_lookup
+@function aclLookUp
 
 @description
-The acl_lookup attempts to find a user record by it's email in the ACL.
+The aclLookUp attempts to find a user record by it's email in the ACL.
 
 The user record will be validated and returned to the requesting saml Assertion Consumer Service [ACS].
 
@@ -205,7 +234,7 @@ The user record will be validated and returned to the requesting saml Assertion 
 User object or Error.
 */
 
-async function acl_lookup(email) {
+async function aclLookUp(email) {
   if (acl === null) {
     return new Error('ACL unavailable.');
   }
