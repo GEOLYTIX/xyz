@@ -44,7 +44,7 @@ module.exports = async params => {
         name: env.TRANSPORT_EMAIL.split('@')[0],
         port: env.TRANSPORT_PORT || 587,
         secure: false,
-        requireTLS: env.TRANSPORT_TLS && true,
+        requireTLS: env.TRANSPORT_TLS,
         auth: {
           user: env.TRANSPORT_EMAIL,
           pass: env.TRANSPORT_PASSWORD

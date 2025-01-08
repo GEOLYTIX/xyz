@@ -85,7 +85,7 @@ async function loginBody(req, res) {
 
   const user = await fromACL(req)
 
-  const redirect = req.cookies && req.cookies[`${env.TITLE}_redirect`]
+  const redirect = req.cookies?.[`${env.TITLE}_redirect`]
 
   // The redirect indicates that a previous login has failed.
   if (user instanceof Error && redirect) {

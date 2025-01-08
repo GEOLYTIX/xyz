@@ -54,6 +54,8 @@ process.env.FAILED_ATTEMPTS ??= 3
 
 process.env.RETRY_LIMIT ??= 3;
 
+process.env.TRANSPORT_TLS ??= false
+
 
 const env = {}
 
