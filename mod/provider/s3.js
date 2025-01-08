@@ -12,9 +12,11 @@ const {
 
 const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
 
+const env = require('../../mapp_env.js')
+
 module.exports = async (req, res) => {
 
-  const credentials = Object.fromEntries(new URLSearchParams(process.env.AWS_S3_CLIENT))
+  const credentials = Object.fromEntries(new URLSearchParams(env.AWS_S3_CLIENT))
 
   const s3Client = new S3Client({
     credentials,

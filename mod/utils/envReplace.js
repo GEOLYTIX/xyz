@@ -5,15 +5,18 @@
 /**
 @function envReplace 
 @description
-The envReplace method finds occurances of ${...} in a stringified object and substitutes the template variables with values from matched process.env variables.
+The envReplace method finds occurances of ${...} in a stringified object and substitutes the template variables with values from matched env variables.
 
-The template variable ${RESOURCE} will be substituted with the process.env.SRC_RESOURCE value.
+The template variable ${RESOURCE} will be substituted with the env.SRC_RESOURCE value.
 
-Template variables not defined in the process.env will not be replaced.
+Template variables not defined in the env will not be replaced.
 
 @param {Obeckt} obj 
 @returns {json} safeObject 
 */
+
+const env = require('../../mapp_env.js')
+
 module.exports = function envReplace(obj) {
 
   // Convert the input object to a JSON string
@@ -22,8 +25,8 @@ module.exports = function envReplace(obj) {
     // Remove template brackets from matched param.
     const param = matched.replace(/\$\{|\}/g, '')
 
-    // Find substitute value from process.env SRC_* variable.
-    const change = process.env[`SRC_${param}`] || matched
+    // Find substitute value from env SRC_* variable.
+    const change = env[`SRC_${param}`] || matched
 
     return change
   })

@@ -6,12 +6,14 @@ const { readFileSync } = require('fs')
 
 const { join } = require('path')
 
+const env = require('../../mapp_env.js')
+
 module.exports = async ref => {
   try {
 
-    // Subtitutes {*} with process.env.SRC_* key values.
+    // Subtitutes {*} with env.SRC_* key values.
     const path = (ref.params?.url || ref).replace(/{(?!{)(.*?)}/g,
-      matched => process.env[`SRC_${matched.replace(/(^{)|(}$)/g, '')}`])
+      matched => env[`SRC_${matched.replace(/(^{)|(}$)/g, '')}`])
 
     const file = readFileSync(join(__dirname, `../../${path}`))
 

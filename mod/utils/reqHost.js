@@ -4,9 +4,12 @@
 Exports the reqHost utility method.
 
 @requires module:/utils/logger
+@requires mapp_env
 
 @module /utils/reqHost
 */
+
+const env = require('../../mapp_env.js')
 
 const logger = require('./logger')
 
@@ -29,11 +32,11 @@ module.exports = function reqHost(req) {
 
   if (req.headers.host.startsWith('localhost')) {
 
-    host = `http://${req.headers.host}${process.env.DIR}`
+    host = `http://${req.headers.host}${env.DIR}`
 
   } else if (req.headers.host) {
 
-    host = `https://${process.env.ALIAS||req.headers.host}${process.env.DIR}`
+    host = `https://${env.ALIAS||req.headers.host}${env.DIR}`
 
   } else if (req.headers.referer) {
 

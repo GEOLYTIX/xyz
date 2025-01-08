@@ -6,9 +6,11 @@ Exports the login method for the /api/user/login route.
 @requires module:/user/fromACL
 @requires module:/view
 @requires jsonwebtoken
+@requires mapp_env
 
 @module /user/login
 */
+const env = require('../../mapp_env.js')
 
 const fromACL = require('./fromACL')
 
@@ -51,7 +53,7 @@ module.exports = function login(req, res) {
 
   if (!req.params.msg && req.params.user) {
 
-    res.setHeader('location', `${process.env.DIR || '/'}`)
+    res.setHeader('location', `${env.DIR || '/'}`)
     res.status(302).send()
     return;
   }
@@ -83,7 +85,7 @@ async function loginBody(req, res) {
 
   const user = await fromACL(req)
 
-  const redirect = req.cookies && req.cookies[`${process.env.TITLE}_redirect`]
+  const redirect = req.cookies && req.cookies[`${env.TITLE}_redirect`]
 
   // The redirect indicates that a previous login has failed.
   if (user instanceof Error && redirect) {
@@ -104,17 +106,17 @@ async function loginBody(req, res) {
       roles: user.roles,
       session: user.session
     },
-    process.env.SECRET,
+    env.SECRET,
     {
-      expiresIn: parseInt(process.env.COOKIE_TTL)
+      expiresIn: parseInt(env.COOKIE_TTL)
     })
 
-  const user_cookie = `${process.env.TITLE}=${token};HttpOnly;Max-Age=${process.env.COOKIE_TTL};Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`
+  const user_cookie = `${env.TITLE}=${token};HttpOnly;Max-Age=${env.COOKIE_TTL};Path=${env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`
 
-  const redirect_null_cookie = `${process.env.TITLE}_redirect=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`
+  const redirect_null_cookie = `${env.TITLE}_redirect=null;HttpOnly;Max-Age=0;Path=${env.DIR || '/'}`
 
   res.setHeader('Set-Cookie', [user_cookie, redirect_null_cookie])
-  res.setHeader('location', `${redirect || process.env.DIR}`)
+  res.setHeader('location', `${redirect || env.DIR}`)
   res.status(302).send()
 }
 
@@ -135,13 +137,13 @@ The default `login_view` will be set as template request parameter before the XY
 function loginView(req, res) {
 
   // Clear user token cookie.
-  res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
+  res.setHeader('Set-Cookie', `${env.TITLE}=null;HttpOnly;Max-Age=0;Path=${env.DIR || '/'}`)
 
   // The redirect for a successful login.
   req.params.redirect = req.url && decodeURIComponent(req.url).replace(/login=true/, '')
 
   // Set cookie with redirect value.
-  res.setHeader('Set-Cookie', `${process.env.TITLE}_redirect=${req.params.redirect};HttpOnly;Max-Age=60000;Path=${process.env.DIR || '/'}`)
+  res.setHeader('Set-Cookie', `${env.TITLE}_redirect=${req.params.redirect};HttpOnly;Max-Age=60000;Path=${env.DIR || '/'}`)
 
   req.params.template = 'login_view'
 

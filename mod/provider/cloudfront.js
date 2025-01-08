@@ -16,6 +16,7 @@ const { join } = require('path')
 const { getSignedUrl } = require('@aws-sdk/cloudfront-signer');
 const logger = require('../utils/logger')
 
+const env = require('../../mapp_env.js')
 /**
 @function cloudfront
 @async
@@ -41,9 +42,9 @@ module.exports = async function cloudfront(ref) {
 
   try {
 
-    // Substitutes {*} with process.env.SRC_* key values.
+    // Substitutes {*} with env.SRC_* key values.
     const url = (ref.params?.url || ref).replace(/{(?!{)(.*?)}/g,
-      matched => process.env[`SRC_${matched.replace(/(^{)|(}$)/g, '')}`])
+      matched => env[`SRC_${matched.replace(/(^{)|(}$)/g, '')}`])
 
     const date = new Date(Date.now())
 
@@ -51,9 +52,9 @@ module.exports = async function cloudfront(ref) {
 
     const signedURL = getSignedUrl({
       url: `https://${url}`,
-      keyPairId: process.env.KEY_CLOUDFRONT,
+      keyPairId: env.KEY_CLOUDFRONT,
       dateLessThan: date.toDateString(),
-      privateKey: String(readFileSync(join(__dirname, `../../${process.env.KEY_CLOUDFRONT}.pem`)))
+      privateKey: String(readFileSync(join(__dirname, `../../${env.KEY_CLOUDFRONT}.pem`)))
     });
 
     // Return signedURL only from request.

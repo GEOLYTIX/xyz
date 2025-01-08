@@ -4,9 +4,12 @@
 Exports the [user] list method for the /api/user/list route.
 
 @requires module:/user/acl
+@requires mapp_env
 
 @module /user/cookie
 */
+
+const env = require('../../mapp_env.js')
 
 const acl = require('./acl')
 
@@ -48,7 +51,7 @@ module.exports = async (req, res) => {
       access_log[array_upper(access_log, 1)],
       failedattempts,
       approved_by,
-      ${process.env.APPROVAL_EXPIRY ? 'expires_on,' : ''}
+      ${env.APPROVAL_EXPIRY ? 'expires_on,' : ''}
       blocked,
       verificationtoken
     FROM acl_schema.acl_table

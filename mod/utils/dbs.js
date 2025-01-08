@@ -4,11 +4,13 @@
 
 const { Pool } = require('pg');
 
+const env = require('../../mapp_env.js')
+
 const logger = require('./logger');
 
 const dbs = {};
 
-Object.keys(process.env)
+Object.keys(env)
 
   // Filter keys which start with DBS 
   .filter(key => key.startsWith('DBS_'))
@@ -16,7 +18,7 @@ Object.keys(process.env)
   .forEach(key => {
 
     const pool = new Pool({
-      connectionString: process.env[key],
+      connectionString: env[key],
       keepAlive: true
     });
 
@@ -26,8 +28,8 @@ Object.keys(process.env)
 
         const client = await pool.connect()
 
-        if (timeout || process.env.STATEMENT_TIMEOUT) {
-          await client.query(`SET statement_timeout = ${parseInt(timeout) || parseInt(process.env.STATEMENT_TIMEOUT)}`)
+        if (timeout || env.STATEMENT_TIMEOUT) {
+          await client.query(`SET statement_timeout = ${parseInt(timeout) || parseInt(env.STATEMENT_TIMEOUT)}`)
         }
 
         const { rows } = await client.query(query, variables)

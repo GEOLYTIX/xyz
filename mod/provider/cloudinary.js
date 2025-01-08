@@ -4,15 +4,17 @@
 
 const { createHash } = require('crypto');
 
+const env = require('../../mapp_env.js')
+
 // 1: api_key
 // 2: api_secret
 // 3: cloud_name
-const cloudinary = process.env.CLOUDINARY_URL?.replaceAll('://', ' ').replaceAll(':', ' ').replaceAll('@', ' ').split(' ');
+const cloudinary = env.CLOUDINARY_URL?.replaceAll('://', ' ').replaceAll(':', ' ').replaceAll('@', ' ').split(' ');
 
 module.exports = async req => {
 
   if (!cloudinary) {
-    console.warn(`process.env.CLOUDINARY_URL not set`);
+    console.warn(`env.CLOUDINARY_URL not set`);
     return;
   }
 

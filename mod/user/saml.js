@@ -7,20 +7,23 @@ The module requires the saml2-js module library to be installed. The availabilit
 
 The SAML Service Provider [sp] and Identity Provider [idp] are stored in module variables.
 
-Succesful declaration of the sp and idp requires a Service Provider certificatate key pair `${process.env.SAML_SP_CRT}.pem` and `${process.env.SAML_SP_CRT}.crt` in the XYZ process root.
+Succesful declaration of the sp and idp requires a Service Provider certificatate key pair `${env.SAML_SP_CRT}.pem` and `${env.SAML_SP_CRT}.crt` in the XYZ process root.
 
-An Assertation Consumer Service [ACS] endpoint must be provided as `process.env.SAML_ACS`
+An Assertation Consumer Service [ACS] endpoint must be provided as `env.SAML_ACS`
 
-The idp requires a certificate `${process.env.SAML_IDP_CRT}.crt`, single sign-on [SSO] login url `process.env.SAML_SSO` and logout url `process.env.SAML_SLO`.
+The idp requires a certificate `${env.SAML_IDP_CRT}.crt`, single sign-on [SSO] login url `env.SAML_SSO` and logout url `env.SAML_SLO`.
 
 @requires module:/utils/logger
 @requires jsonwebtoken
 @requires saml2-js
+@requires mapp_env
 
 @module /user/saml
 */
 
 let acl, sp, idp;
+
+const env = require('../../mapp_env.js')
 
 const logger = require('../utils/logger');
 
@@ -36,27 +39,27 @@ try {
   acl = require('./acl');
 
   sp = new saml2.ServiceProvider({
-    entity_id: process.env.SAML_ENTITY_ID,
+    entity_id: env.SAML_ENTITY_ID,
     private_key:
-      process.env.SAML_SP_CRT &&
+      env.SAML_SP_CRT &&
       String(
-        readFileSync(join(__dirname, `../../${process.env.SAML_SP_CRT}.pem`))
+        readFileSync(join(__dirname, `../../${env.SAML_SP_CRT}.pem`))
       ),
     certificate:
-      process.env.SAML_SP_CRT &&
+      env.SAML_SP_CRT &&
       String(
-        readFileSync(join(__dirname, `../../${process.env.SAML_SP_CRT}.crt`))
+        readFileSync(join(__dirname, `../../${env.SAML_SP_CRT}.crt`))
       ),
-    assert_endpoint: process.env.SAML_ACS,
+    assert_endpoint: env.SAML_ACS,
     allow_unencrypted_assertion: true,
   });
 
   idp = new saml2.IdentityProvider({
-    sso_login_url: process.env.SAML_SSO,
-    sso_logout_url: process.env.SAML_SLO,
-    certificates: process.env.SAML_IDP_CRT && [
+    sso_login_url: env.SAML_SSO,
+    sso_logout_url: env.SAML_SLO,
+    certificates: env.SAML_IDP_CRT && [
       String(
-        readFileSync(join(__dirname, `../../${process.env.SAML_IDP_CRT}.crt`))
+        readFileSync(join(__dirname, `../../${env.SAML_IDP_CRT}.crt`))
       ),
     ],
     sign_get_request: true,
@@ -136,7 +139,7 @@ module.exports = function saml(req, res) {
           session_index: saml_response.user.session_index,
         }
 
-        if (process.env.SAML_ACL) {
+        if (env.SAML_ACL) {
 
           const acl_response = await acl_lookup(saml_response.user.name_id)
 
@@ -154,19 +157,19 @@ module.exports = function saml(req, res) {
         // Create token with 8 hour expiry.
         const token = jwt.sign(
           user,
-          process.env.SECRET,
+          env.SECRET,
           {
-            expiresIn: parseInt(process.env.COOKIE_TTL),
+            expiresIn: parseInt(env.COOKIE_TTL),
           });
 
         const cookie =
-          `${process.env.TITLE}=${token};HttpOnly;` +
-          `Max-Age=${process.env.COOKIE_TTL};` +
-          `Path=${process.env.DIR || '/'};`;
+          `${env.TITLE}=${token};HttpOnly;` +
+          `Max-Age=${env.COOKIE_TTL};` +
+          `Path=${env.DIR || '/'};`;
 
         res.setHeader('Set-Cookie', cookie);
 
-        res.setHeader('location', `${process.env.DIR || '/'}`);
+        res.setHeader('location', `${env.DIR || '/'}`);
 
         return res.status(302).send();
       }

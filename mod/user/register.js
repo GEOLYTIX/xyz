@@ -11,6 +11,7 @@ Exports the [user] register method for the /api/user/register route.
 @requires /utils/languageTemplates
 @requires /utils/bcrypt
 @requires crypto
+@requires mapp_env
 
 @module /user/register
 */
@@ -18,6 +19,8 @@ Exports the [user] register method for the /api/user/register route.
 const bcrypt = require('../utils/bcrypt')
 
 const crypto = require('crypto')
+
+const env = require('../../mapp_env.js')
 
 const acl = require('./acl')
 
@@ -57,7 +60,7 @@ module.exports = async function register(req, res) {
   if (req.body) return registerUserBody(req, res)
 
   // The login view will set the cookie to null.
-  res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
+  res.setHeader('Set-Cookie', `${env.TITLE}=null;HttpOnly;Max-Age=0;Path=${env.DIR || '/'}`)
 
   req.params.template = req.params.reset
     ? 'password_reset_view'
@@ -104,7 +107,7 @@ async function registerUserBody(req, res) {
   // Get the date for logs.
   const date = new Date().toISOString().replace(/\..*/, '')
 
-  const expiry_date = parseInt((new Date().getTime() + process.env.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24) / 1000)
+  const expiry_date = parseInt((new Date().getTime() + env.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24) / 1000)
 
   const USER = {
     email: req.body.email,
@@ -115,7 +118,7 @@ async function registerUserBody(req, res) {
     access_log: [`${date}@${req.ips && req.ips.pop() || req.ip}`]
   }
 
-  if (process.env.APPROVAL_EXPIRY) {
+  if (env.APPROVAL_EXPIRY) {
     USER['expires_on'] = expiry_date
   }
 
@@ -186,9 +189,9 @@ The request body JSON object must contain a user email, and password as string e
 
 The email address is tested against following regex: `/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/`.
 
-The ACL can be restricted for email addresses provided as `process.env.USER_DOMAINS`.
+The ACL can be restricted for email addresses provided as `env.USER_DOMAINS`.
 
-A valid password must be provided. Password rules can be defined as `process.env.PASSWORD_REGEXP`. The default rule for password being `'(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{10,}$'`.
+A valid password must be provided. Password rules can be defined as `env.PASSWORD_REGEXP`. The default rule for password being `'(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{10,}$'`.
 
 The `req.body.password` will be hashed with bcrypt.
 
@@ -214,10 +217,10 @@ function checkUserBody(req, res) {
   }
 
   // Test whether email domain is allowed to register
-  if (process.env.USER_DOMAINS) {
+  if (env.USER_DOMAINS) {
 
     // Get array of allowed user email domains from split environment variable.
-    const domains = new Set(process.env.USER_DOMAINS.split(','))
+    const domains = new Set(env.USER_DOMAINS.split(','))
 
     // Check whether the Set has the domain.
     if (!domains.has(req.body.email.match(/(?<=@)[^.]+(?=\.)/g)[0])) {
@@ -231,7 +234,7 @@ function checkUserBody(req, res) {
   if (!req.body.password) return res.status(400).send('No password provided')
 
   // Create regex to text password complexity from env or set default.
-  const passwordRgx = new RegExp(process.env.PASSWORD_REGEXP || '(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{10,}$')
+  const passwordRgx = new RegExp(env.PASSWORD_REGEXP || '(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{10,}$')
 
   // Test whether the provided password is valid.
   if (!passwordRgx.test(req.body.password)) {
@@ -301,9 +304,9 @@ async function passwordReset(req, res) {
   // Get the date for logs.
   const date = new Date().toISOString().replace(/\..*/, '')
 
-  const expiry_date = parseInt((new Date().getTime() + process.env.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24) / 1000)
+  const expiry_date = parseInt((new Date().getTime() + env.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24) / 1000)
 
-  const expires_on = process.env.APPROVAL_EXPIRY && user.expires_on
+  const expires_on = env.APPROVAL_EXPIRY && user.expires_on
     ? `expires_on = ${expiry_date},` : ''
 
 
@@ -314,7 +317,7 @@ async function passwordReset(req, res) {
     `${date}@${req.params.remote_address}`
   ]
 
-  if (process.env.APPROVAL_EXPIRY && user.expires_on) {
+  if (env.APPROVAL_EXPIRY && user.expires_on) {
 
     VALUES.push(expiry_date)
   }
@@ -327,7 +330,7 @@ async function passwordReset(req, res) {
       password_reset = $2,
       verificationtoken = $3,
       access_log = array_append(access_log, $4)
-      ${process.env.APPROVAL_EXPIRY && user.expires_on ? ',expires_on = $5' : ''}
+      ${env.APPROVAL_EXPIRY && user.expires_on ? ',expires_on = $5' : ''}
     WHERE lower(email) = lower($1);`,
     VALUES)
 

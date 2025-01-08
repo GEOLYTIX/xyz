@@ -8,9 +8,11 @@ A user_sessions{} object is declared in the module to store user sessions.
 @requires module:/user/acl
 @requires module:/user/fromACL
 @requires jsonwebtoken
+@requires mapp_env
 
 @module /user/auth
 */
+const env = require('../../mapp_env.js')
 
 const acl = require('./acl')
 
@@ -61,7 +63,7 @@ module.exports = async function auth(req, res) {
   }
 
   // Get token from params or cookie.
-  const token = req.params.token || req.cookies?.[process.env.TITLE]
+  const token = req.params.token || req.cookies?.[env.TITLE]
 
   // Return if there is no token to decode
   if (!token) return null
@@ -69,10 +71,10 @@ module.exports = async function auth(req, res) {
   // Verify the token signature.
   let user;
 
-  if (!process.env.SECRET) return null
+  if (!env.SECRET) return null
 
   try {
-    user = jwt.verify(token, process.env.SECRET)
+    user = jwt.verify(token, env.SECRET)
 
   } catch (err) {
 
@@ -163,13 +165,13 @@ async function checkParamToken(req, res, user) {
   user.from_token = true
 
   // Check whether the token matches cookie.
-  if (req.cookies?.[process.env.TITLE] !== req.params.token) {
+  if (req.cookies?.[env.TITLE] !== req.params.token) {
 
     // Create and assign a new cookie for the user.
-    const cookie = jwt.sign(user, process.env.SECRET)
+    const cookie = jwt.sign(user, env.SECRET)
 
     res.setHeader('Set-Cookie',
-      `${process.env.TITLE}=${cookie};HttpOnly;Max-Age=${user.exp && (user.exp - user.iat) || process.env.COOKIE_TTL};Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
+      `${env.TITLE}=${cookie};HttpOnly;Max-Age=${user.exp && (user.exp - user.iat) || env.COOKIE_TTL};Path=${env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
   }
 }
 
@@ -200,7 +202,7 @@ async function checkSession(req, user) {
   if (req.params.token) return;
 
   // USER_SESSION has not been enabled.
-  if (!process.env.USER_SESSION) return;
+  if (!env.USER_SESSION) return;
 
   // A user.session must be provided if enabled.
   if (!user.session) {
