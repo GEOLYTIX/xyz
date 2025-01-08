@@ -188,7 +188,7 @@ The email address is tested against following regex: `/^[a-zA-Z0-9+_.-]+@[a-zA-Z
 
 The ACL can be restricted for email addresses provided as `process.env.USER_DOMAINS`.
 
-A valid password must be provided. Password rules can be defined as `process.env.PASSWORD_REGEXP`. The default rule for password being `'(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{10,}$'`.
+A valid password must be provided. Password rules can be defined as `process.env.PASSWORD_REGEXP`. The default rule for password being `'(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{12,}$'`.
 
 The `req.body.password` will be hashed with bcrypt.
 
@@ -231,7 +231,7 @@ function checkUserBody(req, res) {
   if (!req.body.password) return res.status(400).send('No password provided')
 
   // Create regex to text password complexity from env or set default.
-  const passwordRgx = new RegExp(process.env.PASSWORD_REGEXP || '(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{10,}$')
+  const passwordRgx = new RegExp(process.env.PASSWORD_REGEXP || '(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{12,}$')
 
   // Test whether the provided password is valid.
   if (!passwordRgx.test(req.body.password)) {
