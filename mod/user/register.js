@@ -307,10 +307,6 @@ async function passwordReset(req, res) {
 
   const expiry_date = parseInt((new Date().getTime() + env.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24) / 1000)
 
-  const expires_on = env.APPROVAL_EXPIRY && user.expires_on
-    ? `expires_on = ${expiry_date},` : ''
-
-
   const VALUES = [
     req.body.email,
     req.body.password,
