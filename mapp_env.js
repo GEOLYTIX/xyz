@@ -11,6 +11,8 @@ process.env.COOKIE_TTL ??= 36000
 
 process.env.FAILED_ATTEMPTS ??= 3
 
+process.env.RETRY_LIMIT ??= 3;
+
 
 const env = {}
 
