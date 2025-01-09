@@ -24,7 +24,7 @@ The idp requires a certificate `${process.env.SAML_IDP_CRT}.crt`, single sign-on
 @module /user/saml
 */
 
-let strategy, samlConfig, logger, jwt, acl;
+let samlStrat, samlConfig, logger, jwt, acl;
 
 try {
   const { SAML } = require('@node-saml/node-saml');
@@ -63,7 +63,7 @@ try {
   };
 
   /** @type {SAML} */
-  strategy = new SAML(samlConfig);
+  samlStrat = new SAML(samlConfig);
 
   module.exports = saml;
 } catch {
@@ -106,7 +106,7 @@ The user object is signed as a JSON Web Token and set as a cookie to the HTTP re
 */
 
 async function saml(req, res) {
-  if (!strategy) {
+  if (!samlStrat) {
     console.warn(`SAML is not available in XYZ instance.`);
     return;
   }
@@ -114,7 +114,7 @@ async function saml(req, res) {
   // Return metadata.
   if (/\/saml\/metadata/.exec(req.url)) {
     res.setHeader('Content-Type', 'application/xml');
-    const metadata = strategy.generateServiceProviderMetadata(
+    const metadata = samlStrat.generateServiceProviderMetadata(
       null,
       samlConfig.idpCert,
     );
@@ -146,7 +146,7 @@ async function saml(req, res) {
       let url = process.env.DIR || '/';
 
       if (user.sessionIndex) {
-        url = await strategy.getLogoutUrlAsync(user);
+        url = await samlStrat.getLogoutUrlAsync(user);
       } else {
         //Clear the user cookie.
         res.cookie(process.env.TITLE, '', {
@@ -169,7 +169,7 @@ async function saml(req, res) {
       // RelayState can be used to store the URL to redirect to after login
       const relayState = req.query.returnTo || process.env.DIR;
 
-      const url = await strategy.getAuthorizeUrlAsync(
+      const url = await samlStrat.getAuthorizeUrlAsync(
         relayState,
         req.get('host'), // Get host from request
         {
@@ -186,7 +186,7 @@ async function saml(req, res) {
 
   if (/\/saml\/acs/.exec(req.url)) {
     try {
-      const samlResponse = await strategy.validatePostResponseAsync(req.body);
+      const samlResponse = await samlStrat.validatePostResponseAsync(req.body);
 
       logger(samlResponse, 'saml_response');
 
