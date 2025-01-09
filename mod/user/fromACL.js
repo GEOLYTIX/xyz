@@ -9,7 +9,7 @@ This module exports the fromACL method to request and validate a user from the A
 @requires module:/utils/languageTemplates
 @requires module:/utils/bcrypt
 @requires crypto
-@requires mapp_env
+@requires module:/utils/processEnv
 
 @module /user/fromACL
 */

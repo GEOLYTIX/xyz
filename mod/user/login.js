@@ -6,7 +6,7 @@ Exports the login method for the /api/user/login route.
 @requires module:/user/fromACL
 @requires module:/view
 @requires jsonwebtoken
-@requires mapp_env
+@requires module:/utils/processEnv
 
 @module /user/login
 */

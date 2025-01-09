@@ -5,7 +5,7 @@ The module exports the getTemplate method which is required by the query, langua
 @requires /provider/getFrom
 @requires /utils/merge
 @requires /workspace/cache
-@requires mapp_env
+@requires module:/utils/processEnv
 
 @module /workspace/getTemplate
 */

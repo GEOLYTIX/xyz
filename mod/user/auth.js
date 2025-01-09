@@ -8,7 +8,7 @@ A user_sessions{} object is declared in the module to store user sessions.
 @requires module:/user/acl
 @requires module:/user/fromACL
 @requires jsonwebtoken
-@requires mapp_env
+@requires module:/utils/processEnv
 
 @module /user/auth
 */

@@ -5,7 +5,7 @@ Exports the deleteUser method for the /api/user/delete route.
 
 @requires module:/user/acl
 @requires module:/utils/mailer
-@requires mapp_env
+@requires module:/utils/processEnv
 
 @module /user/add
 */

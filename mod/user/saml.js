@@ -20,7 +20,7 @@ The idp requires a certificate `${env.SAML_IDP_CRT}.crt`, single sign-on [SSO] l
 @requires module:/utils/logger
 @requires jsonwebtoken
 @requires saml2-js
-@requires mapp_env
+@requires module:/utils/processEnv
 
 @module /user/saml
 */

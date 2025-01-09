@@ -4,7 +4,7 @@
 Exports the [user] list method for the /api/user/list route.
 
 @requires module:/user/acl
-@requires mapp_env
+@requires module:/utils/processEnv
 
 @module /user/list
 */

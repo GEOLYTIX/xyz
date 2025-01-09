@@ -11,7 +11,7 @@ Exports the [user] register method for the /api/user/register route.
 @requires /utils/languageTemplates
 @requires /utils/bcrypt
 @requires crypto
-@requires mapp_env
+@requires module:/utils/processEnv
 
 @module /user/register
 */

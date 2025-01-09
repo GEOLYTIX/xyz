@@ -4,7 +4,7 @@
 Exports the reqHost utility method.
 
 @requires module:/utils/logger
-@requires mapp_env
+@requires module:/utils/processEnv
 
 @module /utils/reqHost
 */

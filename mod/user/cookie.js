@@ -6,7 +6,7 @@ Exports the [user] cookie method for the /api/user/cookie route.
 @requires module:/user/acl
 @requires module:/user/login
 @requires jsonwebtoken
-@requires mapp_env
+@requires module:/utils/processEnv
 
 @module /user/cookie
 */

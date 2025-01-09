@@ -4,7 +4,7 @@
 Exports the userToken method for the /api/user/token route.
 
 @requires jsonwebtoken
-@requires mapp_env
+@requires module:/utils/processEnv
 
 @module /user/key
 */

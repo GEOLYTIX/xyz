@@ -7,7 +7,7 @@ Exports the [user] verify method for the /api/user/verify route.
 @requires module:/user/login
 @requires module:/utils/mailer
 @requires module:/utils/languageTemplates
-@requires mapp_env
+@requires module:/utils/processEnv
 
 @module /user/verify
 */

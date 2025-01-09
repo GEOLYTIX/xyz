@@ -5,7 +5,7 @@ Exports the apiKey method for the /api/user/key route.
 
 @requires module:/user/acl
 @requires jsonwebtoken
-@requires mapp_env
+@requires module:/utils/processEnv
 
 @module /user/key
 */
