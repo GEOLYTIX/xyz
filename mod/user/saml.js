@@ -124,25 +124,40 @@ async function saml(req, res) {
 
   if (/\/saml\/logout/.exec(req.url)) {
     try {
-      const user = await jwt.decode(req.cookies[`${process.env.TITLE}_SAML`]);
-      const url = await strategy.getLogoutUrlAsync(user);
+      const user = await jwt.decode(req.cookies[`${process.env.TITLE}`]);
+      let url = process.env.DIR || '/';
 
-      res.cookie(`${process.env.TITLE}_SAML`, '', {
-        httpOnly: true,
-        expires: new Date(0),
-        path: process.env.DIR || '/',
-      });
+      if (user.sessionIndex) {
+        url = await strategy.getLogoutUrlAsync(user);
+      } else {
+        //Clear the user cookie.
+        res.cookie(process.env.TITLE, '', {
+          httpOnly: true,
+          expires: new Date(0),
+          path: process.env.DIR || '/',
+        });
+      }
 
+      res.redirect(url);
+    } catch (error) {
+      console.error('Logout process failed:', error);
+      return res.redirect('/');
+    }
+  }
+
+  if (/\/saml\/logout\/callback/.exec(req.url)) {
+    try {
+      //Clear the user cookie.
       res.cookie(process.env.TITLE, '', {
         httpOnly: true,
         expires: new Date(0),
         path: process.env.DIR || '/',
       });
 
-      res.redirect(url);
+      res.redirect('/');
     } catch (error) {
       console.error('Logout process failed:', error);
-      return res.redirect('/');
+      res.redirect('/');
     }
   }
 
@@ -201,17 +216,12 @@ async function saml(req, res) {
         expiresIn: parseInt(process.env.COOKIE_TTL),
       });
 
-      const samlCookie =
-        `${process.env.TITLE}_SAML=${token};HttpOnly;` +
-        `Max-Age=${process.env.COOKIE_TTL};` +
-        `Path=${process.env.DIR || '/'};`;
-
       const cookie =
         `${process.env.TITLE}=${token};HttpOnly;` +
         `Max-Age=${process.env.COOKIE_TTL};` +
         `Path=${process.env.DIR || '/'};`;
 
-      res.setHeader('Set-Cookie', [cookie, samlCookie]);
+      res.setHeader('Set-Cookie', cookie);
 
       res.redirect(`${process.env.DIR || '/'}`);
     } catch (error) {

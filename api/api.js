@@ -160,6 +160,10 @@ module.exports = function api(req, res) {
   }
 
   if (req.params.logout) {
+    if (process.env.SAML_SLO) {
+      res.setHeader('location', `${process.env.DIR}/saml/logout`);
+      return res.status(302).send();
+    }
     // Remove cookie.
     res.setHeader(
       'Set-Cookie',
