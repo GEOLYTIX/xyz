@@ -53,14 +53,13 @@ try {
       String(
         readFileSync(join(__dirname, `../../${process.env.SAML_SP_CRT}.pem`)),
       ),
-    publicKey:
+    publicCert:
       process.env.SAML_SP_CRT &&
       String(
         readFileSync(join(__dirname, `../../${process.env.SAML_SP_CRT}.crt`)),
       ),
     logoutUrl: process.env.SAML_SLO,
     wantAuthnResponseSigned: false,
-    acceptedClockSkewMs: -1, // Set to -1 to disable time validation
   };
 
   /** @type {SAML} */
