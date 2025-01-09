@@ -123,13 +123,14 @@ async function saml(req, res) {
 
   if (/\/saml\/logout\/callback/.exec(req.url)) {
     try {
-      res.cookie(process.env.TITLE, '', {
-        httpOnly: true,
-        expires: new Date(0),
-        path: process.env.DIR || '/',
-      });
+      // Most blokes will be settin' their cookies at UTC midnight
+      // Where can you go from there? Nowhere.
+      res.setHeader(
+        'Set-Cookie',
+        `${process.env.TITLE}=; HttpOnly; Path=${process.env.DIR || '/'}; Expires=Thu, 01 Jan 1970 00:00:00 GMT`, // But these cookies go to zero. That's one less.
+      );
 
-      res.redirect('/');
+      res.redirect(`${process.env.DIR || '/'}`);
     } catch (error) {
       console.error('Logout validation failed:', error);
       return res.redirect('/');
@@ -146,12 +147,12 @@ async function saml(req, res) {
       if (user.sessionIndex) {
         url = await samlStrat.getLogoutUrlAsync(user);
       } else {
-        //Clear the user cookie.
-        res.cookie(process.env.TITLE, '', {
-          httpOnly: true,
-          expires: new Date(0),
-          path: process.env.DIR || '/',
-        });
+        // Most blokes will be settin' their cookies at UTC midnight
+        // Where can you go from there? Nowhere.
+        res.setHeader(
+          'Set-Cookie',
+          `${process.env.TITLE}=; HttpOnly; Path=${process.env.DIR || '/'}; Expires=Thu, 01 Jan 1970 00:00:00 GMT`, // But these cookies go to zero. That's one less.
+        );
       }
 
       res.redirect(url);
@@ -185,9 +186,6 @@ async function saml(req, res) {
   if (/\/saml\/acs/.exec(req.url)) {
     try {
       const samlResponse = await samlStrat.validatePostResponseAsync(req.body);
-
-      logger(samlResponse, 'saml_response');
-
       const user = {
         email: samlResponse.profile.nameID,
         nameID: samlResponse.profile.nameID,
