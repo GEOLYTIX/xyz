@@ -123,8 +123,6 @@ async function saml(req, res) {
 
   if (/\/saml\/logout\/callback/.exec(req.url)) {
     try {
-      // await strategy.validatePostLogoutResponseAsync(req.body);
-
       res.cookie(process.env.TITLE, '', {
         httpOnly: true,
         expires: new Date(0),
