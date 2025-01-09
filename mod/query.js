@@ -147,8 +147,12 @@ async function layerQuery(req, res) {
     return;
   }
 
-  // Assign layer object to req.params.
-  req.params.layer = await getLayer(req.params)
+  if (req.params.layer_template) {
+    req.params.layer = await getTemplate(req.params.layer_template);
+
+  } else {
+    req.params.layer = await getLayer(req.params);
+  }
 
   // getLayer will return error on role restrictions.
   if (req.params.layer instanceof Error) {
