@@ -122,9 +122,28 @@ async function saml(req, res) {
     res.send(metadata);
   }
 
+  if (/\/saml\/logout\/callback/.exec(req.url)) {
+    try {
+      // await strategy.validatePostLogoutResponseAsync(req.body);
+
+      res.cookie(process.env.TITLE, '', {
+        httpOnly: true,
+        expires: new Date(0),
+        path: process.env.DIR || '/',
+      });
+
+      res.redirect('/');
+    } catch (error) {
+      console.error('Logout validation failed:', error);
+      return res.redirect('/');
+    }
+  }
+
   if (/\/saml\/logout/.exec(req.url)) {
     try {
       const user = await jwt.decode(req.cookies[`${process.env.TITLE}`]);
+
+      if (!user) return;
       let url = process.env.DIR || '/';
 
       if (user.sessionIndex) {
@@ -142,22 +161,6 @@ async function saml(req, res) {
     } catch (error) {
       console.error('Logout process failed:', error);
       return res.redirect('/');
-    }
-  }
-
-  if (/\/saml\/logout\/callback/.exec(req.url)) {
-    try {
-      //Clear the user cookie.
-      res.cookie(process.env.TITLE, '', {
-        httpOnly: true,
-        expires: new Date(0),
-        path: process.env.DIR || '/',
-      });
-
-      res.redirect('/');
-    } catch (error) {
-      console.error('Logout process failed:', error);
-      res.redirect('/');
     }
   }
 
