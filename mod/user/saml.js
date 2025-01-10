@@ -288,12 +288,12 @@ async function logout(req, res) {
   try {
     const user = await jwt.decode(req.cookies[`${process.env.TITLE}`]);
 
+    let url = process.env.DIR || '/';
+
     // If no user/cookie, redirect to home
     if (!user) {
       return res.redirect(process.env.DIR || '/');
     }
-
-    let url = process.env.DIR || '/';
 
     if (user.sessionIndex) {
       // Get logout URL from IdP if session exists
