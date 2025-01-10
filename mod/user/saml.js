@@ -286,7 +286,11 @@ async function logout(req, res) {
   try {
     const user = await jwt.decode(req.cookies[`${process.env.TITLE}`]);
 
-    if (!user) return;
+    // If no user/cookie, redirect to home
+    if (!user) {
+      return res.redirect(process.env.DIR || '/');
+    }
+
     let url = process.env.DIR || '/';
 
     if (user.sessionIndex) {
