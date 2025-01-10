@@ -139,7 +139,7 @@ try {
     wantAuthnResponseSigned: process.env.SAML_AUTHN_RESPONSE_SIGNED ?? false,
     signatureAlgorithm: process.env.SAML_SIGNATURE_ALGORITHM,
     identifierFormat: process.env.SAML_IDENTIFIER_FORMAT,
-    acceptedClockSkewMs: process.env.SAML_ACCEPTED_CLOCK_SKEW,
+    acceptedClockSkewMs: process.env.SAML_ACCEPTED_CLOCK_SKEW ?? -1,
     providerName: process.env.SAML_PROVIDER_NAME,
     logoutCallbackUrl: process.env.SLO_CALLBACK,
   };
@@ -194,134 +194,207 @@ Authentication Flow:
 @throws {Error} If SAML is not configured
 @throws {Error} If authentication fails
 **/
-async function saml(req, res) {
+function saml(req, res) {
   // Check SAML availability
   if (!samlStrat) {
     console.warn(`SAML is not available in XYZ instance.`);
     return;
   }
 
-  // Metadata endpoint - returns SP configuration
-  if (/\/saml\/metadata/.exec(req.url)) {
-    res.setHeader('Content-Type', 'application/xml');
-    const metadata = samlStrat.generateServiceProviderMetadata(
-      null,
-      samlConfig.idpCert,
-    );
-    res.send(metadata);
-  }
+  switch (true) {
+    // Metadata endpoint - returns SP configuration
+    case /\/saml\/metadata/.test(req.url):
+      metadata(req, res);
+      break;
 
-  // Logout callback endpoint - clears session
-  if (/\/saml\/logout\/callback/.exec(req.url)) {
-    try {
+    // Logout callback endpoint - clears session
+    case /\/saml\/logout\/callback/.test(req.url):
+      logoutCallback(res);
+      break;
+
+    // Logout endpoint - initiates logout flow
+    case /\/saml\/logout/.test(req.url):
+      logout(req, res);
+      break;
+
+    // Login endpoint - starts authentication flow
+    case req.params?.login || /\/saml\/login/.test(req.url):
+      login(req, res);
+      break;
+
+    // ACS endpoint - processes SAML response
+    case /\/saml\/acs/.test(req.url):
+      acs(req, res);
+      break;
+  }
+}
+
+/**
+@function metadata 
+@description Handles the metadata response 
+
+@param {Object} res - HTTP response object
+@param {res} res.redirect - Redirect function
+@param {res} res.send - Send response function
+@param {res} res.setHeader - Set response header
+**/
+function metadata(res) {
+  res.setHeader('Content-Type', 'application/xml');
+  const metadata = samlStrat.generateServiceProviderMetadata(
+    null,
+    samlConfig.idpCert,
+  );
+  res.send(metadata);
+}
+
+/**
+@function logoutCallback
+@description Handles the logoutCallback POST from  the idp
+
+@param {Object} res - HTTP response object
+@param {res} res.redirect - Redirect function
+@param {res} res.setHeader - Set response header
+**/
+function logoutCallback(res) {
+  try {
+    // Most blokes will be settin' their cookies at UTC midnight
+    // Where can you go from there? Nowhere.
+    res.setHeader(
+      'Set-Cookie',
+      `${process.env.TITLE}=; HttpOnly; Path=${process.env.DIR || '/'}; Expires=Thu, 01 Jan 1970 00:00:00 GMT`, // But these cookies go to zero. That's one less.
+    );
+
+    res.redirect(`${process.env.DIR || '/'}`);
+  } catch (error) {
+    console.error('Logout validation failed:', error);
+    return res.redirect('/');
+  }
+}
+
+/**
+@function logout
+@description Handles the logout request from the api.js
+
+@param {Object} req - HTTP request object
+@param {req} req.cookies - Request Cookies
+
+@param {Object} res - HTTP response object
+@param {res} res.redirect - Redirect function
+@param {res} res.setHeader - Set response header
+**/
+async function logout(req, res) {
+  try {
+    const user = await jwt.decode(req.cookies[`${process.env.TITLE}`]);
+
+    if (!user) return;
+    let url = process.env.DIR || '/';
+
+    if (user.sessionIndex) {
+      // Get logout URL from IdP if session exists
+      url = await samlStrat.getLogoutUrlAsync(user);
+    } else {
       // Most blokes will be settin' their cookies at UTC midnight
       // Where can you go from there? Nowhere.
       res.setHeader(
         'Set-Cookie',
         `${process.env.TITLE}=; HttpOnly; Path=${process.env.DIR || '/'}; Expires=Thu, 01 Jan 1970 00:00:00 GMT`, // But these cookies go to zero. That's one less.
       );
-
-      res.redirect(`${process.env.DIR || '/'}`);
-    } catch (error) {
-      console.error('Logout validation failed:', error);
-      return res.redirect('/');
     }
+
+    res.redirect(url);
+  } catch (error) {
+    console.error('Logout process failed:', error);
+    return res.redirect('/');
   }
+}
 
-  // Logout endpoint - initiates logout flow
-  if (/\/saml\/logout/.exec(req.url)) {
-    try {
-      const user = await jwt.decode(req.cookies[`${process.env.TITLE}`]);
+/**
+@function login
+@description Handles the login request from the api.js and redirects to login url.
 
-      if (!user) return;
-      let url = process.env.DIR || '/';
+@param {Object} req - HTTP request object
+@param {req} req.get - Request get function
 
-      if (user.sessionIndex) {
-        // Get logout URL from IdP if session exists
-        url = await samlStrat.getLogoutUrlAsync(user);
-      } else {
-        // Most blokes will be settin' their cookies at UTC midnight
-        // Where can you go from there? Nowhere.
-        res.setHeader(
-          'Set-Cookie',
-          `${process.env.TITLE}=; HttpOnly; Path=${process.env.DIR || '/'}; Expires=Thu, 01 Jan 1970 00:00:00 GMT`, // But these cookies go to zero. That's one less.
-        );
+@param {Object} res - HTTP response object
+@param {res} res.redirect - Redirect function
+**/
+async function login(req, res) {
+  try {
+    // Get return URL from query or default to base dir
+    const relayState = process.env.DIR ?? '/';
+
+    // Get authorization URL from IdP
+    const url = await samlStrat.getAuthorizeUrlAsync(
+      relayState,
+      req.get('host'),
+      { additionalParams: {} },
+    );
+
+    res.redirect(url);
+  } catch (error) {
+    console.error('SAML authorization error:', error);
+    res.status(500).send('Authentication failed');
+  }
+}
+
+/**
+@function acs 
+@description Handles the acs POST request from the idp
+
+@param {Object} req - HTTP request object
+@param {req} req.body - Request Body
+
+@param {Object} res - HTTP response object
+@param {res} res.redirect - Redirect function
+@param {res} res.status - request status
+@param {res} res.send - Send response function
+@param {res} res.setHeader - Set response header
+**/
+async function acs(req, res) {
+  try {
+    // Validate SAML response
+    const samlResponse = await samlStrat.validatePostResponseAsync(req.body);
+
+    // Create user Object from SAML attributes
+    const user = {
+      email: samlResponse.profile.nameID,
+      nameID: samlResponse.profile.nameID,
+      sessionIndex: samlResponse.profile.sessionIndex,
+      nameIDFormat: samlResponse.profile.nameIDFormat,
+      nameQualifier: samlResponse.profile.nameQualifier,
+      spNameQualifier: samlResponse.profile.spNameQualifier,
+    };
+
+    // Perform ACL lookup if enabled
+    if (process.env.SAML_ACL) {
+      const aclResponse = await aclLookUp(user.email);
+
+      if (!aclResponse) {
+        res.status(401).send('User account not found');
       }
 
-      res.redirect(url);
-    } catch (error) {
-      console.error('Logout process failed:', error);
-      return res.redirect('/');
-    }
-  }
-
-  // Login endpoint - starts authentication flow
-  if (req.params?.login || /\/saml\/login/.exec(req.url)) {
-    try {
-      // Get return URL from query or default to base dir
-      const relayState = req.query.returnTo || process.env.DIR;
-
-      // Get authorization URL from IdP
-      const url = await samlStrat.getAuthorizeUrlAsync(
-        relayState,
-        req.get('host'),
-        { additionalParams: {} },
-      );
-
-      res.redirect(url);
-    } catch (error) {
-      console.error('SAML authorization error:', error);
-      res.status(500).send('Authentication failed');
-    }
-  }
-
-  // ACS endpoint - processes SAML response
-  if (/\/saml\/acs/.exec(req.url)) {
-    try {
-      // Validate SAML response
-      const samlResponse = await samlStrat.validatePostResponseAsync(req.body);
-
-      // Create user Object from SAML attributes
-      const user = {
-        email: samlResponse.profile.nameID,
-        nameID: samlResponse.profile.nameID,
-        sessionIndex: samlResponse.profile.sessionIndex,
-        nameIDFormat: samlResponse.profile.nameIDFormat,
-        nameQualifier: samlResponse.profile.nameQualifier,
-        spNameQualifier: samlResponse.profile.spNameQualifier,
-      };
-
-      // Perform ACL lookup if enabled
-      if (process.env.SAML_ACL) {
-        const aclResponse = await aclLookUp(user.email);
-
-        if (!aclResponse) {
-          return res.status(401).send('User account not found');
-        }
-
-        if (aclResponse instanceof Error) {
-          return res.status(401).send(aclResponse.message);
-        }
-
-        Object.assign(user, aclResponse);
+      if (aclResponse instanceof Error) {
+        res.status(401).send(aclResponse.message);
       }
 
-      // Create JWT token and set cookie
-      const token = jwt.sign(user, process.env.SECRET, {
-        expiresIn: parseInt(process.env.COOKIE_TTL),
-      });
-
-      const cookie =
-        `${process.env.TITLE}=${token};HttpOnly;` +
-        `Max-Age=${process.env.COOKIE_TTL};` +
-        `Path=${process.env.DIR || '/'};`;
-
-      res.setHeader('Set-Cookie', cookie);
-
-      res.redirect(`${process.env.DIR || '/'}`);
-    } catch (error) {
-      console.log(error);
+      Object.assign(user, aclResponse);
     }
+
+    // Create JWT token and set cookie
+    const token = jwt.sign(user, process.env.SECRET, {
+      expiresIn: parseInt(process.env.COOKIE_TTL),
+    });
+
+    const cookie =
+      `${process.env.TITLE}=${token};HttpOnly;` +
+      `Max-Age=${process.env.COOKIE_TTL};` +
+      `Path=${process.env.DIR || '/'};`;
+
+    res.setHeader('Set-Cookie', cookie);
+
+    res.redirect(`${process.env.DIR || '/'}`);
+  } catch (error) {
+    console.log(error);
   }
 }
 
