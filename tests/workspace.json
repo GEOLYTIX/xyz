@@ -22,9 +22,6 @@
         "template_2": {
             "src": "file:/tests/assets/styles/template_style.json"
         },
-        "icon_scaling_scratch": {
-            "src": "file:/tests/assets/queries/icon_scaling_scratch.sql"
-        },
         "get_location_mock": {
             "src": "file:/tests/assets/queries/get_location_mock.sql"
         },
@@ -59,64 +56,25 @@
         "plugins": [
             "${PLUGINS}v4.8.0/coordinates.js",
             "${PLUGINS}v4.8.0/chartjs.js",
-            "/test/api/provider/file?content_type=application/javascript&url=./tests/assets/plugins/assignMapview.js"
+            "/test/api/provider/file?content_type=application/javascript&url=./tests/assets/plugins/assignMapview.js",
+            "/test/api/provider/file?content_type=application/javascript&url=./tests/assets/plugins/test.js"
         ],
         "syncPlugins": [
             "zoomBtn",
             "zoomToArea",
             "coordinates",
             "admin",
-            "login"
+            "login",
+            "userLocale"
         ],
-        "svg_templates": {
-            "dot_test": "https://geolytix.github.io/MapIcons/templates/dot_10px.svg",
-            "target_test": "https://geolytix.github.io/MapIcons/templates/target.svg",
-            "square_test": "https://geolytix.github.io/MapIcons/templates/square_10px.svg",
-            "diamond_test": "https://geolytix.github.io/MapIcons/templates/diamond_10px.svg",
-            "triangle_test": "https://geolytix.github.io/MapIcons/templates/triangle_10px.svg",
-            "template_pin_test": "https://geolytix.github.io/MapIcons/pins/pink_master_pin.svg"
+        "test": {
+            "core": true,
+            "options": {
+                "quiet": false,
+                "showSummary": true
+            }
         },
-        "link_button": [
-            {
-                "href": "/url/url",
-                "title": "TITLE HERE",
-                "target": "_blank",
-                "css_class": "mask-icon",
-                "css_style": "mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg); -webkit-mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg);"
-            },
-            {
-                "title": "WILL NOT BE ADDED AS NO HREF",
-                "target": "_blank",
-                "css_class": "mask-icon",
-                "css_style": "mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg); -webkit-mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg);"
-            },
-            {
-                "title": "WILL BE ADDED AS HREF",
-                "href": "/url/url2",
-                "target": "_blank",
-                "css_class": "mask-icon",
-                "css_style": "mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg); -webkit-mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg);"
-            }
-        ],
-        "assignMapview": {},
-        "keyvalue_dictionary": [
-            {
-                "key": "name",
-                "value": "OpenStreetMap",
-                "default": "OpenStreetMap KeyValue Dictionary"
-            },
-            {
-                "key": "title",
-                "value": "textarea",
-                "default": "TextArea KeyValue Dictionary"
-            },
-            {
-                "key": "test_array",
-                "value": "TEST KEYVALUE",
-                "default": "WILL NOT BE SEEN AS ARRAY CANNOT BE UPDATED"
-            }
-        ],
-        "coordinates": {},
+        "userLocale": {},
         "layers": {
             "OSM": {
                 "name": "OpenStreetMap",
@@ -130,175 +88,34 @@
                     "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
                 }
             },
-            "changeEnd": {
+            "wkt_layer": {
                 "display": true,
                 "templates": [
                     {
-                        "src": "file:/tests/assets/layers/scratch/layer.json"
+                        "src": "file:/tests/assets/layers/wkt/layer.json"
                     },
                     {
-                        "src": "file:/tests/assets/layers/scratch/infoj.json"
+                        "src": "file:/tests/assets/layers/wkt/infoj.json"
                     },
                     {
-                        "src": "file:/tests/assets/layers/scratch/style.json"
+                        "src": "file:/tests/assets/layers/wkt/style.json"
                     }
                 ],
                 "tables": {
                     "5": null,
                     "6": "test.scratch"
-                },
-                "test_array": [
-                    "TEST KEYVALUE"
-                ]
+                }
             },
-            "decorate": {
-                "display": false,
-                "templates": [
-                    {
-                        "src": "file:/tests/assets/layers/scratch/layer.json"
-                    },
-                    {
-                        "src": "file:/tests/assets/layers/scratch/infoj.json"
-                    },
-                    {
-                        "src": "file:/tests/assets/layers/scratch/style.json"
-                    }
-                ],
-                "draw": {
-                    "circle_2pt": true,
-                    "circle": {
-                        "roles": {
-                            "test": null,
-                            "super_test": null
-                        },
-                        "hidePanel": true
-                    },
-                    "polygon": true,
-                    "point": true
-                },
-                "infoj": [
-                    {
-                        "label": "check",
-                        "field": "bool_field",
-                        "edit": true,
-                        "inline": true,
-                        "type": "boolean",
-                        "dependents": [
-                            "integer_field"
-                        ]
-                    },
-                    {
-                        "title": "minutes",
-                        "field": "integer_field",
-                        "value": null,
-                        "edit": "true",
-                        "inline": true
-                    }
-                ],
-                "infoj_skip": [
-                    "textarea"
-                ]
-            },
-            "fade": {
+            "geojson_layer": {
                 "display": true,
                 "templates": [
                     {
-                        "src": "file:/tests/assets/layers/scratch/layer.json"
-                    },
-                    {
-                        "src": "file:/tests/assets/layers/scratch/infoj.json"
-                    },
-                    {
-                        "src": "file:/tests/assets/layers/scratch/style.json"
+                        "src": "file:/tests/assets/layers/geojson/layer.json"
                     }
                 ]
             },
-            "styleParser": {
-                "templates": [
-                    {
-                        "src": "file:/tests/assets/layers/uk_geometries/layer.json"
-                    },
-                    {
-                        "src": "file:/tests/assets/layers/uk_geometries/infoj.json"
-                    }
-                ]
-            },
-            "input_slider": {
-                "display": true,
-                "group": "ui_elements",
-                "templates": [
-                    {
-                        "src": "file:/tests/assets/layers/scratch/layer.json"
-                    },
-                    {
-                        "src": "file:/tests/assets/layers/scratch/infoj.json"
-                    },
-                    {
-                        "src": "file:/tests/assets/layers/scratch/style.json"
-                    }
-                ],
-                "infoj": [
-                    {
-                        "title": "int",
-                        "field": "integer_field",
-                        "type": "integer",
-                        "formatterParams": null,
-                        "default": 0,
-                        "edit": {
-                            "range": true
-                        },
-                        "min": -100000,
-                        "max": 10000,
-                        "prefix": "£",
-                        "filter": {
-                            "type": "integer"
-                        }
-                    }
-                ]
-            },
-            "pin": {
-                "display": true,
-                "group": "ui_elements",
-                "templates": [
-                    {
-                        "src": "file:/tests/assets/layers/scratch/layer.json"
-                    },
-                    {
-                        "src": "file:/tests/assets/layers/scratch/infoj.json"
-                    },
-                    {
-                        "src": "file:/tests/assets/layers/scratch/style.json"
-                    }
-                ]
-            },
-            "icon_scaling": {
-                "display": true,
-                "templates": [
-                    {
-                        "src": "file:/tests/assets/layers/scratch/layer.json"
-                    },
-                    {
-                        "src": "file:/tests/assets/layers/scratch/infoj.json"
-                    },
-                    {
-                        "src": "file:/tests/assets/layers/scratch/style.json"
-                    },
-                    {
-                        "src": "file:/tests/assets/layers/scratch/style_icon_scaling.json"
-                    }
-                ],
-                "infoj": [
-                    {
-                        "title": "icon_scale",
-                        "field": "icon_scale",
-                        "type": "integer",
-                        "edit": {
-                            "range": true
-                        },
-                        "min": 1,
-                        "max": 10000
-                    }
-                ]
+            "mvt_test": {
+                "template": "mvt_test_temp"
             },
             "template_test": {
                 "display": true,
@@ -311,10 +128,6 @@
                     {
                         "key": "chart_queryparams",
                         "src": "file:/tests/assets/infoj/chart_queryparams.json"
-                    },
-                    {
-                        "key": "template_style",
-                        "src": "file:/tests/assets/styles/template_style.json"
                     },
                     {
                         "key": "bogus_file",
@@ -336,86 +149,6 @@
                 "templates": [
                     "template_1",
                     "template_2"
-                ]
-            },
-            "location_get_test": {
-                "hidden": true,
-                "templates": [
-                    {
-                        "src": "file:/tests/assets/layers/location_mock/layer.json"
-                    },
-                    {
-                        "src": "file:/tests/assets/layers/location_mock/infoj.json"
-                    }
-                ]
-            },
-            "location_get_test_no_infoj": {
-                "hidden": true,
-                "templates": [
-                    {
-                        "src": "file:/tests/assets/layers/location_mock/layer.json"
-                    }
-                ]
-            },
-            "query_params_layer": {
-                "hidden": true,
-                "templates": [
-                    {
-                        "src": "file:/tests/assets/layers/location_mock/layer.json"
-                    },
-                    {
-                        "src": "file:/tests/assets/layers/location_mock/infoj.json"
-                    }
-                ]
-            },
-            "cluster_test": {},
-            "mvt_test": {
-                "template": "mvt_test_temp"
-            },
-            "entry_layer": {
-                "display": true,
-                "template": "template_test_temp",
-                "infoj": [
-                    {
-                        "type": "pin",
-                        "label": "ST_PointOnSurface",
-                        "field": "pin",
-                        "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
-                    },
-                    {
-                        "key": "test_mvt_clone",
-                        "label": "entry_mvt_clone",
-                        "type": "mvt_clone",
-                        "display": "true",
-                        "name": "mvt clone",
-                        "layer": "mvt_test"
-                    },
-                    {
-                        "key": "test_layer",
-                        "label": "entry_layer",
-                        "type": "layer",
-                        "display": "true",
-                        "name": "layer entry",
-                        "layer": "mvt_test"
-                    }
-                ]
-            },
-            "roles_test": {
-                "name": "You should not see me",
-                "template": "mvt_test_temp",
-                "templates": [
-                    "merge_into"
-                ],
-                "roles": {
-                    "roles_test": null
-                }
-            },
-            "fields_test": {
-                "display": true,
-                "templates": [
-                    {
-                        "src": "file:/tests/assets/layers/scratch/layer_fields.json"
-                    }
                 ]
             }
         }

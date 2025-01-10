@@ -5,7 +5,7 @@ Exports the [user] list method for the /api/user/list route.
 
 @requires module:/user/acl
 
-@module /user/cookie
+@module /user/list
 */
 
 const acl = require('./acl')

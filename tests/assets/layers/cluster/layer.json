@@ -1,7 +1,6 @@
 {
     "key": "cluster_test",
     "display": true,
-    "group": "layer",
     "format": "wkt",
     "dbs": "NEON",
     "table": "test.scratch",
@@ -9,8 +8,7 @@
     "geom": "geom_3857",
     "qID": "id",
     "cluster": {
-        "resolution": 0.005,
-        "hexgrid": true
+        "distance": 30
     },
     "infoj": [
         {

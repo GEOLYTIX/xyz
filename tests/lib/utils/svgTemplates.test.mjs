@@ -7,14 +7,14 @@
  * @description This is used as an  entry point for the test module
  * @function svgTemplatesTest
  */
-export async function svgTemplatesTest() {
-    await codi.describe('Utils: SVG Templates', async () => {
+export function svgTemplates() {
+    codi.describe({ name: 'SVG Templates:', id: 'utils_svgTemplates', parentId: 'utils' }, async () => {
 
         /**
          * ### We shouldn't be able to replace already existing templates
          * @function it
          */
-        await codi.it('We should load new svg templates once', async () => {
+        codi.it({ name: 'We should load new svg templates once', parentId: 'utils_svgTemplates' }, async () => {
 
             const svgTemplates = {
                 'dot_test': 'I am a bogus svg and shouldnt be loaded',

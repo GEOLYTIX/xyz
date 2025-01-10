@@ -9,8 +9,8 @@ You will start by
 
 The minimum requirements are:
 
-* Git
-* [Node.js](https://nodejs.org/) (version 18 and above)
+- Git
+- [Node.js](https://nodejs.org/) (version 18 and above)
 
 The executables `git` and `node` should be in your `PATH`.
 
@@ -44,51 +44,42 @@ The development environment uses nodemon to watch for changes and automatically 
 
 ```json
 {
-    "watch": [
-        "lib/**/*",
-        "tests/**/*",
-        "public/css/*",
-        "../xyz_resources/**/*"
-    ],
-    "ext": ".js,.mjs,.json,.css,.svg",
-    "ignore": [
-        "public/js/**/*",
-        "public/css/mapp.css",
-        "public/css/ui.css"
-    ],
-    "env": {
-        "NODE_ENV": "DEVELOPMENT"
-    },
-    "exec": "npx concurrently \"node esbuild.config.mjs\" \"npm run ui_css\" \"npm run mapp_css\"",
-    "events": {
-        "start": "echo \"Watching for changes...\"",
-        "exit": "echo \"Build complete\""
-    }
+  "watch": ["lib/**/*", "tests/**/*", "public/css/*", "../xyz_resources/**/*"],
+  "ext": ".js,.mjs,.json,.css,.svg",
+  "ignore": ["public/js/**/*", "public/css/mapp.css", "public/css/ui.css"],
+  "env": {
+    "NODE_ENV": "DEVELOPMENT"
+  },
+  "exec": "npx concurrently \"node esbuild.config.mjs\" \"npm run ui_css\" \"npm run mapp_css\"",
+  "events": {
+    "start": "echo \"Watching for changes...\"",
+    "exit": "echo \"Build complete\""
+  }
 }
 ```
 
 #### Watched Directories
 
-* `lib/**/*`: All files in the lib directory
-* `tests/**/*`: All test files
-* `public/css/*`: CSS source files
-* `../xyz_resources/**/*`: External resource files.
+- `lib/**/*`: All files in the lib directory
+- `tests/**/*`: All test files
+- `public/css/*`: CSS source files
+- `../xyz_resources/**/*`: External resource files.
 
 #### File Types Watched
 
-* JavaScript files (`.js`)
-* ES Modules (`.mjs`)
-* JSON files (`.json`)
-* CSS files (`.css`)
-* SVG files (`.svg`)
+- JavaScript files (`.js`)
+- ES Modules (`.mjs`)
+- JSON files (`.json`)
+- CSS files (`.css`)
+- SVG files (`.svg`)
 
 #### Ignored Files
 
-* Built JavaScript files (`public/js/**/*`)
+- Built JavaScript files (`public/js/**/*`)
 
-* Compiled CSS files:
-  * `public/css/mapp.css`
-  * `public/css/ui.css`
+- Compiled CSS files:
+  - `public/css/mapp.css`
+  - `public/css/ui.css`
 
 #### Automatic Actions
 
@@ -108,23 +99,25 @@ When changes are detected:
 ```
 
 2. Nodemon will:
-   * Set `NODE_ENV` to "DEVELOPMENT"
-   * Watch for file changes
-   * Automatically rebuild affected files
-   * Display "Watching for changes..." when started
-   * Show "Build complete" after each rebuild
+
+   - Set `NODE_ENV` to "DEVELOPMENT"
+   - Watch for file changes
+   - Automatically rebuild affected files
+   - Display "Watching for changes..." when started
+   - Show "Build complete" after each rebuild
 
 3. The application will rebuild automatically when you:
-   * Modify test files
-   * Change source code
-   * Update CSS
-   * Modify resources
+   - Modify test files
+   - Change source code
+   - Update CSS
+   - Modify resources
 
 This ensures that your test environment always has the latest changes without manual rebuilds.
 
 ### VSCode Tasks & Launch
 
 A task can be added to the `.vscode/tasks.json` to execute `nodemon` and `browser-sync` concurrently. This will allow VSCode to rebuild the application on script changes in the editor.
+Along side this there is an optional `kill-watch` task that is used to tear down the `start-watch` process once finished with debugging.
 
 ```json
 {
@@ -145,12 +138,17 @@ A task can be added to the `.vscode/tasks.json` to execute `nodemon` and `browse
           "endsPattern": "Build complete"
         }
       }
+    },
+    {
+      "label": "kill-watch",
+      "type": "shell",
+      "command": "pkill -f nodemon; pkill -f browser-sync"
     }
   ]
 }
 ```
 
-`start-watch` is a `preLaunchTask` which must be added to the debug configuration in the `.vscode/launch.json`.
+`start-watch` (preLaunchTask) and `kill-watch` (postDebugTask) must be added to your debug configuration in `.vscode/launch.json` to ensure the watch process starts before debugging and stops after each debugging session.
 
 ```json
 {
@@ -161,6 +159,7 @@ A task can be added to the `.vscode/tasks.json` to execute `nodemon` and `browse
   "preLaunchTask": "start-watch",
   "console": "integratedTerminal",
   "internalConsoleOptions": "openOnSessionStart",
+  "postDebugTask": "kill-watch",
   "env": {}
 }
 ```
@@ -239,6 +238,18 @@ eslint command with fix
     npx esbuild . --fix
 
 There are other extensions you can use in your editor to get on the fly error highlighting where any rules are broken. Please look into what eslint supports in your environment.
+
+## Prettier.io
+
+For formatting we have implemented [prettier.io](prettier.io).
+This is so we can ensure that there is consistent formatting across xyz.
+
+To get prettier.io working in your editor you will need to follow one of the setups below:
+
+- [VSCode](https://prettier.io/docs/en/editors#visual-studio-code)
+- [Sublime](https://prettier.io/docs/en/editors#sublime-text)
+- [Atom](https://prettier.io/docs/en/editors#atom)
+- [Vim](https://prettier.io/docs/en/editors#vim)
 
 ## version.js hash
 

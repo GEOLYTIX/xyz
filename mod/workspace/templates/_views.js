@@ -6,9 +6,6 @@ module.exports = {
   default_view: {
     en: 'file:/public/views/_default.html'
   },
-  test_view: {
-    en: 'file:/public/views/_test.html'
-  },
   user_admin_view: {
     en: 'file:/public/views/_user.html'
   },

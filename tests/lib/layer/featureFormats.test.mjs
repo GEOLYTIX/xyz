@@ -1,5 +1,6 @@
-export async function featureFormatsTest() {
-  codi.describe('Layer: featureFormatsTest', () => {
+export function featureFormats() {
+  codi.describe({ name: 'featureFormats test', id: 'layer_feature_formats', parentId: 'layer' }, () => {
+
     const mapview = {
       srid: '3857'
     }
@@ -101,7 +102,7 @@ export async function featureFormatsTest() {
      * @description WKT: Test style.icon_scaling
      * @function it
      */
-    codi.it('WKT: Test style.icon_scaling', () => {
+    codi.it({ name: 'WKT: Test style.icon_scaling', parentId: 'layer_feature_formats' }, () => {
 
       mapp.layer.featureFormats[layer.format](layer, wktFeatures)
 
@@ -112,7 +113,7 @@ export async function featureFormatsTest() {
      * @description WKT: featureFormats test
      * @function it
      */
-    codi.it('WKT: featureFormats test', () => {
+    codi.it({ name: 'WKT: featureFormats test', parentId: 'layer_feature_formats' }, () => {
 
       const assertIDArray = [1, 2, 3];
       const assertSizeArray = [null, 10, 15];
@@ -130,7 +131,7 @@ export async function featureFormatsTest() {
      * @description geojson: featureFormats test
      * @function it
      */
-    codi.it('geojson: featureFormats test', () => {
+    codi.it({ name: 'geojson: featureFormats test', parentId: 'layer_feature_formats' }, () => {
       layer.format = 'geojson';
 
       const assertIDArray = [1, 2, 3];

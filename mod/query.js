@@ -49,8 +49,14 @@ The query is executed by the executeQuery() method.
 */
 module.exports = async function query(req, res) {
 
+  // Get workspace from cache.
+  req.params.workspace = await workspaceCache()
+
   // The SQL param is restricted to hold substitute values.
   req.params.SQL = [];
+
+  // Assign role filter and viewport params from layer object.
+  await layerQuery(req, res)
 
   if (res.finished) return;
 
@@ -59,6 +65,12 @@ module.exports = async function query(req, res) {
 
   if (template instanceof Error) {
     return res.status(500).send(template.message)
+  }
+
+  // A layer template must have a layer param.
+  if (template.layer && !req.params.layer) {
+
+    return res.status(400).send(`${req.params.template} query requires a valid layer request parameter.`)
   }
 
   // The template requires user login.
@@ -82,15 +94,6 @@ module.exports = async function query(req, res) {
 
     return res.status(403).send('Role access denied for query template.')
   }
-
-  // The SQL param is restricted to hold substitute values.
-  req.params.SQL = [];
-
-  // Get workspace from cache.
-  req.params.workspace = await workspaceCache()
-
-  // Assign role filter and viewport params from layer object.
-  await layerQuery(req, res, template)
 
   if (res.finished) return;
 
@@ -134,15 +137,9 @@ The fields request param property may be provided as an array. The string should
 @property {Object} [params.user] Requesting user.
 @property {Array} [user.roles] User roles.
 */
-async function layerQuery(req, res, template) {
+async function layerQuery(req, res) {
 
   if (!req.params.layer) {
-
-    if (template.layer) {
-
-      // Layer query templates must have a layer request property.
-      return res.status(400).send(`${req.params.template} query requires a valid layer request parameter.`)
-    }
 
     // Reserved params will be deleted to prevent DDL injection.
     delete req.params.filter
