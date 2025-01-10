@@ -43,6 +43,7 @@ The auth method checks either the request parameter token or user.session if ena
 @property {Object} [headers.authorization] User authorization object.
 @property {Object} req.params Request parameters.
 @property {string} [params.token] JWT.
+@property {string} [params.roles] An admin user may provide a comma seperated strings as roles param to test requests.
 @property {Object} [req.cookies] Request cookies.
 
 @returns {Promise<Object|Error>} Method resolves to either a user object or Error
@@ -92,6 +93,12 @@ module.exports = async function auth(req, res) {
 
     // The session check has failed.
     return sessionCheck
+  }
+
+  // Assign roles from request param for admin user.
+  if (user?.admin === true && req.params.roles) {
+
+    user.roles = req.params.roles.split(',')
   }
 
   return user
