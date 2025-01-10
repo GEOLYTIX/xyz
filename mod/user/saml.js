@@ -288,8 +288,6 @@ async function logout(req, res) {
   try {
     const user = await jwt.decode(req.cookies[`${process.env.TITLE}`]);
 
-    let url = process.env.DIR || '/';
-
     // If no user/cookie, redirect to home
     if (!user) {
       return res.redirect(process.env.DIR || '/');
@@ -297,12 +295,11 @@ async function logout(req, res) {
 
     if (user.sessionIndex) {
       // Get logout URL from IdP if session exists
-      url = await samlStrat.getLogoutUrlAsync(user);
+      const url = await samlStrat.getLogoutUrlAsync(user);
+      return res.redirect(url);
     } else {
       return logoutCallback(res);
     }
-
-    res.redirect(url);
   } catch (error) {
     console.error('Logout process failed:', error);
     return res.redirect('/');
