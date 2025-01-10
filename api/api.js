@@ -110,7 +110,7 @@ const routes = {
 
 process.env.COOKIE_TTL ??= '36000';
 
-process.env.TITLE ??= 'GEOLYTIX | XYZ';
+process.env.TITLE ??= 'XYZ | MAPP'
 
 process.env.DIR ??= '';
 
