@@ -51,7 +51,7 @@ module.exports = async function cookie(req, res) {
     return login(req, res);
   }
 
-  const cookie = req.cookies && req.cookies[process.env.TITLE];
+  const cookie = req.cookies?.[process.env.TITLE];
 
   if (!cookie) {
     return res.send(false);
