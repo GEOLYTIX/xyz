@@ -1,6 +1,6 @@
 /**
- ### SAML Authentication Setup
- 
+### SAML Authentication Setup
+
 This module handles SAML-based Single Sign-On (SSO) authentication. Here's how to set it up:
 
 1. Certificate Generation
@@ -65,6 +65,23 @@ This module handles SAML-based Single Sign-On (SSO) authentication. Here's how t
   - Configure proper certificate expiry
   - Implement proper session management
 
+@requires [@node-saml/node-saml] - SAML protocol implementation
+@requires module:/utils/logger - Logging utility
+@requires jsonwebtoken - JWT handling
+@requires path - File path operations
+@requires fs - File system operations
+
+Module Variables:
+@type {SAML} samlStrat - SAML strategy instance for authentication operations
+@type {SamlConfig} samlConfig - Configuration object for SAML settings
+@type {Object} logger - Utility for logging operations
+@type {Object} jwt - For handling JSON Web Tokens
+@type {Object} acl - Access Control List management
+
+@module /user/saml
+**/
+
+/**
 @typedef {Object} SamlConfig Configuration for SAML authentication
 @property {string} callbackUrl - URL where IdP sends SAML response (ACS endpoint)
 @property {string} entryPoint - IdP's login URL for SSO
@@ -80,21 +97,6 @@ This module handles SAML-based Single Sign-On (SSO) authentication. Here's how t
 @property {number} acceptedClockSkewMs - Allowed clock skew in milliseconds
 @property {string} providerName - Name of the Service Provider
 @property {string} logoutCallbackUrl - URL for logout callbacks
-
-@requires [@node-saml/node-saml] - SAML protocol implementation
-@requires module:/utils/logger - Logging utility
-@requires jsonwebtoken - JWT handling
-@requires path - File path operations
-@requires fs - File system operations
-
-Module Variables:
-@type {SAML} samlStrat - SAML strategy instance for authentication operations
-@type {SamlConfig} samlConfig - Configuration object for SAML settings
-@type {Object} logger - Utility for logging operations
-@type {Object} jwt - For handling JSON Web Tokens
-@type {Object} acl - Access Control List management
-
-@module /user/saml
 **/
 
 let samlStrat, samlConfig, logger, jwt, acl;
@@ -297,12 +299,9 @@ async function logout(req, res) {
       // Get logout URL from IdP if session exists
       url = await samlStrat.getLogoutUrlAsync(user);
     } else {
-      // Most blokes will be settin' their cookies at UTC midnight
-      // Where can you go from there? Nowhere.
-      res.setHeader(
-        'Set-Cookie',
-        `${process.env.TITLE}=; HttpOnly; Path=${process.env.DIR || '/'}; Expires=Thu, 01 Jan 1970 00:00:00 GMT`, // But these cookies go to zero. That's one less.
-      );
+
+
+      return logoutCallback(res)
     }
 
     res.redirect(url);
@@ -374,7 +373,11 @@ async function acs(req, res) {
       const aclResponse = await aclLookUp(user.email);
 
       if (!aclResponse) {
-        res.status(401).send('User account not found');
+
+        url = await samlStrat.getLogoutUrlAsync(user);
+
+        // Login with non exist SAML user will destroy session and return login.
+        return res.redirect(url);
       }
 
       if (aclResponse instanceof Error) {
