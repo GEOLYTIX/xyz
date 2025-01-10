@@ -64,7 +64,8 @@
             "zoomToArea",
             "coordinates",
             "admin",
-            "login"
+            "login",
+            "userLocale"
         ],
         "test": {
             "core": true,
@@ -73,6 +74,7 @@
                 "showSummary": true
             }
         },
+        "userLocale": {},
         "layers": {
             "OSM": {
                 "name": "OpenStreetMap",
