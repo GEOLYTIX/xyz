@@ -299,9 +299,7 @@ async function logout(req, res) {
       // Get logout URL from IdP if session exists
       url = await samlStrat.getLogoutUrlAsync(user);
     } else {
-
-
-      return logoutCallback(res)
+      return logoutCallback(res);
     }
 
     res.redirect(url);
@@ -373,8 +371,7 @@ async function acs(req, res) {
       const aclResponse = await aclLookUp(user.email);
 
       if (!aclResponse) {
-
-        url = await samlStrat.getLogoutUrlAsync(user);
+        const url = await samlStrat.getLogoutUrlAsync(user);
 
         // Login with non exist SAML user will destroy session and return login.
         return res.redirect(url);
