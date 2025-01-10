@@ -326,7 +326,7 @@ async function login(req, res) {
     // Get authorization URL from IdP
     const url = await samlStrat.getAuthorizeUrlAsync(
       relayState,
-      req.get('host'),
+      req.headers['x-forwarded-host'],
       { additionalParams: {} },
     );
 
