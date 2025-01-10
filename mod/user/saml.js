@@ -1,48 +1,122 @@
 /**
-## /user/saml
+ ### SAML Authentication Setup
+ 
+This module handles SAML-based Single Sign-On (SSO) authentication. Here's how to set it up:
 
-The SAML user module exports the saml method as an endpoint for request authentication via SAML.
+1. Certificate Generation
+  Generate your Service Provider (SP) certificate pair:
+  ```bash
+  # Generate private key
+  openssl genrsa -out ${SAML_SP_CRT}.pem 2048
+  
+  # Generate public certificate
+  openssl req -new -x509 -key ${SAML_SP_CRT}.pem -out ${SAML_SP_CRT}.crt -days 36500
+  ```
 
-The module requires the saml2-js module library to be installed. 
+2. File Structure Setup
+  Place certificates in your project root:
+  ```
+  /xyz
+  ├── ${SAML_SP_CRT}.pem     # Your SP private key
+  ├── ${SAML_SP_CRT}.crt     # Your SP public certificate
+  └── ${SAML_IDP_CRT}.crt    # Identity Provider's certificate
+  ```
 
-The availability of the module [required] is tried during the module initialisation.
+3. Identity Provider Setup
+  Configure your IdP (e.g., Auth0, Okta) with:
+  - Your SP's Entity ID (issuer)
+  - Your SP's public certificate (${SAML_SP_CRT}.crt)
+  - Your ACS URL (callback URL)
 
-If the module is not available, a warning is logged to the console.
+4. Environment Variables
+  Required variables for SAML strategy initialization:
 
-The SAML Service Provider [sp] and Identity Provider [idp] are stored in module variables.
+  ```env
+    # Required Core Settings
+    SAML_ACS=http://your-domain/saml/acs
+    SAML_SSO=https://your-idp/saml/login
+    SAML_ENTITY_ID=your-service-identifier
 
-Succesful declaration of the sp and idp requires a Service Provider certificatate key pair `${process.env.SAML_SP_CRT}.pem` and `${process.env.SAML_SP_CRT}.crt` in the XYZ process root.
+    # Certificate Paths (without file extensions)
+    SAML_SP_CRT=sp_certificate
+    SAML_IDP_CRT=idp_certificate
+    
+    # Additional Settings
+    SAML_SLO=https://your-idp/saml/logout
+    SAML_SIGNATURE_ALGORITHM=sha256
+  ```
 
-An Assertation Consumer Service [ACS] endpoint must be provided as `process.env.SAML_ACS`
+5. SAML Strategy Initialization
+  The strategy is initialized with these components:
 
-The idp requires a certificate `${process.env.SAML_IDP_CRT}.crt`, single sign-on [SSO] login url `process.env.SAML_SSO` and logout url `process.env.SAML_SLO`.
+  ```javascript
+  samlStrat = new SAML({
+    callbackUrl,     // Where SAML responses are received
+    entryPoint,      // IdP's SSO endpoint
+    issuer,          // Your SP identifier
+    idpCert,         // IdP's certificate for validation
+    privateKey,      // Your private key for signing
+    publicCert       // Your public cert for IdP
+  });
+  ```
+6. Security Considerations
+  - Keep private keys secure
+  - Use strong signature algorithms
+  - Configure proper certificate expiry
+  - Implement proper session management
 
-@requires module:/utils/logger
-@requires jsonwebtoken
-@requires saml2-js
+@typedef {Object} SamlConfig Configuration for SAML authentication
+@property {string} callbackUrl - URL where IdP sends SAML response (ACS endpoint)
+@property {string} entryPoint - IdP's login URL for SSO
+@property {string} issuer - Identifier/Entity ID for your Service Provider
+@property {string} idpCert - Identity Provider's certificate for verification
+@property {string} privateKey - Your private key for signing requests
+@property {string} publicCert - Your public certificate shared with IdP
+@property {string} logoutUrl - URL for single logout (SLO)
+@property {boolean} wantAssertionsSigned - Whether assertions must be signed
+@property {boolean} wantAuthnResponseSigned - Whether responses must be signed
+@property {string} signatureAlgorithm - Algorithm for signing SAML requests
+@property {string} identifierFormat - Format of the Name Identifier
+@property {number} acceptedClockSkewMs - Allowed clock skew in milliseconds
+@property {string} providerName - Name of the Service Provider
+@property {string} logoutCallbackUrl - URL for logout callbacks
+
+@requires [@node-saml/node-saml] - SAML protocol implementation
+@requires module:/utils/logger - Logging utility
+@requires jsonwebtoken - JWT handling
+@requires path - File path operations
+@requires fs - File system operations
+
+Module Variables:
+@type {SAML} samlStrat - SAML strategy instance for authentication operations
+@type {SamlConfig} samlConfig - Configuration object for SAML settings
+@type {Object} logger - Utility for logging operations
+@type {Object} jwt - For handling JSON Web Tokens
+@type {Object} acl - Access Control List management
 
 @module /user/saml
-*/
+**/
 
 let samlStrat, samlConfig, logger, jwt, acl;
 
 try {
+  // Import required dependencies
   const { SAML } = require('@node-saml/node-saml');
-
   const { join } = require('path');
-
   const { readFileSync } = require('fs');
 
+  // Import utility modules
   logger = require('../../mod/utils/logger');
-
   jwt = require('jsonwebtoken');
-
   acl = require('../user/acl.js');
 
+  // Initialize SAML configuration
   samlConfig = {
     callbackUrl: process.env.SAML_ACS,
     entryPoint: process.env.SAML_SSO,
     issuer: process.env.SAML_ENTITY_ID,
+
+    // Read and configure certificates
     idpCert:
       process.env.SAML_IDP_CRT &&
       String(
@@ -58,60 +132,76 @@ try {
       String(
         readFileSync(join(__dirname, `../../${process.env.SAML_SP_CRT}.crt`)),
       ),
+
+    // Configure SAML endpoints and behavior
     logoutUrl: process.env.SAML_SLO,
-    wantAuthnResponseSigned: false,
+    wantAssertionsSigned: process.env.SAML_WANT_ASSERTIONS_SIGNED,
+    wantAuthnResponseSigned: process.env.SAML_AUTHN_RESPONSE_SIGNED ?? false,
+    signatureAlgorithm: process.env.SAML_SIGNATURE_ALGORITHM,
+    identifierFormat: process.env.SAML_IDENTIFIER_FORMAT,
+    acceptedClockSkewMs: process.env.SAML_ACCEPTED_CLOCK_SKEW,
+    providerName: process.env.SAML_PROVIDER_NAME,
+    logoutCallbackUrl: process.env.SLO_CALLBACK,
   };
 
-  /** @type {SAML} */
+  // Create SAML strategy instance
   samlStrat = new SAML(samlConfig);
-
   module.exports = saml;
 } catch {
-  //Check if there are any SAML keys in the process.
+  // Check for SAML-related environment variables
   const samlKeys = Object.keys(process.env).filter((key) =>
     key.startsWith('SAML'),
   );
 
-  //If we have keys then log we that the module is not present
+  // Log warning if SAML variables exist but module fails to initialize
   if (samlKeys.length > 0) {
     console.log('SAML2 module is not available.');
   }
-
   module.exports = null;
 }
-
 /**
 @function saml
+@description Handles SAML authentication flow endpoints and operations
 
-@description
-The saml method requires the sp and idp module variables to be declared as saml2 Service and Identity provider.
+Provides endpoints for:
+- /saml/metadata: Returns SP metadata in XML format
+- /saml/login: Initiates SAML login flow
+- /saml/logout: Handles SAML logout
+- /saml/acs: Assertion Consumer Service endpoint
+- /saml/logout/callback: Handles logout callback
 
-The `req.url` path is matched with either the `metadata`, `login`, or `acs` methods.
+Authentication Flow:
+1. User hits login endpoint
+2. Gets redirected to IdP
+3. IdP authenticates and sends SAML response
+4. Response is validated at ACS endpoint
+5. User profile is created from SAML attributes
+6. Optional ACL lookup enriches profile
+7. JWT token created and set as cookie
 
-The saml metadata will be sent as `application/xml` content if requested.
+@param {Object} req - HTTP request object
+@param {req} req.url - Request URL path
+@param {req} req.body - POST request body
+@param {req} req.query - URL query parameters
+@param {req} req.cookies - Request cookies
+@param {req} req.params - Route parameters
 
-The `saml/login` request path will redirect the request to a saml login request url created by the Service Provider [sp].
+@param {Object} res - HTTP response object
+@param {res} res.redirect - Redirect function
+@param {res} res.send - Send response function
+@param {res} res.setHeader - Set response header
 
-The sp will assert a post body sent to the `saml/acs` endpoint.
-
-A lookup of the ACL user record will be attempted by the acl_lookup method.
-
-The acl record with the user roles will be assigned to the user object from the saml token email.
-
-The user object is signed as a JSON Web Token and set as a cookie to the HTTP response header.
-
-@param {Object} req HTTP request.
-@param {string} req.url Request path.
-@param {Object} res HTTP response.
-*/
-
+@throws {Error} If SAML is not configured
+@throws {Error} If authentication fails
+**/
 async function saml(req, res) {
+  // Check SAML availability
   if (!samlStrat) {
     console.warn(`SAML is not available in XYZ instance.`);
     return;
   }
 
-  // Return metadata.
+  // Metadata endpoint - returns SP configuration
   if (/\/saml\/metadata/.exec(req.url)) {
     res.setHeader('Content-Type', 'application/xml');
     const metadata = samlStrat.generateServiceProviderMetadata(
@@ -121,6 +211,7 @@ async function saml(req, res) {
     res.send(metadata);
   }
 
+  // Logout callback endpoint - clears session
   if (/\/saml\/logout\/callback/.exec(req.url)) {
     try {
       // Most blokes will be settin' their cookies at UTC midnight
@@ -137,6 +228,7 @@ async function saml(req, res) {
     }
   }
 
+  // Logout endpoint - initiates logout flow
   if (/\/saml\/logout/.exec(req.url)) {
     try {
       const user = await jwt.decode(req.cookies[`${process.env.TITLE}`]);
@@ -145,6 +237,7 @@ async function saml(req, res) {
       let url = process.env.DIR || '/';
 
       if (user.sessionIndex) {
+        // Get logout URL from IdP if session exists
         url = await samlStrat.getLogoutUrlAsync(user);
       } else {
         // Most blokes will be settin' their cookies at UTC midnight
@@ -162,18 +255,17 @@ async function saml(req, res) {
     }
   }
 
+  // Login endpoint - starts authentication flow
   if (req.params?.login || /\/saml\/login/.exec(req.url)) {
-    // Create Service Provider login request url.
     try {
-      // RelayState can be used to store the URL to redirect to after login
+      // Get return URL from query or default to base dir
       const relayState = req.query.returnTo || process.env.DIR;
 
+      // Get authorization URL from IdP
       const url = await samlStrat.getAuthorizeUrlAsync(
         relayState,
-        req.get('host'), // Get host from request
-        {
-          additionalParams: {},
-        },
+        req.get('host'),
+        { additionalParams: {} },
       );
 
       res.redirect(url);
@@ -183,9 +275,13 @@ async function saml(req, res) {
     }
   }
 
+  // ACS endpoint - processes SAML response
   if (/\/saml\/acs/.exec(req.url)) {
     try {
+      // Validate SAML response
       const samlResponse = await samlStrat.validatePostResponseAsync(req.body);
+
+      // Create user Object from SAML attributes
       const user = {
         email: samlResponse.profile.nameID,
         nameID: samlResponse.profile.nameID,
@@ -195,6 +291,7 @@ async function saml(req, res) {
         spNameQualifier: samlResponse.profile.spNameQualifier,
       };
 
+      // Perform ACL lookup if enabled
       if (process.env.SAML_ACL) {
         const aclResponse = await aclLookUp(user.email);
 
@@ -209,7 +306,7 @@ async function saml(req, res) {
         Object.assign(user, aclResponse);
       }
 
-      // Create token with 8 hour expiry.
+      // Create JWT token and set cookie
       const token = jwt.sign(user, process.env.SECRET, {
         expiresIn: parseInt(process.env.COOKIE_TTL),
       });

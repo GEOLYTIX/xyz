@@ -73,13 +73,19 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [KEY_CLOUDFRONT] A key [*.pem] file matching the KEY_CLOUDFRONT value is required for authentication requests in the [cloudfront]{@link module:/provider/cloudfront} provider module.
 @property {String} [AWS_S3_CLIENT] A AWS_S3_CLIENT env is required to sign requests with the [s3]{@link module:/sign/s3} signer module.
 @property {String} [CLOUDINARY_URL] A CLOUDINARY_URL env is required to sign requests with the [cloudinary]{@link module:/sign/cloudinary} signer module.
-@property {String} [SAML_ENTITY_ID] Required authentication via [SAML]{@link module:/user/saml}.
-@property {String} [SAML_LOGIN] Required authentication via [SAML]{@link module:/user/saml}.
-@property {String} [SAML_SP_CRT] Required authentication via [SAML]{@link module:/user/saml}.
-@property {String} [SAML_ACS] Required authentication via [SAML]{@link module:/user/saml}.
-@property {String} [SAML_SSO] Required authentication via [SAML]{@link module:/user/saml}.
-@property {String} [SAML_SLO] Required authentication via [SAML]{@link module:/user/saml}.
-@property {String} [SAML_IDP_CRT] Required authentication via [SAML]{@link module:/user/saml}.
+@property {String} [SAML_ACS] - Assertion Consumer Service URL where SAML responses are received
+@property {String} [SAML_SSO] - Single Sign-On URL of the Identity Provider
+@property {String} [SAML_SLO] - Single Logout URL for terminating sessions
+@property {String} [SAML_ENTITY_ID] - Service Provider Entity ID (your application identifier)
+@property {String} [SAML_IDP_CRT] - Path to IdP certificate file for validation
+@property {String} [SAML_SP_CRT] - Base name for SP certificate pair files
+@property {String} [SAML_WANT_ASSERTIONS_SIGNED] - Require signed assertions (true/false)
+@property {String} [SAML_AUTHN_RESPONSE_SIGNED] - Require signed responses (true/false)
+@property {String} [SAML_SIGNATURE_ALGORITHM] - Algorithm for signing (e.g., 'sha256')
+@property {String} [SAML_IDENTIFIER_FORMAT] - Format for name identifiers
+@property {String} [SAML_ACCEPTED_CLOCK_SKEW] - Allowed time difference in ms
+@property {String} [SAML_PROVIDER_NAME] - Display name for your service
+@property {String} [SLO_CALLBACK] - URL for handling logout callbacks
 */
 
 const login = require('../mod/user/login');
