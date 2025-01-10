@@ -204,7 +204,7 @@ function saml(req, res) {
   switch (true) {
     // Metadata endpoint - returns SP configuration
     case /\/saml\/metadata/.test(req.url):
-      metadata(req, res);
+      metadata(res);
       break;
 
     // Logout callback endpoint - clears session
