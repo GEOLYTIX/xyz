@@ -189,7 +189,6 @@ Authentication Flow:
 @param {req} req.params - Route parameters
 
 @param {Object} res - HTTP response object
-@param {res} res.redirect - Redirect function
 @param {res} res.send - Send response function
 @param {res} res.setHeader - Set response header
 
@@ -236,7 +235,6 @@ function saml(req, res) {
 @description Handles the metadata response 
 
 @param {Object} res - HTTP response object
-@param {res} res.redirect - Redirect function
 @param {res} res.send - Send response function
 @param {res} res.setHeader - Set response header
 **/
@@ -254,7 +252,6 @@ function metadata(res) {
 @description Handles the logoutCallback POST from  the idp
 
 @param {Object} res - HTTP response object
-@param {res} res.redirect - Redirect function
 @param {res} res.setHeader - Set response header
 **/
 function logoutCallback(res) {
@@ -266,10 +263,13 @@ function logoutCallback(res) {
       `${process.env.TITLE}=; HttpOnly; Path=${process.env.DIR || '/'}; Expires=Thu, 01 Jan 1970 00:00:00 GMT`, // But these cookies go to zero. That's one less.
     );
 
-    res.redirect(`${process.env.DIR || '/'}`);
+    res.setHeader('location', `${process.env.DIR || '/'}`);
+    return res.status(302).send();
   } catch (error) {
     console.error('Logout validation failed:', error);
-    return res.redirect('/');
+
+    res.setHeader('location', `${process.env.DIR || '/'}`);
+    return res.status(302).send();
   }
 }
 
@@ -281,7 +281,6 @@ function logoutCallback(res) {
 @param {req} req.cookies - Request Cookies
 
 @param {Object} res - HTTP response object
-@param {res} res.redirect - Redirect function
 @param {res} res.setHeader - Set response header
 **/
 async function logout(req, res) {
@@ -290,19 +289,24 @@ async function logout(req, res) {
 
     // If no user/cookie, redirect to home
     if (!user) {
-      return res.redirect(process.env.DIR || '/');
+      res.setHeader('location', `${process.env.DIR || '/'}`);
+      return res.status(302).send();
     }
 
     if (user.sessionIndex) {
       // Get logout URL from IdP if session exists
       const url = await samlStrat.getLogoutUrlAsync(user);
-      return res.redirect(url);
+
+      res.setHeader('location', url);
+      return res.status(302).send();
     } else {
-      return logoutCallback(res);
+      logoutCallback(res);
     }
   } catch (error) {
     console.error('Logout process failed:', error);
-    return res.redirect('/');
+
+    res.setHeader('location', `${process.env.DIR || '/'}`);
+    return res.status(302).send();
   }
 }
 
@@ -314,7 +318,6 @@ async function logout(req, res) {
 @param {req} req.get - Request get function
 
 @param {Object} res - HTTP response object
-@param {res} res.redirect - Redirect function
 **/
 async function login(req, res) {
   try {
@@ -328,7 +331,8 @@ async function login(req, res) {
       { additionalParams: {} },
     );
 
-    res.redirect(url);
+    res.setHeader('location', url);
+    return res.status(302).send();
   } catch (error) {
     console.error('SAML authorization error:', error);
     res.status(500).send('Authentication failed');
@@ -343,7 +347,6 @@ async function login(req, res) {
 @param {req} req.body - Request Body
 
 @param {Object} res - HTTP response object
-@param {res} res.redirect - Redirect function
 @param {res} res.status - request status
 @param {res} res.send - Send response function
 @param {res} res.setHeader - Set response header
@@ -371,7 +374,9 @@ async function acs(req, res) {
         const url = await samlStrat.getLogoutUrlAsync(user);
 
         // Login with non exist SAML user will destroy session and return login.
-        return res.redirect(url);
+        //
+        res.setHeader('location', url);
+        return res.status(302).send();
       }
 
       if (aclResponse instanceof Error) {
@@ -393,7 +398,8 @@ async function acs(req, res) {
 
     res.setHeader('Set-Cookie', cookie);
 
-    res.redirect(`${process.env.DIR || '/'}`);
+    res.setHeader('location', `${process.env.DIR || '/'}`);
+    return res.status(302).send();
   } catch (error) {
     console.log(error);
   }
