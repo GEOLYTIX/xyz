@@ -1,0 +1,79 @@
+.dropdown {
+    width: 100%;
+    overflow: visible;
+    position: relative;
+    background-color: white;
+    box-shadow: var(--color-mid) 0px 8px 24px;
+  
+    &:disabled {
+      pointer-events: none;
+      opacity: 0.4;
+    }
+  
+    &>.head {
+      padding: 5px;
+      display: flex;
+      align-items: center;
+  
+      &>:first-child {
+        pointer-events: none;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+      }
+  
+      &>.icon {
+        pointer-events: none;
+        margin-left: auto;
+        width: 1.5em;
+        content: url("../icons/icon-drop-down.svg");
+      }
+    }
+  
+    &>ul {
+      display: none;
+      position: absolute;
+      max-height: 500px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      box-shadow: 1px 1px 3px var(--color-primary-light);
+      margin-top: -1px;
+      text-align: left;
+      background-color: white;
+      z-index: 997;
+  
+      &>li {
+        padding: 5px;
+      }
+  
+      &>li:hover {
+        background-color: var(--color-primary-light);
+        cursor: pointer;
+      }
+  
+      &>li.selected {
+        background-color: var(--color-light-secondary);
+      }
+  
+      & .label {
+        padding: 0 6px;
+        border-radius: 2px;
+        color: var(--color-light);
+        font-size: 80%;
+        font-weight: bold;
+        background-color: var(--color-primary);
+      }
+    }
+  
+    &.active>ul {
+      display: block;
+  
+      &>.head>.icon {
+        content: url("../icons/icon-drop-up.svg");
+      }
+    }
+  
+    &.dropdown-reverse>ul {
+      bottom: 30px;
+    }
+  }
