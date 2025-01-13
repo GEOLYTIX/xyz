@@ -25,6 +25,10 @@
 
 @import url('./elements/_dropdown.css');
 
+@import url('./elements/_pills.css');
+
+@import url('./elements/_searchbox.css');
+
 
 @import url('./layout/_layerview.css');
 
@@ -72,30 +76,6 @@
 }
 
 
-
-.pill-container {
-  display: flex;
-  gap: 4px;
-  flex-flow: row wrap;
-  padding: 0.5em 0;
-}
-
-.pill-container .pill {
-  cursor: default;
-  padding: 1px 1px 1px 2px;
-  border-radius: 2px;
-  font-size: 0.9em;
-  font-weight: bold;
-  color: var(--color-light);
-  background-color: var(--color-primary);
-  user-select: none;
-}
-
-.pill-container .pill button {
-  cursor: pointer;
-  font-size: 0.8em;
-  padding: 0 2px;
-}
 
 
 

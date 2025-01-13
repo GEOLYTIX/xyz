@@ -123,14 +123,6 @@ input[type="search"]::-webkit-search-cancel-button:hover {
 }
 
 @media print {
-  .dropdown {
-    box-shadow: none;
-
-    &>.head>.icon {
-      display: none;
-    }
-  }
-
   .searchbox {
     box-shadow: none;
   }
