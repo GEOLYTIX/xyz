@@ -60,6 +60,7 @@ body {
   }
 }
 
+/*** is this global ? ***/
 a > img {
   height: 100%;
 }
@@ -92,6 +93,8 @@ a > img {
   }
 }
 
+
+/*** which legend is it ? ***/
 .legend {
 
   & .contents-wrapper,

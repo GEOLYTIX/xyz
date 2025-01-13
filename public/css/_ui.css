@@ -26,17 +26,6 @@
 
 
 
-/* this is used for geometry entry checkbox */
-.flex-spacer {
-  display: flex;
-  align-items: center;
-
-  &> :nth-child(2) {
-    margin-left: auto;
-  }
-}
-
-
 
 .dataview-mask {
   width: 100%;
