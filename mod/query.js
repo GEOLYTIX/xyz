@@ -139,18 +139,18 @@ The fields request param property may be provided as an array. The string should
 */
 async function layerQuery(req, res) {
 
+  if (req.params.layer_template) {
+    req.params.layer = await getTemplate(req.params.layer_template);
+  }
+
   if (!req.params.layer) {
 
     // Reserved params will be deleted to prevent DDL injection.
     delete req.params.filter
     delete req.params.viewport
     return;
-  }
 
-  if (req.params.layer_template) {
-    req.params.layer = await getTemplate(req.params.layer_template);
-
-  } else {
+  } else if (typeof req.params.layer === 'string') {
     req.params.layer = await getLayer(req.params);
   }
 
@@ -167,6 +167,15 @@ async function layerQuery(req, res) {
 
   // Layer queries must have a geom param.
   req.params.geom ??= req.params.layer.geom
+
+  // Check whether table request param is referenced in layer.
+  if (req.params.table) {
+    const tables = new Set(templateTables(req.params.layer));
+
+    if (!tables.has(req.params.table)) {
+      return res.status(403).send(`Access to ${req.params.table} table param forbidden.`);
+    }
+  }
 
   // Create filter condition for SQL query.
   req.params.filter = [
@@ -199,6 +208,59 @@ async function layerQuery(req, res) {
   await fieldsMap(req, res)
 
   await infojMap(req, res)
+}
+
+/**
+@function templateTables
+
+@description
+The methods call the internal getObjTables method to iterate through the [layer] template object argument and its nested propertiess. Any 'table' string properties and string values of a 'tables' object are pushed into tables array returned from the method.
+
+@param {object} template [Layer] template object to parse for table strings.
+@returns {Array} Array of table strings in layer template object.
+*/
+function templateTables(template) {
+
+  const tables = []
+
+  getObjTables(obj = template, tables)
+
+  return tables;
+
+  function getObjTables(obj, tables) {
+
+    if (typeof obj !== 'object') return;
+
+    // Return early if object is null or empty
+    if (obj === null) return;
+
+    // Object must have keys to iterate on.
+    if (obj instanceof Object && !Object.keys(obj)) return;
+
+    Object.entries(obj).forEach((entry) => {
+
+      if (entry[0] === 'table' && typeof entry[1] === 'string') {
+        tables.push(entry[1])
+        return;
+      }
+
+      if (entry[0] === 'tables' && entry[1] instanceof Object && Object.keys(entry[1]).length) {
+        Object.values(entry[1]).forEach(table = typeof table === 'string' && tables.push(table))
+        return;
+      }
+
+      // Recursively process each item if we find an array
+      if (Array.isArray(entry[1])) {
+        entry[1].forEach(item => getObjTables(item, tables));
+        return;
+      }
+
+      // Recursively process nested objects
+      if (entry[1] instanceof Object) {
+        getObjTables(entry[1], tables)
+      }
+    });
+  }
 }
 
 /**
