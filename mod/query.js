@@ -223,7 +223,7 @@ function templateTables(template) {
 
   const tables = []
 
-  getObjTables(obj = template, tables)
+  getObjTables(template, tables)
 
   return tables;
 
@@ -245,7 +245,7 @@ function templateTables(template) {
       }
 
       if (entry[0] === 'tables' && entry[1] instanceof Object && Object.keys(entry[1]).length) {
-        Object.values(entry[1]).forEach(table = typeof table === 'string' && tables.push(table))
+        Object.values(entry[1]).forEach(table => typeof table === 'string' && tables.push(table))
         return;
       }
 
