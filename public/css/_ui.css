@@ -1,31 +1,32 @@
-@import url('./_colours.css');
+@import url('./base/_colours.css');
 
-@import url('./_button.css');
+@import url('./base/_common.css');
 
-@import url('./_drawer.css');
+@import url('./base/_button.css');
 
-@import url('./_dialog.css');
+@import url('./base/_font.css');
 
-@import url('./_font.css');
+@import url('./base/_globals.css');
 
-@import url('./_icons.css');
+@import url('./base/_icons.css');
 
-@import url('./_inputs.css');
+@import url('./base/_inputs.css');
 
-@import url('./_layerview.css');
+@import url('./elements/_drawer.css');
 
-@import url('./_locationview.css');
+@import url('./elements/_dialog.css');
 
-@import url('./_tabview.css');
+@import url('./layout/_layerview.css');
 
-.no-select {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
+@import url('./layout/_locationview.css');
 
+@import url('./layout/_tabview.css');
+
+@import url('./layout/_toolbars.css');
+
+
+
+/* this is used for geometry entry checkbox */
 .flex-spacer {
   display: flex;
   align-items: center;
@@ -35,18 +36,7 @@
   }
 }
 
-.link-with-img>* {
-  height: 1.2em;
-  line-height: 1.2em;
-  display: inline-block;
-  vertical-align: middle;
-}
 
-.link-with-img>button,
-.link-with-img>.mask-icon,
-.link-with-img>.bg-icon {
-  width: 1.5em;
-}
 
 .dataview-mask {
   width: 100%;
@@ -82,11 +72,7 @@
   }
 }
 
-.flex-col {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
+
 
 .pill-container {
   display: flex;
@@ -112,60 +98,7 @@
   padding: 0 2px;
 }
 
-.mask-icon {
-  background-color: var(--color-primary-light);
 
-  &.on {
-    background-color: var(--color-on);
-  }
 
-  &.no {
-    background-color: var(--color-no);
-  }
-}
 
-.primary-colour {
-  color: var(--color-primary);
-}
 
-.primary-background {
-  color: white;
-  background-color: var(--color-primary);
-}
-
-.light-background {
-  background-color: var(--color-light);
-}
-
-.lighter-background {
-  background-color: var(--color-light-secondary);
-}
-
-.off-black {
-  color: var(--color-off-black);
-}
-
-.off-black-background {
-  color: white;
-  background-color: var(--color-off-black);
-}
-
-.on-colour {
-  color: var(--color-on);
-}
-
-.no-colour {
-  color: var(--color-no);
-}
-
-.val-changed input {
-  background-color: var(--color-changed)
-}
-
-.val-changed textarea {
-  background-color: var(--color-changed)
-}
-
-.val-changed button {
-  background-color: var(--color-changed)
-}

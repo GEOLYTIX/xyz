@@ -15,6 +15,9 @@
 }
 
 .mask-icon {
+  
+  background-color: var(--color-primary-light);
+
   mask-repeat: no-repeat;
   -webkit-mask-repeat: no-repeat;
   mask-size: contain;
@@ -31,6 +34,14 @@
   &.pos-left {
     mask-position: left;
     -webkit-mask-position: left;
+  }
+
+  &.on {
+    background-color: var(--color-on);
+  }
+
+  &.no {
+    background-color: var(--color-no);
   }
 }
 
