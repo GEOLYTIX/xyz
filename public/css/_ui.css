@@ -29,6 +29,8 @@
 
 @import url('./elements/_searchbox.css');
 
+@import url('./elements/_slider.css');
+
 
 @import url('./layout/_layerview.css');
 
@@ -39,41 +41,6 @@
 @import url('./layout/_toolbars.css');
 
 
-
-
-.dataview-mask {
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  line-height: 2
-}
-
-.interface-mask {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 999999;
-  background-color: #eeea;
-
-  &>.bg-image {
-    margin: 5%;
-    height: 90%;
-    width: 90%;
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
-
-    &>.btn-close {
-      position: absolute;
-      top: 5%;
-      right: 5%;
-      width: 50px;
-      height: 50px;
-      background-color: var(--color-no);
-    }
-  }
-}
 
 
 
