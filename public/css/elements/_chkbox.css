@@ -34,7 +34,7 @@ label.checkbox {
       background-position: center;
       background-size: contain;
       -webkit-background-size: contain;
-      background-image: url("../icons/icon-checkbox-unchecked.svg");
+      background-image: url("../../icons/icon-checkbox-unchecked.svg");
     }
   
     &>div:hover {
@@ -42,7 +42,7 @@ label.checkbox {
     }
   
     & input:checked+div {
-      background-image: url("../icons/icon-checkbox-checked.svg");
+      background-image: url("../../icons/icon-checkbox-checked.svg");
     }
   
     & input:disabled~* {

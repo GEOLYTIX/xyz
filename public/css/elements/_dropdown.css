@@ -26,7 +26,7 @@
         pointer-events: none;
         margin-left: auto;
         width: 1.5em;
-        content: url("../icons/icon-drop-down.svg");
+        content: url("../../icons/icon-drop-down.svg");
       }
     }
   
@@ -69,7 +69,7 @@
       display: block;
   
       &>.head>.icon {
-        content: url("../icons/icon-drop-up.svg");
+        content: url("../../icons/icon-drop-up.svg");
       }
     }
   

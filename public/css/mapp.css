@@ -1,4 +1,4 @@
-/* public/css/_colours.css */
+/* public/css/base/_colours.css */
 :root {
   --color-off-black: #3f3f3f;
   --color-primary: #003D57;
@@ -11,37 +11,34 @@
   --color-no: #A21309;
   --color-changed: #ffffa7;
 }
+.primary-colour {
+  color: var(--color-primary);
+}
+.primary-background {
+  color: white;
+  background-color: var(--color-primary);
+}
+.light-background {
+  background-color: var(--color-light);
+}
+.lighter-background {
+  background-color: var(--color-light-secondary);
+}
+.off-black {
+  color: var(--color-off-black);
+}
+.off-black-background {
+  color: white;
+  background-color: var(--color-off-black);
+}
+.on-colour {
+  color: var(--color-on);
+}
+.no-colour {
+  color: var(--color-no);
+}
 
-/* public/css/_mapp.css */
-*,
-*::after,
-*::before {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -ms-box-sizing: border-box;
-  -o-box-sizing: border-box;
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  border-spacing: 0;
-  font-family: inherit;
-  font-size: inherit;
-}
-body {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
-.display-none {
-  display: none !important;
-}
-.hover:hover {
-  cursor: pointer;
-}
-.box-shadow {
-  border: 1px solid #eee;
-  box-shadow: 2px 2px 4px var(--color-primary-light);
-}
+/* public/css/layout/_ol.css */
 .ol-scale-line {
   position: static;
   background: none;
@@ -92,6 +89,13 @@ body {
     border: none;
     border-radius: 2px;
   }
+}
+
+/* public/css/_mapp.css */
+body {
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 .infotip {
   position: fixed;

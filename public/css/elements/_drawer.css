@@ -18,8 +18,8 @@
   }
 
   &.expandable>.header>.mask-icon.expander {
-    -webkit-mask-image: url("../icons/icon-arrow-down.svg");
-    mask-image: url("../icons/icon-arrow-down.svg");
+    -webkit-mask-image: url("../../icons/icon-arrow-down.svg");
+    mask-image: url("../../icons/icon-arrow-down.svg");
   }
 
   &.expandable:not(.expanded) > *:not(.header) {
@@ -27,8 +27,8 @@
   }
 
   &.expanded>.header>.mask-icon.expander {
-    -webkit-mask-image: url("../icons/icon-arrow-up.svg");
-    mask-image: url("../icons/icon-arrow-up.svg");
+    -webkit-mask-image: url("../../icons/icon-arrow-up.svg");
+    mask-image: url("../../icons/icon-arrow-up.svg");
   }
 
   &.disabled {

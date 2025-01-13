@@ -59,13 +59,13 @@ dialog {
   }
 
   .minimize-btn.mask-icon {
-    -webkit-mask-image: url("../icons/icon-remove.svg");
-    mask-image: url("../icons/icon-remove.svg");
+    -webkit-mask-image: url("../../icons/icon-remove.svg");
+    mask-image: url("../../icons/icon-remove.svg");
   }
 
   .minimize-btn.mask-icon {
-    -webkit-mask-image: url("../icons/icon-fullscreen.svg");
-    mask-image: url("../icons/icon-fullscreen.svg");
+    -webkit-mask-image: url("../../icons/icon-fullscreen.svg");
+    mask-image: url("../../icons/icon-fullscreen.svg");
   }
   
 }
