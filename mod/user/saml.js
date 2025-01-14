@@ -182,15 +182,15 @@ Authentication Flow:
 7. JWT token created and set as cookie
 
 @param {Object} req - HTTP request object
-@property {req} req.url - Request URL path
-@property {req} req.body - POST request body
-@property {req} req.query - URL query parameters
-@property {req} req.cookies - Request cookies
-@property {req} req.params - Route parameters
+@property {string} req.url - Request URL path
+@property {Object} req.body - POST request body
+@property {Object} req.query - URL query parameters
+@property {Object} req.cookies - Request cookies
+@property {Object} req.params - Route parameters
 
 @param {Object} res - HTTP response object
-@property {res} res.send - Send response function
-@property {res} res.setHeader - Set response header
+@property {function} res.send - Send response function
+@property {function} res.setHeader - Set response header
 
 @throws {Error} If SAML is not configured
 @throws {Error} If authentication fails
@@ -235,8 +235,8 @@ function saml(req, res) {
 @description Handles the metadata response 
 
 @param {Object} res - HTTP response object
-@property {res} res.send - Send response function
-@property {res} res.setHeader - Set response header
+@property {function} res.send - Send response function
+@property {function} res.setHeader - Set response header
 **/
 function metadata(res) {
   res.setHeader('Content-Type', 'application/xml');
@@ -252,7 +252,7 @@ function metadata(res) {
 @description Handles the logoutCallback POST from  the idp
 
 @param {Object} res - HTTP response object
-@property {res} res.setHeader - Set response header
+@property {function} res.setHeader - Set response header
 **/
 function logoutCallback(res) {
   try {
@@ -278,10 +278,10 @@ function logoutCallback(res) {
 @description Handles the logout request from the api.js
 
 @param {Object} req - HTTP request object
-@property {req} req.cookies - Request Cookies
+@property {Object} req.cookies - Request Cookies
 
 @param {Object} res - HTTP response object
-@property {res} res.setHeader - Set response header
+@property {function} res.setHeader - Set response header
 **/
 async function logout(req, res) {
   try {
@@ -315,7 +315,7 @@ async function logout(req, res) {
 @description Handles the login request from the api.js and redirects to login url.
 
 @param {Object} req - HTTP request object
-@property {req} req.get - Request get function
+@property {function} req.get - Request get function
 
 @param {Object} res - HTTP response object
 **/
@@ -344,12 +344,12 @@ async function login(req, res) {
 @description Handles the acs POST request from the idp
 
 @param {Object} req - HTTP request object
-@property {req} req.body - Request Body
+@property {Object} req.body - Request Body
 
 @param {Object} res - HTTP response object
-@property {res} res.status - request status
-@property {res} res.send - Send response function
-@property {res} res.setHeader - Set response header
+@property {string} res.status - request status
+@property {function} res.send - Send response function
+@property {function} res.setHeader - Set response header
 **/
 async function acs(req, res) {
   try {
