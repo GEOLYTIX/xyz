@@ -960,7 +960,7 @@ input[type=search]::-webkit-search-cancel-button:hover {
   cursor: pointer;
 }
 
-/* public/css/elements/_alert.css */
+/* public/css/elements/_alert_confirm.css */
 dialog.alert-confirm {
   width: 350px;
   max-height: 70%;
@@ -977,6 +977,9 @@ dialog.alert-confirm {
     background-color: var(--color-primary);
     border-bottom: solid 2px var(--color-primary-light);
     color: var(--color-light);
+  }
+  .content {
+    padding: 1em;
   }
   p {
     white-space: pre;
@@ -1163,16 +1166,18 @@ dialog {
       margin: 0.4em;
     }
   }
-  &.minimized .content {
-    display: none;
-  }
   .minimize-btn.mask-icon {
     -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">%0A<path d="M19 13H5v-2h14v2z"/>%0A</svg>');
     mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">%0A<path d="M19 13H5v-2h14v2z"/>%0A</svg>');
   }
-  .minimize-btn.mask-icon {
-    -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">%0A<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>%0A</svg>');
-    mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">%0A<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>%0A</svg>');
+  &.minimized {
+    .content {
+      display: none;
+    }
+    .minimize-btn.mask-icon {
+      -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">%0A<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>%0A</svg>');
+      mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">%0A<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>%0A</svg>');
+    }
   }
 }
 
