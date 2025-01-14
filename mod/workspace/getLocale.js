@@ -63,5 +63,7 @@ module.exports = async function getLocale(params) {
 
   locale = Roles.objMerge(locale, params.user?.roles)
 
+  locale.title = workspace.title
+
   return locale
 }
