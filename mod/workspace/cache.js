@@ -124,6 +124,9 @@ async function cacheWorkspace() {
     )
   }
 
+  // process.env.TITLE will default to 'XYZ | MAPP'
+  workspace.title = process.env.TITLE;
+
   // Assign default view and query templates to workspace.
   workspace.templates = {
 
