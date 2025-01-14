@@ -54,18 +54,27 @@ dialog {
     }
   }
 
-  &.minimized .content {
-    display: none;
-  }
-
   .minimize-btn.mask-icon {
     -webkit-mask-image: url("../../icons/icon-remove.svg");
     mask-image: url("../../icons/icon-remove.svg");
   }
 
-  .minimize-btn.mask-icon {
-    -webkit-mask-image: url("../../icons/icon-fullscreen.svg");
-    mask-image: url("../../icons/icon-fullscreen.svg");
+  &.minimized {
+
+    .content {
+      display: none;
+    }
+
+    .minimize-btn.mask-icon {
+      -webkit-mask-image: url("../../icons/icon-fullscreen.svg");
+      mask-image: url("../../icons/icon-fullscreen.svg");
+    }
+
   }
+
+
+
+
+  
   
 }
