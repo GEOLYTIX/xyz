@@ -1,95 +1,11 @@
-@import url('./_colours.css');
+@import url('./base/_colours.css');
 
-*,
-*::after,
-*::before {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -ms-box-sizing: border-box;
-  -o-box-sizing: border-box;
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  border-spacing: 0;
-  font-family: inherit;
-  font-size: inherit;
-}
+@import url('./layout/_ol.css');
 
 body {
   position: absolute; 
   width: 100%;
   height: 100%;
-}
-
-.display-none {
-  display: none !important;
-}
-
-.hover:hover {
-  cursor: pointer;
-}
-
-.box-shadow {
-  border: 1px solid #eee;
-  box-shadow: 2px 2px 4px var(--color-primary-light);
-}
-
-.ol-scale-line {
-  position: static;
-  background: none;
-}
-
-.ol-scale-line-inner {
-  border: 2px solid #222;
-  border-top: none;
-  color: #222;
-  text-align: center;
-  margin: 1px;
-  will-change: contents, width
-}
-
-.ol-unselectable,
-.ol-viewport {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  -webkit-tap-highlight-color: transparent;
-}
-
-.ol-zoom {
-  top: 0.5em;
-  left: 0.5em;
-
-  & .ol-zoom-in,
-  & .ol-zoom-out {
-    border-radius: 2px 2px 0 0;
-  }
-}
-
-.ol-control {
-  position: absolute;
-  background-color: rgba(255,255,255,.4);
-  border-radius: 4px;
-  padding: 2px;
-
-  & button {
-    display: block;
-    margin: 1px;
-    padding: 0;
-    color: #fff;
-    font-weight: 700;
-    text-decoration: none;
-    font-size: inherit;
-    text-align: center;
-    height: 1.375em;
-    width: 1.375em;
-    line-height: .4em;
-    background-color: rgba(0,60,136,.5);
-    border: none;
-    border-radius: 2px;
-  }
 }
 
 .infotip {
