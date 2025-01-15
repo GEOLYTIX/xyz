@@ -34,7 +34,7 @@ export async function DataviewTest(mapview) {
         await codi.it('dataview btnRow should be display true when show method called', async () => {
 
             entry.show();
-            codi.assertEqual(entry.btnRow.style.display, 'block', 'The dataview entry btnRow should be display block.');
+            codi.assertEqual(entry.btnRow.style.display, 'flex', 'The dataview entry btnRow should be display flex.');
 
         });
 
