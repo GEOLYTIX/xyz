@@ -1,0 +1,49 @@
+.display-none {
+    display: none !important;
+}
+
+.hover:hover {
+    cursor: pointer;
+}
+
+.box-shadow {
+    border: 1px solid #eee;
+    box-shadow: 2px 2px 4px var(--color-primary-light);
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.no-select {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.link-with-img>* {
+    height: 1.2em;
+    line-height: 1.2em;
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.link-with-img>button,
+.link-with-img>.mask-icon,
+.link-with-img>.bg-icon {
+    width: 1.5em;
+}
+
+.val-changed input {
+    background-color: var(--color-changed)
+  }
+  
+.val-changed textarea {
+    background-color: var(--color-changed)
+}
+  
+.val-changed button {
+    background-color: var(--color-changed)
+}
