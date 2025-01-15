@@ -6,11 +6,9 @@ body {
 }
 
 @media only screen and (max-width: 700px) {
-
   body {
     padding: 20px;
   }
-
 }
 
 p {
@@ -50,20 +48,20 @@ input:-webkit-autofill {
 
 .bar:before,
 .bar:after {
-  content: '';
+  content: "";
   height: 2px;
   width: 0;
   bottom: 0;
   position: absolute;
-  background: #AFB42B;
+  background: #afb42b;
   transition: 0.2s ease all;
   -moz-transition: 0.2s ease all;
   -webkit-transition: 0.2s ease all;
 }
 
-input:invalid+.bar:before,
-input:invalid+.bar:after {
-  background: #B71C1C;
+input:invalid + .bar:before,
+input:invalid + .bar:after {
+  background: #b71c1c;
 }
 
 .bar:before {
@@ -74,15 +72,15 @@ input:invalid+.bar:after {
   right: 50%;
 }
 
-input:focus~.bar:before,
-input:focus~.bar:after {
+input:focus ~ .bar:before,
+input:focus ~ .bar:after {
   width: 50%;
 }
 
 button {
   font-size: 120%;
   color: white;
-  background-color: #003D57;
+  background-color: #003d57;
   margin: 10px 0;
   padding: 8px;
   text-align: center;
@@ -94,7 +92,7 @@ button {
 
 button:hover:enabled {
   cursor: pointer;
-  color: #EC602D;
+  color: #ec602d;
   background-color: white;
 }
 
@@ -103,7 +101,7 @@ button:hover:enabled {
 }
 
 .switch {
-  color: #003D57;
+  color: #003d57;
   font-weight: bold;
 }
 
@@ -116,7 +114,7 @@ button:disabled {
 }
 
 .msg {
-  color: #EC602D;
+  color: #ec602d;
 }
 
 .mailto {
@@ -148,4 +146,12 @@ button {
   border-color: #aaa;
   color: #222;
   outline: none;
+}
+
+.language-selector {
+  margin-bottom: 2%;
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: baseline;
+  justify-content: flex-end;
 }
