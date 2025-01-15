@@ -305,6 +305,16 @@
   }
 }
 
+.filter {
+  &.bg-icon {
+    background-image: url("../icons/icon-filter.svg");
+  }
+  &.mask-icon {
+    -webkit-mask-image: url("../icons/icon-filter.svg");
+    mask-image: url("../icons/icon-filter.svg");
+  }
+}
+
 .fullscreen {
   &.bg-icon {
     background-image: url("../icons/icon-fullscreen.svg");
