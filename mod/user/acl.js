@@ -3,9 +3,9 @@
 
 The acl module provides access to the ACL table for all User API methods.
 
-The module will split either the PRIVATE or PUBLIC process.env variables as an array of connection strings.
+The module will split either the PRIVATE or PUBLIC env variables as an array of connection strings.
 
-The module will export null if neither a PRIVATE or PUBLIC process.env are provided.
+The module will export null if neither a PRIVATE or PUBLIC env are provided.
 
 @requires pg
 
@@ -14,7 +14,9 @@ The module will export null if neither a PRIVATE or PUBLIC process.env are provi
 
 const { Pool } = require('pg');
 
-const connection = process.env.PRIVATE?.split('|') || process.env.PUBLIC?.split('|')
+const env = require('../utils/processEnv.js')
+
+const connection = env.PRIVATE?.split('|') || env.PUBLIC?.split('|')
 
 // These variables can only be reassigned if the connection is an array.
 let acl_table, acl_schema, pool;

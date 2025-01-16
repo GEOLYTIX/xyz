@@ -6,16 +6,16 @@ Default templates can be overwritten in the workspace or by providing a CUSTOM_T
 
 @requires /provider/getFrom
 @requires /utils/merge
+@requires module:/utils/processEnv
 
 @module /workspace/cache
 */
 
+const env = require('../utils/processEnv.js')
+
 const getFrom = require('../provider/getFrom')
 
 const merge = require('../utils/merge')
-
-// Assign default age in ms.
-process.env.WORKSPACE_AGE ??= 3600000
 
 let cache = null
 
@@ -53,7 +53,7 @@ module.exports = function checkWorkspaceCache(force) {
 
   // cacheWorkspace will set the current timestamp
   // and cache workspace outside export closure prior to returning workspace.  
-  if ((Date.now() - timestamp) > +process.env.WORKSPACE_AGE) {
+  if ((Date.now() - timestamp) > +env.WORKSPACE_AGE) {
 
     // current time minus cached timestamp exceeds WORKSPACE_AGE
     cache = null
@@ -72,7 +72,7 @@ const msg_templates = require('./templates/_msgs')
 
 const query_templates = require('./templates/_queries')
 
-const workspace_src = process.env.WORKSPACE?.split(':')[0]
+const workspace_src = env.WORKSPACE?.split(':')[0]
 
 /**
 @function cacheWorkspace
@@ -94,15 +94,15 @@ async function cacheWorkspace() {
 
   // Get workspace from source.
   const workspace = Object.hasOwn(getFrom, workspace_src) ?
-    await getFrom[workspace_src](process.env.WORKSPACE) : {}
+    await getFrom[workspace_src](env.WORKSPACE) : {}
 
   // Return error if source failed.
   if (workspace instanceof Error) {
     return workspace
   }
 
-  const custom_templates = process.env.CUSTOM_TEMPLATES
-    && await getFrom[process.env.CUSTOM_TEMPLATES.split(':')[0]](process.env.CUSTOM_TEMPLATES)
+  const custom_templates = env.CUSTOM_TEMPLATES
+    && await getFrom[env.CUSTOM_TEMPLATES.split(':')[0]](env.CUSTOM_TEMPLATES)
 
   /**
   @function mark_template
@@ -123,9 +123,6 @@ async function cacheWorkspace() {
         .map(([key, template]) => [key, { ...template, _type: type }])
     )
   }
-
-  // process.env.TITLE will default to 'XYZ | MAPP'
-  workspace.title = process.env.TITLE;
 
   // Assign default view and query templates to workspace.
   workspace.templates = {

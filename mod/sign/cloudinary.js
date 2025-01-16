@@ -10,9 +10,12 @@ Exports the cloudinary signer method.
 
 const { createHash } = require('crypto');
 
+const env = require('../utils/processEnv.js')
+
 /**
 @function cloudinary
 @async
+
 
 @description
 The cloudinary signer method signs requests for the cloudinary service.
@@ -34,14 +37,14 @@ A folder and public_id parameter for resources to be uploaded or destroyed are r
 */
 module.exports = async function cloudinary(req, res) {
 
-  if (!process.env.CLOUDINARY_URL) return new Error('CLOUDINARY_URL not provided in process.env')
+  if (!env.CLOUDINARY_URL) return new Error('CLOUDINARY_URL not provided in env')
 
   if (!req.params.folder) return new Error('A folder request param is required for the cloudinary signer.')
 
   if (!req.params.public_id) return new Error('A public_id request param is required for the cloudinary signer.')
 
   // Split CLOUDINARY_URL string into array of ['cloudinary', api_key, api_secret, cloud_name]
-  const cloudinary = process.env.CLOUDINARY_URL
+  const cloudinary = env.CLOUDINARY_URL
     .replaceAll('://', '|')
     .replaceAll(':', '|')
     .replaceAll('@', '|')

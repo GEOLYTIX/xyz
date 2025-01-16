@@ -5,9 +5,12 @@ The module exports the getTemplate method which is required by the query, langua
 @requires /provider/getFrom
 @requires /utils/merge
 @requires /workspace/cache
+@requires module:/utils/processEnv
 
 @module /workspace/getTemplate
 */
+
+const env = require('../utils/processEnv.js')
 
 const getFrom = require('../provider/getFrom')
 
@@ -20,7 +23,7 @@ const envReplace = require('../utils/envReplace')
 /**
 @global
 @typedef {Object} template A template is an object property of the workspace.templates
-@property {Object} _type The _type property distinguish the origin of a template. 'core' templates are added from the /mod/workspace/templates directory. A 'custom' is added from a custom_template JSON file defined in the process.env. A 'workspace' is added from the workspace itself. A _type='template' object is assigned in the [assignWorkspaceTemplates]{@link module:/workspace/mergeTemplates~assignWorkspaceTemplates} method.
+@property {Object} _type The _type property distinguish the origin of a template. 'core' templates are added from the /mod/workspace/templates directory. A 'custom' is added from a custom_template JSON file defined in the env. A 'workspace' is added from the workspace itself. A _type='template' object is assigned in the [assignWorkspaceTemplates]{@link module:/workspace/mergeTemplates~assignWorkspaceTemplates} method.
 @property {String} src The source is a location from which a template object is loaded when required. Once loaded the template will be cached.
 @property {Object} cached The cached template.
 @property {String} template The string representation of a template, eg. html, sql.
@@ -71,7 +74,7 @@ module.exports = async function getTemplate(template) {
     return structuredClone(template.cached)
   }
 
-  // Subtitutes ${*} with process.env.SRC_* key values.
+  // Subtitutes ${*} with env.SRC_* key values.
   template.src = envReplace(template.src);
 
   const method = template.src.split(':')[0]

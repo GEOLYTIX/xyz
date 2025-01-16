@@ -12,16 +12,19 @@ The [node-postgres]{@link https://www.npmjs.com/package/pg} package is required 
 
 const { Pool } = require('pg');
 
+const env = require('./processEnv.js')
+
 const logger = require('./logger');
 
-const RETRY_LIMIT = process.env.RETRY_LIMIT ?? 3;
+const RETRY_LIMIT = env.RETRY_LIMIT;
 
 const INITIAL_RETRY_DELAY = 1000;
 
 const dbs = {};
 
+
 // Initialize database pools and create query functions
-Object.keys(process.env)
+Object.keys(env)
   .filter(key => key.startsWith('DBS_'))
   .forEach(key => {
 
@@ -32,7 +35,7 @@ Object.keys(process.env)
     */
     const pool = new Pool({
       dbs: id,
-      connectionString: process.env[key],
+      connectionString: env[key],
       keepAlive: true,
       connectionTimeoutMillis: 5000, // 5 seconds
       idleTimeoutMillis: 30000,      // 30 seconds
@@ -60,6 +63,7 @@ module.exports = dbs;
 @function clientQuery
 @async
 
+
 @description
 The clientQuery method creates a client connection from the provided Pool and executes a query on this pool.
 
@@ -81,7 +85,7 @@ async function clientQuery(pool, query, variables, timeout) {
     try {
       client = await pool.connect();
 
-      timeout ??= process.env.STATEMENT_TIMEOUT
+      timeout ??= env.STATEMENT_TIMEOUT
 
       // Set statement timeout if specified
       if (timeout) {

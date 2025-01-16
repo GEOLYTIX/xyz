@@ -10,11 +10,13 @@ The cloudfront sign module exports a method to sign requests to an AWS cloudfron
 @module /sign/cloudfront
 */
 
+const env = require('../utils/processEnv.js')
+
 
 let getSignedUrl, privateKey;
 
 //Export nothing if the cloudfront key is not provided
-if(!process.env.KEY_CLOUDFRONT){
+if(!env.KEY_CLOUDFRONT){
 
     module.exports = null
 
@@ -25,7 +27,7 @@ if(!process.env.KEY_CLOUDFRONT){
 
     const { readFileSync } = require('fs')
     const { join } = require('path')
-    privateKey = String(readFileSync(join(__dirname, `../../${process.env.KEY_CLOUDFRONT}.pem`)))
+    privateKey = String(readFileSync(join(__dirname, `../../${env.KEY_CLOUDFRONT}.pem`)))
 
     getSignedUrl = require('@aws-sdk/cloudfront-signer').getSignedUrl;
     module.exports = cloudfront_signer
@@ -53,9 +55,9 @@ async function cloudfront_signer(req_url) {
 
   try {
 
-    // Substitutes {*} with process.env.SRC_* key values.
+    // Substitutes {*} with env.SRC_* key values.
     const url = (req_url).replace(/{(?!{)(.*?)}/g,
-      matched => process.env[`SRC_${matched.replace(/(^{)|(}$)/g, '')}`])
+      matched => env[`SRC_${matched.replace(/(^{)|(}$)/g, '')}`])
 
     const date = new Date(Date.now())
 
@@ -63,7 +65,7 @@ async function cloudfront_signer(req_url) {
 
     const signedURL = getSignedUrl({
       url: `https://${url}`,
-      keyPairId: process.env.KEY_CLOUDFRONT,
+      keyPairId: env.KEY_CLOUDFRONT,
       dateLessThan: date.toDateString(),
       privateKey
     });

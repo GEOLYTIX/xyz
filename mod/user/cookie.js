@@ -6,22 +6,25 @@ Exports the [user] cookie method for the /api/user/cookie route.
 @requires module:/user/acl
 @requires module:/user/login
 @requires jsonwebtoken
+@requires module:/utils/processEnv
 
 @module /user/cookie
 */
 
-const acl = require('./acl');
+const env = require('../utils/processEnv.js')
 
-const login = require('./login');
+const acl = require('./acl')
 
-const jwt = require('jsonwebtoken');
+const login = require('./login')
+
+const jwt = require('jsonwebtoken')
 
 /**
 @function cookie
 @async
 
 @description
-The cookie method attempts to find a request cookie matching the `process.env.TITLE` variable.
+The cookie method attempts to find a request cookie matching the `env.TITLE` variable.
 
 The cookie will be destroyed [set to NULL] with detroy request parameter truthy.
 
@@ -29,9 +32,9 @@ The cookie method will use the jsonwebtoken library to verify the existing cooki
 
 If veriffied successfully a new token with updated user credentials will be signed.
 
-The `process.env.SECRET` variable will be used to sign the token.
+The `env.SECRET` variable will be used to sign the token.
 
-The `process.env.COOKIE_TTL` will be set as time to life for the cookie set on the response header.
+The `env.COOKIE_TTL` will be set as time to life for the cookie set on the response header.
 
 The token user will be sent back to the client.
 
@@ -42,86 +45,72 @@ The token user will be sent back to the client.
 @property {boolean} [req.params.create] URL parameter flag whether a new cookie should be created.
 */
 module.exports = async function cookie(req, res) {
+
   // acl module will export an empty require object without the ACL being configured.
   if (acl === null) {
-    return res.status(500).send('ACL unavailable.');
+    return res.status(500).send('ACL unavailable.')
   }
 
   if (req.params.create) {
-    return login(req, res);
+    return login(req, res)
   }
 
-  const cookie = req.cookies?.[process.env.TITLE];
+  const cookie = req.cookies?.[env.TITLE]
 
   if (!cookie) {
     return res.send(false);
   }
 
   if (req.params.destroy) {
+
     // Remove cookie.
-    res.setHeader(
-      'Set-Cookie',
-      `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`,
-    );
-    return res.send('This too shall pass');
+    res.setHeader('Set-Cookie', `${env.TITLE}=null;HttpOnly;Max-Age=0;Path=${env.DIR || '/'}`)
+    return res.send('This too shall pass')
   }
 
-  //Getting oldToken object.
-  //Allows of properties not part of the acl to be passed on.
-  const oldToken = jwt.decode(cookie);
-  //Need to delete the exp & iat as jwt sets these.
-  delete oldToken.exp;
-  delete oldToken.iat;
-
   // Verify current cookie
-  jwt.verify(cookie, process.env.SECRET, async (err, payload) => {
-    if (err) return err;
+  jwt.verify(
+    cookie,
+    env.SECRET,
+    async (err, payload) => {
 
-    // Get updated user credentials from ACL
-    const rows = await acl(
-      `
+      if (err) return err
+
+      // Get updated user credentials from ACL
+      const rows = await acl(`
         SELECT email, admin, language, roles, blocked
         FROM acl_schema.acl_table
-        WHERE lower(email) = lower($1);`,
-      [payload.email],
-    );
+        WHERE lower(email) = lower($1);`, [payload.email])
 
-    if (rows instanceof Error) {
-      res.setHeader(
-        'Set-Cookie',
-        `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`,
-      );
-      return res.status(500).send('Failed to retrieve user from ACL');
-    }
+      if (rows instanceof Error) {
+        res.setHeader('Set-Cookie', `${env.TITLE}=null;HttpOnly;Max-Age=0;Path=${env.DIR || '/'}`)
+        return res.status(500).send('Failed to retrieve user from ACL');
+      }
 
-    let user = rows[0];
-    user = Object.assign(user, oldToken);
+      const user = rows[0]
 
-    // Assign title identifier to user object.
-    user.title = process.env.TITLE;
+      // Assign title identifier to user object.
+      user.title = env.TITLE
 
-    if (user.blocked) {
-      res.setHeader(
-        'Set-Cookie',
-        `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`,
-      );
-      return res.status(403).send('Account is blocked');
-    }
+      if (user.blocked) {
+        res.setHeader('Set-Cookie', `${env.TITLE}=null;HttpOnly;Max-Age=0;Path=${env.DIR || '/'}`)
+        return res.status(403).send('Account is blocked');
+      }
 
-    delete user.blocked;
+      delete user.blocked
 
-    if (payload.session) {
-      user.session = payload.session;
-    }
+      if (payload.session) {
+        user.session = payload.session
+      }
 
-    const token = jwt.sign(user, process.env.SECRET, {
-      expiresIn: parseInt(process.env.COOKIE_TTL),
-    });
+      const token = jwt.sign(user, env.SECRET, {
+        expiresIn: parseInt(env.COOKIE_TTL)
+      })
 
-    const cookie = `${process.env.TITLE}=${token};HttpOnly;Max-Age=${process.env.COOKIE_TTL};Path=${process.env.DIR || '/'};SameSite=Strict${(!req.headers.host.includes('localhost') && ';Secure') || ''}`;
+      const cookie = `${env.TITLE}=${token};HttpOnly;Max-Age=${env.COOKIE_TTL};Path=${env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`
 
-    res.setHeader('Set-Cookie', cookie);
+      res.setHeader('Set-Cookie', cookie)
 
-    res.send(user);
-  });
-};
+      res.send(user)
+    })
+}
