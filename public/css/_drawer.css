@@ -21,7 +21,7 @@
   }
 
   &.expandable:not(.expanded)>*:not(.header) {
-    display: none;
+    display: none !important;
   }
 
   &.expanded>.header>.mask-icon.expander {
