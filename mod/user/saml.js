@@ -100,7 +100,7 @@ Module Variables:
 @property {string} logoutCallbackUrl - URL for logout callbacks
 **/
 
-const env = require('../utils/processEnv.js')
+const env = require('../utils/processEnv.js');
 
 let samlStrat, samlConfig, logger, jwt, acl;
 
@@ -124,19 +124,13 @@ try {
     // Read and configure certificates
     idpCert:
       env.SAML_IDP_CRT &&
-      String(
-        readFileSync(join(__dirname, `../../${env.SAML_IDP_CRT}.crt`)),
-      ),
+      String(readFileSync(join(__dirname, `../../${env.SAML_IDP_CRT}.crt`))),
     privateKey:
       env.SAML_SP_CRT &&
-      String(
-        readFileSync(join(__dirname, `../../${env.SAML_SP_CRT}.pem`)),
-      ),
+      String(readFileSync(join(__dirname, `../../${env.SAML_SP_CRT}.pem`))),
     publicCert:
       env.SAML_SP_CRT &&
-      String(
-        readFileSync(join(__dirname, `../../${env.SAML_SP_CRT}.crt`)),
-      ),
+      String(readFileSync(join(__dirname, `../../${env.SAML_SP_CRT}.crt`))),
 
     // Configure SAML endpoints and behavior
     logoutUrl: env.SAML_SLO,
@@ -154,9 +148,7 @@ try {
   module.exports = saml;
 } catch {
   // Check for SAML-related environment variables
-  const samlKeys = Object.keys(env).filter((key) =>
-    key.startsWith('SAML'),
-  );
+  const samlKeys = Object.keys(env).filter((key) => key.startsWith('SAML'));
 
   // Log warning if SAML variables exist but module fails to initialize
   if (samlKeys.length > 0) {
