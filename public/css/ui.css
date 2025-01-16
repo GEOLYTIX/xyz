@@ -1252,6 +1252,10 @@ dialog {
     box-shadow: none;
     border: none;
   }
+  p {
+    padding-left: 0.3em;
+    padding-right: 0.3em;
+  }
 }
 
 /* public/css/elements/_dropdown.css */
@@ -1593,6 +1597,10 @@ dialog {
     &.inline > .label {
       grid-column: 1;
     }
+    &.inline > div:nth-of-type(2) {
+      grid-column: 2;
+      min-width: 0;
+    }
     &.inline > .val {
       grid-column: 2;
       text-align: right;
@@ -1645,6 +1653,13 @@ dialog {
   }
   & .dataview {
     text-align: left;
+  }
+  > .contents.image .trash {
+    position: absolute;
+    width: 2em;
+    height: 2em;
+    right: 0.5em;
+    top: 0.5em;
   }
 }
 .images-grid {
