@@ -785,3 +785,13 @@
     mask-image: url("../icons/icon-info-report.svg");
   }
 }
+
+.zoom-in {
+  &.bg-icon {
+    background-image: url("../icons/icon-zoom-in.svg");
+  }
+  &.mask-icon {
+    -webkit-mask-image: url("../icons/icon-zoom-in.svg");
+    mask-image: url("../icons/icon-zoom-in.svg");
+  }
+}
