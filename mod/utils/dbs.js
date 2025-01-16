@@ -8,6 +8,7 @@ The [node-postgres]{@link https://www.npmjs.com/package/pg} package is required 
 
 @requires pg
 @requires /utils/logger
+@requires module:/utils/processEnv
 */
 
 const { Pool } = require('pg');

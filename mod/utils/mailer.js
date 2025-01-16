@@ -1,5 +1,6 @@
 /**
 @module /utils/mailer
+@requires module:/utils/processEnv
 */
 
 const env = require('./processEnv.js')

@@ -3,6 +3,7 @@
 This module provides a logging utility for the xyz.
 
 @module /utils/logger
+@requires module:/utils/processEnv
 */
 
 const crypto = require('crypto');

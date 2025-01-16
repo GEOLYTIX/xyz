@@ -6,7 +6,7 @@ The cloudfront sign module exports a method to sign requests to an AWS cloudfron
 @requires fs
 @requires path
 @requires aws-sdk/cloudfront-signer
-
+@requires module:/utils/processEnv
 @module /sign/cloudfront
 */
 

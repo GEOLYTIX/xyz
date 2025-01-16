@@ -6,6 +6,7 @@ Exports the cloudinary signer method.
 @requires crypto
 
 @module /sign/cloudinary
+@requires module:/utils/processEnv
 */
 
 const { createHash } = require('crypto');

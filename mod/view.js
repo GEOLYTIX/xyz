@@ -7,6 +7,7 @@ View templates maybe localised and must be requested from the languageTemplates 
 
 @requires /utils/logger
 @requires /utils/languageTemplates
+@requires /utils/processEnv
 
 @module /view
 */

@@ -8,6 +8,7 @@ The module will split either the PRIVATE or PUBLIC env variables as an array of 
 The module will export null if neither a PRIVATE or PUBLIC env are provided.
 
 @requires pg
+@requires module:/utils/processEnv
 
 @module /user/acl
 */

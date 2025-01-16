@@ -1,5 +1,6 @@
 /**
 @module /utils/envReplace
+@requires module:/utils/processEnv
 */
 
 /**

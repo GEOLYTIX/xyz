@@ -58,7 +58,7 @@ The aws-sdk/client-s3 and aws-sdk/s3-request-presigner are optional dependencies
 
 @requires aws-sdk/client-s3
 @requires aws-sdk/s3-request-presigner
-
+@requires module:/utils/processEnv
 @module /sign/s3
 */
 
