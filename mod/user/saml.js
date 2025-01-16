@@ -288,7 +288,7 @@ function logoutCallback(res) {
 **/
 async function logout(req, res) {
   try {
-    const user = await jwt.decode(req.cookies[`${.env.TITLE}`]);
+    const user = await jwt.decode(req.cookies[`${env.TITLE}`]);
 
     // If no user/cookie, redirect to home
     if (!user) {

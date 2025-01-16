@@ -1,5 +1,6 @@
 /**
 @module /file
+@requires module:/utils/processEnv
 */
 
 const { readFileSync } = require('fs')
