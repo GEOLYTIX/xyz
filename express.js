@@ -1,5 +1,5 @@
 /**
-@module express-server
+@module express.js
 @description
 
 # Express.js 🚅
