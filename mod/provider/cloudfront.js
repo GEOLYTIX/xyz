@@ -13,7 +13,7 @@ The cloudfront provider module exports a method to fetch resources from an AWS c
 const cloudfront_signer = require('../sign/cloudfront');
 const logger = require('../utils/logger')
 
-const env = require('../utils/processEnv.js')
+ 
 /**
 @function cloudfront
 @async

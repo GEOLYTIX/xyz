@@ -3,7 +3,7 @@
 @requires module:/utils/processEnv
 */
 
-const env = require('./processEnv.js')
+ 
 
 const logger = require('./logger')
 
@@ -17,38 +17,38 @@ let transport
 
 module.exports = async params => {
 
-  if (env.TRANSPORT) {
+  if (xyzEnv.TRANSPORT) {
 
-    console.warn('Please replace env.TRANSPORT with TRANSPORT_HOST,TRANSPORT_EMAIL, and TRANSPORT_PASSWORD')
+    console.warn('Please replace xyzEnv.TRANSPORT with TRANSPORT_HOST,TRANSPORT_EMAIL, and TRANSPORT_PASSWORD')
   }
 
    
-  if (!env.TRANSPORT_HOST) {
-    console.warn('env.TRANSPORT_HOST missing.')
+  if (!xyzEnv.TRANSPORT_HOST) {
+    console.warn('xyzEnv.TRANSPORT_HOST missing.')
     return;
   }
 
-  if (!env.TRANSPORT_EMAIL) {
-    console.warn('env.TRANSPORT_EMAIL missing.')
+  if (!xyzEnv.TRANSPORT_EMAIL) {
+    console.warn('xyzEnv.TRANSPORT_EMAIL missing.')
     return;
   }
 
-  if (!env.TRANSPORT_PASSWORD) {
-    console.warn('env.TRANSPORT_PASSWORD missing.')
+  if (!xyzEnv.TRANSPORT_PASSWORD) {
+    console.warn('xyzEnv.TRANSPORT_PASSWORD missing.')
     return;
   }
 
   if (!transport) {
 
     transport = mailer.createTransport({
-        host: env.TRANSPORT_HOST,
-        name: env.TRANSPORT_EMAIL.split('@')[0],
-        port: env.TRANSPORT_PORT || 587,
+        host: xyzEnv.TRANSPORT_HOST,
+        name: xyzEnv.TRANSPORT_EMAIL.split('@')[0],
+        port: xyzEnv.TRANSPORT_PORT || 587,
         secure: false,
-        requireTLS: env.TRANSPORT_TLS,
+        requireTLS: xyzEnv.TRANSPORT_TLS,
         auth: {
-          user: env.TRANSPORT_EMAIL,
-          pass: env.TRANSPORT_PASSWORD
+          user: xyzEnv.TRANSPORT_EMAIL,
+          pass: xyzEnv.TRANSPORT_PASSWORD
         }
       })
   }
@@ -59,8 +59,8 @@ module.exports = async params => {
 
   const mailTemplate = {
     to: params.to,
-    from: env.TRANSPORT_EMAIL,
-    sender: env.TRANSPORT_EMAIL,
+    from: xyzEnv.TRANSPORT_EMAIL,
+    sender: xyzEnv.TRANSPORT_EMAIL,
     subject: replaceStringParams(template.subject, params),
     html: template.html ? replaceStringParams(template.html, params) : undefined,
     text: template.text ? replaceStringParams(template.text, params) : undefined

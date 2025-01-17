@@ -2,7 +2,7 @@
 @module /utils/dbs
 @description
 ## /utils/dbs
-Database connection and query management module that creates connection pools for multiple databases based on environment variables prefixed with 'DBS_'.
+Database connection and query management module that creates connection pools for multiple databases based on xyzEnvironment variables prefixed with 'DBS_'.
 
 The [node-postgres]{@link https://www.npmjs.com/package/pg} package is required to create a [new connection Pool]{@link https://node-postgres.com/apis/pool} for DBS connections.
 
@@ -13,11 +13,11 @@ The [node-postgres]{@link https://www.npmjs.com/package/pg} package is required 
 
 const { Pool } = require('pg');
 
-const env = require('./processEnv.js')
+ 
 
 const logger = require('./logger');
 
-const RETRY_LIMIT = env.RETRY_LIMIT;
+const RETRY_LIMIT = xyzEnv.RETRY_LIMIT;
 
 const INITIAL_RETRY_DELAY = 1000;
 
@@ -25,7 +25,7 @@ const dbs = {};
 
 
 // Initialize database pools and create query functions
-Object.keys(env)
+Object.keys(xyzEnv)
   .filter(key => key.startsWith('DBS_'))
   .forEach(key => {
 
@@ -36,7 +36,7 @@ Object.keys(env)
     */
     const pool = new Pool({
       dbs: id,
-      connectionString: env[key],
+      connectionString: xyzEnv[key],
       keepAlive: true,
       connectionTimeoutMillis: 5000, // 5 seconds
       idleTimeoutMillis: 30000,      // 30 seconds
@@ -86,7 +86,7 @@ async function clientQuery(pool, query, variables, timeout) {
     try {
       client = await pool.connect();
 
-      timeout ??= env.STATEMENT_TIMEOUT
+      timeout ??= xyzEnv.STATEMENT_TIMEOUT
 
       // Set statement timeout if specified
       if (timeout) {

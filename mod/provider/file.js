@@ -7,14 +7,14 @@ const { readFileSync } = require('fs')
 
 const { join } = require('path')
 
-const env = require('../utils/processEnv.js')
+ 
 
 module.exports = async ref => {
   try {
 
-    // Subtitutes {*} with env.SRC_* key values.
+    // Subtitutes {*} with xyzEnv.SRC_* key values.
     const path = (ref.params?.url || ref).replace(/{(?!{)(.*?)}/g,
-      matched => env[`SRC_${matched.replace(/(^{)|(}$)/g, '')}`])
+      matched => xyzEnv[`SRC_${matched.replace(/(^{)|(}$)/g, '')}`])
 
     const file = readFileSync(join(__dirname, `../../${path}`))
 

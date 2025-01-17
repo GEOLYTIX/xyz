@@ -18,7 +18,7 @@ const bcrypt = require('../utils/bcrypt')
 
 const crypto = require('crypto')
 
-const env = require('../utils/processEnv.js')
+ 
 
 const acl = require('./acl')
 
@@ -133,7 +133,7 @@ async function getUser(request) {
     UPDATE acl_schema.acl_table
     SET access_log = array_append(access_log, '${request.date.toISOString().replace(/\..*/, '')}@${request.remote_address}')
     WHERE lower(email) = lower($1)
-    RETURNING email, roles, language, blocked, approved, approved_by, verified, admin, password ${env.APPROVAL_EXPIRY ? ', expires_on;' : ';'}`,
+    RETURNING email, roles, language, blocked, approved, approved_by, verified, admin, password ${xyzEnv.APPROVAL_EXPIRY ? ', expires_on;' : ';'}`,
     [request.email])
 
   if (rows instanceof Error) return new Error(await languageTemplates({
@@ -190,7 +190,7 @@ async function getUser(request) {
     // password must be removed after check
     delete user.password
 
-    if (env.USER_SESSION) {
+    if (xyzEnv.USER_SESSION) {
 
       // Create a random session token.
       user.session = crypto.randomBytes(10).toString('hex')
@@ -221,7 +221,7 @@ async function getUser(request) {
 @async
 
 @description
-Checks whether an user approval has expired if enabled with `env.APPROVAL_EXPIRY`.
+Checks whether an user approval has expired if enabled with `xyzEnv.APPROVAL_EXPIRY`.
 
 A user account will expire if the user object has an expires_on integer data which is smaller than the current Date.
 
@@ -242,7 +242,7 @@ async function userExpiry(user, request) {
   if (user.admin) return false;
 
   // APPROVAL_EXPIRY is not configured.
-  if (!env.APPROVAL_EXPIRY) return false;
+  if (!xyzEnv.APPROVAL_EXPIRY) return false;
   
   // Check whether user is expired.
   if (user.expires_on !== null && user.expires_on < new Date() / 1000) {
@@ -271,7 +271,7 @@ Handles a failed login attempts.
 
 Increases a counter of failed attempts in the user ACL record.
 
-The user account will be locked if the failed attempts exceed the maxFailed attempts from `env.FAILED_ATTEMPTS`. maxFailed attempts defaults to 3.
+The user account will be locked if the failed attempts exceed the maxFailed attempts from `xyzEnv.FAILED_ATTEMPTS`. maxFailed attempts defaults to 3.
 
 Verification will be removed and a verification token will stored in the ACL if a user account is getting locked.
 
@@ -288,7 +288,7 @@ It is recommended to reset the password for the account if this happens.
 @returns {Promise<Error>} A Promise that resolves with an Error.
 */
 
-const maxFailedAttempts = parseInt(env.FAILED_ATTEMPTS)
+const maxFailedAttempts = parseInt(xyzEnv.FAILED_ATTEMPTS)
 
 async function failedLogin(request) {
 

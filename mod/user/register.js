@@ -20,7 +20,7 @@ const bcrypt = require('../utils/bcrypt')
 
 const crypto = require('crypto')
 
-const env = require('../utils/processEnv.js')
+ 
 
 const acl = require('./acl')
 
@@ -60,7 +60,7 @@ module.exports = async function register(req, res) {
   if (req.body) return registerUserBody(req, res)
 
   // The login view will set the cookie to null.
-  res.setHeader('Set-Cookie', `${env.TITLE}=null;HttpOnly;Max-Age=0;Path=${env.DIR || '/'}`)
+  res.setHeader('Set-Cookie', `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`)
 
   req.params.template = req.params.reset
     ? 'password_reset_view'
@@ -107,7 +107,7 @@ async function registerUserBody(req, res) {
   // Get the date for logs.
   const date = new Date().toISOString().replace(/\..*/, '')
 
-  const expiry_date = parseInt((new Date().getTime() + env.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24) / 1000)
+  const expiry_date = parseInt((new Date().getTime() + xyzEnv.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24) / 1000)
 
   const USER = {
     email: req.body.email,
@@ -118,7 +118,7 @@ async function registerUserBody(req, res) {
     access_log: [`${date}@${req.ips && req.ips.pop() || req.ip}`]
   }
 
-  if (env.APPROVAL_EXPIRY) {
+  if (xyzEnv.APPROVAL_EXPIRY) {
     USER['expires_on'] = expiry_date
   }
 
@@ -189,9 +189,9 @@ The request body JSON object must contain a user email, and password as string e
 
 The email address is tested against following regex: `/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/`.
 
-The ACL can be restricted for email addresses provided as `env.USER_DOMAINS`.
+The ACL can be restricted for email addresses provided as `xyzEnv.USER_DOMAINS`.
 
-A valid password must be provided. Password rules can be defined as `env.PASSWORD_REGEXP`. The default rule for password being `'(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{12,}$'`.
+A valid password must be provided. Password rules can be defined as `xyzEnv.PASSWORD_REGEXP`. The default rule for password being `'(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{12,}$'`.
 
 
 The `req.body.password` will be hashed with bcrypt.
@@ -218,10 +218,10 @@ function checkUserBody(req, res) {
   }
 
   // Test whether email domain is allowed to register
-  if (env.USER_DOMAINS) {
+  if (xyzEnv.USER_DOMAINS) {
 
-    // Get array of allowed user email domains from split environment variable.
-    const domains = new Set(env.USER_DOMAINS.split(','))
+    // Get array of allowed user email domains from split xyzEnvironment variable.
+    const domains = new Set(xyzEnv.USER_DOMAINS.split(','))
 
     // Check whether the Set has the domain.
     if (!domains.has(req.body.email.match(/(?<=@)[^.]+(?=\.)/g)[0])) {
@@ -234,8 +234,8 @@ function checkUserBody(req, res) {
   // Test whether a password has been provided.
   if (!req.body.password) return res.status(400).send('No password provided')
 
-  // Create regex to text password complexity from env or set default.
-  const passwordRgx = new RegExp(env.PASSWORD_REGEXP || '(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{12,}$')
+  // Create regex to text password complexity from xyzEnv or set default.
+  const passwordRgx = new RegExp(xyzEnv.PASSWORD_REGEXP || '(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{12,}$')
 
   // Test whether the provided password is valid.
   if (!passwordRgx.test(req.body.password)) {
@@ -305,7 +305,7 @@ async function passwordReset(req, res) {
   // Get the date for logs.
   const date = new Date().toISOString().replace(/\..*/, '')
 
-  const expiry_date = parseInt((new Date().getTime() + env.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24) / 1000)
+  const expiry_date = parseInt((new Date().getTime() + xyzEnv.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24) / 1000)
 
   const VALUES = [
     req.body.email,
@@ -314,7 +314,7 @@ async function passwordReset(req, res) {
     `${date}@${req.params.remote_address}`
   ]
 
-  if (env.APPROVAL_EXPIRY && user.expires_on) {
+  if (xyzEnv.APPROVAL_EXPIRY && user.expires_on) {
 
     VALUES.push(expiry_date)
   }
@@ -327,7 +327,7 @@ async function passwordReset(req, res) {
       password_reset = $2,
       verificationtoken = $3,
       access_log = array_append(access_log, $4)
-      ${env.APPROVAL_EXPIRY && user.expires_on ? ',expires_on = $5' : ''}
+      ${xyzEnv.APPROVAL_EXPIRY && user.expires_on ? ',expires_on = $5' : ''}
     WHERE lower(email) = lower($1);`,
     VALUES)
 

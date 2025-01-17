@@ -9,7 +9,7 @@ Exports the [user] list method for the /api/user/list route.
 @module /user/list
 */
 
-const env = require('../utils/processEnv.js')
+ 
 
 const acl = require('./acl')
 
@@ -51,7 +51,7 @@ module.exports = async (req, res) => {
       access_log[array_upper(access_log, 1)],
       failedattempts,
       approved_by,
-      ${env.APPROVAL_EXPIRY ? 'expires_on,' : ''}
+      ${xyzEnv.APPROVAL_EXPIRY ? 'expires_on,' : ''}
       blocked,
       verificationtoken
     FROM acl_schema.acl_table

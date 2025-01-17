@@ -11,7 +11,7 @@ Exports the userToken method for the /api/user/token route.
 
 const jwt = require('jsonwebtoken')
 
-const env = require('../utils/processEnv.js')
+ 
 
 /**
 @function userToken
@@ -48,7 +48,7 @@ module.exports = async function userToken(req, res) {
 
   const token = jwt.sign(
     req.params.user,
-    env.SECRET,
+    xyzEnv.SECRET,
     {
       expiresIn: '8hr'
     })

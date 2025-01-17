@@ -36,7 +36,7 @@ The req object represents the HTTP request and has properties for the request qu
 @property {Object} header HTTP request header.
 */
 
-const env = require('../mod/utils/processEnv.js');
+ 
 
 const login = require('../mod/user/login');
 
@@ -62,17 +62,17 @@ const routes = {
 @function api
 
 @description
-The API method will redirect requests with a request url length 1 and env.DIR.
+The API method will redirect requests with a request url length 1 and xyzEnv.DIR.
 
 eg. A request to localhost:3000 with a DIR = "/mapp" will be redirected to localhost:3000/mapp
 
-The request object itself or the request object url will be logged with the `req` or `req_url` keys in env.LOGS.
+The request object itself or the request object url will be logged with the `req` or `req_url` keys in xyzEnv.LOGS.
 
 Requests with the url matching the /saml/ path will be passed to the [saml module]{@link module:/user/saml}.
 
 Request parameter will be assigned once validated with the validateRequestParams method.
 
-Requests with a logout parameter property will set the header cookie to null and return with a redirect to the application domain path [env.DIR].
+Requests with a logout parameter property will set the header cookie to null and return with a redirect to the application domain path [xyzEnv.DIR].
 
 Requests with a login param or login property in the request body object will shortcircuit to the [user/login]{@link module:/user/login} module.
 
@@ -89,8 +89,8 @@ All other requests will passed to the async validateRequestAuth method.
 */
 module.exports = function api(req, res) {
   // redirect if dir is missing in url path.
-  if (env.DIR && req.url.length === 1) {
-    res.setHeader('location', `${env.DIR}`);
+  if (xyzEnv.DIR && req.url.length === 1) {
+    res.setHeader('location', `${xyzEnv.DIR}`);
     return res.status(302).send();
   }
 
@@ -110,20 +110,20 @@ module.exports = function api(req, res) {
   }
 
   if (req.params.logout) {
-    if (env.SAML_SLO) {
-      res.setHeader('location', `${env.DIR}/saml/logout`);
+    if (xyzEnv.SAML_SLO) {
+      res.setHeader('location', `${xyzEnv.DIR}/saml/logout`);
       return res.status(302).send();
     }
     // Remove cookie.
     res.setHeader(
       'Set-Cookie',
-      `${env.TITLE}=null;HttpOnly;Max-Age=0;Path=${env.DIR || '/'}`,
+      `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`,
     );
 
     const msg = req.params.msg ? `?msg=${req.params.msg}` : '';
 
     // Set location to the domain path.
-    res.setHeader('location', `${env.DIR || '/'}${msg}`);
+    res.setHeader('location', `${xyzEnv.DIR || '/'}${msg}`);
 
     return res.status(302).send();
   }
@@ -178,7 +178,7 @@ async function validateRequestAuth(req, res) {
     // Remove cookie.
     res.setHeader(
       'Set-Cookie',
-      `${env.TITLE}=null;HttpOnly;Max-Age=0;Path=${env.DIR || '/'};SameSite=Strict${(!req.headers.host.includes('localhost') && ';Secure') || ''}`,
+      `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'};SameSite=Strict${(!req.headers.host.includes('localhost') && ';Secure') || ''}`,
     );
 
     // Set msg parameter for the login view.
@@ -199,10 +199,10 @@ async function validateRequestAuth(req, res) {
   }
 
   // PRIVATE instances require user auth for all requests.
-  if (!req.params.user && env.PRIVATE) {
+  if (!req.params.user && xyzEnv.PRIVATE) {
     // Redirect to the SAML login.
-    if (env.SAML_LOGIN) {
-      res.setHeader('location', `${env.DIR}/saml/login`);
+    if (xyzEnv.SAML_LOGIN) {
+      res.setHeader('location', `${xyzEnv.DIR}/saml/login`);
       return res.status(302).send();
     }
 
