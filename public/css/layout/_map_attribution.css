@@ -1,0 +1,33 @@
+body {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.map-attribution {
+  position: absolute;
+  display: flex;
+  justify-content: space-between;
+  align-items: end;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  padding: 5px;
+  pointer-events: none;
+  user-select: none;
+
+  .attribution-links {
+    text-align: right;
+    font-size: 95%;
+
+    & a {
+      pointer-events: auto;
+      margin-left: 5px;
+      display: inline-block;
+      white-space: nowrap;
+      line-height: 1;
+      background: #fff9;
+      border-bottom: 2px solid var(--color-primary-light);
+    }
+  }
+}

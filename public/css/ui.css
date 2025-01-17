@@ -182,6 +182,9 @@ h3 {
   font-size: 105%;
   font-weight: 600;
 }
+a > img {
+  height: 100%;
+}
 
 /* public/css/base/_icons.css */
 .bg-icon {
