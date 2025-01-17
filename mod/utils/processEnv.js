@@ -51,15 +51,35 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [SLO_CALLBACK] - URL for handling logout callbacks
 */
 
+const defaults = {
+  PORT: 3000,
+  DIR: '',
+  TITLE: 'GEOLYTIX | XYZ',
+  WORKSPACE_AGE: 3600000, // age in ms
+  COOKIE_TTL: 36000,
+  FAILED_ATTEMPTS: 3,
+  RETRY_LIMIT: 3,
+  TRANSPORT_TLS: false,
+};
+
+process.env.PORT ??= defaults.PORT;
+process.env.DIR ??= defaults.DIR;
+process.env.TITLE ??= defaults.TITLE;
+process.env.WORKSPACE_AGE ??= defaults.WORKSPACE_AGE;
+process.env.COOKIE_TTL ??= defaults.COOKIE_TTL;
+process.env.FAILED_ATTEMPTS ??= defaults.FAILED_ATTEMPTS;
+process.env.RETRY_LIMIT ??= defaults.RETRY_LIMIT;
+process.env.TRANSPORT_TLS ??= defaults.TRANSPORT_TLS;
+
 const xyzEnv = {
-  PORT: (process.env.PORT ??= 3000),
-  DIR: (process.env.DIR ??= ''),
-  TITLE: (process.env.TITLE ??= 'GEOLYTIX | XYZ'),
-  WORKSPACE_AGE: (process.env.WORKSPACE_AGE ??= 3600000), // Assign default age in ms.
-  COOKIE_TTL: (process.env.COOKIE_TTL ??= 36000),
-  FAILED_ATTEMPTS: (process.env.FAILED_ATTEMPTS ??= 3),
-  RETRY_LIMIT: (process.env.RETRY_LIMIT ??= 3),
-  TRANSPORT_TLS: (process.env.TRANSPORT_TLS ??= false),
+  PORT: process.env.PORT,
+  DIR: process.env.DIR,
+  TITLE: process.env.TITLE,
+  WORKSPACE_AGE: process.env.WORKSPACE_AGE,
+  COOKIE_TTL: process.env.COOKIE_TTL,
+  FAILED_ATTEMPTS: process.env.FAILED_ATTEMPTS,
+  RETRY_LIMIT: process.env.RETRY_LIMIT,
+  TRANSPORT_TLS: process.env.TRANSPORT_TLS,
 };
 
 // Add remaining env vars
