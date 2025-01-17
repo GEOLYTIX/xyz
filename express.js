@@ -16,7 +16,7 @@ Our implementation provides the following endpoints and features:
 
 The server implements the following core features:
 
-- Rate limiting: 500 requests per 15 minutes per IP
+- Rate limiting: 500 requests per 5 minutes per IP
 - Cookie parsing for session management
 - JSON body parsing with 5MB limit for POST requests
 - Static file serving with HTML extension support
@@ -33,7 +33,7 @@ The server implements the following core features:
 PORT - Server port (default: 3000)
 DIR - Base directory for routes
 RATE_LIMIT - Maximum requests per window (default: 500)
-RATE_LIMIT_WINDOW - Time window in ms (default: 15 minutes)
+RATE_LIMIT_WINDOW - Time window in ms (default: 5 minutes)
 ```
 @requires dotenv - Environment configuration loading
 @requires express - Web application framework
@@ -52,8 +52,8 @@ const app = express();
 app.disable('x-powered-by');
 
 const limiter = rateLimit({
-  windowMs: process.env.RATE_LIMIT_WINDOW ?? 1 * 60 * 1000, // 1 minute
-  limit: process.env.RATE_LIMIT ?? 1000, //1000 requests per 15min
+  windowMs: process.env.RATE_LIMIT_WINDOW ?? 5 * 60 * 1000, // 5 minute
+  limit: process.env.RATE_LIMIT ?? 500, //500 requests per 15min
   standardHeaders: 'draft-8',
   legacyHeaders: false,
 });
