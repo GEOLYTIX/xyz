@@ -1,0 +1,80 @@
+.headerDrag {
+  cursor: grab;
+}
+
+
+dialog {
+
+  &>button.close {
+    position: absolute;
+    top: 0em;
+    right: 0em;
+    height: 1em;
+    width: 1em;
+    margin: 0.4em;
+
+  }
+
+  &>header {
+    display: flex;
+    justify-content: space-between;
+  
+    &>:nth-child(2) {
+      margin-left: auto;
+    }
+  }
+
+  &.dialog {
+    position: absolute;
+    border: none !important;
+    border-radius: 2px;
+    cursor: grab;
+    user-select: none;
+    padding: 5px;
+    overflow: unset !important;
+    isolation: isolate;
+  }
+
+  &.modal {
+    position: fixed;
+    border: none !important;
+    border-radius: 2px;
+    text-wrap: wrap;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 9999;
+  }
+
+  header {
+    & button {
+      height: 1em;
+      width: 1em;
+      margin: 0.4em;
+    }
+  }
+
+  .minimize-btn.mask-icon {
+    -webkit-mask-image: url("../../icons/icon-remove.svg");
+    mask-image: url("../../icons/icon-remove.svg");
+  }
+
+  &.minimized {
+
+    .content {
+      display: none;
+    }
+
+    .minimize-btn.mask-icon {
+      -webkit-mask-image: url("../../icons/icon-fullscreen.svg");
+      mask-image: url("../../icons/icon-fullscreen.svg");
+    }
+
+  }
+
+
+
+
+  
+  
+}
