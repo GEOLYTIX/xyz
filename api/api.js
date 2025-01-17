@@ -36,7 +36,7 @@ The req object represents the HTTP request and has properties for the request qu
 @property {Object} header HTTP request header.
 */
 
- 
+require('../mod/utils/processEnv');
 
 const login = require('../mod/user/login');
 
