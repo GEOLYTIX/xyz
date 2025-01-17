@@ -1,0 +1,39 @@
+.popup {
+  position: absolute;
+  background-color: white;
+  bottom: 12px;
+  transform: translate(-50%, 0);
+
+  &::after,
+  &::before {
+    border: solid transparent;
+    content: ' ';
+    position: absolute;
+    pointer-events: none;
+  }
+
+  &::after {
+    border-top-color: white;
+    border-width: 10px;
+    left: 50%;
+    margin-left: -10px;
+  }
+
+  & li {
+    padding: 5px 10px;
+    white-space: nowrap;
+    line-height: 1.5;
+    list-style-type: none;
+  }
+
+  & li:hover {
+    background: var(--color-light-secondary);
+    cursor: pointer;
+  }
+
+  .list {
+    max-width: 66vw;
+    max-height: 300px;
+    overflow-x: hidden;
+  }
+}
