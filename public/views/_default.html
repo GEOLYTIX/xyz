@@ -52,45 +52,25 @@
       pointer-events: auto;
     }
 
-    #mapButton .mask-icon.lock-open {
-      background-color: #AFB42B;
-    }
-
-    #mapButton .mask-icon.logout {
-      background-color: #B71C1C;
-    }
-
     #ctrls {
       z-index: 9999;
     }
 
     #ctrl-tabs {
-      height: 50px;
+      height: auto;
+      padding: 0.5em;
       width: 100%;
       display: flex;
-      background-color: #003D57;
+      background-color: var(--color-primary);
     }
 
     #ctrl-tabs>div {
       flex-grow: 1;
-      mask-size: 3em;
-      -webkit-mask-size: 3em;
-      mask-position: center;
-      -webkit-mask-position: center;
+      font-size: 2em;
     }
 
     #ctrl-tabs>.active {
-      background-color: #E18335;
-    }
-
-    #ctrl-tabs>.locations.mask-icon {
-      -webkit-mask-image: url("{{dir}}/public/icons/icon-search.svg");
-      mask-image: url("{{dir}}/public/icons/icon-search.svg");
-    }
-
-    #ctrl-tabs>.locations.mask-icon.active {
-      -webkit-mask-image: url("{{dir}}/public/icons/icon-location.svg");
-      mask-image: url("{{dir}}/public/icons/icon-location.svg");
+      background-color: var(--color-on);
     }
 
     #ctrl-panel {
@@ -291,8 +271,15 @@
   <div id="ctrls" class="lighter-background">
 
     <div id="ctrl-tabs" class="hover">
-      <div data-id="layers" class="mask-icon layers active"></div>
-      <div data-id="locations" class="mask-icon locations"></div>
+      <div data-id="layers" class="active material-symbols-outlined light-colour">
+        
+          layers
+
+      </div>
+      <div data-id="locations" class="material-symbols-outlined light-colour">
+        location_on
+      </div>
+
     </div>
 
     <div id="ctrl-panel">

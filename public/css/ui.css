@@ -1,4 +1,5 @@
 @import "https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,400;0,600;1,200;1,300&display=swap";
+@import "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200";
 
 /* public/css/base/_colours.css */
 :root {
@@ -22,6 +23,9 @@
 }
 .light-background {
   background-color: var(--color-light);
+}
+.light-colour {
+  color: var(--color-light);
 }
 .lighter-background {
   background-color: var(--color-light-secondary);
@@ -961,6 +965,16 @@ input[type=search]::-webkit-search-cancel-button,
 input[type=search]::-webkit-search-decoration:hover,
 input[type=search]::-webkit-search-cancel-button:hover {
   cursor: pointer;
+}
+
+/* public/css/base/_material_icons.css */
+.material-symbols-outlined {
+  font-variation-settings:
+    "FILL" 0,
+    "wght" 300,
+    "GRAD" 0,
+    "opsz" 24;
+  text-align: center;
 }
 
 /* public/css/elements/_alert_confirm.css */
