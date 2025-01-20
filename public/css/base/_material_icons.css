@@ -13,6 +13,10 @@
   &.active {
     color: var(--color-on);
   }
+
+  &.on-colour {
+    color: var(--color-on);
+  }
 }
 
 .active > .material-symbols-outlined {
