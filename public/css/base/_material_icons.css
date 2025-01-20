@@ -22,6 +22,10 @@
   &.no-colour {
     color: var(--color-no);
   }
+
+  &.primary-light-colour {
+    color: var(--color-primary-light);
+  }
 }
 
 .active > .material-symbols-outlined {

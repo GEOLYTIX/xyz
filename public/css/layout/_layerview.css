@@ -3,17 +3,16 @@
   margin-top: 7px;
   border-radius: 3px;
 
-  & >.header {
-
-    & ~.drawer.layer-view{
-      margin-top: 0
+  & > .header {
+    & ~ .drawer.layer-view {
+      margin-top: 0;
     }
-    & ~.drawer.layer-view~.drawer.layer-view{
-      margin-top: 7px
+    & ~ .drawer.layer-view ~ .drawer.layer-view {
+      margin-top: 7px;
     }
   }
 
-  & >.meta {
+  & > .meta {
     padding-bottom: 5px;
   }
 
@@ -26,12 +25,17 @@
   padding-left: 5px;
   padding-right: 5px;
 
-  & >*:not(.header) {
+  & > *:not(.header) {
     margin-top: 5px;
   }
 
   > .header {
-    h2{
+
+    .material-symbols-outlined {
+      font-size: 1.5em;
+    }
+
+    h2 {
       font-weight: normal;
     }
   }
@@ -42,26 +46,29 @@
   padding-right: 3px;
   background: var(--color-light);
 
-  & >* {
+  .material-symbols-outlined {
+    font-size: 1.5em;
+  }
+
+  & > * {
     padding-left: 4px;
     padding-right: 4px;
   }
-  
 }
 
-#layers>.drawer.layer-group .drawer.layer-view {
+#layers > .drawer.layer-group .drawer.layer-view {
   background: var(--color-light);
   border: none;
   box-shadow: none;
   border-top: 2px solid var(--color-light-secondary);
 }
 
-#layers>.layer-view>.drawer,
+#layers > .layer-view > .drawer,
 #layers .drawer.layer-view .drawer {
   border: none;
   box-shadow: none;
 }
 
-#layers>.layer-view>.drawer {
+#layers > .layer-view > .drawer {
   background: var(--color-light);
 }
