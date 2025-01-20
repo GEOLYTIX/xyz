@@ -12,6 +12,8 @@
 
 @import url('./base/_inputs.css');
 
+@import url('./base/_material_icons.css');
+
 @import url('./elements/_alert_confirm.css');
 
 @import url('./elements/_btnPanel.css');

@@ -34,13 +34,95 @@
       defer
     ></script>
 
-    <style>
-      html {
-        position: fixed;
-        bottom: 0%;
-        top: 0%;
-        height: 100%;
-        width: 100%;
+  <script type="module" src="{{dir}}/public/js/lib/mapp.js" defer></script>
+  <script type="module" src="{{dir}}/public/js/lib/ui.js" defer></script>
+
+  <script type="module" src="{{dir}}/public/js/tests/_mapp.test.js" defer></script>
+
+  <style>
+    html {
+      position: fixed;
+      bottom: 0%;
+      top: 0%;
+      height: 100%;
+      width: 100%;
+    }
+
+    #Map {
+      position: relative;
+    }
+
+    #Map .ol-scale-line {
+      right: 5px;
+      top: 5px;
+      position: fixed;
+    }
+
+    .map-attribution>.logo {
+      pointer-events: auto;
+      height: 1em;
+    }
+
+    #mapButton {
+      pointer-events: none;
+    }
+
+    #mapButton>* {
+      pointer-events: auto;
+    }
+
+    #ctrls {
+      z-index: 9999;
+    }
+
+    #ctrl-tabs {
+      height: auto;
+      padding: 0.5em;
+      width: 100%;
+      display: flex;
+      background-color: var(--color-primary);
+    }
+
+    #ctrl-tabs>div {
+      flex-grow: 1;
+      font-size: 2em;
+    }
+
+    #ctrl-tabs>.active {
+      background-color: var(--color-on);
+    }
+
+    #ctrl-panel {
+      height: calc(100% - 50px);
+      overflow-y: auto;
+    }
+
+    #ctrl-panel>div {
+      display: none;
+      padding: 10px;
+    }
+
+    #ctrl-panel>div.active {
+      display: block;
+    }
+
+    .bg-icon.mapp {
+      background-image: url("https://geolytix.github.io/public/mapp_v4/emblem.svg");
+    }
+
+    @media only screen and (min-width: 768px) {
+
+      body {
+        display: grid;
+        grid-template-columns: 350px 10px auto;
+      }
+
+      body.fullscreen {
+        grid-template-columns: 0 0 auto !important;
+      }
+
+      body.fullscreen #ctrls {
+        display: none;
       }
 
       #Map {
@@ -275,17 +357,16 @@
           display: none !important;
         }
 
-        .mobile-disabled {
-          opacity: 0.3;
-          pointer-events: none;
-        }
-      }
-    </style>
-  </head>
+    <div id="ctrl-tabs" class="hover">
+      <div data-id="layers" class="active material-symbols-outlined light-colour">
+        
+          layers
 
-  <body style="grid-template-rows: auto 0 0">
-    <div id="Map">
-      <div id="OL"></div>
+      </div>
+      <div data-id="locations" class="material-symbols-outlined light-colour">
+        location_on
+      </div>
+
     </div>
 
     <div id="mapButton" class="btn-column"></div>

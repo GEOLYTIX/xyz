@@ -33,6 +33,10 @@
   background-color: var(--color-light);
 }
 
+.light-colour {
+  color: var(--color-light);
+}
+
 .lighter-background {
   background-color: var(--color-light-secondary);
 }
