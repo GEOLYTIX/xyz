@@ -1,4 +1,4 @@
-/* public/css/_colours.css */
+/* public/css/base/_colours.css */
 :root {
   --color-off-black: #3f3f3f;
   --color-primary: #003D57;
@@ -11,37 +11,34 @@
   --color-no: #A21309;
   --color-changed: #ffffa7;
 }
+.primary-colour {
+  color: var(--color-primary);
+}
+.primary-background {
+  color: white;
+  background-color: var(--color-primary);
+}
+.light-background {
+  background-color: var(--color-light);
+}
+.lighter-background {
+  background-color: var(--color-light-secondary);
+}
+.off-black {
+  color: var(--color-off-black);
+}
+.off-black-background {
+  color: white;
+  background-color: var(--color-off-black);
+}
+.on-colour {
+  color: var(--color-on);
+}
+.no-colour {
+  color: var(--color-no);
+}
 
-/* public/css/_mapp.css */
-*,
-*::after,
-*::before {
-  -webkit-box-sizing: border-box;
-  -moz-box-sizing: border-box;
-  -ms-box-sizing: border-box;
-  -o-box-sizing: border-box;
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-  border-spacing: 0;
-  font-family: inherit;
-  font-size: inherit;
-}
-body {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
-.display-none {
-  display: none !important;
-}
-.hover:hover {
-  cursor: pointer;
-}
-.box-shadow {
-  border: 1px solid #eee;
-  box-shadow: 2px 2px 4px var(--color-primary-light);
-}
+/* public/css/layout/_ol.css */
 .ol-scale-line {
   position: static;
   background: none;
@@ -93,52 +90,11 @@ body {
     border-radius: 2px;
   }
 }
-.infotip {
-  position: fixed;
-  z-index: 998;
-  margin: 0;
-  padding: 5px;
-  background-color: white;
-  opacity: 0;
-  transition-property: opacity;
-  transition-duration: 0.3s;
-  transition-delay: 0.2s;
-}
-.popup {
+
+/* public/css/layout/_map_attribution.css */
+body {
   position: absolute;
-  background-color: white;
-  bottom: 12px;
-  transform: translate(-50%, 0);
-  &::after,
-  &::before {
-    border: solid transparent;
-    content: " ";
-    position: absolute;
-    pointer-events: none;
-  }
-  &::after {
-    border-top-color: white;
-    border-width: 10px;
-    left: 50%;
-    margin-left: -10px;
-  }
-  & li {
-    padding: 5px 10px;
-    white-space: nowrap;
-    line-height: 1.5;
-    list-style-type: none;
-  }
-  & li:hover {
-    background: var(--color-light-secondary);
-    cursor: pointer;
-  }
-  .list {
-    max-width: 66vw;
-    max-height: 300px;
-    overflow-x: hidden;
-  }
-}
-a > img {
+  width: 100%;
   height: 100%;
 }
 .map-attribution {
@@ -152,20 +108,22 @@ a > img {
   padding: 5px;
   pointer-events: none;
   user-select: none;
-}
-.attribution-links {
-  text-align: right;
-  font-size: 95%;
-  & a {
-    pointer-events: auto;
-    margin-left: 5px;
-    display: inline-block;
-    white-space: nowrap;
-    line-height: 1;
-    background: #fff9;
-    border-bottom: 2px solid var(--color-primary-light);
+  .attribution-links {
+    text-align: right;
+    font-size: 95%;
+    & a {
+      pointer-events: auto;
+      margin-left: 5px;
+      display: inline-block;
+      white-space: nowrap;
+      line-height: 1;
+      background: #fff9;
+      border-bottom: 2px solid var(--color-primary-light);
+    }
   }
 }
+
+/* public/css/layout/_legend.css */
 .legend {
   & .contents-wrapper,
   &.content .contents-wrapper {
@@ -231,3 +189,54 @@ a > img {
     opacity: 0.5;
   }
 }
+
+/* public/css/layout/_infotip.css */
+.infotip {
+  position: fixed;
+  z-index: 998;
+  margin: 0;
+  padding: 5px;
+  background-color: white;
+  opacity: 0;
+  transition-property: opacity;
+  transition-duration: 0.3s;
+  transition-delay: 0.2s;
+}
+
+/* public/css/layout/_popup.css */
+.popup {
+  position: absolute;
+  background-color: white;
+  bottom: 12px;
+  transform: translate(-50%, 0);
+  &::after,
+  &::before {
+    border: solid transparent;
+    content: " ";
+    position: absolute;
+    pointer-events: none;
+  }
+  &::after {
+    border-top-color: white;
+    border-width: 10px;
+    left: 50%;
+    margin-left: -10px;
+  }
+  & li {
+    padding: 5px 10px;
+    white-space: nowrap;
+    line-height: 1.5;
+    list-style-type: none;
+  }
+  & li:hover {
+    background: var(--color-light-secondary);
+    cursor: pointer;
+  }
+  .list {
+    max-width: 66vw;
+    max-height: 300px;
+    overflow-x: hidden;
+  }
+}
+
+/* public/css/_mapp.css */
