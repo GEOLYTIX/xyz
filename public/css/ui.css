@@ -1009,6 +1009,9 @@ input[type=search]::-webkit-search-cancel-button:hover {
   &.no-colour {
     color: var(--color-no);
   }
+  &.primary-light-colour {
+    color: var(--color-primary-light);
+  }
 }
 .active > .material-symbols-outlined {
   color: var(--color-on);
@@ -1080,6 +1083,12 @@ dialog.alert-confirm {
       overflow: hidden;
     }
   }
+  & .mask-icon {
+    width: 1.5em;
+    height: 1.5em;
+    -webkit-mask-position: right;
+    mask-position: right;
+  }
   & .panel {
     display: block;
     position: absolute;
@@ -1100,13 +1109,6 @@ dialog.alert-confirm {
     & .content {
       padding: 1em;
     }
-    &::after {
-      content: initial;
-    }
-  }
-  &.active {
-    background-color: var(--color-primary);
-    color: #fff;
     & .panel {
       display: block;
       position: absolute;
@@ -1617,6 +1619,9 @@ dialog {
     margin-top: 5px;
   }
   > .header {
+    .material-symbols-outlined {
+      font-size: 1.5em;
+    }
     h2 {
       font-weight: normal;
     }
@@ -1626,6 +1631,9 @@ dialog {
   padding-left: 3px;
   padding-right: 3px;
   background: var(--color-light);
+  .material-symbols-outlined {
+    font-size: 1.5em;
+  }
   & > * {
     padding-left: 4px;
     padding-right: 4px;

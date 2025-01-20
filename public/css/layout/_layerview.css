@@ -30,6 +30,11 @@
   }
 
   > .header {
+
+    .material-symbols-outlined {
+      font-size: 1.5em;
+    }
+
     h2 {
       font-weight: normal;
     }
@@ -40,6 +45,10 @@
   padding-left: 3px;
   padding-right: 3px;
   background: var(--color-light);
+
+  .material-symbols-outlined {
+    font-size: 1.5em;
+  }
 
   & > * {
     padding-left: 4px;
