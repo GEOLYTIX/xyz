@@ -636,26 +636,28 @@
   }
 }
 
+
 .toggle {
-  &.bg-icon {
-    background-image: url("../../icons/icon-toggle-off.svg");
-    &.on {
-      background-image: url("../../icons/icon-toggle-on.svg");
-    }
+
+  &::after {
+    content: "toggle_off";
   }
-  &.mask-icon {
-    -webkit-mask-image: url("../../icons/icon-toggle-off.svg");
-    mask-image: url("../../icons/icon-toggle-off.svg");
-    &.on {
-      -webkit-mask-image: url("../../icons/icon-toggle-on.svg");
-      mask-image: url("../../icons/icon-toggle-on.svg");
-    }
+
+  &.on::after {
+    content: "toggle_on";
+    color: var(--color-on);
   }
+
   &.disabled {
     opacity: 0.5;
     pointer-events: none;
   }
 }
+
+
+
+
+
 
 .touch-app {
   &.bg-icon {
