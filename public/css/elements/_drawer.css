@@ -15,18 +15,18 @@
     display: none;
   }
 
-  &.expandable>.header>.mask-icon.expander {
-    -webkit-mask-image: url("../../icons/icon-arrow-down.svg");
-    mask-image: url("../../icons/icon-arrow-down.svg");
+  &.expandable>.header>.material-symbols-outlined.expander::after {
+    content: "keyboard_arrow_down";
+    color: var(--color-primary-light);
   }
 
   &.expandable:not(.expanded)>*:not(.header) {
     display: none;
   }
 
-  &.expanded>.header>.mask-icon.expander {
-    -webkit-mask-image: url("../../icons/icon-arrow-up.svg");
-    mask-image: url("../../icons/icon-arrow-up.svg");
+  &.expanded>.header>.material-symbols-outlined.expander::after {
+    content: "keyboard_arrow_up";
+    color: var(--color-primary-light);
   }
 
   &.disabled {
