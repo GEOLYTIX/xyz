@@ -30,9 +30,7 @@
     vertical-align: middle;
 }
 
-.link-with-img>button,
-.link-with-img>.mask-icon,
-.link-with-img>.bg-icon {
+.link-with-img>button {
     width: 1.5em;
 }
 

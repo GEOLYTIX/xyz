@@ -54,9 +54,8 @@ dialog {
     }
   }
 
-  .minimize-btn.mask-icon {
-    -webkit-mask-image: url("../../icons/icon-remove.svg");
-    mask-image: url("../../icons/icon-remove.svg");
+  .minimize-btn::after {
+    content: 'minimize';
   }
 
   &.minimized {
@@ -65,9 +64,8 @@ dialog {
       display: none;
     }
 
-    .minimize-btn.mask-icon {
-      -webkit-mask-image: url("../../icons/icon-fullscreen.svg");
-      mask-image: url("../../icons/icon-fullscreen.svg");
+    .minimize-btn::after {
+      content: 'fullscreen';
     }
 
   }

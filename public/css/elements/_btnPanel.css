@@ -19,13 +19,6 @@
         }
     }
 
-    & .mask-icon {
-        width: 1.5em;
-        height: 1.5em;
-        -webkit-mask-position: right;
-        mask-position: right;
-    }
-
     & .panel {
         display: block;
         position: absolute;
@@ -56,10 +49,6 @@
     &.active {
         background-color: var(--color-primary);
         color: #fff;
-
-        & .mask-icon {
-            background-color: #fff;
-        }
 
         & .panel {
             bottom: 2em;
