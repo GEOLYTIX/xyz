@@ -68,7 +68,7 @@
     "test": {
       "core": true,
       "options": {
-        "quiet": true,
+        "quiet": false,
         "showSummary": true
       }
     },
