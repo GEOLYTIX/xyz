@@ -4,6 +4,10 @@ button {
   background: none;
   text-align: center;
 
+  > * {
+    pointer-events: none;
+  }
+
   &.mask-icon,
   & >.mask-icon {
     background-color: var(--color-primary)
@@ -36,7 +40,7 @@ button {
     padding: 0.3em;
       
     &.active {
-      border-bottom: 3px solid var(--color-on);
+      border-bottom: 1px solid var(--color-on);
     }
   }
 
@@ -58,7 +62,7 @@ button {
   }
 
   &.active {
-    background-color: var(--color-on);
+    color: var(--color-on);
   }
 }
 
