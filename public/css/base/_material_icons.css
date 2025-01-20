@@ -9,4 +9,9 @@
   'opsz' 24;
   /* Customisation */
   text-align: center;
+  color: var(--color-primary);
+
+  &.active {
+    color: var(--color-on);
+  }
 }
