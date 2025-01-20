@@ -1642,6 +1642,7 @@ dialog {
     user-select: none;
     height: 1.5em;
     width: 1.5em;
+    font-size: inherit;
   }
   & .drawer.group {
     grid-column: 1 / 3;
