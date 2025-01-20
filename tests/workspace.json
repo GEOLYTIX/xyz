@@ -1,156 +1,151 @@
 {
-    "dbs": "NEON",
-    "roles": {
-        "A": "Text about A",
-        "B": "Text about B",
-        "*": null
+  "dbs": "NEON",
+  "roles": {
+    "A": "Text about A",
+    "B": "Text about B",
+    "*": null
+  },
+  "templates": {
+    "template_test_temp": {
+      "src": "file:/tests/assets/layers/template_test/layer.json"
     },
-    "templates": {
-        "template_test_temp": {
-            "src": "file:/tests/assets/layers/template_test/layer.json"
-        },
-        "mvt_test_temp": {
-            "src": "file:/tests/assets/layers/mvt/layer.json"
-        },
-        "module_test": {
-            "type": "module",
-            "src": "file:/tests/assets/queries/foo.js"
-        },
-        "template_1": {
-            "src": "file:/tests/assets/infoj/template_infoj.json"
-        },
-        "template_2": {
-            "src": "file:/tests/assets/styles/template_style.json"
-        },
-        "get_location_mock": {
-            "src": "file:/tests/assets/queries/get_location_mock.sql"
-        },
-        "minmax_query": {
-            "src": "file:/tests/assets/queries/minmax_mock.sql"
-        },
-        "data_array": {
-            "src": "file:/tests/assets/queries/data_array.sql",
-            "value_only": true
-        },
-        "bogus_data_array": {
-            "src": "file:/tests/assets/queries/data_array.sql",
-            "dbs": "bogus"
-        },
-        "merge_into": {
-            "name": "merge_into",
-            "roles": {
-                "merge_into": null
-            }
-        }
+    "mvt_test_temp": {
+      "src": "file:/tests/assets/layers/mvt/layer.json"
     },
-    "locale": {
-        "roles": {
-            "A": null,
-            "B": null,
-            "C": null,
-            "*": null
-        },
-        "mapviewControls": [
-            "Zoom"
-        ],
-        "plugins": [
-            "${PLUGINS}v4.8.0/coordinates.js",
-            "${PLUGINS}v4.8.0/chartjs.js",
-            "/test/api/provider/file?content_type=application/javascript&url=./tests/assets/plugins/assignMapview.js",
-            "/test/api/provider/file?content_type=application/javascript&url=./tests/assets/plugins/test.js"
-        ],
-        "syncPlugins": [
-            "zoomBtn",
-            "zoomToArea",
-            "coordinates",
-            "admin",
-            "login",
-            "userLocale"
-        ],
-        "test": {
-            "core": true,
-            "options": {
-                "quiet": false,
-                "showSummary": true
-            }
-        },
-        "userLocale": {},
-        "layers": {
-            "OSM": {
-                "name": "OpenStreetMap",
-                "display": true,
-                "format": "tiles",
-                "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                "style": {
-                    "contextFilter": "grayscale(100%)"
-                },
-                "attribution": {
-                    "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-                }
-            },
-            "wkt_layer": {
-                "display": true,
-                "templates": [
-                    {
-                        "src": "file:/tests/assets/layers/wkt/layer.json"
-                    },
-                    {
-                        "src": "file:/tests/assets/layers/wkt/infoj.json"
-                    },
-                    {
-                        "src": "file:/tests/assets/layers/wkt/style.json"
-                    }
-                ],
-                "tables": {
-                    "5": null,
-                    "6": "test.scratch"
-                }
-            },
-            "geojson_layer": {
-                "display": true,
-                "templates": [
-                    {
-                        "src": "file:/tests/assets/layers/geojson/layer.json"
-                    }
-                ]
-            },
-            "mvt_test": {
-                "template": "mvt_test_temp"
-            },
-            "template_test": {
-                "display": true,
-                "template": "template_test_temp",
-                "templates": [
-                    {
-                        "key": "template_infoj",
-                        "src": "file:/tests/assets/infoj/template_infoj.json"
-                    },
-                    {
-                        "key": "chart_queryparams",
-                        "src": "file:/tests/assets/infoj/chart_queryparams.json"
-                    },
-                    {
-                        "key": "bogus_file",
-                        "src": "file:/tests/assets/styles/bogus_file.json"
-                    },
-                    {
-                        "key": "dataviews_json",
-                        "src": "file:/tests/assets/dataviews/dataviews_json.json"
-                    }
-                ]
-            },
-            "template_foo": {
-                "template": "foo",
-                "display": true
-            },
-            "template_test_vanilla": {
-                "hidden": true,
-                "template": "template_test_temp",
-                "templates": [
-                    "template_1",
-                    "template_2"
-                ]
-            }
-        }
+    "module_test": {
+      "type": "module",
+      "src": "file:/tests/assets/queries/foo.js"
+    },
+    "template_1": {
+      "src": "file:/tests/assets/infoj/template_infoj.json"
+    },
+    "template_2": {
+      "src": "file:/tests/assets/styles/template_style.json"
+    },
+    "get_location_mock": {
+      "src": "file:/tests/assets/queries/get_location_mock.sql"
+    },
+    "minmax_query": {
+      "src": "file:/tests/assets/queries/minmax_mock.sql"
+    },
+    "data_array": {
+      "src": "file:/tests/assets/queries/data_array.sql",
+      "value_only": true
+    },
+    "bogus_data_array": {
+      "src": "file:/tests/assets/queries/data_array.sql",
+      "dbs": "bogus"
+    },
+    "merge_into": {
+      "name": "merge_into",
+      "roles": {
+        "merge_into": null
+      }
     }
+  },
+  "locale": {
+    "roles": {
+      "A": null,
+      "B": null,
+      "C": null,
+      "*": null
+    },
+    "mapviewControls": ["Zoom"],
+    "plugins": [
+      "${PLUGINS}v4.8.0/coordinates.js",
+      "${PLUGINS}v4.8.0/chartjs.js",
+      "/test/api/provider/file?content_type=application/javascript&url=./tests/assets/plugins/assignMapview.js",
+      "/test/api/provider/file?content_type=application/javascript&url=./tests/assets/plugins/test.js"
+    ],
+    "syncPlugins": [
+      "zoomBtn",
+      "zoomToArea",
+      "coordinates",
+      "admin",
+      "login",
+      "userLocale"
+    ],
+    "test": {
+      "core": true,
+      "options": {
+        "quiet": true,
+        "showSummary": true
+      }
+    },
+    "userLocale": {},
+    "layers": {
+      "OSM": {
+        "name": "OpenStreetMap",
+        "display": true,
+        "format": "tiles",
+        "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        "style": {
+          "contextFilter": "grayscale(100%)"
+        },
+        "attribution": {
+          "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+        }
+      },
+      "wkt_layer": {
+        "display": true,
+        "templates": [
+          {
+            "src": "file:/tests/assets/layers/wkt/layer.json"
+          },
+          {
+            "src": "file:/tests/assets/layers/wkt/infoj.json"
+          },
+          {
+            "src": "file:/tests/assets/layers/wkt/style.json"
+          }
+        ],
+        "tables": {
+          "5": null,
+          "6": "test.scratch"
+        }
+      },
+      "geojson_layer": {
+        "display": true,
+        "templates": [
+          {
+            "src": "file:/tests/assets/layers/geojson/layer.json"
+          }
+        ]
+      },
+      "mvt_test": {
+        "template": "mvt_test_temp"
+      },
+      "template_test": {
+        "display": true,
+        "template": "template_test_temp",
+        "templates": [
+          {
+            "key": "template_infoj",
+            "src": "file:/tests/assets/infoj/template_infoj.json"
+          },
+          {
+            "key": "chart_queryparams",
+            "src": "file:/tests/assets/infoj/chart_queryparams.json"
+          },
+          {
+            "key": "bogus_file",
+            "src": "file:/tests/assets/styles/bogus_file.json"
+          },
+          {
+            "key": "dataviews_json",
+            "src": "file:/tests/assets/dataviews/dataviews_json.json"
+          }
+        ]
+      },
+      "template_foo": {
+        "template": "foo",
+        "display": true
+      },
+      "template_test_vanilla": {
+        "hidden": true,
+        "template": "template_test_temp",
+        "templates": ["template_1", "template_2"]
+      }
+    }
+  }
 }
