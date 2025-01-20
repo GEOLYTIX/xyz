@@ -972,8 +972,12 @@ input[type=search]::-webkit-search-cancel-button:hover {
   &.active {
     color: var(--color-on);
   }
-  &.on-colour {
+  &.on-colour,
+  &.on {
     color: var(--color-on);
+  }
+  &.no-colour {
+    color: var(--color-no);
   }
 }
 .active > .material-symbols-outlined {
