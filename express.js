@@ -1,11 +1,65 @@
+/**
+@module express.js
+@description
+
+# Express.js 🚅
+
+[Express](https://expressjs.com) is a minimal and flexible Node.js web application framework that provides a robust
+set of features for web and mobile applications.
+
+Our implementation provides the following endpoints and features:
+
+- SAML authentication endpoints for Single Sign-On
+- Rate-limited API endpoints for provider interactions
+- Static file serving for documentation
+- Security enhancements including header protection
+
+The server implements the following core features:
+
+- Rate limiting: 1000 requests per 1 min per IP
+- Cookie parsing for session management
+- JSON body parsing with 5MB limit for POST requests
+- Static file serving with HTML extension support
+
+## Security 🔐
+
+- X-Powered-By header disabled
+- Rate limiting enabled
+- SAML authentication required for protected routes
+
+## env
+
+```env
+PORT - Server port (default: 3000)
+DIR - Base directory for routes
+RATE_LIMIT - Maximum requests per window (default: 1000)
+RATE_LIMIT_WINDOW - Time window in ms (default: 1 min)
+```
+@requires dotenv - Environment configuration loading
+@requires express - Web application framework
+@requires cookie-parser - HTTP cookie parsing middleware
+@requires express-rate-limit - Rate limiting middleware
+*/
+
 require('dotenv').config();
 require('./mod/utils/processEnv.js');
 
 const express = require('express');
-
 const cookieParser = require('cookie-parser');
+const rateLimit = require('express-rate-limit');
 
 const app = express();
+
+app.disable('x-powered-by');
+
+const limiter = rateLimit({
+  windowMs: process.env.RATE_LIMIT_WINDOW ?? 1 * 60 * 1000, // 1 min
+  limit: process.env.RATE_LIMIT ?? 1000, //1000 requests per 1min
+  standardHeaders: 'draft-8',
+  legacyHeaders: false,
+});
+
+app.use(limiter);
 
 app.use(
   '/xyz',

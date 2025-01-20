@@ -1,0 +1,78 @@
+.legend {
+  & .contents-wrapper,
+  &.content .contents-wrapper {
+    margin-top: 0.5em;
+    gap: 0.5em;
+
+    & > .contents {
+      display: contents;
+    }
+
+    &.label {
+      grid-column: 2;
+    }
+
+    &.flex {
+      display: flex;
+      flex-wrap: wrap;
+      flex-grow: 1;
+      justify-content: start;
+
+      & .contents {
+        display: block;
+        flex-basis: 30%;
+        flex-shrink: 1;
+
+        &.center {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-direction: column;
+          margin-bottom: 1em;
+          text-align: center;
+        }
+
+        &.row {
+          display: flex;
+          align-items: center;
+          margin-bottom: 1em;
+        }
+
+        &.horizontal {
+          display: flex;
+          align-items: center;
+          flex-direction: column;
+          flex-basis: auto;
+          flex-grow: 1;
+        }
+      }
+
+      &.nowrap {
+        flex-wrap: nowrap;
+
+        & .contents {
+          justify-content: flex-start;
+
+          & .label {
+            text-align: center;
+          }
+        }
+      }
+    }
+
+    &.grid {
+      display: grid;
+      grid-template-columns: min-content;
+      align-items: center;
+      justify-content: start;
+    }
+  }
+
+  & .switch {
+    cursor: pointer;
+  }
+
+  & .switch.disabled {
+    opacity: 0.5;
+  }
+}
