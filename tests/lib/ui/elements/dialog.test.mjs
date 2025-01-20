@@ -143,9 +143,21 @@ export function dialog() {
             'The dialog content should not be visible',
           );
 
-          dialog.close();
-        },
-      );
-    },
-  );
+            params.minimizeBtn = true;
+            const new_params = { ...params }
+
+            const dialog = mapp.ui.elements.dialog(new_params);
+
+            dialog.node.querySelector('header > button.minimize-btn').dispatchEvent(new Event('click'))
+            let minimized = dialog.node.classList.contains('minimized');
+            codi.assertTrue(minimized, 'The dialog content should not be visible');
+
+            dialog.node.querySelector('header > button.minimize-btn').dispatchEvent(new Event('click'))
+            minimized = dialog.node.classList.contains('minimized');
+            codi.assertFalse(minimized, 'The dialog content should not be visible');
+
+            dialog.close();
+        });
+
+    });
 }

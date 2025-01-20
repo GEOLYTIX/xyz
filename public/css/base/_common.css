@@ -30,10 +30,8 @@
   vertical-align: middle;
 }
 
-.link-with-img > button,
-.link-with-img > .mask-icon,
-.link-with-img > .bg-icon {
-  width: 1.5em;
+.link-with-img>button {
+    width: 1.5em;
 }
 
 .val-changed input {

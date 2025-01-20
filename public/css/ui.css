@@ -71,9 +71,7 @@
   display: inline-block;
   vertical-align: middle;
 }
-.link-with-img > button,
-.link-with-img > .mask-icon,
-.link-with-img > .bg-icon {
+.link-with-img > button {
   width: 1.5em;
 }
 .val-changed input {
@@ -1108,20 +1106,41 @@ dialog.alert-confirm {
     & .content {
       padding: 1em;
     }
-    &::after {
-      content: initial;
-    }
-  }
-  &.active {
-    background-color: var(--color-primary);
-    color: #fff;
-    & .mask-icon {
-      background-color: #fff;
-    }
     & .panel {
-      bottom: 2em;
-      pointer-events: auto;
-      opacity: 1;
+      display: block;
+      position: absolute;
+      width: 100%;
+      bottom: 15em;
+      left: 0;
+      right: 0;
+      z-index: 99;
+      color: black;
+      background: white;
+      overflow: hidden;
+      padding: 1em 1.5em;
+      opacity: 0;
+      border-radius: 3px;
+      box-shadow: 1px 1px 3px var(--color-primary-light);
+      pointer-events: none;
+      transition: 0.2s ease-in-out;
+      & .content {
+        padding: 1em;
+      }
+      &::after {
+        content: initial;
+      }
+    }
+    &.active {
+      background-color: var(--color-primary);
+      color: #fff;
+      & .panel {
+        bottom: 2em;
+        pointer-events: auto;
+        opacity: 1;
+      }
+      &.downward .panel {
+        bottom: -7em;
+      }
     }
     &.downward .panel {
       bottom: -7em;
@@ -1223,17 +1242,15 @@ dialog {
       margin: 0.4em;
     }
   }
-  .minimize-btn.mask-icon {
-    -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">%0A<path d="M19 13H5v-2h14v2z"/>%0A</svg>');
-    mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">%0A<path d="M19 13H5v-2h14v2z"/>%0A</svg>');
+  .minimize-btn::after {
+    content: "minimize";
   }
   &.minimized {
     .content {
       display: none;
     }
-    .minimize-btn.mask-icon {
-      -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">%0A<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>%0A</svg>');
-      mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">%0A<path d="M7 14H5v5h5v-2H7v-3zm-2-4h2V7h3V5H5v5zm12 7h-3v2h5v-5h-2v3zM14 5v2h3v3h2V5h-5z"/>%0A</svg>');
+    .minimize-btn::after {
+      content: "fullscreen";
     }
   }
 }
@@ -1249,7 +1266,7 @@ dialog {
   &.expandable:not(.empty) > .header:hover {
     cursor: pointer;
   }
-  &.expandable.empty > .header > .mask-icon.expander {
+  &.expandable.empty > .header > .expander {
     display: none;
   }
   &.expandable > .header > .material-symbols-outlined.expander::after {
@@ -1286,10 +1303,6 @@ dialog {
     }
     & > :nth-child(2) {
       margin-left: auto;
-    }
-    & > .mask-icon {
-      mask-position: right;
-      -webkit-mask-position: right;
     }
   }
   &.flat {
