@@ -1080,12 +1080,6 @@ dialog.alert-confirm {
       overflow: hidden;
     }
   }
-  & .mask-icon {
-    width: 1.5em;
-    height: 1.5em;
-    -webkit-mask-position: right;
-    mask-position: right;
-  }
   & .panel {
     display: block;
     position: absolute;
@@ -1106,6 +1100,13 @@ dialog.alert-confirm {
     & .content {
       padding: 1em;
     }
+    &::after {
+      content: initial;
+    }
+  }
+  &.active {
+    background-color: var(--color-primary);
+    color: #fff;
     & .panel {
       display: block;
       position: absolute;
