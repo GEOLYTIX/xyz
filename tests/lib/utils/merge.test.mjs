@@ -7,97 +7,116 @@
  * @function mergeTest
  */
 export function merge() {
+  codi.describe(
+    { name: 'merge Test:', id: 'utils_merge', parentId: 'utils' },
+    () => {
+      codi.it(
+        {
+          name: 'Hobbies should be overwritten in the merge',
+          parentId: 'utils_merge',
+        },
+        () => {
+          const target = {
+            name: 'Rob',
+            age: 28,
+            address: {
+              street: '6 fourteenth street',
+              city: 'Johannesburg',
+            },
+            hobbies: ['squash', 'guitar'],
+          };
 
-    codi.describe({ name: 'merge Test:', id: 'utils_merge', parentId: 'utils' }, () => {
+          const source = {
+            name: 'Rob',
+            age: 26,
+            address: {
+              street: '6 fourteenth street',
+              city: 'Johannesburg',
+            },
+            hobbies: ['cooking'],
+          };
 
-        codi.it({ name: 'Hobbies should be overwritten in the merge', parentId: 'utils_merge' }, () => {
-            const target = {
-                name: 'Rob',
-                age: 28,
-                address: {
-                    street: '6 fourteenth street',
-                    city: 'Johannesburg',
-                },
-                hobbies: ['squash', 'guitar'],
-            };
+          const expected = {
+            name: 'Rob',
+            age: 26,
+            address: {
+              street: '6 fourteenth street',
+              city: 'Johannesburg',
+            },
+            hobbies: ['cooking'],
+          };
 
-            const source = {
-                name: 'Rob',
-                age: 26,
-                address: {
-                    street: '6 fourteenth street',
-                    city: 'Johannesburg',
-                },
-                hobbies: ['cooking'],
-            };
+          const mergedObj = mapp.utils.merge(target, source);
 
-            const expected = {
-                name: 'Rob',
-                age: 26,
-                address: {
-                    street: '6 fourteenth street',
-                    city: 'Johannesburg',
-                },
-                hobbies: ['cooking'],
-            };
+          codi.assertEqual(mergedObj, expected);
+        },
+      );
 
-            const mergedObj = mapp.utils.merge(target, source);
+      codi.it(
+        {
+          name: 'should handle merging with null or undefined values',
+          parentId: 'utils_merge',
+        },
+        async () => {
+          const target = {
+            name: 'John',
+            age: 30,
+          };
 
-            codi.assertEqual(mergedObj, expected)
-        });
+          const source1 = null;
+          const source2 = undefined;
 
-        codi.it({ name: 'should handle merging with null or undefined values', parentId: 'utils_merge' }, async () => {
-            const target = {
-                name: 'John',
-                age: 30,
-            };
+          const expected = {
+            name: 'John',
+            age: 30,
+          };
 
-            const source1 = null;
-            const source2 = undefined;
+          const mergedObj1 = mapp.utils.merge(target, source1);
+          const mergedObj2 = mapp.utils.merge(target, source2);
 
-            const expected = {
-                name: 'John',
-                age: 30,
-            };
+          codi.assertEqual(mergedObj1, expected);
+          codi.assertEqual(mergedObj2, expected);
+        },
+      );
 
-            const mergedObj1 = mapp.utils.merge(target, source1);
-            const mergedObj2 = mapp.utils.merge(target, source2);
+      codi.it(
+        { name: 'should prevent _proto merging', parentId: 'utils_merge' },
+        async () => {
+          const target = {
+            current: {
+              country: {
+                in: ['ROI'],
+              },
+            },
+          };
 
-            codi.assertEqual(mergedObj1, expected);
-            codi.assertEqual(mergedObj2, expected);
-        });
+          const source = {
+            current: {
+              country: {
+                in: ['UK'],
+              },
+            },
+            __proto__: {
+              polluted: 'polluted',
+            },
+          };
 
-        codi.it({ name: 'should prevent _proto merging', parentId: 'utils_merge' }, async () => {
-            const target = {
-                current: {
-                    'country': {
-                        'in': ['ROI']
-                    }
-                }
-            };
+          const expected = {
+            current: {
+              country: {
+                in: ['ROI'],
+              },
+            },
+          };
 
-            const source = {
-                current: {
-                    'country': {
-                        'in': ['UK']
-                    }
-                },
-                __proto__: {
-                    'polluted': 'polluted'
-                }
-            };
-
-            const expected = {
-                current: {
-                    'country': {
-                        'in': ['ROI']
-                    }
-                }
-            };
-
-            const mergedObj1 = mapp.utils.merge(target, source);
-            codi.assertEqual(mergedObj1, expected, 'The merge should not happen if a __proto__ is found on an object');
-        });
-
-    });
+          const mergedObj1 = mapp.utils.merge(target, source);
+          codi.assertEqual(
+            mergedObj1,
+            expected,
+            'The merge should not happen if a __proto__ is found on an object',
+          );
+        },
+      );
+    },
+  );
 }

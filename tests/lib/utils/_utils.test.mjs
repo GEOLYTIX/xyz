@@ -8,17 +8,17 @@ import { versionCheck } from './versionCheck.mjs';
 import { jsonParser } from './jsonParser.test.mjs';
 
 export const utilsTest = {
-    setup,
-    numericFormatter,
-    merge,
-    paramString,
-    queryParams,
-    compose,
-    svgTemplates,
-    versionCheck,
-    jsonParser
-}
+  setup,
+  numericFormatter,
+  merge,
+  paramString,
+  queryParams,
+  compose,
+  svgTemplates,
+  versionCheck,
+  jsonParser,
+};
 
 function setup() {
-    codi.describe({ name: 'Utils:', id: 'utils' }, () => { });
+  codi.describe({ name: 'Utils:', id: 'utils' }, () => {});
 }

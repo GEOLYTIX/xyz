@@ -12,16 +12,16 @@ import { uiTest } from './lib/_ui.test.mjs';
 import { utilsTest } from './lib/utils/_utils.test.mjs';
 
 globalThis._mappTest = {
-    coreTest,
-    mappTest,
-    layer,
-    dictionaryTest,
-    locationTest,
-    mapviewTest,
-    workspaceSuite,
-    templatesTest,
-    queryTest,
-    userTest,
-    uiTest,
-    utilsTest
-}
+  coreTest,
+  mappTest,
+  layer,
+  dictionaryTest,
+  locationTest,
+  mapviewTest,
+  workspaceSuite,
+  templatesTest,
+  queryTest,
+  userTest,
+  uiTest,
+  utilsTest,
+};
