@@ -1,4 +1,4 @@
-.disabled>.drawer {
+.disabled > .drawer {
   opacity: 0.4;
   pointer-events: none;
 }
@@ -7,26 +7,28 @@
   padding: 2px;
   background-color: var(--color-light-tertiary);
 
-  &.expandable:not(.empty)>.header:hover {
+  &.expandable:not(.empty) > .header:hover {
     cursor: pointer;
   }
 
-  &.expandable.empty>.header>.expander {
+  &.expandable.empty > .header > .expander {
     display: none;
   }
 
-  &.expandable>.header>.material-symbols-outlined.expander::after {
-    content: "keyboard_arrow_down";
+  &.expandable > .header > .material-symbols-outlined.expander::after {
+    content: 'keyboard_arrow_down';
     color: var(--color-primary-light);
+    line-height: 1.5em;
   }
 
-  &.expandable:not(.expanded)>*:not(.header) {
+  &.expandable:not(.expanded) > *:not(.header) {
     display: none;
   }
 
-  &.expanded>.header>.material-symbols-outlined.expander::after {
-    content: "keyboard_arrow_up";
+  &.expanded > .header > .material-symbols-outlined.expander::after {
+    content: 'keyboard_arrow_up';
     color: var(--color-primary-light);
+    line-height: 1.5em;
   }
 
   &.disabled {
@@ -34,7 +36,7 @@
     pointer-events: none;
   }
 
-  &>.header {
+  & > .header {
     display: flex;
     align-items: center;
 
@@ -42,27 +44,26 @@
       font-size: 1.5em;
     }
 
-    &>:not(button):not(label):not(input) {
+    & > :not(button):not(label):not(input) {
       pointer-events: none;
     }
 
-    &>div,
-    &>button {
+    & > div,
+    & > button {
       margin-left: 5px;
       width: 1.5em;
       height: 1.5em;
     }
 
-    &>:nth-child(1) {
+    & > :nth-child(1) {
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
     }
 
-    &>:nth-child(2) {
+    & > :nth-child(2) {
       margin-left: auto;
     }
-
   }
 
   &.flat {
