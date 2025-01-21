@@ -15,8 +15,8 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [TITLE='GEOLYTIX | XYZ'] The TITLE value is used to identify cookies and is provided to as a param to Application View templates.
 @property {String} [LOGS] The LOGS string will split on comma to determine which requests send to the [LOGGER]{@link module:/utils/logger} module will be logged.
 @property {String} [LOGGER] Required to configure the [LOGGER]{@link module:/utils/logger} module for a remote out.
-@property {String} [RATE_LIMIT_WINDOW=1000] Maximum requests per window in the [express]{@link module:express} module
-@property {String} [RATE_LIMIT=36000] Time window in ms in the [express]{@link module:express} module
+@property {String} [RATE_LIMIT_WINDOW=60000] Maximum requests per window in the [express]{@link module:express} module
+@property {String} [RATE_LIMIT=1000] Time window in ms in the [express]{@link module:express} module
 @property {String} [PRIVATE] All requests to XYZ API require authentication. The PRIVATE value represents the ACL connection.
 @property {String} [PUBLIC] General requests to XYZ API do require authentication. The PUBLIC value represents an ACL connection for optional authentication.
 @property {String} [SECRET] A secret string is required to sign and [validate JWT]{@link module:/user/auth}.
@@ -62,6 +62,8 @@ const defaults = {
   FAILED_ATTEMPTS: 3,
   RETRY_LIMIT: 3,
   TRANSPORT_TLS: false,
+  RATE_LIMIT: 1000, //1000 requests per 1min
+  RATE_LIMIT_WINDOW: 60000  // 1 min
 };
 
 process.env.PORT ??= defaults.PORT;
@@ -72,6 +74,8 @@ process.env.COOKIE_TTL ??= defaults.COOKIE_TTL;
 process.env.FAILED_ATTEMPTS ??= defaults.FAILED_ATTEMPTS;
 process.env.RETRY_LIMIT ??= defaults.RETRY_LIMIT;
 process.env.TRANSPORT_TLS ??= defaults.TRANSPORT_TLS;
+process.env.RATE_LIMIT_WINDOW ??= defaults.RATE_LIMIT_WINDOW;
+process.env.RATE_LIMIT ??= defaults.RATE_LIMIT;
 
 const xyzEnv = {
   PORT: process.env.PORT,
@@ -79,6 +83,8 @@ const xyzEnv = {
   TITLE: process.env.TITLE,
   WORKSPACE_AGE: process.env.WORKSPACE_AGE,
   COOKIE_TTL: process.env.COOKIE_TTL,
+  RATE_LIMIT_WINDOW: process.env.RATE_LIMIT_WINDOW,
+  RATE_LIMIT: process.env.RATE_LIMIT,
   FAILED_ATTEMPTS: process.env.FAILED_ATTEMPTS,
   RETRY_LIMIT: process.env.RETRY_LIMIT,
   TRANSPORT_TLS: process.env.TRANSPORT_TLS,

@@ -53,8 +53,8 @@ const app = express();
 app.disable('x-powered-by');
 
 const limiter = rateLimit({
-  windowMs: process.env.RATE_LIMIT_WINDOW ?? 1 * 60 * 1000, // 1 min
-  limit: process.env.RATE_LIMIT ?? 1000, //1000 requests per 1min
+  windowMs: xyzEnv.RATE_LIMIT_WINDOW,
+  limit: xyzEnv.RATE_LIMIT,
   standardHeaders: 'draft-8',
   legacyHeaders: false,
 });
