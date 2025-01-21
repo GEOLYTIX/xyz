@@ -5,7 +5,6 @@ The cloudfront provider module exports a method to fetch resources from an AWS c
 
 @requires module:/utils/logger
 @requires module:/sign/cloudfront
-@requires module:/utils/processEnv
 
 @module /provider/cloudfront
 */
