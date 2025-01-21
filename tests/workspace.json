@@ -68,6 +68,28 @@
       "triangle_test": "https://geolytix.github.io/MapIcons/templates/triangle_10px.svg",
       "template_pin_test": "https://geolytix.github.io/MapIcons/pins/pink_master_pin.svg"
     },
+    "link_button": [
+      {
+        "href": "/url/url",
+        "title": "TITLE HERE",
+        "target": "_blank",
+        "css_class": "mask-icon",
+        "css_style": "mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg); -webkit-mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg);"
+      },
+      {
+        "title": "WILL NOT BE ADDED AS NO HREF",
+        "target": "_blank",
+        "css_class": "mask-icon",
+        "css_style": "mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg); -webkit-mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg);"
+      },
+      {
+        "title": "WILL BE ADDED AS HREF",
+        "href": "/url/url2",
+        "target": "_blank",
+        "css_class": "mask-icon",
+        "css_style": "mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg); -webkit-mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg);"
+      }
+    ],
     "assignMapview": {},
     "keyvalue_dictionary": [
       {
