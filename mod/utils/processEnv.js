@@ -100,4 +100,4 @@ Object.entries(process.env).forEach(([key, value]) => {
 // Freeze to prevent modifications
 Object.freeze(xyzEnv);
 
-globalThis.xyzEnv = xyzEnv;
+globalThis.xyzEnv ??= xyzEnv;
