@@ -5,7 +5,7 @@ Signs requests to S3. Provides functions for get, list, delete and put to S3.
 > For public buckets you do not need to use the s3 sign in order to get or list from the bucket. 
 > See bellow for examples of how public interactions 
 
-The module requires AWS_S3_CLIENT credentials in the process.env and will export as null if the credentials are not provided. The credentials consist of two parts: an access key ID and a secret access key eg: `AWS_S3_CLIENT="accessKeyId=AKIAIOSFODNN7EXAMPLE&secretAccessKey=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"`. [Both the access key ID and secret access key together are required to authenticate your requests]{@link https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html}.
+The module requires AWS_S3_CLIENT credentials in the xyzEnv and will export as null if the credentials are not provided. The credentials consist of two parts: an access key ID and a secret access key eg: `AWS_S3_CLIENT="accessKeyId=AKIAIOSFODNN7EXAMPLE&secretAccessKey=wJalrXUtnFEMI/K7MDENG/bPxRfiCYEXAMPLEKEY"`. [Both the access key ID and secret access key together are required to authenticate your requests]{@link https://docs.aws.amazon.com/IAM/latest/UserGuide/id_credentials_access-keys.html}.
 
 Sample requests for common S3 SDK commands. Please refer to the S3 SDK documentation for detailed information in regards to the Command methods.
 
@@ -58,7 +58,7 @@ The aws-sdk/client-s3 and aws-sdk/s3-request-presigner are optional dependencies
 
 @requires aws-sdk/client-s3
 @requires aws-sdk/s3-request-presigner
-
+@requires module:/utils/processEnv
 @module /sign/s3
 */
 
@@ -66,27 +66,21 @@ let clientSDK;
 let getSignedUrl;
 let credentials;
 
-if (!process.env.AWS_S3_CLIENT) {
-
-  module.exports = null
-
+if (!xyzEnv.AWS_S3_CLIENT) {
+  module.exports = null;
 } else {
-
   //Attempt import if credentials are found
   try {
-
     // Create credentials object from AWS_S3_CLIENT
-    credentials = Object.fromEntries(new URLSearchParams(process.env.AWS_S3_CLIENT))
+    credentials = Object.fromEntries(new URLSearchParams(xyzEnv.AWS_S3_CLIENT));
 
     // Require will err if installed without optional dependencies.
     clientSDK = require('@aws-sdk/client-s3');
     getSignedUrl = require('@aws-sdk/s3-request-presigner').getSignedUrl;
 
-    module.exports = s3_signer
-  }
-  catch (err) {
-
-    module.exports = null
+    module.exports = s3_signer;
+  } catch (err) {
+    module.exports = null;
   }
 }
 
@@ -107,25 +101,21 @@ The provided request params will be spread into the Command object created from 
 @returns {Promise<String>} The signed url associated to the request params.
 **/
 async function s3_signer(req, res) {
-
   const S3Client = new clientSDK.S3Client({
     credentials,
-    region: req.params.Region
-  })
+    region: req.params.Region,
+  });
 
   if (!Object.hasOwn(clientSDK, req.params.command)) {
-    return res.status(400).send(`S3 clientSDK command validation failed.`)
+    return res.status(400).send(`S3 clientSDK command validation failed.`);
   }
 
   // Spread req.params into the clientSDK Command.
-  const Command = new clientSDK[req.params.command]({ ...req.params })
+  const Command = new clientSDK[req.params.command]({ ...req.params });
 
-  const signedURL = await getSignedUrl(
-    S3Client,
-    Command,
-    {
-      expiresIn: 3600,
-    });
+  const signedURL = await getSignedUrl(S3Client, Command, {
+    expiresIn: 3600,
+  });
 
   return signedURL;
 }

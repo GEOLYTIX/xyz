@@ -3,11 +3,12 @@
 This module provides a logging utility for the xyz.
 
 @module /utils/logger
+@requires module:/utils/processEnv
 */
 
 const crypto = require('crypto');
 
-const logs = new Set(process.env.LOGS?.split(',') || []);
+const logs = new Set(xyzEnv.LOGS?.split(',') || []);
 
 // Errors should always be logged.
 logs.add('err');
@@ -16,15 +17,16 @@ const process_id = crypto.randomBytes(3).toString('hex');
 
 const logout = {
   logflare,
-  postgresql
+  postgresql,
 };
 
 // Required to initialse PostgreSQL logger.
 const { Pool } = require('pg');
 
-const logger = process.env.LOGGER
-  && Object.hasOwn(logout, process.env.LOGGER.split(':')[0])
-  && logout[process.env.LOGGER.split(':')[0]]();
+const logger =
+  xyzEnv.LOGGER &&
+  Object.hasOwn(logout, xyzEnv.LOGGER.split(':')[0]) &&
+  logout[xyzEnv.LOGGER.split(':')[0]]();
 
 /**
  * Logs a message to the configured logger or console.
@@ -56,7 +58,9 @@ module.exports = (log, key = 'err') => {
  * @returns {Function} A function that logs messages to Logflare.
  */
 function logflare() {
-  const params = Object.fromEntries(new URLSearchParams(process.env.LOGGER.split(':')[1]).entries());
+  const params = Object.fromEntries(
+    new URLSearchParams(xyzEnv.LOGGER.split(':')[1]).entries(),
+  );
 
   return (log, key) => {
     fetch(`https://api.logflare.app/logs/json?source=${params.source}`, {
@@ -67,9 +71,9 @@ function logflare() {
       },
       body: JSON.stringify({
         [process_id]: log,
-        key
-      })
-    }).catch(err => {
+        key,
+      }),
+    }).catch((err) => {
       console.error(err);
     });
   };
@@ -81,9 +85,11 @@ function logflare() {
  * @returns {Function} A function that logs messages to a PostgreSQL database.
  */
 function postgresql() {
-  const params = Object.fromEntries(new URLSearchParams(process.env.LOGGER.split(':')[1]).entries());
+  const params = Object.fromEntries(
+    new URLSearchParams(xyzEnv.LOGGER.split(':')[1]).entries(),
+  );
 
-  const connectionString = process.env[`DBS_${params.dbs}`];
+  const connectionString = xyzEnv[`DBS_${params.dbs}`];
 
   if (!connectionString) {
     console.warn(`Logger module unable to find dbs=${params.dbs}`);
@@ -92,7 +98,7 @@ function postgresql() {
 
   const pool = new Pool({
     connectionString,
-    statement_timeout: 3000
+    statement_timeout: 3000,
   });
 
   return async (log, key) => {
@@ -110,7 +116,7 @@ function postgresql() {
       await client.query(
         `INSERT INTO ${table} (process, datetime, key, log, message) 
         VALUES ($1, $2, $3, $4, $5)`,
-        [process_id, parseInt(Date.now() / 1000), key, logstring, errorMessage]
+        [process_id, parseInt(Date.now() / 1000), key, logstring, errorMessage],
       );
     } catch (error) {
       console.error('Error while logging to database:', error);

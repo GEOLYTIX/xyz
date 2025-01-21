@@ -7,17 +7,18 @@ Exports the [user] verify method for the /api/user/verify route.
 @requires module:/user/login
 @requires module:/utils/mailer
 @requires module:/utils/languageTemplates
+@requires module:/utils/processEnv
 
 @module /user/verify
 */
 
-const acl = require('./acl')
+const acl = require('./acl');
 
-const mailer = require('../utils/mailer')
+const mailer = require('../utils/mailer');
 
-const languageTemplates = require('../utils/languageTemplates')
+const languageTemplates = require('../utils/languageTemplates');
 
-const login = require('./login')
+const login = require('./login');
 
 /**
 @function verify
@@ -42,111 +43,107 @@ Request messaging language
 */
 
 module.exports = async (req, res) => {
-
   // acl module will export an empty require object without the ACL being configured.
   if (acl === null) {
-    return res.status(500).send('ACL unavailable.')
+    return res.status(500).send('ACL unavailable.');
   }
 
   // Find user record with matching verificationtoken.
-  let rows = await acl(`
+  let rows = await acl(
+    `
     SELECT email, language, approved, password_reset
     FROM acl_schema.acl_table
     WHERE verificationtoken = $1;`,
-    [req.params.key])
+    [req.params.key],
+  );
 
   if (rows instanceof Error) {
-    return res.status(500).send('Failed to access ACL.')
+    return res.status(500).send('Failed to access ACL.');
   }
 
-  const user = rows[0]
+  const user = rows[0];
 
   if (!user) {
-
     const token_not_found = await languageTemplates({
       template: 'token_not_found',
-      language: req.params.language
-    })
+      language: req.params.language,
+    });
 
-    return res.status(302).send(token_not_found)
+    return res.status(302).send(token_not_found);
   }
 
   // Update user account in ACL with the approval token and remove verification token.
-  await acl(`
+  await acl(
+    `
     UPDATE acl_schema.acl_table SET
       failedattempts = 0,
       password = $3,
       verified = true,
       verificationtoken = null,
       language = $2
-    WHERE lower(email) = lower($1);`, [
-    user.email,
-    req.params.language || user.language,
-    user.password_reset
-  ]);
+    WHERE lower(email) = lower($1);`,
+    [user.email, req.params.language || user.language, user.password_reset],
+  );
 
   if (rows instanceof Error) {
-    return res.status(500).send('Failed to access ACL.')
+    return res.status(500).send('Failed to access ACL.');
   }
 
   // Account is already approved.
   // eg. on password reset
   if (user.approved) {
-
     // Login with message if account is approved and password reset.
     if (user.password_reset) {
-
       // Set root location which will open the login view.
-      res.setHeader('location', `${process.env.DIR || '/'}?msg=password_reset_ok`)
+      res.setHeader('location', `${xyzEnv.DIR || '/'}?msg=password_reset_ok`);
 
-      return res.status(302).send()
+      return res.status(302).send();
     }
 
-    return login(req, res)
+    return login(req, res);
   }
 
   // Get all admin accounts from the ACL.
   rows = await acl(`
     SELECT email, language
     FROM acl_schema.acl_table
-    WHERE admin = true;`)
+    WHERE admin = true;`);
 
   if (rows instanceof Error) {
-    return res.status(500).send('Failed to access ACL.')
+    return res.status(500).send('Failed to access ACL.');
   }
 
-  // One or more administrator have been 
+  // One or more administrator have been
   if (rows.length > 0) {
-
     // Get array of mail promises.
-    const mail_promises = rows.map(async row => {
-
+    const mail_promises = rows.map(async (row) => {
       return await mailer({
         template: 'admin_email',
         language: row.language,
         to: row.email,
         email: user.email,
-        host: req.params.host
-      })
-    })
+        host: req.params.host,
+      });
+    });
 
     // Continue after all mail promises have been resolved.
-    Promise
-      .allSettled(mail_promises)
-      .then(async arr => {
-        res.send(await languageTemplates({
-          template: 'account_await_approval',
-          language: user.language
-        }))
+    Promise.allSettled(mail_promises)
+      .then(async (arr) => {
+        res.send(
+          await languageTemplates({
+            template: 'account_await_approval',
+            language: user.language,
+          }),
+        );
       })
-      .catch(error => console.error(error))
-
+      .catch((error) => console.error(error));
   } else {
-
     // No admin accounts found in ACL.
-    res.send(await languageTemplates({
-      template: 'account_approved_no_admin',
-      language: user.language
-    }))
+    res.send(
+      await languageTemplates({
+        template: 'account_approved_no_admin',
+        language: user.language,
+      }),
+    );
   }
-}
+};

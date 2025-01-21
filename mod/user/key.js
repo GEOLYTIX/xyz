@@ -5,13 +5,14 @@ Exports the apiKey method for the /api/user/key route.
 
 @requires module:/user/acl
 @requires jsonwebtoken
+@requires module:/utils/processEnv
 
 @module /user/key
 */
 
-const acl = require('./acl')
+const acl = require('./acl');
 
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 
 /**
 @function apiKey
@@ -34,51 +35,54 @@ Requesting user.
 */
 
 module.exports = async function apiKey(req, res) {
-
   // acl module will export an empty require object without the ACL being configured.
   if (acl === null) {
-    return res.status(500).send('ACL unavailable.')
+    return res.status(500).send('ACL unavailable.');
   }
 
   if (!req.params.user) {
-
-    return new Error('login_required')
+    return new Error('login_required');
   }
 
   // Get user from ACL.
-  let rows = await acl(`
+  let rows = await acl(
+    `
     SELECT * FROM acl_schema.acl_table
-    WHERE lower(email) = lower($1);`, [req.params.user.email])
+    WHERE lower(email) = lower($1);`,
+    [req.params.user.email],
+  );
 
   if (rows instanceof Error) {
-    return res.status(500).send('Failed to access ACL.')
+    return res.status(500).send('Failed to access ACL.');
   }
 
-  const user = rows[0]
+  const user = rows[0];
 
   if (!user || !user.api || !user.verified || !user.approved || user.blocked) {
-    return res.status(401).send('Unauthorized access.')
+    return res.status(401).send('Unauthorized access.');
   }
 
   // Create signed api_token
   const api_user = {
     email: user.email,
     roles: user.roles,
-    api: true
-  }
+    api: true,
+  };
 
-  const key = jwt.sign(api_user, process.env.SECRET)
+  const key = jwt.sign(api_user, xyzEnv.SECRET);
 
   // Store api_token in ACL.
-  rows = await acl(`
+  rows = await acl(
+    `
     UPDATE acl_schema.acl_table SET api = '${key}'
     WHERE lower(email) = lower($1);`,
-    [user.email])
+    [user.email],
+  );
 
   if (rows instanceof Error) {
-    return res.status(500).send('Failed to access ACL.')
+    return res.status(500).send('Failed to access ACL.');
   }
 
   // Send ACL token.
-  res.send(key)
-}
+  res.send(key);
+};

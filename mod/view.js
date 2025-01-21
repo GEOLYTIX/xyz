@@ -7,13 +7,14 @@ View templates maybe localised and must be requested from the languageTemplates 
 
 @requires /utils/logger
 @requires /utils/languageTemplates
+@requires /utils/processEnv
 
 @module /view
 */
 
-const logger = require('./utils/logger')
+const logger = require('./utils/logger');
 
-const languageTemplates = require('./utils/languageTemplates')
+const languageTemplates = require('./utils/languageTemplates');
 
 /**
 @function view
@@ -34,48 +35,48 @@ The view [template] is a HTML string. Template variables defined within a set of
 @property {Object} [params.user] Requesting user.
 */
 module.exports = async function view(req, res) {
+  logger(req.url, 'view-req-url');
 
-  logger(req.url, 'view-req-url')
-
-  const params = {}
+  const params = {};
 
   Object.keys(req.params)
-    .filter(key => typeof req.params[key] === 'string')
-    .forEach(key => params[key] = req.params[key])
+    .filter((key) => typeof req.params[key] === 'string')
+    .forEach((key) => (params[key] = req.params[key]));
 
   // The default_view is assumed without an implicit template value.
-  params.template ??= 'default_view'
+  params.template ??= 'default_view';
 
-  params.dir ??= process.env.DIR
+  params.dir ??= xyzEnv.DIR;
 
-  params.login ??= (process.env.PRIVATE || process.env.PUBLIC) && 'true'
+  params.login ??= (xyzEnv.PRIVATE || xyzEnv.PUBLIC) && 'true';
 
-  params.title ??= process.env.TITLE
+  params.title ??= xyzEnv.TITLE;
 
-  params.language ??= req.params.user?.language || 'en'
+  params.language ??= req.params.user?.language || 'en';
 
-  const template = await languageTemplates(params)
+  const template = await languageTemplates(params);
 
   if (!template) {
-    res.status(400).send(`Template undefined`)
+    res.status(400).send(`Template undefined`);
     return;
   }
 
   if (req.params.msg) {
-
     // Check for languageTemplate for a message to be displayed in the template.
     params.msg = await languageTemplates({
       template: req.params.msg,
-      language: req.params.language
-    })
+      language: req.params.language,
+    });
   }
 
   // Susbtitute template variables with string properties in params.
-  const view = template.replace(/{{2}([A-Za-z][A-Za-z0-9]*)}{2}/g, matched => {
-
-    // regex matches {{ or }}
-    return params[matched.replace(/(^{{)|(}}$)/g, '')] || ''
-  });
+  const view = template.replace(
+    /{{2}([A-Za-z][A-Za-z0-9]*)}{2}/g,
+    (matched) => {
+      // regex matches {{ or }}
+      return params[matched.replace(/(^{{)|(}}$)/g, '')] || '';
+    },
+  );
 
   res.send(view);
-}
+};

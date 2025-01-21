@@ -9,29 +9,28 @@ This module exports the fromACL method to request and validate a user from the A
 @requires module:/utils/languageTemplates
 @requires module:/utils/bcrypt
 @requires crypto
+@requires module:/utils/processEnv
 
 @module /user/fromACL
 */
 
-const bcrypt = require('../utils/bcrypt')
+const bcrypt = require('../utils/bcrypt');
 
-const crypto = require('crypto')
+const crypto = require('crypto');
 
-const acl = require('./acl')
+const acl = require('./acl');
 
 if (acl === null) {
   module.exports = null;
-
 } else {
-
-  module.exports = fromACL
+  module.exports = fromACL;
 }
 
-const reqHost = require('../utils/reqHost')
+const reqHost = require('../utils/reqHost');
 
-const mailer = require('../utils/mailer')
+const mailer = require('../utils/mailer');
 
-const languageTemplates = require('../utils/languageTemplates')
+const languageTemplates = require('../utils/languageTemplates');
 
 /**
 @function fromACL
@@ -52,52 +51,59 @@ The request.email and request.password are taken from the req.body or authorizat
 Validated user object or an Error if authentication fails.
 */
 async function fromACL(req) {
-
   const request = {
     email: req.body?.email,
     password: req.body?.password,
     language: req.params.language,
     headers: req.headers,
     date: new Date(),
-    host: reqHost(req)
-  }
+    host: reqHost(req),
+  };
 
   if (req.headers.authorization) {
+    const user_string = Buffer.from(
+      req.headers.authorization.split(' ')[1],
+      'base64',
+    ).toString();
 
-    const user_string = Buffer.from(req.headers.authorization.split(' ')[1], 'base64').toString()
+    const email_password = user_string.split(':');
 
-    const email_password = user_string.split(':')
+    request.email = email_password[0];
 
-    request.email = email_password[0]
-
-    request.password = email_password[1]
+    request.password = email_password[1];
   }
 
   // Get remote_address param from request headers.
-  request.remote_address = /^[A-Za-z0-9.,_-\s]*$/
-    .test(req.headers['x-forwarded-for'])
+  request.remote_address = /^[A-Za-z0-9.,_-\s]*$/.test(
+    req.headers['x-forwarded-for'],
+  )
     ? req.headers['x-forwarded-for']
     : undefined;
 
-  if (!request.email) return new Error(await languageTemplates({
-    template: 'missing_email',
-    language: request.language
-  }))
+  if (!request.email)
+    return new Error(
+      await languageTemplates({
+        template: 'missing_email',
+        language: request.language,
+      }),
+    );
 
-  if (!request.password) return new Error(await languageTemplates({
-    template: 'missing_password',
-    language: request.language
-  }))
+  if (!request.password)
+    return new Error(
+      await languageTemplates({
+        template: 'missing_password',
+        language: request.language,
+      }),
+    );
 
-  const user = await getUser(request)
+  const user = await getUser(request);
 
   if (user === undefined) {
-
     // This will happen when a user has a null password.
-    return new Error('auth_failed')
+    return new Error('auth_failed');
   }
 
-  return user
+  return user;
 }
 
 /**
@@ -124,22 +130,26 @@ Returns a validated user object or Error.
 */
 
 async function getUser(request) {
-
   // Update access_log and return user record matched by email.
-  let rows = await acl(`
+  let rows = await acl(
+    `
     UPDATE acl_schema.acl_table
     SET access_log = array_append(access_log, '${request.date.toISOString().replace(/\..*/, '')}@${request.remote_address}')
     WHERE lower(email) = lower($1)
-    RETURNING email, roles, language, blocked, approved, approved_by, verified, admin, password ${process.env.APPROVAL_EXPIRY ? ', expires_on;' : ';'}`,
-    [request.email])
+    RETURNING email, roles, language, blocked, approved, approved_by, verified, admin, password ${xyzEnv.APPROVAL_EXPIRY ? ', expires_on;' : ';'}`,
+    [request.email],
+  );
 
-  if (rows instanceof Error) return new Error(await languageTemplates({
-    template: 'failed_query',
-    language: request.language
-  }))
+  if (rows instanceof Error)
+    return new Error(
+      await languageTemplates({
+        template: 'failed_query',
+        language: request.language,
+      }),
+    );
 
   // Get user record from first row.
-  const user = rows[0]
+  const user = rows[0];
 
   // If there is no user in the ACL do not throw error.
   if (!user) return;
@@ -149,68 +159,68 @@ async function getUser(request) {
 
   // Blocked user cannot login.
   if (user.blocked) {
-    return new Error(await languageTemplates({
-      template: 'user_blocked',
-      language: user.language
-    }))
+    return new Error(
+      await languageTemplates({
+        template: 'user_blocked',
+        language: user.language,
+      }),
+    );
   }
 
   // Removes blocked.false flag from user object.
-  delete user.blocked
+  delete user.blocked;
 
   // Check whether the user approval may have expired.
   if (await userExpiry(user, request)) {
-
-    return new Error(await languageTemplates({
-      template: 'user_expired',
-      language: user.language
-    })) 
+    return new Error(
+      await languageTemplates({
+        template: 'user_expired',
+        language: user.language,
+      }),
+    );
   }
 
   // Accounts must be verified and approved for login
   if (!user.verified || !user.approved) {
-
     await mailer({
       template: 'failed_login',
       language: user.language,
       to: user.email,
       host: request.host,
-      remote_address: request.remote_address
-    })
+      remote_address: request.remote_address,
+    });
 
-    return new Error('user_not_verified')
+    return new Error('user_not_verified');
   }
 
   // Check password from post body against encrypted password from ACL.
   if (bcrypt.compareSync(request.password, user.password)) {
-
     // password must be removed after check
-    delete user.password
+    delete user.password;
 
-    if (process.env.USER_SESSION) {
-
+    if (xyzEnv.USER_SESSION) {
       // Create a random session token.
-      user.session = crypto.randomBytes(10).toString('hex')
+      user.session = crypto.randomBytes(10).toString('hex');
 
       // Store session token in ACL.
-      rows = await acl(`
+      rows = await acl(
+        `
         UPDATE acl_schema.acl_table
         SET session = '${user.session}'
         WHERE lower(email) = lower($1)`,
-        [request.email])
+        [request.email],
+      );
 
       // The ACL table may not have a session column.
       if (rows instanceof Error) {
-
-        return new Error('Unable to store session.')
+        return new Error('Unable to store session.');
       }
-
     }
 
-    return user
+    return user;
   }
 
-  return await failedLogin(request)
+  return await failedLogin(request);
 }
 
 /**
@@ -218,7 +228,7 @@ async function getUser(request) {
 @async
 
 @description
-Checks whether an user approval has expired if enabled with `process.env.APPROVAL_EXPIRY`.
+Checks whether an user approval has expired if enabled with `xyzEnv.APPROVAL_EXPIRY`.
 
 A user account will expire if the user object has an expires_on integer data which is smaller than the current Date.
 
@@ -234,24 +244,23 @@ Admin user accounts do not expire.
 */
 
 async function userExpiry(user, request) {
-
   // Admin accounts do not not expire.
   if (user.admin) return false;
 
   // APPROVAL_EXPIRY is not configured.
-  if (!process.env.APPROVAL_EXPIRY) return false;
-  
+  if (!xyzEnv.APPROVAL_EXPIRY) return false;
+
   // Check whether user is expired.
   if (user.expires_on !== null && user.expires_on < new Date() / 1000) {
-
     if (user.approved) {
-
       // Remove approval of expired user.
-      await acl(`
+      await acl(
+        `
         UPDATE acl_schema.acl_table
         SET approved = false
         WHERE lower(email) = lower($1);`,
-        [request.email])
+        [request.email],
+      );
     }
 
     // User approval has expired.
@@ -268,7 +277,7 @@ Handles a failed login attempts.
 
 Increases a counter of failed attempts in the user ACL record.
 
-The user account will be locked if the failed attempts exceed the maxFailed attempts from `process.env.FAILED_ATTEMPTS`. maxFailed attempts defaults to 3.
+The user account will be locked if the failed attempts exceed the maxFailed attempts from `xyzEnv.FAILED_ATTEMPTS`. maxFailed attempts defaults to 3.
 
 Verification will be removed and a verification token will stored in the ACL if a user account is getting locked.
 
@@ -285,43 +294,51 @@ It is recommended to reset the password for the account if this happens.
 @returns {Promise<Error>} A Promise that resolves with an Error.
 */
 
-const maxFailedAttempts = parseInt(process.env.FAILED_ATTEMPTS || 3)
+const maxFailedAttempts = parseInt(xyzEnv.FAILED_ATTEMPTS);
 
 async function failedLogin(request) {
-
   // Increase failed login attempts counter by 1.
-  let rows = await acl(`
+  let rows = await acl(
+    `
     UPDATE acl_schema.acl_table
     SET failedattempts = failedattempts + 1
     WHERE lower(email) = lower($1)
-    RETURNING failedattempts;`, [request.email])
+    RETURNING failedattempts;`,
+    [request.email],
+  );
 
   if (rows instanceof Error) {
-    return new Error(await languageTemplates({
-      template: 'failed_query',
-      language: request.language
-    }))
+    return new Error(
+      await languageTemplates({
+        template: 'failed_query',
+        language: request.language,
+      }),
+    );
   }
 
   // Check whether failed login attempts exceeds limit.
   if (rows[0]?.failedattempts >= maxFailedAttempts) {
-
     // Create a verificationtoken.
-    const verificationtoken = crypto.randomBytes(20).toString('hex')
+    const verificationtoken = crypto.randomBytes(20).toString('hex');
 
     // Store verificationtoken and remove verification status.
-    rows = await acl(`
+    rows = await acl(
+      `
       UPDATE acl_schema.acl_table
       SET
         verified = false,
         verificationtoken = '${verificationtoken}'
-      WHERE lower(email) = lower($1);`, [request.email])
+      WHERE lower(email) = lower($1);`,
+      [request.email],
+    );
 
     if (rows instanceof Error) {
-      return new Error(await languageTemplates({
-        template: 'failed_query',
-        language: request.language
-      }))
+      return new Error(
+        await languageTemplates({
+          template: 'failed_query',
+          language: request.language,
+        }),
+      );
     }
 
     await mailer({
@@ -331,13 +348,15 @@ async function failedLogin(request) {
       host: request.host,
       failed_attempts: maxFailedAttempts,
       remote_address: request.remote_address,
-      verificationtoken
-    })
+      verificationtoken,
+    });
 
-    return new Error(await languageTemplates({
-      template: 'user_locked',
-      language: request.language
-    }))
+    return new Error(
+      await languageTemplates({
+        template: 'user_locked',
+        language: request.language,
+      }),
+    );
   }
 
   // Login has failed but account is not locked (yet).
@@ -346,8 +365,8 @@ async function failedLogin(request) {
     language: request.language,
     to: request.email,
     host: request.host,
-    remote_address: request.remote_address
-  })
+    remote_address: request.remote_address,
+  });
 
-  return new Error('auth_failed')
+  return new Error('auth_failed');
 }
