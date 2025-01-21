@@ -7,11 +7,14 @@ View templates maybe localised and must be requested from the languageTemplates 
 
 @requires /utils/logger
 @requires /utils/languageTemplates
+@requires /utils/processEnv
 
 @module /view
 */
 
 const logger = require('./utils/logger')
+
+ 
 
 const languageTemplates = require('./utils/languageTemplates')
 
@@ -46,11 +49,11 @@ module.exports = async function view(req, res) {
   // The default_view is assumed without an implicit template value.
   params.template ??= 'default_view'
 
-  params.dir ??= process.env.DIR
+  params.dir ??= xyzEnv.DIR
 
-  params.login ??= (process.env.PRIVATE || process.env.PUBLIC) && 'true'
+  params.login ??= (xyzEnv.PRIVATE || xyzEnv.PUBLIC) && 'true'
 
-  params.title ??= process.env.TITLE
+  params.title ??= xyzEnv.TITLE
 
   params.language ??= req.params.user?.language || 'en'
 

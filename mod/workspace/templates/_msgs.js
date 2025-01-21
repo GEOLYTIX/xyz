@@ -102,7 +102,7 @@ module.exports = {
   admin_approved: {
     en: `The account has been approved by you. An email has been sent to the account holder.`,
     pl: `Konto zostało zatwierdzone. Wysłano wiadomość na zarejestrowany adres e-mail.`,
-    fr: `Vous avez approuvé ce compte. Un e-mail a été envoyé au propriétaire du compte.`,
+    fr: `Vous avez approuvé ce compte. Un e-mail a été xyzEnvoyé au propriétaire du compte.`,
     ja: `アカウントはあなたによって承認されました。 メールをアカウント所有者に送信しました。`,
     ko: `귀하에 의해서 계정이 승인되었습니다. 계정 사용자에게 이메일이 발송되었습니다.`,
     zh: `此帐户已被您批准。电子邮件已发送给帐户持有人`

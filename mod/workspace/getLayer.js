@@ -27,7 +27,7 @@ The layer locale is requested from the getLocale module.
 
 A layer template lookup will be attempted if a layer is not found in locale.layers.
 
-The mergeTemplate module will be called to merge templates into the locale object and substitute SRC_* environment variables.
+The mergeTemplate module will be called to merge templates into the locale object and substitute SRC_* xyzEnvironment variables.
 
 A role check is performed to check whether the requesting user has access to the locale.
 

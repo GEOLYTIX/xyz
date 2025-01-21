@@ -5,9 +5,12 @@ Exports the apiKey method for the /api/user/key route.
 
 @requires module:/user/acl
 @requires jsonwebtoken
+@requires module:/utils/processEnv
 
 @module /user/key
 */
+
+ 
 
 const acl = require('./acl')
 
@@ -67,7 +70,7 @@ module.exports = async function apiKey(req, res) {
     api: true
   }
 
-  const key = jwt.sign(api_user, process.env.SECRET)
+  const key = jwt.sign(api_user, xyzEnv.SECRET)
 
   // Store api_token in ACL.
   rows = await acl(`

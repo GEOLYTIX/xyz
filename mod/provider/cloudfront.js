@@ -12,6 +12,7 @@ The cloudfront provider module exports a method to fetch resources from an AWS c
 const cloudfront_signer = require('../sign/cloudfront');
 const logger = require('../utils/logger')
 
+ 
 /**
 @function cloudfront
 @async
@@ -41,11 +42,13 @@ async function cloudfront(ref) {
 
     const url = ref.params?.url || ref
 
+
     const signedURL = await cloudfront_signer(url)
 
     if(signedURL instanceof Error) {
       return signedURL;
     }
+
 
     // Return signedURL only from request.
     if (ref.params?.signedURL) {
