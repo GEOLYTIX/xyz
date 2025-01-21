@@ -237,27 +237,27 @@ function templateTables(template) {
     // Object must have keys to iterate on.
     if (obj instanceof Object && !Object.keys(obj)) return;
 
-    Object.entries(obj).forEach((entry) => {
+    Object.entries(obj).forEach(([key, value]) => {
 
-      if (entry[0] === 'table' && typeof entry[1] === 'string') {
-        tables.push(entry[1])
+      if (key === 'table' && typeof value === 'string') {
+        tables.push(value)
         return;
       }
 
-      if (entry[0] === 'tables' && entry[1] instanceof Object && Object.keys(entry[1]).length) {
-        Object.values(entry[1]).forEach(table => typeof table === 'string' && tables.push(table))
+      if (key === 'tables' && value instanceof Object && Object.keys(value).length) {
+        Object.values(value).forEach(table => typeof table === 'string' && tables.push(table))
         return;
       }
 
       // Recursively process each item if we find an array
-      if (Array.isArray(entry[1])) {
-        entry[1].forEach(item => getObjTables(item, tables));
+      if (Array.isArray(value)) {
+        value.forEach(item => getObjTables(item, tables));
         return;
       }
 
       // Recursively process nested objects
-      if (entry[1] instanceof Object) {
-        getObjTables(entry[1], tables)
+      if (value instanceof Object) {
+        getObjTables(value, tables)
       }
     });
   }
