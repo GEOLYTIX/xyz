@@ -11,22 +11,24 @@
     cursor: pointer;
   }
 
-  &.expandable.empty>.header>.expander {
+  &.expandable.empty > .header > .expander {
     display: none;
   }
 
   &.expandable > .header > .material-symbols-outlined.expander::after {
     content: 'keyboard_arrow_down';
     color: var(--color-primary-light);
+    line-height: 1.5em;
   }
 
   &.expandable:not(.expanded) > *:not(.header) {
-    display: none !important;
+    display: none;
   }
 
   &.expanded > .header > .material-symbols-outlined.expander::after {
     content: 'keyboard_arrow_up';
     color: var(--color-primary-light);
+    line-height: 1.5em;
   }
 
   &.disabled {
@@ -42,7 +44,7 @@
       font-size: 1.5em;
     }
 
-    &>:not(button):not(label):not(input) {
+    & > :not(button):not(label):not(input) {
       pointer-events: none;
     }
 
@@ -62,7 +64,6 @@
     & > :nth-child(2) {
       margin-left: auto;
     }
-
   }
 
   &.flat {

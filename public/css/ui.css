@@ -1281,13 +1281,17 @@ dialog {
   &.expandable > .header > .material-symbols-outlined.expander::after {
     content: "keyboard_arrow_down";
     color: var(--color-primary-light);
+    line-height: 1.5em;
   }
   &.expandable:not(.expanded) > *:not(.header) {
-    display: none !important;
+    <<<<<<< HEAD display: none !important;
+    ======= display: none;
+    >>>>>>> 08931033f (css - line-height property on expander;);
   }
   &.expanded > .header > .material-symbols-outlined.expander::after {
     content: "keyboard_arrow_up";
     color: var(--color-primary-light);
+    line-height: 1.5em;
   }
   &.disabled {
     opacity: 0.4;
