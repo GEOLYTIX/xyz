@@ -108,7 +108,7 @@ async function loginBody(req, res) {
     },
     xyzEnv.SECRET,
     {
-      expiresIn: parseInt(xyzEnv.COOKIE_TTL)
+      expiresIn: xyzEnv.COOKIE_TTL
     })
 
   const user_cookie = `${xyzEnv.TITLE}=${token};HttpOnly;Max-Age=${xyzEnv.COOKIE_TTL};Path=${xyzEnv.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`

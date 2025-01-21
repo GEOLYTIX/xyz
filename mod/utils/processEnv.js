@@ -11,7 +11,7 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [DIR=''] The XYZ API path which concatenated with the domain for all requests.
 @property {String} [DBS_=''] DBS_* values are the connections used to establish connections to pg servers with the [dbs]{@link module:/utils/dbs} module. 
 @property {String} [PORT='3000'] The port on which the express app listens to for requests.
-@property {String} [COOKIE_TTL='36000'] The Time To Live for all cookies issued by the XYZ API.
+@property {Integer} [COOKIE_TTL=36000] The Time To Live for all cookies issued by the XYZ API.
 @property {String} [TITLE='GEOLYTIX | XYZ'] The TITLE value is used to identify cookies and is provided to as a param to Application View templates.
 @property {String} [LOGS] The LOGS string will split on comma to determine which requests send to the [LOGGER]{@link module:/utils/logger} module will be logged.
 @property {String} [LOGGER] Required to configure the [LOGGER]{@link module:/utils/logger} module for a remote out.
@@ -63,7 +63,7 @@ const defaults = {
   RETRY_LIMIT: 3,
   TRANSPORT_TLS: false,
   RATE_LIMIT: 1000, //1000 requests per 1min
-  RATE_LIMIT_WINDOW: 1 * 60 * 1000, // 1 min
+  RATE_LIMIT_WINDOW: 60 * 1000, // 1 min
 };
 
 process.env.PORT ??= defaults.PORT;
@@ -82,7 +82,7 @@ const xyzEnv = {
   DIR: process.env.DIR,
   TITLE: process.env.TITLE,
   WORKSPACE_AGE: process.env.WORKSPACE_AGE,
-  COOKIE_TTL: process.env.COOKIE_TTL,
+  COOKIE_TTL: parseInt(process.env.COOKIE_TTL),
   RATE_LIMIT_WINDOW: process.env.RATE_LIMIT_WINDOW,
   RATE_LIMIT: process.env.RATE_LIMIT,
   FAILED_ATTEMPTS: process.env.FAILED_ATTEMPTS,

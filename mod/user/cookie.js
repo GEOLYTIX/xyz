@@ -104,7 +104,7 @@ module.exports = async function cookie(req, res) {
       }
 
       const token = jwt.sign(user, xyzEnv.SECRET, {
-        expiresIn: parseInt(xyzEnv.COOKIE_TTL)
+        expiresIn: xyzEnv.COOKIE_TTL
       })
 
       const cookie = `${xyzEnv.TITLE}=${token};HttpOnly;Max-Age=${xyzEnv.COOKIE_TTL};Path=${xyzEnv.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`
