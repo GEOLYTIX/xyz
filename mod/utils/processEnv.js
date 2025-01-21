@@ -63,7 +63,7 @@ const defaults = {
   RETRY_LIMIT: 3,
   TRANSPORT_TLS: false,
   RATE_LIMIT: 1000, //1000 requests per 1min
-  RATE_LIMIT_WINDOW: 60000  // 1 min
+  RATE_LIMIT_WINDOW: 1 * 60 * 1000, // 1 min
 };
 
 process.env.PORT ??= defaults.PORT;
