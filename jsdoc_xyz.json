@@ -1,14 +1,9 @@
 {
   "source": {
-    "include": [
-      "api",
-      "mod"
-    ],
+    "include": ["api", "mod", "express.js"],
     "includePattern": ".js$"
   },
-  "plugins": [
-    "plugins/markdown"
-  ],
+  "plugins": ["plugins/markdown"],
   "opts": {
     "encoding": "utf8",
     "readme": "./api/README.md",
@@ -19,9 +14,7 @@
     "theme_opts": {
       "title": "XYZ",
       "homepageTitle": "XYZ",
-      "static_dir": [
-        "./public/icons"
-      ],
+      "static_dir": ["./public/icons"],
       "favicon": "./public/icons/favicon.ico",
       "menu": [
         {

@@ -31,7 +31,7 @@ This module handles SAML-based Single Sign-On (SSO) authentication. Here's how t
 4. Environment Variables
   Required variables for SAML strategy initialization:
 
-  ```env
+  ```xyzEnv
     # Required Core Settings
     SAML_ACS=http://your-domain/saml/acs
     SAML_SSO=https://your-idp/saml/login
@@ -70,6 +70,7 @@ This module handles SAML-based Single Sign-On (SSO) authentication. Here's how t
 @requires jsonwebtoken - JWT handling
 @requires path - File path operations
 @requires fs - File system operations
+@requires module:/utils/processEnv - xyzEnvironment variables
 
 Module Variables:
 @type {SAML} samlStrat - SAML strategy instance for authentication operations
@@ -114,46 +115,38 @@ try {
 
   // Initialize SAML configuration
   samlConfig = {
-    callbackUrl: process.env.SAML_ACS,
-    entryPoint: process.env.SAML_SSO,
-    issuer: process.env.SAML_ENTITY_ID,
+    callbackUrl: xyzEnv.SAML_ACS,
+    entryPoint: xyzEnv.SAML_SSO,
+    issuer: xyzEnv.SAML_ENTITY_ID,
 
     // Read and configure certificates
     idpCert:
-      process.env.SAML_IDP_CRT &&
-      String(
-        readFileSync(join(__dirname, `../../${process.env.SAML_IDP_CRT}.crt`)),
-      ),
+      xyzEnv.SAML_IDP_CRT &&
+      String(readFileSync(join(__dirname, `../../${xyzEnv.SAML_IDP_CRT}.crt`))),
     privateKey:
-      process.env.SAML_SP_CRT &&
-      String(
-        readFileSync(join(__dirname, `../../${process.env.SAML_SP_CRT}.pem`)),
-      ),
+      xyzEnv.SAML_SP_CRT &&
+      String(readFileSync(join(__dirname, `../../${xyzEnv.SAML_SP_CRT}.pem`))),
     publicCert:
-      process.env.SAML_SP_CRT &&
-      String(
-        readFileSync(join(__dirname, `../../${process.env.SAML_SP_CRT}.crt`)),
-      ),
+      xyzEnv.SAML_SP_CRT &&
+      String(readFileSync(join(__dirname, `../../${xyzEnv.SAML_SP_CRT}.crt`))),
 
     // Configure SAML endpoints and behavior
-    logoutUrl: process.env.SAML_SLO,
-    wantAssertionsSigned: process.env.SAML_WANT_ASSERTIONS_SIGNED,
-    wantAuthnResponseSigned: process.env.SAML_AUTHN_RESPONSE_SIGNED ?? false,
-    signatureAlgorithm: process.env.SAML_SIGNATURE_ALGORITHM,
-    identifierFormat: process.env.SAML_IDENTIFIER_FORMAT,
-    acceptedClockSkewMs: process.env.SAML_ACCEPTED_CLOCK_SKEW ?? -1,
-    providerName: process.env.SAML_PROVIDER_NAME,
-    logoutCallbackUrl: process.env.SLO_CALLBACK,
+    logoutUrl: xyzEnv.SAML_SLO,
+    wantAssertionsSigned: xyzEnv.SAML_WANT_ASSERTIONS_SIGNED,
+    wantAuthnResponseSigned: xyzEnv.SAML_AUTHN_RESPONSE_SIGNED ?? false,
+    signatureAlgorithm: xyzEnv.SAML_SIGNATURE_ALGORITHM,
+    identifierFormat: xyzEnv.SAML_IDENTIFIER_FORMAT,
+    acceptedClockSkewMs: xyzEnv.SAML_ACCEPTED_CLOCK_SKEW ?? -1,
+    providerName: xyzEnv.SAML_PROVIDER_NAME,
+    logoutCallbackUrl: xyzEnv.SLO_CALLBACK,
   };
 
   // Create SAML strategy instance
   samlStrat = new SAML(samlConfig);
   module.exports = saml;
 } catch {
-  // Check for SAML-related environment variables
-  const samlKeys = Object.keys(process.env).filter((key) =>
-    key.startsWith('SAML'),
-  );
+  // Check for SAML-related xyzEnvironment variables
+  const samlKeys = Object.keys(xyzEnv).filter((key) => key.startsWith('SAML'));
 
   // Log warning if SAML variables exist but module fails to initialize
   if (samlKeys.length > 0) {
@@ -260,15 +253,15 @@ function logoutCallback(res) {
     // Where can you go from there? Nowhere.
     res.setHeader(
       'Set-Cookie',
-      `${process.env.TITLE}=; HttpOnly; Path=${process.env.DIR || '/'}; Expires=Thu, 01 Jan 1970 00:00:00 GMT`, // But these cookies go to zero. That's one less.
+      `${xyzEnv.TITLE}=; HttpOnly; Path=${xyzEnv.DIR || '/'}; Expires=Thu, 01 Jan 1970 00:00:00 GMT`, // But these cookies go to zero. That's one less.
     );
 
-    res.setHeader('location', `${process.env.DIR || '/'}`);
+    res.setHeader('location', `${xyzEnv.DIR || '/'}`);
     return res.status(302).send();
   } catch (error) {
     console.error('Logout validation failed:', error);
 
-    res.setHeader('location', `${process.env.DIR || '/'}`);
+    res.setHeader('location', `${xyzEnv.DIR || '/'}`);
     return res.status(302).send();
   }
 }
@@ -285,11 +278,11 @@ function logoutCallback(res) {
 **/
 async function logout(req, res) {
   try {
-    const user = await jwt.decode(req.cookies[`${process.env.TITLE}`]);
+    const user = await jwt.decode(req.cookies[`${xyzEnv.TITLE}`]);
 
     // If no user/cookie, redirect to home
     if (!user) {
-      res.setHeader('location', `${process.env.DIR || '/'}`);
+      res.setHeader('location', `${xyzEnv.DIR || '/'}`);
       return res.status(302).send();
     }
 
@@ -305,7 +298,7 @@ async function logout(req, res) {
   } catch (error) {
     console.error('Logout process failed:', error);
 
-    res.setHeader('location', `${process.env.DIR || '/'}`);
+    res.setHeader('location', `${xyzEnv.DIR || '/'}`);
     return res.status(302).send();
   }
 }
@@ -322,7 +315,7 @@ async function logout(req, res) {
 async function login(req, res) {
   try {
     // Get return URL from query or default to base dir
-    const relayState = process.env.DIR ?? '/';
+    const relayState = xyzEnv.DIR ?? '/';
 
     // Get authorization URL from IdP
     const url = await samlStrat.getAuthorizeUrlAsync(
@@ -367,7 +360,7 @@ async function acs(req, res) {
     };
 
     // Perform ACL lookup if enabled
-    if (process.env.SAML_ACL) {
+    if (xyzEnv.SAML_ACL) {
       const aclResponse = await aclLookUp(user.email);
 
       if (!aclResponse) {
@@ -387,18 +380,18 @@ async function acs(req, res) {
     }
 
     // Create JWT token and set cookie
-    const token = jwt.sign(user, process.env.SECRET, {
-      expiresIn: parseInt(process.env.COOKIE_TTL),
+    const token = jwt.sign(user, xyzEnv.SECRET, {
+      expiresIn: xyzEnv.COOKIE_TTL,
     });
 
     const cookie =
-      `${process.env.TITLE}=${token};HttpOnly;` +
-      `Max-Age=${process.env.COOKIE_TTL};` +
-      `Path=${process.env.DIR || '/'};`;
+      `${xyzEnv.TITLE}=${token};HttpOnly;` +
+      `Max-Age=${xyzEnv.COOKIE_TTL};` +
+      `Path=${xyzEnv.DIR || '/'};`;
 
     res.setHeader('Set-Cookie', cookie);
 
-    res.setHeader('location', `${process.env.DIR || '/'}`);
+    res.setHeader('location', `${xyzEnv.DIR || '/'}`);
     return res.status(302).send();
   } catch (error) {
     console.log(error);

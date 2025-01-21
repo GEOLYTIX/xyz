@@ -25,7 +25,7 @@ The getLocale method requests the workspace from cache and checks whether the re
 
 The workspace.locale is assigned as locale if params.locale is undefined.
 
-The mergeTemplate module will be called to merge templates into the locale object and substitute SRC_* environment variables.
+The mergeTemplate module will be called to merge templates into the locale object and substitute SRC_* xyzEnvironment variables.
 
 A role check is performed to check whether the requesting user has access to the locale.
 
