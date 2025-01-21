@@ -4,9 +4,12 @@
 Exports the reqHost utility method.
 
 @requires module:/utils/logger
+@requires module:/utils/processEnv
 
 @module /utils/reqHost
 */
+
+ 
 
 const logger = require('./logger')
 
@@ -29,11 +32,11 @@ module.exports = function reqHost(req) {
 
   if (req.headers.host.startsWith('localhost')) {
 
-    host = `http://${req.headers.host}${process.env.DIR}`
+    host = `http://${req.headers.host}${xyzEnv.DIR}`
 
   } else if (req.headers.host) {
 
-    host = `https://${process.env.ALIAS||req.headers.host}${process.env.DIR}`
+    host = `https://${xyzEnv.ALIAS||req.headers.host}${xyzEnv.DIR}`
 
   } else if (req.headers.referer) {
 

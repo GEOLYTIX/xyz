@@ -1,3 +1,3 @@
-module.exports = _ => {
-    return `SELECT 'foo' as bar;`
-}
+module.exports = (_) => {
+  return `SELECT 'foo' as bar;`;
+};

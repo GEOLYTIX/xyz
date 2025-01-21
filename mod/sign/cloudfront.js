@@ -6,35 +6,30 @@ The cloudfront sign module exports a method to sign requests to an AWS cloudfron
 @requires fs
 @requires path
 @requires aws-sdk/cloudfront-signer
-
+@requires module:/utils/processEnv
 @module /sign/cloudfront
 */
-
 
 let getSignedUrl, privateKey;
 
 //Export nothing if the cloudfront key is not provided
-if(!process.env.KEY_CLOUDFRONT){
-
-    module.exports = null
-
+if (!xyzEnv.KEY_CLOUDFRONT) {
+  module.exports = null;
 } else {
-
   //Third party sources are optional
   try {
-
-    const { readFileSync } = require('fs')
-    const { join } = require('path')
-    privateKey = String(readFileSync(join(__dirname, `../../${process.env.KEY_CLOUDFRONT}.pem`)))
+    const { readFileSync } = require('fs');
+    const { join } = require('path');
+    privateKey = String(
+      readFileSync(join(__dirname, `../../${xyzEnv.KEY_CLOUDFRONT}.pem`)),
+    );
 
     getSignedUrl = require('@aws-sdk/cloudfront-signer').getSignedUrl;
-    module.exports = cloudfront_signer
-
+    module.exports = cloudfront_signer;
   } catch (err) {
+    console.error(err);
 
-    console.error(err)
-
-    module.exports = null
+    module.exports = null;
   }
 }
 
@@ -50,29 +45,28 @@ The method creates a signed URL for a cloudfront resource.
 @returns {Promise<String>} The method resolves to a string which contains the signed url.
 */
 async function cloudfront_signer(req_url) {
-
   try {
+    // Substitutes {*} with xyzEnv.SRC_* key values.
+    const url = req_url.replace(
+      /{(?!{)(.*?)}/g,
+      (matched) => xyzEnv[`SRC_${matched.replace(/(^{)|(}$)/g, '')}`],
+    );
 
-    // Substitutes {*} with process.env.SRC_* key values.
-    const url = (req_url).replace(/{(?!{)(.*?)}/g,
-      matched => process.env[`SRC_${matched.replace(/(^{)|(}$)/g, '')}`])
-
-    const date = new Date(Date.now())
+    const date = new Date(Date.now());
 
     date.setDate(date.getDate() + 1);
 
     const signedURL = getSignedUrl({
       url: `https://${url}`,
-      keyPairId: process.env.KEY_CLOUDFRONT,
+      keyPairId: xyzEnv.KEY_CLOUDFRONT,
       dateLessThan: date.toDateString(),
-      privateKey
+      privateKey,
     });
 
     // Return signedURL only from request.
-    return signedURL
-
-  } catch(err){
-    console.error(err)
-    return err
+    return signedURL;
+  } catch (err) {
+    console.error(err);
+    return err;
   }
 }

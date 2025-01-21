@@ -565,7 +565,14 @@ function sendRows(req, res, template, rows) {
 
   if (req.params.value_only || template?.value_only) {
 
-    return res.send(Object.values(rows[0])[0])
+    const value = Object.values(rows[0])[0]
+
+    // Numeric values may not be returned with the res.send() method.
+    if (typeof value === 'number') {
+      return res.send(value.toString())
+    }
+
+    return res.send(value)
   }
 
   // Send the infoj object with values back to the client.

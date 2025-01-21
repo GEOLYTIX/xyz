@@ -5,9 +5,12 @@ Exports the deleteUser method for the /api/user/delete route.
 
 @requires module:/user/acl
 @requires module:/utils/mailer
+@requires module:/utils/processEnv
 
 @module /user/add
 */
+
+ 
 
 const acl = require('./acl')
 
@@ -58,7 +61,7 @@ module.exports = async function deleteUser(req, res) {
   if (req.params.user?.email === email) {
 
     // The cookie must be set to null on successful return from delete method.
-    res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
+    res.setHeader('Set-Cookie', `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`)
 
     console.log(`${email} removed themselves`)
 

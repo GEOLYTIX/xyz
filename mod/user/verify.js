@@ -7,9 +7,11 @@ Exports the [user] verify method for the /api/user/verify route.
 @requires module:/user/login
 @requires module:/utils/mailer
 @requires module:/utils/languageTemplates
+@requires module:/utils/processEnv
 
 @module /user/verify
 */
+ 
 
 const acl = require('./acl')
 
@@ -97,7 +99,7 @@ module.exports = async (req, res) => {
     if (user.password_reset) {
 
       // Set root location which will open the login view.
-      res.setHeader('location', `${process.env.DIR || '/'}?msg=password_reset_ok`)
+      res.setHeader('location', `${xyzEnv.DIR || '/'}?msg=password_reset_ok`)
 
       return res.status(302).send()
     }

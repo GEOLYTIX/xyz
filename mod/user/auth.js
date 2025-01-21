@@ -8,9 +8,11 @@ A user_sessions{} object is declared in the module to store user sessions.
 @requires module:/user/acl
 @requires module:/user/fromACL
 @requires jsonwebtoken
+@requires module:/utils/processEnv
 
 @module /user/auth
 */
+ 
 
 const acl = require('./acl')
 
@@ -29,7 +31,7 @@ The auth method returns a user object to be assigned as request parameter if a r
 
 Requests with authorization headers will return the user fromACL method.
 
-Without a request parameter token [eg. API key], the token value will be extracted from a request cookie matching the TITLE environment variable.
+Without a request parameter token [eg. API key], the token value will be extracted from a request cookie matching the TITLE xyzEnvironment variable.
 
 The token will be verified by the JWT [jsonwebtoken] library.
 
@@ -43,7 +45,6 @@ The auth method checks either the request parameter token or user.session if ena
 @property {Object} [headers.authorization] User authorization object.
 @property {Object} req.params Request parameters.
 @property {string} [params.token] JWT.
-@property {string} [params.roles] An admin user may provide a comma seperated strings as roles param to test requests.
 @property {Object} [req.cookies] Request cookies.
 
 @returns {Promise<Object|Error>} Method resolves to either a user object or Error
@@ -58,7 +59,7 @@ module.exports = async function auth(req, res) {
   }
 
   // Get token from params or cookie.
-  const token = req.params.token || req.cookies?.[process.env.TITLE]
+  const token = req.params.token || req.cookies?.[xyzEnv.TITLE]
 
   // Return if there is no token to decode
   if (!token) return null
@@ -67,10 +68,11 @@ module.exports = async function auth(req, res) {
   let user;
 
   // A secret string is required to verify a token.
-  if (!process.env.SECRET) return null
+  if (!xyzEnv.SECRET) return null
+
 
   try {
-    user = jwt.verify(token, process.env.SECRET)
+    user = jwt.verify(token, xyzEnv.SECRET)
 
   } catch (err) {
 
@@ -93,12 +95,6 @@ module.exports = async function auth(req, res) {
 
     // The session check has failed.
     return sessionCheck
-  }
-
-  // Assign roles from request param for admin user.
-  if (user?.admin === true && req.params.roles) {
-
-    user.roles = req.params.roles.split(',')
   }
 
   return user
@@ -165,13 +161,13 @@ async function checkParamToken(req, res, user) {
   user.from_token = true
 
   // Check whether the token matches cookie.
-  if (req.cookies?.[process.env.TITLE] !== req.params.token) {
+  if (req.cookies?.[xyzEnv.TITLE] !== req.params.token) {
 
     // Create and assign a new cookie for the user.
-    const cookie = jwt.sign(user, process.env.SECRET)
+    const cookie = jwt.sign(user, xyzEnv.SECRET)
 
     res.setHeader('Set-Cookie',
-      `${process.env.TITLE}=${cookie};HttpOnly;Max-Age=${user.exp && (user.exp - user.iat) || process.env.COOKIE_TTL};Path=${process.env.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
+      `${xyzEnv.TITLE}=${cookie};HttpOnly;Max-Age=${user.exp && (user.exp - user.iat) || xyzEnv.COOKIE_TTL};Path=${xyzEnv.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
   }
 }
 
@@ -180,7 +176,7 @@ async function checkParamToken(req, res, user) {
 @async
 
 @description
-Will return if sessions are not enabled via USER_SESSION environment variable.
+Will return if sessions are not enabled via USER_SESSION xyzEnvironment variable.
 
 A user must have a session key which is either stored in the user_sessions object or will be validated against the session key in the ACL.
 
@@ -202,7 +198,7 @@ async function checkSession(req, user) {
   if (req.params.token) return;
 
   // USER_SESSION has not been enabled.
-  if (!process.env.USER_SESSION) return;
+  if (!xyzEnv.USER_SESSION) return;
 
   // A user.session must be provided if enabled.
   if (!user.session) {
