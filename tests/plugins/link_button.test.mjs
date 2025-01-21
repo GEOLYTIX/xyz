@@ -3,7 +3,41 @@
  * This test is used to see if the link_button plugin is working as expected.
  * @function linkButtonTest
  */
-export function linkButtonTest() {
+export function linkButtonTest(mapview) {
+
+    const links = [
+        {
+            'href': '/url/url',
+            'title': 'TITLE HERE',
+            'target': '_blank',
+            'css_class': 'mask-icon',
+            'css_style': 'mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg); -webkit-mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg);'
+        },
+        {
+            'title': 'WILL NOT BE ADDED AS NO HREF',
+            'target': '_blank',
+            'css_class': 'mask-icon',
+            'css_style': 'mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg); -webkit-mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg);'
+        },
+        {
+            'title': 'WILL BE ADDED AS HREF',
+            'href': '/url/url2',
+            'target': '_blank',
+            'css_class': 'mask-icon',
+            'css_style': 'mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg); -webkit-mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg);'
+        },
+        {
+            'title': 'Locale HREF',
+            'href': '/url/url3',
+            'target': '_blank',
+            'css_class': 'mask-icon',
+            'css_style': 'mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg); -webkit-mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg);',
+            'locale': true
+        }
+    ]
+
+    mapp.plugins.link_button(links, mapview)
+
     codi.describe('Link Button Test', () => {
         codi.it('Should add a link button to the mapButton panel', () => {
             // Get the mapButton element

@@ -9,7 +9,7 @@ export async function coreTest() {
     // Run the dictionary Tests
     await runAllTests(_mappTest.dictionaryTest, mapview);
     //Plugins Tests
-    await runAllTests(_mappTest.pluginsTest);
+    await runAllTests(_mappTest.pluginsTest, mapview);
     //Layer Tests
     await runAllTests(_mappTest.layerTest, mapview);
     //Location Tests
