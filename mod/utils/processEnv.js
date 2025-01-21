@@ -15,8 +15,8 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [TITLE='GEOLYTIX | XYZ'] The TITLE value is used to identify cookies and is provided to as a param to Application View templates.
 @property {String} [LOGS] The LOGS string will split on comma to determine which requests send to the [LOGGER]{@link module:/utils/logger} module will be logged.
 @property {String} [LOGGER] Required to configure the [LOGGER]{@link module:/utils/logger} module for a remote out.
-@property {String} [RATE_LIMIT_WINDOW=60000] Maximum requests per window in the [express]{@link module:express} module
-@property {String} [RATE_LIMIT=1000] Time window in ms in the [express]{@link module:express} module
+@property {String} [RATE_LIMIT=1000] Maximum requests per window in the [express]{@link module:express} module
+@property {String} [RATE_LIMIT_WINDOW=60000] Time window in ms in the [express]{@link module:express} module
 @property {String} [PRIVATE] All requests to XYZ API require authentication. The PRIVATE value represents the ACL connection.
 @property {String} [PUBLIC] General requests to XYZ API do require authentication. The PUBLIC value represents an ACL connection for optional authentication.
 @property {String} [SECRET] A secret string is required to sign and [validate JWT]{@link module:/user/auth}.
