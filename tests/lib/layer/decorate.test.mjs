@@ -69,7 +69,7 @@ export function decorate(mapview, layer, infoj, style) {
           );
           codi.assertTrue(
             typeof layer.display === 'undefined',
-            "The layer shouldn't have a display flag",
+            'The layer shouldn\'t have a display flag',
           );
           layer.show();
           codi.assertTrue(
