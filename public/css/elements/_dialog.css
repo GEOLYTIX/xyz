@@ -19,6 +19,10 @@ dialog {
     & > :nth-child(2) {
       margin-left: auto;
     }
+
+    &>.material-symbols-outlined {
+      font-size: 1.2em;
+    }
   }
 
   &.dialog {
