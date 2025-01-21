@@ -1,8 +1,4 @@
-/**
-@global
-@typedef {Object} res
-The res object represents the HTTP response that an [Express] app sends when it gets an HTTP request.
-*/
+
 
 /**
 @global

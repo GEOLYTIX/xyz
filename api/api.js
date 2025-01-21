@@ -29,6 +29,12 @@ app.get(`/`, api)
 
 /**
 @global
+@typedef {Object} res
+The res object represents the HTTP response that an [Express] app sends when it gets an HTTP request.
+*/
+
+/**
+@global
 @typedef {Object} req
 The req object represents the HTTP request and has properties for the request query string, parameters, body, HTTP headers, and so on.
 @property {Object} params HTTP request parameter.
