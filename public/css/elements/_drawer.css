@@ -4,7 +4,7 @@
 }
 
 .drawer {
-  padding: 5px;
+  padding: 2px;
   background-color: var(--color-light-tertiary);
 
   &.expandable:not(.empty)>.header:hover {
@@ -37,6 +37,10 @@
   &>.header {
     display: flex;
     align-items: center;
+
+    .material-symbols-outlined {
+      font-size: 1.5em;
+    }
 
     &>:not(button):not(label):not(input) {
       pointer-events: none;
