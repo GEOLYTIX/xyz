@@ -40,5 +40,16 @@ export function linkButtonTest() {
             codi.assertEqual(linkButton2.getAttribute('href'), '/url/url2');
         });
 
+        codi.it('Should add a link with the locale added to the href', () => {
+            // Get the mapButton element
+            const mapButton = document.getElementById('mapButton');
+            // Get the link_button from the mapButton (a tag with the title="TITLE HERE")
+            const linkButton = mapButton.querySelector('a[title="Locale HREF"]');
+
+            // Check if the linkButton has the correct href
+            codi.assertTrue(linkButton.getAttribute('href').includes('locale='));
+
+        });
+
     });
 }

@@ -96,6 +96,14 @@
                 "target": "_blank",
                 "css_class": "mask-icon",
                 "css_style": "mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg); -webkit-mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg);"
+            },
+            {
+                "title": "Locale HREF",
+                "href": "/url/url3",
+                "target": "_blank",
+                "css_class": "mask-icon",
+                "css_style": "mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg); -webkit-mask-image: url(https://geolytix.github.io/MapIcons/services/component_exchange.svg);",
+                "locale": true
             }
         ],
         "assignMapview": {},
