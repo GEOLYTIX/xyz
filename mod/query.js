@@ -441,12 +441,14 @@ function getQueryFromTemplate(req, template) {
         }
 
         try {
-          // Try to parse val if the string begins and ends with either [] or {}
-          val =
-            (!param === 'body' &&
-              /^[\[\{]{1}.*[\]\}]{1}$/.test(val) &&
-              JSON.parse(val)) ||
-            val;
+          
+
+          if (param !== 'body' && /^[\[\{]{1}.*[\]\}]{1}$/.test(val)) {
+
+            // Parse val as JSON if param is not 'body' and the [string] value begins and ends with either [] or {}.
+            val = JSON.parse(val)
+          }
+          
         } catch (err) {
           console.error(err);
         }
