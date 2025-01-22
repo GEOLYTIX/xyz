@@ -434,7 +434,7 @@ function getQueryFromTemplate(req, template) {
         // Remove template brackets from matched param.
         const param = matched.replace(/\%\{{1}|\}{1}/g, '');
 
-        var val = req.params[param]; // || ""
+        let val = req.params[param];
 
         if (req.params.wildcard) {
           val = val.replaceAll(req.params.wildcard, '%');
