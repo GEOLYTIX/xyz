@@ -411,9 +411,9 @@ function getQueryFromTemplate(req, template) {
     const query_template = template.template
 
       // Replace parameter for identifiers, e.g. table, schema, columns
-      .replace(/\${{1}(.*?)}{1}/g, (matched) => {
+      .replace(/\${(.*?)}/g, (matched) => {
         // Remove template brackets from matched param.
-        const param = matched.replace(/\${{1}|}{1}/g, '');
+        const param = matched.replace(/\${|}/g, '');
 
         // Get param value from request params object.
         const change = req.params[param] || '';
@@ -430,9 +430,9 @@ function getQueryFromTemplate(req, template) {
       })
 
       // Replace params with placeholder, eg. $1, $2
-      .replace(/%{{1}(.*?)}{1}/g, (matched) => {
+      .replace(/%{(.*?)}/g, (matched) => {
         // Remove template brackets from matched param.
-        const param = matched.replace(/%{{1}|}{1}/g, '');
+        const param = matched.replace(/%{|}/g, '');
 
         let val = req.params[param];
 
@@ -443,7 +443,7 @@ function getQueryFromTemplate(req, template) {
         try {
           
 
-          if (param !== 'body' && /^[[{]{1}.*[\]}]{1}$/.test(val)) {
+          if (param !== 'body' && /^[[{].*[\]}]$/.test(val)) {
 
             // Parse val as JSON if param is not 'body' and the [string] value begins and ends with either [] or {}.
             val = JSON.parse(val)
