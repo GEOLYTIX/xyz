@@ -1,3 +1,16 @@
+button {
+  &.mask-icon,
+  & > .mask-icon {
+    background-color: var(--color-primary);
+  }
+
+  &.mask-icon.active,
+  &.active > .mask-icon,
+  & > .mask-icon.active {
+    background-color: var(--color-on);
+  }
+}
+
 .drawer {
   &.expandable.empty > .header > .mask-icon.expander {
     display: none;

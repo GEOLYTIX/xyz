@@ -90,7 +90,7 @@ button {
   outline: none;
   background: none;
   text-align: center;
-  > * {
+  > .material-symbols-outlined {
     pointer-events: none;
   }
   &.mask-icon,
@@ -1371,6 +1371,7 @@ dialog {
     }
   }
   & > ul {
+    color: var(--color-off-black);
     display: none;
     position: absolute;
     max-height: 500px;
@@ -1383,6 +1384,7 @@ dialog {
     z-index: 997;
     & > li {
       padding: 5px;
+      color: var(--off);
     }
     & > li:hover {
       background-color: var(--color-primary-light);
@@ -1662,6 +1664,17 @@ dialog {
 }
 
 /* public/css/layout/_legacy.css */
+button {
+  &.mask-icon,
+  & > .mask-icon {
+    background-color: var(--color-primary);
+  }
+  &.mask-icon.active,
+  &.active > .mask-icon,
+  & > .mask-icon.active {
+    background-color: var(--color-on);
+  }
+}
 .drawer {
   &.expandable.empty > .header > .mask-icon.expander {
     display: none;
