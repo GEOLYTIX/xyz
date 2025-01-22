@@ -1,16 +1,16 @@
-@import "https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,400;0,600;1,200;1,300&display=swap";
+@import 'https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,400;0,600;1,200;1,300&display=swap';
 
 /* public/css/base/_colours.css */
 :root {
   --color-off-black: #3f3f3f;
-  --color-primary: #003D57;
+  --color-primary: #003d57;
   --color-primary-light: #939faa;
   --color-light: #ffffff;
   --color-light-secondary: #f2f2f2;
   --color-light-tertiary: #fafafa;
   --color-mid: #e3e3e3;
-  --color-on: #E18335;
-  --color-no: #A21309;
+  --color-on: #e18335;
+  --color-no: #a21309;
   --color-changed: #ffffa7;
 }
 .primary-colour {
@@ -144,7 +144,7 @@ a > .mask-icon {
 
 /* public/css/base/_globals.css */
 body {
-  font-family: "Titillium Web", sans-serif;
+  font-family: 'Titillium Web', sans-serif;
   font-size: 0.8em;
   color: var(--color-off-black);
 }
@@ -458,6 +458,15 @@ a > img {
   &.mask-icon {
     -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="%235f6368"><path d="M480-320q17 0 29.5-12.5T522-362q0-17-12.5-29.5T480-404q-17 0-29.5 12.5T438-362q0 17 12.5 29.5T480-320Zm-30-124h60q0-19 1.5-30t4.5-18q4-8 11.5-16.5T552-534q21-21 31.5-42t10.5-42q0-47-31-74.5T480-720q-41 0-72 23t-42 61l54 22q7-23 23-35.5t37-12.5q24 0 39 13t15 33q0 17-7.5 29.5T500-558q-17 14-27 25.5T458-510q-5 10-6.5 24.5T450-444Zm30 258q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-186Zm0 106Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Zm0-480Z"/></svg>');
     mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="%235f6368"><path d="M480-320q17 0 29.5-12.5T522-362q0-17-12.5-29.5T480-404q-17 0-29.5 12.5T438-362q0 17 12.5 29.5T480-320Zm-30-124h60q0-19 1.5-30t4.5-18q4-8 11.5-16.5T552-534q21-21 31.5-42t10.5-42q0-47-31-74.5T480-720q-41 0-72 23t-42 61l54 22q7-23 23-35.5t37-12.5q24 0 39 13t15 33q0 17-7.5 29.5T500-558q-17 14-27 25.5T458-510q-5 10-6.5 24.5T450-444Zm30 258q122-112 181-203.5T720-552q0-109-69.5-178.5T480-800q-101 0-170.5 69.5T240-552q0 71 59 162.5T480-186Zm0 106Q319-217 239.5-334.5T160-552q0-150 96.5-239T480-880q127 0 223.5 89T800-552q0 100-79.5 217.5T480-80Zm0-480Z"/></svg>');
+  }
+}
+.filter {
+  &.bg-icon {
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="%23000000"><path d="M440-160q-17 0-28.5-11.5T400-200v-240L168-736q-15-20-4.5-42t36.5-22h560q26 0 36.5 22t-4.5 42L560-440v240q0 17-11.5 28.5T520-160h-80Zm40-308 198-252H282l198 252Zm0 0Z"/></svg>');
+  }
+  &.mask-icon {
+    -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="%23000000"><path d="M440-160q-17 0-28.5-11.5T400-200v-240L168-736q-15-20-4.5-42t36.5-22h560q26 0 36.5 22t-4.5 42L560-440v240q0 17-11.5 28.5T520-160h-80Zm40-308 198-252H282l198 252Zm0 0Z"/></svg>');
+    mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="%23000000"><path d="M440-160q-17 0-28.5-11.5T400-200v-240L168-736q-15-20-4.5-42t36.5-22h560q26 0 36.5 22t-4.5 42L560-440v240q0 17-11.5 28.5T520-160h-80Zm40-308 198-252H282l198 252Zm0 0Z"/></svg>');
   }
 }
 .filter-list {
@@ -894,6 +903,15 @@ a > img {
     mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="48" width="48"><path d="M30.5 40.5h2V33h-2Zm1-9.45q.4 0 .7-.3.3-.3.3-.75 0-.4-.3-.7-.3-.3-.7-.3-.45 0-.725.3-.275.3-.275.7 0 .45.275.75t.725.3ZM9 7v14.75-.2V41 7v9.3Zm4.95 20h8.4q.6-.85 1.325-1.6.725-.75 1.575-1.4h-11.3Zm0 8.5h6.15q-.1-.75-.075-1.5.025-.75.125-1.5h-6.2ZM6 44V4h21.05L38 14.95v7.75q-.7-.35-1.45-.575-.75-.225-1.55-.375V16.3h-9.45V7H9v34h13q.55.85 1.2 1.6.65.75 1.4 1.4Zm26.75-19.45q4.05 0 6.875 2.825t2.825 6.875q0 4.05-2.825 6.875T32.75 43.95q-4.05 0-6.875-2.825T23.05 34.25q0-4.05 2.825-6.875t6.875-2.825Z"/></svg>');
   }
 }
+.zoom-in {
+  &.bg-icon {
+    background-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="%23e8eaed"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Zm-40-60v-80h-80v-80h80v-80h80v80h80v80h-80v80h-80Z"/></svg>');
+  }
+  &.mask-icon {
+    -webkit-mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="%23e8eaed"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Zm-40-60v-80h-80v-80h80v-80h80v80h80v80h-80v80h-80Z"/></svg>');
+    mask-image: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" height="24px" viewBox="0 -960 960 960" width="24px" fill="%23e8eaed"><path d="M784-120 532-372q-30 24-69 38t-83 14q-109 0-184.5-75.5T120-580q0-109 75.5-184.5T380-840q109 0 184.5 75.5T640-580q0 44-14 83t-38 69l252 252-56 56ZM380-400q75 0 127.5-52.5T560-580q0-75-52.5-127.5T380-760q-75 0-127.5 52.5T200-580q0 75 52.5 127.5T380-400Zm-40-60v-80h-80v-80h80v-80h80v80h80v80h-80v80h-80Z"/></svg>');
+  }
+}
 
 /* public/css/base/_inputs.css */
 input {
@@ -920,28 +938,28 @@ textarea {
   border-bottom: 0.5px dotted;
   background-color: var(--color-light-secondary);
 }
-input[type=number] {
+input[type='number'] {
   -moz-appearance: textfield;
   appearance: textfield;
   text-align: right;
 }
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
-input[type=search],
-input[type=date],
-input[type=time],
-input[type=datetime-local] {
+input[type='search'],
+input[type='date'],
+input[type='time'],
+input[type='datetime-local'] {
   border: 1px solid #ccc;
   padding: 5px;
   &:focus {
     cursor: text;
   }
 }
-input[type=text],
-input[type=number] {
+input[type='text'],
+input[type='number'] {
   padding: 5px;
   border: none;
   background-color: var(--color-light-secondary);
@@ -953,13 +971,13 @@ input[type=number] {
     cursor: text;
   }
 }
-input[type=search]:focus + ul,
-input[type=search] + ul:active {
+input[type='search']:focus + ul,
+input[type='search'] + ul:active {
   display: block;
 }
-input[type=search]::-webkit-search-cancel-button,
-input[type=search]::-webkit-search-decoration:hover,
-input[type=search]::-webkit-search-cancel-button:hover {
+input[type='search']::-webkit-search-cancel-button,
+input[type='search']::-webkit-search-decoration:hover,
+input[type='search']::-webkit-search-cancel-button:hover {
   cursor: pointer;
 }
 
@@ -1418,24 +1436,24 @@ dialog {
   & .track-bg {
     grid-row: 2;
     grid-column: 1/3;
-    background:
-      linear-gradient(
-        0deg,
-        transparent 0 45%,
-        var(--color-primary-light) 45% 55%,
-        transparent 55% 100%);
+    background: linear-gradient(
+      0deg,
+      transparent 0 45%,
+      var(--color-primary-light) 45% 55%,
+      transparent 55% 100%
+    );
     z-index: 1;
   }
   &.single::after {
     grid-column: 1/3;
     grid-row: 2;
-    background:
-      linear-gradient(
-        0deg,
-        transparent 0 45%,
-        var(--color-primary) 45% 55%,
-        transparent 55% 100%);
-    content: "";
+    background: linear-gradient(
+      0deg,
+      transparent 0 45%,
+      var(--color-primary) 45% 55%,
+      transparent 55% 100%
+    );
+    content: '';
     z-index: 2;
     width: calc((var(--a) - var(--min)) / var(--dif) * (100% - 10px));
   }
@@ -1451,25 +1469,29 @@ dialog {
     &::after {
       grid-column: 1/3;
       grid-row: 2;
-      background:
-        linear-gradient(
-          0deg,
-          transparent 0 45%,
-          var(--color-primary) 45% 55%,
-          transparent 55% 100%);
-      content: "";
+      background: linear-gradient(
+        0deg,
+        transparent 0 45%,
+        var(--color-primary) 45% 55%,
+        transparent 55% 100%
+      );
+      content: '';
       z-index: 2;
     }
     &::before {
-      margin-left: calc(10px + (var(--a) - var(--min)) / var(--dif) * (100% - 10px));
+      margin-left: calc(
+        10px + (var(--a) - var(--min)) / var(--dif) * (100% - 10px)
+      );
       width: calc((var(--b) - var(--a)) / var(--dif) * (100% - 10px));
     }
     &::after {
-      margin-left: calc(10px + (var(--b) - var(--min)) / var(--dif) * (100% - 10px));
+      margin-left: calc(
+        10px + (var(--b) - var(--min)) / var(--dif) * (100% - 10px)
+      );
       width: calc((var(--a) - var(--b)) / var(--dif) * (100% - 10px));
     }
   }
-  & input[type=range] {
+  & input[type='range'] {
     -webkit-appearance: none;
     appearance: none;
     grid-column: 1/3;
@@ -1486,17 +1508,17 @@ dialog {
     pointer-events: none;
   }
 }
-.input-range input[type=range]::-webkit-slider-runnable-track {
+.input-range input[type='range']::-webkit-slider-runnable-track {
   width: 100%;
   height: 100%;
   background: none;
 }
-.input-range input[type=range]::-moz-range-track {
+.input-range input[type='range']::-moz-range-track {
   width: 100%;
   height: 100%;
   background: none;
 }
-.input-range input[type=range]::-webkit-slider-thumb {
+.input-range input[type='range']::-webkit-slider-thumb {
   -webkit-appearance: none;
   border: none;
   width: 20px;
@@ -1509,7 +1531,7 @@ dialog {
   background-position: center;
   box-shadow: none;
 }
-.input-range input[type=range]::-moz-range-thumb {
+.input-range input[type='range']::-moz-range-thumb {
   border: none;
   width: 20px;
   height: 40px;
@@ -1716,7 +1738,7 @@ dialog {
   display: grid;
   grid-template-rows: 50px auto;
   &.disabled::after {
-    content: "";
+    content: '';
     height: 100%;
     width: 100%;
     position: absolute;
