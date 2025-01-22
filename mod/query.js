@@ -548,15 +548,9 @@ function sendRows(req, res, template, rows) {
     return res.status(500).send('Failed to query PostGIS table.');
   }
 
-  // return 202 if no record was returned from database.
-  if (!rows || !rows.length)
-    return res.status(202).send('No rows returned from table.');
+  // The rows array must have a length with some row not being empty.
+  if (!rows?.length || !rows.some((row) => checkEmptyRow(row))) {
 
-  // Check whether any row of the rows array is empty or whether a single row is empty.
-  if (
-    (rows.length && !rows.some((row) => checkEmptyRow(row))) ||
-    !checkEmptyRow(rows)
-  ) {
     return res.status(202).send('No rows returned from table.');
   }
 
