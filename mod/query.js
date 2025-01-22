@@ -430,9 +430,9 @@ function getQueryFromTemplate(req, template) {
       })
 
       // Replace params with placeholder, eg. $1, $2
-      .replace(/\%{{1}(.*?)\}{1}/g, (matched) => {
+      .replace(/%{{1}(.*?)\}{1}/g, (matched) => {
         // Remove template brackets from matched param.
-        const param = matched.replace(/\%\{{1}|\}{1}/g, '');
+        const param = matched.replace(/%\{{1}|\}{1}/g, '');
 
         let val = req.params[param];
 
