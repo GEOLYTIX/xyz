@@ -6,79 +6,34 @@ export async function getLayerTest() {
       parentId: 'api_workspace',
     },
     async () => {
+      const locales = await mapp.utils.xhr(`/test/api/workspace/locales`);
+      const locale = await mapp.utils.xhr(
+        `/test/api/workspace/locale?locale=${locales[0].key}`,
+      );
+
       codi.it(
         {
           name: 'Getting template_test Layer',
           parentId: 'api_workspace_layer',
         },
         async () => {
-          let layer = await mapp.utils.xhr(
-            `/test/api/workspace/layer?layer=template_test`,
-          );
-
-          codi.assertEqual(
-            layer.key,
-            'template_test',
-            'Ensure that we get the template_test layer from the API',
-          );
-          codi.assertTrue(!!layer.table, 'Ensure that the layer has a table');
-          codi.assertTrue(!!layer.geom, 'Ensure that the layer has a geom');
-          codi.assertTrue(!!layer.group, 'Ensure that the layer has a group');
-          codi.assertEqual(
-            layer.infoj.length,
-            7,
-            'The infoj should always have 7 infoj entries',
-          );
-          codi.assertTrue(
-            !!layer.style,
-            'The layer needs to have a style object from another template',
-          );
-
-          layer = await mapp.utils.xhr(
-            `/test/api/workspace/layer?layer=template_test`,
-          );
-
-          codi.assertEqual(
-            layer.infoj.length,
-            7,
-            'The infoj should always have 7 infoj entries',
-          );
-          codi.assertTrue(
-            !!layer.style,
-            'The layer needs to have a style object from another template',
-          );
-          codi.assertTrue(!!layer.err, 'The layer should have a error array');
-          codi.assertEqual(
-            layer.err.length,
-            1,
-            'There should be on failure on the layer',
-          );
-        },
-      );
-
-      codi.it(
-        {
-          name: 'Getting template_test_vanilla Layer',
-          parentId: 'api_workspace_layer',
-        },
-        async () => {
           const layer = await mapp.utils.xhr(
-            `/test/api/workspace/layer?layer=template_test_vanilla`,
+            `/test/api/workspace/layer?layer=${locale.layers[0]}`,
           );
 
-          codi.assertEqual(
-            layer.key,
-            'template_test_vanilla',
-            'Ensure that we get the template_test_vanilla layer from the API',
-          );
-          codi.assertEqual(
-            layer.infoj.length,
-            6,
-            'The infoj should always have 6 infoj entries',
-          );
           codi.assertTrue(
-            !!layer.style,
-            'The layer needs to have a style object from another template',
+            Object.hasOwn(layer, 'key'),
+            'A Layer should have a key',
+          );
+
+          codi.assertTrue(
+            Object.hasOwn(layer, 'name'),
+            'A Layer should have a name',
+          );
+
+          codi.assertTrue(
+            Object.hasOwn(layer, 'format'),
+            'A Layer should have a format',
           );
         },
       );

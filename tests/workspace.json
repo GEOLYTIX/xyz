@@ -34,66 +34,6 @@
         "attribution": {
           "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
         }
-      },
-      "wkt_layer": {
-        "display": true,
-        "templates": [
-          {
-            "src": "file:/tests/assets/layers/wkt/layer.json"
-          },
-          {
-            "src": "file:/tests/assets/layers/wkt/infoj.json"
-          },
-          {
-            "src": "file:/tests/assets/layers/wkt/style.json"
-          }
-        ],
-        "tables": {
-          "5": null,
-          "6": "test.scratch"
-        }
-      },
-      "geojson_layer": {
-        "display": true,
-        "templates": [
-          {
-            "src": "file:/tests/assets/layers/geojson/layer.json"
-          }
-        ]
-      },
-      "mvt_test": {
-        "template": "mvt_test_temp"
-      },
-      "template_test": {
-        "display": true,
-        "template": "template_test_temp",
-        "templates": [
-          {
-            "key": "template_infoj",
-            "src": "file:/tests/assets/infoj/template_infoj.json"
-          },
-          {
-            "key": "chart_queryparams",
-            "src": "file:/tests/assets/infoj/chart_queryparams.json"
-          },
-          {
-            "key": "bogus_file",
-            "src": "file:/tests/assets/styles/bogus_file.json"
-          },
-          {
-            "key": "dataviews_json",
-            "src": "file:/tests/assets/dataviews/dataviews_json.json"
-          }
-        ]
-      },
-      "template_foo": {
-        "template": "foo",
-        "display": true
-      },
-      "template_test_vanilla": {
-        "hidden": true,
-        "template": "template_test_temp",
-        "templates": ["template_1", "template_2"]
       }
     }
   }
