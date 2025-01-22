@@ -443,7 +443,7 @@ function getQueryFromTemplate(req, template) {
         try {
           
 
-          if (param !== 'body' && /^[\[{]{1}.*[\]}]{1}$/.test(val)) {
+          if (param !== 'body' && /^[[{]{1}.*[\]}]{1}$/.test(val)) {
 
             // Parse val as JSON if param is not 'body' and the [string] value begins and ends with either [] or {}.
             val = JSON.parse(val)
