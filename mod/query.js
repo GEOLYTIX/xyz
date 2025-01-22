@@ -454,7 +454,7 @@ function getQueryFromTemplate(req, template) {
         // Push value from request params object into params array.
         req.params.SQL.push(val);
 
-        return `$${req.params.SQL.length}`;
+        return `$${Array.from(req.params.SQL).length}`;
       });
 
     return query_template;
