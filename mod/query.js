@@ -400,7 +400,7 @@ function getQueryFromTemplate(req, template) {
     }
 
     // Returns -1 if ${filter} not found in template
-    if (template.template.search(/\$\{filter\}/) < 0) {
+    if (template.template.search(/\${filter}/) < 0) {
       // Ensure that the $n substitute params match the SQL length on layer queries without a ${filter}
       delete req.params.filter;
       //We remove the SQL params because there is no filter at this stage so we don't have any values to substitute.
@@ -411,9 +411,9 @@ function getQueryFromTemplate(req, template) {
     const query_template = template.template
 
       // Replace parameter for identifiers, e.g. table, schema, columns
-      .replace(/\$\{{1}(.*?)\}{1}/g, (matched) => {
+      .replace(/\${{1}(.*?)}{1}/g, (matched) => {
         // Remove template brackets from matched param.
-        const param = matched.replace(/\$\{{1}|\}{1}/g, '');
+        const param = matched.replace(/\${{1}|}{1}/g, '');
 
         // Get param value from request params object.
         const change = req.params[param] || '';
@@ -430,9 +430,9 @@ function getQueryFromTemplate(req, template) {
       })
 
       // Replace params with placeholder, eg. $1, $2
-      .replace(/%{{1}(.*?)\}{1}/g, (matched) => {
+      .replace(/%{{1}(.*?)}{1}/g, (matched) => {
         // Remove template brackets from matched param.
-        const param = matched.replace(/%\{{1}|\}{1}/g, '');
+        const param = matched.replace(/%{{1}|}{1}/g, '');
 
         let val = req.params[param];
 
@@ -443,7 +443,7 @@ function getQueryFromTemplate(req, template) {
         try {
           
 
-          if (param !== 'body' && /^[\[\{]{1}.*[\]\}]{1}$/.test(val)) {
+          if (param !== 'body' && /^[\[{]{1}.*[\]}]{1}$/.test(val)) {
 
             // Parse val as JSON if param is not 'body' and the [string] value begins and ends with either [] or {}.
             val = JSON.parse(val)
