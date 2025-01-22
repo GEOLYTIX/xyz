@@ -11,11 +11,11 @@
     cursor: pointer;
   }
 
-  &.expandable.empty > .header > .expander {
+  &.expandable.empty > .header > .caret {
     display: none;
   }
 
-  &.expandable > .header > .material-symbols-outlined.expander::after {
+  &.expandable > .header > .material-symbols-outlined.caret::after {
     content: 'keyboard_arrow_down';
     color: var(--color-primary-light);
     line-height: 1.5em;
@@ -25,7 +25,7 @@
     display: none;
   }
 
-  &.expanded > .header > .material-symbols-outlined.expander::after {
+  &.expanded > .header > .material-symbols-outlined.caret::after {
     content: 'keyboard_arrow_up';
     color: var(--color-primary-light);
     line-height: 1.5em;

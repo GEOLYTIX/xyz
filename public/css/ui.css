@@ -1275,20 +1275,18 @@ dialog {
   &.expandable:not(.empty) > .header:hover {
     cursor: pointer;
   }
-  &.expandable.empty > .header > .expander {
+  &.expandable.empty > .header > .caret {
     display: none;
   }
-  &.expandable > .header > .material-symbols-outlined.expander::after {
+  &.expandable > .header > .material-symbols-outlined.caret::after {
     content: "keyboard_arrow_down";
     color: var(--color-primary-light);
     line-height: 1.5em;
   }
   &.expandable:not(.expanded) > *:not(.header) {
-    <<<<<<< HEAD display: none !important;
-    ======= display: none;
-    >>>>>>> 08931033f (css - line-height property on expander;);
+    display: none;
   }
-  &.expanded > .header > .material-symbols-outlined.expander::after {
+  &.expanded > .header > .material-symbols-outlined.caret::after {
     content: "keyboard_arrow_up";
     color: var(--color-primary-light);
     line-height: 1.5em;
