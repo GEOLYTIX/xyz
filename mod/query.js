@@ -411,7 +411,7 @@ function getQueryFromTemplate(req, template) {
     const query_template = template.template
 
       // Replace parameter for identifiers, e.g. table, schema, columns
-      .replace(/\${(.*?)}/g, (matched) => {
+      .replace(/\${(.{0,99})}/g, (matched) => {
         // Remove template brackets from matched param.
         const param = matched.replace(/\${|}/g, '');
 
@@ -430,7 +430,7 @@ function getQueryFromTemplate(req, template) {
       })
 
       // Replace params with placeholder, eg. $1, $2
-      .replace(/%{(.*?)}/g, (matched) => {
+      .replace(/%{(.{0,99})}/g, (matched) => {
         // Remove template brackets from matched param.
         const param = matched.replace(/%{|}/g, '');
 
