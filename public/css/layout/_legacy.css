@@ -1,0 +1,19 @@
+.drawer {
+  &.expandable.empty > .header > .mask-icon.expander {
+    display: none;
+  }
+
+  &.expandable > .header > .mask-icon.expander {
+    -webkit-mask-image: url('../../icons/icon-arrow-down.svg');
+    mask-image: url('../../icons/icon-arrow-down.svg');
+  }
+
+  &.expandable:not(.expanded) > *:not(.header) {
+    display: none;
+  }
+
+  &.expanded > .header > .mask-icon.expander {
+    -webkit-mask-image: url('../../icons/icon-arrow-up.svg');
+    mask-image: url('../../icons/icon-arrow-up.svg');
+  }
+}
