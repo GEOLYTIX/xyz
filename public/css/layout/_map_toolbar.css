@@ -1,17 +1,9 @@
 #mapButton {
-  background-color: var(--dm-color-darker);
-
-  .material-symbols-outlined {
-    color: var(--color-light-secondary);
-  }
-}
-
-#mapButton {
   pointer-events: none;
-}
 
-#mapButton > * {
-  pointer-events: auto;
+  & > * {
+    pointer-events: auto;
+  }
 }
 
 @media only screen and (min-width: 768px) {
@@ -27,6 +19,10 @@
   html.dark-mode {
     #mapButton {
       background-color: var(--dm-color-darker);
+
+      .material-symbols-outlined {
+        color: var(--color-light-secondary);
+      }
     }
   }
 }
