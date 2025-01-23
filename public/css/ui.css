@@ -73,12 +73,12 @@ html.dark-mode {
   .input-range.single {
     &::after,
     &::before {
-      background: linear-gradient(
-        0deg,
-        transparent 0 45%,
-        #fff 45% 55%,
-        transparent 55% 100%
-      );
+      background:
+        linear-gradient(
+          0deg,
+          transparent 0 45%,
+          #fff 45% 55%,
+          transparent 55% 100%);
     }
   }
   #ctrl-panel {
@@ -198,12 +198,6 @@ html.dark-mode {
       color: var(--dm-color-light);
     }
   }
-}
-
-/* public/css/base/_font.css */
-a.mask-icon,
-a > .mask-icon {
-  background-color: var(--color-primary);
 }
 
 /* public/css/base/_globals.css */
@@ -1057,14 +1051,14 @@ input[type=search]::-webkit-search-cancel-button:hover {
   cursor: pointer;
 }
 html.dark-mode {
-  input[type='number'],
-  input[type='text'],
-  input[type='search'] {
+  input[type=number],
+  input[type=text],
+  input[type=search] {
     background: var(--dm-color-medium);
     color: var(--dm-color-light);
     border-color: var(--dm-color-dark-faded);
   }
-  input[type='search'] {
+  input[type=search] {
     &::placeholder {
       color: var(--dm-color-light-darker);
       opacity: 1;
@@ -1881,6 +1875,10 @@ html.dark-mode {
 }
 
 /* public/css/layout/_legacy.css */
+a.mask-icon,
+a > .mask-icon {
+  background-color: var(--color-primary);
+}
 button {
   &.mask-icon,
   & > .mask-icon {
