@@ -215,7 +215,7 @@ body {
   &::after,
   &::before {
     border: solid transparent;
-    content: " ";
+    content: ' ';
     position: absolute;
     pointer-events: none;
   }
