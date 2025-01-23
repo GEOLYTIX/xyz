@@ -441,14 +441,10 @@ function getQueryFromTemplate(req, template) {
         }
 
         try {
-          
-
           if (param !== 'body' && /^[[{].*[\]}]$/.test(val)) {
-
             // Parse val as JSON if param is not 'body' and the [string] value begins and ends with either [] or {}.
-            val = JSON.parse(val)
+            val = JSON.parse(val);
           }
-          
         } catch (err) {
           console.error(err);
         }
@@ -550,7 +546,6 @@ function sendRows(req, res, template, rows) {
 
   // The rows array must have a length with some row not being empty.
   if (!rows?.length || !rows.some((row) => checkEmptyRow(row))) {
-
     return res.status(202).send('No rows returned from table.');
   }
 
