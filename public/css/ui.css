@@ -1203,7 +1203,7 @@ dialog {
     mask-image: url('data:image/svg+xml,<svg%0A  xmlns="http://www.w3.org/2000/svg"%0A  width="12"%0A  height="16"%0A  viewBox="0 0 12 16">%0A  <path d="m 1.41,4.5784035 4.59,4.58 4.59,-4.58 1.41,1.41 L 6,11.988404 0,5.9884035 Z"/>%0A</svg>');
   }
   &.expandable:not(.expanded) > *:not(.header) {
-    display: none;
+    display: none !important;
   }
   &.expanded > .header > .mask-icon.expander {
     -webkit-mask-image: url('data:image/svg+xml,<svg%0A  xmlns="http://www.w3.org/2000/svg"%0A  width="12"%0A  height="16"%0A  viewBox="0 0 12 16">%0A  <path d="M 1.41,11.536062 6,6.9560619 10.59,11.536062 12,10.126062 6,4.1260619 0,10.126062 Z"/>%0A</svg>');
