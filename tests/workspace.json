@@ -17,7 +17,7 @@
     "test": {
       "core": true,
       "options": {
-        "quiet": false,
+        "quiet": true,
         "showSummary": true
       }
     },
