@@ -20,8 +20,6 @@ const bcrypt = require('../utils/bcrypt')
 
 const crypto = require('crypto')
 
- 
-
 const acl = require('./acl')
 
 const reqHost = require('../utils/reqHost')
@@ -70,8 +68,6 @@ module.exports = async function register(req, res) {
   view(req, res)
 }
 
-const previousAddress = {}
-
 /**
 @function registerUserBody
 
@@ -90,10 +86,6 @@ Post body object with user data.
 */
 
 async function registerUserBody(req, res) {
-
-  debounceRequest(req, res)
-
-  if (res.finished) return;
 
   checkUserBody(req, res)
 
@@ -146,39 +138,6 @@ async function registerUserBody(req, res) {
     template: 'new_account_registered',
     language: req.body.language
   }))
-}
-
-/**
-@function debounceRequest
-
-@description
-The remote_address determined from the request header is stored in the previousAddress module variable. Requests from the same address within 30 seconds will be bounced.
-
-@param {req} req HTTP request.
-@param {res} res HTTP response.
-@property {Object} req.params HTTP request parameter.
-@property {Object} req.header HTTP request header.
-*/
-
-function debounceRequest(req, res) {
-
-  req.params.remote_address = req.headers['x-forwarded-for']
-    && /^[A-Za-z0-9.,_-\s]*$/.test(req.headers['x-forwarded-for']) ? req.headers['x-forwarded-for'] : 'invalid'
-  || 'unknown';
-
-  // The remote_address has been previously used
-  if (Object.hasOwn(previousAddress, req.params.remote_address)
-
-    // within 30 seconds or less.
-    && new Date() - previousAddress[req.params.remote_address] < 30000) {
-
-    res.status(403).send(`Address ${req.params.remote_address} temporarily locked.`)
-
-    return;
-  }
-
-  // Log the remote_address with the current datetime.
-  previousAddress[req.params.remote_address] = new Date()
 }
 
 /**
