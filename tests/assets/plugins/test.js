@@ -1,4 +1,4 @@
-import * as codi from 'https://esm.sh/codi-test-framework@1.0.13';
+import * as codi from 'https://esm.sh/codi-test-framework@1.0.19';
 
 mapp.plugins.test = test;
 
