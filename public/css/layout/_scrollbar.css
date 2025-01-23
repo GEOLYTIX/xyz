@@ -1,0 +1,31 @@
+::-webkit-scrollbar {
+  width: 5px;
+  height: 7px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--color-light-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary-light);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-corner {
+  background: var(--color-light-secondary);
+}
+
+html.dark-mode {
+  ::-webkit-scrollbar-track {
+    background: var(--dm-color-dark-faded);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--dm-color-color-on);
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: var(--dm-color-dark-faded);
+  }
+}

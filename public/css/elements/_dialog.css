@@ -2,28 +2,25 @@
   cursor: grab;
 }
 
-
 dialog {
-
-  &>button.close {
+  & > button.close {
     position: absolute;
     top: 0em;
     right: 0em;
     height: 1em;
     width: 1em;
     margin: 0.4em;
-
   }
 
-  &>header {
+  & > header {
     display: flex;
     justify-content: space-between;
-  
-    &>:nth-child(2) {
+
+    & > :nth-child(2) {
       margin-left: auto;
     }
 
-    &>.material-symbols-outlined {
+    & > .material-symbols-outlined {
       font-size: 1.2em;
     }
   }
@@ -63,7 +60,6 @@ dialog {
   }
 
   &.minimized {
-
     .content {
       display: none;
     }
@@ -71,12 +67,12 @@ dialog {
     .minimize-btn::after {
       content: 'fullscreen';
     }
-
   }
+}
 
-
-
-
-  
-  
+html.dark-mode {
+  dialog {
+    color: var(--dm-color-light);
+    background-color: var(--dm-color-dark-faded);
+  }
 }

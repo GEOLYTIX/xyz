@@ -28,22 +28,22 @@ textarea {
   background-color: var(--color-light-secondary);
 }
 
-input[type=number] {
+input[type='number'] {
   -moz-appearance: textfield;
   appearance: textfield;
   text-align: right;
 }
 
-input[type=number]::-webkit-inner-spin-button,
-input[type=number]::-webkit-outer-spin-button {
+input[type='number']::-webkit-inner-spin-button,
+input[type='number']::-webkit-outer-spin-button {
   -webkit-appearance: none;
   margin: 0;
 }
 
-input[type=search],
-input[type=date],
-input[type=time],
-input[type=datetime-local] {
+input[type='search'],
+input[type='date'],
+input[type='time'],
+input[type='datetime-local'] {
   border: 1px solid #ccc;
   padding: 5px;
 
@@ -52,8 +52,8 @@ input[type=datetime-local] {
   }
 }
 
-input[type=text],
-input[type=number] {
+input[type='text'],
+input[type='number'] {
   padding: 5px;
   border: none;
   background-color: var(--color-light-secondary);
@@ -67,17 +67,34 @@ input[type=number] {
   }
 }
 
-input[type=search]:focus+ul,
-input[type=search]+ul:active {
+input[type='search']:focus + ul,
+input[type='search'] + ul:active {
   display: block;
 }
 
-input[type="search"]::-webkit-search-cancel-button,
-input[type="search"]::-webkit-search-decoration:hover,
-input[type="search"]::-webkit-search-cancel-button:hover {
+input[type='search']::-webkit-search-cancel-button,
+input[type='search']::-webkit-search-decoration:hover,
+input[type='search']::-webkit-search-cancel-button:hover {
   cursor: pointer;
 }
 
+html.dark-mode {
+  input[type='number'],
+  input[type='text'],
+  input[type='search'] {
+    background: var(--dm-color-medium);
+    color: var(--dm-color-light);
+    border-color: var(--dm-color-dark-faded);
+  }
 
+  input[type='search'] {
+    &::placeholder {
+      color: var(--dm-color-light-darker);
+      opacity: 1;
+    }
 
-
+    &::-ms-input-placeholder {
+      color: var(--dm-color-light-darker);
+    }
+  }
+}

@@ -89,3 +89,31 @@
     }
   }
 }
+
+html.dark-mode {
+  .dropdown {
+    box-shadow: 0px 0px 0px 0px;
+
+    &.active .head {
+      background: var(--dm-color-on);
+    }
+    ul .label {
+      background-color: var(--dm-color-dark-faded);
+    }
+    ul > li,
+    .head {
+      background: var(--dm-color-medium);
+      color: var(--dm-color-light);
+      border-color: var(--dm-color-dark-faded);
+    }
+
+    ul > li {
+      &:hover {
+        background: var(--dm-color-dark-faded);
+      }
+      &.selected {
+        background-color: var(--dm-color-dark-faded);
+      }
+    }
+  }
+}

@@ -1,51 +1,57 @@
 label.checkbox {
-    display: block;
-  
-    &.disabled {
-      opacity: 0.3;
-      pointer-events: none;
-    }
-  
-    &.inline {
-      display: inline-block;
-    }
-  
-    &>span {
-      vertical-align: middle;
-    }
-  
-    &.inline+span {
-      vertical-align: middle;
-    }
-  
-    &>input {
-      display: none;
-    }
-  
-    &>div {
-      display: inline-block;
-      vertical-align: middle;
-      height: 1em;
-      min-height: 12px;
-      width: 1em;
-      min-width: 12px;
-      margin-right: 0.5em;
-      background-repeat: no-repeat;
-      background-position: center;
-      background-size: contain;
-      -webkit-background-size: contain;
-      background-image: url("../../icons/icon-checkbox-unchecked.svg");
-    }
-  
-    &>div:hover {
-      cursor: pointer;
-    }
-  
-    & input:checked+div {
-      background-image: url("../../icons/icon-checkbox-checked.svg");
-    }
-  
-    & input:disabled~* {
-      opacity: 0.4;
-    }
+  display: block;
+
+  &.disabled {
+    opacity: 0.3;
+    pointer-events: none;
   }
+
+  &.inline {
+    display: inline-block;
+  }
+
+  & > span {
+    vertical-align: middle;
+  }
+
+  &.inline + span {
+    vertical-align: middle;
+  }
+
+  & > input {
+    display: none;
+  }
+
+  & > div {
+    display: inline-block;
+    vertical-align: middle;
+    height: 1em;
+    min-height: 12px;
+    width: 1em;
+    min-width: 12px;
+    margin-right: 0.5em;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    -webkit-background-size: contain;
+    background-image: url('../../icons/icon-checkbox-unchecked.svg');
+  }
+
+  & > div:hover {
+    cursor: pointer;
+  }
+
+  & input:checked + div {
+    background-image: url('../../icons/icon-checkbox-checked.svg');
+  }
+
+  & input:disabled ~ * {
+    opacity: 0.4;
+  }
+}
+
+html.dark-mode {
+  .checkbox div {
+    filter: invert(1);
+  }
+}

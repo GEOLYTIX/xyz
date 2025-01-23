@@ -39,19 +39,6 @@
       position: fixed;
     }
 
-    .map-attribution>.logo {
-      pointer-events: auto;
-      height: 1em;
-    }
-
-    #mapButton {
-      pointer-events: none;
-    }
-
-    #mapButton>* {
-      pointer-events: auto;
-    }
-
     #ctrls {
       z-index: 9999;
     }
@@ -121,14 +108,7 @@
         padding-left: 4em;
       }
 
-      #mapButton {
-        position: absolute;
-        height: 100%;
-        grid-row: 1/4;
-        grid-column: 3;
-        background-color: #fff;
-        opacity: 0.8;
-      }
+      
 
       #ctrl-panel {
         transform: rotateY(180deg);
@@ -150,34 +130,6 @@
         grid-column: 3;
       }
 
-      #ctrls-divider {
-        grid-row: 1/4;
-        grid-column: 2;
-        background-image: url("{{dir}}/public/icons/pill-vertical.svg");
-        background-repeat: no-repeat;
-        background-position: center;
-        box-shadow: 3px 0px 6px -3px #777;
-        z-index: 9999;
-      }
-
-      #ctrls-divider:hover {
-        cursor: col-resize;
-      }
-
-      #tabview-divider {
-        position: relative;
-        grid-row: 2;
-        grid-column: 3;
-        background-image: url("{{dir}}/public/icons/pill-horizontal.svg");
-        background-repeat: no-repeat;
-        background-position: center;
-        background-color: white;
-        box-shadow: 0px -1px 6px -3px #777;
-      }
-
-      #tabview-divider:hover {
-        cursor: row-resize;
-      }
 
       .desktop-display-none {
         display: none;
@@ -205,24 +157,8 @@
         height: 100%;
       }
 
-      #mapButton {
-        position: fixed;
-        top: 0;
-        left: 0;
-        height: 100%;
-      }
+ 
 
-      #mapButton>button,
-      #mapButton>a {
-        margin-bottom: 10px;
-        background-color: white;
-        box-shadow: 1px 1px 3px #777;
-        border-radius: 50%;
-        opacity: 0.9;
-        padding: 5px;
-        width: 3em;
-        height: 3em;
-      }
 
       #ctrls {
         width: 100%;
@@ -230,9 +166,7 @@
         position: relative;
       }
 
-      #ctrls-divider {
-        display: none;
-      }
+      
 
       .mobile-hidden {
         visibility: hidden;
@@ -270,12 +204,12 @@
   <div id="ctrls" class="lighter-background">
 
     <div id="ctrl-tabs" class="hover">
-      <div data-id="layers" class="active material-symbols-outlined light-colour">
+      <div data-id="layers" class="active material-symbols-outlined">
         
           layers
 
       </div>
-      <div data-id="locations" class="material-symbols-outlined light-colour">
+      <div data-id="locations" class="material-symbols-outlined">
         location_on
       </div>
 
