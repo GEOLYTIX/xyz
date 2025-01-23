@@ -72,3 +72,76 @@
     position: fixed;
   }
 }
+
+html.dark-mode {
+  .tabview {
+    .panel {
+      background-color: var(--dm-color-dark-neutral);
+
+      .btn-row {
+        background-color: var(--dm-color-dark-neutral);
+
+        button {
+          font-weight: bold;
+          color: var(--dm-color-on);
+          background: var(--dm-color-dark-faded);
+        }
+      }
+
+      & > .flex-col {
+        background-color: var(--dm-color-dark-faded);
+      }
+    }
+
+    .tabs,
+    .tabulator-tableholder {
+      background: var(--dm-color-darker);
+    }
+
+    .tab {
+      .header {
+        color: var(--dm-color-light);
+        background-color: var(--dm-color-dark-faded);
+      }
+
+      &.active .header {
+        background-color: var(--dm-color-on);
+      }
+    }
+
+    .tabulator {
+      .tabulator-footer {
+        background: var(--dm-color-dark);
+
+        .tabulator-page {
+          color: var(--dm-color-light);
+
+          &.active {
+            color: var(--dm-color-on);
+          }
+        }
+      }
+    }
+
+    .tabulator-header {
+      background: var(--dm-color-dark);
+    }
+
+    .tabulator-col {
+      background-color: var(--dm-color-dark-faded);
+      color: var(--dm-color-light);
+    }
+
+    .tabulator-row {
+      color: var(--dm-color-light);
+
+      &.tabulator-row-odd {
+        background-color: var(--dm-color-dark-neutral);
+      }
+
+      &.tabulator-row-even {
+        background-color: var(--dm-color-medium);
+      }
+    }
+  }
+}

@@ -111,6 +111,10 @@ body {
   padding: 5px;
   pointer-events: none;
   user-select: none;
+  & > .logo {
+    pointer-events: auto;
+    height: 1em;
+  }
   .attribution-links {
     text-align: right;
     font-size: 95%;

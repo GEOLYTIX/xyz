@@ -72,5 +72,12 @@ html.dark-mode {
     &.primary-colour {
       color: var(--dm-color-light);
     }
+    &.active {
+      color: var(--dm-color-on);
+    }
+
+    & > .primary-colour {
+      color: var(--dm-color-light);
+    }
   }
 }

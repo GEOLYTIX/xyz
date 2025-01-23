@@ -97,4 +97,9 @@ html.dark-mode {
       color: var(--dm-color-light-darker);
     }
   }
+
+  textarea {
+    background-color: var(--dm-color-light-darker);
+    color: var(--dm-color-light);
+  }
 }

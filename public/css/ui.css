@@ -54,7 +54,7 @@
   --dm-color-darker: #151515;
   --dm-color-light: #ffffff;
   --dm-color-light-secondary: #f2f2f2;
-  --dm-light-darker: #d8d8d8;
+  --dm-color-light-darker: #d8d8d8;
 }
 * {
   transition: 0.2s ease-in-out;
@@ -189,6 +189,12 @@ html.dark-mode {
   button {
     color: var(--dm-color-light);
     &.primary-colour {
+      color: var(--dm-color-light);
+    }
+    &.active {
+      color: var(--dm-color-on);
+    }
+    & > .primary-colour {
       color: var(--dm-color-light);
     }
   }
@@ -1066,6 +1072,10 @@ html.dark-mode {
     &::-ms-input-placeholder {
       color: var(--dm-color-light-darker);
     }
+  }
+  textarea {
+    background-color: var(--dm-color-light-darker);
+    color: var(--dm-color-light);
   }
 }
 
@@ -2060,16 +2070,10 @@ html.dark-mode {
 
 /* public/css/layout/_map_toolbar.css */
 #mapButton {
-  background-color: var(--dm-color-darker);
-  .material-symbols-outlined {
-    color: var(--color-light-secondary);
-  }
-}
-#mapButton {
   pointer-events: none;
-}
-#mapButton > * {
-  pointer-events: auto;
+  & > * {
+    pointer-events: auto;
+  }
 }
 @media only screen and (min-width: 768px) {
   #mapButton {
@@ -2083,6 +2087,9 @@ html.dark-mode {
   html.dark-mode {
     #mapButton {
       background-color: var(--dm-color-darker);
+      .material-symbols-outlined {
+        color: var(--color-light-secondary);
+      }
     }
   }
 }
@@ -2205,6 +2212,64 @@ html.dark-mode {
   }
   & .dropdown > ul {
     position: fixed;
+  }
+}
+html.dark-mode {
+  .tabview {
+    .panel {
+      background-color: var(--dm-color-dark-neutral);
+      .btn-row {
+        background-color: var(--dm-color-dark-neutral);
+        button {
+          font-weight: bold;
+          color: var(--dm-color-on);
+          background: var(--dm-color-dark-faded);
+        }
+      }
+      & > .flex-col {
+        background-color: var(--dm-color-dark-faded);
+      }
+    }
+    .tabs,
+    .tabulator-tableholder {
+      background: var(--dm-color-darker);
+    }
+    .tab {
+      .header {
+        color: var(--dm-color-light);
+        background-color: var(--dm-color-dark-faded);
+      }
+      &.active .header {
+        background-color: var(--dm-color-on);
+      }
+    }
+    .tabulator {
+      .tabulator-footer {
+        background: var(--dm-color-dark);
+        .tabulator-page {
+          color: var(--dm-color-light);
+          &.active {
+            color: var(--dm-color-on);
+          }
+        }
+      }
+    }
+    .tabulator-header {
+      background: var(--dm-color-dark);
+    }
+    .tabulator-col {
+      background-color: var(--dm-color-dark-faded);
+      color: var(--dm-color-light);
+    }
+    .tabulator-row {
+      color: var(--dm-color-light);
+      &.tabulator-row-odd {
+        background-color: var(--dm-color-dark-neutral);
+      }
+      &.tabulator-row-even {
+        background-color: var(--dm-color-medium);
+      }
+    }
   }
 }
 
