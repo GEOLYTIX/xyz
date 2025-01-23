@@ -93,9 +93,15 @@ The remote_address determined from the request header is stored in the previousA
 */
 function debounceRequest(req, res) {
 
-  req.params.remote_address = req.headers['x-forwarded-for']
-    && /^[A-Za-z0-9.,_-\s]*$/.test(req.headers['x-forwarded-for']) ? req.headers['x-forwarded-for'] : 'invalid'
-  || 'unknown';
+  if (!req.headers['x-forwarded-for']) {
+
+    req.params.remote_address = 'unknown'
+  } else {
+
+    req.params.remote_address = /^[A-Za-z0-9.,_-\s]*$/.test(req.headers['x-forwarded-for']) 
+      ? req.headers['x-forwarded-for']
+      : 'invalid'
+  }
 
   // The remote_address has been previously used
   if (Object.hasOwn(previousAddress, req.params.remote_address)
