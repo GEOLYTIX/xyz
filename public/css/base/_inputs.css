@@ -77,3 +77,24 @@ input[type='search']::-webkit-search-decoration:hover,
 input[type='search']::-webkit-search-cancel-button:hover {
   cursor: pointer;
 }
+
+html.dark-mode {
+  input[type='number'],
+  input[type='text'],
+  input[type='search'] {
+    background: var(--dm-color-medium);
+    color: var(--dm-color-light);
+    border-color: var(--dm-color-dark-faded);
+  }
+
+  input[type='search'] {
+    &::placeholder {
+      color: var(--dm-color-light-darker);
+      opacity: 1;
+    }
+
+    &::-ms-input-placeholder {
+      color: var(--dm-color-light-darker);
+    }
+  }
+}

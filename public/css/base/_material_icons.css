@@ -14,7 +14,8 @@
     color: var(--color-on);
   }
 
-  &.on-colour, &.on {
+  &.on-colour,
+  &.on {
     color: var(--color-on);
   }
 
@@ -29,4 +30,14 @@
 
 .active > .material-symbols-outlined {
   color: var(--color-on);
+}
+
+html.dark-mode {
+  .material-symbols-outlined {
+    color: var(--dm-color-light-secondary);
+
+    &.active {
+      color: var(--dm-color-on);
+    }
+  }
 }

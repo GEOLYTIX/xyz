@@ -30,3 +30,29 @@ button {
     mask-image: url('../../icons/icon-arrow-up.svg');
   }
 }
+
+html.dark-mode {
+  .mask-icon {
+    background: var(--color-light-secondary);
+
+    &::hover {
+      background-color: var(--dm-color-dark-faded);
+    }
+
+    &.toggle {
+      background-color: var(--dm-color-light);
+
+      &.on {
+        background-color: var(--dm-color-on);
+      }
+    }
+
+    &.active {
+      background-color: var(--dm-color-on);
+    }
+
+    &.disabled {
+      background-color: var(--dm-color-medium);
+    }
+  }
+}

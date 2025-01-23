@@ -1,0 +1,64 @@
+#mapButton {
+  background-color: var(--dm-color-darker);
+
+  .material-symbols-outlined {
+    color: var(--color-light-secondary);
+  }
+}
+
+#mapButton {
+  pointer-events: none;
+}
+
+#mapButton > * {
+  pointer-events: auto;
+}
+
+@media only screen and (min-width: 768px) {
+  #mapButton {
+    position: absolute;
+    height: 100%;
+    grid-row: 1/4;
+    grid-column: 3;
+    background-color: #fff;
+    opacity: 0.8;
+  }
+
+  html.dark-mode {
+    #mapButton {
+      background-color: var(--dm-color-darker);
+    }
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  #mapButton {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+
+    & > button,
+    & > a {
+      margin-bottom: 10px;
+      background-color: var(--color-light);
+      box-shadow: 1px 1px 3px #777;
+      border-radius: 50%;
+      opacity: 0.9;
+      padding: 5px;
+      width: 3em;
+      height: 3em;
+    }
+  }
+
+  html.dark-mode {
+    #mapButton {
+      background-color: unset;
+
+      & > button,
+      & > a {
+        background-color: var(--dm-color-dark-faded);
+      }
+    }
+  }
+}

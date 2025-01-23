@@ -49,3 +49,9 @@ h3 {
 a > img {
   height: 100%;
 }
+
+html.dark-mode {
+  a {
+    color: var(--dm-color-on);
+  }
+}

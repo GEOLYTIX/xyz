@@ -58,19 +58,6 @@
       position: fixed;
     }
 
-    .map-attribution>.logo {
-      pointer-events: auto;
-      height: 1em;
-    }
-
-    #mapButton {
-      pointer-events: none;
-    }
-
-    #mapButton>* {
-      pointer-events: auto;
-    }
-
     #ctrls {
       z-index: 9999;
     }
@@ -139,9 +126,7 @@
         height: 1em;
       }
 
-      #mapButton {
-        pointer-events: none;
-      }
+      
 
       #mapButton > * {
         pointer-events: auto;
@@ -156,27 +141,17 @@
       }
 
       #ctrls {
-        z-index: 9999;
+        grid-row: 1/4;
+        grid-column: 1;
+        height: 100%;
+        overflow: hidden;
       }
 
-      #ctrl-tabs {
-        height: 50px;
-        width: 100%;
-        display: flex;
-        background-color: #003d57;
+      #Tabview {
+        grid-row: 3;
+        grid-column: 3;
       }
 
-      #ctrl-tabs > div {
-        flex-grow: 1;
-        mask-size: 3em;
-        -webkit-mask-size: 3em;
-        mask-position: center;
-        -webkit-mask-position: center;
-      }
-
-      #ctrl-tabs > .active {
-        background-color: #e18335;
-      }
 
       #ctrl-tabs > .locations.mask-icon {
         -webkit-mask-image: url('{{dir}}/public/icons/icon-search.svg');
@@ -193,10 +168,21 @@
         overflow-y: auto;
       }
 
-      #ctrl-panel > div {
-        display: none;
-        padding: 10px;
+      #OL {
+        width: 100%;
+        height: 100%;
       }
+
+ 
+
+
+      #ctrls {
+        width: 100%;
+        height: 100%;
+        position: relative;
+      }
+
+      
 
       #ctrl-panel > div.active {
         display: block;
@@ -357,12 +343,12 @@
         }
 
     <div id="ctrl-tabs" class="hover">
-      <div data-id="layers" class="active material-symbols-outlined light-colour">
+      <div data-id="layers" class="active material-symbols-outlined">
         
           layers
 
       </div>
-      <div data-id="locations" class="material-symbols-outlined light-colour">
+      <div data-id="locations" class="material-symbols-outlined">
         location_on
       </div>
 

@@ -1,0 +1,19 @@
+.key {
+  button.layer-key {
+    &.active {
+      background-color: var(--color-primary);
+      color: var(--color-light);
+    }
+  }
+}
+
+html.dark-mode {
+  .key {
+    button.layer-key {
+      &.active {
+        background-color: var(--dm-color-on);
+        color: var(--dm-color-darker);
+      }
+    }
+  }
+}

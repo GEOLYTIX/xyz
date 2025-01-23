@@ -49,3 +49,9 @@ label.checkbox {
     opacity: 0.4;
   }
 }
+
+html.dark-mode {
+  .checkbox div {
+    filter: invert(1);
+  }
+}

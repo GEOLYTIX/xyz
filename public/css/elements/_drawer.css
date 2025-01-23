@@ -92,3 +92,19 @@
     padding-right: 0.3em;
   }
 }
+
+html.dark-mode {
+  .drawer {
+    background-color: var(--dm-color-dark-faded);
+    color: var(--color-light-secondary);
+    border: none;
+
+    &.top-btn {
+      color: var(--color-light-secondary);
+    }
+
+    &.panel {
+      background-color: var(--dm-dark-neutral);
+    }
+  }
+}

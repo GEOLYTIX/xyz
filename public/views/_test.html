@@ -158,18 +158,6 @@
           position: absolute;
         }
 
-        .map-attribution {
-          padding-left: 4em;
-        }
-
-        #mapButton {
-            pointer-events: none;
-        }
-
-        #mapButton>* {
-            pointer-events: auto;
-        }
-
         #ctrls {
             z-index: 9999;
         }
@@ -213,18 +201,103 @@
           grid-column: 3;
         }
 
-        #ctrls-divider {
-          grid-row: 1/4;
-          grid-column: 2;
-          background-image: url('{{dir}}/public/icons/pill-vertical.svg');
-          background-repeat: no-repeat;
-          background-position: center;
-          box-shadow: 3px 0px 6px -3px #777;
-          z-index: 9999;
+        @media only screen and (min-width: 768px) {
+
+            body {
+                display: grid;
+                grid-template-columns: 350px 10px auto;
+            }
+
+            body.fullscreen {
+                grid-template-columns: 0 0 auto !important;
+            }
+
+            body.fullscreen #ctrls {
+                display: none;
+            }
+
+            #Map {
+                grid-row: 1;
+                grid-column: 3;
+                position: relative;
+            }
+
+            #OL {
+                width: 100%;
+                height: 100vh;
+                position: absolute;
+            }
+
+            .map-attribution {
+                padding-left: 4em;
+            }
+
+            #ctrl-panel {
+                transform: rotateY(180deg);
+            }
+
+            #ctrl-panel>div {
+                transform: rotateY(180deg);
+            }
+
+            #ctrls {
+                grid-row: 1/4;
+                grid-column: 1;
+                height: 100%;
+                overflow: hidden;
+            }
+
+            #Tabview {
+                grid-row: 3;
+                grid-column: 3;
+            }
+
+
+            .desktop-display-none {
+                display: none;
+            }
         }
 
-        #ctrls-divider:hover {
-          cursor: col-resize;
+        @media only screen and (max-width: 768px) {
+
+            html {
+                overflow: scroll;
+            }
+
+            body {
+                overflow-y: scroll;
+                overflow-x: hidden;
+            }
+
+            #Map {
+                height: calc(100% - 50px);
+                width: 100%;
+            }
+
+            #OL {
+                width: 100%;
+                height: 100%;
+            }
+
+
+            #ctrls {
+                width: 100%;
+                height: 100%;
+                position: relative;
+            }
+
+            .mobile-hidden {
+                visibility: hidden;
+            }
+
+            .mobile-display-none {
+                display: none;
+            }
+
+            .mobile-disabled {
+                opacity: 0.3;
+                pointer-events: none;
+            }
         }
 
         #tabview-divider {
@@ -335,12 +408,12 @@
       </div>
 
         <div id="ctrl-tabs" class="hover">
-            <div data-id="layers" class="active material-symbols-outlined light-colour">
+            <div data-id="layers" class="active material-symbols-outlined">
               
                 layers
       
             </div>
-            <div data-id="locations" class="material-symbols-outlined light-colour">
+            <div data-id="locations" class="material-symbols-outlined">
               location_on
             </div>
       

@@ -20,7 +20,7 @@ dialog {
       margin-left: auto;
     }
 
-    &>.material-symbols-outlined {
+    & > .material-symbols-outlined {
       font-size: 1.2em;
     }
   }
@@ -67,5 +67,12 @@ dialog {
     .minimize-btn::after {
       content: 'fullscreen';
     }
+  }
+}
+
+html.dark-mode {
+  dialog {
+    color: var(--dm-color-light);
+    background-color: var(--dm-color-dark-faded);
   }
 }
