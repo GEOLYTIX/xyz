@@ -11,8 +11,6 @@ Exports the [user] cookie method for the /api/user/cookie route.
 @module /user/cookie
 */
 
- 
-
 const acl = require('./acl')
 
 const login = require('./login')
@@ -88,6 +86,9 @@ module.exports = async function cookie(req, res) {
       }
 
       const user = rows[0]
+
+      // Admin rights should not be added if not provided from a token.
+      user.admin = payload.admin
 
       // Assign title identifier to user object.
       user.title = xyzEnv.TITLE
