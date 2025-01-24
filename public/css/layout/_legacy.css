@@ -40,7 +40,7 @@ html.dark-mode {
   .mask-icon {
     background: var(--color-light-secondary);
 
-    &::hover {
+    &:hover {
       background-color: var(--dm-color-dark-faded);
     }
 
