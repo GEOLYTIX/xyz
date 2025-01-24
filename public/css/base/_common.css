@@ -2,6 +2,19 @@
   display: none !important;
 }
 
+.mobile-hidden {
+  visibility: hidden;
+}
+
+.mobile-display-none {
+  display: none !important;
+}
+
+.mobile-disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
+
 .hover:hover {
   cursor: pointer;
 }
@@ -30,8 +43,8 @@
   vertical-align: middle;
 }
 
-.link-with-img>button {
-    width: 1.5em;
+.link-with-img > button {
+  width: 1.5em;
 }
 
 .val-changed input {
