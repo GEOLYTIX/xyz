@@ -1324,7 +1324,7 @@ html.dark-mode {
     line-height: 1.5em;
   }
   &.expandable:not(.expanded) > *:not(.header) {
-    display: none;
+    display: none !important;
   }
   &.expanded > .header > .material-symbols-outlined.caret::after {
     content: "keyboard_arrow_up";

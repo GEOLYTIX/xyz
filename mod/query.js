@@ -141,15 +141,18 @@ The fields request param property may be provided as an array. The string should
 @property {Array} [user.roles] User roles.
 */
 async function layerQuery(req, res) {
+  if (req.params.layer_template) {
+    req.params.layer = await getTemplate(req.params.layer_template);
+  }
+
   if (!req.params.layer) {
     // Reserved params will be deleted to prevent DDL injection.
     delete req.params.filter;
     delete req.params.viewport;
     return;
+  } else if (typeof req.params.layer === 'string') {
+    req.params.layer = await getLayer(req.params);
   }
-
-  // Assign layer object to req.params.
-  req.params.layer = await getLayer(req.params);
 
   // getLayer will return error on role restrictions.
   if (req.params.layer instanceof Error) {
@@ -164,6 +167,17 @@ async function layerQuery(req, res) {
 
   // Layer queries must have a geom param.
   req.params.geom ??= req.params.layer.geom;
+
+  // Check whether table request param is referenced in layer.
+  if (req.params.table) {
+    const tables = new Set(templateTables(req.params.layer));
+
+    if (!tables.has(req.params.table)) {
+      return res
+        .status(403)
+        .send(`Access to ${req.params.table} table param forbidden.`);
+    }
+  }
 
   // Create filter condition for SQL query.
   req.params.filter = [
@@ -199,6 +213,62 @@ async function layerQuery(req, res) {
   await fieldsMap(req, res);
 
   await infojMap(req, res);
+}
+
+/**
+@function templateTables
+
+@description
+The methods call the internal getObjTables method to iterate through the [layer] template object argument and its nested propertiess. Any 'table' string properties and string values of a 'tables' object are pushed into tables array returned from the method.
+
+@param {object} template [Layer] template object to parse for table strings.
+@returns {Array} Array of table strings in layer template object.
+*/
+function templateTables(template) {
+  const tables = [];
+
+  getObjTables(template, tables);
+
+  return tables;
+
+  function getObjTables(obj, tables) {
+    if (typeof obj !== 'object') return;
+
+    // Return early if object is null or empty
+    if (obj === null) return;
+
+    // Object must have keys to iterate on.
+    if (obj instanceof Object && !Object.keys(obj)) return;
+
+    Object.entries(obj).forEach(([key, value]) => {
+      if (key === 'table' && typeof value === 'string') {
+        tables.push(value);
+        return;
+      }
+
+      if (
+        key === 'tables' &&
+        value instanceof Object &&
+        Object.keys(value).length
+      ) {
+        Object.values(value).forEach(
+          (table) => typeof table === 'string' && tables.push(table),
+        );
+        return;
+      }
+
+      // Recursively process each item if we find an array
+      if (Array.isArray(value)) {
+        value.forEach((item) => getObjTables(item, tables));
+        return;
+      }
+
+      // Recursively process nested objects
+      if (value instanceof Object) {
+        getObjTables(value, tables);
+      }
+    });
+  }
 }
 
 /**
@@ -330,7 +400,7 @@ function getQueryFromTemplate(req, template) {
     }
 
     // Returns -1 if ${filter} not found in template
-    if (template.template.search(/\$\{filter\}/) < 0) {
+    if (template.template.search(/\${filter}/) < 0) {
       // Ensure that the $n substitute params match the SQL length on layer queries without a ${filter}
       delete req.params.filter;
       //We remove the SQL params because there is no filter at this stage so we don't have any values to substitute.
@@ -341,9 +411,9 @@ function getQueryFromTemplate(req, template) {
     const query_template = template.template
 
       // Replace parameter for identifiers, e.g. table, schema, columns
-      .replace(/\$\{{1}(.*?)\}{1}/g, (matched) => {
+      .replace(/\${(.{0,99}?)}/g, (matched) => {
         // Remove template brackets from matched param.
-        const param = matched.replace(/\$\{{1}|\}{1}/g, '');
+        const param = matched.replace(/\${|}/g, '');
 
         // Get param value from request params object.
         const change = req.params[param] || '';
@@ -360,23 +430,21 @@ function getQueryFromTemplate(req, template) {
       })
 
       // Replace params with placeholder, eg. $1, $2
-      .replace(/\%{{1}(.*?)\}{1}/g, (matched) => {
+      .replace(/%{(.{0,99}?)}/g, (matched) => {
         // Remove template brackets from matched param.
-        const param = matched.replace(/\%\{{1}|\}{1}/g, '');
+        const param = matched.replace(/%{|}/g, '');
 
-        var val = req.params[param]; // || ""
+        let val = req.params[param];
 
         if (req.params.wildcard) {
           val = val.replaceAll(req.params.wildcard, '%');
         }
 
         try {
-          // Try to parse val if the string begins and ends with either [] or {}
-          val =
-            (!param === 'body' &&
-              /^[\[\{]{1}.*[\]\}]{1}$/.test(val) &&
-              JSON.parse(val)) ||
-            val;
+          if (param !== 'body' && /^[[{].*[\]}]$/.test(val)) {
+            // Parse val as JSON if param is not 'body' and the [string] value begins and ends with either [] or {}.
+            val = JSON.parse(val);
+          }
         } catch (err) {
           console.error(err);
         }
@@ -384,7 +452,7 @@ function getQueryFromTemplate(req, template) {
         // Push value from request params object into params array.
         req.params.SQL.push(val);
 
-        return `$${req.params.SQL.length}`;
+        return `$${Array.from(req.params.SQL).length}`;
       });
 
     return query_template;
@@ -476,15 +544,8 @@ function sendRows(req, res, template, rows) {
     return res.status(500).send('Failed to query PostGIS table.');
   }
 
-  // return 202 if no record was returned from database.
-  if (!rows || !rows.length)
-    return res.status(202).send('No rows returned from table.');
-
-  // Check whether any row of the rows array is empty or whether a single row is empty.
-  if (
-    (rows.length && !rows.some((row) => checkEmptyRow(row))) ||
-    !checkEmptyRow(rows)
-  ) {
+  // The rows array must have a length with some row not being empty.
+  if (!rows?.length || !rows.some((row) => checkEmptyRow(row))) {
     return res.status(202).send('No rows returned from table.');
   }
 

@@ -22,7 +22,7 @@
   }
 
   &.expandable:not(.expanded) > *:not(.header) {
-    display: none;
+    display: none !important;
   }
 
   &.expanded > .header > .material-symbols-outlined.caret::after {
