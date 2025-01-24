@@ -65,9 +65,12 @@ module.exports = async function user(req, res) {
     return res.send(`Failed to evaluate 'method' param.`)
   }
 
-  debounceRequest(req, res)
+  if (new Set(['login', 'register']).has(req.params.method)) {
 
-  if (res.finished) return;
+    debounceRequest(req, res)
+
+    if (res.finished) return;
+  }
 
   req.params.host = reqHost(req)
 
