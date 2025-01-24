@@ -6,19 +6,6 @@
   display: none;
 }
 
-.mobile-hidden {
-  visibility: hidden;
-}
-
-.mobile-display-none {
-  display: none !important;
-}
-
-.mobile-disabled {
-  opacity: 0.3;
-  pointer-events: none;
-}
-
 .hover:hover {
   cursor: pointer;
 }
@@ -61,4 +48,28 @@
 
 .val-changed button {
   background-color: var(--color-changed);
+}
+
+@media only screen and (max-width: 768px) {
+  html {
+    overflow: scroll;
+  }
+
+  body {
+    overflow-y: scroll;
+    overflow-x: hidden;
+  }
+
+  .mobile-hidden {
+    visibility: hidden;
+  }
+
+  .mobile-display-none {
+    display: none !important;
+  }
+
+  .mobile-disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
 }
