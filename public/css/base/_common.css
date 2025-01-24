@@ -2,6 +2,10 @@
   display: none !important;
 }
 
+.desktop-display-none {
+  display: none;
+}
+
 .mobile-hidden {
   visibility: hidden;
 }

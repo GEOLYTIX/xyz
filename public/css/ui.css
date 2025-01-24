@@ -93,6 +93,9 @@ html.dark-mode {
 .display-none {
   display: none !important;
 }
+.desktop-display-none {
+  display: none;
+}
 .mobile-hidden {
   visibility: hidden;
 }

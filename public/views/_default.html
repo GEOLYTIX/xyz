@@ -152,10 +152,12 @@
         grid-column: 3;
       }
 
+    }
 
-      #ctrl-tabs > .locations.mask-icon {
-        -webkit-mask-image: url('{{dir}}/public/icons/icon-search.svg');
-        mask-image: url('{{dir}}/public/icons/icon-search.svg');
+    @media only screen and (max-width: 768px) {
+
+      html {
+        overflow: scroll;
       }
 
       #ctrl-tabs > .locations.mask-icon.active {
