@@ -1,47 +1,60 @@
 .display-none {
-    display: none !important;
+  display: none !important;
+}
+
+.mobile-hidden {
+  visibility: hidden;
+}
+
+.mobile-display-none {
+  display: none !important;
+}
+
+.mobile-disabled {
+  opacity: 0.3;
+  pointer-events: none;
 }
 
 .hover:hover {
-    cursor: pointer;
+  cursor: pointer;
 }
 
 .box-shadow {
-    border: 1px solid #eee;
-    box-shadow: 2px 2px 4px var(--color-primary-light);
+  border: 1px solid #eee;
+  box-shadow: 2px 2px 4px var(--color-primary-light);
 }
 
 .bold {
-    font-weight: bold;
+  font-weight: bold;
 }
 
 .no-select {
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
-.link-with-img>* {
-    height: 1.2em;
-    line-height: 1.2em;
-    display: inline-block;
-    vertical-align: middle;
+.link-with-img > * {
+  height: 1.2em;
+  line-height: 1.2em;
+  display: inline-block;
+  vertical-align: middle;
 }
 
-.link-with-img>button {
-    width: 1.5em;
+.link-with-img > button {
+  width: 1.5em;
 }
 
 .val-changed input {
-    background-color: var(--color-changed)
-  }
-  
-.val-changed textarea {
-    background-color: var(--color-changed)
+  background-color: var(--color-changed);
 }
-  
+
+.val-changed textarea {
+  background-color: var(--color-changed);
+}
+
 .val-changed button {
-    background-color: var(--color-changed)
+  background-color: var(--color-changed);
 }

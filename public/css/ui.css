@@ -93,6 +93,16 @@ html.dark-mode {
 .display-none {
   display: none !important;
 }
+.mobile-hidden {
+  visibility: hidden;
+}
+.mobile-display-none {
+  display: none !important;
+}
+.mobile-disabled {
+  opacity: 0.3;
+  pointer-events: none;
+}
 .hover:hover {
   cursor: pointer;
 }
