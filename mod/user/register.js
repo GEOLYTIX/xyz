@@ -111,7 +111,7 @@ async function registerUserBody(req, res) {
     password_reset: req.body.password,
     language: req.body.language,
     verificationtoken: req.body.verificationtoken,
-    access_log: [`${date}@${(req.ips && req.ips.pop()) || req.ip}`],
+    access_log: [`${date}@${req.ips?.pop() || req.ip}`],
   };
 
   if (xyzEnv.APPROVAL_EXPIRY) {
