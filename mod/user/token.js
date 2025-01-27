@@ -9,9 +9,7 @@ Exports the userToken method for the /api/user/token route.
 @module /user/key
 */
 
-const jwt = require('jsonwebtoken')
-
- 
+const jwt = require('jsonwebtoken');
 
 /**
 @function userToken
@@ -30,28 +28,23 @@ Requesting user.
 */
 
 module.exports = async function userToken(req, res) {
-
   if (!req.params.user) {
-
-    return new Error('login_required')
+    return new Error('login_required');
   }
 
-  const user = req.params.user
+  const user = req.params.user;
 
   if (user.from_token) {
-    return res.send('Token may not be generated from token authentication.')
+    return res.send('Token may not be generated from token authentication.');
   }
 
-  delete user.admin
-  delete user.exp
-  delete user.iat
+  delete user.admin;
+  delete user.exp;
+  delete user.iat;
 
-  const token = jwt.sign(
-    req.params.user,
-    xyzEnv.SECRET,
-    {
-      expiresIn: '8hr'
-    })
+  const token = jwt.sign(req.params.user, xyzEnv.SECRET, {
+    expiresIn: '8hr',
+  });
 
-  res.send(token)
-}
+  res.send(token);
+};
