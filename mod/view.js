@@ -46,13 +46,19 @@ module.exports = async function view(req, res) {
   // The default_view is assumed without an implicit template value.
   params.template ??= 'default_view';
 
-  params.dir ??= xyzEnv.DIR;
+  params.dir = xyzEnv.DIR;
 
-  params.login ??= (xyzEnv.PRIVATE || xyzEnv.PUBLIC) && 'true';
+  params.login = (xyzEnv.PRIVATE || xyzEnv.PUBLIC) && 'true';
 
-  params.title ??= xyzEnv.TITLE;
+  params.title = xyzEnv.TITLE;
 
-  params.language ??= req.params.user?.language || 'en';
+  params.language ??= req.params.user?.language;
+
+  // Test ISO629 language param.
+  if (!/^[a-z]{2}?$/.test(params.language)) {
+    // Assign English as default language.
+    params.language = 'en';
+  }
 
   const template = await languageTemplates(params);
 
