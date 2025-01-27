@@ -16,21 +16,19 @@ Exports the [user] register method for the /api/user/register route.
 @module /user/register
 */
 
-const bcrypt = require('../utils/bcrypt')
+const bcrypt = require('../utils/bcrypt');
 
-const crypto = require('crypto')
+const crypto = require('crypto');
 
- 
+const acl = require('./acl');
 
-const acl = require('./acl')
+const reqHost = require('../utils/reqHost');
 
-const reqHost = require('../utils/reqHost')
+const mailer = require('../utils/mailer');
 
-const mailer = require('../utils/mailer')
+const languageTemplates = require('../utils/languageTemplates');
 
-const languageTemplates = require('../utils/languageTemplates')
-
-const view = require('../view')
+const view = require('../view');
 
 /**
 @function register
@@ -48,29 +46,29 @@ Post body object with user data.
 */
 
 module.exports = async function register(req, res) {
-
   // acl module will export an empty require object without the ACL being configured.
   if (acl === null) {
-    return res.status(500).send('ACL unavailable.')
+    return res.status(500).send('ACL unavailable.');
   }
 
-  req.params.host = reqHost(req)
+  req.params.host = reqHost(req);
 
   // Register request [post] body.
-  if (req.body) return registerUserBody(req, res)
+  if (req.body) return registerUserBody(req, res);
 
   // The login view will set the cookie to null.
-  res.setHeader('Set-Cookie', `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`)
+  res.setHeader(
+    'Set-Cookie',
+    `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`,
+  );
 
   req.params.template = req.params.reset
     ? 'password_reset_view'
     : 'register_view';
 
   // Get request for registration form view.
-  view(req, res)
-}
-
-const previousAddress = {}
+  view(req, res);
+};
 
 /**
 @function registerUserBody
@@ -90,24 +88,22 @@ Post body object with user data.
 */
 
 async function registerUserBody(req, res) {
-
-  debounceRequest(req, res)
-
-  if (res.finished) return;
-
-  checkUserBody(req, res)
+  checkUserBody(req, res);
 
   if (res.finished) return;
 
   // The password will be reset for exisiting user accounts.
-  await passwordReset(req, res)
+  await passwordReset(req, res);
 
   if (res.finished) return;
 
   // Get the date for logs.
-  const date = new Date().toISOString().replace(/\..*/, '')
+  const date = new Date().toISOString().replace(/\..*/, '');
 
-  const expiry_date = parseInt((new Date().getTime() + xyzEnv.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24) / 1000)
+  const expiry_date = parseInt(
+    (new Date().getTime() + xyzEnv.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24) /
+      1000,
+  );
 
   const USER = {
     email: req.body.email,
@@ -115,21 +111,23 @@ async function registerUserBody(req, res) {
     password_reset: req.body.password,
     language: req.body.language,
     verificationtoken: req.body.verificationtoken,
-    access_log: [`${date}@${req.ips && req.ips.pop() || req.ip}`]
-  }
+    access_log: [`${date}@${req.ips?.pop() || req.ip}`],
+  };
 
   if (xyzEnv.APPROVAL_EXPIRY) {
-    USER['expires_on'] = expiry_date
+    USER['expires_on'] = expiry_date;
   }
 
   // Create new user account
-  const rows = await acl(`
+  const rows = await acl(
+    `
     INSERT INTO acl_schema.acl_table (${Object.keys(USER).join(',')})
     VALUES (${Object.keys(USER).map((NULL, i) => `\$${i + 1}`)})`,
-    Object.values(USER))
+    Object.values(USER),
+  );
 
   if (rows instanceof Error) {
-    return res.status(500).send('Failed to access ACL.')
+    return res.status(500).send('Failed to access ACL.');
   }
 
   await mailer({
@@ -138,47 +136,16 @@ async function registerUserBody(req, res) {
     to: req.body.email,
     host: req.params.host,
     link: `${req.params.host}/api/user/verify/${req.body.verificationtoken}`,
-    remote_address: req.params.remote_address
-  })
+    remote_address: req.params.remote_address,
+  });
 
   // Return msg. No redirect for password reset.
-  res.send(await languageTemplates({
-    template: 'new_account_registered',
-    language: req.body.language
-  }))
-}
-
-/**
-@function debounceRequest
-
-@description
-The remote_address determined from the request header is stored in the previousAddress module variable. Requests from the same address within 30 seconds will be bounced.
-
-@param {req} req HTTP request.
-@param {res} res HTTP response.
-@property {Object} req.params HTTP request parameter.
-@property {Object} req.header HTTP request header.
-*/
-
-function debounceRequest(req, res) {
-
-  req.params.remote_address = req.headers['x-forwarded-for']
-    && /^[A-Za-z0-9.,_-\s]*$/.test(req.headers['x-forwarded-for']) ? req.headers['x-forwarded-for'] : 'invalid'
-  || 'unknown';
-
-  // The remote_address has been previously used
-  if (Object.hasOwn(previousAddress, req.params.remote_address)
-
-    // within 30 seconds or less.
-    && new Date() - previousAddress[req.params.remote_address] < 30000) {
-
-    res.status(403).send(`Address ${req.params.remote_address} temporarily locked.`)
-
-    return;
-  }
-
-  // Log the remote_address with the current datetime.
-  previousAddress[req.params.remote_address] = new Date()
+  res.send(
+    await languageTemplates({
+      template: 'new_account_registered',
+      language: req.body.language,
+    }),
+  );
 }
 
 /**
@@ -208,50 +175,50 @@ Post body object with user data.
 */
 
 function checkUserBody(req, res) {
-
-  if (!req.body.email) return res.status(400).send('No email provided')
+  if (!req.body.email) return res.status(400).send('No email provided');
 
   // Test email address
   if (!/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/.test(req.body.email)) {
-
-    return res.status(400).send('Provided email address is invalid')
+    return res.status(400).send('Provided email address is invalid');
   }
 
   // Test whether email domain is allowed to register
   if (xyzEnv.USER_DOMAINS) {
-
     // Get array of allowed user email domains from split xyzEnvironment variable.
-    const domains = new Set(xyzEnv.USER_DOMAINS.split(','))
+    const domains = new Set(xyzEnv.USER_DOMAINS.split(','));
 
     // Check whether the Set has the domain.
     if (!domains.has(req.body.email.match(/(?<=@)[^.]+(?=\.)/g)[0])) {
-
       // Return if not...
       return res.status(400).send('Provided email address is invalid');
     }
   }
 
   // Test whether a password has been provided.
-  if (!req.body.password) return res.status(400).send('No password provided')
+  if (!req.body.password) return res.status(400).send('No password provided');
 
   // Create regex to text password complexity from xyzEnv or set default.
-  const passwordRgx = new RegExp(xyzEnv.PASSWORD_REGEXP || '(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{12,}$')
+  const passwordRgx = new RegExp(
+    xyzEnv.PASSWORD_REGEXP || '(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{12,}$',
+  );
 
   // Test whether the provided password is valid.
   if (!passwordRgx.test(req.body.password)) {
-
-    res.status(403).send('Invalid password provided')
+    res.status(403).send('Invalid password provided');
     return;
   }
 
   // Hash the password.
-  req.body.password = bcrypt.hashSync(req.body.password, 8)
+  req.body.password = bcrypt.hashSync(req.body.password, 8);
 
   // Create random verification token.
-  req.body.verificationtoken = crypto.randomBytes(20).toString('hex')
+  req.body.verificationtoken = crypto.randomBytes(20).toString('hex');
 
   // Lookup the provided language key.
-  req.body.language = Intl.Collator.supportedLocalesOf([req.body.language], { localeMatcher: 'lookup' })[0] || 'en';
+  req.body.language =
+    Intl.Collator.supportedLocalesOf([req.body.language], {
+      localeMatcher: 'lookup',
+    })[0] || 'en';
 }
 
 /**
@@ -270,58 +237,64 @@ Post body object with user data.
 */
 
 async function passwordReset(req, res) {
-
   // Attempt to retrieve ACL record with matching email field.
-  let rows = await acl(`
+  let rows = await acl(
+    `
     SELECT email, password, password_reset, language, blocked
     FROM acl_schema.acl_table 
     WHERE lower(email) = lower($1);`,
-    [req.body.email])
+    [req.body.email],
+  );
 
   if (rows instanceof Error) {
-    return res.status(500).send('Failed to access ACL.')
+    return res.status(500).send('Failed to access ACL.');
   }
 
-  const user = rows[0]
+  const user = rows[0];
 
   // Register new user.
   if (!user) return;
 
   // Setting the password to NULL will disable access to the account and prevent resetting the password.
   if (user?.password === null) {
-    res.status(401).send('User account has restricted access')
+    res.status(401).send('User account has restricted access');
     return;
   }
 
   // Blocked user may not reset their password.
   if (user.blocked) {
-    res.status(403).send(await languageTemplates({
-      template: 'user_blocked',
-      language: req.body.language
-    }))
+    res.status(403).send(
+      await languageTemplates({
+        template: 'user_blocked',
+        language: req.body.language,
+      }),
+    );
     return;
   }
 
   // Get the date for logs.
-  const date = new Date().toISOString().replace(/\..*/, '')
+  const date = new Date().toISOString().replace(/\..*/, '');
 
-  const expiry_date = parseInt((new Date().getTime() + xyzEnv.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24) / 1000)
+  const expiry_date = parseInt(
+    (new Date().getTime() + xyzEnv.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24) /
+      1000,
+  );
 
   const VALUES = [
     req.body.email,
     req.body.password,
     req.body.verificationtoken,
-    `${date}@${req.params.remote_address}`
-  ]
+    `${date}@${req.params.remote_address}`,
+  ];
 
   if (xyzEnv.APPROVAL_EXPIRY && user.expires_on) {
-
-    VALUES.push(expiry_date)
+    VALUES.push(expiry_date);
   }
 
   // Set new password and verification token.
   // New passwords will only apply after account verification.
-  rows = await acl(`
+  rows = await acl(
+    `
     UPDATE acl_schema.acl_table 
     SET
       password_reset = $2,
@@ -329,26 +302,27 @@ async function passwordReset(req, res) {
       access_log = array_append(access_log, $4)
       ${xyzEnv.APPROVAL_EXPIRY && user.expires_on ? ',expires_on = $5' : ''}
     WHERE lower(email) = lower($1);`,
-    VALUES)
+    VALUES,
+  );
 
   if (rows instanceof Error) {
-    return res.status(500).send('Failed to access ACL.')
+    return res.status(500).send('Failed to access ACL.');
   }
 
-  // Sent mail with verification token to the account email address.  
+  // Sent mail with verification token to the account email address.
   await mailer({
     template: 'verify_password_reset',
     language: req.body.language,
     to: user.email,
     host: req.params.host,
     link: `${req.params.host}/api/user/verify/${req.body.verificationtoken}/?language=${req.body.language}`,
-    remote_address: req.params.remote_address
-  })
+    remote_address: req.params.remote_address,
+  });
 
   const password_reset_verification = await languageTemplates({
     template: 'password_reset_verification',
-    language: req.body.language
-  })
+    language: req.body.language,
+  });
 
-  res.send(password_reset_verification)
+  res.send(password_reset_verification);
 }
