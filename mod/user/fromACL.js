@@ -182,14 +182,6 @@ async function getUser(request) {
 
   // Accounts must be verified and approved for login
   if (!user.verified || !user.approved) {
-    await mailer({
-      template: 'failed_login',
-      language: user.language,
-      to: user.email,
-      host: request.host,
-      remote_address: request.remote_address,
-    });
-
     return new Error('user_not_verified');
   }
 
@@ -317,7 +309,7 @@ async function failedLogin(request) {
   }
 
   // Check whether failed login attempts exceeds limit.
-  if (rows[0]?.failedattempts >= maxFailedAttempts) {
+  if (rows[0]?.failedattempts === maxFailedAttempts) {
     // Create a verificationtoken.
     const verificationtoken = crypto.randomBytes(20).toString('hex');
 
@@ -357,6 +349,11 @@ async function failedLogin(request) {
         language: request.language,
       }),
     );
+  }
+
+  if (rows[0]?.failedattempts > maxFailedAttempts) {
+    // Only email once the limit is matched not on every subsequent failed attempt.
+    return new Error('auth_failed');
   }
 
   // Login has failed but account is not locked (yet).
