@@ -1,56 +1,73 @@
 <!doctype html>
 <html lang="fr">
+  <head data-dir="{{dir}}">
+    <title>XYZ | Se connecter</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{{dir}}/public/icons/favicon.ico"
+    />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<head data-dir="{{dir}}">
-  <title>XYZ | Se connecter</title>
-  <link rel="icon" type="image/x-icon" href="{{dir}}/public/icons/favicon.ico" />
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="{{dir}}/public/views/login/_login.js" defer></script>
+    <link rel="stylesheet" href="{{dir}}/public/views/login/_login.css" />
+  </head>
 
-  <script src="{{dir}}/public/views/login/_login.js" defer></script>
-  <link rel="stylesheet" href="{{dir}}/public/views/login/_login.css" />
+  <body class="login_form">
+    <select
+      id="language"
+      onChange="(function(e){location=e.target.value})(event)"
+    >
+      <option value="{{dir}}?language=fr&login=true">Français</option>
+      <option value="{{dir}}?language=en&login=true">English</option>
+      <option value="{{dir}}?language=de&login=true">Deutsch</option>
+      <option value="{{dir}}?language=pl&login=true">Polski</option>
+      <option value="{{dir}}?language=ja&login=true">日本語</option>
+      <option value="{{dir}}?language=ko&login=true">한국어</option>
+      <option value="{{dir}}?language=zh&login=true">中文简体</option>
+    </select>
 
-</head>
+    <form action="{{dir}}/api/user/login" method="post" autocomplete="off">
+      <input style="display: none" name="language" required value="fr" />
 
-<body class="login_form">
+      <div class="input-group">
+        <input
+          id="auth_user_email"
+          name="email"
+          type="email"
+          required
+          maxlength="50"
+        />
+        <span class="bar"></span>
+        <label for="auth_user_email">E-mail</label>
+      </div>
 
-  <select id="language" onChange="(function(e){location=e.target.value})(event)">
-    <option value="{{dir}}?language=fr&login=true">Français</option>
-    <option value="{{dir}}?language=en&login=true">English</option>
-    <option value="{{dir}}?language=de&login=true">Deutsch</option>
-    <option value="{{dir}}?language=pl&login=true">Polski</option>
-    <option value="{{dir}}?language=ja&login=true">日本語</option>
-    <option value="{{dir}}?language=ko&login=true">한국어</option>
-    <option value="{{dir}}?language=zh&login=true">中文简体</option>
-  </select>
+      <div class="input-group">
+        <input
+          id="auth_user_password"
+          name="password"
+          type="password"
+          required
+          minlength="12"
+        />
+        <span class="bar"></span>
+        <label for="auth_user_password">Mot de passe</label>
+      </div>
 
-  <form action="{{dir}}/api/user/login" method="post" autocomplete="off">
+      <p class="msg">{{msg}}</p>
 
-    <input style="display:none;" name="language" required value="fr">
+      <button id="btnLogin" type="submit" disabled>Se connecter</button>
 
-    <div class="input-group">
-      <input id="auth_user_email" name="email" type="email" required maxlength="50">
-      <span class="bar"></span>
-      <label for="auth_user_email">E-mail</label>
-    </div>
-
-    <div class="input-group">
-      <input id="auth_user_password" name="password" type="password" required minlength="12">
-      <span class="bar"></span>
-      <label for="auth_user_password">Mot de passe</label>
-    </div>
-
-    <p class="msg">{{msg}}</p>
-
-    <button id="btnLogin" type="submit" disabled>Se connecter</button>
-
-    <p>Son compte doit être vérifié avec un lien de vérification envoyé à l’adresse e-mail et approuvé par
-      l'administrateur.</p>
-    <a class="switch" href="{{dir}}/api/user/register?register=true&language=fr">Enregistrer un nouveau compte ou
-      réinitialiser son mot de passe.</a>
-      
-  </form>
-
-</body>
-
+      <p>
+        Son compte doit être vérifié avec un lien de vérification envoyé à
+        l’adresse e-mail et approuvé par l'administrateur.
+      </p>
+      <a
+        class="switch"
+        href="{{dir}}/api/user/register?register=true&language=fr"
+        >Enregistrer un nouveau compte ou réinitialiser son mot de passe.</a
+      >
+    </form>
+  </body>
 </html>

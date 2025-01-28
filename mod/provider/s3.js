@@ -8,14 +8,12 @@ The S3 provider module requires the [S3 signer]{@link module:/sign/s3} and will 
 @module /provider/s3
 */
 
-const s3_signer = require('../sign/s3')
+const s3_signer = require('../sign/s3');
 
 if (!s3_signer) {
-
-  module.exports = null
+  module.exports = null;
 } else {
-
-  module.exports = s3_provider
+  module.exports = s3_provider;
 }
 
 /**
@@ -30,6 +28,5 @@ The s3_provider method returns the s3_signer method.
 @returns {Function} The s3_signer module method.
 **/
 async function s3_provider(req, res) {
-   
-  return s3_signer(req, res)
+  return s3_signer(req, res);
 }

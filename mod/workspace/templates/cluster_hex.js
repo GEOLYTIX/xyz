@@ -5,35 +5,33 @@ The cluster_hex layer query template returns aggregated cluster features.
 
 @module /workspace/templates/cluster_hex
 */
-module.exports = _ => {
+module.exports = (_) => {
+  _.qID ??= _.layer.qID || null;
+  _.geom ??= _.layer.geom;
 
-  _.qID ??= _.layer.qID || null
-  _.geom ??= _.layer.geom
+  const fields = [];
 
-  const fields = []
+  const aggFields = [];
 
-  const aggFields = []
+  _.fieldsMap &&
+    Array.from(_.fieldsMap.entries()).forEach((entry) => {
+      const [key, value] = entry;
 
-  _.fieldsMap && Array.from(_.fieldsMap.entries())
-    .forEach(entry => {
-
-      const [key, value] = entry
-
-      fields.push(`(${value}) as ${key}`)
+      fields.push(`(${value}) as ${key}`);
 
       aggFields.push(`
       CASE WHEN count(*)::int = 1 
       THEN (array_agg(${value}))[1] 
-      END as ${key}`)
-    })
+      END as ${key}`);
+    });
 
-  const where = _.viewport || `AND ${_.geom} IS NOT NULL`
+  const where = _.viewport || `AND ${_.geom} IS NOT NULL`;
 
   // Calculate grid resolution (r) based on zoom level and resolution parameter.
-  const r = parseInt(40075016.68 / Math.pow(2, _.z) * _.resolution);
+  const r = parseInt((40075016.68 / Math.pow(2, _.z)) * _.resolution);
 
   const _width = r;
-  const _height = r - ((r * 2 / Math.sqrt(3)) - r) / 2;
+  const _height = r - ((r * 2) / Math.sqrt(3) - r) / 2;
 
   return `
   WITH first as (
@@ -147,5 +145,5 @@ module.exports = _ => {
       END as point
     FROM first) AS grid
 
-  GROUP BY point;`
-}
+  GROUP BY point;`;
+};

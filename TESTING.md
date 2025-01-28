@@ -12,16 +12,16 @@ Testing in xyz is split into 3 different sections:
 
 The minimum requirements are:
 
-* Node.js (version 18 and above)
-* [codi](https://github.com/RobAndrewHurst/codi)
-* Node modules installed via `npm install`
+- Node.js (version 18 and above)
+- [codi](https://github.com/RobAndrewHurst/codi)
+- Node modules installed via `npm install`
 
 ## Test Structure
 
 Tests are organized in the `/tests` directory with two main subdirectories:
 
-* `/tests/mod`: CLI tests for the xyz (mod) directory
-* `/tests/lib`: Module tests for browser environment
+- `/tests/mod`: CLI tests for the xyz (mod) directory
+- `/tests/lib`: Module tests for browser environment
 
 ```bash
 xyz/
@@ -48,7 +48,7 @@ Each test folder exports an object matching its corresponding directory structur
 ```javascript
 // tests/mod/module1/index.mjs
 export default {
-  feature1: () => import('./feature1.test.mjs')
+  feature1: () => import('./feature1.test.mjs'),
 };
 ```
 
@@ -74,10 +74,10 @@ npm run test -- --quiet
 
 Module tests are designed for the browser environment with full access to:
 
-* DOM
-* Mapp library
-* Mapview for loaded application
-* No mocking required for module imports
+- DOM
+- Mapp library
+- Mapview for loaded application
+- No mocking required for module imports
 
 ### Running Module Tests
 
@@ -121,11 +121,13 @@ Example with multiple assertions:
 
 ```javascript
 describe('All languages should have the same base language entries', () => {
-  Object.keys(mapp.dictionaries).forEach(language => {
+  Object.keys(mapp.dictionaries).forEach((language) => {
     it(`The ${language} dictionary should have all the base keys`, () => {
-      Object.keys(base_dictionary).forEach(key => {
-        assertTrue(!!mapp.dictionaries[language][key], 
-          `${language} should have ${key}`);
+      Object.keys(base_dictionary).forEach((key) => {
+        assertTrue(
+          !!mapp.dictionaries[language][key],
+          `${language} should have ${key}`,
+        );
       });
     });
   });
@@ -136,29 +138,28 @@ describe('All languages should have the same base language entries', () => {
 
 Codi provides several built-in assertions:
 
-* `assertEqual(actual, expected, message)` ⚖️
-  * Asserts that the actual value equals the expected value
-* `assertNotEqual(actual, expected, message)` 🙅‍♂️
-  * Asserts that the actual value does not equal the expected value
-* `assertTrue(actual, message)` ✅
-  * Asserts that the actual value is true
-* `assertFalse(actual, message)` ❌
-  * Asserts that the actual value is false
-* `assertThrows(callback, errorMessage, message)` 💥
-  * Asserts that the callback throws an error with the specified message
-* `assertNoDuplicates(callback, errorMessage, message)` 👬
-  * Asserts that there are no duplicates in a provided array.
-
+- `assertEqual(actual, expected, message)` ⚖️
+  - Asserts that the actual value equals the expected value
+- `assertNotEqual(actual, expected, message)` 🙅‍♂️
+  - Asserts that the actual value does not equal the expected value
+- `assertTrue(actual, message)` ✅
+  - Asserts that the actual value is true
+- `assertFalse(actual, message)` ❌
+  - Asserts that the actual value is false
+- `assertThrows(callback, errorMessage, message)` 💥
+  - Asserts that the callback throws an error with the specified message
+- `assertNoDuplicates(callback, errorMessage, message)` 👬
+  - Asserts that there are no duplicates in a provided array.
 
 ## Best Practices
 
-* Maintain parallel structure between source and test directories
-* Use descriptive test names
-* One describe per test suite
-* Group related tests in the same describe block
-* Use test bundles for reusable configurations
-* Keep tests focused and isolated
-* Use `--quiet` flag in CI/CD pipelines. (can also be used on other test fuctions).
+- Maintain parallel structure between source and test directories
+- Use descriptive test names
+- One describe per test suite
+- Group related tests in the same describe block
+- Use test bundles for reusable configurations
+- Keep tests focused and isolated
+- Use `--quiet` flag in CI/CD pipelines. (can also be used on other test fuctions).
 
 ## Common Issues and Solutions
 
@@ -166,7 +167,7 @@ Codi provides several built-in assertions:
 
 Codi automatically discovers tests in files with the pattern:
 
-* `*.test.mjs`
+- `*.test.mjs`
 
 ### Error Handling
 
@@ -190,30 +191,30 @@ Setting process environment `NODE_ENV=DEVELOPMENT` disables minification in buil
 
 ```javascript
 // esbuild.config.mjs
-import * as esbuild from 'esbuild'
+import * as esbuild from 'esbuild';
 
 const isDev = process.env.NODE_ENV !== 'DEVELOPMENT';
 
 const buildOptions = {
-    entryPoints: isDev 
-        ? ['./lib/mapp.mjs', './lib/ui.mjs'] 
-        : ['./lib/mapp.mjs', './lib/ui.mjs', './tests/_mapp.test.mjs'],
-    bundle: true,
-    minify: isDev,  // Code won't be minified in development
-    sourcemap: true,
-    sourceRoot: '/lib',
-    format: 'iife',
-    outbase: '.',
-    outdir: 'public/js',
-    metafile: true,
-    logLevel: 'info'
+  entryPoints: isDev
+    ? ['./lib/mapp.mjs', './lib/ui.mjs']
+    : ['./lib/mapp.mjs', './lib/ui.mjs', './tests/_mapp.test.mjs'],
+  bundle: true,
+  minify: isDev, // Code won't be minified in development
+  sourcemap: true,
+  sourceRoot: '/lib',
+  format: 'iife',
+  outbase: '.',
+  outdir: 'public/js',
+  metafile: true,
+  logLevel: 'info',
 };
 
 try {
-    await esbuild.build(buildOptions);
+  await esbuild.build(buildOptions);
 } catch (err) {
-    console.error('Build failed:', err);
-    process.exit(1);
+  console.error('Build failed:', err);
+  process.exit(1);
 }
 ```
 
@@ -234,23 +235,24 @@ try {
    ```
 
 3. Verify that:
-   * Test files are included in the build
-   * Source maps are generated
-   * Code is not minified
+
+   - Test files are included in the build
+   - Source maps are generated
+   - Code is not minified
 
 4. Launch the application and navigate to `localhost:3000/test?template=test_view`
 
 5. Open Chrome DevTools to:
-   * View test results in the console
-   * Debug and step through unminified code
-   * Use source maps for accurate file locations
+   - View test results in the console
+   - Debug and step through unminified code
+   - Use source maps for accurate file locations
 
 ### Debugging Benefits
 
 The unminified development build provides several advantages:
 
-* Clear, readable code in Chrome DevTools
-* Accurate source mapping to original files
-* Ability to set breakpoints in original source files
-* Step-through debugging from Chrome to VSCode
-* Easier identification of test failures
+- Clear, readable code in Chrome DevTools
+- Accurate source mapping to original files
+- Ability to set breakpoints in original source files
+- Step-through debugging from Chrome to VSCode
+- Easier identification of test failures

@@ -2,9 +2,9 @@ name: Codi unit tests
 
 on:
   push:
-    branches: [ "main", "major", "minor", "patch" ]
+    branches: ['main', 'major', 'minor', 'patch']
   pull_request:
-    branches: [ "main", "major", "minor", "patch" ]
+    branches: ['main', 'major', 'minor', 'patch']
 
 jobs:
   build:
@@ -12,16 +12,16 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
-    - uses: actions/setup-node@v4
-      with:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
           node-version: '18'
 
-    - name: Install Dependencies
-      run: npm install
+      - name: Install Dependencies
+        run: npm install
 
-    - name: Install Dependencies
-      run: npm install bun -g
+      - name: Install Dependencies
+        run: npm install bun -g
 
-    - name: Run tests
-      run: bun run test
+      - name: Run tests
+        run: bun run test

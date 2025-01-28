@@ -107,8 +107,10 @@ The deprectaed mapp.layer.Style() method will warn if use and return the feature
 */
 
 function Style(layer) {
-  console.warn(`The mapp.layer.Style() method has been superseeded by the mapp.layer.featureStyle() method.`)
-  return featureStyle(layer)
+  console.warn(
+    `The mapp.layer.Style() method has been superseeded by the mapp.layer.featureStyle() method.`,
+  );
+  return featureStyle(layer);
 }
 ```
 
