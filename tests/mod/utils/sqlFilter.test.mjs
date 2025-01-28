@@ -1,4 +1,4 @@
-import sqlfilter from '../../../mod/utils/sqlFilter';
+import sqlfilter from '../../../mod/utils/sqlFilter.js';
 
 codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
   codi.it(
