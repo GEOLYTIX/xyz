@@ -2234,7 +2234,6 @@ html.dark-mode {
       .btn-row {
         background-color: var(--dm-color-dark-neutral);
         button {
-          font-weight: bold;
           color: var(--dm-color-on);
           background: var(--dm-color-dark-faded);
         }
