@@ -9,15 +9,15 @@ The sign API provides access to different request signer modules. Signer modules
 @module /sign
 */
 
-const cloudfront = require('./cloudfront')
-const cloudinary = require('./cloudinary')
-const s3 = require('./s3')
+const cloudfront = require('./cloudfront');
+const cloudinary = require('./cloudinary');
+const s3 = require('./s3');
 
 const signerModules = {
   cloudinary,
   s3,
-  cloudfront
-}
+  cloudfront,
+};
 
 /**
 @function signer
@@ -36,21 +36,23 @@ The response from the method is returned with the HTTP response.
 @returns {Promise} The promise resolves into the response from the signerModules method.
 */
 module.exports = async function signer(req, res) {
-
   if (!Object.hasOwn(signerModules, req.params.signer)) {
-    return res.status(404).send(`Failed to validate 'signer=${req.params.signer}' param.`)
+    return res
+      .status(404)
+      .send(`Failed to validate 'signer=${req.params.signer}' param.`);
   }
 
   if (signerModules[req.params.signer] === null) {
-    return res.status(405).send(`Signer: ${req.params.signer} is not configured.`)
+    return res
+      .status(405)
+      .send(`Signer: ${req.params.signer} is not configured.`);
   }
 
-  const response = await signerModules[req.params.signer](req, res)
+  const response = await signerModules[req.params.signer](req, res);
 
   if (response instanceof Error) {
-
-    return res.status(500).send(response.message)
+    return res.status(500).send(response.message);
   }
-    
-  res.send(response)
-}
+
+  res.send(response);
+};

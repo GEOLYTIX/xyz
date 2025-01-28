@@ -10,11 +10,11 @@ The getLocale module exports the getLocale method which is required by the getLa
 @module /workspace/getLocale
 */
 
-const Roles = require('../utils/roles')
+const Roles = require('../utils/roles');
 
-const mergeTemplates = require('./mergeTemplates')
+const mergeTemplates = require('./mergeTemplates');
 
-const workspaceCache = require('./cache')
+const workspaceCache = require('./cache');
 
 /**
 @function getLocale
@@ -39,31 +39,30 @@ Role objects in the locale and nested layers are merged with their respective pa
 @returns {Promise<Object|Error>} JSON Locale.
 */
 module.exports = async function getLocale(params) {
-
-  const workspace = await workspaceCache()
+  const workspace = await workspaceCache();
 
   if (workspace instanceof Error) {
-    return workspace
+    return workspace;
   }
 
   if (params.locale && !Object.hasOwn(workspace.locales, params.locale)) {
-    return new Error('Unable to validate locale param.')
+    return new Error('Unable to validate locale param.');
   }
 
   // The workspace.locale is assigned as locale if params.locale is not a property of workspace.locales
   let locale = Object.hasOwn(workspace.locales, params.locale)
     ? workspace.locales[params.locale]
-    : workspace.locale
+    : workspace.locale;
 
-  locale = await mergeTemplates(locale)
+  locale = await mergeTemplates(locale);
 
   if (!Roles.check(locale, params.user?.roles)) {
-    return new Error('Role access denied.')
+    return new Error('Role access denied.');
   }
 
-  locale = Roles.objMerge(locale, params.user?.roles)
+  locale = Roles.objMerge(locale, params.user?.roles);
 
-  locale.title = workspace.title
+  locale.title = workspace.title;
 
-  return locale
-}
+  return locale;
+};

@@ -9,9 +9,7 @@ Exports the [user] list method for the /api/user/list route.
 @module /user/list
 */
 
- 
-
-const acl = require('./acl')
+const acl = require('./acl');
 
 /**
 @function list
@@ -28,15 +26,12 @@ Requesting user is admin.
 */
 
 module.exports = async (req, res) => {
-
   if (!req.params.user) {
-
-    return new Error('login_required')
+    return new Error('login_required');
   }
 
   if (!req.params.user?.admin) {
-
-    return new Error('admin_required')
+    return new Error('admin_required');
   }
 
   let rows = await acl(`
@@ -55,20 +50,20 @@ module.exports = async (req, res) => {
       blocked,
       verificationtoken
     FROM acl_schema.acl_table
-    ORDER BY email;`)
+    ORDER BY email;`);
 
   if (rows instanceof Error) {
-    return res.status(500).send('Failed to access ACL.')
+    return res.status(500).send('Failed to access ACL.');
   }
 
   // return 204 if no record was returned from database.
   if (!rows?.length) {
-    return res.status(202).send('No rows returned from table.')
+    return res.status(202).send('No rows returned from table.');
   }
 
   // rows must be returned as an array.
-  rows = rows.length === 1 && rows[0] || rows
+  rows = (rows.length === 1 && rows[0]) || rows;
 
   // Send the infoj object with values back to the client.
-  res.send(rows)
-}
+  res.send(rows);
+};

@@ -5,4 +5,4 @@ module.exports = `
   FROM \${table}
   WHERE \${qterm}::text ILIKE %{term}
   \${filter}
-  LIMIT \${limit};`
+  LIMIT \${limit};`;

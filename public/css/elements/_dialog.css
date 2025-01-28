@@ -2,24 +2,21 @@
   cursor: grab;
 }
 
-
 dialog {
-
-  &>button.close {
+  & > button.close {
     position: absolute;
     top: 0em;
     right: 0em;
     height: 1em;
     width: 1em;
     margin: 0.4em;
-
   }
 
-  &>header {
+  & > header {
     display: flex;
     justify-content: space-between;
-  
-    &>:nth-child(2) {
+
+    & > :nth-child(2) {
       margin-left: auto;
     }
   }
@@ -55,26 +52,18 @@ dialog {
   }
 
   .minimize-btn.mask-icon {
-    -webkit-mask-image: url("../../icons/icon-remove.svg");
-    mask-image: url("../../icons/icon-remove.svg");
+    -webkit-mask-image: url('../../icons/icon-remove.svg');
+    mask-image: url('../../icons/icon-remove.svg');
   }
 
   &.minimized {
-
     .content {
       display: none;
     }
 
     .minimize-btn.mask-icon {
-      -webkit-mask-image: url("../../icons/icon-fullscreen.svg");
-      mask-image: url("../../icons/icon-fullscreen.svg");
+      -webkit-mask-image: url('../../icons/icon-fullscreen.svg');
+      mask-image: url('../../icons/icon-fullscreen.svg');
     }
-
   }
-
-
-
-
-  
-  
 }

@@ -1,79 +1,79 @@
 .btn-panel {
+  width: 100%;
+  padding: 0.3em 0.5em;
+  background-color: white;
+  border: 1px solid var(--color-light-secondary);
+  border-radius: 3px;
+  box-shadow: 1px 1px 3px var(--color-primary-light);
+
+  & .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    overflow: hidden;
+    pointer-events: none;
+
+    & h3 {
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+  }
+
+  & .mask-icon {
+    width: 1.5em;
+    height: 1.5em;
+    -webkit-mask-position: right;
+    mask-position: right;
+  }
+
+  & .panel {
+    display: block;
+    position: absolute;
     width: 100%;
-    padding: 0.3em 0.5em;
-    background-color: white;
-    border: 1px solid var(--color-light-secondary);
+    bottom: 15em;
+    left: 0;
+    right: 0;
+    z-index: 99;
+    color: black;
+    background: white;
+    overflow: hidden;
+    padding: 1em 1.5em;
+    opacity: 0;
     border-radius: 3px;
     box-shadow: 1px 1px 3px var(--color-primary-light);
+    pointer-events: none;
+    transition: 0.2s ease-in-out;
 
-    & .header {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        overflow: hidden;
-        pointer-events: none;
-
-        & h3 {
-            text-overflow: ellipsis;
-            overflow: hidden;
-        }
+    & .content {
+      padding: 1em;
     }
 
+    &::after {
+      content: initial;
+    }
+  }
+
+  &.active {
+    background-color: var(--color-primary);
+    color: #fff;
+
     & .mask-icon {
-        width: 1.5em;
-        height: 1.5em;
-        -webkit-mask-position: right;
-        mask-position: right;
+      background-color: #fff;
     }
 
     & .panel {
-        display: block;
-        position: absolute;
-        width: 100%;
-        bottom: 15em;
-        left: 0;
-        right: 0;
-        z-index: 99;
-        color: black;
-        background: white;
-        overflow: hidden;
-        padding: 1em 1.5em;
-        opacity: 0;
-        border-radius: 3px;
-        box-shadow: 1px 1px 3px var(--color-primary-light);
-        pointer-events: none;
-        transition: 0.2s ease-in-out;
-
-        & .content {
-            padding: 1em;
-        }
-
-        &::after {
-            content: initial;
-        }
-    }
-
-    &.active {
-        background-color: var(--color-primary);
-        color: #fff;
-
-        & .mask-icon {
-            background-color: #fff;
-        }
-
-        & .panel {
-            bottom: 2em;
-            pointer-events: auto;
-            opacity: 1;
-        }
-
-        &.downward .panel {
-            bottom: -7em;
-            /* places adjacent to the bottom border of parent */
-        }
+      bottom: 2em;
+      pointer-events: auto;
+      opacity: 1;
     }
 
     &.downward .panel {
-        bottom: -15em;
+      bottom: -7em;
+      /* places adjacent to the bottom border of parent */
     }
+  }
+
+  &.downward .panel {
+    bottom: -15em;
+  }
 }

@@ -31,8 +31,8 @@ const filterTypes = {
       .map((val) => `"${col}" ILIKE \$${addValues(`${val}%`, 'string')}`)
       .join(' OR ')})`,
 
-  match: (col, val) => `"${col}"::text = \$${addValues(val, 'string')}`
-}
+  match: (col, val) => `"${col}"::text = \$${addValues(val, 'string')}`,
+};
 
 let SQLparams;
 
@@ -45,13 +45,11 @@ The addValues method is used to add values to the SQLparams array.
 @returns {number} SQLparams.length
 */
 function addValues(val, type) {
-
-  const err = isValidParam(val, type)
+  const err = isValidParam(val, type);
 
   if (err instanceof Error) {
-
-    console.error(err)
-    SQLparams.push(err)
+    console.error(err);
+    SQLparams.push(err);
     return;
   }
 
@@ -70,18 +68,19 @@ If the filter is a string, the filter will be returned as is.
 @param {Array} params
 @returns {string} SQL query string
 */
-module.exports = sqlfilter; 
+module.exports = sqlfilter;
 
 function sqlfilter(filter, params) {
-
   //Check to see that params is an array and that the values of the params are of valid type.
   if (!Array.isArray(params)) {
-    throw new TypeError('Expected params to be an array of valid types (string, number, boolean, object, or bigint)');
+    throw new TypeError(
+      'Expected params to be an array of valid types (string, number, boolean, object, or bigint)',
+    );
   }
 
   if (typeof filter === 'string') return filter;
 
-  SQLparams = params
+  SQLparams = params;
 
   // Filter in an array will be conditional OR
   if (filter.length)
@@ -105,14 +104,16 @@ The method also validates the filter entries against SQL parameter validation.
 */
 
 function mapFilterEntries(filter) {
+  const SQLvalidation = /^[a-zA-Z_]\w*$/;
 
-  const SQLvalidation = /^[a-zA-Z_]\w*$/
+  if (Object.keys(filter).some((key) => !SQLvalidation.test(key))) {
+    const unvalidatedKey = Object.keys(filter).find(
+      (key) => !SQLvalidation.test(key),
+    );
 
-  if (Object.keys(filter).some(key => !SQLvalidation.test(key))) {
-
-    const unvalidatedKey = Object.keys(filter).find(key => !SQLvalidation.test(key))
-
-    console.warn(`"${unvalidatedKey}" field didn't pass SQL parameter validation`)
+    console.warn(
+      `"${unvalidatedKey}" field didn't pass SQL parameter validation`,
+    );
     return;
   }
 
@@ -120,9 +121,8 @@ function mapFilterEntries(filter) {
 
     // Map filter entries
     .map((entry) => {
-
-      const field = entry[0]
-      const value = entry[1]
+      const field = entry[0];
+      const value = entry[1];
 
       // Array entry values represent conditional OR
       if (value.length) return sqlfilter(value);
@@ -130,14 +130,13 @@ function mapFilterEntries(filter) {
       // Call filter type method for matching filter entry value
       // Multiple filterTypes for the same field will be joined with AND
       return Object.keys(value)
-        .filter(filterType => !!filterTypes[filterType])
-        .map(filterType => filterTypes[filterType](field, value[filterType]))
-        .join(' AND ')
-
+        .filter((filterType) => !!filterTypes[filterType])
+        .map((filterType) => filterTypes[filterType](field, value[filterType]))
+        .join(' AND ');
     })
 
     // Filter out undefined / escaped filter
-    .filter(f => typeof f !== 'undefined')
+    .filter((f) => typeof f !== 'undefined')
 
     // Join filter with conjunction
     .join(' AND ')})`;
@@ -161,7 +160,7 @@ function isValidParam(val, type) {
     string: (val) => typeof val === 'string',
     // Checks if value is a valid number and not null
     // Note: isNaN('123') returns false, so this also accepts numeric strings
-    numeric: (val) => !isNaN(val) && val !== null
+    numeric: (val) => !isNaN(val) && val !== null,
   };
 
   // Check if the requested type is supported
