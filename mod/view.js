@@ -55,7 +55,7 @@ module.exports = async function view(req, res) {
   params.language ??= req.params.user?.language;
 
   // Test ISO629 language param.
-  if (!/^[a-z]{2}?$/.test(params.language)) {
+  if (!/^[a-z]{2}$/.test(params.language)) {
     // Assign English as default language.
     params.language = 'en';
   }
