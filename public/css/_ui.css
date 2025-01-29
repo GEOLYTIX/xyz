@@ -12,7 +12,6 @@
 
 @import url('./base/_inputs.css');
 
-
 @import url('./elements/_alert_confirm.css');
 
 @import url('./elements/_btnPanel.css');
@@ -31,7 +30,6 @@
 
 @import url('./elements/_slider.css');
 
-
 @import url('./layout/_layerview.css');
 
 @import url('./layout/_locationview.css');
@@ -39,12 +37,3 @@
 @import url('./layout/_tabview.css');
 
 @import url('./layout/_toolbars.css');
-
-
-
-
-
-
-
-
-

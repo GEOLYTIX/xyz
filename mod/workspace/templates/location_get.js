@@ -5,24 +5,22 @@ The location_get layer query returns the field values from a location record in 
 
 @module /workspace/templates/location_get
 */
-module.exports = _ => {
-
+module.exports = (_) => {
   // The SQL array may be populated by a default filter which is not required for this query template.
-  _.SQL = []
+  _.SQL = [];
 
   // The layer.qID will be returned from the select statement.
-  const fields = [_.layer.qID]
+  const fields = [_.layer.qID];
 
-  _.infojMap && Array.from(_.infojMap.entries())
-  .forEach(entry => {
+  _.infojMap &&
+    Array.from(_.infojMap.entries()).forEach((entry) => {
+      const [key, value] = entry;
 
-    const [key, value] = entry
-
-    fields.push(`(${value}) as ${key}`)
-  })
+      fields.push(`(${value}) as ${key}`);
+    });
 
   return `
     SELECT ${fields.join()}
     FROM ${_.table}
-    WHERE ${_.layer.qID} = %{id}`
-}
+    WHERE ${_.layer.qID} = %{id}`;
+};
