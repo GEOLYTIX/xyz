@@ -18,25 +18,22 @@ import { getSignedUrl } from '@aws-sdk/cloudfront-signer';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-let privateKey, exportedModule;
+let privateKey;
 
 //Export nothing if the cloudfront key is not provided
-if (!xyzEnv.KEY_CLOUDFRONT) {
-  exportedModule = null;
-} else {
-  //Third party sources are optional
-  try {
-    privateKey = String(
-      readFileSync(join(__dirname, `../../${xyzEnv.KEY_CLOUDFRONT}.pem`)),
-    );
-    exportedModule = cloudfront_signer;
-  } catch (err) {
-    console.error(err);
-    exportedModule = null;
-  }
-}
-
-export default exportedModule;
+export default !xyzEnv.KEY_CLOUDFRONT
+  ? null
+  : (() => {
+      try {
+        privateKey = String(
+          readFileSync(join(__dirname, `../../${xyzEnv.KEY_CLOUDFRONT}.pem`)),
+        );
+        return cloudfront_signer;
+      } catch (err) {
+        console.error(err);
+        return null;
+      }
+    })();
 
 /**
 @function cloudfront_signer
