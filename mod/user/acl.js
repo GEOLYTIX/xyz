@@ -18,30 +18,25 @@ const { Pool } = pg;
 const connection = xyzEnv.PRIVATE?.split('|') || xyzEnv.PUBLIC?.split('|');
 
 // These variables can only be reassigned if the connection is an array.
-let acl_table,
-  acl_schema,
-  pool,
-  exportedModule = null;
+let acl_table, acl_schema, pool;
 
 // The acl module will export an empty require object instead of a function if no ACL connection has been defined.
-if (!connection?.[1]) {
-  exportedModule = null;
-} else {
-  acl_table = connection[1]?.split('.').pop();
+export default !connection?.[1]
+  ? null
+  : (() => {
+      acl_table = connection[1]?.split('.').pop();
 
-  acl_schema =
-    connection[1]?.split('.')[0] === acl_table
-      ? 'public'
-      : connection[1]?.split('.')[0];
+      acl_schema =
+        connection[1]?.split('.')[0] === acl_table
+          ? 'public'
+          : connection[1]?.split('.')[0];
 
-  pool = new Pool({
-    connectionString: connection[0],
-  });
+      pool = new Pool({
+        connectionString: connection[0],
+      });
 
-  exportedModule = acl;
-}
-
-export default exportedModule;
+      return acl;
+    })();
 
 /**
 @function acl

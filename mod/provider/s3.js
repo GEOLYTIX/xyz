@@ -10,9 +10,7 @@ The S3 provider module requires the [S3 signer]{@link module:/sign/s3} and will 
 
 import s3_signer from '../sign/s3.js';
 
-const exportedModule = !s3_signer ? null : s3_provider;
-
-export default exportedModule;
+export default !s3_signer ? null : s3_provider;
 
 /**
 @function s3_provider

@@ -27,15 +27,7 @@ import mailer from '../utils/mailer.js';
 
 import languageTemplates from '../utils/languageTemplates.js';
 
-let exportedModule = null;
-
-if (acl === null) {
-  exportedModule = null;
-} else {
-  exportedModule = fromACL;
-}
-
-export default exportedModule;
+export default !acl ? null : fromACL;
 
 /**
 @function fromACL

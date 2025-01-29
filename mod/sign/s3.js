@@ -65,27 +65,26 @@ The aws-sdk/client-s3 and aws-sdk/s3-request-presigner are optional dependencies
 let clientSDK;
 let getSignedUrl;
 let credentials;
-let exportedModule;
 
-if (!xyzEnv.AWS_S3_CLIENT) {
-  exportedModule = null;
-} else {
-  //Attempt import if credentials are found
-  try {
-    // Create credentials object from AWS_S3_CLIENT
-    credentials = Object.fromEntries(new URLSearchParams(xyzEnv.AWS_S3_CLIENT));
+export default !xyzEnv.AWS_S3_CLIENT
+  ? null
+  : (() => {
+      //Attempt import if credentials are found
+      try {
+        // Create credentials object from AWS_S3_CLIENT
+        credentials = Object.fromEntries(
+          new URLSearchParams(xyzEnv.AWS_S3_CLIENT),
+        );
 
-    // Require will err if installed without optional dependencies.
-    clientSDK = require('@aws-sdk/client-s3');
-    getSignedUrl = require('@aws-sdk/s3-request-presigner').getSignedUrl;
+        // Require will err if installed without optional dependencies.
+        clientSDK = require('@aws-sdk/client-s3');
+        getSignedUrl = require('@aws-sdk/s3-request-presigner').getSignedUrl;
 
-    exportedModule = s3_signer;
-  } catch (err) {
-    exportedModule = null;
-  }
-}
-
-export default exportedModule;
+        return s3_signer;
+      } catch (err) {
+        return null;
+      }
+    })();
 
 /**
 @function s3_signer

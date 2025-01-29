@@ -66,7 +66,6 @@ This module handles SAML-based Single Sign-On (SSO) authentication. Here's how t
   - Implement proper session management
 
 @requires [@node-saml/node-saml] - SAML protocol implementation
-@requires module:/utils/logger - Logging utility
 @requires jsonwebtoken - JWT handling
 @requires path - File path operations
 @requires fs - File system operations
@@ -75,7 +74,6 @@ This module handles SAML-based Single Sign-On (SSO) authentication. Here's how t
 Module Variables:
 @type {SAML} samlStrat - SAML strategy instance for authentication operations
 @type {SamlConfig} samlConfig - Configuration object for SAML settings
-@type {Object} logger - Utility for logging operations
 @type {Object} jwt - For handling JSON Web Tokens
 @type {Object} acl - Access Control List management
 
@@ -100,67 +98,78 @@ Module Variables:
 @property {string} logoutCallbackUrl - URL for logout callbacks
 **/
 
-let samlStrat,
-  samlConfig,
-  logger,
-  jwt,
-  acl,
-  exportedModule = null;
+// Import required dependencies
+import SAML from '@node-saml/node-saml';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
+import { readFileSync } from 'fs';
 
-try {
-  // Import required dependencies
-  const { SAML } = require('@node-saml/node-saml');
-  const { join } = require('path');
-  const { readFileSync } = require('fs');
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-  // Import utility modules
-  logger = require('../../mod/utils/logger');
-  jwt = require('jsonwebtoken');
-  acl = require('../user/acl.js');
+// Import utility modules
+import jwt from 'jsonwebtoken';
+import acl from '../user/acl.js';
 
-  // Initialize SAML configuration
-  samlConfig = {
-    callbackUrl: xyzEnv.SAML_ACS,
-    entryPoint: xyzEnv.SAML_SSO,
-    issuer: xyzEnv.SAML_ENTITY_ID,
+let samlStrat, samlConfig;
 
-    // Read and configure certificates
-    idpCert:
-      xyzEnv.SAML_IDP_CRT &&
-      String(readFileSync(join(__dirname, `../../${xyzEnv.SAML_IDP_CRT}.crt`))),
-    privateKey:
-      xyzEnv.SAML_SP_CRT &&
-      String(readFileSync(join(__dirname, `../../${xyzEnv.SAML_SP_CRT}.pem`))),
-    publicCert:
-      xyzEnv.SAML_SP_CRT &&
-      String(readFileSync(join(__dirname, `../../${xyzEnv.SAML_SP_CRT}.crt`))),
+const getModule = () => {
+  try {
+    // Initialize SAML configuration
+    samlConfig = {
+      callbackUrl: xyzEnv.SAML_ACS,
+      entryPoint: xyzEnv.SAML_SSO,
+      issuer: xyzEnv.SAML_ENTITY_ID,
 
-    // Configure SAML endpoints and behavior
-    logoutUrl: xyzEnv.SAML_SLO,
-    wantAssertionsSigned: xyzEnv.SAML_WANT_ASSERTIONS_SIGNED,
-    wantAuthnResponseSigned: xyzEnv.SAML_AUTHN_RESPONSE_SIGNED ?? false,
-    signatureAlgorithm: xyzEnv.SAML_SIGNATURE_ALGORITHM,
-    identifierFormat: xyzEnv.SAML_IDENTIFIER_FORMAT,
-    acceptedClockSkewMs: xyzEnv.SAML_ACCEPTED_CLOCK_SKEW ?? -1,
-    providerName: xyzEnv.SAML_PROVIDER_NAME,
-    logoutCallbackUrl: xyzEnv.SLO_CALLBACK,
-  };
+      // Read and configure certificates
+      idpCert:
+        xyzEnv.SAML_IDP_CRT &&
+        String(
+          readFileSync(join(__dirname, `../../${xyzEnv.SAML_IDP_CRT}.crt`)),
+        ),
+      privateKey:
+        xyzEnv.SAML_SP_CRT &&
+        String(
+          readFileSync(join(__dirname, `../../${xyzEnv.SAML_SP_CRT}.pem`)),
+        ),
+      publicCert:
+        xyzEnv.SAML_SP_CRT &&
+        String(
+          readFileSync(join(__dirname, `../../${xyzEnv.SAML_SP_CRT}.crt`)),
+        ),
 
-  // Create SAML strategy instance
-  samlStrat = new SAML(samlConfig);
-  exportedModule = saml;
-} catch {
-  // Check for SAML-related xyzEnvironment variables
-  const samlKeys = Object.keys(xyzEnv).filter((key) => key.startsWith('SAML'));
+      // Configure SAML endpoints and behavior
+      logoutUrl: xyzEnv.SAML_SLO,
+      wantAssertionsSigned: xyzEnv.SAML_WANT_ASSERTIONS_SIGNED,
+      wantAuthnResponseSigned: xyzEnv.SAML_AUTHN_RESPONSE_SIGNED ?? false,
+      signatureAlgorithm: xyzEnv.SAML_SIGNATURE_ALGORITHM,
+      identifierFormat: xyzEnv.SAML_IDENTIFIER_FORMAT,
+      acceptedClockSkewMs: xyzEnv.SAML_ACCEPTED_CLOCK_SKEW ?? -1,
+      providerName: xyzEnv.SAML_PROVIDER_NAME,
+      logoutCallbackUrl: xyzEnv.SLO_CALLBACK,
+    };
 
-  // Log warning if SAML variables exist but module fails to initialize
-  if (samlKeys.length > 0) {
-    console.log('SAML2 module is not available.');
+    // Create SAML strategy instance
+    samlStrat = new SAML(samlConfig);
+    return saml;
+  } catch {
+    // Check for SAML-related xyzEnvironment variables
+    const samlKeys = Object.keys(xyzEnv).filter((key) =>
+      key.startsWith('SAML'),
+    );
+
+    // Log warning if SAML variables exist but module fails to initialize
+    if (samlKeys.length > 0) {
+      console.log('SAML2 module is not available.');
+    }
+    return null;
   }
-  exportedModule = null;
-}
+};
+
+const exportedModule = getModule();
 
 export default exportedModule;
+
 /**
 @function saml
 @description Handles SAML authentication flow endpoints and operations
