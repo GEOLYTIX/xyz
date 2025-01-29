@@ -12,15 +12,14 @@ A user_sessions{} object is declared in the module to store user sessions.
 
 @module /user/auth
 */
- 
 
-const acl = require('./acl')
+const acl = require('./acl');
 
-const fromACL = require('./fromACL')
+const fromACL = require('./fromACL');
 
-const jwt = require('jsonwebtoken')
+const jwt = require('jsonwebtoken');
 
-const user_sessions = {}
+const user_sessions = {};
 
 /**
 @function auth
@@ -50,55 +49,48 @@ The auth method checks either the request parameter token or user.session if ena
 @returns {Promise<Object|Error>} Method resolves to either a user object or Error
 */
 module.exports = async function auth(req, res) {
-
   if (acl === null) return null;
 
   if (req.headers.authorization) {
-
-    return await fromACL(req)
+    return await fromACL(req);
   }
 
   // Get token from params or cookie.
-  const token = req.params.token || req.cookies?.[xyzEnv.TITLE]
+  const token = req.params.token || req.cookies?.[xyzEnv.TITLE];
 
   // Return if there is no token to decode
-  if (!token) return null
+  if (!token) return null;
 
   // Verify the token signature.
   let user;
 
   // A secret string is required to verify a token.
-  if (!xyzEnv.SECRET) return null
-
+  if (!xyzEnv.SECRET) return null;
 
   try {
-    user = jwt.verify(token, xyzEnv.SECRET)
-
+    user = jwt.verify(token, xyzEnv.SECRET);
   } catch (err) {
-
-    return err
+    return err;
   }
 
   // Check req.param.token
-  const tokenCheck = await checkParamToken(req, res, user)
+  const tokenCheck = await checkParamToken(req, res, user);
 
   if (tokenCheck instanceof Error) {
-
     // The token check has failed.
-    return tokenCheck
+    return tokenCheck;
   }
 
   // Check user.session
-  const sessionCheck = await checkSession(req, user)
+  const sessionCheck = await checkSession(req, user);
 
   if (sessionCheck instanceof Error) {
-
     // The session check has failed.
-    return sessionCheck
+    return sessionCheck;
   }
 
-  return user
-}
+  return user;
+};
 
 /**
 @function checkParamToken
@@ -123,51 +115,51 @@ API keys do not expire. But changing the key in the ACL will immediately invalid
 */
 
 async function checkParamToken(req, res, user) {
-
   // A parameter token is required to be checked.
   if (!req.params.token) return;
 
   // The user object has an API key.
   if (user.api) {
-
     // Retrieve stored API key from ACL.
-    const rows = await acl(`
+    const rows = await acl(
+      `
       SELECT api, blocked
       FROM acl_schema.acl_table
-      WHERE lower(email) = lower($1);`, [user.email])
+      WHERE lower(email) = lower($1);`,
+      [user.email],
+    );
 
     // The request for the stored API key has failed.
-    if (rows instanceof Error) return rows
+    if (rows instanceof Error) return rows;
 
     if (rows.blocked) {
-
       // The user is blocked.
-      return new Error('Account is blocked')
+      return new Error('Account is blocked');
     }
 
     if (rows[0].api !== req.params.token) {
-
       // API keys do not expire.
       // The stored key must match the request param token.
-      return new Error('API Key mismatch')
+      return new Error('API Key mismatch');
     }
   }
 
   // Token access must not have admin rights.
-  delete user.admin
+  delete user.admin;
 
   // Flag the user to be created from a token.
   // It must not be possible created a new token from a token user.
-  user.from_token = true
+  user.from_token = true;
 
   // Check whether the token matches cookie.
   if (req.cookies?.[xyzEnv.TITLE] !== req.params.token) {
-
     // Create and assign a new cookie for the user.
-    const cookie = jwt.sign(user, xyzEnv.SECRET)
+    const cookie = jwt.sign(user, xyzEnv.SECRET);
 
-    res.setHeader('Set-Cookie',
-      `${xyzEnv.TITLE}=${cookie};HttpOnly;Max-Age=${user.exp && (user.exp - user.iat) || xyzEnv.COOKIE_TTL};Path=${xyzEnv.DIR || '/'};SameSite=Strict${!req.headers.host.includes('localhost') && ';Secure' || ''}`)
+    res.setHeader(
+      'Set-Cookie',
+      `${xyzEnv.TITLE}=${cookie};HttpOnly;Max-Age=${(user.exp && user.exp - user.iat) || xyzEnv.COOKIE_TTL};Path=${xyzEnv.DIR || '/'};SameSite=Strict${(!req.headers.host.includes('localhost') && ';Secure') || ''}`,
+    );
   }
 }
 
@@ -193,7 +185,6 @@ The session key will be updated on login, eg. on a different device. This will i
 */
 
 async function checkSession(req, user) {
-
   // Session checks are not applicable for requests with token.
   if (req.params.token) return;
 
@@ -202,40 +193,37 @@ async function checkSession(req, user) {
 
   // A user.session must be provided if enabled.
   if (!user.session) {
-
-    return new Error('No user.session provided.')
+    return new Error('No user.session provided.');
   }
 
   // The session token is stored in the user_session object.
   if (Object.hasOwn(user_sessions, user.email)) {
-
     // The stored session doesn't match the token user session.
     if (user_sessions[user.email] !== user.session) {
-
       // Delete the user_session
-      delete user_sessions[user.email]
+      delete user_sessions[user.email];
     }
   }
 
   if (!Object.hasOwn(user_sessions, user.email)) {
-
     // Get session from the ACL.
-    const rows = await acl(`
+    const rows = await acl(
+      `
       SELECT session
       FROM acl_schema.acl_table
       WHERE lower(email) = lower($1);`,
-      [user.email])
+      [user.email],
+    );
 
     // The request for the stored session has failed.
-    if (rows instanceof Error) return rows
+    if (rows instanceof Error) return rows;
 
     if (user.session !== rows[0].session) {
-
       // The stored session doesn't match user.session.
-      return new Error('Session has been terminated. Please login again.')
+      return new Error('Session has been terminated. Please login again.');
     }
 
     // Store user.session in user_sessions object.
-    user_sessions[user.email] = user.session
+    user_sessions[user.email] = user.session;
   }
 }

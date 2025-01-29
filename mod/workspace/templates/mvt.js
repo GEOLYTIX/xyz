@@ -5,22 +5,19 @@ The mvt layer query template returns a vector tile (st_asmvt) with mvt geometrie
 
 @module /workspace/templates/mvt
 */
-module.exports = _ => {
+module.exports = (_) => {
+  const fields = [];
 
-  const fields = []
+  _.fieldsMap &&
+    Array.from(_.fieldsMap.entries()).forEach((entry) => {
+      const [key, value] = entry;
 
-  _.fieldsMap && Array.from(_.fieldsMap.entries())
-    .forEach(entry => {
+      fields.push(`(${value}) as ${key}`);
+    });
 
-      const [key, value] = entry
-
-      fields.push(`(${value}) as ${key}`)
-    })
-
-  const
-    x = parseInt(_.x),
+  const x = parseInt(_.x),
     y = parseInt(_.y),
-    z = parseInt(_.z)
+    z = parseInt(_.z);
 
   return `
     SELECT
@@ -38,11 +35,11 @@ module.exports = _ => {
         ) geom
       FROM ${_.table}
       WHERE
-        ${_.layer.z_field && `${_.layer.z_field} < ${z} AND` || ''}
+        ${(_.layer.z_field && `${_.layer.z_field} < ${z} AND`) || ''}
         ST_Intersects(
           ST_TileEnvelope(${z},${x},${y}),
           ${_.geom}
         )
         \${filter}
-  ) tile`
-}
+  ) tile`;
+};

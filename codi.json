@@ -1,6 +1,3 @@
 {
-    "excludeDirectories": [
-        "lib",
-        "browser"
-    ]
+  "excludeDirectories": ["lib", "browser"]
 }

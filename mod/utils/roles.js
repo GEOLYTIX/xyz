@@ -12,12 +12,12 @@
  * @property {Object} [roles.'!key'] - Negated role properties (applied when user doesn't have the role)
  */
 
-const merge = require('./merge')
+const merge = require('./merge');
 
 module.exports = {
   check,
-  objMerge
-}
+  objMerge,
+};
 
 /**
  * Checks if an object should be accessible based on user roles
@@ -25,46 +25,45 @@ module.exports = {
  * @param {roles} obj.roles - Role configuration object
  * @param {Array<string>} user_roles - Array of roles assigned to the user
  * @returns {(Object|boolean)} Returns the original object if access is granted, false otherwise
- * 
+ *
  * @example
  * // Object with unrestricted access
  * check({ roles: { '*': true }, data: 'content' }, ['user']) // returns object
- * 
+ *
  * // Object with role restriction
  * check({ roles: { admin: true }, data: 'content' }, ['user']) // returns false
  * check({ roles: { admin: true }, data: 'content' }, ['admin']) // returns object
- * 
+ *
  * // Object with negated roles
  * check({ roles: { '!guest': true }, data: 'content' }, ['guest']) // returns false
  * check({ roles: { '!guest': true }, data: 'content' }, ['user']) // returns object
  */
 function check(obj, user_roles) {
-
   // The object to check has no roles assigned.
   if (!obj.roles) return obj;
 
   // Always return object with '*' asterisk role.
   if (Object.hasOwn(obj.roles, '*')) return obj;
 
-  if (!user_roles) return false
+  if (!user_roles) return false;
 
   // Some negated role is included in user_roles[]
   const someNegatedRole = Object.keys(obj.roles).some(
-    (role) => /^!/.exec(role) && user_roles.includes(role.replace(/^!/, ''))
+    (role) => /^!/.exec(role) && user_roles.includes(role.replace(/^!/, '')),
   );
 
   if (someNegatedRole) return false;
 
   // Check whether every role is negated.
   const everyNegatedRoles = Object.keys(obj.roles).every((role) =>
-    /^!/.exec(role)
+    /^!/.exec(role),
   );
 
   if (everyNegatedRoles) return obj;
 
   // Some positive role is included in user_roles[]
   const somePositiveRole = Object.keys(obj.roles).some((role) =>
-    user_roles.includes(role)
+    user_roles.includes(role),
   );
 
   if (somePositiveRole) return obj;
@@ -108,25 +107,22 @@ objMerge(obj, ['user']);
 @returns {Object} Processed object with merged role-specific properties
 */
 function objMerge(obj, user_roles) {
-
   if (typeof obj !== 'object') return obj;
 
-  if (!Array.isArray(user_roles)) return obj
+  if (!Array.isArray(user_roles)) return obj;
 
   if (Array.isArray(obj)) {
-
-    return obj.map(arrEntry => objMerge(arrEntry, user_roles))
+    return obj.map((arrEntry) => objMerge(arrEntry, user_roles));
   }
 
   Object.keys(obj)
-    .filter(key => typeof obj[key] === 'object')
-    .forEach(key => {
-
+    .filter((key) => typeof obj[key] === 'object')
+    .forEach((key) => {
       // Cannot convert undefined or null to object.
       if (!obj[key]) return;
 
-      obj[key] = objMerge(obj[key], user_roles)
-    })
+      obj[key] = objMerge(obj[key], user_roles);
+    });
 
   if (!obj.roles) return obj;
 
@@ -136,19 +132,22 @@ function objMerge(obj, user_roles) {
 
   if (typeof obj.roles === 'function') return obj;
 
-  const clone = structuredClone(obj)
+  const clone = structuredClone(obj);
 
   Object.keys(clone.roles)
-    .filter(role => clone.roles[role] !== true)
-    .filter(role => clone.roles[role] !== null)
-    .filter(role => typeof clone.roles[role] === 'object')
-    .filter(role => !Array.isArray(clone.roles[role]))
-    .filter(role => user_roles.includes(role) || notIncludesNegatedRole(role, user_roles))
-    .forEach(role => {
-      merge(clone, clone.roles[role])
-    })
+    .filter((role) => clone.roles[role] !== true)
+    .filter((role) => clone.roles[role] !== null)
+    .filter((role) => typeof clone.roles[role] === 'object')
+    .filter((role) => !Array.isArray(clone.roles[role]))
+    .filter(
+      (role) =>
+        user_roles.includes(role) || notIncludesNegatedRole(role, user_roles),
+    )
+    .forEach((role) => {
+      merge(clone, clone.roles[role]);
+    });
 
-  return clone
+  return clone;
 }
 
 /**
@@ -162,9 +161,8 @@ The utility method checks whether a negated role [prefixed with an exclamation m
 @returns {Boolean} True if the negated role is not included in the user_roles array.
 */
 function notIncludesNegatedRole(role, user_roles) {
-
   // A negated role is prefixes with an exclamation mark.
-  return role.match(/(?<=^!)(.*)/g)?.[0] ?
-    !user_roles.includes(role.match(/(?<=^!)(.*)/g)?.[0]) :
-    false
+  return role.match(/(?<=^!)(.*)/g)?.[0]
+    ? !user_roles.includes(role.match(/(?<=^!)(.*)/g)?.[0])
+    : false;
 }

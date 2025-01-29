@@ -39,31 +39,31 @@ Before working on a pull request, create an issue explaining what you want to co
 
 Your pull request must:
 
- * Follow XYZ/MAPP's coding style.
+- Follow XYZ/MAPP's coding style.
 
- * Address a single issue or add a single item of functionality.
+- Address a single issue or add a single item of functionality.
 
- * Contain a clean history of small, incremental, logically separate commits,
-   with no merge commits.
+- Contain a clean history of small, incremental, logically separate commits,
+  with no merge commits.
 
- * Use clear commit messages.
+- Use clear commit messages.
 
- * Be possible to merge automatically.
+- Be possible to merge automatically.
 
 ### Address a single issue or add a single item of functionality
 
-Please submit separate pull requests for separate issues.  This allows each to
+Please submit separate pull requests for separate issues. This allows each to
 be reviewed on its own merits.
 
 ### Contain a clean history of small, incremental, logically separate commits, with no merge commits
 
 The commit history explains to the reviewer the series of modifications to the
 code that you have made and breaks the overall contribution into a series of
-easily-understandable chunks.  Any individual commit should not add more than
-one new class or one new function.  Do not submit commits that change thousands
-of lines or that contain more than one distinct logical change.  Trivial
+easily-understandable chunks. Any individual commit should not add more than
+one new class or one new function. Do not submit commits that change thousands
+of lines or that contain more than one distinct logical change. Trivial
 commits, e.g. to fix lint errors, should be merged into the commit that
-introduced the error.  See the [Atomic Commit Convention on Wikipedia](https://en.wikipedia.org/wiki/Atomic_commit#Atomic_Commit_Convention) for more detail.
+introduced the error. See the [Atomic Commit Convention on Wikipedia](https://en.wikipedia.org/wiki/Atomic_commit#Atomic_Commit_Convention) for more detail.
 
 `git apply --patch` and `git rebase` can help you create a clean commit
 history.
@@ -98,6 +98,6 @@ Please keep the header line short, no more than 50 characters.
 ### Be possible to merge automatically
 
 Occasionally other changes to `main` might mean that your pull request cannot
-be merged automatically.  In this case you may need to rebase your branch on a
+be merged automatically. In this case you may need to rebase your branch on a
 more recent `main`, resolve any conflicts, and `git push --force` to update
 your branch so that it can be merged automatically.

@@ -13,8 +13,6 @@ The [node-postgres]{@link https://www.npmjs.com/package/pg} package is required 
 
 const { Pool } = require('pg');
 
- 
-
 const logger = require('./logger');
 
 const RETRY_LIMIT = xyzEnv.RETRY_LIMIT;
@@ -23,13 +21,11 @@ const INITIAL_RETRY_DELAY = 1000;
 
 const dbs = {};
 
-
 // Initialize database pools and create query functions
 Object.keys(xyzEnv)
-  .filter(key => key.startsWith('DBS_'))
-  .forEach(key => {
-
-    const id = key.split('_')[1]
+  .filter((key) => key.startsWith('DBS_'))
+  .forEach((key) => {
+    const id = key.split('_')[1];
 
     /** 
     @type {Pool} @private
@@ -39,8 +35,8 @@ Object.keys(xyzEnv)
       connectionString: xyzEnv[key],
       keepAlive: true,
       connectionTimeoutMillis: 5000, // 5 seconds
-      idleTimeoutMillis: 30000,      // 30 seconds
-      max: 20                        // Maximum number of clients in the pool
+      idleTimeoutMillis: 30000, // 30 seconds
+      max: 20, // Maximum number of clients in the pool
     });
 
     // Handle pool errors
@@ -48,13 +44,13 @@ Object.keys(xyzEnv)
       logger({
         err,
         message: 'Unexpected error on idle client',
-        pool: id
+        pool: id,
       });
     });
 
     // Assigning clientQuery method to dbs property.
     dbs[id] = async (query, variables, timeout) =>
-      await clientQuery(pool, query, variables, timeout)
+      await clientQuery(pool, query, variables, timeout);
   });
 
 // Export dbs constant
@@ -76,37 +72,32 @@ The clientQuery method creates a client connection from the provided Pool and ex
 @throws {Error} Database connection or query errors
 */
 async function clientQuery(pool, query, variables, timeout) {
-
   let retryCount = 0;
   let lastError;
   let client;
 
   while (retryCount < RETRY_LIMIT) {
-
     try {
       client = await pool.connect();
 
-      timeout ??= xyzEnv.STATEMENT_TIMEOUT
+      timeout ??= xyzEnv.STATEMENT_TIMEOUT;
 
       // Set statement timeout if specified
       if (timeout) {
-
         await client.query(`SET statement_timeout = ${parseInt(timeout)}`);
       }
 
       const { rows } = await client.query(query, variables);
 
       return rows;
-
     } catch (err) {
-
       // Log the error with retry information
       logger({
         err,
         query,
         variables,
         retry: retryCount + 1,
-        pool: pool.options.dbs
+        pool: pool.options.dbs,
       });
 
       retryCount++;
@@ -117,18 +108,17 @@ async function clientQuery(pool, query, variables, timeout) {
         await sleep(delay);
       }
 
-      lastError = err
-
+      lastError = err;
     } finally {
       if (client) {
-        client.release(true);  // Force release in case of errors
+        client.release(true); // Force release in case of errors
       }
     }
   }
 
   // If we've exhausted all retries, return the last error
   return lastError;
-};
+}
 
 /**
 @function sleep
@@ -139,5 +129,5 @@ Helper function to pause execution
 @returns {Promise<void>}
 */
 function sleep(ms) {
-  return new Promise(resolve => setTimeout(resolve, ms));
+  return new Promise((resolve) => setTimeout(resolve, ms));
 }

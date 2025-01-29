@@ -4,4 +4,4 @@ module.exports = `
     max(\${field}),
     avg(\${field})
     FROM \${table}
-    WHERE true \${filter};`
+    WHERE true \${filter};`;

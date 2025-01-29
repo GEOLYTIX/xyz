@@ -27,15 +27,15 @@ The workspace object defines the mapp resources available in an XYZ instance.
 @property {Object} locales Each property in the locales object is a locale available from this workspace.
 */
 
-const Roles = require('../utils/roles')
+const Roles = require('../utils/roles');
 
-const workspaceCache = require('./cache')
+const workspaceCache = require('./cache');
 
-const getLocale = require('./getLocale')
+const getLocale = require('./getLocale');
 
-const getLayer = require('./getLayer')
+const getLayer = require('./getLayer');
 
-const getTemplate = require('./getTemplate')
+const getTemplate = require('./getTemplate');
 
 const keyMethods = {
   layer,
@@ -43,7 +43,7 @@ const keyMethods = {
   locales,
   roles,
   test,
-}
+};
 
 let workspace;
 
@@ -62,21 +62,21 @@ The method checks whether the req.params.key matches a keyMethods property and r
 @property {string} params.key Workspace API method requested.
 */
 module.exports = async function getKeyMethod(req, res) {
-
-  workspace = await workspaceCache()
+  workspace = await workspaceCache();
 
   if (workspace instanceof Error) {
-    return res.status(500).send('Failed to load workspace.')
+    return res.status(500).send('Failed to load workspace.');
   }
 
   // The keys object must own a user provided lookup key
   if (!Object.hasOwn(keyMethods, req.params.key)) {
-
-    return res.status(400).send(`Failed to evaluate '${req.params.key}' param.`)
+    return res
+      .status(400)
+      .send(`Failed to evaluate '${req.params.key}' param.`);
   }
 
-  return keyMethods[req.params.key](req, res)
-}
+  return keyMethods[req.params.key](req, res);
+};
 
 /**
 @function layer
@@ -95,20 +95,18 @@ The method requests a JSON layer from the getLayer module.
 @returns {res} The HTTP response with either an error.message or the JSON layer.
 */
 async function layer(req, res) {
-
   // Add default role * to all users.
   if (Array.isArray(req.params.user?.roles)) {
-
-    req.params.user.roles.push('*')
+    req.params.user.roles.push('*');
   }
 
-  const layer = await getLayer(req.params)
+  const layer = await getLayer(req.params);
 
   if (layer instanceof Error) {
-    return res.status(400).send(layer.message)
+    return res.status(400).send(layer.message);
   }
 
-  res.json(removeRoles(layer))
+  res.json(removeRoles(layer));
 }
 
 /**
@@ -127,21 +125,19 @@ The locales are not merged with templates and only roles defined inside the work
 @returns {res} The HTTP response with either an error.message or JSON array of locales in workspace.
 */
 function locales(req, res) {
-
   // Add default role * to all users.
   if (Array.isArray(req.params.user?.roles)) {
-
-    req.params.user.roles.push('*')
+    req.params.user.roles.push('*');
   }
 
   const locales = Object.values(workspace.locales)
-    .filter(locale => !!Roles.check(locale, req.params.user?.roles))
-    .map(locale => ({
+    .filter((locale) => !!Roles.check(locale, req.params.user?.roles))
+    .map((locale) => ({
       key: locale.key,
-      name: locale.name
-    }))
+      name: locale.name,
+    }));
 
-  res.send(locales)
+  res.send(locales);
 }
 
 /**
@@ -165,51 +161,51 @@ The locale.layers{} object is reduced to an array of layer keys without the `par
 @returns {res} The HTTP response with either an error.message or the JSON locale.
 */
 async function locale(req, res) {
-
   // Add default role * to all users.
   if (Array.isArray(req.params.user?.roles)) {
-
-    req.params.user.roles.push('*')
+    req.params.user.roles.push('*');
   }
 
-  const locale = await getLocale(req.params)
+  const locale = await getLocale(req.params);
 
   if (locale instanceof Error) {
-    return res.status(400).send(locale.message)
+    return res.status(400).send(locale.message);
   }
 
   // Return layer object instead of array of layer keys
   if (req.params.layers) {
+    const layers = Object.keys(locale.layers).map(
+      async (key) =>
+        await getLayer({
+          ...req.params,
+          layer: key,
+        }),
+    );
 
-    const layers = Object.keys(locale.layers)
-      .map(async key => await getLayer({
-        ...req.params,
-        layer: key
-      }))
-
-    await Promise.all(layers).then(layers => {
-
+    await Promise.all(layers).then((layers) => {
       locale.layers = layers
-        .filter(layer => !!layer)
+        .filter((layer) => !!layer)
 
         // The getLayer method will return an Error if role access is prevented.
-        .filter(layer => !(layer instanceof Error))
-    })
+        .filter((layer) => !(layer instanceof Error));
+    });
 
-    return res.json(removeRoles(locale))
+    return res.json(removeRoles(locale));
   }
 
   // Check layer access.
-  locale.layers = locale.layers && Object.entries(locale.layers)
+  locale.layers =
+    locale.layers &&
+    Object.entries(locale.layers)
 
-    // filter layers which are null
-    .filter(layer => layer[1] !== null)
+      // filter layers which are null
+      .filter((layer) => layer[1] !== null)
 
-    // check layer for user roles
-    .filter(layer => !!Roles.check(layer[1], req.params.user?.roles))
-    .map(layer => layer[0])
+      // check layer for user roles
+      .filter((layer) => !!Roles.check(layer[1], req.params.user?.roles))
+      .map((layer) => layer[0]);
 
-  res.json(removeRoles(locale))
+  res.json(removeRoles(locale));
 }
 
 /**
@@ -231,51 +227,45 @@ Whether the roles should be returned as an object with details.
 @returns {Array|Object} Returns either an array of roles as string, or an object with roles as properties.
 */
 function roles(req, res) {
-
   const rolesSet = new Set();
 
   (function objectEval(o, parent, key) {
-
     if (key === 'roles') {
-      Object.keys(parent.roles).forEach(role => {
-
+      Object.keys(parent.roles).forEach((role) => {
         // Add role without negation ! to roles set.
         // The same role can not be added multiple times to the rolesSet.
-        rolesSet.add(role.replace(/^!/, ''))
-      })
+        rolesSet.add(role.replace(/^!/, ''));
+      });
     }
 
     // Iterate through the object tree.
     Object.keys(o).forEach((key) => {
       if (o[key] && typeof o[key] === 'object') {
-
         // Call method recursive for nested objects.
-        objectEval(o[key], o, key)
+        objectEval(o[key], o, key);
       }
     });
-
-  })(workspace)
+  })(workspace);
 
   // Delete restricted Asterisk role.
-  rolesSet.delete('*')
+  rolesSet.delete('*');
 
-  const roles = Array.from(rolesSet)
+  const roles = Array.from(rolesSet);
 
   // If detail=true, return workspace.roles{} object (so you can specify information for each role).
   if (req.params.detail) {
-
-    workspace.roles ??= {}
+    workspace.roles ??= {};
 
     // If the role is missing, add it to the workspace.roles{} object as an empty object.
     roles
-      .filter(role => !Object.hasOwn(workspace.roles, role))
-      .forEach(role => workspace.roles[role] = {})
+      .filter((role) => !Object.hasOwn(workspace.roles, role))
+      .forEach((role) => (workspace.roles[role] = {}));
 
     // Return the workspace.roles{} object.
-    return res.send(workspace.roles)
+    return res.send(workspace.roles);
   }
 
-  res.send(roles)
+  res.send(roles);
 }
 
 /**
@@ -303,53 +293,61 @@ The user requesting the test method.
 The user is required to have admin priviliges.
 */
 async function test(req, res) {
-
   if (!req.params.user?.admin) {
-    res.status(403).send(`Admin credentials are required to test the workspace sources.`)
-    return
+    res
+      .status(403)
+      .send(`Admin credentials are required to test the workspace sources.`);
+    return;
   }
 
   // Force re-caching of workspace.
-  workspace = await workspaceCache(true)
+  workspace = await workspaceCache(true);
 
   const test = {
     results: {},
     errArr: [],
     used_templates: [],
-    properties: new Set(['template', 'templates', 'query'])
-  }
+    properties: new Set(['template', 'templates', 'query']),
+  };
 
-  test.workspace_templates = new Set(Object.entries(workspace.templates)
-    .filter(([key, value]) => value._type === 'workspace')
-    .map(([key, value]) => key))
+  test.workspace_templates = new Set(
+    Object.entries(workspace.templates)
+      .filter(([key, value]) => value._type === 'workspace')
+      .map(([key, value]) => key),
+  );
 
   // Create clone of workspace_templates
-  test.unused_templates = new Set([...test.workspace_templates])
+  test.unused_templates = new Set([...test.workspace_templates]);
 
-  test.overwritten_templates = new Set()
+  test.overwritten_templates = new Set();
 
   for (const localeKey of Object.keys(workspace.locales)) {
-
     // Will get layer and assignTemplates to workspace.
-    const locale = await getLocale({ locale: localeKey, user: req.params.user })
+    const locale = await getLocale({
+      locale: localeKey,
+      user: req.params.user,
+    });
 
     // If you can't get the locale, access is denied, add the error to the errArr.
     if (locale.message === 'Role access denied') {
-      test.errArr.push(`${localeKey}: ${locale.message}`)
+      test.errArr.push(`${localeKey}: ${locale.message}`);
       continue;
-    };
+    }
 
     // If the locale has no layers, just skip it.
     if (!locale.layers) continue;
 
     for (const layerKey of Object.keys(locale.layers)) {
-
       // Will get layer and assignTemplates to workspace.
-      const layer = await getLayer({ locale: localeKey, layer: layerKey, user: req.params.user })
+      const layer = await getLayer({
+        locale: localeKey,
+        layer: layerKey,
+        user: req.params.user,
+      });
 
       locale.layers[layerKey] = layer;
 
-      if (layer.err) test.errArr.push(`${layerKey}: ${layer.err}`)
+      if (layer.err) test.errArr.push(`${layerKey}: ${layer.err}`);
     }
 
     // Test locale and all of its layers as nested object.
@@ -358,10 +356,9 @@ async function test(req, res) {
 
   // From here on its 🐢 Templates all the way down.
   for (const key of Object.keys(workspace.templates)) {
+    const template = await getTemplate(key);
 
-    const template = await getTemplate(key)
-
-    if (template.err) test.errArr.push(`${key}: ${template.err.path}`)
+    if (template.err) test.errArr.push(`${key}: ${template.err.path}`);
   }
 
   test.results.errors = test.errArr.flat();
@@ -372,14 +369,18 @@ async function test(req, res) {
 
   // Sort the array.
   test.used_templates.sort((a, b) => {
-    if (a > b) return 1
-    if (a < b) return -1
-    return 0
-  })
+    if (a > b) return 1;
+    if (a < b) return -1;
+    return 0;
+  });
 
   // Reduce the test.used_templates array to count the occurance of each template.
-  test.results.usage = Object.fromEntries(test.used_templates
-    .reduce((acc, e) => acc.set(e, (acc.get(e) || 0) + 1), new Map()));
+  test.results.usage = Object.fromEntries(
+    test.used_templates.reduce(
+      (acc, e) => acc.set(e, (acc.get(e) || 0) + 1),
+      new Map(),
+    ),
+  );
 
   res.setHeader('content-type', 'application/json');
 
@@ -404,51 +405,42 @@ Add template keys to test.used_templates Array.
 @property {Array} test.used_templates Array of template keys for each usage.
 */
 function templateUse(obj, test) {
-
   if (typeof obj !== 'object') return;
 
-  Object.entries(obj).forEach(entry => {
-
+  Object.entries(obj).forEach((entry) => {
     // entry key === ['template', 'templates', 'query']
     if (test.properties.has(entry[0])) {
-
       if (Array.isArray(entry[1])) {
-
         entry[1]
-          .filter(item => typeof item === 'string')
-          .forEach(item => {
-            test.unused_templates.delete(item)
-            test.used_templates.push(item)
-          })
+          .filter((item) => typeof item === 'string')
+          .forEach((item) => {
+            test.unused_templates.delete(item);
+            test.used_templates.push(item);
+          });
       }
 
-      if (typeof entry[1] === 'object'
-        && Object.hasOwn(entry[1], 'key')
-
-      ) {
+      if (typeof entry[1] === 'object' && Object.hasOwn(entry[1], 'key')) {
         if (test.workspace_templates.has(entry[1].key)) {
-          test.overwritten_templates.add(entry[1].key)
+          test.overwritten_templates.add(entry[1].key);
         }
         return;
       }
 
       if (typeof entry[1] === 'string') {
-        test.unused_templates.delete(entry[1])
-        test.used_templates.push(entry[1])
+        test.unused_templates.delete(entry[1]);
+        test.used_templates.push(entry[1]);
       }
     }
 
     // Iterate through each array, eg. infoj
     if (Array.isArray(entry[1])) {
+      entry[1].forEach((entry) => templateUse(entry, test));
 
-      entry[1].forEach(entry => templateUse(entry, test))
-
-      // Iterate through nested objects eg. layers      
+      // Iterate through nested objects eg. layers
     } else if (entry[1] instanceof Object) {
-
-      templateUse(entry[1], test)
+      templateUse(entry[1], test);
     }
-  })
+  });
 }
 
 /**
@@ -461,7 +453,6 @@ ensuring that role-based permissions data is not exposed.
 @returns {object}
 */
 function removeRoles(obj) {
-
   // If param is not an object or is null, return as is
   if (typeof obj !== 'object' || obj === null) {
     return obj;
@@ -469,7 +460,7 @@ function removeRoles(obj) {
 
   // If object is an array, process each element
   if (Array.isArray(obj)) {
-    return obj.map(item => removeRoles(item));
+    return obj.map((item) => removeRoles(item));
   }
 
   // Create a new object to store cleaned properties
@@ -477,7 +468,6 @@ function removeRoles(obj) {
 
   // Process each property in the object
   for (const [key, value] of Object.entries(obj)) {
-
     // Skip 'roles' properties
     if (key === 'roles') {
       continue;

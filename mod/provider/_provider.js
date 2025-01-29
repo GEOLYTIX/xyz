@@ -5,11 +5,11 @@
 Functions for handling 3rd party service provider requests
 */
 
-const file = require('./file')
+const file = require('./file');
 
-const cloudfront = require('./cloudfront')
+const cloudfront = require('./cloudfront');
 
-const s3 = require('./s3')
+const s3 = require('./s3');
 
 /**
 @function provider
@@ -27,25 +27,29 @@ The response from the method is returned with the HTTP response.
 
 @returns {Promise} The promise resolves into the response from the provider modules method.
 */
-module.exports = async function provider(req, res){
-
+module.exports = async function provider(req, res) {
   const provider = {
     cloudfront,
     file,
-    s3
-  }
+    s3,
+  };
 
   if (!Object.hasOwn(provider, req.params.provider)) {
-    return res.status(404).send(`Failed to validate 'provider=${req.params.provider}' param.`)
+    return res
+      .status(404)
+      .send(`Failed to validate 'provider=${req.params.provider}' param.`);
   }
 
   if (provider[req.params.provider] === null) {
-    return res.status(405).send(`Provider: ${req.params.provider} is not configured.`)
+    return res
+      .status(405)
+      .send(`Provider: ${req.params.provider} is not configured.`);
   }
 
-  const response = await provider[req.params.provider](req, res)
+  const response = await provider[req.params.provider](req, res);
 
-  req.params.content_type && res.setHeader('content-type', req.params.content_type)
+  req.params.content_type &&
+    res.setHeader('content-type', req.params.content_type);
 
-  res.send(response)
-}
+  res.send(response);
+};
