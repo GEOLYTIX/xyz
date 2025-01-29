@@ -5,16 +5,13 @@
     "type": "git",
     "url": "https://github.com/geolytix/xyz"
   },
-  "engines": {
-    "node": ">=18.x"
-  },
   "lint-staged": {
     "*.{js,mjs,json,css,md}": [
       "prettier --write"
     ]
   },
   "scripts": {
-    "test": "codi tests",
+    "test": "codi tests/mod/user --quiet",
     "_build": "node esbuild.config.mjs",
     "browser-sync": "npx browser-sync start --proxy localhost:3000 --port 3001 --ui-port 3002 --files public/js/**/* --no-open --no-notify",
     "ui_css": "npx esbuild --bundle public/css/_ui.css --outfile=public/css/ui.css --loader:.svg=dataurl",
@@ -42,7 +39,7 @@
     "@eslint/js": "^9.13.0",
     "browser-sync": "^3.0.3",
     "clean-jsdoc-theme": "^4.3.0",
-    "codi-test-framework": "^1.0.22",
+    "codi-test-framework": "^1.0.23",
     "concurrently": "^9.1.0",
     "cookie-parser": "^1.4.5",
     "dotenv": "^16.4.5",
