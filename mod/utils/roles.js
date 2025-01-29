@@ -14,10 +14,7 @@
 
 import merge from './merge.js';
 
-export default {
-  check,
-  objMerge,
-};
+export { check, objMerge };
 
 /**
  * Checks if an object should be accessible based on user roles
