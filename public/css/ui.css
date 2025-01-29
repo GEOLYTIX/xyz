@@ -1094,6 +1094,10 @@ html.dark-mode {
   &.primary-light-colour {
     color: var(--color-primary-light);
   }
+  &.close:after {
+    content: "close";
+    color: var(--color-primary-light);
+  }
 }
 .active > .material-symbols-outlined {
   color: var(--color-on);
