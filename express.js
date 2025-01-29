@@ -48,6 +48,8 @@ import express from 'express';
 import cookieParser from 'cookie-parser';
 import rateLimit from 'express-rate-limit';
 
+import api from './api/api.js';
+
 const app = express();
 
 app.disable('x-powered-by');
@@ -77,8 +79,6 @@ app.use(`${xyzEnv.DIR}/tests`, express.static('tests'));
 app.use(xyzEnv.DIR, express.static('tests'));
 
 app.use(cookieParser());
-
-const api = require('./api/api');
 
 app.get(`${xyzEnv.DIR}/api/provider/:provider?`, api);
 
