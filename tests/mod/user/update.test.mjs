@@ -53,6 +53,7 @@ await codi.describe(params, async () => {
       function acl() {
         return [];
       }
+
       await mock.module('../../../mod/user/acl.js', () => {
         return { default: acl };
       });
@@ -75,7 +76,6 @@ await codi.describe(params, async () => {
 
       const result = await update(req, res);
 
-      // console.log(result);
       codi.assertTrue(result instanceof Error);
       codi.assertEqual(result.message, 'admin_user_login_required');
     },
