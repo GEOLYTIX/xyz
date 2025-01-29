@@ -12,4 +12,4 @@ LEFT JOIN LATERAL (
 ) closest
 on true
 WHERE a.\${qID} = %{id}
-`
+`;

@@ -5,12 +5,10 @@ The mvt layer query template returns a vector tile (st_asmvt) with mvt geometrie
 
 @module /workspace/templates/mvt_geom
 */
-module.exports = _ => {
-
-  const
-    x = parseInt(_.x),
+module.exports = (_) => {
+  const x = parseInt(_.x),
     y = parseInt(_.y),
-    z = parseInt(_.z)
+    z = parseInt(_.z);
 
   return `
     SELECT
@@ -31,5 +29,5 @@ module.exports = _ => {
           ST_TileEnvelope(${z},${x},${y}),
           ${_.geom}
         )
-      ) tile`
-}
+      ) tile`;
+};

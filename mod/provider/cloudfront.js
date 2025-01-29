@@ -10,9 +10,8 @@ The cloudfront provider module exports a method to fetch resources from an AWS c
 */
 
 const cloudfront_signer = require('../sign/cloudfront');
-const logger = require('../utils/logger')
+const logger = require('../utils/logger');
 
- 
 /**
 @function cloudfront
 @async
@@ -34,44 +33,38 @@ The fetch response will be parsed as text by default.
 
 @returns {Promise<String|JSON|Buffer|Error>} The method resolves to either JSON, Text, or Buffer dependent ref.params.
 */
-module.exports = cloudfront_signer ? cloudfront : null
+module.exports = cloudfront_signer ? cloudfront : null;
 
 async function cloudfront(ref) {
-
   try {
+    const url = ref.params?.url || ref;
 
-    const url = ref.params?.url || ref
+    const signedURL = await cloudfront_signer(url);
 
-
-    const signedURL = await cloudfront_signer(url)
-
-    if(signedURL instanceof Error) {
+    if (signedURL instanceof Error) {
       return signedURL;
     }
-
 
     // Return signedURL only from request.
     if (ref.params?.signedURL) {
       return signedURL;
     }
 
-    const response = await fetch(signedURL)
+    const response = await fetch(signedURL);
 
-    logger(`${response.status} - ${url}`, 'cloudfront')
+    logger(`${response.status} - ${url}`, 'cloudfront');
 
-    if (response.status >= 300) return new Error(`${response.status} ${url}`)
+    if (response.status >= 300) return new Error(`${response.status} ${url}`);
 
-    if (url.match(/\.json$/i)) return await response.json()
+    if (url.match(/\.json$/i)) return await response.json();
 
     if (ref.params?.buffer) {
-      const arrayBuffer = await response.arrayBuffer()
-      return Buffer.from(arrayBuffer)
+      const arrayBuffer = await response.arrayBuffer();
+      return Buffer.from(arrayBuffer);
     }
 
-    return await response.text()
-
+    return await response.text();
   } catch (err) {
-
-    console.error(err)
+    console.error(err);
   }
 }

@@ -5,4 +5,4 @@ module.exports = `
     FROM \${table} 
     WHERE true \${filter}
   ) values
-  ORDER BY distinct_field;`
+  ORDER BY distinct_field;`;
