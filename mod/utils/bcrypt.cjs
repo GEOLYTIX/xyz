@@ -358,7 +358,6 @@ Released under the Apache License, Version 2.0
    * @param {function(...[*])} callback Callback to execute
    * @inner
    */
-  // eslint-disable-next-line no-nested-ternary
   var nextTick =
     typeof process !== 'undefined' &&
     process &&
