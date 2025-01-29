@@ -1,6 +1,7 @@
 {
   "name": "xyz",
   "version": "v4.13.0-alpha",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/geolytix/xyz"

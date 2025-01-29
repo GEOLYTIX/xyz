@@ -41,12 +41,12 @@ RATE_LIMIT_WINDOW - Time window in ms (default: 1 min)
 @requires express-rate-limit - Rate limiting middleware
 */
 
-require('dotenv').config();
-require('./mod/utils/processEnv.js');
+import 'dotenv/config';
+import './mod/utils/processEnv.js';
 
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const rateLimit = require('express-rate-limit');
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import rateLimit from 'express-rate-limit';
 
 const app = express();
 
