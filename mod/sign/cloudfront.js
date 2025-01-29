@@ -10,28 +10,33 @@ The cloudfront sign module exports a method to sign requests to an AWS cloudfron
 @module /sign/cloudfront
 */
 
-let getSignedUrl, privateKey;
+import { readFileSync } from 'fs';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
+import { getSignedUrl } from '@aws-sdk/cloudfront-signer';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
+
+let privateKey, exportedModule;
 
 //Export nothing if the cloudfront key is not provided
 if (!xyzEnv.KEY_CLOUDFRONT) {
-  module.exports = null;
+  exportedModule = null;
 } else {
   //Third party sources are optional
   try {
-    const { readFileSync } = require('fs');
-    const { join } = require('path');
     privateKey = String(
       readFileSync(join(__dirname, `../../${xyzEnv.KEY_CLOUDFRONT}.pem`)),
     );
-
-    getSignedUrl = require('@aws-sdk/cloudfront-signer').getSignedUrl;
-    module.exports = cloudfront_signer;
+    exportedModule = cloudfront_signer;
   } catch (err) {
     console.error(err);
-
-    module.exports = null;
+    exportedModule = null;
   }
 }
+
+export default exportedModule;
 
 /**
 @function cloudfront_signer

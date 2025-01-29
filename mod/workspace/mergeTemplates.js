@@ -11,13 +11,13 @@ The workspace is cached in the module scope to allow for the mergeObjectTemplate
 @module /workspace/mergeTemplates
 */
 
-const merge = require('../utils/merge');
+import merge from '../utils/merge.js';
 
-const envReplace = require('../utils/envReplace');
+import envReplace from '../utils/envReplace.js';
 
-const getTemplate = require('./getTemplate');
+import getTemplate from './getTemplate.js';
 
-const workspaceCache = require('./cache');
+import workspaceCache from './cache.js';
 
 let workspace;
 
@@ -42,7 +42,7 @@ An array of templates can be defined as obj.templates[]. The templates will be m
 
 @returns {Promise} The layer or locale provided as obj param.
 */
-module.exports = async function mergeTemplates(obj) {
+export default async function mergeTemplates(obj) {
   // Cache workspace in module scope for template assignment.
   workspace = await workspaceCache();
 
@@ -105,7 +105,7 @@ module.exports = async function mergeTemplates(obj) {
   obj.dbs ??= workspace.dbs;
 
   return obj;
-};
+}
 
 /**
 @function assignWorkspaceTemplates

@@ -9,7 +9,7 @@ Exports the reqHost utility method.
 @module /utils/reqHost
 */
 
-const logger = require('./logger');
+import logger from './logger.js';
 
 /**
 @function reqHost
@@ -24,7 +24,7 @@ The host value can be logged with the `reqHost` logger key.
 @returns {string} host
 */
 
-module.exports = function reqHost(req) {
+export default function reqHost(req) {
   let host;
 
   if (req.headers.host.startsWith('localhost')) {
@@ -38,4 +38,4 @@ module.exports = function reqHost(req) {
   logger(host, 'reqhost');
 
   return host;
-};
+}

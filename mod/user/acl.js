@@ -1,5 +1,4 @@
-/**
-## /user/acl
+/** ## /user/acl
 
 The acl module provides access to the ACL table for all User API methods.
 
@@ -13,16 +12,20 @@ The module will export null if neither a PRIVATE or PUBLIC xyzEnv are provided.
 @module /user/acl
 */
 
-const { Pool } = require('pg');
+import pg from 'pg';
+const { Pool } = pg;
 
 const connection = xyzEnv.PRIVATE?.split('|') || xyzEnv.PUBLIC?.split('|');
 
 // These variables can only be reassigned if the connection is an array.
-let acl_table, acl_schema, pool;
+let acl_table,
+  acl_schema,
+  pool,
+  exportedModule = null;
 
 // The acl module will export an empty require object instead of a function if no ACL connection has been defined.
 if (!connection?.[1]) {
-  module.exports = null;
+  exportedModule = null;
 } else {
   acl_table = connection[1]?.split('.').pop();
 
@@ -35,8 +38,10 @@ if (!connection?.[1]) {
     connectionString: connection[0],
   });
 
-  module.exports = acl;
+  exportedModule = acl;
 }
+
+export default exportedModule;
 
 /**
 @function acl

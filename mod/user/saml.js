@@ -100,7 +100,12 @@ Module Variables:
 @property {string} logoutCallbackUrl - URL for logout callbacks
 **/
 
-let samlStrat, samlConfig, logger, jwt, acl;
+let samlStrat,
+  samlConfig,
+  logger,
+  jwt,
+  acl,
+  exportedModule = null;
 
 try {
   // Import required dependencies
@@ -143,7 +148,7 @@ try {
 
   // Create SAML strategy instance
   samlStrat = new SAML(samlConfig);
-  module.exports = saml;
+  exportedModule = saml;
 } catch {
   // Check for SAML-related xyzEnvironment variables
   const samlKeys = Object.keys(xyzEnv).filter((key) => key.startsWith('SAML'));
@@ -152,8 +157,10 @@ try {
   if (samlKeys.length > 0) {
     console.log('SAML2 module is not available.');
   }
-  module.exports = null;
+  exportedModule = null;
 }
+
+export default exportedModule;
 /**
 @function saml
 @description Handles SAML authentication flow endpoints and operations

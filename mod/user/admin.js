@@ -6,7 +6,7 @@ Exports the admin view method for the /api/user/admin route.
 @module /user/admin
 */
 
-const view = require('../view');
+import view from '../view.js';
 
 /**
 @function admin
@@ -24,7 +24,7 @@ Requesting user.
 Requesting user is admin.
 */
 
-module.exports = async function admin(req, res) {
+export default async function admin(req, res) {
   if (!req.params.user) {
     return new Error('login_required');
   }
@@ -37,4 +37,4 @@ module.exports = async function admin(req, res) {
   req.params.language = req.params.user.language;
   req.params.user = req.params.user.email;
   view(req, res);
-};
+}

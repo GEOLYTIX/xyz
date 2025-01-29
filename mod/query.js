@@ -12,21 +12,21 @@ The query module exports the [SQL] query method to pass queries to the stored db
 @module /query
 */
 
-const dbs_connections = require('./utils/dbs');
+import dbs_connections from './utils/dbs.js';
 
-const sqlFilter = require('./utils/sqlFilter');
+import sqlFilter from './utils/sqlFilter.js';
 
-const Roles = require('./utils/roles');
+import Roles from './utils/roles.js';
 
-const logger = require('./utils/logger');
+import logger from './utils/logger.js';
 
-const login = require('./user/login');
+import login from './user/login.js';
 
-const workspaceCache = require('./workspace/cache');
+import workspaceCache from './workspace/cache.js';
 
-const getTemplate = require('./workspace/getTemplate');
+import getTemplate from './workspace/getTemplate.js';
 
-const getLayer = require('./workspace/getLayer');
+import getLayer from './workspace/getLayer.js';
 
 /**
 @function query
@@ -47,7 +47,7 @@ The query is executed by the executeQuery() method.
 @property {Object} [params.user] Requesting user.
 @property {Array} [user.roles] User roles.
 */
-module.exports = async function query(req, res) {
+export default async function query(req, res) {
   // Get workspace from cache.
   req.params.workspace = await workspaceCache();
 
@@ -108,7 +108,7 @@ module.exports = async function query(req, res) {
   const query = await getQueryFromTemplate(req, template);
 
   executeQuery(req, res, template, query);
-};
+}
 
 /**
 @function layerQuery

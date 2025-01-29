@@ -3,17 +3,17 @@
 @requires module:/utils/processEnv
 */
 
-const logger = require('./logger');
+import logger from './logger.js';
 
-const languageTemplates = require('./languageTemplates');
+import languageTemplates from './languageTemplates.js';
 
-const getFrom = require('../provider/getFrom');
+import getFrom from '../provider/getFrom.js';
 
-const mailer = require('nodemailer');
+import mailer from 'nodemailer';
 
 let transport;
 
-module.exports = async (params) => {
+export default async (params) => {
   if (xyzEnv.TRANSPORT) {
     console.warn(
       'Please replace xyzEnv.TRANSPORT with TRANSPORT_HOST,TRANSPORT_EMAIL, and TRANSPORT_PASSWORD',

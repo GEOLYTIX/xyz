@@ -14,23 +14,28 @@ This module exports the fromACL method to request and validate a user from the A
 @module /user/fromACL
 */
 
-const bcrypt = require('../utils/bcrypt');
+import bcrypt from '../utils/bcrypt.cjs';
+const { compareSync } = bcrypt;
 
-const crypto = require('crypto');
+import { randomBytes } from 'crypto';
 
-const acl = require('./acl');
+import acl from './acl.js';
+
+import reqHost from '../utils/reqHost.js';
+
+import mailer from '../utils/mailer.js';
+
+import languageTemplates from '../utils/languageTemplates.js';
+
+let exportedModule = null;
 
 if (acl === null) {
-  module.exports = null;
+  exportedModule = null;
 } else {
-  module.exports = fromACL;
+  exportedModule = fromACL;
 }
 
-const reqHost = require('../utils/reqHost');
-
-const mailer = require('../utils/mailer');
-
-const languageTemplates = require('../utils/languageTemplates');
+export default exportedModule;
 
 /**
 @function fromACL
@@ -186,13 +191,13 @@ async function getUser(request) {
   }
 
   // Check password from post body against encrypted password from ACL.
-  if (bcrypt.compareSync(request.password, user.password)) {
+  if (compareSync(request.password, user.password)) {
     // password must be removed after check
     delete user.password;
 
     if (xyzEnv.USER_SESSION) {
       // Create a random session token.
-      user.session = crypto.randomBytes(10).toString('hex');
+      user.session = randomBytes(10).toString('hex');
 
       // Store session token in ACL.
       rows = await acl(
@@ -311,7 +316,7 @@ async function failedLogin(request) {
   // Check whether failed login attempts exceeds limit.
   if (rows[0]?.failedattempts === maxFailedAttempts) {
     // Create a verificationtoken.
-    const verificationtoken = crypto.randomBytes(20).toString('hex');
+    const verificationtoken = randomBytes(20).toString('hex');
 
     // Store verificationtoken and remove verification status.
     rows = await acl(

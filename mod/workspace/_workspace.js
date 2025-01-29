@@ -27,15 +27,15 @@ The workspace object defines the mapp resources available in an XYZ instance.
 @property {Object} locales Each property in the locales object is a locale available from this workspace.
 */
 
-const Roles = require('../utils/roles');
+import Roles from '../utils/roles.js';
 
-const workspaceCache = require('./cache');
+import workspaceCache from './cache.js';
 
-const getLocale = require('./getLocale');
+import getLocale from './getLocale.js';
 
-const getLayer = require('./getLayer');
+import getLayer from './getLayer.js';
 
-const getTemplate = require('./getTemplate');
+import getTemplate from './getTemplate.js';
 
 const keyMethods = {
   layer,
@@ -61,7 +61,7 @@ The method checks whether the req.params.key matches a keyMethods property and r
 @property {Object} req.params HTTP request params.
 @property {string} params.key Workspace API method requested.
 */
-module.exports = async function getKeyMethod(req, res) {
+export default async function getKeyMethod(req, res) {
   workspace = await workspaceCache();
 
   if (workspace instanceof Error) {
@@ -76,7 +76,7 @@ module.exports = async function getKeyMethod(req, res) {
   }
 
   return keyMethods[req.params.key](req, res);
-};
+}
 
 /**
 @function layer

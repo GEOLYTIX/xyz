@@ -12,9 +12,9 @@
  * @property {Object} [roles.'!key'] - Negated role properties (applied when user doesn't have the role)
  */
 
-const merge = require('./merge');
+import merge from './merge.js';
 
-module.exports = {
+export default {
   check,
   objMerge,
 };

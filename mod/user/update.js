@@ -9,9 +9,9 @@ Exports the [user] update method for the /api/user/cookie route.
 @module /user/update
 */
 
-const acl = require('./acl');
+import acl from './acl.js';
 
-const mailer = require('../utils/mailer');
+import mailer from '../utils/mailer.js';
 
 /**
 @function update
@@ -43,7 +43,7 @@ Requesting user.
 @property {boolean} user.admin 
 Requesting user is admin.
 */
-module.exports = async function update(req, res) {
+export default async function update(req, res) {
   // acl module will export an empty require object without the ACL being configured.
   if (acl === null) {
     return res.status(500).send('ACL unavailable.');
@@ -143,4 +143,4 @@ module.exports = async function update(req, res) {
   }
 
   return res.send('Update success');
-};
+}

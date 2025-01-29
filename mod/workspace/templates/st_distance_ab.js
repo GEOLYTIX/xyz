@@ -1,4 +1,4 @@
-module.exports = `
+export default `
 SELECT 
     ST_DISTANCE(st_transform(a.\${geom},4326)::geography, closest.geom ) AS dist
 FROM 

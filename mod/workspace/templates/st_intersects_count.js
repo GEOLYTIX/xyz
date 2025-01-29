@@ -1,4 +1,4 @@
-module.exports = `
+export default `
 SELECT 
    COUNT(b.*) AS count
 FROM

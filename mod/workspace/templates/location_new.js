@@ -5,7 +5,7 @@ The location_new layer query returns the serial id for a new location record ins
 
 @module /workspace/templates/location_new
 */
-module.exports = (_) => {
+export default (_) => {
   // select array for insert statement
   const selects = [];
 
