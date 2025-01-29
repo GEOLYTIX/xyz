@@ -10,7 +10,7 @@ The getLayer module exports the getLayer method which is required by the query a
 @module /workspace/getLayer
 */
 
-import Roles from '../utils/roles.js';
+import * as Roles from '../utils/roles.js';
 
 import mergeTemplates from './mergeTemplates.js';
 

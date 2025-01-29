@@ -16,7 +16,7 @@ import dbs_connections from './utils/dbs.js';
 
 import sqlFilter from './utils/sqlFilter.js';
 
-import Roles from './utils/roles.js';
+import * as Roles from './utils/roles.js';
 
 import logger from './utils/logger.js';
 
