@@ -5,31 +5,29 @@ The cluster layer query template returns aggregated cluster features.
 
 @module /workspace/templates/cluster
 */
-module.exports = _ => {
+module.exports = (_) => {
+  _.qID ??= _.layer.qID || null;
+  _.geom ??= _.layer.geom;
 
-  _.qID ??= _.layer.qID || null
-  _.geom ??= _.layer.geom
+  const fields = [];
 
-  const fields = []
+  const aggFields = [];
 
-  const aggFields = []  
-
-  _.fieldsMap && Array.from(_.fieldsMap.entries())
-    .forEach(entry => {
-
-      const [key, value] = entry
-      fields.push(`(${value}) as ${key}`)
+  _.fieldsMap &&
+    Array.from(_.fieldsMap.entries()).forEach((entry) => {
+      const [key, value] = entry;
+      fields.push(`(${value}) as ${key}`);
 
       aggFields.push(`
         CASE WHEN count(*)::int = 1 
         THEN (array_agg(${value}))[1] 
-        END as ${key}`)
-    })
+        END as ${key}`);
+    });
 
-  const where = _.viewport || `AND ${_.geom} IS NOT NULL` 
+  const where = _.viewport || `AND ${_.geom} IS NOT NULL`;
 
   // Calculate grid resolution (r) based on zoom level and resolution parameter.
-  const r = parseInt(40075016.68 / Math.pow(2, _.z) * _.resolution);
+  const r = parseInt((40075016.68 / Math.pow(2, _.z)) * _.resolution);
 
   return `
     SELECT
@@ -51,5 +49,5 @@ module.exports = _ => {
       FROM ${_.table}
       WHERE TRUE ${where} \${filter}) grid
 
-    GROUP BY x_round, y_round;`
-}
+    GROUP BY x_round, y_round;`;
+};

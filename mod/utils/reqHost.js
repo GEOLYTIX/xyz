@@ -9,9 +9,7 @@ Exports the reqHost utility method.
 @module /utils/reqHost
 */
 
- 
-
-const logger = require('./logger')
+const logger = require('./logger');
 
 /**
 @function reqHost
@@ -27,23 +25,17 @@ The host value can be logged with the `reqHost` logger key.
 */
 
 module.exports = function reqHost(req) {
-
-  let host
+  let host;
 
   if (req.headers.host.startsWith('localhost')) {
-
-    host = `http://${req.headers.host}${xyzEnv.DIR}`
-
+    host = `http://${req.headers.host}${xyzEnv.DIR}`;
   } else if (req.headers.host) {
-
-    host = `https://${xyzEnv.ALIAS||req.headers.host}${xyzEnv.DIR}`
-
+    host = `https://${xyzEnv.ALIAS || req.headers.host}${xyzEnv.DIR}`;
   } else if (req.headers.referer) {
-
-    host = new URL(req.headers.referer).origin
+    host = new URL(req.headers.referer).origin;
   }
 
-  logger(host, 'reqhost')
+  logger(host, 'reqhost');
 
-  return host
-}
+  return host;
+};

@@ -18,8 +18,7 @@ const key = 'hash:.*';
 
 // Get the current git commit hash
 // Execute git command to get current commit hash
-const hash = execSync('git rev-parse HEAD')  
-
+const hash = execSync('git rev-parse HEAD')
   // Convert Buffer to string
   .toString()
 
@@ -28,30 +27,30 @@ const hash = execSync('git rev-parse HEAD')
 
 // Read the contents of mapp.mjs file
 let data = fs.readFileSync(
-
   // Path to the file
   './lib/mapp.mjs',
 
   // Specify encoding
-  'utf-8');
+  'utf-8',
+);
 
 // Replace all occurrences of the old hash with the new commit hash
 data = data.replace(
-
   // Global regex to match all occurrences
   new RegExp(key, 'g'),
 
   // Replace with new hash string
-  `hash: '${hash}',`);
+  `hash: '${hash}',`,
+);
 
 // Write the updated content back to the file
 fs.writeFileSync(
-
   // Path to the file
   './lib/mapp.mjs',
-  
+
   // Updated content
-  data);
+  data,
+);
 
 // Run the build script defined in package.json
 // Execute build command

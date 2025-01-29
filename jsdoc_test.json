@@ -1,40 +1,36 @@
 {
-    "source": {
-        "include": [
-            "tests"
-        ],
-        "includePattern": ".js$"
-    },
-    "plugins": [
-        "plugins/markdown"
-    ],
-    "opts": {
-        "encoding": "utf8",
-        "readme": "TESTING.md",
-        "destination": "docs/tests/",
-        "recurse": true,
-        "verbose": true,
-        "template": "./node_modules/clean-jsdoc-theme",
-        "theme_opts": {
-            "title": "Mapp Tests",
-            "homepageTitle": "Mapp Tests",
-            "favicon": "../public/icons/favicon.ico",
-            "menu": [
-                {
-                    "title": "Github",
-                    "id": "github",
-                    "link": "https://github.com/GEOLYTIX/xyz"
-                },
-                {
-                    "title": "XYZ",
-                    "id": "xyz",
-                    "link": "/docs"
-                }
-            ]
+  "source": {
+    "include": ["tests"],
+    "includePattern": ".js$"
+  },
+  "plugins": ["plugins/markdown"],
+  "opts": {
+    "encoding": "utf8",
+    "readme": "TESTING.md",
+    "destination": "docs/tests/",
+    "recurse": true,
+    "verbose": true,
+    "template": "./node_modules/clean-jsdoc-theme",
+    "theme_opts": {
+      "title": "Mapp Tests",
+      "homepageTitle": "Mapp Tests",
+      "favicon": "../public/icons/favicon.ico",
+      "menu": [
+        {
+          "title": "Github",
+          "id": "github",
+          "link": "https://github.com/GEOLYTIX/xyz"
+        },
+        {
+          "title": "XYZ",
+          "id": "xyz",
+          "link": "/docs"
         }
-    },
-    "markdown": {
-        "hardwrap": false,
-        "idInHeadings": true
+      ]
     }
+  },
+  "markdown": {
+    "hardwrap": false,
+    "idInHeadings": true
+  }
 }

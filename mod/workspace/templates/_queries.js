@@ -38,17 +38,17 @@ module.exports = {
   cluster: {
     layer: true,
     render: require('./cluster'),
-    reduce: true
+    reduce: true,
   },
   cluster_hex: {
     layer: true,
     render: require('./cluster_hex'),
-    reduce: true
+    reduce: true,
   },
   wkt: {
     layer: true,
     render: require('./wkt'),
-    reduce: true
+    reduce: true,
   },
   infotip: {
     layer: true,
@@ -77,7 +77,7 @@ module.exports = {
   location_new: {
     layer: true,
     render: require('./location_new'),
-    value_only: true
+    value_only: true,
   },
   location_delete: {
     layer: true,
@@ -94,16 +94,16 @@ module.exports = {
   location_count: {
     layer: true,
     template: require('./location_count'),
-    value_only: true
+    value_only: true,
   },
   mvt: {
     layer: true,
     render: require('./mvt'),
-    value_only: true
+    value_only: true,
   },
   mvt_geom: {
     layer: true,
     render: require('./mvt_geom'),
-    value_only: true
-  }
-}
+    value_only: true,
+  },
+};
