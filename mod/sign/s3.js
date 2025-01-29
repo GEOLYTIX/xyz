@@ -65,7 +65,7 @@ The aws-sdk/client-s3 and aws-sdk/s3-request-presigner are optional dependencies
 let clientSDK;
 let getSignedUrl;
 let credentials;
-let exportedModule = null;
+let exportedModule;
 
 if (!xyzEnv.AWS_S3_CLIENT) {
   exportedModule = null;
