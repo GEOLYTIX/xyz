@@ -36,16 +36,3 @@
 .active > .material-symbols-outlined {
   color: var(--color-on);
 }
-
-html.dark-mode {
-  .active > .material-symbols-outlined {
-    color: var(--dm-color-on);
-  }
-  .material-symbols-outlined {
-    color: var(--dm-color-light-secondary);
-
-    &.active {
-      color: var(--dm-color-on);
-    }
-  }
-}

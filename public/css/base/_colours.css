@@ -85,39 +85,3 @@
 .no-colour {
   color: var(--color-no);
 }
-
-/* dark mode classes */
-
-html.dark-mode {
-  .primary-colour {
-    color: var(--dm-color-on);
-
-    &.active {
-      color: var(--dm-color-light);
-    }
-  }
-
-  .bg-light-tertiary {
-    background-color: var(--dm-color-dark-faded);
-  }
-
-  .input-range.single {
-    &::after,
-    &::before {
-      background: linear-gradient(
-        0deg,
-        transparent 0 45%,
-        #fff 45% 55%,
-        transparent 55% 100%
-      );
-    }
-  }
-
-  #ctrl-panel {
-    background-color: var(--dm-color-dark-neutral);
-  }
-
-  #ctrl-tabs {
-    background-color: var(--dm-color-darker);
-  }
-}
