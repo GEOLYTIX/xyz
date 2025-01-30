@@ -14,6 +14,19 @@
   --color-on: #e18335;
   --color-no: #a21309;
   --color-changed: #ffffa7;
+  --dm-color-on: #e18335;
+  --dm-color-medium: #555555;
+  --dm-color-dark-faded: #333333;
+  --dm-color-dark-neutral: #222222;
+  --dm-color-dark: #111111;
+  --dm-color-darker: #151515;
+  --dm-color-light: #ffffff;
+  --dm-color-light-secondary: #f2f2f2;
+  --dm-color-light-darker: #d8d8d8;
+}
+* {
+  transition: 0.2s ease-in-out;
+  transition-property: background-color;
 }
 .primary-colour {
   color: var(--color-primary);
@@ -43,23 +56,6 @@
 }
 .no-colour {
   color: var(--color-no);
-}
-
-/* public/css/base/_colours_dark_mode.css */
-:root {
-  --dm-color-on: #e18335;
-  --dm-color-medium: #555555;
-  --dm-color-dark-faded: #333333;
-  --dm-color-dark-neutral: #222222;
-  --dm-color-dark: #111111;
-  --dm-color-darker: #151515;
-  --dm-color-light: #ffffff;
-  --dm-color-light-secondary: #f2f2f2;
-  --dm-color-light-darker: #d8d8d8;
-}
-* {
-  transition: 0.2s ease-in-out;
-  transition-property: background-color;
 }
 html.dark-mode {
   .primary-colour {
