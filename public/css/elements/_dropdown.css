@@ -28,7 +28,7 @@
       width: 1.5em;
 
       &:after {
-        color: var(--color-primary);
+        color: var(--color-off-black);
         content: 'arrow_drop_down';
       }
     }
