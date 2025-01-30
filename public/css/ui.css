@@ -1140,7 +1140,7 @@ dialog.alert-confirm {
     white-space: pre;
     text-wrap: pretty;
     text-align: center;
-    padding: 1em;
+    margin: 0 1em 1em;
   }
   .buttons {
     display: grid;
