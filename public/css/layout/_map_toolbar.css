@@ -15,12 +15,6 @@
     background-color: var(--dm-color-light);
     opacity: 0.8;
   }
-
-  html.dark-mode {
-    #mapButton {
-      background-color: var(--dm-color-darker);
-    }
-  }
 }
 
 @media only screen and (max-width: 768px) {

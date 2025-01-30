@@ -54,19 +54,3 @@ button {
     color: var(--color-on);
   }
 }
-
-html.dark-mode {
-  button {
-    color: var(--dm-color-light);
-    &.primary-colour {
-      color: var(--dm-color-light);
-    }
-    &.active {
-      color: var(--dm-color-on);
-    }
-
-    & > .primary-colour {
-      color: var(--dm-color-light);
-    }
-  }
-}
