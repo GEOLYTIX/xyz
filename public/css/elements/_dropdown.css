@@ -2,7 +2,7 @@
   width: 100%;
   overflow: visible;
   position: relative;
-  background-color: white;
+  background-color: var(--color-light);
   box-shadow: var(--color-mid) 0px 8px 24px;
 
   &:disabled {
@@ -22,11 +22,15 @@
       text-overflow: ellipsis;
     }
 
-    & > .icon {
+    > .material-symbols-outlined {
       pointer-events: none;
       margin-left: auto;
       width: 1.5em;
-      content: url('../../icons/icon-drop-down.svg');
+
+      &:after {
+        color: var(--color-primary);
+        content: 'arrow_drop_down';
+      }
     }
   }
 
@@ -40,7 +44,7 @@
     box-shadow: 1px 1px 3px var(--color-primary-light);
     margin-top: -1px;
     text-align: left;
-    background-color: white;
+    background-color: var(--color-light);
     z-index: 997;
 
     & > li {
@@ -67,11 +71,13 @@
     }
   }
 
-  &.active > ul {
-    display: block;
+  &.active {
+    & > ul {
+      display: block;
+    }
 
-    & > .head > .icon {
-      content: url('../../icons/icon-drop-up.svg');
+    & > .head > .material-symbols-outlined:after {
+      content: 'arrow_drop_up';
     }
   }
 
@@ -84,7 +90,7 @@
   .dropdown {
     box-shadow: none;
 
-    & > .head > .icon {
+    & > .head > .material-symbols-outlined {
       display: none;
     }
   }
@@ -97,14 +103,22 @@ html.dark-mode {
     &.active .head {
       background: var(--dm-color-on);
     }
-    ul .label {
-      background-color: var(--dm-color-dark-faded);
+
+    ul {
+      &.label {
+        background-color: var(--dm-color-dark-faded);
+      }
     }
+
     ul > li,
     .head {
       background: var(--dm-color-medium);
       color: var(--dm-color-light);
       border-color: var(--dm-color-dark-faded);
+
+      > .material-symbols-outlined:after {
+        color: var(--color-light);
+      }
     }
 
     ul > li {
