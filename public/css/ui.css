@@ -7,6 +7,7 @@
   --color-primary: #003d57;
   --color-primary-light: #939faa;
   --color-light: #ffffff;
+  --color-off-light: #eeeeee;
   --color-light-secondary: #f2f2f2;
   --color-light-tertiary: #fafafa;
   --color-mid: #e3e3e3;
@@ -18,7 +19,7 @@
   color: var(--color-primary);
 }
 .primary-background {
-  color: white;
+  color: var(--color-light);
   background-color: var(--color-primary);
 }
 .light-background {
@@ -100,7 +101,7 @@ html.dark-mode {
   cursor: pointer;
 }
 .box-shadow {
-  border: 1px solid #eee;
+  border: 1px solid var(--color-off-light);
   box-shadow: 2px 2px 4px var(--color-primary-light);
 }
 .bold {
@@ -1200,17 +1201,41 @@ dialog.alert-confirm {
     & .content {
       padding: 1em;
     }
-    &::after {
-      content: initial;
-    }
-  }
-  &.active {
-    background-color: var(--color-primary);
-    color: #fff;
     & .panel {
-      bottom: 2em;
-      pointer-events: auto;
-      opacity: 1;
+      display: block;
+      position: absolute;
+      width: 100%;
+      bottom: 15em;
+      left: 0;
+      right: 0;
+      z-index: 99;
+      color: var(--color-off-black);
+      background: var(--color-light);
+      overflow: hidden;
+      padding: 1em 1.5em;
+      opacity: 0;
+      border-radius: 3px;
+      box-shadow: 1px 1px 3px var(--color-primary-light);
+      pointer-events: none;
+      transition: 0.2s ease-in-out;
+      & .content {
+        padding: 1em;
+      }
+      &::after {
+        content: initial;
+      }
+    }
+    &.active {
+      background-color: var(--color-primary);
+      color: #fff;
+      & .panel {
+        bottom: 2em;
+        pointer-events: auto;
+        opacity: 1;
+      }
+      &.downward .panel {
+        bottom: -7em;
+      }
     }
     &.downward .panel {
       bottom: -7em;
@@ -1472,7 +1497,7 @@ html.dark-mode {
     z-index: 997;
     & > li {
       padding: 5px;
-      color: var(--off);
+      color: var(--color-off-black);
     }
     & > li:hover {
       background-color: var(--color-primary-light);
