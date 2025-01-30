@@ -36,7 +36,7 @@ button {
   }
 }
 
-html.dark-mode {
+.dark-mode {
   .mask-icon {
     background: var(--color-light-secondary);
 

@@ -45,9 +45,3 @@
     box-shadow: none;
   }
 }
-
-html.dark-mode {
-  .searchbox {
-    box-shadow: unset;
-  }
-}

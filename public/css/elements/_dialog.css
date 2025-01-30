@@ -69,10 +69,3 @@ dialog {
     }
   }
 }
-
-html.dark-mode {
-  dialog {
-    color: var(--dm-color-light);
-    background-color: var(--dm-color-dark-faded);
-  }
-}
