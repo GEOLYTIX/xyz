@@ -150,15 +150,3 @@
     margin-left: auto;
   }
 }
-
-html.dark-mode {
-  .location-view-grid {
-    .layer-key > span {
-      background-color: var(--dm-color-on);
-    }
-
-    .location canvas {
-      filter: invert(1);
-    }
-  }
-}
