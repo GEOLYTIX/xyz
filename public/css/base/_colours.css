@@ -7,6 +7,8 @@
 
   --color-light: #ffffff;
 
+  --color-off-light: #eeeeee;
+
   --color-light-secondary: #f2f2f2;
 
   --color-light-tertiary: #fafafa;
@@ -25,7 +27,7 @@
 }
 
 .primary-background {
-  color: white;
+  color: var(--color-light);
   background-color: var(--color-primary);
 }
 

@@ -45,7 +45,7 @@
 
     & > li {
       padding: 5px;
-      color: var(--off);
+      color: var(--color-off-black);
     }
 
     & > li:hover {

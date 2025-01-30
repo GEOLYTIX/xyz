@@ -24,9 +24,9 @@ English being the default language, each language template should have the 'en' 
 @module /utils/languageTemplates
 */
 
-const getFrom = require('../provider/getFrom')
+const getFrom = require('../provider/getFrom');
 
-const getTemplate = require('../workspace/getTemplate')
+const getTemplate = require('../workspace/getTemplate');
 
 /**
 @function languageTemplates
@@ -48,47 +48,42 @@ Valid language template objects must have an `en` property. The english template
 @returns {Promise} The promise will resolve to a string or object.
 */
 module.exports = async function languageTemplates(params) {
-
   if (params.template === undefined) return;
 
-  const languageTemplate = await getTemplate(params.template)
+  const languageTemplate = await getTemplate(params.template);
 
   if (languageTemplate instanceof Error) {
-
     // Return the template string value if the template is not available in workspace.
-    return params.template
+    return params.template;
   }
 
   // NOT a language template
   if (typeof languageTemplate.template === 'string') {
-
-    return languageTemplate.template
+    return languageTemplate.template;
   }
 
   // The getTemplate method failed to retrieve the template from a src string property.
   if (languageTemplate.src && languageTemplate.err instanceof Error) {
-
-    return params.template
+    return params.template;
   }
 
   // Set english as default template language.
-  params.language ??= 'en'
+  params.language ??= 'en';
 
   // Assign language property from languageTemplate as template
   const template = Object.hasOwn(languageTemplate, params.language)
     ? languageTemplate[params.language]
     : languageTemplate.en;
 
-  if (typeof template !== 'string') return template
+  if (typeof template !== 'string') return template;
 
-  const method = template.split(':')[0]
+  const method = template.split(':')[0];
 
   // HTML Templates must be gotten as string from [template] string.
   if (Object.hasOwn(getFrom, method)) {
-
     // Get template from method.
-    return await getFrom[method](template)
+    return await getFrom[method](template);
   }
 
-  return template
-}
+  return template;
+};
