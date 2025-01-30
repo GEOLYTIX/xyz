@@ -1,4 +1,5 @@
 :root {
+  /* light colour mode */
   --color-off-black: #3f3f3f;
 
   --color-primary: #003d57;
@@ -20,7 +21,34 @@
   --color-no: #a21309;
 
   --color-changed: #ffffa7;
+
+  /* dark colour mode */
+
+  --dm-color-on: #e18335;
+
+  --dm-color-medium: #555555;
+
+  --dm-color-dark-faded: #333333;
+
+  --dm-color-dark-neutral: #222222;
+
+  --dm-color-dark: #111111;
+
+  --dm-color-darker: #151515;
+
+  --dm-color-light: #ffffff;
+
+  --dm-color-light-secondary: #f2f2f2;
+
+  --dm-color-light-darker: #d8d8d8;
 }
+
+* {
+  transition: 0.2s ease-in-out;
+  transition-property: background-color;
+}
+
+/* light mode classes */
 
 .primary-colour {
   color: var(--color-primary);
@@ -58,4 +86,40 @@
 
 .no-colour {
   color: var(--color-no);
+}
+
+/* dark mode classes */
+
+html.dark-mode {
+  .primary-colour {
+    color: var(--dm-color-on);
+
+    &.active {
+      color: var(--dm-color-light);
+    }
+  }
+
+  .bg-light-tertiary {
+    background-color: var(--dm-color-dark-faded);
+  }
+
+  .input-range.single {
+    &::after,
+    &::before {
+      background: linear-gradient(
+        0deg,
+        transparent 0 45%,
+        #fff 45% 55%,
+        transparent 55% 100%
+      );
+    }
+  }
+
+  #ctrl-panel {
+    background-color: var(--dm-color-dark-neutral);
+  }
+
+  #ctrl-tabs {
+    background-color: var(--dm-color-darker);
+  }
 }
