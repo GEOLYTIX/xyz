@@ -6,14 +6,3 @@
     }
   }
 }
-
-html.dark-mode {
-  .key {
-    button.layer-key {
-      &.active {
-        background-color: var(--dm-color-on);
-        color: var(--dm-color-darker);
-      }
-    }
-  }
-}

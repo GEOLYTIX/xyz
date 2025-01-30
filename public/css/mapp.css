@@ -54,34 +54,6 @@
 .no-colour {
   color: var(--color-no);
 }
-html.dark-mode {
-  .primary-colour {
-    color: var(--dm-color-on);
-    &.active {
-      color: var(--dm-color-light);
-    }
-  }
-  .bg-light-tertiary {
-    background-color: var(--dm-color-dark-faded);
-  }
-  .input-range.single {
-    &::after,
-    &::before {
-      background:
-        linear-gradient(
-          0deg,
-          transparent 0 45%,
-          #fff 45% 55%,
-          transparent 55% 100%);
-    }
-  }
-  #ctrl-panel {
-    background-color: var(--dm-color-dark-neutral);
-  }
-  #ctrl-tabs {
-    background-color: var(--dm-color-darker);
-  }
-}
 
 /* public/css/layout/_ol.css */
 .ol-scale-line {
@@ -89,9 +61,9 @@ html.dark-mode {
   background: none;
 }
 .ol-scale-line-inner {
-  border: 2px solid #222;
+  border: 2px solid var(--color-off-black);
   border-top: none;
-  color: #222;
+  color: var(--color-off-black);
   text-align: center;
   margin: 1px;
   will-change: contents, width;
@@ -122,7 +94,7 @@ html.dark-mode {
     display: block;
     margin: 1px;
     padding: 0;
-    color: #fff;
+    color: var(--color-light);
     font-weight: 700;
     text-decoration: none;
     font-size: inherit;

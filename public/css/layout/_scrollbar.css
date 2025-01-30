@@ -15,17 +15,3 @@
 ::-webkit-scrollbar-corner {
   background: var(--color-light-secondary);
 }
-
-html.dark-mode {
-  ::-webkit-scrollbar-track {
-    background: var(--dm-color-dark-faded);
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background: var(--dm-color-color-on);
-  }
-
-  ::-webkit-scrollbar-corner {
-    background: var(--dm-color-dark-faded);
-  }
-}
