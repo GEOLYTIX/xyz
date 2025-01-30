@@ -36,15 +36,4 @@
       height: 3em;
     }
   }
-
-  html.dark-mode {
-    #mapButton {
-      background-color: unset;
-
-      & > button,
-      & > a {
-        background-color: var(--dm-color-dark-faded);
-      }
-    }
-  }
 }
