@@ -12,13 +12,13 @@ dialog.alert-confirm {
     outline: none;
   }
 
-    h4 {
-        padding: 0.5em 1em;
-        background-color: var(--color-primary);
-        border-bottom: solid 2px var(--color-primary-light);
-        color: var(--color-light);
-        width: 100%;
-    }
+  h4 {
+    padding: 0.5em 1em;
+    background-color: var(--color-primary);
+    border-bottom: solid 2px var(--color-primary-light);
+    color: var(--color-light);
+    width: 100%;
+  }
 
   .content {
     padding: 1em;
@@ -28,7 +28,7 @@ dialog.alert-confirm {
     white-space: pre;
     text-wrap: pretty;
     text-align: center;
-    padding: 1em;
+    margin: 0 1em 1em;
   }
 
   .buttons {
