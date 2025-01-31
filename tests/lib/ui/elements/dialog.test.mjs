@@ -126,7 +126,7 @@ export function dialog() {
           const dialog = mapp.ui.elements.dialog(new_params);
 
           dialog.node
-            .querySelector('header > button.mask-icon.minimize-btn')
+            .querySelector('header > button.minimize-btn')
             .dispatchEvent(new Event('click'));
           let minimized = dialog.node.classList.contains('minimized');
           codi.assertTrue(
@@ -135,7 +135,7 @@ export function dialog() {
           );
 
           dialog.node
-            .querySelector('header > button.mask-icon.minimize-btn')
+            .querySelector('header > button.minimize-btn')
             .dispatchEvent(new Event('click'));
           minimized = dialog.node.classList.contains('minimized');
           codi.assertFalse(
@@ -143,21 +143,9 @@ export function dialog() {
             'The dialog content should not be visible',
           );
 
-            params.minimizeBtn = true;
-            const new_params = { ...params }
-
-            const dialog = mapp.ui.elements.dialog(new_params);
-
-            dialog.node.querySelector('header > button.minimize-btn').dispatchEvent(new Event('click'))
-            let minimized = dialog.node.classList.contains('minimized');
-            codi.assertTrue(minimized, 'The dialog content should not be visible');
-
-            dialog.node.querySelector('header > button.minimize-btn').dispatchEvent(new Event('click'))
-            minimized = dialog.node.classList.contains('minimized');
-            codi.assertFalse(minimized, 'The dialog content should not be visible');
-
-            dialog.close();
-        });
-
-    });
+          dialog.close();
+        },
+      );
+    },
+  );
 }
