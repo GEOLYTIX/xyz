@@ -644,6 +644,7 @@
   }
 }
 
+
 .toggle {
   &.bg-icon {
     background-image: url('../../icons/icon-toggle-off.svg');
@@ -658,12 +659,26 @@
       -webkit-mask-image: url('../../icons/icon-toggle-on.svg');
       mask-image: url('../../icons/icon-toggle-on.svg');
     }
+
+  &::after {
+    content: "toggle_off";
   }
+
+  &.on::after {
+    content: "toggle_on";
+    color: var(--color-on);
+  }
+
   &.disabled {
     opacity: 0.5;
     pointer-events: none;
   }
 }
+
+
+
+
+
 
 .touch-app {
   &.bg-icon {
