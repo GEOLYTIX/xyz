@@ -1,85 +1,129 @@
 <!doctype html>
 <html lang="en">
+  <head data-dir="{{dir}}">
+    <title>XYZ | Registration</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{{dir}}/public/icons/favicon.ico"
+    />
 
-<head data-dir="{{dir}}">
-  <title>XYZ | Registration</title>
-  <link rel="icon" type="image/x-icon" href="{{dir}}/public/icons/favicon.ico" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="{{dir}}/public/views/register/_register.js" defer></script>
+    <link rel="stylesheet" href="{{dir}}/public/views/register/_register.css" />
+  </head>
 
-  <script src="{{dir}}/public/views/register/_register.js" defer></script>
-  <link rel="stylesheet" href="{{dir}}/public/views/register/_register.css" />
+  <body class="register_form">
+    <form method="post">
+      <input style="display: none" name="language" required value="en" />
 
-</head>
+      <input style="display: none" name="register" value="true" />
 
-<body class="register_form">
-  <form method="post">
+      <div class="input-group">
+        <input
+          id="auth_user_email"
+          name="email"
+          type="email"
+          autocomplete="off"
+          required
+          maxlength="50"
+          value=""
+        />
+        <span class="bar"></span>
+        <label for="auth_user_email">E-mail</label>
+      </div>
 
-    <input style="display:none;" name="language" required value="en">
+      <div class="input-group">
+        <input
+          id="auth_user_password"
+          name="password"
+          type="password"
+          autocomplete="off"
+          required
+          pattern="(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{12,}$"
+          value=""
+        />
+        <span class="bar"></span>
+        <label for="auth_user_password"
+          >New Password (min. length 12, must contain a digit, upper, and lower
+          case character)</label
+        >
+      </div>
 
-    <input style="display: none;" name="register" value=true>
+      <div class="input-group">
+        <input
+          id="auth_user_password_retype"
+          type="password"
+          autocomplete="off"
+          required
+          value=""
+        />
+        <span class="bar"></span>
+        <label for="auth_user_password_retype">Re-type password</label>
+      </div>
 
-    <div class="input-group">
-      <input id="auth_user_email" name="email" type="email" autocomplete="off" required maxlength="50" value="">
-      <span class="bar"></span>
-      <label for="auth_user_email">E-mail</label>
-    </div>
+      <br />
 
-    <div class="input-group">
-      <input id="auth_user_password" name="password" type="password" autocomplete="off" required pattern="(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{12,}$" value="">
-      <span class="bar"></span>
-      <label for="auth_user_password">New Password (min. length 12, must contain a digit, upper, and lower case character)</label>
-    </div>
+      <p class="bold">Privacy Agreement</p>
 
-    <div class="input-group">
-      <input id="auth_user_password_retype" type="password" autocomplete="off" required value="">
-      <span class="bar"></span>
-      <label for="auth_user_password_retype">Re-type password</label>
-    </div>
+      <p>
+        Here at Geolytix we take your privacy seriously and will only use your
+        personal information to administer your account and provide the products
+        and services requested from us. We will never share your personal data
+        with a third party.
+      </p>
 
-    <br>
+      <p>
+        Disabling your account can be done through your administrator however if
+        you wish for your details to be permanently removed please email
+        <a class="mailto" href="mailto:support@geolytix.co.uk"
+          >support@geolytix.co.uk</a
+        >
+      </p>
 
-    <p class="bold">Privacy Agreement</p>
+      <p>
+        This website is owned and operated by Geolytix, with its principal place
+        of business at The Finsbury Business Centre, 40 Bowling Green Lane,
+        London EC1R 0NE
+      </p>
 
-    <p>Here at Geolytix we take your privacy seriously and will only use your personal information to administer
-      your account and provide the products and services requested from us. We will never share your personal
-      data with a third party.</p>
+      <label class="checkbox">
+        <input id="privacy_agreement" type="checkbox" />
+        <div></div>
+        <span>I agree</span>
+      </label>
 
-    <p>Disabling your account can be done through your administrator however if you wish for your details to be
-      permanently removed please email <a class="mailto" href="mailto:support@geolytix.co.uk">support@geolytix.co.uk</a>
-    </p>
+      <button id="btnRegister" type="submit" formaction="register" disabled>
+        Register or Re-set Password
+      </button>
 
-    <p>This website is owned and operated by Geolytix, with its principal place of business at The Finsbury Business
-      Centre, 40 Bowling Green Lane, London EC1R 0NE</p>
+      <p class="bold">What happens next? Confirming your account</p>
 
-    <label class="checkbox">
-      <input id="privacy_agreement" type="checkbox">
-      <div></div>
-      <span>I agree</span>
-    </label>
+      <p>
+        An email will be sent to the email address you have provided, from
+        <a class="mailto" href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a
+        >, with a link to verify your account.
+      </p>
 
-    <button id="btnRegister" type="submit" formaction="register" disabled>
-      Register or Re-set Password
-    </button>
+      <p>
+        If this has not been received in a few minutes please check any spam /
+        junk folders. Adding
+        <a class="mailto" href="mailto:xyz@geolytix.co.uk"
+          >xyz@geolytix.co.uk</a
+        >
+        to your safe senders list will ensure messages get through.
+      </p>
 
-    <p class="bold">What happens next? Confirming your account</p>
+      <p>
+        After verification, a site administrator will approve new accounts. You
+        will receive a further email once your account has been approved.
+      </p>
 
-    <p>An email will be sent to the email address you have provided, from <a class="mailto"
-        href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a>, with a link to
-      verify your account.</p>
-
-    <p>If this has not been received in a few minutes please check any spam / junk folders. Adding
-      <a class="mailto" href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a> to your safe senders list will
-      ensure messages get through.</p>
-
-    <p>After verification, a site administrator will approve new accounts. You will receive a further email once
-      your account has been approved.</p>
-
-    <a class="switch" href="{{dir}}/public/?login">Already registered? Login.</a>
-
-  </form>
-
-</body>
-
+      <a class="switch" href="{{dir}}/public/?login"
+        >Already registered? Login.</a
+      >
+    </form>
+  </body>
 </html>

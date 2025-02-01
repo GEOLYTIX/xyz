@@ -1,48 +1,161 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="{{language}}">
-
-<head data-dir="{{dir}}" data-login="{{login}}">
-
+  <head data-dir="{{dir}}" data-login="{{login}}">
     <title>{{title}}</title>
 
-    <link rel="icon" type="image/x-icon" href="{{dir}}/public/icons/favicon.ico" />
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{{dir}}/public/icons/favicon.ico"
+    />
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
 
-    <script src="https://cdn.jsdelivr.net/npm/ol@v10.3.1/dist/ol.js" defer></script>
+    <script
+      src="https://cdn.jsdelivr.net/npm/ol@v10.3.1/dist/ol.js"
+      integrity="sha384-GtOM9G1JWFKmDbfOLBrez9YebIrX1pqVVtYukhqrKOtyneLNxnTIFMe8ER850GT/"
+      crossOrigin="anonymous"
+      defer
+    ></script>
 
     <!-- Load XYZ / MAPP stylesheet and library. -->
     <link rel="stylesheet" href="{{dir}}/public/css/mapp.css" />
     <link rel="stylesheet" href="{{dir}}/public/css/ui.css" />
 
     <script type="importmap">
-        {
-          "imports": {
-            "codi": "https://esm.sh/codi-test-framework@0.0.47"
-          }
-        } </script>
+      {
+        "imports": {
+          "codi": "https://esm.sh/codi-test-framework@0.0.47"
+        }
+      }
+    </script>
 
     <script type="module" src="{{dir}}/public/js/lib/mapp.js" defer></script>
     <script type="module" src="{{dir}}/public/js/lib/ui.js" defer></script>
-    <script type="module" src="{{dir}}/public/js/tests/_mapp.test.js" defer></script>
+    <script
+      type="module"
+      src="{{dir}}/public/js/tests/_mapp.test.js"
+      defer
+    ></script>
 
     <style>
-        html {
-            position: fixed;
-            bottom: 0%;
-            top: 0%;
-            height: 100%;
-            width: 100%;
+      html {
+        position: fixed;
+        bottom: 0%;
+        top: 0%;
+        height: 100%;
+        width: 100%;
+      }
+
+      #Map {
+        position: relative;
+      }
+
+      #Map .ol-scale-line {
+        right: 5px;
+        top: 5px;
+        position: fixed;
+      }
+
+      .map-attribution > .logo {
+        pointer-events: auto;
+        height: 1em;
+      }
+
+      #mapButton {
+        pointer-events: none;
+      }
+
+      #mapButton > * {
+        pointer-events: auto;
+      }
+
+      #mapButton .mask-icon.lock-open {
+        background-color: #afb42b;
+      }
+
+      #mapButton .mask-icon.logout {
+        background-color: #b71c1c;
+      }
+
+      #ctrls {
+        z-index: 9999;
+      }
+
+      #ctrl-tabs {
+        height: 50px;
+        width: 100%;
+        display: flex;
+        background-color: #003d57;
+      }
+
+      #ctrl-tabs > div {
+        flex-grow: 1;
+        mask-size: 3em;
+        -webkit-mask-size: 3em;
+        mask-position: center;
+        -webkit-mask-position: center;
+      }
+
+      #ctrl-tabs > .active {
+        background-color: #e18335;
+      }
+
+      #ctrl-tabs > .locations.mask-icon {
+        -webkit-mask-image: url('{{dir}}/public/icons/icon-search.svg');
+        mask-image: url('{{dir}}/public/icons/icon-search.svg');
+      }
+
+      #ctrl-tabs > .locations.mask-icon.active {
+        -webkit-mask-image: url('{{dir}}/public/icons/icon-location.svg');
+        mask-image: url('{{dir}}/public/icons/icon-location.svg');
+      }
+
+      #ctrl-panel {
+        height: calc(100% - 50px);
+        overflow-y: auto;
+      }
+
+      #ctrl-panel > div {
+        display: none;
+        padding: 10px;
+      }
+
+      #ctrl-panel > div.active {
+        display: block;
+      }
+
+      .bg-icon.mapp {
+        background-image: url('https://geolytix.github.io/public/mapp_v4/emblem.svg');
+      }
+
+      @media only screen and (min-width: 768px) {
+        body {
+          display: grid;
+          grid-template-columns: 350px 10px auto;
+        }
+
+        body.fullscreen {
+          grid-template-columns: 0 0 auto !important;
+        }
+
+        body.fullscreen #ctrls {
+          display: none;
         }
 
         #Map {
-            position: relative;
+          grid-row: 1;
+          grid-column: 3;
+          position: relative;
         }
 
-        #Map .ol-scale-line {
-            right: 5px;
-            top: 5px;
-            position: fixed;
+        #OL {
+          width: 100%;
+          height: 100vh;
+          position: absolute;
         }
 
         #ctrls {
@@ -61,21 +174,23 @@
         }
 
         #ctrl-panel {
-            height: calc(100% - 50px);
-            overflow-y: auto;
+          transform: rotateY(180deg);
         }
 
-        #ctrl-panel>div {
-            display: none;
-            padding: 10px;
+        #ctrl-panel > div {
+          transform: rotateY(180deg);
         }
 
-        #ctrl-panel>div.active {
-            display: block;
+        #ctrls {
+          grid-row: 1/4;
+          grid-column: 1;
+          height: 100%;
+          overflow: hidden;
         }
 
-        .bg-icon.mapp {
-            background-image: url("https://geolytix.github.io/public/mapp_v4/emblem.svg");
+        #Tabview {
+          grid-row: 3;
+          grid-column: 3;
         }
 
         @media only screen and (min-width: 768px) {
@@ -159,27 +274,113 @@
             }
 
         }
+
+        #tabview-divider {
+          position: relative;
+          grid-row: 2;
+          grid-column: 3;
+          background-image: url('{{dir}}/public/icons/pill-horizontal.svg');
+          background-repeat: no-repeat;
+          background-position: center;
+          background-color: white;
+          box-shadow: 0px -1px 6px -3px #777;
+        }
+
+        #tabview-divider:hover {
+          cursor: row-resize;
+        }
+
+        .desktop-display-none {
+          display: none;
+        }
+      }
+
+      @media only screen and (max-width: 768px) {
+        html {
+          overflow: scroll;
+        }
+
+        body {
+          overflow-y: scroll;
+          overflow-x: hidden;
+        }
+
+        #Map {
+          height: calc(100% - 50px);
+          width: 100%;
+        }
+
+        #OL {
+          width: 100%;
+          height: 100%;
+        }
+
+        #mapButton {
+          position: fixed;
+          top: 0;
+          left: 0;
+          height: 100%;
+        }
+
+        #mapButton > button,
+        #mapButton > a {
+          margin-bottom: 10px;
+          background-color: white;
+          box-shadow: 1px 1px 3px #777;
+          border-radius: 50%;
+          opacity: 0.9;
+          padding: 5px;
+          width: 3em;
+          height: 3em;
+        }
+
+        #ctrls {
+          width: 100%;
+          height: 100%;
+          position: relative;
+        }
+
+        #ctrls-divider {
+          display: none;
+        }
+
+        .mobile-hidden {
+          visibility: hidden;
+        }
+
+        .mobile-display-none {
+          display: none;
+        }
+
+        .mobile-disabled {
+          opacity: 0.3;
+          pointer-events: none;
+        }
+      }
     </style>
+  </head>
 
-</head>
-
-<body style="grid-template-rows: auto 0 0;">
-
+  <body style="grid-template-rows: auto 0 0">
     <div id="Map">
-
-        <div id="OL"></div>
-
+      <div id="OL"></div>
     </div>
 
     <div id="mapButton" class="btn-column"></div>
 
     <div id="tabview-divider"></div>
 
-    <div id="Tabview" class="tabview mobile-display-none desktop-display-none"></div>
+    <div
+      id="Tabview"
+      class="tabview mobile-display-none desktop-display-none"
+    ></div>
 
     <div id="ctrls-divider"></div>
 
     <div id="ctrls" class="lighter-background">
+      <div id="ctrl-tabs" class="hover">
+        <div data-id="layers" class="mask-icon layers active"></div>
+        <div data-id="locations" class="mask-icon locations"></div>
+      </div>
 
         <div id="ctrl-tabs" class="hover">
             <div data-id="layers" class="active material-symbols-outlined">
@@ -201,77 +402,70 @@
     </div>
 
     <script type="module">
+      import * as _codi from 'codi';
 
-        import * as _codi from "codi";
+      self.codi = _codi;
 
-        self.codi = _codi;
+      const urlParams = new URLSearchParams(window.location.search);
+      const integrity = urlParams.get('integrity');
+      const testFiles = integrity
+        ? [`${window.location.origin}{{dir}}/public/tests/integrity.test.mjs`]
+        : [`${window.location.origin}{{dir}}/tests/browser/local.test.mjs`];
 
-        const urlParams = new URLSearchParams(window.location.search);
-        const integrity = urlParams.get('integrity');
-        const testFiles = integrity ? [`${window.location.origin}{{dir}}/public/tests/integrity.test.mjs`] : [`${window.location.origin}{{dir}}/tests/browser/local.test.mjs`];
+      try {
+        // Set mapp.language to TEST
+        mapp.user ??= {};
 
-        try {
+        mapp.user.language = 'TEST';
+        mapp.language = 'TEST';
 
-            // Set mapp.language to TEST 
-            mapp.user ??= {};
-
-            mapp.user.language = 'TEST';
-            mapp.language = 'TEST';
-
-            // Language as URL parameter will override user language.
-            if (mapp.hooks.current.language) {
-
-                mapp.language = mapp.hooks.current.language
-
-            } else if (mapp?.user?.language) {
-
-                if (!Object.hasOwn(mapp.dictionaries, mapp.user.language)) {
-
-                    // Set mapp.language to english if user.language is not supported by mapp.dictionaries.
-                    console.warn(`'${mapp.user.language}' mapp.language is not supported by mapp.dictionaries.`)
-                    mapp.language = 'en'
-                } else {
-
-                    mapp.language = mapp.user.language
-                }
-            }
-
-            let results = {};
-
-            if (integrity) {
-                results = await codi.runWebTests(testFiles);
-            } else {
-                results = await codi.runWebTestFunction(_mappTest.coreTest);
-            }
-
-            const shouldDownload = urlParams.get('download') === 'true';
-
-            if (shouldDownload) {
-                const jsonString = JSON.stringify(results, null, 2);
-
-                const blob = new Blob([jsonString], { type: 'application/json' });
-
-                const url = URL.createObjectURL(blob);
-
-                const link = document.createElement('a');
-                link.href = url;
-                link.download = `${window.location.origin}{{dir}}-${Date.now()}.json`;
-
-                document.body.appendChild(link);
-
-                link.click();
-
-                document.body.removeChild(link);
-
-                URL.revokeObjectURL(url);
-            }
-
-
-        } catch (error) {
-            console.error('Error running tests:', error);
+        // Language as URL parameter will override user language.
+        if (mapp.hooks.current.language) {
+          mapp.language = mapp.hooks.current.language;
+        } else if (mapp?.user?.language) {
+          if (!Object.hasOwn(mapp.dictionaries, mapp.user.language)) {
+            // Set mapp.language to english if user.language is not supported by mapp.dictionaries.
+            console.warn(
+              `'${mapp.user.language}' mapp.language is not supported by mapp.dictionaries.`,
+            );
+            mapp.language = 'en';
+          } else {
+            mapp.language = mapp.user.language;
+          }
         }
+
+        let results = {};
+
+        if (integrity) {
+          results = await codi.runWebTests(testFiles);
+        } else {
+          results = await codi.runWebTestFunction(_mappTest.coreTest);
+        }
+
+        const shouldDownload = urlParams.get('download') === 'true';
+
+        if (shouldDownload) {
+          const jsonString = JSON.stringify(results, null, 2);
+
+          const blob = new Blob([jsonString], { type: 'application/json' });
+
+          const url = URL.createObjectURL(blob);
+
+          const link = document.createElement('a');
+          link.href = url;
+          link.download = `${window.location.origin}{{dir}}-${Date.now()}.json`;
+
+          document.body.appendChild(link);
+
+          link.click();
+
+          document.body.removeChild(link);
+
+          URL.revokeObjectURL(url);
+        }
+      } catch (error) {
+        console.error('Error running tests:', error);
+      }
     </script>
-
-</body>
-
+  </body>
 </html>

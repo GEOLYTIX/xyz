@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head data-dir="{{dir}}">
     <title>XYZ | Login</title>
@@ -15,12 +15,10 @@
   </head>
 
   <body class="login_form">
-    <div class="language-selector">
-      Choose Language:
+    <div class="language-selector">Choose Language:
       <select
         id="language"
-        onChange="(function(e){location=e.target.value})(event)"
-      >
+        onChange="(function(e){location=e.target.value})(event)">
         <option value="{{dir}}?language=en&login=true">English</option>
         <option value="{{dir}}?language=de&login=true">Deutsch</option>
         <option value="{{dir}}?language=fr&login=true">Français</option>
@@ -33,7 +31,6 @@
 
     <form action="{{dir}}/api/user/login" method="post" autocomplete="off">
       <input style="display: none" name="language" required value="en" />
-      <input style="display: none" name="redirect" value="{{redirect}}" />
 
       <div class="input-group">
         <input
@@ -70,9 +67,7 @@
         to log in.
       </p>
 
-      <a class="switch" href="{{dir}}/api/user/register?register=true"
-        >Register a new account or reset your password.</a
-      >
+      <a class="switch" href="{{dir}}/api/user/register?register=true">Register a new account or reset your password.</a>
     </form>
   </body>
 </html>

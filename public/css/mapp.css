@@ -73,7 +73,7 @@
 }
 .ol-control {
   position: absolute;
-  background-color: rgba(255, 255, 255, .4);
+  background-color: rgba(255, 255, 255, 0.4);
   border-radius: 4px;
   padding: 2px;
   & button {
@@ -87,8 +87,8 @@
     text-align: center;
     height: 1.375em;
     width: 1.375em;
-    line-height: .4em;
-    background-color: rgba(0, 60, 136, .5);
+    line-height: 0.4em;
+    background-color: rgba(0, 60, 136, 0.5);
     border: none;
     border-radius: 2px;
   }

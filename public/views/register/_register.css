@@ -2,15 +2,15 @@ body {
   margin: 0 auto !important;
   padding: 50px;
   max-width: 600px;
-  font: 14px "Open Sans", sans-serif;
+  font:
+    14px 'Open Sans',
+    sans-serif;
 }
 
 @media only screen and (max-width: 700px) {
-
   body {
     padding: 20px;
   }
-
 }
 
 p {
@@ -55,15 +55,15 @@ input:-webkit-autofill {
   width: 0;
   bottom: 0;
   position: absolute;
-  background: #AFB42B;
+  background: #afb42b;
   transition: 0.2s ease all;
   -moz-transition: 0.2s ease all;
   -webkit-transition: 0.2s ease all;
 }
 
-input:invalid+.bar:before,
-input:invalid+.bar:after {
-  background: #B71C1C;
+input:invalid + .bar:before,
+input:invalid + .bar:after {
+  background: #b71c1c;
 }
 
 .bar:before {
@@ -74,18 +74,20 @@ input:invalid+.bar:after {
   right: 50%;
 }
 
-input:focus~.bar:before,
-input:focus~.bar:after {
+input:focus ~ .bar:before,
+input:focus ~ .bar:after {
   width: 50%;
 }
 
 button {
   color: white;
-  background-color: #003D57;
+  background-color: #003d57;
   margin: 10px 0;
   padding: 8px;
   text-align: center;
-  font: 18px "Open Sans", sans-serif;
+  font:
+    18px 'Open Sans',
+    sans-serif;
   font-weight: bold;
   border-radius: 3px;
   border: 0;
@@ -98,13 +100,13 @@ button {
 
 .switch {
   font-size: 120%;
-  color: #003D57;
+  color: #003d57;
   font-weight: bold;
 }
 
 button:hover {
   cursor: pointer;
-  color: #EC602D;
+  color: #ec602d;
   background-color: white;
 }
 
@@ -113,7 +115,7 @@ button:disabled {
 }
 
 .msg {
-  color: #EC602D;
+  color: #ec602d;
 }
 
 .mailto {
@@ -129,12 +131,12 @@ button:disabled {
   display: none;
 }
 
-.checkbox>span {
+.checkbox > span {
   display: inline-block;
   vertical-align: middle;
 }
 
-.checkbox>div {
+.checkbox > div {
   display: inline-block;
   vertical-align: middle;
   width: 18px;
@@ -147,7 +149,7 @@ button:disabled {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M19 5v14H5V5h14m0-2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z'/%3E%3C/svg%3E");
 }
 
-input:checked+div {
+input:checked + div {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath d='M19 3H5c-1.11 0-2 .9-2 2v14c0 1.1.89 2 2 2h14c1.11 0 2-.9 2-2V5c0-1.1-.89-2-2-2zm-9 14l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z'/%3E%3C/svg%3E");
 }
 

@@ -5,7 +5,6 @@ The location_delete layer query removes a record from a layer table where the la
 
 @module /workspace/templates/location_delete
 */
-module.exports = _ => {
-
-  return `DELETE FROM ${_.table} WHERE ${_.layer.qID} = %{id};`
-}
+module.exports = (_) => {
+  return `DELETE FROM ${_.table} WHERE ${_.layer.qID} = %{id};`;
+};

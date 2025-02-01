@@ -4,10 +4,10 @@
 
 module.exports = {
   default_view: {
-    en: 'file:/public/views/_default.html'
+    en: 'file:/public/views/_default.html',
   },
   user_admin_view: {
-    en: 'file:/public/views/_user.html'
+    en: 'file:/public/views/_user.html',
   },
   register_view: {
     en: 'file:/public/views/register/_register_en.html',
@@ -16,7 +16,7 @@ module.exports = {
     ja: 'file:/public/views/register/_register_ja.html',
     ko: 'file:/public/views/register/_register_ko.html',
     pl: 'file:/public/views/register/_register_pl.html',
-    zh: 'file:/public/views/register/_register_zh.html'
+    zh: 'file:/public/views/register/_register_zh.html',
   },
   password_reset_view: {
     en: 'file:/public/views/register/_register_en.html',
@@ -25,7 +25,7 @@ module.exports = {
     ja: 'file:/public/views/register/_register_ja.html',
     ko: 'file:/public/views/register/_register_ko.html',
     pl: 'file:/public/views/register/_register_pl.html',
-    zh: 'file:/public/views/register/_register_zh.html'
+    zh: 'file:/public/views/register/_register_zh.html',
   },
   login_view: {
     en: 'file:/public/views/login/_login_en.html',
@@ -34,6 +34,6 @@ module.exports = {
     ja: 'file:/public/views/login/_login_ja.html',
     ko: 'file:/public/views/login/_login_ko.html',
     pl: 'file:/public/views/login/_login_pl.html',
-    zh: 'file:/public/views/login/_login_zh.html'
-  }
-}
+    zh: 'file:/public/views/login/_login_zh.html',
+  },
+};
