@@ -19,19 +19,29 @@ const __dirname = dirname(__filename);
 
 let privateKey, getSignedUrl;
 
+try {
+  ({ getSignedUrl } = await import('@aws-sdk/cloudfront-signer'));
+  console.log(getSignedUrl);
+} catch {
+  //Dependencies not installed
+}
+
 //Export nothing if the cloudfront key is not provided
 export default xyzEnv.KEY_CLOUDFRONT
-  ? (async () => {
+  ? (() => {
       try {
-        ({ getSignedUrl } = await import('@aws-sdk/cloudfront-signer'));
         privateKey = String(
           readFileSync(join(__dirname, `../../${xyzEnv.KEY_CLOUDFRONT}.pem`)),
         );
-        return cloudfront_signer;
-      } catch (err) {
-        if (xyzEnv.KEY_CLOUDFRONT && !getSignedUrl) {
-          console.error('Invalid cloudfront config.');
+
+        if (getSignedUrl) {
+          console.log('We are about not about to error');
+          return cloudfront_signer;
+        } else {
+          throw new Error('Missing Cloudfront signer dependency');
         }
+      } catch (error) {
+        console.error(error);
         return null;
       }
     })()
