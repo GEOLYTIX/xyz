@@ -99,7 +99,6 @@ Module Variables:
 **/
 
 // Import required dependencies
-import SAML from '@node-saml/node-saml';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { readFileSync } from 'fs';
@@ -113,8 +112,9 @@ import acl from '../user/acl.js';
 
 let samlStrat, samlConfig;
 
-const getModule = () => {
+const getModule = async () => {
   try {
+    const SAML = await import('@node-saml/node-saml');
     // Initialize SAML configuration
     samlConfig = {
       callbackUrl: xyzEnv.SAML_ACS,

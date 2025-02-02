@@ -26,5 +26,8 @@ export default {
     }
   },
   file: (ref) => file(ref.split(':')[1]),
-  cloudfront: (ref) => cloudfront(ref.split(':')[1]),
+  cloudfront: (ref) =>
+    xyzEnv.KEY_CLOUDFRONT
+      ? cloudfront(ref.split(':')[1])
+      : console.error('Cloudfront key is missing'),
 };

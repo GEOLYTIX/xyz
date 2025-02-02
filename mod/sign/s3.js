@@ -73,9 +73,8 @@ try {
   // Dependencies not installed
 }
 
-export default !xyzEnv.AWS_S3_CLIENT
-  ? null
-  : (() => {
+export default xyzEnv.AWS_S3_CLIENT
+  ? (() => {
       try {
         // Create credentials object from AWS_S3_CLIENT
         credentials = Object.fromEntries(
@@ -91,7 +90,8 @@ export default !xyzEnv.AWS_S3_CLIENT
       } catch (err) {
         return null;
       }
-    })();
+    })()
+  : null;
 
 /**
 @function s3_signer
