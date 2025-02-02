@@ -35,7 +35,6 @@ export default xyzEnv.KEY_CLOUDFRONT
         );
 
         if (getSignedUrl) {
-          console.log('We are about not about to error');
           return cloudfront_signer;
         } else {
           throw new Error('Missing Cloudfront signer dependency');
