@@ -19,13 +19,6 @@
     }
   }
 
-  & .mask-icon {
-    width: 1.5em;
-    height: 1.5em;
-    -webkit-mask-position: right;
-    mask-position: right;
-  }
-
   & .panel {
     display: block;
     position: absolute;
@@ -49,46 +42,46 @@
     }
 
     & .panel {
-        display: block;
-        position: absolute;
-        width: 100%;
-        bottom: 15em;
-        left: 0;
-        right: 0;
-        z-index: 99;
-        color: black;
-        background: white;
-        overflow: hidden;
-        padding: 1em 1.5em;
-        opacity: 0;
-        border-radius: 3px;
-        box-shadow: 1px 1px 3px var(--color-primary-light);
-        pointer-events: none;
-        transition: 0.2s ease-in-out;
+      display: block;
+      position: absolute;
+      width: 100%;
+      bottom: 15em;
+      left: 0;
+      right: 0;
+      z-index: 99;
+      color: var(--color-off-black);
+      background: var(--color-light);
+      overflow: hidden;
+      padding: 1em 1.5em;
+      opacity: 0;
+      border-radius: 3px;
+      box-shadow: 1px 1px 3px var(--color-primary-light);
+      pointer-events: none;
+      transition: 0.2s ease-in-out;
 
-        & .content {
-            padding: 1em;
-        }
+      & .content {
+        padding: 1em;
+      }
 
-        &::after {
-            content: initial;
-        }
+      &::after {
+        content: initial;
+      }
     }
 
     &.active {
-        background-color: var(--color-primary);
-        color: #fff;
+      background-color: var(--color-primary);
+      color: #fff;
 
-        & .panel {
-            bottom: 2em;
-            pointer-events: auto;
-            opacity: 1;
-        }
+      & .panel {
+        bottom: 2em;
+        pointer-events: auto;
+        opacity: 1;
+      }
 
-        &.downward .panel {
-            bottom: -7em;
-            /* places adjacent to the bottom border of parent */
-        }
+      &.downward .panel {
+        bottom: -7em;
+        /* places adjacent to the bottom border of parent */
+      }
     }
 
     &.downward .panel {
