@@ -11,11 +11,11 @@ Exports the [user] cookie method for the /api/user/cookie route.
 @module /user/cookie
 */
 
-const acl = require('./acl');
+import acl from './acl.js';
 
-const login = require('./login');
+import login from './login.js';
 
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
 /**
 @function cookie
@@ -42,7 +42,7 @@ The token user will be sent back to the client.
 @property {boolean} [req.params.destroy] URL parameter flag whether the cookie should be destroyed.
 @property {boolean} [req.params.create] URL parameter flag whether a new cookie should be created.
 */
-module.exports = async function cookie(req, res) {
+export default async function cookie(req, res) {
   // acl module will export an empty require object without the ACL being configured.
   if (acl === null) {
     return res.status(500).send('ACL unavailable.');
@@ -120,4 +120,4 @@ module.exports = async function cookie(req, res) {
 
     res.send(user);
   });
-};
+}

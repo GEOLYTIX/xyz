@@ -5,7 +5,7 @@ The infotip layer query returns a field property value from the location nearest
 
 @module /workspace/templates/infotip
 */
-module.exports = (_) => {
+export default (_) => {
   if (!_.coords)
     return `
     SELECT \${field} AS label

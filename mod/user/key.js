@@ -10,9 +10,9 @@ Exports the apiKey method for the /api/user/key route.
 @module /user/key
 */
 
-const acl = require('./acl');
+import acl from './acl.js';
 
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
 /**
 @function apiKey
@@ -34,7 +34,7 @@ Request parameter.
 Requesting user.
 */
 
-module.exports = async function apiKey(req, res) {
+export default async function apiKey(req, res) {
   // acl module will export an empty require object without the ACL being configured.
   if (acl === null) {
     return res.status(500).send('ACL unavailable.');
@@ -85,4 +85,4 @@ module.exports = async function apiKey(req, res) {
 
   // Send ACL token.
   res.send(key);
-};
+}

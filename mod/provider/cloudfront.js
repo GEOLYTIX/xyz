@@ -8,9 +8,8 @@ The cloudfront provider module exports a method to fetch resources from an AWS c
 
 @module /provider/cloudfront
 */
-
-const cloudfront_signer = require('../sign/cloudfront');
-const logger = require('../utils/logger');
+import cloudfront_signer from '../sign/cloudfront.js';
+import logger from '../utils/logger.js';
 
 /**
 @function cloudfront
@@ -33,7 +32,7 @@ The fetch response will be parsed as text by default.
 
 @returns {Promise<String|JSON|Buffer|Error>} The method resolves to either JSON, Text, or Buffer dependent ref.params.
 */
-module.exports = cloudfront_signer ? cloudfront : null;
+export default cloudfront_signer ? cloudfront : null;
 
 async function cloudfront(ref) {
   try {

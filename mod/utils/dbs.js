@@ -11,9 +11,11 @@ The [node-postgres]{@link https://www.npmjs.com/package/pg} package is required 
 @requires module:/utils/processEnv
 */
 
-const { Pool } = require('pg');
+import pg from 'pg';
 
-const logger = require('./logger');
+const { Pool } = pg;
+
+import logger from './logger.js';
 
 const RETRY_LIMIT = xyzEnv.RETRY_LIMIT;
 
@@ -54,7 +56,7 @@ Object.keys(xyzEnv)
   });
 
 // Export dbs constant
-module.exports = dbs;
+export default dbs;
 
 /**
 @function clientQuery

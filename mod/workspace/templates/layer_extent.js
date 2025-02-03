@@ -5,7 +5,7 @@ The layer_extent layer query returns the bbox coordinates of feature [record] ge
 
 @module /workspace/templates/layer_extent
 */
-module.exports = `
+export default `
   SELECT
     Box2D(
       ST_Transform(

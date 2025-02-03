@@ -9,7 +9,7 @@ Exports the cloudinary signer method.
 @requires module:/utils/processEnv
 */
 
-const { createHash } = require('crypto');
+import { createHash } from 'crypto';
 
 /**
 @function cloudinary
@@ -34,7 +34,7 @@ A folder and public_id parameter for resources to be uploaded or destroyed are r
 
 @returns {Promise} The promise resolves into the response from the signerModules method.
 */
-module.exports = async function cloudinary(req, res) {
+export default async function cloudinary(req, res) {
   if (!xyzEnv.CLOUDINARY_URL)
     return new Error('CLOUDINARY_URL not provided in xyzEnv');
 
@@ -84,4 +84,4 @@ module.exports = async function cloudinary(req, res) {
   const signedUrl = `https://api.cloudinary.com/v1_1/${cloudinary[3]}/${method}?${params.join('&')}`;
 
   return signedUrl;
-};
+}
