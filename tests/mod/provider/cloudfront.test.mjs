@@ -27,7 +27,7 @@ await codi.describe(
 
         codi.assertTrue(
           result instanceof Error,
-          'We expect to see an error be returned',
+          'We expect to see an error returned',
         );
       },
     );
@@ -59,7 +59,11 @@ await codi.describe(
 
         const result = await cloudfront(req);
 
-        codi.assertEqual(result, expected.url);
+        codi.assertEqual(
+          result,
+          expected.url,
+          'We should see the expected URL returned',
+        );
       },
     );
   },
