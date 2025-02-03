@@ -21,7 +21,6 @@ let privateKey, getSignedUrl;
 
 try {
   ({ getSignedUrl } = await import('@aws-sdk/cloudfront-signer'));
-  console.log(getSignedUrl);
 } catch {
   //Dependencies not installed
 }
