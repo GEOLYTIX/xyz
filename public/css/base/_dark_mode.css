@@ -203,12 +203,17 @@ html.dark-mode {
   /* begin layerview */
 
   #layers {
-    .drawer.layer-view .drawer {
-      background-color: var(--dm-color-dark-neutral);
-    }
     & > .drawer.layer-group .drawer.layer-view {
       background-color: var(--dm-color-dark-faded);
       border-top: 1px solid var(--dm-color-medium);
+    }
+
+    & > .layer-view > .drawer {
+      background-color: var(--dm-dark-faded);
+    }
+
+    .drawer.layer-view .drawer {
+      background-color: var(--dm-color-dark-neutral);
     }
   }
 
