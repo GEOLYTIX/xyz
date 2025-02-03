@@ -5,7 +5,7 @@ The wkt layer query template returns feature records from a layer table as an or
 
 @module /workspace/templates/wkt
 */
-module.exports = (_) => {
+export default (_) => {
   const fields = [];
 
   _.fieldsMap &&

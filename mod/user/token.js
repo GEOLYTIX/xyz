@@ -9,7 +9,7 @@ Exports the userToken method for the /api/user/token route.
 @module /user/key
 */
 
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
 /**
 @function userToken
@@ -27,7 +27,7 @@ Request parameter.
 Requesting user.
 */
 
-module.exports = async function userToken(req, res) {
+export default async function userToken(req, res) {
   if (!req.params.user) {
     return new Error('login_required');
   }
@@ -47,4 +47,4 @@ module.exports = async function userToken(req, res) {
   });
 
   res.send(token);
-};
+}

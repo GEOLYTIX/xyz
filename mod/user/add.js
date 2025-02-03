@@ -8,7 +8,7 @@ Exports the addUser method for the /api/user/add route.
 @module /user/add
 */
 
-const acl = require('./acl');
+import acl from './acl.js';
 
 /**
 @function addUser
@@ -38,7 +38,7 @@ Requesting user.
 Requesting user is admin.
 */
 
-module.exports = async function addUser(req, res) {
+export default async function addUser(req, res) {
   // acl module will export an empty require object without the ACL being configured.
   if (acl === null) {
     return res.status(500).send('ACL unavailable.');
@@ -90,4 +90,4 @@ module.exports = async function addUser(req, res) {
   }
 
   res.send(`${email} added to ACL.`);
-};
+}

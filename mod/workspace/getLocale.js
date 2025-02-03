@@ -10,11 +10,11 @@ The getLocale module exports the getLocale method which is required by the getLa
 @module /workspace/getLocale
 */
 
-const Roles = require('../utils/roles');
+import * as Roles from '../utils/roles.js';
 
-const mergeTemplates = require('./mergeTemplates');
+import mergeTemplates from './mergeTemplates.js';
 
-const workspaceCache = require('./cache');
+import workspaceCache from './cache.js';
 
 /**
 @function getLocale
@@ -38,7 +38,7 @@ Role objects in the locale and nested layers are merged with their respective pa
 
 @returns {Promise<Object|Error>} JSON Locale.
 */
-module.exports = async function getLocale(params) {
+export default async function getLocale(params) {
   const workspace = await workspaceCache();
 
   if (workspace instanceof Error) {
@@ -65,4 +65,4 @@ module.exports = async function getLocale(params) {
   locale.title = workspace.title;
 
   return locale;
-};
+}

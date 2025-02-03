@@ -3,11 +3,15 @@
 @requires module:/utils/processEnv
 */
 
-const { readFileSync } = require('fs');
+import { readFileSync } from 'fs';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 
-const { join } = require('path');
+// Get current file path and directory in ESM
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-module.exports = async (ref) => {
+export default async function file(ref) {
   try {
     // Subtitutes {*} with xyzEnv.SRC_* key values.
     const path = (ref.params?.url || ref).replace(
@@ -26,4 +30,4 @@ module.exports = async (ref) => {
     console.error(err);
     return err;
   }
-};
+}

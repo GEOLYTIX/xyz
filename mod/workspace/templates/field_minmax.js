@@ -1,4 +1,4 @@
-module.exports = `
+export default `
   SELECT
     ARRAY[min(\${field}), max(\${field})] as minmax
     FROM \${table}

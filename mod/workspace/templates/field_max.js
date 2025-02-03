@@ -1,4 +1,4 @@
-module.exports = `
+export default `
   SELECT
     max(\${field})
     FROM \${table}

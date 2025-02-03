@@ -5,7 +5,7 @@ The location_count layer query returns the count of table records which pass the
 
 @module /workspace/templates/location_count
 */
-module.exports = `
+export default `
   SELECT count(*) as location_count
   FROM \${table}
   WHERE true \${filter} \${viewport}`;

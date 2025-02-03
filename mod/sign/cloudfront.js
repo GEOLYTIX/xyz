@@ -10,30 +10,40 @@ The cloudfront sign module exports a method to sign requests to an AWS cloudfron
 @module /sign/cloudfront
 */
 
-let getSignedUrl, privateKey;
+import { readFileSync } from 'fs';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
 
-//Export nothing if the cloudfront key is not provided
-if (!xyzEnv.KEY_CLOUDFRONT) {
-  module.exports = null;
-} else {
-  //Third party sources are optional
-  try {
-    const { readFileSync } = require('fs');
-    const { join } = require('path');
-    privateKey = String(
-      readFileSync(join(__dirname, `../../${xyzEnv.KEY_CLOUDFRONT}.pem`)),
-    );
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-    getSignedUrl = require('@aws-sdk/cloudfront-signer').getSignedUrl;
-    module.exports = cloudfront_signer;
-  } catch (err) {
-    console.error(err);
+let privateKey, getSignedUrl;
 
-    module.exports = null;
-  }
+try {
+  ({ getSignedUrl } = await import('@aws-sdk/cloudfront-signer'));
+} catch {
+  //Dependencies not installed
 }
 
-/**
+//Export nothing if the cloudfront key is not provided
+export default xyzEnv.KEY_CLOUDFRONT
+  ? (() => {
+      try {
+        privateKey = String(
+          readFileSync(join(__dirname, `../../${xyzEnv.KEY_CLOUDFRONT}.pem`)),
+        );
+
+        if (getSignedUrl) {
+          return cloudfront_signer;
+        } else {
+          throw new Error('Missing Cloudfront signer dependency');
+        }
+      } catch (error) {
+        console.error(error);
+        return null;
+      }
+    })()
+  : null; /**
 @function cloudfront_signer
 @async
 
