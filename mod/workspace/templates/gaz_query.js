@@ -1,4 +1,4 @@
-module.exports = `
+export default `
   SELECT 
   \${label} AS label,
   \${qID} AS id

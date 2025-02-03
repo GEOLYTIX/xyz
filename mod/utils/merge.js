@@ -2,7 +2,7 @@
 @module /utils/merge
 */
 
-module.exports = function mergeDeep(target, ...sources) {
+export default function mergeDeep(target, ...sources) {
   // No sources to merge.
   if (!sources.length) {
     return target;
@@ -40,7 +40,7 @@ module.exports = function mergeDeep(target, ...sources) {
   }
 
   return mergeDeep(target, ...sources);
-};
+}
 
 function isObject(item) {
   return !Array.isArray(item) && item instanceof Object;

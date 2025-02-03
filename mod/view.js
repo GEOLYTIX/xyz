@@ -12,9 +12,9 @@ View templates maybe localised and must be requested from the languageTemplates 
 @module /view
 */
 
-const logger = require('./utils/logger');
+import logger from './utils/logger.js';
 
-const languageTemplates = require('./utils/languageTemplates');
+import languageTemplates from './utils/languageTemplates.js';
 
 /**
 @function view
@@ -34,7 +34,7 @@ The view [template] is a HTML string. Template variables defined within a set of
 @property {string} [params.msg] The view template reference.
 @property {Object} [params.user] Requesting user.
 */
-module.exports = async function view(req, res) {
+export default async function view(req, res) {
   logger(req.url, 'view-req-url');
 
   const params = {};
@@ -85,4 +85,4 @@ module.exports = async function view(req, res) {
   );
 
   res.send(view);
-};
+}

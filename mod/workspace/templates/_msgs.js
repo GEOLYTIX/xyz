@@ -2,7 +2,7 @@
 @module /workspace/templates/msgs
 */
 
-module.exports = {
+export default {
   login_required: {
     en: `Login required.`,
   },

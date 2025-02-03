@@ -11,11 +11,12 @@ Exports the login method for the /api/user/login route.
 @module /user/login
 */
 
-const fromACL = require('./fromACL');
+import fromACL from './fromACL.js';
 
-const view = require('../view');
+import view from '../view.js';
 
-const jwt = require('jsonwebtoken');
+import jsonwebtoken from 'jsonwebtoken';
+const { sign } = jsonwebtoken;
 
 /**
 @function login
@@ -36,7 +37,7 @@ The loginView method will be returned with a message from a failed user validati
 @property {Object} [req.params.user] Mapp User object.
 @property {Object} [req.body] HTTP POST request body.
 */
-module.exports = function login(req, res) {
+export default function login(req, res) {
   if (fromACL === null) {
     res.status(405).send('The ACL has not been configured to support login.');
     return;
@@ -55,7 +56,7 @@ module.exports = function login(req, res) {
   }
 
   return loginView(req, res);
-};
+}
 
 /**
 @function loginBody
@@ -92,7 +93,7 @@ async function loginBody(req, res) {
     return res.status(401).send(user.message);
   }
 
-  const token = jwt.sign(
+  const token = sign(
     {
       email: user.email,
       admin: user.admin,

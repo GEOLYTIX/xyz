@@ -10,13 +10,13 @@ The module exports the getTemplate method which is required by the query, langua
 @module /workspace/getTemplate
 */
 
-const getFrom = require('../provider/getFrom');
+import getFrom from '../provider/getFrom.js';
 
-const merge = require('../utils/merge');
+import merge from '../utils/merge.js';
 
-const workspaceCache = require('./cache');
+import workspaceCache from './cache.js';
 
-const envReplace = require('../utils/envReplace');
+import envReplace from '../utils/envReplace.js';
 
 /**
 @global
@@ -46,7 +46,7 @@ Module templates will be constructed before being returned.
 
 @returns {Promise<Object|Error>} JSON Template
 */
-module.exports = async function getTemplate(template) {
+export default async function getTemplate(template) {
   if (typeof template === 'string') {
     const workspace = await workspaceCache();
 
@@ -114,4 +114,4 @@ module.exports = async function getTemplate(template) {
   }
 
   return template;
-};
+}

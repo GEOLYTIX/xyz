@@ -1,4 +1,4 @@
-module.exports = `
+export default `
 SELECT 
     b.\${field_b} AS \${as} 
 FROM
