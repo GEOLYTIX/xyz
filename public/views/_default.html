@@ -108,32 +108,27 @@
       }
 
       #Map {
+        grid-row: 1;
+        grid-column: 3;
         position: relative;
       }
 
-      #Map .ol-scale-line {
-        right: 5px;
-        top: 5px;
-        position: fixed;
+      #OL {
+        width: 100%;
+        height: 100vh;
+        position: absolute;
       }
 
-      .map-attribution > .logo {
-        pointer-events: auto;
-        height: 1em;
+      .map-attribution {
+        padding-left: 4em;
       }
 
-      
-
-      #mapButton > * {
-        pointer-events: auto;
+      #ctrl-panel {
+        transform: rotateY(180deg);
       }
 
-      #mapButton .mask-icon.lock-open {
-        background-color: #afb42b;
-      }
-
-      #mapButton .mask-icon.logout {
-        background-color: #b71c1c;
+      #ctrl-panel>div {
+        transform: rotateY(180deg);
       }
 
       #ctrls {
@@ -156,14 +151,14 @@
         overflow: scroll;
       }
 
-      #ctrl-tabs > .locations.mask-icon.active {
-        -webkit-mask-image: url('{{dir}}/public/icons/icon-location.svg');
-        mask-image: url('{{dir}}/public/icons/icon-location.svg');
+      body {
+        overflow-y: scroll;
+        overflow-x: hidden;
       }
 
-      #ctrl-panel {
+      #Map {
         height: calc(100% - 50px);
-        overflow-y: auto;
+        width: 100%;
       }
 
       #OL {
@@ -182,99 +177,45 @@
 
     }
   </style>
+  
+  </head>
+  <body style="grid-template-rows: auto 0 0;">
 
-      @media only screen and (max-width: 768px) {
-        html {
-          overflow: scroll;
-        }
-
-        body {
-          overflow-y: scroll;
-          overflow-x: hidden;
-        }
-
-        #Map {
-          height: calc(100% - 50px);
-          width: 100%;
-        }
-
-        #OL {
-          width: 100%;
-          height: 100%;
-        }
-
-        #mapButton {
-          position: fixed;
-          top: 0;
-          left: 0;
-          height: 100%;
-        }
-
-        #mapButton > button,
-        #mapButton > a {
-          margin-bottom: 10px;
-          background-color: white;
-          box-shadow: 1px 1px 3px #777;
-          border-radius: 50%;
-          opacity: 0.9;
-          padding: 5px;
-          width: 3em;
-          height: 3em;
-        }
-
-        #ctrls {
-          width: 100%;
-          height: 100%;
-          position: relative;
-        }
-
-        #ctrls-divider {
-          display: none;
-        }
-
-        .mobile-hidden {
-          visibility: hidden;
-        }
-
-        .mobile-display-none {
-          display: none !important;
-        }
-
-    <div id="ctrl-tabs" class="hover">
-      <div data-id="layers" class="active material-symbols-outlined">
-        
-          layers
-
-      </div>
-      <div data-id="locations" class="material-symbols-outlined">
-        location_on
-      </div>
-
+    <div id="Map">
+  
+      <div id="OL"></div>
+  
     </div>
-
+  
     <div id="mapButton" class="btn-column"></div>
-
+  
     <div id="tabview-divider"></div>
-
-    <div
-      id="Tabview"
-      class="tabview mobile-display-none desktop-display-none"
-    ></div>
-
+  
+    <div id="Tabview" class="tabview mobile-display-none desktop-display-none"></div>
+  
     <div id="ctrls-divider"></div>
-
+  
     <div id="ctrls" class="lighter-background">
+  
       <div id="ctrl-tabs" class="hover">
-        <div data-id="layers" class="mask-icon layers active"></div>
-        <div data-id="locations" class="mask-icon locations"></div>
+        <div data-id="layers" class="active material-symbols-outlined">
+          
+            layers
+  
+        </div>
+        <div data-id="locations" class="material-symbols-outlined">
+          location_on
+        </div>
+  
       </div>
-
+  
       <div id="ctrl-panel">
         <div id="layers" class="active"></div>
         <div id="locations"></div>
       </div>
+  
     </div>
-  </body>
+  
 
   <script type="module">
     console.log(`MAPP v${mapp.version}`);
@@ -541,4 +482,5 @@
     document.getElementById('mapButton').append(mapp.utils.html.node`
     <div class="mobile-display-none" style="height: 60px;">`);
   </script>
+  </body>
 </html>
