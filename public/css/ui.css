@@ -14,6 +14,7 @@
   --color-on: #e18335;
   --color-no: #a21309;
   --color-changed: #ffffa7;
+  --color-ok: #0B6F50;
   --dm-color-on: #e18335;
   --dm-color-medium: #555555;
   --dm-color-dark-faded: #333333;
@@ -1237,6 +1238,9 @@ input[type=search]::-webkit-search-cancel-button:hover {
   }
   &.no-colour {
     color: var(--color-no);
+  }
+  &.ok-colour {
+    color: var(--color-ok);
   }
   &.primary-light-colour {
     color: var(--color-primary-light);
