@@ -465,9 +465,11 @@
 
       if (mapp.hooks.current.userlocale) {
 
+        // Assign the userlocale value as name to check for a stored userlocale
         locale.name = mapp.hooks.current.userlocale
       }
 
+      // Check whether a userLocale is stored for the current user|workspace
       const userLocale = await mapp.utils.userLocale.get(locale);
 
       if (userLocale) {
