@@ -209,7 +209,7 @@ html.dark-mode {
     }
 
     & > .layer-view > .drawer {
-      background-color: var(--dm-dark-faded);
+      background-color: var(--dm-color-dark-faded);
     }
 
     .drawer.layer-view .drawer {
