@@ -462,6 +462,12 @@
 
     // Check whether the locale supports a userLocale
     if (locale.userLocale) {
+
+      if (mapp.hooks.current.userlocale) {
+
+        locale.name = mapp.hooks.current.userlocale
+      }
+
       const userLocale = await mapp.utils.userLocale.get(locale);
 
       if (userLocale) {
