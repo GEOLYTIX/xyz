@@ -21,10 +21,10 @@ html.dark-mode {
   /* begin colour classes */
 
   .primary-colour {
-    color: var(--dm-color-on);
+    color: var(--color-light);
 
     &.active {
-      color: var(--dm-color-light);
+      color: var(--color-on);
     }
   }
 
@@ -94,6 +94,14 @@ html.dark-mode {
   }
   .material-symbols-outlined {
     color: var(--dm-color-light-secondary);
+
+    &.no-colour {
+      color: var(--dm-color-no);
+    }
+
+    &.ok-colour {
+      color: var(--color-ok);
+    }
 
     &.active {
       color: var(--dm-color-on);
