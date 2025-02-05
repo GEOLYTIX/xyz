@@ -24,6 +24,7 @@
   --dm-color-light: #ffffff;
   --dm-color-light-secondary: #f2f2f2;
   --dm-color-light-darker: #d8d8d8;
+  --dm-color-no: #ef5350;
 }
 * {
   transition: 0.2s ease-in-out;
@@ -74,9 +75,9 @@ html.dark-mode {
     }
   }
   .primary-colour {
-    color: var(--dm-color-on);
+    color: var(--color-light);
     &.active {
-      color: var(--dm-color-light);
+      color: var(--color-on);
     }
   }
   .bg-light-tertiary {
@@ -127,6 +128,12 @@ html.dark-mode {
   }
   .material-symbols-outlined {
     color: var(--dm-color-light-secondary);
+    &.no-colour {
+      color: var(--dm-color-no);
+    }
+    &.ok-colour {
+      color: var(--color-ok);
+    }
     &.active {
       color: var(--dm-color-on);
     }
