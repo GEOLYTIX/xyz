@@ -1677,6 +1677,39 @@ dialog {
   }
 }
 
+/* public/css/elements/_radio.css */
+label.radio {
+  display: block;
+  &.disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+  &.inline {
+    display: inline-block;
+  }
+  & > span {
+    vertical-align: middle;
+  }
+  &.inline + span {
+    vertical-align: middle;
+  }
+  & > input[type=radio] {
+    display: none;
+  }
+  & > .material-symbols-outlined:after {
+    content: "radio_button_unchecked";
+  }
+  & input[type=radio]:checked + .material-symbols-outlined:after {
+    content: "radio_button_checked";
+  }
+  & input[type=radio]:disabled ~ * {
+    opacity: 0.4;
+  }
+}
+
 /* public/css/elements/_searchbox.css */
 .searchbox {
   width: 100%;
