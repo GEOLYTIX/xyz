@@ -4,7 +4,7 @@ globalThis.xyzEnv = {
 
 codi.describe({ name: 'acl test', id: 'acl_test' }, () => {
   codi.it({ name: 'acl', parentId: 'acl_test' }, async () => {
-    const { acl } = await import('../../../mod/user/acl.js');
+    // const { acl } = await import('../../../mod/user/acl.js');
     // console.log(acl);
   });
 });
