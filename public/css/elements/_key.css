@@ -1,5 +1,6 @@
 .key {
   button.layer-key {
+    margin-right: 0.2em;
     &.active {
       background-color: var(--color-primary);
       color: var(--color-light);

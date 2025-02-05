@@ -14,7 +14,7 @@
   --color-on: #e18335;
   --color-no: #a21309;
   --color-changed: #ffffa7;
-  --color-ok: #0B6F50;
+  --color-ok: #0b6f50;
   --dm-color-on: #e18335;
   --dm-color-medium: #555555;
   --dm-color-dark-faded: #333333;
@@ -1646,6 +1646,7 @@ dialog {
 /* public/css/elements/_key.css */
 .key {
   button.layer-key {
+    margin-right: 0.2em;
     &.active {
       background-color: var(--color-primary);
       color: var(--color-light);
