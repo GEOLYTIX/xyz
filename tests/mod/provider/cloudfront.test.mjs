@@ -1,5 +1,14 @@
 globalThis.xyzEnv = {};
 
+const mockedCloudfrontFn = codi.mock.fn();
+
+const cloudfrontSign = codi.mock.module('../../../mod/sign/cloudfront.js', {
+  defaultExport: mockedCloudfrontFn,
+});
+
+const mockAgent = new codi.mockHttp.MockAgent();
+codi.mockHttp.setGlobalDispatcher(mockAgent);
+
 await codi.describe(
   { name: 'Provider: Cloudfront', id: 'provider_cloudfront' },
   async () => {
@@ -9,16 +18,14 @@ await codi.describe(
         parentId: 'provider_cloudfront',
       },
       async () => {
-        codi.mock.module('../../../mod/sign/cloudfront.js', () => {
-          const cloudfront = () => {
-            return new Error('Cloudfront found an error');
-          };
-
-          return { default: cloudfront };
-        });
-
         const { default: cloudfront } = await import(
           '../../../mod/provider/cloudfront.js'
+        );
+
+        mockedCloudfrontFn.mock.mockImplementation(
+          function cloudfront_signer() {
+            return new Error('Cloudfront found an error');
+          },
         );
 
         const { req } = codi.mockHttp.createMocks();
@@ -39,13 +46,11 @@ await codi.describe(
           url: 'https://aws.signed.url.com/*',
         };
 
-        codi.mock.module('../../../mod/sign/cloudfront.js', () => {
-          const cloudfront = async () => {
+        mockedCloudfrontFn.mock.mockImplementation(
+          function cloudfront_signer() {
             return expected.url;
-          };
-
-          return { default: cloudfront };
-        });
+          },
+        );
 
         const { default: cloudfront } = await import(
           '../../../mod/provider/cloudfront.js'
@@ -79,7 +84,8 @@ await codi.describe(
             status: 300,
             body: 'test string',
             params: {
-              url: 'https://aws.signedURL.test/thing1.json',
+              url: 'http://localhost:3000/thing1.json',
+              path: '/thing1.json',
             },
             expected: new Error(),
           },
@@ -96,7 +102,8 @@ await codi.describe(
               },
             },
             params: {
-              url: 'https://aws.signedURL.test/proper.json',
+              url: 'http://localhost:3000/proper.json',
+              path: '/proper.json',
             },
             expected: {
               objectKey: 'example-image.jpg',
@@ -111,64 +118,44 @@ await codi.describe(
           },
         };
 
-        codi.mock.module('../../../mod/sign/cloudfront.js', () => {
-          const cloudfront = async () => {
-            return testCases.error.url;
-          };
-          return { default: cloudfront };
-        });
-
         const { default: cloudfront } = await import(
           '../../../mod/provider/cloudfront.js'
         );
 
+        const mockPool = mockAgent.get(new RegExp('http://localhost:3000'));
+
         Object.keys(testCases).forEach(async (test) => {
-          await codi.it(
-            {
-              name: `cloudfront: ${test}`,
-              parentId: 'provider_cloudfront',
-            },
-            async () => {
-              try {
-                codi.mock.module('../../../mod/sign/cloudfront.js', () => {
-                  const cloudfront = async () => {
-                    return testCases[test].params.url;
-                  };
-                  return { default: cloudfront };
-                });
-
-                const { req } = codi.mockHttp.createMocks(
-                  {
-                    params: {
-                      url: testCases[test].params.url,
-                      body: testCases[test].body,
-                    },
-                  },
-                  {
-                    locals: {
-                      statusCode: testCases[test].status,
-                    },
-                  },
-                );
-
-                codi.mockFetch(testCases[test].params.url, {
-                  data: testCases[test].body,
-                  response: {
-                    status: testCases[test].status,
-                  },
-                });
-
-                const results = await cloudfront(req);
-                codi.assertEqual(results, testCases[test].expected);
-              } catch (error) {
-                console.error('Test failed:', error);
-              } finally {
-                globalThis.fetch = null;
-              }
+          mockedCloudfrontFn.mock.mockImplementation(
+            function cloudfront_signer() {
+              return testCases[test].params.url;
             },
           );
+
+          const { req } = codi.mockHttp.createMocks(
+            {
+              params: {
+                url: testCases[test].params.url,
+                body: testCases[test].body,
+              },
+            },
+            {
+              locals: {
+                statusCode: testCases[test].status,
+              },
+            },
+          );
+
+          mockPool
+            .intercept({ path: testCases[test].params.path })
+            .reply(testCases[test].status, testCases[test].body);
+
+          const results = await cloudfront(req);
+
+          codi.assertEqual(results, testCases[test].expected);
         });
       },
     );
   },
 );
+
+cloudfrontSign.restore();

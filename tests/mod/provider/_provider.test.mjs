@@ -1,7 +1,29 @@
 import 'dotenv/config';
 import '../../../mod/utils/processEnv.js';
 
-const mock = codi.mock;
+const mockedFile = codi.mock.module('../../../mod/provider/file.js', {
+  defaultExport: (ref) => {
+    ref = '';
+    return String('Look at me go from the file provider fam!');
+  },
+});
+
+const mockedCloudfront = codi.mock.module(
+  '../../../mod/provider/cloudfront.js',
+  {
+    defaultExport: (ref) => {
+      ref = '';
+      return '{"test":{"another_test":{}}}';
+    },
+  },
+);
+
+const mockeds3 = codi.mock.module('../../../mod/provider/s3.js', {
+  defaultExport: (ref) => {
+    ref = '';
+    return 'http://localhost:3000/';
+  },
+});
 
 await codi.describe({ name: 'Provider:', id: 'provider_test' }, async () => {
   await codi.it(
@@ -32,8 +54,12 @@ await codi.describe({ name: 'Provider:', id: 'provider_test' }, async () => {
     },
   );
 
-  await codi.it(
-    { name: 'Test Providers', parentId: 'provider_test' },
+  await codi.describe(
+    {
+      name: 'Test Providers',
+      id: 'provider_test_working',
+      parentId: 'provider_test',
+    },
     async () => {
       const providers = ['file', 'cloudfront', 's3'];
 
@@ -61,59 +87,42 @@ await codi.describe({ name: 'Provider:', id: 'provider_test' }, async () => {
         },
       };
 
-      function file(ref) {
-        ref = '';
-        return String('Look at me go from the file provider fam!');
-      }
-
-      function cloudfront(ref) {
-        ref = '';
-        return '{"test":{"another_test":{}}}';
-      }
-
-      function s3_provider(ref) {
-        ref = '';
-        return 'http://localhost:3000/';
-      }
-
-      mock.module('../../../mod/provider/file.js', () => {
-        return {
-          default: file,
-        };
-      });
-
-      mock.module('../../../mod/provider/cloudfront.js', () => {
-        return {
-          default: cloudfront,
-        };
-      });
-
-      mock.module('../../../mod/provider/s3.js', () => {
-        return {
-          default: s3_provider,
-        };
-      });
-
       const { default: provider } = await import(
         '../../../mod/provider/_provider.js'
       );
 
       providers.forEach(async (providerName) => {
-        const { req, res } = codi.mockHttp.createMocks({
-          params: {
-            provider: providerName,
-            content_type: expectedValues[providerName].content_type,
-          },
-        });
+        try {
+          await codi.it(
+            {
+              name: `Provider: ${providerName}`,
+              parentId: 'provider_test_working',
+            },
+            async () => {
+              const { req, res } = codi.mockHttp.createMocks({
+                params: {
+                  provider: providerName,
+                  content_type: expectedValues[providerName].content_type,
+                },
+              });
 
-        await provider(req, res);
+              await provider(req, res);
 
-        const data = res._getData();
-        const headers = res.getHeaders();
+              const data = res._getData();
+              const headers = res.getHeaders();
 
-        codi.assertEqual(data, expectedValues[providerName].data);
-        codi.assertEqual(headers, expectedValues[providerName].headers);
+              codi.assertEqual(data, expectedValues[providerName].data);
+              codi.assertEqual(headers, expectedValues[providerName].headers);
+            },
+          );
+        } catch (error) {
+          console.log(error);
+        }
       });
     },
   );
 });
+
+mockedFile.restore();
+mockedCloudfront.restore();
+mockeds3.restore();
