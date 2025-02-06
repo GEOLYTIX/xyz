@@ -5,7 +5,7 @@ The cluster_hex layer query template returns aggregated cluster features.
 
 @module /workspace/templates/cluster_hex
 */
-module.exports = (_) => {
+export default (_) => {
   _.qID ??= _.layer.qID || null;
   _.geom ??= _.layer.geom;
 

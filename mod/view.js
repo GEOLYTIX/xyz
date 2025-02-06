@@ -12,9 +12,9 @@ View templates maybe localised and must be requested from the languageTemplates 
 @module /view
 */
 
-const logger = require('./utils/logger');
+import logger from './utils/logger.js';
 
-const languageTemplates = require('./utils/languageTemplates');
+import languageTemplates from './utils/languageTemplates.js';
 
 /**
 @function view
@@ -34,7 +34,7 @@ The view [template] is a HTML string. Template variables defined within a set of
 @property {string} [params.msg] The view template reference.
 @property {Object} [params.user] Requesting user.
 */
-module.exports = async function view(req, res) {
+export default async function view(req, res) {
   logger(req.url, 'view-req-url');
 
   const params = {};
@@ -46,13 +46,19 @@ module.exports = async function view(req, res) {
   // The default_view is assumed without an implicit template value.
   params.template ??= 'default_view';
 
-  params.dir ??= xyzEnv.DIR;
+  params.dir = xyzEnv.DIR;
 
-  params.login ??= (xyzEnv.PRIVATE || xyzEnv.PUBLIC) && 'true';
+  params.login = (xyzEnv.PRIVATE || xyzEnv.PUBLIC) && 'true';
 
-  params.title ??= xyzEnv.TITLE;
+  params.title = xyzEnv.TITLE;
 
-  params.language ??= req.params.user?.language || 'en';
+  params.language ??= req.params.user?.language;
+
+  // Test ISO629 language param.
+  if (!/^[a-z]{2}$/.test(params.language)) {
+    // Assign English as default language.
+    params.language = 'en';
+  }
 
   const template = await languageTemplates(params);
 
@@ -79,4 +85,4 @@ module.exports = async function view(req, res) {
   );
 
   res.send(view);
-};
+}

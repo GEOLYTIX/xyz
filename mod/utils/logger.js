@@ -6,7 +6,7 @@ This module provides a logging utility for the xyz.
 @requires module:/utils/processEnv
 */
 
-const crypto = require('crypto');
+import crypto from 'crypto';
 
 const logs = new Set(xyzEnv.LOGS?.split(',') || []);
 
@@ -21,7 +21,8 @@ const logout = {
 };
 
 // Required to initialse PostgreSQL logger.
-const { Pool } = require('pg');
+import pg from 'pg';
+const { Pool } = pg;
 
 const logger =
   xyzEnv.LOGGER &&
@@ -35,7 +36,7 @@ const logger =
  * @param {string} [key='err'] - The log level or key.
  * @returns {void}
  */
-module.exports = (log, key = 'err') => {
+export default (log, key = 'err') => {
   // Check whether the log for the key should be logged.
   if (!logs.has(key)) return;
 

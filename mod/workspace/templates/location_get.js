@@ -5,7 +5,7 @@ The location_get layer query returns the field values from a location record in 
 
 @module /workspace/templates/location_get
 */
-module.exports = (_) => {
+export default (_) => {
   // The SQL array may be populated by a default filter which is not required for this query template.
   _.SQL = [];
 

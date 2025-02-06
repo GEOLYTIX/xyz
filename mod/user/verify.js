@@ -12,13 +12,13 @@ Exports the [user] verify method for the /api/user/verify route.
 @module /user/verify
 */
 
-const acl = require('./acl');
+import acl from './acl.js';
 
-const mailer = require('../utils/mailer');
+import mailer from '../utils/mailer.js';
 
-const languageTemplates = require('../utils/languageTemplates');
+import languageTemplates from '../utils/languageTemplates.js';
 
-const login = require('./login');
+import login from './login.js';
 
 /**
 @function verify
@@ -42,7 +42,7 @@ Verification key
 Request messaging language
 */
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   // acl module will export an empty require object without the ACL being configured.
   if (acl === null) {
     return res.status(500).send('ACL unavailable.');

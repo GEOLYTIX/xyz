@@ -5,7 +5,7 @@ The mvt layer query template returns a vector tile (st_asmvt) with mvt geometrie
 
 @module /workspace/templates/mvt
 */
-module.exports = (_) => {
+export default (_) => {
   const fields = [];
 
   _.fieldsMap &&

@@ -1,14 +1,14 @@
 /* public/css/base/_colours.css */
 :root {
   --color-off-black: #3f3f3f;
-  --color-primary: #003D57;
+  --color-primary: #003d57;
   --color-primary-light: #939faa;
   --color-light: #ffffff;
   --color-light-secondary: #f2f2f2;
   --color-light-tertiary: #fafafa;
   --color-mid: #e3e3e3;
-  --color-on: #E18335;
-  --color-no: #A21309;
+  --color-on: #e18335;
+  --color-no: #a21309;
   --color-changed: #ffffa7;
 }
 .primary-colour {
@@ -70,7 +70,7 @@
 }
 .ol-control {
   position: absolute;
-  background-color: rgba(255, 255, 255, .4);
+  background-color: rgba(255, 255, 255, 0.4);
   border-radius: 4px;
   padding: 2px;
   & button {
@@ -84,8 +84,8 @@
     text-align: center;
     height: 1.375em;
     width: 1.375em;
-    line-height: .4em;
-    background-color: rgba(0, 60, 136, .5);
+    line-height: 0.4em;
+    background-color: rgba(0, 60, 136, 0.5);
     border: none;
     border-radius: 2px;
   }
