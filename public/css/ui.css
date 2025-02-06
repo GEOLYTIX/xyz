@@ -1877,6 +1877,58 @@ dialog {
   }
 }
 
+/* public/css/layout/_cloudinary.css */
+.image,
+.images,
+.documents {
+  .material-symbols-outlined {
+    &.delete:after {
+      content: "delete";
+    }
+    &.add:after {
+      content: "add_a_photo";
+    }
+    &.add-doc:after {
+      content: "add_notes";
+    }
+  }
+  .drag_and_drop_zone {
+    width: 100%;
+    border: 1px dashed var(--color-primary-light);
+    position: relative;
+    height: 100px;
+    input {
+      outline: none;
+      width: 100%;
+      height: 80px;
+      cursor: pointer;
+      opacity: 0;
+    }
+    p {
+      margin: auto;
+      text-align: center;
+      color: var(----color-off-black);
+      & > span {
+        vertical-align: middle;
+        margin: 0.2em;
+        font-size: 1.5em;
+      }
+    }
+  }
+  .img-item {
+    position: relative;
+    .delete {
+      position: absolute;
+      top: 0.2em;
+      left: 0.2em;
+      font-size: 1.5em;
+      background-color: var(--color-off-light);
+      padding: 0.1em;
+      border-radius: 50%;
+    }
+  }
+}
+
 /* public/css/layout/_layerview.css */
 .drawer.layer-group,
 .drawer.layer-view {
