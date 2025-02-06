@@ -9,9 +9,9 @@ The sign API provides access to different request signer modules. Signer modules
 @module /sign
 */
 
-const cloudfront = require('./cloudfront');
-const cloudinary = require('./cloudinary');
-const s3 = require('./s3');
+import cloudfront from './cloudfront.js';
+import cloudinary from './cloudinary.js';
+import s3 from './s3.js';
 
 const signerModules = {
   cloudinary,
@@ -35,7 +35,7 @@ The response from the method is returned with the HTTP response.
 
 @returns {Promise} The promise resolves into the response from the signerModules method.
 */
-module.exports = async function signer(req, res) {
+export default async function signer(req, res) {
   if (!Object.hasOwn(signerModules, req.params.signer)) {
     return res
       .status(404)
@@ -55,4 +55,4 @@ module.exports = async function signer(req, res) {
   }
 
   res.send(response);
-};
+}

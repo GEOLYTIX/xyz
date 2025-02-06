@@ -5,7 +5,7 @@ The locations_delete layer query deletes multiple records in a layer table which
 
 @module /workspace/templates/locations_delete
 */
-module.exports = (_) => {
+export default (_) => {
   // If no layer parameter, return
   if (!_.layer) {
     throw new Error(

@@ -16,19 +16,19 @@ Exports the [user] register method for the /api/user/register route.
 @module /user/register
 */
 
-const bcrypt = require('../utils/bcrypt');
+import bcrypt from '../utils/bcrypt.cjs';
 
-const crypto = require('crypto');
+import crypto from 'crypto';
 
-const acl = require('./acl');
+import acl from './acl.js';
 
-const reqHost = require('../utils/reqHost');
+import reqHost from '../utils/reqHost.js';
 
-const mailer = require('../utils/mailer');
+import mailer from '../utils/mailer.js';
 
-const languageTemplates = require('../utils/languageTemplates');
+import languageTemplates from '../utils/languageTemplates.js';
 
-const view = require('../view');
+import view from '../view.js';
 
 /**
 @function register
@@ -45,7 +45,7 @@ Returns the `registerUserBody` method with a request [user] body present.
 Post body object with user data.
 */
 
-module.exports = async function register(req, res) {
+export default async function register(req, res) {
   // acl module will export an empty require object without the ACL being configured.
   if (acl === null) {
     return res.status(500).send('ACL unavailable.');
@@ -68,7 +68,7 @@ module.exports = async function register(req, res) {
 
   // Get request for registration form view.
   view(req, res);
-};
+}
 
 /**
 @function registerUserBody

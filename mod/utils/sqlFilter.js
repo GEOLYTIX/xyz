@@ -68,7 +68,7 @@ If the filter is a string, the filter will be returned as is.
 @param {Array} params
 @returns {string} SQL query string
 */
-module.exports = sqlfilter;
+export default sqlfilter;
 
 function sqlfilter(filter, params) {
   //Check to see that params is an array and that the values of the params are of valid type.

@@ -11,15 +11,15 @@ Default templates can be overwritten in the workspace or by providing a CUSTOM_T
 @module /workspace/cache
 */
 
-const getFrom = require('../provider/getFrom');
+import getFrom from '../provider/getFrom.js';
 
-const merge = require('../utils/merge');
+import merge from '../utils/merge.js';
 
 let cache = null;
 
 let timestamp = Infinity;
 
-const logger = require('../utils/logger');
+import logger from '../utils/logger.js';
 
 /**
 @function checkWorkspaceCache
@@ -37,7 +37,7 @@ The cacheWorkspace method is called if the cache is invalid.
 
 @returns {workspace} JSON Workspace.
 */
-module.exports = function checkWorkspaceCache(force) {
+export default function checkWorkspaceCache(force) {
   if (force) {
     // Reset the cache with force flag.
     cache = null;
@@ -57,15 +57,15 @@ module.exports = function checkWorkspaceCache(force) {
   }
 
   return cache;
-};
+}
 
-const view_templates = require('./templates/_views');
+import view_templates from './templates/_views.js';
 
-const mail_templates = require('./templates/_mails');
+import mail_templates from './templates/_mails.js';
 
-const msg_templates = require('./templates/_msgs');
+import msg_templates from './templates/_msgs.js';
 
-const query_templates = require('./templates/_queries');
+import query_templates from './templates/_queries.js';
 
 const workspace_src = xyzEnv.WORKSPACE?.split(':')[0];
 

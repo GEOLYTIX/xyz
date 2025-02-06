@@ -13,11 +13,11 @@ A user_sessions{} object is declared in the module to store user sessions.
 @module /user/auth
 */
 
-const acl = require('./acl');
+import acl from './acl.js';
 
-const fromACL = require('./fromACL');
+import fromACL from './fromACL.js';
 
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
 const user_sessions = {};
 
@@ -48,7 +48,7 @@ The auth method checks either the request parameter token or user.session if ena
 
 @returns {Promise<Object|Error>} Method resolves to either a user object or Error
 */
-module.exports = async function auth(req, res) {
+export default async function auth(req, res) {
   if (acl === null) return null;
 
   if (req.headers.authorization) {
@@ -90,7 +90,7 @@ module.exports = async function auth(req, res) {
   }
 
   return user;
-};
+}
 
 /**
 @function checkParamToken

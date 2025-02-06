@@ -24,9 +24,9 @@ English being the default language, each language template should have the 'en' 
 @module /utils/languageTemplates
 */
 
-const getFrom = require('../provider/getFrom');
+import getFrom from '../provider/getFrom.js';
 
-const getTemplate = require('../workspace/getTemplate');
+import getTemplate from '../workspace/getTemplate.js';
 
 /**
 @function languageTemplates
@@ -47,7 +47,7 @@ Valid language template objects must have an `en` property. The english template
 
 @returns {Promise} The promise will resolve to a string or object.
 */
-module.exports = async function languageTemplates(params) {
+export default async function languageTemplates(params) {
   if (params.template === undefined) return;
 
   const languageTemplate = await getTemplate(params.template);
@@ -86,4 +86,4 @@ module.exports = async function languageTemplates(params) {
   }
 
   return template;
-};
+}

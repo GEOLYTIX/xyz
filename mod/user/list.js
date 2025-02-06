@@ -9,7 +9,7 @@ Exports the [user] list method for the /api/user/list route.
 @module /user/list
 */
 
-const acl = require('./acl');
+import acl from './acl.js';
 
 /**
 @function list
@@ -25,7 +25,7 @@ Requesting user.
 Requesting user is admin.
 */
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   if (!req.params.user) {
     return new Error('login_required');
   }
