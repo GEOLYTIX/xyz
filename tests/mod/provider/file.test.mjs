@@ -40,8 +40,6 @@ await codi.describe({ name: 'file:', id: 'provider_file' }, async () => {
       const { default: file } = await import('../../../mod/provider/file.js');
 
       const results = await file('../../dir/tests/thing.json');
-
-      console.log(results);
     },
   );
 });
