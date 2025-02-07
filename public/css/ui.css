@@ -1927,6 +1927,11 @@ dialog {
       border-radius: 50%;
     }
   }
+  .link-with-img {
+    .delete {
+      font-size: 1.5em;
+    }
+  }
 }
 
 /* public/css/layout/_layerview.css */
