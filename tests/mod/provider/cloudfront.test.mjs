@@ -159,3 +159,4 @@ await codi.describe(
 );
 
 cloudfrontSign.restore();
+codi.mock.reset();

@@ -47,3 +47,4 @@ await codi.describe({ name: 'file:', id: 'provider_file' }, async () => {
 fsMock.restore();
 mockPath.restore();
 mockedUrl.restore();
+codi.mock.reset();

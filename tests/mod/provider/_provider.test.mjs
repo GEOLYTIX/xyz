@@ -126,3 +126,5 @@ await codi.describe({ name: 'Provider:', id: 'provider_test' }, async () => {
 mockedFile.restore();
 mockedCloudfront.restore();
 mockeds3.restore();
+
+codi.mock.reset();
