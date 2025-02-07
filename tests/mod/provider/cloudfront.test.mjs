@@ -10,7 +10,11 @@ const mockAgent = new codi.mockHttp.MockAgent();
 codi.mockHttp.setGlobalDispatcher(mockAgent);
 
 await codi.describe(
-  { name: 'Provider: Cloudfront', id: 'provider_cloudfront' },
+  {
+    name: 'cloudfront:',
+    id: 'provider_cloudfront',
+    parentId: 'provider',
+  },
   async () => {
     await codi.it(
       {

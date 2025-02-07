@@ -25,9 +25,9 @@ const mockeds3 = codi.mock.module('../../../mod/provider/s3.js', {
   },
 });
 
-await codi.describe({ name: 'Provider:', id: 'provider_test' }, async () => {
+await codi.describe({ name: 'Provider:', id: 'provider' }, async () => {
   await codi.it(
-    { name: 'Bogus provider test', parentId: 'provider_test' },
+    { name: 'Bogus provider test', parentId: 'provider' },
     async () => {
       const { default: provider } = await import(
         '../../../mod/provider/_provider.js'
@@ -56,9 +56,9 @@ await codi.describe({ name: 'Provider:', id: 'provider_test' }, async () => {
 
   await codi.describe(
     {
-      name: 'Test Providers',
+      name: 'Base Provider Tests',
       id: 'provider_test_working',
-      parentId: 'provider_test',
+      parentId: 'provider',
     },
     async () => {
       const providers = ['file', 'cloudfront', 's3'];
@@ -95,7 +95,7 @@ await codi.describe({ name: 'Provider:', id: 'provider_test' }, async () => {
         try {
           await codi.it(
             {
-              name: `Provider: ${providerName}`,
+              name: `${providerName}`,
               parentId: 'provider_test_working',
             },
             async () => {

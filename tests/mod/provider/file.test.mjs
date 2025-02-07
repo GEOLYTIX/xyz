@@ -21,28 +21,31 @@ const mockedUrl = codi.mock.module('url', {
   },
 });
 
-await codi.describe({ name: 'file:', id: 'provider_file' }, async () => {
-  await codi.it(
-    { name: 'Get File test', parentId: 'provider_file' },
-    async () => {
-      fsMockFn.mock.mockImplementation(function readFileSync() {
-        return JSON.stringify({ text: 'I am a file' });
-      });
+await codi.describe(
+  { name: 'file:', id: 'provider_file', parentId: 'provider' },
+  async () => {
+    await codi.it(
+      { name: 'Get File test', parentId: 'provider_file' },
+      async () => {
+        fsMockFn.mock.mockImplementation(function readFileSync() {
+          return JSON.stringify({ text: 'I am a file' });
+        });
 
-      mockPathdirnameFn.mock.mockImplementation(function dirname() {
-        return 'test.json';
-      });
+        mockPathdirnameFn.mock.mockImplementation(function dirname() {
+          return 'test.json';
+        });
 
-      mockPathJoinFn.mock.mockImplementation(function dirname() {
-        '../../test.json';
-      });
+        mockPathJoinFn.mock.mockImplementation(function dirname() {
+          '../../test.json';
+        });
 
-      const { default: file } = await import('../../../mod/provider/file.js');
+        const { default: file } = await import('../../../mod/provider/file.js');
 
-      const results = await file('../../dir/tests/thing.json');
-    },
-  );
-});
+        const results = await file('../../dir/tests/thing.json');
+      },
+    );
+  },
+);
 
 fsMock.restore();
 mockPath.restore();
