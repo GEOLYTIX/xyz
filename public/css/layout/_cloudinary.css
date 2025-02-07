@@ -33,6 +33,8 @@
       margin: auto;
       text-align: center;
       color: var(----color-off-black);
+      pointer-events: none;
+      user-select: none;
 
       & > span {
         vertical-align: middle;
