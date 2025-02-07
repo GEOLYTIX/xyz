@@ -5,11 +5,11 @@
 Functions for handling 3rd party service provider requests
 */
 
-const file = require('./file');
+import file from './file.js';
 
-const cloudfront = require('./cloudfront');
+import cloudfront from './cloudfront.js';
 
-const s3 = require('./s3');
+import s3 from './s3.js';
 
 /**
 @function provider
@@ -27,7 +27,7 @@ The response from the method is returned with the HTTP response.
 
 @returns {Promise} The promise resolves into the response from the provider modules method.
 */
-module.exports = async function provider(req, res) {
+export default async function provider(req, res) {
   const provider = {
     cloudfront,
     file,
@@ -52,4 +52,4 @@ module.exports = async function provider(req, res) {
     res.setHeader('content-type', req.params.content_type);
 
   res.send(response);
-};
+}

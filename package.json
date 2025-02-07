@@ -1,12 +1,10 @@
 {
   "name": "xyz",
   "version": "v4.13.0-alpha",
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/geolytix/xyz"
-  },
-  "engines": {
-    "node": ">=18.x"
   },
   "lint-staged": {
     "*.{js,mjs,json,css,md}": [
@@ -42,7 +40,7 @@
     "@eslint/js": "^9.13.0",
     "browser-sync": "^3.0.3",
     "clean-jsdoc-theme": "^4.3.0",
-    "codi-test-framework": "^0.0.47",
+    "codi-test-framework": "^1.0.24",
     "concurrently": "^9.1.0",
     "cookie-parser": "^1.4.5",
     "dotenv": "^16.4.5",

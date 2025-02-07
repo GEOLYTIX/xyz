@@ -2,7 +2,7 @@
 @module /workspace/templates/mails
 */
 
-module.exports = {
+export default {
   verify_password_reset: {
     en: {
       subject: `Please verify your password reset for \${host}`,

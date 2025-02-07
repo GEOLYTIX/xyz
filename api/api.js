@@ -42,26 +42,31 @@ The req object represents the HTTP request and has properties for the request qu
 @property {Object} header HTTP request header.
 */
 
-require('../mod/utils/processEnv');
+import '../mod/utils/processEnv.js';
+import login from '../mod/user/login.js';
+import auth from '../mod/user/auth.js';
+import saml from '../mod/user/saml.js';
+import register from '../mod/user/register.js';
+import logger from '../mod/utils/logger.js';
 
-const login = require('../mod/user/login');
+//Route imports
+import fetch from '../mod/fetch.js';
+import query from '../mod/query.js';
+import view from '../mod/view.js';
+import provider from '../mod/provider/_provider.js';
+import sign from '../mod/sign/_sign.js';
+import user from '../mod/user/_user.js';
+import workspace from '../mod/workspace/_workspace.js';
 
-const auth = require('../mod/user/auth');
-
-const saml = require('../mod/user/saml');
-
-const register = require('../mod/user/register');
-
-const logger = require('../mod/utils/logger');
-
+// Group all routes
 const routes = {
-  fetch: require('../mod/fetch'),
-  query: require('../mod/query'),
-  view: require('../mod/view'),
-  provider: require('../mod/provider/_provider'),
-  sign: require('../mod/sign/_sign'),
-  user: require('../mod/user/_user'),
-  workspace: require('../mod/workspace/_workspace'),
+  fetch,
+  query,
+  view,
+  provider,
+  sign,
+  user,
+  workspace,
 };
 
 /**
@@ -93,7 +98,7 @@ All other requests will passed to the async validateRequestAuth method.
 @property {Boolean} params.login The request should redirect to user/login.
 @property {Boolean} params.register The request should redirect to user/register.
 */
-module.exports = function api(req, res) {
+export default function api(req, res) {
   // redirect if dir is missing in url path.
   if (xyzEnv.DIR && req.url.length === 1) {
     res.setHeader('location', `${xyzEnv.DIR}`);
@@ -145,7 +150,7 @@ module.exports = function api(req, res) {
   }
 
   validateRequestAuth(req, res);
-};
+}
 
 /**
 @function validateRequestAuth

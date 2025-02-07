@@ -5,7 +5,7 @@ The get_last_location layer query template returns the last id from layer table 
 
 @module /workspace/templates/get_last_location
 */
-module.exports = (_) => {
+export default (_) => {
   const table =
     _.layer.table || Object.values(_.layer.tables).find((tab) => !!tab);
 

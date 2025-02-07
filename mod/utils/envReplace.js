@@ -16,7 +16,7 @@ Template variables not defined in the xyzEnv will not be replaced.
 @returns {json} safeObject 
 */
 
-module.exports = function envReplace(obj) {
+export default function envReplace(obj) {
   // Convert the input object to a JSON string
   const str = JSON.stringify(obj).replace(
     /\$\{([A-Za-z0-9_\s]*)\}/g,
@@ -32,4 +32,4 @@ module.exports = function envReplace(obj) {
   );
 
   return JSON.parse(str);
-};
+}

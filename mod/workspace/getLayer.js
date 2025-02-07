@@ -10,13 +10,13 @@ The getLayer module exports the getLayer method which is required by the query a
 @module /workspace/getLayer
 */
 
-const Roles = require('../utils/roles');
+import * as Roles from '../utils/roles.js';
 
-const mergeTemplates = require('./mergeTemplates');
+import mergeTemplates from './mergeTemplates.js';
 
-const getLocale = require('./getLocale');
+import getLocale from './getLocale.js';
 
-const getTemplate = require('./getTemplate');
+import getTemplate from './getTemplate.js';
 
 /**
 @function getLayer
@@ -43,7 +43,7 @@ The layer.key and layer.name will be assigned if missing.
 
 @returns {Promise<Object|Error>} JSON Layer.
 */
-module.exports = async function getLayer(params) {
+export default async function getLayer(params) {
   const locale = await getLocale(params);
 
   // getLocale will return err if role.check fails.
@@ -83,4 +83,4 @@ module.exports = async function getLayer(params) {
   layer.dbs ??= locale.dbs;
 
   return layer;
-};
+}

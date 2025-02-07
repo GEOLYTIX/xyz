@@ -21,21 +21,34 @@ The _user module exports the user method to route User API requests.
 @module /user
 */
 
-const reqHost = require('../utils/reqHost');
+import reqHost from '../utils/reqHost.js';
+
+import add from './add.js';
+import admin from './admin.js';
+import cookie from './cookie.js';
+import deleteMethod from './delete.js'; // renamed because delete is a reserved word
+import key from './key.js';
+import list from './list.js';
+import log from './log.js';
+import login from './login.js';
+import register from './register.js';
+import token from './token.js';
+import update from './update.js';
+import verify from './verify.js';
 
 const methods = {
-  add: require('./add'),
-  admin: require('./admin'),
-  cookie: require('./cookie'),
-  delete: require('./delete'),
-  key: require('./key'),
-  list: require('./list'),
-  log: require('./log'),
-  login: require('./login'),
-  register: require('./register'),
-  token: require('./token'),
-  update: require('./update'),
-  verify: require('./verify'),
+  add,
+  admin,
+  cookie,
+  delete: deleteMethod, // use the renamed import
+  key,
+  list,
+  log,
+  login,
+  register,
+  token,
+  update,
+  verify,
 };
 
 const previousAddress = {};
@@ -58,7 +71,7 @@ Requests to the user module are debounced by 5 seconds preventing registration, 
 @param {Object} req.params Request parameter.
 @param {string} req.params.method Method request parameter.
 */
-module.exports = async function user(req, res) {
+export default async function user(req, res) {
   if (!Object.hasOwn(methods, req.params.method)) {
     return res.send(`Failed to evaluate 'method' param.`);
   }
@@ -77,7 +90,7 @@ module.exports = async function user(req, res) {
     req.params.msg = method.message;
     methods.login(req, res);
   }
-};
+}
 
 /**
 @function debounceRequest

@@ -2,7 +2,7 @@
 @module /fetch
 */
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   if (!req.options?.template) {
     res.status(400).send();
     return;

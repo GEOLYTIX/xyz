@@ -1,4 +1,4 @@
-module.exports = `
+export default `
   SELECT DISTINCT distinct_field as \${key}
   FROM (
     SELECT \${field} ->> '\${key}' as distinct_field 

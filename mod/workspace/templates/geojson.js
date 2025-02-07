@@ -5,7 +5,7 @@ The geojson layer query template returns an array of records including a geojson
 
 @module /workspace/templates/geojson
 */
-module.exports = (_) => {
+export default (_) => {
   const fields = [];
 
   _.fieldsMap &&
