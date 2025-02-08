@@ -20,7 +20,7 @@ globalThis.xyzEnv = {
 
 await codi.describe(
   {
-    name: 'cloudfront',
+    name: 'cloudfront:',
     id: 'sign_cloudfront',
     parentId: 'sign',
   },
