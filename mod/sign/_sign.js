@@ -42,6 +42,7 @@ export default async function signer(req, res) {
       .send(`Failed to validate 'signer=${req.params.signer}' param.`);
   }
 
+  //TODO : Discuss if this check is needed
   if (signerModules[req.params.signer] === null) {
     return res
       .status(405)
