@@ -9,6 +9,7 @@ Exports the cloudinary signer method.
 @requires module:/utils/processEnv
 */
 
+//TODO: I think we should think about removing these crypto imports as they are global
 import { createHash } from 'crypto';
 
 /**

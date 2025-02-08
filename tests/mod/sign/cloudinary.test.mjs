@@ -73,5 +73,37 @@ await codi.describe(
         );
       },
     );
+
+    await codi.it(
+      { name: 'get url', parentId: 'sign_cloudinary' },
+      async () => {
+        const id1 = crypto.randomUUID();
+        const id2 = crypto.randomUUID();
+
+        globalThis.xyzEnv = {
+          CLOUDINARY_URL: `cloudinary://${id1}:${id2}@test`,
+        };
+
+        const { default: cloudinary } = await import(
+          '../../../mod/sign/cloudinary.js'
+        );
+
+        const { req, res } = codi.mockHttp.createMocks({
+          params: {
+            folder: './test',
+            public_id: 'public_id',
+          },
+        });
+
+        const cloudinaryURL = await cloudinary(req, res);
+
+        codi.assertTrue(cloudinaryURL.includes(id1));
+        codi.assertTrue(cloudinaryURL.includes(id2));
+        codi.assertTrue(
+          cloudinaryURL.includes('https://api.cloudinary.com/v1_1/'),
+        );
+        codi.assertTrue(cloudinaryURL.includes('upload'));
+      },
+    );
   },
 );
