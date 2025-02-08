@@ -12,7 +12,7 @@
     ]
   },
   "scripts": {
-    "test": "NODE_DEBUG=test node --watch-path=. --experimental-test-module-mocks node_modules/codi-test-framework/cli.js tests",
+    "test": "NODE_DEBUG=test node --watch-path=. --experimental-test-module-mocks node_modules/codi-test-framework/cli.js tests --quiet",
     "_build": "node esbuild.config.mjs",
     "browser-sync": "npx browser-sync start --proxy localhost:3000 --port 3001 --ui-port 3002 --files public/js/**/* --no-open --no-notify",
     "ui_css": "npx esbuild --bundle public/css/_ui.css --outfile=public/css/ui.css --loader:.svg=dataurl",
