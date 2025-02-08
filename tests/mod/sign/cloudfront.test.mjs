@@ -1,25 +1,22 @@
-const mockreadFileSyncFn = codi.mock.fn();
 const mockreadFileSync = codi.mock.module('fs', {
   namedExports: {
-    readFileSync: mockreadFileSyncFn,
+    readFileSync: () => {
+      return 'PRIVATEKEY';
+    },
   },
 });
 
-const mockDirnameFn = codi.mock.fn();
-const mockJoinFn = codi.mock.fn();
-const mockPath = codi.mock.module('path', {
+const mockGetSignedURLFn = codi.mock.fn();
+const mockAwsCloudfront = codi.mock.module('@aws-sdk/cloudfront-signer', {
   namedExports: {
-    dirname: mockDirnameFn,
-    join: mockJoinFn,
+    getSignedUrl: mockGetSignedURLFn,
   },
 });
 
-const mockFileURLToPathFn = codi.mock.fn();
-const mockFileURLToPath = codi.mock.module('url', {
-  namedExports: {
-    fileURLToPath: mockFileURLToPathFn,
-  },
-});
+globalThis.xyzEnv = {
+  SRC_TEST: 'test.com',
+  KEY_CLOUDFRONT: 'IAMACLOUDFRONTKEY',
+};
 
 await codi.describe(
   {
@@ -35,16 +32,21 @@ await codi.describe(
           '../../../mod/sign/cloudfront.js'
         );
 
-        const req_url = '';
+        const id = crypto.randomUUID();
+
+        mockGetSignedURLFn.mock.mockImplementation((cloudfront) => {
+          return cloudfront.url + '?key=' + id;
+        });
+
+        const req_url = '{TEST}/cool.json';
 
         const signedUrl = await cloudfront_signer(req_url);
 
-        console.log(signedUrl);
+        codi.assertEqual(signedUrl, `https://test.com/cool.json?key=${id}`);
       },
     );
   },
 );
 
-mockFileURLToPath.restore();
 mockreadFileSync.restore();
-mockPath.restore();
+mockAwsCloudfront.restore();
