@@ -255,7 +255,8 @@ html.dark-mode {
   ::-webkit-scrollbar-corner {
     background: var(--dm-color-dark-faded);
   }
-  .tabview {
+  .tabview,
+  .location {
     .panel {
       background-color: var(--dm-color-dark-neutral);
       .btn-row {
@@ -282,14 +283,12 @@ html.dark-mode {
         background-color: var(--dm-color-on);
       }
     }
-    .tabulator {
-      .tabulator-footer {
-        background: var(--dm-color-dark);
-        .tabulator-page {
-          color: var(--dm-color-light);
-          &.active {
-            color: var(--dm-color-on);
-          }
+    .tabulator-footer {
+      background-color: var(--dm-color-dark);
+      .tabulator-page {
+        color: var(--dm-color-light);
+        &.active {
+          color: var(--dm-color-on);
         }
       }
     }

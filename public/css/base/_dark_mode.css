@@ -306,7 +306,8 @@ html.dark-mode {
 
   /* begin tabview */
 
-  .tabview {
+  .tabview,
+  .location {
     .panel {
       background-color: var(--dm-color-dark-neutral);
 
@@ -340,16 +341,14 @@ html.dark-mode {
       }
     }
 
-    .tabulator {
-      .tabulator-footer {
-        background: var(--dm-color-dark);
+    .tabulator-footer {
+      background-color: var(--dm-color-dark);
 
-        .tabulator-page {
-          color: var(--dm-color-light);
+      .tabulator-page {
+        color: var(--dm-color-light);
 
-          &.active {
-            color: var(--dm-color-on);
-          }
+        &.active {
+          color: var(--dm-color-on);
         }
       }
     }
