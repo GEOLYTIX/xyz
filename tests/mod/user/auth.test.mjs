@@ -321,6 +321,99 @@ await codi.describe(
         );
       },
     );
+
+    await codi.describe(
+      {
+        name: 'checkSession:',
+        id: 'user_auth_check_session',
+        parentId: 'user_auth',
+      },
+      async () => {
+        await codi.it(
+          { name: 'no user session', parentId: 'user_auth_check_session' },
+          async () => {
+            const user = {
+              email: 'test@geolytix.co.uk',
+              admin: true,
+              roles: [],
+            };
+
+            const secret = 'i-am-a-secret';
+
+            const token = jwt.sign(JSON.stringify(user), secret);
+
+            globalThis.xyzEnv = {
+              SECRET: secret,
+              TITLE: 'TEST',
+              USER_SESSION: true,
+            };
+
+            const { req, res } = codi.mockHttp.createMocks({
+              headers: {
+                host: 'http://localhost:3000',
+              },
+              cookies: {
+                TEST: token,
+              },
+              params: {},
+            });
+
+            aclFn.mock.mockImplementation(() => {
+              return [user];
+            });
+
+            const { default: auth } = await import('../../../mod/user/auth.js');
+
+            const result = await auth(req, res);
+
+            codi.assertTrue(result instanceof Error);
+            codi.assertEqual(result.message, 'No user.session provided.');
+          },
+        );
+
+        await codi.it(
+          { name: 'user with a session', parentId: 'user_auth_check_session' },
+          async () => {
+            const user = {
+              email: 'test@geolytix.co.uk',
+              admin: true,
+              roles: [],
+              session: crypto.randomUUID('123.12.23/123'),
+            };
+
+            const secret = 'i-am-a-secret';
+
+            const token = jwt.sign(JSON.stringify(user), secret);
+
+            globalThis.xyzEnv = {
+              SECRET: secret,
+              TITLE: 'TEST',
+              USER_SESSION: true,
+            };
+
+            const { req, res } = codi.mockHttp.createMocks({
+              headers: {
+                host: 'http://localhost:3000',
+              },
+              cookies: {
+                TEST: token,
+              },
+              params: {},
+            });
+
+            aclFn.mock.mockImplementation(() => {
+              return [user];
+            });
+
+            const { default: auth } = await import('../../../mod/user/auth.js');
+
+            const result = await auth(req, res);
+
+            codi.assertEqual(result.session, user.session);
+          },
+        );
+      },
+    );
   },
 );
 
