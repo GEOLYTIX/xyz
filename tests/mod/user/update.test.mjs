@@ -1,6 +1,7 @@
 const params = {
-  name: 'User Update Tests',
-  id: 'user_update_tests',
+  name: 'update: ',
+  id: 'user_update',
+  parentId: 'user',
 };
 
 const aclMockFn = codi.mock.fn();
@@ -19,7 +20,7 @@ await codi.describe(params, async () => {
   await codi.it(
     {
       name: 'should return error for non-admin users',
-      parentId: 'user_update_tests',
+      parentId: 'user_update',
     },
     async () => {
       aclMockFn.mock.mockImplementation(function acl() {
@@ -48,8 +49,9 @@ await codi.describe(params, async () => {
       codi.assertEqual(result.message, 'admin_user_login_required');
     },
   );
-  codi.it(
-    { name: 'should send approval email', parentId: 'user_update_tests' },
+
+  await codi.it(
+    { name: 'should send approval email', parentId: 'user_update' },
     async () => {
       let mailOptions;
 
@@ -89,10 +91,10 @@ await codi.describe(params, async () => {
     },
   );
 
-  codi.it(
+  await codi.it(
     {
       name: 'should reject invalid update keys',
-      parentId: 'user_update_tests',
+      parentId: 'user_update',
     },
     async () => {
       const { default: update } = await import('../../../mod/user/update.js');
