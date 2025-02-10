@@ -80,6 +80,9 @@ html.dark-mode {
       color: var(--color-on);
     }
   }
+  .lighter-background {
+    background-color: var(--dm-color-dark-faded);
+  }
   .bg-light-tertiary {
     background-color: var(--dm-color-dark-faded);
   }

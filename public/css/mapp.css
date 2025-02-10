@@ -11,6 +11,7 @@
   --color-on: #e18335;
   --color-no: #a21309;
   --color-changed: #ffffa7;
+  --color-ok: #0b6f50;
   --dm-color-on: #e18335;
   --dm-color-medium: #555555;
   --dm-color-dark-faded: #333333;
@@ -20,6 +21,7 @@
   --dm-color-light: #ffffff;
   --dm-color-light-secondary: #f2f2f2;
   --dm-color-light-darker: #d8d8d8;
+  --dm-color-no: #ef5350;
 }
 * {
   transition: 0.2s ease-in-out;

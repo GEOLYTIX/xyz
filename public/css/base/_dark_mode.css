@@ -28,6 +28,10 @@ html.dark-mode {
     }
   }
 
+  .lighter-background {
+    background-color: var(--dm-color-dark-faded);
+  }
+
   .bg-light-tertiary {
     background-color: var(--dm-color-dark-faded);
   }
