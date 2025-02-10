@@ -70,7 +70,6 @@ export default async function cookie(req, res) {
   // Verify current cookie
   jwt.verify(cookie, xyzEnv.SECRET, async (err, payload) => {
     if (err) return err;
-
     // Get updated user credentials from ACL
     const rows = await acl(
       `
@@ -104,6 +103,7 @@ export default async function cookie(req, res) {
       return res.status(403).send('Account is blocked');
     }
 
+    //TODO: Is this needed if we return an error?
     delete user.blocked;
 
     if (payload.session) {
