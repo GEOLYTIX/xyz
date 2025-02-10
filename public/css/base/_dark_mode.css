@@ -271,6 +271,10 @@ html.dark-mode {
 
     & button.primary-colour {
       color: var(--color-on);
+
+      & > * {
+        color: var(--color-on);
+      }
     }
 
     &:after {

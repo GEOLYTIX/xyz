@@ -235,6 +235,9 @@ html.dark-mode {
     color: var(--color-light);
     & button.primary-colour {
       color: var(--color-on);
+      & > * {
+        color: var(--color-on);
+      }
     }
     &:after {
       border-top-color: var(--dm-color-medium);
