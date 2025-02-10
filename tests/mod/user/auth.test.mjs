@@ -275,6 +275,50 @@ await codi.describe(
             codi.assertEqual(result.message, 'API Key mismatch');
           },
         );
+
+        await codi.it(
+          {
+            name: 'api token correct',
+            parentId: 'user_auth_check_token',
+          },
+          async () => {
+            const user = {
+              email: 'test@geolytix.co.uk',
+              admin: true,
+              roles: [],
+              api: true,
+            };
+
+            const secret = 'i-am-a-secret';
+
+            const token = jwt.sign(JSON.stringify(user), secret);
+            user.api = token;
+
+            const { req, res } = codi.mockHttp.createMocks({
+              headers: {
+                host: 'http://localhost:3000',
+              },
+              params: {
+                token: token,
+              },
+            });
+
+            globalThis.xyzEnv = {
+              SECRET: secret,
+              TITLE: 'TEST',
+            };
+
+            aclFn.mock.mockImplementation(() => {
+              return [user];
+            });
+
+            const { default: auth } = await import('../../../mod/user/auth.js');
+
+            const result = await auth(req, res);
+
+            codi.assertEqual(result.email, 'test@geolytix.co.uk');
+          },
+        );
       },
     );
   },
