@@ -349,6 +349,11 @@ async function infojMap(req, res) {
     if (Object.hasOwn(req.params.workspace.templates, entry.field)) {
       const fieldTemplate = await getTemplate(entry.field);
 
+        // Core templates should not be included in the infojMap.
+        if (fieldTemplate._type === 'core') {
+          continue; 
+        }
+
       value = fieldTemplate.template || '';
     }
 
