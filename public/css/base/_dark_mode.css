@@ -195,6 +195,14 @@ html.dark-mode {
 
   .searchbox {
     box-shadow: unset;
+
+    & > ul {
+      background-color: var(--dm-color-medium);
+
+      & li {
+        color: var(--color-light);
+      }
+    }
   }
 
   /* end searchbox */
