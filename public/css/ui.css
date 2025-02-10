@@ -228,6 +228,21 @@ html.dark-mode {
   #mapButton {
     background-color: var(--dm-color-darker);
   }
+  .popup {
+    background-color: var(--dm-color-medium);
+    box-shadow: unset;
+    border: solid 1px var(--dm-color-dark-faded);
+    color: var(--color-light);
+    & button.primary-colour {
+      color: var(--color-on);
+    }
+    &:after {
+      border-top-color: var(--dm-color-medium);
+    }
+    & li:hover {
+      background: var(--dm-color-dark-faded);
+    }
+  }
   ::-webkit-scrollbar-track {
     background: var(--dm-color-dark-faded);
   }
