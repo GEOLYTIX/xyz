@@ -1,11 +1,10 @@
 export default [
   {
-    ignores: ['public/js/**/*', 'docs/**/*'],
+    ignores: ['public/js/**/*', 'docs/**/*', 'mod/utils/bcrypt.js'],
   },
   {
     files: ['**/*.js', '**/*.mjs'],
     rules: {
-      quotes: ['error', 'single', { allowTemplateLiterals: true }],
       'prefer-const': [
         'error',
         {
@@ -19,7 +18,7 @@ export default [
           max: 4,
         },
       ],
-      // 'complexity': ['error', { 'max': 15 }],
+      // complexity: ['error', { max: 15 }],
       'no-nested-ternary': 'error',
     },
   },
