@@ -54,14 +54,32 @@ export default {
 
 ## 1. CLI (Console) Tests
 
-CLI tests are vanilla JavaScript tests that execute in the Node.js runtime using the Codi Test framework. These tests focus on the xyz (mod) directory and code that doesn't require browser-specific features.
+CLI tests are javaScript tests that execute in the Node.js runtime using the Codi Test framework. These tests focus on the xyz (mod) directory and code that doesn't require browser-specific features.
+
+The main testing pattern in the cli tests are test mocks.
+
+Codi has implemented some mock modules/functions that are only available in the nodeJS environment.
+
+### Mocks
+
+Module mocking is a strange and weird concept to get your head around. What it is essentially is a way to replace modules or functions within modules with functionality to simulate or 'mock' external entities.
+
+What a mocking module will do is replace the reference of a module in memory with a 'mocked' version of it. You can then reset that version of the mocked module to the original export with a reset/restore function.
+
+Codi provides interfaces to mock:
+
+- functions
+- modules
+- http requests
+
+#### function (fn) mocking
 
 ### Running CLI Tests
 
 The codi test suit will iterate through the tests directory [ignoring the folders specified in codi.json] and log the results from each test suit.
 
 ```bash
-npm run test
+node --run test
 ```
 
 Summary statistics for all tests will be logged with the `-- quiet` flag (codi v0.0.47+):
@@ -70,16 +88,16 @@ Summary statistics for all tests will be logged with the `-- quiet` flag (codi v
 npm run test -- --quiet
 ```
 
-## 2. Module (Browser) Tests
+## 2. Browser Tests
 
-Module tests are designed for the browser environment with full access to:
+Browser tests are designed for the browser environment with full access to:
 
 - DOM
 - Mapp library
 - Mapview for loaded application
 - No mocking required for module imports
 
-### Running Module Tests
+### Running Browser Tests
 
 A [test application view](https://github.com/GEOLYTIX/xyz/blob/main/public/views/_test.html) is provided in the public folder to execute browser tests.
 
@@ -110,28 +128,46 @@ Tests use the describe-it pattern for organization:
 ```javascript
 import { describe, it, assertTrue } from 'codi';
 
-describe('Feature Description', () => {
-  it('should behave in a specific way', () => {
-    // Test code
-  });
+describe({ name: 'Feature Description', id: 'feature_description' }, () => {
+  it(
+    {
+      name: 'should behave in a specific way',
+      parentId: 'feature_description',
+    },
+    () => {
+      // Test code
+    },
+  );
 });
 ```
 
 Example with multiple assertions:
 
 ```javascript
-describe('All languages should have the same base language entries', () => {
-  Object.keys(mapp.dictionaries).forEach((language) => {
-    it(`The ${language} dictionary should have all the base keys`, () => {
-      Object.keys(base_dictionary).forEach((key) => {
-        assertTrue(
-          !!mapp.dictionaries[language][key],
-          `${language} should have ${key}`,
-        );
-      });
+codi.describe(
+  {
+    name: 'All languages should have the same base language entries',
+    id: 'dictionaries',
+  },
+  () => {
+    Object.keys(mapp.dictionaries).forEach((language) => {
+      codi.it(
+        {
+          name: `The ${language} dictionary should have all the base keys`,
+          parentId: 'dictionaries',
+        },
+        () => {
+          Object.keys(base_dictionary).forEach((key) => {
+            codi.assertTrue(
+              !!mapp.dictionaries[language][key],
+              `${language} should have ${key}`,
+            );
+          });
+        },
+      );
     });
-  });
-});
+  },
+);
 ```
 
 ### Available Assertions
@@ -226,7 +262,7 @@ try {
    NODE_ENV=DEVELOPMENT
    ```
 
-> This can be defined in your .env or in your nodemon.json config.
+   > This can be defined in your .env or in your nodemon.json config.
 
 2. Build the project:
 
