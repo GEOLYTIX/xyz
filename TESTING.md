@@ -176,6 +176,70 @@ codi has exported functions to help aid in mocking http requests.
 
 `codi.mockHttp` helps create `req` & `res` objects that can be passed to functions in order to simulate a call to the function via an api. You can call the `createRequest` & `createResponse` functions respectively. You can also call the `createMocks` function and perform a destructured assignment on the `req` & `res`.
 
+```javascript
+await codi.describe({ name: 'Sign: ', id: 'sign' }, async () => {
+  await codi.it({ name: 'Invalid signer', parentId: 'sign' }, async () => {
+    const { default: signer } = await import('../../../mod/sign/_sign.js');
+
+    const req = codi.mockHttp.createRequest({
+      params: {
+        signer: 'foo',
+      },
+    });
+
+    const res = codi.mockHttp.createResponse();
+
+    //OR
+
+    const { req, res } = codi.mockHttp.createMocks({
+      params: {
+        signer: 'foo',
+      },
+    });
+
+    await signer(req, res);
+
+    codi.assertEqual(res.statusCode, 404);
+    codi.assertEqual(res._getData(), "Failed to validate 'signer=foo' param.");
+  });
+});
+```
+
+You can also mock the response from the global fetch function by making use of the `MockAgent` & `setGlobalDispatcher` interfaces.
+
+The `MockAgent` class is used to create a mockpool which can intercept different paths to certains URLs. And based on these paths we can specify a return.
+
+The `setGlobalDispatcher` will assign the Agent on a global scope so that calls to the `fetch` function in non-test modules will be intercepted.
+
+Here is an example of this:
+
+```javascript
+await codi.describe({ name: 'HTTP Mock', id: 'http_test_fun' }, async () => {
+  await codi.it(
+    { name: 'We should get some doggies', parentId: 'http_test_fun' },
+    async () => {
+      const mockAgent = new codi.mockHttp.MockAgent(); //<-- Mockagent we use to get a pool
+      codi.mockHttp.setGlobalDispatcher(mockAgent); // <-- Assigning the agent on a global scope.
+
+      const mockPool = mockAgent.get(new RegExp('http://localhost:3000')); //<-- Mock pool listening for the localhost url
+      mockPool
+        .intercept({ path: '/' })
+        .reply(404, [
+          'codi',
+          'mieka',
+          'luci',
+        ]); /** <-- When we hit a specific path
+                    we get a specified response */
+
+      const response = await fetch('http://localhost:3000');
+
+      codi.assertEqual(response.status, 404, 'We expect to get a 404');
+      codi.assertEqual(await response.json(), ['codi', 'mieka', 'luci']);
+    },
+  );
+});
+```
+
 ### Running CLI Tests
 
 The codi test suit will iterate through the tests directory [ignoring the folders specified in codi.json] and log the results from each test suit.
