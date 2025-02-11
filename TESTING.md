@@ -58,15 +58,15 @@ CLI tests are javaScript tests that execute in the Node.js runtime using the Cod
 
 The main testing pattern in the cli tests are test mocks.
 
-Codi has implemented some mock modules/functions that are only available in the nodeJS environment.
-
 ### Mocks
 
-Module mocking is a strange and weird concept to get your head around. What it is essentially is a way to replace modules or functions with functionality to simulate or 'mock' external entities.
+> [!NOTE] Codi has implemented mock modules/functions that are only available in the nodeJS environment.
 
-What a mocking module will do is replace the reference of a module in memory with a 'mocked' version of it. This mocked version can then be called on from non-test code and receive typically an output. You can then reset that version of the mocked module to the original export with a reset/restore function.
+Module mocking is a strange and weird concept to get your head around. It is essentially is a way to replace modules or functions with stubs to simulate or 'mock' external entities.
 
-Codi provides interfaces to mock:
+What a mocking module will do is replace the reference of a module in memory with a 'mocked' version of it. This mocked version can then be called from non-test code and receive an output. You can then reset that version of the mocked module to the original export with a reset/restore function.
+
+Codi can mock:
 
 - functions
 - modules
@@ -74,7 +74,7 @@ Codi provides interfaces to mock:
 
 #### function (fn) mocking
 
-function mocking is quite simple in that it needs to have a context. The context can be the scope of a test, to a module or global.
+Just like any function, mocking a function needs to have context. The context can be the scope of a test, imported module or global.
 
 To mock a function you can call the `codi.mock.fn()` function.
 This creates a mock function which you can interface with.
@@ -91,7 +91,7 @@ codi.it({ name: 'random', parentId: 'foo' }, () => {
 You can also mock functions/methods with the `codi.mock.method()` function that will take an object as a reference and implement a mock function to that objects method.
 
 > [!NOTE]
-> typically in the tests currently written this methodology isn't used and favoured for the `codi.mock.mockImplementation()` function which can mock a function given to a mocked module. An example of this will be provided in the mock module section.
+> typically in tests written this methodology isn't used and favoured for the `codi.mock.mockImplementation()/mockImplementationOnce()` function which can mock a function given to a mocked module. An example of this will be provided in the mock module section.
 
 ```javascript
 import fs from 'node:fs';
@@ -125,18 +125,18 @@ codi.describe({ name: 'Mocking fs.readFile in Node.js', id: 'mock' }, () => {
 You can mock modules with the `codi.mock.module()` function which takes a path and options to mock a module.
 The typical practice is that you provide a mocked function that you can implement mocks ontop of making the mocked module more reusable.
 
-> [!NOTE]
+> [!CAUTION]
 > the `codi.mock.module()` function is still in early development as it comes from the node:test runner, which is still in further development
 
 options you can provide mocked module:
 
-- cache: If false, each call to require() or import() generates a new mock module. If true, subsequent calls will return the same module mock, and the mock module is inserted into the CommonJS cache. Default: false.
+- cache: If false, each call to require() or import() generates a new mock module. Default: false.
 - defaultExport: An optional value used as the mocked module's default export. If this value is not provided, ESM mocks do not include a default export.
 - namedExports: An optional object whose keys and values are used to create the named exports of the mock module.
 
-Bellow is an example of a mocked module referencing a mock function
+Bellow is an example of a mocked module referencing a mocked function
 
-> [!NOTE]
+> [!IMPORTANT]
 > Ensure that your module mocks are top level, as to import the module before the dynamic import to the module we are testing.
 
 ```javascript
@@ -174,7 +174,7 @@ codi.describe({name: 'mocked module', id: 'mocked_module'}, () => {
 
 if you want to return the functionality of a mocked function/module you will want to call the `restore` function on a mocked module.
 
-> ![NOTE]
+> [!IMPORTANT]
 > You will want to call these restores on mocked modules at the end of a test so that other tests can also mock the same module. If you don't an error will be returned.
 
 ```javascript
@@ -234,7 +234,7 @@ await codi.describe({ name: 'Sign: ', id: 'sign' }, async () => {
 
 You can also mock the response from the global fetch function by making use of the `MockAgent` & `setGlobalDispatcher` interfaces.
 
-The `MockAgent` class is used to create a mockpool which can intercept different paths to certains URLs. And based on these paths we can specify a return.
+The `MockAgent` class is used to create a mockpool which can intercept different paths to certain URLs. And based on these paths we can specify a return.
 
 The `setGlobalDispatcher` will assign the Agent on a global scope so that calls to the `fetch` function in non-test modules will be intercepted.
 
@@ -275,11 +275,15 @@ The codi test suit will iterate through the tests directory [ignoring the folder
 node --run test
 ```
 
-Summary statistics for all tests will be logged with the `-- quiet` flag (codi v.0.47+):
+You can also call the tests in watch mode where changes to the xyz codebase will retrigger the tests on save.
+Running the watched tests will only show the tests that fail.
 
 ```bash
-npm run test -- --quiet
+node --run test-watch
 ```
+
+> [!NOTE] It's better to call the scripts in the package.json with the `node --run` command as it's faster than npm.
+> This is part of node v22+
 
 ## 2. Browser Tests
 
