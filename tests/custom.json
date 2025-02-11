@@ -1,0 +1,5 @@
+{
+  "default_view": {
+    "en": "file:public/views/_test.html"
+  }
+}
