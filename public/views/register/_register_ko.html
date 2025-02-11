@@ -1,79 +1,126 @@
 <!doctype html>
 <html lang="ko">
+  <head data-dir="{{dir}}">
+    <title>XYZ | 등록</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{{dir}}/public/icons/favicon.ico"
+    />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<head data-dir="{{dir}}">
-  <title>XYZ | 등록</title>
-  <link rel="icon" type="image/x-icon" href="{{dir}}/public/icons/favicon.ico" />
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="{{dir}}/public/views/register/_register.js" defer></script>
+    <link rel="stylesheet" href="{{dir}}/public/views/register/_register.css" />
+  </head>
 
-  <script src="{{dir}}/public/views/register/_register.js" defer></script>
-  <link rel="stylesheet" href="{{dir}}/public/views/register/_register.css" />
+  <body class="register_form">
+    <form method="post">
+      <input style="display: none" name="language" required value="ko" />
 
-</head>
+      <input style="display: none" name="register" value="true" />
 
-<body class="register_form">
-  <form method="post">
+      <div class="input-group">
+        <input
+          id="auth_user_email"
+          name="email"
+          type="email"
+          autocomplete="off"
+          required
+          maxlength="50"
+          value=""
+        />
+        <span class="bar"></span>
+        <label for="auth_user_email">이메일</label>
+      </div>
 
-    <input style="display:none;" name="language" required value="ko">
+      <div class="input-group">
+        <input
+          id="auth_user_password"
+          name="password"
+          type="password"
+          autocomplete="off"
+          required
+          pattern="(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{12,}$"
+          value=""
+        />
+        <span class="bar"></span>
+        <label for="auth_user_password">신규 비밀번호(최소 10자 이상)</label>
+      </div>
 
-    <input style="display: none;" name="register" value=true>
+      <div class="input-group">
+        <input
+          id="auth_user_password_retype"
+          type="password"
+          autocomplete="off"
+          required
+          value=""
+        />
+        <span class="bar"></span>
+        <label for="auth_user_password_retype">비밀번호 재입력</label>
+      </div>
 
-    <div class="input-group">
-      <input id="auth_user_email" name="email" type="email" autocomplete="off" required maxlength="50" value="">
-      <span class="bar"></span>
-      <label for="auth_user_email">이메일</label>
-    </div>
+      <br />
 
-    <div class="input-group">
-      <input id="auth_user_password" name="password" type="password" autocomplete="off" required pattern="(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{12,}$" value="">
-      <span class="bar"></span>
-      <label for="auth_user_password">신규 비밀번호(최소 10자 이상)</label>
-    </div>
+      <p class="bold">개인정보</p>
 
-    <div class="input-group">
-      <input id="auth_user_password_retype" type="password" autocomplete="off" required value="">
-      <span class="bar"></span>
-      <label for="auth_user_password_retype">비밀번호 재입력</label>
-    </div>
+      <p>
+        Geolytix는 개인정보관리를 철저히 하며 계정관리와 제품서비스 제공
+        목적으로만 사용할 것입니다. 그외 어떠한 경우라도 제3자와 개인정보를
+        공유하는 일은 없을 것입니다.
+      </p>
 
-    <br>
+      <p>
+        관리자가 귀하의 계정을 무효화할수있지만 귀하의 개인정보의 영구 삭제를
+        원하시면
+        <a class="mailto" href="mailto:support@geolytix.co.uk"
+          >support@geolytix.co.uk</a
+        >
+        로 이메일을 보내주십시오.
+      </p>
 
-    <p class="bold">개인정보</p>
+      <p>
+        이 웹사이트는 The Finsbury Business Centre, 40 Bowling Green Lane,
+        London EC1R 0NE에 주 사업장을 둔 Geolytix소유이며 Geolytix에 의해
+        운영됩니다.
+      </p>
 
-    <p>Geolytix는 개인정보관리를 철저히 하며 계정관리와 제품서비스 제공 목적으로만 사용할 것입니다. 그외 어떠한 경우라도 제3자와 개인정보를 공유하는 일은 없을 것입니다.</p>
+      <label class="checkbox">
+        <input id="privacy_agreement" type="checkbox" />
+        <div></div>
+        <span>동의합니다.</span>
+      </label>
 
-    <p>관리자가 귀하의 계정을 무효화할수있지만 귀하의 개인정보의 영구 삭제를 원하시면 <a class="mailto"
-        href="mailto:support@geolytix.co.uk">support@geolytix.co.uk</a> 로 이메일을 보내주십시오.
-    </p>
+      <button id="btnRegister" type="submit" formaction="register" disabled>
+        계정등록 및 비밀번호 설정
+      </button>
 
-    <p>이 웹사이트는 The Finsbury Business Centre, 40 Bowling Green Lane, London EC1R 0NE에 주 사업장을 둔 Geolytix소유이며 Geolytix에 의해 운영됩니다.</p>
+      <p class="bold">다음단계는? 귀하의 계정을 확인하시면 됩니다.</p>
 
-    <label class="checkbox">
-      <input id="privacy_agreement" type="checkbox">
-      <div></div>
-      <span>동의합니다.</span>
-    </label>
+      <p>
+        귀하가 제공한 이메일주소로
+        <a class="mailto" href="mailto:xyz@geolytix.co.uk"
+          >xyz@geolytix.co.uk</a
+        >
+        로부터 계정을 확인할 수 있는 링크가 포함된 이메일을 받게됩니다.
+      </p>
 
-    <button id="btnRegister" type="submit" formaction="register" disabled>
-      계정등록 및 비밀번호 설정
-    </button>
+      <p>
+        몇분내로 이메일을 받지못하셨으면 스팸메일함을 확인해보십시오.
+        <a class="mailto" href="mailto:xyz@geolytix.co.uk"
+          >xyz@geolytix.co.uk</a
+        >
+        를 안전한 발신자 리스트에 추가하시면 메시지 수신에 문제가 없을 것입니다.
+      </p>
 
-    <p class="bold">다음단계는? 귀하의 계정을 확인하시면 됩니다.</p>
+      <p>
+        확인 후, 입지 관리자가 신규계정 승인을 하게됩니다. 귀하의 계정이
+        승인되면 그 다음의 이메일을 받으시게 됩니다.
+      </p>
 
-    <p>귀하가 제공한 이메일주소로 <a class="mailto" href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a> 로부터 계정을 확인할 수 있는 링크가 포함된
-      이메일을 받게됩니다.
-    </p>
-
-    <p>몇분내로 이메일을 받지못하셨으면 스팸메일함을 확인해보십시오. <a class="mailto" href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a> 를 안전한
-      발신자 리스트에 추가하시면 메시지 수신에 문제가 없을 것입니다.
-    </p>
-
-    <p>확인 후, 입지 관리자가 신규계정 승인을 하게됩니다. 귀하의 계정이 승인되면 그 다음의 이메일을 받으시게 됩니다.</p>
-
-    <a class="switch" href="{{dir}}/public/?login&language=ko">이미 등록이 되었나요? 로그인 하세요.</a>
-  </form>
-
-</body>
-
+      <a class="switch" href="{{dir}}/public/?login&language=ko"
+        >이미 등록이 되었나요? 로그인 하세요.</a
+      >
+    </form>
+  </body>
 </html>

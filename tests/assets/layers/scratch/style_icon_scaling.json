@@ -1,9 +1,9 @@
 {
-    "style": {
-        "dynamic": true,
-        "icon_scaling": {
-            "field": "icon_scale",
-            "cluster": "avg"
-        }
+  "style": {
+    "dynamic": true,
+    "icon_scaling": {
+      "field": "icon_scale",
+      "cluster": "avg"
     }
+  }
 }

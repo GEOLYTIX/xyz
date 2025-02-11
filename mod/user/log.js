@@ -8,7 +8,7 @@ Exports the [user] access log method for the /api/user/log route.
 @module /user/log
 */
 
-const acl = require('./acl')
+const acl = require('./acl');
 
 /**
 @function accessLog
@@ -33,49 +33,46 @@ Requesting user is admin.
 */
 
 module.exports = async function accessLog(req, res) {
-
   // acl module will export an empty require object without the ACL being configured.
   if (acl === null) {
-    return res.status(500).send('ACL unavailable.')
+    return res.status(500).send('ACL unavailable.');
   }
 
   if (!req.params.email) {
-
-    return res.status(500).send('Missing email param')
+    return res.status(500).send('Missing email param');
   }
 
   if (!req.params.user) {
-
-    return new Error('login_required')
+    return new Error('login_required');
   }
 
-  const email = req.params.email.replace(/\s+/g, '')
+  const email = req.params.email.replace(/\s+/g, '');
 
   // Admin priviliges are required for the user access log.
   if (!req.params.user?.admin) {
-
     // A user may request their own access log.
     if (req.params.user?.email !== email) {
-
-      return new Error('admin_required')
+      return new Error('admin_required');
     }
   }
 
-  const rows = await acl(`
+  const rows = await acl(
+    `
     SELECT access_log
     FROM acl_schema.acl_table
     WHERE lower(email) = lower($1);`,
-    [req.params.email])
+    [req.params.email],
+  );
 
   if (rows instanceof Error) {
-    return res.status(500).send('Failed to access ACL.')
+    return res.status(500).send('Failed to access ACL.');
   }
 
   // return 204 if no record was returned from database.
   if (!rows?.length) {
-    return res.status(202).send('No rows returned from table.')
+    return res.status(202).send('No rows returned from table.');
   }
 
   // Send the infoj object with values back to the client.
-  res.send(rows.length === 1 && rows[0] || rows)
-}
+  res.send((rows.length === 1 && rows[0]) || rows);
+};

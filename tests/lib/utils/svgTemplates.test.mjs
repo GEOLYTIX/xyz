@@ -8,22 +8,23 @@
  * @function svgTemplatesTest
  */
 export async function svgTemplatesTest() {
-    await codi.describe('Utils: SVG Templates', async () => {
+  await codi.describe('Utils: SVG Templates', async () => {
+    /**
+     * ### We shouldn't be able to replace already existing templates
+     * @function it
+     */
+    await codi.it('We should load new svg templates once', async () => {
+      const svgTemplates = {
+        dot_test: 'I am a bogus svg and shouldnt be loaded',
+      };
 
-        /**
-         * ### We shouldn't be able to replace already existing templates
-         * @function it
-         */
-        await codi.it('We should load new svg templates once', async () => {
-
-            const svgTemplates = {
-                'dot_test': 'I am a bogus svg and shouldnt be loaded',
-            };
-
-            await mapp.utils.svgTemplates(svgTemplates);
-            const dot_test_svg = await mapp.utils.svgSymbols.templates['dot_test'];
-            codi.assertNotEqual(dot_test_svg, '', 'The svg template should not be overwriten');
-
-        });
+      await mapp.utils.svgTemplates(svgTemplates);
+      const dot_test_svg = await mapp.utils.svgSymbols.templates['dot_test'];
+      codi.assertNotEqual(
+        dot_test_svg,
+        '',
+        'The svg template should not be overwriten',
+      );
     });
+  });
 }

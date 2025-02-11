@@ -3,7 +3,7 @@ import { getTest } from './get.test.mjs';
 import { nnearestTest } from './nnearest.test.mjs';
 
 export const locationTest = {
-    createTest,
-    getTest,
-    nnearestTest
+  createTest,
+  getTest,
+  nnearestTest,
 };

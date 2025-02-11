@@ -8,7 +8,7 @@ Exports the addUser method for the /api/user/add route.
 @module /user/add
 */
 
-const acl = require('./acl')
+const acl = require('./acl');
 
 /**
 @function addUser
@@ -39,40 +39,39 @@ Requesting user is admin.
 */
 
 module.exports = async function addUser(req, res) {
-
   // acl module will export an empty require object without the ACL being configured.
   if (acl === null) {
-    return res.status(500).send('ACL unavailable.')
+    return res.status(500).send('ACL unavailable.');
   }
 
   if (!req.params.email) {
-
-    return res.status(500).send('Missing email param')
+    return res.status(500).send('Missing email param');
   }
 
   if (!req.params.user) {
-
-    return new Error('login_required')
+    return new Error('login_required');
   }
 
   if (!req.params.user?.admin) {
-
-    return new Error('admin_required')
+    return new Error('admin_required');
   }
 
-  const email = req.params.email.replace(/\s+/g, '')
+  const email = req.params.email.replace(/\s+/g, '');
 
   // Check for exsiting user account with same email in ACL.
-  let rows = await acl(`
+  let rows = await acl(
+    `
     SELECT email FROM acl_schema.acl_table
-    WHERE lower(email) = lower($1);`, [email])
+    WHERE lower(email) = lower($1);`,
+    [email],
+  );
 
   if (rows instanceof Error) {
-    return res.status(500).send('Failed to access ACL.')
+    return res.status(500).send('Failed to access ACL.');
   }
 
   if (rows[0]) {
-    return res.send('User already exists in ACL.')
+    return res.send('User already exists in ACL.');
   }
 
   // Create new user account
@@ -84,11 +83,11 @@ module.exports = async function addUser(req, res) {
     SELECT
       '${email}' AS email,
       true AS verified,
-      true AS approved;`)
+      true AS approved;`);
 
   if (rows instanceof Error) {
-    return res.status(500).send('Failed to add user account to ACL.')
+    return res.status(500).send('Failed to add user account to ACL.');
   }
 
-  res.send(`${email} added to ACL.`)
-} 
+  res.send(`${email} added to ACL.`);
+};

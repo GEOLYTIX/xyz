@@ -2,33 +2,29 @@
 @module /provider/getFrom
 */
 
-const logger = require('../utils/logger')
+const logger = require('../utils/logger');
 
-const cloudfront = require('../provider/cloudfront')
+const cloudfront = require('../provider/cloudfront');
 
-const file = require('../provider/file')
+const file = require('../provider/file');
 
 module.exports = {
-  https: async url => {
-
+  https: async (url) => {
     try {
+      const response = await fetch(url);
 
-      const response = await fetch(url)
-
-      logger(`${response.status} - ${url}`, 'fetch')
+      logger(`${response.status} - ${url}`, 'fetch');
 
       if (url.match(/\.json$/i)) {
-        return await response.json()
+        return await response.json();
       }
 
-      return await response.text()
-
+      return await response.text();
     } catch (err) {
-      console.error(err)
+      console.error(err);
       return;
     }
-
   },
-  file: ref => file(ref.split(':')[1]),
-  cloudfront: ref => cloudfront(ref.split(':')[1])
-}
+  file: (ref) => file(ref.split(':')[1]),
+  cloudfront: (ref) => cloudfront(ref.split(':')[1]),
+};

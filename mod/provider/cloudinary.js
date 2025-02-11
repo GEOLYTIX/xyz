@@ -7,10 +7,12 @@ const { createHash } = require('crypto');
 // 1: api_key
 // 2: api_secret
 // 3: cloud_name
-const cloudinary = process.env.CLOUDINARY_URL?.replaceAll('://', ' ').replaceAll(':', ' ').replaceAll('@', ' ').split(' ');
+const cloudinary = process.env.CLOUDINARY_URL?.replaceAll('://', ' ')
+  .replaceAll(':', ' ')
+  .replaceAll('@', ' ')
+  .split(' ');
 
-module.exports = async req => {
-
+module.exports = async (req) => {
   if (!cloudinary) {
     console.warn(`process.env.CLOUDINARY_URL not set`);
     return;
@@ -21,26 +23,35 @@ module.exports = async req => {
 
   const data = generateData(req, 'upload');
 
-  req.body = req.body && await bodyData(req) || null;
+  req.body = (req.body && (await bodyData(req))) || null;
 
   // Convert body to appropriate format
-  const file = req.params.resource_type === 'raw' ? req.body.toString() : `data:image/jpeg;base64,${req.body.toString('base64')}`;
+  const file =
+    req.params.resource_type === 'raw'
+      ? req.body.toString()
+      : `data:image/jpeg;base64,${req.body.toString('base64')}`;
   data.append('file', file);
 
-  const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudinary[3]}/upload`, {
-    method: 'post',
-    body: data,
-  });
+  const response = await fetch(
+    `https://api.cloudinary.com/v1_1/${cloudinary[3]}/upload`,
+    {
+      method: 'post',
+      body: data,
+    },
+  );
 
   return await response.json();
-}
+};
 
 async function destroy(req) {
   const data = generateData(req, 'destroy');
-  const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudinary[3]}/image/destroy`, {
-    method: 'post',
-    body: data,
-  });
+  const response = await fetch(
+    `https://api.cloudinary.com/v1_1/${cloudinary[3]}/image/destroy`,
+    {
+      method: 'post',
+      body: data,
+    },
+  );
 
   return await response.json();
 }
@@ -77,8 +88,8 @@ function bodyData(req) {
   return new Promise((resolve, reject) => {
     const chunks = [];
 
-    req.on('data', chunk => chunks.push(chunk));
+    req.on('data', (chunk) => chunks.push(chunk));
     req.on('end', () => resolve(Buffer.concat(chunks)));
-    req.on('error', error => reject(error));
+    req.on('error', (error) => reject(error));
   });
 }

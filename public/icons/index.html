@@ -1,101 +1,117 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+  <head>
+    <title>XYZ Icons</title>
 
-<head>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="https://geolytix.github.io/xyz/public/icons/favicon.ico"
+    />
 
-  <title>XYZ Icons</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-  <link rel="icon" type="image/x-icon" href="https://geolytix.github.io/xyz/public/icons/favicon.ico" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        font-family: Arial, Helvetica, sans-serif;
+      }
 
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+      #gallery {
+        display: flex;
+        flex-wrap: wrap;
+      }
 
-  <style>
-    * {
-      margin: 0;
-      padding: 0;
-      font-family: Arial, Helvetica, sans-serif;
-    }
+      .img {
+        width: 10vw;
+        height: 10vw;
+        margin: 10px;
+        background-size: contain;
+        background-repeat: no-repeat;
+        background-position: center;
+      }
 
-    #gallery {
-      display: flex;
-      flex-wrap: wrap;
-    }
+      .progress-line,
+      .progress-line:before {
+        height: 3px;
+        width: 100%;
+        margin: 0;
+      }
 
-    .img {
-      width: 10vw;
-      height: 10vw;
-      margin: 10px;
-      background-size: contain;
-      background-repeat: no-repeat;
-      background-position: center;
-    }
-    
-    .progress-line, .progress-line:before {
-      height: 3px;
-      width: 100%;
-      margin: 0;
-    }
+      .progress-line {
+        background-color: #cddc39;
+        display: -webkit-flex;
+        display: flex;
+      }
 
-    .progress-line {
-      background-color: #cddc39;
-      display: -webkit-flex;
-      display: flex;
-    }
-    
-    .progress-line:before {
-      background-color: #090;
-      content: '';
-      -webkit-animation: running-progress 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-      animation: running-progress 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
-    }
-    
-    @-webkit-keyframes running-progress {
-      0% { margin-left: 0px; margin-right: 100%; }
-      50% { margin-left: 25%; margin-right: 0%; }
-      100% { margin-left: 100%; margin-right: 0; }
-    }
-    
-    @keyframes running-progress {
-      0% { margin-left: 0px; margin-right: 100%; }
-      50% { margin-left: 25%; margin-right: 0%; }
-      100% { margin-left: 100%; margin-right: 0; }
-    }
+      .progress-line:before {
+        background-color: #090;
+        content: '';
+        -webkit-animation: running-progress 2s cubic-bezier(0.4, 0, 0.2, 1)
+          infinite;
+        animation: running-progress 2s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+      }
 
-  </style>
+      @-webkit-keyframes running-progress {
+        0% {
+          margin-left: 0px;
+          margin-right: 100%;
+        }
+        50% {
+          margin-left: 25%;
+          margin-right: 0%;
+        }
+        100% {
+          margin-left: 100%;
+          margin-right: 0;
+        }
+      }
 
-</head>
+      @keyframes running-progress {
+        0% {
+          margin-left: 0px;
+          margin-right: 100%;
+        }
+        50% {
+          margin-left: 25%;
+          margin-right: 0%;
+        }
+        100% {
+          margin-left: 100%;
+          margin-right: 0;
+        }
+      }
+    </style>
+  </head>
 
-<body>
-  
-  <div class="progress-line"></div>
-  <div id="gallery"></div>
+  <body>
+    <div class="progress-line"></div>
+    <div id="gallery"></div>
+  </body>
 
-</body>
+  <script type="module">
+    import { render, html } from 'https://unpkg.com/uhtml?module';
 
-<script  type="module">
+    fetch(
+      `https://api.github.com/repos/geolytix/xyz/contents/public/icons?ref=development`,
+    )
+      .then((response) => response.json())
+      .then((json) => {
+        const gallery = document.getElementById('gallery');
 
-import { render, html } from "https://unpkg.com/uhtml?module";
-
-fetch(`https://api.github.com/repos/geolytix/xyz/contents/public/icons?ref=development`)
-  .then((response) => response.json())
-  .then((json) => {
-    const gallery = document.getElementById("gallery");
-
-    Object.values(json)
-      .filter((o) => o.name.match(/\.svg$/i))
-      .forEach((o) => {
-        gallery.appendChild(html.node`<div
+        Object.values(json)
+          .filter((o) => o.name.match(/\.svg$/i))
+          .forEach((o) => {
+            gallery.appendChild(html.node`<div
       class="img"
       title="${o.name}"
       style="${`background-image: url(https://geolytix.github.io/xyz/public/icons/${o.name})`}"
-      >`)
-      })
-  
-    document.querySelector('.progress-line').remove()
+      >`);
+          });
 
-  })
-
-</script>
-
+        document.querySelector('.progress-line').remove();
+      });
+  </script>
 </html>

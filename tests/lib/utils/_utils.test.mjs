@@ -6,11 +6,11 @@ import { composeTest } from './compose.test.mjs';
 import { svgTemplatesTest } from './svgTemplates.test.mjs';
 import { versionCheck } from './versionCheck.mjs';
 export const utilsTest = {
-    numericFormatterTest,
-    mergeTest,
-    paramStringTest,
-    queryParamsTest,
-    composeTest,
-    svgTemplatesTest,
-    versionCheck
-}
+  numericFormatterTest,
+  mergeTest,
+  paramStringTest,
+  queryParamsTest,
+  composeTest,
+  svgTemplatesTest,
+  versionCheck,
+};

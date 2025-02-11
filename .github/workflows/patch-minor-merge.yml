@@ -1,4 +1,4 @@
-name: patch-merge 
+name: patch-merge
 on:
   push:
     branches:

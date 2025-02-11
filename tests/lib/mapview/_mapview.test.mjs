@@ -11,15 +11,15 @@ import { popupTest } from './popup.test.mjs';
 import { olControlsTest } from './olcontrols.test.mjs';
 
 export const mapviewTest = {
-    olControlsTest,
-    addLayerTest,
-    allfeaturesTest,
-    attributionTest,
-    fitViewTest,
-    geoJSONTest,
-    geometryTest,
-    getBoundsTest,
-    infotipTest,
-    locateTest,
-    popupTest
-}
+  olControlsTest,
+  addLayerTest,
+  allfeaturesTest,
+  attributionTest,
+  fitViewTest,
+  geoJSONTest,
+  geometryTest,
+  getBoundsTest,
+  infotipTest,
+  locateTest,
+  popupTest,
+};

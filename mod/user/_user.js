@@ -21,7 +21,7 @@ The _user module exports the user method to route User API requests.
 @module /user
 */
 
-const reqHost = require('../utils/reqHost')
+const reqHost = require('../utils/reqHost');
 
 const methods = {
   add: require('./add'),
@@ -36,7 +36,7 @@ const methods = {
   token: require('./token'),
   update: require('./update'),
   verify: require('./verify'),
-}
+};
 
 /**
 @function user
@@ -56,19 +56,16 @@ The method request parameter must be an own member of the methods object, eg. `a
 */
 
 module.exports = async function user(req, res) {
-
   if (!Object.hasOwn(methods, req.params.method)) {
-
-    return res.send(`Failed to evaluate 'method' param.`)
+    return res.send(`Failed to evaluate 'method' param.`);
   }
 
-  req.params.host = reqHost(req)
+  req.params.host = reqHost(req);
 
-  const method = await methods[req.params.method](req, res)
+  const method = await methods[req.params.method](req, res);
 
   if (method instanceof Error) {
-
-    req.params.msg = method.message
-    methods.login(req, res)
+    req.params.msg = method.message;
+    methods.login(req, res);
   }
-}
+};
