@@ -1,22 +1,25 @@
 export default [
   {
-    ignores: ['public/js/**/*', 'docs/**/*'],
+    ignores: ['public/js/**/*', 'docs/**/*', 'mod/utils/bcrypt.js'],
   },
   {
     files: ['**/*.js', '**/*.mjs'],
     rules: {
-      quotes: ['error', 'single', { 'allowTemplateLiterals': true }],
-      'prefer-const': ['error', {
-        'destructuring': 'any',
-        'ignoreReadBeforeAssign': true
-      }],
-      'max-depth': ['error',
+      'prefer-const': [
+        'error',
         {
-          'max': 4
-        }
+          destructuring: 'any',
+          ignoreReadBeforeAssign: true,
+        },
       ],
-      // 'complexity': ['error', { 'max': 15 }],
-      'no-nested-ternary': 'error'
-    }
-  }
+      'max-depth': [
+        'error',
+        {
+          max: 4,
+        },
+      ],
+      // complexity: ['error', { max: 15 }],
+      'no-nested-ternary': 'error',
+    },
+  },
 ];

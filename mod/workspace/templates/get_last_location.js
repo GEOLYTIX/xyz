@@ -1,8 +1,9 @@
-module.exports = _ => {
+module.exports = (_) => {
+  const table =
+    _.layer.table || Object.values(_.layer.tables).find((tab) => !!tab);
 
-  const table = _.layer.table || Object.values(_.layer.tables).find(tab => !!tab);
-
-  const geom = _.layer.geom || Object.values(_.layer.geoms).find(tab => !!tab);
+  const geom =
+    _.layer.geom || Object.values(_.layer.geoms).find((tab) => !!tab);
 
   return `
           SELECT
@@ -10,5 +11,5 @@ module.exports = _ => {
           FROM ${table}
           WHERE ${geom} IS NOT NULL AND ${_.layer.qID} IS NOT NULL \${filter}
           ORDER BY ${_.layer.qID} DESC
-          LIMIT 1`
-}
+          LIMIT 1`;
+};

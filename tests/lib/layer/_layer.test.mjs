@@ -1,7 +1,7 @@
 /**
  * ## layerTest{}
  * The layer test modules are exported as an object to be used in the local.test.mjs module in the browser tests
- * @module layer 
+ * @module layer
  */
 
 /**
@@ -23,11 +23,11 @@ import { featureStyleTest } from './featureStyle.test.mjs';
 import { styleParser } from './styleParser.test.mjs';
 
 export const layerTest = {
-    decorateTest,
-    fadeTest,
-    featureFieldsTest,
-    featureFormatsTest,
-    featureHoverTest,
-    featureStyleTest,
-    styleParser
+  decorateTest,
+  fadeTest,
+  featureFieldsTest,
+  featureFormatsTest,
+  featureHoverTest,
+  featureStyleTest,
+  styleParser,
 };

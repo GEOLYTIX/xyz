@@ -11,15 +11,15 @@ The workspace is cached in the module scope to allow for the mergeObjectTemplate
 @module /workspace/mergeTemplates
 */
 
-const merge = require('../utils/merge')
+const merge = require('../utils/merge');
 
-const envReplace = require('../utils/envReplace')
+const envReplace = require('../utils/envReplace');
 
-const getTemplate = require('./getTemplate')
+const getTemplate = require('./getTemplate');
 
-const workspaceCache = require('./cache')
+const workspaceCache = require('./cache');
 
-let workspace
+let workspace;
 
 /**
 @function mergeTemplates
@@ -43,58 +43,47 @@ An array of templates can be defined as obj.templates[]. The templates will be m
 @returns {Promise} The layer or locale provided as obj param.
 */
 module.exports = async function mergeTemplates(obj) {
-
   // Cache workspace in module scope for template assignment.
-  workspace = await workspaceCache()
+  workspace = await workspaceCache();
 
   // The object has an implicit template to merge into.
   if (obj.template) {
-
-    const template = await getTemplate(obj.template)
+    const template = await getTemplate(obj.template);
 
     // Failed to get template matching obj.template from template.src!
     if (template.err instanceof Error) {
-
-      obj.err ??= []
-      obj.err.push(template.err.message)
+      obj.err ??= [];
+      obj.err.push(template.err.message);
 
       // The template is not in the workspace.templates{}
     } else if (template instanceof Error) {
-
-      obj.err ??= []
-      obj.err.push(template.message)
-
+      obj.err ??= [];
+      obj.err.push(template.message);
     } else {
-
       // Merge obj --> template
       // Template must be cloned to prevent cross polination and array aggregation.
-      obj = merge(structuredClone(template), obj)
+      obj = merge(structuredClone(template), obj);
     }
 
     // Check whether the object key exist as template if no implicit template has been defined.
   } else if (Object.hasOwn(workspace.templates, obj.key)) {
-
-    obj.err ??= []
-    obj.err.push(`Template matching ${obj.key} exists in workspace.`)
+    obj.err ??= [];
+    obj.err.push(`Template matching ${obj.key} exists in workspace.`);
   }
 
   for (const template_key of obj.templates || []) {
-
-    const template = await getTemplate(template_key)
+    const template = await getTemplate(template_key);
 
     // Failed to retrieve template matching template_key
     if (template.err instanceof Error) {
-
-      obj.err ??= []
-      obj.err.push(template.err.message)
+      obj.err ??= [];
+      obj.err.push(template.err.message);
 
       // A template matching the template_key does not exist.
     } else if (template instanceof Error) {
-
-      obj.err ??= []
-      obj.err.push(`${template_key}: ${template.message}`)
+      obj.err ??= [];
+      obj.err.push(`${template_key}: ${template.message}`);
     } else {
-
       //The object key must not be overwritten by a template key.
       delete template.key;
 
@@ -102,21 +91,21 @@ module.exports = async function mergeTemplates(obj) {
       delete template.template;
 
       // Merge template --> obj
-      obj = merge(obj, template)
+      obj = merge(obj, template);
     }
   }
 
   // Substitute ${SRC_*} in object string.
-  obj = envReplace(obj)
+  obj = envReplace(obj);
 
   // Assign templates to workspace.
-  assignWorkspaceTemplates(obj)
+  assignWorkspaceTemplates(obj);
 
   // Assign default workspace dbs if not defined in template.
-  obj.dbs ??= workspace.dbs
+  obj.dbs ??= workspace.dbs;
 
-  return obj
-}
+  return obj;
+};
 
 /**
 @function assignWorkspaceTemplates
@@ -136,28 +125,27 @@ function assignWorkspaceTemplates(obj) {
 
   if (obj instanceof Object && !Object.keys(obj)) return;
 
-  Object.entries(obj).forEach(entry => {
+  Object.entries(obj).forEach((entry) => {
     // Process template objects - if found, add type and merge into workspace templates
     if (entry[0] === 'template' && entry[1].key) {
-
       entry[1]._type = 'template';
-      workspace.templates[entry[1].key] = Object.assign(workspace.templates[entry[1].key] || {}, entry[1])
+      workspace.templates[entry[1].key] = Object.assign(
+        workspace.templates[entry[1].key] || {},
+        entry[1],
+      );
 
       return;
     }
 
     // Recursively process each item if we find an array
     if (Array.isArray(entry[1])) {
-
-      entry[1].forEach(assignWorkspaceTemplates)
+      entry[1].forEach(assignWorkspaceTemplates);
       return;
     }
 
     // Recursively process nested objects
     if (entry[1] instanceof Object) {
-
       assignWorkspaceTemplates(entry[1]);
     }
-
-  })
+  });
 }

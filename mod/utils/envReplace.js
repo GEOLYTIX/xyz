@@ -15,18 +15,19 @@ Template variables not defined in the process.env will not be replaced.
 @returns {json} safeObject 
 */
 module.exports = function envReplace(obj) {
-
   // Convert the input object to a JSON string
-  const str = JSON.stringify(obj).replace(/\$\{([A-Za-z0-9_\s]*)\}/g, matched => {
+  const str = JSON.stringify(obj).replace(
+    /\$\{([A-Za-z0-9_\s]*)\}/g,
+    (matched) => {
+      // Remove template brackets from matched param.
+      const param = matched.replace(/\$\{|\}/g, '');
 
-    // Remove template brackets from matched param.
-    const param = matched.replace(/\$\{|\}/g, '')
+      // Find substitute value from process.env SRC_* variable.
+      const change = process.env[`SRC_${param}`] || matched;
 
-    // Find substitute value from process.env SRC_* variable.
-    const change = process.env[`SRC_${param}`] || matched
-
-    return change
-  })
+      return change;
+    },
+  );
 
   return JSON.parse(str);
-}
+};

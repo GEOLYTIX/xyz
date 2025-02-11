@@ -1,6 +1,4 @@
-
-
-.disabled >  .drawer {
+.disabled > .drawer {
   opacity: 0.4;
   pointer-events: none;
 }
@@ -9,26 +7,26 @@
   padding: 5px;
   background-color: var(--color-light-tertiary);
 
-  &.expandable:not(.empty)>.header:hover {
+  &.expandable:not(.empty) > .header:hover {
     cursor: pointer;
   }
-    
-  &.expandable.empty>.header>.mask-icon.expander {
+
+  &.expandable.empty > .header > .mask-icon.expander {
     display: none;
   }
 
-  &.expandable>.header>.mask-icon.expander {
-    -webkit-mask-image: url("../icons/icon-arrow-down.svg");
-    mask-image: url("../icons/icon-arrow-down.svg");
+  &.expandable > .header > .mask-icon.expander {
+    -webkit-mask-image: url('../icons/icon-arrow-down.svg');
+    mask-image: url('../icons/icon-arrow-down.svg');
   }
 
   &.expandable:not(.expanded) > *:not(.header) {
     display: none;
   }
 
-  &.expanded>.header>.mask-icon.expander {
-    -webkit-mask-image: url("../icons/icon-arrow-up.svg");
-    mask-image: url("../icons/icon-arrow-up.svg");
+  &.expanded > .header > .mask-icon.expander {
+    -webkit-mask-image: url('../icons/icon-arrow-up.svg');
+    mask-image: url('../icons/icon-arrow-up.svg');
   }
 
   &.disabled {
@@ -36,36 +34,35 @@
     pointer-events: none;
   }
 
-  & >.header {
+  & > .header {
     display: flex;
     align-items: center;
 
-    & >:not(button):not(label):not(input) {
+    & > :not(button):not(label):not(input) {
       pointer-events: none;
     }
 
-    & >div,
-    & >button {
+    & > div,
+    & > button {
       margin-left: 5px;
       width: 1.5em;
       height: 1.5em;
     }
 
-    & >:nth-child(1) {
+    & > :nth-child(1) {
       overflow: hidden;
       white-space: nowrap;
       text-overflow: ellipsis;
     }
 
-    & >:nth-child(2) {
+    & > :nth-child(2) {
       margin-left: auto;
     }
 
-    & >.mask-icon {
+    & > .mask-icon {
       mask-position: right;
       -webkit-mask-position: right;
     }
-
   }
 
   &.flat {

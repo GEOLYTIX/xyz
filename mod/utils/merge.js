@@ -3,7 +3,6 @@
 */
 
 module.exports = function mergeDeep(target, ...sources) {
-
   // No sources to merge.
   if (!sources.length) {
     return target;
@@ -14,12 +13,9 @@ module.exports = function mergeDeep(target, ...sources) {
 
   // Source and Target are both objects.
   if (isObject(target) && isObject(source)) {
-
     // Iterate over object keys in source.
     for (const key in source) {
-
       if (isObject(source[key])) {
-
         // Assign empty object on key.
         if (!target[key]) Object.assign(target, { [key]: {} });
 
@@ -28,22 +24,15 @@ module.exports = function mergeDeep(target, ...sources) {
 
         // Target and Source are both arrays.
       } else if (Array.isArray(source[key]) && Array.isArray(target[key])) {
-
-
         // Target and Source arrays are equal.
-        if (source[key].every(item => target[key].includes(item))) {
-
+        if (source[key].every((item) => target[key].includes(item))) {
           // Do not merge.
-          target[key] = source[key]
-
+          target[key] = source[key];
         } else {
-
           // Merge unequal arrays.
-          target[key] = [...target[key] || [], ...source[key]]
+          target[key] = [...(target[key] || []), ...source[key]];
         }
-
       } else {
-
         // Assign key if not an object itself.
         Object.assign(target, { [key]: source[key] });
       }
@@ -51,8 +40,8 @@ module.exports = function mergeDeep(target, ...sources) {
   }
 
   return mergeDeep(target, ...sources);
-}
+};
 
 function isObject(item) {
-  return (!Array.isArray(item) && item instanceof Object);
+  return !Array.isArray(item) && item instanceof Object;
 }

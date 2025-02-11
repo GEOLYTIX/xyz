@@ -8,7 +8,7 @@
   grid-template-rows: 50px auto;
 
   &.disabled::after {
-    content: "";
+    content: '';
     height: 100%;
     width: 100%;
     position: absolute;
@@ -17,7 +17,7 @@
     background-color: #fff;
     opacity: 0.7;
   }
- 
+
   & > .tabs {
     width: 100%;
     height: 50px;
@@ -42,7 +42,7 @@
       background-color: white;
       font-weight: bold;
     }
-    
+
     & > .tab:not(.active) > .header:hover {
       cursor: pointer;
     }
@@ -51,7 +51,7 @@
   & > .panel {
     position: relative;
 
-    & >.flex-col {
+    & > .flex-col {
       position: absolute;
       width: 100%;
       height: 100%;
@@ -62,8 +62,8 @@
       height: 100%;
       overflow-y: auto;
     }
-    
-    & >.dataview-target {
+
+    & > .dataview-target {
       position: absolute;
     }
   }
