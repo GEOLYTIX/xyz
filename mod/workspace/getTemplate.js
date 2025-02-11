@@ -47,6 +47,13 @@ Module templates will be constructed before being returned.
 */
 module.exports = async function getTemplate(template) {
   if (typeof template === 'string') {
+    // The template param must not include non whitelisted character.
+    if (template.match(/[^a-zA-Z\d\s:_-]/)) {
+      return new Error(
+        `Template param may only include whitelisted character.`,
+      );
+    }
+
     const workspace = await workspaceCache();
 
     if (workspace instanceof Error) {
