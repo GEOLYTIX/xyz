@@ -62,9 +62,9 @@ Codi has implemented some mock modules/functions that are only available in the 
 
 ### Mocks
 
-Module mocking is a strange and weird concept to get your head around. What it is essentially is a way to replace modules or functions within modules with functionality to simulate or 'mock' external entities.
+Module mocking is a strange and weird concept to get your head around. What it is essentially is a way to replace modules or functions with functionality to simulate or 'mock' external entities.
 
-What a mocking module will do is replace the reference of a module in memory with a 'mocked' version of it. You can then reset that version of the mocked module to the original export with a reset/restore function.
+What a mocking module will do is replace the reference of a module in memory with a 'mocked' version of it. This mocked version can then be called on from non-test code and receive typically an output. You can then reset that version of the mocked module to the original export with a reset/restore function.
 
 Codi provides interfaces to mock:
 
@@ -74,6 +74,102 @@ Codi provides interfaces to mock:
 
 #### function (fn) mocking
 
+function mocking is quite simple in that it needs to have a context. The context can be the scope of a test, to a module or global.
+
+To mock a function you can call the `codi.mock.fn()` function.
+This creates a mock function which you can interface with.
+
+```javascript
+const random = codi.mock.fn((max) => return Math.floor(Math.random() * max););
+
+codi.it({ name: 'random', parentId: 'foo' }, () => {
+  codi.assertTrue(random(1) === 0, 'We expect the number to be 0');
+  codi.assertTrue(random(3) <= 2), 'We expect the number to less than or equal to 2';
+});
+```
+
+You can also mock functions/methods with the `codi.mock.method()` function that will take an object as a reference and implement a mock function to that objects method.
+
+> [!NOTE]
+> typically in the tests currently written this methodology isn't used and favoured for the `codi.mock.mockImplementation()` function which can mock a function given to a mocked module. An example of this will be provided in the mock module section.
+
+```javascript
+import fs from 'node:fs';
+
+// Mocking fs.readFile() method
+codi.mock.method(fs.promises, 'readFile', async () => 'Hello World');
+
+codi.describe({ name: 'Mocking fs.readFile in Node.js', id: 'mock' }, () => {
+  codi.it(
+    {
+      name: 'should successfully read the content of a text file',
+      parentId: 'mock',
+    },
+    async () => {
+      codi.assertEqual(fs.promises.readFile.mock.calls.length, 0);
+      codi.assertEqual(
+        await fs.promises.readFile('text-content.txt'),
+        'Hello World',
+      );
+      codi.assertEqual(fs.promises.readFile.mock.calls.length, 1);
+
+      // Reset the globally tracked mocks.
+      mock.reset();
+    },
+  );
+});
+```
+
+#### module mocking
+
+You can mock modules with the `codi.mock.module()` function which takes a path and options to mock a module.
+The typical practice is that you provide a mocked function that you can implement mocks ontop of making the mocked module more reusable.
+
+> [!NOTE]
+> the `codi.mock.module()` function is still in early development as it comes from the node:test runner, which is still in further development
+
+options you can provide mocked module:
+
+- cache: If false, each call to require() or import() generates a new mock module. If true, subsequent calls will return the same module mock, and the mock module is inserted into the CommonJS cache. Default: false.
+- defaultExport: An optional value used as the mocked module's default export. If this value is not provided, ESM mocks do not include a default export.
+- namedExports: An optional object whose keys and values are used to create the named exports of the mock module.
+
+Bellow is an example of a mocked module referencing a mock function
+
+> [!NOTE]
+> Ensure that your module mocks are top level, as to import the module before the dynamic import to the module we are testing.
+
+```javascript
+const aclFn = codi.mock.fn();
+const mockedacl = codi.mock.module('../../acl.js', {
+  cache: false,
+  defaultExport: aclFn
+  namedExports:{
+    acl: aclFn
+  }
+});
+
+codi.describe({name: 'mocked module', id: 'mocked_module'}, () => {
+  codi.it({'We should be able to mock a module', parentId: 'mocked_module'}, async () => {
+
+    aclFn.mock.mockImplementation(() => {
+      const user = {
+        email: 'robert.hurst@geolytix.co.uk',
+        admin: true
+      };
+      return user
+    })
+
+    const { default: login } = await import('../../../mod/user/login.js');
+
+    const result = await loing();
+
+    //{ email: 'robert.hurst@geolytix.co.uk', admin: true}
+    console.log(result);
+  });
+});
+```
+
 ### Running CLI Tests
 
 The codi test suit will iterate through the tests directory [ignoring the folders specified in codi.json] and log the results from each test suit.
@@ -82,7 +178,7 @@ The codi test suit will iterate through the tests directory [ignoring the folder
 node --run test
 ```
 
-Summary statistics for all tests will be logged with the `-- quiet` flag (codi v0.0.47+):
+Summary statistics for all tests will be logged with the `-- quiet` flag (codi v.0.47+):
 
 ```bash
 npm run test -- --quiet
