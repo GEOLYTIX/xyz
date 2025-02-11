@@ -127,7 +127,7 @@ An error exception will be returned if the template object lookup from the works
 async function getTemplateObject(template) {
   if (typeof template === 'string') {
     // The template param must not include non whitelisted character.
-    if (/[^a-zA-Z\d\s:_-]/.exec(template)) {
+    if (/[^a-zA-Z0-9 :_-]/.exec(template)) {
       return new Error(
         `Template param may only include whitelisted character.`,
       );
