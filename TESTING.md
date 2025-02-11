@@ -170,6 +170,12 @@ codi.describe({name: 'mocked module', id: 'mocked_module'}, () => {
 });
 ```
 
+#### http mocks
+
+codi has exported functions to help aid in mocking http requests.
+
+`codi.mockHttp` helps create `req` & `res` objects that can be passed to functions in order to simulate a call to the function via an api. You can call the `createRequest` & `createResponse` functions respectively. You can also call the `createMocks` function and perform a destructured assignment on the `req` & `res`.
+
 ### Running CLI Tests
 
 The codi test suit will iterate through the tests directory [ignoring the folders specified in codi.json] and log the results from each test suit.
