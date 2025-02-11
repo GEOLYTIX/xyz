@@ -170,6 +170,33 @@ codi.describe({name: 'mocked module', id: 'mocked_module'}, () => {
 });
 ```
 
+#### module & function restore/reset
+
+if you want to return the functionality of a mocked function/module you will want to call the `restore` function on a mocked module.
+
+> ![NOTE]
+> You will want to call these restores on mocked modules at the end of a test so that other tests can also mock the same module. If you don't an error will be returned.
+
+```javascript
+const aclFn = codi.mock.fn();
+const mockedacl = codi.mock.module('../../acl.js', {
+  cache: false,
+  defaultExport: aclFn
+  namedExports:{
+    acl: aclFn
+  }
+});
+
+codi.describe({name: 'mocked module', id: 'mocked_module'}, () => {
+  codi.it({'We should be able to mock a module', parentId: 'mocked_module'}, async () => {
+  //...test
+  });
+});
+
+//Call to the mocked module to restore to original state.
+mockedacl.restore();
+```
+
 #### http mocks
 
 codi has exported functions to help aid in mocking http requests.
