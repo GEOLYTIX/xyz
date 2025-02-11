@@ -40,12 +40,12 @@ try {
     private_key:
       process.env.SAML_SP_CRT &&
       String(
-        readFileSync(join(__dirname, `../../${process.env.SAML_SP_CRT}.pem`))
+        readFileSync(join(__dirname, `../../${process.env.SAML_SP_CRT}.pem`)),
       ),
     certificate:
       process.env.SAML_SP_CRT &&
       String(
-        readFileSync(join(__dirname, `../../${process.env.SAML_SP_CRT}.crt`))
+        readFileSync(join(__dirname, `../../${process.env.SAML_SP_CRT}.crt`)),
       ),
     assert_endpoint: process.env.SAML_ACS,
     allow_unencrypted_assertion: true,
@@ -56,14 +56,13 @@ try {
     sso_logout_url: process.env.SAML_SLO,
     certificates: process.env.SAML_IDP_CRT && [
       String(
-        readFileSync(join(__dirname, `../../${process.env.SAML_IDP_CRT}.crt`))
+        readFileSync(join(__dirname, `../../${process.env.SAML_IDP_CRT}.crt`)),
       ),
     ],
     sign_get_request: true,
   });
-
 } catch {
-  console.log('SAML2 module is not available.')
+  console.log('SAML2 module is not available.');
 }
 
 /**
@@ -92,9 +91,8 @@ The user object is signed as a JSON Web Token and set as a cookie to the HTTP re
 */
 
 module.exports = function saml(req, res) {
-
   if (!sp || !idp) {
-    console.warn(`SAML SP or IDP are not available in XYZ instance.`)
+    console.warn(`SAML SP or IDP are not available in XYZ instance.`);
     return;
   }
 
@@ -106,58 +104,51 @@ module.exports = function saml(req, res) {
 
   // Create Service Provider login request url.
   if (req.params?.login || /\/saml\/login/.exec(req.url)) {
-    sp.create_login_request_url(idp, {},
-      (err, login_url, request_id) => {
-        if (err != null) return res.send(500);
+    sp.create_login_request_url(idp, {}, (err, login_url, request_id) => {
+      if (err != null) return res.send(500);
 
-        res.setHeader('location', login_url);
-        res.status(301).send();
-      });
+      res.setHeader('location', login_url);
+      res.status(301).send();
+    });
   }
 
   if (/\/saml\/acs/.exec(req.url)) {
-
     sp.post_assert(
       idp,
       {
         request_body: req.body,
       },
       async (err, saml_response) => {
-
         if (err != null) {
           console.error(err);
           return res.send(500);
         }
 
-        logger(saml_response, 'saml_response')
+        logger(saml_response, 'saml_response');
 
         const user = {
           email: saml_response.user.name_id,
           session_index: saml_response.user.session_index,
-        }
+        };
 
         if (process.env.SAML_ACL) {
-
-          const acl_response = await acl_lookup(saml_response.user.name_id)
+          const acl_response = await acl_lookup(saml_response.user.name_id);
 
           if (!acl_response) {
-            return res.status(401).send('User account not found')
+            return res.status(401).send('User account not found');
           }
 
           if (acl_response instanceof Error) {
-            return res.status(401).send(acl_response.message)
+            return res.status(401).send(acl_response.message);
           }
 
-          Object.assign(user, acl_response)
+          Object.assign(user, acl_response);
         }
 
         // Create token with 8 hour expiry.
-        const token = jwt.sign(
-          user,
-          process.env.SECRET,
-          {
-            expiresIn: parseInt(process.env.COOKIE_TTL),
-          });
+        const token = jwt.sign(user, process.env.SECRET, {
+          expiresIn: parseInt(process.env.COOKIE_TTL),
+        });
 
         const cookie =
           `${process.env.TITLE}=${token};HttpOnly;` +
@@ -169,7 +160,7 @@ module.exports = function saml(req, res) {
         res.setHeader('location', `${process.env.DIR || '/'}`);
 
         return res.status(302).send();
-      }
+      },
     );
   }
 };
@@ -189,45 +180,46 @@ User object or Error.
 */
 
 async function acl_lookup(email) {
-
   if (acl === null) {
-    return new Error('ACL unavailable.')
+    return new Error('ACL unavailable.');
   }
 
-  const date = new Date()
+  const date = new Date();
 
   // Update access_log and return user record matched by email.
-  const rows = await acl(`
+  const rows = await acl(
+    `
     UPDATE acl_schema.acl_table
     SET access_log = array_append(access_log, '${date.toISOString().replace(/\..*/, '')}')
     WHERE lower(email) = lower($1)
     RETURNING email, roles, language, blocked, approved, approved_by, verified, admin, password;`,
-    [email])
+    [email],
+  );
 
-  if (rows instanceof Error) return new Error('Failed to query to ACL.')
+  if (rows instanceof Error) return new Error('Failed to query to ACL.');
 
   // Get user record from first row.
-  const user = rows[0]
+  const user = rows[0];
 
   if (!user) return null;
 
   // Blocked user cannot login.
   if (user.blocked) {
-    return new Error('User blocked in ACL.')
+    return new Error('User blocked in ACL.');
   }
 
   // Accounts must be verified and approved for login
   if (!user.verified) {
-    return new Error('User not verified in ACL')
+    return new Error('User not verified in ACL');
   }
 
   if (!user.approved) {
-    return new Error('User not approved in ACL')
+    return new Error('User not approved in ACL');
   }
 
   return {
     roles: user.roles,
     language: user.language,
-    admin: user.admin
-  }
+    admin: user.admin,
+  };
 }

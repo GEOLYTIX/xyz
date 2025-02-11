@@ -9,9 +9,9 @@ Exports the deleteUser method for the /api/user/delete route.
 @module /user/add
 */
 
-const acl = require('./acl')
+const acl = require('./acl');
 
-const mailer = require('../utils/mailer')
+const mailer = require('../utils/mailer');
 
 /**
 @function deleteUser
@@ -36,57 +36,56 @@ Requesting user is admin.
 */
 
 module.exports = async function deleteUser(req, res) {
-
   // acl module will export an empty require object without the ACL being configured.
   if (acl === null) {
-    return res.status(500).send('ACL unavailable.')
+    return res.status(500).send('ACL unavailable.');
   }
 
   if (!req.params.email) {
-
-    return res.status(500).send('Missing email param')
+    return res.status(500).send('Missing email param');
   }
 
   if (!req.params.user) {
-
-    return new Error('login_required')
+    return new Error('login_required');
   }
 
-  const email = req.params.email.replace(/\s+/g, '')
+  const email = req.params.email.replace(/\s+/g, '');
 
   // A user may remove themselves from the ACL.
   if (req.params.user?.email === email) {
-
     // The cookie must be set to null on successful return from delete method.
-    res.setHeader('Set-Cookie', `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`)
+    res.setHeader(
+      'Set-Cookie',
+      `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`,
+    );
 
-    console.log(`${email} removed themselves`)
-
+    console.log(`${email} removed themselves`);
   } else if (!req.params.user?.admin) {
-
-    return new Error('admin_required')
+    return new Error('admin_required');
   }
 
   // Delete user account in ACL.
-  const rows = await acl(`
+  const rows = await acl(
+    `
     DELETE FROM acl_schema.acl_table
     WHERE lower(email) = lower($1)
     RETURNING *;`,
-    [email])
+    [email],
+  );
 
   if (rows instanceof Error) {
-    return res.status(500).send('Failed to access ACL.')
+    return res.status(500).send('Failed to access ACL.');
   }
 
-  const user = rows[0]
+  const user = rows[0];
 
   // Sent email to inform user that their account has been deleted.
   await mailer({
     template: 'deleted_account',
     language: user.language,
     to: user.email,
-    host: req.params.host
-  })
+    host: req.params.host,
+  });
 
-  res.send('User account deleted.')
-}
+  res.send('User account deleted.');
+};

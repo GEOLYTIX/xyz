@@ -2,7 +2,7 @@
   cursor: grab;
 }
 
-dialog>button.close {
+dialog > button.close {
   position: absolute;
   top: 0em;
   right: 0em;
@@ -41,11 +41,11 @@ header {
   }
 }
 
-.dialog>header {
+.dialog > header {
   display: flex;
   justify-content: space-between;
 
-  &>:nth-child(2) {
+  & > :nth-child(2) {
     margin-left: auto;
   }
 }
@@ -69,7 +69,7 @@ dialog.alert-confirm h4 {
   padding: 0.5em 1em;
   background-color: var(--color-primary);
   border-bottom: solid 2px var(--color-primary-light);
-  color: var(--color-light)
+  color: var(--color-light);
 }
 
 dialog.alert-confirm .content {
@@ -86,7 +86,7 @@ dialog.alert-confirm p {
 dialog.alert-confirm .buttons {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
-  grid-gap: 0.2em
+  grid-gap: 0.2em;
 }
 
 dialog.alert-confirm button {
@@ -101,17 +101,16 @@ dialog.minimized .content {
 }
 
 dialog .minimize-btn.mask-icon {
-  -webkit-mask-image: url("../icons/icon-remove.svg");
-  mask-image: url("../icons/icon-remove.svg");
+  -webkit-mask-image: url('../icons/icon-remove.svg');
+  mask-image: url('../icons/icon-remove.svg');
 }
 
 dialog.minimized .minimize-btn.mask-icon {
-  -webkit-mask-image: url("../icons/icon-fullscreen.svg");
-  mask-image: url("../icons/icon-fullscreen.svg");
+  -webkit-mask-image: url('../icons/icon-fullscreen.svg');
+  mask-image: url('../icons/icon-fullscreen.svg');
 }
 
 @media only screen and (max-width: 768px) {
-
   dialog.alert-confirm {
     min-width: 350px;
     max-width: 70%;

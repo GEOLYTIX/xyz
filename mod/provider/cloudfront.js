@@ -11,10 +11,10 @@ The cloudfront provider module exports a method to fetch resources from an AWS c
 @module /provider/cloudfront
 */
 
-const { readFileSync } = require('fs')
-const { join } = require('path')
+const { readFileSync } = require('fs');
+const { join } = require('path');
 const { getSignedUrl } = require('@aws-sdk/cloudfront-signer');
-const logger = require('../utils/logger')
+const logger = require('../utils/logger');
 
 /**
 @function cloudfront
@@ -38,14 +38,14 @@ The fetch response will be parsed as text by default.
 @returns {Promise<String|JSON|Buffer|Error>} The method resolves to either JSON, Text, or Buffer dependent ref.params.
 */
 module.exports = async function cloudfront(ref) {
-
   try {
-
     // Substitutes {*} with process.env.SRC_* key values.
-    const url = (ref.params?.url || ref).replace(/{(?!{)(.*?)}/g,
-      matched => process.env[`SRC_${matched.replace(/(^{)|(}$)/g, '')}`])
+    const url = (ref.params?.url || ref).replace(
+      /{(?!{)(.*?)}/g,
+      (matched) => process.env[`SRC_${matched.replace(/(^{)|(}$)/g, '')}`],
+    );
 
-    const date = new Date(Date.now())
+    const date = new Date(Date.now());
 
     date.setDate(date.getDate() + 1);
 
@@ -53,7 +53,11 @@ module.exports = async function cloudfront(ref) {
       url: `https://${url}`,
       keyPairId: process.env.KEY_CLOUDFRONT,
       dateLessThan: date.toDateString(),
-      privateKey: String(readFileSync(join(__dirname, `../../${process.env.KEY_CLOUDFRONT}.pem`)))
+      privateKey: String(
+        readFileSync(
+          join(__dirname, `../../${process.env.KEY_CLOUDFRONT}.pem`),
+        ),
+      ),
     });
 
     // Return signedURL only from request.
@@ -61,23 +65,21 @@ module.exports = async function cloudfront(ref) {
       return signedURL;
     }
 
-    const response = await fetch(signedURL)
+    const response = await fetch(signedURL);
 
-    logger(`${response.status} - ${url}`, 'cloudfront')
+    logger(`${response.status} - ${url}`, 'cloudfront');
 
-    if (response.status >= 300) return new Error(`${response.status} ${ref}`)
+    if (response.status >= 300) return new Error(`${response.status} ${ref}`);
 
-    if (url.match(/\.json$/i)) return await response.json()
+    if (url.match(/\.json$/i)) return await response.json();
 
     if (ref.params?.buffer) {
-      const arrayBuffer = await response.arrayBuffer()
-      return Buffer.from(arrayBuffer)
+      const arrayBuffer = await response.arrayBuffer();
+      return Buffer.from(arrayBuffer);
     }
 
-    return await response.text()
-
+    return await response.text();
   } catch (err) {
-
-    console.error(err)
+    console.error(err);
   }
-}
+};

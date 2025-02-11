@@ -6,10 +6,10 @@
 /**
  * This function is used to test the query API endpoint
  * @function featureStyleTest
- * @param {Object} mapview 
-*/
+ * @param {Object} mapview
+ */
 export async function featureStyleTest(mapview) {
-    await codi.describe('TODO: Layer: featureStyleTest', async () => {
-        //TODO
-    });
+  await codi.describe('TODO: Layer: featureStyleTest', async () => {
+    //TODO
+  });
 }

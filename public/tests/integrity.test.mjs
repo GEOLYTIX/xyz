@@ -4,4 +4,4 @@ import { workspaceTest } from './workspace.test.mjs';
 
 const mapview = await base();
 await layerTest(mapview);
-await workspaceTest(mapview); 
+await workspaceTest(mapview);

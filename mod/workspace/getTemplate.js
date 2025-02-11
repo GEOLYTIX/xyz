@@ -9,13 +9,13 @@ The module exports the getTemplate method which is required by the query, langua
 @module /workspace/getTemplate
 */
 
-const getFrom = require('../provider/getFrom')
+const getFrom = require('../provider/getFrom');
 
-const merge = require('../utils/merge')
+const merge = require('../utils/merge');
 
-const workspaceCache = require('./cache')
+const workspaceCache = require('./cache');
 
-const envReplace = require('../utils/envReplace')
+const envReplace = require('../utils/envReplace');
 
 /**
 @global
@@ -46,81 +46,71 @@ Module templates will be constructed before being returned.
 @returns {Promise<Object|Error>} JSON Template
 */
 module.exports = async function getTemplate(template) {
-
   if (typeof template === 'string') {
-    const workspace = await workspaceCache()
+    const workspace = await workspaceCache();
 
     if (workspace instanceof Error) {
-      return workspace
+      return workspace;
     }
 
     if (!Object.hasOwn(workspace.templates, template)) {
-      return new Error(`Template: ${template} not found.`)
+      return new Error(`Template: ${template} not found.`);
     }
 
-    template = workspace.templates[template]
-
+    template = workspace.templates[template];
   }
 
   if (!template.src) {
-
-    return template
+    return template;
   }
 
   if (template.cached) {
-    return structuredClone(template.cached)
+    return structuredClone(template.cached);
   }
 
   // Subtitutes ${*} with process.env.SRC_* key values.
   template.src = envReplace(template.src);
 
-  const method = template.src.split(':')[0]
+  const method = template.src.split(':')[0];
 
   if (!Object.hasOwn(getFrom, method)) {
-
     // Unable to determine getFrom method.
     console.warn(`Cannot get: "${template.src}"`);
-    return template
+    return template;
   }
 
-  const response = await getFrom[method](template.src)
+  const response = await getFrom[method](template.src);
 
   if (response instanceof Error) {
+    template.err = response;
 
-    template.err = response
-
-    return template
+    return template;
   }
 
   // Template is a module.
   if (template.module || template.type === 'module') {
     try {
-
       // Attempt to construct module from string.
       const module_constructor = module.constructor;
       const Module = new module_constructor();
       Module._compile(response, template.src);
 
-      template.render = Module.exports
-
+      template.render = Module.exports;
     } catch (err) {
-      template.err = err
-      return template
+      template.err = err;
+      return template;
     }
     return template;
   }
 
   if (typeof response === 'object') {
-
     // Get template from src.
-    template.cached = merge(response, template)
+    template.cached = merge(response, template);
 
-    return structuredClone(template.cached)
-
+    return structuredClone(template.cached);
   } else if (typeof response === 'string') {
-
-    template.template = response
+    template.template = response;
   }
 
-  return template
-}
+  return template;
+};

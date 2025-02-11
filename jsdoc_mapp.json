@@ -1,13 +1,9 @@
 {
   "source": {
-    "include": [
-      "lib"
-    ],
+    "include": ["lib"],
     "includePattern": ".js$"
   },
-  "plugins": [
-    "plugins/markdown"
-  ],
+  "plugins": ["plugins/markdown"],
   "opts": {
     "encoding": "utf8",
     "readme": "./lib/README.md",
