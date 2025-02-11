@@ -35,15 +35,15 @@ module.exports = {
   },
   cluster: {
     render: require('./cluster'),
-    reduce: true
+    reduce: true,
   },
   cluster_hex: {
     render: require('./cluster_hex'),
-    reduce: true
+    reduce: true,
   },
   wkt: {
     render: require('./wkt'),
-    reduce: true
+    reduce: true,
   },
   infotip: {
     render: require('./infotip'),
@@ -68,7 +68,7 @@ module.exports = {
   },
   location_new: {
     render: require('./location_new'),
-    value_only: true
+    value_only: true,
   },
   location_delete: {
     render: require('./location_delete'),
@@ -81,14 +81,14 @@ module.exports = {
   },
   location_count: {
     template: require('./location_count'),
-    value_only: true
+    value_only: true,
   },
   mvt: {
     render: require('./mvt'),
-    value_only: true
+    value_only: true,
   },
   mvt_geom: {
     render: require('./mvt_geom'),
-    value_only: true
-  }
-}
+    value_only: true,
+  },
+};

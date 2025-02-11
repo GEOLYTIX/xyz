@@ -1,78 +1,127 @@
 <!doctype html>
 <html lang="pl">
+  <head data-dir="{{dir}}">
+    <title>XYZ | Rejestracja</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{{dir}}/public/icons/favicon.ico"
+    />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<head data-dir="{{dir}}">
-  <title>XYZ | Rejestracja</title>
-  <link rel="icon" type="image/x-icon" href="{{dir}}/public/icons/favicon.ico" />
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="{{dir}}/public/views/register/_register.js" defer></script>
+    <link rel="stylesheet" href="{{dir}}/public/views/register/_register.css" />
+  </head>
 
-  <script src="{{dir}}/public/views/register/_register.js" defer></script>
-  <link rel="stylesheet" href="{{dir}}/public/views/register/_register.css" />
+  <body class="register_form">
+    <form method="post">
+      <input style="display: none" name="language" required value="pl" />
 
-</head>
+      <input style="display: none" name="register" value="true" />
 
-<body class="register_form">
-  <form method="post">
+      <div class="input-group">
+        <input
+          id="auth_user_email"
+          name="email"
+          type="email"
+          autocomplete="off"
+          required
+          maxlength="50"
+          value=""
+        />
+        <span class="bar"></span>
+        <label for="auth_user_email">Adres e-mail</label>
+      </div>
 
-    <input style="display:none;" name="language" required value="pl">
+      <div class="input-group">
+        <input
+          id="auth_user_password"
+          name="password"
+          type="password"
+          autocomplete="off"
+          required
+          pattern="(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{12,}$"
+          value=""
+        />
+        <span class="bar"></span>
+        <label for="auth_user_password"
+          >Nowe hasło (co najmniej 12 znaków)</label
+        >
+      </div>
 
-    <input style="display: none;" name="register" value=true>
+      <div class="input-group">
+        <input
+          id="auth_user_password_retype"
+          type="password"
+          autocomplete="off"
+          required
+          value=""
+        />
+        <span class="bar"></span>
+        <label for="auth_user_password_retype">Potwiedź nowe hasło</label>
+      </div>
 
-    <div class="input-group">
-      <input id="auth_user_email" name="email" type="email" autocomplete="off" required maxlength="50" value="">
-      <span class="bar"></span>
-      <label for="auth_user_email">Adres e-mail</label>
-    </div>
+      <br />
 
-    <div class="input-group">
-      <input id="auth_user_password" name="password" type="password" autocomplete="off" required pattern="(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{12,}$" value="">
-      <span class="bar"></span>
-      <label for="auth_user_password">Nowe hasło (co najmniej 12 znaków)</label>
-    </div>
+      <p class="bold">Prywatność</p>
 
-    <div class="input-group">
-      <input id="auth_user_password_retype" type="password" autocomplete="off" required value="">
-      <span class="bar"></span>
-      <label for="auth_user_password_retype">Potwiedź nowe hasło</label>
-    </div>
+      <p>
+        Geolytix traktuje prywatność poważnie, a dane kontaktowe służą jedynie
+        do zarządzania kontami użytkowników, dostarczonymi im produktami i
+        usługami. Nie są w żaden sposób udostępniane podmiotom trzecim.
+      </p>
 
-    <br>
+      <p>
+        Konto może usunąć administrator aplikacji. Jeśli chcesz, aby Twoje dane
+        kontaktowe zostały usunięte napisz do
+        <a class="mailto" href="mailto:support@geolytix.co.uk"
+          >support@geolytix.co.uk</a
+        >
+      </p>
 
-    <p class="bold">Prywatność</p>
+      <p>
+        Właścicielem tej strony jest Geolytix, z siedzibą The Finsbury Business
+        Centre, 40 Bowling Green Lane, Londyn EC1R 0NE, Wielkia Brytania.
+      </p>
 
-    <p>Geolytix traktuje prywatność poważnie, a dane kontaktowe służą jedynie do zarządzania kontami użytkowników,
-      dostarczonymi im produktami i usługami. Nie są w żaden sposób udostępniane podmiotom trzecim.</p>
+      <label class="checkbox">
+        <input id="privacy_agreement" type="checkbox" />
+        <div></div>
+        <span>Zgadzam się</span>
+      </label>
 
-    <p>Konto może usunąć administrator aplikacji. Jeśli chcesz, aby Twoje dane kontaktowe zostały usunięte napisz do <a
-        class="mailto" href="mailto:support@geolytix.co.uk">support@geolytix.co.uk</a></p>
+      <button id="btnRegister" type="submit" formaction="register" disabled>
+        Zarejestruj się lub zmień hasło
+      </button>
 
-    <p>Właścicielem tej strony jest Geolytix, z siedzibą The Finsbury Business Centre, 40 Bowling Green Lane, Londyn
-      EC1R 0NE, Wielkia Brytania.</p>
+      <p class="bold">Co dalej? Potwierdź swoje konto</p>
 
-    <label class="checkbox">
-      <input id="privacy_agreement" type="checkbox">
-      <div></div>
-      <span>Zgadzam się</span>
-    </label>
+      <p>
+        Na podany adres e-mail zostanie wysłana wiadomość od
+        <a class="mailto" href="mailto:xyz@geolytix.co.uk"
+          >xyz@geolytix.co.uk</a
+        >
+        zawierająca link weryfikacyjny.
+      </p>
 
-    <button id="btnRegister" type="submit" formaction="register" disabled>
-      Zarejestruj się lub zmień hasło
-    </button>
+      <p>
+        Jeśli nie dotrze w ciągu kilku następnych minut sprawdź foldery SPAM.
+        Dla pewności odebrania powiadomień dodaj
+        <a class="mailto" href="mailto:xyz@geolytix.co.uk"
+          >xyz@geolytix.co.uk</a
+        >
+        do listy bezpiecznych nadawców.
+      </p>
 
-    <p class="bold">Co dalej? Potwierdź swoje konto</p>
+      <p>
+        Po weryfikacji administrator zatwierdzi nowe konta, co potwierdzimy
+        następną wiadomością e-mail.
+      </p>
 
-    <p>Na podany adres e-mail zostanie wysłana wiadomość od <a class="mailto"
-        href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a> zawierająca link weryfikacyjny.</p>
-
-    <p>Jeśli nie dotrze w ciągu kilku następnych minut sprawdź foldery SPAM. Dla pewności odebrania powiadomień dodaj
-      <a class="mailto" href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a> do listy bezpiecznych nadawców.</p>
-
-    <p>Po weryfikacji administrator zatwierdzi nowe konta, co potwierdzimy następną wiadomością e-mail.</p>
-
-    <a class="switch" href="{{dir}}/public/?login&language=pl">Masz konto? Zaloguj się.</a>
-  </form>
-
-</body>
-
+      <a class="switch" href="{{dir}}/public/?login&language=pl"
+        >Masz konto? Zaloguj się.</a
+      >
+    </form>
+  </body>
 </html>

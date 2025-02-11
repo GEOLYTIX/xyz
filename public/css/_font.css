@@ -12,7 +12,7 @@ a {
   color: var(--color-primary);
 
   &.mask-icon,
-  &>.mask-icon {
+  & > .mask-icon {
     background-color: var(--color-primary);
   }
 }

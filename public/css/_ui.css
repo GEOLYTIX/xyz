@@ -30,21 +30,21 @@
   display: flex;
   align-items: center;
 
-  &> :nth-child(2) {
+  & > :nth-child(2) {
     margin-left: auto;
   }
 }
 
-.link-with-img>* {
+.link-with-img > * {
   height: 1.2em;
   line-height: 1.2em;
   display: inline-block;
   vertical-align: middle;
 }
 
-.link-with-img>button,
-.link-with-img>.mask-icon,
-.link-with-img>.bg-icon {
+.link-with-img > button,
+.link-with-img > .mask-icon,
+.link-with-img > .bg-icon {
   width: 1.5em;
 }
 
@@ -52,7 +52,7 @@
   width: 100%;
   height: 100%;
   text-align: center;
-  line-height: 2
+  line-height: 2;
 }
 
 .interface-mask {
@@ -63,7 +63,7 @@
   z-index: 999999;
   background-color: #eeea;
 
-  &>.bg-image {
+  & > .bg-image {
     margin: 5%;
     height: 90%;
     width: 90%;
@@ -71,7 +71,7 @@
     background-size: contain;
     background-position: center;
 
-    &>.btn-close {
+    & > .btn-close {
       position: absolute;
       top: 5%;
       right: 5%;
@@ -159,13 +159,13 @@
 }
 
 .val-changed input {
-  background-color: var(--color-changed)
+  background-color: var(--color-changed);
 }
 
 .val-changed textarea {
-  background-color: var(--color-changed)
+  background-color: var(--color-changed);
 }
 
 .val-changed button {
-  background-color: var(--color-changed)
+  background-color: var(--color-changed);
 }

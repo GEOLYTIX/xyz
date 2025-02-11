@@ -7,4 +7,4 @@ module.exports = `
           \${proj}),
         \${srid}))
   FROM \${table}
-  WHERE true \${filter};`
+  WHERE true \${filter};`;

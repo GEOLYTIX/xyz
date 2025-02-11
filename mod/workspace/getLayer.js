@@ -9,11 +9,11 @@ The getLayer module exports the getLayer method which is required by the query a
 @module /workspace/getLayer
 */
 
-const Roles = require('../utils/roles')
+const Roles = require('../utils/roles');
 
-const mergeTemplates = require('./mergeTemplates')
+const mergeTemplates = require('./mergeTemplates');
 
-const getLocale = require('./getLocale')
+const getLocale = require('./getLocale');
 
 /**
 @function getLayer
@@ -39,37 +39,36 @@ The layer.key and layer.name will be assigned if missing.
 @returns {Promise<Object|Error>} JSON Layer.
 */
 module.exports = async function getLayer(params) {
-
-  const locale = await getLocale(params)
+  const locale = await getLocale(params);
 
   // getLocale will return err if role.check fails.
-  if (locale instanceof Error) return locale
+  if (locale instanceof Error) return locale;
 
   if (!Object.hasOwn(locale.layers, params.layer)) {
-    return new Error('Unable to validate layer param.')
+    return new Error('Unable to validate layer param.');
   }
 
-  let layer = locale.layers[params.layer]
+  let layer = locale.layers[params.layer];
 
   // layer maybe null.
   if (!layer) return;
 
   // Assign key value as key on layer object.
-  layer.key ??= params.layer
+  layer.key ??= params.layer;
 
-  layer = await mergeTemplates(layer)
+  layer = await mergeTemplates(layer);
 
   if (!Roles.check(layer, params.user?.roles)) {
-    return new Error('Role access denied.')
+    return new Error('Role access denied.');
   }
 
-  layer = Roles.objMerge(layer, params.user?.roles)
+  layer = Roles.objMerge(layer, params.user?.roles);
 
   // Assign layer key as name with no existing name on layer object.
-  layer.name ??= layer.key
+  layer.name ??= layer.key;
 
   // Assign dbs from locale if nullish on layer.
-  layer.dbs ??= locale.dbs
+  layer.dbs ??= locale.dbs;
 
-  return layer
-}
+  return layer;
+};

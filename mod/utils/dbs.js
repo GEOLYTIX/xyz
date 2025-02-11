@@ -10,38 +10,35 @@ const dbs = {};
 
 Object.keys(process.env)
 
-  // Filter keys which start with DBS 
-  .filter(key => key.startsWith('DBS_'))
+  // Filter keys which start with DBS
+  .filter((key) => key.startsWith('DBS_'))
 
-  .forEach(key => {
-
+  .forEach((key) => {
     const pool = new Pool({
       connectionString: process.env[key],
-      keepAlive: true
+      keepAlive: true,
     });
 
     dbs[key.split('_')[1]] = async (query, variables, timeout) => {
-
       try {
-
-        const client = await pool.connect()
+        const client = await pool.connect();
 
         if (timeout || process.env.STATEMENT_TIMEOUT) {
-          await client.query(`SET statement_timeout = ${parseInt(timeout) || parseInt(process.env.STATEMENT_TIMEOUT)}`)
+          await client.query(
+            `SET statement_timeout = ${parseInt(timeout) || parseInt(process.env.STATEMENT_TIMEOUT)}`,
+          );
         }
 
-        const { rows } = await client.query(query, variables)
+        const { rows } = await client.query(query, variables);
 
-        client.release()
+        client.release();
 
-        return rows
-
+        return rows;
       } catch (err) {
-
-        logger({ err, query, variables })
+        logger({ err, query, variables });
         return err;
       }
-    }
-  })
+    };
+  });
 
-module.exports = dbs
+module.exports = dbs;

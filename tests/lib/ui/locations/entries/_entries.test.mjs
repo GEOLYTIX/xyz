@@ -3,7 +3,7 @@ import { geometryTest } from './geometry.test.mjs';
 import { layerTest } from './layer.test.mjs';
 
 export const entriesTest = {
-    pinTest,
-    geometryTest,
-    layerTest
-}
+  pinTest,
+  geometryTest,
+  layerTest,
+};
