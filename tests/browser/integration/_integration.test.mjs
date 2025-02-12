@@ -1,7 +1,8 @@
 import { layerTest } from './layer.test.mjs';
 import { workspaceTest } from './workspace.test.mjs';
 
-export const integrationTests = {
-  layerTest,
-  workspaceTest,
-};
+export async function integrationTests(mapview) {
+  console.log(mapview);
+  await layerTest(mapview);
+  await workspaceTest(mapview);
+}

@@ -1,4 +1,4 @@
-export async function layerTest(layer) {
+export async function layerTest(mapview) {
   await codi.describe(
     { name: `${mapview.host} : Layer Test`, id: 'integration_layer' },
     async () => {

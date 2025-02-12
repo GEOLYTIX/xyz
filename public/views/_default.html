@@ -17,7 +17,7 @@
     <script
       src="https://cdn.jsdelivr.net/npm/ol@v10.3.1/dist/ol.js"
       integrity="sha384-GtOM9G1JWFKmDbfOLBrez9YebIrX1pqVVtYukhqrKOtyneLNxnTIFMe8ER850GT/"
-      crossOrigin="anonymous"
+      crossorigin="anonymous"
       defer
     ></script>
 
@@ -564,6 +564,11 @@
         id: hook[1],
       });
     });
+
+    //Execute integration tests
+    if (mapp.hooks.current.test === 'integration') {
+      await mapp.plugins.integrationTests(mapview);
+    }
 
     // Configure idle mask if set in locale.
     mapp.user &&
