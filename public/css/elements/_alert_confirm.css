@@ -17,6 +17,7 @@ dialog.alert-confirm {
     background-color: var(--color-primary);
     border-bottom: solid 2px var(--color-primary-light);
     color: var(--color-light);
+    width: 100%;
   }
 
   .content {
@@ -27,7 +28,7 @@ dialog.alert-confirm {
     white-space: pre;
     text-wrap: pretty;
     text-align: center;
-    padding: 1em;
+    margin: 0 1em 1em;
   }
 
   .buttons {

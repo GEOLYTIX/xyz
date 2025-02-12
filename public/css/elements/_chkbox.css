@@ -6,6 +6,10 @@ label.checkbox {
     pointer-events: none;
   }
 
+  &:hover {
+    cursor: pointer;
+  }
+
   &.inline {
     display: inline-block;
   }
@@ -22,27 +26,12 @@ label.checkbox {
     display: none;
   }
 
-  & > div {
-    display: inline-block;
-    vertical-align: middle;
-    height: 1em;
-    min-height: 12px;
-    width: 1em;
-    min-width: 12px;
-    margin-right: 0.5em;
-    background-repeat: no-repeat;
-    background-position: center;
-    background-size: contain;
-    -webkit-background-size: contain;
-    background-image: url('../../icons/icon-checkbox-unchecked.svg');
+  & > .material-symbols-outlined:after {
+    content: 'check_box_outline_blank';
   }
 
-  & > div:hover {
-    cursor: pointer;
-  }
-
-  & input:checked + div {
-    background-image: url('../../icons/icon-checkbox-checked.svg');
+  & input:checked + .material-symbols-outlined:after {
+    content: 'select_check_box';
   }
 
   & input:disabled ~ * {

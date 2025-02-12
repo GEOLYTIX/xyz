@@ -4,15 +4,8 @@ button {
   background: none;
   text-align: center;
 
-  &.mask-icon,
-  & > .mask-icon {
-    background-color: var(--color-primary);
-  }
-
-  &.mask-icon.active,
-  &.active > .mask-icon,
-  & > .mask-icon.active {
-    background-color: var(--color-on);
+  > .material-symbols-outlined {
+    pointer-events: none;
   }
 
   &:hover {
@@ -36,7 +29,7 @@ button {
     padding: 0.3em;
 
     &.active {
-      border-bottom: 3px solid var(--color-on);
+      border-bottom: 1px solid var(--color-on);
     }
   }
 
@@ -58,6 +51,6 @@ button {
   }
 
   &.active {
-    background-color: var(--color-on);
+    color: var(--color-on);
   }
 }

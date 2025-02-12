@@ -1,6 +1,6 @@
 .popup {
   position: absolute;
-  background-color: white;
+  background-color: var(--color-light);
   bottom: 12px;
   transform: translate(-50%, 0);
 
@@ -13,7 +13,7 @@
   }
 
   &::after {
-    border-top-color: white;
+    border-top-color: var(--color-light);
     border-width: 10px;
     left: 50%;
     margin-left: -10px;
