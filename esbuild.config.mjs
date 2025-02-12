@@ -8,7 +8,7 @@ const buildOptions = {
   bundle: true,
   minify: isDev,
   sourcemap: true,
-  format: 'iife',
+  format: 'esm',
   outbase: '.',
   outdir: 'public/js',
   metafile: true,

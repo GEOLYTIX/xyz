@@ -6,10 +6,12 @@ import { locationTest } from './lib/location/_location.test.mjs';
 import { mapviewTest } from './lib/mapview/_mapview.test.mjs';
 import { uiTest } from './lib/_ui.test.mjs';
 import { utilsTest } from './lib/utils/_utils.test.mjs';
+import { integrationTests } from './browser/integration/_integration.test.mjs';
 
 globalThis._mappTest = {
   coreTest,
   mappTest,
+  integrationTests,
   layer,
   dictionaryTest,
   locationTest,
