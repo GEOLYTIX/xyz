@@ -121,6 +121,10 @@ html.dark-mode {
   dialog {
     color: var(--dm-color-light);
     background-color: var(--dm-color-dark-faded);
+
+    &.alert-confirm h4 {
+      background-color: var(--color-on);
+    }
   }
   /* end dialog */
 
