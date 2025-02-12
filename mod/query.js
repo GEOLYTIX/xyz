@@ -142,7 +142,7 @@ The fields request param property may be provided as an array. The string should
 */
 async function layerQuery(req, res) {
   if (req.params.layer_template) {
-    req.params.layer = await getTemplate(req.params.layer_template);
+    req.params.layer = req.params.layer_template;
   }
 
   if (!req.params.layer) {
