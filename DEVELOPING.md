@@ -190,6 +190,25 @@ Breakpoints set in the mapp lib script will now be respected in the VSCode debug
 
 The browser will automatically reload on changes to files in the `lib`, 'tests' and `public/css' directories.
 
+#### CLI Test Debugging
+
+You can also debug the codi tests with the following launch config.
+
+```json
+{
+  "type": "node",
+  "request": "launch",
+  "name": "Debug Tests",
+  "skipFiles": ["<node_internals>/**"],
+  "program": "${workspaceFolder}/node_modules/codi-test-framework/cli.js",
+  "args": ["${workspaceFolder}/tests", "--quiet"],
+  "runtimeArgs": ["--watch-path=.", "--experimental-test-module-mocks"],
+  "console": "integratedTerminal",
+  "internalConsoleOptions": "neverOpen",
+  "cwd": "${workspaceFolder}"
+}
+```
+
 #### Additional settings for VSCode
 
 Here are some additional settings to use in your ./vscode/settings.json file
