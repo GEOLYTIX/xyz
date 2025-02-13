@@ -62,7 +62,7 @@ export default async function getLocale(params) {
 
   locale = Roles.objMerge(locale, params.user?.roles);
 
-  locale.title = workspace.title;
+  locale.workspace = workspace.key;
 
   return locale;
 }
