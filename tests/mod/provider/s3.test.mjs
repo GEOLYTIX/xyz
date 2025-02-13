@@ -6,13 +6,12 @@ const mocks3 = codi.mock.module('../../../mod/sign/s3.js', {
 await codi.describe(
   { name: 's3:', id: 's3_provider', parentId: 'provider' },
   async () => {
+    const { default: s3_provider } = await import(
+      '../../../mod/provider/s3.js'
+    );
     await codi.it(
       { name: 'get from signer', parentId: 's3_provider' },
       async () => {
-        const { default: s3_provider } = await import(
-          '../../../mod/provider/s3.js'
-        );
-
         const fileBody = JSON.stringify(
           '{ "templates": {}, "locale": { "layers": {}, }, }',
         );

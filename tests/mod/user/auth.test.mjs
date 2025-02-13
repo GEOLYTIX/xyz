@@ -16,6 +16,7 @@ const mockFromACL = codi.mock.module('../../../mod/user/fromACL.js', {
 await codi.describe(
   { name: 'auth:', id: 'user_auth', parentId: 'user' },
   async () => {
+    const { default: auth } = await import('../../../mod/user/auth.js');
     await codi.it(
       { name: 'req with authorization headers', parentId: 'user_auth' },
       async () => {
@@ -24,8 +25,6 @@ await codi.describe(
         fromACLFn.mock.mockImplementation(() => {
           return user;
         });
-
-        const { default: auth } = await import('../../../mod/user/auth.js');
 
         const { req, res } = codi.mockHttp.createMocks({
           headers: {
@@ -45,8 +44,6 @@ await codi.describe(
         const user = { email: 'test@geolytix.co.uk', admin: true, roles: [] };
 
         const secret = 'i-am-a-secret';
-
-        const { default: auth } = await import('../../../mod/user/auth.js');
 
         const { req, res } = codi.mockHttp.createMocks({
           headers: {},
@@ -72,8 +69,6 @@ await codi.describe(
           SECRET: secret,
         };
 
-        const { default: auth } = await import('../../../mod/user/auth.js');
-
         const { req, res } = codi.mockHttp.createMocks({
           headers: {},
           params: {
@@ -96,8 +91,6 @@ await codi.describe(
         SECRET: secret,
         TITLE: 'TEST',
       };
-
-      const { default: auth } = await import('../../../mod/user/auth.js');
 
       const { req, res } = codi.mockHttp.createMocks({
         headers: {
@@ -123,8 +116,6 @@ await codi.describe(
         SECRET: secret,
         TITLE: 'TEST',
       };
-
-      const { default: auth } = await import('../../../mod/user/auth.js');
 
       const { req, res } = codi.mockHttp.createMocks({
         headers: {
@@ -172,8 +163,6 @@ await codi.describe(
               TITLE: 'TEST',
             };
 
-            const { default: auth } = await import('../../../mod/user/auth.js');
-
             const { req, res } = codi.mockHttp.createMocks({
               headers: {
                 host: 'http://localhost:3000',
@@ -212,8 +201,6 @@ await codi.describe(
               SECRET: secret,
               TITLE: 'TEST',
             };
-
-            const { default: auth } = await import('../../../mod/user/auth.js');
 
             const { req, res } = codi.mockHttp.createMocks({
               headers: {
@@ -267,8 +254,6 @@ await codi.describe(
               return [user];
             });
 
-            const { default: auth } = await import('../../../mod/user/auth.js');
-
             const result = await auth(req, res);
 
             codi.assertTrue(result instanceof Error);
@@ -311,8 +296,6 @@ await codi.describe(
             aclFn.mock.mockImplementation(() => {
               return [user];
             });
-
-            const { default: auth } = await import('../../../mod/user/auth.js');
 
             const result = await auth(req, res);
 
@@ -362,8 +345,6 @@ await codi.describe(
               return [user];
             });
 
-            const { default: auth } = await import('../../../mod/user/auth.js');
-
             const result = await auth(req, res);
 
             codi.assertTrue(result instanceof Error);
@@ -404,8 +385,6 @@ await codi.describe(
             aclFn.mock.mockImplementation(() => {
               return [user];
             });
-
-            const { default: auth } = await import('../../../mod/user/auth.js');
 
             const result = await auth(req, res);
 

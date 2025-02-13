@@ -11,13 +11,10 @@ const mockMailer = codi.mock.module('../../../mod/utils/mailer.js', {
 await codi.describe(
   { name: 'delete:', id: 'user_delete', parentId: 'user' },
   async () => {
+    const { default: deleteUser } = await import('../../../mod/user/delete.js');
     await codi.it(
       { name: 'no email provided', parentId: 'user_delete' },
       async () => {
-        const { default: deleteUser } = await import(
-          '../../../mod/user/delete.js'
-        );
-
         const { req, res } = codi.mockHttp.createMocks({
           params: {},
         });
@@ -32,10 +29,6 @@ await codi.describe(
     await codi.it(
       { name: 'no user provided', parentId: 'user_delete' },
       async () => {
-        const { default: deleteUser } = await import(
-          '../../../mod/user/delete.js'
-        );
-
         const { req, res } = codi.mockHttp.createMocks({
           params: {
             email: 'test@geolytix.co.uk',
@@ -59,10 +52,6 @@ await codi.describe(
         aclfn.mock.mockImplementation(() => {
           return [user];
         });
-
-        const { default: deleteUser } = await import(
-          '../../../mod/user/delete.js'
-        );
 
         const { req, res } = codi.mockHttp.createMocks({
           params: {
@@ -120,10 +109,6 @@ await codi.describe(
           return [user];
         });
 
-        const { default: deleteUser } = await import(
-          '../../../mod/user/delete.js'
-        );
-
         const { req, res } = codi.mockHttp.createMocks({
           params: {
             email: user.email,
@@ -154,10 +139,6 @@ await codi.describe(
         aclfn.mock.mockImplementation(() => {
           return [user];
         });
-
-        const { default: deleteUser } = await import(
-          '../../../mod/user/delete.js'
-        );
 
         const { req, res } = codi.mockHttp.createMocks({
           params: {

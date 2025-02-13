@@ -6,12 +6,11 @@ const aclMock = codi.mock.module('../../../mod/user/acl.js', {
 await codi.describe(
   { name: 'add: ', id: 'user_add', parentId: 'user' },
   async () => {
+    const { default: addUser } = await import('../../../mod/user/add.js');
     await codi.it({ name: 'Adding a user', parentId: 'user_add' }, async () => {
       aclMockFn.mock.mockImplementation(function acl(q) {
         return [];
       });
-
-      const { default: addUser } = await import('../../../mod/user/add.js');
 
       const { req, res } = codi.mockHttp.createMocks({
         params: {
@@ -51,8 +50,6 @@ await codi.describe(
     await codi.it(
       { name: 'Missing user param', parentId: 'user_add' },
       async () => {
-        const { default: addUser } = await import('../../../mod/user/add.js');
-
         const { req, res } = codi.mockHttp.createMocks({
           params: {
             email: 'dev_1@geolytix.co.uk',
@@ -69,8 +66,6 @@ await codi.describe(
     await codi.it(
       { name: 'Missing admin param', parentId: 'user_add' },
       async () => {
-        const { default: addUser } = await import('../../../mod/user/add.js');
-
         const { req, res } = codi.mockHttp.createMocks({
           params: {
             email: 'dev_1@geolytix.co.uk',
@@ -91,8 +86,6 @@ await codi.describe(
         aclMockFn.mock.mockImplementation(function acl() {
           return new Error('There was an issue with the acl');
         });
-
-        const { default: addUser } = await import('../../../mod/user/add.js');
 
         const { req, res } = codi.mockHttp.createMocks({
           params: {
@@ -116,8 +109,6 @@ await codi.describe(
         aclMockFn.mock.mockImplementation(function acl() {
           return ['user'];
         });
-
-        const { default: addUser } = await import('../../../mod/user/add.js');
 
         const { req, res } = codi.mockHttp.createMocks({
           params: {
@@ -143,8 +134,6 @@ await codi.describe(
           }
           return [];
         });
-
-        const { default: addUser } = await import('../../../mod/user/add.js');
 
         const { req, res } = codi.mockHttp.createMocks({
           params: {

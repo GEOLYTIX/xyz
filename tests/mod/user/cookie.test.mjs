@@ -13,13 +13,12 @@ globalThis.xyzEnv = {
 await codi.describe(
   { name: 'cookie:', id: 'user_cookie', parentId: 'user' },
   async () => {
+    const { default: cookie } = await import('../../../mod/user/cookie.js');
     await codi.it({ name: 'no cookie', parentId: 'user_cookie' }, async () => {
       const { req, res } = codi.mockHttp.createMocks({
         cookies: {},
         params: {},
       });
-
-      const { default: cookie } = await import('../../../mod/user/cookie.js');
 
       await cookie(req, res);
 
@@ -51,8 +50,6 @@ await codi.describe(
             destroy: true,
           },
         });
-
-        const { default: cookie } = await import('../../../mod/user/cookie.js');
 
         await cookie(req, res);
 
@@ -96,8 +93,6 @@ await codi.describe(
         return [user];
       });
 
-      const { default: cookie } = await import('../../../mod/user/cookie.js');
-
       await cookie(req, res);
 
       const header = res.getHeader('set-cookie');
@@ -138,8 +133,6 @@ await codi.describe(
       aclFn.mock.mockImplementation(() => {
         return new Error('I am not here and this is not happening');
       });
-
-      const { default: cookie } = await import('../../../mod/user/cookie.js');
 
       await cookie(req, res);
 
@@ -184,8 +177,6 @@ await codi.describe(
           user.blocked = true;
           return [user];
         });
-
-        const { default: cookie } = await import('../../../mod/user/cookie.js');
 
         await cookie(req, res);
 

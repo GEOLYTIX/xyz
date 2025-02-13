@@ -16,16 +16,15 @@ await codi.describe(
     parentId: 'provider',
   },
   async () => {
+    const { default: cloudfront } = await import(
+      '../../../mod/provider/cloudfront.js'
+    );
     await codi.it(
       {
         name: 'Should handle cloudfront signer error',
         parentId: 'provider_cloudfront',
       },
       async () => {
-        const { default: cloudfront } = await import(
-          '../../../mod/provider/cloudfront.js'
-        );
-
         mockedCloudfrontFn.mock.mockImplementation(
           function cloudfront_signer() {
             return new Error('Cloudfront found an error');
@@ -54,10 +53,6 @@ await codi.describe(
           function cloudfront_signer() {
             return expected.url;
           },
-        );
-
-        const { default: cloudfront } = await import(
-          '../../../mod/provider/cloudfront.js'
         );
 
         const { req } = codi.mockHttp.createMocks({
@@ -121,10 +116,6 @@ await codi.describe(
             },
           },
         };
-
-        const { default: cloudfront } = await import(
-          '../../../mod/provider/cloudfront.js'
-        );
 
         const mockPool = mockAgent.get(new RegExp('http://localhost:3000'));
 

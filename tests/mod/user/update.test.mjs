@@ -17,6 +17,7 @@ const mailerMock = codi.mock.module('../../../mod/utils/mailer.js', {
 });
 
 await codi.describe(params, async () => {
+  const { default: update } = await import('../../../mod/user/update.js');
   await codi.it(
     {
       name: 'should return error for non-admin users',
@@ -26,8 +27,6 @@ await codi.describe(params, async () => {
       aclMockFn.mock.mockImplementation(function acl() {
         return [];
       });
-
-      const { default: update } = await import('../../../mod/user/update.js');
 
       const req = {
         params: {
@@ -59,8 +58,6 @@ await codi.describe(params, async () => {
         mailOptions = options;
         return true;
       });
-
-      const { default: update } = await import('../../../mod/user/update.js');
 
       const req = {
         params: {
@@ -97,8 +94,6 @@ await codi.describe(params, async () => {
       parentId: 'user_update',
     },
     async () => {
-      const { default: update } = await import('../../../mod/user/update.js');
-
       const req = {
         params: {
           user: { admin: true },

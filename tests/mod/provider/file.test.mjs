@@ -24,11 +24,13 @@ const mockedUrl = codi.mock.module('url', {
 await codi.describe(
   { name: 'file:', id: 'provider_file', parentId: 'provider' },
   async () => {
+    const { default: file } = await import('../../../mod/provider/file.js');
     await codi.it(
       { name: 'Get File test', parentId: 'provider_file' },
       async () => {
+        const fileContent = { text: 'I am a file' };
         fsMockFn.mock.mockImplementation(function readFileSync() {
-          return JSON.stringify({ text: 'I am a file' });
+          return JSON.stringify(fileContent);
         });
 
         mockPathdirnameFn.mock.mockImplementation(function dirname() {
@@ -39,9 +41,9 @@ await codi.describe(
           '../../test.json';
         });
 
-        const { default: file } = await import('../../../mod/provider/file.js');
-
         const results = await file('../../dir/tests/thing.json');
+
+        codi.assertEqual(results, fileContent);
       },
     );
   },
@@ -50,4 +52,3 @@ await codi.describe(
 fsMock.restore();
 mockPath.restore();
 mockedUrl.restore();
-codi.mock.reset();

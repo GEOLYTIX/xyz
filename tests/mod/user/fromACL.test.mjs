@@ -33,13 +33,11 @@ const mockReqHost = codi.mock.module('../../../mod/utils/reqHost.js', {
 await codi.describe(
   { name: 'acl', id: 'user_acl', parentId: 'user' },
   async () => {
+    const { default: fromACL } = await import('../../../mod/user/fromACL.js');
+
     await codi.it(
       { name: 'no email provided', parentId: 'user_acl' },
       async () => {
-        const { default: fromACL } = await import(
-          '../../../mod/user/fromACL.js'
-        );
-
         const { req, res } = codi.mockHttp.createMocks({
           body: {},
           params: {
@@ -60,10 +58,6 @@ await codi.describe(
     await codi.it(
       { name: 'no password provided', parentId: 'user_acl' },
       async () => {
-        const { default: fromACL } = await import(
-          '../../../mod/user/fromACL.js'
-        );
-
         const { req, res } = codi.mockHttp.createMocks({
           body: { email: 'test@geolytix.com' },
           params: {

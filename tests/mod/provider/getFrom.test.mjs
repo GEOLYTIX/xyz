@@ -14,11 +14,11 @@ const mockCloudFront = codi.mock.module('../../../mod/provider/cloudfront.js', {
 await codi.describe(
   { name: 'getFrom:', id: 'getFrom', parentId: 'provider' },
   async () => {
-    await codi.it({ name: 'https', parentId: 'getFrom' }, async () => {
-      const { default: getFrom } = await import(
-        '../../../mod/provider/getFrom.js'
-      );
+    const { default: getFrom } = await import(
+      '../../../mod/provider/getFrom.js'
+    );
 
+    await codi.it({ name: 'https', parentId: 'getFrom' }, async () => {
       const resBody = JSON.stringify(
         '{ "templates": {}, "locale": { "layers": {}, }, }',
       );
@@ -40,10 +40,6 @@ await codi.describe(
     });
 
     await codi.it({ name: 'file', parentId: 'getFrom' }, async () => {
-      const { default: getFrom } = await import(
-        '../../../mod/provider/getFrom.js'
-      );
-
       const filePath = 'file:../../workspaces/workspace.json';
 
       const fileBody = JSON.stringify(
@@ -63,10 +59,6 @@ await codi.describe(
     });
 
     await codi.it({ name: 'cloudfront', parentId: 'getFrom' }, async () => {
-      const { default: getFrom } = await import(
-        '../../../mod/provider/getFrom.js'
-      );
-
       globalThis.xyzEnv = {
         KEY_CLOUDFRONT: 'CLOUDFRONTKEY',
       };

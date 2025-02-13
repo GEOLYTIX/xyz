@@ -18,6 +18,8 @@ const mockPg = codi.mock.module('pg', {
 await codi.describe(
   { name: 'acl: ', id: 'user_acl', parentId: 'user' },
   async () => {
+    const { default: acl } = await import('../../../mod/user/acl.js');
+
     await codi.it(
       { name: 'Get users from acl', parentId: 'user_acl' },
       async () => {
@@ -35,8 +37,6 @@ await codi.describe(
             rows: ['user1', 'user2', 'user3'],
           };
         });
-
-        const { default: acl } = await import('../../../mod/user/acl.js');
 
         const q = 'select * from acl_schema.acl_table';
         const arr = [];

@@ -26,13 +26,12 @@ const mockeds3 = codi.mock.module('../../../mod/provider/s3.js', {
 });
 
 await codi.describe({ name: 'Provider:', id: 'provider' }, async () => {
+  const { default: provider } = await import(
+    '../../../mod/provider/_provider.js'
+  );
   await codi.it(
     { name: 'Bogus provider test', parentId: 'provider' },
     async () => {
-      const { default: provider } = await import(
-        '../../../mod/provider/_provider.js'
-      );
-
       const req = {
         params: {
           provider: 'mongo',
@@ -86,10 +85,6 @@ await codi.describe({ name: 'Provider:', id: 'provider' }, async () => {
           },
         },
       };
-
-      const { default: provider } = await import(
-        '../../../mod/provider/_provider.js'
-      );
 
       providers.forEach(async (providerName) => {
         try {
