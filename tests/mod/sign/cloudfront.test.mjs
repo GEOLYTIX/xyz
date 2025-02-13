@@ -25,13 +25,13 @@ await codi.describe(
     parentId: 'sign',
   },
   async () => {
+    const { default: cloudfront_signer } = await import(
+      '../../../mod/sign/cloudfront.js'
+    );
+
     await codi.it(
       { name: 'get url', parentId: 'sign_cloudfront' },
       async () => {
-        const { default: cloudfront_signer } = await import(
-          '../../../mod/sign/cloudfront.js'
-        );
-
         const id = crypto.randomUUID();
 
         mockGetSignedURLFn.mock.mockImplementation((cloudfront) => {

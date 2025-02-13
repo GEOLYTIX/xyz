@@ -14,9 +14,8 @@ const mocks3 = codi.mock.module('../../../mod/sign/s3.js', {
 });
 
 await codi.describe({ name: 'Sign: ', id: 'sign' }, async () => {
+  const { default: signer } = await import('../../../mod/sign/_sign.js');
   await codi.it({ name: 'Invalid signer', parentId: 'sign' }, async () => {
-    const { default: signer } = await import('../../../mod/sign/_sign.js');
-
     const { req, res } = codi.mockHttp.createMocks({
       params: {
         signer: 'foo',
@@ -30,8 +29,6 @@ await codi.describe({ name: 'Sign: ', id: 'sign' }, async () => {
   });
 
   await codi.it({ name: 'response Error', parentId: 'sign' }, async () => {
-    const { default: signer } = await import('../../../mod/sign/_sign.js');
-
     const { req, res } = codi.mockHttp.createMocks({
       params: {
         signer: 's3',
@@ -63,10 +60,6 @@ await codi.describe({ name: 'Sign: ', id: 'sign' }, async () => {
         await codi.it(
           { name: `${sign}`, parentId: 'sign_signers' },
           async () => {
-            const { default: signer } = await import(
-              '../../../mod/sign/_sign.js'
-            );
-
             const mockFn = mockFns[sign];
 
             mockFn.mock.mockImplementation(() => {

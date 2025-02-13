@@ -1,14 +1,14 @@
 await codi.describe(
   { name: 'cloudinary:', id: 'sign_cloudinary', parentId: 'sign' },
   async () => {
+    const { default: cloudinary } = await import(
+      '../../../mod/sign/cloudinary.js'
+    );
+
     await codi.it(
       { name: 'no cloudinary url configured', parentId: 'sign_cloudinary' },
       async () => {
         globalThis.xyzEnv = {};
-
-        const { default: cloudinary } = await import(
-          '../../../mod/sign/cloudinary.js'
-        );
 
         const cloudinaryError = await cloudinary();
 
@@ -26,10 +26,6 @@ await codi.describe(
         globalThis.xyzEnv = {
           CLOUDINARY_URL: 'https://cloudinary.test.com',
         };
-
-        const { default: cloudinary } = await import(
-          '../../../mod/sign/cloudinary.js'
-        );
 
         const { req, res } = codi.mockHttp.createMocks({
           params: {},
@@ -52,10 +48,6 @@ await codi.describe(
         globalThis.xyzEnv = {
           CLOUDINARY_URL: 'https://cloudinary.test.com',
         };
-
-        const { default: cloudinary } = await import(
-          '../../../mod/sign/cloudinary.js'
-        );
 
         const { req, res } = codi.mockHttp.createMocks({
           params: {
@@ -83,10 +75,6 @@ await codi.describe(
         globalThis.xyzEnv = {
           CLOUDINARY_URL: `cloudinary://${id1}:${id2}@test`,
         };
-
-        const { default: cloudinary } = await import(
-          '../../../mod/sign/cloudinary.js'
-        );
 
         const { req, res } = codi.mockHttp.createMocks({
           params: {
