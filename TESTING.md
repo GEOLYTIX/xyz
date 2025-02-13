@@ -12,7 +12,7 @@ Testing in xyz is split into 3 different sections:
 
 The minimum requirements are:
 
-- Node.js (version 18 and above)
+- Node.js (version 22 and above)
 - [codi](https://github.com/RobAndrewHurst/codi)
 - Node modules installed via `npm install`
 
@@ -143,7 +143,7 @@ Bellow is an example of a mocked module referencing a mocked function
 const aclFn = codi.mock.fn();
 const mockedacl = codi.mock.module('../../acl.js', {
   cache: false,
-  defaultExport: aclFn
+  defaultExport: aclFn,
   namedExports:{
     acl: aclFn
   }
@@ -162,7 +162,7 @@ codi.describe({name: 'mocked module', id: 'mocked_module'}, () => {
 
     const { default: login } = await import('../../../mod/user/login.js');
 
-    const result = await loing();
+    const result = await login();
 
     //{ email: 'robert.hurst@geolytix.co.uk', admin: true}
     console.log(result);
