@@ -50,6 +50,27 @@ await codi.describe(
     });
 
     codi.it(
+      { name: 'deny access if no user is found', parentId: 'user_key' },
+      async () => {
+        const { req, res } = codi.mockHttp.createMocks({
+          params: {
+            user: 'test@email.com',
+            admin: true,
+          },
+        });
+
+        aclFn.mock.mockImplementation(async () => {
+          return [null];
+        });
+
+        await apiKey(req, res);
+
+        codi.assertTrue(res.statusCode === 401);
+        codi.assertTrue(res._getData() === 'Unauthorized access.');
+      },
+    );
+
+    codi.it(
       { name: 'deny access to unverified users', parentId: 'user_key' },
       async () => {
         const { req, res } = codi.mockHttp.createMocks({
