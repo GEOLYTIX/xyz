@@ -385,6 +385,11 @@ button {
   > .material-symbols-outlined {
     pointer-events: none;
   }
+  &.mask-icon.active,
+  &.active > .mask-icon,
+  & > .mask-icon.active {
+    background-color: var(--color-on);
+  }
   &:hover {
     cursor: pointer;
   }

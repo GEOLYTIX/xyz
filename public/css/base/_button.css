@@ -8,6 +8,14 @@ button {
     pointer-events: none;
   }
 
+  /* begin legacy */
+  &.mask-icon.active,
+  &.active > .mask-icon,
+  & > .mask-icon.active {
+    background-color: var(--color-on);
+  }
+  /* end legacy */
+
   &:hover {
     cursor: pointer;
   }
