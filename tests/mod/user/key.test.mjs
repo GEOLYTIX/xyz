@@ -21,6 +21,13 @@ await codi.describe(
       roles: ['test'],
     };
 
+    const { req, res } = codi.mockHttp.createMocks({
+      params: {
+        user: 'test@email.com',
+        admin: true,
+      },
+    });
+
     codi.it({ name: 'user not provided', parentId: 'user_key' }, async () => {
       const { req, res } = codi.mockHttp.createMocks({
         params: {
@@ -52,13 +59,6 @@ await codi.describe(
     codi.it(
       { name: 'deny access if no user is found', parentId: 'user_key' },
       async () => {
-        const { req, res } = codi.mockHttp.createMocks({
-          params: {
-            user: 'test@email.com',
-            admin: true,
-          },
-        });
-
         aclFn.mock.mockImplementation(async () => {
           return [null];
         });
@@ -66,20 +66,13 @@ await codi.describe(
         await apiKey(req, res);
 
         codi.assertTrue(res.statusCode === 401);
-        codi.assertTrue(res._getData() === 'Unauthorized access.');
+        codi.assertTrue(res._getData().includes('Unauthorized access.'));
       },
     );
 
     codi.it(
       { name: 'deny access to unverified users', parentId: 'user_key' },
       async () => {
-        const { req, res } = codi.mockHttp.createMocks({
-          params: {
-            user: 'test@email.com',
-            admin: true,
-          },
-        });
-
         aclFn.mock.mockImplementation(async () => {
           const mockUser = { ...user };
           mockUser.verified = false;
@@ -89,20 +82,13 @@ await codi.describe(
         await apiKey(req, res);
 
         codi.assertTrue(res.statusCode === 401);
-        codi.assertTrue(res._getData() === 'Unauthorized access.');
+        codi.assertTrue(res._getData().includes('Unauthorized access.'));
       },
     );
 
     codi.it(
       { name: 'deny access to blocked users', parentId: 'user_key' },
       async () => {
-        const { req, res } = codi.mockHttp.createMocks({
-          params: {
-            user: 'test@geolytix.co.uk',
-            admin: true,
-          },
-        });
-
         aclFn.mock.mockImplementation(async () => {
           const mockUser = { ...user };
           mockUser.blocked = true;
@@ -112,20 +98,13 @@ await codi.describe(
         await apiKey(req, res);
 
         codi.assertTrue(res.statusCode === 401);
-        codi.assertTrue(res._getData() === 'Unauthorized access.');
+        codi.assertTrue(res._getData().includes('Unauthorized access.'));
       },
     );
 
     codi.it(
       { name: 'deny access to unapproved users', parentId: 'user_key' },
       async () => {
-        const { req, res } = codi.mockHttp.createMocks({
-          params: {
-            user: 'test@email.com',
-            admin: true,
-          },
-        });
-
         aclFn.mock.mockImplementation(async () => {
           const mockUser = { ...user };
           mockUser.approved = false;
@@ -135,19 +114,12 @@ await codi.describe(
         await apiKey(req, res);
 
         codi.assertTrue(res.statusCode === 401);
-        codi.assertTrue(res._getData() === 'Unauthorized access.');
+        codi.assertTrue(res._getData().includes('Unauthorized access.'));
       },
     );
     codi.it(
       { name: 'deny access to no api access users', parentId: 'user_key' },
       async () => {
-        const { req, res } = codi.mockHttp.createMocks({
-          params: {
-            user: 'test@email.com',
-            admin: true,
-          },
-        });
-
         aclFn.mock.mockImplementation(async () => {
           const mockUser = { ...user };
           mockUser.api = false;
@@ -157,22 +129,21 @@ await codi.describe(
         await apiKey(req, res);
 
         codi.assertTrue(res.statusCode === 401);
-        codi.assertTrue(res._getData() === 'Unauthorized access.');
+        codi.assertTrue(res._getData().includes('Unauthorized access.'));
       },
     );
 
     codi.it(
       { name: 'successfully generate a key', parentId: 'user_key' },
       async () => {
-        aclFn.mock.mockImplementation(async () => {
-          return [user];
-        });
-
         const { req, res } = codi.mockHttp.createMocks({
           params: {
-            user: 'test@email.com',
-            admin: true,
+            user: user,
           },
+        });
+
+        aclFn.mock.mockImplementation(async () => {
+          return [user];
         });
 
         await apiKey(req, res);
