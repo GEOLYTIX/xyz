@@ -311,7 +311,8 @@ html.dark-mode {
   /* begin tabview */
 
   .tabview,
-  .location {
+  .location,
+  .dataview-target {
     .panel {
       background-color: var(--dm-color-dark-neutral);
 

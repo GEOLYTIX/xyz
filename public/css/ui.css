@@ -259,7 +259,8 @@ html.dark-mode {
     background: var(--dm-color-dark-faded);
   }
   .tabview,
-  .location {
+  .location,
+  .dataview-target {
     .panel {
       background-color: var(--dm-color-dark-neutral);
       .btn-row {
