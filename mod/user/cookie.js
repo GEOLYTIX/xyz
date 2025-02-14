@@ -103,9 +103,6 @@ export default async function cookie(req, res) {
       return res.status(403).send('Account is blocked');
     }
 
-    //TODO: Is this needed if we return an error?
-    delete user.blocked;
-
     if (payload.session) {
       user.session = payload.session;
     }
