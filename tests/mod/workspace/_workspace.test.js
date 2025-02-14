@@ -1,3 +1,4 @@
+//TODO: rewrite workspace API module test for CLI
 ///**
 // * ## workspaceTest()
 // * @module mod/workspace
