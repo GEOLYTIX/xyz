@@ -4,109 +4,83 @@ const secret = crypto.randomUUID();
 
 globalThis.xyzEnv.SECRET = secret;
 
-const aclFn = codi.mock.fn();
-const mockacl = codi.mock.module('../../../mod/user/acl.js', {
-  defaultExport: aclFn,
-  // namedExport: {
-  //   acl: aclFn,
-  // },
-});
-
-// const fromACLFn = codi.mock.fn();
-// const mockFromACL = codi.mock.module('../../../mod/user/fromACL.js', {
-//   defaultExport: fromACLFn,
-// });
-
 await codi.describe(
   { name: 'token:', id: 'user_token', parentId: 'user' },
   async () => {
-    await codi.it({ name: 'no user', parentId: 'user_token' }, async () => {
-      const { req, res } = codi.mockHttp.createMocks({
-        params: {},
-      });
+    const { default: userToken } = await import('../../../mod/user/token.js');
 
-      const { default: userToken } = await import('../../../mod/user/token.js');
-
-      const response = await userToken(req, res);
-
-      codi.assertTrue(
-        response instanceof Error && response.message === 'login_required',
-      );
-    });
+    const { default: auth } = await import('../../../mod/user/auth.js');
 
     let token;
 
-    await codi.it({ name: 'admin user', parentId: 'user_token' }, async () => {
-      const { req, res } = codi.mockHttp.createMocks({
-        params: {
-          expiresin: '10hr',
-          user: {
-            api: true,
-            email: 'test@geolytix.co.uk',
-            roles: [],
-            admin: true,
+    let user = {
+      email: 'test@geolytix.co.uk',
+      roles: [],
+      admin: true,
+    };
+
+    // The /user/token module should return an error if no user object is provided as request param.
+    await codi.it(
+      { name: 'missing user param', parentId: 'user_token' },
+      async () => {
+        const { req, res } = codi.mockHttp.createMocks({
+          params: {},
+        });
+
+        const response = await userToken(req, res);
+
+        codi.assertTrue(
+          response instanceof Error && response.message === 'login_required',
+        );
+      },
+    );
+
+    // The /user/token module should return a token for the provided user object request param.
+    await codi.it(
+      { name: '10hr admin user token', parentId: 'user_token' },
+      async () => {
+        const { req, res } = codi.mockHttp.createMocks({
+          params: {
+            expiresin: '10hr',
+            user,
           },
-        },
-      });
+        });
 
-      const { default: userToken } = await import('../../../mod/user/token.js');
+        await userToken(req, res);
 
-      await userToken(req, res);
+        token = res._getData();
 
-      token = res._getData();
+        user = jwt.verify(token, xyzEnv.SECRET);
 
-      const user = jwt.verify(token, xyzEnv.SECRET);
+        // token expires in 10hr.
+        codi.assertTrue(user.exp - user.iat === 36000);
 
-      // token expires in 10hr.
-      codi.assertTrue(user.exp - user.iat === 36000);
+        // user from token must not have admin rights.
+        codi.assertTrue(!user.admin);
+      },
+    );
 
-      // user from token must not have admin rights.
-      codi.assertTrue(!user.admin);
-    });
-
-    let user;
+    // The /user/auth module should return the token user object without admin flag but with the from_token flag.
     await codi.it({ name: 'token auth', parentId: 'user_token' }, async () => {
-      console.log(token);
-
-      aclFn.mock.mockImplementation(() => {
-        const rows = [
-          {
-            email: 'test@geolytix.co.uk',
-            api: token,
-          },
-        ];
-
-        return rows;
-      });
-
       const { req, res } = codi.mockHttp.createMocks({
         params: {
           token,
         },
       });
 
-      const { default: auth } = await import('../../../mod/user/auth.js');
-
       // auth should return user from token.
       user = await auth(req, res);
-
-      console.log(user);
 
       codi.assertTrue(user.from_token);
     });
 
+    // The user object from token authentication may not be used to create a new token.
     await codi.it({ name: 'token user', parentId: 'user_token' }, async () => {
-      //const user = jwt.verify(token, xyzEnv.SECRET);
-
-      //TODO: get user from login with token.
-
       const { req, res } = codi.mockHttp.createMocks({
         params: {
           user,
         },
       });
-
-      const { default: userToken } = await import('../../../mod/user/token.js');
 
       const response = await userToken(req, res);
 
@@ -118,6 +92,3 @@ await codi.describe(
     });
   },
 );
-
-mockacl.restore();
-//mockFromACL.restore();
