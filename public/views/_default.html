@@ -566,8 +566,8 @@
     });
 
     //Execute integration tests
-    if (mapp.hooks.current.test === 'integration') {
-      await mapp.plugins.integrationTests(mapview);
+    if (mapp.hooks.current.test === 'integrity') {
+      await mapp.plugins.integrityTests(mapview);
     }
 
     // Configure idle mask if set in locale.
