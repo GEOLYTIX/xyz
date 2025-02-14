@@ -4,6 +4,19 @@ const secret = crypto.randomUUID();
 
 globalThis.xyzEnv.SECRET = secret;
 
+const aclFn = codi.mock.fn();
+const mockacl = codi.mock.module('../../../mod/user/acl.js', {
+  defaultExport: aclFn,
+  // namedExport: {
+  //   acl: aclFn,
+  // },
+});
+
+// const fromACLFn = codi.mock.fn();
+// const mockFromACL = codi.mock.module('../../../mod/user/fromACL.js', {
+//   defaultExport: fromACLFn,
+// });
+
 await codi.describe(
   { name: 'token:', id: 'user_token', parentId: 'user' },
   async () => {
@@ -28,6 +41,7 @@ await codi.describe(
         params: {
           expiresin: '10hr',
           user: {
+            api: true,
             email: 'test@geolytix.co.uk',
             roles: [],
             admin: true,
@@ -50,8 +64,39 @@ await codi.describe(
       codi.assertTrue(!user.admin);
     });
 
+    let user;
+    await codi.it({ name: 'token auth', parentId: 'user_token' }, async () => {
+      console.log(token);
+
+      aclFn.mock.mockImplementation(() => {
+        const rows = [
+          {
+            email: 'test@geolytix.co.uk',
+            api: token,
+          },
+        ];
+
+        return rows;
+      });
+
+      const { req, res } = codi.mockHttp.createMocks({
+        params: {
+          token,
+        },
+      });
+
+      const { default: auth } = await import('../../../mod/user/auth.js');
+
+      // auth should return user from token.
+      user = await auth(req, res);
+
+      console.log(user);
+
+      codi.assertTrue(user.from_token);
+    });
+
     await codi.it({ name: 'token user', parentId: 'user_token' }, async () => {
-      const user = jwt.verify(token, xyzEnv.SECRET);
+      //const user = jwt.verify(token, xyzEnv.SECRET);
 
       //TODO: get user from login with token.
 
@@ -73,3 +118,6 @@ await codi.describe(
     });
   },
 );
+
+mockacl.restore();
+//mockFromACL.restore();
