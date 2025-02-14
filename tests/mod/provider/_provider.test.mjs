@@ -26,6 +26,7 @@ const mockeds3 = codi.mock.module('../../../mod/provider/s3.js', {
 });
 
 await codi.describe({ name: 'Provider:', id: 'provider' }, async () => {
+  // Requires mocking of modules imported by the _provider module.
   const { default: provider } = await import(
     '../../../mod/provider/_provider.js'
   );

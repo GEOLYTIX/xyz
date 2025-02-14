@@ -1,62 +1,69 @@
 # Testing
 
-Testing in xyz is split into 3 different sections:
+XYZ/MAPP testing is split into 3 sections:
 
-1. cli (console)
-2. module (browser)
-3. integrity
+- CLI [Command Line Interface] tests for endpoints of the XYZ API.
+- Browser based testing of modules bundled into the Mapp library.
+- Integrity tests for workspaces and XYZ process environments.
 
-## Testing Environment Setup
+The [codi](https://github.com/RobAndrewHurst/codi) test framework is a required dependency to support the different tests.
 
-### Prerequisites
+## CLI [Command Line Interface] tests
 
-The minimum requirements are:
+Command Line Interface tests are typically executed on localhost for a clone of the XYZ repository to check whether XYZ API modules under development execute as outlined in their documentation. These tests should also be run as an action on any pull request to ensure the structural integrity of XYZ API endpoints.
 
-- Node.js (version 22 and above)
-- [codi](https://github.com/RobAndrewHurst/codi)
-- Node modules installed via `npm install`
+The codi test framework must be installed into the node_modules with `npm install`.
 
-## Test Structure
+The codi CLI tests require experimental _module mocks_ which are available in Node 22+ [LTS].
 
-Tests are organized in the `/tests` directory with two main subdirectories:
-
-- `/tests/mod`: CLI tests for the xyz (mod) directory
-- `/tests/lib`: Module tests for browser environment
+The CLI tests can be executed with the following bash command.
 
 ```bash
-xyz/
-├── mod/
-│   ├── module1/
-│   │   └── feature1.mjs
-├── lib/
-│   ├── module2/
-│   │   └── feature2.mjs
-├── tests/
-│   ├── mod/
-│   │   ├── module1/
-│   │   │   ├── feature1.test.mjs
-│   │   │   └── index.mjs
-│   └── lib/
-│       └── module2/
-│           ├── feature2.test.mjs
-│           └── index.mjs
-
+node --experimental-test-module-mocks node_modules/codi-test-framework/cli.js tests
 ```
 
-Each test folder exports an object matching its corresponding directory structure:
+This script is defined as "test" in the package.json document and can also be run with `node --run test`.
 
-```javascript
-// tests/mod/module1/index.mjs
-export default {
-  feature1: () => import('./feature1.test.mjs'),
-};
+> [!NOTE] It is recommended to call the scripts defined in the package.json with node, rather than npm for performance reasons.
+
+The "test-watch" script watches the test directory and will re-run tests on change events. Details of these tests are suppressed with the quiet flag.
+
+```bash
+node --run test-watch
 ```
 
-## 1. CLI (Console) Tests
+### Debugging tests
 
-CLI tests are javaScript tests that execute in the Node.js runtime using the Codi Test framework. These tests focus on the xyz (mod) directory and code that doesn't require browser-specific features.
+The codi test framework CLI can be launched in debug with VSCode by addign debug config for the node runtime to the launch.json.
 
-The main testing pattern in the cli tests are test mocks.
+```json
+{
+  "type": "node",
+  "request": "launch",
+  "name": "Debug Codi CLI Tests",
+  "skipFiles": ["<node_internals>/**"],
+  "program": "${workspaceFolder}/node_modules/codi-test-framework/cli.js",
+  "args": ["${workspaceFolder}/tests", "--quiet"],
+  "runtimeArgs": ["--experimental-test-module-mocks"],
+  "console": "integratedTerminal",
+  "internalConsoleOptions": "neverOpen",
+  "cwd": "${workspaceFolder}"
+}
+```
+
+### /tests/mod directory
+
+The `/tests/mod` directory contains tests for the individual XYZ API endpoints and utility modules. The codi test framework CLI will iterate through the test module scripts and execute each. Subfolder with multiple API modules [eg /provider, /sign, /user, /utis, /workspace] include a module of the same name prefixed with an underscore to ensure that this file is listed first in the directory. These entry modules [eg _provider.mjs] import and execute any test modules from the same directory.
+
+### codi test module structure [describe > it > assert]
+
+A codi test module will usually import modules to be tested within an async codi.describe() method which defines the test or a group of tests.
+
+Multiple codi.it() methods can be executed in an async fashion within each codi.describe() method to test individual aspects of a module.
+
+Multiple assertations can be checked with codi.assert\*() methods inside a codi.it() test. Each assertation must be met for the codi.it() test to pass.
+
+For example: The codi test module for the /user/token module must import the token and auth modules in the codi.describe() method. The method then awaits the execution of multiple codi.it() methods to test whether the module correctly responds to mocked HTTP requests with missing or valid parameters. A codi.it() method to check for missign parameter will validate with a codi.assertTrue() method checking for the return of an Error. Multiple codi.it() methods can be chained in an async fashion by storing the variables within the closure of the codi.describe() method. A codi.it() method with a valid request user parameter will store the token returned from the tested module for a subsequent codi.it() method to pass this token to the auth module and check whether the expected user object is returned.
 
 ### Mocks
 
@@ -267,25 +274,7 @@ await codi.describe({ name: 'HTTP Mock', id: 'http_test_fun' }, async () => {
 });
 ```
 
-### Running CLI Tests
-
-The codi test suit will iterate through the tests directory [ignoring the folders specified in codi.json] and log the results from each test suit.
-
-```bash
-node --run test
-```
-
-You can also call the tests in watch mode where changes to the xyz codebase will retrigger the tests on save.
-Running the watched tests will only show the tests that fail.
-
-```bash
-node --run test-watch
-```
-
-> [!NOTE] It's better to call the scripts in the package.json with the `node --run` command as it's faster than npm.
-> This is part of node v22+
-
-## 2. Browser Tests
+## Browser tests for Mapp library modules
 
 Browser tests are designed for the browser environment with full access to:
 
@@ -310,15 +299,15 @@ The test results will be logged to the browser dev console.
 
 VSCode can be used to debug tests and mapp library modules as outlined in the [developer notes](https://github.com/GEOLYTIX/xyz/blob/main/DEVELOPING.md).
 
-## 3. Integrity Tests
+## Integrity tests for workspaces and XYZ process environments.
 
 Integrity tests check data integrity of a workspace through the test view document. The test view hosted in the public directory is set as a view templates in the workspace templates. This can be requested from the View API by setting `test_view` as template URL parameter.
 
 The data integrity tests are currently evaluated for public access.
 
-## Writing Tests
+### Writing Tests
 
-### Test Structure
+#### Test Structure
 
 Tests use the describe-it pattern for organization:
 
@@ -384,7 +373,7 @@ Codi provides several built-in assertions:
 - `assertNoDuplicates(callback, errorMessage, message)` 👬
   - Asserts that there are no duplicates in a provided array.
 
-## Best Practices
+### Best Practices
 
 - Maintain parallel structure between source and test directories
 - Use descriptive test names
@@ -394,15 +383,15 @@ Codi provides several built-in assertions:
 - Keep tests focused and isolated
 - Use `--quiet` flag in CI/CD pipelines. (can also be used on other test fuctions).
 
-## Common Issues and Solutions
+### Common Issues and Solutions
 
-### Test Discovery
+#### Test Discovery
 
 Codi automatically discovers tests in files with the pattern:
 
 - `*.test.mjs`
 
-### Error Handling
+#### Error Handling
 
 If tests fail to run:
 
@@ -414,9 +403,9 @@ If tests fail to run:
 
 For more information, please visit the [Codi GitHub repository](https://github.com/RobAndrewHurst/codi).
 
-## Browser Tests Development Environment Setup
+### Browser Tests Development Environment Setup
 
-### Build Configuration
+#### Build Configuration
 
 Tests require an unminified build to enable debugging and stepping through code. This is handled by the build system (`esbuild.config.mjs`).
 
