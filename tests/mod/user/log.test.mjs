@@ -1,7 +1,7 @@
 // Mock the acl module.
 const aclFn = codi.mock.fn();
 
-const mockedacl = codi.mock.module('../../../mod/user/acl.js', {
+const mockacl = codi.mock.module('../../../mod/user/acl.js', {
   defaultExport: aclFn,
 });
 
@@ -191,4 +191,4 @@ await codi.describe(
   },
 );
 
-mockedacl.restore();
+mockacl.restore();
