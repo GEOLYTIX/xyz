@@ -70,7 +70,7 @@ export default async function accessLog(req, res) {
 
   // return 204 if no record was returned from database.
   if (!rows?.length) {
-    return res.status(202).send('No rows returned from table.');
+    return res.status(204).send('No rows returned from table.');
   }
 
   // Send the infoj object with values back to the client.

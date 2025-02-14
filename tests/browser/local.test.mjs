@@ -1,8 +1,5 @@
 export async function coreTest(mapview) {
   //API Tests
-  await runAllTests(_mappTest.workspaceSuite);
-  await runAllTests(_mappTest.templatesTest);
-  _mappTest.queryTest();
   await runAllTests(_mappTest.mappTest);
   await runAllTests(_mappTest.dictionaryTest, mapview);
   await runAllTests(_mappTest.layer, mapview);

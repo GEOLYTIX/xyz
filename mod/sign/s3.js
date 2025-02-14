@@ -67,8 +67,7 @@ let clientSDK, getSignedUrl, credentials;
 // Check if optional dependencies are available
 try {
   clientSDK = await import('@aws-sdk/client-s3');
-  const presigner = await import('@aws-sdk/s3-request-presigner');
-  getSignedUrl = presigner.getSignedUrl;
+  ({ getSignedUrl } = await import('@aws-sdk/s3-request-presigner'));
 } catch {
   // Dependencies not installed
 }
