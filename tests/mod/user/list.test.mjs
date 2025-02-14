@@ -1,4 +1,11 @@
 const aclFn = codi.mock.fn();
+const mockedacl = codi.mock.module('../../../mod/user/acl.js', {
+  cache: false,
+  defaultExport: aclFn,
+  namedExports: {
+    acl: aclFn,
+  },
+});
 
 await codi.describe(
   { name: 'list', id: 'user_list', parentId: 'user' },
@@ -10,7 +17,6 @@ await codi.describe(
       verified: true,
       approved: true,
       blocked: false,
-      //admin: true,
       email: 'test@email.com',
       roles: ['test'],
     };
@@ -30,7 +36,7 @@ await codi.describe(
 
       const userList = await user_list(req, res);
 
-      codi.assertTrue(userList.message === 'login_required');
+      codi.assertTrue(userList.message == 'login_required');
     });
 
     codi.it(
@@ -44,7 +50,7 @@ await codi.describe(
 
         const userList = await user_list(req, res);
 
-        codi.assertTrue(userList.message === 'admin_required');
+        codi.assertTrue(userList.message == 'admin_required');
       },
     );
 
@@ -88,6 +94,23 @@ await codi.describe(
       },
     );
 
+    codi.it({ name: 'users listed', parentId: 'user_list' }, async () => {
+      aclFn.mock.mockImplementation(async () => {
+        return Array.from(['row1', 'row2', 'row3']);
+      });
+
+      const { req, res } = codi.mockHttp.createMocks({
+        params: {
+          user: user.email,
+          admin: true,
+        },
+      });
+
+      await user_list(req, res);
+
+      codi.assertTrue(res.statusCode === 200);
+    });
+
     /*codi.it({ name: 'TEST ME! @cityremade', parentId: 'user_list' }, () => {
 
       //TODO: @cityremade Please test me
@@ -95,3 +118,5 @@ await codi.describe(
     });*/
   },
 );
+
+mockedacl.restore();
