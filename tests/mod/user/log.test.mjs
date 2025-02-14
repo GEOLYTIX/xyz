@@ -1,41 +1,29 @@
 // Mock the acl module.
 const aclFn = codi.mock.fn();
 
-const mockednoacl = codi.mock.module('../../../mod/user/acl.js', {
-  cache: false,
+const mockedacl = codi.mock.module('../../../mod/user/acl.js', {
   defaultExport: aclFn,
-  namedExports: {
-    acl: null,
-  },
 });
 
 await codi.describe(
   { name: 'log:', id: 'user_log', parentId: 'user' },
   async () => {
-    codi.it(
-      { name: 'Returns an error if no acl provided ', parentId: 'user_log' },
-      async () => {
-        const { default: accessLog } = await import('../../../mod/user/log.js');
+    const { default: accessLog } = await import('../../../mod/user/log.js');
 
-        const { req, res } = codi.mockHttp.createMocks({
-          params: {
-            email: 'test@geolytix.co.uk',
-          },
-        });
-
-        const result = await accessLog(req, res);
-
-        codi.assertTrue(result.message == 'ACL unavailable.');
-      },
-    );
     codi.it(
       {
         name: 'Returns an error if no email parameter provided ',
         parentId: 'user_log',
       },
       async () => {
-        //TODO: @simon-leech Please test me
-        codi.assertTrue(false);
+        const { req, res } = codi.mockHttp.createMocks({
+          params: {},
+        });
+
+        await accessLog(req, res);
+
+        codi.assertEqual(res.statusCode, 500);
+        codi.assertEqual(res._getData(), 'Missing email param');
       },
     );
     codi.it(
@@ -44,8 +32,16 @@ await codi.describe(
         parentId: 'user_log',
       },
       async () => {
-        //TODO: @simon-leech Please test me
-        codi.assertTrue(false);
+        const { req, res } = codi.mockHttp.createMocks({
+          params: {
+            email: 'test@geolytix.co.uk',
+          },
+        });
+
+        const result = await accessLog(req, res);
+
+        codi.assertTrue(result instanceof Error);
+        codi.assertEqual(result.message, 'login_required');
       },
     );
     codi.it(
@@ -54,8 +50,20 @@ await codi.describe(
         parentId: 'user_log',
       },
       async () => {
-        //TODO: @simon-leech Please test me
-        codi.assertTrue(false);
+        const { req, res } = codi.mockHttp.createMocks({
+          params: {
+            email: 'test@geolytix.co.uk',
+            user: {
+              email: 'test1@geolytix.co.uk',
+              admin: false,
+            },
+          },
+        });
+
+        const result = await accessLog(req, res);
+
+        codi.assertTrue(result instanceof Error);
+        codi.assertEqual(result.message, 'admin_required');
       },
     );
     codi.it(
@@ -64,8 +72,33 @@ await codi.describe(
         parentId: 'user_log',
       },
       async () => {
-        //TODO: @simon-leech Please test me
-        codi.assertTrue(false);
+        aclFn.mock.mockImplementation(() => {
+          return [{ access_log: 'test' }];
+        });
+
+        const { req, res } = codi.mockHttp.createMocks({
+          params: {
+            email: 'test@geolytix.co.uk',
+            user: {
+              email: 'test@geolytix.co.uk',
+              admin: false,
+            },
+          },
+        });
+
+        await accessLog(req, res);
+
+        codi.assertEqual(res._getData(), { access_log: 'test' });
+
+        aclFn.mock.mockImplementation(() => {
+          return [{ access_log: 'test' }, { access_log: 'test' }];
+        });
+
+        await accessLog(req, res);
+        codi.assertEqual(res._getData(), [
+          { access_log: 'test' },
+          { access_log: 'test' },
+        ]);
       },
     );
     codi.it(
@@ -74,8 +107,85 @@ await codi.describe(
         parentId: 'user_log',
       },
       async () => {
-        //TODO: @simon-leech Please test me
-        codi.assertTrue(false);
+        aclFn.mock.mockImplementation(() => {
+          return [{ access_log: 'test' }];
+        });
+
+        const { req, res } = codi.mockHttp.createMocks({
+          params: {
+            email: 'test1@geolytix.co.uk',
+            user: {
+              email: 'test@geolytix.co.uk',
+              admin: true,
+            },
+          },
+        });
+
+        await accessLog(req, res);
+
+        codi.assertEqual(res._getData(), { access_log: 'test' });
+
+        aclFn.mock.mockImplementation(() => {
+          return [{ access_log: 'test' }, { access_log: 'test' }];
+        });
+
+        await accessLog(req, res);
+        codi.assertEqual(res._getData(), [
+          { access_log: 'test' },
+          { access_log: 'test' },
+        ]);
+      },
+    );
+    codi.it(
+      {
+        name: 'Returns error if an error occurs in the acl module ',
+        parentId: 'user_log',
+      },
+      async () => {
+        aclFn.mock.mockImplementation(() => {
+          return new Error('failed to access ACL');
+        });
+
+        const { req, res } = codi.mockHttp.createMocks({
+          params: {
+            email: 'test1@geolytix.co.uk',
+            user: {
+              email: 'test@geolytix.co.uk',
+              admin: true,
+            },
+          },
+        });
+
+        await accessLog(req, res);
+
+        codi.assertEqual(res.statusCode, 500);
+        codi.assertEqual(res._getData(), 'Failed to access ACL.');
+      },
+    );
+    codi.it(
+      {
+        name: 'Returns 204 if no rows are returned from the acl module ',
+        parentId: 'user_log',
+      },
+      async () => {
+        aclFn.mock.mockImplementation(() => {
+          return [];
+        });
+
+        const { req, res } = codi.mockHttp.createMocks({
+          params: {
+            email: 'test1@geolytix.co.uk',
+            user: {
+              email: 'test@geolytix.co.uk',
+              admin: true,
+            },
+          },
+        });
+
+        await accessLog(req, res);
+
+        codi.assertEqual(res.statusCode, 204);
+        codi.assertEqual(res._getData(), 'No rows returned from table.');
       },
     );
   },
