@@ -46,7 +46,7 @@ Template modules will be constructed.
 
 @returns {Promise<Object|Error>} JSON Template
 */
-module.exports = async function getTemplate(template) {
+export default async function getTemplate(template) {
   template = await getTemplateObject(template);
 
   if (template instanceof Error) {
@@ -106,7 +106,7 @@ module.exports = async function getTemplate(template) {
   }
 
   return template;
-};
+}
 
 /**
 @function getTemplateObject
