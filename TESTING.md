@@ -1,85 +1,260 @@
 # Testing
 
-Testing in xyz is split into 3 different sections:
+XYZ/MAPP testing is split into 3 sections:
 
-1. cli (console)
-2. module (browser)
-3. integrity
+- CLI [Command Line Interface] tests for endpoints of the XYZ API.
+- Browser based testing of modules bundled into the Mapp library.
+- Integrity tests for workspaces and XYZ process environments.
 
-## Testing Environment Setup
+The [codi](https://github.com/RobAndrewHurst/codi) test framework is a required dependency to support the different tests.
 
-### Prerequisites
+## CLI [Command Line Interface] tests
 
-The minimum requirements are:
+Command Line Interface tests are typically executed on localhost for a clone of the XYZ repository to check whether XYZ API modules under development execute as outlined in their documentation. These tests should also be run as an action on any pull request to ensure the structural integrity of XYZ API endpoints.
 
-- Node.js (version 18 and above)
-- [codi](https://github.com/RobAndrewHurst/codi)
-- Node modules installed via `npm install`
+The codi test framework must be installed into the node_modules with `npm install`.
 
-## Test Structure
+The codi CLI tests require experimental _module mocks_ which are available in Node 22+ [LTS].
 
-Tests are organized in the `/tests` directory with two main subdirectories:
-
-- `/tests/mod`: CLI tests for the xyz (mod) directory
-- `/tests/lib`: Module tests for browser environment
+The CLI tests can be executed with the following bash command.
 
 ```bash
-xyz/
-├── mod/
-│   ├── module1/
-│   │   └── feature1.mjs
-├── lib/
-│   ├── module2/
-│   │   └── feature2.mjs
-├── tests/
-│   ├── mod/
-│   │   ├── module1/
-│   │   │   ├── feature1.test.mjs
-│   │   │   └── index.mjs
-│   └── lib/
-│       └── module2/
-│           ├── feature2.test.mjs
-│           └── index.mjs
-
+node --experimental-test-module-mocks node_modules/codi-test-framework/cli.js tests
 ```
 
-Each test folder exports an object matching its corresponding directory structure:
+This script is defined as "test" in the package.json document and can also be run with `node --run test`.
+
+> [!NOTE] It is recommended to call the scripts defined in the package.json with node, rather than npm for performance reasons.
+
+The "test-watch" script watches the test directory and will re-run tests on change events. Details of these tests are suppressed with the quiet flag.
+
+```bash
+node --run test-watch
+```
+
+### Debugging tests
+
+The codi test framework CLI can be launched in debug with VSCode by addign debug config for the node runtime to the launch.json.
+
+```json
+{
+  "type": "node",
+  "request": "launch",
+  "name": "Debug Codi CLI Tests",
+  "skipFiles": ["<node_internals>/**"],
+  "program": "${workspaceFolder}/node_modules/codi-test-framework/cli.js",
+  "args": ["${workspaceFolder}/tests", "--quiet"],
+  "runtimeArgs": ["--experimental-test-module-mocks"],
+  "console": "integratedTerminal",
+  "internalConsoleOptions": "neverOpen",
+  "cwd": "${workspaceFolder}"
+}
+```
+
+### /tests/mod directory
+
+The `/tests/mod` directory contains tests for the individual XYZ API endpoints and utility modules. The codi test framework CLI will iterate through the test module scripts and execute each. Subfolder with multiple API modules [eg /provider, /sign, /user, /utis, /workspace] include a module of the same name prefixed with an underscore to ensure that this file is listed first in the directory. These entry modules [eg _provider.mjs] import and execute any test modules from the same directory.
+
+### codi test module structure [describe > it > assert]
+
+A codi test module will usually import modules to be tested within an async codi.describe() method which defines the test or a group of tests.
+
+Multiple codi.it() methods can be executed in an async fashion within each codi.describe() method to test individual aspects of a module.
+
+Multiple assertations can be checked with codi.assert\*() methods inside a codi.it() test. Each assertation must be met for the codi.it() test to pass.
+
+For example: The codi test module for the /user/token module must import the token and auth modules in the codi.describe() method. The method then awaits the execution of multiple codi.it() methods to test whether the module correctly responds to mocked HTTP requests with missing or valid parameters. A codi.it() method to check for missign parameter will validate with a codi.assertTrue() method checking for the return of an Error. Multiple codi.it() methods can be chained in an async fashion by storing the variables within the closure of the codi.describe() method. A codi.it() method with a valid request user parameter will store the token returned from the tested module for a subsequent codi.it() method to pass this token to the auth module and check whether the expected user object is returned.
+
+### Mocks
+
+> [!NOTE] Mocking is only available with an expiremental flag in Node 22+ [LTS]
+
+Mocking allows alteration of the default behaviour of functions or methods for testing.
+
+Mocking replaces the reference of a module or function in memory with a 'mocked' version of it. This mocked version can then be called from non-test code and receive an output.
+
+It is important to restore mocked objects within the closure of multiple tests.
+
+#### function (fn) mocking
+
+Just like any function, mocking a function needs to have context. The context can be the scope of a test, imported module or global.
+
+To mock a function you can call the `codi.mock.fn()` function.
+
+This creates a mock function which you can interface with.
 
 ```javascript
-// tests/mod/module1/index.mjs
-export default {
-  feature1: () => import('./feature1.test.mjs'),
-};
+const random = codi.mock.fn((max) => return Math.floor(Math.random() * max););
+
+codi.it({ name: 'random', parentId: 'foo' }, () => {
+  codi.assertTrue(random(1) === 0, 'We expect the number to be 0');
+  codi.assertTrue(random(3) <= 2), 'We expect the number to less than or equal to 2';
+});
 ```
 
-## 1. CLI (Console) Tests
+You can also mock functions/methods with the `codi.mock.method()` function that will take an object as a reference and implement a mock function to that objects method.
 
-CLI tests are vanilla JavaScript tests that execute in the Node.js runtime using the Codi Test framework. These tests focus on the xyz (mod) directory and code that doesn't require browser-specific features.
+> [!NOTE] typically in tests written this methodology isn't used and favoured for the `codi.mock.mockImplementation()/mockImplementationOnce()` function which can mock a function given to a mocked module. An example of this will be provided in the mock module section.
 
-### Running CLI Tests
+```javascript
+import fs from 'node:fs';
 
-The codi test suit will iterate through the tests directory [ignoring the folders specified in codi.json] and log the results from each test suit.
+// Mocking fs.readFile() method
+codi.mock.method(fs.promises, 'readFile', async () => 'Hello World');
 
-```bash
-npm run test
+codi.describe({ name: 'Mocking fs.readFile in Node.js', id: 'mock' }, () => {
+  codi.it(
+    {
+      name: 'should successfully read the content of a text file',
+      parentId: 'mock',
+    },
+    async () => {
+      codi.assertEqual(fs.promises.readFile.mock.calls.length, 0);
+      codi.assertEqual(
+        await fs.promises.readFile('text-content.txt'),
+        'Hello World',
+      );
+      codi.assertEqual(fs.promises.readFile.mock.calls.length, 1);
+
+      // Reset the globally tracked mocks.
+      mock.reset();
+    },
+  );
+});
 ```
 
-Summary statistics for all tests will be logged with the `-- quiet` flag (codi v0.0.47+):
+#### module mocking
 
-```bash
-npm run test -- --quiet
+The `codi.mock.module()` function requires the path of a module to mock as first argument with options for the mocked module as second argument.
+
+Properties for the options argument are:
+
+- cache: If false, each call to require() or import() generates a new mock module. Default: false.
+- defaultExport: An optional value used as the mocked module's default export. If this value is not provided, ESM mocks do not include a default export. It possible to provide a mocked function as defaultExport property in the options parameter.
+- namedExports: An optional object whose keys and values are used to create the named exports of the mock module.
+
+> [!IMPORTANT] Ensure that functions are mocked prior to a module exporting the function. And modules are mocked prior to imports of modules that require a mocked module.
+
+In the following example the acl method is mocked as export for acl module. The mock implementation of the acl function returns a user object defined in the mock implementation. This allows to return a user object from the acl module without access to a store for user objects.
+
+The imported login module will now return a user object regardless of arguments provided to the login module method.
+
+```javascript
+const aclFn = codi.mock.fn();
+const mockedacl = codi.mock.module('../../acl.js', {
+  cache: false,
+  defaultExport: aclFn,
+  namedExports:{
+    acl: aclFn
+  }
+});
+
+codi.describe({name: 'mocked module', id: 'mocked_module'}, () => {
+  codi.it({'We should be able to mock a module', parentId: 'mocked_module'}, async () => {
+
+    aclFn.mock.mockImplementation(() => {
+      const user = {
+        email: 'robert.hurst@geolytix.co.uk',
+        admin: true
+      };
+      return user
+    })
+
+    const { default: login } = await import('../../../mod/user/login.js');
+
+    //{ email: 'robert.hurst@geolytix.co.uk', admin: true}
+    const result = await login();
+  });
+});
+
+// The mocked ACL module must be restored once the tests are completed.
+mockedacl.restore();
 ```
 
-## 2. Module (Browser) Tests
+> [!IMPORTANT] Mocked functions and modules must be restored prior to tests which may require the default behaviour of the same object.
 
-Module tests are designed for the browser environment with full access to:
+#### http mocks
+
+Node HTTP resquests and responses can be mocked to test endpoints in the middleware.
+
+`codi.mockHttp` helps create `req` & `res` objects that can be passed to functions in order to simulate a call to the function via an api. You can call the `createRequest` & `createResponse` functions respectively. You can also call the `createMocks` function and perform a destructured assignment on the `req` & `res`.
+
+In the following example we mock a HTTP request with a user object param for the /user/token API module. The module will send a signed token as HTTP response from the module. The token can be accessed as [sent] data from the mocked HTTP response object.
+
+```javascript
+const { default: userToken } = await import('../../../mod/user/token.js');
+await codi.it(
+  { name: '10hr admin user token', parentId: 'user_token' },
+  async () => {
+    const { req, res } = codi.mockHttp.createMocks({
+      params: {
+        expiresin: '10hr',
+        user: {
+          email: 'test@geolytix.co.uk',
+        },
+      },
+    });
+
+    await userToken(req, res);
+
+    const token = res._getData();
+
+    const user = jwt.verify(token, xyzEnv.SECRET);
+
+    // token expires in 10hr.
+    codi.assertTrue(user.exp - user.iat === 36000);
+
+    // user from token must not have admin rights.
+    codi.assertTrue(!user.admin);
+  },
+);
+```
+
+You can also mock the response from the global fetch function by making use of the `MockAgent` & `setGlobalDispatcher` interfaces.
+
+The `MockAgent` class is used to create a mockpool which can intercept different paths to certain URLs. And based on these paths we can specify a return.
+
+The `setGlobalDispatcher` will assign the Agent on a global scope so that calls to the `fetch` function in non-test modules will be intercepted.
+
+Here is an example of this:
+
+```javascript
+await codi.describe({ name: 'HTTP Mock', id: 'http_test_fun' }, async () => {
+  await codi.it(
+    { name: 'We should get some doggies', parentId: 'http_test_fun' },
+    async () => {
+      const mockAgent = new codi.mockHttp.MockAgent(); //<-- Mockagent we use to get a pool
+      codi.mockHttp.setGlobalDispatcher(mockAgent); // <-- Assigning the agent on a global scope.
+
+      const mockPool = mockAgent.get(new RegExp('http://localhost:3000')); //<-- Mock pool listening for the localhost url
+      mockPool
+        .intercept({ path: '/' })
+        .reply(404, [
+          'codi',
+          'mieka',
+          'luci',
+        ]); /** <-- When we hit a specific path
+                    we get a specified response */
+
+      const response = await fetch('http://localhost:3000');
+
+      codi.assertEqual(response.status, 404, 'We expect to get a 404');
+      codi.assertEqual(await response.json(), ['codi', 'mieka', 'luci']);
+    },
+  );
+});
+```
+
+## Browser tests for Mapp library modules
+
+Browser tests are designed for the browser environment with full access to:
 
 - DOM
 - Mapp library
 - Mapview for loaded application
 - No mocking required for module imports
 
-### Running Module Tests
+### Running Browser Tests
 
 A [test application view](https://github.com/GEOLYTIX/xyz/blob/main/public/views/_test.html) is provided in the public folder to execute browser tests.
 
@@ -95,43 +270,61 @@ The test results will be logged to the browser dev console.
 
 VSCode can be used to debug tests and mapp library modules as outlined in the [developer notes](https://github.com/GEOLYTIX/xyz/blob/main/DEVELOPING.md).
 
-## 3. Integrity Tests
+## Integrity tests for workspaces and XYZ process environments.
 
 Integrity tests check data integrity of a workspace through the test view document. The test view hosted in the public directory is set as a view templates in the workspace templates. This can be requested from the View API by setting `test_view` as template URL parameter.
 
 The data integrity tests are currently evaluated for public access.
 
-## Writing Tests
+### Writing Tests
 
-### Test Structure
+#### Test Structure
 
 Tests use the describe-it pattern for organization:
 
 ```javascript
 import { describe, it, assertTrue } from 'codi';
 
-describe('Feature Description', () => {
-  it('should behave in a specific way', () => {
-    // Test code
-  });
+describe({ name: 'Feature Description', id: 'feature_description' }, () => {
+  it(
+    {
+      name: 'should behave in a specific way',
+      parentId: 'feature_description',
+    },
+    () => {
+      // Test code
+    },
+  );
 });
 ```
 
 Example with multiple assertions:
 
 ```javascript
-describe('All languages should have the same base language entries', () => {
-  Object.keys(mapp.dictionaries).forEach((language) => {
-    it(`The ${language} dictionary should have all the base keys`, () => {
-      Object.keys(base_dictionary).forEach((key) => {
-        assertTrue(
-          !!mapp.dictionaries[language][key],
-          `${language} should have ${key}`,
-        );
-      });
+codi.describe(
+  {
+    name: 'All languages should have the same base language entries',
+    id: 'dictionaries',
+  },
+  () => {
+    Object.keys(mapp.dictionaries).forEach((language) => {
+      codi.it(
+        {
+          name: `The ${language} dictionary should have all the base keys`,
+          parentId: 'dictionaries',
+        },
+        () => {
+          Object.keys(base_dictionary).forEach((key) => {
+            codi.assertTrue(
+              !!mapp.dictionaries[language][key],
+              `${language} should have ${key}`,
+            );
+          });
+        },
+      );
     });
-  });
-});
+  },
+);
 ```
 
 ### Available Assertions
@@ -151,7 +344,7 @@ Codi provides several built-in assertions:
 - `assertNoDuplicates(callback, errorMessage, message)` 👬
   - Asserts that there are no duplicates in a provided array.
 
-## Best Practices
+### Best Practices
 
 - Maintain parallel structure between source and test directories
 - Use descriptive test names
@@ -161,15 +354,15 @@ Codi provides several built-in assertions:
 - Keep tests focused and isolated
 - Use `--quiet` flag in CI/CD pipelines. (can also be used on other test fuctions).
 
-## Common Issues and Solutions
+### Common Issues and Solutions
 
-### Test Discovery
+#### Test Discovery
 
 Codi automatically discovers tests in files with the pattern:
 
 - `*.test.mjs`
 
-### Error Handling
+#### Error Handling
 
 If tests fail to run:
 
@@ -181,9 +374,9 @@ If tests fail to run:
 
 For more information, please visit the [Codi GitHub repository](https://github.com/RobAndrewHurst/codi).
 
-## Browser Tests Development Environment Setup
+### Browser Tests Development Environment Setup
 
-### Build Configuration
+#### Build Configuration
 
 Tests require an unminified build to enable debugging and stepping through code. This is handled by the build system (`esbuild.config.mjs`).
 
@@ -226,7 +419,7 @@ try {
    NODE_ENV=DEVELOPMENT
    ```
 
-> This can be defined in your .env or in your nodemon.json config.
+   > This can be defined in your .env or in your nodemon.json config.
 
 2. Build the project:
 
