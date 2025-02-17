@@ -67,23 +67,20 @@ For example: The codi test module for the /user/token module must import the tok
 
 ### Mocks
 
-> [!NOTE] Codi has implemented mock modules/functions that are only available in the nodeJS environment.
+> [!NOTE] Mocking is only available with an expiremental flag in Node 22+ [LTS]
 
-Module mocking is a strange and weird concept to get your head around. It is essentially is a way to replace modules or functions with stubs to simulate or 'mock' external entities.
+Mocking allows alteration of the default behaviour of functions or methods for testing.
 
-What a mocking module will do is replace the reference of a module in memory with a 'mocked' version of it. This mocked version can then be called from non-test code and receive an output. You can then reset that version of the mocked module to the original export with a reset/restore function.
+Mocking replaces the reference of a module or function in memory with a 'mocked' version of it. This mocked version can then be called from non-test code and receive an output.
 
-Codi can mock:
-
-- functions
-- modules
-- http requests
+It is important to restore mocked objects within the closure of multiple tests.
 
 #### function (fn) mocking
 
 Just like any function, mocking a function needs to have context. The context can be the scope of a test, imported module or global.
 
 To mock a function you can call the `codi.mock.fn()` function.
+
 This creates a mock function which you can interface with.
 
 ```javascript
@@ -97,8 +94,7 @@ codi.it({ name: 'random', parentId: 'foo' }, () => {
 
 You can also mock functions/methods with the `codi.mock.method()` function that will take an object as a reference and implement a mock function to that objects method.
 
-> [!NOTE]
-> typically in tests written this methodology isn't used and favoured for the `codi.mock.mockImplementation()/mockImplementationOnce()` function which can mock a function given to a mocked module. An example of this will be provided in the mock module section.
+> [!NOTE] typically in tests written this methodology isn't used and favoured for the `codi.mock.mockImplementation()/mockImplementationOnce()` function which can mock a function given to a mocked module. An example of this will be provided in the mock module section.
 
 ```javascript
 import fs from 'node:fs';
@@ -129,22 +125,19 @@ codi.describe({ name: 'Mocking fs.readFile in Node.js', id: 'mock' }, () => {
 
 #### module mocking
 
-You can mock modules with the `codi.mock.module()` function which takes a path and options to mock a module.
-The typical practice is that you provide a mocked function that you can implement mocks ontop of making the mocked module more reusable.
+The `codi.mock.module()` function requires the path of a module to mock as first argument with options for the mocked module as second argument.
 
-> [!CAUTION]
-> the `codi.mock.module()` function is still in early development as it comes from the node:test runner, which is still in further development
-
-options you can provide mocked module:
+Properties for the options argument are:
 
 - cache: If false, each call to require() or import() generates a new mock module. Default: false.
-- defaultExport: An optional value used as the mocked module's default export. If this value is not provided, ESM mocks do not include a default export.
+- defaultExport: An optional value used as the mocked module's default export. If this value is not provided, ESM mocks do not include a default export. It possible to provide a mocked function as defaultExport property in the options parameter.
 - namedExports: An optional object whose keys and values are used to create the named exports of the mock module.
 
-Bellow is an example of a mocked module referencing a mocked function
+> [!IMPORTANT] Ensure that functions are mocked prior to a module exporting the function. And modules are mocked prior to imports of modules that require a mocked module.
 
-> [!IMPORTANT]
-> Ensure that your module mocks are top level, as to import the module before the dynamic import to the module we are testing.
+In the following example the acl method is mocked as export for acl module. The mock implementation of the acl function returns a user object defined in the mock implementation. This allows to return a user object from the acl module without access to a store for user objects.
+
+The imported login module will now return a user object regardless of arguments provided to the login module method.
 
 ```javascript
 const aclFn = codi.mock.fn();
@@ -169,74 +162,52 @@ codi.describe({name: 'mocked module', id: 'mocked_module'}, () => {
 
     const { default: login } = await import('../../../mod/user/login.js');
 
-    const result = await login();
-
     //{ email: 'robert.hurst@geolytix.co.uk', admin: true}
-    console.log(result);
-  });
-});
-```
-
-#### module & function restore/reset
-
-if you want to return the functionality of a mocked function/module you will want to call the `restore` function on a mocked module.
-
-> [!IMPORTANT]
-> You will want to call these restores on mocked modules at the end of a test so that other tests can also mock the same module. If you don't an error will be returned.
-
-```javascript
-const aclFn = codi.mock.fn();
-const mockedacl = codi.mock.module('../../acl.js', {
-  cache: false,
-  defaultExport: aclFn
-  namedExports:{
-    acl: aclFn
-  }
-});
-
-codi.describe({name: 'mocked module', id: 'mocked_module'}, () => {
-  codi.it({'We should be able to mock a module', parentId: 'mocked_module'}, async () => {
-  //...test
+    const result = await login();
   });
 });
 
-//Call to the mocked module to restore to original state.
+// The mocked ACL module must be restored once the tests are completed.
 mockedacl.restore();
 ```
 
+> [!IMPORTANT] Mocked functions and modules must be restored prior to tests which may require the default behaviour of the same object.
+
 #### http mocks
 
-codi has exported functions to help aid in mocking http requests.
+Node HTTP resquests and responses can be mocked to test endpoints in the middleware.
 
 `codi.mockHttp` helps create `req` & `res` objects that can be passed to functions in order to simulate a call to the function via an api. You can call the `createRequest` & `createResponse` functions respectively. You can also call the `createMocks` function and perform a destructured assignment on the `req` & `res`.
 
+In the following example we mock a HTTP request with a user object param for the /user/token API module. The module will send a signed token as HTTP response from the module. The token can be accessed as [sent] data from the mocked HTTP response object.
+
 ```javascript
-await codi.describe({ name: 'Sign: ', id: 'sign' }, async () => {
-  await codi.it({ name: 'Invalid signer', parentId: 'sign' }, async () => {
-    const { default: signer } = await import('../../../mod/sign/_sign.js');
-
-    const req = codi.mockHttp.createRequest({
-      params: {
-        signer: 'foo',
-      },
-    });
-
-    const res = codi.mockHttp.createResponse();
-
-    //OR
-
+const { default: userToken } = await import('../../../mod/user/token.js');
+await codi.it(
+  { name: '10hr admin user token', parentId: 'user_token' },
+  async () => {
     const { req, res } = codi.mockHttp.createMocks({
       params: {
-        signer: 'foo',
+        expiresin: '10hr',
+        user: {
+          email: 'test@geolytix.co.uk',
+        },
       },
     });
 
-    await signer(req, res);
+    await userToken(req, res);
 
-    codi.assertEqual(res.statusCode, 404);
-    codi.assertEqual(res._getData(), "Failed to validate 'signer=foo' param.");
-  });
-});
+    const token = res._getData();
+
+    const user = jwt.verify(token, xyzEnv.SECRET);
+
+    // token expires in 10hr.
+    codi.assertTrue(user.exp - user.iat === 36000);
+
+    // user from token must not have admin rights.
+    codi.assertTrue(!user.admin);
+  },
+);
 ```
 
 You can also mock the response from the global fetch function by making use of the `MockAgent` & `setGlobalDispatcher` interfaces.
