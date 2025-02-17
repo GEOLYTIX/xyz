@@ -7,7 +7,6 @@
     ],
     "syncPlugins": ["zoomBtn", "zoomToArea", "coordinates", "admin", "login"],
     "test": {
-      "core": true,
       "options": {
         "quiet": true,
         "showSummary": true
