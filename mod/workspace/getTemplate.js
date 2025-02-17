@@ -34,31 +34,23 @@ import envReplace from '../utils/envReplace.js';
 @async
 
 @description
-The workspace will checked and cached by the [Workspace API checkWorkspaceCache]{@link module:/workspace/cache~checkWorkspaceCache} method.
+A JSON template object will be requested from the getTemplateObject method.
 
-A template object matching the template_key param in the workspace.templates{} object will be returned from the getTemplate method.
+An error will be returned if the lookup failed.
 
-The template will be retrieved from its src if not cached.
+A template will be requested from source if the template has not been cached.
 
-Module templates will be constructed before being returned.
+Template modules will be constructed.
 
 @param {string} template 
 
 @returns {Promise<Object|Error>} JSON Template
 */
-export default async function getTemplate(template) {
-  if (typeof template === 'string') {
-    const workspace = await workspaceCache();
+module.exports = async function getTemplate(template) {
+  template = await getTemplateObject(template);
 
-    if (workspace instanceof Error) {
-      return workspace;
-    }
-
-    if (!Object.hasOwn(workspace.templates, template)) {
-      return new Error(`Template: ${template} not found.`);
-    }
-
-    template = workspace.templates[template];
+  if (template instanceof Error) {
+    return template;
   }
 
   if (!template.src) {
@@ -111,6 +103,48 @@ export default async function getTemplate(template) {
     return structuredClone(template.cached);
   } else if (typeof response === 'string') {
     template.template = response;
+  }
+
+  return template;
+};
+
+/**
+@function getTemplateObject
+@async
+
+@description
+The workspace will checked and cached by the [Workspace API checkWorkspaceCache]{@link module:/workspace/cache~checkWorkspaceCache} method.
+
+A template object matching the template_key param in the workspace.templates{} object will be returned.
+
+The template string will be checked to include only whitelisted character.
+
+An error exception will be returned if the template object lookup from the workspace failed.
+
+@param {string} template 
+
+@returns {Promise<Object|Error>} JSON Template
+*/
+async function getTemplateObject(template) {
+  if (typeof template === 'string') {
+    // The template param must not include non whitelisted character.
+    if (/[^a-zA-Z0-9 :_-]/.exec(template)) {
+      return new Error(
+        `Template param may only include whitelisted character.`,
+      );
+    }
+
+    const workspace = await workspaceCache();
+
+    if (workspace instanceof Error) {
+      return workspace;
+    }
+
+    if (!Object.hasOwn(workspace.templates, template)) {
+      return new Error(`Template: ${template} not found.`);
+    }
+
+    template = workspace.templates[template];
   }
 
   return template;
