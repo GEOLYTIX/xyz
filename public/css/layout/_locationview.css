@@ -48,6 +48,7 @@
     user-select: none;
     height: 1.5em;
     width: 1.5em;
+    font-size: inherit;
   }
 
   & .drawer.group {
@@ -61,7 +62,7 @@
     & > .header {
       grid-column: 1 / 3;
       background-color: var(--color-primary);
-      color: white;
+      color: var(--color-light);
       border-radius: 3px;
       padding: 0 0.5em;
     }
