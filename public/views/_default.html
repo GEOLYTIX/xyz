@@ -331,8 +331,6 @@
           tabview.classList.add('desktop-display-none');
           document.body.style.gridTemplateRows = 'auto 0 0';
           mapview.Map.getTargetElement().style.marginTop = 0;
-        },
-      });
 
       // Get list of accessible locales from Workspace API.
       const locales = await mapp.utils.xhr(
@@ -357,14 +355,22 @@
         });
       }
 
-      // Check whether the locale supports a userLocale
-      if (locale.userLocale) {
-        const userLocale = await mapp.utils.userLocale.get(locale);
+    // Check whether the locale supports a userLocale
+    if (locale.userLocale) {
 
-        if (userLocale) {
-          locale = userLocale;
-        }
+      if (mapp.hooks.current.userlocale) {
+
+        // Assign the userlocale value as name to check for a stored userlocale
+        locale.name = mapp.hooks.current.userlocale
       }
+
+      // Check whether a userLocale is stored for the current user|workspace
+      const userLocale = await mapp.utils.userLocale.get(locale);
+
+      if (userLocale) {
+        locale = userLocale;
+      }
+    }
 
       // Add locale dropdown to layers panel if multiple locales are accessible.
       if (locales.length > 1) {
@@ -382,7 +388,7 @@
 
         layersTab.appendChild(mapp.utils.html.node`${localesDropdown}`);
       }
-
+          
       if (!window.ol) await mapp.utils.olScript();
 
       locale.syncPlugins ??= ['zoomBtn', 'admin', 'login'];
