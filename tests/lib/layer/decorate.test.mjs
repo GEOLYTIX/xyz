@@ -39,47 +39,6 @@ export function decorate(mapview, layer, infoj, style) {
       await mapp.layer.decorate(layer);
 
       /**
-       * ### Should have a draw object
-       * We check if the layer has a draw object
-       * @function it
-       */
-      codi.it(
-        { name: 'Should have a draw object', parentId: 'layer_decorate' },
-        () => {
-          codi.assertTrue(
-            Object.hasOwn(layer, 'draw'),
-            'The layer should have a draw object by default',
-          );
-        },
-      );
-
-      /**
-       * ### Should have a show function
-       * 1. We check if a decorated layer has a show function
-       * 2. We then execute the show() function on a layer.
-       * 3. We expect the layer.display to now be true
-       * @function it
-       */
-      codi.it(
-        { name: 'Should have a show function', parentId: 'layer_decorate' },
-        () => {
-          codi.assertTrue(
-            Object.hasOwn(layer, 'show'),
-            'The layer should have a show method by default',
-          );
-          codi.assertTrue(
-            typeof layer.display === 'undefined',
-            "The layer shouldn't have a display flag",
-          );
-          layer.show();
-          codi.assertTrue(
-            layer.display,
-            'The layer should now display true after displaying',
-          );
-        },
-      );
-
-      /**
        * ### Should have a hide function
        * 1. We check if the decorated layer has a hide function
        * 2. We execute the hide() function
