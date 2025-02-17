@@ -190,7 +190,9 @@ async function locale(req, res) {
         .filter((layer) => !(layer instanceof Error));
     });
 
-    return res.json(removeRoles(locale));
+    const localeWithoutRoles = removeRoles(locale);
+
+    return res.json(localeWithoutRoles);
   }
 
   // Check layer access.
