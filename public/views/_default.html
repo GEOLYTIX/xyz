@@ -50,7 +50,6 @@
     }
 
     #ctrl-tabs {
-      height: auto;
       padding: 0.5em;
       width: 100%;
       display: flex;
@@ -62,7 +61,6 @@
     }
 
     #ctrl-panel {
-      height: calc(100% - 50px);
       overflow-y: auto;
     }
 
@@ -122,6 +120,8 @@
         grid-column: 1;
         height: 100%;
         overflow: hidden;
+        display: flex;
+        flex-direction: column;
       }
 
       #Tabview {
