@@ -295,11 +295,11 @@ html.dark-mode {
   /* begin scrollbar */
 
   ::-webkit-scrollbar-track {
-    background: var(--dm-color-dark-faded);
+    background: var(--dm-color-dark-medium);
   }
 
   ::-webkit-scrollbar-thumb {
-    background: var(--dm-color-color-on);
+    background: var(--dm-color-on);
   }
 
   ::-webkit-scrollbar-corner {
