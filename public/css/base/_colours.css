@@ -1,4 +1,5 @@
 :root {
+  /* light colour mode */
   --color-off-black: #3f3f3f;
 
   --color-primary: #003d57;
@@ -7,30 +8,67 @@
 
   --color-light: #ffffff;
 
+  --color-off-light: #eeeeee;
+
   --color-light-secondary: #f2f2f2;
 
   --color-light-tertiary: #fafafa;
 
   --color-mid: #e3e3e3;
 
-  --color-on: #e18335;
+  --color-on: #d57120;
 
   --color-no: #a21309;
 
   --color-changed: #ffffa7;
+
+  --color-ok: #0b6f50;
+
+  /* dark colour mode */
+
+  --dm-color-on: #e18335;
+
+  --dm-color-medium: #555555;
+
+  --dm-color-dark-faded: #333333;
+
+  --dm-color-dark-neutral: #222222;
+
+  --dm-color-dark: #111111;
+
+  --dm-color-darker: #151515;
+
+  --dm-color-light: #ffffff;
+
+  --dm-color-light-secondary: #f2f2f2;
+
+  --dm-color-light-darker: #d8d8d8;
+
+  --dm-color-no: #ef5350;
 }
+
+* {
+  transition: 0.2s ease-in-out;
+  transition-property: background-color;
+}
+
+/* light mode classes */
 
 .primary-colour {
   color: var(--color-primary);
 }
 
 .primary-background {
-  color: white;
+  color: var(--color-light);
   background-color: var(--color-primary);
 }
 
 .light-background {
   background-color: var(--color-light);
+}
+
+.light-colour {
+  color: var(--color-light);
 }
 
 .lighter-background {
@@ -42,7 +80,7 @@
 }
 
 .off-black-background {
-  color: white;
+  color: var(--color-light);
   background-color: var(--color-off-black);
 }
 
