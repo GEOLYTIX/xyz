@@ -1,0 +1,386 @@
+html.dark-mode {
+  /* begin base stylesheets */
+
+  /* base: begin button */
+  button {
+    color: var(--dm-color-light);
+    &.primary-colour {
+      color: var(--dm-color-light);
+    }
+    &.active {
+      color: var(--dm-color-on);
+    }
+
+    & > .primary-colour {
+      color: var(--dm-color-light);
+    }
+  }
+
+  /* end button */
+
+  /* begin colour classes */
+
+  .primary-colour {
+    color: var(--color-light);
+
+    &.active {
+      color: var(--color-on);
+    }
+  }
+
+  .lighter-background {
+    background-color: var(--dm-color-dark-faded);
+  }
+
+  .bg-light-tertiary {
+    background-color: var(--dm-color-dark-faded);
+  }
+
+  .input-range.single {
+    &::after,
+    &::before {
+      background: linear-gradient(
+        0deg,
+        transparent 0 45%,
+        var(--color-light) 45% 55%,
+        transparent 55% 100%
+      );
+    }
+  }
+
+  #ctrl-panel {
+    background-color: var(--dm-color-dark-neutral);
+  }
+
+  #ctrl-tabs {
+    background-color: var(--dm-color-darker);
+  }
+
+  /* end colour classes */
+
+  /* begin globals */
+  a {
+    color: var(--dm-color-on);
+  }
+  /* end globals */
+
+  /* begin inputs */
+
+  input[type='number'],
+  input[type='text'],
+  input[type='search'] {
+    background: var(--dm-color-medium);
+    color: var(--dm-color-light);
+    border-color: var(--dm-color-dark-faded);
+  }
+
+  input[type='search'] {
+    &::placeholder {
+      color: var(--dm-color-light-darker);
+      opacity: 1;
+    }
+
+    &::-ms-input-placeholder {
+      color: var(--dm-color-light-darker);
+    }
+  }
+
+  textarea {
+    background-color: var(--dm-color-light-darker);
+    color: var(--dm-color-light);
+  }
+
+  /* end inputs */
+
+  /* begin material icons */
+  .active > .material-symbols-outlined {
+    color: var(--dm-color-on);
+  }
+  .material-symbols-outlined {
+    color: var(--dm-color-light-secondary);
+
+    &.no-colour {
+      color: var(--dm-color-no);
+    }
+
+    &.ok-colour {
+      color: var(--color-ok);
+    }
+
+    &.active {
+      color: var(--dm-color-on);
+    }
+  }
+  /* end material icons */
+
+  /* end base stylesheets */
+
+  /* begin elements stylesheets */
+
+  /* begin dialog */
+  dialog {
+    color: var(--dm-color-light);
+    background-color: var(--dm-color-dark-faded);
+
+    &.alert-confirm h4 {
+      background-color: var(--color-on);
+    }
+  }
+  /* end dialog */
+
+  /* begin drawer */
+  .drawer {
+    background-color: var(--dm-color-dark-faded);
+    color: var(--color-light-secondary);
+    border: none;
+
+    &.top-btn {
+      color: var(--color-light-secondary);
+    }
+
+    &.panel {
+      background-color: var(--dm-dark-neutral);
+    }
+  }
+  /* end drawer */
+
+  /* begin dropdown */
+
+  .dropdown {
+    box-shadow: 0px 0px 0px 0px;
+
+    &.active .head {
+      background: var(--dm-color-on);
+    }
+
+    ul {
+      &.label {
+        background-color: var(--dm-color-dark-faded);
+      }
+    }
+
+    ul > li,
+    .head {
+      background: var(--dm-color-medium);
+      color: var(--dm-color-light);
+      border-color: var(--dm-color-dark-faded);
+
+      > .material-symbols-outlined:after {
+        color: var(--color-light);
+      }
+    }
+
+    ul > li {
+      &:hover {
+        background: var(--dm-color-dark-faded);
+      }
+      &.selected {
+        background-color: var(--dm-color-dark-faded);
+      }
+    }
+  }
+
+  /* end dropdown */
+
+  /* begin key */
+
+  .key {
+    button.layer-key {
+      &.active {
+        background-color: var(--dm-color-on);
+        color: var(--dm-color-darker);
+      }
+    }
+  }
+
+  /* end key */
+
+  /* begin searchbox */
+
+  .searchbox {
+    box-shadow: unset;
+
+    & > ul {
+      background-color: var(--dm-color-medium);
+
+      & li {
+        color: var(--color-light);
+      }
+    }
+  }
+
+  /* end searchbox */
+
+  /* end elements stylesheets */
+
+  /* begin layout stylesheets */
+
+  /* begin divider */
+
+  #ctrls-divider,
+  #tabview-divider {
+    background-color: var(--dm-color-dark-faded);
+  }
+
+  /* end divider */
+
+  /* begin layerview */
+
+  #layers {
+    & > .drawer.layer-group .drawer.layer-view {
+      background-color: var(--dm-color-dark-faded);
+      border-top: 1px solid var(--dm-color-medium);
+    }
+
+    & > .layer-view > .drawer {
+      background-color: var(--dm-color-dark-faded);
+    }
+
+    .drawer.layer-view .drawer {
+      background-color: var(--dm-color-dark-neutral);
+    }
+  }
+
+  /* end layerview */
+
+  /* begin locationview */
+
+  .location-view-grid {
+    .layer-key > span {
+      background-color: var(--dm-color-on);
+    }
+
+    .location canvas {
+      filter: invert(1);
+    }
+  }
+
+  /* end locationview */
+
+  /* begin map toolbar */
+
+  #mapButton {
+    background-color: var(--dm-color-darker);
+  }
+
+  /* end map toolbar */
+
+  /* begin popup */
+
+  .popup {
+    background-color: var(--dm-color-medium);
+    box-shadow: unset;
+    border: solid 1px var(--dm-color-dark-faded);
+    color: var(--color-light);
+
+    & button.primary-colour {
+      color: var(--color-on);
+
+      & > * {
+        color: var(--color-on);
+      }
+    }
+
+    &:after {
+      border-top-color: var(--dm-color-medium);
+    }
+
+    & li:hover {
+      background: var(--dm-color-dark-faded);
+    }
+  }
+
+  /* end popup */
+
+  /* begin scrollbar */
+
+  ::-webkit-scrollbar-track {
+    background: var(--dm-color-dark-medium);
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: var(--dm-color-on);
+  }
+
+  ::-webkit-scrollbar-corner {
+    background: var(--dm-color-dark-faded);
+  }
+
+  /* end scrollbar */
+
+  /* begin tabview */
+
+  .tabview,
+  .location,
+  .dataview-target {
+    .panel {
+      background-color: var(--dm-color-dark-neutral);
+
+      .btn-row {
+        background-color: var(--dm-color-dark-neutral);
+
+        button {
+          color: var(--dm-color-on);
+          background: var(--dm-color-dark-faded);
+        }
+      }
+
+      & > .flex-col {
+        background-color: var(--dm-color-dark-faded);
+      }
+    }
+
+    .tabs,
+    .tabulator-tableholder {
+      background: var(--dm-color-darker);
+    }
+
+    .tab {
+      .header {
+        color: var(--dm-color-light);
+        background-color: var(--dm-color-dark-faded);
+      }
+
+      &.active .header {
+        background-color: var(--dm-color-on);
+      }
+    }
+
+    .tabulator-footer {
+      background-color: var(--dm-color-dark);
+
+      .tabulator-page {
+        color: var(--dm-color-light);
+
+        &.active {
+          color: var(--dm-color-on);
+        }
+      }
+    }
+
+    .tabulator-header {
+      background: var(--dm-color-dark);
+    }
+
+    .tabulator-col {
+      background-color: var(--dm-color-dark-faded);
+      color: var(--dm-color-light);
+    }
+
+    .tabulator-row {
+      color: var(--dm-color-light);
+
+      &.tabulator-row-odd {
+        background-color: var(--dm-color-dark-neutral);
+      }
+
+      &.tabulator-row-even {
+        background-color: var(--dm-color-medium);
+      }
+    }
+  }
+
+  /* end tabview */
+
+  /* end layout stylesheets */
+}
