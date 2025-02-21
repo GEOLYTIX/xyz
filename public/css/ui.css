@@ -130,6 +130,7 @@ html.dark-mode {
     color: var(--dm-color-light);
   }
   .val-changed {
+    .dropdown > .head,
     input[type=number],
     input[type=text],
     input[type=search],
@@ -137,6 +138,9 @@ html.dark-mode {
     input[type=datetime-local],
     textarea {
       background-color: var(--color-changed);
+      color: var(--color-off-black);
+    }
+    .dropdown > .head > .material-symbols-outlined:after {
       color: var(--color-off-black);
     }
   }
@@ -177,6 +181,10 @@ html.dark-mode {
     box-shadow: 0px 0px 0px 0px;
     &.active .head {
       background: var(--dm-color-on);
+      & > .material-symbols-outlined:after {
+        color: var(--color-off-black);
+        background-color: transparent;
+      }
     }
     ul {
       &.label {
