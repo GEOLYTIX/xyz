@@ -86,7 +86,7 @@ html.dark-mode {
   }
 
   textarea {
-    background-color: var(--dm-color-light-darker);
+    background-color: var(--dm-color-medium);
     color: var(--dm-color-light);
   }
 
