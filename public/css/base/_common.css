@@ -39,7 +39,8 @@
 }
 
 .val-changed {
-  input {
+  input,
+  input[type='text'] {
     background-color: var(--color-changed);
   }
 
