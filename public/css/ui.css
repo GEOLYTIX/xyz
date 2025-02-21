@@ -109,7 +109,9 @@ html.dark-mode {
   }
   input[type=number],
   input[type=text],
-  input[type=search] {
+  input[type=search],
+  input[type=date],
+  input[type=datetime-local] {
     background: var(--dm-color-medium);
     color: var(--dm-color-light);
     border-color: var(--dm-color-dark-faded);
@@ -126,6 +128,17 @@ html.dark-mode {
   textarea {
     background-color: var(--dm-color-medium);
     color: var(--dm-color-light);
+  }
+  .val-changed {
+    input[type=number],
+    input[type=text],
+    input[type=search],
+    input[type=date],
+    input[type=datetime-local],
+    textarea {
+      background-color: var(--color-changed);
+      color: var(--color-off-black);
+    }
   }
   .active > .material-symbols-outlined {
     color: var(--dm-color-on);
