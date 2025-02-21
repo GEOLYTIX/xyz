@@ -15,6 +15,7 @@
   --color-no: #a21309;
   --color-changed: #ffffa7;
   --color-ok: #0b6f50;
+  --color-input-border: #ccc;
   --dm-color-on: #e18335;
   --dm-color-medium: #555555;
   --dm-color-dark-faded: #333333;
@@ -348,14 +349,24 @@ html.dark-mode {
 .link-with-img > button {
   width: 1.5em;
 }
-.val-changed input {
-  background-color: var(--color-changed);
-}
-.val-changed textarea {
-  background-color: var(--color-changed);
-}
-.val-changed button {
-  background-color: var(--color-changed);
+.val-changed {
+  input {
+    background-color: var(--color-changed);
+  }
+  textarea {
+    background-color: var(--color-changed);
+  }
+  button {
+    background-color: var(--color-changed);
+  }
+  label.checkbox {
+    span:nth-child(3) {
+      background-color: var(--color-changed);
+      color: var(--color-off-black);
+      padding: 0 0.5em;
+      border-radius: 2px;
+    }
+  }
 }
 @media only screen and (max-width: 768px) {
   html {
@@ -1233,7 +1244,7 @@ input[type=search],
 input[type=date],
 input[type=time],
 input[type=datetime-local] {
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-input-border);
   padding: 5px;
   &:focus {
     cursor: text;
