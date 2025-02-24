@@ -1,6 +1,11 @@
 export default [
   {
-    ignores: ['public/js/**/*', 'docs/**/*', 'mod/utils/bcrypt.cjs'],
+    ignores: [
+      'public/js/**/*',
+      'docs/**/*',
+      'mod/utils/bcrypt.cjs',
+      'tests/**/*',
+    ],
   },
   {
     files: ['**/*.js', '**/*.mjs'],
