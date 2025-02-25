@@ -374,15 +374,29 @@
         }
       }
 
-    //Execute integration tests
-    if (mapp.hooks.current.test === 'integrity') {
-      await mapp.plugins.integrityTests(mapview);
-    }
+      // Add locale dropdown to layers panel if multiple locales are accessible.
+      if (locales.length > 1) {
+        const localesDropdown = mapp.ui.elements.dropdown({
+          data_id: 'locales-dropdown',
+          span: locale.name || locale.key,
+          entries: locales.map((locale) => ({
+            title: locale.name || locale.key,
+            key: locale.key,
+          })),
+          callback: (e, entry) => {
+            window.location.assign(`${mapp.host}?locale=${entry.key}`);
+          },
+        });
 
-    // Configure idle mask if set in locale.
-    mapp.user &&
-      mapview.locale.idle &&
-      mapp.ui.utils.idleLogout({
+        layersTab.appendChild(mapp.utils.html.node`${localesDropdown}`);
+      }
+
+      if (!window.ol) await mapp.utils.olScript();
+
+      locale.syncPlugins ??= ['zoomBtn', 'admin', 'login'];
+
+      // Create mapview
+      const mapview = await mapp.Mapview({
         host: mapp.host,
         target: OL,
         locale: locale,
@@ -455,6 +469,11 @@
           id: hook[1],
         });
       });
+
+      //Execute integration tests
+      if (mapp.hooks.current.test === 'integrity') {
+        await mapp.plugins.integrityTests(mapview);
+      }
 
       // Configure idle mask if set in locale.
       mapp.user &&
