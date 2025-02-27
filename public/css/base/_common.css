@@ -53,12 +53,9 @@
   }
 
   label.checkbox {
-    span:nth-child(3) {
-      background-color: var(--color-changed);
-      color: var(--color-off-black);
-      padding: 0 0.5em;
-      border-radius: 2px;
-    }
+    background-color: var(--color-changed);
+    color: var(--color-off-black);
+    border-radius: 2px;
   }
 }
 

@@ -104,6 +104,7 @@ html.dark-mode {
       color: var(--color-off-black);
     }
 
+    label.checkbox > .material-symbols-outlined:after,
     .dropdown > .head > .material-symbols-outlined:after {
       color: var(--color-off-black);
     }

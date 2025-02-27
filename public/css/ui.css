@@ -140,6 +140,7 @@ html.dark-mode {
       background-color: var(--color-changed);
       color: var(--color-off-black);
     }
+    label.checkbox > .material-symbols-outlined:after,
     .dropdown > .head > .material-symbols-outlined:after {
       color: var(--color-off-black);
     }
@@ -382,12 +383,9 @@ html.dark-mode {
     background-color: var(--color-changed);
   }
   label.checkbox {
-    span:nth-child(3) {
-      background-color: var(--color-changed);
-      color: var(--color-off-black);
-      padding: 0 0.5em;
-      border-radius: 2px;
-    }
+    background-color: var(--color-changed);
+    color: var(--color-off-black);
+    border-radius: 2px;
   }
 }
 @media only screen and (max-width: 768px) {
