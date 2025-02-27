@@ -15,6 +15,7 @@
   --color-no: #a21309;
   --color-changed: #ffffa7;
   --color-ok: #0b6f50;
+  --color-input-border: #ccc;
   --dm-color-on: #e18335;
   --dm-color-medium: #555555;
   --dm-color-dark-faded: #333333;
@@ -108,7 +109,9 @@ html.dark-mode {
   }
   input[type=number],
   input[type=text],
-  input[type=search] {
+  input[type=search],
+  input[type=date],
+  input[type=datetime-local] {
     background: var(--dm-color-medium);
     color: var(--dm-color-light);
     border-color: var(--dm-color-dark-faded);
@@ -123,8 +126,24 @@ html.dark-mode {
     }
   }
   textarea {
-    background-color: var(--dm-color-light-darker);
+    background-color: var(--dm-color-medium);
     color: var(--dm-color-light);
+  }
+  .val-changed {
+    .dropdown > .head,
+    input[type=number],
+    input[type=text],
+    input[type=search],
+    input[type=date],
+    input[type=datetime-local],
+    textarea {
+      background-color: var(--color-changed);
+      color: var(--color-off-black);
+    }
+    label.checkbox > .material-symbols-outlined:after,
+    .dropdown > .head > .material-symbols-outlined:after {
+      color: var(--color-off-black);
+    }
   }
   .active > .material-symbols-outlined {
     color: var(--dm-color-on);
@@ -163,6 +182,10 @@ html.dark-mode {
     box-shadow: 0px 0px 0px 0px;
     &.active .head {
       background: var(--dm-color-on);
+      & > .material-symbols-outlined:after {
+        color: var(--color-off-black);
+        background-color: transparent;
+      }
     }
     ul {
       &.label {
@@ -348,14 +371,22 @@ html.dark-mode {
 .link-with-img > button {
   width: 1.5em;
 }
-.val-changed input {
-  background-color: var(--color-changed);
-}
-.val-changed textarea {
-  background-color: var(--color-changed);
-}
-.val-changed button {
-  background-color: var(--color-changed);
+.val-changed {
+  input,
+  input[type=text] {
+    background-color: var(--color-changed);
+  }
+  textarea {
+    background-color: var(--color-changed);
+  }
+  button {
+    background-color: var(--color-changed);
+  }
+  label.checkbox {
+    background-color: var(--color-changed);
+    color: var(--color-off-black);
+    border-radius: 2px;
+  }
 }
 @media only screen and (max-width: 768px) {
   html {
@@ -1218,6 +1249,9 @@ textarea {
   border: none;
   border-bottom: 0.5px dotted;
   background-color: var(--color-light-secondary);
+  &:focus {
+    outline: none;
+  }
 }
 input[type=number] {
   -moz-appearance: textfield;
@@ -1233,7 +1267,7 @@ input[type=search],
 input[type=date],
 input[type=time],
 input[type=datetime-local] {
-  border: 1px solid #ccc;
+  border: 1px solid var(--color-input-border);
   padding: 5px;
   &:focus {
     cursor: text;
