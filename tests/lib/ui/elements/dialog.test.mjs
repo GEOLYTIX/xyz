@@ -126,7 +126,7 @@ export function dialog() {
           const dialog = mapp.ui.elements.dialog(new_params);
 
           dialog.node
-            .querySelector('header > button.mask-icon.minimize-btn')
+            .querySelector('#Map > dialog > header > button:nth-child(1)')
             .dispatchEvent(new Event('click'));
           let minimized = dialog.node.classList.contains('minimized');
           codi.assertTrue(
@@ -135,7 +135,7 @@ export function dialog() {
           );
 
           dialog.node
-            .querySelector('header > button.mask-icon.minimize-btn')
+            .querySelector('#Map > dialog > header > button:nth-child(1)')
             .dispatchEvent(new Event('click'));
           minimized = dialog.node.classList.contains('minimized');
           codi.assertFalse(

@@ -256,25 +256,32 @@ Browser tests are designed for the browser environment with full access to:
 
 ### Running Browser Tests
 
-A [test application view](https://github.com/GEOLYTIX/xyz/blob/main/public/views/_test.html) is provided in the public folder to execute browser tests.
+A [Test Plugin](https://github.com/GEOLYTIX/xyz/blob/main/lib/plugins/test.mjs) is provided to run tests in the browser.
 
-Mapp module test require ressources which are not publicly accessible. This is to be addressed in a future release.
+Please ensure to run the `_build` script prior to launching the local test environment test environment.
 
-Please ensure to run the `_build` script prior to launching the test environment.
+The current tests require an active user to execute.
 
-The current tests require an active user.
+In order for the tests to run you will need to configure the test object on a locale.
 
-The test view will be requested as the default view from the XYZ View API when the local node process is opened on `localhost:3000/test`.
+```json
+"test": {
+  "options": { <-- Options passed to the runWebTestFunction
+    "quiet": true, <-- will only show errors (Defaults to false)
+    "showSummary": true, <-- will show a summary (Default to false)
+  }
+},
+```
 
-The test results will be logged to the browser dev console.
+To run the different tests you can provide the `test` param as part of the url params.
 
-VSCode can be used to debug tests and mapp library modules as outlined in the [developer notes](https://github.com/GEOLYTIX/xyz/blob/main/DEVELOPING.md).
+eg.
 
-## Integrity tests for workspaces and XYZ process environments.
+`/?test=core` - run the core front end tests
+`/?test=integrity` - run the integrity tests
 
-Integrity tests check data integrity of a workspace through the test view document. The test view hosted in the public directory is set as a view templates in the workspace templates. This can be requested from the View API by setting `test_view` as template URL parameter.
-
-The data integrity tests are currently evaluated for public access.
+- `core` - `mapp` object tests
+- `integrity` - workspaces and XYZ process environments tests
 
 ### Writing Tests
 
