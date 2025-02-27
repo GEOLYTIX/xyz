@@ -60,10 +60,13 @@ export default async function view(req, res) {
     params.language = 'en';
   }
 
+  // Assign view_template flag to return Error.message on failed lookup.
+  params.view_template = true;
+
   const template = await languageTemplates(params);
 
-  if (!template) {
-    res.status(400).send(`Template undefined`);
+  if (template instanceof Error) {
+    res.status(400).send(template.message);
     return;
   }
 

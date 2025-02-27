@@ -42,7 +42,12 @@ export async function layerTest(mapview) {
             //Location test
             if (layer.infoj) {
               const lastLocation = await mapp.utils.xhr(
-                `${mapp.host}/api/query?template=get_last_location&locale=${encodeURIComponent(mapview.locale.key)}&layer=${key}`,
+                `${mapp.host}/api/query?${mapp.utils.paramString({
+                  template: 'get_last_location',
+                  locale: layer.mapview.locale.key,
+                  layer: layer.key,
+                  filter: layer.filter?.current,
+                })}`,
               );
 
               if (lastLocation?.id) {
@@ -71,7 +76,7 @@ export async function layerTest(mapview) {
                 };
 
                 // Add a new location to the layer using the last location
-                if (Object.keys(layer.draw).length > 0) {
+                if (layer.draw) {
                   await codi.it(
                     {
                       name: 'Add a new location to the layer using the last location coordinates',
@@ -137,10 +142,11 @@ export async function layerTest(mapview) {
                 }
 
                 location.remove();
-
-                layer.hide();
               }
             }
+
+            // Turn off the layer
+            layer.hide();
           },
         );
       }

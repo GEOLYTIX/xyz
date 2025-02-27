@@ -15,10 +15,12 @@
   </head>
 
   <body class="login_form">
-    <div class="language-selector">Choose Language:
+    <div class="language-selector">
+      Choose Language:
       <select
         id="language"
-        onChange="(function(e){location=e.target.value})(event)">
+        onChange="(function(e){location=e.target.value})(event)"
+      >
         <option value="{{dir}}?language=en&login=true">English</option>
         <option value="{{dir}}?language=de&login=true">Deutsch</option>
         <option value="{{dir}}?language=fr&login=true">Français</option>
@@ -67,7 +69,9 @@
         to log in.
       </p>
 
-      <a class="switch" href="{{dir}}/api/user/register?register=true">Register a new account or reset your password.</a>
+      <a class="switch" href="{{dir}}/api/user/register?register=true"
+        >Register a new account or reset your password.</a
+      >
     </form>
   </body>
 </html>

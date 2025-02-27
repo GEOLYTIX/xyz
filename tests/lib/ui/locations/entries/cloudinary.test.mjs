@@ -40,8 +40,9 @@ export function cloudinary() {
             entry.value,
             'Image src should be the entrys value',
           );
+
           codi.assertTrue(
-            imageEntry.children[1].classList.contains('trash'),
+            imageEntry.children[1].classList.contains('delete'),
             'Image should have a delete button',
           );
           codi.assertEqual(
@@ -78,10 +79,11 @@ export function cloudinary() {
           codi.assertEqual(
             linkHolder.children[1].getAttribute('href'),
             entry.value[0],
-            'Document href should be the entrys value',
+            'delete',
           );
+
           codi.assertTrue(
-            linkHolder.children[0].classList.contains('trash'),
+            linkHolder.children[0].classList.contains('delete'),
             'Document should have a delete button',
           );
           codi.assertEqual(
