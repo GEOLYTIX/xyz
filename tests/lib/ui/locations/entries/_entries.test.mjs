@@ -1,13 +1,11 @@
 import { pin } from './pin.test.mjs';
 import { geometry } from './geometry.test.mjs';
-import { layer } from './layer.test.mjs';
 import { cloudinary } from './cloudinary.test.mjs';
 
 export const entries = {
   setup,
   pin,
   geometry,
-  layer,
   cloudinary,
 };
 
