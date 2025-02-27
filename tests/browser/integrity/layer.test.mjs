@@ -142,10 +142,11 @@ export async function layerTest(mapview) {
                 }
 
                 location.remove();
-
-                layer.hide();
               }
             }
+
+            // Turn off the layer
+            layer.hide();
           },
         );
       }
