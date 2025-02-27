@@ -76,7 +76,7 @@ export async function layerTest(mapview) {
                 };
 
                 // Add a new location to the layer using the last location
-                if (Object.keys(layer.draw).length > 0) {
+                if (layer.draw) {
                   await codi.it(
                     {
                       name: 'Add a new location to the layer using the last location coordinates',
