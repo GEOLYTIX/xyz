@@ -1,6 +1,6 @@
 {
   "name": "xyz",
-  "version": "v4.13.0-alpha",
+  "version": "v4.13.0-beta",
   "type": "module",
   "repository": {
     "type": "git",
