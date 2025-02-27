@@ -12,10 +12,6 @@ dialog {
     margin: 0.4em;
   }
 
-  & > .content {
-    padding: 1em;
-  }
-
   & > header {
     display: flex;
     justify-content: space-between;
@@ -23,7 +19,6 @@ dialog {
     top: -1px;
     left: 0;
     background-color: inherit;
-    padding: 1em;
 
     & > :first-child {
       margin-right: 5em;
