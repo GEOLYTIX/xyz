@@ -3,25 +3,15 @@
   "locale": {
     "mapviewControls": ["Zoom"],
     "plugins": [
-      "/test/api/provider/file?content_type=application/javascript&url=./tests/assets/plugins/assignMapview.js",
-      "/test/api/provider/file?content_type=application/javascript&url=./tests/assets/plugins/test.js"
+      "/test/api/provider/file?content_type=application/javascript&url=./tests/assets/plugins/assignMapview.js"
     ],
-    "syncPlugins": [
-      "zoomBtn",
-      "zoomToArea",
-      "coordinates",
-      "admin",
-      "login",
-      "userLocale"
-    ],
+    "syncPlugins": ["zoomBtn", "zoomToArea", "coordinates", "admin", "login"],
     "test": {
-      "core": true,
       "options": {
         "quiet": true,
         "showSummary": true
       }
     },
-    "userLocale": {},
     "layers": {
       "OSM": {
         "name": "OpenStreetMap",

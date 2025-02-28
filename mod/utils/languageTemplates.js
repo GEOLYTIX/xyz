@@ -53,6 +53,9 @@ export default async function languageTemplates(params) {
   const languageTemplate = await getTemplate(params.template);
 
   if (languageTemplate instanceof Error) {
+    // Return the error object for failed view_template lookup.
+    if (params.view_template) return languageTemplate;
+
     // Return the template string value if the template is not available in workspace.
     return params.template;
   }
