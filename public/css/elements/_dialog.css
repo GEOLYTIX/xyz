@@ -15,6 +15,14 @@ dialog {
   & > header {
     display: flex;
     justify-content: space-between;
+    position: sticky;
+    top: -1px;
+    left: 0;
+    background-color: inherit;
+
+    & > :first-child {
+      margin-right: 5em;
+    }
 
     & > :nth-child(2) {
       margin-left: auto;
@@ -22,6 +30,17 @@ dialog {
 
     & > .material-symbols-outlined {
       font-size: 1.2em;
+
+      &:after {
+        color: var(--color-primary-light);
+        font-size: inherit;
+      }
+    }
+
+    & button {
+      height: 1em;
+      width: 1em;
+      margin: 0.4em;
     }
   }
 
@@ -45,14 +64,6 @@ dialog {
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 9999;
-  }
-
-  header {
-    & button {
-      height: 1em;
-      width: 1em;
-      margin: 0.4em;
-    }
   }
 
   .minimize-btn::after {
