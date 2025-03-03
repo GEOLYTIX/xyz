@@ -62,5 +62,7 @@ module.exports = async function getLocale(params) {
 
   locale = Roles.objMerge(locale, params.user?.roles);
 
+  locale.layers ??= {};
+
   return locale;
 };
