@@ -470,6 +470,11 @@
         });
       });
 
+      //Execute integration tests
+      if (mapp.hooks.current.test === 'integrity') {
+        await mapp.plugins.integrityTests(mapview);
+      }
+
       // Configure idle mask if set in locale.
       mapp.user &&
         mapview.locale.idle &&

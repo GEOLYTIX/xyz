@@ -68,7 +68,9 @@ html.dark-mode {
 
   input[type='number'],
   input[type='text'],
-  input[type='search'] {
+  input[type='search'],
+  input[type='date'],
+  input[type='datetime-local'] {
     background: var(--dm-color-medium);
     color: var(--dm-color-light);
     border-color: var(--dm-color-dark-faded);
@@ -86,8 +88,26 @@ html.dark-mode {
   }
 
   textarea {
-    background-color: var(--dm-color-light-darker);
+    background-color: var(--dm-color-medium);
     color: var(--dm-color-light);
+  }
+  /* common val changed class */
+  .val-changed {
+    .dropdown > .head,
+    input[type='number'],
+    input[type='text'],
+    input[type='search'],
+    input[type='date'],
+    input[type='datetime-local'],
+    textarea {
+      background-color: var(--color-changed);
+      color: var(--color-off-black);
+    }
+
+    label.checkbox > .material-symbols-outlined:after,
+    .dropdown > .head > .material-symbols-outlined:after {
+      color: var(--color-off-black);
+    }
   }
 
   /* end inputs */
@@ -151,6 +171,11 @@ html.dark-mode {
 
     &.active .head {
       background: var(--dm-color-on);
+
+      & > .material-symbols-outlined:after {
+        color: var(--color-off-black);
+        background-color: transparent;
+      }
     }
 
     ul {
