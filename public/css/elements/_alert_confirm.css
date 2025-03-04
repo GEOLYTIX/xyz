@@ -12,12 +12,6 @@ dialog.alert-confirm {
     outline: none;
   }
 
-  & > header {
-    & > :first-child {
-      margin-right: 0;
-    }
-  }
-
   h4 {
     padding: 0.5em 1em;
     background-color: var(--color-primary);
