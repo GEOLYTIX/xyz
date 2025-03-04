@@ -20,10 +20,6 @@ dialog {
     left: 0;
     background-color: inherit;
 
-    & > :first-child {
-      margin-right: 5em;
-    }
-
     & > :nth-child(2) {
       margin-left: auto;
     }
