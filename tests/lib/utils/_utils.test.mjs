@@ -5,6 +5,7 @@ import { compose } from './compose.test.mjs';
 import { svgTemplates } from './svgTemplates.test.mjs';
 import { versionCheck } from './versionCheck.mjs';
 import { jsonParser } from './jsonParser.test.mjs';
+import { temporal } from './temporal.test.mjs';
 
 export const utilsTest = {
   setup,
@@ -15,6 +16,7 @@ export const utilsTest = {
   svgTemplates,
   versionCheck,
   jsonParser,
+  temporal,
 };
 
 function setup() {
