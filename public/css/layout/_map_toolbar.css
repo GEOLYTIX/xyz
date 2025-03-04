@@ -12,7 +12,7 @@
     height: 100%;
     grid-row: 1/4;
     grid-column: 3;
-    background-color: var(--dm-color-light);
+    background-color: var(--color-light);
     opacity: 0.8;
   }
 }
@@ -28,7 +28,7 @@
     & > a {
       margin-bottom: 10px;
       background-color: var(--color-light);
-      box-shadow: 1px 1px 3px var(--dm-color-medium);
+      box-shadow: 1px 1px 3px var(--color-medium);
       border-radius: 50%;
       opacity: 0.9;
       padding: 5px;
