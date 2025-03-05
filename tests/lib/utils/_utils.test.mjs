@@ -6,6 +6,7 @@ import { svgTemplates } from './svgTemplates.test.mjs';
 import { versionCheck } from './versionCheck.mjs';
 import { jsonParser } from './jsonParser.test.mjs';
 import { temporal } from './temporal.test.mjs';
+import { keyvalue_dictionary } from './keyvalue_dictionary.test.mjs';
 
 export const utilsTest = {
   setup,
@@ -17,6 +18,7 @@ export const utilsTest = {
   versionCheck,
   jsonParser,
   temporal,
+  keyvalue_dictionary,
 };
 
 function setup() {
