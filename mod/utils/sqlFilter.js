@@ -24,12 +24,16 @@ const filterTypes = {
 
   in: (col, val) => `"${col}" = ANY (\$${addValues([val], 'array')})`,
 
-  like: (col, val) =>
-    `(${val
+  like: (col, val) => {
+    // The val string must be decoded.
+    val = decodeURIComponent(val);
+
+    return `(${val
       .split(',')
       .filter((val) => val.length > 0)
       .map((val) => `"${col}" ILIKE \$${addValues(`${val}%`, 'string')}`)
-      .join(' OR ')})`,
+      .join(' OR ')})`;
+  },
 
   match: (col, val) => `"${col}"::text = \$${addValues(val, 'string')}`,
 };
