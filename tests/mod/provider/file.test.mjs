@@ -1,12 +1,17 @@
-const fsMockFn = codi.mock.fn();
+const { readFileSync } = await import('fs');
+const fsMockFn = codi.mock.fn(readFileSync);
 const fsMock = codi.mock.module('fs', {
   namedExports: {
     readFileSync: fsMockFn,
   },
 });
 
-const mockPathdirnameFn = codi.mock.fn();
-const mockPathJoinFn = codi.mock.fn();
+globalThis.fsMockFn = fsMockFn;
+
+const { dirname, join } = await import('path');
+
+const mockPathdirnameFn = codi.mock.fn(dirname);
+const mockPathJoinFn = codi.mock.fn(join);
 const mockPath = codi.mock.module('path', {
   namedExports: {
     dirname: mockPathdirnameFn,
@@ -29,15 +34,15 @@ await codi.describe(
       { name: 'Get File test', parentId: 'provider_file' },
       async () => {
         const fileContent = { text: 'I am a file' };
-        fsMockFn.mock.mockImplementation(function readFileSync() {
+        fsMockFn.mock.mockImplementationOnce(function readFileSync() {
           return JSON.stringify(fileContent);
         });
 
-        mockPathdirnameFn.mock.mockImplementation(function dirname() {
+        mockPathdirnameFn.mock.mockImplementationOnce(function dirname() {
           return 'test.json';
         });
 
-        mockPathJoinFn.mock.mockImplementation(function dirname() {
+        mockPathJoinFn.mock.mockImplementationOnce(function dirname() {
           '../../test.json';
         });
 

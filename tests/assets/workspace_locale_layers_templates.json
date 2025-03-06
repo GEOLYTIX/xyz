@@ -5,6 +5,14 @@
       "roles": {
         "template": true
       }
+    },
+    "mod_query": {
+      "src": "file:./tests/assets/queries/mod_query.js",
+      "module": true
+    },
+    "bad_mod_query": {
+      "src": "file:./tests/assets/queries/bad_mod_query.js",
+      "module": true
     }
   },
   "locale": {

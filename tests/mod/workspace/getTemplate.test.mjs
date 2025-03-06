@@ -1,14 +1,71 @@
-export function getTemplateTest() {
-  codi.describe('Workspace: Get Template Test', async () => {
-    codi.it('Layer template test', async () => {
-      const res = await mapp.utils.xhr(
-        '/test/api/query?layer=template_test&template=layer_data_array',
-      );
-      codi.assertEqual(
-        res,
-        [1, 2, 5, 3, 4],
-        'We expect the query to be able to return from the workspace before the layer has been merged',
-      );
-    });
-  });
-}
+import checkWorkspaceCache from '../../../mod/workspace/cache.js';
+
+await codi.describe(
+  { name: 'getTemplate', id: 'workspace_getTemplate', parentId: 'workspace' },
+  async () => {
+    globalThis.xyzEnv = {
+      TITLE: 'TITLE',
+      WORKSPACE: 'file:./tests/assets/workspace_locale_layers_templates.json',
+    };
+
+    //Calling the cache method with force to reload a new workspace
+    await checkWorkspaceCache('file');
+
+    await codi.it(
+      {
+        name: 'get template from workspace',
+        parentId: 'workspace_getTemplate',
+      },
+      async () => {
+        const template = 'OSM';
+
+        const { default: getTemplate } = await import(
+          '../../../mod/workspace/getTemplate.js'
+        );
+
+        const result = await getTemplate(template);
+
+        codi.assertTrue(typeof result === 'object');
+        codi.assertTrue(Object.hasOwn(result, 'roles'));
+      },
+    );
+
+    await codi.it(
+      {
+        name: 'get mod query',
+        parentId: 'workspace_getTemplate',
+      },
+      async () => {
+        const template = 'mod_query';
+
+        const { default: getTemplate } = await import(
+          '../../../mod/workspace/getTemplate.js'
+        );
+
+        const result = await getTemplate(template);
+
+        codi.assertTrue(typeof result === 'object');
+        codi.assertTrue(Object.hasOwn(result, 'render'));
+      },
+    );
+
+    await codi.it(
+      {
+        name: 'get mod query',
+        parentId: 'workspace_getTemplate',
+      },
+      async () => {
+        const template = 'bad_mod_query';
+
+        const { default: getTemplate } = await import(
+          '../../../mod/workspace/getTemplate.js'
+        );
+
+        const result = await getTemplate(template);
+
+        codi.assertTrue(typeof result === 'object');
+        codi.assertTrue(Object.hasOwn(result, 'err'));
+      },
+    );
+  },
+);
