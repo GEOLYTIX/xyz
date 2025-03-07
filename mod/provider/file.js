@@ -1,5 +1,14 @@
 /**
-@module /file
+## /provider/file
+
+The file provider module exports a method to fetch resources from the local file system.
+
+Since node v21.2.0 & v20.11.0
+node added the `import.meta.dirname` property into their [import attributes](https://nodejs.org/api/esm.html#import-attributes).
+It provides the directory name of the current module.
+This is the same as the `path.dirname()` of the `import.meta.filename`.
+
+@module /provider/file
 @requires module:/utils/processEnv
 */
 
