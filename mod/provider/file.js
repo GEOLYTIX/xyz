@@ -24,7 +24,7 @@ The buffer returned from the read process will be parsed as json if the referenc
 The [node import module attributes]{@link https://nodejs.org/api/esm.html#import-attributes} allow access to the directory name through the meta property.
 
 @param {object|string} ref The file reference maybe defined as an object or string. A string is assumed to be the params.url property of the file location.
-@returns {Promise<File|Error>} The file will be returned as parsed json or string if the readFileSync process succeeds.
+@returns {File|Error} The file will be returned as parsed json or string if the readFileSync process succeeds.
 */
 export default function file(ref) {
   try {
