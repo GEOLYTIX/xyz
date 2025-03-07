@@ -81,7 +81,7 @@ export default async function getTemplate(template) {
   }
 
   // Template is a module.
-  if (template.module || template.type === 'module') {
+  if (template.module) {
     try {
       // For ESM modules, we need to use dynamic import with a data URL
       // Convert the module code to a data URL with the proper MIME type
