@@ -42,7 +42,7 @@ A template will be requested from source if the template has not been cached.
 
 Template modules will be constructed.
 
-@param {string} template 
+@param {string} template
 
 @returns {Promise<Object|Error>} JSON Template
 */
@@ -81,15 +81,19 @@ export default async function getTemplate(template) {
   }
 
   // Template is a module.
-  if (template.module || template.type === 'module') {
+  if (template.module) {
     try {
-      // Attempt to construct module from string.
-      const module_constructor = module.constructor;
-      const Module = new module_constructor();
-      Module._compile(response, template.src);
+      // For ESM modules, we need to use dynamic import with a data URL
+      // Convert the module code to a data URL with the proper MIME type
+      const dataUrl = `data:text/javascript;charset=utf-8,${encodeURIComponent(response)}`;
 
-      template.render = Module.exports;
+      // Use dynamic import to load the module
+      const importedModule = await import(dataUrl);
+
+      // Set the render function to the default export or the entire module
+      template.render = importedModule.default || importedModule;
     } catch (err) {
+      console.error(err);
       template.err = err;
       return template;
     }
@@ -121,7 +125,7 @@ The template string will be checked to include only whitelisted character.
 
 An error exception will be returned if the template object lookup from the workspace failed.
 
-@param {string} template 
+@param {string} template
 
 @returns {Promise<Object|Error>} JSON Template
 */

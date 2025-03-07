@@ -12,6 +12,7 @@ The workspace typedef object has templates, locale, locales, dbs, and roles prop
 @requires /workspace/cache
 @requires /workspace/getLocale
 @requires /workspace/getLayer
+@requires /workspace/getTemplate
 @requires /utils/roles
 
 @module /workspace
@@ -221,9 +222,9 @@ An object with detailed workspace.roles{} can be requested with the `detail=true
 @param {req} req HTTP request.
 @param {req} res HTTP response.
 
-@property {Object} req.params 
+@property {Object} req.params
 HTTP request parameter.
-@property {Boolean} params.detail 
+@property {Boolean} params.detail
 Whether the roles should be returned as an object with details.
 
 @returns {Array|Object} Returns either an array of roles as string, or an object with roles as properties.
@@ -287,9 +288,9 @@ A flat array of template.err will be returned from the workspace/test method.
 @param {req} req HTTP request.
 @param {req} res HTTP response.
 
-@property {Object} req.params 
+@property {Object} req.params
 HTTP request parameter.
-@property {Object} params.user 
+@property {Object} params.user
 The user requesting the test method.
 @property {Boolean} user.admin
 The user is required to have admin priviliges.
@@ -447,7 +448,7 @@ function templateUse(obj, test) {
 
 /**
 @function removeRoles
-@description 
+@description
 Recursively removes all 'roles' objects from the provided object [locale, layer].
 This function is designed to sanitize locale configuration objects before sending to the client,
 ensuring that role-based permissions data is not exposed.

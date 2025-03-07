@@ -33,8 +33,7 @@ Setting the WORKSPACE_AGE to 0 is not recommended as this could cause the cache 
 
 The cacheWorkspace method is called if the cache is invalid.
 
-@param {Boolean} [force] The workspace cache will be cleared with the force param flag.
-
+@param {boolean} [force] The workspace cache will be cleared with the force param flag.
 @returns {workspace} JSON Workspace.
 */
 export default function checkWorkspaceCache(force) {
@@ -67,8 +66,6 @@ import msg_templates from './templates/_msgs.js';
 
 import query_templates from './templates/_queries.js';
 
-const workspace_src = xyzEnv.WORKSPACE?.split(':')[0];
-
 /**
 @function cacheWorkspace
 
@@ -86,9 +83,10 @@ The workspace is assigned to the module scope cache variable and the timestamp i
 @returns {workspace} JSON Workspace.
 */
 async function cacheWorkspace() {
-  // Get workspace from source.
-  const workspace = Object.hasOwn(getFrom, workspace_src)
-    ? await getFrom[workspace_src](xyzEnv.WORKSPACE)
+  const src = xyzEnv.WORKSPACE?.split(':')[0];
+
+  const workspace = Object.hasOwn(getFrom, src)
+    ? await getFrom[src](xyzEnv.WORKSPACE)
     : {};
 
   // Return error if source failed.
@@ -108,8 +106,8 @@ async function cacheWorkspace() {
   @description
   The method maps the Object.entries of the templates_object param and assigns the _type property on the object marking is a different types of templates.
 
-  
-  @param {Object} templates_object 
+
+  @param {Object} templates_object
   @returns {Object} templates_object with _core: true property.
   */
   function mark_template(templates_object, type) {

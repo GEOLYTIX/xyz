@@ -1,7 +1,9 @@
 const mockAgent = new codi.mockHttp.MockAgent();
 codi.mockHttp.setGlobalDispatcher(mockAgent);
 
-const mockFileFn = codi.mock.fn();
+const { default: file } = await import('../../../mod/provider/file.js');
+
+const mockFileFn = codi.mock.fn(file);
 const mockFile = codi.mock.module('../../../mod/provider/file.js', {
   defaultExport: mockFileFn,
 });
@@ -46,7 +48,7 @@ await codi.describe(
         '{ "templates": {}, "locale": { "layers": {}, }, }',
       );
 
-      mockFileFn.mock.mockImplementation(function file() {
+      mockFileFn.mock.mockImplementationOnce(function file() {
         return JSON.parse(fileBody);
       });
 
@@ -70,7 +72,7 @@ await codi.describe(
         '{ "templates": {}, "locale": { "layers": {}, }, }',
       );
 
-      mockCloudFrontFn.mock.mockImplementation(function cloudfront(ref) {
+      mockCloudFrontFn.mock.mockImplementationOnce(function cloudfront(ref) {
         return JSON.parse(fileBody);
       });
 
