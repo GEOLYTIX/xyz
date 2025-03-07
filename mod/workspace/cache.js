@@ -33,7 +33,7 @@ Setting the WORKSPACE_AGE to 0 is not recommended as this could cause the cache 
 
 The cacheWorkspace method is called if the cache is invalid.
 
-@param {boolean|string} [force] The workspace cache will be cleared with the force param flag, this flag can also be a string to set the src/provider of the workspace for local testing.
+@param {boolean} [force] The workspace cache will be cleared with the force param flag.
 @returns {workspace} JSON Workspace.
 */
 export default function checkWorkspaceCache(force) {
@@ -44,7 +44,7 @@ export default function checkWorkspaceCache(force) {
 
   // cache is null on first request for workspace.
   // cacheWorkspace is async and must be awaited.
-  if (!cache) return cacheWorkspace(force);
+  if (!cache) return cacheWorkspace();
 
   // cacheWorkspace will set the current timestamp
   // and cache workspace outside export closure prior to returning workspace.
@@ -66,8 +66,6 @@ import msg_templates from './templates/_msgs.js';
 
 import query_templates from './templates/_queries.js';
 
-let workspace_src = xyzEnv.WORKSPACE?.split(':')[0];
-
 /**
 @function cacheWorkspace
 
@@ -82,17 +80,13 @@ Locale objects get their key and name properties assigned if falsy.
 
 The workspace is assigned to the module scope cache variable and the timestamp is recorded.
 
-@param {(boolean|string)} [src] The workspace cache will be cleared with the force param flag, this flag can also be a string to set the src/provider of the workspace for local testing.
 @returns {workspace} JSON Workspace.
 */
-async function cacheWorkspace(src) {
-  //if the src is a string we will reassign the workspace_src
-  if (typeof src == 'string') {
-    workspace_src = src;
-  }
+async function cacheWorkspace() {
+  const src = xyzEnv.WORKSPACE?.split(':')[0];
 
-  const workspace = Object.hasOwn(getFrom, workspace_src)
-    ? await getFrom[workspace_src](xyzEnv.WORKSPACE)
+  const workspace = Object.hasOwn(getFrom, src)
+    ? await getFrom[src](xyzEnv.WORKSPACE)
     : {};
 
   // Return error if source failed.
