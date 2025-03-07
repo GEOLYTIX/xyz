@@ -67,5 +67,25 @@ await codi.describe(
         codi.assertTrue(Object.hasOwn(result, 'err'));
       },
     );
+
+    await codi.it(
+      {
+        name: 'get mod query',
+        parentId: 'workspace_getTemplate',
+      },
+      async () => {
+        const template = 'mod_query_no_default';
+
+        const { default: getTemplate } = await import(
+          '../../../mod/workspace/getTemplate.js'
+        );
+
+        const result = await getTemplate(template);
+
+        const foo = result.render.foo();
+
+        codi.assertEqual(foo, 'I am a module query fam');
+      },
+    );
   },
 );
