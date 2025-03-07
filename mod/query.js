@@ -62,8 +62,8 @@ export default async function query(req, res) {
   // Get the template.
   const template = await getTemplate(req.params.template);
 
-  if (template instanceof Error) {
-    return res.status(500).send(template.message);
+  if (template.err instanceof Error) {
+    return res.status(500).send(template.err.message);
   }
 
   // A layer template must have a layer param.
