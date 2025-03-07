@@ -93,6 +93,7 @@ export default async function getTemplate(template) {
       // Set the render function to the default export or the entire module
       template.render = importedModule.default || importedModule;
     } catch (err) {
+      console.error(err);
       template.err = err;
       return template;
     }
