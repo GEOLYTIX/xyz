@@ -116,7 +116,7 @@ This ensures that your test environment always has the latest changes without ma
 
 ### VSCode Tasks & Launch
 
-A task can be added to the `.vscode/tasks.json` to execute `nodemon` and `browser-sync` concurrently. This will allow VSCode to rebuild the application on script changes in the editor.
+A task can be added to the `.vscode/tasks.json` to execute `nodemon`. This will allow VSCode to rebuild the application on script changes in the editor.
 Along side this there is an optional `kill-watch` task that is used to tear down the `start-watch` process once finished with debugging.
 
 ```json
@@ -126,7 +126,7 @@ Along side this there is an optional `kill-watch` task that is used to tear down
     {
       "label": "start-watch",
       "type": "shell",
-      "command": "npx concurrently 'npx nodemon' 'npm run browser-sync'",
+      "command": "npx nodemon",
       "isBackground": true,
       "problemMatcher": {
         "pattern": {
@@ -142,7 +142,7 @@ Along side this there is an optional `kill-watch` task that is used to tear down
     {
       "label": "kill-watch",
       "type": "shell",
-      "command": "pkill -f nodemon; pkill -f browser-sync"
+      "command": "pkill -f nodemon"
     }
   ]
 }
@@ -164,10 +164,6 @@ Along side this there is an optional `kill-watch` task that is used to tear down
 }
 ```
 
-The `browser-sync` script is defined in the `package.json` as `"npx browser-sync start --proxy localhost:3000 --port 3001 --ui-port 3002 --files public/js/**/* --no-open --no-notify"`
-
-The application running on port 3000 will be proxied to port 3001 for the browser-sync event. The browser window will refresh when the node application rebuilds after changes to the script in a VSCode editor.
-
 #### VSCode / Chrome Debugging
 
 An additional debug configuration in `.vscode/launch.json` is required to debug the mapp lib code in VSCode.
@@ -177,7 +173,7 @@ An additional debug configuration in `.vscode/launch.json` is required to debug 
   "type": "chrome",
   "request": "launch",
   "name": "Debug in Chrome",
-  "url": "http://localhost:3001",
+  "url": "http://localhost:3000",
   "webRoot": "${workspaceFolder}/xyz/lib", //Please check your worksapceFolder
   "sourceMaps": true,
   "pauseForSourceMap": true
@@ -187,8 +183,6 @@ An additional debug configuration in `.vscode/launch.json` is required to debug 
 The Chrome debug config must be launched as an additional session. VSCode run and debug panel will show 2 active sessions. A chrome instance should open with the url defined in the Chrome debug config.
 
 Breakpoints set in the mapp lib script will now be respected in the VSCode debug editor window. Breakpoints set in the Chrome dev tools will also break in the VSCode editor.
-
-The browser will automatically reload on changes to files in the `lib`, 'tests' and `public/css' directories.
 
 #### CLI Test Debugging
 
