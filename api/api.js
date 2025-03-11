@@ -11,7 +11,6 @@ const api = require('./api/api')
 app.get(`/`, api)
 ```
 
-@requires /fetch
 @requires /utils/processEnv
 @requires /query
 @requires /view
@@ -50,7 +49,6 @@ import register from '../mod/user/register.js';
 import logger from '../mod/utils/logger.js';
 
 //Route imports
-import fetch from '../mod/fetch.js';
 import query from '../mod/query.js';
 import view from '../mod/view.js';
 import provider from '../mod/provider/_provider.js';
@@ -60,7 +58,6 @@ import workspace from '../mod/workspace/_workspace.js';
 
 // Group all routes
 const routes = {
-  fetch,
   query,
   view,
   provider,
@@ -257,11 +254,6 @@ function requestRouter(req, res) {
     // Query API
     case /(?<=\/api\/query)/.test(req.url):
       routes.query(req, res);
-      break;
-
-    // Fetch API
-    case /(?<=\/api\/fetch)/.test(req.url):
-      routes.fetch(req, res);
       break;
 
     case /(?<=\/api\/workspace)/.test(req.url):
