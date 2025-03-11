@@ -7,11 +7,9 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link href="https://unpkg.com/tabulator-tables@6.2.0/dist/css/tabulator.min.css" rel="stylesheet">
+  <link href="https://unpkg.com/tabulator-tables@6.3.1/dist/css/tabulator.min.css" rel="stylesheet">
 
-  <script type="text/javascript" src="https://unpkg.com/tabulator-tables@6.2.0/dist/js/tabulator.min.js"></script>
-
-  <script src="https://unpkg.com/uhtml@3.2.1/es.js" defer></script>
+  <script type="text/javascript" src="https://unpkg.com/tabulator-tables@6.3.1/dist/js/tabulator.min.js"></script>
 
   <style>
     * {
@@ -126,11 +124,11 @@
       }
     }
 
-    @media only screen and (max-width: 700px) {
+    @media only screen and (max-width: 768px) {
 
       body,
       h1 {
-        margin: 0
+        padding: 10px;
       }
     }
   </style>
@@ -149,12 +147,9 @@
         <button class="raised primary-colour" id="toggleBlocked">Show blocked accounts</button>
       </div>
       <div>
-        <button class="raised primary-colour" id="default-view"
+        <button class="raised primary-colour"
           onclick="window.location.href = `${window.location.origin}{{dir}}`">Default View</button>
-        <button class="raised primary-colour" id="test-view"
-          onclick="window.location.href = `${window.location.origin}{{dir}}?template=test_view&integrity=true&download=true`">Test
-          View</button>
-        <button class="raised red" id="logout"
+        <button class="raised red"
           onclick="window.location.href = `${window.location.origin}{{dir}}?logout=true`">Logout</button>
       </div>
     </div>
@@ -233,7 +228,8 @@
             vertAlign: 'middle',
             headerTooltip: 'Account EMail',
             titleFormatter: () => '<div class="icon-face xyz-icon"></div>',
-            resizable: false,
+            resizable: true,
+            frozen: true,
             responsive: 0 // Never hide
           },
           {
