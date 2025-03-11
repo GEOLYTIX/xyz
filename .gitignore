@@ -35,3 +35,4 @@ public/js/*
 !jsdoc*.json
 !codi.json
 !.prettierrc.json
+!biome.json
