@@ -98,14 +98,6 @@ app.post(
   api,
 );
 
-app.get(`${xyzEnv.DIR}/api/fetch/:template?`, api);
-
-app.post(
-  `${xyzEnv.DIR}/api/fetch/:template?`,
-  express.json({ limit: '5mb' }),
-  api,
-);
-
 app.get(`${xyzEnv.DIR}/api/workspace/:key?`, api);
 
 app.get(`${xyzEnv.DIR}/api/user/:method?/:key?`, api);
