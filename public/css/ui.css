@@ -336,6 +336,15 @@ html.dark-mode {
       }
     }
   }
+  @media only screen and (max-width: 768px) {
+    #mapButton {
+      background-color: transparent;
+      button,
+      a {
+        background-color: var(--dm-color-darker);
+      }
+    }
+  }
 }
 
 /* public/css/base/_common.css */
