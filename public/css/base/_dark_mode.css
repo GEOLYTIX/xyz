@@ -408,4 +408,17 @@ html.dark-mode {
   /* end tabview */
 
   /* end layout stylesheets */
+
+  /* begin mobile */
+  @media only screen and (max-width: 768px) {
+    #mapButton {
+      background-color: transparent;
+
+      button,
+      a {
+        background-color: var(--dm-color-darker);
+      }
+    }
+  }
+  /* end mobile */
 }
