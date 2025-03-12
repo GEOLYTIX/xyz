@@ -42,7 +42,6 @@
         "noAccumulatingSpread": "error"
       },
       "suspicious": {
-        "noArrayIndexKey": "error",
         "noDuplicateObjectKeys": "error",
         "noGlobalAssign": "error",
         "useIsArray": "error"
@@ -57,14 +56,12 @@
   },
   "javascript": {
     "formatter": {
-      "jsxQuoteStyle": "double",
       "quoteProperties": "asNeeded",
       "trailingCommas": "all",
       "semicolons": "always",
       "arrowParentheses": "always",
       "bracketSameLine": false,
       "quoteStyle": "single",
-      "attributePosition": "auto",
       "bracketSpacing": true
     }
   },
