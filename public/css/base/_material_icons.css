@@ -8,6 +8,7 @@
     'opsz' 24;
   /* Customisation */
   text-align: center;
+  line-height: initial;
   color: var(--color-primary);
 
   &.active {
