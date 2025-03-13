@@ -7,12 +7,12 @@
 
   & .label-row {
     grid-row: 1;
-    grid-column: 1/3;
+    grid-column: 1 / 3;
   }
 
   & .track-bg {
     grid-row: 2;
-    grid-column: 1/3;
+    grid-column: 1 / 3;
     background: linear-gradient(
       0deg,
       transparent 0 45%,
@@ -23,7 +23,7 @@
   }
 
   &.single::after {
-    grid-column: 1/3;
+    grid-column: 1 / 3;
     grid-row: 2;
     background: linear-gradient(
       0deg,
@@ -48,7 +48,7 @@
 
     &::before,
     &::after {
-      grid-column: 1/3;
+      grid-column: 1 / 3;
       grid-row: 2;
       background: linear-gradient(
         0deg,
@@ -62,14 +62,20 @@
 
     &::before {
       margin-left: calc(
-        10px + (var(--a) - var(--min)) / var(--dif) * (100% - 10px)
+        10px +
+        (var(--a) - var(--min)) /
+        var(--dif) *
+        (100% - 10px)
       );
       width: calc((var(--b) - var(--a)) / var(--dif) * (100% - 10px));
     }
 
     &::after {
       margin-left: calc(
-        10px + (var(--b) - var(--min)) / var(--dif) * (100% - 10px)
+        10px +
+        (var(--b) - var(--min)) /
+        var(--dif) *
+        (100% - 10px)
       );
       width: calc((var(--a) - var(--b)) / var(--dif) * (100% - 10px));
     }
@@ -78,7 +84,7 @@
   & input[type='range'] {
     -webkit-appearance: none;
     appearance: none;
-    grid-column: 1/3;
+    grid-column: 1 / 3;
     grid-row: 2;
     z-index: 3;
     top: 0;
