@@ -8,7 +8,7 @@
     'opsz' 24;
   /* Customisation */
   text-align: center;
-  line-height: initial;
+  line-height: 1;
   color: var(--color-primary);
 
   &.active {
