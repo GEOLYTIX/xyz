@@ -1313,7 +1313,6 @@ input[type=search]::-webkit-search-cancel-button:hover {
     "GRAD" 0,
     "opsz" 24;
   text-align: center;
-  line-height: 1;
   color: var(--color-primary);
   &.active {
     color: var(--color-on);
