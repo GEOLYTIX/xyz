@@ -1,0 +1,76 @@
+{
+  "vcs": {
+    "clientKind": "git",
+    "enabled": true,
+    "defaultBranch": "main"
+  },
+  "formatter": {
+    "enabled": true,
+    "useEditorconfig": true,
+    "formatWithErrors": false,
+    "indentStyle": "space",
+    "indentWidth": 2,
+    "lineEnding": "lf",
+    "lineWidth": 80,
+    "attributePosition": "auto",
+    "bracketSpacing": true,
+    "ignore": ["public/css/mapp.css", "public/css/ui.css"]
+  },
+  "organizeImports": {
+    "enabled": false
+  },
+  "linter": {
+    "enabled": true,
+    "rules": {
+      "recommended": false,
+      "complexity": {
+        "noBannedTypes": "error",
+        "useOptionalChain": "error",
+        "noExcessiveCognitiveComplexity": {
+          "level": "warn",
+          "options": {
+            "maxAllowedComplexity": 20
+          }
+        }
+      },
+      "correctness": {
+        "noConstantCondition": "error",
+        "noConstAssign": "error"
+      },
+      "style": {
+        "useConst": "error",
+        "noYodaExpression": "error"
+      },
+      "performance": {
+        "noAccumulatingSpread": "error"
+      },
+      "suspicious": {
+        "noDuplicateObjectKeys": "error",
+        "noGlobalAssign": "error",
+        "useIsArray": "error"
+      }
+    },
+    "ignore": [
+      "public/js/**/*",
+      "docs/**/*",
+      "mod/utils/bcrypt.cjs",
+      "tests/**/*"
+    ]
+  },
+  "javascript": {
+    "formatter": {
+      "quoteProperties": "asNeeded",
+      "trailingCommas": "all",
+      "semicolons": "always",
+      "arrowParentheses": "always",
+      "bracketSameLine": false,
+      "quoteStyle": "single",
+      "bracketSpacing": true
+    }
+  },
+  "css": {
+    "formatter": {
+      "quoteStyle": "single"
+    }
+  }
+}

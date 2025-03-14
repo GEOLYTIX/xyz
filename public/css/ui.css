@@ -1823,11 +1823,11 @@ dialog {
   width: 100%;
   & .label-row {
     grid-row: 1;
-    grid-column: 1/3;
+    grid-column: 1 / 3;
   }
   & .track-bg {
     grid-row: 2;
-    grid-column: 1/3;
+    grid-column: 1 / 3;
     background:
       linear-gradient(
         0deg,
@@ -1837,7 +1837,7 @@ dialog {
     z-index: 1;
   }
   &.single::after {
-    grid-column: 1/3;
+    grid-column: 1 / 3;
     grid-row: 2;
     background:
       linear-gradient(
@@ -1859,7 +1859,7 @@ dialog {
     }
     &::before,
     &::after {
-      grid-column: 1/3;
+      grid-column: 1 / 3;
       grid-row: 2;
       background:
         linear-gradient(
@@ -1882,7 +1882,7 @@ dialog {
   & input[type=range] {
     -webkit-appearance: none;
     appearance: none;
-    grid-column: 1/3;
+    grid-column: 1 / 3;
     grid-row: 2;
     z-index: 3;
     top: 0;
@@ -1934,7 +1934,7 @@ dialog {
 
 /* public/css/layout/_divider.css */
 #ctrls-divider {
-  grid-row: 1/4;
+  grid-row: 1 / 4;
   grid-column: 2;
   background-image: url('data:image/svg+xml,<svg viewBox="0 0 10 100" xmlns="http://www.w3.org/2000/svg">%0D%0A  <line x1="5" y1="10" x2="5" y2="90" stroke-width="3" stroke="%23888" stroke-linecap="round"/>%0D%0A</svg>');
   background-repeat: no-repeat;
@@ -2230,7 +2230,7 @@ dialog {
   #mapButton {
     position: absolute;
     height: 100%;
-    grid-row: 1/4;
+    grid-row: 1 / 4;
     grid-column: 3;
     background-color: var(--dm-color-light);
     opacity: 0.8;
@@ -2345,11 +2345,15 @@ dialog {
   display: grid;
   grid-auto-rows: minmax(min-content, 4em);
   padding: 0.7em;
+  & span {
+    line-height: normal;
+  }
   & button,
   & > div,
   & > a {
     width: 2em;
     height: 2em;
+    text-align: center;
   }
   & a > div,
   & button > div {
