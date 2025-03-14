@@ -52,7 +52,7 @@ Dynamic module imports reduce the need to bundle 3rd party libraries such as [Ta
 
 ## XYZ Dependencies
 
-Node.js v18+
+**Node.js v22+** is required for importing ESM modules.
 
 [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) - A Node implementation of JSON Web Token.
 
