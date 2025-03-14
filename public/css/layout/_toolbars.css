@@ -3,11 +3,16 @@
   grid-auto-rows: minmax(min-content, 4em);
   padding: 0.7em;
 
+  & span {
+    line-height: normal;
+  }
+
   & button,
   & > div,
   & > a {
     width: 2em;
     height: 2em;
+    text-align: center;
   }
 
   & a > div,
