@@ -51,7 +51,7 @@ import rateLimit from 'express-rate-limit';
 import api from './api/api.js';
 
 if (process.versions.node.split('.')[0] < 22) {
-  console.warn(`Process Node version below 22.`)
+  console.warn(`Process Node version below 22.`);
 }
 
 const app = express();
