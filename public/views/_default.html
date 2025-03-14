@@ -66,6 +66,21 @@
       #ctrl-tabs > div {
         flex-grow: 1;
         font-size: 2em;
+
+        &[data-id='layers']:after {
+          content: 'layers';
+        }
+
+        &[data-id='locations'] {
+          &:after {
+            content: 'search';
+          }
+
+          &.active:after {
+            content: 'location_on';
+          }
+        }
+
       }
 
       #ctrl-panel {
@@ -188,12 +203,8 @@
 
     <div id="ctrls" class="lighter-background">
       <div id="ctrl-tabs" class="hover">
-        <div data-id="layers" class="active material-symbols-outlined">
-          layers
-        </div>
-        <div data-id="locations" class="material-symbols-outlined">
-          location_on
-        </div>
+        <div data-id="layers" class="active material-symbols-outlined"></div>
+        <div data-id="locations" class="material-symbols-outlined"></div>
       </div>
 
       <div id="ctrl-panel">

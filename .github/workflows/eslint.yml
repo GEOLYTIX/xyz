@@ -1,24 +1,18 @@
-name: ESLint
+name: Code quality
 
 on:
   push:
-    branches: ['main', 'major', 'minor', 'patch']
   pull_request:
-    branches: ['main', 'major', 'minor', 'patch']
 
 jobs:
-  eslint:
-    name: Run ESLint
+  quality:
     runs-on: ubuntu-latest
-
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Setup Biome
+        uses: biomejs/setup-biome@v2
         with:
-          node-version: '20'
-
-      - name: Install dependencies
-        run: npm install
-
-      - name: Run ESLint
-        run: npx eslint . --max-warnings=0
+          version: latest
+      - name: Run Biome
+        run: biome ci .
