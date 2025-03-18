@@ -343,7 +343,10 @@ async function infojMap(req, res) {
     let value = entry.field;
 
     // Check for workspace.template matching the entry.field.
-    if (entry.template && Object.hasOwn(req.params.workspace.templates, entry.field)) {
+    if (
+      entry.template &&
+      Object.hasOwn(req.params.workspace.templates, entry.field)
+    ) {
       const fieldTemplate = await getTemplate(entry.field);
 
       // Core templates should not be included in the infojMap.
