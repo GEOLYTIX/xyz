@@ -21,7 +21,7 @@
   #mapButton {
     position: absolute;
     height: 100%;
-    grid-row: 1/4;
+    grid-row: 1 / 4;
     grid-column: 3;
     opacity: 0.8;
   }
