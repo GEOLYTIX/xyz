@@ -342,7 +342,8 @@ function validateRequestParams(req) {
     // Check whether the params value begins and ends with square braces.
     if (params[key].match(/^\[.*\]$/)) {
       // Match the string between square brackets and split into an array with undefined array values filtered out.
-      params[key] = params[key].match(/^\[(.*)\]$/)[1]
+      params[key] = params[key]
+        .match(/^\[(.*)\]$/)[1]
         .split(',')
         .filter(Boolean);
     }
