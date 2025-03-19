@@ -2,6 +2,11 @@
   display: grid;
   grid-auto-rows: minmax(min-content, 4em);
   padding: 0.7em;
+  pointer-events: none;
+
+  & > * {
+    pointer-events: auto;
+  }
 
   & span {
     line-height: normal;
@@ -29,6 +34,25 @@
   & button:disabled,
   & a:disabled {
     cursor: not-allowed;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .btn-column {
+    position: absolute;
+    height: 100%;
+    grid-row: 1 / 4;
+    grid-column: 3;
+    opacity: 0.8;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .btn-column {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
   }
 }
 
