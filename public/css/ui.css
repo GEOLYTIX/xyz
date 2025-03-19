@@ -251,7 +251,7 @@ html.dark-mode {
       filter: invert(1);
     }
   }
-  #mapButton {
+  .btn-column {
     & > button,
     & > a {
       background-color: var(--dm-color-medium);
@@ -2211,7 +2211,7 @@ dialog {
 }
 
 /* public/css/layout/_map_toolbar.css */
-#mapButton {
+.btn-column {
   pointer-events: none;
   & > * {
     pointer-events: auto;
@@ -2229,7 +2229,7 @@ dialog {
   }
 }
 @media only screen and (min-width: 768px) {
-  #mapButton {
+  .btn-column {
     position: absolute;
     height: 100%;
     grid-row: 1 / 4;
@@ -2238,7 +2238,7 @@ dialog {
   }
 }
 @media only screen and (max-width: 768px) {
-  #mapButton {
+  .btn-column {
     position: fixed;
     top: 0;
     left: 0;
