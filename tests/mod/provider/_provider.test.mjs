@@ -1,11 +1,9 @@
 import 'dotenv/config';
 import '../../../mod/utils/processEnv.js';
 
-const mockedFile = codi.mock.module('../../../mod/provider/file.js', {
-  defaultExport: (ref) => {
-    ref = '';
-    return String('Look at me go from the file provider fam!');
-  },
+fileFn.mock.mockImplementationOnce((ref) => {
+  ref = '';
+  return String('Look at me go from the file provider fam!');
 });
 
 const mockedCloudfront = codi.mock.module(
@@ -119,7 +117,6 @@ await codi.describe({ name: 'Provider:', id: 'provider' }, async () => {
   );
 });
 
-mockedFile.restore();
 mockedCloudfront.restore();
 mockeds3.restore();
 
