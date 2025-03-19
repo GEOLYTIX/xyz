@@ -10,8 +10,14 @@
   & button,
   & > div,
   & > a {
-    width: 2em;
-    height: 2em;
+    margin-bottom: 10px;
+    background-color: var(--color-light);
+    box-shadow: 1px 1px 3px var(--dm-color-medium);
+    border-radius: 50%;
+    opacity: 0.9;
+    padding: 5px;
+    width: 3em;
+    height: 3em;
     text-align: center;
   }
 
