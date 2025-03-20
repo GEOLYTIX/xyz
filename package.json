@@ -22,13 +22,12 @@
     "@aws-sdk/client-s3": "^3.691.0",
     "@aws-sdk/cloudfront-signer": "^3.621.0",
     "@aws-sdk/s3-request-presigner": "^3.691.0",
-    "@node-saml/node-saml": "^5.0.0"
+    "@node-saml/node-saml": "^5.0.1"
   },
   "dependencies": {
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^6.9.7",
-    "pg": "^8.13.1",
-    "simple-statistics": "^7.8.3"
+    "pg": "^8.13.1"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
