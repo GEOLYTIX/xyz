@@ -2,6 +2,11 @@
   display: grid;
   grid-auto-rows: minmax(min-content, 4em);
   padding: 0.7em;
+  pointer-events: none;
+
+  & > * {
+    pointer-events: auto;
+  }
 
   & span {
     line-height: normal;
@@ -10,8 +15,14 @@
   & button,
   & > div,
   & > a {
-    width: 2em;
-    height: 2em;
+    margin-bottom: 10px;
+    background-color: var(--color-light);
+    box-shadow: 1px 1px 3px var(--dm-color-medium);
+    border-radius: 50%;
+    opacity: 0.9;
+    padding: 5px;
+    width: 3em;
+    height: 3em;
     text-align: center;
   }
 
@@ -23,6 +34,25 @@
   & button:disabled,
   & a:disabled {
     cursor: not-allowed;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .btn-column {
+    position: absolute;
+    height: 100%;
+    grid-row: 1 / 4;
+    grid-column: 3;
+    opacity: 0.8;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  .btn-column {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
   }
 }
 
