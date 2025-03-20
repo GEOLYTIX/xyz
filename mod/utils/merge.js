@@ -35,13 +35,12 @@ export default function mergeDeep(target, ...sources) {
   if (isObject(target) && isObject(source)) {
     // Iterate over object keys in source.
     for (const key in source) {
-
       // Spread source array into target array.
       if (arrayMerge(source, target, key)) continue;
 
       // mergeDeep source object into target object.
       if (objectMerge(source, target, key)) continue;
-    
+
       // Assign the source[key] property to target object.
       Object.assign(target, { [key]: source[key] });
     }
@@ -90,7 +89,7 @@ function objectMerge(source, target, key) {
     // Call recursive merge for target key object.
     Object.hasOwn(target, key) && mergeDeep(target[key], source[key]);
 
-    return true
+    return true;
   }
 }
 
