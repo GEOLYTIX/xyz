@@ -63,13 +63,3 @@
     }
   }
 }
-
-@media print {
-  .image,
-  .images,
-  .documents {
-    .drag_and_drop_zone {
-      display: none;
-    }
-  }
-}
