@@ -2013,15 +2013,6 @@ dialog {
     }
   }
 }
-@media print {
-  .image,
-  .images,
-  .documents {
-    .drag_and_drop_zone {
-      display: none;
-    }
-  }
-}
 
 /* public/css/layout/_layerview.css */
 .drawer.layer-group,
