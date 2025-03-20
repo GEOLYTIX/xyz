@@ -298,7 +298,7 @@ async function fieldsMap(req, res) {
     if (Object.hasOwn(req.params.workspace.templates, field)) {
       const fieldTemplate = await getTemplate(field);
 
-      value = fieldTemplate.template || '';
+      value = fieldTemplate.field  || field;
     }
 
     req.params.fieldsMap.set(field, value);
