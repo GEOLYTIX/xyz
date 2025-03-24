@@ -26,7 +26,6 @@
   --color-primary-light: #939faa;
   --color-off-light: #eeeeee;
   --color-light-secondary: #f2f2f2;
-  --color-light-tertiary: #fafafa;
 }
 * {
   transition: 0.2s ease-in-out;
@@ -1569,7 +1568,7 @@ dialog {
 }
 .drawer {
   padding: 2px;
-  background-color: var(--color-light-tertiary);
+  background-color: var(--color-base-tertiary);
   &.expandable:not(.empty) > .header:hover {
     cursor: pointer;
   }

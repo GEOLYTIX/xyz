@@ -5,7 +5,7 @@
 
 .drawer {
   padding: 2px;
-  background-color: var(--color-light-tertiary);
+  background-color: var(--color-base-tertiary);
 
   &.expandable:not(.empty) > .header:hover {
     cursor: pointer;
