@@ -124,7 +124,7 @@ html.dark-mode {
     }
 
     &.ok-colour {
-      color: var(--color-ok);
+      color: var(--color-info);
     }
 
     &.active {

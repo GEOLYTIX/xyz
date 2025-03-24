@@ -20,7 +20,7 @@
   }
 
   &.ok-colour {
-    color: var(--color-ok);
+    color: var(--color-info);
   }
 
   &.primary-light-colour {
