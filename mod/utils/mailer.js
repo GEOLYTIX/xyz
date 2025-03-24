@@ -9,11 +9,30 @@ import languageTemplates from './languageTemplates.js';
 
 import getFrom from '../provider/getFrom.js';
 
-import mailer from 'nodemailer';
+//Attempt to import node mailer
+let nodeMailer;
+try {
+  if (
+    xyzEnv.TRANSPORT ||
+    xyzEnv.TRANSPORT_EMAIL ||
+    xyzEnv.TRANSPORT_HOST ||
+    xyzEnv.TRANSPORT_PASSWORD
+  ) {
+    nodeMailer = await import('nodemailer');
+  } else {
+    console.warn(
+      'Mailer: environment keys are missing for mailing functionality',
+    );
+  }
+} catch {
+  //Dependencies not installed
+}
 
 let transport;
 
-export default async (params) => {
+export default nodeMailer ? mailer : null;
+
+async function mailer(params) {
   if (xyzEnv.TRANSPORT) {
     console.warn(
       'Please replace xyzEnv.TRANSPORT with TRANSPORT_HOST,TRANSPORT_EMAIL, and TRANSPORT_PASSWORD',
@@ -36,7 +55,7 @@ export default async (params) => {
   }
 
   if (!transport) {
-    transport = mailer.createTransport({
+    transport = nodeMailer.createTransport({
       host: xyzEnv.TRANSPORT_HOST,
       name: xyzEnv.TRANSPORT_EMAIL.split('@')[0],
       port: xyzEnv.TRANSPORT_PORT || 587,
@@ -71,7 +90,7 @@ export default async (params) => {
     .catch((err) => console.error(err));
 
   logger(result, 'mailer');
-};
+}
 
 async function getBody(template) {
   if (template.text) {

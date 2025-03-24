@@ -330,7 +330,7 @@ async function failedLogin(request) {
       );
     }
 
-    await mailer({
+    await mailer?.({
       template: 'locked_account',
       language: request.language,
       to: request.email,
@@ -354,7 +354,7 @@ async function failedLogin(request) {
   }
 
   // Login has failed but account is not locked (yet).
-  await mailer({
+  await mailer?.({
     template: 'login_incorrect',
     language: request.language,
     to: request.email,
