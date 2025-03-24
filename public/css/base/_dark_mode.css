@@ -120,7 +120,7 @@ html.dark-mode {
     color: var(--dm-color-light-secondary);
 
     &.no-colour {
-      color: var(--dm-color-no);
+      color: var(--dm-color-blocked);
     }
 
     &.ok-colour {

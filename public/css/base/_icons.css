@@ -40,7 +40,7 @@
   }
 
   &.no {
-    background-color: var(--color-no);
+    background-color: var(--color-blocked);
   }
 }
 

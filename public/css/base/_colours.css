@@ -23,6 +23,11 @@
   /* Accent */
   --dm-color-accent-active:  #e18335;
 
+
+  /* Information */
+
+  --dm-color-blocked: #ef5350;
+
   /* end temporary dark mode */
 
   /* end unified colour palette */
@@ -43,8 +48,6 @@
 
   --color-mid: #e3e3e3;
 
-  --color-no: #a21309; /* color-blocked */
-
   /* --color-changed: #ffffa7; color-changed */
 
   --color-input-border: #ccc;
@@ -63,7 +66,6 @@
 
   --dm-color-light-darker: #d8d8d8;
 
-  --dm-color-no: #ef5350; /* color-accent-active */
 }
 
 * {
@@ -108,5 +110,5 @@
 }
 
 .no-colour {
-  color: var(--color-no);
+  color: var(--color-blocked);
 }
