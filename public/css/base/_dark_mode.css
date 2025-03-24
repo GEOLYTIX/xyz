@@ -3,16 +3,16 @@ html.dark-mode {
 
   /* base: begin button */
   button {
-    color: var(--dm-color-light);
+    color: var(--dm-color-accent-primary);
     &.primary-colour {
-      color: var(--dm-color-light);
+      color: var(--dm-color-accent-primary);
     }
     &.active {
       color: var(--dm-color-accent-active);
     }
 
     & > .primary-colour {
-      color: var(--dm-color-light);
+      color: var(--dm-color-accent-primary);
     }
   }
 
@@ -72,7 +72,7 @@ html.dark-mode {
   input[type='date'],
   input[type='datetime-local'] {
     background: var(--dm-color-base-tertiary);
-    color: var(--dm-color-light);
+    color: var(--dm-color-accent-primary);
     border-color: var(--dm-color-base-secondary);
   }
 
@@ -89,7 +89,7 @@ html.dark-mode {
 
   textarea {
     background-color: var(--dm-color-base-tertiary);
-    color: var(--dm-color-light);
+    color: var(--dm-color-accent-primary);
   }
   /* common val changed class */
   .val-changed {
@@ -139,7 +139,7 @@ html.dark-mode {
 
   /* begin dialog */
   dialog {
-    color: var(--dm-color-light);
+    color: var(--dm-color-accent-primary);
     background-color: var(--dm-color-base-secondary);
 
     &.alert-confirm h4 {
@@ -187,7 +187,7 @@ html.dark-mode {
     ul > li,
     .head {
       background: var(--dm-color-base-tertiary);
-      color: var(--dm-color-light);
+      color: var(--dm-color-accent-primary);
       border-color: var(--dm-color-base-secondary);
 
       > .material-symbols-outlined:after {
@@ -365,7 +365,7 @@ html.dark-mode {
 
     .tab {
       .header {
-        color: var(--dm-color-light);
+        color: var(--dm-color-accent-primary);
         background-color: var(--dm-color-base-primary);
       }
 
@@ -378,7 +378,7 @@ html.dark-mode {
       background-color: var(--dm-color-base-primary);
 
       .tabulator-page {
-        color: var(--dm-color-light);
+        color: var(--dm-color-accent-primary);
 
         &.active {
           color: var(--dm-color-accent-active);
@@ -392,11 +392,11 @@ html.dark-mode {
 
     .tabulator-col {
       background-color: var(--dm-color-base-secondary);
-      color: var(--dm-color-light);
+      color: var(--dm-color-accent-primary);
     }
 
     .tabulator-row {
-      color: var(--dm-color-light);
+      color: var(--dm-color-accent-primary);
 
       &.tabulator-row-odd {
         background-color: var(--dm-color-base-primary);
