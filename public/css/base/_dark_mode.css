@@ -8,7 +8,7 @@ html.dark-mode {
       color: var(--dm-color-light);
     }
     &.active {
-      color: var(--dm-color-on);
+      color: var(--dm-color-accent-active);
     }
 
     & > .primary-colour {
@@ -24,7 +24,7 @@ html.dark-mode {
     color: var(--color-base-tertiary);
 
     &.active {
-      color: var(--color-on);
+      color: var(--color-accent-active);
     }
   }
 
@@ -60,7 +60,7 @@ html.dark-mode {
 
   /* begin globals */
   a {
-    color: var(--dm-color-on);
+    color: var(--dm-color-accent-active);
   }
   /* end globals */
 
@@ -114,7 +114,7 @@ html.dark-mode {
 
   /* begin material icons */
   .active > .material-symbols-outlined {
-    color: var(--dm-color-on);
+    color: var(--dm-color-accent-active);
   }
   .material-symbols-outlined {
     color: var(--dm-color-light-secondary);
@@ -128,7 +128,7 @@ html.dark-mode {
     }
 
     &.active {
-      color: var(--dm-color-on);
+      color: var(--dm-color-accent-active);
     }
   }
   /* end material icons */
@@ -143,7 +143,7 @@ html.dark-mode {
     background-color: var(--dm-color-dark-faded);
 
     &.alert-confirm h4 {
-      background-color: var(--color-on);
+      background-color: var(--color-accent-active);
     }
   }
   /* end dialog */
@@ -170,7 +170,7 @@ html.dark-mode {
     box-shadow: 0px 0px 0px 0px;
 
     &.active .head {
-      background: var(--dm-color-on);
+      background: var(--dm-color-accent-active);
 
       & > .material-symbols-outlined:after {
         color: var(--color-off-black);
@@ -212,7 +212,7 @@ html.dark-mode {
   .key {
     button.layer-key {
       &.active {
-        background-color: var(--dm-color-on);
+        background-color: var(--dm-color-accent-active);
         color: var(--dm-color-medium);
       }
     }
@@ -272,7 +272,7 @@ html.dark-mode {
 
   .location-view-grid {
     .layer-key > span {
-      background-color: var(--dm-color-on);
+      background-color: var(--dm-color-accent-active);
     }
 
     .location canvas {
@@ -302,10 +302,10 @@ html.dark-mode {
     color: var(--color-base-tertiary);
 
     & button.primary-colour {
-      color: var(--color-on);
+      color: var(--color-accent-active);
 
       & > * {
-        color: var(--color-on);
+        color: var(--color-accent-active);
       }
     }
 
@@ -327,7 +327,7 @@ html.dark-mode {
   }
 
   ::-webkit-scrollbar-thumb {
-    background: var(--dm-color-on);
+    background: var(--dm-color-accent-active);
   }
 
   ::-webkit-scrollbar-corner {
@@ -348,7 +348,7 @@ html.dark-mode {
         background-color: var(--dm-color-dark-neutral);
 
         button {
-          color: var(--dm-color-on);
+          color: var(--dm-color-accent-active);
           background: var(--dm-color-dark-faded);
         }
       }
@@ -370,7 +370,7 @@ html.dark-mode {
       }
 
       &.active .header {
-        background-color: var(--dm-color-on);
+        background-color: var(--dm-color-accent-active);
       }
     }
 
@@ -381,7 +381,7 @@ html.dark-mode {
         color: var(--dm-color-light);
 
         &.active {
-          color: var(--dm-color-on);
+          color: var(--dm-color-accent-active);
         }
       }
     }

@@ -18,6 +18,13 @@
   --color-blocked: #a21309;
   --color-changed: #ffffa7;
 
+  /* begin temporary dark mode */
+
+  /* Accent */
+  --dm-color-accent-active:  #e18335;
+
+  /* end temporary dark mode */
+
   /* end unified colour palette */
 
 
@@ -36,8 +43,6 @@
 
   --color-mid: #e3e3e3;
 
-  --color-on: #d57120; /* color-accent-active */
-
   --color-no: #a21309; /* color-blocked */
 
   /* --color-changed: #ffffa7; color-changed */
@@ -45,8 +50,6 @@
   --color-input-border: #ccc;
 
   /* dark colour mode */
-
-  --dm-color-on: #e18335; /* --color-accent-active */
 
   --dm-color-medium: #555555; /* --color-base-tertiary */
 
@@ -101,7 +104,7 @@
 }
 
 .on-colour {
-  color: var(--color-on);
+  color: var(--color-accent-active);
 }
 
 .no-colour {

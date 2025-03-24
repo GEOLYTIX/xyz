@@ -82,7 +82,7 @@
     background-color: var(--color-mid);
 
     &.active {
-      background-color: var(--color-on);
+      background-color: var(--color-accent-active);
     }
   }
 

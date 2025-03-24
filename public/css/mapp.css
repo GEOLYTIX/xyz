@@ -9,6 +9,7 @@
   --color-info: #0b6f50;
   --color-blocked: #a21309;
   --color-changed: #ffffa7;
+  --dm-color-accent-active: #e18335;
   --color-off-black: #3f3f3f;
   --color-primary: #003d57;
   --color-primary-light: #939faa;
@@ -16,10 +17,8 @@
   --color-light-secondary: #f2f2f2;
   --color-light-tertiary: #fafafa;
   --color-mid: #e3e3e3;
-  --color-on: #d57120;
   --color-no: #a21309;
   --color-input-border: #ccc;
-  --dm-color-on: #e18335;
   --dm-color-medium: #555555;
   --dm-color-dark-faded: #333333;
   --dm-color-dark-neutral: #222222;
@@ -56,7 +55,7 @@
   background-color: var(--color-off-black);
 }
 .on-colour {
-  color: var(--color-on);
+  color: var(--color-accent-active);
 }
 .no-colour {
   color: var(--color-no);
