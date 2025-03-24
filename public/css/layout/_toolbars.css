@@ -16,7 +16,7 @@
   & > div,
   & > a {
     margin-bottom: 10px;
-    background-color: var(--color-light);
+    background-color: var(--color-base-tertiary);
     box-shadow: 1px 1px 3px var(--dm-color-medium);
     border-radius: 50%;
     opacity: 0.9;

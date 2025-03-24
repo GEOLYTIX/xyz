@@ -163,7 +163,7 @@ label.checkbox {
     & .label {
       padding: 0 6px;
       border-radius: 2px;
-      color: var(--color-light);
+      color: var(--color-base-tertiary);
       font-size: 80%;
       font-weight: bold;
       background-color: var(--color-primary);
@@ -231,7 +231,7 @@ label.checkbox {
     & .label {
       padding: 0 6px;
       border-radius: 2px;
-      color: var(--color-light);
+      color: var(--color-base-tertiary);
       font-size: 80%;
       font-weight: bold;
       background-color: var(--color-primary);

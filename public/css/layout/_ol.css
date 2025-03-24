@@ -42,7 +42,7 @@
     display: block;
     margin: 1px;
     padding: 0;
-    color: var(--color-light);
+    color: var(--color-base-tertiary);
     font-weight: 700;
     text-decoration: none;
     font-size: inherit;

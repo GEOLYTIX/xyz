@@ -3,7 +3,7 @@
   height: 100%;
   overflow: hidden;
   position: relative;
-  background-color: var(--color-light);
+  background-color: var(--color-base-tertiary);
   display: grid;
   grid-template-rows: 3em auto;
 
@@ -14,7 +14,7 @@
     position: absolute;
     left: 0;
     top: 0;
-    background-color: var(--color-light);
+    background-color: var(--color-base-tertiary);
     opacity: 0.7;
   }
 
@@ -42,7 +42,7 @@
     }
 
     & > .tab.active > .header {
-      background-color: var(--color-light);
+      background-color: var(--color-base-tertiary);
       font-weight: bold;
     }
 

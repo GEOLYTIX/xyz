@@ -21,7 +21,7 @@ html.dark-mode {
   /* begin colour classes */
 
   .primary-colour {
-    color: var(--color-light);
+    color: var(--color-base-tertiary);
 
     &.active {
       color: var(--color-on);
@@ -42,7 +42,7 @@ html.dark-mode {
       background: linear-gradient(
         0deg,
         transparent 0 45%,
-        var(--color-light) 45% 55%,
+        var(--color-base-tertiary) 45% 55%,
         transparent 55% 100%
       );
     }
@@ -53,7 +53,7 @@ html.dark-mode {
   }
 
   #ctrl-tabs {
-    background-color: var(--dm-color-darker);
+    background-color: var(--dm-color-medium);
   }
 
   /* end colour classes */
@@ -191,7 +191,7 @@ html.dark-mode {
       border-color: var(--dm-color-dark-faded);
 
       > .material-symbols-outlined:after {
-        color: var(--color-light);
+        color: var(--color-base-tertiary);
       }
     }
 
@@ -213,7 +213,7 @@ html.dark-mode {
     button.layer-key {
       &.active {
         background-color: var(--dm-color-on);
-        color: var(--dm-color-darker);
+        color: var(--dm-color-medium);
       }
     }
   }
@@ -229,7 +229,7 @@ html.dark-mode {
       background-color: var(--dm-color-medium);
 
       & li {
-        color: var(--color-light);
+        color: var(--color-base-tertiary);
       }
     }
   }
@@ -299,7 +299,7 @@ html.dark-mode {
     background-color: var(--dm-color-medium);
     box-shadow: unset;
     border: solid 1px var(--dm-color-dark-faded);
-    color: var(--color-light);
+    color: var(--color-base-tertiary);
 
     & button.primary-colour {
       color: var(--color-on);
@@ -360,13 +360,13 @@ html.dark-mode {
 
     .tabs,
     .tabulator-tableholder {
-      background: var(--dm-color-darker);
+      background-color: var(--dm-color-medium);
     }
 
     .tab {
       .header {
         color: var(--dm-color-light);
-        background-color: var(--dm-color-dark-faded);
+        background-color: var(--dm-color-dark-neutral);
       }
 
       &.active .header {
@@ -375,7 +375,7 @@ html.dark-mode {
     }
 
     .tabulator-footer {
-      background-color: var(--dm-color-dark);
+      background-color: var(--dm-color-dark-neutral);
 
       .tabulator-page {
         color: var(--dm-color-light);
@@ -387,7 +387,7 @@ html.dark-mode {
     }
 
     .tabulator-header {
-      background: var(--dm-color-dark);
+      background: var(--dm-color-dark-neutral);
     }
 
     .tabulator-col {

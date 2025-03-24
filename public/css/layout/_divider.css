@@ -19,7 +19,7 @@
   background-image: url('../../icons/pill-horizontal.svg');
   background-repeat: no-repeat;
   background-position: center;
-  background-color: var(--color-light);
+  background-color: var(--color-base-tertiary);
   box-shadow: 0px -1px 6px -3px var(--color-off-black);
 
   &:hover {
