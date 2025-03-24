@@ -51,7 +51,7 @@
       top: 0.2em;
       left: 0.2em;
       font-size: 1.5em;
-      background-color: var(--color-off-light);
+      background-color: var(--color-base-secondary);
       padding: 0.1em;
       border-radius: 50%;
     }

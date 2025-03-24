@@ -21,7 +21,6 @@
   --color-off-black: #3f3f3f;
   --color-primary: #003d57;
   --color-primary-light: #939faa;
-  --color-off-light: #eeeeee;
 }
 * {
   transition: 0.2s ease-in-out;
