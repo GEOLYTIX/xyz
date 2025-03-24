@@ -101,12 +101,12 @@ html.dark-mode {
     input[type='datetime-local'],
     textarea {
       background-color: var(--color-changed);
-      color: var(--color-off-black);
+      color: var(--color-text);
     }
 
     label.checkbox > .material-symbols-outlined:after,
     .dropdown > .head > .material-symbols-outlined:after {
-      color: var(--color-off-black);
+      color: var(--color-text);
     }
   }
 
@@ -173,7 +173,7 @@ html.dark-mode {
       background: var(--dm-color-accent-active);
 
       & > .material-symbols-outlined:after {
-        color: var(--color-off-black);
+        color: var(--color-text);
         background-color: transparent;
       }
     }

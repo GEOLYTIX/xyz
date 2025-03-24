@@ -54,7 +54,7 @@
 
   label.checkbox {
     background-color: var(--color-changed);
-    color: var(--color-off-black);
+    color: var(--color-text);
     border-radius: 2px;
   }
 }

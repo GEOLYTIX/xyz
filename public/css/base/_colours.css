@@ -45,7 +45,6 @@
 
 
   /* light colour mode */
-  --color-off-black: #3f3f3f; /* color-text */
 
   --color-primary: #003d57; /* color-accent-primary */
 
@@ -81,12 +80,12 @@
 }
 
 .off-black {
-  color: var(--color-off-black);
+  color: var(--color-text);
 }
 
 .off-black-background {
   color: var(--color-base-tertiary);
-  background-color: var(--color-off-black);
+  background-color: var(--color-text);
 }
 
 .on-colour {

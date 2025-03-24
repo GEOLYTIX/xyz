@@ -49,7 +49,7 @@
       left: 0;
       right: 0;
       z-index: 99;
-      color: var(--color-off-black);
+      color: var(--color-text);
       background: var(--color-base-tertiary);
       overflow: hidden;
       padding: 1em 1.5em;

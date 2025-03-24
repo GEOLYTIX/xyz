@@ -4,9 +4,9 @@
 }
 
 .ol-scale-line-inner {
-  border: 2px solid var(--color-off-black);
+  border: 2px solid var(--color-text);
   border-top: none;
-  color: var(--color-off-black);
+  color: var(--color-text);
   text-align: center;
   margin: 1px;
   will-change: contents, width;

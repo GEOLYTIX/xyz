@@ -28,14 +28,14 @@
       width: 1.5em;
 
       &:after {
-        color: var(--color-off-black);
+        color: var(--color-text);
         content: 'arrow_drop_down';
       }
     }
   }
 
   & > ul {
-    color: var(--color-off-black);
+    color: var(--color-text);
     display: none;
     position: absolute;
     max-height: 500px;
@@ -49,7 +49,7 @@
 
     & > li {
       padding: 5px;
-      color: var(--color-off-black);
+      color: var(--color-text);
     }
 
     & > li:hover {

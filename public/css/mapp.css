@@ -19,7 +19,6 @@
   --dm-color-accent: #ffffff;
   --dm-color-accent-active: #e18335;
   --dm-color-blocked: #ef5350;
-  --color-off-black: #3f3f3f;
   --color-primary: #003d57;
 }
 * {
@@ -43,11 +42,11 @@
   background-color: var(--color-base-secondary);
 }
 .off-black {
-  color: var(--color-off-black);
+  color: var(--color-text);
 }
 .off-black-background {
   color: var(--color-base-tertiary);
-  background-color: var(--color-off-black);
+  background-color: var(--color-text);
 }
 .on-colour {
   color: var(--color-accent-active);
@@ -62,9 +61,9 @@
   background: none;
 }
 .ol-scale-line-inner {
-  border: 2px solid var(--color-off-black);
+  border: 2px solid var(--color-text);
   border-top: none;
-  color: var(--color-off-black);
+  color: var(--color-text);
   text-align: center;
   margin: 1px;
   will-change: contents, width;
