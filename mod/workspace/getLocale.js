@@ -45,13 +45,15 @@ export default async function getLocale(params) {
     return workspace;
   }
 
-  if (params.locale && !Object.hasOwn(workspace.locales, params.locale)) {
+  const localeKey = Array.isArray(params.locale) ? params.locale.shift(): params.locale;
+
+  if (localeKey && !Object.hasOwn(workspace.locales, localeKey)) {
     return new Error('Unable to validate locale param.');
   }
 
-  // The workspace.locale is assigned as locale if params.locale is not a property of workspace.locales
-  let locale = Object.hasOwn(workspace.locales, params.locale)
-    ? workspace.locales[params.locale]
+  // The workspace.locale is assigned as locale if workspace.locales does not hold the localeKey
+  let locale = Object.hasOwn(workspace.locales, localeKey)
+    ? workspace.locales[localeKey]
     : workspace.locale;
 
   locale = await mergeTemplates(locale);

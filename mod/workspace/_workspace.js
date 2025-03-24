@@ -112,6 +112,7 @@ async function layer(req, res) {
 
 /**
 @function locales
+@async
 
 @description
 The locales method reduces the workspace.locales{} object to an array locales with only the key and name properties.
@@ -125,10 +126,15 @@ The locales are not merged with templates and only roles defined inside the work
 
 @returns {res} The HTTP response with either an error.message or JSON array of locales in workspace.
 */
-function locales(req, res) {
+async function locales(req, res) {
   // Add default role * to all users.
   if (Array.isArray(req.params.user?.roles)) {
     req.params.user.roles.push('*');
+  }
+
+  if (req.params.locale) {
+    getNestedLocales(req, res)
+    return;
   }
 
   const locales = Object.values(workspace.locales)
@@ -136,9 +142,41 @@ function locales(req, res) {
     .map((locale) => ({
       key: locale.key,
       name: locale.name,
+      locales: locale.locales
     }));
 
   res.send(locales);
+}
+
+async function getNestedLocales(req, res) {
+
+  const locale = await getLocale(req.params);
+
+  if (locale instanceof Error) {
+    return res.status(400).send(locale.message);
+  }
+
+  const nestedLocales = []
+
+  if (!Array.isArray(locale.locales)) {
+    res.send(nestedLocales);
+    return;
+  }
+
+  for (const key of locale.locales) {
+
+    const nestedLocale = await getTemplate(key)
+
+    if(!Roles.check(nestedLocale, req.params.user?.roles)) continue;
+
+    nestedLocales.push({
+      key,
+      name: nestedLocale.name || key,
+      locales: nestedLocale.locales
+    })
+  }
+
+  res.send(nestedLocales);
 }
 
 /**
