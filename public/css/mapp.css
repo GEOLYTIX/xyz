@@ -22,7 +22,6 @@
   --color-primary: #003d57;
   --color-primary-light: #939faa;
   --color-off-light: #eeeeee;
-  --color-light-secondary: #f2f2f2;
 }
 * {
   transition: 0.2s ease-in-out;
@@ -42,7 +41,7 @@
   color: var(--color-base-tertiary);
 }
 .lighter-background {
-  background-color: var(--color-light-secondary);
+  background-color: var(--color-base-secondary);
 }
 .off-black {
   color: var(--color-off-black);
@@ -253,7 +252,7 @@ body {
     list-style-type: none;
   }
   & li:hover {
-    background: var(--color-light-secondary);
+    background: var(--color-base-secondary);
     cursor: pointer;
   }
   .list {

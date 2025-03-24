@@ -151,11 +151,11 @@ html.dark-mode {
   /* begin drawer */
   .drawer {
     background-color: var(--dm-color-base-secondary);
-    color: var(--color-light-secondary);
+    color: var(--color-base-secondary);
     border: none;
 
     &.top-btn {
-      color: var(--color-light-secondary);
+      color: var(--color-base-secondary);
     }
 
     &.panel {

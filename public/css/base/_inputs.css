@@ -25,7 +25,7 @@ textarea {
   resize: none;
   border: none;
   border-bottom: 0.5px dotted;
-  background-color: var(--color-light-secondary);
+  background-color: var(--color-base-secondary);
 
   &:focus {
     outline: none;
@@ -60,7 +60,7 @@ input[type='text'],
 input[type='number'] {
   padding: 5px;
   border: none;
-  background-color: var(--color-light-secondary);
+  background-color: var(--color-base-secondary);
   border-bottom: 0.5px dotted;
   display: inline-block;
   width: 100%;

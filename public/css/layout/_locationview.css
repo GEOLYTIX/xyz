@@ -11,7 +11,7 @@
   grid-template-columns: 1fr 1fr;
 
   & pre {
-    background-color: var(--color-light-secondary);
+    background-color: var(--color-base-secondary);
   }
 
   & .contents {

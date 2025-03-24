@@ -58,7 +58,7 @@
     }
 
     & > li.selected {
-      background-color: var(--color-light-secondary);
+      background-color: var(--color-base-secondary);
     }
 
     & .label {

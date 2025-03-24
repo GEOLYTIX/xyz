@@ -52,9 +52,6 @@
 
   --color-off-light: #eeeeee;
 
-  --color-light-secondary: #f2f2f2;
-
-
 
 }
 
@@ -83,7 +80,7 @@
 }
 
 .lighter-background {
-  background-color: var(--color-light-secondary);
+  background-color: var(--color-base-secondary);
 }
 
 .off-black {

@@ -27,7 +27,7 @@
   }
 
   & li:hover {
-    background: var(--color-light-secondary);
+    background: var(--color-base-secondary);
     cursor: pointer;
   }
 

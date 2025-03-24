@@ -25,7 +25,6 @@
   --color-primary: #003d57;
   --color-primary-light: #939faa;
   --color-off-light: #eeeeee;
-  --color-light-secondary: #f2f2f2;
 }
 * {
   transition: 0.2s ease-in-out;
@@ -45,7 +44,7 @@
   color: var(--color-base-tertiary);
 }
 .lighter-background {
-  background-color: var(--color-light-secondary);
+  background-color: var(--color-base-secondary);
 }
 .off-black {
   color: var(--color-off-black);
@@ -169,10 +168,10 @@ html.dark-mode {
   }
   .drawer {
     background-color: var(--dm-color-base-secondary);
-    color: var(--color-light-secondary);
+    color: var(--color-base-secondary);
     border: none;
     &.top-btn {
-      color: var(--color-light-secondary);
+      color: var(--color-base-secondary);
     }
     &.panel {
       background-color: var(--dm-dark-neutral);
@@ -434,7 +433,7 @@ button {
   }
   &.flat {
     border-radius: 3px;
-    border-bottom: 1px solid var(--color-light-secondary);
+    border-bottom: 1px solid var(--color-base-secondary);
     padding: 0.3em;
     &.active {
       border-bottom: 1px solid var(--color-accent-active);
@@ -447,8 +446,8 @@ button {
   }
   &.raised {
     border-radius: 3px;
-    border: 1px solid var(--color-light-secondary);
-    box-shadow: 1px 1px 2px var(--color-light-secondary);
+    border: 1px solid var(--color-base-secondary);
+    box-shadow: 1px 1px 2px var(--color-base-secondary);
     padding: 0.3em;
     &.active {
       box-shadow: none;
@@ -1246,7 +1245,7 @@ textarea {
   resize: none;
   border: none;
   border-bottom: 0.5px dotted;
-  background-color: var(--color-light-secondary);
+  background-color: var(--color-base-secondary);
   &:focus {
     outline: none;
   }
@@ -1275,7 +1274,7 @@ input[type=text],
 input[type=number] {
   padding: 5px;
   border: none;
-  background-color: var(--color-light-secondary);
+  background-color: var(--color-base-secondary);
   border-bottom: 0.5px dotted;
   display: inline-block;
   width: 100%;
@@ -1380,7 +1379,7 @@ dialog.alert-confirm {
   width: 100%;
   padding: 0.3em 0.5em;
   background-color: var(--color-base-tertiary);
-  border: 1px solid var(--color-light-secondary);
+  border: 1px solid var(--color-base-secondary);
   border-radius: 3px;
   box-shadow: 1px 1px 3px var(--color-primary-light);
   & .header {
@@ -1618,12 +1617,12 @@ dialog {
   }
   &.flat {
     border-radius: 2px;
-    border: 1px solid var(--color-light-secondary);
+    border: 1px solid var(--color-base-secondary);
   }
   &.raised {
     border-radius: 2px;
     box-shadow: 1px 1px 3px var(--color-primary-light);
-    border: 1px solid var(--color-light-secondary);
+    border: 1px solid var(--color-base-secondary);
   }
   &.raised.empty {
     box-shadow: none;
@@ -1691,7 +1690,7 @@ dialog {
       cursor: pointer;
     }
     & > li.selected {
-      background-color: var(--color-light-secondary);
+      background-color: var(--color-base-secondary);
     }
     & .label {
       padding: 0 6px;
@@ -1781,7 +1780,7 @@ dialog {
       cursor: pointer;
     }
     & > li.selected {
-      background-color: var(--color-light-secondary);
+      background-color: var(--color-base-secondary);
     }
     & .label {
       padding: 0 2px;
@@ -2065,7 +2064,7 @@ dialog {
   background: var(--color-base-tertiary);
   border: none;
   box-shadow: none;
-  border-top: 1px solid var(--color-light-secondary);
+  border-top: 1px solid var(--color-base-secondary);
 }
 #layers > .layer-view > .drawer,
 #layers .drawer.layer-view .drawer {
@@ -2088,7 +2087,7 @@ dialog {
   padding: 5px 0;
   grid-template-columns: 1fr 1fr;
   & pre {
-    background-color: var(--color-light-secondary);
+    background-color: var(--color-base-secondary);
   }
   & .contents {
     display: contents;
@@ -2211,14 +2210,14 @@ dialog {
   height: 7px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-light-secondary);
+  background: var(--color-base-secondary);
 }
 ::-webkit-scrollbar-thumb {
   background: var(--color-primary-light);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-corner {
-  background: var(--color-light-secondary);
+  background: var(--color-base-secondary);
 }
 
 /* public/css/layout/_tabview.css */
@@ -2245,7 +2244,7 @@ dialog {
     height: inherit;
     overflow-x: auto;
     display: flex;
-    background-color: var(--color-light-secondary);
+    background-color: var(--color-base-secondary);
     & > .tab > .header {
       min-width: 8em;
       height: 100%;

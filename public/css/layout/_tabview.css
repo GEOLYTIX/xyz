@@ -23,7 +23,7 @@
     height: inherit;
     overflow-x: auto;
     display: flex;
-    background-color: var(--color-light-secondary);
+    background-color: var(--color-base-secondary);
 
     & > .tab > .header {
       min-width: 8em;
