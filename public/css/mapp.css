@@ -19,18 +19,17 @@
   --dm-color-accent: #ffffff;
   --dm-color-accent-active: #e18335;
   --dm-color-blocked: #ef5350;
-  --color-primary: #003d57;
 }
 * {
   transition: 0.2s ease-in-out;
   transition-property: background-color;
 }
 .primary-colour {
-  color: var(--color-primary);
+  color: var(--color-accent);
 }
 .primary-background {
   color: var(--color-base-tertiary);
-  background-color: var(--color-primary);
+  background-color: var(--color-accent);
 }
 .light-background {
   background-color: var(--color-base-tertiary);

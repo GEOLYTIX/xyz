@@ -69,7 +69,7 @@
     }
 
     &.active {
-      background-color: var(--color-primary);
+      background-color: var(--color-accent);
       color: #fff;
 
       & .panel {

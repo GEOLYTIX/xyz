@@ -43,12 +43,6 @@
 
   /* end unified colour palette */
 
-
-  /* light colour mode */
-
-  --color-primary: #003d57; /* color-accent-primary */
-
-
 }
 
 * {
@@ -59,12 +53,12 @@
 /* light mode classes */
 
 .primary-colour {
-  color: var(--color-primary);
+  color: var(--color-accent);
 }
 
 .primary-background {
   color: var(--color-base-tertiary);
-  background-color: var(--color-primary);
+  background-color: var(--color-accent);
 }
 
 .light-background {

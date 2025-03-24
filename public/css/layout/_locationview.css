@@ -61,7 +61,7 @@
 
     & > .header {
       grid-column: 1 / 3;
-      background-color: var(--color-primary);
+      background-color: var(--color-accent);
       color: var(--color-base-tertiary);
       border-radius: 3px;
       padding: 0 0.5em;
