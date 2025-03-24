@@ -29,11 +29,11 @@ html.dark-mode {
   }
 
   .lighter-background {
-    background-color: var(--dm-color-dark-faded);
+    background-color: var(--dm-color-base-secondary);
   }
 
   .bg-light-tertiary {
-    background-color: var(--dm-color-dark-faded);
+    background-color: var(--dm-color-base-secondary);
   }
 
   .input-range.single {
@@ -73,7 +73,7 @@ html.dark-mode {
   input[type='datetime-local'] {
     background: var(--dm-color-medium);
     color: var(--dm-color-light);
-    border-color: var(--dm-color-dark-faded);
+    border-color: var(--dm-color-base-secondary);
   }
 
   input[type='search'] {
@@ -140,7 +140,7 @@ html.dark-mode {
   /* begin dialog */
   dialog {
     color: var(--dm-color-light);
-    background-color: var(--dm-color-dark-faded);
+    background-color: var(--dm-color-base-secondary);
 
     &.alert-confirm h4 {
       background-color: var(--color-accent-active);
@@ -150,7 +150,7 @@ html.dark-mode {
 
   /* begin drawer */
   .drawer {
-    background-color: var(--dm-color-dark-faded);
+    background-color: var(--dm-color-base-secondary);
     color: var(--color-light-secondary);
     border: none;
 
@@ -180,7 +180,7 @@ html.dark-mode {
 
     ul {
       &.label {
-        background-color: var(--dm-color-dark-faded);
+        background-color: var(--dm-color-base-secondary);
       }
     }
 
@@ -188,7 +188,7 @@ html.dark-mode {
     .head {
       background: var(--dm-color-medium);
       color: var(--dm-color-light);
-      border-color: var(--dm-color-dark-faded);
+      border-color: var(--dm-color-base-secondary);
 
       > .material-symbols-outlined:after {
         color: var(--color-base-tertiary);
@@ -197,10 +197,10 @@ html.dark-mode {
 
     ul > li {
       &:hover {
-        background: var(--dm-color-dark-faded);
+        background: var(--dm-color-base-secondary);
       }
       &.selected {
-        background-color: var(--dm-color-dark-faded);
+        background-color: var(--dm-color-base-secondary);
       }
     }
   }
@@ -244,7 +244,7 @@ html.dark-mode {
 
   #ctrls-divider,
   #tabview-divider {
-    background-color: var(--dm-color-dark-faded);
+    background-color: var(--dm-color-base-secondary);
   }
 
   /* end divider */
@@ -253,12 +253,12 @@ html.dark-mode {
 
   #layers {
     & > .drawer.layer-group .drawer.layer-view {
-      background-color: var(--dm-color-dark-faded);
+      background-color: var(--dm-color-base-secondary);
       border-top: 1px solid var(--dm-color-medium);
     }
 
     & > .layer-view > .drawer {
-      background-color: var(--dm-color-dark-faded);
+      background-color: var(--dm-color-base-secondary);
     }
 
     .drawer.layer-view .drawer {
@@ -298,7 +298,7 @@ html.dark-mode {
   .popup {
     background-color: var(--dm-color-medium);
     box-shadow: unset;
-    border: solid 1px var(--dm-color-dark-faded);
+    border: solid 1px var(--dm-color-base-secondary);
     color: var(--color-base-tertiary);
 
     & button.primary-colour {
@@ -314,7 +314,7 @@ html.dark-mode {
     }
 
     & li:hover {
-      background: var(--dm-color-dark-faded);
+      background: var(--dm-color-base-secondary);
     }
   }
 
@@ -331,7 +331,7 @@ html.dark-mode {
   }
 
   ::-webkit-scrollbar-corner {
-    background: var(--dm-color-dark-faded);
+    background: var(--dm-color-base-secondary);
   }
 
   /* end scrollbar */
@@ -349,12 +349,12 @@ html.dark-mode {
 
         button {
           color: var(--dm-color-accent-active);
-          background: var(--dm-color-dark-faded);
+          background: var(--dm-color-base-secondary);
         }
       }
 
       & > .flex-col {
-        background-color: var(--dm-color-dark-faded);
+        background-color: var(--dm-color-base-secondary);
       }
     }
 
@@ -391,7 +391,7 @@ html.dark-mode {
     }
 
     .tabulator-col {
-      background-color: var(--dm-color-dark-faded);
+      background-color: var(--dm-color-base-secondary);
       color: var(--dm-color-light);
     }
 
