@@ -3,23 +3,23 @@
 
 /* public/css/base/_colours.css */
 :root {
-  --color-base-primary: #f2f2f2;
+  --color-base: #f2f2f2;
   --color-base-secondary: #f2f2f2;
   --color-base-tertiary: #ffffff;
   --color-base-text: #3f3f3f;
   --color-base-text-secondary: #939faa;
-  --color-accent-primary: #003d57;
+  --color-accent: #003d57;
   --color-accent-active: #d57120;
   --color-info: #0b6f50;
   --color-blocked: #a21309;
   --color-changed: #ffffa7;
-  --dm-color-base-primary: #222222;
+  --dm-color-base: #222222;
   --dm-color-base-secondary: #333333;
   --dm-color-base-tertiary: #555555;
   --dm-color-base-text: #f2f2f2;
   --dm-color-base-text-secondary: #d8d8d8;
+  --dm-color-accent: #ffffff;
   --dm-color-accent-active: #e18335;
-  --dm-color-accent-primary: #ffffff;
   --dm-color-blocked: #ef5350;
   --color-off-black: #3f3f3f;
   --color-primary: #003d57;
@@ -67,15 +67,15 @@
 /* public/css/base/_dark_mode.css */
 html.dark-mode {
   button {
-    color: var(--dm-color-accent-primary);
+    color: var(--dm-color-accent);
     &.primary-colour {
-      color: var(--dm-color-accent-primary);
+      color: var(--dm-color-accent);
     }
     &.active {
       color: var(--dm-color-accent-active);
     }
     & > .primary-colour {
-      color: var(--dm-color-accent-primary);
+      color: var(--dm-color-accent);
     }
   }
   .primary-colour {
@@ -102,7 +102,7 @@ html.dark-mode {
     }
   }
   #ctrl-panel {
-    background-color: var(--dm-color-base-primary);
+    background-color: var(--dm-color-base);
   }
   #ctrl-tabs {
     background-color: var(--dm-color-base-tertiary);
@@ -116,7 +116,7 @@ html.dark-mode {
   input[type=date],
   input[type=datetime-local] {
     background: var(--dm-color-base-tertiary);
-    color: var(--dm-color-accent-primary);
+    color: var(--dm-color-accent);
     border-color: var(--dm-color-base-secondary);
   }
   input[type=search] {
@@ -130,7 +130,7 @@ html.dark-mode {
   }
   textarea {
     background-color: var(--dm-color-base-tertiary);
-    color: var(--dm-color-accent-primary);
+    color: var(--dm-color-accent);
   }
   .val-changed {
     .dropdown > .head,
@@ -152,7 +152,7 @@ html.dark-mode {
     color: var(--dm-color-accent-active);
   }
   .material-symbols-outlined {
-    color: var(--dm-color-accent-primary);
+    color: var(--dm-color-accent);
     &.no-colour {
       color: var(--dm-color-blocked);
     }
@@ -164,7 +164,7 @@ html.dark-mode {
     }
   }
   dialog {
-    color: var(--dm-color-accent-primary);
+    color: var(--dm-color-accent);
     background-color: var(--dm-color-base-secondary);
     &.alert-confirm h4 {
       background-color: var(--color-accent-active);
@@ -198,7 +198,7 @@ html.dark-mode {
     ul > li,
     .head {
       background: var(--dm-color-base-tertiary);
-      color: var(--dm-color-accent-primary);
+      color: var(--dm-color-accent);
       border-color: var(--dm-color-base-secondary);
       > .material-symbols-outlined:after {
         color: var(--color-base-tertiary);
@@ -243,7 +243,7 @@ html.dark-mode {
       background-color: var(--dm-color-base-secondary);
     }
     .drawer.layer-view .drawer {
-      background-color: var(--dm-color-base-primary);
+      background-color: var(--dm-color-base);
     }
   }
   .location-view-grid {
@@ -291,9 +291,9 @@ html.dark-mode {
   .location,
   .dataview-target {
     .panel {
-      background-color: var(--dm-color-base-primary);
+      background-color: var(--dm-color-base);
       .btn-row {
-        background-color: var(--dm-color-base-primary);
+        background-color: var(--dm-color-base);
         button {
           color: var(--dm-color-accent-active);
           background: var(--dm-color-base-secondary);
@@ -309,33 +309,33 @@ html.dark-mode {
     }
     .tab {
       .header {
-        color: var(--dm-color-accent-primary);
-        background-color: var(--dm-color-base-primary);
+        color: var(--dm-color-accent);
+        background-color: var(--dm-color-base);
       }
       &.active .header {
         background-color: var(--dm-color-accent-active);
       }
     }
     .tabulator-footer {
-      background-color: var(--dm-color-base-primary);
+      background-color: var(--dm-color-base);
       .tabulator-page {
-        color: var(--dm-color-accent-primary);
+        color: var(--dm-color-accent);
         &.active {
           color: var(--dm-color-accent-active);
         }
       }
     }
     .tabulator-header {
-      background: var(--dm-color-base-primary);
+      background: var(--dm-color-base);
     }
     .tabulator-col {
       background-color: var(--dm-color-base-secondary);
-      color: var(--dm-color-accent-primary);
+      color: var(--dm-color-accent);
     }
     .tabulator-row {
-      color: var(--dm-color-accent-primary);
+      color: var(--dm-color-accent);
       &.tabulator-row-odd {
-        background-color: var(--dm-color-base-primary);
+        background-color: var(--dm-color-base);
       }
       &.tabulator-row-even {
         background-color: var(--dm-color-base-tertiary);

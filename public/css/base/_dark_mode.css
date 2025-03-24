@@ -3,16 +3,16 @@ html.dark-mode {
 
   /* base: begin button */
   button {
-    color: var(--dm-color-accent-primary);
+    color: var(--dm-color-accent);
     &.primary-colour {
-      color: var(--dm-color-accent-primary);
+      color: var(--dm-color-accent);
     }
     &.active {
       color: var(--dm-color-accent-active);
     }
 
     & > .primary-colour {
-      color: var(--dm-color-accent-primary);
+      color: var(--dm-color-accent);
     }
   }
 
@@ -49,7 +49,7 @@ html.dark-mode {
   }
 
   #ctrl-panel {
-    background-color: var(--dm-color-base-primary);
+    background-color: var(--dm-color-base);
   }
 
   #ctrl-tabs {
@@ -72,7 +72,7 @@ html.dark-mode {
   input[type='date'],
   input[type='datetime-local'] {
     background: var(--dm-color-base-tertiary);
-    color: var(--dm-color-accent-primary);
+    color: var(--dm-color-accent);
     border-color: var(--dm-color-base-secondary);
   }
 
@@ -89,7 +89,7 @@ html.dark-mode {
 
   textarea {
     background-color: var(--dm-color-base-tertiary);
-    color: var(--dm-color-accent-primary);
+    color: var(--dm-color-accent);
   }
   /* common val changed class */
   .val-changed {
@@ -117,7 +117,7 @@ html.dark-mode {
     color: var(--dm-color-accent-active);
   }
   .material-symbols-outlined {
-    color: var(--dm-color-accent-primary);
+    color: var(--dm-color-accent);
 
     &.no-colour {
       color: var(--dm-color-blocked);
@@ -139,7 +139,7 @@ html.dark-mode {
 
   /* begin dialog */
   dialog {
-    color: var(--dm-color-accent-primary);
+    color: var(--dm-color-accent);
     background-color: var(--dm-color-base-secondary);
 
     &.alert-confirm h4 {
@@ -187,7 +187,7 @@ html.dark-mode {
     ul > li,
     .head {
       background: var(--dm-color-base-tertiary);
-      color: var(--dm-color-accent-primary);
+      color: var(--dm-color-accent);
       border-color: var(--dm-color-base-secondary);
 
       > .material-symbols-outlined:after {
@@ -262,7 +262,7 @@ html.dark-mode {
     }
 
     .drawer.layer-view .drawer {
-      background-color: var(--dm-color-base-primary);
+      background-color: var(--dm-color-base);
     }
   }
 
@@ -342,10 +342,10 @@ html.dark-mode {
   .location,
   .dataview-target {
     .panel {
-      background-color: var(--dm-color-base-primary);
+      background-color: var(--dm-color-base);
 
       .btn-row {
-        background-color: var(--dm-color-base-primary);
+        background-color: var(--dm-color-base);
 
         button {
           color: var(--dm-color-accent-active);
@@ -365,8 +365,8 @@ html.dark-mode {
 
     .tab {
       .header {
-        color: var(--dm-color-accent-primary);
-        background-color: var(--dm-color-base-primary);
+        color: var(--dm-color-accent);
+        background-color: var(--dm-color-base);
       }
 
       &.active .header {
@@ -375,10 +375,10 @@ html.dark-mode {
     }
 
     .tabulator-footer {
-      background-color: var(--dm-color-base-primary);
+      background-color: var(--dm-color-base);
 
       .tabulator-page {
-        color: var(--dm-color-accent-primary);
+        color: var(--dm-color-accent);
 
         &.active {
           color: var(--dm-color-accent-active);
@@ -387,19 +387,19 @@ html.dark-mode {
     }
 
     .tabulator-header {
-      background: var(--dm-color-base-primary);
+      background: var(--dm-color-base);
     }
 
     .tabulator-col {
       background-color: var(--dm-color-base-secondary);
-      color: var(--dm-color-accent-primary);
+      color: var(--dm-color-accent);
     }
 
     .tabulator-row {
-      color: var(--dm-color-accent-primary);
+      color: var(--dm-color-accent);
 
       &.tabulator-row-odd {
-        background-color: var(--dm-color-base-primary);
+        background-color: var(--dm-color-base);
       }
 
       &.tabulator-row-even {
