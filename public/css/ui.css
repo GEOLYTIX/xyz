@@ -16,6 +16,7 @@
   --dm-color-base-secondary: #333333;
   --dm-color-base-tertiary: #555555;
   --dm-color-accent-active: #e18335;
+  --dm-color-accent-primary: #ffffff;
   --dm-color-blocked: #ef5350;
   --color-off-black: #3f3f3f;
   --color-primary: #003d57;
@@ -25,7 +26,6 @@
   --color-light-tertiary: #fafafa;
   --color-mid: #e3e3e3;
   --color-input-border: #ccc;
-  --dm-color-medium: #555555;
   --dm-color-light: #ffffff;
   --dm-color-light-secondary: #f2f2f2;
   --dm-color-light-darker: #d8d8d8;
@@ -105,7 +105,7 @@ html.dark-mode {
     background-color: var(--dm-color-base-primary);
   }
   #ctrl-tabs {
-    background-color: var(--dm-color-medium);
+    background-color: var(--dm-color-base-tertiary);
   }
   a {
     color: var(--dm-color-accent-active);
@@ -115,7 +115,7 @@ html.dark-mode {
   input[type=search],
   input[type=date],
   input[type=datetime-local] {
-    background: var(--dm-color-medium);
+    background: var(--dm-color-base-tertiary);
     color: var(--dm-color-light);
     border-color: var(--dm-color-base-secondary);
   }
@@ -129,7 +129,7 @@ html.dark-mode {
     }
   }
   textarea {
-    background-color: var(--dm-color-medium);
+    background-color: var(--dm-color-base-tertiary);
     color: var(--dm-color-light);
   }
   .val-changed {
@@ -197,7 +197,7 @@ html.dark-mode {
     }
     ul > li,
     .head {
-      background: var(--dm-color-medium);
+      background: var(--dm-color-base-tertiary);
       color: var(--dm-color-light);
       border-color: var(--dm-color-base-secondary);
       > .material-symbols-outlined:after {
@@ -217,14 +217,14 @@ html.dark-mode {
     button.layer-key {
       &.active {
         background-color: var(--dm-color-accent-active);
-        color: var(--dm-color-medium);
+        color: var(--dm-color-base-tertiary);
       }
     }
   }
   .searchbox {
     box-shadow: unset;
     & > ul {
-      background-color: var(--dm-color-medium);
+      background-color: var(--dm-color-base-tertiary);
       & li {
         color: var(--color-base-tertiary);
       }
@@ -237,7 +237,7 @@ html.dark-mode {
   #layers {
     & > .drawer.layer-group .drawer.layer-view {
       background-color: var(--dm-color-base-secondary);
-      border-top: 1px solid var(--dm-color-medium);
+      border-top: 1px solid var(--dm-color-base-tertiary);
     }
     & > .layer-view > .drawer {
       background-color: var(--dm-color-base-secondary);
@@ -257,11 +257,11 @@ html.dark-mode {
   .btn-column {
     & > button,
     & > a {
-      background-color: var(--dm-color-medium);
+      background-color: var(--dm-color-base-tertiary);
     }
   }
   .popup {
-    background-color: var(--dm-color-medium);
+    background-color: var(--dm-color-base-tertiary);
     box-shadow: unset;
     border: solid 1px var(--dm-color-base-secondary);
     color: var(--color-base-tertiary);
@@ -272,7 +272,7 @@ html.dark-mode {
       }
     }
     &:after {
-      border-top-color: var(--dm-color-medium);
+      border-top-color: var(--dm-color-base-tertiary);
     }
     & li:hover {
       background: var(--dm-color-base-secondary);
@@ -305,7 +305,7 @@ html.dark-mode {
     }
     .tabs,
     .tabulator-tableholder {
-      background-color: var(--dm-color-medium);
+      background-color: var(--dm-color-base-tertiary);
     }
     .tab {
       .header {
@@ -338,7 +338,7 @@ html.dark-mode {
         background-color: var(--dm-color-base-primary);
       }
       &.tabulator-row-even {
-        background-color: var(--dm-color-medium);
+        background-color: var(--dm-color-base-tertiary);
       }
     }
   }
@@ -2309,7 +2309,7 @@ dialog {
   & > a {
     margin-bottom: 10px;
     background-color: var(--color-base-tertiary);
-    box-shadow: 1px 1px 3px var(--dm-color-medium);
+    box-shadow: 1px 1px 3px var(--dm-color-base-tertiary);
     border-radius: 50%;
     opacity: 0.9;
     padding: 5px;

@@ -27,6 +27,7 @@
 
   /* Accent */
   --dm-color-accent-active:  #e18335;
+  --dm-color-accent-primary:  #ffffff;
 
 
   /* Information */
@@ -58,8 +59,6 @@
   --color-input-border: #ccc;
 
   /* dark colour mode */
-
-  --dm-color-medium: #555555; /* --color-base-tertiary */
 
   --dm-color-light: #ffffff;
 

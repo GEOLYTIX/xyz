@@ -53,7 +53,7 @@ html.dark-mode {
   }
 
   #ctrl-tabs {
-    background-color: var(--dm-color-medium);
+    background-color: var(--dm-color-base-tertiary);
   }
 
   /* end colour classes */
@@ -71,7 +71,7 @@ html.dark-mode {
   input[type='search'],
   input[type='date'],
   input[type='datetime-local'] {
-    background: var(--dm-color-medium);
+    background: var(--dm-color-base-tertiary);
     color: var(--dm-color-light);
     border-color: var(--dm-color-base-secondary);
   }
@@ -88,7 +88,7 @@ html.dark-mode {
   }
 
   textarea {
-    background-color: var(--dm-color-medium);
+    background-color: var(--dm-color-base-tertiary);
     color: var(--dm-color-light);
   }
   /* common val changed class */
@@ -186,7 +186,7 @@ html.dark-mode {
 
     ul > li,
     .head {
-      background: var(--dm-color-medium);
+      background: var(--dm-color-base-tertiary);
       color: var(--dm-color-light);
       border-color: var(--dm-color-base-secondary);
 
@@ -213,7 +213,7 @@ html.dark-mode {
     button.layer-key {
       &.active {
         background-color: var(--dm-color-accent-active);
-        color: var(--dm-color-medium);
+        color: var(--dm-color-base-tertiary);
       }
     }
   }
@@ -226,7 +226,7 @@ html.dark-mode {
     box-shadow: unset;
 
     & > ul {
-      background-color: var(--dm-color-medium);
+      background-color: var(--dm-color-base-tertiary);
 
       & li {
         color: var(--color-base-tertiary);
@@ -254,7 +254,7 @@ html.dark-mode {
   #layers {
     & > .drawer.layer-group .drawer.layer-view {
       background-color: var(--dm-color-base-secondary);
-      border-top: 1px solid var(--dm-color-medium);
+      border-top: 1px solid var(--dm-color-base-tertiary);
     }
 
     & > .layer-view > .drawer {
@@ -287,7 +287,7 @@ html.dark-mode {
   .btn-column {
     & > button,
     & > a {
-      background-color: var(--dm-color-medium);
+      background-color: var(--dm-color-base-tertiary);
     }
   }
 
@@ -296,7 +296,7 @@ html.dark-mode {
   /* begin popup */
 
   .popup {
-    background-color: var(--dm-color-medium);
+    background-color: var(--dm-color-base-tertiary);
     box-shadow: unset;
     border: solid 1px var(--dm-color-base-secondary);
     color: var(--color-base-tertiary);
@@ -310,7 +310,7 @@ html.dark-mode {
     }
 
     &:after {
-      border-top-color: var(--dm-color-medium);
+      border-top-color: var(--dm-color-base-tertiary);
     }
 
     & li:hover {
@@ -360,7 +360,7 @@ html.dark-mode {
 
     .tabs,
     .tabulator-tableholder {
-      background-color: var(--dm-color-medium);
+      background-color: var(--dm-color-base-tertiary);
     }
 
     .tab {
@@ -403,7 +403,7 @@ html.dark-mode {
       }
 
       &.tabulator-row-even {
-        background-color: var(--dm-color-medium);
+        background-color: var(--dm-color-base-tertiary);
       }
     }
   }
