@@ -7,6 +7,7 @@
   --color-base-secondary: #f2f2f2;
   --color-base-tertiary: #ffffff;
   --color-base-text: #3f3f3f;
+  --color-base-text-secondary: #939faa;
   --color-accent-primary: #003d57;
   --color-accent-active: #d57120;
   --color-info: #0b6f50;
@@ -15,6 +16,8 @@
   --dm-color-base-primary: #222222;
   --dm-color-base-secondary: #333333;
   --dm-color-base-tertiary: #555555;
+  --dm-color-base-text: #f2f2f2;
+  --dm-color-base-text-secondary: #d8d8d8;
   --dm-color-accent-active: #e18335;
   --dm-color-accent-primary: #ffffff;
   --dm-color-blocked: #ef5350;
@@ -26,8 +29,6 @@
   --color-light-tertiary: #fafafa;
   --color-mid: #e3e3e3;
   --color-input-border: #ccc;
-  --dm-color-light-secondary: #f2f2f2;
-  --dm-color-light-darker: #d8d8d8;
 }
 * {
   transition: 0.2s ease-in-out;
@@ -120,11 +121,11 @@ html.dark-mode {
   }
   input[type=search] {
     &::placeholder {
-      color: var(--dm-color-light-darker);
+      color: var(--dm-color-base-text-secondary);
       opacity: 1;
     }
     &::-ms-input-placeholder {
-      color: var(--dm-color-light-darker);
+      color: var(--dm-color-base-text-secondary);
     }
   }
   textarea {
@@ -151,7 +152,7 @@ html.dark-mode {
     color: var(--dm-color-accent-active);
   }
   .material-symbols-outlined {
-    color: var(--dm-color-light-secondary);
+    color: var(--dm-color-accent-primary);
     &.no-colour {
       color: var(--dm-color-blocked);
     }

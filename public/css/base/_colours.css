@@ -8,6 +8,7 @@
 
   /* Text */
   --color-base-text: #3f3f3f;
+  --color-base-text-secondary: #939faa;
 
   /* Accent */
   --color-accent-primary:  #003d57;
@@ -24,6 +25,10 @@
   --dm-color-base-primary: #222222;
   --dm-color-base-secondary: #333333;
   --dm-color-base-tertiary:  #555555;
+
+    /* Text */
+  --dm-color-base-text: #f2f2f2;
+  --dm-color-base-text-secondary: #d8d8d8;
 
   /* Accent */
   --dm-color-accent-active:  #e18335;
@@ -58,11 +63,8 @@
 
   --color-input-border: #ccc;
 
-  /* dark colour mode */
 
-  --dm-color-light-secondary: #f2f2f2;
 
-  --dm-color-light-darker: #d8d8d8;
 
 }
 
