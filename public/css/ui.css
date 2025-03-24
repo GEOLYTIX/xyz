@@ -10,6 +10,7 @@
   --color-text-secondary: #939faa;
   --color-accent: #003d57;
   --color-accent-active: #d57120;
+  --color-accent-hover: #939faa;
   --color-info: #0b6f50;
   --color-blocked: #a21309;
   --color-changed: #ffffa7;
@@ -23,7 +24,6 @@
   --dm-color-blocked: #ef5350;
   --color-off-black: #3f3f3f;
   --color-primary: #003d57;
-  --color-primary-light: #939faa;
 }
 * {
   transition: 0.2s ease-in-out;
@@ -351,7 +351,7 @@ html.dark-mode {
 }
 .box-shadow {
   border: 1px solid var(--color-base-secondary);
-  box-shadow: 2px 2px 4px var(--color-primary-light);
+  box-shadow: 2px 2px 4px var(--color-base-secondary);
 }
 .bold {
   font-weight: bold;
@@ -517,7 +517,7 @@ a > img {
   }
 }
 .mask-icon {
-  background-color: var(--color-primary-light);
+  background-color: var(--color-text-secondary);
   mask-repeat: no-repeat;
   -webkit-mask-repeat: no-repeat;
   mask-size: contain;
@@ -1315,11 +1315,11 @@ input[type=search]::-webkit-search-cancel-button:hover {
     color: var(--color-info);
   }
   &.primary-light-colour {
-    color: var(--color-primary-light);
+    color: var(--color-text-secondary);
   }
   &.close:after {
     content: "close";
-    color: var(--color-primary-light);
+    color: var(--color-text-secondary);
   }
 }
 .active > .material-symbols-outlined {
@@ -1341,7 +1341,7 @@ dialog.alert-confirm {
   h4 {
     padding: 0.5em 1em;
     background-color: var(--color-primary);
-    border-bottom: solid 2px var(--color-primary-light);
+    border-bottom: solid 2px var(--color-base-secondary);
     color: var(--color-base-tertiary);
     width: 100%;
   }
@@ -1380,7 +1380,7 @@ dialog.alert-confirm {
   background-color: var(--color-base-tertiary);
   border: 1px solid var(--color-base-secondary);
   border-radius: 3px;
-  box-shadow: 1px 1px 3px var(--color-primary-light);
+  box-shadow: 1px 1px 3px var(--color-base-secondary);
   & .header {
     display: flex;
     justify-content: space-between;
@@ -1406,7 +1406,7 @@ dialog.alert-confirm {
     padding: 1em 1.5em;
     opacity: 0;
     border-radius: 3px;
-    box-shadow: 1px 1px 3px var(--color-primary-light);
+    box-shadow: 1px 1px 3px var(--color-base-secondary);
     pointer-events: none;
     transition: 0.2s ease-in-out;
     & .content {
@@ -1426,7 +1426,7 @@ dialog.alert-confirm {
       padding: 1em 1.5em;
       opacity: 0;
       border-radius: 3px;
-      box-shadow: 1px 1px 3px var(--color-primary-light);
+      box-shadow: 1px 1px 3px var(--color-base-secondary);
       pointer-events: none;
       transition: 0.2s ease-in-out;
       & .content {
@@ -1516,7 +1516,7 @@ dialog {
     & > .material-symbols-outlined {
       font-size: 1.2em;
       &:after {
-        color: var(--color-primary-light);
+        color: var(--color-text-secondary);
         font-size: inherit;
       }
     }
@@ -1575,7 +1575,7 @@ dialog {
   }
   &.expandable > .header > .material-symbols-outlined.caret::after {
     content: "keyboard_arrow_down";
-    color: var(--color-primary-light);
+    color: var(--color-text-secondary);
     line-height: 1.5em;
   }
   &.expandable:not(.expanded) > *:not(.header) {
@@ -1583,7 +1583,7 @@ dialog {
   }
   &.expanded > .header > .material-symbols-outlined.caret::after {
     content: "keyboard_arrow_up";
-    color: var(--color-primary-light);
+    color: var(--color-text-secondary);
     line-height: 1.5em;
   }
   &.disabled {
@@ -1620,7 +1620,7 @@ dialog {
   }
   &.raised {
     border-radius: 2px;
-    box-shadow: 1px 1px 3px var(--color-primary-light);
+    box-shadow: 1px 1px 3px var(--color-base-secondary);
     border: 1px solid var(--color-base-secondary);
   }
   &.raised.empty {
@@ -1675,7 +1675,7 @@ dialog {
     max-height: 500px;
     overflow-y: auto;
     overflow-x: hidden;
-    box-shadow: 1px 1px 3px var(--color-primary-light);
+    box-shadow: 1px 1px 3px var(--color-base-secondary);
     margin-top: -1px;
     text-align: left;
     background-color: var(--color-base-tertiary);
@@ -1685,7 +1685,7 @@ dialog {
       color: var(--color-off-black);
     }
     & > li:hover {
-      background-color: var(--color-primary-light);
+      background-color: var(--color-accent-hover);
       cursor: pointer;
     }
     & > li.selected {
@@ -1766,7 +1766,7 @@ dialog {
     max-height: 500px;
     overflow-y: auto;
     overflow-x: hidden;
-    box-shadow: 1px 1px 3px var(--color-primary-light);
+    box-shadow: 1px 1px 3px var(--color-base-secondary);
     margin-top: -1px;
     text-align: left;
     background-color: var(--color-base-tertiary);
@@ -1775,7 +1775,7 @@ dialog {
       padding: 5px;
     }
     & > li:hover {
-      background-color: var(--color-primary-light);
+      background-color: var(--color-accent-hover);
       cursor: pointer;
     }
     & > li.selected {
@@ -1816,7 +1816,7 @@ dialog {
       linear-gradient(
         0deg,
         transparent 0 45%,
-        var(--color-primary-light) 45% 55%,
+        var(--color-accent-hover) 45% 55%,
         transparent 55% 100%);
     z-index: 1;
   }
@@ -1965,7 +1965,7 @@ dialog {
   }
   .drag_and_drop_zone {
     width: 100%;
-    border: 1px dashed var(--color-primary-light);
+    border: 1px dashed var(--color-base-secondary);
     position: relative;
     height: 100px;
     input {
@@ -2212,7 +2212,7 @@ dialog {
   background: var(--color-base-secondary);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-primary-light);
+  background: var(--color-accent-hover);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-corner {

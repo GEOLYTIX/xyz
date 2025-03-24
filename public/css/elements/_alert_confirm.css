@@ -15,7 +15,7 @@ dialog.alert-confirm {
   h4 {
     padding: 0.5em 1em;
     background-color: var(--color-primary);
-    border-bottom: solid 2px var(--color-primary-light);
+    border-bottom: solid 2px var(--color-base-secondary);
     color: var(--color-base-tertiary);
     width: 100%;
   }

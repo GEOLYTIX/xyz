@@ -7,6 +7,7 @@
   --color-text-secondary: #939faa;
   --color-accent: #003d57;
   --color-accent-active: #d57120;
+  --color-accent-hover: #939faa;
   --color-info: #0b6f50;
   --color-blocked: #a21309;
   --color-changed: #ffffa7;
@@ -20,7 +21,6 @@
   --dm-color-blocked: #ef5350;
   --color-off-black: #3f3f3f;
   --color-primary: #003d57;
-  --color-primary-light: #939faa;
 }
 * {
   transition: 0.2s ease-in-out;
@@ -140,7 +140,7 @@ body {
       white-space: nowrap;
       line-height: 1;
       background: #fff9;
-      border-bottom: 2px solid var(--color-primary-light);
+      border-bottom: 2px solid var(--color-base-secondary);
     }
   }
 }

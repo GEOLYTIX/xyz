@@ -13,6 +13,7 @@
   /* Accent */
   --color-accent:  #003d57;
   --color-accent-active: #d57120;
+  --color-accent-hover: #939faa;
 
 
   /* Information */
@@ -47,8 +48,6 @@
   --color-off-black: #3f3f3f; /* color-text */
 
   --color-primary: #003d57; /* color-accent-primary */
-
-  --color-primary-light: #939faa;
 
 
 }

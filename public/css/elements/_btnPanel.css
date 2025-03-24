@@ -4,7 +4,7 @@
   background-color: var(--color-base-tertiary);
   border: 1px solid var(--color-base-secondary);
   border-radius: 3px;
-  box-shadow: 1px 1px 3px var(--color-primary-light);
+  box-shadow: 1px 1px 3px var(--color-base-secondary);
 
   & .header {
     display: flex;
@@ -33,7 +33,7 @@
     padding: 1em 1.5em;
     opacity: 0;
     border-radius: 3px;
-    box-shadow: 1px 1px 3px var(--color-primary-light);
+    box-shadow: 1px 1px 3px var(--color-base-secondary);
     pointer-events: none;
     transition: 0.2s ease-in-out;
 
@@ -55,7 +55,7 @@
       padding: 1em 1.5em;
       opacity: 0;
       border-radius: 3px;
-      box-shadow: 1px 1px 3px var(--color-primary-light);
+      box-shadow: 1px 1px 3px var(--color-base-secondary);
       pointer-events: none;
       transition: 0.2s ease-in-out;
 
