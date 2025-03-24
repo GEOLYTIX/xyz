@@ -24,7 +24,6 @@
   --color-off-light: #eeeeee;
   --color-light-secondary: #f2f2f2;
   --color-light-tertiary: #fafafa;
-  --color-input-border: #ccc;
 }
 * {
   transition: 0.2s ease-in-out;
