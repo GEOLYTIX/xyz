@@ -8,7 +8,7 @@ Exports the [user] access log method for the /api/user/log route.
 @module /user/log
 */
 
-const acl = require('./acl');
+import acl from './acl.js';
 
 /**
 @function accessLog
@@ -32,7 +32,7 @@ Requesting user.
 Requesting user is admin.
 */
 
-module.exports = async function accessLog(req, res) {
+export default async function accessLog(req, res) {
   // acl module will export an empty require object without the ACL being configured.
   if (acl === null) {
     return res.status(500).send('ACL unavailable.');
@@ -70,9 +70,9 @@ module.exports = async function accessLog(req, res) {
 
   // return 204 if no record was returned from database.
   if (!rows?.length) {
-    return res.status(202).send('No rows returned from table.');
+    return res.status(204).send('No rows returned from table.');
   }
 
   // Send the infoj object with values back to the client.
   res.send((rows.length === 1 && rows[0]) || rows);
-};
+}

@@ -1,9 +1,10 @@
-import { createTest } from './create.test.mjs';
-import { getTest } from './get.test.mjs';
-import { nnearestTest } from './nnearest.test.mjs';
+import { get } from './get.test.mjs';
 
 export const locationTest = {
-  createTest,
-  getTest,
-  nnearestTest,
+  setup,
+  get,
 };
+
+function setup() {
+  codi.describe({ name: 'Location:', id: 'location' }, () => {});
+}

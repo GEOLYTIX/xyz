@@ -1,0 +1,53 @@
+dialog.alert-confirm {
+  width: 350px;
+  max-height: 70%;
+  z-index: 1001;
+  user-select: none;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  h4 {
+    padding: 0.5em 1em;
+    background-color: var(--color-primary);
+    border-bottom: solid 2px var(--color-primary-light);
+    color: var(--color-light);
+    width: 100%;
+  }
+
+  .content {
+    padding: 1em;
+  }
+
+  p {
+    white-space: pre;
+    text-wrap: pretty;
+    text-align: center;
+    margin: 0 1em 1em;
+  }
+
+  .buttons {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-gap: 0.2em;
+  }
+
+  button {
+    float: right;
+    font-size: 0.9em;
+    color: var(--color-primary);
+    z-index: 1005;
+  }
+}
+
+@media only screen and (max-width: 768px) {
+  dialog.alert-confirm {
+    min-width: 350px;
+    max-width: 70%;
+  }
+}

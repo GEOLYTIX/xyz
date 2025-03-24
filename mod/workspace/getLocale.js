@@ -10,11 +10,11 @@ The getLocale module exports the getLocale method which is required by the getLa
 @module /workspace/getLocale
 */
 
-const Roles = require('../utils/roles');
+import * as Roles from '../utils/roles.js';
 
-const mergeTemplates = require('./mergeTemplates');
+import mergeTemplates from './mergeTemplates.js';
 
-const workspaceCache = require('./cache');
+import workspaceCache from './cache.js';
 
 /**
 @function getLocale
@@ -25,7 +25,7 @@ The getLocale method requests the workspace from cache and checks whether the re
 
 The workspace.locale is assigned as locale if params.locale is undefined.
 
-The mergeTemplate module will be called to merge templates into the locale object and substitute SRC_* environment variables.
+The mergeTemplate module will be called to merge templates into the locale object and substitute SRC_* xyzEnvironment variables.
 
 A role check is performed to check whether the requesting user has access to the locale.
 
@@ -38,7 +38,7 @@ Role objects in the locale and nested layers are merged with their respective pa
 
 @returns {Promise<Object|Error>} JSON Locale.
 */
-module.exports = async function getLocale(params) {
+export default async function getLocale(params) {
   const workspace = await workspaceCache();
 
   if (workspace instanceof Error) {
@@ -62,7 +62,8 @@ module.exports = async function getLocale(params) {
 
   locale = Roles.objMerge(locale, params.user?.roles);
 
+  locale.workspace = workspace.key;
   locale.layers ??= {};
 
   return locale;
-};
+}

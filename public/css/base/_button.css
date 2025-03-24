@@ -1,0 +1,64 @@
+button {
+  border: none;
+  outline: none;
+  background: none;
+  text-align: center;
+
+  > .material-symbols-outlined {
+    pointer-events: none;
+  }
+
+  /* begin legacy */
+  &.mask-icon.active,
+  &.active > .mask-icon,
+  & > .mask-icon.active {
+    background-color: var(--color-on);
+  }
+  /* end legacy */
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &:disabled {
+    opacity: 0.3;
+    &:hover {
+      cursor: not-allowed;
+    }
+  }
+
+  &.wide {
+    width: 100%;
+  }
+
+  &.flat {
+    border-radius: 3px;
+    border-bottom: 1px solid var(--color-light-secondary);
+    padding: 0.3em;
+
+    &.active {
+      border-bottom: 1px solid var(--color-on);
+    }
+  }
+
+  &.underline {
+    display: none;
+    margin-bottom: 5px;
+    text-decoration: underline;
+  }
+
+  &.raised {
+    border-radius: 3px;
+    border: 1px solid var(--color-light-secondary);
+    box-shadow: 1px 1px 2px var(--color-light-secondary);
+    padding: 0.3em;
+
+    &.active {
+      box-shadow: none;
+    }
+  }
+
+  &.active {
+    color: var(--color-on);
+  }
+}

@@ -6,15 +6,17 @@ Exports the login method for the /api/user/login route.
 @requires module:/user/fromACL
 @requires module:/view
 @requires jsonwebtoken
+@requires module:/utils/processEnv
 
 @module /user/login
 */
 
-const fromACL = require('./fromACL');
+import fromACL from './fromACL.js';
 
-const view = require('../view');
+import view from '../view.js';
 
-const jwt = require('jsonwebtoken');
+import jsonwebtoken from 'jsonwebtoken';
+const { sign } = jsonwebtoken;
 
 /**
 @function login
@@ -35,7 +37,7 @@ The loginView method will be returned with a message from a failed user validati
 @property {Object} [req.params.user] Mapp User object.
 @property {Object} [req.body] HTTP POST request body.
 */
-module.exports = function login(req, res) {
+export default function login(req, res) {
   if (fromACL === null) {
     res.status(405).send('The ACL has not been configured to support login.');
     return;
@@ -48,13 +50,13 @@ module.exports = function login(req, res) {
   }
 
   if (!req.params.msg && req.params.user) {
-    res.setHeader('location', `${process.env.DIR || '/'}`);
+    res.setHeader('location', `${xyzEnv.DIR || '/'}`);
     res.status(302).send();
     return;
   }
 
   return loginView(req, res);
-};
+}
 
 /**
 @function loginBody
@@ -79,7 +81,7 @@ The response will be redirected to the location from the redirect cookie. The re
 async function loginBody(req, res) {
   const user = await fromACL(req);
 
-  const redirect = req.cookies && req.cookies[`${process.env.TITLE}_redirect`];
+  const redirect = req.cookies?.[`${xyzEnv.TITLE}_redirect`];
 
   // The redirect indicates that a previous login has failed.
   if (user instanceof Error && redirect) {
@@ -91,7 +93,7 @@ async function loginBody(req, res) {
     return res.status(401).send(user.message);
   }
 
-  const token = jwt.sign(
+  const token = sign(
     {
       email: user.email,
       admin: user.admin,
@@ -99,18 +101,18 @@ async function loginBody(req, res) {
       roles: user.roles,
       session: user.session,
     },
-    process.env.SECRET,
+    xyzEnv.SECRET,
     {
-      expiresIn: parseInt(process.env.COOKIE_TTL),
+      expiresIn: xyzEnv.COOKIE_TTL,
     },
   );
 
-  const user_cookie = `${process.env.TITLE}=${token};HttpOnly;Max-Age=${process.env.COOKIE_TTL};Path=${process.env.DIR || '/'};SameSite=Strict${(!req.headers.host.includes('localhost') && ';Secure') || ''}`;
+  const user_cookie = `${xyzEnv.TITLE}=${token};HttpOnly;Max-Age=${xyzEnv.COOKIE_TTL};Path=${xyzEnv.DIR || '/'};SameSite=Strict${(!req.headers.host.includes('localhost') && ';Secure') || ''}`;
 
-  const redirect_null_cookie = `${process.env.TITLE}_redirect=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`;
+  const redirect_null_cookie = `${xyzEnv.TITLE}_redirect=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`;
 
   res.setHeader('Set-Cookie', [user_cookie, redirect_null_cookie]);
-  res.setHeader('location', `${redirect || process.env.DIR}`);
+  res.setHeader('location', `${redirect || xyzEnv.DIR}`);
   res.status(302).send();
 }
 
@@ -132,7 +134,7 @@ function loginView(req, res) {
   // Clear user token cookie.
   res.setHeader(
     'Set-Cookie',
-    `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`,
+    `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`,
   );
 
   // The redirect for a successful login.
@@ -142,7 +144,7 @@ function loginView(req, res) {
   // Set cookie with redirect value.
   res.setHeader(
     'Set-Cookie',
-    `${process.env.TITLE}_redirect=${req.params.redirect};HttpOnly;Max-Age=60000;Path=${process.env.DIR || '/'}`,
+    `${xyzEnv.TITLE}_redirect=${req.params.redirect};HttpOnly;Max-Age=60000;Path=${xyzEnv.DIR || '/'}`,
   );
 
   req.params.template = 'login_view';

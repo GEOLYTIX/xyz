@@ -6,22 +6,23 @@ Exports the [user] cookie method for the /api/user/cookie route.
 @requires module:/user/acl
 @requires module:/user/login
 @requires jsonwebtoken
+@requires module:/utils/processEnv
 
 @module /user/cookie
 */
 
-const acl = require('./acl');
+import acl from './acl.js';
 
-const login = require('./login');
+import login from './login.js';
 
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
 /**
 @function cookie
 @async
 
 @description
-The cookie method attempts to find a request cookie matching the `process.env.TITLE` variable.
+The cookie method attempts to find a request cookie matching the `xyzEnv.TITLE` variable.
 
 The cookie will be destroyed [set to NULL] with detroy request parameter truthy.
 
@@ -29,9 +30,9 @@ The cookie method will use the jsonwebtoken library to verify the existing cooki
 
 If veriffied successfully a new token with updated user credentials will be signed.
 
-The `process.env.SECRET` variable will be used to sign the token.
+The `xyzEnv.SECRET` variable will be used to sign the token.
 
-The `process.env.COOKIE_TTL` will be set as time to life for the cookie set on the response header.
+The `xyzEnv.COOKIE_TTL` will be set as time to life for the cookie set on the response header.
 
 The token user will be sent back to the client.
 
@@ -41,7 +42,7 @@ The token user will be sent back to the client.
 @property {boolean} [req.params.destroy] URL parameter flag whether the cookie should be destroyed.
 @property {boolean} [req.params.create] URL parameter flag whether a new cookie should be created.
 */
-module.exports = async function cookie(req, res) {
+export default async function cookie(req, res) {
   // acl module will export an empty require object without the ACL being configured.
   if (acl === null) {
     return res.status(500).send('ACL unavailable.');
@@ -51,7 +52,7 @@ module.exports = async function cookie(req, res) {
     return login(req, res);
   }
 
-  const cookie = req.cookies && req.cookies[process.env.TITLE];
+  const cookie = req.cookies?.[xyzEnv.TITLE];
 
   if (!cookie) {
     return res.send(false);
@@ -61,15 +62,14 @@ module.exports = async function cookie(req, res) {
     // Remove cookie.
     res.setHeader(
       'Set-Cookie',
-      `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`,
+      `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`,
     );
     return res.send('This too shall pass');
   }
 
   // Verify current cookie
-  jwt.verify(cookie, process.env.SECRET, async (err, payload) => {
+  jwt.verify(cookie, xyzEnv.SECRET, async (err, payload) => {
     if (err) return err;
-
     // Get updated user credentials from ACL
     const rows = await acl(
       `
@@ -82,38 +82,39 @@ module.exports = async function cookie(req, res) {
     if (rows instanceof Error) {
       res.setHeader(
         'Set-Cookie',
-        `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`,
+        `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`,
       );
       return res.status(500).send('Failed to retrieve user from ACL');
     }
 
     const user = rows[0];
 
+    // Admin rights should not be added if not provided from a token.
+    user.admin = payload.admin;
+
     // Assign title identifier to user object.
-    user.title = process.env.TITLE;
+    user.title = xyzEnv.TITLE;
 
     if (user.blocked) {
       res.setHeader(
         'Set-Cookie',
-        `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`,
+        `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`,
       );
       return res.status(403).send('Account is blocked');
     }
-
-    delete user.blocked;
 
     if (payload.session) {
       user.session = payload.session;
     }
 
-    const token = jwt.sign(user, process.env.SECRET, {
-      expiresIn: parseInt(process.env.COOKIE_TTL),
+    const token = jwt.sign(user, xyzEnv.SECRET, {
+      expiresIn: xyzEnv.COOKIE_TTL,
     });
 
-    const cookie = `${process.env.TITLE}=${token};HttpOnly;Max-Age=${process.env.COOKIE_TTL};Path=${process.env.DIR || '/'};SameSite=Strict${(!req.headers.host.includes('localhost') && ';Secure') || ''}`;
+    const cookie = `${xyzEnv.TITLE}=${token};HttpOnly;Max-Age=${xyzEnv.COOKIE_TTL};Path=${xyzEnv.DIR || '/'};SameSite=Strict${(!req.headers.host.includes('localhost') && ';Secure') || ''}`;
 
     res.setHeader('Set-Cookie', cookie);
 
     res.send(user);
   });
-};
+}

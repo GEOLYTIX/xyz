@@ -4,11 +4,12 @@
 Exports the [user] list method for the /api/user/list route.
 
 @requires module:/user/acl
+@requires module:/utils/processEnv
 
-@module /user/cookie
+@module /user/list
 */
 
-const acl = require('./acl');
+import acl from './acl.js';
 
 /**
 @function list
@@ -24,7 +25,7 @@ Requesting user.
 Requesting user is admin.
 */
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   if (!req.params.user) {
     return new Error('login_required');
   }
@@ -45,7 +46,7 @@ module.exports = async (req, res) => {
       access_log[array_upper(access_log, 1)],
       failedattempts,
       approved_by,
-      ${process.env.APPROVAL_EXPIRY ? 'expires_on,' : ''}
+      ${xyzEnv.APPROVAL_EXPIRY ? 'expires_on,' : ''}
       blocked,
       verificationtoken
     FROM acl_schema.acl_table

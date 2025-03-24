@@ -1,4 +1,11 @@
-module.exports = (_) => {
+/**
+### /workspace/templates/locations_delete
+
+The locations_delete layer query deletes multiple records in a layer table which pass the provided viewport and/or SQL filter.
+
+@module /workspace/templates/locations_delete
+*/
+export default (_) => {
   // If no layer parameter, return
   if (!_.layer) {
     throw new Error(

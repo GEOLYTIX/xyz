@@ -1,27 +1,34 @@
 /**
- * This test is used to see if all the language options at least have all of these base entries.
+ * This test is used to see if all the language options have the same keys as the English language.
+ * English is the base language, so we check that all other languages have the same keys as English.
  * @function baseDictionaryTest
  */
-export async function baseDictionaryTest() {
-  await codi.describe(
-    'All languages should have the same base language entries',
-    async () => {
-      const base_dictionary = {
-        save: '',
-        cancel: '',
-        confirm_delete: '',
-        invalid_geometry: '',
-        no_results: '',
-      };
-
+export function baseDictionaryTest() {
+  codi.describe(
+    {
+      name: 'All languages should have the keys as English',
+      id: 'dictionary_base',
+      parentId: 'dictionary',
+    },
+    () => {
+      // English is the base, so we check that all other languages have the same keys as English.
       for (const language of Object.keys(mapp.dictionaries)) {
-        await codi.it(
-          `${language} dictionary should have all the base keys`,
+        // If the language is English, we skip it.
+        if (language === 'en') {
+          continue;
+        }
+
+        // Ensure that there are no keys that the english language doesn't have
+        codi.it(
+          {
+            name: `${language} dictionary should have the same keys as English`,
+            parentId: 'dictionary_base',
+          },
           () => {
-            for (const key of Object.keys(base_dictionary)) {
+            for (const key of Object.keys(mapp.dictionaries[language])) {
               codi.assertTrue(
-                !!mapp.dictionaries[language][key],
-                `${language} should have ${key}`,
+                Object.hasOwn(mapp.dictionaries['en'], key),
+                `${language} has ${key} the base english`,
               );
             }
           },

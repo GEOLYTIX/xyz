@@ -2,13 +2,13 @@
 @module /provider/getFrom
 */
 
-const logger = require('../utils/logger');
+import logger from '../utils/logger.js';
 
-const cloudfront = require('../provider/cloudfront');
+import cloudfront from '../provider/cloudfront.js';
 
-const file = require('../provider/file');
+import file from '../provider/file.js';
 
-module.exports = {
+export default {
   https: async (url) => {
     try {
       const response = await fetch(url);
@@ -26,5 +26,8 @@ module.exports = {
     }
   },
   file: (ref) => file(ref.split(':')[1]),
-  cloudfront: (ref) => cloudfront(ref.split(':')[1]),
+  cloudfront: (ref) =>
+    xyzEnv.KEY_CLOUDFRONT
+      ? cloudfront(ref.split(':')[1])
+      : console.error('Cloudfront key is missing'),
 };

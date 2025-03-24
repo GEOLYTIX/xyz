@@ -1,28 +1,33 @@
-module.exports = (_) => {
+/**
+### /workspace/templates/cluster
+
+The cluster layer query template returns aggregated cluster features.
+
+@module /workspace/templates/cluster
+*/
+export default (_) => {
   _.qID ??= _.layer.qID || null;
   _.geom ??= _.layer.geom;
 
-  // Get fields array from query params.
-  const fields = _.fields
-    ?.split(',')
-    .map(
-      (field) =>
-        `${_.workspace.templates[field]?.template || field} as ${field}`,
-    );
+  const fields = [];
 
-  const aggFields = _.fields
-    ?.split(',')
-    .map(
-      (field) =>
-        `CASE WHEN count(*)::int = 1 THEN (array_agg(${field}))[1] END as ${field}`,
-    );
+  const aggFields = [];
+
+  _.fieldsMap &&
+    Array.from(_.fieldsMap.entries()).forEach((entry) => {
+      const [key, value] = entry;
+      fields.push(`(${value}) as ${key}`);
+
+      aggFields.push(`
+        CASE WHEN count(*)::int = 1 
+        THEN (array_agg(${value}))[1] 
+        END as ${key}`);
+    });
 
   const where = _.viewport || `AND ${_.geom} IS NOT NULL`;
 
   // Calculate grid resolution (r) based on zoom level and resolution parameter.
   const r = parseInt((40075016.68 / Math.pow(2, _.z)) * _.resolution);
-
-  // ${params.cat && `${params.aggregate || 'array_agg'}(cat) cat,` || ''}
 
   return `
     SELECT
@@ -33,12 +38,12 @@ module.exports = (_) => {
         ELSE CONCAT('!',(array_agg(id))[1]::varchar)
         END AS id
       
-      ${_.fields ? ',' + aggFields.join() : ''}
+      ${fields.length ? ',' + aggFields.join() : ''}
 
     FROM (
       SELECT
         ${_.qID} as id,
-        ${_.fields ? fields.join() + ',' : ''}
+        ${fields.length ? fields.join() + ',' : ''}
         round(ST_X(${_.geom}) / ${r}) * ${r} x_round,
         round(ST_Y(${_.geom}) / ${r}) * ${r} y_round
       FROM ${_.table}

@@ -1,25 +1,23 @@
-module.exports = (_) => {
+/**
+### /workspace/templates/location_get
+
+The location_get layer query returns the field values from a location record in the layer table where the location qID matches the provided id param.
+
+@module /workspace/templates/location_get
+*/
+export default (_) => {
   // The SQL array may be populated by a default filter which is not required for this query template.
   _.SQL = [];
 
-  const fields = [_.layer.qID].concat(
-    _.layer.infoj
-      ?.filter((entry) => !entry.query)
+  // The layer.qID will be returned from the select statement.
+  const fields = [_.layer.qID];
 
-      // Entry must have a field defined.
-      .filter((entry) => entry.field)
+  _.infojMap &&
+    Array.from(_.infojMap.entries()).forEach((entry) => {
+      const [key, value] = entry;
 
-      // Only include fields from the fields[] array param.
-      .filter(
-        (entry) => !_.fields || _.fields?.split(',').includes(entry.field),
-      )
-
-      // Map either fieldfx or template SQL if available.
-      .map(
-        (entry) =>
-          `(${entry.fieldfx || _.workspace.templates[entry.field]?.template || entry.field}) AS ${entry.field}`,
-      ),
-  );
+      fields.push(`(${value}) as ${key}`);
+    });
 
   return `
     SELECT ${fields.join()}

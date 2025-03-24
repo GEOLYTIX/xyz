@@ -1,0 +1,40 @@
+label.checkbox {
+  display: block;
+
+  &.disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+
+  &:hover {
+    cursor: pointer;
+  }
+
+  &.inline {
+    display: inline-block;
+  }
+
+  & > span {
+    vertical-align: middle;
+  }
+
+  &.inline + span {
+    vertical-align: middle;
+  }
+
+  & > input {
+    display: none;
+  }
+
+  & > .material-symbols-outlined:after {
+    content: 'check_box_outline_blank';
+  }
+
+  & input:checked + .material-symbols-outlined:after {
+    content: 'select_check_box';
+  }
+
+  & input:disabled ~ * {
+    opacity: 0.4;
+  }
+}

@@ -1,0 +1,23 @@
+.pill-container {
+  display: flex;
+  gap: 4px;
+  flex-flow: row wrap;
+  padding: 0.5em 0;
+
+  .pill {
+    cursor: default;
+    padding: 1px 1px 1px 2px;
+    border-radius: 2px;
+    font-size: 0.9em;
+    font-weight: bold;
+    color: var(--color-light);
+    background-color: var(--color-primary);
+    user-select: none;
+
+    button {
+      cursor: pointer;
+      font-size: 0.8em;
+      padding: 0 2px;
+    }
+  }
+}

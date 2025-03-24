@@ -1,4 +1,11 @@
-module.exports = (_) => {
+/**
+### /workspace/templates/location_new
+
+The location_new layer query returns the serial id for a new location record inserted into the table property.
+
+@module /workspace/templates/location_new
+*/
+export default (_) => {
   // select array for insert statement
   const selects = [];
 

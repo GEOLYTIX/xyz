@@ -1,12 +1,14 @@
 /**
 ## logger 🪵
 This module provides a logging utility for the xyz.
- * @module /utils/logger
- */
 
-const crypto = require('crypto');
+@module /utils/logger
+@requires module:/utils/processEnv
+*/
 
-const logs = new Set(process.env.LOGS?.split(',') || []);
+import crypto from 'crypto';
+
+const logs = new Set(xyzEnv.LOGS?.split(',') || []);
 
 // Errors should always be logged.
 logs.add('err');
@@ -19,12 +21,13 @@ const logout = {
 };
 
 // Required to initialse PostgreSQL logger.
-const { Pool } = require('pg');
+import pg from 'pg';
+const { Pool } = pg;
 
 const logger =
-  process.env.LOGGER &&
-  Object.hasOwn(logout, process.env.LOGGER.split(':')[0]) &&
-  logout[process.env.LOGGER.split(':')[0]]();
+  xyzEnv.LOGGER &&
+  Object.hasOwn(logout, xyzEnv.LOGGER.split(':')[0]) &&
+  logout[xyzEnv.LOGGER.split(':')[0]]();
 
 /**
  * Logs a message to the configured logger or console.
@@ -33,7 +36,7 @@ const logger =
  * @param {string} [key='err'] - The log level or key.
  * @returns {void}
  */
-module.exports = (log, key = 'err') => {
+export default (log, key = 'err') => {
   // Check whether the log for the key should be logged.
   if (!logs.has(key)) return;
 
@@ -57,7 +60,7 @@ module.exports = (log, key = 'err') => {
  */
 function logflare() {
   const params = Object.fromEntries(
-    new URLSearchParams(process.env.LOGGER.split(':')[1]).entries(),
+    new URLSearchParams(xyzEnv.LOGGER.split(':')[1]).entries(),
   );
 
   return (log, key) => {
@@ -84,10 +87,10 @@ function logflare() {
  */
 function postgresql() {
   const params = Object.fromEntries(
-    new URLSearchParams(process.env.LOGGER.split(':')[1]).entries(),
+    new URLSearchParams(xyzEnv.LOGGER.split(':')[1]).entries(),
   );
 
-  const connectionString = process.env[`DBS_${params.dbs}`];
+  const connectionString = xyzEnv[`DBS_${params.dbs}`];
 
   if (!connectionString) {
     console.warn(`Logger module unable to find dbs=${params.dbs}`);

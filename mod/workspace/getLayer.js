@@ -5,15 +5,18 @@ The getLayer module exports the getLayer method which is required by the query a
 @requires /utils/roles
 @requires /workspace/mergeTemplates
 @requires /workspace/getLocale
+@requires /workspace/getTemplate
 
 @module /workspace/getLayer
 */
 
-const Roles = require('../utils/roles');
+import * as Roles from '../utils/roles.js';
 
-const mergeTemplates = require('./mergeTemplates');
+import mergeTemplates from './mergeTemplates.js';
 
-const getLocale = require('./getLocale');
+import getLocale from './getLocale.js';
+
+import getTemplate from './getTemplate.js';
 
 /**
 @function getLayer
@@ -22,7 +25,9 @@ const getLocale = require('./getLocale');
 @description
 The layer locale is requested from the getLocale module.
 
-The mergeTemplate module will be called to merge templates into the locale object and substitute SRC_* environment variables.
+A layer template lookup will be attempted if a layer is not found in locale.layers.
+
+The mergeTemplate module will be called to merge templates into the locale object and substitute SRC_* xyzEnvironment variables.
 
 A role check is performed to check whether the requesting user has access to the locale.
 
@@ -38,17 +43,24 @@ The layer.key and layer.name will be assigned if missing.
 
 @returns {Promise<Object|Error>} JSON Layer.
 */
-module.exports = async function getLayer(params) {
+export default async function getLayer(params) {
   const locale = await getLocale(params);
 
   // getLocale will return err if role.check fails.
   if (locale instanceof Error) return locale;
 
-  if (!Object.hasOwn(locale.layers, params.layer)) {
-    return new Error('Unable to validate layer param.');
-  }
+  let layer;
 
-  let layer = locale.layers[params.layer];
+  if (!Object.hasOwn(locale.layers, params.layer)) {
+    // A layer maybe defined as a template only.
+    layer = await getTemplate(params.layer);
+
+    if (!layer || layer instanceof Error) {
+      return new Error('Unable to validate layer param.');
+    }
+  } else {
+    layer = locale.layers[params.layer];
+  }
 
   // layer maybe null.
   if (!layer) return;
@@ -71,4 +83,4 @@ module.exports = async function getLayer(params) {
   layer.dbs ??= locale.dbs;
 
   return layer;
-};
+}

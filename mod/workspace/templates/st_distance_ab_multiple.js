@@ -1,4 +1,4 @@
-module.exports = `
+export default `
 SELECT 
     closest.field_b AS \${as},
     ST_DISTANCE(st_transform(a.\${geom},4326)::geography, closest.geom ) AS dist

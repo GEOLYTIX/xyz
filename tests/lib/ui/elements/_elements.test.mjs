@@ -1,17 +1,20 @@
-import { sliderTest } from './slider.test.mjs';
-import { layerStyleTest } from './layerStyle.test.mjs';
-import { pillsTest } from './pills.test.mjs';
-import { alertTest } from './alert.test.mjs';
-import { confirmTest } from './confirm.test.mjs';
-import { dialogTest } from './dialog.test.mjs';
-import { themeLegendSwitch } from './themeLegendSwitch.test.mjs';
+import { slider } from './slider.test.mjs';
+import { layerStyle } from './layerStyle.test.mjs';
+import { pills } from './pills.test.mjs';
+import { alert } from './alert.test.mjs';
+import { confirm } from './confirm.test.mjs';
+import { dialog } from './dialog.test.mjs';
 
-export const ui_elementsTest = {
-  sliderTest,
-  layerStyleTest,
-  pillsTest,
-  alertTest,
-  confirmTest,
-  dialogTest,
-  themeLegendSwitch,
+export const elements = {
+  setup,
+  slider,
+  layerStyle,
+  pills,
+  alert,
+  confirm,
+  dialog,
 };
+
+function setup() {
+  codi.describe({ name: 'UI Elements:', id: 'ui_elements' }, () => {});
+}

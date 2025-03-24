@@ -1,49 +1,50 @@
 /**
 @module /utils/mailer
+@requires module:/utils/processEnv
 */
 
-const logger = require('./logger');
+import logger from './logger.js';
 
-const languageTemplates = require('./languageTemplates');
+import languageTemplates from './languageTemplates.js';
 
-const getFrom = require('../provider/getFrom');
+import getFrom from '../provider/getFrom.js';
 
-const mailer = require('nodemailer');
+import mailer from 'nodemailer';
 
 let transport;
 
-module.exports = async (params) => {
-  if (process.env.TRANSPORT) {
+export default async (params) => {
+  if (xyzEnv.TRANSPORT) {
     console.warn(
-      'Please replace process.env.TRANSPORT with TRANSPORT_HOST,TRANSPORT_EMAIL, and TRANSPORT_PASSWORD',
+      'Please replace xyzEnv.TRANSPORT with TRANSPORT_HOST,TRANSPORT_EMAIL, and TRANSPORT_PASSWORD',
     );
   }
 
-  if (!process.env.TRANSPORT_HOST) {
-    console.warn('process.env.TRANSPORT_HOST missing.');
+  if (!xyzEnv.TRANSPORT_HOST) {
+    console.warn('xyzEnv.TRANSPORT_HOST missing.');
     return;
   }
 
-  if (!process.env.TRANSPORT_EMAIL) {
-    console.warn('process.env.TRANSPORT_EMAIL missing.');
+  if (!xyzEnv.TRANSPORT_EMAIL) {
+    console.warn('xyzEnv.TRANSPORT_EMAIL missing.');
     return;
   }
 
-  if (!process.env.TRANSPORT_PASSWORD) {
-    console.warn('process.env.TRANSPORT_PASSWORD missing.');
+  if (!xyzEnv.TRANSPORT_PASSWORD) {
+    console.warn('xyzEnv.TRANSPORT_PASSWORD missing.');
     return;
   }
 
   if (!transport) {
     transport = mailer.createTransport({
-      host: process.env.TRANSPORT_HOST,
-      name: process.env.TRANSPORT_EMAIL.split('@')[0],
-      port: process.env.TRANSPORT_PORT || 587,
+      host: xyzEnv.TRANSPORT_HOST,
+      name: xyzEnv.TRANSPORT_EMAIL.split('@')[0],
+      port: xyzEnv.TRANSPORT_PORT || 587,
       secure: false,
-      requireTLS: process.env.TRANSPORT_TLS && true,
+      requireTLS: xyzEnv.TRANSPORT_TLS,
       auth: {
-        user: process.env.TRANSPORT_EMAIL,
-        pass: process.env.TRANSPORT_PASSWORD,
+        user: xyzEnv.TRANSPORT_EMAIL,
+        pass: xyzEnv.TRANSPORT_PASSWORD,
       },
     });
   }
@@ -54,8 +55,8 @@ module.exports = async (params) => {
 
   const mailTemplate = {
     to: params.to,
-    from: process.env.TRANSPORT_EMAIL,
-    sender: process.env.TRANSPORT_EMAIL,
+    from: xyzEnv.TRANSPORT_EMAIL,
+    sender: xyzEnv.TRANSPORT_EMAIL,
     subject: replaceStringParams(template.subject, params),
     html: template.html
       ? replaceStringParams(template.html, params)

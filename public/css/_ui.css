@@ -1,171 +1,49 @@
-@import url('./_colours.css');
+@import url('./base/_colours.css');
 
-@import url('./_button.css');
+@import url('./base/_dark_mode.css');
 
-@import url('./_drawer.css');
+@import url('./base/_common.css');
 
-@import url('./_dialog.css');
+@import url('./base/_button.css');
 
-@import url('./_font.css');
+@import url('./base/_globals.css');
 
-@import url('./_icons.css');
+@import url('./base/_icons.css');
 
-@import url('./_inputs.css');
+@import url('./base/_inputs.css');
 
-@import url('./_layerview.css');
+@import url('./base/_material_icons.css');
 
-@import url('./_locationview.css');
+@import url('./elements/_alert_confirm.css');
 
-@import url('./_tabview.css');
+@import url('./elements/_btnPanel.css');
 
-.no-select {
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-}
+@import url('./elements/_chkbox.css');
 
-.flex-spacer {
-  display: flex;
-  align-items: center;
+@import url('./elements/_dialog.css');
 
-  & > :nth-child(2) {
-    margin-left: auto;
-  }
-}
+@import url('./elements/_drawer.css');
 
-.link-with-img > * {
-  height: 1.2em;
-  line-height: 1.2em;
-  display: inline-block;
-  vertical-align: middle;
-}
+@import url('./elements/_dropdown.css');
 
-.link-with-img > button,
-.link-with-img > .mask-icon,
-.link-with-img > .bg-icon {
-  width: 1.5em;
-}
+@import url('./elements/_key.css');
 
-.dataview-mask {
-  width: 100%;
-  height: 100%;
-  text-align: center;
-  line-height: 2;
-}
+@import url('./elements/_pills.css');
 
-.interface-mask {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 999999;
-  background-color: #eeea;
+@import url('./elements/_searchbox.css');
 
-  & > .bg-image {
-    margin: 5%;
-    height: 90%;
-    width: 90%;
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
+@import url('./elements/_slider.css');
 
-    & > .btn-close {
-      position: absolute;
-      top: 5%;
-      right: 5%;
-      width: 50px;
-      height: 50px;
-      background-color: var(--color-no);
-    }
-  }
-}
+@import url('./layout/_divider.css');
 
-.flex-col {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
+@import url('./layout/_cloudinary.css');
 
-.pill-container {
-  display: flex;
-  gap: 4px;
-  flex-flow: row wrap;
-  padding: 0.5em 0;
-}
+@import url('./layout/_layerview.css');
 
-.pill-container .pill {
-  cursor: default;
-  padding: 1px 1px 1px 2px;
-  border-radius: 2px;
-  font-size: 0.9em;
-  font-weight: bold;
-  color: var(--color-light);
-  background-color: var(--color-primary);
-  user-select: none;
-}
+@import url('./layout/_locationview.css');
 
-.pill-container .pill button {
-  cursor: pointer;
-  font-size: 0.8em;
-  padding: 0 2px;
-}
+@import url('./layout/_scrollbar.css');
 
-.mask-icon {
-  background-color: var(--color-primary-light);
+@import url('./layout/_tabview.css');
 
-  &.on {
-    background-color: var(--color-on);
-  }
-
-  &.no {
-    background-color: var(--color-no);
-  }
-}
-
-.primary-colour {
-  color: var(--color-primary);
-}
-
-.primary-background {
-  color: white;
-  background-color: var(--color-primary);
-}
-
-.light-background {
-  background-color: var(--color-light);
-}
-
-.lighter-background {
-  background-color: var(--color-light-secondary);
-}
-
-.off-black {
-  color: var(--color-off-black);
-}
-
-.off-black-background {
-  color: white;
-  background-color: var(--color-off-black);
-}
-
-.on-colour {
-  color: var(--color-on);
-}
-
-.no-colour {
-  color: var(--color-no);
-}
-
-.val-changed input {
-  background-color: var(--color-changed);
-}
-
-.val-changed textarea {
-  background-color: var(--color-changed);
-}
-
-.val-changed button {
-  background-color: var(--color-changed);
-}
+@import url('./layout/_toolbars.css');

@@ -5,13 +5,14 @@ Exports the deleteUser method for the /api/user/delete route.
 
 @requires module:/user/acl
 @requires module:/utils/mailer
+@requires module:/utils/processEnv
 
 @module /user/add
 */
 
-const acl = require('./acl');
+import acl from './acl.js';
 
-const mailer = require('../utils/mailer');
+import mailer from '../utils/mailer.js';
 
 /**
 @function deleteUser
@@ -35,7 +36,7 @@ Requesting user.
 Requesting user is admin.
 */
 
-module.exports = async function deleteUser(req, res) {
+export default async function deleteUser(req, res) {
   // acl module will export an empty require object without the ACL being configured.
   if (acl === null) {
     return res.status(500).send('ACL unavailable.');
@@ -56,7 +57,7 @@ module.exports = async function deleteUser(req, res) {
     // The cookie must be set to null on successful return from delete method.
     res.setHeader(
       'Set-Cookie',
-      `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`,
+      `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`,
     );
 
     console.log(`${email} removed themselves`);
@@ -88,4 +89,4 @@ module.exports = async function deleteUser(req, res) {
   });
 
   res.send('User account deleted.');
-};
+}

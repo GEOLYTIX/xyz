@@ -1,0 +1,157 @@
+{
+  "style": {
+    "opacitySlider": true,
+    "cluster": {
+      "clusterScale": 5
+    },
+    "icon_scaling": {
+      "field": "size",
+      "icon": true,
+      "clusterScale": true,
+      "zoomInScale": true,
+      "zoomOutScale": true
+    },
+    "hover": {
+      "display": true,
+      "title": "Hover title",
+      "field": "hover_1",
+      "label": "I am a hover label"
+    },
+    "hovers": {
+      "hover_1": {
+        "title": "Hover title",
+        "field": "hover_1",
+        "display": true,
+        "label": "I am a hover label"
+      },
+      "hover_2": {
+        "title": "Hover title 2",
+        "field": "hover_2",
+        "display": true,
+        "label": "I am a hover label"
+      }
+    },
+    "label": "label_2",
+    "labels": {
+      "label_1": {
+        "title": "Label title",
+        "display": true,
+        "field": "label_1",
+        "label": "I am labels label"
+      },
+      "label_2": {
+        "title": "Label title 2",
+        "display": true,
+        "field": "label_2",
+        "label": "I am a labels label"
+      }
+    },
+    "theme": {
+      "title": "Theme title",
+      "type": "categorized",
+      "field": "foo",
+      "other": true,
+      "categories": [
+        {
+          "key": "category_1",
+          "style": {
+            "strokeColor": "#000",
+            "fillColor": "#000",
+            "fillOpacity": 0.5,
+            "strokeWidth": 3
+          }
+        },
+        {
+          "key": "category_2",
+          "style": {
+            "strokeColor": "#000",
+            "fillColor": "#000",
+            "fillOpacity": 0.5,
+            "strokeWidth": 3
+          }
+        },
+        {
+          "key": "category_3",
+          "style": {
+            "strokeColor": "#000",
+            "fillColor": "#000",
+            "fillOpacity": 0.5,
+            "strokeWidth": 3
+          }
+        }
+      ]
+    },
+    "themes": {
+      "first_theme": {
+        "title": "Theme title",
+        "type": "categorized",
+        "field": "foo",
+        "other": true,
+        "categories": [
+          {
+            "key": "category_1",
+            "style": {
+              "strokeColor": "#000",
+              "fillColor": "#000",
+              "fillOpacity": 0.5,
+              "strokeWidth": 3
+            }
+          },
+          {
+            "key": "category_2",
+            "style": {
+              "strokeColor": "#000",
+              "fillColor": "#000",
+              "fillOpacity": 0.5,
+              "strokeWidth": 3
+            }
+          },
+          {
+            "key": "category_3",
+            "style": {
+              "strokeColor": "#000",
+              "fillColor": "#000",
+              "fillOpacity": 0.5,
+              "strokeWidth": 3
+            }
+          }
+        ]
+      },
+      "second_theme": {
+        "title": "Theme title",
+        "type": "categorized",
+        "field": "foo",
+        "other": true,
+        "categories": [
+          {
+            "key": "category_1",
+            "style": {
+              "strokeColor": "#000",
+              "fillColor": "#000",
+              "fillOpacity": 0.5,
+              "strokeWidth": 3
+            }
+          },
+          {
+            "key": "category_2",
+            "style": {
+              "strokeColor": "#000",
+              "fillColor": "#000",
+              "fillOpacity": 0.5,
+              "strokeWidth": 3
+            }
+          },
+          {
+            "key": "category_3",
+            "style": {
+              "strokeColor": "#000",
+              "fillColor": "#000",
+              "fillOpacity": 0.5,
+              "strokeWidth": 3
+            }
+          }
+        ]
+      }
+    }
+  }
+}

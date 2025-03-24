@@ -1,101 +1,125 @@
-/**
- * ## user.updateTest()
- * @module user/update
- */
+const params = {
+  name: 'update: ',
+  id: 'user_update',
+  parentId: 'user',
+};
 
-/**
- * This function is used as an entry point for the changeEndTest
- * @function updateTest
- */
-export async function updateTest() {
-  if (mapp.user) {
-    await codi.describe('User: update', async () => {
-      /**
-       * ### update endpoint should be able to process a body
-       * The user update endpoint should be able to take a body as the request.
-       * @function it
-       */
-      await codi.it(
-        'update endpoint should be able to process a body',
-        async () => {
-          let params = {
-            url: '/test/api/user/update',
-            body: JSON.stringify({
-              email: 'test@geolytix.co.uk',
-              admin: false,
-              approved: false,
-              verified: false,
-            }),
-          };
+const aclMockFn = codi.mock.fn();
 
-          await mapp.utils.xhr(params);
+const aclMock = codi.mock.module('../../../mod/user/acl.js', {
+  defaultExport: aclMockFn,
+});
 
-          params = {
-            url: '/test/api/user/update',
-            body: JSON.stringify({
-              email: 'test@geolytix.co.uk',
-              admin: true,
-              approved: true,
-              verified: false,
-            }),
-          };
+const mailerMockFn = codi.mock.fn();
 
-          await mapp.utils.xhr(params);
+const mailerMock = codi.mock.module('../../../mod/utils/mailer.js', {
+  defaultExport: mailerMockFn,
+});
 
-          const acl = await mapp.utils.xhr('/test/api/user/list');
-          const test_user = acl.filter(
-            (user) => user.email === 'test@geolytix.co.uk',
-          )[0];
+await codi.describe(params, async () => {
+  const { default: update } = await import('../../../mod/user/update.js');
+  await codi.it(
+    {
+      name: 'should return error for non-admin users',
+      parentId: 'user_update',
+    },
+    async () => {
+      aclMockFn.mock.mockImplementation(function acl() {
+        return [];
+      });
 
-          await codi.assertEqual(
-            test_user.email,
-            'test@geolytix.co.uk',
-            'The users email address should be test@geolytix.co.uk',
-          );
-          await codi.assertFalse(
-            test_user.verified,
-            'The user should be not verified',
-          );
-          await codi.assertTrue(test_user.admin, 'The user should an admin');
-          await codi.assertTrue(
-            test_user.approved,
-            'The user should be approved',
-          );
+      const req = {
+        params: {
+          user: { admin: false },
+          email: 'test@example.com',
+          host: 'test.com',
         },
-      );
+        body: {},
+      };
 
-      /**
-             ### update endpoint should be able to be just params
-             * The user update endpoint should be able to take a body as the request.
-             * @function it
-             */
-      await codi.it(
-        'update endpoint should be able to be just params',
-        async () => {
-          const url = `/test/api/user/update?email=test@geolytix.co.uk&field=admin&value=false`;
-          await mapp.utils.xhr(url);
+      const res = {
+        status: (code) => ({ send: (message) => ({ code, message }) }),
+        send: (message) => ({ message }),
+      };
 
-          const acl = await mapp.utils.xhr('/test/api/user/list');
-          const test_user = acl.filter(
-            (user) => user.email === 'test@geolytix.co.uk',
-          )[0];
+      const result = await update(req, res);
 
-          await codi.assertEqual(
-            test_user.email,
-            'test@geolytix.co.uk',
-            'The users email address should be test@geolytix.co.uk',
-          );
-          await codi.assertFalse(
-            test_user.verified,
-            'The user should be not verified',
-          );
-          await codi.assertFalse(test_user.admin, 'The user should an admin');
-          await codi.assertTrue(
-            test_user.approved,
-            'The user should be approved',
-          );
+      codi.assertTrue(result instanceof Error);
+      codi.assertEqual(result.message, 'admin_user_login_required');
+    },
+  );
+
+  await codi.it(
+    { name: 'should send approval email', parentId: 'user_update' },
+    async () => {
+      let mailOptions;
+
+      mailerMockFn.mock.mockImplementation(function mailer(options) {
+        mailOptions = options;
+        return true;
+      });
+
+      const req = {
+        params: {
+          user: { admin: true },
+          email: 'test@example.com',
+          host: 'test.com',
         },
+        body: {
+          email: 'test@example.com',
+          approved: true,
+          language: 'en',
+        },
+      };
+
+      const res = {
+        status: (code) => ({ send: (message) => ({ code, message }) }),
+        send: (message) => ({ message }),
+      };
+
+      await update(req, res);
+
+      codi.assertEqual(mailOptions, {
+        template: 'approved_account',
+        language: 'en',
+        to: 'test@example.com',
+        host: 'test.com',
+      });
+    },
+  );
+
+  await codi.it(
+    {
+      name: 'should reject invalid update keys',
+      parentId: 'user_update',
+    },
+    async () => {
+      const req = {
+        params: {
+          user: { admin: true },
+          email: 'test@example.com',
+          host: 'test.com',
+        },
+        body: {
+          email: 'test@example.com',
+          'invalid;key': 'value',
+        },
+      };
+
+      const res = {
+        status: (code) => ({ send: (message) => ({ code, message }) }),
+        send: (message) => ({ message }),
+      };
+
+      const result = await update(req, res);
+      codi.assertEqual(result.code, 400);
+      codi.assertEqual(
+        result.message,
+        'Invalid key in user object for SQL update.',
       );
-    });
-  }
-}
+    },
+  );
+});
+
+aclMock.restore();
+mailerMock.restore();

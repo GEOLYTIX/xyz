@@ -11,23 +11,24 @@ Exports the [user] register method for the /api/user/register route.
 @requires /utils/languageTemplates
 @requires /utils/bcrypt
 @requires crypto
+@requires module:/utils/processEnv
 
 @module /user/register
 */
 
-const bcrypt = require('../utils/bcrypt');
+import bcrypt from '../utils/bcrypt.cjs';
 
-const crypto = require('crypto');
+import crypto from 'crypto';
 
-const acl = require('./acl');
+import acl from './acl.js';
 
-const reqHost = require('../utils/reqHost');
+import reqHost from '../utils/reqHost.js';
 
-const mailer = require('../utils/mailer');
+import mailer from '../utils/mailer.js';
 
-const languageTemplates = require('../utils/languageTemplates');
+import languageTemplates from '../utils/languageTemplates.js';
 
-const view = require('../view');
+import view from '../view.js';
 
 /**
 @function register
@@ -44,7 +45,7 @@ Returns the `registerUserBody` method with a request [user] body present.
 Post body object with user data.
 */
 
-module.exports = async function register(req, res) {
+export default async function register(req, res) {
   // acl module will export an empty require object without the ACL being configured.
   if (acl === null) {
     return res.status(500).send('ACL unavailable.');
@@ -58,7 +59,7 @@ module.exports = async function register(req, res) {
   // The login view will set the cookie to null.
   res.setHeader(
     'Set-Cookie',
-    `${process.env.TITLE}=null;HttpOnly;Max-Age=0;Path=${process.env.DIR || '/'}`,
+    `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`,
   );
 
   req.params.template = req.params.reset
@@ -67,9 +68,7 @@ module.exports = async function register(req, res) {
 
   // Get request for registration form view.
   view(req, res);
-};
-
-const previousAddress = {};
+}
 
 /**
 @function registerUserBody
@@ -89,10 +88,6 @@ Post body object with user data.
 */
 
 async function registerUserBody(req, res) {
-  debounceRequest(req, res);
-
-  if (res.finished) return;
-
   checkUserBody(req, res);
 
   if (res.finished) return;
@@ -106,7 +101,7 @@ async function registerUserBody(req, res) {
   const date = new Date().toISOString().replace(/\..*/, '');
 
   const expiry_date = parseInt(
-    (new Date().getTime() + process.env.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24) /
+    (new Date().getTime() + xyzEnv.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24) /
       1000,
   );
 
@@ -116,10 +111,10 @@ async function registerUserBody(req, res) {
     password_reset: req.body.password,
     language: req.body.language,
     verificationtoken: req.body.verificationtoken,
-    access_log: [`${date}@${(req.ips && req.ips.pop()) || req.ip}`],
+    access_log: [`${date}@${req.ips?.pop() || req.ip}`],
   };
 
-  if (process.env.APPROVAL_EXPIRY) {
+  if (xyzEnv.APPROVAL_EXPIRY) {
     USER['expires_on'] = expiry_date;
   }
 
@@ -154,42 +149,6 @@ async function registerUserBody(req, res) {
 }
 
 /**
-@function debounceRequest
-
-@description
-The remote_address determined from the request header is stored in the previousAddress module variable. Requests from the same address within 30 seconds will be bounced.
-
-@param {req} req HTTP request.
-@param {res} res HTTP response.
-@property {Object} req.params HTTP request parameter.
-@property {Object} req.header HTTP request header.
-*/
-
-function debounceRequest(req, res) {
-  req.params.remote_address =
-    req.headers['x-forwarded-for'] &&
-    /^[A-Za-z0-9.,_-\s]*$/.test(req.headers['x-forwarded-for'])
-      ? req.headers['x-forwarded-for']
-      : 'invalid' || 'unknown';
-
-  // The remote_address has been previously used
-  if (
-    Object.hasOwn(previousAddress, req.params.remote_address) &&
-    // within 30 seconds or less.
-    new Date() - previousAddress[req.params.remote_address] < 30000
-  ) {
-    res
-      .status(403)
-      .send(`Address ${req.params.remote_address} temporarily locked.`);
-
-    return;
-  }
-
-  // Log the remote_address with the current datetime.
-  previousAddress[req.params.remote_address] = new Date();
-}
-
-/**
 @function checkUserBody
 
 @description
@@ -197,9 +156,10 @@ The request body JSON object must contain a user email, and password as string e
 
 The email address is tested against following regex: `/^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+$/`.
 
-The ACL can be restricted for email addresses provided as `process.env.USER_DOMAINS`.
+The ACL can be restricted for email addresses provided as `xyzEnv.USER_DOMAINS`.
 
-A valid password must be provided. Password rules can be defined as `process.env.PASSWORD_REGEXP`. The default rule for password being `'(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{12,}$'`.
+A valid password must be provided. Password rules can be defined as `xyzEnv.PASSWORD_REGEXP`. The default rule for password being `'(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{12,}$'`.
+
 
 The `req.body.password` will be hashed with bcrypt.
 
@@ -223,9 +183,9 @@ function checkUserBody(req, res) {
   }
 
   // Test whether email domain is allowed to register
-  if (process.env.USER_DOMAINS) {
-    // Get array of allowed user email domains from split environment variable.
-    const domains = new Set(process.env.USER_DOMAINS.split(','));
+  if (xyzEnv.USER_DOMAINS) {
+    // Get array of allowed user email domains from split xyzEnvironment variable.
+    const domains = new Set(xyzEnv.USER_DOMAINS.split(','));
 
     // Check whether the Set has the domain.
     if (!domains.has(req.body.email.match(/(?<=@)[^.]+(?=\.)/g)[0])) {
@@ -237,10 +197,9 @@ function checkUserBody(req, res) {
   // Test whether a password has been provided.
   if (!req.body.password) return res.status(400).send('No password provided');
 
-  // Create regex to text password complexity from env or set default.
+  // Create regex to text password complexity from xyzEnv or set default.
   const passwordRgx = new RegExp(
-    process.env.PASSWORD_REGEXP ||
-      '(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{12,}$',
+    xyzEnv.PASSWORD_REGEXP || '(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])^.{12,}$',
   );
 
   // Test whether the provided password is valid.
@@ -317,14 +276,9 @@ async function passwordReset(req, res) {
   const date = new Date().toISOString().replace(/\..*/, '');
 
   const expiry_date = parseInt(
-    (new Date().getTime() + process.env.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24) /
+    (new Date().getTime() + xyzEnv.APPROVAL_EXPIRY * 1000 * 60 * 60 * 24) /
       1000,
   );
-
-  const expires_on =
-    process.env.APPROVAL_EXPIRY && user.expires_on
-      ? `expires_on = ${expiry_date},`
-      : '';
 
   const VALUES = [
     req.body.email,
@@ -333,7 +287,7 @@ async function passwordReset(req, res) {
     `${date}@${req.params.remote_address}`,
   ];
 
-  if (process.env.APPROVAL_EXPIRY && user.expires_on) {
+  if (xyzEnv.APPROVAL_EXPIRY && user.expires_on) {
     VALUES.push(expiry_date);
   }
 
@@ -346,7 +300,7 @@ async function passwordReset(req, res) {
       password_reset = $2,
       verificationtoken = $3,
       access_log = array_append(access_log, $4)
-      ${process.env.APPROVAL_EXPIRY && user.expires_on ? ',expires_on = $5' : ''}
+      ${xyzEnv.APPROVAL_EXPIRY && user.expires_on ? ',expires_on = $5' : ''}
     WHERE lower(email) = lower($1);`,
     VALUES,
   );

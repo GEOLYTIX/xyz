@@ -2,26 +2,24 @@
 ## /workspace/cache
 The module exports the cacheWorkspace method which returns a workspace from the module scope cache variable or call the cacheWorkspace method to cache the workspace.
 
-Default templates can be overwritten in the workspace or by providing a CUSTOM_TEMPLATES environment variable which references a JSON with templates to be merged into the workspace.
+Default templates can be overwritten in the workspace or by providing a CUSTOM_TEMPLATES xyzEnvironment variable which references a JSON with templates to be merged into the workspace.
 
 @requires /provider/getFrom
 @requires /utils/merge
+@requires module:/utils/processEnv
 
 @module /workspace/cache
 */
 
-const getFrom = require('../provider/getFrom');
+import getFrom from '../provider/getFrom.js';
 
-const merge = require('../utils/merge');
-
-// Assign default age in ms.
-process.env.WORKSPACE_AGE ??= 3600000;
+import merge from '../utils/merge.js';
 
 let cache = null;
 
 let timestamp = Infinity;
 
-const logger = require('../utils/logger');
+import logger from '../utils/logger.js';
 
 /**
 @function checkWorkspaceCache
@@ -29,17 +27,16 @@ const logger = require('../utils/logger');
 @description
 The method checks whether the module scope variable cache has been populated.
 
-The timestamp set by cacheWorkspace is checked against the current time. The [workspace] cache will be invalidated if the difference exceeds the WORKSPACE_AGE environment variable.
+The timestamp set by cacheWorkspace is checked against the current time. The [workspace] cache will be invalidated if the difference exceeds the WORKSPACE_AGE xyzEnvironment variable.
 
 Setting the WORKSPACE_AGE to 0 is not recommended as this could cause the cache to be flushed while a request is passed through the XYZ API. A layer query processed by the [Query API module]{@link module:/query~layerQuery} will request the layer and associated locale which could be defined in remote templates. Each request to the [Workspace API getTemplate]{@link module:/workspace/getTemplate~getTemplate} method for the locale, layer, and query templates will call the checkWorkspaceCache method which will cause the workspace to be flushed and templates previously cached from their src no longer available.
 
 The cacheWorkspace method is called if the cache is invalid.
 
-@param {Boolean} [force] The workspace cache will be cleared with the force param flag.
-
+@param {boolean} [force] The workspace cache will be cleared with the force param flag.
 @returns {workspace} JSON Workspace.
 */
-module.exports = function checkWorkspaceCache(force) {
+export default function checkWorkspaceCache(force) {
   if (force) {
     // Reset the cache with force flag.
     cache = null;
@@ -51,7 +48,7 @@ module.exports = function checkWorkspaceCache(force) {
 
   // cacheWorkspace will set the current timestamp
   // and cache workspace outside export closure prior to returning workspace.
-  if (Date.now() - timestamp > +process.env.WORKSPACE_AGE) {
+  if (Date.now() - timestamp > +xyzEnv.WORKSPACE_AGE) {
     // current time minus cached timestamp exceeds WORKSPACE_AGE
     cache = null;
 
@@ -59,25 +56,23 @@ module.exports = function checkWorkspaceCache(force) {
   }
 
   return cache;
-};
+}
 
-const view_templates = require('./templates/_views');
+import view_templates from './templates/_views.js';
 
-const mail_templates = require('./templates/_mails');
+import mail_templates from './templates/_mails.js';
 
-const msg_templates = require('./templates/_msgs');
+import msg_templates from './templates/_msgs.js';
 
-const query_templates = require('./templates/_queries');
-
-const workspace_src = process.env.WORKSPACE?.split(':')[0];
+import query_templates from './templates/_queries.js';
 
 /**
 @function cacheWorkspace
 
 @description
-The workspace is retrived from the source defined in the WORKSPACE environment variable.
+The workspace is retrived from the source defined in the WORKSPACE xyzEnvironment variable.
 
-Templates defined in the CUSTOM_TEMPLATES environment variable are spread into the default workspace.templates{}.
+Templates defined in the CUSTOM_TEMPLATES xyzEnvironment variable are spread into the default workspace.templates{}.
 
 Each locale from the workspace.locale{} is merged into the workspace.locale{} template.
 
@@ -88,9 +83,10 @@ The workspace is assigned to the module scope cache variable and the timestamp i
 @returns {workspace} JSON Workspace.
 */
 async function cacheWorkspace() {
-  // Get workspace from source.
-  const workspace = Object.hasOwn(getFrom, workspace_src)
-    ? await getFrom[workspace_src](process.env.WORKSPACE)
+  const src = xyzEnv.WORKSPACE?.split(':')[0];
+
+  const workspace = Object.hasOwn(getFrom, src)
+    ? await getFrom[src](xyzEnv.WORKSPACE)
     : {};
 
   // Return error if source failed.
@@ -99,9 +95,9 @@ async function cacheWorkspace() {
   }
 
   const custom_templates =
-    process.env.CUSTOM_TEMPLATES &&
-    (await getFrom[process.env.CUSTOM_TEMPLATES.split(':')[0]](
-      process.env.CUSTOM_TEMPLATES,
+    xyzEnv.CUSTOM_TEMPLATES &&
+    (await getFrom[xyzEnv.CUSTOM_TEMPLATES.split(':')[0]](
+      xyzEnv.CUSTOM_TEMPLATES,
     ));
 
   /**
@@ -110,8 +106,8 @@ async function cacheWorkspace() {
   @description
   The method maps the Object.entries of the templates_object param and assigns the _type property on the object marking is a different types of templates.
 
-  
-  @param {Object} templates_object 
+
+  @param {Object} templates_object
   @returns {Object} templates_object with _core: true property.
   */
   function mark_template(templates_object, type) {
@@ -173,6 +169,8 @@ async function cacheWorkspace() {
       `Default plugins should be defined in the default workspace.locale{}`,
     );
   }
+
+  workspace.key ??= xyzEnv.TITLE;
 
   logger(`Workspace cached;`, 'workspace');
 

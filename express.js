@@ -1,8 +1,8 @@
 /**
-@module express.js
+@module express
 @description
 
-# Express.js 🚅
+# express.js 🚅
 
 [Express](https://expressjs.com) is a minimal and flexible Node.js web application framework that provides a robust
 set of features for web and mobile applications.
@@ -41,19 +41,26 @@ RATE_LIMIT_WINDOW - Time window in ms (default: 1 min)
 @requires express-rate-limit - Rate limiting middleware
 */
 
-require('dotenv').config();
+import 'dotenv/config';
+import './mod/utils/processEnv.js';
 
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const rateLimit = require('express-rate-limit');
+import express from 'express';
+import cookieParser from 'cookie-parser';
+import rateLimit from 'express-rate-limit';
+
+import api from './api/api.js';
+
+if (process.versions.node.split('.')[0] < 22) {
+  console.warn(`Process Node version below 22.`);
+}
 
 const app = express();
 
 app.disable('x-powered-by');
 
 const limiter = rateLimit({
-  windowMs: process.env.RATE_LIMIT_WINDOW ?? 1 * 60 * 1000, // 1 min
-  limit: process.env.RATE_LIMIT ?? 1000, //1000 requests per 1min
+  windowMs: xyzEnv.RATE_LIMIT_WINDOW,
+  limit: xyzEnv.RATE_LIMIT,
   standardHeaders: 'draft-8',
   legacyHeaders: false,
 });
@@ -67,76 +74,56 @@ app.use(
   }),
 );
 
-app.use(`${process.env.DIR || ''}/public`, express.static('public'));
+app.use(`${xyzEnv.DIR}/public`, express.static('public'));
 
-app.use(process.env.DIR || '', express.static('public'));
+app.use(xyzEnv.DIR, express.static('public'));
 
-app.use(`${process.env.DIR || ''}/tests`, express.static('tests'));
+app.use(`${xyzEnv.DIR}/tests`, express.static('tests'));
 
-app.use(process.env.DIR || '', express.static('tests'));
+app.use(xyzEnv.DIR, express.static('tests'));
 
 app.use(cookieParser());
 
-const api = require('./api/api');
-
-app.get(`${process.env.DIR || ''}/api/provider/:provider?`, api);
+app.get(`${xyzEnv.DIR}/api/provider/:provider?`, api);
 
 app.post(
-  `${process.env.DIR || ''}/api/provider/:provider?`,
+  `${xyzEnv.DIR}/api/provider/:provider?`,
   express.json({ limit: '5mb' }),
   api,
 );
 
-app.get(`${process.env.DIR || ''}/api/sign/:provider?`, api);
+app.get(`${xyzEnv.DIR || ''}/api/sign/:signer?`, api);
+
+app.get(`${xyzEnv.DIR}/api/query/:template?`, api);
 
 app.post(
-  `${process.env.DIR || ''}/api/sign/:provider?`,
+  `${xyzEnv.DIR}/api/query/:template?`,
   express.json({ limit: '5mb' }),
   api,
 );
 
-app.get(`${process.env.DIR || ''}/api/query/:template?`, api);
+app.get(`${xyzEnv.DIR}/api/workspace/:key?`, api);
+
+app.get(`${xyzEnv.DIR}/api/user/:method?/:key?`, api);
 
 app.post(
-  `${process.env.DIR || ''}/api/query/:template?`,
-  express.json({ limit: '5mb' }),
-  api,
-);
-
-app.get(`${process.env.DIR || ''}/api/fetch/:template?`, api);
-
-app.post(
-  `${process.env.DIR || ''}/api/fetch/:template?`,
-  express.json({ limit: '5mb' }),
-  api,
-);
-
-app.get(`${process.env.DIR || ''}/api/workspace/:key?`, api);
-
-app.get(`${process.env.DIR || ''}/api/user/:method?/:key?`, api);
-
-app.post(
-  `${process.env.DIR || ''}/api/user/:method?`,
+  `${xyzEnv.DIR}/api/user/:method?`,
   [express.urlencoded({ extended: true }), express.json({ limit: '5mb' })],
   api,
 );
 
-app.get(`${process.env.DIR || ''}/saml/metadata`, api);
+app.get(`${xyzEnv.DIR}/saml/metadata`, api);
 
-app.get(`${process.env.DIR || ''}/saml/logout`, api);
+app.get(`${xyzEnv.DIR}/saml/logout`, api);
 
-app.get(`${process.env.DIR || ''}/saml/login`, api);
+app.get(`${xyzEnv.DIR}/saml/login`, api);
 
-app.post(
-  `${process.env.DIR || ''}/saml/acs`,
-  express.urlencoded({ extended: true }),
-  api,
-);
+app.post(`${xyzEnv.DIR}/saml/acs`, express.urlencoded({ extended: true }), api);
 
-app.get(`${process.env.DIR || ''}/view/:template?`, api);
+app.get(`${xyzEnv.DIR}/view/:template?`, api);
 
-app.get(`${process.env.DIR || ''}/:locale?`, api);
+app.get(`${xyzEnv.DIR}/:locale?`, api);
 
-process.env.DIR && app.get(`/`, api);
+app.get(`/`, api);
 
-app.listen(process.env.PORT || 3000);
+app.listen(xyzEnv.PORT);

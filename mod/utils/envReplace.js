@@ -1,20 +1,22 @@
 /**
 @module /utils/envReplace
+@requires module:/utils/processEnv
 */
 
 /**
 @function envReplace 
 @description
-The envReplace method finds occurances of ${...} in a stringified object and substitutes the template variables with values from matched process.env variables.
+The envReplace method finds occurances of ${...} in a stringified object and substitutes the template variables with values from matched xyzEnv variables.
 
-The template variable ${RESOURCE} will be substituted with the process.env.SRC_RESOURCE value.
+The template variable ${RESOURCE} will be substituted with the xyzEnv.SRC_RESOURCE value.
 
-Template variables not defined in the process.env will not be replaced.
+Template variables not defined in the xyzEnv will not be replaced.
 
 @param {Obeckt} obj 
 @returns {json} safeObject 
 */
-module.exports = function envReplace(obj) {
+
+export default function envReplace(obj) {
   // Convert the input object to a JSON string
   const str = JSON.stringify(obj).replace(
     /\$\{([A-Za-z0-9_\s]*)\}/g,
@@ -22,12 +24,12 @@ module.exports = function envReplace(obj) {
       // Remove template brackets from matched param.
       const param = matched.replace(/\$\{|\}/g, '');
 
-      // Find substitute value from process.env SRC_* variable.
-      const change = process.env[`SRC_${param}`] || matched;
+      // Find substitute value from xyzEnv SRC_* variable.
+      const change = xyzEnv[`SRC_${param}`] || matched;
 
       return change;
     },
   );
 
   return JSON.parse(str);
-};
+}

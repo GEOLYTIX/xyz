@@ -1,4 +1,6 @@
-import styleParserJson from '../../assets/styles/styleParser.json' with { type: 'json' };
+import styleParserJson from '../../assets/styles/styleParser.json' with {
+  type: 'json',
+};
 
 export async function styleParser(mapview) {
   await codi.describe('TODO: Layer: styleParserTest', async () => {

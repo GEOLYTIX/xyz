@@ -1,175 +1,424 @@
 /**
-## /user/saml
+### SAML Authentication Setup
 
-The SAML user module exports the saml method as an enpoint for request authentication via SAML.
+This module handles SAML-based Single Sign-On (SSO) authentication. Here's how to set it up:
 
-The module requires the saml2-js module library to be installed. The availability of the module [required] is tries during the module initialisation.
+1. Certificate Generation
+  Generate your Service Provider (SP) certificate pair:
+  ```bash
+  # Generate private key
+  openssl genrsa -out ${SAML_SP_CRT}.pem 2048
+  
+  # Generate public certificate
+  openssl req -new -x509 -key ${SAML_SP_CRT}.pem -out ${SAML_SP_CRT}.crt -days 36500
+  ```
 
-The SAML Service Provider [sp] and Identity Provider [idp] are stored in module variables.
+2. File Structure Setup
+  Place certificates in your project root:
+  ```
+  /xyz
+  ├── ${SAML_SP_CRT}.pem     # Your SP private key
+  ├── ${SAML_SP_CRT}.crt     # Your SP public certificate
+  └── ${SAML_IDP_CRT}.crt    # Identity Provider's certificate
+  ```
 
-Succesful declaration of the sp and idp requires a Service Provider certificatate key pair `${process.env.SAML_SP_CRT}.pem` and `${process.env.SAML_SP_CRT}.crt` in the XYZ process root.
+3. Identity Provider Setup
+  Configure your IdP (e.g., Auth0, Okta) with:
+  - Your SP's Entity ID (issuer)
+  - Your SP's public certificate (${SAML_SP_CRT}.crt)
+  - Your ACS URL (callback URL)
 
-An Assertation Consumer Service [ACS] endpoint must be provided as `process.env.SAML_ACS`
+4. Environment Variables
+  Required variables for SAML strategy initialization:
 
-The idp requires a certificate `${process.env.SAML_IDP_CRT}.crt`, single sign-on [SSO] login url `process.env.SAML_SSO` and logout url `process.env.SAML_SLO`.
+  ```xyzEnv
+    # Required Core Settings
+    SAML_ACS=http://your-domain/saml/acs
+    SAML_SSO=https://your-idp/saml/login
+    SAML_ENTITY_ID=your-service-identifier
 
-@requires module:/utils/logger
-@requires jsonwebtoken
-@requires saml2-js
+    # Certificate Paths (without file extensions)
+    SAML_SP_CRT=sp_certificate
+    SAML_IDP_CRT=idp_certificate
+    
+    # Additional Settings
+    SAML_SLO=https://your-idp/saml/logout
+    SAML_SIGNATURE_ALGORITHM=sha256
+  ```
+
+5. SAML Strategy Initialization
+  The strategy is initialized with these components:
+
+  ```javascript
+  samlStrat = new SAML({
+    callbackUrl,     // Where SAML responses are received
+    entryPoint,      // IdP's SSO endpoint
+    issuer,          // Your SP identifier
+    idpCert,         // IdP's certificate for validation
+    privateKey,      // Your private key for signing
+    publicCert       // Your public cert for IdP
+  });
+  ```
+6. Security Considerations
+  - Keep private keys secure
+  - Use strong signature algorithms
+  - Configure proper certificate expiry
+  - Implement proper session management
+
+@requires [@node-saml/node-saml] - SAML protocol implementation
+@requires jsonwebtoken - JWT handling
+@requires path - File path operations
+@requires fs - File system operations
+@requires module:/utils/processEnv - xyzEnvironment variables
+
+Module Variables:
+@type {SAML} samlStrat - SAML strategy instance for authentication operations
+@type {SamlConfig} samlConfig - Configuration object for SAML settings
+@type {Object} jwt - For handling JSON Web Tokens
+@type {Object} acl - Access Control List management
 
 @module /user/saml
-*/
-
-let acl, sp, idp;
-
-const logger = require('../utils/logger');
-
-const jwt = require('jsonwebtoken');
-
-try {
-  const saml2 = require('saml2-js');
-
-  const { join } = require('path');
-
-  const { readFileSync } = require('fs');
-
-  acl = require('./acl');
-
-  sp = new saml2.ServiceProvider({
-    entity_id: process.env.SAML_ENTITY_ID,
-    private_key:
-      process.env.SAML_SP_CRT &&
-      String(
-        readFileSync(join(__dirname, `../../${process.env.SAML_SP_CRT}.pem`)),
-      ),
-    certificate:
-      process.env.SAML_SP_CRT &&
-      String(
-        readFileSync(join(__dirname, `../../${process.env.SAML_SP_CRT}.crt`)),
-      ),
-    assert_endpoint: process.env.SAML_ACS,
-    allow_unencrypted_assertion: true,
-  });
-
-  idp = new saml2.IdentityProvider({
-    sso_login_url: process.env.SAML_SSO,
-    sso_logout_url: process.env.SAML_SLO,
-    certificates: process.env.SAML_IDP_CRT && [
-      String(
-        readFileSync(join(__dirname, `../../${process.env.SAML_IDP_CRT}.crt`)),
-      ),
-    ],
-    sign_get_request: true,
-  });
-} catch {
-  console.log('SAML2 module is not available.');
-}
+**/
 
 /**
-@function saml
+@typedef {Object} SamlConfig Configuration for SAML authentication
+@property {string} callbackUrl - URL where IdP sends SAML response (ACS endpoint)
+@property {string} entryPoint - IdP's login URL for SSO
+@property {string} issuer - Identifier/Entity ID for your Service Provider
+@property {string} idpCert - Identity Provider's certificate for verification
+@property {string} privateKey - Your private key for signing requests
+@property {string} publicCert - Your public certificate shared with IdP
+@property {string} logoutUrl - URL for single logout (SLO)
+@property {boolean} wantAssertionsSigned - Whether assertions must be signed
+@property {boolean} wantAuthnResponseSigned - Whether responses must be signed
+@property {string} signatureAlgorithm - Algorithm for signing SAML requests
+@property {string} identifierFormat - Format of the Name Identifier
+@property {number} acceptedClockSkewMs - Allowed clock skew in milliseconds
+@property {string} providerName - Name of the Service Provider
+@property {string} logoutCallbackUrl - URL for logout callbacks
+**/
 
-@description
-The saml method requires the sp and idp module variables to be declared as saml2 Service and Identity provider.
+// Import required dependencies
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
+import { readFileSync } from 'fs';
 
-The `req.url` path is matched with either the `metadata`, `login`, or `acs` methods.
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
-The saml metadata will be sent as `application/xml` content if requested.
+// Import utility modules
+import jwt from 'jsonwebtoken';
+import acl from '../user/acl.js';
 
-The `saml/login` request path will redirect the request to a saml login request url created by the Service Provider [sp].
+let samlStrat, samlConfig;
 
-The sp will assert a post body sent to the `saml/acs` endpoint.
+const getModule = async () => {
+  try {
+    const SAML = await import('@node-saml/node-saml');
+    // Initialize SAML configuration
+    samlConfig = {
+      callbackUrl: xyzEnv.SAML_ACS,
+      entryPoint: xyzEnv.SAML_SSO,
+      issuer: xyzEnv.SAML_ENTITY_ID,
 
-A lookup of the ACL user record will be attempted by the acl_lookup method.
+      // Read and configure certificates
+      idpCert:
+        xyzEnv.SAML_IDP_CRT &&
+        String(
+          readFileSync(join(__dirname, `../../${xyzEnv.SAML_IDP_CRT}.crt`)),
+        ),
+      privateKey:
+        xyzEnv.SAML_SP_CRT &&
+        String(
+          readFileSync(join(__dirname, `../../${xyzEnv.SAML_SP_CRT}.pem`)),
+        ),
+      publicCert:
+        xyzEnv.SAML_SP_CRT &&
+        String(
+          readFileSync(join(__dirname, `../../${xyzEnv.SAML_SP_CRT}.crt`)),
+        ),
 
-The acl record with the user roles will be assigned to the user object from the saml token email.
+      // Configure SAML endpoints and behavior
+      logoutUrl: xyzEnv.SAML_SLO,
+      wantAssertionsSigned: xyzEnv.SAML_WANT_ASSERTIONS_SIGNED,
+      wantAuthnResponseSigned: xyzEnv.SAML_AUTHN_RESPONSE_SIGNED ?? false,
+      signatureAlgorithm: xyzEnv.SAML_SIGNATURE_ALGORITHM,
+      identifierFormat: xyzEnv.SAML_IDENTIFIER_FORMAT,
+      acceptedClockSkewMs: xyzEnv.SAML_ACCEPTED_CLOCK_SKEW ?? -1,
+      providerName: xyzEnv.SAML_PROVIDER_NAME,
+      logoutCallbackUrl: xyzEnv.SLO_CALLBACK,
+    };
 
-The user object is signed as a JSON Web Token and set as a cookie to the HTTP response header.
-
-@param {Object} req HTTP request.
-@param {string} req.url Request path.
-@param {Object} res HTTP response.
-*/
-
-module.exports = function saml(req, res) {
-  if (!sp || !idp) {
-    console.warn(`SAML SP or IDP are not available in XYZ instance.`);
-    return;
-  }
-
-  // Return metadata.
-  if (/\/saml\/metadata/.exec(req.url)) {
-    res.setHeader('Content-Type', 'application/xml');
-    res.send(sp.create_metadata());
-  }
-
-  // Create Service Provider login request url.
-  if (req.params?.login || /\/saml\/login/.exec(req.url)) {
-    sp.create_login_request_url(idp, {}, (err, login_url, request_id) => {
-      if (err != null) return res.send(500);
-
-      res.setHeader('location', login_url);
-      res.status(301).send();
-    });
-  }
-
-  if (/\/saml\/acs/.exec(req.url)) {
-    sp.post_assert(
-      idp,
-      {
-        request_body: req.body,
-      },
-      async (err, saml_response) => {
-        if (err != null) {
-          console.error(err);
-          return res.send(500);
-        }
-
-        logger(saml_response, 'saml_response');
-
-        const user = {
-          email: saml_response.user.name_id,
-          session_index: saml_response.user.session_index,
-        };
-
-        if (process.env.SAML_ACL) {
-          const acl_response = await acl_lookup(saml_response.user.name_id);
-
-          if (!acl_response) {
-            return res.status(401).send('User account not found');
-          }
-
-          if (acl_response instanceof Error) {
-            return res.status(401).send(acl_response.message);
-          }
-
-          Object.assign(user, acl_response);
-        }
-
-        // Create token with 8 hour expiry.
-        const token = jwt.sign(user, process.env.SECRET, {
-          expiresIn: parseInt(process.env.COOKIE_TTL),
-        });
-
-        const cookie =
-          `${process.env.TITLE}=${token};HttpOnly;` +
-          `Max-Age=${process.env.COOKIE_TTL};` +
-          `Path=${process.env.DIR || '/'};`;
-
-        res.setHeader('Set-Cookie', cookie);
-
-        res.setHeader('location', `${process.env.DIR || '/'}`);
-
-        return res.status(302).send();
-      },
+    // Create SAML strategy instance
+    samlStrat = new SAML(samlConfig);
+    return saml;
+  } catch {
+    // Check for SAML-related xyzEnvironment variables
+    const samlKeys = Object.keys(xyzEnv).filter((key) =>
+      key.startsWith('SAML'),
     );
+
+    // Log warning if SAML variables exist but module fails to initialize
+    if (samlKeys.length > 0) {
+      console.log('SAML2 module is not available.');
+    }
+    return null;
   }
 };
 
+const exportedModule = getModule();
+
+export default exportedModule;
+
 /**
-@function acl_lookup
+@function saml
+@description Handles SAML authentication flow endpoints and operations
+
+Provides endpoints for:
+- /saml/metadata: Returns SP metadata in XML format
+- /saml/login: Initiates SAML login flow
+- /saml/logout: Handles SAML logout
+- /saml/acs: Assertion Consumer Service endpoint
+- /saml/logout/callback: Handles logout callback
+
+Authentication Flow:
+1. User hits login endpoint
+2. Gets redirected to IdP
+3. IdP authenticates and sends SAML response
+4. Response is validated at ACS endpoint
+5. User profile is created from SAML attributes
+6. Optional ACL lookup enriches profile
+7. JWT token created and set as cookie
+
+@param {Object} req - HTTP request object
+@property {string} req.url - Request URL path
+@property {Object} req.body - POST request body
+@property {Object} req.query - URL query parameters
+@property {Object} req.cookies - Request cookies
+@property {Object} req.params - Route parameters
+
+@param {Object} res - HTTP response object
+@property {function} res.send - Send response function
+@property {function} res.setHeader - Set response header
+
+@throws {Error} If SAML is not configured
+@throws {Error} If authentication fails
+**/
+function saml(req, res) {
+  // Check SAML availability
+  if (!samlStrat) {
+    console.warn(`SAML is not available in XYZ instance.`);
+    return;
+  }
+
+  switch (true) {
+    // Metadata endpoint - returns SP configuration
+    case /\/saml\/metadata/.test(req.url):
+      metadata(res);
+      break;
+
+    // Logout callback endpoint - clears session
+    case /\/saml\/logout\/callback/.test(req.url):
+      logoutCallback(res);
+      break;
+
+    // Logout endpoint - initiates logout flow
+    case /\/saml\/logout/.test(req.url):
+      logout(req, res);
+      break;
+
+    // Login endpoint - starts authentication flow
+    case req.params?.login || /\/saml\/login/.test(req.url):
+      login(req, res);
+      break;
+
+    // ACS endpoint - processes SAML response
+    case /\/saml\/acs/.test(req.url):
+      acs(req, res);
+      break;
+  }
+}
+
+/**
+@function metadata 
+@description Handles the metadata response 
+
+@param {Object} res - HTTP response object
+@property {function} res.send - Send response function
+@property {function} res.setHeader - Set response header
+**/
+function metadata(res) {
+  res.setHeader('Content-Type', 'application/xml');
+  const metadata = samlStrat.generateServiceProviderMetadata(
+    null,
+    samlConfig.idpCert,
+  );
+  res.send(metadata);
+}
+
+/**
+@function logoutCallback
+@description Handles the logoutCallback POST from  the idp
+
+@param {Object} res - HTTP response object
+@property {function} res.setHeader - Set response header
+**/
+function logoutCallback(res) {
+  try {
+    // Most blokes will be settin' their cookies at UTC midnight
+    // Where can you go from there? Nowhere.
+    res.setHeader(
+      'Set-Cookie',
+      `${xyzEnv.TITLE}=; HttpOnly; Path=${xyzEnv.DIR || '/'}; Expires=Thu, 01 Jan 1970 00:00:00 GMT`, // But these cookies go to zero. That's one less.
+    );
+
+    res.setHeader('location', `${xyzEnv.DIR || '/'}`);
+    return res.status(302).send();
+  } catch (error) {
+    console.error('Logout validation failed:', error);
+
+    res.setHeader('location', `${xyzEnv.DIR || '/'}`);
+    return res.status(302).send();
+  }
+}
+
+/**
+@function logout
+@description Handles the logout request from the api.js
+
+@param {Object} req - HTTP request object
+@property {Object} req.cookies - Request Cookies
+
+@param {Object} res - HTTP response object
+@property {function} res.setHeader - Set response header
+**/
+async function logout(req, res) {
+  try {
+    const user = await jwt.decode(req.cookies[`${xyzEnv.TITLE}`]);
+
+    // If no user/cookie, redirect to home
+    if (!user) {
+      res.setHeader('location', `${xyzEnv.DIR || '/'}`);
+      return res.status(302).send();
+    }
+
+    if (user.sessionIndex) {
+      // Get logout URL from IdP if session exists
+      const url = await samlStrat.getLogoutUrlAsync(user);
+
+      res.setHeader('location', url);
+      return res.status(302).send();
+    } else {
+      logoutCallback(res);
+    }
+  } catch (error) {
+    console.error('Logout process failed:', error);
+
+    res.setHeader('location', `${xyzEnv.DIR || '/'}`);
+    return res.status(302).send();
+  }
+}
+
+/**
+@function login
+@description Handles the login request from the api.js and redirects to login url.
+
+@param {Object} req - HTTP request object
+@property {function} req.get - Request get function
+
+@param {Object} res - HTTP response object
+**/
+async function login(req, res) {
+  try {
+    // Get return URL from query or default to base dir
+    const relayState = xyzEnv.DIR ?? '/';
+
+    // Get authorization URL from IdP
+    const url = await samlStrat.getAuthorizeUrlAsync(
+      relayState,
+      req.headers['x-forwarded-host'],
+      { additionalParams: {} },
+    );
+
+    res.setHeader('location', url);
+    return res.status(302).send();
+  } catch (error) {
+    console.error('SAML authorization error:', error);
+    res.status(500).send('Authentication failed');
+  }
+}
+
+/**
+@function acs 
+@description Handles the acs POST request from the idp
+
+@param {Object} req - HTTP request object
+@property {Object} req.body - Request Body
+
+@param {Object} res - HTTP response object
+@property {string} res.status - request status
+@property {function} res.send - Send response function
+@property {function} res.setHeader - Set response header
+**/
+async function acs(req, res) {
+  try {
+    // Validate SAML response
+    const samlResponse = await samlStrat.validatePostResponseAsync(req.body);
+
+    // Create user Object from SAML attributes
+    const user = {
+      email: samlResponse.profile.nameID,
+      nameID: samlResponse.profile.nameID,
+      sessionIndex: samlResponse.profile.sessionIndex,
+      nameIDFormat: samlResponse.profile.nameIDFormat,
+      nameQualifier: samlResponse.profile.nameQualifier,
+      spNameQualifier: samlResponse.profile.spNameQualifier,
+    };
+
+    // Perform ACL lookup if enabled
+    if (xyzEnv.SAML_ACL) {
+      const aclResponse = await aclLookUp(user.email);
+
+      if (!aclResponse) {
+        const url = await samlStrat.getLogoutUrlAsync(user);
+
+        // Login with non exist SAML user will destroy session and return login.
+        //
+        res.setHeader('location', url);
+        return res.status(302).send();
+      }
+
+      if (aclResponse instanceof Error) {
+        res.status(401).send(aclResponse.message);
+      }
+
+      Object.assign(user, aclResponse);
+    }
+
+    // Create JWT token and set cookie
+    const token = jwt.sign(user, xyzEnv.SECRET, {
+      expiresIn: xyzEnv.COOKIE_TTL,
+    });
+
+    const cookie =
+      `${xyzEnv.TITLE}=${token};HttpOnly;` +
+      `Max-Age=${xyzEnv.COOKIE_TTL};` +
+      `Path=${xyzEnv.DIR || '/'};`;
+
+    res.setHeader('Set-Cookie', cookie);
+
+    res.setHeader('location', `${xyzEnv.DIR || '/'}`);
+    return res.status(302).send();
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+/**
+@function aclLookUp
 
 @description
-The acl_lookup attempts to find a user record by it's email in the ACL.
+The aclLookUp attempts to find a user record by it's email in the ACL.
 
 The user record will be validated and returned to the requesting saml Assertion Consumer Service [ACS].
 
@@ -179,7 +428,7 @@ The user record will be validated and returned to the requesting saml Assertion 
 User object or Error.
 */
 
-async function acl_lookup(email) {
+async function aclLookUp(email) {
   if (acl === null) {
     return new Error('ACL unavailable.');
   }

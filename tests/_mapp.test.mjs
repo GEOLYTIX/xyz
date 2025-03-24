@@ -1,39 +1,46 @@
-import { base } from '../public/tests/_base.test.mjs';
+/**
+## _mappTest
+* Exports test functions for various MAPP modules to the global scope.
+* This is used by the test runner to execute tests for different parts of the MAPP library.
+@module _mappTest
+*/
+
 import { coreTest } from './browser/local.test.mjs';
 import { mappTest } from './lib/mapp.test.mjs';
-import { layerTest } from './lib/layer/_layer.test.mjs';
+import { layer } from './lib/layer/_layer.test.mjs';
 import { dictionaryTest } from './lib/dictionaries/_dictionaries.test.mjs';
 import { locationTest } from './lib/location/_location.test.mjs';
 import { mapviewTest } from './lib/mapview/_mapview.test.mjs';
-import { pluginsTest } from './plugins/_plugins.test.mjs';
-import { workspaceSuite } from './mod/workspace/_workspace.test.mjs';
-import { queryTest } from './mod/query.test.mjs';
-import { userTest } from './mod/user/_user.test.js';
-import { ui_elementsTest } from './lib/ui/elements/_elements.test.mjs';
-import { ui_layers } from './lib/ui/layers/_layers.test.mjs';
-import { entriesTest } from './lib/ui/locations/entries/_entries.test.mjs';
-import { uiTest } from './lib/ui/_ui.test.mjs';
+import { uiTest } from './lib/_ui.test.mjs';
 import { utilsTest } from './lib/utils/_utils.test.mjs';
-import { formatTest } from './lib/layer/format/_format.test.mjs';
-import { ui_locations } from './lib/ui/locations/_locations.test.mjs';
+import { integrityTests } from './browser/integrity/_integrity.test.mjs';
 
-self._mappTest = {
-  base,
+/**
+ * @global
+ * @name _mappTest
+ * @type {object}
+ * @description An object containing test functions for various MAPP modules.
+ * This object is assigned to the global scope to be accessible by the test runner.
+ * Each property of this object is a test function or a set of test functions for a specific module.
+ *
+ * @property {function} coreTest - Test functions for core MAPP functionality, this will run the other test functions.
+ * @property {function} mappTest - Test functions for the mapp object.
+ * @property {function} integrityTests - Test functions for 3rd party (db servers) integrity.
+ * @property {function} layer - Test functions for the layer module.
+ * @property {function} dictionaryTest - Test functions for the dictionaries module.
+ * @property {function} locationTest - Test functions for the location module.
+ * @property {function} mapviewTest - Test functions for the mapview module.
+ * @property {function} uiTest - Test functions for the UI module.
+ * @property {function} utilsTest - Test functions for the utils module.
+ */
+globalThis._mappTest = {
   coreTest,
   mappTest,
-  layerTest,
+  integrityTests,
+  layer,
   dictionaryTest,
   locationTest,
   mapviewTest,
-  pluginsTest,
-  workspaceSuite,
-  queryTest,
-  userTest,
-  ui_elementsTest,
-  ui_layers,
-  entriesTest,
   uiTest,
   utilsTest,
-  formatTest,
-  ui_locations,
 };

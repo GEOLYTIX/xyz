@@ -1,4 +1,11 @@
-module.exports = (_) => {
+/**
+### /workspace/templates/location_update
+
+The location_update layer query updates a record in the layer table identified where layer qID matches the provided id property.
+
+@module /workspace/templates/location_update
+*/
+export default (_) => {
   // The location ID must not be altered.
   if (Object.keys(_.body).some((key) => key === _.layer.qID || key === 'id')) {
     throw new Error(

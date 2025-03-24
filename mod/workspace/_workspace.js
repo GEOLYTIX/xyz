@@ -12,6 +12,7 @@ The workspace typedef object has templates, locale, locales, dbs, and roles prop
 @requires /workspace/cache
 @requires /workspace/getLocale
 @requires /workspace/getLayer
+@requires /workspace/getTemplate
 @requires /utils/roles
 
 @module /workspace
@@ -27,15 +28,15 @@ The workspace object defines the mapp resources available in an XYZ instance.
 @property {Object} locales Each property in the locales object is a locale available from this workspace.
 */
 
-const Roles = require('../utils/roles');
+import * as Roles from '../utils/roles.js';
 
-const workspaceCache = require('./cache');
+import workspaceCache from './cache.js';
 
-const getLocale = require('./getLocale');
+import getLocale from './getLocale.js';
 
-const getLayer = require('./getLayer');
+import getLayer from './getLayer.js';
 
-const getTemplate = require('./getTemplate');
+import getTemplate from './getTemplate.js';
 
 const keyMethods = {
   layer,
@@ -61,7 +62,7 @@ The method checks whether the req.params.key matches a keyMethods property and r
 @property {Object} req.params HTTP request params.
 @property {string} params.key Workspace API method requested.
 */
-module.exports = async function getKeyMethod(req, res) {
+export default async function getKeyMethod(req, res) {
   workspace = await workspaceCache();
 
   if (workspace instanceof Error) {
@@ -76,7 +77,7 @@ module.exports = async function getKeyMethod(req, res) {
   }
 
   return keyMethods[req.params.key](req, res);
-};
+}
 
 /**
 @function layer
@@ -190,7 +191,9 @@ async function locale(req, res) {
         .filter((layer) => !(layer instanceof Error));
     });
 
-    return res.json(removeRoles(locale));
+    const localeWithoutRoles = removeRoles(locale);
+
+    return res.json(localeWithoutRoles);
   }
 
   // Check layer access.
@@ -219,9 +222,9 @@ An object with detailed workspace.roles{} can be requested with the `detail=true
 @param {req} req HTTP request.
 @param {req} res HTTP response.
 
-@property {Object} req.params 
+@property {Object} req.params
 HTTP request parameter.
-@property {Boolean} params.detail 
+@property {Boolean} params.detail
 Whether the roles should be returned as an object with details.
 
 @returns {Array|Object} Returns either an array of roles as string, or an object with roles as properties.
@@ -285,9 +288,9 @@ A flat array of template.err will be returned from the workspace/test method.
 @param {req} req HTTP request.
 @param {req} res HTTP response.
 
-@property {Object} req.params 
+@property {Object} req.params
 HTTP request parameter.
-@property {Object} params.user 
+@property {Object} params.user
 The user requesting the test method.
 @property {Boolean} user.admin
 The user is required to have admin priviliges.
@@ -445,7 +448,7 @@ function templateUse(obj, test) {
 
 /**
 @function removeRoles
-@description 
+@description
 Recursively removes all 'roles' objects from the provided object [locale, layer].
 This function is designed to sanitize locale configuration objects before sending to the client,
 ensuring that role-based permissions data is not exposed.

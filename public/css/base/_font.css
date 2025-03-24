@@ -1,0 +1,4 @@
+a.mask-icon,
+a > .mask-icon {
+  background-color: var(--color-primary);
+}

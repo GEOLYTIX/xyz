@@ -1,92 +1,28 @@
 /**
+### /provider/s3
+
+The S3 provider module requires the [S3 signer]{@link module:/sign/s3} and will return a signed request URL.
+
+@requires /sign/s3
+
 @module /provider/s3
 */
 
-const {
-  S3Client,
-  PutObjectCommand,
-  GetObjectCommand,
-  DeleteObjectCommand,
-  ListObjectsCommand,
-} = require('@aws-sdk/client-s3');
+import s3_signer from '../sign/s3.js';
 
-const { getSignedUrl } = require('@aws-sdk/s3-request-presigner');
+export default s3_signer ? s3_provider : null;
 
-module.exports = async (req, res) => {
-  const credentials = Object.fromEntries(
-    new URLSearchParams(process.env.AWS_S3_CLIENT),
-  );
+/**
+@function s3_provider
 
-  const s3Client = new S3Client({
-    credentials,
-    region: req.params.region,
-  });
+@description
+The s3_provider method returns the s3_signer method.
 
-  const commands = {
-    get,
-    put,
-    trash,
-    list,
-  };
+@param {Object} req HTTP request.
+@param {Object} res HTTP response.
 
-  if (!Object.hasOwn(commands, req.params.command)) {
-    return res.status(400).send(`S3 command validation failed.`);
-  }
-
-  return commands[req.params.command](s3Client, req);
-};
-
-async function trash(s3Client, req) {
-  const command = new DeleteObjectCommand({
-    Key: req.params.key,
-    Bucket: req.params.bucket,
-  });
-
-  return s3Client.send(command);
-}
-
-async function get(s3Client, req) {
-  try {
-    const command = new GetObjectCommand({
-      Key: req.params.key,
-      Bucket: req.params.bucket,
-    });
-
-    const signedURL = await getSignedUrl(s3Client, command, {
-      expiresIn: 3600,
-    });
-
-    return JSON.stringify(signedURL);
-  } catch (err) {
-    console.error(err);
-  }
-}
-
-async function put(s3Client, req) {
-  try {
-    const command = new PutObjectCommand({
-      Key: req.params.key,
-      Bucket: req.params.bucket,
-      Region: req.params.region,
-    });
-
-    const signedURL = await getSignedUrl(s3Client, command, {
-      expiresIn: 3600,
-    });
-
-    return JSON.stringify(signedURL);
-  } catch (err) {
-    console.error(err);
-  }
-}
-
-async function list(s3Client, req) {
-  try {
-    const command = new ListObjectsCommand({ Bucket: req.params.bucket });
-    const response = await s3Client.send(command);
-
-    return response;
-  } catch (err) {
-    console.error(err);
-  }
+@returns {Function} The s3_signer module method.
+**/
+async function s3_provider(req, res) {
+  return s3_signer(req, res);
 }

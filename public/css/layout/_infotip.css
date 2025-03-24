@@ -1,0 +1,11 @@
+.infotip {
+  position: fixed;
+  z-index: 998;
+  margin: 0;
+  padding: 5px;
+  background-color: var(--color-light);
+  opacity: 0;
+  transition-property: opacity;
+  transition-duration: 0.3s;
+  transition-delay: 0.2s;
+}

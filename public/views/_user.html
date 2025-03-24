@@ -7,11 +7,11 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <link href="https://unpkg.com/tabulator-tables@6.2.0/dist/css/tabulator.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0" />
 
-  <script type="text/javascript" src="https://unpkg.com/tabulator-tables@6.2.0/dist/js/tabulator.min.js"></script>
+  <link href="https://unpkg.com/tabulator-tables@6.3.1/dist/css/tabulator.min.css" rel="stylesheet">
 
-  <script src="https://unpkg.com/uhtml@3.2.1/es.js" defer></script>
+  <script type="text/javascript" src="https://unpkg.com/tabulator-tables@6.3.1/dist/js/tabulator.min.js"></script>
 
   <style>
     * {
@@ -35,53 +35,10 @@
       flex-direction: column;
     }
 
-    .icon-face {
-      background-image: url("{{dir}}/public/icons/icon-face.svg");
-    }
-
-    .icon-logout {
-      background-image: url("{{dir}}/public/icons/icon-logout.svg");
-    }
-
-    .icon-tick-done {
-      background-image: url("{{dir}}/public/icons/icon-tick-done.svg");
-    }
-
-    .icon-tick-done-all {
-      background-image: url("{{dir}}/public/icons/icon-tick-done-all.svg");
-    }
-
-    .icon-warning {
-      background-image: url("{{dir}}/public/icons/icon-warning.svg");
-    }
-
-    .icon-translate {
-      background-image: url("{{dir}}/public/icons/icon-translate.svg");
-    }
-
-    .icon-supervisor-account {
-      background-image: url("{{dir}}/public/icons/icon-supervisor-account.svg");
-    }
-
-    .icon-settings {
-      background-image: url("{{dir}}/public/icons/icon-settings.svg");
-    }
-
-    .icon-key {
-      background-image: url("{{dir}}/public/icons/icon-key.svg");
-    }
-
-    .icon-lock-closed {
-      background-image: url("{{dir}}/public/icons/icon-lock-closed.svg");
-      height: 40px;
-      width: 30px;
-    }
-
-    .xyz-icon {
-      background-repeat: no-repeat;
-      background-position: center;
-      height: 36px;
-      width: 36px;
+    .material-icons {
+      font-family: 'Material Symbols Outlined', sans-serif;
+      font-size: 24px;
+      color: black;
     }
 
     .btn-row {
@@ -126,11 +83,11 @@
       }
     }
 
-    @media only screen and (max-width: 700px) {
+    @media only screen and (max-width: 768px) {
 
       body,
       h1 {
-        margin: 0
+        padding: 10px;
       }
     }
   </style>
@@ -149,12 +106,9 @@
         <button class="raised primary-colour" id="toggleBlocked">Show blocked accounts</button>
       </div>
       <div>
-        <button class="raised primary-colour" id="default-view"
+        <button class="raised primary-colour"
           onclick="window.location.href = `${window.location.origin}{{dir}}`">Default View</button>
-        <button class="raised primary-colour" id="test-view"
-          onclick="window.location.href = `${window.location.origin}{{dir}}?template=test_view&integrity=true&download=true`">Test
-          View</button>
-        <button class="raised red" id="logout"
+        <button class="raised red"
           onclick="window.location.href = `${window.location.origin}{{dir}}?logout=true`">Logout</button>
       </div>
     </div>
@@ -176,7 +130,7 @@
     // Get list of available roles from workspace.
     const rolesList = await xhrPromise(`${document.head.dataset.dir}/api/workspace/roles`)
 
-    // List of languages key values. 
+    // List of languages key values.
     const languagesList = {
       "en": "English",
       "de": "German",
@@ -232,8 +186,9 @@
             field: 'email',
             vertAlign: 'middle',
             headerTooltip: 'Account EMail',
-            titleFormatter: () => '<div class="icon-face xyz-icon"></div>',
-            resizable: false,
+            titleFormatter: () => '<span class="material-icons">face</span>',
+            resizable: true,
+            frozen: true,
             responsive: 0 // Never hide
           },
           {
@@ -241,7 +196,7 @@
             hozAlign: 'center',
             vertAlign: 'middle',
             headerTooltip: 'The account email has been verified through a token sent to the email address.',
-            titleFormatter: () => '<div class="icon-tick-done xyz-icon"></div>',
+            titleFormatter: () => '<span class="material-icons">done</span>',
             formatter: 'tickCross',
             cellClick: cellToggle,
             resizable: false,
@@ -252,7 +207,7 @@
             hozAlign: 'center',
             vertAlign: 'middle',
             headerTooltip: 'The account has an outstanding password reset to be verified.',
-            titleFormatter: () => '<div class="xyz-icon" style="background-image:url(https://fonts.gstatic.com/s/i/short-term/release/materialsymbolsoutlined/check_circle/default/24px.svg)"></div>',
+            titleFormatter: () => '<span class="material-icons">check_circle</span>',
             formatter: 'tickCross',
             cellClick: cellToggle,
             resizable: false,
@@ -263,7 +218,7 @@
             hozAlign: 'center',
             vertAlign: 'middle',
             headerTooltip: 'The account has been approved by a site administrator and is permitted to access the application.',
-            titleFormatter: () => '<div class="icon-tick-done-all xyz-icon"></div>',
+            titleFormatter: () => '<span class="material-icons">done_all</span>',
             formatter: 'tickCross',
             cellClick: cellToggle,
             resizable: false,
@@ -274,7 +229,7 @@
             hozAlign: 'center',
             vertAlign: 'middle',
             headerTooltip: 'The account is an admin account which can access this page and change other account credentials.',
-            titleFormatter: () => '<div class="xyz-icon icon-supervisor-account"></div>',
+            titleFormatter: () => '<span class="material-icons">supervisor_account</span>',
             formatter: 'tickCross',
             cellClick: cellToggle,
             resizable: false,
@@ -285,7 +240,7 @@
             hozAlign: 'center',
             vertAlign: 'middle',
             headerTooltip: 'The account has priviliges to create API keys.',
-            titleFormatter: () => '<div class="xyz-icon icon-key"></div>',
+            titleFormatter: () => '<span class="material-icons">key</span>',
             formatter: 'tickCross',
             cellClick: cellToggle,
             resizable: false,
@@ -296,7 +251,7 @@
             hozAlign: 'center',
             vertAlign: 'middle',
             headerTooltip: 'Failed login attempts.',
-            titleFormatter: () => '<div class="xyz-icon icon-warning"></div>',
+            titleFormatter: () => '<span class="material-icons">warning</span>',
             formatter: (cell, formatterParams) => '<span style="color:red; font-weight:bold;">' + cell.getValue() + '</span>',
             resizable: false,
             responsive: 2 // Hide first
@@ -306,7 +261,7 @@
             hozAlign: 'center',
             vertAlign: 'middle',
             headerTooltip: 'Account language',
-            titleFormatter: () => '<div class="xyz-icon icon-translate"></div>',
+            titleFormatter: () => '<span class="material-icons">translate</span>',
             editor: 'list',
             editorParams: {
               // show the label of the language in the dropdown list
@@ -387,7 +342,7 @@
             hozAlign: 'center',
             vertAlign: 'middle',
             headerTooltip: 'Blocked accounts can no longer login or reset their password.',
-            titleFormatter: () => '<div class="icon-lock-closed xyz-icon"></div>',
+            titleFormatter: () => '<span class="material-icons">lock</span>',
             formatter: 'tickCross',
             cellClick: cellToggle,
             resizable: false,
@@ -397,6 +352,7 @@
             field: 'delete',
             vertAlign: 'middle',
             headerSort: false,
+            titleFormatter: () => '<span class="material-icons">person_remove</span>',
             formatter: () => '<span style="color:red; font-weight:bold;">DELETE</span>',
             cellClick: rowDelete,
             resizable: false,
@@ -436,7 +392,7 @@
 
       let rowData = cell.getRow().getData()
       //create and style editor
-      var editor = document.createElement("input");
+      let editor = document.createElement("input");
 
       editor.setAttribute("type", "date");
 
@@ -571,7 +527,7 @@
 
       xhr.send()
     })
-  } 
+  }
 </script>
 
 </html>

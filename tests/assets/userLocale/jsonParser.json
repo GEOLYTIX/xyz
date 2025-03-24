@@ -1,0 +1,283 @@
+{
+  "templates": {
+    "nuts3": {
+      "style": {
+        "default": {
+          "strokeWidth": 1,
+          "strokeColor": "#555",
+          "fillColor": "#fff",
+          "fillOpacity": 0
+        },
+        "themes": {
+          "Population": {
+            "cat_arr": [
+              {
+                "value": "0",
+                "label": "up to 50000",
+                "style": {
+                  "strokeColor": "#00897b",
+                  "fillColor": "#00897b",
+                  "fillOpacity": 0.5
+                }
+              },
+              {
+                "value": "50000",
+                "label": "50000+",
+                "style": {
+                  "strokeColor": "#43a047",
+                  "fillColor": "#43a047",
+                  "fillOpacity": 0.5
+                }
+              },
+              {
+                "value": "100000",
+                "label": "100000+",
+                "style": {
+                  "strokeColor": "#c0ca33",
+                  "fillColor": "#c0ca33",
+                  "fillOpacity": 0.5
+                }
+              },
+              {
+                "value": "250000",
+                "label": "250000+",
+                "style": {
+                  "strokeColor": "#fdd835",
+                  "fillColor": "#fdd835",
+                  "fillOpacity": 0.5
+                }
+              },
+              {
+                "value": "500000",
+                "label": "500000+",
+                "style": {
+                  "strokeColor": "#fb8c00",
+                  "fillColor": "#fb8c00",
+                  "fillOpacity": 0.5
+                }
+              },
+              {
+                "value": "1000000",
+                "label": "1000000+",
+                "style": {
+                  "strokeColor": "#f4511e",
+                  "fillColor": "#f4511e",
+                  "fillOpacity": 0.5
+                }
+              }
+            ]
+          },
+          "Average Age": {
+            "cat_arr": [
+              {
+                "value": "0",
+                "label": "under 35",
+                "style": {
+                  "strokeColor": "#00897b",
+                  "fillColor": "#00897b",
+                  "fillOpacity": 0.5
+                }
+              },
+              {
+                "value": "35",
+                "label": "over 35",
+                "style": {
+                  "strokeColor": "#43a047",
+                  "fillColor": "#43a047",
+                  "fillOpacity": 0.5
+                }
+              },
+              {
+                "value": "37.5",
+                "label": "over 37.5",
+                "style": {
+                  "strokeColor": "#c0ca33",
+                  "fillColor": "#c0ca33",
+                  "fillOpacity": 0.5
+                }
+              },
+              {
+                "value": "40",
+                "label": "over 40",
+                "style": {
+                  "strokeColor": "#fdd835",
+                  "fillColor": "#fdd835",
+                  "fillOpacity": 0.5
+                }
+              },
+              {
+                "value": "42.5",
+                "label": "over 42.5",
+                "style": {
+                  "strokeColor": "#fb8c00",
+                  "fillColor": "#fb8c00",
+                  "fillOpacity": 0.5
+                }
+              },
+              {
+                "value": "45",
+                "label": "over 45",
+                "style": {
+                  "strokeColor": "#f4511e",
+                  "fillColor": "#f4511e",
+                  "fillOpacity": 0.5
+                }
+              }
+            ]
+          },
+          "Affluence": {
+            "cat": {
+              "1": {
+                "label": "1",
+                "style": {
+                  "fillColor": "#fff7f3",
+                  "fillOpacity": 0.5
+                }
+              },
+              "2": {
+                "label": "2",
+                "style": {
+                  "fillColor": "#fde0dd",
+                  "fillOpacity": 0.5
+                }
+              },
+              "3": {
+                "label": "3",
+                "style": {
+                  "fillColor": "#fcc5c0",
+                  "fillOpacity": 0.5
+                }
+              },
+              "4": {
+                "label": "4",
+                "style": {
+                  "fillColor": "#fa9fb5",
+                  "fillOpacity": 0.5
+                }
+              },
+              "5": {
+                "label": "5",
+                "style": {
+                  "fillColor": "#f768a1",
+                  "fillOpacity": 0.5
+                }
+              },
+              "6": {
+                "label": "6",
+                "style": {
+                  "fillColor": "#dd3497",
+                  "fillOpacity": 0.5
+                }
+              },
+              "7": {
+                "label": "7",
+                "style": {
+                  "fillColor": "#ae017e",
+                  "fillOpacity": 0.5
+                }
+              },
+              "8": {
+                "label": "8",
+                "style": {
+                  "fillColor": "#7a0177",
+                  "fillOpacity": 0.5
+                }
+              }
+            }
+          },
+          "Life Stage": {
+            "cat": {
+              "C": {
+                "label": "C",
+                "style": {
+                  "fillColor": "#f7fcb9",
+                  "fillOpacity": 0.5
+                }
+              },
+              "D": {
+                "label": "D",
+                "style": {
+                  "fillColor": "#addd8e",
+                  "fillOpacity": 0.5
+                }
+              },
+              "E": {
+                "label": "E",
+                "style": {
+                  "fillColor": "#41ab5d",
+                  "fillOpacity": 0.5
+                }
+              },
+              "F": {
+                "label": "F",
+                "style": {
+                  "fillColor": "#005a32",
+                  "fillOpacity": 0.5
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "locale": {
+    "plugins": ["PLUGIN_1", "PLUGIN_2", "PLUGIN_3"],
+    "dark_mode": {},
+    "extent": {
+      "north": 72,
+      "east": 43,
+      "south": 32,
+      "west": -16,
+      "mask": true
+    },
+    "lordArrArr": [["arr", ["arr", "arr"]]],
+    "nullKey": null,
+    "trueKey": true,
+    "falseKey": false,
+    "userLocale": {
+      "store": "userIDB"
+    },
+    "minZoom": 3,
+    "maxZoom": 15,
+    "layers": {
+      "OSM": {
+        "display": true,
+        "format": "tiles",
+        "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        "style": {
+          "contextFilter": "grayscale(100%)"
+        },
+        "attribution": {
+          "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+        }
+      },
+      "vectors": {
+        "group": "test",
+        "name": "NUTS3 Vector",
+        "format": "wkt",
+        "template": "nuts3",
+        "tests": {
+          "getLocation": {}
+        },
+        "params": {
+          "viewport": true
+        },
+        "attribution": {
+          "© eurostat": "https://ec.europa.eu/eurostat/web/nuts"
+        }
+      },
+      "circles": {
+        "display": true,
+        "name": "Center of Mass Circles",
+        "format": "geojson",
+        "featureFormat": "centerOfMassCircle",
+        "template": "nuts3",
+        "attribution": {
+          "© eurostat": "https://ec.europa.eu/eurostat/web/nuts",
+          "turf.js": "https://turfjs.org/"
+        }
+      }
+    }
+  }
+}

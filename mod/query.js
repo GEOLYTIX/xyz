@@ -12,21 +12,21 @@ The query module exports the [SQL] query method to pass queries to the stored db
 @module /query
 */
 
-const dbs_connections = require('./utils/dbs');
+import dbs_connections from './utils/dbs.js';
 
-const sqlFilter = require('./utils/sqlFilter');
+import sqlFilter from './utils/sqlFilter.js';
 
-const Roles = require('./utils/roles');
+import * as Roles from './utils/roles.js';
 
-const logger = require('./utils/logger');
+import logger from './utils/logger.js';
 
-const login = require('./user/login');
+import login from './user/login.js';
 
-const workspaceCache = require('./workspace/cache');
+import workspaceCache from './workspace/cache.js';
 
-const getTemplate = require('./workspace/getTemplate');
+import getTemplate from './workspace/getTemplate.js';
 
-const getLayer = require('./workspace/getLayer');
+import getLayer from './workspace/getLayer.js';
 
 /**
 @function query
@@ -47,7 +47,10 @@ The query is executed by the executeQuery() method.
 @property {Object} [params.user] Requesting user.
 @property {Array} [user.roles] User roles.
 */
-module.exports = async function query(req, res) {
+export default async function query(req, res) {
+  // Get workspace from cache.
+  req.params.workspace = await workspaceCache();
+
   // The SQL param is restricted to hold substitute values.
   req.params.SQL = [];
 
@@ -59,8 +62,17 @@ module.exports = async function query(req, res) {
   // Get the template.
   const template = await getTemplate(req.params.template);
 
-  if (template instanceof Error) {
-    return res.status(500).send(template.message);
+  if (template.err instanceof Error) {
+    return res.status(500).send(template.err.message);
+  }
+
+  // A layer template must have a layer param.
+  if (template.layer && !req.params.layer) {
+    return res
+      .status(400)
+      .send(
+        `${req.params.template} query requires a valid layer request parameter.`,
+      );
   }
 
   // The template requires user login.
@@ -85,8 +97,7 @@ module.exports = async function query(req, res) {
     return res.status(403).send('Role access denied for query template.');
   }
 
-  // Get workspace from cache.
-  req.params.workspace = await workspaceCache();
+  if (res.finished) return;
 
   // Assign body to params to enable reserved %{body} parameter.
   req.params.body =
@@ -97,7 +108,7 @@ module.exports = async function query(req, res) {
   const query = await getQueryFromTemplate(req, template);
 
   executeQuery(req, res, template, query);
-};
+}
 
 /**
 @function layerQuery
@@ -105,6 +116,8 @@ module.exports = async function query(req, res) {
 
 @description
 Queries which reference a layer must be checked against the layer JSON in the workspace.
+
+Layer query templates must have a layer request property.
 
 Layer queries have restricted viewport and filter params. These params can not be substituted in the database but must be replaced in the SQL query string.
 
@@ -114,24 +127,32 @@ Any query which references a layer and locale will be passed through the layer q
 /api/query?template=query&locale=uk&layer=retail
 ```
 
+The fields request param property may be provided as an array. The string should be replaced with the template property of a matching workspace template.
+
 @param {req} req HTTP request.
 @param {res} res HTTP response.
+@param {Object} template The query template.
+@property {Boolean} template.layer A layer query template.
 @property {Object} req.params Request params.
 @property {Object} params.filter JSON filter which must be turned into a SQL filter string for substitution.
 @property {Array} params.SQL Substitute parameter for SQL query.
+@property {Array} params.fields An array of string fields is provided for a layer query.
 @property {Object} [params.user] Requesting user.
 @property {Array} [user.roles] User roles.
 */
 async function layerQuery(req, res) {
+  if (req.params.layer_template) {
+    req.params.layer = req.params.layer_template;
+  }
+
   if (!req.params.layer) {
     // Reserved params will be deleted to prevent DDL injection.
     delete req.params.filter;
     delete req.params.viewport;
     return;
+  } else if (typeof req.params.layer === 'string') {
+    req.params.layer = await getLayer(req.params);
   }
-
-  // Assign layer object to req.params.
-  req.params.layer = await getLayer(req.params);
 
   // getLayer will return error on role restrictions.
   if (req.params.layer instanceof Error) {
@@ -139,13 +160,24 @@ async function layerQuery(req, res) {
   }
 
   // Layer queries must have a qID param.
-  req.params.qID ??= req.params.layer.qID || 'NULL';
+  req.params.qID ??= req.params.layer.qID;
 
   // Layer queries must have an srid param.
   req.params.srid ??= req.params.layer.srid;
 
   // Layer queries must have a geom param.
   req.params.geom ??= req.params.layer.geom;
+
+  // Check whether table request param is referenced in layer.
+  if (req.params.table) {
+    const tables = new Set(templateTables(req.params.layer));
+
+    if (!tables.has(req.params.table)) {
+      return res
+        .status(403)
+        .send(`Access to ${req.params.table} table param forbidden.`);
+    }
+  }
 
   // Create filter condition for SQL query.
   req.params.filter = [
@@ -176,6 +208,157 @@ async function layerQuery(req, res) {
           ),
           ${req.params.geom}
         )`;
+  }
+
+  await fieldsMap(req, res);
+
+  await infojMap(req, res);
+}
+
+/**
+@function templateTables
+
+@description
+The methods call the internal getObjTables method to iterate through the [layer] template object argument and its nested propertiess. Any 'table' string properties and string values of a 'tables' object are pushed into tables array returned from the method.
+
+@param {object} template [Layer] template object to parse for table strings.
+@returns {Array} Array of table strings in layer template object.
+*/
+function templateTables(template) {
+  const tables = [];
+
+  getObjTables(template, tables);
+
+  return tables;
+
+  function getObjTables(obj, tables) {
+    if (typeof obj !== 'object') return;
+
+    // Return early if object is null or empty
+    if (obj === null) return;
+
+    // Object must have keys to iterate on.
+    if (obj instanceof Object && !Object.keys(obj)) return;
+
+    Object.entries(obj).forEach(([key, value]) => {
+      if (key === 'table' && typeof value === 'string') {
+        tables.push(value);
+        return;
+      }
+
+      if (
+        key === 'tables' &&
+        value instanceof Object &&
+        Object.keys(value).length
+      ) {
+        Object.values(value).forEach(
+          (table) => typeof table === 'string' && tables.push(table),
+        );
+        return;
+      }
+
+      // Recursively process each item if we find an array
+      if (Array.isArray(value)) {
+        value.forEach((item) => getObjTables(item, tables));
+        return;
+      }
+
+      // Recursively process nested objects
+      if (value instanceof Object) {
+        getObjTables(value, tables);
+      }
+    });
+  }
+}
+
+/**
+@function fieldsMap
+@async
+
+@description
+The method assigns the fieldsMap object property to the request params for layer queries with a fields request parameter.
+
+The fields param is split into an array and template strings of workspace.templates matching a field are set as value to the field key in the fieldsMap object.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {Object} req.params The request params.
+@property {Array} params.fields An array of string fields is provided for a layer query.
+*/
+async function fieldsMap(req, res) {
+  if (!req.params.fields) return;
+
+  const fields = req.params.fields.split(',');
+
+  req.params.fieldsMap = new Map();
+
+  for (const field of fields) {
+    let value = field;
+
+    if (Object.hasOwn(req.params.workspace.templates, field)) {
+      const fieldTemplate = await getTemplate(field);
+
+      value = fieldTemplate.field || field;
+    }
+
+    req.params.fieldsMap.set(field, value);
+  }
+}
+
+/**
+@function infojMap
+@async
+
+@description
+The method assigns the infojMap object property to the request params for layer requests.
+
+The method iterates over the layer.infoj entries and only assigns entry fields valid for a location_get request.
+
+A lookup of template [SQL] strings is attempted only if the template is defined in the entry object.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {Object} req.params The request params.
+@property {Array} params.layer The layer object assigned by the layerQuery
+*/
+async function infojMap(req, res) {
+  if (!req.params.layer?.infoj) return;
+
+  req.params.infojMap = new Map();
+
+  for (const entry of req.params.layer.infoj) {
+    // An entry must have a field, and not a query.
+    if (!entry.field || entry.query) continue;
+
+    // Only entries with fields included in the fieldsMap should be added if a fieldsMap has been provided.
+    if (req.params.fieldsMap && !req.params.fieldsMap?.has(entry.field))
+      continue;
+
+    // The fieldfx has precendence over templates.
+    if (entry.fieldfx) {
+      req.params.infojMap.set(entry.field, entry.fieldfx);
+      continue;
+    }
+
+    let value = entry.field;
+
+    // Check for workspace.template matching the entry.field.
+    if (
+      entry.template &&
+      Object.hasOwn(req.params.workspace.templates, entry.field)
+    ) {
+      const fieldTemplate = await getTemplate(entry.field);
+
+      // Core templates should not be included in the infojMap.
+      if (fieldTemplate._type === 'core') {
+        req.params.infojMap.set(entry.field, value);
+        continue;
+      }
+
+      value = fieldTemplate.template || '';
+    }
+
+    req.params.infojMap.set(entry.field, value);
   }
 }
 
@@ -223,7 +406,7 @@ function getQueryFromTemplate(req, template) {
     }
 
     // Returns -1 if ${filter} not found in template
-    if (template.template.search(/\$\{filter\}/) < 0) {
+    if (template.template.search(/\${filter}/) < 0) {
       // Ensure that the $n substitute params match the SQL length on layer queries without a ${filter}
       delete req.params.filter;
       //We remove the SQL params because there is no filter at this stage so we don't have any values to substitute.
@@ -234,9 +417,9 @@ function getQueryFromTemplate(req, template) {
     const query_template = template.template
 
       // Replace parameter for identifiers, e.g. table, schema, columns
-      .replace(/\$\{{1}(.*?)\}{1}/g, (matched) => {
+      .replace(/\${(.{0,99}?)}/g, (matched) => {
         // Remove template brackets from matched param.
-        const param = matched.replace(/\$\{{1}|\}{1}/g, '');
+        const param = matched.replace(/\${|}/g, '');
 
         // Get param value from request params object.
         const change = req.params[param] || '';
@@ -253,23 +436,21 @@ function getQueryFromTemplate(req, template) {
       })
 
       // Replace params with placeholder, eg. $1, $2
-      .replace(/\%{{1}(.*?)\}{1}/g, (matched) => {
+      .replace(/%{(.{0,99}?)}/g, (matched) => {
         // Remove template brackets from matched param.
-        const param = matched.replace(/\%\{{1}|\}{1}/g, '');
+        const param = matched.replace(/%{|}/g, '');
 
-        var val = req.params[param]; // || ""
+        let val = req.params[param];
 
         if (req.params.wildcard) {
           val = val.replaceAll(req.params.wildcard, '%');
         }
 
         try {
-          // Try to parse val if the string begins and ends with either [] or {}
-          val =
-            (!param === 'body' &&
-              /^[\[\{]{1}.*[\]\}]{1}$/.test(val) &&
-              JSON.parse(val)) ||
-            val;
+          if (param !== 'body' && /^[[{].*[\]}]$/.test(val)) {
+            // Parse val as JSON if param is not 'body' and the [string] value begins and ends with either [] or {}.
+            val = JSON.parse(val);
+          }
         } catch (err) {
           console.error(err);
         }
@@ -277,7 +458,7 @@ function getQueryFromTemplate(req, template) {
         // Push value from request params object into params array.
         req.params.SQL.push(val);
 
-        return `$${req.params.SQL.length}`;
+        return `$${Array.from(req.params.SQL).length}`;
       });
 
     return query_template;
@@ -369,15 +550,8 @@ function sendRows(req, res, template, rows) {
     return res.status(500).send('Failed to query PostGIS table.');
   }
 
-  // return 202 if no record was returned from database.
-  if (!rows || !rows.length)
-    return res.status(202).send('No rows returned from table.');
-
-  // Check whether any row of the rows array is empty or whether a single row is empty.
-  if (
-    (rows.length && !rows.some((row) => checkEmptyRow(row))) ||
-    !checkEmptyRow(rows)
-  ) {
+  // The rows array must have a length with some row not being empty.
+  if (!rows?.length || !rows.some((row) => checkEmptyRow(row))) {
     return res.status(202).send('No rows returned from table.');
   }
 

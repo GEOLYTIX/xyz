@@ -1,4 +1,11 @@
-module.exports = (_) => {
+/**
+### /workspace/templates/mvt_geom
+
+The mvt layer query template returns a vector tile (st_asmvt) with mvt geometries but without field properties.
+
+@module /workspace/templates/mvt_geom
+*/
+export default (_) => {
   const x = parseInt(_.x),
     y = parseInt(_.y),
     z = parseInt(_.z);

@@ -62,29 +62,6 @@ button {
   }
 }
 
-.btn-column {
-  display: grid;
-  grid-auto-rows: minmax(min-content, 4em);
-  padding: 0.7em;
-
-  & button,
-  & > div,
-  & > a {
-    width: 2em;
-    height: 2em;
-  }
-
-  & a > div,
-  & button > div {
-    height: 100%;
-  }
-
-  & button:disabled,
-  & a:disabled {
-    cursor: not-allowed;
-  }
-}
-
 .btn-row {
   display: flex;
   & > * {

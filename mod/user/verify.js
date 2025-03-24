@@ -7,17 +7,18 @@ Exports the [user] verify method for the /api/user/verify route.
 @requires module:/user/login
 @requires module:/utils/mailer
 @requires module:/utils/languageTemplates
+@requires module:/utils/processEnv
 
 @module /user/verify
 */
 
-const acl = require('./acl');
+import acl from './acl.js';
 
-const mailer = require('../utils/mailer');
+import mailer from '../utils/mailer.js';
 
-const languageTemplates = require('../utils/languageTemplates');
+import languageTemplates from '../utils/languageTemplates.js';
 
-const login = require('./login');
+import login from './login.js';
 
 /**
 @function verify
@@ -41,7 +42,7 @@ Verification key
 Request messaging language
 */
 
-module.exports = async (req, res) => {
+export default async (req, res) => {
   // acl module will export an empty require object without the ACL being configured.
   if (acl === null) {
     return res.status(500).send('ACL unavailable.');
@@ -94,10 +95,7 @@ module.exports = async (req, res) => {
     // Login with message if account is approved and password reset.
     if (user.password_reset) {
       // Set root location which will open the login view.
-      res.setHeader(
-        'location',
-        `${process.env.DIR || '/'}?msg=password_reset_ok`,
-      );
+      res.setHeader('location', `${xyzEnv.DIR || '/'}?msg=password_reset_ok`);
 
       return res.status(302).send();
     }

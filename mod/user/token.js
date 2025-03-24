@@ -1,14 +1,19 @@
 /**
 ## /user/token 🎟
 
-Exports the userToken method for the /api/user/token route.
+Exports the userToken method for the /api/user/token route. A token can be provided as a parameter to provide authentication with the user roles that request the token from the api.
+
+A new token may not be requested from a user authenticated by a token.
+
+Token authentication will never provide admin access.
 
 @requires jsonwebtoken
+@requires module:/utils/processEnv
 
-@module /user/key
+@module /user/token
 */
 
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
 /**
 @function userToken
@@ -18,15 +23,14 @@ The `/api/user/token` endpoint requests a jsonwebtoken for the user object.
 
 The encoded user token expires in 8hours and does not carry admin rights.
 
-@param {Object} req HTTP request.
-@param {Object} res HTTP response.
-@param {Object} req.params 
-Request parameter.
-@param {Object} req.params.user 
-Requesting user.
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@param {Object} req.params Request parameter.
+@param {Object} params.user Requesting user.
+@param {string} [params.expiresin='8hr'] Time string for token expiration.
 */
 
-module.exports = async function userToken(req, res) {
+export default async function userToken(req, res) {
   if (!req.params.user) {
     return new Error('login_required');
   }
@@ -34,16 +38,18 @@ module.exports = async function userToken(req, res) {
   const user = req.params.user;
 
   if (user.from_token) {
-    return res.send('Token may not be generated from token authentication.');
+    return new Error('Token may not be generated from token authentication.');
   }
 
   delete user.admin;
   delete user.exp;
   delete user.iat;
 
-  const token = jwt.sign(req.params.user, process.env.SECRET, {
-    expiresIn: '8hr',
+  req.params.expiresin ??= '8hr';
+
+  const token = jwt.sign(req.params.user, xyzEnv.SECRET, {
+    expiresIn: req.params.expiresin,
   });
 
   res.send(token);
-};
+}

@@ -5,13 +5,14 @@ Exports the apiKey method for the /api/user/key route.
 
 @requires module:/user/acl
 @requires jsonwebtoken
+@requires module:/utils/processEnv
 
 @module /user/key
 */
 
-const acl = require('./acl');
+import acl from './acl.js';
 
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
 /**
 @function apiKey
@@ -31,9 +32,10 @@ An API key can be revoked by setting the api field in the ACL record to null.
 Request parameter.
 @param {Object} req.params.user 
 Requesting user.
+@returns {Promise<Object|Error>} A promise that resolves with a response object from the request or an error.
 */
 
-module.exports = async function apiKey(req, res) {
+export default async function apiKey(req, res) {
   // acl module will export an empty require object without the ACL being configured.
   if (acl === null) {
     return res.status(500).send('ACL unavailable.');
@@ -68,7 +70,7 @@ module.exports = async function apiKey(req, res) {
     api: true,
   };
 
-  const key = jwt.sign(api_user, process.env.SECRET);
+  const key = jwt.sign(api_user, xyzEnv.SECRET);
 
   // Store api_token in ACL.
   rows = await acl(
@@ -84,4 +86,4 @@ module.exports = async function apiKey(req, res) {
 
   // Send ACL token.
   res.send(key);
-};
+}

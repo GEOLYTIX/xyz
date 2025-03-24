@@ -8,15 +8,16 @@ A user_sessions{} object is declared in the module to store user sessions.
 @requires module:/user/acl
 @requires module:/user/fromACL
 @requires jsonwebtoken
+@requires module:/utils/processEnv
 
 @module /user/auth
 */
 
-const acl = require('./acl');
+import acl from './acl.js';
 
-const fromACL = require('./fromACL');
+import fromACL from './fromACL.js';
 
-const jwt = require('jsonwebtoken');
+import jwt from 'jsonwebtoken';
 
 const user_sessions = {};
 
@@ -29,7 +30,7 @@ The auth method returns a user object to be assigned as request parameter if a r
 
 Requests with authorization headers will return the user fromACL method.
 
-Without a request parameter token [eg. API key], the token value will be extracted from a request cookie matching the TITLE environment variable.
+Without a request parameter token [eg. API key], the token value will be extracted from a request cookie matching the TITLE xyzEnvironment variable.
 
 The token will be verified by the JWT [jsonwebtoken] library.
 
@@ -37,21 +38,17 @@ With a valid signature the token will be resolved as a user object by the verify
 
 The auth method checks either the request parameter token or user.session if enabled.
 
-@param {Object} req HTTP request.
-@param {Object} req.headers Request headers.
-@param {Object} [req.headers.authorization] 
-User authorization object.
-@param {string} [req.params.token] 
-Authorization token.
-@param {Object} [req.cookies] 
-Request cookies.
-@param {Object} res 
-HTTP response.
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {Object} req.headers Request headers.
+@property {Object} [headers.authorization] User authorization object.
+@property {Object} req.params Request parameters.
+@property {string} [params.token] JWT.
+@property {Object} [req.cookies] Request cookies.
 
-@return {Object} User
+@returns {Promise<Object|Error>} Method resolves to either a user object or Error
 */
-
-module.exports = async function auth(req, res) {
+export default async function auth(req, res) {
   if (acl === null) return null;
 
   if (req.headers.authorization) {
@@ -59,7 +56,7 @@ module.exports = async function auth(req, res) {
   }
 
   // Get token from params or cookie.
-  const token = req.params.token || req.cookies?.[process.env.TITLE];
+  const token = req.params.token || req.cookies?.[xyzEnv.TITLE];
 
   // Return if there is no token to decode
   if (!token) return null;
@@ -67,10 +64,11 @@ module.exports = async function auth(req, res) {
   // Verify the token signature.
   let user;
 
-  if (!process.env.SECRET) return null;
+  // A secret string is required to verify a token.
+  if (!xyzEnv.SECRET) return null;
 
   try {
-    user = jwt.verify(token, process.env.SECRET);
+    user = jwt.verify(token, xyzEnv.SECRET);
   } catch (err) {
     return err;
   }
@@ -92,7 +90,7 @@ module.exports = async function auth(req, res) {
   }
 
   return user;
-};
+}
 
 /**
 @function checkParamToken
@@ -107,15 +105,13 @@ Every request will validate the API key against the key stored in the ACL.
 
 API keys do not expire. But changing the key in the ACL will immediately invalidate the key on successive checks.
 
-@param {Object} req 
-HTTP request.
-@param {string} req.params.token
-Authorization token.
-@param {Object} [req.cookies] 
-Request cookies.
-@param {Object} res 
-HTTP response.
-@param {Object} user
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {Object} req.params Request parameters.
+@property {string} params.token JWT.
+@property {Object} [req.cookies] Request cookies.
+
+@returns {Promise<Object|Error>} Method resolves to either a user object or Error
 */
 
 async function checkParamToken(req, res, user) {
@@ -156,13 +152,13 @@ async function checkParamToken(req, res, user) {
   user.from_token = true;
 
   // Check whether the token matches cookie.
-  if (req.cookies?.[process.env.TITLE] !== req.params.token) {
+  if (req.cookies?.[xyzEnv.TITLE] !== req.params.token) {
     // Create and assign a new cookie for the user.
-    const cookie = jwt.sign(user, process.env.SECRET);
+    const cookie = jwt.sign(user, xyzEnv.SECRET);
 
     res.setHeader(
       'Set-Cookie',
-      `${process.env.TITLE}=${cookie};HttpOnly;Max-Age=${(user.exp && user.exp - user.iat) || process.env.COOKIE_TTL};Path=${process.env.DIR || '/'};SameSite=Strict${(!req.headers.host.includes('localhost') && ';Secure') || ''}`,
+      `${xyzEnv.TITLE}=${cookie};HttpOnly;Max-Age=${(user.exp && user.exp - user.iat) || xyzEnv.COOKIE_TTL};Path=${xyzEnv.DIR || '/'};SameSite=Strict${(!req.headers.host?.includes('localhost') && ';Secure') || ''}`,
     );
   }
 }
@@ -172,7 +168,7 @@ async function checkParamToken(req, res, user) {
 @async
 
 @description
-Will return if sessions are not enabled via USER_SESSION environment variable.
+Will return if sessions are not enabled via USER_SESSION xyzEnvironment variable.
 
 A user must have a session key which is either stored in the user_sessions object or will be validated against the session key in the ACL.
 
@@ -180,12 +176,12 @@ Validated session keys are stored in the user_sessions object to prevent excessi
 
 The session key will be updated on login, eg. on a different device. This will invalidate the existing session key on devices previously logged in.
 
-@param {Object} req 
-HTTP request.
-@param {string} [req.params.token] 
-Authorization token.
-@param {Object} user
-@return {string} user.session
+@param {req} req HTTP request.
+@param {user} user User object.
+@property {Object} req.params Request parameters.
+@property {string} [params.token] JWT.
+
+@returns {Promise<Object|Error>} Method resolves to either a user object or Error
 */
 
 async function checkSession(req, user) {
@@ -193,7 +189,7 @@ async function checkSession(req, user) {
   if (req.params.token) return;
 
   // USER_SESSION has not been enabled.
-  if (!process.env.USER_SESSION) return;
+  if (!xyzEnv.USER_SESSION) return;
 
   // A user.session must be provided if enabled.
   if (!user.session) {
