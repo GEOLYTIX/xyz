@@ -45,7 +45,9 @@ export default async function getLocale(params) {
     return workspace;
   }
 
-  const localeKey = Array.isArray(params.locale) ? params.locale.shift(): params.locale;
+  const localeKey = Array.isArray(params.locale)
+    ? params.locale.shift()
+    : params.locale;
 
   if (localeKey && !Object.hasOwn(workspace.locales, localeKey)) {
     return new Error('Unable to validate locale param.');

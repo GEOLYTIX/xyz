@@ -133,7 +133,7 @@ async function locales(req, res) {
   }
 
   if (req.params.locale) {
-    getNestedLocales(req, res)
+    getNestedLocales(req, res);
     return;
   }
 
@@ -142,21 +142,20 @@ async function locales(req, res) {
     .map((locale) => ({
       key: locale.key,
       name: locale.name,
-      locales: locale.locales
+      locales: locale.locales,
     }));
 
   res.send(locales);
 }
 
 async function getNestedLocales(req, res) {
-
   const locale = await getLocale(req.params);
 
   if (locale instanceof Error) {
     return res.status(400).send(locale.message);
   }
 
-  const nestedLocales = []
+  const nestedLocales = [];
 
   if (!Array.isArray(locale.locales)) {
     res.send(nestedLocales);
@@ -164,16 +163,15 @@ async function getNestedLocales(req, res) {
   }
 
   for (const key of locale.locales) {
+    const nestedLocale = await getTemplate(key);
 
-    const nestedLocale = await getTemplate(key)
-
-    if(!Roles.check(nestedLocale, req.params.user?.roles)) continue;
+    if (!Roles.check(nestedLocale, req.params.user?.roles)) continue;
 
     nestedLocales.push({
       key,
       name: nestedLocale.name || key,
-      locales: nestedLocale.locales
-    })
+      locales: nestedLocale.locales,
+    });
   }
 
   res.send(nestedLocales);
