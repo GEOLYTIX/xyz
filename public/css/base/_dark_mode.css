@@ -78,12 +78,12 @@ html.dark-mode {
 
   input[type='search'] {
     &::placeholder {
-      color: var(--dm-color-base-text-secondary);
+      color: var(--dm-color-text-secondary);
       opacity: 1;
     }
 
     &::-ms-input-placeholder {
-      color: var(--dm-color-base-text-secondary);
+      color: var(--dm-color-text-secondary);
     }
   }
 

@@ -3,7 +3,7 @@
   overflow: visible;
   position: relative;
   background-color: var(--color-base-tertiary);
-  box-shadow: var(--color-mid) 0px 8px 24px;
+  box-shadow: var(--color-base-secondary) 0px 8px 24px;
 
   & > ul {
     display: none;
