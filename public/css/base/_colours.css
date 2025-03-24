@@ -20,6 +20,11 @@
 
   /* begin temporary dark mode */
 
+  /* Backgrounds */
+  --dm-color-base-primary: #222222;
+  --dm-color-base-secondary: #333333;
+  --dm-color-base-tertiary:  #555555;
+
   /* Accent */
   --dm-color-accent-active:  #e18335;
 
@@ -57,8 +62,6 @@
   --dm-color-medium: #555555; /* --color-base-tertiary */
 
   --dm-color-dark-faded: #333333; /* --color-base-secondary */
-
-  --dm-color-dark-neutral: #222222; /* --color-base-primary */
 
   --dm-color-light: #ffffff;
 

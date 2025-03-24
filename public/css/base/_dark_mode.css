@@ -49,7 +49,7 @@ html.dark-mode {
   }
 
   #ctrl-panel {
-    background-color: var(--dm-color-dark-neutral);
+    background-color: var(--dm-color-base-primary);
   }
 
   #ctrl-tabs {
@@ -262,7 +262,7 @@ html.dark-mode {
     }
 
     .drawer.layer-view .drawer {
-      background-color: var(--dm-color-dark-neutral);
+      background-color: var(--dm-color-base-primary);
     }
   }
 
@@ -342,10 +342,10 @@ html.dark-mode {
   .location,
   .dataview-target {
     .panel {
-      background-color: var(--dm-color-dark-neutral);
+      background-color: var(--dm-color-base-primary);
 
       .btn-row {
-        background-color: var(--dm-color-dark-neutral);
+        background-color: var(--dm-color-base-primary);
 
         button {
           color: var(--dm-color-accent-active);
@@ -366,7 +366,7 @@ html.dark-mode {
     .tab {
       .header {
         color: var(--dm-color-light);
-        background-color: var(--dm-color-dark-neutral);
+        background-color: var(--dm-color-base-primary);
       }
 
       &.active .header {
@@ -375,7 +375,7 @@ html.dark-mode {
     }
 
     .tabulator-footer {
-      background-color: var(--dm-color-dark-neutral);
+      background-color: var(--dm-color-base-primary);
 
       .tabulator-page {
         color: var(--dm-color-light);
@@ -387,7 +387,7 @@ html.dark-mode {
     }
 
     .tabulator-header {
-      background: var(--dm-color-dark-neutral);
+      background: var(--dm-color-base-primary);
     }
 
     .tabulator-col {
@@ -399,7 +399,7 @@ html.dark-mode {
       color: var(--dm-color-light);
 
       &.tabulator-row-odd {
-        background-color: var(--dm-color-dark-neutral);
+        background-color: var(--dm-color-base-primary);
       }
 
       &.tabulator-row-even {

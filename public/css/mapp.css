@@ -9,6 +9,9 @@
   --color-info: #0b6f50;
   --color-blocked: #a21309;
   --color-changed: #ffffa7;
+  --dm-color-base-primary: #222222;
+  --dm-color-base-secondary: #333333;
+  --dm-color-base-tertiary: #555555;
   --dm-color-accent-active: #e18335;
   --dm-color-blocked: #ef5350;
   --color-off-black: #3f3f3f;
@@ -21,7 +24,6 @@
   --color-input-border: #ccc;
   --dm-color-medium: #555555;
   --dm-color-dark-faded: #333333;
-  --dm-color-dark-neutral: #222222;
   --dm-color-light: #ffffff;
   --dm-color-light-secondary: #f2f2f2;
   --dm-color-light-darker: #d8d8d8;
