@@ -14,7 +14,11 @@
     "lineWidth": 80,
     "attributePosition": "auto",
     "bracketSpacing": true,
-    "ignore": ["public/css/mapp.css", "public/css/ui.css", "lib/utils/uhtml.mjs"]
+    "ignore": [
+      "public/css/mapp.css",
+      "public/css/ui.css",
+      "lib/utils/uhtml.mjs"
+    ]
   },
   "organizeImports": {
     "enabled": false
