@@ -1,52 +1,48 @@
 :root {
-  /* light colour mode */
-  --color-off-black: #3f3f3f;
+  /* begin unified colour palette */
 
-  --color-primary: #003d57;
+  /* Backgrounds */
+  --color-base: #f2f2f2;
+  --color-base-secondary: #f2f2f2;
+  --color-base-tertiary: #ffffff;
+  --color-base-border: #cccccc;
 
-  --color-primary-light: #939faa;
+  /* Text */
+  --color-text: #3f3f3f;
+  --color-text-secondary: #939faa;
 
-  --color-light: #ffffff;
+  /* Accent */
+  --color-accent: #003d57;
+  --color-accent-active: #d57120;
+  --color-accent-hover: #939faa;
 
-  --color-off-light: #eeeeee;
-
-  --color-light-secondary: #f2f2f2;
-
-  --color-light-tertiary: #fafafa;
-
-  --color-mid: #e3e3e3;
-
-  --color-on: #d57120;
-
-  --color-no: #a21309;
-
+  /* Information */
+  --color-info: #0b6f50;
+  --color-blocked: #a21309;
   --color-changed: #ffffa7;
 
-  --color-ok: #0b6f50;
+  /* begin temporary dark mode */
 
-  --color-input-border: #ccc;
+  /* Backgrounds */
+  --dm-color-base: #222222;
+  --dm-color-base-secondary: #333333;
+  --dm-color-base-tertiary: #555555;
+  --dm-color-base-border: #cccccc;
 
-  /* dark colour mode */
+  /* Text */
+  --dm-color-text: #f2f2f2;
+  --dm-color-text-secondary: #d8d8d8;
 
-  --dm-color-on: #e18335;
+  /* Accent */
+  --dm-color-accent: #ffffff;
+  --dm-color-accent-active: #e18335;
 
-  --dm-color-medium: #555555;
+  /* Information */
+  --dm-color-blocked: #ef5350;
 
-  --dm-color-dark-faded: #333333;
+  /* end temporary dark mode */
 
-  --dm-color-dark-neutral: #222222;
-
-  --dm-color-dark: #111111;
-
-  --dm-color-darker: #151515;
-
-  --dm-color-light: #ffffff;
-
-  --dm-color-light-secondary: #f2f2f2;
-
-  --dm-color-light-darker: #d8d8d8;
-
-  --dm-color-no: #ef5350;
+  /* end unified colour palette */
 }
 
 * {
@@ -57,39 +53,39 @@
 /* light mode classes */
 
 .primary-colour {
-  color: var(--color-primary);
+  color: var(--color-accent);
 }
 
 .primary-background {
-  color: var(--color-light);
-  background-color: var(--color-primary);
+  color: var(--color-base-tertiary);
+  background-color: var(--color-accent);
 }
 
 .light-background {
-  background-color: var(--color-light);
+  background-color: var(--color-base-tertiary);
 }
 
 .light-colour {
-  color: var(--color-light);
+  color: var(--color-base-tertiary);
 }
 
 .lighter-background {
-  background-color: var(--color-light-secondary);
+  background-color: var(--color-base-secondary);
 }
 
 .off-black {
-  color: var(--color-off-black);
+  color: var(--color-text);
 }
 
 .off-black-background {
-  color: var(--color-light);
-  background-color: var(--color-off-black);
+  color: var(--color-base-tertiary);
+  background-color: var(--color-text);
 }
 
 .on-colour {
-  color: var(--color-on);
+  color: var(--color-accent-active);
 }
 
 .no-colour {
-  color: var(--color-no);
+  color: var(--color-blocked);
 }

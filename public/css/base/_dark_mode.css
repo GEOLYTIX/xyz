@@ -3,16 +3,16 @@ html.dark-mode {
 
   /* base: begin button */
   button {
-    color: var(--dm-color-light);
+    color: var(--dm-color-accent);
     &.primary-colour {
-      color: var(--dm-color-light);
+      color: var(--dm-color-accent);
     }
     &.active {
-      color: var(--dm-color-on);
+      color: var(--dm-color-accent-active);
     }
 
     & > .primary-colour {
-      color: var(--dm-color-light);
+      color: var(--dm-color-accent);
     }
   }
 
@@ -21,19 +21,19 @@ html.dark-mode {
   /* begin colour classes */
 
   .primary-colour {
-    color: var(--color-light);
+    color: var(--color-base-tertiary);
 
     &.active {
-      color: var(--color-on);
+      color: var(--color-accent-active);
     }
   }
 
   .lighter-background {
-    background-color: var(--dm-color-dark-faded);
+    background-color: var(--dm-color-base-secondary);
   }
 
   .bg-light-tertiary {
-    background-color: var(--dm-color-dark-faded);
+    background-color: var(--dm-color-base-secondary);
   }
 
   .input-range.single {
@@ -42,25 +42,25 @@ html.dark-mode {
       background: linear-gradient(
         0deg,
         transparent 0 45%,
-        var(--color-light) 45% 55%,
+        var(--color-base-tertiary) 45% 55%,
         transparent 55% 100%
       );
     }
   }
 
   #ctrl-panel {
-    background-color: var(--dm-color-dark-neutral);
+    background-color: var(--dm-color-base);
   }
 
   #ctrl-tabs {
-    background-color: var(--dm-color-darker);
+    background-color: var(--dm-color-base);
   }
 
   /* end colour classes */
 
   /* begin globals */
   a {
-    color: var(--dm-color-on);
+    color: var(--dm-color-accent-active);
   }
   /* end globals */
 
@@ -71,25 +71,25 @@ html.dark-mode {
   input[type='search'],
   input[type='date'],
   input[type='datetime-local'] {
-    background: var(--dm-color-medium);
-    color: var(--dm-color-light);
-    border-color: var(--dm-color-dark-faded);
+    background: var(--dm-color-base-tertiary);
+    color: var(--dm-color-accent);
+    border-color: var(--dm-color-base-border);
   }
 
   input[type='search'] {
     &::placeholder {
-      color: var(--dm-color-light-darker);
+      color: var(--dm-color-text-secondary);
       opacity: 1;
     }
 
     &::-ms-input-placeholder {
-      color: var(--dm-color-light-darker);
+      color: var(--dm-color-text-secondary);
     }
   }
 
   textarea {
-    background-color: var(--dm-color-medium);
-    color: var(--dm-color-light);
+    background-color: var(--dm-color-base-tertiary);
+    color: var(--dm-color-accent);
   }
   /* common val changed class */
   .val-changed {
@@ -101,12 +101,12 @@ html.dark-mode {
     input[type='datetime-local'],
     textarea {
       background-color: var(--color-changed);
-      color: var(--color-off-black);
+      color: var(--color-text);
     }
 
     label.checkbox > .material-symbols-outlined:after,
     .dropdown > .head > .material-symbols-outlined:after {
-      color: var(--color-off-black);
+      color: var(--color-text);
     }
   }
 
@@ -114,21 +114,21 @@ html.dark-mode {
 
   /* begin material icons */
   .active > .material-symbols-outlined {
-    color: var(--dm-color-on);
+    color: var(--dm-color-accent-active);
   }
   .material-symbols-outlined {
-    color: var(--dm-color-light-secondary);
+    color: var(--dm-color-accent);
 
     &.no-colour {
-      color: var(--dm-color-no);
+      color: var(--dm-color-blocked);
     }
 
     &.ok-colour {
-      color: var(--color-ok);
+      color: var(--color-info);
     }
 
     &.active {
-      color: var(--dm-color-on);
+      color: var(--dm-color-accent-active);
     }
   }
   /* end material icons */
@@ -139,23 +139,23 @@ html.dark-mode {
 
   /* begin dialog */
   dialog {
-    color: var(--dm-color-light);
-    background-color: var(--dm-color-dark-faded);
+    color: var(--dm-color-accent);
+    background-color: var(--dm-color-base-secondary);
 
     &.alert-confirm h4 {
-      background-color: var(--color-on);
+      background-color: var(--color-accent-active);
     }
   }
   /* end dialog */
 
   /* begin drawer */
   .drawer {
-    background-color: var(--dm-color-dark-faded);
-    color: var(--color-light-secondary);
+    background-color: var(--dm-color-base-secondary);
+    color: var(--color-base-secondary);
     border: none;
 
     &.top-btn {
-      color: var(--color-light-secondary);
+      color: var(--color-base-secondary);
     }
 
     &.panel {
@@ -170,37 +170,37 @@ html.dark-mode {
     box-shadow: 0px 0px 0px 0px;
 
     &.active .head {
-      background: var(--dm-color-on);
+      background: var(--dm-color-accent-active);
 
       & > .material-symbols-outlined:after {
-        color: var(--color-off-black);
+        color: var(--color-text);
         background-color: transparent;
       }
     }
 
     ul {
       &.label {
-        background-color: var(--dm-color-dark-faded);
+        background-color: var(--dm-color-base-secondary);
       }
     }
 
     ul > li,
     .head {
-      background: var(--dm-color-medium);
-      color: var(--dm-color-light);
-      border-color: var(--dm-color-dark-faded);
+      background: var(--dm-color-base-tertiary);
+      color: var(--dm-color-accent);
+      border-color: var(--dm-color-base-border);
 
       > .material-symbols-outlined:after {
-        color: var(--color-light);
+        color: var(--color-base-tertiary);
       }
     }
 
     ul > li {
       &:hover {
-        background: var(--dm-color-dark-faded);
+        background: var(--dm-color-base-secondary);
       }
       &.selected {
-        background-color: var(--dm-color-dark-faded);
+        background-color: var(--dm-color-base-secondary);
       }
     }
   }
@@ -212,8 +212,8 @@ html.dark-mode {
   .key {
     button.layer-key {
       &.active {
-        background-color: var(--dm-color-on);
-        color: var(--dm-color-darker);
+        background-color: var(--dm-color-accent-active);
+        color: var(--dm-color-base-tertiary);
       }
     }
   }
@@ -226,10 +226,10 @@ html.dark-mode {
     box-shadow: unset;
 
     & > ul {
-      background-color: var(--dm-color-medium);
+      background-color: var(--dm-color-base-tertiary);
 
       & li {
-        color: var(--color-light);
+        color: var(--color-base-tertiary);
       }
     }
   }
@@ -244,7 +244,7 @@ html.dark-mode {
 
   #ctrls-divider,
   #tabview-divider {
-    background-color: var(--dm-color-dark-faded);
+    background-color: var(--dm-color-base-secondary);
   }
 
   /* end divider */
@@ -253,16 +253,16 @@ html.dark-mode {
 
   #layers {
     & > .drawer.layer-group .drawer.layer-view {
-      background-color: var(--dm-color-dark-faded);
-      border-top: 1px solid var(--dm-color-medium);
+      background-color: var(--dm-color-base-secondary);
+      border-top: 1px solid var(--dm-color-base-tertiary);
     }
 
     & > .layer-view > .drawer {
-      background-color: var(--dm-color-dark-faded);
+      background-color: var(--dm-color-base-secondary);
     }
 
     .drawer.layer-view .drawer {
-      background-color: var(--dm-color-dark-neutral);
+      background-color: var(--dm-color-base);
     }
   }
 
@@ -272,7 +272,7 @@ html.dark-mode {
 
   .location-view-grid {
     .layer-key > span {
-      background-color: var(--dm-color-on);
+      background-color: var(--dm-color-accent-active);
     }
 
     .location canvas {
@@ -287,7 +287,7 @@ html.dark-mode {
   .btn-column {
     & > button,
     & > a {
-      background-color: var(--dm-color-medium);
+      background-color: var(--dm-color-base-tertiary);
     }
   }
 
@@ -296,25 +296,25 @@ html.dark-mode {
   /* begin popup */
 
   .popup {
-    background-color: var(--dm-color-medium);
+    background-color: var(--dm-color-base-tertiary);
     box-shadow: unset;
-    border: solid 1px var(--dm-color-dark-faded);
-    color: var(--color-light);
+    border: solid 1px var(--dm-color-base-border);
+    color: var(--color-base-tertiary);
 
     & button.primary-colour {
-      color: var(--color-on);
+      color: var(--color-accent-active);
 
       & > * {
-        color: var(--color-on);
+        color: var(--color-accent-active);
       }
     }
 
     &:after {
-      border-top-color: var(--dm-color-medium);
+      border-top-color: var(--dm-color-base-border);
     }
 
     & li:hover {
-      background: var(--dm-color-dark-faded);
+      background: var(--dm-color-base-secondary);
     }
   }
 
@@ -327,11 +327,11 @@ html.dark-mode {
   }
 
   ::-webkit-scrollbar-thumb {
-    background: var(--dm-color-on);
+    background: var(--dm-color-accent-active);
   }
 
   ::-webkit-scrollbar-corner {
-    background: var(--dm-color-dark-faded);
+    background: var(--dm-color-base-secondary);
   }
 
   /* end scrollbar */
@@ -342,68 +342,68 @@ html.dark-mode {
   .location,
   .dataview-target {
     .panel {
-      background-color: var(--dm-color-dark-neutral);
+      background-color: var(--dm-color-base);
 
       .btn-row {
-        background-color: var(--dm-color-dark-neutral);
+        background-color: var(--dm-color-base);
 
         button {
-          color: var(--dm-color-on);
-          background: var(--dm-color-dark-faded);
+          color: var(--dm-color-accent-active);
+          background: var(--dm-color-base-secondary);
         }
       }
 
       & > .flex-col {
-        background-color: var(--dm-color-dark-faded);
+        background-color: var(--dm-color-base-secondary);
       }
     }
 
     .tabs,
     .tabulator-tableholder {
-      background: var(--dm-color-darker);
+      background-color: var(--dm-color-base-tertiary);
     }
 
     .tab {
       .header {
-        color: var(--dm-color-light);
-        background-color: var(--dm-color-dark-faded);
+        color: var(--dm-color-accent);
+        background-color: var(--dm-color-base);
       }
 
       &.active .header {
-        background-color: var(--dm-color-on);
+        background-color: var(--dm-color-accent-active);
       }
     }
 
     .tabulator-footer {
-      background-color: var(--dm-color-dark);
+      background-color: var(--dm-color-base);
 
       .tabulator-page {
-        color: var(--dm-color-light);
+        color: var(--dm-color-accent);
 
         &.active {
-          color: var(--dm-color-on);
+          color: var(--dm-color-accent-active);
         }
       }
     }
 
     .tabulator-header {
-      background: var(--dm-color-dark);
+      background: var(--dm-color-base);
     }
 
     .tabulator-col {
-      background-color: var(--dm-color-dark-faded);
-      color: var(--dm-color-light);
+      background-color: var(--dm-color-base-secondary);
+      color: var(--dm-color-accent);
     }
 
     .tabulator-row {
-      color: var(--dm-color-light);
+      color: var(--dm-color-accent);
 
       &.tabulator-row-odd {
-        background-color: var(--dm-color-dark-neutral);
+        background-color: var(--dm-color-base);
       }
 
       &.tabulator-row-even {
-        background-color: var(--dm-color-medium);
+        background-color: var(--dm-color-base-tertiary);
       }
     }
   }

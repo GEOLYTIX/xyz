@@ -5,7 +5,7 @@
 
 .drawer {
   padding: 2px;
-  background-color: var(--color-light-tertiary);
+  background-color: var(--color-base-tertiary);
 
   &.expandable:not(.empty) > .header:hover {
     cursor: pointer;
@@ -17,7 +17,7 @@
 
   &.expandable > .header > .material-symbols-outlined.caret::after {
     content: 'keyboard_arrow_down';
-    color: var(--color-primary-light);
+    color: var(--color-text-secondary);
     line-height: 1.5em;
   }
 
@@ -27,7 +27,7 @@
 
   &.expanded > .header > .material-symbols-outlined.caret::after {
     content: 'keyboard_arrow_up';
-    color: var(--color-primary-light);
+    color: var(--color-text-secondary);
     line-height: 1.5em;
   }
 
@@ -68,13 +68,13 @@
 
   &.flat {
     border-radius: 2px;
-    border: 1px solid var(--color-light-secondary);
+    border: 1px solid var(--color-base-border);
   }
 
   &.raised {
     border-radius: 2px;
-    box-shadow: 1px 1px 3px var(--color-primary-light);
-    border: 1px solid var(--color-light-secondary);
+    box-shadow: 1px 1px 3px var(--color-base-secondary);
+    border: 1px solid var(--color-base-border);
   }
 
   &.raised.empty {

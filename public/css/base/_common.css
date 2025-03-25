@@ -11,8 +11,8 @@
 }
 
 .box-shadow {
-  border: 1px solid var(--color-off-light);
-  box-shadow: 2px 2px 4px var(--color-primary-light);
+  border: 1px solid var(--color-base-border);
+  box-shadow: 2px 2px 4px var(--color-base-secondary);
 }
 
 .bold {
@@ -54,7 +54,7 @@
 
   label.checkbox {
     background-color: var(--color-changed);
-    color: var(--color-off-black);
+    color: var(--color-text);
     border-radius: 2px;
   }
 }

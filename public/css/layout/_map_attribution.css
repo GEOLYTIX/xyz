@@ -32,7 +32,7 @@ body {
       white-space: nowrap;
       line-height: 1;
       background: #fff9;
-      border-bottom: 2px solid var(--color-primary-light);
+      border-bottom: 2px solid var(--color-base-secondary);
     }
   }
 }

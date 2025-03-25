@@ -2,8 +2,8 @@
   width: 100%;
   overflow: visible;
   position: relative;
-  background-color: var(--color-light);
-  box-shadow: var(--color-mid) 0px 8px 24px;
+  background-color: var(--color-base-tertiary);
+  box-shadow: var(--color-base-secondary) 0px 8px 24px;
 
   &:disabled {
     pointer-events: none;
@@ -28,46 +28,46 @@
       width: 1.5em;
 
       &:after {
-        color: var(--color-off-black);
+        color: var(--color-text);
         content: 'arrow_drop_down';
       }
     }
   }
 
   & > ul {
-    color: var(--color-off-black);
+    color: var(--color-text);
     display: none;
     position: absolute;
     max-height: 500px;
     overflow-y: auto;
     overflow-x: hidden;
-    box-shadow: 1px 1px 3px var(--color-primary-light);
+    box-shadow: 1px 1px 3px var(--color-base-secondary);
     margin-top: -1px;
     text-align: left;
-    background-color: var(--color-light);
+    background-color: var(--color-base-tertiary);
     z-index: 997;
 
     & > li {
       padding: 5px;
-      color: var(--color-off-black);
+      color: var(--color-text);
     }
 
     & > li:hover {
-      background-color: var(--color-primary-light);
+      background-color: var(--color-accent-hover);
       cursor: pointer;
     }
 
     & > li.selected {
-      background-color: var(--color-light-secondary);
+      background-color: var(--color-base-secondary);
     }
 
     & .label {
       padding: 0 6px;
       border-radius: 2px;
-      color: var(--color-light);
+      color: var(--color-base-tertiary);
       font-size: 80%;
       font-weight: bold;
-      background-color: var(--color-primary);
+      background-color: var(--color-accent);
     }
   }
 

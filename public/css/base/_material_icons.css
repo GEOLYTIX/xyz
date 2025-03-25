@@ -4,35 +4,35 @@
   font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
   /* Customisation */
   text-align: center;
-  color: var(--color-primary);
+  color: var(--color-accent);
 
   &.active {
-    color: var(--color-on);
+    color: var(--color-accent-active);
   }
 
   &.on-colour,
   &.on {
-    color: var(--color-on);
+    color: var(--color-accent-active);
   }
 
   &.no-colour {
-    color: var(--color-no);
+    color: var(--color-blocked);
   }
 
   &.ok-colour {
-    color: var(--color-ok);
+    color: var(--color-info);
   }
 
   &.primary-light-colour {
-    color: var(--color-primary-light);
+    color: var(--color-text-secondary);
   }
 
   &.close:after {
     content: 'close';
-    color: var(--color-primary-light);
+    color: var(--color-text-secondary);
   }
 }
 
 .active > .material-symbols-outlined {
-  color: var(--color-on);
+  color: var(--color-accent-active);
 }

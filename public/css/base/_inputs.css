@@ -8,7 +8,7 @@ input {
 
 input.invalid {
   opacity: 0.5;
-  outline: 1px solid var(--color-no);
+  outline: 1px solid var(--color-blocked);
 }
 
 input::placeholder {
@@ -25,7 +25,7 @@ textarea {
   resize: none;
   border: none;
   border-bottom: 0.5px dotted;
-  background-color: var(--color-light-secondary);
+  background-color: var(--color-base-secondary);
 
   &:focus {
     outline: none;
@@ -48,7 +48,7 @@ input[type='search'],
 input[type='date'],
 input[type='time'],
 input[type='datetime-local'] {
-  border: 1px solid var(--color-input-border);
+  border: 1px solid var(--color-base-border);
   padding: 5px;
 
   &:focus {
@@ -60,7 +60,7 @@ input[type='text'],
 input[type='number'] {
   padding: 5px;
   border: none;
-  background-color: var(--color-light-secondary);
+  background-color: var(--color-base-secondary);
   border-bottom: 0.5px dotted;
   display: inline-block;
   width: 100%;

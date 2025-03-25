@@ -28,7 +28,7 @@ dialog {
       font-size: 1.2em;
 
       &:after {
-        color: var(--color-primary-light);
+        color: var(--color-text-secondary);
         font-size: inherit;
       }
     }

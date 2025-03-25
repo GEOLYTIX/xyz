@@ -14,9 +14,9 @@ dialog.alert-confirm {
 
   h4 {
     padding: 0.5em 1em;
-    background-color: var(--color-primary);
-    border-bottom: solid 2px var(--color-primary-light);
-    color: var(--color-light);
+    background-color: var(--color-accent);
+    border-bottom: solid 2px var(--color-base-secondary);
+    color: var(--color-base-tertiary);
     width: 100%;
   }
 
@@ -40,7 +40,7 @@ dialog.alert-confirm {
   button {
     float: right;
     font-size: 0.9em;
-    color: var(--color-primary);
+    color: var(--color-accent);
     z-index: 1005;
   }
 }

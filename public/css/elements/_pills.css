@@ -10,8 +10,8 @@
     border-radius: 2px;
     font-size: 0.9em;
     font-weight: bold;
-    color: var(--color-light);
-    background-color: var(--color-primary);
+    color: var(--color-base-tertiary);
+    background-color: var(--color-accent);
     user-select: none;
 
     button {
