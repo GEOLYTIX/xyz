@@ -66,6 +66,21 @@
       #ctrl-tabs > div {
         flex-grow: 1;
         font-size: 2em;
+
+        &[data-id='layers']:after {
+          content: 'layers';
+        }
+
+        &[data-id='locations'] {
+          &:after {
+            content: 'search';
+          }
+
+          &.active:after {
+            content: 'location_on';
+          }
+        }
+
       }
 
       #ctrl-panel {
@@ -110,10 +125,6 @@
           width: 100%;
           height: 100vh;
           position: absolute;
-        }
-
-        .map-attribution {
-          padding-left: 4em;
         }
 
         #ctrl-panel {
@@ -188,12 +199,8 @@
 
     <div id="ctrls" class="lighter-background">
       <div id="ctrl-tabs" class="hover">
-        <div data-id="layers" class="active material-symbols-outlined">
-          layers
-        </div>
-        <div data-id="locations" class="material-symbols-outlined">
-          location_on
-        </div>
+        <div data-id="layers" class="active material-symbols-outlined"></div>
+        <div data-id="locations" class="material-symbols-outlined"></div>
       </div>
 
       <div id="ctrl-panel">
@@ -478,7 +485,7 @@
 
       // Append spacer for tableview
       document.getElementById('mapButton').append(mapp.utils.html.node`
-    <div class="mobile-display-none" style="height: 60px;">`);
+    <div class="mobile-display-none" style="opacity: 0; height: 60px;">`);
     </script>
   </body>
 </html>

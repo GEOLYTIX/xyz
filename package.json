@@ -1,15 +1,10 @@
 {
   "name": "xyz",
-  "version": "v4.13.0-beta",
+  "version": "v4.13.0",
   "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/geolytix/xyz"
-  },
-  "lint-staged": {
-    "*.{js,mjs,json,css,md}": [
-      "prettier --write"
-    ]
   },
   "scripts": {
     "test": "node --experimental-test-module-mocks node_modules/codi-test-framework/cli.js tests",
@@ -20,37 +15,31 @@
     "generate-docs": "jsdoc --configure jsdoc_mapp.json --verbose && jsdoc --configure jsdoc_xyz.json --verbose && jsdoc --configure jsdoc_test.json --verbose",
     "mapp-docs": "jsdoc --configure jsdoc_mapp.json --verbose",
     "xyz-docs": "jsdoc --configure jsdoc_xyz.json --verbose",
-    "test-docs": "jsdoc --configure jsdoc_test.json --verbose",
-    "prepare": "husky"
+    "test-docs": "jsdoc --configure jsdoc_test.json --verbose"
   },
   "license": "MIT",
   "optionalDependencies": {
     "@aws-sdk/client-s3": "^3.691.0",
     "@aws-sdk/cloudfront-signer": "^3.621.0",
     "@aws-sdk/s3-request-presigner": "^3.691.0",
-    "@node-saml/node-saml": "^5.0.0"
+    "@node-saml/node-saml": "^5.0.1"
   },
   "dependencies": {
     "jsonwebtoken": "^9.0.2",
     "nodemailer": "^6.9.7",
-    "pg": "^8.13.1",
-    "simple-statistics": "^7.8.3"
+    "pg": "^8.13.1"
   },
   "devDependencies": {
-    "@eslint/js": "^9.13.0",
+    "@biomejs/biome": "1.9.4",
     "clean-jsdoc-theme": "^4.3.0",
     "codi-test-framework": "1.0.37",
     "concurrently": "^9.1.0",
     "cookie-parser": "^1.4.5",
     "dotenv": "^16.4.5",
     "esbuild": "^0.25.0",
-    "eslint": "^9.13.0",
     "express": "^4.18.3",
     "express-rate-limit": "^7.5.0",
-    "husky": "^9.1.7",
-    "lint-staged": "^15.4.1",
     "nodemon": "^3.1.7",
-    "prettier": "^3.4.2",
     "uhtml": "^3.1.0"
   }
 }
