@@ -11,7 +11,7 @@
 }
 
 .box-shadow {
-  border: 1px solid var(--color-base-secondary);
+  border: 1px solid var(--color-base-border);
   box-shadow: 2px 2px 4px var(--color-base-secondary);
 }
 

@@ -53,7 +53,7 @@ html.dark-mode {
   }
 
   #ctrl-tabs {
-    background-color: var(--dm-color-base-tertiary);
+    background-color: var(--dm-color-base);
   }
 
   /* end colour classes */
@@ -73,7 +73,7 @@ html.dark-mode {
   input[type='datetime-local'] {
     background: var(--dm-color-base-tertiary);
     color: var(--dm-color-accent);
-    border-color: var(--dm-color-base-secondary);
+    border-color: var(--dm-color-base-border);
   }
 
   input[type='search'] {
@@ -188,7 +188,7 @@ html.dark-mode {
     .head {
       background: var(--dm-color-base-tertiary);
       color: var(--dm-color-accent);
-      border-color: var(--dm-color-base-secondary);
+      border-color: var(--dm-color-base-border);
 
       > .material-symbols-outlined:after {
         color: var(--color-base-tertiary);
@@ -298,7 +298,7 @@ html.dark-mode {
   .popup {
     background-color: var(--dm-color-base-tertiary);
     box-shadow: unset;
-    border: solid 1px var(--dm-color-base-secondary);
+    border: solid 1px var(--dm-color-base-border);
     color: var(--color-base-tertiary);
 
     & button.primary-colour {
@@ -310,7 +310,7 @@ html.dark-mode {
     }
 
     &:after {
-      border-top-color: var(--dm-color-base-tertiary);
+      border-top-color: var(--dm-color-base-border);
     }
 
     & li:hover {

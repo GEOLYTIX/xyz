@@ -3,6 +3,7 @@
   --color-base: #f2f2f2;
   --color-base-secondary: #f2f2f2;
   --color-base-tertiary: #ffffff;
+  --color-base-border: #cccccc;
   --color-text: #3f3f3f;
   --color-text-secondary: #939faa;
   --color-accent: #003d57;
@@ -14,6 +15,7 @@
   --dm-color-base: #222222;
   --dm-color-base-secondary: #333333;
   --dm-color-base-tertiary: #555555;
+  --dm-color-base-border: #cccccc;
   --dm-color-text: #f2f2f2;
   --dm-color-text-secondary: #d8d8d8;
   --dm-color-accent: #ffffff;

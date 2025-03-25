@@ -6,6 +6,7 @@
   --color-base: #f2f2f2;
   --color-base-secondary: #f2f2f2;
   --color-base-tertiary: #ffffff;
+  --color-base-border: #cccccc;
   --color-text: #3f3f3f;
   --color-text-secondary: #939faa;
   --color-accent: #003d57;
@@ -17,6 +18,7 @@
   --dm-color-base: #222222;
   --dm-color-base-secondary: #333333;
   --dm-color-base-tertiary: #555555;
+  --dm-color-base-border: #cccccc;
   --dm-color-text: #f2f2f2;
   --dm-color-text-secondary: #d8d8d8;
   --dm-color-accent: #ffffff;
@@ -98,7 +100,7 @@ html.dark-mode {
     background-color: var(--dm-color-base);
   }
   #ctrl-tabs {
-    background-color: var(--dm-color-base-tertiary);
+    background-color: var(--dm-color-base);
   }
   a {
     color: var(--dm-color-accent-active);
@@ -110,7 +112,7 @@ html.dark-mode {
   input[type=datetime-local] {
     background: var(--dm-color-base-tertiary);
     color: var(--dm-color-accent);
-    border-color: var(--dm-color-base-secondary);
+    border-color: var(--dm-color-base-border);
   }
   input[type=search] {
     &::placeholder {
@@ -192,7 +194,7 @@ html.dark-mode {
     .head {
       background: var(--dm-color-base-tertiary);
       color: var(--dm-color-accent);
-      border-color: var(--dm-color-base-secondary);
+      border-color: var(--dm-color-base-border);
       > .material-symbols-outlined:after {
         color: var(--color-base-tertiary);
       }
@@ -256,7 +258,7 @@ html.dark-mode {
   .popup {
     background-color: var(--dm-color-base-tertiary);
     box-shadow: unset;
-    border: solid 1px var(--dm-color-base-secondary);
+    border: solid 1px var(--dm-color-base-border);
     color: var(--color-base-tertiary);
     & button.primary-colour {
       color: var(--color-accent-active);
@@ -265,7 +267,7 @@ html.dark-mode {
       }
     }
     &:after {
-      border-top-color: var(--dm-color-base-tertiary);
+      border-top-color: var(--dm-color-base-border);
     }
     & li:hover {
       background: var(--dm-color-base-secondary);
@@ -348,7 +350,7 @@ html.dark-mode {
   cursor: pointer;
 }
 .box-shadow {
-  border: 1px solid var(--color-base-secondary);
+  border: 1px solid var(--color-base-border);
   box-shadow: 2px 2px 4px var(--color-base-secondary);
 }
 .bold {
@@ -443,7 +445,7 @@ button {
   }
   &.raised {
     border-radius: 3px;
-    border: 1px solid var(--color-base-secondary);
+    border: 1px solid var(--color-base-border);
     box-shadow: 1px 1px 2px var(--color-base-secondary);
     padding: 0.3em;
     &.active {
@@ -1261,7 +1263,7 @@ input[type=search],
 input[type=date],
 input[type=time],
 input[type=datetime-local] {
-  border: 1px solid var(--color-base-secondary);
+  border: 1px solid var(--color-base-border);
   padding: 5px;
   &:focus {
     cursor: text;
@@ -1376,7 +1378,7 @@ dialog.alert-confirm {
   width: 100%;
   padding: 0.3em 0.5em;
   background-color: var(--color-base-tertiary);
-  border: 1px solid var(--color-base-secondary);
+  border: 1px solid var(--color-base-border);
   border-radius: 3px;
   box-shadow: 1px 1px 3px var(--color-base-secondary);
   & .header {
@@ -1614,12 +1616,12 @@ dialog {
   }
   &.flat {
     border-radius: 2px;
-    border: 1px solid var(--color-base-secondary);
+    border: 1px solid var(--color-base-border);
   }
   &.raised {
     border-radius: 2px;
     box-shadow: 1px 1px 3px var(--color-base-secondary);
-    border: 1px solid var(--color-base-secondary);
+    border: 1px solid var(--color-base-border);
   }
   &.raised.empty {
     box-shadow: none;
@@ -1963,7 +1965,7 @@ dialog {
   }
   .drag_and_drop_zone {
     width: 100%;
-    border: 1px dashed var(--color-base-secondary);
+    border: 1px dashed var(--color-base-border);
     position: relative;
     height: 100px;
     input {
