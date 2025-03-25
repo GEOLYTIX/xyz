@@ -3,32 +3,7 @@ html.dark-mode {
 
 
   /* begin inputs */
-
-  input[type='number'],
-  input[type='text'],
-  input[type='search'],
-  input[type='date'],
-  input[type='datetime-local'] {
-    background: var(--dm-color-base-tertiary);
-    color: var(--dm-color-accent);
-    border-color: var(--dm-color-base-border);
-  }
-
-  input[type='search'] {
-    &::placeholder {
-      color: var(--dm-color-text-secondary);
-      opacity: 1;
-    }
-
-    &::-ms-input-placeholder {
-      color: var(--dm-color-text-secondary);
-    }
-  }
-
-  textarea {
-    background-color: var(--dm-color-base-tertiary);
-    color: var(--dm-color-accent);
-  }
+  
   /* common val changed class */
   .val-changed {
     .dropdown > .head,

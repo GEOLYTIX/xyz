@@ -4,16 +4,23 @@ input {
   &:focus {
     outline: none;
   }
+
+  &::placeholder {
+    text-align: left;
+    color: var(--color-text-secondary);
+  }
+
+  &::-ms-input-placeholder {
+    color: var(--color-text-secondary);
+  }
+
+  &.invalid {
+    opacity: 0.5;
+    outline: 1px solid var(--color-blocked);
+  }
 }
 
-input.invalid {
-  opacity: 0.5;
-  outline: 1px solid var(--color-blocked);
-}
 
-input::placeholder {
-  text-align: left;
-}
 
 input::-moz-focus-inner,
 input::-moz-focus-outer {
@@ -25,7 +32,8 @@ textarea {
   resize: none;
   border: none;
   border-bottom: 0.5px dotted;
-  background-color: var(--color-base-secondary);
+  background-color: var(--color-base-tertiary);
+  color: var(--color-text);
 
   &:focus {
     outline: none;
@@ -48,7 +56,9 @@ input[type='search'],
 input[type='date'],
 input[type='time'],
 input[type='datetime-local'] {
+  background-color: var(--color-base-tertiary);
   border: 1px solid var(--color-base-border);
+  color: var(--color-accent);
   padding: 5px;
 
   &:focus {
@@ -56,11 +66,13 @@ input[type='datetime-local'] {
   }
 }
 
+
 input[type='text'],
 input[type='number'] {
   padding: 5px;
   border: none;
-  background-color: var(--color-base-secondary);
+  background-color: var(--color-base-tertiary);
+  color: var(--color-accent);
   border-bottom: 0.5px dotted;
   display: inline-block;
   width: 100%;
@@ -70,6 +82,12 @@ input[type='number'] {
     cursor: text;
   }
 }
+
+input[type='search']::after {
+  color: var(--color-text);
+}
+
+
 
 input[type='search']:focus + ul,
 input[type='search'] + ul:active {
