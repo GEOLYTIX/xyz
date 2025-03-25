@@ -3,62 +3,60 @@
 
 /* public/css/base/_colours.css */
 :root {
-  --color-off-black: #3f3f3f;
-  --color-primary: #003d57;
-  --color-primary-light: #939faa;
-  --color-light: #ffffff;
-  --color-off-light: #eeeeee;
-  --color-light-secondary: #f2f2f2;
-  --color-light-tertiary: #fafafa;
-  --color-mid: #e3e3e3;
-  --color-on: #d57120;
-  --color-no: #a21309;
+  --color-base: #f2f2f2;
+  --color-base-secondary: #f2f2f2;
+  --color-base-tertiary: #ffffff;
+  --color-base-border: #cccccc;
+  --color-text: #3f3f3f;
+  --color-text-secondary: #939faa;
+  --color-accent: #003d57;
+  --color-accent-active: #d57120;
+  --color-accent-hover: #939faa;
+  --color-info: #0b6f50;
+  --color-blocked: #a21309;
   --color-changed: #ffffa7;
-  --color-ok: #0b6f50;
-  --color-input-border: #ccc;
-  --dm-color-on: #e18335;
-  --dm-color-medium: #555555;
-  --dm-color-dark-faded: #333333;
-  --dm-color-dark-neutral: #222222;
-  --dm-color-dark: #111111;
-  --dm-color-darker: #151515;
-  --dm-color-light: #ffffff;
-  --dm-color-light-secondary: #f2f2f2;
-  --dm-color-light-darker: #d8d8d8;
-  --dm-color-no: #ef5350;
+  --dm-color-base: #222222;
+  --dm-color-base-secondary: #333333;
+  --dm-color-base-tertiary: #555555;
+  --dm-color-base-border: #cccccc;
+  --dm-color-text: #f2f2f2;
+  --dm-color-text-secondary: #d8d8d8;
+  --dm-color-accent: #ffffff;
+  --dm-color-accent-active: #e18335;
+  --dm-color-blocked: #ef5350;
 }
 * {
   transition: 0.2s ease-in-out;
   transition-property: background-color;
 }
 .primary-colour {
-  color: var(--color-primary);
+  color: var(--color-accent);
 }
 .primary-background {
-  color: var(--color-light);
-  background-color: var(--color-primary);
+  color: var(--color-base-tertiary);
+  background-color: var(--color-accent);
 }
 .light-background {
-  background-color: var(--color-light);
+  background-color: var(--color-base-tertiary);
 }
 .light-colour {
-  color: var(--color-light);
+  color: var(--color-base-tertiary);
 }
 .lighter-background {
-  background-color: var(--color-light-secondary);
+  background-color: var(--color-base-secondary);
 }
 .off-black {
-  color: var(--color-off-black);
+  color: var(--color-text);
 }
 .off-black-background {
-  color: var(--color-light);
-  background-color: var(--color-off-black);
+  color: var(--color-base-tertiary);
+  background-color: var(--color-text);
 }
 .on-colour {
-  color: var(--color-on);
+  color: var(--color-accent-active);
 }
 .no-colour {
-  color: var(--color-no);
+  color: var(--color-blocked);
 }
 
 /* public/css/base/_common.css */
@@ -72,8 +70,8 @@
   cursor: pointer;
 }
 .box-shadow {
-  border: 1px solid var(--color-off-light);
-  box-shadow: 2px 2px 4px var(--color-primary-light);
+  border: 1px solid var(--color-base-border);
+  box-shadow: 2px 2px 4px var(--color-base-secondary);
 }
 .bold {
   font-weight: bold;
@@ -107,7 +105,7 @@
   }
   label.checkbox {
     background-color: var(--color-changed);
-    color: var(--color-off-black);
+    color: var(--color-text);
     border-radius: 2px;
   }
 }
@@ -140,11 +138,6 @@ button {
   > .material-symbols-outlined {
     pointer-events: none;
   }
-  &.mask-icon.active,
-  &.active > .mask-icon,
-  & > .mask-icon.active {
-    background-color: var(--color-on);
-  }
   &:hover {
     cursor: pointer;
   }
@@ -159,10 +152,10 @@ button {
   }
   &.flat {
     border-radius: 3px;
-    border-bottom: 1px solid var(--color-light-secondary);
+    border-bottom: 1px solid var(--color-base-secondary);
     padding: 0.3em;
     &.active {
-      border-bottom: 1px solid var(--color-on);
+      border-bottom: 1px solid var(--color-accent-active);
     }
   }
   &.underline {
@@ -172,15 +165,15 @@ button {
   }
   &.raised {
     border-radius: 3px;
-    border: 1px solid var(--color-light-secondary);
-    box-shadow: 1px 1px 2px var(--color-light-secondary);
+    border: 1px solid var(--color-base-border);
+    box-shadow: 1px 1px 2px var(--color-base-secondary);
     padding: 0.3em;
     &.active {
       box-shadow: none;
     }
   }
   &.active {
-    color: var(--color-on);
+    color: var(--color-accent-active);
   }
 }
 
@@ -188,7 +181,7 @@ button {
 body {
   font-family: "Titillium Web", sans-serif;
   font-size: 0.8em;
-  color: var(--color-off-black);
+  color: var(--color-text);
 }
 *,
 *::after,
@@ -207,7 +200,7 @@ body {
 a {
   text-decoration: none;
   font-weight: bold;
-  color: var(--color-primary);
+  color: var(--color-accent);
 }
 li {
   list-style-type: none;
@@ -244,7 +237,7 @@ a > img {
   }
 }
 .mask-icon {
-  background-color: var(--color-primary-light);
+  background-color: var(--color-text-secondary);
   mask-repeat: no-repeat;
   -webkit-mask-repeat: no-repeat;
   mask-size: contain;
@@ -262,10 +255,10 @@ a > img {
     -webkit-mask-position: left;
   }
   &.on {
-    background-color: var(--color-on);
+    background-color: var(--color-accent-active);
   }
   &.no {
-    background-color: var(--color-no);
+    background-color: var(--color-blocked);
   }
 }
 .add {
@@ -814,7 +807,7 @@ a > img {
   }
   &.on::after {
     content: "toggle_on";
-    color: var(--color-on);
+    color: var(--color-accent-active);
   }
   &.disabled {
     opacity: 0.5;
@@ -957,7 +950,7 @@ input {
 }
 input.invalid {
   opacity: 0.5;
-  outline: 1px solid var(--color-no);
+  outline: 1px solid var(--color-blocked);
 }
 input::placeholder {
   text-align: left;
@@ -971,7 +964,7 @@ textarea {
   resize: none;
   border: none;
   border-bottom: 0.5px dotted;
-  background-color: var(--color-light-secondary);
+  background-color: var(--color-base-secondary);
   &:focus {
     outline: none;
   }
@@ -990,7 +983,7 @@ input[type=search],
 input[type=date],
 input[type=time],
 input[type=datetime-local] {
-  border: 1px solid var(--color-input-border);
+  border: 1px solid var(--color-base-border);
   padding: 5px;
   &:focus {
     cursor: text;
@@ -1000,7 +993,7 @@ input[type=text],
 input[type=number] {
   padding: 5px;
   border: none;
-  background-color: var(--color-light-secondary);
+  background-color: var(--color-base-secondary);
   border-bottom: 0.5px dotted;
   display: inline-block;
   width: 100%;
@@ -1027,30 +1020,30 @@ input[type=search]::-webkit-search-cancel-button:hover {
     "GRAD" 0,
     "opsz" 24;
   text-align: center;
-  color: var(--color-primary);
+  color: var(--color-accent);
   &.active {
-    color: var(--color-on);
+    color: var(--color-accent-active);
   }
   &.on-colour,
   &.on {
-    color: var(--color-on);
+    color: var(--color-accent-active);
   }
   &.no-colour {
-    color: var(--color-no);
+    color: var(--color-blocked);
   }
   &.ok-colour {
-    color: var(--color-ok);
+    color: var(--color-info);
   }
   &.primary-light-colour {
-    color: var(--color-primary-light);
+    color: var(--color-text-secondary);
   }
   &.close:after {
     content: "close";
-    color: var(--color-primary-light);
+    color: var(--color-text-secondary);
   }
 }
 .active > .material-symbols-outlined {
-  color: var(--color-on);
+  color: var(--color-accent-active);
 }
 
 /* public/css/elements/_alert_confirm.css */
@@ -1067,9 +1060,9 @@ dialog.alert-confirm {
   }
   h4 {
     padding: 0.5em 1em;
-    background-color: var(--color-primary);
-    border-bottom: solid 2px var(--color-primary-light);
-    color: var(--color-light);
+    background-color: var(--color-accent);
+    border-bottom: solid 2px var(--color-base-secondary);
+    color: var(--color-base-tertiary);
     width: 100%;
   }
   .content {
@@ -1089,7 +1082,7 @@ dialog.alert-confirm {
   button {
     float: right;
     font-size: 0.9em;
-    color: var(--color-primary);
+    color: var(--color-accent);
     z-index: 1005;
   }
 }
@@ -1104,10 +1097,10 @@ dialog.alert-confirm {
 .btn-panel {
   width: 100%;
   padding: 0.3em 0.5em;
-  background-color: var(--color-light);
-  border: 1px solid var(--color-light-secondary);
+  background-color: var(--color-base-tertiary);
+  border: 1px solid var(--color-base-border);
   border-radius: 3px;
-  box-shadow: 1px 1px 3px var(--color-primary-light);
+  box-shadow: 1px 1px 3px var(--color-base-secondary);
   & .header {
     display: flex;
     justify-content: space-between;
@@ -1128,12 +1121,12 @@ dialog.alert-confirm {
     right: 0;
     z-index: 99;
     color: black;
-    background: var(--color-light);
+    background: var(--color-base-tertiary);
     overflow: hidden;
     padding: 1em 1.5em;
     opacity: 0;
     border-radius: 3px;
-    box-shadow: 1px 1px 3px var(--color-primary-light);
+    box-shadow: 1px 1px 3px var(--color-base-secondary);
     pointer-events: none;
     transition: 0.2s ease-in-out;
     & .content {
@@ -1147,13 +1140,13 @@ dialog.alert-confirm {
       left: 0;
       right: 0;
       z-index: 99;
-      color: var(--color-off-black);
-      background: var(--color-light);
+      color: var(--color-text);
+      background: var(--color-base-tertiary);
       overflow: hidden;
       padding: 1em 1.5em;
       opacity: 0;
       border-radius: 3px;
-      box-shadow: 1px 1px 3px var(--color-primary-light);
+      box-shadow: 1px 1px 3px var(--color-base-secondary);
       pointer-events: none;
       transition: 0.2s ease-in-out;
       & .content {
@@ -1164,7 +1157,7 @@ dialog.alert-confirm {
       }
     }
     &.active {
-      background-color: var(--color-primary);
+      background-color: var(--color-accent);
       color: #fff;
       & .panel {
         bottom: 2em;
@@ -1243,7 +1236,7 @@ dialog {
     & > .material-symbols-outlined {
       font-size: 1.2em;
       &:after {
-        color: var(--color-primary-light);
+        color: var(--color-text-secondary);
         font-size: inherit;
       }
     }
@@ -1293,7 +1286,7 @@ dialog {
 }
 .drawer {
   padding: 2px;
-  background-color: var(--color-light-tertiary);
+  background-color: var(--color-base-tertiary);
   &.expandable:not(.empty) > .header:hover {
     cursor: pointer;
   }
@@ -1302,7 +1295,7 @@ dialog {
   }
   &.expandable > .header > .material-symbols-outlined.caret::after {
     content: "keyboard_arrow_down";
-    color: var(--color-primary-light);
+    color: var(--color-text-secondary);
     line-height: 1.5em;
   }
   &.expandable:not(.expanded) > *:not(.header) {
@@ -1310,7 +1303,7 @@ dialog {
   }
   &.expanded > .header > .material-symbols-outlined.caret::after {
     content: "keyboard_arrow_up";
-    color: var(--color-primary-light);
+    color: var(--color-text-secondary);
     line-height: 1.5em;
   }
   &.disabled {
@@ -1343,12 +1336,12 @@ dialog {
   }
   &.flat {
     border-radius: 2px;
-    border: 1px solid var(--color-light-secondary);
+    border: 1px solid var(--color-base-border);
   }
   &.raised {
     border-radius: 2px;
-    box-shadow: 1px 1px 3px var(--color-primary-light);
-    border: 1px solid var(--color-light-secondary);
+    box-shadow: 1px 1px 3px var(--color-base-secondary);
+    border: 1px solid var(--color-base-border);
   }
   &.raised.empty {
     box-shadow: none;
@@ -1369,8 +1362,8 @@ dialog {
   width: 100%;
   overflow: visible;
   position: relative;
-  background-color: var(--color-light);
-  box-shadow: var(--color-mid) 0px 8px 24px;
+  background-color: var(--color-base-tertiary);
+  box-shadow: var(--color-base-secondary) 0px 8px 24px;
   &:disabled {
     pointer-events: none;
     opacity: 0.4;
@@ -1390,41 +1383,41 @@ dialog {
       margin-left: auto;
       width: 1.5em;
       &:after {
-        color: var(--color-off-black);
+        color: var(--color-text);
         content: "arrow_drop_down";
       }
     }
   }
   & > ul {
-    color: var(--color-off-black);
+    color: var(--color-text);
     display: none;
     position: absolute;
     max-height: 500px;
     overflow-y: auto;
     overflow-x: hidden;
-    box-shadow: 1px 1px 3px var(--color-primary-light);
+    box-shadow: 1px 1px 3px var(--color-base-secondary);
     margin-top: -1px;
     text-align: left;
-    background-color: var(--color-light);
+    background-color: var(--color-base-tertiary);
     z-index: 997;
     & > li {
       padding: 5px;
-      color: var(--color-off-black);
+      color: var(--color-text);
     }
     & > li:hover {
-      background-color: var(--color-primary-light);
+      background-color: var(--color-accent-hover);
       cursor: pointer;
     }
     & > li.selected {
-      background-color: var(--color-light-secondary);
+      background-color: var(--color-base-secondary);
     }
     & .label {
       padding: 0 6px;
       border-radius: 2px;
-      color: var(--color-light);
+      color: var(--color-base-tertiary);
       font-size: 80%;
       font-weight: bold;
-      background-color: var(--color-primary);
+      background-color: var(--color-accent);
     }
   }
   &.active {
@@ -1453,7 +1446,7 @@ dialog {
   button.layer-key {
     margin-right: 0.2em;
     &.active {
-      color: var(--color-light);
+      color: var(--color-base-tertiary);
     }
   }
 }
@@ -1470,8 +1463,8 @@ dialog {
     border-radius: 2px;
     font-size: 0.9em;
     font-weight: bold;
-    color: var(--color-light);
-    background-color: var(--color-primary);
+    color: var(--color-base-tertiary);
+    background-color: var(--color-accent);
     user-select: none;
     button {
       cursor: pointer;
@@ -1486,36 +1479,36 @@ dialog {
   width: 100%;
   overflow: visible;
   position: relative;
-  background-color: var(--color-light);
-  box-shadow: var(--color-mid) 0px 8px 24px;
+  background-color: var(--color-base-tertiary);
+  box-shadow: var(--color-base-secondary) 0px 8px 24px;
   & > ul {
     display: none;
     max-height: 500px;
     overflow-y: auto;
     overflow-x: hidden;
-    box-shadow: 1px 1px 3px var(--color-primary-light);
+    box-shadow: 1px 1px 3px var(--color-base-secondary);
     margin-top: -1px;
     text-align: left;
-    background-color: var(--color-light);
+    background-color: var(--color-base-tertiary);
     z-index: 999;
     & > li {
       padding: 5px;
     }
     & > li:hover {
-      background-color: var(--color-primary-light);
+      background-color: var(--color-accent-hover);
       cursor: pointer;
     }
     & > li.selected {
-      background-color: var(--color-light-secondary);
+      background-color: var(--color-base-secondary);
     }
     & .label {
       padding: 0 2px;
       margin-right: 2px;
       border-radius: 2px;
-      color: var(--color-light);
+      color: var(--color-base-tertiary);
       font-size: 80%;
       font-weight: bold;
-      background-color: var(--color-primary);
+      background-color: var(--color-accent);
     }
   }
 }
@@ -1543,7 +1536,7 @@ dialog {
       linear-gradient(
         0deg,
         transparent 0 45%,
-        var(--color-primary-light) 45% 55%,
+        var(--color-accent-hover) 45% 55%,
         transparent 55% 100%);
     z-index: 1;
   }
@@ -1554,7 +1547,7 @@ dialog {
       linear-gradient(
         0deg,
         transparent 0 45%,
-        var(--color-primary) 45% 55%,
+        var(--color-accent) 45% 55%,
         transparent 55% 100%);
     content: "";
     z-index: 2;
@@ -1576,7 +1569,7 @@ dialog {
         linear-gradient(
           0deg,
           transparent 0 45%,
-          var(--color-primary) 45% 55%,
+          var(--color-accent) 45% 55%,
           transparent 55% 100%);
       content: "";
       z-index: 2;
@@ -1650,7 +1643,7 @@ dialog {
   background-image: url('data:image/svg+xml,<svg viewBox="0 0 10 100" xmlns="http://www.w3.org/2000/svg">%0A  <line x1="5" y1="10" x2="5" y2="90" stroke-width="3" stroke="%23888" stroke-linecap="round"/>%0A</svg>');
   background-repeat: no-repeat;
   background-position: center;
-  box-shadow: 3px 0px 6px -3px var(--color-off-black);
+  box-shadow: 3px 0px 6px -3px var(--color-text);
   z-index: 9999;
   &:hover {
     cursor: col-resize;
@@ -1663,8 +1656,8 @@ dialog {
   background-image: url('data:image/svg+xml,<svg viewBox="0 0 100 10" xmlns="http://www.w3.org/2000/svg">%0A  <line x1="10" y1="5" x2="90" y2="5" stroke-width="3" stroke="%23888" stroke-linecap="round"/>%0A</svg>');
   background-repeat: no-repeat;
   background-position: center;
-  background-color: var(--color-light);
-  box-shadow: 0px -1px 6px -3px var(--color-off-black);
+  background-color: var(--color-base-tertiary);
+  box-shadow: 0px -1px 6px -3px var(--color-text);
   &:hover {
     cursor: row-resize;
   }
@@ -1692,7 +1685,7 @@ dialog {
   }
   .drag_and_drop_zone {
     width: 100%;
-    border: 1px dashed var(--color-primary-light);
+    border: 1px dashed var(--color-base-border);
     position: relative;
     height: 100px;
     input {
@@ -1705,7 +1698,7 @@ dialog {
     p {
       margin: auto;
       text-align: center;
-      color: var(----color-off-black);
+      color: var(----color-text);
       pointer-events: none;
       user-select: none;
       & > span {
@@ -1722,7 +1715,7 @@ dialog {
       top: 0.2em;
       left: 0.2em;
       font-size: 1.5em;
-      background-color: var(--color-off-light);
+      background-color: var(--color-base-secondary);
       padding: 0.1em;
       border-radius: 50%;
     }
@@ -1781,16 +1774,16 @@ dialog {
 .drawer.layer-group {
   padding-left: 3px;
   padding-right: 3px;
-  background: var(--color-light);
+  background: var(--color-base-tertiary);
   & > * {
     padding-left: 4px;
   }
 }
 #layers > .drawer.layer-group .drawer.layer-view {
-  background: var(--color-light);
+  background: var(--color-base-tertiary);
   border: none;
   box-shadow: none;
-  border-top: 1px solid var(--color-light-secondary);
+  border-top: 1px solid var(--color-base-secondary);
 }
 #layers > .layer-view > .drawer,
 #layers .drawer.layer-view .drawer {
@@ -1798,7 +1791,7 @@ dialog {
   box-shadow: none;
 }
 #layers > .layer-view > .drawer {
-  background: var(--color-light);
+  background: var(--color-base-tertiary);
 }
 
 /* public/css/layout/_locationview.css */
@@ -1813,7 +1806,7 @@ dialog {
   padding: 5px 0;
   grid-template-columns: 1fr 1fr;
   & pre {
-    background-color: var(--color-light-secondary);
+    background-color: var(--color-base-secondary);
   }
   & .contents {
     display: contents;
@@ -1850,12 +1843,12 @@ dialog {
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 5px 10px;
-    border-bottom: 1px solid var(--color-mid);
+    border-bottom: 1px solid var(--color-base-secondary);
     padding: 0;
     & > .header {
       grid-column: 1 / 3;
-      background-color: var(--color-primary);
-      color: var(--color-light);
+      background-color: var(--color-accent);
+      color: var(--color-base-tertiary);
       border-radius: 3px;
       padding: 0 0.5em;
     }
@@ -1870,9 +1863,9 @@ dialog {
     border-radius: 2px;
     font-weight: bold;
     font-size: 0.8em;
-    background-color: var(--color-mid);
+    background-color: var(--color-base-secondary);
     &.active {
-      background-color: var(--color-on);
+      background-color: var(--color-accent-active);
     }
   }
   & .textarea {
@@ -1936,14 +1929,14 @@ dialog {
   height: 7px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-light-secondary);
+  background: var(--color-base-secondary);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-primary-light);
+  background: var(--color-accent-hover);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-corner {
-  background: var(--color-light-secondary);
+  background: var(--color-base-secondary);
 }
 
 /* public/css/layout/_tabview.css */
@@ -1952,7 +1945,7 @@ dialog {
   height: 100%;
   overflow: hidden;
   position: relative;
-  background-color: var(--color-light);
+  background-color: var(--color-base-tertiary);
   display: grid;
   grid-template-rows: 3em auto;
   &.disabled::after {
@@ -1962,7 +1955,7 @@ dialog {
     position: absolute;
     left: 0;
     top: 0;
-    background-color: var(--color-light);
+    background-color: var(--color-base-tertiary);
     opacity: 0.7;
   }
   & > .tabs {
@@ -1970,7 +1963,7 @@ dialog {
     height: inherit;
     overflow-x: auto;
     display: flex;
-    background-color: var(--color-light-secondary);
+    background-color: var(--color-base-secondary);
     & > .tab > .header {
       min-width: 8em;
       height: 100%;
@@ -1986,7 +1979,7 @@ dialog {
       user-select: none;
     }
     & > .tab.active > .header {
-      background-color: var(--color-light);
+      background-color: var(--color-base-tertiary);
       font-weight: bold;
     }
     & > .tab:not(.active) > .header:hover {
@@ -2030,8 +2023,8 @@ dialog {
   & > div,
   & > a {
     margin-bottom: 10px;
-    background-color: var(--color-light);
-    box-shadow: 1px 1px 3px var(--dm-color-medium);
+    background-color: var(--color-base-tertiary);
+    box-shadow: 1px 1px 3px var(--dm-color-base-tertiary);
     border-radius: 50%;
     opacity: 0.9;
     padding: 5px;
@@ -2096,7 +2089,7 @@ dialog {
       right: 5%;
       width: 50px;
       height: 50px;
-      background-color: var(--color-no);
+      background-color: var(--color-blocked);
     }
   }
 }
