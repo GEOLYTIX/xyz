@@ -8,7 +8,7 @@
   --color-base-tertiary: #ffffff;
   --color-base-border: #dddddd;
   --color-text: #3f3f3f;
-  --color-text-secondary: #7A7A7A;
+  --color-text-secondary: #666666;
   --color-text-tertiary: #dddddd;
   --color-accent: #003d57;
   --color-accent-active: #d57120;
@@ -88,20 +88,24 @@
   width: 1.5em;
 }
 .val-changed {
-  input,
-  input[type=text] {
+  input[type=number],
+  input[type=text],
+  input[type=search],
+  input[type=date],
+  input[type=datetime-local],
+  textarea,
+  button,
+  .dropdown > .head {
     background-color: var(--color-changed);
-  }
-  textarea {
-    background-color: var(--color-changed);
-  }
-  button {
-    background-color: var(--color-changed);
+    color: var(--color-text-secondary);
   }
   label.checkbox {
     background-color: var(--color-changed);
-    color: var(--color-text);
+    color: var(--color-text-secondary);
     border-radius: 2px;
+  }
+  .material-symbols-outlined:after {
+    color: var(--color-text-secondary);
   }
 }
 @media only screen and (max-width: 768px) {

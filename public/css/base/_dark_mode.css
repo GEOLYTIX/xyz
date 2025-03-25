@@ -2,29 +2,6 @@ html.dark-mode {
   /* begin base stylesheets */
 
 
-  /* begin inputs */
-  
-  /* common val changed class */
-  .val-changed {
-    .dropdown > .head,
-    input[type='number'],
-    input[type='text'],
-    input[type='search'],
-    input[type='date'],
-    input[type='datetime-local'],
-    textarea {
-      background-color: var(--color-changed);
-      color: var(--color-text);
-    }
-
-    label.checkbox > .material-symbols-outlined:after,
-    .dropdown > .head > .material-symbols-outlined:after {
-      color: var(--color-text);
-    }
-  }
-
-  /* end inputs */
-
   /* begin material icons */
   .active > .material-symbols-outlined {
     color: var(--dm-color-accent-active);

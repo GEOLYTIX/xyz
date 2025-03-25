@@ -39,23 +39,26 @@
 }
 
 .val-changed {
-  input,
-  input[type='text'] {
+  input[type='number'],
+  input[type='text'],
+  input[type='search'],
+  input[type='date'],
+  input[type='datetime-local'],
+  textarea,
+  button,
+  .dropdown > .head {
     background-color: var(--color-changed);
-  }
-
-  textarea {
-    background-color: var(--color-changed);
-  }
-
-  button {
-    background-color: var(--color-changed);
+    color: var(--color-text-secondary);
   }
 
   label.checkbox {
     background-color: var(--color-changed);
-    color: var(--color-text);
+    color: var(--color-text-secondary);
     border-radius: 2px;
+  }
+
+  .material-symbols-outlined:after {
+    color: var(--color-text-secondary);
   }
 }
 
