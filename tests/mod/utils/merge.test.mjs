@@ -121,4 +121,89 @@ codi.describe({ name: 'mergeDeep Module', id: 'merge_deep_test' }, () => {
       codi.assertEqual(mergedObj1, expected);
     },
   );
+
+  codi.it(
+    {
+      name: 'should merge multiple sources into target',
+      parentId: 'merge_deep_test',
+    },
+    () => {
+      const target = { sourceA: 'A' };
+      const source1 = { sourceB: 'B' };
+      const source2 = { sourceC: 'C' };
+      const source3 = { sourceD: 'D' };
+
+      const expected = {
+        sourceA: 'A',
+        sourceB: 'B',
+        sourceC: 'C',
+        sourceD: 'D',
+      };
+
+      const mergedObj = mergeDeep(target, source1, source2, source3);
+      codi.assertEqual(mergedObj, expected);
+    },
+  );
+
+  codi.it(
+    {
+      name: 'should create empty object if target key does not exist',
+      parentId: 'merge_deep_test',
+    },
+    () => {
+      const target = {};
+      const source = {
+        settings: {
+          theme: 'a theme',
+          labels: true,
+        },
+      };
+
+      const expected = {
+        settings: {
+          theme: 'a theme',
+          labels: true,
+        },
+      };
+
+      const mergedObj = mergeDeep(target, source);
+      codi.assertEqual(mergedObj, expected);
+    },
+  );
+
+  codi.it(
+    {
+      name: 'should handle equal arrays correctly',
+      parentId: 'merge_deep_test',
+    },
+    () => {
+      const target = {
+        plugins: ['pluginA', 'pluginB'],
+      };
+      const source = {
+        plugins: ['pluginA', 'pluginB'],
+      };
+
+      // When arrays are equal, source array should be used
+      const expected = {
+        plugins: ['pluginA', 'pluginB'],
+      };
+
+      const mergedObj = mergeDeep(target, source);
+      codi.assertEqual(mergedObj, expected);
+    },
+  );
+
+  codi.it(
+    {
+      name: 'should return target when no sources provided',
+      parentId: 'merge_deep_test',
+    },
+    () => {
+      const target = { name: 'test', value: 46 };
+
+      const result = mergeDeep(target);
+      codi.assertEqual(result, target);
+    },
+  );
 });
