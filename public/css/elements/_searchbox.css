@@ -18,6 +18,7 @@
 
     & > li {
       padding: 5px;
+      color: var(--color-text);
     }
 
     & > li:hover {
@@ -33,10 +34,10 @@
       padding: 0 2px;
       margin-right: 2px;
       border-radius: 2px;
-      color: var(--color-base-tertiary);
+      color: var(--color-text);
       font-size: 80%;
       font-weight: bold;
-      background-color: var(--color-accent);
+      background-color: var(--color-accent-hover);
     }
   }
 }
