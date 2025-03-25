@@ -25,7 +25,7 @@ button {
 
   &.flat {
     border-radius: 3px;
-    border-bottom: 1px solid var(--color-base-secondary);
+    border-bottom: 1px solid var(--color-base-border);
     padding: 0.3em;
 
     &.active {

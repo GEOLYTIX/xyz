@@ -1,68 +1,6 @@
 html.dark-mode {
   /* begin base stylesheets */
 
-  /* base: begin button */
-  button {
-    color: var(--dm-color-accent);
-    &.primary-colour {
-      color: var(--dm-color-accent);
-    }
-    &.active {
-      color: var(--dm-color-accent-active);
-    }
-
-    & > .primary-colour {
-      color: var(--dm-color-accent);
-    }
-  }
-
-  /* end button */
-
-  /* begin colour classes */
-
-  .primary-colour {
-    color: var(--color-base-tertiary);
-
-    &.active {
-      color: var(--color-accent-active);
-    }
-  }
-
-  .lighter-background {
-    background-color: var(--dm-color-base-secondary);
-  }
-
-  .bg-light-tertiary {
-    background-color: var(--dm-color-base-secondary);
-  }
-
-  .input-range.single {
-    &::after,
-    &::before {
-      background: linear-gradient(
-        0deg,
-        transparent 0 45%,
-        var(--color-base-tertiary) 45% 55%,
-        transparent 55% 100%
-      );
-    }
-  }
-
-  #ctrl-panel {
-    background-color: var(--dm-color-base);
-  }
-
-  #ctrl-tabs {
-    background-color: var(--dm-color-base);
-  }
-
-  /* end colour classes */
-
-  /* begin globals */
-  a {
-    color: var(--dm-color-accent-active);
-  }
-  /* end globals */
 
   /* begin inputs */
 

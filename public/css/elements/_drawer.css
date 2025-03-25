@@ -39,6 +39,7 @@
   & > .header {
     display: flex;
     align-items: center;
+    color: var(--color-accent);
 
     .material-symbols-outlined {
       font-size: 1.5em;
