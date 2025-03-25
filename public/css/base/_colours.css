@@ -21,27 +21,6 @@
   --color-blocked: #a21309;
   --color-changed: #ffffa7;
 
-  /* begin temporary dark mode */
-
-  /* Backgrounds */
-  --dm-color-base: #222222;
-  --dm-color-base-secondary: #333333;
-  --dm-color-base-tertiary: #555555;
-  --dm-color-base-border: #333333;
-
-  /* Text */
-  --dm-color-text: #f2f2f2;
-  --dm-color-text-secondary: #d8d8d8;
-
-  /* Accent */
-  --dm-color-accent: #ffffff;
-  --dm-color-accent-active: #e18335;
-
-  /* Information */
-  --dm-color-blocked: #ef5350;
-
-  /* end temporary dark mode */
-
   /* end unified colour palette */
 }
 
