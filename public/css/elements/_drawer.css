@@ -6,6 +6,7 @@
 .drawer {
   padding: 2px;
   background-color: var(--color-base-tertiary);
+  color: var(--color-text);
 
   &.expandable:not(.empty) > .header:hover {
     cursor: pointer;
@@ -39,7 +40,7 @@
   & > .header {
     display: flex;
     align-items: center;
-    color: var(--color-accent);
+    color: var(--color-text);
 
     .material-symbols-outlined {
       font-size: 1.5em;

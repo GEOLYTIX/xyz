@@ -2,7 +2,8 @@
 :root {
   --color-base: #f2f2f2;
   --color-base-secondary: #f2f2f2;
-  --color-base-tertiary: #ffffff;
+  --color-base-tertiary: #fafafa;
+  --color-base-contrast: #ffffff;
   --color-base-border: #dddddd;
   --color-text: #3f3f3f;
   --color-text-secondary: #666666;

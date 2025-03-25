@@ -1,33 +1,6 @@
 html.dark-mode {
   /* begin elements stylesheets */
 
-  /* begin dialog */
-  dialog {
-    color: var(--dm-color-accent);
-    background-color: var(--dm-color-base-secondary);
-
-    &.alert-confirm h4 {
-      background-color: var(--color-accent-active);
-    }
-  }
-  /* end dialog */
-
-  /* begin drawer */
-  .drawer {
-    background-color: var(--dm-color-base-secondary);
-    color: var(--color-base-secondary);
-    border: none;
-
-    &.top-btn {
-      color: var(--color-base-secondary);
-    }
-
-    &.panel {
-      background-color: var(--dm-dark-neutral);
-    }
-  }
-  /* end drawer */
-
   /* begin dropdown */
 
   .dropdown {

@@ -5,7 +5,8 @@
 :root {
   --color-base: #f2f2f2;
   --color-base-secondary: #f2f2f2;
-  --color-base-tertiary: #ffffff;
+  --color-base-tertiary: #fafafa;
+  --color-base-contrast: #ffffff;
   --color-base-border: #dddddd;
   --color-text: #3f3f3f;
   --color-text-secondary: #666666;
@@ -1071,7 +1072,7 @@ dialog.alert-confirm {
   h4 {
     padding: 0.5em 1em;
     background-color: var(--color-accent);
-    border-bottom: solid 2px var(--color-base-secondary);
+    border-bottom: solid 2px var(--color-base-border);
     color: var(--color-base-tertiary);
     width: 100%;
   }
@@ -1130,7 +1131,7 @@ dialog.alert-confirm {
     left: 0;
     right: 0;
     z-index: 99;
-    color: black;
+    color: var(--color-text);
     background: var(--color-base-tertiary);
     overflow: hidden;
     padding: 1em 1.5em;
@@ -1225,6 +1226,8 @@ label.checkbox {
   cursor: grab;
 }
 dialog {
+  background-color: var(--color-base-secondary);
+  color: var(--color-text);
   & > button.close {
     position: absolute;
     top: 0em;
@@ -1297,6 +1300,7 @@ dialog {
 .drawer {
   padding: 2px;
   background-color: var(--color-base-tertiary);
+  color: var(--color-text);
   &.expandable:not(.empty) > .header:hover {
     cursor: pointer;
   }
@@ -1323,7 +1327,7 @@ dialog {
   & > .header {
     display: flex;
     align-items: center;
-    color: var(--color-accent);
+    color: var(--color-text);
     .material-symbols-outlined {
       font-size: 1.5em;
     }
@@ -1786,16 +1790,16 @@ dialog {
 .drawer.layer-group {
   padding-left: 3px;
   padding-right: 3px;
-  background: var(--color-base-tertiary);
+  background: var(--color-base-contrast);
   & > * {
     padding-left: 4px;
   }
 }
 #layers > .drawer.layer-group .drawer.layer-view {
-  background: var(--color-base-tertiary);
+  background: var(--color-base-contrast);
   border: none;
   box-shadow: none;
-  border-top: 1px solid var(--color-base-secondary);
+  border-top: 1px solid var(--color-base-border);
 }
 #layers > .layer-view > .drawer,
 #layers .drawer.layer-view .drawer {
@@ -1803,7 +1807,7 @@ dialog {
   box-shadow: none;
 }
 #layers > .layer-view > .drawer {
-  background: var(--color-base-tertiary);
+  background: var(--color-base-contrast);
 }
 
 /* public/css/layout/_locationview.css */

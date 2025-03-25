@@ -4,7 +4,8 @@
   /* Backgrounds */
   --color-base: #f2f2f2;
   --color-base-secondary: #f2f2f2;
-  --color-base-tertiary: #ffffff;
+  --color-base-tertiary: #fafafa;
+  --color-base-contrast: #ffffff;
 
   /* Border */
   --color-base-border: #dddddd;
