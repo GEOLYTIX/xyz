@@ -20,8 +20,6 @@ input {
   }
 }
 
-
-
 input::-moz-focus-inner,
 input::-moz-focus-outer {
   border: 0;
@@ -66,7 +64,6 @@ input[type='datetime-local'] {
   }
 }
 
-
 input[type='text'],
 input[type='number'] {
   padding: 5px;
@@ -86,8 +83,6 @@ input[type='number'] {
 input[type='search']::after {
   color: var(--color-text);
 }
-
-
 
 input[type='search']:focus + ul,
 input[type='search'] + ul:active {
