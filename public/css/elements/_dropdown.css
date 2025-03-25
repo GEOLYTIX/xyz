@@ -30,11 +30,13 @@
 
       &:after {
         content: 'arrow_drop_down';
+        background-color: transparent;
       }
     }
   }
 
   & > ul {
+    background-color: var(--color-base-tertiary);
     color: var(--color-text);
     display: none;
     position: absolute;
@@ -44,7 +46,6 @@
     box-shadow: 1px 1px 3px var(--color-base-secondary);
     margin-top: -1px;
     text-align: left;
-    background-color: var(--color-base-tertiary);
     z-index: 997;
 
     & > li {

@@ -35,9 +35,6 @@
 .light-colour {
   color: var(--color-base-tertiary);
 }
-.lighter-background {
-  background-color: var(--color-base-secondary);
-}
 .off-black {
   color: var(--color-text);
 }

@@ -1,6 +1,7 @@
 .location-view.drawer {
   margin-top: 5px;
   border-radius: 5px;
+  background-color: var(--color-base-contrast);
 }
 
 .location-view-grid {

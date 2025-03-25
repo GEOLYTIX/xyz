@@ -38,9 +38,6 @@
 .light-colour {
   color: var(--color-base-tertiary);
 }
-.lighter-background {
-  background-color: var(--color-base-secondary);
-}
 .off-black {
   color: var(--color-text);
 }
@@ -1400,10 +1397,12 @@ dialog {
       width: 1.5em;
       &:after {
         content: "arrow_drop_down";
+        background-color: transparent;
       }
     }
   }
   & > ul {
+    background-color: var(--color-base-tertiary);
     color: var(--color-text);
     display: none;
     position: absolute;
@@ -1413,7 +1412,6 @@ dialog {
     box-shadow: 1px 1px 3px var(--color-base-secondary);
     margin-top: -1px;
     text-align: left;
-    background-color: var(--color-base-tertiary);
     z-index: 997;
     & > li {
       padding: 5px;
@@ -1814,6 +1812,7 @@ dialog {
 .location-view.drawer {
   margin-top: 5px;
   border-radius: 5px;
+  background-color: var(--color-base-contrast);
 }
 .location-view-grid {
   display: grid;
