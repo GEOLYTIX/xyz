@@ -12,7 +12,7 @@
   /* Text */
   --color-text: #3f3f3f;
   --color-text-secondary: #666666; /* this should be medium dark */
-  --color-text-tertiary: #dddddd;
+  --color-text-tertiary: #dddddd; /* this should be light enough for inverted background */
 
   /* Accent */
   --color-accent: #003d57;

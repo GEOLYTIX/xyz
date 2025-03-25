@@ -3,6 +3,9 @@
 }
 
 dialog {
+  background-color: var(--color-base-secondary);
+  color: var(--color-text);
+
   & > button.close {
     position: absolute;
     top: 0em;
