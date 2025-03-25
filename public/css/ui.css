@@ -251,8 +251,11 @@ html.dark-mode {
       filter: invert(1);
     }
   }
-  #mapButton {
-    background-color: var(--dm-color-darker);
+  .btn-column {
+    & > button,
+    & > a {
+      background-color: var(--dm-color-medium);
+    }
   }
   .popup {
     background-color: var(--dm-color-medium);
@@ -333,15 +336,6 @@ html.dark-mode {
       }
       &.tabulator-row-even {
         background-color: var(--dm-color-medium);
-      }
-    }
-  }
-  @media only screen and (max-width: 768px) {
-    #mapButton {
-      background-color: transparent;
-      button,
-      a {
-        background-color: var(--dm-color-darker);
       }
     }
   }
@@ -2219,43 +2213,6 @@ dialog {
   }
 }
 
-/* public/css/layout/_map_toolbar.css */
-#mapButton {
-  pointer-events: none;
-  & > * {
-    pointer-events: auto;
-  }
-}
-@media only screen and (min-width: 768px) {
-  #mapButton {
-    position: absolute;
-    height: 100%;
-    grid-row: 1 / 4;
-    grid-column: 3;
-    background-color: var(--dm-color-light);
-    opacity: 0.8;
-  }
-}
-@media only screen and (max-width: 768px) {
-  #mapButton {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100%;
-    & > button,
-    & > a {
-      margin-bottom: 10px;
-      background-color: var(--color-light);
-      box-shadow: 1px 1px 3px var(--dm-color-medium);
-      border-radius: 50%;
-      opacity: 0.9;
-      padding: 5px;
-      width: 3em;
-      height: 3em;
-    }
-  }
-}
-
 /* public/css/layout/_scrollbar.css */
 ::-webkit-scrollbar {
   width: 5px;
@@ -2345,14 +2302,24 @@ dialog {
   display: grid;
   grid-auto-rows: minmax(min-content, 4em);
   padding: 0.7em;
+  pointer-events: none;
+  & > * {
+    pointer-events: auto;
+  }
   & span {
     line-height: normal;
   }
   & button,
   & > div,
   & > a {
-    width: 2em;
-    height: 2em;
+    margin-bottom: 10px;
+    background-color: var(--color-light);
+    box-shadow: 1px 1px 3px var(--dm-color-medium);
+    border-radius: 50%;
+    opacity: 0.9;
+    padding: 5px;
+    width: 3em;
+    height: 3em;
     text-align: center;
   }
   & a > div,
@@ -2362,6 +2329,23 @@ dialog {
   & button:disabled,
   & a:disabled {
     cursor: not-allowed;
+  }
+}
+@media only screen and (min-width: 768px) {
+  .btn-column {
+    position: absolute;
+    height: 100%;
+    grid-row: 1 / 4;
+    grid-column: 3;
+    opacity: 0.8;
+  }
+}
+@media only screen and (max-width: 768px) {
+  .btn-column {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
   }
 }
 .btn-row {
