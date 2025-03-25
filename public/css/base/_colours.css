@@ -1,5 +1,5 @@
 :root {
-  /* begin unified colour palette */
+  /* begin default colour palette */
 
   /* Backgrounds */
   --color-base: #f2f2f2;
@@ -12,8 +12,8 @@
 
   /* Text */
   --color-text: #3f3f3f;
-  --color-text-secondary: #666666; /* this should be medium dark */
-  --color-text-tertiary: #dddddd; /* this should be light enough for inverted background */
+  --color-text-secondary: #858585;
+  --color-text-tertiary: #dddddd;
 
   /* Accent */
   --color-accent: #003d57;
@@ -25,15 +25,13 @@
   --color-blocked: #a21309;
   --color-changed: #ffffa7;
 
-  /* end unified colour palette */
+  /* end default colour palette */
 }
 
 * {
   transition: 0.2s ease-in-out;
   transition-property: background-color;
 }
-
-/* light mode classes */
 
 .primary-colour {
   color: var(--color-accent);
