@@ -3,6 +3,7 @@
 The getLocale module exports the getLocale method which is required by the getLayer and workspace modules.
 
 @requires /utils/roles
+@requires /utils/merge
 @requires /workspace/mergeTemplates
 @requires /workspace/cache
 @requires /workspace/getTemplate
@@ -15,6 +16,10 @@ import * as Roles from '../utils/roles.js';
 import mergeTemplates from './mergeTemplates.js';
 
 import workspaceCache from './cache.js';
+
+import getTemplate from './getTemplate.js';
+
+import merge from '../utils/merge.js';
 
 /**
 @function getLocale
@@ -38,7 +43,7 @@ Role objects in the locale and nested layers are merged with their respective pa
 
 @returns {Promise<Object|Error>} JSON Locale.
 */
-export default async function getLocale(params) {
+export default async function getLocale(params, parentLocale) {
   const workspace = await workspaceCache();
 
   if (workspace instanceof Error) {
@@ -49,14 +54,34 @@ export default async function getLocale(params) {
     ? params.locale.shift()
     : params.locale;
 
-  if (localeKey && !Object.hasOwn(workspace.locales, localeKey)) {
-    return new Error('Unable to validate locale param.');
-  }
+  let locale, nestedLocale;
 
-  // The workspace.locale is assigned as locale if workspace.locales does not hold the localeKey
-  let locale = Object.hasOwn(workspace.locales, localeKey)
-    ? workspace.locales[localeKey]
-    : workspace.locale;
+  if (localeKey && !Object.hasOwn(workspace.locales, localeKey)) {
+
+    if (parentLocale) {
+
+      //TODO check what happens if the getTemplate returns an error.
+      nestedLocale = await getTemplate(localeKey);
+
+      parentLocale.locale ??= [parentLocale.key]
+
+      nestedLocale.locale = [nestedLocale.key]
+
+      //TODO create locale string
+      locale = merge(parentLocale, nestedLocale)
+
+    } else {
+
+      return new Error('Unable to validate locale param.');
+    }
+
+  } else {
+
+    // The workspace.locale is assigned as locale if workspace.locales does not hold the localeKey
+    locale = Object.hasOwn(workspace.locales, localeKey)
+      ? workspace.locales[localeKey]
+      : workspace.locale;
+  }
 
   locale = await mergeTemplates(locale);
 
@@ -68,6 +93,11 @@ export default async function getLocale(params) {
 
   locale.workspace = workspace.key;
   locale.layers ??= {};
+
+  if (Array.isArray(params.locale) && params.locale.length > 0) {
+
+    locale = await getLocale(params, locale)
+  }
 
   return locale;
 }

@@ -42,16 +42,19 @@ A template will be requested from source if the template has not been cached.
 
 Template modules will be constructed.
 
-@param {string} template
+@param {string} key
 
 @returns {Promise<Object|Error>} JSON Template
 */
-export default async function getTemplate(template) {
-  template = await getTemplateObject(template);
+export default async function getTemplate(key) {
+  const template = await getTemplateObject(key);
 
   if (template instanceof Error) {
     return template;
   }
+
+  // The template.key property value must be the same as the key reference in the workspace.templates{}
+  template.key = key
 
   if (!template.src) {
     return template;
