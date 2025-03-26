@@ -95,15 +95,15 @@
   button,
   .dropdown > .head {
     background-color: var(--color-changed);
-    color: var(--color-text-secondary);
+    color: var(--color-text);
   }
   label.checkbox {
     background-color: var(--color-changed);
-    color: var(--color-text-secondary);
+    color: var(--color-text);
     border-radius: 2px;
   }
   .material-symbols-outlined:after {
-    color: var(--color-text-secondary);
+    color: var(--color-text);
   }
 }
 @media only screen and (max-width: 768px) {
@@ -965,9 +965,10 @@ textarea {
   width: 100%;
   resize: none;
   border: none;
-  border-bottom: 0.5px dotted;
-  background-color: var(--color-base-tertiary);
+  border-bottom: 1px dotted var(--color-base-border);
+  background-color: var(--color-base-contrast);
   color: var(--color-text);
+  border-radius: 3px;
   &:focus {
     outline: none;
   }
@@ -990,6 +991,7 @@ input[type=datetime-local] {
   border: 1px solid var(--color-base-border);
   color: var(--color-accent);
   padding: 5px;
+  border-radius: 3px;
   &:focus {
     cursor: text;
   }
@@ -998,7 +1000,7 @@ input[type=text],
 input[type=number] {
   padding: 5px;
   border: none;
-  background-color: var(--color-base-tertiary);
+  background-color: var(--color-base-contrast);
   color: var(--color-accent);
   border-bottom: 0.5px dotted;
   display: inline-block;
@@ -1375,8 +1377,10 @@ dialog {
   width: 100%;
   overflow: visible;
   position: relative;
-  background-color: var(--color-base-tertiary);
+  background-color: var(--color-base-secondary);
   box-shadow: var(--color-base-secondary) 0px 8px 24px;
+  border: 1px solid var(--color-base-border);
+  border-radius: 3px;
   &:disabled {
     pointer-events: none;
     opacity: 0.4;
@@ -1411,6 +1415,7 @@ dialog {
     overflow-y: auto;
     overflow-x: hidden;
     box-shadow: 1px 1px 3px var(--color-base-secondary);
+    border: 1px solid var(--color-base-border);
     margin-top: -1px;
     text-align: left;
     z-index: 997;
@@ -1988,7 +1993,8 @@ dialog {
       display: flex;
       align-items: center;
       white-space: nowrap;
-      box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3) 0px 1px 3px -1px;
+      border: solid 1px var(--color-base-border);
+      box-shadow: var(--color-base-border) 0px 2px 5px -1px, var(--color-base-contrast) 0px 1px 3px -1px;
       border-radius: 3px 1em 0 0;
       padding: 10px;
       -webkit-user-select: none;

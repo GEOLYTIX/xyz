@@ -48,17 +48,17 @@
   button,
   .dropdown > .head {
     background-color: var(--color-changed);
-    color: var(--color-text-secondary);
+    color: var(--color-text);
   }
 
   label.checkbox {
     background-color: var(--color-changed);
-    color: var(--color-text-secondary);
+    color: var(--color-text);
     border-radius: 2px;
   }
 
   .material-symbols-outlined:after {
-    color: var(--color-text-secondary);
+    color: var(--color-text);
   }
 }
 
