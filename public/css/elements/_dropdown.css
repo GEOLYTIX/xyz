@@ -3,7 +3,6 @@
   overflow: visible;
   position: relative;
   background-color: var(--color-base-secondary);
-  box-shadow: var(--color-base-secondary) 0px 8px 24px;
   border: 1px solid var(--color-base-border);
   border-radius: 3px;
 
