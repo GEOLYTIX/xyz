@@ -1498,7 +1498,6 @@ dialog {
   overflow: visible;
   position: relative;
   background-color: var(--color-base-tertiary);
-  box-shadow: var(--color-base-secondary) 0px 8px 24px;
   & > ul {
     display: none;
     max-height: 500px;
@@ -1663,7 +1662,7 @@ dialog {
   background-image: url('data:image/svg+xml,<svg viewBox="0 0 10 100" xmlns="http://www.w3.org/2000/svg">%0A  <line x1="5" y1="10" x2="5" y2="90" stroke-width="3" stroke="%23888" stroke-linecap="round"/>%0A</svg>');
   background-repeat: no-repeat;
   background-position: center;
-  box-shadow: 3px 0px 6px -3px var(--color-text);
+  box-shadow: 3px 0px 6px -3px var(--color-base-tertiary);
   z-index: 9999;
   &:hover {
     cursor: col-resize;
@@ -1677,7 +1676,7 @@ dialog {
   background-repeat: no-repeat;
   background-position: center;
   background-color: var(--color-base-tertiary);
-  box-shadow: 0px -1px 6px -3px var(--color-text);
+  box-shadow: 0px -1px 6px -3px var(--color-base-tertiary);
   &:hover {
     cursor: row-resize;
   }
@@ -1993,7 +1992,6 @@ dialog {
       align-items: center;
       white-space: nowrap;
       border: solid 1px var(--color-base-border);
-      box-shadow: var(--color-base-border) 0px 2px 5px -1px, var(--color-base-contrast) 0px 1px 3px -1px;
       border-radius: 3px 1em 0 0;
       padding: 10px;
       -webkit-user-select: none;
