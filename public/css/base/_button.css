@@ -3,6 +3,7 @@ button {
   outline: none;
   background: none;
   text-align: center;
+  color: var(--color-accent);
 
   > .material-symbols-outlined {
     pointer-events: none;

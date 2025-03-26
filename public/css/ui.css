@@ -132,6 +132,7 @@ button {
   outline: none;
   background: none;
   text-align: center;
+  color: var(--color-accent);
   > .material-symbols-outlined {
     pointer-events: none;
   }
@@ -1979,8 +1980,9 @@ dialog {
     height: inherit;
     overflow-x: auto;
     display: flex;
-    background-color: var(--color-base-secondary);
+    background-color: var(--color-base);
     & > .tab > .header {
+      color: var(--color-text);
       min-width: 8em;
       height: 100%;
       display: flex;
@@ -2004,12 +2006,15 @@ dialog {
   }
   & > .panel {
     position: relative;
+    background-color: var(--color-base);
     & > .flex-col {
+      background-color: var(--color-base-secondary);
       position: absolute;
       width: 100%;
       height: 100%;
     }
     & .dataview-target {
+      background-color: var(--color-base);
       width: 100%;
       height: 100%;
       overflow-y: auto;
@@ -2020,6 +2025,31 @@ dialog {
   }
   & .dropdown > ul {
     position: fixed;
+  }
+  .tabulator-header > * {
+    background-color: var(--color-base);
+  }
+  .tabulator-col > * {
+    background-color: var(--color-base);
+    color: var(--color-accent);
+  }
+  .tabulator-row {
+    color: var(--color-text);
+    &.tabulator-row-odd {
+      background-color: var(--color-base-secondary);
+    }
+    &.tabulator-row-even {
+      background-color: var(--color-base-tertiary);
+    }
+  }
+  .tabulator-footer {
+    background-color: var(--color-base);
+    .tabulator-page {
+      color: var(--color-accent);
+      &.active {
+        color: var(--color-accent-active);
+      }
+    }
   }
 }
 
