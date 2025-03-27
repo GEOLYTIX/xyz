@@ -14,7 +14,11 @@
     "lineWidth": 80,
     "attributePosition": "auto",
     "bracketSpacing": true,
-    "ignore": ["public/css/mapp.css", "public/css/ui.css"]
+    "ignore": [
+      "public/css/mapp.css",
+      "public/css/ui.css",
+      "lib/utils/uhtml.mjs"
+    ]
   },
   "organizeImports": {
     "enabled": false
@@ -27,7 +31,7 @@
         "noBannedTypes": "error",
         "useOptionalChain": "error",
         "noExcessiveCognitiveComplexity": {
-          "level": "warn",
+          "level": "error",
           "options": {
             "maxAllowedComplexity": 20
           }
@@ -54,7 +58,8 @@
       "public/js/**/*",
       "docs/**/*",
       "mod/utils/bcrypt.cjs",
-      "tests/**/*"
+      "tests/**/*",
+      "lib/utils/uhtml.mjs"
     ]
   },
   "javascript": {
