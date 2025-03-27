@@ -1,59 +1,50 @@
-const { readFileSync } = await import('fs');
-const fsMockFn = codi.mock.fn(readFileSync);
-const fsMock = codi.mock.module('fs', {
-  namedExports: {
-    readFileSync: fsMockFn,
-  },
-});
+/**
+ * @module tests/mod/provider/file
+ */
 
-globalThis.fsMockFn = fsMockFn;
-
-const { dirname, join } = await import('path');
-
-const mockPathdirnameFn = codi.mock.fn(dirname);
-const mockPathJoinFn = codi.mock.fn(join);
-const mockPath = codi.mock.module('path', {
-  namedExports: {
-    dirname: mockPathdirnameFn,
-    join: mockPathJoinFn,
-  },
-});
-
-const mockedUrlFn = codi.mock.fn();
-const mockedUrl = codi.mock.module('url', {
-  namedExports: {
-    fileURLToPath: mockedUrlFn,
-  },
-});
-
+/**
+ * Test suite for the file provider
+ * Tests the ability to read and parse different types of files
+ */
 await codi.describe(
   { name: 'file:', id: 'provider_file', parentId: 'provider' },
   async () => {
     const { default: file } = await import('../../../mod/provider/file.js');
+
+    /**
+     * Test case: Verify JSON file reading and parsing
+     * Mocks the readFileSync function to return a JSON string
+     * Expects the file provider to return the parsed JSON object
+     */
     await codi.it(
       { name: 'Get File test', parentId: 'provider_file' },
       async () => {
         const fileContent = { text: 'I am a file' };
-        fsMockFn.mock.mockImplementationOnce(function readFileSync() {
+
+        readFileSyncFn.mock.mockImplementationOnce(() => {
           return JSON.stringify(fileContent);
         });
 
-        mockPathdirnameFn.mock.mockImplementationOnce(function dirname() {
-          return 'test.json';
-        });
+        const results = file('../../dir/tests/thing.json');
 
-        mockPathJoinFn.mock.mockImplementationOnce(function dirname() {
-          '../../test.json';
-        });
+        codi.assertEqual(results, fileContent);
+      },
+    );
 
-        const results = await file('../../dir/tests/thing.json');
+    /**
+     * Test case: Verify reading files without extensions
+     * Tests the file provider's ability to read and return content from files without extensions
+     * Expects the file provider to return the file content as a string
+     */
+    await codi.it(
+      { name: 'Get file with no extension', parentId: 'provider_file' },
+      async () => {
+        const fileContent = 'I am a file with no extension\n';
+
+        const results = file('./tests/assets/file');
 
         codi.assertEqual(results, fileContent);
       },
     );
   },
 );
-
-fsMock.restore();
-mockPath.restore();
-mockedUrl.restore();
