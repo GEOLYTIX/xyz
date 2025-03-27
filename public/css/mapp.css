@@ -132,8 +132,8 @@ body {
       display: inline-block;
       white-space: nowrap;
       line-height: 1;
-      background: #fff9;
-      border-bottom: 2px solid var(--color-base-secondary);
+      background: var(--color-base-secondary);
+      border-bottom: 2px solid var(--color-base-border);
     }
   }
 }
