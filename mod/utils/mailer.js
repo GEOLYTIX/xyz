@@ -16,7 +16,6 @@ import languageTemplates from './languageTemplates.js';
 import getFrom from '../provider/getFrom.js';
 
 //Attempt to import node mailer
-console.log(xyzEnv);
 let nodeMailer;
 if (
   xyzEnv.TRANSPORT ||
