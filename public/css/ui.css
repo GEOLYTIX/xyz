@@ -144,7 +144,7 @@ button {
     width: 100%;
   }
   &.flat {
-    border-radius: 3px;
+    border-radius: 1px;
     border-bottom: 1px solid var(--color-base-border);
     padding: 0.3em;
     &.active {
