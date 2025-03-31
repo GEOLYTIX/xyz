@@ -130,7 +130,7 @@ async function registerUserBody(req, res) {
     return res.status(500).send('Failed to access ACL.');
   }
 
-  await mailer?.({
+  await mailer({
     template: 'verify_account',
     language: req.body.language,
     to: req.body.email,
@@ -310,7 +310,7 @@ async function passwordReset(req, res) {
   }
 
   // Sent mail with verification token to the account email address.
-  await mailer?.({
+  await mailer({
     template: 'verify_password_reset',
     language: req.body.language,
     to: user.email,
