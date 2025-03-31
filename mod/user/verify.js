@@ -117,7 +117,7 @@ export default async (req, res) => {
   if (rows.length > 0) {
     // Get array of mail promises.
     const mail_promises = rows.map(async (row) => {
-      return await mailer?.({
+      return await mailer({
         template: 'admin_email',
         language: row.language,
         to: row.email,

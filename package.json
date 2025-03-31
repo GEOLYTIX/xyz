@@ -23,7 +23,7 @@
     "@aws-sdk/cloudfront-signer": "^3.621.0",
     "@aws-sdk/s3-request-presigner": "^3.691.0",
     "@node-saml/node-saml": "^5.0.1",
-    "nodemailer": "^6.9.7"
+    "nodemailer": "^6.10.0"
   },
   "dependencies": {
     "jsonwebtoken": "^9.0.2",

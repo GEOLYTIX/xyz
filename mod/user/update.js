@@ -139,7 +139,7 @@ export default async function update(req, res) {
       host: req.params.host,
     };
 
-    await mailer?.(approval_mail);
+    await mailer(approval_mail);
   }
 
   return res.send('Update success');

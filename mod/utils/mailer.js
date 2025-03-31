@@ -16,7 +16,7 @@ import languageTemplates from './languageTemplates.js';
 import getFrom from '../provider/getFrom.js';
 
 //Attempt to import node mailer
-let nodeMailer;
+let nodeMailer, transport;
 if (
   xyzEnv.TRANSPORT ||
   xyzEnv.TRANSPORT_EMAIL ||
@@ -30,9 +30,7 @@ if (
   }
 }
 
-let transport;
-
-export default nodeMailer ? mailer : null;
+export default mailer;
 
 /**
 @function mailer
@@ -48,6 +46,10 @@ Function which sends email using the nodemailer dependancy.
 @property {String} params.host The URL of the instance.
 */
 async function mailer(params) {
+
+  // The nodeMailer module could not be imported.
+  if (!nodeMailer) return;
+
   if (xyzEnv.TRANSPORT) {
     console.warn(
       'Please replace xyzEnv.TRANSPORT with TRANSPORT_HOST,TRANSPORT_EMAIL, and TRANSPORT_PASSWORD',
