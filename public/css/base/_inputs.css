@@ -72,7 +72,7 @@ input[type='number'] {
   border: none;
   background-color: var(--color-base-contrast);
   color: var(--color-accent);
-  border-bottom: 0.5px dotted;
+  border-bottom: 1px dotted var(--color-base-border);
   display: inline-block;
   width: 100%;
   min-width: 2.4ch;
