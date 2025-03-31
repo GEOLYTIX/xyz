@@ -46,7 +46,6 @@ Function which sends email using the nodemailer dependancy.
 @property {String} params.host The URL of the instance.
 */
 async function mailer(params) {
-
   // The nodeMailer module could not be imported.
   if (!nodeMailer) return;
 
