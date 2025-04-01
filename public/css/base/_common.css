@@ -42,17 +42,17 @@
   button,
   .dropdown > .head {
     background-color: var(--color-changed);
-    color: var(--color-text);
+    color: var(--color-font);
   }
 
   label.checkbox {
     background-color: var(--color-changed);
-    color: var(--color-text);
+    color: var(--color-font);
     border-radius: 2px;
   }
 
   .material-symbols-outlined:after {
-    color: var(--color-text);
+    color: var(--color-font);
   }
 }
 

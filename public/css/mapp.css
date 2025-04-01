@@ -39,11 +39,11 @@ body {
   color: var(--color-base-tertiary);
 }
 .off-black {
-  color: var(--color-text);
+  color: var(--color-font);
 }
 .off-black-background {
   color: var(--color-base-tertiary);
-  background-color: var(--color-text);
+  background-color: var(--color-font);
 }
 .on-colour {
   color: var(--color-active);
@@ -58,9 +58,9 @@ body {
   background: none;
 }
 .ol-scale-line-inner {
-  border: 2px solid var(--color-text);
+  border: 2px solid var(--color-font);
   border-top: none;
-  color: var(--color-text);
+  color: var(--color-font);
   text-align: center;
   margin: 1px;
   will-change: contents, width;
@@ -227,7 +227,7 @@ body {
 .popup {
   position: absolute;
   background-color: var(--color-base-tertiary);
-  color: var(--color-text);
+  color: var(--color-font);
   border: solid 1px var(--color-border);
   bottom: 12px;
   transform: translate(-50%, 0);

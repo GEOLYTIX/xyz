@@ -26,7 +26,7 @@
     background-color: var(--color-base);
 
     & > .tab > .header {
-      color: var(--color-text);
+      color: var(--color-font);
       min-width: 8em;
       height: 100%;
       display: flex;
@@ -90,7 +90,7 @@
   }
 
   .tabulator-row {
-    color: var(--color-text);
+    color: var(--color-font);
 
     &.tabulator-row-odd {
       background-color: var(--color-base-secondary);

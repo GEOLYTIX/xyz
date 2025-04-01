@@ -11,7 +11,7 @@
   --color-border: #dddddd;
 
   /* Text */
-  --color-text: #3f3f3f;
+  --color-font: #3f3f3f;
   --color-text-secondary: #858585;
   --color-text-tertiary: #ffffff;
 
@@ -58,12 +58,12 @@ body {
 }
 
 .off-black {
-  color: var(--color-text);
+  color: var(--color-font);
 }
 
 .off-black-background {
   color: var(--color-base-tertiary);
-  background-color: var(--color-text);
+  background-color: var(--color-font);
 }
 
 .on-colour {

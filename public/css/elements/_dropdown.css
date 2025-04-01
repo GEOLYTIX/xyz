@@ -15,7 +15,7 @@
     padding: 5px;
     display: flex;
     align-items: center;
-    color: var(--color-text);
+    color: var(--color-font);
 
     & > :first-child {
       pointer-events: none;
@@ -38,7 +38,7 @@
 
   & > ul {
     background-color: var(--color-base-tertiary);
-    color: var(--color-text);
+    color: var(--color-font);
     display: none;
     position: absolute;
     max-height: 500px;
@@ -52,7 +52,7 @@
 
     & > li {
       padding: 5px;
-      color: var(--color-text);
+      color: var(--color-font);
     }
 
     & > li:hover {
@@ -67,7 +67,7 @@
     & .label {
       padding: 0 6px;
       border-radius: 2px;
-      color: var(--color-text);
+      color: var(--color-font);
       font-size: 80%;
       font-weight: bold;
       background-color: var(--color-hover);

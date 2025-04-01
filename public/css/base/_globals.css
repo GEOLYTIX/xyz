@@ -3,7 +3,7 @@
 body {
   font-family: 'Titillium Web', sans-serif;
   font-size: 0.8em;
-  color: var(--color-text);
+  color: var(--color-font);
 }
 
 *,

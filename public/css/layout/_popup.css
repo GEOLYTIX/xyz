@@ -1,7 +1,7 @@
 .popup {
   position: absolute;
   background-color: var(--color-base-tertiary);
-  color: var(--color-text);
+  color: var(--color-font);
   border: solid 1px var(--color-border);
   bottom: 12px;
   transform: translate(-50%, 0);

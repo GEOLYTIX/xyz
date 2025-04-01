@@ -31,7 +31,7 @@ textarea {
   border: none;
   border-bottom: 1px dotted var(--color-border);
   background-color: var(--color-base-contrast);
-  color: var(--color-text);
+  color: var(--color-font);
   border-radius: 3px;
 
   &:focus {
@@ -83,7 +83,7 @@ input[type='number'] {
 }
 
 input[type='search']::after {
-  color: var(--color-text);
+  color: var(--color-font);
 }
 
 input[type='search']:focus + ul,
