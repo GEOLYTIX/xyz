@@ -29,9 +29,6 @@ Object.keys(xyzEnv)
   .forEach((key) => {
     const id = key.split('_')[1];
 
-    /** 
-    @type {Pool} @private
-    */
     const pool = new Pool({
       dbs: id,
       connectionString: xyzEnv[key],
