@@ -24,12 +24,12 @@
   }
 
   &.primary-light-colour {
-    color: var(--color-text-secondary);
+    color: var(--color-font-mid);
   }
 
   &.close:after {
     content: 'close';
-    color: var(--color-text-secondary);
+    color: var(--color-font-mid);
   }
 }
 

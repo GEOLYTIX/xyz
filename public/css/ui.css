@@ -8,15 +8,15 @@
   --color-base-tertiary: #fafafa;
   --color-base-contrast: #ffffff;
   --color-border: #dddddd;
-  --color-text: #3f3f3f;
-  --color-text-secondary: #858585;
-  --color-text-tertiary: #ffffff;
-  --color-accent: #003d57;
+  --color-font: #3f3f3f;
+  --color-font-mid: #858585;
+  --color-font-contrast: #ffffff;
   --color-active: #d57120;
-  --color-accent-hover: #939faa;
+  --color-hover: #939faa;
+  --color-changed: #ffffa7;
+  --color-accent: #003d57;
   --color-info: #0b6f50;
   --color-danger: #a21309;
-  --color-changed: #ffffa7;
 }
 body {
   background-color: var(--color-base);
@@ -32,7 +32,7 @@ body {
   }
 }
 .primary-background {
-  color: var(--color-text-tertiary);
+  color: var(--color-font-contrast);
   background-color: var(--color-accent);
 }
 .light-background {
@@ -233,7 +233,7 @@ a > img {
   }
 }
 .mask-icon {
-  background-color: var(--color-text-secondary);
+  background-color: var(--color-font-mid);
   mask-repeat: no-repeat;
   -webkit-mask-repeat: no-repeat;
   mask-size: contain;
@@ -945,10 +945,10 @@ input {
   }
   &::placeholder {
     text-align: left;
-    color: var(--color-text-secondary);
+    color: var(--color-font-mid);
   }
   &::-ms-input-placeholder {
-    color: var(--color-text-secondary);
+    color: var(--color-font-mid);
   }
   &.invalid {
     opacity: 0.5;
@@ -1044,11 +1044,11 @@ input[type=search]::-webkit-search-cancel-button:hover {
     color: var(--color-info);
   }
   &.primary-light-colour {
-    color: var(--color-text-secondary);
+    color: var(--color-font-mid);
   }
   &.close:after {
     content: "close";
-    color: var(--color-text-secondary);
+    color: var(--color-font-mid);
   }
 }
 .active > .material-symbols-outlined {
@@ -1247,7 +1247,7 @@ dialog {
     & > .material-symbols-outlined {
       font-size: 1.2em;
       &:after {
-        color: var(--color-text-secondary);
+        color: var(--color-font-mid);
         font-size: inherit;
       }
     }
@@ -1307,7 +1307,7 @@ dialog {
   }
   &.expandable > .header > .material-symbols-outlined.caret::after {
     content: "keyboard_arrow_down";
-    color: var(--color-text-secondary);
+    color: var(--color-font-mid);
     line-height: 1.5em;
   }
   &.expandable:not(.expanded) > *:not(.header) {
@@ -1315,7 +1315,7 @@ dialog {
   }
   &.expanded > .header > .material-symbols-outlined.caret::after {
     content: "keyboard_arrow_up";
-    color: var(--color-text-secondary);
+    color: var(--color-font-mid);
     line-height: 1.5em;
   }
   &.disabled {
@@ -1462,7 +1462,7 @@ dialog {
   button.layer-key {
     margin-right: 0.2em;
     &.active {
-      color: var(--color-text-tertiary);
+      color: var(--color-font-contrast);
     }
   }
 }

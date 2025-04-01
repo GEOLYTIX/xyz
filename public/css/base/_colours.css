@@ -12,8 +12,8 @@
 
   /* Text */
   --color-font: #3f3f3f;
-  --color-text-secondary: #858585;
-  --color-text-tertiary: #ffffff;
+  --color-font-mid: #858585;
+  --color-font-contrast: #ffffff;
 
   /* State */
   --color-active: #d57120;
@@ -45,7 +45,7 @@ body {
 }
 
 .primary-background {
-  color: var(--color-text-tertiary);
+  color: var(--color-font-contrast);
   background-color: var(--color-accent);
 }
 

@@ -7,11 +7,11 @@ input {
 
   &::placeholder {
     text-align: left;
-    color: var(--color-text-secondary);
+    color: var(--color-font-mid);
   }
 
   &::-ms-input-placeholder {
-    color: var(--color-text-secondary);
+    color: var(--color-font-mid);
   }
 
   &.invalid {

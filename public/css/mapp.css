@@ -5,15 +5,15 @@
   --color-base-tertiary: #fafafa;
   --color-base-contrast: #ffffff;
   --color-border: #dddddd;
-  --color-text: #3f3f3f;
-  --color-text-secondary: #858585;
-  --color-text-tertiary: #ffffff;
-  --color-accent: #003d57;
+  --color-font: #3f3f3f;
+  --color-font-mid: #858585;
+  --color-font-contrast: #ffffff;
   --color-active: #d57120;
-  --color-accent-hover: #939faa;
+  --color-hover: #939faa;
+  --color-changed: #ffffa7;
+  --color-accent: #003d57;
   --color-info: #0b6f50;
   --color-danger: #a21309;
-  --color-changed: #ffffa7;
 }
 body {
   background-color: var(--color-base);
@@ -29,7 +29,7 @@ body {
   }
 }
 .primary-background {
-  color: var(--color-text-tertiary);
+  color: var(--color-font-contrast);
   background-color: var(--color-accent);
 }
 .light-background {

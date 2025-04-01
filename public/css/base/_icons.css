@@ -15,7 +15,7 @@
 }
 
 .mask-icon {
-  background-color: var(--color-text-secondary);
+  background-color: var(--color-font-mid);
 
   mask-repeat: no-repeat;
   -webkit-mask-repeat: no-repeat;

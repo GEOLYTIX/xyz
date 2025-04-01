@@ -2,7 +2,7 @@
   button.layer-key {
     margin-right: 0.2em;
     &.active {
-      color: var(--color-text-tertiary);
+      color: var(--color-font-contrast);
     }
   }
 }
