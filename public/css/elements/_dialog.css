@@ -3,7 +3,7 @@
 }
 
 dialog {
-  background-color: var(--color-base-secondary);
+  background-color: var(--color-base);
   color: var(--color-text);
 
   & > button.close {

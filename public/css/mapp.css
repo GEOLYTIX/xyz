@@ -15,6 +15,9 @@
   --color-danger: #a21309;
   --color-changed: #ffffa7;
 }
+body {
+  background-color: var(--color-base);
+}
 * {
   transition: 0.2s ease-in-out;
   transition-property: background-color;
