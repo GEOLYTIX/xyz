@@ -4,7 +4,7 @@
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-base-secondary);
+  background-color: var(--color-base-secondary);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -13,5 +13,5 @@
 }
 
 ::-webkit-scrollbar-corner {
-  background: var(--color-base-secondary);
+  background-color: var(--color-base-secondary);
 }
