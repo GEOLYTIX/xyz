@@ -80,7 +80,7 @@ async function mailer(params) {
       secure: false,
       requireTLS: xyzEnv.TRANSPORT_TLS,
       auth: {
-        user: xyzEnv.TRANSPORT_USERNAME,
+        user: xyzEnv.TRANSPORT_USERNAME || xyzEnv.TRANSPORT_EMAIL,
         pass: xyzEnv.TRANSPORT_PASSWORD,
       },
     });
