@@ -1421,7 +1421,7 @@ dialog {
       color: var(--color-text);
     }
     & > li:hover {
-      background-color: var(--color-accent-hover);
+      background-color: var(--color-hover);
       cursor: pointer;
     }
     & > li.selected {
@@ -1433,7 +1433,7 @@ dialog {
       color: var(--color-text);
       font-size: 80%;
       font-weight: bold;
-      background-color: var(--color-accent-hover);
+      background-color: var(--color-hover);
     }
   }
   &.active {
@@ -1511,7 +1511,7 @@ dialog {
       color: var(--color-text);
     }
     & > li:hover {
-      background-color: var(--color-accent-hover);
+      background-color: var(--color-hover);
       cursor: pointer;
     }
     & > li.selected {
@@ -1524,7 +1524,7 @@ dialog {
       color: var(--color-text);
       font-size: 80%;
       font-weight: bold;
-      background-color: var(--color-accent-hover);
+      background-color: var(--color-hover);
     }
   }
 }
@@ -1552,7 +1552,7 @@ dialog {
       linear-gradient(
         0deg,
         transparent 0 45%,
-        var(--color-accent-hover) 45% 55%,
+        var(--color-hover) 45% 55%,
         transparent 55% 100%);
     z-index: 1;
   }
@@ -1914,7 +1914,7 @@ dialog {
   background: var(--color-base-secondary);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-accent-hover);
+  background: var(--color-hover);
   border-radius: 3px;
 }
 ::-webkit-scrollbar-corner {

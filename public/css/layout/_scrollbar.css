@@ -8,7 +8,7 @@
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-accent-hover);
+  background: var(--color-hover);
   border-radius: 3px;
 }
 

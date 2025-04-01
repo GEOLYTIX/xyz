@@ -15,16 +15,15 @@
   --color-text-secondary: #858585;
   --color-text-tertiary: #ffffff;
 
-  /* Accent */
-  --color-accent: #003d57;
+  /* State */
   --color-active: #d57120;
-  --color-accent-hover: #939faa;
-
-  /* Information */
-  --color-info: #0b6f50;
-  --color-danger: #a21309;
+  --color-hover: #939faa;
   --color-changed: #ffffa7;
 
+  --color-accent: #003d57;
+
+  --color-info: #0b6f50;
+  --color-danger: #a21309;
   /* end default colour palette */
 }
 

@@ -16,7 +16,7 @@
     background: linear-gradient(
       0deg,
       transparent 0 45%,
-      var(--color-accent-hover) 45% 55%,
+      var(--color-hover) 45% 55%,
       transparent 55% 100%
     );
     z-index: 1;

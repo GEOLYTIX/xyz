@@ -56,7 +56,7 @@
     }
 
     & > li:hover {
-      background-color: var(--color-accent-hover);
+      background-color: var(--color-hover);
       cursor: pointer;
     }
 
@@ -70,7 +70,7 @@
       color: var(--color-text);
       font-size: 80%;
       font-weight: bold;
-      background-color: var(--color-accent-hover);
+      background-color: var(--color-hover);
     }
   }
 
