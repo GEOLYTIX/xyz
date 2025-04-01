@@ -26,7 +26,7 @@ button {
 
   &.flat {
     border-radius: 1px;
-    border-bottom: 1px solid var(--color-base-border);
+    border-bottom: 1px solid var(--color-border);
     padding: 0.3em;
 
     &.active {
@@ -42,7 +42,7 @@ button {
 
   &.raised {
     border-radius: 3px;
-    border: 1px solid var(--color-base-border);
+    border: 1px solid var(--color-border);
     box-shadow: 1px 1px 2px var(--color-base-secondary);
     padding: 0.3em;
 

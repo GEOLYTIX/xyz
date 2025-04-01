@@ -29,7 +29,7 @@ textarea {
   width: 100%;
   resize: none;
   border: none;
-  border-bottom: 1px dotted var(--color-base-border);
+  border-bottom: 1px dotted var(--color-border);
   background-color: var(--color-base-contrast);
   color: var(--color-text);
   border-radius: 3px;
@@ -56,7 +56,7 @@ input[type='date'],
 input[type='time'],
 input[type='datetime-local'] {
   background-color: var(--color-base-tertiary);
-  border: 1px solid var(--color-base-border);
+  border: 1px solid var(--color-border);
   color: var(--color-accent);
   padding: 5px;
   border-radius: 3px;
@@ -72,7 +72,7 @@ input[type='number'] {
   border: none;
   background-color: var(--color-base-contrast);
   color: var(--color-accent);
-  border-bottom: 1px dotted var(--color-base-border);
+  border-bottom: 1px dotted var(--color-border);
   display: inline-block;
   width: 100%;
   min-width: 2.4ch;

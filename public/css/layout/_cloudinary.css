@@ -3,7 +3,7 @@
 .documents {
   .drag_and_drop_zone {
     width: 100%;
-    border: 1px dashed var(--color-base-border);
+    border: 1px dashed var(--color-border);
     position: relative;
     height: 100px;
 

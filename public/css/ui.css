@@ -66,8 +66,8 @@ body {
   cursor: pointer;
 }
 .box-shadow {
-  border: 1px solid var(--color-base-border);
-  box-shadow: var(--color-base-border) 0px 1px 4px;
+  border: 1px solid var(--color-border);
+  box-shadow: var(--color-border) 0px 1px 4px;
 }
 .bold {
   font-weight: bold;
@@ -148,7 +148,7 @@ button {
   }
   &.flat {
     border-radius: 1px;
-    border-bottom: 1px solid var(--color-base-border);
+    border-bottom: 1px solid var(--color-border);
     padding: 0.3em;
     &.active {
       border-bottom: 1px solid var(--color-accent-active);
@@ -161,7 +161,7 @@ button {
   }
   &.raised {
     border-radius: 3px;
-    border: 1px solid var(--color-base-border);
+    border: 1px solid var(--color-border);
     box-shadow: 1px 1px 2px var(--color-base-secondary);
     padding: 0.3em;
     &.active {
@@ -963,7 +963,7 @@ textarea {
   width: 100%;
   resize: none;
   border: none;
-  border-bottom: 1px dotted var(--color-base-border);
+  border-bottom: 1px dotted var(--color-border);
   background-color: var(--color-base-contrast);
   color: var(--color-text);
   border-radius: 3px;
@@ -986,7 +986,7 @@ input[type=date],
 input[type=time],
 input[type=datetime-local] {
   background-color: var(--color-base-tertiary);
-  border: 1px solid var(--color-base-border);
+  border: 1px solid var(--color-border);
   color: var(--color-accent);
   padding: 5px;
   border-radius: 3px;
@@ -1000,7 +1000,7 @@ input[type=number] {
   border: none;
   background-color: var(--color-base-contrast);
   color: var(--color-accent);
-  border-bottom: 1px dotted var(--color-base-border);
+  border-bottom: 1px dotted var(--color-border);
   display: inline-block;
   width: 100%;
   min-width: 2.4ch;
@@ -1070,7 +1070,7 @@ dialog.alert-confirm {
   h4 {
     padding: 0.5em 1em;
     background-color: var(--color-accent);
-    border-bottom: solid 2px var(--color-base-border);
+    border-bottom: solid 2px var(--color-border);
     color: var(--color-base-tertiary);
     width: 100%;
   }
@@ -1107,7 +1107,7 @@ dialog.alert-confirm {
   width: 100%;
   padding: 0.3em 0.5em;
   background-color: var(--color-base-tertiary);
-  border: 1px solid var(--color-base-border);
+  border: 1px solid var(--color-border);
   border-radius: 3px;
   box-shadow: 1px 1px 3px var(--color-base-secondary);
   & .header {
@@ -1349,12 +1349,12 @@ dialog {
   }
   &.flat {
     border-radius: 2px;
-    border: 1px solid var(--color-base-border);
+    border: 1px solid var(--color-border);
   }
   &.raised {
     border-radius: 2px;
     box-shadow: 1px 1px 3px var(--color-base-secondary);
-    border: 1px solid var(--color-base-border);
+    border: 1px solid var(--color-border);
   }
   &.raised.empty {
     box-shadow: none;
@@ -1376,7 +1376,7 @@ dialog {
   overflow: visible;
   position: relative;
   background-color: var(--color-base-secondary);
-  border: 1px solid var(--color-base-border);
+  border: 1px solid var(--color-border);
   border-radius: 3px;
   &:disabled {
     pointer-events: none;
@@ -1412,7 +1412,7 @@ dialog {
     overflow-y: auto;
     overflow-x: hidden;
     box-shadow: 1px 1px 3px var(--color-base-secondary);
-    border: 1px solid var(--color-base-border);
+    border: 1px solid var(--color-border);
     margin-top: -1px;
     text-align: left;
     z-index: 997;
@@ -1691,7 +1691,7 @@ dialog {
 .documents {
   .drag_and_drop_zone {
     width: 100%;
-    border: 1px dashed var(--color-base-border);
+    border: 1px dashed var(--color-border);
     position: relative;
     height: 100px;
     input {
@@ -1797,7 +1797,7 @@ dialog {
   background: var(--color-base-contrast);
   border: none;
   box-shadow: none;
-  border-top: 1px solid var(--color-base-border);
+  border-top: 1px solid var(--color-border);
 }
 #layers > .layer-view > .drawer,
 #layers .drawer.layer-view .drawer {
@@ -1953,7 +1953,7 @@ dialog {
       display: flex;
       align-items: center;
       white-space: nowrap;
-      border: solid 1px var(--color-base-border);
+      border: solid 1px var(--color-border);
       border-radius: 3px 1em 0 0;
       padding: 10px;
       -webkit-user-select: none;
