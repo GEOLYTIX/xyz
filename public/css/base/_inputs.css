@@ -30,7 +30,7 @@ textarea {
   resize: none;
   border: none;
   border-bottom: 1px dotted var(--color-border);
-  background-color: var(--color-base-contrast);
+  background-color: var(--color-base-tertiary);
   color: var(--color-font);
   border-radius: 3px;
 
@@ -70,7 +70,7 @@ input[type='text'],
 input[type='number'] {
   padding: 5px;
   border: none;
-  background-color: var(--color-base-contrast);
+  background-color: var(--color-base-tertiary);
   color: var(--color-primary);
   border-bottom: 1px dotted var(--color-border);
   display: inline-block;

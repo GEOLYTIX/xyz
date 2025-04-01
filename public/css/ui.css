@@ -7,7 +7,6 @@
   --color-base: #f2f2f2;
   --color-base-secondary: #f7f7f7;
   --color-base-tertiary: #fafafa;
-  --color-base-contrast: #ffffff;
   --color-border: #dddddd;
   --color-font: #3f3f3f;
   --color-font-mid: #858585;
@@ -964,7 +963,7 @@ textarea {
   resize: none;
   border: none;
   border-bottom: 1px dotted var(--color-border);
-  background-color: var(--color-base-contrast);
+  background-color: var(--color-base-tertiary);
   color: var(--color-font);
   border-radius: 3px;
   &:focus {
@@ -998,7 +997,7 @@ input[type=text],
 input[type=number] {
   padding: 5px;
   border: none;
-  background-color: var(--color-base-contrast);
+  background-color: var(--color-base-tertiary);
   color: var(--color-primary);
   border-bottom: 1px dotted var(--color-border);
   display: inline-block;
@@ -1788,13 +1787,13 @@ dialog {
 .drawer.layer-group {
   padding-left: 3px;
   padding-right: 3px;
-  background: var(--color-base-contrast);
+  background: var(--color-base-tertiary);
   & > * {
     padding-left: 4px;
   }
 }
 #layers > .drawer.layer-group .drawer.layer-view {
-  background: var(--color-base-contrast);
+  background: var(--color-base-tertiary);
   border: none;
   box-shadow: none;
   border-top: 1px solid var(--color-border);
@@ -1805,14 +1804,14 @@ dialog {
   box-shadow: none;
 }
 #layers > .layer-view > .drawer {
-  background: var(--color-base-contrast);
+  background: var(--color-base-tertiary);
 }
 
 /* public/css/layout/_locationview.css */
 .location-view.drawer {
   margin-top: 5px;
   border-radius: 5px;
-  background-color: var(--color-base-contrast);
+  background-color: var(--color-base-tertiary);
 }
 .location-view-grid {
   display: grid;

@@ -43,7 +43,7 @@
 .drawer.layer-group {
   padding-left: 3px;
   padding-right: 3px;
-  background: var(--color-base-contrast);
+  background: var(--color-base-tertiary);
 
   & > * {
     padding-left: 4px;
@@ -51,7 +51,7 @@
 }
 
 #layers > .drawer.layer-group .drawer.layer-view {
-  background: var(--color-base-contrast);
+  background: var(--color-base-tertiary);
   border: none;
   box-shadow: none;
   border-top: 1px solid var(--color-border);
@@ -64,5 +64,5 @@
 }
 
 #layers > .layer-view > .drawer {
-  background: var(--color-base-contrast);
+  background: var(--color-base-tertiary);
 }
