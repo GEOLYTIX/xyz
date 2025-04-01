@@ -3,7 +3,7 @@
 
   /* Backgrounds */
   --color-base: #f2f2f2;
-  --color-base-secondary: #f2f2f2;
+  --color-base-secondary: #f7f7f7;
   --color-base-tertiary: #fafafa;
   --color-base-contrast: #ffffff;
 
@@ -22,7 +22,7 @@
 
   /* Information */
   --color-info: #0b6f50;
-  --color-blocked: #a21309;
+  --color-danger: #a21309;
   --color-changed: #ffffa7;
 
   /* end default colour palette */
@@ -68,5 +68,5 @@
 }
 
 .no-colour {
-  color: var(--color-blocked);
+  color: var(--color-danger);
 }

@@ -1,7 +1,7 @@
 /* public/css/base/_colours.css */
 :root {
   --color-base: #f2f2f2;
-  --color-base-secondary: #f2f2f2;
+  --color-base-secondary: #f7f7f7;
   --color-base-tertiary: #fafafa;
   --color-base-contrast: #ffffff;
   --color-base-border: #dddddd;
@@ -12,7 +12,7 @@
   --color-accent-active: #d57120;
   --color-accent-hover: #939faa;
   --color-info: #0b6f50;
-  --color-blocked: #a21309;
+  --color-danger: #a21309;
   --color-changed: #ffffa7;
 }
 * {
@@ -46,7 +46,7 @@
   color: var(--color-accent-active);
 }
 .no-colour {
-  color: var(--color-blocked);
+  color: var(--color-danger);
 }
 
 /* public/css/layout/_ol.css */

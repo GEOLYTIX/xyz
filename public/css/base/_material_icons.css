@@ -16,7 +16,7 @@
   }
 
   &.no-colour {
-    color: var(--color-blocked);
+    color: var(--color-danger);
   }
 
   &.ok-colour {

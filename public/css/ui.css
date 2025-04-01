@@ -4,7 +4,7 @@
 /* public/css/base/_colours.css */
 :root {
   --color-base: #f2f2f2;
-  --color-base-secondary: #f2f2f2;
+  --color-base-secondary: #f7f7f7;
   --color-base-tertiary: #fafafa;
   --color-base-contrast: #ffffff;
   --color-base-border: #dddddd;
@@ -15,7 +15,7 @@
   --color-accent-active: #d57120;
   --color-accent-hover: #939faa;
   --color-info: #0b6f50;
-  --color-blocked: #a21309;
+  --color-danger: #a21309;
   --color-changed: #ffffa7;
 }
 * {
@@ -49,7 +49,7 @@
   color: var(--color-accent-active);
 }
 .no-colour {
-  color: var(--color-blocked);
+  color: var(--color-danger);
 }
 
 /* public/css/base/_common.css */
@@ -251,7 +251,7 @@ a > img {
     background-color: var(--color-accent-active);
   }
   &.no {
-    background-color: var(--color-blocked);
+    background-color: var(--color-danger);
   }
 }
 .add {
@@ -949,7 +949,7 @@ input {
   }
   &.invalid {
     opacity: 0.5;
-    outline: 1px solid var(--color-blocked);
+    outline: 1px solid var(--color-danger);
   }
 }
 input::-moz-focus-inner,
@@ -1035,7 +1035,7 @@ input[type=search]::-webkit-search-cancel-button:hover {
     color: var(--color-accent-active);
   }
   &.no-colour {
-    color: var(--color-blocked);
+    color: var(--color-danger);
   }
   &.ok-colour {
     color: var(--color-info);
@@ -2097,7 +2097,7 @@ dialog {
       right: 5%;
       width: 50px;
       height: 50px;
-      background-color: var(--color-blocked);
+      background-color: var(--color-danger);
     }
   }
 }
