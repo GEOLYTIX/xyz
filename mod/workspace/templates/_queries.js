@@ -118,7 +118,6 @@ export default {
     render: locationsDelete,
   },
   locations_insert: {
-    layer: true,
     render: locationsInsert,
   },
   location_update: {
