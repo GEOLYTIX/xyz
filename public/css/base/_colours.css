@@ -8,7 +8,7 @@
   --color-base-contrast: #ffffff;
 
   /* Border */
-  --color-base-border: #dddddd;
+  --color-border: #dddddd;
 
   /* Text */
   --color-text: #3f3f3f;
@@ -17,7 +17,7 @@
 
   /* Accent */
   --color-accent: #003d57;
-  --color-accent-active: #d57120;
+  --color-active: #d57120;
   --color-accent-hover: #939faa;
 
   /* Information */
@@ -41,7 +41,7 @@ body {
   color: var(--color-accent);
 
   &.active {
-    color: var(--color-accent-active);
+    color: var(--color-active);
   }
 }
 
@@ -68,7 +68,7 @@ body {
 }
 
 .on-colour {
-  color: var(--color-accent-active);
+  color: var(--color-active);
 }
 
 .no-colour {

@@ -4,12 +4,12 @@
   --color-base-secondary: #f7f7f7;
   --color-base-tertiary: #fafafa;
   --color-base-contrast: #ffffff;
-  --color-base-border: #dddddd;
+  --color-border: #dddddd;
   --color-text: #3f3f3f;
   --color-text-secondary: #858585;
   --color-text-tertiary: #ffffff;
   --color-accent: #003d57;
-  --color-accent-active: #d57120;
+  --color-active: #d57120;
   --color-accent-hover: #939faa;
   --color-info: #0b6f50;
   --color-danger: #a21309;
@@ -25,7 +25,7 @@ body {
 .primary-colour {
   color: var(--color-accent);
   &.active {
-    color: var(--color-accent-active);
+    color: var(--color-active);
   }
 }
 .primary-background {
@@ -46,7 +46,7 @@ body {
   background-color: var(--color-text);
 }
 .on-colour {
-  color: var(--color-accent-active);
+  color: var(--color-active);
 }
 .no-colour {
   color: var(--color-danger);

@@ -36,7 +36,7 @@
   }
 
   &.on {
-    background-color: var(--color-accent-active);
+    background-color: var(--color-active);
   }
 
   &.no {
@@ -651,7 +651,7 @@
 
   &.on::after {
     content: 'toggle_on';
-    color: var(--color-accent-active);
+    color: var(--color-active);
   }
 
   &.disabled {

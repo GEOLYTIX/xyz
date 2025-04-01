@@ -7,12 +7,12 @@
   --color-base-secondary: #f7f7f7;
   --color-base-tertiary: #fafafa;
   --color-base-contrast: #ffffff;
-  --color-base-border: #dddddd;
+  --color-border: #dddddd;
   --color-text: #3f3f3f;
   --color-text-secondary: #858585;
   --color-text-tertiary: #ffffff;
   --color-accent: #003d57;
-  --color-accent-active: #d57120;
+  --color-active: #d57120;
   --color-accent-hover: #939faa;
   --color-info: #0b6f50;
   --color-danger: #a21309;
@@ -28,7 +28,7 @@ body {
 .primary-colour {
   color: var(--color-accent);
   &.active {
-    color: var(--color-accent-active);
+    color: var(--color-active);
   }
 }
 .primary-background {
@@ -49,7 +49,7 @@ body {
   background-color: var(--color-text);
 }
 .on-colour {
-  color: var(--color-accent-active);
+  color: var(--color-active);
 }
 .no-colour {
   color: var(--color-danger);
@@ -151,7 +151,7 @@ button {
     border-bottom: 1px solid var(--color-border);
     padding: 0.3em;
     &.active {
-      border-bottom: 1px solid var(--color-accent-active);
+      border-bottom: 1px solid var(--color-active);
     }
   }
   &.underline {
@@ -169,7 +169,7 @@ button {
     }
   }
   &.active {
-    color: var(--color-accent-active);
+    color: var(--color-active);
   }
 }
 
@@ -251,7 +251,7 @@ a > img {
     -webkit-mask-position: left;
   }
   &.on {
-    background-color: var(--color-accent-active);
+    background-color: var(--color-active);
   }
   &.no {
     background-color: var(--color-danger);
@@ -803,7 +803,7 @@ a > img {
   }
   &.on::after {
     content: "toggle_on";
-    color: var(--color-accent-active);
+    color: var(--color-active);
   }
   &.disabled {
     opacity: 0.5;
@@ -1031,11 +1031,11 @@ input[type=search]::-webkit-search-cancel-button:hover {
   text-align: center;
   color: var(--color-accent);
   &.active {
-    color: var(--color-accent-active);
+    color: var(--color-active);
   }
   &.on-colour,
   &.on {
-    color: var(--color-accent-active);
+    color: var(--color-active);
   }
   &.no-colour {
     color: var(--color-danger);
@@ -1052,7 +1052,7 @@ input[type=search]::-webkit-search-cancel-button:hover {
   }
 }
 .active > .material-symbols-outlined {
-  color: var(--color-accent-active);
+  color: var(--color-active);
 }
 
 /* public/css/elements/_alert_confirm.css */
@@ -1880,7 +1880,7 @@ dialog {
     font-size: 0.8em;
     background-color: var(--color-base-secondary);
     &.active {
-      background-color: var(--color-accent-active);
+      background-color: var(--color-active);
     }
   }
   & .textarea {
@@ -2012,7 +2012,7 @@ dialog {
     .tabulator-page {
       color: var(--color-accent);
       &.active {
-        color: var(--color-accent-active);
+        color: var(--color-active);
       }
     }
   }

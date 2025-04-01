@@ -30,7 +30,7 @@ button {
     padding: 0.3em;
 
     &.active {
-      border-bottom: 1px solid var(--color-accent-active);
+      border-bottom: 1px solid var(--color-active);
     }
   }
 
@@ -52,6 +52,6 @@ button {
   }
 
   &.active {
-    color: var(--color-accent-active);
+    color: var(--color-active);
   }
 }
