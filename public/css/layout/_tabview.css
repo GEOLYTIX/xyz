@@ -86,7 +86,7 @@
 
   .tabulator-col > * {
     background-color: var(--color-base);
-    color: var(--color-accent);
+    color: var(--color-primary);
   }
 
   .tabulator-row {
@@ -105,7 +105,7 @@
     background-color: var(--color-base);
 
     .tabulator-page {
-      color: var(--color-accent);
+      color: var(--color-primary);
 
       &.active {
         color: var(--color-active);

@@ -11,7 +11,7 @@
     font-size: 0.9em;
     font-weight: bold;
     color: var(--color-base-tertiary);
-    background-color: var(--color-accent);
+    background-color: var(--color-primary);
     user-select: none;
 
     button {

@@ -24,7 +24,7 @@ body {
 a {
   text-decoration: none;
   font-weight: bold;
-  color: var(--color-accent);
+  color: var(--color-primary);
 }
 
 li {

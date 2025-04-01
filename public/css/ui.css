@@ -3,6 +3,7 @@
 
 /* public/css/base/_colours.css */
 :root {
+  --color-primary: #003d57;
   --color-base: #f2f2f2;
   --color-base-secondary: #f7f7f7;
   --color-base-tertiary: #fafafa;
@@ -14,7 +15,6 @@
   --color-active: #d57120;
   --color-hover: #939faa;
   --color-changed: #ffffa7;
-  --color-accent: #003d57;
   --color-info: #0b6f50;
   --color-danger: #a21309;
 }
@@ -26,14 +26,14 @@ body {
   transition-property: background-color;
 }
 .primary-colour {
-  color: var(--color-accent);
+  color: var(--color-primary);
   &.active {
     color: var(--color-active);
   }
 }
 .primary-background {
   color: var(--color-font-contrast);
-  background-color: var(--color-accent);
+  background-color: var(--color-primary);
 }
 .light-background {
   background-color: var(--color-base-tertiary);
@@ -130,7 +130,7 @@ button {
   outline: none;
   background: none;
   text-align: center;
-  color: var(--color-accent);
+  color: var(--color-primary);
   > .material-symbols-outlined {
     pointer-events: none;
   }
@@ -196,7 +196,7 @@ body {
 a {
   text-decoration: none;
   font-weight: bold;
-  color: var(--color-accent);
+  color: var(--color-primary);
 }
 li {
   list-style-type: none;
@@ -987,7 +987,7 @@ input[type=time],
 input[type=datetime-local] {
   background-color: var(--color-base-tertiary);
   border: 1px solid var(--color-border);
-  color: var(--color-accent);
+  color: var(--color-primary);
   padding: 5px;
   border-radius: 3px;
   &:focus {
@@ -999,7 +999,7 @@ input[type=number] {
   padding: 5px;
   border: none;
   background-color: var(--color-base-contrast);
-  color: var(--color-accent);
+  color: var(--color-primary);
   border-bottom: 1px dotted var(--color-border);
   display: inline-block;
   width: 100%;
@@ -1029,7 +1029,7 @@ input[type=search]::-webkit-search-cancel-button:hover {
     "GRAD" 0,
     "opsz" 24;
   text-align: center;
-  color: var(--color-accent);
+  color: var(--color-primary);
   &.active {
     color: var(--color-active);
   }
@@ -1069,7 +1069,7 @@ dialog.alert-confirm {
   }
   h4 {
     padding: 0.5em 1em;
-    background-color: var(--color-accent);
+    background-color: var(--color-primary);
     border-bottom: solid 2px var(--color-border);
     color: var(--color-base-tertiary);
     width: 100%;
@@ -1091,7 +1091,7 @@ dialog.alert-confirm {
   button {
     float: right;
     font-size: 0.9em;
-    color: var(--color-accent);
+    color: var(--color-primary);
     z-index: 1005;
   }
 }
@@ -1166,7 +1166,7 @@ dialog.alert-confirm {
       }
     }
     &.active {
-      background-color: var(--color-accent);
+      background-color: var(--color-primary);
       color: #fff;
       & .panel {
         bottom: 2em;
@@ -1480,7 +1480,7 @@ dialog {
     font-size: 0.9em;
     font-weight: bold;
     color: var(--color-base-tertiary);
-    background-color: var(--color-accent);
+    background-color: var(--color-primary);
     user-select: none;
     button {
       cursor: pointer;
@@ -1563,7 +1563,7 @@ dialog {
       linear-gradient(
         0deg,
         transparent 0 45%,
-        var(--color-accent) 45% 55%,
+        var(--color-primary) 45% 55%,
         transparent 55% 100%);
     content: "";
     z-index: 2;
@@ -1585,7 +1585,7 @@ dialog {
         linear-gradient(
           0deg,
           transparent 0 45%,
-          var(--color-accent) 45% 55%,
+          var(--color-primary) 45% 55%,
           transparent 55% 100%);
       content: "";
       z-index: 2;
@@ -1862,7 +1862,7 @@ dialog {
     padding: 0;
     & > .header {
       grid-column: 1 / 3;
-      background-color: var(--color-accent);
+      background-color: var(--color-primary);
       color: var(--color-base-tertiary);
       border-radius: 3px;
       padding: 0 0.5em;
@@ -1996,7 +1996,7 @@ dialog {
   }
   .tabulator-col > * {
     background-color: var(--color-base);
-    color: var(--color-accent);
+    color: var(--color-primary);
   }
   .tabulator-row {
     color: var(--color-font);
@@ -2010,7 +2010,7 @@ dialog {
   .tabulator-footer {
     background-color: var(--color-base);
     .tabulator-page {
-      color: var(--color-accent);
+      color: var(--color-primary);
       &.active {
         color: var(--color-active);
       }

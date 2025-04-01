@@ -1,6 +1,8 @@
 :root {
   /* begin default colour palette */
 
+  --color-primary: #003d57;
+
   /* Backgrounds */
   --color-base: #f2f2f2;
   --color-base-secondary: #f7f7f7;
@@ -19,9 +21,7 @@
   --color-active: #d57120;
   --color-hover: #939faa;
   --color-changed: #ffffa7;
-
-  --color-accent: #003d57;
-
+  
   --color-info: #0b6f50;
   --color-danger: #a21309;
   /* end default colour palette */
@@ -37,7 +37,7 @@ body {
 }
 
 .primary-colour {
-  color: var(--color-accent);
+  color: var(--color-primary);
 
   &.active {
     color: var(--color-active);
@@ -46,7 +46,7 @@ body {
 
 .primary-background {
   color: var(--color-font-contrast);
-  background-color: var(--color-accent);
+  background-color: var(--color-primary);
 }
 
 .light-background {

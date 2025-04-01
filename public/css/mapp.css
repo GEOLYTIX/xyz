@@ -1,5 +1,6 @@
 /* public/css/base/_colours.css */
 :root {
+  --color-primary: #003d57;
   --color-base: #f2f2f2;
   --color-base-secondary: #f7f7f7;
   --color-base-tertiary: #fafafa;
@@ -11,7 +12,6 @@
   --color-active: #d57120;
   --color-hover: #939faa;
   --color-changed: #ffffa7;
-  --color-accent: #003d57;
   --color-info: #0b6f50;
   --color-danger: #a21309;
 }
@@ -23,14 +23,14 @@ body {
   transition-property: background-color;
 }
 .primary-colour {
-  color: var(--color-accent);
+  color: var(--color-primary);
   &.active {
     color: var(--color-active);
   }
 }
 .primary-background {
   color: var(--color-font-contrast);
-  background-color: var(--color-accent);
+  background-color: var(--color-primary);
 }
 .light-background {
   background-color: var(--color-base-tertiary);
