@@ -78,38 +78,4 @@
     position: fixed;
   }
 
-  /* Tabulator colour overrides */
-
-  .tabulator-header > * {
-    background-color: var(--color-base);
-  }
-
-  .tabulator-col > * {
-    background-color: var(--color-base);
-    color: var(--color-primary);
-  }
-
-  .tabulator-row {
-    color: var(--color-font);
-
-    &.tabulator-row-odd {
-      background-color: var(--color-base-secondary);
-    }
-
-    &.tabulator-row-even {
-      background-color: var(--color-base-tertiary);
-    }
-  }
-
-  .tabulator-footer {
-    background-color: var(--color-base);
-
-    .tabulator-page {
-      color: var(--color-primary);
-
-      &.active {
-        color: var(--color-active);
-      }
-    }
-  }
 }
