@@ -1425,7 +1425,8 @@ dialog {
       cursor: pointer;
     }
     & > li.selected {
-      background-color: var(--color-base-secondary);
+      background-color: var(--color-primary);
+      color: var(--color-font-contrast);
     }
     & .label {
       padding: 0 6px;
