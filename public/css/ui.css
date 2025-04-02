@@ -1862,7 +1862,7 @@ dialog {
     & > .header {
       grid-column: 1 / 3;
       background-color: var(--color-primary);
-      color: var(--color-font-tertiary);
+      color: var(--color-font-contrast);
       border-radius: 3px;
       padding: 0 0.5em;
       & > .caret::after {
