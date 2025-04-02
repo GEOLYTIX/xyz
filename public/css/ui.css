@@ -1419,6 +1419,8 @@ dialog {
     & > li {
       padding: 5px;
       color: var(--color-font);
+      margin: 0 0.1em;
+      border-radius: 2px;
     }
     & > li:hover {
       background-color: var(--color-hover);
