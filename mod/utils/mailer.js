@@ -62,18 +62,13 @@ async function mailer(params) {
     return;
   }
 
-  if (!xyzEnv.TRANSPORT_EMAIL && !xyzEnv.TRANSPORT_USERNAME) {
-    console.warn('xyzEnv.TRANSPORT_EMAIL/USERNAME is missing.');
+  if (!xyzEnv.TRANSPORT_EMAIL) {
+    console.warn('xyzEnv.TRANSPORT_EMAIL is missing.');
     return;
   }
 
   if (!xyzEnv.TRANSPORT_PASSWORD) {
     console.warn('xyzEnv.TRANSPORT_PASSWORD missing.');
-    return;
-  }
-
-  if (!xyzEnv.TRANSPORT_EMAIL && !xyzEnv.TRANSPORT_NAME) {
-    console.warn('xyzEnv.TRANSPORT_EMAIL/NAME is missing.');
     return;
   }
 
