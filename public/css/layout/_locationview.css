@@ -66,6 +66,11 @@
       color: var(--color-base-tertiary);
       border-radius: 3px;
       padding: 0 0.5em;
+
+      & > .caret::after {
+        color: var(--color-font-contrast);
+      }
+
     }
 
     & .label,
