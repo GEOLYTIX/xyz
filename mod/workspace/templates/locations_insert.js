@@ -7,6 +7,9 @@ The locations_insert layer query inserts a record in the layer table.
 */
 export default (_) => {
   // The location ID must not be inserted.
+  const table = _.layer?.table || _.table;
+  if (!table) throw new Error('insert template requires a table');
+
   if (
     _.layer &&
     Object.keys(_.body.columns).some(
@@ -19,19 +22,20 @@ export default (_) => {
   }
 
   let data = _.body.data || _.body.values;
-  const columns = _.body.columns;
-  const table = _.layer?.table || _.table;
+  const columns = _.body.fields;
 
   if (!Array.isArray(data)) data = [data];
 
-  for (const [values, indx] of Object.entries(data)) {
-    if (typeof values === 'string') continue;
+  for (const indx in data) {
+    if (typeof data[indx] === 'string') continue;
 
-    data[indx] = Object.keys(data[indx]).map((key) => data[indx][key]);
+    data[indx] = Object.keys(data[indx]).map((key) => {
+      if (data[indx][key] === null) return 'null';
+      return data[indx][key];
+    });
+
     data[indx] = `(${data[indx].join()})`;
   }
-
-  if (!table) throw new Error('insert template requires a table');
 
   return `INSERT INTO ${table} (${columns.join(',')}) VALUES ${data.join()};`;
 };
