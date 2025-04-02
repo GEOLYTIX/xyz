@@ -27,7 +27,7 @@ import locationNew from './location_new.js';
 import locationDelete from './location_delete.js';
 import locationsDelete from './locations_delete.js';
 import locationUpdate from './location_update.js';
-import locationsInsert from './locations_insert.js';
+import sql_table_insert from './sql_table_insert.js';
 import locationCount from './location_count.js';
 import mvt from './mvt.js';
 import mvtGeom from './mvt_geom.js';
@@ -117,8 +117,9 @@ export default {
     layer: true,
     render: locationsDelete,
   },
-  locations_insert: {
-    render: locationsInsert,
+  sql_table_insert: {
+    layer: true,
+    render: sql_table_insert,
   },
   location_update: {
     layer: true,
