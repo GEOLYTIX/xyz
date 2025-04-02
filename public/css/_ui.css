@@ -38,11 +38,11 @@
 
 @import url('./layout/_divider.css');
 
+@import url('./layout/_cloudinary.css');
+
 @import url('./layout/_layerview.css');
 
 @import url('./layout/_locationview.css');
-
-@import url('./layout/_map_toolbar.css');
 
 @import url('./layout/_scrollbar.css');
 

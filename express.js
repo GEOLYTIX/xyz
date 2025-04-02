@@ -50,6 +50,10 @@ import rateLimit from 'express-rate-limit';
 
 import api from './api/api.js';
 
+if (process.versions.node.split('.')[0] < 22) {
+  console.warn(`Process Node version below 22.`);
+}
+
 const app = express();
 
 app.disable('x-powered-by');
@@ -94,14 +98,6 @@ app.get(`${xyzEnv.DIR}/api/query/:template?`, api);
 
 app.post(
   `${xyzEnv.DIR}/api/query/:template?`,
-  express.json({ limit: '5mb' }),
-  api,
-);
-
-app.get(`${xyzEnv.DIR}/api/fetch/:template?`, api);
-
-app.post(
-  `${xyzEnv.DIR}/api/fetch/:template?`,
   express.json({ limit: '5mb' }),
   api,
 );

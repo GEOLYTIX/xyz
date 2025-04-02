@@ -16,13 +16,15 @@
 
   --color-mid: #e3e3e3;
 
-  --color-on: #e18335;
+  --color-on: #d57120;
 
   --color-no: #a21309;
 
   --color-changed: #ffffa7;
 
   --color-ok: #0b6f50;
+
+  --color-input-border: #ccc;
 
   /* dark colour mode */
 

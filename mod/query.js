@@ -62,8 +62,8 @@ export default async function query(req, res) {
   // Get the template.
   const template = await getTemplate(req.params.template);
 
-  if (template instanceof Error) {
-    return res.status(500).send(template.message);
+  if (template.err instanceof Error) {
+    return res.status(500).send(template.err.message);
   }
 
   // A layer template must have a layer param.
@@ -142,7 +142,7 @@ The fields request param property may be provided as an array. The string should
 */
 async function layerQuery(req, res) {
   if (req.params.layer_template) {
-    req.params.layer = await getTemplate(req.params.layer_template);
+    req.params.layer = req.params.layer_template;
   }
 
   if (!req.params.layer) {
@@ -298,7 +298,7 @@ async function fieldsMap(req, res) {
     if (Object.hasOwn(req.params.workspace.templates, field)) {
       const fieldTemplate = await getTemplate(field);
 
-      value = fieldTemplate.template || '';
+      value = fieldTemplate.field || field;
     }
 
     req.params.fieldsMap.set(field, value);
@@ -314,7 +314,7 @@ The method assigns the infojMap object property to the request params for layer 
 
 The method iterates over the layer.infoj entries and only assigns entry fields valid for a location_get request.
 
-A lookup of template strings in the workspace.templates for the infojMap entry.field key/value is attempted.
+A lookup of template [SQL] strings is attempted only if the template is defined in the entry object.
 
 @param {req} req HTTP request.
 @param {res} res HTTP response.
@@ -327,11 +327,8 @@ async function infojMap(req, res) {
   req.params.infojMap = new Map();
 
   for (const entry of req.params.layer.infoj) {
-    // An entry must have a field.
-    if (!entry.field) continue;
-
-    // Query entries are not included in the infojMap
-    if (entry.query) continue;
+    // An entry must have a field, and not a query.
+    if (!entry.field || entry.query) continue;
 
     // Only entries with fields included in the fieldsMap should be added if a fieldsMap has been provided.
     if (req.params.fieldsMap && !req.params.fieldsMap?.has(entry.field))
@@ -346,8 +343,17 @@ async function infojMap(req, res) {
     let value = entry.field;
 
     // Check for workspace.template matching the entry.field.
-    if (Object.hasOwn(req.params.workspace.templates, entry.field)) {
+    if (
+      entry.template &&
+      Object.hasOwn(req.params.workspace.templates, entry.field)
+    ) {
       const fieldTemplate = await getTemplate(entry.field);
+
+      // Core templates should not be included in the infojMap.
+      if (fieldTemplate._type === 'core') {
+        req.params.infojMap.set(entry.field, value);
+        continue;
+      }
 
       value = fieldTemplate.template || '';
     }

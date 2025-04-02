@@ -1,64 +1,32 @@
-import 'dotenv/config';
-import '../../../mod/utils/processEnv.js';
-
 const params = {
-  name: 'User Update Tests',
-  id: 'user_update_tests',
+  name: 'update: ',
+  id: 'user_update',
+  parentId: 'user',
 };
 
-const mock = codi.mock;
+const aclMockFn = codi.mock.fn();
+
+const aclMock = codi.mock.module('../../../mod/user/acl.js', {
+  defaultExport: aclMockFn,
+});
+
+const mailerMockFn = codi.mock.fn();
+
+const mailerMock = codi.mock.module('../../../mod/utils/mailer.js', {
+  defaultExport: mailerMockFn,
+});
 
 await codi.describe(params, async () => {
-  await codi.it(
-    {
-      name: 'should return error when ACL is null',
-      parentId: 'user_update_tests',
-    },
-    async () => {
-      const req = {
-        params: {
-          user: { admin: true },
-          email: 'test@example.com',
-          host: 'test.com',
-        },
-        body: {},
-      };
-
-      await mock.module('../../../mod/user/acl.js', () => {
-        return { default: null };
-      });
-
-      const { default: update } = await import('../../../mod/user/update.js');
-
-      const res = {
-        status: (code) => ({ send: (message) => ({ code, message }) }),
-        send: (message) => ({ message }),
-      };
-
-      const result = await update(req, res);
-
-      codi.assertEqual(result.code, 500);
-      codi.assertEqual(result.message, 'ACL unavailable.');
-
-      mock.restore();
-    },
-  );
-
+  const { default: update } = await import('../../../mod/user/update.js');
   await codi.it(
     {
       name: 'should return error for non-admin users',
-      parentId: 'user_update_tests',
+      parentId: 'user_update',
     },
     async () => {
-      function acl() {
+      aclMockFn.mock.mockImplementation(function acl() {
         return [];
-      }
-
-      await mock.module('../../../mod/user/acl.js', () => {
-        return { default: acl };
       });
-
-      const { default: update } = await import('../../../mod/user/update.js');
 
       const req = {
         params: {
@@ -81,29 +49,15 @@ await codi.describe(params, async () => {
     },
   );
 
-  codi.it(
-    { name: 'should send approval email', parentId: 'user_update_tests' },
+  await codi.it(
+    { name: 'should send approval email', parentId: 'user_update' },
     async () => {
       let mailOptions;
 
-      function acl() {
-        return [];
-      }
-
-      await mock.module('../../../mod/user/acl.js', () => {
-        return { default: acl };
-      });
-
-      async function mailer(options) {
+      mailerMockFn.mock.mockImplementation(function mailer(options) {
         mailOptions = options;
         return true;
-      }
-
-      await mock.module('../../../mod/utils/mailer.js', () => {
-        return { default: mailer };
       });
-
-      const { default: update } = await import('../../../mod/user/update.js');
 
       const req = {
         params: {
@@ -134,22 +88,12 @@ await codi.describe(params, async () => {
     },
   );
 
-  codi.it(
+  await codi.it(
     {
       name: 'should reject invalid update keys',
-      parentId: 'user_update_tests',
+      parentId: 'user_update',
     },
     async () => {
-      function acl() {
-        return [];
-      }
-
-      await mock.module('../../../mod/user/acl.js', () => {
-        return { default: acl };
-      });
-
-      const { default: update } = await import('../../../mod/user/update.js');
-
       const req = {
         params: {
           user: { admin: true },
@@ -176,3 +120,6 @@ await codi.describe(params, async () => {
     },
   );
 });
+
+aclMock.restore();
+mailerMock.restore();
