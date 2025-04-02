@@ -1946,7 +1946,7 @@ dialog {
     display: flex;
     background-color: var(--color-base);
     & > .tab > .header {
-      color: var(--color-font);
+      color: var(--color-primary);
       min-width: 8em;
       height: 100%;
       display: flex;
