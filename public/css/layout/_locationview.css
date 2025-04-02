@@ -70,7 +70,6 @@
       & > .caret::after {
         color: var(--color-font-contrast);
       }
-
     }
 
     & .label,
