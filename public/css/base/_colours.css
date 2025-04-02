@@ -1,7 +1,7 @@
 :root {
   /* begin default colour palette */
 
-  --color-primary: #003d57;  
+  --color-primary: #003d57;
 
   /* Backgrounds */
   --color-base: #f2f2f2;
@@ -20,7 +20,7 @@
   --color-active: #d57120;
   --color-hover: #939faa;
   --color-changed: #ffffa7;
-  
+
   --color-info: #0b6f50;
   --color-danger: #a21309;
   /* end default colour palette */
