@@ -57,26 +57,20 @@ export default async function getLocale(params, parentLocale) {
   let locale, nestedLocale;
 
   if (localeKey && !Object.hasOwn(workspace.locales, localeKey)) {
-
     if (parentLocale) {
-
       //TODO check what happens if the getTemplate returns an error.
       nestedLocale = await getTemplate(localeKey);
 
-      parentLocale.locale ??= [parentLocale.key]
+      parentLocale.locale ??= [parentLocale.key];
 
-      nestedLocale.locale = [nestedLocale.key]
+      nestedLocale.locale = [nestedLocale.key];
 
       //TODO create locale string
-      locale = merge(parentLocale, nestedLocale)
-
+      locale = merge(parentLocale, nestedLocale);
     } else {
-
       return new Error('Unable to validate locale param.');
     }
-
   } else {
-
     // The workspace.locale is assigned as locale if workspace.locales does not hold the localeKey
     locale = Object.hasOwn(workspace.locales, localeKey)
       ? workspace.locales[localeKey]
@@ -95,8 +89,7 @@ export default async function getLocale(params, parentLocale) {
   locale.layers ??= {};
 
   if (Array.isArray(params.locale) && params.locale.length > 0) {
-
-    locale = await getLocale(params, locale)
+    locale = await getLocale(params, locale);
   }
 
   return locale;

@@ -54,7 +54,7 @@ export default async function getTemplate(key) {
   }
 
   // The template.key property value must be the same as the key reference in the workspace.templates{}
-  template.key = key
+  template.key = key;
 
   if (!template.src) {
     return template;
