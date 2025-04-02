@@ -90,7 +90,7 @@ body {
     display: block;
     margin: 1px;
     padding: 0;
-    color: var(--color-font-tertiary);
+    color: var(--color-font-contrast);
     font-weight: 700;
     text-decoration: none;
     font-size: inherit;

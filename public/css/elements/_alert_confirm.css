@@ -16,7 +16,7 @@ dialog.alert-confirm {
     padding: 0.5em 1em;
     background-color: var(--color-primary);
     border-bottom: solid 2px var(--color-border);
-    color: var(--color-font-tertiary);
+    color: var(--color-font-contrast);
     width: 100%;
   }
 
