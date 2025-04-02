@@ -9,13 +9,14 @@
   &:disabled {
     pointer-events: none;
     opacity: 0.4;
+    color: var(--color-font);
   }
 
   & > .head {
     padding: 5px;
     display: flex;
     align-items: center;
-    color: var(--color-font);
+    color: var(--color-primary);
 
     & > :first-child {
       pointer-events: none;
