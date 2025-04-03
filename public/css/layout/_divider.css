@@ -1,10 +1,11 @@
 #ctrls-divider {
   grid-row: 1 / 4;
   grid-column: 2;
+  background-color: var(--color-base-secondary);
   background-image: url('../../icons/pill-vertical.svg');
   background-repeat: no-repeat;
   background-position: center;
-  box-shadow: 3px 0px 6px -3px var(--color-off-black);
+  box-shadow: 3px 0px 6px -3px var(--color-base-tertiary);
   z-index: 9999;
 
   &:hover {
@@ -19,8 +20,8 @@
   background-image: url('../../icons/pill-horizontal.svg');
   background-repeat: no-repeat;
   background-position: center;
-  background-color: var(--color-light);
-  box-shadow: 0px -1px 6px -3px var(--color-off-black);
+  background-color: var(--color-base-tertiary);
+  box-shadow: 0px -1px 6px -3px var(--color-base-tertiary);
 
   &:hover {
     cursor: row-resize;
