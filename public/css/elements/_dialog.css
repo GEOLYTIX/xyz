@@ -3,6 +3,9 @@
 }
 
 dialog {
+  background-color: var(--color-base);
+  color: var(--color-font);
+
   & > button.close {
     position: absolute;
     top: 0em;
@@ -28,7 +31,7 @@ dialog {
       font-size: 1.2em;
 
       &:after {
-        color: var(--color-primary-light);
+        color: var(--color-font-mid);
         font-size: inherit;
       }
     }

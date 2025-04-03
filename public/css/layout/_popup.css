@@ -1,6 +1,8 @@
 .popup {
   position: absolute;
-  background-color: var(--color-light);
+  background-color: var(--color-base-tertiary);
+  color: var(--color-font);
+  border: solid 1px var(--color-border);
   bottom: 12px;
   transform: translate(-50%, 0);
 
@@ -13,7 +15,7 @@
   }
 
   &::after {
-    border-top-color: var(--color-light);
+    border-top-color: var(--color-border);
     border-width: 10px;
     left: 50%;
     margin-left: -10px;
@@ -27,7 +29,7 @@
   }
 
   & li:hover {
-    background: var(--color-light-secondary);
+    background-color: var(--color-base-secondary);
     cursor: pointer;
   }
 
