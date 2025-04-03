@@ -5,6 +5,7 @@
   background-color: var(--color-base-secondary);
   border: 1px solid var(--color-border);
   border-radius: 3px;
+  isolation: isolate;
 
   &:disabled {
     pointer-events: none;
@@ -49,7 +50,6 @@
     border: 1px solid var(--color-border);
     margin-top: -1px;
     text-align: left;
-    z-index: 997;
 
     & > li {
       padding: 5px;
