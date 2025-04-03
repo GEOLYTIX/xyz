@@ -15,7 +15,7 @@
 }
 
 .mask-icon {
-  background-color: var(--color-primary-light);
+  background-color: var(--color-font-mid);
 
   mask-repeat: no-repeat;
   -webkit-mask-repeat: no-repeat;
@@ -36,11 +36,11 @@
   }
 
   &.on {
-    background-color: var(--color-on);
+    background-color: var(--color-active);
   }
 
   &.no {
-    background-color: var(--color-no);
+    background-color: var(--color-danger);
   }
 }
 
@@ -651,7 +651,7 @@
 
   &.on::after {
     content: 'toggle_on';
-    color: var(--color-on);
+    color: var(--color-active);
   }
 
   &.disabled {

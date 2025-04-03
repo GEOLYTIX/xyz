@@ -132,12 +132,12 @@ export function temporal() {
         },
         () => {
           const epoch = 1704067200;
-          const datetime = mapp.utils.temporal.datetime({ value: epoch });
+          const datetime = mapp.utils.temporal.datetime(epoch);
 
           codi.assertEqual(
             datetime,
             '2024-01-01T00:00:00',
-            'The datetime should b be the 1st of January 2024',
+            'The datetime should be the 1st of January 2024',
           );
         },
       );
@@ -153,12 +153,12 @@ export function temporal() {
         },
         () => {
           const epoch = 1704067200;
-          const datetime = mapp.utils.temporal.date({ value: epoch });
+          const datetime = mapp.utils.temporal.date(epoch);
 
           codi.assertEqual(
             datetime,
             '2024-01-01',
-            'The datetime should b be the 1st of January 2024',
+            'The datetime should be the 1st of January 2024',
           );
         },
       );
