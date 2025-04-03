@@ -1,6 +1,12 @@
 /**
 @module /utils/mailer
-@requires module:/utils/processEnv
+The mailer module provides a way to send emails to clients/admins, etc.
+
+@requires module:/utils/logger
+@requires module:/utils/languageTemplates
+@requires module:/provider/getFrom
+
+@requires nodemailer
 */
 
 import logger from './logger.js';
@@ -9,11 +15,40 @@ import languageTemplates from './languageTemplates.js';
 
 import getFrom from '../provider/getFrom.js';
 
-import mailer from 'nodemailer';
+//Attempt to import node mailer
+let nodeMailer, transport;
+if (
+  xyzEnv.TRANSPORT ||
+  xyzEnv.TRANSPORT_EMAIL ||
+  xyzEnv.TRANSPORT_HOST ||
+  xyzEnv.TRANSPORT_PASSWORD
+) {
+  try {
+    nodeMailer = await import('nodemailer');
+  } catch {
+    console.error('Error: Missing nodemailer dependancy');
+  }
+}
 
-let transport;
+export default mailer;
 
-export default async (params) => {
+/**
+@function mailer
+@async
+
+@description
+Function which sends email using the nodemailer dependancy.
+
+@param {Object} params 
+@property {String} params.to The email recipient.
+@property {String} params.template The html that will make up the body of the email.
+@property {String} params.language The language to be used.
+@property {String} params.host The URL of the instance.
+*/
+async function mailer(params) {
+  // The nodeMailer module could not be imported.
+  if (!nodeMailer) return;
+
   if (xyzEnv.TRANSPORT) {
     console.warn(
       'Please replace xyzEnv.TRANSPORT with TRANSPORT_HOST,TRANSPORT_EMAIL, and TRANSPORT_PASSWORD',
@@ -36,7 +71,7 @@ export default async (params) => {
   }
 
   if (!transport) {
-    transport = mailer.createTransport({
+    transport = nodeMailer.createTransport({
       host: xyzEnv.TRANSPORT_HOST,
       name: xyzEnv.TRANSPORT_EMAIL.split('@')[0],
       port: xyzEnv.TRANSPORT_PORT || 587,
@@ -71,8 +106,19 @@ export default async (params) => {
     .catch((err) => console.error(err));
 
   logger(result, 'mailer');
-};
+}
 
+/**
+@function getBody
+@async
+
+@description
+Retrieves the body of the text from the provided url/file.
+
+@param {Object} template 
+@property {String} template.text The url from which to retrieve the text content using {@link module:/provider/getFrom~flyTo}.
+@property {String} template.html The url from which to retrieve the html content using {@link module:/provider/getFrom~flyTo}.
+*/
 async function getBody(template) {
   if (template.text) {
     // Prevent mail template from having text and html
@@ -90,6 +136,17 @@ async function getBody(template) {
   }
 }
 
+/**
+@function replaceStringParams
+
+@description
+Substitutes supplied params into a supplied string.
+
+@param {String} string  
+@property {Object} params The url from which to retrieve the text content using {@link module:/provider/getFrom~flyTo}.
+
+@returns {String} The string with substitutions made.
+*/
 function replaceStringParams(string, params) {
   return string.replace(
     /\$\{(.*?)\}/g,
