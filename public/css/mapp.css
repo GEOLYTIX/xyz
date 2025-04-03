@@ -27,10 +27,6 @@ body {
     color: var(--color-active);
   }
 }
-.primary-background {
-  color: var(--color-font-contrast);
-  background-color: var(--color-primary);
-}
 .off-black {
   color: var(--color-font);
 }
