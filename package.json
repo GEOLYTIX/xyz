@@ -10,7 +10,7 @@
     "test": "node --experimental-test-module-mocks node_modules/codi-test-framework/cli.js tests",
     "test-watch": "node --watch-path=. --experimental-test-module-mocks node_modules/codi-test-framework/cli.js tests --quiet",
     "_build": "node esbuild.config.mjs",
-    "ui_css": "npx esbuild --bundle public/css/_ui.css --outfile=public/css/ui.css --loader:.svg=dataurl",
+    "ui_css": "npx esbuild --bundle public/css/_ui.css --outfile=public/css/ui.css",
     "mapp_css": "npx esbuild --bundle public/css/_mapp.css --outfile=public/css/mapp.css",
     "generate-docs": "jsdoc --configure jsdoc_mapp.json --verbose && jsdoc --configure jsdoc_xyz.json --verbose && jsdoc --configure jsdoc_test.json --verbose",
     "mapp-docs": "jsdoc --configure jsdoc_mapp.json --verbose",
