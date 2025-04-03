@@ -65,10 +65,16 @@ export default async function getLocale(params, parentLocale) {
 
       nestedLocale.locale = [nestedLocale.key];
 
+      // Only locales of a nested locales should be used for further nesting.
+      delete parentLocale.locales;
+
       //TODO create locale string
       locale = merge(parentLocale, nestedLocale);
+
+      locale.key = `[${locale.locale.join(',')}]`
     } else {
-      return new Error('Unable to validate locale param.');
+      console.log(params)
+      //return new Error('Unable to validate locale param.');
     }
   } else {
     // The workspace.locale is assigned as locale if workspace.locales does not hold the localeKey

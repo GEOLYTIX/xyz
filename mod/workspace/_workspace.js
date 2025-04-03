@@ -168,8 +168,8 @@ async function getNestedLocales(req, res) {
     if (!Roles.check(nestedLocale, req.params.user?.roles)) continue;
 
     nestedLocales.push({
-      key,
-      name: nestedLocale.name || key,
+      key: `[${locale.key},${key}]`,
+      name: `${locale.name}/${nestedLocale.name || key}`,
       locales: nestedLocale.locales,
     });
   }
@@ -208,6 +208,8 @@ async function locale(req, res) {
   if (locale instanceof Error) {
     return res.status(400).send(locale.message);
   }
+  
+  req.params.locale = locale.locale || locale.key
 
   // Return layer object instead of array of layer keys
   if (req.params.layers) {
