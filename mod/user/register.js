@@ -184,7 +184,6 @@ function checkUserBody(req, res) {
 
   // Test whether email domain is allowed to register
   if (xyzEnv.USER_DOMAINS) {
-
     // Get array of allowed user email domains from split xyzEnvironment variable.
     const allowed_domains = xyzEnv.USER_DOMAINS.split(',');
 
@@ -192,7 +191,7 @@ function checkUserBody(req, res) {
     const user_domain = req.body.email.split('@')[1];
 
     // Check whether not some of the allowed_domain includes the user_domain.
-    if (!allowed_domains.some(domain => user_domain.includes(domain))) {
+    if (!allowed_domains.some((domain) => user_domain.includes(domain))) {
       return res.status(400).send('Provided email address is invalid');
     }
   }
