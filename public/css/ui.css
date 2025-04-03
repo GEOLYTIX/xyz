@@ -34,23 +34,13 @@ body {
   color: var(--color-font-contrast);
   background-color: var(--color-primary);
 }
-.light-background {
-  background-color: var(--color-base-tertiary);
-}
-.light-colour {
-  color: var(--color-base-tertiary);
-}
 .off-black {
   color: var(--color-font);
-}
-.off-black-background {
-  color: var(--color-base-tertiary);
-  background-color: var(--color-font);
 }
 .on-colour {
   color: var(--color-active);
 }
-.no-colour {
+.danger {
   color: var(--color-danger);
 }
 
@@ -316,10 +306,10 @@ input[type=search]::-webkit-search-cancel-button:hover {
   &.on {
     color: var(--color-active);
   }
-  &.no-colour {
+  &.danger {
     color: var(--color-danger);
   }
-  &.ok-colour {
+  &.info {
     color: var(--color-info);
   }
   &.primary-light-colour {

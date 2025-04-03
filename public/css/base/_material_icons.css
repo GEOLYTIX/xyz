@@ -15,11 +15,11 @@
     color: var(--color-active);
   }
 
-  &.no-colour {
+  &.danger {
     color: var(--color-danger);
   }
 
-  &.ok-colour {
+  &.info {
     color: var(--color-info);
   }
 
