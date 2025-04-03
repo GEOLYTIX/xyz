@@ -7,32 +7,32 @@
   color: var(--color-primary);
 
   &.active {
-    color: var(--color-on);
+    color: var(--color-active);
   }
 
   &.on-colour,
   &.on {
-    color: var(--color-on);
+    color: var(--color-active);
   }
 
   &.no-colour {
-    color: var(--color-no);
+    color: var(--color-danger);
   }
 
   &.ok-colour {
-    color: var(--color-ok);
+    color: var(--color-info);
   }
 
   &.primary-light-colour {
-    color: var(--color-primary-light);
+    color: var(--color-font-mid);
   }
 
   &.close:after {
     content: 'close';
-    color: var(--color-primary-light);
+    color: var(--color-font-mid);
   }
 }
 
 .active > .material-symbols-outlined {
-  color: var(--color-on);
+  color: var(--color-active);
 }
