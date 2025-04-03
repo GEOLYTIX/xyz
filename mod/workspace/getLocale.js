@@ -50,37 +50,22 @@ export default async function getLocale(params, parentLocale) {
     return workspace;
   }
 
+  if (typeof params.locale === 'string') {
+    params.locale = params.locale.split(',');
+  }
+
   const localeKey = Array.isArray(params.locale)
     ? params.locale.shift()
     : params.locale;
 
-  let locale, nestedLocale;
+  let locale;
 
-  if (localeKey && !Object.hasOwn(workspace.locales, localeKey)) {
-    if (parentLocale) {
-      //TODO check what happens if the getTemplate returns an error.
-      nestedLocale = await getTemplate(localeKey);
-
-      parentLocale.locale ??= [parentLocale.key];
-
-      nestedLocale.locale = [nestedLocale.key];
-
-      // Only locales of a nested locales should be used for further nesting.
-      delete parentLocale.locales;
-
-      //TODO create locale string
-      locale = merge(parentLocale, nestedLocale);
-
-      locale.key = `[${locale.locale.join(',')}]`
-    } else {
-      console.log(params)
-      //return new Error('Unable to validate locale param.');
-    }
+  if (!localeKey) {
+    locale = workspace.locale;
+  } else if (Object.hasOwn(workspace.locales, localeKey)) {
+    locale = workspace.locales[localeKey];
   } else {
-    // The workspace.locale is assigned as locale if workspace.locales does not hold the localeKey
-    locale = Object.hasOwn(workspace.locales, localeKey)
-      ? workspace.locales[localeKey]
-      : workspace.locale;
+    locale = await getTemplate(localeKey);
   }
 
   locale = await mergeTemplates(locale);
@@ -92,10 +77,27 @@ export default async function getLocale(params, parentLocale) {
   locale = Roles.objMerge(locale, params.user?.roles);
 
   locale.workspace = workspace.key;
-  locale.layers ??= {};
+
+  if (parentLocale) {
+    // Only locales of a nested locales should be used for further nesting.
+    delete parentLocale.locales;
+
+    parentLocale.keys ??= [parentLocale.key];
+    parentLocale.name ??= parentLocale.key;
+    locale.keys = [locale.key];
+    locale.name ??= locale.key;
+
+    locale.name = `${parentLocale.name}/${locale.name}`;
+
+    locale = merge(parentLocale, locale);
+  }
 
   if (Array.isArray(params.locale) && params.locale.length > 0) {
     locale = await getLocale(params, locale);
+  }
+
+  if (Array.isArray(locale.keys)) {
+    locale.key = locale.keys;
   }
 
   return locale;

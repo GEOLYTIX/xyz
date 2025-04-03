@@ -208,17 +208,22 @@ async function locale(req, res) {
   if (locale instanceof Error) {
     return res.status(400).send(locale.message);
   }
-  
-  req.params.locale = locale.locale || locale.key
+
+  if (Array.isArray(locale.keys)) {
+    req.params.locale = locale.keys;
+  }
 
   // Return layer object instead of array of layer keys
   if (req.params.layers) {
     const layers = Object.keys(locale.layers).map(
       async (key) =>
-        await getLayer({
-          ...req.params,
-          layer: key,
-        }),
+        await getLayer(
+          {
+            ...req.params,
+            layer: key,
+          },
+          locale,
+        ),
     );
 
     await Promise.all(layers).then((layers) => {

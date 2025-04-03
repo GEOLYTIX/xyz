@@ -43,8 +43,10 @@ The layer.key and layer.name will be assigned if missing.
 
 @returns {Promise<Object|Error>} JSON Layer.
 */
-export default async function getLayer(params) {
-  const locale = await getLocale(params);
+export default async function getLayer(params, locale) {
+  if (!locale) {
+    locale = await getLocale(params);
+  }
 
   // getLocale will return err if role.check fails.
   if (locale instanceof Error) return locale;
