@@ -24,7 +24,7 @@ body {
 .off-black {
   color: var(--color-font);
 }
-.on-colour {
+.active {
   color: var(--color-active);
 }
 .danger {

@@ -27,7 +27,7 @@ body {
 .off-black {
   color: var(--color-font);
 }
-.on-colour {
+.active {
   color: var(--color-active);
 }
 .danger {
@@ -292,10 +292,6 @@ input[type=search]::-webkit-search-cancel-button:hover {
   &.active {
     color: var(--color-active);
   }
-  &.on-colour,
-  &.on {
-    color: var(--color-active);
-  }
   &.danger {
     color: var(--color-danger);
   }
@@ -314,7 +310,7 @@ input[type=search]::-webkit-search-cancel-button:hover {
   &::after {
     content: "toggle_off";
   }
-  &.on::after {
+  &.toggle-on::after {
     content: "toggle_on";
     color: var(--color-active);
   }
@@ -1089,6 +1085,9 @@ dialog {
   margin-top: 5px;
   border-radius: 5px;
   background-color: var(--color-base-tertiary);
+  .edit-toggle-on {
+    color: var(--color-active);
+  }
 }
 .location-view-grid {
   display: grid;

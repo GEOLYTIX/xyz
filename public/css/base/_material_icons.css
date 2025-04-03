@@ -10,11 +10,6 @@
     color: var(--color-active);
   }
 
-  &.on-colour,
-  &.on {
-    color: var(--color-active);
-  }
-
   &.danger {
     color: var(--color-danger);
   }
@@ -38,7 +33,7 @@
     content: 'toggle_off';
   }
 
-  &.on::after {
+  &.toggle-on::after {
     content: 'toggle_on';
     color: var(--color-active);
   }
