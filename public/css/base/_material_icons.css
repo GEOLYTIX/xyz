@@ -33,6 +33,22 @@
   }
 }
 
+.toggle {
+  &::after {
+    content: 'toggle_off';
+  }
+
+  &.on::after {
+    content: 'toggle_on';
+    color: var(--color-active);
+  }
+
+  &.disabled {
+    opacity: 0.5;
+    pointer-events: none;
+  }
+}
+
 .active > .material-symbols-outlined {
   color: var(--color-active);
 }
