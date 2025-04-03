@@ -2,18 +2,21 @@
   width: 100%;
   overflow: visible;
   position: relative;
-  background-color: var(--color-light);
-  box-shadow: var(--color-mid) 0px 8px 24px;
+  background-color: var(--color-base-secondary);
+  border: 1px solid var(--color-border);
+  border-radius: 3px;
 
   &:disabled {
     pointer-events: none;
     opacity: 0.4;
+    color: var(--color-font);
   }
 
   & > .head {
     padding: 5px;
     display: flex;
     align-items: center;
+    color: var(--color-primary);
 
     & > :first-child {
       pointer-events: none;
@@ -28,46 +31,50 @@
       width: 1.5em;
 
       &:after {
-        color: var(--color-off-black);
         content: 'arrow_drop_down';
+        background-color: transparent;
       }
     }
   }
 
   & > ul {
-    color: var(--color-off-black);
+    background-color: var(--color-base-tertiary);
+    color: var(--color-font);
     display: none;
     position: absolute;
     max-height: 500px;
     overflow-y: auto;
     overflow-x: hidden;
-    box-shadow: 1px 1px 3px var(--color-primary-light);
+    box-shadow: 1px 1px 3px var(--color-border);
+    border: 1px solid var(--color-border);
     margin-top: -1px;
     text-align: left;
-    background-color: var(--color-light);
     z-index: 997;
 
     & > li {
       padding: 5px;
-      color: var(--color-off-black);
+      color: var(--color-font);
+      margin: 0 0.1em;
+      border-radius: 2px;
     }
 
     & > li:hover {
-      background-color: var(--color-primary-light);
+      background-color: var(--color-hover);
       cursor: pointer;
     }
 
     & > li.selected {
-      background-color: var(--color-light-secondary);
+      background-color: var(--color-primary);
+      color: var(--color-font-contrast);
     }
 
     & .label {
       padding: 0 6px;
       border-radius: 2px;
-      color: var(--color-light);
+      color: var(--color-font);
       font-size: 80%;
       font-weight: bold;
-      background-color: var(--color-primary);
+      background-color: var(--color-hover);
     }
   }
 

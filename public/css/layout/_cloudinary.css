@@ -3,7 +3,7 @@
 .documents {
   .drag_and_drop_zone {
     width: 100%;
-    border: 1px dashed var(--color-primary-light);
+    border: 1px dashed var(--color-border);
     position: relative;
     height: 100px;
 
@@ -19,7 +19,7 @@
     p {
       margin: auto;
       text-align: center;
-      color: var(----color-off-black);
+      color: var(----color-text);
       pointer-events: none;
       user-select: none;
 
@@ -45,7 +45,8 @@
       top: 0.2em;
       right: 0.2em;
       font-size: 1.5em;
-      background-color: var(--color-off-light);
+      background-color: var(--color-base-secondary);
+      padding: 0.1em;
       border-radius: 50%;
     }
   }
