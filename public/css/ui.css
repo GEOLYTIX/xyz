@@ -24,9 +24,6 @@ body {
   transition: 0.2s ease-in-out;
   transition-property: background-color;
 }
-.off-black {
-  color: var(--color-font);
-}
 .active {
   color: var(--color-active);
 }
