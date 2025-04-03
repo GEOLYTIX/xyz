@@ -18,7 +18,12 @@ import getFrom from '../provider/getFrom.js';
 
 //Attempt to import node mailer
 let nodeMailer, transport;
-if (
+
+if (xyzEnv.TRANSPORT) {
+  console.warn(
+    'Please replace xyzEnv.TRANSPORT with TRANSPORT_HOST,TRANSPORT_EMAIL, and TRANSPORT_PASSWORD',
+  );
+} else if (
   xyzEnv.TRANSPORT_EMAIL ||
   xyzEnv.TRANSPORT_USERNAME ||
   xyzEnv.TRANSPORT_HOST ||
@@ -49,12 +54,6 @@ Function which sends email using the nodemailer dependancy.
 async function mailer(params) {
   // The nodeMailer module could not be imported.
   if (!nodeMailer) return;
-
-  if (xyzEnv.TRANSPORT) {
-    console.warn(
-      'Please replace xyzEnv.TRANSPORT with TRANSPORT_HOST,TRANSPORT_EMAIL, and TRANSPORT_PASSWORD',
-    );
-  }
 
   if (!xyzEnv.TRANSPORT_HOST) {
     console.warn('xyzEnv.TRANSPORT_HOST missing.');
