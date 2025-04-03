@@ -1,488 +1,491 @@
 <!doctype html>
 <html lang="{{language}}">
+  <head data-dir="{{dir}}" data-login="{{login}}">
+    <title>{{title}}</title>
 
-<head data-dir="{{dir}}" data-login="{{login}}">
-  <title>{{title}}</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{{dir}}/public/icons/favicon.ico"
+    />
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
 
-  <link rel="icon" type="image/x-icon" href="{{dir}}/public/icons/favicon.ico" />
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <script
+      src="https://cdn.jsdelivr.net/npm/ol@v10.3.1/dist/ol.js"
+      integrity="sha384-GtOM9G1JWFKmDbfOLBrez9YebIrX1pqVVtYukhqrKOtyneLNxnTIFMe8ER850GT/"
+      crossorigin="anonymous"
+      defer
+    ></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/ol@v10.3.1/dist/ol.js"
-    integrity="sha384-GtOM9G1JWFKmDbfOLBrez9YebIrX1pqVVtYukhqrKOtyneLNxnTIFMe8ER850GT/" crossorigin="anonymous"
-    defer></script>
+    <!-- Load XYZ / MAPP stylesheet and library. -->
+    <link rel="stylesheet" href="{{dir}}/public/css/mapp.css" />
+    <link rel="stylesheet" href="{{dir}}/public/css/ui.css" />
 
-  <!-- Load XYZ / MAPP stylesheet and library. -->
-  <link rel="stylesheet" href="{{dir}}/public/css/mapp.css" />
-  <link rel="stylesheet" href="{{dir}}/public/css/ui.css" />
+    <script type="module" src="{{dir}}/public/js/lib/mapp.js" defer></script>
+    <script type="module" src="{{dir}}/public/js/lib/ui.js" defer></script>
 
-  <script type="module" src="{{dir}}/public/js/lib/mapp.js" defer></script>
-  <script type="module" src="{{dir}}/public/js/lib/ui.js" defer></script>
+    <script
+      type="module"
+      src="{{dir}}/public/js/tests/_mapp.test.js"
+      defer
+    ></script>
 
-  <script type="module" src="{{dir}}/public/js/tests/_mapp.test.js" defer></script>
-
-  <style>
-    html {
-      position: fixed;
-      bottom: 0%;
-      top: 0%;
-      height: 100%;
-      width: 100%;
-    }
-
-    #Map {
-      position: relative;
-    }
-
-    #Map .ol-scale-line {
-      right: 5px;
-      top: 5px;
-      position: fixed;
-    }
-
-    #ctrls {
-      z-index: 9999;
-    }
-
-    #ctrl-tabs {
-      padding: 0.5em;
-      width: 100%;
-      display: flex;
-    }
-
-    #ctrl-tabs>div {
-      flex-grow: 1;
-      font-size: 2em;
-
-      &[data-id='layers']:after {
-        content: 'layers';
-      }
-
-      &[data-id='locations'] {
-        &:after {
-          content: 'search';
-        }
-
-        &.active:after {
-          content: 'location_on';
-        }
-      }
-
-    }
-
-    #ctrl-panel {
-      flex-grow: 1;
-      overflow-y: auto;
-    }
-
-    #ctrl-panel>div {
-      display: none;
-      padding: 10px;
-    }
-
-    #ctrl-panel>div.active {
-      display: block;
-    }
-
-    .bg-icon.mapp {
-      background-image: url('https://geolytix.github.io/public/mapp_v4/emblem.svg');
-    }
-
-    @media only screen and (min-width: 768px) {
-      body {
-        display: grid;
-        grid-template-columns: 350px 10px auto;
-      }
-
-      body.fullscreen {
-        grid-template-columns: 0 0 auto !important;
-      }
-
-      body.fullscreen #ctrls {
-        display: none;
+    <style>
+      html {
+        position: fixed;
+        bottom: 0%;
+        top: 0%;
+        height: 100%;
+        width: 100%;
       }
 
       #Map {
-        grid-row: 1;
-        grid-column: 3;
         position: relative;
       }
 
-      #OL {
+      #Map .ol-scale-line {
+        right: 5px;
+        top: 5px;
+        position: fixed;
+      }
+
+      #ctrls {
+        z-index: 9999;
+      }
+
+      #ctrl-tabs {
+        padding: 0.5em;
         width: 100%;
-        height: 100vh;
-        position: absolute;
+        display: flex;
+      }
+
+      #ctrl-tabs > div {
+        flex-grow: 1;
+        font-size: 2em;
+
+        &[data-id='layers']:after {
+          content: 'layers';
+        }
+
+        &[data-id='locations'] {
+          &:after {
+            content: 'search';
+          }
+
+          &.active:after {
+            content: 'location_on';
+          }
+        }
+
       }
 
       #ctrl-panel {
-        transform: rotateY(180deg);
+        flex-grow: 1;
+        overflow-y: auto;
       }
 
-      #ctrl-panel>div {
-        transform: rotateY(180deg);
+      #ctrl-panel > div {
+        display: none;
+        padding: 10px;
       }
 
-      #ctrls {
-        grid-row: 1/4;
-        grid-column: 1;
-        height: 100%;
-        overflow: hidden;
-        display: flex;
-        flex-direction: column;
+      #ctrl-panel > div.active {
+        display: block;
       }
 
-      #Tabview {
-        grid-row: 3;
-        grid-column: 3;
-      }
-    }
-
-    @media only screen and (max-width: 768px) {
-      html {
-        overflow: scroll;
+      .bg-icon.mapp {
+        background-image: url('https://geolytix.github.io/public/mapp_v4/emblem.svg');
       }
 
-      body {
-        overflow-y: scroll;
-        overflow-x: hidden;
+      @media only screen and (min-width: 768px) {
+        body {
+          display: grid;
+          grid-template-columns: 350px 10px auto;
+        }
+
+        body.fullscreen {
+          grid-template-columns: 0 0 auto !important;
+        }
+
+        body.fullscreen #ctrls {
+          display: none;
+        }
+
+        #Map {
+          grid-row: 1;
+          grid-column: 3;
+          position: relative;
+        }
+
+        #OL {
+          width: 100%;
+          height: 100vh;
+          position: absolute;
+        }
+
+        #ctrl-panel {
+          transform: rotateY(180deg);
+        }
+
+        #ctrl-panel > div {
+          transform: rotateY(180deg);
+        }
+
+        #ctrls {
+          grid-row: 1/4;
+          grid-column: 1;
+          height: 100%;
+          overflow: hidden;
+          display: flex;
+          flex-direction: column;
+        }
+
+        #Tabview {
+          grid-row: 3;
+          grid-column: 3;
+        }
       }
 
-      #Map {
-        height: calc(100% - 40px);
-        width: 100%;
+      @media only screen and (max-width: 768px) {
+        html {
+          overflow: scroll;
+        }
+
+        body {
+          overflow-y: scroll;
+          overflow-x: hidden;
+        }
+
+        #Map {
+          height: calc(100% - 40px);
+          width: 100%;
+        }
+
+        #OL {
+          width: 100%;
+          height: 100%;
+        }
+
+        #ctrls {
+          width: 100%;
+          height: 100%;
+          position: relative;
+          display: flex;
+          flex-direction: column;
+        }
       }
+    </style>
+  </head>
 
-      #OL {
-        width: 100%;
-        height: 100%;
-      }
-
-      #ctrls {
-        width: 100%;
-        height: 100%;
-        position: relative;
-        display: flex;
-        flex-direction: column;
-      }
-    }
-  </style>
-</head>
-
-<body style="grid-template-rows: auto 0 0">
-  <div id="Map">
-    <div id="OL"></div>
-  </div>
-
-  <div id="mapButton" class="btn-column"></div>
-
-  <div id="tabview-divider"></div>
-
-  <div id="Tabview" class="tabview mobile-display-none desktop-display-none"></div>
-
-  <div id="ctrls-divider"></div>
-
-  <div id="ctrls" class="lighter-background">
-    <div id="ctrl-tabs" class="hover">
-      <div data-id="layers" class="active material-symbols-outlined"></div>
-      <div data-id="locations" class="material-symbols-outlined"></div>
+  <body style="grid-template-rows: auto 0 0">
+    <div id="Map">
+      <div id="OL"></div>
     </div>
 
-    <div id="ctrl-panel">
-      <div id="layers" class="active"></div>
-      <div id="locations"></div>
+    <div id="mapButton" class="btn-column"></div>
+
+    <div id="tabview-divider"></div>
+
+    <div
+      id="Tabview"
+      class="tabview mobile-display-none desktop-display-none"
+    ></div>
+
+    <div id="ctrls-divider"></div>
+
+    <div id="ctrls">
+      <div id="ctrl-tabs" class="hover">
+        <div data-id="layers" class="active material-symbols-outlined"></div>
+        <div data-id="locations" class="material-symbols-outlined"></div>
+      </div>
+
+      <div id="ctrl-panel">
+        <div id="layers" class="active"></div>
+        <div id="locations"></div>
+      </div>
     </div>
-  </div>
 
-  <script type="module">
-    console.log(`MAPP v${mapp.version}`);
+    <script type="module">
+      console.log(`MAPP v${mapp.version}`);
 
-    // Set the maxWidth for mobile responsive display.
-    mapp.utils.mobile(765);
+      // Set the maxWidth for mobile responsive display.
+      mapp.utils.mobile(765);
 
-    // Refresh cookie and get user with updated credentials.
-    await mapp.utils.xhr(`${mapp.host}/api/user/cookie`).then((user) => {
-      // The cookie request will Err without an ACL being configured for public access.
-      mapp.user = user instanceof Error ? false : user;
-    });
-
-    // Language as URL parameter will override user language.
-    if (mapp.hooks.current.language) {
-      mapp.language = mapp.hooks.current.language;
-    } else if (mapp.user?.language) {
-      if (!Object.hasOwn(mapp.dictionaries, mapp.user.language)) {
-        // Set mapp.language to english if user.language is not supported by mapp.dictionaries.
-        console.warn(
-          `'${mapp.user.language}' mapp.language is not supported by mapp.dictionaries.`,
-        );
-        mapp.language = 'en';
-      } else {
-        mapp.language = mapp.user.language;
-      }
-    }
-
-    // Restore scroll
-    if ('scrollRestoration' in history) history.scrollRestoration = 'auto';
-
-    // Set Openlayers node in order to move map object.
-    const OL = document.getElementById('OL');
-
-    // Move map up on document scroll
-    document.body.addEventListener('scroll', () => {
-      OL.style['marginTop'] = `-${parseInt(window.pageYOffset / 2)}px`;
-
-      // Limit scrollTop on mobile browser
-      if (document.body.scrollTop > window.innerHeight) {
-        document.body.scrollTop = window.innerHeight;
-      }
-    });
-
-    // ResizeHandler for #CTRLS
-    mapp.ui.utils.resizeHandler({
-      target: document.getElementById('ctrls-divider'),
-      resizeEvent: (e) => {
-        let pageX = (e.touches && e.touches[0].pageX) || e.pageX;
-
-        if (pageX < 350) return;
-
-        // Half width snap.
-        if (pageX > window.innerWidth / 2) pageX = window.innerWidth / 2;
-
-        document.body.style.gridTemplateColumns = `${pageX}px 10px auto`;
-      },
-    });
-
-    // ResizeHandler for tabview
-    mapp.ui.utils.resizeHandler({
-      target: document.getElementById('tabview-divider'),
-      resizeEvent: (e) => {
-        let pageY = (e.touches && e.touches[0].pageY) || e.pageY;
-
-        if (pageY < 0) return;
-
-        let height = window.innerHeight - pageY;
-
-        // Min height snap.
-        if (height < 65) height = 50;
-
-        // Full height snap.
-        if (height > window.innerHeight - 10) height = window.innerHeight;
-
-        document.body.style.gridTemplateRows = `auto 10px ${height}px`;
-
-        OL.style.marginTop = `-${height / 2}px`;
-      },
-    });
-
-    const locationsTab = document.getElementById('locations');
-    const layersTab = document.getElementById('layers');
-
-    const tabs = document.querySelectorAll('#ctrl-tabs > div');
-    const tabPanels = document.querySelectorAll('#ctrl-panel > div');
-
-    tabs.forEach((tab) => {
-      // Set help text from dictionary.
-      tab.title = mapp.dictionary[tab.dataset.id];
-
-      tab.onclick = (e) => {
-        // Change active class for the tab.
-        tabs.forEach((el) => el.classList.remove('active'));
-        e.target.classList.add('active');
-
-        // Change active class for the panel.
-        tabPanels.forEach((el) => el.classList.remove('active'));
-        document.getElementById(e.target.dataset.id).classList.add('active');
-
-        // Put focus on the gazetteer if the locations tab is activated.
-        if (e.target.dataset.id === 'locations') {
-          let gazetteerInput = document.getElementById('gazetteerInput');
-          gazetteerInput && window.innerWidth > 768 && gazetteerInput.focus();
-        }
-      };
-    });
-
-    const tabview = document.getElementById('Tabview');
-
-    mapp.ui.Tabview({
-      node: tabview,
-      id: 'tabview',
-      showTab: () => {
-        // Show the tabview if not already visible.
-        if (tabview.classList.contains('desktop-display-none')) {
-          tabview.classList.remove('desktop-display-none');
-          document.body.style.gridTemplateRows = 'auto 10px 200px';
-        }
-      },
-      removeLastTab: () => {
-        // Hide tabview if tab had no siblings.
-        tabview.classList.add('desktop-display-none');
-        document.body.style.gridTemplateRows = 'auto 0 0';
-        mapview.Map.getTargetElement().style.marginTop = 0;
-      },
-    });
-
-    // Get list of accessible locales from Workspace API.
-    let locales = await mapp.utils.xhr(
-      `${mapp.host}/api/workspace/locales`,
-    );
-
-    // Get locale with list of layers from Workspace API.
-    let locale = await mapp.utils.xhr(
-      `${mapp.host}/api/workspace/locale?locale=${mapp.hooks.current.locale || locales[0]?.key}&layers=true`,
-    );
-
-    if (locale instanceof Error) {
-      // Create the Dialog.node
-      mapp.ui.elements.dialog({
-        css_style:
-          'padding: 1em; border-color: #000; z-index:9999; max-width: 50%;',
-        content: mapp.dictionary.no_locales,
-        target: document.body,
-        top: '40%',
-        left: '25%',
-        contained: true,
+      // Refresh cookie and get user with updated credentials.
+      await mapp.utils.xhr(`${mapp.host}/api/user/cookie`).then((user) => {
+        // The cookie request will Err without an ACL being configured for public access.
+        mapp.user = user instanceof Error ? false : user;
       });
-    }
 
-    // Check whether the locale supports a userLocale
-    if (locale.userLocale) {
-      if (mapp.hooks.current.userlocale) {
-        // Assign the userlocale value as name to check for a stored userlocale
-        locale.name = mapp.hooks.current.userlocale;
+      // Language as URL parameter will override user language.
+      if (mapp.hooks.current.language) {
+        mapp.language = mapp.hooks.current.language;
+      } else if (mapp.user?.language) {
+        if (!Object.hasOwn(mapp.dictionaries, mapp.user.language)) {
+          // Set mapp.language to english if user.language is not supported by mapp.dictionaries.
+          console.warn(
+            `'${mapp.user.language}' mapp.language is not supported by mapp.dictionaries.`,
+          );
+          mapp.language = 'en';
+        } else {
+          mapp.language = mapp.user.language;
+        }
       }
 
-      // Check whether a userLocale is stored for the current user|workspace
-      const userLocale = await mapp.utils.userLocale.get(locale);
+      // Restore scroll
+      if ('scrollRestoration' in history) history.scrollRestoration = 'auto';
 
-      if (userLocale) {
-        locale = userLocale;
-      }
-    }
+      // Set Openlayers node in order to move map object.
+      const OL = document.getElementById('OL');
 
-    if (locale.locales) {
+      // Move map up on document scroll
+      document.body.addEventListener('scroll', () => {
+        OL.style['marginTop'] = `-${parseInt(window.pageYOffset / 2)}px`;
+
+        // Limit scrollTop on mobile browser
+        if (document.body.scrollTop > window.innerHeight) {
+          document.body.scrollTop = window.innerHeight;
+        }
+      });
+
+      // ResizeHandler for #CTRLS
+      mapp.ui.utils.resizeHandler({
+        target: document.getElementById('ctrls-divider'),
+        resizeEvent: (e) => {
+          let pageX = (e.touches && e.touches[0].pageX) || e.pageX;
+
+          if (pageX < 350) return;
+
+          // Half width snap.
+          if (pageX > window.innerWidth / 2) pageX = window.innerWidth / 2;
+
+          document.body.style.gridTemplateColumns = `${pageX}px 10px auto`;
+        },
+      });
+
+      // ResizeHandler for tabview
+      mapp.ui.utils.resizeHandler({
+        target: document.getElementById('tabview-divider'),
+        resizeEvent: (e) => {
+          let pageY = (e.touches && e.touches[0].pageY) || e.pageY;
+
+          if (pageY < 0) return;
+
+          let height = window.innerHeight - pageY;
+
+          // Min height snap.
+          if (height < 65) height = 50;
+
+          // Full height snap.
+          if (height > window.innerHeight - 10) height = window.innerHeight;
+
+          document.body.style.gridTemplateRows = `auto 10px ${height}px`;
+
+          OL.style.marginTop = `-${height / 2}px`;
+        },
+      });
+
+      const locationsTab = document.getElementById('locations');
+      const layersTab = document.getElementById('layers');
+
+      const tabs = document.querySelectorAll('#ctrl-tabs > div');
+      const tabPanels = document.querySelectorAll('#ctrl-panel > div');
+
+      tabs.forEach((tab) => {
+        // Set help text from dictionary.
+        tab.title = mapp.dictionary[tab.dataset.id];
+
+        tab.onclick = (e) => {
+          // Change active class for the tab.
+          tabs.forEach((el) => el.classList.remove('active'));
+          e.target.classList.add('active');
+
+          // Change active class for the panel.
+          tabPanels.forEach((el) => el.classList.remove('active'));
+          document.getElementById(e.target.dataset.id).classList.add('active');
+
+          // Put focus on the gazetteer if the locations tab is activated.
+          if (e.target.dataset.id === 'locations') {
+            let gazetteerInput = document.getElementById('gazetteerInput');
+            gazetteerInput && window.innerWidth > 768 && gazetteerInput.focus();
+          }
+        };
+      });
+
+      const tabview = document.getElementById('Tabview');
+
+      mapp.ui.Tabview({
+        node: tabview,
+        id: 'tabview',
+        showTab: () => {
+          // Show the tabview if not already visible.
+          if (tabview.classList.contains('desktop-display-none')) {
+            tabview.classList.remove('desktop-display-none');
+            document.body.style.gridTemplateRows = 'auto 10px 200px';
+          }
+        },
+        removeLastTab: () => {
+          // Hide tabview if tab had no siblings.
+          tabview.classList.add('desktop-display-none');
+          document.body.style.gridTemplateRows = 'auto 0 0';
+          mapview.Map.getTargetElement().style.marginTop = 0;
+        },
+      });
 
       // Get list of accessible locales from Workspace API.
-      const nestedLocales = await mapp.utils.xhr(
-        `${mapp.host}/api/workspace/locales?locale=${locale.key}`,
+      const locales = await mapp.utils.xhr(
+        `${mapp.host}/api/workspace/locales`,
       );
 
-      locales = [...locales, ...nestedLocales]
+      // Get locale with list of layers from Workspace API.
+      let locale = await mapp.utils.xhr(
+        `${mapp.host}/api/workspace/locale?locale=${mapp.hooks.current.locale || locales[0]?.key}&layers=true`,
+      );
 
-      console.log(locales)
-    }
+      if (locale instanceof Error) {
+        // Create the Dialog.node
+        mapp.ui.elements.dialog({
+          css_style:
+            'padding: 1em; border-color: #000; z-index:9999; max-width: 50%;',
+          content: mapp.dictionary.no_locales,
+          target: document.body,
+          top: '40%',
+          left: '25%',
+          contained: true,
+        });
+      }
 
-    // Add locale dropdown to layers panel if multiple locales are accessible.
-    if (locales.length > 1) {
-      const localesDropdown = mapp.ui.elements.dropdown({
-        data_id: 'locales-dropdown',
-        span: locale.name || locale.key,
-        entries: locales.map((locale) => ({
-          title: locale.name || locale.key,
-          key: locale.key,
-        })),
-        callback: (e, entry) => {
-          window.location.assign(`${mapp.host}?locale=${entry.key}`);
-        },
-      });
+      // Check whether the locale supports a userLocale
+      if (locale.userLocale) {
+        if (mapp.hooks.current.userlocale) {
+          // Assign the userlocale value as name to check for a stored userlocale
+          locale.name = mapp.hooks.current.userlocale;
+        }
 
-      layersTab.appendChild(mapp.utils.html.node`${localesDropdown}`);
-    }
+        // Check whether a userLocale is stored for the current user|workspace
+        const userLocale = await mapp.utils.userLocale.get(locale);
 
-    if (!window.ol) await mapp.utils.olScript();
+        if (userLocale) {
+          locale = userLocale;
+        }
+      }
 
-    locale.syncPlugins ??= ['zoomBtn', 'admin', 'login'];
+      // Add locale dropdown to layers panel if multiple locales are accessible.
+      if (locales.length > 1) {
+        const localesDropdown = mapp.ui.elements.dropdown({
+          data_id: 'locales-dropdown',
+          span: locale.name || locale.key,
+          entries: locales.map((locale) => ({
+            title: locale.name || locale.key,
+            key: locale.key,
+          })),
+          callback: (e, entry) => {
+            window.location.assign(`${mapp.host}?locale=${entry.key}`);
+          },
+        });
 
-    // Create mapview
-    const mapview = await mapp.Mapview({
-      host: mapp.host,
-      target: OL,
-      locale: locale,
-      hooks: true,
-      scrollWheelZoom: true,
-      loadPlugins: true,
-      attribution: {
-        target: document.getElementById('Map'),
-        logo: mapp.utils.html.node`
+        layersTab.appendChild(mapp.utils.html.node`${localesDropdown}`);
+      }
+
+      if (!window.ol) await mapp.utils.olScript();
+
+      locale.syncPlugins ??= ['zoomBtn', 'admin', 'login'];
+
+      // Create mapview
+      const mapview = await mapp.Mapview({
+        host: mapp.host,
+        target: OL,
+        locale: locale,
+        hooks: true,
+        scrollWheelZoom: true,
+        loadPlugins: true,
+        attribution: {
+          target: document.getElementById('Map'),
+          logo: mapp.utils.html.node`
         <a class="logo" target="_blank" href="https://geolytix.co.uk">
           <img src="https://geolytix.github.io/public/geolytix_mapp.svg" alt="GEOLYTIX MAPP Logo">`,
-        links: {
-          [`XYZ v${mapp.version}`]: 'https://github.com/GEOLYTIX/xyz',
-          ['SHA']: `https://github.com/GEOLYTIX/xyz/commit/${mapp.hash}`,
-          Openlayers: 'https://openlayers.org',
+          links: {
+            [`XYZ v${mapp.version}`]: 'https://github.com/GEOLYTIX/xyz',
+            ['SHA']: `https://github.com/GEOLYTIX/xyz/commit/${mapp.hash}`,
+            Openlayers: 'https://openlayers.org',
+          },
         },
-      },
-    });
-
-    if (!locale.layers?.length && !(locale instanceof Error)) {
-      mapp.ui.elements.dialog({
-        css_style:
-          'padding: 1em; border-color: #000; z-index:9999; max-width: 50%;',
-        content: mapp.dictionary.no_layers,
-        target: document.body,
-        top: '40%',
-        left: '25%',
-        contained: true,
-      });
-    }
-
-    // Add layers to mapview.
-    await mapview.addLayer(locale.layers);
-
-    if (mapview.locale.gazetteer) {
-      mapp.ui.Gazetteer(
-        Object.assign(mapview.locale.gazetteer, {
-          mapview,
-          target: locationsTab.appendChild(mapp.utils.html.node`<div>`),
-        }),
-      );
-    } else {
-      document.querySelector('[data-id=locations]').style.display = 'none';
-    }
-
-    // Create layers listview.
-    mapp.ui.layers.listview({
-      target: layersTab,
-      layers: mapview.layers,
-    });
-
-    // Create locations listview.
-    mapp.ui.locations.listview({
-      target: locationsTab,
-      mapview: mapview,
-    });
-
-    // Begin highlight interaction.
-    mapview.interactions.highlight();
-
-    // Select locations from hooks.
-    mapp.hooks.current.locations.forEach((_hook) => {
-      // Split location hook into layer key and id.
-      const hook = _hook.split('!');
-
-      // Get the location.
-      // Will be added to listview in location panel.
-      mapp.location.get({
-        layer: mapview.layers[decodeURIComponent(hook[0])],
-        id: hook[1],
-      });
-    });
-
-    //Execute integration tests
-    if (mapp.hooks.current.test === 'integrity') {
-      await mapp.plugins.integrityTests(mapview);
-    }
-
-    // Configure idle mask if set in locale.
-    mapp.user &&
-      mapview.locale.idle &&
-      mapp.ui.utils.idleLogout({
-        host: mapp.host,
-        idle: mapview.locale.idle,
       });
 
-    // Append spacer for tableview
-    document.getElementById('mapButton').append(mapp.utils.html.node`
+      if (!locale.layers?.length && !(locale instanceof Error)) {
+        mapp.ui.elements.dialog({
+          css_style:
+            'padding: 1em; border-color: #000; z-index:9999; max-width: 50%;',
+          content: mapp.dictionary.no_layers,
+          target: document.body,
+          top: '40%',
+          left: '25%',
+          contained: true,
+        });
+      }
+
+      // Add layers to mapview.
+      await mapview.addLayer(locale.layers);
+
+      if (mapview.locale.gazetteer) {
+        mapp.ui.Gazetteer(
+          Object.assign(mapview.locale.gazetteer, {
+            mapview,
+            target: locationsTab.appendChild(mapp.utils.html.node`<div>`),
+          }),
+        );
+      } else {
+        document.querySelector('[data-id=locations]').style.display = 'none';
+      }
+
+      // Create layers listview.
+      mapp.ui.layers.listview({
+        target: layersTab,
+        layers: mapview.layers,
+      });
+
+      // Create locations listview.
+      mapp.ui.locations.listview({
+        target: locationsTab,
+        mapview: mapview,
+      });
+
+      // Begin highlight interaction.
+      mapview.interactions.highlight();
+
+      // Select locations from hooks.
+      mapp.hooks.current.locations.forEach((_hook) => {
+        // Split location hook into layer key and id.
+        const hook = _hook.split('!');
+
+        // Get the location.
+        // Will be added to listview in location panel.
+        mapp.location.get({
+          layer: mapview.layers[decodeURIComponent(hook[0])],
+          id: hook[1],
+        });
+      });
+
+      //Execute integration tests
+      if (mapp.hooks.current.test === 'integrity') {
+        await mapp.plugins.integrityTests(mapview);
+      }
+
+      // Configure idle mask if set in locale.
+      mapp.user &&
+        mapview.locale.idle &&
+        mapp.ui.utils.idleLogout({
+          host: mapp.host,
+          idle: mapview.locale.idle,
+        });
+
+      // Append spacer for tableview
+      document.getElementById('mapButton').append(mapp.utils.html.node`
     <div class="mobile-display-none" style="opacity: 0; height: 60px;">`);
-  </script>
-</body>
-
+    </script>
+  </body>
 </html>
