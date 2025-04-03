@@ -132,7 +132,7 @@ export function temporal() {
         },
         () => {
           const epoch = 1704067200;
-          const datetime = mapp.utils.temporal.datetime({ value: epoch });
+          const datetime = mapp.utils.temporal.datetime(epoch);
 
           codi.assertEqual(
             datetime,
@@ -153,7 +153,7 @@ export function temporal() {
         },
         () => {
           const epoch = 1704067200;
-          const datetime = mapp.utils.temporal.date({ value: epoch });
+          const datetime = mapp.utils.temporal.date(epoch);
 
           codi.assertEqual(
             datetime,
