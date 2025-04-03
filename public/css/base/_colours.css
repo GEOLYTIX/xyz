@@ -35,14 +35,6 @@ body {
   transition-property: background-color;
 }
 
-.primary-colour {
-  color: var(--color-primary);
-
-  &.active {
-    color: var(--color-active);
-  }
-}
-
 .off-black {
   color: var(--color-font);
 }
