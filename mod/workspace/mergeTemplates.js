@@ -64,11 +64,6 @@ export default async function mergeTemplates(obj) {
       // Template must be cloned to prevent cross polination and array aggregation.
       obj = merge(structuredClone(template), obj);
     }
-
-    // Check whether the object key exist as template if no implicit template has been defined.
-  } else if (Object.hasOwn(workspace.templates, obj.key)) {
-    obj.err ??= [];
-    obj.err.push(`Template matching ${obj.key} exists in workspace.`);
   }
 
   for (const template_key of obj.templates || []) {
