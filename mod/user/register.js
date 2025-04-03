@@ -193,7 +193,6 @@ function checkUserBody(req, res) {
 
     // Check whether not some of the allowed_domain includes the user_domain.
     if (!allowed_domains.some(domain => user_domain.includes(domain))) {
-      // Return if not...
       return res.status(400).send('Provided email address is invalid');
     }
   }
