@@ -41,7 +41,7 @@ Returns the `registerUserBody` method with a request [user] body present.
 @param {req} req HTTP request.
 @param {res} res HTTP response.
 @property {Object} req.params HTTP request parameter.
-@property {Object} [req.body] 
+@property {Object} [req.body]
 Post body object with user data.
 */
 
@@ -191,7 +191,7 @@ function checkUserBody(req, res) {
     const user_domain_full = req.body.email.split('@')[1];
 
     // The short domain includes "test" - allowing USER_DOMAIN of "test" to pass.
-    const user_domain_short = req.body.email.match(/(?<=@)[^.]+(?=\.)/g)[0];
+    const user_domain_short = user_domain_full.split('.')[0];
 
     // Check whether the Set has the full or short domain name.
     const allowed_domain_full = allowed_domains.has(user_domain_full);
@@ -251,7 +251,7 @@ async function passwordReset(req, res) {
   let rows = await acl(
     `
     SELECT email, password, password_reset, language, blocked
-    FROM acl_schema.acl_table 
+    FROM acl_schema.acl_table
     WHERE lower(email) = lower($1);`,
     [req.body.email],
   );
@@ -305,7 +305,7 @@ async function passwordReset(req, res) {
   // New passwords will only apply after account verification.
   rows = await acl(
     `
-    UPDATE acl_schema.acl_table 
+    UPDATE acl_schema.acl_table
     SET
       password_reset = $2,
       verificationtoken = $3,
