@@ -184,21 +184,15 @@ function checkUserBody(req, res) {
 
   // Test whether email domain is allowed to register
   if (xyzEnv.USER_DOMAINS) {
+
     // Get array of allowed user email domains from split xyzEnvironment variable.
-    const allowed_domains = new Set(xyzEnv.USER_DOMAINS.split(','));
+    const allowed_domains = xyzEnv.USER_DOMAINS.split(',');
 
-    //  The full domain includes everything after the @ - e.g. "test.co.uk" - allowing USER_DOMAIN of "test.co.uk" to pass.
-    const user_domain_full = req.body.email.split('@')[1];
+    //  Get the user_domain from user email.
+    const user_domain = req.body.email.split('@')[1];
 
-    // The short domain includes "test" - allowing USER_DOMAIN of "test" to pass.
-    const user_domain_short = user_domain_full.split('.')[0];
-
-    // Check whether the Set has the full or short domain name.
-    const allowed_domain_full = allowed_domains.has(user_domain_full);
-    const allowed_domain_short = allowed_domains.has(user_domain_short);
-
-    // if neither passed, return error.
-    if (!allowed_domain_full && !allowed_domain_short) {
+    // Check whether not some of the allowed_domain includes the user_domain.
+    if (!allowed_domains.some(domain => user_domain.includes(domain))) {
       // Return if not...
       return res.status(400).send('Provided email address is invalid');
     }
