@@ -19,7 +19,6 @@ import getFrom from '../provider/getFrom.js';
 //Attempt to import node mailer
 let nodeMailer, transport;
 if (
-  xyzEnv.TRANSPORT ||
   xyzEnv.TRANSPORT_EMAIL ||
   xyzEnv.TRANSPORT_USERNAME ||
   xyzEnv.TRANSPORT_HOST ||
