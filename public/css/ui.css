@@ -243,7 +243,7 @@ textarea {
   resize: none;
   border: none;
   border-bottom: 1px dotted var(--color-border);
-  background-color: var(--color-base-tertiary);
+  background-color: var(--color-base);
   color: var(--color-font);
   border-radius: 3px;
   &:focus {
@@ -264,7 +264,7 @@ input[type=search],
 input[type=date],
 input[type=time],
 input[type=datetime-local] {
-  background-color: var(--color-base-tertiary);
+  background-color: var(--color-base);
   border: 1px solid var(--color-border);
   color: var(--color-primary);
   padding: 5px;
@@ -277,7 +277,7 @@ input[type=text],
 input[type=number] {
   padding: 5px;
   border: none;
-  background-color: var(--color-base-tertiary);
+  background-color: var(--color-base);
   color: var(--color-primary);
   border-bottom: 1px dotted var(--color-border);
   display: inline-block;
