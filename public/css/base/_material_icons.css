@@ -10,20 +10,15 @@
     color: var(--color-active);
   }
 
-  &.on-colour,
-  &.on {
-    color: var(--color-active);
-  }
-
-  &.no-colour {
-    color: var(--color-danger);
-  }
-
-  &.ok-colour {
+  &.color-info {
     color: var(--color-info);
   }
 
-  &.primary-light-colour {
+  &.color-danger {
+    color: var(--color-danger);
+  }
+
+  &.color-font-mid {
     color: var(--color-font-mid);
   }
 
@@ -38,7 +33,7 @@
     content: 'toggle_off';
   }
 
-  &.on::after {
+  &.toggle-on::after {
     content: 'toggle_on';
     color: var(--color-active);
   }
