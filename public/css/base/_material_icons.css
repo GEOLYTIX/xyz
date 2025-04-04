@@ -10,8 +10,6 @@
     color: var(--color-active);
   }
 
-
-
   &.info {
     color: var(--color-info);
   }
