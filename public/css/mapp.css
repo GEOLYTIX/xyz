@@ -27,6 +27,12 @@ body {
 .color-danger {
   color: var(--color-danger);
 }
+.color-info {
+  color: var(--color-info);
+}
+.color-font-mid {
+  color: var(--color-font-mid);
+}
 
 /* public/css/layout/_ol.css */
 .ol-scale-line {

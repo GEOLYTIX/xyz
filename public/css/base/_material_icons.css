@@ -10,11 +10,15 @@
     color: var(--color-active);
   }
 
-  &.info {
+  &.color-info {
     color: var(--color-info);
   }
 
-  &.primary-light-colour {
+  &.color-danger {
+    color: var(--color-danger);
+  }
+
+  &.color-font-mid {
     color: var(--color-font-mid);
   }
 

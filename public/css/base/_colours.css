@@ -35,10 +35,19 @@ body {
   transition-property: background-color;
 }
 
+
 .active {
   color: var(--color-active);
 }
 
 .color-danger {
   color: var(--color-danger);
+}
+
+.color-info {
+  color: var(--color-info);
+}
+
+.color-font-mid {
+  color: var(--color-font-mid);
 }
