@@ -171,7 +171,6 @@ Nested locales accessible to the user are returned. The key for a nested locale 
 @returns {res} The HTTP response with either an error.message or JSON array of locales in workspace.
 */
 async function getNestedLocales(req, res) {
-
   // The locale property is required for nested locales.
   if (!params.locale) return;
 
