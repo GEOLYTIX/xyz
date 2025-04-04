@@ -1,6 +1,6 @@
 .infotip {
   position: fixed;
-  z-index: 998;
+  isolation: isolate;
   margin: 0;
   padding: 5px;
   background-color: var(--color-base-tertiary);

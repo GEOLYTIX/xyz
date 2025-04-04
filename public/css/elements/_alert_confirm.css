@@ -1,7 +1,6 @@
 dialog.alert-confirm {
   width: 350px;
   max-height: 70%;
-  z-index: 1001;
   user-select: none;
 
   &::-webkit-scrollbar {

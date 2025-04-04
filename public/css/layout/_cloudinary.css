@@ -19,7 +19,7 @@
     p {
       margin: auto;
       text-align: center;
-      color: var(----color-text);
+      color: var(--color-font);
       pointer-events: none;
       user-select: none;
 

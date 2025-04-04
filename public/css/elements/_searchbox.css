@@ -3,6 +3,7 @@
   overflow: visible;
   position: relative;
   background-color: var(--color-base-tertiary);
+  isolation: isolate;
 
   & > ul {
     display: none;
@@ -13,7 +14,6 @@
     margin-top: -1px;
     text-align: left;
     background-color: var(--color-base-tertiary);
-    z-index: 999;
 
     & > li {
       padding: 5px;
