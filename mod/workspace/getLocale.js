@@ -30,6 +30,12 @@ The getLocale method requests the workspace from cache and checks whether the re
 
 The workspace.locale is assigned as locale if params.locale is undefined.
 
+Any locale can be nested into another locale. If the locale property is defined as an array of locale keys.
+
+The localeKey will be shifted from the locale array property. The getLocale method will call itself recursively with the locale object provided as parentLocale param. The current locale object will be merged into the parentLocale. The locale key for nested locales is an array which reflects the locale array property.
+
+The locales array property which provides an interface for locales which can be nested but are not available from the workspace.locales directly is removed on nested locales.
+
 The mergeTemplate module will be called to merge templates into the locale object and substitute SRC_* xyzEnvironment variables.
 
 A role check is performed to check whether the requesting user has access to the locale.
@@ -37,7 +43,9 @@ A role check is performed to check whether the requesting user has access to the
 Role objects in the locale and nested layers are merged with their respective parent objects.
 
 @param {Object} params 
+@param {Object} [parentLocale] Locale will be merged into optional parentLocale to create a nested locale.
 @property {string} [params.locale] Locale key.
+@property {array} [params.locale] An array of locale keys to be merged as a nested locale.
 @property {Object} [params.user] Requesting user.
 @property {Array} [user.roles] User roles.
 
