@@ -21,24 +21,24 @@ The POST body must contain properties for each field. The key will be split on :
 @module /workspace/templates/sql_table_insert
 */
 export default (_) => {
-
   const fields = [];
   const unnests = [];
 
   for (const [key, value] of Object.entries(_.body)) {
-
     // Split key into field and type array
-    const field_type = key.split('::')
+    const field_type = key.split('::');
 
     // Check for SQL Injection in the property key.
     if (field_type.some((string) => !/^[A-Za-z0-9_-]*$/.exec(string))) {
-      console.warn(`Potential SQL Injection sql_table_insert body.`)
+      console.warn(`Potential SQL Injection sql_table_insert body.`);
       continue;
     }
 
-    _[field_type[0]] = value
-    fields.push(field_type[0])
-    unnests.push(`unnest(%{${field_type[0]}}::${field_type[1]}[]) as ${field_type[0]}`);
+    _[field_type[0]] = value;
+    fields.push(field_type[0]);
+    unnests.push(
+      `unnest(%{${field_type[0]}}::${field_type[1]}[]) as ${field_type[0]}`,
+    );
   }
 
   const sql = `INSERT INTO ${_.table} 
