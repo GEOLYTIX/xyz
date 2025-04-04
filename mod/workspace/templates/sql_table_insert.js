@@ -30,7 +30,7 @@ export default (_) => {
 
     // Check for SQL Injection in the property key.
     if (field_type.some((string) => !/^[A-Za-z0-9_-]*$/.exec(string))) {
-      console.warn(`Potential SQL Injection sql_table_insert body.`);
+      console.warn(`Potential SQL Injection in sql_table_insert request body.`);
       continue;
     }
 
