@@ -2,38 +2,38 @@
   width: 100%;
   overflow: visible;
   position: relative;
-  background-color: var(--color-light);
-  box-shadow: var(--color-mid) 0px 8px 24px;
+  background-color: var(--color-base-tertiary);
 
   & > ul {
     display: none;
     max-height: 500px;
     overflow-y: auto;
     overflow-x: hidden;
-    box-shadow: 1px 1px 3px var(--color-primary-light);
+    box-shadow: 1px 1px 3px var(--color-border);
     margin-top: -1px;
     text-align: left;
-    background-color: var(--color-light);
+    background-color: var(--color-base-tertiary);
     z-index: 999;
 
     & > li {
       padding: 5px;
+      color: var(--color-font);
     }
 
     & > li:hover {
-      background-color: var(--color-primary-light);
+      background-color: var(--color-hover);
       cursor: pointer;
     }
 
     & > li.selected {
-      background-color: var(--color-light-secondary);
+      background-color: var(--color-base-secondary);
     }
 
     & .label {
       padding: 0 2px;
       margin-right: 2px;
       border-radius: 2px;
-      color: var(--color-light);
+      color: var(--color-font-contrast);
       font-size: 80%;
       font-weight: bold;
       background-color: var(--color-primary);
