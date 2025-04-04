@@ -1,0 +1,331 @@
+html {
+    position: fixed;
+    bottom: 0%;
+    top: 0%;
+    height: 100%;
+    width: 100%;
+}
+
+body {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    background-color: #ffffff;
+    background-image: linear-gradient(43deg, var(--color-primary) 0%, #E0E0E0 24%, #ffffff 100%);
+}
+
+button.create {
+    border: none;
+    outline: none;
+    cursor: pointer;
+    transition: 0.3s;
+    width: 6em;
+    height: 2em;
+    min-width: 6em;
+    padding: 0 0.2em 0.1em 0.2em;
+    border-radius: 0.2em;
+    font-weight: bold;
+    color: white;
+    background-color: var(--color-primary);
+    -webkit-box-shadow: 2px 2px 3px 0px rgb(58 58 58 / 53%);
+    box-shadow: 2px 2px 3px 0px rgb(58 58 58 / 53%);
+}
+
+button.create.sec {
+    font-size: 0.95em;
+}
+
+button.create.sec.wider {
+    width: 9em;
+}
+
+button.create.sec.active {
+    border-bottom: solid 3px var(--color-primary);
+}
+
+button.create:hover {
+    background-color: #434371;
+}
+
+button.create.sec::disabled {
+    background-color: var(--color-primary-light) !important;
+    border-bottom: solid 3px var(--color-off-black);
+    opacity: 0.7;
+    color: var(--color-off-black);
+}
+
+/* remove this clause once updated navtabs css is included */
+.nav {
+ z-index: auto !important;
+}
+
+
+.housing-dialog {
+    overflow: visible;
+}
+
+.modals .header {
+    background-color: var(--color-primary);
+    border-bottom: solid 3px var(--color-on);
+    color: var(--color-light);
+}
+
+
+* {
+    box-sizing: border-box;
+}
+
+.dropdown.active>ul {
+    max-height: 160px;
+    width: 100%;
+}
+
+.dropdown.active>ul li:hover {
+    color: black;
+    background-color: lightgrey;
+}
+
+.dropdown.active>ul li.selected {
+    color: white;
+    background-color: var(--color-primary);
+}
+
+.location-view-grid {
+    grid-gap: 4px 10px;
+    font-size: 0.8em;
+
+    &:-webkit-scrollbar {
+     display: none;
+    }
+}
+
+.flex-col {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    height: 100%;
+}
+
+.btn-row {
+    align-items: center;
+}
+
+.ol-scale-line {
+    left: 5px;
+    bottom: 5px;
+    top: unset;
+    position: absolute;
+}
+
+.ol-control {
+    top: unset;
+    bottom: 1em;
+    left: unset;
+    right: 1em;
+}
+
+.pos-relative {
+    position: relative;
+}
+
+.teal {
+    /*color: #00796b;*/
+    color: var(--color-primary);
+}
+
+.teal-bg {
+    /*background-color: #00796b;*/
+    background-color: var(--color-primary);
+}
+
+.card {
+    padding: 0.5em;
+    border-radius: 4px;
+    background-color: #546e7a33;
+    font-size: 1em;
+}
+
+.card-edit {
+    padding: 0.5em;
+    border-radius: 4px;
+    border: solid 1px rgb(0 121 107 / 53%);
+    background-color: #F3F3F3;
+    -webkit-box-shadow: 2px 2px 3px 0px rgb(58 58 58 / 53%);
+    box-shadow: 2px 2px 3px 0px rgb(58 58 58 / 53%);
+}
+
+.none {
+    display: none;
+}
+
+.modeller_display_none {
+    display: none !important;
+}
+
+.val>input[type=number] {
+    text-align: left;
+}
+
+.val>textarea {
+    padding: 0.5em;
+}
+
+.drawer {
+    background: none;
+    padding: 0;
+    margin-top: 0;
+}
+
+
+
+/* tabulator override */
+.tabulator {
+    background-color: #ffffff22 !important;
+    border-radius: 3px !important;
+    font-size: 0.9em !important;
+}
+
+.tabulator-headers {
+    font-size: 0.9em;
+}
+
+.tabulator-row.tabulator-selected {
+    background-color: #ffd54f77 !important;
+}
+
+/* begin table styling */
+
+.table-view {
+    border: 1px solid #00000033;
+    border-radius: 3px;
+    background-color: white;
+    font-size: 0.9em;
+}
+
+.thead {
+    padding: 0.2em;
+    font-weight: bold;
+    border-bottom: 1px solid #00000011;
+    background-color: white;
+}
+
+.table-view div {
+    border-bottom: 1px solid #00000011;
+    padding: 0.2em;
+}
+
+.btn-row {
+    flex-wrap: wrap;
+}
+
+.btn-row button {
+    margin: 5px;
+}
+
+.sticky-top {
+    position: sticky;
+    top: 0;
+    background-color: white;
+}
+
+.col-hl {
+    background-color: #D3E4E1;
+}
+
+.col-grey {
+    background-color: #EEEEEE;
+}
+
+.col-white {
+    background-color: white;
+}
+
+/* end table styling  */
+
+#Gazetteer .searchbox ul {
+    position: absolute;
+    top: 30px;
+    width: 100%;
+}
+
+.lbl {
+    padding: 1px 2px;
+    text-align: center;
+    border-radius: 4px;
+    font-size: 0.8em;
+    margin-right: 4px;
+}
+
+.changed {
+    border: solid 1px #A23B72;
+    background-color: #A23B7233;
+    color: #A23B72;
+}
+
+.unchanged {
+    border: solid 1px #00796b;
+    background-color: #00796b33;
+    color: #00796b;
+}
+
+.edited {
+    background-color: #512da8;
+    font-weight: bold;
+    color: white;
+    padding: 2px 3px;
+    border-radius: 3px;
+}
+
+.new {
+    border: solid 1px #d84315;
+    background-color: #d8431533;
+    color: #d84315;
+}
+
+.save {
+    width: 7em;
+    background-color: #d84315;
+    padding: 0 0.2em 0.1em 0.2em;
+    border-radius: 0.2em;
+    font-weight: bold;
+    color: white;
+    -webkit-box-shadow: 2px 2px 3px 0px rgb(58 58 58 / 53%);
+    box-shadow: 2px 2px 3px 0px rgb(58 58 58 / 53%);
+    border: none;
+}
+
+.vmid {
+    width: auto;
+    vertical-align: middle;
+}
+
+
+#results-site-details-edit>textarea {
+    height: 2em;
+    width: 360px;
+    text-overflow: ellipsis;
+    transition: all 0.5s ease;
+    border: none;
+    outline: none;
+    padding: 4px;
+    background-color: #ffffff99;
+    border-radius: 2px;
+}
+
+#results-site-comment button {
+    visibility: hidden;
+    transition: 0.5s ease;
+}
+
+#results-site-details-edit>textarea:focus {
+    height: 10em;
+    text-overflow: auto;
+    border: solid 1px var(--color-primary);
+    background-color: #ffffff;
+}
+
+#results-site-details-edit:hover>textarea {
+    height: 10em;
+    text-overflow: auto;
+    background-color: #ffffff;
+}
