@@ -23,19 +23,26 @@ import getTemplate from './getTemplate.js';
 @async
 
 @description
-The layer locale is requested from the getLocale module.
+A layer will primarily be requested from a locale.
 
-A layer template lookup will be attempted if a layer is not found in locale.layers.
+The getLocale method will err if the requesting user does not have access to the locale.
+
+If a layer is not part of a locale an attemp to get the layer directly from the workspace templates will be made.
+
+The locale object can be provided as an additional param. The getLocale method of the workspace API may request any layer in the locale after the locale has already been retrieved. This will prevent a loopback to the locale for every layer in the locale.
 
 The mergeTemplate module will be called to merge templates into the locale object and substitute SRC_* xyzEnvironment variables.
 
-A role check is performed to check whether the requesting user has access to the locale.
+A role check is performed to check whether the requesting user has access to the layer object.
 
 Role objects in the layer are merged with their respective parent objects.
 
 The layer.key and layer.name will be assigned if missing.
 
+The layer.dbs will be assigned from the locale is missing.
+
 @param {Object} params 
+@param {locale} [locale] An optional workspace locale can be provided to prevent a roundtrip to the getLocale method.
 @property {string} [params.locale] Locale key.
 @property {string} [params.layer] Layer key.
 @property {Object} [params.user] Requesting user.
