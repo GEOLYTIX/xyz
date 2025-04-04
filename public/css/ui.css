@@ -27,7 +27,7 @@ body {
 .active {
   color: var(--color-active);
 }
-.danger {
+.color-danger {
   color: var(--color-danger);
 }
 
@@ -288,9 +288,6 @@ input[type=search]::-webkit-search-cancel-button:hover {
   color: var(--color-primary);
   &.active {
     color: var(--color-active);
-  }
-  &.danger {
-    color: var(--color-danger);
   }
   &.info {
     color: var(--color-info);

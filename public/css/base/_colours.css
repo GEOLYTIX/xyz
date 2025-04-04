@@ -39,6 +39,6 @@ body {
   color: var(--color-active);
 }
 
-.danger {
+.color-danger {
   color: var(--color-danger);
 }
