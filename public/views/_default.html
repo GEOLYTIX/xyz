@@ -365,9 +365,8 @@
         `${mapp.host}/api/workspace/locales?locale=${locale.key}`,
       );
 
+      // The nested locales for the current locale will be spread into the locales array.
       locales = [...locales, ...nestedLocales]
-
-      console.log(locales)
     }
 
     // Add locale dropdown to layers panel if multiple locales are accessible.

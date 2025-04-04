@@ -40,6 +40,8 @@ An error will be returned if the lookup failed.
 
 A template will be requested from source if the template has not been cached.
 
+The key will be assigned to the template object as key property.
+
 Template modules will be constructed.
 
 @param {string} key
