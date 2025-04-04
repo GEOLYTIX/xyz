@@ -1,5 +1,4 @@
 export default (_) => {
-  console.log(_);
   let data = _.body.data;
   const columns = _.body.fields;
 
