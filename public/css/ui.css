@@ -297,7 +297,7 @@ input[type=search]::-webkit-search-cancel-button:hover {
     color: var(--color-font-mid);
   }
 }
-.toogle-on {
+.toggle-on {
   color: var(--color-active);
 }
 .toggle {
