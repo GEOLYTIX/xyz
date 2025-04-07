@@ -24,18 +24,6 @@ body {
   transition: 0.2s ease-in-out;
   transition-property: background-color;
 }
-.active {
-  color: var(--color-active);
-}
-.color-danger {
-  color: var(--color-danger);
-}
-.color-info {
-  color: var(--color-info);
-}
-.color-font-mid {
-  color: var(--color-font-mid);
-}
 
 /* public/css/base/_common.css */
 .display-none {
