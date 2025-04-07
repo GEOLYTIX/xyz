@@ -1,12 +1,12 @@
 import checkWorkspaceCache from '../../../mod/workspace/cache.js';
 
-//Assigning console.warn to a property to restore original function with.
+//Assigning console.error to a property to restore original function with.
 const originalConsole = console.error;
 
-//mockWarnings from test so we can assert on them and not get polute the console.
+//erros from test so we can assert on them and not get polute the console.
 const mockErrors = [];
 
-//Changing the console.warn function to push to our local collection of messages.
+//Changing the console.error function to push to our local collection of messages.
 console.error = (message) => {
   mockErrors.push(message);
 };
