@@ -6,7 +6,7 @@
   border: 1px solid var(--color-border);
   border-radius: 3px;
   isolation: isolate;
-  z-index: 5;
+  z-index: 4; /* required to layer higher than highest used z-index for slider element */
 
   &:disabled {
     pointer-events: none;

@@ -4,6 +4,7 @@
   position: relative;
   background-color: var(--color-base-tertiary);
   isolation: isolate;
+  z-index: 4; /* required to layer higher than highest used z-index for slider element */
 
   & > ul {
     display: none;

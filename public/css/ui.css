@@ -672,7 +672,7 @@ dialog {
   border: 1px solid var(--color-border);
   border-radius: 3px;
   isolation: isolate;
-  z-index: 5;
+  z-index: 4;
   &:disabled {
     pointer-events: none;
     opacity: 0.4;
@@ -795,6 +795,7 @@ dialog {
   position: relative;
   background-color: var(--color-base-tertiary);
   isolation: isolate;
+  z-index: 4;
   & > ul {
     display: none;
     max-height: 500px;
@@ -839,7 +840,6 @@ dialog {
   grid-template-columns: 50% 50%;
   position: relative;
   width: 100%;
-  z-index: auto;
   & .label-row {
     grid-row: 1;
     grid-column: 1 / 3;
