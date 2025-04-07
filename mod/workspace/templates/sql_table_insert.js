@@ -41,7 +41,7 @@ export default (_) => {
     );
   }
 
-  const sql = `INSERT INTO ${_.table} 
+  const sql = `INSERT INTO ${_.table}
     (${fields.join(',')})
     SELECT ${unnests.join(',')}`;
 
