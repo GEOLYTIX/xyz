@@ -28,6 +28,10 @@
   }
 }
 
+.toogle-on {
+  color: var(--color-active);
+}
+
 .toggle {
   &::after {
     content: 'toggle_off';
@@ -35,7 +39,6 @@
 
   &.toggle-on::after {
     content: 'toggle_on';
-    color: var(--color-active);
   }
 
   &.disabled {

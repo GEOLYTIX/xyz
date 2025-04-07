@@ -2,10 +2,6 @@
   margin-top: 5px;
   border-radius: 5px;
   background-color: var(--color-base-tertiary);
-
-  .edit-toggle-on {
-    color: var(--color-active);
-  }
 }
 
 .location-view-grid {

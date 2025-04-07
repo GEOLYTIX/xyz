@@ -297,13 +297,15 @@ input[type=search]::-webkit-search-cancel-button:hover {
     color: var(--color-font-mid);
   }
 }
+.toogle-on {
+  color: var(--color-active);
+}
 .toggle {
   &::after {
     content: "toggle_off";
   }
   &.toggle-on::after {
     content: "toggle_on";
-    color: var(--color-active);
   }
   &.disabled {
     opacity: 0.5;
@@ -1076,9 +1078,6 @@ dialog {
   margin-top: 5px;
   border-radius: 5px;
   background-color: var(--color-base-tertiary);
-  .edit-toggle-on {
-    color: var(--color-active);
-  }
 }
 .location-view-grid {
   display: grid;
