@@ -54,13 +54,12 @@ export default (_) => {
       }
     }
 
-    // Value is an array (of strings)
-    if (Array.isArray(_.body[key])) {
-      _[key] = `{${_.body[key].join(',')}}`;
-    }
-
-    // Value is boolean or number.
-    if (typeof _.body[key] === 'boolean' || typeof _.body[key] === 'number') {
+    // Value is array, boolean, or number.
+    if (
+      Array.isArray(_.body[key]) ||
+      typeof _.body[key] === 'boolean' ||
+      typeof _.body[key] === 'number'
+    ) {
       _[key] = _.body[key];
     }
 

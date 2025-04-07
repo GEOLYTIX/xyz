@@ -9,7 +9,7 @@ The processEnv utility script is required by the express web server app and the 
 @typedef {Object} xyzEnv
 The process.ENV object holds configuration provided to the node process from the launch environment. The environment configuration allows the provision of keys and secrets which must not be accessible from the client. All xyzEnv properties are limited to string type.
 @property {String} [DIR=''] The XYZ API path which concatenated with the domain for all requests.
-@property {String} [DBS_=''] DBS_* values are the connections used to establish connections to pg servers with the [dbs]{@link module:/utils/dbs} module. 
+@property {String} [DBS_=''] DBS_* values are the connections used to establish connections to pg servers with the [dbs]{@link module:/utils/dbs} module.
 @property {String} [PORT='3000'] The port on which the express app listens to for requests.
 @property {Integer} [COOKIE_TTL=36000] The Time To Live for all cookies issued by the XYZ API.
 @property {String} [TITLE='GEOLYTIX | XYZ'] The TITLE value is used to identify cookies and is provided to as a param to Application View templates.
@@ -29,10 +29,13 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [WORKSPACE_AGE] The [workspace/cache module]{@link module:/mod/workspace/cache} flashes the workspace cache after the WORKSPACE_AGE is reached.
 @property {String} [CUSTOM_TEMPLATES] The [workspace/cache module]{@link module:/mod/workspace/cache} caches templates defined as a src in the CUSTOM_TEMPLATES xyzEnv.
 @property {String} [TRANSPORT] The [utils/mailer module]{@link module:/utils/mailer} requires a TRANSPORT xyzEnv.
-@property {String} [TRANSPORT_HOST] The [utils/mailer module]{@link module:/utils/mailer} requires a TRANSPORT xyzEnv.
-@property {String} [TRANSPORT_EMAIL] The [utils/mailer module]{@link module:/utils/mailer} requires a TRANSPORT xyzEnv.
-@property {String} [TRANSPORT_PASSWORD] The [utils/mailer module]{@link module:/utils/mailer} requires a TRANSPORT xyzEnv.
-@property {String} [TRANSPORT_PORT] The [utils/mailer module]{@link module:/utils/mailer} requires a TRANSPORT xyzEnv.
+@property {String} [TRANSPORT_HOST] The hostname or IP address that the [utils/mailer module]{@link module:/utils/mailer} module connects to.
+@property {String} [TRANSPORT_NAME] The optional hostname of the client, used for identifying to the server in the [utils/mailer module]{@link module:/utils/mailer} module.
+@property {String} [TRANSPORT_EMAIL] The email used to send emails in the [utils/mailer module]{@link module:/utils/mailer} module.
+@property {String} [TRANSPORT_USERNAME] The username used to authenticate in the [utils/mailer module]{@link module:/utils/mailer} module.
+@property {String} [TRANSPORT_PASSWORD] The password used to authenticate in the [utils/mailer module]{@link module:/utils/mailer} module.
+@property {String} [TRANSPORT_PORT] The port used to connect to the host in the [utils/mailer module]{@link module:/utils/mailer} module.
+@property {String} [TRANSPORT_TLS] defines additional node.js TLSSocket options to be passed to the socket constructor used in the [utils/mailer module]{@link module:/utils/mailer} module.
 @property {String} [USER_DOMAINS] The [user/register module]{@link module:/user/register} will limit the registration to user emails for domains provided in the comma seperated USER_DOMAINS xyzEnv.
 @property {String} [SRC_] SRC_* values will replace the key wildcard [*] in the stringified workspace.
 @property {String} [KEY_CLOUDFRONT] A key [*.pem] file matching the KEY_CLOUDFRONT value is required for authentication requests in the [cloudfront]{@link module:/provider/cloudfront} provider module.

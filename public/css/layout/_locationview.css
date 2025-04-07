@@ -1,6 +1,7 @@
 .location-view.drawer {
   margin-top: 5px;
   border-radius: 5px;
+  background-color: var(--color-base-tertiary);
 }
 
 .location-view-grid {
@@ -11,7 +12,7 @@
   grid-template-columns: 1fr 1fr;
 
   & pre {
-    background-color: var(--color-light-secondary);
+    background-color: var(--color-base-secondary);
   }
 
   & .contents {
@@ -56,15 +57,19 @@
     display: grid;
     grid-template-columns: 1fr 1fr;
     grid-gap: 5px 10px;
-    border-bottom: 1px solid var(--color-mid);
+    border-bottom: 1px solid var(--color-border);
     padding: 0;
 
     & > .header {
       grid-column: 1 / 3;
       background-color: var(--color-primary);
-      color: var(--color-light);
+      color: var(--color-font-contrast);
       border-radius: 3px;
       padding: 0 0.5em;
+
+      & > .caret::after {
+        color: var(--color-font-contrast);
+      }
     }
 
     & .label,
@@ -79,10 +84,10 @@
     border-radius: 2px;
     font-weight: bold;
     font-size: 0.8em;
-    background-color: var(--color-mid);
+    background-color: var(--color-base-secondary);
 
     &.active {
-      background-color: var(--color-on);
+      background-color: var(--color-active);
     }
   }
 
@@ -100,45 +105,6 @@
     height: 2em;
     right: 0.5em;
     top: 0.5em;
-  }
-}
-
-.images-grid {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-
-  & > div {
-    position: relative;
-    width: 90px;
-    height: 90px;
-    flex-grow: 1;
-    padding: 2px;
-
-    & img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-
-    & .trash {
-      position: absolute;
-      width: 2em;
-      height: 2em;
-      right: 0.5em;
-      top: 0.5em;
-    }
-
-    & input {
-      height: 100%;
-      opacity: 0;
-      cursor: pointer;
-    }
-  }
-
-  & > div:first-child {
-    width: 100%;
-    height: 180px;
   }
 }
 
