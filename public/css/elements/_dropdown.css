@@ -5,7 +5,7 @@
   border: 1px solid var(--color-border);
   border-radius: 3px;
 
-  &.disabled {
+  &:disabled {
     pointer-events: none;
     opacity: 0.4;
     color: var(--color-font);
