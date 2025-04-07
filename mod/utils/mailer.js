@@ -1,5 +1,6 @@
 /**
 @module /utils/mailer
+@description
 The mailer module provides a way to send emails to clients/admins, etc.
 
 @requires module:/utils/logger
@@ -17,9 +18,14 @@ import getFrom from '../provider/getFrom.js';
 
 //Attempt to import node mailer
 let nodeMailer, transport;
-if (
-  xyzEnv.TRANSPORT ||
+
+if (xyzEnv.TRANSPORT) {
+  console.warn(
+    'Please replace xyzEnv.TRANSPORT with TRANSPORT_HOST,TRANSPORT_EMAIL, and TRANSPORT_PASSWORD',
+  );
+} else if (
   xyzEnv.TRANSPORT_EMAIL ||
+  xyzEnv.TRANSPORT_USERNAME ||
   xyzEnv.TRANSPORT_HOST ||
   xyzEnv.TRANSPORT_PASSWORD
 ) {
@@ -39,7 +45,7 @@ export default mailer;
 @description
 Function which sends email using the nodemailer dependancy.
 
-@param {Object} params 
+@param {Object} params
 @property {String} params.to The email recipient.
 @property {String} params.template The html that will make up the body of the email.
 @property {String} params.language The language to be used.
@@ -49,19 +55,13 @@ async function mailer(params) {
   // The nodeMailer module could not be imported.
   if (!nodeMailer) return;
 
-  if (xyzEnv.TRANSPORT) {
-    console.warn(
-      'Please replace xyzEnv.TRANSPORT with TRANSPORT_HOST,TRANSPORT_EMAIL, and TRANSPORT_PASSWORD',
-    );
-  }
-
   if (!xyzEnv.TRANSPORT_HOST) {
     console.warn('xyzEnv.TRANSPORT_HOST missing.');
     return;
   }
 
   if (!xyzEnv.TRANSPORT_EMAIL) {
-    console.warn('xyzEnv.TRANSPORT_EMAIL missing.');
+    console.warn('xyzEnv.TRANSPORT_EMAIL is missing.');
     return;
   }
 
@@ -73,12 +73,12 @@ async function mailer(params) {
   if (!transport) {
     transport = nodeMailer.createTransport({
       host: xyzEnv.TRANSPORT_HOST,
-      name: xyzEnv.TRANSPORT_EMAIL.split('@')[0],
+      name: xyzEnv.TRANSPORT_NAME || xyzEnv.TRANSPORT_EMAIL.split('@')[0],
       port: xyzEnv.TRANSPORT_PORT || 587,
       secure: false,
       requireTLS: xyzEnv.TRANSPORT_TLS,
       auth: {
-        user: xyzEnv.TRANSPORT_EMAIL,
+        user: xyzEnv.TRANSPORT_USERNAME || xyzEnv.TRANSPORT_EMAIL,
         pass: xyzEnv.TRANSPORT_PASSWORD,
       },
     });
@@ -115,7 +115,7 @@ async function mailer(params) {
 @description
 Retrieves the body of the text from the provided url/file.
 
-@param {Object} template 
+@param {Object} template
 @property {String} template.text The url from which to retrieve the text content using {@link module:/provider/getFrom~flyTo}.
 @property {String} template.html The url from which to retrieve the html content using {@link module:/provider/getFrom~flyTo}.
 */
@@ -142,7 +142,7 @@ async function getBody(template) {
 @description
 Substitutes supplied params into a supplied string.
 
-@param {String} string  
+@param {String} string
 @property {Object} params The url from which to retrieve the text content using {@link module:/provider/getFrom~flyTo}.
 
 @returns {String} The string with substitutions made.
