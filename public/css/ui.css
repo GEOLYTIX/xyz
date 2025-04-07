@@ -667,16 +667,23 @@ dialog {
 .dropdown {
   width: 100%;
   overflow: visible;
-  position: relative;
   background-color: var(--color-base-secondary);
   border: 1px solid var(--color-border);
   border-radius: 3px;
-  isolation: isolate;
-  z-index: 4;
-  &:disabled {
+  &.disabled {
     pointer-events: none;
     opacity: 0.4;
     color: var(--color-font);
+  }
+  &.active {
+    & > ul {
+      display: block;
+      position: absolute;
+      z-index: 4;
+    }
+    & > .head > .material-symbols-outlined:after {
+      content: "arrow_drop_up";
+    }
   }
   & > .head {
     padding: 5px;
@@ -723,6 +730,7 @@ dialog {
     }
     & > li.selected {
       background-color: var(--color-primary);
+      border: 1px solid var(--color-border);
       color: var(--color-font-contrast);
     }
     & .label {
@@ -732,14 +740,6 @@ dialog {
       font-size: 80%;
       font-weight: bold;
       background-color: var(--color-hover);
-    }
-  }
-  &.active {
-    & > ul {
-      display: block;
-    }
-    & > .head > .material-symbols-outlined:after {
-      content: "arrow_drop_up";
     }
   }
   &.dropdown-reverse > ul {
