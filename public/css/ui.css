@@ -784,6 +784,11 @@ dialog {
       cursor: pointer;
       font-size: 0.8em;
       padding: 0 2px;
+      &:after {
+        content: "close";
+        color: var(--color-font-contrast);
+        vertical-align: middle;
+      }
     }
   }
 }
