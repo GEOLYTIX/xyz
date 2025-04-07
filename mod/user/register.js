@@ -41,7 +41,7 @@ Returns the `registerUserBody` method with a request [user] body present.
 @param {req} req HTTP request.
 @param {res} res HTTP response.
 @property {Object} req.params HTTP request parameter.
-@property {Object} [req.body] 
+@property {Object} [req.body]
 Post body object with user data.
 */
 
@@ -185,11 +185,13 @@ function checkUserBody(req, res) {
   // Test whether email domain is allowed to register
   if (xyzEnv.USER_DOMAINS) {
     // Get array of allowed user email domains from split xyzEnvironment variable.
-    const domains = new Set(xyzEnv.USER_DOMAINS.split(','));
+    const allowed_domains = xyzEnv.USER_DOMAINS.split(',');
 
-    // Check whether the Set has the domain.
-    if (!domains.has(req.body.email.match(/(?<=@)[^.]+(?=\.)/g)[0])) {
-      // Return if not...
+    //  Get the user_domain from user email.
+    const user_domain = req.body.email.split('@')[1];
+
+    // Check whether not some of the allowed_domain includes the user_domain.
+    if (!allowed_domains.some((domain) => user_domain.includes(domain))) {
       return res.status(400).send('Provided email address is invalid');
     }
   }
@@ -241,7 +243,7 @@ async function passwordReset(req, res) {
   let rows = await acl(
     `
     SELECT email, password, password_reset, language, blocked
-    FROM acl_schema.acl_table 
+    FROM acl_schema.acl_table
     WHERE lower(email) = lower($1);`,
     [req.body.email],
   );
@@ -295,7 +297,7 @@ async function passwordReset(req, res) {
   // New passwords will only apply after account verification.
   rows = await acl(
     `
-    UPDATE acl_schema.acl_table 
+    UPDATE acl_schema.acl_table
     SET
       password_reset = $2,
       verificationtoken = $3,
