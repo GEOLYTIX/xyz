@@ -3,7 +3,6 @@ import sql_table_insert from '../../../../mod/workspace/templates/sql_table_inse
 //Assigning console.warn to a property to restore original function with.
 const originalConsole = console.warn;
 
-
 //mockWarnings from test so we can assert on them and not get polute the console.
 const mockWarnings = [];
 
@@ -29,7 +28,8 @@ await codi.describe(
     (letters,numbers)
     SELECT unnest(%{letters}::varchar[]) as letters,unnest(%{numbers}::int[]) as numbers`;
 
-        const expectedWarning = 'Potential SQL Injection in sql_table_insert request body.'
+        const expectedWarning =
+          'Potential SQL Injection in sql_table_insert request body.';
 
         const req = {
           table: 'test.table',
