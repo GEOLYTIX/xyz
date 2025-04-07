@@ -22,7 +22,7 @@
     color: var(--color-font-mid);
   }
 
-  &.close:after {
+  &.close::after {
     content: 'close';
     color: var(--color-font-mid);
   }

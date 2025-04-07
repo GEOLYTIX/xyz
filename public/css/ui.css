@@ -292,7 +292,7 @@ input[type=search]::-webkit-search-cancel-button:hover {
   &.color-font-mid {
     color: var(--color-font-mid);
   }
-  &.close:after {
+  &.close::after {
     content: "close";
     color: var(--color-font-mid);
   }
