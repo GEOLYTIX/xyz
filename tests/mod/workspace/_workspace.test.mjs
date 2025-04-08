@@ -100,4 +100,27 @@ await codi.describe({ name: 'workspace:', id: 'workspace' }, async () => {
       );
     },
   );
+
+  //TODO: How do we want to handle providing locales that don't exist?
+  codi.it(
+    {
+      name: 'nested locales bogus locale',
+      parentId: 'workspace',
+      id: 'workspace_locales',
+    },
+    async () => {
+      const { req, res } = codi.mockHttp.createMocks({
+        params: {
+          key: 'locale',
+          locale: ['notALocale', 'anotherincorrectone', 'Idontexist'],
+        },
+      });
+
+      await getKeyMethod(req, res);
+
+      const code = res.statusCode;
+
+      codi.assertEqual(code, 400, 'We expect to get a bad request.');
+    },
+  );
 });
