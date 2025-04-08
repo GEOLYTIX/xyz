@@ -35,7 +35,10 @@ await codi.describe({ name: 'workspace:', id: 'workspace' }, async () => {
             await getKeyMethod(req, res);
             const result = res._getData();
 
-            codi.assertTrue(result !== null, `Need to ensure we get a response from ${testMethod.key}`)
+            codi.assertTrue(
+              result !== null,
+              `Need to ensure we get a response from ${testMethod.key}`,
+            );
           },
         );
       });
