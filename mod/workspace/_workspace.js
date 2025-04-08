@@ -178,7 +178,7 @@ locales in workspace.
 */
 async function getNestedLocales(req, res) {
   // The locale property is required for nested locales.
-  if (!params.locale) return;
+  if (!req.params.locale) return;
 
   const locale = await getLocale(req.params);
 
