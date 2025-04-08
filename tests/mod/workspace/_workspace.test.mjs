@@ -1,4 +1,5 @@
 import checkWorkspaceCache from '../../../mod/workspace/cache.js';
+import getKeyMethod from '../../../mod/workspace/_workspace.js';
 
 await codi.describe({ name: 'workspace:', id: 'workspace' }, async () => {
   globalThis.xyzEnv = {
@@ -10,12 +11,12 @@ await codi.describe({ name: 'workspace:', id: 'workspace' }, async () => {
   await checkWorkspaceCache(true);
 
   await codi.describe(
-    { name: 'Test method keys', id: 'workspace_key', parentId: 'workspace' },
+    {
+      name: 'Test method keys',
+      id: 'workspace_keyMethod',
+      parentId: 'workspace',
+    },
     async () => {
-      const { default: getKeyMethod } = await import(
-        '../../../mod/workspace/_workspace.js'
-      );
-
       const testMethods = [
         { key: 'layer', value: 'OSM' },
         { key: 'locale', value: '' },
@@ -26,7 +27,7 @@ await codi.describe({ name: 'workspace:', id: 'workspace' }, async () => {
 
       testMethods.forEach((testMethod) => {
         codi.it(
-          { name: `${testMethod.key}`, parentId: 'workspace_key' },
+          { name: `${testMethod.key}`, parentId: 'workspace_keyMethod' },
           async () => {
             const { req, res } = codi.mockHttp.createMocks({
               params: { key: testMethod.key, layer: testMethod.value },
@@ -42,6 +43,25 @@ await codi.describe({ name: 'workspace:', id: 'workspace' }, async () => {
           },
         );
       });
+    },
+  );
+
+  codi.it(
+    { name: 'nested locales', parentId: 'workspace', id: 'workspace_locales' },
+    async () => {
+      const { req, res } = codi.mockHttp.createMocks({
+        params: {
+          key: 'locale',
+          locales: ['us', 'brand_a_locale'],
+          user: {
+            roles: ['us', 'brand_a'],
+          },
+        },
+      });
+
+      await getKeyMethod(req, res);
+
+      //console.log(res._getData());
     },
   );
 });
