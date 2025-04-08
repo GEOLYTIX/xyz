@@ -21,35 +21,6 @@ body {
   transition: 0.2s ease-in-out;
   transition-property: background-color;
 }
-.primary-colour {
-  color: var(--color-primary);
-  &.active {
-    color: var(--color-active);
-  }
-}
-.primary-background {
-  color: var(--color-font-contrast);
-  background-color: var(--color-primary);
-}
-.light-background {
-  background-color: var(--color-base-tertiary);
-}
-.light-colour {
-  color: var(--color-base-tertiary);
-}
-.off-black {
-  color: var(--color-font);
-}
-.off-black-background {
-  color: var(--color-base-tertiary);
-  background-color: var(--color-font);
-}
-.on-colour {
-  color: var(--color-active);
-}
-.no-colour {
-  color: var(--color-danger);
-}
 
 /* public/css/layout/_ol.css */
 .ol-scale-line {
