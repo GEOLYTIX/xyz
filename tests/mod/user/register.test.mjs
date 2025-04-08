@@ -2,6 +2,13 @@ globalThis.xyzEnv = {
   PRIVATE: '192.168.1.1:3000|user:password|acl.test',
 };
 
+const originalWarn = console.warn;
+const mockWarn = [];
+
+console.warn = (log) => {
+  mockWarn.push(log);
+};
+
 await codi.describe(
   { name: 'register: ', id: 'user_register', parentId: 'user' },
   async () => {
@@ -105,3 +112,5 @@ await codi.describe(
     );
   },
 );
+
+console.warn = originalWarn;
