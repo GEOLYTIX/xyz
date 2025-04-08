@@ -1,10 +1,8 @@
 .searchbox {
   width: 100%;
   overflow: visible;
-  position: relative;
   background-color: var(--color-base-tertiary);
   isolation: isolate;
-  z-index: 4; /* required to layer higher than highest used z-index for slider element */
 
   & > ul {
     display: none;
@@ -15,10 +13,13 @@
     margin-top: -1px;
     text-align: left;
     background-color: var(--color-base-tertiary);
+    z-index: 4; /* required to layer higher than highest used z-index for slider element */
 
     & > li {
       padding: 5px;
       color: var(--color-font);
+      margin: 0 0.1em;
+      border-radius: 2px;
     }
 
     & > li:hover {
@@ -27,7 +28,9 @@
     }
 
     & > li.selected {
-      background-color: var(--color-base-secondary);
+      background-color: var(--color-primary);
+      border: 1px solid var(--color-border);
+      color: var(--color-font-contrast);
     }
 
     & .label {
