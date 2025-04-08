@@ -156,11 +156,16 @@ async function locales(req, res) {
 @async
 
 @description
-The getNestedLocales is returned if the locales method is called with a locale property.
+The getNestedLocales is returned if the locales method is called with a locale
+property.
 
-The locale will requested from the getLocale module. An array of nested locales defined in the locales property of the locale is checked for user access.
+The locale will be requested from the getLocale module. An array of nested
+locales defined in the locales property of the locale is checked for user access.
 
-Nested locales accessible to the user are returned. The key for a nested locale is an array left to right. For `[UK,London]` the London locale will be nested in the UK locale. The name for a nested locale will be concatenated like so `UK/London`.
+Nested locales accessible to the user are returned. The key for a nested locale
+is an array left to right. For `[UK,London]` the London locale will be nested
+in the UK locale. The name for a nested locale will be concatenated like so
+`UK/London`.
 
 @param {req} req HTTP request.
 @param {res} res HTTP response.
@@ -168,7 +173,8 @@ Nested locales accessible to the user are returned. The key for a nested locale 
 @property {string} params.locale Request nested locales for the locale.
 @property {Object} [params.user] User requesting the locales.
 
-@returns {res} The HTTP response with either an error.message or JSON array of locales in workspace.
+@returns {res} The HTTP response with either an error.message or JSON array of
+locales in workspace.
 */
 async function getNestedLocales(req, res) {
   // The locale property is required for nested locales.
