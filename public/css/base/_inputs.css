@@ -57,7 +57,7 @@ input[type='time'],
 input[type='datetime-local'] {
   background-color: var(--color-base);
   border: 1px solid var(--color-border);
-  color: var(--color-primary);
+  color: var(--color-font);
   padding: 5px;
   border-radius: 3px;
 
@@ -71,7 +71,7 @@ input[type='number'] {
   padding: 5px;
   border: none;
   background-color: var(--color-base);
-  color: var(--color-primary);
+  color: var(--color-font);
   border-bottom: 1px dotted var(--color-border);
   display: inline-block;
   width: 100%;
