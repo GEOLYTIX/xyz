@@ -77,7 +77,7 @@ export default async function getLocale(params, parentLocale) {
   }
 
   if (locale instanceof Error) {
-    return new Error(locale.message)
+    return new Error(locale.message);
   }
 
   locale = await mergeTemplates(locale);
