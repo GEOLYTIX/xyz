@@ -76,6 +76,10 @@ export default async function getLocale(params, parentLocale) {
     locale = await getTemplate(localeKey);
   }
 
+  if (locale instanceof Error) {
+    return new Error(locale.message)
+  }
+
   locale = await mergeTemplates(locale);
 
   if (!Roles.check(locale, params.user?.roles)) {
