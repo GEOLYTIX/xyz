@@ -302,7 +302,7 @@ input[type=search]::-webkit-search-cancel-button:hover {
 
 /* public/css/base/_material_icons.css */
 .material-symbols-outlined-important {
-  font-family: "Material Symbols Outlined" !important;
+  font-family: "Material Symbols Outlined", sans-serif !important;
 }
 .material-symbols-outlined {
   font-variation-settings:
