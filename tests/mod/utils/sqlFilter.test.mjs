@@ -1,5 +1,13 @@
 import sqlfilter from '../../../mod/utils/sqlFilter.js';
 
+const originalConsole = console.warn;
+
+const mockWarns = [];
+
+console.warn = (log) => {
+  mockWarns.push(log);
+};
+
 codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
   codi.it(
     {
@@ -311,3 +319,5 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
     },
   );
 });
+
+console.warn = originalConsole;
