@@ -45,7 +45,7 @@ const filterTypes = {
     return `(${val
       .split(',')
       .filter((val) => val.length > 0)
-      .map((val) => `"${col}" ILIKE ${addValues(`${val}%`, 'string')}`)
+      .map((val) => `"${col}" ILIKE ${addValues(val+'%', 'string')}`)
       .join(' OR ')})`;
   },
 
