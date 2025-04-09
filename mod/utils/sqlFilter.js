@@ -49,11 +49,7 @@ const filterTypes = {
       .join(' OR ')})`;
   },
 
-  match: (col, val) => {
-    console.log(val);
-
-    return `"${col}"::text = \$${addValues(val, 'string')}`;
-  },
+  match: (col, val) => `"${col}"::text = \$${addValues(val, 'string')}`,
 };
 
 let SQLparams;
