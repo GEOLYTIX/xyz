@@ -1,10 +1,24 @@
 /**
+## /utils/sqlFilter
+The sqlFilter module export a utility method to create SQL filter strings for SQL query templates.
 @module /utils/sqlFilter
-@description The sqlFilter module is used to convert the filter object into a SQL query string.
-@exports sqlfilter
 */
 
-// The filterTypes object contains methods for each filter type.
+/**
+@typedef {Object} filterTypes
+The filterTypes object contains methods for each filter type.
+@property {function} eq The value is numeric and must be equal compared with the field.
+@property {function} gt The value is numeric and must be greater than compared with the field.
+@property {function} gte The value is numeric and must be greater than or equal compared with the field.
+@property {function} lt The value is numeric and must be lesser than compared with the field.
+@property {function} lte The value is numeric and must be lesser than or equal compared with the field.
+@property {function} boolean The value is boolean and must be the same as IS the field.
+@property {function} null The field must be NULL.
+@property {function} ni The field must be NOT IN the value array.
+@property {function} in The field must be IN the value array.
+@property {function} like The value is a string which is like the field.
+@property {function} match The value is a string which must be the same as the field.
+*/
 const filterTypes = {
   eq: (col, val) => `"${col}" = \$${addValues(val, 'numeric')}`,
 
@@ -35,7 +49,11 @@ const filterTypes = {
       .join(' OR ')})`;
   },
 
-  match: (col, val) => `"${col}"::text = \$${addValues(val, 'string')}`,
+  match: (col, val) => {
+    console.log(val);
+
+    return `"${col}"::text = \$${addValues(val, 'string')}`;
+  },
 };
 
 let SQLparams;
@@ -74,9 +92,10 @@ If the filter is a string, the filter will be returned as is.
 */
 export default sqlfilter;
 
-function sqlfilter(filter, params) {
+function sqlfilter(filter, req) {
+  SQLparams = req.params.SQL;
   //Check to see that params is an array and that the values of the params are of valid type.
-  if (!Array.isArray(params)) {
+  if (!Array.isArray(SQLparams)) {
     throw new TypeError(
       'Expected params to be an array of valid types (string, number, boolean, object, or bigint)',
     );
@@ -84,18 +103,15 @@ function sqlfilter(filter, params) {
 
   if (typeof filter === 'string') return filter;
 
-  SQLparams = params;
-
   // Filter in an array will be conditional OR
-  if (filter.length)
-    return `(${filter
+  if (Array.isArray(filter)) {
+    const filters = filter.map((filter) => mapFilterEntries(filter, req));
 
-      // Map filter in array with OR conjuction
-      .map((filter) => mapFilterEntries(filter))
-      .join(' OR ')})`;
+    return `(${filters.join(' OR ')})`;
+  }
 
   // Filter in an object will be conditional AND
-  return mapFilterEntries(filter);
+  return mapFilterEntries(filter, req);
 }
 
 /**
@@ -103,11 +119,11 @@ function sqlfilter(filter, params) {
 @description 
 The mapFilterEntries method is used to map the filter entries and convert them into a SQL query string.
 The method also validates the filter entries against SQL parameter validation.
+A string match filter for the user.email is added to the filter if the filter entry value has a user property.
 @param {Object} filter
 @returns {string} SQL query string
 */
-
-function mapFilterEntries(filter) {
+function mapFilterEntries(filter, req) {
   const SQLvalidation = /^[a-zA-Z_]\w*$/;
 
   if (Object.keys(filter).some((key) => !SQLvalidation.test(key))) {
@@ -121,29 +137,31 @@ function mapFilterEntries(filter) {
     return;
   }
 
-  return `(${Object.entries(filter)
+  const filters = [];
 
-    // Map filter entries
-    .map((entry) => {
-      const field = entry[0];
-      const value = entry[1];
+  for (const [field, value] of Object.entries(filter)) {
+    // Array entry values represent conditional OR
+    if (Array.isArray(value)) {
+      filters.push(sqlfilter(value));
+      continue;
+    }
 
-      // Array entry values represent conditional OR
-      if (value.length) return sqlfilter(value);
+    const filter = Object.keys(value)
+      .filter((filterType) => Object.hasOwn(filterTypes, filterType))
+      .map((filterType) => filterTypes[filterType](field, value[filterType]));
 
-      // Call filter type method for matching filter entry value
-      // Multiple filterTypes for the same field will be joined with AND
-      return Object.keys(value)
-        .filter((filterType) => !!filterTypes[filterType])
-        .map((filterType) => filterTypes[filterType](field, value[filterType]))
-        .join(' AND ');
-    })
+    // Add user filter
+    if (Object.hasOwn(value, 'user')) {
+      filter.push(
+        `"${field}"::text = \$${addValues(req.params.user?.email, 'string')}`,
+      );
+    }
 
-    // Filter out undefined / escaped filter
-    .filter((f) => typeof f !== 'undefined')
+    filters.push(filter.join(' AND '));
+  }
 
-    // Join filter with conjunction
-    .join(' AND ')})`;
+  // Return joined filters string.
+  return `(${filters.join(' AND ')})`;
 }
 
 /**
@@ -156,17 +174,6 @@ Check whether val param is of expected type.
 @returns boolean 
 */
 function isValidParam(val, type) {
-  // Object containing type checking functions for each supported type
-  const typeCheckers = {
-    // Uses native Array.isArray for array checking
-    array: Array.isArray,
-    // Checks if value is strictly a string using typeof
-    string: (val) => typeof val === 'string',
-    // Checks if value is a valid number and not null
-    // Note: isNaN('123') returns false, so this also accepts numeric strings
-    numeric: (val) => !isNaN(val) && val !== null,
-  };
-
   // Check if the requested type is supported
   if (!typeCheckers.hasOwnProperty(type)) {
     return new Error(`Unsupported type: ${type}`);
@@ -183,3 +190,20 @@ function isValidParam(val, type) {
   // If we reach here, the value is valid
   return null;
 }
+
+/**
+@typedef {Object} typeCheckers
+Object containing type checking functions for each supported type
+@property {function} array The value is an array.
+@property {function} string The value is typeof string.
+@property {function} numeric The value is a number.
+*/
+const typeCheckers = {
+  // Uses native Array.isArray for array checking
+  array: Array.isArray,
+  // Checks if value is strictly a string using typeof
+  string: (val) => typeof val === 'string',
+  // Checks if value is a valid number and not null
+  // Note: isNaN('123') returns false, so this also accepts numeric strings
+  numeric: (val) => !isNaN(val) && val !== null,
+};
