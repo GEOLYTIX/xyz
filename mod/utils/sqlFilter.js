@@ -20,23 +20,23 @@ The filterTypes object contains methods for each filter type.
 @property {function} match The value is a string which must be the same as the field.
 */
 const filterTypes = {
-  eq: (col, val) => `"${col}" = \$${addValues(val, 'numeric')}`,
+  eq: (col, val) => `"${col}" = ${addValues(val, 'numeric')}`,
 
-  gt: (col, val) => `"${col}" > \$${addValues(val, 'numeric')}`,
+  gt: (col, val) => `"${col}" > ${addValues(val, 'numeric')}`,
 
-  gte: (col, val) => `"${col}" >= \$${addValues(val, 'numeric')}`,
+  gte: (col, val) => `"${col}" >= ${addValues(val, 'numeric')}`,
 
-  lt: (col, val) => `"${col}" < \$${addValues(val, 'numeric')}`,
+  lt: (col, val) => `"${col}" < ${addValues(val, 'numeric')}`,
 
-  lte: (col, val) => `"${col}" <= \$${addValues(val, 'numeric')}`,
+  lte: (col, val) => `"${col}" <= ${addValues(val, 'numeric')}`,
 
   boolean: (col, val) => `"${col}" IS ${!!val}`,
 
   null: (col, val) => `"${col}" IS ${!val ? 'NOT' : ''} NULL`,
 
-  ni: (col, val) => `NOT "${col}" = ANY (\$${addValues([val], 'array')})`,
+  ni: (col, val) => `NOT "${col}" = ANY (${addValues([val], 'array')})`,
 
-  in: (col, val) => `"${col}" = ANY (\$${addValues([val], 'array')})`,
+  in: (col, val) => `"${col}" = ANY (${addValues([val], 'array')})`,
 
   like: (col, val) => {
     // The val string must be decoded.
@@ -45,11 +45,11 @@ const filterTypes = {
     return `(${val
       .split(',')
       .filter((val) => val.length > 0)
-      .map((val) => `"${col}" ILIKE \$${addValues(`${val}%`, 'string')}`)
+      .map((val) => `"${col}" ILIKE ${addValues(`${val}%`, 'string')}`)
       .join(' OR ')})`;
   },
 
-  match: (col, val) => `"${col}"::text = \$${addValues(val, 'string')}`,
+  match: (col, val) => `"${col}"::text = ${addValues(val, 'string')}`,
 };
 
 let SQLparams;
@@ -72,7 +72,7 @@ function addValues(val, type) {
   }
 
   SQLparams.push(val);
-  return SQLparams.length;
+  return '$' + SQLparams.length;
 }
 
 /**
@@ -149,7 +149,7 @@ function mapFilterEntries(filter, req) {
     // Add user filter
     if (Object.hasOwn(value, 'user')) {
       filter.push(
-        `"${field}"::text = \$${addValues(req.params.user?.email, 'string')}`,
+        `"${field}"::text = ${addValues(req.params.user?.email, 'string')}`,
       );
     }
 
