@@ -27,7 +27,10 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
 
       const expected = '("fieldname" = $2)';
 
-      codi.assertEqual(sqlfilter(filter, {params:{SQL:SQLparams}}), expected);
+      codi.assertEqual(
+        sqlfilter(filter, { params: { SQL: SQLparams } }),
+        expected,
+      );
     },
   );
 
@@ -49,7 +52,10 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
 
       const expected = '("fieldname" > $2)';
 
-      codi.assertEqual(sqlfilter(filter, {params:{SQL:SQLparams}}), expected);
+      codi.assertEqual(
+        sqlfilter(filter, { params: { SQL: SQLparams } }),
+        expected,
+      );
     },
   );
 
@@ -71,7 +77,10 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
 
       const expected = '("fieldname" >= $2)';
 
-      codi.assertEqual(sqlfilter(filter, {params:{SQL:SQLparams}}), expected);
+      codi.assertEqual(
+        sqlfilter(filter, { params: { SQL: SQLparams } }),
+        expected,
+      );
     },
   );
 
@@ -93,7 +102,10 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
 
       const expected = '("fieldname" < $2)';
 
-      codi.assertEqual(sqlfilter(filter, {params:{SQL:SQLparams}}), expected);
+      codi.assertEqual(
+        sqlfilter(filter, { params: { SQL: SQLparams } }),
+        expected,
+      );
     },
   );
 
@@ -115,7 +127,10 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
 
       const expected = '("fieldname" <= $2)';
 
-      codi.assertEqual(sqlfilter(filter, {params:{SQL:SQLparams}}), expected);
+      codi.assertEqual(
+        sqlfilter(filter, { params: { SQL: SQLparams } }),
+        expected,
+      );
     },
   );
 
@@ -137,7 +152,10 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
 
       const expected = '("fieldname" IS true)';
 
-      codi.assertEqual(sqlfilter(filter, {params:{SQL:SQLparams}}), expected);
+      codi.assertEqual(
+        sqlfilter(filter, { params: { SQL: SQLparams } }),
+        expected,
+      );
     },
   );
 
@@ -159,7 +177,10 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
 
       const expected = '("fieldname" IS  NULL)';
 
-      codi.assertEqual(sqlfilter(filter, {params:{SQL:SQLparams}}), expected);
+      codi.assertEqual(
+        sqlfilter(filter, { params: { SQL: SQLparams } }),
+        expected,
+      );
     },
   );
 
@@ -181,7 +202,10 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
 
       const expected = '(NOT "fieldname" = ANY ($2))';
 
-      codi.assertEqual(sqlfilter(filter, {params:{SQL:SQLparams}}), expected);
+      codi.assertEqual(
+        sqlfilter(filter, { params: { SQL: SQLparams } }),
+        expected,
+      );
     },
   );
 
@@ -203,7 +227,10 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
 
       const expected = '("fieldname" = ANY ($2))';
 
-      codi.assertEqual(sqlfilter(filter, {params:{SQL:SQLparams}}), expected);
+      codi.assertEqual(
+        sqlfilter(filter, { params: { SQL: SQLparams } }),
+        expected,
+      );
     },
   );
 
@@ -225,7 +252,10 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
 
       const expected = '(("fieldname" ILIKE $2))';
 
-      codi.assertEqual(sqlfilter(filter, {params:{SQL:SQLparams}}), expected);
+      codi.assertEqual(
+        sqlfilter(filter, { params: { SQL: SQLparams } }),
+        expected,
+      );
     },
   );
 
@@ -247,7 +277,10 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
 
       const expected = '("fieldname"::text = $2)';
 
-      codi.assertEqual(sqlfilter(filter, {params:{SQL:SQLparams}}), expected);
+      codi.assertEqual(
+        sqlfilter(filter, { params: { SQL: SQLparams } }),
+        expected,
+      );
     },
   );
 
@@ -270,7 +303,10 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
 
       const expected = '("fieldname_a" = $3 AND "fieldname_b" > $4)';
 
-      codi.assertEqual(sqlfilter(filter, {params:{SQL:SQLparams}}), expected);
+      codi.assertEqual(
+        sqlfilter(filter, { params: { SQL: SQLparams } }),
+        expected,
+      );
     },
   );
 
@@ -297,7 +333,10 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
 
       const expected = '(("fieldname_a" = $3) OR ("fieldname_b" > $4))';
 
-      codi.assertEqual(sqlfilter(filter, {params:{SQL:SQLparams}}), expected);
+      codi.assertEqual(
+        sqlfilter(filter, { params: { SQL: SQLparams } }),
+        expected,
+      );
     },
   );
 
@@ -315,7 +354,10 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
         },
       };
 
-      codi.assertEqual(sqlfilter(filter, {params:{SQL:SQLparams}}), undefined);
+      codi.assertEqual(
+        sqlfilter(filter, { params: { SQL: SQLparams } }),
+        undefined,
+      );
     },
   );
 });
