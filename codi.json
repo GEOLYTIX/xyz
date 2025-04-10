@@ -1,3 +1,4 @@
 {
-  "excludeDirectories": ["lib", "browser", "_mapp.test.mjs"]
+  "excludeDirectories": ["lib", "browser", "_mapp.test.mjs"],
+  "preload": "tests/__preload"
 }
