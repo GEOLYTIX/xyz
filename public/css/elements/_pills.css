@@ -10,7 +10,7 @@
     border-radius: 2px;
     font-size: 0.9em;
     font-weight: bold;
-    color: var(--color-light);
+    color: var(--color-font-contrast);
     background-color: var(--color-primary);
     user-select: none;
 

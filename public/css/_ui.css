@@ -1,14 +1,10 @@
 @import url('./base/_colours.css');
 
-@import url('./base/_dark_mode.css');
-
 @import url('./base/_common.css');
 
 @import url('./base/_button.css');
 
 @import url('./base/_globals.css');
-
-@import url('./base/_icons.css');
 
 @import url('./base/_inputs.css');
 
@@ -41,8 +37,6 @@
 @import url('./layout/_layerview.css');
 
 @import url('./layout/_locationview.css');
-
-@import url('./layout/_map_toolbar.css');
 
 @import url('./layout/_scrollbar.css');
 

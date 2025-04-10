@@ -8,6 +8,13 @@ const mockMailer = codi.mock.module('../../../mod/utils/mailer.js', {
   defaultExport: mailerfn,
 });
 
+const originalLog = console.log;
+const mockLogs = [];
+
+console.log = (log) => {
+  mockLogs.push(log);
+};
+
 await codi.describe(
   { name: 'delete:', id: 'user_delete', parentId: 'user' },
   async () => {
@@ -163,3 +170,4 @@ await codi.describe(
 
 mockACL.restore();
 mockMailer.restore();
+console.log = originalLog;

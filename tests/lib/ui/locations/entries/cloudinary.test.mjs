@@ -75,19 +75,21 @@ export function cloudinary() {
 
           const documentEntry = mapp.ui.locations.entries.documents(entry);
 
-          const linkHolder = documentEntry.children[1];
+          const linkHolder = documentEntry.querySelector('.link-with-img');
+
           codi.assertEqual(
-            linkHolder.children[1].getAttribute('href'),
+            linkHolder.querySelector('a').getAttribute('href'),
             entry.value[0],
-            'delete',
+            'Document href should match entry value',
           );
 
           codi.assertTrue(
-            linkHolder.children[0].classList.contains('delete'),
+            linkHolder.querySelector('.delete').getAttribute('Title') ===
+              'Delete',
             'Document should have a delete button',
           );
           codi.assertEqual(
-            linkHolder.children[0].getAttribute('data-href'),
+            linkHolder.querySelector('.delete').getAttribute('data-href'),
             entry.value[0],
             'Delete button src should match entry value',
           );
