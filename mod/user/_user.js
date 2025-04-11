@@ -104,6 +104,10 @@ The remote_address determined from the request header is stored in the previousA
 @property {Object} req.header HTTP request header.
 */
 function debounceRequest(req, res) {
+
+  // Admin user requests should not be debounced.
+  if (req.params.user?.admin) return;
+
   if (!req.headers['x-forwarded-for']) {
     req.params.remote_address = 'unknown';
   } else {
