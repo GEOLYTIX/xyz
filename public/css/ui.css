@@ -489,6 +489,7 @@ dialog {
   background-color: var(--color-base);
   color: var(--color-font);
   isolation: isolate;
+  user-select: none;
   & > button.close {
     position: absolute;
     top: 0em;
