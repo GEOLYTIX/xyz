@@ -1,4 +1,6 @@
 .legend {
+  user-select: none;
+  
   & .contents-wrapper,
   &.content .contents-wrapper {
     margin-top: 0.5em;
