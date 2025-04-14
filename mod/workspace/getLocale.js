@@ -68,7 +68,7 @@ export default async function getLocale(params, parentLocale) {
 
   let locale;
 
-  if (!localeKey) {
+  if (!localeKey || localeKey === 'locale') {
     locale = workspace.locale;
   } else if (Object.hasOwn(workspace.locales, localeKey)) {
     locale = workspace.locales[localeKey];

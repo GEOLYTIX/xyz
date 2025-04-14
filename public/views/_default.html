@@ -325,9 +325,15 @@
       `${mapp.host}/api/workspace/locales`,
     );
 
+    // Assign locale from current [URL parameter] or as first key from locales array.
+    let locale = mapp.hooks.current.locale || locales[0]?.key
+    
+    // Use 'locale' as default if undefined.
+    locale ??= 'locale'
+
     // Get locale with list of layers from Workspace API.
-    let locale = await mapp.utils.xhr(
-      `${mapp.host}/api/workspace/locale?locale=${mapp.hooks.current.locale || locales[0]?.key}&layers=true`,
+    locale = await mapp.utils.xhr(
+      `${mapp.host}/api/workspace/locale?locale=${locale}&layers=true`,
     );
 
     if (locale instanceof Error) {

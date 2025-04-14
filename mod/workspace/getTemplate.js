@@ -80,9 +80,7 @@ export default async function getTemplate(key) {
   const response = await getFrom[method](template.src);
 
   if (response instanceof Error) {
-    template.err = response;
-
-    return template;
+    return response;
   }
 
   // Template is a module.
@@ -98,9 +96,7 @@ export default async function getTemplate(key) {
       // Set the render function to the default export or the entire module
       template.render = importedModule.default || importedModule;
     } catch (err) {
-      console.error(err);
-      template.err = err;
-      return template;
+      return err;
     }
     return template;
   }

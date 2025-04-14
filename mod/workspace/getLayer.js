@@ -60,15 +60,15 @@ export default async function getLayer(params, locale) {
 
   let layer;
 
-  if (!Object.hasOwn(locale.layers, params.layer)) {
+  if (Object.hasOwn(locale.layers, params.layer)) {
+    layer = locale.layers[params.layer];
+  } else {
     // A layer maybe defined as a template only.
     layer = await getTemplate(params.layer);
 
     if (!layer || layer instanceof Error) {
       return new Error('Unable to validate layer param.');
     }
-  } else {
-    layer = locale.layers[params.layer];
   }
 
   // layer maybe null.
@@ -78,6 +78,10 @@ export default async function getLayer(params, locale) {
   layer.key ??= params.layer;
 
   layer = await mergeTemplates(layer);
+
+  if (layer instanceof Error) {
+    return layer;
+  }
 
   if (!Roles.check(layer, params.user?.roles)) {
     return new Error('Role access denied.');

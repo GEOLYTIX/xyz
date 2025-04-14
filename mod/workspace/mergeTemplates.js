@@ -51,14 +51,8 @@ export default async function mergeTemplates(obj) {
     const template = await getTemplate(obj.template);
 
     // Failed to get template matching obj.template from template.src!
-    if (template.err instanceof Error) {
-      obj.err ??= [];
-      obj.err.push(template.err.message);
-
-      // The template is not in the workspace.templates{}
-    } else if (template instanceof Error) {
-      obj.err ??= [];
-      obj.err.push(template.message);
+    if (template instanceof Error) {
+      return template;
     } else {
       // Merge obj --> template
       // Template must be cloned to prevent cross polination and array aggregation.
@@ -70,14 +64,8 @@ export default async function mergeTemplates(obj) {
     const template = await getTemplate(template_key);
 
     // Failed to retrieve template matching template_key
-    if (template.err instanceof Error) {
-      obj.err ??= [];
-      obj.err.push(template.err.message);
-
-      // A template matching the template_key does not exist.
-    } else if (template instanceof Error) {
-      obj.err ??= [];
-      obj.err.push(`${template_key}: ${template.message}`);
+    if (template instanceof Error) {
+      return template;
     } else {
       //The object key must not be overwritten by a template key.
       delete template.key;
