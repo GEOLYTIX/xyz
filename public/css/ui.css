@@ -52,6 +52,7 @@ body {
 .link-with-img > * {
   display: inline-block;
   vertical-align: middle;
+  user-select: none;
 }
 .val-changed {
   input[type=number],
