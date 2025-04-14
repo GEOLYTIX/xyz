@@ -323,7 +323,6 @@ input[type=search]::-webkit-search-cancel-button:hover {
 dialog.alert-confirm {
   width: 350px;
   max-height: 70%;
-  z-index: 1001;
   user-select: none;
   &::-webkit-scrollbar {
     display: none;
@@ -392,7 +391,7 @@ dialog.alert-confirm {
     bottom: 15em;
     left: 0;
     right: 0;
-    z-index: 99;
+    isolation: auto;
     color: var(--color-font);
     background: var(--color-base-tertiary);
     overflow: hidden;
@@ -412,7 +411,7 @@ dialog.alert-confirm {
       bottom: 15em;
       left: 0;
       right: 0;
-      z-index: 99;
+      isolation: auto;
       color: var(--color-font);
       background: var(--color-base-tertiary);
       overflow: hidden;
@@ -490,6 +489,7 @@ label.checkbox {
 dialog {
   background-color: var(--color-base);
   color: var(--color-font);
+  isolation: isolate;
   & > button.close {
     position: absolute;
     top: 0em;
@@ -497,6 +497,9 @@ dialog {
     height: 1em;
     width: 1em;
     margin: 0.4em;
+  }
+  &:focus {
+    outline: none;
   }
   & > header {
     display: flex;
@@ -523,23 +526,21 @@ dialog {
   }
   &.dialog {
     position: absolute;
-    border: none !important;
+    border: none;
     border-radius: 2px;
     cursor: grab;
     user-select: none;
     padding: 5px;
     overflow: unset !important;
-    isolation: isolate;
   }
   &.modal {
     position: fixed;
-    border: none !important;
+    border: none;
     border-radius: 2px;
     text-wrap: wrap;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 9999;
   }
   .minimize-btn::after {
     content: "minimize";
@@ -638,7 +639,6 @@ dialog {
 .dropdown {
   width: 100%;
   overflow: visible;
-  position: relative;
   background-color: var(--color-base-secondary);
   border: 1px solid var(--color-border);
   border-radius: 3px;
@@ -646,6 +646,16 @@ dialog {
     pointer-events: none;
     opacity: 0.4;
     color: var(--color-font);
+  }
+  &.active {
+    & > ul {
+      display: block;
+      position: absolute;
+      z-index: 4;
+    }
+    & > .head > .material-symbols-outlined:after {
+      content: "arrow_drop_up";
+    }
   }
   & > .head {
     padding: 5px;
@@ -680,7 +690,6 @@ dialog {
     border: 1px solid var(--color-border);
     margin-top: -1px;
     text-align: left;
-    z-index: 997;
     & > li {
       padding: 5px;
       color: var(--color-font);
@@ -693,6 +702,7 @@ dialog {
     }
     & > li.selected {
       background-color: var(--color-primary);
+      border: 1px solid var(--color-border);
       color: var(--color-font-contrast);
     }
     & .label {
@@ -702,14 +712,6 @@ dialog {
       font-size: 80%;
       font-weight: bold;
       background-color: var(--color-hover);
-    }
-  }
-  &.active {
-    & > ul {
-      display: block;
-    }
-    & > .head > .material-symbols-outlined:after {
-      content: "arrow_drop_up";
     }
   }
   &.dropdown-reverse > ul {
@@ -754,6 +756,11 @@ dialog {
       cursor: pointer;
       font-size: 0.8em;
       padding: 0 2px;
+      &:after {
+        content: "close";
+        color: var(--color-font-contrast);
+        vertical-align: middle;
+      }
     }
   }
 }
@@ -762,8 +769,8 @@ dialog {
 .searchbox {
   width: 100%;
   overflow: visible;
-  position: relative;
   background-color: var(--color-base-tertiary);
+  isolation: isolate;
   & > ul {
     display: none;
     max-height: 500px;
@@ -773,17 +780,21 @@ dialog {
     margin-top: -1px;
     text-align: left;
     background-color: var(--color-base-tertiary);
-    z-index: 999;
+    z-index: 4;
     & > li {
       padding: 5px;
       color: var(--color-font);
+      margin: 0 0.1em;
+      border-radius: 2px;
     }
     & > li:hover {
       background-color: var(--color-hover);
       cursor: pointer;
     }
     & > li.selected {
-      background-color: var(--color-base-secondary);
+      background-color: var(--color-primary);
+      border: 1px solid var(--color-border);
+      color: var(--color-font-contrast);
     }
     & .label {
       padding: 0 2px;
@@ -929,7 +940,7 @@ dialog {
   background-repeat: no-repeat;
   background-position: center;
   box-shadow: 3px 0px 6px -3px var(--color-base-tertiary);
-  z-index: 9999;
+  isolation: isolate;
   &:hover {
     cursor: col-resize;
   }
@@ -954,51 +965,47 @@ dialog {
 }
 
 /* public/css/layout/_cloudinary.css */
-.image,
-.images,
-.documents {
-  .drag_and_drop_zone {
-    width: 100%;
-    border: 1px dashed var(--color-border);
-    position: relative;
-    height: 100px;
-    input {
-      top: 0;
-      position: absolute;
-      outline: none;
-      height: 100%;
-      cursor: pointer;
-      opacity: 0;
-    }
-    p {
-      margin: auto;
-      text-align: center;
-      color: var(----color-text);
-      pointer-events: none;
-      user-select: none;
-      & > span {
-        vertical-align: middle;
-        margin: 0.2em;
-        font-size: 1.5em;
-      }
+.drag_and_drop_zone {
+  width: 100%;
+  border: 1px dashed var(--color-border);
+  position: relative;
+  height: 100px;
+  input {
+    top: 0;
+    position: absolute;
+    outline: none;
+    height: 100%;
+    cursor: pointer;
+    opacity: 0;
+  }
+  p {
+    margin: auto;
+    text-align: center;
+    color: var(--color-font);
+    pointer-events: none;
+    user-select: none;
+    & > span {
+      vertical-align: middle;
+      margin: 0.2em;
+      font-size: 1.5em;
     }
   }
-  .img-item {
-    position: relative;
-    & img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-    }
-    .delete {
-      position: absolute;
-      top: 0.2em;
-      right: 0.2em;
-      font-size: 1.5em;
-      background-color: var(--color-base-secondary);
-      padding: 0.1em;
-      border-radius: 50%;
-    }
+}
+.img-item {
+  position: relative;
+  & img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .delete {
+    position: absolute;
+    top: 0.2em;
+    right: 0.2em;
+    font-size: 1.5em;
+    background-color: var(--color-base-secondary);
+    padding: 0.1em;
+    border-radius: 50%;
   }
 }
 .images-grid {
@@ -1015,6 +1022,32 @@ dialog {
     width: 90px;
     height: 90px;
     flex-grow: 1;
+  }
+}
+
+/* public/css/layout/_image_preview.css */
+.interface-mask {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  isolation: isolate;
+  background-color: var(-color-base-secondary);
+  & > .bg-image {
+    margin: 5%;
+    height: 90%;
+    width: 90%;
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    & > .btn-close {
+      position: absolute;
+      top: 5%;
+      right: 5%;
+      width: 50px;
+      height: 50px;
+      background-color: var(--color-primary);
+    }
   }
 }
 
@@ -1325,30 +1358,6 @@ dialog {
   display: flex;
   flex-direction: column;
   gap: 5px;
-}
-.interface-mask {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  height: 100%;
-  z-index: 999999;
-  background-color: #eeea;
-  & > .bg-image {
-    margin: 5%;
-    height: 90%;
-    width: 90%;
-    background-repeat: no-repeat;
-    background-size: contain;
-    background-position: center;
-    & > .btn-close {
-      position: absolute;
-      top: 5%;
-      right: 5%;
-      width: 50px;
-      height: 50px;
-      background-color: var(--color-danger);
-    }
-  }
 }
 
 /* public/css/_ui.css */
