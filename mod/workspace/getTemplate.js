@@ -75,7 +75,7 @@ export default async function getTemplate(key) {
     // Unable to determine getFrom method.
     const err = new Error(`Cannot get: "${template.src}"`);
     console.error(err);
-    return err
+    return err;
   }
 
   const response = await getFrom[method](template.src);
