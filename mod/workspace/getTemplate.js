@@ -73,8 +73,9 @@ export default async function getTemplate(key) {
 
   if (!Object.hasOwn(getFrom, method)) {
     // Unable to determine getFrom method.
-    console.warn(`Cannot get: "${template.src}"`);
-    return template;
+    const err = new Error(`Cannot get: "${template.src}"`);
+    console.error(err);
+    return err
   }
 
   const response = await getFrom[method](template.src);

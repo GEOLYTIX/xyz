@@ -47,7 +47,7 @@ export default async function mergeTemplates(obj) {
   workspace = await workspaceCache();
 
   // The object has an implicit template to merge into.
-  if (obj.template) {
+  if (typeof obj.template === 'string') {
     const template = await getTemplate(obj.template);
 
     // Failed to get template matching obj.template from template.src!
