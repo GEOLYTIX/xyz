@@ -1,5 +1,6 @@
 label.checkbox {
   display: block;
+  user-select: none;
 
   &.disabled {
     opacity: 0.3;

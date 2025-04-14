@@ -451,6 +451,7 @@ dialog.alert-confirm {
 /* public/css/elements/_chkbox.css */
 label.checkbox {
   display: block;
+  user-select: none;
   &.disabled {
     opacity: 0.3;
     pointer-events: none;
