@@ -53,7 +53,6 @@ export function temporal() {
           parentId: 'utils_datetime',
         },
         () => {
-
           const params = {
             value: 1702483200, // December 13, 2023
             locale: 'en', // This is how the locale is defined when setting to mapp.user.language
@@ -66,7 +65,6 @@ export function temporal() {
             },
           };
 
-          
           const expectedDate = '13 December 2023 at 18:00';
           const date = mapp.utils.temporal.dateString(params);
 
