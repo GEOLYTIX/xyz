@@ -25,6 +25,7 @@ a {
   text-decoration: none;
   font-weight: bold;
   color: var(--color-primary);
+  user-select: none;
 }
 
 li {

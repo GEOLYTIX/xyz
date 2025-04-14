@@ -3,6 +3,7 @@ button {
   outline: none;
   background: none;
   text-align: center;
+  user-select: none;
   color: var(--color-primary);
 
   > .material-symbols-outlined {

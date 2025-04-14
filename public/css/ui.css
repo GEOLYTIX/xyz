@@ -100,6 +100,7 @@ button {
   outline: none;
   background: none;
   text-align: center;
+  user-select: none;
   color: var(--color-primary);
   > .material-symbols-outlined {
     pointer-events: none;
@@ -167,6 +168,7 @@ a {
   text-decoration: none;
   font-weight: bold;
   color: var(--color-primary);
+  user-select: none;
 }
 li {
   list-style-type: none;
@@ -588,6 +590,7 @@ dialog {
     display: flex;
     align-items: center;
     color: var(--color-font);
+    user-select: none;
     .material-symbols-outlined {
       font-size: 1.5em;
     }
