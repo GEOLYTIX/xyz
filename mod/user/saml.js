@@ -156,9 +156,18 @@ const getModule = async () => {
     if (samlKeys.length > 0) {
       console.log('SAML2 module is not available.');
     }
-    return null;
+    return saml_not_configured;
   }
 };
+
+/**
+@function saml_not_configured
+The SAML service has not been configured correctly.
+*/
+function saml_not_configured(req, res) {
+
+  res.status(405).send('SAML not configured');
+}
 
 const exportedModule = await getModule();
 
