@@ -60,6 +60,24 @@ export default async function mergeTemplates(obj) {
     }
   }
 
+  // The object has a template object to merge into.
+  if (typeof obj.template?.key === 'string') {
+    const template = await getTemplate(obj.template.key);
+
+    // Failed to get template matching obj.template from template.src!
+    if (template instanceof Error) {
+      return template;
+    } else {
+      // Merge obj --> template
+      // Template must be cloned to prevent cross polination and array aggregation.
+      obj = merge(structuredClone(template), obj);
+    }
+  }
+
+  delete obj.src;
+  delete obj.template;
+  delete obj._type;
+
   for (const template_key of obj.templates || []) {
     const template = await getTemplate(template_key);
 
