@@ -54,7 +54,7 @@
       }
 
       #ctrls {
-        z-index: 9999;
+        isolation: isolate;
       }
 
       #ctrl-tabs {
@@ -173,6 +173,7 @@
           position: relative;
           display: flex;
           flex-direction: column;
+          background-color: inherit;
         }
       }
     </style>
@@ -347,7 +348,8 @@
         // Create the Dialog.node
         mapp.ui.elements.dialog({
           css_style:
-            'padding: 1em; border-color: #000; z-index:9999; max-width: 50%;',
+            'padding: 1em; max-width: 50%;',
+          header: mapp.utils.html`<h4>${mapp.dictionary.information}`,
           content: mapp.dictionary.no_locales,
           target: document.body,
           top: '40%',
@@ -416,7 +418,8 @@
       if (!locale.layers?.length && !(locale instanceof Error)) {
         mapp.ui.elements.dialog({
           css_style:
-            'padding: 1em; border-color: #000; z-index:9999; max-width: 50%;',
+            'padding: 1em; max-width: 50%;',
+          header: mapp.utils.html`<h4>${mapp.dictionary.information}`,
           content: mapp.dictionary.no_layers,
           target: document.body,
           top: '40%',
