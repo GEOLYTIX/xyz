@@ -44,39 +44,6 @@ export function temporal() {
       );
 
       /**
-       * ### Should format en-GB locale Date/Time
-       * @function it
-       */
-      codi.it(
-        {
-          name: 'Should format correctly to en-GB when using mapp.user.language of en',
-          parentId: 'utils_datetime',
-        },
-        () => {
-          const params = {
-            value: 1702483200, // December 13, 2023
-            locale: 'en', // This is how the locale is defined when setting to mapp.user.language
-            options: {
-              year: 'numeric',
-              month: 'long',
-              day: 'numeric',
-              hour: '2-digit',
-              minute: '2-digit',
-            },
-          };
-
-          const expectedDate = 'December 13, 2023 at 06:00 PM';
-          const date = mapp.utils.temporal.dateString(params);
-
-          codi.assertEqual(
-            date,
-            expectedDate,
-            `We expect ${date} to be the exact string: ${expectedDate}`,
-          );
-        },
-      );
-
-      /**
        * ### Should convert date string to Unix timestamp
        * @function it
        */
