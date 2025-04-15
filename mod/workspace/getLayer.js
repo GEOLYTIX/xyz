@@ -74,7 +74,6 @@ export default async function getLayer(params) {
   layer = await mergeTemplates(layer);
 
   if (locale.layer) {
-
     layer = merge(structuredClone(locale.layer), layer);
   }
 
