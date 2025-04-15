@@ -108,7 +108,7 @@ let samlStrat, samlConfig;
 
 const getModule = async () => {
   try {
-    const SAML = await import('@node-saml/node-saml');
+    const { SAML } = await import('@node-saml/node-saml');
     // Initialize SAML configuration
     samlConfig = {
       callbackUrl: xyzEnv.SAML_ACS,
@@ -160,7 +160,7 @@ const getModule = async () => {
   }
 };
 
-const exportedModule = getModule();
+const exportedModule = await getModule();
 
 export default exportedModule;
 
