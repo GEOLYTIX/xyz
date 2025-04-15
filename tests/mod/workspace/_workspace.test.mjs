@@ -101,7 +101,6 @@ await codi.describe({ name: 'workspace:', id: 'workspace' }, async () => {
     },
   );
 
-  //TODO: How do we want to handle providing locales that don't exist?
   codi.it(
     {
       name: 'nested locales bogus locale',
