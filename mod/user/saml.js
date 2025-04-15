@@ -165,7 +165,6 @@ const getModule = async () => {
 The SAML service has not been configured correctly.
 */
 function saml_not_configured(req, res) {
-
   res.status(405).send('SAML not configured');
 }
 
