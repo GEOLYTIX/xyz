@@ -3,8 +3,12 @@ button {
   outline: none;
   background: none;
   text-align: center;
-  user-select: none;
   color: var(--color-primary);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 
   > .material-symbols-outlined {
     pointer-events: none;

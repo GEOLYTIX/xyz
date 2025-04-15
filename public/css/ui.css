@@ -52,6 +52,10 @@ body {
 .link-with-img > * {
   display: inline-block;
   vertical-align: middle;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 .val-changed {
@@ -101,8 +105,12 @@ button {
   outline: none;
   background: none;
   text-align: center;
-  user-select: none;
   color: var(--color-primary);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   > .material-symbols-outlined {
     pointer-events: none;
   }
@@ -169,6 +177,10 @@ a {
   text-decoration: none;
   font-weight: bold;
   color: var(--color-primary);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 }
 li {
@@ -323,6 +335,10 @@ input[type=search]::-webkit-search-cancel-button:hover {
 dialog.alert-confirm {
   width: 350px;
   max-height: 70%;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   &::-webkit-scrollbar {
     display: none;
@@ -452,6 +468,10 @@ dialog.alert-confirm {
 /* public/css/elements/_chkbox.css */
 label.checkbox {
   display: block;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   &.disabled {
     opacity: 0.3;
@@ -491,6 +511,10 @@ dialog {
   background-color: var(--color-base);
   color: var(--color-font);
   isolation: isolate;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   & > button.close {
     position: absolute;
@@ -593,6 +617,10 @@ dialog {
     display: flex;
     align-items: center;
     color: var(--color-font);
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
     .material-symbols-outlined {
       font-size: 1.5em;
@@ -754,6 +782,10 @@ dialog {
     font-weight: bold;
     color: var(--color-font-contrast);
     background-color: var(--color-primary);
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
     button {
       cursor: pointer;
@@ -986,6 +1018,10 @@ dialog {
     text-align: center;
     color: var(--color-font);
     pointer-events: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
     & > span {
       vertical-align: middle;
@@ -1069,6 +1105,10 @@ dialog {
   }
   & > .meta {
     padding-bottom: 5px;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
   }
   &.expanded {
