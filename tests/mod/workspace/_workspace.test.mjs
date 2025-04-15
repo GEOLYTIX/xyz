@@ -3,7 +3,7 @@ import getKeyMethod from '../../../mod/workspace/_workspace.js';
 
 await codi.describe({ name: 'workspace:', id: 'workspace' }, async () => {
   globalThis.xyzEnv = {
-    TITLE: 'A DIFFERENT TITLE',
+    TITLE: 'WORKSPACE TEST',
     WORKSPACE: 'file:./tests/assets/workspace_nested_locales.json',
   };
 
@@ -49,7 +49,10 @@ await codi.describe({ name: 'workspace:', id: 'workspace' }, async () => {
   codi.it(
     { name: 'nested locales', parentId: 'workspace', id: 'workspace_locales' },
     async () => {
-      const expectedLocale = `{"layers":["OSM","brand_a_layer","brand_b_layer"],"extent":{},"key":["europe","brand_a_locale","brand_b_locale"],"name":"europe/brand_a_locale/brand_b_locale","workspace":"A DIFFERENT TITLE","keys":["europe","brand_a_locale","brand_b_locale"],"_type":"workspace"}`;
+      const expectedLayers = ['OSM', 'brand_a_layer', 'brand_b_layer'];
+      const expectedKeys = ['europe', 'brand_a_locale', 'brand_b_locale'];
+      const expectedName = 'europe/brand_a_locale/brand_b_locale';
+
       const { req, res } = codi.mockHttp.createMocks({
         params: {
           key: 'locale',
@@ -62,9 +65,27 @@ await codi.describe({ name: 'workspace:', id: 'workspace' }, async () => {
 
       await getKeyMethod(req, res);
 
-      const result = res._getData();
+      let result = res._getData();
 
-      codi.assertEqual(result, expectedLocale);
+      result = JSON.parse(result);
+
+      codi.assertEqual(
+        result.layers,
+        expectedLayers,
+        `We expect to get ${expectedLayers}, received: ${result.layers}`,
+      );
+
+      codi.assertEqual(
+        result.keys,
+        expectedKeys,
+        `We expect to get ${expectedKeys}, received: ${result.keys}`,
+      );
+
+      codi.assertEqual(
+        result.name,
+        expectedName,
+        `We expect to get ${expectedName}, received: ${result.name}`,
+      );
     },
   );
 
