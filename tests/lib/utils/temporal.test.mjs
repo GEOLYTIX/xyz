@@ -65,13 +65,13 @@ export function temporal() {
             },
           };
 
-          const expectedDate = '13 December 2023 at 18:00';
+          const expectedDate = 'December 13, 2023 at 06:00 PM';
           const date = mapp.utils.temporal.dateString(params);
 
           codi.assertEqual(
             date,
             expectedDate,
-            'We expect the date to be the exact string',
+            `We expect ${date} to be the exact string: ${expectedDate}`,
           );
         },
       );
