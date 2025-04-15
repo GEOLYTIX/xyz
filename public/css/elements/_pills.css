@@ -12,6 +12,10 @@
     font-weight: bold;
     color: var(--color-font-contrast);
     background-color: var(--color-primary);
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
 
     button {
