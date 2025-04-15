@@ -51,7 +51,7 @@ await codi.describe({ name: 'workspace:', id: 'workspace' }, async () => {
     async () => {
       const expectedLayers = ['OSM', 'brand_b_layer'];
       const expectedKeys = ['europe','brand_b_locale'];
-      const expectedName = 'europe/brand_a_locale/brand_b_locale';
+      const expectedName = 'europe/brand_b_locale';
 
       const { req, res } = codi.mockHttp.createMocks({
         params: {
