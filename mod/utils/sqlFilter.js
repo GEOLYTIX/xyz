@@ -146,8 +146,8 @@ function mapFilterEntries(filter, req) {
       .filter((filterType) => Object.hasOwn(filterTypes, filterType))
       .map((filterType) => filterTypes[filterType](field, value[filterType]));
 
-    // Add user filter
-    if (Object.hasOwn(value, 'user')) {
+    // Add user.email filter
+    if (Object.hasOwn(value, 'email')) {
       filter.push(
         `"${field}"::text = ${addValues(req.params.user?.email, 'string')}`,
       );
