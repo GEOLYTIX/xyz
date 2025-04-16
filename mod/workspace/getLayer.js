@@ -98,5 +98,10 @@ export default async function getLayer(params, locale) {
   // Assign dbs from locale if nullish on layer.
   layer.dbs ??= locale.dbs;
 
+  delete layer.src;
+  delete layer.template;
+  delete layer.templates;
+  delete layer._type;
+
   return layer;
 }

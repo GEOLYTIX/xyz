@@ -112,5 +112,11 @@ export default async function getLocale(params, parentLocale) {
     locale.key = locale.keys;
   }
 
+  delete locale.layer;
+  delete locale.src;
+  delete locale.template;
+  delete locale.templates;
+  delete locale._type;
+
   return locale;
 }

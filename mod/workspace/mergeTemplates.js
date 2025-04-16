@@ -52,7 +52,9 @@ export default async function mergeTemplates(obj) {
 
     // Failed to get template matching obj.template from template.src!
     if (template instanceof Error) {
-      return template;
+      obj.err ??= [];
+      obj.err.push(template.message);
+      return obj;
     } else {
       // Merge obj --> template
       // Template must be cloned to prevent cross polination and array aggregation.
@@ -66,7 +68,9 @@ export default async function mergeTemplates(obj) {
 
     // Failed to get template matching obj.template from template.src!
     if (template instanceof Error) {
-      return template;
+      obj.err ??= [];
+      obj.err.push(template.message);
+      return obj;
     } else {
       // Merge obj --> template
       // Template must be cloned to prevent cross polination and array aggregation.
@@ -74,16 +78,14 @@ export default async function mergeTemplates(obj) {
     }
   }
 
-  delete obj.src;
-  delete obj.template;
-  delete obj._type;
-
   for (const template_key of obj.templates || []) {
     const template = await getTemplate(template_key);
 
     // Failed to retrieve template matching template_key
     if (template instanceof Error) {
-      return template;
+      obj.err ??= [];
+      obj.err.push(template.message);
+      return obj;
     } else {
       //The object key must not be overwritten by a template key.
       delete template.key;
