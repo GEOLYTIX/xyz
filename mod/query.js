@@ -182,10 +182,10 @@ async function layerQuery(req, res) {
   // Create filter condition for SQL query.
   req.params.filter = [
     (req.params.layer.filter?.default &&
-      `AND ${sqlFilter(req.params.layer.filter.default, req.params.SQL)}`) ||
+      `AND ${sqlFilter(req.params.layer.filter.default, req)}`) ||
       '',
     (req.params.filter &&
-      `AND ${sqlFilter(JSON.parse(req.params.filter), req.params.SQL)}`) ||
+      `AND ${sqlFilter(JSON.parse(req.params.filter), req)}`) ||
       '',
   ].join(' ');
 
@@ -402,7 +402,7 @@ function getQueryFromTemplate(req, template) {
     if (req.params.sqlFilter) {
       req.params.filter =
         req.params.filter ||
-        `AND ${sqlFilter(JSON.parse(req.params.sqlFilter), req.params.SQL)}`;
+        `AND ${sqlFilter(JSON.parse(req.params.sqlFilter), req)}`;
     }
 
     // Returns -1 if ${filter} not found in template

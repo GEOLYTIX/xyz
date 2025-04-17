@@ -4,6 +4,11 @@ button {
   background: none;
   text-align: center;
   color: var(--color-primary);
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 
   > .material-symbols-outlined {
     pointer-events: none;

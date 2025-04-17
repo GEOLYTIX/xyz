@@ -16,7 +16,7 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
     },
     () => {
       // Pass one parameter
-      const params = ['param1'];
+      const SQLparams = ['param1'];
 
       // 'value1' is passed as $2 in the query
       const filter = {
@@ -27,7 +27,10 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
 
       const expected = '("fieldname" = $2)';
 
-      codi.assertEqual(sqlfilter(filter, params), expected);
+      codi.assertEqual(
+        sqlfilter(filter, { params: { SQL: SQLparams } }),
+        expected,
+      );
     },
   );
 
@@ -38,7 +41,7 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
     },
     () => {
       // Pass one parameter
-      const params = ['param1'];
+      const SQLparams = ['param1'];
 
       // 99 is passed as $2 in the query
       const filter = {
@@ -49,7 +52,10 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
 
       const expected = '("fieldname" > $2)';
 
-      codi.assertEqual(sqlfilter(filter, params), expected);
+      codi.assertEqual(
+        sqlfilter(filter, { params: { SQL: SQLparams } }),
+        expected,
+      );
     },
   );
 
@@ -60,7 +66,7 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
     },
     () => {
       // Pass one parameter
-      const params = ['param1'];
+      const SQLparams = ['param1'];
 
       // 99 is passed as $2 in the query
       const filter = {
@@ -71,7 +77,10 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
 
       const expected = '("fieldname" >= $2)';
 
-      codi.assertEqual(sqlfilter(filter, params), expected);
+      codi.assertEqual(
+        sqlfilter(filter, { params: { SQL: SQLparams } }),
+        expected,
+      );
     },
   );
 
@@ -82,7 +91,7 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
     },
     () => {
       // Pass one parameter
-      const params = ['param1'];
+      const SQLparams = ['param1'];
 
       // 99 is passed as $2 in the query
       const filter = {
@@ -93,7 +102,10 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
 
       const expected = '("fieldname" < $2)';
 
-      codi.assertEqual(sqlfilter(filter, params), expected);
+      codi.assertEqual(
+        sqlfilter(filter, { params: { SQL: SQLparams } }),
+        expected,
+      );
     },
   );
 
@@ -104,7 +116,7 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
     },
     () => {
       // Pass one parameter
-      const params = ['param1'];
+      const SQLparams = ['param1'];
 
       // 99 is passed as $2 in the query
       const filter = {
@@ -115,7 +127,10 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
 
       const expected = '("fieldname" <= $2)';
 
-      codi.assertEqual(sqlfilter(filter, params), expected);
+      codi.assertEqual(
+        sqlfilter(filter, { params: { SQL: SQLparams } }),
+        expected,
+      );
     },
   );
 
@@ -126,7 +141,7 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
     },
     () => {
       // Pass one parameter
-      const params = ['param1'];
+      const SQLparams = ['param1'];
 
       // true is passed as $2 in the query
       const filter = {
@@ -137,7 +152,10 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
 
       const expected = '("fieldname" IS true)';
 
-      codi.assertEqual(sqlfilter(filter, params), expected);
+      codi.assertEqual(
+        sqlfilter(filter, { params: { SQL: SQLparams } }),
+        expected,
+      );
     },
   );
 
@@ -148,7 +166,7 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
     },
     () => {
       // Pass one parameter
-      const params = ['param1'];
+      const SQLparams = ['param1'];
 
       // true is passed as $2 in the query
       const filter = {
@@ -159,7 +177,10 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
 
       const expected = '("fieldname" IS  NULL)';
 
-      codi.assertEqual(sqlfilter(filter, params), expected);
+      codi.assertEqual(
+        sqlfilter(filter, { params: { SQL: SQLparams } }),
+        expected,
+      );
     },
   );
 
@@ -170,7 +191,7 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
     },
     () => {
       // Pass one parameter
-      const params = ['param1'];
+      const SQLparams = ['param1'];
 
       // true is passed as $2 in the query
       const filter = {
@@ -181,7 +202,10 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
 
       const expected = '(NOT "fieldname" = ANY ($2))';
 
-      codi.assertEqual(sqlfilter(filter, params), expected);
+      codi.assertEqual(
+        sqlfilter(filter, { params: { SQL: SQLparams } }),
+        expected,
+      );
     },
   );
 
@@ -192,7 +216,7 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
     },
     () => {
       // Pass one parameter
-      const params = ['param1'];
+      const SQLparams = ['param1'];
 
       // true is passed as $2 in the query
       const filter = {
@@ -203,7 +227,10 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
 
       const expected = '("fieldname" = ANY ($2))';
 
-      codi.assertEqual(sqlfilter(filter, params), expected);
+      codi.assertEqual(
+        sqlfilter(filter, { params: { SQL: SQLparams } }),
+        expected,
+      );
     },
   );
 
@@ -214,7 +241,7 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
     },
     () => {
       // Pass one parameter
-      const params = ['param1'];
+      const SQLparams = ['param1'];
 
       // test is passed as $2 in the query
       const filter = {
@@ -225,7 +252,10 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
 
       const expected = '(("fieldname" ILIKE $2))';
 
-      codi.assertEqual(sqlfilter(filter, params), expected);
+      codi.assertEqual(
+        sqlfilter(filter, { params: { SQL: SQLparams } }),
+        expected,
+      );
     },
   );
 
@@ -236,7 +266,7 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
     },
     () => {
       // Pass one parameter
-      const params = ['param1'];
+      const SQLparams = ['param1'];
 
       // test is passed as $2 in the query
       const filter = {
@@ -247,7 +277,10 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
 
       const expected = '("fieldname"::text = $2)';
 
-      codi.assertEqual(sqlfilter(filter, params), expected);
+      codi.assertEqual(
+        sqlfilter(filter, { params: { SQL: SQLparams } }),
+        expected,
+      );
     },
   );
 
@@ -257,7 +290,7 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
       parentId: 'sqlFilter',
     },
     () => {
-      const params = ['param1', 'param2'];
+      const SQLparams = ['param1', 'param2'];
 
       const filter = {
         fieldname_a: {
@@ -270,7 +303,10 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
 
       const expected = '("fieldname_a" = $3 AND "fieldname_b" > $4)';
 
-      codi.assertEqual(sqlfilter(filter, params), expected);
+      codi.assertEqual(
+        sqlfilter(filter, { params: { SQL: SQLparams } }),
+        expected,
+      );
     },
   );
 
@@ -280,7 +316,7 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
       parentId: 'sqlFilter',
     },
     () => {
-      const params = ['param1', 'param2'];
+      const SQLparams = ['param1', 'param2'];
 
       const filter = [
         {
@@ -297,7 +333,10 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
 
       const expected = '(("fieldname_a" = $3) OR ("fieldname_b" > $4))';
 
-      codi.assertEqual(sqlfilter(filter, params), expected);
+      codi.assertEqual(
+        sqlfilter(filter, { params: { SQL: SQLparams } }),
+        expected,
+      );
     },
   );
 
@@ -307,7 +346,7 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
       parentId: 'sqlFilter',
     },
     () => {
-      const params = ['param1', 'param2'];
+      const SQLparams = ['param1', 'param2'];
 
       const filter = {
         'invalid-field-name!!!': {
@@ -315,7 +354,10 @@ codi.describe({ name: 'sqlFilter', id: 'sqlFilter' }, () => {
         },
       };
 
-      codi.assertEqual(sqlfilter(filter, params), undefined);
+      codi.assertEqual(
+        sqlfilter(filter, { params: { SQL: SQLparams } }),
+        undefined,
+      );
     },
   );
 });

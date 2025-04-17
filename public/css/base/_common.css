@@ -30,6 +30,11 @@
 .link-with-img > * {
   display: inline-block;
   vertical-align: middle;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
 }
 
 .val-changed {
