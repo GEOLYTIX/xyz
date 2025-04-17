@@ -1,75 +1,72 @@
-.image,
-.images,
-.documents {
-  .material-symbols-outlined {
-    &.delete:after {
-      content: 'delete';
-    }
+.drag_and_drop_zone {
+  width: 100%;
+  border: 1px dashed var(--color-border);
+  position: relative;
+  height: 100px;
 
-    &.add:after {
-      content: 'add_a_photo';
-    }
-
-    &.add-doc:after {
-      content: 'add_notes';
-    }
+  input {
+    top: 0;
+    position: absolute;
+    outline: none;
+    height: 100%;
+    cursor: pointer;
+    opacity: 0;
   }
 
-  .drag_and_drop_zone {
-    width: 100%;
-    border: 1px dashed var(--color-primary-light);
-    position: relative;
-    height: 100px;
+  p {
+    margin: auto;
+    text-align: center;
+    color: var(--color-font);
+    pointer-events: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 
-    input {
-      outline: none;
-      width: 100%;
-      height: 80px;
-      cursor: pointer;
-      opacity: 0;
-    }
-
-    p {
-      margin: auto;
-      text-align: center;
-      color: var(----color-off-black);
-      pointer-events: none;
-      user-select: none;
-
-      & > span {
-        vertical-align: middle;
-        margin: 0.2em;
-        font-size: 1.5em;
-      }
-    }
-  }
-
-  .img-item {
-    position: relative;
-    .delete {
-      position: absolute;
-      top: 0.2em;
-      left: 0.2em;
-      font-size: 1.5em;
-      background-color: var(--color-off-light);
-      padding: 0.1em;
-      border-radius: 50%;
-    }
-  }
-
-  .link-with-img {
-    .delete {
+    & > span {
+      vertical-align: middle;
+      margin: 0.2em;
       font-size: 1.5em;
     }
   }
 }
 
-@media print {
-  .image,
-  .images,
-  .documents {
-    .drag_and_drop_zone {
-      display: none;
-    }
+.img-item {
+  position: relative;
+
+  & img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .delete {
+    position: absolute;
+    top: 0.2em;
+    right: 0.2em;
+    font-size: 1.5em;
+    background-color: var(--color-base-secondary);
+    padding: 0.1em;
+    border-radius: 50%;
+  }
+}
+
+.images-grid {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 3px;
+
+  & > div:first-child {
+    width: 100%;
+    height: 180px;
+  }
+
+  & > div {
+    position: relative;
+    width: 90px;
+    height: 90px;
+    flex-grow: 1;
   }
 }

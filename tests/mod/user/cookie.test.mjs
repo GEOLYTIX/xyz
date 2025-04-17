@@ -8,6 +8,9 @@ const mockACL = codi.mock.module('../../../mod/user/acl.js', {
 globalThis.xyzEnv = {
   TITLE: 'TEST',
   COOKIE_TTL: 36000,
+  TRANSPORT_EMAIL: 'xyz@gmail.com',
+  TRANSPORT_PASSWORD: 'IAMANEMAILPASSWORD',
+  TRANSPORT_HOST: 'smpt-host.emailserver.com',
 };
 
 await codi.describe(

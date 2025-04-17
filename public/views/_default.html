@@ -54,7 +54,7 @@
       }
 
       #ctrls {
-        z-index: 9999;
+        isolation: isolate;
       }
 
       #ctrl-tabs {
@@ -97,9 +97,6 @@
         display: block;
       }
 
-      .bg-icon.mapp {
-        background-image: url('https://geolytix.github.io/public/mapp_v4/emblem.svg');
-      }
 
       @media only screen and (min-width: 768px) {
         body {
@@ -176,6 +173,7 @@
           position: relative;
           display: flex;
           flex-direction: column;
+          background-color: inherit;
         }
       }
     </style>
@@ -197,7 +195,7 @@
 
     <div id="ctrls-divider"></div>
 
-    <div id="ctrls" class="lighter-background">
+    <div id="ctrls">
       <div id="ctrl-tabs" class="hover">
         <div data-id="layers" class="active material-symbols-outlined"></div>
         <div data-id="locations" class="material-symbols-outlined"></div>
@@ -350,7 +348,8 @@
         // Create the Dialog.node
         mapp.ui.elements.dialog({
           css_style:
-            'padding: 1em; border-color: #000; z-index:9999; max-width: 50%;',
+            'padding: 1em; max-width: 50%;',
+          header: mapp.utils.html`<h4>${mapp.dictionary.information}`,
           content: mapp.dictionary.no_locales,
           target: document.body,
           top: '40%',
@@ -419,7 +418,8 @@
       if (!locale.layers?.length && !(locale instanceof Error)) {
         mapp.ui.elements.dialog({
           css_style:
-            'padding: 1em; border-color: #000; z-index:9999; max-width: 50%;',
+            'padding: 1em; max-width: 50%;',
+          header: mapp.utils.html`<h4>${mapp.dictionary.information}`,
           content: mapp.dictionary.no_layers,
           target: document.body,
           top: '40%',

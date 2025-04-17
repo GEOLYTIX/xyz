@@ -1,9 +1,9 @@
 .infotip {
   position: fixed;
-  z-index: 998;
+  isolation: isolate;
   margin: 0;
   padding: 5px;
-  background-color: var(--color-light);
+  background-color: var(--color-base-tertiary);
   opacity: 0;
   transition-property: opacity;
   transition-duration: 0.3s;

@@ -8,7 +8,7 @@ This module handles SAML-based Single Sign-On (SSO) authentication. Here's how t
   ```bash
   # Generate private key
   openssl genrsa -out ${SAML_SP_CRT}.pem 2048
-  
+
   # Generate public certificate
   openssl req -new -x509 -key ${SAML_SP_CRT}.pem -out ${SAML_SP_CRT}.crt -days 36500
   ```
@@ -40,7 +40,7 @@ This module handles SAML-based Single Sign-On (SSO) authentication. Here's how t
     # Certificate Paths (without file extensions)
     SAML_SP_CRT=sp_certificate
     SAML_IDP_CRT=idp_certificate
-    
+
     # Additional Settings
     SAML_SLO=https://your-idp/saml/logout
     SAML_SIGNATURE_ALGORITHM=sha256
@@ -70,12 +70,6 @@ This module handles SAML-based Single Sign-On (SSO) authentication. Here's how t
 @requires path - File path operations
 @requires fs - File system operations
 @requires module:/utils/processEnv - xyzEnvironment variables
-
-Module Variables:
-@type {SAML} samlStrat - SAML strategy instance for authentication operations
-@type {SamlConfig} samlConfig - Configuration object for SAML settings
-@type {Object} jwt - For handling JSON Web Tokens
-@type {Object} acl - Access Control List management
 
 @module /user/saml
 **/
@@ -114,7 +108,7 @@ let samlStrat, samlConfig;
 
 const getModule = async () => {
   try {
-    const SAML = await import('@node-saml/node-saml');
+    const { SAML } = await import('@node-saml/node-saml');
     // Initialize SAML configuration
     samlConfig = {
       callbackUrl: xyzEnv.SAML_ACS,
@@ -162,11 +156,19 @@ const getModule = async () => {
     if (samlKeys.length > 0) {
       console.log('SAML2 module is not available.');
     }
-    return null;
+    return saml_not_configured;
   }
 };
 
-const exportedModule = getModule();
+/**
+@function saml_not_configured
+The SAML service has not been configured correctly.
+*/
+function saml_not_configured(req, res) {
+  res.status(405).send('SAML not configured');
+}
+
+const exportedModule = await getModule();
 
 export default exportedModule;
 
@@ -240,8 +242,8 @@ function saml(req, res) {
 }
 
 /**
-@function metadata 
-@description Handles the metadata response 
+@function metadata
+@description Handles the metadata response
 
 @param {Object} res - HTTP response object
 @property {function} res.send - Send response function
@@ -349,7 +351,7 @@ async function login(req, res) {
 }
 
 /**
-@function acs 
+@function acs
 @description Handles the acs POST request from the idp
 
 @param {Object} req - HTTP request object

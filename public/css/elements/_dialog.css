@@ -3,6 +3,15 @@
 }
 
 dialog {
+  background-color: var(--color-base);
+  color: var(--color-font);
+  isolation: isolate;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
   & > button.close {
     position: absolute;
     top: 0em;
@@ -10,6 +19,10 @@ dialog {
     height: 1em;
     width: 1em;
     margin: 0.4em;
+  }
+
+  &:focus {
+    outline: none;
   }
 
   & > header {
@@ -28,7 +41,7 @@ dialog {
       font-size: 1.2em;
 
       &:after {
-        color: var(--color-primary-light);
+        color: var(--color-font-mid);
         font-size: inherit;
       }
     }
@@ -42,24 +55,22 @@ dialog {
 
   &.dialog {
     position: absolute;
-    border: none !important;
+    border: none;
     border-radius: 2px;
     cursor: grab;
     user-select: none;
     padding: 5px;
     overflow: unset !important;
-    isolation: isolate;
   }
 
   &.modal {
     position: fixed;
-    border: none !important;
+    border: none;
     border-radius: 2px;
     text-wrap: wrap;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    z-index: 9999;
   }
 
   .minimize-btn::after {

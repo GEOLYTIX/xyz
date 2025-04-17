@@ -10,14 +10,24 @@
     border-radius: 2px;
     font-size: 0.9em;
     font-weight: bold;
-    color: var(--color-light);
+    color: var(--color-font-contrast);
     background-color: var(--color-primary);
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
 
     button {
       cursor: pointer;
       font-size: 0.8em;
       padding: 0 2px;
+
+      &:after {
+        content: 'close';
+        color: var(--color-font-contrast);
+        vertical-align: middle;
+      }
     }
   }
 }

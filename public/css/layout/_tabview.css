@@ -3,7 +3,7 @@
   height: 100%;
   overflow: hidden;
   position: relative;
-  background-color: var(--color-light);
+  background-color: var(--color-base-tertiary);
   display: grid;
   grid-template-rows: 3em auto;
 
@@ -14,7 +14,7 @@
     position: absolute;
     left: 0;
     top: 0;
-    background-color: var(--color-light);
+    background-color: var(--color-base-tertiary);
     opacity: 0.7;
   }
 
@@ -23,16 +23,16 @@
     height: inherit;
     overflow-x: auto;
     display: flex;
-    background-color: var(--color-light-secondary);
+    background-color: var(--color-base);
 
     & > .tab > .header {
+      color: var(--color-primary);
       min-width: 8em;
       height: 100%;
       display: flex;
       align-items: center;
       white-space: nowrap;
-      box-shadow: rgba(50, 50, 93, 0.25) 0px 2px 5px -1px, rgba(0, 0, 0, 0.3)
-        0px 1px 3px -1px;
+      border: solid 1px var(--color-border);
       border-radius: 3px 1em 0 0;
       padding: 10px;
       -webkit-user-select: none;
@@ -42,7 +42,7 @@
     }
 
     & > .tab.active > .header {
-      background-color: var(--color-light);
+      background-color: var(--color-base-tertiary);
       font-weight: bold;
     }
 
@@ -53,14 +53,17 @@
 
   & > .panel {
     position: relative;
+    background-color: var(--color-base);
 
     & > .flex-col {
+      background-color: var(--color-base-secondary);
       position: absolute;
       width: 100%;
       height: 100%;
     }
 
     & .dataview-target {
+      background-color: var(--color-base);
       width: 100%;
       height: 100%;
       overflow-y: auto;

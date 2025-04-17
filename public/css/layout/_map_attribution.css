@@ -14,6 +14,10 @@ body {
   width: 100%;
   padding: 5px;
   pointer-events: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
 
   & > .logo {
@@ -31,8 +35,10 @@ body {
       display: inline-block;
       white-space: nowrap;
       line-height: 1;
-      background: #fff9;
-      border-bottom: 2px solid var(--color-primary-light);
+      background-color: var(--color-base-secondary);
+      padding: 0 1px;
+      border-radius: 2px;
+      border-bottom: 1px solid var(--color-border);
     }
   }
 }

@@ -1,10 +1,10 @@
 .btn-panel {
   width: 100%;
   padding: 0.3em 0.5em;
-  background-color: var(--color-light);
-  border: 1px solid var(--color-light-secondary);
+  background-color: var(--color-base-tertiary);
+  border: 1px solid var(--color-border);
   border-radius: 3px;
-  box-shadow: 1px 1px 3px var(--color-primary-light);
+  box-shadow: 1px 1px 3px var(--color-border);
 
   & .header {
     display: flex;
@@ -26,14 +26,14 @@
     bottom: 15em;
     left: 0;
     right: 0;
-    z-index: 99;
-    color: black;
-    background: var(--color-light);
+    isolation: auto;
+    color: var(--color-font);
+    background: var(--color-base-tertiary);
     overflow: hidden;
     padding: 1em 1.5em;
     opacity: 0;
     border-radius: 3px;
-    box-shadow: 1px 1px 3px var(--color-primary-light);
+    box-shadow: 1px 1px 3px var(--color-border);
     pointer-events: none;
     transition: 0.2s ease-in-out;
 
@@ -48,14 +48,14 @@
       bottom: 15em;
       left: 0;
       right: 0;
-      z-index: 99;
-      color: var(--color-off-black);
-      background: var(--color-light);
+      isolation: auto;
+      color: var(--color-font);
+      background: var(--color-base-tertiary);
       overflow: hidden;
       padding: 1em 1.5em;
       opacity: 0;
       border-radius: 3px;
-      box-shadow: 1px 1px 3px var(--color-primary-light);
+      box-shadow: 1px 1px 3px var(--color-border);
       pointer-events: none;
       transition: 0.2s ease-in-out;
 

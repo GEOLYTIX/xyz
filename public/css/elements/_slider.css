@@ -16,7 +16,7 @@
     background: linear-gradient(
       0deg,
       transparent 0 45%,
-      var(--color-primary-light) 45% 55%,
+      var(--color-hover) 45% 55%,
       transparent 55% 100%
     );
     z-index: 1;
@@ -125,7 +125,7 @@
   /* get rid of Firefox corner rounding */
   pointer-events: auto;
   cursor: pointer;
-  background: url('../../icons/thumb.svg');
+  background: url('data:image/svg+xml,%0A<svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">%0A  <circle cx="5" cy="5" r="4" fill="%23E18335"/>%0A</svg>');
   background-repeat: no-repeat;
   background-position: center;
   box-shadow: none;
@@ -140,7 +140,7 @@
   /* get rid of Firefox corner rounding */
   pointer-events: auto;
   cursor: pointer;
-  background: url('../../icons/thumb.svg');
+  background: url('data:image/svg+xml,%0A<svg viewBox="0 0 10 10" xmlns="http://www.w3.org/2000/svg">%0A  <circle cx="5" cy="5" r="4" fill="%23E18335"/>%0A</svg>');
   background-repeat: no-repeat;
   background-position: center;
   box-shadow: none;

@@ -5,7 +5,8 @@
 
 .drawer {
   padding: 2px;
-  background-color: var(--color-light-tertiary);
+  background-color: var(--color-base-secondary);
+  color: var(--color-font);
 
   &.expandable:not(.empty) > .header:hover {
     cursor: pointer;
@@ -17,7 +18,7 @@
 
   &.expandable > .header > .material-symbols-outlined.caret::after {
     content: 'keyboard_arrow_down';
-    color: var(--color-primary-light);
+    color: var(--color-font-mid);
     line-height: 1.5em;
   }
 
@@ -27,7 +28,7 @@
 
   &.expanded > .header > .material-symbols-outlined.caret::after {
     content: 'keyboard_arrow_up';
-    color: var(--color-primary-light);
+    color: var(--color-font-mid);
     line-height: 1.5em;
   }
 
@@ -39,6 +40,12 @@
   & > .header {
     display: flex;
     align-items: center;
+    color: var(--color-font);
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 
     .material-symbols-outlined {
       font-size: 1.5em;
@@ -68,13 +75,13 @@
 
   &.flat {
     border-radius: 2px;
-    border: 1px solid var(--color-light-secondary);
+    border: 1px solid var(--color-border);
   }
 
   &.raised {
     border-radius: 2px;
-    box-shadow: 1px 1px 3px var(--color-primary-light);
-    border: 1px solid var(--color-light-secondary);
+    box-shadow: 1px 1px 3px var(--color-border);
+    border: 1px solid var(--color-border);
   }
 
   &.raised.empty {

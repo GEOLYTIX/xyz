@@ -1,6 +1,6 @@
 {
   "name": "xyz",
-  "version": "v4.13.0",
+  "version": "v4.13.2",
   "type": "module",
   "repository": {
     "type": "git",
@@ -10,7 +10,7 @@
     "test": "node --experimental-test-module-mocks node_modules/codi-test-framework/cli.js tests",
     "test-watch": "node --watch-path=. --experimental-test-module-mocks node_modules/codi-test-framework/cli.js tests --quiet",
     "_build": "node esbuild.config.mjs",
-    "ui_css": "npx esbuild --bundle public/css/_ui.css --outfile=public/css/ui.css --loader:.svg=dataurl",
+    "ui_css": "npx esbuild --bundle public/css/_ui.css --outfile=public/css/ui.css",
     "mapp_css": "npx esbuild --bundle public/css/_mapp.css --outfile=public/css/mapp.css",
     "generate-docs": "jsdoc --configure jsdoc_mapp.json --verbose && jsdoc --configure jsdoc_xyz.json --verbose && jsdoc --configure jsdoc_test.json --verbose",
     "mapp-docs": "jsdoc --configure jsdoc_mapp.json --verbose",
@@ -22,11 +22,11 @@
     "@aws-sdk/client-s3": "^3.691.0",
     "@aws-sdk/cloudfront-signer": "^3.621.0",
     "@aws-sdk/s3-request-presigner": "^3.691.0",
-    "@node-saml/node-saml": "^5.0.1"
+    "@node-saml/node-saml": "^5.0.1",
+    "nodemailer": "^6.10.0"
   },
   "dependencies": {
     "jsonwebtoken": "^9.0.2",
-    "nodemailer": "^6.9.7",
     "pg": "^8.13.1"
   },
   "devDependencies": {
@@ -39,7 +39,6 @@
     "esbuild": "^0.25.0",
     "express": "^4.18.3",
     "express-rate-limit": "^7.5.0",
-    "nodemon": "^3.1.7",
-    "uhtml": "^3.1.0"
+    "nodemon": "^3.1.7"
   }
 }

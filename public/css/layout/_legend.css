@@ -1,4 +1,10 @@
 .legend {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+
   & .contents-wrapper,
   &.content .contents-wrapper {
     margin-top: 0.5em;

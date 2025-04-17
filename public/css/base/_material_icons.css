@@ -1,5 +1,9 @@
 @import url(https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0);
 
+.material-symbols-outlined-important {
+  font-family: 'Material Symbols Outlined', sans-serif !important;
+}
+
 .material-symbols-outlined {
   font-variation-settings: 'FILL' 0, 'wght' 300, 'GRAD' 0, 'opsz' 24;
   /* Customisation */
@@ -7,32 +11,46 @@
   color: var(--color-primary);
 
   &.active {
-    color: var(--color-on);
+    color: var(--color-active);
   }
 
-  &.on-colour,
-  &.on {
-    color: var(--color-on);
+  &.color-info {
+    color: var(--color-info);
   }
 
-  &.no-colour {
-    color: var(--color-no);
+  &.color-danger {
+    color: var(--color-danger);
   }
 
-  &.ok-colour {
-    color: var(--color-ok);
+  &.color-font-mid {
+    color: var(--color-font-mid);
   }
 
-  &.primary-light-colour {
-    color: var(--color-primary-light);
-  }
-
-  &.close:after {
+  &.close::after {
     content: 'close';
-    color: var(--color-primary-light);
+    color: var(--color-font-mid);
+  }
+}
+
+.toggle-on {
+  color: var(--color-active);
+}
+
+.toggle {
+  &::after {
+    content: 'toggle_off';
+  }
+
+  &.toggle-on::after {
+    content: 'toggle_on';
+  }
+
+  &.disabled {
+    opacity: 0.5;
+    pointer-events: none;
   }
 }
 
 .active > .material-symbols-outlined {
-  color: var(--color-on);
+  color: var(--color-active);
 }
