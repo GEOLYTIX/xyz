@@ -9,10 +9,9 @@ If unset buckets parameters defaults to 7.
 
 */
 export default (_) => {
+  _.buckets ??= 7;
 
-    _.buckets ??= 7;
-
-    return `
+  return `
     with percentiles as (
         select 
         percentile_cont(0.98) within group(order by ${_.field}) p98,
@@ -23,9 +22,11 @@ export default (_) => {
         select 
         case 
         when ${_.field} <=p2 then 0
-        ${[...Array(_.buckets).keys()].map((bucket) => {
+        ${[...Array(_.buckets).keys()]
+          .map((bucket) => {
             return `when ${_.field} < p2 + ${bucket + 1}*(p98-p2)/${_.buckets} then ${bucket + 1}`;
-        }).join('\n')}
+          })
+          .join('\n')}
         when ${_.field} >= p98 then ${_.buckets + 1} 
         end as bucket
         from ${_.table} 
@@ -38,5 +39,4 @@ export default (_) => {
     group by bucket
     order by bucket
     `;
-    
-}
+};
