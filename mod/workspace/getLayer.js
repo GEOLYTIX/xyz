@@ -3,6 +3,7 @@
 The getLayer module exports the getLayer method which is required by the query and workspace modules.
 
 @requires /utils/roles
+@requires /utils/merge
 @requires /workspace/mergeTemplates
 @requires /workspace/getLocale
 @requires /workspace/getTemplate
@@ -11,6 +12,8 @@ The getLayer module exports the getLayer method which is required by the query a
 */
 
 import * as Roles from '../utils/roles.js';
+
+import merge from '../utils/merge.js';
 
 import mergeTemplates from './mergeTemplates.js';
 
@@ -69,6 +72,10 @@ export default async function getLayer(params) {
   layer.key ??= params.layer;
 
   layer = await mergeTemplates(layer);
+
+  if (locale.layer) {
+    layer = merge(structuredClone(locale.layer), layer);
+  }
 
   if (!Roles.check(layer, params.user?.roles)) {
     return new Error('Role access denied.');
