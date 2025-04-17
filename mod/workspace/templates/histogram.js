@@ -2,7 +2,7 @@
 ### /workspace/templates/histogram
 
 The query returns data organised in a specified number of buckets in order to visualise histogram for continuous data.
-Buckets is an optional integer parameter which defined number of groups.
+`buckets` is an optional integer parameter which defines number of groups.
 If unset buckets parameters defaults to 7.
 
 @module /workspace/templates/histogram
