@@ -792,13 +792,8 @@ dialog {
     user-select: none;
     button {
       cursor: pointer;
-      font-size: 1em;
       padding: 0 2px;
-      &.close:after {
-        content: "close";
-        color: var(--color-font-contrast);
-        vertical-align: middle;
-      }
+      color: inherit;
     }
   }
 }
