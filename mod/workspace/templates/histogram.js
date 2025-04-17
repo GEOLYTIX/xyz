@@ -33,7 +33,7 @@ export default (_) => {
         cross join percentiles
     )
     select 
-    count(*) as count, 
+    count(*)::integer as count, 
     bucket
     from buckets
     group by bucket
