@@ -20,8 +20,14 @@
 
     button {
       cursor: pointer;
+      font-size: 1em;
       padding: 0 2px;
-      color: inherit;
+
+      &.close:after {
+        content: 'close';
+        color: var(--color-font-contrast);
+        vertical-align: middle;
+      }
     }
   }
 }
