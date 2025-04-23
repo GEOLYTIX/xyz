@@ -42,7 +42,7 @@ module.exports = async (params) => {
       secure: false,
       requireTLS: process.env.TRANSPORT_TLS && true,
       auth: {
-        user: process.env.TRANSPORT_EMAIL,
+        user: process.env.TRANSPORT_USERNAME || process.env.TRANSPORT_EMAIL,
         pass: process.env.TRANSPORT_PASSWORD,
       },
     });
