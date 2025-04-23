@@ -31,7 +31,7 @@ export default (_) => {
                 WHEN ${_.field} <= p2 THEN 0
                 ${[...Array(_.buckets).keys()]
                   .map((bucket) => {
-                    return `WHEN ${_.field} < p2 + ${(bucket + 1)} * (p98 - p2) / ${_.buckets} THEN ${bucket + 1}`;
+                    return `WHEN ${_.field} < p2 + ${bucket + 1} * (p98 - p2) / ${_.buckets} THEN ${bucket + 1}`;
                   })
                   .join('\n')}
                 WHEN ${_.field} >= p98 THEN ${_.buckets + 1}
