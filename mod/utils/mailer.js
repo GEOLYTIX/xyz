@@ -19,7 +19,6 @@ module.exports = async params => {
     console.warn('Please replace process.env.TRANSPORT with TRANSPORT_HOST,TRANSPORT_EMAIL, and TRANSPORT_PASSWORD')
   }
 
-   
   if (!process.env.TRANSPORT_HOST) {
     console.warn('process.env.TRANSPORT_HOST missing.')
     return;
@@ -44,7 +43,7 @@ module.exports = async params => {
         secure: false,
         requireTLS: process.env.TRANSPORT_TLS && true,
         auth: {
-          user: process.env.TRANSPORT_EMAIL,
+          user: process.env.TRANSPORT_USERNAME || process.env.TRANSPORT_EMAIL,
           pass: process.env.TRANSPORT_PASSWORD
         }
       })
@@ -62,7 +61,7 @@ module.exports = async params => {
     html: template.html ? replaceStringParams(template.html, params) : undefined,
     text: template.text ? replaceStringParams(template.text, params) : undefined
   }
- 
+
   const result = await transport.sendMail(mailTemplate).catch(err => console.error(err))
 
   logger(result, 'mailer')
