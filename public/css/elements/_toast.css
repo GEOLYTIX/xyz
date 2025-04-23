@@ -29,6 +29,7 @@
 
   .actions {
     padding: 0.5em;
+    margin-top: 1em;
   }
 
   .toast-logo {
@@ -44,6 +45,7 @@
     cursor: pointer;
     padding: 0.25em 0.5em 0.2em;
     transition: 300ms all;
+    width: 6em;
     font-size: 100%;
     border-radius: 3px;
     font-weight: bold;
@@ -51,8 +53,7 @@
     background-color: var(--color-primary);
 
     &:hover {
-      box-shadow: rgba(0, 0, 0, 0.02) 0px 1px 3px 0px, rgba(27, 31, 35, 0.15)
-        0px 0px 0px 1px;
+      text-decoration: underline;
     }
   }
 
