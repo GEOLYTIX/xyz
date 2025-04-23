@@ -13,10 +13,11 @@ export default (_) => {
 
   return `
     with percentiles as (
-        select 
+        select
         percentile_cont(0.98) within group(order by ${_.field}) p98,
         percentile_cont(0.02) within group(order by ${_.field}) p2
-        from ${_.table}
+        from ${_.table} 
+        where true \${filter} \${viewport}
     ),
     buckets as (
         select 
