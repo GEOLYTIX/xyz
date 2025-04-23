@@ -15,6 +15,9 @@ This is because the first bucket is for values less than or equal to the 2nd per
 
 The rest of the buckets are calculated by dividing the range between the 2nd and 98th percentiles into equal intervals.
 
+If the parameter "chartjs" is set to true, the query returns a chart.js compatible string.
+Otherwise, the query returns the final data as a table.
+
 @module /workspace/templates/histogram
 */
 export default (_) => {
@@ -51,7 +54,9 @@ export default (_) => {
             (p98 - p2) / ${buckets} AS bin_width
         FROM \${table}
         CROSS JOIN percentiles
-        WHERE ${_.field} is not null and true \${filter} \${viewport})
+        WHERE ${_.field} is not null and true \${filter} \${viewport}),
+
+    final_data AS (
 
     SELECT
         COUNT(*)::integer AS count,
@@ -68,7 +73,27 @@ export default (_) => {
         END::NUMERIC,${decimals}) AS bucket_max
     FROM buckets
     GROUP BY bucket, p2, p98, actual_min, actual_max, bin_width
-    ORDER BY bucket;`;
+    ORDER BY bucket)
+`;
 
-  return sqlString;
+const chartJSString = `
+SELECT ARRAY [JSON_BUILD_OBJECT(
+        'data', ARRAY_AGG(count ORDER BY bucket),
+        'backgroundColor', '#000000',
+        'borderColor', '#000000'
+              )]                                                  AS datasets,
+       ARRAY_AGG(bucket_min || '-' || bucket_max ORDER BY bucket) AS labels
+FROM final_data`;
+
+const outputString = `
+SELECT * FROM final_data`
+
+
+// If the parameter "chartjs" is set to true, return the chart.js string
+  if (_.chartjs) {
+    return sqlString + chartJSString;
+  } else {
+    return sqlString + outputString;
+  }
+
 };
