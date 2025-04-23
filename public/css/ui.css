@@ -992,9 +992,6 @@ dialog {
   &.before-remove {
     animation: 1s ease-in-out forwards hideToast;
   }
-  a {
-    color: var(--color-primary);
-  }
   .actions {
     padding: 0.5em;
     margin-top: 1em;
