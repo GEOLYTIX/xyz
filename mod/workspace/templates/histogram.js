@@ -73,25 +73,18 @@ export default (_) => {
         END::NUMERIC,${decimals}) AS bucket_max
     FROM buckets
     GROUP BY bucket, p2, p98, actual_min, actual_max, bin_width
-    ORDER BY bucket)
-`;
-
-  const chartJSString = `
-SELECT ARRAY [JSON_BUILD_OBJECT(
-        'data', ARRAY_AGG(count ORDER BY bucket),
-        'backgroundColor', '#000000',
-        'borderColor', '#000000'
-              )]                                                  AS datasets,
-       ARRAY_AGG(bucket_min || '-' || bucket_max ORDER BY bucket) AS labels
-FROM final_data`;
-
-  const outputString = `
-SELECT * FROM final_data`;
+    ORDER BY bucket)`;
 
   // If the parameter "chartjs" is set to true, return the chart.js string
   if (_.chartjs) {
-    return sqlString + chartJSString;
-  } else {
-    return sqlString + outputString;
+    return `
+    ${sqlString}
+    SELECT 
+      ARRAY [JSON_BUILD_OBJECT(
+        'data', ARRAY_AGG(count ORDER BY bucket))] AS datasets,
+      ARRAY_AGG(bucket_min || '-' || bucket_max ORDER BY bucket) AS labels
+    FROM final_data`;
   }
+
+  return `${sqlString} SELECT * FROM final_data`;
 };
