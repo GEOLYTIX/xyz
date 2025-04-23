@@ -142,6 +142,7 @@ export default {
     value_only: true,
   },
   histogram: {
+    layer: true,
     render: histogram,
   },
 };

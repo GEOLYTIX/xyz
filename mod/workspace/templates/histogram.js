@@ -16,7 +16,7 @@ export default (_) => {
         select
         percentile_cont(0.98) within group(order by ${_.field}) p98,
         percentile_cont(0.02) within group(order by ${_.field}) p2
-        from ${_.table} 
+        from \${table} 
         where true \${filter} \${viewport}
     ),
     buckets as (
@@ -30,7 +30,7 @@ export default (_) => {
           .join('\n')}
         when ${_.field} >= p98 then ${_.buckets + 1} 
         end as bucket
-        from ${_.table} 
+        from \${table} true \${filter} \${viewport}
         cross join percentiles
     )
     select 
