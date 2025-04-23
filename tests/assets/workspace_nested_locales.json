@@ -93,14 +93,21 @@
     "us": {
       "extent": {},
       "layers": {},
-      "locales": ["brand_a_locale", "brand_b_locale"]
+      "locales": ["brand_a_locale", "brand_b_locale", "UK_locale"]
     },
     "europe": {
       "roles": {
         "europe": {}
       },
       "extent": {},
-      "layers": {},
+      "layers": {
+        "Scratch": {
+          "template": "scratch_geojson",
+          "roles": {
+            "scratch_role": {}
+          }
+        }
+      },
       "locales": ["UK_locale", "brand_b_locale", "brand_c_locale"]
     }
   }

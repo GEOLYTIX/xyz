@@ -90,6 +90,36 @@ await codi.describe({ name: 'workspace:', id: 'workspace' }, async () => {
   );
 
   codi.it(
+    { name: 'nested locales', parentId: 'workspace', id: 'workspace_locales' },
+    async () => {
+      const expectedMessage = 'Role access denied.';
+
+      const { req, res } = codi.mockHttp.createMocks({
+        params: {
+          key: 'locale',
+          locale: ['us', 'brand_a_locale', 'brand_b_locale', 'UK_locale'],
+          user: {
+            roles: ['us', 'brand_b'],
+          },
+        },
+      });
+
+      await getKeyMethod(req, res);
+
+      const message = res._getData();
+      const code = res.statusCode;
+
+      codi.assertEqual(code, 400, 'We expect to get a bad request.');
+
+      codi.assertEqual(
+        message,
+        expectedMessage,
+        'We should get a roles denial message',
+      );
+    },
+  );
+
+  codi.it(
     {
       name: 'nested locales bogus roles',
       parentId: 'workspace',
