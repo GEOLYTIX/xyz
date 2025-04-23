@@ -15,6 +15,8 @@ export default (_) => {
   _.buckets ??= 7;
   _.decimals ??= 0;
 
+  _.buckets = parseInt(_.buckets);
+
   return `
     WITH percentiles AS (
         SELECT
@@ -23,7 +25,7 @@ export default (_) => {
             MIN(${_.field}) AS actual_min,
             MAX(${_.field}) AS actual_max
         FROM \${table}
-        WHERE true \${filter} \${viewport}
+        WHERE ${_.field} is not null and true \${filter} \${viewport}
     ),
     buckets AS (
         SELECT 
@@ -44,7 +46,7 @@ export default (_) => {
             (p98 - p2) / ${_.buckets} AS bin_width
         FROM \${table}
         CROSS JOIN percentiles
-        WHERE true \${filter} \${viewport}
+        WHERE ${_.field} is not null and true \${filter} \${viewport}
     )
     SELECT
         COUNT(*)::integer AS count,
