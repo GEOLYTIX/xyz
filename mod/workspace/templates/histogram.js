@@ -76,7 +76,7 @@ export default (_) => {
     ORDER BY bucket)
 `;
 
-const chartJSString = `
+  const chartJSString = `
 SELECT ARRAY [JSON_BUILD_OBJECT(
         'data', ARRAY_AGG(count ORDER BY bucket),
         'backgroundColor', '#000000',
@@ -85,15 +85,13 @@ SELECT ARRAY [JSON_BUILD_OBJECT(
        ARRAY_AGG(bucket_min || '-' || bucket_max ORDER BY bucket) AS labels
 FROM final_data`;
 
-const outputString = `
-SELECT * FROM final_data`
+  const outputString = `
+SELECT * FROM final_data`;
 
-
-// If the parameter "chartjs" is set to true, return the chart.js string
+  // If the parameter "chartjs" is set to true, return the chart.js string
   if (_.chartjs) {
     return sqlString + chartJSString;
   } else {
     return sqlString + outputString;
   }
-
 };
