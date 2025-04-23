@@ -31,6 +31,7 @@ import sql_table_insert from './sql_table_insert.js';
 import locationCount from './location_count.js';
 import mvt from './mvt.js';
 import mvtGeom from './mvt_geom.js';
+import histogram from './histogram.js';
 
 export default {
   gaz_query: {
@@ -139,5 +140,9 @@ export default {
     layer: true,
     render: mvtGeom,
     value_only: true,
+  },
+  histogram: {
+    layer: true,
+    render: histogram,
   },
 };
