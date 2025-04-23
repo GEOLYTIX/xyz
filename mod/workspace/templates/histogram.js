@@ -30,8 +30,9 @@ export default (_) => {
           .join('\n')}
         when ${_.field} >= p98 then ${_.buckets + 1} 
         end as bucket
-        from \${table} true \${filter} \${viewport}
+        from \${table}
         cross join percentiles
+        where true \${filter} \${viewport}
     )
     select 
     count(*)::integer as count, 
