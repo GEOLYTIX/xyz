@@ -13,6 +13,7 @@ The module will export null if neither a PRIVATE or PUBLIC xyzEnv are provided.
 */
 
 import pg from 'pg';
+
 const { Pool } = pg;
 
 const connection = xyzEnv.PRIVATE?.split('|') || xyzEnv.PUBLIC?.split('|');

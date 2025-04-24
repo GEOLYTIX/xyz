@@ -14,9 +14,9 @@ import cloudinary from './cloudinary.js';
 import s3 from './s3.js';
 
 const signerModules = {
+  cloudfront,
   cloudinary,
   s3,
-  cloudfront,
 };
 
 /**

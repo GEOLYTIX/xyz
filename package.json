@@ -30,7 +30,7 @@
     "pg": "^8.13.1"
   },
   "devDependencies": {
-    "@biomejs/biome": "1.9.4",
+    "@biomejs/biome": "2.0.0-beta.1",
     "clean-jsdoc-theme": "^4.3.0",
     "codi-test-framework": "1.0.37",
     "concurrently": "^9.1.0",

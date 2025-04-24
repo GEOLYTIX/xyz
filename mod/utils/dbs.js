@@ -30,11 +30,11 @@ Object.keys(xyzEnv)
     const id = key.split('_')[1];
 
     const pool = new Pool({
-      dbs: id,
       connectionString: xyzEnv[key],
-      keepAlive: true,
-      connectionTimeoutMillis: 5000, // 5 seconds
-      idleTimeoutMillis: 30000, // 30 seconds
+      connectionTimeoutMillis: 5000,
+      dbs: id,
+      idleTimeoutMillis: 30000, // 5 seconds
+      keepAlive: true, // 30 seconds
       max: 20, // Maximum number of clients in the pool
     });
 
@@ -93,10 +93,10 @@ async function clientQuery(pool, query, variables, timeout) {
       // Log the error with retry information
       logger({
         err,
-        query,
-        variables,
-        retry: retryCount + 1,
         pool: pool.options.dbs,
+        query,
+        retry: retryCount + 1,
+        variables,
       });
 
       retryCount++;

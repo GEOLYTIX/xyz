@@ -10,9 +10,8 @@ Exports the apiKey method for the /api/user/key route.
 @module /user/key
 */
 
-import acl from './acl.js';
-
 import jwt from 'jsonwebtoken';
+import acl from './acl.js';
 
 /**
 @function apiKey
@@ -65,9 +64,9 @@ export default async function apiKey(req, res) {
 
   // Create signed api_token
   const api_user = {
+    api: true,
     email: user.email,
     roles: user.roles,
-    api: true,
   };
 
   const key = jwt.sign(api_user, xyzEnv.SECRET);

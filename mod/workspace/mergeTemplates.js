@@ -11,13 +11,10 @@ The workspace is cached in the module scope to allow for the mergeObjectTemplate
 @module /workspace/mergeTemplates
 */
 
-import merge from '../utils/merge.js';
-
 import envReplace from '../utils/envReplace.js';
-
-import getTemplate from './getTemplate.js';
-
+import merge from '../utils/merge.js';
 import workspaceCache from './cache.js';
+import getTemplate from './getTemplate.js';
 
 let workspace;
 
