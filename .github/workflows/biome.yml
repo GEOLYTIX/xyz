@@ -1,5 +1,6 @@
 name: Code quality
-
+permissions:
+  contents: read
 on:
   push:
   pull_request:
