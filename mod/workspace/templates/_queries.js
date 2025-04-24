@@ -29,6 +29,7 @@ import locationsDelete from './locations_delete.js';
 import locationUpdate from './location_update.js';
 import sql_table_insert from './sql_table_insert.js';
 import locationCount from './location_count.js';
+import locationFieldValue from './location_field_value.js';
 import mvt from './mvt.js';
 import mvtGeom from './mvt_geom.js';
 import histogram from './histogram.js';
@@ -129,6 +130,11 @@ export default {
   location_count: {
     layer: true,
     template: locationCount,
+    value_only: true,
+  },
+  location_field_value: {
+    layer: true,
+    render: locationFieldValue,
     value_only: true,
   },
   mvt: {
