@@ -6,7 +6,7 @@ const mockPgConnectFn = codi.mock.fn();
 const mockPgQueryFn = codi.mock.fn();
 
 const mockPg = codi.mock.module('pg', {
-  namedExports: {
+  defaultExport: {
     Pool: class Pool {
       constructor() {
         this.connect = mockPgConnectFn;
