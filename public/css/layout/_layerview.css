@@ -3,16 +3,17 @@
   margin-top: 7px;
   border-radius: 3px;
 
-  & > .header {
-    & ~ .drawer.layer-view {
+  &>.header {
+    &~.drawer.layer-view {
       margin-top: 0;
     }
-    & ~ .drawer.layer-view ~ .drawer.layer-view {
+
+    &~.drawer.layer-view~.drawer.layer-view {
       margin-top: 7px;
     }
   }
 
-  & > .meta {
+  &>.meta {
     padding-bottom: 5px;
     -webkit-touch-callout: none;
     -webkit-user-select: none;
@@ -30,11 +31,11 @@
   padding-left: 5px;
   padding-right: 5px;
 
-  & > *:not(.header) {
+  &>*:not(.header) {
     margin-top: 5px;
   }
 
-  > .header {
+  >.header {
     .material-symbols-outlined {
       font-size: 1.5em;
     }
@@ -51,24 +52,24 @@
   padding-right: 3px;
   background: var(--color-base-tertiary);
 
-  & > * {
+  &>* {
     padding-left: 4px;
   }
 }
 
-#layers > .drawer.layer-group .drawer.layer-view {
+#layers>.drawer.layer-group .drawer.layer-view {
   background: var(--color-base-tertiary);
   border: none;
   box-shadow: none;
   border-top: 1px solid var(--color-border);
 }
 
-#layers > .layer-view > .drawer,
+#layers>.layer-view>.drawer,
 #layers .drawer.layer-view .drawer {
   border: none;
   box-shadow: none;
 }
 
-#layers > .layer-view > .drawer {
+#layers>.layer-view>.drawer {
   background: var(--color-base-tertiary);
 }
