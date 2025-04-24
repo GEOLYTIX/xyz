@@ -27,7 +27,7 @@
   },
   "dependencies": {
     "jsonwebtoken": "^9.0.2",
-    "pg": "^8.13.1"
+    "pg": "~8.15.1"
   },
   "devDependencies": {
     "@biomejs/biome": "1.9.4",
