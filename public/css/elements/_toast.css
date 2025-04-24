@@ -1,6 +1,5 @@
 .toast {
   position: fixed;
-  display: none;
   left: 0;
   bottom: 0;
   width: 100%;
@@ -14,12 +13,9 @@
   padding: 1em 2em;
   text-align: center;
   transform: translateY(100%);
+  animation: 1s ease-in-out 1s forwards showToast;
 
-  &[style*='display: block'] {
-    animation: 1s ease-in-out 1s forwards showToast;
-  }
-
-  &.before-remove {
+  &.ease-out {
     animation: 1s ease-in-out forwards hideToast;
   }
 

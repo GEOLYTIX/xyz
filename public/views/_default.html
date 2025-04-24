@@ -358,6 +358,17 @@
         });
       }
 
+        const toast = await mapp.ui.elements.toast({
+          content: 'Hello from ui toast!',
+          actions: [{
+            label: 'OK',
+            callback: (e, params) => console.log(e)
+          }],
+          logo: "https://geolytix.github.io/public/mapp_v4/emblem.svg"
+        });
+
+        console.log(toast)
+
       // Check whether the locale supports a userLocale
       if (locale.userLocale) {
         if (mapp.hooks.current.userlocale) {

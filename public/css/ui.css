@@ -972,7 +972,6 @@ dialog {
 /* public/css/elements/_toast.css */
 .toast {
   position: fixed;
-  display: none;
   left: 0;
   bottom: 0;
   width: 100%;
@@ -986,10 +985,8 @@ dialog {
   padding: 1em 2em;
   text-align: center;
   transform: translateY(100%);
-  &[style*="display: block"] {
-    animation: 1s ease-in-out 1s forwards showToast;
-  }
-  &.before-remove {
+  animation: 1s ease-in-out 1s forwards showToast;
+  &.ease-out {
     animation: 1s ease-in-out forwards hideToast;
   }
   .actions {
