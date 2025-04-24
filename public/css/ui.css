@@ -1126,6 +1126,7 @@ dialog {
     }
     h2 {
       font-weight: normal;
+      max-width: 75%;
     }
   }
 }
