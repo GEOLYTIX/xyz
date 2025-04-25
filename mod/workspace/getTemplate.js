@@ -74,11 +74,7 @@ export default async function getTemplate(key) {
   if (!template.src) {
     return template;
   } else if (!template.key) {
-    const srcTemplate = await getTemplateObject(workspace, null, template.src);
-
-    if (srcTemplate) {
-      template = srcTemplate;
-    }
+    template = await getTemplateObject(workspace, null, template.src) || template;
   }
 
   let response;
