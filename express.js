@@ -44,8 +44,8 @@ RATE_LIMIT_WINDOW - Time window in ms (default: 1 min)
 import 'dotenv/config';
 import './mod/utils/processEnv.js';
 
-import express from 'express';
 import cookieParser from 'cookie-parser';
+import express from 'express';
 import rateLimit from 'express-rate-limit';
 
 import api from './api/api.js';
@@ -59,10 +59,10 @@ const app = express();
 app.disable('x-powered-by');
 
 const limiter = rateLimit({
-  windowMs: xyzEnv.RATE_LIMIT_WINDOW,
+  legacyHeaders: false,
   limit: xyzEnv.RATE_LIMIT,
   standardHeaders: 'draft-8',
-  legacyHeaders: false,
+  windowMs: xyzEnv.RATE_LIMIT_WINDOW,
 });
 
 app.use(limiter);

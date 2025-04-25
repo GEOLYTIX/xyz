@@ -235,34 +235,29 @@ Here are some additional settings to use in your ./vscode/settings.json file
 }
 ```
 
-## ESLint
+## Biome
 
-The codebase makes use of the [eslint](eslint.org) package to ensure that our code adhere to different rules and coding guidelines.
-To run `eslint` you will need to have the development packages installed. You can ensure they are installed by running `npm install` in the root of the xyz directory.
+The codebase uses [Biome](https://biomejs.dev/) to ensure code quality, consistent formatting, and adherence to coding guidelines. Biome is an all-in-one tool for linting, formatting, and more.
 
-To run the lint you can execute `npx eslint .` in the root of the application. This will show any issues there are with the codebase. You can also add the flag `--fix` to the command to allow eslint to fix any issues it may find.
+To run Biome, you need to have the development dependencies installed. Make sure to run `npm install` in the root of the xyz directory.
 
-eslint command
+To check for linting and formatting issues, run the following command in the root of the application:
 
-    npx esbuild .
+    npx biome check
 
-eslint command with fix
+To automatically fix issues (where possible), run:
 
-    npx esbuild . --fix
+    npx biome check --write
 
-There are other extensions you can use in your editor to get on the fly error highlighting where any rules are broken. Please look into what eslint supports in your environment.
+You can also use Biome's formatting capabilities:
 
-## Prettier.io
+    npx biome format
 
-For formatting we have implemented [prettier.io](prettier.io).
-This is so we can ensure that there is consistent formatting across xyz.
+Or to format and apply fixes:
 
-To get prettier.io working in your editor you will need to follow one of the setups below:
+    npx biome format --write
 
-- [VSCode](https://prettier.io/docs/en/editors#visual-studio-code)
-- [Sublime](https://prettier.io/docs/en/editors#sublime-text)
-- [Atom](https://prettier.io/docs/en/editors#atom)
-- [Vim](https://prettier.io/docs/en/editors#vim)
+Many editors have Biome extensions or plugins for on-the-fly error highlighting and formatting. Please refer to the [Biome editor integration guide](https://biomejs.dev/docs/integrations/editors/) for setup instructions for your environment.
 
 ## version.js hash
 

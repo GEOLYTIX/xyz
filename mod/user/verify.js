@@ -12,11 +12,10 @@ Exports the [user] verify method for the /api/user/verify route.
 @module /user/verify
 */
 
-import acl from './acl.js';
+import languageTemplates from '../utils/languageTemplates.js';
 
 import mailer from '../utils/mailer.js';
-
-import languageTemplates from '../utils/languageTemplates.js';
+import acl from './acl.js';
 
 import login from './login.js';
 
@@ -65,8 +64,8 @@ export default async (req, res) => {
 
   if (!user) {
     const token_not_found = await languageTemplates({
-      template: 'token_not_found',
       language: req.params.language,
+      template: 'token_not_found',
     });
 
     return res.status(302).send(token_not_found);
@@ -118,11 +117,11 @@ export default async (req, res) => {
     // Get array of mail promises.
     const mail_promises = rows.map(async (row) => {
       return await mailer({
-        template: 'admin_email',
-        language: row.language,
-        to: row.email,
         email: user.email,
         host: req.params.host,
+        language: row.language,
+        template: 'admin_email',
+        to: row.email,
       });
     });
 
@@ -131,8 +130,8 @@ export default async (req, res) => {
       .then(async (arr) => {
         res.send(
           await languageTemplates({
-            template: 'account_await_approval',
             language: user.language,
+            template: 'account_await_approval',
           }),
         );
       })
@@ -141,8 +140,8 @@ export default async (req, res) => {
     // No admin accounts found in ACL.
     res.send(
       await languageTemplates({
-        template: 'account_approved_no_admin',
         language: user.language,
+        template: 'account_approved_no_admin',
       }),
     );
   }

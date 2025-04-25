@@ -1,81 +1,97 @@
 {
-  "vcs": {
-    "clientKind": "git",
-    "enabled": true,
-    "defaultBranch": "main"
+  "$schema": "https://next.biomejs.dev/schemas/2.0.0-beta/schema.json",
+  "assist": {
+    "actions": {
+      "source": {
+        "organizeImports": "on",
+        "useSortedKeys": "off"
+      }
+    },
+    "enabled": true
+  },
+  "css": {
+    "formatter": {
+      "quoteStyle": "single"
+    }
+  },
+  "files": {
+    "includes": [
+      "**",
+      "!**/public/js/**/*",
+      "!**/docs/**/*",
+      "!**/mod/utils/bcrypt.cjs",
+      "!**/tests/**/*",
+      "!**/lib/utils/uhtml.mjs",
+      "!**/public/css/mapp.css",
+      "!**/public/css/ui.css",
+      "!**/lib/utils/uhtml.mjs",
+      "!package.json",
+      "!jsdoc_mapp.json",
+      "!jsdoc_xyz.json",
+      "!jsdoc_test.json"
+    ]
   },
   "formatter": {
+    "attributePosition": "auto",
+    "bracketSpacing": true,
     "enabled": true,
-    "useEditorconfig": true,
     "formatWithErrors": false,
     "indentStyle": "space",
     "indentWidth": 2,
     "lineEnding": "lf",
-    "lineWidth": 80,
-    "attributePosition": "auto",
-    "bracketSpacing": true,
-    "ignore": [
-      "public/css/mapp.css",
-      "public/css/ui.css",
-      "lib/utils/uhtml.mjs"
-    ]
+    "lineWidth": 80
   },
-  "organizeImports": {
-    "enabled": false
+  "html": {
+    "formatter": {
+      "enabled": true
+    }
+  },
+  "javascript": {
+    "formatter": {
+      "arrowParentheses": "always",
+      "bracketSameLine": false,
+      "bracketSpacing": true,
+      "quoteProperties": "asNeeded",
+      "quoteStyle": "single",
+      "semicolons": "always",
+      "trailingCommas": "all"
+    }
   },
   "linter": {
     "enabled": true,
     "rules": {
-      "recommended": false,
       "complexity": {
         "noBannedTypes": "error",
-        "useOptionalChain": "error",
         "noExcessiveCognitiveComplexity": {
           "level": "error",
           "options": {
             "maxAllowedComplexity": 20
           }
-        }
+        },
+        "useOptionalChain": "error"
       },
       "correctness": {
-        "noConstantCondition": "error",
-        "noConstAssign": "error"
-      },
-      "style": {
-        "useConst": "error",
-        "noYodaExpression": "error"
+        "noConstAssign": "error",
+        "noConstantCondition": "error"
       },
       "performance": {
         "noAccumulatingSpread": "error"
+      },
+      "recommended": false,
+      "style": {
+        "noYodaExpression": "error",
+        "useConst": "error"
       },
       "suspicious": {
         "noDuplicateObjectKeys": "error",
         "noGlobalAssign": "error",
         "useIsArray": "error"
       }
-    },
-    "ignore": [
-      "public/js/**/*",
-      "docs/**/*",
-      "mod/utils/bcrypt.cjs",
-      "tests/**/*",
-      "lib/utils/uhtml.mjs"
-    ]
-  },
-  "javascript": {
-    "formatter": {
-      "quoteProperties": "asNeeded",
-      "trailingCommas": "all",
-      "semicolons": "always",
-      "arrowParentheses": "always",
-      "bracketSameLine": false,
-      "quoteStyle": "single",
-      "bracketSpacing": true
     }
   },
-  "css": {
-    "formatter": {
-      "quoteStyle": "single"
-    }
+  "vcs": {
+    "clientKind": "git",
+    "defaultBranch": "main",
+    "enabled": true
   }
 }

@@ -58,13 +58,10 @@ export default function checkWorkspaceCache(force) {
   return cache;
 }
 
-import view_templates from './templates/_views.js';
-
 import mail_templates from './templates/_mails.js';
-
 import msg_templates from './templates/_msgs.js';
-
 import query_templates from './templates/_queries.js';
+import view_templates from './templates/_views.js';
 
 /**
 @function cacheWorkspace
