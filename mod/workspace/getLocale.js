@@ -11,13 +11,12 @@ The getLocale module exports the getLocale method which is required by the getLa
 @module /workspace/getLocale
 */
 
+import merge from '../utils/merge.js';
 import * as Roles from '../utils/roles.js';
 import workspaceCache from './cache.js';
-import mergeTemplates from './mergeTemplates.js';
 
 import getTemplate from './getTemplate.js';
-
-import merge from '../utils/merge.js';
+import mergeTemplates from './mergeTemplates.js';
 
 /**
 @function getLocale
