@@ -78,8 +78,9 @@ export default async function mergeTemplates(obj) {
     }
   }
 
-  for (let template of obj.templates || []) {
-    template = await getTemplate(template);
+  // The _template can be a string or object [with src]
+  for (const _template of obj.templates || []) {
+    const template = await getTemplate(_template);
 
     // Failed to retrieve template matching template_key
     if (template instanceof Error) {
