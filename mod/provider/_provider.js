@@ -5,9 +5,8 @@
 Functions for handling 3rd party service provider requests
 */
 
-import file from './file.js';
-
 import cloudfront from './cloudfront.js';
+import file from './file.js';
 
 import s3 from './s3.js';
 

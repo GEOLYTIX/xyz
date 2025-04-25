@@ -11,11 +11,11 @@ Exports the login method for the /api/user/login route.
 @module /user/login
 */
 
-import fromACL from './fromACL.js';
+import jsonwebtoken from 'jsonwebtoken';
 
 import view from '../view.js';
+import fromACL from './fromACL.js';
 
-import jsonwebtoken from 'jsonwebtoken';
 const { sign } = jsonwebtoken;
 
 /**
@@ -95,8 +95,8 @@ async function loginBody(req, res) {
 
   const token = sign(
     {
-      email: user.email,
       admin: user.admin,
+      email: user.email,
       language: user.language,
       roles: user.roles,
       session: user.session,

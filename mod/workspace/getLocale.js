@@ -12,10 +12,8 @@ The getLocale module exports the getLocale method which is required by the getLa
 */
 
 import * as Roles from '../utils/roles.js';
-
-import mergeTemplates from './mergeTemplates.js';
-
 import workspaceCache from './cache.js';
+import mergeTemplates from './mergeTemplates.js';
 
 import getTemplate from './getTemplate.js';
 

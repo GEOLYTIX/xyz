@@ -11,12 +11,9 @@ The module exports the getTemplate method which is required by the query, langua
 */
 
 import getFrom from '../provider/getFrom.js';
-
-import merge from '../utils/merge.js';
-
-import workspaceCache from './cache.js';
-
 import envReplace from '../utils/envReplace.js';
+import merge from '../utils/merge.js';
+import workspaceCache from './cache.js';
 
 /**
 @global
