@@ -23,6 +23,7 @@ import locationGet from './location_get.js';
 import locationNew from './location_new.js';
 import locationUpdate from './location_update.js';
 import locationsDelete from './locations_delete.js';
+import locationFieldValue from './location_field_value.js';
 import mvt from './mvt.js';
 import mvtGeom from './mvt_geom.js';
 import sql_table_insert from './sql_table_insert.js';
