@@ -34,79 +34,82 @@ import envReplace from '../utils/envReplace.js';
 @async
 
 @description
+The workspace will checked and cached by the [Workspace API checkWorkspaceCache]{@link module:/workspace/cache~checkWorkspaceCache} method.
+
 A JSON template object will be requested from the getTemplateObject method.
 
 An error will be returned if the lookup failed.
 
-A template will be requested from source if the template has not been cached.
+A template will be fetched from the templates src property.
+
+A template can be cached by removing the src property in the workspace.templates.
 
 The key will be assigned to the template object as key property.
-
-Template modules will be constructed.
 
 @param {string} key
 
 @returns {Promise<Object|Error>} JSON Template
 */
 export default async function getTemplate(key) {
-  const template = await getTemplateObject(key);
+  const workspace = await workspaceCache();
 
-  if (template instanceof Error) {
-    return template;
+  if (workspace instanceof Error) {
+    return workspace;
   }
 
-  // The template.key property value must be the same as the key reference in the workspace.templates{}
-  template.key = key;
+  let template;
+  if (typeof key === 'string') {
+    template = await getTemplateObject(workspace, key);
+
+    if (template instanceof Error) {
+      return template;
+    }
+
+    // The template.key property value must be the same as the key reference in the workspace.templates{}
+    template.key = key;
+  } else if (key instanceof Object) {
+    template = key;
+  }
 
   if (!template.src) {
     return template;
-  }
+  } else if (!template.key) {
+    const srcTemplate = await getTemplateObject(workspace, null, template.src);
 
-  if (template.cached) {
-    return structuredClone(template.cached);
-  }
+    if (srcTemplate) {
+      template = srcTemplate
+    }
+  } 
 
-  // Subtitutes ${*} with xyzEnv.SRC_* key values.
-  template.src = envReplace(template.src);
+  let response;
 
-  const method = template.src.split(':')[0];
+  if (template.src) {
+    // Subtitutes ${*} with xyzEnv.SRC_* key values.
+    template.src = envReplace(template.src);
 
-  if (!Object.hasOwn(getFrom, method)) {
-    // Unable to determine getFrom method.
-    const err = new Error(`Cannot get: "${template.src}"`);
-    console.error(err);
-    return err;
-  }
+    const method = template.src.split(':')[0];
 
-  const response = await getFrom[method](template.src);
+    if (!Object.hasOwn(getFrom, method)) {
+      // Unable to determine getFrom method.
+      const err = new Error(`Cannot get: "${template.src}"`);
+      console.error(err);
+      return err;
+    }
 
-  if (response instanceof Error) {
-    return response;
+    response = await getFrom[method](template.src);
+
+    if (response instanceof Error) {
+      return response;
+    }
   }
 
   // Template is a module.
   if (template.module) {
-    try {
-      // For ESM modules, we need to use dynamic import with a data URL
-      // Convert the module code to a data URL with the proper MIME type
-      const dataUrl = `data:text/javascript;charset=utf-8,${encodeURIComponent(response)}`;
-
-      // Use dynamic import to load the module
-      const importedModule = await import(dataUrl);
-
-      // Set the render function to the default export or the entire module
-      template.render = importedModule.default || importedModule;
-    } catch (err) {
-      return err;
-    }
-    return template;
+    return await moduleTemplate(template, response);
   }
 
   if (typeof response === 'object') {
-    // Get template from src.
-    template.cached = merge(response, template);
-
-    return structuredClone(template.cached);
+    return await cacheTemplate(workspace, template, response);
   } else if (typeof response === 'string') {
     template.template = response;
   }
@@ -119,7 +122,7 @@ export default async function getTemplate(key) {
 @async
 
 @description
-The workspace will checked and cached by the [Workspace API checkWorkspaceCache]{@link module:/workspace/cache~checkWorkspaceCache} method.
+
 
 A template object matching the template_key param in the workspace.templates{} object will be returned.
 
@@ -131,27 +134,85 @@ An error exception will be returned if the template object lookup from the works
 
 @returns {Promise<Object|Error>} JSON Template
 */
-async function getTemplateObject(template) {
-  if (typeof template === 'string') {
-    // The template param must not include non whitelisted character.
-    if (/[^a-zA-Z0-9 :_-]/.exec(template)) {
-      return new Error(
-        `Template param may only include whitelisted character.`,
-      );
-    }
-
-    const workspace = await workspaceCache();
-
-    if (workspace instanceof Error) {
-      return workspace;
-    }
-
-    if (!Object.hasOwn(workspace.templates, template)) {
-      return new Error(`Template: ${template} not found.`);
-    }
-
-    template = workspace.templates[template];
+async function getTemplateObject(workspace, templateKey, srcKey) {
+  // The template param must not include non whitelisted character.
+  if (templateKey && /[^a-zA-Z0-9 :_-]/.exec(templateKey)) {
+    return new Error(`Template param may only include whitelisted character.`);
   }
 
+  if (srcKey && Object.hasOwn(workspace.templates, srcKey)) {
+    return workspace.templates[srcKey];
+  }
+
+  if (!templateKey) return;
+
+  if (!Object.hasOwn(workspace.templates, templateKey)) {
+    return new Error(`Template: ${templateKey} not found.`);
+  }
+
+  return workspace.templates[templateKey];
+}
+
+/**
+@function moduleTemplate
+@async
+
+@description
+The script string is converted to a jascript data URL which can be used in a dynamic ESM import.
+
+The default export or the imported module itself will be assigned as the render method in the module template.
+
+Module templates are not cached.
+@param {object} template
+@param {string} response Module script as string.
+
+@returns {Promise<Object|Error>} JSON Template
+*/
+async function moduleTemplate(template, response) {
+  try {
+
+    const dataUrl = `data:text/javascript;charset=utf-8,${encodeURIComponent(response)}`;
+
+    // Use dynamic import to load the module
+    const importedModule = await import(dataUrl);
+
+    // Set the render function to the default export or the entire module
+    template.render = importedModule.default || importedModule;
+  } catch (err) {
+    return err;
+  }
   return template;
+}
+
+/**
+@function cacheTemplate
+@async
+
+@description
+The method merges the response object into the template and removes the src property. The merged template object is assigned to the workspace. This effectively caches the template since the src to fetch the template is removed.
+
+A src property is assigned as key for an object without an key property. This allows to cache templates which should be merged into their respective parent objects.
+
+A src property beginning with `file:` is not removed since file resources do not require caching.
+
+@param {workspace} workspace
+@param {object} template
+@param {object} [response] An object from a template src
+
+@returns {Promise<Object|Error>} JSON Template
+*/
+async function cacheTemplate(workspace, template, response = {}) {
+  // Get template from src.
+  template = merge(response, template);
+
+  if (template.src) {
+
+    workspace.templates[template.key || template.src] = template;
+
+    if (!template.src.startsWith('file:')) {
+      delete template.src;
+    }
+  }
+
+  return structuredClone(template);
 }

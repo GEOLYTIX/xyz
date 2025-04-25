@@ -63,8 +63,8 @@ export default async function mergeTemplates(obj) {
   }
 
   // The object has a template object to merge into.
-  if (typeof obj.template?.key === 'string') {
-    const template = await getTemplate(obj.template.key);
+  if (obj.template instanceof Object) {
+    const template = await getTemplate(obj.template);
 
     // Failed to get template matching obj.template from template.src!
     if (template instanceof Error) {
@@ -78,8 +78,8 @@ export default async function mergeTemplates(obj) {
     }
   }
 
-  for (const template_key of obj.templates || []) {
-    const template = await getTemplate(template_key);
+  for (let template of obj.templates || []) {
+    template = await getTemplate(template);
 
     // Failed to retrieve template matching template_key
     if (template instanceof Error) {
