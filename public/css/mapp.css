@@ -91,6 +91,10 @@ body {
   width: 100%;
   padding: 5px;
   pointer-events: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
   user-select: none;
   & > .logo {
     pointer-events: auto;
@@ -115,6 +119,11 @@ body {
 
 /* public/css/layout/_legend.css */
 .legend {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
   & .contents-wrapper,
   &.content .contents-wrapper {
     margin-top: 0.5em;
@@ -183,7 +192,7 @@ body {
 /* public/css/layout/_infotip.css */
 .infotip {
   position: fixed;
-  z-index: 998;
+  isolation: isolate;
   margin: 0;
   padding: 5px;
   background-color: var(--color-base-tertiary);

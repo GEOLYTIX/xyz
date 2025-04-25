@@ -12,12 +12,18 @@
     font-weight: bold;
     color: var(--color-font-contrast);
     background-color: var(--color-primary);
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
     user-select: none;
 
-    button {
+    button.close {
       cursor: pointer;
-      font-size: 0.8em;
+      font-size: 1em;
       padding: 0 2px;
+      color: inherit;
+      vertical-align: middle;
     }
   }
 }
