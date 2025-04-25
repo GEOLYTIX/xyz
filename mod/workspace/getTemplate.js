@@ -77,9 +77,9 @@ export default async function getTemplate(key) {
     const srcTemplate = await getTemplateObject(workspace, null, template.src);
 
     if (srcTemplate) {
-      template = srcTemplate
+      template = srcTemplate;
     }
-  } 
+  }
 
   let response;
 
@@ -170,7 +170,6 @@ Module templates are not cached.
 */
 async function moduleTemplate(template, response) {
   try {
-
     const dataUrl = `data:text/javascript;charset=utf-8,${encodeURIComponent(response)}`;
 
     // Use dynamic import to load the module
@@ -206,7 +205,6 @@ async function cacheTemplate(workspace, template, response = {}) {
   template = merge(response, template);
 
   if (template.src) {
-
     workspace.templates[template.key || template.src] = template;
 
     if (!template.src.startsWith('file:')) {
