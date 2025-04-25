@@ -10,9 +10,8 @@ Exports the deleteUser method for the /api/user/delete route.
 @module /user/add
 */
 
-import acl from './acl.js';
-
 import mailer from '../utils/mailer.js';
+import acl from './acl.js';
 
 /**
 @function deleteUser
@@ -82,10 +81,10 @@ export default async function deleteUser(req, res) {
 
   // Sent email to inform user that their account has been deleted.
   await mailer({
-    template: 'deleted_account',
-    language: user.language,
-    to: user.email,
     host: req.params.host,
+    language: user.language,
+    template: 'deleted_account',
+    to: user.email,
   });
 
   res.send('User account deleted.');

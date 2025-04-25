@@ -57,16 +57,16 @@ The process.ENV object holds configuration provided to the node process from the
 */
 
 const defaults = {
-  PORT: 3000,
-  DIR: '',
-  TITLE: 'GEOLYTIX | XYZ',
-  WORKSPACE_AGE: 3600000, // age in ms
   COOKIE_TTL: 36000,
+  DIR: '',
   FAILED_ATTEMPTS: 3,
+  PORT: 3000, // age in ms
+  RATE_LIMIT: 1000,
+  RATE_LIMIT_WINDOW: 60 * 1000,
   RETRY_LIMIT: 3,
-  TRANSPORT_TLS: false,
-  RATE_LIMIT: 1000, //1000 requests per 1min
-  RATE_LIMIT_WINDOW: 60 * 1000, // 1 min
+  TITLE: 'GEOLYTIX | XYZ',
+  TRANSPORT_TLS: false, //1000 requests per 1min
+  WORKSPACE_AGE: 3600000, // 1 min
 };
 
 process.env.PORT ??= defaults.PORT;
@@ -81,16 +81,16 @@ process.env.RATE_LIMIT_WINDOW ??= defaults.RATE_LIMIT_WINDOW;
 process.env.RATE_LIMIT ??= defaults.RATE_LIMIT;
 
 const xyzEnv = {
-  PORT: process.env.PORT,
-  DIR: process.env.DIR,
-  TITLE: process.env.TITLE,
-  WORKSPACE_AGE: process.env.WORKSPACE_AGE,
   COOKIE_TTL: parseInt(process.env.COOKIE_TTL),
-  RATE_LIMIT_WINDOW: process.env.RATE_LIMIT_WINDOW,
-  RATE_LIMIT: process.env.RATE_LIMIT,
+  DIR: process.env.DIR,
   FAILED_ATTEMPTS: process.env.FAILED_ATTEMPTS,
+  PORT: process.env.PORT,
+  RATE_LIMIT: process.env.RATE_LIMIT,
+  RATE_LIMIT_WINDOW: process.env.RATE_LIMIT_WINDOW,
   RETRY_LIMIT: process.env.RETRY_LIMIT,
+  TITLE: process.env.TITLE,
   TRANSPORT_TLS: process.env.TRANSPORT_TLS,
+  WORKSPACE_AGE: process.env.WORKSPACE_AGE,
 };
 
 // Add remaining env vars
