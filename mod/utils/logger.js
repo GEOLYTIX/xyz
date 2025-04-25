@@ -22,6 +22,7 @@ const logout = {
 
 // Required to initialse PostgreSQL logger.
 import pg from 'pg';
+
 const { Pool } = pg;
 
 const logger =
@@ -65,15 +66,15 @@ function logflare() {
 
   return (log, key) => {
     fetch(`https://api.logflare.app/logs/json?source=${params.source}`, {
-      method: 'post',
-      headers: {
-        'Content-Type': 'application/json',
-        'X-API-KEY': params.apikey,
-      },
       body: JSON.stringify({
         [process_id]: log,
         key,
       }),
+      headers: {
+        'Content-Type': 'application/json',
+        'X-API-KEY': params.apikey,
+      },
+      method: 'post',
     }).catch((err) => {
       console.error(err);
     });

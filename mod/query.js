@@ -12,21 +12,15 @@ The query module exports the [SQL] query method to pass queries to the stored db
 @module /query
 */
 
+import login from './user/login.js';
 import dbs_connections from './utils/dbs.js';
-
+import logger from './utils/logger.js';
+import * as Roles from './utils/roles.js';
 import sqlFilter from './utils/sqlFilter.js';
 
-import * as Roles from './utils/roles.js';
-
-import logger from './utils/logger.js';
-
-import login from './user/login.js';
-
 import workspaceCache from './workspace/cache.js';
-
-import getTemplate from './workspace/getTemplate.js';
-
 import getLayer from './workspace/getLayer.js';
+import getTemplate from './workspace/getTemplate.js';
 
 /**
 @function query

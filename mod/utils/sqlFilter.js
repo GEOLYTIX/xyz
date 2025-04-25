@@ -20,21 +20,13 @@ The filterTypes object contains methods for each filter type.
 @property {function} match The value is a string which must be the same as the field.
 */
 const filterTypes = {
+  boolean: (col, val) => `"${col}" IS ${!!val}`,
+
   eq: (col, val) => `"${col}" = ${addValues(val, 'numeric')}`,
 
   gt: (col, val) => `"${col}" > ${addValues(val, 'numeric')}`,
 
   gte: (col, val) => `"${col}" >= ${addValues(val, 'numeric')}`,
-
-  lt: (col, val) => `"${col}" < ${addValues(val, 'numeric')}`,
-
-  lte: (col, val) => `"${col}" <= ${addValues(val, 'numeric')}`,
-
-  boolean: (col, val) => `"${col}" IS ${!!val}`,
-
-  null: (col, val) => `"${col}" IS ${!val ? 'NOT' : ''} NULL`,
-
-  ni: (col, val) => `NOT "${col}" = ANY (${addValues([val], 'array')})`,
 
   in: (col, val) => `"${col}" = ANY (${addValues([val], 'array')})`,
 
@@ -49,7 +41,15 @@ const filterTypes = {
       .join(' OR ')})`;
   },
 
+  lt: (col, val) => `"${col}" < ${addValues(val, 'numeric')}`,
+
+  lte: (col, val) => `"${col}" <= ${addValues(val, 'numeric')}`,
+
   match: (col, val) => `"${col}"::text = ${addValues(val, 'string')}`,
+
+  ni: (col, val) => `NOT "${col}" = ANY (${addValues([val], 'array')})`,
+
+  null: (col, val) => `"${col}" IS ${!val ? 'NOT' : ''} NULL`,
 };
 
 let SQLparams;
@@ -198,8 +198,8 @@ const typeCheckers = {
   // Uses native Array.isArray for array checking
   array: Array.isArray,
   // Checks if value is strictly a string using typeof
-  string: (val) => typeof val === 'string',
+  numeric: (val) => !isNaN(val) && val !== null,
   // Checks if value is a valid number and not null
   // Note: isNaN('123') returns false, so this also accepts numeric strings
-  numeric: (val) => !isNaN(val) && val !== null,
+  string: (val) => typeof val === 'string',
 };

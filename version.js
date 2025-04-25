@@ -9,9 +9,9 @@ To run this script you can execute `node version.js` in your terminal.
 @module version
 */
 
+import { execSync } from 'child_process'; // For executing shell commands synchronously
 // File system module for reading/writing files
 import { readFileSync, writeFileSync } from 'fs';
-import { execSync } from 'child_process'; // For executing shell commands synchronously
 
 // Regular expression pattern to match 'hash: ' followed by any characters
 const key = 'hash:.*';

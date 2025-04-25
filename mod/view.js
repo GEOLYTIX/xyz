@@ -12,9 +12,8 @@ View templates maybe localised and must be requested from the languageTemplates 
 @module /view
 */
 
-import logger from './utils/logger.js';
-
 import languageTemplates from './utils/languageTemplates.js';
+import logger from './utils/logger.js';
 
 /**
 @function view
@@ -73,8 +72,8 @@ export default async function view(req, res) {
   if (req.params.msg) {
     // Check for languageTemplate for a message to be displayed in the template.
     params.msg = await languageTemplates({
-      template: req.params.msg,
       language: req.params.language,
+      template: req.params.msg,
     });
   }
 

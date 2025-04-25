@@ -2,45 +2,46 @@
  * @module /workspace/templates/queries
  */
 
-// Import all templates and renders
-import gazQuery from './gaz_query.js';
-import getLastLocation from './get_last_location.js';
-import distinctValues from './distinct_values.js';
-import distinctValuesJson from './distinct_values_json.js';
-import fieldStats from './field_stats.js';
-import fieldMin from './field_min.js';
-import fieldMax from './field_max.js';
-import fieldMinmax from './field_minmax.js';
-import getNnearest from './get_nnearest.js';
-import geojson from './geojson.js';
 import cluster from './cluster.js';
 import clusterHex from './cluster_hex.js';
-import wkt from './wkt.js';
+import distinctValues from './distinct_values.js';
+import distinctValuesJson from './distinct_values_json.js';
+import fieldMax from './field_max.js';
+import fieldMin from './field_min.js';
+import fieldMinmax from './field_minmax.js';
+import fieldStats from './field_stats.js';
+// Import all templates and renders
+import gazQuery from './gaz_query.js';
+import geojson from './geojson.js';
+import getLastLocation from './get_last_location.js';
+import getNnearest from './get_nnearest.js';
 import infotip from './infotip.js';
 import layerExtent from './layer_extent.js';
-import stIntersectsAb from './st_intersects_ab.js';
-import stIntersectsCount from './st_intersects_count.js';
-import stDistanceAb from './st_distance_ab.js';
-import stDistanceAbMultiple from './st_distance_ab_multiple.js';
+import locationCount from './location_count.js';
+import locationDelete from './location_delete.js';
 import locationGet from './location_get.js';
 import locationNew from './location_new.js';
-import locationDelete from './location_delete.js';
-import locationsDelete from './locations_delete.js';
 import locationUpdate from './location_update.js';
-import sql_table_insert from './sql_table_insert.js';
-import locationCount from './location_count.js';
-import locationFieldValue from './location_field_value.js';
+import locationsDelete from './locations_delete.js';
 import mvt from './mvt.js';
 import mvtGeom from './mvt_geom.js';
-import histogram from './histogram.js';
+import sql_table_insert from './sql_table_insert.js';
+import stDistanceAb from './st_distance_ab.js';
+import stDistanceAbMultiple from './st_distance_ab_multiple.js';
+import stIntersectsAb from './st_intersects_ab.js';
+import stIntersectsCount from './st_intersects_count.js';
+import wkt from './wkt.js';
 
 export default {
-  gaz_query: {
-    template: gazQuery,
-  },
-  get_last_location: {
+  cluster: {
     layer: true,
-    render: getLastLocation,
+    reduce: true,
+    render: cluster,
+  },
+  cluster_hex: {
+    layer: true,
+    reduce: true,
+    render: clusterHex,
   },
   distinct_values: {
     template: distinctValues,
@@ -48,39 +49,31 @@ export default {
   distinct_values_json: {
     template: distinctValuesJson,
   },
-  field_stats: {
-    template: fieldStats,
+  field_max: {
+    template: fieldMax,
   },
   field_min: {
     template: fieldMin,
   },
-  field_max: {
-    template: fieldMax,
-  },
   field_minmax: {
     template: fieldMinmax,
   },
-  get_nnearest: {
-    render: getNnearest,
+  field_stats: {
+    template: fieldStats,
+  },
+  gaz_query: {
+    template: gazQuery,
   },
   geojson: {
     layer: true,
     render: geojson,
   },
-  cluster: {
+  get_last_location: {
     layer: true,
-    render: cluster,
-    reduce: true,
+    render: getLastLocation,
   },
-  cluster_hex: {
-    layer: true,
-    render: clusterHex,
-    reduce: true,
-  },
-  wkt: {
-    layer: true,
-    render: wkt,
-    reduce: true,
+  get_nnearest: {
+    render: getNnearest,
   },
   infotip: {
     layer: true,
@@ -90,17 +83,14 @@ export default {
     layer: true,
     template: layerExtent,
   },
-  st_intersects_ab: {
-    template: stIntersectsAb,
+  location_count: {
+    layer: true,
+    template: locationCount,
+    value_only: true,
   },
-  st_intersects_count: {
-    template: stIntersectsCount,
-  },
-  st_distance_ab: {
-    template: stDistanceAb,
-  },
-  st_distance_ab_multiple: {
-    template: stDistanceAbMultiple,
+  location_delete: {
+    layer: true,
+    render: locationDelete,
   },
   location_get: {
     layer: true,
@@ -111,26 +101,13 @@ export default {
     render: locationNew,
     value_only: true,
   },
-  location_delete: {
-    layer: true,
-    render: locationDelete,
-  },
-  locations_delete: {
-    layer: true,
-    render: locationsDelete,
-  },
-  sql_table_insert: {
-    layer: true,
-    render: sql_table_insert,
-  },
   location_update: {
     layer: true,
     render: locationUpdate,
   },
-  location_count: {
+  locations_delete: {
     layer: true,
-    template: locationCount,
-    value_only: true,
+    render: locationsDelete,
   },
   location_field_value: {
     layer: true,
@@ -147,8 +124,25 @@ export default {
     render: mvtGeom,
     value_only: true,
   },
-  histogram: {
+  sql_table_insert: {
     layer: true,
-    render: histogram,
+    render: sql_table_insert,
+  },
+  st_distance_ab: {
+    template: stDistanceAb,
+  },
+  st_distance_ab_multiple: {
+    template: stDistanceAbMultiple,
+  },
+  st_intersects_ab: {
+    template: stIntersectsAb,
+  },
+  st_intersects_count: {
+    template: stIntersectsCount,
+  },
+  wkt: {
+    layer: true,
+    reduce: true,
+    render: wkt,
   },
 };
