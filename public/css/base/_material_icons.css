@@ -28,7 +28,6 @@
 
   &.close::after {
     content: 'close';
-    color: var(--color-font-mid);
   }
 }
 

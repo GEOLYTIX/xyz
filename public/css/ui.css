@@ -312,7 +312,6 @@ input[type=search]::-webkit-search-cancel-button:hover {
   }
   &.close::after {
     content: "close";
-    color: var(--color-font-mid);
   }
 }
 .toggle-on {
@@ -790,15 +789,12 @@ dialog {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-    button {
+    button.close {
       cursor: pointer;
-      font-size: 0.8em;
+      font-size: 1em;
       padding: 0 2px;
-      &:after {
-        content: "close";
-        color: var(--color-font-contrast);
-        vertical-align: middle;
-      }
+      color: inherit;
+      vertical-align: middle;
     }
   }
 }
