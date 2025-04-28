@@ -2,8 +2,9 @@
  * ## layer.decorateTest()
  * @module layer/decorateTest
  */
-import wkt_layer_default from '../../assets/layers/wkt/layer.json';
+
 import wkt_infoj_default from '../../assets/layers/wkt/infoj.json';
+import wkt_layer_default from '../../assets/layers/wkt/layer.json';
 import wkt_style_default from '../../assets/layers/wkt/style.json';
 
 /**

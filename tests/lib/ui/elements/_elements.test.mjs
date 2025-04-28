@@ -1,9 +1,9 @@
-import { slider } from './slider.test.mjs';
-import { layerStyle } from './layerStyle.test.mjs';
-import { pills } from './pills.test.mjs';
 import { alert } from './alert.test.mjs';
 import { confirm } from './confirm.test.mjs';
 import { dialog } from './dialog.test.mjs';
+import { layerStyle } from './layerStyle.test.mjs';
+import { pills } from './pills.test.mjs';
+import { slider } from './slider.test.mjs';
 
 export const elements = {
   setup,
