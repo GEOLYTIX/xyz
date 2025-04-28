@@ -42,27 +42,26 @@ The req object represents the HTTP request and has properties for the request qu
 */
 
 import '../mod/utils/processEnv.js';
-import login from '../mod/user/login.js';
-import auth from '../mod/user/auth.js';
-import saml from '../mod/user/saml.js';
-import register from '../mod/user/register.js';
-import logger from '../mod/utils/logger.js';
-
+import provider from '../mod/provider/_provider.js';
 //Route imports
 import query from '../mod/query.js';
-import view from '../mod/view.js';
-import provider from '../mod/provider/_provider.js';
 import sign from '../mod/sign/_sign.js';
 import user from '../mod/user/_user.js';
+import auth from '../mod/user/auth.js';
+import login from '../mod/user/login.js';
+import register from '../mod/user/register.js';
+import saml from '../mod/user/saml.js';
+import logger from '../mod/utils/logger.js';
+import view from '../mod/view.js';
 import workspace from '../mod/workspace/_workspace.js';
 
 // Group all routes
 const routes = {
-  query,
-  view,
   provider,
+  query,
   sign,
   user,
+  view,
   workspace,
 };
 
