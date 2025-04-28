@@ -15,17 +15,14 @@ This module exports the fromACL method to request and validate a user from the A
 */
 
 import bcrypt from '../utils/bcrypt.cjs';
+
 const { compareSync } = bcrypt;
 
 import { randomBytes } from 'crypto';
-
-import acl from './acl.js';
-
-import reqHost from '../utils/reqHost.js';
-
-import mailer from '../utils/mailer.js';
-
 import languageTemplates from '../utils/languageTemplates.js';
+import mailer from '../utils/mailer.js';
+import reqHost from '../utils/reqHost.js';
+import acl from './acl.js';
 
 export default !acl ? null : fromACL;
 
@@ -49,12 +46,12 @@ Validated user object or an Error if authentication fails.
 */
 async function fromACL(req) {
   const request = {
-    email: req.body?.email,
-    password: req.body?.password,
-    language: req.params.language,
-    headers: req.headers,
     date: new Date(),
+    email: req.body?.email,
+    headers: req.headers,
     host: reqHost(req),
+    language: req.params.language,
+    password: req.body?.password,
   };
 
   if (req.headers.authorization) {
@@ -80,16 +77,16 @@ async function fromACL(req) {
   if (!request.email)
     return new Error(
       await languageTemplates({
-        template: 'missing_email',
         language: request.language,
+        template: 'missing_email',
       }),
     );
 
   if (!request.password)
     return new Error(
       await languageTemplates({
-        template: 'missing_password',
         language: request.language,
+        template: 'missing_password',
       }),
     );
 
@@ -140,8 +137,8 @@ async function getUser(request) {
   if (rows instanceof Error)
     return new Error(
       await languageTemplates({
-        template: 'failed_query',
         language: request.language,
+        template: 'failed_query',
       }),
     );
 
@@ -158,8 +155,8 @@ async function getUser(request) {
   if (user.blocked) {
     return new Error(
       await languageTemplates({
-        template: 'user_blocked',
         language: user.language,
+        template: 'user_blocked',
       }),
     );
   }
@@ -171,8 +168,8 @@ async function getUser(request) {
   if (await userExpiry(user, request)) {
     return new Error(
       await languageTemplates({
-        template: 'user_expired',
         language: user.language,
+        template: 'user_expired',
       }),
     );
   }
@@ -299,8 +296,8 @@ async function failedLogin(request) {
   if (rows instanceof Error) {
     return new Error(
       await languageTemplates({
-        template: 'failed_query',
         language: request.language,
+        template: 'failed_query',
       }),
     );
   }
@@ -324,26 +321,26 @@ async function failedLogin(request) {
     if (rows instanceof Error) {
       return new Error(
         await languageTemplates({
-          template: 'failed_query',
           language: request.language,
+          template: 'failed_query',
         }),
       );
     }
 
     await mailer({
-      template: 'locked_account',
-      language: request.language,
-      to: request.email,
-      host: request.host,
       failed_attempts: maxFailedAttempts,
+      host: request.host,
+      language: request.language,
       remote_address: request.remote_address,
+      template: 'locked_account',
+      to: request.email,
       verificationtoken,
     });
 
     return new Error(
       await languageTemplates({
-        template: 'user_locked',
         language: request.language,
+        template: 'user_locked',
       }),
     );
   }
@@ -355,11 +352,11 @@ async function failedLogin(request) {
 
   // Login has failed but account is not locked (yet).
   await mailer({
-    template: 'login_incorrect',
-    language: request.language,
-    to: request.email,
     host: request.host,
+    language: request.language,
     remote_address: request.remote_address,
+    template: 'login_incorrect',
+    to: request.email,
   });
 
   return new Error('auth_failed');
