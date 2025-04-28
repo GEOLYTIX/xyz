@@ -111,6 +111,7 @@ button {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  transition: all 0.2s ease-in-out;
   > .material-symbols-outlined {
     pointer-events: none;
   }
