@@ -3,7 +3,7 @@ import styleParserJson from '../../assets/styles/styleParser.json' with {
 };
 
 export async function styleParser(mapview) {
-  await codi.describe('TODO: Layer: styleParserTest', async () => {
+  await codi.describe('Layer: styleParserTest', async () => {
     await codi.it('stypeParser Test:', async () => {
       const layer = styleParserJson;
 
@@ -127,42 +127,7 @@ export async function styleParser(mapview) {
           );
           codi.assertTrue(theme.hasOwnProperty('key'), 'Theme should have key');
 
-          if (theme.type === 'graduated') {
-            // Check graduated_breaks default
-            if (!theme.graduated_breaks) {
-              codi.assertEqual(
-                theme.graduated_breaks,
-                'less_than',
-                'Graduated theme should default to less_than breaks',
-              );
-            }
-
-            // Verify all values are numbers
-            theme.categories.forEach((cat) => {
-              codi.assertTrue(
-                typeof cat.value === 'number',
-                'Graduated theme category values should be numbers',
-              );
-            });
-
-            // Check ordering
-            const isOrdered = theme.categories.every((cat, i) => {
-              if (i === 0) return true;
-              const prev = theme.categories[i - 1].value;
-              const curr = cat.value;
-
-              if (theme.graduated_breaks === 'less_than') {
-                return prev <= curr;
-              } else {
-                return prev >= curr;
-              }
-            });
-
-            codi.assertTrue(
-              isOrdered,
-              `Categories should be ordered ${theme.graduated_breaks === 'less_than' ? 'ascending' : 'descending'}`,
-            );
-          }
+          checkGraduatedTheme(theme);
 
           if (theme.categories) {
             theme.categories.forEach((category) => {
@@ -208,4 +173,43 @@ export async function styleParser(mapview) {
       }
     });
   });
+}
+
+function checkGraduatedTheme(theme) {
+  if (theme.type === 'graduated') {
+    // Check graduated_breaks default
+    if (!theme.graduated_breaks) {
+      codi.assertEqual(
+        theme.graduated_breaks,
+        'less_than',
+        'Graduated theme should default to less_than breaks',
+      );
+    }
+
+    // Verify all values are numbers
+    theme.categories.forEach((cat) => {
+      codi.assertTrue(
+        typeof cat.value === 'number',
+        'Graduated theme category values should be numbers',
+      );
+    });
+
+    // Check ordering
+    const isOrdered = theme.categories.every((cat, i) => {
+      if (i === 0) return true;
+      const prev = theme.categories[i - 1].value;
+      const curr = cat.value;
+
+      if (theme.graduated_breaks === 'less_than') {
+        return prev <= curr;
+      } else {
+        return prev >= curr;
+      }
+    });
+
+    codi.assertTrue(
+      isOrdered,
+      `Categories should be ordered ${theme.graduated_breaks === 'less_than' ? 'ascending' : 'descending'}`,
+    );
+  }
 }
