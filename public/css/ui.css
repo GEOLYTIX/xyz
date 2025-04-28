@@ -1008,9 +1008,6 @@ dialog {
       margin: 0.1em;
       transition: 300ms all;
       width: 6em;
-      &:hover {
-        text-decoration: underline;
-      }
     }
   }
   .toast-logo {
