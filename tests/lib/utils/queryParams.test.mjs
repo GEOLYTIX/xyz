@@ -36,6 +36,14 @@ export async function queryParams(mapview) {
         { name: 'Providing a layer', parentId: 'utils_queryParams' },
         async () => {
           const layer_params = geojsonLayerDefault;
+          const expected = {
+            geom: 'geometry',
+            id: '1234',
+            layer: 'queryParamsLayer',
+            locale: 'locale',
+            table: 'different_table',
+            template: 'another_template',
+          };
 
           layer_params.key = 'queryParamsLayer';
 
@@ -62,7 +70,12 @@ export async function queryParams(mapview) {
 
           const queryparams = await mapp.utils.queryParams(origin);
 
-          console.log(queryparams);
+          codi.assertEqual(queryparams.geom, expected.geom);
+          codi.assertEqual(queryparams.id, expected.id);
+          codi.assertEqual(queryparams.layer, expected.layer);
+          codi.assertEqual(queryparams.locale, expected.locale);
+          codi.assertEqual(queryparams.table, expected.table);
+          codi.assertEqual(queryparams.template, expected.template);
 
           await mapview.removeLayer('queryParamsLayer');
         },
