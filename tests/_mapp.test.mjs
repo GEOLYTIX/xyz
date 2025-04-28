@@ -5,15 +5,15 @@
 @module _mappTest
 */
 
-import { coreTest } from './browser/local.test.mjs';
-import { mappTest } from './lib/mapp.test.mjs';
-import { layer } from './lib/layer/_layer.test.mjs';
-import { dictionaryTest } from './lib/dictionaries/_dictionaries.test.mjs';
-import { locationTest } from './lib/location/_location.test.mjs';
-import { mapviewTest } from './lib/mapview/_mapview.test.mjs';
-import { uiTest } from './lib/_ui.test.mjs';
-import { utilsTest } from './lib/utils/_utils.test.mjs';
 import { integrityTests } from './browser/integrity/_integrity.test.mjs';
+import { coreTest } from './browser/local.test.mjs';
+import { uiTest } from './lib/_ui.test.mjs';
+import { dictionaryTest } from './lib/dictionaries/_dictionaries.test.mjs';
+import { layer } from './lib/layer/_layer.test.mjs';
+import { locationTest } from './lib/location/_location.test.mjs';
+import { mappTest } from './lib/mapp.test.mjs';
+import { mapviewTest } from './lib/mapview/_mapview.test.mjs';
+import { utilsTest } from './lib/utils/_utils.test.mjs';
 
 /**
  * @global

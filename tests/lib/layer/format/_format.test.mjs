@@ -1,5 +1,5 @@
-import { vector } from './vector.test.mjs';
 import { mvt } from './mvt.test.mjs';
+import { vector } from './vector.test.mjs';
 
 export const formats = {
   setup,
