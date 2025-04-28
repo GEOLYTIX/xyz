@@ -31,10 +31,8 @@ The workspace object defines the mapp resources available in an XYZ instance.
 import * as Roles from '../utils/roles.js';
 
 import workspaceCache from './cache.js';
-
-import getLocale from './getLocale.js';
-
 import getLayer from './getLayer.js';
+import getLocale from './getLocale.js';
 
 import getTemplate from './getTemplate.js';
 
@@ -307,10 +305,10 @@ async function test(req, res) {
   workspace = await workspaceCache(true);
 
   const test = {
-    results: {},
     errArr: [],
-    used_templates: [],
     properties: new Set(['template', 'templates', 'query']),
+    results: {},
+    used_templates: [],
   };
 
   test.workspace_templates = new Set(
@@ -343,8 +341,8 @@ async function test(req, res) {
     for (const layerKey of Object.keys(locale.layers)) {
       // Will get layer and assignTemplates to workspace.
       const layer = await getLayer({
-        locale: localeKey,
         layer: layerKey,
+        locale: localeKey,
         user: req.params.user,
       });
 

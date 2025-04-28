@@ -1,19 +1,33 @@
 <!DOCTYPE html>
 <html>
+  <head data-user="{{user}}" data-dir="{{dir}}">
+    <title>XYZ | User Administration</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{{dir}}/public/icons/favicon.ico"
+    />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-<head data-user="{{user}}" data-dir="{{dir}}">
-  <title>XYZ | User Administration</title>
-  <link rel="icon" type="image/x-icon" href="{{dir}}/public/icons/favicon.ico" />
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0"
+    />
 
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0" />
+    <link
+      href="https://unpkg.com/tabulator-tables@6.3.1/dist/css/tabulator.min.css"
+      rel="stylesheet"
+    />
 
-  <link href="https://unpkg.com/tabulator-tables@6.3.1/dist/css/tabulator.min.css" rel="stylesheet">
+    <script
+      type="text/javascript"
+      src="https://unpkg.com/tabulator-tables@6.3.1/dist/js/tabulator.min.js"
+      integrity="sha384-SKSq3cuuVWdfrjtLz9wNlqE0bMc903yMS5zGnFtwvfddplgxa1hywtiLyw1CbSHO"
+      crossorigin="anonymous"
+    ></script>
 
-  <script type="text/javascript" src="https://unpkg.com/tabulator-tables@6.3.1/dist/js/tabulator.min.js"></script>
-
-  <style>
+    <style>
     * {
       box-sizing: border-box;
       margin: 0;
@@ -91,35 +105,46 @@
       }
     }
   </style>
+  </head>
 
-</head>
+  <body>
+    <div class="flex">
+      <h1>Account Administration</h1>
 
-<body>
-
-  <div class="flex">
-
-    <h1>Account Administration</h1>
-
-    <div class="btn-row">
-      <div <span>Filter</span>
-        <input id="filterInput" type="text" placeholder="e.g. geolytix" style="max-width: 100%;">
-        <button class="raised primary-colour" id="toggleBlocked">Show blocked accounts</button>
+      <div class="btn-row">
+        <div>
+          <span>Filter</span>
+          <input
+            id="filterInput"
+            type="text"
+            placeholder="e.g. geolytix"
+            style="max-width: 100%;"
+          />
+          <button class="raised primary-colour" id="toggleBlocked">
+            Show blocked accounts
+          </button>
+        </div>
+        <div>
+          <button
+            class="raised primary-colour"
+            onclick="window.location.href = `${window.location.origin}{{dir}}`"
+          >
+            Default View
+          </button>
+          <button
+            class="raised red"
+            onclick="window.location.href = `${window.location.origin}{{dir}}?logout=true`"
+          >
+            Logout
+          </button>
+        </div>
       </div>
-      <div>
-        <button class="raised primary-colour"
-          onclick="window.location.href = `${window.location.origin}{{dir}}`">Default View</button>
-        <button class="raised red"
-          onclick="window.location.href = `${window.location.origin}{{dir}}?logout=true`">Logout</button>
-      </div>
+
+      <div id="userTable"></div>
     </div>
+  </body>
 
-    <div id="userTable"></div>
-
-  </div>
-
-</body>
-
-<script>
+  <script>
   window.onload = async () => {
 
     if (!document.head.dataset.user) {
@@ -529,5 +554,4 @@
     })
   }
 </script>
-
 </html>

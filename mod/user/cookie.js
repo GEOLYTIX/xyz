@@ -11,11 +11,9 @@ Exports the [user] cookie method for the /api/user/cookie route.
 @module /user/cookie
 */
 
-import acl from './acl.js';
-
-import login from './login.js';
-
 import jwt from 'jsonwebtoken';
+import acl from './acl.js';
+import login from './login.js';
 
 /**
 @function cookie
