@@ -1,5 +1,5 @@
-import geojsonLayer from '../../../../assets/layers/geojson/layer.json';
 import ukFeatures from '../../../../assets/data/uk.json';
+import geojsonLayer from '../../../../assets/layers/geojson/layer.json';
 
 import { mockLocation } from '../../../../utils/location.js';
 /**

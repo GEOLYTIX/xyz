@@ -1,5 +1,5 @@
-import geojsonLayer from '../../../assets/layers/geojson/layer.json';
 import sliderInfoj from '../../../assets/infoj/slider.json';
+import geojsonLayer from '../../../assets/layers/geojson/layer.json';
 /**
  * @module ui/elements/slider
  */
