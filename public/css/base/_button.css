@@ -30,7 +30,6 @@ button {
   }
 
   &.action {
-    font-weight: bold;
     > span.material-symbols-outlined {
       font-size: inherit;
       vertical-align: middle;
