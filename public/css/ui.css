@@ -126,6 +126,18 @@ button {
   &.wide {
     width: 100%;
   }
+  &.primary {
+    background-color: var(--color-primary);
+    color: var(--color-font-contrast);
+  }
+  &.reject {
+    background-color: var(--color-danger);
+    color: var(--color-font-contrast);
+  }
+  &.accept {
+    background-color: var(--color-info);
+    color: var(--color-font-contrast);
+  }
   &.flat {
     border-radius: 1px;
     border-bottom: 1px solid var(--color-border);
@@ -992,6 +1004,14 @@ dialog {
   .actions {
     padding: 0.5em;
     margin-top: 1em;
+    * {
+      margin: 0.1em;
+      transition: 300ms all;
+      width: 6em;
+      &:hover {
+        text-decoration: underline;
+      }
+    }
   }
   .toast-logo {
     height: 2.5em;
@@ -999,26 +1019,6 @@ dialog {
     & img {
       height: 100%;
     }
-  }
-  button {
-    cursor: pointer;
-    padding: 0.25em 0.5em 0.2em;
-    transition: 300ms all;
-    width: 6em;
-    font-size: 100%;
-    border-radius: 3px;
-    font-weight: bold;
-    color: var(--color-font-contrast);
-    background-color: var(--color-primary);
-    &:hover {
-      text-decoration: underline;
-    }
-  }
-  .reject {
-    background-color: var(--color-danger);
-  }
-  .accept {
-    background-color: var(--color-info);
   }
 }
 @keyframes showToast {
