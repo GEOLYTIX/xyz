@@ -1,4 +1,6 @@
 name: Codi unit tests
+permissions:
+  contents: read
 
 on:
   push:

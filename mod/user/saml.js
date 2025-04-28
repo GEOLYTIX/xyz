@@ -92,10 +92,10 @@ This module handles SAML-based Single Sign-On (SSO) authentication. Here's how t
 @property {string} logoutCallbackUrl - URL for logout callbacks
 **/
 
+import { readFileSync } from 'fs';
 // Import required dependencies
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import { readFileSync } from 'fs';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -111,36 +111,36 @@ const getModule = async () => {
     const { SAML } = await import('@node-saml/node-saml');
     // Initialize SAML configuration
     samlConfig = {
+      acceptedClockSkewMs: xyzEnv.SAML_ACCEPTED_CLOCK_SKEW ?? -1,
       callbackUrl: xyzEnv.SAML_ACS,
       entryPoint: xyzEnv.SAML_SSO,
-      issuer: xyzEnv.SAML_ENTITY_ID,
 
       // Read and configure certificates
+      identifierFormat: xyzEnv.SAML_IDENTIFIER_FORMAT,
       idpCert:
         xyzEnv.SAML_IDP_CRT &&
         String(
           readFileSync(join(__dirname, `../../${xyzEnv.SAML_IDP_CRT}.crt`)),
         ),
+      issuer: xyzEnv.SAML_ENTITY_ID,
+
+      // Configure SAML endpoints and behavior
+      logoutCallbackUrl: xyzEnv.SLO_CALLBACK,
+      logoutUrl: xyzEnv.SAML_SLO,
       privateKey:
         xyzEnv.SAML_SP_CRT &&
         String(
           readFileSync(join(__dirname, `../../${xyzEnv.SAML_SP_CRT}.pem`)),
         ),
+      providerName: xyzEnv.SAML_PROVIDER_NAME,
       publicCert:
         xyzEnv.SAML_SP_CRT &&
         String(
           readFileSync(join(__dirname, `../../${xyzEnv.SAML_SP_CRT}.crt`)),
         ),
-
-      // Configure SAML endpoints and behavior
-      logoutUrl: xyzEnv.SAML_SLO,
+      signatureAlgorithm: xyzEnv.SAML_SIGNATURE_ALGORITHM,
       wantAssertionsSigned: xyzEnv.SAML_WANT_ASSERTIONS_SIGNED,
       wantAuthnResponseSigned: xyzEnv.SAML_AUTHN_RESPONSE_SIGNED ?? false,
-      signatureAlgorithm: xyzEnv.SAML_SIGNATURE_ALGORITHM,
-      identifierFormat: xyzEnv.SAML_IDENTIFIER_FORMAT,
-      acceptedClockSkewMs: xyzEnv.SAML_ACCEPTED_CLOCK_SKEW ?? -1,
-      providerName: xyzEnv.SAML_PROVIDER_NAME,
-      logoutCallbackUrl: xyzEnv.SLO_CALLBACK,
     };
 
     // Create SAML strategy instance
@@ -371,9 +371,9 @@ async function acs(req, res) {
     const user = {
       email: samlResponse.profile.nameID,
       nameID: samlResponse.profile.nameID,
-      sessionIndex: samlResponse.profile.sessionIndex,
       nameIDFormat: samlResponse.profile.nameIDFormat,
       nameQualifier: samlResponse.profile.nameQualifier,
+      sessionIndex: samlResponse.profile.sessionIndex,
       spNameQualifier: samlResponse.profile.spNameQualifier,
     };
 
@@ -469,8 +469,8 @@ async function aclLookUp(email) {
   }
 
   return {
-    roles: user.roles,
-    language: user.language,
     admin: user.admin,
+    language: user.language,
+    roles: user.roles,
   };
 }

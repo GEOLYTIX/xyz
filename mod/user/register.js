@@ -16,19 +16,13 @@ Exports the [user] register method for the /api/user/register route.
 @module /user/register
 */
 
-import bcrypt from '../utils/bcrypt.cjs';
-
 import crypto from 'crypto';
-
-import acl from './acl.js';
-
-import reqHost from '../utils/reqHost.js';
-
-import mailer from '../utils/mailer.js';
-
+import bcrypt from '../utils/bcrypt.cjs';
 import languageTemplates from '../utils/languageTemplates.js';
-
+import mailer from '../utils/mailer.js';
+import reqHost from '../utils/reqHost.js';
 import view from '../view.js';
+import acl from './acl.js';
 
 /**
 @function register
@@ -106,12 +100,12 @@ async function registerUserBody(req, res) {
   );
 
   const USER = {
+    access_log: [`${date}@${req.ips?.pop() || req.ip}`],
     email: req.body.email,
+    language: req.body.language,
     password: req.body.password,
     password_reset: req.body.password,
-    language: req.body.language,
     verificationtoken: req.body.verificationtoken,
-    access_log: [`${date}@${req.ips?.pop() || req.ip}`],
   };
 
   if (xyzEnv.APPROVAL_EXPIRY) {
@@ -131,19 +125,19 @@ async function registerUserBody(req, res) {
   }
 
   await mailer({
-    template: 'verify_account',
-    language: req.body.language,
-    to: req.body.email,
     host: req.params.host,
+    language: req.body.language,
     link: `${req.params.host}/api/user/verify/${req.body.verificationtoken}`,
     remote_address: req.params.remote_address,
+    template: 'verify_account',
+    to: req.body.email,
   });
 
   // Return msg. No redirect for password reset.
   res.send(
     await languageTemplates({
-      template: 'new_account_registered',
       language: req.body.language,
+      template: 'new_account_registered',
     }),
   );
 }
@@ -267,8 +261,8 @@ async function passwordReset(req, res) {
   if (user.blocked) {
     res.status(403).send(
       await languageTemplates({
-        template: 'user_blocked',
         language: req.body.language,
+        template: 'user_blocked',
       }),
     );
     return;
@@ -313,17 +307,17 @@ async function passwordReset(req, res) {
 
   // Sent mail with verification token to the account email address.
   await mailer({
-    template: 'verify_password_reset',
-    language: req.body.language,
-    to: user.email,
     host: req.params.host,
+    language: req.body.language,
     link: `${req.params.host}/api/user/verify/${req.body.verificationtoken}/?language=${req.body.language}`,
     remote_address: req.params.remote_address,
+    template: 'verify_password_reset',
+    to: user.email,
   });
 
   const password_reset_verification = await languageTemplates({
-    template: 'password_reset_verification',
     language: req.body.language,
+    template: 'password_reset_verification',
   });
 
   res.send(password_reset_verification);

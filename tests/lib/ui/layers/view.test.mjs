@@ -3,9 +3,9 @@
  * @module /ui/layers/view
  */
 
-import { setView } from '../../../utils/view.js';
-import { delayFunction } from '../../../utils/delay.js';
 import clusterConfig from '../../../assets/layers/cluster/layer.json';
+import { delayFunction } from '../../../utils/delay.js';
+import { setView } from '../../../utils/view.js';
 
 /**
  * This function is used as an entry point for the changeEndTest
