@@ -13,11 +13,9 @@ A user_sessions{} object is declared in the module to store user sessions.
 @module /user/auth
 */
 
-import acl from './acl.js';
-
-import fromACL from './fromACL.js';
-
 import jwt from 'jsonwebtoken';
+import acl from './acl.js';
+import fromACL from './fromACL.js';
 
 const user_sessions = {};
 

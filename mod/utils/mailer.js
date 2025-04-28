@@ -10,11 +10,10 @@ The mailer module provides a way to send emails to clients/admins, etc.
 @requires nodemailer
 */
 
-import logger from './logger.js';
+import getFrom from '../provider/getFrom.js';
 
 import languageTemplates from './languageTemplates.js';
-
-import getFrom from '../provider/getFrom.js';
+import logger from './logger.js';
 
 //Attempt to import node mailer
 let nodeMailer, transport;
@@ -72,15 +71,15 @@ async function mailer(params) {
 
   if (!transport) {
     transport = nodeMailer.createTransport({
+      auth: {
+        pass: xyzEnv.TRANSPORT_PASSWORD,
+        user: xyzEnv.TRANSPORT_USERNAME || xyzEnv.TRANSPORT_EMAIL,
+      },
       host: xyzEnv.TRANSPORT_HOST,
       name: xyzEnv.TRANSPORT_NAME || xyzEnv.TRANSPORT_EMAIL.split('@')[0],
       port: xyzEnv.TRANSPORT_PORT || 587,
-      secure: false,
       requireTLS: xyzEnv.TRANSPORT_TLS,
-      auth: {
-        user: xyzEnv.TRANSPORT_USERNAME || xyzEnv.TRANSPORT_EMAIL,
-        pass: xyzEnv.TRANSPORT_PASSWORD,
-      },
+      secure: false,
     });
   }
 
@@ -89,16 +88,16 @@ async function mailer(params) {
   await getBody(template);
 
   const mailTemplate = {
-    to: params.to,
     from: xyzEnv.TRANSPORT_EMAIL,
-    sender: xyzEnv.TRANSPORT_EMAIL,
-    subject: replaceStringParams(template.subject, params),
     html: template.html
       ? replaceStringParams(template.html, params)
       : undefined,
+    sender: xyzEnv.TRANSPORT_EMAIL,
+    subject: replaceStringParams(template.subject, params),
     text: template.text
       ? replaceStringParams(template.text, params)
       : undefined,
+    to: params.to,
   };
 
   const result = await transport

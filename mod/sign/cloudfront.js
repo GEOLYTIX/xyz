@@ -67,10 +67,10 @@ async function cloudfront_signer(req_url) {
     date.setDate(date.getDate() + 1);
 
     const signedURL = getSignedUrl({
-      url: `https://${url}`,
-      keyPairId: xyzEnv.KEY_CLOUDFRONT,
       dateLessThan: date.toDateString(),
+      keyPairId: xyzEnv.KEY_CLOUDFRONT,
       privateKey,
+      url: `https://${url}`,
     });
 
     // Return signedURL only from request.

@@ -9,9 +9,8 @@ Exports the [user] update method for the /api/user/cookie route.
 @module /user/update
 */
 
-import acl from './acl.js';
-
 import mailer from '../utils/mailer.js';
+import acl from './acl.js';
 
 /**
 @function update
@@ -83,11 +82,11 @@ export default async function update(req, res) {
   if (update_user.verified) {
     // Verifying a user will also approve the user, reset password, and failed login attempts.
     Object.assign(update_user, {
-      password_reset: null,
-      failedattempts: 0,
-      verificationtoken: null,
       approved: true,
       approved_by: `${req.params.user.email}|${ISODate}`,
+      failedattempts: 0,
+      password_reset: null,
+      verificationtoken: null,
     });
 
     password_reset = `password = password_reset,`;
@@ -133,10 +132,10 @@ export default async function update(req, res) {
   // Send email to the user account if an account has been approved.
   if (update_user.approved) {
     const approval_mail = {
-      template: 'approved_account',
-      language: update_user.language,
-      to: update_user.email,
       host: req.params.host,
+      language: update_user.language,
+      template: 'approved_account',
+      to: update_user.email,
     };
 
     await mailer(approval_mail);
