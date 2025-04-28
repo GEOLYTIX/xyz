@@ -1,5 +1,5 @@
-import { infoj } from './infoj.test.mjs';
 import { entries } from './entries/_entries.test.mjs';
+import { infoj } from './infoj.test.mjs';
 
 export const locations = {
   setup,
