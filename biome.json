@@ -20,7 +20,6 @@
       "!**/public/js/**/*",
       "!**/docs/**/*",
       "!**/mod/utils/bcrypt.cjs",
-      "!**/tests/**/*",
       "!**/lib/utils/uhtml.mjs",
       "!**/public/css/mapp.css",
       "!**/public/css/ui.css",

@@ -1,6 +1,6 @@
-import mockLayer from '../../assets/layers/location_mock/layer.json';
-import mockLayerInfoj from '../../assets/layers/location_mock/infoj.json';
 import ukFeatures from '../../assets/data/uk.json';
+import mockLayerInfoj from '../../assets/layers/location_mock/infoj.json';
+import mockLayer from '../../assets/layers/location_mock/layer.json';
 /**
  * This test is used to test the mapp.location.get function
  * @function get
