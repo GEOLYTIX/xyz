@@ -29,6 +29,14 @@ button {
     width: 100%;
   }
 
+  &.action {
+    font-weight: bold;
+    > span.material-symbols-outlined {
+      font-size: inherit;
+      vertical-align: middle;
+    }
+  }
+
   &.flat {
     border-radius: 1px;
     border-bottom: 1px solid var(--color-border);
