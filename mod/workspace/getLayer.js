@@ -40,6 +40,8 @@ The layer.key and layer.name will be assigned if missing.
 
 The layer.dbs will be assigned from the locale is missing.
 
+Template properties will be removed as these are not required by the MAPP API but only for the composition of workspace objects.
+
 @param {Object} params 
 @param {locale} [locale] An optional workspace locale can be provided to prevent a roundtrip to the getLocale method.
 @property {string} [params.locale] Locale key.
@@ -94,7 +96,7 @@ export default async function getLayer(params, locale) {
   // Assign dbs from locale if nullish on layer.
   layer.dbs ??= locale.dbs;
 
-  // TODO: Please can you explain why we are required to delete these properties.
+  // Remove properties which are only required for the fetching templates and composing workspace objects.
   delete layer.src;
   delete layer.template;
   delete layer.templates;

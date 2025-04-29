@@ -39,6 +39,8 @@ A role check is performed to check whether the requesting user has access to the
 
 Role objects in the locale and nested layers are merged with their respective parent objects.
 
+Template properties will be removed as these are not required by the MAPP API but only for the composition of workspace objects.
+
 @param {Object} params 
 @param {Object} [parentLocale] Locale will be merged into optional parentLocale to create a nested locale.
 @property {string} [params.locale] Locale key.
@@ -109,7 +111,7 @@ export default async function getLocale(params, parentLocale) {
     locale.key = locale.keys;
   }
 
-  // TODO: Please can you explain why we are required to delete these properties.
+  // Remove properties which are only required for the fetching templates and composing workspace objects.
   delete locale.layer;
   delete locale.src;
   delete locale.template;
