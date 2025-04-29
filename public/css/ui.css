@@ -1352,9 +1352,6 @@ dialog {
   &::-webkit-scrollbar {
     display: none;
   }
-  & > * {
-    pointer-events: auto;
-  }
   & span {
     line-height: normal;
   }
