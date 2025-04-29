@@ -27,7 +27,7 @@ The getLocale method requests the workspace from cache and checks whether the re
 
 The workspace.locale is assigned as locale if params.locale is undefined.
 
-Any locale can be nested into another locale. If the locale property is defined as an array of locale keys.
+Any locale can be nested into another locale, if the locale property is defined as an array of locale keys.
 
 The localeKey will be shifted from the locale array property. The getLocale method will call itself recursively with the locale object provided as parentLocale param. The current locale object will be merged into the parentLocale. The locale key for nested locales is an array which reflects the locale array property.
 
@@ -108,7 +108,8 @@ export default async function getLocale(params, parentLocale) {
   if (Array.isArray(locale.keys)) {
     locale.key = locale.keys;
   }
-
+  
+  // TODO: Please can you explain why we are required to delete these properties.
   delete locale.layer;
   delete locale.src;
   delete locale.template;

@@ -26,7 +26,7 @@ A layer will primarily be requested from a locale.
 
 The getLocale method will err if the requesting user does not have access to the locale.
 
-If a layer is not part of a locale an attemp to get the layer directly from the workspace templates will be made.
+If a layer is not part of a locale an attempt to get the layer directly from the workspace templates will be made.
 
 The locale object can be provided as an additional param. The getLocale method of the workspace API may request any layer in the locale after the locale has already been retrieved. This will prevent a loopback to the locale for every layer in the locale.
 
@@ -70,7 +70,7 @@ export default async function getLayer(params, locale) {
     }
   }
 
-  // layer maybe null.
+  // layer may be null.
   if (!layer) return;
 
   // Assign key value as key on layer object.
@@ -94,6 +94,7 @@ export default async function getLayer(params, locale) {
   // Assign dbs from locale if nullish on layer.
   layer.dbs ??= locale.dbs;
 
+  // TODO: Please can you explain why we are required to delete these properties.
   delete layer.src;
   delete layer.template;
   delete layer.templates;

@@ -70,7 +70,7 @@ export default async function mergeTemplates(obj) {
       return obj;
     } else {
       // Merge obj --> template
-      // Template must be cloned to prevent cross polination and array aggregation.
+      // Template must be cloned to prevent cross pollination and array aggregation.
       obj = merge(structuredClone(template), obj);
     }
   }
@@ -112,9 +112,13 @@ export default async function mergeTemplates(obj) {
 @function assignWorkspaceTemplates
 
 @description
-The method parses an object for a template object property. The template property value will be assigned to the workspace.templates{} object matching the template key value.
+The method parses an object for a template object property. 
 
-The template._type property will be set to 'template' indicating that the templates origin is in the workspace. It is possible to overassign _type:'core' templates which are loaded from the /mod/workspace/templates directory.
+The template property value will be assigned to the workspace.templates{} object matching the template key value.
+
+The template._type property will be set to 'template' indicating that the templates origin is in the workspace. 
+
+It is possible to overassign _type:'core' templates which are loaded from the /mod/workspace/templates directory.
 
 The method will call itself for nested objects.
 

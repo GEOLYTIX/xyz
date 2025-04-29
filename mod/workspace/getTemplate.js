@@ -31,7 +31,7 @@ import workspaceCache from './cache.js';
 @async
 
 @description
-The workspace will checked and cached by the [Workspace API checkWorkspaceCache]{@link module:/workspace/cache~checkWorkspaceCache} method.
+The workspace will be checked and cached by the [Workspace API checkWorkspaceCache]{@link module:/workspace/cache~checkWorkspaceCache} method.
 
 A JSON template object will be requested from the getTemplateObject method.
 
@@ -120,7 +120,7 @@ export default async function getTemplate(key) {
 
 A template object matching the template_key param in the workspace.templates{} object will be returned.
 
-The template string will be checked to include only whitelisted character.
+The template string will be checked to include only whitelisted characters.
 
 An error exception will be returned if the template object lookup from the workspace failed.
 
@@ -152,7 +152,7 @@ async function getTemplateObject(workspace, templateKey, srcKey) {
 @async
 
 @description
-The script string is converted to a jascript data URL which can be used in a dynamic ESM import.
+The script string is converted to a JavaScript data URL which can be used in a dynamic ESM import.
 
 The default export or the imported module itself will be assigned as the render method in the module template.
 
@@ -182,9 +182,15 @@ async function moduleTemplate(template, response) {
 @async
 
 @description
-The method merges the response object into the template and removes the src property. The merged template object is assigned to the workspace. This effectively caches the template since the src to fetch the template is removed.
+The method merges the response object into the template and removes the src property. 
 
-A src property is assigned as key for an object without an key property. This allows to cache templates which should be merged into their respective parent objects.
+The merged template object is assigned to the workspace. 
+
+This effectively caches the template since the src to fetch the template is removed.
+
+A src property is assigned as key for an object without an key property. 
+
+This allows to cache templates which should be merged into their respective parent objects.
 
 A src property beginning with `file:` is not removed since file resources do not require caching.
 
