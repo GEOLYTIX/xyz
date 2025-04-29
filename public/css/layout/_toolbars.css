@@ -44,12 +44,6 @@
   }
 }
 
-@media only screen and (max-width: 768px) {
-  .btn-column {
-    max-height: 100%;
-  }
-}
-
 .btn-row {
   display: flex;
 
