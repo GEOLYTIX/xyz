@@ -4,17 +4,19 @@ import { dialog } from './dialog.test.mjs';
 import { layerStyle } from './layerStyle.test.mjs';
 import { pills } from './pills.test.mjs';
 import { slider } from './slider.test.mjs';
+import { toast } from './toast.test.mjs';
 
 export const elements = {
-  setup,
-  slider,
-  layerStyle,
-  pills,
   alert,
   confirm,
   dialog,
+  layerStyle,
+  pills,
+  setup,
+  slider,
+  toast,
 };
 
 function setup() {
-  codi.describe({ name: 'UI Elements:', id: 'ui_elements' }, () => {});
+  codi.describe({ id: 'ui_elements', name: 'UI Elements:' }, () => {});
 }

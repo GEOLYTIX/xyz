@@ -29,6 +29,21 @@ button {
     width: 100%;
   }
 
+  &.primary {
+    background-color: var(--color-primary);
+    color: var(--color-font-contrast);
+  }
+
+  &.reject {
+    background-color: var(--color-danger);
+    color: var(--color-font-contrast);
+  }
+
+  &.accept {
+    background-color: var(--color-info);
+    color: var(--color-font-contrast);
+  }
+
   &.flat {
     border-radius: 1px;
     border-bottom: 1px solid var(--color-border);
