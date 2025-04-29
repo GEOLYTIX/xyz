@@ -30,11 +30,24 @@ button {
     width: 100%;
   }
 
-  &.action {
-    > span.material-symbols-outlined {
-      font-size: inherit;
-      vertical-align: middle;
-    }
+  &.action > span.material-symbols-outlined {
+    font-size: inherit;
+    vertical-align: middle;
+  }
+
+  &.primary {
+    background-color: var(--color-primary);
+    color: var(--color-font-contrast);
+  }
+
+  &.reject {
+    background-color: var(--color-danger);
+    color: var(--color-font-contrast);
+  }
+
+  &.accept {
+    background-color: var(--color-info);
+    color: var(--color-font-contrast);
   }
 
   &.flat {
