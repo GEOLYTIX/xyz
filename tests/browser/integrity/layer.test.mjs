@@ -10,34 +10,8 @@ export async function layerTest(mapview) {
 
             layer.show();
 
-            if (layer.tables) {
-              //This is to set the zoom level so that the correct zoom level is used for the layer.
-              const layerZoom = parseInt(
-                Object.entries(layer.tables).find(
-                  ([key, value]) => value !== null,
-                )[0],
-              );
-              mapview.Map.getView().setZoom(layerZoom);
-            }
-
-            if (layer.dataviews) {
-              for (const dataview in layer.dataview) {
-                dataview.show();
-              }
-            }
-
-            // Turn on every theme on the layer to test if they work
-            if (layer.style?.themes) {
-              for (const theme in layer.style.themes) {
-                console.log(`Testing -- Layer: ${layer.key}: Theme: ${theme}`);
-                layer.style.theme = layer.style.themes[theme];
-                layer.reload();
-
-                //This is to allow errors being logged into the console.
-                //There is no test being asserted on.
-                await new Promise((resolve) => setTimeout(resolve, 1000));
-              }
-            }
+            setupMapView(mapview, layer);
+            await testThemes(layer);
 
             //Location test
             if (layer.infoj) {
@@ -152,4 +126,35 @@ export async function layerTest(mapview) {
       }
     },
   );
+}
+
+function setupMapView(mapview, layer) {
+  if (layer.tables) {
+    //This is to set the zoom level so that the correct zoom level is used for the layer.
+    const layerZoom = parseInt(
+      Object.entries(layer.tables).find(([key, value]) => value !== null)[0],
+    );
+    mapview.Map.getView().setZoom(layerZoom);
+  }
+
+  if (layer.dataviews) {
+    for (const dataview in layer.dataview) {
+      dataview.show();
+    }
+  }
+}
+
+async function testThemes(layer) {
+  // Turn on every theme on the layer to test if they work
+  if (layer.style?.themes) {
+    for (const theme in layer.style.themes) {
+      console.log(`Testing -- Layer: ${layer.key}: Theme: ${theme}`);
+      layer.style.theme = layer.style.themes[theme];
+      layer.reload();
+
+      //This is to allow errors being logged into the console.
+      //There is no test being asserted on.
+      await new Promise((resolve) => setTimeout(resolve, 1000));
+    }
+  }
 }
