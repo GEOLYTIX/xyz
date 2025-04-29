@@ -3,8 +3,8 @@
  * @module layer/format/vector
  */
 
-import geojsonLayerDefault from '../../../assets/layers/geojson/layer.json';
 import ukFeatures from '../../../assets/data/uk.json';
+import geojsonLayerDefault from '../../../assets/layers/geojson/layer.json';
 
 /**
  * This is the entry point function for the vector test module.

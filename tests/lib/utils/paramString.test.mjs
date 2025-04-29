@@ -8,7 +8,7 @@
  */
 export function paramString() {
   codi.describe(
-    { name: 'paramString Test:', id: 'utils_paramString', parentId: 'utils' },
+    { name: 'paramString:', id: 'utils_paramString', parentId: 'utils' },
     () => {
       /**
        * ### Should Return an empty string as nothing is in params

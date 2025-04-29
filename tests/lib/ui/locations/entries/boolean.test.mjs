@@ -1,4 +1,4 @@
-import { it, assertEqual } from 'codi';
+import { assertEqual, it } from 'codi';
 export async function booleanTest() {
   it('Should return a checkbox', () => {
     const entry = {
