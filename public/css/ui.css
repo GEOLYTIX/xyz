@@ -1343,10 +1343,10 @@ dialog {
 /* public/css/layout/_toolbars.css */
 .btn-column {
   position: absolute;
+  top: 0;
   display: grid;
   grid-auto-rows: minmax(min-content, 4em);
   padding: 0.7em;
-  pointer-events: none;
   overflow: scroll;
   max-height: 100%;
   &::-webkit-scrollbar {
