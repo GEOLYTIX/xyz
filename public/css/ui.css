@@ -1349,6 +1349,7 @@ dialog {
   padding: 0.7em;
   overflow: scroll;
   max-height: 100%;
+  scrollbar-width: none;
   &::-webkit-scrollbar {
     display: none;
   }
