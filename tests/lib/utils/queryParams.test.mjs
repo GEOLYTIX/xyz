@@ -37,7 +37,7 @@ export async function queryParams(mapview) {
         async () => {
           const layer_params = geojsonLayerDefault;
           const expected = {
-            geom: 'geometry',
+            geom: 'different_geom',
             id: '1234',
             layer: 'queryParamsLayer',
             locale: 'locale',
@@ -61,6 +61,7 @@ export async function queryParams(mapview) {
             queryparams: {
               email: 'test@email.com',
               filter: true,
+              geom: 'different_geom',
               id: 1234,
               table: 'different_table',
               template: 'another_template',
