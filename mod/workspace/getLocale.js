@@ -108,7 +108,7 @@ export default async function getLocale(params, parentLocale) {
   if (Array.isArray(locale.keys)) {
     locale.key = locale.keys;
   }
-  
+
   // TODO: Please can you explain why we are required to delete these properties.
   delete locale.layer;
   delete locale.src;
