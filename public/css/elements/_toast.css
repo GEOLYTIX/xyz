@@ -1,0 +1,67 @@
+.toast {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  isolation: isolate;
+  background-color: var(--color-base);
+  border-top: 1px solid var(--color-border);
+  box-sizing: border-box;
+  color: var(--color-font);
+  font-size: 14px;
+  line-height: 1.4;
+  padding: 1em 2em;
+  text-align: center;
+  transform: translateY(100%);
+  animation: 1s ease-in-out 1s forwards showToast;
+
+  button.close {
+    position: absolute;
+    top: 0.1em;
+    right: 0.1em;
+    font-size: 1.2em;
+    color: var(--color-font-mid);
+  }
+
+  &.ease-out {
+    animation: 1s ease-in-out forwards hideToast;
+  }
+
+  .actions {
+    padding: 0.5em;
+    margin-top: 1em;
+
+    * {
+      margin: 0.1em;
+      transition: 300ms all;
+      width: 6em;
+    }
+  }
+
+  .toast-logo {
+    height: 2.5em;
+    margin-bottom: 0.5em;
+
+    & img {
+      height: 100%;
+    }
+  }
+}
+
+@keyframes showToast {
+  from {
+    transform: translateY(100%);
+  }
+  to {
+    transform: translateY(0%);
+  }
+}
+
+@keyframes hideToast {
+  from {
+    transform: translateY(0%);
+  }
+  to {
+    transform: translateY(100%);
+  }
+}
