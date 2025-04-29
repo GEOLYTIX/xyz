@@ -84,10 +84,10 @@ app.use(xyzEnv.DIR, express.static('tests'));
 
 app.use(cookieParser());
 
-app.get(`${xyzEnv.DIR}/api/provider/{:provider}`, api);
+app.get(`${xyzEnv.DIR}/api/provider{/:provider}`, api);
 
 app.post(
-  `${xyzEnv.DIR}/api/provider/{:provider}`,
+  `${xyzEnv.DIR}/api/provider{/:provider}`,
   express.json({ limit: '5mb' }),
   api,
 );
