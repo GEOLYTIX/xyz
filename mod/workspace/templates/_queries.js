@@ -13,7 +13,7 @@ import fieldStats from './field_stats.js';
 // Import all templates and renders
 import gazQuery from './gaz_query.js';
 import geojson from './geojson.js';
-import getLastLocation from './get_last_location.js';
+import getRandomLocation from './get_random_location.js';
 import getNnearest from './get_nnearest.js';
 import infotip from './infotip.js';
 import layerExtent from './layer_extent.js';
@@ -68,9 +68,9 @@ export default {
     layer: true,
     render: geojson,
   },
-  get_last_location: {
+  get_random_location: {
     layer: true,
-    render: getLastLocation,
+    render: getRandomLocation,
   },
   get_nnearest: {
     render: getNnearest,
