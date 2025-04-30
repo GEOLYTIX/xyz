@@ -1,7 +1,9 @@
 /**
 ### /workspace/templates/get_last_location
 
-The get_last_location layer query template returns the last id from layer table in a descending order.
+The get_last_location layer query template returns a single feature from the specified layer that meets the criteria. 
+The criteria include the presence of a geometry and a unique identifier (ID) for the feature.
+The filter will also be applied to the query if provided.
 
 @module /workspace/templates/get_last_location
 */
@@ -17,6 +19,5 @@ export default (_) => {
     ${_.layer.qID} as id
     FROM ${table}
     WHERE ${geom} IS NOT NULL AND ${_.layer.qID} IS NOT NULL \${filter}
-    ORDER BY ${_.layer.qID} DESC
     LIMIT 1`;
 };
