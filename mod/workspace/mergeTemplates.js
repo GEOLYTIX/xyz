@@ -44,42 +44,46 @@ export default async function mergeTemplates(obj) {
   workspace = await workspaceCache();
 
   // The object has an implicit template to merge into.
-  if (obj.template) {
+  if (typeof obj.template === 'string') {
     const template = await getTemplate(obj.template);
 
     // Failed to get template matching obj.template from template.src!
-    if (template.err instanceof Error) {
-      obj.err ??= [];
-      obj.err.push(template.err.message);
-
-      // The template is not in the workspace.templates{}
-    } else if (template instanceof Error) {
+    if (template instanceof Error) {
       obj.err ??= [];
       obj.err.push(template.message);
+      return obj;
     } else {
       // Merge obj --> template
       // Template must be cloned to prevent cross polination and array aggregation.
       obj = merge(structuredClone(template), obj);
     }
-
-    // Check whether the object key exist as template if no implicit template has been defined.
-  } else if (Object.hasOwn(workspace.templates, obj.key)) {
-    obj.err ??= [];
-    obj.err.push(`Template matching ${obj.key} exists in workspace.`);
   }
 
-  for (const template_key of obj.templates || []) {
-    const template = await getTemplate(template_key);
+  // The object has a template object to merge into.
+  if (obj.template instanceof Object) {
+    const template = await getTemplate(obj.template);
+
+    // Failed to get template matching obj.template from template.src!
+    if (template instanceof Error) {
+      obj.err ??= [];
+      obj.err.push(template.message);
+      return obj;
+    } else {
+      // Merge obj --> template
+      // Template must be cloned to prevent cross pollination and array aggregation.
+      obj = merge(structuredClone(template), obj);
+    }
+  }
+
+  // The _template can be a string or object [with src]
+  for (const _template of obj.templates || []) {
+    const template = await getTemplate(_template);
 
     // Failed to retrieve template matching template_key
-    if (template.err instanceof Error) {
+    if (template instanceof Error) {
       obj.err ??= [];
-      obj.err.push(template.err.message);
-
-      // A template matching the template_key does not exist.
-    } else if (template instanceof Error) {
-      obj.err ??= [];
-      obj.err.push(`${template_key}: ${template.message}`);
+      obj.err.push(template.message);
+      return obj;
     } else {
       //The object key must not be overwritten by a template key.
       delete template.key;
@@ -108,9 +112,13 @@ export default async function mergeTemplates(obj) {
 @function assignWorkspaceTemplates
 
 @description
-The method parses an object for a template object property. The template property value will be assigned to the workspace.templates{} object matching the template key value.
+The method parses an object for a template object property. 
 
-The template._type property will be set to 'template' indicating that the templates origin is in the workspace. It is possible to overassign _type:'core' templates which are loaded from the /mod/workspace/templates directory.
+The template property value will be assigned to the workspace.templates{} object matching the template key value.
+
+The template._type property will be set to 'template' indicating that the templates origin is in the workspace. 
+
+It is possible to overassign _type:'core' templates which are loaded from the /mod/workspace/templates directory.
 
 The method will call itself for nested objects.
 

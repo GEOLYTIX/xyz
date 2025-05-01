@@ -333,61 +333,77 @@
         },
       });
 
+    // Get list of accessible locales from Workspace API.
+    let locales = await mapp.utils.xhr(
+      `${mapp.host}/api/workspace/locales`,
+    );
+
+    // Assign locale from current [URL parameter] or as first key from locales array.
+    let locale = mapp.hooks.current.locale || locales[0]?.key
+    
+    // Use 'locale' as default if undefined.
+    locale ??= 'locale'
+
+    // Get locale with list of layers from Workspace API.
+    locale = await mapp.utils.xhr(
+      `${mapp.host}/api/workspace/locale?locale=${locale}&layers=true`,
+    );
+
+    if (locale instanceof Error) {
+      // Create the Dialog.node
+      mapp.ui.elements.dialog({
+        css_style:
+          'padding: 1em; border-color: #000; z-index:9999; max-width: 50%;',
+        content: mapp.dictionary.no_locales,
+        target: document.body,
+        top: '40%',
+        left: '25%',
+        contained: true,
+      });
+    }
+
+    // Check whether the locale supports a userLocale
+    if (locale.userLocale) {
+      if (mapp.hooks.current.userlocale) {
+        // Assign the userlocale value as name to check for a stored userlocale
+        locale.name = mapp.hooks.current.userlocale;
+      }
+
+      // Check whether a userLocale is stored for the current user|workspace
+      const userLocale = await mapp.utils.userLocale.get(locale);
+
+      if (userLocale) {
+        locale = userLocale;
+      }
+    }
+
+    if (locale.locales) {
+
       // Get list of accessible locales from Workspace API.
-      const locales = await mapp.utils.xhr(
-        `${mapp.host}/api/workspace/locales`,
+      const nestedLocales = await mapp.utils.xhr(
+        `${mapp.host}/api/workspace/locales?locale=${locale.key}`,
       );
 
-      // Get locale with list of layers from Workspace API.
-      let locale = await mapp.utils.xhr(
-        `${mapp.host}/api/workspace/locale?locale=${mapp.hooks.current.locale || locales[0]?.key}&layers=true`,
-      );
+      // The nested locales for the current locale will be spread into the locales array.
+      locales = [...locales, ...nestedLocales]
+    }
 
-      if (locale instanceof Error) {
-        // Create the Dialog.node
-        mapp.ui.elements.dialog({
-          css_style:
-            'padding: 1em; max-width: 50%;',
-          header: mapp.utils.html`<h4>${mapp.dictionary.information}`,
-          content: mapp.dictionary.no_locales,
-          target: document.body,
-          top: '40%',
-          left: '25%',
-          contained: true,
-        });
-      }
+    // Add locale dropdown to layers panel if multiple locales are accessible.
+    if (locales.length > 1) {
+      const localesDropdown = mapp.ui.elements.dropdown({
+        data_id: 'locales-dropdown',
+        span: locale.name || locale.key,
+        entries: locales.map((locale) => ({
+          title: locale.name || locale.key,
+          key: locale.key,
+        })),
+        callback: (e, entry) => {
+          window.location.assign(`${mapp.host}?locale=${entry.key}`);
+        },
+      });
 
-      // Check whether the locale supports a userLocale
-      if (locale.userLocale) {
-        if (mapp.hooks.current.userlocale) {
-          // Assign the userlocale value as name to check for a stored userlocale
-          locale.name = mapp.hooks.current.userlocale;
-        }
-
-        // Check whether a userLocale is stored for the current user|workspace
-        const userLocale = await mapp.utils.userLocale.get(locale);
-
-        if (userLocale) {
-          locale = userLocale;
-        }
-      }
-
-      // Add locale dropdown to layers panel if multiple locales are accessible.
-      if (locales.length > 1) {
-        const localesDropdown = mapp.ui.elements.dropdown({
-          data_id: 'locales-dropdown',
-          span: locale.name || locale.key,
-          entries: locales.map((locale) => ({
-            title: locale.name || locale.key,
-            key: locale.key,
-          })),
-          callback: (e, entry) => {
-            window.location.assign(`${mapp.host}?locale=${entry.key}`);
-          },
-        });
-
-        layersTab.appendChild(mapp.utils.html.node`${localesDropdown}`);
-      }
+      layersTab.appendChild(mapp.utils.html.node`${localesDropdown}`);
+    }
 
       if (!window.ol) await mapp.utils.olScript();
 
