@@ -43,7 +43,7 @@ await codi.describe(
 
     await codi.it(
       {
-        name: 'get mod query',
+        name: 'query module has render property',
         parentId: 'workspace_getTemplate',
       },
       async () => {
@@ -62,7 +62,7 @@ await codi.describe(
 
     await codi.it(
       {
-        name: 'get mod query',
+        name: 'query module is Error',
         parentId: 'workspace_getTemplate',
       },
       async () => {
@@ -74,14 +74,13 @@ await codi.describe(
 
         const result = await getTemplate(template);
 
-        codi.assertTrue(typeof result === 'object');
-        codi.assertTrue(Object.hasOwn(result, 'err'));
+        codi.assertTrue(result instanceof Error);
       },
     );
 
     await codi.it(
       {
-        name: 'get mod query',
+        name: 'query module render string',
         parentId: 'workspace_getTemplate',
       },
       async () => {

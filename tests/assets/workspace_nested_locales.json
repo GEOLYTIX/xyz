@@ -1,0 +1,114 @@
+{
+  "templates": {
+    "query": {},
+    "common_layer": {},
+    "finance_layer": {},
+    "brand_a_layer": {},
+    "brand_b_layer": {},
+    "brand_c_layer": {},
+    "brand_a_locale": {
+      "layers": {
+        "brand_a_layer": {
+          "template": "scratch_geojson"
+        }
+      }
+    },
+    "brand_b_locale": {
+      "roles": {
+        "brand_b": {}
+      },
+      "layers": {
+        "brand_b_layer": {
+          "template": "scratch_geojson"
+        }
+      }
+    },
+    "brand_c_locale": {
+      "roles": {
+        "brand_c": {}
+      },
+      "layers": {
+        "brand_c_layer": {}
+      }
+    },
+    "UK_locale": {
+      "roles": {
+        "UK": {}
+      },
+      "extent": {},
+      "layers": {
+        "brand_c_layer": {}
+      }
+    },
+    "OSM": {
+      "display": true,
+      "format": "tiles",
+      "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      "attribution": {
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "scratch_geojson": {
+      "format": "geojson",
+      "dbs": "NEON",
+      "table": "scratch",
+      "srid": "3857",
+      "geom": "geom_3857",
+      "qID": "id",
+      "style": {
+        "highlight": {
+          "scale": 1.3,
+          "strokeColor": "#090"
+        }
+      },
+      "infoj": [
+        {
+          "type": "geometry",
+          "display": true,
+          "field": "geom_3857",
+          "fieldfx": "ST_asGeoJSON(geom_3857)"
+        },
+        {
+          "type": "pin",
+          "label": "ST_PointOnSurface",
+          "field": "pin",
+          "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
+        },
+        {
+          "title": "ID",
+          "field": "id",
+          "inline": true
+        }
+      ]
+    }
+  },
+  "locale": {
+    "layers": {
+      "OSM": {
+        "template": "OSM"
+      }
+    }
+  },
+  "locales": {
+    "us": {
+      "extent": {},
+      "layers": {},
+      "locales": ["brand_a_locale", "brand_b_locale", "UK_locale"]
+    },
+    "europe": {
+      "roles": {
+        "europe": {}
+      },
+      "extent": {},
+      "layers": {
+        "Scratch": {
+          "template": "scratch_geojson",
+          "roles": {
+            "scratch_role": {}
+          }
+        }
+      },
+      "locales": ["UK_locale", "brand_b_locale", "brand_c_locale"]
+    }
+  }
+}
