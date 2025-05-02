@@ -99,7 +99,7 @@ async function objTemplate(obj, template, roles, reverse) {
   if (template instanceof Error) {
     obj.err ??= [];
     obj.err.push(template.message);
-    return obj
+    return obj;
   } else if (Roles.check(template, roles)) {
     template = structuredClone(template);
 
