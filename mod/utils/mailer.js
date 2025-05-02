@@ -80,6 +80,9 @@ async function mailer(params) {
       port: xyzEnv.TRANSPORT_PORT || 587,
       requireTLS: xyzEnv.TRANSPORT_TLS,
       secure: false,
+      tls: {
+        rejectUnauthorized: false,
+      },
     });
   }
 

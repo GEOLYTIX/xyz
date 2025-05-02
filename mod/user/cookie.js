@@ -43,7 +43,7 @@ The token user will be sent back to the client.
 export default async function cookie(req, res) {
   // acl module will export an empty require object without the ACL being configured.
   if (acl === null) {
-    return res.status(500).send('ACL unavailable.');
+    return res.send(null);
   }
 
   if (req.params.create) {
