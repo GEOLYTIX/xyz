@@ -1,27 +1,40 @@
 <!doctype html>
 <html lang="{{language}}">
+  <head data-dir="{{dir}}" data-login="{{login}}">
+    <title>{{title}}</title>
 
-<head data-dir="{{dir}}" data-login="{{login}}">
-  <title>{{title}}</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{{dir}}/public/icons/favicon.ico"
+    />
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
+    />
 
-  <link rel="icon" type="image/x-icon" href="{{dir}}/public/icons/favicon.ico" />
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
+    <script
+      src="https://cdn.jsdelivr.net/npm/ol@v10.3.1/dist/ol.js"
+      integrity="sha384-GtOM9G1JWFKmDbfOLBrez9YebIrX1pqVVtYukhqrKOtyneLNxnTIFMe8ER850GT/"
+      crossorigin="anonymous"
+      defer
+    ></script>
 
-  <script src="https://cdn.jsdelivr.net/npm/ol@v10.3.1/dist/ol.js"
-    integrity="sha384-GtOM9G1JWFKmDbfOLBrez9YebIrX1pqVVtYukhqrKOtyneLNxnTIFMe8ER850GT/" crossorigin="anonymous"
-    defer></script>
+    <!-- Load XYZ / MAPP stylesheet and library. -->
+    <link rel="stylesheet" href="{{dir}}/public/css/mapp.css" />
+    <link rel="stylesheet" href="{{dir}}/public/css/ui.css" />
 
-  <!-- Load XYZ / MAPP stylesheet and library. -->
-  <link rel="stylesheet" href="{{dir}}/public/css/mapp.css" />
-  <link rel="stylesheet" href="{{dir}}/public/css/ui.css" />
+    <script type="module" src="{{dir}}/public/js/lib/mapp.js" defer></script>
+    <script type="module" src="{{dir}}/public/js/lib/ui.js" defer></script>
 
-  <script type="module" src="{{dir}}/public/js/lib/mapp.js" defer></script>
-  <script type="module" src="{{dir}}/public/js/lib/ui.js" defer></script>
+    <script
+      type="module"
+      src="{{dir}}/public/js/tests/_mapp.test.js"
+      defer
+    ></script>
 
-  <script type="module" src="{{dir}}/public/js/tests/_mapp.test.js" defer></script>
-
-  <style>
+    <style>
     html {
       position: fixed;
       bottom: 0%;
@@ -164,33 +177,36 @@
       }
     }
   </style>
-</head>
+  </head>
 
-<body style="grid-template-rows: auto 0 0">
-  <div id="Map">
-    <div id="OL"></div>
-    <div id="mapButton" class="btn-column"></div>
-  </div>
-
-  <div id="tabview-divider"></div>
-
-  <div id="Tabview" class="tabview mobile-display-none desktop-display-none"></div>
-
-  <div id="ctrls-divider"></div>
-
-  <div id="ctrls">
-    <div id="ctrl-tabs" class="hover">
-      <div data-id="layers" class="active material-symbols-outlined"></div>
-      <div data-id="locations" class="material-symbols-outlined"></div>
+  <body style="grid-template-rows: auto 0 0">
+    <div id="Map">
+      <div id="OL"></div>
+      <div id="mapButton" class="btn-column"></div>
     </div>
 
-    <div id="ctrl-panel">
-      <div id="layers" class="active"></div>
-      <div id="locations"></div>
-    </div>
-  </div>
+    <div id="tabview-divider"></div>
 
-  <script type="module">
+    <div
+      id="Tabview"
+      class="tabview mobile-display-none desktop-display-none"
+    ></div>
+
+    <div id="ctrls-divider"></div>
+
+    <div id="ctrls">
+      <div id="ctrl-tabs" class="hover">
+        <div data-id="layers" class="active material-symbols-outlined"></div>
+        <div data-id="locations" class="material-symbols-outlined"></div>
+      </div>
+
+      <div id="ctrl-panel">
+        <div id="layers" class="active"></div>
+        <div id="locations"></div>
+      </div>
+    </div>
+
+    <script type="module">
     console.log(`MAPP v${mapp.version}`);
 
     // Set the maxWidth for mobile responsive display.
@@ -498,6 +514,5 @@
         idle: mapview.locale.idle,
       });
   </script>
-</body>
-
+  </body>
 </html>
