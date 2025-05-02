@@ -48,12 +48,12 @@ export default async function mergeTemplates(obj, roles) {
 
   // The object has an implicit template to merge into.
   if (typeof obj.template === 'string' || obj.template instanceof Object) {
-    await objTemplate(obj, obj.template, roles);
+    obj = await objTemplate(obj, obj.template, roles);
   }
 
   // The _template can be a string or object [with src]
   for (const _template of obj.templates || []) {
-    await objTemplate(obj, _template, roles, true);
+    obj = await objTemplate(obj, _template, roles, true);
   }
 
   // Substitute ${SRC_*} in object string.
@@ -75,6 +75,8 @@ export default async function mergeTemplates(obj, roles) {
 @description
 The method will request a template object from the getTemplate module method.
 
+Possible error from the template fetch will be added to the obj.err[] array before the obj is returned.
+
 The template will be checked against the request user roles.
 
 The method will shortcircuit if roles restrict access to the template object.
@@ -87,6 +89,8 @@ The template will be merged into the obj with the reverse flag.
 @param {Object} template The template maybe an object with a src property or a string. 
 @param {array} roles An array of user roles from request params. 
 @param {boolean} reverse Whether template should be merged into the obj, not the other way around.
+
+@returns {Promise<Object>} Returns the merged obj.
 */
 async function objTemplate(obj, template, roles, reverse) {
   template = await getTemplate(template);
@@ -95,6 +99,7 @@ async function objTemplate(obj, template, roles, reverse) {
   if (template instanceof Error) {
     obj.err ??= [];
     obj.err.push(template.message);
+    return obj
   } else if (Roles.check(template, roles)) {
     template = structuredClone(template);
 
@@ -108,11 +113,11 @@ async function objTemplate(obj, template, roles, reverse) {
       delete template.template;
 
       // Merge template --> obj
-      obj = merge(obj, template);
+      return merge(obj, template);
     } else {
       // Merge obj --> template
       // Template must be cloned to prevent cross polination and array aggregation.
-      obj = merge(template, obj);
+      return merge(template, obj);
     }
   }
 }
