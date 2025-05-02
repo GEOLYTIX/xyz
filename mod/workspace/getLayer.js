@@ -86,7 +86,7 @@ export default async function getLayer(params, locale) {
     return new Error('Role access denied.');
   }
 
-  layer = Roles.objMerge(layer, params.user?.roles);  
+  layer = Roles.objMerge(layer, params.user?.roles);
 
   layer = await mergeTemplates(layer, params.user?.roles);
 

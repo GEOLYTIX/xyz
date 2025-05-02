@@ -34,7 +34,7 @@ The method will check for a template matching the obj.key string property if obj
 An array of templates can be defined as obj.templates[]. The templates will be merged into the obj in the order the template keys are in the templates[] array.
 
 @param {Object} obj 
-@param {array} roles An array of user roles from request params. 
+@param {array} [roles] An array of user roles from request params. 
 
 @property {string} [obj.template] Key of template for the object.
 @property {string} obj.key Fallback for lookup of template if not an implicit property.
