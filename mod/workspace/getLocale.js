@@ -79,13 +79,13 @@ export default async function getLocale(params, parentLocale) {
     return new Error(locale.message);
   }
 
-  locale = await mergeTemplates(locale);
-
   if (!Roles.check(locale, params.user?.roles)) {
     return new Error('Role access denied.');
   }
 
   locale = Roles.objMerge(locale, params.user?.roles);
+
+  locale = await mergeTemplates(locale, params.user?.roles);
 
   locale.workspace = workspace.key;
 

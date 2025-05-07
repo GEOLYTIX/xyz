@@ -78,8 +78,6 @@ export default async function getLayer(params, locale) {
   // Assign key value as key on layer object.
   layer.key ??= params.layer;
 
-  layer = await mergeTemplates(layer);
-
   if (locale.layer) {
     layer = merge(structuredClone(locale.layer), layer);
   }
@@ -89,6 +87,8 @@ export default async function getLayer(params, locale) {
   }
 
   layer = Roles.objMerge(layer, params.user?.roles);
+
+  layer = await mergeTemplates(layer, params.user?.roles);
 
   // Assign layer key as name with no existing name on layer object.
   layer.name ??= layer.key;
