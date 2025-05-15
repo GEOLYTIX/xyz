@@ -224,9 +224,9 @@
       name: mapp.user?.email || 'anonymous',
     });
 
-    // Assign mapp.user into the storedUser object as mapp.user
+    // Assign storedUser into mapp.user to overwrite custom user properties.
     if (storedUser?.email) {
-      mapp.user = { ...storedUser, ...mapp.user };
+      mapp.user = { ...mapp.user, ...storedUser };
     }
 
     // Language as URL parameter will override user language.
