@@ -747,9 +747,6 @@ dialog {
       background-color: var(--color-hover);
     }
   }
-  &.dropdown-reverse > ul {
-    bottom: 30px;
-  }
 }
 @media print {
   .dropdown {
