@@ -14,7 +14,7 @@
   &.active {
     & > ul {
       display: block;
-      position: absolute;
+      position: fixed;
       z-index: 4; /* required to layer higher than highest used z-index for slider element */
     }
 

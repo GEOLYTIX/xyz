@@ -683,7 +683,7 @@ dialog {
   &.active {
     & > ul {
       display: block;
-      position: absolute;
+      position: fixed;
       z-index: 4;
     }
     & > .head > .material-symbols-outlined:after {
