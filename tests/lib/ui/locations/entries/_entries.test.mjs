@@ -1,17 +1,19 @@
 import { cloudinary } from './cloudinary.test.mjs';
 import { geometry } from './geometry.test.mjs';
+import { layer } from './layer.test.mjs';
 import { pin } from './pin.test.mjs';
 
 export const entries = {
-  setup,
-  pin,
-  geometry,
   cloudinary,
+  geometry,
+  layer,
+  pin,
+  setup,
 };
 
 function setup() {
   codi.describe(
-    { name: 'Entries:', id: 'ui_locations_entries', parentId: 'ui_locations' },
+    { id: 'ui_locations_entries', name: 'Entries:', parentId: 'ui_locations' },
     () => {},
   );
 }
