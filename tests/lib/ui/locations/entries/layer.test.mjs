@@ -25,7 +25,18 @@ export function layer(mapview) {
         fields: ['id', 'name', 'description', 'geom_4326'],
       };
 
-      const [layer] = await mapview.addLayer(layer_params);
+      await mapview.addLayer(layer_params);
+
+      const test_entry = {
+        type: 'vector_layer',
+        display: true,
+        layer: 'layer_entry_test',
+        mapview,
+      };
+
+      const result = mapp.ui.locations.entries.layer(test_entry);
+
+      console.log(result);
     },
   );
 }
