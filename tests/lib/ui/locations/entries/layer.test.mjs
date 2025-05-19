@@ -9,6 +9,14 @@ export function layer(mapview) {
       parentId: 'ui_locations_entries',
     },
     async () => {
+      const originalConsole = console.warn;
+
+      const mockWarns = [];
+
+      console.warn = (message) => {
+        mockWarns.push(message);
+      };
+
       const custom_config = {
         key: 'layer_entry_test',
         featureLocation: true,
@@ -25,18 +33,27 @@ export function layer(mapview) {
         fields: ['id', 'name', 'description', 'geom_4326'],
       };
 
-      await mapview.addLayer(layer_params);
+      geojsonLayerDefault.zIndex = 0;
+
+      mapview.locale.layers.push(geojsonLayerDefault);
 
       const test_entry = {
         type: 'vector_layer',
         display: true,
-        layer: 'layer_entry_test',
+        layer: 'geojson_test',
         mapview,
+        location: { id: '1234', removeCallbacks: [] },
       };
 
-      const result = mapp.ui.locations.entries.layer(test_entry);
+      codi.it(
+        { parentId: 'ui_locations_entries_layer', name: 'basic test' },
+        () => {
+          const result = mapp.ui.locations.entries.layer(test_entry);
+          codi.assertTrue(result !== null);
+        },
+      );
 
-      console.log(result);
+      console.warn = originalConsole;
     },
   );
 }
