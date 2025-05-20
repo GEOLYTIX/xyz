@@ -669,6 +669,13 @@ dialog {
 }
 
 /* public/css/elements/_dropdown.css */
+.select-dropdown {
+  width: 100%;
+  option.selected {
+    background-color: var(--color-primary);
+    color: var(--color-font-contrast);
+  }
+}
 .dropdown {
   width: 100%;
   overflow: visible;
