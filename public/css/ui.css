@@ -1468,4 +1468,17 @@ dialog {
   gap: 5px;
 }
 
+/* public/css/layout/_user_locale.css */
+.user-locales {
+  height: 75px;
+  overflow-y: auto;
+  li {
+    display: flex;
+    align-items: center;
+  }
+  button {
+    height: 24px;
+  }
+}
+
 /* public/css/_ui.css */
