@@ -1,0 +1,14 @@
+.user-locales{
+    height: 75px; 
+    overflow-y: scroll;
+
+    li{
+        display: flex;
+        align-items: center;
+    }
+
+    button{
+        height: 24px;
+    }
+
+}
