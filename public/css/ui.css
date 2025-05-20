@@ -1471,7 +1471,7 @@ dialog {
 /* public/css/layout/_user_locale.css */
 .user-locales {
   height: 75px;
-  overflow-y: scroll;
+  overflow-y: auto;
   li {
     display: flex;
     align-items: center;

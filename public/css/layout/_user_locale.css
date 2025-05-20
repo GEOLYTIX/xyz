@@ -1,6 +1,6 @@
 .user-locales {
   height: 75px;
-  overflow-y: scroll;
+  overflow-y: auto;
 
   li {
     display: flex;
