@@ -43,7 +43,7 @@ export function linkButtonTest(mapview) {
   codi.describe('Link Button Test', () => {
     codi.it('Should add a link button to the mapButton panel', () => {
       // Get the mapButton element
-      const mapButton = document.getElementById('mapButton');
+      const mapButton = mapview.mapButton;
       // Get the link_button from the mapButton (a tag with the title="TITLE HERE")
       const linkButton = mapButton.querySelector('a[title="TITLE HERE"]');
 
@@ -53,7 +53,7 @@ export function linkButtonTest(mapview) {
 
     codi.it('Should not add a button if no href is provided', () => {
       // Get the mapButton element
-      const mapButton = document.getElementById('mapButton');
+      const mapButton = mapview.mapButton;
       // Get the link_button from the mapButton (a tag with the title="SHOULD NOT BE ADDED AS NO HREF")
       const linkButton = mapButton.querySelector(
         'a[title="SHOULD NOT BE ADDED AS NO HREF"]',
@@ -67,7 +67,7 @@ export function linkButtonTest(mapview) {
       'Should add multiple buttons if the link_button config is an array',
       () => {
         // Get the mapButton element
-        const mapButton = document.getElementById('mapButton');
+        const mapButton = mapview.mapButton;
         // Get the link_button from the mapButton (a tag with the title="TITLE HERE")
         const linkButton = mapButton.querySelector('a[title="TITLE HERE"]');
 
@@ -85,7 +85,7 @@ export function linkButtonTest(mapview) {
 
     codi.it('Should add a link with the locale added to the href', () => {
       // Get the mapButton element
-      const mapButton = document.getElementById('mapButton');
+      const mapButton = mapview.mapButton;
       // Get the link_button from the mapButton (a tag with the title="TITLE HERE")
       const linkButton = mapButton.querySelector('a[title="Locale HREF"]');
 
