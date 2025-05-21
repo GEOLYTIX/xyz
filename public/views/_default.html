@@ -378,20 +378,18 @@
       Object.assign(locale, mapp.user?.locale)
     }
 
-    // Check whether the locale supports a userLocale
-    if (locale.userLocale) {
+      // Check whether the locale supports a userLocale
       if (mapp.hooks.current.userlocale) {
         // Assign the userlocale value as name to check for a stored userlocale
         locale.name = mapp.hooks.current.userlocale;
-      }
 
-      // Check whether a userLocale is stored for the current user|workspace
-      const userLocale = await mapp.utils.userLocale.get(locale);
+        // Check whether a userLocale is stored for the current user|workspace
+        const userLocale = await mapp.utils.userLocale.get(locale);
 
-      if (userLocale) {
-        locale = userLocale;
+        if (userLocale) {
+          locale = userLocale;
+        }
       }
-    }
 
     if (locale.locales) {
 
