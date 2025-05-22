@@ -139,6 +139,9 @@
           </button>
         </div>
       </div>
+  <button class="raised primary-colour" onclick="generateUsage()">
+  Download Usage Report
+</button>
 
       <div id="userTable"></div>
     </div>
@@ -552,6 +555,13 @@
 
       xhr.send()
     })
+  }
+
+ async function generateUsage() {
+    const query = await mapp.utils.xhr `${document.head.dataset.dir}/api/query?template=user_usage`;
+
+    mapp.utils.csvDownload(query); 
+    
   }
 </script>
 </html>
