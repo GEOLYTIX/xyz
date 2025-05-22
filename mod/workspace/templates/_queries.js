@@ -31,6 +31,7 @@ import stDistanceAb from './st_distance_ab.js';
 import stDistanceAbMultiple from './st_distance_ab_multiple.js';
 import stIntersectsAb from './st_intersects_ab.js';
 import stIntersectsCount from './st_intersects_count.js';
+import userUsage from './user_usage.js';
 import wkt from './wkt.js';
 
 export default {
@@ -140,6 +141,9 @@ export default {
   },
   st_intersects_count: {
     template: stIntersectsCount,
+  },
+  user_usage: {
+    template: userUsage,
   },
   wkt: {
     layer: true,
