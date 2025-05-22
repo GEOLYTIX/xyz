@@ -5,16 +5,17 @@ import { dropdown } from './dropdown.test.mjs';
 import { layerStyle } from './layerStyle.test.mjs';
 import { pills } from './pills.test.mjs';
 import { slider } from './slider.test.mjs';
+import { toast } from './toast.test.mjs';
 
 export const elements = {
   alert,
   confirm,
   dialog,
-  dropdown,
   layerStyle,
   pills,
   setup,
   slider,
+  toast,
 };
 
 function setup() {
