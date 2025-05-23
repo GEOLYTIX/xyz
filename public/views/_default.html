@@ -373,6 +373,15 @@
       });
     }
 
+      let testdropdown = mapp.ui.elements.dropdown({
+        multi: true,
+        entries: [{ title: 'Foo', option: 'foo' }, { title: 'Bar', option: 'bar', selected: true }]
+      });
+
+      layersTab.appendChild(testdropdown);
+
+
+
     if (mapp.user?.locale instanceof Object) {
 
       Object.assign(locale, mapp.user?.locale)
