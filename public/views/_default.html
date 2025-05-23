@@ -406,7 +406,7 @@
     if (locales.length > 1) {
       const localesDropdown = mapp.ui.elements.dropdown({
         data_id: 'locales-dropdown',
-        span: locale.name || locale.key,
+        placeholder: locale.name || locale.key,
         entries: locales.map((locale) => ({
           title: locale.name || locale.key,
           key: locale.key,
