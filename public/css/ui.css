@@ -693,6 +693,9 @@ dialog {
     color: var(--color-font-contrast);
   }
 }
+input[type=search]::-webkit-calendar-picker-indicator {
+  display: none !important;
+}
 
 /* public/css/elements/_key.css */
 .key {
