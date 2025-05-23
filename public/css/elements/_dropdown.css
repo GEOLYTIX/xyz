@@ -1,5 +1,7 @@
 .select-dropdown {
   width: 100%;
+  background-color: var(--color-base-secondary);
+  color: var(--color-font);
 
   option.selected {
     background-color: var(--color-primary);
