@@ -2,6 +2,7 @@
  * @module /workspace/templates/queries
  */
 
+// Import all templates and renders
 import cluster from './cluster.js';
 import clusterHex from './cluster_hex.js';
 import distinctValues from './distinct_values.js';
@@ -10,7 +11,6 @@ import fieldMax from './field_max.js';
 import fieldMin from './field_min.js';
 import fieldMinmax from './field_minmax.js';
 import fieldStats from './field_stats.js';
-// Import all templates and renders
 import gazQuery from './gaz_query.js';
 import geojson from './geojson.js';
 import getNnearest from './get_nnearest.js';
@@ -19,6 +19,7 @@ import infotip from './infotip.js';
 import layerExtent from './layer_extent.js';
 import locationCount from './location_count.js';
 import locationDelete from './location_delete.js';
+import locationFieldValue from './location_field_value.js';
 import locationGet from './location_get.js';
 import locationNew from './location_new.js';
 import locationUpdate from './location_update.js';
@@ -108,6 +109,11 @@ export default {
   locations_delete: {
     layer: true,
     render: locationsDelete,
+  },
+  location_field_value: {
+    layer: true,
+    render: locationFieldValue,
+    value_only: true,
   },
   mvt: {
     layer: true,

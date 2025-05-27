@@ -30,6 +30,8 @@
 
 @import url('./elements/_slider.css');
 
+@import url('./elements/_toast.css');
+
 @import url('./layout/_divider.css');
 
 @import url('./layout/_cloudinary.css');
@@ -45,3 +47,5 @@
 @import url('./layout/_tabview.css');
 
 @import url('./layout/_toolbars.css');
+
+@import url('./layout/_user_locale.css');
