@@ -1,43 +1,52 @@
 /**
- * Roles utility module for handling role-based access control and object merging
- * @module /utils/roles
- */
+## /utils/roles
+Roles utility module for handling role-based access control and object merging
+
+@requires /utils/merge
+@module /utils/roles
+*/
 
 /**
- * @global
- * @typedef {Object} roles
- * @property {Object} roles - roles configuration object
- * @property {boolean} [roles.*] - Wildcard role indicating unrestricted access
- * @property {Object} [roles.key] - Role-specific properties to merge
- * @property {Object} [roles.'!key'] - Negated role properties (applied when user doesn't have the role)
- */
+@global
+@typedef {Object} roles
+@property {Object} roles - roles configuration object
+@property {boolean} [roles.*] - Wildcard role indicating unrestricted access
+@property {Object} [roles.key] - Role-specific properties to merge
+@property {Object} [roles.'!key'] - Negated role properties (applied when user doesn't have the role)
+*/
 
 import merge from './merge.js';
 
 export { check, objMerge };
 
 /**
- * Checks if an object should be accessible based on user roles
- * @param {Object} obj - The object to check access for
- * @param {roles} obj.roles - Role configuration object
- * @param {Array<string>} user_roles - Array of roles assigned to the user
- * @returns {(Object|boolean)} Returns the original object if access is granted, false otherwise
- *
- * @example
- * // Object with unrestricted access
- * check({ roles: { '*': true }, data: 'content' }, ['user']) // returns object
- *
- * // Object with role restriction
- * check({ roles: { admin: true }, data: 'content' }, ['user']) // returns false
- * check({ roles: { admin: true }, data: 'content' }, ['admin']) // returns object
- *
- * // Object with negated roles
- * check({ roles: { '!guest': true }, data: 'content' }, ['guest']) // returns false
- * check({ roles: { '!guest': true }, data: 'content' }, ['user']) // returns object
- */
+@function check
+@description
+Checks if an object should be accessible based on user roles
+
+```js
+// Object with unrestricted access
+check({ roles: { '*': true }, data: 'content' }, ['user']) // returns object
+
+// Object with role restriction
+check({ roles: { admin: true }, data: 'content' }, ['user']) // returns false
+check({ roles: { admin: true }, data: 'content' }, ['admin']) // returns object
+
+// Object with negated roles
+check({ roles: { '!guest': true }, data: 'content' }, ['guest']) // returns false
+check({ roles: { '!guest': true }, data: 'content' }, ['user']) // returns object
+```
+
+@param {Object} obj The object to check access for
+@param {Array<string>} user_roles Array of roles assigned to the user
+@property {roles} obj.roles Role configuration object
+@returns {(Object|boolean)} Returns the original object if access is granted, false otherwise
+*/
 function check(obj, user_roles) {
   // The object to check has no roles assigned.
   if (!obj.roles) return obj;
+
+  if (user_roles === true) return obj;
 
   // Always return object with '*' asterisk role.
   if (Object.hasOwn(obj.roles, '*')) return obj;

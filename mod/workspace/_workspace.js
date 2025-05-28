@@ -41,6 +41,7 @@ const keyMethods = {
   locale,
   locales,
   roles,
+  rolestree,
   test,
 };
 
@@ -344,6 +345,66 @@ function roles(req, res) {
 }
 
 /**
+@function rolestree
+
+@param {req} req HTTP request.
+@param {req} res HTTP response.
+*/
+async function rolestree(req, res) {
+  // Force re-caching of workspace.
+  workspace = await workspaceCache(true);
+
+  const rolesTree = {};
+
+  for (const localeKey of Object.keys(workspace.locales)) {
+    // Will get layer and assignTemplates to workspace.
+    const locale = await getLocale({
+      locale: localeKey,
+      user: {
+        roles: true,
+      },
+    });
+
+    if (locale instanceof Error) {
+      console.error(locale);
+      continue;
+    }
+
+    Object.keys(locale.roles || {}).forEach((role) => {
+      // Add role without negation ! to roles set.
+      rolesTree[role.replace(/^!/, '')] = {};
+    });
+
+    // If the locale has no layers, just skip it.
+    if (!locale.layers) continue;
+
+    for (const layerKey of Object.keys(locale.layers)) {
+      // Will get layer and assignTemplates to workspace.
+      const layer = await getLayer({
+        layer: layerKey,
+        locale: localeKey,
+        user: {
+          roles: true,
+        },
+      });
+
+      Object.keys(layer.roles || {}).forEach((role) => {
+        const layerRole = role.replace(/^!/, '');
+
+        Object.keys(locale.roles).forEach((role) => {
+          const localeRole = role.replace(/^!/, '');
+          rolesTree[localeRole] = {
+            [layerRole]: {},
+          };
+        });
+      });
+    }
+  }
+
+  res.send(rolesTree);
+}
+
+/**
 @function test
 
 @description
@@ -360,12 +421,9 @@ A flat array of template.err will be returned from the workspace/test method.
 @param {req} req HTTP request.
 @param {req} res HTTP response.
 
-@property {Object} req.params
-HTTP request parameter.
-@property {Object} params.user
-The user requesting the test method.
-@property {Boolean} user.admin
-The user is required to have admin priviliges.
+@property {Object} req.params HTTP request parameter.
+@property {Object} params.user The user requesting the test method.
+@property {Boolean} user.admin The user is required to have admin priviliges.
 */
 async function test(req, res) {
   if (!req.params.user?.admin) {
