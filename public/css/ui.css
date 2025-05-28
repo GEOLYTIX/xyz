@@ -1089,6 +1089,54 @@ input[type=search]::-webkit-calendar-picker-indicator {
   }
 }
 
+/* public/css/layout/_histogram.css */
+.histogram {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5em;
+  .bucket {
+    position: relative;
+    background-color: var(--color-hover);
+    align-self: flex-end;
+    cursor: pointer;
+    flex-grow: 1;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    box-shadow: rgba(0, 0, 0, 0.12) 0px 1px 3px, rgba(0, 0, 0, 0.24) 0px 1px 2px;
+    & > div.bucket-info {
+      position: absolute;
+      min-width: 60px;
+      background-color: var(--color-primary);
+      color: var(--color-font-contrast);
+      display: inline-block;
+      text-align: center;
+      padding: 0 0.2em;
+      top: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      visibility: hidden;
+      opacity: 0;
+      transition: all .3s ease;
+      z-index: 1;
+      &:after {
+        position: absolute;
+        content: "";
+        border-top: 5px solid var(--color-primary);
+        border-left: 5px solid transparent;
+        border-right: 5px solid transparent;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+    }
+    &:hover > div.bucket-info {
+      visibility: visible;
+      opacity: 1;
+      top: 0;
+    }
+  }
+}
+
 /* public/css/layout/_layerview.css */
 .drawer.layer-group,
 .drawer.layer-view {
