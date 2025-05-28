@@ -351,6 +351,13 @@ function roles(req, res) {
 @param {req} res HTTP response.
 */
 async function rolestree(req, res) {
+  if (!req.params.user?.admin) {
+    res
+      .status(403)
+      .send(`Admin credentials are required to test the workspace sources.`);
+    return;
+  }
+
   // Force re-caching of workspace.
   workspace = await workspaceCache(true);
 
