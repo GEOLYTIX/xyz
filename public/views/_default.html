@@ -391,6 +391,9 @@
         }
       }
 
+      // Call the mergeLanguage function with the users language.
+      await mapp.utils.mergeLanguage(mapp.user.language); 
+      
     if (locale.locales) {
 
       // Get list of accessible locales from Workspace API.
