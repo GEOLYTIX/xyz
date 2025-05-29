@@ -1118,6 +1118,7 @@ input[type=search]::-webkit-calendar-picker-indicator {
       visibility: hidden;
       opacity: 0;
       transition: all 0.3s ease;
+      isolation: isolate;
       z-index: 1;
       &:after {
         position: absolute;
