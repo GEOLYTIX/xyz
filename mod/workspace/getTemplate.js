@@ -207,9 +207,12 @@ async function cacheTemplate(workspace, template, response = {}) {
   if (template.src) {
     workspace.templates[template.key || template.src] = template;
 
-    if (!template.src.startsWith('file:')) {
-      delete template.src;
-    }
+    delete template.src;
+
+    // TODO fix caching issue for file
+    // if (!template.src.startsWith('file:')) {
+    //   delete template.src;
+    // }
   }
 
   return structuredClone(template);
