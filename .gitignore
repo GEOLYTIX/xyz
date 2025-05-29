@@ -36,3 +36,4 @@ public/js/*
 !jsdoc*.json
 !codi.json
 !biome.json
+!public/dictionaries/*.json
