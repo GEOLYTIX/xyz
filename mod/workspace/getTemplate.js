@@ -201,18 +201,15 @@ A src property beginning with `file:` is not removed since file resources do not
 @returns {Promise<Object|Error>} JSON Template
 */
 async function cacheTemplate(workspace, template, response = {}) {
-  // Get template from src.
-  template = merge(response, template);
+  Object.assign(template, response)
 
   if (template.src) {
     workspace.templates[template.key || template.src] = template;
 
-    delete template.src;
-
-    // TODO fix caching issue for file
-    // if (!template.src.startsWith('file:')) {
-    //   delete template.src;
-    // }
+    // file src templates should not be cached.
+    if (!template.src.startsWith('file:')) {
+      delete template.src;
+    }
   }
 
   return structuredClone(template);
