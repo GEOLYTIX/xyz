@@ -587,6 +587,11 @@ dialog {
     left: 50%;
     transform: translate(-50%, -50%);
   }
+  &.popout .material-symbols-outlined.toggle-on {
+    &::after {
+      color: var(--color-active) !important;
+    }
+  }
   .minimize-btn::after {
     content: "minimize";
   }
