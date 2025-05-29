@@ -182,9 +182,7 @@ async function moduleTemplate(template, response) {
 @async
 
 @description
-The method merges the response object into the template and removes the src property. 
-
-The merged template object is assigned to the workspace. 
+The method assigns the response object to the template object and removes the src property. 
 
 This effectively caches the template since the src to fetch the template is removed.
 
@@ -201,7 +199,7 @@ A src property beginning with `file:` is not removed since file resources do not
 @returns {Promise<Object|Error>} JSON Template
 */
 async function cacheTemplate(workspace, template, response = {}) {
-  Object.assign(template, response)
+  Object.assign(template, response);
 
   if (template.src) {
     workspace.templates[template.key || template.src] = template;
