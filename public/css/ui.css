@@ -553,8 +553,8 @@ dialog {
     top: -1px;
     left: 0;
     background-color: inherit;
-    & > :nth-child(2) {
-      margin-left: auto;
+    & > :first-child {
+      flex-grow: 1;
     }
     & > .material-symbols-outlined {
       font-size: 1.2em;
@@ -653,13 +653,11 @@ dialog {
       width: 1.5em;
       height: 1.5em;
     }
-    & > :nth-child(1) {
+    & > :first-child {
       overflow: hidden;
       white-space: normal;
       text-overflow: ellipsis;
-    }
-    & > :nth-child(2) {
-      margin-left: auto;
+      flex-grow: 1;
     }
   }
   &.flat {
@@ -1296,8 +1294,8 @@ input[type=search]::-webkit-calendar-picker-indicator {
 .flex-spacer {
   display: flex;
   align-items: center;
-  & > :nth-child(2) {
-    margin-left: auto;
+  & > :first-child {
+    flex-grow: 1;
   }
 }
 
