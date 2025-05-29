@@ -409,7 +409,7 @@
     if (locales.length > 1) {
       const localesDropdown = mapp.ui.elements.dropdown({
         data_id: 'locales-dropdown',
-        placeholder: locale.name || locale.key,
+        span: locale.name || locale.key,
         entries: locales.map((locale) => ({
           title: locale.name || locale.key,
           key: locale.key,
@@ -419,7 +419,7 @@
         },
       });
 
-      layersTab.appendChild(localesDropdown);
+      layersTab.appendChild(mapp.utils.html.node`${localesDropdown}`);
     }
 
     if (!window.ol) await mapp.utils.olScript();
