@@ -41,6 +41,7 @@ const keyMethods = {
   locale,
   locales,
   roles,
+  rolestree,
   test,
 };
 
@@ -344,6 +345,103 @@ function roles(req, res) {
 }
 
 /**
+@function rolestree
+
+@param {req} req HTTP request.
+@param {req} res HTTP response.
+*/
+async function rolestree(req, res) {
+  if (!req.params.user?.admin) {
+    res
+      .status(403)
+      .send(`Admin credentials are required to test the workspace sources.`);
+    return;
+  }
+
+  // Force re-caching of workspace.
+  workspace = await workspaceCache(true);
+
+  const rolesTree = {};
+
+  if (workspace.locale) {
+    const locale = await getLocale({
+      user: {
+        roles: true,
+      },
+    });
+    await localeRoles(locale, rolesTree);
+  }
+
+  for (const localeKey of Object.keys(workspace.locales)) {
+    const locale = await getLocale({
+      locale: localeKey,
+      user: {
+        roles: true,
+      },
+    });
+
+    if (locale instanceof Error) {
+      console.error(locale);
+      continue;
+    }
+
+    await localeRoles(locale, rolesTree);
+  }
+
+  res.send(rolesTree);
+}
+
+function addRole(rolesTree, rolesArray) {
+  console.log(rolesArray);
+
+  if (!rolesArray.length) return;
+
+  const role = rolesArray.shift()
+
+  rolesTree[role] ??= {}
+
+  addRole(rolesTree[role], rolesArray)
+}
+
+async function localeRoles(locale, rolesTree, rolesArray = []) {
+  const roles = Object.keys(locale.roles || { '*': true });
+
+  roles.forEach((localeRole) => {
+    //rolesTree[localeRole] ??= {};
+    addRole(rolesTree, [...rolesArray, localeRole]);
+  });
+
+  for (const nestedLocale of locale.locales || []) {
+    const locale = await getLocale({
+      locale: nestedLocale,
+      user: {
+        roles: true,
+      },
+    });
+
+    localeRoles(locale, rolesTree, roles);
+  }
+
+  // for (const layerKey of Object.keys(locale.layers || {})) {
+  //   const layer = await getLayer({
+  //     layer: layerKey,
+  //     locale: locale.key,
+  //     user: {
+  //       roles: true,
+  //     },
+  //   });
+
+  //   const layerRoles = Object.keys(layer.roles || { '*': true });
+
+  //   roles.forEach((localeRole) => {
+  //     layerRoles.forEach((layerRole) => {
+  //       rolesTree[localeRole][layerRole] ??= {};
+  //     });
+  //   });
+  // }
+}
+
+/**
 @function test
 
 @description
@@ -360,12 +458,9 @@ A flat array of template.err will be returned from the workspace/test method.
 @param {req} req HTTP request.
 @param {req} res HTTP response.
 
-@property {Object} req.params
-HTTP request parameter.
-@property {Object} params.user
-The user requesting the test method.
-@property {Boolean} user.admin
-The user is required to have admin priviliges.
+@property {Object} req.params HTTP request parameter.
+@property {Object} params.user The user requesting the test method.
+@property {Boolean} user.admin The user is required to have admin priviliges.
 */
 async function test(req, res) {
   if (!req.params.user?.admin) {
