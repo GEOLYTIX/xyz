@@ -363,8 +363,16 @@ async function rolestree(req, res) {
 
   const rolesTree = {};
 
+  if (workspace.locale) {
+    const locale = await getLocale({
+      user: {
+        roles: true,
+      },
+    });
+    await localeRoles(locale, rolesTree);
+  }
+
   for (const localeKey of Object.keys(workspace.locales)) {
-    // Will get layer and assignTemplates to workspace.
     const locale = await getLocale({
       locale: localeKey,
       user: {
@@ -377,38 +385,60 @@ async function rolestree(req, res) {
       continue;
     }
 
-    Object.keys(locale.roles || {}).forEach((role) => {
-      // Add role without negation ! to roles set.
-      rolesTree[role.replace(/^!/, '')] = {};
-    });
-
-    // If the locale has no layers, just skip it.
-    if (!locale.layers) continue;
-
-    for (const layerKey of Object.keys(locale.layers)) {
-      // Will get layer and assignTemplates to workspace.
-      const layer = await getLayer({
-        layer: layerKey,
-        locale: localeKey,
-        user: {
-          roles: true,
-        },
-      });
-
-      Object.keys(layer.roles || {}).forEach((role) => {
-        const layerRole = role.replace(/^!/, '');
-
-        Object.keys(locale.roles).forEach((role) => {
-          const localeRole = role.replace(/^!/, '');
-          rolesTree[localeRole] = {
-            [layerRole]: {},
-          };
-        });
-      });
-    }
+    await localeRoles(locale, rolesTree);
   }
 
   res.send(rolesTree);
+}
+
+function addRole(rolesTree, rolesArray) {
+  console.log(rolesArray);
+
+  if (!rolesArray.length) return;
+
+  const role = rolesArray.shift()
+
+  rolesTree[role] ??= {}
+
+  addRole(rolesTree[role], rolesArray)
+}
+
+async function localeRoles(locale, rolesTree, rolesArray = []) {
+  const roles = Object.keys(locale.roles || { '*': true });
+
+  roles.forEach((localeRole) => {
+    //rolesTree[localeRole] ??= {};
+    addRole(rolesTree, [...rolesArray, localeRole]);
+  });
+
+  for (const nestedLocale of locale.locales || []) {
+    const locale = await getLocale({
+      locale: nestedLocale,
+      user: {
+        roles: true,
+      },
+    });
+
+    localeRoles(locale, rolesTree, roles);
+  }
+
+  // for (const layerKey of Object.keys(locale.layers || {})) {
+  //   const layer = await getLayer({
+  //     layer: layerKey,
+  //     locale: locale.key,
+  //     user: {
+  //       roles: true,
+  //     },
+  //   });
+
+  //   const layerRoles = Object.keys(layer.roles || { '*': true });
+
+  //   roles.forEach((localeRole) => {
+  //     layerRoles.forEach((layerRole) => {
+  //       rolesTree[localeRole][layerRole] ??= {};
+  //     });
+  //   });
+  // }
 }
 
 /**
