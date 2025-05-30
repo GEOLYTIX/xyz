@@ -62,14 +62,11 @@
       height: 1.5em;
     }
 
-    & > :nth-child(1) {
+    & > :first-child {
       overflow: hidden;
       white-space: normal;
       text-overflow: ellipsis;
-    }
-
-    & > :nth-child(2) {
-      margin-left: auto;
+      flex-grow: 1;
     }
   }
 
