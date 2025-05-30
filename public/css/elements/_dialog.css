@@ -75,7 +75,7 @@ dialog {
 
   &.popout .material-symbols-outlined.toggle-on {
     &::after {
-      color: var(--color-active) !important;
+      color: var(--color-active);
     }
   }
 
