@@ -29,11 +29,9 @@ The workspace object defines the mapp resources available in an XYZ instance.
 */
 
 import * as Roles from '../utils/roles.js';
-
 import workspaceCache from './cache.js';
 import getLayer from './getLayer.js';
 import getLocale from './getLocale.js';
-
 import getTemplate from './getTemplate.js';
 
 const keyMethods = {
@@ -41,7 +39,6 @@ const keyMethods = {
   locale,
   locales,
   roles,
-  rolestree,
   test,
 };
 
@@ -303,54 +300,6 @@ Whether the roles should be returned as an object with details.
 @returns {Array|Object} Returns either an array of roles as string, or an object with roles as properties.
 */
 function roles(req, res) {
-  const rolesSet = new Set();
-
-  (function objectEval(o, parent, key) {
-    if (key === 'roles') {
-      Object.keys(parent.roles).forEach((role) => {
-        // Add role without negation ! to roles set.
-        // The same role can not be added multiple times to the rolesSet.
-        rolesSet.add(role.replace(/^!/, ''));
-      });
-    }
-
-    // Iterate through the object tree.
-    Object.keys(o).forEach((key) => {
-      if (o[key] && typeof o[key] === 'object') {
-        // Call method recursive for nested objects.
-        objectEval(o[key], o, key);
-      }
-    });
-  })(workspace);
-
-  // Delete restricted Asterisk role.
-  rolesSet.delete('*');
-
-  const roles = Array.from(rolesSet);
-
-  // If detail=true, return workspace.roles{} object (so you can specify information for each role).
-  if (req.params.detail) {
-    workspace.roles ??= {};
-
-    // If the role is missing, add it to the workspace.roles{} object as an empty object.
-    roles
-      .filter((role) => !Object.hasOwn(workspace.roles, role))
-      .forEach((role) => (workspace.roles[role] = {}));
-
-    // Return the workspace.roles{} object.
-    return res.send(workspace.roles);
-  }
-
-  res.send(roles);
-}
-
-/**
-@function rolestree
-
-@param {req} req HTTP request.
-@param {req} res HTTP response.
-*/
-async function rolestree(req, res) {
   if (!req.params.user?.admin) {
     res
       .status(403)
@@ -358,87 +307,42 @@ async function rolestree(req, res) {
     return;
   }
 
-  // Force re-caching of workspace.
-  workspace = await workspaceCache(true);
+  const rolesSet = new Set();
+
+  Roles.fromObj(rolesSet, workspace);
 
   const rolesTree = {};
 
-  if (workspace.locale) {
-    const locale = await getLocale({
-      user: {
-        roles: true,
-      },
-    });
-    await localeRoles(locale, rolesTree);
-  }
+  // Delete restricted Asterisk role.
+  rolesSet.delete('*');
 
-  for (const localeKey of Object.keys(workspace.locales)) {
-    const locale = await getLocale({
-      locale: localeKey,
-      user: {
-        roles: true,
-      },
-    });
+  rolesSet.forEach((role) => {
+    const roles = role.split('.');
 
-    if (locale instanceof Error) {
-      console.error(locale);
-      continue;
+    if (roles.length > 1) {
+      roles.reduce(
+        (accumulator, currentValue) => (accumulator[currentValue] ??= {}),
+        rolesTree,
+      );
+
+      rolesSet.delete(role);
+      rolesSet.add(roles.pop());
+    } else {
+      rolesTree[role] ??= {};
     }
-
-    await localeRoles(locale, rolesTree);
-  }
-
-  res.send(rolesTree);
-}
-
-function addRole(rolesTree, rolesArray) {
-  console.log(rolesArray);
-
-  if (!rolesArray.length) return;
-
-  const role = rolesArray.shift()
-
-  rolesTree[role] ??= {}
-
-  addRole(rolesTree[role], rolesArray)
-}
-
-async function localeRoles(locale, rolesTree, rolesArray = []) {
-  const roles = Object.keys(locale.roles || { '*': true });
-
-  roles.forEach((localeRole) => {
-    //rolesTree[localeRole] ??= {};
-    addRole(rolesTree, [...rolesArray, localeRole]);
   });
 
-  for (const nestedLocale of locale.locales || []) {
-    const locale = await getLocale({
-      locale: nestedLocale,
-      user: {
-        roles: true,
-      },
-    });
+  const roles = Array.from(rolesSet);
 
-    localeRoles(locale, rolesTree, roles);
+  if (req.params.detail) {
+    return res.send(workspace.roles);
   }
 
-  // for (const layerKey of Object.keys(locale.layers || {})) {
-  //   const layer = await getLayer({
-  //     layer: layerKey,
-  //     locale: locale.key,
-  //     user: {
-  //       roles: true,
-  //     },
-  //   });
+  if (req.params.tree) {
+    return res.send(rolesTree);
+  }
 
-  //   const layerRoles = Object.keys(layer.roles || { '*': true });
-
-  //   roles.forEach((localeRole) => {
-  //     layerRoles.forEach((layerRole) => {
-  //       rolesTree[localeRole][layerRole] ??= {};
-  //     });
-  //   });
-  // }
+  res.send(roles);
 }
 
 /**
