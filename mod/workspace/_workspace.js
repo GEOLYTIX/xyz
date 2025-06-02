@@ -29,11 +29,9 @@ The workspace object defines the mapp resources available in an XYZ instance.
 */
 
 import * as Roles from '../utils/roles.js';
-
 import workspaceCache from './cache.js';
 import getLayer from './getLayer.js';
 import getLocale from './getLocale.js';
-
 import getTemplate from './getTemplate.js';
 
 const keyMethods = {
@@ -302,42 +300,46 @@ Whether the roles should be returned as an object with details.
 @returns {Array|Object} Returns either an array of roles as string, or an object with roles as properties.
 */
 function roles(req, res) {
+  if (!req.params.user?.admin) {
+    res
+      .status(403)
+      .send(`Admin credentials are required to test the workspace sources.`);
+    return;
+  }
+
   const rolesSet = new Set();
 
-  (function objectEval(o, parent, key) {
-    if (key === 'roles') {
-      Object.keys(parent.roles).forEach((role) => {
-        // Add role without negation ! to roles set.
-        // The same role can not be added multiple times to the rolesSet.
-        rolesSet.add(role.replace(/^!/, ''));
-      });
-    }
+  Roles.fromObj(rolesSet, workspace);
 
-    // Iterate through the object tree.
-    Object.keys(o).forEach((key) => {
-      if (o[key] && typeof o[key] === 'object') {
-        // Call method recursive for nested objects.
-        objectEval(o[key], o, key);
-      }
-    });
-  })(workspace);
+  const rolesTree = {};
 
   // Delete restricted Asterisk role.
   rolesSet.delete('*');
 
+  rolesSet.forEach((role) => {
+    const roles = role.split('.');
+
+    if (roles.length > 1) {
+      roles.reduce(
+        (accumulator, currentValue) => (accumulator[currentValue] ??= {}),
+        rolesTree,
+      );
+
+      rolesSet.delete(role);
+      rolesSet.add(roles.pop());
+    } else {
+      rolesTree[role] ??= {};
+    }
+  });
+
   const roles = Array.from(rolesSet);
 
-  // If detail=true, return workspace.roles{} object (so you can specify information for each role).
   if (req.params.detail) {
-    workspace.roles ??= {};
-
-    // If the role is missing, add it to the workspace.roles{} object as an empty object.
-    roles
-      .filter((role) => !Object.hasOwn(workspace.roles, role))
-      .forEach((role) => (workspace.roles[role] = {}));
-
-    // Return the workspace.roles{} object.
     return res.send(workspace.roles);
+  }
+
+  if (req.params.tree) {
+    return res.send(rolesTree);
   }
 
   res.send(roles);
@@ -360,12 +362,9 @@ A flat array of template.err will be returned from the workspace/test method.
 @param {req} req HTTP request.
 @param {req} res HTTP response.
 
-@property {Object} req.params
-HTTP request parameter.
-@property {Object} params.user
-The user requesting the test method.
-@property {Boolean} user.admin
-The user is required to have admin priviliges.
+@property {Object} req.params HTTP request parameter.
+@property {Object} params.user The user requesting the test method.
+@property {Boolean} user.admin The user is required to have admin priviliges.
 */
 async function test(req, res) {
   if (!req.params.user?.admin) {
