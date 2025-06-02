@@ -144,9 +144,10 @@ export function objMerge(obj, user_roles) {
       // Get last role from a dot tree role string.
       const popRole = role.split('.').pop();
 
-      if (user_roles.includes(popRole)) return true;
-      if (notIncludesNegatedRole(popRole, user_roles)) return true;
-      return false;
+      return (
+        user_roles.includes(popRole) ||
+        notIncludesNegatedRole(popRole, user_roles)
+      );
     })
     .forEach((role) => {
       merge(clone, clone.roles[role]);
