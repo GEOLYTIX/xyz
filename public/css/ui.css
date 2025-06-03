@@ -1092,6 +1092,10 @@ input[type=search]::-webkit-calendar-picker-indicator {
   display: flex;
   flex-direction: row;
   gap: 0.5em;
+  .xlabel {
+    writing-mode: sideways-lr;
+    text-align: center;
+  }
   .bucket {
     position: relative;
     background-color: var(--color-hover);
