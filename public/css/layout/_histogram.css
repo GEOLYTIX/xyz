@@ -6,6 +6,7 @@
   .xlabel {
     writing-mode: sideways-lr;
     text-align: center;
+    color: var(--color-font-mid);
   }
 
   .bucket {
