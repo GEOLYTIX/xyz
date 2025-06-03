@@ -1140,6 +1140,19 @@ input[type=search]::-webkit-calendar-picker-indicator {
     }
   }
 }
+.histogram-title {
+  margin: 0.5em 0;
+}
+.histogram-xlabel {
+  position: relative;
+  text-align: center;
+  color: var(--color-font-mid);
+  margin: 0.5em 0;
+}
+.histogram-caption {
+  color: var(--color-font-mid);
+  margin: 0.5em 0;
+}
 
 /* public/css/layout/_layerview.css */
 .drawer.layer-group,

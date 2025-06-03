@@ -56,3 +56,19 @@
     }
   }
 }
+
+.histogram-title {
+  margin: 0.5em 0;
+}
+
+.histogram-xlabel {
+  position: relative;
+  text-align: center;
+  color: var(--color-font-mid);
+  margin: 0.5em 0;
+}
+
+.histogram-caption {
+  color: var(--color-font-mid);
+  margin: 0.5em 0;
+}
