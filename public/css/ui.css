@@ -1095,6 +1095,7 @@ input[type=search]::-webkit-calendar-picker-indicator {
   .xlabel {
     writing-mode: sideways-lr;
     text-align: center;
+    color: var(--color-font-mid);
   }
   .bucket {
     position: relative;
