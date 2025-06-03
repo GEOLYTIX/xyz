@@ -592,6 +592,11 @@ dialog {
       color: var(--color-active);
     }
   }
+  &.popout {
+    [data-id=popout-btn] {
+      display: none;
+    }
+  }
   .minimize-btn::after {
     content: "minimize";
   }
