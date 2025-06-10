@@ -6,10 +6,6 @@
   padding: 5px;
   border-radius: 3px;
 
-  * {
-    color: var(--color-font);
-  }
-
   option.selected {
     background-color: var(--color-primary);
     color: var(--color-font-contrast);
