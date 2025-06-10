@@ -1,7 +1,7 @@
 .select-dropdown {
   width: 100%;
   color: var(--color-font);
-  background-color: var(--color-base);
+  background-color: var(--color-base-secondary);
   border: 1px solid var(--color-border);
   padding: 5px;
   border-radius: 3px;
