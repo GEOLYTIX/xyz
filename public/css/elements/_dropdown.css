@@ -1,14 +1,13 @@
 .select-dropdown {
   width: 100%;
-  background-color: var(--color-base-secondary);
   color: var(--color-font);
+  background-color: var(--color-base-secondary);
+  border: 1px solid var(--color-border);
+  padding: 5px;
+  border-radius: 3px;
 
   option.selected {
     background-color: var(--color-primary);
     color: var(--color-font-contrast);
   }
-}
-
-input[type='search']::-webkit-calendar-picker-indicator {
-  display: none !important;
 }
