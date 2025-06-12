@@ -83,6 +83,20 @@ dialog {
     [data-id='popout-btn'] {
       display: none;
     }
+
+    .drawer {
+      padding: 2px;
+      border: none;
+      background-color: var(--color-base-secondary);
+      color: var(--color-font);
+      box-shadow: none;
+    }
+
+    .headerDrag {
+      h2 {
+        font-weight: normal;
+      }
+    }
   }
 
   .minimize-btn::after {
