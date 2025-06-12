@@ -54,3 +54,9 @@ h3 {
 a > img {
   height: 100%;
 }
+
+select {
+  &:focus {
+    outline: none;
+  }
+}
