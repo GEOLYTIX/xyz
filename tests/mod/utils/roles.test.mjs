@@ -1,4 +1,4 @@
-import { check, objMerge, fromObj } from '../../../mod/utils/roles.js';
+import { check, fromObj, objMerge } from '../../../mod/utils/roles.js';
 
 codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
   codi.describe(
@@ -332,8 +332,8 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
             nullValue: null,
             undefinedValue: undefined,
             roles: {
-              admin: { text: 'admin' }
-            }
+              admin: { text: 'admin' },
+            },
           };
           const result = objMerge(obj, ['admin']);
           codi.assertEqual(result.nullValue, null);
@@ -350,7 +350,7 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
         () => {
           const obj = {
             data: 'test',
-            roles: ['admin', 'user']
+            roles: ['admin', 'user'],
           };
           const result = objMerge(obj, ['admin']);
           codi.assertEqual(result, obj);
@@ -365,7 +365,7 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
         () => {
           const obj = {
             data: 'test',
-            roles: () => 'function'
+            roles: () => 'function',
           };
           const result = objMerge(obj, ['admin']);
           codi.assertEqual(result, obj);
@@ -381,8 +381,8 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
           const obj = {
             roles: {
               'namespace.admin': { text: 'admin' },
-              'namespace.user': { text: 'user' }
-            }
+              'namespace.user': { text: 'user' },
+            },
           };
           const result = objMerge(obj, ['admin']);
           codi.assertEqual(result.text, 'admin');
@@ -398,8 +398,8 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
           const obj = {
             roles: {
               admin: true,
-              user: { text: 'user' }
-            }
+              user: { text: 'user' },
+            },
           };
           const result = objMerge(obj, ['admin', 'user']);
           codi.assertEqual(result.text, 'user');
@@ -415,8 +415,8 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
           const obj = {
             roles: {
               admin: null,
-              user: { text: 'user' }
-            }
+              user: { text: 'user' },
+            },
           };
           const result = objMerge(obj, ['admin', 'user']);
           codi.assertEqual(result.text, 'user');
@@ -433,16 +433,16 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
             level1: {
               level2: {
                 roles: {
-                  admin: { deepText: 'deep admin' }
-                }
+                  admin: { deepText: 'deep admin' },
+                },
               },
               roles: {
-                user: { midText: 'mid user' }
-              }
+                user: { midText: 'mid user' },
+              },
             },
             roles: {
-              root: { rootText: 'root' }
-            }
+              root: { rootText: 'root' },
+            },
           };
           const result = objMerge(obj, ['admin', 'user', 'root']);
           codi.assertEqual(result.rootText, 'root');
@@ -471,8 +471,8 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
             roles: {
               admin: true,
               user: true,
-              guest: true
-            }
+              guest: true,
+            },
           };
           fromObj(rolesSet, obj);
           codi.assertEqual(rolesSet.has('admin'), true);
@@ -492,8 +492,8 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
             roles: {
               '!admin': true,
               '!guest': true,
-              user: true
-            }
+              user: true,
+            },
           };
           fromObj(rolesSet, obj);
           codi.assertEqual(rolesSet.has('admin'), true);
@@ -514,19 +514,19 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
           const obj = {
             level1: {
               roles: {
-                admin: true
+                admin: true,
               },
               level2: {
                 roles: {
-                  user: true
+                  user: true,
                 },
                 level3: {
                   roles: {
-                    guest: true
-                  }
-                }
-              }
-            }
+                    guest: true,
+                  },
+                },
+              },
+            },
           };
           fromObj(rolesSet, obj);
           codi.assertEqual(rolesSet.has('admin'), true);
@@ -546,15 +546,15 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
             items: [
               {
                 roles: {
-                  admin: true
-                }
+                  admin: true,
+                },
               },
               {
                 roles: {
-                  user: true
-                }
-              }
-            ]
+                  user: true,
+                },
+              },
+            ],
           };
           fromObj(rolesSet, obj);
           codi.assertEqual(rolesSet.has('admin'), true);
@@ -573,8 +573,8 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
             nullValue: null,
             undefinedValue: undefined,
             roles: {
-              admin: true
-            }
+              admin: true,
+            },
           };
           fromObj(rolesSet, obj);
           codi.assertEqual(rolesSet.has('admin'), true);
@@ -591,15 +591,15 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
           const obj = {
             section1: {
               roles: {
-                admin: true
-              }
+                admin: true,
+              },
             },
             section2: {
               roles: {
                 admin: true,
-                user: true
-              }
-            }
+                user: true,
+              },
+            },
           };
           fromObj(rolesSet, obj);
           codi.assertEqual(rolesSet.size, 2);
@@ -631,8 +631,8 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
           const obj = {
             data: 'test',
             nested: {
-              value: 'nested'
-            }
+              value: 'nested',
+            },
           };
           fromObj(rolesSet, obj);
           codi.assertEqual(rolesSet.size, 0);
