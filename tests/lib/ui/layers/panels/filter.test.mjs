@@ -55,25 +55,17 @@ export function filter() {
           const filterPanelDropDown = filterPanel.querySelector(
             '[data-id=panel_test-filter-dropdown]',
           );
-          const drop_down_elements = filterPanelDropDown.querySelector('ul');
+
+          const drop_down_elements =
+            filterPanelDropDown.querySelectorAll('option');
 
           codi.assertEqual(
-            drop_down_elements.children.length,
-            2,
-            'We expect two entries into the dropdown from the infoj',
+            drop_down_elements.length,
+            3,
+            'We expect three entries into the dropdown from the infoj',
           );
 
-          filterPanel
-            .querySelector('ul')
-            .children[0].dispatchEvent(new Event('click'));
-
-          codi.assertEqual(
-            filterPanel
-              .querySelector('ul')
-              .children[0].classList.contains('selected'),
-            true,
-            'Expect an element to be selected',
-          );
+          filterPanelDropDown[1].dispatchEvent(new Event('click'));
 
           const resetButton = filterPanel.querySelector('[data-id=resetall]');
 
@@ -84,7 +76,7 @@ export function filter() {
           codi.assertEqual(
             layer.filter.current,
             {},
-            ' `layer.current.filter` should be empty',
+            '`layer.current.filter` should be empty',
           );
         },
       );
