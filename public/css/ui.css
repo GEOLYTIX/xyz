@@ -1125,7 +1125,7 @@ dialog {
   .ylabel {
     writing-mode: sideways-lr;
     text-align: center;
-    color: var(--color-font-mid);
+    color: var(--color-font);
   }
   .bucket {
     position: relative;
@@ -1176,7 +1176,7 @@ dialog {
 .histogram-xlabel {
   position: relative;
   text-align: center;
-  color: var(--color-font-mid);
+  color: var(--color-font);
   margin: 0.5em 0;
 }
 .histogram-caption {
