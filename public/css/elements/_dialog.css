@@ -73,6 +73,32 @@ dialog {
     transform: translate(-50%, -50%);
   }
 
+  &.popout .material-symbols-outlined.toggle-on {
+    &::after {
+      color: var(--color-active);
+    }
+  }
+
+  &.popout {
+    [data-id='popout-btn'] {
+      display: none;
+    }
+
+    .drawer {
+      padding: 2px;
+      border: none;
+      background-color: var(--color-base-secondary);
+      color: var(--color-font);
+      box-shadow: none;
+    }
+
+    .headerDrag {
+      h2 {
+        font-weight: normal;
+      }
+    }
+  }
+
   .minimize-btn::after {
     content: 'minimize';
   }
