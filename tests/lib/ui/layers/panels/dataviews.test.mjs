@@ -2,7 +2,7 @@ import dataviews_panel from '../../../../assets/dataviews/dataviews_panel.json';
 export function dataviews(mapview) {
   codi.describe(
     {
-      name: 'Panel Filter test:',
+      name: 'dataview panel test:',
       id: 'ui_layers_panel_dataviews',
       parentId: 'ui_layers',
     },
@@ -19,6 +19,7 @@ export function dataviews(mapview) {
             mapview: mapview,
             dataviews: dataviews.dataviews,
             showCallbacks: [],
+            hideCallbacks: [],
           };
 
           const drawer = ui.layers.panels.dataviews(layer);
