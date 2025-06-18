@@ -244,6 +244,11 @@
       }
     }
 
+    if (mapp.language !== 'en') {
+
+      await mapp.utils.loadDictionary(mapp.language)
+    }
+
     // Restore scroll
     if ('scrollRestoration' in history) history.scrollRestoration = 'auto';
 

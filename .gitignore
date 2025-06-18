@@ -9,9 +9,13 @@ env
 package-lock.json
 node_modules/*
 
+public/js/*
 public/css/.sass-cache/
 public/workspaces/*
 public/js/plugins/*
+!public/js/mapbox-gl-rtl-text.js
+!public/dictionaries/*
+
 stats.json
 docs/*
 
@@ -23,9 +27,6 @@ caddy_linux_amd64
 !.elasticbeanstalk/*.global.yml
 .ebextensions/*
 \.ebextensions/
-
-public/js/*
-!public/js/mapbox-gl-rtl-text.js
 
 *.pem
 *.crt
