@@ -1,4 +1,4 @@
-export const en = {
+export default {
   cancel: 'Cancel',
   circle_config: 'Circle configuration',
   confirm: 'Confirm',
