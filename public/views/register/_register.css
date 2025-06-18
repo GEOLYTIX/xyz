@@ -2,7 +2,9 @@ body {
   margin: 0 auto !important;
   padding: 50px;
   max-width: 600px;
-  font: 14px 'Open Sans', sans-serif;
+  font:
+    14px 'Open Sans',
+    sans-serif;
 }
 
 @media only screen and (max-width: 700px) {
@@ -83,7 +85,9 @@ button {
   margin: 10px 0;
   padding: 8px;
   text-align: center;
-  font: 18px 'Open Sans', sans-serif;
+  font:
+    18px 'Open Sans',
+    sans-serif;
   font-weight: bold;
   border-radius: 3px;
   border: 0;
