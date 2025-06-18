@@ -30,7 +30,7 @@ caddy_linux_amd64
 
 *.pem
 *.crt
-*.json
+/*.json
 !tests/*.json
 !tests/**
 !package.json
