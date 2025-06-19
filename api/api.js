@@ -113,7 +113,7 @@ export default function api(req, res) {
   req.params = validateRequestParams(req);
 
   if (req.params instanceof Error) {
-    return res.status(400).send(req.params.message);
+    return res.status(400).send('Invalid request parameters.');
   }
 
   if (req.params.logout) {
