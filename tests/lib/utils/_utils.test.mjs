@@ -8,6 +8,7 @@ import { queryParams } from './queryParams.test.mjs';
 import { svgTemplates } from './svgTemplates.test.mjs';
 import { temporal } from './temporal.test.mjs';
 import { versionCheck } from './versionCheck.mjs';
+import { scriptElementTest } from './scriptElement.test.mjs';
 
 export const utilsTest = {
   compose,
@@ -21,6 +22,7 @@ export const utilsTest = {
   svgTemplates,
   temporal,
   versionCheck,
+  scriptElementTest,
 };
 
 function setup() {
