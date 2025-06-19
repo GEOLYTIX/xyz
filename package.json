@@ -1,6 +1,6 @@
 {
   "name": "xyz",
-  "version": "v4.15.0",
+  "version": "v4.15.3",
   "type": "module",
   "repository": {
     "type": "git",
@@ -30,7 +30,7 @@
     "pg": "~8.15.1"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.0.0-beta.1",
+    "@biomejs/biome": "2.0.0",
     "clean-jsdoc-theme": "^4.3.0",
     "codi-test-framework": "1.0.37",
     "concurrently": "^9.1.0",
