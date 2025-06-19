@@ -3,7 +3,6 @@
 The module exports the getTemplate method which is required by the query, languageTemplates, getLayer, and getLocale modules.
 
 @requires /provider/getFrom
-@requires /utils/merge
 @requires /workspace/cache
 @requires module:/utils/processEnv
 
@@ -12,7 +11,6 @@ The module exports the getTemplate method which is required by the query, langua
 
 import getFrom from '../provider/getFrom.js';
 import envReplace from '../utils/envReplace.js';
-import merge from '../utils/merge.js';
 import workspaceCache from './cache.js';
 
 /**
