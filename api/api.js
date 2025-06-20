@@ -113,7 +113,10 @@ export default function api(req, res) {
   req.params = validateRequestParams(req);
 
   if (req.params instanceof Error) {
-    return res.status(400).send(req.params.message);
+    return res
+      .status(400)
+      .set('Content-Type', 'text/plain')
+      .send(req.params.message);
   }
 
   if (req.params.logout) {
