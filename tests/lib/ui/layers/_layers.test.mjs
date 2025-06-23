@@ -1,7 +1,7 @@
+import { filters } from './filters.test.mjs';
 import { basic } from './legends/basic.test.mjs';
 import { dataviews } from './panels/dataviews.test.mjs';
 import { filter } from './panels/filter.test.mjs';
-import { filters } from './filters.test.mjs';
 import { view } from './view.test.mjs';
 
 export const layers = {
