@@ -33,36 +33,51 @@ export function basic(mapview) {
           };
 
           // Call the basicTheme function
-          mapp.ui.layers.legend.basic(layer);
+          ui.layers.legends.basic(layer);
 
-          // Check that the legend node is created and holds a div of class 'legend'
-          const legendNode = layer.style.legend;
+         // Get the legend
+          const legend = layer.style.legend;
+
+          // Ensure that the legend is defined
           codi.assertTrue(
-            legendNode instanceof HTMLElement,
-            'Ensure that the legend node is an HTMLElement',
-          );
-
-          codi.assertTrue(
-            legendNode.classList.contains('legend'),
-            'Ensure that the legend node has the class "legend"',
-          );
-
-          // Check that the legend node contains a div with class 'contents-wrapper grid'
-          const contentsWrapper = legendNode.querySelector(
-            '.contents-wrapper.grid',
+            legend !== undefined,
+            'Ensure that the legend is defined after calling basicTheme',
           );
 
           codi.assertTrue(
-            contentsWrapper instanceof HTMLElement,
-            'Ensure that the contents-wrapper is an HTMLElement',
+            legend instanceof HTMLElement,
+            'Ensure that the legend is a HTMLElement',
+          );
+          
+          // Check if the legend has a div of 'contents-wrapper grid' within it
+          const contentsWrapper = legend.querySelector(
+            'div.contents-wrapper.grid',
+          );
+          codi.assertTrue(
+            contentsWrapper !== null,
+            'Ensure that the legend contains a div with class "contents-wrapper grid"',
           );
 
-          // Check that the contents-wrapper contains a div with class 'contents'
-          const contents = contentsWrapper.querySelector('.contents');
+          // Check if the contentsWrapper has a div with class 'contents'
+          const contents = contentsWrapper.querySelector('div.contents');
           codi.assertTrue(
-            contents instanceof HTMLElement,
-            'Ensure that the contents is an HTMLElement',
+            contents !== null,
+            'Ensure that the contentsWrapper contains a div with class "contents"',
           );
+
+          // Check if the contents div has two divs within it (icon and label)
+          codi.assertTrue(
+            contents.children.length === 2,
+            'Ensure that the contents div contains exactly two divs',
+          );
+
+          // Check that the second div has class 'label'
+          const labelDiv = contents.children[1];
+          codi.assertTrue(
+            labelDiv.classList.contains('label'),
+            'Ensure that the second div within contents has class "label"',
+          );
+
         },
       );
     },
