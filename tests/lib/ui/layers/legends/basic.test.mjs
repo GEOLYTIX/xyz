@@ -35,7 +35,7 @@ export function basic(mapview) {
           // Call the basicTheme function
           ui.layers.legends.basic(layer);
 
-         // Get the legend
+          // Get the legend
           const legend = layer.style.legend;
 
           // Ensure that the legend is defined
@@ -48,7 +48,7 @@ export function basic(mapview) {
             legend instanceof HTMLElement,
             'Ensure that the legend is a HTMLElement',
           );
-          
+
           // Check if the legend has a div of 'contents-wrapper grid' within it
           const contentsWrapper = legend.querySelector(
             'div.contents-wrapper.grid',
@@ -77,7 +77,6 @@ export function basic(mapview) {
             labelDiv.classList.contains('label'),
             'Ensure that the second div within contents has class "label"',
           );
-
         },
       );
     },
