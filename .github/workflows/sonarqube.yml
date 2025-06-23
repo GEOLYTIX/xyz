@@ -7,17 +7,31 @@ on:
       - minor
   pull_request:
     types: [opened, synchronize, reopened]
+    branches:
+      - main
+      - patch
+      - minor
 jobs:
   sonarqube:
     name: SonarQube
     runs-on: ubuntu-latest
-    # Sonar Token can't be passed to PRs from forks. Disable Sonar workflow unless PR is from a branch.
-    if: github.event.pull_request.head.repo.full_name == github.repository
+    # Only run for PRs from the upstream repo or push events
+    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+          fetch-depth: 0  # Required for better SonarQube analysis relevancy
+      - name: Cache Sonar Scanner
+        uses: actions/cache@v4
+        with:
+          path: ${{ runner.temp }}/sonar-scanner-cli-7.1.0.4889-Linux-X64
+          key: sonar-scanner-cli-7.1.0.4889-Linux-X64
+      - name: Debug SONAR_TOKEN
+        run: echo "SONAR_TOKEN is set: ${SONAR_TOKEN:+set}"
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }} # Optional for SonarQube
