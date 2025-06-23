@@ -11,6 +11,8 @@ jobs:
   sonarqube:
     name: SonarQube
     runs-on: ubuntu-latest
+    # Sonar Token can't be passed to PRs from forks. Disable Sonar workflow unless PR is from a branch.
+    if: github.event.pull_request.head.repo.full_name == github.repository
     steps:
       - uses: actions/checkout@v4
         with:
