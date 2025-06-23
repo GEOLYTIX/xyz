@@ -8,7 +8,6 @@ import clusterHex from './cluster_hex.js';
 import distinctValues from './distinct_values.js';
 import distinctValuesJson from './distinct_values_json.js';
 import featureExtent from './feature_extent.js';
-import featureIds from './feature_ids.js';
 import fieldMax from './field_max.js';
 import fieldMin from './field_min.js';
 import fieldMinmax from './field_minmax.js';
@@ -55,10 +54,6 @@ export default {
   feature_extent: {
     layer: true,
     render: featureExtent,
-  },
-  feature_ids: {
-    layer: true,
-    render: featureIds,
   },
   field_max: {
     template: fieldMax,
