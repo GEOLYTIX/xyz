@@ -16,6 +16,7 @@ import gazQuery from './gaz_query.js';
 import geojson from './geojson.js';
 import getNnearest from './get_nnearest.js';
 import getRandomLocation from './get_random_location.js';
+import histogram from './histogram.js';
 import infotip from './infotip.js';
 import layerExtent from './layer_extent.js';
 import locationCount from './location_count.js';
@@ -80,6 +81,10 @@ export default {
   },
   get_nnearest: {
     render: getNnearest,
+  },
+  histogram: {
+    layer: true,
+    render: histogram,
   },
   infotip: {
     layer: true,
