@@ -11,16 +11,23 @@ on:
       - main
       - patch
       - minor
+  workflow_dispatch:
+    inputs:
+      pr_number:
+        description: 'PR number'
+      pr_sha:
+        description: 'PR commit SHA'
+      target_branch:
+        description: 'Target branch'
 jobs:
   sonarqube:
     name: SonarQube
     runs-on: ubuntu-latest
-    # Only run for PRs from the upstream repo or push events
-    if: github.event_name == 'push' || github.event.pull_request.head.repo.full_name == github.repository
     steps:
       - uses: actions/checkout@v4
         with:
           fetch-depth: 0  # Required for better SonarQube analysis relevancy
+          ref: ${{ github.event.inputs.pr_sha || github.event.pull_request.head.sha || github.ref }}
       - name: Cache Sonar Scanner
         uses: actions/cache@v4
         with:
@@ -30,3 +37,9 @@ jobs:
         uses: SonarSource/sonarqube-scan-action@v5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          SONAR_HOST_URL: https://sonarcloud.io  # Explicit for SonarCloud
+        with:
+          args: >
+            -Dsonar.pullrequest.key=${{ github.event.inputs.pr_number || github.event.pull_request.number }}
+            -Dsonar.pullrequest.branch=${{ github.event.inputs.pr_sha || github.event.pull_request.head.ref }}
+            -Dsonar.pullrequest.base=${{ github.event.inputs.target_branch || github.event.pull_request.base.ref }}

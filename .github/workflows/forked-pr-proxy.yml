@@ -1,0 +1,30 @@
+name: Forked PR Proxy
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+    branches:
+      - main
+      - patch
+      - minor
+jobs:
+  proxy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.event.pull_request.head.sha }}
+      - name: Trigger SonarCloud Scan
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'sonarcloud.yml',
+              ref: context.payload.pull_request.head.ref,
+              inputs: {
+                pr_number: context.payload.pull_request.number,
+                pr_sha: context.payload.pull_request.head.sha,
+                target_branch: context.payload.pull_request.base.ref
+              }
+            })
