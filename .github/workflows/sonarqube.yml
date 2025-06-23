@@ -26,12 +26,7 @@ jobs:
         with:
           path: ${{ runner.temp }}/sonar-scanner-cli-7.1.0.4889-Linux-X64
           key: sonar-scanner-cli-7.1.0.4889-Linux-X64
-      - name: Debug SONAR_TOKEN
-        run: echo "SONAR_TOKEN is set: ${SONAR_TOKEN:+set}"
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       - name: SonarQube Scan
         uses: SonarSource/sonarqube-scan-action@v5
         env:
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }} # Optional for SonarQube
