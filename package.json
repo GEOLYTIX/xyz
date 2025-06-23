@@ -1,6 +1,31 @@
 {
   "name": "xyz",
-  "version": "v4.15.3",
+  "version": "v4.15.4"Run SonarSource/sonarqube-scan-action@v5
+Run ${GITHUB_ACTION_PATH}/scripts/sanity-checks.sh
+Warning: Running this GitHub Action without SONAR_TOKEN is not recommended
+Run actions/cache@v4
+Cache hit for: sonar-scanner-cli-7.1.0.4889-Linux-X64
+Received 4194304 of 51916608 (8.1%), 4.0 MBs/sec
+Received 51916608 of 51916608 (100.0%), 33.9 MBs/sec
+Cache Size: ~50 MB (51916608 B)
+/usr/bin/tar -xf /home/runner/work/_temp/d6a7075b-6ff3-4948-8f61-f6ede7a037de/cache.tzst -P -C /home/runner/work/xyz/xyz --use-compress-program unzstd
+Cache restored successfully
+Cache restored from key: sonar-scanner-cli-7.1.0.4889-Linux-X64
+Run echo "${RUNNER_TEMP}/sonar-scanner-cli-7.1.0.4889-Linux-X64/bin" >> $GITHUB_PATH
+Run args=()
++ sonar-scanner
+08:10:00.839 INFO  Scanner configuration file: /home/runner/work/_temp/sonar-scanner-cli-7.1.0.4889-Linux-X64/conf/sonar-scanner.properties
+08:10:00.843 INFO  Project root configuration file: /home/runner/work/xyz/xyz/sonar-project.properties
+08:10:00.858 INFO  SonarScanner CLI 7.1.0.4889
+08:10:00.859 INFO  Java 17.0.13 Eclipse Adoptium (64-bit)
+08:10:00.860 INFO  Linux 6.11.0-1015-azure amd64
+08:10:00.890 INFO  User cache: /home/runner/.sonar/cache
+08:10:01.572 INFO  Communicating with SonarQube Cloud
+08:10:01.573 INFO  JRE provisioning: os[linux], arch[x86_64]
+08:10:02.844 ERROR Failed to query JRE metadata: GET https://api.sonarcloud.io/analysis/jres?os=linux&arch=x86_64 failed with HTTP 401. Please check the property sonar.token or the environment variable SONAR_TOKEN.
+08:10:02.844 INFO  EXECUTION FAILURE
+08:10:02.845 INFO  Total time: 2.009s
+Error: Process completed with exit code 1.,
   "type": "module",
   "repository": {
     "type": "git",
