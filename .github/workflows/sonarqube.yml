@@ -49,7 +49,6 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}   # Generate a token on SonarQube, add it to the secrets of this repo with the name SONAR_TOKEN (Settings > Secrets > Actions > add new repository secret)
-          SONAR_HOST_URL: ${{ secrets.SONAR_HOST_URL }}   # add the URL of your instance to the secrets of this repo with the name SONAR_HOST_URL (Settings > Secrets > Actions > add new repository secret)
         with:
           # Additional arguments for the sonarcloud scanner
           args:
