@@ -40,8 +40,8 @@ export default (_) => {
         WHERE ${_.field} is not null and true \${filter} \${viewport}),
 
     buckets AS (
-        SELECT 
-            CASE 
+        SELECT
+            CASE
                 WHEN ${_.field} <= p2 THEN 0
                 ${bucketCases}
                 WHEN ${_.field} >= p98 THEN ${buckets + 1}
@@ -61,12 +61,12 @@ export default (_) => {
     SELECT
         COUNT(*)::integer AS count,
         bucket,
-        ROUND(CASE 
+        ROUND(CASE
             WHEN bucket = 0 THEN actual_min
             WHEN bucket = ${buckets + 1} THEN p98
             ELSE p2 + (bucket - 1) * bin_width
         END::NUMERIC, ${decimals}) AS bucket_min,
-        ROUND(CASE 
+        ROUND(CASE
             WHEN bucket = 0 THEN p2
             WHEN bucket = ${buckets + 1} THEN actual_max
             ELSE p2 + bucket * bin_width
@@ -79,7 +79,7 @@ export default (_) => {
   if (_.chartjs) {
     return `
     ${sqlString}
-    SELECT 
+    SELECT
       ARRAY [JSON_BUILD_OBJECT(
         'data', ARRAY_AGG(count ORDER BY bucket))] AS datasets,
       ARRAY_AGG(bucket_min || '-' || bucket_max ORDER BY bucket) AS labels
