@@ -5,6 +5,7 @@ import { merge } from './merge.test.mjs';
 import { numericFormatter } from './numericFormatter.test.mjs';
 import { paramString } from './paramString.test.mjs';
 import { queryParams } from './queryParams.test.mjs';
+import { scriptElementTest } from './scriptElement.test.mjs';
 import { svgTemplates } from './svgTemplates.test.mjs';
 import { temporal } from './temporal.test.mjs';
 import { versionCheck } from './versionCheck.mjs';
@@ -21,6 +22,7 @@ export const utilsTest = {
   svgTemplates,
   temporal,
   versionCheck,
+  scriptElementTest,
 };
 
 function setup() {
