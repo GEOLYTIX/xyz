@@ -918,7 +918,7 @@ dialog {
   height: 20px;
   pointer-events: auto;
   cursor: pointer;
-  border: 2px solid var(--color-border);
+  border: 3px solid var(--color-border);
   border-radius: 50%;
   background-color: var(--color-primary);
 }
@@ -927,7 +927,7 @@ dialog {
   height: 14px;
   pointer-events: auto;
   cursor: pointer;
-  border: 2px solid var(--color-border);
+  border: 3px solid var(--color-border);
   border-radius: 50%;
   background-color: var(--color-primary);
   box-shadow: none;
