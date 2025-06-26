@@ -143,7 +143,9 @@ const getModule = async () => {
       wantAssertionsSigned: xyzEnv.SAML_WANT_ASSERTIONS_SIGNED,
       wantAuthnResponseSigned: xyzEnv.SAML_AUTHN_RESPONSE_SIGNED ?? false,
       disableRequestedAuthnContext:
-        xyzEnv.SAML_DISABLE_REQUESTED_AUTHN_CONTEXT ?? true,
+        xyzEnv.SAML_DISABLE_REQUESTED_AUTHN_CONTEXT !== undefined
+          ? xyzEnv.SAML_DISABLE_REQUESTED_AUTHN_CONTEXT === 'true'
+          : true,
     };
 
     // Create SAML strategy instance
