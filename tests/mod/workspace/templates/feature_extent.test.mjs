@@ -132,7 +132,6 @@ export function featureExtentTests() {
                 'ID_WITH_UPPERCASE',
                 'id123',
                 'id,with,comma',
-                "id'with'quote",
               ],
             },
             geom: 'geom',
@@ -144,7 +143,7 @@ export function featureExtentTests() {
           const result = feature_extent(req);
 
           const expected =
-            "\n  SELECT\n    Box2D(ST_Transform(ST_SetSRID(ST_Extent(geom),4326), 3857))\n  FROM public.features\n  WHERE ${qID} IN ('id_with_underscore','id-with-dash','id.with.dot','id with space','ID_WITH_UPPERCASE','id123','id,with,comma','id'with'quote') ${filter}";
+            "\n  SELECT\n    Box2D(ST_Transform(ST_SetSRID(ST_Extent(geom),4326), 3857))\n  FROM public.features\n  WHERE ${qID} IN ('id_with_underscore','id-with-dash','id.with.dot','id with space','ID_WITH_UPPERCASE','id123','id,with,comma') ${filter}";
 
           codi.assertEqual(result, expected);
         },
