@@ -7,7 +7,7 @@ export default (_) => {
   const ids = _.body.ids.filter((id) => /^[A-Za-z0-9,"'._-\s]*$/.test(id));
 
   return `
-  SELECT 
+  SELECT
     ARRAY[st_xmin(box.box2d), st_ymin(box.box2d), st_xmax(box.box2d), st_ymax(box.box2d)] as box2d_arr,
     box.box2d
   FROM (
