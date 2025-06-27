@@ -8,6 +8,7 @@ export async function coreTest(mapview) {
   await runAllTests(_mappTest.uiTest.elements, mapview);
   await runAllTests(_mappTest.uiTest.layers, mapview);
   await runAllTests(_mappTest.uiTest.layers.panels, mapview);
+  await runAllTests(_mappTest.uiTest.layers.legends, mapview);
   await runAllTests(_mappTest.layer.formats, mapview);
   await runAllTests(_mappTest.uiTest.locations, mapview);
   await runAllTests(_mappTest.uiTest.locations.entries, mapview);
