@@ -14,39 +14,39 @@ export function graduated(mapview) {
         () => {
           const style = {
             theme: {
-              title: "theme_1",
-              field: "test_template_style",
-              graduated_breaks: "greater_than",
+              title: 'theme_1',
+              field: 'test_template_style',
+              graduated_breaks: 'greater_than',
               template: {
-                key: "test_template_style",
-                template: "100-99",
-                value_only: true
+                key: 'test_template_style',
+                template: '100-99',
+                value_only: true,
               },
               type: 'graduated',
               categories: [
                 {
                   value: 0,
-                  label: "0 to 5%",
+                  label: '0 to 5%',
                   style: {
                     icon: {
-                      type: "target",
-                      fillColor: "#ffffcc",
-                      fillOpacity: 0.8
-                    }
-                  }
+                      type: 'target',
+                      fillColor: '#ffffcc',
+                      fillOpacity: 0.8,
+                    },
+                  },
                 },
                 {
                   value: 1,
-                  label: "1%",
+                  label: '1%',
                   style: {
                     icon: {
-                      type: "target",
-                      fillColor: "#ffffcc",
-                      fillOpacity: 0.8
-                    }
-                  }
-                }
-              ]
+                      type: 'target',
+                      fillColor: '#ffffcc',
+                      fillOpacity: 0.8,
+                    },
+                  },
+                },
+              ],
             },
           };
 
@@ -109,7 +109,7 @@ export function graduated(mapview) {
           );
 
           // Check that the second div has class 'label'
-          const value1Div = contents.getAttribute("data-id");
+          const value1Div = contents.getAttribute('data-id');
           codi.assertTrue(
             value1Div == 0,
             'Ensure that the first div within contents has "data-id" attribute equal to 0',
@@ -137,7 +137,7 @@ export function graduated(mapview) {
           );
 
           // Check that the second div has class 'label'
-          const value2Div = contents2.getAttribute("data-id");
+          const value2Div = contents2.getAttribute('data-id');
           codi.assertTrue(
             value2Div == 1,
             'Ensure that the second div within contents has "data-id" attribute equal to 1',
