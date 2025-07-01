@@ -83,7 +83,7 @@ await codi.describe(
     );
 
     await codi.it({ name: 'same secrets', parentId: 'user_auth' }, async () => {
-      const user = { email: 'test@geolytix.co.uk', admin: true, roles: [] };
+      const user = { email: 'test@geolytix.co.uk', admin: true, roles: ['*'] };
 
       const secret = 'i-am-a-secret';
 
@@ -108,7 +108,7 @@ await codi.describe(
     });
 
     await codi.it({ name: 'same secrets', parentId: 'user_auth' }, async () => {
-      const user = { email: 'test@geolytix.co.uk', admin: true, roles: [] };
+      const user = { email: 'test@geolytix.co.uk', admin: true, roles: ['*'] };
 
       const secret = 'i-am-a-secret';
 
