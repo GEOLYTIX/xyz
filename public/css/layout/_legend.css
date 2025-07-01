@@ -81,4 +81,8 @@
   & .switch.disabled {
     opacity: 0.5;
   }
+
+  .legend-icon {
+    display: flex;
+  }
 }
