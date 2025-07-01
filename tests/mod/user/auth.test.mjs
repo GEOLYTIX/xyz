@@ -83,7 +83,7 @@ await codi.describe(
     );
 
     await codi.it({ name: 'same secrets', parentId: 'user_auth' }, async () => {
-      const user = { email: 'test@geolytix.co.uk', admin: true, roles: ['*'] };
+      const user = { email: 'test@geolytix.co.uk', admin: true, roles: [] };
 
       const secret = 'i-am-a-secret';
 
@@ -103,12 +103,15 @@ await codi.describe(
       });
 
       const result = await auth(req, res);
+
+      // Add * role for equality check
+      user.roles = ['*'];
 
       codi.assertEqual(result, user);
     });
 
     await codi.it({ name: 'same secrets', parentId: 'user_auth' }, async () => {
-      const user = { email: 'test@geolytix.co.uk', admin: true, roles: ['*'] };
+      const user = { email: 'test@geolytix.co.uk', admin: true, roles: [] };
 
       const secret = 'i-am-a-secret';
 
@@ -128,6 +131,9 @@ await codi.describe(
       });
 
       const result = await auth(req, res);
+
+      // Add * role for equality check
+      user.roles = ['*'];
 
       codi.assertEqual(result, user);
     });
