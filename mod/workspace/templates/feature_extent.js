@@ -8,8 +8,7 @@ export default (_) => {
 
   return `
   SELECT
-    ARRAY[st_xmin(box.box2d), st_ymin(box.box2d), st_xmax(box.box2d), st_ymax(box.box2d)] as box2d_arr,
-    box.box2d
+    ARRAY[st_xmin(box.box2d), st_ymin(box.box2d), st_xmax(box.box2d), st_ymax(box.box2d)] as box2d,
   FROM (
     SELECT
       Box2D(ST_Transform(ST_SetSRID(ST_Extent(${_.geom}),${_.srid}), ${_.proj}))
