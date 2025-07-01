@@ -53,7 +53,9 @@ export function check(obj, user_roles) {
   const rolesArr = Object.keys(obj.roles);
 
   // Pop last role from dot notation roles into rolesArr for backwards compatibility.
-  Object.keys(obj.roles).forEach((role) => rolesArr.push(role.split('.').pop()));
+  Object.keys(obj.roles).forEach((role) =>
+    rolesArr.push(role.split('.').pop()),
+  );
 
   // Some negated role is included in user_roles[]
   const someNegatedRole = rolesArr.some(
