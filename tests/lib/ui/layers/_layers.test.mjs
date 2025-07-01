@@ -22,5 +22,5 @@ export const layers = {
 };
 
 function setup() {
-  codi.describe({ name: 'UI Layers:', id: 'ui_layers' }, () => { });
+  codi.describe({ name: 'UI Layers:', id: 'ui_layers' }, () => {});
 }
