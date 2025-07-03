@@ -71,6 +71,7 @@ export default async function getKeyMethod(req, res) {
   if (!Object.hasOwn(keyMethods, req.params.key)) {
     return res
       .status(400)
+      .set('Content-type', 'text/plain')
       .send(`Failed to evaluate '${req.params.key}' param.`);
   }
 
