@@ -375,13 +375,14 @@ async function test(req, res) {
   }
 
   // Force re-caching of workspace.
-  workspace = await workspaceCache(true);
+  workspace = await getCachedWorkspace({ force: true });
 
   const test = {
     errArr: [],
     properties: new Set(['template', 'templates', 'query']),
     results: {},
     used_templates: [],
+    unused_templates: [],
   };
 
   test.workspace_templates = new Set(
@@ -396,12 +397,6 @@ async function test(req, res) {
   test.overwritten_templates = new Set();
 
   for (const localeKey of Object.keys(workspace.locales)) {
-    // Will get layer and assignTemplates to workspace.
-    const locale = await getLocale({
-      locale: localeKey,
-      user: req.params.user,
-    });
-
     // If you can't get the locale, access is denied, add the error to the errArr.
     if (locale.message === 'Role access denied') {
       test.errArr.push(`${localeKey}: ${locale.message}`);
@@ -412,16 +407,7 @@ async function test(req, res) {
     if (!locale.layers) continue;
 
     for (const layerKey of Object.keys(locale.layers)) {
-      // Will get layer and assignTemplates to workspace.
-      const layer = await getLayer({
-        layer: layerKey,
-        locale: localeKey,
-        user: req.params.user,
-      });
-
-      locale.layers[layerKey] = layer;
-
-      if (layer.err) test.errArr.push(`${layerKey}: ${layer.err}`);
+      if (layer.err) test.errArr?.push(`${layerKey}: ${layer.err}`);
     }
 
     // Test locale and all of its layers as nested object.
@@ -552,4 +538,32 @@ function removeRoles(obj) {
   }
 
   return cleanedObj;
+}
+
+async function getCachedWorkspace(options) {
+  workspace = await workspaceCache(options.force);
+
+  for (const localeKey of Object.keys(workspace.locales)) {
+    // Will get layer and assignTemplates to workspace.
+    const locale = await getLocale({
+      locale: localeKey,
+      user: req.params.user,
+    });
+
+    // If the locale has no layers, just skip it.
+    if (!locale.layers) continue;
+
+    for (const layerKey of Object.keys(locale.layers)) {
+      // Will get layer and assignTemplates to workspace.
+      const layer = await getLayer({
+        layer: layerKey,
+        locale: localeKey,
+        user: req.params.user,
+      });
+
+      locale.layers[layerKey] = layer;
+    }
+  }
+
+  return workspace;
 }
