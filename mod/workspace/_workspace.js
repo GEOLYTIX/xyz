@@ -103,7 +103,10 @@ async function layer(req, res) {
   const layer = await getLayer(req.params);
 
   if (layer instanceof Error) {
-    return res.status(400).send(layer.message);
+    return res
+      .status(400)
+      .set('Content-type', 'text/plain')
+      .send(layer.message);
   }
 
   res.json(removeRoles(layer));
