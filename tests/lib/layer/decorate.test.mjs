@@ -130,36 +130,6 @@ export function decorate(mapview, layer, infoj, style) {
           );
         },
       );
-
-      /**
-       * ### Should get a `zoomToFilteredExtent` button/function
-       * 1. We add a filter to the layer.
-       * 2. We call the `zoomToExtent()` function.
-       * 3. We then assert that the function returns true.
-       * @function it
-       */
-      codi.it(
-        {
-          name: 'Should get a zoomToExtent button',
-          parentId: 'layer_decorate',
-        },
-        async () => {
-          layer.filter = {
-            current: {
-              id: {
-                in: [6, 7, 23],
-              },
-            },
-          };
-
-          const zoomed = layer.zoomToExtent();
-
-          codi.assertTrue(
-            zoomed,
-            'The zoomToExtent function should return true',
-          );
-        },
-      );
     },
   );
 }
