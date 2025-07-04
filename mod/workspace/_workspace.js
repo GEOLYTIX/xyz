@@ -182,7 +182,10 @@ async function getNestedLocales(req, res) {
   const locale = await getLocale(req.params);
 
   if (locale instanceof Error) {
-    return res.status(400).send(locale.message);
+    return res
+      .status(400)
+      .set('Content-type', 'text/plain')
+      .send(locale.message);
   }
 
   const nestedLocales = [];
