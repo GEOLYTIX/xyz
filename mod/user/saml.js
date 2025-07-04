@@ -90,6 +90,7 @@ This module handles SAML-based Single Sign-On (SSO) authentication. Here's how t
 @property {number} acceptedClockSkewMs - Allowed clock skew in milliseconds
 @property {string} providerName - Name of the Service Provider
 @property {string} logoutCallbackUrl - URL for logout callbacks
+@property {boolean} disableRequestedAuthnContext - If true, disables sending the AuthnContext in SAML authentication requests. Useful for IdPs that do not require or support AuthnContext, or for compatibility with certain SAML providers.
 **/
 
 import { readFileSync } from 'fs';
@@ -141,6 +142,10 @@ const getModule = async () => {
       signatureAlgorithm: xyzEnv.SAML_SIGNATURE_ALGORITHM,
       wantAssertionsSigned: xyzEnv.SAML_WANT_ASSERTIONS_SIGNED,
       wantAuthnResponseSigned: xyzEnv.SAML_AUTHN_RESPONSE_SIGNED ?? false,
+      disableRequestedAuthnContext:
+        xyzEnv.SAML_DISABLE_REQUESTED_AUTHN_CONTEXT !== undefined
+          ? xyzEnv.SAML_DISABLE_REQUESTED_AUTHN_CONTEXT === 'true'
+          : true,
     };
 
     // Create SAML strategy instance
