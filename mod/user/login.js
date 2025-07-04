@@ -86,13 +86,13 @@ async function loginBody(req, res) {
   // Decode the redirect URL since it's now encoded when stored
   const decodedRedirect = redirect ? decodeURIComponent(redirect) : null;
 
-  // The redirect indicates that a previous login has failed.
-  if (user instanceof Error && decodedRedirect) {
-    req.params.msg = user.message;
-    return loginView(req, res);
-  }
-
   if (user instanceof Error) {
+    // Return to loginView with a redirect from the loginView form.
+    if (decodedRedirect) {
+      req.params.msg = user.message;
+      return loginView(req, res);
+    }
+
     return res.status(401).set('Content-type', 'text/plain').send(user.message);
   }
 
