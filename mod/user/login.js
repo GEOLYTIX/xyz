@@ -83,8 +83,11 @@ async function loginBody(req, res) {
 
   const redirect = req.cookies?.[`${xyzEnv.TITLE}_redirect`];
 
+  // Decode the redirect URL since it's now encoded when stored
+  const decodedRedirect = redirect ? decodeURIComponent(redirect) : null;
+
   // The redirect indicates that a previous login has failed.
-  if (user instanceof Error && redirect) {
+  if (user instanceof Error && decodedRedirect) {
     req.params.msg = user.message;
     return loginView(req, res);
   }
@@ -112,7 +115,7 @@ async function loginBody(req, res) {
   const redirect_null_cookie = `${xyzEnv.TITLE}_redirect=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`;
 
   res.setHeader('Set-Cookie', [user_cookie, redirect_null_cookie]);
-  res.setHeader('location', `${redirect || xyzEnv.DIR}`);
+  res.setHeader('location', `${decodedRedirect || xyzEnv.DIR}`);
   res.status(302).send();
 }
 
@@ -138,13 +141,32 @@ function loginView(req, res) {
   );
 
   // The redirect for a successful login.
-  req.params.redirect =
+  let redirectUrl =
     req.url && decodeURIComponent(req.url).replace(/login=true/, '');
 
-  // Set cookie with redirect value.
+  // Validate and sanitize the redirect URL to prevent cookie injection
+  if (redirectUrl) {
+    // Remove any characters that could be used for cookie injection
+    redirectUrl = redirectUrl.replace(/[;\r\n]/g, '');
+
+    // Ensure it's a relative URL (it starts with '/')
+    if (!redirectUrl.startsWith('/')) {
+      redirectUrl = xyzEnv.DIR || '/';
+    }
+  } else {
+    redirectUrl = xyzEnv.DIR || '/';
+  }
+
+  // Store the clean redirect URL for the view template
+  req.params.redirect = redirectUrl;
+
+  // Encode the URL for safe storage in the cookie
+  const encodedRedirectUrl = encodeURIComponent(redirectUrl);
+
+  // Set cookie with properly encoded redirect value.
   res.setHeader(
     'Set-Cookie',
-    `${xyzEnv.TITLE}_redirect=${req.params.redirect};HttpOnly;Max-Age=60000;Path=${xyzEnv.DIR || '/'}`,
+    `${xyzEnv.TITLE}_redirect=${encodedRedirectUrl};HttpOnly;Max-Age=60000;Path=${xyzEnv.DIR || '/'}`,
   );
 
   req.params.template = 'login_view';
