@@ -1,4 +1,4 @@
-import feature_extent from '../../../../mod/workspace/templates/feature_extent.js';
+import layer_extent from '../../../../mod/workspace/templates/layer_extent.js';
 
 export function featureExtentTests() {
   codi.describe(
