@@ -55,6 +55,7 @@ export default {
   feature_extent: {
     layer: true,
     render: featureExtent,
+    value_only: true,
   },
   field_max: {
     template: fieldMax,
