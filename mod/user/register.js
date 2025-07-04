@@ -134,7 +134,7 @@ async function registerUserBody(req, res) {
   });
 
   // Return msg. No redirect for password reset.
-  res.send(
+  res.set('Content-type', 'text/plain').send(
     await languageTemplates({
       language: req.body.language,
       template: 'new_account_registered',
