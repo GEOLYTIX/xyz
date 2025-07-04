@@ -63,6 +63,13 @@ export async function pin(mapview) {
             'The pinEntry needs to have an scale property on the icon set to 4',
           );
 
+          mapp.ui.locations.entries.pin(pinEntry);
+
+          codi.assertTrue(
+            !!pinEntry.getExtent(),
+            'The pin entry should have an extent function.',
+          );
+
           //remove the location
           location.removeCallbacks.push(
             (_this) => delete _this.removeCallbacks,

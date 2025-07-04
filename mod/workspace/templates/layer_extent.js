@@ -1,17 +1,26 @@
-/**
-### /workspace/templates/layer_extent
+export default (_) => {
+  let condition = 'true';
 
-The layer_extent layer query returns the bbox coordinates of feature [record] geometries which which pass the provided layer filter.
+  if (Array.isArray(_.body?.ids)) {
+    const ids = _.body.ids.filter((id) => /^[A-Za-z0-9,"'._-\s]*$/.test(id));
 
-@module /workspace/templates/layer_extent
-*/
-export default `
-  SELECT
-    Box2D(
-      ST_Transform(
-        ST_SetSRID(
-          ST_Extent(\${geom}),
-          \${proj}),
-        \${srid}))
-  FROM \${table}
-  WHERE true \${filter};`;
+    condition = `\${qID} IN ('${ids.join("','")}')`;
+  }
+
+  return `
+    SELECT
+      ARRAY[
+        st_xmin(box.box2d),
+        st_ymin(box.box2d),
+        st_xmax(box.box2d),
+        st_ymax(box.box2d)]
+    FROM(
+      SELECT Box2D(
+        ST_Transform(
+          ST_SetSRID(
+            ST_Extent(\${geom}),
+            \${proj}),
+          \${srid}))
+      FROM \${table}
+      WHERE ${condition} \${filter}) box`;
+};
