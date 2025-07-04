@@ -1,11 +1,10 @@
 export default (_) => {
-
-  let condition = 'true'
+  let condition = 'true';
 
   if (Array.isArray(_.body?.ids)) {
     const ids = _.body.ids.filter((id) => /^[A-Za-z0-9,"'._-\s]*$/.test(id));
 
-    condition = `\${qID} IN ('${ids.join("','")}')`
+    condition = `\${qID} IN ('${ids.join("','")}')`;
   }
 
   return `
@@ -23,5 +22,5 @@ export default (_) => {
             \${proj}),
           \${srid}))
       FROM \${table}
-      WHERE ${condition} \${filter}) box`
+      WHERE ${condition} \${filter}) box`;
 };
