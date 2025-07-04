@@ -561,8 +561,6 @@ async function getCachedWorkspace(options) {
         user: req.params.user,
       });
 
-      console.log('test');
-
       locale.layers[layerKey] = layer;
     }
   }
