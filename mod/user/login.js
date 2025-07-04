@@ -90,7 +90,7 @@ async function loginBody(req, res) {
   }
 
   if (user instanceof Error) {
-    return res.status(401).send(user.message);
+    return res.status(401).set('Content-type', 'text/plain').send(user.message);
   }
 
   const token = sign(
