@@ -109,8 +109,6 @@ async function layer(req, res) {
       .send(layer.message);
   }
 
-  console.log('retrigger');
-
   res.json(removeRoles(layer));
 }
 
