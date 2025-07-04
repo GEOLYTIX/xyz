@@ -157,9 +157,6 @@ function loginView(req, res) {
     redirectUrl = xyzEnv.DIR || '/';
   }
 
-  // Store the clean redirect URL for the view template
-  req.params.redirect = redirectUrl;
-
   // Encode the URL for safe storage in the cookie
   const encodedRedirectUrl = encodeURIComponent(redirectUrl);
 
