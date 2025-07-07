@@ -396,6 +396,7 @@ A flat array of template.err will be returned from the workspace/test method.
 
 @property {Object} req.params HTTP request parameter.
 @property {Object} params.user The user requesting the test method.
+@property {Boolean} params.detail Flag to return the workspace in full.
 @property {Boolean} user.admin The user is required to have admin priviliges.
 */
 async function test(req, res) {
@@ -489,7 +490,7 @@ async function test(req, res) {
 
   res.setHeader('content-type', 'application/json');
 
-  const result = req.params.workspace
+  const result = req.params.detail
     ? { ...test.results, ...workspace }
     : test.results;
 
