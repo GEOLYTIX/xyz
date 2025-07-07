@@ -134,7 +134,7 @@ async function registerUserBody(req, res) {
   });
 
   // Return msg. No redirect for password reset.
-  res.send(
+  res.set('Content-type', 'text/plain').send(
     await languageTemplates({
       language: req.body.language,
       template: 'new_account_registered',
@@ -259,12 +259,15 @@ async function passwordReset(req, res) {
 
   // Blocked user may not reset their password.
   if (user.blocked) {
-    res.status(403).send(
-      await languageTemplates({
-        language: req.body.language,
-        template: 'user_blocked',
-      }),
-    );
+    res
+      .status(403)
+      .set('Content-type', 'text/plain')
+      .send(
+        await languageTemplates({
+          language: req.body.language,
+          template: 'user_blocked',
+        }),
+      );
     return;
   }
 
