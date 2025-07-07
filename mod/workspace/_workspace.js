@@ -334,7 +334,6 @@ async function roles(req, res) {
 
   if (req.params.force) {
     await getCachedWorkspace({
-      force: req.params.force,
       user: req.params.user,
     });
   }
@@ -408,7 +407,7 @@ async function test(req, res) {
   }
 
   // Force re-caching of workspace.
-  workspace = await getCachedWorkspace({ force: true, user: req.params.user });
+  await getCachedWorkspace({ user: req.params.user });
 
   const test = {
     errArr: [],
@@ -606,16 +605,12 @@ This function performs a comprehensive workspace loading operation by:
 This method is primarily used for testing and administrative operations where
 the entire workspace structure needs to be available and validated.
 
-@param {Object} options Configuration options for workspace caching.
-@property {boolean} [options.force] Whether to force refresh the workspace cache.
+@param {user} options Configuration options for workspace caching.
 @property {Object} [options.user] User context for permission checking when loading locales and layers.
 @property {Array} [options.user.roles] User roles for access control.
-@property {boolean} [options.user.admin] Whether user has admin privileges.
-
-@returns {Promise<Object>} The fully loaded workspace object with all locales, layers, and templates.
 */
 async function getCachedWorkspace(options) {
-  workspace = await workspaceCache(options.force);
+  workspace = await workspaceCache(true);
 
   for (const localeKey of Object.keys(workspace.locales)) {
     // Will get layer and assignTemplates to workspace.
@@ -644,5 +639,5 @@ async function getCachedWorkspace(options) {
     }
   }
 
-  return workspace;
+  return;
 }
