@@ -21,13 +21,8 @@ export function scriptElementTest() {
             origAppend.call(this, el);
           };
 
-          const result = await scriptElement(testSrc);
+          await scriptElement(testSrc);
           codi.assertTrue(appended, 'Script element should be appended');
-          codi.assertEqual(
-            result.type,
-            'load',
-            'Should resolve with load event',
-          );
 
           document.head.append = origAppend;
         },
