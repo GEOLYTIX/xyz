@@ -86,11 +86,15 @@ export default async function getKeyMethod(req, res) {
 @description
 The method requests a JSON layer from the getLayer module.
 
+The layer is checked for user role access and will return an error if access is denied.
+
+All role information is removed from the layer before being returned to the client.
+
 @param {req} req HTTP request.
 @param {res} res HTTP response.
 @property {Object} req.params HTTP request params.
 @property {string} [params.locale] Locale key.
-@property {boolean} [params.layer] Layer key.
+@property {string} params.layer Layer key.
 @property {Object} [params.user] User requesting the layer.
 
 @returns {res} The HTTP response with either an error.message or the JSON layer.
@@ -296,21 +300,29 @@ async function locale(req, res) {
 
 /**
 @function roles
+@async
 
 @description
 The roles method returns an array of roles returned from the roles utility.
 
-An object with detailed workspace.roles{} can be requested with the `detail=true` url parameter for the workspace/roles request.
+This method is only available to users with admin credentials. It extracts all roles
+from the workspace and can return them in different formats based on the request parameters.
+
+An object with detailed workspace.roles{} can be requested with the `detail=true` url parameter.
+A hierarchical tree structure can be requested with the `tree=true` url parameter.
+The workspace cache can be refreshed with the `force=true` url parameter.
 
 @param {req} req HTTP request.
-@param {req} res HTTP response.
+@param {res} res HTTP response.
 
-@property {Object} req.params
-HTTP request parameter.
-@property {Boolean} params.detail
-Whether the roles should be returned as an object with details.
+@property {Object} req.params HTTP request parameter.
+@property {Object} params.user User requesting the roles.
+@property {boolean} params.user.admin Whether user has admin privileges (required).
+@property {boolean} [params.detail] Whether the roles should be returned as an object with details.
+@property {boolean} [params.tree] Whether the roles should be returned as a hierarchical tree structure.
+@property {boolean} [params.force] Whether to force refresh the workspace cache.
 
-@returns {Array|Object} Returns either an array of roles as string, or an object with roles as properties.
+@returns {Array|Object} Returns either an array of roles as strings, detailed roles object, or hierarchical roles tree.
 */
 async function roles(req, res) {
   if (!req.params.user?.admin) {
@@ -417,8 +429,14 @@ async function test(req, res) {
   test.overwritten_templates = new Set();
 
   for (const localeKey of Object.keys(workspace.locales)) {
+    // Get the locale and check for access errors
+    const locale = await getLocale({
+      locale: localeKey,
+      user: req.params.user,
+    });
+
     // If you can't get the locale, access is denied, add the error to the errArr.
-    if (locale.message === 'Role access denied') {
+    if (locale instanceof Error && locale.message === 'Role access denied') {
       test.errArr.push(`${localeKey}: ${locale.message}`);
       continue;
     }
@@ -427,7 +445,14 @@ async function test(req, res) {
     if (!locale.layers) continue;
 
     for (const layerKey of Object.keys(locale.layers)) {
-      if (layer.err) test.errArr?.push(`${layerKey}: ${layer.err}`);
+      const layer = await getLayer({
+        layer: layerKey,
+        locale: localeKey,
+        user: req.params.user,
+      });
+
+      if (layer instanceof Error)
+        test.errArr?.push(`${layerKey}: ${layer.message}`);
     }
 
     // Test locale and all of its layers as nested object.
@@ -435,8 +460,10 @@ async function test(req, res) {
   }
 
   // From here on its 🐢 Templates all the way down.
-  for (const template of Object.keys(workspace.templates)) {
-    if (template.err) test.errArr.push(`${key}: ${template.err.path}`);
+  for (const templateKey of Object.keys(workspace.templates)) {
+    const template = await getTemplate(templateKey);
+    if (template instanceof Error)
+      test.errArr.push(`${templateKey}: ${template.message}`);
   }
 
   test.results.errors = test.errArr.flat();
@@ -562,6 +589,30 @@ function removeRoles(obj) {
   return cleanedObj;
 }
 
+/**
+@function getCachedWorkspace
+@async
+
+@description
+Gets and caches a complete workspace with all locales, layers, and templates pre-loaded.
+
+This function performs a comprehensive workspace loading operation by:
+1. Getting the workspace from cache (with optional force refresh)
+2. Loading all locales and their layers with user permissions applied
+3. Loading all workspace templates to ensure they are cached and validated
+4. Returning the fully populated workspace object
+
+This method is primarily used for testing and administrative operations where
+the entire workspace structure needs to be available and validated.
+
+@param {Object} options Configuration options for workspace caching.
+@property {boolean} [options.force] Whether to force refresh the workspace cache.
+@property {Object} [options.user] User context for permission checking when loading locales and layers.
+@property {Array} [options.user.roles] User roles for access control.
+@property {boolean} [options.user.admin] Whether user has admin privileges.
+
+@returns {Promise<Object>} The fully loaded workspace object with all locales, layers, and templates.
+*/
 async function getCachedWorkspace(options) {
   workspace = await workspaceCache(options.force);
 
