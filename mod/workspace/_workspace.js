@@ -312,12 +312,19 @@ Whether the roles should be returned as an object with details.
 
 @returns {Array|Object} Returns either an array of roles as string, or an object with roles as properties.
 */
-function roles(req, res) {
+async function roles(req, res) {
   if (!req.params.user?.admin) {
     res
       .status(403)
       .send(`Admin credentials are required to test the workspace sources.`);
     return;
+  }
+
+  if (req.params.force) {
+    await getCachedWorkspace({
+      force: req.params.force,
+      user: req.params.user,
+    });
   }
 
   const rolesSet = new Set();
@@ -388,7 +395,7 @@ async function test(req, res) {
   }
 
   // Force re-caching of workspace.
-  workspace = await getCachedWorkspace({ force: true });
+  workspace = await getCachedWorkspace({ force: true, user: req.params.user });
 
   const test = {
     errArr: [],
@@ -428,9 +435,7 @@ async function test(req, res) {
   }
 
   // From here on its 🐢 Templates all the way down.
-  for (const key of Object.keys(workspace.templates)) {
-    const template = await getTemplate(key);
-
+  for (const template of Object.keys(workspace.templates)) {
     if (template.err) test.errArr.push(`${key}: ${template.err.path}`);
   }
 
@@ -457,7 +462,11 @@ async function test(req, res) {
 
   res.setHeader('content-type', 'application/json');
 
-  res.send(JSON.stringify(test.results));
+  const result = req.params.workspace
+    ? { ...test.results, ...workspace }
+    : test.results;
+
+  res.send(JSON.stringify(result));
 }
 
 /**
@@ -560,7 +569,7 @@ async function getCachedWorkspace(options) {
     // Will get layer and assignTemplates to workspace.
     const locale = await getLocale({
       locale: localeKey,
-      user: req.params.user,
+      user: options.user,
     });
 
     // If the locale has no layers, just skip it.
@@ -571,10 +580,15 @@ async function getCachedWorkspace(options) {
       const layer = await getLayer({
         layer: layerKey,
         locale: localeKey,
-        user: req.params.user,
+        user: options.user,
       });
 
       locale.layers[layerKey] = layer;
+    }
+
+    // From here on its 🐢 Templates all the way down.
+    for (const key of Object.keys(workspace.templates)) {
+      await getTemplate(key);
     }
   }
 
