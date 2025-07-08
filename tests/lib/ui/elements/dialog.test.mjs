@@ -35,6 +35,23 @@ export function dialog() {
           const dialog = mapp.ui.elements.dialog({ ...params });
 
           /**
+           * The dialog header should be an html element
+           * @function it
+           */
+          codi.it(
+            {
+              name: 'Dialog header should be an html element',
+              parentId: 'ui_elements_dialog',
+            },
+            () => {
+              codi.assertTrue(
+                dialog.header.type === 'html',
+                'The dialog header should be am html element',
+              );
+            },
+          );
+
+          /**
            * The dialog should be able to close
            * @function it
            */
@@ -125,19 +142,21 @@ export function dialog() {
 
           const dialog = mapp.ui.elements.dialog(new_params);
 
-          dialog.node
-            .querySelector('#Map > dialog > header > button:nth-child(1)')
-            .dispatchEvent(new Event('click'));
+          const minimizeBtn = dialog.node.querySelector('[data-id=minimize]');
+
+          minimizeBtn.dispatchEvent(new Event('click'));
+
           let minimized = dialog.node.classList.contains('minimized');
+
           codi.assertTrue(
             minimized,
             'The dialog content should not be visible',
           );
 
-          dialog.node
-            .querySelector('#Map > dialog > header > button:nth-child(1)')
-            .dispatchEvent(new Event('click'));
+          minimizeBtn.dispatchEvent(new Event('click'));
+
           minimized = dialog.node.classList.contains('minimized');
+
           codi.assertFalse(
             minimized,
             'The dialog content should not be visible',

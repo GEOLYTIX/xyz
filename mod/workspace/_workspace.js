@@ -62,13 +62,17 @@ export default async function getKeyMethod(req, res) {
   workspace = await workspaceCache();
 
   if (workspace instanceof Error) {
-    return res.status(500).send('Failed to load workspace.');
+    return res
+      .status(500)
+      .set('Content-type', 'text/plain')
+      .send('Failed to load workspace.');
   }
 
   // The keys object must own a user provided lookup key
   if (!Object.hasOwn(keyMethods, req.params.key)) {
     return res
       .status(400)
+      .set('Content-type', 'text/plain')
       .send(`Failed to evaluate '${req.params.key}' param.`);
   }
 
@@ -100,7 +104,10 @@ async function layer(req, res) {
   const layer = await getLayer(req.params);
 
   if (layer instanceof Error) {
-    return res.status(400).send(layer.message);
+    return res
+      .status(400)
+      .set('Content-type', 'text/plain')
+      .send(layer.message);
   }
 
   res.json(removeRoles(layer));
@@ -179,7 +186,10 @@ async function getNestedLocales(req, res) {
   const locale = await getLocale(req.params);
 
   if (locale instanceof Error) {
-    return res.status(400).send(locale.message);
+    return res
+      .status(400)
+      .set('Content-type', 'text/plain')
+      .send(locale.message);
   }
 
   const nestedLocales = [];
@@ -233,7 +243,10 @@ async function locale(req, res) {
   const locale = await getLocale(req.params);
 
   if (locale instanceof Error) {
-    return res.status(400).send(locale.message);
+    return res
+      .status(400)
+      .set('Content-type', 'text/plain')
+      .send(locale.message);
   }
 
   if (Array.isArray(locale.keys)) {
