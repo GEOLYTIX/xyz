@@ -62,7 +62,10 @@ export default async function getKeyMethod(req, res) {
   workspace = await workspaceCache();
 
   if (workspace instanceof Error) {
-    return res.status(500).send('Failed to load workspace.');
+    return res
+      .status(500)
+      .set('Content-type', 'text/plain')
+      .send('Failed to load workspace.');
   }
 
   // The keys object must own a user provided lookup key
@@ -98,7 +101,7 @@ async function layer(req, res) {
   if (layer instanceof Error) {
     return res
       .status(400)
-      .set('Content-Type', 'text/plain')
+      .set('Content-type', 'text/plain')
       .send(layer.message);
   }
 
@@ -175,7 +178,7 @@ async function getNestedLocales(req, res) {
   if (locale instanceof Error) {
     return res
       .status(400)
-      .set('Content-Type', 'text/plain')
+      .set('Content-type', 'text/plain')
       .send(locale.message);
   }
 
@@ -227,7 +230,7 @@ async function locale(req, res) {
   if (locale instanceof Error) {
     return res
       .status(400)
-      .set('Content-Type', 'text/plain')
+      .set('Content-type', 'text/plain')
       .send(locale.message);
   }
 
