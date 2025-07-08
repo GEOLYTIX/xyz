@@ -20,6 +20,8 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [PRIVATE] All requests to XYZ API require authentication. The PRIVATE value represents the ACL connection.
 @property {String} [PUBLIC] General requests to XYZ API do require authentication. The PUBLIC value represents an ACL connection for optional authentication.
 @property {String} [SECRET] A secret string is required to sign and [validate JWT]{@link module:/user/auth}.
+@property {String} [SECRET_ALGORITHM] The algorithm used to sign and validate token. Defaults to HS256.
+@property {String} [SECRET_KEY] A key in the root directory to be read as a string secret for token signatures and validation.
 @property {String} [USER_SESSION] The [auth module]{@link module:/user/auth} will store and check a session key if the USER_SESSION xyzEnv is not undefined.
 @property {String} [AUTH_EXPIRY] The [user/fromACL module]{@link module:/user/fromACL} can expiry user authorization if the AUTH_EXPIRY xyzEnv is configured.
 @property {String} [FAILED_ATTEMPTS='3'] The [user/fromACL module]{@link module:/user/fromACL} will expire user validation if failed login attempts exceed the FAILED_ATTEMPTS value.
@@ -55,6 +57,8 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [SLO_CALLBACK] - URL for handling logout callbacks
 */
 
+import { readFileSync } from 'fs';
+
 const defaults = {
   COOKIE_TTL: 36000,
   DIR: '',
@@ -63,11 +67,21 @@ const defaults = {
   RATE_LIMIT: 1000,
   RATE_LIMIT_WINDOW: 60 * 1000,
   RETRY_LIMIT: 3,
+  SECRET_ALGORITHM: 'HS256',
   TITLE: 'GEOLYTIX | XYZ',
   TRANSPORT_PORT: 587,
   TRANSPORT_TLS: false,
   WORKSPACE_AGE: 3600000, // 1 min
 };
+
+if (process.env.SECRET_KEY) {
+  const SECRET = String(
+    readFileSync(`./${process.env.SECRET_KEY}`),
+  );
+
+  process.env.SECRET = SECRET;
+  process.env.SECRET_ALGORITHM ??= 'RS256';
+}
 
 process.env.COOKIE_TTL ??= defaults.COOKIE_TTL;
 process.env.DIR ??= defaults.DIR;
@@ -76,6 +90,7 @@ process.env.PORT ??= defaults.PORT;
 process.env.RATE_LIMIT_WINDOW ??= defaults.RATE_LIMIT_WINDOW;
 process.env.RATE_LIMIT ??= defaults.RATE_LIMIT;
 process.env.RETRY_LIMIT ??= defaults.RETRY_LIMIT;
+process.env.SECRET_ALGORITHM ??= defaults.SECRET_ALGORITHM;
 process.env.TITLE ??= defaults.TITLE;
 process.env.TRANSPORT_PORT ??= defaults.TRANSPORT_PORT;
 process.env.TRANSPORT_TLS ??= defaults.TRANSPORT_TLS;
