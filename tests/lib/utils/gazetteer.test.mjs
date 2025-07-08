@@ -21,7 +21,7 @@ export function gazetteer() {
         'onerror',
       ];
 
-      XMLHttpRequest = class {
+      globalThis.XMLHttpRequest = class {
         constructor() {
           this.abort = () => {
             return this;
@@ -102,7 +102,7 @@ export function gazetteer() {
         },
       );
 
-      XMLHttpRequest = originalXMLHttpRequest;
+      globalThis.XMLHttpRequest = originalXMLHttpRequest;
     },
   );
 }
