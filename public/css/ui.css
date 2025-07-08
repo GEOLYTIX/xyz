@@ -1142,6 +1142,7 @@ dialog {
     div.bucket-info {
       position: absolute;
       min-width: 60px;
+      white-space: nowrap;
       background-color: var(--color-primary);
       color: var(--color-font-contrast);
       display: inline-block;
