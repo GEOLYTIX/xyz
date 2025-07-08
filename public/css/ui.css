@@ -1124,7 +1124,7 @@ dialog {
   flex-direction: row;
   gap: 0.5em;
   .ylabel {
-    writing-mode: sideways-rl;
+    writing-mode: sideways-lr;
     text-align: center;
     color: var(--color-font);
   }
