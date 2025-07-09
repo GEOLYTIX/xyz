@@ -430,8 +430,6 @@ async function test(req, res) {
 
   test.overwritten_templates = new Set();
 
-  //Retrigger
-
   for (const localeKey of Object.keys(workspace.locales)) {
     const locale = workspace.locales[localeKey];
     // If you can't get the locale, access is denied, add the error to the errArr.
