@@ -333,7 +333,7 @@ async function roles(req, res) {
   }
 
   if (req.params.force) {
-    await getCachedWorkspace({
+    await cacheTemplates({
       user: req.params.user,
     });
   }
@@ -395,8 +395,8 @@ A flat array of template.err will be returned from the workspace/test method.
 
 @property {Object} req.params HTTP request parameter.
 @property {Object} params.user The user requesting the test method.
-@property {Boolean} params.detail Flag to return the workspace in full.
-@property {Boolean} user.admin The user is required to have admin priviliges.
+@property {Boolean} params.detail Flag to return the cached workspace.
+@property {Boolean} user.admin The user is required to have admin privileges.
 */
 async function test(req, res) {
   if (!req.params.user?.admin) {
@@ -407,7 +407,7 @@ async function test(req, res) {
   }
 
   // Force re-caching of workspace.
-  await getCachedWorkspace({ user: req.params.user });
+  const workspace = await cacheTemplates({ user: req.params.user });
 
   const test = {
     errArr: [],
@@ -460,10 +460,9 @@ async function test(req, res) {
   }
 
   // From here on its 🐢 Templates all the way down.
-  for (const templateKey of Object.keys(workspace.templates)) {
-    const template = await getTemplate(templateKey);
+  for (const template of Object.keys(workspace.templates)) {
     if (template instanceof Error)
-      test.errArr.push(`${templateKey}: ${template.message}`);
+      test.errArr.push(`${template.key}: ${template.message}`);
   }
 
   test.results.errors = test.errArr.flat();
@@ -590,7 +589,7 @@ function removeRoles(obj) {
 }
 
 /**
-@function getCachedWorkspace
+@function cacheTemplates
 @async
 
 @description
@@ -609,7 +608,7 @@ the entire workspace structure needs to be available and validated.
 @property {Object} [options.user] User context for permission checking when loading locales and layers.
 @property {Array} [options.user.roles] User roles for access control.
 */
-async function getCachedWorkspace(options) {
+async function cacheTemplates(options) {
   workspace = await workspaceCache(true);
 
   for (const localeKey of Object.keys(workspace.locales)) {
@@ -617,6 +616,7 @@ async function getCachedWorkspace(options) {
     const locale = await getLocale({
       locale: localeKey,
       user: options.user,
+      ignoreRoles: true,
     });
 
     // If the locale has no layers, just skip it.
@@ -628,16 +628,17 @@ async function getCachedWorkspace(options) {
         layer: layerKey,
         locale: localeKey,
         user: options.user,
+        ignoreRoles: true,
       });
 
       locale.layers[layerKey] = layer;
     }
 
-    // From here on its 🐢 Templates all the way down.
+    // hydrating/caching all the templates
     for (const key of Object.keys(workspace.templates)) {
       await getTemplate(key);
     }
   }
 
-  return;
+  return workspace;
 }
