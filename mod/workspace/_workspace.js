@@ -431,14 +431,9 @@ async function test(req, res) {
   test.overwritten_templates = new Set();
 
   for (const localeKey of Object.keys(workspace.locales)) {
-    // Get the locale and check for access errors
-    const locale = await getLocale({
-      locale: localeKey,
-      user: req.params.user,
-    });
-
+    const locale = workspace.locales[localeKey];
     // If you can't get the locale, access is denied, add the error to the errArr.
-    if (locale instanceof Error && locale.message === 'Role access denied') {
+    if (locale instanceof Error) {
       test.errArr.push(`${localeKey}: ${locale.message}`);
       continue;
     }
@@ -447,11 +442,7 @@ async function test(req, res) {
     if (!locale.layers) continue;
 
     for (const layerKey of Object.keys(locale.layers)) {
-      const layer = await getLayer({
-        layer: layerKey,
-        locale: localeKey,
-        user: req.params.user,
-      });
+      const layer = locale.layers[layerKey];
 
       if (layer instanceof Error)
         test.errArr?.push(`${layerKey}: ${layer.message}`);
@@ -462,9 +453,10 @@ async function test(req, res) {
   }
 
   // From here on its 🐢 Templates all the way down.
-  for (const template of Object.keys(workspace.templates)) {
+  for (const templateKey of Object.keys(workspace.templates)) {
+    const template = workspace.templates[templateKey];
     if (template instanceof Error)
-      test.errArr.push(`${template.key}: ${template.message}`);
+      test.errArr.push(`${templateKey}: ${template.message}`);
   }
 
   test.results.errors = test.errArr.flat();
