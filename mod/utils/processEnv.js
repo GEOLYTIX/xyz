@@ -75,9 +75,7 @@ const defaults = {
 };
 
 if (process.env.SECRET_KEY) {
-  const SECRET = String(
-    readFileSync(`./${process.env.SECRET_KEY}`),
-  );
+  const SECRET = String(readFileSync(`./${process.env.SECRET_KEY}`));
 
   process.env.SECRET = SECRET;
   process.env.SECRET_ALGORITHM ??= 'RS256';
