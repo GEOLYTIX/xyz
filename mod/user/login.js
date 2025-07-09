@@ -93,7 +93,10 @@ async function loginBody(req, res) {
       return loginView(req, res);
     }
 
-    return res.status(401).set('Content-type', 'text/plain').send(user.message);
+    return res
+      .status(401)
+      .setHeader('Content-Type', 'text/plain')
+      .send(user.message);
   }
 
   const token = sign(

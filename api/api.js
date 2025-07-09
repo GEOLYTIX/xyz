@@ -115,7 +115,7 @@ export default function api(req, res) {
   if (req.params instanceof Error) {
     return res
       .status(400)
-      .set('Content-Type', 'text/plain')
+      .setHeader('Content-Type', 'text/plain')
       .send(req.params.message);
   }
 
