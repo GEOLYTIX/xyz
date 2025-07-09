@@ -64,7 +64,7 @@ export default async function getKeyMethod(req, res) {
   if (workspace instanceof Error) {
     return res
       .status(500)
-      .set('Content-type', 'text/plain')
+      .setHeader('Content-Type', 'text/plain')
       .send('Failed to load workspace.');
   }
 
@@ -72,7 +72,7 @@ export default async function getKeyMethod(req, res) {
   if (!Object.hasOwn(keyMethods, req.params.key)) {
     return res
       .status(400)
-      .set('Content-type', 'text/plain')
+      .setHeader('Content-Type', 'text/plain')
       .send(`Failed to evaluate '${req.params.key}' param.`);
   }
 
@@ -106,7 +106,7 @@ async function layer(req, res) {
   if (layer instanceof Error) {
     return res
       .status(400)
-      .set('Content-type', 'text/plain')
+      .setHeader('Content-Type', 'text/plain')
       .send(layer.message);
   }
 
@@ -188,7 +188,7 @@ async function getNestedLocales(req, res) {
   if (locale instanceof Error) {
     return res
       .status(400)
-      .set('Content-type', 'text/plain')
+      .setHeader('Content-Type', 'text/plain')
       .send(locale.message);
   }
 
@@ -245,7 +245,7 @@ async function locale(req, res) {
   if (locale instanceof Error) {
     return res
       .status(400)
-      .set('Content-type', 'text/plain')
+      .setHeader('Content-Type', 'text/plain')
       .send(locale.message);
   }
 
