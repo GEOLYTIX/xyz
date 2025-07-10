@@ -71,7 +71,12 @@ export default async function cookie(req, res) {
     xyzEnv.SECRET,
     { algorithm: xyzEnv.SECRET_ALGORITHM },
     async (err, payload) => {
-      if (err) return err;
+      if (err) {
+        return res
+          .status(401)
+          .setHeader('Content-Type', 'plain/text')
+          .send('Invalid token');
+      }
       // Get updated user credentials from ACL
       const rows = await acl(
         `
