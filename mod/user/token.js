@@ -49,6 +49,7 @@ export default async function userToken(req, res) {
 
   const token = jwt.sign(req.params.user, xyzEnv.SECRET, {
     expiresIn: req.params.expiresin,
+    algorithm: xyzEnv.SECRET_ALGORITHM,
   });
 
   res.send(token);
