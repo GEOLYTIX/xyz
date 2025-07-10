@@ -49,8 +49,13 @@ export function check(obj, user_roles) {
 
   if (!user_roles) return false;
 
-  // Add last of dot tree role to rolesArr
-  const rolesArr = Object.keys(obj.roles).map((role) => role.split('.').pop());
+  // Add last of dot notation role to rolesArr
+  const rolesArr = Object.keys(obj.roles);
+
+  // Pop last role from dot notation roles into rolesArr for backwards compatibility.
+  Object.keys(obj.roles).forEach((role) =>
+    rolesArr.push(role.split('.').pop()),
+  );
 
   // Some negated role is included in user_roles[]
   const someNegatedRole = rolesArr.some(

@@ -89,6 +89,19 @@ export default async function auth(req, res) {
     return sessionCheck;
   }
 
+  if (Array.isArray(user.roles)) {
+    // Add default role * to all users.
+    user.roles.push('*');
+
+    // Shift first role of dot notation roles into user.roles array.
+    user.roles.forEach((role) => {
+      const dotRoles = role.split('.');
+      if (dotRoles.length > 1) {
+        user.roles.push(dotRoles.shift());
+      }
+    });
+  }
+
   return user;
 }
 
