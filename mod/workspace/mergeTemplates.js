@@ -49,6 +49,7 @@ export default async function mergeTemplates(obj, roles) {
   // The object has an implicit template to merge into.
   if (typeof obj.template === 'string' || obj.template instanceof Object) {
     obj = await objTemplate(obj, obj.template, roles);
+    if (obj instanceof Error) return obj;
   }
 
   // The _template can be a string or object [with src]
@@ -124,7 +125,7 @@ async function objTemplate(obj, template, roles, reverse) {
   }
 
   // Return empty object if Roles.check fails to prevent subsequent object from crashing on undefined.
-  return {};
+  return new Error('Role check failed.');
 }
 
 /**

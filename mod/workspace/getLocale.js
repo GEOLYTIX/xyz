@@ -82,7 +82,7 @@ export default async function getLocale(params, parentLocale) {
   // The roles property maybe assigned from a template. Templates must be merged prior to the role check.
   locale = await mergeTemplates(locale, params.user?.roles);
 
-  if (!Roles.check(locale, params.user?.roles)) {
+  if (locale instanceof Error || !Roles.check(locale, params.user?.roles)) {
     return new Error('Role access denied.');
   }
 
