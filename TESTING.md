@@ -199,7 +199,7 @@ await codi.it(
 
     const token = res._getData();
 
-    const user = jwt.verify(token, xyzEnv.SECRET);
+    const user = jwt.verify(token, xyzEnv.SECRET, {algorithm: xyzEnv.SECRET_ALGORITHM});
 
     // token expires in 10hr.
     codi.assertTrue(user.exp - user.iat === 36000);
