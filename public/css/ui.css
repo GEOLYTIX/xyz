@@ -727,6 +727,13 @@ dialog {
   }
 }
 
+/* public/css/elements/_jse.css */
+.jse-main {
+  .text-button {
+    width: auto !important;
+  }
+}
+
 /* public/css/elements/_key.css */
 .key {
   button.layer-key {
