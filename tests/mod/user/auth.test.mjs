@@ -290,6 +290,7 @@ await codi.describe(
 
             globalThis.xyzEnv = {
               SECRET: secret,
+              SECRET_ALGORITHM: 'HS256',
               TITLE: 'TEST',
             };
 
