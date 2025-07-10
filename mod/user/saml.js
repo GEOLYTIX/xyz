@@ -405,6 +405,7 @@ async function acs(req, res) {
     // Create JWT token and set cookie
     const token = jwt.sign(user, xyzEnv.SECRET, {
       expiresIn: xyzEnv.COOKIE_TTL,
+      algorithm: xyzEnv.SECRET_ALGORITHM,
     });
 
     const cookie =

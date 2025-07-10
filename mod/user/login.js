@@ -110,6 +110,7 @@ async function loginBody(req, res) {
     xyzEnv.SECRET,
     {
       expiresIn: xyzEnv.COOKIE_TTL,
+      algorithm: xyzEnv.SECRET_ALGORITHM,
     },
   );
 
