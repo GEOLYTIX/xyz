@@ -100,7 +100,9 @@ async function objTemplate(obj, template, roles, reverse) {
     obj.err ??= [];
     obj.err.push(template.message);
     return obj;
-  } else if (Roles.check(template, roles)) {
+  }
+
+  if (Roles.check(template, roles)) {
     template = structuredClone(template);
 
     template = Roles.objMerge(template, roles);
@@ -120,6 +122,9 @@ async function objTemplate(obj, template, roles, reverse) {
       return merge(template, obj);
     }
   }
+
+  // Return empty object if Roles.check fails to prevent subsequent object from crashing on undefined.
+  return {};
 }
 
 /**
