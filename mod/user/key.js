@@ -69,7 +69,9 @@ export default async function apiKey(req, res) {
     roles: user.roles,
   };
 
-  const key = jwt.sign(api_user, xyzEnv.SECRET);
+  const key = jwt.sign(api_user, xyzEnv.SECRET, {
+    algorithm: xyzEnv.SECRET_ALGORITHM,
+  });
 
   // Store api_token in ACL.
   rows = await acl(
