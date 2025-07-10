@@ -3,6 +3,7 @@ import jwt from 'jsonwebtoken';
 const secret = crypto.randomUUID();
 
 globalThis.xyzEnv.SECRET = secret;
+globalThis.xyzEnv.SECRET_ALGORITHM = 'HS256';
 
 await codi.describe(
   { name: 'token:', id: 'user_token', parentId: 'user' },
