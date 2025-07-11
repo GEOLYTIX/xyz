@@ -95,6 +95,13 @@ export default {
   location_zoom: 'Zoom map to feature bounds',
   locations: 'Locations',
   modify_geometry: 'Modify Geometry',
+  multi_filter_title: 'Multi Filter Panel',
+  multi_filter_btn_label: 'Open Filter Panel',
+  multi_filter_btn_hover: 'Open Filtering View',
+  multi_filter_count: 'Location(s) match filter criteria',
+  multi_filter_layer_name: 'Layer Filter',
+  multi_filter_in_viewport: 'viewport based.',
+  multi_filter_not_in_viewport: 'all locations not just those in viewport.',
   no_data_filter: 'This field contains no data and cannot be filtered on.',
   no_layers: 'No accessible layers in locale.',
   no_locales:
