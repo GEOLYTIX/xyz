@@ -180,11 +180,11 @@ async function moduleTemplate(template, response) {
 @async
 
 @description
-The method assigns the response object to the template object and removes the src property. 
+The method assigns the response object to the template object and removes the src property.
 
 This effectively caches the template since the src to fetch the template is removed.
 
-A src property is assigned as key for an object without an key property. 
+A src property is assigned as key for an object without an key property.
 
 This allows to cache templates which should be merged into their respective parent objects.
 

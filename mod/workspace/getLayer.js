@@ -42,11 +42,12 @@ The layer.dbs will be assigned from the locale is missing.
 
 Template properties will be removed as these are not required by the MAPP API but only for the composition of workspace objects.
 
-@param {Object} params 
+@param {Object} params
 @param {locale} [locale] An optional workspace locale can be provided to prevent a roundtrip to the getLocale method.
 @property {string} [params.locale] Locale key.
 @property {string} [params.layer] Layer key.
 @property {Object} [params.user] Requesting user.
+@property {Boolean} [params.ignoreRoles] Whether role check should be performed.
 @property {Array} [user.roles] User roles.
 
 @returns {Promise<Object|Error>} JSON Layer.
@@ -54,6 +55,10 @@ Template properties will be removed as these are not required by the MAPP API bu
 export default async function getLayer(params, locale) {
   if (!locale) {
     locale = await getLocale(params);
+  }
+
+  if (!params.user?.admin) {
+    delete params.ignoreRoles;
   }
 
   // getLocale will return err if role.check fails.
@@ -82,11 +87,14 @@ export default async function getLayer(params, locale) {
     layer = merge(structuredClone(locale.layer), layer);
   }
 
-  if (!Roles.check(layer, params.user?.roles)) {
+  //If the user is an admin we don't need to check roles
+  if (!params.ignoreRoles && !Roles.check(layer, params.user?.roles)) {
     return new Error('Role access denied.');
   }
 
-  layer = Roles.objMerge(layer, params.user?.roles);
+  layer = params.user?.admin
+    ? Roles.objMerge(layer, params.user?.roles)
+    : layer;
 
   layer = await mergeTemplates(layer, params.user?.roles);
 
