@@ -82,13 +82,14 @@ export default async function getLayer(params, locale) {
     layer = merge(structuredClone(locale.layer), layer);
   }
 
+  // The roles property maybe assigned from a template. Templates must be merged prior to the role check.
+  layer = await mergeTemplates(layer, params.user?.roles);
+
   if (!Roles.check(layer, params.user?.roles)) {
     return new Error('Role access denied.');
   }
 
   layer = Roles.objMerge(layer, params.user?.roles);
-
-  layer = await mergeTemplates(layer, params.user?.roles);
 
   // Assign layer key as name with no existing name on layer object.
   layer.name ??= layer.key;

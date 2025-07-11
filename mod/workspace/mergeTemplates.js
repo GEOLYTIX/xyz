@@ -49,6 +49,7 @@ export default async function mergeTemplates(obj, roles) {
   // The object has an implicit template to merge into.
   if (typeof obj.template === 'string' || obj.template instanceof Object) {
     obj = await objTemplate(obj, obj.template, roles);
+    if (obj instanceof Error) return obj;
   }
 
   // The _template can be a string or object [with src]
@@ -100,7 +101,9 @@ async function objTemplate(obj, template, roles, reverse) {
     obj.err ??= [];
     obj.err.push(template.message);
     return obj;
-  } else if (Roles.check(template, roles)) {
+  }
+
+  if (Roles.check(template, roles)) {
     template = structuredClone(template);
 
     template = Roles.objMerge(template, roles);
@@ -120,6 +123,9 @@ async function objTemplate(obj, template, roles, reverse) {
       return merge(template, obj);
     }
   }
+
+  // Return empty object if Roles.check fails to prevent subsequent object from crashing on undefined.
+  return new Error('Role check failed.');
 }
 
 /**
