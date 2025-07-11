@@ -29,6 +29,7 @@ export function geometry(mapview) {
             mapview: mapview,
           },
           Layers: [],
+          Extents: {},
         },
       };
 
@@ -67,6 +68,21 @@ export function geometry(mapview) {
             typeof geometryCheckBox === 'undefined',
             'We need to get no geometry checkbox returned',
           );
+        },
+      );
+
+      /**
+       * @description Should return an extent for the geometry
+       * @function it
+       */
+      codi.it(
+        {
+          name: 'Should return an extent for the geometry',
+          parentId: 'ui_locations_entries_geometry',
+        },
+        async () => {
+          const extent = await entry.getExtent();
+          codi.assertTrue(!!extent, 'An extent needs to be returned');
         },
       );
     },

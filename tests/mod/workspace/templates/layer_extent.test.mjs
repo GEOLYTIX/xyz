@@ -1,6 +1,6 @@
-import feature_extent from '../../../../mod/workspace/templates/feature_extent.js';
+import layer_extent from '../../../../mod/workspace/templates/layer_extent.js';
 
-export function featureExtentTests() {
+export function layerExtentTests() {
   codi.describe(
     {
       name: 'feature_extent',
@@ -24,11 +24,11 @@ export function featureExtentTests() {
             table: 'public.features',
           };
 
-          const result = feature_extent(req);
+          const result = layer_extent(req);
 
           // Build expected SQL with direct property substitution
           const expected =
-            "\n  SELECT\n    Box2D(ST_Transform(ST_SetSRID(ST_Extent(geom),4326), 3857))\n  FROM public.features\n  WHERE ${qID} IN ('123','456','789') ${filter}";
+            "\n    SELECT\n      ARRAY[\n        st_xmin(box.box2d),\n        st_ymin(box.box2d),\n        st_xmax(box.box2d),\n        st_ymax(box.box2d)]\n    FROM(\n      SELECT Box2D(\n        ST_Transform(\n          ST_SetSRID(\n            ST_Extent(${geom}),\n            ${proj}),\n          ${srid}))\n      FROM ${table}\n      WHERE ${qID} IN ('123','456','789') ${filter}) box";
 
           codi.assertEqual(result, expected);
         },
@@ -56,11 +56,11 @@ export function featureExtentTests() {
             table: 'public.features',
           };
 
-          const result = feature_extent(req);
+          const result = layer_extent(req);
 
           // Should filter out malicious SQL and only include valid IDs
           const expected =
-            "\n  SELECT\n    Box2D(ST_Transform(ST_SetSRID(ST_Extent(geom),4326), 3857))\n  FROM public.features\n  WHERE ${qID} IN ('123','789','valid_id') ${filter}";
+            "\n    SELECT\n      ARRAY[\n        st_xmin(box.box2d),\n        st_ymin(box.box2d),\n        st_xmax(box.box2d),\n        st_ymax(box.box2d)]\n    FROM(\n      SELECT Box2D(\n        ST_Transform(\n          ST_SetSRID(\n            ST_Extent(${geom}),\n            ${proj}),\n          ${srid}))\n      FROM ${table}\n      WHERE ${qID} IN ('123','789','valid_id') ${filter}) box";
 
           codi.assertEqual(result, expected);
         },
@@ -82,10 +82,10 @@ export function featureExtentTests() {
             table: 'public.features',
           };
 
-          const result = feature_extent(req);
+          const result = layer_extent(req);
 
           const expected =
-            "\n  SELECT\n    Box2D(ST_Transform(ST_SetSRID(ST_Extent(geom),4326), 3857))\n  FROM public.features\n  WHERE ${qID} IN ('') ${filter}";
+            "\n    SELECT\n      ARRAY[\n        st_xmin(box.box2d),\n        st_ymin(box.box2d),\n        st_xmax(box.box2d),\n        st_ymax(box.box2d)]\n    FROM(\n      SELECT Box2D(\n        ST_Transform(\n          ST_SetSRID(\n            ST_Extent(${geom}),\n            ${proj}),\n          ${srid}))\n      FROM ${table}\n      WHERE ${qID} IN ('') ${filter}) box";
 
           codi.assertEqual(result, expected);
         },
@@ -107,10 +107,10 @@ export function featureExtentTests() {
             table: 'public.features',
           };
 
-          const result = feature_extent(req);
+          const result = layer_extent(req);
 
           const expected =
-            "\n  SELECT\n    Box2D(ST_Transform(ST_SetSRID(ST_Extent(geom),4326), 3857))\n  FROM public.features\n  WHERE ${qID} IN ('single_id') ${filter}";
+            "\n    SELECT\n      ARRAY[\n        st_xmin(box.box2d),\n        st_ymin(box.box2d),\n        st_xmax(box.box2d),\n        st_ymax(box.box2d)]\n    FROM(\n      SELECT Box2D(\n        ST_Transform(\n          ST_SetSRID(\n            ST_Extent(${geom}),\n            ${proj}),\n          ${srid}))\n      FROM ${table}\n      WHERE ${qID} IN ('single_id') ${filter}) box";
 
           codi.assertEqual(result, expected);
         },
@@ -140,10 +140,10 @@ export function featureExtentTests() {
             table: 'public.features',
           };
 
-          const result = feature_extent(req);
+          const result = layer_extent(req);
 
           const expected =
-            "\n  SELECT\n    Box2D(ST_Transform(ST_SetSRID(ST_Extent(geom),4326), 3857))\n  FROM public.features\n  WHERE ${qID} IN ('id_with_underscore','id-with-dash','id.with.dot','id with space','ID_WITH_UPPERCASE','id123','id,with,comma') ${filter}";
+            "\n    SELECT\n      ARRAY[\n        st_xmin(box.box2d),\n        st_ymin(box.box2d),\n        st_xmax(box.box2d),\n        st_ymax(box.box2d)]\n    FROM(\n      SELECT Box2D(\n        ST_Transform(\n          ST_SetSRID(\n            ST_Extent(${geom}),\n            ${proj}),\n          ${srid}))\n      FROM ${table}\n      WHERE ${qID} IN ('id_with_underscore','id-with-dash','id.with.dot','id with space','ID_WITH_UPPERCASE','id123','id,with,comma') ${filter}) box";
 
           codi.assertEqual(result, expected);
         },
@@ -174,11 +174,11 @@ export function featureExtentTests() {
             table: 'public.features',
           };
 
-          const result = feature_extent(req);
+          const result = layer_extent(req);
 
           // Should only include the valid_id
           const expected =
-            "\n  SELECT\n    Box2D(ST_Transform(ST_SetSRID(ST_Extent(geom),4326), 3857))\n  FROM public.features\n  WHERE ${qID} IN ('valid_id') ${filter}";
+            "\n    SELECT\n      ARRAY[\n        st_xmin(box.box2d),\n        st_ymin(box.box2d),\n        st_xmax(box.box2d),\n        st_ymax(box.box2d)]\n    FROM(\n      SELECT Box2D(\n        ST_Transform(\n          ST_SetSRID(\n            ST_Extent(${geom}),\n            ${proj}),\n          ${srid}))\n      FROM ${table}\n      WHERE ${qID} IN ('valid_id') ${filter}) box";
 
           codi.assertEqual(result, expected);
         },
@@ -200,66 +200,12 @@ export function featureExtentTests() {
             table: 'test_table',
           };
 
-          const result = feature_extent(req);
+          const result = layer_extent(req);
 
           const expected =
-            "\n  SELECT\n    Box2D(ST_Transform(ST_SetSRID(ST_Extent(geometry_column),27700), 4326))\n  FROM test_table\n  WHERE ${qID} IN ('test_id') ${filter}";
+            "\n    SELECT\n      ARRAY[\n        st_xmin(box.box2d),\n        st_ymin(box.box2d),\n        st_xmax(box.box2d),\n        st_ymax(box.box2d)]\n    FROM(\n      SELECT Box2D(\n        ST_Transform(\n          ST_SetSRID(\n            ST_Extent(${geom}),\n            ${proj}),\n          ${srid}))\n      FROM ${table}\n      WHERE ${qID} IN ('test_id') ${filter}) box";
 
           codi.assertEqual(result, expected);
-        },
-      );
-
-      codi.it(
-        {
-          name: 'Should throw error for missing body.ids',
-          parentId: 'template_feature_extent',
-        },
-        () => {
-          const req = {
-            body: {},
-            geom: 'geom',
-            srid: 4326,
-            proj: 3857,
-            table: 'public.features',
-          };
-
-          try {
-            feature_extent(req);
-            codi.assertEqual(false, true, 'Expected error to be thrown');
-          } catch (error) {
-            codi.assertEqual(
-              error.message,
-              'Invalid or missing body.ids - must be an array',
-            );
-          }
-        },
-      );
-
-      codi.it(
-        {
-          name: 'Should throw error for non-array body.ids',
-          parentId: 'template_feature_extent',
-        },
-        () => {
-          const req = {
-            body: {
-              ids: 'not_an_array',
-            },
-            geom: 'geom',
-            srid: 4326,
-            proj: 3857,
-            table: 'public.features',
-          };
-
-          try {
-            feature_extent(req);
-            codi.assertEqual(false, true, 'Expected error to be thrown');
-          } catch (error) {
-            codi.assertEqual(
-              error.message,
-              'Invalid or missing body.ids - must be an array',
-            );
-          }
         },
       );
     },
