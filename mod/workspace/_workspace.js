@@ -238,6 +238,9 @@ async function locale(req, res) {
     req.params.locale = locale.keys;
   }
 
+  // Prevent with no [] layers to crash the iteration process.
+  locale.layers ??= {};
+
   // Return layer object instead of array of layer keys
   if (req.params.layers) {
     const layers = Object.keys(locale.layers).map(
