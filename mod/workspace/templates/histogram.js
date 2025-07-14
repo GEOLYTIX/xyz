@@ -61,6 +61,7 @@ export default (_) => {
     SELECT
         COUNT(*)::integer AS count,
         bucket,
+        CEIL(bin_width) bin_width,
         ROUND(CASE 
             WHEN bucket = 0 THEN actual_min
             WHEN bucket = ${buckets + 1} THEN p98
