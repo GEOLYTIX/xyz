@@ -308,12 +308,13 @@ async function locale(req, res) {
 @description
 The roles method returns an array of roles returned from the roles utility.
 
-This method is only available to users with admin credentials. It extracts all roles
-from the workspace and can return them in different formats based on the request parameters.
+This method is only available to users with admin credentials.
 
-An object with detailed workspace.roles{} can be requested with the `detail=true` url parameter.
+The cacheTemplates method will called to read any template from it's src and cache the template. This is required to extract any roles from the workspace which may be defined in a template only.
+
+The workspace.roles{} object will be returned with the `detail=true` url parameter.
+
 A hierarchical tree structure can be requested with the `tree=true` url parameter.
-The workspace cache can be refreshed with the `force=true` url parameter.
 
 @param {req} req HTTP request.
 @param {res} res HTTP response.
@@ -410,6 +411,7 @@ async function test(req, res) {
   req.params.force &&
     (await cacheTemplates({
       user: req.params.user,
+      force: req.params.force,
     }));
 
   const test = {
@@ -590,20 +592,20 @@ function removeRoles(obj) {
 @description
 Gets and caches a complete workspace with all locales, layers, and templates pre-loaded.
 
-This function performs a comprehensive workspace loading operation by:
-1. Getting the workspace from cache (with optional force refresh)
-2. Loading all locales and their layers with user permissions applied
-3. Loading all workspace templates to ensure they are cached and validated
-4. Returning the fully populated workspace object
+The workspaceCache method will be forced to clear the cached workspace and load the workspace again which may have changed. This is required for testing purposes. If templates should be loaded in order to extract roles it may be beneficial to use already cached templates.
 
-This method is primarily used for testing and administrative operations where
-the entire workspace structure needs to be available and validated.
+The method will iterate over the workspace.locales to cache any templates defined in the locales object.
+
+The method will iterate over each layer defined in every locale to cache any templates associated with the layer objects.
+
+Finally each template defined in the workspace.templates will be cached.
 
 @param {user} params Configuration parameter for workspace caching.
 @property {Object} [params.user] User context for permission checking when loading locales and layers.
+@property {Boolean} [params.force] Whether the cached workspace should be cleared.
 */
 async function cacheTemplates(params) {
-  workspace = await workspaceCache(true);
+  workspace = await workspaceCache(params.force);
 
   for (const localeKey of Object.keys(workspace.locales)) {
     // Will get layer and assignTemplates to workspace.
