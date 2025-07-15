@@ -88,7 +88,10 @@ export default async function getLocale(params, parentLocale) {
   locale = await mergeTemplates(locale, params.user?.roles);
 
   //If the user is an admin we don't need to check roles
-  if (locale instanceof Error || !params.ignoreRoles && !Roles.check(locale, params.user?.roles)) {
+  if (
+    locale instanceof Error ||
+    (!params.ignoreRoles && !Roles.check(locale, params.user?.roles))
+  ) {
     return new Error('Role access denied.');
   }
 
