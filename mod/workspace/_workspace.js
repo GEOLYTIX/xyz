@@ -326,8 +326,6 @@ The workspace cache can be refreshed with the `force=true` url parameter.
 @returns {Array|Object} Returns either an array of roles as strings, detailed roles object, or hierarchical roles tree.
 */
 async function roles(req, res) {
-  let workspace = {};
-
   if (!req.params.user?.admin) {
     res
       .status(403)
@@ -339,10 +337,8 @@ async function roles(req, res) {
     return res.send(workspace.roles);
   }
 
-  workspace = await cacheTemplates({
-    force: true,
+  await cacheTemplates({
     user: req.params.user,
-    ignoreRoles: true,
   });
 
   const rolesSet = new Set();
@@ -411,11 +407,10 @@ async function test(req, res) {
   }
 
   // Force re-caching of workspace.
-  const workspace = await cacheTemplates({
-    force: req.params.force,
-    user: req.params.user,
-    ignoreRoles: true,
-  });
+  req.params.force &&
+    (await cacheTemplates({
+      user: req.params.user,
+    }));
 
   const test = {
     errArr: [],
@@ -604,44 +599,39 @@ This function performs a comprehensive workspace loading operation by:
 This method is primarily used for testing and administrative operations where
 the entire workspace structure needs to be available and validated.
 
-@param {user} options Configuration options for workspace caching.
-@property {Object} [options.user] User context for permission checking when loading locales and layers.
-@property {Boolean} [options.force] Whether the caching of the workspace should be forced.
-@property {Array} [user.roles] User roles for access control.
+@param {user} params Configuration parameter for workspace caching.
+@property {Object} [params.user] User context for permission checking when loading locales and layers.
+@property {Boolean} [params.force] Whether the caching of the workspace should be forced.
 */
-async function cacheTemplates(options) {
-  workspace = await workspaceCache(options.force);
+async function cacheTemplates(params) {
+  workspace = await workspaceCache(true);
 
-  if (options.force) {
-    for (const localeKey of Object.keys(workspace.locales)) {
+  for (const localeKey of Object.keys(workspace.locales)) {
+    // Will get layer and assignTemplates to workspace.
+    const locale = await getLocale({
+      locale: localeKey,
+      user: params.user,
+      ignoreRoles: true,
+    });
+
+    // If the locale has no layers, just skip it.
+    if (!locale.layers) continue;
+
+    for (const layerKey of Object.keys(locale.layers)) {
       // Will get layer and assignTemplates to workspace.
-      const locale = await getLocale({
+      const layer = await getLayer({
+        layer: layerKey,
         locale: localeKey,
-        user: options.user,
-        ignoreRoles: options.ignoreRoles,
+        user: params.user,
+        ignoreRoles: true,
       });
 
-      // If the locale has no layers, just skip it.
-      if (!locale.layers) continue;
+      locale.layers[layerKey] = layer;
+    }
 
-      for (const layerKey of Object.keys(locale.layers)) {
-        // Will get layer and assignTemplates to workspace.
-        const layer = await getLayer({
-          layer: layerKey,
-          locale: localeKey,
-          user: options.user,
-          ignoreRoles: options.ignoreRoles,
-        });
-
-        locale.layers[layerKey] = layer;
-      }
-
-      // hydrating/caching all the templates
-      for (const key of Object.keys(workspace.templates)) {
-        await getTemplate(key);
-      }
+    // hydrating/caching all the templates
+    for (const key of Object.keys(workspace.templates)) {
+      await getTemplate(key);
     }
   }
-
-  return workspace;
 }
