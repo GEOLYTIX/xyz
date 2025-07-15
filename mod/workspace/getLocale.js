@@ -84,14 +84,15 @@ export default async function getLocale(params, parentLocale) {
     return new Error(locale.message);
   }
 
+  // The roles property maybe assigned from a template. Templates must be merged prior to the role check.
+  locale = await mergeTemplates(locale, params.user?.roles);
+
   //If the user is an admin we don't need to check roles
-  if (!params.ignoreRoles && !Roles.check(locale, params.user?.roles)) {
+  if (locale instanceof Error || !params.ignoreRoles && !Roles.check(locale, params.user?.roles)) {
     return new Error('Role access denied.');
   }
 
   locale = Roles.objMerge(locale, params.user?.roles);
-
-  locale = await mergeTemplates(locale, params.user?.roles);
 
   locale.workspace = workspace.key;
 
@@ -104,6 +105,7 @@ export default async function getLocale(params, parentLocale) {
     locale.keys = [locale.key];
     locale.name ??= locale.key;
 
+    // Compose the nested locale name.
     locale.name = `${parentLocale.name}/${locale.name}`;
 
     locale = merge(parentLocale, locale);
