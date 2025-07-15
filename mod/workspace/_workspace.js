@@ -601,7 +601,6 @@ the entire workspace structure needs to be available and validated.
 
 @param {user} params Configuration parameter for workspace caching.
 @property {Object} [params.user] User context for permission checking when loading locales and layers.
-@property {Boolean} [params.force] Whether the caching of the workspace should be forced.
 */
 async function cacheTemplates(params) {
   workspace = await workspaceCache(true);
