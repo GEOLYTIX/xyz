@@ -336,6 +336,10 @@ async function roles(req, res) {
     return;
   }
 
+  if (req.params.detail) {
+    return res.send(workspace.roles);
+  }
+
   workspace = await cacheTemplates({
     force: req.params.force,
     user: req.params.user,
