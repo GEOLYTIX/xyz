@@ -340,6 +340,7 @@ async function roles(req, res) {
   }
 
   workspace = await cacheTemplates({
+    force: true,
     user: req.params.user,
     ignoreRoles: true,
   });
@@ -397,7 +398,8 @@ A flat array of template.err will be returned from the workspace/test method.
 
 @property {Object} req.params HTTP request parameter.
 @property {Object} params.user The user requesting the test method.
-@property {Boolean} params.detail Flag to return the cached workspace.
+@property {Boolean} [params.detail] Flag to return the cached workspace.
+@property {boolean} [params.force] Whether to force refresh the workspace cache.
 @property {Boolean} user.admin The user is required to have admin privileges.
 */
 async function test(req, res) {
@@ -410,6 +412,7 @@ async function test(req, res) {
 
   // Force re-caching of workspace.
   const workspace = await cacheTemplates({
+    force: req.params.force,
     user: req.params.user,
     ignoreRoles: true,
   });
@@ -603,7 +606,8 @@ the entire workspace structure needs to be available and validated.
 
 @param {user} options Configuration options for workspace caching.
 @property {Object} [options.user] User context for permission checking when loading locales and layers.
-@property {Array} [options.user.roles] User roles for access control.
+@property {Boolean} [options.force] Whether the caching of the workspace should be forced.
+@property {Array} [user.roles] User roles for access control.
 */
 async function cacheTemplates(options) {
   workspace = await workspaceCache(true);
