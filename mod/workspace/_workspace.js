@@ -322,7 +322,6 @@ The workspace cache can be refreshed with the `force=true` url parameter.
 @property {Object} params.user User requesting the roles.
 @property {boolean} params.user.admin Whether user has admin privileges (required).
 @property {boolean} [params.tree] Whether the roles should be returned as a hierarchical tree structure.
-@property {boolean} [params.force] Whether to force refresh the workspace cache.
 
 @returns {Array|Object} Returns either an array of roles as strings, detailed roles object, or hierarchical roles tree.
 */
@@ -341,7 +340,6 @@ async function roles(req, res) {
   }
 
   workspace = await cacheTemplates({
-    force: req.params.force,
     user: req.params.user,
     ignoreRoles: true,
   });
@@ -400,7 +398,6 @@ A flat array of template.err will be returned from the workspace/test method.
 @property {Object} req.params HTTP request parameter.
 @property {Object} params.user The user requesting the test method.
 @property {Boolean} params.detail Flag to return the cached workspace.
-@property {Boolean} params.force Flag to force re-caching of the workspace.
 @property {Boolean} user.admin The user is required to have admin privileges.
 */
 async function test(req, res) {
@@ -413,7 +410,6 @@ async function test(req, res) {
 
   // Force re-caching of workspace.
   const workspace = await cacheTemplates({
-    force: req.params.force,
     user: req.params.user,
     ignoreRoles: true,
   });
@@ -607,11 +603,10 @@ the entire workspace structure needs to be available and validated.
 
 @param {user} options Configuration options for workspace caching.
 @property {Object} [options.user] User context for permission checking when loading locales and layers.
-@property {Boolean}[options.force] Flag to force re-caching of the workspace.
 @property {Array} [options.user.roles] User roles for access control.
 */
 async function cacheTemplates(options) {
-  workspace = await workspaceCache(options.force);
+  workspace = await workspaceCache(true);
 
   if (options.force) {
     for (const localeKey of Object.keys(workspace.locales)) {
