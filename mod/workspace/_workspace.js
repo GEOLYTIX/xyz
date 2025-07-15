@@ -610,7 +610,7 @@ the entire workspace structure needs to be available and validated.
 @property {Array} [user.roles] User roles for access control.
 */
 async function cacheTemplates(options) {
-  workspace = await workspaceCache(true);
+  workspace = await workspaceCache(options.force);
 
   if (options.force) {
     for (const localeKey of Object.keys(workspace.locales)) {
