@@ -100,11 +100,6 @@ All role information is removed from the layer before being returned to the clie
 @returns {res} The HTTP response with either an error.message or the JSON layer.
 */
 async function layer(req, res) {
-  // Add default role * to all users.
-  if (Array.isArray(req.params.user?.roles)) {
-    req.params.user.roles.push('*');
-  }
-
   const layer = await getLayer(req.params);
 
   if (layer instanceof Error) {
@@ -137,11 +132,6 @@ The nestedLocales method will be returned if a locale property is provided in th
 @returns {res} The HTTP response with either an error.message or JSON array of locales in workspace.
 */
 async function locales(req, res) {
-  // Add default role * to all users.
-  if (Array.isArray(req.params.user?.roles)) {
-    req.params.user.roles.push('*');
-  }
-
   if (req.params.locale) {
     getNestedLocales(req, res);
     return;
@@ -239,11 +229,6 @@ The locale.layers{} object is reduced to an array of layer keys without the `par
 @returns {res} The HTTP response with either an error.message or the JSON locale.
 */
 async function locale(req, res) {
-  // Add default role * to all users.
-  if (Array.isArray(req.params.user?.roles)) {
-    req.params.user.roles.push('*');
-  }
-
   const locale = await getLocale(req.params);
 
   if (locale instanceof Error) {
@@ -360,7 +345,7 @@ async function roles(req, res) {
         rolesTree,
       );
 
-      rolesSet.delete(role);
+      // Pop last role from array into roleSet.
       rolesSet.add(roles.pop());
     } else {
       rolesTree[role] ??= {};

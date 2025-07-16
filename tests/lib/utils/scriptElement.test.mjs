@@ -22,6 +22,7 @@ export function scriptElementTest() {
           };
 
           await scriptElement(testSrc);
+
           codi.assertTrue(appended, 'Script element should be appended');
 
           document.head.append = origAppend;
