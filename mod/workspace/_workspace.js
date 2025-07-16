@@ -96,11 +96,6 @@ The method requests a JSON layer from the getLayer module.
 @returns {res} The HTTP response with either an error.message or the JSON layer.
 */
 async function layer(req, res) {
-  // Add default role * to all users.
-  if (Array.isArray(req.params.user?.roles)) {
-    req.params.user.roles.push('*');
-  }
-
   const layer = await getLayer(req.params);
 
   if (layer instanceof Error) {
@@ -133,11 +128,6 @@ The nestedLocales method will be returned if a locale property is provided in th
 @returns {res} The HTTP response with either an error.message or JSON array of locales in workspace.
 */
 async function locales(req, res) {
-  // Add default role * to all users.
-  if (Array.isArray(req.params.user?.roles)) {
-    req.params.user.roles.push('*');
-  }
-
   if (req.params.locale) {
     getNestedLocales(req, res);
     return;
@@ -235,11 +225,6 @@ The locale.layers{} object is reduced to an array of layer keys without the `par
 @returns {res} The HTTP response with either an error.message or the JSON locale.
 */
 async function locale(req, res) {
-  // Add default role * to all users.
-  if (Array.isArray(req.params.user?.roles)) {
-    req.params.user.roles.push('*');
-  }
-
   const locale = await getLocale(req.params);
 
   if (locale instanceof Error) {
@@ -305,13 +290,14 @@ The roles method returns an array of roles returned from the roles utility.
 
 An object with detailed workspace.roles{} can be requested with the `detail=true` url parameter for the workspace/roles request.
 
+Dot notation roles are processed for legacy support. The `UK` role will be popped from the `Europe.UK` role. This allows users with the UK role to access the same ressource with an extended role.
+
 @param {req} req HTTP request.
 @param {req} res HTTP response.
 
-@property {Object} req.params
-HTTP request parameter.
-@property {Boolean} params.detail
-Whether the roles should be returned as an object with details.
+@property {Object} req.params HTTP request parameter.
+@property {Boolean} [params.detail] Whether the roles should be returned as an object with details.
+@property {Boolean} [params.tree] Whether an object tree representation of the roles should be returned.
 
 @returns {Array|Object} Returns either an array of roles as string, or an object with roles as properties.
 */
@@ -341,7 +327,7 @@ function roles(req, res) {
         rolesTree,
       );
 
-      rolesSet.delete(role);
+      // Pop last role from array into roleSet.
       rolesSet.add(roles.pop());
     } else {
       rolesTree[role] ??= {};
