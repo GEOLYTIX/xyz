@@ -79,6 +79,11 @@ export default async function getLocale(params, parentLocale) {
     return new Error(locale.message);
   }
 
+  // Assign the queryparams object to the locale.layer object
+  locale.layer ??= {};
+  locale.layer.queryparams = locale.queryparams;
+  delete locale.queryparams;
+
   // The roles property maybe assigned from a template. Templates must be merged prior to the role check.
   locale = await mergeTemplates(locale, params.user?.roles);
 
