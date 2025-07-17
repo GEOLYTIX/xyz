@@ -379,9 +379,9 @@ A flat array of template.err will be returned from the workspace/test method.
 @param {req} res HTTP response.
 
 @property {Object} req.params HTTP request parameter.
-@property {Object} params.user The user requesting the test method.
 @property {Boolean} [params.detail] Flag to return the cached workspace.
 @property {boolean} [params.force] Whether to force refresh the workspace cache.
+@property {Object} params.user The user requesting the test method.
 @property {Boolean} user.admin The user is required to have admin privileges.
 */
 async function test(req, res) {
@@ -399,10 +399,32 @@ async function test(req, res) {
       force: req.params.force,
     }));
 
-  const testConfig = initializeTestConfig();
+  const testConfig = {
+    errArr: [],
+    properties: new Set(['template', 'templates', 'query']),
+    results: {},
+    used_templates: [],
+    unused_templates: [],
+  };
 
-  await testWorkspaceLocales(testConfig);
-  await testWorkspaceTemplates(testConfig);
+  testConfig.workspace_templates = new Set(
+    Object.entries(workspace.templates)
+      .filter(([key, value]) => value._type === 'workspace')
+      .map(([key, value]) => key),
+  );
+
+  // Create clone of workspace_templates
+  testConfig.unused_templates = new Set([...testConfig.workspace_templates]);
+  testConfig.overwritten_templates = new Set();
+
+  testWorkspaceLocales(testConfig);
+
+  for (const templateKey of Object.keys(workspace.templates)) {
+    const template = workspace.templates[templateKey];
+    if (template instanceof Error) {
+      testConfig.errArr.push(`${templateKey}: ${template.message}`);
+    }
+  }
 
   const results = processTestResults(testConfig);
 
@@ -414,43 +436,13 @@ async function test(req, res) {
 }
 
 /**
-@function initializeTestConfig
-@description
-Initializes the test configuration object with workspace templates and tracking sets.
-
-@returns {Object} Test configuration object with properties for tracking templates and errors.
-*/
-function initializeTestConfig() {
-  const test = {
-    errArr: [],
-    properties: new Set(['template', 'templates', 'query']),
-    results: {},
-    used_templates: [],
-    unused_templates: [],
-  };
-
-  test.workspace_templates = new Set(
-    Object.entries(workspace.templates)
-      .filter(([key, value]) => value._type === 'workspace')
-      .map(([key, value]) => key),
-  );
-
-  // Create clone of workspace_templates
-  test.unused_templates = new Set([...test.workspace_templates]);
-  test.overwritten_templates = new Set();
-
-  return test;
-}
-
-/**
 @function testWorkspaceLocales
-@async
 @description
 Tests all locales in the workspace for errors and analyzes template usage.
 
 @param {Object} testConfig The test configuration object.
 */
-async function testWorkspaceLocales(testConfig) {
+function testWorkspaceLocales(testConfig) {
   for (const localeKey of Object.keys(workspace.locales)) {
     const locale = workspace.locales[localeKey];
 
@@ -463,82 +455,17 @@ async function testWorkspaceLocales(testConfig) {
     // If the locale has no layers, just skip it.
     if (!locale.layers) continue;
 
-    // Test layers in this locale
-    testLocaleLayers(locale, localeKey, testConfig);
+    for (const layerKey of Object.keys(locale.layers)) {
+      const layer = locale.layers[layerKey];
+
+      if (layer instanceof Error) {
+        testConfig.errArr?.push(`${layerKey}: ${layer.message}`);
+      }
+    }
 
     // Test locale and all of its layers as nested object for template usage.
     templateUse(locale, testConfig);
   }
-}
-
-/**
-@function testLocaleLayers
-@description
-Tests all layers in a locale for errors.
-
-@param {Object} locale The locale object containing layers.
-@param {string} localeKey The key of the locale being tested.
-@param {Object} testConfig The test configuration object.
-*/
-function testLocaleLayers(locale, localeKey, testConfig) {
-  for (const layerKey of Object.keys(locale.layers)) {
-    const layer = locale.layers[layerKey];
-
-    if (layer instanceof Error) {
-      testConfig.errArr?.push(`${layerKey}: ${layer.message}`);
-    }
-  }
-}
-
-/**
-@function testWorkspaceTemplates
-@async
-@description
-Tests all workspace templates for errors.
-
-@param {Object} testConfig The test configuration object.
-*/
-async function testWorkspaceTemplates(testConfig) {
-  // From here on its 🐢 Templates all the way down.
-  for (const templateKey of Object.keys(workspace.templates)) {
-    const template = workspace.templates[templateKey];
-    if (template instanceof Error) {
-      testConfig.errArr.push(`${templateKey}: ${template.message}`);
-    }
-  }
-}
-
-/**
-@function processTestResults
-@description
-Processes the test configuration and returns formatted results.
-
-@param {Object} testConfig The test configuration object.
-@returns {Object} Formatted test results object.
-*/
-function processTestResults(testConfig) {
-  const results = {};
-
-  results.errors = testConfig.errArr.flat();
-  results.unused_templates = Array.from(testConfig.unused_templates);
-  results.overwritten_templates = Array.from(testConfig.overwritten_templates);
-
-  // Sort the array.
-  testConfig.used_templates.sort((a, b) => {
-    if (a > b) return 1;
-    if (a < b) return -1;
-    return 0;
-  });
-
-  // Reduce the test.used_templates array to count the occurrence of each template.
-  results.usage = Object.fromEntries(
-    testConfig.used_templates.reduce(
-      (acc, e) => acc.set(e, (acc.get(e) || 0) + 1),
-      new Map(),
-    ),
-  );
-
-  return results;
 }
 
 /**
@@ -595,6 +522,39 @@ function templateUse(obj, test) {
       templateUse(entry[1], test);
     }
   });
+}
+
+/**
+@function processTestResults
+@description
+Processes the test configuration and returns formatted results.
+
+@param {Object} testConfig The test configuration object.
+@returns {Object} Formatted test results object.
+*/
+function processTestResults(testConfig) {
+  const results = {};
+
+  results.errors = testConfig.errArr.flat();
+  results.unused_templates = Array.from(testConfig.unused_templates);
+  results.overwritten_templates = Array.from(testConfig.overwritten_templates);
+
+  // Sort the array.
+  testConfig.used_templates.sort((a, b) => {
+    if (a > b) return 1;
+    if (a < b) return -1;
+    return 0;
+  });
+
+  // Reduce the test.used_templates array to count the occurrence of each template.
+  results.usage = Object.fromEntries(
+    testConfig.used_templates.reduce(
+      (acc, e) => acc.set(e, (acc.get(e) || 0) + 1),
+      new Map(),
+    ),
+  );
+
+  return results;
 }
 
 /**
