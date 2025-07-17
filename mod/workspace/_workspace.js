@@ -399,6 +399,28 @@ async function test(req, res) {
       force: req.params.force,
     }));
 
+  const testConfig = initializeTestConfig();
+
+  await testWorkspaceLocales(testConfig);
+  await testWorkspaceTemplates(testConfig);
+
+  const results = processTestResults(testConfig);
+
+  res.setHeader('content-type', 'application/json');
+
+  const result = req.params.detail ? { ...results, ...workspace } : results;
+
+  res.send(JSON.stringify(result));
+}
+
+/**
+@function initializeTestConfig
+@description
+Initializes the test configuration object with workspace templates and tracking sets.
+
+@returns {Object} Test configuration object with properties for tracking templates and errors.
+*/
+function initializeTestConfig() {
   const test = {
     errArr: [],
     properties: new Set(['template', 'templates', 'query']),
@@ -415,66 +437,108 @@ async function test(req, res) {
 
   // Create clone of workspace_templates
   test.unused_templates = new Set([...test.workspace_templates]);
-
   test.overwritten_templates = new Set();
 
+  return test;
+}
+
+/**
+@function testWorkspaceLocales
+@async
+@description
+Tests all locales in the workspace for errors and analyzes template usage.
+
+@param {Object} testConfig The test configuration object.
+*/
+async function testWorkspaceLocales(testConfig) {
   for (const localeKey of Object.keys(workspace.locales)) {
     const locale = workspace.locales[localeKey];
+
     // If you can't get the locale, access is denied, add the error to the errArr.
     if (locale instanceof Error) {
-      test.errArr.push(`${localeKey}: ${locale.message}`);
+      testConfig.errArr.push(`${localeKey}: ${locale.message}`);
       continue;
     }
 
     // If the locale has no layers, just skip it.
     if (!locale.layers) continue;
 
-    for (const layerKey of Object.keys(locale.layers)) {
-      const layer = locale.layers[layerKey];
+    // Test layers in this locale
+    testLocaleLayers(locale, localeKey, testConfig);
 
-      if (layer instanceof Error)
-        test.errArr?.push(`${layerKey}: ${layer.message}`);
-    }
-
-    // Test locale and all of its layers as nested object.
-    templateUse(locale, test);
+    // Test locale and all of its layers as nested object for template usage.
+    templateUse(locale, testConfig);
   }
+}
 
+/**
+@function testLocaleLayers
+@description
+Tests all layers in a locale for errors.
+
+@param {Object} locale The locale object containing layers.
+@param {string} localeKey The key of the locale being tested.
+@param {Object} testConfig The test configuration object.
+*/
+function testLocaleLayers(locale, localeKey, testConfig) {
+  for (const layerKey of Object.keys(locale.layers)) {
+    const layer = locale.layers[layerKey];
+
+    if (layer instanceof Error) {
+      testConfig.errArr?.push(`${layerKey}: ${layer.message}`);
+    }
+  }
+}
+
+/**
+@function testWorkspaceTemplates
+@async
+@description
+Tests all workspace templates for errors.
+
+@param {Object} testConfig The test configuration object.
+*/
+async function testWorkspaceTemplates(testConfig) {
   // From here on its 🐢 Templates all the way down.
   for (const templateKey of Object.keys(workspace.templates)) {
     const template = workspace.templates[templateKey];
-    if (template instanceof Error)
-      test.errArr.push(`${templateKey}: ${template.message}`);
+    if (template instanceof Error) {
+      testConfig.errArr.push(`${templateKey}: ${template.message}`);
+    }
   }
+}
 
-  test.results.errors = test.errArr.flat();
+/**
+@function processTestResults
+@description
+Processes the test configuration and returns formatted results.
 
-  test.results.unused_templates = Array.from(test.unused_templates);
+@param {Object} testConfig The test configuration object.
+@returns {Object} Formatted test results object.
+*/
+function processTestResults(testConfig) {
+  const results = {};
 
-  test.results.overwritten_templates = Array.from(test.overwritten_templates);
+  results.errors = testConfig.errArr.flat();
+  results.unused_templates = Array.from(testConfig.unused_templates);
+  results.overwritten_templates = Array.from(testConfig.overwritten_templates);
 
   // Sort the array.
-  test.used_templates.sort((a, b) => {
+  testConfig.used_templates.sort((a, b) => {
     if (a > b) return 1;
     if (a < b) return -1;
     return 0;
   });
 
-  // Reduce the test.used_templates array to count the occurance of each template.
-  test.results.usage = Object.fromEntries(
-    test.used_templates.reduce(
+  // Reduce the test.used_templates array to count the occurrence of each template.
+  results.usage = Object.fromEntries(
+    testConfig.used_templates.reduce(
       (acc, e) => acc.set(e, (acc.get(e) || 0) + 1),
       new Map(),
     ),
   );
 
-  res.setHeader('content-type', 'application/json');
-
-  const result = req.params.detail
-    ? { ...test.results, ...workspace }
-    : test.results;
-
-  res.send(JSON.stringify(result));
+  return results;
 }
 
 /**
