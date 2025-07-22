@@ -356,7 +356,7 @@
       `${mapp.host}/api/workspace/locale?locale=${locale}&layers=true`,
     );
 
-    if (locale instanceof Error || locales.length === 0) {
+    if (locale instanceof Error) {
       // Create the Dialog.node
       mapp.ui.elements.dialog({
         css_style:
