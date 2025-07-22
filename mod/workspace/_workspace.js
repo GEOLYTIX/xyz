@@ -117,9 +117,9 @@ async function layer(req, res) {
 @async
 
 @description
-The locales method reduces the workspace.locales{} object to an array locales with only the key and name properties.
+The locales method returns an array of fully resolved locale objects from the workspace.
 
-The locales are not merged with templates and only roles defined inside the workspace.locales{} locale object are considered for access.
+Each locale is retrieved via the getLocale method, which merges templates and applies proper role-based access control. Any locales that return errors (e.g., due to access restrictions) are filtered out of the response.
 
 The nestedLocales method will be returned if a locale property is provided in the request params.
 
@@ -129,7 +129,7 @@ The nestedLocales method will be returned if a locale property is provided in th
 @property {string} [params.locale] Request nested locales for the locale.
 @property {Object} [params.user] User requesting the locales.
 
-@returns {res} The HTTP response with either an error.message or JSON array of locales in workspace.
+@returns {res} The HTTP response with a JSON array of accessible locale objects.
 */
 async function locales(req, res) {
   if (req.params.locale) {
@@ -137,15 +137,17 @@ async function locales(req, res) {
     return;
   }
 
-  const locales = Object.values(workspace.locales)
-    .filter((locale) => !!Roles.check(locale, req.params.user?.roles))
-    .map((locale) => ({
-      key: locale.key,
-      name: locale.name,
-      locales: locale.locales,
-    }));
+  const locales = await Promise.all(
+    Object.keys(workspace.locales).map((localeKey) =>
+      getLocale({
+        user: req.params.user,
+        locale: localeKey,
+        roles: req.params.user?.roles,
+      }),
+    ),
+  );
 
-  res.send(locales);
+  res.send(locales.filter((locale) => !(locale instanceof Error)));
 }
 
 /**
