@@ -20,6 +20,8 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [PRIVATE] All requests to XYZ API require authentication. The PRIVATE value represents the ACL connection.
 @property {String} [PUBLIC] General requests to XYZ API do require authentication. The PUBLIC value represents an ACL connection for optional authentication.
 @property {String} [SECRET] A secret string is required to sign and [validate JWT]{@link module:/user/auth}.
+@property {String} [SECRET_ALGORITHM] The algorithm used to sign and validate token. Defaults to HS256.
+@property {String} [SECRET_KEY] A key in the root directory to be read as a string secret for token signatures and validation.
 @property {String} [USER_SESSION] The [auth module]{@link module:/user/auth} will store and check a session key if the USER_SESSION xyzEnv is not undefined.
 @property {String} [AUTH_EXPIRY] The [user/fromACL module]{@link module:/user/fromACL} can expiry user authorization if the AUTH_EXPIRY xyzEnv is configured.
 @property {String} [FAILED_ATTEMPTS='3'] The [user/fromACL module]{@link module:/user/fromACL} will expire user validation if failed login attempts exceed the FAILED_ATTEMPTS value.
@@ -28,13 +30,12 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [RETRY_LIMIT='3'] The [utils/dbs module]{@link module:/utils/dbs} will apply the RETRY_LIMIT to the query.client.
 @property {String} [WORKSPACE_AGE] The [workspace/cache module]{@link module:/mod/workspace/cache} flashes the workspace cache after the WORKSPACE_AGE is reached.
 @property {String} [CUSTOM_TEMPLATES] The [workspace/cache module]{@link module:/mod/workspace/cache} caches templates defined as a src in the CUSTOM_TEMPLATES xyzEnv.
-@property {String} [TRANSPORT] The [utils/mailer module]{@link module:/utils/mailer} requires a TRANSPORT xyzEnv.
 @property {String} [TRANSPORT_HOST] The hostname or IP address that the [utils/mailer module]{@link module:/utils/mailer} module connects to.
 @property {String} [TRANSPORT_NAME] The optional hostname of the client, used for identifying to the server in the [utils/mailer module]{@link module:/utils/mailer} module.
 @property {String} [TRANSPORT_EMAIL] The email used to send emails in the [utils/mailer module]{@link module:/utils/mailer} module.
 @property {String} [TRANSPORT_USERNAME] The username used to authenticate in the [utils/mailer module]{@link module:/utils/mailer} module.
 @property {String} [TRANSPORT_PASSWORD] The password used to authenticate in the [utils/mailer module]{@link module:/utils/mailer} module.
-@property {String} [TRANSPORT_PORT] The port used to connect to the host in the [utils/mailer module]{@link module:/utils/mailer} module.
+@property {Integer} [TRANSPORT_PORT] The port used to connect to the host in the [utils/mailer module]{@link module:/utils/mailer} module.
 @property {String} [TRANSPORT_TLS] defines additional node.js TLSSocket options to be passed to the socket constructor used in the [utils/mailer module]{@link module:/utils/mailer} module.
 @property {String} [USER_DOMAINS] The [user/register module]{@link module:/user/register} will limit the registration to user emails for domains provided in the comma seperated USER_DOMAINS xyzEnv.
 @property {String} [SRC_] SRC_* values will replace the key wildcard [*] in the stringified workspace.
@@ -56,39 +57,53 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [SLO_CALLBACK] - URL for handling logout callbacks
 */
 
+import { readFileSync } from 'fs';
+
 const defaults = {
   COOKIE_TTL: 36000,
   DIR: '',
   FAILED_ATTEMPTS: 3,
-  PORT: 3000, // age in ms
+  PORT: 3000,
   RATE_LIMIT: 1000,
   RATE_LIMIT_WINDOW: 60 * 1000,
   RETRY_LIMIT: 3,
+  SECRET_ALGORITHM: 'HS256',
   TITLE: 'GEOLYTIX | XYZ',
-  TRANSPORT_TLS: false, //1000 requests per 1min
+  TRANSPORT_PORT: 587,
+  TRANSPORT_TLS: false,
   WORKSPACE_AGE: 3600000, // 1 min
 };
 
-process.env.PORT ??= defaults.PORT;
-process.env.DIR ??= defaults.DIR;
-process.env.TITLE ??= defaults.TITLE;
-process.env.WORKSPACE_AGE ??= defaults.WORKSPACE_AGE;
+if (process.env.SECRET_KEY) {
+  const SECRET = String(readFileSync(`./${process.env.SECRET_KEY}`));
+
+  process.env.SECRET = SECRET;
+  process.env.SECRET_ALGORITHM ??= 'RS256';
+}
+
 process.env.COOKIE_TTL ??= defaults.COOKIE_TTL;
+process.env.DIR ??= defaults.DIR;
 process.env.FAILED_ATTEMPTS ??= defaults.FAILED_ATTEMPTS;
-process.env.RETRY_LIMIT ??= defaults.RETRY_LIMIT;
-process.env.TRANSPORT_TLS ??= defaults.TRANSPORT_TLS;
+process.env.PORT ??= defaults.PORT;
 process.env.RATE_LIMIT_WINDOW ??= defaults.RATE_LIMIT_WINDOW;
 process.env.RATE_LIMIT ??= defaults.RATE_LIMIT;
+process.env.RETRY_LIMIT ??= defaults.RETRY_LIMIT;
+process.env.SECRET_ALGORITHM ??= defaults.SECRET_ALGORITHM;
+process.env.TITLE ??= defaults.TITLE;
+process.env.TRANSPORT_PORT ??= defaults.TRANSPORT_PORT;
+process.env.TRANSPORT_TLS ??= defaults.TRANSPORT_TLS;
+process.env.WORKSPACE_AGE ??= defaults.WORKSPACE_AGE;
 
 const xyzEnv = {
   COOKIE_TTL: parseInt(process.env.COOKIE_TTL),
   DIR: process.env.DIR,
   FAILED_ATTEMPTS: process.env.FAILED_ATTEMPTS,
-  PORT: process.env.PORT,
+  PORT: parseInt(process.env.PORT),
   RATE_LIMIT: process.env.RATE_LIMIT,
   RATE_LIMIT_WINDOW: process.env.RATE_LIMIT_WINDOW,
   RETRY_LIMIT: process.env.RETRY_LIMIT,
   TITLE: process.env.TITLE,
+  TRANSPORT_PORT: parseInt(process.env.TRANSPORT_PORT),
   TRANSPORT_TLS: process.env.TRANSPORT_TLS,
   WORKSPACE_AGE: process.env.WORKSPACE_AGE,
 };

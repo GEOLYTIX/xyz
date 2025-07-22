@@ -1,41 +1,46 @@
 /**
- * Roles utility module for handling role-based access control and object merging
- * @module /utils/roles
- */
+## /utils/roles
+Roles utility module for handling role-based access control and object merging
+
+@requires /utils/merge
+@module /utils/roles
+*/
 
 /**
- * @global
- * @typedef {Object} roles
- * @property {Object} roles - roles configuration object
- * @property {boolean} [roles.*] - Wildcard role indicating unrestricted access
- * @property {Object} [roles.key] - Role-specific properties to merge
- * @property {Object} [roles.'!key'] - Negated role properties (applied when user doesn't have the role)
- */
+@global
+@typedef {Object} roles
+@property {Object} roles - roles configuration object
+@property {boolean} [roles.*] - Wildcard role indicating unrestricted access
+@property {Object} [roles.key] - Role-specific properties to merge
+@property {Object} [roles.'!key'] - Negated role properties (applied when user doesn't have the role)
+*/
 
 import merge from './merge.js';
 
-export { check, objMerge };
-
 /**
- * Checks if an object should be accessible based on user roles
- * @param {Object} obj - The object to check access for
- * @param {roles} obj.roles - Role configuration object
- * @param {Array<string>} user_roles - Array of roles assigned to the user
- * @returns {(Object|boolean)} Returns the original object if access is granted, false otherwise
- *
- * @example
- * // Object with unrestricted access
- * check({ roles: { '*': true }, data: 'content' }, ['user']) // returns object
- *
- * // Object with role restriction
- * check({ roles: { admin: true }, data: 'content' }, ['user']) // returns false
- * check({ roles: { admin: true }, data: 'content' }, ['admin']) // returns object
- *
- * // Object with negated roles
- * check({ roles: { '!guest': true }, data: 'content' }, ['guest']) // returns false
- * check({ roles: { '!guest': true }, data: 'content' }, ['user']) // returns object
- */
-function check(obj, user_roles) {
+@function check
+@description
+Checks if an object should be accessible based on user roles
+
+```js
+// Object with unrestricted access
+check({ roles: { '*': true }, data: 'content' }, ['user']) // returns object
+
+// Object with role restriction
+check({ roles: { admin: true }, data: 'content' }, ['user']) // returns false
+check({ roles: { admin: true }, data: 'content' }, ['admin']) // returns object
+
+// Object with negated roles
+check({ roles: { '!guest': true }, data: 'content' }, ['guest']) // returns false
+check({ roles: { '!guest': true }, data: 'content' }, ['user']) // returns object
+```
+
+@param {Object} obj The object to check access for
+@param {Array<string>} user_roles Array of roles assigned to the user
+@property {roles} obj.roles Role configuration object
+@returns {(Object|boolean)} Returns the original object if access is granted, false otherwise
+*/
+export function check(obj, user_roles) {
   // The object to check has no roles assigned.
   if (!obj.roles) return obj;
 
@@ -44,24 +49,28 @@ function check(obj, user_roles) {
 
   if (!user_roles) return false;
 
+  // Add last of dot notation role to rolesArr
+  const rolesArr = Object.keys(obj.roles);
+
+  // Pop last role from dot notation roles into rolesArr for backwards compatibility.
+  Object.keys(obj.roles).forEach((role) =>
+    rolesArr.push(role.split('.').pop()),
+  );
+
   // Some negated role is included in user_roles[]
-  const someNegatedRole = Object.keys(obj.roles).some(
+  const someNegatedRole = rolesArr.some(
     (role) => /^!/.exec(role) && user_roles.includes(role.replace(/^!/, '')),
   );
 
   if (someNegatedRole) return false;
 
   // Check whether every role is negated.
-  const everyNegatedRoles = Object.keys(obj.roles).every((role) =>
-    /^!/.exec(role),
-  );
+  const everyNegatedRoles = rolesArr.every((role) => /^!/.exec(role));
 
   if (everyNegatedRoles) return obj;
 
   // Some positive role is included in user_roles[]
-  const somePositiveRole = Object.keys(obj.roles).some((role) =>
-    user_roles.includes(role),
-  );
+  const somePositiveRole = rolesArr.some((role) => user_roles.includes(role));
 
   if (somePositiveRole) return obj;
 
@@ -103,7 +112,7 @@ objMerge(obj, ['user']);
 @property {roles} obj.roles Role configuration object
 @returns {Object} Processed object with merged role-specific properties
 */
-function objMerge(obj, user_roles) {
+export function objMerge(obj, user_roles) {
   if (typeof obj !== 'object') return obj;
 
   if (!Array.isArray(user_roles)) return obj;
@@ -136,10 +145,15 @@ function objMerge(obj, user_roles) {
     .filter((role) => clone.roles[role] !== null)
     .filter((role) => typeof clone.roles[role] === 'object')
     .filter((role) => !Array.isArray(clone.roles[role]))
-    .filter(
-      (role) =>
-        user_roles.includes(role) || notIncludesNegatedRole(role, user_roles),
-    )
+    .filter((role) => {
+      // Get last role from a dot tree role string.
+      const popRole = role.split('.').pop();
+
+      return (
+        user_roles.includes(popRole) ||
+        notIncludesNegatedRole(popRole, user_roles)
+      );
+    })
     .forEach((role) => {
       merge(clone, clone.roles[role]);
     });
@@ -162,4 +176,32 @@ function notIncludesNegatedRole(role, user_roles) {
   return role.match(/(?<=^!)(.*)/g)?.[0]
     ? !user_roles.includes(role.match(/(?<=^!)(.*)/g)?.[0])
     : false;
+}
+
+/**
+@function objectRoles
+
+@description
+The objectRoles method has been designed to iterate through all nested objects in a workspace and add any keys in a 'roles' object property to a Set of role strings.
+
+@param {set} rolesSet Set of role strings for each individual role. The same role cannot be added twice to a set.
+@param {object} obj Object to evaluate for roles.
+@param {string} key Key value of current object.
+*/
+export function fromObj(rolesSet, obj) {
+  // Iterate through the object tree.
+  Object.keys(obj).forEach((key) => {
+    if (obj[key] && typeof obj[key] === 'object') {
+      if (key === 'roles') {
+        Object.keys(obj[key]).forEach((role) => {
+          // Add role without negation ! to roles set.
+          // The same s.role can not be added multiple times to the rolesSet.
+          rolesSet.add(role.replace(/^!/, ''));
+        });
+      }
+
+      // Call method recursive for nested objects.
+      fromObj(rolesSet, obj[key]);
+    }
+  });
 }

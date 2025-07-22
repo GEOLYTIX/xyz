@@ -66,53 +66,64 @@ export default async function cookie(req, res) {
   }
 
   // Verify current cookie
-  jwt.verify(cookie, xyzEnv.SECRET, async (err, payload) => {
-    if (err) return err;
-    // Get updated user credentials from ACL
-    const rows = await acl(
-      `
+  jwt.verify(
+    cookie,
+    xyzEnv.SECRET,
+    { algorithm: xyzEnv.SECRET_ALGORITHM },
+    async (err, payload) => {
+      if (err) {
+        return res
+          .status(401)
+          .setHeader('Content-Type', 'plain/text')
+          .send('Invalid token');
+      }
+      // Get updated user credentials from ACL
+      const rows = await acl(
+        `
         SELECT email, admin, language, roles, blocked
         FROM acl_schema.acl_table
         WHERE lower(email) = lower($1);`,
-      [payload.email],
-    );
-
-    if (rows instanceof Error) {
-      res.setHeader(
-        'Set-Cookie',
-        `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`,
+        [payload.email],
       );
-      return res.status(500).send('Failed to retrieve user from ACL');
-    }
 
-    const user = rows[0];
+      if (rows instanceof Error) {
+        res.setHeader(
+          'Set-Cookie',
+          `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`,
+        );
+        return res.status(500).send('Failed to retrieve user from ACL');
+      }
 
-    // Admin rights should not be added if not provided from a token.
-    user.admin = payload.admin;
+      const user = rows[0];
 
-    // Assign title identifier to user object.
-    user.title = xyzEnv.TITLE;
+      // Admin rights should not be added if not provided from a token.
+      user.admin = payload.admin;
 
-    if (user.blocked) {
-      res.setHeader(
-        'Set-Cookie',
-        `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`,
-      );
-      return res.status(403).send('Account is blocked');
-    }
+      // Assign title identifier to user object.
+      user.title = xyzEnv.TITLE;
 
-    if (payload.session) {
-      user.session = payload.session;
-    }
+      if (user.blocked) {
+        res.setHeader(
+          'Set-Cookie',
+          `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`,
+        );
+        return res.status(403).send('Account is blocked');
+      }
 
-    const token = jwt.sign(user, xyzEnv.SECRET, {
-      expiresIn: xyzEnv.COOKIE_TTL,
-    });
+      if (payload.session) {
+        user.session = payload.session;
+      }
 
-    const cookie = `${xyzEnv.TITLE}=${token};HttpOnly;Max-Age=${xyzEnv.COOKIE_TTL};Path=${xyzEnv.DIR || '/'};SameSite=Strict${(!req.headers.host.includes('localhost') && ';Secure') || ''}`;
+      const token = jwt.sign(user, xyzEnv.SECRET, {
+        expiresIn: xyzEnv.COOKIE_TTL,
+        algorithm: xyzEnv.SECRET_ALGORITHM,
+      });
 
-    res.setHeader('Set-Cookie', cookie);
+      const cookie = `${xyzEnv.TITLE}=${token};HttpOnly;Max-Age=${xyzEnv.COOKIE_TTL};Path=${xyzEnv.DIR || '/'};SameSite=Strict${(!req.headers.host.includes('localhost') && ';Secure') || ''}`;
 
-    res.send(user);
-  });
+      res.setHeader('Set-Cookie', cookie);
+
+      res.send(user);
+    },
+  );
 }

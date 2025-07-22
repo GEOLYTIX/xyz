@@ -11,6 +11,7 @@ globalThis.xyzEnv = {
   TRANSPORT_EMAIL: 'xyz@gmail.com',
   TRANSPORT_PASSWORD: 'IAMANEMAILPASSWORD',
   TRANSPORT_HOST: 'smpt-host.emailserver.com',
+  SECRET_ALGORITHM: 'HS256',
 };
 
 await codi.describe(

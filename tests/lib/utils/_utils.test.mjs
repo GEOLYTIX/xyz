@@ -1,4 +1,5 @@
 import { compose } from './compose.test.mjs';
+import { createExtent } from './createExtent.test.mjs';
 import { gazetteer } from './gazetteer.test.mjs';
 import { jsonParser } from './jsonParser.test.mjs';
 import { keyvalue_dictionary } from './keyvalue_dictionary.test.mjs';
@@ -6,12 +7,14 @@ import { merge } from './merge.test.mjs';
 import { numericFormatter } from './numericFormatter.test.mjs';
 import { paramString } from './paramString.test.mjs';
 import { queryParams } from './queryParams.test.mjs';
+import { scriptElementTest } from './scriptElement.test.mjs';
 import { svgTemplates } from './svgTemplates.test.mjs';
 import { temporal } from './temporal.test.mjs';
 import { versionCheck } from './versionCheck.mjs';
 
 export const utilsTest = {
   compose,
+  createExtent,
   gazetteer,
   jsonParser,
   keyvalue_dictionary,
@@ -23,6 +26,7 @@ export const utilsTest = {
   svgTemplates,
   temporal,
   versionCheck,
+  scriptElementTest,
 };
 
 function setup() {
