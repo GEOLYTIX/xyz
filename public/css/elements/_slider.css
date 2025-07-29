@@ -1,7 +1,7 @@
 .input-range {
   --dif: calc(var(--max) - var(--min));
   display: grid;
-  grid-template-columns: 50% 50%;
+  grid-template-columns: repeat(2, 1fr);
   grid-gap: 0.2em;
   position: relative;
   width: 100%;
