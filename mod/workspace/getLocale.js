@@ -99,6 +99,8 @@ export default async function getLocale(params, parentLocale) {
 
   locale.workspace = workspace.key;
 
+  locale.name ??= locale.key;
+
   if (parentLocale) {
     // Only locales of a nested locales should be used for further nesting.
     delete parentLocale.locales;
@@ -106,8 +108,7 @@ export default async function getLocale(params, parentLocale) {
     parentLocale.keys ??= [parentLocale.key];
     parentLocale.name ??= parentLocale.key;
     locale.keys = [locale.key];
-    locale.name ??= locale.key;
-
+    
     // Compose the nested locale name.
     locale.name = `${parentLocale.name}/${locale.name}`;
 
