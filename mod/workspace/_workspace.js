@@ -137,17 +137,25 @@ async function locales(req, res) {
     return;
   }
 
-  const locales = await Promise.all(
-    Object.keys(workspace.locales).map((localeKey) =>
-      getLocale({
-        user: req.params.user,
-        locale: localeKey,
-        roles: req.params.user?.roles,
-      }),
-    ),
-  );
+  const locales = [];
 
-  res.send(locales.filter((locale) => !(locale instanceof Error)));
+  for (const localeKey of Object.keys(workspace.locales)) {
+    const locale = await getLocale({
+      user: req.params.user,
+      locale: localeKey,
+      roles: req.params.user?.roles,
+    });
+
+    if (locale instanceof Error) continue;
+
+    locales.push({
+      key: locale.key,
+      name: locale.name,
+      locales: locale.locales,
+    });
+  }
+
+  res.send(locales);
 }
 
 /**
