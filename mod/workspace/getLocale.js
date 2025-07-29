@@ -108,7 +108,7 @@ export default async function getLocale(params, parentLocale) {
     parentLocale.keys ??= [parentLocale.key];
     parentLocale.name ??= parentLocale.key;
     locale.keys = [locale.key];
-    
+
     // Compose the nested locale name.
     locale.name = `${parentLocale.name}/${locale.name}`;
 
