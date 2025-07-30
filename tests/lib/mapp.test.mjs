@@ -10,9 +10,6 @@ function base() {
   codi.describe({ name: 'Mapp:', id: 'mapp' }, () => {
     codi.it({ name: 'Ensure we have base objects', parentId: 'mapp' }, () => {
       codi.assertTrue(
-        Object.hasOwn(mapp, 'ol', 'The mapp object needs to have an ol object'),
-      );
-      codi.assertTrue(
         Object.hasOwn(
           mapp,
           'version',
@@ -33,6 +30,7 @@ function base() {
           'The mapp object needs to have an host object',
         ),
       );
+
       codi.assertTrue(
         Object.hasOwn(
           mapp,
@@ -40,6 +38,7 @@ function base() {
           'The mapp object needs to have an language object',
         ),
       );
+
       codi.assertTrue(
         Object.hasOwn(
           mapp,

@@ -9,6 +9,11 @@ console.warn = (log) => {
   mockWarn.push(log);
 };
 
+const mockMailerFn = codi.mock.fn();
+const mockMailer = codi.mock.module('../../../mod/utils/mailer.js', {
+  defaultExport: mockMailerFn,
+});
+
 await codi.describe(
   { name: 'register: ', id: 'user_register', parentId: 'user' },
   async () => {
@@ -114,3 +119,4 @@ await codi.describe(
 );
 
 console.warn = originalWarn;
+mockMailer.restore();

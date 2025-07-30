@@ -15,10 +15,9 @@
     >
 
     <script
-      src="https://cdn.jsdelivr.net/npm/ol@v10.3.1/dist/ol.js"
-      integrity="sha384-GtOM9G1JWFKmDbfOLBrez9YebIrX1pqVVtYukhqrKOtyneLNxnTIFMe8ER850GT/"
+      src="https://cdn.jsdelivr.net/npm/ol@v10.6.1/dist/ol.js"
+      integrity="sha384-R02sHnzL8yl/uvLZvMsfgBOMBIOOHLpuLNo4dLuWQWFun1sxEWJej+SPwiGxaeGd"
       crossorigin="anonymous"
-      defer
     ></script>
 
     <!-- Load XYZ / MAPP stylesheet and library. -->
@@ -230,18 +229,15 @@
     }
 
     // Language as URL parameter will override user language.
-    if (mapp.hooks.current.language) {
-      mapp.language = mapp.hooks.current.language;
-    } else if (mapp.user?.language) {
-      if (!Object.hasOwn(mapp.dictionaries, mapp.user.language)) {
-        // Set mapp.language to english if user.language is not supported by mapp.dictionaries.
-        console.warn(
-          `'${mapp.user.language}' mapp.language is not supported by mapp.dictionaries.`,
-        );
-        mapp.language = 'en';
-      } else {
-        mapp.language = mapp.user.language;
-      }
+    mapp.language = mapp.hooks.current.language || mapp.user?.language || 'en';
+
+    // Load dictionary if language other than English.
+    if (mapp.language !== 'en') {
+      await mapp.utils.loadDictionary(mapp.language);
+    }
+
+    if (!Object.hasOwn(mapp.dictionaries, mapp.language)) {
+      console.warn(`'${mapp.user.language}' mapp.language is not supported by mapp.dictionaries.`);
     }
 
     // Restore scroll
