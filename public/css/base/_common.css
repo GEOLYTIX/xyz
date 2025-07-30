@@ -31,11 +31,8 @@
   display: flex;
   width: fit-content;
   align-items: center;
-}
-
-.link-with-img > * {
-  display: inline-block;
-  vertical-align: middle;
+  text-align: center;
+  text-overflow: ellipsis;
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -moz-user-select: none;
@@ -47,8 +44,6 @@
   border: 1px solid var(--color-primary);
   border-radius: 5px;
   padding: 0.2em 0.5em;
-  text-overflow: ellipsis;
-  text-align: center;
 
   &.active {
     border: 1px solid var(--color-active);
