@@ -27,6 +27,10 @@
   user-select: none;
 }
 
+.link-with-img {
+  display: flex;
+}
+
 .link-with-img > * {
   display: inline-block;
   vertical-align: middle;
@@ -41,10 +45,6 @@
   border: 1px solid var(--color-primary);
   border-radius: 5px;
   padding: 0.2em 0.5em;
-  width: auto;
-  min-width: 5em;
-  max-width: 10em;
-  margin: 1px;
   text-overflow: ellipsis;
   text-align: center;
 
