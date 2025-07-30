@@ -29,6 +29,7 @@
 
 .link-with-img {
   display: flex;
+  width: fit-content;
 }
 
 .link-with-img > * {

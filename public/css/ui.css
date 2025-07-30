@@ -51,6 +51,7 @@ body {
 }
 .link-with-img {
   display: flex;
+  width: fit-content;
 }
 .link-with-img > * {
   display: inline-block;
