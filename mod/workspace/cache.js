@@ -156,9 +156,6 @@ async function cacheWorkspace() {
 
     // Assign key value as key on locale object.
     workspace.locales[locale_key].key = locale_key;
-
-    // Assign locale key as name with no existing name on locale object.
-    workspace.locales[locale_key].name ??= locale_key;
   });
 
   if (workspace.plugins) {
