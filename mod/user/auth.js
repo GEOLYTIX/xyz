@@ -66,7 +66,9 @@ export default async function auth(req, res) {
   if (!xyzEnv.SECRET) return null;
 
   try {
-    user = jwt.verify(token, xyzEnv.SECRET);
+    user = jwt.verify(token, xyzEnv.SECRET, {
+      algorithm: xyzEnv.SECRET_ALGORITHM,
+    });
   } catch (err) {
     return err;
   }
@@ -85,6 +87,19 @@ export default async function auth(req, res) {
   if (sessionCheck instanceof Error) {
     // The session check has failed.
     return sessionCheck;
+  }
+
+  if (Array.isArray(user.roles)) {
+    // Add default role * to all users.
+    user.roles.push('*');
+
+    // Shift first role of dot notation roles into user.roles array.
+    user.roles.forEach((role) => {
+      const dotRoles = role.split('.');
+      if (dotRoles.length > 1) {
+        user.roles.push(dotRoles.shift());
+      }
+    });
   }
 
   return user;
@@ -152,7 +167,9 @@ async function checkParamToken(req, res, user) {
   // Check whether the token matches cookie.
   if (req.cookies?.[xyzEnv.TITLE] !== req.params.token) {
     // Create and assign a new cookie for the user.
-    const cookie = jwt.sign(user, xyzEnv.SECRET);
+    const cookie = jwt.sign(user, xyzEnv.SECRET, {
+      algorithm: xyzEnv.SECRET_ALGORITHM,
+    });
 
     res.setHeader(
       'Set-Cookie',

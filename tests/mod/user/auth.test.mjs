@@ -104,6 +104,9 @@ await codi.describe(
 
       const result = await auth(req, res);
 
+      // Add * role for equality check
+      user.roles = ['*'];
+
       codi.assertEqual(result, user);
     });
 
@@ -128,6 +131,9 @@ await codi.describe(
       });
 
       const result = await auth(req, res);
+
+      // Add * role for equality check
+      user.roles = ['*'];
 
       codi.assertEqual(result, user);
     });
@@ -290,6 +296,7 @@ await codi.describe(
 
             globalThis.xyzEnv = {
               SECRET: secret,
+              SECRET_ALGORITHM: 'HS256',
               TITLE: 'TEST',
             };
 
