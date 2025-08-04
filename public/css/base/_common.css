@@ -45,6 +45,7 @@
   input[type='datetime-local'],
   textarea,
   button,
+  .select-dropdown,
   .dropdown > .head {
     background-color: var(--color-changed);
     color: var(--color-font);
