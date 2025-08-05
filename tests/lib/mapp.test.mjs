@@ -30,6 +30,7 @@ function base() {
           'The mapp object needs to have an host object',
         ),
       );
+
       codi.assertTrue(
         Object.hasOwn(
           mapp,
@@ -37,6 +38,7 @@ function base() {
           'The mapp object needs to have an language object',
         ),
       );
+
       codi.assertTrue(
         Object.hasOwn(
           mapp,

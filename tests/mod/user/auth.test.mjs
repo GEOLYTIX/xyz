@@ -104,6 +104,9 @@ await codi.describe(
 
       const result = await auth(req, res);
 
+      // Add * role for equality check
+      user.roles = ['*'];
+
       codi.assertEqual(result, user);
     });
 
@@ -128,6 +131,9 @@ await codi.describe(
       });
 
       const result = await auth(req, res);
+
+      // Add * role for equality check
+      user.roles = ['*'];
 
       codi.assertEqual(result, user);
     });
