@@ -97,7 +97,7 @@ export default {
   modify_geometry: 'Modify Geometry',
   multi_filter_title: 'Multi Filter Panel',
   multi_filter_btn_label: 'Open Filter Panel',
-  multi_filter_btn_hover: 'Open Filtering View',
+  multi_filter_btn_title: 'Open Filtering View',
   multi_filter_count: 'Location(s) match filter criteria',
   multi_filter_layer_name: 'Layer Filter',
   multi_filter_in_viewport: 'viewport based.',
