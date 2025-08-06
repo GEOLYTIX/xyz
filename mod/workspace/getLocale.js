@@ -41,11 +41,12 @@ Role objects in the locale and nested layers are merged with their respective pa
 
 Template properties will be removed as these are not required by the MAPP API but only for the composition of workspace objects.
 
-@param {Object} params 
+@param {Object} params
 @param {Object} [parentLocale] Locale will be merged into optional parentLocale to create a nested locale.
 @property {string} [params.locale] Locale key.
 @property {array} [params.locale] An array of locale keys to be merged as a nested locale.
 @property {Object} [params.user] Requesting user.
+@property {Boolean} [params.ignoreRoles] Whether role check should be performed.
 @property {Array} [user.roles] User roles.
 
 @returns {Promise<Object|Error>} JSON Locale.
@@ -55,6 +56,10 @@ export default async function getLocale(params, parentLocale) {
 
   if (workspace instanceof Error) {
     return workspace;
+  }
+
+  if (!params.user?.admin) {
+    delete params.ignoreRoles;
   }
 
   if (typeof params.locale === 'string') {
@@ -79,15 +84,22 @@ export default async function getLocale(params, parentLocale) {
     return new Error(locale.message);
   }
 
-  if (!Roles.check(locale, params.user?.roles)) {
+  // The roles property maybe assigned from a template. Templates must be merged prior to the role check.
+  locale = await mergeTemplates(locale, params.user?.roles);
+
+  //If the user is an admin we don't need to check roles
+  if (
+    locale instanceof Error ||
+    (!params.ignoreRoles && !Roles.check(locale, params.user?.roles))
+  ) {
     return new Error('Role access denied.');
   }
 
   locale = Roles.objMerge(locale, params.user?.roles);
 
-  locale = await mergeTemplates(locale, params.user?.roles);
-
   locale.workspace = workspace.key;
+
+  locale.name ??= locale.key;
 
   if (parentLocale) {
     // Only locales of a nested locales should be used for further nesting.
@@ -96,8 +108,8 @@ export default async function getLocale(params, parentLocale) {
     parentLocale.keys ??= [parentLocale.key];
     parentLocale.name ??= parentLocale.key;
     locale.keys = [locale.key];
-    locale.name ??= locale.key;
 
+    // Compose the nested locale name.
     locale.name = `${parentLocale.name}/${locale.name}`;
 
     locale = merge(parentLocale, locale);

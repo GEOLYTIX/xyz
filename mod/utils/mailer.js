@@ -1,13 +1,15 @@
 /**
-@module /utils/mailer
-@description
+## /utils/mailer
 The mailer module provides a way to send emails to clients/admins, etc.
 
-@requires module:/utils/logger
-@requires module:/utils/languageTemplates
-@requires module:/provider/getFrom
+The nodemailer dependency will be imported dynamically on the condition that a TRANSPORT_EMAIL [sender] is defined the process environment.
 
 @requires nodemailer
+@requires /utils/logger
+@requires /utils/languageTemplates
+@requires /provider/getFrom
+
+@module /utils/mailer
 */
 
 import getFrom from '../provider/getFrom.js';
@@ -18,16 +20,7 @@ import logger from './logger.js';
 //Attempt to import node mailer
 let nodeMailer, transport;
 
-if (xyzEnv.TRANSPORT) {
-  console.warn(
-    'Please replace xyzEnv.TRANSPORT with TRANSPORT_HOST,TRANSPORT_EMAIL, and TRANSPORT_PASSWORD',
-  );
-} else if (
-  xyzEnv.TRANSPORT_EMAIL ||
-  xyzEnv.TRANSPORT_USERNAME ||
-  xyzEnv.TRANSPORT_HOST ||
-  xyzEnv.TRANSPORT_PASSWORD
-) {
+if (xyzEnv.TRANSPORT_EMAIL && xyzEnv.TRANSPORT_HOST) {
   try {
     nodeMailer = await import('nodemailer');
   } catch {
@@ -51,33 +44,18 @@ Function which sends email using the nodemailer dependancy.
 @property {String} params.host The URL of the instance.
 */
 async function mailer(params) {
-  // The nodeMailer module could not be imported.
+  // The nodeMailer module is not available.
   if (!nodeMailer) return;
-
-  if (!xyzEnv.TRANSPORT_HOST) {
-    console.warn('xyzEnv.TRANSPORT_HOST missing.');
-    return;
-  }
-
-  if (!xyzEnv.TRANSPORT_EMAIL) {
-    console.warn('xyzEnv.TRANSPORT_EMAIL is missing.');
-    return;
-  }
-
-  if (!xyzEnv.TRANSPORT_PASSWORD) {
-    console.warn('xyzEnv.TRANSPORT_PASSWORD missing.');
-    return;
-  }
 
   if (!transport) {
     transport = nodeMailer.createTransport({
       auth: {
-        pass: xyzEnv.TRANSPORT_PASSWORD,
         user: xyzEnv.TRANSPORT_USERNAME || xyzEnv.TRANSPORT_EMAIL,
+        pass: xyzEnv.TRANSPORT_PASSWORD,
       },
       host: xyzEnv.TRANSPORT_HOST,
       name: xyzEnv.TRANSPORT_NAME || xyzEnv.TRANSPORT_EMAIL.split('@')[0],
-      port: xyzEnv.TRANSPORT_PORT || 587,
+      port: xyzEnv.TRANSPORT_PORT,
       requireTLS: xyzEnv.TRANSPORT_TLS,
       secure: false,
       tls: {

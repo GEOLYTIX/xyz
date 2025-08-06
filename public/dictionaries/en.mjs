@@ -46,6 +46,9 @@ export default {
   icon_scaling_cluster_log: 'Cluster Log Scale',
   icon_scaling_field: 'Toggle Field Icon Scaling',
   icon_scaling_label: 'Icon Scale',
+  icon_scaling_no_scaling: 'No Scaling',
+  icon_scaling_select_one: 'Select a field',
+  icon_scaling_title: 'Icon Scaling',
   icon_scaling_zoom_in: 'Zoom-in Scale',
   icon_scaling_zoom_out: 'Zoom-out Scale',
   identical_values_filter:
