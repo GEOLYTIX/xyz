@@ -6,6 +6,7 @@
     "type": "git",
     "url": "https://github.com/geolytix/xyz"
   },
+  "packageManager": "pnpm@10.10.0",
   "scripts": {
     "test": "node --experimental-test-module-mocks node_modules/codi-test-framework/cli.js tests",
     "test-watch": "node --watch-path=. --experimental-test-module-mocks node_modules/codi-test-framework/cli.js tests --quiet",
