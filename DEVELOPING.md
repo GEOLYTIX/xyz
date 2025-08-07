@@ -16,7 +16,7 @@ The executables `git` and `node` should be in your `PATH`.
 
 To install the Node.js dependencies run
 
-    npm install
+    pnpm install
 
 Please check the full list of dependencies as defined in the [package.json](https://github.com/GEOLYTIX/xyz/blob/main/package.json)
 
@@ -99,7 +99,6 @@ When changes are detected:
 ```
 
 2. Nodemon will:
-
    - Set `NODE_ENV` to "DEVELOPMENT"
    - Watch for file changes
    - Automatically rebuild affected files
@@ -239,23 +238,23 @@ Here are some additional settings to use in your ./vscode/settings.json file
 
 The codebase uses [Biome](https://biomejs.dev/) to ensure code quality, consistent formatting, and adherence to coding guidelines. Biome is an all-in-one tool for linting, formatting, and more.
 
-To run Biome, you need to have the development dependencies installed. Make sure to run `npm install` in the root of the xyz directory.
+To run Biome, you need to have the development dependencies installed. Make sure to run `pnpm install` in the root of the xyz directory.
 
 To check for linting and formatting issues, run the following command in the root of the application:
 
-    npx biome check
+    pnpm exec biome check
 
 To automatically fix issues (where possible), run:
 
-    npx biome check --write
+    pnpm exec biome check --write
 
 You can also use Biome's formatting capabilities:
 
-    npx biome format
+    pnpm exec biome format
 
 Or to format and apply fixes:
 
-    npx biome format --write
+    pnpm exec biome format --write
 
 Many editors have Biome extensions or plugins for on-the-fly error highlighting and formatting. Please refer to the [Biome editor integration guide](https://biomejs.dev/docs/integrations/editors/) for setup instructions for your environment.
 
