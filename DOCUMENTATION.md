@@ -143,7 +143,7 @@ An @example does not require a code block [\`\`\`JS] definition. At examples sho
 
 ### /docs express route
 
-The /docs express route can be used to preview the built pages on `http://localhost:3000/docs/`
+The /docs express route can be used to preview the built pages on `http://localhost:3000/xyz/` or `http://localhost:3000/xyz/`
 
 ### docs in vscode
 
