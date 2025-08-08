@@ -1,5 +1,4 @@
 import { compose } from './compose.test.mjs';
-import { createExtent } from './createExtent.test.mjs';
 import { gazetteer } from './gazetteer.test.mjs';
 import { jsonParser } from './jsonParser.test.mjs';
 import { keyvalue_dictionary } from './keyvalue_dictionary.test.mjs';
@@ -14,7 +13,6 @@ import { versionCheck } from './versionCheck.mjs';
 
 export const utilsTest = {
   compose,
-  createExtent,
   gazetteer,
   jsonParser,
   keyvalue_dictionary,

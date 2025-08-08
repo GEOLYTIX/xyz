@@ -42,7 +42,11 @@ export function layer(mapview) {
         display: true,
         layer: 'geojson_test',
         mapview,
-        location: { id: '1234', removeCallbacks: [] },
+        location: { id: '1234', removeCallbacks: [], Layers: [] },
+        tables: {
+          0: 'test.table',
+          1: 'test.table',
+        },
       };
 
       codi.it(
