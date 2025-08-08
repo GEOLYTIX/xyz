@@ -104,6 +104,14 @@ export default async function getLayer(params, locale) {
   // Assign dbs from locale if nullish on layer.
   layer.dbs ??= locale.dbs;
 
+  // Merge locale.queryparams into layer.
+  if (locale.queryparams) {
+    layer.queryparams = {
+      ...locale.queryparams,
+      ...layer.queryparams,
+    };
+  }
+
   // Remove properties which are only required for the fetching templates and composing workspace objects.
   delete layer.src;
   delete layer.template;
