@@ -7,10 +7,8 @@
     ],
     "syncPlugins": ["zoomBtn", "zoomToArea", "coordinates", "admin", "login"],
     "test": {
-      "options": {
-        "quiet": true,
-        "showSummary": true
-      }
+      "quiet": true,
+      "showSummary": true
     },
     "layers": {
       "OSM": {
