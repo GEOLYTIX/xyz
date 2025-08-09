@@ -6,8 +6,14 @@
 .vercel
 
 env
+# npm legacy files (replaced by pnpm)
 package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# pnpm files
 node_modules/*
+.pnpm-store/
 
 public/js/*
 public/css/.sass-cache/
