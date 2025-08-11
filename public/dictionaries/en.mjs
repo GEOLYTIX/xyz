@@ -98,6 +98,7 @@ export default {
   filter_btn_label: 'Open Filter Panel',
   filter_btn_title: 'Open Filtering View',
   filter_count: 'Location(s) match filter criteria',
+  filter_dialog_title: 'Filter Panel',
   filter_in_viewport: 'viewport based.',
   filter_not_in_viewport: 'all locations not just those in viewport.',
   no_data_filter: 'This field contains no data and cannot be filtered on.',
