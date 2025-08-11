@@ -24,17 +24,17 @@ Please check the full list of dependencies as defined in the [package.json](http
 
 The MAPP and MAPP.UI library must be build with [esbuild](https://esbuild.github.io/) prior to launching the host.
 
-    npx esbuild ./lib/mapp.mjs ./lib/ui.mjs --bundle --minify --tree-shaking=false --sourcemap --format=iife --outdir=./public/js
+    pnpm exec esbuild ./lib/mapp.mjs ./lib/ui.mjs --bundle --minify --tree-shaking=false --sourcemap --format=iife --outdir=./public/js
 
 The build command is stored in the package.json as `_build` script.
 
-    npm run _build
+    pnpm _build
 
 ESBuild must also be used to compile the CSS supporting the MAPP and MAPP.UI elements.
 
-    npx esbuild --bundle public/css/_mapp.css --outfile=public/css/mapp.css
+    pnpm exec esbuild --bundle public/css/_mapp.css --outfile=public/css/mapp.css
 
-    npx esbuild --bundle public/css/_ui.css --outfile=public/css/ui.css --loader:.svg=dataurl
+    pnpm exec esbuild --bundle public/css/_ui.css --outfile=public/css/ui.css --loader:.svg=dataurl
 
 ## Hot rebuild with nodemon & VSCode Chrome Debugger
 
@@ -50,7 +50,7 @@ The development environment uses nodemon to watch for changes and automatically 
   "env": {
     "NODE_ENV": "DEVELOPMENT"
   },
-  "exec": "npx concurrently \"node esbuild.config.mjs\" \"npm run ui_css\" \"npm run mapp_css\"",
+  "exec": "pnpm exec concurrently \"node esbuild.config.mjs\" \"pnpm ui_css\" \"pnpm mapp_css\"",
   "events": {
     "start": "echo \"Watching for changes...\"",
     "exit": "echo \"Build complete\""
@@ -95,7 +95,7 @@ When changes are detected:
 1. Start the watch mode:
 
 ```bash
-  npx nodemon
+  pnpm exec nodemon
 ```
 
 2. Nodemon will:
@@ -125,7 +125,7 @@ Along side this there is an optional `kill-watch` task that is used to tear down
     {
       "label": "start-watch",
       "type": "shell",
-      "command": "npx nodemon",
+      "command": "pnpm exec nodemon",
       "isBackground": true,
       "problemMatcher": {
         "pattern": {
