@@ -48,13 +48,13 @@ export default async function mergeTemplates(obj, roles) {
 
   // The object has an implicit template to merge into.
   if (typeof obj.template === 'string' || obj.template instanceof Object) {
-    obj = await objTemplate(obj, obj.template, roles) || obj;
+    obj = (await objTemplate(obj, obj.template, roles)) || obj;
     if (obj instanceof Error) return obj;
   }
 
   // The _template can be a string or object [with src]
   for (const _template of obj.templates || []) {
-    obj = await objTemplate(obj, _template, roles, true) || obj;
+    obj = (await objTemplate(obj, _template, roles, true)) || obj;
   }
 
   // Substitute ${SRC_*} in object string.
