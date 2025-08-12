@@ -12,7 +12,7 @@ The [codi](https://github.com/RobAndrewHurst/codi) test framework is a required 
 
 Command Line Interface tests are typically executed on localhost for a clone of the XYZ repository to check whether XYZ API modules under development execute as outlined in their documentation. These tests should also be run as an action on any pull request to ensure the structural integrity of XYZ API endpoints.
 
-The codi test framework must be installed into the node_modules with `npm install`.
+The codi test framework must be installed into the node_modules with `pnpm install`.
 
 The codi CLI tests require experimental _module mocks_ which are available in Node 22+ [LTS].
 
@@ -97,22 +97,22 @@ You can also mock functions/methods with the `codi.mock.method()` function that 
 > [!NOTE] typically in tests written this methodology isn't used and favoured for the `codi.mock.mockImplementation()/mockImplementationOnce()` function which can mock a function given to a mocked module. An example of this will be provided in the mock module section.
 
 ```javascript
-import fs from 'node:fs';
+import fs from "node:fs";
 
 // Mocking fs.readFile() method
-codi.mock.method(fs.promises, 'readFile', async () => 'Hello World');
+codi.mock.method(fs.promises, "readFile", async () => "Hello World");
 
-codi.describe({ name: 'Mocking fs.readFile in Node.js', id: 'mock' }, () => {
+codi.describe({ name: "Mocking fs.readFile in Node.js", id: "mock" }, () => {
   codi.it(
     {
-      name: 'should successfully read the content of a text file',
-      parentId: 'mock',
+      name: "should successfully read the content of a text file",
+      parentId: "mock",
     },
     async () => {
       codi.assertEqual(fs.promises.readFile.mock.calls.length, 0);
       codi.assertEqual(
-        await fs.promises.readFile('text-content.txt'),
-        'Hello World',
+        await fs.promises.readFile("text-content.txt"),
+        "Hello World",
       );
       codi.assertEqual(fs.promises.readFile.mock.calls.length, 1);
 
@@ -182,15 +182,15 @@ Node HTTP resquests and responses can be mocked to test endpoints in the middlew
 In the following example we mock a HTTP request with a user object param for the /user/token API module. The module will send a signed token as HTTP response from the module. The token can be accessed as [sent] data from the mocked HTTP response object.
 
 ```javascript
-const { default: userToken } = await import('../../../mod/user/token.js');
+const { default: userToken } = await import("../../../mod/user/token.js");
 await codi.it(
-  { name: '10hr admin user token', parentId: 'user_token' },
+  { name: "10hr admin user token", parentId: "user_token" },
   async () => {
     const { req, res } = codi.mockHttp.createMocks({
       params: {
-        expiresin: '10hr',
+        expiresin: "10hr",
         user: {
-          email: 'test@geolytix.co.uk',
+          email: "test@geolytix.co.uk",
         },
       },
     });
@@ -199,7 +199,9 @@ await codi.it(
 
     const token = res._getData();
 
-    const user = jwt.verify(token, xyzEnv.SECRET, {algorithm: xyzEnv.SECRET_ALGORITHM});
+    const user = jwt.verify(token, xyzEnv.SECRET, {
+      algorithm: xyzEnv.SECRET_ALGORITHM,
+    });
 
     // token expires in 10hr.
     codi.assertTrue(user.exp - user.iat === 36000);
@@ -219,27 +221,27 @@ The `setGlobalDispatcher` will assign the Agent on a global scope so that calls 
 Here is an example of this:
 
 ```javascript
-await codi.describe({ name: 'HTTP Mock', id: 'http_test_fun' }, async () => {
+await codi.describe({ name: "HTTP Mock", id: "http_test_fun" }, async () => {
   await codi.it(
-    { name: 'We should get some doggies', parentId: 'http_test_fun' },
+    { name: "We should get some doggies", parentId: "http_test_fun" },
     async () => {
       const mockAgent = new codi.mockHttp.MockAgent(); //<-- Mockagent we use to get a pool
       codi.mockHttp.setGlobalDispatcher(mockAgent); // <-- Assigning the agent on a global scope.
 
-      const mockPool = mockAgent.get(new RegExp('http://localhost:3000')); //<-- Mock pool listening for the localhost url
+      const mockPool = mockAgent.get(new RegExp("http://localhost:3000")); //<-- Mock pool listening for the localhost url
       mockPool
-        .intercept({ path: '/' })
+        .intercept({ path: "/" })
         .reply(404, [
-          'codi',
-          'mieka',
-          'luci',
+          "codi",
+          "mieka",
+          "luci",
         ]); /** <-- When we hit a specific path
                     we get a specified response */
 
-      const response = await fetch('http://localhost:3000');
+      const response = await fetch("http://localhost:3000");
 
-      codi.assertEqual(response.status, 404, 'We expect to get a 404');
-      codi.assertEqual(await response.json(), ['codi', 'mieka', 'luci']);
+      codi.assertEqual(response.status, 404, "We expect to get a 404");
+      codi.assertEqual(await response.json(), ["codi", "mieka", "luci"]);
     },
   );
 });
@@ -290,13 +292,13 @@ eg.
 Tests use the describe-it pattern for organization:
 
 ```javascript
-import { describe, it, assertTrue } from 'codi';
+import { describe, it, assertTrue } from "codi";
 
-describe({ name: 'Feature Description', id: 'feature_description' }, () => {
+describe({ name: "Feature Description", id: "feature_description" }, () => {
   it(
     {
-      name: 'should behave in a specific way',
-      parentId: 'feature_description',
+      name: "should behave in a specific way",
+      parentId: "feature_description",
     },
     () => {
       // Test code
@@ -310,15 +312,15 @@ Example with multiple assertions:
 ```javascript
 codi.describe(
   {
-    name: 'All languages should have the same base language entries',
-    id: 'dictionaries',
+    name: "All languages should have the same base language entries",
+    id: "dictionaries",
   },
   () => {
     Object.keys(mapp.dictionaries).forEach((language) => {
       codi.it(
         {
           name: `The ${language} dictionary should have all the base keys`,
-          parentId: 'dictionaries',
+          parentId: "dictionaries",
         },
         () => {
           Object.keys(base_dictionary).forEach((key) => {
@@ -391,29 +393,29 @@ Setting process environment `NODE_ENV=DEVELOPMENT` disables minification in buil
 
 ```javascript
 // esbuild.config.mjs
-import * as esbuild from 'esbuild';
+import * as esbuild from "esbuild";
 
-const isDev = process.env.NODE_ENV !== 'DEVELOPMENT';
+const isDev = process.env.NODE_ENV !== "DEVELOPMENT";
 
 const buildOptions = {
   entryPoints: isDev
-    ? ['./lib/mapp.mjs', './lib/ui.mjs']
-    : ['./lib/mapp.mjs', './lib/ui.mjs', './tests/_mapp.test.mjs'],
+    ? ["./lib/mapp.mjs", "./lib/ui.mjs"]
+    : ["./lib/mapp.mjs", "./lib/ui.mjs", "./tests/_mapp.test.mjs"],
   bundle: true,
   minify: isDev, // Code won't be minified in development
   sourcemap: true,
-  sourceRoot: '/lib',
-  format: 'iife',
-  outbase: '.',
-  outdir: 'public/js',
+  sourceRoot: "/lib",
+  format: "iife",
+  outbase: ".",
+  outdir: "public/js",
   metafile: true,
-  logLevel: 'info',
+  logLevel: "info",
 };
 
 try {
   await esbuild.build(buildOptions);
 } catch (err) {
-  console.error('Build failed:', err);
+  console.error("Build failed:", err);
   process.exit(1);
 }
 ```
@@ -431,11 +433,10 @@ try {
 2. Build the project:
 
    ```bash
-   npm run _build
+   pnpm _build
    ```
 
 3. Verify that:
-
    - Test files are included in the build
    - Source maps are generated
    - Code is not minified
