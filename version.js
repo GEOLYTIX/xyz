@@ -54,4 +54,4 @@ writeFileSync(
 
 // Run the build script defined in package.json
 // Execute build command
-execSync('npm run _build');
+execSync('pnpm _build');
