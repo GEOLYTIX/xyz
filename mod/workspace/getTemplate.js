@@ -46,6 +46,11 @@ The key will be assigned to the template object as key property.
 @returns {Promise<Object|Error>} JSON Template
 */
 export default async function getTemplate(key) {
+
+  if (key === undefined) {
+    return new Error('Requesting undefined template.');
+  }
+
   const workspace = await workspaceCache();
 
   if (workspace instanceof Error) {
@@ -129,7 +134,7 @@ An error exception will be returned if the template object lookup from the works
 async function getTemplateObject(workspace, templateKey, srcKey) {
   // The template param must not include non whitelisted character.
   if (templateKey && /[^a-zA-Z0-9 :_-]/.exec(templateKey)) {
-    return new Error(`Template param may only include whitelisted character.`);
+    return new Error('Template param may only include whitelisted character.');
   }
 
   if (srcKey && Object.hasOwn(workspace.templates, srcKey)) {
