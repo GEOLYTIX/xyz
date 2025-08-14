@@ -46,7 +46,6 @@ The key will be assigned to the template object as key property.
 @returns {Promise<Object|Error>} JSON Template
 */
 export default async function getTemplate(key) {
-
   if (key === undefined) {
     return new Error('Requesting undefined template.');
   }
