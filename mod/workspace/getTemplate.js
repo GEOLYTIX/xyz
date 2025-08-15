@@ -58,15 +58,12 @@ export default async function getTemplate(key) {
   let template;
   if (typeof key === 'string') {
     template = await getTemplateObject(workspace, key);
-
-    if (template instanceof Error) {
-      return template;
-    }
-
-    // The template.key property value must be the same as the key reference in the workspace.templates{}
-    template.key = key;
   } else if (key instanceof Object) {
     template = key;
+  }
+
+  if (template instanceof Error) {
+    return template;
   }
 
   if (!template.src) {
@@ -147,6 +144,8 @@ async function getTemplateObject(workspace, templateKey, srcKey) {
   if (!Object.hasOwn(workspace.templates, templateKey)) {
     return new Error(`Template: ${templateKey} not found.`);
   }
+
+  workspace.templates[templateKey].key = templateKey;
 
   return workspace.templates[templateKey];
 }
