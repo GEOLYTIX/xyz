@@ -403,11 +403,12 @@ async function test(req, res) {
   }
 
   // Force re-caching of workspace.
-  req.params.force &&
-    (await cacheTemplates({
+  if (req.params.force) {
+    await cacheTemplates({
       user: req.params.user,
       force: req.params.force,
-    }));
+    });
+  }
 
   const testConfig = {
     errArr: [],
@@ -429,10 +430,13 @@ async function test(req, res) {
 
   testWorkspaceLocales(testConfig);
 
-  for (const templateKey of Object.keys(workspace.templates)) {
-    const template = workspace.templates[templateKey];
+  for (const [key, template] of Object.entries(workspace.templates)) {
     if (template instanceof Error) {
-      testConfig.errArr.push(`${templateKey}: ${template.message}`);
+      testConfig.errArr.push(`${key}: ${template.message}`);
+    }
+
+    if (template.err instanceof Error) {
+      testConfig.errArr.push(`${key}: ${template.err.message}`);
     }
   }
 
@@ -648,10 +652,10 @@ async function cacheTemplates(params) {
 
       locale.layers[layerKey] = layer;
     }
+  }
 
-    // hydrating/caching all the templates
-    for (const key of Object.keys(workspace.templates)) {
-      await getTemplate(key);
-    }
+  // hydrating/caching all the templates
+  for (const key of Object.keys(workspace.templates)) {
+    await getTemplate(key);
   }
 }

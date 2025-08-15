@@ -91,6 +91,7 @@ export default async function getTemplate(key) {
     response = await getFrom[method](template.src);
 
     if (response instanceof Error) {
+      template.err = response;
       return response;
     }
   }
@@ -114,8 +115,6 @@ export default async function getTemplate(key) {
 @async
 
 @description
-
-
 A template object matching the template_key param in the workspace.templates{} object will be returned.
 
 The template string will be checked to include only whitelisted characters.
