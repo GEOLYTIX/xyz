@@ -96,11 +96,7 @@ export default async function getLayer(params, locale) {
     ? Roles.objMerge(layer, params.user?.roles)
     : layer;
 
-  try {
-    layer = await mergeTemplates(layer, params.user?.roles);
-  } catch (err) {
-    console.error(`Error merging templates for layer ${layer.key}: ${err}`);
-  }
+  layer = await mergeTemplates(layer, params.user?.roles);
 
   // Assign layer key as name with no existing name on layer object.
   layer.name ??= layer.key;
