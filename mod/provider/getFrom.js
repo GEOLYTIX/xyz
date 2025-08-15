@@ -25,7 +25,7 @@ export default {
       return await response.text();
     } catch (err) {
       console.error(err);
-      return;
+      return err;
     }
   },
 };
