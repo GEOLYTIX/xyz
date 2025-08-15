@@ -76,7 +76,6 @@ export default async function addUser(req, res) {
   const values = [email, true, true];
 
   if (typeof req.params.roles === 'string') {
-
     // Create roles array from string param.
     const roles = req.params.roles
       .split(',')
