@@ -756,6 +756,115 @@ dialog {
   }
 }
 
+/* public/css/elements/_loading.css */
+.loading {
+  position: relative;
+  pointer-events: none;
+}
+.loading::after {
+  --dot-size: 24px;
+  --dot-color: var(--color-primary);
+  --dot-gap: 24px;
+  content: "";
+  position: fixed;
+  top: 50%;
+  left: 20%;
+  width: var(--dot-size);
+  height: var(--dot-size);
+  border-radius: 50%;
+  box-shadow:
+    0 0 0 var(--dot-color),
+    var(--dot-gap) 0 0 var(--color-base),
+    calc(var(--dot-gap) * 2) 0 0 var(--color-base),
+    calc(var(--dot-gap) * 3) 0 0 var(--color-base),
+    calc(var(--dot-gap) * 4) 0 0 var(--color-base),
+    calc(var(--dot-gap) * 5) 0 0 var(--color-base),
+    calc(var(--dot-gap) * 6) 0 0 var(--color-base);
+  animation: dotsWave 1.6s infinite steps(7);
+}
+@keyframes dotsWave {
+  0% {
+    box-shadow:
+      0 0 0 var(--dot-color),
+      var(--dot-gap) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 2) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 3) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 4) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 5) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 6) 0 0 var(--color-base);
+  }
+  14.28% {
+    box-shadow:
+      0 0 0 var(--color-base),
+      var(--dot-gap) 0 0 var(--dot-color),
+      calc(var(--dot-gap) * 2) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 3) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 4) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 5) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 6) 0 0 var(--color-base);
+  }
+  28.56% {
+    box-shadow:
+      0 0 0 var(--color-base),
+      var(--dot-gap) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 2) 0 0 var(--dot-color),
+      calc(var(--dot-gap) * 3) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 4) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 5) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 6) 0 0 var(--color-base);
+  }
+  42.84% {
+    box-shadow:
+      0 0 0 var(--color-base),
+      var(--dot-gap) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 2) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 3) 0 0 var(--dot-color),
+      calc(var(--dot-gap) * 4) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 5) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 6) 0 0 var(--color-base);
+  }
+  57.12% {
+    box-shadow:
+      0 0 0 var(--color-base),
+      var(--dot-gap) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 2) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 3) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 4) 0 0 var(--dot-color),
+      calc(var(--dot-gap) * 5) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 6) 0 0 var(--color-base);
+  }
+  71.4% {
+    box-shadow:
+      0 0 0 var(--color-base),
+      var(--dot-gap) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 2) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 3) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 4) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 5) 0 0 var(--dot-color),
+      calc(var(--dot-gap) * 6) 0 0 var(--color-base);
+  }
+  85.68% {
+    box-shadow:
+      0 0 0 var(--color-base),
+      var(--dot-gap) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 2) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 3) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 4) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 5) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 6) 0 0 var(--dot-color);
+  }
+  100% {
+    box-shadow:
+      0 0 0 var(--dot-color),
+      var(--dot-gap) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 2) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 3) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 4) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 5) 0 0 var(--color-base),
+      calc(var(--dot-gap) * 6) 0 0 var(--color-base);
+  }
+}
+
 /* public/css/elements/_pills.css */
 .pill-container {
   display: flex;
