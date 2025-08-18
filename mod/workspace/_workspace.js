@@ -421,7 +421,7 @@ async function test(req, res) {
   testConfig.workspace_templates = new Set(
     Object.entries(workspace.templates)
       .filter(([key, value]) => value._type === 'workspace')
-      .filter(([key, value]) => !value.src || !value.src.endsWith('.html'))
+      .filter(([key, value]) => !value.src?.endsWith('.html'))
       .map(([key, value]) => key),
   );
 
