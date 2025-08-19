@@ -148,11 +148,6 @@ async function layerQuery(req, res) {
     req.params.layer = await getLayer(req.params);
   }
 
-  // Merge layer queryparams with request queryparams.
-  if (req.params.layer.queryparams) {
-    Object.assign(req.params, req.params.layer.queryparams);
-  }
-
   // getLayer will return error on role restrictions.
   if (req.params.layer instanceof Error) {
     return res.status(400).send(req.params.layer.message);
