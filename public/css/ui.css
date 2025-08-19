@@ -760,6 +760,7 @@ dialog {
 .loading {
   position: relative;
   pointer-events: none;
+  opacity: 0.5;
 }
 .loading::after {
   --dot-size: 24px;
