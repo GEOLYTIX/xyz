@@ -1,12 +1,16 @@
 @property --border-angle {
-  syntax: "<angle>";
+  syntax: '<angle>';
   initial-value: 0deg;
   inherits: false;
 }
 
 @keyframes border-angle-rotate {
-  from { --border-angle: 0deg; }
-  to { --border-angle: 360deg; }
+  from {
+    --border-angle: 0deg;
+  }
+  to {
+    --border-angle: 360deg;
+  }
 }
 
 .loading {
@@ -23,5 +27,6 @@
       var(--color-primary),
       var(--color-base),
       var(--color-primary)
-    ) border-box;
+    )
+    border-box;
 }
