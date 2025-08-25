@@ -597,6 +597,13 @@ dialog {
     user-select: none;
     padding: 5px;
     overflow: unset !important;
+    & > .content {
+      & > .filter-list {
+        max-height: 350px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+      }
+    }
   }
   &.modal {
     position: fixed;
