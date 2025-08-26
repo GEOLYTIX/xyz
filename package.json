@@ -1,17 +1,18 @@
 {
   "name": "xyz",
-  "version": "v4.16.1",
+  "version": "v4.17.0",
   "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/geolytix/xyz"
   },
+  "packageManager": "pnpm@10.10.0",
   "scripts": {
     "test": "node --experimental-test-module-mocks node_modules/codi-test-framework/cli.js tests",
     "test-watch": "node --watch-path=. --experimental-test-module-mocks node_modules/codi-test-framework/cli.js tests --quiet",
     "_build": "node esbuild.config.mjs",
-    "ui_css": "npx esbuild --bundle public/css/_ui.css --outfile=public/css/ui.css",
-    "mapp_css": "npx esbuild --bundle public/css/_mapp.css --outfile=public/css/mapp.css",
+    "ui_css": "pnpm exec esbuild --bundle public/css/_ui.css --outfile=public/css/ui.css",
+    "mapp_css": "pnpm exec esbuild --bundle public/css/_mapp.css --outfile=public/css/mapp.css",
     "generate-docs": "jsdoc --configure jsdoc_mapp.json --verbose && jsdoc --configure jsdoc_xyz.json --verbose && jsdoc --configure jsdoc_test.json --verbose",
     "mapp-docs": "jsdoc --configure jsdoc_mapp.json --verbose",
     "xyz-docs": "jsdoc --configure jsdoc_xyz.json --verbose",

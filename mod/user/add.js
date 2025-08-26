@@ -28,14 +28,11 @@ The new user added to the ACL via the [user] add method will automatically be ve
 
 @param {Object} req HTTP request.
 @param {Object} res HTTP response.
-@param {Object} req.params 
-Request parameter.
-@param {string} req.params.email 
-Email to add.
-@param {Object} req.params.user 
-Requesting user.
-@param {boolean} req.params.user.admin 
-Requesting user is admin.
+@property {Object} req.params Request parameter.
+@property {string} params.email Email to add.
+@property {Array<string>} [params.roles] Optional array of role keys to assign.
+@property {Object} params.user Requesting user.
+@property {boolean} user.admin Requesting user is admin.
 */
 
 export default async function addUser(req, res) {
@@ -74,16 +71,30 @@ export default async function addUser(req, res) {
     return res.send('User already exists in ACL.');
   }
 
-  // Create new user account
-  rows = await acl(`
-    INSERT INTO acl_schema.acl_table (
-      email,
-      verified,
-      approved )
-    SELECT
-      '${email}' AS email,
-      true AS verified,
-      true AS approved;`);
+  // Build parameterized insert query and values.
+  const columns = ['email', 'verified', 'approved'];
+  const values = [email, true, true];
+
+  if (typeof req.params.roles === 'string') {
+    // Create roles array from string param.
+    const roles = req.params.roles
+      .split(',')
+      .map((role) => role.trim())
+      .filter((role) => role.length > 0);
+
+    columns.push('roles');
+    values.push(roles);
+  }
+
+  const placeholders = values.map((_, i) => `$${i + 1}`);
+
+  // Insert user account into ACL.
+  rows = await acl(
+    `
+    INSERT INTO acl_schema.acl_table (${columns.join(', ')})
+    VALUES (${placeholders.join(', ')});`,
+    values,
+  );
 
   if (rows instanceof Error) {
     return res.status(500).send('Failed to add user account to ACL.');

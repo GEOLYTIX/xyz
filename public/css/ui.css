@@ -597,6 +597,13 @@ dialog {
     user-select: none;
     padding: 5px;
     overflow: unset !important;
+    & > .content {
+      & > .filter-list {
+        max-height: 350px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+      }
+    }
   }
   &.modal {
     position: fixed;
@@ -754,6 +761,32 @@ dialog {
       color: var(--color-font-contrast);
     }
   }
+}
+
+/* public/css/elements/_loading.css */
+@property --border-angle { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
+@keyframes border-angle-rotate {
+  from {
+    --border-angle: 0deg;
+  }
+  to {
+    --border-angle: 360deg;
+  }
+}
+.loading {
+  --border-angle: 0deg;
+  border: 0.5em solid transparent !important;
+  border-radius: 5px;
+  animation: border-angle-rotate 4s linear infinite;
+  background:
+    linear-gradient(var(--color-base), var(--color-base)) padding-box,
+    conic-gradient(
+      from var(--border-angle),
+      var(--color-primary),
+      var(--color-base),
+      var(--color-primary),
+      var(--color-base),
+      var(--color-primary)) border-box;
 }
 
 /* public/css/elements/_pills.css */

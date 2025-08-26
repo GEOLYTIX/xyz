@@ -18,7 +18,7 @@ XYZ/MAPP source code is annotated via [JSDoc](https://jsdoc.app/) markup languag
 
 We are using the [clean-jsdoc-theme](https://github.com/ankitskvmdam/clean-jsdoc-theme-example) which is installed as one of the devDependencies.
 
-The script to build the docs requires the jsdoc_mapp.json and jsdoc_xyz.json config files in the root directory. The script can be executed with `npm run generate-docs`.
+The script to build the docs requires the jsdoc_mapp.json and jsdoc_xyz.json config files in the root directory. The script can be executed with `pnpm generate-docs`.
 
 The documentation pages are generated in the local `/docs` directory. The docs directory is [git] ignored will be built in an automated action.
 
@@ -101,7 +101,7 @@ Functions no longer in use but kept with a warning for legacy configurations sho
 @description
 The deprectaed mapp.layer.Style() method will warn if use and return the featureStyle() method which supersedes the Style() method.
 
-@param {Object} layer 
+@param {Object} layer
 
 @return {Function} featureStyle
 */
@@ -143,7 +143,7 @@ An @example does not require a code block [\`\`\`JS] definition. At examples sho
 
 ### /docs express route
 
-The /docs express route can be used to preview the built pages on `http://localhost:3000/docs/`
+The /docs express route can be used to preview the built pages on `http://localhost:3000/xyz/` or `http://localhost:3000/xyz/`
 
 ### docs in vscode
 
