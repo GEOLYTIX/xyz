@@ -44,8 +44,12 @@
       > .close_tab {
         font-size: 0.8em;
         position: relative;
-        left: -0.8em;
+        right: -97%;
         padding-bottom: 2.1em;
+      }
+
+      button {
+        padding-right: 5px;
       }
     }
 
