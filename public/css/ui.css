@@ -1459,7 +1459,10 @@ dialog {
       white-space: nowrap;
       border: solid 1px var(--color-border);
       border-radius: 3px 1em 0 0;
-      padding: 10px;
+      padding-top: 10px;
+      padding-bottom: 10px;
+      justify-content: space-between;
+      padding-left: 10px;
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
@@ -1468,11 +1471,13 @@ dialog {
       > .close_tab {
         font-size: 0.8em;
         position: relative;
-        right: -97%;
         padding-bottom: 2.1em;
       }
       button {
         padding-right: 5px;
+        max-width: 250px;
+        overflow: hidden;
+        text-overflow: ellipsis;
       }
     }
     & > .tab.active > .header {
