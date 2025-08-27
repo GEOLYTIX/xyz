@@ -39,6 +39,14 @@
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
+      cursor: pointer;
+
+      > .close_tab {
+        font-size: 0.8em;
+        position: relative;
+        left: -0.8em;
+        padding-bottom: 2.1em;
+      }
     }
 
     & > .tab.active > .header {
