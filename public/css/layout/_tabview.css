@@ -36,7 +36,7 @@
       border-radius: 3px 1em 0 0;
       padding-top: 10px;
       padding-bottom: 10px;
-      justify-content: space-between;
+      justify-content: space-around;
       padding-left: 10px;
       -webkit-user-select: none;
       -moz-user-select: none;
@@ -45,9 +45,8 @@
       cursor: pointer;
 
       > .close_tab {
-        font-size: 0.8em;
+        font-size: 0.9em;
         position: relative;
-        padding-bottom: 2.1em;
       }
 
       button {
