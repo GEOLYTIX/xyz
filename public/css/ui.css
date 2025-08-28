@@ -17,9 +17,6 @@
   --color-info: #0b6f50;
   --color-danger: #a21309;
 }
-body {
-  background-color: var(--color-base);
-}
 * {
   transition: 0.2s ease-in-out;
   transition-property: background-color;
@@ -187,6 +184,10 @@ body {
   font-family: "Titillium Web", sans-serif;
   font-size: 0.8em;
   color: var(--color-font);
+  background-color: var(--color-base);
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 *,
 *::after,
