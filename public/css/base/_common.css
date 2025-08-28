@@ -76,15 +76,6 @@
 }
 
 @media only screen and (max-width: 768px) {
-  html {
-    overflow: scroll;
-  }
-
-  body {
-    overflow-y: scroll;
-    overflow-x: hidden;
-  }
-
   .mobile-hidden {
     visibility: hidden;
   }

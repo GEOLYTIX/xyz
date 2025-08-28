@@ -14,12 +14,20 @@
   --color-info: #0b6f50;
   --color-danger: #a21309;
 }
-body {
-  background-color: var(--color-base);
-}
 * {
   transition: 0.2s ease-in-out;
   transition-property: background-color;
+}
+
+/* public/css/base/_body.css */
+body {
+  font-family: "Titillium Web", sans-serif;
+  font-size: 0.8em;
+  color: var(--color-font);
+  background-color: var(--color-base);
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 
 /* public/css/layout/_ol.css */
@@ -76,11 +84,6 @@ body {
 }
 
 /* public/css/layout/_map_attribution.css */
-body {
-  position: absolute;
-  width: 100%;
-  height: 100%;
-}
 .map-attribution {
   position: absolute;
   display: flex;
