@@ -57,13 +57,17 @@ export default async function query(req, res) {
   const template = await getTemplate(req.params.template);
 
   if (template.err instanceof Error) {
-    return res.status(500).send(template.err.message);
+    return res
+      .status(500)
+      .setHeader('Content-Type', 'text/plain')
+      .send(template.err.message);
   }
 
   // A layer template must have a layer param.
   if (template.layer && !req.params.layer) {
     return res
       .status(400)
+      .setHeader('Content-Type', 'text/plain')
       .send(
         `${req.params.template} query requires a valid layer request parameter.`,
       );
@@ -88,7 +92,10 @@ export default async function query(req, res) {
 
   // Validate template role access.
   if (template.roles && !Roles.check(template, req.params.user?.roles)) {
-    return res.status(403).send('Role access denied for query template.');
+    return res
+      .status(403)
+      .setHeader('Content-Type', 'text/plain')
+      .send('Role access denied for query template.');
   }
 
   if (res.finished) return;
@@ -150,7 +157,10 @@ async function layerQuery(req, res) {
 
   // getLayer will return error on role restrictions.
   if (req.params.layer instanceof Error) {
-    return res.status(400).send(req.params.layer.message);
+    return res
+      .status(400)
+      .setHeader('Content-Type', 'text/plain')
+      .send(req.params.layer.message);
   }
 
   // Layer queries must have a qID param.
@@ -169,6 +179,7 @@ async function layerQuery(req, res) {
     if (!tables.has(req.params.table)) {
       return res
         .status(403)
+        .setHeader('Content-Type', 'text/plain')
         .send(`Access to ${req.params.table} table param forbidden.`);
     }
   }
@@ -480,7 +491,10 @@ async function executeQuery(req, res, template, query) {
   logger(query, 'query');
 
   if (query instanceof Error) {
-    return res.status(400).send(query.message);
+    return res
+      .status(400)
+      .setHeader('Content-Type', 'text/plain')
+      .send(query.message);
   }
 
   // The dbs param or workspace dbs will be used as fallback if the dbs is not implicit in the template object.
@@ -492,7 +506,8 @@ async function executeQuery(req, res, template, query) {
   if (!Object.hasOwn(dbs_connections, dbs)) {
     return res
       .status(400)
-      .send(`Failed to validate database connection method.`);
+      .setHeader('Content-Type', 'text/plain')
+      .send('Failed to validate database connection method.');
   }
 
   // Return without executing the query if a param errs.
@@ -503,7 +518,7 @@ async function executeQuery(req, res, template, query) {
 
     paramsArray.unshift('Parameter validation failed.');
 
-    res.status(500).send(paramsArray);
+    res.status(500).setHeader('Content-Type', 'text/plain').send(paramsArray);
     return;
   }
 
@@ -541,12 +556,18 @@ The method formats the rows returned from a SQL query and sends the formated row
 */
 function sendRows(req, res, template, rows) {
   if (rows instanceof Error) {
-    return res.status(500).send('Failed to query PostGIS table.');
+    return res
+      .status(500)
+      .setHeader('Content-Type', 'text/plain')
+      .send('Failed to query PostGIS table.');
   }
 
   // The rows array must have a length with some row not being empty.
   if (!rows?.length || !rows.some((row) => checkEmptyRow(row))) {
-    return res.status(202).send('No rows returned from table.');
+    return res
+      .status(202)
+      .setHeader('Content-Type', 'text/plain')
+      .send('No rows returned from table.');
   }
 
   if (req.params.reduce || template?.reduce) {
