@@ -1,6 +1,7 @@
 .idea/
 .vscode/
 .env
+.env.*
 .DS_Store
 .sass-cache/
 .vercel
@@ -24,15 +25,6 @@ public/js/plugins/*
 
 stats.json
 docs/*
-
-caddy_linux_amd64
-
-# Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
-.ebextensions/*
-\.ebextensions/
 
 *.pem
 *.crt
