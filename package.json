@@ -16,10 +16,11 @@
     "_build": "node esbuild.config.mjs",
     "ui_css": "pnpm exec esbuild --bundle public/css/_ui.css --outfile=public/css/ui.css",
     "mapp_css": "pnpm exec esbuild --bundle public/css/_mapp.css --outfile=public/css/mapp.css",
-    "generate-docs": "jsdoc --configure jsdoc_mapp.json --verbose && jsdoc --configure jsdoc_xyz.json --verbose && jsdoc --configure jsdoc_test.json --verbose",
-    "mapp-docs": "jsdoc --configure jsdoc_mapp.json --verbose",
-    "xyz-docs": "jsdoc --configure jsdoc_xyz.json --verbose",
-    "test-docs": "jsdoc --configure jsdoc_test.json --verbose"
+    "generate-docs": "jsdoc --configure ./utils/jsdoc_mapp.json --verbose && jsdoc --configure ./utils/jsdoc_xyz.json --verbose && jsdoc --configure ./utils/jsdoc_test.json --verbose",
+    "mapp-docs": "jsdoc --configure ./utils/jsdoc_mapp.json --verbose",
+    "xyz-docs": "jsdoc --configure ./utils/jsdoc_xyz.json --verbose",
+    "test-docs": "jsdoc --configure ./utils/jsdoc_test.json --verbose",
+    "push-env": "node ./utils/sync-vercel-env.js"
   },
   "license": "MIT",
   "optionalDependencies": {
