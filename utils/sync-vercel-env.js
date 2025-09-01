@@ -135,7 +135,7 @@ function parseEnvFile(path) {
     const match = line.match(/^([^=]+)=(.*)$/);
     if (match) {
       const key = match[1].trim();
-      const value = match[2].trim().replace(/^["']|["']$/g, '');
+      const value = match[2].trim().replace(/(^["'])|(["']$)/g, '');
       vars[key] = value;
     }
   });
@@ -245,6 +245,7 @@ function apiRequest(method, path, data = null) {
           resolve({ status: res.statusCode, data: JSON.parse(body) });
         } catch (e) {
           resolve({ status: res.statusCode, data: body });
+          console.error(e.message);
         }
       });
     });
