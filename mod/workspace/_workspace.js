@@ -620,7 +620,7 @@ The workspaceCache method will be forced to clear the cached workspace and load 
 
 The method will iterate over the workspace.locales to cache any templates defined in the locales object.
 
-The method will iterate over each layer defined in every locale to cache any templates associated with the layer objects.
+A getLayer promise for each layer in a locale will be added to a promises array. All getLayer promises must be settled before the next locale can be processed.
 
 Finally each template defined in the workspace.templates will be cached.
 
@@ -642,7 +642,7 @@ async function cacheTemplates(params) {
     // If the locale has no layers, just skip it.
     if (!locale.layers) continue;
 
-    for (const layerKey of Object.keys(locale.layers)) {
+    const layerPromises = Object.keys(locale.layers).map(async (layerKey) => {
       // Will get layer and assignTemplates to workspace.
       const layer = await getLayer({
         layer: layerKey,
@@ -652,7 +652,9 @@ async function cacheTemplates(params) {
       });
 
       locale.layers[layerKey] = layer;
-    }
+    });
+
+    await Promise.allSettled(layerPromises)
   }
 
   // hydrating/caching all the templates
