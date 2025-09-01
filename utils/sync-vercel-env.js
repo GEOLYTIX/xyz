@@ -12,6 +12,8 @@ eg: `node ./utils/sync-vercel-env --token=`
 
 When providing the env variable in the .env.vercel the key is `VERCEL_TOKEN` it is important not to provide the key in the .env.
 
+To generate a vercel token see the following docs: https://vercel.com/guides/how-do-i-use-a-vercel-api-access-token
+
 Other arguments you can provide the script are:
 
 - `--help` - shows a help menu
@@ -146,7 +148,7 @@ function parseEnvFile(path) {
 @async
 
 @description
-Batch upsert environment variables.
+Batch upsert environment variables to the vercel api.
 
 @param {Object} envVars Environment Variables to push to vercel.
 */
@@ -208,7 +210,15 @@ async function batchUpsertEnvs(envVars) {
     }
   }
 }
-
+/**
+ * @function apiRequest
+ * @description
+ * This function is used to send a authorized request to the vercel api.
+ * It will specify the orgiId and projectid.
+ * @param {String} method api method
+ * @param {String} path vercel api path
+ * @param {object} data req body data
+ */
 function apiRequest(method, path, data = null) {
   return new Promise((resolve, reject) => {
     const url = new URL(`https://api.vercel.com${path}`);
@@ -245,7 +255,11 @@ function apiRequest(method, path, data = null) {
   });
 }
 
-// Show help
+/**
+ * @function showHelp
+ * @description
+ * This function is used to display a help dialog in the terminal to the dev.
+ */
 function showHelp() {
   console.log(`
 Sync Environment Variables to Vercel
