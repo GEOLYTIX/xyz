@@ -39,19 +39,24 @@ export default async function signer(req, res) {
   if (!Object.hasOwn(signerModules, req.params.signer)) {
     return res
       .status(404)
+      .setHeader('Content-Type', 'text/plain')
       .send(`Failed to validate 'signer=${req.params.signer}' param.`);
   }
 
   if (signerModules[req.params.signer] === null) {
     return res
       .status(405)
+      .setHeader('Content-Type', 'text/plain')
       .send(`Signer: ${req.params.signer} is not configured.`);
   }
 
   const response = await signerModules[req.params.signer](req, res);
 
   if (response instanceof Error) {
-    return res.status(500).send(response.message);
+    return res
+      .status(500)
+      .setHeader('Content-Type', 'text/plain')
+      .send(response.message);
   }
 
   res.send(response);
