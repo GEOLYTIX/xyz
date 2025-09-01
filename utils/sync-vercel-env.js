@@ -49,7 +49,7 @@ const envFile =
 // Get project and org IDs
 const { projectId, orgId } = readVercelConfig();
 
-//sync env variables
+//sync env method call.
 syncEnv().catch(console.error);
 
 /**
@@ -68,6 +68,7 @@ async function syncEnv() {
     process.exit(1);
   }
 
+  //Details of the upload.
   console.log(`🔄 Syncing environment variables to Vercel...`);
   console.log(`Project: ${projectId}`);
   console.log(`Organization: ${orgId}`);
@@ -86,6 +87,7 @@ async function syncEnv() {
     `Found ${totalVars} environment variables (${vercelVars} Vercel system vars will be skipped)\n`,
   );
 
+  //Call to the batchupsert
   await batchUpsertEnvs(envVars);
 
   if (!dryRun) {
@@ -139,7 +141,15 @@ function parseEnvFile(path) {
   return vars;
 }
 
-// Batch upsert environment variables
+/**
+@function batchUpsertEnvs
+@async
+
+@description
+Batch upsert environment variables.
+
+@param {Object} envVars Environment Variables to push to vercel.
+*/
 async function batchUpsertEnvs(envVars) {
   // Prepare batch array
   const batch = Object.entries(envVars)
@@ -156,6 +166,7 @@ async function batchUpsertEnvs(envVars) {
     return;
   }
 
+  //If it's a dryRun then we don't actually push the keys.
   if (dryRun) {
     console.log('[DRY RUN] Would sync the following variables:');
     batch.forEach(({ key }) => console.log(`  - ${key}`));
