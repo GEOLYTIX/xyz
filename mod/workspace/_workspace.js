@@ -654,7 +654,7 @@ async function cacheTemplates(params) {
       locale.layers[layerKey] = layer;
     });
 
-    await Promise.allSettled(layerPromises)
+    await Promise.allSettled(layerPromises);
   }
 
   // hydrating/caching all the templates
