@@ -2,23 +2,10 @@
 .vscode/
 .env
 .DS_Store
-.sass-cache/
 
 env
 package-lock.json
 node_modules/*
 
-*.md 
+*.md
 express.js
-
-public/css/.sass-cache/
-stats.json
-
-caddy_linux_amd64
-
-# Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
-.ebextensions/*
-\.ebextensions/
