@@ -9,18 +9,20 @@
     >
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="{{dir}}/public/css/mapp.css" />
     <link rel="stylesheet" href="{{dir}}/public/css/ui.css" />
     <script type="module" src="{{dir}}/public/js/lib/mapp.js" defer></script>
     <script type="module" src="{{dir}}/public/js/lib/ui.js" defer></script>
     <style>
       body {
-        margin: 0 auto !important;
         padding: 50px;
-        max-width: 600px;
         font:
           14px 'Open Sans',
           sans-serif;
+      }
+
+      .formwrapper {
+        margin: 0 auto;
+        max-width: 600px;
       }
 
       @media only screen and (max-width: 700px) {
@@ -127,80 +129,59 @@
         cursor: pointer;
       }
 
-      button:disabled {
-        background-color: #939faa;
-      }
-
       .msg {
         color: #ec602d;
       }
-
-      .mailto {
-        color: #401505;
-        text-decoration: none;
-      }
-
-      a,
-      button {
-        outline: 0;
-      }
-
-      #language {
-        float: right;
-        margin-bottom: 20px;
-        width: 240px;
-        padding: 5px;
-        color: #444;
-        background-color: #fff;
-        border: 1px solid #aaa;
-      }
-
-      #language:hover {
-        border-color: #888;
-        outline: none;
-      }
-
-      #language:focus {
-        border-color: #aaa;
-        color: #222;
-        outline: none;
-      }
-
-      .language-selector {
-        margin-bottom: 2%;
-        display: flex;
-        flex-wrap: nowrap;
-        align-items: baseline;
-        justify-content: flex-end;
-      }      
     </style>
   </head>
 
-  <body class="login_form">
-    <div class="language-selector">
-      Choose Language:
-      <select
-        id="language"
-        onChange="(function(e){location=e.target.value})(event)"
-      >
-        <option value="{{dir}}?language=en&login=true">English</option>
-        <option value="{{dir}}?language=de&login=true">Deutsch</option>
-        <option value="{{dir}}?language=fr&login=true">Français</option>
-        <option value="{{dir}}?language=pl&login=true">Polski</option>
-        <option value="{{dir}}?language=ja&login=true">日本語</option>
-        <option value="{{dir}}?language=ko&login=true">한국어</option>
-        <option value="{{dir}}?language=zh&login=true">中文简体</option>
-      </select>
-    </div>
-  </body>
+  <body><div class="formwrapper"></div></body>
 
   <script type="module">
-
     console.log(`MAPP v${mapp.version}`);
+
+    mapp.language = mapp.hooks.current.language;
+
+    if (mapp.language !== 'en') {
+      await mapp.utils.loadDictionary(mapp.language);
+    }
+
+    const languages = [{
+      option: 'en',
+      title: 'English'
+    },{
+      option: 'de',
+      title: 'Deutsch'
+    },{
+      option: 'fr',
+      title: 'Français'
+    },{
+      option: 'pl',
+      title: 'Polski'
+    },{
+      option: 'ja',
+      title: '日本語'
+    },{
+      option: 'zh',
+      title: '中文简体'
+    }]
+
+    const language = languages.find(l => l.option === mapp.language);
+
+    const selectLanguage = mapp.ui.elements.dropdown({
+      callback: (e, entry) => {
+        window.location.assign(`${mapp.host}?language=${entry.option}&login=true`);
+      },
+      entries: languages,
+      span: language.title,
+    })
+
+    const formwrapper = document.querySelector('.formwrapper')
+
+    formwrapper.append(selectLanguage)
 
     const loginForm = mapp.ui.elements.loginForm({})
 
-    document.body.append(loginForm)
-   
+    formwrapper.append(loginForm)
   </script>
 </html>
