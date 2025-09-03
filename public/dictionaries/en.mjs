@@ -97,8 +97,10 @@ export default {
   login_email: 'Email',
   login_password: 'Password',
   login_button: 'Log In',
-  login_invalid: 'Invalid email or password does not meet the requirement of minimum 12 characters.',
-  login_verificattion_note: 'Your account must be verified by following a verification link sent to the email address and approved by an administrator before you are able to log in.',
+  login_invalid:
+    'Invalid email or password does not meet the requirement of minimum 12 characters.',
+  login_verificattion_note:
+    'Your account must be verified by following a verification link sent to the email address and approved by an administrator before you are able to log in.',
   login_registration_link: 'Register a new account or reset your password.',
   modify_geometry: 'Modify Geometry',
   filter_btn_label: 'Open Filter Panel',

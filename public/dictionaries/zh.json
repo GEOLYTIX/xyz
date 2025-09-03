@@ -77,7 +77,7 @@
   "login_button": "登录",
   "login_invalid": "电子邮件无效或密码不符合至少 12 个字符的要求",
   "login_verificattion_note": "请通过以下验证链接来验证您的帐户。该链接发送电子邮件并得到管理员的批准之后，您就可以登录了。",
-  "login_registration_link": "注册新帐户或重设密码",  
+  "login_registration_link": "注册新帐户或重设密码",
   "modify_geometry": "修改几何",
   "no_data_filter": "此字段不包含数据，无法进行过滤。",
   "no_layers": "在区域内没有可访问的图层。",
