@@ -7,13 +7,7 @@ export default {
     en: 'file:/public/views/_default.html',
   },
   login_view: {
-    de: 'file:/public/views/login/_login_de.html',
-    en: 'file:/public/views/login/_login_en.html',
-    fr: 'file:/public/views/login/_login_fr.html',
-    ja: 'file:/public/views/login/_login_ja.html',
-    ko: 'file:/public/views/login/_login_ko.html',
-    pl: 'file:/public/views/login/_login_pl.html',
-    zh: 'file:/public/views/login/_login_zh.html',
+    en: 'file:/public/views/_login.html',
   },
   password_reset_view: {
     de: 'file:/public/views/register/_register_de.html',
