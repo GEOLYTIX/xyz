@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="{{language}}">
   <head data-dir="{{dir}}">
-    <title>XYZ | Login</title>
+    <title>{{title}}</title>
     <link
       rel="icon"
       type="image/x-icon"
@@ -9,6 +9,10 @@
     >
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{{dir}}/public/css/mapp.css" />
+    <link rel="stylesheet" href="{{dir}}/public/css/ui.css" />
+    <script type="module" src="{{dir}}/public/js/lib/mapp.js" defer></script>
+    <script type="module" src="{{dir}}/public/js/lib/ui.js" defer></script>
     <style>
       body {
         margin: 0 auto !important;
@@ -188,74 +192,15 @@
         <option value="{{dir}}?language=zh&login=true">中文简体</option>
       </select>
     </div>
-
-    <form action="{{dir}}/api/user/login" method="post" autocomplete="off">
-      <input style="display: none" name="language" required value="en" />
-
-      <div class="input-group">
-        <input
-          id="auth_user_email"
-          name="email"
-          type="email"
-          required
-          maxlength="50"
-        >
-        <span class="bar"></span>
-        <label for="auth_user_email">E-mail</label>
-      </div>
-
-      <div class="input-group">
-        <input
-          id="auth_user_password"
-          name="password"
-          type="password"
-          required
-          minlength="12"
-        >
-        <span class="bar"></span>
-        <label for="auth_user_password">Password</label>
-        <br>
-        <br>
-        <b
-          ><span id="disabled_info"></span></b
-        >
-      </div>
-
-      <p class="msg">{{msg}}</p>
-
-      <button id="btnLogin" type="submit" disabled>Log In</button>
-
-      <p>
-        Your account must be verified by following a verification link sent to
-        the email address and approved by an administrator before you are able
-        to log in.
-      </p>
-
-      <a class="switch" href="{{dir}}/api/user/register?register=true"
-        >Register a new account or reset your password.</a
-      >
-    </form>
   </body>
 
   <script type="module">
-    const email = document.getElementById('auth_user_email');
-    const password = document.getElementById('auth_user_password');
-    const btnLogin = document.getElementById('btnLogin');
 
-    email.addEventListener('change', () => check());
-    email.addEventListener('keyup', () => check());
+    console.log(`MAPP v${mapp.version}`);
 
-    password.addEventListener('change', () => check());
-    password.addEventListener('keyup', () => check());
+    const loginForm = mapp.ui.elements.loginForm({})
 
-    function check() {
-      // Disable the login button if the email or password is invalid.
-      btnLogin.disabled = !(email.validity.valid && password.validity.valid);
-
-      // Set the context of the disabled_info element to an error message if the email or password is invalid.
-      document.getElementById('disabled_info').innerHTML = btnLogin.disabled
-        ? 'Invalid email or password does not meet the requirement of minimum 12 characters'
-        : '';
-    }    
+    document.body.append(loginForm)
+   
   </script>
 </html>
