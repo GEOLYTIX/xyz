@@ -1413,13 +1413,13 @@ dialog {
     background-color: var(--color-base);
     & > .tab > .header {
       color: var(--color-primary);
-      min-width: 8em;
+      min-width: 102px;
       height: 100%;
       display: flex;
       align-items: center;
       white-space: nowrap;
       border: solid 1px var(--color-border);
-      border-radius: 3px 1em 0 0;
+      border-radius: 3px 17px 0 0;
       padding-top: 10px;
       padding-bottom: 10px;
       justify-content: space-around;
@@ -1431,7 +1431,7 @@ dialog {
       user-select: none;
       cursor: pointer;
       > .close_tab {
-        font-size: 0.9em;
+        font-size: 12px;
         position: relative;
       }
       button {
