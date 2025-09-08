@@ -17,7 +17,7 @@ async function Cloudfront(ref, cache) {
     return console.error('Cloudfront key is missing');
   }
 
-  const src = ref.split(':')[1]
+  const src = ref.split(':')[1];
 
   return await cloudfront(src, cache);
 }

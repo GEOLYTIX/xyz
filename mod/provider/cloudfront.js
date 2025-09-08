@@ -37,7 +37,6 @@ export default cloudfront_signer ? cloudfront : null;
 const cacheMap = new Map();
 
 async function cloudfront(ref, cache) {
-
   const url = ref.params?.url || ref;
 
   // Return signedURL only from request.
