@@ -1413,18 +1413,14 @@ dialog {
     background-color: var(--color-base);
     & > .tab > .header {
       color: var(--color-primary);
-      min-width: 102px;
+      min-width: 100px;
       height: 100%;
       display: flex;
-      align-items: center;
       white-space: nowrap;
       border: solid 1px var(--color-border);
-      border-radius: 3px 17px 0 0;
-      padding-top: 10px;
-      padding-bottom: 10px;
-      justify-content: space-around;
-      padding-left: 10px;
-      padding-right: 5px;
+      border-radius: 3px 15px 0 0;
+      padding: 5px;
+      justify-content: space-between;
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
