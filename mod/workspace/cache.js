@@ -7,6 +7,7 @@ Default templates can be overwritten in the workspace or by providing a CUSTOM_T
 @requires /provider/getFrom
 @requires /utils/merge
 @requires module:/utils/processEnv
+@requires crypto
 
 @module /workspace/cache
 */
@@ -14,6 +15,8 @@ Default templates can be overwritten in the workspace or by providing a CUSTOM_T
 import getFrom from '../provider/getFrom.js';
 
 import merge from '../utils/merge.js';
+
+import { createHash } from 'crypto';
 
 let cache = null;
 
@@ -75,9 +78,11 @@ Each locale from the workspace.locale{} is merged into the workspace.locale{} te
 
 Locale objects get their key and name properties assigned if falsy.
 
+A SHA-256 checksum is calculated from the complete workspace configuration and stored as workspace.checksum.
+
 The workspace is assigned to the module scope cache variable and the timestamp is recorded.
 
-@returns {workspace} JSON Workspace.
+@returns {workspace} JSON Workspace with checksum property.
 */
 async function cacheWorkspace() {
   const src = xyzEnv.WORKSPACE?.split(':')[0];
@@ -166,7 +171,17 @@ async function cacheWorkspace() {
 
   workspace.key ??= xyzEnv.TITLE;
 
-  logger(`Workspace cached;`, 'workspace');
+  // Calculate checksum of the workspace configuration
+  const workspaceString = JSON.stringify(workspace, null, 0);
+  const checksum = createHash('sha256').update(workspaceString).digest('hex');
+
+  // Store checksum on the workspace object
+  workspace.checksum = checksum;
+
+  logger(
+    `Workspace cached; checksum: ${checksum.substring(0, 8)}...`,
+    'workspace',
+  );
 
   timestamp = Date.now();
 
