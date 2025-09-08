@@ -12,11 +12,9 @@ Default templates can be overwritten in the workspace or by providing a CUSTOM_T
 @module /workspace/cache
 */
 
-import getFrom from '../provider/getFrom.js';
-
-import merge from '../utils/merge.js';
-
 import { createHash } from 'crypto';
+import getFrom from '../provider/getFrom.js';
+import merge from '../utils/merge.js';
 
 let cache = null;
 
