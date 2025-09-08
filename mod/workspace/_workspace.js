@@ -637,6 +637,7 @@ async function cacheTemplates(params) {
       locale: localeKey,
       user: params.user,
       ignoreRoles: true,
+      cache: true,
     });
 
     // If the locale has no layers, just skip it.
@@ -649,6 +650,7 @@ async function cacheTemplates(params) {
         locale: localeKey,
         user: params.user,
         ignoreRoles: true,
+        cache: true,
       });
 
       locale.layers[layerKey] = layer;
@@ -659,6 +661,6 @@ async function cacheTemplates(params) {
 
   // hydrating/caching all the templates
   for (const key of Object.keys(workspace.templates)) {
-    await getTemplate(key);
+    await getTemplate(key, true);
   }
 }

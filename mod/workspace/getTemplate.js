@@ -45,7 +45,7 @@ The key will be assigned to the template object as key property.
 
 @returns {Promise<Object|Error>} JSON Template
 */
-export default async function getTemplate(key) {
+export default async function getTemplate(key, cache) {
   if (key === undefined) {
     return new Error('Undefined template key.');
   }
@@ -90,7 +90,7 @@ export default async function getTemplate(key) {
       return err;
     }
 
-    response = await getFrom[method](template.src);
+    response = await getFrom[method](template.src, cache);
 
     if (response instanceof Error) {
       template.err = response;

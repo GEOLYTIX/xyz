@@ -3,8 +3,8 @@
 
 The cloudfront provider module exports a method to fetch resources from an AWS cloudfront service.
 
-@requires module:/utils/logger
-@requires module:/sign/cloudfront
+@requires /utils/logger
+@requires /sign/cloudfront
 
 @module /provider/cloudfront
 */
@@ -34,36 +34,54 @@ The fetch response will be parsed as text by default.
 */
 export default cloudfront_signer ? cloudfront : null;
 
-async function cloudfront(ref) {
-  try {
-    const url = ref.params?.url || ref;
+const cacheMap = new Map();
 
-    const signedURL = await cloudfront_signer(url);
+async function cloudfront(ref, cache) {
 
-    if (signedURL instanceof Error) {
-      return signedURL;
-    }
+  const url = ref.params?.url || ref;
 
-    // Return signedURL only from request.
-    if (ref.params?.signedURL) {
-      return signedURL;
-    }
-
-    const response = await fetch(signedURL);
-
-    logger(`${response.status} - ${url}`, 'cloudfront');
-
-    if (response.status >= 300) return new Error(`${response.status} ${url}`);
-
-    if (url.match(/\.json$/i)) return await response.json();
-
-    if (ref.params?.buffer) {
-      const arrayBuffer = await response.arrayBuffer();
-      return Buffer.from(arrayBuffer);
-    }
-
-    return await response.text();
-  } catch (err) {
-    console.error(err);
+  // Return signedURL only from request.
+  if (ref.params?.signedURL) {
+    return await cloudfront_signer(url);
   }
+
+  let response;
+
+  if (cache) {
+    let cachedURL = cacheMap.get(url);
+
+    if (!cachedURL) {
+      cachedURL = Fetch(url, ref.params);
+      cacheMap.set(url, cachedURL);
+    }
+
+    response = await cachedURL;
+  } else {
+    response = await Fetch(url);
+  }
+
+  return response;
+}
+
+async function Fetch(url, params) {
+  const signedURL = await cloudfront_signer(url);
+
+  if (signedURL instanceof Error) {
+    return signedURL;
+  }
+
+  const response = await fetch(signedURL);
+
+  logger(`${response.status} - ${url}`, 'cloudfront');
+
+  if (response.status >= 300) return new Error(`${response.status} ${url}`);
+
+  if (url.match(/\.json$/i)) return await response.json();
+
+  if (params?.buffer) {
+    const arrayBuffer = await response.arrayBuffer();
+    return Buffer.from(arrayBuffer);
+  }
+
+  return await response.text();
 }

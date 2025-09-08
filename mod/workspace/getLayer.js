@@ -70,7 +70,7 @@ export default async function getLayer(params, locale) {
     layer = locale.layers[params.layer];
   } else {
     // A layer maybe defined as a template only.
-    layer = await getTemplate(params.layer);
+    layer = await getTemplate(params.layer, params.cache);
 
     if (!layer || layer instanceof Error) {
       return new Error('Unable to validate layer param.');
@@ -96,7 +96,7 @@ export default async function getLayer(params, locale) {
     ? Roles.objMerge(layer, params.user?.roles)
     : layer;
 
-  layer = await mergeTemplates(layer, params.user?.roles);
+  layer = await mergeTemplates(layer, params.user?.roles, params.cache);
 
   // Assign layer key as name with no existing name on layer object.
   layer.name ??= layer.key;
