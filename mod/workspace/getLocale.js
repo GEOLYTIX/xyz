@@ -77,7 +77,7 @@ export default async function getLocale(params, parentLocale) {
   } else if (Object.hasOwn(workspace.locales, localeKey)) {
     locale = workspace.locales[localeKey];
   } else {
-    locale = await getTemplate(localeKey);
+    locale = await getTemplate(localeKey, params.cache);
   }
 
   if (locale instanceof Error) {
@@ -85,7 +85,7 @@ export default async function getLocale(params, parentLocale) {
   }
 
   // The roles property maybe assigned from a template. Templates must be merged prior to the role check.
-  locale = await mergeTemplates(locale, params.user?.roles);
+  locale = await mergeTemplates(locale, params.user?.roles, params.cache);
 
   //If the user is an admin we don't need to check roles
   if (
