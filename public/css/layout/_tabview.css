@@ -27,18 +27,31 @@
 
     & > .tab > .header {
       color: var(--color-primary);
-      min-width: 8em;
+      min-width: 100px;
       height: 100%;
       display: flex;
-      align-items: center;
       white-space: nowrap;
       border: solid 1px var(--color-border);
-      border-radius: 3px 1em 0 0;
-      padding: 10px;
+      border-radius: 3px 15px 0 0;
+      padding: 5px;
+      justify-content: space-between;
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
+      cursor: pointer;
+
+      > .close_tab {
+        font-size: 12px;
+        position: relative;
+      }
+
+      button {
+        padding-right: 5px;
+        max-width: 250px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
 
     & > .tab.active > .header {
