@@ -1314,6 +1314,7 @@ dialog {
     height: 1.5em;
     width: 1.5em;
     font-size: inherit;
+    cursor: help;
   }
   & .drawer.group {
     grid-column: 1 / 3;
