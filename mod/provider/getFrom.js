@@ -52,9 +52,8 @@ async function Cloudfront(ref, cache) {
     }
     response = await cachedURL;
   } else {
-
     // The cacheMap must be cleared to prevent cached resource never being updated between role requests or tests.
-    cacheMap.clear()
+    cacheMap.clear();
     response = await cloudfront(url);
   }
 

@@ -34,10 +34,9 @@ The req param is string if the request for a resource is passed from the getFrom
 export default cloudfront_signer ? cloudfront : null;
 
 function cloudfront(req) {
+  const url = req.params?.url || req;
 
-  const url = (req.params?.url || req)
-
-  return Fetch(url)
+  return Fetch(url);
 }
 
 /**
