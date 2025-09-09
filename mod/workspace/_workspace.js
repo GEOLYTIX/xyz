@@ -280,7 +280,7 @@ async function locale(req, res) {
 
     const localeWithoutRoles = removeRoles(locale);
 
-    assignChecksum(localeWithoutRoles)
+    assignChecksum(localeWithoutRoles);
 
     return res.json(localeWithoutRoles);
   }
@@ -299,7 +299,7 @@ async function locale(req, res) {
 
   const localeWithoutRoles = removeRoles(locale);
 
-  assignChecksum(localeWithoutRoles)
+  assignChecksum(localeWithoutRoles);
 
   res.json(removeRoles(localeWithoutRoles));
 }
