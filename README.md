@@ -55,6 +55,8 @@ Dynamic module imports reduce the need to bundle 3rd party libraries such as [Ta
 
 **Node.js v22+** is required for importing ESM modules.
 
+[brcypt](https://github.com/kelektiv/node.bcrypt.js#readme) - A library to help you hash passwords.
+
 [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) - A Node implementation of JSON Web Token.
 
 [Node-Postgres](https://github.com/brianc/node-postgres) - PostgreSQL client for Node.
