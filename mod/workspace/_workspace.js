@@ -152,6 +152,7 @@ async function locales(req, res) {
       key: locale.key,
       name: locale.name,
       locales: locale.locales,
+      checksum: locale.checksum,
     });
   }
 

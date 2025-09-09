@@ -7,10 +7,12 @@ The getLocale module exports the getLocale method which is required by the getLa
 @requires /workspace/mergeTemplates
 @requires /workspace/cache
 @requires /workspace/getTemplate
+@requires crypto
 
 @module /workspace/getLocale
 */
 
+import { createHash } from 'crypto';
 import merge from '../utils/merge.js';
 import * as Roles from '../utils/roles.js';
 import workspaceCache from './cache.js';
@@ -128,6 +130,14 @@ export default async function getLocale(params, parentLocale) {
   delete locale.template;
   delete locale.templates;
   delete locale._type;
+
+  // Recalculate checksum for the final locale (especially important for merged/nested locales)
+  // Create a copy without the checksum for calculation
+  const localeForChecksum = { ...locale };
+  delete localeForChecksum.checksum;
+
+  const localeString = JSON.stringify(localeForChecksum, null, 0);
+  locale.checksum = createHash('sha256').update(localeString).digest('hex');
 
   return locale;
 }

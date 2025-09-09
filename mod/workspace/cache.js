@@ -76,11 +76,11 @@ Each locale from the workspace.locale{} is merged into the workspace.locale{} te
 
 Locale objects get their key and name properties assigned if falsy.
 
-A SHA-256 checksum is calculated from the complete workspace configuration and stored as workspace.checksum.
+A SHA-256 checksum is calculated for each locale and stored as locale.checksum.
 
 The workspace is assigned to the module scope cache variable and the timestamp is recorded.
 
-@returns {workspace} JSON Workspace with checksum property.
+@returns {workspace} JSON Workspace with locales containing checksum properties.
 */
 async function cacheWorkspace() {
   const src = xyzEnv.WORKSPACE?.split(':')[0];
@@ -169,15 +169,25 @@ async function cacheWorkspace() {
 
   workspace.key ??= xyzEnv.TITLE;
 
-  // Calculate checksum of the workspace configuration
-  const workspaceString = JSON.stringify(workspace, null, 0);
-  const checksum = createHash('sha256').update(workspaceString).digest('hex');
+  // Calculate checksum for each locale
+  Object.keys(workspace.locales).forEach((locale_key) => {
+    const locale = workspace.locales[locale_key];
 
-  // Store checksum on the workspace object
-  workspace.checksum = checksum;
+    // Create a string representation of the locale for checksum calculation
+    const localeString = JSON.stringify(locale, null, 0);
+    const checksum = createHash('sha256').update(localeString).digest('hex');
+
+    // Store checksum on the locale object
+    locale.checksum = checksum;
+
+    logger(
+      `Locale '${locale_key}' cached with checksum: ${checksum.substring(0, 8)}...`,
+      'workspace',
+    );
+  });
 
   logger(
-    `Workspace cached; checksum: ${checksum.substring(0, 8)}...`,
+    `Workspace cached with ${Object.keys(workspace.locales).length} locales`,
     'workspace',
   );
 
