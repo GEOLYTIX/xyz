@@ -616,9 +616,11 @@ function removeRoles(obj) {
 @description
 Gets and caches a complete workspace with all locales, layers, and templates pre-loaded.
 
-The workspaceCache method will be forced to clear the cached workspace and load the workspace again which may have changed. This is required for testing purposes. If templates should be loaded in order to extract roles it may be beneficial to use already cached templates.
+The workspaceCache method will be called with the params force flag. If true, any cached templates as well as the workspace itself will be reset.
 
-The method will iterate over the workspace.locales to cache any templates defined in the locales object.
+The method will iterate over the workspace.locales and each layer defined in the locales.
+
+The getLocale and getLayer method will be called with the cache true flag. This flag will passed on to the getTemplate method. Templates fetched from an external source will be cached in a Map object. This is to prevent that the same template used in multiple locales or layers will be fetched multiple times.
 
 A getLayer promise for each layer in a locale will be added to a promises array. All getLayer promises must be settled before the next locale can be processed.
 

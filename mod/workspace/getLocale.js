@@ -46,6 +46,7 @@ Template properties will be removed as these are not required by the MAPP API bu
 @property {string} [params.locale] Locale key.
 @property {array} [params.locale] An array of locale keys to be merged as a nested locale.
 @property {Object} [params.user] Requesting user.
+@property {Boolean} [params.cache] Templates associated with the locale should be cached and not requested multiple times.
 @property {Boolean} [params.ignoreRoles] Whether role check should be performed.
 @property {Array} [user.roles] User roles.
 
