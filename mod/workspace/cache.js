@@ -6,6 +6,7 @@ Default templates can be overwritten in the workspace or by providing a CUSTOM_T
 
 @requires /provider/getFrom
 @requires /utils/merge
+@requires /utils/processEnv
 
 @module /workspace/cache
 */
