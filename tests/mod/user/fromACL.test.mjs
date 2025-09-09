@@ -1,5 +1,5 @@
 const mockCompareSyncFn = codi.mock.fn();
-const mockBcrypt = codi.mock.module('../../../mod/utils/bcrypt.cjs', {
+const mockBcrypt = codi.mock.module('bcrypt', {
   namedExports: {
     bcrypt: {
       compareSync: mockCompareSyncFn,
