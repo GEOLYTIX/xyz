@@ -164,6 +164,7 @@ async function cacheWorkspace() {
 
   workspace.key ??= xyzEnv.TITLE;
 
+  logger(`Workspace cached;`, 'workspace');
 
   timestamp = Date.now();
 
