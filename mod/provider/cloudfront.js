@@ -3,6 +3,10 @@
 
 The cloudfront provider module exports a method to fetch resources from an AWS cloudfront service.
 
+The fetch requests and their status can be logged with the 'cloudfront' log.
+
+The provider module requires the cloudfront signer which requires a cloudfront key. If not provided the module will export null.
+
 @requires /utils/logger
 @requires /sign/cloudfront
 
@@ -13,56 +17,45 @@ import logger from '../utils/logger.js';
 
 /**
 @function cloudfront
-@async
 
 @description
-The method creates a signed URL for a cloudfront resource, fetches the resource and returns the fetched resource.
+The cloudfront method returns an async Fetch method which must be awaited to resolve into a cloudfront resource.
 
-A buffer is returned with the ref.params.buffer flag.
+A req param will be provided by requests through the provider endpoint module.
 
-JSON is returned if the URL path matches the .json file ending to fetch a JSON resource from the cloudfront service.
+The req param is string if the request for a resource is passed from the getFrom module.
 
-The fetch response will be parsed as text by default.
+@param {req|string} req Request object or URL string.
+@property {object} [req.params] Request params.
+@property {string} params.url URL in request param.
 
-@param {Object|string} ref Reference object or URL string.
-@property {Object} [ref.params] Optional parameters for the request.
-@property {string} [params.url] Cloudfront resource URL.
-@property {boolean} [params.signedURL] Return a signedURL only.
-@property {boolean} [params.buffer] Return a buffer from the fetch.
-
-@returns {Promise<String|JSON|Buffer|Error>} The method resolves to either JSON, Text, or Buffer dependent ref.params.
+@returns {function} The async fetch function is returned.
 */
 export default cloudfront_signer ? cloudfront : null;
 
-const cacheMap = new Map();
+function cloudfront(req) {
 
-async function cloudfront(ref, cache) {
-  const url = ref.params?.url || ref;
+  const url = (req.params?.url || req)
 
-  // Return signedURL only from request.
-  if (ref.params?.signedURL) {
-    return await cloudfront_signer(url);
-  }
-
-  let response;
-
-  if (cache) {
-    let cachedURL = cacheMap.get(url);
-
-    if (!cachedURL) {
-      cachedURL = Fetch(url, ref.params);
-      cacheMap.set(url, cachedURL);
-    }
-
-    response = await cachedURL;
-  } else {
-    response = await Fetch(url);
-  }
-
-  return response;
+  return Fetch(url)
 }
 
-async function Fetch(url, params) {
+/**
+@function fetch
+@async
+
+@description
+The url string is passed to the cloudfront signer to request a signed URL.
+
+The resource is fetched from the signed cloudfront URL.
+
+The response is parsed as JSON if the URL ending matches `.json`
+
+@param {string} url Cloudfront resource URL.
+
+@returns {Promise<String|JSON|Error>} The fetch is resolved into either a string or JSON depending on the url ending.
+*/
+async function Fetch(url) {
   const signedURL = await cloudfront_signer(url);
 
   if (signedURL instanceof Error) {
@@ -76,11 +69,6 @@ async function Fetch(url, params) {
   if (response.status >= 300) return new Error(`${response.status} ${url}`);
 
   if (url.match(/\.json$/i)) return await response.json();
-
-  if (params?.buffer) {
-    const arrayBuffer = await response.arrayBuffer();
-    return Buffer.from(arrayBuffer);
-  }
 
   return await response.text();
 }
