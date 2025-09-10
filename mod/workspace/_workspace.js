@@ -14,6 +14,7 @@ The workspace typedef object has templates, locale, locales, dbs, and roles prop
 @requires /workspace/getLayer
 @requires /workspace/getTemplate
 @requires /utils/roles
+@requires crypto
 
 @module /workspace
 */
@@ -28,6 +29,7 @@ The workspace object defines the mapp resources available in an XYZ instance.
 @property {Object} locales Each property in the locales object is a locale available from this workspace.
 */
 
+import { createHash } from 'crypto';
 import * as Roles from '../utils/roles.js';
 import workspaceCache from './cache.js';
 import getLayer from './getLayer.js';
@@ -278,6 +280,8 @@ async function locale(req, res) {
 
     const localeWithoutRoles = removeRoles(locale);
 
+    assignChecksum(localeWithoutRoles);
+
     return res.json(localeWithoutRoles);
   }
 
@@ -293,7 +297,11 @@ async function locale(req, res) {
       .filter((layer) => !!Roles.check(layer[1], req.params.user?.roles))
       .map((layer) => layer[0]);
 
-  res.json(removeRoles(locale));
+  const localeWithoutRoles = removeRoles(locale);
+
+  assignChecksum(localeWithoutRoles);
+
+  res.json(removeRoles(localeWithoutRoles));
 }
 
 /**
@@ -661,4 +669,17 @@ async function cacheTemplates(params) {
   for (const key of Object.keys(workspace.templates)) {
     await getTemplate(key);
   }
+}
+
+/**
+@function assignChecksum
+
+@description
+The method assigns a checksum to an object.
+
+@param {object} obj Object for the checksum
+*/
+function assignChecksum(obj) {
+  const objString = JSON.stringify(obj, null, 0);
+  obj.checksum = createHash('sha256').update(objString).digest('hex');
 }
