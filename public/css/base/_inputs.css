@@ -37,6 +37,10 @@ textarea {
   &:focus {
     outline: none;
   }
+
+  &:-webkit-autofill {
+    box-shadow: 0 0 0px 1000px var(--color-tertiary) inset;
+  }
 }
 
 input[type='number'] {
@@ -67,9 +71,12 @@ input[type='datetime-local'] {
 }
 
 input[type='text'],
+input[type='email'],
+input[type='password'],
 input[type='number'] {
   padding: 5px;
   border: none;
+  border-radius: 3px;
   background-color: var(--color-base);
   color: var(--color-font);
   border-bottom: 1px dotted var(--color-border);
