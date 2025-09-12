@@ -72,6 +72,14 @@
   "location_save_changes": "Vuoi salvare le modifiche a questa località?",
   "location_zoom": "Zoom sulla mappa per le caratteristiche",
   "locations": "Località",
+  "login_email": "Email",
+  "login_password": "Password",
+  "login_button": "Accedere",
+  "login_invalid":
+    "Un indirizzo email o una password non validi non soddisfano il requisito di un minimo di 12 caratteri.",
+  "login_verificattion_note":
+    "Il tuo account deve essere verificato seguendo un link di verifica inviato all'indirizzo email e approvato da un amministratore prima di poter accedere.",
+  "login_registration_link": "Registra un nuovo account o reimposta la password.",
   "modify_geometry": "Modifica geometria",
   "no_data_filter": "Questo campo non contiene dati e non può essere filtrato.",
   "no_layers": "Nessun layer accessibile nella località.",
