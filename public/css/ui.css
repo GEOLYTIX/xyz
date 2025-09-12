@@ -783,6 +783,93 @@ dialog {
       var(--color-primary)) border-box;
 }
 
+/* public/css/elements/_login_form.css */
+form.login-form {
+  .input-group {
+    width: 100%;
+    padding: 5px 0;
+  }
+  input {
+    padding: 10px 0;
+    width: 100%;
+    border: none;
+    border-bottom: 1px solid #999;
+  }
+  input:focus {
+    outline: none;
+  }
+  input:-webkit-autofill {
+    box-shadow: 0 0 0px 1000px white inset;
+  }
+  p {
+    line-height: 1.5;
+  }
+  label {
+    color: #555;
+  }
+  .bar {
+    position: relative;
+    display: block;
+    width: 100%;
+  }
+  .bar:before,
+  .bar:after {
+    content: "";
+    height: 2px;
+    width: 0;
+    bottom: 0;
+    position: absolute;
+    background: #afb42b;
+    transition: 0.2s ease all;
+    -moz-transition: 0.2s ease all;
+    -webkit-transition: 0.2s ease all;
+  }
+  .bar:before {
+    left: 50%;
+  }
+  .bar:after {
+    right: 50%;
+  }
+  input:invalid + .bar:before,
+  input:invalid + .bar:after {
+    background: #b71c1c;
+  }
+  input:focus ~ .bar:before,
+  input:focus ~ .bar:after {
+    width: 50%;
+  }
+  .bold {
+    font-weight: bold;
+  }
+  .switch {
+    color: #003d57;
+    font-weight: bold;
+  }
+  .switch:hover {
+    cursor: pointer;
+  }
+  .msg {
+    color: #ec602d;
+  }
+  button {
+    font-size: 120%;
+    color: white;
+    background-color: #003d57;
+    margin: 10px 0;
+    padding: 8px;
+    text-align: center;
+    border-radius: 3px;
+    border: 0;
+    box-shadow: 2px 2px 2px 0 rgba(0, 0, 0, 0.2);
+    font-weight: bold;
+  }
+  button:hover:enabled {
+    cursor: pointer;
+    color: #ec602d;
+    background-color: white;
+  }
+}
+
 /* public/css/elements/_pills.css */
 .pill-container {
   display: flex;
