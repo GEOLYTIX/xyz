@@ -142,7 +142,7 @@
   <script type="module">
     console.log(`MAPP v${mapp.version}`);
 
-    mapp.language = mapp.hooks.current.language;
+    mapp.language = mapp.hooks.current.language || 'en';
 
     if (mapp.language !== 'en') {
       await mapp.utils.loadDictionary(mapp.language);
