@@ -16,8 +16,29 @@
     <!--<script src="{{dir}}/public/views/register/_register.js" defer></script>-->
     <link rel="stylesheet" href="{{dir}}/public/views/register/_register.css" />
   </head>
+  
+  <style>
+    body {
+        padding: 50px;
+        font-size: 14px;
+        background-color: var(--color-base-secondary);
+      }
+
+    .formwrapper {
+      margin: 0 auto;
+      max-width: 600px;
+    }
+
+    @media only screen and (max-width: 700px) {
+        body {
+          padding: 20px;
+        }
+      }
+
+  </style>
 
   <body class="register_form">
+    <div class="formwrapper"></div>
     <div class="content"></div>
   </body>
   <script type="module">
@@ -48,11 +69,11 @@
     });
 
     const next_steps = mapp.utils.html`
+    <br>
     <p class="bold">${mapp.dictionary.register_next}</p>
     <p>${mapp.dictionary.register_next_p1}</p><br>
     <p>${mapp.dictionary.register_next_p2}</p><br>
-    <p>${mapp.dictionary.register_next_p3}</p><br>
-    <p>${mapp.dictionary.register_login}</p>`;
+    <p>${mapp.dictionary.register_next_p3}</p><br>`;
 
     const privacy =  mapp.utils.html`
     <p class="bold">${mapp.dictionary.register_privacy}</p>
@@ -61,13 +82,13 @@
     <p>${mapp.dictionary.register_privacy_p3}</p><br>`;
 
     const content = mapp.utils.html`
-    ${selectLanguage}
     ${privacy}
     <label class="checkbox">
       <input id="privacy_agreement" type="checkbox" />
         <div></div>
         <span>${mapp.dictionary.register_agree}</span>
     </label>
+    <br>
     <button id="btnRegister" type="submit" formaction="register" disabled>
         ${mapp.dictionary.register_reset}
     </button>
@@ -76,6 +97,16 @@
     `;
 
     mapp.utils.render(document.querySelector('.content'), content);
+
+    const formwrapper = document.querySelector('.formwrapper');
+
+    formwrapper.append(selectLanguage);
+
+    // should this be a ui element?
+    const registerForm = {};
+
+    //formwrapper.append(registerForm);
+
 
 
 
