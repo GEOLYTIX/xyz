@@ -1,13 +1,14 @@
 .user-locales {
-  height: 75px;
-  overflow-y: auto;
+  ul {
+    overflow-y: auto;
+    max-height: 6em;
 
-  li {
-    display: flex;
-    align-items: center;
-  }
+    li {
+      display: flex;
 
-  button {
-    height: 24px;
+      .material-symbols-outlined {
+        font-size: 20px;
+      }
+    }
   }
 }
