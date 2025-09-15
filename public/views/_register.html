@@ -1,0 +1,83 @@
+<!doctype html>
+<html lang="de">
+  <head data-dir="{{dir}}">
+    <title>XYZ | Registration (Deutsch)</title>
+    <link
+      rel="icon"
+      type="image/x-icon"
+      href="{{dir}}/public/icons/favicon.ico"
+    >
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="{{dir}}/public/css/ui.css" />
+    <script type="module" src="{{dir}}/public/js/lib/mapp.js" defer></script>
+    <script type="module" src="{{dir}}/public/js/lib/ui.js" defer></script>
+
+    <!--<script src="{{dir}}/public/views/register/_register.js" defer></script>-->
+    <link rel="stylesheet" href="{{dir}}/public/views/register/_register.css" />
+  </head>
+
+  <body class="register_form">
+    <div class="content"></div>
+  </body>
+  <script type="module">
+    console.log(`MAPP v${mapp.version}`);
+    
+    mapp.language = mapp.hooks.current.language || 'en';
+    
+    if (mapp.language !== 'en') {
+      await mapp.utils.loadDictionary(mapp.language);
+    }
+
+    const languages = [{
+      option: 'en',
+      title: 'English'
+    },{
+      option: 'fr',
+      title: 'Français'
+    }];
+
+    const language = languages.find(l => l.option === mapp.language);
+
+    const selectLanguage = mapp.ui.elements.dropdown({
+      callback: (e, entry) => {
+        window.location.assign(`${mapp.host}?language=${entry.option}&register=true`);
+      },
+      entries: languages,
+      span: language.title,
+    });
+
+    const next_steps = mapp.utils.html`
+    <p class="bold">${mapp.dictionary.register_next}</p>
+    <p>${mapp.dictionary.register_next_p1}</p><br>
+    <p>${mapp.dictionary.register_next_p2}</p><br>
+    <p>${mapp.dictionary.register_next_p3}</p><br>
+    <p>${mapp.dictionary.register_login}</p>`;
+
+    const privacy =  mapp.utils.html`
+    <p class="bold">${mapp.dictionary.register_privacy}</p>
+    <p>${mapp.dictionary.register_privacy_p1}</p><br>
+    <p>${mapp.dictionary.register_privacy_p2}</p><br>
+    <p>${mapp.dictionary.register_privacy_p3}</p><br>`;
+
+    const content = mapp.utils.html`
+    ${selectLanguage}
+    ${privacy}
+    <label class="checkbox">
+      <input id="privacy_agreement" type="checkbox" />
+        <div></div>
+        <span>${mapp.dictionary.register_agree}</span>
+    </label>
+    <button id="btnRegister" type="submit" formaction="register" disabled>
+        ${mapp.dictionary.register_reset}
+    </button>
+    ${next_steps}
+     <a class="switch" href="{{dir}}/public/?login">${mapp.dictionary.register_login}</a>
+    `;
+
+    mapp.utils.render(document.querySelector('.content'), content);
+
+
+
+  </script>
+</html>

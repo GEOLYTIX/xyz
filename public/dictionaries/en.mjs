@@ -94,7 +94,7 @@ export default {
   location_save_changes: 'Save your changes to this location?',
   location_zoom: 'Zoom map to feature bounds',
   locations: 'Locations',
-  login_email: 'Email',
+  login_email: 'E-mail',
   login_password: 'Password',
   login_button: 'Log In',
   login_invalid:
@@ -119,6 +119,27 @@ export default {
   pill_component_remove: 'Remove',
   pin: 'Pin',
   radius: 'Radius',
+  register_agree: 'I agree',
+  register_email: 'E-mail',
+  register_login: 'Already registered? Login.',
+  register_new_password:
+    'New Password (min. length 12, must contain a digit, upper, and lower case character)',
+  register_next: 'What happens next? Confirming your account',
+  register_next_p1:
+    'An email will will be sent to the email address you have provided, from <a class="mailto" href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a>, with a link to verify your account.',
+  register_next_p2:
+    'If this has not been received in a few minutes please check any spam / junk folders. Adding <a class="mailto" href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a> to your safe senders list will ensure messages get through.',
+  register_next_p3:
+    'After verification, a site administrator will approve new accounts. You will receive a further email once your account has been approved.',
+  register_privacy: 'Privacy Agreement',
+  register_privacy_p1:
+    'Here at Geolytix we take your privacy seriously and will only use your personal information to administer your account and provide the products and services requested from us. We will never share your personal data with a third party.',
+  register_privacy_p2:
+    'Disabling your account can be done through your administrator however if you wish for your details to be permanently removed please email <a class="mailto" href="mailto:support@geolytix.co.uk">support@geolytix.co.uk</a>',
+  register_privacy_p3:
+    'This website is owned and operated by Geolytix, with its principal place of business at The Finsbury Business Centre, 40 Bowling Green Lane, London EC1R 0NE',
+  register_reset: 'Register or Reset Password',
+  register_retype_password: 'Re-type password',
   remove_document_confirm:
     'Are you sure to remove this document? This cannot be undone.',
   remove_image_confirm:
