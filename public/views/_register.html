@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="de">
   <head data-dir="{{dir}}">
-    <title>XYZ | Registration (Deutsch)</title>
+    <title>XYZ | Registration</title>
     <link
       rel="icon"
       type="image/x-icon"
@@ -55,6 +55,8 @@
     }];
 
     const language = languages.find(l => l.option === mapp.language);
+
+    document.title = `XYZ | ${mapp.dictionary.register_title}`;
 
     const selectLanguage = mapp.ui.elements.dropdown({
       callback: (e, entry) => {

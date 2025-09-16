@@ -140,6 +140,7 @@ export default {
     'This website is owned and operated by Geolytix, with its principal place of business at The Finsbury Business Centre, 40 Bowling Green Lane, London EC1R 0NE',
   register_reset: 'Register or Reset Password',
   register_retype_password: 'Re-type password',
+  register_title: 'Registration',
   remove_document_confirm:
     'Are you sure to remove this document? This cannot be undone.',
   remove_image_confirm:

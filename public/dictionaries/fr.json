@@ -104,6 +104,7 @@
   "register_privacy_p3": "Le propriétaire et exploiteur de ce site est Geolytix dont le siège social se trouve à The Finsbury Business Centre, 40 Bowling Green Lane, Londres EC1R 0NE, Royaume-Uni",
   "register_reset": "S'enregistrer ou réinitialiser son mot de passe",
   "register_retype_password": "Revalider le mot de passe",
+  "register_title": "Inscription",
   "remove_document_confirm": "Êtes-vous sûr de vouloir supprimer ce document ?",
   "remove_image_confirm": "Êtes-vous sûr de vouloir supprimer cette image ?",
   "remove_item_confirm": "Supprimer l'élément ?",
