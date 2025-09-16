@@ -28,11 +28,7 @@
 
 @import url('./elements/_loading.css');
 
-@import url('./elements/_login_form.css');
-
 @import url('./elements/_pills.css');
-
-@import url('./elements/_register_form.css');
 
 @import url('./elements/_searchbox.css');
 
@@ -55,5 +51,7 @@
 @import url('./layout/_tabview.css');
 
 @import url('./layout/_toolbars.css');
+
+@import url('./elements/_user_form.css');
 
 @import url('./layout/_user_locale.css');
