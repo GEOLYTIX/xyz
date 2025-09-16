@@ -76,7 +76,7 @@
   "login_password": "密碼",
   "login_button": "登入",
   "login_invalid": "電子郵件無效或密碼不符合至少 12 個字元的要求。",
-  "login_verificattion_note": "您必須透過發送到電子郵件地址的驗證連結驗證您的帳戶，並在獲得管理員批准後才能登入。",
+  "login_verification_note": "您必須透過發送到電子郵件地址的驗證連結驗證您的帳戶，並在獲得管理員批准後才能登入。",
   "login_registration_link": "註冊新帳戶或重設密碼。",
   "modify_geometry": "修改几何",
   "no_data_filter": "此字段不包含数据，无法进行过滤。",

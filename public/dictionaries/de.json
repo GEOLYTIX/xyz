@@ -76,7 +76,7 @@
   "login_password": "Passwort",
   "login_button": "Einloggen",
   "login_invalid": "Ungültige E-Mail oder Passwort erfüllt nicht die Anforderung von mindestens 12 Zeichen.",
-  "login_verificattion_note": "Benutzerkontos müssen mit einem Email Link verifiziert und anschließend von einem Administrator genehmigt werden.",
+  "login_verification_note": "Benutzerkontos müssen mit einem Email Link verifiziert und anschließend von einem Administrator genehmigt werden.",
   "login_registration_link": "Passwort zurücksetzen oder neues Benutzerkonto registrieren.",
   "modify_geometry": "Geometrie bearbeiten",
   "no_data_filter": "Dieses Feld enthält keine Daten und kann nicht gefiltert werden.",

@@ -78,7 +78,7 @@
   "login_password": "Hasło",
   "login_button": "Zaloguj się",
   "login_invalid": "Nieprawidłowy adres e-mail lub hasło nie spełnia wymogu minimum 12 znaków.",
-  "login_verificattion_note": "Logowanie jest możliwe po weryfikacji konta za pomocą linku wysłanego we wiadomości e-mail, a następnie zatwierdzonego przez administratora.",
+  "login_verification_note": "Logowanie jest możliwe po weryfikacji konta za pomocą linku wysłanego we wiadomości e-mail, a następnie zatwierdzonego przez administratora.",
   "login_registration_link": "Zarejestruj nowe konto lub zmień hasło.",
   "modify_geometry": "Zmień geometrię",
   "no_data_filter": "To pole nie zawiera danych i nie można go filtrować.",

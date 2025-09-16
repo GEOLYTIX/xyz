@@ -78,7 +78,7 @@
   "login_password": "Mot de passe",
   "login_button": "Se connecter",
   "login_invalid": "L'adresse e-mail ou le mot de passe invalide ne répond pas à l'exigence d'un minimum de 12 caractères.",
-  "login_verificattion_note": "Votre compte doit être vérifié avec un lien de vérification envoyé à l’adresse e-mail et approuvé par l'administrateur.",
+  "login_verification_note": "Votre compte doit être vérifié avec un lien de vérification envoyé à l’adresse e-mail et approuvé par l'administrateur.",
   "login_registration_link": "Enregistrer un nouveau compte ou réinitialiser son mot de passe.",
   "modify_geometry": "Modifier la Géométrie",
   "no_data_filter": "Ce champ ne contient aucune donnée et ne peut pas être filtré.",

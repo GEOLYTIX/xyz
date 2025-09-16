@@ -76,7 +76,7 @@
   "login_password": "Şifre",
   "login_button": "Giriş yapmak",
   "login_invalid": "Geçersiz e-posta veya şifre minimum 12 karakter gereksinimini karşılamıyor.",
-  "login_verificattion_note": "Giriş yapabilmeniz için öncelikle e-posta adresinize gönderilen doğrulama bağlantısını takip ederek hesabınızın doğrulanması ve bir yönetici tarafından onaylanması gerekmektedir.",
+  "login_verification_note": "Giriş yapabilmeniz için öncelikle e-posta adresinize gönderilen doğrulama bağlantısını takip ederek hesabınızın doğrulanması ve bir yönetici tarafından onaylanması gerekmektedir.",
   "login_registration_link": "Yeni bir hesap oluşturun veya şifrenizi sıfırlayın.",
   "modify_geometry": "Geometrisini değiştir",
   "no_data_filter": "Bu alan veri içermiyor ve filtrelenemez.",
