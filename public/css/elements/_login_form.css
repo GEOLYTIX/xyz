@@ -18,7 +18,8 @@ form.login-form {
     display: block;
     width: 100%;
 
-    &:before, &:after {
+    &:before,
+    &:after {
       content: '';
       height: 2px;
       width: 0;
