@@ -125,6 +125,7 @@ function debounceRequest(req, res) {
   ) {
     res
       .status(429)
+      .setHeader('Content-Type', 'text/plain')
       .send(`Address ${req.params.remote_address} temporarily locked.`);
 
     return;
