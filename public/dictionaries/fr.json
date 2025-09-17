@@ -92,7 +92,7 @@
   "radius": "Rayon",
   "register_agree": "J'accepte",
   "register_email": "E-mail",
-  "register_login": "Déjà enregistré? Vous connecter.",
+  "register_login": "Déjà enregistré(e)? Vous connecter.",
   "register_new_password": "Le nouveau mot de passe (au moins 12 caractères)",
   "register_next": "Maintenant, confirmez votre compte.",
   "register_next_p1": "Un e-mail de <a class='mailto' href='mailto:xyz@geolytix.co.uk'>xyz@geolytix.co.uk</a> sera automatiquement expédié à l'adresse entrée avec un lien de vérification.",
