@@ -33,12 +33,14 @@
     </style>
   </head>
 
-  <body>
+  <body data-template="{{template}}">
     <div class="formwrapper"></div>
   </body>
 
   <script type="module">
     console.log(`MAPP v${mapp.version}`);
+
+    console.log(document.body.dataset.template)
 
     mapp.language = mapp.hooks.current.language || 'en';
 
