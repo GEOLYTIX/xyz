@@ -1,0 +1,17 @@
+{
+  "register_agree": "동의합니다.",
+  "register_email": "이메일",
+  "register_login": "이미 등록이 되었나요? 로그인 하세요.",
+  "register_new_password": "신규 비밀번호(최소 10자 이상)",
+  "register_next": "다음단계는? 귀하의 계정을 확인하시면 됩니다.",
+  "register_next_p1": "귀하가 제공한 이메일주소로 <a class='mailto' href='mailto:xyz@geolytix.co.uk'>xyz@geolytix.co.uk</a> 로부터 계정을 확인할 수 있는 링크가 포함된 이메일을 받게됩니다.",
+  "register_next_p2": "몇분내로 이메일을 받지못하셨으면 스팸메일함을 확인해보십시오. <a class='mailto' href='mailto:xyz@geolytix.co.uk'>xyz@geolytix.co.uk</a> 를 안전한 발신자 리스트에 추가하시면 메시지 수신에 문제가 없을 것입니다.",
+  "register_next_p3": "확인 후, 입지 관리자가 신규계정 승인을 하게됩니다. 귀하의 계정이 승인되면 그 다음의 이메일을 받으시게 됩니다.",
+  "register_privacy": "개인정보",
+  "register_privacy_p1": "Geolytix는 개인정보관리를 철저히 하며 계정관리와 제품서비스 제공 목적으로만 사용할 것입니다. 그외 어떠한 경우라도 제3자와 개인정보를 공유하는 일은 없을 것입니다.",
+  "register_privacy_p2": " 관리자가 귀하의 계정을 무효화할수있지만 귀하의 개인정보의 영구 삭제를 원하시면 <a class='mailto' href='mailto:support@geolytix.co.uk'>support@geolytix.co.uk</a> 로 이메일을 보내주십시오.",
+  "register_privacy_p3": "이 웹사이트는 The Finsbury Business Centre, 40 Bowling Green Lane, London EC1R 0NE에 주 사업장을 둔 Geolytix소유이며 Geolytix에 의해 운영됩니다.",
+  "register_reset": "계정등록 및 비밀번호 설정",
+  "register_retype_password": "비밀번호 재입력",
+  "register_title": "등록"
+}
