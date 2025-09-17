@@ -52,9 +52,13 @@ export default async function mergeTemplates(obj, roles) {
     if (obj instanceof Error) return obj;
   }
 
-  // The _template can be a string or object [with src]
-  for (const _template of obj.templates || []) {
-    obj = await objTemplate(obj, _template, roles, true);
+  if (Array.isArray(obj.templates)) {
+    // The _template can be a string or object [with src]
+    for (const _template of obj.templates) {
+      obj = await objTemplate(obj, _template, roles, true);
+    }
+  } else if (obj.templates instanceof Object) {
+    console.error(`${obj.key} Object must be a templates Array.`);
   }
 
   // Substitute ${SRC_*} in object string.
