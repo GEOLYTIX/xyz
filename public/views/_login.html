@@ -33,7 +33,7 @@
     </style>
   </head>
 
-  <body>
+  <body data-template="{{template}}">
     <div class="formwrapper"></div>
   </body>
 
@@ -79,13 +79,17 @@
     },{
       option: 'tr',
       title: 'Türk'
-    }]
+    }];
+
+    if(document.body.dataset.template !== 'login_view') document.title = `XYZ | ${mapp.dictionary.register_title}`;
 
     const language = languages.find(l => l.option === mapp.language);
 
+    const callbackRoute = document.body.dataset.template === 'login_view' ? 'login=true' : 'register=true';
+
     const selectLanguage = mapp.ui.elements.dropdown({
       callback: (e, entry) => {
-        window.location.assign(`${mapp.host}?language=${entry.option}&login=true`);
+        window.location.assign(`${mapp.host}?language=${entry.option}&${callbackRoute}`);
       },
       entries: languages,
       span: language.title,
@@ -95,8 +99,9 @@
 
     formwrapper.append(selectLanguage);
 
-    const loginForm = mapp.ui.elements.loginForm();
+    const form = document.body.dataset.template === 'login_view' ? 
+      mapp.ui.elements.loginForm() : mapp.ui.elements.registerForm();
 
-    formwrapper.append(loginForm);
+    formwrapper.append(form);
   </script>
 </html>
