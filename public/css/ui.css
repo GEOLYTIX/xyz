@@ -813,7 +813,7 @@ form.login-form {
       width: 0;
       bottom: 0;
       position: absolute;
-      background: var(--color-changed);
+      background: var(--color-primary);
       transition: 0.2s ease all;
       -moz-transition: 0.2s ease all;
       -webkit-transition: 0.2s ease all;
