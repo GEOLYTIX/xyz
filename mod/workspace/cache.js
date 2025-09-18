@@ -6,20 +6,17 @@ Default templates can be overwritten in the workspace or by providing a CUSTOM_T
 
 @requires /provider/getFrom
 @requires /utils/merge
-@requires module:/utils/processEnv
+@requires /utils/processEnv
 
 @module /workspace/cache
 */
 
 import getFrom from '../provider/getFrom.js';
-
+import logger from '../utils/logger.js';
 import merge from '../utils/merge.js';
 
 let cache = null;
-
 let timestamp = Infinity;
-
-import logger from '../utils/logger.js';
 
 /**
 @function checkWorkspaceCache

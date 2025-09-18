@@ -86,6 +86,11 @@ await codi.describe({ name: 'workspace:', id: 'workspace' }, async () => {
         expectedName,
         `We expect to get ${expectedName}, received: ${result.name}`,
       );
+
+      codi.assertTrue(
+        typeof result.checksum !== null,
+        'We expect to see a checksum on the locale ',
+      );
     },
   );
 
