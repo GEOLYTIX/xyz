@@ -75,7 +75,6 @@ input[type='email'],
 input[type='password'],
 input[type='number'] {
   padding: 5px;
-  border: none;
   border-radius: 3px;
   background-color: var(--color-base);
   color: var(--color-font);
