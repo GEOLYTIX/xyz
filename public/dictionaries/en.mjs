@@ -125,19 +125,11 @@ export default {
   register_new_password:
     'New Password (min. length 12, must contain a digit, upper, and lower case character)',
   register_next: 'What happens next? Confirming your account',
-  register_next_p1:
-    'An email will will be sent to the email address you have provided, from <a class="mailto" href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a>, with a link to verify your account.',
-  register_next_p2:
-    'If this has not been received in a few minutes please check any spam / junk folders. Adding <a class="mailto" href="mailto:xyz@geolytix.co.uk">xyz@geolytix.co.uk</a> to your safe senders list will ensure messages get through.',
-  register_next_p3:
-    'After verification, a site administrator will approve new accounts. You will receive a further email once your account has been approved.',
+  register_next_info:
+    'XYZ/MAPP will attempt to deliver an email to your email address. You must click on the link in the email to verify that you are the account holder. Please check your spam folder if you can not find this email. You will need to contact a site administrator if you are unable to access the verification link. Newly registered accounts must be approved by a site administrator once verified.',
   register_privacy: 'Privacy Agreement',
-  register_privacy_p1:
-    'Here at Geolytix we take your privacy seriously and will only use your personal information to administer your account and provide the products and services requested from us. We will never share your personal data with a third party.',
-  register_privacy_p2:
-    'Disabling your account can be done through your administrator however if you wish for your details to be permanently removed please email <a class="mailto" href="mailto:support@geolytix.co.uk">support@geolytix.co.uk</a>',
-  register_privacy_p3:
-    'This website is owned and operated by Geolytix, with its principal place of business at The Finsbury Business Centre, 40 Bowling Green Lane, London EC1R 0NE',
+  register_privacy_agreement:
+    'User account data will maybe stored in a third party database. Passwords are encrypted at rest. Administrator will never ask for your password. User account data will not be shared with a third party. Administrator may disable, block, or remove your account. Please refer to the XYZ/MAPP documentation to remove your stored account details. You must agree to these conditions in order to register your account.',
   register_reset: 'Register or Reset Password',
   register_retype_password: 'Re-type password',
   register_title: 'Registration',
