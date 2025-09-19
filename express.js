@@ -35,19 +35,15 @@ DIR - Base directory for routes
 RATE_LIMIT - Maximum requests per window (default: 1000)
 RATE_LIMIT_WINDOW - Time window in ms (default: 1 min)
 ```
-@requires dotenv - Environment configuration loading
-@requires express - Web application framework
-@requires cookie-parser - HTTP cookie parsing middleware
-@requires express-rate-limit - Rate limiting middleware
+@requires express Web application framework
+@requires cookie-parser HTTP cookie parsing middleware
+@requires express-rate-limit Rate limiting middleware
 */
 
-import 'dotenv/config';
 import './mod/utils/processEnv.js';
-
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import rateLimit from 'express-rate-limit';
-
 import api from './api/api.js';
 
 if (process.versions.node.split('.')[0] < 22) {
