@@ -31,11 +31,11 @@ label.checkbox {
     display: none;
   }
 
-  & > .material-symbols-outlined:after {
+  & > span.material-symbols-outlined:first-of-type:after {
     content: 'check_box_outline_blank';
   }
 
-  & input:checked + .material-symbols-outlined:after {
+  & input:checked + span.material-symbols-outlined:first-of-type:after {
     content: 'select_check_box';
   }
 
