@@ -10,6 +10,15 @@
   cursor: pointer;
 }
 
+.tooltip {
+  -webkit-user-select: none;
+  user-select: none;
+  height: 1.5em;
+  width: 1.5em;
+  font-size: inherit;
+  cursor: help;
+}
+
 .box-shadow {
   border: 1px solid var(--color-border);
   box-shadow: var(--color-border) 0px 1px 4px;

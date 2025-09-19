@@ -32,6 +32,14 @@
 .hover:hover {
   cursor: pointer;
 }
+.tooltip {
+  -webkit-user-select: none;
+  user-select: none;
+  height: 1.5em;
+  width: 1.5em;
+  font-size: inherit;
+  cursor: help;
+}
 .box-shadow {
   border: 1px solid var(--color-border);
   box-shadow: var(--color-border) 0px 1px 4px;
@@ -525,10 +533,10 @@ label.checkbox {
   & > input {
     display: none;
   }
-  & > .material-symbols-outlined:after {
+  & > span.material-symbols-outlined:first-of-type:after {
     content: "check_box_outline_blank";
   }
-  & input:checked + .material-symbols-outlined:after {
+  & input:checked + span.material-symbols-outlined:first-of-type:after {
     content: "select_check_box";
   }
   & input:disabled ~ * {
@@ -1307,13 +1315,6 @@ dialog {
     align-items: center;
     display: flex;
     font-weight: bold;
-  }
-  & .label > .tooltip {
-    -webkit-user-select: none;
-    user-select: none;
-    height: 1.5em;
-    width: 1.5em;
-    font-size: inherit;
   }
   & .drawer.group {
     grid-column: 1 / 3;
