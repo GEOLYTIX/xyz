@@ -92,7 +92,7 @@
 
     const selectLanguage = mapp.ui.elements.dropdown({
       callback: (e, entry) => {
-        window.location.assign(`${mapp.host}?language=${entry.option}&${callbackRoute}`);
+        globalThis.location.assign(`${mapp.host}?language=${entry.option}&${callbackRoute}`);
       },
       entries: languages,
       span: language.title,
@@ -106,7 +106,7 @@
       msg: document.body.dataset.msg
     }
 
-    const form = document.body.dataset.template === 'login_view' ? 
+    const form = document.body.dataset.template === 'login_view' ?
       mapp.ui.elements.loginForm(params) : mapp.ui.elements.registerForm(params);
 
     formwrapper.append(form);
