@@ -6,7 +6,7 @@ form.login-form {
   }
 
   .asterisk:after {
-    content: "*";
+    content: '*';
     color: var(--color-danger);
   }
 
