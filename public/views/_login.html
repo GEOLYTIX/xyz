@@ -33,7 +33,7 @@
     </style>
   </head>
 
-  <body data-template="{{template}}">
+  <body data-template="{{template}}" data-msg="{{msg}}">
     <div class="formwrapper"></div>
   </body>
 
@@ -102,8 +102,12 @@
 
     formwrapper.append(selectLanguage);
 
+    const params = {
+      msg: document.body.dataset.msg
+    }
+
     const form = document.body.dataset.template === 'login_view' ? 
-      mapp.ui.elements.loginForm() : mapp.ui.elements.registerForm();
+      mapp.ui.elements.loginForm(params) : mapp.ui.elements.registerForm(params);
 
     formwrapper.append(form);
   </script>
