@@ -4,9 +4,9 @@
 Exports the cloudinary signer method.
 
 @requires crypto
+@requires /utils/processEnv
 
 @module /sign/cloudinary
-@requires module:/utils/processEnv
 */
 
 import { createHash } from 'crypto';
@@ -14,7 +14,6 @@ import { createHash } from 'crypto';
 /**
 @function cloudinary
 @async
-
 
 @description
 The cloudinary signer method signs requests for the cloudinary service.
@@ -25,12 +24,12 @@ A request to destroy a resource stored in the cloudinary service can be signed w
 
 A folder and public_id parameter for resources to be uploaded or destroyed are required.
 
-@param {Object} req HTTP request.
-@param {Object} res HTTP response.
-@param {Object} req.params Request parameter.
-@param {string} params.folder
-@param {string} params.public_id
-@param {string} params.destroy
+@param {req} req HTTP request.
+@param {req} res HTTP response.
+@property {Object} req.params Request parameter.
+@property {string} params.folder
+@property {string} params.public_id
+@property {string} params.destroy
 
 @returns {Promise} The promise resolves into the response from the signerModules method.
 */

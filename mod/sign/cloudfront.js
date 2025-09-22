@@ -6,7 +6,7 @@ The cloudfront sign module exports a method to sign requests to an AWS cloudfron
 @requires fs
 @requires path
 @requires aws-sdk/cloudfront-signer
-@requires module:/utils/processEnv
+@requires /utils/processEnv
 @module /sign/cloudfront
 */
 
@@ -50,14 +50,14 @@ export default xyzEnv.KEY_CLOUDFRONT
 @description
 The method creates a signed URL for a cloudfront resource.
 
-@param {String} req_url Cloudfront resource URL.
+@param {req|string} req Request object or URL string.
 
 @returns {Promise<String>} The method resolves to a string which contains the signed url.
 */
-async function cloudfront_signer(req_url) {
+async function cloudfront_signer(req) {
   try {
     // Substitutes {*} with xyzEnv.SRC_* key values.
-    const url = req_url.replace(
+    const url = (req.params?.url || req).replace(
       /{(?!{)(.*?)}/g,
       (matched) => xyzEnv[`SRC_${matched.replace(/(^{)|(}$)/g, '')}`],
     );
