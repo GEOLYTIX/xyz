@@ -803,6 +803,10 @@ form.login-form {
     width: 100%;
     padding: 5px 0;
   }
+  .asterisk:after {
+    content: "*";
+    color: var(--color-danger);
+  }
   p {
     line-height: 1.5;
   }

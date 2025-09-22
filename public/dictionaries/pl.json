@@ -92,6 +92,7 @@
   "radius": "Promień",
   "register_agree": "Zgadzam się",
   "register_email": "Adres e-mail",
+  "register_error": "Upewnij się, że dane logowania spełniają wymagania bezpieczeństwa.",
   "register_login": "Masz konto? Zaloguj się.",
   "register_new_password": "Nowe hasło (co najmniej 12 znaków)",
   "register_next": "Co dalej? Potwierdź swoje konto",

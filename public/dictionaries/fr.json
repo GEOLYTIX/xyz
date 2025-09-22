@@ -92,6 +92,7 @@
   "radius": "Rayon",
   "register_agree": "J'accepte",
   "register_email": "E-mail",
+  "register_error": "Veuillez vous assurer que les identifiants répondent aux exigences de sécurité.",
   "register_login": "Déjà enregistré(e)? Vous connecter.",
   "register_new_password": "Le nouveau mot de passe (au moins 12 caractères)",
   "register_next": "Maintenant, confirmez votre compte.",

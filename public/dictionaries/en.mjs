@@ -121,6 +121,7 @@ export default {
   radius: 'Radius',
   register_agree: 'I agree',
   register_email: 'E-mail',
+  register_error: 'Please make sure credentials meet the security requirements.',
   register_login: 'Already registered? Login.',
   register_new_password:
     'New Password (min. length 12, must contain a digit, upper, and lower case character)',

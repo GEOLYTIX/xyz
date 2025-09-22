@@ -90,6 +90,7 @@
   "radius": "Raggio",
   "register_agree": "Sono d'accordo",
   "register_email": "Email",
+  "register_error": "Verifica che le tue credenziali rispondano ai requisiti di sicurezza.",
   "register_login": "Già registrato? Accedi.",
   "register_new_password": "Nuova password (lunghezza minima 12 caratteri, deve contenere una cifra, una lettera maiuscola e una minuscola)",
   "register_next": "Cosa succede dopo? Conferma del tuo account",
