@@ -31,9 +31,9 @@
     "nodemailer": "^6.10.0"
   },
   "dependencies": {
+    "dotenv": "^17.2.2",
     "jsonwebtoken": "^9.0.2",
-    "pg": "~8.15.1",
-    "dotenv": "^16.4.5"
+    "pg": "~8.15.1"
   },
   "devDependencies": {
     "@biomejs/biome": "2.0.0",
