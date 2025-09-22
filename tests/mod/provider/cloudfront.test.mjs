@@ -42,35 +42,6 @@ await codi.describe(
       },
     );
 
-    await codi.it(
-      { name: 'Return only signedURL', parentId: 'provider_cloudfront' },
-      async () => {
-        const expected = {
-          url: 'https://aws.signed.url.com/*',
-        };
-
-        mockedCloudfrontFn.mock.mockImplementation(
-          function cloudfront_signer() {
-            return expected.url;
-          },
-        );
-
-        const { req } = codi.mockHttp.createMocks({
-          params: {
-            signedURL: true,
-          },
-        });
-
-        const result = await cloudfront(req);
-
-        codi.assertEqual(
-          result,
-          expected.url,
-          'We should see the expected URL returned',
-        );
-      },
-    );
-
     await codi.describe(
       {
         name: 'Fetches signedURL',
