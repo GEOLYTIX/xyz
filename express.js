@@ -63,6 +63,7 @@ const limiter = rateLimit({
   limit: xyzEnv.RATE_LIMIT,
   standardHeaders: 'draft-8',
   windowMs: xyzEnv.RATE_LIMIT_WINDOW,
+  validate: { xForwardedForHeader: false },
 });
 
 app.use(limiter);
