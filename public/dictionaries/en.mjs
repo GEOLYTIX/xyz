@@ -129,7 +129,7 @@ export default {
     'XYZ/MAPP will attempt to deliver an email to your email address. You must click on the link in the email to verify that you are the account holder. Please check your spam folder if you can not find this email. You will need to contact a site administrator if you are unable to access the verification link. Newly registered accounts must be approved by a site administrator once verified.',
   register_privacy: 'Privacy Agreement',
   register_privacy_agreement:
-    'User account data will maybe stored in a third party database. Passwords are encrypted at rest. Administrator will never ask for your password. User account data will not be shared with a third party. Administrator may disable, block, or remove your account. Please refer to the XYZ/MAPP documentation to remove your stored account details. You must agree to these conditions in order to register your account.',
+    'User account data may be stored in a third party database. Passwords are encrypted at rest. Administrator will never ask for your password. User account data will not be shared with a third party. Administrator may disable, block, or remove your account. Please refer to the XYZ/MAPP documentation to remove your stored account details. You must agree to these conditions in order to register your account.',
   register_reset: 'Register or Reset Password',
   register_retype_password: 'Re-type password',
   register_title: 'Registration',
