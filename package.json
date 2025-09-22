@@ -32,7 +32,8 @@
   },
   "dependencies": {
     "jsonwebtoken": "^9.0.2",
-    "pg": "~8.15.1"
+    "pg": "~8.15.1",
+    "dotenv": "^16.4.5"
   },
   "devDependencies": {
     "@biomejs/biome": "2.0.0",
@@ -40,7 +41,6 @@
     "codi-test-framework": "1.0.37",
     "concurrently": "^9.1.0",
     "cookie-parser": "^1.4.5",
-    "dotenv": "^16.4.5",
     "esbuild": "^0.25.0",
     "express": "^5.1.0",
     "express-rate-limit": "^7.5.0",
