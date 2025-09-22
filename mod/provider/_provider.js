@@ -7,7 +7,6 @@ Functions for handling 3rd party service provider requests
 
 import cloudfront from './cloudfront.js';
 import file from './file.js';
-
 import s3 from './s3.js';
 
 /**
@@ -19,7 +18,7 @@ The provider method looks up a provider module method matching the provider requ
 
 The response from the method is returned with the HTTP response.
 
-@param {Object} req HTTP request.
+@param {req} req HTTP request.
 @param {Object} res HTTP response.
 @param {Object} req.params Request parameter.
 @param {string} params.signer Provider module to handle the request.
