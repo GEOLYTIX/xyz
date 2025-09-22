@@ -65,9 +65,10 @@ form.login-form {
 
   button {
     margin: 10px 0;
-    padding: 8px;
+    padding: 5px 8px;
     border-radius: 3px;
     font-size: 120%;
+    min-width: 5em;
 
     &:hover:enabled {
       cursor: pointer;
