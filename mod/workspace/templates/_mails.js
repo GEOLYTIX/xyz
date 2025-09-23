@@ -45,6 +45,10 @@ export default {
       subject: `This account has been approved on \${host}.`,
       text: `You are now able to log on to \${host}`,
     },
+    es: {
+      subject: `Esta cuenta ha sido aprobada el \${host}.`,
+      text: `Esta cuenta ha sido aprobada el \${host}`,
+    },
     fr: {
       subject: `Maintenant vous pouvez vous connecter à \${host}`,
       text: `Ce compte a été approuvé sur \${host}.`,
