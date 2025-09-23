@@ -1522,14 +1522,15 @@ dialog {
 
 /* public/css/layout/_user_locale.css */
 .user-locales {
-  height: 75px;
-  overflow-y: auto;
-  li {
-    display: flex;
-    align-items: center;
-  }
-  button {
-    height: 24px;
+  ul {
+    overflow-y: auto;
+    max-height: 6em;
+    li {
+      display: flex;
+      .material-symbols-outlined {
+        font-size: 20px;
+      }
+    }
   }
 }
 

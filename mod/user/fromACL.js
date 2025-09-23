@@ -7,16 +7,14 @@ This module exports the fromACL method to request and validate a user from the A
 @requires module:/utils/reqHost
 @requires module:/utils/mailer
 @requires module:/utils/languageTemplates
-@requires module:/utils/bcrypt
+@requires bcrypt
 @requires crypto
 @requires module:/utils/processEnv
 
 @module /user/fromACL
 */
 
-import bcrypt from '../utils/bcrypt.cjs';
-
-const { compareSync } = bcrypt;
+import { compareSync } from 'bcrypt';
 
 import { randomBytes } from 'crypto';
 import languageTemplates from '../utils/languageTemplates.js';

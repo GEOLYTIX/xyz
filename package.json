@@ -32,6 +32,7 @@
   },
   "dependencies": {
     "dotenv": "^17.2.2",
+    "bcrypt": "^6.0.0",
     "jsonwebtoken": "^9.0.2",
     "pg": "~8.15.1"
   },
