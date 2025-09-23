@@ -8,6 +8,7 @@ export default {
   },
   account_await_approval: {
     en: `This account has been verified but requires administrator approval.`,
+    es: `Esta cuenta ha sido verificada pero requiere la aprobación del administrador.`,
     fr: `Le compte a été verifié mais il doit être approuvé par l'administrateur. `,
     ja: `本アカウント検証完了。アドミニストレーター承認が必要となります`,
     ko: `이 계정은 확인되었으나 관리자의 승인이 필요합니다.`,
@@ -47,6 +48,7 @@ export default {
   },
   new_account_registered: {
     en: `A new account has been registered and is awaiting email verification.`,
+    es: `Se ha registrado una nueva cuenta y está esperando verificación por correo electrónico.`,
     fr: `Un nouveau compte a été enregistré et il attend la vérification par e-mail.`,
     ja: `新規アカウントの登録完了にてE-メール検証待ち`,
     ko: `새로운 계정이 등록되었고 이메일 확인을 기다리고 있습니다.`,
