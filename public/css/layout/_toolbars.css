@@ -14,26 +14,6 @@
 
   & span {
     line-height: normal;
-
-    &.strikethrough {
-      position: relative;
-    }
-
-    &.strikethrough:before {
-      position: absolute;
-      content: '';
-      left: 0;
-      top: 45%;
-      right: 0;
-      border-top: 2px solid;
-      border-color: inherit;
-
-      -webkit-transform: rotate(45deg);
-      -moz-transform: rotate(45deg);
-      -ms-transform: rotate(45deg);
-      -o-transform: rotate(45deg);
-      transform: rotate(45deg);
-    }
   }
 
   & button,
