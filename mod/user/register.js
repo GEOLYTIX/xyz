@@ -9,15 +9,15 @@ Exports the [user] register method for the /api/user/register route.
 @requires /utils/reqHost
 @requires /utils/mailer
 @requires /utils/languageTemplates
-@requires /utils/bcrypt
+@requires bcrypt
 @requires crypto
 @requires module:/utils/processEnv
 
 @module /user/register
 */
 
+import bcrypt from 'bcrypt';
 import crypto from 'crypto';
-import bcrypt from '../utils/bcrypt.cjs';
 import languageTemplates from '../utils/languageTemplates.js';
 import mailer from '../utils/mailer.js';
 import reqHost from '../utils/reqHost.js';
