@@ -109,22 +109,12 @@
   "register_email": "E-posta",
   "register_error": "Lütfen kimlik bilgilerinizin güvenlik gerekliliklerini karşıladığından emin olun.",
   "register_login": "Zaten kayıtlı mısınız? Giriş yapın.",
-<<<<<<< HEAD
-  "register_error": "Lütfen bilgilerinizin güvenlik gerekliliklerini karşıladığından emin olun.",
-  "register_new_password": "Yeni Şifre (minimum uzunluk 12, bir rakam, büyük ve küçük harf içermelidir)",
-  "register_next": "Sonraki işlem nedir? Hesabınızı onaylayın.",
-  "register_next_info": "Kayıt işlemini tamamlamak için sistem, e-posta adresinize bir doğrulama bağlantısı gönderecektir. Hesabınızın size ait olduğunu doğrulamak için bu bağlantıya tıklamanız gerekir. E-postayı göremezseniz “Gereksiz” veya “Spam” klasörünüzü kontrol edin. Bağlantıya ulaşamıyorsanız site yöneticisiyle iletişime geçmeniz gerekir. Doğrulama tamamlandıktan sonra hesabınız bir yönetici tarafından onaylandıktan sonra aktif hale gelecektir.",
-  "register_privacy": "Gizlilik Sözleşmesi",
-  "register_privacy_agreement": "Kullanıcı hesabı bilgileriniz üçüncü taraf bir veritabanında saklanabilir. Parolalarınız güvenlik amacıyla depolandığı anda şifrelenir ve asla şifresiz biçimde tutulmaz. Yönetici sizden hiçbir zaman parolanızı istemeyecektir ve bilgileriniz üçüncü kişilerle paylaşılmayacaktır. Ancak yöneticiler gerektiğinde hesabınızı devre dışı bırakabilir, engelleyebilir veya silebilir. Hesap verilerinizi silmek isterseniz XYZ/MAPP dokümantasyonundaki adımları takip edebilirsiniz. Hesap açabilmek için bu koşulları kabul etmeniz gerekmektedir.",
-  "register_reset": "Kayıt Olun veya Şifrenizi Sıfırlayın",
-=======
   "register_new_password": "Yeni Şifre (min. uzunluk 12, bir rakam, büyük ve küçük harf içermelidir)",
   "register_next": "Sonra ne olacak? E-posta Doğrulaması ve Onay.",
   "register_next_info": "Kayıt işlemini tamamlamak için sistem, e-posta adresinize bir doğrulama bağlantısı gönderecektir. Hesabınızın size ait olduğunu doğrulamak için bu bağlantıya tıklamanız gerekir. E-postayı göremezseniz “Gereksiz” veya “Spam” klasörünüzü kontrol edin. Bağlantıya ulaşamıyorsanız site yöneticisiyle iletişime geçmeniz gerekir. Doğrulama tamamlandıktan sonra hesabınız bir yönetici tarafından onaylandıktan sonra aktif hale gelecektir.",
   "register_privacy": "Hesap Verileri ve Güvenlik",
   "register_privacy_agreement": "Kullanıcı hesabı bilgileriniz üçüncü taraf bir veritabanında saklanabilir. Parolalarınız güvenlik amacıyla depolandığı anda şifrelenir ve asla şifresiz biçimde tutulmaz. Yönetici sizden hiçbir zaman parolanızı istemeyecektir ve bilgileriniz üçüncü kişilerle paylaşılmayacaktır. Ancak yöneticiler gerektiğinde hesabınızı devre dışı bırakabilir, engelleyebilir veya silebilir. Hesap verilerinizi silmek isterseniz XYZ/MAPP dokümantasyonundaki adımları takip edebilirsiniz. Hesap açabilmek için bu koşulları kabul etmeniz gerekmektedir.",
   "register_reset": "Kayıt Ol veya Şifreyi Sıfırla",
->>>>>>> 0fd680adbd4d1d09ade695aa685e18d48ce8e216
   "register_retype_password": "Şifrenizi yeniden yazın",
   "register_title": "Kayıt",
   "remove_document_confirm": "Bu belgeyi kaldırmak istediğinizden emin misiniz? Bu işlem geri alınamaz.",
