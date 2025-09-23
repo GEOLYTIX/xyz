@@ -19,7 +19,6 @@
       "**",
       "!**/public/js/**/*",
       "!**/docs/**/*",
-      "!**/mod/utils/bcrypt.cjs",
       "!**/lib/utils/uhtml.mjs",
       "!**/public/css/mapp.css",
       "!**/public/css/ui.css",
