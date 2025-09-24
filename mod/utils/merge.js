@@ -23,16 +23,37 @@ Each source object property will be iterated if both the target and source are o
 The method will iterate over itself until the object arguments are merged into the target.
 */
 export default function mergeDeep(target, ...sources) {
+
   // No sources to merge.
   if (!sources.length) {
     return target;
   }
 
   // Shift first entry from sources array as source.
-  const source = sources.shift();
+  let source = sources.shift();
 
   // Source and Target are both objects.
   if (isObject(target) && isObject(source)) {
+
+    if (Array.isArray(source.include_props)) {
+      let _source = {}
+      for (const prop of source.include_props) {
+        if (source.hasOwnProperty(prop)) {
+          _source[prop] = source[prop];
+        }
+      }
+      source = _source;
+    }
+    if (Array.isArray(source.exclude_props)) {
+
+      for (const prop of source.exclude_props) {
+        if (source.hasOwnProperty(prop)) {
+          delete source[prop];
+        }
+      }
+
+    }
+
     // Iterate over object keys in source.
     for (const key in source) {
       // Spread source array into target array.
