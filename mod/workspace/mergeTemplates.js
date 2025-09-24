@@ -33,7 +33,7 @@ The method will check for a template matching the obj.key string property if obj
 
 An array of templates can be defined as obj.templates[]. The templates will be merged into the obj in the order the template keys are in the templates[] array.
 
-@param {Object} obj 
+@param {Object} obj
 @param {array} [roles] An array of user roles from request params.
 @param {boolean} cache Templates should be cached and not requested multiple times.
 
@@ -46,6 +46,8 @@ An array of templates can be defined as obj.templates[]. The templates will be m
 export default async function mergeTemplates(obj, roles, cache) {
   // Cache workspace in module scope for template assignment.
   workspace = await workspaceCache();
+
+  //We will make our changes in this method.
 
   // The object has an implicit template to merge into.
   if (typeof obj.template === 'string' || obj.template instanceof Object) {
@@ -94,9 +96,9 @@ Otherwise the obj will be merged into the template.
 
 The template will be merged into the obj with the reverse flag.
 
-@param {Object} obj 
-@param {Object} template The template maybe an object with a src property or a string. 
-@param {array} roles An array of user roles from request params. 
+@param {Object} obj
+@param {Object} template The template maybe an object with a src property or a string.
+@param {array} roles An array of user roles from request params.
 @param {boolean} reverse Whether template should be merged into the obj, not the other way around.
 
 @returns {Promise<Object>} Returns the merged obj.
@@ -140,17 +142,17 @@ async function objTemplate(obj, template, roles, reverse, cache) {
 @function assignWorkspaceTemplates
 
 @description
-The method parses an object for a template object property. 
+The method parses an object for a template object property.
 
 The template property value will be assigned to the workspace.templates{} object matching the template key value.
 
-The template._type property will be set to 'template' indicating that the templates origin is in the workspace. 
+The template._type property will be set to 'template' indicating that the templates origin is in the workspace.
 
 It is possible to overassign _type:'core' templates which are loaded from the /mod/workspace/templates directory.
 
 The method will call itself for nested objects.
 
-@param {Object} obj 
+@param {Object} obj
 */
 function assignWorkspaceTemplates(obj) {
   // Return early if object is null or empty
