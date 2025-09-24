@@ -452,6 +452,10 @@ function getQueryFromTemplate(req, template) {
 
         let val = req.params[param];
 
+        if (typeof val === 'undefined') {
+          missingParams.push(param);
+        }
+
         if (req.params.wildcard) {
           val = val.replaceAll(req.params.wildcard, '%');
         }
