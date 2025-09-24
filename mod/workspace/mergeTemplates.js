@@ -116,7 +116,7 @@ async function objTemplate(obj, template, roles, reverse, cache) {
 
     template = Roles.objMerge(template, roles);
 
-    templateProperties(template);
+    template = templateProperties(template);
 
     if (reverse) {
       //The object key must not be overwritten by a template key.
@@ -195,6 +195,7 @@ Properties defined in the template object exclude_props array property will remo
 @param {Object} template
 @property {array} template.include_props Remove all but these properties from template object.
 @property {array} template.exclude_props Remove these properties from template object.
+@returns {Object} template
 */
 function templateProperties(template) {
   if (Array.isArray(template.exclude_props)) {
@@ -211,6 +212,7 @@ function templateProperties(template) {
         _template[prop] = template[prop];
       }
     }
-    template = _template;
+    return _template;
   }
+  return template
 }
