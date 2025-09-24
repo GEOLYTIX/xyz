@@ -23,7 +23,8 @@
     }
   }
 
-  button {
+  button,
+  a {
     margin-bottom: 10px;
     background-color: var(--color-base-tertiary);
     box-shadow: 1px 1px 3px var(--color-base-tertiary);
@@ -33,5 +34,9 @@
     width: 3em;
     height: 3em;
     text-align: center;
+  }
+
+  a {
+    display: inline-block;
   }
 }
