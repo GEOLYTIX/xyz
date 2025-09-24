@@ -14,8 +14,8 @@ await codi.describe(
         const obj = {
           template: {
             src: 'file:./tests/assets/layers/template_test/layer.json',
+            exclude_props: ['style'],
           },
-          exclude_props: ['style'],
         };
 
         const { default: mergeTemplates } = await import(
