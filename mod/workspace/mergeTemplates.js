@@ -116,22 +116,7 @@ async function objTemplate(obj, template, roles, reverse, cache) {
 
     template = Roles.objMerge(template, roles);
 
-    if (Array.isArray(template.include_props)) {
-      const _template = {}
-      for (const prop of template.include_props) {
-        if (template.hasOwnProperty(prop)) {
-          _template[prop] = template[prop];
-        }
-      }
-      template = _template;
-    }
-    if (Array.isArray(template.exclude_props)) {
-      for (const prop of template.exclude_props) {
-        if (template.hasOwnProperty(prop)) {
-          delete template[prop];
-        }
-      }
-    }
+    templateProperties(template);
 
     if (reverse) {
       //The object key must not be overwritten by a template key.
@@ -198,4 +183,23 @@ function assignWorkspaceTemplates(obj) {
       assignWorkspaceTemplates(entry[1]);
     }
   });
+}
+
+function templateProperties(template) {
+  if (Array.isArray(template.include_props)) {
+    const _template = {};
+    for (const prop of template.include_props) {
+      if (template.hasOwnProperty(prop)) {
+        _template[prop] = template[prop];
+      }
+    }
+    template = _template;
+  }
+  if (Array.isArray(template.exclude_props)) {
+    for (const prop of template.exclude_props) {
+      if (template.hasOwnProperty(prop)) {
+        delete template[prop];
+      }
+    }
+  }
 }
