@@ -419,6 +419,7 @@ function getQueryFromTemplate(req, template) {
       req.params.SQL.length = 0;
     }
 
+    let missingParams = '';
     const query_template = template.template
 
       // Replace parameter for identifiers, e.g. table, schema, columns
@@ -427,7 +428,12 @@ function getQueryFromTemplate(req, template) {
         const param = matched.replace(/\${|}/g, '');
 
         // Get param value from request params object.
-        const change = req.params[param] || '';
+        const change = req.params[param];
+
+        if (!change) {
+          missingParams += `${param},`;
+          return '';
+        }
 
         // Change value may only contain a limited set of whitelisted characters.
         if (
@@ -447,6 +453,11 @@ function getQueryFromTemplate(req, template) {
 
         let val = req.params[param];
 
+        if (!val) {
+          missingParams += `${param},`;
+          return '';
+        }
+
         if (req.params.wildcard) {
           val = val.replaceAll(req.params.wildcard, '%');
         }
@@ -465,6 +476,12 @@ function getQueryFromTemplate(req, template) {
 
         return `$${Array.from(req.params.SQL).length}`;
       });
+
+    if (missingParams.length) {
+      throw new Error(
+        `Params not supplied to ${template.key}: ${missingParams}`,
+      );
+    }
 
     return query_template;
   } catch (err) {
