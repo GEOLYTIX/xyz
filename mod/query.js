@@ -392,6 +392,7 @@ An error will be returned if the substitution fails.
 @property {string} template.template SQL template string.
 */
 function getQueryFromTemplate(req, template) {
+  const missingParams = [];
   try {
     if (typeof template.render === 'function') {
       // Render template string from template.render() function.
@@ -427,7 +428,11 @@ function getQueryFromTemplate(req, template) {
         const param = matched.replace(/\${|}/g, '');
 
         // Get param value from request params object.
-        const change = req.params[param] || '';
+        const change = req.params[param];
+
+        if (typeof change === 'undefined') {
+          missingParams.push(param);
+        }
 
         // Change value may only contain a limited set of whitelisted characters.
         if (
@@ -465,6 +470,10 @@ function getQueryFromTemplate(req, template) {
 
         return `$${Array.from(req.params.SQL).length}`;
       });
+
+    if (missingParams.length > 0) {
+      throw new Error(`The following params are missing: ${missingParams}`);
+    }
 
     return query_template;
   } catch (err) {
@@ -596,3 +605,4 @@ function checkEmptyRow(row) {
     typeof row === 'object' && Object.values(row).some((val) => val !== null)
   );
 }
+
