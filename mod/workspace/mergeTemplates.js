@@ -214,5 +214,5 @@ function templateProperties(template) {
     }
     return _template;
   }
-  return template
+  return template;
 }
