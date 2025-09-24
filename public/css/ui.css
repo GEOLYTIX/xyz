@@ -17,9 +17,6 @@
   --color-info: #0b6f50;
   --color-danger: #a21309;
 }
-body {
-  background-color: var(--color-base);
-}
 * {
   transition: 0.2s ease-in-out;
   transition-property: background-color;
@@ -34,6 +31,14 @@ body {
 }
 .hover:hover {
   cursor: pointer;
+}
+.tooltip {
+  -webkit-user-select: none;
+  user-select: none;
+  height: 1.5em;
+  width: 1.5em;
+  font-size: inherit;
+  cursor: help;
 }
 .box-shadow {
   border: 1px solid var(--color-border);
@@ -92,13 +97,6 @@ body {
   }
 }
 @media only screen and (max-width: 768px) {
-  html {
-    overflow: scroll;
-  }
-  body {
-    overflow-y: scroll;
-    overflow-x: hidden;
-  }
   .mobile-hidden {
     visibility: hidden;
   }
@@ -187,6 +185,10 @@ body {
   font-family: "Titillium Web", sans-serif;
   font-size: 0.8em;
   color: var(--color-font);
+  background-color: var(--color-base);
+  position: absolute;
+  width: 100%;
+  height: 100%;
 }
 *,
 *::after,
@@ -531,10 +533,10 @@ label.checkbox {
   & > input {
     display: none;
   }
-  & > .material-symbols-outlined:after {
+  & > span.material-symbols-outlined:first-of-type:after {
     content: "check_box_outline_blank";
   }
-  & input:checked + .material-symbols-outlined:after {
+  & input:checked + span.material-symbols-outlined:first-of-type:after {
     content: "select_check_box";
   }
   & input:disabled ~ * {
@@ -597,6 +599,13 @@ dialog {
     user-select: none;
     padding: 5px;
     overflow: unset !important;
+    & > .content {
+      & > .filter-list {
+        max-height: 350px;
+        overflow-y: scroll;
+        overflow-x: hidden;
+      }
+    }
   }
   &.modal {
     position: fixed;
@@ -754,6 +763,32 @@ dialog {
       color: var(--color-font-contrast);
     }
   }
+}
+
+/* public/css/elements/_loading.css */
+@property --border-angle { syntax: "<angle>"; initial-value: 0deg; inherits: false; }
+@keyframes border-angle-rotate {
+  from {
+    --border-angle: 0deg;
+  }
+  to {
+    --border-angle: 360deg;
+  }
+}
+.loading {
+  --border-angle: 0deg;
+  border: 0.5em solid transparent !important;
+  border-radius: 5px;
+  animation: border-angle-rotate 4s linear infinite;
+  background:
+    linear-gradient(var(--color-base), var(--color-base)) padding-box,
+    conic-gradient(
+      from var(--border-angle),
+      var(--color-primary),
+      var(--color-base),
+      var(--color-primary),
+      var(--color-base),
+      var(--color-primary)) border-box;
 }
 
 /* public/css/elements/_pills.css */
@@ -1019,39 +1054,6 @@ dialog {
   }
 }
 
-/* public/css/layout/_divider.css */
-#ctrls-divider {
-  grid-row: 1 / 4;
-  grid-column: 2;
-  background-color: var(--color-base-secondary);
-  background-image: url('data:image/svg+xml,<svg viewBox="0 0 10 100" xmlns="http://www.w3.org/2000/svg">%0A  <line x1="5" y1="10" x2="5" y2="90" stroke-width="3" stroke="%23888" stroke-linecap="round"/>%0A</svg>');
-  background-repeat: no-repeat;
-  background-position: center;
-  box-shadow: 3px 0px 6px -3px var(--color-base-tertiary);
-  isolation: isolate;
-  &:hover {
-    cursor: col-resize;
-  }
-}
-#tabview-divider {
-  position: relative;
-  grid-row: 2;
-  grid-column: 3;
-  background-image: url('data:image/svg+xml,<svg viewBox="0 0 100 10" xmlns="http://www.w3.org/2000/svg">%0A  <line x1="10" y1="5" x2="90" y2="5" stroke-width="3" stroke="%23888" stroke-linecap="round"/>%0A</svg>');
-  background-repeat: no-repeat;
-  background-position: center;
-  background-color: var(--color-base-tertiary);
-  box-shadow: 0px -1px 6px -3px var(--color-base-tertiary);
-  &:hover {
-    cursor: row-resize;
-  }
-}
-@media only screen and (max-width: 768px) {
-  #ctrls-divider {
-    display: none;
-  }
-}
-
 /* public/css/layout/_cloudinary.css */
 .drag_and_drop_zone {
   width: 100%;
@@ -1314,13 +1316,6 @@ dialog {
     display: flex;
     font-weight: bold;
   }
-  & .label > .tooltip {
-    -webkit-user-select: none;
-    user-select: none;
-    height: 1.5em;
-    width: 1.5em;
-    font-size: inherit;
-  }
   & .drawer.group {
     grid-column: 1 / 3;
     display: grid;
@@ -1419,18 +1414,29 @@ dialog {
     background-color: var(--color-base);
     & > .tab > .header {
       color: var(--color-primary);
-      min-width: 8em;
+      min-width: 100px;
       height: 100%;
       display: flex;
-      align-items: center;
       white-space: nowrap;
       border: solid 1px var(--color-border);
-      border-radius: 3px 1em 0 0;
-      padding: 10px;
+      border-radius: 3px 15px 0 0;
+      padding: 5px;
+      justify-content: space-between;
       -webkit-user-select: none;
       -moz-user-select: none;
       -ms-user-select: none;
       user-select: none;
+      cursor: pointer;
+      > .close_tab {
+        font-size: 12px;
+        position: relative;
+      }
+      button {
+        padding-right: 5px;
+        max-width: 250px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
     & > .tab.active > .header {
       background-color: var(--color-base-tertiary);
@@ -1516,14 +1522,15 @@ dialog {
 
 /* public/css/layout/_user_locale.css */
 .user-locales {
-  height: 75px;
-  overflow-y: auto;
-  li {
-    display: flex;
-    align-items: center;
-  }
-  button {
-    height: 24px;
+  ul {
+    overflow-y: auto;
+    max-height: 6em;
+    li {
+      display: flex;
+      .material-symbols-outlined {
+        font-size: 20px;
+      }
+    }
   }
 }
 

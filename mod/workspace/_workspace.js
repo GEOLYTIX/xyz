@@ -14,6 +14,7 @@ The workspace typedef object has templates, locale, locales, dbs, and roles prop
 @requires /workspace/getLayer
 @requires /workspace/getTemplate
 @requires /utils/roles
+@requires crypto
 
 @module /workspace
 */
@@ -28,6 +29,7 @@ The workspace object defines the mapp resources available in an XYZ instance.
 @property {Object} locales Each property in the locales object is a locale available from this workspace.
 */
 
+import { createHash } from 'crypto';
 import * as Roles from '../utils/roles.js';
 import workspaceCache from './cache.js';
 import getLayer from './getLayer.js';
@@ -278,6 +280,8 @@ async function locale(req, res) {
 
     const localeWithoutRoles = removeRoles(locale);
 
+    assignChecksum(localeWithoutRoles);
+
     return res.json(localeWithoutRoles);
   }
 
@@ -293,7 +297,11 @@ async function locale(req, res) {
       .filter((layer) => !!Roles.check(layer[1], req.params.user?.roles))
       .map((layer) => layer[0]);
 
-  res.json(removeRoles(locale));
+  const localeWithoutRoles = removeRoles(locale);
+
+  assignChecksum(localeWithoutRoles);
+
+  res.json(removeRoles(localeWithoutRoles));
 }
 
 /**
@@ -403,11 +411,12 @@ async function test(req, res) {
   }
 
   // Force re-caching of workspace.
-  req.params.force &&
-    (await cacheTemplates({
+  if (req.params.force) {
+    await cacheTemplates({
       user: req.params.user,
       force: req.params.force,
-    }));
+    });
+  }
 
   const testConfig = {
     errArr: [],
@@ -420,6 +429,7 @@ async function test(req, res) {
   testConfig.workspace_templates = new Set(
     Object.entries(workspace.templates)
       .filter(([key, value]) => value._type === 'workspace')
+      .filter(([key, value]) => !value.src?.endsWith('.html'))
       .map(([key, value]) => key),
   );
 
@@ -429,10 +439,13 @@ async function test(req, res) {
 
   testWorkspaceLocales(testConfig);
 
-  for (const templateKey of Object.keys(workspace.templates)) {
-    const template = workspace.templates[templateKey];
+  for (const [key, template] of Object.entries(workspace.templates)) {
     if (template instanceof Error) {
-      testConfig.errArr.push(`${templateKey}: ${template.message}`);
+      testConfig.errArr.push(`${key}: ${template.message}`);
+    }
+
+    if (template.err instanceof Error) {
+      testConfig.errArr.push(`${key}: ${template.err.message}`);
     }
   }
 
@@ -611,11 +624,13 @@ function removeRoles(obj) {
 @description
 Gets and caches a complete workspace with all locales, layers, and templates pre-loaded.
 
-The workspaceCache method will be forced to clear the cached workspace and load the workspace again which may have changed. This is required for testing purposes. If templates should be loaded in order to extract roles it may be beneficial to use already cached templates.
+The workspaceCache method will be called with the params force flag. If true, any cached templates as well as the workspace itself will be reset.
 
-The method will iterate over the workspace.locales to cache any templates defined in the locales object.
+The method will iterate over the workspace.locales and each layer defined in the locales.
 
-The method will iterate over each layer defined in every locale to cache any templates associated with the layer objects.
+The getLocale and getLayer method will be called with the cache true flag. This flag will passed on to the getTemplate method. Templates fetched from an external source will be cached in a Map object. This is to prevent that the same template used in multiple locales or layers will be fetched multiple times.
+
+A getLayer promise for each layer in a locale will be added to a promises array. All getLayer promises must be settled before the next locale can be processed.
 
 Finally each template defined in the workspace.templates will be cached.
 
@@ -632,26 +647,43 @@ async function cacheTemplates(params) {
       locale: localeKey,
       user: params.user,
       ignoreRoles: true,
+      cache: true,
     });
 
     // If the locale has no layers, just skip it.
     if (!locale.layers) continue;
 
-    for (const layerKey of Object.keys(locale.layers)) {
+    const layerPromises = Object.keys(locale.layers).map(async (layerKey) => {
       // Will get layer and assignTemplates to workspace.
       const layer = await getLayer({
         layer: layerKey,
         locale: localeKey,
         user: params.user,
         ignoreRoles: true,
+        cache: true,
       });
 
       locale.layers[layerKey] = layer;
-    }
+    });
 
-    // hydrating/caching all the templates
-    for (const key of Object.keys(workspace.templates)) {
-      await getTemplate(key);
-    }
+    await Promise.allSettled(layerPromises);
   }
+
+  // hydrating/caching all the templates
+  for (const key of Object.keys(workspace.templates)) {
+    await getTemplate(key, true);
+  }
+}
+
+/**
+@function assignChecksum
+
+@description
+The method assigns a checksum to an object.
+
+@param {object} obj Object for the checksum
+*/
+function assignChecksum(obj) {
+  const objString = JSON.stringify(obj, null, 0);
+  obj.checksum = createHash('sha256').update(objString).digest('hex');
 }

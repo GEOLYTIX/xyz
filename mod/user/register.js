@@ -9,15 +9,15 @@ Exports the [user] register method for the /api/user/register route.
 @requires /utils/reqHost
 @requires /utils/mailer
 @requires /utils/languageTemplates
-@requires /utils/bcrypt
+@requires bcrypt
 @requires crypto
 @requires module:/utils/processEnv
 
 @module /user/register
 */
 
+import bcrypt from 'bcrypt';
 import crypto from 'crypto';
-import bcrypt from '../utils/bcrypt.cjs';
 import languageTemplates from '../utils/languageTemplates.js';
 import mailer from '../utils/mailer.js';
 import reqHost from '../utils/reqHost.js';
@@ -113,10 +113,12 @@ async function registerUserBody(req, res) {
   }
 
   // Create new user account
+  const KEYS = Object.keys(USER).join(',');
+  const VALUES = Object.keys(USER).map((NULL, i) => `$${i + 1}`);
+
   const rows = await acl(
-    `
-    INSERT INTO acl_schema.acl_table (${Object.keys(USER).join(',')})
-    VALUES (${Object.keys(USER).map((NULL, i) => `\$${i + 1}`)})`,
+    `INSERT INTO acl_schema.acl_table (${KEYS})
+    VALUES (${VALUES})`,
     Object.values(USER),
   );
 
@@ -134,12 +136,11 @@ async function registerUserBody(req, res) {
   });
 
   // Return msg. No redirect for password reset.
-  res.send(
-    await languageTemplates({
-      language: req.body.language,
-      template: 'new_account_registered',
-    }),
-  );
+  const new_account_registered = await languageTemplates({
+    language: req.body.language,
+    template: 'new_account_registered',
+  });
+  res.send(new_account_registered);
 }
 
 /**
@@ -259,12 +260,11 @@ async function passwordReset(req, res) {
 
   // Blocked user may not reset their password.
   if (user.blocked) {
-    res.status(403).send(
-      await languageTemplates({
-        language: req.body.language,
-        template: 'user_blocked',
-      }),
-    );
+    const user_blocked = await languageTemplates({
+      language: req.body.language,
+      template: 'user_blocked',
+    });
+    res.status(403).send(user_blocked);
     return;
   }
 

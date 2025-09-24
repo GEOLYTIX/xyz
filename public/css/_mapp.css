@@ -1,5 +1,7 @@
 @import url('./base/_colours.css');
 
+@import url('./base/_body.css');
+
 @import url('./layout/_ol.css');
 
 @import url('./layout/_map_attribution.css');

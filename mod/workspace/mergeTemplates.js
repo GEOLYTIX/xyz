@@ -34,7 +34,8 @@ The method will check for a template matching the obj.key string property if obj
 An array of templates can be defined as obj.templates[]. The templates will be merged into the obj in the order the template keys are in the templates[] array.
 
 @param {Object} obj 
-@param {array} [roles] An array of user roles from request params. 
+@param {array} [roles] An array of user roles from request params.
+@param {boolean} cache Templates should be cached and not requested multiple times.
 
 @property {string} [obj.template] Key of template for the object.
 @property {string} obj.key Fallback for lookup of template if not an implicit property.
@@ -42,19 +43,26 @@ An array of templates can be defined as obj.templates[]. The templates will be m
 
 @returns {Promise} The layer or locale provided as obj param.
 */
-export default async function mergeTemplates(obj, roles) {
+export default async function mergeTemplates(obj, roles, cache) {
   // Cache workspace in module scope for template assignment.
   workspace = await workspaceCache();
 
   // The object has an implicit template to merge into.
   if (typeof obj.template === 'string' || obj.template instanceof Object) {
-    obj = await objTemplate(obj, obj.template, roles);
+    obj = await objTemplate(obj, obj.template, roles, null, cache);
     if (obj instanceof Error) return obj;
   }
 
-  // The _template can be a string or object [with src]
-  for (const _template of obj.templates || []) {
-    obj = await objTemplate(obj, _template, roles, true);
+  if (Array.isArray(obj.templates)) {
+    // The _template can be a string or object [with src]
+    for (const _template of obj.templates) {
+      obj = await objTemplate(obj, _template, roles, true);
+    }
+  } else if (obj.templates instanceof Object) {
+    const err = `${obj.key} Object must be a templates Array.`;
+    obj.err ??= [];
+    obj.err.push(err);
+    console.warn(err);
   }
 
   // Substitute ${SRC_*} in object string.
@@ -93,8 +101,8 @@ The template will be merged into the obj with the reverse flag.
 
 @returns {Promise<Object>} Returns the merged obj.
 */
-async function objTemplate(obj, template, roles, reverse) {
-  template = await getTemplate(template);
+async function objTemplate(obj, template, roles, reverse, cache) {
+  template = await getTemplate(template, cache);
 
   // Failed to get template matching obj.template from template.src!
   if (template instanceof Error) {

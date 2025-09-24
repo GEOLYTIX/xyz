@@ -1,32 +1,26 @@
 .idea/
 .vscode/
 .env
+.env.*
 .DS_Store
-.sass-cache/
 .vercel
 
 env
+# npm legacy files (replaced by pnpm)
 package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# pnpm files
 node_modules/*
+.pnpm-store/
 
 public/js/*
-public/css/.sass-cache/
 public/workspaces/*
 public/js/plugins/*
-!public/js/mapbox-gl-rtl-text.js
 !public/dictionaries/*
 
-stats.json
 docs/*
-
-caddy_linux_amd64
-
-# Elastic Beanstalk Files
-.elasticbeanstalk/*
-!.elasticbeanstalk/*.cfg.yml
-!.elasticbeanstalk/*.global.yml
-.ebextensions/*
-\.ebextensions/
 
 *.pem
 *.crt

@@ -1,21 +1,26 @@
 {
   "name": "xyz",
-  "version": "v4.17.0",
+  "version": "v4.18.0",
   "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/geolytix/xyz"
   },
+  "packageManager": "pnpm@10.10.0",
+  "pnpm": {
+    "neverBuiltDependencies": []
+  },
   "scripts": {
     "test": "node --experimental-test-module-mocks node_modules/codi-test-framework/cli.js tests",
     "test-watch": "node --watch-path=. --experimental-test-module-mocks node_modules/codi-test-framework/cli.js tests --quiet",
     "_build": "node esbuild.config.mjs",
-    "ui_css": "npx esbuild --bundle public/css/_ui.css --outfile=public/css/ui.css",
-    "mapp_css": "npx esbuild --bundle public/css/_mapp.css --outfile=public/css/mapp.css",
-    "generate-docs": "jsdoc --configure jsdoc_mapp.json --verbose && jsdoc --configure jsdoc_xyz.json --verbose && jsdoc --configure jsdoc_test.json --verbose",
-    "mapp-docs": "jsdoc --configure jsdoc_mapp.json --verbose",
-    "xyz-docs": "jsdoc --configure jsdoc_xyz.json --verbose",
-    "test-docs": "jsdoc --configure jsdoc_test.json --verbose"
+    "ui_css": "pnpm exec esbuild --bundle public/css/_ui.css --outfile=public/css/ui.css",
+    "mapp_css": "pnpm exec esbuild --bundle public/css/_mapp.css --outfile=public/css/mapp.css",
+    "generate-docs": "jsdoc --configure ./utils/jsdoc_mapp.json --verbose && jsdoc --configure ./utils/jsdoc_xyz.json --verbose && jsdoc --configure ./utils/jsdoc_test.json --verbose",
+    "mapp-docs": "jsdoc --configure ./utils/jsdoc_mapp.json --verbose",
+    "xyz-docs": "jsdoc --configure ./utils/jsdoc_xyz.json --verbose",
+    "test-docs": "jsdoc --configure ./utils/jsdoc_test.json --verbose",
+    "push-env": "node ./utils/sync-vercel-env.js"
   },
   "license": "MIT",
   "optionalDependencies": {
@@ -26,6 +31,8 @@
     "nodemailer": "^6.10.0"
   },
   "dependencies": {
+    "dotenv": "^17.2.2",
+    "bcrypt": "^6.0.0",
     "jsonwebtoken": "^9.0.2",
     "pg": "~8.15.1"
   },
@@ -35,7 +42,6 @@
     "codi-test-framework": "1.0.37",
     "concurrently": "^9.1.0",
     "cookie-parser": "^1.4.5",
-    "dotenv": "^16.4.5",
     "esbuild": "^0.25.0",
     "express": "^5.1.0",
     "express-rate-limit": "^7.5.0",

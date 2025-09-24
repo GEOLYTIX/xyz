@@ -1,4 +1,4 @@
-**v4.17.0**
+**v4.18.0**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Codi Unit Tests](https://github.com/GEOLYTIX/xyz/actions/workflows/unit_tests.yml/badge.svg)
@@ -54,6 +54,8 @@ Dynamic module imports reduce the need to bundle 3rd party libraries such as [Ta
 ## XYZ Dependencies
 
 **Node.js v22+** is required for importing ESM modules.
+
+[brcypt](https://github.com/kelektiv/node.bcrypt.js#readme) - A library to help you hash passwords.
 
 [jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) - A Node implementation of JSON Web Token.
 
