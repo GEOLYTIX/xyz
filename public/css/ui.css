@@ -1071,10 +1071,7 @@ dialog {
     li {
       position: relative;
     }
-  & > ul li {
-    position: relative;
   }
-}
 }
 
 /* public/css/layout/_cloudinary.css */
