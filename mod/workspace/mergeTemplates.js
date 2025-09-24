@@ -47,8 +47,6 @@ export default async function mergeTemplates(obj, roles, cache) {
   // Cache workspace in module scope for template assignment.
   workspace = await workspaceCache();
 
-  //We will make our changes in this method.
-
   // The object has an implicit template to merge into.
   if (typeof obj.template === 'string' || obj.template instanceof Object) {
     obj = await objTemplate(obj, obj.template, roles, null, cache);
@@ -117,6 +115,23 @@ async function objTemplate(obj, template, roles, reverse, cache) {
     template = structuredClone(template);
 
     template = Roles.objMerge(template, roles);
+
+    if (Array.isArray(template.include_props)) {
+      const _template = {}
+      for (const prop of template.include_props) {
+        if (template.hasOwnProperty(prop)) {
+          _template[prop] = template[prop];
+        }
+      }
+      template = _template;
+    }
+    if (Array.isArray(template.exclude_props)) {
+      for (const prop of template.exclude_props) {
+        if (template.hasOwnProperty(prop)) {
+          delete template[prop];
+        }
+      }
+    }
 
     if (reverse) {
       //The object key must not be overwritten by a template key.
