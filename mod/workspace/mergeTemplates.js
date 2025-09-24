@@ -197,6 +197,13 @@ Properties defined in the template object exclude_props array property will remo
 @property {array} template.exclude_props Remove these properties from template object.
 */
 function templateProperties(template) {
+  if (Array.isArray(template.exclude_props)) {
+    for (const prop of template.exclude_props) {
+      if (template.hasOwnProperty(prop)) {
+        delete template[prop];
+      }
+    }
+  }
   if (Array.isArray(template.include_props)) {
     const _template = {};
     for (const prop of template.include_props) {
@@ -205,12 +212,5 @@ function templateProperties(template) {
       }
     }
     template = _template;
-  }
-  if (Array.isArray(template.exclude_props)) {
-    for (const prop of template.exclude_props) {
-      if (template.hasOwnProperty(prop)) {
-        delete template[prop];
-      }
-    }
   }
 }
