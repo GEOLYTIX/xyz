@@ -430,7 +430,7 @@ function getQueryFromTemplate(req, template) {
         // Get param value from request params object.
         const change = req.params[param];
 
-        if (typeof change === undefined) {
+        if (typeof change === 'undefined') {
           missingParams.push(param);
         }
 
@@ -472,7 +472,7 @@ function getQueryFromTemplate(req, template) {
       });
 
     if (missingParams.length > 0) {
-      throw new Error(`The following params are missing: ${missingParams}`);
+      throw new Error(`${template.key} has missing params: ${missingParams}`);
     }
 
     return query_template;
