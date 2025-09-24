@@ -5,11 +5,6 @@ await codi.describe(
     parentId: 'workspace',
   },
   async () => {
-    globalThis.xyzEnv = {
-      TITLE: 'TITLE',
-      WORKSPACE: 'file:./tests/assets/workspace_locale_layers_templates.json',
-    };
-
     await codi.it(
       {
         name: 'get template from workspace',
