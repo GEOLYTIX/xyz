@@ -11,7 +11,7 @@
   & > ul:first-of-type {
     position: relative;
 
-    &>li {
+    & > li {
       display: flex;
       flex-direction: row-reverse;
       gap: 0.5em;
@@ -21,7 +21,6 @@
         gap: 0.5em;
       }
     }
-
   }
 
   button {
