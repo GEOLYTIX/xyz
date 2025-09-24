@@ -605,4 +605,3 @@ function checkEmptyRow(row) {
     typeof row === 'object' && Object.values(row).some((val) => val !== null)
   );
 }
-
