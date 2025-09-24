@@ -14,15 +14,17 @@
     &>li {
       display: flex;
       flex-direction: row-reverse;
+      gap: 0.5em;
 
-      .submenu{
+      .submenu {
         display: flex;
+        gap: 0.5em;
       }
     }
 
   }
 
-  & > ul > li > button {
+  button {
     margin-bottom: 10px;
     background-color: var(--color-base-tertiary);
     box-shadow: 1px 1px 3px var(--color-base-tertiary);
