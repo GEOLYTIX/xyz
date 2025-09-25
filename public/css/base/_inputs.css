@@ -29,13 +29,17 @@ textarea {
   width: 100%;
   resize: none;
   border: none;
-  border-bottom: 1px dotted var(--color-border);
+  border: 1px solid var(--color-border);
   background-color: var(--color-base);
   color: var(--color-font);
   border-radius: 3px;
 
   &:focus {
     outline: none;
+  }
+
+  &:-webkit-autofill {
+    box-shadow: 0 0 0px 1000px var(--color-tertiary) inset;
   }
 }
 
@@ -67,12 +71,14 @@ input[type='datetime-local'] {
 }
 
 input[type='text'],
+input[type='email'],
+input[type='password'],
 input[type='number'] {
   padding: 5px;
-  border: none;
+  border-radius: 3px;
   background-color: var(--color-base);
   color: var(--color-font);
-  border-bottom: 1px dotted var(--color-border);
+  border: 1px solid var(--color-border);
   display: inline-block;
   width: 100%;
   min-width: 2.4ch;
