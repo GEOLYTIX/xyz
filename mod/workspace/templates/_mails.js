@@ -45,6 +45,10 @@ export default {
       subject: `This account has been approved on \${host}.`,
       text: `You are now able to log on to \${host}`,
     },
+    es: {
+      subject: `Esta cuenta ha sido aprobada el \${host}.`,
+      text: `Esta cuenta ha sido aprobada el \${host}`,
+    },
     fr: {
       subject: `Maintenant vous pouvez vous connecter à \${host}`,
       text: `Ce compte a été approuvé sur \${host}.`,
@@ -239,6 +243,15 @@ export default {
       You will be notified via email once an administrator has approved your account.
       The account was registered from this remote address \${remote_address}\n
       This wasn't you? Do NOT verify the account and let your manager know.`,
+    },
+    es: {
+      subject: `Por favor verifique su cuenta en \${host}`,
+      text: `Se ha registrado una nueva cuenta para esta dirección de correo electrónico con \${host}
+      Por favor verifique que usted es el titular de la cuenta: \${link}
+      Un administrador del sitio debe aprobar la cuenta antes de poder iniciar sesión.
+      Se le notificará por correo electrónico una vez que un administrador haya aprobado su cuenta.
+      La cuenta se registró desde esta dirección remota \${remote_address}\n
+      ¿No fuiste tú? NO verifiques la cuenta y avísale a tu gerente.`,
     },
     fr: {
       subject: `Vérifiez votre compte sur \${host}`,
