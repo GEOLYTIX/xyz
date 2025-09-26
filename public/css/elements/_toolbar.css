@@ -14,25 +14,32 @@
     & > li {
       display: flex;
       flex-direction: row-reverse;
+      margin-bottom: 8px;
       gap: 0.5em;
 
       button.group {
         position: relative;
-        margin-bottom: 10px;
         background-color: var(--color-primary);
-        color: var(--color-font-contrast);
+
+        & > span:first-of-type {
+          width: 100%;
+        }
+
+        * {
+          color: var(--color-font-contrast);
+        }
 
         .material-symbols-outlined.state-icon:after {
           font-size: 0.5em;
           position: absolute;
           top: 0;
-          right: -0.25em;
-          background-color: var(--color-info);
+          left: 0;
+          background-color: var(--color-active);
           color: var(--color-font-contrast);
           border-radius: 50%;
           box-shadow: var(--box-shadow);
           margin: 0 1px;
-          content: 'add_circle';
+          content: 'chevron_left';
         }
       }
 
@@ -42,12 +49,7 @@
         background-color: var(--color-base-tertiary);
         border-radius: 1em;
 
-        &>button,
-        &>a {
-          margin-bottom: 0;
-        }
-      
-        &>a {
+        a {
           display: inline-block;
         }
       }
@@ -57,7 +59,6 @@
   button,
   a {
     background-color: var(--color-base);
-    box-shadow: 1px 1px 3px var(--color-base-tertiary);
     border-radius: 50%;
     opacity: 0.9;
     padding: 5px;
