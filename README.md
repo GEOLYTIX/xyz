@@ -1,4 +1,4 @@
-**v4.18.0**
+**v4.18.1**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Codi Unit Tests](https://github.com/GEOLYTIX/xyz/actions/workflows/unit_tests.yml/badge.svg)
