@@ -6,7 +6,6 @@
   opacity: 0.95;
   margin: 0.5%;
   border-radius: 5%;
-  padding: 0.5%;
 
   & > ul:first-of-type {
     position: relative;
@@ -54,8 +53,8 @@
 
       .submenu {
         display: flex;
-        gap: 0.5em;
-        background-color: var(--color-base-tertiary);
+        gap: 1px;
+        background-color: var(--color-primary);
         border-radius: 1em;
 
         button,
