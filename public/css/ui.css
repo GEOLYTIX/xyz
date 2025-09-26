@@ -1130,6 +1130,81 @@ form.login-form {
   }
 }
 
+/* public/css/elements/_toolbar.css */
+.core-menu {
+  position: fixed;
+  top: 0.5em;
+  right: 0.5em;
+  z-index: 1;
+  opacity: 0.95;
+  margin: 0.5%;
+  border-radius: 5%;
+  & > ul:first-of-type {
+    position: relative;
+    & > li {
+      display: flex;
+      flex-direction: row-reverse;
+      margin-bottom: 8px;
+      gap: 0.5em;
+      button.group {
+        position: relative;
+        background-color: var(--color-primary);
+        &.active {
+          background-color: var(--color-active);
+          .material-symbols-outlined.state-icon:after {
+            content: "keyboard_double_arrow_right";
+            background-color: var(--color-primary);
+          }
+        }
+        & > span:first-of-type {
+          width: 100%;
+        }
+        * {
+          color: var(--color-font-contrast);
+        }
+        .material-symbols-outlined.state-icon:after {
+          font-size: 0.5em;
+          position: absolute;
+          top: 0;
+          left: 0;
+          background-color: var(--color-active);
+          color: var(--color-font-contrast);
+          border-radius: 50%;
+          box-shadow: var(--box-shadow);
+          margin: 0 1px;
+          content: "keyboard_double_arrow_left";
+        }
+      }
+      .submenu {
+        display: flex;
+        gap: 1px;
+        background-color: var(--color-primary);
+        border-radius: 1em;
+        button,
+        a {
+          clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
+        }
+        a {
+          display: inline-block;
+        }
+      }
+    }
+  }
+  button,
+  a {
+    background-color: var(--color-base);
+    border-radius: 50%;
+    opacity: 0.9;
+    padding: 5px;
+    width: 3em;
+    height: 3em;
+    text-align: center;
+  }
+  .hexagon {
+    clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
+  }
+}
+
 /* public/css/layout/_cloudinary.css */
 .drag_and_drop_zone {
   width: 100%;
