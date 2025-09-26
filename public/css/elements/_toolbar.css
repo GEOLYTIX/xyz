@@ -16,17 +16,47 @@
       flex-direction: row-reverse;
       gap: 0.5em;
 
+      button.group {
+        position: relative;
+        margin-bottom: 10px;
+        background-color: var(--color-primary);
+        color: var(--color-font-contrast);
+
+        .material-symbols-outlined.state-icon:after {
+          font-size: 0.5em;
+          position: absolute;
+          top: 0;
+          right: -0.25em;
+          background-color: var(--color-info);
+          color: var(--color-font-contrast);
+          border-radius: 50%;
+          box-shadow: var(--box-shadow);
+          margin: 0 1px;
+          content: 'add_circle';
+        }
+      }
+
       .submenu {
         display: flex;
         gap: 0.5em;
+        background-color: var(--color-base-tertiary);
+        border-radius: 1em;
+
+        &>button,
+        &>a {
+          margin-bottom: 0;
+        }
+      
+        &>a {
+          display: inline-block;
+        }
       }
     }
   }
 
   button,
   a {
-    margin-bottom: 10px;
-    background-color: var(--color-base-tertiary);
+    background-color: var(--color-base);
     box-shadow: 1px 1px 3px var(--color-base-tertiary);
     border-radius: 50%;
     opacity: 0.9;
@@ -34,9 +64,5 @@
     width: 3em;
     height: 3em;
     text-align: center;
-  }
-
-  a {
-    display: inline-block;
   }
 }
