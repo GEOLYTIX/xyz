@@ -264,12 +264,15 @@ textarea {
   width: 100%;
   resize: none;
   border: none;
-  border-bottom: 1px dotted var(--color-border);
+  border: 1px solid var(--color-border);
   background-color: var(--color-base);
   color: var(--color-font);
   border-radius: 3px;
   &:focus {
     outline: none;
+  }
+  &:-webkit-autofill {
+    box-shadow: 0 0 0px 1000px var(--color-tertiary) inset;
   }
 }
 input[type=number] {
@@ -296,12 +299,14 @@ input[type=datetime-local] {
   }
 }
 input[type=text],
+input[type=email],
+input[type=password],
 input[type=number] {
   padding: 5px;
-  border: none;
+  border-radius: 3px;
   background-color: var(--color-base);
   color: var(--color-font);
-  border-bottom: 1px dotted var(--color-border);
+  border: 1px solid var(--color-border);
   display: inline-block;
   width: 100%;
   min-width: 2.4ch;
@@ -789,6 +794,77 @@ dialog {
       var(--color-primary),
       var(--color-base),
       var(--color-primary)) border-box;
+}
+
+/* public/css/elements/_login_form.css */
+form.login-form {
+  padding: 0 0 4em 0;
+  .input-group {
+    width: 100%;
+    padding: 5px 0;
+  }
+  .asterisk:after {
+    content: "*";
+    color: var(--color-danger);
+  }
+  p {
+    line-height: 1.5;
+  }
+  label {
+    color: var(--color-font-mid);
+  }
+  .bar {
+    position: relative;
+    display: block;
+    width: 100%;
+    &:before,
+    &:after {
+      content: "";
+      height: 2px;
+      width: 0;
+      bottom: 0;
+      position: absolute;
+      background: var(--color-primary);
+      transition: 0.2s ease all;
+      -moz-transition: 0.2s ease all;
+      -webkit-transition: 0.2s ease all;
+    }
+    &:before {
+      left: 50%;
+    }
+    &:after {
+      right: 50%;
+    }
+  }
+  input:invalid + .bar:before,
+  input:invalid + .bar:after {
+    background: var(--color-danger);
+  }
+  input:focus ~ .bar:before,
+  input:focus ~ .bar:after {
+    width: 50%;
+  }
+  .switch {
+    color: var(--color-primary);
+    font-weight: bold;
+    &:hover {
+      cursor: pointer;
+    }
+  }
+  .msg {
+    color: var(--color-active);
+  }
+  button {
+    margin: 10px 0;
+    padding: 5px 8px;
+    border-radius: 3px;
+    font-size: 120%;
+    min-width: 5em;
+    &:hover:enabled {
+      cursor: pointer;
+      background-color: var(--color-active);
+    }
+  }
 }
 
 /* public/css/elements/_pills.css */
