@@ -21,6 +21,15 @@
         position: relative;
         background-color: var(--color-primary);
 
+        &.active {
+          background-color: var(--color-active);
+
+          .material-symbols-outlined.state-icon:after {
+            content: 'keyboard_double_arrow_right';
+            background-color: var(--color-primary);
+          }
+        }
+
         & > span:first-of-type {
           width: 100%;
         }
@@ -39,7 +48,7 @@
           border-radius: 50%;
           box-shadow: var(--box-shadow);
           margin: 0 1px;
-          content: 'chevron_left';
+          content: 'keyboard_double_arrow_left';
         }
       }
 
@@ -48,6 +57,11 @@
         gap: 0.5em;
         background-color: var(--color-base-tertiary);
         border-radius: 1em;
+
+        button,
+        a {
+          clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
+        }
 
         a {
           display: inline-block;
@@ -65,5 +79,9 @@
     width: 3em;
     height: 3em;
     text-align: center;
+  }
+
+  .hexagon {
+    clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
   }
 }
