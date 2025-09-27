@@ -94,6 +94,14 @@ export default {
   location_save_changes: 'Save your changes to this location?',
   location_zoom: 'Zoom map to feature bounds',
   locations: 'Locations',
+  login_email: 'E-mail',
+  login_password: 'Password',
+  login_button: 'Log In',
+  login_invalid:
+    'Invalid email or password does not meet the requirement of minimum 12 characters.',
+  login_verification_note:
+    'Your account must be verified by following a verification link sent to the email address and approved by an administrator before you are able to log in.',
+  login_registration_link: 'Register a new account or reset your password.',
   modify_geometry: 'Modify Geometry',
   filter_btn_label: 'Open Filter Panel',
   filter_btn_title: 'Open Filtering View',
@@ -111,6 +119,22 @@ export default {
   pill_component_remove: 'Remove',
   pin: 'Pin',
   radius: 'Radius',
+  register_agree: 'I agree',
+  register_email: 'E-mail',
+  register_error:
+    'Please make sure credentials meet the security requirements.',
+  register_login: 'Already registered? Login.',
+  register_new_password:
+    'New Password (min. length 12, must contain a digit, upper, and lower case character)',
+  register_next: 'What happens next? Confirming your account',
+  register_next_info:
+    'XYZ/MAPP will attempt to deliver an email to your email address. You must click on the link in the email to verify that you are the account holder. Please check your spam folder if you can not find this email. You will need to contact a site administrator if you are unable to access the verification link. Newly registered accounts must be approved by a site administrator once verified.',
+  register_privacy: 'Privacy Agreement',
+  register_privacy_agreement:
+    'User account data may be stored in a third party database. Passwords are encrypted at rest. Administrator will never ask for your password. User account data will not be shared with a third party. Administrator may disable, block, or remove your account. Please refer to the XYZ/MAPP documentation to remove your stored account details. You must agree to these conditions in order to register your account.',
+  register_reset: 'Register or Reset Password',
+  register_retype_password: 'Re-type password',
+  register_title: 'Registration',
   remove_document_confirm:
     'Are you sure to remove this document? This cannot be undone.',
   remove_image_confirm:
