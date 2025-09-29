@@ -14,7 +14,12 @@
       display: flex;
       flex-direction: row-reverse;
       margin-bottom: 8px;
-      gap: 0.5em;
+      position: relative;
+
+      &.active > .material-symbols-outlined.state-icon:before {
+        content: 'arrow_menu_open';
+        background-color: var(--color-primary);
+      }
 
       button.group {
         position: relative;
@@ -22,11 +27,6 @@
 
         &.active {
           background-color: var(--color-active);
-
-          .material-symbols-outlined.state-icon:after {
-            content: 'keyboard_double_arrow_right';
-            background-color: var(--color-primary);
-          }
         }
 
         & > span:first-of-type {
@@ -36,26 +36,30 @@
         * {
           color: var(--color-font-contrast);
         }
+      }
 
-        .material-symbols-outlined.state-icon:after {
-          font-size: 0.5em;
-          position: absolute;
-          top: 0;
-          left: 0;
-          background-color: var(--color-active);
-          color: var(--color-font-contrast);
-          border-radius: 50%;
-          box-shadow: var(--box-shadow);
-          margin: 0 1px;
-          content: 'keyboard_double_arrow_left';
-        }
+      .material-symbols-outlined.state-icon:before {
+        font-size: 0.5em;
+        position: absolute;
+        top: 1em;
+        right: 2.5em;
+        background-color: var(--color-active);
+        color: var(--color-font-contrast);
+        border-radius: 50%;
+        box-shadow: var(--box-shadow);
+        margin: 0 1px;
+        content: 'arrow_menu_close';
+        z-index: 1;
       }
 
       .submenu {
         display: flex;
-        gap: 1px;
+        position: absolute;
+        top: 0;
+        right: 3em;
         background-color: var(--color-primary);
         border-radius: 1em;
+        padding: 2px 4px;
 
         button,
         a {
