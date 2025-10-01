@@ -188,10 +188,10 @@ async function layerQuery(req, res) {
   req.params.filter = [
     (req.params.layer.filter?.default &&
       `AND ${sqlFilter(req.params.layer.filter.default, req)}`) ||
-      '',
+    '',
     (req.params.filter &&
       `AND ${sqlFilter(JSON.parse(req.params.filter), req)}`) ||
-      '',
+    '',
   ].join(' ');
 
   // Create viewport condition for SQL query.
@@ -420,6 +420,7 @@ function getQueryFromTemplate(req, template) {
       req.params.SQL.length = 0;
     }
 
+    const optionalParams = new Set(['viewport', 'filter']);
     const query_template = template.template
 
       // Replace parameter for identifiers, e.g. table, schema, columns
@@ -428,7 +429,7 @@ function getQueryFromTemplate(req, template) {
         const param = matched.replace(/\${|}/g, '');
 
         // Get param value from request params object.
-        const change = req.params[param];
+        const change = optionalParams.has(param) ? '' : req.params[param];
 
         if (change === undefined) {
           missingParams.push(param);
@@ -436,7 +437,7 @@ function getQueryFromTemplate(req, template) {
 
         // Change value may only contain a limited set of whitelisted characters.
         if (
-          !new Set(['viewport', 'filter']).has(param) &&
+          optionalParams.has(param) &&
           !/^[A-Za-z0-9,"'._-\s]*$/.test(change)
         ) {
           throw new Error(`Substitute \${${param}} value rejected: ${change}`);
@@ -450,7 +451,7 @@ function getQueryFromTemplate(req, template) {
         // Remove template brackets from matched param.
         const param = matched.replace(/%{|}/g, '');
 
-        let val = req.params[param];
+        let val = optionalParams.has(param) ? '' : req.params[param];
 
         if (val === undefined) {
           missingParams.push(param);
