@@ -188,10 +188,10 @@ async function layerQuery(req, res) {
   req.params.filter = [
     (req.params.layer.filter?.default &&
       `AND ${sqlFilter(req.params.layer.filter.default, req)}`) ||
-    '',
+      '',
     (req.params.filter &&
       `AND ${sqlFilter(JSON.parse(req.params.filter), req)}`) ||
-    '',
+      '',
   ].join(' ');
 
   // Create viewport condition for SQL query.
