@@ -429,7 +429,9 @@ function getQueryFromTemplate(req, template) {
         const param = matched.replace(/\${|}/g, '');
 
         // Get param value from request params object.
-        const change = optionalParams.has(param) ? '' : req.params[param];
+        const change = optionalParams.has(param)
+          ? req.params[param] || ''
+          : req.params[param];
 
         if (change === undefined) {
           missingParams.push(param);
@@ -437,7 +439,7 @@ function getQueryFromTemplate(req, template) {
 
         // Change value may only contain a limited set of whitelisted characters.
         if (
-          optionalParams.has(param) &&
+          !optionalParams.has(param) &&
           !/^[A-Za-z0-9,"'._-\s]*$/.test(change)
         ) {
           throw new Error(`Substitute \${${param}} value rejected: ${change}`);
@@ -451,7 +453,9 @@ function getQueryFromTemplate(req, template) {
         // Remove template brackets from matched param.
         const param = matched.replace(/%{|}/g, '');
 
-        let val = optionalParams.has(param) ? '' : req.params[param];
+        let val = optionalParams.has(param)
+          ? req.params[param] || ''
+          : req.params[param];
 
         if (val === undefined) {
           missingParams.push(param);
