@@ -116,6 +116,10 @@ async function objTemplate(obj, template, roles, reverse, cache) {
 
     template = Roles.objMerge(template, roles);
 
+    //use the base obj exclude/include props as we need that for the templateProperties method.
+    template.exclude_props = obj.exclude_props ?? template.exclude_props;
+    template.include_props = obj.include_props ?? template.include_props;
+
     template = templateProperties(template);
 
     if (reverse) {
