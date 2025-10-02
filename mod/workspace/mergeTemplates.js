@@ -33,7 +33,7 @@ The method will check for a template matching the obj.key string property if obj
 
 An array of templates can be defined as obj.templates[]. The templates will be merged into the obj in the order the template keys are in the templates[] array.
 
-@param {Object} obj 
+@param {Object} obj
 @param {array} [roles] An array of user roles from request params.
 @param {boolean} cache Templates should be cached and not requested multiple times.
 
@@ -94,9 +94,9 @@ Otherwise the obj will be merged into the template.
 
 The template will be merged into the obj with the reverse flag.
 
-@param {Object} obj 
-@param {Object} template The template maybe an object with a src property or a string. 
-@param {array} roles An array of user roles from request params. 
+@param {Object} obj
+@param {Object} template The template maybe an object with a src property or a string.
+@param {array} roles An array of user roles from request params.
 @param {boolean} reverse Whether template should be merged into the obj, not the other way around.
 
 @returns {Promise<Object>} Returns the merged obj.
@@ -115,6 +115,12 @@ async function objTemplate(obj, template, roles, reverse, cache) {
     template = structuredClone(template);
 
     template = Roles.objMerge(template, roles);
+
+    //use the base obj exclude/include props as we need that for the templateProperties method.
+    template.exclude_props = obj.exclude_props ?? template.exclude_props;
+    template.include_props = obj.include_props ?? template.include_props;
+
+    template = templateProperties(template);
 
     if (reverse) {
       //The object key must not be overwritten by a template key.
@@ -140,17 +146,17 @@ async function objTemplate(obj, template, roles, reverse, cache) {
 @function assignWorkspaceTemplates
 
 @description
-The method parses an object for a template object property. 
+The method parses an object for a template object property.
 
 The template property value will be assigned to the workspace.templates{} object matching the template key value.
 
-The template._type property will be set to 'template' indicating that the templates origin is in the workspace. 
+The template._type property will be set to 'template' indicating that the templates origin is in the workspace.
 
 It is possible to overassign _type:'core' templates which are loaded from the /mod/workspace/templates directory.
 
 The method will call itself for nested objects.
 
-@param {Object} obj 
+@param {Object} obj
 */
 function assignWorkspaceTemplates(obj) {
   // Return early if object is null or empty
@@ -181,4 +187,36 @@ function assignWorkspaceTemplates(obj) {
       assignWorkspaceTemplates(entry[1]);
     }
   });
+}
+
+/**
+@function templateProperties
+
+@description
+The method checks whether the template object has an array property include_props and will iterate through the string entries in the array to remove all other properties from the template object.
+
+Properties defined in the template object exclude_props array property will removed from the template object.
+@param {Object} template
+@property {array} template.include_props Remove all but these properties from template object.
+@property {array} template.exclude_props Remove these properties from template object.
+@returns {Object} template
+*/
+function templateProperties(template) {
+  if (Array.isArray(template.exclude_props)) {
+    for (const prop of template.exclude_props) {
+      if (template.hasOwnProperty(prop)) {
+        delete template[prop];
+      }
+    }
+  }
+  if (Array.isArray(template.include_props)) {
+    const _template = {};
+    for (const prop of template.include_props) {
+      if (template.hasOwnProperty(prop)) {
+        _template[prop] = template[prop];
+      }
+    }
+    return _template;
+  }
+  return template;
 }
