@@ -41,8 +41,8 @@
       .material-symbols-outlined.state-icon:before {
         font-size: 0.5em;
         position: absolute;
-        top: 1em;
-        right: 2.5em;
+        top: 0.2em;
+        right: 2em;
         background-color: var(--color-active);
         color: var(--color-font-contrast);
         border-radius: 50%;
@@ -55,9 +55,9 @@
       .submenu {
         display: flex;
         position: absolute;
-        top: 0;
+        top: -2px;
         right: 3em;
-        background-color: var(--color-primary);
+        background-color: rgb(from var(--color-primary) r g b / 0.3);
         border-radius: 1em;
         padding: 2px 4px;
 
