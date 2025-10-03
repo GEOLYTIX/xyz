@@ -57,7 +57,7 @@
         position: absolute;
         top: -2px;
         right: 3em;
-        background-color: rgb(from var(--color-primary) r g b / 0.3);
+        background-color: rgb(from var(--color-primary) r g b / 0.5);
         border-radius: 1em;
         padding: 2px 4px;
 
