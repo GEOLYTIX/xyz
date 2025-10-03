@@ -22,6 +22,8 @@
 
 @import url('./elements/_dropdown.css');
 
+@import url('./elements/_flyout_toolbar.css');
+
 @import url('./elements/_jse.css');
 
 @import url('./elements/_key.css');
@@ -35,8 +37,6 @@
 @import url('./elements/_slider.css');
 
 @import url('./elements/_toast.css');
-
-@import url('./elements/_toolbar.css');
 
 @import url('./layout/_cloudinary.css');
 

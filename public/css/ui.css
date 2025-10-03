@@ -748,6 +748,85 @@ dialog {
   }
 }
 
+/* public/css/elements/_flyout_toolbar.css */
+.core-menu {
+  position: fixed;
+  top: 0.5em;
+  right: 0.5em;
+  z-index: 1;
+  opacity: 0.95;
+  margin: 0.5%;
+  border-radius: 5%;
+  & > ul:first-of-type {
+    position: relative;
+    & > li {
+      display: flex;
+      flex-direction: row-reverse;
+      margin-bottom: 8px;
+      position: relative;
+      &.active > .material-symbols-outlined.state-icon:before {
+        content: "arrow_menu_open";
+        background-color: var(--color-primary);
+      }
+      button.group {
+        position: relative;
+        background-color: var(--color-primary);
+        &.active {
+          background-color: var(--color-active);
+        }
+        & > span:first-of-type {
+          width: 100%;
+        }
+        * {
+          color: var(--color-font-contrast);
+        }
+      }
+      .material-symbols-outlined.state-icon:before {
+        font-size: 0.5em;
+        position: absolute;
+        top: 0.2em;
+        right: 2em;
+        background-color: var(--color-active);
+        color: var(--color-font-contrast);
+        border-radius: 50%;
+        box-shadow: var(--box-shadow);
+        margin: 0 1px;
+        content: "arrow_menu_close";
+        z-index: 1;
+      }
+      .submenu {
+        display: flex;
+        position: absolute;
+        top: -2px;
+        right: 3em;
+        background-color: rgb(from var(--color-primary) r g b / 0.5);
+        border-radius: 1em;
+        padding: 2px 4px;
+        button,
+        a {
+          clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
+        }
+        a {
+          display: inline-block;
+        }
+      }
+    }
+  }
+  button,
+  a {
+    background-color: var(--color-base);
+    border-radius: 50%;
+    opacity: 0.9;
+    padding: 5px;
+    width: 3em;
+    height: 3em;
+    text-align: center;
+  }
+  .hexagon {
+    clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
+  }
+}
+
 /* public/css/elements/_jse.css */
 .jse-main {
   .text-button {
@@ -1051,85 +1130,6 @@ dialog {
   }
   to {
     transform: translateY(100%);
-  }
-}
-
-/* public/css/elements/_toolbar.css */
-.core-menu {
-  position: fixed;
-  top: 0.5em;
-  right: 0.5em;
-  z-index: 1;
-  opacity: 0.95;
-  margin: 0.5%;
-  border-radius: 5%;
-  & > ul:first-of-type {
-    position: relative;
-    & > li {
-      display: flex;
-      flex-direction: row-reverse;
-      margin-bottom: 8px;
-      position: relative;
-      &.active > .material-symbols-outlined.state-icon:before {
-        content: "arrow_menu_open";
-        background-color: var(--color-primary);
-      }
-      button.group {
-        position: relative;
-        background-color: var(--color-primary);
-        &.active {
-          background-color: var(--color-active);
-        }
-        & > span:first-of-type {
-          width: 100%;
-        }
-        * {
-          color: var(--color-font-contrast);
-        }
-      }
-      .material-symbols-outlined.state-icon:before {
-        font-size: 0.5em;
-        position: absolute;
-        top: 0.2em;
-        right: 2em;
-        background-color: var(--color-active);
-        color: var(--color-font-contrast);
-        border-radius: 50%;
-        box-shadow: var(--box-shadow);
-        margin: 0 1px;
-        content: "arrow_menu_close";
-        z-index: 1;
-      }
-      .submenu {
-        display: flex;
-        position: absolute;
-        top: -2px;
-        right: 3em;
-        background-color: rgb(from var(--color-primary) r g b / 0.3);
-        border-radius: 1em;
-        padding: 2px 4px;
-        button,
-        a {
-          clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
-        }
-        a {
-          display: inline-block;
-        }
-      }
-    }
-  }
-  button,
-  a {
-    background-color: var(--color-base);
-    border-radius: 50%;
-    opacity: 0.9;
-    padding: 5px;
-    width: 3em;
-    height: 3em;
-    text-align: center;
-  }
-  .hexagon {
-    clip-path: polygon(50% 0%, 95% 25%, 95% 75%, 50% 100%, 5% 75%, 5% 25%);
   }
 }
 
