@@ -26,7 +26,7 @@ The cookie will be destroyed [set to NULL] with detroy request parameter truthy.
 
 The cookie method will use the jsonwebtoken library to verify the existing cookie.
 
-If veriffied successfully a new token with updated user credentials will be signed.
+If verified successfully a new token with updated user credentials will be signed.
 
 The `xyzEnv.SECRET` variable will be used to sign the token.
 
@@ -51,11 +51,12 @@ export default async function cookie(req, res) {
   }
 
   const cookie = req.cookies?.[xyzEnv.TITLE];
-  const decodedCookie = jwt.decode(cookie);
 
   if (!cookie) {
     return res.send(false);
   }
+
+  const decodedCookie = jwt.decode(cookie);
 
   if (req.params.destroy) {
     // Remove cookie.
