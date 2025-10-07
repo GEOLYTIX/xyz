@@ -26,7 +26,7 @@ The cookie will be destroyed [set to NULL] with detroy request parameter truthy.
 
 The cookie method will use the jsonwebtoken library to verify the existing cookie.
 
-If veriffied successfully a new token with updated user credentials will be signed.
+If verified successfully a new token with updated user credentials will be signed.
 
 The `xyzEnv.SECRET` variable will be used to sign the token.
 
@@ -55,6 +55,8 @@ export default async function cookie(req, res) {
   if (!cookie) {
     return res.send(false);
   }
+
+  const decodedCookie = jwt.decode(cookie);
 
   if (req.params.destroy) {
     // Remove cookie.
@@ -112,6 +114,12 @@ export default async function cookie(req, res) {
 
       if (payload.session) {
         user.session = payload.session;
+      }
+
+      //If we have a sessionIndex from a SAML IdP then we need to pass it from the
+      //already created cookie as this is not stored in the acl.
+      if (decodedCookie.sessionIndex) {
+        user.sessionIndex = decodedCookie.sessionIndex;
       }
 
       const token = jwt.sign(user, xyzEnv.SECRET, {
