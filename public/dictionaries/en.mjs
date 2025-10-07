@@ -60,6 +60,7 @@ export default {
     'The provided Coordinates do not fall within the selected Locale.',
   invalid_lat_long_range:
     'Invalid coordinates: Latitude and longitude values must be within valid ranges.',
+  invalid_entry_value: 'Unable to update location with invalid entry value.',
   layer_add_new_location: 'Add new locations',
   layer_dataview_header: 'Data Views',
   filter_clear_all: 'Clear all filters',
@@ -93,6 +94,7 @@ export default {
   location_save: 'Save changes to cloud',
   location_save_changes: 'Save your changes to this location?',
   location_zoom: 'Zoom map to feature bounds',
+  location_update_failed: 'Location update has failed.',
   locations: 'Locations',
   login_email: 'E-mail',
   login_password: 'Password',
@@ -118,6 +120,7 @@ export default {
   ok: 'OK',
   pill_component_remove: 'Remove',
   pin: 'Pin',
+  query_failed: 'Query failed.',
   radius: 'Radius',
   register_agree: 'I agree',
   register_email: 'E-mail',
