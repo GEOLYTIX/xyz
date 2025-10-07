@@ -74,21 +74,17 @@ try {
 
 export default xyzEnv.AWS_S3_CLIENT
   ? (() => {
-      try {
-        // Create credentials object from AWS_S3_CLIENT
-        credentials = Object.fromEntries(
-          new URLSearchParams(xyzEnv.AWS_S3_CLIENT),
-        );
+      // Create credentials object from AWS_S3_CLIENT
+      credentials = Object.fromEntries(
+        new URLSearchParams(xyzEnv.AWS_S3_CLIENT),
+      );
 
-        // Check if we successfully imported the optional dependencies
-        if (!clientSDK || !getSignedUrl) {
-          return null;
-        }
-
-        return s3_signer;
-      } catch (err) {
+      // Check if we successfully imported the optional dependencies
+      if (!clientSDK || !getSignedUrl) {
         return null;
       }
+
+      return s3_signer;
     })()
   : null;
 
@@ -115,15 +111,19 @@ async function s3_signer(req, res) {
   });
 
   if (!Object.hasOwn(clientSDK, req.params.command)) {
-    return res.status(400).send(`S3 clientSDK command validation failed.`);
+    return new Error(`S3 clientSDK command validation failed.`);
   }
 
-  // Spread req.params into the clientSDK Command.
-  const Command = new clientSDK[req.params.command]({ ...req.params });
+  try {
+    // Spread req.params into the clientSDK Command.
+    const Command = new clientSDK[req.params.command]({ ...req.params });
 
-  const signedURL = await getSignedUrl(S3Client, Command, {
-    expiresIn: 3600,
-  });
+    const signedURL = await getSignedUrl(S3Client, Command, {
+      expiresIn: 3600,
+    });
 
-  return signedURL;
+    return signedURL;
+  } catch (err) {
+    return new Error(`S3 Signer failed: ${err.toString()}`);
+  }
 }

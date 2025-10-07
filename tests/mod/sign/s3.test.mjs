@@ -43,12 +43,12 @@ await codi.describe(
           },
         });
 
-        await s3_signer(req, res);
+        const resp = await s3_signer(req, res);
 
-        codi.assertEqual(res.statusCode, 400);
+        codi.assertTrue(resp instanceof Error);
         codi.assertEqual(
-          res._getData(),
-          'S3 clientSDK command validation failed.',
+          resp.toString(),
+          'Error: S3 clientSDK command validation failed.',
         );
       },
     );
