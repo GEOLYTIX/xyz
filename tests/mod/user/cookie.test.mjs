@@ -191,6 +191,55 @@ await codi.describe(
         codi.assertEqual(status, 403);
       },
     );
+
+    await codi.it({ name: 'saml user', parentId: 'user_cookie' }, async () => {
+      const user = {
+        email: 'test@geolytix.co.uk',
+        roles: [],
+        admin: false,
+      };
+
+      const samlUser = {
+        email: 'test@geolytix.co.uk',
+        roles: [],
+        admin: false,
+        sessionIndex: crypto.randomUUID(),
+      };
+
+      const secret = crypto.randomUUID();
+
+      globalThis.xyzEnv.SECRET = secret;
+
+      const { req, res } = codi.mockHttp.createMocks({
+        headers: {
+          host: 'http://localhost:3000',
+        },
+        cookies: {
+          TEST: jwt.sign(samlUser, secret),
+        },
+        params: {},
+      });
+
+      aclFn.mock.mockImplementation(() => {
+        return [user];
+      });
+
+      await cookie(req, res);
+
+      const header = res.getHeader('set-cookie');
+      let token = {};
+
+      //Split the values from the header
+      header.split(';').forEach((cookie) => {
+        const [name, value] = cookie.trim().split('=');
+
+        if (name === 'TEST') {
+          token = jwt.decode(value);
+        }
+      });
+
+      codi.assertTrue(Object.hasOwn(token, 'sessionIndex'));
+    });
   },
 );
 
