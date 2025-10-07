@@ -51,6 +51,7 @@ export default async function cookie(req, res) {
   }
 
   const cookie = req.cookies?.[xyzEnv.TITLE];
+  const decodedCookie = jwt.decode(cookie);
 
   if (!cookie) {
     return res.send(false);
@@ -112,6 +113,12 @@ export default async function cookie(req, res) {
 
       if (payload.session) {
         user.session = payload.session;
+      }
+
+      //If we have a sessionIndex from a SAML IdP then we need to pass it from the
+      //already created cookie as this is not stored in the acl.
+      if (decodedCookie.sessionIndex) {
+        user.sessionIndex = decodedCookie.sessionIndex;
       }
 
       const token = jwt.sign(user, xyzEnv.SECRET, {
