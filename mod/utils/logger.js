@@ -4,16 +4,15 @@ This module provides a logging utility for the XYZ API. The LOG process environm
 
 Possible log values are:
 
-- req 
-- req_url
-- query_params
-- query
-- view-req-url
-- cloudfront
-- fetch
-- mailer
-- reqhost
-- workspace
+- req: Logs the req property from requests (see https://developer.mozilla.org/en-US/docs/Web/API/Request).
+- req_url: Logs the url of the request.
+- query_params: Logs query parameters sent to the query endpoint.
+- query: Logs the sql to executed by calling the query endpoint.
+- view-req-url: Logs the url of the requested view.  
+- cloudfront: Logs responses from requests made to cloudfront e.g. <staus_code> - <endpoint> 
+- mailer: Logs the response from email sending.
+- reqhost: Logs the host for the request.
+- workspace: Logs responses for requests made to /workspace.
 
 @requires module:/utils/processEnv
 @requires crypto
