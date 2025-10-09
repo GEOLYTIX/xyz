@@ -127,7 +127,7 @@ function keyVerification(req) {
 
   if (req.params.expires < Date.parse(new Date())) return null;
 
-  const key_file = req.params.key_id;
+  const key_file = req.params.key_id.replace(/[^a-zA-Z0-9^_]/g, '');
 
   try {
     const privateKey = String(
