@@ -46,14 +46,14 @@ const logger =
   logout[xyzEnv.LOGGER.split(':')[0]]();
 
 /**
-@function logger
+@function log
 @description
 Logs a message to the configured logger or console.
 
 @param {string|Object} log The message or object to log.
 @param {string} [key='err'] The log level or key.
 */
-export default (log, key = 'err') => {
+export default function log(log, key = 'err') {
   // Check whether the log for the key should be logged.
   if (!logs.has(key)) return;
 
@@ -68,7 +68,7 @@ export default (log, key = 'err') => {
 
   // Log to stdout.
   console.log(log);
-};
+}
 
 /**
 @function logflare
