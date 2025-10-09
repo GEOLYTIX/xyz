@@ -1,9 +1,24 @@
 /**
-## logger 🪵
-This module provides a logging utility for the xyz.
+## /utils/logger 🪵
+This module provides a logging utility for the XYZ API. The LOG process environment variable will be split into an array to determine which logs should be written out.
+
+Possible log values are:
+
+- req 
+- req_url
+- query_params
+- query
+- view-req-url
+- cloudfront
+- fetch
+- mailer
+- reqhost
+- workspace
+
+@requires module:/utils/processEnv
+@requires crypto
 
 @module /utils/logger
-@requires module:/utils/processEnv
 */
 
 import crypto from 'crypto';
@@ -31,12 +46,13 @@ const logger =
   logout[xyzEnv.LOGGER.split(':')[0]]();
 
 /**
- * Logs a message to the configured logger or console.
- * @function logger
- * @param {string|Object} log - The message or object to log.
- * @param {string} [key='err'] - The log level or key.
- * @returns {void}
- */
+@function logger
+@description
+Logs a message to the configured logger or console.
+
+@param {string|Object} log The message or object to log.
+@param {string} [key='err'] The log level or key.
+*/
 export default (log, key = 'err') => {
   // Check whether the log for the key should be logged.
   if (!logs.has(key)) return;
@@ -55,10 +71,12 @@ export default (log, key = 'err') => {
 };
 
 /**
- * Configures the Logflare logger.
- * @function logflare
- * @returns {Function} A function that logs messages to Logflare.
- */
+@function logflare
+@description
+Configures the Logflare logger.
+
+@returns {Function} A function that logs messages to Logflare.
+*/
 function logflare() {
   const params = Object.fromEntries(
     new URLSearchParams(xyzEnv.LOGGER.split(':')[1]).entries(),
@@ -82,10 +100,12 @@ function logflare() {
 }
 
 /**
- * Configures the PostgreSQL logger.
- * @function postgresql
- * @returns {Function} A function that logs messages to a PostgreSQL database.
- */
+@function postgresql
+@description
+Configures the PostgreSQL logger.
+
+@returns {Function} A function that logs messages to a PostgreSQL database.
+*/
 function postgresql() {
   const params = Object.fromEntries(
     new URLSearchParams(xyzEnv.LOGGER.split(':')[1]).entries(),
