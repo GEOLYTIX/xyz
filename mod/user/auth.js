@@ -14,7 +14,7 @@ A user_sessions{} object is declared in the module to store user sessions.
 */
 
 import crypto from 'node:crypto';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import jwt from 'jsonwebtoken';
@@ -129,9 +129,13 @@ function keyVerification(req) {
 
   const key_file = req.params.key_id.replaceAll(/[^a-zA-Z0-9^_]/g, '');
 
+  const fileName = readdirSync(join(__dirname, `../../`)).find(
+    (filename) => filename === key_file,
+  );
+
   try {
     const privateKey = String(
-      readFileSync(join(__dirname, `../../${key_file}.pem`)),
+      readFileSync(join(__dirname, `../../${fileName}.pem`)),
     );
 
     const signature = crypto.createHmac('sha256', privateKey).digest('hex');
