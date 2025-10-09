@@ -130,12 +130,12 @@ function keyVerification(req) {
   const key_file = req.params.key_id.replaceAll(/[^a-zA-Z0-9^_]/g, '');
 
   const fileName = readdirSync(join(__dirname, `../../`)).find(
-    (filename) => filename === key_file,
+    (filename) => filename === `${key_file}.pem`,
   );
 
   try {
     const privateKey = String(
-      readFileSync(join(__dirname, `../../${fileName}.pem`)),
+      readFileSync(join(__dirname, `../../${fileName}`)),
     );
 
     const signature = crypto.createHmac('sha256', privateKey).digest('hex');
