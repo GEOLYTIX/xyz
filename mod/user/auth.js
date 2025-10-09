@@ -13,13 +13,13 @@ A user_sessions{} object is declared in the module to store user sessions.
 @module /user/auth
 */
 
-import jwt from 'jsonwebtoken';
-import acl from './acl.js';
-import fromACL from './fromACL.js';
+import crypto from 'crypto';
 import { readFileSync } from 'fs';
+import jwt from 'jsonwebtoken';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import crypto from 'crypto';
+import acl from './acl.js';
+import fromACL from './fromACL.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

@@ -9,10 +9,10 @@ The file sign module exports a method to sign requests to a file respurce local 
 @module /sign/file
 */
 
+import crypto from 'crypto';
 import { readFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import crypto from 'crypto';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
