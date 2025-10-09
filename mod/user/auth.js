@@ -16,6 +16,13 @@ A user_sessions{} object is declared in the module to store user sessions.
 import jwt from 'jsonwebtoken';
 import acl from './acl.js';
 import fromACL from './fromACL.js';
+import { readFileSync } from 'fs';
+import { dirname, join } from 'path';
+import { fileURLToPath } from 'url';
+import crypto from 'crypto';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 const user_sessions = {};
 
@@ -53,6 +60,11 @@ export default async function auth(req, res) {
     return await fromACL(req);
   }
 
+  const signatureCheck = keyVerification(req);
+
+  if (signatureCheck instanceof Error) {
+    return signatureCheck;
+  }
   // Get token from params or cookie.
   const token = req.params.token || req.cookies?.[xyzEnv.TITLE];
 
@@ -103,6 +115,38 @@ export default async function auth(req, res) {
   }
 
   return user;
+}
+
+function keyVerification(req) {
+  if (!req.params.signature) return null;
+
+  //Only use signature verification on signer endpoints.
+  if (!req.params.signer) return null;
+
+  req.params.expires ??= 0;
+
+  if (req.params.expires < Date.parse(new Date())) return null;
+
+  const key_file = req.params.key_id;
+
+  try {
+    const privateKey = String(
+      readFileSync(join(__dirname, `../../${key_file}.pem`)),
+    );
+
+    const signature = crypto.createHmac('sha256', privateKey).digest('hex');
+
+    if (signature !== req.params.signature)
+      throw new Error('Signature authentication failed');
+
+    delete req.params.signature;
+    delete req.params.key_id;
+    delete req.params.expires;
+
+    return { signature_auth: true };
+  } catch (error) {
+    return error;
+  }
 }
 
 /**

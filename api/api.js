@@ -175,6 +175,9 @@ async function validateRequestAuth(req, res) {
   // Validate signature of either request token, authorization header, or cookie.
   const user = await auth(req, res);
 
+  //Call request router if signature authentication was used.
+  if (user?.signature_auth) return requestRouter(req, res);
+
   // Remove token from params object.
   delete req.params.token;
 

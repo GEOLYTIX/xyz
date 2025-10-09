@@ -12,11 +12,13 @@ The sign API provides access to different request signer modules. Signer modules
 import cloudfront from './cloudfront.js';
 import cloudinary from './cloudinary.js';
 import s3 from './s3.js';
+import file from './file.js';
 
 const signerModules = {
   cloudfront,
   cloudinary,
   s3,
+  file,
 };
 
 /**
