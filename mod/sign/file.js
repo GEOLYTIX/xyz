@@ -22,17 +22,17 @@ let privateKey;
 //Export nothing if the file key is not provided
 export default xyzEnv.KEY_FILE
   ? (() => {
-    try {
-      privateKey = String(
-        readFileSync(join(__dirname, `../../${xyzEnv.KEY_FILE}.pem`)),
-      );
+      try {
+        privateKey = String(
+          readFileSync(join(__dirname, `../../${xyzEnv.KEY_FILE}.pem`)),
+        );
 
-      return file_signer;
-    } catch (error) {
-      console.error(`File Signer: ${error.toString()}`);
-      return null;
-    }
-  })()
+        return file_signer;
+      } catch (error) {
+        console.error(`File Signer: ${error.toString()}`);
+        return null;
+      }
+    })()
   : null;
 
 /**
