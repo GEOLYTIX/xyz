@@ -9,10 +9,10 @@ The file sign module exports a method to sign requests to a file respurce local 
 @module /sign/file
 */
 
-import crypto from 'crypto';
-import { readFileSync } from 'fs';
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+import crypto from 'node:crypto';
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -22,17 +22,17 @@ let privateKey;
 //Export nothing if the file key is not provided
 export default xyzEnv.KEY_FILE
   ? (() => {
-      try {
-        privateKey = String(
-          readFileSync(join(__dirname, `../../${xyzEnv.KEY_FILE}.pem`)),
-        );
+    try {
+      privateKey = String(
+        readFileSync(join(__dirname, `../../${xyzEnv.KEY_FILE}.pem`)),
+      );
 
-        return file_signer;
-      } catch (error) {
-        console.error(`File Signer: ${error.toString()}`);
-        return null;
-      }
-    })()
+      return file_signer;
+    } catch (error) {
+      console.error(`File Signer: ${error.toString()}`);
+      return null;
+    }
+  })()
   : null;
 
 /**
@@ -52,11 +52,6 @@ function file_signer(req) {
     const url = req.params?.url;
 
     if (!url) throw new Error('File Sign: url parameter was not provided');
-
-    url.replace(
-      /{(?!{)(.*?)}/g,
-      (matched) => xyzEnv[`SRC_${matched.replace(/(^{)|(}$)/g, '')}`],
-    );
 
     const date = new Date(Date.now());
 
