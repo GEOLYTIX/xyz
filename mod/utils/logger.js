@@ -11,6 +11,7 @@ Possible log values are:
 - view-req-url: Logs the url of the requested view.  
 - cloudfront: Logs responses from requests made to cloudfront e.g. <staus_code> - <endpoint> 
 - mailer: Logs the response from email sending.
+- mailer_body: Logs email from and two with the body.
 - reqhost: Logs the host for the request.
 - workspace: Logs responses for requests made to /workspace.
 
