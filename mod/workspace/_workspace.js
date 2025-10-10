@@ -278,6 +278,8 @@ async function locale(req, res) {
         .filter((layer) => !(layer instanceof Error));
     });
 
+    return res.json(locale);
+
     const localeWithoutRoles = removeRoles(locale);
 
     assignChecksum(localeWithoutRoles);
@@ -301,7 +303,7 @@ async function locale(req, res) {
 
   assignChecksum(localeWithoutRoles);
 
-  res.json(removeRoles(localeWithoutRoles));
+  res.json(localeWithoutRoles);
 }
 
 /**
@@ -363,8 +365,9 @@ async function roles(req, res) {
         rolesTree,
       );
 
-      // Pop last role from array into roleSet.
-      rolesSet.add(roles.pop());
+      for (const role of roles) {
+        rolesSet.add(role);
+      }
     } else {
       rolesTree[role] ??= {};
     }
