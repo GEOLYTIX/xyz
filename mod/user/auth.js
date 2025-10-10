@@ -60,9 +60,9 @@ export default async function auth(req, res) {
     return await fromACL(req);
   }
 
-  const signatureCheck = keyVerification(req);
+  const signatureCheck = keyVerification(req, res);
 
-  if (signatureCheck instanceof Error) {
+  if (signatureCheck || signatureCheck instanceof Error) {
     return signatureCheck;
   }
   // Get token from params or cookie.
@@ -117,11 +117,11 @@ export default async function auth(req, res) {
   return user;
 }
 
-function keyVerification(req) {
+function keyVerification(req, res) {
   if (!req.params.signature) return null;
 
   //Only use signature verification on signer endpoints.
-  if (!req.params.signer) return null;
+  if (!req.params.provider) return null;
 
   req.params.expires ??= 0;
 
@@ -138,10 +138,16 @@ function keyVerification(req) {
       readFileSync(join(__dirname, `../../${fileName}`)),
     );
 
-    const signature = crypto.createHmac('sha256', privateKey).digest('hex');
+    const signature = crypto
+      .createHmac('sha256', privateKey)
+      .update(req.params.url)
+      .digest('hex');
 
     if (signature !== req.params.signature)
-      throw new Error('Signature authentication failed');
+      return res
+        .status(401)
+        .setHeader('Content-Type', 'text/plain')
+        .send('Signature authentication failed');
 
     delete req.params.signature;
     delete req.params.key_id;

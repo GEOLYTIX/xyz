@@ -53,11 +53,17 @@ function file_signer(req) {
 
     if (!url) throw new Error('File Sign: url parameter was not provided');
 
+    if (!url.startsWith(`./${xyzEnv.FILE_RESOURCES}/`))
+      throw new Error('Unauthorized');
+
     const date = new Date(Date.now());
 
     date.setDate(date.getDate() + 1);
 
-    const signature = crypto.createHmac('sha256', privateKey).digest('hex');
+    const signature = crypto
+      .createHmac('sha256', privateKey)
+      .update(url)
+      .digest('hex');
 
     const params = {
       expires: Date.parse(date),
@@ -74,7 +80,7 @@ function file_signer(req) {
       paramString += urlParam;
     }
 
-    const signedURL = `https://${req.host}/api/provider/file?${paramString}`;
+    const signedURL = `https://${req.host}${xyzEnv.DIR}/api/provider/file?${paramString}`;
 
     // Return signedURL only from request.
     return signedURL;
