@@ -1,9 +1,24 @@
 /**
-## logger 🪵
-This module provides a logging utility for the xyz.
+## /utils/logger 🪵
+This module provides a logging utility for the XYZ API. The LOG process environment variable will be split into an array to determine which logs should be written out.
+
+Possible log values are:
+
+- req: Logs the req property from requests (see https://developer.mozilla.org/en-US/docs/Web/API/Request).
+- req_url: Logs the url of the request.
+- query_params: Logs query parameters sent to the query endpoint.
+- query: Logs the sql to executed by calling the query endpoint.
+- view-req-url: Logs the url of the requested view.  
+- cloudfront: Logs responses from requests made to cloudfront e.g. <staus_code> - <endpoint> 
+- mailer: Logs the response from email sending.
+- mailer_body: Logs email from and two with the body.
+- reqhost: Logs the host for the request.
+- workspace: Logs responses for requests made to /workspace.
+
+@requires module:/utils/processEnv
+@requires crypto
 
 @module /utils/logger
-@requires module:/utils/processEnv
 */
 
 import crypto from 'crypto';
@@ -31,13 +46,14 @@ const logger =
   logout[xyzEnv.LOGGER.split(':')[0]]();
 
 /**
- * Logs a message to the configured logger or console.
- * @function logger
- * @param {string|Object} log - The message or object to log.
- * @param {string} [key='err'] - The log level or key.
- * @returns {void}
- */
-export default (log, key = 'err') => {
+@function log
+@description
+Logs a message to the configured logger or console.
+
+@param {string|Object} log The message or object to log.
+@param {string} [key='err'] The log level or key.
+*/
+export default function log(log, key = 'err') {
   // Check whether the log for the key should be logged.
   if (!logs.has(key)) return;
 
@@ -52,13 +68,15 @@ export default (log, key = 'err') => {
 
   // Log to stdout.
   console.log(log);
-};
+}
 
 /**
- * Configures the Logflare logger.
- * @function logflare
- * @returns {Function} A function that logs messages to Logflare.
- */
+@function logflare
+@description
+Configures the Logflare logger.
+
+@returns {Function} A function that logs messages to Logflare.
+*/
 function logflare() {
   const params = Object.fromEntries(
     new URLSearchParams(xyzEnv.LOGGER.split(':')[1]).entries(),
@@ -82,10 +100,12 @@ function logflare() {
 }
 
 /**
- * Configures the PostgreSQL logger.
- * @function postgresql
- * @returns {Function} A function that logs messages to a PostgreSQL database.
- */
+@function postgresql
+@description
+Configures the PostgreSQL logger.
+
+@returns {Function} A function that logs messages to a PostgreSQL database.
+*/
 function postgresql() {
   const params = Object.fromEntries(
     new URLSearchParams(xyzEnv.LOGGER.split(':')[1]).entries(),
