@@ -63,6 +63,9 @@ await codi.describe(
     await codi.it({ name: 'cloudfront', parentId: 'getFrom' }, async () => {
       globalThis.xyzEnv = {
         KEY_CLOUDFRONT: 'CLOUDFRONTKEY',
+        FILE_RESOURCES: 'public',
+        DIR: 'latest',
+        KEY_FILE: 'KEY_TEST',
       };
 
       const cloudFrontURL =

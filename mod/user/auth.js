@@ -60,6 +60,7 @@ export default async function auth(req, res) {
     return await fromACL(req);
   }
 
+  //Verify signed urls
   const signatureCheck = keyVerification(req, res);
 
   if (signatureCheck || signatureCheck instanceof Error) {
@@ -117,18 +118,38 @@ export default async function auth(req, res) {
   return user;
 }
 
+/**
+  @function keyVerification
+
+  @description
+  The function attempts to validate the signature sent with the request. 
+
+  We compare the given signature to one calcualted from the key and the url. 
+
+  @param {req} req HTTP request.
+  @param {res} res HTTP Response
+
+  @returns {Object} returns an object containing whether or not the signature verification passed. 
+*/
 function keyVerification(req, res) {
   if (!req.params.signature) return null;
 
-  //Only use signature verification on signer endpoints.
+  //Only use signature verification on provider endpoints.
   if (!req.params.provider) return null;
 
   req.params.expires ??= 0;
 
-  if (req.params.expires < Date.parse(new Date())) return null;
+  if (Number.parseInt(req.params.expires) < Date.parse(new Date())) {
+    return res
+      .status(401)
+      .setHeader('Content-Type', 'text/plain')
+      .send('Signature authentication failed');
+  }
 
+  //Sanitize the key_id parameter
   const key_file = req.params.key_id.replaceAll(/[^a-zA-Z0-9^_]/g, '');
 
+  //Find the file to avoid using user input directly
   const fileName = readdirSync(join(__dirname, `../../`)).find(
     (filename) => filename === `${key_file}.pem`,
   );
@@ -138,6 +159,7 @@ function keyVerification(req, res) {
       readFileSync(join(__dirname, `../../${fileName}`)),
     );
 
+    //Build signature from key file and requested file url
     const signature = crypto
       .createHmac('sha256', privateKey)
       .update(req.params.url)
@@ -149,13 +171,20 @@ function keyVerification(req, res) {
         .setHeader('Content-Type', 'text/plain')
         .send('Signature authentication failed');
 
+    //Delete params that are no longer required.
     delete req.params.signature;
     delete req.params.key_id;
     delete req.params.expires;
 
     return { signature_auth: true };
   } catch (error) {
-    return error;
+    if (error.code === 'ENOENT') {
+      return res
+        .status(405)
+        .setHeader('Content-Type', 'text/plain')
+        .send('Signature authentication not configured');
+    }
+    throw new Error(error.toString());
   }
 }
 

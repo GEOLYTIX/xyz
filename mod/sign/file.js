@@ -1,7 +1,7 @@
 /**
 ## /sign/file
 
-The file sign module exports a method to sign requests to a file respurce local to the instance.
+The file sign module exports a method to sign requests to a file resource local to the instance.
 
 @requires fs
 @requires path
@@ -22,17 +22,17 @@ let privateKey;
 //Export nothing if the file key is not provided
 export default xyzEnv.KEY_FILE
   ? (() => {
-      try {
-        privateKey = String(
-          readFileSync(join(__dirname, `../../${xyzEnv.KEY_FILE}.pem`)),
-        );
+    try {
+      privateKey = String(
+        readFileSync(join(__dirname, `../../${xyzEnv.KEY_FILE}.pem`)),
+      );
 
-        return file_signer;
-      } catch (error) {
-        console.error(`File Signer: ${error.toString()}`);
-        return null;
-      }
-    })()
+      return file_signer;
+    } catch (error) {
+      console.error(`File Signer: ${error.toString()}`);
+      return null;
+    }
+  })()
   : null;
 
 /**
@@ -44,7 +44,7 @@ The method creates a signed URL for a file resource.
 
 @param {req|string} req Request object or URL string.
 
-@returns {String} The method resolves to a string which contains the signed url.
+@returns {String} The function returns the signed url.
 */
 function file_signer(req) {
   try {
@@ -60,6 +60,7 @@ function file_signer(req) {
 
     date.setDate(date.getDate() + 1);
 
+    //Signature only allows access to the requested file.
     const signature = crypto
       .createHmac('sha256', privateKey)
       .update(url)
@@ -72,6 +73,7 @@ function file_signer(req) {
       url: req.params.url,
     };
 
+    //Build up URL
     let paramString = '';
     for (const key of Object.keys(params)) {
       let urlParam = `${key}=${encodeURIComponent(params[key])}`;
