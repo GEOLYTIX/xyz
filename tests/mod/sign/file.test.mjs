@@ -1,10 +1,10 @@
 import crypto from 'node:crypto';
-import { readFileSync } from 'fs';
 
-const fsMockFn = codi.mock.fn(readFileSync);
-const fsMock = codi.mock.module('fs', {
+const mockreadFileSync = codi.mock.module('fs', {
   namedExports: {
-    readFileSync: fsMockFn,
+    readFileSync: () => {
+      return 'PRIVATEKEY';
+    },
   },
 });
 
@@ -55,13 +55,11 @@ await codi.describe(
         paramString += urlParam;
       }
 
-      fsMockFn.mock.mockImplementationOnce(function readFileSync() {
-        return 'PRIVATEKEY';
-      });
+      const { default: file_signer } = await import(
+        '../../../mod/sign/file.js'
+      );
 
-      const { file_signer } = await import('../../../mod/sign/file.js');
-
-      const result = await file_signer(req);
+      const result = file_signer(req);
 
       const signedURL = `https://${req.host}${xyzEnv.DIR}/api/provider/file?${paramString}`;
 
@@ -70,4 +68,4 @@ await codi.describe(
   },
 );
 
-fsMock.restore();
+mockreadFileSync.restore();
