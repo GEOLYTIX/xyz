@@ -88,13 +88,15 @@ export default async function getLocale(params, parentLocale) {
   // The roles property maybe assigned from a template. Templates must be merged prior to the role check.
   locale = await mergeTemplates(locale, params.user?.roles, params.cache);
 
-  //If the user is an admin we don't need to check roles
-  if (
-    locale instanceof Error ||
-    (!params.ignoreRoles && !Roles.check(locale, params.user?.roles))
-  ) {
+  // The mergeTemplates method returned an Error.
+  if (locale instanceof Error) {
     return new Error('Role access denied.');
   }
+
+  //If the user is an admin we don't need to check roles
+  if (!params.ignoreRoles && !Roles.check(locale, params.user?.roles)) {
+    return new Error('Role access denied.');
+  }  
 
   locale = Roles.objMerge(locale, params.user?.roles);
 
@@ -125,10 +127,10 @@ export default async function getLocale(params, parentLocale) {
   }
 
   // Remove properties which are only required for the fetching templates and composing workspace objects.
-  delete locale.src;
-  delete locale.template;
-  delete locale.templates;
-  delete locale._type;
+  // delete locale.src;
+  // delete locale.template;
+  // delete locale.templates;
+  // delete locale._type;
 
   return locale;
 }

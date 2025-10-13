@@ -47,6 +47,11 @@ export default async function mergeTemplates(obj, roles, cache) {
   // Cache workspace in module scope for template assignment.
   workspace = await workspaceCache();
 
+  if (typeof obj.role === 'string') {
+    obj.roles ??= {};
+    obj.roles[obj.role] ??= true;
+  }
+
   // The object has an implicit template to merge into.
   if (typeof obj.template === 'string' || obj.template instanceof Object) {
     obj = await objTemplate(obj, obj.template, roles, null, cache);
@@ -125,20 +130,18 @@ async function objTemplate(obj, template, roles, reverse, cache) {
   //   }
   // }
 
-  if (obj.role) {
-    obj.roles ??= {};
-    obj.roles[obj.role] ??= true;
-  }
-
   if (template.role) {
     template.roles ??= {};
     template.roles[template.role] ??= true;
 
-    if (obj.role) {
-      obj.roles[`${obj.role}.${template.role}`] ??= true;
-    }
+    obj.roles ??= {};
+    obj.roles[template.role] ??= true;
 
-    //delete template.role;
+    // if (obj.role) {
+    //   obj.roles[`${obj.role}.${template.role}`] ??= true;
+    // }
+
+    delete template.role;
   }
 
   if (Roles.check(template, roles)) {
@@ -163,8 +166,8 @@ async function objTemplate(obj, template, roles, reverse, cache) {
   }
 
   return obj;
-
-  // Return empty object if Roles.check fails to prevent subsequent object from crashing on undefined.
+  
+  // TODO: Error handling should be managed here not in mergeTemplates method.
   return new Error('Role check failed.');
 }
 
