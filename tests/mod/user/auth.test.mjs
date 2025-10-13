@@ -520,7 +520,7 @@ await codi.describe(
               email: 'test@geolytix.co.uk',
               admin: true,
               roles: [],
-              session: crypto.randomUUID('123.12.23/123'),
+              session: crypto.randomUUID({ ip_addr: '123.12.23/123' }),
             };
 
             const secret = 'i-am-a-secret';

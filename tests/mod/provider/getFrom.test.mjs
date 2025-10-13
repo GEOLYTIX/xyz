@@ -64,7 +64,7 @@ await codi.describe(
       globalThis.xyzEnv = {
         KEY_CLOUDFRONT: 'CLOUDFRONTKEY',
         FILE_RESOURCES: 'public',
-        DIR: 'latest',
+        DIR: '/latest',
         KEY_FILE: 'KEY_TEST',
       };
 

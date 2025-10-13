@@ -1,10 +1,12 @@
 import crypto from 'node:crypto';
-import fs from 'node:fs';
+import { readFileSync } from 'fs';
 
-fs.writeFileSync(
-  '../KEY_TEST.pem',
-  '------BEGIN-----\nwerwerwerqwerwerqwerw\n-----END',
-);
+const fsMockFn = codi.mock.fn(readFileSync);
+const fsMock = codi.mock.module('fs', {
+  namedExports: {
+    readFileSync: fsMockFn,
+  },
+});
 
 await codi.describe(
   {
@@ -14,17 +16,13 @@ await codi.describe(
   },
   async () => {
     codi.it({ name: 'valid file sign', parentId: 'sign_file' }, async () => {
-      const privateKey = String(fs.readFileSync('../KEY_TEST.pem'));
+      const privateKey = 'PRIVATEKEY';
 
       globalThis.xyzEnv = {
         FILE_RESOURCES: 'public',
         DIR: 'latest',
         KEY_FILE: 'KEY_TEST',
       };
-
-      const { default: file_signer } = await import(
-        '../../../mod/sign/file.js'
-      );
 
       const date = new Date(Date.now());
 
@@ -36,7 +34,7 @@ await codi.describe(
         .digest('hex');
 
       const { req, res } = codi.mockHttp.createMocks({
-        host: 'localhost',
+        host: 'localhost/',
         params: {
           url: './public/views/_login.html',
         },
@@ -57,8 +55,13 @@ await codi.describe(
         paramString += urlParam;
       }
 
-      console.log(file_signer);
-      const result = file_signer(req);
+      fsMockFn.mock.mockImplementationOnce(function readFileSync() {
+        return 'PRIVATEKEY';
+      });
+
+      const { file_signer } = await import('../../../mod/sign/file.js');
+
+      const result = await file_signer(req);
 
       const signedURL = `https://${req.host}${xyzEnv.DIR}/api/provider/file?${paramString}`;
 
@@ -67,4 +70,4 @@ await codi.describe(
   },
 );
 
-fs.unlinkSync('../KEY_TEST.pem');
+fsMock.restore();
