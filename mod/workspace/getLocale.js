@@ -90,7 +90,7 @@ export default async function getLocale(params, parentLocale) {
 
   // The mergeTemplates method returned an Error.
   if (locale instanceof Error) {
-    return new Error('Role access denied.');
+    return locale;
   }
 
   //If the user is an admin we don't need to check roles
