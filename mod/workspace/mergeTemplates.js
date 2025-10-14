@@ -138,6 +138,12 @@ async function objTemplate(obj, template, roles, reverse, cache) {
 
   template = Roles.objMerge(template, roles);
 
+    //use the base obj exclude/include props as we need that for the templateProperties method.
+    template.exclude_props = obj.exclude_props ?? template.exclude_props;
+    template.include_props = obj.include_props ?? template.include_props;
+
+    template = templateProperties(template);
+
   if (reverse) {
     //The object key must not be overwritten by a template key.
     delete template.key;
@@ -199,4 +205,36 @@ function assignWorkspaceTemplates(obj) {
       assignWorkspaceTemplates(entry[1]);
     }
   });
+}
+
+/**
+@function templateProperties
+
+@description
+The method checks whether the template object has an array property include_props and will iterate through the string entries in the array to remove all other properties from the template object.
+
+Properties defined in the template object exclude_props array property will removed from the template object.
+@param {Object} template
+@property {array} template.include_props Remove all but these properties from template object.
+@property {array} template.exclude_props Remove these properties from template object.
+@returns {Object} template
+*/
+function templateProperties(template) {
+  if (Array.isArray(template.exclude_props)) {
+    for (const prop of template.exclude_props) {
+      if (template.hasOwnProperty(prop)) {
+        delete template[prop];
+      }
+    }
+  }
+  if (Array.isArray(template.include_props)) {
+    const _template = {};
+    for (const prop of template.include_props) {
+      if (template.hasOwnProperty(prop)) {
+        _template[prop] = template[prop];
+      }
+    }
+    return _template;
+  }
+  return template;
 }
