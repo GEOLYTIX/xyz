@@ -91,6 +91,16 @@ The method will request a template object from the getTemplate module method.
 
 Possible error from the template fetch will be added to the obj.err[] array before the obj is returned.
 
+Templates may have an access role restriction. The `template.role` string property requires a user to have that role in order to access the template.
+
+The role string will be added as boolean:true property to the `template.roles` object property if the property key is undefined.
+
+`template.role = 'bar' -> template.roles = {'bar':true}`
+
+A dot notation role key will be created if the obj has a role string property.
+
+`obj.role = 'foo' && template.role = 'bar' -> template.roles = {'foo.bar':true}`
+
 The template will be checked against the request user roles.
 
 The method will shortcircuit if roles restrict access to the template object.
@@ -103,6 +113,7 @@ The template will be merged into the obj with the reverse flag.
 @param {Object} template The template maybe an object with a src property or a string. 
 @param {array} roles An array of user roles from request params. 
 @param {boolean} reverse Whether template should be merged into the obj, not the other way around.
+@property {string} template.role The template has an access role restriction.
 
 @returns {Promise<Object>} Returns the merged obj.
 */
@@ -120,13 +131,11 @@ async function objTemplate(obj, template, roles, reverse, cache) {
     template.roles ??= {};
     template.roles[template.role] ??= true;
 
-    obj.roles ??= {};
-    obj.roles[template.role] ??= true;
-
     if (obj.role) {
       template.roles[`${obj.role}.${template.role}`] ??= true;
     }
 
+    // Delete the template.role to prevent the obj.role being overwritten when the template is merged into the obj.
     if (reverse) delete template.role;
   }
 
