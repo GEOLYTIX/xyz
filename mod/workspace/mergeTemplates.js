@@ -116,20 +116,6 @@ async function objTemplate(obj, template, roles, reverse, cache) {
     return obj;
   }
 
-  // if (reverse) {
-  //   if (template.role) {
-  //     template.roles ??= {};
-  //     template.roles[template.role] ??= true;
-
-  //     if (obj.role) {
-  //       obj.roles ??= {};
-  //       obj.roles[`${obj.role}.${template.role}`] ??= true;
-  //     }
-
-  //     delete template.role;
-  //   }
-  // }
-
   if (template.role) {
     template.roles ??= {};
     template.roles[template.role] ??= true;
@@ -137,38 +123,35 @@ async function objTemplate(obj, template, roles, reverse, cache) {
     obj.roles ??= {};
     obj.roles[template.role] ??= true;
 
-    // if (obj.role) {
-    //   obj.roles[`${obj.role}.${template.role}`] ??= true;
-    // }
-
-    delete template.role;
-  }
-
-  if (Roles.check(template, roles)) {
-    template = structuredClone(template);
-
-    template = Roles.objMerge(template, roles);
-
-    if (reverse) {
-      //The object key must not be overwritten by a template key.
-      delete template.key;
-
-      //The object template must not be overwritten by a templates template.
-      delete template.template;
-
-      // Merge template --> obj
-      return merge(obj, template);
-    } else {
-      // Merge obj --> template
-      // Template must be cloned to prevent cross polination and array aggregation.
-      return merge(template, obj);
+    if (obj.role) {
+      template.roles[`${obj.role}.${template.role}`] ??= true;
     }
+
+    if (reverse) delete template.role;
   }
 
-  return obj;
-  
-  // TODO: Error handling should be managed here not in mergeTemplates method.
-  return new Error('Role check failed.');
+  if (!Roles.check(template, roles)) {
+    return obj;
+  }
+
+  template = structuredClone(template);
+
+  template = Roles.objMerge(template, roles);
+
+  if (reverse) {
+    //The object key must not be overwritten by a template key.
+    delete template.key;
+
+    //The object template must not be overwritten by a templates template.
+    delete template.template;
+
+    // Merge template --> obj
+    return merge(obj, template);
+  } else {
+    // Merge obj --> template
+    // Template must be cloned to prevent cross polination and array aggregation.
+    return merge(template, obj);
+  }
 }
 
 /**
