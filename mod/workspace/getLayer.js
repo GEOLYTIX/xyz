@@ -89,7 +89,7 @@ export default async function getLayer(params, locale) {
   }
 
   if (locale.role) {
-    layer.localeRole = locale.role
+    layer.localeRole = locale.role;
   }
 
   //If the user is an admin we don't need to check roles
