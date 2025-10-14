@@ -81,11 +81,20 @@ async function mailer(params) {
     to: params.to,
   };
 
-  const result = await transport
-    .sendMail(mailTemplate)
-    .catch((err) => console.error(err));
+  await transport.sendMail(mailTemplate, (err, info) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
 
-  logger(result, 'mailer');
+    let result = `${info.messageId}\nFrom: ${info.envelope.from}\nTo: ${info.envelope.to}`;
+
+    logger(result, 'mailer');
+
+    result += `\nBody:\n ${mailTemplate.text.replace('    ', '')}`;
+
+    logger(result, 'mailer_body');
+  });
 }
 
 /**
