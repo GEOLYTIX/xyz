@@ -96,7 +96,7 @@ export default async function getLocale(params, parentLocale) {
   //If the user is an admin we don't need to check roles
   if (!params.ignoreRoles && !Roles.check(locale, params.user?.roles)) {
     return new Error('Role access denied.');
-  }  
+  }
 
   locale = Roles.objMerge(locale, params.user?.roles);
 
