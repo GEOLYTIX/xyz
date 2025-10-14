@@ -127,10 +127,10 @@ export default async function getLocale(params, parentLocale) {
   }
 
   // Remove properties which are only required for the fetching templates and composing workspace objects.
-  // delete locale.src;
-  // delete locale.template;
-  // delete locale.templates;
-  // delete locale._type;
+  delete locale.src;
+  delete locale.template;
+  delete locale.templates;
+  delete locale._type;
 
   return locale;
 }

@@ -278,8 +278,6 @@ async function locale(req, res) {
         .filter((layer) => !(layer instanceof Error));
     });
 
-    return res.json(locale);
-
     const localeWithoutRoles = removeRoles(locale);
 
     assignChecksum(localeWithoutRoles);
