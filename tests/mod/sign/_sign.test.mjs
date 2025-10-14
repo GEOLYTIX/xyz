@@ -53,12 +53,13 @@ await codi.describe({ name: 'Sign: ', id: 'sign' }, async () => {
   await codi.describe(
     { name: 'signers: ', id: 'sign_signers', parentId: 'sign' },
     () => {
-      const signers = ['s3', 'cloudfront', 'cloudinary'];
+      const signers = ['s3', 'cloudfront', 'cloudinary', 'file'];
 
       const mockFns = {
         s3: mocks3Fn,
         cloudinary: mockCloudinaryFn,
         cloudfront: mockCloudFrontFn,
+        file: mockFileFn,
       };
 
       signers.forEach(async (sign) => {
