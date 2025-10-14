@@ -1,5 +1,4 @@
 import crypto from 'node:crypto';
-import fs from 'node:fs';
 import jwt from 'jsonwebtoken';
 
 const aclFn = codi.mock.fn();
@@ -15,17 +14,22 @@ const mockFromACL = codi.mock.module('../../../mod/user/fromACL.js', {
   defaultExport: fromACLFn,
 });
 
+const { readFileSync, readdirSync } = await import('fs');
+const fsMockFn = codi.mock.fn(readFileSync);
+const fsMockDirFn = codi.mock.fn(readdirSync);
+const fsMock = codi.mock.module('fs', {
+  namedExports: {
+    readFileSync: fsMockFn,
+    readdirSync: fsMockDirFn,
+  },
+});
+
 await codi.describe(
   { name: 'auth:', id: 'user_auth', parentId: 'user' },
   async () => {
     const { default: auth } = await import('../../../mod/user/auth.js');
 
-    fs.writeFileSync(
-      'TEST_KEY.pem',
-      '------BEGIN-----\nwerwerwerqwerwerqwerw\n-----END',
-    );
-
-    const privateKey = fs.readFileSync('TEST_KEY.pem');
+    const privateKey = 'PRIVATEKEY';
 
     globalThis.xyzEnv ??= {};
     globalThis.xyzEnv = { FILE_RESOURCES: 'public', KEY_FILE: 'TEST_KEY' };
@@ -49,6 +53,19 @@ await codi.describe(
             expires: Date.parse(date),
             key_id: 'TEST_KEY',
           },
+        });
+
+        fsMockFn.mock.mockImplementation((filePath) => {
+          if (filePath?.includes?.('undefined')) {
+            const error = new Error('File not Found');
+            error.code = 'ENOENT';
+            throw error;
+          }
+          return 'PRIVATEKEY';
+        });
+
+        fsMockDirFn.mock.mockImplementation(() => {
+          return ['TEST_KEY.pem'];
         });
 
         const result = await auth(req, res);
@@ -160,6 +177,8 @@ await codi.describe(
           },
         });
 
+        fsMock.restore();
+
         await auth(req, res);
 
         codi.assertEqual(res.statusCode, 405);
@@ -167,8 +186,6 @@ await codi.describe(
           res._getData(),
           'Signature authentication not configured',
         );
-
-        fs.unlinkSync('TEST_KEY.pem');
       },
     );
     await codi.it(
@@ -557,5 +574,6 @@ await codi.describe(
   },
 );
 
+fsMock.restore();
 mockacl.restore();
 mockFromACL.restore();
