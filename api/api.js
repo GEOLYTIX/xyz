@@ -42,6 +42,7 @@ The req object represents the HTTP request and has properties for the request qu
 */
 
 import '../mod/utils/processEnv.js';
+import { ServerResponse } from 'node:http';
 import provider from '../mod/provider/_provider.js';
 //Route imports
 import query from '../mod/query.js';
@@ -174,6 +175,11 @@ PRIVATE processes require user auth for all requests and will shortcircuit to th
 async function validateRequestAuth(req, res) {
   // Validate signature of either request token, authorization header, or cookie.
   const user = await auth(req, res);
+
+  //Key authentication generates a response
+  if (user instanceof ServerResponse) {
+    return user;
+  }
 
   //Call request router if signature authentication was used.
   if (user?.signature_auth) return requestRouter(req, res);

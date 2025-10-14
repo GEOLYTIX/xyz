@@ -165,11 +165,12 @@ function keyVerification(req, res) {
       .update(req.params.url)
       .digest('hex');
 
-    if (signature !== req.params.signature)
+    if (signature !== req.params.signature) {
       return res
         .status(401)
         .setHeader('Content-Type', 'text/plain')
         .send('Signature authentication failed');
+    }
 
     //Delete params that are no longer required.
     delete req.params.signature;
