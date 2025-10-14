@@ -664,7 +664,7 @@ async function cacheTemplates(params) {
         cache: true,
       });
 
-      locale.layers[layerKey] = layer;
+      workspace.locales[localeKey].layers[layerKey] = layer;
     });
 
     await Promise.allSettled(layerPromises);

@@ -88,6 +88,10 @@ export default async function getLayer(params, locale) {
     layer = merge(structuredClone(locale.layer), layer);
   }
 
+  if (locale.role) {
+    layer.localeRole = locale.role
+  }
+
   //If the user is an admin we don't need to check roles
   if (!params.ignoreRoles && !Roles.check(layer, params.user?.roles)) {
     return new Error('Role access denied.');
