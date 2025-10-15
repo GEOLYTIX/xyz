@@ -369,7 +369,7 @@ async function roles(req, res) {
     } else {
       rolesTree[role] ??= {};
     }
-  };
+  }
 
   const rolesArr = Array.from(rolesSet).sort();
 
