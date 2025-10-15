@@ -79,6 +79,10 @@
     border-radius: 2px;
   }
 
+  label.radio span.material-symbols-outlined:after {
+    color: var(--color-active);
+  }
+
   .material-symbols-outlined:after {
     color: var(--color-font);
   }
