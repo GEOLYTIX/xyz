@@ -59,7 +59,7 @@ async function cloudfront_signer(req) {
     // Substitutes {*} with xyzEnv.SRC_* key values.
     const url = (req.params?.url || req).replaceAll(
       /{(?!{)(.*?)}/g,
-      (matched) => xyzEnv[`SRC_${matched.replace(/^{|}$/g, '')}`],
+      (matched) => xyzEnv[`SRC_${matched.replace(/(^{)|(}$)/g, '')}`],
     );
 
     const date = new Date(Date.now());
