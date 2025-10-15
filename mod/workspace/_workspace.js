@@ -371,7 +371,7 @@ async function roles(req, res) {
     }
   });
 
-  const roles = Array.from(rolesSet);
+  const roles = Array.from(rolesSet).sort();
 
   if (req.params.tree) {
     return res.send(rolesTree);

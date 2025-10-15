@@ -130,19 +130,33 @@ async function objTemplate(obj, template, roles, reverse, cache) {
     return obj;
   }
 
-  if (template.role) {
+  //obj.role ??= obj.localeRole;
+
+  if (typeof obj.role === 'string') {
+    // if (typeof obj.localeRole === 'string' && obj.localeRole !== obj.role) {
+    //   obj.role = `${obj.localeRole}.${obj.role}`;
+    // }
+    obj.roles ??= {};
+    obj.roles[obj.role] ??= true;
+  }
+
+  if (typeof template.role === 'string') {
     template.roles ??= {};
     template.roles[template.role] ??= true;
 
-    if (obj.role) {
+    if (typeof obj.role === 'string') {
       template.roles[`${obj.role}.${template.role}`] ??= true;
+    } else if (typeof obj.localeRole === 'string') {
+      template.roles[`${obj.localeRole}.${template.role}`] ??= true;
     }
 
     // Delete the template.role to prevent the obj.role being overwritten when the template is merged into the obj.
-    if (reverse) delete template.role;
+    if (reverse) {
+      delete template.role;
+    }
   }
 
-  if (!Roles.check(template, roles)) {
+  if (roles !== true && !Roles.check(template, roles)) {
     return obj;
   }
 
