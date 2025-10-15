@@ -57,9 +57,9 @@ The method creates a signed URL for a cloudfront resource.
 async function cloudfront_signer(req) {
   try {
     // Substitutes {*} with xyzEnv.SRC_* key values.
-    const url = (req.params?.url || req).replace(
+    const url = (req.params?.url || req).replaceAll(
       /{(?!{)(.*?)}/g,
-      (matched) => xyzEnv[`SRC_${matched.replace(/(^{)|(}$)/g, '')}`],
+      (matched) => xyzEnv[`SRC_${matched.replace(/^{|}$/g, '')}`],
     );
 
     const date = new Date(Date.now());
