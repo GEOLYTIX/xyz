@@ -92,6 +92,9 @@
     color: var(--color-font);
     border-radius: 2px;
   }
+  label.radio span.material-symbols-outlined:after {
+    color: var(--color-active);
+  }
   .material-symbols-outlined:after {
     color: var(--color-font);
   }
@@ -893,6 +896,39 @@ form.login-form {
       color: inherit;
       vertical-align: middle;
     }
+  }
+}
+
+/* public/css/elements/_radio.css */
+label.radio {
+  display: block;
+  &.disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+  &.inline {
+    display: inline-block;
+  }
+  & > span {
+    vertical-align: middle;
+  }
+  &.inline + span {
+    vertical-align: middle;
+  }
+  & > input[type=radio] {
+    display: none;
+  }
+  & > .material-symbols-outlined:first-of-type:after {
+    content: "radio_button_unchecked";
+  }
+  & input[type=radio]:checked + .material-symbols-outlined:first-of-type:after {
+    content: "radio_button_checked";
+  }
+  & input[type=radio]:disabled ~ * {
+    opacity: 0.4;
   }
 }
 
