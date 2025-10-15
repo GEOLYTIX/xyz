@@ -351,51 +351,33 @@ async function roles(req, res) {
 
   const rolesTree = {};
 
-  rolesSet.forEach((role) => {
-    const dotRoles = role.split('.');
-
-    if (dotRoles.length === 1) return;
-
-    const popRole = dotRoles.pop();
-
-    rolesSet.forEach((role) => {
-      const nestedRoles = role.split('.');
-
-      if (nestedRoles.length === 1) return;
-
-      if (popRole === nestedRoles[0]) {
-        rolesSet.add(`${dotRoles.join('.')}.${role}`);
-      }
-    });
-  });
-
   // Delete restricted Asterisk role.
   rolesSet.delete('*');
 
-  rolesSet.forEach((role) => {
-    const roles = role.split('.');
+  for (const role of rolesSet) {
+    const rolesArr = role.split('.');
 
     if (roles.length > 1) {
-      roles.reduce(
+      rolesArr.reduce(
         (accumulator, currentValue) => (accumulator[currentValue] ??= {}),
         rolesTree,
       );
 
-      for (const role of roles) {
+      for (const role of rolesArr) {
         rolesSet.add(role);
       }
     } else {
       rolesTree[role] ??= {};
     }
-  });
+  };
 
-  const roles = Array.from(rolesSet).sort();
+  const rolesArr = Array.from(rolesSet).sort();
 
   if (req.params.tree) {
     return res.send(rolesTree);
   }
 
-  res.send(roles);
+  res.send(rolesArr);
 }
 
 /**
