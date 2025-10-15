@@ -91,15 +91,20 @@ export default async function auth(req, res) {
 
   if (Array.isArray(user.roles)) {
     // Add default role * to all users.
-    user.roles.push('*');
+    //user.roles.push('*');
+
+    const roleSet = new Set(['*'])
 
     // Shift first role of dot notation roles into user.roles array.
-    user.roles.forEach((role) => {
-      const dotRoles = role.split('.');
-      if (dotRoles.length > 1) {
-        user.roles.push(dotRoles.shift());
+    for (const role of user.roles) {
+      const roleArr = []
+      for (const dotRole of role.split('.')) {
+        roleArr.push(dotRole)
+        roleSet.add(roleArr.join('.'))
       }
-    });
+    };
+
+    user.roles = Array.from(roleSet);
   }
 
   return user;
