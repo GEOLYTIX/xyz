@@ -130,16 +130,6 @@ async function objTemplate(obj, template, roles, reverse, cache) {
     return obj;
   }
 
-  //obj.role ??= obj.localeRole;
-
-  if (typeof obj.role === 'string') {
-    // if (typeof obj.localeRole === 'string' && obj.localeRole !== obj.role) {
-    //   obj.role = `${obj.localeRole}.${obj.role}`;
-    // }
-    obj.roles ??= {};
-    obj.roles[obj.role] ??= true;
-  }
-
   if (typeof template.role === 'string') {
     template.roles ??= {};
     template.roles[template.role] ??= true;

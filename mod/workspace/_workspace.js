@@ -351,6 +351,24 @@ async function roles(req, res) {
 
   const rolesTree = {};
 
+  rolesSet.forEach((role) => {
+    const dotRoles = role.split('.');
+
+    if (dotRoles.length === 1) return;
+
+    const popRole = dotRoles.pop();
+
+    rolesSet.forEach((role) => {
+      const nestedRoles = role.split('.');
+
+      if (nestedRoles.length === 1) return;
+
+      if (popRole === nestedRoles[0]) {
+        rolesSet.add(`${dotRoles.join('.')}.${role}`);
+      }
+    });
+  });
+
   // Delete restricted Asterisk role.
   rolesSet.delete('*');
 
