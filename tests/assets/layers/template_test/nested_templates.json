@@ -1,0 +1,25 @@
+{
+  "key": "nested_templates",
+  "format": "wkt",
+  "role": "layer_a",
+
+  "dbs": "NEON",
+  "table": "test.scratch",
+  "srid": "3857",
+  "geom": "geom_3857",
+  "qID": "id",
+  "templates": [
+    {
+      "draw": {
+        "point": true
+      },
+      "role": "draw_point"
+    },
+    {
+      "role": "draw_circle",
+      "draw": {
+        "circle": true
+      }
+    }
+  ]
+}
