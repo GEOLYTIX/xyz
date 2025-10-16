@@ -34,31 +34,25 @@ await codi.describe(
         parentId: 'workspace_mergeTemplates',
       },
       async () => {
+        const expectedRoles = { 'locale.layer': true };
         const obj = {
           localeRole: 'locale',
           role: 'layer',
-          name: 'Layer Name',
           template: {
-            src: 'file:./tests/assets/layers/template_test/layer.json',
+            src: 'file:./tests/assets/layers/template_test/nested_roles.json',
             exclude_props: ['style'],
-            role: 'template',
           },
-          infoj: [
-            {
-              name: 'You should see me',
-              edit: true,
-              role: 'edit',
-            },
-          ],
         };
 
-        const roles = ['locale', 'layer', 'template'];
+        const roles = ['locale', 'locale.layer', 'locale.layer.template'];
 
-        const template = await mergeTemplates(obj, roles, false);
+        const template = await mergeTemplates(obj, roles, true);
 
-        delete template.template;
-
-        // console.log(template);
+        codi.assertEqual(
+          expectedRoles,
+          template.roles,
+          'We expect to see locale.layer as a role path',
+        );
       },
     );
 
