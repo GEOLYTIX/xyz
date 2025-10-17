@@ -92,6 +92,9 @@
     color: var(--color-font);
     border-radius: 2px;
   }
+  label.radio span.material-symbols-outlined:after {
+    color: var(--color-active);
+  }
   .material-symbols-outlined:after {
     color: var(--color-font);
   }
@@ -896,6 +899,39 @@ form.login-form {
   }
 }
 
+/* public/css/elements/_radio.css */
+label.radio {
+  display: block;
+  &.disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+  &:hover {
+    cursor: pointer;
+  }
+  &.inline {
+    display: inline-block;
+  }
+  & > span {
+    vertical-align: middle;
+  }
+  &.inline + span {
+    vertical-align: middle;
+  }
+  & > input[type=radio] {
+    display: none;
+  }
+  & > .material-symbols-outlined:first-of-type:after {
+    content: "radio_button_unchecked";
+  }
+  & input[type=radio]:checked + .material-symbols-outlined:first-of-type:after {
+    content: "radio_button_checked";
+  }
+  & input[type=radio]:disabled ~ * {
+    opacity: 0.4;
+  }
+}
+
 /* public/css/elements/_searchbox.css */
 .searchbox {
   width: 100%;
@@ -1210,13 +1246,13 @@ form.login-form {
     background-repeat: no-repeat;
     background-size: contain;
     background-position: center;
+    display: flex;
+    justify-content: flex-end;
     & > .btn-close {
-      position: absolute;
-      top: 5%;
-      right: 5%;
       width: 50px;
       height: 50px;
       background-color: var(--color-primary);
+      color: var(--color-font-contrast);
     }
   }
 }
