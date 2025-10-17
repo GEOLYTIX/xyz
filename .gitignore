@@ -31,3 +31,6 @@ docs/*
 !jsdoc*.json
 !codi.json
 !biome.json
+
+.vercel
+resources
