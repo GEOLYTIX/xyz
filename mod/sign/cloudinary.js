@@ -9,7 +9,7 @@ Exports the cloudinary signer method.
 @module /sign/cloudinary
 */
 
-import { createHash } from 'crypto';
+import { createHash } from 'node:crypto';
 
 /**
 @function cloudinary
