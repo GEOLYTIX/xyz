@@ -29,7 +29,7 @@ The workspace object defines the mapp resources available in an XYZ instance.
 @property {Object} locales Each property in the locales object is a locale available from this workspace.
 */
 
-import { createHash } from 'crypto';
+import { createHash } from 'node:crypto';
 import * as Roles from '../utils/roles.js';
 import workspaceCache from './cache.js';
 import getLayer from './getLayer.js';
