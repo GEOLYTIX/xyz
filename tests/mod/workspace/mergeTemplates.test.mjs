@@ -39,6 +39,7 @@ await codi.describe(
           localeRole: 'locale',
           role: 'layer',
           template: {
+            role: 'template',
             src: 'file:./tests/assets/layers/template_test/nested_roles.json',
             exclude_props: ['style'],
           },
@@ -51,7 +52,7 @@ await codi.describe(
         codi.assertEqual(
           expectedRoles,
           template.roles,
-          'We expect to see locale.layer as a role path',
+          `We expect to see locale, locale.layer, locale.layer.template as a role path we get: ${JSON.stringify(template.roles)}`,
         );
       },
     );
