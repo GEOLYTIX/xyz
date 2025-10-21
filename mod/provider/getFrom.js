@@ -10,11 +10,48 @@ import logger from '../utils/logger.js';
 import cloudfront from './cloudfront.js';
 import file from './file.js';
 
-export default {
+const getFromModules = {
   cloudfront: Cloudfront,
   file: File,
   https: Https,
 };
+
+/**
+ Create file custom getFrom functions
+  Custom file getFrom functions can be built from env keys with the following pattern:
+  `SIGN_FUNCTION_NAME: url`
+
+  This should be accompanied by a matching key:
+  `SIGN_FUNCTION_NAME: key_file_name`
+
+  These two options will be added to an object along with the file ref 
+ */
+for (const key in xyzEnv) {
+  //Custom file get functions have a SIGN_XXX patern.
+  //The match is what is used to name the function.
+  const match = key.match(/^SIGN_(.*)/)?.[1];
+  if (match === undefined) continue;
+
+  //The associated key should be in the form KEY_XXX
+  const signingKey = xyzEnv[`KEY_${match}`];
+  if (!signingKey) continue;
+
+  //Set up a function that passes the key name and the host url name
+  //And the file name as `src`
+  getFromModules[match.toLocaleLowerCase()] = (ref) => {
+    const src = ref.split(':')[1];
+    const params = {
+      params: {
+        url: src,
+        signing_key: `KEY_${match}`,
+        host_key: key,
+      },
+    };
+    return file(params);
+  };
+}
+
+export default getFromModules;
 
 const cacheMap = new Map();
 
