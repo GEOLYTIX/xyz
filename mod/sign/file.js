@@ -43,22 +43,22 @@ for (const key in xyzEnv) {
 //Export nothing if no file signing keys are provided
 export default Object.keys(privateKeyIds).length
   ? (() => {
-    try {
-      //Read all supplied keys in.
-      for (const key in privateKeyIds) {
-        const privateKey = String(
-          readFileSync(join(__dirname, `../../${privateKeyIds[key]}.pem`)),
-        );
+      try {
+        //Read all supplied keys in.
+        for (const key in privateKeyIds) {
+          const privateKey = String(
+            readFileSync(join(__dirname, `../../${privateKeyIds[key]}.pem`)),
+          );
 
-        privateKeyIds[key] = privateKey;
+          privateKeyIds[key] = privateKey;
+        }
+
+        return file_signer;
+      } catch (error) {
+        console.error(`File Signer: ${error.toString()}`);
+        return null;
       }
-
-      return file_signer;
-    } catch (error) {
-      console.error(`File Signer: ${error.toString()}`);
-      return null;
-    }
-  })()
+    })()
   : null;
 
 /**
