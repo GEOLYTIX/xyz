@@ -22,12 +22,23 @@ const signerModules = {
   file,
 };
 
+//Create file signer functions
 for (const key in xyzEnv) {
+  //File signers have a SIGN_XXX patern.
+  //The match is what is used to name the function.
   const match = key.match(/^SIGN_(.*)/)?.[1];
   if (match === undefined) continue;
-  console.log(`${key}: ${xyzEnv[key]}`);
-  if (!xyzEnv[`KEY_${match}`]) continue;
-  console.log(`KEY_${match}: ${xyzEnv[`KEY_${match}`]}`);
+
+  //The associated key should be in the form KEY_XXX
+  const signingKey = xyzEnv[`KEY_${match}`];
+  if (!signingKey) continue;
+
+  //Set up a function that passes the key name and the host url name
+  signerModules[match.toLocaleLowerCase()] = (req, res) => {
+    req.params.signing_key = signingKey;
+    req.params.host_key = key;
+    return file(req, res);
+  };
 }
 
 /**
