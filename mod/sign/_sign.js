@@ -26,7 +26,7 @@ const signerModules = {
 for (const key in xyzEnv) {
   //File signers have a SIGN_XXX patern.
   //The match is what is used to name the function.
-  const match = key.match(/^SIGN_(.*)/)?.[1];
+  const match = RegExp(/^SIGN_(.*)/).exec(key)?.[1];
   if (match === undefined) continue;
 
   //The associated key should be in the form KEY_XXX

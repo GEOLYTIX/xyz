@@ -29,7 +29,7 @@ const privateKeyIds = {};
 
 */
 for (const key in xyzEnv) {
-  const match = key.match(/^SIGN_(.*)/)?.[1];
+  const match = RegExp(/^SIGN_(.*)/).exec(key)?.[1];
 
   if (match === undefined) continue;
 
