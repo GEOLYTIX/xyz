@@ -80,7 +80,9 @@ function file_signer(req, res) {
     //assign the default key
     let privateKey = privateKeyIds.KEY_FILE;
 
-    req.params.host ??= `${req.host}${xyzEnv.DIR}`;
+    const host = xyzEnv[req.params.host_key]
+      ? `${xyzEnv[req.params.host_key]}`
+      : `${req.host}${xyzEnv.DIR}`;
 
     if (!key) throw new Error('File Sign: key parameter was not provided');
 
@@ -124,7 +126,7 @@ function file_signer(req, res) {
       paramString += urlParam;
     }
 
-    const signedURL = `http://${req.params.host}/api/provider/file?${paramString}`;
+    const signedURL = `http://${host}/api/provider/file?${paramString}`;
 
     //Redirect to the file
     if (req.params.redirect) {
