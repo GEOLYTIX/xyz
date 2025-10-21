@@ -37,7 +37,7 @@ await codi.describe(
         const { req, res } = codi.mockHttp.createMocks({
           host: 'localhost/',
           params: {
-            url: './public/views/_login.html',
+            key: './public/views/_login.html',
           },
         });
 
@@ -45,7 +45,7 @@ await codi.describe(
           expires: Date.parse(date),
           key_id: xyzEnv.KEY_FILE,
           signature: signature,
-          url: req.params.url,
+          url: req.params.key,
         };
 
         let paramString = '';

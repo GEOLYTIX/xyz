@@ -9,6 +9,7 @@ The sign API provides access to different request signer modules. Signer modules
 @module /sign
 */
 
+import { ServerResponse } from 'node:http';
 import cloudfront from './cloudfront.js';
 import cloudinary from './cloudinary.js';
 import file from './file.js';
@@ -60,6 +61,8 @@ export default async function signer(req, res) {
       .setHeader('Content-Type', 'text/plain')
       .send(response.message);
   }
+
+  if (response instanceof ServerResponse) return response;
 
   res.send(response);
 }

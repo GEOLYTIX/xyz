@@ -177,6 +177,9 @@ function keyVerification(req, res) {
     delete req.params.key_id;
     delete req.params.expires;
 
+    //Keep track that this is a signed request.
+    req.params.signed = true;
+
     return { signature_auth: true };
   } catch (error) {
     if (error.code === 'ENOENT') {

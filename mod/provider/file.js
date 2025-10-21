@@ -27,6 +27,13 @@ The [node import module attributes]{@link https://nodejs.org/api/esm.html#import
 @returns {File|Error} The file will be returned as parsed json or string if the readFileSync process succeeds.
 */
 export default function file(ref) {
+  //Signed requests are alllowed limited file access.
+  if (
+    ref.params?.signed &&
+    !ref.params.url?.startsWith?.(`./${xyzEnv.FILE_RESOURCES}/`)
+  )
+    throw new Error('Unauthorized');
+
   try {
     // Subtitutes {*} with xyzEnv.SRC_* key values.
     const path = (ref.params?.url || ref).replace(

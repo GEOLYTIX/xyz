@@ -43,17 +43,23 @@ export default xyzEnv.KEY_FILE
 The method creates a signed URL for a file resource.
 
 @param {req|string} req Request object or URL string.
+@param {res} res Resposnse object.
 
-@returns {String} The function returns the signed url.
+@returns {String|ServerResponse} The function returns the signed url or the ServerResponse from the redirect.
 */
-function file_signer(req) {
+function file_signer(req, res) {
   try {
-    // Substitutes {*} with xyzEnv.SRC_* key values.
-    const url = req.params?.url;
+    const key = req.params?.key;
 
-    if (!url) throw new Error('File Sign: url parameter was not provided');
+    req.params.host ??= `${req.host}${xyzEnv.DIR}`;
 
-    if (!url.startsWith(`./${xyzEnv.FILE_RESOURCES}/`))
+    if (!key) throw new Error('File Sign: key parameter was not provided');
+
+    //Only check the env value if the request is for the same host.
+    if (
+      !key.startsWith(`./${xyzEnv.FILE_RESOURCES}/`) &&
+      req.params.host === `${req.host}${xyzEnv.DIR}`
+    )
       throw new Error('Unauthorized');
 
     const date = new Date(Date.now());
@@ -63,14 +69,14 @@ function file_signer(req) {
     //Signature only allows access to the requested file.
     const signature = crypto
       .createHmac('sha256', privateKey)
-      .update(url)
+      .update(key)
       .digest('hex');
 
     const params = {
       expires: Date.parse(date),
       key_id: xyzEnv.KEY_FILE,
       signature: signature,
-      url: req.params.url,
+      url: key,
     };
 
     //Build up URL
@@ -82,8 +88,13 @@ function file_signer(req) {
       paramString += urlParam;
     }
 
-    const signedURL = `https://${req.host}${xyzEnv.DIR}/api/provider/file?${paramString}`;
+    const signedURL = `https://${req.params.host}/api/provider/file?${paramString}`;
 
+    //Redirect to the file
+    if (req.params.redirect) {
+      res.setHeader('location', signedURL);
+      return res.status(302).send();
+    }
     // Return signedURL only from request.
     return signedURL;
   } catch (err) {
