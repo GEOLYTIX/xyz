@@ -22,6 +22,14 @@ const signerModules = {
   file,
 };
 
+for (const key in xyzEnv) {
+  const match = key.match(/^SIGN_(.*)/)?.[1];
+  if (match === undefined) continue;
+  console.log(`${key}: ${xyzEnv[key]}`);
+  if (!xyzEnv[`KEY_${match}`]) continue;
+  console.log(`KEY_${match}: ${xyzEnv[`KEY_${match}`]}`);
+}
+
 /**
 @function signer
 @async
