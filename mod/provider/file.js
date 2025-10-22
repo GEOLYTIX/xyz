@@ -34,7 +34,7 @@ export default async function file(ref) {
   //Signed requests are alllowed limited file access.
   if (
     ref.params?.signed &&
-    !ref.params.url?.startsWith?.(`./${xyzEnv.FILE_RESOURCES}/`)
+    !ref.params.url?.startsWith?.(`${xyzEnv.FILE_RESOURCES}/`)
   )
     throw new Error('Unauthorized');
 

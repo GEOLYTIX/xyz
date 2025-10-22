@@ -90,7 +90,7 @@ function file_signer(req, res) {
 
     //Only check the env value if the request is for the same host.
     if (
-      !key.startsWith(`./${xyzEnv.FILE_RESOURCES}/`) &&
+      !key.startsWith(`${xyzEnv.FILE_RESOURCES}/`) &&
       req.params.host === `${req.host}${xyzEnv.DIR}`
     )
       throw new Error('Unauthorized');
