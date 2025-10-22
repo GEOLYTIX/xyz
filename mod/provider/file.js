@@ -47,12 +47,31 @@ export default async function file(ref) {
 
     //A signed requested is being made.
     if (ref.params?.signing_key) {
+      const contentTypes = {
+        json: 'application/json',
+        html: 'text/html',
+        js: 'text/javascript',
+      };
       ref.params.key = ref.params.url;
       ref.params.host = xyzEnv[ref.params.host_key];
 
       const signedUrl = file_signer(ref);
 
-      return await fetch(signedUrl);
+      //Different content types require Different request headers
+      //These will get assigned based on the file ending
+      const fileType = ref.params.key.split('.').at(-1);
+      const contentType = contentTypes[fileType] || 'text/plain';
+
+      //The function to be awaited from the fetch response
+      const responseType = fileType === 'json' ? 'json' : 'text';
+
+      const fileResponse = await fetch(signedUrl, {
+        headers: {
+          'Content-Type': contentType,
+        },
+      });
+
+      return await fileResponse[responseType]();
     }
 
     // Join the releative path with the import directory name to generate a path with platform specific separator as delimiter.

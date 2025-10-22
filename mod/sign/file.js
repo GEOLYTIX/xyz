@@ -107,7 +107,7 @@ function file_signer(req, res) {
 
     const params = {
       expires: Date.parse(date),
-      key_id: req.params.signing_key || xyzEnv.KEY_LOCAL_FILE,
+      key_id: xyzEnv[req.params.signing_key] || xyzEnv.KEY_LOCAL_FILE,
       signature: signature,
       url: key,
     };
