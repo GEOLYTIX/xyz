@@ -81,7 +81,6 @@ function file_signer(req, res) {
     req.params.signing_key ??= 'KEY_LOCAL_FILE';
 
     const privateKey = privateKeyIds[req.params.signing_key];
-    console.log(privateKey);
 
     const host = xyzEnv[req.params.host_key]
       ? `${xyzEnv[req.params.host_key]}`
