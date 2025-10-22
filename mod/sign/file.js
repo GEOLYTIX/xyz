@@ -49,7 +49,6 @@ export default Object.keys(privateKeyIds).length
           const privateKey = String(
             readFileSync(join(__dirname, `../../${privateKeyIds[key]}.pem`)),
           );
-
           privateKeyIds[key] = privateKey;
         }
 
@@ -78,7 +77,11 @@ function file_signer(req, res) {
     const key = req.params?.key;
 
     //assign the default key
-    let privateKey = privateKeyIds.KEY_FILE;
+    //If no key was specified.
+    req.params.signing_key ??= 'KEY_LOCAL_FILE';
+
+    const privateKey = privateKeyIds[req.params.signing_key];
+    console.log(privateKey);
 
     const host = xyzEnv[req.params.host_key]
       ? `${xyzEnv[req.params.host_key]}`
@@ -97,13 +100,6 @@ function file_signer(req, res) {
 
     date.setDate(date.getDate() + 1);
 
-    //The signing request may not be for the default key,
-    //But for a different instances files.
-    if (req.params.signing_key !== xyzEnv.FILE_KEY) {
-      //Find the file to avoid passing user submitted params
-      privateKey = privateKeyIds[req.params.signing_key];
-    }
-
     //Signature only allows access to the requested file.
     const signature = crypto
       .createHmac('sha256', privateKey)
@@ -112,7 +108,7 @@ function file_signer(req, res) {
 
     const params = {
       expires: Date.parse(date),
-      key_id: req.params.signing_key || xyzEnv.KEY_FILE,
+      key_id: req.params.signing_key || xyzEnv.KEY_LOCAL_FILE,
       signature: signature,
       url: key,
     };
@@ -126,7 +122,7 @@ function file_signer(req, res) {
       paramString += urlParam;
     }
 
-    const signedURL = `http://${host}/api/provider/file?${paramString}`;
+    const signedURL = `https://${host}/api/provider/file?${paramString}`;
 
     //Redirect to the file
     if (req.params.redirect) {

@@ -3,7 +3,10 @@ import { createHmac } from 'node:crypto';
 globalThis.xyzEnv = {
   FILE_RESOURCES: 'public',
   DIR: 'latest',
-  KEY_FILE: 'KEY_TEST',
+  KEY_TEST: 'KEY_TEST',
+  SIGN_TEST: 'localhost:3000',
+  KEY_LOCAL_FILE: 'KEY_LOCAL_FILE',
+  SIGN_LOCAL_FILE: 'localhost:3000',
 };
 
 const { readFileSync } = await import('fs');
@@ -43,7 +46,7 @@ await codi.describe(
 
         const params = {
           expires: Date.parse(date),
-          key_id: xyzEnv.KEY_FILE,
+          key_id: xyzEnv.KEY_LOCAL_FILE,
           signature: signature,
           url: req.params.key,
         };

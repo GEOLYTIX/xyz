@@ -2,6 +2,9 @@
 ## /provider/file
 
 The file provider module exports a method to fetch resources from the local file system.
+@requires fs
+@requires path
+@requires /sign/file
 
 @module /provider/file
 */
