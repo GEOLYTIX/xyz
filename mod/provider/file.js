@@ -65,9 +65,8 @@ export default async function file(ref) {
         },
       });
 
-      const content = fileType === 'json'
-        ? await response.json()
-        : await response.text();
+      const content =
+        fileType === 'json' ? await response.json() : await response.text();
 
       return content;
     }

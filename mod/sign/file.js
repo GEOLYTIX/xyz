@@ -29,7 +29,6 @@ for (const key in xyzEnv) {
       readFileSync(join(__dirname, `../../${SIGNER}.pem`)),
     );
     wallet[SIGNER] = privateKey;
-
   } catch (error) {
     console.error(`File Signer: ${error.toString()}`);
   }
@@ -82,7 +81,7 @@ function file_signer(req, res) {
       paramString += urlParam;
     }
 
-    const host = xyzEnv[`SIGN_${req.params.signing_key}`]
+    const host = xyzEnv[`SIGN_${req.params.signing_key}`];
 
     const signedURL = `https://${host}/api/provider/file?${paramString}`;
 
