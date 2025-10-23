@@ -65,8 +65,8 @@ export default async function file(ref) {
         },
       });
 
-      if(!response.ok) {
-        return new Error(`Failed to fetch`)
+      if (!response.ok) {
+        return new Error(`Failed to fetch`);
       }
 
       const content =
