@@ -65,6 +65,10 @@ export default async function file(ref) {
         },
       });
 
+      if(!response.ok) {
+        return new Error(`Failed to fetch`)
+      }
+
       const content =
         fileType === 'json' ? await response.json() : await response.text();
 

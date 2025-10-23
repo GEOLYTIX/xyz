@@ -119,17 +119,17 @@ export default async function auth(req, res) {
 }
 
 /**
-  @function keyVerification
+@function keyVerification
 
-  @description
-  The function attempts to validate the signature sent with the request. 
+@description
+The function attempts to validate the signature sent with the request. 
 
-  We compare the given signature to one calcualted from the key and the url. 
+We compare the given signature to one calcualted from the key and the url. 
 
-  @param {req} req HTTP request.
-  @param {res} res HTTP Response
+@param {req} req HTTP request.
+@param {res} res HTTP Response
 
-  @returns {Object} returns an object containing whether or not the signature verification passed. 
+@returns {Object} returns an object containing whether or not the signature verification passed. 
 */
 function keyVerification(req, res) {
   if (!req.params.signature) return null;
@@ -149,12 +149,12 @@ function keyVerification(req, res) {
   //Sanitize the key_id parameter
   const key_file = req.params.key_id.replaceAll(/[^a-zA-Z0-9^_]/g, '');
 
-  //Find the file to avoid using user input directly
-  const fileName = readdirSync(join(__dirname, `../../`)).find(
-    (filename) => filename === `${key_file}.pem`,
-  );
-
   try {
+    //Find the file to avoid using user input directly
+    const fileName = readdirSync(join(__dirname, `../../`)).find(
+      (filename) => filename === `${key_file}.pem`,
+    );
+
     const privateKey = String(
       readFileSync(join(__dirname, `../../${fileName}`)),
     );
