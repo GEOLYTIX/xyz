@@ -25,18 +25,12 @@ const signerModules = {
 //Create file signer functions
 for (const key in xyzEnv) {
   //File signers have a SIGN_XXX patern.
-  //The match is what is used to name the function.
-  const match = new RegExp(/^SIGN_(.*)/).exec(key)?.[1];
-  if (match === undefined) continue;
-
-  //The associated key should be in the form KEY_XXX
-  const signingKey = xyzEnv[`KEY_${match}`];
-  if (!signingKey) continue;
+  const SIGNER = new RegExp(/^SIGN_(.*)/).exec(key)?.[1];
+  if (SIGNER === undefined) continue;
 
   //Set up a function that passes the key name and the host url name
-  signerModules[match.toLocaleLowerCase()] = (req, res) => {
-    req.params.signing_key = signingKey;
-    req.params.host_key = key;
+  signerModules[SIGNER] = (req, res) => {
+    req.params.signing_key = SIGNER;
     return file(req, res);
   };
 }

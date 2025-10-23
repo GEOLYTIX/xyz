@@ -17,48 +17,26 @@ import { fileURLToPath } from 'node:url';
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
 
-const privateKeyIds = {};
+const wallet = {};
 
-/**
- Any SIGN_ keys with match KEY_ values are assigned to an object
-
- ```
-  {
-    "KEY_TEST_RESOURCE": key_name
-  }
-
-*/
 for (const key in xyzEnv) {
-  const match = new RegExp(/^SIGN_(.*)/).exec(key)?.[1];
+  const SIGNER = new RegExp(/^SIGN_(.*)/).exec(key)?.[1];
 
-  if (match === undefined) continue;
+  if (SIGNER === undefined) continue;
 
-  const keyValue = xyzEnv[`KEY_${match}`];
+  try {
+    const privateKey = String(
+      readFileSync(join(__dirname, `../../${SIGNER}.pem`)),
+    );
+    wallet[SIGNER] = privateKey;
 
-  if (!keyValue) continue;
-
-  privateKeyIds[`KEY_${match}`] = keyValue;
+  } catch (error) {
+    console.error(`File Signer: ${error.toString()}`);
+  }
 }
 
 //Export nothing if no file signing keys are provided
-export default Object.keys(privateKeyIds).length
-  ? (() => {
-      try {
-        //Read all supplied keys in.
-        for (const key in privateKeyIds) {
-          const privateKey = String(
-            readFileSync(join(__dirname, `../../${privateKeyIds[key]}.pem`)),
-          );
-          privateKeyIds[key] = privateKey;
-        }
-
-        return file_signer;
-      } catch (error) {
-        console.error(`File Signer: ${error.toString()}`);
-        return null;
-      }
-    })()
-  : null;
+export default Object.keys(wallet).length ? file_signer : null;
 
 /**
 @function file_signer
@@ -74,26 +52,9 @@ The method creates a signed URL for a file resource.
 */
 function file_signer(req, res) {
   try {
-    const key = req.params?.key;
+    const privateKey = wallet[req.params.signing_key];
 
-    //assign the default key
-    //If no key was specified.
-    req.params.signing_key ??= 'KEY_LOCAL_FILE';
-
-    const privateKey = privateKeyIds[req.params.signing_key];
-
-    const host = xyzEnv[req.params.host_key]
-      ? `${xyzEnv[req.params.host_key]}`
-      : `${req.host}${xyzEnv.DIR}`;
-
-    if (!key) throw new Error('File Sign: key parameter was not provided');
-
-    //Only check the env value if the request is for the same host.
-    if (
-      !key.startsWith(`${xyzEnv.FILE_RESOURCES}/`) &&
-      req.params.host === `${req.host}${xyzEnv.DIR}`
-    )
-      throw new Error('Unauthorized');
+    if (privateKey === undefined) throw new Error('privateKey undefined');
 
     const date = new Date(Date.now());
 
@@ -102,14 +63,14 @@ function file_signer(req, res) {
     //Signature only allows access to the requested file.
     const signature = crypto
       .createHmac('sha256', privateKey)
-      .update(key)
+      .update(req.params.url)
       .digest('hex');
 
     const params = {
       expires: Date.parse(date),
-      key_id: xyzEnv[req.params.signing_key] || xyzEnv.KEY_LOCAL_FILE,
+      key_id: req.params.signing_key,
       signature: signature,
-      url: key,
+      url: req.params.url,
     };
 
     //Build up URL
@@ -121,14 +82,10 @@ function file_signer(req, res) {
       paramString += urlParam;
     }
 
+    const host = xyzEnv[`SIGN_${req.params.signing_key}`]
+
     const signedURL = `https://${host}/api/provider/file?${paramString}`;
 
-    //Redirect to the file
-    if (req.params.redirect) {
-      res.setHeader('location', signedURL);
-      return res.status(302).send();
-    }
-    // Return signedURL only from request.
     return signedURL;
   } catch (err) {
     console.error(err);

@@ -28,23 +28,17 @@ const getFromModules = {
  */
 for (const key in xyzEnv) {
   //Custom file get functions have a SIGN_XXX patern.
-  //The match is what is used to name the function.
-  const match = new RegExp(/^SIGN_(.*)/).exec(key)?.[1];
-  if (match === undefined) continue;
-
-  //The associated key should be in the form KEY_XXX
-  const signingKey = xyzEnv[`KEY_${match}`];
-  if (!signingKey) continue;
+  const PROVIDER = new RegExp(/^SIGN_(.*)/).exec(key)?.[1];
+  if (PROVIDER === undefined) continue;
 
   //Set up a function that passes the key name and the host url name
   //And the file name as `src`
-  getFromModules[match.toLocaleLowerCase()] = (ref) => {
+  getFromModules[PROVIDER] = (ref) => {
     const src = ref.split(':')[1];
     const params = {
       params: {
         url: src,
-        signing_key: `KEY_${match}`,
-        host_key: key,
+        signing_key: PROVIDER,
       },
     };
     return file(params);
