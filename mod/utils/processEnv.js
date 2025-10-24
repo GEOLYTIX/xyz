@@ -75,6 +75,7 @@ const defaults = {
   TRANSPORT_PORT: 587,
   TRANSPORT_TLS: false,
   WORKSPACE_AGE: 3600000, // 1 min
+  FILE_RESOURCES: 'resources'
 };
 
 if (process.env.SECRET_KEY) {
