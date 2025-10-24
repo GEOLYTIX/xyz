@@ -14,15 +14,9 @@ A user_sessions{} object is declared in the module to store user sessions.
 */
 
 import crypto from 'node:crypto';
-import { readdirSync, readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
 import jwt from 'jsonwebtoken';
 import acl from './acl.js';
 import fromACL from './fromACL.js';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
 
 const user_sessions = {};
 
@@ -146,18 +140,15 @@ function keyVerification(req, res) {
       .send('Signature authentication failed');
   }
 
-  //Sanitize the key_id parameter
-  const key_file = req.params.key_id.replaceAll(/[^a-zA-Z0-9^_]/g, '');
+  if (!Object.hasOwn(xyzEnv.WALLET, req.params.key_id)) {
+    return res
+      .status(405)
+      .setHeader('Content-Type', 'text/plain')
+      .send('Signature authentication not configured');
+  }
 
   try {
-    //Find the file to avoid using user input directly
-    const fileName = readdirSync(join(__dirname, `../../`)).find(
-      (filename) => filename === `${key_file}.pem`,
-    );
-
-    const privateKey = String(
-      readFileSync(join(__dirname, `../../${fileName}`)),
-    );
+    const privateKey = xyzEnv.WALLET[req.params.key_id]
 
     //Build signature from key file and requested file url
     const signature = crypto
@@ -182,13 +173,7 @@ function keyVerification(req, res) {
 
     return { signature_auth: true };
   } catch (error) {
-    if (error.code === 'ENOENT') {
-      return res
-        .status(405)
-        .setHeader('Content-Type', 'text/plain')
-        .send('Signature authentication not configured');
-    }
-    throw new Error(error.toString());
+    console.err(error)
   }
 }
 
