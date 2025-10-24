@@ -34,9 +34,6 @@ for (const key in xyzEnv) {
   }
 }
 
-//Export nothing if no file signing keys are provided
-export default Object.keys(wallet).length ? file_signer : null;
-
 /**
 @function file_signer
 @async
@@ -49,7 +46,7 @@ The method creates a signed URL for a file resource.
 
 @returns {String|ServerResponse} The function returns the signed url or the ServerResponse from the redirect.
 */
-function file_signer(req, res) {
+export default function file_signer(req, res) {
   try {
     const privateKey = wallet[req.params.signing_key];
 
@@ -77,7 +74,6 @@ function file_signer(req, res) {
     for (const key of Object.keys(params)) {
       let urlParam = `${key}=${encodeURIComponent(params[key])}`;
       if (key !== Object.keys(params).at(-1)) urlParam = `${urlParam}&`;
-
       paramString += urlParam;
     }
 

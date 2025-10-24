@@ -24,7 +24,6 @@ const getFromModules = {
 
 // Assign XYZ method for each SIGN_* key in xyzEnv
 for (const key in xyzEnv) {
-  //Custom file get functions have a SIGN_XXX patern.
   const PROVIDER = new RegExp(/^SIGN_(.*)/).exec(key)?.[1];
   if (PROVIDER === undefined) continue;
   getFromModules[PROVIDER] = XYZ;
