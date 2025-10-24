@@ -136,10 +136,10 @@ async function objTemplate(obj, template, roles, reverse, cache) {
 
     if (typeof obj.role === 'string') {
       template.roles[`${obj.role}.${template.role}`] ??= true;
-      // if (typeof obj.localeRole === 'string') {
-      //   template.roles[`${obj.localeRole}.${obj.role}.${template.role}`] ??=
-      //     true;
-      // }
+      if (typeof obj.localeRole === 'string' && !obj.role.startsWith(`${obj.localeRole}.`)) {
+        template.roles[`${obj.localeRole}.${obj.role}.${template.role}`] ??=
+          true;
+      }
     } else if (typeof obj.localeRole === 'string') {
       template.roles[`${obj.localeRole}.${template.role}`] ??= true;
     }
