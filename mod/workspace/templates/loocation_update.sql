@@ -1,0 +1,1 @@
+UPDATE scratch SET textarea = %{body.textarea} WHERE id = %{id};
