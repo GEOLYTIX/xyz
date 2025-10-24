@@ -5,7 +5,7 @@ globalThis.xyzEnv = {
   DIR: 'latest',
   KEY_TEST: 'KEY_TEST',
   SIGN_TEST: 'localhost:3000/latest',
-  LOCAL_FILE: 'LOCAL_FILE',
+  WALLET: { LOCAL_FILE: 'PRIVATEKEY' },
   SIGN_LOCAL_FILE: 'localhost/latest',
 };
 
@@ -47,7 +47,7 @@ await codi.describe(
 
         const params = {
           expires: Date.parse(date),
-          key_id: xyzEnv.LOCAL_FILE,
+          key_id: 'LOCAL_FILE',
           signature: signature,
           url: req.params.url,
         };

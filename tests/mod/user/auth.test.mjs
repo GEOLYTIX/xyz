@@ -32,7 +32,11 @@ await codi.describe(
     const privateKey = 'PRIVATEKEY';
 
     globalThis.xyzEnv ??= {};
-    globalThis.xyzEnv = { FILE_RESOURCES: 'public', KEY_FILE: 'TEST_KEY' };
+    globalThis.xyzEnv.FILE_RESOURCES = 'public';
+    globalThis.xyzEnv.KEY_FILE = 'TEST_KEY';
+    globalThis.xyzEnv.WALLET = {
+      TEST_KEY: 'PRIVATEKEY',
+    };
 
     await codi.it(
       { name: 'request with signature', parentId: 'user_auth' },
