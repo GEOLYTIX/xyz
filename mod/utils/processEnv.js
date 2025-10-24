@@ -109,14 +109,25 @@ const xyzEnv = {
   TRANSPORT_PORT: parseInt(process.env.TRANSPORT_PORT),
   TRANSPORT_TLS: process.env.TRANSPORT_TLS,
   WORKSPACE_AGE: process.env.WORKSPACE_AGE,
+  WALLET: {},
 };
 
-// Add remaining env vars
-Object.entries(process.env).forEach(([key, value]) => {
-  if (!(key in xyzEnv)) {
-    xyzEnv[key] = value;
+for (const [key, value] of Object.entries(process.env)) {
+  if (Object.hasOwn(xyzEnv, key)) continue;
+  xyzEnv[key] = value;
+  addKeyToWallet(key);
+}
+
+// Add SIGN_* key files as string to the xyzEnv.WALLET
+function addKeyToWallet(variable) {
+  const KEY = new RegExp(/^SIGN_(.*)/).exec(variable)?.[1];
+  if (KEY === undefined) return;
+  try {
+    xyzEnv.WALLET[KEY] = String(readFileSync(`./${KEY}.pem`));
+  } catch (error) {
+    console.error(`File Signer: ${error.toString()}`);
   }
-});
+}
 
 // Freeze to prevent modifications
 Object.freeze(xyzEnv);

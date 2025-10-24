@@ -3,36 +3,10 @@
 
 The file sign module exports a method to sign requests to a file resource local to the instance.
 
-@requires fs
-@requires path
-@requires url 
 @module /sign/file
 */
 
 import crypto from 'node:crypto';
-import { readFileSync } from 'node:fs';
-import { dirname, join } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-const wallet = {};
-
-for (const key in xyzEnv) {
-  const SIGNER = new RegExp(/^SIGN_(.*)/).exec(key)?.[1];
-
-  if (SIGNER === undefined) continue;
-
-  try {
-    const privateKey = String(
-      readFileSync(join(__dirname, `../../${SIGNER}.pem`)),
-    );
-    wallet[SIGNER] = privateKey;
-  } catch (error) {
-    console.error(`File Signer: ${error.toString()}`);
-  }
-}
 
 /**
 @function file_signer
@@ -48,7 +22,7 @@ The method creates a signed URL for a file resource.
 */
 export default function file_signer(req, res) {
   try {
-    const privateKey = wallet[req.params.signing_key];
+    const privateKey = xyzEnv.WALLET[req.params.signing_key];
 
     if (privateKey === undefined) throw new Error('privateKey undefined');
 
