@@ -457,6 +457,10 @@ function getQueryFromTemplate(req, template) {
           ? req.params[param] || ''
           : req.params[param];
 
+        if (param.startsWith('body.')) {
+          val = req.params.body[param.replace('body.','')]
+        }          
+
         if (val === undefined) {
           missingParams.push(param);
         }
@@ -473,6 +477,8 @@ function getQueryFromTemplate(req, template) {
         } catch (err) {
           console.error(err);
         }
+
+
 
         // Push value from request params object into params array.
         req.params.SQL.push(val);
