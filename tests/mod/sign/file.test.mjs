@@ -4,9 +4,9 @@ globalThis.xyzEnv = {
   FILE_RESOURCES: 'public',
   DIR: 'latest',
   KEY_TEST: 'KEY_TEST',
-  SIGN_TEST: 'localhost:3000',
-  KEY_LOCAL_FILE: 'KEY_LOCAL_FILE',
-  SIGN_LOCAL_FILE: 'localhost:3000',
+  SIGN_TEST: 'localhost:3000/latest',
+  LOCAL_FILE: 'LOCAL_FILE',
+  SIGN_LOCAL_FILE: 'localhost/latest',
 };
 
 const { readFileSync } = await import('fs');
@@ -40,24 +40,17 @@ await codi.describe(
         const { req, res } = codi.mockHttp.createMocks({
           host: 'localhost/',
           params: {
-            key: './public/views/_login.html',
+            url: './public/views/_login.html',
+            signing_key: 'LOCAL_FILE',
           },
         });
 
         const params = {
           expires: Date.parse(date),
-          key_id: xyzEnv.KEY_LOCAL_FILE,
+          key_id: xyzEnv.LOCAL_FILE,
           signature: signature,
-          url: req.params.key,
+          url: req.params.url,
         };
-
-        let paramString = '';
-        for (const key of Object.keys(params)) {
-          let urlParam = `${key}=${encodeURIComponent(params[key])}`;
-          if (key !== Object.keys(params).at(-1)) urlParam = `${urlParam}&`;
-
-          paramString += urlParam;
-        }
 
         fsMockFn.mock.mockImplementation(() => {
           return 'PRIVATEKEY';
@@ -68,6 +61,14 @@ await codi.describe(
         );
 
         const result = file_signer(req);
+
+        let paramString = '';
+        for (const key of Object.keys(params)) {
+          let urlParam = `${key}=${encodeURIComponent(params[key])}`;
+          if (key !== Object.keys(params).at(-1)) urlParam = `${urlParam}&`;
+
+          paramString += urlParam;
+        }
 
         const signedURL = `https://${req.host}${xyzEnv.DIR}/api/provider/file?${paramString}`;
 
