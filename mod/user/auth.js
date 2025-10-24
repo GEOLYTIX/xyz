@@ -148,7 +148,7 @@ function keyVerification(req, res) {
   }
 
   try {
-    const privateKey = xyzEnv.WALLET[req.params.key_id]
+    const privateKey = xyzEnv.WALLET[req.params.key_id];
 
     //Build signature from key file and requested file url
     const signature = crypto
@@ -173,7 +173,7 @@ function keyVerification(req, res) {
 
     return { signature_auth: true };
   } catch (error) {
-    console.err(error)
+    console.err(error);
   }
 }
 
