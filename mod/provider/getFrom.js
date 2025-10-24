@@ -3,9 +3,15 @@
 
 The getFrom provider module allows XYZ modules to get resources either from configured sources.
 
+@requires ../sign/file
+@requires ../utils/logger
+@requires ./cloudfront
+@requires ./file
+
 @module /provider/getFrom
 */
 
+import file_signer from '../sign/file.js';
 import logger from '../utils/logger.js';
 import cloudfront from './cloudfront.js';
 import file from './file.js';
@@ -16,33 +22,12 @@ const getFromModules = {
   https: Https,
 };
 
-/**
- Create file custom getFrom functions
-  Custom file getFrom functions can be built from env keys with the following pattern:
-  `SIGN_FUNCTION_NAME: url`
-
-  This should be accompanied by a matching key:
-  `SIGN_FUNCTION_NAME: key_file_name`
-
-  These two options will be added to an object along with the file ref 
- */
+// Assign XYZ method for each SIGN_* key in xyzEnv
 for (const key in xyzEnv) {
   //Custom file get functions have a SIGN_XXX patern.
   const PROVIDER = new RegExp(/^SIGN_(.*)/).exec(key)?.[1];
   if (PROVIDER === undefined) continue;
-
-  //Set up a function that passes the key name and the host url name
-  //And the file name as `src`
-  getFromModules[PROVIDER] = (ref) => {
-    const src = ref.split(':')[1];
-    const params = {
-      params: {
-        url: src,
-        signing_key: PROVIDER,
-      },
-    };
-    return file(params);
-  };
+  getFromModules[PROVIDER] = XYZ;
 }
 
 export default getFromModules;
@@ -112,4 +97,49 @@ async function Https(url) {
     console.error(err);
     return err;
   }
+}
+
+/**
+@function XYZ
+@async
+
+@description
+The method splits the reference string into a params object for the XYZ file signer.
+
+@param {string} ref Reference for the XYZ signer.
+
+@returns {Promise<String|JSON|Error>} The fetch is resolved into either a string or JSON depending on the url ending.
+*/
+async function XYZ(ref) {
+  const params = {
+    signing_key: ref.split(':')[0],
+    url: ref.split(':')[1],
+  };
+
+  const signedUrl = file_signer({ params });
+
+  //Different content types require Different request headers
+  //These will get assigned based on the file ending
+  const fileType = signedUrl.split('.').at(-1);
+  const contentTypes = {
+    json: 'application/json',
+    html: 'text/html',
+    js: 'text/javascript',
+  };
+  const contentType = contentTypes[fileType] || 'text/plain';
+
+  const response = await fetch(signedUrl, {
+    headers: {
+      'Content-Type': contentType,
+    },
+  });
+
+  if (!response.ok) {
+    return new Error(`Failed to fetch`);
+  }
+
+  const content =
+    fileType === 'json' ? await response.json() : await response.text();
+
+  return content;
 }

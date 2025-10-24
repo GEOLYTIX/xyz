@@ -4,14 +4,12 @@
 The file provider module exports a method to fetch resources from the local file system.
 @requires fs
 @requires path
-@requires /sign/file
 
 @module /provider/file
 */
 
 import { readFileSync } from 'fs';
 import { join } from 'path';
-import file_signer from '../sign/file.js';
 
 /**
 @function file
@@ -30,11 +28,6 @@ The [node import module attributes]{@link https://nodejs.org/api/esm.html#import
 @param {object|string} ref The file reference maybe defined as an object or string. A string is assumed to be the params.url property of the file location.
 @returns {File|Error} The file will be returned as parsed json or string if the readFileSync process succeeds.
 */
-const contentTypes = {
-  json: 'application/json',
-  html: 'text/html',
-  js: 'text/javascript',
-};
 export default async function file(ref) {
   //Signed requests are alllowed limited file access.
   if (
@@ -49,31 +42,6 @@ export default async function file(ref) {
       /{(?!{)(.*?)}/g,
       (matched) => xyzEnv[`SRC_${matched.replace(/(^{)|(}$)/g, '')}`],
     );
-
-    //A signed requested is being made.
-    if (ref.params?.signing_key) {
-      const signedUrl = file_signer(ref);
-
-      //Different content types require Different request headers
-      //These will get assigned based on the file ending
-      const fileType = signedUrl.split('.').at(-1);
-      const contentType = contentTypes[fileType] || 'text/plain';
-
-      const response = await fetch(signedUrl, {
-        headers: {
-          'Content-Type': contentType,
-        },
-      });
-
-      if (!response.ok) {
-        return new Error(`Failed to fetch`);
-      }
-
-      const content =
-        fileType === 'json' ? await response.json() : await response.text();
-
-      return content;
-    }
 
     // Join the releative path with the import directory name to generate a path with platform specific separator as delimiter.
     const file = readFileSync(join(import.meta.dirname, `../../${path}`));
