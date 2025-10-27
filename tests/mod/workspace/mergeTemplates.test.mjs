@@ -34,8 +34,12 @@ await codi.describe(
         parentId: 'workspace_mergeTemplates',
       },
       async () => {
-        const expectedRoles = { 'locale.layer': true };
-        const obj = {
+        const expectedRoles = [
+          'locale.layer',
+          'template',
+          'locale.layer.template',
+        ];
+        const layer = {
           localeRole: 'locale',
           role: 'layer',
           template: {
@@ -47,12 +51,11 @@ await codi.describe(
 
         const roles = ['locale', 'locale.layer', 'locale.layer.template'];
 
-        const template = await mergeTemplates(obj, roles, true);
+        const template = await mergeTemplates(layer, roles, true);
 
-        codi.assertEqual(
-          expectedRoles,
-          template.roles,
-          `We expect to see locale, locale.layer, locale.layer.template as a role path we get: ${JSON.stringify(template.roles)}`,
+        codi.assertTrue(
+          expectedRoles.every((r) => Object.keys(template.roles).includes(r)),
+          `Need to ensure all expected roles are present: ${expectedRoles.join(', ')}`,
         );
       },
     );
