@@ -357,7 +357,7 @@ async function roles(req, res) {
   for (const role of rolesSet) {
     const rolesArr = role.split('.');
 
-    if (roles.length > 1) {
+    if (rolesArr.length > 1) {
       rolesArr.reduce(
         (accumulator, currentValue) => (accumulator[currentValue] ??= {}),
         rolesTree,
