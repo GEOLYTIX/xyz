@@ -35,6 +35,8 @@ await codi.describe(
 
         const signature = createHmac('sha256', privateKey)
           .update('./public/views/_login.html')
+          .update('LOCAL_FILE')
+          .update(String(Date.parse(date)))
           .digest('hex');
 
         const { req, res } = codi.mockHttp.createMocks({

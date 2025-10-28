@@ -34,6 +34,8 @@ export default function file_signer(req, res) {
     const signature = crypto
       .createHmac('sha256', privateKey)
       .update(req.params.url)
+      .update(req.params.signing_key)
+      .update(String(Date.parse(date)))
       .digest('hex');
 
     const params = {

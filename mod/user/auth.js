@@ -116,14 +116,14 @@ export default async function auth(req, res) {
 @function keyVerification
 
 @description
-The function attempts to validate the signature sent with the request. 
+The function attempts to validate the signature sent with the request.
 
-We compare the given signature to one calcualted from the key and the url. 
+We compare the given signature to one calcualted from the key and the url.
 
 @param {req} req HTTP request.
 @param {res} res HTTP Response
 
-@returns {Object} returns an object containing whether or not the signature verification passed. 
+@returns {Object} returns an object containing whether or not the signature verification passed.
 */
 function keyVerification(req, res) {
   if (!req.params.signature) return null;
@@ -154,6 +154,8 @@ function keyVerification(req, res) {
     const signature = crypto
       .createHmac('sha256', privateKey)
       .update(req.params.url)
+      .update(req.params.key_id)
+      .update(String(req.params.expires))
       .digest('hex');
 
     if (signature !== req.params.signature) {
