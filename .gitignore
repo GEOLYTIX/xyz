@@ -15,6 +15,7 @@ yarn.lock
 node_modules/*
 .pnpm-store/
 
+resources
 public/js/*
 public/workspaces/*
 public/js/plugins/*
