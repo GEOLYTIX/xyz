@@ -127,13 +127,18 @@ async function XYZ(ref) {
   };
   const contentType = contentTypes[fileType] || 'text/plain';
 
+  const timestamp = Date.now();
+
   const response = await fetch(signedUrl, {
     headers: {
       'Content-Type': contentType,
     },
   });
 
-  logger(`${response.ok} - ${signedUrl}`, 'xyzfetch');
+  logger(
+    `${Date.now() - timestamp}: ${response.ok} - ${params.signing_key}/${params.url}`,
+    'xyzfetch',
+  );
 
   if (!response.ok) {
     return new Error(`Failed to fetch`);
