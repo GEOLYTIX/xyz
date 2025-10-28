@@ -371,7 +371,7 @@ async function roles(req, res) {
     }
   }
 
-  const rolesArr = Array.from(rolesSet).sort();
+  const rolesArr = Array.from(rolesSet).sort((a, b) => a.localeCompare(b));
 
   if (req.params.tree) {
     return res.send(rolesTree);
