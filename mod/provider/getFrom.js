@@ -133,6 +133,8 @@ async function XYZ(ref) {
     },
   });
 
+  logger(`${response.ok} - ${signedUrl}`, 'xyzfetch');
+
   if (!response.ok) {
     return new Error(`Failed to fetch`);
   }

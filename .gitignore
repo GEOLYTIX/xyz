@@ -15,6 +15,7 @@ yarn.lock
 node_modules/*
 .pnpm-store/
 
+resources
 public/js/*
 public/workspaces/*
 public/js/plugins/*
@@ -31,6 +32,3 @@ docs/*
 !jsdoc*.json
 !codi.json
 !biome.json
-
-.vercel
-resources

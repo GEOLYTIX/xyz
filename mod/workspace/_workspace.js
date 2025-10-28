@@ -639,6 +639,7 @@ Finally each template defined in the workspace.templates will be cached.
 @property {Boolean} [params.force] Whether the cached workspace should be cleared.
 */
 async function cacheTemplates(params) {
+  console.time(`cacheTemplates`);
   workspace = await workspaceCache(params.force);
 
   for (const localeKey of Object.keys(workspace.locales)) {
@@ -673,6 +674,7 @@ async function cacheTemplates(params) {
   for (const key of Object.keys(workspace.templates)) {
     await getTemplate(key, true);
   }
+  console.timeEnd(`cacheTemplates`);
 }
 
 /**
