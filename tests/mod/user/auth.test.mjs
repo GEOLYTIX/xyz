@@ -41,13 +41,15 @@ await codi.describe(
     await codi.it(
       { name: 'request with signature', parentId: 'user_auth' },
       async () => {
+        const date = new Date();
+        date.setDate(date.getDate() + 1);
+
         const signature = crypto
           .createHmac('sha256', privateKey)
           .update('./public/views/_login.html')
+          .update('TEST_KEY')
+          .update(String(Date.parse(date)))
           .digest('hex');
-
-        const date = new Date();
-        date.setDate(date.getDate() + 1);
 
         const { req, res } = codi.mockHttp.createMocks({
           params: {
