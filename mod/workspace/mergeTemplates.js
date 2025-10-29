@@ -94,16 +94,6 @@ The method will request a template object from the getTemplate module method.
 
 Possible error from the template fetch will be added to the obj.err[] array before the obj is returned.
 
-Templates may have an access role restriction. The `template.role` string property requires a user to have that role in order to access the template.
-
-The role string will be added as boolean:true property to the `template.roles` object property if the property key is undefined.
-
-`template.role = 'bar' -> template.roles = {'bar':true}`
-
-A dot notation role key will be created if the obj has a role string property.
-
-`obj.role = 'foo' && template.role = 'bar' -> template.roles = {'foo.bar':true}`
-
 The template will be checked against the request user roles.
 
 The method will shortcircuit if roles restrict access to the template object.
@@ -116,7 +106,6 @@ The template will be merged into the obj with the reverse flag.
 @param {Object} template The template maybe an object with a src property or a string. 
 @param {array} roles An array of user roles from request params. 
 @param {boolean} reverse Whether template should be merged into the obj, not the other way around.
-@property {string} template.role The template has an access role restriction.
 
 @returns {Promise<Object>} Returns the merged obj.
 */
@@ -130,28 +119,7 @@ async function objTemplate(obj, template, roles, reverse, cache) {
     return obj;
   }
 
-  if (typeof template.role === 'string') {
-    template.roles ??= {};
-    template.roles[template.role] ??= true;
-
-    if (typeof obj.role === 'string') {
-      template.roles[`${obj.role}.${template.role}`] ??= true;
-      if (
-        typeof obj.localeRole === 'string' &&
-        !obj.role.startsWith(`${obj.localeRole}.`)
-      ) {
-        template.roles[`${obj.localeRole}.${obj.role}.${template.role}`] ??=
-          true;
-      }
-    } else if (typeof obj.localeRole === 'string') {
-      template.roles[`${obj.localeRole}.${template.role}`] ??= true;
-    }
-
-    // Delete the template.role to prevent the obj.role being overwritten when the template is merged into the obj.
-    if (reverse) {
-      delete template.role;
-    }
-  }
+  roleAssign(obj, template, roles, reverse);
 
   if (roles !== true && !Roles.check(template, roles)) {
     if (!reverse) {
@@ -186,6 +154,49 @@ async function objTemplate(obj, template, roles, reverse, cache) {
     // Merge obj --> template
     // Template must be cloned to prevent cross polination and array aggregation.
     return merge(template, obj);
+  }
+}
+
+/**
+@function roleAssign
+
+@description
+Templates may have an access role restriction. The `template.role` string property requires a user to have that role in order to access the template.
+
+The role string will be added as boolean:true property to the `template.roles` object property if the property key is undefined.
+
+`template.role = 'bar' -> template.roles = {'bar':true}`
+
+A dot notation role key will be created if the obj has a role string property.
+
+`obj.role = 'foo' && template.role = 'bar' -> template.roles = {'foo.bar':true}`
+
+@param {Object} obj 
+@param {Object} template The template maybe an object with a src property or a string. 
+@param {boolean} reverse Whether template should be merged into the obj, not the other way around.
+@property {string} template.role The template has an access role restriction.
+*/
+function roleAssign(obj, template, roles, reverse) {
+  if (!template.role) return;
+
+  template.roles ??= {};
+  template.roles[template.role] ??= true;
+
+  if (typeof obj.role === 'string') {
+    template.roles[`${obj.role}.${template.role}`] ??= true;
+    if (
+      typeof obj.localeRole === 'string' &&
+      !obj.role.startsWith(`${obj.localeRole}.`)
+    ) {
+      template.roles[`${obj.localeRole}.${obj.role}.${template.role}`] ??= true;
+    }
+  } else if (typeof obj.localeRole === 'string') {
+    template.roles[`${obj.localeRole}.${template.role}`] ??= true;
+  }
+
+  // Delete the template.role to prevent the obj.role being overwritten when the template is merged into the obj.
+  if (reverse) {
+    delete template.role;
   }
 }
 
