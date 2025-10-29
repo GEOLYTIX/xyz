@@ -154,6 +154,12 @@ async function objTemplate(obj, template, roles, reverse, cache) {
   }
 
   if (roles !== true && !Roles.check(template, roles)) {
+    if (!reverse) {
+      obj.roles = {
+        ...template.roles,
+        ...obj.roles,
+      }
+    }
     return obj;
   }
 
