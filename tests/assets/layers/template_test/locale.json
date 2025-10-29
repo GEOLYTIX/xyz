@@ -1,0 +1,12 @@
+{
+  "locale": {
+    "role": "locale",
+    "extent": {
+      "north": 52.92645,
+      "east": 1.740951,
+      "south": 52.394613,
+      "west": 0.889335,
+      "mask": true
+    }
+  }
+}
