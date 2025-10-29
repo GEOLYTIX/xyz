@@ -158,7 +158,7 @@ async function objTemplate(obj, template, roles, reverse, cache) {
       obj.roles = {
         ...template.roles,
         ...obj.roles,
-      }
+      };
     }
     return obj;
   }
