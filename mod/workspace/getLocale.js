@@ -59,8 +59,8 @@ export default async function getLocale(params, parentLocale) {
     return workspace;
   }
 
-  if (!params.user?.admin) {
-    delete params.ignoreRoles;
+  if (params.ignoreRoles){
+    params.user.roles = true
   }
 
   if (typeof params.locale === 'string') {
@@ -86,7 +86,11 @@ export default async function getLocale(params, parentLocale) {
   }
 
   // The roles property maybe assigned from a template. Templates must be merged prior to the role check.
-  locale = await mergeTemplates(locale, params.user?.roles, params.cache);
+  locale = await mergeTemplates(
+    locale,
+    params.user?.roles,
+    params.cache,
+  );
 
   // The mergeTemplates method returned an Error.
   if (locale instanceof Error) {
@@ -94,7 +98,7 @@ export default async function getLocale(params, parentLocale) {
   }
 
   //If the user is an admin we don't need to check roles
-  if (!params.ignoreRoles && !Roles.check(locale, params.user?.roles)) {
+  if (!Roles.check(locale, params.user?.roles)) {
     return new Error('Role access denied.');
   }
 

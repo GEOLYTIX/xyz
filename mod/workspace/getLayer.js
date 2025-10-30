@@ -58,8 +58,8 @@ export default async function getLayer(params, locale) {
     locale = await getLocale(params);
   }
 
-  if (!params.user?.admin) {
-    delete params.ignoreRoles;
+  if (params.ignoreRoles){
+    params.user.roles = true
   }
 
   // getLocale will return err if role.check fails.
@@ -93,17 +93,15 @@ export default async function getLayer(params, locale) {
   }
 
   //If the user is an admin we don't need to check roles
-  if (!params.ignoreRoles && !Roles.check(layer, params.user?.roles)) {
+  if (!Roles.check(layer, params.user?.roles)) {
     return new Error('Role access denied.');
   }
 
-  layer = params.user?.admin
-    ? Roles.objMerge(layer, params.user?.roles)
-    : layer;
+  layer = Roles.objMerge(layer, params.user?.roles);
 
   layer = await mergeTemplates(
     layer,
-    params.ignoreRoles || params.user?.roles,
+    params.user?.roles,
     params.cache,
   );
 

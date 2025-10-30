@@ -341,13 +341,13 @@ async function roles(req, res) {
     return res.send(workspace.roles);
   }
 
-  await cacheTemplates({
+  const cache = await cacheTemplates({
     user: req.params.user,
   });
 
   const rolesSet = new Set();
 
-  Roles.fromObj(rolesSet, workspace);
+  Roles.fromObj(rolesSet, cache);
 
   const rolesTree = {};
 
@@ -412,11 +412,14 @@ async function test(req, res) {
   }
 
   // Force re-caching of workspace.
+  let cache;
   if (req.params.force) {
-    await cacheTemplates({
+    cache = await cacheTemplates({
       user: req.params.user,
       force: req.params.force,
     });
+  } else {
+    cache = workspace;
   }
 
   const testConfig = {
@@ -428,7 +431,7 @@ async function test(req, res) {
   };
 
   testConfig.workspace_templates = new Set(
-    Object.entries(workspace.templates)
+    Object.entries(cache.templates)
       .filter(([key, value]) => value._type === 'workspace')
       .filter(([key, value]) => !value.src?.endsWith('.html'))
       .map(([key, value]) => key),
@@ -440,7 +443,7 @@ async function test(req, res) {
 
   testWorkspaceLocales(testConfig);
 
-  for (const [key, template] of Object.entries(workspace.templates)) {
+  for (const [key, template] of Object.entries(cache.templates)) {
     if (template instanceof Error) {
       testConfig.errArr.push(`${key}: ${template.message}`);
     }
@@ -640,40 +643,44 @@ Finally each template defined in the workspace.templates will be cached.
 @property {Boolean} [params.force] Whether the cached workspace should be cleared.
 */
 async function cacheTemplates(params) {
-  workspace = await workspaceCache(params.force);
+  const cache = await workspaceCache(params.force);
 
-  for (const localeKey of Object.keys(workspace.locales)) {
+  for (const localeKey of Object.keys(cache.locales)) {
     // Will get layer and assignTemplates to workspace.
     const locale = await getLocale({
       locale: localeKey,
       user: params.user,
       ignoreRoles: true,
-      cache: true,
     });
+
+    cache.locales[localeKey] = locale
 
     // If the locale has no layers, just skip it.
     if (!locale.layers) continue;
 
-    const layerPromises = Object.keys(locale.layers).map(async (layerKey) => {
+    const layerPromises = Object.keys(locale.layers).map(async (layerKey) => _getLayer(layerKey, locale));
+
+    async function _getLayer(layerKey, locale) {
       // Will get layer and assignTemplates to workspace.
       const layer = await getLayer({
         layer: layerKey,
-        locale: localeKey,
+        locale: locale.key,
         user: params.user,
         ignoreRoles: true,
-        cache: true,
-      });
+      }, locale);
 
-      workspace.locales[localeKey].layers[layerKey] = layer;
-    });
+      locale.layers[layerKey] = layer;
+    }
 
     await Promise.allSettled(layerPromises);
   }
 
   // hydrating/caching all the templates
-  for (const key of Object.keys(workspace.templates)) {
+  for (const key of Object.keys(cache.templates)) {
     await getTemplate(key, true);
   }
+
+  return cache;
 }
 
 /**
