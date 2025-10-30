@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="{{language}}">
   <head data-dir="{{dir}}" data-login="{{login}}">
-    <title>{{ title }}</title>
+    <title>{{title}}</title>
 
     <link
       rel="icon"
@@ -490,6 +490,8 @@
     if (!window.ol) await mapp.utils.olScript();
 
     locale.syncPlugins ??= ['zoomBtn', 'admin', 'login'];
+
+    mapp.hooks.set({locale:locale.key});
 
     // Create mapview
     const mapview = await mapp.Mapview({
