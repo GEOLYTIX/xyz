@@ -47,7 +47,6 @@ Template properties will be removed as these are not required by the MAPP API bu
 @property {string} [params.locale] Locale key.
 @property {string} [params.layer] Layer key.
 @property {Object} [params.user] Requesting user.
-@property {Boolean} [params.cache] Templates associated with the layer should be cached and not requested multiple times.
 @property {Boolean} [params.ignoreRoles] Whether role check should be performed.
 @property {Array} [user.roles] User roles.
 
@@ -58,8 +57,8 @@ export default async function getLayer(params, locale) {
     locale = await getLocale(params);
   }
 
-  if (params.ignoreRoles){
-    params.user.roles = true
+  if (params.ignoreRoles) {
+    params.user.roles = true;
   }
 
   // getLocale will return err if role.check fails.
@@ -71,7 +70,7 @@ export default async function getLayer(params, locale) {
     layer = locale.layers[params.layer];
   } else {
     // A layer maybe defined as a template only.
-    layer = await getTemplate(params.layer, params.cache);
+    layer = await getTemplate(params.layer);
 
     if (!layer || layer instanceof Error) {
       return new Error('Unable to validate layer param.');
@@ -99,11 +98,7 @@ export default async function getLayer(params, locale) {
 
   layer = Roles.objMerge(layer, params.user?.roles);
 
-  layer = await mergeTemplates(
-    layer,
-    params.user?.roles,
-    params.cache,
-  );
+  layer = await mergeTemplates(layer, params.user?.roles);
 
   // Assign layer key as name with no existing name on layer object.
   layer.name ??= layer.key;

@@ -35,7 +35,6 @@ An array of templates can be defined as obj.templates[]. The templates will be m
 
 @param {Object} obj 
 @param {array} [roles] An array of user roles from request params.
-@param {boolean} cache Templates should be cached and not requested multiple times.
 
 @property {string} [obj.template] Key of template for the object.
 @property {string} obj.key Fallback for lookup of template if not an implicit property.
@@ -43,7 +42,7 @@ An array of templates can be defined as obj.templates[]. The templates will be m
 
 @returns {Promise} The layer or locale provided as obj param.
 */
-export default async function mergeTemplates(obj, roles, cache) {
+export default async function mergeTemplates(obj, roles) {
   // Cache workspace in module scope for template assignment.
   workspace = await workspaceCache();
 
@@ -57,7 +56,7 @@ export default async function mergeTemplates(obj, roles, cache) {
 
   // The object has an implicit template to merge into.
   if (typeof obj.template === 'string' || obj.template instanceof Object) {
-    obj = await objTemplate(obj, obj.template, roles, null, cache);
+    obj = await objTemplate(obj, obj.template, roles, null);
     if (obj instanceof Error) return obj;
   }
 
@@ -109,8 +108,8 @@ The template will be merged into the obj with the reverse flag.
 
 @returns {Promise<Object>} Returns the merged obj.
 */
-async function objTemplate(obj, template, roles, reverse, cache) {
-  template = await getTemplate(template, cache);
+async function objTemplate(obj, template, roles, reverse) {
+  template = await getTemplate(template);
 
   // Failed to get template matching obj.template from template.src!
   if (template instanceof Error) {

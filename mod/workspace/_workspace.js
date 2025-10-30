@@ -653,21 +653,26 @@ async function cacheTemplates(params) {
       ignoreRoles: true,
     });
 
-    cache.locales[localeKey] = locale
+    cache.locales[localeKey] = locale;
 
     // If the locale has no layers, just skip it.
     if (!locale.layers) continue;
 
-    const layerPromises = Object.keys(locale.layers).map(async (layerKey) => _getLayer(layerKey, locale));
+    const layerPromises = Object.keys(locale.layers).map(async (layerKey) =>
+      _getLayer(layerKey, locale),
+    );
 
     async function _getLayer(layerKey, locale) {
       // Will get layer and assignTemplates to workspace.
-      const layer = await getLayer({
-        layer: layerKey,
-        locale: locale.key,
-        user: params.user,
-        ignoreRoles: true,
-      }, locale);
+      const layer = await getLayer(
+        {
+          layer: layerKey,
+          locale: locale.key,
+          user: params.user,
+          ignoreRoles: true,
+        },
+        locale,
+      );
 
       locale.layers[layerKey] = layer;
     }

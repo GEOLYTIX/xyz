@@ -44,7 +44,7 @@ The check is also passed if the obj does not have a roles property.
 */
 export function check(obj, user_roles) {
   if (user_roles === true) return true;
-  
+
   // The object to check has no roles assigned.
   if (!obj.roles) return true;
 
