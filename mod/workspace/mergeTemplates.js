@@ -118,6 +118,8 @@ async function objTemplate(obj, template, roles, reverse) {
     return obj;
   }
 
+  template = structuredClone(template);
+
   roleAssign(obj, template, roles, reverse);
 
   if (roles !== true && !Roles.check(template, roles)) {
@@ -129,8 +131,6 @@ async function objTemplate(obj, template, roles, reverse) {
     }
     return obj;
   }
-
-  template = structuredClone(template);
 
   template = Roles.objMerge(template, roles);
 
