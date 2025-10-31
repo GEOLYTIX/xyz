@@ -384,7 +384,7 @@ async function acs(req, res) {
 
     // Perform ACL lookup if enabled
     if (xyzEnv.SAML_ACL) {
-      const aclResponse = await aclLookUp(user.email);
+      const aclResponse = await aclLookUp(user.email || user.nameID);
 
       if (!aclResponse) {
         const url = await samlStrat.getLogoutUrlAsync(user);
