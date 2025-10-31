@@ -1,3 +1,4 @@
+import crypto from 'node:crypto';
 import jwt from 'jsonwebtoken';
 
 const aclFn = codi.mock.fn();
@@ -13,10 +14,186 @@ const mockFromACL = codi.mock.module('../../../mod/user/fromACL.js', {
   defaultExport: fromACLFn,
 });
 
+const { readFileSync, readdirSync } = await import('fs');
+const fsMockFn = codi.mock.fn(readFileSync);
+const fsMockDirFn = codi.mock.fn(readdirSync);
+const fsMock = codi.mock.module('fs', {
+  namedExports: {
+    readFileSync: fsMockFn,
+    readdirSync: fsMockDirFn,
+  },
+});
+
 await codi.describe(
   { name: 'auth:', id: 'user_auth', parentId: 'user' },
   async () => {
     const { default: auth } = await import('../../../mod/user/auth.js');
+
+    const privateKey = 'PRIVATEKEY';
+
+    globalThis.xyzEnv ??= {};
+    globalThis.xyzEnv.FILE_RESOURCES = 'public';
+    globalThis.xyzEnv.KEY_FILE = 'TEST_KEY';
+    globalThis.xyzEnv.WALLET = {
+      TEST_KEY: 'PRIVATEKEY',
+    };
+
+    await codi.it(
+      { name: 'request with signature', parentId: 'user_auth' },
+      async () => {
+        const date = new Date();
+        date.setDate(date.getDate() + 1);
+
+        const signature = crypto
+          .createHmac('sha256', privateKey)
+          .update('./public/views/_login.html')
+          .update('TEST_KEY')
+          .update(String(Date.parse(date)))
+          .digest('hex');
+
+        const { req, res } = codi.mockHttp.createMocks({
+          params: {
+            provider: 'file',
+            signature: signature,
+            url: './public/views/_login.html',
+            expires: Date.parse(date),
+            key_id: 'TEST_KEY',
+          },
+        });
+
+        fsMockFn.mock.mockImplementation((filePath) => {
+          if (filePath?.includes?.('undefined')) {
+            const error = new Error('File not Found');
+            error.code = 'ENOENT';
+            throw error;
+          }
+          return 'PRIVATEKEY';
+        });
+
+        fsMockDirFn.mock.mockImplementation(() => {
+          return ['TEST_KEY.pem'];
+        });
+
+        const result = await auth(req, res);
+
+        codi.assertEqual(res.statusCode, 200);
+        codi.assertTrue(result.signature_auth);
+      },
+    );
+    await codi.it(
+      { name: 'request with expired signature', parentId: 'user_auth' },
+      async () => {
+        const signature = crypto
+          .createHmac('sha256', privateKey)
+          .update('./public/views/_login.html')
+          .digest('hex');
+
+        const date = new Date();
+        date.setDate(date.getDate() - 1);
+
+        const { req, res } = codi.mockHttp.createMocks({
+          params: {
+            provider: 'file',
+            signature: signature,
+            url: './public/views/_login.html',
+            expires: Date.parse(date),
+            key_id: 'TEST_KEY',
+          },
+        });
+
+        await auth(req, res);
+
+        codi.assertEqual(res.statusCode, 401);
+        codi.assertEqual(res._getData(), 'Signature authentication failed');
+      },
+    );
+    await codi.it(
+      { name: 'request with invalid signature', parentId: 'user_auth' },
+      async () => {
+        const date = new Date();
+        date.setDate(date.getDate() + 1);
+
+        const { req, res } = codi.mockHttp.createMocks({
+          params: {
+            provider: 'file',
+            signature: 'bad',
+            url: './public/views/_login.html',
+            expires: Date.parse(date),
+            key_id: 'TEST_KEY',
+          },
+        });
+
+        await auth(req, res);
+
+        codi.assertEqual(res.statusCode, 401);
+        codi.assertEqual(res._getData(), 'Signature authentication failed');
+      },
+    );
+    await codi.it(
+      {
+        name: 'request with signature for different file',
+        parentId: 'user_auth',
+      },
+      async () => {
+        const signature = crypto
+          .createHmac('sha256', privateKey)
+          .update('./public/views/_login.html')
+          .digest('hex');
+
+        const date = new Date();
+        date.setDate(date.getDate() + 1);
+
+        const { req, res } = codi.mockHttp.createMocks({
+          params: {
+            provider: 'file',
+            signature: signature,
+            url: './public/views/_default.html',
+            expires: Date.parse(date),
+            key_id: 'TEST_KEY',
+          },
+        });
+
+        await auth(req, res);
+
+        codi.assertEqual(res.statusCode, 401);
+        codi.assertEqual(res._getData(), 'Signature authentication failed');
+      },
+    );
+    await codi.it(
+      {
+        name: 'request with wrong key_id',
+        parentId: 'user_auth',
+      },
+      async () => {
+        const signature = crypto
+          .createHmac('sha256', privateKey)
+          .update('./public/views/_login.html')
+          .digest('hex');
+
+        const date = new Date();
+        date.setDate(date.getDate() + 1);
+
+        const { req, res } = codi.mockHttp.createMocks({
+          params: {
+            provider: 'file',
+            signature: signature,
+            url: './public/views/_default.html',
+            expires: Date.parse(date),
+            key_id: 'TES_KEY',
+          },
+        });
+
+        fsMock.restore();
+
+        await auth(req, res);
+
+        codi.assertEqual(res.statusCode, 405);
+        codi.assertEqual(
+          res._getData(),
+          'Signature authentication not configured',
+        );
+      },
+    );
     await codi.it(
       { name: 'req with authorization headers', parentId: 'user_auth' },
       async () => {
@@ -366,7 +543,7 @@ await codi.describe(
               email: 'test@geolytix.co.uk',
               admin: true,
               roles: [],
-              session: crypto.randomUUID('123.12.23/123'),
+              session: crypto.randomUUID(),
             };
 
             const secret = 'i-am-a-secret';
@@ -403,5 +580,6 @@ await codi.describe(
   },
 );
 
+fsMock.restore();
 mockacl.restore();
 mockFromACL.restore();

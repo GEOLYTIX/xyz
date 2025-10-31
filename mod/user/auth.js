@@ -13,6 +13,7 @@ A user_sessions{} object is declared in the module to store user sessions.
 @module /user/auth
 */
 
+import crypto from 'node:crypto';
 import jwt from 'jsonwebtoken';
 import acl from './acl.js';
 import fromACL from './fromACL.js';
@@ -53,6 +54,12 @@ export default async function auth(req, res) {
     return await fromACL(req);
   }
 
+  //Verify signed urls
+  const signatureCheck = keyVerification(req, res);
+
+  if (signatureCheck || signatureCheck instanceof Error) {
+    return signatureCheck;
+  }
   // Get token from params or cookie.
   const token = req.params.token || req.cookies?.[xyzEnv.TITLE];
 
@@ -103,6 +110,73 @@ export default async function auth(req, res) {
   }
 
   return user;
+}
+
+/**
+@function keyVerification
+
+@description
+The function attempts to validate the signature sent with the request.
+
+We compare the given signature to one calcualted from the key and the url.
+
+@param {req} req HTTP request.
+@param {res} res HTTP Response
+
+@returns {Object} returns an object containing whether or not the signature verification passed.
+*/
+function keyVerification(req, res) {
+  if (!req.params.signature) return null;
+
+  //Only use signature verification on provider endpoints.
+  if (!req.params.provider) return null;
+
+  req.params.expires ??= 0;
+
+  if (Number.parseInt(req.params.expires) < Date.parse(new Date())) {
+    return res
+      .status(401)
+      .setHeader('Content-Type', 'text/plain')
+      .send('Signature authentication failed');
+  }
+
+  if (!Object.hasOwn(xyzEnv.WALLET, req.params.key_id)) {
+    return res
+      .status(405)
+      .setHeader('Content-Type', 'text/plain')
+      .send('Signature authentication not configured');
+  }
+
+  try {
+    const privateKey = xyzEnv.WALLET[req.params.key_id];
+
+    //Build signature from key file and requested file url
+    const signature = crypto
+      .createHmac('sha256', privateKey)
+      .update(req.params.url)
+      .update(req.params.key_id)
+      .update(String(req.params.expires))
+      .digest('hex');
+
+    if (signature !== req.params.signature) {
+      return res
+        .status(401)
+        .setHeader('Content-Type', 'text/plain')
+        .send('Signature authentication failed');
+    }
+
+    //Delete params that are no longer required.
+    delete req.params.signature;
+    delete req.params.key_id;
+    delete req.params.expires;
+
+    //Keep track that this is a signed request.
+    req.params.signed = true;
+
+    return { signature_auth: true };
+  } catch (error) {
+    console.err(error);
+  }
 }
 
 /**

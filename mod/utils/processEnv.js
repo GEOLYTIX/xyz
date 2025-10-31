@@ -75,6 +75,7 @@ const defaults = {
   TRANSPORT_PORT: 587,
   TRANSPORT_TLS: false,
   WORKSPACE_AGE: 3600000, // 1 min
+  FILE_RESOURCES: 'resources',
 };
 
 if (process.env.SECRET_KEY) {
@@ -96,6 +97,7 @@ process.env.TITLE ??= defaults.TITLE;
 process.env.TRANSPORT_PORT ??= defaults.TRANSPORT_PORT;
 process.env.TRANSPORT_TLS ??= defaults.TRANSPORT_TLS;
 process.env.WORKSPACE_AGE ??= defaults.WORKSPACE_AGE;
+process.env.FILE_RESOURCES ??= defaults.FILE_RESOURCES;
 
 const xyzEnv = {
   COOKIE_TTL: parseInt(process.env.COOKIE_TTL),
@@ -109,14 +111,25 @@ const xyzEnv = {
   TRANSPORT_PORT: parseInt(process.env.TRANSPORT_PORT),
   TRANSPORT_TLS: process.env.TRANSPORT_TLS,
   WORKSPACE_AGE: process.env.WORKSPACE_AGE,
+  WALLET: {},
 };
 
-// Add remaining env vars
-Object.entries(process.env).forEach(([key, value]) => {
-  if (!(key in xyzEnv)) {
-    xyzEnv[key] = value;
+for (const [key, value] of Object.entries(process.env)) {
+  if (Object.hasOwn(xyzEnv, key)) continue;
+  xyzEnv[key] = value;
+  addKeyToWallet(key);
+}
+
+// Add SIGN_* key files as string to the xyzEnv.WALLET
+function addKeyToWallet(variable) {
+  const KEY = new RegExp(/^SIGN_(.*)/).exec(variable)?.[1];
+  if (KEY === undefined) return;
+  try {
+    xyzEnv.WALLET[KEY] = String(readFileSync(`./${KEY}.pem`));
+  } catch (error) {
+    console.error(`File Signer: ${error.toString()}`);
   }
-});
+}
 
 // Freeze to prevent modifications
 Object.freeze(xyzEnv);

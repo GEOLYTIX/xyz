@@ -9,15 +9,31 @@ The sign API provides access to different request signer modules. Signer modules
 @module /sign
 */
 
+import { ServerResponse } from 'node:http';
 import cloudfront from './cloudfront.js';
 import cloudinary from './cloudinary.js';
+import file from './file.js';
 import s3 from './s3.js';
 
 const signerModules = {
   cloudfront,
   cloudinary,
   s3,
+  file,
 };
+
+//Create file signer functions
+for (const key in xyzEnv) {
+  //File signers have a SIGN_XXX patern.
+  const SIGNER = new RegExp(/^SIGN_(.*)/).exec(key)?.[1];
+  if (SIGNER === undefined) continue;
+
+  //Set up a function that passes the key name and the host url name
+  signerModules[SIGNER] = (req, res) => {
+    req.params.signing_key = SIGNER;
+    return file(req, res);
+  };
+}
 
 /**
 @function signer
@@ -58,6 +74,8 @@ export default async function signer(req, res) {
       .setHeader('Content-Type', 'text/plain')
       .send(response.message);
   }
+
+  if (response instanceof ServerResponse) return response;
 
   res.send(response);
 }

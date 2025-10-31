@@ -26,6 +26,14 @@ const mockedUrl = codi.mock.module('url', {
   },
 });
 
+const mockSignFileFn = codi.mock.fn();
+const mockSignFile = codi.mock.module('../../../mod/sign/file.js', {
+  defaultExport: mockSignFileFn,
+  namedExports: {
+    file_signer: mockSignFileFn,
+  },
+});
+
 await codi.describe(
   { name: 'file:', id: 'provider_file', parentId: 'provider' },
   async () => {
@@ -54,6 +62,7 @@ await codi.describe(
   },
 );
 
+mockSignFile.restore();
 fsMock.restore();
 mockPath.restore();
 mockedUrl.restore();

@@ -30,6 +30,7 @@ The workspace object defines the mapp resources available in an XYZ instance.
 */
 
 import { createHash } from 'node:crypto';
+import logger from '../utils/logger.js';
 import * as Roles from '../utils/roles.js';
 import workspaceCache from './cache.js';
 import getLayer from './getLayer.js';
@@ -639,6 +640,7 @@ Finally each template defined in the workspace.templates will be cached.
 @property {Boolean} [params.force] Whether the cached workspace should be cleared.
 */
 async function cacheTemplates(params) {
+  const timestamp = Date.now();
   workspace = await workspaceCache(params.force);
 
   for (const localeKey of Object.keys(workspace.locales)) {
@@ -668,11 +670,15 @@ async function cacheTemplates(params) {
 
     await Promise.allSettled(layerPromises);
   }
+  logger(`cachelocales: ${Date.now() - timestamp}`, 'cachelocales');
 
-  // hydrating/caching all the templates
-  for (const key of Object.keys(workspace.templates)) {
+  const templatePromises = Object.keys(workspace.templates).map(async (key) => {
     await getTemplate(key, true);
-  }
+  });
+
+  await Promise.allSettled(templatePromises);
+
+  logger(`cachetemplates: ${Date.now() - timestamp}`, 'cachetemplates');
 }
 
 /**

@@ -61,9 +61,14 @@ async function Fetch(url) {
     return signedURL;
   }
 
+  const timestamp = Date.now();
+
   const response = await fetch(signedURL);
 
-  logger(`${response.status} - ${url}`, 'cloudfront');
+  logger(
+    `${Date.now() - timestamp}: ${response.status} - ${url}`,
+    'cloudfront',
+  );
 
   if (response.status >= 300) return new Error(`${response.status} ${url}`);
 
