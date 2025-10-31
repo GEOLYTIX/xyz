@@ -46,7 +46,6 @@ Template properties will be removed as these are not required by the MAPP API bu
 @property {string} [params.locale] Locale key.
 @property {array} [params.locale] An array of locale keys to be merged as a nested locale.
 @property {Object} [params.user] Requesting user.
-@property {Boolean} [params.cache] Templates associated with the locale should be cached and not requested multiple times.
 @property {Boolean} [params.ignoreRoles] Whether role check should be performed.
 @property {Array} [user.roles] User roles.
 
@@ -59,8 +58,8 @@ export default async function getLocale(params, parentLocale) {
     return workspace;
   }
 
-  if (!params.user?.admin) {
-    delete params.ignoreRoles;
+  if (params.ignoreRoles) {
+    params.user.roles = true;
   }
 
   if (typeof params.locale === 'string') {
@@ -78,7 +77,7 @@ export default async function getLocale(params, parentLocale) {
   } else if (Object.hasOwn(workspace.locales, localeKey)) {
     locale = workspace.locales[localeKey];
   } else {
-    locale = await getTemplate(localeKey, params.cache);
+    locale = await getTemplate(localeKey);
   }
 
   if (locale instanceof Error) {
@@ -86,13 +85,15 @@ export default async function getLocale(params, parentLocale) {
   }
 
   // The roles property maybe assigned from a template. Templates must be merged prior to the role check.
-  locale = await mergeTemplates(locale, params.user?.roles, params.cache);
+  locale = await mergeTemplates(locale, params.user?.roles);
+
+  // The mergeTemplates method returned an Error.
+  if (locale instanceof Error) {
+    return locale;
+  }
 
   //If the user is an admin we don't need to check roles
-  if (
-    locale instanceof Error ||
-    (!params.ignoreRoles && !Roles.check(locale, params.user?.roles))
-  ) {
+  if (!Roles.check(locale, params.user?.roles)) {
     return new Error('Role access denied.');
   }
 

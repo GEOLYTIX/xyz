@@ -33,9 +33,8 @@ The method will check for a template matching the obj.key string property if obj
 
 An array of templates can be defined as obj.templates[]. The templates will be merged into the obj in the order the template keys are in the templates[] array.
 
-@param {Object} obj
+@param {Object} obj 
 @param {array} [roles] An array of user roles from request params.
-@param {boolean} cache Templates should be cached and not requested multiple times.
 
 @property {string} [obj.template] Key of template for the object.
 @property {string} obj.key Fallback for lookup of template if not an implicit property.
@@ -43,13 +42,21 @@ An array of templates can be defined as obj.templates[]. The templates will be m
 
 @returns {Promise} The layer or locale provided as obj param.
 */
-export default async function mergeTemplates(obj, roles, cache) {
+export default async function mergeTemplates(obj, roles) {
   // Cache workspace in module scope for template assignment.
   workspace = await workspaceCache();
 
+  if (typeof obj.role === 'string') {
+    if (typeof obj.localeRole === 'string') {
+      obj.role = `${obj.localeRole}.${obj.role}`;
+    }
+    obj.roles ??= {};
+    obj.roles[obj.role] ??= true;
+  }
+
   // The object has an implicit template to merge into.
   if (typeof obj.template === 'string' || obj.template instanceof Object) {
-    obj = await objTemplate(obj, obj.template, roles, null, cache);
+    obj = await objTemplate(obj, obj.template, roles, null);
     if (obj instanceof Error) return obj;
   }
 
@@ -94,15 +101,15 @@ Otherwise the obj will be merged into the template.
 
 The template will be merged into the obj with the reverse flag.
 
-@param {Object} obj
-@param {Object} template The template maybe an object with a src property or a string.
-@param {array} roles An array of user roles from request params.
+@param {Object} obj 
+@param {Object} template The template maybe an object with a src property or a string. 
+@param {array} roles An array of user roles from request params. 
 @param {boolean} reverse Whether template should be merged into the obj, not the other way around.
 
 @returns {Promise<Object>} Returns the merged obj.
 */
-async function objTemplate(obj, template, roles, reverse, cache) {
-  template = await getTemplate(template, cache);
+async function objTemplate(obj, template, roles, reverse) {
+  template = await getTemplate(template);
 
   // Failed to get template matching obj.template from template.src!
   if (template instanceof Error) {
@@ -111,52 +118,102 @@ async function objTemplate(obj, template, roles, reverse, cache) {
     return obj;
   }
 
-  if (Roles.check(template, roles)) {
-    template = structuredClone(template);
+  template = structuredClone(template);
 
-    template = Roles.objMerge(template, roles);
+  roleAssign(obj, template, roles, reverse);
 
-    //use the base obj exclude/include props as we need that for the templateProperties method.
-    template.exclude_props = obj.exclude_props ?? template.exclude_props;
-    template.include_props = obj.include_props ?? template.include_props;
-
-    template = templateProperties(template);
-
-    if (reverse) {
-      //The object key must not be overwritten by a template key.
-      delete template.key;
-
-      //The object template must not be overwritten by a templates template.
-      delete template.template;
-
-      // Merge template --> obj
-      return merge(obj, template);
-    } else {
-      // Merge obj --> template
-      // Template must be cloned to prevent cross polination and array aggregation.
-      return merge(template, obj);
+  if (roles !== true && !Roles.check(template, roles)) {
+    if (!reverse) {
+      obj.roles = {
+        ...template.roles,
+        ...obj.roles,
+      };
     }
+    return obj;
   }
 
-  // Return empty object if Roles.check fails to prevent subsequent object from crashing on undefined.
-  return new Error('Role check failed.');
+  template = Roles.objMerge(template, roles);
+
+  //use the base obj exclude/include props as we need that for the templateProperties method.
+  template.exclude_props = obj.exclude_props ?? template.exclude_props;
+  template.include_props = obj.include_props ?? template.include_props;
+
+  template = templateProperties(template);
+
+  if (reverse) {
+    //The object key must not be overwritten by a template key.
+    delete template.key;
+
+    //The object template must not be overwritten by a templates template.
+    delete template.template;
+
+    // Merge template --> obj
+    return merge(obj, template);
+  } else {
+    // Merge obj --> template
+    // Template must be cloned to prevent cross polination and array aggregation.
+    return merge(template, obj);
+  }
+}
+
+/**
+@function roleAssign
+
+@description
+Templates may have an access role restriction. The `template.role` string property requires a user to have that role in order to access the template.
+
+The role string will be added as boolean:true property to the `template.roles` object property if the property key is undefined.
+
+`template.role = 'bar' -> template.roles = {'bar':true}`
+
+A dot notation role key will be created if the obj has a role string property.
+
+`obj.role = 'foo' && template.role = 'bar' -> template.roles = {'foo.bar':true}`
+
+@param {Object} obj 
+@param {Object} template The template maybe an object with a src property or a string. 
+@param {boolean} reverse Whether template should be merged into the obj, not the other way around.
+@property {string} template.role The template has an access role restriction.
+*/
+function roleAssign(obj, template, roles, reverse) {
+  if (!template.role) return;
+
+  template.roles ??= {};
+  template.roles[template.role] ??= true;
+
+  if (typeof obj.role === 'string') {
+    template.roles[`${obj.role}.${template.role}`] ??= true;
+    if (
+      typeof obj.localeRole === 'string' &&
+      !obj.role.startsWith(`${obj.localeRole}.`)
+    ) {
+      template.roles[`${obj.localeRole}.${obj.role}.${template.role}`] ??= true;
+    }
+  } else if (typeof obj.localeRole === 'string') {
+    template.roles[`${obj.localeRole}.${template.role}`] ??= true;
+  }
+
+  // Delete the template.role to prevent the obj.role being overwritten when the template is merged into the obj.
+  if (reverse) {
+    delete template.role;
+  }
 }
 
 /**
 @function assignWorkspaceTemplates
 
 @description
-The method parses an object for a template object property.
+The method parses an object for a template object property. 
 
 The template property value will be assigned to the workspace.templates{} object matching the template key value.
 
-The template._type property will be set to 'template' indicating that the templates origin is in the workspace.
+The template._type property will be set to 'template' indicating that the templates origin is in the workspace. 
 
 It is possible to overassign _type:'core' templates which are loaded from the /mod/workspace/templates directory.
 
 The method will call itself for nested objects.
 
-@param {Object} obj
+@param {Object} obj 
 */
 function assignWorkspaceTemplates(obj) {
   // Return early if object is null or empty

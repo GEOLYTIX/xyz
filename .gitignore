@@ -27,6 +27,7 @@ docs/*
 *.pem
 *.crt
 /*.json
+/*.jsonc
 !tests/*.json
 !tests/**
 !package.json
