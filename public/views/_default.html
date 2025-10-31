@@ -286,62 +286,16 @@
       }
     });
 
-    document.getElementById('ctrls-divider').ondblclick = (e) => {
-      let pageX = (e.touches && e.touches[0].pageX) || e.pageX;
-
-      if(pageX < 75) {
-        document.body.style.gridTemplateColumns = `350px 10px auto`;
-
-        return;
-      }
-
-      document.body.style.gridTemplateColumns = `0px 10px auto`;
-
-
-    }
-
     // ResizeHandler for #CTRLS
     mapp.ui.utils.resizeHandler({
       target: document.getElementById('ctrls-divider'),
-      resizeEvent: (e) => {
-        let pageX = (e.touches && e.touches[0].pageX) || e.pageX;
-
-        if (pageX < 75) {
-          document.body.style.gridTemplateColumns = `0px 10px auto`;
-          return;
-        };
-
-        if(pageX < 200) {
-           return;
-        }
-
-        // Half width snap.
-        if (pageX > window.innerWidth / 2) pageX = window.innerWidth / 2;
-
-        document.body.style.gridTemplateColumns = `${pageX}px 10px auto`;
-      },
+      doubleClickClose: true,
     });
 
     // ResizeHandler for tabview
     mapp.ui.utils.resizeHandler({
       target: document.getElementById('tabview-divider'),
-      resizeEvent: (e) => {
-        let pageY = (e.touches && e.touches[0].pageY) || e.pageY;
-
-        if (pageY < 0) return;
-
-        let height = window.innerHeight - pageY;
-
-        // Min height snap.
-        if (height < 65) height = 50;
-
-        // Full height snap.
-        if (height > window.innerHeight - 10) height = window.innerHeight;
-
-        document.body.style.gridTemplateRows = `auto 10px ${height}px`;
-
-        OL.style.marginTop = `-${height / 2}px`;
-      },
+      axis: 'Y'
     });
 
     const locationsTab = document.getElementById('locations');
