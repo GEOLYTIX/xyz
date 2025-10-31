@@ -43,7 +43,7 @@ The check is also passed if the obj does not have a roles property.
 @returns {boolean} Returns true if check is passed, false otherwise.
 */
 export function check(obj, user_roles) {
-  if (user_roles === true) return true;
+  if (user_roles == true) return true;
 
   // The object to check has no roles assigned.
   if (!obj.roles) return true;
@@ -104,7 +104,7 @@ const obj = {
 };
 
 // With admin role
-objMerge(obj, ['admin']); 
+objMerge(obj, ['admin']);
 // Returns: { name: 'layer', secretField: 'sensitive', roles: {...} }
 
 // With user role
