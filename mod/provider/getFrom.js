@@ -3,18 +3,33 @@
 
 The getFrom provider module allows XYZ modules to get resources either from configured sources.
 
+@requires ../sign/file
+@requires ../utils/logger
+@requires ./cloudfront
+@requires ./file
+
 @module /provider/getFrom
 */
 
+import file_signer from '../sign/file.js';
 import logger from '../utils/logger.js';
 import cloudfront from './cloudfront.js';
 import file from './file.js';
 
-export default {
+const getFromModules = {
   cloudfront: Cloudfront,
   file: File,
   https: Https,
 };
+
+// Assign XYZ method for each SIGN_* key in xyzEnv
+for (const key in xyzEnv) {
+  const PROVIDER = new RegExp(/^SIGN_(.*)/).exec(key)?.[1];
+  if (PROVIDER === undefined) continue;
+  getFromModules[PROVIDER] = XYZ;
+}
+
+export default getFromModules;
 
 const cacheMap = new Map();
 
@@ -81,4 +96,56 @@ async function Https(url) {
     console.error(err);
     return err;
   }
+}
+
+/**
+@function XYZ
+@async
+
+@description
+The method splits the reference string into a params object for the XYZ file signer.
+
+@param {string} ref Reference for the XYZ signer.
+
+@returns {Promise<String|JSON|Error>} The fetch is resolved into either a string or JSON depending on the url ending.
+*/
+async function XYZ(ref) {
+  const params = {
+    signing_key: ref.split(':')[0],
+    url: ref.split(':')[1],
+  };
+
+  const signedUrl = file_signer({ params });
+
+  //Different content types require Different request headers
+  //These will get assigned based on the file ending
+  const fileType = signedUrl.split('.').at(-1);
+  const contentTypes = {
+    json: 'application/json',
+    html: 'text/html',
+    js: 'text/javascript',
+  };
+  const contentType = contentTypes[fileType] || 'text/plain';
+
+  const timestamp = Date.now();
+
+  const response = await fetch(signedUrl, {
+    headers: {
+      'Content-Type': contentType,
+    },
+  });
+
+  logger(
+    `${Date.now() - timestamp}: ${response.ok} - ${params.signing_key}/${params.url}`,
+    'xyzfetch',
+  );
+
+  if (!response.ok) {
+    return new Error(`Failed to fetch`);
+  }
+
+  const content =
+    fileType === 'json' ? await response.json() : await response.text();
+
+  return content;
 }
