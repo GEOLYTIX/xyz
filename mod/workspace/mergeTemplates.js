@@ -105,7 +105,8 @@ Templates defined in the obj.templates array will be merged into object.
 
 @param {Object} obj 
 @param {Object} template The template maybe an object with a src property or a string. 
-@param {array} roles An array of user roles from request params. 
+@param {array} roles An array of user roles from request params.
+@property {string} [obj.template] Key of template for the object.
 
 @returns {Promise<Object>} Returns the merged obj.
 */
