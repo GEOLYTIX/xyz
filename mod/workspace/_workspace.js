@@ -645,7 +645,7 @@ Finally each template defined in the workspace.templates will be cached.
 */
 async function cacheTemplates(params) {
   const timestamp = Date.now();
-  workspace = await workspaceCache(params.force);
+  const cache = await workspaceCache(params.force);
 
   for (const localeKey of Object.keys(cache.locales)) {
     // Will get layer and assignTemplates to workspace.
@@ -686,6 +686,8 @@ async function cacheTemplates(params) {
   await Promise.allSettled(templatePromises);
 
   logger(`cachetemplates: ${Date.now() - timestamp}`, 'cachetemplates');
+
+  return cache;
 }
 
 /**

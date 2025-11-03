@@ -56,14 +56,14 @@ export default async function mergeTemplates(obj, roles) {
 
   // The object has an implicit template to merge into.
   if (typeof obj.template === 'string' || obj.template instanceof Object) {
-    obj = await objTemplate(obj, obj.template, roles, null);
+    obj = await objTemplate(obj, obj.template, roles);
     if (obj instanceof Error) return obj;
   }
 
   if (Array.isArray(obj.templates)) {
     // The _template can be a string or object [with src]
     for (const _template of obj.templates) {
-      obj = await objTemplate(obj, _template, roles, true);
+      obj = await objTemplate(obj, _template, roles);
     }
   } else if (obj.templates instanceof Object) {
     const err = `${obj.key} Object must be a templates Array.`;
@@ -80,6 +80,8 @@ export default async function mergeTemplates(obj, roles) {
 
   // Assign default workspace dbs if not defined in template.
   obj.dbs ??= workspace.dbs;
+
+  console.log(obj);
 
   return obj;
 }
@@ -99,16 +101,15 @@ The method will shortcircuit if roles restrict access to the template object.
 
 Otherwise the obj will be merged into the template.
 
-The template will be merged into the obj with the reverse flag.
+Templates defined in the obj.templates array will be merged into object.
 
 @param {Object} obj 
 @param {Object} template The template maybe an object with a src property or a string. 
 @param {array} roles An array of user roles from request params. 
-@param {boolean} reverse Whether template should be merged into the obj, not the other way around.
 
 @returns {Promise<Object>} Returns the merged obj.
 */
-async function objTemplate(obj, template, roles, reverse) {
+async function objTemplate(obj, template, roles) {
   template = await getTemplate(template);
 
   // Failed to get template matching obj.template from template.src!
@@ -120,10 +121,10 @@ async function objTemplate(obj, template, roles, reverse) {
 
   template = structuredClone(template);
 
-  roleAssign(obj, template, roles, reverse);
+  roleAssign(obj, template);
 
   if (roles !== true && !Roles.check(template, roles)) {
-    if (!reverse) {
+    if (typeof obj.template === 'string') {
       obj.roles = {
         ...template.roles,
         ...obj.roles,
@@ -140,7 +141,12 @@ async function objTemplate(obj, template, roles, reverse) {
 
   template = templateProperties(template);
 
-  if (reverse) {
+  if (typeof obj.template === 'string') {
+    // prevent template property to be overwritten in template object.
+    delete obj.template;
+    // Merge obj --> template
+    obj = merge(template, obj);
+  } else {
     //The object key must not be overwritten by a template key.
     delete template.key;
 
@@ -148,12 +154,15 @@ async function objTemplate(obj, template, roles, reverse) {
     delete template.template;
 
     // Merge template --> obj
-    return merge(obj, template);
-  } else {
-    // Merge obj --> template
-    // Template must be cloned to prevent cross polination and array aggregation.
-    return merge(template, obj);
+    obj = merge(obj, template);
   }
+
+  if (typeof obj.template === 'string') {
+    obj = objTemplate(obj, obj.template, roles);
+    return obj;
+  }
+
+  return obj;
 }
 
 /**
@@ -172,10 +181,9 @@ A dot notation role key will be created if the obj has a role string property.
 
 @param {Object} obj 
 @param {Object} template The template maybe an object with a src property or a string. 
-@param {boolean} reverse Whether template should be merged into the obj, not the other way around.
 @property {string} template.role The template has an access role restriction.
 */
-function roleAssign(obj, template, roles, reverse) {
+function roleAssign(obj, template) {
   if (!template.role) return;
 
   template.roles ??= {};
@@ -194,7 +202,7 @@ function roleAssign(obj, template, roles, reverse) {
   }
 
   // Delete the template.role to prevent the obj.role being overwritten when the template is merged into the obj.
-  if (reverse) {
+  if (typeof obj.template === 'string') {
     delete template.role;
   }
 }
