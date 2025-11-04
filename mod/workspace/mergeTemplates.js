@@ -140,7 +140,7 @@ async function objTemplate(obj, template, roles) {
 
   template = templateProperties(template);
 
-  if (typeof obj.template === 'string') {
+  if (obj.template) {
     // prevent template property to be overwritten in template object.
     delete obj.template;
     // Merge obj --> template
@@ -156,7 +156,7 @@ async function objTemplate(obj, template, roles) {
     obj = merge(obj, template);
   }
 
-  if (typeof obj.template === 'string') {
+  if (obj.template) {
     obj = objTemplate(obj, obj.template, roles);
     return obj;
   }

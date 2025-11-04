@@ -82,9 +82,7 @@ await codi.describe(
           'locale.layer_a.draw_circle',
         ];
 
-        const template = await mergeTemplates(obj, roles, false);
-
-        delete template.template;
+        const template = await mergeTemplates(obj, roles);
 
         // Check template in template has the draw.point object.
         codi.assertTrue(
