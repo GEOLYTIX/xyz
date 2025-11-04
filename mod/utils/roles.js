@@ -43,15 +43,16 @@ The check is also passed if the obj does not have a roles property.
 @returns {boolean} Returns true if check is passed, false otherwise.
 */
 export function check(obj, user_roles) {
-  if (user_roles == true) return true;
+  if (!user_roles) return false;
+
+  // user_roles must be an array or true
+  if (!Array.isArray(user_roles)) return true;
 
   // The object to check has no roles assigned.
   if (!obj.roles) return true;
 
   // Always return object with '*' asterisk role.
   if (Object.hasOwn(obj.roles, '*')) return true;
-
-  if (!user_roles) return false;
 
   // Add last of dot notation role to rolesArr
   const rolesArr = Object.keys(obj.roles);
