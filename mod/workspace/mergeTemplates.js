@@ -123,7 +123,7 @@ async function objTemplate(obj, template, roles) {
   roleAssign(obj, template);
 
   if (roles !== true && !Roles.check(template, roles)) {
-    if (typeof obj.template === 'string') {
+    if (obj.template) {
       obj.roles = {
         ...template.roles,
         ...obj.roles,
