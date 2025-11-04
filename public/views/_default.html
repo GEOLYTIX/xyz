@@ -217,23 +217,7 @@
 
     <div id="ctrls-divider" class="mobile-display-none"></div>
 
-    <div id="ctrls">
-      <div id="ctrl-tabs" class="hover">
-        <div
-          data-id="layers"
-          class="active notranslate material-symbols-outlined"
-        ></div>
-        <div
-          data-id="locations"
-          class="notranslate material-symbols-outlined"
-        ></div>
-      </div>
-
-      <div id="ctrl-panel">
-        <div id="layers" class="active"></div>
-        <div id="locations"></div>
-      </div>
-    </div>
+    <div id="ctrls"></div>
 
     <script type="module">
     console.log(`MAPP v${mapp.version}`);
@@ -323,6 +307,84 @@
       },
     });
 
+    // Get list of accessible locales from Workspace API.
+    let locales = await mapp.utils.xhr(
+      `${mapp.host}/api/workspace/locales`,
+    );
+
+      // Assign locale from current [URL parameter] or as first key from locales array.
+    let locale = mapp.hooks.current.locale || locales[0]?.key
+
+    // Use 'locale' as default if undefined.
+    locale ??= 'locale'
+
+    // Get locale with list of layers from Workspace API.
+    locale = await mapp.utils.xhr(
+      `${mapp.host}/api/workspace/locale?locale=${locale}&layers=true`,
+    );
+
+    if (locale instanceof Error) {
+      // Create the Dialog.node
+      mapp.ui.elements.dialog({
+        css_style:
+          'padding: 1em; border-color: #000; z-index:9999; max-width: 50%;',
+        content: mapp.dictionary.no_locales,
+        target: document.body,
+        top: '40%',
+        left: '25%',
+        contained: true,
+      });
+    }
+
+   // Create mapview
+    const mapview = await mapp.Mapview({
+      host: mapp.host,
+      target: OL,
+      locale: locale,
+      hooks: true,
+      scrollWheelZoom: true,
+      loadPlugins: true,
+      mapButton: document.getElementById('mapButton'),
+      controls: document.getElementById('ctrls'),
+      attribution: {
+        target: document.getElementById('Map'),
+        logo: mapp.utils.html.node`
+        <a class="logo" target="_blank" href="https://geolytix.co.uk">
+          <img src="https://geolytix.github.io/public/geolytix_mapp.svg" alt="GEOLYTIX MAPP Logo">`,
+        links: {
+          [`XYZ v${mapp.version}`]: 'https://github.com/GEOLYTIX/xyz',
+          ['SHA']: `https://github.com/GEOLYTIX/xyz/commit/${mapp.hash}`,
+          Openlayers: 'https://openlayers.org',
+        },
+      },
+    });
+
+    const controls = [
+      'layers',
+      ...(mapview.locale?.controls || []),
+      {key: 'locations', style: 'display: none'}
+    ]
+    mapp.ui.elements.controls({
+      target: document.getElementById('ctrls'),
+      tabs: controls
+    })
+
+    mapview.controlPanels = controls.map( control => control.key || control)
+
+    if (mapview.locale.controls) {
+      for(const control of mapview.locale.controls){
+        const func = control.key || control
+        if(mapview.locale[func])
+          mapp.ui.controls?.[func]?.(
+            Object.assign(mapview.locale[func], {
+              mapview,
+              target: document.getElementById(`${func}`)
+            })
+          )
+      }
+     }
+
+
     const locationsTab = document.getElementById('locations');
     const layersTab = document.getElementById('layers');
 
@@ -369,35 +431,6 @@
         mapview.Map.getTargetElement().style.marginTop = 0;
       },
     });
-
-    // Get list of accessible locales from Workspace API.
-    let locales = await mapp.utils.xhr(
-      `${mapp.host}/api/workspace/locales`,
-    );
-
-    // Assign locale from current [URL parameter] or as first key from locales array.
-    let locale = mapp.hooks.current.locale || locales[0]?.key
-
-    // Use 'locale' as default if undefined.
-    locale ??= 'locale'
-
-    // Get locale with list of layers from Workspace API.
-    locale = await mapp.utils.xhr(
-      `${mapp.host}/api/workspace/locale?locale=${locale}&layers=true`,
-    );
-
-    if (locale instanceof Error) {
-      // Create the Dialog.node
-      mapp.ui.elements.dialog({
-        css_style:
-          'padding: 1em; border-color: #000; z-index:9999; max-width: 50%;',
-        content: mapp.dictionary.no_locales,
-        target: document.body,
-        top: '40%',
-        left: '25%',
-        contained: true,
-      });
-    }
 
     if (mapp.user?.locale instanceof Object) {
 
@@ -451,28 +484,6 @@
 
     mapp.hooks.set({locale:locale.key});
 
-    // Create mapview
-    const mapview = await mapp.Mapview({
-      host: mapp.host,
-      target: OL,
-      locale: locale,
-      hooks: true,
-      scrollWheelZoom: true,
-      loadPlugins: true,
-      mapButton: document.getElementById('mapButton'),
-      attribution: {
-        target: document.getElementById('Map'),
-        logo: mapp.utils.html.node`
-        <a class="logo" target="_blank" href="https://geolytix.co.uk">
-          <img src="https://geolytix.github.io/public/geolytix_mapp.svg" alt="GEOLYTIX MAPP Logo">`,
-        links: {
-          [`XYZ v${mapp.version}`]: 'https://github.com/GEOLYTIX/xyz',
-          ['SHA']: `https://github.com/GEOLYTIX/xyz/commit/${mapp.hash}`,
-          Openlayers: 'https://openlayers.org',
-        },
-      },
-    });
-
     if (!locale.layers?.length && !(locale instanceof Error)) {
       mapp.ui.elements.dialog({
         css_style:
@@ -488,17 +499,6 @@
 
     // Add layers to mapview.
     await mapview.addLayer(locale.layers);
-
-    if (mapview.locale.gazetteer) {
-      mapp.ui.Gazetteer(
-        Object.assign(mapview.locale.gazetteer, {
-          mapview,
-          target: locationsTab.appendChild(mapp.utils.html.node`<div>`),
-        }),
-      );
-    } else {
-      document.querySelector('[data-id=locations]').style.display = 'none';
-    }
 
     // Create layers listview.
     mapp.ui.layers.listview({
