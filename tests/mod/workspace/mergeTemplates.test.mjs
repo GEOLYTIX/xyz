@@ -49,9 +49,7 @@ await codi.describe(
           },
         };
 
-        const roles = ['locale', 'locale.layer', 'locale.layer.template'];
-
-        const template = await mergeTemplates(layer, roles, true);
+        const template = await mergeTemplates(layer, true);
 
         codi.assertTrue(
           expectedRoles.every((r) => Object.keys(template.roles).includes(r)),

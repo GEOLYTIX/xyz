@@ -189,9 +189,7 @@ function roleAssign(obj, template) {
   template.roles[template.role] ??= true;
 
   if (typeof obj.role === 'string') {
-    if (!obj.template) {
-      template.roles[`${obj.role}.${template.role}`] ??= true;
-    }
+    template.roles[`${obj.role}.${template.role}`] ??= true;
 
     if (
       typeof obj.localeRole === 'string' &&
