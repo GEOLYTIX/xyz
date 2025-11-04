@@ -81,8 +81,6 @@ export default async function mergeTemplates(obj, roles) {
   // Assign default workspace dbs if not defined in template.
   obj.dbs ??= workspace.dbs;
 
-  console.log(obj);
-
   return obj;
 }
 
@@ -191,19 +189,24 @@ function roleAssign(obj, template) {
   template.roles[template.role] ??= true;
 
   if (typeof obj.role === 'string') {
-    template.roles[`${obj.role}.${template.role}`] ??= true;
+
+    if (!obj.template) {
+      template.roles[`${obj.role}.${template.role}`] ??= true;
+    }
+
     if (
       typeof obj.localeRole === 'string' &&
       !obj.role.startsWith(`${obj.localeRole}.`)
     ) {
       template.roles[`${obj.localeRole}.${obj.role}.${template.role}`] ??= true;
     }
+
   } else if (typeof obj.localeRole === 'string') {
     template.roles[`${obj.localeRole}.${template.role}`] ??= true;
   }
 
   // Delete the template.role to prevent the obj.role being overwritten when the template is merged into the obj.
-  if (typeof obj.template === 'string') {
+  if (!obj.template) {
     delete template.role;
   }
 }
