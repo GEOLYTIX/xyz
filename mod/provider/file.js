@@ -2,6 +2,8 @@
 ## /provider/file
 
 The file provider module exports a method to fetch resources from the local file system.
+@requires fs
+@requires path
 
 @module /provider/file
 */
@@ -26,8 +28,15 @@ The [node import module attributes]{@link https://nodejs.org/api/esm.html#import
 @param {object|string} ref The file reference maybe defined as an object or string. A string is assumed to be the params.url property of the file location.
 @returns {File|Error} The file will be returned as parsed json or string if the readFileSync process succeeds.
 */
-export default function file(ref) {
+export default async function file(ref) {
   try {
+    //Signed requests are alllowed limited file access.
+    if (
+      ref.params?.signed &&
+      !ref.params.url?.startsWith?.(`${xyzEnv.FILE_RESOURCES}/`)
+    )
+      throw new Error('Unauthorized');
+
     // Subtitutes {*} with xyzEnv.SRC_* key values.
     const path = (ref.params?.url || ref).replace(
       /{(?!{)(.*?)}/g,
