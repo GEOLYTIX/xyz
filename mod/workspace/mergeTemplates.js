@@ -47,7 +47,7 @@ export default async function mergeTemplates(obj, roles) {
   workspace = await workspaceCache();
 
   if (typeof obj.role === 'string') {
-    if (typeof obj.localeRole === 'string') {
+    if (typeof obj.localeRole === 'string' && !obj.role.startsWith(`${obj.localeRole}.`)) {
       obj.role = `${obj.localeRole}.${obj.role}`;
     }
     obj.roles ??= {};
