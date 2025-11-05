@@ -90,20 +90,6 @@
       flex-grow: 1;
       font-size: 2em;
 
-      &[data-id='layers']:after {
-        content: 'layers';
-      }
-
-      &[data-id='locations'] {
-        &:after {
-          content: 'search';
-        }
-
-        &.active:after {
-          content: 'location_on';
-        }
-      }
-
     }
 
     #ctrl-panel {
@@ -217,7 +203,10 @@
 
     <div id="ctrls-divider" class="mobile-display-none"></div>
 
-    <div id="ctrls"></div>
+    <div id="ctrls">
+      <div id="ctrl-tabs" class="hover"></div>
+      <div id="ctrl-panel"></div>
+    </div>
 
     <script type="module">
     console.log(`MAPP v${mapp.version}`);
@@ -336,6 +325,8 @@
       });
     }
 
+    locale.syncPlugins ??= ['zoomBtn', 'admin', 'login'];
+
    // Create mapview
     const mapview = await mapp.Mapview({
       host: mapp.host,
@@ -345,7 +336,8 @@
       scrollWheelZoom: true,
       loadPlugins: true,
       mapButton: document.getElementById('mapButton'),
-      controls: document.getElementById('ctrls'),
+      controlTabs: document.getElementById('ctrl-tabs'),
+      controlPanels: document.getElementById('ctrl-panel'),
       attribution: {
         target: document.getElementById('Map'),
         logo: mapp.utils.html.node`
@@ -359,58 +351,20 @@
       },
     });
 
-    const controls = [
-      'layers',
-      ...(mapview.locale?.controls || []),
-      {key: 'locations', style: 'display: none'}
+    mapview.locale.controls ??= [
+      'layers', {key: 'locations', style: 'display: none', icon: "location_on"}
     ]
+
+    //Create tabs and panels for controls.
     mapp.ui.elements.controls({
-      target: document.getElementById('ctrls'),
-      tabs: controls
+      tabTarget: mapview.controlTabs,
+      panelTarget: mapview.controlPanels,
+      ctrlTarget: document.getElementById('ctrls'),
+      tabs: mapview.locale.controls
     })
-
-    mapview.controlPanels = controls.map( control => control.key || control)
-
-    if (mapview.locale.controls) {
-      for(const control of mapview.locale.controls){
-        const func = control.key || control
-        if(mapview.locale[func])
-          mapp.ui.controls?.[func]?.(
-            Object.assign(mapview.locale[func], {
-              mapview,
-              target: document.getElementById(`${func}`)
-            })
-          )
-      }
-     }
-
 
     const locationsTab = document.getElementById('locations');
     const layersTab = document.getElementById('layers');
-
-    const tabs = document.querySelectorAll('#ctrl-tabs > div');
-    const tabPanels = document.querySelectorAll('#ctrl-panel > div');
-
-    tabs.forEach((tab) => {
-      // Set help text from dictionary.
-      tab.title = mapp.dictionary[tab.dataset.id];
-
-      tab.onclick = (e) => {
-        // Change active class for the tab.
-        tabs.forEach((el) => el.classList.remove('active'));
-        e.target.classList.add('active');
-
-        // Change active class for the panel.
-        tabPanels.forEach((el) => el.classList.remove('active'));
-        document.getElementById(e.target.dataset.id).classList.add('active');
-
-        // Put focus on the gazetteer if the locations tab is activated.
-        if (e.target.dataset.id === 'locations') {
-          let gazetteerInput = document.getElementById('gazetteerInput');
-          gazetteerInput && window.innerWidth > 768 && gazetteerInput.focus();
-        }
-      };
-    });
 
     const tabview = document.getElementById('Tabview');
 
@@ -480,8 +434,6 @@
 
     if (!window.ol) await mapp.utils.olScript();
 
-    locale.syncPlugins ??= ['zoomBtn', 'admin', 'login'];
-
     mapp.hooks.set({locale:locale.key});
 
     if (!locale.layers?.length && !(locale instanceof Error)) {
@@ -500,11 +452,8 @@
     // Add layers to mapview.
     await mapview.addLayer(locale.layers);
 
-    // Create layers listview.
-    mapp.ui.layers.listview({
-      target: layersTab,
-      layers: mapview.layers,
-    });
+    //Load controls once layers are added
+    mapp.controls.loadControls(mapview);
 
     // Create locations listview.
     mapp.ui.locations.listview({
