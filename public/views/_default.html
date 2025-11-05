@@ -352,7 +352,7 @@
     });
 
     mapview.locale.controls ??= [
-      'layers', {key: 'locations', style: 'display: none', icon: "location_on"}
+      'layers', {key: 'locations', style: {display: 'none'}, icon: "location_on"}
     ]
 
     mapview.locale.locations ??= {};
@@ -365,7 +365,6 @@
       tabs: mapview.locale.controls
     })
 
-    const locationsTab = document.getElementById('locations');
     const layersTab = document.getElementById('layers');
 
     const tabview = document.getElementById('Tabview');
