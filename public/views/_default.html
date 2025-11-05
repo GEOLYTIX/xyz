@@ -355,6 +355,8 @@
       'layers', {key: 'locations', style: 'display: none', icon: "location_on"}
     ]
 
+    mapview.locale.locations ??= {};
+
     //Create tabs and panels for controls.
     mapp.ui.elements.controls({
       tabTarget: mapview.controlTabs,
@@ -454,12 +456,6 @@
 
     //Load controls once layers are added
     mapp.controls.loadControls(mapview);
-
-    // Create locations listview.
-    mapp.ui.locations.listview({
-      target: locationsTab,
-      mapview: mapview,
-    });
 
     // Begin highlight interaction.
     mapview.interactions.highlight();
