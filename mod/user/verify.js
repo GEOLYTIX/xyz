@@ -33,9 +33,9 @@ An email will be sent to all admin accounts requesting approval of the newly ver
 
 @param {Object} req HTTP request.
 @param {Object} res HTTP response.
-@param {Object} req.params 
+@param {Object} req.params
 Request parameter.
-@param {string} req.params.key 
+@param {string} req.params.key
 Verification key
 @param {string} req.params.language
 Request messaging language
@@ -111,6 +111,12 @@ export default async (req, res) => {
   if (rows instanceof Error) {
     return res.status(500).send('Failed to access ACL.');
   }
+
+  //Filter out admins not in the list
+  if (req.params.adminList)
+    rows = rows.filter((adminAcc) =>
+      req.params.adminList.includes(adminAcc.email),
+    );
 
   // One or more administrator have been
   if (rows.length > 0) {
