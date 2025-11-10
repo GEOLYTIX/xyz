@@ -434,18 +434,16 @@
       mapview,
     });    
 
-    /*
     if (mapview.locale.gazetteer) {
       mapp.ui.Gazetteer(
         Object.assign(mapview.locale.gazetteer, {
           mapview,
-          target: locationsTab.appendChild(mapp.utils.html.node`<div>`),
+          target: locationsPanel.appendChild(mapp.utils.html.node`<div>`),
         }),
       );
     } else {
       document.querySelector('[data-id=locations]').style.display = 'none';
     }
-    */
 
     // Begin highlight interaction.
     mapview.interactions.highlight();
