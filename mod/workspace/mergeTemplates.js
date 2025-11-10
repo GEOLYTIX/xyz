@@ -164,7 +164,6 @@ async function objTemplate(obj, template, roles) {
 
   if (obj.template) {
     obj = objTemplate(obj, obj.template, roles);
-    return obj;
   }
 
   return obj;
