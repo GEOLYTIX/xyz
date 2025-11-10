@@ -16,6 +16,8 @@
 
 @import url('./elements/_chkbox.css');
 
+@import url('./elements/_control.css');
+
 @import url('./elements/_dialog.css');
 
 @import url('./elements/_drawer.css');
