@@ -144,15 +144,18 @@ async function objTemplate(obj, template, roles) {
   template = templateProperties(template);
 
   if (obj.template) {
-    // prevent template property to be overwritten in template object.
+    // obj.template must NOT overwrite template.template.
     delete obj.template;
     // Merge obj --> template
     obj = merge(template, obj);
   } else {
-    //The object key must not be overwritten by a template key.
+    // template.role must NOT overwrite obj.role.
+    delete template.role;
+
+    // template.key must NOT overwrite obj.key.
     delete template.key;
 
-    //The object template must not be overwritten by a templates template.
+    // template.template must NOT overwrite obj.template.
     delete template.template;
 
     // Merge template --> obj
@@ -202,11 +205,6 @@ function roleAssign(obj, template) {
     }
   } else if (typeof obj.localeRole === 'string') {
     template.roles[`${obj.localeRole}.${template.role}`] ??= true;
-  }
-
-  // Delete the template.role to prevent the obj.role being overwritten when the template is merged into the obj.
-  if (!obj.template) {
-    delete template.role;
   }
 }
 
