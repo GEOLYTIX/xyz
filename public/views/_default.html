@@ -315,6 +315,8 @@
       locales = [...locales, ...nestedLocales]
     }
 
+    const layersPanel = mapp.utils.html.node`<div id="layers" class="active">`
+
     // Add locale dropdown to layers panel if multiple locales are accessible.
     if (locales.length > 1) {
       const localesDropdown = mapp.ui.elements.dropdown({
@@ -329,7 +331,7 @@
         },
       });
 
-      document.getElementById('layers')?.appendChild(localesDropdown);
+      layersPanel.appendChild(localesDropdown);
     }
 
     if (!window.ol) await mapp.utils.olScript();
@@ -380,8 +382,6 @@
     const control = mapp.ui.elements.control({
       target: document.getElementById('ctrls')
     })
-
-    const layersPanel = mapp.utils.html.node`<div id="layers" class="active">`
 
     control.add({
       key: 'layers',
