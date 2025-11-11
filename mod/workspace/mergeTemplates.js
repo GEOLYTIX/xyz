@@ -143,7 +143,7 @@ async function objTemplate(obj, template, roles) {
 
   template = templateProperties(template);
 
-  let templates;
+  // let templates;
 
   if (obj.template) {
     // obj.template must NOT overwrite template.template.
@@ -151,15 +151,15 @@ async function objTemplate(obj, template, roles) {
     // Merge obj --> template
     obj = merge(template, obj);
 
-    if (!template.obj) {
-      templates = obj.templates;
-      delete obj.templates;
-    }
+    // if (!template.obj) {
+    //   templates = obj.templates;
+    //   delete obj.templates;
+    // }
   } else {
-    if (Array.isArray(template.templates)) {
-      templates = template.templates;
-      delete template.templates;
-    }
+    // if (Array.isArray(template.templates)) {
+    //   templates = template.templates;
+    //   delete template.templates;
+    // }
 
     // template.role must NOT overwrite obj.role.
     delete template.role;
@@ -176,11 +176,12 @@ async function objTemplate(obj, template, roles) {
 
   if (obj.template) {
     obj = objTemplate(obj, obj.template, roles);
-  } else if (Array.isArray(templates)) {
-    for (const _template of templates) {
-      obj = await objTemplate(obj, _template, roles);
-    }
-  }
+  } 
+  // else if (Array.isArray(templates)) {
+  //   for (const _template of templates) {
+  //     obj = await objTemplate(obj, _template, roles);
+  //   }
+  // }
 
   return obj;
 }
@@ -209,17 +210,17 @@ function roleAssign(obj, template) {
   template.roles ??= {};
   template.roles[template.role] ??= true;
 
-  if (
-    obj.templateRole &&
-    obj.role !== obj.templateRole &&
-    !template.role.startsWith(obj.templateRole)
-  ) {
-    template.role = `${obj.templateRole}.${template.role}`;
-  }
+  // if (
+  //   obj.templateRole &&
+  //   obj.role !== obj.templateRole &&
+  //   !template.role.startsWith(obj.templateRole)
+  // ) {
+  //   template.role = `${obj.templateRole}.${template.role}`;
+  // }
 
-  if (obj.templates) {
-    obj.templateRole = template.role;
-  }
+  // if (obj.templates) {
+  //   obj.templateRole = template.role;
+  // }
 
   if (typeof obj.role === 'string') {
     template.roles[`${obj.role}.${template.role}`] ??= true;
