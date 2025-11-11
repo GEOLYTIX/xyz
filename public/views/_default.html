@@ -340,6 +340,11 @@
 
     mapp.hooks.set({locale:locale.key});
 
+    //Create tabs and panels for controls.
+    const control = mapp.ui.elements.control({
+      target: document.getElementById('ctrls')
+    })
+
     // Create mapview
     const mapview = await mapp.Mapview({
       host: mapp.host,
@@ -348,6 +353,7 @@
       hooks: true,
       scrollWheelZoom: true,
       loadPlugins: true,
+      controlNav: control,
       mapButton: document.getElementById('mapButton'),
       attribution: {
         target: document.getElementById('Map'),
@@ -377,11 +383,6 @@
 
     // Add layers to mapview.
     await mapview.addLayer(locale.layers);
-
-    //Create tabs and panels for controls.
-    const control = mapp.ui.elements.control({
-      target: document.getElementById('ctrls')
-    })
 
     control.add({
       key: 'layers',
