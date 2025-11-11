@@ -58,12 +58,23 @@ await codi.describe(
       async () => {
         const params = {
           user: {
-            roles: ['brand_b'],
+            roles: ['brand_b', 'brand_c'],
           },
           locale: 'brand_b_locale',
         };
 
-        const template = await getLocale(params);
+        const expectedRoles = {
+          brand_b: {},
+          brand_c: {},
+          scratch_role: {},
+          europe: {},
+        };
+
+        await getLocale(params);
+
+        params.locale = 'brand_c_locale';
+
+        await getLocale(params);
 
         const { req, res } = codi.mockHttp.createMocks({
           params: {
@@ -79,11 +90,7 @@ await codi.describe(
 
         const roles = res._getData();
 
-        console.log(roles);
-
-        console.log(template);
-
-        codi.assertTrue(template instanceof Error);
+        codi.assertEqual(roles, expectedRoles);
       },
     );
   },
