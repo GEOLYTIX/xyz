@@ -59,5 +59,10 @@ export default async function signer(req, res) {
       .send(response.message);
   }
 
+  if (req.params.redirect) {
+    res.setHeader('location', response);
+    return res.status(302).send();
+  }
+
   res.send(response);
 }
