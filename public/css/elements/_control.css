@@ -15,6 +15,13 @@
     flex-grow: 1;
     overflow-y: auto;
 
+    .no_locations {
+      margin: 5% 30%;
+      color: var(--color-font-mid);
+      font-style: italic;
+      font-weight: bold;
+    }
+
     > div {
       display: none;
       padding: 10px;

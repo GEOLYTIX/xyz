@@ -387,11 +387,29 @@
       key: 'layers',
       panel: layersPanel
     })
-    
+
     mapp.ui.layers.listview({
       target: layersPanel,
       layers: mapview.layers,
     });
+
+    if (mapview.locale.gazetteer) {
+      const gazPanel =  mapp.utils.html.node`<div id="gazetteer">`;
+
+      control.add({
+        key: 'gazetteer',
+        icon: 'search',
+        panel: gazPanel,
+        focus: 'gazetteer-search-input'
+      })
+
+      mapp.ui.Gazetteer(
+        Object.assign(mapview.locale.gazetteer, {
+          mapview,
+          target: gazPanel,
+        }),
+      );
+    }
 
     const locationsPanel = mapp.utils.html.node`<div id="locations">`
 
@@ -400,22 +418,11 @@
       icon: 'location_on',
       panel: locationsPanel
     })
-    
+
     mapp.ui.locations.listview({
       target: locationsPanel,
       mapview,
-    });    
-
-    if (mapview.locale.gazetteer) {
-      mapp.ui.Gazetteer(
-        Object.assign(mapview.locale.gazetteer, {
-          mapview,
-          target: locationsPanel.appendChild(mapp.utils.html.node`<div>`),
-        }),
-      );
-    } else {
-      document.querySelector('[data-id=locations]').style.display = 'none';
-    }
+    });
 
     // Begin highlight interaction.
     mapview.interactions.highlight();
