@@ -32,6 +32,7 @@ The response from the method is returned with the HTTP response.
 @param {Object} res HTTP response.
 @param {Object} req.params Request parameter.
 @param {string} params.signer Signer module to sign the request.
+@param {bool} params.redirect Redirect the signer request to the signed URL.
 
 @returns {Promise} The promise resolves into the response from the signerModules method.
 */
