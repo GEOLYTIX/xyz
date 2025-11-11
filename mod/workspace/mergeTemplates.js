@@ -143,12 +143,25 @@ async function objTemplate(obj, template, roles) {
 
   template = templateProperties(template);
 
+  // let templates;
+
   if (obj.template) {
     // obj.template must NOT overwrite template.template.
     delete obj.template;
     // Merge obj --> template
     obj = merge(template, obj);
+
+    // if (!template.obj) {
+    //   templates = obj.templates;
+    //   delete obj.templates;
+    // }
   } else {
+
+    // if (Array.isArray(template.templates)) {
+    //   templates = template.templates;
+    //   delete template.templates;
+    // }
+
     // template.role must NOT overwrite obj.role.
     delete template.role;
 
@@ -164,7 +177,12 @@ async function objTemplate(obj, template, roles) {
 
   if (obj.template) {
     obj = objTemplate(obj, obj.template, roles);
-  }
+  } 
+  // else if (Array.isArray(templates)) {
+  //   for (const _template of templates) {
+  //     obj = await objTemplate(obj, _template, roles);
+  //   }
+  // }
 
   return obj;
 }
