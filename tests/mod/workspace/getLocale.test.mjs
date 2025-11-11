@@ -1,3 +1,6 @@
+import checkWorkspaceCache from '../../../mod/workspace/cache.js';
+import getKeyMethod from '../../../mod/workspace/_workspace.js';
+
 await codi.describe(
   {
     name: 'getLocale',
@@ -8,6 +11,14 @@ await codi.describe(
     const { default: getLocale } = await import(
       '../../../mod/workspace/getLocale.js'
     );
+
+    globalThis.xyzEnv = {
+      TITLE: 'WORKSPACE TEST',
+      WORKSPACE: 'file:./tests/assets/workspace_nested_locales_roles.json',
+    };
+
+    //Calling the cache method with force to reload a new workspace
+    await checkWorkspaceCache(true);
 
     await codi.it(
       {
@@ -36,6 +47,43 @@ await codi.describe(
           template instanceof Error,
           'We would expect a roles permission error',
         );
+      },
+    );
+
+    await codi.it(
+      {
+        name: 'locale with templates that has roles',
+        parentId: 'workspace_getLocale',
+      },
+      async () => {
+        const params = {
+          user: {
+            roles: ['brand_b'],
+          },
+          locale: 'brand_b_locale',
+        };
+
+        const template = await getLocale(params);
+
+        const { req, res } = codi.mockHttp.createMocks({
+          params: {
+            key: 'roles',
+            tree: true,
+            user: {
+              admin: true,
+            },
+          },
+        });
+
+        await getKeyMethod(req, res);
+
+        const roles = res._getData();
+
+        console.log(roles);
+
+        console.log(template);
+
+        codi.assertTrue(template instanceof Error);
       },
     );
   },
