@@ -133,8 +133,10 @@ function postgresql() {
     //This is to pull the short Error message from the stack
     const errorMessage = log.err?.toString().split('\n')[0];
 
-    const client = await pool.connect();
+    // Declare client outside the try catch.
+    let client;
     try {
+      client = await pool.connect();
       await client.query(
         `INSERT INTO ${table} (process, datetime, key, log, message) 
         VALUES ($1, $2, $3, $4, $5)`,
@@ -143,7 +145,8 @@ function postgresql() {
     } catch (error) {
       console.error('Error while logging to database:', error);
     } finally {
-      client.release();
+      // Optional chaining in case the client failed to connect.
+      client?.release();
     }
   };
 }
