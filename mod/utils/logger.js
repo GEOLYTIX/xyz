@@ -29,7 +29,7 @@ Alternatively logs can be written into a table on any of the configured DBS_* co
 ```
 
 The schema for the log table should be like so:
-```SQL
+```sql
 CREATE TABLE public.dev_logs (
   process VARCHAR,
   datetime BIGINT,
