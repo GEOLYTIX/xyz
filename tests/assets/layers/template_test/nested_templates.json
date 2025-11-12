@@ -10,10 +10,7 @@
   "qID": "id",
   "templates": [
     {
-      "draw": {
-        "point": true
-      },
-      "role": "draw_point"
+     "src": "file:./tests/assets/layers/template_test/draw_point.json"
     },
     {
       "role": "draw_circle",
