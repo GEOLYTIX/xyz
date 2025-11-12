@@ -125,7 +125,7 @@ await codi.describe(
         // The nested template is a separate file that has the "role": "layer_a".
         // Within the nested template is two templates. One is loaded from a file that has the "role": "draw_point" and provides a draw object with different properties.
         // The other is defined inline with the "role": "draw_circle".
-        // Inside the draw_point template is another template that provides additional properties. 
+        // Inside the draw_point template is another template that provides additional properties.
         // The template nested inside draw_point is loaded from a file that has the "role": "nested_draw_point".
         const obj = {
           localeRole: 'locale',
@@ -159,11 +159,19 @@ await codi.describe(
           'Need to ensure draw.circle is present from the merge',
         );
 
+        // Check template in template has the name "Nested Draw Point".
+        codi.assertTrue(
+          template.name === 'Nested Draw Point',
+          'template name should be "Nested Draw Point", found: ' +
+            template.name,
+        );
+
         // Check the roles object contains nested roles.
         const expectedRoles = [
           'locale.layer_a',
           'layer_a.draw_point',
           'locale.layer_a.draw_point',
+          'locale.layer_a.draw_point.nested_draw_point',
           'layer_a.draw_point.nested_draw_point',
           'layer_a.draw_circle',
           'locale.layer_a.draw_circle',
@@ -171,7 +179,10 @@ await codi.describe(
 
         codi.assertTrue(
           expectedRoles.every((r) => Object.keys(template.roles).includes(r)),
-          'Roles missing: ' + expectedRoles.filter((r) => !Object.keys(template.roles).includes(r)).join(', ')
+          'Roles missing: ' +
+            expectedRoles
+              .filter((r) => !Object.keys(template.roles).includes(r))
+              .join(', '),
         );
       },
     );
