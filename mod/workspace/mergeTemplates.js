@@ -210,12 +210,13 @@ function roleAssign(obj, template) {
 
   obj.roles ??= {};
 
-  const roleArr = [
-    obj.localeRole,
-    obj.role,
-    obj.templateRole,
-    template.role,
-  ].filter((role) => typeof role === 'string');
+  const roleArr = Array.from(
+    new Set(
+      [obj.localeRole, obj.role, obj.templateRole, template.role].filter(
+        (role) => typeof role === 'string',
+      ),
+    ),
+  );
 
   if (roleArr.length) {
     template.roles[roleArr.join('.')] ??= true;
@@ -231,6 +232,8 @@ function roleAssign(obj, template) {
 
   if (template.templates) {
     template.templateRole = template.role;
+  } else {
+    delete template.templateRole;
   }
 }
 
