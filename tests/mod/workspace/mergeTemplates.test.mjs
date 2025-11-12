@@ -130,7 +130,6 @@ await codi.describe(
         const obj = {
           localeRole: 'locale',
           template: {
-            key: 'layer_a',
             src: 'file:./tests/assets/layers/template_test/nested_templates.json',
           },
         };
@@ -169,11 +168,8 @@ await codi.describe(
         // Check the roles object contains nested roles.
         const expectedRoles = [
           'locale.layer_a',
-          'layer_a.draw_point',
           'locale.layer_a.draw_point',
           'locale.layer_a.draw_point.nested_draw_point',
-          'layer_a.draw_point.nested_draw_point',
-          'layer_a.draw_circle',
           'locale.layer_a.draw_circle',
         ];
 

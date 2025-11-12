@@ -46,24 +46,11 @@ export default async function mergeTemplates(obj, roles) {
   // Cache workspace in module scope for template assignment.
   workspace = await workspaceCache();
 
-  if (typeof obj.role === 'string') {
-    if (
-      typeof obj.localeRole === 'string' &&
-      !obj.role.startsWith(`${obj.localeRole}.`)
-    ) {
-      obj.role = `${obj.localeRole}.${obj.role}`;
-    }
-    obj.roles ??= {};
-    obj.roles[obj.role] ??= true;
-  }
-
   // The object has an implicit template to merge into.
   if (typeof obj.template === 'string' || obj.template instanceof Object) {
     obj = await objTemplate(obj, obj.template, roles);
     if (obj instanceof Error) return obj;
-  }
-
-  if (Array.isArray(obj.templates)) {
+  } else if (Array.isArray(obj.templates)) {
     // The _template can be a string or object [with src]
     for (const _template of obj.templates) {
       obj = await objTemplate(obj, _template, roles);
@@ -73,6 +60,18 @@ export default async function mergeTemplates(obj, roles) {
     obj.err ??= [];
     obj.err.push(err);
     console.warn(err);
+  }
+
+  // This must happen after the template merge which will assign the localeRole.
+  if (typeof obj.role === 'string') {
+    if (
+      typeof obj.localeRole === 'string' &&
+      !obj.role.startsWith(`${obj.localeRole}.`)
+    ) {
+      obj.role = `${obj.localeRole}.${obj.role}`;
+    }
+    obj.roles ??= {};
+    obj.roles[obj.role] ??= true;
   }
 
   // Substitute ${SRC_*} in object string.
@@ -151,7 +150,7 @@ async function objTemplate(obj, template, roles) {
     // Merge obj --> template
     obj = merge(template, obj);
 
-    if (!template.obj) {
+    if (obj.templates) {
       templates = obj.templates;
       delete obj.templates;
     }
@@ -209,29 +208,29 @@ function roleAssign(obj, template) {
   template.roles ??= {};
   template.roles[template.role] ??= true;
 
-  if (
-    obj.templateRole &&
-    obj.role !== obj.templateRole &&
-    !template.role.startsWith(obj.templateRole)
-  ) {
-    template.role = `${obj.templateRole}.${template.role}`;
+  obj.roles ??= {};
+
+  const roleArr = [
+    obj.localeRole,
+    obj.role,
+    obj.templateRole,
+    template.role,
+  ].filter((role) => typeof role === 'string');
+
+  if (roleArr.length) {
+    template.roles[roleArr.join('.')] ??= true;
   }
 
-  if (obj.templates) {
-    obj.templateRole = template.role;
+  for (const role of Object.keys(obj.roles)) {
+    if (!template.role) continue;
+    const tailRole = role.split('.').pop();
+    if (tailRole !== obj.role) continue;
+    if (!role.endsWith(`${obj.role}`)) continue;
+    template.roles[`${role}.${template.role}`] ??= true;
   }
 
-  if (typeof obj.role === 'string') {
-    template.roles[`${obj.role}.${template.role}`] ??= true;
-
-    if (
-      typeof obj.localeRole === 'string' &&
-      !obj.role.startsWith(`${obj.localeRole}.`)
-    ) {
-      template.roles[`${obj.localeRole}.${obj.role}.${template.role}`] ??= true;
-    }
-  } else if (typeof obj.localeRole === 'string') {
-    template.roles[`${obj.localeRole}.${template.role}`] ??= true;
+  if (template.templates) {
+    template.templateRole = template.role;
   }
 }
 
