@@ -101,8 +101,6 @@ export default function api(req, res) {
     return res.status(302).send();
   }
 
-  logger(req, 'req');
-
   logger(req.url, 'req_url');
 
   // SAML request.
