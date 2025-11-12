@@ -4,7 +4,6 @@ This module provides a logging utility for the XYZ API. The LOG process environm
 
 Possible log values are:
 
-- req: Logs the req property from requests (see https://developer.mozilla.org/en-US/docs/Web/API/Request).
 - req_url: Logs the url of the request.
 - query_params: Logs query parameters sent to the query endpoint.
 - query: Logs the sql to executed by calling the query endpoint.
