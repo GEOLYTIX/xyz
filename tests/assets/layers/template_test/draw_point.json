@@ -1,11 +1,11 @@
 {
-     "draw": {
-        "point": true
-      },
-      "role": "draw_point",
-      "templates": [
-        {
-         "src": "file:./tests/assets/layers/template_test/nested_draw_point.json"   
-        }
-      ]
+  "draw": {
+    "point": true
+  },
+  "role": "draw_point",
+  "templates": [
+    {
+      "src": "file:./tests/assets/layers/template_test/nested_draw_point.json"
+    }
+  ]
 }
