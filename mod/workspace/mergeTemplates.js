@@ -210,6 +210,7 @@ function roleAssign(obj, template) {
 
   obj.roles ??= {};
 
+  // Filter out undefined roles and duplicates from roles array.
   const roleArr = Array.from(
     new Set(
       [obj.localeRole, obj.role, obj.templateRole, template.role].filter(
@@ -218,15 +219,16 @@ function roleAssign(obj, template) {
     ),
   );
 
+  // Join roles array into the template.roles.
   if (roleArr.length) {
     template.roles[roleArr.join('.')] ??= true;
   }
 
+  // Create a new role with the template.role concatenated for every role in obj.roles where the last nested role matches the obj.role.
   for (const role of Object.keys(obj.roles)) {
     if (!template.role) continue;
     const tailRole = role.split('.').pop();
     if (tailRole !== obj.role) continue;
-    if (!role.endsWith(`${obj.role}`)) continue;
     template.roles[`${role}.${template.role}`] ??= true;
   }
 
