@@ -14,6 +14,31 @@ Possible log values are:
 - reqhost: Logs the host for the request.
 - workspace: Logs responses for requests made to /workspace.
 
+By default the logs are only written to the stdout console.
+
+It is possible to set the LOGGER process env to write logs to the logflare api. A valid source and apikey must be provided in the LOGGER env value.
+
+```
+"LOGGER": "logflare:apikey=🤫&source=🤫"
+```
+
+Alternatively logs can be written into a table on any of the configured DBS_* connections. The dbs parameter value must match a DBS_* connection in the process env.
+
+```
+"LOGGER": "postgresql:dbs=NEON&table=public.dev_logs"
+```
+
+The schema for the log table should be like so:
+```SQL
+CREATE TABLE public.dev_logs (
+  process VARCHAR,
+  datetime BIGINT,
+  key VARCHAR,
+  message VARCHAR,
+  log TEXT
+);
+```
+
 @requires module:/utils/processEnv
 @requires crypto
 
@@ -27,6 +52,7 @@ const logs = new Set(xyzEnv.LOGS?.split(',') || []);
 // Errors should always be logged.
 logs.add('err');
 
+// Generates a unique for the process.
 const process_id = crypto.randomBytes(3).toString('hex');
 
 const logout = {
