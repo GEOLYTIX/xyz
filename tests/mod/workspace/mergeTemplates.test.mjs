@@ -30,6 +30,44 @@ await codi.describe(
 
     await codi.it(
       {
+        name: 'check roles object merge',
+        parentId: 'workspace_mergeTemplates',
+      },
+      async () => {
+        const expectedRoles = ['foo', 'bar', 'alpha', 'beta'];
+
+        const layer = {
+          roles: {
+            foo: null,
+            bar: null,
+          },
+          template: {
+            src: 'file:./tests/assets/layers/template_test/roles_object.json',
+          },
+        };
+
+        const template = await mergeTemplates(layer, ['foo', 'alpha']);
+
+        codi.assertTrue(
+          expectedRoles.every((r) => Object.keys(template.roles).includes(r)),
+          `Need to ensure all expected roles are present: ${expectedRoles.join(', ')}`,
+        );
+
+        codi.assertTrue(
+          template.name === 'Test Alpha',
+          'template name should match role assignment',
+        );
+
+        codi.assertEqual(
+          template.infoj.length,
+          2,
+          'There should be two infoj entries',
+        );
+      },
+    );
+
+    await codi.it(
+      {
         name: 'mergeTemplates with roles',
         parentId: 'workspace_mergeTemplates',
       },
