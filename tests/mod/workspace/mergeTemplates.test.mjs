@@ -205,19 +205,39 @@ await codi.describe(
 
         // Check the roles object contains nested roles.
         const expectedRoles = [
+          'layer_a',
+          'layer_a.draw_point',
+          'draw_point',
+          'nested_draw_point',
+          'draw_circle',
+          'layer_a.draw_point.nested_draw_point',
+          'layer_a.draw_circle',
           'locale.layer_a',
           'locale.layer_a.draw_point',
           'locale.layer_a.draw_point.nested_draw_point',
           'locale.layer_a.draw_circle',
         ];
 
-        codi.assertTrue(
+        // Check no other roles are present other than expected.
+        codi.assertEqual(
+          Object.keys(template.roles).length,
+          expectedRoles.length,
+          'Unexpected roles found: ' +
+            Object.keys(template.roles)
+              .filter((r) => !expectedRoles.includes(r))
+              .join(', '),
+        );
+
+        // Check all expected roles are present.
+         codi.assertTrue(
           expectedRoles.every((r) => Object.keys(template.roles).includes(r)),
           'Roles missing: ' +
             expectedRoles
               .filter((r) => !Object.keys(template.roles).includes(r))
               .join(', '),
-        );
+        ); 
+
+
       },
     );
   },
