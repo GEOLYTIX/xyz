@@ -227,12 +227,18 @@ function roleAssign(obj, template) {
   // Create a new role with the template.role concatenated for every role in obj.roles where the last nested role matches the obj.role.
   for (const role of Object.keys(obj.roles)) {
     const tailRole = role.split('.').pop();
-    if (tailRole !== obj.role) continue;
+    if (tailRole !== template.objRole) {
+      continue;
+    }
     template.roles[`${role}.${template.role}`] ??= true;
   }
 
-  if (template.templates) {
+  if (Array.isArray(template.templates)) {
     template.templateRole = template.role;
+    for (const templatesTemplate of template.templates) {
+      if (typeof templatesTemplate !== 'object') continue;
+      templatesTemplate.objRole = template.role
+    }
   } else {
     delete obj.templateRole;
   }
