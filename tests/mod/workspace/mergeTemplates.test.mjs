@@ -126,14 +126,14 @@ await codi.describe(
         // Check template in template has the draw.point object.
         codi.assertTrue(
           Object.hasOwn(template, 'draw') &&
-          Object.hasOwn(template.draw, 'point'),
+            Object.hasOwn(template.draw, 'point'),
           'Need to ensure draw.point is present from the merge',
         );
 
         // Check template in template has the draw.circle object.
         codi.assertTrue(
           Object.hasOwn(template, 'draw') &&
-          Object.hasOwn(template.draw, 'circle'),
+            Object.hasOwn(template.draw, 'circle'),
           'Need to ensure draw.circle is present from the merge',
         );
 
@@ -185,14 +185,14 @@ await codi.describe(
         // Check template in template has the draw.point object.
         codi.assertTrue(
           Object.hasOwn(template, 'draw') &&
-          Object.hasOwn(template.draw, 'point'),
+            Object.hasOwn(template.draw, 'point'),
           'Need to ensure draw.point is present from the merge',
         );
 
         // Check template in template has the draw.circle object.
         codi.assertTrue(
           Object.hasOwn(template, 'draw') &&
-          Object.hasOwn(template.draw, 'circle'),
+            Object.hasOwn(template.draw, 'circle'),
           'Need to ensure draw.circle is present from the merge',
         );
 
@@ -200,32 +200,29 @@ await codi.describe(
         codi.assertTrue(
           template.name === 'Nested Draw Point',
           'template name should be "Nested Draw Point", found: ' +
-          template.name,
+            template.name,
         );
 
         // Check the roles object contains nested roles.
         const expectedRoles = [
-          "draw_circle",
-          "draw_point",
-          "draw_point.nested_draw_point",
-          "layer_a",
-          "layer_a.draw_circle",
-          "layer_a.draw_point",
-          "layer_a.draw_point.nested_draw_point",
-          "locale.layer_a",
-          "locale.layer_a.draw_circle",
-          "locale.layer_a.draw_point",
-          "locale.layer_a.draw_point.nested_draw_point",
-          "nested_draw_point",
+          'draw_circle',
+          'draw_point',
+          'draw_point.nested_draw_point',
+          'layer_a',
+          'layer_a.draw_circle',
+          'layer_a.draw_point',
+          'layer_a.draw_point.nested_draw_point',
+          'locale.layer_a',
+          'locale.layer_a.draw_circle',
+          'locale.layer_a.draw_point',
+          'locale.layer_a.draw_point.nested_draw_point',
+          'nested_draw_point',
         ].sort();
 
-        const templateRoles = Object.keys(template.roles).sort()
+        const templateRoles = Object.keys(template.roles).sort();
 
         // Check no other roles are present other than expected.
-        codi.assertEqual(
-          expectedRoles,
-          templateRoles
-        );
+        codi.assertEqual(expectedRoles, templateRoles);
       },
     );
   },

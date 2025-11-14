@@ -237,7 +237,7 @@ function roleAssign(obj, template) {
     template.templateRole = template.role;
     for (const templatesTemplate of template.templates) {
       if (typeof templatesTemplate !== 'object') continue;
-      templatesTemplate.objRole = template.role
+      templatesTemplate.objRole = template.role;
     }
   } else {
     delete obj.templateRole;
