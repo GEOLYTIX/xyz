@@ -208,8 +208,6 @@ function roleAssign(obj, template) {
   template.roles ??= {};
   template.roles[template.role] ??= true;
 
-  obj.roles ??= {};
-
   // Filter out undefined roles and duplicates from roles array.
   const roleArr = Array.from(
     new Set(
@@ -224,9 +222,10 @@ function roleAssign(obj, template) {
     template.roles[roleArr.join('.')] ??= true;
   }
 
+  obj.roles ??= {};
+
   // Create a new role with the template.role concatenated for every role in obj.roles where the last nested role matches the obj.role.
   for (const role of Object.keys(obj.roles)) {
-    if (!template.role) continue;
     const tailRole = role.split('.').pop();
     if (tailRole !== obj.role) continue;
     template.roles[`${role}.${template.role}`] ??= true;
@@ -235,7 +234,7 @@ function roleAssign(obj, template) {
   if (template.templates) {
     template.templateRole = template.role;
   } else {
-    delete template.templateRole;
+    delete obj.templateRole;
   }
 }
 
@@ -269,7 +268,6 @@ function assignWorkspaceTemplates(obj) {
         workspace.templates[entry[1].key] || {},
         entry[1],
       );
-
       return;
     }
 

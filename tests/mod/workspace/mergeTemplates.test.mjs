@@ -229,15 +229,13 @@ await codi.describe(
         );
 
         // Check all expected roles are present.
-         codi.assertTrue(
+        codi.assertTrue(
           expectedRoles.every((r) => Object.keys(template.roles).includes(r)),
           'Roles missing: ' +
             expectedRoles
               .filter((r) => !Object.keys(template.roles).includes(r))
               .join(', '),
-        ); 
-
-
+        );
       },
     );
   },
