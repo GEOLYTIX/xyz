@@ -118,8 +118,11 @@ export default function api(req, res) {
   }
 
   if (req.params.logout) {
-    console.log(req.params.user);
     if (xyzEnv.SAML_SLO) {
+      const user = auth(req, res);
+
+      console.log(user);
+
       res.setHeader('location', `${xyzEnv.DIR}/saml/logout`);
       return res.status(302).send();
     }
