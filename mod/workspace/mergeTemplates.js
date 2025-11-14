@@ -224,7 +224,7 @@ function roleAssign(obj, template) {
 
   obj.roles ??= {};
 
-  // Create a new role with the template.role concatenated for every role in obj.roles where the last nested role matches the obj.role.
+  // Concatenate the template.role to each obj.roles{} key where the last role does not match the template.objRole.
   for (const role of Object.keys(obj.roles)) {
     const tailRole = role.split('.').pop();
     if (tailRole !== template.objRole) {
