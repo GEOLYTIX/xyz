@@ -341,7 +341,7 @@
     mapp.hooks.set({locale:locale.key});
 
     //Create tabs and panels for controls.
-    const control = mapp.ui.elements.control({
+    const controlPanel = mapp.ui.elements.control({
       target: document.getElementById('ctrls')
     })
 
@@ -353,7 +353,7 @@
       hooks: true,
       scrollWheelZoom: true,
       loadPlugins: true,
-      controlNav: control,
+      controlPanel,
       mapButton: document.getElementById('mapButton'),
       attribution: {
         target: document.getElementById('Map'),
@@ -384,7 +384,7 @@
     // Add layers to mapview.
     await mapview.addLayer(locale.layers);
 
-    control.add({
+    controlPanel.add({
       key: 'layers',
       panel: layersPanel
     })
@@ -397,7 +397,7 @@
     if (mapview.locale.gazetteer) {
       const gazPanel =  mapp.utils.html.node`<div id="gazetteer">`;
 
-      control.add({
+      controlPanel.add({
         key: 'gazetteer',
         icon: 'search',
         panel: gazPanel,
@@ -414,7 +414,7 @@
 
     const locationsPanel = mapp.utils.html.node`<div id="locations">`
 
-    control.add({
+    controlPanel.add({
       key: 'locations',
       icon: 'location_on',
       panel: locationsPanel
