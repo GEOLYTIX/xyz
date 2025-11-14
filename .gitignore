@@ -20,7 +20,6 @@ public/js/*
 public/workspaces/*
 public/js/plugins/*
 !public/dictionaries/*
-resources
 
 docs/*
 

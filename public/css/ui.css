@@ -552,6 +552,37 @@ label.checkbox {
   }
 }
 
+/* public/css/elements/_control.css */
+.mapp-control {
+  isolation: isolate;
+  > .tabs {
+    padding: 0.5em;
+    width: 100%;
+    display: flex;
+    > div {
+      flex-grow: 1;
+      font-size: 2em;
+    }
+  }
+  > .panels {
+    flex-grow: 1;
+    overflow-y: auto;
+    .no_locations {
+      margin: 5% 30%;
+      color: var(--color-font-mid);
+      font-style: italic;
+      font-weight: bold;
+    }
+    > div {
+      display: none;
+      padding: 10px;
+    }
+    > div.active {
+      display: block;
+    }
+  }
+}
+
 /* public/css/elements/_dialog.css */
 .headerDrag {
   cursor: grab;
