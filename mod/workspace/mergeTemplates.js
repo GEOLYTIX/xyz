@@ -174,7 +174,7 @@ async function objTemplate(obj, template, roles) {
   }
 
   if (obj.template) {
-    obj = objTemplate(obj, obj.template, roles);
+    obj = await objTemplate(obj, obj.template, roles);
   } else if (Array.isArray(templates)) {
     for (const _template of templates) {
       obj = await objTemplate(obj, _template, roles);
