@@ -1,0 +1,23 @@
+{
+  "key": "roles_object",
+  "roles": {
+    "alpha": {
+      "name": "Test Alpha",
+      "infoj": [
+        {
+          "title": "test alpha",
+          "key": "test_alpha"
+        }
+      ]
+    },
+    "beta": {
+      "name": "Test Beta"
+    }
+  },
+  "infoj": [
+    {
+      "title": "test",
+      "key": "test"
+    }
+  ]
+}
