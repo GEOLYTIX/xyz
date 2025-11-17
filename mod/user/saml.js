@@ -386,7 +386,7 @@ async function acs(req, res) {
     if (xyzEnv.SAML_ACL) {
       const aclResponse = await aclLookUp(user.email);
 
-      if (!aclResponse) {
+      if (aclResponse instanceof Error && xyzEnv.SAML_SLO) {
         const url = await samlStrat.getLogoutUrlAsync(user);
 
         // Login with non exist SAML user will destroy session and return login.
@@ -458,7 +458,7 @@ async function aclLookUp(email) {
   // Get user record from first row.
   const user = rows[0];
 
-  if (!user) return null;
+  if (!user) return new Error('User not found.');
 
   // Blocked user cannot login.
   if (user.blocked) {
