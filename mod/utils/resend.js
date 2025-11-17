@@ -114,10 +114,10 @@ Substitutes supplied params into a supplied string.
 @returns {String} The string with substitutions made.
 */
 function replaceStringParams(string, params) {
-  return string.replace(
+  return string.replaceAll(
     /\$\{(.*?)\}/g,
 
     // Replace matched params in string values
-    (matched) => params[matched.replace(/\$\{|\}/g, '')] || '',
+    (matched) => params[matched.replaceAll(/\$\{|\}/g, '')] || '',
   );
 }
