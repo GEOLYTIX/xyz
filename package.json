@@ -31,10 +31,11 @@
     "nodemailer": "^7.0.9"
   },
   "dependencies": {
-    "dotenv": "^17.2.2",
     "bcrypt": "^6.0.0",
+    "dotenv": "^17.2.2",
     "jsonwebtoken": "^9.0.2",
-    "pg": "~8.15.1"
+    "pg": "~8.15.1",
+    "resend": "^6.4.2"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.6",

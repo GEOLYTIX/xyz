@@ -44,6 +44,7 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [KEY_CLOUDFRONT] A key [*.pem] file matching the KEY_CLOUDFRONT value is required for authentication requests in the [cloudfront]{@link module:/provider/cloudfront} provider module.
 @property {String} [AWS_S3_CLIENT] A AWS_S3_CLIENT xyzEnv is required to sign requests with the [s3]{@link module:/sign/s3} signer module.
 @property {String} [CLOUDINARY_URL] A CLOUDINARY_URL xyzEnv is required to sign requests with the [cloudinary]{@link module:/sign/cloudinary} signer module.
+@property {String} [RESEND_KEY] The password used to authenticate in the [utils/resend module]{@link module:/utils/resend} module.
 @property {String} [SAML_ACS] - Assertion Consumer Service URL where SAML responses are received
 @property {String} [SAML_SSO] - Single Sign-On URL of the Identity Provider
 @property {String} [SAML_SLO] - Single Logout URL for terminating sessions

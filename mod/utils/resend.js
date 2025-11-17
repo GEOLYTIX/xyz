@@ -1,15 +1,15 @@
 /**
-## /utils/mailer
-The mailer module provides a way to send emails to clients/admins, etc.
+## /utils/resend
+The resend module provides a way to send emails to clients/admins, etc.
 
-The nodemailer dependency will be imported dynamically on the condition that a TRANSPORT_EMAIL [sender] is defined the process environment.
+The resend dependency will be imported dynamically on the condition that a TRANSPORT_EMAIL [sender] Or a RESEND_KEY is defined the process environment.
 
 @requires nodemailer
 @requires /utils/logger
 @requires /utils/languageTemplates
 @requires /provider/getFrom
 
-@module /utils/mailer
+@module /utils/resend
 */
 
 import getFrom from '../provider/getFrom.js';
@@ -17,26 +17,20 @@ import getFrom from '../provider/getFrom.js';
 import languageTemplates from './languageTemplates.js';
 import logger from './logger.js';
 
-//Attempt to import node mailer
-let nodeMailer, transport;
+let resend;
 
-if (xyzEnv.TRANSPORT_EMAIL && xyzEnv.TRANSPORT_HOST) {
+if (xyzEnv.TRANSPORT_PASSWORD || xyzEnv.RESEND_KEY) {
   try {
-    nodeMailer = await import('nodemailer');
+    const { Resend } = await import('resend');
+    resend = new Resend(xyzEnv.TRANSPORT_PASSWORD || xyzEnv.RESEND_KEY);
   } catch {
-    console.error('Error: Missing nodemailer dependancy');
+    console.error('Error: Missing resend dependency');
   }
 }
 
 export default mailer;
 
 /**
-@function mailer
-@async
-
-@description
-Function which sends email using the nodemailer dependancy.
-
 @param {Object} params
 @property {String} params.to The email recipient.
 @property {String} params.template The html that will make up the body of the email.
@@ -44,25 +38,8 @@ Function which sends email using the nodemailer dependancy.
 @property {String} params.host The URL of the instance.
 */
 async function mailer(params) {
-  // The nodeMailer module is not available.
-  if (!nodeMailer) return;
-
-  if (!transport) {
-    transport = nodeMailer.createTransport({
-      auth: {
-        user: xyzEnv.TRANSPORT_USERNAME || xyzEnv.TRANSPORT_EMAIL,
-        pass: xyzEnv.TRANSPORT_PASSWORD,
-      },
-      host: xyzEnv.TRANSPORT_HOST,
-      name: xyzEnv.TRANSPORT_NAME || xyzEnv.TRANSPORT_EMAIL.split('@')[0],
-      port: xyzEnv.TRANSPORT_PORT,
-      requireTLS: xyzEnv.TRANSPORT_TLS,
-      secure: false,
-      tls: {
-        rejectUnauthorized: false,
-      },
-    });
-  }
+  // The resend module is not available.
+  if (!resend) return;
 
   const template = await languageTemplates(params);
 
@@ -81,20 +58,20 @@ async function mailer(params) {
     to: params.to,
   };
 
-  await transport.sendMail(mailTemplate, (err, info) => {
-    if (err) {
-      console.error(err);
-      return;
-    }
+  const { data, error } = await resend.emails.send(mailTemplate);
 
-    let result = `${info.messageId}\nFrom: ${info.envelope.from}\nTo: ${info.envelope.to}`;
+  if (error) {
+    console.error(error);
+    return;
+  }
 
-    logger(result, 'mailer');
+  let result = `${data.id}\nFrom: ${xyzEnv.TRANSPORT_EMAIL}\nTo: ${params.to}`;
 
-    result += `\nBody:\n ${mailTemplate.text.replace('    ', '')}`;
+  logger(result, 'mailer');
 
-    logger(result, 'mailer_body');
-  });
+  result += `\nBody:\n ${mailTemplate.text?.replace('    ', '')}`;
+
+  logger(result, 'mailer_body');
 }
 
 /**

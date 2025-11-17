@@ -18,7 +18,7 @@ import { compareSync } from 'bcrypt';
 
 import { randomBytes } from 'crypto';
 import languageTemplates from '../utils/languageTemplates.js';
-import mailer from '../utils/mailer.js';
+import mailer from '../utils/resend.js';
 import reqHost from '../utils/reqHost.js';
 import acl from './acl.js';
 

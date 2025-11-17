@@ -10,7 +10,7 @@ Exports the deleteUser method for the /api/user/delete route.
 @module /user/add
 */
 
-import mailer from '../utils/mailer.js';
+import mailer from '../utils/resend.js';
 import acl from './acl.js';
 
 /**
@@ -25,13 +25,13 @@ The method must be requested by a user with admin priviliges or by a user wantin
 
 @param {Object} req HTTP request.
 @param {Object} res HTTP response.
-@param {Object} req.params 
+@param {Object} req.params
 Request parameter.
-@param {string} req.params.email 
+@param {string} req.params.email
 Email to add.
-@param {Object} req.params.user 
+@param {Object} req.params.user
 Requesting user.
-@param {boolean} req.params.user.admin 
+@param {boolean} req.params.user.admin
 Requesting user is admin.
 */
 

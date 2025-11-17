@@ -13,7 +13,7 @@ Exports the [user] verify method for the /api/user/verify route.
 */
 
 import languageTemplates from '../utils/languageTemplates.js';
-import mailer from '../utils/mailer.js';
+import mailer from '../utils/resend.js';
 import acl from './acl.js';
 import login from './login.js';
 
