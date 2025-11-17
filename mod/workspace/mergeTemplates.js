@@ -33,7 +33,7 @@ The method will check for a template matching the obj.key string property if obj
 
 An array of templates can be defined as obj.templates[]. The templates will be merged into the obj in the order the template keys are in the templates[] array.
 
-@param {Object} obj 
+@param {Object} obj
 @param {array} [roles] An array of user roles from request params.
 
 @property {string} [obj.template] Key of template for the object.
@@ -103,8 +103,8 @@ Otherwise the obj will be merged into the template.
 
 Templates defined in the obj.templates array will be merged into object.
 
-@param {Object} obj 
-@param {Object} template The template maybe an object with a src property or a string. 
+@param {Object} obj
+@param {Object} template The template maybe an object with a src property or a string.
 @param {array} roles An array of user roles from request params.
 @property {string} [obj.template] Key of template for the object.
 
@@ -198,8 +198,8 @@ A dot notation role key will be created if the obj has a role string property.
 
 `obj.role = 'foo' && template.role = 'bar' -> template.roles = {'foo.bar':true}`
 
-@param {Object} obj 
-@param {Object} template The template maybe an object with a src property or a string. 
+@param {Object} obj
+@param {Object} template The template maybe an object with a src property or a string.
 @property {string} template.role The template has an access role restriction.
 */
 function roleAssign(obj, template) {
@@ -248,17 +248,17 @@ function roleAssign(obj, template) {
 @function assignWorkspaceTemplates
 
 @description
-The method parses an object for a template object property. 
+The method parses an object for a template object property.
 
 The template property value will be assigned to the workspace.templates{} object matching the template key value.
 
-The template._type property will be set to 'template' indicating that the templates origin is in the workspace. 
+The template._type property will be set to 'template' indicating that the templates origin is in the workspace.
 
 It is possible to overassign _type:'core' templates which are loaded from the /mod/workspace/templates directory.
 
 The method will call itself for nested objects.
 
-@param {Object} obj 
+@param {Object} obj
 */
 function assignWorkspaceTemplates(obj) {
   // Return early if object is null or empty
