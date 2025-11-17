@@ -34,7 +34,7 @@
     "bcrypt": "^6.0.0",
     "dotenv": "^17.2.2",
     "jsonwebtoken": "^9.0.2",
-    "pg": "~8.15.1",
+    "pg": "~8.15.1"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.6",
