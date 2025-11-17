@@ -4,7 +4,7 @@ The resend module provides a way to send emails to clients/admins, etc.
 
 The resend dependency will be imported dynamically on the condition that a TRANSPORT_EMAIL [sender] Or a RESEND_KEY is defined the process environment.
 
-@requires nodemailer
+@requires resend
 @requires /utils/logger
 @requires /utils/languageTemplates
 @requires /provider/getFrom
