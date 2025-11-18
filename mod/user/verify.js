@@ -131,15 +131,24 @@ export default async function verify(req, res) {
       }),
     );
 
-    //Send emails to admins after template has been sent.
+    //Group emails by language to send to an array of addresses.
+    const langMapp = {};
+
     for (const admin of rows) {
-      await mailer({
+      langMapp[admin.language] ??= {
         email: user.email,
         host: req.params.host,
         language: admin.language,
         template: 'admin_email',
-        to: admin.email,
-      });
+        to: [],
+      };
+
+      //Push to the the list of admins using the same language.
+      langMapp[admin.language].to.push(admin.email);
+    }
+
+    for (const mail_template of Object.keys(langMapp)) {
+      await mailer(langMapp[mail_template]);
     }
   } else {
     // No admin accounts found in ACL.
