@@ -14,7 +14,7 @@
     "test": "node --experimental-test-module-mocks node_modules/codi-test-framework/cli.js tests",
     "test-watch": "node --watch-path=. --experimental-test-module-mocks node_modules/codi-test-framework/cli.js tests --quiet",
     "_build": "node esbuild.config.mjs",
-    "ui_css": "pnpm exec esbuild --bundle public/css/_ui.css --outfile=public/css/ui.css --loader:.woff2=file",
+    "ui_css": "pnpm exec esbuild --bundle public/css/_ui.css --outfile=public/css/ui.css --external:*.woff2",
     "mapp_css": "pnpm exec esbuild --bundle public/css/_mapp.css --outfile=public/css/mapp.css",
     "generate-docs": "jsdoc --configure ./utils/jsdoc_mapp.json --verbose && jsdoc --configure ./utils/jsdoc_xyz.json --verbose && jsdoc --configure ./utils/jsdoc_test.json --verbose",
     "mapp-docs": "jsdoc --configure ./utils/jsdoc_mapp.json --verbose",

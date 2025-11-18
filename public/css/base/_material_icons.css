@@ -1,16 +1,30 @@
-@import url(https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0);
+/* @import url(https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0); */
+
+@font-face {
+  font-family: 'Material Symbols Outlined';
+  font-style: normal;
+  font-weight: 300;
+  src: url(material-icons-outlined.woff2) format('woff2');
+}
 
 .material-symbols-outlined-important {
-  font-family: 'Material Symbols Outlined', sans-serif !important;
+  font-family: 'Material Symbols Outlined' !important;
 }
 
 .material-symbols-outlined {
-  font-variation-settings:
-    'FILL' 0,
-    'wght' 300,
-    'GRAD' 0,
-    'opsz' 24;
-  /* Customisation */
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
   text-align: center;
   color: var(--color-primary);
 
