@@ -3,6 +3,8 @@
 
 The getFrom provider module allows XYZ modules to get resources either from configured sources.
 
+Cloudfront resources get cached for 60seconds to prevent excessive requests for the same resource.
+
 @requires ../sign/file
 @requires ../utils/logger
 @requires ./cloudfront
@@ -32,6 +34,7 @@ for (const key in xyzEnv) {
 export default getFromModules;
 
 const cacheMap = new Map();
+let cacheTime = Date.now();
 
 /**
 @function Cloudfront
@@ -45,11 +48,10 @@ The fetch request will be created from the cloudfront provider module with the c
 The fetch request will be stored in a cache Map object for requests from the [cacheTemplates workspace module]{@link module:/workspace~cacheTemplates}. 
 
 @param {string} ref Cloudfront resource reference.
-@param {boolean} cache The resource fetch request should be cached.
 
 @returns {Promise<String|JSON|Error>} The fetch is resolved into either a string or JSON depending on the url ending.
 */
-async function Cloudfront(ref, cache) {
+async function Cloudfront(ref) {
   if (!xyzEnv.KEY_CLOUDFRONT) {
     return console.error('Cloudfront key is missing');
   }
@@ -58,7 +60,7 @@ async function Cloudfront(ref, cache) {
 
   let response;
 
-  if (cache) {
+  if (Date.now() - cacheTime < 60000) {
     let cachedURL = cacheMap.get(url);
 
     if (!cachedURL) {
@@ -68,6 +70,7 @@ async function Cloudfront(ref, cache) {
     response = await cachedURL;
   } else {
     // The cacheMap must be cleared to prevent cached resource never being updated between role requests or tests.
+    cacheTime = Date.now();
     cacheMap.clear();
     response = await cloudfront(url);
   }
