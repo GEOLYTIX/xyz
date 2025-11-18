@@ -87,6 +87,7 @@ export default {
   link: 'Link',
   loading: 'Loading',
   location_clear_all: 'Clear locations',
+  location_no_location_selected: 'No Locations selected',
   location_close_without_save: 'Close location without saving changes?',
   location_delete: 'Delete location',
   location_listview_full: 'The listview for locations is full.',
@@ -111,6 +112,7 @@ export default {
   filter_dialog_title: 'Filter Panel',
   filter_in_viewport: 'viewport based.',
   filter_not_in_viewport: 'all locations not just those in viewport.',
+  gazetteer: 'Search for a location',
   no_data_filter: 'This field contains no data and cannot be filtered on.',
   no_layers: 'No accessible layers in locale.',
   no_locales:

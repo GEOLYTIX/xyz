@@ -35,19 +35,24 @@ check({ roles: { '!guest': true }, data: 'content' }, ['guest']) // returns fals
 check({ roles: { '!guest': true }, data: 'content' }, ['user']) // returns object
 ```
 
+The check is also passed if the obj does not have a roles property.
+
 @param {Object} obj The object to check access for
 @param {Array<string>} user_roles Array of roles assigned to the user
 @property {roles} obj.roles Role configuration object
-@returns {(Object|boolean)} Returns the original object if access is granted, false otherwise
+@returns {boolean} Returns true if check is passed, false otherwise.
 */
 export function check(obj, user_roles) {
   // The object to check has no roles assigned.
-  if (!obj.roles) return obj;
-
-  // Always return object with '*' asterisk role.
-  if (Object.hasOwn(obj.roles, '*')) return obj;
+  if (!obj.roles) return true;
 
   if (!user_roles) return false;
+
+  // user_roles must be an array or true
+  if (!Array.isArray(user_roles)) return true;
+
+  // Always return object with '*' asterisk role.
+  if (Object.hasOwn(obj.roles, '*')) return true;
 
   // Add last of dot notation role to rolesArr
   const rolesArr = Object.keys(obj.roles);
@@ -67,12 +72,12 @@ export function check(obj, user_roles) {
   // Check whether every role is negated.
   const everyNegatedRoles = rolesArr.every((role) => /^!/.exec(role));
 
-  if (everyNegatedRoles) return obj;
+  if (everyNegatedRoles) return true;
 
   // Some positive role is included in user_roles[]
   const somePositiveRole = rolesArr.some((role) => user_roles.includes(role));
 
-  if (somePositiveRole) return obj;
+  if (somePositiveRole) return true;
 
   // The check fails by default.
   return false;
@@ -100,7 +105,7 @@ const obj = {
 };
 
 // With admin role
-objMerge(obj, ['admin']); 
+objMerge(obj, ['admin']);
 // Returns: { name: 'layer', secretField: 'sensitive', roles: {...} }
 
 // With user role

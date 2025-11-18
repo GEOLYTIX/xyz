@@ -42,11 +42,10 @@ A template can be cached by removing the src property in the workspace.templates
 The key will be assigned to the template object as key property.
 
 @param {string} key
-@param {boolean} cache Templates should be cached and not requested multiple times.
 
 @returns {Promise<Object|Error>} JSON Template
 */
-export default async function getTemplate(key, cache) {
+export default async function getTemplate(key) {
   if (key === undefined) {
     return new Error('Undefined template key.');
   }
@@ -91,7 +90,7 @@ export default async function getTemplate(key, cache) {
       return err;
     }
 
-    response = await getFrom[method](template.src, cache);
+    response = await getFrom[method](template.src);
 
     if (response instanceof Error) {
       template.err = response;

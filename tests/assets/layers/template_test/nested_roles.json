@@ -1,0 +1,8 @@
+{
+  "format": "wkt",
+  "dbs": "NEON",
+  "table": "test.scratch",
+  "srid": "3857",
+  "geom": "geom_3857",
+  "qID": "id"
+}
