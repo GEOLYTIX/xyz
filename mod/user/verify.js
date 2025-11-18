@@ -124,28 +124,23 @@ export default async function verify(req, res) {
 
   // One or more administrator have been
   if (rows.length > 0) {
-    // Get array of mail promises.
-    const mail_promises = rows.map(async (row) => {
-      return await mailer({
+    res.send(
+      await languageTemplates({
+        language: user.language,
+        template: 'account_await_approval',
+      }),
+    );
+
+    //Send emails to admins after template has been sent.
+    for (const admin of rows) {
+      await mailer({
         email: user.email,
         host: req.params.host,
-        language: row.language,
+        language: admin.language,
         template: 'admin_email',
-        to: row.email,
+        to: admin.email,
       });
-    });
-
-    // Continue after all mail promises have been resolved.
-    Promise.allSettled(mail_promises)
-      .then(async (arr) => {
-        res.send(
-          await languageTemplates({
-            language: user.language,
-            template: 'account_await_approval',
-          }),
-        );
-      })
-      .catch((error) => console.error(error));
+    }
   } else {
     // No admin accounts found in ACL.
     res.send(
