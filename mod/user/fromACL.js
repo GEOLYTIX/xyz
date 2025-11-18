@@ -325,7 +325,7 @@ async function failedLogin(request) {
       );
     }
 
-    await mailer({
+    await mailer.send({
       failed_attempts: maxFailedAttempts,
       host: request.host,
       language: request.language,
@@ -349,7 +349,7 @@ async function failedLogin(request) {
   }
 
   // Login has failed but account is not locked (yet).
-  await mailer({
+  await mailer.send({
     host: request.host,
     language: request.language,
     remote_address: request.remote_address,

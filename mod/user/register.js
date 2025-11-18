@@ -126,7 +126,7 @@ async function registerUserBody(req, res) {
     return res.status(500).send('Failed to access ACL.');
   }
 
-  await mailer({
+  await mailer.send({
     host: req.params.host,
     language: req.body.language,
     link: `${req.params.host}/api/user/verify/${req.body.verificationtoken}`,
@@ -308,7 +308,7 @@ async function passwordReset(req, res) {
   }
 
   // Sent mail with verification token to the account email address.
-  await mailer({
+  await mailer.send({
     host: req.params.host,
     language: req.body.language,
     link: `${req.params.host}/api/user/verify/${req.body.verificationtoken}/?language=${req.body.language}`,

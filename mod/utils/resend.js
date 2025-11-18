@@ -28,6 +28,11 @@ if (xyzEnv.TRANSPORT_PASSWORD && xyzEnv.TRANSPORT_EMAIL) {
   }
 }
 
+const mailer = {
+  send,
+  batch,
+};
+
 export default mailer;
 
 /**
@@ -37,7 +42,7 @@ export default mailer;
 @property {String} params.language The language to be used.
 @property {String} params.host The URL of the instance.
 */
-async function mailer(params) {
+async function send(params) {
   // The resend module is not available.
   if (!resend) return;
 
@@ -72,6 +77,48 @@ async function mailer(params) {
   result += `\nBody:\n ${mailTemplate.text?.replace('    ', '')}`;
 
   logger(result, 'mailer_body');
+}
+
+/**
+@param {Array} emails
+@property {String} params.to The email recipient.
+@property {String} params.template The html that will make up the body of the email.
+@property {String} params.language The language to be used.
+@property {String} params.host The URL of the instance.
+*/
+async function batch(emails) {
+  // The resend module is not available.
+  if (!resend) return;
+
+  const emailTemplates = [];
+
+  for (const params of Object.values(emails)) {
+    const template = await languageTemplates(params);
+
+    await getBody(template);
+
+    const mailTemplate = {
+      from: xyzEnv.TRANSPORT_EMAIL,
+      html: template.html
+        ? replaceStringParams(template.html, params)
+        : undefined,
+      sender: xyzEnv.TRANSPORT_EMAIL,
+      subject: replaceStringParams(template.subject, params),
+      text: template.text
+        ? replaceStringParams(template.text, params)
+        : undefined,
+      to: params.to,
+    };
+
+    emailTemplates.push(mailTemplate);
+  }
+
+  const { error } = await resend.batch.send(emailTemplates);
+
+  if (error) {
+    console.error(error);
+    return;
+  }
 }
 
 /**

@@ -138,7 +138,7 @@ export default async function update(req, res) {
       to: update_user.email,
     };
 
-    await mailer(approval_mail);
+    await mailer.send(approval_mail);
   }
 
   return res.send('Update success');

@@ -11,7 +11,7 @@ console.warn = (log) => {
 
 const mockMailerFn = codi.mock.fn();
 const mockMailer = codi.mock.module('../../../mod/utils/resend.js', {
-  defaultExport: mockMailerFn,
+  defaultExport: { send: mockMailerFn },
 });
 
 await codi.describe(

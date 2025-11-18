@@ -80,7 +80,7 @@ export default async function deleteUser(req, res) {
   const user = rows[0];
 
   // Sent email to inform user that their account has been deleted.
-  await mailer({
+  await mailer.send({
     host: req.params.host,
     language: user.language,
     template: 'deleted_account',
