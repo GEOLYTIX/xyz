@@ -115,6 +115,30 @@ await codi.describe(
         codi.assertTrue(res.statusCode === 200);
       },
     );
+
+    await codi.it(
+      {
+        name: 'USER_DOMAINS - ensure case insensitivity',
+        parentId: 'user_register',
+      },
+      async () => {
+        globalThis.xyzEnv.USER_DOMAINS = 'geolytix';
+
+        const { req, res } = codi.mockHttp.createMocks({
+          headers: {
+            host: 'localhost',
+          },
+          body: {
+            email: 'dev_1@GEOLYTIX.COM',
+            password: 'ValidPass123!',
+            language: 'en',
+          },
+        });
+
+        await register(req, res);
+        codi.assertTrue(res.statusCode === 200);
+      },
+    );
   },
 );
 
