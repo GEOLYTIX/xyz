@@ -2,7 +2,7 @@
 ## /utils/resend
 The resend module provides a way to send emails to clients/admins, etc.
 
-The resend dependency will be imported dynamically on the condition that a TRANSPORT_EMAIL [sender] Or a RESEND_KEY is defined the process environment.
+The resend dependency will be imported dynamically on the condition that a TRANSPORT_EMAIL [sender] is defined the process environment.
 
 @requires resend
 @requires /utils/logger
@@ -19,10 +19,10 @@ import logger from './logger.js';
 
 let resend;
 
-if (xyzEnv.TRANSPORT_PASSWORD || xyzEnv.RESEND_KEY) {
+if (xyzEnv.TRANSPORT_PASSWORD && xyzEnv.TRANSPORT_EMAIL) {
   try {
     const { Resend } = await import('resend');
-    resend = new Resend(xyzEnv.TRANSPORT_PASSWORD || xyzEnv.RESEND_KEY);
+    resend = new Resend(xyzEnv.TRANSPORT_PASSWORD);
   } catch {
     console.error('Error: Missing resend dependency');
   }
