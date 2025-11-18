@@ -6,11 +6,11 @@
 }
 
 .material-symbols-outlined-important {
-  font-family: 'Material Symbols Outlined' !important;
+  font-family: 'Material Symbols Outlined', sans-serif !important;
 }
 
 .material-symbols-outlined {
-  font-family: 'Material Symbols Outlined';
+  font-family: 'Material Symbols Outlined', sans-serif;
   font-weight: normal;
   font-style: normal;
   font-size: 24px;
