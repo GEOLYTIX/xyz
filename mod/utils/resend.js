@@ -134,6 +134,14 @@ async function batch(emails) {
   if (error) {
     console.error(error);
   }
+
+  let result = `From: ${xyzEnv.TRANSPORT_EMAIL}\nTo: ${emailTemplates.map((template) => template.to)?.join?.(',')}`;
+
+  logger(result, 'mailer');
+
+  result += `\nBody:\n ${emailTemplates?.[0].text?.replace?.('    ', '')}`;
+
+  logger(result, 'mailer_body');
 }
 
 /**
