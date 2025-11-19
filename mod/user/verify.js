@@ -145,7 +145,7 @@ export default async function verify(req, res) {
       emailTemplates.push(emailTemplate);
     }
 
-    mailer.batch(emailTemplates);
+    await mailer.batch(emailTemplates);
   } else {
     // No admin accounts found in ACL.
     res.send(
