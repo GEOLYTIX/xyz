@@ -133,7 +133,6 @@ async function batch(emails) {
 
   if (error) {
     console.error(error);
-    return;
   }
 }
 
