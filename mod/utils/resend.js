@@ -92,7 +92,7 @@ async function send(params) {
 @function batch
 
 @description
-Takes an array of emails to queue via the resend sdk.
+Takes an array of emails to queue via the resend sdk. This allows us to trigger 100 emails at once.
 
 @async
 
