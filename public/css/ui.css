@@ -1,6 +1,3 @@
-@import "https://fonts.googleapis.com/css2?family=Titillium+Web:ital,wght@0,300;0,400;0,600;1,200;1,300&display=swap";
-@import "https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,300,0,0";
-
 /* public/css/base/_colours.css */
 :root {
   --color-primary: #003d57;
@@ -184,6 +181,18 @@ button {
 }
 
 /* public/css/base/_globals.css */
+@font-face {
+  font-family: "Titillium Web";
+  font-style: normal;
+  font-weight: 400;
+  src: url(titillium-web-v19-latin_latin-ext-regular.woff2) format("woff2");
+}
+@font-face {
+  font-family: "Titillium Web";
+  font-style: italic;
+  font-weight: 400;
+  src: url(titillium-web-v19-latin_latin-ext-italic.woff2) format("woff2");
+}
 body {
   font-family: "Titillium Web", sans-serif;
   font-size: 0.8em;
@@ -334,15 +343,29 @@ input[type=search]::-webkit-calendar-picker-indicator {
 }
 
 /* public/css/base/_material_icons.css */
+@font-face {
+  font-family: "Material Symbols Outlined";
+  font-style: normal;
+  font-weight: 300;
+  src: url(material-icons-outlined.woff2) format("woff2");
+}
 .material-symbols-outlined-important {
   font-family: "Material Symbols Outlined", sans-serif !important;
 }
 .material-symbols-outlined {
-  font-variation-settings:
-    "FILL" 0,
-    "wght" 300,
-    "GRAD" 0,
-    "opsz" 24;
+  font-family: "Material Symbols Outlined", sans-serif;
+  font-weight: normal;
+  font-style: normal;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: "liga";
+  -webkit-font-smoothing: antialiased;
   text-align: center;
   color: var(--color-primary);
   &.active {
