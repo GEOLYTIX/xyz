@@ -48,6 +48,7 @@ The response from the method is returned with the HTTP response.
 @param {Object} res HTTP response.
 @param {Object} req.params Request parameter.
 @param {string} params.signer Signer module to sign the request.
+@param {bool} params.redirect Redirect the signer request to the signed URL.
 
 @returns {Promise} The promise resolves into the response from the signerModules method.
 */
@@ -73,6 +74,11 @@ export default async function signer(req, res) {
       .status(500)
       .setHeader('Content-Type', 'text/plain')
       .send(response.message);
+  }
+
+  if (req.params.redirect) {
+    res.setHeader('location', response);
+    return res.status(302).send();
   }
 
   if (response instanceof ServerResponse) return response;
