@@ -27,9 +27,9 @@ An API key can be revoked by setting the api field in the ACL record to null.
 
 @param {Object} req HTTP request.
 @param {Object} res HTTP response.
-@param {Object} req.params 
+@param {Object} req.params
 Request parameter.
-@param {Object} req.params.user 
+@param {Object} req.params.user
 Requesting user.
 @returns {Promise<Object|Error>} A promise that resolves with a response object from the request or an error.
 */
@@ -65,6 +65,7 @@ export default async function apiKey(req, res) {
   // Create signed api_token
   const api_user = {
     api: true,
+    admin: user.admin,
     email: user.email,
     roles: user.roles,
   };
