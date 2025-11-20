@@ -13,8 +13,7 @@ Exports the [user] verify method for the /api/user/verify route.
 */
 
 import languageTemplates from '../utils/languageTemplates.js';
-
-import mailer from '../utils/mailer.js';
+import mailer from '../utils/resend.js';
 import acl from './acl.js';
 
 import login from './login.js';
@@ -114,28 +113,28 @@ export default async (req, res) => {
 
   // One or more administrator have been
   if (rows.length > 0) {
-    // Get array of mail promises.
-    const mail_promises = rows.map(async (row) => {
-      return await mailer({
+    res.send(
+      await languageTemplates({
+        language: user.language,
+        template: 'account_await_approval',
+      }),
+    );
+
+    const emailTemplates = [];
+
+    for (const admin of rows) {
+      const emailTemplate = {
         email: user.email,
         host: req.params.host,
-        language: row.language,
+        language: admin.language,
         template: 'admin_email',
-        to: row.email,
-      });
-    });
+        to: admin.email,
+      };
 
-    // Continue after all mail promises have been resolved.
-    Promise.allSettled(mail_promises)
-      .then(async (arr) => {
-        res.send(
-          await languageTemplates({
-            language: user.language,
-            template: 'account_await_approval',
-          }),
-        );
-      })
-      .catch((error) => console.error(error));
+      emailTemplates.push(emailTemplate);
+    }
+
+    await mailer.batch(emailTemplates);
   } else {
     // No admin accounts found in ACL.
     res.send(
