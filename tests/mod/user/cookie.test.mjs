@@ -10,7 +10,6 @@ globalThis.xyzEnv = {
   COOKIE_TTL: 36000,
   TRANSPORT_EMAIL: 'xyz@gmail.com',
   TRANSPORT_PASSWORD: 'IAMANEMAILPASSWORD',
-  TRANSPORT_HOST: 'smpt-host.emailserver.com',
   SECRET_ALGORITHM: 'HS256',
 };
 
