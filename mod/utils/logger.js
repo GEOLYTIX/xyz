@@ -4,7 +4,6 @@ This module provides a logging utility for the XYZ API. The LOG process environm
 
 Possible log values are:
 
-- req: Logs the req property from requests (see https://developer.mozilla.org/en-US/docs/Web/API/Request).
 - req_url: Logs the url of the request.
 - query_params: Logs query parameters sent to the query endpoint.
 - query: Logs the sql to executed by calling the query endpoint.
@@ -14,6 +13,31 @@ Possible log values are:
 - mailer_body: Logs email from and two with the body.
 - reqhost: Logs the host for the request.
 - workspace: Logs responses for requests made to /workspace.
+
+By default the logs are only written to the stdout console.
+
+It is possible to set the LOGGER process env to write logs to the logflare api. A valid source and apikey must be provided in the LOGGER env value.
+
+```
+"LOGGER": "logflare:apikey=🤫&source=🤫"
+```
+
+Alternatively logs can be written into a table on any of the configured DBS_* connections. The dbs parameter value must match a DBS_* connection in the process env.
+
+```
+"LOGGER": "postgresql:dbs=NEON&table=public.dev_logs"
+```
+
+The schema for the log table should be like so:
+```sql
+CREATE TABLE public.dev_logs (
+  process VARCHAR,
+  datetime BIGINT,
+  key VARCHAR,
+  message VARCHAR,
+  log TEXT
+);
+```
 
 @requires module:/utils/processEnv
 @requires crypto
@@ -28,6 +52,7 @@ const logs = new Set(xyzEnv.LOGS?.split(',') || []);
 // Errors should always be logged.
 logs.add('err');
 
+// Generates a unique for the process.
 const process_id = crypto.randomBytes(3).toString('hex');
 
 const logout = {
@@ -133,8 +158,10 @@ function postgresql() {
     //This is to pull the short Error message from the stack
     const errorMessage = log.err?.toString().split('\n')[0];
 
-    const client = await pool.connect();
+    // Declare client outside the try catch.
+    let client;
     try {
+      client = await pool.connect();
       await client.query(
         `INSERT INTO ${table} (process, datetime, key, log, message) 
         VALUES ($1, $2, $3, $4, $5)`,
@@ -143,7 +170,8 @@ function postgresql() {
     } catch (error) {
       console.error('Error while logging to database:', error);
     } finally {
-      client.release();
+      // Optional chaining in case the client failed to connect.
+      client?.release();
     }
   };
 }
