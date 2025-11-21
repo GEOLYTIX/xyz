@@ -1429,19 +1429,11 @@ label.radio {
     padding-left: 4px;
   }
 }
-.drawer.layer-group .drawer.layer-view {
+.drawer.layer-group > .drawer.layer-view {
   background: var(--color-base-tertiary);
   border: none;
   box-shadow: none;
   border-top: 1px solid var(--color-border);
-}
-.layer-view > .drawer,
-.drawer.layer-view .drawer {
-  border: none;
-  box-shadow: none;
-}
-.layer-view > .drawer {
-  background: var(--color-base-tertiary);
 }
 
 /* public/css/layout/_locationview.css */
