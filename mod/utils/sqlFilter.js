@@ -59,7 +59,7 @@ let SQLparams;
 @description
 The addValues method is used to add values to the SQLparams array.
 
-@param {string} val 
+@param {string} val
 @returns {number} SQLparams.length
 */
 function addValues(val, type) {
@@ -89,13 +89,14 @@ If the filter is a string, the filter will be returned as is.
 export default sqlfilter;
 
 function sqlfilter(filter, req) {
-  SQLparams = req.params.SQL;
   //Check to see that params is an array and that the values of the params are of valid type.
-  if (!Array.isArray(SQLparams)) {
+  if (!Array.isArray(req.params.SQL)) {
     throw new TypeError(
       'Expected params to be an array of valid types (string, number, boolean, object, or bigint)',
     );
   }
+
+  SQLparams = req.params.SQL;
 
   if (typeof filter === 'string') return filter;
 
@@ -112,7 +113,7 @@ function sqlfilter(filter, req) {
 
 /**
 @function mapFilterEntries
-@description 
+@description
 The mapFilterEntries method is used to map the filter entries and convert them into a SQL query string.
 The method also validates the filter entries against SQL parameter validation.
 A string match filter for the user.email is added to the filter if the filter entry value has a user property.
@@ -161,13 +162,13 @@ function mapFilterEntries(filter, req) {
 }
 
 /**
-@function isValidParam 
+@function isValidParam
 @description
 Check whether val param is of expected type.
 
-@param {*} val 
+@param {*} val
 @param {string} type
-@returns boolean 
+@returns boolean
 */
 function isValidParam(val, type) {
   // Check if the requested type is supported
