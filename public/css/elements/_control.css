@@ -10,8 +10,8 @@
       flex-grow: 1;
       font-size: 2em;
       &.active {
-      border-bottom: 1px solid var(--color-active);
-    }
+        border-bottom: 1px solid var(--color-active);
+      }
     }
   }
   > .panels {
