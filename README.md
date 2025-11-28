@@ -1,4 +1,4 @@
-**v4.19.3**
+**v4.19.6**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Codi Unit Tests](https://github.com/GEOLYTIX/xyz/actions/workflows/unit_tests.yml/badge.svg)
@@ -55,17 +55,21 @@ Dynamic module imports reduce the need to bundle 3rd party libraries such as [Ta
 
 **Node.js v22+** is required for importing ESM modules.
 
-[brcypt](https://github.com/kelektiv/node.bcrypt.js#readme) - A library to help you hash passwords.
+[brcypt](https://github.com/kelektiv/node.bcrypt.js) - A library to help you hash passwords.
 
-[jsonwebtoken](https://www.npmjs.com/package/jsonwebtoken) - A Node implementation of JSON Web Token.
+[dotenv](https://github.com/motdotla/dotenv) - Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env.
+
+[jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) - A Node implementation of JSON Web Token.
 
 [Node-Postgres](https://github.com/brianc/node-postgres) - PostgreSQL client for Node.
 
-[nodemailer](https://github.com/nodemailer/nodemailer) - Send e-mails with Node – easy as cake!
+### Optional dependencies
 
 [aws-sdk](https://github.com/aws/aws-sdk-js-v3) - Several modules are required in order to access resources on cloudfront or S3.
 
-[simple-statistics](https://github.com/simple-statistics/simple-statistics) - A JavaScript implementation of descriptive, regression, and inference statistics.
+[node-saml](https://github.com/node-saml/node-saml) - A SAML 2.0 authentication provider for Node.js.
+
+[resend](https://github.com/resend/resend-node) - Node.js library for the Resend API.
 
 ### Development dependencies
 

@@ -32,13 +32,8 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [RETRY_LIMIT='3'] The [utils/dbs module]{@link module:/utils/dbs} will apply the RETRY_LIMIT to the query.client.
 @property {String} [WORKSPACE_AGE] The [workspace/cache module]{@link module:/mod/workspace/cache} flashes the workspace cache after the WORKSPACE_AGE is reached.
 @property {String} [CUSTOM_TEMPLATES] The [workspace/cache module]{@link module:/mod/workspace/cache} caches templates defined as a src in the CUSTOM_TEMPLATES xyzEnv.
-@property {String} [TRANSPORT_HOST] The hostname or IP address that the [utils/mailer module]{@link module:/utils/mailer} module connects to.
-@property {String} [TRANSPORT_NAME] The optional hostname of the client, used for identifying to the server in the [utils/mailer module]{@link module:/utils/mailer} module.
 @property {String} [TRANSPORT_EMAIL] The email used to send emails in the [utils/mailer module]{@link module:/utils/mailer} module.
-@property {String} [TRANSPORT_USERNAME] The username used to authenticate in the [utils/mailer module]{@link module:/utils/mailer} module.
 @property {String} [TRANSPORT_PASSWORD] The password used to authenticate in the [utils/mailer module]{@link module:/utils/mailer} module.
-@property {Integer} [TRANSPORT_PORT] The port used to connect to the host in the [utils/mailer module]{@link module:/utils/mailer} module.
-@property {String} [TRANSPORT_TLS] defines additional node.js TLSSocket options to be passed to the socket constructor used in the [utils/mailer module]{@link module:/utils/mailer} module.
 @property {String} [USER_DOMAINS] The [user/register module]{@link module:/user/register} will limit the registration to user emails for domains provided in the comma seperated USER_DOMAINS xyzEnv.
 @property {String} [SRC_] SRC_* values will replace the key wildcard [*] in the stringified workspace.
 @property {String} [KEY_CLOUDFRONT] A key [*.pem] file matching the KEY_CLOUDFRONT value is required for authentication requests in the [cloudfront]{@link module:/provider/cloudfront} provider module.
