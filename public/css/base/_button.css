@@ -56,8 +56,10 @@ button {
     padding: 0.3em;
 
     &.active {
-      background-color: var(--color-active);
-      color: var(--color-font-contrast);
+      background-color: rgb(from var(--color-active) r g b / 0.7);
+      color: var(--color-font);
+      font-weight: bold;
+      border: solid 1px var(--color-border);
     }
   }
 
