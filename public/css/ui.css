@@ -162,6 +162,7 @@ button {
       color: var(--color-font);
       font-weight: bold;
       border: solid 1px var(--color-border);
+      border-radius: 3px;
     }
   }
   &.underline {
