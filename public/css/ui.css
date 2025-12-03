@@ -161,7 +161,6 @@ button {
       background-color: rgb(from var(--color-active) r g b / 0.7);
       color: var(--color-font);
       font-weight: bold;
-      border: solid 1px var(--color-border);
       border-radius: 3px;
     }
   }
