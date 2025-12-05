@@ -287,6 +287,12 @@ Note: This script requires a linked Vercel project. Run 'vercel link' first.
 `);
 }
 
+/**
+ * @function checkCustomeEnvironment
+ * @description
+ * This function checks if the environment provided via the cli flags is a
+ * custom environment
+ */
 async function checkCustomeEnvironment() {
   if (!['production', 'development', 'preview'].includes(envType)) {
     const { data } = await apiRequest(
