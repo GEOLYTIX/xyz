@@ -51,6 +51,8 @@ const envFile =
 // Get project and org IDs
 const { projectId, orgId } = readVercelConfig();
 
+let isCustomEnvironment = false;
+
 //sync env method call.
 syncEnv().catch(console.error);
 
@@ -153,19 +155,7 @@ Batch upsert environment variables to the vercel api.
 @param {Object} envVars Environment Variables to push to vercel.
 */
 async function batchUpsertEnvs(envVars) {
-  let isCustomEnvironment = false;
-  if (!['production', 'development', 'preview'].includes(envType)) {
-    const { data } = await apiRequest(
-      'GET',
-      `/v9/projects/${projectId}/custom-environments/${envType}`,
-    );
-
-    if (data) {
-      envType = data.id;
-      isCustomEnvironment = true;
-    }
-  }
-
+  await checkCustomeEnvironment();
   // Prepare batch array
   const batch = Object.entries(envVars)
     .filter(([key]) => !key.startsWith('VERCEL_'))
@@ -295,4 +285,18 @@ Examples:
 
 Note: This script requires a linked Vercel project. Run 'vercel link' first.
 `);
+}
+
+async function checkCustomeEnvironment() {
+  if (!['production', 'development', 'preview'].includes(envType)) {
+    const { data } = await apiRequest(
+      'GET',
+      `/v9/projects/${projectId}/custom-environments/${envType}`,
+    );
+
+    if (data) {
+      envType = data.id;
+      isCustomEnvironment = true;
+    }
+  }
 }
