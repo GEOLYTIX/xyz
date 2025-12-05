@@ -32,9 +32,9 @@ The build command is stored in the package.json as `_build` script.
 
 ESBuild must also be used to compile the CSS supporting the MAPP and MAPP.UI elements.
 
-    pnpm exec esbuild --bundle public/css/_mapp.css --outfile=public/css/mapp.css
+    pnpm mapp_css
 
-    pnpm exec esbuild --bundle public/css/_ui.css --outfile=public/css/ui.css --loader:.svg=dataurl
+    pnpm ui_css
 
 ## Hot rebuild with nodemon & VSCode Chrome Debugger
 
