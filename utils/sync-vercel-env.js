@@ -155,7 +155,7 @@ Batch upsert environment variables to the vercel api.
 async function batchUpsertEnvs(envVars) {
   let isCustomEnvironment = false;
   if (!['production', 'development', 'preview'].includes(envType)) {
-    const { status, data } = await apiRequest(
+    const { data } = await apiRequest(
       'GET',
       `/v9/projects/${projectId}/custom-environments/${envType}`,
     );
