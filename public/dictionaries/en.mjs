@@ -78,6 +78,7 @@ export default {
   layer_style_display_labels: 'Display labels',
   layer_style_header: 'Style',
   layer_style_opacity: 'Change layer opacity:',
+  layer_style_select_label: 'Select field to use as label',
   layer_style_select_theme: 'Select thematic style',
   layer_style_switch_all: 'switch all',
   layer_style_switch_caption: 'Click on labels to switch visibility or',
