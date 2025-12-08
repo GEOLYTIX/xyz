@@ -93,7 +93,7 @@
   "login_verification_note": "로그인하기 전에 이메일 주소로 전송되고 관리자의 승인을 받은 확인 링크를 따라 계정을 확인해야 합니다.",
   "login_registration_link": "새 계정을 등록하거나 비밀번호를 재설정하세요.",
   "modify_geometry": "기하학을 수정합니다",
-  "filter_btn_label": "필터 패널 열기",
+  "filter_btn_label": "필터 적용",
   "filter_btn_title": "필터링 보기 열기",
   "filter_count": "위치(들)는 필터 기준과 일치합니다",
   "filter_dialog_title": "필터 패널",

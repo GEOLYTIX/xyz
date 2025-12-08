@@ -90,7 +90,7 @@
   "login_verification_note": "Giriş yapabilmeniz için öncelikle e-posta adresinize gönderilen doğrulama bağlantısını takip ederek hesabınızın doğrulanması ve bir yönetici tarafından onaylanması gerekmektedir.",
   "login_registration_link": "Yeni bir hesap oluşturun veya şifrenizi sıfırlayın.",
   "modify_geometry": "Geometrisini değiştir",
-  "filter_btn_label": "Filtre Panelini Aç",
+  "filter_btn_label": "Filtreleri uygula",
   "filter_btn_title": "Filtreleme Görünümünü Aç",
   "filter_count": "Konum(lar) filtre kriteriyle eşleşiyor",
   "filter_dialog_title": "Filtre Paneli",
