@@ -107,7 +107,7 @@ export default {
     'Your account must be verified by following a verification link sent to the email address and approved by an administrator before you are able to log in.',
   login_registration_link: 'Register a new account or reset your password.',
   modify_geometry: 'Modify Geometry',
-  filter_btn_label: 'Apply Filters',
+  filter_btn_label: 'Filters',
   filter_btn_title: 'Open Filtering View',
   filter_count: 'Location(s) match filter criteria',
   filter_dialog_title: 'Filter Panel',
