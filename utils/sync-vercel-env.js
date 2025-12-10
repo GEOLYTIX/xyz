@@ -39,7 +39,7 @@ if (args.includes('--help')) {
   process.exit(0);
 }
 
-const envType =
+let envType =
   args.find((arg) => arg.startsWith('--env='))?.split('=')[1] || 'development';
 const token =
   args.find((arg) => arg.startsWith('--token='))?.split('=')[1] ||
@@ -50,6 +50,8 @@ const envFile =
 
 // Get project and org IDs
 const { projectId, orgId } = readVercelConfig();
+
+let isCustomEnvironment = false;
 
 //sync env method call.
 syncEnv().catch(console.error);
@@ -153,6 +155,7 @@ Batch upsert environment variables to the vercel api.
 @param {Object} envVars Environment Variables to push to vercel.
 */
 async function batchUpsertEnvs(envVars) {
+  await checkCustomeEnvironment();
   // Prepare batch array
   const batch = Object.entries(envVars)
     .filter(([key]) => !key.startsWith('VERCEL_'))
@@ -160,7 +163,7 @@ async function batchUpsertEnvs(envVars) {
       key,
       value,
       type: 'encrypted',
-      target: [envType],
+      [isCustomEnvironment ? 'customEnvironmentIds' : 'target']: [envType],
     }));
 
   if (batch.length === 0) {
@@ -244,8 +247,8 @@ function apiRequest(method, path, data = null) {
         try {
           resolve({ status: res.statusCode, data: JSON.parse(body) });
         } catch (e) {
-          resolve({ status: res.statusCode, data: body });
           console.error(e.message);
+          resolve({ status: res.statusCode, data: body });
         }
       });
     });
@@ -282,4 +285,24 @@ Examples:
 
 Note: This script requires a linked Vercel project. Run 'vercel link' first.
 `);
+}
+
+/**
+ * @function checkCustomeEnvironment
+ * @description
+ * This function checks if the environment provided via the cli flags is a
+ * custom environment
+ */
+async function checkCustomeEnvironment() {
+  if (!['production', 'development', 'preview'].includes(envType)) {
+    const { data } = await apiRequest(
+      'GET',
+      `/v9/projects/${projectId}/custom-environments/${envType}`,
+    );
+
+    if (data) {
+      envType = data.id;
+      isCustomEnvironment = true;
+    }
+  }
 }
