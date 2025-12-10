@@ -60,6 +60,10 @@ button {
       color: var(--color-font);
       font-weight: bold;
       border-radius: 3px;
+
+      * {
+        color: inherit;
+      }
     }
   }
 
@@ -82,5 +86,9 @@ button {
 
   &.active {
     color: var(--color-active);
+
+    * {
+      color: inherit;
+    }
   }
 }
