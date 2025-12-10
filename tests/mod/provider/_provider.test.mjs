@@ -1,5 +1,12 @@
 import 'dotenv/config';
 import '../../../mod/utils/processEnv.js';
+const mockSignFileFn = codi.mock.fn();
+const mockSignFile = codi.mock.module('../../../mod/sign/file.js', {
+  defaultExport: mockSignFileFn,
+  namedExports: {
+    file_signer: mockSignFileFn,
+  },
+});
 
 const mockedFile = codi.mock.module('../../../mod/provider/file.js', {
   defaultExport: (ref) => {
@@ -122,5 +129,5 @@ await codi.describe({ name: 'Provider:', id: 'provider' }, async () => {
 mockedFile.restore();
 mockedCloudfront.restore();
 mockeds3.restore();
-
+mockSignFile.restore();
 codi.mock.reset();

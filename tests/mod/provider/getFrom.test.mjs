@@ -1,6 +1,14 @@
 const mockAgent = new codi.mockHttp.MockAgent();
 codi.mockHttp.setGlobalDispatcher(mockAgent);
 
+const mockSignFileFn = codi.mock.fn();
+const mockSignFile = codi.mock.module('../../../mod/sign/file.js', {
+  defaultExport: mockSignFileFn,
+  namedExports: {
+    file_signer: mockSignFileFn,
+  },
+});
+
 const { default: file } = await import('../../../mod/provider/file.js');
 
 const mockFileFn = codi.mock.fn(file);
@@ -86,5 +94,6 @@ await codi.describe(
   },
 );
 
+mockSignFile.restore();
 mockFile.restore();
 mockCloudFront.restore();

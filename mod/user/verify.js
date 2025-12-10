@@ -15,11 +15,11 @@ Exports the [user] verify method for the /api/user/verify route.
 import languageTemplates from '../utils/languageTemplates.js';
 import mailer from '../utils/resend.js';
 import acl from './acl.js';
-
 import login from './login.js';
 
 /**
 @function verify
+@async
 
 @description
 Attemps to find a user record with matching params.key verificationtoken.
@@ -30,17 +30,22 @@ The verification token can only be used once and will be nulled in the ACL.
 
 An email will be sent to all admin accounts requesting approval of the newly verified user account.
 
-@param {Object} req HTTP request.
-@param {Object} res HTTP response.
-@param {Object} req.params 
-Request parameter.
-@param {string} req.params.key 
-Verification key
-@param {string} req.params.language
-Request messaging language
-*/
+The adminList parameter can be used to limit the administrators to be contacted for user approval.
 
-export default async (req, res) => {
+eg. `adminList=dennis@geolytix.co.uk`
+
+Request parameter will be parsed as an array if defined with brackets.
+
+eg. `adminList=[dennis@geolytix.co.uk,robert@geolytix.co.uk]`
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {Object} req.params Request parameter.
+@property {string} params.key Verification key.
+@property {string} params.language Request messaging language.
+@property {array|string} params.adminList Request paramater string will be parsed as array if defined in [].
+*/
+export default async function verify(req, res) {
   // acl module will export an empty require object without the ACL being configured.
   if (acl === null) {
     return res.status(500).send('ACL unavailable.');
@@ -111,6 +116,12 @@ export default async (req, res) => {
     return res.status(500).send('Failed to access ACL.');
   }
 
+  //Filter out admins not in the list
+  if (req.params.adminList)
+    rows = rows.filter((adminAcc) =>
+      req.params.adminList.includes(adminAcc.email),
+    );
+
   // One or more administrator have been
   if (rows.length > 0) {
     res.send(
@@ -144,4 +155,4 @@ export default async (req, res) => {
       }),
     );
   }
-};
+}

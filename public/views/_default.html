@@ -14,6 +14,28 @@
       content="width=device-width, initial-scale=1.0, maximum-scale=1.0"
     >
 
+    <link
+      rel="preload"
+      href="{{dir}}/public/css/material-icons-outlined.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    >
+    <link
+      rel="preload"
+      href="{{dir}}/public/css/titillium-web-v19-latin_latin-ext-regular.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    >
+    <link
+      rel="preload"
+      href="{{dir}}/public/css/titillium-web-v19-latin_latin-ext-italic.woff2"
+      as="font"
+      type="font/woff2"
+      crossorigin
+    >
+
     <script
       src="https://cdn.jsdelivr.net/npm/ol@v10.6.1/dist/ol.js"
       integrity="sha384-R02sHnzL8yl/uvLZvMsfgBOMBIOOHLpuLNo4dLuWQWFun1sxEWJej+SPwiGxaeGd"
@@ -75,51 +97,6 @@
         cursor: row-resize;
       }
     }
-
-    #ctrls {
-      isolation: isolate;
-    }
-
-    #ctrl-tabs {
-      padding: 0.5em;
-      width: 100%;
-      display: flex;
-    }
-
-    #ctrl-tabs>div {
-      flex-grow: 1;
-      font-size: 2em;
-
-      &[data-id='layers']:after {
-        content: 'layers';
-      }
-
-      &[data-id='locations'] {
-        &:after {
-          content: 'search';
-        }
-
-        &.active:after {
-          content: 'location_on';
-        }
-      }
-
-    }
-
-    #ctrl-panel {
-      flex-grow: 1;
-      overflow-y: auto;
-    }
-
-    #ctrl-panel>div {
-      display: none;
-      padding: 10px;
-    }
-
-    #ctrl-panel>div.active {
-      display: block;
-    }
-
 
     @media only screen and (min-width: 768px) {
       body {
@@ -217,23 +194,7 @@
 
     <div id="ctrls-divider" class="mobile-display-none"></div>
 
-    <div id="ctrls">
-      <div id="ctrl-tabs" class="hover">
-        <div
-          data-id="layers"
-          class="active notranslate material-symbols-outlined"
-        ></div>
-        <div
-          data-id="locations"
-          class="notranslate material-symbols-outlined"
-        ></div>
-      </div>
-
-      <div id="ctrl-panel">
-        <div id="layers" class="active"></div>
-        <div id="locations"></div>
-      </div>
-    </div>
+    <div id="ctrls"></div>
 
     <script type="module">
     console.log(`MAPP v${mapp.version}`);
@@ -289,65 +250,13 @@
     // ResizeHandler for #CTRLS
     mapp.ui.utils.resizeHandler({
       target: document.getElementById('ctrls-divider'),
-      resizeEvent: (e) => {
-        let pageX = (e.touches && e.touches[0].pageX) || e.pageX;
-
-        if (pageX < 350) return;
-
-        // Half width snap.
-        if (pageX > window.innerWidth / 2) pageX = window.innerWidth / 2;
-
-        document.body.style.gridTemplateColumns = `${pageX}px 10px auto`;
-      },
+      doubleClickClose: true,
     });
 
     // ResizeHandler for tabview
     mapp.ui.utils.resizeHandler({
       target: document.getElementById('tabview-divider'),
-      resizeEvent: (e) => {
-        let pageY = (e.touches && e.touches[0].pageY) || e.pageY;
-
-        if (pageY < 0) return;
-
-        let height = window.innerHeight - pageY;
-
-        // Min height snap.
-        if (height < 65) height = 50;
-
-        // Full height snap.
-        if (height > window.innerHeight - 10) height = window.innerHeight;
-
-        document.body.style.gridTemplateRows = `auto 10px ${height}px`;
-
-        OL.style.marginTop = `-${height / 2}px`;
-      },
-    });
-
-    const locationsTab = document.getElementById('locations');
-    const layersTab = document.getElementById('layers');
-
-    const tabs = document.querySelectorAll('#ctrl-tabs > div');
-    const tabPanels = document.querySelectorAll('#ctrl-panel > div');
-
-    tabs.forEach((tab) => {
-      // Set help text from dictionary.
-      tab.title = mapp.dictionary[tab.dataset.id];
-
-      tab.onclick = (e) => {
-        // Change active class for the tab.
-        tabs.forEach((el) => el.classList.remove('active'));
-        e.target.classList.add('active');
-
-        // Change active class for the panel.
-        tabPanels.forEach((el) => el.classList.remove('active'));
-        document.getElementById(e.target.dataset.id).classList.add('active');
-
-        // Put focus on the gazetteer if the locations tab is activated.
-        if (e.target.dataset.id === 'locations') {
-          let gazetteerInput = document.getElementById('gazetteerInput');
-          gazetteerInput && window.innerWidth > 768 && gazetteerInput.focus();
-        }
-      };
+      axis: 'Y'
     });
 
     const tabview = document.getElementById('Tabview');
@@ -375,7 +284,7 @@
       `${mapp.host}/api/workspace/locales`,
     );
 
-    // Assign locale from current [URL parameter] or as first key from locales array.
+      // Assign locale from current [URL parameter] or as first key from locales array.
     let locale = mapp.hooks.current.locale || locales[0]?.key
 
     // Use 'locale' as default if undefined.
@@ -428,6 +337,8 @@
       locales = [...locales, ...nestedLocales]
     }
 
+    const layersPanel = mapp.utils.html.node`<div id="layers" class="active">`
+
     // Add locale dropdown to layers panel if multiple locales are accessible.
     if (locales.length > 1) {
       const localesDropdown = mapp.ui.elements.dropdown({
@@ -442,7 +353,7 @@
         },
       });
 
-      layersTab.appendChild(localesDropdown);
+      layersPanel.appendChild(localesDropdown);
     }
 
     if (!window.ol) await mapp.utils.olScript();
@@ -450,6 +361,11 @@
     locale.syncPlugins ??= ['zoomBtn', 'admin', 'login'];
 
     mapp.hooks.set({locale:locale.key});
+
+    //Create tabs and panels for controls.
+    const controlPanel = mapp.ui.elements.control({
+      target: document.getElementById('ctrls')
+    })
 
     // Create mapview
     const mapview = await mapp.Mapview({
@@ -459,6 +375,7 @@
       hooks: true,
       scrollWheelZoom: true,
       loadPlugins: true,
+      controlPanel,
       mapButton: document.getElementById('mapButton'),
       attribution: {
         target: document.getElementById('Map'),
@@ -489,27 +406,45 @@
     // Add layers to mapview.
     await mapview.addLayer(locale.layers);
 
-    if (mapview.locale.gazetteer) {
-      mapp.ui.Gazetteer(
-        Object.assign(mapview.locale.gazetteer, {
-          mapview,
-          target: locationsTab.appendChild(mapp.utils.html.node`<div>`),
-        }),
-      );
-    } else {
-      document.querySelector('[data-id=locations]').style.display = 'none';
-    }
+    controlPanel.add({
+      key: 'layers',
+      panel: layersPanel
+    })
 
-    // Create layers listview.
     mapp.ui.layers.listview({
-      target: layersTab,
+      target: layersPanel,
       layers: mapview.layers,
     });
 
-    // Create locations listview.
+    if (mapview.locale.gazetteer) {
+      const gazPanel =  mapp.utils.html.node`<div id="gazetteer">`;
+
+      controlPanel.add({
+        key: 'gazetteer',
+        icon: 'search',
+        panel: gazPanel,
+        focus: 'gazetteer-search-input'
+      })
+
+      mapp.ui.Gazetteer(
+        Object.assign(mapview.locale.gazetteer, {
+          mapview,
+          target: gazPanel,
+        }),
+      );
+    }
+
+    const locationsPanel = mapp.utils.html.node`<div id="locations">`
+
+    controlPanel.add({
+      key: 'locations',
+      icon: 'location_on',
+      panel: locationsPanel
+    })
+
     mapp.ui.locations.listview({
-      target: locationsTab,
-      mapview: mapview,
+      target: locationsPanel,
+      mapview,
     });
 
     // Begin highlight interaction.

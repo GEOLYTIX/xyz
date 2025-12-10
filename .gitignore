@@ -15,6 +15,7 @@ yarn.lock
 node_modules/*
 .pnpm-store/
 
+resources
 public/js/*
 public/workspaces/*
 public/js/plugins/*
@@ -25,6 +26,7 @@ docs/*
 *.pem
 *.crt
 /*.json
+/*.jsonc
 !tests/*.json
 !tests/**
 !package.json
