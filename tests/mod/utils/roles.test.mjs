@@ -6,25 +6,25 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
     () => {
       codi.it(
         {
-          name: 'should return the object if it has no roles',
+          name: 'should return true if object has no roles',
           parentId: 'roles_module_check',
         },
         () => {
           const obj = { layer: 'I am a layer!' };
           const result = check(obj, ['user']);
-          codi.assertEqual(result, obj);
+          codi.assertTrue(result);
         },
       );
 
       codi.it(
         {
-          name: 'should return the object if it has the * role',
+          name: 'should return true if object has the * role',
           parentId: 'roles_module_check',
         },
         () => {
           const obj = { layer: 'I am a layer!', roles: { '*': true } };
           const result = check(obj, ['user']);
-          codi.assertEqual(result, obj);
+          codi.assertTrue(result);
         },
       );
 
@@ -36,7 +36,7 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
         () => {
           const obj = { roles: { admin: true } };
           const result = check(obj, undefined);
-          codi.assertEqual(result, false);
+          codi.assertFalse(result);
         },
       );
 
@@ -48,31 +48,31 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
         () => {
           const obj = { roles: { '!guest': true } };
           const result = check(obj, ['guest']);
-          codi.assertEqual(result, false);
+          codi.assertFalse(result);
         },
       );
 
       codi.it(
         {
-          name: 'should return the object if all roles are negated and none match user_roles',
+          name: 'should return true if all roles are negated and none match user_roles',
           parentId: 'roles_module_check',
         },
         () => {
           const obj = { roles: { '!admin': true, '!user': true } };
           const result = check(obj, ['guest', 'users']);
-          codi.assertEqual(result, obj);
+          codi.assertTrue(result);
         },
       );
 
       codi.it(
         {
-          name: 'should return the object if a positive role is included in user_roles',
+          name: 'should return true if a positive role is included in user_roles',
           parentId: 'roles_module_check',
         },
         () => {
           const obj = { roles: { admin: true, user: true } };
           const result = check(obj, ['admin']);
-          codi.assertEqual(result, obj);
+          codi.assertTrue(result);
         },
       );
 
@@ -84,19 +84,19 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
         () => {
           const obj = { roles: { admin: true, user: true } };
           const result = check(obj, ['guest']);
-          codi.assertEqual(result, false);
+          codi.assertFalse(result);
         },
       );
 
       codi.it(
         {
-          name: 'should handle dot notation roles',
+          name: 'should return true if final dot notation role is provided',
           parentId: 'roles_module_check',
         },
         () => {
           const obj = { roles: { 'namespace.admin': true } };
           const result = check(obj, ['admin']);
-          codi.assertEqual(result, obj);
+          codi.assertTrue(result);
         },
       );
 
@@ -108,7 +108,7 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
         () => {
           const obj = { roles: { admin: true } };
           const result = check(obj, null);
-          codi.assertEqual(result, false);
+          codi.assertFalse(result);
         },
       );
 
@@ -120,7 +120,7 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
         () => {
           const obj = { roles: { admin: true, '!guest': true } };
           const result = check(obj, ['guest']);
-          codi.assertEqual(result, false);
+          codi.assertFalse(result);
         },
       );
 
@@ -132,7 +132,7 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
         () => {
           const obj = { roles: {} };
           const result = check(obj, ['user']);
-          codi.assertEqual(result, obj);
+          codi.assertTrue(result);
         },
       );
     },

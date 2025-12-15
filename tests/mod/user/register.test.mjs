@@ -10,8 +10,8 @@ console.warn = (log) => {
 };
 
 const mockMailerFn = codi.mock.fn();
-const mockMailer = codi.mock.module('../../../mod/utils/mailer.js', {
-  defaultExport: mockMailerFn,
+const mockMailer = codi.mock.module('../../../mod/utils/resend.js', {
+  defaultExport: { send: mockMailerFn },
 });
 
 await codi.describe(

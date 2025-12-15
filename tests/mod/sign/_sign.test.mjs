@@ -13,6 +13,11 @@ const mocks3 = codi.mock.module('../../../mod/sign/s3.js', {
   defaultExport: mocks3Fn,
 });
 
+const mockFileFn = codi.mock.fn();
+const mockFile = codi.mock.module('../../../mod/sign/file.js', {
+  defaultExport: mockFileFn,
+});
+
 await codi.describe({ name: 'Sign: ', id: 'sign' }, async () => {
   const { default: signer } = await import('../../../mod/sign/_sign.js');
   await codi.it({ name: 'Invalid signer', parentId: 'sign' }, async () => {
@@ -48,12 +53,13 @@ await codi.describe({ name: 'Sign: ', id: 'sign' }, async () => {
   await codi.describe(
     { name: 'signers: ', id: 'sign_signers', parentId: 'sign' },
     () => {
-      const signers = ['s3', 'cloudfront', 'cloudinary'];
+      const signers = ['s3', 'cloudfront', 'cloudinary', 'file'];
 
       const mockFns = {
         s3: mocks3Fn,
         cloudinary: mockCloudinaryFn,
         cloudfront: mockCloudFrontFn,
+        file: mockFileFn,
       };
 
       signers.forEach(async (sign) => {
@@ -87,3 +93,4 @@ await codi.describe({ name: 'Sign: ', id: 'sign' }, async () => {
 mockCloudFront.restore();
 mockCloudinary.restore();
 mocks3.restore();
+mockFile.restore();
