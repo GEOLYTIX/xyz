@@ -22,6 +22,8 @@ import logger from './utils/logger.js';
 @description
 The View API method will request a view [template] from the languageTemplates module method.
 
+Only string values with whitelisted characters can be substituted in view templates.
+
 The optional params.msg string property may have a languageTemplate which should be assigned to the params string before the substitution of template variables.
 
 The view [template] is a HTML string. Template variables defined within a set of brackets `{{var}}` will be substituted with params property values before the view string is sent from the HTTP Response object.
@@ -36,10 +38,13 @@ The view [template] is a HTML string. Template variables defined within a set of
 export default async function view(req, res) {
   logger(req.url, 'view-req-url');
 
+  // Property values in the params object will be substituted in the view template.
   const params = {};
 
   Object.keys(req.params)
     .filter((key) => typeof req.params[key] === 'string')
+    // filter out params properties containing characters which are not whitelisted.
+    .filter((key) => /^[A-Za-z0-9_-]*$/.exec(req.params[key]))
     .forEach((key) => (params[key] = req.params[key]));
 
   // The default_view is assumed without an implicit template value.
