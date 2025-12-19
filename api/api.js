@@ -125,10 +125,8 @@ export default function api(req, res) {
       `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`,
     );
 
-    const msg = req.params.msg ? `?msg=${req.params.msg}` : '';
-
     // Set location to the domain path.
-    res.setHeader('location', `${xyzEnv.DIR || '/'}${msg}`);
+    res.setHeader('location', `${xyzEnv.DIR || '/'}`);
 
     return res.status(302).send();
   }
