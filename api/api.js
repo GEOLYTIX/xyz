@@ -102,8 +102,6 @@ export default function api(req, res) {
     return res.status(302).send();
   }
 
-  logger(req, 'req');
-
   logger(req.url, 'req_url');
 
   // SAML request.
@@ -121,10 +119,6 @@ export default function api(req, res) {
   }
 
   if (req.params.logout) {
-    if (xyzEnv.SAML_SLO) {
-      res.setHeader('location', `${xyzEnv.DIR}/saml/logout`);
-      return res.status(302).send();
-    }
     // Remove cookie.
     res.setHeader(
       'Set-Cookie',

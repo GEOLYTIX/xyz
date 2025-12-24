@@ -12,8 +12,8 @@ const aclMock = codi.mock.module('../../../mod/user/acl.js', {
 
 const mailerMockFn = codi.mock.fn();
 
-const mailerMock = codi.mock.module('../../../mod/utils/mailer.js', {
-  defaultExport: mailerMockFn,
+const mailerMock = codi.mock.module('../../../mod/utils/resend.js', {
+  defaultExport: { send: mailerMockFn },
 });
 
 await codi.describe(params, async () => {

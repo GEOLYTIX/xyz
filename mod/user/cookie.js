@@ -122,6 +122,10 @@ export default async function cookie(req, res) {
         user.sessionIndex = decodedCookie.sessionIndex;
       }
 
+      if (decodedCookie.nameID) {
+        user.nameID = decodedCookie.nameID;
+      }
+
       const token = jwt.sign(user, xyzEnv.SECRET, {
         expiresIn: xyzEnv.COOKIE_TTL,
         algorithm: xyzEnv.SECRET_ALGORITHM,

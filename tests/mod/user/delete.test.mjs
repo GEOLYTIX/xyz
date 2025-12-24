@@ -4,8 +4,8 @@ const mockACL = codi.mock.module('../../../mod/user/acl.js', {
 });
 
 const mailerfn = codi.mock.fn();
-const mockMailer = codi.mock.module('../../../mod/utils/mailer.js', {
-  defaultExport: mailerfn,
+const mockMailer = codi.mock.module('../../../mod/utils/resend.js', {
+  defaultExport: { send: mailerfn },
 });
 
 const originalLog = console.log;

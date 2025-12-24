@@ -9,7 +9,7 @@ Exports the [user] update method for the /api/user/cookie route.
 @module /user/update
 */
 
-import mailer from '../utils/mailer.js';
+import mailer from '../utils/resend.js';
 import acl from './acl.js';
 
 /**
@@ -27,19 +27,19 @@ The update_user keys must be validated to contain white listed characters only t
 @param {req} req HTTP request.
 @param {req} res HTTP response.
 
-@property {Object} [req.body] 
+@property {Object} [req.body]
 HTTP Post request body containing the update information.
-@property {Object} req.params 
+@property {Object} req.params
 HTTP request parameter.
-@property {string} params.email 
+@property {string} params.email
 User to update
-@property {string} params.field 
+@property {string} params.field
 User record field to update
-@property {string} params.value 
+@property {string} params.value
 Update value for user record field.
-@property {Object} params.user 
+@property {Object} params.user
 Requesting user.
-@property {boolean} user.admin 
+@property {boolean} user.admin
 Requesting user is admin.
 */
 export default async function update(req, res) {
@@ -118,7 +118,7 @@ export default async function update(req, res) {
 
   const update_query = `
     UPDATE acl_schema.acl_table
-    SET 
+    SET
       ${password_reset}
       ${properties.join(',')}
     WHERE lower(email) = lower($1);`;
@@ -138,7 +138,7 @@ export default async function update(req, res) {
       to: update_user.email,
     };
 
-    await mailer(approval_mail);
+    await mailer.send(approval_mail);
   }
 
   return res.send('Update success');

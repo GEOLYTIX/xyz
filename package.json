@@ -1,6 +1,6 @@
 {
   "name": "xyz",
-  "version": "v4.20.0",
+  "version": "v4.21.0",
   "type": "module",
   "repository": {
     "type": "git",
@@ -14,7 +14,7 @@
     "test": "node --experimental-test-module-mocks node_modules/codi-test-framework/cli.js tests",
     "test-watch": "node --watch-path=. --experimental-test-module-mocks node_modules/codi-test-framework/cli.js tests --quiet",
     "_build": "node esbuild.config.mjs",
-    "ui_css": "pnpm exec esbuild --bundle public/css/_ui.css --outfile=public/css/ui.css",
+    "ui_css": "pnpm exec esbuild --bundle public/css/_ui.css --outfile=public/css/ui.css --external:*.woff2",
     "mapp_css": "pnpm exec esbuild --bundle public/css/_mapp.css --outfile=public/css/mapp.css",
     "generate-docs": "jsdoc --configure ./utils/jsdoc_mapp.json --verbose && jsdoc --configure ./utils/jsdoc_xyz.json --verbose && jsdoc --configure ./utils/jsdoc_test.json --verbose",
     "mapp-docs": "jsdoc --configure ./utils/jsdoc_mapp.json --verbose",
@@ -28,11 +28,11 @@
     "@aws-sdk/cloudfront-signer": "^3.621.0",
     "@aws-sdk/s3-request-presigner": "^3.691.0",
     "@node-saml/node-saml": "^5.0.1",
-    "nodemailer": "^7.0.9"
+    "resend": "^6.4.2"
   },
   "dependencies": {
-    "dotenv": "^17.2.2",
     "bcrypt": "^6.0.0",
+    "dotenv": "^17.2.2",
     "jsonwebtoken": "^9.0.2",
     "pg": "~8.15.1"
   },
