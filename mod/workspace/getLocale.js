@@ -80,6 +80,9 @@ export default async function getLocale(params, parentLocale) {
     locale = await getTemplate(localeKey);
   }
 
+  // This is to prevent that locale in the workspace is modified.
+  locale = structuredClone(locale);
+
   if (locale instanceof Error) {
     return new Error(locale.message);
   }

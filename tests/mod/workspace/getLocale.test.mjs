@@ -22,7 +22,7 @@ await codi.describe(
 
     await codi.it(
       {
-        name: 'locale with templates that has roles',
+        name: 'access restricted locale',
         parentId: 'workspace_getLocale',
       },
       async () => {
@@ -70,27 +70,15 @@ await codi.describe(
           europe: {},
         };
 
-        await getLocale(params);
+        let locale = await getLocale(params);
+
+        codi.assertTrue(Object.hasOwn(locale.layers, 'brand_b_layer'));
 
         params.locale = 'brand_c_locale';
 
-        await getLocale(params);
+        locale = await getLocale(params);
 
-        const { req, res } = codi.mockHttp.createMocks({
-          params: {
-            key: 'roles',
-            tree: true,
-            user: {
-              admin: true,
-            },
-          },
-        });
-
-        await getKeyMethod(req, res);
-
-        const roles = res._getData();
-
-        codi.assertEqual(roles, expectedRoles);
+        codi.assertTrue(Object.hasOwn(locale.layers, 'brand_c_layer'));
       },
     );
   },
