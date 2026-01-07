@@ -19,7 +19,7 @@
       padding: 5px;
       color: var(--color-font);
       margin: 0 0.1em;
-      border-radius: 2px;
+      border-radius: var(--container-border-radius);
     }
 
     & > li:hover {
@@ -36,7 +36,7 @@
     & .label {
       padding: 0 2px;
       margin-right: 2px;
-      border-radius: 2px;
+      border-radius: var(--container-border-radius);
       color: var(--color-font-contrast);
       font-size: 80%;
       font-weight: bold;

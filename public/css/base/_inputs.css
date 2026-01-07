@@ -32,7 +32,7 @@ textarea {
   border: 1px solid var(--color-border);
   background-color: var(--color-base);
   color: var(--color-font);
-  border-radius: 3px;
+  border-radius: var(--container-border-radius);
 
   &:focus {
     outline: none;
@@ -63,7 +63,7 @@ input[type='datetime-local'] {
   border: 1px solid var(--color-border);
   color: var(--color-font);
   padding: 5px;
-  border-radius: 3px;
+  border-radius: var(--container-border-radius);
 
   &:focus {
     cursor: text;
@@ -75,7 +75,7 @@ input[type='email'],
 input[type='password'],
 input[type='number'] {
   padding: 5px;
-  border-radius: 3px;
+  border-radius: var(--container-border-radius);
   background-color: var(--color-base);
   color: var(--color-font);
   border: 1px solid var(--color-border);

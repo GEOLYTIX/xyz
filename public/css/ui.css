@@ -14,8 +14,7 @@
   --color-changed: #ffffa7;
   --color-info: #0b6f50;
   --color-danger: #a21309;
-  --layer-group-box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
-  --layer-box-shadow: rgba(17, 17, 26, 0.1) 0px 1px 0px;
+  --container-box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
   --container-border-radius: 3px;
 }
 * {
@@ -292,7 +291,7 @@ textarea {
   border: 1px solid var(--color-border);
   background-color: var(--color-base);
   color: var(--color-font);
-  border-radius: 3px;
+  border-radius: var(--container-border-radius);
   &:focus {
     outline: none;
   }
@@ -318,7 +317,7 @@ input[type=datetime-local] {
   border: 1px solid var(--color-border);
   color: var(--color-font);
   padding: 5px;
-  border-radius: 3px;
+  border-radius: var(--container-border-radius);
   &:focus {
     cursor: text;
   }
@@ -328,7 +327,7 @@ input[type=email],
 input[type=password],
 input[type=number] {
   padding: 5px;
-  border-radius: 3px;
+  border-radius: var(--container-border-radius);
   background-color: var(--color-base);
   color: var(--color-font);
   border: 1px solid var(--color-border);
@@ -672,7 +671,7 @@ dialog {
   &.dialog {
     position: absolute;
     border: none;
-    border-radius: 2px;
+    border-radius: var(--container-border-radius);
     cursor: grab;
     user-select: none;
     padding: 5px;
@@ -688,7 +687,7 @@ dialog {
   &.modal {
     position: fixed;
     border: none;
-    border-radius: 2px;
+    border-radius: var(--container-border-radius);
     text-wrap: wrap;
     top: 50%;
     left: 50%;
@@ -736,24 +735,26 @@ dialog {
 }
 .drawer {
   padding: 2px;
-  background-color: var(--color-base-secondary);
-  color: var(--color-font);
   margin-top: 2px;
   border-radius: var(--container-border-radius);
   border: 1px solid var(--color-border);
-  &.expandable:not(.empty) > .header:hover {
-    cursor: pointer;
-  }
-  &.expandable.empty > .header > .caret {
-    display: none;
-  }
-  &.expandable > .header > .material-symbols-outlined.caret::after {
-    content: "keyboard_arrow_down";
-    color: var(--color-font-mid);
-    line-height: 1.5em;
-  }
-  &.expandable:not(.expanded) > *:not(.header) {
-    display: none !important;
+  background-color: var(--color-base-secondary);
+  color: var(--color-font);
+  &.expandable {
+    &:not(.empty) > .header:hover {
+      cursor: pointer;
+    }
+    &.empty > .header > .caret {
+      display: none;
+    }
+    & > .header > .material-symbols-outlined.caret::after {
+      content: "keyboard_arrow_down";
+      color: var(--color-font-mid);
+      line-height: 1.5em;
+    }
+    &:not(.expanded) > *:not(.header) {
+      display: none !important;
+    }
   }
   &.expanded {
     padding-bottom: 5px;
@@ -775,11 +776,6 @@ dialog {
     display: flex;
     align-items: center;
     color: var(--color-font);
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
     .material-symbols-outlined {
       font-size: 1.5em;
     }
@@ -812,7 +808,7 @@ dialog {
   background-color: var(--color-base-secondary);
   border: 1px solid var(--color-border);
   padding: 5px;
-  border-radius: 3px;
+  border-radius: var(--container-border-radius);
   option.selected {
     background-color: var(--color-primary);
     color: var(--color-font-contrast);
@@ -842,29 +838,39 @@ dialog {
   pointer-events: none;
 }
 .layer {
-  padding: 2px;
+  margin-top: 5px;
+  padding: 2px 4px;
+  border-radius: var(--container-border-radius);
   border: solid 1px var(--color-border);
   color: var(--color-font);
-  &.expandable:not(.empty) > .header {
-    &:hover {
-      cursor: pointer;
+  &.expandable {
+    &:not(.empty) > .header {
+      &:hover {
+        cursor: pointer;
+      }
+    }
+    &.empty > .header > .caret {
+      display: none;
+    }
+    & > .header > .material-symbols-outlined.caret::after {
+      content: "keyboard_arrow_down";
+      color: var(--color-font-mid);
+      line-height: 1.5em;
+    }
+    &:not(.expanded) > *:not(.header) {
+      display: none !important;
     }
   }
-  &.expandable.empty > .header > .caret {
-    display: none;
-  }
-  &.expandable > .header > .material-symbols-outlined.caret::after {
-    content: "keyboard_arrow_down";
-    color: var(--color-font-mid);
-    line-height: 1.5em;
-  }
-  &.expandable:not(.expanded) > *:not(.header) {
-    display: none !important;
-  }
-  &.expanded > .header > .material-symbols-outlined.caret::after {
-    content: "keyboard_arrow_up";
-    color: var(--color-font-mid);
-    line-height: 1.5em;
+  &.expanded {
+    padding-bottom: 5px;
+    & > .header {
+      border-bottom: solid 1px var(--color-border);
+      & > .material-symbols-outlined.caret::after {
+        content: "keyboard_arrow_up";
+        color: var(--color-font-mid);
+        line-height: 1.5em;
+      }
+    }
   }
   &.disabled {
     opacity: 0.4;
@@ -873,13 +879,14 @@ dialog {
   & > .header {
     display: flex;
     align-items: center;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
+    h2 {
+      font-weight: normal;
+    }
     .material-symbols-outlined {
       font-size: 1.5em;
+    }
+    .meta {
+      padding: 5px 0;
     }
     & > :not(button):not(label):not(input) {
       pointer-events: none;
@@ -896,10 +903,6 @@ dialog {
       text-overflow: ellipsis;
       flex-grow: 1;
     }
-  }
-  p {
-    padding-left: 0.3em;
-    padding-right: 0.3em;
   }
 }
 
@@ -990,7 +993,7 @@ form.login-form {
   button {
     margin: 10px 0;
     padding: 5px 8px;
-    border-radius: 3px;
+    border-radius: var(--container-border-radius);
     font-size: 120%;
     min-width: 5em;
     &:hover:enabled {
@@ -1082,7 +1085,7 @@ label.radio {
       padding: 5px;
       color: var(--color-font);
       margin: 0 0.1em;
-      border-radius: 2px;
+      border-radius: var(--container-border-radius);
     }
     & > li:hover {
       background-color: var(--color-hover);
@@ -1096,7 +1099,7 @@ label.radio {
     & .label {
       padding: 0 2px;
       margin-right: 2px;
-      border-radius: 2px;
+      border-radius: var(--container-border-radius);
       color: var(--color-font-contrast);
       font-size: 80%;
       font-weight: bold;
@@ -1124,7 +1127,7 @@ label.radio {
     input {
       min-width: 4em;
       border: 1px solid var(--color-border);
-      border-radius: 3px;
+      border-radius: var(--container-border-radius);
     }
   }
   & .minmax-row {
@@ -1458,31 +1461,9 @@ label.radio {
 }
 
 /* public/css/layout/_layerview.css */
-.layer-group,
-.layer-view {
-  margin-top: 5px;
-  border-radius: var(--container-border-radius);
-  & > .meta {
-    padding-bottom: 5px;
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-  }
-  &.expanded {
-    padding-bottom: 5px;
-    & > .header {
-      border-bottom: solid 1px var(--color-border);
-    }
-  }
-}
 .layer-group {
-  padding-left: 4px;
-  padding-right: 4px;
   background: var(--color-base-secondary);
-  box-shadow: var(--layer-group-box-shadow);
-  color: var(--color-font-primary);
+  box-shadow: var(--container-box-shadow);
   border: none;
   > .header {
     h2 {
@@ -1491,19 +1472,9 @@ label.radio {
   }
 }
 .layer-view {
-  padding-left: 4px;
-  padding-right: 4px;
   background: var(--color-base-layout);
   & > *:not(.header) {
     margin-top: 5px;
-  }
-  > .header {
-    .material-symbols-outlined {
-      font-size: 1.5em;
-    }
-    h2 {
-      font-weight: normal;
-    }
   }
 }
 

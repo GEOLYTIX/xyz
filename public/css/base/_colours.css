@@ -25,13 +25,14 @@
   --color-info: #0b6f50;
   --color-danger: #a21309;
 
-  /* Box shadows for layer lists */
-  --layer-group-box-shadow:
+  /* end default colour palette */
+
+  /* Global Layout Properties */
+  --container-box-shadow:
     rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px
     1px;
-  /* Common container border radius */
   --container-border-radius: 3px;
-  /* end default colour palette */
+  /* End of Global Layout Properties */
 }
 
 * {
