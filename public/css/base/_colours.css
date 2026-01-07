@@ -1,12 +1,13 @@
 :root {
   /* begin default colour palette */
-
   --color-primary: #003d57;
 
   /* Backgrounds */
   --color-base: #f2f2f2;
   --color-base-secondary: #f7f7f7;
   --color-base-tertiary: #fafafa;
+  /* background colour for static content readability */
+  --color-base-layout: #f0eee9;
 
   /* Border */
   --color-border: #dddddd;
@@ -23,6 +24,13 @@
 
   --color-info: #0b6f50;
   --color-danger: #a21309;
+
+  /* Box shadows for layer lists */
+  --layer-group-box-shadow:
+    rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px
+    1px;
+  /* Common container border radius */
+  --container-border-radius: 3px;
   /* end default colour palette */
 }
 

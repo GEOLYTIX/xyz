@@ -1,16 +1,7 @@
-.drawer.layer-group,
-.drawer.layer-view {
-  margin-top: 7px;
-  border-radius: 3px;
-
-  & > .header {
-    & ~ .drawer.layer-view {
-      margin-top: 0;
-    }
-    & ~ .drawer.layer-view ~ .drawer.layer-view {
-      margin-top: 7px;
-    }
-  }
+.layer-group,
+.layer-view {
+  margin-top: 5px;
+  border-radius: var(--container-border-radius);
 
   & > .meta {
     padding-bottom: 5px;
@@ -23,29 +14,32 @@
 
   &.expanded {
     padding-bottom: 5px;
+
+    & > .header {
+      border-bottom: solid 1px var(--color-border); /* readability */
+    }
   }
 }
 
-.drawer.layer-group {
-  padding-left: 3px;
-  padding-right: 3px;
-  background: var(--color-base-tertiary);
+.layer-group {
+  padding-left: 4px;
+  padding-right: 4px;
+  background: var(--color-base-secondary);
+  box-shadow: var(--layer-group-box-shadow);
+  color: var(--color-font-primary);
+  border: none;
 
-  & > * {
-    padding-left: 4px;
-  }
-
-  & > .drawer.layer-view {
-    background: var(--color-base-tertiary);
-    border: none;
-    box-shadow: none;
-    border-top: 1px solid var(--color-border);
+  > .header {
+    h2 {
+      color: var(--color-primary);
+    }
   }
 }
 
-.drawer.layer-view {
-  padding-left: 5px;
-  padding-right: 5px;
+.layer-view {
+  padding-left: 4px;
+  padding-right: 4px;
+  background: var(--color-base-layout);
 
   & > *:not(.header) {
     margin-top: 5px;

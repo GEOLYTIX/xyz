@@ -1,18 +1,17 @@
-.disabled > .drawer {
+.disabled > .layer {
   opacity: 0.4;
   pointer-events: none;
 }
 
-.drawer {
+.layer {
   padding: 2px;
-  background-color: var(--color-base-secondary);
+  border: solid 1px var(--color-border);
   color: var(--color-font);
-  margin-top: 2px;
-  border-radius: var(--container-border-radius);
-  border: 1px solid var(--color-border);
 
-  &.expandable:not(.empty) > .header:hover {
-    cursor: pointer;
+  &.expandable:not(.empty) > .header {
+    &:hover {
+      cursor: pointer;
+    }
   }
 
   &.expandable.empty > .header > .caret {
@@ -29,19 +28,10 @@
     display: none !important;
   }
 
-  &.expanded {
-    padding-bottom: 5px;
-
-    & > .header {
-      border-bottom: solid 1px var(--color-border); /* readability */
-      margin-bottom: 7px;
-
-      & > .material-symbols-outlined.caret::after {
-        content: 'keyboard_arrow_up';
-        color: var(--color-font-mid);
-        line-height: 1.5em;
-      }
-    }
+  &.expanded > .header > .material-symbols-outlined.caret::after {
+    content: 'keyboard_arrow_up';
+    color: var(--color-font-mid);
+    line-height: 1.5em;
   }
 
   &.disabled {
@@ -52,7 +42,6 @@
   & > .header {
     display: flex;
     align-items: center;
-    color: var(--color-font);
     -webkit-touch-callout: none;
     -webkit-user-select: none;
     -moz-user-select: none;
