@@ -1465,11 +1465,6 @@ label.radio {
   background: var(--color-base-secondary);
   box-shadow: var(--container-box-shadow);
   border: none;
-  > .header {
-    h2 {
-      color: var(--color-primary);
-    }
-  }
 }
 .layer-view {
   background: var(--color-base-layout);
