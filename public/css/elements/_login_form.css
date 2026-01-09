@@ -71,7 +71,7 @@ form.login-form {
   button {
     margin: 10px 0;
     padding: 5px 8px;
-    border-radius: 3px;
+    border-radius: var(--container-border-radius);
     font-size: 120%;
     min-width: 5em;
 
