@@ -205,7 +205,7 @@
           row.getElement().style.backgroundColor = user.blocked && '#ef9a9a'
         },
         columnHeaderVertAlign: 'middle',
-        rowHeight: 30,
+        resizableRows: true,
         columns: [
           {
             field: 'email',
@@ -308,9 +308,11 @@
             field: 'roles',
             title: 'Roles',
             vertAlign: 'middle',
+            formatter: 'textarea',
             headerTooltip: 'Account roles',
             headerSort: false,
             editor: 'list',
+            width: 400,
             editorParams: {
               values: rolesList,
               multiselect: true
