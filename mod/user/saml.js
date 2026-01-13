@@ -415,7 +415,13 @@ async function acs(req, res) {
 
     res.setHeader('Set-Cookie', cookie);
 
-    res.setHeader('location', `${xyzEnv.DIR || '/'}`);
+    const redirect = req.cookies?.[`${xyzEnv.TITLE}_redirect`];
+
+    // Decode the redirect URL since it's now encoded when stored
+    const location = redirect ? decodeURIComponent(redirect) : xyzEnv.DIR;
+
+    res.setHeader('location', location);
+
     return res.status(302).send();
   } catch (error) {
     console.log(error);
