@@ -341,6 +341,8 @@ async function login(req, res) {
     // Get return URL from query or default to base dir
     const relayState = (urlParams || xyzEnv.DIR) ?? '/';
 
+    console.log(relayState);
+
     // Get authorization URL from IdP
     const url = await samlStrat.getAuthorizeUrlAsync(
       relayState,
