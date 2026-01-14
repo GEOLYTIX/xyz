@@ -91,6 +91,7 @@ export default async function getLayer(params, locale) {
     layer.localeRole = locale.role;
   }
 
+  // The roles property maybe assigned from a template. Templates must be merged prior to the role check.
   layer = await mergeTemplates(layer, params.user?.roles);
 
   //If the user is an admin we don't need to check roles

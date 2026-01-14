@@ -18,7 +18,6 @@ await codi.describe(
         const params = {
           locale: 'locale',
           layer: 'OSM_Layer',
-          ignoreRoles: true,
           user: {
             email: 'test@test.com',
             admin: true,
@@ -50,7 +49,6 @@ await codi.describe(
         const params = {
           locale: 'europe',
           layer: 'Scratch',
-          ignoreRoles: true,
           user: {
             roles: ['europe', 'scratch_role', 'scratch_role_template'],
           },
@@ -61,7 +59,7 @@ await codi.describe(
         // scratch_role_template = template role on the layer
 
         const layer = await getLayer(params);
-        console.log(layer);
+
         // The layer key should be Scratch to ensure we got the correct layer
         codi.assertTrue(layer.key === 'Scratch');
         // The layer name should be SCRATCH ROLE TEMPLATE from the template with role
@@ -78,7 +76,6 @@ await codi.describe(
         const params = {
           locale: 'europe',
           layer: 'Scratch_no_role',
-          ignoreRoles: true,
           user: {
             roles: ['europe', 'scratch_role_template'],
           },
@@ -105,16 +102,13 @@ await codi.describe(
         const params = {
           locale: 'europe',
           layer: 'Scratch_no_role',
-          ignoreRoles: true,
           user: {
             roles: ['europe'],
           },
         };
         // User with 1 role
         // Europe = locale role
-
         const layer = await getLayer(params);
-        console.log(layer);
         // The layer key should be Scratch_no_role to ensure we got the correct layer
         codi.assertTrue(layer.key === 'Scratch_no_role');
         // The layer name should be SCRATCH NO ROLE TEMPLATE from the template without role
