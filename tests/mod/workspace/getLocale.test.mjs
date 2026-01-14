@@ -14,7 +14,8 @@ await codi.describe(
 
     globalThis.xyzEnv = {
       TITLE: 'WORKSPACE TEST',
-      WORKSPACE: 'file:./tests/assets/workspace_nested_locales_roles_props.json',
+      WORKSPACE:
+        'file:./tests/assets/workspace_nested_locales_roles_props.json',
     };
 
     //Calling the cache method with force to reload a new workspace
@@ -50,14 +51,14 @@ await codi.describe(
       },
     );
 
-         await codi.it(
+    await codi.it(
       {
         name: '1. locale with role, templates with roles',
         parentId: 'workspace_getLocale',
       },
       async () => {
         // Provide the user with 3 roles
-        // Europe = locale 
+        // Europe = locale
         // scratch_role = template for layer
         // brand_c = locale template
         const params = {
@@ -66,9 +67,9 @@ await codi.describe(
           },
           locale: 'europe',
         };
- 
+
         let locale = await getLocale(params);
-        
+
         codi.assertTrue(Object.hasOwn(locale.layers, 'Scratch'));
 
         params.locale = 'brand_c_locale';
@@ -76,11 +77,10 @@ await codi.describe(
         locale = await getLocale(params);
 
         codi.assertTrue(Object.hasOwn(locale.layers, 'brand_c_layer'));
-     
       },
     );
 
-            await codi.it(
+    await codi.it(
       {
         name: '2. locale without role, templates with roles',
         parentId: 'workspace_getLocale',
@@ -94,7 +94,7 @@ await codi.describe(
           },
           locale: 'uk',
         };
- 
+
         let locale = await getLocale(params);
 
         codi.assertTrue(locale.key === 'uk');
@@ -104,11 +104,10 @@ await codi.describe(
         locale = await getLocale(params);
 
         codi.assertTrue(Object.hasOwn(locale.layers, 'brand_c_layer'));
-     
       },
     );
 
-            await codi.it(
+    await codi.it(
       {
         name: '3. locale without role, templates without roles',
         parentId: 'workspace_getLocale',
@@ -120,7 +119,7 @@ await codi.describe(
           user: {},
           locale: 'uk',
         };
- 
+
         let locale = await getLocale(params);
 
         codi.assertTrue(locale.key === 'uk');
@@ -130,7 +129,6 @@ await codi.describe(
         locale = await getLocale(params);
 
         codi.assertTrue(Object.hasOwn(locale.layers, 'brand_a_layer'));
-     
       },
     );
   },

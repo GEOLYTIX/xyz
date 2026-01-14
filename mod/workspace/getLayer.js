@@ -93,7 +93,7 @@ export default async function getLayer(params, locale) {
 
   layer = await mergeTemplates(layer, params.user?.roles);
 
-    //If the user is an admin we don't need to check roles
+  //If the user is an admin we don't need to check roles
   if (!Roles.check(layer, params.user?.roles)) {
     return new Error('Role access denied.');
   }
