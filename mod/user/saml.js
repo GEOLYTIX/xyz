@@ -368,6 +368,7 @@ async function login(req, res) {
 @property {function} res.setHeader - Set response header
 **/
 async function acs(req, res) {
+  console.log(req.body);
   try {
     // Validate SAML response
     const samlResponse = await samlStrat.validatePostResponseAsync(req.body);
