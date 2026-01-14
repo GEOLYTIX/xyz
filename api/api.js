@@ -56,6 +56,8 @@ import logger from '../mod/utils/logger.js';
 import view from '../mod/view.js';
 import workspace from '../mod/workspace/_workspace.js';
 
+import { setRedirect } from '../mod/utils/redirect.js';
+
 // Group all routes
 const routes = {
   provider,
@@ -213,6 +215,9 @@ async function validateRequestAuth(req, res) {
   if (!req.params.user && xyzEnv.PRIVATE) {
     // Redirect to the SAML login.
     if (xyzEnv.SAML_LOGIN) {
+      // The redirect for a successful login.
+      setRedirect(req);
+
       res.setHeader('location', `${xyzEnv.DIR}/saml/login`);
       return res.status(302).send();
     }
