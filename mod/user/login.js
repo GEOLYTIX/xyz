@@ -12,11 +12,9 @@ Exports the login method for the /api/user/login route.
 */
 
 import jsonwebtoken from 'jsonwebtoken';
-
+import { setRedirect } from '../utils/redirect.js';
 import view from '../view.js';
 import fromACL from './fromACL.js';
-
-import { setRedirect } from '../utils/redirect.js';
 
 const { sign } = jsonwebtoken;
 

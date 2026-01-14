@@ -53,10 +53,9 @@ import login from '../mod/user/login.js';
 import register from '../mod/user/register.js';
 import saml from '../mod/user/saml.js';
 import logger from '../mod/utils/logger.js';
+import { setRedirect } from '../mod/utils/redirect.js';
 import view from '../mod/view.js';
 import workspace from '../mod/workspace/_workspace.js';
-
-import { setRedirect } from '../mod/utils/redirect.js';
 
 // Group all routes
 const routes = {
