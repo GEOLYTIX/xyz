@@ -372,9 +372,6 @@ async function acs(req, res) {
   try {
     // Validate SAML response
     const samlResponse = await samlStrat.validatePostResponseAsync(req.body);
-    const validRedirect = await samlStrat.validateRedirectAsync(samlResponse);
-
-    console.log(validRedirect);
 
     // Create user Object from SAML attributes
     const user = {
