@@ -215,7 +215,7 @@ async function validateRequestAuth(req, res) {
     // Redirect to the SAML login.
     if (xyzEnv.SAML_LOGIN) {
       // The redirect for a successful login.
-      setRedirect(req);
+      setRedirect(req, res);
 
       res.setHeader('location', `${xyzEnv.DIR}/saml/login`);
       return res.status(302).send();

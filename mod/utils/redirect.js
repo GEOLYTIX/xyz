@@ -1,4 +1,4 @@
-export function setRedirect(req) {
+export function setRedirect(req, res) {
   let redirectUrl =
     req.url && decodeURIComponent(req.url).replace(/login=true/, '');
 

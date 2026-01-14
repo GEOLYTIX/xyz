@@ -144,7 +144,7 @@ function loginView(req, res) {
     `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`,
   );
 
-  setRedirect(req);
+  setRedirect(req, res);
 
   req.params.template = 'login_view';
 
