@@ -338,7 +338,7 @@ async function logout(req, res) {
 async function login(req, res) {
   try {
     // Get return URL from query or default to base dir
-    const relayState = (req.url || xyzEnv.DIR) ?? '/';
+    const relayState = xyzEnv.DIR ?? '/';
 
     // Get authorization URL from IdP
     const url = await samlStrat.getAuthorizeUrlAsync(
