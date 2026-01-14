@@ -337,11 +337,9 @@ async function logout(req, res) {
 **/
 async function login(req, res) {
   const urlParams = new URLSearchParams(req.url.split('?')[1]);
-  console.log(urlParams);
-  console.log(urlParams.get('redirect'));
   try {
     // Get return URL from query or default to base dir
-    const relayState = (req.url || xyzEnv.DIR) ?? '/';
+    const relayState = (urlParams || xyzEnv.DIR) ?? '/';
 
     // Get authorization URL from IdP
     const url = await samlStrat.getAuthorizeUrlAsync(
@@ -421,7 +419,9 @@ async function acs(req, res) {
 
     res.setHeader('Set-Cookie', cookie);
 
-    const redirect = req.cookies?.[`${xyzEnv.TITLE}_redirect`];
+    // const redirect = req.cookies?.[`${xyzEnv.TITLE}_redirect`];
+
+    const redirect = req.body.RelayState;
 
     // Decode the redirect URL since it's now encoded when stored
     const location = redirect ? decodeURIComponent(redirect) : xyzEnv.DIR;
