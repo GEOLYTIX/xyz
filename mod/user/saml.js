@@ -372,7 +372,9 @@ async function acs(req, res) {
   try {
     // Validate SAML response
     const samlResponse = await samlStrat.validatePostResponseAsync(req.body);
-    const validRedirect = await samlStrat.validateRedirectAsync(req.body);
+    const validRedirect = await samlStrat.validateRedirectAsync(
+      req.body.RelayState,
+    );
 
     console.log(validRedirect);
 
