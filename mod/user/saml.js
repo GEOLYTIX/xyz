@@ -336,7 +336,7 @@ async function logout(req, res) {
 @param {Object} res - HTTP response object
 **/
 async function login(req, res) {
-  const urlParams = new URLSearchParams(req.url.split('?'));
+  const urlParams = new URLSearchParams(req.url.split('?')[1]);
   console.log(urlParams);
   console.log(urlParams.get('redirect'));
   try {
