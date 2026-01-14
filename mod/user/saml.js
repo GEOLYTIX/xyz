@@ -402,6 +402,8 @@ async function acs(req, res) {
       Object.assign(user, aclResponse);
     }
 
+    console.log(samlResponse);
+
     // Create JWT token and set cookie
     const token = jwt.sign(user, xyzEnv.SECRET, {
       expiresIn: xyzEnv.COOKIE_TTL,
