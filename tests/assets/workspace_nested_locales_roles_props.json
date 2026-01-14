@@ -55,6 +55,15 @@
           "strokeColor": "#090"
         }
       },
+      "templates": [
+        {
+          "name": "SCRATCH NO ROLE TEMPLATE"
+        },
+        {
+          "name": "SCRATCH ROLE TEMPLATE",
+          "role": "scratch_role_template"
+        }
+      ],
       "infoj": [
         {
           "type": "geometry",
@@ -80,6 +89,16 @@
     "layers": {
       "OSM": {
         "template": "OSM"
+      },
+      "OSM_Layer": {
+        "name": "OSM",
+        "template": "OSM",
+        "exclude_props": ["format", "attribution", "URI"]
+      },
+      "OSM_Duplicate": {
+        "name": "OSM Duplicate",
+        "template": "OSM",
+        "include_props": ["display", "attribution"]
       }
     }
   },
@@ -95,9 +114,10 @@
       "layers": {
         "Scratch": {
           "template": "scratch_geojson",
-          "roles": {
-            "scratch_role": {}
-          }
+          "role": "scratch_role"
+        },
+        "Scratch_no_role": {
+          "template": "scratch_geojson"
         }
       },
       "locales": ["UK_locale", "brand_b_locale", "brand_c_locale"]
