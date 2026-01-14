@@ -339,7 +339,7 @@ async function login(req, res) {
   const urlParams = new URLSearchParams(req.url.split('?')[1]);
   try {
     // Get return URL from query or default to base dir
-    const relayState = (urlParams || xyzEnv.DIR) ?? '/';
+    const relayState = (urlParams.get('redirect') || xyzEnv.DIR) ?? '/';
 
     console.log(relayState);
 
