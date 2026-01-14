@@ -337,7 +337,7 @@ async function logout(req, res) {
 **/
 async function login(req, res) {
   const urlParams = new URLSearchParams(req.url);
-  console.log(urlParams);
+  console.log(urlParams.get('redirect'));
   try {
     // Get return URL from query or default to base dir
     const relayState = (req.url || xyzEnv.DIR) ?? '/';
