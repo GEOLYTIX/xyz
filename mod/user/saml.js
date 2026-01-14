@@ -426,6 +426,8 @@ async function acs(req, res) {
     // Decode the redirect URL since it's now encoded when stored
     const location = redirect ? decodeURIComponent(redirect) : xyzEnv.DIR;
 
+    console.log(location);
+
     res.setHeader('location', location);
 
     return res.status(302).send();
