@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head data-user="{{user}}" data-dir="{{dir}}">
+  <head data-dir="{{dir}}">
     <title>XYZ | User Administration</title>
     <link
       rel="icon"
@@ -147,11 +147,6 @@
   <script>
   window.onload = async () => {
 
-    if (!document.head.dataset.user) {
-      window.location.href = '?login=true'
-      return;
-    }
-
     // Get list of available roles from workspace.
     const rolesList = await xhrPromise(`${document.head.dataset.dir}/api/workspace/roles`)
 
@@ -201,7 +196,7 @@
           row.getElement().style.backgroundColor = user.blocked && '#ef9a9a'
         },
         columnHeaderVertAlign: 'middle',
-        rowHeight: 30,
+        resizableRows: true,
         columns: [
           {
             field: 'email',
@@ -293,9 +288,11 @@
             field: 'roles',
             title: 'Roles',
             vertAlign: 'middle',
+            formatter: 'textarea',
             headerTooltip: 'Account roles',
             headerSort: false,
             editor: 'list',
+            width: 400,
             editorParams: {
               values: rolesList,
               multiselect: true
