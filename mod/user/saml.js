@@ -418,8 +418,20 @@ async function acs(req, res) {
 
     const redirect = req.body.RelayState;
 
-    // Decode the redirect URL since it's now encoded when stored
-    const location = redirect ? decodeURIComponent(redirect) : xyzEnv.DIR;
+    // Validate and sanitize redirect URL to prevent open redirect vulnerability
+    let location = xyzEnv.DIR || '/';
+
+    if (redirect) {
+      const decodedRedirect = decodeURIComponent(redirect);
+
+      // Remove any characters that could be used for injection
+      const sanitized = decodedRedirect.replaceAll(/[;\r\n]/g, '');
+
+      // Only allow relative URLs (must start with '/')
+      if (sanitized.startsWith('/')) {
+        location = sanitized;
+      }
+    }
 
     res.setHeader('location', location);
 
