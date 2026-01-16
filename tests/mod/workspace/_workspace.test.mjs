@@ -203,30 +203,17 @@ await codi.describe(
       async () => {
         const { req, res } = codi.mockHttp.createMocks({
           params: {
-            key: 'locale',
-            locale: ['europe', 'brand_a_locale', 'brand_b_locale'],
-            user: {
-              roles: ['europe', 'brand_b'],
-            },
-          },
-        });
-
-        const { req: req2, res: res2 } = codi.mockHttp.createMocks({
-          params: {
             key: 'roles',
             detail: false,
             user: {
               admin: true,
-              roles: ['europe', 'brand_b'],
             },
           },
         });
 
         await getKeyMethod(req, res);
 
-        await getKeyMethod(req2, res2);
-
-        const roles = res2._getData();
+        const roles = res._getData();
 
         console.log(roles);
       },
