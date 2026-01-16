@@ -1,0 +1,13 @@
+{
+  "role": "Germany",
+  "layers": {
+    "OSM_GERMANY": {
+      "display": true,
+      "format": "tiles",
+      "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      "attribution": {
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    }
+  }
+}

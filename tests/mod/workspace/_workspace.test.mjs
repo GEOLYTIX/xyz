@@ -46,7 +46,7 @@ await codi.describe({ name: 'workspace:', id: 'workspace' }, async () => {
     },
   );
 
-  codi.it(
+  await codi.it(
     { name: 'nested locales', parentId: 'workspace', id: 'workspace_locales' },
     async () => {
       const expectedLayers = ['OSM', 'brand_a_layer', 'brand_b_layer'];
@@ -94,7 +94,7 @@ await codi.describe({ name: 'workspace:', id: 'workspace' }, async () => {
     },
   );
 
-  codi.it(
+  await codi.it(
     { name: 'nested locales', parentId: 'workspace', id: 'workspace_locales' },
     async () => {
       const expectedMessage = 'Role access denied.';
@@ -124,7 +124,7 @@ await codi.describe({ name: 'workspace:', id: 'workspace' }, async () => {
     },
   );
 
-  codi.it(
+  await codi.it(
     {
       name: 'nested locales bogus roles',
       parentId: 'workspace',
@@ -157,7 +157,7 @@ await codi.describe({ name: 'workspace:', id: 'workspace' }, async () => {
     },
   );
 
-  codi.it(
+  await codi.it(
     {
       name: 'nested locales bogus locale',
       parentId: 'workspace',
@@ -179,3 +179,57 @@ await codi.describe({ name: 'workspace:', id: 'workspace' }, async () => {
     },
   );
 });
+
+await codi.describe(
+  {
+    name: 'workspace: w/ Nested Locales & Roles',
+    id: 'workspace_nested_locales',
+  },
+  async () => {
+    globalThis.xyzEnv = {
+      TITLE: 'WORKSPACE TEST',
+      WORKSPACE: 'file:./tests/assets/nested_roles/workspace.json',
+    };
+
+    //Calling the cache method with force to reload a new workspace
+    await checkWorkspaceCache(true);
+
+    await codi.it(
+      {
+        name: 'nested locales w/ Nested Roles',
+        parentId: 'workspace',
+        id: 'workspace_locales',
+      },
+      async () => {
+        const { req, res } = codi.mockHttp.createMocks({
+          params: {
+            key: 'locale',
+            locale: ['europe', 'brand_a_locale', 'brand_b_locale'],
+            user: {
+              roles: ['europe', 'brand_b'],
+            },
+          },
+        });
+
+        const { req: req2, res: res2 } = codi.mockHttp.createMocks({
+          params: {
+            key: 'roles',
+            detail: false,
+            user: {
+              admin: true,
+              roles: ['europe', 'brand_b'],
+            },
+          },
+        });
+
+        await getKeyMethod(req, res);
+
+        await getKeyMethod(req2, res2);
+
+        const roles = res2._getData();
+
+        console.log(roles);
+      },
+    );
+  },
+);

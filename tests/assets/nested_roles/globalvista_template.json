@@ -1,0 +1,14 @@
+{
+  "role": "Globalvista",
+  "layers": {
+    "OSM_GLOBALVISTA": {
+      "display": true,
+      "format": "tiles",
+      "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      "attribution": {
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    }
+  },
+  "locales": ["brand_a_template", "brand_b_template"]
+}
