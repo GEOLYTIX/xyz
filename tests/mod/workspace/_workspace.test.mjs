@@ -201,6 +201,21 @@ await codi.describe(
         id: 'workspace_locales',
       },
       async () => {
+        const expectedRoles = [
+          'germany',
+          'uk',
+          'globalvista',
+          'brand_a',
+          'brand_b',
+          'coremarkets',
+          'germany.globalvista',
+          'germany.globalvista.brand_a',
+          'germany.globalvista.brand_b',
+          'uk.globalvista',
+          'uk.globalvista.brand_a',
+          'uk.globalvista.brand_b',
+          'uk.globalvista.coremarkets',
+        ];
         const { req, res } = codi.mockHttp.createMocks({
           params: {
             key: 'roles',
@@ -215,7 +230,11 @@ await codi.describe(
 
         const roles = res._getData();
 
-        console.log(roles);
+        codi.assertEqual(
+          roles,
+          expectedRoles,
+          'We expect the workspace to have the nested roles defined',
+        );
       },
     );
   },

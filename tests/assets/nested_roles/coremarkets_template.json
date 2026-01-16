@@ -1,5 +1,5 @@
 {
-  "role": "CoreMarkets",
+  "role": "coremarkets",
   "layers": {
     "OSM_COREMARKETS": {
       "display": true,
@@ -12,4 +12,3 @@
   },
   "locales": ["brand_a_template", "brand_b_template"]
 }
-
