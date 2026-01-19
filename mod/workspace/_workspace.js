@@ -209,7 +209,19 @@ async function getNestedLocales(req, res) {
   for (const key of locale.locales) {
     const nestedLocale = await getTemplate(key);
 
-    if (!Roles.check(nestedLocale, req.params.user?.roles)) continue;
+    let validRolesObj = nestedLocale.roles;
+
+    if (locale.roles && nestedLocale.roles) {
+      validRolesObj = { ...nestedLocale.roles };
+      Object.keys(locale.roles).forEach((p) => {
+        Object.keys(nestedLocale.roles).forEach((c) => {
+          validRolesObj[`${p}.${c}`] = true;
+        });
+      });
+    }
+
+    if (!Roles.check({ roles: validRolesObj }, req.params.user?.roles))
+      continue;
 
     nestedLocales.push({
       key: `[${locale.key},${key}]`,
@@ -349,6 +361,10 @@ async function roles(req, res) {
   const rolesSet = new Set();
 
   Roles.fromObj(rolesSet, cache);
+
+  Object.values(cache.locales).forEach((locale) => {
+    traverseNestedLocales(locale.key, [], rolesSet, cache);
+  });
 
   const rolesTree = {};
 
@@ -701,4 +717,85 @@ The method assigns a checksum to an object.
 function assignChecksum(obj) {
   const objString = JSON.stringify(obj, null, 0);
   obj.checksum = createHash('sha256').update(objString).digest('hex');
+}
+
+/**
+@function traverseNestedLocales
+@description
+Recursively traverses nested locales to generate hierarchical role strings.
+
+@param {string} key The key of the current locale or template.
+@param {Array} parentRoles Array of role strings from parent locales.
+@param {Set} rolesSet Set to store unique role strings.
+@param {Object} cache The workspace cache containing locales and templates.
+@param {Set} visitedKeys Set of visited keys to prevent infinite recursion.
+*/
+function traverseNestedLocales(
+  key,
+  parentRoles,
+  rolesSet,
+  cache,
+  visitedKeys = new Set(),
+) {
+  // Prevent infinite recursion
+  if (visitedKeys.has(key)) return;
+
+  const newVisited = new Set(visitedKeys);
+  newVisited.add(key);
+
+  const obj = cache.locales[key] || cache.templates[key];
+  if (!obj) return;
+
+  // Determine roles for the current object
+  const objRoles = [];
+
+  // Check 'role' property (string)
+  if (obj.role && typeof obj.role === 'string') {
+    objRoles.push(obj.role);
+  }
+
+  // Check 'roles' property (object keys)
+  if (obj.roles && typeof obj.roles === 'object') {
+    Object.keys(obj.roles).forEach((r) => {
+      if (r !== '*') objRoles.push(r);
+    });
+  }
+
+  // Determine the "qualified roles" for this level
+  let qualifiedRoles = [];
+
+  if (objRoles.length > 0) {
+    if (parentRoles.length > 0) {
+      // Cartesian product of parentRoles x objRoles
+      parentRoles.forEach((p) => {
+        objRoles.forEach((c) => {
+          const combined = `${p}.${c}`;
+          rolesSet.add(combined);
+          qualifiedRoles.push(combined);
+        });
+      });
+    } else {
+      // No parent roles, so these are top-level roots for this branch
+      objRoles.forEach((r) => {
+        rolesSet.add(r);
+        qualifiedRoles.push(r);
+      });
+    }
+  } else {
+    // If current object has no roles, pass through parent roles
+    qualifiedRoles = parentRoles;
+  }
+
+  // Recurse into nested locales
+  if (obj.locales && Array.isArray(obj.locales)) {
+    obj.locales.forEach((childKey) => {
+      traverseNestedLocales(
+        childKey,
+        qualifiedRoles,
+        rolesSet,
+        cache,
+        newVisited,
+      );
+    });
+  }
 }

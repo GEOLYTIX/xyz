@@ -62,40 +62,85 @@ export default async function getLocale(params, parentLocale) {
     params.user.roles = true;
   }
 
-  if (typeof params.locale === 'string') {
-    params.locale = params.locale.split(',');
-  }
+  const localeKey = getLocaleKey(params);
 
-  const localeKey = Array.isArray(params.locale)
-    ? params.locale.shift()
-    : params.locale;
-
-  let locale;
-
-  if (!localeKey || localeKey === 'locale') {
-    locale = workspace.locale;
-  } else if (Object.hasOwn(workspace.locales, localeKey)) {
-    locale = workspace.locales[localeKey];
-  } else {
-    locale = await getTemplate(localeKey);
-  }
-
-  // This is to prevent that locale in the workspace is modified.
-  locale = structuredClone(locale);
+  let locale = await loadLocale(workspace, localeKey);
 
   if (locale instanceof Error) {
     return new Error(locale.message);
   }
 
+  // Check if this is the last locale in the chain
+  const isLeaf = !Array.isArray(params.locale) || params.locale.length === 0;
+
+  locale = await processRoles(locale, parentLocale, params, isLeaf);
+
+  if (locale instanceof Error) {
+    return locale;
+  }
+
+  return await composeLocale(locale, parentLocale, params, workspace.key);
+}
+
+function getLocaleKey(params) {
+  if (typeof params.locale === 'string') {
+    params.locale = params.locale.split(',');
+  }
+
+  return Array.isArray(params.locale) ? params.locale.shift() : params.locale;
+}
+
+async function loadLocale(workspace, key) {
+  let locale;
+
+  if (!key || key === 'locale') {
+    locale = workspace.locale;
+  } else if (Object.hasOwn(workspace.locales, key)) {
+    locale = workspace.locales[key];
+  } else {
+    locale = await getTemplate(key);
+  }
+
+  // This is to prevent that locale in the workspace is modified.
+  return structuredClone(locale);
+}
+
+async function processRoles(locale, parentLocale, params, isLeaf) {
   // The roles property maybe assigned from a template. Templates must be merged prior to the role check.
-  locale = await mergeTemplates(locale, params.user?.roles);
+
+  // Assign parent roles to locale for combination
+  if (parentLocale?.roles) {
+    locale.roles = { ...locale.roles, ...parentLocale.roles };
+  }
+
+  // Pass true to bypass the role check in mergeTemplates.
+  // The role check will be performed after the mergeTemplates method.
+  locale = await mergeTemplates(locale, true);
 
   // The mergeTemplates method returned an Error.
   if (locale instanceof Error) {
     return locale;
   }
 
-  locale.workspace = workspace.key;
+  // Manually combine parent roles with child roles if mergeTemplates didn't do it.
+  // This occurs because mergeTemplates only combines roles when merging a template into an object,
+  // but here the locale object IS the template.
+  if (parentLocale?.roles && locale.roles) {
+    combineRoles(locale, parentLocale);
+  }
+
+  // Strict Role Check
+  if (!params.ignoreRoles && !params.user?.admin) {
+    if (!checkRoles(locale, parentLocale, params.user, isLeaf)) {
+      return new Error('Role access denied.');
+    }
+  }
+
+  return locale;
+}
+
+async function composeLocale(locale, parentLocale, params, workspaceKey) {
+  locale.workspace = workspaceKey;
 
   locale.name ??= locale.key;
 
@@ -109,6 +154,10 @@ export default async function getLocale(params, parentLocale) {
 
     // Compose the nested locale name.
     locale.name = `${parentLocale.name}/${locale.name}`;
+
+    if (parentLocale.role && locale.role) {
+      locale.role = `${parentLocale.role}.${locale.role}`;
+    }
 
     locale = merge(parentLocale, locale);
   }
@@ -128,4 +177,53 @@ export default async function getLocale(params, parentLocale) {
   delete locale._type;
 
   return locale;
+}
+
+function combineRoles(locale, parentLocale) {
+  const specificChildRoles = Object.keys(locale.roles).filter(
+    (r) => !parentLocale.roles[r],
+  );
+
+  Object.keys(parentLocale.roles).forEach((p) => {
+    specificChildRoles.forEach((c) => {
+      locale.roles[`${p}.${c}`] ??= true;
+    });
+  });
+}
+
+function checkRoles(locale, parentLocale, user, isLeaf) {
+  let validRolesObj = locale.roles;
+
+  // If nested, we must exclude parent roles from valid roles
+  // to enforce that user has the specific nested role.
+  if (parentLocale?.roles) {
+    validRolesObj = { ...locale.roles };
+    Object.keys(parentLocale.roles).forEach((key) => delete validRolesObj[key]);
+
+    // If validRolesObj is empty, it means no new roles were generated.
+    const hasSpecificRoles = Object.keys(validRolesObj).length > 0;
+
+    if (!hasSpecificRoles) {
+      // No specific restrictions on child, so parent roles are enough.
+      validRolesObj = locale.roles;
+    }
+  }
+
+  // Use Roles.check with the restricted set
+  if (Roles.check({ roles: validRolesObj }, user?.roles)) return true;
+
+  if (!isLeaf) {
+    // Check for partial match (traversal)
+    const userRoles = user?.roles || [];
+    const requiredRoles = Object.keys(validRolesObj || {});
+
+    // We look for: UserRole startsWith RequiredRole + '.'
+    const hasTraversalRole = requiredRoles.some((req) =>
+      userRoles.some((usr) => usr.startsWith(req + '.')),
+    );
+
+    if (hasTraversalRole) return true;
+  }
+
+  return false;
 }

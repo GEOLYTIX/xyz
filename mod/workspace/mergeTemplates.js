@@ -72,6 +72,9 @@ export default async function mergeTemplates(obj, roles) {
     }
     obj.roles ??= {};
     obj.roles[obj.role] ??= true;
+  } else if (typeof obj.localeRole === 'string') {
+    obj.roles ??= {};
+    obj.roles[obj.localeRole] ??= true;
   }
 
   // Substitute ${SRC_*} in object string.
@@ -166,7 +169,7 @@ async function objTemplate(obj, template, roles) {
     }
 
     // template.role must NOT overwrite obj.role.
-    delete template.role;
+    if (Object.hasOwn(obj, 'role')) delete template.role;
 
     // template.key must NOT overwrite obj.key.
     delete template.key;
