@@ -142,15 +142,27 @@ async function objTemplate(obj, template, roles) {
     return obj;
   }
 
+  template = prepareTemplate(obj, template, roles);
+
+  let nextTemplates;
+
+  ({ obj, nextTemplates } = mergeObjectWithTemplate(obj, template));
+
+  return await processRecursiveTemplates(obj, nextTemplates, roles);
+}
+
+function prepareTemplate(obj, template, roles) {
   template = Roles.objMerge(template, roles);
 
   //use the base obj exclude/include props as we need that for the templateProperties method.
   template.exclude_props = obj.exclude_props ?? template.exclude_props;
   template.include_props = obj.include_props ?? template.include_props;
 
-  template = templateProperties(template);
+  return templateProperties(template);
+}
 
-  let templates;
+function mergeObjectWithTemplate(obj, template) {
+  let nextTemplates;
 
   if (obj.template) {
     // obj.template must NOT overwrite template.template.
@@ -159,12 +171,12 @@ async function objTemplate(obj, template, roles) {
     obj = merge(template, obj);
 
     if (obj.templates) {
-      templates = obj.templates;
+      nextTemplates = obj.templates;
       delete obj.templates;
     }
   } else {
     if (Array.isArray(template.templates)) {
-      templates = template.templates;
+      nextTemplates = template.templates;
       delete template.templates;
     }
 
@@ -181,14 +193,17 @@ async function objTemplate(obj, template, roles) {
     obj = merge(obj, template);
   }
 
+  return { obj, nextTemplates };
+}
+
+async function processRecursiveTemplates(obj, nextTemplates, roles) {
   if (obj.template) {
     obj = await objTemplate(obj, obj.template, roles);
-  } else if (Array.isArray(templates)) {
-    for (const _template of templates) {
+  } else if (Array.isArray(nextTemplates)) {
+    for (const _template of nextTemplates) {
       obj = await objTemplate(obj, _template, roles);
     }
   }
-
   return obj;
 }
 
