@@ -207,25 +207,17 @@ async function getNestedLocales(req, res) {
   }
 
   for (const key of locale.locales) {
-    const nestedLocale = await getTemplate(key);
+    const params = req.params;
 
-    let validRolesObj = nestedLocale.roles;
+    params.locale = key;
 
-    if (locale.roles && nestedLocale.roles) {
-      validRolesObj = { ...nestedLocale.roles };
-      Object.keys(locale.roles).forEach((p) => {
-        Object.keys(nestedLocale.roles).forEach((c) => {
-          validRolesObj[`${p}.${c}`] = true;
-        });
-      });
-    }
+    const nestedLocale = await getLocale(params, locale);
 
-    if (!Roles.check({ roles: validRolesObj }, req.params.user?.roles))
-      continue;
+    if (nestedLocale instanceof Error) continue;
 
     nestedLocales.push({
-      key: `[${locale.key},${key}]`,
-      name: `${locale.name}/${nestedLocale.name || key}`,
+      key: `[${locale.key}]`,
+      name: `${nestedLocale.name || key}`,
       locales: nestedLocale.locales,
     });
   }

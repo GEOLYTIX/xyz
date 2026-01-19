@@ -130,7 +130,7 @@ async function processRoles(locale, parentLocale, params, isLeaf) {
   }
 
   // Strict Role Check
-  if (!params.ignoreRoles && !params.user?.admin) {
+  if (!params.ignoreRoles) {
     if (!checkRoles(locale, parentLocale, params.user, isLeaf)) {
       return new Error('Role access denied.');
     }
