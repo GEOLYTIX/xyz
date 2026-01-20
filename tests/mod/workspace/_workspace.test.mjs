@@ -197,7 +197,7 @@ await codi.describe(
     await codi.it(
       {
         name: 'nested locales w/ Nested Roles',
-        parentId: 'workspace',
+        parentId: 'workspace_nested_locales',
         id: 'workspace_locales',
       },
       async () => {
