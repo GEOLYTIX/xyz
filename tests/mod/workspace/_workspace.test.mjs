@@ -297,7 +297,7 @@ await codi.describe(
           'Germany should not be visible to user with UK role',
         );
 
-        // UK should be in the list
+        // UK should not be in the list
         const uk = locales.find((l) => l.key === 'uk');
         codi.assertTrue(!uk, 'UK should be hidden to user with nested role');
       },
