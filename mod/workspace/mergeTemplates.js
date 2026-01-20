@@ -83,6 +83,11 @@ export default async function mergeTemplates(obj, roles) {
   // Assign default workspace dbs if not defined in template.
   obj.dbs ??= workspace.dbs;
 
+  //If the user is an admin we don't need to check roles
+  if (!Roles.check(obj, roles)) {
+    return new Error('Role access denied.');
+  }
+
   return obj;
 }
 

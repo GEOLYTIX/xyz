@@ -336,9 +336,10 @@ async function logout(req, res) {
 @param {Object} res - HTTP response object
 **/
 async function login(req, res) {
+  const redirect = req.cookies?.[`${xyzEnv.TITLE}_redirect`];
   try {
     // Get return URL from query or default to base dir
-    const relayState = xyzEnv.DIR ?? '/';
+    const relayState = (redirect || xyzEnv.DIR) ?? '/';
 
     // Get authorization URL from IdP
     const url = await samlStrat.getAuthorizeUrlAsync(
@@ -415,7 +416,25 @@ async function acs(req, res) {
 
     res.setHeader('Set-Cookie', cookie);
 
-    res.setHeader('location', `${xyzEnv.DIR || '/'}`);
+    const redirect = req.body.RelayState;
+
+    // Validate and sanitize redirect URL to prevent open redirect vulnerability
+    let location = xyzEnv.DIR || '/';
+
+    if (redirect) {
+      const decodedRedirect = decodeURIComponent(redirect);
+
+      // Remove any characters that could be used for injection
+      const sanitized = decodedRedirect.replaceAll(/[;\r\n]/g, '');
+
+      // Only allow relative URLs (must start with '/')
+      if (sanitized.startsWith('/')) {
+        location = sanitized;
+      }
+    }
+
+    res.setHeader('location', location);
+
     return res.status(302).send();
   } catch (error) {
     console.log(error);
