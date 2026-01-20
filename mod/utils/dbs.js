@@ -99,6 +99,9 @@ async function clientQuery(pool, query, variables, timeout) {
         variables,
       });
 
+      // Statement timeout
+      if (err.code === '57014') return err;
+
       retryCount++;
 
       if (retryCount < RETRY_LIMIT) {
