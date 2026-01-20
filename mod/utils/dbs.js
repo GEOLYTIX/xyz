@@ -19,14 +19,14 @@ import logger from './logger.js';
 
 const RETRY_LIMIT = xyzEnv.RETRY_LIMIT;
 
-const RETRY_CODES = [
+const RETRY_CODES = new Set([
   '53300', // too_many_connections
   '57P01', // admin_shutdown
   '57P02', // crash_shutdown
   '57P03', // cannot_connect_now
   '08000', // connection_exception
   '08006', // connection_failure
-];
+]);
 
 const INITIAL_RETRY_DELAY = 1000;
 
@@ -109,7 +109,7 @@ async function clientQuery(pool, query, variables, timeout) {
       });
 
       // Return error if not in retry whitelist
-      if (!RETRY_CODES.includes(err.code)) return err;
+      if (!RETRY_CODES.has(err.code)) return err;
 
       retryCount++;
 
