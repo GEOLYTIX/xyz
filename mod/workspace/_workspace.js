@@ -207,11 +207,10 @@ async function getNestedLocales(req, res) {
   }
 
   for (const key of locale.locales) {
-    const params = req.params;
-
-    params.locale = key;
-
-    const nestedLocale = await getLocale(params, locale);
+    const nestedLocale = await getLocale(
+      { ...req.params, locale: key },
+      locale,
+    );
 
     if (nestedLocale instanceof Error) continue;
 
