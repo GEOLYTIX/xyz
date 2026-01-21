@@ -103,9 +103,10 @@ export function paramString() {
         () => {
           const params = {
             region: 'Test & More',
-            location: 'Place with Space'
+            location: 'Place with Space',
           };
-          const expectedValue = 'region=Test%20%26%20More&location=Place%20with%20Space';
+          const expectedValue =
+            'region=Test%20%26%20More&location=Place%20with%20Space';
           const formattedValue = mapp.utils.paramString(params);
 
           codi.assertEqual(
