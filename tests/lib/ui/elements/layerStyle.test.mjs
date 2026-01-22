@@ -53,7 +53,6 @@ export function layerStyle(mapview) {
           parentId: 'ui_elements_layer_style',
         },
         () => {
-          console.log(panel);
           const hoverCheckBox = panel.querySelector(
             '[data-id="hoverCheckbox-layer_style_test"]',
           );
