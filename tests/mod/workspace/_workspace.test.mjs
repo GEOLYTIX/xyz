@@ -25,7 +25,7 @@ await codi.describe({ name: 'workspace:', id: 'workspace' }, async () => {
         { key: 'test', value: '' },
       ];
 
-      testMethods.forEach((testMethod) => {
+      for (const testMethod of testMethods) {
         codi.it(
           { name: `${testMethod.key}`, parentId: 'workspace_keyMethod' },
           async () => {
@@ -42,7 +42,7 @@ await codi.describe({ name: 'workspace:', id: 'workspace' }, async () => {
             );
           },
         );
-      });
+      }
     },
   );
 });
