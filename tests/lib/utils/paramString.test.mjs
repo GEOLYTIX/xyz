@@ -90,6 +90,32 @@ export function paramString() {
           );
         },
       );
+
+      /**
+       * ### Should handle special characters like & and spaces correctly.
+       * @function it
+       */
+      codi.it(
+        {
+          name: 'Should correctly encode ampersands and spaces',
+          parentId: 'utils_paramString',
+        },
+        () => {
+          const params = {
+            region: 'Test & More',
+            location: 'Place with Space',
+          };
+          const expectedValue =
+            'region=Test%20%26%20More&location=Place%20with%20Space';
+          const formattedValue = mapp.utils.paramString(params);
+
+          codi.assertEqual(
+            formattedValue,
+            expectedValue,
+            `Expected ${expectedValue}, received ${formattedValue}`,
+          );
+        },
+      );
     },
   );
 }
