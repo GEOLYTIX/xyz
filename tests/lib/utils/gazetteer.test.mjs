@@ -1,7 +1,6 @@
 /**
  * @module utils/gazetteer
  */
-const originalXMLHttpRequest = XMLHttpRequest;
 
 /**
  * This function is used as an entry point for the gazetteer Test
@@ -11,29 +10,15 @@ export function gazetteer() {
   codi.describe(
     { name: 'Utils: gazetteer Test', id: 'utils_gazetteer', parentId: 'utils' },
     () => {
-      const expectedXhrKeys = [
-        'abort',
-        'send',
-        'open',
-        'setRequestHeader',
-        'responseType',
-        'onload',
-      ];
+      // Mock XMLHttpRequest if not present
+      const originalXMLHttpRequest = globalThis.XMLHttpRequest;
 
       globalThis.XMLHttpRequest = class {
         constructor() {
-          this.abort = () => {
-            return this;
-          };
-          this.send = () => {
-            return this;
-          };
-          this.open = () => {
-            return this;
-          };
-          this.setRequestHeader = () => {
-            return this;
-          };
+          this.abort = () => this;
+          this.send = () => this;
+          this.open = () => this;
+          this.setRequestHeader = () => this;
         }
       };
 
@@ -82,46 +67,83 @@ export function gazetteer() {
           parentId: 'utils_gazetteer',
         },
         () => {
-          const firstDatasetKeys = Object.keys(
-            gazetteer.datasets[0].xhr,
-          ).filter((key) => expectedXhrKeys.includes(key));
+          const term = 'test';
 
-          const secondDatasetKeys = Object.keys(
-            gazetteer.datasets[1].xhr,
-          ).filter((key) => expectedXhrKeys.includes(key));
+          const gazetteer = {
+            leading_wildcard: true,
+            limit: 5,
+            datasets: [
+              {
+                mapview: {
+                  host: 'localhost:3000',
+                  locale: { key: 'test' },
+                  layers: {
+                    layer_3: { key: 'layer_3', qID: 'id' },
+                  },
+                },
+                layer: 'layer_3',
+                label: 'Store Name',
+                qterm: 'store',
+                table: 'fake_table',
+                no_result: null,
+              },
+              {
+                mapview: {
+                  host: 'localhost:3000',
+                  locale: { key: 'test' },
+                  layers: {
+                    layer_2: { key: 'layer_2', qID: 'id' },
+                  },
+                },
+                layer: 'layer_2',
+                label: 'Store Name Also',
+                qterm: 'store',
+                table: 'fake_table',
+                no_result: null,
+              },
+            ],
+          };
 
+          mapp.utils.gazetteer.datasets(term, gazetteer);
+
+          // Check first dataset
+          const ds1 = gazetteer.datasets[0];
           codi.assertTrue(
-            expectedXhrKeys.length === firstDatasetKeys.length,
-            'first dataset should get an xhr object',
+            ds1.url.includes('localhost:3000/api/query?'),
+            'first dataset url set',
           );
           codi.assertTrue(
-            expectedXhrKeys.length === secondDatasetKeys.length,
-            'second dataset should get an xhr object',
+            ds1.url.includes('qterm=store'),
+            'first dataset qterm param set',
+          );
+          codi.assertTrue(
+            typeof ds1.onLoad === 'function',
+            'first dataset onLoad set',
+          );
+
+          // Check second dataset
+          const ds2 = gazetteer.datasets[1];
+          codi.assertTrue(
+            ds2.url.includes('localhost:3000/api/query?'),
+            'second dataset url set',
+          );
+          codi.assertTrue(
+            ds2.url.includes('qterm=store'),
+            'second dataset qterm param set',
+          );
+          codi.assertTrue(
+            typeof ds2.onLoad === 'function',
+            'second dataset onLoad set',
           );
         },
       );
 
-      codi.it(
-        {
-          name: 'XHR should call supplied onLoad functions',
-          parentId: 'utils_gazetteer',
-        },
-        () => {
-          let ds_load = 0;
-          gazetteer.datasets[0].onLoad = () => (ds_load += 1);
-          gazetteer.datasets[1].onLoad = () => (ds_load *= 3);
-
-          gazetteer.datasets[0].xhr.onload();
-          gazetteer.datasets[1].xhr.onload();
-
-          codi.assertTrue(
-            ds_load === 3,
-            'We expect the dataset onLoad functions to be called',
-          );
-        },
-      );
-
-      globalThis.XMLHttpRequest = originalXMLHttpRequest;
+      // Restore original XMLHttpRequest
+      if (originalXMLHttpRequest) {
+        globalThis.XMLHttpRequest = originalXMLHttpRequest;
+      } else {
+        delete globalThis.XMLHttpRequest;
+      }
     },
   );
 }
