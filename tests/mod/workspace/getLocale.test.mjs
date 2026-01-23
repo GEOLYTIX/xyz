@@ -1,4 +1,3 @@
-import getKeyMethod from '../../../mod/workspace/_workspace.js';
 import checkWorkspaceCache from '../../../mod/workspace/cache.js';
 
 await codi.describe(
