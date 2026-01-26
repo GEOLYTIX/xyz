@@ -356,7 +356,7 @@ async function roles(req, res) {
   Roles.fromObj(rolesSet, cache);
 
   Object.values(cache.locales).forEach((locale) => {
-    traverseNestedLocales(locale.key, undefined, rolesSet, cache);
+    traverseNestedLocales(locale.key, rolesSet, cache);
   });
 
   const rolesTree = {};
@@ -718,16 +718,16 @@ function assignChecksum(obj) {
 Recursively traverses nested locales to generate hierarchical role strings.
 
 @param {string} key The key of the current locale or template.
-@param {Array} parentRoles Array of role strings from parent locales.
-@param {Set} rolesSet Set to store unique role strings.
+@param {set} rolesSet Set to store unique role strings.
 @param {workspace} cachedWorkspace Cached workspace containing locales and templates.
-@param {Set} visitedKeys Set of visited keys to prevent infinite recursion.
+@param {set} parentRoles Array of role strings from parent locales.
+@param {set} visitedKeys Set of visited keys to prevent infinite recursion.
 */
 function traverseNestedLocales(
   key,
-  parentRoles = new Set(),
   rolesSet,
   cachedWorkspace,
+  parentRoles = new Set(),
   visitedKeys = new Set(),
 ) {
   // Prevent infinite recursion
@@ -784,9 +784,9 @@ function traverseNestedLocales(
     obj.locales.forEach((nestedLocaleKey) => {
       traverseNestedLocales(
         nestedLocaleKey,
-        qualifiedRoles,
         rolesSet,
         cachedWorkspace,
+        qualifiedRoles,
         visitedKeys.add(key),
       );
     });
