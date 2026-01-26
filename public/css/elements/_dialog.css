@@ -56,7 +56,7 @@ dialog {
   &.dialog {
     position: absolute;
     border: none;
-    border-radius: 2px;
+    border-radius: var(--container-border-radius);
     cursor: grab;
     user-select: none;
     padding: 5px;
@@ -74,7 +74,7 @@ dialog {
   &.modal {
     position: fixed;
     border: none;
-    border-radius: 2px;
+    border-radius: var(--container-border-radius);
     text-wrap: wrap;
     top: 50%;
     left: 50%;

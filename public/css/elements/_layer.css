@@ -1,21 +1,21 @@
-.disabled > .drawer {
+.disabled > .layer {
   opacity: 0.4;
   pointer-events: none;
 }
 
-.drawer {
-  padding: 2px;
-  margin-top: 2px;
+.layer {
+  margin-top: 5px;
+  padding: 2px 4px;
   border-radius: var(--container-border-radius);
-  border: 1px solid var(--color-border);
-  background-color: var(--color-base-secondary);
+  border: solid 1px var(--color-border);
   color: var(--color-font);
 
   &.expandable {
-    &:not(.empty) > .header:hover {
-      cursor: pointer;
+    &:not(.empty) > .header {
+      &:hover {
+        cursor: pointer;
+      }
     }
-
     &.empty > .header > .caret {
       display: none;
     }
@@ -36,7 +36,6 @@
 
     & > .header {
       border-bottom: solid 1px var(--color-border); /* readability */
-      margin-bottom: 7px;
 
       & > .material-symbols-outlined.caret::after {
         content: 'keyboard_arrow_up';
@@ -54,10 +53,17 @@
   & > .header {
     display: flex;
     align-items: center;
-    color: var(--color-font);
+
+    h2 {
+      font-weight: normal;
+    }
 
     .material-symbols-outlined {
       font-size: 1.5em;
+    }
+
+    .meta {
+      padding: 5px 0;
     }
 
     & > :not(button):not(label):not(input) {
@@ -77,10 +83,5 @@
       text-overflow: ellipsis;
       flex-grow: 1;
     }
-  }
-
-  p {
-    padding-left: 0.3em;
-    padding-right: 0.3em;
   }
 }
