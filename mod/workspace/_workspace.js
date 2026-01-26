@@ -733,7 +733,7 @@ function traverseNestedLocales(
 
   // Prevent infinite recursion
   if (visitedKeys.has(key)) {
-    console.log(key)
+    console.error(`locale ${key} is nested in itself.`)
     return;
   }
 
