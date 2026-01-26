@@ -6,6 +6,7 @@ The Workspace API module exports the getKeyMethod() which returns a method from 
 - locale
 - locales
 - roles
+- test
 
 The workspace typedef object has templates, locale, locales, dbs, and roles properties. The workspace will be cached in the process by the workspace/cache module.
 
@@ -21,12 +22,13 @@ The workspace typedef object has templates, locale, locales, dbs, and roles prop
 
 /**
 @global
-@typedef {Object} workspace
+@typedef {object} workspace
 The workspace object defines the mapp resources available in an XYZ instance.
-@property {Object} [roles] Each property of the roles object is a role which can be assigned to a user.
+@property {object} [roles] Each property of the roles object is a role which can be assigned to a user.
 @property {string} [dbs] The fallback dbs connection if not implicit in [query] template.
-@property {Object} locale The default locale which serves as a templates for all locales in workspace.
-@property {Object} locales Each property in the locales object is a locale available from this workspace.
+@property {object} locale The default locale which serves as a templates for all locales in workspace.
+@property {object} locales Each property in the locales object is a locale available from this workspace.
+@property {template} templates Each property in the templates object is a global template typedef.
 */
 
 import { createHash } from 'node:crypto';
@@ -718,25 +720,24 @@ Recursively traverses nested locales to generate hierarchical role strings.
 @param {string} key The key of the current locale or template.
 @param {Array} parentRoles Array of role strings from parent locales.
 @param {Set} rolesSet Set to store unique role strings.
-@param {Object} cache The workspace cache containing locales and templates.
+@param {workspace} cachedWorkspace Cached workspace containing locales and templates.
 @param {Set} visitedKeys Set of visited keys to prevent infinite recursion.
 */
 function traverseNestedLocales(
   key,
   parentRoles,
   rolesSet,
-  cache,
+  cachedWorkspace,
   visitedKeys = new Set(),
 ) {
+
   // Prevent infinite recursion
   if (visitedKeys.has(key)) {
     console.log(key)
     return;
   }
 
-  visitedKeys.add(key);
-
-  const obj = cache.locales[key] || cache.templates[key];
+  const obj = cachedWorkspace.locales[key] || cachedWorkspace.templates[key];
   if (!obj) return;
 
   // Determine roles for the current object
@@ -748,7 +749,7 @@ function traverseNestedLocales(
   }
 
   // Check 'roles' property (object keys)
-  if (obj.roles && typeof obj.roles === 'object') {
+  if (typeof obj.roles === 'object') {
     Object.keys(obj.roles).forEach((role) => {
       if (role !== '*') objRoles.push(role);
     });
@@ -786,8 +787,8 @@ function traverseNestedLocales(
         nestedLocaleKey,
         qualifiedRoles,
         rolesSet,
-        cache,
-        visitedKeys,
+        cachedWorkspace,
+        visitedKeys.add(key),
       );
     });
   }
