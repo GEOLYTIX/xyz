@@ -729,10 +729,12 @@ function traverseNestedLocales(
   visitedKeys = new Set(),
 ) {
   // Prevent infinite recursion
-  if (visitedKeys.has(key)) return;
+  if (visitedKeys.has(key)) {
+    console.log(key)
+    return;
+  }
 
-  const newVisited = new Set(visitedKeys);
-  newVisited.add(key);
+  visitedKeys.add(key);
 
   const obj = cache.locales[key] || cache.templates[key];
   if (!obj) return;
@@ -747,8 +749,8 @@ function traverseNestedLocales(
 
   // Check 'roles' property (object keys)
   if (obj.roles && typeof obj.roles === 'object') {
-    Object.keys(obj.roles).forEach((r) => {
-      if (r !== '*') objRoles.push(r);
+    Object.keys(obj.roles).forEach((role) => {
+      if (role !== '*') objRoles.push(role);
     });
   }
 
@@ -779,13 +781,13 @@ function traverseNestedLocales(
 
   // Recurse into nested locales
   if (obj.locales && Array.isArray(obj.locales)) {
-    obj.locales.forEach((childKey) => {
+    obj.locales.forEach((nestedLocaleKey) => {
       traverseNestedLocales(
-        childKey,
+        nestedLocaleKey,
         qualifiedRoles,
         rolesSet,
         cache,
-        newVisited,
+        visitedKeys,
       );
     });
   }
