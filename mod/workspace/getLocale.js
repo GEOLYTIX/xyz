@@ -62,7 +62,11 @@ export default async function getLocale(params, parentLocale) {
     params.user.roles = true;
   }
 
-  const localeKey = getLocaleKey(params);
+  if (typeof params.locale === 'string') {
+    params.locale = params.locale.split(',');
+  }
+
+  const localeKey = Array.isArray(params.locale) ? params.locale.shift() : params.locale;
 
   let locale = await loadLocale(workspace, localeKey);
 
@@ -80,14 +84,6 @@ export default async function getLocale(params, parentLocale) {
   }
 
   return await composeLocale(locale, parentLocale, params, workspace.key);
-}
-
-function getLocaleKey(params) {
-  if (typeof params.locale === 'string') {
-    params.locale = params.locale.split(',');
-  }
-
-  return Array.isArray(params.locale) ? params.locale.shift() : params.locale;
 }
 
 async function loadLocale(workspace, key) {
