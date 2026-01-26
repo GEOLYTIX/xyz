@@ -17,6 +17,13 @@
     },
     "brand_b_template": {
       "src": "file:./tests/assets/nested_roles/brand_b_template.json"
+    },
+    "no_role_locale": {
+      "layers": {
+        "test_role_layer": {
+          "role": "test"
+        }
+      }
     }
   },
   "locale": {
@@ -38,7 +45,11 @@
     },
     "uk": {
       "template": "uk_template",
-      "locales": ["globalvista_template", "coremarkets_template"]
+      "locales": [
+        "globalvista_template",
+        "coremarkets_template",
+        "no_role_locale"
+      ]
     }
   }
 }

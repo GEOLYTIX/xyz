@@ -356,7 +356,7 @@ async function roles(req, res) {
   Roles.fromObj(rolesSet, cache);
 
   Object.values(cache.locales).forEach((locale) => {
-    traverseNestedLocales(locale.key, [], rolesSet, cache);
+    traverseNestedLocales(locale.key, undefined, rolesSet, cache);
   });
 
   const rolesTree = {};
@@ -725,15 +725,14 @@ Recursively traverses nested locales to generate hierarchical role strings.
 */
 function traverseNestedLocales(
   key,
-  parentRoles,
+  parentRoles = new Set(),
   rolesSet,
   cachedWorkspace,
   visitedKeys = new Set(),
 ) {
-
   // Prevent infinite recursion
   if (visitedKeys.has(key)) {
-    console.error(`locale ${key} is nested in itself.`)
+    console.error(`locale ${key} is nested in itself.`);
     return;
   }
 
@@ -744,7 +743,7 @@ function traverseNestedLocales(
   const objRoles = [];
 
   // Check 'role' property (string)
-  if (obj.role && typeof obj.role === 'string') {
+  if (typeof obj.role === 'string') {
     objRoles.push(obj.role);
   }
 
@@ -756,23 +755,23 @@ function traverseNestedLocales(
   }
 
   // Determine the "qualified roles" for this level
-  let qualifiedRoles = [];
+  let qualifiedRoles = new Set();
 
   if (objRoles.length > 0) {
-    if (parentRoles.length > 0) {
+    if (parentRoles.size > 0) {
       // Cartesian product of parentRoles x objRoles
-      parentRoles.forEach((p) => {
-        objRoles.forEach((c) => {
-          const combined = `${p}.${c}`;
+      parentRoles.forEach((parentRole) => {
+        objRoles.forEach((objRole) => {
+          const combined = `${parentRole}.${objRole}`;
           rolesSet.add(combined);
-          qualifiedRoles.push(combined);
+          qualifiedRoles.add(combined);
         });
       });
     } else {
       // No parent roles, so these are top-level roots for this branch
-      objRoles.forEach((r) => {
-        rolesSet.add(r);
-        qualifiedRoles.push(r);
+      objRoles.forEach((role) => {
+        rolesSet.add(role);
+        qualifiedRoles.add(role);
       });
     }
   } else {

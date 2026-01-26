@@ -1,5 +1,8 @@
 {
   "role": "globalvista",
+  "roles": {
+    "*": true
+  },
   "layers": {
     "OSM_GLOBALVISTA": {
       "display": true,
