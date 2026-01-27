@@ -720,7 +720,7 @@ Recursively traverses nested locales to generate hierarchical role strings.
 @param {string} key The key of the current locale or template.
 @param {set} rolesSet Set to store unique role strings.
 @param {workspace} cachedWorkspace Cached workspace containing locales and templates.
-@param {set} parentRoles Array of role strings from parent locales.
+@param {set} parentRoles Set of role strings from parent locales.
 @param {set} visitedKeys Set of visited keys to prevent infinite recursion.
 */
 function traverseNestedLocales(
