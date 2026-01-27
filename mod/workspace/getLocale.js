@@ -66,7 +66,9 @@ export default async function getLocale(params, parentLocale) {
     params.locale = params.locale.split(',');
   }
 
-  const localeKey = Array.isArray(params.locale) ? params.locale.shift() : params.locale;
+  const localeKey = Array.isArray(params.locale)
+    ? params.locale.shift()
+    : params.locale;
 
   let locale = await loadLocale(workspace, localeKey);
 
