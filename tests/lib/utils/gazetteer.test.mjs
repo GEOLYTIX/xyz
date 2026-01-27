@@ -22,6 +22,45 @@ export function gazetteer() {
         }
       };
 
+      const term = 'test';
+
+      const gazetteer = {
+        leading_wildcard: true,
+        limit: 5,
+        datasets: [
+          {
+            mapview: {
+              host: 'localhost:3000',
+              locale: { key: 'test' },
+              layers: {
+                layer_3: { key: 'layer_3', qID: 'id' },
+              },
+            },
+            layer: 'layer_3',
+            label: 'Store Name',
+            qterm: 'store',
+            table: 'fake_table',
+            no_result: null,
+          },
+          {
+            mapview: {
+              host: 'localhost:3000',
+              locale: { key: 'test' },
+              layers: {
+                layer_2: { key: 'layer_2', qID: 'id' },
+              },
+            },
+            layer: 'layer_2',
+            label: 'Store Name Also',
+            qterm: 'store',
+            table: 'fake_table',
+            no_result: null,
+          },
+        ],
+      };
+
+      mapp.utils.gazetteer.datasets(term, gazetteer);
+
       codi.it(
         {
           name: 'XHR should be assigned to datasets',
