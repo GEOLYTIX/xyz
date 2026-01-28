@@ -18,7 +18,7 @@
     },
     "LAYER_TEMPLATE": {
       "meta": "test role access from a template.",
-      "template": "TEMPLATE_ROLE"
+      "template": "LAYER_TEMPLATE"
     }
   },
   "locales": ["brand_a_template", "brand_b_template"]

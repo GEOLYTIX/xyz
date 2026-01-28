@@ -15,7 +15,7 @@
     },
     "LAYER_TEMPLATE": {
       "meta": "test role access from a template.",
-      "template": "TEMPLATE_ROLE"
+      "template": "LAYER_TEMPLATE"
     }
   }
 }
