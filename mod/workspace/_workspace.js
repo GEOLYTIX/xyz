@@ -6,6 +6,7 @@ The Workspace API module exports the getKeyMethod() which returns a method from 
 - locale
 - locales
 - roles
+- test
 
 The workspace typedef object has templates, locale, locales, dbs, and roles properties. The workspace will be cached in the process by the workspace/cache module.
 
@@ -21,12 +22,13 @@ The workspace typedef object has templates, locale, locales, dbs, and roles prop
 
 /**
 @global
-@typedef {Object} workspace
+@typedef {object} workspace
 The workspace object defines the mapp resources available in an XYZ instance.
-@property {Object} [roles] Each property of the roles object is a role which can be assigned to a user.
+@property {object} [roles] Each property of the roles object is a role which can be assigned to a user.
 @property {string} [dbs] The fallback dbs connection if not implicit in [query] template.
-@property {Object} locale The default locale which serves as a templates for all locales in workspace.
-@property {Object} locales Each property in the locales object is a locale available from this workspace.
+@property {object} locale The default locale which serves as a templates for all locales in workspace.
+@property {object} locales Each property in the locales object is a locale available from this workspace.
+@property {template} templates Each property in the templates object is a global template typedef.
 */
 
 import { createHash } from 'node:crypto';
@@ -207,13 +209,16 @@ async function getNestedLocales(req, res) {
   }
 
   for (const key of locale.locales) {
-    const nestedLocale = await getTemplate(key);
+    const nestedLocale = await getLocale(
+      { ...req.params, locale: key },
+      locale,
+    );
 
-    if (!Roles.check(nestedLocale, req.params.user?.roles)) continue;
+    if (nestedLocale instanceof Error) continue;
 
     nestedLocales.push({
-      key: `[${locale.key},${key}]`,
-      name: `${locale.name}/${nestedLocale.name || key}`,
+      key: `[${locale.key}]`,
+      name: `${nestedLocale.name || key}`,
       locales: nestedLocale.locales,
     });
   }
@@ -349,6 +354,10 @@ async function roles(req, res) {
   const rolesSet = new Set();
 
   Roles.fromObj(rolesSet, cache);
+
+  Object.values(cache.locales).forEach((locale) => {
+    traverseNestedLocales(locale.key, rolesSet, cache);
+  });
 
   const rolesTree = {};
 
@@ -701,4 +710,85 @@ The method assigns a checksum to an object.
 function assignChecksum(obj) {
   const objString = JSON.stringify(obj, null, 0);
   obj.checksum = createHash('sha256').update(objString).digest('hex');
+}
+
+/**
+@function traverseNestedLocales
+@description
+Recursively traverses nested locales to generate hierarchical role strings.
+
+@param {string} key The key of the current locale or template.
+@param {set} rolesSet Set to store unique role strings.
+@param {workspace} cachedWorkspace Cached workspace containing locales and templates.
+@param {set} parentRoles Set of role strings from parent locales.
+@param {set} visitedKeys Set of visited keys to prevent infinite recursion.
+*/
+function traverseNestedLocales(
+  key,
+  rolesSet,
+  cachedWorkspace,
+  parentRoles = new Set(),
+  visitedKeys = new Set(),
+) {
+  // Prevent infinite recursion
+  if (visitedKeys.has(key)) {
+    console.error(`locale ${key} is nested in itself.`);
+    return;
+  }
+
+  const obj = cachedWorkspace.locales[key] || cachedWorkspace.templates[key];
+  if (!obj) return;
+
+  // Determine roles for the current object
+  const objRoles = [];
+
+  // Check 'role' property (string)
+  if (typeof obj.role === 'string') {
+    objRoles.push(obj.role);
+  }
+
+  // Check 'roles' property (object keys)
+  if (typeof obj.roles === 'object') {
+    Object.keys(obj.roles).forEach((role) => {
+      if (role !== '*') objRoles.push(role);
+    });
+  }
+
+  // Determine the "qualified roles" for this level
+  let qualifiedRoles = new Set();
+
+  if (objRoles.length > 0) {
+    if (parentRoles.size > 0) {
+      // Cartesian product of parentRoles x objRoles
+      parentRoles.forEach((parentRole) => {
+        objRoles.forEach((objRole) => {
+          const combined = `${parentRole}.${objRole}`;
+          rolesSet.add(combined);
+          qualifiedRoles.add(combined);
+        });
+      });
+    } else {
+      // No parent roles, so these are top-level roots for this branch
+      objRoles.forEach((role) => {
+        rolesSet.add(role);
+        qualifiedRoles.add(role);
+      });
+    }
+  } else {
+    // If current object has no roles, pass through parent roles
+    qualifiedRoles = parentRoles;
+  }
+
+  // Recurse into nested locales
+  if (obj.locales && Array.isArray(obj.locales)) {
+    obj.locales.forEach((nestedLocaleKey) => {
+      traverseNestedLocales(
+        nestedLocaleKey,
+        rolesSet,
+        cachedWorkspace,
+        qualifiedRoles,
+        visitedKeys.add(key),
+      );
+    });
+  }
 }
