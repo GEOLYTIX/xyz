@@ -24,6 +24,10 @@
           "role": "test"
         }
       }
+    },
+    "LAYER_TEMPLATE": {
+      "meta": "test role access from a template.",
+      "role": "LAYER_TEMPLATE"
     }
   },
   "locale": {

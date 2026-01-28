@@ -11,6 +11,14 @@
       "attribution": {
         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
       }
+    },
+    "LAYER_ROLE": {
+      "meta": "test role access from an object.",
+      "role": "LAYER_ROLE"
+    },
+    "LAYER_TEMPLATE": {
+      "meta": "test role access from a template.",
+      "template": "LAYER_TEMPLATE"
     }
   },
   "locales": ["brand_a_template", "brand_b_template"]
