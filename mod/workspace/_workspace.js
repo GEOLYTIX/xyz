@@ -355,13 +355,15 @@ async function roles(req, res) {
 
   const rolesSet = new Set();
 
-  Roles.fromObj(rolesSet, cache);
+  for (const locale of Object.values(cache.locales)) {
+    Roles.fromObj(rolesSet, locale);
+  }
 
   // Traverse using the ORIGINAL workspace structure to understand nesting
   // before we merge
-  Object.keys(workspace.locales).forEach((localeKey) => {
-    traverseNestedLocales(localeKey, rolesSet, cache);
-  });
+  // Object.keys(workspace.locales).forEach((localeKey) => {
+  //   traverseNestedLocales(localeKey, rolesSet, cache);
+  // });
 
   const rolesTree = {};
 
@@ -679,34 +681,7 @@ async function cacheTemplates(params) {
   const cache = await workspaceCache(params.force);
 
   for (const localeKey of Object.keys(cache.locales)) {
-    // Will get layer and assignTemplates to workspace.
-    const locale = await getLocale({
-      locale: localeKey,
-      user: params.user,
-      ignoreRoles: true,
-    });
-
-    cache.locales[localeKey] = locale;
-
-    // If the locale has no layers, just skip it.
-    if (!locale.layers) continue;
-
-    const layerPromises = Object.keys(locale.layers).map(async (layerKey) => {
-      // Will get layer and assignTemplates to workspace.
-      const layer = await getLayer(
-        {
-          layer: layerKey,
-          locale: locale.key,
-          user: params.user,
-          ignoreRoles: true,
-        },
-        locale,
-      );
-
-      locale.layers[layerKey] = layer;
-    });
-
-    await Promise.allSettled(layerPromises);
+    await cacheLocale(cache.locales, localeKey, params.user)
   }
   logger(`cachelocales: ${Date.now() - timestamp}`, 'cachelocales');
 
@@ -719,6 +694,44 @@ async function cacheTemplates(params) {
   logger(`cachetemplates: ${Date.now() - timestamp}`, 'cachetemplates');
 
   return cache;
+}
+
+async function cacheLocale(cachedLocales, localeKey, user) {
+
+  // Will get layer and assignTemplates to workspace.
+  const locale = await getLocale({
+    locale: localeKey,
+    user: user,
+    ignoreRoles: true,
+  });
+
+  cachedLocales[localeKey] = locale;
+
+  // If the locale has no layers, just skip it.
+  if (locale.layers) {
+    const layerPromises = Object.keys(locale.layers).map(async (layerKey) => {
+      // Will get layer and assignTemplates to workspace.
+      const layer = await getLayer(
+        {
+          layer: layerKey,
+          locale: locale.key,
+          user,
+          ignoreRoles: true,
+        },
+        locale,
+      );
+
+      locale.layers[layerKey] = layer;
+    });
+
+    await Promise.allSettled(layerPromises);
+  }
+
+  if (!Array.isArray(locale.locales)) return;
+
+  for (const nestedLocale of locale.locales) {
+    await cacheLocale(cachedLocales, [localeKey, nestedLocale].join(','), user)
+  }
 }
 
 /**
