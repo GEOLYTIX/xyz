@@ -21,6 +21,7 @@ await codi.describe(
             email: 'test@test.com',
             admin: true,
           },
+          ignoreRoles: true,
         };
 
         const layer = await getLayer(params);

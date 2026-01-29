@@ -77,6 +77,8 @@ await codi.describe(
           'germany.globalvista.brand_a',
           'germany.globalvista.brand_b',
           'globalvista',
+          'OBJ_ROLE',
+          'TEMPLATE_ROLE',
           'uk',
           'uk.coremarkets',
           'uk.coremarkets.brand_a',
@@ -84,6 +86,8 @@ await codi.describe(
           'uk.globalvista',
           'uk.globalvista.brand_a',
           'uk.globalvista.brand_b',
+          'uk.OBJ_ROLE',
+          'uk.TEMPLATE_ROLE',
         ];
         const { req, res } = codi.mockHttp.createMocks({
           params: {

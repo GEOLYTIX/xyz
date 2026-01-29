@@ -215,30 +215,113 @@ export function fromObj(rolesSet, obj) {
 @function combine
 @description
 Combines roles from a parent object into a child object.
-The method ensures that role access logic flows from parent to child.
-Roles defined in the parent are prepended to roles in the child.
-Parent roles are also merged into the child roles object.
+Handles two use cases:
+1. Template role assignment (when parent has localeRole, templateRole, or objRole properties)
+2. Simple parent-child role combination (for nested locales)
 
-@param {Object} child The child object (e.g. sub-locale, layer, or template).
-@param {Object} parent The parent object (e.g. locale, layer).
+@param {Object} child The child object (template or locale).
+@param {Object} parent The parent object providing role context.
 */
 export function combine(child, parent) {
+  // Handle template-style role assignment
+  // Template context has special properties: localeRole, templateRole, objRole
+  if (
+    child.role &&
+    (parent.localeRole || parent.templateRole || parent.objRole)
+  ) {
+    combineTemplateRoles(child, parent);
+    return;
+  }
+
+  // Handle simple locale-style role combination
+  combineLocaleRoles(child, parent);
+}
+
+/**
+@function combineTemplateRoles
+@description
+Combines roles for templates. This replicates the old roleAssign behavior.
+
+Templates may have an access role restriction. The `template.role` string property requires a user to have that role in order to access the template.
+
+The role string will be added as boolean:true property to the `template.roles` object property if the property key is undefined.
+
+`template.role = 'bar' -> template.roles = {'bar':true}`
+
+A dot notation role key will be created if the obj has a role string property.
+
+`obj.role = 'foo' && template.role = 'bar' -> template.roles = {'foo.bar':true}`
+
+@param {Object} template The template object (child).
+@param {Object} obj The parent object providing role context.
+*/
+function combineTemplateRoles(template, obj) {
+  if (!template.role) return;
+
+  template.roles ??= {};
+  template.roles[template.role] ??= true;
+
+  // Filter out undefined roles and duplicates from roles array.
+  const roleArr = Array.from(
+    new Set(
+      [obj.localeRole, obj.role, obj.templateRole, template.role].filter(
+        (role) => typeof role === 'string',
+      ),
+    ),
+  );
+
+  // Join roles array into the template.roles.
+  if (roleArr.length) {
+    template.roles[roleArr.join('.')] ??= true;
+  }
+
+  obj.roles ??= {};
+
+  // Concatenate the template.role to each obj.roles{} key where the last role does not match the template.objRole.
+  for (const role of Object.keys(obj.roles)) {
+    const tailRole = role.split('.').pop();
+    if (tailRole !== template.objRole) {
+      continue;
+    }
+    template.roles[`${role}.${template.role}`] ??= true;
+  }
+
+  if (Array.isArray(template.templates)) {
+    template.templateRole = template.role;
+    for (const templatesTemplate of template.templates) {
+      if (typeof templatesTemplate !== 'object') continue;
+      templatesTemplate.objRole = template.role;
+    }
+  } else {
+    delete obj.templateRole;
+  }
+}
+
+/**
+@function combineLocaleRoles
+@description
+Combines roles for nested locales. Creates parent.child role combinations.
+
+@param {Object} child The child locale.
+@param {Object} parent The parent locale.
+*/
+function combineLocaleRoles(child, parent) {
   if (!parent || !child) return;
 
   // Ensure roles objects exist
   child.roles ??= {};
   parent.roles ??= {};
 
-  // Handle single string role property if present
+  // Convert string role properties to roles object entries
   if (child.role && typeof child.role === 'string') {
-    child.roles[child.role] = true;
+    child.roles[child.role] ??= true;
   }
 
   if (parent.role && typeof parent.role === 'string') {
-    parent.roles[parent.role] = true;
+    parent.roles[parent.role] ??= true;
   }
 
-  // Merge parent roles into child roles
+  // Merge parent roles into child roles first
   Object.assign(child.roles, parent.roles);
 
   // Identify roles specific to the child (not present in parent)
@@ -249,7 +332,7 @@ export function combine(child, parent) {
   // Create combinations Parent.Child
   Object.keys(parent.roles).forEach((p) => {
     specificChildRoles.forEach((c) => {
-      child.roles[`${p}.${c}`] = true;
+      child.roles[`${p}.${c}`] ??= true;
     });
   });
 }

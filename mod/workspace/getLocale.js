@@ -157,7 +157,7 @@ async function composeLocale(locale, parentLocale, params, workspaceKey) {
       locale.role = `${parentLocale.role}.${locale.role}`;
     }
 
-    locale = merge(parentLocale, locale);
+    locale = merge(structuredClone(parentLocale), locale);
   }
 
   if (Array.isArray(params.locale) && params.locale.length > 0) {
