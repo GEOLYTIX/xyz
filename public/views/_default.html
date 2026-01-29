@@ -356,10 +356,10 @@
             data_id: `locale-dropdown-${level}`,
             // Display short name (last part of path)
             placeholder: selectedEntry
-                ? (selectedEntry.name || selectedEntry.key).split(/\/|,/).pop()
+                ? (selectedEntry.name || selectedEntry.key).split(/[/,]/).pop()
                 : 'Select Locale',
             entries: list.map(l => ({
-                title: (l.name || l.key).split(/\/|,/).pop(),
+                title: (l.name || l.key).split(/[/,]/).pop(),
                 key: l.key
             })),
             callback: (e, entry) => {
