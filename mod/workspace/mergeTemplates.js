@@ -130,7 +130,7 @@ async function objTemplate(obj, template, roles) {
 
   template = structuredClone(template);
 
-  roleAssign(obj, template);
+  Roles.combine(template, obj);
 
   if (roles !== true && !Roles.check(template, roles)) {
     if (obj.template) {
@@ -208,67 +208,8 @@ async function processRecursiveTemplates(obj, nextTemplates, roles) {
 }
 
 /**
-@function roleAssign
-
-@description
-Templates may have an access role restriction. The `template.role` string property requires a user to have that role in order to access the template.
-
-The role string will be added as boolean:true property to the `template.roles` object property if the property key is undefined.
-
-`template.role = 'bar' -> template.roles = {'bar':true}`
-
-A dot notation role key will be created if the obj has a role string property.
-
-`obj.role = 'foo' && template.role = 'bar' -> template.roles = {'foo.bar':true}`
-
-@param {Object} obj
-@param {Object} template The template maybe an object with a src property or a string.
-@property {string} template.role The template has an access role restriction.
-*/
-function roleAssign(obj, template) {
-  if (!template.role) return;
-
-  template.roles ??= {};
-  template.roles[template.role] ??= true;
-
-  // Filter out undefined roles and duplicates from roles array.
-  const roleArr = Array.from(
-    new Set(
-      [obj.localeRole, obj.role, obj.templateRole, template.role].filter(
-        (role) => typeof role === 'string',
-      ),
-    ),
-  );
-
-  // Join roles array into the template.roles.
-  if (roleArr.length) {
-    template.roles[roleArr.join('.')] ??= true;
-  }
-
-  obj.roles ??= {};
-
-  // Concatenate the template.role to each obj.roles{} key where the last role does not match the template.objRole.
-  for (const role of Object.keys(obj.roles)) {
-    const tailRole = role.split('.').pop();
-    if (tailRole !== template.objRole) {
-      continue;
-    }
-    template.roles[`${role}.${template.role}`] ??= true;
-  }
-
-  if (Array.isArray(template.templates)) {
-    template.templateRole = template.role;
-    for (const templatesTemplate of template.templates) {
-      if (typeof templatesTemplate !== 'object') continue;
-      templatesTemplate.objRole = template.role;
-    }
-  } else {
-    delete obj.templateRole;
-  }
-}
-
-/**
 @function assignWorkspaceTemplates
+
 
 @description
 The method parses an object for a template object property.

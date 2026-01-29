@@ -45,7 +45,7 @@
   "locales": {
     "germany": {
       "template": "germany_template",
-      "locales": ["germany", "globalvista_template"]
+      "locales": ["globalvista_template"]
     },
     "uk": {
       "template": "uk_template",

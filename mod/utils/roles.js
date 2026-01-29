@@ -210,3 +210,46 @@ export function fromObj(rolesSet, obj) {
     }
   });
 }
+
+/**
+@function combine
+@description
+Combines roles from a parent object into a child object.
+The method ensures that role access logic flows from parent to child.
+Roles defined in the parent are prepended to roles in the child.
+Parent roles are also merged into the child roles object.
+
+@param {Object} child The child object (e.g. sub-locale, layer, or template).
+@param {Object} parent The parent object (e.g. locale, layer).
+*/
+export function combine(child, parent) {
+  if (!parent || !child) return;
+
+  // Ensure roles objects exist
+  child.roles ??= {};
+  parent.roles ??= {};
+
+  // Handle single string role property if present
+  if (child.role && typeof child.role === 'string') {
+    child.roles[child.role] = true;
+  }
+
+  if (parent.role && typeof parent.role === 'string') {
+    parent.roles[parent.role] = true;
+  }
+
+  // Merge parent roles into child roles
+  Object.assign(child.roles, parent.roles);
+
+  // Identify roles specific to the child (not present in parent)
+  const specificChildRoles = Object.keys(child.roles).filter(
+    (r) => !parent.roles[r],
+  );
+
+  // Create combinations Parent.Child
+  Object.keys(parent.roles).forEach((p) => {
+    specificChildRoles.forEach((c) => {
+      child.roles[`${p}.${c}`] = true;
+    });
+  });
+}

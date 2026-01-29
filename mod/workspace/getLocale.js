@@ -124,7 +124,7 @@ async function processRoles(locale, parentLocale, params, isLeaf) {
   // This occurs because mergeTemplates only combines roles when merging a template into an object,
   // but here the locale object IS the template.
   if (parentLocale?.roles && locale.roles) {
-    combineRoles(locale, parentLocale);
+    Roles.combine(locale, parentLocale);
   }
 
   // Strict Role Check
@@ -175,18 +175,6 @@ async function composeLocale(locale, parentLocale, params, workspaceKey) {
   delete locale._type;
 
   return locale;
-}
-
-function combineRoles(locale, parentLocale) {
-  const specificChildRoles = Object.keys(locale.roles).filter(
-    (r) => !parentLocale.roles[r],
-  );
-
-  Object.keys(parentLocale.roles).forEach((p) => {
-    specificChildRoles.forEach((c) => {
-      locale.roles[`${p}.${c}`] ??= true;
-    });
-  });
 }
 
 function checkRoles(locale, parentLocale, user, isLeaf) {

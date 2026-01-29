@@ -1,4 +1,4 @@
-import { check, fromObj, objMerge } from '../../../mod/utils/roles.js';
+import { check, combine, fromObj, objMerge } from '../../../mod/utils/roles.js';
 
 codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
   codi.describe(
@@ -636,6 +636,60 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
           };
           fromObj(rolesSet, obj);
           codi.assertEqual(rolesSet.size, 0);
+        },
+      );
+    },
+  );
+
+  codi.describe(
+    {
+      name: 'combine()',
+      id: 'roles_module_combine',
+      parentId: 'roles_module',
+    },
+    () => {
+      codi.it(
+        {
+          name: 'should combine parent roles with child roles',
+          parentId: 'roles_module_combine',
+        },
+        () => {
+          const child = { roles: { Child: true } };
+          const parent = { roles: { Parent: true } };
+          combine(child, parent);
+          codi.assertTrue(child.roles.Parent);
+          codi.assertTrue(child.roles.Child);
+          codi.assertTrue(child.roles['Parent.Child']);
+        },
+      );
+
+      codi.it(
+        {
+          name: 'should handle string role properties',
+          parentId: 'roles_module_combine',
+        },
+        () => {
+          const child = { role: 'Child' };
+          const parent = { role: 'Parent' };
+          combine(child, parent);
+          codi.assertTrue(child.roles.Parent);
+          codi.assertTrue(child.roles.Child);
+          codi.assertTrue(child.roles['Parent.Child']);
+        },
+      );
+
+      codi.it(
+        {
+          name: 'should not combine if parent role is same as child role',
+          parentId: 'roles_module_combine',
+        },
+        () => {
+          const child = { roles: { Common: true } };
+          const parent = { roles: { Common: true } };
+          combine(child, parent);
+          codi.assertTrue(child.roles.Common);
+          // Should NOT have 'Common.Common'
+          codi.assertFalse(!!child.roles['Common.Common']);
         },
       );
     },
