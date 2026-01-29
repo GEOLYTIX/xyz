@@ -735,15 +735,123 @@ function assignChecksum(obj) {
 }
 
 /**
+@function extractRolesFromObject
+@description
+Extracts role strings from an object's role and roles properties.
+
+@param {Object} obj Object to extract roles from.
+@returns {Array<string>} Array of role strings.
+*/
+function extractRolesFromObject(obj) {
+  const roles = [];
+
+  if (typeof obj.role === 'string') {
+    roles.push(obj.role);
+  }
+
+  if (typeof obj.roles === 'object' && obj.roles !== null) {
+    Object.keys(obj.roles).forEach((role) => {
+      if (role !== '*') roles.push(role);
+    });
+  }
+
+  return roles;
+}
+
+/**
+@function combineRolesWithParent
+@description
+Combines object roles with parent roles to create hierarchical role strings.
+
+@param {Array<string>} objRoles Roles from the current object.
+@param {Set<string>} parentRoles Roles from parent locale/template.
+@param {Set<string>} rolesSet Set to add combined roles to.
+@returns {Set<string>} Qualified roles for this level.
+*/
+function combineRolesWithParent(objRoles, parentRoles, rolesSet) {
+  const qualifiedRoles = new Set();
+
+  if (objRoles.length === 0) {
+    // No object roles, pass through parent roles
+    return parentRoles;
+  }
+
+  if (parentRoles.size === 0) {
+    // No parent roles, use object roles as roots
+    objRoles.forEach((role) => {
+      rolesSet.add(role);
+      qualifiedRoles.add(role);
+    });
+    return qualifiedRoles;
+  }
+
+  // Combine parent and object roles (Cartesian product)
+  parentRoles.forEach((parentRole) => {
+    objRoles.forEach((objRole) => {
+      const combined = `${parentRole}.${objRole}`;
+      rolesSet.add(combined);
+      qualifiedRoles.add(combined);
+    });
+  });
+
+  return qualifiedRoles;
+}
+
+/**
+@function addLayerRoleCombinations
+@description
+Adds combinations of locale roles and layer roles to the roles set.
+
+@param {Array<string>} layerRoles Roles from a layer.
+@param {Set<string>} qualifiedRoles Qualified roles from the parent locale.
+@param {Set<string>} rolesSet Set to add roles to.
+*/
+function addLayerRoleCombinations(layerRoles, qualifiedRoles, rolesSet) {
+  // Add standalone layer roles
+  layerRoles.forEach((role) => rolesSet.add(role));
+
+  // Combine with qualified locale roles if present
+  if (qualifiedRoles.size > 0) {
+    qualifiedRoles.forEach((localeRole) => {
+      layerRoles.forEach((layerRole) => {
+        rolesSet.add(`${localeRole}.${layerRole}`);
+      });
+    });
+  }
+}
+
+/**
+@function processLayerRoles
+@description
+Extracts and combines layer roles with locale roles.
+
+@param {Object} layers Object containing layer definitions.
+@param {Set<string>} qualifiedRoles Qualified roles from the parent locale.
+@param {Set<string>} rolesSet Set to add roles to.
+*/
+function processLayerRoles(layers, qualifiedRoles, rolesSet) {
+  if (!layers || typeof layers !== 'object') return;
+
+  Object.values(layers).forEach((layer) => {
+    if (!layer || typeof layer !== 'object') return;
+
+    const layerRoles = extractRolesFromObject(layer);
+    if (layerRoles.length === 0) return;
+
+    addLayerRoleCombinations(layerRoles, qualifiedRoles, rolesSet);
+  });
+}
+
+/**
 @function traverseNestedLocales
 @description
 Recursively traverses nested locales to generate hierarchical role strings.
 
 @param {string} key The key of the current locale or template.
-@param {set} rolesSet Set to store unique role strings.
+@param {Set<string>} rolesSet Set to store unique role strings.
 @param {workspace} cachedWorkspace Cached workspace containing locales and templates.
-@param {set} parentRoles Set of role strings from parent locales.
-@param {set} visitedKeys Set of visited keys to prevent infinite recursion.
+@param {Set<string>} parentRoles Set of role strings from parent locales.
+@param {Set<string>} visitedKeys Set of visited keys to prevent infinite recursion.
 */
 function traverseNestedLocales(
   key,
@@ -758,93 +866,34 @@ function traverseNestedLocales(
     return;
   }
 
+  // Lookup the locale or template object
   const obj = cachedWorkspace.locales[key] || cachedWorkspace.templates[key];
   if (!obj) return;
 
-  // Determine roles for the current object
-  const objRoles = [];
+  // Extract roles from this object
+  const objRoles = extractRolesFromObject(obj);
 
-  // Check 'role' property (string)
-  if (typeof obj.role === 'string') {
-    objRoles.push(obj.role);
-  }
+  // Combine with parent roles to get qualified roles for this level
+  const qualifiedRoles = combineRolesWithParent(
+    objRoles,
+    parentRoles,
+    rolesSet,
+  );
 
-  // Check 'roles' property (object keys)
-  if (typeof obj.roles === 'object') {
-    Object.keys(obj.roles).forEach((role) => {
-      if (role !== '*') objRoles.push(role);
-    });
-  }
-
-  // Determine the "qualified roles" for this level
-  let qualifiedRoles = new Set();
-
-  if (objRoles.length > 0) {
-    if (parentRoles.size > 0) {
-      // Cartesian product of parentRoles x objRoles
-      parentRoles.forEach((parentRole) => {
-        objRoles.forEach((objRole) => {
-          const combined = `${parentRole}.${objRole}`;
-          rolesSet.add(combined);
-          qualifiedRoles.add(combined);
-        });
-      });
-    } else {
-      // No parent roles, so these are top-level roots for this branch
-      objRoles.forEach((role) => {
-        rolesSet.add(role);
-        qualifiedRoles.add(role);
-      });
-    }
-  } else {
-    // If current object has no roles, pass through parent roles
-    qualifiedRoles = parentRoles;
-  }
+  // Process layer roles if present
+  processLayerRoles(obj.layers, qualifiedRoles, rolesSet);
 
   // Recurse into nested locales
-  if (obj.locales && Array.isArray(obj.locales)) {
+  if (Array.isArray(obj.locales)) {
+    const updatedVisitedKeys = new Set(visitedKeys).add(key);
     obj.locales.forEach((nestedLocaleKey) => {
       traverseNestedLocales(
         nestedLocaleKey,
         rolesSet,
         cachedWorkspace,
         qualifiedRoles,
-        visitedKeys.add(key),
+        updatedVisitedKeys,
       );
-    });
-  }
-
-  // Also traverse layers to find layer roles and combine them with locale roles
-  if (obj.layers && typeof obj.layers === 'object') {
-    Object.values(obj.layers).forEach((layer) => {
-      if (layer && typeof layer === 'object') {
-        const layerRoles = [];
-
-        // Check layer's role property
-        if (typeof layer.role === 'string') {
-          layerRoles.push(layer.role);
-        }
-
-        // Check layer's roles object
-        if (typeof layer.roles === 'object') {
-          Object.keys(layer.roles).forEach((role) => {
-            if (role !== '*') layerRoles.push(role);
-          });
-        }
-
-        // Combine layer roles with qualified locale roles
-        if (layerRoles.length > 0) {
-          if (qualifiedRoles.size > 0) {
-            qualifiedRoles.forEach((localeRole) => {
-              layerRoles.forEach((layerRole) => {
-                rolesSet.add(`${localeRole}.${layerRole}`);
-              });
-            });
-          }
-          // Also add standalone layer roles
-          layerRoles.forEach((role) => rolesSet.add(role));
-        }
-      }
     });
   }
 }

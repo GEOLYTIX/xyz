@@ -107,8 +107,6 @@ await codi.describe(
 
         const roles = res._getData();
 
-        console.log(roles);
-
         codi.assertEqual(
           roles,
           expectedRoles,
