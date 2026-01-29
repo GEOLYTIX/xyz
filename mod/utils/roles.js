@@ -329,13 +329,13 @@ function combineLocaleRoles(child, parent) {
 
   // Identify roles specific to the child (not present in parent)
   const specificChildRoles = Object.keys(child.roles).filter(
-    (r) => !parent.roles[r],
+    (role) => !parent.roles[role],
   );
 
   // Create combinations Parent.Child
-  Object.keys(parent.roles).forEach((p) => {
-    specificChildRoles.forEach((c) => {
-      child.roles[`${p}.${c}`] ??= true;
+  Object.keys(parent.roles).forEach((parentRole) => {
+    specificChildRoles.forEach((childRole) => {
+      child.roles[`${parentRole}.${childRole}`] ??= true;
     });
   });
 }
