@@ -326,35 +326,64 @@
         }
       }
 
-    if (locale.locales) {
-
-      // Get list of accessible locales from Workspace API.
-      const nestedLocales = await mapp.utils.xhr(
-        `${mapp.host}/api/workspace/locales?locale=${locale.key}`,
-      );
-
-      // The nested locales for the current locale will be spread into the locales array.
-      locales = [...locales, ...nestedLocales]
-    }
-
     const layersPanel = mapp.utils.html.node`<div id="layers" class="active">`
 
-    // Add locale dropdown to layers panel if multiple locales are accessible.
-    if (locales.length > 1) {
-      const localesDropdown = mapp.ui.elements.dropdown({
-        data_id: 'locales-dropdown',
-        placeholder: locale.name || locale.key,
-        entries: locales.map((locale) => ({
-          title: locale.name || locale.key,
-          key: locale.key,
-        })),
-        callback: (e, entry) => {
-          window.location.assign(`${mapp.host}?locale=${entry.key}`);
-        },
-      });
-
-      layersPanel.appendChild(localesDropdown);
+    // Parse the current locale path from the hooks or the loaded locale key
+    // mapp.hooks.current.locale is the raw URL string "UK,London" or undefined
+    let currentPath = [];
+    if (mapp.hooks.current.locale) {
+        currentPath = Array.isArray(mapp.hooks.current.locale)
+            ? mapp.hooks.current.locale
+            : mapp.hooks.current.locale.split(',');
+    } else {
+        // Use the key from the loaded locale.
+        currentPath = Array.isArray(locale.key) ? locale.key : [locale.key];
     }
+
+    // Recursive function to build dependent dropdowns
+    async function localeDropdowns(level, list) {
+        if (!list || !list.length) return;
+
+        // Construct the expected key for the current selection at this level.
+        // For root (level 0), this is just the first segment.
+        // For nested (level 1+), it is the cumulative path "A,B".
+        const expectedKey = currentPath.slice(0, level + 1).join(',');
+
+        // Find the selected entry object
+        const selectedEntry = list.find(l => l.key === expectedKey);
+
+        const dropdown = mapp.ui.elements.dropdown({
+            data_id: `locale-dropdown-${level}`,
+            // Display short name (last part of path)
+            placeholder: selectedEntry
+                ? (selectedEntry.name || selectedEntry.key).split(/\/|,/).pop()
+                : 'Select Locale',
+            entries: list.map(l => ({
+                title: (l.name || l.key).split(/\/|,/).pop(),
+                key: l.key
+            })),
+            callback: (e, entry) => {
+                window.location.assign(`${mapp.host}?locale=${entry.key}`);
+            }
+        });
+
+        layersPanel.appendChild(dropdown);
+
+        // If we have a selection at this level, check if we need to show the next level
+        if (selectedEntry) {
+             // Fetch children for this selection
+             const nextList = await mapp.utils.xhr(
+                `${mapp.host}/api/workspace/locales?locale=${selectedEntry.key}`
+             );
+
+             if (nextList && nextList.length > 0) {
+                 await localeDropdowns(level + 1, nextList);
+             }
+        }
+    }
+
+    // Initial call for Root level
+    await localeDropdowns(0, locales);
 
     if (!window.ol) await mapp.utils.olScript();
 

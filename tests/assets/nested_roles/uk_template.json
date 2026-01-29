@@ -1,5 +1,17 @@
 {
   "role": "uk",
+  "view": {
+    "lat": 54.5,
+    "lng": -2.9450000000000003,
+    "z": 5
+  },
+  "extent": {
+    "north": 62.980000000000004,
+    "south": 45.620000000000005,
+    "east": 10,
+    "west": -16,
+    "mask": true
+  },
   "layers": {
     "OSM_UK": {
       "display": true,
