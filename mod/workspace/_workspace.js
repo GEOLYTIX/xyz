@@ -211,13 +211,15 @@ async function getNestedLocales(req, res) {
   for (const key of locale.locales) {
     const nestedLocale = await getLocale(
       { ...req.params, locale: key },
-      locale,
+      structuredClone(locale),
     );
 
     if (nestedLocale instanceof Error) continue;
 
     nestedLocales.push({
-      key: `[${locale.key}]`,
+      key: Array.isArray(nestedLocale.key)
+        ? nestedLocale.key.join(',')
+        : nestedLocale.key,
       name: `${nestedLocale.name || key}`,
       locales: nestedLocale.locales,
     });
