@@ -207,6 +207,9 @@ export function fromObj(rolesSet, obj) {
 
       // Call method recursive for nested objects.
       fromObj(rolesSet, obj[key]);
+    } else if (key === 'role' && typeof obj[key] === 'string') {
+      // Also extract single role string properties
+      rolesSet.add(obj[key].replace(/^!/, ''));
     }
   });
 }

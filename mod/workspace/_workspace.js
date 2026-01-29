@@ -357,14 +357,34 @@ async function roles(req, res) {
 
   Roles.fromObj(rolesSet, cache);
 
-  Object.values(cache.locales).forEach((locale) => {
-    traverseNestedLocales(locale.key, rolesSet, cache);
+  // Traverse using the ORIGINAL workspace structure to understand nesting
+  // before we merge
+  Object.keys(workspace.locales).forEach((localeKey) => {
+    traverseNestedLocales(localeKey, rolesSet, cache);
   });
 
   const rolesTree = {};
 
   // Delete restricted Asterisk role.
   rolesSet.delete('*');
+
+  // Remove self-referential double roles
+  const rolesToRemove = new Set();
+  rolesSet.forEach((role) => {
+    const parts = role.split('.');
+    // Check if it's a double role like 'locale.locale'
+    if (parts.length === 2 && parts[0] === parts[1]) {
+      rolesToRemove.add(role);
+    }
+    // Also remove triple+ nesting of same role
+    for (let i = 0; i < parts.length - 1; i++) {
+      if (parts[i] === parts[i + 1]) {
+        rolesToRemove.add(role);
+        break;
+      }
+    }
+  });
+  rolesToRemove.forEach((role) => rolesSet.delete(role));
 
   for (const role of rolesSet) {
     const rolesArr = role.split('.');
@@ -791,6 +811,40 @@ function traverseNestedLocales(
         qualifiedRoles,
         visitedKeys.add(key),
       );
+    });
+  }
+
+  // Also traverse layers to find layer roles and combine them with locale roles
+  if (obj.layers && typeof obj.layers === 'object') {
+    Object.values(obj.layers).forEach((layer) => {
+      if (layer && typeof layer === 'object') {
+        const layerRoles = [];
+
+        // Check layer's role property
+        if (typeof layer.role === 'string') {
+          layerRoles.push(layer.role);
+        }
+
+        // Check layer's roles object
+        if (typeof layer.roles === 'object') {
+          Object.keys(layer.roles).forEach((role) => {
+            if (role !== '*') layerRoles.push(role);
+          });
+        }
+
+        // Combine layer roles with qualified locale roles
+        if (layerRoles.length > 0) {
+          if (qualifiedRoles.size > 0) {
+            qualifiedRoles.forEach((localeRole) => {
+              layerRoles.forEach((layerRole) => {
+                rolesSet.add(`${localeRole}.${layerRole}`);
+              });
+            });
+          }
+          // Also add standalone layer roles
+          layerRoles.forEach((role) => rolesSet.add(role));
+        }
+      }
     });
   }
 }

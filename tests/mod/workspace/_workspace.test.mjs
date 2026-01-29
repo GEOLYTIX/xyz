@@ -76,9 +76,11 @@ await codi.describe(
           'germany.globalvista',
           'germany.globalvista.brand_a',
           'germany.globalvista.brand_b',
+          'germany.globalvista.OBJ_ROLE',
           'globalvista',
           'OBJ_ROLE',
           'TEMPLATE_ROLE',
+          'test',
           'uk',
           'uk.coremarkets',
           'uk.coremarkets.brand_a',
@@ -86,8 +88,10 @@ await codi.describe(
           'uk.globalvista',
           'uk.globalvista.brand_a',
           'uk.globalvista.brand_b',
+          'uk.globalvista.OBJ_ROLE',
           'uk.OBJ_ROLE',
           'uk.TEMPLATE_ROLE',
+          'uk.test',
         ];
         const { req, res } = codi.mockHttp.createMocks({
           params: {
@@ -102,6 +106,8 @@ await codi.describe(
         await getKeyMethod(req, res);
 
         const roles = res._getData();
+
+        console.log(roles);
 
         codi.assertEqual(
           roles,
