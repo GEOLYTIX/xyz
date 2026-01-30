@@ -120,13 +120,6 @@ async function processRoles(locale, parentLocale, params, isLeaf) {
     return locale;
   }
 
-  // Manually combine parent roles with child roles if mergeTemplates didn't do it.
-  // This occurs because mergeTemplates only combines roles when merging a template into an object,
-  // but here the locale object IS the template.
-  if (parentLocale?.roles && locale.roles) {
-    Roles.combine(locale, parentLocale);
-  }
-
   // Strict Role Check
   if (!params.ignoreRoles) {
     if (!checkRoles(locale, parentLocale, params.user, isLeaf)) {

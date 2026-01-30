@@ -72,11 +72,7 @@ await codi.describe(
         parentId: 'workspace_mergeTemplates',
       },
       async () => {
-        const expectedRoles = [
-          'locale.layer',
-          'template',
-          'locale.layer.template',
-        ];
+        const expectedRoles = ['template', 'locale.layer.template'];
         const layer = {
           localeRole: 'locale',
           role: 'layer',

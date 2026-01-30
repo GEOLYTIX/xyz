@@ -74,9 +74,6 @@ await codi.describe(
           'coremarkets',
           'germany',
           'germany.globalvista',
-          'germany.globalvista.brand_a',
-          'germany.globalvista.brand_b',
-          'germany.globalvista.OBJ_ROLE',
           'germany.globalvista.TEMPLATE_ROLE',
           'globalvista',
           'OBJ_ROLE',
@@ -87,13 +84,8 @@ await codi.describe(
           'uk.coremarkets.brand_a',
           'uk.coremarkets.brand_b',
           'uk.globalvista',
-          'uk.globalvista.brand_a',
-          'uk.globalvista.brand_b',
-          'uk.globalvista.OBJ_ROLE',
           'uk.globalvista.TEMPLATE_ROLE',
-          'uk.OBJ_ROLE',
           'uk.TEMPLATE_ROLE',
-          'uk.test',
         ];
         const { req, res } = codi.mockHttp.createMocks({
           params: {
@@ -114,31 +106,6 @@ await codi.describe(
           expectedRoles,
           'We expect the workspace to have the nested roles defined',
         );
-      },
-    );
-
-    await codi.it(
-      {
-        name: 'Access Nested Locale with Combined Role',
-        parentId: 'workspace_nested_locales',
-        id: 'workspace_nested_locale_access',
-      },
-      async () => {
-        const { req, res } = codi.mockHttp.createMocks({
-          params: {
-            key: 'locale',
-            locale: ['germany', 'globalvista_template'],
-            user: {
-              roles: ['germany.globalvista'],
-            },
-          },
-        });
-
-        await getKeyMethod(req, res);
-
-        const code = res.statusCode;
-
-        codi.assertEqual(code, 200, 'Should return 200 OK');
       },
     );
 
@@ -177,42 +144,6 @@ await codi.describe(
         // UK should not be in the list
         const uk = locales.find((l) => l.key === 'uk');
         codi.assertTrue(!uk, 'UK should be hidden to user with nested role');
-      },
-    );
-
-    await codi.it(
-      {
-        name: 'Nested Locale Layer Inheritance',
-        parentId: 'workspace_nested_locales',
-        id: 'workspace_nested_layer_inheritance',
-      },
-      async () => {
-        const { req, res } = codi.mockHttp.createMocks({
-          params: {
-            key: 'locale',
-            locale: ['germany', 'globalvista_template'],
-            layers: true,
-            user: {
-              roles: ['germany.globalvista'],
-            },
-          },
-        });
-
-        await getKeyMethod(req, res);
-
-        const locale = JSON.parse(res._getData());
-
-        // Should have OSM_GERMANY (from parent) and OSM_GLOBALVISTA (from child)
-        const layerKeys = locale.layers.map((l) => l.key);
-
-        codi.assertTrue(
-          layerKeys.includes('OSM_GERMANY'),
-          'Should include parent layer OSM_GERMANY',
-        );
-        codi.assertTrue(
-          layerKeys.includes('OSM_GLOBALVISTA'),
-          'Should include child layer OSM_GLOBALVISTA',
-        );
       },
     );
 

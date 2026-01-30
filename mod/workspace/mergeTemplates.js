@@ -62,21 +62,6 @@ export default async function mergeTemplates(obj, roles) {
     console.warn(err);
   }
 
-  // This must happen after the template merge which will assign the localeRole.
-  if (typeof obj.role === 'string') {
-    if (
-      typeof obj.localeRole === 'string' &&
-      !obj.role.startsWith(`${obj.localeRole}.`)
-    ) {
-      obj.role = `${obj.localeRole}.${obj.role}`;
-    }
-    obj.roles ??= {};
-    obj.roles[obj.role] ??= true;
-  } else if (typeof obj.localeRole === 'string') {
-    obj.roles ??= {};
-    obj.roles[obj.localeRole] ??= true;
-  }
-
   // Substitute ${SRC_*} in object string.
   obj = envReplace(obj);
 
