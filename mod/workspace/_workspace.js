@@ -681,7 +681,7 @@ async function cacheTemplates(params) {
   const cache = await workspaceCache(params.force);
 
   for (const localeKey of Object.keys(cache.locales)) {
-    await cacheLocale(cache.locales, localeKey, params.user)
+    await cacheLocale(cache.locales, localeKey, params.user);
   }
   logger(`cachelocales: ${Date.now() - timestamp}`, 'cachelocales');
 
@@ -697,7 +697,6 @@ async function cacheTemplates(params) {
 }
 
 async function cacheLocale(cachedLocales, localeKey, user) {
-
   // Will get layer and assignTemplates to workspace.
   const locale = await getLocale({
     locale: localeKey,
@@ -730,7 +729,7 @@ async function cacheLocale(cachedLocales, localeKey, user) {
   if (!Array.isArray(locale.locales)) return;
 
   for (const nestedLocale of locale.locales) {
-    await cacheLocale(cachedLocales, [localeKey, nestedLocale].join(','), user)
+    await cacheLocale(cachedLocales, [localeKey, nestedLocale].join(','), user);
   }
 }
 
