@@ -129,19 +129,25 @@ await codi.describe(
 
         await getKeyMethod(req, res);
 
-        const expectedLocales = [{
-          key: "uk",
-          name: "uk",
-          locales: [
-            "globalvista_template",
-            "coremarkets_template",
-            "no_role_locale",
-          ],
-        }];
+        const expectedLocales = [
+          {
+            key: 'uk',
+            name: 'uk',
+            locales: [
+              'globalvista_template',
+              'coremarkets_template',
+              'no_role_locale',
+            ],
+          },
+        ];
 
         const locales = res._getData();
 
-        codi.assertEqual(expectedLocales, locales, 'User should have access to uk locale only with nested locales.');
+        codi.assertEqual(
+          expectedLocales,
+          locales,
+          'User should have access to uk locale only with nested locales.',
+        );
 
         // Germany should NOT be in the list
         const germany = locales.find((l) => l.key === 'germany');
@@ -149,8 +155,6 @@ await codi.describe(
           !germany,
           'Germany should not be visible to user with UK role',
         );
-
-
       },
     );
 
