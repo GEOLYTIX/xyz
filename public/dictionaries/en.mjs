@@ -88,6 +88,7 @@ export default {
   link: 'Link',
   loading: 'Loading',
   location_clear_all: 'Clear locations',
+  location_new_failed: 'Creating new location has failed.',
   location_no_location_selected: 'No Locations selected',
   location_close_without_save: 'Close location without saving changes?',
   location_delete: 'Delete location',

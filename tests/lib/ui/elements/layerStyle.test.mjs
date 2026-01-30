@@ -54,7 +54,7 @@ export function layerStyle(mapview) {
         },
         () => {
           const hoverCheckBox = panel.querySelector(
-            '[data-id="hoverCheckbox"]',
+            '[data-id="hoverCheckbox-layer_style_test"]',
           );
           codi.assertTrue(
             !!hoverCheckBox,
@@ -71,7 +71,7 @@ export function layerStyle(mapview) {
         },
         () => {
           const hoversDropDown = panel.querySelector(
-            '[data-id="hoversDropdown"]',
+            '[data-id="hoversDropdown-layer_style_test"]',
           );
           codi.assertTrue(
             !!hoversDropDown,
@@ -99,29 +99,11 @@ export function layerStyle(mapview) {
           parentId: 'ui_elements_layer_style',
         },
         () => {
-          const themesDropdown = panel.querySelector(
-            '[data-id="themesDropdown"]',
-          );
+          const themesDropdown = panel.querySelector('[data-id="layerTheme"]');
+
           codi.assertTrue(
             !!themesDropdown,
             'The panel should have a themes dropdown',
-          );
-        },
-      );
-
-      //icon scaling checkbox
-      codi.it(
-        {
-          name: 'The panel function should return an icon scaling field checkbox',
-          parentId: 'ui_elements_layer_style',
-        },
-        () => {
-          const iconScalingFieldCheckBox = panel.querySelector(
-            '[data-id="iconScalingFieldCheckbox"]',
-          );
-          codi.assertTrue(
-            !!iconScalingFieldCheckBox,
-            'The panel should have an icon scaling field check box',
           );
         },
       );

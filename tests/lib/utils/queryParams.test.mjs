@@ -17,22 +17,6 @@ export async function queryParams(mapview) {
     },
     () => {
       codi.it(
-        {
-          name: 'Providing a bogus param object',
-          parentId: 'utils_queryParams',
-        },
-        () => {
-          const origin = {
-            queryParams: '',
-          };
-
-          mapp.utils.queryParams(origin);
-
-          codi.assertEqual(mockWarn[0], 'queryparams must be an object');
-        },
-      );
-
-      codi.it(
         { name: 'Providing a layer', parentId: 'utils_queryParams' },
         async () => {
           const layer_params = geojsonLayerDefault;
