@@ -145,6 +145,10 @@ async function locales(req, res) {
   const locales = [];
 
   for (const localeKey of Object.keys(workspace.locales)) {
+
+    // Nested locales should not be parsed unless specifically requested.
+    if (localeKey.split(',').length > 1) continue;
+
     const locale = await getLocale({
       user: req.params.user,
       locale: localeKey,
