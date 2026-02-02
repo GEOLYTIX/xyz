@@ -66,7 +66,7 @@ export default async function getLayer(params, locale) {
   let layer;
 
   if (Object.hasOwn(locale.layers, params.layer)) {
-    layer = locale.layers[params.layer];
+    layer = structuredClone(locale.layers[params.layer]);
   } else {
     // A layer maybe defined as a template only.
     layer = await getTemplate(params.layer);

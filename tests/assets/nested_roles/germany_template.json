@@ -23,9 +23,7 @@
       "templates": [
         {
           "role": "TEMPLATES_ROLE",
-          "attribution": {
-            "© OpenStreetMap": "Attribution from template."
-          }
+          "display": false
         }
       ]
     }

@@ -681,7 +681,7 @@ async function cacheTemplates(params) {
   cache.locales = structuredClone(cache.locales);
 
   for (const localeKey of Object.keys(cache.locales)) {
-    await cacheLocale(cache.locales, localeKey, params.user);
+    await cacheLocale(cache, cache.locales, localeKey, params.user);
   }
   logger(`cachelocales: ${Date.now() - timestamp}`, 'cachelocales');
 
@@ -696,7 +696,7 @@ async function cacheTemplates(params) {
   return cache;
 }
 
-async function cacheLocale(cachedLocales, localeKey, user) {
+async function cacheLocale(workspace, cachedLocales, localeKey, user) {
   // Will get layer and assignTemplates to workspace.
   const locale = await getLocale({
     locale: localeKey,
@@ -709,6 +709,33 @@ async function cacheLocale(cachedLocales, localeKey, user) {
   // If the locale has no layers, just skip it.
   if (locale.layers) {
     const layerPromises = Object.keys(locale.layers).map(async (layerKey) => {
+      const currentKey = localeKey.split(',').pop();
+      const localeDef = workspace.locales?.[currentKey];
+
+      let isDefined = !!localeDef?.layers?.[layerKey];
+
+      if (!isDefined) {
+        const templateKey = localeDef?.template || (!localeDef && currentKey);
+
+        if (templateKey) {
+          const template = await getTemplate(templateKey);
+          if (
+            !(template instanceof Error) &&
+            Object.hasOwn(template.layers || {}, layerKey)
+          ) {
+            isDefined = true;
+          }
+        }
+      }
+
+      if (
+        !isDefined &&
+        locale.merged_layers &&
+        locale.merged_layers[layerKey]
+      ) {
+        return;
+      }
+
       // Will get layer and assignTemplates to workspace.
       const layer = await getLayer(
         {
@@ -720,7 +747,8 @@ async function cacheLocale(cachedLocales, localeKey, user) {
         locale,
       );
 
-      locale.layers[layerKey] = layer;
+      locale.merged_layers ??= {};
+      locale.merged_layers[layerKey] = layer;
     });
 
     await Promise.allSettled(layerPromises);
@@ -729,7 +757,12 @@ async function cacheLocale(cachedLocales, localeKey, user) {
   if (!Array.isArray(locale.locales)) return;
 
   for (const nestedLocale of locale.locales) {
-    await cacheLocale(cachedLocales, [localeKey, nestedLocale].join(','), user);
+    await cacheLocale(
+      workspace,
+      cachedLocales,
+      [localeKey, nestedLocale].join(','),
+      user,
+    );
   }
 }
 
