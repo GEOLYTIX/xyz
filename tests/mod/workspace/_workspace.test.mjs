@@ -72,7 +72,9 @@ await codi.describe(
           'brand_a',
           'brand_b',
           'coremarkets',
+          'draw_circle',
           'germany',
+          'germany.draw_circle',
           'germany.globalvista',
           'germany.globalvista.TEMPLATE_ROLE',
           'globalvista',
@@ -100,6 +102,8 @@ await codi.describe(
         await getKeyMethod(req, res);
 
         const roles = res._getData();
+
+        console.log(roles);
 
         codi.assertEqual(
           roles,
@@ -225,6 +229,8 @@ await codi.describe(
         await getKeyMethod(req, res);
 
         const code = res.statusCode;
+
+        console.log(code);
         codi.assertEqual(code, 200, 'Should return 200 OK');
       },
     );

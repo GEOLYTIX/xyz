@@ -19,7 +19,15 @@
       "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
       "attribution": {
         "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
-      }
+      },
+      "templates": [
+        {
+          "role": "draw_circle",
+          "draw": {
+            "circle": true
+          }
+        }
+      ]
     }
   }
 }
