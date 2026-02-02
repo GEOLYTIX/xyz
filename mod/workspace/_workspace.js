@@ -708,6 +708,7 @@ async function cacheLocale(workspace, cachedLocales, localeKey, user) {
 
   // If the locale has no layers, just skip it.
   if (locale.layers) {
+    locale.merged_layers ??= {};
     const layerPromises = Object.keys(locale.layers).map(async (layerKey) => {
       const currentKey = localeKey.split(',').pop();
       const localeDef = workspace.locales?.[currentKey];
@@ -730,7 +731,7 @@ async function cacheLocale(workspace, cachedLocales, localeKey, user) {
 
       if (
         !isDefined &&
-        locale.merged_layers?.[layerKey]
+        Object.hasOwn(locale.merged_layers, layerKey)
       ) {
         return;
       }
@@ -746,7 +747,7 @@ async function cacheLocale(workspace, cachedLocales, localeKey, user) {
         locale,
       );
 
-      (locale.merged_layers ??= {})[layerKey] = layer;
+      locale.merged_layers[layerKey] = layer;
     });
 
     await Promise.allSettled(layerPromises);
