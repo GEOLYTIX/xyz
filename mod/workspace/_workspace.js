@@ -362,12 +362,6 @@ async function roles(req, res) {
     Roles.fromObj(rolesSet, locale);
   }
 
-  // Traverse using the ORIGINAL workspace structure to understand nesting
-  // before we merge
-  // Object.keys(workspace.locales).forEach((localeKey) => {
-  //   traverseNestedLocales(localeKey, rolesSet, cache);
-  // });
-
   const rolesTree = {};
 
   // Delete restricted Asterisk role.
@@ -683,6 +677,8 @@ Finally each template defined in the workspace.templates will be cached.
 async function cacheTemplates(params) {
   const timestamp = Date.now();
   const cache = await workspaceCache(params.force);
+
+  cache.locales = structuredClone(cache.locales);
 
   for (const localeKey of Object.keys(cache.locales)) {
     await cacheLocale(cache.locales, localeKey, params.user);

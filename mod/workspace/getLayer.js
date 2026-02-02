@@ -12,7 +12,6 @@ The getLayer module exports the getLayer method which is required by the query a
 */
 
 import merge from '../utils/merge.js';
-import * as Roles from '../utils/roles.js';
 import getLocale from './getLocale.js';
 import getTemplate from './getTemplate.js';
 import mergeTemplates from './mergeTemplates.js';

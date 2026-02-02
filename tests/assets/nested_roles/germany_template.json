@@ -22,9 +22,9 @@
       },
       "templates": [
         {
-          "role": "draw_circle",
-          "draw": {
-            "circle": true
+          "role": "TEMPLATES_ROLE",
+          "attribution": {
+            "© OpenStreetMap": "Attribution from template."
           }
         }
       ]
