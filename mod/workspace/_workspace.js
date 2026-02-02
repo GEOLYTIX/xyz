@@ -747,8 +747,7 @@ async function cacheLocale(workspace, cachedLocales, localeKey, user) {
         locale,
       );
 
-      locale.merged_layers ??= {};
-      locale.merged_layers[layerKey] = layer;
+      (locale.merged_layers ??= {})[layerKey] = layer;
     });
 
     await Promise.allSettled(layerPromises);
