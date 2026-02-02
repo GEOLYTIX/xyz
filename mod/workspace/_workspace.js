@@ -730,8 +730,7 @@ async function cacheLocale(workspace, cachedLocales, localeKey, user) {
 
       if (
         !isDefined &&
-        locale.merged_layers &&
-        locale.merged_layers[layerKey]
+        locale.merged_layers?.[layerKey]
       ) {
         return;
       }
