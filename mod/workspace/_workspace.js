@@ -758,7 +758,6 @@ async function loadLocale(locales, localeKey, user) {
         locale,
       );
 
-      //locale.merged_layers[layerKey] = layer;
       locale.layers[layerKey] = layer;
     });
 
