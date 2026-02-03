@@ -729,9 +729,7 @@ async function cacheLocale(workspace, cachedLocales, localeKey, user) {
         }
       }
 
-      if (
-        !isDefined && Object.hasOwn(locale.merged_layers, layerKey)
-      ) {
+      if (!isDefined && Object.hasOwn(locale.merged_layers, layerKey)) {
         return;
       }
 
