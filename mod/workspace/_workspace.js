@@ -352,13 +352,14 @@ async function roles(req, res) {
     return res.send(workspace.roles);
   }
 
-  const cache = await cacheTemplates({
+  const locales = await cacheTemplates({
     user: req.params.user,
+    locales: true,
   });
 
   const rolesSet = new Set();
 
-  for (const locale of Object.values(cache.locales)) {
+  for (const locale of Object.values(locales)) {
     Roles.fromObj(rolesSet, locale);
   }
 
@@ -678,10 +679,10 @@ async function cacheTemplates(params) {
   const timestamp = Date.now();
   const cache = await workspaceCache(params.force);
 
-  cache.locales = structuredClone(cache.locales);
+  const locales = structuredClone(cache.locales);
 
-  for (const localeKey of Object.keys(cache.locales)) {
-    await cacheLocale(cache, cache.locales, localeKey, params.user);
+  for (const localeKey of Object.keys(locales)) {
+    await cacheLocale(locales, localeKey, params.user);
   }
   logger(`cachelocales: ${Date.now() - timestamp}`, 'cachelocales');
 
@@ -693,10 +694,14 @@ async function cacheTemplates(params) {
 
   logger(`cachetemplates: ${Date.now() - timestamp}`, 'cachetemplates');
 
+  if (params.locales) {
+    return locales;
+  }
+
   return cache;
 }
 
-async function cacheLocale(workspace, cachedLocales, localeKey, user) {
+async function cacheLocale(cachedLocales, localeKey, user) {
   // Will get layer and assignTemplates to workspace.
   const locale = await getLocale({
     locale: localeKey,
@@ -708,10 +713,9 @@ async function cacheLocale(workspace, cachedLocales, localeKey, user) {
 
   // If the locale has no layers, just skip it.
   if (locale.layers) {
-    locale.merged_layers ??= {};
     const layerPromises = Object.keys(locale.layers).map(async (layerKey) => {
       const currentKey = localeKey.split(',').pop();
-      const localeDef = workspace.locales?.[currentKey];
+      const localeDef = cachedLocales[currentKey];
 
       let isDefined = !!localeDef?.layers?.[layerKey];
 
@@ -729,7 +733,7 @@ async function cacheLocale(workspace, cachedLocales, localeKey, user) {
         }
       }
 
-      if (!isDefined && Object.hasOwn(locale.merged_layers, layerKey)) {
+      if (!isDefined && Object.hasOwn(locale.layers, layerKey)) {
         return;
       }
 
@@ -744,7 +748,8 @@ async function cacheLocale(workspace, cachedLocales, localeKey, user) {
         locale,
       );
 
-      locale.merged_layers[layerKey] = layer;
+      //locale.merged_layers[layerKey] = layer;
+      locale.layers[layerKey] = layer;
     });
 
     await Promise.allSettled(layerPromises);
@@ -753,12 +758,7 @@ async function cacheLocale(workspace, cachedLocales, localeKey, user) {
   if (!Array.isArray(locale.locales)) return;
 
   for (const nestedLocale of locale.locales) {
-    await cacheLocale(
-      workspace,
-      cachedLocales,
-      [localeKey, nestedLocale].join(','),
-      user,
-    );
+    await cacheLocale(cachedLocales, [localeKey, nestedLocale].join(','), user);
   }
 }
 
