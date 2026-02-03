@@ -338,10 +338,6 @@ input[type=number] {
 input[type=search]::after {
   color: var(--color-font);
 }
-input[type=search]:focus + ul,
-input[type=search] + ul:active {
-  display: block;
-}
 input[type=search]::-webkit-search-cancel-button,
 input[type=search]::-webkit-search-decoration:hover,
 input[type=search]::-webkit-search-cancel-button:hover {
@@ -1005,7 +1001,6 @@ label.radio {
   background-color: var(--color-base-tertiary);
   isolation: isolate;
   & > ul {
-    display: none;
     max-height: 500px;
     overflow-y: auto;
     overflow-x: hidden;
