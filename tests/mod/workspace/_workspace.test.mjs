@@ -263,5 +263,43 @@ await codi.describe(
         );
       },
     );
+
+    await codi.it(
+      {
+        name: 'Should not see a locale without the correct role',
+        parentId: 'workspace_nested_locales',
+        id: 'workspace_nested_hidden_parent',
+      },
+      async () => {
+        const { req, res } = codi.mockHttp.createMocks({
+          params: {
+            key: 'locale',
+            locale: 'globalvista_template',
+            user: {
+              roles: ['germany'],
+            },
+          },
+        });
+
+        await getKeyMethod(req, res);
+
+        const locale = res._getData();
+
+        console.log(locale);
+
+        const code = res.statusCode;
+
+        codi.assertEqual(code, 400, 'Should return 400');
+
+        // Germany should be hidden (traversal only, not target)
+        const globalvista = locale.find((l) => l.key === 'globalvista');
+
+        console.log(globalvista);
+        codi.assertTrue(
+          !globalvista,
+          'Globalvista should be hidden for user which doesnt have the role',
+        );
+      },
+    );
   },
 );
