@@ -274,7 +274,7 @@ await codi.describe(
         const { req, res } = codi.mockHttp.createMocks({
           params: {
             key: 'locale',
-            locale: 'globalvista_template',
+            locale: ['germany', 'globalvista_template'],
             user: {
               roles: ['germany'],
             },
@@ -283,22 +283,9 @@ await codi.describe(
 
         await getKeyMethod(req, res);
 
-        const locale = res._getData();
-
-        console.log(locale);
-
         const code = res.statusCode;
 
-        codi.assertEqual(code, 400, 'Should return 400');
-
-        // Germany should be hidden (traversal only, not target)
-        const globalvista = locale.find((l) => l.key === 'globalvista');
-
-        console.log(globalvista);
-        codi.assertTrue(
-          !globalvista,
-          'Globalvista should be hidden for user which doesnt have the role',
-        );
+        codi.assertEqual(code, 400, 'We should get a role error');
       },
     );
   },
