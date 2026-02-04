@@ -108,7 +108,7 @@ async function processRoles(locale, parentLocale, params, isLeaf) {
 
   // Assign parent roles to locale for combination
   if (parentLocale?.roles) {
-    locale.roles = { ...locale.roles, ...parentLocale.roles };
+    Roles.combine(locale, parentLocale);
   }
 
   // Pass true to bypass the role check in mergeTemplates.
