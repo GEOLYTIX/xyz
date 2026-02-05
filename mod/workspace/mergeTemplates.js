@@ -46,14 +46,15 @@ export default async function mergeTemplates(obj, roles) {
   // Cache workspace in module scope for template assignment.
   workspace = await workspaceCache();
 
-  // The object has an implicit template to merge into.
+  // Process templates with the object's original role identity as context.
+  const context = getRoleContext(obj);
+
   if (typeof obj.template === 'string' || obj.template instanceof Object) {
-    obj = await objTemplate(obj, obj.template, roles);
+    obj = await objTemplate(obj, obj.template, roles, context);
     if (obj instanceof Error) return obj;
   } else if (Array.isArray(obj.templates)) {
-    // The _template can be a string or object [with src]
     for (const _template of obj.templates) {
-      obj = await objTemplate(obj, _template, roles);
+      obj = await objTemplate(obj, _template, roles, context);
     }
   } else if (obj.templates instanceof Object) {
     const err = `${obj.key} Object must be a templates Array.`;
@@ -99,11 +100,12 @@ Templates defined in the obj.templates array will be merged into object.
 @param {Object} obj
 @param {Object} template The template maybe an object with a src property or a string.
 @param {array} roles An array of user roles from request params.
+@param {Object} [context] Optional base roles for context.
 @property {string} [obj.template] Key of template for the object.
 
 @returns {Promise<Object>} Returns the merged obj.
 */
-async function objTemplate(obj, template, roles) {
+async function objTemplate(obj, template, roles, context) {
   template = await getTemplate(template);
 
   // Failed to get template matching obj.template from template.src!
@@ -115,7 +117,8 @@ async function objTemplate(obj, template, roles) {
 
   template = structuredClone(template);
 
-  Roles.combine(template, obj);
+  // Combine roles using the static context if provided, otherwise the current object state.
+  Roles.combine(template, context || obj);
 
   if (roles !== true && !Roles.check(template, roles)) {
     if (obj.template) {
@@ -183,13 +186,34 @@ function mergeObjectWithTemplate(obj, template) {
 
 async function processRecursiveTemplates(obj, nextTemplates, roles) {
   if (obj.template) {
-    obj = await objTemplate(obj, obj.template, roles);
+    return await objTemplate(obj, obj.template, roles, getRoleContext(obj));
   } else if (Array.isArray(nextTemplates)) {
+    const context = getRoleContext(obj);
     for (const _template of nextTemplates) {
-      obj = await objTemplate(obj, _template, roles);
+      obj = await objTemplate(obj, _template, roles, context);
     }
   }
   return obj;
+}
+
+/**
+@function getRoleContext
+
+@description
+Extracts the role-related properties from an object to provide a stable context for template processing.
+This prevents sibling templates from leaking roles into each other during merging.
+
+@param {Object} obj
+@returns {Object} A context object containing role, roles, localeRole, templateRole, and objRole.
+*/
+function getRoleContext(obj) {
+  return {
+    role: obj.role,
+    roles: obj.roles,
+    localeRole: obj.localeRole,
+    templateRole: obj.templateRole,
+    objRole: obj.objRole,
+  };
 }
 
 /**

@@ -657,7 +657,6 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
           const child = { roles: { Child: true } };
           const parent = { roles: { Parent: true } };
           combine(child, parent);
-          codi.assertTrue(child.roles.Parent);
           codi.assertTrue(child.roles.Child);
           codi.assertTrue(child.roles['Parent.Child']);
         },
@@ -672,7 +671,6 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
           const child = { role: 'Child' };
           const parent = { role: 'Parent' };
           combine(child, parent);
-          codi.assertTrue(child.roles.Parent);
           codi.assertTrue(child.roles.Child);
           codi.assertTrue(child.roles['Parent.Child']);
         },

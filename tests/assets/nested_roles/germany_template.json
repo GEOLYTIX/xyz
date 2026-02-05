@@ -24,6 +24,10 @@
         {
           "role": "TEMPLATES_ROLE",
           "display": false
+        },
+        {
+          "role": "another_role",
+          "display": false
         }
       ]
     }

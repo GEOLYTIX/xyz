@@ -324,9 +324,6 @@ function combineLocaleRoles(child, parent) {
     parent.roles[parent.role] ??= true;
   }
 
-  // Merge parent roles into child roles first
-  Object.assign(child.roles, parent.roles);
-
   // Identify roles specific to the child (not present in parent)
   const specificChildRoles = Object.keys(child.roles).filter(
     (role) => !parent.roles[role],

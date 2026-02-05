@@ -69,12 +69,14 @@ await codi.describe(
       },
       async () => {
         const expectedRoles = [
+          'another_role',
           'brand_a',
           'brand_b',
           'coremarkets',
           'coremarkets.brand_a',
           'coremarkets.brand_b',
           'germany',
+          'germany.another_role',
           'germany.globalvista',
           'germany.globalvista.TEMPLATE_ROLE',
           'germany.TEMPLATES_ROLE',
