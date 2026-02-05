@@ -103,9 +103,29 @@ async function loadLocale(workspace, key) {
   return structuredClone(locale);
 }
 
-async function processRoles(locale, parentLocale, params, isLeaf) {
-  // The roles property maybe assigned from a template. Templates must be merged prior to the role check.
+/**
+@function processRoles
+@async
 
+@description
+The processRoles method calls the utility method that combines a parentLocale roles with a locale.
+
+The locale.template and templates[] will be merged into the locale object.
+
+Locale access for the user will be checked without the ignoreRoles property provided in the params object.
+
+An error will be returned if the user does not have access to the role.
+
+@param {Object} locale 
+@param {Object} parentLocale Parent locale with roles.
+@param {Object} params 
+@param {boolean} [isLeaf] 
+@property {user} [params.user] User object with access roles.
+@property {boolean} [params.ignoreRoles] Ignore roles for template merging and checks.
+
+@returns {Promise<Object|Error>} JSON Locale.
+*/
+async function processRoles(locale, parentLocale, params, isLeaf) {
   // Assign parent roles to locale for combination
   if (parentLocale?.roles) {
     Roles.combine(locale, parentLocale);
@@ -121,10 +141,12 @@ async function processRoles(locale, parentLocale, params, isLeaf) {
   }
 
   // Strict Role Check
-  if (!params.ignoreRoles) {
-    if (!checkRoles(locale, parentLocale, params.user, isLeaf)) {
-      return new Error('Role access denied.');
-    }
+  if (params.ignoreRoles) {
+    return locale;
+  }
+
+  if (!checkRoles(locale, parentLocale, params.user, isLeaf)) {
+    return new Error('Role access denied.');
   }
 
   return locale;
