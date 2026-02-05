@@ -213,18 +213,18 @@ function checkRoles(locale, parentLocale, user, isLeaf) {
   // Use Roles.check with the restricted set
   if (Roles.check({ roles: validRolesObj }, user?.roles)) return true;
 
-  if (!isLeaf) {
-    // Check for partial match (traversal)
-    const userRoles = user?.roles || [];
-    const requiredRoles = Object.keys(validRolesObj || {});
+  // if (!isLeaf) {
+  //   // Check for partial match (traversal)
+  //   const userRoles = user?.roles || [];
+  //   const requiredRoles = Object.keys(validRolesObj || {});
 
-    // We look for: UserRole startsWith RequiredRole + '.'
-    const hasTraversalRole = requiredRoles.some((req) =>
-      userRoles.some((usr) => usr.startsWith(req + '.')),
-    );
+  //   // We look for: UserRole startsWith RequiredRole + '.'
+  //   const hasTraversalRole = requiredRoles.some((req) =>
+  //     userRoles.some((usr) => usr.startsWith(req + '.')),
+  //   );
 
-    if (hasTraversalRole) return true;
-  }
+  //   if (hasTraversalRole) return true;
+  // }
 
   return false;
 }
