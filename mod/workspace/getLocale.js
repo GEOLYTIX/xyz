@@ -207,7 +207,5 @@ function checkRoles(locale, parentLocale, user) {
   }
 
   // Use Roles.check with the restricted set
-  if (Roles.check({ roles: validRolesObj }, user?.roles)) return true;
-
-  return false;
+  return Roles.check({ roles: validRolesObj }, user?.roles);
 }
