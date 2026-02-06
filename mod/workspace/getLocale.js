@@ -188,6 +188,17 @@ async function composeLocale(locale, parentLocale, params, workspaceKey) {
   return locale;
 }
 
+/**
+@function checkRoles
+
+@description
+
+@param {Object} locale
+@param {Object} parentLocale Parent locale with roles.
+@param {Object} user
+
+@returns {boolean} True if the user has access to the locale.
+*/
 function checkRoles(locale, parentLocale, user) {
   let validRolesObj = locale.roles;
 

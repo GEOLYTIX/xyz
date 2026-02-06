@@ -46,6 +46,9 @@ export function check(obj, user_roles) {
   // The object to check has no roles assigned.
   if (!obj.roles) return true;
 
+  // The roles object maybe empty.
+  if (!Object.keys(obj.roles).length) return true;
+
   if (!user_roles) return false;
 
   // user_roles must be an array or true
