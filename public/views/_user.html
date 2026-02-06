@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head data-user="{{user}}" data-dir="{{dir}}">
+  <head data-dir="{{dir}}">
     <title>XYZ | User Administration</title>
     <link
       rel="icon"
@@ -147,11 +147,6 @@
   <script>
   window.onload = async () => {
 
-    if (!document.head.dataset.user) {
-      window.location.href = '?login=true'
-      return;
-    }
-
     // Get list of available roles from workspace.
     const rolesList = await xhrPromise(`${document.head.dataset.dir}/api/workspace/roles`)
 
@@ -183,10 +178,6 @@
     // Data must be an array if only 1 record returned in response.
     const data = Array.isArray(response) && response || [response]
 
-    data.forEach(row => {
-      row.re_verification = !row.verificationtoken
-    })
-
     // Sort data to promote email from url parameter to top.
     if (params.email) {
       data.sort(function (x, y) { return x.email == params.email ? -1 : y.email == params.email ? 1 : 0; });
@@ -205,7 +196,7 @@
           row.getElement().style.backgroundColor = user.blocked && '#ef9a9a'
         },
         columnHeaderVertAlign: 'middle',
-        rowHeight: 30,
+        resizableRows: true,
         columns: [
           {
             field: 'email',
@@ -222,17 +213,6 @@
             vertAlign: 'middle',
             headerTooltip: 'The account email has been verified through a token sent to the email address.',
             titleFormatter: () => '<span class="material-icons">done</span>',
-            formatter: 'tickCross',
-            cellClick: cellToggle,
-            resizable: false,
-            responsive: 0 // Never hide
-          },
-          {
-            field: 're_verification',
-            hozAlign: 'center',
-            vertAlign: 'middle',
-            headerTooltip: 'The account has an outstanding password reset to be verified.',
-            titleFormatter: () => '<span class="material-icons">check_circle</span>',
             formatter: 'tickCross',
             cellClick: cellToggle,
             resizable: false,
@@ -308,9 +288,11 @@
             field: 'roles',
             title: 'Roles',
             vertAlign: 'middle',
+            formatter: 'textarea',
             headerTooltip: 'Account roles',
             headerSort: false,
             editor: 'list',
+            width: 400,
             editorParams: {
               values: rolesList,
               multiselect: true
@@ -474,29 +456,13 @@
       const cellFalsy = cellValue === false ? null : cellValue;
       const apiValue = field === 'api' ? cellFalsy : cellValue;
 
-      // Re-verification cannot be undone.
-      if (field === 're_verification' && cell.getValue()) return;
-
-      const response = await xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${user.email}&field=${field === 're_verification' ? 'verified' : field}&value=${apiValue}`);
+      const response = await xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${user.email}&field=${field}&value=${apiValue}`);
 
       if (response.err) return console.error(response.err);
 
       cell.setValue(cellValue);
 
       const row = cell.getRow();
-
-      if (field === 're_verification'
-        || (field === 'verified' && cell.getValue())) {
-
-        let re_verification_cell = row.getCell('re_verification')
-        re_verification_cell.setValue(true)
-
-        let verified_cell = row.getCell('verified')
-        verified_cell.setValue(true)
-
-        let approved_cell = row.getCell('approved')
-        approved_cell.setValue(true)
-      };
 
       row.reformat();
     };
