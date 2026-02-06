@@ -116,10 +116,10 @@ Locale access for the user will be checked without the ignoreRoles property prov
 
 An error will be returned if the user does not have access to the role.
 
-@param {Object} locale 
+@param {Object} locale
 @param {Object} parentLocale Parent locale with roles.
-@param {Object} params 
-@param {boolean} [isLeaf] 
+@param {Object} params
+@param {boolean} [isLeaf]
 @property {user} [params.user] User object with access roles.
 @property {boolean} [params.ignoreRoles] Ignore roles for template merging and checks.
 
@@ -131,9 +131,9 @@ async function processRoles(locale, parentLocale, params, isLeaf) {
     Roles.combine(locale, parentLocale);
   }
 
-  // Pass true to bypass the role check in mergeTemplates.
-  // The role check will be performed after the mergeTemplates method.
-  locale = await mergeTemplates(locale, true);
+  // Pass params.user.roles to enforce role checks on merged templates.
+  // The role check for the locale itself will be performed after the mergeTemplates method.
+  locale = await mergeTemplates(locale, params.user?.roles);
 
   // The mergeTemplates method returned an Error.
   if (locale instanceof Error) {
