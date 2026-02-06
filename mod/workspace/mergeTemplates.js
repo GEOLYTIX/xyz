@@ -46,6 +46,12 @@ export default async function mergeTemplates(obj, roles) {
   // Cache workspace in module scope for template assignment.
   workspace = await workspaceCache();
 
+  obj.roles ??= {};
+
+  if (obj.role) {
+    obj.roles[obj.role] ??= true;
+  }
+
   // Process templates with the object's original role identity as context.
   const context = getRoleContext(obj);
 
