@@ -76,10 +76,7 @@ export default async function getLocale(params, parentLocale) {
     return new Error(locale.message);
   }
 
-  // Check if this is the last locale in the chain
-  const isLeaf = !Array.isArray(params.locale) || params.locale.length === 0;
-
-  locale = await processRoles(locale, parentLocale, params, isLeaf);
+  locale = await processRoles(locale, parentLocale, params);
 
   if (locale instanceof Error) {
     return locale;
@@ -119,13 +116,12 @@ An error will be returned if the user does not have access to the role.
 @param {Object} locale
 @param {Object} parentLocale Parent locale with roles.
 @param {Object} params
-@param {boolean} [isLeaf]
 @property {user} [params.user] User object with access roles.
 @property {boolean} [params.ignoreRoles] Ignore roles for template merging and checks.
 
 @returns {Promise<Object|Error>} JSON Locale.
 */
-async function processRoles(locale, parentLocale, params, isLeaf) {
+async function processRoles(locale, parentLocale, params) {
   // Assign parent roles to locale for combination
   if (parentLocale?.roles) {
     Roles.combine(locale, parentLocale);
@@ -145,7 +141,7 @@ async function processRoles(locale, parentLocale, params, isLeaf) {
     return locale;
   }
 
-  if (!checkRoles(locale, parentLocale, params.user, isLeaf)) {
+  if (!checkRoles(locale, parentLocale, params.user)) {
     return new Error('Role access denied.');
   }
 
@@ -192,7 +188,7 @@ async function composeLocale(locale, parentLocale, params, workspaceKey) {
   return locale;
 }
 
-function checkRoles(locale, parentLocale, user, isLeaf) {
+function checkRoles(locale, parentLocale, user) {
   let validRolesObj = locale.roles;
 
   // If nested, we must exclude parent roles from valid roles
@@ -212,19 +208,6 @@ function checkRoles(locale, parentLocale, user, isLeaf) {
 
   // Use Roles.check with the restricted set
   if (Roles.check({ roles: validRolesObj }, user?.roles)) return true;
-
-  // if (!isLeaf) {
-  //   // Check for partial match (traversal)
-  //   const userRoles = user?.roles || [];
-  //   const requiredRoles = Object.keys(validRolesObj || {});
-
-  //   // We look for: UserRole startsWith RequiredRole + '.'
-  //   const hasTraversalRole = requiredRoles.some((req) =>
-  //     userRoles.some((usr) => usr.startsWith(req + '.')),
-  //   );
-
-  //   if (hasTraversalRole) return true;
-  // }
 
   return false;
 }
