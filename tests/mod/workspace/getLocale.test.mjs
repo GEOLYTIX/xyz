@@ -14,7 +14,8 @@ await codi.describe(
 
     globalThis.xyzEnv = {
       TITLE: 'WORKSPACE TEST',
-      WORKSPACE: 'file:./tests/assets/workspace_nested_locales_roles.json',
+      WORKSPACE:
+        'file:./tests/assets/workspace_nested_locales_roles_props.json',
     };
 
     //Calling the cache method with force to reload a new workspace
@@ -22,7 +23,7 @@ await codi.describe(
 
     await codi.it(
       {
-        name: 'locale with templates that has roles',
+        name: 'access restricted locale',
         parentId: 'workspace_getLocale',
       },
       async () => {
@@ -52,45 +53,82 @@ await codi.describe(
 
     await codi.it(
       {
-        name: 'locale with templates that has roles',
+        name: '1. locale with role, templates with roles',
         parentId: 'workspace_getLocale',
       },
       async () => {
+        // Provide the user with 3 roles
+        // Europe = locale
+        // scratch_role = template for layer
+        // brand_c = locale template
         const params = {
           user: {
-            roles: ['brand_b', 'brand_c'],
+            roles: ['europe', 'scratch_role', 'brand_c'],
           },
-          locale: 'brand_b_locale',
+          locale: 'europe',
         };
 
-        const expectedRoles = {
-          brand_b: {},
-          brand_c: {},
-          scratch_role: {},
-          europe: {},
-        };
+        let locale = await getLocale(params);
 
-        await getLocale(params);
+        codi.assertTrue(Object.hasOwn(locale.layers, 'Scratch'));
 
         params.locale = 'brand_c_locale';
 
-        await getLocale(params);
+        locale = await getLocale(params);
 
-        const { req, res } = codi.mockHttp.createMocks({
-          params: {
-            key: 'roles',
-            tree: true,
-            user: {
-              admin: true,
-            },
+        codi.assertTrue(Object.hasOwn(locale.layers, 'brand_c_layer'));
+      },
+    );
+
+    await codi.it(
+      {
+        name: '2. locale without role, templates with roles',
+        parentId: 'workspace_getLocale',
+      },
+      async () => {
+        // Provide the user with 1 roles
+        // brand_c = locale template
+        const params = {
+          user: {
+            roles: ['brand_c'],
           },
-        });
+          locale: 'uk',
+        };
 
-        await getKeyMethod(req, res);
+        let locale = await getLocale(params);
 
-        const roles = res._getData();
+        codi.assertTrue(locale.key === 'uk');
 
-        codi.assertEqual(roles, expectedRoles);
+        params.locale = 'brand_c_locale';
+
+        locale = await getLocale(params);
+
+        codi.assertTrue(Object.hasOwn(locale.layers, 'brand_c_layer'));
+      },
+    );
+
+    await codi.it(
+      {
+        name: '3. locale without role, templates without roles',
+        parentId: 'workspace_getLocale',
+      },
+      async () => {
+        // Provide the user with no roles
+        // brand_a_locale = locale template without role
+        const params = {
+          user: {},
+          locale: 'uk',
+        };
+
+        let locale = await getLocale(params);
+
+        codi.assertTrue(locale.key === 'uk');
+
+        params.locale = 'brand_a_locale';
+
+        locale = await getLocale(params);
+
+        codi.assertTrue(Object.hasOwn(locale.layers, 'brand_a_layer'));
       },
     );
   },

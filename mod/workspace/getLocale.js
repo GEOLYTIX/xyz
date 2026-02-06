@@ -80,6 +80,9 @@ export default async function getLocale(params, parentLocale) {
     locale = await getTemplate(localeKey);
   }
 
+  // This is to prevent that locale in the workspace is modified.
+  locale = structuredClone(locale);
+
   if (locale instanceof Error) {
     return new Error(locale.message);
   }
@@ -91,13 +94,6 @@ export default async function getLocale(params, parentLocale) {
   if (locale instanceof Error) {
     return locale;
   }
-
-  //If the user is an admin we don't need to check roles
-  if (!Roles.check(locale, params.user?.roles)) {
-    return new Error('Role access denied.');
-  }
-
-  locale = Roles.objMerge(locale, params.user?.roles);
 
   locale.workspace = workspace.key;
 

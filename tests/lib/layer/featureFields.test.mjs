@@ -13,6 +13,9 @@ export async function featureFields() {
         },
         () => {
           const layer = {
+            L: {
+              changed: () => {},
+            },
             params: {
               default_fields: ['zIndex'],
             },
@@ -74,6 +77,9 @@ export async function featureFields() {
 
           const layer = {
             format: 'wkt',
+            L: {
+              changed: () => {},
+            },
             params: {
               fields: ['retailer'],
             },
@@ -145,6 +151,9 @@ export async function featureFields() {
 
           const layer = {
             format: 'wkt',
+            L: {
+              changed: () => {},
+            },
             params: {
               fields: ['retailer', 'open_close'],
             },
