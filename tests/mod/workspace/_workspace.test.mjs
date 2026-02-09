@@ -79,11 +79,10 @@ await codi.describe(
           'germany.another_role',
           'germany.globalvista',
           'germany.globalvista.TEMPLATE_ROLE',
-          'germany.TEMPLATES_ROLE',
+          'germany.TEMPLATE_ROLE',
           'globalvista',
           'OBJ_ROLE',
           'TEMPLATE_ROLE',
-          'TEMPLATES_ROLE',
           'test',
           'uk',
           'uk.brand_a',
@@ -109,8 +108,6 @@ await codi.describe(
         await getKeyMethod(req, res);
 
         const roles = res._getData();
-
-        console.log(roles);
 
         codi.assertEqual(
           roles,

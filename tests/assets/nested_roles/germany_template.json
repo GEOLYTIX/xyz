@@ -22,7 +22,7 @@
       },
       "templates": [
         {
-          "role": "TEMPLATES_ROLE",
+          "role": "TEMPLATE_ROLE",
           "display": false
         },
         {
