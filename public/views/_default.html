@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="{{language}}">
   <head data-dir="{{dir}}" data-login="{{login}}">
-    <title>{{ title }}</title>
+    <title>{{title}}</title>
 
     <link
       rel="icon"
@@ -128,12 +128,12 @@
         transform: rotateY(180deg);
       }
 
-      #ctrl-panel > div {
+      #ctrl-panel>div {
         transform: rotateY(180deg);
       }
 
       #ctrls {
-        grid-row: 1 / 4;
+        grid-row: 1/4;
         grid-column: 1;
         height: 100%;
         overflow: hidden;
@@ -176,7 +176,7 @@
         background-color: inherit;
       }
     }
-    </style>
+  </style>
   </head>
 
   <body style="grid-template-rows: auto 0 0">
@@ -228,9 +228,7 @@
     }
 
     if (!Object.hasOwn(mapp.dictionaries, mapp.language)) {
-      console.warn(
-        `'${mapp.user.language}' mapp.language is not supported by mapp.dictionaries.`,
-      );
+      console.warn(`'${mapp.user.language}' mapp.language is not supported by mapp.dictionaries.`);
     }
 
     // Restore scroll
@@ -258,7 +256,7 @@
     // ResizeHandler for tabview
     mapp.ui.utils.resizeHandler({
       target: document.getElementById('tabview-divider'),
-      axis: 'Y',
+      axis: 'Y'
     });
 
     const tabview = document.getElementById('Tabview');
@@ -282,13 +280,15 @@
     });
 
     // Get list of accessible locales from Workspace API.
-    let locales = await mapp.utils.xhr(`${mapp.host}/api/workspace/locales`);
+    let locales = await mapp.utils.xhr(
+      `${mapp.host}/api/workspace/locales`,
+    );
 
-    // Assign locale from current [URL parameter] or as first key from locales array.
-    let locale = mapp.hooks.current.locale || locales[0]?.key;
+      // Assign locale from current [URL parameter] or as first key from locales array.
+    let locale = mapp.hooks.current.locale || locales[0]?.key
 
     // Use 'locale' as default if undefined.
-    locale ??= 'locale';
+    locale ??= 'locale'
 
     // Get locale with list of layers from Workspace API.
     locale = await mapp.utils.xhr(
@@ -309,33 +309,35 @@
     }
 
     if (mapp.user?.locale instanceof Object) {
-      Object.assign(locale, mapp.user?.locale);
+
+      Object.assign(locale, mapp.user?.locale)
     }
 
-    // Check whether the locale supports a userLocale
-    if (mapp.hooks.current.userlocale) {
-      // Assign the userlocale value as name to check for a stored userlocale
-      locale.name = mapp.hooks.current.userlocale;
+      // Check whether the locale supports a userLocale
+      if (mapp.hooks.current.userlocale) {
+        // Assign the userlocale value as name to check for a stored userlocale
+        locale.name = mapp.hooks.current.userlocale;
 
-      // Check whether a userLocale is stored for the current user|workspace
-      const userLocale = await mapp.utils.userLocale.get(locale);
+        // Check whether a userLocale is stored for the current user|workspace
+        const userLocale = await mapp.utils.userLocale.get(locale);
 
-      if (userLocale) {
-        locale = userLocale;
+        if (userLocale) {
+          locale = userLocale;
+        }
       }
-    }
 
     if (locale.locales) {
+
       // Get list of accessible locales from Workspace API.
       const nestedLocales = await mapp.utils.xhr(
         `${mapp.host}/api/workspace/locales?locale=${locale.key}`,
       );
 
       // The nested locales for the current locale will be spread into the locales array.
-      locales = [...locales, ...nestedLocales];
+      locales = [...locales, ...nestedLocales]
     }
 
-    const layersPanel = mapp.utils.html.node`<div id="layers" class="active">`;
+    const layersPanel = mapp.utils.html.node`<div id="layers" class="active">`
 
     // Add locale dropdown to layers panel if multiple locales are accessible.
     if (locales.length > 1) {
@@ -358,12 +360,12 @@
 
     locale.syncPlugins ??= ['zoomBtn', 'admin', 'login'];
 
-    mapp.hooks.set({ locale: locale.key });
+    mapp.hooks.set({locale:locale.key});
 
     //Create tabs and panels for controls.
     const controlPanel = mapp.ui.elements.control({
-      target: document.getElementById('ctrls'),
-    });
+      target: document.getElementById('ctrls')
+    })
 
     // Create mapview
     const mapview = await mapp.Mapview({
@@ -390,7 +392,8 @@
 
     if (!locale.layers?.length && !(locale instanceof Error)) {
       mapp.ui.elements.dialog({
-        css_style: 'padding: 1em; max-width: 50%;',
+        css_style:
+          'padding: 1em; max-width: 50%;',
         header: mapp.utils.html`<h4>${mapp.dictionary.information}`,
         content: mapp.dictionary.no_layers,
         target: document.body,
@@ -405,8 +408,8 @@
 
     controlPanel.add({
       key: 'layers',
-      panel: layersPanel,
-    });
+      panel: layersPanel
+    })
 
     mapp.ui.layers.listview({
       target: layersPanel,
@@ -414,14 +417,14 @@
     });
 
     if (mapview.locale.gazetteer) {
-      const gazPanel = mapp.utils.html.node`<div id="gazetteer">`;
+      const gazPanel =  mapp.utils.html.node`<div id="gazetteer">`;
 
       controlPanel.add({
         key: 'gazetteer',
         icon: 'search',
         panel: gazPanel,
-        focus: 'gazetteer-search-input',
-      });
+        focus: 'gazetteer-search-input'
+      })
 
       mapp.ui.Gazetteer(
         Object.assign(mapview.locale.gazetteer, {
@@ -431,13 +434,13 @@
       );
     }
 
-    const locationsPanel = mapp.utils.html.node`<div id="locations">`;
+    const locationsPanel = mapp.utils.html.node`<div id="locations">`
 
     controlPanel.add({
       key: 'locations',
       icon: 'location_on',
-      panel: locationsPanel,
-    });
+      panel: locationsPanel
+    })
 
     mapp.ui.locations.listview({
       target: locationsPanel,
@@ -467,6 +470,6 @@
         host: mapp.host,
         idle: mapview.locale.idle,
       });
-    </script>
+  </script>
   </body>
 </html>
