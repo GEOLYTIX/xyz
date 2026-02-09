@@ -233,7 +233,10 @@ export function combine(child, parent) {
   // Template context has special properties: localeRole, templateRole, objRole
   if (
     child.role &&
-    (parent.localeRole || parent.templateRole || parent.objRole)
+    (parent.localeRole ||
+      parent.templateRole ||
+      parent.objRole ||
+      child.objRole)
   ) {
     combineTemplateRoles(child, parent);
     return;
