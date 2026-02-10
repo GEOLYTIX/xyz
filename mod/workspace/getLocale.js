@@ -141,9 +141,14 @@ async function processRoles(locale, parentLocale, params) {
     return locale;
   }
 
-  if (!checkRoles(locale, parentLocale, params.user)) {
+  if (!Roles.check(locale.roles, params.user?.roles)) {
     return new Error('Role access denied.');
   }
+
+  // TODO: check if this method is needed.
+  // if (!checkRoles(locale, parentLocale, params.user)) {
+  //   return new Error('Role access denied.');
+  // }
 
   return locale;
 }
