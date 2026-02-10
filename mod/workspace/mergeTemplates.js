@@ -215,7 +215,7 @@ This prevents sibling templates from leaking roles into each other during mergin
 function getRoleContext(obj) {
   return {
     role: obj.role,
-    roles: obj.roles,
+    roles: structuredClone(obj.roles),
     localeRole: obj.localeRole,
     templateRole: obj.templateRole,
     objRole: obj.objRole,
