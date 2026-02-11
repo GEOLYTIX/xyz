@@ -145,11 +145,6 @@ async function processRoles(locale, parentLocale, params) {
     return new Error('Role access denied.');
   }
 
-  // TODO: check if this method is needed.
-  // if (!checkRoles(locale, parentLocale, params.user)) {
-  //   return new Error('Role access denied.');
-  // }
-
   return locale;
 }
 
@@ -191,37 +186,4 @@ async function composeLocale(locale, parentLocale, params, workspaceKey) {
   delete locale._type;
 
   return locale;
-}
-
-/**
-@function checkRoles
-
-@description
-
-@param {Object} locale
-@param {Object} parentLocale Parent locale with roles.
-@param {Object} user
-
-@returns {boolean} True if the user has access to the locale.
-*/
-function checkRoles(locale, parentLocale, user) {
-  let validRolesObj = locale.roles;
-
-  // If nested, we must exclude parent roles from valid roles
-  // to enforce that user has the specific nested role.
-  if (parentLocale?.roles) {
-    validRolesObj = { ...locale.roles };
-    Object.keys(parentLocale.roles).forEach((key) => delete validRolesObj[key]);
-
-    // If validRolesObj is empty, it means no new roles were generated.
-    const hasSpecificRoles = Object.keys(validRolesObj).length > 0;
-
-    if (!hasSpecificRoles) {
-      // No specific restrictions on child, so parent roles are enough.
-      validRolesObj = locale.roles;
-    }
-  }
-
-  // Use Roles.check with the restricted set
-  return Roles.check({ roles: validRolesObj }, user?.roles);
 }
