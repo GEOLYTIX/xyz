@@ -291,12 +291,11 @@
     locale ??= 'locale'
 
     // Get locale with list of layers from Workspace API.
+    try{
     locale = await mapp.utils.xhr(
       `${mapp.host}/api/workspace/locale?locale=${locale}&layers=true`,
     );
-
-    if (locale instanceof Error) {
-      // Create the Dialog.node
+    }catch(error){
       mapp.ui.elements.dialog({
         css_style:
           'padding: 1em; border-color: #000; z-index:9999; max-width: 50%;',
@@ -306,6 +305,8 @@
         left: '25%',
         contained: true,
       });
+
+      locale = {}
     }
 
     if (mapp.user?.locale instanceof Object) {
@@ -404,7 +405,7 @@
     }
 
     // Add layers to mapview.
-    await mapview.addLayer(locale.layers);
+    await mapview.addLayer(locale.layers || []);
 
     controlPanel.add({
       key: 'layers',
