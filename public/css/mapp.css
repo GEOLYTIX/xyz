@@ -134,8 +134,11 @@ body {
     & > .contents {
       display: contents;
     }
-    &.label {
+    .label {
       grid-column: 2;
+      text-overflow: ellipsis;
+      text-wrap: nowrap;
+      overflow: hidden;
     }
     &.flex {
       display: flex;
