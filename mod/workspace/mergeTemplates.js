@@ -154,6 +154,18 @@ async function objTemplate(obj, template, roles, context) {
   );
 }
 
+/**
+@function prepareTemplate
+
+@description
+Prepares a template for merging by applying role-based property overrides and filtering properties based on include/exclude lists.
+
+@param {Object} obj The parent object providing include/exclude property configuration.
+@param {Object} template The template to prepare.
+@param {Array|boolean} roles User roles for role-specific property merging.
+
+@returns {Object} The prepared template with role overrides applied and properties filtered.
+*/
 function prepareTemplate(obj, template, roles) {
   template = Roles.objMerge(template, roles);
 
@@ -164,6 +176,22 @@ function prepareTemplate(obj, template, roles) {
   return templateProperties(template);
 }
 
+/**
+@function mergeObjectWithTemplate
+
+@description
+Merges a template into the parent object. Handles two cases:
+
+1. obj.template (singular): The object inherits from a single template. The obj is merged on top of the template.
+2. templates[] array item: A template from the array is merged into the existing object.
+
+When a template from the templates[] array has its own nested sub-templates, the template's role context is captured before the merge. This prevents sibling template roles from leaking into the sub-template role combinations.
+
+@param {Object} obj The parent object to merge the template into.
+@param {Object} template The resolved template object.
+
+@returns {Object} An object containing the merged obj, any nextTemplates to process, and an optional nextTemplatesContext scoped to the template's roles.
+*/
 function mergeObjectWithTemplate(obj, template) {
   let nextTemplates;
   let nextTemplatesContext;
@@ -205,6 +233,26 @@ function mergeObjectWithTemplate(obj, template) {
   return { obj, nextTemplates, nextTemplatesContext };
 }
 
+/**
+@function processRecursiveTemplates
+@async
+
+@description
+Processes any remaining templates that need to be merged after the initial template merge.
+
+If the merged object now has an obj.template property, it is processed as a single template inheritance.
+
+If nextTemplates exist (from a template's own templates[] array), they are processed sequentially using the nextTemplatesContext. This scoped context ensures that sub-templates are combined only with their parent template's roles, preventing sibling template roles from polluting the role hierarchy.
+
+For example, given templates: [demographics, stores] where stores has templates: [brand_a], the brand_a template will be combined with the stores role context only, not with the accumulated demographics roles.
+
+@param {Object} obj The current merged object.
+@param {Array} [nextTemplates] Templates to process recursively.
+@param {Array|boolean} roles User roles or true for admin.
+@param {Object} [nextTemplatesContext] Role context scoped to the parent template, used to prevent sibling role leakage.
+
+@returns {Promise<Object>} The fully merged object.
+*/
 async function processRecursiveTemplates(
   obj,
   nextTemplates,
@@ -230,9 +278,12 @@ async function processRecursiveTemplates(
 
 @description
 Extracts the role-related properties from an object to provide a stable context for template processing.
-This prevents sibling templates from leaking roles into each other during merging.
 
-@param {Object} obj
+Used in two ways:
+1. Captured from the parent object before iterating its templates[] array, preventing sibling templates from leaking roles into each other.
+2. Captured from a template before merging it into the parent, so that the template's own sub-templates are scoped to the template's roles rather than the accumulated parent roles.
+
+@param {Object} obj The object to extract role context from.
 @returns {Object} A context object containing role, roles, localeRole, templateRole, and objRole.
 */
 function getRoleContext(obj) {
