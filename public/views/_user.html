@@ -40,10 +40,12 @@
       height: 100%;
       width: 100%;
       padding: 40px;
-      font: 14px "Open Sans", sans-serif;
+      font:
+        14px 'Open Sans',
+        sans-serif;
     }
 
-    body>.flex {
+    body > .flex {
       height: 100%;
       display: flex;
       flex-direction: column;
@@ -89,7 +91,7 @@
       }
 
       &.primary-colour {
-        background-color: #003D57;
+        background-color: #003d57;
       }
 
       &.red {
@@ -98,13 +100,12 @@
     }
 
     @media only screen and (max-width: 768px) {
-
       body,
       h1 {
         padding: 10px;
       }
     }
-  </style>
+    </style>
   </head>
 
   <body>
@@ -146,277 +147,302 @@
 
   <script>
   window.onload = async () => {
-
     // Get list of available roles from workspace.
-    const rolesList = await xhrPromise(`${document.head.dataset.dir}/api/workspace/roles`)
+    const rolesList = await xhrPromise(
+      `${document.head.dataset.dir}/api/workspace/roles`,
+    );
 
     // List of languages key values.
     const languagesList = {
-      "en": "English",
-      "de": "German",
-      "zh": "Chinese",
-      "zh_tw": "Chinese (Traditional)",
-      "pl": "Polish",
-      "ja": "Japanese",
-      "es": "Spanish",
-      "fr": "French",
-      "tr": "Turkish",
-      "it": "Italian",
-      "th": "Thai",
+      en: 'English',
+      de: 'German',
+      zh: 'Chinese',
+      zh_tw: 'Chinese (Traditional)',
+      pl: 'Polish',
+      ja: 'Japanese',
+      es: 'Spanish',
+      fr: 'French',
+      tr: 'Turkish',
+      it: 'Italian',
+      th: 'Thai',
     };
 
-    const params = {}
+    const params = {};
 
     // Get URL params.
-    window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi, (match, key, value) => {
-      params[key] = decodeURI(value)
-    })
+    window.location.search.replace(
+      /[?&]+([^=&]+)=([^&]*)/gi,
+      (match, key, value) => {
+        params[key] = decodeURI(value);
+      },
+    );
 
     // Get user list from host.
-    const response = await xhrPromise(`${document.head.dataset.dir}/api/user/list`)
+    const response = await xhrPromise(
+      `${document.head.dataset.dir}/api/user/list`,
+    );
 
     // Data must be an array if only 1 record returned in response.
-    const data = Array.isArray(response) && response || [response]
+    const data = (Array.isArray(response) && response) || [response];
 
-    data.forEach(row => {
-      row.re_verification = !row.verificationtoken
-    })
+    data.forEach((row) => {
+      row.re_verification = !row.verificationtoken;
+    });
 
     // Sort data to promote email from url parameter to top.
     if (params.email) {
-      data.sort(function (x, y) { return x.email == params.email ? -1 : y.email == params.email ? 1 : 0; });
+      data.sort(function (x, y) {
+        return x.email == params.email ? -1 : y.email == params.email ? 1 : 0;
+      });
     }
 
-    const userTable = new Tabulator(document.getElementById('userTable'),
-      {
-        data: data,
-        rowFormatter: row => {
-          const user = row.getData()
+    const userTable = new Tabulator(document.getElementById('userTable'), {
+      data: data,
+      rowFormatter: (row) => {
+        const user = row.getData();
 
-          // Highlight user row.
-          row.getElement().style.backgroundColor = user.email === params.email && '#fff9c4'
+        // Highlight user row.
+        row.getElement().style.backgroundColor =
+          user.email === params.email && '#fff9c4';
 
-          // Style blocked user row.
-          row.getElement().style.backgroundColor = user.blocked && '#ef9a9a'
+        // Style blocked user row.
+        row.getElement().style.backgroundColor = user.blocked && '#ef9a9a';
+      },
+      columnHeaderVertAlign: 'middle',
+      resizableRows: true,
+      columns: [
+        {
+          field: 'email',
+          vertAlign: 'middle',
+          headerTooltip: 'Account EMail',
+          titleFormatter: () => '<span class="material-icons">face</span>',
+          resizable: true,
+          frozen: true,
+          responsive: 0, // Never hide
         },
-        columnHeaderVertAlign: 'middle',
-        resizableRows: true,
-        columns: [
-          {
-            field: 'email',
-            vertAlign: 'middle',
-            headerTooltip: 'Account EMail',
-            titleFormatter: () => '<span class="material-icons">face</span>',
-            resizable: true,
-            frozen: true,
-            responsive: 0 // Never hide
+        {
+          field: 'verified',
+          hozAlign: 'center',
+          vertAlign: 'middle',
+          headerTooltip:
+            'The account email has been verified through a token sent to the email address.',
+          titleFormatter: () => '<span class="material-icons">done</span>',
+          formatter: 'tickCross',
+          cellClick: cellToggle,
+          resizable: false,
+          responsive: 0, // Never hide
+        },
+        {
+          field: 're_verification',
+          hozAlign: 'center',
+          vertAlign: 'middle',
+          headerTooltip:
+            'The account has an outstanding password reset to be verified.',
+          titleFormatter: () =>
+            '<span class="material-icons">check_circle</span>',
+          formatter: 'tickCross',
+          cellClick: cellToggle,
+          resizable: false,
+          responsive: 0, // Never hide
+        },
+        {
+          field: 'approved',
+          hozAlign: 'center',
+          vertAlign: 'middle',
+          headerTooltip:
+            'The account has been approved by a site administrator and is permitted to access the application.',
+          titleFormatter: () => '<span class="material-icons">done_all</span>',
+          formatter: 'tickCross',
+          cellClick: cellToggle,
+          resizable: false,
+          responsive: 0, // Never hide
+        },
+        {
+          field: 'admin',
+          hozAlign: 'center',
+          vertAlign: 'middle',
+          headerTooltip:
+            'The account is an admin account which can access this page and change other account credentials.',
+          titleFormatter: () =>
+            '<span class="material-icons">supervisor_account</span>',
+          formatter: 'tickCross',
+          cellClick: cellToggle,
+          resizable: false,
+          responsive: 0, // Never hide
+        },
+        {
+          field: 'api',
+          hozAlign: 'center',
+          vertAlign: 'middle',
+          headerTooltip: 'The account has priviliges to create API keys.',
+          titleFormatter: () => '<span class="material-icons">key</span>',
+          formatter: 'tickCross',
+          cellClick: cellToggle,
+          resizable: false,
+          responsive: 1, // Hide first
+        },
+        {
+          field: 'failedattempts',
+          hozAlign: 'center',
+          vertAlign: 'middle',
+          headerTooltip: 'Failed login attempts.',
+          titleFormatter: () => '<span class="material-icons">warning</span>',
+          formatter: (cell, formatterParams) =>
+            '<span style="color:red; font-weight:bold;">' +
+            cell.getValue() +
+            '</span>',
+          resizable: false,
+          responsive: 2, // Hide first
+        },
+        {
+          field: 'language',
+          hozAlign: 'center',
+          vertAlign: 'middle',
+          headerTooltip: 'Account language',
+          titleFormatter: () => '<span class="material-icons">translate</span>',
+          editor: 'list',
+          editorParams: {
+            // show the label of the language in the dropdown list
+            values: Object.keys(languagesList).map((key) => ({
+              label: languagesList[key],
+              value: key,
+            })),
           },
-          {
-            field: 'verified',
-            hozAlign: 'center',
-            vertAlign: 'middle',
-            headerTooltip: 'The account email has been verified through a token sent to the email address.',
-            titleFormatter: () => '<span class="material-icons">done</span>',
-            formatter: 'tickCross',
-            cellClick: cellToggle,
-            resizable: false,
-            responsive: 0 // Never hide
-          },
-          {
-            field: 're_verification',
-            hozAlign: 'center',
-            vertAlign: 'middle',
-            headerTooltip: 'The account has an outstanding password reset to be verified.',
-            titleFormatter: () => '<span class="material-icons">check_circle</span>',
-            formatter: 'tickCross',
-            cellClick: cellToggle,
-            resizable: false,
-            responsive: 0 // Never hide
-          },
-          {
-            field: 'approved',
-            hozAlign: 'center',
-            vertAlign: 'middle',
-            headerTooltip: 'The account has been approved by a site administrator and is permitted to access the application.',
-            titleFormatter: () => '<span class="material-icons">done_all</span>',
-            formatter: 'tickCross',
-            cellClick: cellToggle,
-            resizable: false,
-            responsive: 0 // Never hide
-          },
-          {
-            field: 'admin',
-            hozAlign: 'center',
-            vertAlign: 'middle',
-            headerTooltip: 'The account is an admin account which can access this page and change other account credentials.',
-            titleFormatter: () => '<span class="material-icons">supervisor_account</span>',
-            formatter: 'tickCross',
-            cellClick: cellToggle,
-            resizable: false,
-            responsive: 0 // Never hide
-          },
-          {
-            field: 'api',
-            hozAlign: 'center',
-            vertAlign: 'middle',
-            headerTooltip: 'The account has priviliges to create API keys.',
-            titleFormatter: () => '<span class="material-icons">key</span>',
-            formatter: 'tickCross',
-            cellClick: cellToggle,
-            resizable: false,
-            responsive: 1 // Hide first
-          },
-          {
-            field: 'failedattempts',
-            hozAlign: 'center',
-            vertAlign: 'middle',
-            headerTooltip: 'Failed login attempts.',
-            titleFormatter: () => '<span class="material-icons">warning</span>',
-            formatter: (cell, formatterParams) => '<span style="color:red; font-weight:bold;">' + cell.getValue() + '</span>',
-            resizable: false,
-            responsive: 2 // Hide first
-          },
-          {
-            field: 'language',
-            hozAlign: 'center',
-            vertAlign: 'middle',
-            headerTooltip: 'Account language',
-            titleFormatter: () => '<span class="material-icons">translate</span>',
-            editor: 'list',
-            editorParams: {
-              // show the label of the language in the dropdown list
-              values: Object.keys(languagesList).map(key => ({ label: languagesList[key], value: key })),
-            },
-            cellEdited: languageEdited,
-            resizable: false,
-            responsive: 1,
-            formatter: (cell, formatterParams, onRendered) => {
+          cellEdited: languageEdited,
+          resizable: false,
+          responsive: 1,
+          formatter: (cell, formatterParams, onRendered) => {
+            let val = cell.getValue();
 
-              let val = cell.getValue()
+            if (!val) return;
 
-              if (!val) return;
-
-              return languagesList[val];
-            }
+            return languagesList[val];
           },
-          {
-            field: 'roles',
-            title: 'Roles',
-            vertAlign: 'middle',
-            formatter: 'textarea',
-            headerTooltip: 'Account roles',
-            headerSort: false,
-            editor: 'list',
-            width: 400,
-            editorParams: {
-              values: rolesList,
-              multiselect: true
-            },
-            cellEdited: rolesEdited,
-            resizable: false,
-            responsive: 0 // Never hide
+        },
+        {
+          field: 'roles',
+          title: 'Roles',
+          vertAlign: 'middle',
+          formatter: 'textarea',
+          headerTooltip: 'Account roles',
+          headerSort: false,
+          editor: 'list',
+          width: 400,
+          editorParams: {
+            values: rolesList,
+            multiselect: true,
           },
-          {
-            field: 'access_log',
-            title: 'Access Log',
-            vertAlign: 'middle',
-            headerTooltip: 'Click last access log entry for full access log array.',
-            cellClick: getAccessLog,
-            resizable: false,
-            responsive: 1 // Hide first
+          cellEdited: rolesEdited,
+          resizable: false,
+          responsive: 0, // Never hide
+        },
+        {
+          field: 'access_log',
+          title: 'Access Log',
+          vertAlign: 'middle',
+          headerTooltip:
+            'Click last access log entry for full access log array.',
+          cellClick: getAccessLog,
+          resizable: false,
+          responsive: 1, // Hide first
+        },
+        {
+          field: 'approved_by',
+          title: 'Approved by',
+          vertAlign: 'middle',
+          headerTooltip:
+            'Admin who approved last modification to this account.',
+          resizable: false,
+          responsive: 1, // Hide first
+        },
+        {
+          visible: typeof data[0].expires_on !== 'undefined',
+          field: 'expires_on',
+          title: 'Expires on',
+          vertAlign: 'middle',
+          minWidth: 120,
+          headerTooltip: 'Date when user approval expires.',
+          responsive: 1, // Hide first
+          formatter: (cell, formatterParams, onRendered) => {
+            let val = parseInt(cell.getValue());
+
+            if (isNaN(val)) return;
+
+            let str = new Date(val * 1000).toLocaleString('en-GB', {
+              year: 'numeric',
+              month: 'short',
+              day: 'numeric',
+            });
+
+            // Colour text red if account has expired.
+            return val < new Date() / 1000
+              ? `<span style="color:red;">${str}</span>`
+              : str;
           },
-          {
-            field: 'approved_by',
-            title: 'Approved by',
-            vertAlign: 'middle',
-            headerTooltip: 'Admin who approved last modification to this account.',
-            resizable: false,
-            responsive: 1 // Hide first
-          },
-          {
-            visible: typeof data[0].expires_on !== 'undefined',
-            field: 'expires_on',
-            title: 'Expires on',
-            vertAlign: 'middle',
-            minWidth: 120,
-            headerTooltip: 'Date when user approval expires.',
-            responsive: 1, // Hide first
-            formatter: (cell, formatterParams, onRendered) => {
+          editor: expiryEdit,
+          resizable: false,
+        },
+        {
+          field: 'blocked',
+          hozAlign: 'center',
+          vertAlign: 'middle',
+          headerTooltip:
+            'Blocked accounts can no longer login or reset their password.',
+          titleFormatter: () => '<span class="material-icons">lock</span>',
+          formatter: 'tickCross',
+          cellClick: cellToggle,
+          resizable: false,
+          responsive: 2, // Hide second
+        },
+        {
+          field: 'delete',
+          vertAlign: 'middle',
+          headerSort: false,
+          titleFormatter: () =>
+            '<span class="material-icons">person_remove</span>',
+          formatter: () =>
+            '<span style="color:red; font-weight:bold;">DELETE</span>',
+          cellClick: rowDelete,
+          resizable: false,
+          responsive: 2, // Hide second
+        },
+      ],
+    });
 
-              let val = parseInt(cell.getValue())
+    await new Promise((resolve) => userTable.on('tableBuilt', resolve));
 
-              if (isNaN(val)) return;
-
-              let str = new Date(val * 1000).toLocaleString('en-GB', {
-                year: "numeric",
-                month: "short",
-                day: "numeric",
-              })
-
-              // Colour text red if account has expired.
-              return val < new Date() / 1000 ? `<span style="color:red;">${str}</span>` : str;
-            },
-            editor: expiryEdit,
-            resizable: false
-          },
-          {
-            field: 'blocked',
-            hozAlign: 'center',
-            vertAlign: 'middle',
-            headerTooltip: 'Blocked accounts can no longer login or reset their password.',
-            titleFormatter: () => '<span class="material-icons">lock</span>',
-            formatter: 'tickCross',
-            cellClick: cellToggle,
-            resizable: false,
-            responsive: 2 // Hide second
-          },
-          {
-            field: 'delete',
-            vertAlign: 'middle',
-            headerSort: false,
-            titleFormatter: () => '<span class="material-icons">person_remove</span>',
-            formatter: () => '<span style="color:red; font-weight:bold;">DELETE</span>',
-            cellClick: rowDelete,
-            resizable: false,
-            responsive: 2 // Hide second
-          }
-        ]
-      });
-
-
-    await new Promise(resolve => userTable.on('tableBuilt', resolve))
-
-    let blocked = true
-    userTable.setFilter("blocked", "!=", true);
-    document.getElementById("toggleBlocked").onclick = e => {
-
-      blocked = !blocked
+    let blocked = true;
+    userTable.setFilter('blocked', '!=', true);
+    document.getElementById('toggleBlocked').onclick = (e) => {
+      blocked = !blocked;
 
       if (blocked) {
-        e.target.textContent = "Show blocked accounts"
-        userTable.setFilter("blocked", "!=", true)
+        e.target.textContent = 'Show blocked accounts';
+        userTable.setFilter('blocked', '!=', true);
         return;
       }
 
-      e.target.textContent = "Hide blocked accounts"
-      userTable.removeFilter("blocked", "!=", true)
-    }
+      e.target.textContent = 'Hide blocked accounts';
+      userTable.removeFilter('blocked', '!=', true);
+    };
 
-    document.getElementById("filterInput").oninput = e => {
-
+    document.getElementById('filterInput').oninput = (e) => {
       // Check whether email or role includes filter term.
-      userTable.setData(data.filter(user => user.email.includes(e.target.value)
-        || user.roles.some(role => role.includes(e.target.value))))
-    }
-
+      userTable.setData(
+        data.filter(
+          (user) =>
+            user.email.includes(e.target.value) ||
+            user.roles.some((role) => role.includes(e.target.value)),
+        ),
+      );
+    };
 
     function expiryEdit(cell, onRendered, success, cancel) {
-
-      let rowData = cell.getRow().getData()
+      let rowData = cell.getRow().getData();
       //create and style editor
-      let editor = document.createElement("input");
+      let editor = document.createElement('input');
 
-      editor.setAttribute("type", "date");
+      editor.setAttribute('type', 'date');
 
       // Set the value to the current date if the value is null and you are editing the cell.
       if (!rowData.expires_on) {
@@ -428,9 +454,9 @@
       }
 
       //create and style input
-      editor.style.padding = "3px";
-      editor.style.width = "100%";
-      editor.style.boxSizing = "border-box";
+      editor.style.padding = '3px';
+      editor.style.width = '100%';
+      editor.style.boxSizing = 'border-box';
 
       onRendered(function () {
         editor.focus();
@@ -439,26 +465,29 @@
       //when the value has been set, trigger the cell to update
       function successFunc() {
         const val = new Date(editor.value).getTime() / 1000 || null;
-        xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${rowData.email}&field=expires_on&value=${val}`)
+        xhrPromise(
+          `${document.head.dataset.dir}/api/user/update?email=${rowData.email}&field=expires_on&value=${val}`,
+        );
         cell.setValue(val);
       }
 
       //editor.addEventListener("change", successFunc);
-      editor.addEventListener("blur", successFunc);
+      editor.addEventListener('blur', successFunc);
 
       //return the editor element
       return editor;
-    };
+    }
 
     function languageEdited(e) {
+      if (JSON.stringify(e._cell.value) === JSON.stringify(e._cell.oldValue))
+        return;
 
-      if (JSON.stringify(e._cell.value) === JSON.stringify(e._cell.oldValue)) return;
-
-      xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${e._cell.row.data.email}&field=language&value=${e._cell.value}`)
+      xhrPromise(
+        `${document.head.dataset.dir}/api/user/update?email=${e._cell.row.data.email}&field=language&value=${e._cell.value}`,
+      );
     }
 
     async function cellToggle(e, cell) {
-
       const user = cell.getData();
 
       const col = cell.getColumn();
@@ -474,7 +503,9 @@
       // Re-verification cannot be undone.
       if (field === 're_verification' && cell.getValue()) return;
 
-      const response = await xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${user.email}&field=${field === 're_verification' ? 'verified' : field}&value=${apiValue}`);
+      const response = await xhrPromise(
+        `${document.head.dataset.dir}/api/user/update?email=${user.email}&field=${field === 're_verification' ? 'verified' : field}&value=${apiValue}`,
+      );
 
       if (response.err) return console.error(response.err);
 
@@ -482,73 +513,76 @@
 
       const row = cell.getRow();
 
-      if (field === 're_verification'
-        || (field === 'verified' && cell.getValue())) {
+      if (
+        field === 're_verification' ||
+        (field === 'verified' && cell.getValue())
+      ) {
+        let re_verification_cell = row.getCell('re_verification');
+        re_verification_cell.setValue(true);
 
-        let re_verification_cell = row.getCell('re_verification')
-        re_verification_cell.setValue(true)
+        let verified_cell = row.getCell('verified');
+        verified_cell.setValue(true);
 
-        let verified_cell = row.getCell('verified')
-        verified_cell.setValue(true)
-
-        let approved_cell = row.getCell('approved')
-        approved_cell.setValue(true)
-      };
+        let approved_cell = row.getCell('approved');
+        approved_cell.setValue(true);
+      }
 
       row.reformat();
-    };
+    }
 
     async function getAccessLog(e, cell) {
-
       const user = cell.getData();
 
-      const response = await xhrPromise(`${document.head.dataset.dir}/api/user/log?email=${user.email}`);
+      const response = await xhrPromise(
+        `${document.head.dataset.dir}/api/user/log?email=${user.email}`,
+      );
 
       if (response.err) return console.error(response.err);
 
       alert(response.access_log.join('\n'));
-    };
+    }
 
     async function rowDelete(e, cell) {
-
       const user = cell.getData();
 
       const row = cell.getRow();
 
       if (confirm('Delete account ' + user.email)) {
-
-        const response = await xhrPromise(`${document.head.dataset.dir}/api/user/delete?email=${user.email}`);
+        const response = await xhrPromise(
+          `${document.head.dataset.dir}/api/user/delete?email=${user.email}`,
+        );
 
         if (response.err) return console.error(response.err);
 
         row.delete();
       }
-    };
+    }
 
     function rolesEdited(e) {
+      if (JSON.stringify(e._cell.value) === JSON.stringify(e._cell.oldValue))
+        return;
 
-      if (JSON.stringify(e._cell.value) === JSON.stringify(e._cell.oldValue)) return;
-
-      xhrPromise(`${document.head.dataset.dir}/api/user/update?email=${e._cell.row.data.email}&field=roles&value=${encodeURIComponent(e._cell.value)}`)
+      xhrPromise(
+        `${document.head.dataset.dir}/api/user/update?email=${e._cell.row.data.email}&field=roles&value=${encodeURIComponent(e._cell.value)}`,
+      );
     }
-  }
+  };
 
   function xhrPromise(req) {
     return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
 
-      const xhr = new XMLHttpRequest()
+      xhr.open('GET', req);
+      xhr.setRequestHeader('Content-Type', 'application/json');
+      xhr.responseType = 'json';
 
-      xhr.open('GET', req)
-      xhr.setRequestHeader('Content-Type', 'application/json')
-      xhr.responseType = 'json'
+      xhr.onload = (e) => {
+        if (e.target.status >= 300) return reject({ err: e.target.status });
+        resolve(e.target.response || {});
+      };
 
-      xhr.onload = e => {
-        if (e.target.status >= 300) return reject({ err: e.target.status })
-        resolve(e.target.response || {})
-      }
-
-      xhr.send()
-    })
+      xhr.send();
+    });
   }
-</script>
+  </script>
 </html>

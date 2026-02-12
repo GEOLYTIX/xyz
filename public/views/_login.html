@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="{{language}}">
   <head data-dir="{{dir}}">
-    <title>{{title}}</title>
+    <title>{{ title }}</title>
     <link
       rel="icon"
       type="image/x-icon"
@@ -13,23 +13,22 @@
     <script type="module" src="{{dir}}/public/js/lib/mapp.js" defer></script>
     <script type="module" src="{{dir}}/public/js/lib/ui.js" defer></script>
     <style>
+    body {
+      padding: 50px;
+      font-size: 14px;
+      background-color: var(--color-base-secondary);
+    }
+
+    .formwrapper {
+      margin: 0 auto;
+      max-width: 600px;
+    }
+
+    @media only screen and (max-width: 700px) {
       body {
-        padding: 50px;
-        font-size: 14px;
-        background-color: var(--color-base-secondary);
+        padding: 20px;
       }
-
-      .formwrapper {
-        margin: 0 auto;
-        max-width: 600px;
-      }
-
-      @media only screen and (max-width: 700px) {
-        body {
-          padding: 20px;
-        }
-      }
-
+    }
     </style>
   </head>
 
@@ -38,77 +37,98 @@
   </body>
 
   <script type="module">
-    console.log(`MAPP v${mapp.version}`);
+  console.log(`MAPP v${mapp.version}`);
 
-    mapp.language = mapp.hooks.current.language || 'en';
+  mapp.language = mapp.hooks.current.language || 'en';
 
-    if (mapp.language !== 'en') {
-      await mapp.utils.loadDictionary(mapp.language);
-    }
+  if (mapp.language !== 'en') {
+    await mapp.utils.loadDictionary(mapp.language);
+  }
 
-    const languages = [{
+  const languages = [
+    {
       option: 'en',
-      title: 'English'
-    },{
+      title: 'English',
+    },
+    {
       option: 'de',
-      title: 'Deutsch'
-    },{
+      title: 'Deutsch',
+    },
+    {
       option: 'fr',
-      title: 'Français'
-    },{
+      title: 'Français',
+    },
+    {
       option: 'it',
-      title: 'Italiano'
-    },{
+      title: 'Italiano',
+    },
+    {
       option: 'es',
-      title: 'Español'
-    },{
+      title: 'Español',
+    },
+    {
       option: 'pl',
-      title: 'Polski'
-    },{
+      title: 'Polski',
+    },
+    {
       option: 'ja',
-      title: '日本語'
-    },{
+      title: '日本語',
+    },
+    {
       option: 'th',
-      title: 'แบบไทย'
-    },{
+      title: 'แบบไทย',
+    },
+    {
       option: 'ko',
-      title: '한국어'
-    },{
+      title: '한국어',
+    },
+    {
       option: 'zh',
-      title: '中文简体'
-    },{
+      title: '中文简体',
+    },
+    {
       option: 'zh_tw',
-      title: '臺灣國語'
-    },{
+      title: '臺灣國語',
+    },
+    {
       option: 'tr',
-      title: 'Türkçe'
-    }];
+      title: 'Türkçe',
+    },
+  ];
 
-    if(document.body.dataset.template !== 'login_view') document.title = `XYZ | ${mapp.dictionary.register_title}`;
+  if (document.body.dataset.template !== 'login_view')
+    document.title = `XYZ | ${mapp.dictionary.register_title}`;
 
-    const language = languages.find(l => l.option === mapp.language);
+  const language = languages.find((l) => l.option === mapp.language);
 
-    const callbackRoute = document.body.dataset.template === 'login_view' ? 'login=true' : 'register=true';
+  const callbackRoute =
+    document.body.dataset.template === 'login_view'
+      ? 'login=true'
+      : 'register=true';
 
-    const selectLanguage = mapp.ui.elements.dropdown({
-      callback: (e, entry) => {
-        globalThis.location.assign(`${mapp.host}?language=${entry.option}&${callbackRoute}`);
-      },
-      entries: languages,
-      span: language.title,
-    });
+  const selectLanguage = mapp.ui.elements.dropdown({
+    callback: (e, entry) => {
+      globalThis.location.assign(
+        `${mapp.host}?language=${entry.option}&${callbackRoute}`,
+      );
+    },
+    entries: languages,
+    span: language.title,
+  });
 
-    const formwrapper = document.querySelector('.formwrapper');
+  const formwrapper = document.querySelector('.formwrapper');
 
-    formwrapper.append(selectLanguage);
+  formwrapper.append(selectLanguage);
 
-    const params = {
-      msg: document.body.dataset.msg
-    }
+  const params = {
+    msg: document.body.dataset.msg,
+  };
 
-    const form = document.body.dataset.template === 'login_view' ?
-      mapp.ui.elements.loginForm(params) : mapp.ui.elements.registerForm(params);
+  const form =
+    document.body.dataset.template === 'login_view'
+      ? mapp.ui.elements.loginForm(params)
+      : mapp.ui.elements.registerForm(params);
 
-    formwrapper.append(form);
+  formwrapper.append(form);
   </script>
 </html>
