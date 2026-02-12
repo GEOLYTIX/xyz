@@ -378,7 +378,7 @@
 
     if (resolvedLocaleKey !== currentLocaleKey) {
       // Redirect once with the fully resolved path.
-      window.location.assign(`${mapp.host}?locale=${resolvedLocaleKey}`);
+      globalThis.location.assign(`${mapp.host}?locale=${resolvedLocaleKey}`);
     }
 
     // Recursive function to build dependent dropdowns
