@@ -295,7 +295,7 @@
     locale = await mapp.utils.xhr(
       `${mapp.host}/api/workspace/locale?locale=${locale}&layers=true`,
     );
-    }catch(error){
+    }catch{
       mapp.ui.elements.dialog({
         css_style:
           'padding: 1em; border-color: #000; z-index:9999; max-width: 50%;',
