@@ -139,10 +139,19 @@ async function objTemplate(obj, template, roles, context) {
   template = prepareTemplate(obj, template, roles);
 
   let nextTemplates;
+  let nextTemplatesContext;
 
-  ({ obj, nextTemplates } = mergeObjectWithTemplate(obj, template));
+  ({ obj, nextTemplates, nextTemplatesContext } = mergeObjectWithTemplate(
+    obj,
+    template,
+  ));
 
-  return await processRecursiveTemplates(obj, nextTemplates, roles);
+  return await processRecursiveTemplates(
+    obj,
+    nextTemplates,
+    roles,
+    nextTemplatesContext,
+  );
 }
 
 function prepareTemplate(obj, template, roles) {
@@ -157,6 +166,7 @@ function prepareTemplate(obj, template, roles) {
 
 function mergeObjectWithTemplate(obj, template) {
   let nextTemplates;
+  let nextTemplatesContext;
 
   if (obj.template) {
     // obj.template must NOT overwrite template.template.
@@ -172,6 +182,11 @@ function mergeObjectWithTemplate(obj, template) {
     if (Array.isArray(template.templates)) {
       nextTemplates = template.templates;
       delete template.templates;
+
+      // Capture the template's role context before merging into obj.
+      // This ensures nested sub-templates are combined only with
+      // their parent template's roles, not accumulated sibling roles.
+      nextTemplatesContext = getRoleContext(template);
     }
 
     // template.role must NOT overwrite obj.role.
@@ -187,14 +202,22 @@ function mergeObjectWithTemplate(obj, template) {
     obj = merge(obj, template);
   }
 
-  return { obj, nextTemplates };
+  return { obj, nextTemplates, nextTemplatesContext };
 }
 
-async function processRecursiveTemplates(obj, nextTemplates, roles) {
+async function processRecursiveTemplates(
+  obj,
+  nextTemplates,
+  roles,
+  nextTemplatesContext,
+) {
   if (obj.template) {
     return await objTemplate(obj, obj.template, roles, getRoleContext(obj));
   } else if (Array.isArray(nextTemplates)) {
-    const context = getRoleContext(obj);
+    // Use the template's own role context if available, so that nested
+    // sub-templates are combined only with their parent template's roles
+    // rather than the accumulated roles of the entire object.
+    const context = nextTemplatesContext || getRoleContext(obj);
     for (const _template of nextTemplates) {
       obj = await objTemplate(obj, _template, roles, context);
     }
