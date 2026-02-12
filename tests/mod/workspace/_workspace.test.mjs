@@ -296,3 +296,83 @@ await codi.describe(
     );
   },
 );
+
+await codi.describe(
+  {
+    name: 'workspace: Sibling Templates with Nested Locales',
+    id: 'workspace_sibling_nested_locales',
+  },
+  async () => {
+    globalThis.xyzEnv = {
+      TITLE: 'WORKSPACE TEST',
+      WORKSPACE: 'file:./tests/assets/nested_roles/sibling_workspace.json',
+    };
+
+    await checkWorkspaceCache(true);
+
+    await codi.it(
+      {
+        name: 'nested locale roles should not leak into sibling templates',
+        parentId: 'workspace_sibling_nested_locales',
+      },
+      async () => {
+        // uk has templates: [demographics, stores]
+        // stores has locales: [brand_a, brand_b]
+        // brand_a/brand_b should combine with stores roles, NOT demographics
+        const { req, res } = codi.mockHttp.createMocks({
+          params: {
+            key: 'roles',
+            detail: false,
+            user: {
+              admin: true,
+            },
+          },
+        });
+
+        await getKeyMethod(req, res);
+
+        const roles = res._getData();
+
+        // brand_a/brand_b should be nested under stores
+        codi.assertTrue(
+          roles.includes('stores.brand_a'),
+          'brand_a should be nested under stores',
+        );
+        codi.assertTrue(
+          roles.includes('stores.brand_b'),
+          'brand_b should be nested under stores',
+        );
+
+        // brand_a/brand_b should NOT be nested under demographics
+        codi.assertFalse(
+          roles.includes('demographics.brand_a'),
+          'brand_a should NOT be nested under demographics (sibling leak)',
+        );
+        codi.assertFalse(
+          roles.includes('demographics.brand_b'),
+          'brand_b should NOT be nested under demographics (sibling leak)',
+        );
+
+        // Proper nesting under uk should exist
+        codi.assertTrue(
+          roles.includes('uk.stores.brand_a'),
+          'brand_a should be nested under uk.stores',
+        );
+        codi.assertTrue(
+          roles.includes('uk.stores.brand_b'),
+          'brand_b should be nested under uk.stores',
+        );
+
+        // Should NOT have uk.demographics.brand_a
+        codi.assertFalse(
+          roles.includes('uk.demographics.brand_a'),
+          'brand_a should NOT be nested under uk.demographics',
+        );
+        codi.assertFalse(
+          roles.includes('uk.demographics.brand_b'),
+          'brand_b should NOT be nested under uk.demographics',
+        );
+      },
+    );
+  },
+);

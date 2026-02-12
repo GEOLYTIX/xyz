@@ -187,6 +187,8 @@ Merges a template into the parent object. Handles two cases:
 
 When a template from the templates[] array has its own nested sub-templates, the template's role context is captured before the merge. This prevents sibling template roles from leaking into the sub-template role combinations.
 
+Similarly, when a template contributes a locales array, the template's role context is stored as localesRoleContext on the merged object. This allows getLocale to scope role combinations for nested locales to the template that defined them, rather than the fully accumulated parent.
+
 @param {Object} obj The parent object to merge the template into.
 @param {Object} template The resolved template object.
 
@@ -215,6 +217,13 @@ function mergeObjectWithTemplate(obj, template) {
       // This ensures nested sub-templates are combined only with
       // their parent template's roles, not accumulated sibling roles.
       nextTemplatesContext = getRoleContext(template);
+    }
+
+    // When a template contributes a locales array, capture its role context
+    // so that nested locales are combined only with the template's roles,
+    // not accumulated sibling template roles.
+    if (Array.isArray(template.locales)) {
+      template.localesRoleContext = getRoleContext(template);
     }
 
     // template.role must NOT overwrite obj.role.

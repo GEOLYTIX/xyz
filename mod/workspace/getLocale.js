@@ -113,6 +113,8 @@ Locale access for the user will be checked without the ignoreRoles property prov
 
 An error will be returned if the user does not have access to the role.
 
+If the parentLocale has a localesRoleContext property (set by mergeTemplates when a template contributes a locales array), it is used as the role context for combining. This ensures nested locales are combined only with the roles of the template that defined the locales array, not the accumulated roles of all sibling templates.
+
 @param {Object} locale
 @param {Object} parentLocale Parent locale with roles.
 @param {Object} params
@@ -122,9 +124,13 @@ An error will be returned if the user does not have access to the role.
 @returns {Promise<Object|Error>} JSON Locale.
 */
 async function processRoles(locale, parentLocale, params) {
-  // Assign parent roles to locale for combination
+  // Assign parent roles to locale for combination.
+  // Use the scoped localesRoleContext if available, so that nested locales
+  // are combined only with the template's roles that contributed the locales
+  // array, not accumulated sibling template roles.
   if (parentLocale?.roles) {
-    Roles.combine(locale, parentLocale);
+    const roleContext = parentLocale.localesRoleContext || parentLocale;
+    Roles.combine(locale, roleContext);
   }
 
   // Pass params.user.roles to enforce role checks on merged templates.
@@ -148,6 +154,24 @@ async function processRoles(locale, parentLocale, params) {
   return locale;
 }
 
+/**
+@function composeLocale
+@async
+
+@description
+Composes the final locale object by merging with an optional parentLocale and recursively processing further nested locales.
+
+When a parentLocale is provided, its properties are merged into the locale. The locale name and role are composed with dot-notation to reflect the nesting hierarchy.
+
+Temporary properties used during workspace composition (src, template, templates, _type, localesRoleContext) are removed before returning.
+
+@param {Object} locale The locale object to compose.
+@param {Object} [parentLocale] Optional parent locale to merge into.
+@param {Object} params Request parameters including locale keys and user.
+@param {string} workspaceKey The workspace key to assign.
+
+@returns {Promise<Object>} The composed locale object.
+*/
 async function composeLocale(locale, parentLocale, params, workspaceKey) {
   locale.workspace = workspaceKey;
 
@@ -184,6 +208,7 @@ async function composeLocale(locale, parentLocale, params, workspaceKey) {
   delete locale.template;
   delete locale.templates;
   delete locale._type;
+  delete locale.localesRoleContext;
 
   return locale;
 }

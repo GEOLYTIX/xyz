@@ -1,0 +1,31 @@
+{
+  "templates": {
+    "stores_template": {
+      "src": "file:./tests/assets/nested_roles/stores_template.json"
+    },
+    "demographics_template": {
+      "src": "file:./tests/assets/nested_roles/demographics_template.json"
+    },
+    "brand_a_template": {
+      "src": "file:./tests/assets/nested_roles/brand_a_template.json"
+    },
+    "brand_b_template": {
+      "src": "file:./tests/assets/nested_roles/brand_b_template.json"
+    }
+  },
+  "locale": {
+    "layers": {
+      "OSM": {
+        "display": true,
+        "format": "tiles",
+        "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+      }
+    }
+  },
+  "locales": {
+    "uk": {
+      "role": "uk",
+      "templates": ["demographics_template", "stores_template"]
+    }
+  }
+}
