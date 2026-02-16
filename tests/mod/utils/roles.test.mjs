@@ -1,4 +1,4 @@
-import { check, combine, fromObj, objMerge } from '../../../mod/utils/roles.js';
+import { check, combine, objMerge, setInObj } from '../../../mod/utils/roles.js';
 
 codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
   codi.describe(
@@ -455,7 +455,7 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
 
   codi.describe(
     {
-      name: 'fromObj()',
+      name: 'setInObj()',
       id: 'roles_module_fromObj',
       parentId: 'roles_module',
     },
@@ -474,7 +474,7 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
               guest: true,
             },
           };
-          fromObj(rolesSet, obj);
+          setInObj(rolesSet, obj);
           codi.assertEqual(rolesSet.has('admin'), true);
           codi.assertEqual(rolesSet.has('user'), true);
           codi.assertEqual(rolesSet.has('guest'), true);
@@ -495,7 +495,7 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
               user: true,
             },
           };
-          fromObj(rolesSet, obj);
+          setInObj(rolesSet, obj);
           codi.assertEqual(rolesSet.has('admin'), true);
           codi.assertEqual(rolesSet.has('guest'), true);
           codi.assertEqual(rolesSet.has('user'), true);
@@ -528,7 +528,7 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
               },
             },
           };
-          fromObj(rolesSet, obj);
+          setInObj(rolesSet, obj);
           codi.assertEqual(rolesSet.has('admin'), true);
           codi.assertEqual(rolesSet.has('user'), true);
           codi.assertEqual(rolesSet.has('guest'), true);
@@ -556,7 +556,7 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
               },
             ],
           };
-          fromObj(rolesSet, obj);
+          setInObj(rolesSet, obj);
           codi.assertEqual(rolesSet.has('admin'), true);
           codi.assertEqual(rolesSet.has('user'), true);
         },
@@ -576,7 +576,7 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
               admin: true,
             },
           };
-          fromObj(rolesSet, obj);
+          setInObj(rolesSet, obj);
           codi.assertEqual(rolesSet.has('admin'), true);
         },
       );
@@ -601,7 +601,7 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
               },
             },
           };
-          fromObj(rolesSet, obj);
+          setInObj(rolesSet, obj);
           codi.assertEqual(rolesSet.size, 2);
           codi.assertEqual(rolesSet.has('admin'), true);
           codi.assertEqual(rolesSet.has('user'), true);
@@ -616,7 +616,7 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
         () => {
           const rolesSet = new Set();
           const obj = {};
-          fromObj(rolesSet, obj);
+          setInObj(rolesSet, obj);
           codi.assertEqual(rolesSet.size, 0);
         },
       );
@@ -634,7 +634,7 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
               value: 'nested',
             },
           };
-          fromObj(rolesSet, obj);
+          setInObj(rolesSet, obj);
           codi.assertEqual(rolesSet.size, 0);
         },
       );

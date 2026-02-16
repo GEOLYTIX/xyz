@@ -1,6 +1,6 @@
 /**
 ## /utils/roles
-Roles utility module for handling role-based access control and object merging
+Roles utility module exports methods to inspect roles in object, checking object access, and merging roles objects based on provided user roles.
 
 @requires /utils/merge
 @module /utils/roles
@@ -175,29 +175,38 @@ export function objMerge(obj, user_roles) {
 }
 
 /**
-@function objectRoles
+@function setInObj
 
 @description
-The objectRoles method has been designed to iterate through all nested objects in a workspace and add any keys in a 'roles' object property to a Set of role strings.
+The setInObj receives a set of roles and an object as params.
 
-@param {set} rolesSet Set of role strings for each individual role. The same role cannot be added twice to a set.
+The method iterates through the object keys and will call itself for every object type property in the object param.
+
+Any roles defined in the roles property of the object param will be added to the rolesSet param.
+
+The method does not return anything but will modify the rolesSet param which is passed recursively.
+
+Access roles defined as the role string property will also be added to the rolesSet.
+
+@param {set} rolesSet Set of roles to be modified while the param is passed recursively.
 @param {object} obj Object to evaluate for roles.
-@param {string} key Key value of current object.
+@property {object} [obj.roles] Roles in the object will be added to the rolesSet.
+@property {string} [obj.role] Any [template] access role will be added to the rolesSet.
 */
-export function fromObj(rolesSet, obj) {
+export function setInObj(rolesSet, obj) {
   // Iterate through the object tree.
   Object.keys(obj).forEach((key) => {
     if (obj[key] && typeof obj[key] === 'object') {
       if (key === 'roles') {
         Object.keys(obj[key]).forEach((role) => {
           // Add role without negation ! to roles set.
-          // The same s.role can not be added multiple times to the rolesSet.
+          // The same role can not be added multiple times to the rolesSet.
           rolesSet.add(role.replace(/^!/, ''));
         });
       }
 
-      // Call method recursive for nested objects.
-      fromObj(rolesSet, obj[key]);
+      // Call method recursively for object properties of the object param.
+      setInObj(rolesSet, obj[key]);
     } else if (key === 'role' && typeof obj[key] === 'string') {
       // Also extract single role string properties
       rolesSet.add(obj[key].replace(/^!/, ''));

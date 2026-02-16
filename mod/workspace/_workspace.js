@@ -360,7 +360,7 @@ async function roles(req, res) {
   const rolesSet = new Set();
 
   for (const locale of Object.values(locales)) {
-    Roles.fromObj(rolesSet, locale);
+    Roles.setInObj(rolesSet, locale);
   }
 
   const rolesTree = {};
