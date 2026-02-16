@@ -1,4 +1,9 @@
-import { check, combine, objMerge, setInObj } from '../../../mod/utils/roles.js';
+import {
+  check,
+  combine,
+  objMerge,
+  setInObj,
+} from '../../../mod/utils/roles.js';
 
 codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
   codi.describe(
