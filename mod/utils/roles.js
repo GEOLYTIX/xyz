@@ -157,33 +157,21 @@ export function objMerge(obj, user_roles) {
       // Get last role from a dot tree role string.
       const popRole = role.split('.').pop();
 
-      return (
-        user_roles.includes(popRole) ||
-        notIncludesNegatedRole(popRole, user_roles)
-      );
+      // A negated role starts with an exclamation mark.
+      const negatedRole = popRole.match(/(?<=^!)(.*)/g)?.[0];
+
+      if (negatedRole) {
+        // True if the user_roles NOT includes the negated role.
+        return !user_roles.includes(negatedRole);
+      }
+
+      return user_roles.includes(popRole);
     })
     .forEach((role) => {
       merge(clone, clone.roles[role]);
     });
 
   return clone;
-}
-
-/**
-@function notIncludesNegatedRole
-
-@description
-The utility method checks whether a negated role [prefixed with an exclamation mark !] is not included in the array of user roles.
-
-@param {String} role A role name
-@param {Array<string>} user_roles Array of roles assigned to the user
-@returns {Boolean} True if the negated role is not included in the user_roles array.
-*/
-function notIncludesNegatedRole(role, user_roles) {
-  // A negated role is prefixes with an exclamation mark.
-  return role.match(/(?<=^!)(.*)/g)?.[0]
-    ? !user_roles.includes(role.match(/(?<=^!)(.*)/g)?.[0])
-    : false;
 }
 
 /**
