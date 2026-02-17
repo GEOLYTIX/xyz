@@ -330,7 +330,7 @@
     // Parse the current locale path from the hooks or the loaded locale key.
     const currentPath = mapp.hooks.current.locale
       ? String(mapp.hooks.current.locale).split(',')
-      : [].concat(locale.key);
+      : [locale.key].flat();
 
     // Recursively build locale dropdowns and auto-select single-entry levels.
     // If a single-entry level extends the path, redirect once with the resolved key.
