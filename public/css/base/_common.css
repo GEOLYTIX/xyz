@@ -52,7 +52,7 @@
 .outlined {
   border: 1px solid var(--color-primary);
   border-radius: 5px;
-  padding: 0.2em 0.5em;
+  padding: 0.5em;
 
   &.active {
     border: 1px solid var(--color-active);

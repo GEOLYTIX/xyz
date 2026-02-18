@@ -66,7 +66,7 @@
 .outlined {
   border: 1px solid var(--color-primary);
   border-radius: 5px;
-  padding: 0.2em 0.5em;
+  padding: 0.5em;
   &.active {
     border: 1px solid var(--color-active);
   }
@@ -252,6 +252,9 @@ h3 {
 }
 a > img {
   height: 100%;
+}
+iframe {
+  border: none;
 }
 select {
   &:focus {
@@ -689,6 +692,10 @@ dialog {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
+  }
+  iframe {
+    width: 100%;
+    height: 100%;
   }
   &.popout .material-symbols-outlined.toggle-on {
     &::after {
