@@ -330,8 +330,9 @@
 
     const localesInterface = await mapp.ui.elements.locales(locale, locales);
 
-    // TODO: must be tested with void
-    layersPanel.append(localesInterface);
+    if(localesInterface){
+      layersPanel.append(localesInterface);
+    }
 
     if (!window.ol) await mapp.utils.olScript();
 
