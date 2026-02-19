@@ -698,6 +698,7 @@ dialog {
     transform: translate(-50%, -50%);
   }
   iframe {
+    position: absolute;
     width: 100%;
     height: 100%;
   }
