@@ -189,7 +189,18 @@ async function composeLocale(locale, parentLocale, params, workspaceKey) {
     locale.name = `${parentLocale.name}/${locale.name}`;
 
     if (parentLocale.role && locale.role) {
-      locale.role = `${parentLocale.role}.${locale.role}`;
+      // When localesRoleContext exists, compose the role with the most
+      // specific parent path from the context (e.g., "uk.stores") rather
+      // than the locale's own role (e.g., "uk"), which would create a
+      // spurious compound like "uk.brand_a" instead of "uk.stores.brand_a".
+      if (parentLocale.localesRoleContext?.roles) {
+        const contextRoles = Object.keys(parentLocale.localesRoleContext.roles);
+        // Use the longest role as it represents the most specific path.
+        const parentRole = contextRoles.sort((a, b) => b.length - a.length)[0];
+        locale.role = `${parentRole}.${locale.role}`;
+      } else {
+        locale.role = `${parentLocale.role}.${locale.role}`;
+      }
     }
 
     locale = merge(structuredClone(parentLocale), locale);

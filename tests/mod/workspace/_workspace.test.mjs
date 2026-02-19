@@ -372,6 +372,16 @@ await codi.describe(
           roles.includes('uk.demographics.brand_b'),
           'brand_b should NOT be nested under uk.demographics',
         );
+
+        // Should NOT have uk.brand_a (should only be uk.stores.brand_a)
+        codi.assertFalse(
+          roles.includes('uk.brand_a'),
+          'brand_a should NOT be directly under uk (should be uk.stores.brand_a)',
+        );
+        codi.assertFalse(
+          roles.includes('uk.brand_b'),
+          'brand_b should NOT be directly under uk (should be uk.stores.brand_b)',
+        );
       },
     );
   },
