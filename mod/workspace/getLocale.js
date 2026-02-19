@@ -196,7 +196,9 @@ async function composeLocale(locale, parentLocale, params, workspaceKey) {
       if (parentLocale.localesRoleContext?.roles) {
         const contextRoles = Object.keys(parentLocale.localesRoleContext.roles);
         // Use the longest role as it represents the most specific path.
-        const parentRole = contextRoles.sort((a, b) => b.length - a.length)[0];
+        const parentRole = contextRoles.toSorted(
+          (a, b) => b.length - a.length,
+        )[0];
         locale.role = `${parentRole}.${locale.role}`;
       } else {
         locale.role = `${parentLocale.role}.${locale.role}`;
