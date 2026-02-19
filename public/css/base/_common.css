@@ -47,6 +47,10 @@
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+
+  .material-symbols-outlined {
+    font-size: 1.5em;
+  }
 }
 
 .outlined {
