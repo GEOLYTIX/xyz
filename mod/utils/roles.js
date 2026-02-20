@@ -1,6 +1,6 @@
 /**
 ## /utils/roles
-Roles utility module for handling role-based access control and object merging
+Roles utility module exports methods to inspect roles in object, checking object access, and merging roles objects based on provided user roles.
 
 @requires /utils/merge
 @module /utils/roles
@@ -45,6 +45,9 @@ The check is also passed if the obj does not have a roles property.
 export function check(obj, user_roles) {
   // The object to check has no roles assigned.
   if (!obj.roles) return true;
+
+  // The roles object maybe empty.
+  if (!Object.keys(obj.roles).length) return true;
 
   if (!user_roles) return false;
 
@@ -154,10 +157,15 @@ export function objMerge(obj, user_roles) {
       // Get last role from a dot tree role string.
       const popRole = role.split('.').pop();
 
-      return (
-        user_roles.includes(popRole) ||
-        notIncludesNegatedRole(popRole, user_roles)
-      );
+      // A negated role starts with an exclamation mark.
+      const negatedRole = popRole.match(/(?<=^!)(.*)/g)?.[0];
+
+      if (negatedRole) {
+        // True if the user_roles NOT includes the negated role.
+        return !user_roles.includes(negatedRole);
+      }
+
+      return user_roles.includes(popRole);
     })
     .forEach((role) => {
       merge(clone, clone.roles[role]);
@@ -167,46 +175,167 @@ export function objMerge(obj, user_roles) {
 }
 
 /**
-@function notIncludesNegatedRole
+@function setInObj
 
 @description
-The utility method checks whether a negated role [prefixed with an exclamation mark !] is not included in the array of user roles.
+The setInObj receives a set of roles and an object as params.
 
-@param {String} role A role name
-@param {Array<string>} user_roles Array of roles assigned to the user
-@returns {Boolean} True if the negated role is not included in the user_roles array.
-*/
-function notIncludesNegatedRole(role, user_roles) {
-  // A negated role is prefixes with an exclamation mark.
-  return role.match(/(?<=^!)(.*)/g)?.[0]
-    ? !user_roles.includes(role.match(/(?<=^!)(.*)/g)?.[0])
-    : false;
-}
+The method iterates through the object keys and will call itself for every object type property in the object param.
 
-/**
-@function objectRoles
+Any roles defined in the roles property of the object param will be added to the rolesSet param.
 
-@description
-The objectRoles method has been designed to iterate through all nested objects in a workspace and add any keys in a 'roles' object property to a Set of role strings.
+The method does not return anything but will modify the rolesSet param which is passed recursively.
 
-@param {set} rolesSet Set of role strings for each individual role. The same role cannot be added twice to a set.
+Access roles defined as the role string property will also be added to the rolesSet.
+
+@param {set} rolesSet Set of roles to be modified while the param is passed recursively.
 @param {object} obj Object to evaluate for roles.
-@param {string} key Key value of current object.
+@property {object} [obj.roles] Roles in the object will be added to the rolesSet.
+@property {string} [obj.role] Any [template] access role will be added to the rolesSet.
 */
-export function fromObj(rolesSet, obj) {
+export function setInObj(rolesSet, obj) {
   // Iterate through the object tree.
   Object.keys(obj).forEach((key) => {
     if (obj[key] && typeof obj[key] === 'object') {
       if (key === 'roles') {
         Object.keys(obj[key]).forEach((role) => {
           // Add role without negation ! to roles set.
-          // The same s.role can not be added multiple times to the rolesSet.
+          // The same role can not be added multiple times to the rolesSet.
           rolesSet.add(role.replace(/^!/, ''));
         });
       }
 
-      // Call method recursive for nested objects.
-      fromObj(rolesSet, obj[key]);
+      // Call method recursively for object properties of the object param.
+      setInObj(rolesSet, obj[key]);
+    } else if (key === 'role' && typeof obj[key] === 'string') {
+      // Also extract single role string properties
+      rolesSet.add(obj[key].replace(/^!/, ''));
     }
+  });
+}
+
+/**
+@function combine
+@description
+Combines roles from a parent object into a child object.
+Handles two use cases:
+1. Template role assignment (when parent has localeRole, templateRole, or objRole properties)
+2. Simple parent-child role combination (for nested locales)
+
+@param {Object} child The child object (template or locale).
+@param {Object} parent The parent object providing role context.
+*/
+export function combine(child, parent) {
+  // Handle template-style role assignment
+  // Template context has special properties: localeRole, templateRole, objRole
+  if (
+    child.role &&
+    (parent.localeRole ||
+      parent.templateRole ||
+      parent.objRole ||
+      child.objRole)
+  ) {
+    combineTemplateRoles(child, parent);
+    return;
+  }
+
+  // Handle simple locale-style role combination
+  combineLocaleRoles(child, parent);
+}
+
+/**
+@function combineTemplateRoles
+@description
+Combines roles for templates. This replicates the old roleAssign behavior.
+
+Templates may have an access role restriction. The `template.role` string property requires a user to have that role in order to access the template.
+
+The role string will be added as boolean:true property to the `template.roles` object property if the property key is undefined.
+
+`template.role = 'bar' -> template.roles = {'bar':true}`
+
+A dot notation role key will be created if the obj has a role string property.
+
+`obj.role = 'foo' && template.role = 'bar' -> template.roles = {'foo.bar':true}`
+
+@param {Object} template The template object (child).
+@param {Object} obj The parent object providing role context.
+*/
+function combineTemplateRoles(template, obj) {
+  if (!template.role) return;
+
+  template.roles ??= {};
+  template.roles[template.role] ??= true;
+
+  // Filter out undefined roles and duplicates from roles array.
+  const roleArr = Array.from(
+    new Set(
+      [obj.localeRole, obj.role, obj.templateRole, template.role].filter(
+        (role) => typeof role === 'string',
+      ),
+    ),
+  );
+
+  // Join roles array into the template.roles.
+  if (roleArr.length) {
+    template.roles[roleArr.join('.')] ??= true;
+  }
+
+  obj.roles ??= {};
+
+  // Concatenate the template.role to each obj.roles{} key where the last role does not match the template.objRole.
+  for (const role of Object.keys(obj.roles)) {
+    const tailRole = role.split('.').pop();
+    if (tailRole !== template.objRole) {
+      continue;
+    }
+    template.roles[`${role}.${template.role}`] ??= true;
+  }
+
+  if (Array.isArray(template.templates)) {
+    template.templateRole = template.role;
+    for (const templatesTemplate of template.templates) {
+      if (typeof templatesTemplate !== 'object') continue;
+      templatesTemplate.objRole = template.role;
+    }
+  } else {
+    delete obj.templateRole;
+  }
+}
+
+/**
+@function combineLocaleRoles
+@description
+Combines roles for nested locales. Creates parent.child role combinations.
+
+@param {Object} child The child locale.
+@param {Object} parent The parent locale.
+*/
+function combineLocaleRoles(child, parent) {
+  if (!parent || !child) return;
+
+  // Ensure roles objects exist
+  child.roles ??= {};
+  parent.roles ??= {};
+
+  // Convert string role properties to roles object entries
+  if (child.role && typeof child.role === 'string') {
+    child.roles[child.role] ??= true;
+  }
+
+  if (parent.role && typeof parent.role === 'string') {
+    parent.roles[parent.role] ??= true;
+  }
+
+  // Identify roles specific to the child (not present in parent)
+  const specificChildRoles = Object.keys(child.roles).filter(
+    (role) => !parent.roles[role],
+  );
+
+  // Create combinations Parent.Child
+  Object.keys(parent.roles).forEach((parentRole) => {
+    specificChildRoles.forEach((childRole) => {
+      child.roles[`${parentRole}.${childRole}`] ??= true;
+    });
   });
 }
