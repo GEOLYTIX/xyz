@@ -28,7 +28,7 @@ Examples:
   node ./utils/sync-fork.js --dry-run             # preview the sync steps
 */
 
-import { execSync } from 'child_process';
+import { execSync } from 'node:child_process';
 
 // Parse CLI arguments
 const args = process.argv.slice(2);
