@@ -12,7 +12,6 @@ The getLayer module exports the getLayer method which is required by the query a
 */
 
 import merge from '../utils/merge.js';
-import * as Roles from '../utils/roles.js';
 import getLocale from './getLocale.js';
 import getTemplate from './getTemplate.js';
 import mergeTemplates from './mergeTemplates.js';
@@ -67,7 +66,7 @@ export default async function getLayer(params, locale) {
   let layer;
 
   if (Object.hasOwn(locale.layers, params.layer)) {
-    layer = locale.layers[params.layer];
+    layer = structuredClone(locale.layers[params.layer]);
   } else {
     // A layer maybe defined as a template only.
     layer = await getTemplate(params.layer);

@@ -72,11 +72,7 @@ await codi.describe(
         parentId: 'workspace_mergeTemplates',
       },
       async () => {
-        const expectedRoles = [
-          'locale.layer',
-          'template',
-          'locale.layer.template',
-        ];
+        const expectedRoles = ['template', 'locale.layer.template'];
         const layer = {
           localeRole: 'locale',
           role: 'layer',
@@ -149,6 +145,64 @@ await codi.describe(
         codi.assertTrue(
           expectedRoles.every((r) => Object.keys(template.roles).includes(r)),
           `Need to ensure all expected roles are present: ${expectedRoles.join(', ')}`,
+        );
+      },
+    );
+
+    await codi.it(
+      {
+        name: 'sibling templates should not leak roles into nested sub-templates',
+        parentId: 'workspace_mergeTemplates',
+      },
+      async () => {
+        // Simulates a locale with role "uk" that has sibling templates:
+        //   - demographics (role: "demographics")
+        //   - stores (role: "stores", with sub-templates: brand_a)
+        // brand_a should combine with stores roles, NOT with demographics roles.
+        const obj = {
+          role: 'uk',
+          templates: [
+            {
+              role: 'demographics',
+              meta: 'demographics template',
+            },
+            {
+              role: 'stores',
+              meta: 'stores template',
+              templates: [
+                {
+                  role: 'brand_a',
+                  meta: 'brand_a template',
+                },
+              ],
+            },
+          ],
+        };
+
+        const roles = true; // admin - no role filtering
+
+        const result = await mergeTemplates(obj, roles);
+
+        const resultRoles = Object.keys(result.roles).sort();
+
+        // brand_a should be combined with stores and uk.stores, but NOT with demographics
+        codi.assertTrue(
+          resultRoles.includes('stores.brand_a'),
+          'brand_a should be nested under stores',
+        );
+        codi.assertTrue(
+          resultRoles.includes('uk.stores.brand_a'),
+          'brand_a should be nested under uk.stores',
+        );
+
+        // brand_a should NOT be combined with demographics
+        codi.assertFalse(
+          resultRoles.includes('demographics.brand_a'),
+          'brand_a should NOT be nested under demographics (sibling leak)',
+        );
+        codi.assertFalse(
+          resultRoles.includes('uk.demographics.brand_a'),
+          'brand_a should NOT be nested under uk.demographics (sibling leak)',
         );
       },
     );
