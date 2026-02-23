@@ -53,6 +53,7 @@ import login from '../mod/user/login.js';
 import register from '../mod/user/register.js';
 import saml from '../mod/user/saml.js';
 import logger from '../mod/utils/logger.js';
+import { setRedirect } from '../mod/utils/redirect.js';
 import view from '../mod/view.js';
 import workspace from '../mod/workspace/_workspace.js';
 
@@ -213,6 +214,9 @@ async function validateRequestAuth(req, res) {
   if (!req.params.user && xyzEnv.PRIVATE) {
     // Redirect to the SAML login.
     if (xyzEnv.SAML_LOGIN) {
+      // The redirect for a successful login.
+      setRedirect(req, res);
+
       res.setHeader('location', `${xyzEnv.DIR}/saml/login`);
       return res.status(302).send();
     }
