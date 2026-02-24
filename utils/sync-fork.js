@@ -198,26 +198,55 @@ function checkoutBranch() {
 @description
 Merges the upstream branch into the current local branch.
 Warns the user if there are merge conflicts.
+In dry-run mode, performs a no-commit merge to show the actual diff, then aborts.
 */
 function mergeUpstream() {
   console.log(`Merging upstream/${upstreamBranch} into ${branch}...`);
 
   if (dryRun) {
-    // Show what commits would be merged
     try {
+      // Show the commits that would be merged
       const log = git(
-        `git log --oneline ${branch}..upstream/${upstreamBranch} 2>/dev/null`,
+        `git log --oneline ${branch}..upstream/${upstreamBranch}`,
       ).trim();
 
-      if (log) {
-        console.log(`\n[DRY RUN] Commits that would be merged:`);
-        console.log(log);
-      } else {
+      if (!log) {
         console.log(`[DRY RUN] No new commits to merge — already up to date.`);
+        return;
       }
-    } catch {
+
+      console.log(`\n[DRY RUN] Commits that would be merged:`);
+      console.log(log);
+
+      // Perform the merge without committing to show the actual diff
+      git(`git merge --no-commit --no-ff upstream/${upstreamBranch}`);
+
+      const diff = git('git diff --cached --stat').trim();
+
+      if (diff) {
+        console.log(`\n[DRY RUN] Changes that would be applied:`);
+        console.log(diff);
+      }
+
+      // Abort the merge to leave the working tree clean
+      git('git merge --abort');
+    } catch (error) {
+      // Ensure the merge is aborted even if something went wrong
+      try {
+        git('git merge --abort');
+      } catch {
+        // merge --abort may fail if no merge was in progress
+      }
+
+      if (error.message.includes('CONFLICT')) {
+        console.log(
+          `\n[DRY RUN] Merge would produce conflicts that need manual resolution.`,
+        );
+        return;
+      }
+
       console.log(
-        `[DRY RUN] Cannot preview commits (upstream may not be fetched yet).`,
+        `[DRY RUN] Cannot preview changes (upstream may not be fetched yet).`,
       );
     }
 
