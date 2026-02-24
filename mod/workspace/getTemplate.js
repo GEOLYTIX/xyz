@@ -71,8 +71,14 @@ export default async function getTemplate(key) {
   }
 
   if (!template.key) {
-    template =
-      (await getTemplateObject(workspace, null, template.src)) || template;
+    const templateObject = await getTemplateObject(
+      workspace,
+      null,
+      template.src,
+    );
+    if (templateObject !== undefined) {
+      return templateObject;
+    }
   }
 
   let response;
