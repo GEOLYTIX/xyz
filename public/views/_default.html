@@ -284,7 +284,7 @@
       `${mapp.host}/api/workspace/locales`,
     );
 
-      // Assign locale from current [URL parameter] or as first key from locales array.
+    // Assign locale from current [URL parameter] or as first key from locales array.
     let locale = mapp.hooks.current.locale || locales[0]?.key
 
     // Use 'locale' as default if undefined.
@@ -313,47 +313,25 @@
       Object.assign(locale, mapp.user?.locale)
     }
 
-      // Check whether the locale supports a userLocale
-      if (mapp.hooks.current.userlocale) {
-        // Assign the userlocale value as name to check for a stored userlocale
-        locale.name = mapp.hooks.current.userlocale;
+    // Check whether the locale supports a userLocale
+    if (mapp.hooks.current.userlocale) {
+      // Assign the userlocale value as name to check for a stored userlocale
+      locale.name = mapp.hooks.current.userlocale;
 
-        // Check whether a userLocale is stored for the current user|workspace
-        const userLocale = await mapp.utils.userLocale.get(locale);
+      // Check whether a userLocale is stored for the current user|workspace
+       const userLocale = await mapp.utils.userLocale.get(locale);
 
-        if (userLocale) {
-          locale = userLocale;
-        }
+      if (userLocale) {
+        locale = userLocale;
       }
-
-    if (locale.locales) {
-
-      // Get list of accessible locales from Workspace API.
-      const nestedLocales = await mapp.utils.xhr(
-        `${mapp.host}/api/workspace/locales?locale=${locale.key}`,
-      );
-
-      // The nested locales for the current locale will be spread into the locales array.
-      locales = [...locales, ...nestedLocales]
     }
 
     const layersPanel = mapp.utils.html.node`<div id="layers" class="active">`
 
-    // Add locale dropdown to layers panel if multiple locales are accessible.
-    if (locales.length > 1) {
-      const localesDropdown = mapp.ui.elements.dropdown({
-        data_id: 'locales-dropdown',
-        placeholder: locale.name || locale.key,
-        entries: locales.map((locale) => ({
-          title: locale.name || locale.key,
-          key: locale.key,
-        })),
-        callback: (e, entry) => {
-          window.location.assign(`${mapp.host}?locale=${entry.key}`);
-        },
-      });
+    const localesInterface = await mapp.ui.elements.locales(locale, locales);
 
-      layersPanel.appendChild(localesDropdown);
+    if(localesInterface){
+      layersPanel.append(localesInterface);
     }
 
     if (!window.ol) await mapp.utils.olScript();

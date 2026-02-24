@@ -1,4 +1,3 @@
-import getKeyMethod from '../../../mod/workspace/_workspace.js';
 import checkWorkspaceCache from '../../../mod/workspace/cache.js';
 
 await codi.describe(
@@ -14,8 +13,7 @@ await codi.describe(
 
     globalThis.xyzEnv = {
       TITLE: 'WORKSPACE TEST',
-      WORKSPACE:
-        'file:./tests/assets/workspace_nested_locales_roles_props.json',
+      WORKSPACE: 'file:./tests/assets/_workspace.json',
     };
 
     //Calling the cache method with force to reload a new workspace
