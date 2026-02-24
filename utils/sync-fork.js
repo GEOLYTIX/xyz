@@ -204,6 +204,9 @@ function mergeUpstream() {
   console.log(`Merging upstream/${upstreamBranch} into ${branch}...`);
 
   if (dryRun) {
+    // Save current HEAD so we can restore it after the trial merge
+    const head = git('git rev-parse HEAD').trim();
+
     try {
       // Show the commits that would be merged
       const log = git(
@@ -227,27 +230,19 @@ function mergeUpstream() {
         console.log(`\n[DRY RUN] Changes that would be applied:`);
         console.log(diff);
       }
-
-      // Abort the merge to leave the working tree clean
-      git('git merge --abort');
     } catch (error) {
-      // Ensure the merge is aborted even if something went wrong
-      try {
-        git('git merge --abort');
-      } catch {
-        // merge --abort may fail if no merge was in progress
-      }
-
       if (error.message.includes('CONFLICT')) {
         console.log(
           `\n[DRY RUN] Merge would produce conflicts that need manual resolution.`,
         );
-        return;
+      } else {
+        console.log(
+          `[DRY RUN] Cannot preview changes (upstream may not be fetched yet).`,
+        );
       }
-
-      console.log(
-        `[DRY RUN] Cannot preview changes (upstream may not be fetched yet).`,
-      );
+    } finally {
+      // Always reset to the original HEAD to leave the working tree clean
+      git(`git reset --hard ${head}`);
     }
 
     return;
