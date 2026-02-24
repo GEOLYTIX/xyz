@@ -15,15 +15,17 @@ Usage:
   node ./utils/sync-fork.js [options]
 
 Options:
-  --upstream=<url>   Git URL of the upstream repository (required on first run,
-                     remembered as the 'upstream' remote afterwards)
-  --branch=<name>    The branch to sync [default: main]
-  --dry-run          Show what would happen without making changes
-  --help             Show this help message
+  --upstream=<url>            Git URL of the upstream repository (required on first run,
+                              remembered as the 'upstream' remote afterwards)
+  --branch=<name>             The local branch to sync [default: main]
+  --upstream-branch=<name>    The upstream branch to merge from [default: value of --branch]
+  --dry-run                   Show what would happen without making changes
+  --help                      Show this help message
 
 Examples:
   node ./utils/sync-fork.js --upstream=https://github.com/GEOLYTIX/xyz.git
-  node ./utils/sync-fork.js --upstream=git@github.com:GEOLYTIX/xyz.git --branch=develop
+  node ./utils/sync-fork.js --upstream=git@github.com:GEOLYTIX/xyz.git --branch=development
+  node ./utils/sync-fork.js --branch=main --upstream-branch=development
   node ./utils/sync-fork.js                      # uses existing 'upstream' remote
   node ./utils/sync-fork.js --dry-run             # preview the sync steps
 */
@@ -43,6 +45,10 @@ const upstreamUrl =
 
 const branch =
   args.find((arg) => arg.startsWith('--branch='))?.split('=')[1] || 'main';
+
+const upstreamBranch =
+  args.find((arg) => arg.startsWith('--upstream-branch='))?.split('=')[1] ||
+  branch;
 
 const dryRun = args.includes('--dry-run');
 
@@ -77,7 +83,7 @@ function syncFork() {
     mergeUpstream();
 
     console.log(
-      `\nDone. Local '${branch}' is now up to date with upstream/${branch}.`,
+      `\nDone. Local '${branch}' is now up to date with upstream/${upstreamBranch}.`,
     );
     console.log('Remember to push your updated branch if needed:');
     console.log(`  git push origin ${branch}`);
@@ -194,13 +200,13 @@ Merges the upstream branch into the current local branch.
 Warns the user if there are merge conflicts.
 */
 function mergeUpstream() {
-  console.log(`Merging upstream/${branch} into ${branch}...`);
+  console.log(`Merging upstream/${upstreamBranch} into ${branch}...`);
 
   if (dryRun) {
     // Show what commits would be merged
     try {
       const log = git(
-        `git log --oneline ${branch}..upstream/${branch} 2>/dev/null`,
+        `git log --oneline ${branch}..upstream/${upstreamBranch} 2>/dev/null`,
       ).trim();
 
       if (log) {
@@ -219,7 +225,7 @@ function mergeUpstream() {
   }
 
   try {
-    const result = git(`git merge upstream/${branch}`);
+    const result = git(`git merge upstream/${upstreamBranch}`);
     console.log(result);
   } catch (error) {
     if (error.message.includes('CONFLICT')) {
@@ -261,11 +267,12 @@ Sync Fork — Pull and merge upstream changes into your fork
 Usage: node ./utils/sync-fork.js [options]
 
 Options:
-  --upstream=<url>   Git URL of the upstream (original) repository.
-                     Required on first run; saved as the 'upstream' remote.
-  --branch=<name>    Branch to sync [default: main]
-  --dry-run          Preview what would happen without making changes
-  --help             Show this help message
+  --upstream=<url>            Git URL of the upstream (original) repository.
+                              Required on first run; saved as the 'upstream' remote.
+  --branch=<name>             Local branch to sync [default: main]
+  --upstream-branch=<name>    Upstream branch to merge from [default: value of --branch]
+  --dry-run                   Preview what would happen without making changes
+  --help                      Show this help message
 
 Examples:
   # First time — add upstream and sync main
@@ -275,7 +282,10 @@ Examples:
   node ./utils/sync-fork.js
 
   # Sync a different branch
-  node ./utils/sync-fork.js --branch=develop
+  node ./utils/sync-fork.js --branch=development
+
+  # Merge upstream/develop into local main
+  node ./utils/sync-fork.js --branch=main --upstream-branch=development
 
   # Preview what would be merged
   node ./utils/sync-fork.js --dry-run
@@ -284,7 +294,7 @@ Workflow:
   1. Adds or verifies the 'upstream' remote
   2. Fetches the latest from upstream
   3. Checks out the target branch locally
-  4. Merges upstream/<branch> into your local branch
+  4. Merges upstream/<upstream-branch> into your local branch
   5. You push to your fork: git push origin <branch>
 `);
 }
