@@ -81,30 +81,27 @@ export default async function getTemplate(key) {
     }
   }
 
-  let response;
+  if (!template.src) return template;
 
-  if (template.src) {
-    // Subtitutes ${*} with xyzEnv.SRC_* key values.
-    template.src = envReplace(template.src);
+  // Subtitutes ${*} with xyzEnv.SRC_* key values.
+  template.src = envReplace(template.src);
 
-    const method = template.src.split(':')[0];
+  const method = template.src.split(':')[0];
 
-    if (!Object.hasOwn(getFrom, method)) {
-      // Unable to determine getFrom method.
-      const err = new Error(`Cannot get: "${template.src}"`);
-      console.error(err);
-      return err;
-    }
-
-    response = await getFrom[method](template.src);
-
-    if (response instanceof Error) {
-      template.err = response;
-      return response;
-    }
+  if (!Object.hasOwn(getFrom, method)) {
+    // Unable to determine getFrom method.
+    template.err = new Error(`Cannot get: "${template.src}"`);
+    console.error(template.err);
+    return template;
   }
 
-  // Template is a module.
+  const response = await getFrom[method](template.src);
+
+  if (response instanceof Error) {
+    template.err = response;
+    return template;
+  }
+
   if (template.module) {
     template = await moduleTemplate(template, response);
     return template;
@@ -113,7 +110,9 @@ export default async function getTemplate(key) {
   if (typeof response === 'object') {
     template = await cacheTemplate(workspace, template, response);
     return template;
-  } else if (typeof response === 'string') {
+  }
+
+  if (typeof response === 'string') {
     template.template = response;
   }
 
