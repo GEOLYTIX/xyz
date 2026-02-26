@@ -48,6 +48,9 @@ export default async function getTemplate(key) {
   if (key === undefined) {
     return new Error('Undefined template key.');
   }
+  if (typeof key === 'string' && /[^a-zA-Z0-9 :_-]/.exec(key)) {
+    return new Error('Template key may only include whitelisted character.');
+  }
   const workspace = await workspaceCache();
 
   if (workspace instanceof Error) {
@@ -56,7 +59,13 @@ export default async function getTemplate(key) {
 
   let template;
   if (typeof key === 'string') {
-    template = await getTemplateObject(workspace, key);
+
+    if (!Object.hasOwn(workspace.templates, key)) {
+      return new Error(`Template: ${key} not found.`);
+    }
+    // Ensure that workspace.templates object has key property.
+    workspace.templates[key].key = key;
+    template = workspace.templates[key];
   } else if (key instanceof Object) {
     template = key;
   }
@@ -81,7 +90,6 @@ export default async function getTemplate(key) {
   if (!Object.hasOwn(getFrom, method)) {
     // Unable to determine getFrom method.
     template.err = new Error(`Cannot get: "${template.src}"`);
-    console.error(template.err);
     return template;
   }
 
@@ -107,36 +115,6 @@ export default async function getTemplate(key) {
   }
 
   return template;
-}
-
-/**
-@function getTemplateObject
-@async
-
-@description
-A template object matching the template_key param in the workspace.templates{} object will be returned.
-
-The template string will be checked to include only whitelisted characters.
-
-An error exception will be returned if the template object lookup from the workspace failed.
-
-@param {workspace} workspace
-@param {string} templateKey
-@property {object} workspace.templates
-
-@returns {Promise<Object|Error>} JSON Template
-*/
-async function getTemplateObject(workspace, key) {
-  if (key && /[^a-zA-Z0-9 :_-]/.exec(key)) {
-    return new Error('Template param may only include whitelisted character.');
-  }
-  if (!Object.hasOwn(workspace.templates, key)) {
-    return new Error(`Template: ${key} not found.`);
-  }
-
-  workspace.templates[key].key = key;
-
-  return workspace.templates[key];
 }
 
 /**
