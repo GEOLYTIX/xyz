@@ -4,13 +4,12 @@ The module exports the getTemplate method which is required by the query, langua
 
 @requires /provider/getFrom
 @requires /workspace/cache
-@requires module:/utils/processEnv
+@requires /utils/processEnv
 
 @module /workspace/getTemplate
 */
 
 import getFrom from '../provider/getFrom.js';
-import envReplace from '../utils/envReplace.js';
 import workspaceCache from './cache.js';
 
 /**
@@ -70,21 +69,12 @@ export default async function getTemplate(key) {
     return template;
   }
 
-  if (!template.key) {
-    const templateObject = await getTemplateObject(
-      workspace,
-      null,
-      template.src,
-    );
-    if (templateObject !== undefined) {
-      return templateObject;
-    }
-  }
-
   if (!template.src) return template;
 
-  // Subtitutes ${*} with xyzEnv.SRC_* key values.
-  template.src = envReplace(template.src);
+  // Check whether a template from .src has been cached.
+  if (Object.hasOwn(workspace.templates, template.src)) {
+    return workspace.templates[template.src];
+  }
 
   const method = template.src.split(':')[0];
 
@@ -130,22 +120,13 @@ The template string will be checked to include only whitelisted characters.
 
 An error exception will be returned if the template object lookup from the workspace failed.
 
-@param {string} template
+@param {workspace} workspace
+@param {string} templateKey
+@property {object} workspace.templates
 
 @returns {Promise<Object|Error>} JSON Template
 */
-async function getTemplateObject(workspace, templateKey, srcKey) {
-  // The template param must not include non whitelisted character.
-  if (templateKey && /[^a-zA-Z0-9 :_-]/.exec(templateKey)) {
-    return new Error('Template param may only include whitelisted character.');
-  }
-
-  if (srcKey && Object.hasOwn(workspace.templates, srcKey)) {
-    return workspace.templates[srcKey];
-  }
-
-  if (!templateKey) return;
-
+async function getTemplateObject(workspace, templateKey) {
   if (!Object.hasOwn(workspace.templates, templateKey)) {
     return new Error(`Template: ${templateKey} not found.`);
   }
