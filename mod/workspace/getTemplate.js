@@ -38,35 +38,32 @@ A template will be fetched from the templates src property.
 
 A template can be cached by removing the src property in the workspace.templates.
 
-The key will be assigned to the template object as key property.
-
-@param {string} key
+@param {string|object} template to be retrieved from workspace.templates if provided as string
 
 @returns {Promise<Object|Error>} JSON Template
 */
-export default async function getTemplate(key) {
-  if (key === undefined) {
+export default async function getTemplate(template) {
+  if (template === undefined) {
     return new Error('Undefined template key.');
   }
-  if (typeof key === 'string' && /[^a-zA-Z0-9 :_-]/.exec(key)) {
-    return new Error('Template key may only include whitelisted character.');
-  }
+
   const workspace = await workspaceCache();
 
   // TODO this must be tested. We shouldn't even get here if workspaceCache errs.
-  // if (workspace instanceof Error) {
-  //   return workspace;
-  // }
-
-  if (typeof key === 'string' && !Object.hasOwn(workspace.templates, key)) {
-    return new Error(`Template: ${key} not found.`);
+  if (workspace instanceof Error) {
+    return workspace;
   }
 
-  let template = workspace.templates[key] || key;
+  if (typeof template === 'string') {
+    if (/[^a-zA-Z0-9 :_-]/.exec(template)) {
+      return new Error('Template key may only include whitelisted character.');
+    }
 
-  // TODO this must be tested.
-  if (template instanceof Error) {
-    return template;
+    if (!Object.hasOwn(workspace.templates, template)) {
+      return new Error(`Template: ${template} not found.`);
+    }
+
+    template = workspace.templates[template];
   }
 
   if (!template.src) {
