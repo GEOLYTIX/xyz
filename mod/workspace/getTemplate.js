@@ -49,7 +49,6 @@ export default async function getTemplate(template) {
 
   const workspace = await workspaceCache();
 
-  // TODO this must be tested. We shouldn't even get here if workspaceCache errs.
   if (workspace instanceof Error) {
     return workspace;
   }
