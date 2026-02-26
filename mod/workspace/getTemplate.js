@@ -59,7 +59,6 @@ export default async function getTemplate(key) {
 
   let template;
   if (typeof key === 'string') {
-
     if (!Object.hasOwn(workspace.templates, key)) {
       return new Error(`Template: ${key} not found.`);
     }
