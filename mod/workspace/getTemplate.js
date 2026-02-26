@@ -126,14 +126,17 @@ An error exception will be returned if the template object lookup from the works
 
 @returns {Promise<Object|Error>} JSON Template
 */
-async function getTemplateObject(workspace, templateKey) {
-  if (!Object.hasOwn(workspace.templates, templateKey)) {
-    return new Error(`Template: ${templateKey} not found.`);
+async function getTemplateObject(workspace, key) {
+  if (key && /[^a-zA-Z0-9 :_-]/.exec(key)) {
+    return new Error('Template param may only include whitelisted character.');
+  }
+  if (!Object.hasOwn(workspace.templates, key)) {
+    return new Error(`Template: ${key} not found.`);
   }
 
-  workspace.templates[templateKey].key = templateKey;
+  workspace.templates[key].key = key;
 
-  return workspace.templates[templateKey];
+  return workspace.templates[key];
 }
 
 /**
