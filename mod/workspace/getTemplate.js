@@ -53,22 +53,18 @@ export default async function getTemplate(key) {
   }
   const workspace = await workspaceCache();
 
-  if (workspace instanceof Error) {
-    return workspace;
+  // TODO this must be tested. We shouldn't even get here if workspaceCache errs.
+  // if (workspace instanceof Error) {
+  //   return workspace;
+  // }
+
+  if (typeof key === 'string' && !Object.hasOwn(workspace.templates, key)) {
+    return new Error(`Template: ${key} not found.`);
   }
 
-  let template;
-  if (typeof key === 'string') {
-    if (!Object.hasOwn(workspace.templates, key)) {
-      return new Error(`Template: ${key} not found.`);
-    }
-    // Ensure that workspace.templates object has key property.
-    workspace.templates[key].key = key;
-    template = workspace.templates[key];
-  } else if (key instanceof Object) {
-    template = key;
-  }
+  let template = workspace.templates[key] || key;
 
+  // TODO this must be tested.
   if (template instanceof Error) {
     return template;
   }
