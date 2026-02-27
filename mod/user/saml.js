@@ -375,7 +375,7 @@ async function acs(req, res) {
 
     // Create user Object from SAML attributes
     const user = {
-      email: samlResponse.profile.email,
+      email: samlResponse.profile.email || samlResponse.profile.nameID,
       nameID: samlResponse.profile.nameID,
       nameIDFormat: samlResponse.profile.nameIDFormat,
       nameQualifier: samlResponse.profile.nameQualifier,
