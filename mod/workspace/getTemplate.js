@@ -98,19 +98,8 @@ export default async function getTemplate(template) {
   }
 
   if (template.module) {
-    try {
-      // The script string is converted to a JavaScript data URL which can be used in a dynamic ESM import.
-      const dataUrl = `data:text/javascript;charset=utf-8,${encodeURIComponent(response)}`;
-
-      // Use dynamic import to load the module
-      const importedModule = await import(dataUrl);
-
-      // Set the render function to the default export or the entire module
-      template.render = importedModule.default || importedModule;
-    } catch (err) {
-      return err;
-    }
-    return template;
+    // Module templates must not be cached.
+    return await moduleTemplate(template, response);
   }
 
   if (typeof response === 'object') {
@@ -118,7 +107,7 @@ export default async function getTemplate(template) {
 
     workspace.templates[template.key || template.src] = template;
 
-    // This effectively caches the template.
+    // This effectively caches the template
     delete template.src;
 
     return structuredClone(template);
@@ -129,5 +118,35 @@ export default async function getTemplate(template) {
     template.template = response;
   }
 
+  return template;
+}
+
+/**
+@function moduleTemplate
+@async
+
+@description
+The script string is converted to a JavaScript data URL which can be used in a dynamic ESM import.
+
+The default export or the imported module itself will be assigned as the render method in the module template.
+
+Module templates are not cached.
+@param {object} template
+@param {string} response Module script as string.
+
+@returns {Promise<Object|Error>} JSON Template
+*/
+async function moduleTemplate(template, response) {
+  try {
+    const dataUrl = `data:text/javascript;charset=utf-8,${encodeURIComponent(response)}`;
+
+    // Use dynamic import to load the module
+    const importedModule = await import(dataUrl);
+
+    // Set the render function to the default export or the entire module
+    template.render = importedModule.default || importedModule;
+  } catch (err) {
+    return err;
+  }
   return template;
 }
