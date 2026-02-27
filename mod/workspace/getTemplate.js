@@ -4,7 +4,6 @@ The module exports the getTemplate method which is required by the query, langua
 
 @requires /provider/getFrom
 @requires /workspace/cache
-@requires /utils/processEnv
 
 @module /workspace/getTemplate
 */
@@ -30,13 +29,18 @@ import workspaceCache from './cache.js';
 @description
 The workspace will be checked and cached by the [Workspace API checkWorkspaceCache]{@link module:/workspace/cache~checkWorkspaceCache} method.
 
-A JSON template object will be requested from the getTemplateObject method.
+The template parameter provided as a string from user input must be validated to only include whitelisted character.
 
-An error will be returned if the lookup failed.
+A lookup for the template object in the cached workspace.templates{} will be performed.
 
-A template will be fetched from the templates src property.
+The template will be returned without a src property.
 
-A template can be cached by removing the src property in the workspace.templates.
+Otherwise a lookup will be performed to check whether a template with a src property has been cached with the src as key in the workspace.templates{}.
+
+An error will be returned if the getFrom method is unknown or unable to fetch from the template.src
+
+A module template will be created from the response with the template.module flag.
+
 
 @param {string|object} template to be retrieved from workspace.templates if provided as string
 
@@ -54,6 +58,7 @@ export default async function getTemplate(template) {
   }
 
   if (typeof template === 'string') {
+    // Protect from user provided input.
     if (/[^a-zA-Z0-9 :_-]/.exec(template)) {
       return new Error('Template key may only include whitelisted character.');
     }
@@ -69,8 +74,6 @@ export default async function getTemplate(template) {
     return template;
   }
 
-  if (!template.src) return template;
-
   // Check whether a template from .src has been cached.
   if (Object.hasOwn(workspace.templates, template.src)) {
     return workspace.templates[template.src];
@@ -80,19 +83,18 @@ export default async function getTemplate(template) {
 
   if (!Object.hasOwn(getFrom, method)) {
     // Unable to determine getFrom method.
-    template.err = new Error(`Cannot get: "${template.src}"`);
-    return template;
+    return new Error(`Unknown getFrom method: ${template.src}`);
   }
 
   const response = await getFrom[method](template.src);
 
   if (response instanceof Error) {
-    template.err = response;
-    return template;
+    return new Error(`Unable to getFrom src: ${template.src}`);
   }
 
   if (template.module) {
     template = await moduleTemplate(template, response);
+    // Module templates must not be cached.
     return template;
   }
 
