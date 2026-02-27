@@ -12,7 +12,6 @@ The getLayer module exports the getLayer method which is required by the query a
 */
 
 import merge from '../utils/merge.js';
-import * as Roles from '../utils/roles.js';
 import getLocale from './getLocale.js';
 import getTemplate from './getTemplate.js';
 import mergeTemplates from './mergeTemplates.js';
@@ -67,7 +66,7 @@ export default async function getLayer(params, locale) {
   let layer;
 
   if (Object.hasOwn(locale.layers, params.layer)) {
-    layer = locale.layers[params.layer];
+    layer = structuredClone(locale.layers[params.layer]);
   } else {
     // A layer maybe defined as a template only.
     layer = await getTemplate(params.layer);
@@ -91,14 +90,13 @@ export default async function getLayer(params, locale) {
     layer.localeRole = locale.role;
   }
 
-  //If the user is an admin we don't need to check roles
-  if (!Roles.check(layer, params.user?.roles)) {
-    return new Error('Role access denied.');
-  }
-
-  layer = Roles.objMerge(layer, params.user?.roles);
-
+  // The roles property maybe assigned from a template. Templates must be merged prior to the role check.
   layer = await mergeTemplates(layer, params.user?.roles);
+
+  // The mergeTemplates method returned an Error.
+  if (layer instanceof Error) {
+    return layer;
+  }
 
   // Assign layer key as name with no existing name on layer object.
   layer.name ??= layer.key;

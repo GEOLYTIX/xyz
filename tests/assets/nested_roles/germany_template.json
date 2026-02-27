@@ -1,0 +1,35 @@
+{
+  "role": "germany",
+  "view": {
+    "lat": 51,
+    "lng": 11.8,
+    "z": 7
+  },
+  "extent": {
+    "north": 70,
+    "east": 50,
+    "south": 30,
+    "west": -20,
+    "mask": true
+  },
+  "layers": {
+    "OSM_GERMANY": {
+      "display": true,
+      "format": "tiles",
+      "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      "attribution": {
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      },
+      "templates": [
+        {
+          "role": "TEMPLATE_ROLE",
+          "display": false
+        },
+        {
+          "role": "another_role",
+          "display": false
+        }
+      ]
+    }
+  }
+}

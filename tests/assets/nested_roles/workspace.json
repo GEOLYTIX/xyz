@@ -1,0 +1,59 @@
+{
+  "templates": {
+    "germany_template": {
+      "src": "file:./tests/assets/nested_roles/germany_template.json"
+    },
+    "globalvista_template": {
+      "src": "file:./tests/assets/nested_roles/globalvista_template.json"
+    },
+    "uk_template": {
+      "src": "file:./tests/assets/nested_roles/uk_template.json"
+    },
+    "coremarkets_template": {
+      "src": "file:./tests/assets/nested_roles/coremarkets_template.json"
+    },
+    "brand_a_template": {
+      "src": "file:./tests/assets/nested_roles/brand_a_template.json"
+    },
+    "brand_b_template": {
+      "src": "file:./tests/assets/nested_roles/brand_b_template.json"
+    },
+    "no_role_locale": {
+      "layers": {
+        "test_role_layer": {
+          "role": "test"
+        }
+      }
+    },
+    "LAYER_TEMPLATE": {
+      "meta": "test role access from a template.",
+      "role": "TEMPLATE_ROLE"
+    }
+  },
+  "locale": {
+    "layers": {
+      "OSM": {
+        "display": true,
+        "format": "tiles",
+        "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        "attribution": {
+          "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+        }
+      }
+    }
+  },
+  "locales": {
+    "germany": {
+      "template": "germany_template",
+      "locales": ["globalvista_template"]
+    },
+    "uk": {
+      "template": "uk_template",
+      "locales": [
+        "globalvista_template",
+        "coremarkets_template",
+        "no_role_locale"
+      ]
+    }
+  }
+}

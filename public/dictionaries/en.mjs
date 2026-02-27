@@ -21,6 +21,7 @@ export default {
   drag_and_drop_doc: 'Drag and drop or add document',
   drag_and_drop_image: 'Drag and drop or add image',
   draw_circle: 'Circle from Centre',
+  draw_circle_dialog: 'Open Circle Settings',
   draw_circle_2pt: 'Manual Circle',
   draw_dialog_begin_drawing: 'Begin Drawing - Click anywhere on the map',
   draw_dialog_cancel_drawing: 'Cancel Drawing - ESC Key',
@@ -33,6 +34,7 @@ export default {
   draw_polygon: 'Polygon',
   draw_position: 'Current Position',
   draw_rectangle: 'Rectangle',
+  draw_settings: 'Geometry Settings',
   edit_dialog_cancel_drawing:
     'Cancel Drawing - Click on the cancel button to cancel the drawing.',
   edit_dialog_modify_shape:

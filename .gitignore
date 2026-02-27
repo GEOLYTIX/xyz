@@ -1,5 +1,6 @@
 .idea/
 .vscode/
+.zed/
 .env
 .env.*
 .DS_Store

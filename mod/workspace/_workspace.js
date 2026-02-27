@@ -6,6 +6,7 @@ The Workspace API module exports the getKeyMethod() which returns a method from 
 - locale
 - locales
 - roles
+- test
 
 The workspace typedef object has templates, locale, locales, dbs, and roles properties. The workspace will be cached in the process by the workspace/cache module.
 
@@ -21,12 +22,13 @@ The workspace typedef object has templates, locale, locales, dbs, and roles prop
 
 /**
 @global
-@typedef {Object} workspace
+@typedef {object} workspace
 The workspace object defines the mapp resources available in an XYZ instance.
-@property {Object} [roles] Each property of the roles object is a role which can be assigned to a user.
+@property {object} [roles] Each property of the roles object is a role which can be assigned to a user.
 @property {string} [dbs] The fallback dbs connection if not implicit in [query] template.
-@property {Object} locale The default locale which serves as a templates for all locales in workspace.
-@property {Object} locales Each property in the locales object is a locale available from this workspace.
+@property {object} locale The default locale which serves as a templates for all locales in workspace.
+@property {object} locales Each property in the locales object is a locale available from this workspace.
+@property {template} templates Each property in the templates object is a global template typedef.
 */
 
 import { createHash } from 'node:crypto';
@@ -143,6 +145,9 @@ async function locales(req, res) {
   const locales = [];
 
   for (const localeKey of Object.keys(workspace.locales)) {
+    // Nested locales should not be parsed unless specifically requested.
+    if (localeKey.split(',').length > 1) continue;
+
     const locale = await getLocale({
       user: req.params.user,
       locale: localeKey,
@@ -207,13 +212,18 @@ async function getNestedLocales(req, res) {
   }
 
   for (const key of locale.locales) {
-    const nestedLocale = await getTemplate(key);
+    const nestedLocale = await getLocale(
+      { ...req.params, locale: key },
+      structuredClone(locale),
+    );
 
-    if (!Roles.check(nestedLocale, req.params.user?.roles)) continue;
+    if (nestedLocale instanceof Error) continue;
 
     nestedLocales.push({
-      key: `[${locale.key},${key}]`,
-      name: `${locale.name}/${nestedLocale.name || key}`,
+      key: Array.isArray(nestedLocale.key)
+        ? nestedLocale.key.join(',')
+        : nestedLocale.key,
+      name: `${nestedLocale.name || key}`,
       locales: nestedLocale.locales,
     });
   }
@@ -342,18 +352,40 @@ async function roles(req, res) {
     return res.send(workspace.roles);
   }
 
-  const cache = await cacheTemplates({
+  const locales = await cacheTemplates({
     user: req.params.user,
+    locales: true,
   });
 
   const rolesSet = new Set();
 
-  Roles.fromObj(rolesSet, cache);
+  for (const locale of Object.values(locales)) {
+    Roles.setInObj(rolesSet, locale);
+  }
 
   const rolesTree = {};
 
   // Delete restricted Asterisk role.
   rolesSet.delete('*');
+
+  // Remove self-referential double roles
+  const rolesToRemove = new Set();
+  rolesSet.forEach((role) => {
+    const parts = role.split('.');
+    // Check if it's a double role like 'locale.locale'
+    if (parts.length === 2 && parts[0] === parts[1]) {
+      rolesToRemove.add(role);
+    }
+    // Also remove triple+ nesting of same role
+    for (let i = 0; i < parts.length - 1; i++) {
+      if (parts[i] === parts[i + 1]) {
+        rolesToRemove.add(role);
+        break;
+      }
+    }
+  });
+
+  rolesToRemove.forEach((role) => rolesSet.delete(role));
 
   for (const role of rolesSet) {
     const rolesArr = role.split('.');
@@ -627,55 +659,25 @@ function removeRoles(obj) {
 @async
 
 @description
-Gets and caches a complete workspace with all locales, layers, and templates pre-loaded.
-
 The workspaceCache method will be called with the params force flag. If true, any cached templates as well as the workspace itself will be reset.
 
-The method will iterate over the workspace.locales and each layer defined in the locales.
-
-The getLocale and getLayer method will be called with the cache true flag. This flag will passed on to the getTemplate method. Templates fetched from an external source will be cached in a Map object. This is to prevent that the same template used in multiple locales or layers will be fetched multiple times.
-
-A getLayer promise for each layer in a locale will be added to a promises array. All getLayer promises must be settled before the next locale can be processed.
+The method will iterate over the locales in a structuredClone of the cached workspace.locales and execute the loadLocale method for each.
 
 Finally each template defined in the workspace.templates will be cached.
 
 @param {user} params Configuration parameter for workspace caching.
 @property {Object} [params.user] User context for permission checking when loading locales and layers.
 @property {Boolean} [params.force] Whether the cached workspace should be cleared.
+@property {Boolean} [params.locales] Return the structured clone of the workspace.locales.
 */
 async function cacheTemplates(params) {
   const timestamp = Date.now();
   const cache = await workspaceCache(params.force);
 
-  for (const localeKey of Object.keys(cache.locales)) {
-    // Will get layer and assignTemplates to workspace.
-    const locale = await getLocale({
-      locale: localeKey,
-      user: params.user,
-      ignoreRoles: true,
-    });
+  const locales = structuredClone(cache.locales);
 
-    cache.locales[localeKey] = locale;
-
-    // If the locale has no layers, just skip it.
-    if (!locale.layers) continue;
-
-    const layerPromises = Object.keys(locale.layers).map(async (layerKey) => {
-      // Will get layer and assignTemplates to workspace.
-      const layer = await getLayer(
-        {
-          layer: layerKey,
-          locale: locale.key,
-          user: params.user,
-          ignoreRoles: true,
-        },
-        locale,
-      );
-
-      locale.layers[layerKey] = layer;
-    });
-
-    await Promise.allSettled(layerPromises);
+  for (const localeKey of Object.keys(locales)) {
+    await loadLocale(locales, localeKey, params.user);
   }
   logger(`cachelocales: ${Date.now() - timestamp}`, 'cachelocales');
 
@@ -687,7 +689,86 @@ async function cacheTemplates(params) {
 
   logger(`cachetemplates: ${Date.now() - timestamp}`, 'cachetemplates');
 
+  if (params.locales) {
+    return locales;
+  }
+
   return cache;
+}
+
+/**
+@function loadLocale
+@async
+
+@description
+The getLocale method is called for the locale defined by the localeKey param.
+
+The locale is assigned to a structuredClone of the workspace.locales{} provided as locales param.
+
+A promises array is created for each layer in the locale to ensure that the getLayers method is called synchronous for each layer in the locale.layers{} object.
+
+@param {object} locales structuredClone of the cached workspace.locales{}.
+@param {string} localeKey key of the locale to be loaded.
+@param {user} user The user object is required to load only locales the test user has access to.
+*/
+async function loadLocale(locales, localeKey, user) {
+  // Will get layer and assignTemplates to workspace.
+  const locale = await getLocale({
+    locale: localeKey,
+    user: user,
+    ignoreRoles: true,
+  });
+
+  locales[localeKey] = locale;
+
+  // If the locale has no layers, just skip it.
+  if (locale.layers) {
+    const layerPromises = Object.keys(locale.layers).map(async (layerKey) => {
+      const currentKey = localeKey.split(',').pop();
+      const localeDef = locales[currentKey];
+
+      let isDefined = !!localeDef?.layers?.[layerKey];
+
+      if (!isDefined) {
+        const templateKey = localeDef?.template || (!localeDef && currentKey);
+
+        if (templateKey) {
+          const template = await getTemplate(templateKey);
+          if (
+            !(template instanceof Error) &&
+            Object.hasOwn(template.layers || {}, layerKey)
+          ) {
+            isDefined = true;
+          }
+        }
+      }
+
+      if (!isDefined && Object.hasOwn(locale.layers, layerKey)) {
+        return;
+      }
+
+      // Will get layer and assignTemplates to workspace.
+      const layer = await getLayer(
+        {
+          layer: layerKey,
+          locale: locale.key,
+          user,
+          ignoreRoles: true,
+        },
+        locale,
+      );
+
+      locale.layers[layerKey] = layer;
+    });
+
+    await Promise.allSettled(layerPromises);
+  }
+
+  if (!Array.isArray(locale.locales)) return;
+
+  for (const nestedLocale of locale.locales) {
+    await loadLocale(locales, [localeKey, nestedLocale].join(','), user);
+  }
 }
 
 /**
