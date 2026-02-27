@@ -71,10 +71,6 @@ a > img {
   height: 100%;
 }
 
-iframe {
-  border: none;
-}
-
 select {
   &:focus {
     outline: none;
