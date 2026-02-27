@@ -41,6 +41,11 @@ An error will be returned if the getFrom method is unknown or unable to fetch fr
 
 A module template will be created from the response with the template.module flag.
 
+In order to cache templates the fetched response object will be assigned to the template object in the workspace.templates.
+
+The src property will be removed unless from a file origin where access is immediate.
+
+A structured clone of the template will be returned to prevent the cached object being modified by role merges.
 
 @param {string|object} template to be retrieved from workspace.templates if provided as string
 
@@ -99,10 +104,19 @@ export default async function getTemplate(template) {
   }
 
   if (typeof response === 'object') {
-    template = await cacheTemplate(workspace, template, response);
-    return template;
+    Object.assign(template, response);
+
+    workspace.templates[template.key || template.src] = template;
+
+    // file src templates should not be cached.
+    if (!template.src.startsWith('file:')) {
+      delete template.src;
+    }
+
+    return structuredClone(template);
   }
 
+  // TODO test string template
   if (typeof response === 'string') {
     template.template = response;
   }
@@ -138,40 +152,4 @@ async function moduleTemplate(template, response) {
     return err;
   }
   return template;
-}
-
-/**
-@function cacheTemplate
-@async
-
-@description
-The method assigns the response object to the template object and removes the src property.
-
-This effectively caches the template since the src to fetch the template is removed.
-
-A src property is assigned as key for an object without an key property.
-
-This allows to cache templates which should be merged into their respective parent objects.
-
-A src property beginning with `file:` is not removed since file resources do not require caching.
-
-@param {workspace} workspace
-@param {object} template
-@param {object} [response] An object from a template src
-
-@returns {Promise<Object|Error>} JSON Template
-*/
-async function cacheTemplate(workspace, template, response = {}) {
-  Object.assign(template, response);
-
-  if (template.src) {
-    workspace.templates[template.key || template.src] = template;
-
-    // file src templates should not be cached.
-    if (!template.src.startsWith('file:')) {
-      delete template.src;
-    }
-  }
-
-  return structuredClone(template);
 }
