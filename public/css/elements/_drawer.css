@@ -5,31 +5,57 @@
 
 .drawer {
   padding: 2px;
+  margin-top: 2px;
   background-color: var(--color-base-secondary);
   color: var(--color-font);
+  border-radius: var(--container-border-radius);
 
-  &.expandable:not(.empty) > .header:hover {
-    cursor: pointer;
+  &:not(.expandable) {
+    border: 1px solid var(--color-border);
   }
 
-  &.expandable.empty > .header > .caret {
-    display: none;
+  &.expandable {
+    &:not(.empty) > .header:hover {
+      cursor: pointer;
+    }
+
+    &.empty > .header > .caret {
+      display: none;
+    }
+
+    & > .header {
+      & > .material-symbols-outlined.caret::after {
+        content: 'keyboard_arrow_down';
+        color: var(--color-font-mid);
+        line-height: 1.5em;
+      }
+    }
+
+    &:not(.expanded) {
+      /* collapsed drawers use box shadow for readability */
+      box-shadow: var(--container-box-shadow);
+      & > *:not(.header) {
+        display: none !important;
+      }
+    }
   }
 
-  &.expandable > .header > .material-symbols-outlined.caret::after {
-    content: 'keyboard_arrow_down';
-    color: var(--color-font-mid);
-    line-height: 1.5em;
-  }
+  &.expanded {
+    /* expanded drawers use border with no box shadow */
+    padding-bottom: 5px;
+    border: 1px solid var(--color-border);
+    box-shadow: none;
 
-  &.expandable:not(.expanded) > *:not(.header) {
-    display: none !important;
-  }
+    & > .header {
+      border-bottom: solid 1px var(--color-border); /* readability */
+      margin-bottom: 7px;
 
-  &.expanded > .header > .material-symbols-outlined.caret::after {
-    content: 'keyboard_arrow_up';
-    color: var(--color-font-mid);
-    line-height: 1.5em;
+      & > .material-symbols-outlined.caret::after {
+        content: 'keyboard_arrow_up';
+        color: var(--color-font-mid);
+        line-height: 1.5em;
+      }
+    }
   }
 
   &.disabled {
@@ -41,11 +67,6 @@
     display: flex;
     align-items: center;
     color: var(--color-font);
-    -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
 
     .material-symbols-outlined {
       font-size: 1.5em;
@@ -63,32 +84,12 @@
     }
 
     & > :first-child {
+      margin-left: 5px;
       overflow: hidden;
       white-space: normal;
       text-overflow: ellipsis;
       flex-grow: 1;
     }
-  }
-
-  &.flat {
-    border-radius: 2px;
-    border: 1px solid var(--color-border);
-  }
-
-  &.raised {
-    border-radius: 2px;
-    box-shadow: 1px 1px 3px var(--color-border);
-    border: 1px solid var(--color-border);
-  }
-
-  &.raised.empty {
-    box-shadow: none;
-    border: none;
-  }
-
-  &.expandable.expanded {
-    box-shadow: none;
-    border: none;
   }
 
   p {
