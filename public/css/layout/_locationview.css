@@ -1,4 +1,4 @@
-.location-view.drawer {
+.location-view {
   margin-top: 5px;
   border-radius: 5px;
   background-color: var(--color-base-secondary);
@@ -44,7 +44,7 @@
     font-weight: bold;
   }
 
-  & .drawer.group {
+  & .group {
     grid-column: 1 / 3;
     display: grid;
     grid-template-columns: 1fr 1fr;

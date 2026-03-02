@@ -9,7 +9,6 @@
   background-color: var(--color-base-secondary);
   color: var(--color-font);
   border-radius: var(--container-border-radius);
-  border: 1px solid var(--color-border);
 
   &.expandable {
     &:not(.empty) > .header:hover {
@@ -29,13 +28,19 @@
     }
 
     &:not(.expanded) {
+      /* collapsed drawers use box shadow for readability */
+      box-shadow: var(--container-box-shadow);
       & > *:not(.header) {
-      display: none !important;}
+        display: none !important;
+      }
     }
   }
 
   &.expanded {
+    /* expanded drawers use border with no box shadow */
     padding-bottom: 5px;
+    border: 1px solid var(--color-border);
+    box-shadow: none;
 
     & > .header {
       border-bottom: solid 1px var(--color-border); /* readability */
@@ -75,7 +80,7 @@
     }
 
     & > :first-child {
-      margin-left: 5px; 
+      margin-left: 5px;
       overflow: hidden;
       white-space: normal;
       text-overflow: ellipsis;

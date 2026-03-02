@@ -12,8 +12,11 @@
   padding-left: 3px;
   padding-right: 3px;
   background: var(--color-base-secondary);
-  box-shadow: var(--container-box-shadow);
   border: none;
+
+  & > .header > h2 {
+    color: var(--color-primary);
+  }
 
   & > * {
     padding-left: 4px;
@@ -24,7 +27,6 @@
   background: var(--color-base-quartenary);
   padding-left: 5px;
   padding-right: 5px;
-  border: 1px solid var(--color-border);
 
   & > *:not(.header) {
     margin-top: 5px;
