@@ -26,6 +26,12 @@
   --color-info: #0b6f50;
   --color-danger: #a21309;
   /* end default colour palette */
+
+  /* Global Layout Properties */
+  --container-box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px,
+    rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  --container-border-radius: 3px;
+  /* End of Global Layout Properties */
 }
 
 * {
