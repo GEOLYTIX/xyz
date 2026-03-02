@@ -817,10 +817,10 @@ dialog {
 .select-dropdown {
   width: 100%;
   color: var(--color-font);
-  background-color: var(--color-base-secondary);
+  background-color: var(--color-base-tertiary);
   border: 1px solid var(--color-border);
   padding: 5px;
-  border-radius: 3px;
+  border-radius: var(--container-border-radius);
   option.selected {
     background-color: var(--color-primary);
     color: var(--color-font-contrast);
@@ -1437,7 +1437,7 @@ label.radio {
 .location-view.drawer {
   margin-top: 5px;
   border-radius: 5px;
-  background-color: var(--color-base-tertiary);
+  background-color: var(--color-base-secondary);
 }
 .location-view-grid {
   display: grid;
@@ -1446,7 +1446,7 @@ label.radio {
   padding: 5px 0;
   grid-template-columns: 1fr 1fr;
   & pre {
-    background-color: var(--color-base-secondary);
+    background-color: var(--color-base-tertiary);
   }
   & .contents {
     display: contents;
@@ -1499,7 +1499,7 @@ label.radio {
     border-radius: 2px;
     font-weight: bold;
     font-size: 0.8em;
-    background-color: var(--color-base-secondary);
+    background-color: var(--color-base-tertiary);
     &.active {
       background-color: var(--color-active);
     }

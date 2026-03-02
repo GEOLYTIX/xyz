@@ -1,7 +1,7 @@
 .location-view.drawer {
   margin-top: 5px;
   border-radius: 5px;
-  background-color: var(--color-base-tertiary);
+  background-color: var(--color-base-secondary);
 }
 
 .location-view-grid {
@@ -12,7 +12,7 @@
   grid-template-columns: 1fr 1fr;
 
   & pre {
-    background-color: var(--color-base-secondary);
+    background-color: var(--color-base-tertiary);
   }
 
   & .contents {
@@ -76,7 +76,7 @@
     border-radius: 2px;
     font-weight: bold;
     font-size: 0.8em;
-    background-color: var(--color-base-secondary);
+    background-color: var(--color-base-tertiary);
 
     &.active {
       background-color: var(--color-active);
