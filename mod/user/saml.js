@@ -437,7 +437,7 @@ async function acs(req, res) {
 
     return res.status(302).send();
   } catch (error) {
-    console.log(error);
+    console.error(error);
   }
 }
 
