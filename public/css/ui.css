@@ -749,6 +749,9 @@ dialog {
   background-color: var(--color-base-secondary);
   color: var(--color-font);
   border-radius: var(--container-border-radius);
+  &:not(.expandable) {
+    border: 1px solid var(--color-border);
+  }
   &.expandable {
     &:not(.empty) > .header:hover {
       cursor: pointer;
