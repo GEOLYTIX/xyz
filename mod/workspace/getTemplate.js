@@ -102,23 +102,21 @@ export default async function getTemplate(template) {
     return await moduleTemplate(template, response);
   }
 
+  // Assign response to template.
   if (typeof response === 'object') {
     Object.assign(template, response);
-
-    workspace.templates[template.key || template.src] = template;
-
-    // This effectively caches the template
-    delete template.src;
-
-    return structuredClone(template);
-  }
-
-  // TODO test string template
-  if (typeof response === 'string') {
+  } else if (typeof response === 'string') {
     template.template = response;
   }
 
-  return template;
+  // Assign template to workspace.
+  workspace.templates[template.key || template.src] = template;
+
+  // Removing the src property caches the template.
+  delete template.src;
+
+  // Prevent modification of cached template.
+  return structuredClone(template);
 }
 
 /**
