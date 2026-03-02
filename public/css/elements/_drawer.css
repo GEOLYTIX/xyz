@@ -28,8 +28,9 @@
       }
     }
 
-    &:not(.expanded) > *:not(.header) {
-      display: none !important;
+    &:not(.expanded) {
+      & > *:not(.header) {
+      display: none !important;}
     }
   }
 
@@ -74,6 +75,7 @@
     }
 
     & > :first-child {
+      margin-left: 5px; 
       overflow: hidden;
       white-space: normal;
       text-overflow: ellipsis;
