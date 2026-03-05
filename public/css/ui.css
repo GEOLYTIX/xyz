@@ -1447,6 +1447,12 @@ label.radio {
   margin-top: 5px;
   border-radius: 5px;
   background-color: var(--color-base-secondary);
+  &:not(.expanded) {
+    box-shadow: var(--container-box-shadow);
+    & > *:not(.header) {
+      display: none !important;
+    }
+  }
 }
 .location-view-grid {
   display: grid;

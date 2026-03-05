@@ -2,6 +2,16 @@
   margin-top: 5px;
   border-radius: 5px;
   background-color: var(--color-base-secondary);
+
+  /* only on drawers that use location-view class */
+  /* if decided as default should be moved to drawer stylesheet */
+  &:not(.expanded) {
+    /* collapsed drawers use box shadow for readability */
+    box-shadow: var(--container-box-shadow);
+    & > *:not(.header) {
+      display: none !important;
+    }
+  }
 }
 
 .location-view-grid {
