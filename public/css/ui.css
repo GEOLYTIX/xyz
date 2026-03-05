@@ -766,6 +766,11 @@ dialog {
         line-height: 1.5em;
       }
     }
+    &:not(.expanded) {
+      & > *:not(.header) {
+        display: none !important;
+      }
+    }
   }
   &.expanded {
     padding-bottom: 5px;
