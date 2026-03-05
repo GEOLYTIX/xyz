@@ -24,10 +24,6 @@
   background: var(--color-base-quartenary);
   border: none;
 
-  & > .header > h2 {
-    color: var(--color-primary);
-  }
-
   & > * {
     padding-left: 4px;
   }
