@@ -6,12 +6,22 @@
   & > .meta {
     padding-bottom: 5px;
   }
+
+  /* only on drawers that use layer-view and layer-group classes */
+  /* if decided as default should be moved to drawer stylesheet */
+  &:not(.expanded) {
+    /* collapsed drawers use box shadow for readability */
+    box-shadow: var(--container-box-shadow);
+    & > *:not(.header) {
+      display: none !important;
+    }
+  }
 }
 
 .layer-group {
   padding-left: 3px;
   padding-right: 3px;
-  background: var(--color-base-secondary);
+  background: var(--color-base-quartenary);
   border: none;
 
   & > .header > h2 {
@@ -21,10 +31,11 @@
   & > * {
     padding-left: 4px;
   }
+
 }
 
 .layer-view {
-  background: var(--color-base-quartenary);
+  background: var(--color-base-secondary);
   padding-left: 5px;
   padding-right: 5px;
 

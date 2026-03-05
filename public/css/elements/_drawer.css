@@ -30,14 +30,6 @@
         line-height: 1.5em;
       }
     }
-
-    &:not(.expanded) {
-      /* collapsed drawers use box shadow for readability */
-      box-shadow: var(--container-box-shadow);
-      & > *:not(.header) {
-        display: none !important;
-      }
-    }
   }
 
   &.expanded {

@@ -766,12 +766,6 @@ dialog {
         line-height: 1.5em;
       }
     }
-    &:not(.expanded) {
-      box-shadow: var(--container-box-shadow);
-      & > *:not(.header) {
-        display: none !important;
-      }
-    }
   }
   &.expanded {
     padding-bottom: 5px;
@@ -1417,11 +1411,17 @@ label.radio {
   & > .meta {
     padding-bottom: 5px;
   }
+  &:not(.expanded) {
+    box-shadow: var(--container-box-shadow);
+    & > *:not(.header) {
+      display: none !important;
+    }
+  }
 }
 .layer-group {
   padding-left: 3px;
   padding-right: 3px;
-  background: var(--color-base-secondary);
+  background: var(--color-base-quartenary);
   border: none;
   & > .header > h2 {
     color: var(--color-primary);
@@ -1431,7 +1431,7 @@ label.radio {
   }
 }
 .layer-view {
-  background: var(--color-base-quartenary);
+  background: var(--color-base-secondary);
   padding-left: 5px;
   padding-right: 5px;
   & > *:not(.header) {
