@@ -7,6 +7,8 @@
   --color-base: #f2f2f2;
   --color-base-secondary: #f7f7f7;
   --color-base-tertiary: #fafafa;
+  /* background colour for static content readability - cuts between secondary and tertiary */
+  --color-base-quartenary: #f0eee9;
 
   /* Border */
   --color-border: #dddddd;
@@ -24,6 +26,13 @@
   --color-info: #0b6f50;
   --color-danger: #a21309;
   /* end default colour palette */
+
+  /* Global Layout Properties */
+  --container-box-shadow:
+    rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px
+    1px;
+  --container-border-radius: 3px;
+  /* End of Global Layout Properties */
 }
 
 * {
