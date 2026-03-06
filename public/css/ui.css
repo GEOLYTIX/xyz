@@ -777,8 +777,6 @@ dialog {
     border: 1px solid var(--color-border);
     box-shadow: none;
     & > .header {
-      border-bottom: solid 1px var(--color-border);
-      margin-bottom: 7px;
       & > .material-symbols-outlined.caret::after {
         content: "keyboard_arrow_up";
         color: var(--color-font-mid);
@@ -1420,6 +1418,12 @@ label.radio {
     box-shadow: var(--container-box-shadow);
     & > *:not(.header) {
       display: none !important;
+    }
+  }
+  &.expanded {
+    & > .header {
+      border-bottom: solid 1px var(--color-border);
+      margin-bottom: 7px;
     }
   }
 }
