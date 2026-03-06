@@ -53,8 +53,7 @@ const upstreamBranch =
   args.find((arg) => arg.startsWith('--upstream-branch='))?.split('=')[1] ||
   branch;
 
-const tag = 
-  args.find((arg) => arg.startsWith('--tag='))?.split('=')[1] || null;
+const tag = args.find((arg) => arg.startsWith('--tag='))?.split('=')[1] || null;
 
 // Determine what we are merging: a specific tag, or the upstream branch
 const mergeTarget = tag ? tag : `upstream/${upstreamBranch}`;
@@ -223,9 +222,7 @@ function mergeUpstream() {
 
     try {
       // Show the commits that would be merged
-      const log = git(
-        `git log --oneline ${branch}..${mergeTarget}`,
-      ).trim();
+      const log = git(`git log --oneline ${branch}..${mergeTarget}`).trim();
 
       if (!log) {
         console.log(`[DRY RUN] No new commits to merge — already up to date.`);
