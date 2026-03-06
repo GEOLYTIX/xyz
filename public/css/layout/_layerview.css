@@ -16,14 +16,6 @@
       display: none !important;
     }
   }
-
-  &.expanded {
-    /* readability - bottom border when container expanded */
-    & > .header {
-      border-bottom: solid 1px var(--color-border);
-      margin-bottom: 7px;
-    }
-  }
 }
 
 .layer-group {

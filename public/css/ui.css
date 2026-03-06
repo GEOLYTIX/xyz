@@ -1419,12 +1419,6 @@ label.radio {
       display: none !important;
     }
   }
-  &.expanded {
-    & > .header {
-      border-bottom: solid 1px var(--color-border);
-      margin-bottom: 7px;
-    }
-  }
 }
 .layer-group {
   padding-left: 3px;
