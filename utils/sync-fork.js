@@ -56,7 +56,7 @@ const upstreamBranch =
 const tag = args.find((arg) => arg.startsWith('--tag='))?.split('=')[1] || null;
 
 // Determine what we are merging: a specific tag, or the upstream branch
-const mergeTarget = tag ? tag : `upstream/${upstreamBranch}`;
+const mergeTarget = tag ?? `upstream/${upstreamBranch}`;
 
 const dryRun = args.includes('--dry-run');
 
@@ -322,7 +322,7 @@ Examples:
 
   # Merge upstream/develop into local main
   node ./utils/sync-fork.js --branch=main --upstream-branch=development
-  
+
   # Merge a specific release tag into local main
   node ./utils/sync-fork.js --branch=main --tag=v2.0.1
 
