@@ -744,7 +744,7 @@ dialog {
   pointer-events: none;
 }
 .drawer {
-  padding: 2px;
+  padding: 2px 2px 2px 5px;
   margin-top: 2px;
   background-color: var(--color-base-secondary);
   color: var(--color-font);
@@ -805,7 +805,6 @@ dialog {
       height: 1.5em;
     }
     & > :first-child {
-      margin-left: 5px;
       overflow: hidden;
       white-space: normal;
       text-overflow: ellipsis;
