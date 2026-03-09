@@ -417,7 +417,7 @@ await codi.describe(
 
         codi.assertTrue(
           Array.isArray(locale?.layers) &&
-          locale.layers.includes('OSM_BRAND_A'),
+            locale.layers.includes('OSM_BRAND_A'),
           `brand_a layer should be visible for nested role, got: ${JSON.stringify(localeData)}`,
         );
       },
