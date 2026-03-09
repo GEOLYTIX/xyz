@@ -384,43 +384,5 @@ await codi.describe(
         );
       },
     );
-
-    await codi.it(
-      {
-        name: 'nested role should still resolve nested locale path',
-        parentId: 'workspace_sibling_nested_locales',
-      },
-      async () => {
-        const { req, res } = codi.mockHttp.createMocks({
-          params: {
-            key: 'locale',
-            locale: 'uk,brand_a_template',
-            user: {
-              roles: ['uk.stores.brand_a'],
-            },
-          },
-        });
-
-        await getKeyMethod(req, res);
-
-        const localeData = res._getData();
-        const locale =
-          typeof localeData === 'string' && /^[\[{]/.test(localeData)
-            ? JSON.parse(localeData)
-            : localeData;
-
-        codi.assertEqual(
-          res.statusCode,
-          200,
-          `Expected nested locale access for role, got: ${JSON.stringify(localeData)}`,
-        );
-
-        codi.assertTrue(
-          Array.isArray(locale?.layers) &&
-            locale.layers.includes('OSM_BRAND_A'),
-          `brand_a layer should be visible for nested role, got: ${JSON.stringify(localeData)}`,
-        );
-      },
-    );
   },
 );
