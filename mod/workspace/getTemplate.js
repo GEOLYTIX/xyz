@@ -4,11 +4,13 @@ The module exports the getTemplate method which is required by the query, langua
 
 @requires /provider/getFrom
 @requires /workspace/cache
+@requires /utils/processEnv
 
 @module /workspace/getTemplate
 */
 
 import getFrom from '../provider/getFrom.js';
+import envReplace from '../utils/envReplace.js';
 import workspaceCache from './cache.js';
 
 /**
@@ -78,6 +80,8 @@ export default async function getTemplate(template) {
   if (!template.src) {
     return template;
   }
+
+  template.src = envReplace(template.src);
 
   // Check whether a template from .src has been cached.
   if (Object.hasOwn(workspace.templates, template.src)) {
