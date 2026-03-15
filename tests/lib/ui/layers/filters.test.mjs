@@ -35,7 +35,7 @@ export function filters(mapview) {
        * Testing providing an explicit max value on the filter.
        * @function it
        */
-      codi.it(
+      await codi.it(
         {
           name: 'Numeric Filter: max value specified',
           parentId: 'ui_layers_filters',

@@ -1,0 +1,21 @@
+{
+  "role": "globalvista",
+  "layers": {
+    "OSM_GLOBALVISTA": {
+      "display": true,
+      "format": "tiles",
+      "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+      "attribution": {
+        "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+      }
+    },
+    "LAYER_OBJ": {
+      "meta": "test role access from an object.",
+      "role": "OBJ_ROLE"
+    },
+    "LAYER_TEMPLATE": {
+      "meta": "test role access from a template.",
+      "template": "LAYER_TEMPLATE"
+    }
+  }
+}

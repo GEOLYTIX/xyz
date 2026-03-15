@@ -222,6 +222,11 @@ async function checkParamToken(req, res, user) {
     // The request for the stored API key has failed.
     if (rows instanceof Error) return rows;
 
+    // The user does not exist.
+    if (rows.length === 0) {
+      return new Error('User not found');
+    }
+
     if (rows.blocked) {
       // The user is blocked.
       return new Error('Account is blocked');

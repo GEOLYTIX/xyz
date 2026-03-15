@@ -81,6 +81,13 @@ dialog {
     transform: translate(-50%, -50%);
   }
 
+  iframe {
+    border: none;
+    position: absolute;
+    width: 100%;
+    height: 100%;
+  }
+
   &.popout .material-symbols-outlined.toggle-on {
     &::after {
       color: var(--color-active);

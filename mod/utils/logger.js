@@ -7,8 +7,8 @@ Possible log values are:
 - req_url: Logs the url of the request.
 - query_params: Logs query parameters sent to the query endpoint.
 - query: Logs the sql to executed by calling the query endpoint.
-- view-req-url: Logs the url of the requested view.  
-- cloudfront: Logs responses from requests made to cloudfront e.g. <staus_code> - <endpoint> 
+- view-req-url: Logs the url of the requested view.
+- cloudfront: Logs responses from requests made to cloudfront e.g. <staus_code> - <endpoint>
 - mailer: Logs the response from email sending.
 - mailer_body: Logs email from and two with the body.
 - reqhost: Logs the host for the request.
@@ -59,11 +59,6 @@ const logout = {
   logflare,
   postgresql,
 };
-
-// Required to initialse PostgreSQL logger.
-import pg from 'pg';
-
-const { Pool } = pg;
 
 const logger =
   xyzEnv.LOGGER &&
@@ -136,21 +131,18 @@ function postgresql() {
     new URLSearchParams(xyzEnv.LOGGER.split(':')[1]).entries(),
   );
 
-  const connectionString = xyzEnv[`DBS_${params.dbs}`];
-
-  if (!connectionString) {
+  if (!xyzEnv[`DBS_${params.dbs}`]) {
     console.warn(`Logger module unable to find dbs=${params.dbs}`);
     return;
   }
 
-  const pool = new Pool({
-    connectionString,
-    statement_timeout: 3000,
-  });
+  // Sanitize the params.table once at init to ensure no SQL injection.
+  const table = params.table.replace(/[^a-zA-Z0-9_.]/g, '');
 
   return async (log, key) => {
-    //Sanitize the params.table to ensure no SQL injection
-    const table = params.table.replace(/[^a-zA-Z0-9_.]/g, '');
+    // Dynamic import to avoid circular dependency (dbs.js imports logger.js).
+    const { default: dbs } = await import('./dbs.js');
+
     // Log messages can be string or objects
     // Objects must be parsed as string for the PostgreSQL log table schema.
     const logstring = typeof log === 'string' ? log : JSON.stringify(log);
@@ -158,20 +150,15 @@ function postgresql() {
     //This is to pull the short Error message from the stack
     const errorMessage = log.err?.toString().split('\n')[0];
 
-    // Declare client outside the try catch.
-    let client;
     try {
-      client = await pool.connect();
-      await client.query(
-        `INSERT INTO ${table} (process, datetime, key, log, message) 
+      await dbs[params.dbs](
+        `INSERT INTO ${table} (process, datetime, key, log, message)
         VALUES ($1, $2, $3, $4, $5)`,
         [process_id, parseInt(Date.now() / 1000), key, logstring, errorMessage],
+        3000,
       );
     } catch (error) {
       console.error('Error while logging to database:', error);
-    } finally {
-      // Optional chaining in case the client failed to connect.
-      client?.release();
     }
   };
 }

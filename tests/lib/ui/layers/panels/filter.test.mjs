@@ -28,6 +28,7 @@ export function filter() {
         },
         hideCallbacks: [],
         showCallbacks: [],
+        changeEndCallbacks: [],
         infoj: [
           {
             field: 'field_1',
@@ -89,10 +90,10 @@ export function filter() {
         () => {
           layer.filter.dialog = true;
 
-          const filterDrawer = mapp.ui.layers.panels.filter(layer);
+          mapp.ui.layers.panels.filter(layer);
 
           codi.assertTrue(
-            layer.filter.dialog_btn instanceof HTMLElement,
+            layer.filter.dialog.btn instanceof HTMLElement,
             'we expect a button to be created',
           );
         },

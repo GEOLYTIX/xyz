@@ -1,4 +1,9 @@
-import { check, fromObj, objMerge } from '../../../mod/utils/roles.js';
+import {
+  check,
+  combine,
+  objMerge,
+  setInObj,
+} from '../../../mod/utils/roles.js';
 
 codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
   codi.describe(
@@ -455,7 +460,7 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
 
   codi.describe(
     {
-      name: 'fromObj()',
+      name: 'setInObj()',
       id: 'roles_module_fromObj',
       parentId: 'roles_module',
     },
@@ -474,7 +479,7 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
               guest: true,
             },
           };
-          fromObj(rolesSet, obj);
+          setInObj(rolesSet, obj);
           codi.assertEqual(rolesSet.has('admin'), true);
           codi.assertEqual(rolesSet.has('user'), true);
           codi.assertEqual(rolesSet.has('guest'), true);
@@ -495,7 +500,7 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
               user: true,
             },
           };
-          fromObj(rolesSet, obj);
+          setInObj(rolesSet, obj);
           codi.assertEqual(rolesSet.has('admin'), true);
           codi.assertEqual(rolesSet.has('guest'), true);
           codi.assertEqual(rolesSet.has('user'), true);
@@ -528,7 +533,7 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
               },
             },
           };
-          fromObj(rolesSet, obj);
+          setInObj(rolesSet, obj);
           codi.assertEqual(rolesSet.has('admin'), true);
           codi.assertEqual(rolesSet.has('user'), true);
           codi.assertEqual(rolesSet.has('guest'), true);
@@ -556,7 +561,7 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
               },
             ],
           };
-          fromObj(rolesSet, obj);
+          setInObj(rolesSet, obj);
           codi.assertEqual(rolesSet.has('admin'), true);
           codi.assertEqual(rolesSet.has('user'), true);
         },
@@ -576,7 +581,7 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
               admin: true,
             },
           };
-          fromObj(rolesSet, obj);
+          setInObj(rolesSet, obj);
           codi.assertEqual(rolesSet.has('admin'), true);
         },
       );
@@ -601,7 +606,7 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
               },
             },
           };
-          fromObj(rolesSet, obj);
+          setInObj(rolesSet, obj);
           codi.assertEqual(rolesSet.size, 2);
           codi.assertEqual(rolesSet.has('admin'), true);
           codi.assertEqual(rolesSet.has('user'), true);
@@ -616,7 +621,7 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
         () => {
           const rolesSet = new Set();
           const obj = {};
-          fromObj(rolesSet, obj);
+          setInObj(rolesSet, obj);
           codi.assertEqual(rolesSet.size, 0);
         },
       );
@@ -634,8 +639,60 @@ codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
               value: 'nested',
             },
           };
-          fromObj(rolesSet, obj);
+          setInObj(rolesSet, obj);
           codi.assertEqual(rolesSet.size, 0);
+        },
+      );
+    },
+  );
+
+  codi.describe(
+    {
+      name: 'combine()',
+      id: 'roles_module_combine',
+      parentId: 'roles_module',
+    },
+    () => {
+      codi.it(
+        {
+          name: 'should combine parent roles with child roles',
+          parentId: 'roles_module_combine',
+        },
+        () => {
+          const child = { roles: { Child: true } };
+          const parent = { roles: { Parent: true } };
+          combine(child, parent);
+          codi.assertTrue(child.roles.Child);
+          codi.assertTrue(child.roles['Parent.Child']);
+        },
+      );
+
+      codi.it(
+        {
+          name: 'should handle string role properties',
+          parentId: 'roles_module_combine',
+        },
+        () => {
+          const child = { role: 'Child' };
+          const parent = { role: 'Parent' };
+          combine(child, parent);
+          codi.assertTrue(child.roles.Child);
+          codi.assertTrue(child.roles['Parent.Child']);
+        },
+      );
+
+      codi.it(
+        {
+          name: 'should not combine if parent role is same as child role',
+          parentId: 'roles_module_combine',
+        },
+        () => {
+          const child = { roles: { Common: true } };
+          const parent = { roles: { Common: true } };
+          combine(child, parent);
+          codi.assertTrue(child.roles.Common);
+          // Should NOT have 'Common.Common'
+          codi.assertFalse(!!child.roles['Common.Common']);
         },
       );
     },

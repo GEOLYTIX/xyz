@@ -1,0 +1,10 @@
+{
+  "role": "demographics",
+  "layers": {
+    "OSM_DEMOGRAPHICS": {
+      "display": true,
+      "format": "tiles",
+      "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+    }
+  }
+}
