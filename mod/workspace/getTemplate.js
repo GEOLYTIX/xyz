@@ -65,6 +65,7 @@ export default async function getTemplate(template) {
   }
 
   if (typeof template === 'string') {
+    const templateKey = String(template);
     // Protect from user provided input.
     if (/[^a-zA-Z0-9 :_-]/.exec(template)) {
       return new Error('Template key may only include whitelisted character.');
@@ -75,6 +76,7 @@ export default async function getTemplate(template) {
     }
 
     template = workspace.templates[template];
+    template.key = templateKey;
   }
 
   if (!template.src) {
