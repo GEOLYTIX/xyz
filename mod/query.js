@@ -234,6 +234,11 @@ function templateTables(template) {
 
   getObjTables(template, tables);
 
+  for (const table of tables) {
+    const schema_table = table.split('.');
+    if (schema_table.length === 2) tables.push(schema_table[1]);
+  }
+
   return tables;
 
   function getObjTables(obj, tables) {
