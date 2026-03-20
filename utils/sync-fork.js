@@ -7,6 +7,7 @@
 
 The sync-fork script allows developers working on a fork to pull and merge
 changes from the upstream (original) repository into their local branch.
+It also supports merging from a specific upstream release tag.
 
 This is useful when the upstream repo has moved ahead and you need to bring
 your fork up to date.
@@ -19,6 +20,7 @@ Options:
                               remembered as the 'upstream' remote afterwards)
   --branch=<name>             The local branch to sync [default: main]
   --upstream-branch=<name>    The upstream branch to merge from [default: value of --branch]
+  --tag=<name>                Specific Git tag to merge (e.g., v1.0.0). Overrides upstream-branch.
   --dry-run                   Show what would happen without making changes
   --help                      Show this help message
 
@@ -26,6 +28,7 @@ Examples:
   node ./utils/sync-fork.js --upstream=https://github.com/GEOLYTIX/xyz.git
   node ./utils/sync-fork.js --upstream=git@github.com:GEOLYTIX/xyz.git --branch=development
   node ./utils/sync-fork.js --branch=main --upstream-branch=development
+  node ./utils/sync-fork.js --branch=main --tag=v2.0.1
   node ./utils/sync-fork.js                      # uses existing 'upstream' remote
   node ./utils/sync-fork.js --dry-run             # preview the sync steps
 */
@@ -49,6 +52,11 @@ const branch =
 const upstreamBranch =
   args.find((arg) => arg.startsWith('--upstream-branch='))?.split('=')[1] ||
   branch;
+
+const tag = args.find((arg) => arg.startsWith('--tag='))?.split('=')[1] || null;
+
+// Determine what we are merging: a specific tag, or the upstream branch
+const mergeTarget = tag ?? `upstream/${upstreamBranch}`;
 
 const dryRun = args.includes('--dry-run');
 
@@ -83,7 +91,7 @@ function syncFork() {
     mergeUpstream();
 
     console.log(
-      `\nDone. Local '${branch}' is now up to date with upstream/${upstreamBranch}.`,
+      `\nDone. Local '${branch}' is now up to date with ${mergeTarget}.`,
     );
     console.log('Remember to push your updated branch if needed:');
     console.log(`  git push origin ${branch}`);
@@ -150,12 +158,17 @@ function ensureUpstreamRemote() {
 
 @description
 Fetches the latest refs and objects from the upstream remote.
+If a tag is specified, ensures tags are explicitly fetched.
 */
 function fetchUpstream() {
   console.log(`Fetching from upstream...`);
 
   if (!dryRun) {
-    git('git fetch upstream');
+    if (tag) {
+      git('git fetch upstream --tags');
+    } else {
+      git('git fetch upstream');
+    }
   }
 }
 
@@ -196,12 +209,12 @@ function checkoutBranch() {
 @function mergeUpstream
 
 @description
-Merges the upstream branch into the current local branch.
+Merges the upstream branch or tag into the current local branch.
 Warns the user if there are merge conflicts.
 In dry-run mode, performs a no-commit merge to show the actual diff, then aborts.
 */
 function mergeUpstream() {
-  console.log(`Merging upstream/${upstreamBranch} into ${branch}...`);
+  console.log(`Merging ${mergeTarget} into ${branch}...`);
 
   if (dryRun) {
     // Save current HEAD so we can restore it after the trial merge
@@ -209,9 +222,7 @@ function mergeUpstream() {
 
     try {
       // Show the commits that would be merged
-      const log = git(
-        `git log --oneline ${branch}..upstream/${upstreamBranch}`,
-      ).trim();
+      const log = git(`git log --oneline ${branch}..${mergeTarget}`).trim();
 
       if (!log) {
         console.log(`[DRY RUN] No new commits to merge — already up to date.`);
@@ -222,7 +233,7 @@ function mergeUpstream() {
       console.log(log);
 
       // Perform the merge without committing to show the actual diff
-      git(`git merge --no-commit --no-ff upstream/${upstreamBranch}`);
+      git(`git merge --no-commit --no-ff ${mergeTarget}`);
 
       const diff = git('git diff --cached --stat').trim();
 
@@ -237,7 +248,7 @@ function mergeUpstream() {
         );
       } else {
         console.log(
-          `[DRY RUN] Cannot preview changes (upstream may not be fetched yet).`,
+          `[DRY RUN] Cannot preview changes (upstream or tag may not be fetched yet).`,
         );
       }
     } finally {
@@ -249,7 +260,7 @@ function mergeUpstream() {
   }
 
   try {
-    const result = git(`git merge upstream/${upstreamBranch}`);
+    const result = git(`git merge ${mergeTarget}`);
     console.log(result);
   } catch (error) {
     if (error.message.includes('CONFLICT')) {
@@ -295,6 +306,7 @@ Options:
                               Required on first run; saved as the 'upstream' remote.
   --branch=<name>             Local branch to sync [default: main]
   --upstream-branch=<name>    Upstream branch to merge from [default: value of --branch]
+  --tag=<name>                Specific Git tag to merge (e.g., v1.0.0). Overrides upstream-branch.
   --dry-run                   Preview what would happen without making changes
   --help                      Show this help message
 
@@ -311,14 +323,17 @@ Examples:
   # Merge upstream/develop into local main
   node ./utils/sync-fork.js --branch=main --upstream-branch=development
 
+  # Merge a specific release tag into local main
+  node ./utils/sync-fork.js --branch=main --tag=v2.0.1
+
   # Preview what would be merged
   node ./utils/sync-fork.js --dry-run
 
 Workflow:
   1. Adds or verifies the 'upstream' remote
-  2. Fetches the latest from upstream
+  2. Fetches the latest from upstream (including tags if specified)
   3. Checks out the target branch locally
-  4. Merges upstream/<upstream-branch> into your local branch
+  4. Merges upstream/<upstream-branch> (or <tag>) into your local branch
   5. You push to your fork: git push origin <branch>
 `);
 }
