@@ -215,6 +215,8 @@ async function layerQuery(req, res) {
         )`;
   }
 
+  if (checkFieldsParam(req, res) instanceof Error) return;
+
   await fieldsMap(req, res);
 
   await infojMap(req, res);
@@ -276,6 +278,55 @@ function templateTables(template) {
       // Recursively process nested objects
       if (value instanceof Object) {
         getObjTables(value, tables);
+      }
+    });
+  }
+}
+
+function checkFieldsParam(req, res) {
+  if (!req.params.fields) return;
+
+  const fields = new Set();
+
+  objPropValueSet(req.params.layer, 'field', fields);
+
+  for (const field of req.params.fields.split(',')) {
+    console.log(field);
+
+    if (!fields.has(field)) {
+      const err = new Error(
+        `${field} field not accessible on ${req.params.layer.key} layer`,
+      );
+      console.error(err);
+      res.status(400).setHeader('Content-Type', 'text/plain').send(err.message);
+      return err;
+    }
+  }
+
+  function objPropValueSet(obj, prop, set) {
+    if (typeof obj !== 'object') return;
+
+    // Return early if object is null or empty
+    if (obj === null) return;
+
+    // Object must have keys to iterate on.
+    if (obj instanceof Object && !Object.keys(obj)) return;
+
+    Object.entries(obj).forEach(([key, value]) => {
+      if (key === prop && typeof value === 'string') {
+        set.add(value);
+        return;
+      }
+
+      // Recursively process each item if we find an array
+      if (Array.isArray(value)) {
+        value.forEach((item) => objPropValueSet(item, prop, set));
+        return;
+      }
+
+      // Recursively process nested objects
+      if (value instanceof Object) {
+        objPropValueSet(value, prop, set);
       }
     });
   }
