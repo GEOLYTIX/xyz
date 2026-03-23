@@ -283,6 +283,25 @@ function templateTables(template) {
   }
 }
 
+/**
+@function checkFieldsParam
+
+@description
+Layer queries should restrict the fields provided as param to query templates.
+
+The method will call a recursive method to parse the layer object for any values referenced as properties with the 'field' key.
+
+Field values may not be referenced in the layer object from role restricted templates.
+
+The method will return an Error if the fields request param contains a string value which is not referenced in a field prooperty in the layer object.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@property {object} req.params The request object params.
+@property {string} params.fields The request layer object [from template].
+@property {object} params.layer The request layer object [from template].
+@returns {Error} An error will be returned if the check fails.
+*/
 function checkFieldsParam(req, res) {
   if (!req.params.fields) return;
 
@@ -291,8 +310,6 @@ function checkFieldsParam(req, res) {
   objPropValueSet(req.params.layer, 'field', fields);
 
   for (const field of req.params.fields.split(',')) {
-    console.log(field);
-
     if (!fields.has(field)) {
       const err = new Error(
         `${field} field not accessible on ${req.params.layer.key} layer`,
@@ -312,23 +329,23 @@ function checkFieldsParam(req, res) {
     // Object must have keys to iterate on.
     if (obj instanceof Object && !Object.keys(obj)) return;
 
-    Object.entries(obj).forEach(([key, value]) => {
+    for (const [key, value] of Object.entries(obj)) {
       if (key === prop && typeof value === 'string') {
         set.add(value);
-        return;
+        continue;
       }
 
       // Recursively process each item if we find an array
       if (Array.isArray(value)) {
         value.forEach((item) => objPropValueSet(item, prop, set));
-        return;
+        continue;
       }
 
       // Recursively process nested objects
       if (value instanceof Object) {
         objPropValueSet(value, prop, set);
       }
-    });
+    }
   }
 }
 
