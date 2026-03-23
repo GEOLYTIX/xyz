@@ -682,7 +682,7 @@ async function cacheTemplates(params) {
   logger(`cachelocales: ${Date.now() - timestamp}`, 'cachelocales');
 
   const templatePromises = Object.keys(workspace.templates).map(async (key) => {
-    await getTemplate(key, true);
+    await getTemplate(key);
   });
 
   await Promise.allSettled(templatePromises);
