@@ -53,6 +53,7 @@ export default async function query(req, res) {
 
   if (res.finished) return;
 
+  // TODO should layerQuery be executed before the getTemplate.
   // Get the template.
   const template = await getTemplate(req.params.template);
 
@@ -74,10 +75,7 @@ export default async function query(req, res) {
   }
 
   // The template requires user login.
-  if (
-    !req.params.user &&
-    (template.login || template.admin || template.roles)
-  ) {
+  if (!req.params.user && (template.login || template.roles)) {
     req.params.msg = 'login_required';
     login(req, res);
     return;
@@ -98,17 +96,19 @@ export default async function query(req, res) {
       .send('Role access denied for query template.');
   }
 
+  // TODO it is unclear how this condition could be met.
   if (res.finished) return;
 
-  // Assign body to params to enable reserved %{body} parameter.
-  req.params.body =
-    (req.params.stringifyBody && JSON.stringify(req.body)) || req.body;
+  if (req.body) {
+    // Assign body to params to enable reserved %{body} parameter.
+    req.params.body = req.params.stringifyBody
+      ? JSON.stringify(req.body)
+      : req.body;
+  }
 
   logger(req.params, 'query_params');
 
-  const query = await getQueryFromTemplate(req, template);
-
-  executeQuery(req, res, template, query);
+  executeQuery(req, res, template);
 }
 
 /**
@@ -511,10 +511,11 @@ The dbs for the query is determined primarily by the template. The layer.dbs is 
 @param {req} req HTTP request.
 @param {res} res HTTP response.
 @param {Object} template Request template.
-@param {string} query SQL query.
 @property {Object} [req.params] Request params.
 */
-async function executeQuery(req, res, template, query) {
+async function executeQuery(req, res, template) {
+  const query = await getQueryFromTemplate(req, template);
+
   logger(query, 'query');
 
   if (query instanceof Error) {
@@ -590,11 +591,25 @@ function sendRows(req, res, template, rows) {
   }
 
   // The rows array must have a length with some row not being empty.
-  if (!rows?.length || !rows.some((row) => checkEmptyRow(row))) {
+  if (!rows?.length) {
     return res
       .status(202)
       .setHeader('Content-Type', 'text/plain')
       .send('No rows returned from table.');
+  }
+
+  // Some row [object] must have a value which is not null.
+  if (
+    !rows.some(
+      (row) =>
+        typeof row === 'object' &&
+        Object.values(row).some((val) => val !== null),
+    )
+  ) {
+    return res
+      .status(202)
+      .setHeader('Content-Type', 'text/plain')
+      .send('No row returned any value.');
   }
 
   if (req.params.reduce || template?.reduce) {
@@ -615,11 +630,4 @@ function sendRows(req, res, template, rows) {
 
   // Send the infoj object with values back to the client.
   res.send((rows.length === 1 && rows[0]) || rows);
-}
-
-function checkEmptyRow(row) {
-  // row is typeof object with at least some value which is not null.
-  return (
-    typeof row === 'object' && Object.values(row).some((val) => val !== null)
-  );
 }
