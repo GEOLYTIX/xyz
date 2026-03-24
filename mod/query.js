@@ -465,7 +465,8 @@ An error will be returned if the substitution fails.
 @property {string} template.template SQL template string.
 */
 function getQueryFromTemplate(req, template) {
-  const missingParams = [];
+  req.params.missing = [];
+  req.params.optional = new Set(['viewport', 'filter']);
   try {
     if (typeof template.render === 'function') {
       // Render template string from template.render() function.
@@ -493,78 +494,124 @@ function getQueryFromTemplate(req, template) {
       req.params.SQL.length = 0;
     }
 
-    const optionalParams = new Set(['viewport', 'filter']);
-    const query_template = template.template
+    // Replace ${param} with string
+    let query_template = template.template.replace(
+      /\${(.{0,99}?)}/g,
+      (matched) => replaceStringParams(req, matched),
+    );
 
-      // Replace parameter for identifiers, e.g. table, schema, columns
-      .replace(/\${(.{0,99}?)}/g, (matched) => {
-        // Remove template brackets from matched param.
-        const param = matched.replace(/\${|}/g, '');
+    // Replace %{param} with placeholder, eg. $1, $2
+    query_template = query_template.replace(/%{(.{0,99}?)}/g, (matched) =>
+      replaceValueParams(req, matched),
+    );
 
-        // Get param value from request params object.
-        const change = optionalParams.has(param)
-          ? req.params[param] || ''
-          : req.params[param];
-
-        if (change === undefined) {
-          missingParams.push(param);
-        }
-
-        // Change value may only contain a limited set of whitelisted characters.
-        if (
-          !optionalParams.has(param) &&
-          !/^[A-Za-z0-9,"'._-\s]*$/.test(change)
-        ) {
-          throw new Error(`Substitute \${${param}} value rejected: ${change}`);
-        }
-
-        return change;
-      })
-
-      // Replace params with placeholder, eg. $1, $2
-      .replace(/%{(.{0,99}?)}/g, (matched) => {
-        // Remove template brackets from matched param.
-        const param = matched.replace(/%{|}/g, '');
-
-        let val = optionalParams.has(param)
-          ? req.params[param] || ''
-          : req.params[param];
-
-        if (param.startsWith('body.')) {
-          val = req.params.body[param.replace('body.', '')];
-        }
-
-        if (val === undefined) {
-          missingParams.push(param);
-        }
-
-        if (req.params.wildcard) {
-          val = val.replaceAll(req.params.wildcard, '%');
-        }
-
-        try {
-          if (param !== 'body' && /^[[{].*[\]}]$/.test(val)) {
-            // Parse val as JSON if param is not 'body' and the [string] value begins and ends with either [] or {}.
-            val = JSON.parse(val);
-          }
-        } catch (err) {
-          console.error(err);
-        }
-
-        // Push value from request params object into params array.
-        req.params.SQL.push(val);
-
-        return `$${Array.from(req.params.SQL).length}`;
-      });
-
-    if (missingParams.length > 0) {
-      throw new Error(`${template.key} has missing params: ${missingParams}`);
+    if (req.params.missing.length > 0) {
+      throw new Error(
+        `${template.key} has missing params: ${req.params.missing}`,
+      );
     }
 
     return query_template;
   } catch (err) {
     return err;
   }
+}
+
+/**
+@function replaceStringParams
+
+@description
+The method receives a variable matched from a regex /\${(.{0,99}?)}/g which should be replaced with a request params string.
+
+Table and column names cannot be provided a values to be substituted in the database. To protect from SQL injections these variables may only contain whitelisted characters /^[A-Za-z0-9,"'._-\s]*$/.
+
+Optional params such as [SQL] filter, and viewports may contain any character and will be replaced with an empty string if not provided in the req.params{}.
+
+@param {req} req HTTP request.
+@param {string} matched ${variable} to replace in template.
+@property {object} req.params Request params.
+@property {array} params.missing Missing params in req.params.
+@property {set} params.optional Optional params for query template [eg filter, viewport].
+@returns {string} The string to replace the matched variable with.
+*/
+function replaceStringParams(req, matched) {
+  // Remove template brackets from matched param.
+  const param = matched.replace(/\${|}/g, '');
+
+  // Optional parameter should be replaced with empty string if not in request params.
+  const change = req.params.optional.has(param)
+    ? req.params[param] || ''
+    : req.params[param];
+
+  if (change === undefined) {
+    req.params.missing.push(param);
+    return;
+  }
+
+  if (req.params.optional.has(param)) {
+    // Optional params eg filter and viewport may contain whitelisted characters.
+    return change;
+  }
+
+  // Change value may only contain a limited set of whitelisted characters.
+  if (!/^[A-Za-z0-9,"'._-\s]*$/.test(change)) {
+    throw new Error(`Substitute \${${param}} value rejected: ${change}`);
+  }
+
+  return change;
+}
+
+/**
+@function replaceValueParams
+
+@description
+The method receives a variable matched from a regex /%{(.{0,99}?)}/g which should be substituted in the database to protect from SQL injections.
+
+Optional params such as [SQL] filter, and viewports may contain any character and will be replaced with an empty string if not provided in the req.params{}.
+
+Variable substitution works with sequential placeholders. Values from the req.params or req.body will be added to the params.SQL[] array and replaced with a $n placeholder in the query_template string where n is the index of value in the params.SQL[] array.
+
+@param {req} req HTTP request.
+@param {string} matched %{variable} to be substituted in database.
+@property {object} req.params Request params.
+@property {array} params.SQL Array of values to be substituted in the database.
+@property {array} params.missing Missing params in req.params.
+@property {set} params.optional Optional params for query template [eg filter, viewport].
+@returns {string} The string to replace the matched variable with.
+*/
+function replaceValueParams(req, matched) {
+  // Remove template brackets from matched param.
+  const param = matched.replace(/%{|}/g, '');
+
+  let val = req.params.optional.has(param)
+    ? req.params[param] || ''
+    : req.params[param];
+
+  if (param.startsWith('body.')) {
+    val = req.params.body[param.replace('body.', '')];
+  }
+
+  if (val === undefined) {
+    req.params.missing.push(param);
+  }
+
+  if (req.params.wildcard) {
+    val = val.replaceAll(req.params.wildcard, '%');
+  }
+
+  try {
+    if (param !== 'body' && /^[[{].*[\]}]$/.test(val)) {
+      // Parse val as JSON if param is not 'body' and the [string] value begins and ends with either [] or {}.
+      val = JSON.parse(val);
+    }
+  } catch (err) {
+    console.error(err);
+  }
+
+  // Push value from request params object into params array.
+  req.params.SQL.push(val);
+
+  return `$${Array.from(req.params.SQL).length}`;
 }
 
 /**
