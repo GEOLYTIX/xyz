@@ -46,6 +46,9 @@ export default async function query(req, res) {
   // Assign reserved request params.
   Object.assign(req.params, {
     fieldsMap: new Map(),
+    infojMap: new Map(),
+    missing: [],
+    optional: new Set(['viewport', 'filter']),
     SQL: [],
   });
 
@@ -381,8 +384,6 @@ A lookup of template [SQL] strings is attempted only if the template is defined 
 async function infojMap(req, res) {
   if (!req.params.layer.infoj) return;
 
-  req.params.infojMap = new Map();
-
   for (const entry of req.params.layer.infoj) {
     // An entry must have a field, and not a query.
     if (!entry.field || entry.query) continue;
@@ -453,8 +454,6 @@ function getQueryFromTemplate(req, template) {
       : req.body;
   }
 
-  req.params.missing = [];
-  req.params.optional = new Set(['viewport', 'filter']);
   try {
     if (typeof template.render === 'function') {
       // Render template string from template.render() function.
