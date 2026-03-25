@@ -203,12 +203,20 @@ async function layerQuery(req, res) {
             ${viewport[1]},
             ${viewport[2]},
             ${viewport[3]},
-            ${parseInt(viewport[4])}),
+            ${Number.parseInt(viewport[4])}),
           ${req.params.srid}),
         ${req.params.geom})`;
   }
 
-  if ((await checkFieldsParam(req, res)) instanceof Error) return;
+  const checkFieldsParamResponse = checkFieldsParam(req);
+
+  if (checkFieldsParamResponse instanceof Error) {
+    res
+      .status(400)
+      .setHeader('Content-Type', 'text/plain')
+      .send(checkFieldsParamResponse.message);
+    return;
+  }
 
   await infojMap(req, res);
 }
@@ -288,13 +296,12 @@ Field values may not be referenced in the layer object from role restricted temp
 The method will return an Error if the fields request param contains a string value which is not referenced in a field prooperty in the layer object.
 
 @param {req} req HTTP request.
-@param {res} res HTTP response.
 @property {object} req.params The request object params.
 @property {string} params.fields The request layer object [from template].
 @property {object} params.layer The request layer object [from template].
 @returns {Error} An error will be returned if the check fails.
 */
-async function checkFieldsParam(req, res) {
+async function checkFieldsParam(req) {
   if (!req.params.fields) return;
 
   const layerFields = new Set();
@@ -309,7 +316,6 @@ async function checkFieldsParam(req, res) {
         `${field} field not accessible on ${req.params.layer.key} layer`,
       );
       console.error(err);
-      res.status(400).setHeader('Content-Type', 'text/plain').send(err.message);
       return err;
     }
 
