@@ -62,7 +62,7 @@ async function acl(q, arr) {
     return rows;
   } catch (err) {
     console.error(err);
-    return err;
+    return new Error('Failed to connect to ACL.');
   } finally {
     client?.release();
   }

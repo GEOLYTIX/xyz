@@ -313,7 +313,9 @@ async function checkSession(req, user) {
     );
 
     // The request for the stored session has failed.
-    if (rows instanceof Error) return rows;
+    if (rows instanceof Error) {
+      return rows;
+    }
 
     if (user.session !== rows[0].session) {
       // The stored session doesn't match user.session.
