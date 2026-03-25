@@ -45,7 +45,6 @@ export default async function query(req, res) {
 
   // Assign reserved request params.
   Object.assign(req.params, {
-    fieldsMap: new Map(),
     infojMap: new Map(),
     missing: [],
     optional: new Set(['viewport', 'filter']),
@@ -293,7 +292,6 @@ The method will return an Error if the fields request param contains a string va
 @property {object} req.params The request object params.
 @property {string} params.fields The request layer object [from template].
 @property {object} params.layer The request layer object [from template].
-@property {map} params.fieldsMap template.field can be referenced in the as values to be substituted in query templates.
 @returns {Error} An error will be returned if the check fails.
 */
 async function checkFieldsParam(req, res) {
@@ -302,6 +300,8 @@ async function checkFieldsParam(req, res) {
   const layerFields = new Set();
 
   objPropValueSet(req.params.layer, 'field', layerFields);
+
+  req.params.fieldsMap = new Map();
 
   for (const field of req.params.fields.split(',')) {
     if (!layerFields.has(field)) {

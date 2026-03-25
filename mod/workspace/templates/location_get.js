@@ -12,12 +12,9 @@ export default (_) => {
   // The layer.qID will be returned from the select statement.
   const fields = [_.layer.qID];
 
-  _.infojMap &&
-    Array.from(_.infojMap.entries()).forEach((entry) => {
-      const [key, value] = entry;
-
-      fields.push(`(${value}) as ${key}`);
-    });
+  for (const [key, value] of _.infojMap?.entries()) {
+    fields.push(`(${value}) as ${key}`);
+  }
 
   return `
     SELECT ${fields.join()}
