@@ -1,13 +1,14 @@
 /**
-The query module exports the [SQL] query method to pass queries to the stored dbs_connections available to the XYZ instance.
+The query module exports the [SQL] query method to pass queries to dbs connections configured in the XYZ process environment.
 
+@requires /user/login
 @requires /utils/dbs
-@requires /utils/sqlFilter
-@requires /utils/roles
 @requires /utils/logger
+@requires /utils/roles
+@requires /utils/sqlFilter
 @requires /workspace/cache
-@requires /workspace/getTemplate
 @requires /workspace/getLayer
+@requires /workspace/getTemplate
 
 @module /query
 */
@@ -17,7 +18,6 @@ import dbs_connections from './utils/dbs.js';
 import logger from './utils/logger.js';
 import * as Roles from './utils/roles.js';
 import sqlFilter from './utils/sqlFilter.js';
-
 import workspaceCache from './workspace/cache.js';
 import getLayer from './workspace/getLayer.js';
 import getTemplate from './workspace/getTemplate.js';
@@ -29,9 +29,7 @@ import getTemplate from './workspace/getTemplate.js';
 @description
 The [SQL] query method requests a query template from the getTemplate method and checks whether the requesting user is permitted to execute the query.
 
-The layerQuery() method must be awaited for queries that reference a layer. The layerQuery must be run before the getTemplate() request since the query template may be defined in the layer [template].
-
-A template is turned into a query by the getQueryFromTemplate() method.
+The layerQuery() method must be awaited to check whether params are referenced in a role restricted JSON layer.
 
 The query is executed by the executeQuery() method.
 
@@ -45,33 +43,36 @@ export default async function query(req, res) {
   // Get workspace from cache.
   req.params.workspace = await workspaceCache();
 
-  // The SQL param is restricted to hold substitute values.
-  req.params.SQL = [];
+  // Assign reserved request params.
+  Object.assign(req.params, {
+    fieldsMap: new Map(),
+    SQL: [],
+  });
 
-  // Assign role filter and viewport params from layer object.
   await layerQuery(req, res);
 
   if (res.finished) return;
 
-  // TODO should layerQuery be executed before the getTemplate.
-  // Get the template.
+  // Must be run after the layerQuery method since the query template could be defined within the layer [template].
   const template = await getTemplate(req.params.template);
 
   if (template.err instanceof Error) {
-    return res
+    res
       .status(500)
       .setHeader('Content-Type', 'text/plain')
       .send(template.err.message);
+    return;
   }
 
   // A layer template must have a layer param.
   if (template.layer && !req.params.layer) {
-    return res
+    res
       .status(400)
       .setHeader('Content-Type', 'text/plain')
       .send(
         `${req.params.template} query requires a valid layer request parameter.`,
       );
+    return;
   }
 
   // The template requires user login.
@@ -89,21 +90,12 @@ export default async function query(req, res) {
   }
 
   // Validate template role access.
-  if (template.roles && !Roles.check(template, req.params.user?.roles)) {
-    return res
+  if (!Roles.check(template, req.params.user?.roles)) {
+    res
       .status(403)
       .setHeader('Content-Type', 'text/plain')
       .send('Role access denied for query template.');
-  }
-
-  // TODO it is unclear how this condition could be met.
-  if (res.finished) return;
-
-  if (req.body) {
-    // Assign body to params to enable reserved %{body} parameter.
-    req.params.body = req.params.stringifyBody
-      ? JSON.stringify(req.body)
-      : req.body;
+    return;
   }
 
   logger(req.params, 'query_params');
@@ -132,14 +124,12 @@ The fields request param property may be provided as an array. The string should
 
 @param {req} req HTTP request.
 @param {res} res HTTP response.
-@param {Object} template The query template.
-@property {Boolean} template.layer A layer query template.
-@property {Object} req.params Request params.
-@property {Object} params.filter JSON filter which must be turned into a SQL filter string for substitution.
-@property {Array} params.SQL Substitute parameter for SQL query.
-@property {Array} params.fields An array of string fields is provided for a layer query.
-@property {Object} [params.user] Requesting user.
-@property {Array} [user.roles] User roles.
+@property {object} req.params Request params.
+@property {object} [params.filter] JSON filter which must be turned into a SQL filter string for substitution.
+@property {array} params.SQL Substitute parameter for SQL query.
+@property {array} [params.fields] An array of string fields is provided for a layer query.
+@property {object} [params.user] Requesting user.
+@property {string} [params.layer_template] A layer can be loaded directly from a template not referenced in a locale.
 */
 async function layerQuery(req, res) {
   if (req.params.layer_template) {
@@ -157,10 +147,11 @@ async function layerQuery(req, res) {
 
   // getLayer will return error on role restrictions.
   if (req.params.layer instanceof Error) {
-    return res
+    res
       .status(400)
       .setHeader('Content-Type', 'text/plain')
       .send(req.params.layer.message);
+    return;
   }
 
   // Layer queries must have a qID param.
@@ -177,47 +168,45 @@ async function layerQuery(req, res) {
     const tables = new Set(templateTables(req.params.layer));
 
     if (!tables.has(req.params.table)) {
-      return res
+      res
         .status(403)
         .setHeader('Content-Type', 'text/plain')
         .send(`Access to ${req.params.table} table param forbidden.`);
+      return;
     }
   }
 
+  // Defined in the layer a default filter cannot be altered by the request.
+  const filterDefault = req.params.layer.filter?.default
+    ? `AND ${sqlFilter(req.params.layer.filter.default, req)}`
+    : '';
+
+  // The current filter is defined in the request params.
+  const filterCurrent = req.params.filter
+    ? `AND ${sqlFilter(JSON.parse(req.params.filter), req)}`
+    : '';
+
   // Create filter condition for SQL query.
-  req.params.filter = [
-    (req.params.layer.filter?.default &&
-      `AND ${sqlFilter(req.params.layer.filter.default, req)}`) ||
-      '',
-    (req.params.filter &&
-      `AND ${sqlFilter(JSON.parse(req.params.filter), req)}`) ||
-      '',
-  ].join(' ');
+  req.params.filter = `${filterDefault} ${filterCurrent}`;
 
   // Create viewport condition for SQL query.
   if (req.params.viewport) {
-    const viewport = req.params.viewport?.split(',');
+    const viewport = req.params.viewport.split(',');
 
-    req.params.viewport &&= `
-      AND
-        ST_Intersects(
-          ST_Transform(
-            ST_MakeEnvelope(
-              ${viewport[0]},
-              ${viewport[1]},
-              ${viewport[2]},
-              ${viewport[3]},
-              ${parseInt(viewport[4])}
-            ),
-            ${req.params.srid}
-          ),
-          ${req.params.geom}
-        )`;
+    req.params.viewport = `AND
+      ST_Intersects(
+        ST_Transform(
+          ST_MakeEnvelope(
+            ${viewport[0]},
+            ${viewport[1]},
+            ${viewport[2]},
+            ${viewport[3]},
+            ${parseInt(viewport[4])}),
+          ${req.params.srid}),
+        ${req.params.geom})`;
   }
 
-  if (checkFieldsParam(req, res) instanceof Error) return;
-
-  await fieldsMap(req, res);
+  if ((await checkFieldsParam(req, res)) instanceof Error) return;
 
   await infojMap(req, res);
 }
@@ -285,11 +274,12 @@ function templateTables(template) {
 
 /**
 @function checkFieldsParam
+@async
 
 @description
 Layer queries should restrict the fields provided as param to query templates.
 
-The method will call a recursive method to parse the layer object for any values referenced as properties with the 'field' key.
+The method will call the recursive objPropValueSet method to parse the layer object for any values referenced as properties with the 'field' key.
 
 Field values may not be referenced in the layer object from role restricted templates.
 
@@ -300,17 +290,18 @@ The method will return an Error if the fields request param contains a string va
 @property {object} req.params The request object params.
 @property {string} params.fields The request layer object [from template].
 @property {object} params.layer The request layer object [from template].
+@property {map} params.fieldsMap template.field can be referenced in the as values to be substituted in query templates.
 @returns {Error} An error will be returned if the check fails.
 */
-function checkFieldsParam(req, res) {
+async function checkFieldsParam(req, res) {
   if (!req.params.fields) return;
 
-  const fields = new Set();
+  const layerFields = new Set();
 
-  objPropValueSet(req.params.layer, 'field', fields);
+  objPropValueSet(req.params.layer, 'field', layerFields);
 
   for (const field of req.params.fields.split(',')) {
-    if (!fields.has(field)) {
+    if (!layerFields.has(field)) {
       const err = new Error(
         `${field} field not accessible on ${req.params.layer.key} layer`,
       );
@@ -318,59 +309,7 @@ function checkFieldsParam(req, res) {
       res.status(400).setHeader('Content-Type', 'text/plain').send(err.message);
       return err;
     }
-  }
 
-  function objPropValueSet(obj, prop, set) {
-    if (typeof obj !== 'object') return;
-
-    // Return early if object is null or empty
-    if (obj === null) return;
-
-    // Object must have keys to iterate on.
-    if (obj instanceof Object && !Object.keys(obj)) return;
-
-    for (const [key, value] of Object.entries(obj)) {
-      if (key === prop && typeof value === 'string') {
-        set.add(value);
-        continue;
-      }
-
-      // Recursively process each item if we find an array
-      if (Array.isArray(value)) {
-        value.forEach((item) => objPropValueSet(item, prop, set));
-        continue;
-      }
-
-      // Recursively process nested objects
-      if (value instanceof Object) {
-        objPropValueSet(value, prop, set);
-      }
-    }
-  }
-}
-
-/**
-@function fieldsMap
-@async
-
-@description
-The method assigns the fieldsMap object property to the request params for layer queries with a fields request parameter.
-
-The fields param is split into an array and template strings of workspace.templates matching a field are set as value to the field key in the fieldsMap object.
-
-@param {req} req HTTP request.
-@param {res} res HTTP response.
-@property {Object} req.params The request params.
-@property {Array} params.fields An array of string fields is provided for a layer query.
-*/
-async function fieldsMap(req, res) {
-  if (!req.params.fields) return;
-
-  const fields = req.params.fields.split(',');
-
-  req.params.fieldsMap = new Map();
-
-  for (const field of fields) {
     let value = field;
 
     if (Object.hasOwn(req.params.workspace.templates, field)) {
@@ -380,6 +319,46 @@ async function fieldsMap(req, res) {
     }
 
     req.params.fieldsMap.set(field, value);
+  }
+}
+
+/**
+@function checkFieldsParam
+
+@description
+The recursive method parses all properties in an object and calls itself if the property value is an object.
+
+String values of object properties with the key matching the prop argument will be added to the set argument.
+
+@param {object} obj Object to parse for property values.
+@param {string} prop The property key.
+@param {set} set The set to which the property values should be added.
+*/
+function objPropValueSet(obj, prop, set) {
+  if (typeof obj !== 'object') return;
+
+  // Return early if object is null or empty
+  if (obj === null) return;
+
+  // Object must have keys to iterate on.
+  if (obj instanceof Object && !Object.keys(obj)) return;
+
+  for (const [key, value] of Object.entries(obj)) {
+    if (key === prop && typeof value === 'string') {
+      set.add(value);
+      continue;
+    }
+
+    // Recursively process each item if we find an array
+    if (Array.isArray(value)) {
+      value.forEach((item) => objPropValueSet(item, prop, set));
+      continue;
+    }
+
+    // Recursively process nested objects
+    if (value instanceof Object) {
+      objPropValueSet(value, prop, set);
+    }
   }
 }
 
@@ -396,11 +375,11 @@ A lookup of template [SQL] strings is attempted only if the template is defined 
 
 @param {req} req HTTP request.
 @param {res} res HTTP response.
-@property {Object} req.params The request params.
-@property {Array} params.layer The layer object assigned by the layerQuery
+@property {object} req.params The request params.
+@property {object} params.layer The layer object assigned by the layerQuery
 */
 async function infojMap(req, res) {
-  if (!req.params.layer?.infoj) return;
+  if (!req.params.layer.infoj) return;
 
   req.params.infojMap = new Map();
 
@@ -457,14 +436,23 @@ The substitute values are stored in the ordered params.SQL[] array.
 An error will be returned if the substitution fails.
 
 @param {req} req HTTP request.
-@param {Object} template Request template.
-@property {Object} req.params Request params.
-@property {Object} params.filter JSON filter which must be turned into a SQL filter string for substitution.
-@property {Array} params.SQL Substitute parameter for SQL query.
-@property {Function} template.render Method to render template string.
+@param {object} template Request template.
+@property {object} [req.body] Post request body.
+@property {object} req.params Request params.
+
+@property {object} params.filter JSON filter which must be turned into a SQL filter string for substitution.
+@property {array} params.SQL Substitute parameter for SQL query.
+@property {function} template.render Method to render template string.
 @property {string} template.template SQL template string.
 */
 function getQueryFromTemplate(req, template) {
+  if (req.body) {
+    // Assign body to params to enable reserved %{body} parameter.
+    req.params.body = req.params.stringifyBody
+      ? JSON.stringify(req.body)
+      : req.body;
+  }
+
   req.params.missing = [];
   req.params.optional = new Set(['viewport', 'filter']);
   try {
