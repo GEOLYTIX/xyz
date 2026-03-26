@@ -132,7 +132,34 @@ export default async function query(req, res) {
 
   logger(req.params, 'query_params');
 
-  executeQuery(req, res, template);
+  const query = getQueryFromTemplate(req, template);
+
+  logger(query, 'query');
+
+  if (query instanceof Error) {
+    res.status(400).setHeader('Content-Type', 'text/plain').send(query.message);
+    return;
+  }
+
+  // Nonblocking queries will not wait for results but return immediately.
+  if (template.nonblocking) {
+    dbs_connections[template.dbs](
+      query,
+      req.params.SQL,
+      template.statement_timeout,
+    );
+
+    return res.send('Non blocking request sent.');
+  }
+
+  // Run the query
+  const rows = await dbs_connections[template.dbs](
+    query,
+    req.params.SQL,
+    template.statement_timeout,
+  );
+
+  sendRows(req, res, template, rows);
 }
 
 /**
@@ -147,10 +174,6 @@ Layer query templates must have a layer request property.
 Layer queries have restricted viewport and filter params. These params can not be substituted in the database but must be replaced in the SQL query string.
 
 Any query which references a layer and locale will be passed through the layer query method. The getLayer method will fail return an error if the locale is not defined as param or the layer is not a member of the locale.
-
-```
-/api/query?template=query&locale=uk&layer=retail
-```
 
 The fields request param property may be provided as an array. The string should be replaced with the template property of a matching workspace template.
 
@@ -646,52 +669,6 @@ function replaceValueParams(req, matched) {
   req.params.SQL.push(val);
 
   return `$${Array.from(req.params.SQL).length}`;
-}
-
-/**
-@function executeQuery
-@async
-
-@description
-The method sends a parameterised query to a database connection.
-
-@param {req} req HTTP request.
-@param {res} res HTTP response.
-@param {object} template Request template.
-@property {object} req.params Request params.
-@property {array} params.SQL Array of values to be passed with a query and substituted for variables in the database process.
-@property {boolean} [template.nonblocking] Execute a nonblocking query.
-@property {integer} [template.statement_timeout] Timeout for database connection.
-*/
-async function executeQuery(req, res, template) {
-  const query = getQueryFromTemplate(req, template);
-
-  logger(query, 'query');
-
-  if (query instanceof Error) {
-    res.status(400).setHeader('Content-Type', 'text/plain').send(query.message);
-    return;
-  }
-
-  // Nonblocking queries will not wait for results but return immediately.
-  if (template.nonblocking) {
-    dbs_connections[template.dbs](
-      query,
-      req.params.SQL,
-      template.statement_timeout,
-    );
-
-    return res.send('Non blocking request sent.');
-  }
-
-  // Run the query
-  const rows = await dbs_connections[template.dbs](
-    query,
-    req.params.SQL,
-    template.statement_timeout,
-  );
-
-  sendRows(req, res, template, rows);
 }
 
 /**
