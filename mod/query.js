@@ -31,6 +31,8 @@ The [SQL] query method requests a query template from the getTemplate method and
 
 The layerQuery() method must be awaited to check whether params are referenced in a role restricted JSON layer.
 
+The query method assigns and checks the dbs connection for the query template.
+
 The query is executed by the executeQuery() method.
 
 @param {req} req HTTP request.
@@ -38,6 +40,10 @@ The query is executed by the executeQuery() method.
 @property {Object} req.params Request params.
 @property {Object} [params.user] Requesting user.
 @property {Array} [user.roles] User roles.
+@property {boolean} [params.value_only] Return a single value from one row.
+@property {boolean} [params.reduce] Reduce query response to a values array.
+@property {boolean} [params.nonblocking] Execute a nonblocking query.
+@property {integer} [params.statement_timeout] Timeout for database connection.
 */
 export default async function query(req, res) {
   // Get workspace from cache.
@@ -53,6 +59,7 @@ export default async function query(req, res) {
 
   await layerQuery(req, res);
 
+  // The layerQuery method will have sent an error response.
   if (res.finished) return;
 
   // Must be run after the layerQuery method since the query template could be defined within the layer [template].
@@ -78,14 +85,14 @@ export default async function query(req, res) {
   }
 
   // The template requires user login.
-  if (!req.params.user && (template.login || template.roles)) {
+  if (template.roles && !req.params.user) {
     req.params.msg = 'login_required';
     login(req, res);
     return;
   }
 
   // The template requires the admin role for the user.
-  if (!req.params.user?.admin && template.admin) {
+  if (template.admin && !req.params.user?.admin) {
     req.params.msg = 'admin_required';
     login(req, res);
     return;
@@ -99,6 +106,29 @@ export default async function query(req, res) {
       .send('Role access denied for query template.');
     return;
   }
+
+  // Use layer dbs as fallback if template dbs is not defined.
+  template.dbs ??= req.params.layer?.dbs;
+
+  // Use workspace dbs as fallback if not explicit or from layer.
+  template.dbs ??= req.params.workspace.dbs;
+
+  // Validate that the dbs string exists as a stored connection method in dbs_connections.
+  if (!Object.hasOwn(dbs_connections, template.dbs)) {
+    res
+      .status(400)
+      .setHeader('Content-Type', 'text/plain')
+      .send('Failed to validate database connection method.');
+    return;
+  }
+
+  template.value_only ??= req.params.value_only;
+
+  template.reduce ??= req.params.reduce;
+
+  template.nonblocking ??= req.params.nonblocking;
+
+  template.statement_timeout ??= req.params.statement_timeout;
 
   logger(req.params, 'query_params');
 
@@ -129,7 +159,6 @@ The fields request param property may be provided as an array. The string should
 @property {object} req.params Request params.
 @property {object} [params.filter] JSON filter which must be turned into a SQL filter string for substitution.
 @property {array} params.SQL Substitute parameter for SQL query.
-@property {array} [params.fields] An array of string fields is provided for a layer query.
 @property {object} [params.user] Requesting user.
 @property {string} [params.layer_template] A layer can be loaded directly from a template not referenced in a locale.
 */
@@ -297,7 +326,7 @@ The method will return an Error if the fields request param contains a string va
 
 @param {req} req HTTP request.
 @property {object} req.params The request object params.
-@property {string} params.fields The request layer object [from template].
+@property {string} [params.fields] The request layer object [from template].
 @property {object} params.layer The request layer object [from template].
 @returns {Error} An error will be returned if the check fails.
 */
@@ -430,9 +459,13 @@ async function infojMap(req, res) {
 @function getQueryFromTemplate
 
 @description
-In order to prevent SQL injections queries must be build from templates stored in the workspace.templates{}.
+The method will assign the body param from the request body object in a post query.
 
-A template may have a render method which returns a query string assigned as template.template.
+The template.render method will be called to return a query string.
+
+An error will be returned if the template object does not have a template string.
+
+Varibles must be replaced or substituted in query string to prevent SQL injections.
 
 Parameter to be replaced in the SQL query string must be checked to only contain whitelisted character to prevent SQL injection.
 
@@ -446,11 +479,12 @@ An error will be returned if the substitution fails.
 @param {object} template Request template.
 @property {object} [req.body] Post request body.
 @property {object} req.params Request params.
-
-@property {object} params.filter JSON filter which must be turned into a SQL filter string for substitution.
+@property {object} [params.filter] JSON filter which must be turned into a SQL filter string for substitution.
 @property {array} params.SQL Substitute parameter for SQL query.
-@property {function} template.render Method to render template string.
+@property {string} [params.sqlFilter] A string which must be parsed as JSON to create a SQL filter string.
+@property {function} [template.render] Method to render template string.
 @property {string} template.template SQL template string.
+@returns {string} A PostgreSQL query string.
 */
 function getQueryFromTemplate(req, template) {
   if (req.body) {
@@ -471,11 +505,9 @@ function getQueryFromTemplate(req, template) {
       return new Error('Unable to parse template string.');
     }
 
-    // The sqlFilter must not override the filter set by the layer query.
     if (req.params.sqlFilter) {
-      req.params.filter =
-        req.params.filter ||
-        `AND ${sqlFilter(JSON.parse(req.params.sqlFilter), req)}`;
+      // The sqlFilter must not override the filter set by the layer query.
+      req.params.filter ??= `AND ${sqlFilter(JSON.parse(req.params.sqlFilter), req)}`;
     }
 
     // Returns -1 if ${filter} not found in template
@@ -612,14 +644,15 @@ function replaceValueParams(req, matched) {
 @async
 
 @description
-The method send a parameterised query to a database connection.
-
-The dbs for the query is determined primarily by the template. The layer.dbs is used for layer queries if the dbs on the template is not implicit. The locale.dbs is assumed as the layer.dbs if not defined in JSON layer. The workspace.dbs will be used as fallback if no template, layer, or locale dbs can be determined.
+The method sends a parameterised query to a database connection.
 
 @param {req} req HTTP request.
 @param {res} res HTTP response.
-@param {Object} template Request template.
-@property {Object} [req.params] Request params.
+@param {object} template Request template.
+@property {object} req.params Request params.
+@property {array} params.SQL Array of values to be passed with a query and substituted for variables in the database process.
+@property {boolean} [template.nonblocking] Execute a nonblocking query.
+@property {integer} [template.statement_timeout] Timeout for database connection.
 */
 async function executeQuery(req, res, template) {
   const query = await getQueryFromTemplate(req, template);
@@ -627,23 +660,8 @@ async function executeQuery(req, res, template) {
   logger(query, 'query');
 
   if (query instanceof Error) {
-    return res
-      .status(400)
-      .setHeader('Content-Type', 'text/plain')
-      .send(query.message);
-  }
-
-  // The dbs param or workspace dbs will be used as fallback if the dbs is not implicit in the template object.
-  const dbs = String(
-    template.dbs || req.params.layer?.dbs || req.params.workspace.dbs,
-  );
-
-  // Validate that the dbs string exists as a stored connection method in dbs_connections.
-  if (!Object.hasOwn(dbs_connections, dbs)) {
-    return res
-      .status(400)
-      .setHeader('Content-Type', 'text/plain')
-      .send('Failed to validate database connection method.');
+    res.status(400).setHeader('Content-Type', 'text/plain').send(query.message);
+    return;
   }
 
   // Return without executing the query if a param errs.
@@ -659,21 +677,21 @@ async function executeQuery(req, res, template) {
   }
 
   // Nonblocking queries will not wait for results but return immediately.
-  if (req.params.nonblocking || template.nonblocking) {
-    dbs_connections[dbs](
+  if (template.nonblocking) {
+    dbs_connections[template.dbs](
       query,
       req.params.SQL,
-      req.params.statement_timeout || template.statement_timeout,
+      template.statement_timeout,
     );
 
     return res.send('Non blocking request sent.');
   }
 
   // Run the query
-  const rows = await dbs_connections[dbs](
+  const rows = await dbs_connections[template.dbs](
     query,
     req.params.SQL,
-    req.params.statement_timeout || template.statement_timeout,
+    template.statement_timeout,
   );
 
   sendRows(req, res, template, rows);
@@ -687,23 +705,27 @@ The method formats the rows returned from a SQL query and sends the formated row
 
 @param {req} req HTTP request.
 @param {res} res HTTP response.
-@param {Object} template Request template.
+@param {object} template Request template.
 @param {array} rows The response from a SQL query.
+@property {boolean} [template.value_only] Return a single value from one row.
+@property {boolean} [template.reduce] Reduce query response to a values array.
 */
 function sendRows(req, res, template, rows) {
   if (rows instanceof Error) {
-    return res
+    res
       .status(500)
       .setHeader('Content-Type', 'text/plain')
       .send('Failed to query PostGIS table.');
+    return;
   }
 
   // The rows array must have a length with some row not being empty.
   if (!rows?.length) {
-    return res
+    res
       .status(202)
       .setHeader('Content-Type', 'text/plain')
       .send('No rows returned from table.');
+    return;
   }
 
   // Some row [object] must have a value which is not null.
@@ -714,26 +736,30 @@ function sendRows(req, res, template, rows) {
         Object.values(row).some((val) => val !== null),
     )
   ) {
-    return res
+    res
       .status(202)
       .setHeader('Content-Type', 'text/plain')
       .send('No row returned any value.');
+    return;
   }
 
-  if (req.params.reduce || template?.reduce) {
+  if (template.reduce) {
     // Reduce row values to an values array.
-    return res.send(rows.map((row) => Object.values(row)));
+    res.send(rows.map((row) => Object.values(row)));
+    return;
   }
 
-  if (req.params.value_only || template?.value_only) {
+  if (template.value_only) {
     const value = Object.values(rows[0])[0];
 
     // Numeric values may not be returned with the res.send() method.
     if (typeof value === 'number') {
-      return res.send(value.toString());
+      res.send(value.toString());
+      return;
     }
 
-    return res.send(value);
+    res.send(value);
+    return;
   }
 
   // Send the infoj object with values back to the client.

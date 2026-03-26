@@ -1,3 +1,10 @@
+/**
+### /workspace/templates/table_schema
+
+The table_schema query returns the table schema columns from the PostgreSQL INFORMATION_SCHEMA.
+
+@module /workspace/templates/table_schema
+*/
 export default `
 SELECT 
   column_name,

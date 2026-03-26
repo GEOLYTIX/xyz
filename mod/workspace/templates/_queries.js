@@ -1,6 +1,10 @@
 /**
- * @module /workspace/templates/queries
- */
+### /workspace/templates/queries
+
+The queries module imports core query templates and assigns access properties.
+
+@module /workspace/templates/queries
+*/
 
 // Import all templates and renders
 import cluster from './cluster.js';
@@ -152,6 +156,7 @@ export default {
   table_schema: {
     layer: true,
     template: table_schema,
+    admin: true,
   },
   wkt: {
     layer: true,
