@@ -536,6 +536,15 @@ function getQueryFromTemplate(req, template) {
       );
     }
 
+    // Check whether params.SQL contains an error.
+    if (req.params.SQL.some((param) => param instanceof Error)) {
+      const paramsArray = req.params.SQL.map((param) =>
+        param instanceof Error ? param.message : param,
+      );
+      paramsArray.unshift('Parameter validation failed.');
+      throw new Error(paramsArray);
+    }
+
     return query_template;
   } catch (err) {
     return err;
@@ -655,24 +664,12 @@ The method sends a parameterised query to a database connection.
 @property {integer} [template.statement_timeout] Timeout for database connection.
 */
 async function executeQuery(req, res, template) {
-  const query = await getQueryFromTemplate(req, template);
+  const query = getQueryFromTemplate(req, template);
 
   logger(query, 'query');
 
   if (query instanceof Error) {
     res.status(400).setHeader('Content-Type', 'text/plain').send(query.message);
-    return;
-  }
-
-  // Return without executing the query if a param errs.
-  if (req.params.SQL.some((param) => param instanceof Error)) {
-    const paramsArray = req.params.SQL.map((param) =>
-      param instanceof Error ? param.message : param,
-    );
-
-    paramsArray.unshift('Parameter validation failed.');
-
-    res.status(500).setHeader('Content-Type', 'text/plain').send(paramsArray);
     return;
   }
 
