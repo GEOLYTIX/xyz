@@ -33,7 +33,11 @@ The layerQuery() method must be awaited to check whether params are referenced i
 
 The query method assigns and checks the dbs connection for the query template.
 
-The query is executed by the executeQuery() method.
+A query string must returned from the getQueryFromTemplate() method.
+
+The query and SQL params to be substituted in the database process are send to the dbs_connection.
+
+The rows returned from the dbs_connection are then passed to the sendRows() method.
 
 @param {req} req HTTP request.
 @param {res} res HTTP response.
@@ -134,12 +138,12 @@ export default async function query(req, res) {
 
   const query = getQueryFromTemplate(req, template);
 
-  logger(query, 'query');
-
   if (query instanceof Error) {
     res.status(400).setHeader('Content-Type', 'text/plain').send(query.message);
     return;
   }
+
+  logger(query, 'query');
 
   // Nonblocking queries will not wait for results but return immediately.
   if (template.nonblocking) {
@@ -159,7 +163,7 @@ export default async function query(req, res) {
     template.statement_timeout,
   );
 
-  sendRows(req, res, template, rows);
+  sendRows(res, template, rows);
 }
 
 /**
@@ -182,6 +186,7 @@ The fields request param property may be provided as an array. The string should
 @property {object} req.params Request params.
 @property {object} [params.filter] JSON filter which must be turned into a SQL filter string for substitution.
 @property {array} params.SQL Substitute parameter for SQL query.
+@property {string} [params.viewport] Viewport string to be split into an array to create a SQL viewport.
 @property {object} [params.user] Requesting user.
 @property {string} [params.layer_template] A layer can be loaded directly from a template not referenced in a locale.
 */
@@ -260,15 +265,10 @@ async function layerQuery(req, res) {
         ${req.params.geom})`;
   }
 
-  const checkFieldsParamResponse = checkFieldsParam(req);
+  checkFieldsParam(req, res);
 
-  if (checkFieldsParamResponse instanceof Error) {
-    res
-      .status(400)
-      .setHeader('Content-Type', 'text/plain')
-      .send(checkFieldsParamResponse.message);
-    return;
-  }
+  // The checkFieldsParam method will have sent an error response.
+  if (res.finished) return;
 
   await infojMap(req, res);
 }
@@ -348,12 +348,13 @@ Field values may not be referenced in the layer object from role restricted temp
 The method will return an Error if the fields request param contains a string value which is not referenced in a field prooperty in the layer object.
 
 @param {req} req HTTP request.
+@param {res} res HTTP response.
 @property {object} req.params The request object params.
 @property {string} [params.fields] The request layer object [from template].
 @property {object} params.layer The request layer object [from template].
 @returns {Error} An error will be returned if the check fails.
 */
-async function checkFieldsParam(req) {
+async function checkFieldsParam(req, res) {
   if (!req.params.fields) return;
 
   const layerFields = new Set();
@@ -368,7 +369,8 @@ async function checkFieldsParam(req) {
         `${field} field not accessible on ${req.params.layer.key} layer`,
       );
       console.error(err);
-      return err;
+      res.status(400).setHeader('Content-Type', 'text/plain').send(err.message);
+      return;
     }
 
     let value = field;
@@ -677,14 +679,13 @@ function replaceValueParams(req, matched) {
 @description
 The method formats the rows returned from a SQL query and sends the formated rows through the HTTP response object.
 
-@param {req} req HTTP request.
 @param {res} res HTTP response.
 @param {object} template Request template.
 @param {array} rows The response from a SQL query.
 @property {boolean} [template.value_only] Return a single value from one row.
 @property {boolean} [template.reduce] Reduce query response to a values array.
 */
-function sendRows(req, res, template, rows) {
+function sendRows(res, template, rows) {
   if (rows instanceof Error) {
     res
       .status(500)
