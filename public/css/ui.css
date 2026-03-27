@@ -431,12 +431,11 @@ dialog.alert-confirm {
   &:focus {
     outline: none;
   }
-  h4 {
+  h2 {
     padding: 0.5em 1em;
-    background-color: var(--color-primary);
-    border-bottom: solid 2px var(--color-border);
-    color: var(--color-font-contrast);
-    width: 100%;
+    display: flex;
+    gap: 0.2em;
+    align-items: center;
   }
   .content {
     padding: 1em;
@@ -444,19 +443,16 @@ dialog.alert-confirm {
   p {
     white-space: pre;
     text-wrap: pretty;
-    text-align: center;
     margin: 0 1em 1em;
   }
   .buttons {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-gap: 0.2em;
+    margin-top: 2em;
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5em;
   }
   button {
-    float: right;
-    font-size: 0.9em;
-    color: var(--color-primary);
-    z-index: 1005;
+    width: 100px;
   }
 }
 @media only screen and (max-width: 768px) {
