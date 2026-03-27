@@ -132,6 +132,9 @@ button {
   &:hover {
     cursor: pointer;
   }
+  &:active {
+    scale: 0.96;
+  }
   &:disabled {
     opacity: 0.3;
     &:hover {
@@ -425,6 +428,7 @@ dialog.alert-confirm {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  padding: 0.5em;
   &::-webkit-scrollbar {
     display: none;
   }
@@ -432,7 +436,6 @@ dialog.alert-confirm {
     outline: none;
   }
   h2 {
-    padding: 0.5em 1em;
     display: flex;
     gap: 0.2em;
     align-items: center;

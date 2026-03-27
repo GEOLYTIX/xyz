@@ -6,6 +6,7 @@ dialog.alert-confirm {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+  padding: 0.5em;
 
   &::-webkit-scrollbar {
     display: none;
@@ -16,7 +17,6 @@ dialog.alert-confirm {
   }
 
   h2 {
-    padding: 0.5em 1em;
     display: flex;
     gap: 0.2em;
     align-items: center;
@@ -35,8 +35,8 @@ dialog.alert-confirm {
   .buttons {
     margin-top: 2em;
     display: flex;
-    justify-content: flex-end; 
-    gap: 0.5em; 
+    justify-content: flex-end;
+    gap: 0.5em;
   }
 
   button {
