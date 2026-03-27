@@ -386,7 +386,7 @@ async function checkFieldsParam(req, res) {
 }
 
 /**
-@function checkFieldsParam
+@function objPropValueSet
 
 @description
 The recursive method parses all properties in an object and calls itself if the property value is an object.
