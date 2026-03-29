@@ -455,7 +455,7 @@ dialog.alert-confirm {
     gap: 0.5em;
   }
   button {
-    width: 100px;
+    min-width: 100px;
   }
 }
 @media only screen and (max-width: 768px) {
