@@ -1,114 +1,103 @@
-const aclFn = codi.mock.fn();
+import { createMocks } from 'node-mocks-http';
+import { describe, expect, it, vi } from 'vitest';
 
-const mockacl = codi.mock.module('../../../mod/user/acl.js', {
-  defaultExport: aclFn,
+const aclFn = vi.fn();
+
+vi.mock('../../../mod/user/acl.js', () => ({
+  default: (...args) => aclFn(...args),
+}));
+
+describe('list', async () => {
+  const { default: user_list } = await import('../../../mod/user/list.js');
+
+  const user = {
+    api: true,
+    verified: true,
+    approved: true,
+    blocked: false,
+    email: 'test@email.com',
+    roles: ['test'],
+  };
+
+  it('user missing', async () => {
+    const { req, res } = createMocks({
+      params: {
+        user: null,
+      },
+    });
+
+    const userList = await user_list(req, res);
+
+    expect(userList.message == 'login_required').toBeTruthy();
+  });
+
+  it('admin rights not granted', async () => {
+    const { req, res } = createMocks({
+      params: {
+        user,
+      },
+    });
+
+    const userList = await user_list(req, res);
+
+    expect(userList.message == 'admin_required').toBeTruthy();
+  });
+
+  it('acl throws an error', async () => {
+    aclFn.mockImplementation(async () => {
+      return new Error('aclFailed');
+    });
+
+    user.admin = true;
+
+    const { req, res } = createMocks({
+      params: {
+        user: user,
+      },
+    });
+
+    await user_list(req, res);
+
+    expect(res.statusCode).toEqual(500);
+    expect(res._getData()).toEqual('Failed to access ACL.');
+  });
+
+  it('no users found in the acl', async () => {
+    aclFn.mockImplementation(async () => {
+      return [];
+    });
+
+    user.admin = true;
+
+    const { req, res } = createMocks({
+      params: {
+        user: user,
+      },
+    });
+
+    await user_list(req, res);
+
+    expect(res.statusCode).toEqual(202);
+    expect(res._getData()).toEqual('No rows returned from table.');
+  });
+
+  it('return users', async () => {
+    aclFn.mockImplementation(() => {
+      return ['user1', 'user2', 'user3'];
+    });
+
+    user.admin = true;
+
+    const { req, res } = createMocks({
+      params: {
+        user: user,
+      },
+    });
+
+    await user_list(req, res);
+
+    const users = await res._getData();
+
+    expect(users).toEqual(['user1', 'user2', 'user3']);
+  });
 });
-
-await codi.describe(
-  { name: 'list', id: 'user_list', parentId: 'user' },
-  async () => {
-    const { default: user_list } = await import('../../../mod/user/list.js');
-
-    const user = {
-      api: true,
-      verified: true,
-      approved: true,
-      blocked: false,
-      email: 'test@email.com',
-      roles: ['test'],
-    };
-
-    codi.it({ name: 'user missing', parentId: 'user_list' }, async () => {
-      const { req, res } = codi.mockHttp.createMocks({
-        params: {
-          user: null,
-        },
-      });
-
-      const userList = await user_list(req, res);
-
-      codi.assertTrue(userList.message == 'login_required');
-    });
-
-    codi.it(
-      { name: 'admin rights not granted', parentId: 'user_list' },
-      async () => {
-        const { req, res } = codi.mockHttp.createMocks({
-          params: {
-            user,
-          },
-        });
-
-        const userList = await user_list(req, res);
-
-        codi.assertTrue(userList.message == 'admin_required');
-      },
-    );
-
-    codi.it(
-      { name: 'acl throws an error', parentId: 'user_list' },
-      async () => {
-        aclFn.mock.mockImplementation(async () => {
-          return new Error('aclFailed');
-        });
-
-        user.admin = true;
-
-        const { req, res } = codi.mockHttp.createMocks({
-          params: {
-            user: user,
-          },
-        });
-
-        await user_list(req, res);
-
-        codi.assertEqual(res.statusCode, 500);
-        codi.assertEqual(res._getData(), 'Failed to access ACL.');
-      },
-    );
-
-    codi.it(
-      { name: 'no users found in the acl', parentId: 'user_list' },
-      async () => {
-        aclFn.mock.mockImplementation(async () => {
-          return [];
-        });
-
-        user.admin = true;
-
-        const { req, res } = codi.mockHttp.createMocks({
-          params: {
-            user: user,
-          },
-        });
-
-        await user_list(req, res);
-
-        codi.assertEqual(res.statusCode, 202);
-        codi.assertEqual(res._getData(), 'No rows returned from table.');
-      },
-    );
-
-    codi.it({ name: 'return users', parentId: 'user_list' }, async () => {
-      aclFn.mock.mockImplementation(() => {
-        return ['user1', 'user2', 'user3'];
-      });
-
-      user.admin = true;
-
-      const { req, res } = codi.mockHttp.createMocks({
-        params: {
-          user: user,
-        },
-      });
-
-      await user_list(req, res);
-
-      const users = await res._getData();
-
-      codi.assertEqual(users, ['user1', 'user2', 'user3']);
-    });
-  },
-);
-
-mockacl.restore();

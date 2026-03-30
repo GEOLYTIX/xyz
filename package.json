@@ -11,8 +11,11 @@
     "neverBuiltDependencies": []
   },
   "scripts": {
-    "test": "node --experimental-test-module-mocks node_modules/codi-test-framework/cli.js tests",
-    "test-watch": "node --watch-path=. --experimental-test-module-mocks node_modules/codi-test-framework/cli.js tests --quiet",
+    "dev": "pnpm exec concurrently --names \"express,vite\" --prefix-colors \"blue,green\" \"node express.js\" \"pnpm exec vite\"",
+    "dev:vite": "pnpm exec vite",
+    "dev:express": "node express.js",
+    "test": "vitest run",
+    "test-watch": "vitest",
     "_build": "node esbuild.config.mjs",
     "ui_css": "pnpm exec esbuild --bundle public/css/_ui.css --outfile=public/css/ui.css --external:*.woff2",
     "mapp_css": "pnpm exec esbuild --bundle public/css/_mapp.css --outfile=public/css/mapp.css",
@@ -39,12 +42,15 @@
   "devDependencies": {
     "@biomejs/biome": "2.2.6",
     "clean-jsdoc-theme": "^4.3.0",
-    "codi-test-framework": "1.0.37",
     "concurrently": "^9.1.0",
     "cookie-parser": "^1.4.5",
     "esbuild": "^0.25.0",
     "express": "^5.1.0",
     "express-rate-limit": "^7.5.0",
-    "nodemon": "^3.1.7"
+    "node-mocks-http": "^1.17.2",
+    "nodemon": "^3.1.7",
+    "undici": "^7.24.6",
+    "vite": "^8.0.0",
+    "vitest": "^4.1.2"
   }
 }

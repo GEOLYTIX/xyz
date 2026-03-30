@@ -1,15 +1,7 @@
-/**
- * ## pluginsTest{}
- * The plugins test modules are exported as an object to be used in the local.test.mjs module in the browser tests
- * @module plugins
- */
+import { describe, it } from 'vitest';
 
-/**
- * @typedef {Object} pluginsTest
- * @property {linkButtonTest} linkButtonTest
- */
-import { linkButtonTest } from './link_button.test.mjs';
-
-export const pluginsTest = {
-  linkButtonTest,
-};
+// Plugin tests are discovered automatically by vitest.
+// Browser-only plugin tests (link_button) are excluded from server-side test runs.
+describe('plugins', () => {
+  it('placeholder', () => {});
+});

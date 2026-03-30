@@ -1,128 +1,109 @@
+import { createMocks } from 'node-mocks-http';
+import { MockAgent, setGlobalDispatcher } from 'undici';
+import { describe, expect, it, vi } from 'vitest';
+
 globalThis.xyzEnv = {};
 
-const mockedCloudfrontFn = codi.mock.fn();
+const mockedCloudfrontFn = vi.fn();
 
-const cloudfrontSign = codi.mock.module('../../../mod/sign/cloudfront.js', {
-  defaultExport: mockedCloudfrontFn,
-});
+vi.mock('../../../mod/sign/cloudfront.js', () => ({
+  default: (...args) => mockedCloudfrontFn(...args),
+}));
 
-const mockAgent = new codi.mockHttp.MockAgent();
-codi.mockHttp.setGlobalDispatcher(mockAgent);
+const mockAgent = new MockAgent();
+setGlobalDispatcher(mockAgent);
 
-await codi.describe(
-  {
-    name: 'cloudfront:',
-    id: 'provider_cloudfront',
-    parentId: 'provider',
-  },
-  async () => {
-    const { default: cloudfront } = await import(
-      '../../../mod/provider/cloudfront.js'
-    );
-    await codi.it(
-      {
-        name: 'Should handle cloudfront signer error',
-        parentId: 'provider_cloudfront',
-      },
-      async () => {
-        mockedCloudfrontFn.mock.mockImplementation(
-          function cloudfront_signer() {
-            return new Error('Cloudfront found an error');
-          },
-        );
-
-        const { req } = codi.mockHttp.createMocks();
-
-        const result = await cloudfront(req);
-
-        codi.assertTrue(
-          result instanceof Error,
-          'We expect to see an error returned',
-        );
-      },
-    );
-
-    await codi.describe(
-      {
-        name: 'Fetches signedURL',
-        id: 'provider_cloudfront_fetch',
-        parentId: 'provider_cloudfront',
-      },
-      async () => {
-        const testCases = {
-          error: {
-            status: 300,
-            body: 'test string',
-            params: {
-              url: 'http://localhost:3000/thing1.json',
-              path: '/thing1.json',
-            },
-            expected: new Error(),
-          },
-          json: {
-            status: 200,
-            body: {
-              objectKey: 'example-image.jpg',
-              bucketName: 'my-aws-bucket',
-              region: 'us-east-1',
-              expires: '2023-12-31T23:59:59Z',
-              headers: {
-                'Content-Type': 'image/jpeg',
-                'Cache-Control': 'max-age=3600',
-              },
-            },
-            params: {
-              url: 'http://localhost:3000/proper.json',
-              path: '/proper.json',
-            },
-            expected: {
-              objectKey: 'example-image.jpg',
-              bucketName: 'my-aws-bucket',
-              region: 'us-east-1',
-              expires: '2023-12-31T23:59:59Z',
-              headers: {
-                'Content-Type': 'image/jpeg',
-                'Cache-Control': 'max-age=3600',
-              },
-            },
-          },
-        };
-
-        const mockPool = mockAgent.get(new RegExp('http://localhost:3000'));
-
-        Object.keys(testCases).forEach(async (test) => {
-          mockedCloudfrontFn.mock.mockImplementation(
-            function cloudfront_signer() {
-              return testCases[test].params.url;
-            },
-          );
-
-          const { req } = codi.mockHttp.createMocks(
-            {
-              params: {
-                url: testCases[test].params.url,
-                body: testCases[test].body,
-              },
-            },
-            {
-              locals: {
-                statusCode: testCases[test].status,
-              },
-            },
-          );
-
-          mockPool
-            .intercept({ path: testCases[test].params.path })
-            .reply(testCases[test].status, testCases[test].body);
-
-          const results = await cloudfront(req);
-
-          codi.assertEqual(results, testCases[test].expected);
-        });
-      },
-    );
-  },
+const { default: cloudfront } = await import(
+  '../../../mod/provider/cloudfront.js'
 );
 
-cloudfrontSign.restore();
-codi.mock.reset();
+describe('cloudfront:', () => {
+  it('Should handle cloudfront signer error', async () => {
+    mockedCloudfrontFn.mockImplementation(() => {
+      return new Error('Cloudfront found an error');
+    });
+
+    const { req } = createMocks();
+
+    const result = await cloudfront(req);
+
+    expect(result).toBeInstanceOf(Error);
+  });
+
+  describe('Fetches signedURL', () => {
+    const testCases = {
+      error: {
+        status: 300,
+        body: 'test string',
+        params: {
+          url: 'http://localhost:3000/thing1.json',
+          path: '/thing1.json',
+        },
+        expected: new Error(),
+      },
+      json: {
+        status: 200,
+        body: {
+          objectKey: 'example-image.jpg',
+          bucketName: 'my-aws-bucket',
+          region: 'us-east-1',
+          expires: '2023-12-31T23:59:59Z',
+          headers: {
+            'Content-Type': 'image/jpeg',
+            'Cache-Control': 'max-age=3600',
+          },
+        },
+        params: {
+          url: 'http://localhost:3000/proper.json',
+          path: '/proper.json',
+        },
+        expected: {
+          objectKey: 'example-image.jpg',
+          bucketName: 'my-aws-bucket',
+          region: 'us-east-1',
+          expires: '2023-12-31T23:59:59Z',
+          headers: {
+            'Content-Type': 'image/jpeg',
+            'Cache-Control': 'max-age=3600',
+          },
+        },
+      },
+    };
+
+    const mockPool = mockAgent.get(new RegExp('http://localhost:3000'));
+
+    for (const test of Object.keys(testCases)) {
+      it(`${test}`, async () => {
+        mockedCloudfrontFn.mockImplementation(() => {
+          return testCases[test].params.url;
+        });
+
+        const { req } = createMocks(
+          {
+            params: {
+              url: testCases[test].params.url,
+              body: testCases[test].body,
+            },
+          },
+          {
+            locals: {
+              statusCode: testCases[test].status,
+            },
+          },
+        );
+
+        mockPool
+          .intercept({ path: testCases[test].params.path })
+          .reply(testCases[test].status, testCases[test].body);
+
+        const results = await cloudfront(req);
+
+        if (testCases[test].expected instanceof Error) {
+          expect(results).toBeInstanceOf(Error);
+        } else {
+          expect(results).toEqual(testCases[test].expected);
+        }
+      });
+    }
+  });
+});

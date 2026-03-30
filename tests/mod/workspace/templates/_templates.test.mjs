@@ -1,5 +1,8 @@
-import { layerExtentTests } from './layer_extent.test.mjs';
+import { describe, it } from 'vitest';
 
-await codi.describe({ name: 'templates:', id: 'templates' }, () => {
-  layerExtentTests();
+// Tests are now defined directly in their respective test files
+// (layer_extent.test.mjs, sql_table_insert.test.mjs)
+// and will be discovered automatically by vitest.
+describe('templates', () => {
+  it('placeholder', () => {});
 });
