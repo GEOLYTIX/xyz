@@ -6,6 +6,9 @@ export default defineConfig({
     exclude: ['tests/lib/**', 'tests/browser/**', 'tests/_mapp.test.mjs'],
     setupFiles: ['tests/setup.mjs'],
     testTimeout: 10000,
-    fileParallelism: false,
+    fileParallelism: true,
+    coverage: {
+      provider: 'v8', // or 'istanbul'
+    },
   },
 });
