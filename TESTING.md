@@ -6,13 +6,43 @@ XYZ/MAPP testing is split into 3 sections:
 - Browser based testing of modules bundled into the Mapp library.
 - Integrity tests for workspaces and XYZ process environments.
 
+## Migrating from Codi to Vitest
+
+The server-side (CLI) test suite has been migrated from the [codi-test-framework](https://www.npmjs.com/package/codi-test-framework) to [Vitest](https://vitest.dev/).
+
+Codi was originally used for both browser and server-side tests. It provided `describe`, `it`, `assertTrue`, `assertEqual`, and similar functions, loaded at runtime via ESM from `https://esm.sh/codi-test-framework`. This worked well in the browser where the full `mapp` global and DOM are available, but was a poor fit for server-side unit testing:
+
+- Tests that called `mapp.utils.xhr(...)` could not run without a live Express server and browser environment.
+- There was no mocking system, making it impossible to isolate modules from their dependencies (database connections, file system, external APIs).
+- Test discovery was manual — each file had to be explicitly wired up.
+- There was no coverage reporting, watch mode, or CI integration out of the box.
+
+Vitest solves all of these problems. It is a Vite-native test framework with built-in mocking (`vi.mock`, `vi.fn`), snapshot testing, code coverage (v8 provider), watch mode, parallel execution, and first-class ESM support — which is important since the XYZ codebase is `"type": "module"` throughout.
+
+> [!NOTE] Browser tests (`tests/lib/` and `tests/browser/`) still use Codi because they run inside the application in a real browser with access to the DOM, OpenLayers map, and the `mapp` global. These are loaded by the [Test Plugin](https://github.com/GEOLYTIX/xyz/blob/main/lib/plugins/test.mjs) and are not part of the Vitest pipeline.
+
+### What changed
+
+Previously, `tests/mod/query.test.mjs` contained a `describe.skip()` block with 5 tests that depended on `mapp.utils.xhr()` — a browser-only function. These tests could never run in Node.js and were effectively dead code in the CI pipeline.
+
+The file has been rewritten as 19 proper server-side unit tests that exercise `mod/query.js` directly by:
+
+- Mocking `mod/utils/dbs.js` with a Proxy so no real PostgreSQL connection is needed.
+- Mocking `mod/user/login.js` to return a 401 with the message key, avoiding view template rendering.
+- Using a dedicated `tests/assets/query_workspace.json` fixture loaded via `checkWorkspaceCache(true)`.
+- Using `createMocks` from `node-mocks-http` to simulate HTTP request/response objects.
+
+The tests now cover template resolution errors, auth checks (login, admin, roles), query execution (single/multiple rows, empty results, database errors), response formatting (reduce, value_only), parameter substitution and SQL injection rejection, invalid database connections, and nonblocking queries.
+
 ## CLI [Command Line Interface] tests
 
 Command Line Interface tests are typically executed on localhost for a clone of the XYZ repository to check whether XYZ API modules under development execute as outlined in their documentation. These tests should also be run as an action on any pull request to ensure the structural integrity of XYZ API endpoints.
 
 CLI tests use [Vitest](https://vitest.dev/) as the test framework. Vitest must be installed into the node_modules with `pnpm install`.
 
-The CLI tests can be executed with the following bash command.
+### Running tests
+
+Run the full test suite:
 
 ```bash
 pnpm test
@@ -20,11 +50,33 @@ pnpm test
 
 This runs `vitest run` as defined in the package.json `test` script.
 
-The "test-watch" script watches the test directory and will re-run affected tests on change events.
+Watch mode re-runs affected tests on file changes:
 
 ```bash
 pnpm test-watch
 ```
+
+Run a single test file:
+
+```bash
+pnpm exec vitest run tests/mod/query.test.mjs
+```
+
+Run tests matching a name pattern:
+
+```bash
+pnpm exec vitest run -t "should return 400"
+```
+
+### Coverage
+
+Generate a coverage report with the v8 provider:
+
+```bash
+pnpm coverage
+```
+
+This runs `vitest run --coverage` and prints a table showing statement, branch, function, and line coverage for every file under `mod/`.
 
 ### Configuration
 
@@ -39,12 +91,31 @@ export default defineConfig({
     exclude: ['tests/lib/**', 'tests/browser/**', 'tests/_mapp.test.mjs'],
     setupFiles: ['tests/setup.mjs'],
     testTimeout: 10000,
-    fileParallelism: false,
+    fileParallelism: true,
+    coverage: {
+      provider: 'v8',
+    },
   },
 });
 ```
 
-The `tests/setup.mjs` file ensures `globalThis.xyzEnv` exists before any test module loads.
+Key points:
+
+- Only `tests/mod/**` and `tests/plugins/**` are included. Browser tests (`tests/lib/**`, `tests/browser/**`) are excluded — they use Codi and run in the browser.
+- `tests/setup.mjs` ensures `globalThis.xyzEnv` exists before any test module loads.
+- Tests run in parallel across files with a 10-second timeout per test.
+
+### CI Pipeline
+
+Tests run automatically on every push and pull request to `main`, `major`, `minor`, and `patch` branches via the GitHub Actions workflow in `.github/workflows/unit_tests.yml`:
+
+```yaml
+- name: Install Dependencies
+  run: pnpm install
+
+- name: Run tests
+  run: node --run test
+```
 
 ### Debugging tests
 
@@ -262,6 +333,50 @@ Vitest automatically discovers tests matching the glob patterns in `vitest.confi
 5. Check file extensions are `.mjs`
 6. Verify import/export syntax is ESM compatible
 
+## Current Coverage
+
+Overall: **61.9% statements, 55.3% branches, 65.4% functions, 62.6% lines**
+
+### Well-covered modules (>80% statements)
+
+| Module | Stmts | Branch |
+|---|---|---|
+| `mod/utils/merge.js` | 100% | 96% |
+| `mod/utils/roles.js` | 96% | 93% |
+| `mod/user/token.js` | 100% | 100% |
+| `mod/user/list.js` | 100% | 85% |
+| `mod/user/log.js` | 94% | 94% |
+| `mod/user/auth.js` | 85% | 82% |
+| `mod/user/cookie.js` | 85% | 81% |
+| `mod/user/delete.js` | 89% | 86% |
+| `mod/workspace/cache.js` | 89% | 80% |
+| `mod/workspace/getLocale.js` | 95% | 93% |
+| `mod/workspace/mergeTemplates.js` | 88% | 87% |
+| `mod/provider/cloudfront.js` | 92% | 90% |
+
+### Modules that need tests
+
+| Module | Stmts | Priority |
+|---|---|---|
+| `mod/view.js` | 0% | High |
+| `mod/user/login.js` | 3% | High |
+| `mod/user/fromACL.js` | 13% | High |
+| `mod/utils/redirect.js` | 0% | Medium |
+| `mod/utils/resend.js` | 11% | Medium |
+| `mod/utils/logger.js` | 29% | Medium |
+| `mod/utils/envReplace.js` | 44% | Medium |
+| `mod/provider/getFrom.js` | 53% | Medium |
+| `mod/sign/_sign.js` | 52% | Medium |
+| `mod/workspace/_workspace.js` | 52% | Medium |
+| `mod/query.js` | 51% | Medium |
+| `mod/user/register.js` | 59% | Medium |
+
+### Query template render functions (0% coverage)
+
+The 28 query template files under `mod/workspace/templates/` are almost entirely at 0% coverage. Only `layer_extent.js` and `sql_table_insert.js` have tests. The remaining 26 templates are pure functions or string constants that take params and return SQL. They are the easiest modules to unit test — import the render function directly and assert on the generated SQL string. No mocking is required.
+
+Templates at 0%: `cluster`, `cluster_hex`, `geojson`, `mvt`, `mvt_geom`, `wkt`, `location_get`, `location_new`, `location_update`, `location_delete`, `locations_delete`, `location_field_value`, `location_count`, `histogram`, `infotip`, `get_nnearest`, `get_random_location`, `distinct_values`, `distinct_values_json`, `field_max`, `field_min`, `field_minmax`, `field_stats`, `gaz_query`, `st_distance_ab`, `st_distance_ab_multiple`, `st_intersects_ab`, `st_intersects_count`.
+
 ## Browser tests for Mapp library modules
 
 Browser tests are designed for the browser environment with full access to:
@@ -270,6 +385,8 @@ Browser tests are designed for the browser environment with full access to:
 - Mapp library
 - Mapview for loaded application
 - No mocking required for module imports
+
+Browser tests still use [Codi](https://www.npmjs.com/package/codi-test-framework), which is loaded at runtime via ESM in the [Test Plugin](https://github.com/GEOLYTIX/xyz/blob/main/lib/plugins/test.mjs). Codi provides `describe`, `it`, `assertTrue`, `assertEqual`, and related assertion functions designed for in-browser execution.
 
 ### Running Browser Tests
 
