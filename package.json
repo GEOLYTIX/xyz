@@ -13,8 +13,8 @@
   "scripts": {
     "dev": "pnpm exec concurrently --names \"express,vite\" --prefix-colors \"blue,green\" \"node express.js\" \"pnpm exec vite\"",
     "test": "vitest run",
-    "test-watch": "vitest",
-    "coverage": "vitest run --coverage",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage",
     "_build": "node esbuild.config.mjs",
     "ui_css": "pnpm exec esbuild --bundle public/css/_ui.css --outfile=public/css/ui.css --external:*.woff2",
     "mapp_css": "pnpm exec esbuild --bundle public/css/_mapp.css --outfile=public/css/mapp.css",

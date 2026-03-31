@@ -17,6 +17,7 @@ node_modules/*
 .pnpm-store/
 
 resources
+coverage
 public/js/*
 public/workspaces/*
 public/js/plugins/*
