@@ -1,4 +1,4 @@
-name: Codi unit tests
+name: Unit Tests
 permissions:
   contents: read
 
