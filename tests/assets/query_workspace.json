@@ -1,0 +1,52 @@
+{
+  "dbs": "NEON",
+  "templates": {
+    "login_required_query": {
+      "template": "SELECT 1",
+      "login": true
+    },
+    "admin_only_query": {
+      "template": "SELECT 1",
+      "admin": true
+    },
+    "role_restricted_query": {
+      "template": "SELECT 'ok' as result",
+      "roles": {
+        "analyst": true
+      }
+    },
+    "simple_select": {
+      "template": "SELECT 'hello' as greeting"
+    },
+    "reduce_query": {
+      "template": "SELECT name, value FROM ${table} WHERE true ${filter}",
+      "reduce": true
+    },
+    "value_only_query": {
+      "template": "SELECT count(*) as cnt FROM ${table}",
+      "value_only": true
+    },
+    "param_query": {
+      "template": "SELECT ${field} FROM ${table} WHERE name = %{name}"
+    },
+    "injection_query": {
+      "template": "SELECT ${field} FROM ${table}"
+    },
+    "bogus_dbs_query": {
+      "template": "SELECT 1",
+      "dbs": "BOGUS_DB"
+    },
+    "nonblocking_query": {
+      "template": "INSERT INTO log (msg) VALUES (%{msg})",
+      "nonblocking": true
+    }
+  },
+  "locale": {
+    "layers": {}
+  },
+  "locales": {
+    "locale": {
+      "layers": {}
+    }
+  }
+}

@@ -1,67 +1,406 @@
-import { describe, expect, it } from 'vitest';
+import { createMocks } from 'node-mocks-http';
+import {
+  afterAll,
+  beforeAll,
+  beforeEach,
+  describe,
+  expect,
+  it,
+  vi,
+} from 'vitest';
 
 /**
  * ## Query Tests
  * @module mod/query
  */
 
-/**
- * Tests for the query API endpoint.
- * These tests require a running server and the browser-side `mapp` global.
- */
-// This test requires a running server and the browser-side `mapp` global.
-// It is skipped in server-side vitest runs.
-describe.skip('Query: Testing Query API', () => {
-  /**
-   * @description Testing Query defined on infoj entry
-   */
-  it('Testing Query defined on infoj entry', async () => {
-    const expected_result = [1, 2, 5, 3, 4];
-    const results = await mapp.utils.xhr(`/test/api/query?template=data_array`);
-    expect(results).toEqual(expected_result);
-  });
+// Mock dbs_connections so no real database is required.
+const mockDbQuery = vi.fn();
 
-  /**
-   * @description Testing Module defined in templates
-   */
-  it('Testing Module defined in templates', async () => {
-    const expected_result = {
-      bar: 'foo',
+vi.mock('../../mod/utils/dbs.js', () => ({
+  default: new Proxy(
+    {},
+    {
+      get(target, prop) {
+        if (prop === '__esModule') return true;
+        return mockDbQuery;
+      },
+      has(target, prop) {
+        return prop === 'NEON';
+      },
+      getOwnPropertyDescriptor(target, prop) {
+        // Object.hasOwn() uses getOwnPropertyDescriptor internally.
+        if (prop === 'NEON') {
+          return { configurable: true, enumerable: true, value: mockDbQuery };
+        }
+        return undefined;
+      },
+    },
+  ),
+}));
+
+// Mock the login module to prevent view rendering side effects.
+vi.mock('../../mod/user/login.js', () => ({
+  default: (req, res) => {
+    res.status(401).send(req.params.msg);
+  },
+}));
+
+// Mock the logger to suppress output during tests.
+vi.mock('../../mod/utils/logger.js', () => ({
+  default: () => {},
+}));
+
+const { default: query } = await import('../../mod/query.js');
+const { default: checkWorkspaceCache } = await import(
+  '../../mod/workspace/cache.js'
+);
+
+// Suppress console.error from getTemplate for missing template tests.
+const originalConsoleError = console.error;
+
+describe('Query: Testing Query API', () => {
+  beforeAll(async () => {
+    console.error = () => {};
+
+    globalThis.xyzEnv = {
+      TITLE: 'QUERY TEST',
+      WORKSPACE: 'file:./tests/assets/query_workspace.json',
     };
-    const results = await mapp.utils.xhr(
-      `/test/api/query?template=module_test`,
-    );
-    expect(results).toEqual(expected_result);
+
+    await checkWorkspaceCache(true);
   });
 
-  /**
-   * @description Testing a query with a bogus dbs string via the req params
-   */
-  it('Testing a query with a bogus dbs string via the req params', async () => {
-    const expected_result = {
-      bar: 'foo',
-    };
-    const results = await mapp.utils.xhr(
-      `/test/api/query?template=module_test&dbs=bogus`,
-    );
-    expect(results).toEqual(expected_result);
+  afterAll(() => {
+    console.error = originalConsoleError;
   });
 
-  /**
-   * @description Testing a query with a bogus dbs on the template
-   */
-  it('Testing a query with a bogus dbs on the template', async () => {
-    const results = await mapp.utils.xhr(
-      `/test/api/query?template=bogus_data_array`,
-    );
-    expect(results instanceof Error).toBeTruthy();
+  beforeEach(() => {
+    mockDbQuery.mockReset();
   });
 
-  /**
-   * @description Testing a query with a bogus dbs on the template (cluster)
-   */
-  it('Testing a query with a bogus dbs on the template (cluster)', async () => {
-    const results = await mapp.utils.xhr(`/test/api/query?template=cluster`);
-    expect(results instanceof Error).toBeTruthy();
+  describe('Template resolution', () => {
+    it('should return 400 for a non-existent template', async () => {
+      const { req, res } = createMocks({
+        params: {
+          template: 'non_existent_template',
+        },
+      });
+
+      await query(req, res);
+
+      // A missing template cannot be parsed, resulting in a 400 from executeQuery.
+      expect(res.statusCode).toBe(400);
+    });
+
+    it('should return 400 when a layer template is used without a layer param', async () => {
+      const { req, res } = createMocks({
+        params: {
+          template: 'location_get',
+        },
+      });
+
+      await query(req, res);
+
+      expect(res.statusCode).toBe(400);
+      expect(res._getData()).toContain(
+        'location_get query requires a valid layer request parameter',
+      );
+    });
+  });
+
+  describe('Auth checks', () => {
+    it('should require login when template has login flag and no user', async () => {
+      const { req, res } = createMocks({
+        params: {
+          template: 'login_required_query',
+        },
+      });
+
+      await query(req, res);
+
+      expect(res.statusCode).toBe(401);
+      expect(res._getData()).toBe('login_required');
+    });
+
+    it('should require admin when template has admin flag and user is not admin', async () => {
+      const { req, res } = createMocks({
+        params: {
+          template: 'admin_only_query',
+          user: { admin: false, roles: [] },
+        },
+      });
+
+      await query(req, res);
+
+      expect(res.statusCode).toBe(401);
+      expect(res._getData()).toBe('admin_required');
+    });
+
+    it('should return 403 when user lacks required roles', async () => {
+      const { req, res } = createMocks({
+        params: {
+          template: 'role_restricted_query',
+          user: { roles: ['viewer'] },
+        },
+      });
+
+      await query(req, res);
+
+      expect(res.statusCode).toBe(403);
+      expect(res._getData()).toBe('Role access denied for query template.');
+    });
+
+    it('should allow access when user has required role', async () => {
+      mockDbQuery.mockResolvedValueOnce([{ result: 'ok' }]);
+
+      const { req, res } = createMocks({
+        params: {
+          template: 'role_restricted_query',
+          user: { roles: ['analyst'] },
+        },
+      });
+
+      await query(req, res);
+
+      expect(mockDbQuery).toHaveBeenCalled();
+      expect(res.statusCode).toBe(200);
+      expect(res._getData()).toEqual({ result: 'ok' });
+    });
+  });
+
+  describe('Query execution', () => {
+    it('should execute a simple query and return a single row', async () => {
+      mockDbQuery.mockResolvedValueOnce([{ greeting: 'hello' }]);
+
+      const { req, res } = createMocks({
+        params: {
+          template: 'simple_select',
+        },
+      });
+
+      await query(req, res);
+
+      expect(mockDbQuery).toHaveBeenCalled();
+      expect(res.statusCode).toBe(200);
+      expect(res._getData()).toEqual({ greeting: 'hello' });
+    });
+
+    it('should return 202 when query returns no rows', async () => {
+      mockDbQuery.mockResolvedValueOnce([]);
+
+      const { req, res } = createMocks({
+        params: {
+          template: 'simple_select',
+        },
+      });
+
+      await query(req, res);
+
+      expect(res.statusCode).toBe(202);
+      expect(res._getData()).toBe('No rows returned from table.');
+    });
+
+    it('should return 500 when database returns an error', async () => {
+      mockDbQuery.mockResolvedValueOnce(new Error('connection refused'));
+
+      const { req, res } = createMocks({
+        params: {
+          template: 'simple_select',
+        },
+      });
+
+      await query(req, res);
+
+      expect(res.statusCode).toBe(500);
+      expect(res._getData()).toBe('Failed to query PostGIS table.');
+    });
+
+    it('should return multiple rows as an array', async () => {
+      const rows = [{ id: 1 }, { id: 2 }, { id: 3 }];
+      mockDbQuery.mockResolvedValueOnce(rows);
+
+      const { req, res } = createMocks({
+        params: {
+          template: 'simple_select',
+        },
+      });
+
+      await query(req, res);
+
+      expect(res.statusCode).toBe(200);
+      expect(res._getData()).toEqual(rows);
+    });
+  });
+
+  describe('Response formatting', () => {
+    it('should reduce rows to value arrays when template has reduce flag', async () => {
+      mockDbQuery.mockResolvedValueOnce([
+        { name: 'alice', value: 10 },
+        { name: 'bob', value: 20 },
+      ]);
+
+      const { req, res } = createMocks({
+        params: {
+          template: 'reduce_query',
+          table: 'users',
+        },
+      });
+
+      await query(req, res);
+
+      expect(res.statusCode).toBe(200);
+      expect(res._getData()).toEqual([
+        ['alice', 10],
+        ['bob', 20],
+      ]);
+    });
+
+    it('should return only the first value when template has value_only flag', async () => {
+      mockDbQuery.mockResolvedValueOnce([{ cnt: 42 }]);
+
+      const { req, res } = createMocks({
+        params: {
+          template: 'value_only_query',
+          table: 'users',
+        },
+      });
+
+      await query(req, res);
+
+      expect(res.statusCode).toBe(200);
+      // Numeric values are converted to strings by sendRows.
+      expect(res._getData()).toBe('42');
+    });
+  });
+
+  describe('Parameter substitution', () => {
+    it('should substitute ${} identifier params and %{} value params', async () => {
+      mockDbQuery.mockResolvedValueOnce([{ age: 30 }]);
+
+      const { req, res } = createMocks({
+        params: {
+          template: 'param_query',
+          field: 'age',
+          table: 'users',
+          name: 'alice',
+        },
+      });
+
+      await query(req, res);
+
+      expect(mockDbQuery).toHaveBeenCalled();
+      const [queryStr, sqlParams] = mockDbQuery.mock.calls[0];
+
+      // ${field} and ${table} are replaced inline.
+      expect(queryStr).toContain('SELECT age FROM users');
+      // %{name} is replaced with $1, and 'alice' is in the SQL params.
+      expect(queryStr).toContain('$1');
+      expect(sqlParams).toContain('alice');
+    });
+
+    it('should reject identifier params with invalid characters', async () => {
+      const { req, res } = createMocks({
+        params: {
+          template: 'injection_query',
+          field: 'age; DROP TABLE users;--',
+          table: 'users',
+        },
+      });
+
+      await query(req, res);
+
+      expect(res.statusCode).toBe(400);
+    });
+
+    it('should return 400 when required params are missing', async () => {
+      const { req, res } = createMocks({
+        params: {
+          template: 'param_query',
+          // field, table, and name are all missing.
+        },
+      });
+
+      await query(req, res);
+
+      expect(res.statusCode).toBe(400);
+    });
+  });
+
+  describe('Invalid dbs connection', () => {
+    it('should return 400 when dbs connection does not exist', async () => {
+      const { req, res } = createMocks({
+        params: {
+          template: 'bogus_dbs_query',
+        },
+      });
+
+      await query(req, res);
+
+      expect(res.statusCode).toBe(400);
+      expect(res._getData()).toBe(
+        'Failed to validate database connection method.',
+      );
+    });
+  });
+
+  describe('Nonblocking queries', () => {
+    it('should return immediately for nonblocking queries', async () => {
+      mockDbQuery.mockResolvedValueOnce([]);
+
+      const { req, res } = createMocks({
+        params: {
+          template: 'nonblocking_query',
+          msg: 'test message',
+        },
+      });
+
+      await query(req, res);
+
+      expect(res.statusCode).toBe(200);
+      expect(res._getData()).toBe('Non blocking request sent.');
+      expect(mockDbQuery).toHaveBeenCalled();
+    });
+  });
+
+  describe('Core query templates', () => {
+    it('should execute distinct_values template with correct SQL', async () => {
+      mockDbQuery.mockResolvedValueOnce([{ name: 'alice' }, { name: 'bob' }]);
+
+      const { req, res } = createMocks({
+        params: {
+          template: 'distinct_values',
+          field: 'name',
+          table: 'users',
+        },
+      });
+
+      await query(req, res);
+
+      expect(mockDbQuery).toHaveBeenCalled();
+      const [queryStr] = mockDbQuery.mock.calls[0];
+      expect(queryStr).toContain('SELECT distinct(name)');
+      expect(queryStr).toContain('FROM users');
+      expect(queryStr).toContain('ORDER BY name');
+    });
+
+    it('should execute field_max template with correct SQL', async () => {
+      mockDbQuery.mockResolvedValueOnce([{ max: 100 }]);
+
+      const { req, res } = createMocks({
+        params: {
+          template: 'field_max',
+          field: 'price',
+          table: 'products',
+        },
+      });
+
+      await query(req, res);
+
+      expect(mockDbQuery).toHaveBeenCalled();
+      const [queryStr] = mockDbQuery.mock.calls[0];
+      expect(queryStr).toContain('max(price)');
+      expect(queryStr).toContain('FROM products');
+    });
   });
 });
