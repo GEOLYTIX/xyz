@@ -12,8 +12,6 @@
   },
   "scripts": {
     "dev": "pnpm exec concurrently --names \"express,vite\" --prefix-colors \"blue,green\" \"node express.js\" \"pnpm exec vite\"",
-    "dev:vite": "pnpm exec vite",
-    "dev:express": "node express.js",
     "test": "vitest run",
     "test-watch": "vitest",
     "coverage": "vitest run --coverage",
