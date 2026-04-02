@@ -4,7 +4,6 @@ This module provides a logging utility for the XYZ API. The LOG process environm
 
 Possible log values are:
 
-- req_url: Logs the url of the request.
 - query_params: Logs query parameters sent to the query endpoint.
 - query: Logs the sql to executed by calling the query endpoint.
 - view-req-url: Logs the url of the requested view.
