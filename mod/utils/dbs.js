@@ -109,7 +109,7 @@ async function clientQuery(pool, query, variables, timeout) {
       if (retryCount < RETRY_LIMIT) {
         // Exponential backoff
         const delay = INITIAL_RETRY_DELAY * Math.pow(2, retryCount - 1);
-        await sleep(delay);
+        await new Promise((resolve) => setTimeout(resolve, delay));
       }
 
       lastError = err;
@@ -122,16 +122,4 @@ async function clientQuery(pool, query, variables, timeout) {
 
   // If we've exhausted all retries, return the last error
   return lastError;
-}
-
-/**
-@function sleep
-@description
-Helper function to pause execution
-
-@param {number} ms Time to sleep in milliseconds
-@returns {Promise<void>}
-*/
-function sleep(ms) {
-  return new Promise((resolve) => setTimeout(resolve, ms));
 }
