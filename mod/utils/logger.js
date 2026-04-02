@@ -150,15 +150,12 @@ function postgresql() {
     //This is to pull the short Error message from the stack
     const errorMessage = log.err?.toString().split('\n')[0];
 
-    try {
-      await dbs[params.dbs](
-        `INSERT INTO ${table} (process, datetime, key, log, message)
-        VALUES ($1, $2, $3, $4, $5)`,
-        [process_id, parseInt(Date.now() / 1000), key, logstring, errorMessage],
-        3000,
-      );
-    } catch (error) {
-      console.error('Error while logging to database:', error);
-    }
+    dbs[params.dbs](
+      `INSERT INTO ${table} 
+      (process, datetime, key, log, message)
+      VALUES ($1, $2, $3, $4, $5)`,
+      [process_id, parseInt(Date.now() / 1000), key, logstring, errorMessage],
+      3000,
+    );
   };
 }

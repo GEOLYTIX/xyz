@@ -99,14 +99,7 @@ async function clientQuery(pool, query, variables, timeout) {
 
       return rows;
     } catch (err) {
-      // Log the error with retry information
-      logger({
-        err,
-        pool: pool.options.dbs,
-        query,
-        retry: retryCount + 1,
-        variables,
-      });
+      console.error(err);
 
       // Return error if not in retry whitelist
       if (!RETRY_CODES.has(err.code)) return err;
