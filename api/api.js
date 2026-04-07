@@ -22,7 +22,6 @@ app.get(`/`, api)
 @requires /user/auth
 @requires /user/saml
 @requires /user/register
-@requires /utils/logger
 @module /api
 */
 
@@ -52,7 +51,6 @@ import auth from '../mod/user/auth.js';
 import login from '../mod/user/login.js';
 import register from '../mod/user/register.js';
 import saml from '../mod/user/saml.js';
-import logger from '../mod/utils/logger.js';
 import { setRedirect } from '../mod/utils/redirect.js';
 import view from '../mod/view.js';
 import workspace from '../mod/workspace/_workspace.js';
@@ -74,8 +72,6 @@ const routes = {
 The API method will redirect requests with a request url length 1 and xyzEnv.DIR.
 
 eg. A request to localhost:3000 with a DIR = "/mapp" will be redirected to localhost:3000/mapp
-
-The request object itself or the request object url will be logged with the `req` or `req_url` keys in xyzEnv.LOGS.
 
 Requests with the url matching the /saml/ path will be passed to the [saml module]{@link module:/user/saml}.
 
@@ -102,8 +98,6 @@ export default function api(req, res) {
     res.setHeader('location', `${xyzEnv.DIR}`);
     return res.status(302).send();
   }
-
-  logger(req.url, 'req_url');
 
   // SAML request.
   if (req.url.match(/\/saml/)) {
