@@ -66,6 +66,8 @@ app.use(limiter);
 
 app.use(cookieParser());
 
+app.use(`${xyzEnv.DIR}/public`, express.static('public'));
+
 app.get(`${xyzEnv.DIR}/api/provider{/:provider}`, api);
 
 app.post(
