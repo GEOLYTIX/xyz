@@ -438,7 +438,7 @@ dialog.alert-confirm {
   p {
     white-space: pre;
     text-wrap: pretty;
-    margin: 1em 0.5em;
+    margin: 1em;
   }
   .buttons {
     display: flex;
