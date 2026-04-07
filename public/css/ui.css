@@ -435,7 +435,7 @@ dialog.alert-confirm {
     gap: 0.2em;
     align-items: center;
   }
-  p {
+  .content > p {
     white-space: pre;
     text-wrap: pretty;
     margin: 1em;

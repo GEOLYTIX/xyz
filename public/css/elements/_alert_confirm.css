@@ -17,7 +17,7 @@ dialog.alert-confirm {
     align-items: center;
   }
 
-  p {
+  .content > p {
     white-space: pre;
     text-wrap: pretty;
     margin: 1em;
