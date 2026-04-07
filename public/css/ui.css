@@ -423,11 +423,6 @@ input[type=search]::-webkit-calendar-picker-indicator {
 dialog.alert-confirm {
   width: 350px;
   max-height: 70%;
-  -webkit-touch-callout: none;
-  -webkit-user-select: none;
-  -moz-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
   padding: 0.5em;
   &::-webkit-scrollbar {
     display: none;
@@ -441,7 +436,7 @@ dialog.alert-confirm {
     align-items: center;
   }
   .content {
-    padding: 1em;
+    padding: 1em 0;
   }
   p {
     white-space: pre;
@@ -449,19 +444,13 @@ dialog.alert-confirm {
     margin: 0 1em 1em;
   }
   .buttons {
-    margin-top: 2em;
     display: flex;
     justify-content: flex-end;
     gap: 0.5em;
+    padding: 0 0.5em;
   }
   button {
     min-width: 100px;
-  }
-}
-@media only screen and (max-width: 768px) {
-  dialog.alert-confirm {
-    min-width: 350px;
-    max-width: 70%;
   }
 }
 
