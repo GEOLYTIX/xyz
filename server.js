@@ -110,6 +110,8 @@ app.get(`${xyzEnv.DIR}{/:locale}`, api);
 
 app.get(`/`, api);
 
-app.listen(xyzEnv.PORT);
+if (!process.env.VERCEL) {
+  app.listen(xyzEnv.PORT);
+}
 
 export default app;
