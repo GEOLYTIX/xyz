@@ -1,6 +1,10 @@
 /**
- * @module /workspace/templates/queries
- */
+### /workspace/templates/queries
+
+The queries module imports core query templates and assigns access properties.
+
+@module /workspace/templates/queries
+*/
 
 // Import all templates and renders
 import cluster from './cluster.js';
@@ -32,6 +36,7 @@ import stDistanceAb from './st_distance_ab.js';
 import stDistanceAbMultiple from './st_distance_ab_multiple.js';
 import stIntersectsAb from './st_intersects_ab.js';
 import stIntersectsCount from './st_intersects_count.js';
+import table_schema from './table_schema.js';
 import wkt from './wkt.js';
 
 export default {
@@ -147,6 +152,11 @@ export default {
   },
   st_intersects_count: {
     template: stIntersectsCount,
+  },
+  table_schema: {
+    layer: true,
+    template: table_schema,
+    admin: true,
   },
   wkt: {
     layer: true,
