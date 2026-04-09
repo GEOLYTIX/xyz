@@ -436,7 +436,7 @@ dialog.alert-confirm {
     align-items: center;
   }
   .content > p {
-    white-space: pre;
+    white-space: pre-wrap;
     text-wrap: pretty;
     margin: 1em;
   }

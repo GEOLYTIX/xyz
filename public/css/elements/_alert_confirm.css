@@ -18,7 +18,7 @@ dialog.alert-confirm {
   }
 
   .content > p {
-    white-space: pre;
+    white-space: pre-wrap; /* allows support of line breaks `\n` in text */
     text-wrap: pretty;
     margin: 1em;
   }
