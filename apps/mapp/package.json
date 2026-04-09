@@ -1,0 +1,17 @@
+{
+  "name": "mapp",
+  "version": "v4.22.1",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/geolytix/xyz"
+  },
+  "packageManager": "pnpm@10.10.0",
+  "scripts": {
+    "build": "node esbuild.config.mjs"
+  },
+  "license": "MIT",
+  "devDependencies": {
+    "esbuild": "^0.25.0"
+  }
+}

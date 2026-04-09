@@ -1,12 +1,12 @@
 {
   "source": {
-    "include": ["api", "mod", "express.js"],
+    "include": ["./apps/xyz/api", "./apps/xyz/mod", "server.js"],
     "includePattern": ".js$"
   },
   "plugins": ["plugins/markdown"],
   "opts": {
     "encoding": "utf8",
-    "readme": "./api/README.md",
+    "readme": "./apps/xyz/api/README.md",
     "destination": "docs/",
     "recurse": true,
     "verbose": true,

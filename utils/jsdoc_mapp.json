@@ -1,12 +1,12 @@
 {
   "source": {
-    "include": ["lib"],
+    "include": ["./apps/mapp/lib"],
     "includePattern": ".js$"
   },
   "plugins": ["plugins/markdown"],
   "opts": {
     "encoding": "utf8",
-    "readme": "./lib/README.md",
+    "readme": "./apps/mapp/lib/README.md",
     "destination": "docs/mapp/",
     "recurse": true,
     "verbose": true,

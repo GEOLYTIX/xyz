@@ -13,7 +13,7 @@ pnpm-lock.yaml
 yarn.lock
 
 # pnpm files
-node_modules/*
+**/node_modules/
 .pnpm-store/
 
 resources
@@ -24,7 +24,7 @@ public/js/plugins/*
 
 docs/*
 
-*.pem
+**/*.pem
 *.crt
 /*.json
 /*.jsonc

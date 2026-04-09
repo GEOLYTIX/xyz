@@ -40,11 +40,11 @@ RATE_LIMIT_WINDOW - Time window in ms (default: 1 min)
 @requires express-rate-limit Rate limiting middleware
 */
 
-import './mod/utils/processEnv.js';
+import './apps/xyz/mod/utils/processEnv.js';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import rateLimit from 'express-rate-limit';
-import api from './api/api.js';
+import api from './apps/xyz/api/api.js';
 
 if (process.versions.node.split('.')[0] < 22) {
   console.warn(`Process Node version below 22.`);
@@ -66,7 +66,9 @@ app.use(limiter);
 
 app.use(cookieParser());
 
-app.use(`${xyzEnv.DIR}/public`, express.static('public'));
+app.use(`${xyzEnv.DIR}/public`, express.static('./public'));
+
+app.use(xyzEnv.DIR, express.static('./public'));
 
 app.get(`${xyzEnv.DIR}/api/provider{/:provider}`, api);
 
