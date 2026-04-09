@@ -5,6 +5,7 @@
   "exports": {
     ".": "./api/api.js",
     "./api": "./api/api.js",
+    "./extensions": "./extensions.js",
     "./server": "./server.js"
   },
   "repository": {
