@@ -1,13 +1,19 @@
 {
-  "name": "xyz",
+  "name": "@geolytix/xyz-app",
   "version": "v4.22.1",
   "type": "module",
+  "exports": {
+    ".": "./api/api.js",
+    "./api": "./api/api.js",
+    "./server": "./server.js"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/geolytix/xyz"
   },
   "packageManager": "pnpm@10.10.0",
   "scripts": {
+    "dev": "node --inspect server.js",
     "test": "node --experimental-test-module-mocks node_modules/codi-test-framework/cli.js tests",
     "test-watch": "node --watch-path=. --experimental-test-module-mocks node_modules/codi-test-framework/cli.js tests --quiet"
   },
@@ -21,7 +27,10 @@
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
+    "cookie-parser": "^1.4.5",
     "dotenv": "^17.4.1",
+    "express": "^5.1.0",
+    "express-rate-limit": "^7.5.0",
     "jsonwebtoken": "^9.0.2",
     "pg": "~8.15.1"
   },

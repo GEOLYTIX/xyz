@@ -21,12 +21,15 @@
     "push-env": "node ./utils/sync-vercel-env.js"
   },
   "license": "MIT",
+  "dependencies": {
+    "@geolytix/xyz-app": "file:apps/xyz"
+  },
   "devDependencies": {
-    "clean-jsdoc-theme": "^4.3.0",
-    "@biomejs/biome": "2.2.6",
     "express": "^5.1.0",
     "express-rate-limit": "^7.5.0",
-    "turbo": "^2.5.8",
-    "cookie-parser": "^1.4.5"
+    "clean-jsdoc-theme": "^4.3.0",
+    "@biomejs/biome": "2.2.6",
+    "dotenv": "^17.4.1",
+    "turbo": "^2.5.8"
   }
 }
