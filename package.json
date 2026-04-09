@@ -22,7 +22,8 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@geolytix/xyz-app": "file:apps/xyz"
+    "@geolytix/xyz-app": "file:apps/xyz",
+    "@geolytix/mapp": "file:apps/mapp"
   },
   "devDependencies": {
     "express": "^5.1.0",

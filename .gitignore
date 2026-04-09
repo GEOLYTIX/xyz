@@ -15,6 +15,7 @@ yarn.lock
 # pnpm files
 **/node_modules/
 .pnpm-store/
+.turbo/
 
 resources
 public/js/*

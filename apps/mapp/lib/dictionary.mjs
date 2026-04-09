@@ -6,7 +6,7 @@ The dictionary module exports a proxy object to get values from the mapp.diction
 @module /dictionary
 */
 
-import en from '../public/dictionaries/en.mjs';
+import en from '../../../public/dictionaries/en.mjs';
 
 export const dictionary = new Proxy({}, { get });
 
