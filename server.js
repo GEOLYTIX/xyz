@@ -1,9 +1,4 @@
-// Vercel's Express detection expects this import in the entrypoint.
-
 import { registerExtension } from '@geolytix/xyz-app/extensions';
-import express from 'express';
-
-void express;
 
 registerExtension({
   apiRoutes: [
