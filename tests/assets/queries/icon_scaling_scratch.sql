@@ -1,1 +1,0 @@
-UPDATE test.scratch set icon_scale = %{value};

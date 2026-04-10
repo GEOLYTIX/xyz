@@ -4,7 +4,6 @@
 .env
 .env.*
 .DS_Store
-.vercel
 
 env
 # npm legacy files (replaced by pnpm)
@@ -13,8 +12,9 @@ pnpm-lock.yaml
 yarn.lock
 
 # pnpm files
-node_modules/*
+**/node_modules/
 .pnpm-store/
+.turbo/
 
 resources
 public/js/*
@@ -24,7 +24,7 @@ public/js/plugins/*
 
 docs/*
 
-*.pem
+**/*.pem
 *.crt
 /*.json
 /*.jsonc
@@ -34,3 +34,6 @@ docs/*
 !jsdoc*.json
 !codi.json
 !biome.json
+!turbo.json
+
+.vercel
