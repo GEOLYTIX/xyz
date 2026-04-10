@@ -9,9 +9,9 @@ To run this script you can execute `node version.js` in your terminal.
 @module version
 */
 
-import { execFileSync } from 'child_process';
+import { execFileSync } from 'node:child_process';
 // File system module for reading/writing files
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 
 // Regular expression pattern to match 'hash: ' followed by any characters
 const key = 'hash:.*';
@@ -35,7 +35,7 @@ let data = readFileSync(
 );
 
 // Replace all occurrences of the old hash with the new commit hash
-data = data.replace(
+data = data.replaceAll(
   // Global regex to match all occurrences
   new RegExp(key, 'g'),
 

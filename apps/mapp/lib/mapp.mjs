@@ -43,7 +43,7 @@ if (!ol.util?.VERSION) {
 globalThis.mapp = {
   dictionaries,
   dictionary,
-  hash: '3b9330aaa65e0a7064c8a29197a40b6d78b89978',
+  hash: 'f44e76f6a0d1d586d6a16fda9c137977f9c45609',
   hooks,
   host: document.head?.dataset?.dir || '',
   language: hooks.current.language || 'en',
