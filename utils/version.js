@@ -9,7 +9,7 @@ To run this script you can execute `node version.js` in your terminal.
 @module version
 */
 
-import { execSync } from 'child_process'; // For executing shell commands synchronously
+import { execFileSync } from 'child_process';
 // File system module for reading/writing files
 import { readFileSync, writeFileSync } from 'fs';
 
@@ -18,7 +18,7 @@ const key = 'hash:.*';
 
 // Get the current git commit hash
 // Execute git command to get current commit hash
-const hash = execSync('git rev-parse HEAD')
+const hash = execFileSync('git', ['rev-parse', 'HEAD'])
   // Convert Buffer to string
   .toString()
 
@@ -28,7 +28,7 @@ const hash = execSync('git rev-parse HEAD')
 // Read the contents of mapp.mjs file
 let data = readFileSync(
   // Path to the file
-  './lib/mapp.mjs',
+  './apps/mapp/lib/mapp.mjs',
 
   // Specify encoding
   'utf-8',
@@ -46,7 +46,7 @@ data = data.replace(
 // Write the updated content back to the file
 writeFileSync(
   // Path to the file
-  './lib/mapp.mjs',
+  './apps/mapp/lib/mapp.mjs',
 
   // Updated content
   data,
@@ -54,4 +54,4 @@ writeFileSync(
 
 // Run the build script defined in package.json
 // Execute build command
-execSync('pnpm _build');
+execFileSync('pnpm', ['build'], { stdio: 'inherit' });
