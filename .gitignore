@@ -4,7 +4,6 @@
 .env
 .env.*
 .DS_Store
-.vercel
 
 env
 # npm legacy files (replaced by pnpm)

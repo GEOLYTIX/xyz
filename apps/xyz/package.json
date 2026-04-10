@@ -34,8 +34,5 @@
     "express-rate-limit": "^7.5.0",
     "jsonwebtoken": "^9.0.2",
     "pg": "~8.15.1"
-  },
-  "devDependencies": {
-    "@biomejs/biome": "2.2.6"
   }
 }
