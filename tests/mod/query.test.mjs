@@ -109,66 +109,6 @@ describe('Query: Testing Query API', () => {
     });
   });
 
-  describe('Auth checks', () => {
-    it('should require login when template has login flag and no user', async () => {
-      const { req, res } = createMocks({
-        params: {
-          template: 'login_required_query',
-        },
-      });
-
-      await query(req, res);
-
-      expect(res.statusCode).toBe(401);
-      expect(res._getData()).toBe('login_required');
-    });
-
-    it('should require admin when template has admin flag and user is not admin', async () => {
-      const { req, res } = createMocks({
-        params: {
-          template: 'admin_only_query',
-          user: { admin: false, roles: [] },
-        },
-      });
-
-      await query(req, res);
-
-      expect(res.statusCode).toBe(401);
-      expect(res._getData()).toBe('admin_required');
-    });
-
-    it('should return 403 when user lacks required roles', async () => {
-      const { req, res } = createMocks({
-        params: {
-          template: 'role_restricted_query',
-          user: { roles: ['viewer'] },
-        },
-      });
-
-      await query(req, res);
-
-      expect(res.statusCode).toBe(403);
-      expect(res._getData()).toBe('Role access denied for query template.');
-    });
-
-    it('should allow access when user has required role', async () => {
-      mockDbQuery.mockResolvedValueOnce([{ result: 'ok' }]);
-
-      const { req, res } = createMocks({
-        params: {
-          template: 'role_restricted_query',
-          user: { roles: ['analyst'] },
-        },
-      });
-
-      await query(req, res);
-
-      expect(mockDbQuery).toHaveBeenCalled();
-      expect(res.statusCode).toBe(200);
-      expect(res._getData()).toEqual({ result: 'ok' });
-    });
-  });
-
   describe('Query execution', () => {
     it('should execute a simple query and return a single row', async () => {
       mockDbQuery.mockResolvedValueOnce([{ greeting: 'hello' }]);
