@@ -1,3 +1,6 @@
+import { createMocks } from 'node-mocks-http';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
+
 globalThis.xyzEnv = {
   PRIVATE: '192.168.1.1:3000|user:password|acl.test',
 };
@@ -5,142 +8,118 @@ globalThis.xyzEnv = {
 const originalWarn = console.warn;
 const mockWarn = [];
 
-console.warn = (log) => {
-  mockWarn.push(log);
-};
-
-const mockMailerFn = codi.mock.fn();
-const mockMailer = codi.mock.module('../../../mod/utils/resend.js', {
-  defaultExport: { send: mockMailerFn },
+beforeAll(() => {
+  console.warn = (log) => {
+    mockWarn.push(log);
+  };
 });
 
-await codi.describe(
-  { name: 'register: ', id: 'user_register', parentId: 'user' },
-  async () => {
-    const { default: register } = await import('../../../mod/user/register.js');
-    await codi.it(
-      {
-        name: 'USER_DOMAINS - full domain with invalid email',
-        parentId: 'user_register',
+afterAll(() => {
+  console.warn = originalWarn;
+});
+
+const mockMailerFn = vi.fn();
+vi.mock('../../../mod/utils/resend.js', () => ({
+  default: { send: (...args) => mockMailerFn(...args) },
+}));
+
+const mockAclFn = vi.fn(() => []);
+vi.mock('../../../mod/user/acl.js', () => ({
+  default: (...args) => mockAclFn(...args),
+}));
+
+describe('register: ', async () => {
+  const { default: register } = await import('../../../mod/user/register.js');
+
+  it('USER_DOMAINS - full domain with invalid email', async () => {
+    globalThis.xyzEnv.USER_DOMAINS = 'geolytix.com';
+
+    const { req, res } = createMocks({
+      headers: {
+        host: 'localhost',
       },
-      async () => {
-        globalThis.xyzEnv.USER_DOMAINS = 'geolytix.com';
-
-        const { req, res } = codi.mockHttp.createMocks({
-          headers: {
-            host: 'localhost',
-          },
-          body: {
-            email: 'dev_1@geolytix.co.uk',
-            password: 'ValidPass123!',
-            language: 'en',
-          },
-        });
-
-        await register(req, res);
-        codi.assertTrue(res.statusCode === 400);
-        codi.assertEqual(res._getData(), 'Provided email address is invalid');
+      body: {
+        email: 'dev_1@geolytix.co.uk',
+        password: 'ValidPass123!',
+        language: 'en',
       },
-    );
+    });
 
-    await codi.it(
-      {
-        name: 'USER_DOMAINS - short domain with invalid email',
-        parentId: 'user_register',
+    await register(req, res);
+    expect(res.statusCode === 400).toBeTruthy();
+    expect(res._getData()).toEqual('Provided email address is invalid');
+  });
+
+  it('USER_DOMAINS - short domain with invalid email', async () => {
+    globalThis.xyzEnv.USER_DOMAINS = 'geolytix';
+
+    const { req, res } = createMocks({
+      headers: {
+        host: 'localhost',
       },
-      async () => {
-        globalThis.xyzEnv.USER_DOMAINS = 'geolytix';
-
-        const { req, res } = codi.mockHttp.createMocks({
-          headers: {
-            host: 'localhost',
-          },
-          body: {
-            email: 'dev_1@test.co.uk',
-            password: 'ValidPass123!',
-            language: 'en',
-          },
-        });
-
-        await register(req, res);
-        codi.assertTrue(res.statusCode === 400);
-        codi.assertEqual(res._getData(), 'Provided email address is invalid');
+      body: {
+        email: 'dev_1@test.co.uk',
+        password: 'ValidPass123!',
+        language: 'en',
       },
-    );
+    });
 
-    await codi.it(
-      {
-        name: 'USER_DOMAINS - full domain with valid email',
-        parentId: 'user_register',
+    await register(req, res);
+    expect(res.statusCode === 400).toBeTruthy();
+    expect(res._getData()).toEqual('Provided email address is invalid');
+  });
+
+  it('USER_DOMAINS - full domain with valid email', async () => {
+    globalThis.xyzEnv.USER_DOMAINS = 'geolytix.com';
+
+    const { req, res } = createMocks({
+      headers: {
+        host: 'localhost',
       },
-      async () => {
-        globalThis.xyzEnv.USER_DOMAINS = 'geolytix.com';
-
-        const { req, res } = codi.mockHttp.createMocks({
-          headers: {
-            host: 'localhost',
-          },
-          body: {
-            email: 'dev_1@geolytix.com',
-            password: 'ValidPass123!',
-            language: 'en',
-          },
-        });
-
-        await register(req, res);
-        codi.assertTrue(res.statusCode === 200);
+      body: {
+        email: 'dev_1@geolytix.com',
+        password: 'ValidPass123!',
+        language: 'en',
       },
-    );
+    });
 
-    await codi.it(
-      {
-        name: 'USER_DOMAINS - short domain with valid email',
-        parentId: 'user_register',
+    await register(req, res);
+    expect(res.statusCode === 200).toBeTruthy();
+  });
+
+  it('USER_DOMAINS - short domain with valid email', async () => {
+    globalThis.xyzEnv.USER_DOMAINS = 'geolytix';
+
+    const { req, res } = createMocks({
+      headers: {
+        host: 'localhost',
       },
-      async () => {
-        globalThis.xyzEnv.USER_DOMAINS = 'geolytix';
-
-        const { req, res } = codi.mockHttp.createMocks({
-          headers: {
-            host: 'localhost',
-          },
-          body: {
-            email: 'dev_1@geolytix.whatever',
-            password: 'ValidPass123!',
-            language: 'en',
-          },
-        });
-
-        await register(req, res);
-        codi.assertTrue(res.statusCode === 200);
+      body: {
+        email: 'dev_1@geolytix.whatever',
+        password: 'ValidPass123!',
+        language: 'en',
       },
-    );
+    });
 
-    await codi.it(
-      {
-        name: 'USER_DOMAINS - ensure case insensitivity',
-        parentId: 'user_register',
+    await register(req, res);
+    expect(res.statusCode === 200).toBeTruthy();
+  });
+
+  it('USER_DOMAINS - ensure case insensitivity', async () => {
+    globalThis.xyzEnv.USER_DOMAINS = 'geolytix';
+
+    const { req, res } = createMocks({
+      headers: {
+        host: 'localhost',
       },
-      async () => {
-        globalThis.xyzEnv.USER_DOMAINS = 'geolytix';
-
-        const { req, res } = codi.mockHttp.createMocks({
-          headers: {
-            host: 'localhost',
-          },
-          body: {
-            email: 'dev_1@GEOLYTIX.COM',
-            password: 'ValidPass123!',
-            language: 'en',
-          },
-        });
-
-        await register(req, res);
-        codi.assertTrue(res.statusCode === 200);
+      body: {
+        email: 'dev_1@GEOLYTIX.COM',
+        password: 'ValidPass123!',
+        language: 'en',
       },
-    );
-  },
-);
+    });
 
-console.warn = originalWarn;
-mockMailer.restore();
+    await register(req, res);
+    expect(res.statusCode === 200).toBeTruthy();
+  });
+});

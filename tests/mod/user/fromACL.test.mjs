@@ -1,84 +1,73 @@
-const mockCompareSyncFn = codi.mock.fn();
-const mockBcrypt = codi.mock.module('bcrypt', {
-  namedExports: {
-    bcrypt: {
-      compareSync: mockCompareSyncFn,
-    },
+import { createMocks } from 'node-mocks-http';
+import { describe, expect, it, vi } from 'vitest';
+
+const mockCompareSyncFn = vi.fn();
+vi.mock('bcrypt', () => ({
+  bcrypt: {
+    compareSync: (...args) => mockCompareSyncFn(...args),
   },
+}));
+
+const mockAclfn = vi.fn();
+vi.mock('../../../mod/user/acl.js', () => ({
+  default: (...args) => mockAclfn(...args),
+}));
+
+const mockMailerFn = vi.fn();
+vi.mock('../../../mod/utils/resend.js', () => ({
+  default: (...args) => mockMailerFn(...args),
+}));
+
+const mockLanguageTempFn = vi.fn(async ({ language, template }) => {
+  const templates = {
+    missing_email: { fr: 'E-mail manquant' },
+    missing_password: { fr: 'Mot de passe manquant' },
+  };
+  return templates[template]?.[language] || template;
 });
+vi.mock('../../../mod/utils/languageTemplates.js', () => ({
+  default: (...args) => mockLanguageTempFn(...args),
+}));
 
-const mockAclfn = codi.mock.fn();
-const mockACL = codi.mock.module('../../../mod/user/acl.js', {
-  defaultExport: mockAclfn,
-});
+const mockReqHostFn = vi.fn();
+vi.mock('../../../mod/utils/reqHost.js', () => ({
+  default: (...args) => mockReqHostFn(...args),
+}));
 
-const mockMailerFn = codi.mock.fn();
-const mockMailer = codi.mock.module('../../../mod/utils/resend.js', {
-  defaultExport: mockMailerFn,
-});
+describe('acl', async () => {
+  const { default: fromACL } = await import('../../../mod/user/fromACL.js');
 
-const mockLanguageTempFn = codi.mock.fn();
-const mockLanguageTemp = codi.mock.module(
-  '../../../mod/utils/languageTemplates.js',
-  {
-    defaultExport: mockLanguageTempFn,
-  },
-);
-
-const mockReqHostFn = codi.mock.fn();
-const mockReqHost = codi.mock.module('../../../mod/utils/reqHost.js', {
-  defaultExport: mockReqHostFn,
-});
-
-await codi.describe(
-  { name: 'acl', id: 'user_acl', parentId: 'user' },
-  async () => {
-    const { default: fromACL } = await import('../../../mod/user/fromACL.js');
-
-    await codi.it(
-      { name: 'no email provided', parentId: 'user_acl' },
-      async () => {
-        const { req, res } = codi.mockHttp.createMocks({
-          body: {},
-          params: {
-            language: 'fr',
-          },
-          headers: {
-            host: 'localhost:3000',
-          },
-        });
-
-        const result = await fromACL(req, res);
-
-        codi.assertTrue(result instanceof Error);
-        codi.assertEqual(result.message, 'E-mail manquant');
+  it('no email provided', async () => {
+    const { req, res } = createMocks({
+      body: {},
+      params: {
+        language: 'fr',
       },
-    );
-
-    await codi.it(
-      { name: 'no password provided', parentId: 'user_acl' },
-      async () => {
-        const { req, res } = codi.mockHttp.createMocks({
-          body: { email: 'test@geolytix.com' },
-          params: {
-            language: 'fr',
-          },
-          headers: {
-            host: 'localhost:3000',
-          },
-        });
-
-        const result = await fromACL(req, res);
-
-        codi.assertTrue(result instanceof Error);
-        codi.assertEqual(result.message, 'Mot de passe manquant');
+      headers: {
+        host: 'localhost:3000',
       },
-    );
-  },
-);
+    });
 
-mockBcrypt.restore();
-mockACL.restore();
-mockMailer.restore();
-mockLanguageTemp.restore();
-mockReqHost.restore();
+    const result = await fromACL(req, res);
+
+    expect(result instanceof Error).toBeTruthy();
+    expect(result.message).toEqual('E-mail manquant');
+  });
+
+  it('no password provided', async () => {
+    const { req, res } = createMocks({
+      body: { email: 'test@geolytix.com' },
+      params: {
+        language: 'fr',
+      },
+      headers: {
+        host: 'localhost:3000',
+      },
+    });
+
+    const result = await fromACL(req, res);
+
+    expect(result instanceof Error).toBeTruthy();
+    expect(result.message).toEqual('Mot de passe manquant');
+  });
+});

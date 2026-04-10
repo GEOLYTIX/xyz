@@ -1,99 +1,84 @@
-const mockAgent = new codi.mockHttp.MockAgent();
-codi.mockHttp.setGlobalDispatcher(mockAgent);
+import { MockAgent, setGlobalDispatcher } from 'undici';
+import { describe, expect, it, vi } from 'vitest';
 
-const mockSignFileFn = codi.mock.fn();
-const mockSignFile = codi.mock.module('../../../mod/sign/file.js', {
-  defaultExport: mockSignFileFn,
-  namedExports: {
-    file_signer: mockSignFileFn,
-  },
-});
+const mockAgent = new MockAgent();
+setGlobalDispatcher(mockAgent);
 
-const { default: file } = await import('../../../mod/provider/file.js');
+const mockFileFn = vi.fn();
+const mockCloudFrontFn = vi.fn();
 
-const mockFileFn = codi.mock.fn(file);
-const mockFile = codi.mock.module('../../../mod/provider/file.js', {
-  defaultExport: mockFileFn,
-});
+vi.mock('../../../mod/sign/file.js', () => ({
+  default: vi.fn(),
+  file_signer: vi.fn(),
+}));
 
-const mockCloudFrontFn = codi.mock.fn();
-const mockCloudFront = codi.mock.module('../../../mod/provider/cloudfront.js', {
-  defaultExport: mockCloudFrontFn,
-});
+vi.mock('../../../mod/provider/file.js', () => ({
+  default: (...args) => mockFileFn(...args),
+}));
 
-await codi.describe(
-  { name: 'getFrom:', id: 'getFrom', parentId: 'provider' },
-  async () => {
-    const { default: getFrom } = await import(
-      '../../../mod/provider/getFrom.js'
+vi.mock('../../../mod/provider/cloudfront.js', () => ({
+  default: (...args) => mockCloudFrontFn(...args),
+}));
+
+const { default: getFrom } = await import('../../../mod/provider/getFrom.js');
+
+describe('getFrom:', () => {
+  it('https', async () => {
+    const resBody = JSON.stringify(
+      '{ "templates": {}, "locale": { "layers": {}, }, }',
     );
 
-    await codi.it({ name: 'https', parentId: 'getFrom' }, async () => {
-      const resBody = JSON.stringify(
-        '{ "templates": {}, "locale": { "layers": {}, }, }',
-      );
+    const mockPool = mockAgent.get(new RegExp('https://geolytix.com/*'));
 
-      const mockPool = mockAgent.get(new RegExp('https://geolytix.com/*'));
+    mockPool.intercept({ path: '/config/workspace.json' }).reply(200, resBody);
 
-      mockPool
-        .intercept({ path: '/config/workspace.json' })
-        .reply(200, resBody);
+    const url = 'https://geolytix.com/config/workspace.json';
 
-      const url = 'https://geolytix.com/config/workspace.json';
+    const results = await getFrom['https'](url);
 
-      const results = await getFrom['https'](url);
+    expect(results).toEqual(
+      '{ "templates": {}, "locale": { "layers": {}, }, }',
+    );
+  });
 
-      codi.assertEqual(
-        results,
-        '{ "templates": {}, "locale": { "layers": {}, }, }',
-      );
+  it('file', async () => {
+    const filePath = 'file:../../workspaces/workspace.json';
+
+    const fileBody = JSON.stringify(
+      '{ "templates": {}, "locale": { "layers": {}, }, }',
+    );
+
+    mockFileFn.mockImplementationOnce(() => {
+      return JSON.parse(fileBody);
     });
 
-    await codi.it({ name: 'file', parentId: 'getFrom' }, async () => {
-      const filePath = 'file:../../workspaces/workspace.json';
+    const results = await getFrom['file'](filePath);
 
-      const fileBody = JSON.stringify(
-        '{ "templates": {}, "locale": { "layers": {}, }, }',
-      );
+    expect(results).toEqual(
+      '{ "templates": {}, "locale": { "layers": {}, }, }',
+    );
+  });
 
-      mockFileFn.mock.mockImplementationOnce(function file() {
-        return JSON.parse(fileBody);
-      });
+  it('cloudfront', async () => {
+    globalThis.xyzEnv = {
+      KEY_CLOUDFRONT: 'CLOUDFRONTKEY',
+    };
 
-      const results = await getFrom['file'](filePath);
+    const cloudFrontURL =
+      'cloudfront:aws.cloudfront.example/workspaces/workspace.json';
 
-      codi.assertEqual(
-        results,
-        '{ "templates": {}, "locale": { "layers": {}, }, }',
-      );
+    const fileBody = JSON.stringify(
+      '{ "templates": {}, "locale": { "layers": {}, }, }',
+    );
+
+    mockCloudFrontFn.mockImplementationOnce((ref) => {
+      return JSON.parse(fileBody);
     });
 
-    await codi.it({ name: 'cloudfront', parentId: 'getFrom' }, async () => {
-      globalThis.xyzEnv = {
-        KEY_CLOUDFRONT: 'CLOUDFRONTKEY',
-      };
+    const results = await getFrom['cloudfront'](cloudFrontURL);
 
-      const cloudFrontURL =
-        'cloudfront:aws.cloudfront.example/workspaces/workspace.json';
-
-      const fileBody = JSON.stringify(
-        '{ "templates": {}, "locale": { "layers": {}, }, }',
-      );
-
-      mockCloudFrontFn.mock.mockImplementationOnce(function cloudfront(ref) {
-        return JSON.parse(fileBody);
-      });
-
-      const results = await getFrom['cloudfront'](cloudFrontURL);
-
-      codi.assertEqual(
-        results,
-        '{ "templates": {}, "locale": { "layers": {}, }, }',
-      );
-    });
-  },
-);
-
-mockSignFile.restore();
-mockFile.restore();
-mockCloudFront.restore();
+    expect(results).toEqual(
+      '{ "templates": {}, "locale": { "layers": {}, }, }',
+    );
+  });
+});

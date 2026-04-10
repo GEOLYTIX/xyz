@@ -1,158 +1,142 @@
-const aclFn = codi.mock.fn();
-const mockedacl = codi.mock.module('../../../mod/user/acl.js', {
-  cache: false,
-  defaultExport: aclFn,
-  namedExports: {
-    acl: aclFn,
-  },
-});
+import { createMocks } from 'node-mocks-http';
+import { describe, expect, it, vi } from 'vitest';
 
-await codi.describe(
-  { name: 'key:', id: 'user_key', parentId: 'user' },
-  async () => {
-    const { default: apiKey } = await import('../../../mod/user/key.js');
+const aclFn = vi.fn();
+vi.mock('../../../mod/user/acl.js', () => ({
+  default: (...args) => aclFn(...args),
+  acl: (...args) => aclFn(...args),
+}));
 
-    const user = {
-      api: true,
-      verified: true,
-      approved: true,
-      blocked: false,
-      email: 'test@email.com',
-      roles: ['test'],
-    };
+describe('key:', async () => {
+  globalThis.xyzEnv = {
+    ...globalThis.xyzEnv,
+    SECRET: 'test-secret',
+    SECRET_ALGORITHM: 'HS256',
+  };
 
-    const { req, res } = codi.mockHttp.createMocks({
+  const { default: apiKey } = await import('../../../mod/user/key.js');
+
+  const user = {
+    api: true,
+    verified: true,
+    approved: true,
+    blocked: false,
+    email: 'test@email.com',
+    roles: ['test'],
+  };
+
+  const { req, res } = createMocks({
+    params: {
+      user: 'test@email.com',
+      admin: true,
+    },
+  });
+
+  it('user not provided', async () => {
+    const { req, res } = createMocks({
       params: {
-        user: 'test@email.com',
+        user: null,
+      },
+    });
+
+    const key = await apiKey(req, res);
+
+    expect(key.message === 'login_required').toBeTruthy();
+  });
+
+  it('acl throws an error', async () => {
+    aclFn.mockImplementation(async () => {
+      return new Error('aclFailed');
+    });
+
+    const { req, res } = createMocks({
+      params: {
+        user: 'test@geolytix.co.uk',
         admin: true,
       },
     });
 
-    codi.it({ name: 'user not provided', parentId: 'user_key' }, async () => {
-      const { req, res } = codi.mockHttp.createMocks({
-        params: {
-          user: null,
-        },
-      });
+    await apiKey(req, res);
+    expect(res._getData() === 'Failed to access ACL.').toBeTruthy();
+  });
 
-      const key = await apiKey(req, res);
-
-      codi.assertTrue(key.message === 'login_required');
+  it('deny access if no user is found', async () => {
+    aclFn.mockImplementation(async () => {
+      return [null];
     });
 
-    codi.it({ name: 'acl throws an error', parentId: 'user_key' }, async () => {
-      aclFn.mock.mockImplementation(async () => {
-        return new Error('aclFailed');
-      });
+    await apiKey(req, res);
 
-      const { req, res } = codi.mockHttp.createMocks({
-        params: {
-          user: 'test@geolytix.co.uk',
-          admin: true,
-        },
-      });
+    expect(res.statusCode === 401).toBeTruthy();
+    expect(res._getData().includes('Unauthorized access.')).toBeTruthy();
+  });
 
-      await apiKey(req, res);
-      codi.assertTrue(res._getData() === 'Failed to access ACL.');
+  it('deny access to unverified users', async () => {
+    aclFn.mockImplementation(async () => {
+      const mockUser = { ...user };
+      mockUser.verified = false;
+      return [mockUser];
     });
 
-    codi.it(
-      { name: 'deny access if no user is found', parentId: 'user_key' },
-      async () => {
-        aclFn.mock.mockImplementation(async () => {
-          return [null];
-        });
+    await apiKey(req, res);
 
-        await apiKey(req, res);
+    expect(res.statusCode === 401).toBeTruthy();
+    expect(res._getData().includes('Unauthorized access.')).toBeTruthy();
+  });
 
-        codi.assertTrue(res.statusCode === 401);
-        codi.assertTrue(res._getData().includes('Unauthorized access.'));
+  it('deny access to blocked users', async () => {
+    aclFn.mockImplementation(async () => {
+      const mockUser = { ...user };
+      mockUser.blocked = true;
+      return [mockUser];
+    });
+
+    await apiKey(req, res);
+
+    expect(res.statusCode === 401).toBeTruthy();
+    expect(res._getData().includes('Unauthorized access.')).toBeTruthy();
+  });
+
+  it('deny access to unapproved users', async () => {
+    aclFn.mockImplementation(async () => {
+      const mockUser = { ...user };
+      mockUser.approved = false;
+      return [mockUser];
+    });
+
+    await apiKey(req, res);
+
+    expect(res.statusCode === 401).toBeTruthy();
+    expect(res._getData().includes('Unauthorized access.')).toBeTruthy();
+  });
+
+  it('deny access to no api access users', async () => {
+    aclFn.mockImplementation(async () => {
+      const mockUser = { ...user };
+      mockUser.api = false;
+      return [mockUser];
+    });
+
+    await apiKey(req, res);
+
+    expect(res.statusCode === 401).toBeTruthy();
+    expect(res._getData().includes('Unauthorized access.')).toBeTruthy();
+  });
+
+  it('successfully generate a key', async () => {
+    const { req, res } = createMocks({
+      params: {
+        user: user,
       },
-    );
+    });
 
-    codi.it(
-      { name: 'deny access to unverified users', parentId: 'user_key' },
-      async () => {
-        aclFn.mock.mockImplementation(async () => {
-          const mockUser = { ...user };
-          mockUser.verified = false;
-          return [mockUser];
-        });
+    aclFn.mockImplementation(async () => {
+      return [user];
+    });
 
-        await apiKey(req, res);
+    await apiKey(req, res);
 
-        codi.assertTrue(res.statusCode === 401);
-        codi.assertTrue(res._getData().includes('Unauthorized access.'));
-      },
-    );
-
-    codi.it(
-      { name: 'deny access to blocked users', parentId: 'user_key' },
-      async () => {
-        aclFn.mock.mockImplementation(async () => {
-          const mockUser = { ...user };
-          mockUser.blocked = true;
-          return [mockUser];
-        });
-
-        await apiKey(req, res);
-
-        codi.assertTrue(res.statusCode === 401);
-        codi.assertTrue(res._getData().includes('Unauthorized access.'));
-      },
-    );
-
-    codi.it(
-      { name: 'deny access to unapproved users', parentId: 'user_key' },
-      async () => {
-        aclFn.mock.mockImplementation(async () => {
-          const mockUser = { ...user };
-          mockUser.approved = false;
-          return [mockUser];
-        });
-
-        await apiKey(req, res);
-
-        codi.assertTrue(res.statusCode === 401);
-        codi.assertTrue(res._getData().includes('Unauthorized access.'));
-      },
-    );
-    codi.it(
-      { name: 'deny access to no api access users', parentId: 'user_key' },
-      async () => {
-        aclFn.mock.mockImplementation(async () => {
-          const mockUser = { ...user };
-          mockUser.api = false;
-          return [mockUser];
-        });
-
-        await apiKey(req, res);
-
-        codi.assertTrue(res.statusCode === 401);
-        codi.assertTrue(res._getData().includes('Unauthorized access.'));
-      },
-    );
-
-    codi.it(
-      { name: 'successfully generate a key', parentId: 'user_key' },
-      async () => {
-        const { req, res } = codi.mockHttp.createMocks({
-          params: {
-            user: user,
-          },
-        });
-
-        aclFn.mock.mockImplementation(async () => {
-          return [user];
-        });
-
-        await apiKey(req, res);
-
-        codi.assertTrue(res.statusCode === 200);
-        codi.assertTrue(res._getData().startsWith('ey'));
-      },
-    );
-  },
-);
-
-mockedacl.restore();
+    expect(res.statusCode === 200).toBeTruthy();
+    expect(res._getData().startsWith('ey')).toBeTruthy();
+  });
+});

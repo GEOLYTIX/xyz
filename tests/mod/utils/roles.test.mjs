@@ -1,3 +1,4 @@
+import { describe, expect, it } from 'vitest';
 import {
   check,
   combine,
@@ -5,696 +6,455 @@ import {
   setInObj,
 } from '../../../mod/utils/roles.js';
 
-codi.describe({ name: 'Roles Module', id: 'roles_module' }, async () => {
-  codi.describe(
-    { name: 'check()', id: 'roles_module_check', parentId: 'roles_module' },
-    () => {
-      codi.it(
-        {
-          name: 'should return true if object has no roles',
-          parentId: 'roles_module_check',
-        },
-        () => {
-          const obj = { layer: 'I am a layer!' };
-          const result = check(obj, ['user']);
-          codi.assertTrue(result);
-        },
-      );
+describe('Roles Module', () => {
+  describe('check()', () => {
+    it('should return true if object has no roles', () => {
+      const obj = { layer: 'I am a layer!' };
+      const result = check(obj, ['user']);
+      expect(result).toBeTruthy();
+    });
 
-      codi.it(
-        {
-          name: 'should return true if object has the * role',
-          parentId: 'roles_module_check',
-        },
-        () => {
-          const obj = { layer: 'I am a layer!', roles: { '*': true } };
-          const result = check(obj, ['user']);
-          codi.assertTrue(result);
-        },
-      );
+    it('should return true if object has the * role', () => {
+      const obj = { layer: 'I am a layer!', roles: { '*': true } };
+      const result = check(obj, ['user']);
+      expect(result).toBeTruthy();
+    });
 
-      codi.it(
-        {
-          name: 'should return false if user_roles is undefined',
-          parentId: 'roles_module_check',
-        },
-        () => {
-          const obj = { roles: { admin: true } };
-          const result = check(obj, undefined);
-          codi.assertFalse(result);
-        },
-      );
+    it('should return false if user_roles is undefined', () => {
+      const obj = { roles: { admin: true } };
+      const result = check(obj, undefined);
+      expect(result).toBeFalsy();
+    });
 
-      codi.it(
-        {
-          name: 'should return false if a negated role is included in user_roles',
-          parentId: 'roles_module_check',
-        },
-        () => {
-          const obj = { roles: { '!guest': true } };
-          const result = check(obj, ['guest']);
-          codi.assertFalse(result);
-        },
-      );
+    it('should return false if a negated role is included in user_roles', () => {
+      const obj = { roles: { '!guest': true } };
+      const result = check(obj, ['guest']);
+      expect(result).toBeFalsy();
+    });
 
-      codi.it(
-        {
-          name: 'should return true if all roles are negated and none match user_roles',
-          parentId: 'roles_module_check',
-        },
-        () => {
-          const obj = { roles: { '!admin': true, '!user': true } };
-          const result = check(obj, ['guest', 'users']);
-          codi.assertTrue(result);
-        },
-      );
+    it('should return true if all roles are negated and none match user_roles', () => {
+      const obj = { roles: { '!admin': true, '!user': true } };
+      const result = check(obj, ['guest', 'users']);
+      expect(result).toBeTruthy();
+    });
 
-      codi.it(
-        {
-          name: 'should return true if a positive role is included in user_roles',
-          parentId: 'roles_module_check',
-        },
-        () => {
-          const obj = { roles: { admin: true, user: true } };
-          const result = check(obj, ['admin']);
-          codi.assertTrue(result);
-        },
-      );
+    it('should return true if a positive role is included in user_roles', () => {
+      const obj = { roles: { admin: true, user: true } };
+      const result = check(obj, ['admin']);
+      expect(result).toBeTruthy();
+    });
 
-      codi.it(
-        {
-          name: 'should return false if no role matches user_roles',
-          parentId: 'roles_module_check',
-        },
-        () => {
-          const obj = { roles: { admin: true, user: true } };
-          const result = check(obj, ['guest']);
-          codi.assertFalse(result);
-        },
-      );
+    it('should return false if no role matches user_roles', () => {
+      const obj = { roles: { admin: true, user: true } };
+      const result = check(obj, ['guest']);
+      expect(result).toBeFalsy();
+    });
 
-      codi.it(
-        {
-          name: 'should return true if final dot notation role is provided',
-          parentId: 'roles_module_check',
-        },
-        () => {
-          const obj = { roles: { 'namespace.admin': true } };
-          const result = check(obj, ['admin']);
-          codi.assertTrue(result);
-        },
-      );
+    it('should return true if final dot notation role is provided', () => {
+      const obj = { roles: { 'namespace.admin': true } };
+      const result = check(obj, ['admin']);
+      expect(result).toBeTruthy();
+    });
 
-      codi.it(
-        {
-          name: 'should return false if user_roles is null',
-          parentId: 'roles_module_check',
-        },
-        () => {
-          const obj = { roles: { admin: true } };
-          const result = check(obj, null);
-          codi.assertFalse(result);
-        },
-      );
+    it('should return false if user_roles is null', () => {
+      const obj = { roles: { admin: true } };
+      const result = check(obj, null);
+      expect(result).toBeFalsy();
+    });
 
-      codi.it(
-        {
-          name: 'should handle mixed positive and negated roles',
-          parentId: 'roles_module_check',
-        },
-        () => {
-          const obj = { roles: { admin: true, '!guest': true } };
-          const result = check(obj, ['guest']);
-          codi.assertFalse(result);
-        },
-      );
+    it('should handle mixed positive and negated roles', () => {
+      const obj = { roles: { admin: true, '!guest': true } };
+      const result = check(obj, ['guest']);
+      expect(result).toBeFalsy();
+    });
 
-      codi.it(
-        {
-          name: 'should return the object with empty roles object',
-          parentId: 'roles_module_check',
-        },
-        () => {
-          const obj = { roles: {} };
-          const result = check(obj, ['user']);
-          codi.assertTrue(result);
-        },
-      );
-    },
-  );
+    it('should return the object with empty roles object', () => {
+      const obj = { roles: {} };
+      const result = check(obj, ['user']);
+      expect(result).toBeTruthy();
+    });
+  });
 
-  codi.describe(
-    {
-      name: 'objMerge()',
-      id: 'roles_module_objMerge',
-      parentId: 'roles_module',
-    },
-    () => {
-      codi.it(
-        {
-          name: 'should return the input value if it is not an object',
-          parentId: 'roles_module_objMerge',
-        },
-        () => {
-          codi.assertEqual(objMerge(5), 5);
-          codi.assertEqual(objMerge('hello'), 'hello');
-          codi.assertEqual(objMerge(null), null);
-        },
-      );
+  describe('objMerge()', () => {
+    it('should return the input value if it is not an object', () => {
+      expect(objMerge(5)).toEqual(5);
+      expect(objMerge('hello')).toEqual('hello');
+      expect(objMerge(null)).toEqual(null);
+    });
 
-      codi.it(
-        {
-          name: 'should return the input object if user_roles is undefined',
-          parentId: 'roles_module_objMerge',
-        },
-        () => {
-          const obj = { a: 1, b: 2 };
-          codi.assertEqual(objMerge(obj, undefined), obj);
-        },
-      );
+    it('should return the input object if user_roles is undefined', () => {
+      const obj = { a: 1, b: 2 };
+      expect(objMerge(obj, undefined)).toEqual(obj);
+    });
 
-      codi.it(
-        {
-          name: 'should merge nested objects',
-          parentId: 'roles_module_objMerge',
-        },
-        () => {
-          const obj = {
+    it('should merge nested objects', () => {
+      const obj = {
+        foo: 'bar',
+        bar: {
+          foo: 'bar',
+          bar: {
             foo: 'bar',
-            bar: {
-              foo: 'bar',
-              bar: {
-                foo: 'bar',
-              },
-            },
-            roles: {
-              admin: {
-                foo: 'bar',
-              },
-              user: {
-                foo: 'bar',
-              },
-            },
-          };
-          const user_roles = ['admin'];
-
-          const expected = {
+          },
+        },
+        roles: {
+          admin: {
             foo: 'bar',
-            bar: {
-              foo: 'bar',
-              bar: {
-                foo: 'bar',
-              },
-            },
-            roles: {
-              admin: {
-                foo: 'bar',
-              },
-              user: {
-                foo: 'bar',
-              },
-            },
-          };
-
-          codi.assertEqual(objMerge(obj, user_roles), expected);
+          },
+          user: {
+            foo: 'bar',
+          },
         },
-      );
+      };
+      const user_roles = ['admin'];
 
-      codi.it(
-        {
-          name: 'should handle negated roles',
-          parentId: 'roles_module_objMerge',
+      const expected = {
+        foo: 'bar',
+        bar: {
+          foo: 'bar',
+          bar: {
+            foo: 'bar',
+          },
         },
-        () => {
-          let obj = {
-            roles: {
-              admin: {
-                text: 'admin',
-              },
-              '!guest': {
-                text: 'guest',
-              },
-              user: {
-                text: 'user',
-              },
-            },
-          };
+        roles: {
+          admin: {
+            foo: 'bar',
+          },
+          user: {
+            foo: 'bar',
+          },
+        },
+      };
 
-          const user_roles = ['user'];
+      expect(objMerge(obj, user_roles)).toEqual(expected);
+    });
 
-          const expected = {
+    it('should handle negated roles', () => {
+      let obj = {
+        roles: {
+          admin: {
+            text: 'admin',
+          },
+          '!guest': {
+            text: 'guest',
+          },
+          user: {
             text: 'user',
-          };
-
-          obj = objMerge(obj, user_roles);
-
-          codi.assertEqual(obj.text, expected.text);
+          },
         },
-      );
+      };
 
-      codi.it(
-        { name: 'should handle arrays', parentId: 'roles_module_objMerge' },
-        () => {
-          const obj = [{ foo: 'afoo' }, { bar: 'abar' }, [{ foo: 'afoo' }]];
-          const user_roles = [];
+      const user_roles = ['user'];
 
-          const expected = [
-            { foo: 'afoo' },
-            { bar: 'abar' },
-            [{ foo: 'afoo' }],
-          ];
+      const expected = {
+        text: 'user',
+      };
 
-          codi.assertEqual(objMerge(obj, user_roles), expected);
-        },
-      );
+      obj = objMerge(obj, user_roles);
 
-      codi.it(
-        {
-          name: 'should merge unequal arrays for multiple roles',
-          parentId: 'roles_module_objMerge',
-        },
-        () => {
-          let obj = {
-            layer: {
-              name: 'Test Me',
-              roles: {
-                foo: {
-                  filter: {
-                    current: {
-                      country: {
-                        in: ['ROI'],
-                      },
-                    },
-                  },
-                },
-                bar: {
-                  filter: {
-                    current: {
-                      country: {
-                        in: ['UK'],
-                      },
-                    },
+      expect(obj.text).toEqual(expected.text);
+    });
+
+    it('should handle arrays', () => {
+      const obj = [{ foo: 'afoo' }, { bar: 'abar' }, [{ foo: 'afoo' }]];
+      const user_roles = [];
+
+      const expected = [{ foo: 'afoo' }, { bar: 'abar' }, [{ foo: 'afoo' }]];
+
+      expect(objMerge(obj, user_roles)).toEqual(expected);
+    });
+
+    it('should merge unequal arrays for multiple roles', () => {
+      let obj = {
+        layer: {
+          name: 'Test Me',
+          roles: {
+            foo: {
+              filter: {
+                current: {
+                  country: {
+                    in: ['ROI'],
                   },
                 },
               },
             },
-          };
-
-          const user_roles = ['foo', 'bar'];
-
-          const expected_filter = {
-            current: {
-              country: {
-                in: ['ROI', 'UK'],
-              },
-            },
-          };
-
-          obj = objMerge(obj, user_roles);
-
-          codi.assertEqual(obj.layer.filter, expected_filter);
-        },
-      );
-
-      codi.it(
-        {
-          name: 'should return the input object if user_roles is not an array',
-          parentId: 'roles_module_objMerge',
-        },
-        () => {
-          const obj = { a: 1, b: 2 };
-          codi.assertEqual(objMerge(obj, 'not-array'), obj);
-        },
-      );
-
-      codi.it(
-        {
-          name: 'should handle objects with null/undefined nested values',
-          parentId: 'roles_module_objMerge',
-        },
-        () => {
-          const obj = {
-            nullValue: null,
-            undefinedValue: undefined,
-            roles: {
-              admin: { text: 'admin' },
-            },
-          };
-          const result = objMerge(obj, ['admin']);
-          codi.assertEqual(result.nullValue, null);
-          codi.assertEqual(result.undefinedValue, undefined);
-          codi.assertEqual(result.text, 'admin');
-        },
-      );
-
-      codi.it(
-        {
-          name: 'should handle roles object that is an array',
-          parentId: 'roles_module_objMerge',
-        },
-        () => {
-          const obj = {
-            data: 'test',
-            roles: ['admin', 'user'],
-          };
-          const result = objMerge(obj, ['admin']);
-          codi.assertEqual(result, obj);
-        },
-      );
-
-      codi.it(
-        {
-          name: 'should handle roles object that is a function',
-          parentId: 'roles_module_objMerge',
-        },
-        () => {
-          const obj = {
-            data: 'test',
-            roles: () => 'function',
-          };
-          const result = objMerge(obj, ['admin']);
-          codi.assertEqual(result, obj);
-        },
-      );
-
-      codi.it(
-        {
-          name: 'should handle dot notation roles',
-          parentId: 'roles_module_objMerge',
-        },
-        () => {
-          const obj = {
-            roles: {
-              'namespace.admin': { text: 'admin' },
-              'namespace.user': { text: 'user' },
-            },
-          };
-          const result = objMerge(obj, ['admin']);
-          codi.assertEqual(result.text, 'admin');
-        },
-      );
-
-      codi.it(
-        {
-          name: 'should filter out roles with true values',
-          parentId: 'roles_module_objMerge',
-        },
-        () => {
-          const obj = {
-            roles: {
-              admin: true,
-              user: { text: 'user' },
-            },
-          };
-          const result = objMerge(obj, ['admin', 'user']);
-          codi.assertEqual(result.text, 'user');
-        },
-      );
-
-      codi.it(
-        {
-          name: 'should filter out roles with null values',
-          parentId: 'roles_module_objMerge',
-        },
-        () => {
-          const obj = {
-            roles: {
-              admin: null,
-              user: { text: 'user' },
-            },
-          };
-          const result = objMerge(obj, ['admin', 'user']);
-          codi.assertEqual(result.text, 'user');
-        },
-      );
-
-      codi.it(
-        {
-          name: 'should handle deep nested structures with roles at multiple levels',
-          parentId: 'roles_module_objMerge',
-        },
-        () => {
-          const obj = {
-            level1: {
-              level2: {
-                roles: {
-                  admin: { deepText: 'deep admin' },
+            bar: {
+              filter: {
+                current: {
+                  country: {
+                    in: ['UK'],
+                  },
                 },
               },
-              roles: {
-                user: { midText: 'mid user' },
-              },
             },
-            roles: {
-              root: { rootText: 'root' },
-            },
-          };
-          const result = objMerge(obj, ['admin', 'user', 'root']);
-          codi.assertEqual(result.rootText, 'root');
-          codi.assertEqual(result.level1.midText, 'mid user');
-          codi.assertEqual(result.level1.level2.deepText, 'deep admin');
+          },
         },
-      );
-    },
-  );
+      };
 
-  codi.describe(
-    {
-      name: 'setInObj()',
-      id: 'roles_module_fromObj',
-      parentId: 'roles_module',
-    },
-    () => {
-      codi.it(
-        {
-          name: 'should add roles to Set',
-          parentId: 'roles_module_fromObj',
-        },
-        () => {
-          const rolesSet = new Set();
-          const obj = {
-            roles: {
-              admin: true,
-              user: true,
-              guest: true,
-            },
-          };
-          setInObj(rolesSet, obj);
-          codi.assertEqual(rolesSet.has('admin'), true);
-          codi.assertEqual(rolesSet.has('user'), true);
-          codi.assertEqual(rolesSet.has('guest'), true);
-        },
-      );
+      const user_roles = ['foo', 'bar'];
 
-      codi.it(
-        {
-          name: 'should handle negated roles by removing ! prefix',
-          parentId: 'roles_module_fromObj',
+      const expected_filter = {
+        current: {
+          country: {
+            in: ['ROI', 'UK'],
+          },
         },
-        () => {
-          const rolesSet = new Set();
-          const obj = {
+      };
+
+      obj = objMerge(obj, user_roles);
+
+      expect(obj.layer.filter).toEqual(expected_filter);
+    });
+
+    it('should return the input object if user_roles is not an array', () => {
+      const obj = { a: 1, b: 2 };
+      expect(objMerge(obj, 'not-array')).toEqual(obj);
+    });
+
+    it('should handle objects with null/undefined nested values', () => {
+      const obj = {
+        nullValue: null,
+        undefinedValue: undefined,
+        roles: {
+          admin: { text: 'admin' },
+        },
+      };
+      const result = objMerge(obj, ['admin']);
+      expect(result.nullValue).toEqual(null);
+      expect(result.undefinedValue).toEqual(undefined);
+      expect(result.text).toEqual('admin');
+    });
+
+    it('should handle roles object that is an array', () => {
+      const obj = {
+        data: 'test',
+        roles: ['admin', 'user'],
+      };
+      const result = objMerge(obj, ['admin']);
+      expect(result).toEqual(obj);
+    });
+
+    it('should handle roles object that is a function', () => {
+      const obj = {
+        data: 'test',
+        roles: () => 'function',
+      };
+      const result = objMerge(obj, ['admin']);
+      expect(result).toEqual(obj);
+    });
+
+    it('should handle dot notation roles', () => {
+      const obj = {
+        roles: {
+          'namespace.admin': { text: 'admin' },
+          'namespace.user': { text: 'user' },
+        },
+      };
+      const result = objMerge(obj, ['admin']);
+      expect(result.text).toEqual('admin');
+    });
+
+    it('should filter out roles with true values', () => {
+      const obj = {
+        roles: {
+          admin: true,
+          user: { text: 'user' },
+        },
+      };
+      const result = objMerge(obj, ['admin', 'user']);
+      expect(result.text).toEqual('user');
+    });
+
+    it('should filter out roles with null values', () => {
+      const obj = {
+        roles: {
+          admin: null,
+          user: { text: 'user' },
+        },
+      };
+      const result = objMerge(obj, ['admin', 'user']);
+      expect(result.text).toEqual('user');
+    });
+
+    it('should handle deep nested structures with roles at multiple levels', () => {
+      const obj = {
+        level1: {
+          level2: {
             roles: {
-              '!admin': true,
-              '!guest': true,
+              admin: { deepText: 'deep admin' },
+            },
+          },
+          roles: {
+            user: { midText: 'mid user' },
+          },
+        },
+        roles: {
+          root: { rootText: 'root' },
+        },
+      };
+      const result = objMerge(obj, ['admin', 'user', 'root']);
+      expect(result.rootText).toEqual('root');
+      expect(result.level1.midText).toEqual('mid user');
+      expect(result.level1.level2.deepText).toEqual('deep admin');
+    });
+  });
+
+  describe('setInObj()', () => {
+    it('should add roles to Set', () => {
+      const rolesSet = new Set();
+      const obj = {
+        roles: {
+          admin: true,
+          user: true,
+          guest: true,
+        },
+      };
+      setInObj(rolesSet, obj);
+      expect(rolesSet.has('admin')).toEqual(true);
+      expect(rolesSet.has('user')).toEqual(true);
+      expect(rolesSet.has('guest')).toEqual(true);
+    });
+
+    it('should handle negated roles by removing ! prefix', () => {
+      const rolesSet = new Set();
+      const obj = {
+        roles: {
+          '!admin': true,
+          '!guest': true,
+          user: true,
+        },
+      };
+      setInObj(rolesSet, obj);
+      expect(rolesSet.has('admin')).toEqual(true);
+      expect(rolesSet.has('guest')).toEqual(true);
+      expect(rolesSet.has('user')).toEqual(true);
+      expect(rolesSet.has('!admin')).toEqual(false);
+      expect(rolesSet.has('!guest')).toEqual(false);
+    });
+
+    it('should recurse through nested objects', () => {
+      const rolesSet = new Set();
+      const obj = {
+        level1: {
+          roles: {
+            admin: true,
+          },
+          level2: {
+            roles: {
               user: true,
             },
-          };
-          setInObj(rolesSet, obj);
-          codi.assertEqual(rolesSet.has('admin'), true);
-          codi.assertEqual(rolesSet.has('guest'), true);
-          codi.assertEqual(rolesSet.has('user'), true);
-          codi.assertEqual(rolesSet.has('!admin'), false);
-          codi.assertEqual(rolesSet.has('!guest'), false);
-        },
-      );
-
-      codi.it(
-        {
-          name: 'should recurse through nested objects',
-          parentId: 'roles_module_fromObj',
-        },
-        () => {
-          const rolesSet = new Set();
-          const obj = {
-            level1: {
+            level3: {
               roles: {
-                admin: true,
-              },
-              level2: {
-                roles: {
-                  user: true,
-                },
-                level3: {
-                  roles: {
-                    guest: true,
-                  },
-                },
+                guest: true,
               },
             },
-          };
-          setInObj(rolesSet, obj);
-          codi.assertEqual(rolesSet.has('admin'), true);
-          codi.assertEqual(rolesSet.has('user'), true);
-          codi.assertEqual(rolesSet.has('guest'), true);
+          },
         },
-      );
+      };
+      setInObj(rolesSet, obj);
+      expect(rolesSet.has('admin')).toEqual(true);
+      expect(rolesSet.has('user')).toEqual(true);
+      expect(rolesSet.has('guest')).toEqual(true);
+    });
 
-      codi.it(
-        {
-          name: 'should handle arrays',
-          parentId: 'roles_module_fromObj',
-        },
-        () => {
-          const rolesSet = new Set();
-          const obj = {
-            items: [
-              {
-                roles: {
-                  admin: true,
-                },
-              },
-              {
-                roles: {
-                  user: true,
-                },
-              },
-            ],
-          };
-          setInObj(rolesSet, obj);
-          codi.assertEqual(rolesSet.has('admin'), true);
-          codi.assertEqual(rolesSet.has('user'), true);
-        },
-      );
-
-      codi.it(
-        {
-          name: 'should handle null and undefined values',
-          parentId: 'roles_module_fromObj',
-        },
-        () => {
-          const rolesSet = new Set();
-          const obj = {
-            nullValue: null,
-            undefinedValue: undefined,
+    it('should handle arrays', () => {
+      const rolesSet = new Set();
+      const obj = {
+        items: [
+          {
             roles: {
               admin: true,
             },
-          };
-          setInObj(rolesSet, obj);
-          codi.assertEqual(rolesSet.has('admin'), true);
-        },
-      );
-
-      codi.it(
-        {
-          name: 'should not duplicate roles in Set',
-          parentId: 'roles_module_fromObj',
-        },
-        () => {
-          const rolesSet = new Set();
-          const obj = {
-            section1: {
-              roles: {
-                admin: true,
-              },
+          },
+          {
+            roles: {
+              user: true,
             },
-            section2: {
-              roles: {
-                admin: true,
-                user: true,
-              },
-            },
-          };
-          setInObj(rolesSet, obj);
-          codi.assertEqual(rolesSet.size, 2);
-          codi.assertEqual(rolesSet.has('admin'), true);
-          codi.assertEqual(rolesSet.has('user'), true);
-        },
-      );
+          },
+        ],
+      };
+      setInObj(rolesSet, obj);
+      expect(rolesSet.has('admin')).toEqual(true);
+      expect(rolesSet.has('user')).toEqual(true);
+    });
 
-      codi.it(
-        {
-          name: 'should handle empty objects',
-          parentId: 'roles_module_fromObj',
+    it('should handle null and undefined values', () => {
+      const rolesSet = new Set();
+      const obj = {
+        nullValue: null,
+        undefinedValue: undefined,
+        roles: {
+          admin: true,
         },
-        () => {
-          const rolesSet = new Set();
-          const obj = {};
-          setInObj(rolesSet, obj);
-          codi.assertEqual(rolesSet.size, 0);
-        },
-      );
+      };
+      setInObj(rolesSet, obj);
+      expect(rolesSet.has('admin')).toEqual(true);
+    });
 
-      codi.it(
-        {
-          name: 'should handle objects with no roles property',
-          parentId: 'roles_module_fromObj',
+    it('should not duplicate roles in Set', () => {
+      const rolesSet = new Set();
+      const obj = {
+        section1: {
+          roles: {
+            admin: true,
+          },
         },
-        () => {
-          const rolesSet = new Set();
-          const obj = {
-            data: 'test',
-            nested: {
-              value: 'nested',
-            },
-          };
-          setInObj(rolesSet, obj);
-          codi.assertEqual(rolesSet.size, 0);
+        section2: {
+          roles: {
+            admin: true,
+            user: true,
+          },
         },
-      );
-    },
-  );
+      };
+      setInObj(rolesSet, obj);
+      expect(rolesSet.size).toEqual(2);
+      expect(rolesSet.has('admin')).toEqual(true);
+      expect(rolesSet.has('user')).toEqual(true);
+    });
 
-  codi.describe(
-    {
-      name: 'combine()',
-      id: 'roles_module_combine',
-      parentId: 'roles_module',
-    },
-    () => {
-      codi.it(
-        {
-          name: 'should combine parent roles with child roles',
-          parentId: 'roles_module_combine',
-        },
-        () => {
-          const child = { roles: { Child: true } };
-          const parent = { roles: { Parent: true } };
-          combine(child, parent);
-          codi.assertTrue(child.roles.Child);
-          codi.assertTrue(child.roles['Parent.Child']);
-        },
-      );
+    it('should handle empty objects', () => {
+      const rolesSet = new Set();
+      const obj = {};
+      setInObj(rolesSet, obj);
+      expect(rolesSet.size).toEqual(0);
+    });
 
-      codi.it(
-        {
-          name: 'should handle string role properties',
-          parentId: 'roles_module_combine',
+    it('should handle objects with no roles property', () => {
+      const rolesSet = new Set();
+      const obj = {
+        data: 'test',
+        nested: {
+          value: 'nested',
         },
-        () => {
-          const child = { role: 'Child' };
-          const parent = { role: 'Parent' };
-          combine(child, parent);
-          codi.assertTrue(child.roles.Child);
-          codi.assertTrue(child.roles['Parent.Child']);
-        },
-      );
+      };
+      setInObj(rolesSet, obj);
+      expect(rolesSet.size).toEqual(0);
+    });
+  });
 
-      codi.it(
-        {
-          name: 'should not combine if parent role is same as child role',
-          parentId: 'roles_module_combine',
-        },
-        () => {
-          const child = { roles: { Common: true } };
-          const parent = { roles: { Common: true } };
-          combine(child, parent);
-          codi.assertTrue(child.roles.Common);
-          // Should NOT have 'Common.Common'
-          codi.assertFalse(!!child.roles['Common.Common']);
-        },
-      );
-    },
-  );
+  describe('combine()', () => {
+    it('should combine parent roles with child roles', () => {
+      const child = { roles: { Child: true } };
+      const parent = { roles: { Parent: true } };
+      combine(child, parent);
+      expect(child.roles.Child).toBeTruthy();
+      expect(child.roles['Parent.Child']).toBeTruthy();
+    });
+
+    it('should handle string role properties', () => {
+      const child = { role: 'Child' };
+      const parent = { role: 'Parent' };
+      combine(child, parent);
+      expect(child.roles.Child).toBeTruthy();
+      expect(child.roles['Parent.Child']).toBeTruthy();
+    });
+
+    it('should not combine if parent role is same as child role', () => {
+      const child = { roles: { Common: true } };
+      const parent = { roles: { Common: true } };
+      combine(child, parent);
+      expect(child.roles.Common).toBeTruthy();
+      // Should NOT have 'Common.Common'
+      expect(!!child.roles['Common.Common']).toBeFalsy();
+    });
+  });
 });

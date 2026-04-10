@@ -1,148 +1,101 @@
-const mockGetSignedUrlFn = codi.mock.fn();
+import { createMocks } from 'node-mocks-http';
+import { describe, expect, it, vi } from 'vitest';
 
-const mockPreSigner = codi.mock.module('@aws-sdk/s3-request-presigner', {
-  namedExports: {
-    getSignedUrl: mockGetSignedUrlFn,
+const mockGetSignedUrlFn = vi.fn();
+
+vi.mock('@aws-sdk/s3-request-presigner', () => ({
+  getSignedUrl: (...args) => mockGetSignedUrlFn(...args),
+}));
+
+vi.mock('@aws-sdk/client-s3', () => ({
+  S3Client: class s3Client {
+    constructor(credentials) {
+      this.credentials = credentials;
+    }
   },
-});
-
-const mockListObjectsV2Command = codi.mock.fn();
-const mockGetObjectCommand = codi.mock.fn();
-const mockPutObjectCommand = codi.mock.fn();
-const mockDeleteObjectCommand = codi.mock.fn();
-
-const mockClientSDK = codi.mock.module('@aws-sdk/client-s3', {
-  namedExports: {
-    S3Client: class s3Client {
-      constructor(credentials) {
-        this.credentials = credentials;
-      }
-    },
-    ListObjectsV2Command: mockListObjectsV2Command,
-    GetObjectCommand: mockGetObjectCommand,
-    PutObjectCommand: mockPutObjectCommand,
-    DeleteObjectCommand: mockDeleteObjectCommand,
+  ListObjectsV2Command: class ListObjectsV2Command {
+    constructor() {
+      this.url = 'https://aws.s3.test/list';
+    }
   },
-});
+  GetObjectCommand: class GetObjectCommand {
+    constructor() {
+      this.url = 'https://aws.s3.test/get/test.json';
+    }
+  },
+  PutObjectCommand: class PutObjectCommand {
+    constructor() {
+      this.url = 'https://aws.s3.test/put/test.json';
+    }
+  },
+  DeleteObjectCommand: class DeleteObjectCommand {
+    constructor() {
+      this.url = 'https://aws.s3.test/delete/test.json';
+    }
+  },
+}));
 
-await codi.describe(
-  { name: 's3:', id: 'sign_s3', parentId: 'sign' },
-  async () => {
-    await codi.it(
-      { name: 'invalid command', parentId: 'sign_s3' },
-      async () => {
-        globalThis.xyzEnv = {
-          AWS_S3_CLIENT: 'AWSS3KEY',
-        };
+describe('s3:', () => {
+  it('invalid command', async () => {
+    globalThis.xyzEnv = {
+      AWS_S3_CLIENT: 'AWSS3KEY',
+    };
+
+    const { default: s3_signer } = await import('../../../mod/sign/s3.js');
+
+    const { req, res } = createMocks({
+      params: {
+        command: 'foo',
+      },
+    });
+
+    const resp = await s3_signer(req, res);
+
+    expect(resp).toBeInstanceOf(Error);
+    expect(resp.toString()).toEqual(
+      'Error: S3 clientSDK command validation failed.',
+    );
+  });
+
+  describe('Commands:', () => {
+    const commands = [
+      {
+        name: 'ListObjectsV2Command',
+        url: 'https://aws.s3.test/list',
+      },
+      {
+        name: 'GetObjectCommand',
+        url: 'https://aws.s3.test/get/test.json',
+      },
+      {
+        name: 'PutObjectCommand',
+        url: 'https://aws.s3.test/put/test.json',
+      },
+      {
+        name: 'DeleteObjectCommand',
+        url: 'https://aws.s3.test/delete/test.json',
+      },
+    ];
+
+    for (const command of commands) {
+      it(command.name, async () => {
+        mockGetSignedUrlFn.mockImplementation((S3Client, Command, opts) => {
+          const id = crypto.randomUUID();
+          return `${Command.url}?key=${id}`;
+        });
 
         const { default: s3_signer } = await import('../../../mod/sign/s3.js');
 
-        const { req, res } = codi.mockHttp.createMocks({
+        const { req, res } = createMocks({
           params: {
-            command: 'foo',
+            command: command.name,
           },
         });
 
-        const resp = await s3_signer(req, res);
+        const result = await s3_signer(req, res);
 
-        codi.assertTrue(resp instanceof Error);
-        codi.assertEqual(
-          resp.toString(),
-          'Error: S3 clientSDK command validation failed.',
-        );
-      },
-    );
-
-    await codi.describe(
-      {
-        name: 'Commands: ',
-        id: 'sign_s3_commands',
-        parentId: 'sign_s3',
-      },
-      async () => {
-        const commands = [
-          'ListObjectsV2Command',
-          'GetObjectCommand',
-          'PutObjectCommand',
-          'DeleteObjectCommand',
-        ];
-
-        const mockFns = {
-          ListObjectsV2Command: {
-            mockFn: mockListObjectsV2Command,
-            url: 'https://aws.s3.test/list',
-            implementation: class ListObjectsV2Command {
-              constructor() {
-                this.url = 'https://aws.s3.test/list';
-              }
-            },
-          },
-          GetObjectCommand: {
-            mockFn: mockGetObjectCommand,
-            url: 'https://aws.s3.test/get/test.json',
-            implementation: class GetObjectCommand {
-              constructor() {
-                this.url = 'https://aws.s3.test/get/test.json';
-              }
-            },
-          },
-          PutObjectCommand: {
-            mockFn: mockPutObjectCommand,
-            url: 'https://aws.s3.test/put/test.json',
-            implementation: class PutObjectCommand {
-              constructor() {
-                this.url = 'https://aws.s3.test/put/test.json';
-              }
-            },
-          },
-          DeleteObjectCommand: {
-            mockFn: mockDeleteObjectCommand,
-            url: 'https://aws.s3.test/delete/test.json',
-            implementation: class DeleteObjectCommand {
-              constructor() {
-                this.url = 'https://aws.s3.test/delete/test.json';
-              }
-            },
-          },
-        };
-
-        commands.forEach(async (command) => {
-          await codi.it(
-            { name: command, parentId: 'sign_s3_commands' },
-            async () => {
-              const mockFn = mockFns[command].mockFn;
-              const url = mockFns[command].url;
-              const implementation = mockFns[command].implementation;
-
-              mockFn.mock.mockImplementation(implementation);
-
-              mockGetSignedUrlFn.mock.mockImplementation(
-                (S3Client, Command, opts) => {
-                  const id = crypto.randomUUID();
-                  return `${Command.url}?key=${id}`;
-                },
-              );
-
-              const { default: s3_signer } = await import(
-                '../../../mod/sign/s3.js'
-              );
-
-              const { req, res } = codi.mockHttp.createMocks({
-                params: {
-                  command: command,
-                },
-              });
-
-              const result = await s3_signer(req, res);
-
-              codi.assertTrue(result.includes(url));
-            },
-          );
-        });
-      },
-    );
-  },
-);
-
-mockClientSDK.restore();
-mockPreSigner.restore();
+        expect(result).toContain(command.url);
+      });
+    }
+  });
+});

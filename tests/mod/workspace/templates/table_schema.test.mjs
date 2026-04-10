@@ -1,92 +1,37 @@
+import { describe, expect, it } from 'vitest';
+
 import table_schema from '../../../../mod/workspace/templates/table_schema.js';
 
-export function tableSchemaTests() {
-  codi.describe(
-    {
-      name: 'table_schema',
-      id: 'template_table_schema',
-      parentId: 'template',
-    },
-    () => {
-      codi.it(
-        {
-          name: 'Should be a valid SQL template string',
-          parentId: 'template_table_schema',
-        },
-        () => {
-          codi.assertTrue(
-            typeof table_schema === 'string',
-            'table_schema template should be a string',
-          );
-        },
-      );
+describe('table_schema', () => {
+  it('should be a valid SQL template string', () => {
+    expect(typeof table_schema).toBe('string');
+  });
 
-      codi.it(
-        {
-          name: 'Should query INFORMATION_SCHEMA.COLUMNS',
-          parentId: 'template_table_schema',
-        },
-        () => {
-          codi.assertTrue(
-            table_schema.includes('INFORMATION_SCHEMA.COLUMNS'),
-            'Template should query INFORMATION_SCHEMA.COLUMNS',
-          );
-        },
-      );
+  it('should query INFORMATION_SCHEMA.COLUMNS', () => {
+    expect(table_schema.includes('INFORMATION_SCHEMA.COLUMNS')).toBe(true);
+  });
 
-      codi.it(
-        {
-          name: 'Should use parameterised substitution for table_schema and table',
-          parentId: 'template_table_schema',
-        },
-        () => {
-          codi.assertTrue(
-            table_schema.includes('%{table_schema}'),
-            'Template should use %{table_schema} substitution parameter',
-          );
-          codi.assertTrue(
-            table_schema.includes('%{table}'),
-            'Template should use %{table} substitution parameter',
-          );
-        },
-      );
+  it('should use parameterised substitution for table_schema and table', () => {
+    expect(table_schema.includes('%{table_schema}')).toBe(true);
+    expect(table_schema.includes('%{table}')).toBe(true);
+  });
 
-      codi.it(
-        {
-          name: 'Should select expected column metadata fields',
-          parentId: 'template_table_schema',
-        },
-        () => {
-          const expectedFields = [
-            'column_name',
-            'data_type',
-            'udt_name',
-            'character_maximum_length',
-            'column_default',
-            'is_nullable',
-          ];
+  it('should select expected column metadata fields', () => {
+    const expectedFields = [
+      'column_name',
+      'data_type',
+      'udt_name',
+      'character_maximum_length',
+      'column_default',
+      'is_nullable',
+    ];
 
-          for (const field of expectedFields) {
-            codi.assertTrue(
-              table_schema.includes(field),
-              `Template should select ${field}`,
-            );
-          }
-        },
-      );
+    for (const field of expectedFields) {
+      expect(table_schema.includes(field)).toBe(true);
+    }
+  });
 
-      codi.it(
-        {
-          name: 'Should order by ordinal_position',
-          parentId: 'template_table_schema',
-        },
-        () => {
-          codi.assertTrue(
-            table_schema.includes('ORDER BY ordinal_position'),
-            'Template should order results by ordinal_position',
-          );
-        },
-      );
-    },
-  );
-}
+  it('should order by ordinal_position', () => {
+    expect(table_schema.includes('ORDER BY ordinal_position')).toBe(true);
+  });
+});

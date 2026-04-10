@@ -1,31 +1,25 @@
-const mocks3SignerFn = codi.mock.fn();
-const mocks3 = codi.mock.module('../../../mod/sign/s3.js', {
-  defaultExport: mocks3SignerFn,
+import { describe, expect, it, vi } from 'vitest';
+
+const mocks3SignerFn = vi.fn();
+
+vi.mock('../../../mod/sign/s3.js', () => ({
+  default: (...args) => mocks3SignerFn(...args),
+}));
+
+const { default: s3_provider } = await import('../../../mod/provider/s3.js');
+
+describe('s3:', () => {
+  it('get from signer', async () => {
+    const fileBody = JSON.stringify(
+      '{ "templates": {}, "locale": { "layers": {}, }, }',
+    );
+
+    mocks3SignerFn.mockImplementation(async () => {
+      return fileBody;
+    });
+
+    const result = await s3_provider();
+
+    expect(result).toEqual(fileBody);
+  });
 });
-
-await codi.describe(
-  { name: 's3:', id: 's3_provider', parentId: 'provider' },
-  async () => {
-    const { default: s3_provider } = await import(
-      '../../../mod/provider/s3.js'
-    );
-    await codi.it(
-      { name: 'get from signer', parentId: 's3_provider' },
-      async () => {
-        const fileBody = JSON.stringify(
-          '{ "templates": {}, "locale": { "layers": {}, }, }',
-        );
-
-        mocks3SignerFn.mock.mockImplementation(async function s3_signer() {
-          return fileBody;
-        });
-
-        const result = await s3_provider();
-
-        codi.assertEqual(result, fileBody);
-      },
-    );
-  },
-);
-
-mocks3.restore();
