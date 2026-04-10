@@ -45,7 +45,7 @@ import './mod/utils/processEnv.js';
 import cookieParser from 'cookie-parser';
 import express from 'express';
 import rateLimit from 'express-rate-limit';
-import api from './api/api.js';
+import api from './api.js';
 
 const publicDir = resolve(process.cwd(), 'public');
 
@@ -110,8 +110,6 @@ app.get(`${xyzEnv.DIR}/saml/login`, api);
 app.post(`${xyzEnv.DIR}/saml/acs`, express.urlencoded({ extended: true }), api);
 
 app.get(`${xyzEnv.DIR}/view{/:template}`, api);
-
-app.get(`${xyzEnv.DIR}{/:locale}`, api);
 
 app.get(`/`, api);
 

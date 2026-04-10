@@ -3,8 +3,8 @@
   "version": "v4.22.1",
   "type": "module",
   "exports": {
-    ".": "./api/api.js",
-    "./api": "./api/api.js",
+    ".": "./api.js",
+    "./api": "./api.js",
     "./extensions": "./extensions.js",
     "./server": "./server.js"
   },
