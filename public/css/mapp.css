@@ -172,6 +172,7 @@ body {
       }
       &.nowrap {
         flex-wrap: nowrap;
+        overflow: scroll;
         & .contents {
           justify-content: flex-start;
           & .label {
