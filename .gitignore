@@ -35,5 +35,6 @@ docs/*
 !jsdoc*.json
 !codi.json
 !biome.json
+!turbo.json
 
 .vercel
