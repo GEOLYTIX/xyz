@@ -9,7 +9,7 @@ set of features for web and mobile applications.
 
 Our implementation provides the following endpoints and features:
 
-- SAML authentication endpoints for Single Sign-On
+- Extension-managed authentication endpoints such as SAML SSO
 - Rate-limited API endpoints for provider interactions
 - Static file serving for documentation
 - Security enhancements including header protection
@@ -20,6 +20,7 @@ The server implements the following core features:
 - Cookie parsing for session management
 - JSON body parsing with 5MB limit for POST requests
 - Static file serving with HTML extension support
+- Direct route installation for extension apps before view fallbacks
 
 ## Security 🔐
 
@@ -38,6 +39,7 @@ RATE_LIMIT_WINDOW - Time window in ms (default: 1 min)
 @requires express Web application framework
 @requires cookie-parser HTTP cookie parsing middleware
 @requires express-rate-limit Rate limiting middleware
+@requires ./extensions Extension-managed server route installers
 */
 
 import { resolve } from 'node:path';
@@ -46,6 +48,7 @@ import cookieParser from 'cookie-parser';
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 import api from './api/api.js';
+import { getExpressRoutes } from './extensions.js';
 
 const publicDir = resolve(process.cwd(), 'public');
 
@@ -101,13 +104,10 @@ app.post(
   api,
 );
 
-app.get(`${xyzEnv.DIR}/saml/metadata`, api);
-
-app.get(`${xyzEnv.DIR}/saml/logout`, api);
-
-app.get(`${xyzEnv.DIR}/saml/login`, api);
-
-app.post(`${xyzEnv.DIR}/saml/acs`, express.urlencoded({ extended: true }), api);
+// Install direct server routes from extensions before generic view routes.
+for (const registerRoute of getExpressRoutes()) {
+  registerRoute(app, { express });
+}
 
 app.get(`${xyzEnv.DIR}/view{/:template}`, api);
 

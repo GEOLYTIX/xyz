@@ -20,7 +20,6 @@ app.get(`/`, api)
 @requires /workspace
 @requires /user/login
 @requires /user/auth
-@requires /user/saml
 @requires /user/register
 @module /api
 */
@@ -51,7 +50,6 @@ import user from '../mod/user/_user.js';
 import auth from '../mod/user/auth.js';
 import login from '../mod/user/login.js';
 import register from '../mod/user/register.js';
-import saml from '../mod/user/saml.js';
 import { setRedirect } from '../mod/utils/redirect.js';
 import view from '../mod/view.js';
 import workspace from '../mod/workspace/_workspace.js';
@@ -73,8 +71,6 @@ const routes = {
 The API method will redirect requests with a request url length 1 and xyzEnv.DIR.
 
 eg. A request to localhost:3000 with a DIR = "/mapp" will be redirected to localhost:3000/mapp
-
-Requests with the url matching the /saml/ path will be passed to the [saml module]{@link module:/user/saml}.
 
 Request parameter will be assigned once validated with the validateRequestParams method.
 
@@ -98,11 +94,6 @@ export default function api(req, res) {
   if (xyzEnv.DIR && req.url.length === 1) {
     res.setHeader('location', `${xyzEnv.DIR}`);
     return res.status(302).send();
-  }
-
-  // SAML request.
-  if (req.url.match(/\/saml/)) {
-    return saml(req, res);
   }
 
   req.params = validateRequestParams(req);

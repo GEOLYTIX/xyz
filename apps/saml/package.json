@@ -1,0 +1,15 @@
+{
+  "name": "@geolytix/xyz-saml-app",
+  "version": "v1.0.0",
+  "description": "Optional SAML backend app",
+  "type": "module",
+  "exports": {
+    ".": "./index.js"
+  },
+  "optionalDependencies": {
+    "@node-saml/node-saml": "^5.0.1"
+  },
+  "dependencies": {
+    "jsonwebtoken": "^9.0.2"
+  }
+}
