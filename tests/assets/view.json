@@ -1,0 +1,7 @@
+{
+  "templates": {
+    "custom_view": {
+      "template": "<html lang=\"{{language}}\">{{varcheck}}</html>"
+    }
+  }
+}
