@@ -16,7 +16,7 @@ import {
 
 // Mock the logger to suppress output during tests.
 vi.mock('../../mod/utils/logger.js', () => ({
-  default: () => { },
+  default: () => {},
 }));
 
 const { default: view } = await import('../../mod/view.js');
@@ -29,7 +29,7 @@ const originalConsoleError = console.error;
 
 describe('View: Testing View API', () => {
   beforeAll(async () => {
-    console.error = () => { };
+    console.error = () => {};
 
     globalThis.xyzEnv = {
       TITLE: 'VIEW TEST',
@@ -43,10 +43,8 @@ describe('View: Testing View API', () => {
     console.error = originalConsoleError;
   });
 
-
   describe('Default view', () => {
     it('should return 200 without params', async () => {
-
       const { req, res } = createMocks();
 
       await view(req, res);
@@ -72,7 +70,7 @@ describe('View: Testing View API', () => {
       const { req, res } = createMocks({
         params: {
           template: 'custom_view',
-          varcheck: 'foo₿ar'
+          varcheck: 'foo₿ar',
         },
       });
 
