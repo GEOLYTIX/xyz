@@ -12,6 +12,7 @@ import express from 'express';
 app.get(`${xyzEnv.DIR}/saml/metadata`, saml);
 app.get(`${xyzEnv.DIR}/saml/logout`, saml);
 app.get(`${xyzEnv.DIR}/saml/login`, saml);
+app.get(`${xyzEnv.DIR}/saml/logout/callback`, saml);
 app.post(
   `${xyzEnv.DIR}/saml/logout/callback`,
   express.urlencoded({ extended: true }),
