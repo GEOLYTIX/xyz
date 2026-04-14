@@ -1,119 +1,96 @@
+import { describe, expect, it } from 'vitest';
 import checkWorkspaceCache from '../../../mod/workspace/cache.js';
 import getLayer from '../../../mod/workspace/getLayer.js';
 
-await codi.describe(
-  { name: 'getLayer: ', id: 'workspace_getLayer' },
-  async () => {
-    globalThis.xyzEnv = {
-      TITLE: 'WORKSPACE TEST',
-      WORKSPACE: 'file:./tests/assets/_workspace.json',
+describe('getLayer: ', async () => {
+  globalThis.xyzEnv = {
+    TITLE: 'WORKSPACE TEST',
+    WORKSPACE: 'file:./tests/assets/_workspace.json',
+  };
+
+  await checkWorkspaceCache(true);
+
+  it('Get Layer from workspace', async () => {
+    const params = {
+      locale: 'locale',
+      layer: 'OSM_Layer',
+      user: {
+        email: 'test@test.com',
+        admin: true,
+      },
+      ignoreRoles: true,
     };
 
-    await checkWorkspaceCache(true);
+    const layer = await getLayer(params);
 
-    await codi.it(
-      { name: 'Get Layer from workspace', parentId: 'workspace_getLayer' },
-      async () => {
-        const params = {
-          locale: 'locale',
-          layer: 'OSM_Layer',
-          user: {
-            email: 'test@test.com',
-            admin: true,
-          },
-          ignoreRoles: true,
-        };
+    params.layer = 'OSM_Duplicate';
+    const layer_2 = await getLayer(params);
 
-        const layer = await getLayer(params);
+    //Check for if we have excluded props
+    expect(Object.hasOwn(layer, 'attribution')).toBeFalsy();
+    expect(Object.hasOwn(layer, 'format')).toBeFalsy();
+    expect(Object.hasOwn(layer, 'URI')).toBeFalsy();
 
-        params.layer = 'OSM_Duplicate';
-        const layer_2 = await getLayer(params);
+    //Check for if we have include props
+    expect(Object.hasOwn(layer_2, 'attribution')).toBeTruthy();
+    expect(Object.hasOwn(layer_2, 'display')).toBeTruthy();
+  });
 
-        //Check for if we have excluded props
-        codi.assertFalse(Object.hasOwn(layer, 'attribution'));
-        codi.assertFalse(Object.hasOwn(layer, 'format'));
-        codi.assertFalse(Object.hasOwn(layer, 'URI'));
-
-        //Check for if we have include props
-        codi.assertTrue(Object.hasOwn(layer_2, 'attribution'));
-        codi.assertTrue(Object.hasOwn(layer_2, 'display'));
+  it('1. layer with role, templates with roles', async () => {
+    const params = {
+      locale: 'europe',
+      layer: 'Scratch',
+      user: {
+        roles: ['europe', 'scratch_role', 'scratch_role_template'],
       },
-    );
+    };
+    // User with 3 roles
+    // Europe = locale role
+    // scratch_role = layer role
+    // scratch_role_template = template role on the layer
 
-    await codi.it(
-      {
-        name: '1. layer with role, templates with roles',
-        parentId: 'workspace_getLayer',
+    const layer = await getLayer(params);
+
+    // The layer key should be Scratch to ensure we got the correct layer
+    expect(layer.key === 'Scratch').toBeTruthy();
+    // The layer name should be SCRATCH ROLE TEMPLATE from the template with role
+    expect(layer.name === 'SCRATCH ROLE TEMPLATE').toBeTruthy();
+  });
+
+  it('2. layer without role, templates with roles', async () => {
+    const params = {
+      locale: 'europe',
+      layer: 'Scratch_no_role',
+      user: {
+        roles: ['europe', 'scratch_role_template'],
       },
-      async () => {
-        const params = {
-          locale: 'europe',
-          layer: 'Scratch',
-          user: {
-            roles: ['europe', 'scratch_role', 'scratch_role_template'],
-          },
-        };
-        // User with 3 roles
-        // Europe = locale role
-        // scratch_role = layer role
-        // scratch_role_template = template role on the layer
+    };
+    // User with 2 roles
+    // Europe = locale role
+    // scratch_role_template = template role on the layer
 
-        const layer = await getLayer(params);
+    const layer = await getLayer(params);
 
-        // The layer key should be Scratch to ensure we got the correct layer
-        codi.assertTrue(layer.key === 'Scratch');
-        // The layer name should be SCRATCH ROLE TEMPLATE from the template with role
-        codi.assertTrue(layer.name === 'SCRATCH ROLE TEMPLATE');
+    // The layer key should be Scratch_no_role to ensure we got the correct layer
+    expect(layer.key === 'Scratch_no_role').toBeTruthy();
+    // The layer name should be SCRATCH ROLE TEMPLATE from the template with role
+    expect(layer.name === 'SCRATCH ROLE TEMPLATE').toBeTruthy();
+  });
+
+  it('3. layer without role, templates without roles', async () => {
+    const params = {
+      locale: 'europe',
+      layer: 'Scratch_no_role',
+      user: {
+        roles: ['europe'],
       },
-    );
-
-    await codi.it(
-      {
-        name: '2. layer without role, templates with roles',
-        parentId: 'workspace_getLayer',
-      },
-      async () => {
-        const params = {
-          locale: 'europe',
-          layer: 'Scratch_no_role',
-          user: {
-            roles: ['europe', 'scratch_role_template'],
-          },
-        };
-        // User with 2 roles
-        // Europe = locale role
-        // scratch_role_template = template role on the layer
-
-        const layer = await getLayer(params);
-
-        // The layer key should be Scratch_no_role to ensure we got the correct layer
-        codi.assertTrue(layer.key === 'Scratch_no_role');
-        // The layer name should be SCRATCH ROLE TEMPLATE from the template with role
-        codi.assertTrue(layer.name === 'SCRATCH ROLE TEMPLATE');
-      },
-    );
-
-    await codi.it(
-      {
-        name: '3. layer without role, templates without roles',
-        parentId: 'workspace_getLayer',
-      },
-      async () => {
-        const params = {
-          locale: 'europe',
-          layer: 'Scratch_no_role',
-          user: {
-            roles: ['europe'],
-          },
-        };
-        // User with 1 role
-        // Europe = locale role
-        const layer = await getLayer(params);
-        // The layer key should be Scratch_no_role to ensure we got the correct layer
-        codi.assertTrue(layer.key === 'Scratch_no_role');
-        // The layer name should be SCRATCH NO ROLE TEMPLATE from the template without role
-        codi.assertTrue(layer.name === 'SCRATCH NO ROLE TEMPLATE');
-      },
-    );
-  },
-);
+    };
+    // User with 1 role
+    // Europe = locale role
+    const layer = await getLayer(params);
+    // The layer key should be Scratch_no_role to ensure we got the correct layer
+    expect(layer.key === 'Scratch_no_role').toBeTruthy();
+    // The layer name should be SCRATCH NO ROLE TEMPLATE from the template without role
+    expect(layer.name === 'SCRATCH NO ROLE TEMPLATE').toBeTruthy();
+  });
+});

@@ -1,27 +1,32 @@
-const mockCloudFrontFn = codi.mock.fn();
-const mockCloudFront = codi.mock.module('../../../mod/sign/cloudfront.js', {
-  defaultExport: mockCloudFrontFn,
-});
+import { createMocks } from 'node-mocks-http';
+import { describe, expect, it, vi } from 'vitest';
 
-const mockCloudinaryFn = codi.mock.fn();
-const mockCloudinary = codi.mock.module('../../../mod/sign/cloudinary.js', {
-  defaultExport: mockCloudinaryFn,
-});
+const mockCloudFrontFn = vi.fn();
+const mockCloudinaryFn = vi.fn();
+const mocks3Fn = vi.fn();
+const mockFileFn = vi.fn();
 
-const mocks3Fn = codi.mock.fn();
-const mocks3 = codi.mock.module('../../../mod/sign/s3.js', {
-  defaultExport: mocks3Fn,
-});
+vi.mock('../../../mod/sign/cloudfront.js', () => ({
+  default: (...args) => mockCloudFrontFn(...args),
+}));
 
-const mockFileFn = codi.mock.fn();
-const mockFile = codi.mock.module('../../../mod/sign/file.js', {
-  defaultExport: mockFileFn,
-});
+vi.mock('../../../mod/sign/cloudinary.js', () => ({
+  default: (...args) => mockCloudinaryFn(...args),
+}));
 
-await codi.describe({ name: 'Sign: ', id: 'sign' }, async () => {
-  const { default: signer } = await import('../../../mod/sign/_sign.js');
-  await codi.it({ name: 'Invalid signer', parentId: 'sign' }, async () => {
-    const { req, res } = codi.mockHttp.createMocks({
+vi.mock('../../../mod/sign/s3.js', () => ({
+  default: (...args) => mocks3Fn(...args),
+}));
+
+vi.mock('../../../mod/sign/file.js', () => ({
+  default: (...args) => mockFileFn(...args),
+}));
+
+const { default: signer } = await import('../../../mod/sign/_sign.js');
+
+describe('Sign:', () => {
+  it('Invalid signer', async () => {
+    const { req, res } = createMocks({
       params: {
         signer: 'foo',
       },
@@ -29,68 +34,57 @@ await codi.describe({ name: 'Sign: ', id: 'sign' }, async () => {
 
     await signer(req, res);
 
-    codi.assertEqual(res.statusCode, 404);
-    codi.assertEqual(res._getData(), "Failed to validate 'signer=foo' param.");
+    expect(res.statusCode).toEqual(404);
+    expect(res._getData()).toEqual("Failed to validate 'signer=foo' param.");
   });
 
-  await codi.it({ name: 'response Error', parentId: 'sign' }, async () => {
-    const { req, res } = codi.mockHttp.createMocks({
+  it('response Error', async () => {
+    const { req, res } = createMocks({
       params: {
         signer: 's3',
       },
     });
 
-    mocks3Fn.mock.mockImplementation(() => {
+    mocks3Fn.mockImplementation(() => {
       return new Error('This is not happening');
     });
 
     await signer(req, res);
 
-    codi.assertEqual(res.statusCode, 500);
-    codi.assertEqual(res._getData(), 'This is not happening');
+    expect(res.statusCode).toEqual(500);
+    expect(res._getData()).toEqual('This is not happening');
   });
 
-  await codi.describe(
-    { name: 'signers: ', id: 'sign_signers', parentId: 'sign' },
-    () => {
-      const signers = ['s3', 'cloudfront', 'cloudinary', 'file'];
+  describe('signers:', () => {
+    const signers = ['s3', 'cloudfront', 'cloudinary', 'file'];
 
-      const mockFns = {
-        s3: mocks3Fn,
-        cloudinary: mockCloudinaryFn,
-        cloudfront: mockCloudFrontFn,
-        file: mockFileFn,
-      };
+    const mockFns = {
+      s3: mocks3Fn,
+      cloudinary: mockCloudinaryFn,
+      cloudfront: mockCloudFrontFn,
+      file: mockFileFn,
+    };
 
-      signers.forEach(async (sign) => {
-        await codi.it(
-          { name: `${sign}`, parentId: 'sign_signers' },
-          async () => {
-            const mockFn = mockFns[sign];
+    for (const sign of signers) {
+      it(`${sign}`, async () => {
+        const mockFn = mockFns[sign];
 
-            mockFn.mock.mockImplementation(() => {
-              return `I am a file coming from ${sign}`;
-            });
+        mockFn.mockImplementation(() => {
+          return `I am a file coming from ${sign}`;
+        });
 
-            const { req, res } = codi.mockHttp.createMocks({
-              params: {
-                signer: sign,
-              },
-            });
-
-            await signer(req, res);
-
-            const body = res._getData();
-
-            codi.assertEqual(body, `I am a file coming from ${sign}`);
+        const { req, res } = createMocks({
+          params: {
+            signer: sign,
           },
-        );
-      });
-    },
-  );
-});
+        });
 
-mockCloudFront.restore();
-mockCloudinary.restore();
-mocks3.restore();
-mockFile.restore();
+        await signer(req, res);
+
+        const body = res._getData();
+
+        expect(body).toEqual(`I am a file coming from ${sign}`);
+      });
+    }
+  });
+});

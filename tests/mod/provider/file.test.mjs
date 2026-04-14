@@ -1,68 +1,46 @@
-const { readFileSync } = await import('fs');
-const fsMockFn = codi.mock.fn(readFileSync);
-const fsMock = codi.mock.module('fs', {
-  namedExports: {
-    readFileSync: fsMockFn,
-  },
+import { describe, expect, it, vi } from 'vitest';
+
+const fsMockFn = vi.fn();
+const mockPathdirnameFn = vi.fn();
+const mockPathJoinFn = vi.fn();
+
+vi.mock('fs', () => ({
+  readFileSync: (...args) => fsMockFn(...args),
+}));
+
+vi.mock('path', () => ({
+  dirname: (...args) => mockPathdirnameFn(...args),
+  join: (...args) => mockPathJoinFn(...args),
+}));
+
+vi.mock('url', () => ({
+  fileURLToPath: vi.fn(),
+}));
+
+vi.mock('../../../mod/sign/file.js', () => ({
+  default: vi.fn(),
+  file_signer: vi.fn(),
+}));
+
+const { default: file } = await import('../../../mod/provider/file.js');
+
+describe('file:', () => {
+  it('Get File test', async () => {
+    const fileContent = { text: 'I am a file' };
+    fsMockFn.mockImplementationOnce(() => {
+      return JSON.stringify(fileContent);
+    });
+
+    mockPathdirnameFn.mockImplementationOnce(() => {
+      return 'test.json';
+    });
+
+    mockPathJoinFn.mockImplementationOnce(() => {
+      '../../test.json';
+    });
+
+    const results = await file('../../dir/tests/thing.json');
+
+    expect(results).toEqual(fileContent);
+  });
 });
-
-globalThis.fsMockFn = fsMockFn;
-
-const { dirname, join } = await import('path');
-
-const mockPathdirnameFn = codi.mock.fn(dirname);
-const mockPathJoinFn = codi.mock.fn(join);
-const mockPath = codi.mock.module('path', {
-  namedExports: {
-    dirname: mockPathdirnameFn,
-    join: mockPathJoinFn,
-  },
-});
-
-const mockedUrlFn = codi.mock.fn();
-const mockedUrl = codi.mock.module('url', {
-  namedExports: {
-    fileURLToPath: mockedUrlFn,
-  },
-});
-
-const mockSignFileFn = codi.mock.fn();
-const mockSignFile = codi.mock.module('../../../mod/sign/file.js', {
-  defaultExport: mockSignFileFn,
-  namedExports: {
-    file_signer: mockSignFileFn,
-  },
-});
-
-await codi.describe(
-  { name: 'file:', id: 'provider_file', parentId: 'provider' },
-  async () => {
-    const { default: file } = await import('../../../mod/provider/file.js');
-    await codi.it(
-      { name: 'Get File test', parentId: 'provider_file' },
-      async () => {
-        const fileContent = { text: 'I am a file' };
-        fsMockFn.mock.mockImplementationOnce(function readFileSync() {
-          return JSON.stringify(fileContent);
-        });
-
-        mockPathdirnameFn.mock.mockImplementationOnce(function dirname() {
-          return 'test.json';
-        });
-
-        mockPathJoinFn.mock.mockImplementationOnce(function dirname() {
-          '../../test.json';
-        });
-
-        const results = await file('../../dir/tests/thing.json');
-
-        codi.assertEqual(results, fileContent);
-      },
-    );
-  },
-);
-
-mockSignFile.restore();
-fsMock.restore();
-mockPath.restore();
-mockedUrl.restore();

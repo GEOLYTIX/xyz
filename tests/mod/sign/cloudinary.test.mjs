@@ -1,97 +1,80 @@
-await codi.describe(
-  { name: 'cloudinary:', id: 'sign_cloudinary', parentId: 'sign' },
-  async () => {
-    const { default: cloudinary } = await import(
-      '../../../mod/sign/cloudinary.js'
+import { createMocks } from 'node-mocks-http';
+import { describe, expect, it } from 'vitest';
+
+const { default: cloudinary } = await import('../../../mod/sign/cloudinary.js');
+
+describe('cloudinary:', () => {
+  it('no cloudinary url configured', async () => {
+    globalThis.xyzEnv = {};
+
+    const cloudinaryError = await cloudinary();
+
+    expect(cloudinaryError).toBeInstanceOf(Error);
+    expect(cloudinaryError.message).toEqual(
+      'CLOUDINARY_URL not provided in xyzEnv',
     );
+  });
 
-    await codi.it(
-      { name: 'no cloudinary url configured', parentId: 'sign_cloudinary' },
-      async () => {
-        globalThis.xyzEnv = {};
+  it('no folder provided', async () => {
+    globalThis.xyzEnv = {
+      CLOUDINARY_URL: 'https://cloudinary.test.com',
+    };
 
-        const cloudinaryError = await cloudinary();
+    const { req, res } = createMocks({
+      params: {},
+    });
 
-        codi.assertTrue(cloudinaryError instanceof Error);
-        codi.assertEqual(
-          cloudinaryError.message,
-          'CLOUDINARY_URL not provided in xyzEnv',
-        );
+    const cloudinaryError = await cloudinary(req, res);
+
+    expect(cloudinaryError).toBeInstanceOf(Error);
+
+    expect(cloudinaryError.message).toEqual(
+      'A folder request param is required for the cloudinary signer.',
+    );
+  });
+
+  it('no public_id provided', async () => {
+    globalThis.xyzEnv = {
+      CLOUDINARY_URL: 'https://cloudinary.test.com',
+    };
+
+    const { req, res } = createMocks({
+      params: {
+        folder: './test',
       },
+    });
+
+    const cloudinaryError = await cloudinary(req, res);
+
+    expect(cloudinaryError).toBeInstanceOf(Error);
+
+    expect(cloudinaryError.message).toEqual(
+      'A public_id request param is required for the cloudinary signer.',
     );
+  });
 
-    await codi.it(
-      { name: 'no folder provided', parentId: 'sign_cloudinary' },
-      async () => {
-        globalThis.xyzEnv = {
-          CLOUDINARY_URL: 'https://cloudinary.test.com',
-        };
+  it('get url', async () => {
+    const id1 = crypto.randomUUID();
+    const id2 = crypto.randomUUID();
 
-        const { req, res } = codi.mockHttp.createMocks({
-          params: {},
-        });
+    globalThis.xyzEnv = {
+      CLOUDINARY_URL: `cloudinary://${id1}:${id2}@test`,
+    };
 
-        const cloudinaryError = await cloudinary(req, res);
-
-        codi.assertTrue(cloudinaryError instanceof Error);
-
-        codi.assertEqual(
-          cloudinaryError.message,
-          'A folder request param is required for the cloudinary signer.',
-        );
+    const { req, res } = createMocks({
+      params: {
+        folder: './test',
+        public_id: 'public_id',
       },
-    );
+    });
 
-    await codi.it(
-      { name: 'no public_id provided', parentId: 'sign_cloudinary' },
-      async () => {
-        globalThis.xyzEnv = {
-          CLOUDINARY_URL: 'https://cloudinary.test.com',
-        };
+    const cloudinaryURL = await cloudinary(req, res);
 
-        const { req, res } = codi.mockHttp.createMocks({
-          params: {
-            folder: './test',
-          },
-        });
-
-        const cloudinaryError = await cloudinary(req, res);
-
-        codi.assertTrue(cloudinaryError instanceof Error);
-
-        codi.assertEqual(
-          cloudinaryError.message,
-          'A public_id request param is required for the cloudinary signer.',
-        );
-      },
-    );
-
-    await codi.it(
-      { name: 'get url', parentId: 'sign_cloudinary' },
-      async () => {
-        const id1 = crypto.randomUUID();
-        const id2 = crypto.randomUUID();
-
-        globalThis.xyzEnv = {
-          CLOUDINARY_URL: `cloudinary://${id1}:${id2}@test`,
-        };
-
-        const { req, res } = codi.mockHttp.createMocks({
-          params: {
-            folder: './test',
-            public_id: 'public_id',
-          },
-        });
-
-        const cloudinaryURL = await cloudinary(req, res);
-
-        codi.assertTrue(cloudinaryURL.includes(id1));
-        codi.assertTrue(cloudinaryURL.includes(id2));
-        codi.assertTrue(
-          cloudinaryURL.includes('https://api.cloudinary.com/v1_1/'),
-        );
-        codi.assertTrue(cloudinaryURL.includes('upload'));
-      },
-    );
-  },
-);
+    expect(cloudinaryURL.includes(id1)).toBeTruthy();
+    expect(cloudinaryURL.includes(id2)).toBeTruthy();
+    expect(
+      cloudinaryURL.includes('https://api.cloudinary.com/v1_1/'),
+    ).toBeTruthy();
+    expect(cloudinaryURL.includes('upload')).toBeTruthy();
+  });
+});

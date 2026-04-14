@@ -185,17 +185,17 @@ Breakpoints set in the mapp lib script will now be respected in the VSCode debug
 
 #### CLI Test Debugging
 
-You can also debug the codi tests with the following launch config.
+You can debug vitest tests with the following launch config.
 
 ```json
 {
   "type": "node",
   "request": "launch",
-  "name": "Debug Tests",
-  "skipFiles": ["<node_internals>/**"],
-  "program": "${workspaceFolder}/node_modules/codi-test-framework/cli.js",
-  "args": ["${workspaceFolder}/tests", "--quiet"],
-  "runtimeArgs": ["--watch-path=.", "--experimental-test-module-mocks"],
+  "name": "Debug Vitest Tests",
+  "autoAttachChildProcesses": true,
+  "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
+  "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
+  "args": ["run", "--no-file-parallelism"],
   "console": "integratedTerminal",
   "internalConsoleOptions": "neverOpen",
   "cwd": "${workspaceFolder}"

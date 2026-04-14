@@ -1,3 +1,4 @@
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import checkWorkspaceCache from '../../../mod/workspace/cache.js';
 
 //Assigning console.error to a property to restore original function with.
@@ -6,98 +7,75 @@ const originalConsole = console.error;
 //erros from test so we can assert on them and not get polute the console.
 const mockErrors = [];
 
-//Changing the console.error function to push to our local collection of messages.
-console.error = (message) => {
-  mockErrors.push(message);
-};
+beforeAll(() => {
+  //Changing the console.error function to push to our local collection of messages.
+  console.error = (message) => {
+    mockErrors.push(message);
+  };
+});
 
-await codi.describe(
-  { name: 'getTemplate', id: 'workspace_getTemplate', parentId: 'workspace' },
-  async () => {
-    globalThis.xyzEnv = {
-      TITLE: 'TITLE',
-      WORKSPACE: 'file:./tests/assets/workspace_locale_layers_templates.json',
-    };
+afterAll(() => {
+  console.error = originalConsole;
+});
 
-    //Calling the cache method with force to reload a new workspace
-    await checkWorkspaceCache('file');
+describe('getTemplate', async () => {
+  globalThis.xyzEnv = {
+    TITLE: 'TITLE',
+    WORKSPACE: 'file:./tests/assets/workspace_locale_layers_templates.json',
+  };
 
-    await codi.it(
-      {
-        name: 'get template from workspace',
-        parentId: 'workspace_getTemplate',
-      },
-      async () => {
-        const template = 'OSM';
+  //Calling the cache method with force to reload a new workspace
+  await checkWorkspaceCache('file');
 
-        const { default: getTemplate } = await import(
-          '../../../mod/workspace/getTemplate.js'
-        );
+  it('get template from workspace', async () => {
+    const template = 'OSM';
 
-        const result = await getTemplate(template);
-
-        codi.assertTrue(typeof result === 'object');
-        codi.assertTrue(Object.hasOwn(result, 'roles'));
-      },
+    const { default: getTemplate } = await import(
+      '../../../mod/workspace/getTemplate.js'
     );
 
-    await codi.it(
-      {
-        name: 'query module has render property',
-        parentId: 'workspace_getTemplate',
-      },
-      async () => {
-        const template = 'mod_query';
+    const result = await getTemplate(template);
 
-        const { default: getTemplate } = await import(
-          '../../../mod/workspace/getTemplate.js'
-        );
+    expect(typeof result === 'object').toBeTruthy();
+    expect(Object.hasOwn(result, 'roles')).toBeTruthy();
+  });
 
-        const result = await getTemplate(template);
+  it('query module has render property', async () => {
+    const template = 'mod_query';
 
-        codi.assertTrue(typeof result === 'object');
-        codi.assertTrue(Object.hasOwn(result, 'render'));
-      },
+    const { default: getTemplate } = await import(
+      '../../../mod/workspace/getTemplate.js'
     );
 
-    await codi.it(
-      {
-        name: 'query module is Error',
-        parentId: 'workspace_getTemplate',
-      },
-      async () => {
-        const template = 'bad_mod_query';
+    const result = await getTemplate(template);
 
-        const { default: getTemplate } = await import(
-          '../../../mod/workspace/getTemplate.js'
-        );
+    expect(typeof result === 'object').toBeTruthy();
+    expect(Object.hasOwn(result, 'render')).toBeTruthy();
+  });
 
-        const result = await getTemplate(template);
+  it('query module is Error', async () => {
+    const template = 'bad_mod_query';
 
-        codi.assertTrue(result instanceof Error);
-      },
+    const { default: getTemplate } = await import(
+      '../../../mod/workspace/getTemplate.js'
     );
 
-    await codi.it(
-      {
-        name: 'query module render string',
-        parentId: 'workspace_getTemplate',
-      },
-      async () => {
-        const template = 'mod_query_no_default';
+    const result = await getTemplate(template);
 
-        const { default: getTemplate } = await import(
-          '../../../mod/workspace/getTemplate.js'
-        );
+    expect(result instanceof Error).toBeTruthy();
+  });
 
-        const result = await getTemplate(template);
+  it('query module render string', async () => {
+    const template = 'mod_query_no_default';
 
-        const foo = result.render.foo();
-
-        codi.assertEqual(foo, 'I am a module query fam');
-      },
+    const { default: getTemplate } = await import(
+      '../../../mod/workspace/getTemplate.js'
     );
-  },
-);
 
-console.error = originalConsole;
+    const result = await getTemplate(template);
+
+    const foo = result.render.foo();
+
+    expect(foo).toEqual('I am a module query fam');
+  });
+});

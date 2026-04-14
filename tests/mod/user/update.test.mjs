@@ -1,125 +1,101 @@
-const params = {
-  name: 'update: ',
-  id: 'user_update',
-  parentId: 'user',
-};
+import { describe, expect, it, vi } from 'vitest';
 
-const aclMockFn = codi.mock.fn();
+const aclMockFn = vi.fn();
+vi.mock('../../../mod/user/acl.js', () => ({
+  default: (...args) => aclMockFn(...args),
+}));
 
-const aclMock = codi.mock.module('../../../mod/user/acl.js', {
-  defaultExport: aclMockFn,
-});
+const mailerMockFn = vi.fn();
+vi.mock('../../../mod/utils/resend.js', () => ({
+  default: { send: (...args) => mailerMockFn(...args) },
+}));
 
-const mailerMockFn = codi.mock.fn();
-
-const mailerMock = codi.mock.module('../../../mod/utils/resend.js', {
-  defaultExport: { send: mailerMockFn },
-});
-
-await codi.describe(params, async () => {
+describe('update: ', async () => {
   const { default: update } = await import('../../../mod/user/update.js');
-  await codi.it(
-    {
-      name: 'should return error for non-admin users',
-      parentId: 'user_update',
-    },
-    async () => {
-      aclMockFn.mock.mockImplementation(function acl() {
-        return [];
-      });
 
-      const req = {
-        params: {
-          user: { admin: false },
-          email: 'test@example.com',
-          host: 'test.com',
-        },
-        body: {},
-      };
+  it('should return error for non-admin users', async () => {
+    aclMockFn.mockImplementation(function acl() {
+      return [];
+    });
 
-      const res = {
-        status: (code) => ({ send: (message) => ({ code, message }) }),
-        send: (message) => ({ message }),
-      };
-
-      const result = await update(req, res);
-
-      codi.assertTrue(result instanceof Error);
-      codi.assertEqual(result.message, 'admin_user_login_required');
-    },
-  );
-
-  await codi.it(
-    { name: 'should send approval email', parentId: 'user_update' },
-    async () => {
-      let mailOptions;
-
-      mailerMockFn.mock.mockImplementation(function mailer(options) {
-        mailOptions = options;
-        return true;
-      });
-
-      const req = {
-        params: {
-          user: { admin: true },
-          email: 'test@example.com',
-          host: 'test.com',
-        },
-        body: {
-          email: 'test@example.com',
-          approved: true,
-          language: 'en',
-        },
-      };
-
-      const res = {
-        status: (code) => ({ send: (message) => ({ code, message }) }),
-        send: (message) => ({ message }),
-      };
-
-      await update(req, res);
-
-      codi.assertEqual(mailOptions, {
-        template: 'approved_account',
-        language: 'en',
-        to: 'test@example.com',
+    const req = {
+      params: {
+        user: { admin: false },
+        email: 'test@example.com',
         host: 'test.com',
-      });
-    },
-  );
+      },
+      body: {},
+    };
 
-  await codi.it(
-    {
-      name: 'should reject invalid update keys',
-      parentId: 'user_update',
-    },
-    async () => {
-      const req = {
-        params: {
-          user: { admin: true },
-          email: 'test@example.com',
-          host: 'test.com',
-        },
-        body: {
-          email: 'test@example.com',
-          'invalid;key': 'value',
-        },
-      };
+    const res = {
+      status: (code) => ({ send: (message) => ({ code, message }) }),
+      send: (message) => ({ message }),
+    };
 
-      const res = {
-        status: (code) => ({ send: (message) => ({ code, message }) }),
-        send: (message) => ({ message }),
-      };
+    const result = await update(req, res);
 
-      const result = await update(req, res);
-      codi.assertEqual(result.code, 400);
-      codi.assertEqual(
-        result.message,
-        'Invalid key in user object for SQL update.',
-      );
-    },
-  );
+    expect(result instanceof Error).toBeTruthy();
+    expect(result.message).toEqual('admin_user_login_required');
+  });
+
+  it('should send approval email', async () => {
+    let mailOptions;
+
+    mailerMockFn.mockImplementation(function mailer(options) {
+      mailOptions = options;
+      return true;
+    });
+
+    const req = {
+      params: {
+        user: { admin: true },
+        email: 'test@example.com',
+        host: 'test.com',
+      },
+      body: {
+        email: 'test@example.com',
+        approved: true,
+        language: 'en',
+      },
+    };
+
+    const res = {
+      status: (code) => ({ send: (message) => ({ code, message }) }),
+      send: (message) => ({ message }),
+    };
+
+    await update(req, res);
+
+    expect(mailOptions).toEqual({
+      template: 'approved_account',
+      language: 'en',
+      to: 'test@example.com',
+      host: 'test.com',
+    });
+  });
+
+  it('should reject invalid update keys', async () => {
+    const req = {
+      params: {
+        user: { admin: true },
+        email: 'test@example.com',
+        host: 'test.com',
+      },
+      body: {
+        email: 'test@example.com',
+        'invalid;key': 'value',
+      },
+    };
+
+    const res = {
+      status: (code) => ({ send: (message) => ({ code, message }) }),
+      send: (message) => ({ message }),
+    };
+
+    const result = await update(req, res);
+    expect(result.code).toEqual(400);
+    expect(result.message).toEqual(
+      'Invalid key in user object for SQL update.',
+    );
+  });
 });
-
-aclMock.restore();
-mailerMock.restore();
