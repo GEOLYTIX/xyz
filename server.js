@@ -1,25 +1,26 @@
 /**
-The root backend composes the base XYZ app with optional extensions.
+The root backend composes the base XYZ app with optional direct routes.
 
-SAML is registered here as a concrete example of an extracted backend app that
-adds its own direct HTTP routes back into the shared Express server.
-*/
+SAML is mounted here as an extracted backend app so fork-level server wiring is
+kept explicit in the root application.
+ */
 
-import { registerExtension } from '@geolytix/xyz-app/extensions';
-import samlExtension from '@geolytix/xyz-saml-app';
+import app from '@geolytix/xyz-app/server';
+import saml from '@geolytix/xyz-saml-app';
+import express from 'express';
 
-registerExtension({
-  expressRoutes: samlExtension.expressRoutes,
-  apiRoutes: [
-    // Add fork-specific API routes here.
-    // {
-    //   test: (req) => /\/api\/custom/.test(req.url),
-    //   handler: (req, res) => res.status(200).json({ ok: true }),
-    // },
-  ],
-});
-
-// Load the base server after extension registration so direct routes are mounted.
-const { default: app } = await import('@geolytix/xyz-app/server');
+app.get(`${xyzEnv.DIR}/saml/metadata`, saml);
+app.get(`${xyzEnv.DIR}/saml/logout`, saml);
+app.get(`${xyzEnv.DIR}/saml/login`, saml);
+app.post(
+  `${xyzEnv.DIR}/saml/logout/callback`,
+  express.urlencoded({ extended: true }),
+  saml,
+);
+app.post(
+  `${xyzEnv.DIR}/saml/acs`,
+  express.urlencoded({ extended: true }),
+  saml,
+);
 
 export default app;
