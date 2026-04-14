@@ -9,7 +9,6 @@ set of features for web and mobile applications.
 
 Our implementation provides the following endpoints and features:
 
-- SAML authentication endpoints for Single Sign-On
 - Rate-limited API endpoints for provider interactions
 - Static file serving for documentation
 - Security enhancements including header protection
@@ -100,14 +99,6 @@ app.post(
   [express.urlencoded({ extended: true }), express.json({ limit: '5mb' })],
   api,
 );
-
-app.get(`${xyzEnv.DIR}/saml/metadata`, api);
-
-app.get(`${xyzEnv.DIR}/saml/logout`, api);
-
-app.get(`${xyzEnv.DIR}/saml/login`, api);
-
-app.post(`${xyzEnv.DIR}/saml/acs`, express.urlencoded({ extended: true }), api);
 
 app.get(`${xyzEnv.DIR}/view{/:template}`, api);
 

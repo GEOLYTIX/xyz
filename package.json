@@ -23,6 +23,7 @@
   "license": "MIT",
   "dependencies": {
     "@geolytix/xyz-app": "file:apps/xyz",
+    "@geolytix/xyz-saml-app": "workspace:*",
     "@geolytix/mapp": "file:apps/mapp"
   },
   "devDependencies": {
