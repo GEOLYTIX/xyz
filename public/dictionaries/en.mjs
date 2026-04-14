@@ -3,7 +3,7 @@ export default {
   circle_config: 'Circle configuration',
   confirm: 'Confirm',
   confirm_delete:
-    'Are you sure you want to delete this feature? This cannot be undone.',
+    'Are you sure you want to delete this feature? \nThis cannot be undone.',
   create: 'Create',
   csv_upload_failed: 'Data import failed, please try again.',
   csv_upload_import: 'Import From CSV',
