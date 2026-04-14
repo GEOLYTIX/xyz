@@ -1,5 +1,6 @@
 {
   "$schema": "https://biomejs.dev/schemas/2.2.6/schema.json",
+  "root": false,
   "assist": {
     "actions": {
       "source": {
@@ -17,15 +18,8 @@
   "files": {
     "includes": [
       "**",
-      "!**/docs/**/*",
-      "!**/public/js/**/*",
-      "!**/public/css/mapp.css",
-      "!**/public/css/mapp.css",
-      "!**/public/css/ui.css",
+      "!**/lib/utils/uhtml.mjs",
       "!package.json",
-      "!jsdoc_mapp.json",
-      "!jsdoc_xyz.json",
-      "!jsdoc_test.json",
       "!**/.vscode"
     ]
   },
