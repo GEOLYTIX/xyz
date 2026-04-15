@@ -15,7 +15,7 @@ importers:
         specifier: file:apps/xyz
         version: link:apps/xyz
       '@geolytix/xyz-saml-app':
-        specifier: workspace:*
+        specifier: file:apps/saml
         version: link:apps/saml
     devDependencies:
       '@biomejs/biome':
