@@ -1,0 +1,69 @@
+{
+  "format": "wkt",
+  "geom": "geom_3857",
+  "table": "test.scratch",
+  "srid": "3857",
+  "display": true,
+  "deleteLocation": true,
+  "qID": "id",
+  "draw": {
+    "point": true
+  },
+  "infoj": [
+    {
+      "type": "key"
+    },
+    {
+      "field": "geom_3857",
+      "fieldfx": "ST_asGeoJSON(geom_3857)",
+      "type": "geometry",
+      "display": true
+    },
+    {
+      "type": "pin",
+      "label": "ST_PointOnSurface",
+      "field": "pin",
+      "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
+    },
+    {
+      "field": "integer_field",
+      "title": "Integer Field",
+      "type": "integer",
+      "edit": true,
+      "inline": true
+    },
+    {
+      "field": "char_field",
+      "title": "Char Field",
+      "edit": true,
+      "dependents": ["numeric_field"]
+    },
+    {
+      "field": "numeric_field",
+      "title": "Numeric Field",
+      "type": "numeric",
+      "edit": true,
+      "inline": true
+    }
+  ],
+  "style": {
+    "label": {
+      "template": {
+        "key": "integer_label",
+        "template": "integer_field::text || '++'"
+      },
+      "field": "integer_label"
+    },
+    "theme": {
+      "title": "Field test",
+      "type": "basic",
+      "fields": ["integer_field", "char_field"],
+      "style": {}
+    },
+    "highlight": {
+      "scale": 1.3,
+      "strokeWidth": 2,
+      "strokeColor": "hotpink"
+    }
+  }
+}

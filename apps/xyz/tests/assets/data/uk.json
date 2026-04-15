@@ -1,0 +1,190 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-0.225, 51.48, 0],
+            [-0.225, 51.52, 0],
+            [-0.1, 51.52, 0],
+            [-0.1, 51.48, 0],
+            [-0.225, 51.48, 0]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 1,
+        "name": "Greater London",
+        "description": "A polygon covering central London",
+        "pin": [-0.1625, 51.5]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-2.2426, 53.4808, 0]
+      },
+      "properties": {
+        "id": 2,
+        "name": "Manchester City Centre",
+        "description": "Point marking Manchester city centre",
+        "pin": [-2.2426, 53.4808]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-3.203, 55.948, 0],
+            [-3.203, 55.95, 0],
+            [-3.199, 55.95, 0],
+            [-3.199, 55.948, 0],
+            [-3.203, 55.948, 0]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 3,
+        "name": "Edinburgh Castle Area",
+        "description": "Area around Edinburgh Castle",
+        "pin": [-3.201, 55.949]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-3.165, 51.462, 0],
+          [-3.163, 51.463, 0],
+          [-3.16, 51.464, 0],
+          [-3.158, 51.4645, 0]
+        ]
+      },
+      "properties": {
+        "id": 4,
+        "name": "Cardiff Bay Walk",
+        "description": "Walking path along Cardiff Bay",
+        "pin": [-3.16, 51.464]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-5.92, 54.608, 0],
+            [-5.92, 54.618, 0],
+            [-5.91, 54.618, 0],
+            [-5.91, 54.608, 0],
+            [-5.92, 54.608, 0]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 5,
+        "name": "Belfast Harbour",
+        "description": "Area covering Belfast Harbour",
+        "pin": [-5.915, 54.613]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-3.006, 53.405, 0],
+          [-3.004, 53.406, 0],
+          [-3.002, 53.407, 0],
+          [-3.0, 53.408, 0]
+        ]
+      },
+      "properties": {
+        "id": 6,
+        "name": "Liverpool Docks",
+        "description": "Path along Liverpool's famous docks",
+        "pin": [-3.002, 53.407]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [-4.27, 55.858, 0],
+            [-4.27, 55.863, 0],
+            [-4.26, 55.863, 0],
+            [-4.26, 55.858, 0],
+            [-4.27, 55.858, 0]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 7,
+        "name": "Glasgow City Center",
+        "description": "Central area of Glasgow",
+        "pin": [-4.265, 55.8605]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Point",
+        "coordinates": [-1.2544, 51.7548, 0]
+      },
+      "properties": {
+        "id": 8,
+        "name": "Oxford University",
+        "description": "Central point of Oxford University",
+        "pin": [-1.2544, 51.7548]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [-0.15, 50.82, 0],
+          [-0.145, 50.8205, 0],
+          [-0.14, 50.821, 0],
+          [-0.135, 50.8215, 0]
+        ]
+      },
+      "properties": {
+        "id": 9,
+        "name": "Brighton Beach",
+        "description": "Brighton Beach shoreline",
+        "pin": [-0.14, 50.821]
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [0.115, 52.205, 0],
+            [0.115, 52.21, 0],
+            [0.12, 52.21, 0],
+            [0.12, 52.205, 0],
+            [0.115, 52.205, 0]
+          ]
+        ]
+      },
+      "properties": {
+        "id": 10,
+        "name": "Cambridge City Center",
+        "description": "Historic center of Cambridge",
+        "pin": [0.1175, 52.2075]
+      }
+    }
+  ]
+}

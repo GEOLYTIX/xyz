@@ -1,0 +1,43 @@
+{
+  "key": "geojson_test",
+  "format": "geojson",
+  "display": true,
+  "geom": "geometry",
+  "srid": "4326",
+  "qID": "id",
+  "infoj": [
+    {
+      "type": "pin",
+      "label": "ST_PointOnSurface",
+      "field": "pin"
+    },
+    {
+      "edit": true,
+      "field": "name",
+      "inline": true,
+      "title": "name"
+    },
+    {
+      "field": "description",
+      "inline": true,
+      "title": "description"
+    }
+  ],
+  "style": {
+    "default": {
+      "strokeWidth": "0",
+      "fillColor": "#13336b",
+      "fillOpacity": 0.4,
+      "strokeColor": "#13336b",
+      "icon": {
+        "type": "dot",
+        "fillColor": "#13336B"
+      }
+    },
+    "highlight": {
+      "scale": 1.3,
+      "strokeWidth": 2,
+      "strokeColor": "hotpink"
+    }
+  }
+}

@@ -1,0 +1,18 @@
+{
+  "style": {
+    "default": {
+      "strokeColor": "#333",
+      "fillColor": "#fff9",
+      "icon": {
+        "type": "dot"
+      }
+    },
+    "cluster": {
+      "clusterScale": 1
+    },
+    "highlight": {
+      "scale": 1.3,
+      "strokeColor": "#090"
+    }
+  }
+}

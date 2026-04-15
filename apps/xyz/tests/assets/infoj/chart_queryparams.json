@@ -1,0 +1,20 @@
+{
+  "infoj": [
+    {
+      "display": true,
+      "type": "dataview",
+      "label": "I'm a chart using queryparams",
+      "query": "data_array_queryparams",
+      "template": {
+        "key": "data_array_queryparams",
+        "src": "file:/tests/assets/queries/data_array_queryparams.sql"
+      },
+      "queryparams": {
+        "id": true
+      },
+      "chart": {
+        "type": "bar"
+      }
+    }
+  ]
+}

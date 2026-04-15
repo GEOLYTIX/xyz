@@ -1,0 +1,36 @@
+{
+  "templates": {
+    "OSM": {
+      "display": true,
+      "roles": {
+        "template": true
+      }
+    },
+    "mod_query": {
+      "src": "file:./tests/assets/queries/mod_query.js",
+      "module": true
+    },
+    "bad_mod_query": {
+      "src": "file:./tests/assets/queries/bad_mod_query.js",
+      "module": true
+    },
+    "mod_query_no_default": {
+      "src": "file:./tests/assets/queries/mod_query_no_default.js",
+      "module": true
+    }
+  },
+  "locale": {
+    "layers": {
+      "OSM": {
+        "format": "tiles",
+        "URI": "https://{a-c}.tile.openstreetmap.org/{z}/{x}/{y}.png",
+        "attribution": {
+          "© OpenStreetMap": "http://www.openstreetmap.org/copyright"
+        },
+        "roles": {
+          "osm": null
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,27 @@
+{
+  "infoj": [
+    {
+      "title": "qID",
+      "field": "id",
+      "inline": true
+    },
+    {
+      "type": "key"
+    },
+    {
+      "type": "pin",
+      "label": "ST_PointOnSurface",
+      "field": "pin",
+      "fieldfx": "ARRAY[ST_X(ST_PointOnSurface(geom_3857)),ST_Y(ST_PointOnSurface(geom_3857))]"
+    },
+    {
+      "title": "textarea",
+      "field": "textarea",
+      "edit": true
+    },
+    {
+      "title": "char_field",
+      "field": "char_field"
+    }
+  ]
+}

@@ -6,6 +6,7 @@
     ".": "./api.js",
     "./api": "./api.js",
     "./extensions": "./extensions.js",
+    "./mod/*": "./mod/*",
     "./server": "./server.js"
   },
   "repository": {
@@ -15,8 +16,9 @@
   "packageManager": "pnpm@10.10.0",
   "scripts": {
     "dev": "node --inspect server.js",
-    "test": "node --experimental-test-module-mocks node_modules/codi-test-framework/cli.js tests",
-    "test-watch": "node --watch-path=. --experimental-test-module-mocks node_modules/codi-test-framework/cli.js tests --quiet"
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:coverage": "vitest run --coverage"
   },
   "license": "MIT",
   "optionalDependencies": {
@@ -34,5 +36,11 @@
     "express-rate-limit": "^7.5.0",
     "jsonwebtoken": "^9.0.2",
     "pg": "~8.15.1"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "4.1.4",
+    "node-mocks-http": "^1.17.2",
+    "undici": "^7.24.6",
+    "vitest": "4.1.4"
   }
 }

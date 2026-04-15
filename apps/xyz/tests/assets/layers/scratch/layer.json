@@ -1,0 +1,15 @@
+{
+  "group": "layer",
+  "format": "wkt",
+  "dbs": "NEON",
+  "table": "test.scratch",
+  "srid": "3857",
+  "geom": "geom_3857",
+  "qID": "id",
+  "toggleLocationViewEdits": true,
+  "deleteLocation": true,
+  "icon_scaling": {
+    "icon": {},
+    "clusterScale": {}
+  }
+}

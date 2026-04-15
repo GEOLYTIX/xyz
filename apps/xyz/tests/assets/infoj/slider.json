@@ -1,0 +1,20 @@
+{
+  "infoj": [
+    {
+      "title": "int",
+      "field": "integer_field",
+      "type": "integer",
+      "formatterParams": null,
+      "default": 0,
+      "edit": {
+        "range": true
+      },
+      "min": -100000,
+      "max": 10000,
+      "prefix": "£",
+      "filter": {
+        "type": "integer"
+      }
+    }
+  ]
+}

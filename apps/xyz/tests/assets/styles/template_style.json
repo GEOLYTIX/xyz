@@ -1,0 +1,46 @@
+{
+  "style": {
+    "default": {
+      "icon": {
+        "type": "dot",
+        "fillColor": "#13336B"
+      }
+    },
+    "cluster": {
+      "icon": {
+        "type": "target",
+        "fillColor": "#E6FFFF",
+        "layers": {
+          "1": "#13336B",
+          "0.85": "#E6FFFF"
+        }
+      }
+    },
+    "highlight": {
+      "scale": 1.3
+    },
+    "theme": {
+      "title": "theme_1",
+      "type": "graduated",
+      "field": "test_template_style",
+      "graduated_breaks": "greater_than",
+      "template": {
+        "key": "test_template_style",
+        "template": "100-99",
+        "value_only": true
+      },
+      "cat_arr": [
+        {
+          "value": 0,
+          "label": "0 to 5%",
+          "style": {
+            "icon": {
+              "fillColor": "#ffffcc",
+              "fillOpacity": 0.8
+            }
+          }
+        }
+      ]
+    }
+  }
+}

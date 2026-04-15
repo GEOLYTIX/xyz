@@ -1,0 +1,27 @@
+{
+  "display": true,
+  "group": "layer",
+  "format": "wkt",
+  "dbs": "NEON",
+  "table": "test.uk_geometries",
+  "srid": "3857",
+  "geom": "geom_3857",
+  "qID": "_id",
+  "toggleLocationViewEdits": true,
+  "cluster": {
+    "distance": 30
+  },
+  "hover": {
+    "field": "_id",
+    "display": "true"
+  },
+  "draw": {
+    "circle_2pt": true,
+    "circle": {
+      "hidePanel": true
+    },
+    "polygon": true,
+    "point": true
+  },
+  "deleteLocation": true
+}

@@ -1,0 +1,65 @@
+{
+  "dataviews": {
+    "test": {
+      "target": "tabview",
+      "dataview": "Json",
+      "query": "stores",
+      "display": true,
+      "queryparams": {
+        "table": true,
+        "layer": "stores",
+        "limit": 10
+      },
+      "toolbar": {
+        "queryparams": {
+          "limit": {
+            "type": "numeric"
+          }
+        }
+      },
+      "table": {
+        "frozenRows": 1,
+        "selectable": true,
+        "columns": [
+          {
+            "field": "name",
+            "width": 300,
+            "title": "Name"
+          }
+        ]
+      }
+    },
+    "stores": {
+      "display": true,
+      "target": "tabview",
+      "query": "stores",
+      "viewport": true,
+      "dataview": "Json",
+      "table": {
+        "selectable": true,
+        "pagination": true,
+        "columns": [
+          {
+            "field": "name",
+            "width": 300,
+            "title": "Name"
+          }
+        ]
+      }
+    },
+    "json": {
+      "display": true,
+      "label": "Json",
+      "dataview": "Json",
+      "query": "select_arr",
+      "toolbar": {
+        "jsonfile": true
+      },
+      "template": {
+        "key": "select_arr",
+        "template": "SELECT array[1, 2, 3]",
+        "value_only": true
+      }
+    }
+  }
+}
