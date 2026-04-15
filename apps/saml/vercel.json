@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "trailingSlash": false,
+  "builds": [
+    {
+      "src": "/saml-server.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": "public/**"
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/saml-server.js"
+    }
+  ]
+}
