@@ -16,7 +16,6 @@ yarn.lock
 .turbo/
 
 coverage
-public/js/*
 public/workspaces/*
 public/js/plugins/*
 !public/dictionaries/*
