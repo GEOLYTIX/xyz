@@ -6,191 +6,243 @@ XYZ/MAPP testing is split into 3 sections:
 - Browser based testing of modules bundled into the Mapp library.
 - Integrity tests for workspaces and XYZ process environments.
 
-The [codi](https://github.com/RobAndrewHurst/codi) test framework is a required dependency to support the different tests.
+## Migrating from Codi to Vitest
+
+The server-side (CLI) test suite has been migrated from the [codi-test-framework](https://www.npmjs.com/package/codi-test-framework) to [Vitest](https://vitest.dev/).
+
+Codi was originally used for both browser and server-side tests. It provided `describe`, `it`, `assertTrue`, `assertEqual`, and similar functions, loaded at runtime via ESM from `https://esm.sh/codi-test-framework`. This worked well in the browser where the full `mapp` global and DOM are available, but was a poor fit for server-side unit testing:
+
+- Tests that called `mapp.utils.xhr(...)` could not run without a live Express server and browser environment.
+- There was no mocking system, making it impossible to isolate modules from their dependencies (database connections, file system, external APIs).
+- Test discovery was manual — each file had to be explicitly wired up.
+- There was no coverage reporting, watch mode, or CI integration out of the box.
+
+Vitest solves all of these problems. It is a Vite-native test framework with built-in mocking (`vi.mock`, `vi.fn`), snapshot testing, code coverage (v8 provider), watch mode, parallel execution, and first-class ESM support — which is important since the XYZ codebase is `"type": "module"` throughout.
+
+> [!NOTE] Browser tests (`tests/lib/` and `tests/browser/`) still use Codi because they run inside the application in a real browser with access to the DOM, OpenLayers map, and the `mapp` global. These are loaded by the [Test Plugin](https://github.com/GEOLYTIX/xyz/blob/main/lib/plugins/test.mjs) and are not part of the Vitest pipeline.
+
+### What changed
+
+Previously, `tests/mod/query.test.mjs` contained a `describe.skip()` block with 5 tests that depended on `mapp.utils.xhr()` — a browser-only function. These tests could never run in Node.js and were effectively dead code in the CI pipeline.
+
+The file has been rewritten as 19 proper server-side unit tests that exercise `mod/query.js` directly by:
+
+- Mocking `mod/utils/dbs.js` with a Proxy so no real PostgreSQL connection is needed.
+- Mocking `mod/user/login.js` to return a 401 with the message key, avoiding view template rendering.
+- Using a dedicated `tests/assets/query_workspace.json` fixture loaded via `checkWorkspaceCache(true)`.
+- Using `createMocks` from `node-mocks-http` to simulate HTTP request/response objects.
+
+The tests now cover template resolution errors, auth checks (login, admin, roles), query execution (single/multiple rows, empty results, database errors), response formatting (reduce, value_only), parameter substitution and SQL injection rejection, invalid database connections, and nonblocking queries.
 
 ## CLI [Command Line Interface] tests
 
 Command Line Interface tests are typically executed on localhost for a clone of the XYZ repository to check whether XYZ API modules under development execute as outlined in their documentation. These tests should also be run as an action on any pull request to ensure the structural integrity of XYZ API endpoints.
 
-The codi test framework must be installed into the node_modules with `pnpm install`.
+CLI tests use [Vitest](https://vitest.dev/) as the test framework. Vitest must be installed into the node_modules with `pnpm install`.
 
-The codi CLI tests require experimental _module mocks_ which are available in Node 22+ [LTS].
+### Running tests
 
-The CLI tests can be executed with the following bash command.
+Run the full test suite:
 
 ```bash
-node --experimental-test-module-mocks node_modules/codi-test-framework/cli.js tests
+pnpm test
 ```
 
-This script is defined as "test" in the package.json document and can also be run with `node --run test`.
+This runs `vitest run` as defined in the package.json `test` script.
 
-> [!NOTE] It is recommended to call the scripts defined in the package.json with node, rather than npm for performance reasons.
-
-The "test-watch" script watches the test directory and will re-run tests on change events. Details of these tests are suppressed with the quiet flag.
+Watch mode re-runs affected tests on file changes:
 
 ```bash
-node --run test-watch
+pnpm test-watch
+```
+
+Run a single test file:
+
+```bash
+pnpm exec vitest run tests/mod/query.test.mjs
+```
+
+Run tests matching a name pattern:
+
+```bash
+pnpm exec vitest run -t "should return 400"
+```
+
+### Coverage
+
+Generate a coverage report with the v8 provider:
+
+```bash
+pnpm coverage
+```
+
+This runs `vitest run --coverage` and prints a table showing statement, branch, function, and line coverage for every file under `mod/`.
+
+### Configuration
+
+Vitest is configured via `vitest.config.mjs` at the project root:
+
+```javascript
+import { defineConfig } from 'vitest/config';
+
+export default defineConfig({
+  test: {
+    include: ['tests/mod/**/*.test.mjs', 'tests/plugins/**/*.test.mjs'],
+    exclude: ['tests/lib/**', 'tests/browser/**', 'tests/_mapp.test.mjs'],
+    setupFiles: ['tests/setup.mjs'],
+    testTimeout: 10000,
+    fileParallelism: true,
+    coverage: {
+      provider: 'v8',
+    },
+  },
+});
+```
+
+Key points:
+
+- Only `tests/mod/**` and `tests/plugins/**` are included. Browser tests (`tests/lib/**`, `tests/browser/**`) are excluded — they use Codi and run in the browser.
+- `tests/setup.mjs` ensures `globalThis.xyzEnv` exists before any test module loads.
+- Tests run in parallel across files with a 10-second timeout per test.
+
+### CI Pipeline
+
+Tests run automatically on every push and pull request to `main`, `major`, `minor`, and `patch` branches via the GitHub Actions workflow in `.github/workflows/unit_tests.yml`:
+
+```yaml
+- name: Install Dependencies
+  run: pnpm install
+
+- name: Run tests
+  run: node --run test
 ```
 
 ### Debugging tests
 
-The codi test framework CLI can be launched in debug with VSCode by addign debug config for the node runtime to the launch.json.
+Vitest tests can be launched in debug mode with VSCode by adding a debug config for the node runtime to the launch.json.
 
 ```json
 {
   "type": "node",
   "request": "launch",
-  "name": "Debug Codi CLI Tests",
-  "skipFiles": ["<node_internals>/**"],
-  "program": "${workspaceFolder}/node_modules/codi-test-framework/cli.js",
-  "args": ["${workspaceFolder}/tests", "--quiet"],
-  "runtimeArgs": ["--experimental-test-module-mocks"],
+  "name": "Debug Vitest Tests",
+  "autoAttachChildProcesses": true,
+  "skipFiles": ["<node_internals>/**", "**/node_modules/**"],
+  "program": "${workspaceFolder}/node_modules/vitest/vitest.mjs",
+  "args": ["run", "--no-file-parallelism"],
   "console": "integratedTerminal",
   "internalConsoleOptions": "neverOpen",
   "cwd": "${workspaceFolder}"
 }
 ```
 
+To debug a single test file, add the file path to `args`:
+
+```json
+"args": ["run", "--no-file-parallelism", "tests/mod/utils/merge.test.mjs"]
+```
+
 ### /tests/mod directory
 
-The `/tests/mod` directory contains tests for the individual XYZ API endpoints and utility modules. The codi test framework CLI will iterate through the test module scripts and execute each. Subfolder with multiple API modules [eg /provider, /sign, /user, /utis, /workspace] include a module of the same name prefixed with an underscore to ensure that this file is listed first in the directory. These entry modules [eg _provider.mjs] import and execute any test modules from the same directory.
+The `/tests/mod` directory contains tests for the individual XYZ API endpoints and utility modules. Vitest discovers test files automatically by matching the glob patterns defined in `vitest.config.mjs`. Each `.test.mjs` file is a standalone test module.
 
-### codi test module structure [describe > it > assert]
+### Test structure [describe > it > expect]
 
-A codi test module will usually import modules to be tested within an async codi.describe() method which defines the test or a group of tests.
+A test module will usually import modules to be tested and wrap tests in `describe()` blocks which define a group of related tests.
 
-Multiple codi.it() methods can be executed in an async fashion within each codi.describe() method to test individual aspects of a module.
+Multiple `it()` methods can be used within each `describe()` block to test individual aspects of a module.
 
-Multiple assertations can be checked with codi.assert\*() methods inside a codi.it() test. Each assertation must be met for the codi.it() test to pass.
+Multiple assertions can be checked with `expect()` methods inside an `it()` test. Each assertion must pass for the test to succeed.
 
-For example: The codi test module for the /user/token module must import the token and auth modules in the codi.describe() method. The method then awaits the execution of multiple codi.it() methods to test whether the module correctly responds to mocked HTTP requests with missing or valid parameters. A codi.it() method to check for missign parameter will validate with a codi.assertTrue() method checking for the return of an Error. Multiple codi.it() methods can be chained in an async fashion by storing the variables within the closure of the codi.describe() method. A codi.it() method with a valid request user parameter will store the token returned from the tested module for a subsequent codi.it() method to pass this token to the auth module and check whether the expected user object is returned.
+```javascript
+import { describe, it, expect } from 'vitest';
+
+describe('Feature Description', () => {
+  it('should behave in a specific way', () => {
+    const result = myFunction();
+    expect(result).toEqual(expectedValue);
+  });
+});
+```
+
+For example: The test module for the /user/token module imports the token and auth modules. The describe block then contains multiple `it()` tests to check whether the module correctly responds to mocked HTTP requests with missing or valid parameters. An `it()` test for a missing parameter validates with `expect(response).toBeInstanceOf(Error)`. Multiple `it()` tests can be chained by storing variables within the closure of the `describe()` block. An `it()` test with a valid request user parameter stores the returned token for a subsequent `it()` test to pass to the auth module and check whether the expected user object is returned.
 
 ### Mocks
 
-> [!NOTE] Mocking is only available with an expiremental flag in Node 22+ [LTS]
+Vitest provides a built-in mocking system that does not require any experimental Node.js flags.
 
-Mocking allows alteration of the default behaviour of functions or methods for testing.
+Mocking replaces the reference of a module or function in memory with a 'mocked' version of it. This mocked version can then be called from non-test code and receive a controlled output.
 
-Mocking replaces the reference of a module or function in memory with a 'mocked' version of it. This mocked version can then be called from non-test code and receive an output.
+Vitest automatically cleans up mocks between test files, so manual restoration is not required.
 
-It is important to restore mocked objects within the closure of multiple tests.
+#### Function mocking
 
-#### function (fn) mocking
-
-Just like any function, mocking a function needs to have context. The context can be the scope of a test, imported module or global.
-
-To mock a function you can call the `codi.mock.fn()` function.
-
-This creates a mock function which you can interface with.
+To mock a function you can call `vi.fn()`.
 
 ```javascript
-const random = codi.mock.fn((max) => return Math.floor(Math.random() * max););
+import { it, expect, vi } from 'vitest';
 
-codi.it({ name: 'random', parentId: 'foo' }, () => {
-  codi.assertTrue(random(1) === 0, 'We expect the number to be 0');
-  codi.assertTrue(random(3) <= 2), 'We expect the number to less than or equal to 2';
+const random = vi.fn((max) => Math.floor(Math.random() * max));
+
+it('random', () => {
+  expect(random(1)).toEqual(0);
+  expect(random(3) <= 2).toBeTruthy();
 });
 ```
 
-You can also mock functions/methods with the `codi.mock.method()` function that will take an object as a reference and implement a mock function to that objects method.
+#### Module mocking
 
-> [!NOTE] typically in tests written this methodology isn't used and favoured for the `codi.mock.mockImplementation()/mockImplementationOnce()` function which can mock a function given to a mocked module. An example of this will be provided in the mock module section.
+The `vi.mock()` function takes the path of a module to mock and a factory function that returns the mocked module's exports.
 
-```javascript
-import fs from "node:fs";
+> [!IMPORTANT] `vi.mock()` calls are hoisted to the top of the file by Vitest's transform. To reference mutable variables inside the factory, use a proxy pattern with `vi.fn()`.
 
-// Mocking fs.readFile() method
-codi.mock.method(fs.promises, "readFile", async () => "Hello World");
-
-codi.describe({ name: "Mocking fs.readFile in Node.js", id: "mock" }, () => {
-  codi.it(
-    {
-      name: "should successfully read the content of a text file",
-      parentId: "mock",
-    },
-    async () => {
-      codi.assertEqual(fs.promises.readFile.mock.calls.length, 0);
-      codi.assertEqual(
-        await fs.promises.readFile("text-content.txt"),
-        "Hello World",
-      );
-      codi.assertEqual(fs.promises.readFile.mock.calls.length, 1);
-
-      // Reset the globally tracked mocks.
-      mock.reset();
-    },
-  );
-});
-```
-
-#### module mocking
-
-The `codi.mock.module()` function requires the path of a module to mock as first argument with options for the mocked module as second argument.
-
-Properties for the options argument are:
-
-- cache: If false, each call to require() or import() generates a new mock module. Default: false.
-- defaultExport: An optional value used as the mocked module's default export. If this value is not provided, ESM mocks do not include a default export. It possible to provide a mocked function as defaultExport property in the options parameter.
-- namedExports: An optional object whose keys and values are used to create the named exports of the mock module.
-
-> [!IMPORTANT] Ensure that functions are mocked prior to a module exporting the function. And modules are mocked prior to imports of modules that require a mocked module.
-
-In the following example the acl method is mocked as export for acl module. The mock implementation of the acl function returns a user object defined in the mock implementation. This allows to return a user object from the acl module without access to a store for user objects.
-
-The imported login module will now return a user object regardless of arguments provided to the login module method.
+In the following example the acl method is mocked as the default export for the acl module. The mock implementation returns a user object without requiring access to a real database.
 
 ```javascript
-const aclFn = codi.mock.fn();
-const mockedacl = codi.mock.module('../../acl.js', {
-  cache: false,
-  defaultExport: aclFn,
-  namedExports:{
-    acl: aclFn
-  }
-});
+import { describe, it, expect, vi } from 'vitest';
 
-codi.describe({name: 'mocked module', id: 'mocked_module'}, () => {
-  codi.it({'We should be able to mock a module', parentId: 'mocked_module'}, async () => {
+const aclFn = vi.fn();
 
-    aclFn.mock.mockImplementation(() => {
-      const user = {
+vi.mock('../../acl.js', () => ({
+  default: (...args) => aclFn(...args),
+}));
+
+describe('mocked module', () => {
+  it('should return a mocked user from acl', async () => {
+    aclFn.mockImplementation(() => {
+      return {
         email: 'robert.hurst@geolytix.co.uk',
-        admin: true
+        admin: true,
       };
-      return user
-    })
+    });
 
     const { default: login } = await import('../../../mod/user/login.js');
-
-    //{ email: 'robert.hurst@geolytix.co.uk', admin: true}
     const result = await login();
+
+    expect(result.email).toEqual('robert.hurst@geolytix.co.uk');
   });
 });
-
-// The mocked ACL module must be restored once the tests are completed.
-mockedacl.restore();
 ```
 
-> [!IMPORTANT] Mocked functions and modules must be restored prior to tests which may require the default behaviour of the same object.
+#### HTTP mocks
 
-#### http mocks
+Node HTTP requests and responses can be mocked to test endpoints in the middleware.
 
-Node HTTP resquests and responses can be mocked to test endpoints in the middleware.
-
-`codi.mockHttp` helps create `req` & `res` objects that can be passed to functions in order to simulate a call to the function via an api. You can call the `createRequest` & `createResponse` functions respectively. You can also call the `createMocks` function and perform a destructured assignment on the `req` & `res`.
-
-In the following example we mock a HTTP request with a user object param for the /user/token API module. The module will send a signed token as HTTP response from the module. The token can be accessed as [sent] data from the mocked HTTP response object.
+The `createMocks` function from `node-mocks-http` creates `req` & `res` objects that can be passed to functions to simulate API calls.
 
 ```javascript
-const { default: userToken } = await import("../../../mod/user/token.js");
-await codi.it(
-  { name: "10hr admin user token", parentId: "user_token" },
-  async () => {
-    const { req, res } = codi.mockHttp.createMocks({
+import { describe, it, expect } from 'vitest';
+import { createMocks } from 'node-mocks-http';
+
+const { default: userToken } = await import('../../../mod/user/token.js');
+
+describe('token', () => {
+  it('10hr admin user token', async () => {
+    const { req, res } = createMocks({
       params: {
-        expiresin: "10hr",
+        expiresin: '10hr',
         user: {
-          email: "test@geolytix.co.uk",
+          email: 'test@geolytix.co.uk',
         },
       },
     });
@@ -204,48 +256,126 @@ await codi.it(
     });
 
     // token expires in 10hr.
-    codi.assertTrue(user.exp - user.iat === 36000);
+    expect(user.exp - user.iat === 36000).toBeTruthy();
 
     // user from token must not have admin rights.
-    codi.assertTrue(!user.admin);
-  },
-);
-```
-
-You can also mock the response from the global fetch function by making use of the `MockAgent` & `setGlobalDispatcher` interfaces.
-
-The `MockAgent` class is used to create a mockpool which can intercept different paths to certain URLs. And based on these paths we can specify a return.
-
-The `setGlobalDispatcher` will assign the Agent on a global scope so that calls to the `fetch` function in non-test modules will be intercepted.
-
-Here is an example of this:
-
-```javascript
-await codi.describe({ name: "HTTP Mock", id: "http_test_fun" }, async () => {
-  await codi.it(
-    { name: "We should get some doggies", parentId: "http_test_fun" },
-    async () => {
-      const mockAgent = new codi.mockHttp.MockAgent(); //<-- Mockagent we use to get a pool
-      codi.mockHttp.setGlobalDispatcher(mockAgent); // <-- Assigning the agent on a global scope.
-
-      const mockPool = mockAgent.get(new RegExp("http://localhost:3000")); //<-- Mock pool listening for the localhost url
-      mockPool
-        .intercept({ path: "/" })
-        .reply(404, [
-          "codi",
-          "mieka",
-          "luci",
-        ]); /** <-- When we hit a specific path
-                    we get a specified response */
-
-      const response = await fetch("http://localhost:3000");
-
-      codi.assertEqual(response.status, 404, "We expect to get a 404");
-      codi.assertEqual(await response.json(), ["codi", "mieka", "luci"]);
-    },
-  );
+    expect(!user.admin).toBeTruthy();
+  });
 });
 ```
+
+You can also mock the response from the global fetch function by using `MockAgent` and `setGlobalDispatcher` from `undici`.
+
+The `MockAgent` class creates a mock pool which intercepts requests to specific URLs. The `setGlobalDispatcher` assigns the agent globally so that `fetch` calls in non-test modules are intercepted.
+
+```javascript
+import { describe, it, expect } from 'vitest';
+import { MockAgent, setGlobalDispatcher } from 'undici';
+
+describe('HTTP Mock', () => {
+  it('should intercept fetch requests', async () => {
+    const mockAgent = new MockAgent();
+    setGlobalDispatcher(mockAgent);
+
+    const mockPool = mockAgent.get(new RegExp('http://localhost:3000'));
+    mockPool
+      .intercept({ path: '/' })
+      .reply(404, ['codi', 'mieka', 'luci']);
+
+    const response = await fetch('http://localhost:3000');
+
+    expect(response.status).toEqual(404);
+    expect(await response.json()).toEqual(['codi', 'mieka', 'luci']);
+  });
+});
+```
+
+### Available Assertions
+
+Vitest provides a rich set of assertions via the `expect()` API:
+
+- `expect(actual).toEqual(expected)` - Asserts deep equality
+- `expect(actual).toBe(expected)` - Asserts strict reference equality
+- `expect(actual).toBeTruthy()` - Asserts the value is truthy
+- `expect(actual).toBeFalsy()` - Asserts the value is falsy
+- `expect(actual).toBeInstanceOf(Class)` - Asserts the value is an instance of a class
+- `expect(actual).toContain(item)` - Asserts an array or string contains the item
+- `expect(actual).toBeNull()` - Asserts the value is null
+- `expect(actual).toBeDefined()` - Asserts the value is not undefined
+- `expect(fn).toThrow(message)` - Asserts the function throws an error
+- `expect(actual).toMatchSnapshot()` - Asserts against a stored snapshot
+
+For the full list, see the [Vitest expect API](https://vitest.dev/api/expect).
+
+### Best Practices
+
+- Maintain parallel structure between source and test directories
+- Use descriptive test names
+- One describe per test suite
+- Group related tests in the same describe block
+- Keep tests focused and isolated
+- Use `beforeAll` / `afterAll` for async setup and teardown (e.g. loading workspace caches)
+- Avoid putting async setup directly in `describe` bodies -- use `beforeAll` instead
+
+### Test Discovery
+
+Vitest automatically discovers tests matching the glob patterns in `vitest.config.mjs`:
+
+- `tests/mod/**/*.test.mjs`
+- `tests/plugins/**/*.test.mjs`
+
+### Common Issues and Solutions
+
+1. **`xyzEnv is not defined`** - Ensure `tests/setup.mjs` is listed in `setupFiles` in `vitest.config.mjs`. If a specific test needs additional `xyzEnv` properties, set them in a `beforeAll` hook.
+2. **Mock not applied** - `vi.mock()` calls are hoisted. Use the `(...args) => mockFn(...args)` proxy pattern to reference `vi.fn()` variables inside the factory.
+3. **Constructor mock fails** - Arrow functions cannot be called with `new`. Use class syntax in the `vi.mock` factory for modules that export classes (e.g. AWS SDK commands).
+4. **Async describe body race conditions** - Do not `await` async operations directly in `describe` callbacks. Use `beforeAll` instead.
+5. Check file extensions are `.mjs`
+6. Verify import/export syntax is ESM compatible
+
+## Current Coverage
+
+Overall: **61.9% statements, 55.3% branches, 65.4% functions, 62.6% lines**
+
+### Well-covered modules (>80% statements)
+
+| Module | Stmts | Branch |
+|---|---|---|
+| `mod/utils/merge.js` | 100% | 96% |
+| `mod/utils/roles.js` | 96% | 93% |
+| `mod/user/token.js` | 100% | 100% |
+| `mod/user/list.js` | 100% | 85% |
+| `mod/user/log.js` | 94% | 94% |
+| `mod/user/auth.js` | 85% | 82% |
+| `mod/user/cookie.js` | 85% | 81% |
+| `mod/user/delete.js` | 89% | 86% |
+| `mod/workspace/cache.js` | 89% | 80% |
+| `mod/workspace/getLocale.js` | 95% | 93% |
+| `mod/workspace/mergeTemplates.js` | 88% | 87% |
+| `mod/provider/cloudfront.js` | 92% | 90% |
+
+### Modules that need tests
+
+| Module | Stmts | Priority |
+|---|---|---|
+| `mod/view.js` | 0% | High |
+| `mod/user/login.js` | 3% | High |
+| `mod/user/fromACL.js` | 13% | High |
+| `mod/utils/redirect.js` | 0% | Medium |
+| `mod/utils/resend.js` | 11% | Medium |
+| `mod/utils/logger.js` | 29% | Medium |
+| `mod/utils/envReplace.js` | 44% | Medium |
+| `mod/provider/getFrom.js` | 53% | Medium |
+| `mod/sign/_sign.js` | 52% | Medium |
+| `mod/workspace/_workspace.js` | 52% | Medium |
+| `mod/query.js` | 51% | Medium |
+| `mod/user/register.js` | 59% | Medium |
+
+### Query template render functions (0% coverage)
+
+The 28 query template files under `mod/workspace/templates/` are almost entirely at 0% coverage. Only `layer_extent.js` and `sql_table_insert.js` have tests. The remaining 26 templates are pure functions or string constants that take params and return SQL. They are the easiest modules to unit test — import the render function directly and assert on the generated SQL string. No mocking is required.
+
+Templates at 0%: `cluster`, `cluster_hex`, `geojson`, `mvt`, `mvt_geom`, `wkt`, `location_get`, `location_new`, `location_update`, `location_delete`, `locations_delete`, `location_field_value`, `location_count`, `histogram`, `infotip`, `get_nnearest`, `get_random_location`, `distinct_values`, `distinct_values_json`, `field_max`, `field_min`, `field_minmax`, `field_stats`, `gaz_query`, `st_distance_ab`, `st_distance_ab_multiple`, `st_intersects_ab`, `st_intersects_count`.
 
 ## Browser tests for Mapp library modules
 
@@ -255,6 +385,8 @@ Browser tests are designed for the browser environment with full access to:
 - Mapp library
 - Mapview for loaded application
 - No mocking required for module imports
+
+Browser tests still use [Codi](https://www.npmjs.com/package/codi-test-framework), which is loaded at runtime via ESM in the [Test Plugin](https://github.com/GEOLYTIX/xyz/blob/main/lib/plugins/test.mjs). Codi provides `describe`, `it`, `assertTrue`, `assertEqual`, and related assertion functions designed for in-browser execution.
 
 ### Running Browser Tests
 
@@ -268,9 +400,9 @@ In order for the tests to run you will need to configure the test object on a lo
 
 ```json
 "test": {
-  "options": { <-- Options passed to the runWebTestFunction
-    "quiet": true, <-- will only show errors (Defaults to false)
-    "showSummary": true, <-- will show a summary (Default to false)
+  "options": {
+    "quiet": true,
+    "showSummary": true
   }
 },
 ```
@@ -285,20 +417,20 @@ eg.
 - `core` - `mapp` object tests
 - `integrity` - workspaces and XYZ process environments tests
 
-### Writing Tests
+### Writing Browser Tests
 
 #### Test Structure
 
-Tests use the describe-it pattern for organization:
+Browser tests use the describe-it pattern for organization:
 
 ```javascript
-import { describe, it, assertTrue } from "codi";
+import { describe, it, assertTrue } from 'codi';
 
-describe({ name: "Feature Description", id: "feature_description" }, () => {
+describe({ name: 'Feature Description', id: 'feature_description' }, () => {
   it(
     {
-      name: "should behave in a specific way",
-      parentId: "feature_description",
+      name: 'should behave in a specific way',
+      parentId: 'feature_description',
     },
     () => {
       // Test code
@@ -312,15 +444,15 @@ Example with multiple assertions:
 ```javascript
 codi.describe(
   {
-    name: "All languages should have the same base language entries",
-    id: "dictionaries",
+    name: 'All languages should have the same base language entries',
+    id: 'dictionaries',
   },
   () => {
     Object.keys(mapp.dictionaries).forEach((language) => {
       codi.it(
         {
           name: `The ${language} dictionary should have all the base keys`,
-          parentId: "dictionaries",
+          parentId: 'dictionaries',
         },
         () => {
           Object.keys(base_dictionary).forEach((key) => {
@@ -336,53 +468,6 @@ codi.describe(
 );
 ```
 
-### Available Assertions
-
-Codi provides several built-in assertions:
-
-- `assertEqual(actual, expected, message)` ⚖️
-  - Asserts that the actual value equals the expected value
-- `assertNotEqual(actual, expected, message)` 🙅‍♂️
-  - Asserts that the actual value does not equal the expected value
-- `assertTrue(actual, message)` ✅
-  - Asserts that the actual value is true
-- `assertFalse(actual, message)` ❌
-  - Asserts that the actual value is false
-- `assertThrows(callback, errorMessage, message)` 💥
-  - Asserts that the callback throws an error with the specified message
-- `assertNoDuplicates(callback, errorMessage, message)` 👬
-  - Asserts that there are no duplicates in a provided array.
-
-### Best Practices
-
-- Maintain parallel structure between source and test directories
-- Use descriptive test names
-- One describe per test suite
-- Group related tests in the same describe block
-- Use test bundles for reusable configurations
-- Keep tests focused and isolated
-- Use `--quiet` flag in CI/CD pipelines. (can also be used on other test fuctions).
-
-### Common Issues and Solutions
-
-#### Test Discovery
-
-Codi automatically discovers tests in files with the pattern:
-
-- `*.test.mjs`
-
-#### Error Handling
-
-If tests fail to run:
-
-1. Ensure Bun.sh version is compatible (v1.1.0+ for Codi v0.0.47)
-2. Check file extensions are `.mjs`
-3. Verify import/export syntax is ESM compatible
-4. Confirm test directory structure matches source directories
-5. Verify test settings in xyz_settings/tests/launch.json
-
-For more information, please visit the [Codi GitHub repository](https://github.com/RobAndrewHurst/codi).
-
 ### Browser Tests Development Environment Setup
 
 #### Build Configuration
@@ -393,29 +478,29 @@ Setting process environment `NODE_ENV=DEVELOPMENT` disables minification in buil
 
 ```javascript
 // esbuild.config.mjs
-import * as esbuild from "esbuild";
+import * as esbuild from 'esbuild';
 
-const isDev = process.env.NODE_ENV !== "DEVELOPMENT";
+const isDev = process.env.NODE_ENV !== 'DEVELOPMENT';
 
 const buildOptions = {
   entryPoints: isDev
-    ? ["./lib/mapp.mjs", "./lib/ui.mjs"]
-    : ["./lib/mapp.mjs", "./lib/ui.mjs", "./tests/_mapp.test.mjs"],
+    ? ['./lib/mapp.mjs', './lib/ui.mjs']
+    : ['./lib/mapp.mjs', './lib/ui.mjs', './tests/_mapp.test.mjs'],
   bundle: true,
   minify: isDev, // Code won't be minified in development
   sourcemap: true,
-  sourceRoot: "/lib",
-  format: "iife",
-  outbase: ".",
-  outdir: "public/js",
+  sourceRoot: '/lib',
+  format: 'iife',
+  outbase: '.',
+  outdir: 'public/js',
   metafile: true,
-  logLevel: "info",
+  logLevel: 'info',
 };
 
 try {
   await esbuild.build(buildOptions);
 } catch (err) {
-  console.error("Build failed:", err);
+  console.error('Build failed:', err);
   process.exit(1);
 }
 ```

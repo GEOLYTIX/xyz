@@ -51,6 +51,8 @@ export default function categorized(theme, feature) {
 
         if (!cat) return;
 
+        if (!cat.style) return;
+
         flat ||= Array.isArray(cat.style.icon);
 
         return cat.style.icon;

@@ -54,10 +54,17 @@ export default function dataview(entry) {
   // A dataview must have a HTMLElement target
   if (entry.target instanceof HTMLElement === false) return;
 
-  // Decorate the dataview entry.
-  if (mapp.ui.Dataview(entry) instanceof Error) return;
+  // The dataview has been decorated but should not be displayed.
+  if (!entry.display && typeof entry.create === 'function') {
+    return mapp.utils.html.node`
+    ${entry.chkbox || ''}
+    ${entry.locationViewTarget || ''}`;
+  }
 
-  //If queryCheck is true and theres no data, don't dislpay the dataview
+  // The dataview doesn't have a create method and needs to be decorated.
+  if (!entry.create && mapp.ui.Dataview(entry) instanceof Error) return;
+
+  //If queryCheck is true and there's no data, don't display the dataview
   if ((!entry.data || entry.data instanceof Error) && entry.queryCheck) {
     entry.chkbox?.classList?.add?.('disabled');
     entry.chkbox.querySelector('input').checked = false;

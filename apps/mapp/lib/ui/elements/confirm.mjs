@@ -36,44 +36,64 @@ if(confirm) {
 @property {string} [params.data_id='confirm'] The data-id attribute value for the dialog.
 @property {string} [params.title] Text to display in the confirm header. Defaults to 'Confirm'.
 @property {string} [params.text] Text to display in the confirm content.
+@property {HTMLElement} [params.innerContent] custom HTML fragment to display in the dialog, optional. Overrides text. 
+@property {string} [params.icon] Custom Material Symbols icon name to use in the header for message clarity. Defaults to 'warning'. Set empty string `icon: ''` to skip the symbol entirely.
 @returns {Promise<boolean>} Returns promise which resolves to true or false whether the question was confirmed.
 */
 export default function confirm(params) {
-  return new Promise((resolve, reject) => {
-    params.title ??= `${mapp.dictionary.confirm}`;
+  // Fallback for compatibility with system confirm dialog.
+  if (typeof params === 'string') {
+    params = { text: params };
+  }
 
-    params.data_id ??= 'confirm';
+  params.title ??= mapp.dictionary.confirm;
 
-    params.header = mapp.utils.html`<h4>${params.title}`;
+  params.data_id ??= 'confirm';
 
-    delete params.minimizeBtn;
+  params.icon ??= 'warning';
 
-    delete params.closeBtn;
+  // create icon span tag only if icon is not an empty string
+  const el_icon =
+    params.icon === ''
+      ? ''
+      : mapp.utils
+          .html`<span class="material-symbols-outlined notranslate">${params.icon}</span>`;
 
-    const btn_true = mapp.utils.html`<button 
-      onclick=${(e) => {
-        e.target.closest('dialog').close();
-        resolve(true);
-      }}
-      class="raised bold">
+  params.header = mapp.utils.html`${el_icon}${params.title}`;
+
+  delete params.minimizeBtn;
+
+  delete params.closeBtn;
+
+  const btn_true = mapp.utils.html.node`<button 
+      class="action outlined bold">
       ${mapp.dictionary.ok}`;
 
-    const btn_false = mapp.utils.html`<button
-      onclick=${(e) => {
-        e.target.closest('dialog').close();
-        resolve(false);
-      }}
-      class="raised bold">
+  const btn_false = mapp.utils.html.node`<button
+      class="action outlined bold">
       ${mapp.dictionary.cancel}`;
 
-    params.content ??= mapp.utils.html`
-      <p>${params.text}</p>
+  params.innerContent ??= mapp.utils.html`<p>${params.text}</p>`;
+
+  params.content = mapp.utils.html`
+      ${params.innerContent}
       <div class="buttons">
         ${btn_true}  
         ${btn_false}`;
 
-    params.class ??= 'alert-confirm box-shadow';
+  params.class ??= 'alert-confirm box-shadow no-select';
 
-    mapp.ui.elements.dialog(params);
+  mapp.ui.elements.dialog(params);
+
+  return new Promise((resolve) => {
+    btn_true.addEventListener('click', () => {
+      resolve(true);
+      params.close();
+    });
+
+    btn_false.addEventListener('click', () => {
+      resolve(false);
+      params.close();
+    });
   });
 }

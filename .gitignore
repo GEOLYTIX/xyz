@@ -17,6 +17,7 @@ yarn.lock
 .turbo/
 
 resources
+coverage
 public/js/*
 public/workspaces/*
 public/js/plugins/*

@@ -48,7 +48,7 @@ export default function layerView(layer) {
 @description
 The viewConfig method will create viewConfig object and update the configuration from legacy properties.
 
-The method will iterate through the panelOrder keys to add panel to the content array.
+The layer object keys will be ordered according to the keyOrder array when calling panel methods to create the content elements for the layer view.
 
 The method will iterate through the headerOrder keys to and execute methods from mapp.ui.layers.viewHeader{} to return elements for the headerBtn array.
 
@@ -59,7 +59,8 @@ The method will iterate through the headerOrder keys to and execute methods from
 @property {Boolean} [viewConfig.zoomBtn=true] Controls whether the zoom magnifying glass is displayed.
 @property {Boolean} [viewConfig.hideDisabled=false] Controls whether the layer view is hidden when layer is outside its zoom range. When set to true layer will be temporarily hidden in the list until it's within restricted zoom again.
 @property {Boolean} [viewConfig.zoomToFilteredExtentBtn=true] Controls whether the zoom to extent button is displayed.
-@property {Array} [viewConfig.panelOrder=['draw-drawer', 'dataviews-drawer', 'filter-drawer', 'style-drawer', 'meta']] Controls which panels are added to the view and in which order, will be assigned from layer.panelOrder if not explicit.
+@property {Array} [viewConfig.panelOrder] Legacy config to sort content elements by their dataset.id.
+@property {Array} [viewConfig.keyOrder] Order for keys when calling panel methods.
 @property {string} [viewConfig.classList] Classlist string to be added to layer-view drawer element classList.
 @property {Array} [viewConfig.headerOrder=['zoomToFilteredExtentBtn', 'zoomBtn', 'popoutBtn', 'displayToggle']] List of viewHeader methods to be executed.
 @property {array} [viewConfig.headerBtn] Array of elements to be added to the layer.view header.
@@ -97,30 +98,38 @@ function viewConfig(layer) {
   // Delete legacy panelOrder config
   delete layer.panelOrder;
 
-  if (!Array.isArray(layer.viewConfig.panelOrder)) {
-    // Assign default panelOrder if not a config array.
-    layer.viewConfig.panelOrder = [
-      'draw-drawer',
-      'dataviews-drawer',
-      'filter-drawer',
-      'style-drawer',
-      'meta',
-    ];
-  }
+  // Set default keyOrder if not in viewConfig
+  layer.viewConfig.keyOrder ??= [
+    'meta',
+    'style',
+    'filter',
+    'dataviews',
+    'draw',
+  ];
 
-  // Create content from layer view panels and plugins
+  // Created sorted content array of elements from panel methods.
   layer.viewConfig.content = Object.keys(layer)
+    .sort((a, b) => {
+      let indexA = layer.viewConfig.keyOrder.indexOf(a);
+      let indexB = layer.viewConfig.keyOrder.indexOf(b);
+
+      // If an item isn't in the keyOrder array (-1),assign it Infinity so it sorts last.
+      if (indexA === -1) indexA = Infinity;
+      if (indexB === -1) indexB = Infinity;
+
+      return indexA - indexB;
+    })
     .map((key) => mapp.ui.layers?.panels?.[key]?.(layer))
-    .filter((panel) => typeof panel !== 'undefined');
+    .filter((panel) => panel !== undefined);
 
   if (Array.isArray(layer.viewConfig.panelOrder)) {
-    // Sort the content array according to the data-id in the panelOrder array.
+    console.warn(
+      `Layer [${layer.key}] has the legacy panelOrder config with inverted logic; please use viewConfig.keyOrder array!`,
+    );
     layer.viewConfig.content.sort((a, b) => {
-      return layer.viewConfig.panelOrder.findIndex(
-        (chk) => chk === a.dataset?.id,
-      ) < layer.viewConfig.panelOrder.findIndex((chk) => chk === b.dataset?.id)
-        ? 1
-        : -1;
+      const aIndex = layer.viewConfig.panelOrder.indexOf(a.dataset?.id);
+      const bIndex = layer.viewConfig.panelOrder.indexOf(b.dataset?.id);
+      return aIndex < bIndex ? 1 : -1;
     });
   }
 
