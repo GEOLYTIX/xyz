@@ -16,7 +16,6 @@ yarn.lock
 .pnpm-store/
 .turbo/
 
-resources
 coverage
 public/js/*
 public/workspaces/*
@@ -33,8 +32,8 @@ docs/*
 !tests/**
 !package.json
 !jsdoc*.json
-!codi.json
 !biome.json
 !turbo.json
+!vercel.json
 
 .vercel
