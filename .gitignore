@@ -8,6 +8,7 @@
 env
 # npm legacy files (replaced by pnpm)
 package-lock.json
+pnpm-lock.yaml
 yarn.lock
 
 # pnpm files
