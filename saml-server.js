@@ -1,9 +1,8 @@
 /**
-The root backend composes the base XYZ app with optional direct routes.
+The saml-server script imports an express app from /apps/xyz
 
-SAML is mounted here as an extracted backend app so fork-level server wiring is
-kept explicit in the root application.
- */
+The express app is extended with routes to the saml module imported from /apps/saml
+*/
 
 import app from '@geolytix/xyz-app/server';
 import saml from '@geolytix/xyz-saml-app';
