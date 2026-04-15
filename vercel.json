@@ -2,20 +2,10 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
   "buildCommand": "pnpm build",
-  "builds": [
-    {
-      "src": "server.js",
-      "use": "@vercel/node",
-      "config": {
-        "includeFiles": "{resources,apps/xyz}/**/*"
-      }
+  "functions": {
+    "server.js": {
+      "includeFiles": "{public,resources}/**/*",
+      "regions": ["lhr1"]
     }
-  ],
-  "routes": [
-    {
-      "src": "/(.*)",
-      "dest": "server.js"
-    }
-  ],
-  "regions": ["lhr1"]
+  }
 }
