@@ -1,33 +1,28 @@
-await codi.describe(
-  { name: 'admin: ', id: 'user_admin', parentId: 'user' },
-  async () => {
-    const { default: admin } = await import('../../../mod/user/admin.js');
-    await codi.it(
-      { name: 'no user provided', parentId: 'user_admin' },
-      async () => {
-        const { req, res } = codi.mockHttp.createMocks();
+import { createMocks } from 'node-mocks-http';
+import { describe, expect, it } from 'vitest';
 
-        const result = await admin(req, res);
+const { default: admin } = await import('../../../mod/user/admin.js');
 
-        codi.assertTrue(result instanceof Error);
-        codi.assertEqual(result.message, 'login_required');
+describe('admin:', () => {
+  it('no user provided', async () => {
+    const { req, res } = createMocks();
+
+    const result = await admin(req, res);
+
+    expect(result).toBeInstanceOf(Error);
+    expect(result.message).toEqual('login_required');
+  });
+
+  it('not an admin user', async () => {
+    const { req, res } = createMocks({
+      params: {
+        user: {},
       },
-    );
+    });
 
-    await codi.it(
-      { name: 'not an admin user', parentId: 'user_admin' },
-      async () => {
-        const { req, res } = codi.mockHttp.createMocks({
-          params: {
-            user: {},
-          },
-        });
+    const result = await admin(req, res);
 
-        const result = await admin(req, res);
-
-        codi.assertTrue(result instanceof Error);
-        codi.assertEqual(result.message, 'admin_required');
-      },
-    );
-  },
-);
+    expect(result).toBeInstanceOf(Error);
+    expect(result.message).toEqual('admin_required');
+  });
+});

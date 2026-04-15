@@ -1,156 +1,136 @@
-const aclMockFn = codi.mock.fn();
-const aclMock = codi.mock.module('../../../mod/user/acl.js', {
-  defaultExport: aclMockFn,
-});
+import { createMocks } from 'node-mocks-http';
+import { describe, expect, it, vi } from 'vitest';
 
-await codi.describe(
-  { name: 'add: ', id: 'user_add', parentId: 'user' },
-  async () => {
-    const { default: addUser } = await import('../../../mod/user/add.js');
-    await codi.it({ name: 'Adding a user', parentId: 'user_add' }, async () => {
-      aclMockFn.mock.mockImplementation(function acl(q) {
-        return [];
-      });
+const aclMockFn = vi.fn();
 
-      const { req, res } = codi.mockHttp.createMocks({
-        params: {
-          email: 'dev_1@geolytix.co.uk',
-          user: {
-            admin: true,
-          },
-        },
-      });
+vi.mock('../../../mod/user/acl.js', () => ({
+  default: (...args) => aclMockFn(...args),
+}));
 
-      await addUser(req, res);
+const { default: addUser } = await import('../../../mod/user/add.js');
 
-      const message = res._getData();
-
-      codi.assertEqual(message, 'dev_1@geolytix.co.uk added to ACL.');
+describe('add:', () => {
+  it('Adding a user', async () => {
+    aclMockFn.mockImplementation((q) => {
+      return [];
     });
 
-    await codi.it(
-      { name: 'Missing email param', parentId: 'user_add' },
-      async () => {
-        const { default: addUser } = await import('../../../mod/user/add.js');
-
-        const { req, res } = codi.mockHttp.createMocks({
-          params: {},
-        });
-
-        await addUser(req, res);
-
-        const status = res.statusCode;
-        const message = res._getData();
-
-        codi.assertEqual(status, 500);
-        codi.assertEqual(message, 'Missing email param');
+    const { req, res } = createMocks({
+      params: {
+        email: 'dev_1@geolytix.co.uk',
+        user: {
+          admin: true,
+        },
       },
-    );
+    });
 
-    await codi.it(
-      { name: 'Missing user param', parentId: 'user_add' },
-      async () => {
-        const { req, res } = codi.mockHttp.createMocks({
-          params: {
-            email: 'dev_1@geolytix.co.uk',
-          },
-        });
+    await addUser(req, res);
 
-        const result = await addUser(req, res);
+    const message = res._getData();
 
-        codi.assertTrue(result instanceof Error);
-        codi.assertEqual(result.message, 'login_required');
+    expect(message).toEqual('dev_1@geolytix.co.uk added to ACL.');
+  });
+
+  it('Missing email param', async () => {
+    const { req, res } = createMocks({
+      params: {},
+    });
+
+    await addUser(req, res);
+
+    const status = res.statusCode;
+    const message = res._getData();
+
+    expect(status).toEqual(500);
+    expect(message).toEqual('Missing email param');
+  });
+
+  it('Missing user param', async () => {
+    const { req, res } = createMocks({
+      params: {
+        email: 'dev_1@geolytix.co.uk',
       },
-    );
+    });
 
-    await codi.it(
-      { name: 'Missing admin param', parentId: 'user_add' },
-      async () => {
-        const { req, res } = codi.mockHttp.createMocks({
-          params: {
-            email: 'dev_1@geolytix.co.uk',
-            user: {},
-          },
-        });
+    const result = await addUser(req, res);
 
-        const result = await addUser(req, res);
+    expect(result).toBeInstanceOf(Error);
+    expect(result.message).toEqual('login_required');
+  });
 
-        codi.assertTrue(result instanceof Error);
-        codi.assertEqual(result.message, 'admin_required');
+  it('Missing admin param', async () => {
+    const { req, res } = createMocks({
+      params: {
+        email: 'dev_1@geolytix.co.uk',
+        user: {},
       },
-    );
+    });
 
-    await codi.it(
-      { name: 'error from acl', parentId: 'user_add' },
-      async () => {
-        aclMockFn.mock.mockImplementation(function acl() {
-          return new Error('There was an issue with the acl');
-        });
+    const result = await addUser(req, res);
 
-        const { req, res } = codi.mockHttp.createMocks({
-          params: {
-            email: 'dev_1@geolytix.co.uk',
-            user: {
-              admin: true,
-            },
-          },
-        });
+    expect(result).toBeInstanceOf(Error);
+    expect(result.message).toEqual('admin_required');
+  });
 
-        await addUser(req, res);
+  it('error from acl', async () => {
+    aclMockFn.mockImplementation(() => {
+      return new Error('There was an issue with the acl');
+    });
 
-        codi.assertEqual(res.statusCode, 500);
-        codi.assertEqual(res._getData(), 'Failed to access ACL.');
+    const { req, res } = createMocks({
+      params: {
+        email: 'dev_1@geolytix.co.uk',
+        user: {
+          admin: true,
+        },
       },
-    );
+    });
 
-    await codi.it(
-      { name: 'user already exists', parentId: 'user_add' },
-      async () => {
-        aclMockFn.mock.mockImplementation(function acl() {
-          return ['user'];
-        });
+    await addUser(req, res);
 
-        const { req, res } = codi.mockHttp.createMocks({
-          params: {
-            email: 'dev_1@geolytix.co.uk',
-            user: {
-              admin: true,
-            },
-          },
-        });
+    expect(res.statusCode).toEqual(500);
+    expect(res._getData()).toEqual('Failed to access ACL.');
+  });
 
-        await addUser(req, res);
+  it('user already exists', async () => {
+    aclMockFn.mockImplementation(() => {
+      return ['user'];
+    });
 
-        codi.assertEqual(res._getData(), 'User already exists in ACL.');
+    const { req, res } = createMocks({
+      params: {
+        email: 'dev_1@geolytix.co.uk',
+        user: {
+          admin: true,
+        },
       },
-    );
+    });
 
-    await codi.it(
-      { name: 'user already exists', parentId: 'user_add' },
-      async () => {
-        aclMockFn.mock.mockImplementation(function acl(q) {
-          if (q.includes('INSERT INTO')) {
-            return new Error();
-          }
-          return [];
-        });
+    await addUser(req, res);
 
-        const { req, res } = codi.mockHttp.createMocks({
-          params: {
-            email: 'dev_1@geolytix.co.uk',
-            user: {
-              admin: true,
-            },
-          },
-        });
+    expect(res._getData()).toEqual('User already exists in ACL.');
+  });
 
-        await addUser(req, res);
+  it('insert error', async () => {
+    aclMockFn.mockImplementation((q) => {
+      if (q.includes('INSERT INTO')) {
+        return new Error();
+      }
+      return [];
+    });
 
-        codi.assertEqual(res.statusCode, 500);
-        codi.assertEqual(res._getData(), 'Failed to add user account to ACL.');
+    const { req, res } = createMocks({
+      params: {
+        email: 'dev_1@geolytix.co.uk',
+        user: {
+          admin: true,
+        },
       },
-    );
-  },
-);
+    });
 
-aclMock.restore();
+    await addUser(req, res);
+
+    expect(res.statusCode).toEqual(500);
+    expect(res._getData()).toEqual('Failed to add user account to ACL.');
+  });
+});

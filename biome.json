@@ -27,6 +27,8 @@
       "!jsdoc_mapp.json",
       "!jsdoc_xyz.json",
       "!jsdoc_test.json",
+      "!coverage",
+      "!.zed",
       "!**/.vscode"
     ]
   },
