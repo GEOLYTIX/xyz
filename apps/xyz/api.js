@@ -41,17 +41,17 @@ The req object represents the HTTP request and has properties for the request qu
 
 import './mod/utils/processEnv.js';
 import { ServerResponse } from 'node:http';
-import provider from '../mod/provider/_provider.js';
+import provider from './mod/provider/_provider.js';
 //Route imports
-import query from '../mod/query.js';
-import sign from '../mod/sign/_sign.js';
-import user from '../mod/user/_user.js';
-import auth from '../mod/user/auth.js';
-import login from '../mod/user/login.js';
-import register from '../mod/user/register.js';
-import { setRedirect } from '../mod/utils/redirect.js';
-import view from '../mod/view.js';
-import workspace from '../mod/workspace/_workspace.js';
+import query from './mod/query.js';
+import sign from './mod/sign/_sign.js';
+import user from './mod/user/_user.js';
+import auth from './mod/user/auth.js';
+import login from './mod/user/login.js';
+import register from './mod/user/register.js';
+import { setRedirect } from './mod/utils/redirect.js';
+import view from './mod/view.js';
+import workspace from './mod/workspace/_workspace.js';
 
 // Group all routes
 const routes = {
