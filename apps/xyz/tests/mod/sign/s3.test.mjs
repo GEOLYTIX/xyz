@@ -41,7 +41,9 @@ describe('s3:', () => {
       AWS_S3_CLIENT: 'AWSS3KEY',
     };
 
-    const { default: s3_signer } = await import('@geolytix/xyz-app/mod/sign/s3.js');
+    const { default: s3_signer } = await import(
+      '@geolytix/xyz-app/mod/sign/s3.js'
+    );
 
     const { req, res } = createMocks({
       params: {
@@ -84,7 +86,9 @@ describe('s3:', () => {
           return `${Command.url}?key=${id}`;
         });
 
-        const { default: s3_signer } = await import('@geolytix/xyz-app/mod/sign/s3.js');
+        const { default: s3_signer } = await import(
+          '@geolytix/xyz-app/mod/sign/s3.js'
+        );
 
         const { req, res } = createMocks({
           params: {

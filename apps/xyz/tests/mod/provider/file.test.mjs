@@ -22,7 +22,9 @@ vi.mock('@geolytix/xyz-app/mod/sign/file.js', () => ({
   file_signer: vi.fn(),
 }));
 
-const { default: file } = await import('@geolytix/xyz-app/mod/provider/file.js');
+const { default: file } = await import(
+  '@geolytix/xyz-app/mod/provider/file.js'
+);
 
 describe('file:', () => {
   it('Get File test', async () => {

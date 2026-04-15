@@ -1,10 +1,10 @@
-import { describe, expect, it } from 'vitest';
 import {
   check,
   combine,
   objMerge,
   setInObj,
 } from '@geolytix/xyz-app/mod/utils/roles.js';
+import { describe, expect, it } from 'vitest';
 
 describe('Roles Module', () => {
   describe('check()', () => {

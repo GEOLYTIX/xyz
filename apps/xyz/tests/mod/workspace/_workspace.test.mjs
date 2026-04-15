@@ -1,7 +1,7 @@
-import { createMocks } from 'node-mocks-http';
-import { beforeAll, describe, expect, it } from 'vitest';
 import getKeyMethod from '@geolytix/xyz-app/mod/workspace/_workspace.js';
 import checkWorkspaceCache from '@geolytix/xyz-app/mod/workspace/cache.js';
+import { createMocks } from 'node-mocks-http';
+import { beforeAll, describe, expect, it } from 'vitest';
 
 describe('workspace:', () => {
   beforeAll(async () => {

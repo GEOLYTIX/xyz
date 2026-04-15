@@ -8,7 +8,9 @@ vi.mock('@geolytix/xyz-app/mod/user/acl.js', () => ({
 }));
 
 describe('list', async () => {
-  const { default: user_list } = await import('@geolytix/xyz-app/mod/user/list.js');
+  const { default: user_list } = await import(
+    '@geolytix/xyz-app/mod/user/list.js'
+  );
 
   const user = {
     api: true,

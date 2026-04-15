@@ -1,5 +1,5 @@
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import sql_table_insert from '@geolytix/xyz-app/mod/workspace/templates/sql_table_insert.js';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 //Assigning console.warn to a property to restore original function with.
 const originalConsole = console.warn;

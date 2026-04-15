@@ -16,7 +16,9 @@ globalThis.xyzEnv = {
 };
 
 describe('cookie:', async () => {
-  const { default: cookie } = await import('@geolytix/xyz-app/mod/user/cookie.js');
+  const { default: cookie } = await import(
+    '@geolytix/xyz-app/mod/user/cookie.js'
+  );
   it('no cookie', async () => {
     const { req, res } = createMocks({
       cookies: {},

@@ -50,7 +50,9 @@ describe('file:', () => {
       return 'PRIVATEKEY';
     });
 
-    const { default: file_signer } = await import('@geolytix/xyz-app/mod/sign/file.js');
+    const { default: file_signer } = await import(
+      '@geolytix/xyz-app/mod/sign/file.js'
+    );
 
     const result = file_signer(req);
 

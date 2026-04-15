@@ -1,7 +1,9 @@
 import { createMocks } from 'node-mocks-http';
 import { describe, expect, it } from 'vitest';
 
-const { default: cloudinary } = await import('@geolytix/xyz-app/mod/sign/cloudinary.js');
+const { default: cloudinary } = await import(
+  '@geolytix/xyz-app/mod/sign/cloudinary.js'
+);
 
 describe('cloudinary:', () => {
   it('no cloudinary url configured', async () => {

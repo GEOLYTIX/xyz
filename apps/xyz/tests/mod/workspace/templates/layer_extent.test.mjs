@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import layer_extent from '@geolytix/xyz-app/mod/workspace/templates/layer_extent.js';
+import { describe, expect, it } from 'vitest';
 
 describe('feature_extent', () => {
   it('Should generate correct SQL for valid input', () => {

@@ -6,7 +6,9 @@ vi.mock('@geolytix/xyz-app/mod/sign/s3.js', () => ({
   default: (...args) => mocks3SignerFn(...args),
 }));
 
-const { default: s3_provider } = await import('@geolytix/xyz-app/mod/provider/s3.js');
+const { default: s3_provider } = await import(
+  '@geolytix/xyz-app/mod/provider/s3.js'
+);
 
 describe('s3:', () => {
   it('get from signer', async () => {

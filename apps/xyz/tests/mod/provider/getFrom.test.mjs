@@ -20,7 +20,9 @@ vi.mock('@geolytix/xyz-app/mod/provider/cloudfront.js', () => ({
   default: (...args) => mockCloudFrontFn(...args),
 }));
 
-const { default: getFrom } = await import('@geolytix/xyz-app/mod/provider/getFrom.js');
+const { default: getFrom } = await import(
+  '@geolytix/xyz-app/mod/provider/getFrom.js'
+);
 
 describe('getFrom:', () => {
   it('https', async () => {

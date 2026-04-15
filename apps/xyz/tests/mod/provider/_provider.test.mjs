@@ -30,7 +30,9 @@ vi.mock('@geolytix/xyz-app/mod/provider/s3.js', () => ({
   },
 }));
 
-const { default: provider } = await import('@geolytix/xyz-app/mod/provider/_provider.js');
+const { default: provider } = await import(
+  '@geolytix/xyz-app/mod/provider/_provider.js'
+);
 
 describe('Provider:', () => {
   it('Bogus provider test', async () => {

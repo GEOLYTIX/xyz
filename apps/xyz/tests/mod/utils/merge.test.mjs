@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import mergeDeep from '@geolytix/xyz-app/mod/utils/merge.js';
+import { describe, expect, it } from 'vitest';
 
 describe('mergeDeep Module', () => {
   it('should merge objects deeply', () => {

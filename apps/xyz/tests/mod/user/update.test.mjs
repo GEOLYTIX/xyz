@@ -11,7 +11,9 @@ vi.mock('@geolytix/xyz-app/mod/utils/resend.js', () => ({
 }));
 
 describe('update: ', async () => {
-  const { default: update } = await import('@geolytix/xyz-app/mod/user/update.js');
+  const { default: update } = await import(
+    '@geolytix/xyz-app/mod/user/update.js'
+  );
 
   it('should return error for non-admin users', async () => {
     aclMockFn.mockImplementation(function acl() {

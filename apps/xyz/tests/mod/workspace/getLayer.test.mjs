@@ -1,6 +1,6 @@
-import { describe, expect, it } from 'vitest';
 import checkWorkspaceCache from '@geolytix/xyz-app/mod/workspace/cache.js';
 import getLayer from '@geolytix/xyz-app/mod/workspace/getLayer.js';
+import { describe, expect, it } from 'vitest';
 
 describe('getLayer: ', async () => {
   globalThis.xyzEnv = {

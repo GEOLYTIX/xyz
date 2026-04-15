@@ -25,9 +25,13 @@ global.xyzEnv = {
 };
 
 describe('login', async () => {
-  const { default: login } = await import('@geolytix/xyz-app/mod/user/login.js');
+  const { default: login } = await import(
+    '@geolytix/xyz-app/mod/user/login.js'
+  );
   const view = (await import('@geolytix/xyz-app/mod/view.js')).default;
-  const { setRedirect } = await import('@geolytix/xyz-app/mod/utils/redirect.js');
+  const { setRedirect } = await import(
+    '@geolytix/xyz-app/mod/utils/redirect.js'
+  );
 
   beforeEach(() => {
     vi.clearAllMocks();

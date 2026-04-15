@@ -1,6 +1,5 @@
-import { describe, expect, it } from 'vitest';
-
 import table_schema from '@geolytix/xyz-app/mod/workspace/templates/table_schema.js';
+import { describe, expect, it } from 'vitest';
 
 describe('table_schema', () => {
   it('should be a valid SQL template string', () => {

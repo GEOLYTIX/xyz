@@ -9,7 +9,9 @@ vi.mock('@geolytix/xyz-app/mod/user/acl.js', () => ({
 }));
 
 describe('log:', async () => {
-  const { default: accessLog } = await import('@geolytix/xyz-app/mod/user/log.js');
+  const { default: accessLog } = await import(
+    '@geolytix/xyz-app/mod/user/log.js'
+  );
 
   it('Returns an error if no email parameter provided ', async () => {
     const { req, res } = createMocks({

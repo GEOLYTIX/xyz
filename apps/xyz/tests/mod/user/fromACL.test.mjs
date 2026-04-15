@@ -73,7 +73,9 @@ vi.mock('@geolytix/xyz-app/mod/utils/reqHost.js', () => ({
 
 describe('acl', async () => {
   globalThis.xyzEnv.FAILED_ATTEMPTS = 3;
-  const { default: fromACL } = await import('@geolytix/xyz-app/mod/user/fromACL.js');
+  const { default: fromACL } = await import(
+    '@geolytix/xyz-app/mod/user/fromACL.js'
+  );
 
   it('no email provided', async () => {
     const { req, res } = createMocks({

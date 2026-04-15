@@ -22,7 +22,9 @@ vi.mock('@geolytix/xyz-app/mod/user/fromACL.js', () => ({
 }));
 
 describe('token:', async () => {
-  const { default: userToken } = await import('@geolytix/xyz-app/mod/user/token.js');
+  const { default: userToken } = await import(
+    '@geolytix/xyz-app/mod/user/token.js'
+  );
 
   const { default: auth } = await import('@geolytix/xyz-app/mod/user/auth.js');
 

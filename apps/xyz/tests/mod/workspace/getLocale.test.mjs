@@ -1,5 +1,5 @@
-import { describe, expect, it } from 'vitest';
 import checkWorkspaceCache from '@geolytix/xyz-app/mod/workspace/cache.js';
+import { describe, expect, it } from 'vitest';
 
 describe('getLocale', async () => {
   const { default: getLocale } = await import(

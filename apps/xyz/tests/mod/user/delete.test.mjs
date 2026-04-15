@@ -33,7 +33,9 @@ describe('delete:', () => {
   });
 
   it('no email provided', async () => {
-    const { default: deleteUser } = await import('@geolytix/xyz-app/mod/user/delete.js');
+    const { default: deleteUser } = await import(
+      '@geolytix/xyz-app/mod/user/delete.js'
+    );
     const { req, res } = createMocks({
       params: {},
     });
@@ -45,7 +47,9 @@ describe('delete:', () => {
   });
 
   it('no user provided', async () => {
-    const { default: deleteUser } = await import('@geolytix/xyz-app/mod/user/delete.js');
+    const { default: deleteUser } = await import(
+      '@geolytix/xyz-app/mod/user/delete.js'
+    );
     const { req, res } = createMocks({
       params: {
         email: 'test@geolytix.co.uk',
@@ -59,7 +63,9 @@ describe('delete:', () => {
   });
 
   it('delete user', async () => {
-    const { default: deleteUser } = await import('@geolytix/xyz-app/mod/user/delete.js');
+    const { default: deleteUser } = await import(
+      '@geolytix/xyz-app/mod/user/delete.js'
+    );
     const user = {
       email: 'test@geolytix.co.uk',
     };
@@ -92,7 +98,9 @@ describe('delete:', () => {
       return new Error('Something bad happened');
     });
 
-    const { default: deleteUser } = await import('@geolytix/xyz-app/mod/user/delete.js');
+    const { default: deleteUser } = await import(
+      '@geolytix/xyz-app/mod/user/delete.js'
+    );
 
     const { req, res } = createMocks({
       params: {
@@ -111,7 +119,9 @@ describe('delete:', () => {
   });
 
   it('user deleting themselves', async () => {
-    const { default: deleteUser } = await import('@geolytix/xyz-app/mod/user/delete.js');
+    const { default: deleteUser } = await import(
+      '@geolytix/xyz-app/mod/user/delete.js'
+    );
     const user = {
       email: 'admin@geolytix.co.uk',
     };
@@ -140,7 +150,9 @@ describe('delete:', () => {
   });
 
   it('user deleting themselves(not admin)', async () => {
-    const { default: deleteUser } = await import('@geolytix/xyz-app/mod/user/delete.js');
+    const { default: deleteUser } = await import(
+      '@geolytix/xyz-app/mod/user/delete.js'
+    );
     const user = {
       email: 'admin@geolytix.co.uk',
     };

@@ -1,5 +1,5 @@
-import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import checkWorkspaceCache from '@geolytix/xyz-app/mod/workspace/cache.js';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 //Assigning console.error to a property to restore original function with.
 const originalConsole = console.error;

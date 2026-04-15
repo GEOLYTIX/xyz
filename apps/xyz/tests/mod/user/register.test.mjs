@@ -29,7 +29,9 @@ vi.mock('@geolytix/xyz-app/mod/user/acl.js', () => ({
 }));
 
 describe('register: ', async () => {
-  const { default: register } = await import('@geolytix/xyz-app/mod/user/register.js');
+  const { default: register } = await import(
+    '@geolytix/xyz-app/mod/user/register.js'
+  );
 
   it('USER_DOMAINS - full domain with invalid email', async () => {
     globalThis.xyzEnv.USER_DOMAINS = 'geolytix.com';
