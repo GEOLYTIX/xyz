@@ -8,5 +8,4 @@ pnpm-lock.yaml
 
 *.md
 
-apps/mapp
 apps/xyz/tests
