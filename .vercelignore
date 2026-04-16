@@ -9,3 +9,5 @@ pnpm-lock.yaml
 *.md
 
 apps/mapp
+apps/saml
+apps/xyz/tests
