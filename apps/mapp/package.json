@@ -11,7 +11,7 @@
     "build": "node esbuild.config.mjs"
   },
   "license": "MIT",
-  "devDependencies": {
+  "dependencies": {
     "esbuild": "^0.25.0"
   }
 }

@@ -38,7 +38,7 @@ importers:
         version: 17.4.1
 
   apps/mapp:
-    devDependencies:
+    dependencies:
       esbuild:
         specifier: ^0.25.0
         version: 0.25.12
