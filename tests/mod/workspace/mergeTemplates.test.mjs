@@ -78,11 +78,11 @@ await codi.describe(
             current: {},
           },
           roles: {
-            'Pizza Hut': {
-              name: 'PIZZA HUT KEY BRANDS',
+            KEY_BRANDS: {
+              name: 'KEY BRANDS',
               filter: {
                 current: {
-                  pizza_hut_layer: {
+                  key_brands_layer: {
                     in: [true],
                   },
                 },
@@ -91,11 +91,11 @@ await codi.describe(
           },
         };
 
-        const result = await mergeTemplates(layer, ['Pizza Hut']);
+        const result = await mergeTemplates(layer, ['KEY_BRANDS']);
 
-        codi.assertEqual(result.name, 'PIZZA HUT KEY BRANDS');
+        codi.assertEqual(result.name, 'KEY BRANDS');
         codi.assertEqual(result.filter.current, {
-          pizza_hut_layer: {
+          key_brands_layer: {
             in: [true],
           },
         });
