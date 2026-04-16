@@ -46,9 +46,11 @@ export default async function mergeTemplates(obj, roles) {
   // Cache workspace in module scope for template assignment.
   workspace = await workspaceCache();
 
-  obj.roles ??= {};
-  const directRoles = structuredClone(obj.roles);
+  obj = Roles.objMerge(obj, roles);
 
+  obj.roles ??= {};
+  //const directRoles = structuredClone(obj.roles);
+  
   if (obj.role) {
     obj.roles[obj.role] ??= true;
   }
@@ -87,10 +89,10 @@ export default async function mergeTemplates(obj, roles) {
   // Apply only the original object's direct role payloads before the workspace
   // API strips roles from the response. Template role payloads have already
   // been merged during template preparation.
-  if (Object.keys(directRoles).length) {
-    const rolesObj = Roles.objMerge({ roles: directRoles }, roles);
-    obj = merge(obj, rolesObj);
-  }
+  // if (Object.keys(directRoles).length) {
+  //   const rolesObj = Roles.objMerge({ roles: directRoles }, roles);
+  //   obj = merge(obj, rolesObj);
+  // }
 
   return obj;
 }
