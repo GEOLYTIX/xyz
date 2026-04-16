@@ -6,5 +6,11 @@
       "includeFiles": "{public,resources}/**/*",
       "regions": ["lhr1"]
     }
-  }
+  },
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "server.js"
+    }
+  ]
 }
