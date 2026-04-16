@@ -87,7 +87,10 @@ export default async function mergeTemplates(obj, roles) {
   // Apply only the original object's direct role payloads before the workspace
   // API strips roles from the response. Template role payloads have already
   // been merged during template preparation.
-  obj = merge(obj, Roles.objMerge({ roles: directRoles }, roles));
+  if (Object.keys(directRoles).length) {
+    const rolesObj = Roles.objMerge({ roles: directRoles }, roles);
+    obj = merge(obj, rolesObj);
+  }
 
   return obj;
 }
