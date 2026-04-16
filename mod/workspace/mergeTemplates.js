@@ -47,6 +47,7 @@ export default async function mergeTemplates(obj, roles) {
   workspace = await workspaceCache();
 
   obj.roles ??= {};
+  const directRoles = structuredClone(obj.roles);
 
   if (obj.role) {
     obj.roles[obj.role] ??= true;
@@ -82,6 +83,11 @@ export default async function mergeTemplates(obj, roles) {
   if (!Roles.check(obj, roles)) {
     return new Error('Role access denied.');
   }
+
+  // Apply only the original object's direct role payloads before the workspace
+  // API strips roles from the response. Template role payloads have already
+  // been merged during template preparation.
+  obj = merge(obj, Roles.objMerge({ roles: directRoles }, roles));
 
   return obj;
 }

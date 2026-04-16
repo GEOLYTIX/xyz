@@ -68,6 +68,42 @@ await codi.describe(
 
     await codi.it(
       {
+        name: 'merge direct object roles into resolved object',
+        parentId: 'workspace_mergeTemplates',
+      },
+      async () => {
+        const layer = {
+          name: 'Base name',
+          filter: {
+            current: {},
+          },
+          roles: {
+            'Pizza Hut': {
+              name: 'PIZZA HUT KEY BRANDS',
+              filter: {
+                current: {
+                  pizza_hut_layer: {
+                    in: [true],
+                  },
+                },
+              },
+            },
+          },
+        };
+
+        const result = await mergeTemplates(layer, ['Pizza Hut']);
+
+        codi.assertEqual(result.name, 'PIZZA HUT KEY BRANDS');
+        codi.assertEqual(result.filter.current, {
+          pizza_hut_layer: {
+            in: [true],
+          },
+        });
+      },
+    );
+
+    await codi.it(
+      {
         name: 'mergeTemplates with roles',
         parentId: 'workspace_mergeTemplates',
       },
