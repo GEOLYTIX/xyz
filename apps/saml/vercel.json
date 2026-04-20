@@ -3,17 +3,17 @@
   "trailingSlash": false,
   "builds": [
     {
-      "src": "/saml-server.js",
+      "src": "apps/saml/server.js",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": "public/**"
+        "includeFiles": "{public/**,apps/xyz/*.crt,apps/xyz/*.pem}"
       }
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/saml-server.js"
+      "dest": "apps/saml/server.js"
     }
   ]
 }

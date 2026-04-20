@@ -28,7 +28,8 @@
       "!jsdoc_test.json",
       "!coverage",
       "!.zed",
-      "!**/.vscode"
+      "!**/.vscode",
+      "!.turbo"
     ]
   },
   "formatter": {

@@ -25,9 +25,9 @@ app.post(
 export default app;
 ```
 
-The saml-server.js script is provided in the xyz repository root and can be deployed to vercel as a build for the node runtime.
+The apps/saml/server.js script composes the xyz express app with the saml module and can be deployed to vercel as a build for the node runtime.
 
-Any request must be routed to the saml-server script. The build and routing can be defined in a vercel.json configuration.
+Any request must be routed to the saml server script. The build and routing can be defined in a vercel.json configuration.
 
 ```json
 {
@@ -35,17 +35,17 @@ Any request must be routed to the saml-server script. The build and routing can 
   "trailingSlash": false,
   "builds": [
     {
-      "src": "/saml-server.js",
+      "src": "apps/saml/server.js",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": "public/**"
+        "includeFiles": "{public/**,apps/xyz/*.crt,apps/xyz/*.pem}"
       }
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "/saml-server.js"
+      "dest": "apps/saml/server.js"
     }
   ]
 }
