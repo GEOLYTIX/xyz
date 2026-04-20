@@ -50,7 +50,7 @@ export default async function mergeTemplates(obj, roles) {
 
   obj.roles ??= {};
   //const directRoles = structuredClone(obj.roles);
-  
+
   if (obj.role) {
     obj.roles[obj.role] ??= true;
   }
