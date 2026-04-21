@@ -43,7 +43,7 @@ export default async function file(ref) {
       (matched) => xyzEnv[`SRC_${matched.replace(/(^{)|(}$)/g, '')}`],
     );
 
-    const path = join(process.cwd(), relativePath)
+    const path = join(process.cwd(), relativePath);
 
     // Join the releative path with the import directory name to generate a path with platform specific separator as delimiter.
     const file = readFileSync(path);
