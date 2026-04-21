@@ -10,13 +10,16 @@ You will start by
 The minimum requirements are:
 
 - Git
-- [Node.js](https://nodejs.org/) (version 18 and above)
+- [Node.js](https://nodejs.org/) (version 22 and above)
+- [pnpm](https://pnpm.io/) (version 10)
 
 The executables `git` and `node` should be in your `PATH`.
 
 To install the Node.js dependencies run
 
     pnpm install
+
+For a current clone-to-first-run walkthrough, see [SETUP.md](./SETUP.md).
 
 Please check the full list of dependencies as defined in the [package.json](https://github.com/GEOLYTIX/xyz/blob/main/package.json)
 

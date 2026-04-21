@@ -35,6 +35,8 @@ The MAPP library can be extended at runtime by dynamically importing [mapp plugi
 
 Please refer to the [wiki pages](https://github.com/GEOLYTIX/xyz/wiki) for detailed interface references.
 
+For a local install and first-run walkthrough, see [SETUP.md](./SETUP.md).
+
 ## Version History
 
 **v1** was build with [Leaflet](https://github.com/Leaflet/Leaflet) as the map render for the client library.
