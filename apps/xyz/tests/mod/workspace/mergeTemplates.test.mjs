@@ -42,58 +42,42 @@ describe('mergeTemplates', async () => {
     expect(template.infoj.length).toEqual(2);
   });
 
-  it('mergeTemplates with roles', async () => {
-    const expectedRoles = ['template', 'locale.layer.template'];
+  it('merge direct object roles into resolved object', async () => {
     const layer = {
-      localeRole: 'locale',
-      role: 'layer',
-      template: {
-        role: 'template',
-        src: 'file:./tests/assets/layers/template_test/nested_roles.json',
-        exclude_props: ['style'],
+      name: 'Base name',
+      filter: {
+        current: {},
       },
-    };
-
-    await codi.it(
-      {
-        name: 'merge direct object roles into resolved object',
-        parentId: 'workspace_mergeTemplates',
-      },
-      async () => {
-        const layer = {
-          name: 'Base name',
+      roles: {
+        KEY_BRANDS: {
+          name: 'KEY BRANDS',
           filter: {
-            current: {},
-          },
-          roles: {
-            KEY_BRANDS: {
-              name: 'KEY BRANDS',
-              filter: {
-                current: {
-                  key_brands_layer: {
-                    in: [true],
-                  },
-                },
+            current: {
+              key_brands_layer: {
+                in: [true],
               },
             },
           },
-        };
-
-        const result = await mergeTemplates(layer, ['KEY_BRANDS']);
-
-        codi.assertEqual(result.name, 'KEY BRANDS');
-        codi.assertEqual(result.filter.current, {
-          key_brands_layer: {
-            in: [true],
-          },
-        });
+        },
       },
-    );
+    };
 
-    await codi.it(
-      {
-        name: 'mergeTemplates with roles',
-        parentId: 'workspace_mergeTemplates',
+    const result = await mergeTemplates(layer, ['KEY_BRANDS']);
+
+    expect(result.name).toEqual('KEY BRANDS');
+    expect(result.filter.current).toEqual({
+      key_brands_layer: {
+        in: [true],
+      },
+    });
+  });
+
+  it('mergeTemplates with roles', async () => {
+    const layer = {
+      localeRole: 'locale',
+      template: {
+        src: 'file:./tests/assets/layers/template_test/nested_templates.json',
+        exclude_props: ['style'],
       },
     };
 
@@ -104,7 +88,7 @@ describe('mergeTemplates', async () => {
       'locale.layer_a.draw_circle',
     ];
 
-    const template = await mergeTemplates(obj, roles);
+    const template = await mergeTemplates(layer, roles);
 
     // Check template in template has the draw.point object.
     expect(
@@ -118,6 +102,8 @@ describe('mergeTemplates', async () => {
 
     // Check the roles object contains nested roles.
     const expectedRoles = [
+      'draw_circle',
+      'draw_point',
       'locale.layer_a',
       'layer_a.draw_point',
       'locale.layer_a.draw_point',
