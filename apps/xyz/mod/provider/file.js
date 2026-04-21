@@ -38,13 +38,15 @@ export default async function file(ref) {
       throw new Error('Unauthorized');
 
     // Subtitutes {*} with xyzEnv.SRC_* key values.
-    const path = (ref.params?.url || ref).replace(
+    const relativePath = (ref.params?.url || ref).replace(
       /{(?!{)(.*?)}/g,
       (matched) => xyzEnv[`SRC_${matched.replace(/(^{)|(}$)/g, '')}`],
     );
 
+    const path = join(process.cwd(), relativePath)
+
     // Join the releative path with the import directory name to generate a path with platform specific separator as delimiter.
-    const file = readFileSync(join(import.meta.dirname, `../../${path}`));
+    const file = readFileSync(path);
 
     if (path.match(/\.json$/i)) {
       return JSON.parse(file, 'utf8');
