@@ -54,23 +54,46 @@ describe('mergeTemplates', async () => {
       },
     };
 
-    const template = await mergeTemplates(layer, ['locale.layer.template']);
+    await codi.it(
+      {
+        name: 'merge direct object roles into resolved object',
+        parentId: 'workspace_mergeTemplates',
+      },
+      async () => {
+        const layer = {
+          name: 'Base name',
+          filter: {
+            current: {},
+          },
+          roles: {
+            KEY_BRANDS: {
+              name: 'KEY BRANDS',
+              filter: {
+                current: {
+                  key_brands_layer: {
+                    in: [true],
+                  },
+                },
+              },
+            },
+          },
+        };
 
-    expect(
-      expectedRoles.every((r) => Object.keys(template.roles).includes(r)),
-    ).toBeTruthy();
-  });
+        const result = await mergeTemplates(layer, ['KEY_BRANDS']);
 
-  it('mergeTemplates with 3 levels nesting of roles', async () => {
-    // Inside the layer is a template which contains another template that is used to control whether or not the draw object is seen.
-    // The nested template is a separate file that has the "role": "layer_a".
-    // Within the nested template is two templates. One is loaded from a file that has the "role": "draw_point" and provides a draw object with different properties.
-    // The other is defined inline with the "role": "draw_circle".
-    const obj = {
-      localeRole: 'locale',
-      template: {
-        key: 'layer_a',
-        src: 'file:./tests/assets/layers/template_test/nested_templates.json',
+        codi.assertEqual(result.name, 'KEY BRANDS');
+        codi.assertEqual(result.filter.current, {
+          key_brands_layer: {
+            in: [true],
+          },
+        });
+      },
+    );
+
+    await codi.it(
+      {
+        name: 'mergeTemplates with roles',
+        parentId: 'workspace_mergeTemplates',
       },
     };
 
