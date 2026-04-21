@@ -11,9 +11,9 @@
     "neverBuiltDependencies": []
   },
   "scripts": {
-    "dev": "node server.js --inspect",
+    "dev:saml": "turbo run dev --filter=@geolytix/xyz-saml-app",
     "test": "turbo run test",
-    "test:xyz": "turbo run test --filter=xyz",
+    "test:xyz": "turbo run test --filter=@geolytix/xyz-app",
     "build": "turbo run build",
     "ui_css": "pnpm exec esbuild --bundle public/css/_ui.css --outfile=public/css/ui.css --external:*.woff2",
     "mapp_css": "pnpm exec esbuild --bundle public/css/_mapp.css --outfile=public/css/mapp.css",

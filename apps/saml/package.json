@@ -3,13 +3,19 @@
   "version": "v1.0.0",
   "description": "Optional SAML backend app",
   "type": "module",
+  "scripts": {
+    "dev": "node --inspect server.js"
+  },
   "exports": {
-    ".": "./saml.js"
+    ".": "./saml.js",
+    "./server": "./server.js"
   },
   "optionalDependencies": {
     "@node-saml/node-saml": "^5.0.1"
   },
   "dependencies": {
+    "@geolytix/xyz-app": "file:../xyz",
+    "express": "^5.1.0",
     "jsonwebtoken": "^9.0.2"
   }
 }
