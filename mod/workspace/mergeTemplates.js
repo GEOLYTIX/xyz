@@ -46,6 +46,8 @@ export default async function mergeTemplates(obj, roles) {
   // Cache workspace in module scope for template assignment.
   workspace = await workspaceCache();
 
+  obj = Roles.objMerge(obj, roles);
+
   obj.roles ??= {};
 
   if (obj.role) {
