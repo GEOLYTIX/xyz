@@ -24,27 +24,27 @@
   },
   "license": "MIT",
   "optionalDependencies": {
-    "@aws-sdk/client-s3": "^3.691.0",
-    "@aws-sdk/cloudfront-signer": "^3.621.0",
-    "@aws-sdk/s3-request-presigner": "^3.691.0",
-    "@node-saml/node-saml": "^5.0.1",
-    "resend": "^6.4.2"
+    "@aws-sdk/client-s3": "^3.1031.0",
+    "@aws-sdk/cloudfront-signer": "^3.1031.0",
+    "@aws-sdk/s3-request-presigner": "^3.1031.0",
+    "@node-saml/node-saml": "^5.1.0",
+    "resend": "^6.12.0"
   },
   "dependencies": {
     "bcrypt": "^6.0.0",
-    "dotenv": "^17.2.2",
-    "jsonwebtoken": "^9.0.2",
+    "dotenv": "^17.4.2",
+    "jsonwebtoken": "^9.0.3",
     "pg": "~8.15.1"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.6",
     "clean-jsdoc-theme": "^4.3.0",
     "codi-test-framework": "1.0.37",
-    "concurrently": "^9.1.0",
-    "cookie-parser": "^1.4.5",
-    "esbuild": "^0.25.0",
-    "express": "^5.1.0",
-    "express-rate-limit": "^7.5.0",
-    "nodemon": "^3.1.7"
+    "concurrently": "^9.2.1",
+    "cookie-parser": "^1.4.7",
+    "esbuild": "^0.25.12",
+    "express": "^5.2.0",
+    "express-rate-limit": "^7.5.1",
+    "nodemon": "^3.1.14"
   }
 }
