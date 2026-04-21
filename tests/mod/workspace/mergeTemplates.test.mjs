@@ -42,35 +42,42 @@ describe('mergeTemplates', async () => {
     expect(template.infoj.length).toEqual(2);
   });
 
-  it('mergeTemplates with roles', async () => {
-    const expectedRoles = ['template', 'locale.layer.template'];
+  it('merge direct object roles into resolved object', async () => {
     const layer = {
-      localeRole: 'locale',
-      role: 'layer',
-      template: {
-        role: 'template',
-        src: 'file:./tests/assets/layers/template_test/nested_roles.json',
-        exclude_props: ['style'],
+      name: 'Base name',
+      filter: {
+        current: {},
+      },
+      roles: {
+        KEY_BRANDS: {
+          name: 'KEY BRANDS',
+          filter: {
+            current: {
+              key_brands_layer: {
+                in: [true],
+              },
+            },
+          },
+        },
       },
     };
 
-    const template = await mergeTemplates(layer, ['locale.layer.template']);
+    const result = await mergeTemplates(layer, ['KEY_BRANDS']);
 
-    expect(
-      expectedRoles.every((r) => Object.keys(template.roles).includes(r)),
-    ).toBeTruthy();
+    expect(result.name).toEqual('KEY BRANDS');
+    expect(result.filter.current).toEqual({
+      key_brands_layer: {
+        in: [true],
+      },
+    });
   });
 
-  it('mergeTemplates with 3 levels nesting of roles', async () => {
-    // Inside the layer is a template which contains another template that is used to control whether or not the draw object is seen.
-    // The nested template is a separate file that has the "role": "layer_a".
-    // Within the nested template is two templates. One is loaded from a file that has the "role": "draw_point" and provides a draw object with different properties.
-    // The other is defined inline with the "role": "draw_circle".
-    const obj = {
+  it('mergeTemplates with roles', async () => {
+    const layer = {
       localeRole: 'locale',
       template: {
-        key: 'layer_a',
         src: 'file:./tests/assets/layers/template_test/nested_templates.json',
+        exclude_props: ['style'],
       },
     };
 
@@ -81,7 +88,7 @@ describe('mergeTemplates', async () => {
       'locale.layer_a.draw_circle',
     ];
 
-    const template = await mergeTemplates(obj, roles);
+    const template = await mergeTemplates(layer, roles);
 
     // Check template in template has the draw.point object.
     expect(
@@ -95,6 +102,8 @@ describe('mergeTemplates', async () => {
 
     // Check the roles object contains nested roles.
     const expectedRoles = [
+      'draw_circle',
+      'draw_point',
       'locale.layer_a',
       'layer_a.draw_point',
       'locale.layer_a.draw_point',
