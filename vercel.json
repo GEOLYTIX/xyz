@@ -2,7 +2,7 @@
   "$schema": "https://openapi.vercel.sh/vercel.json",
   "version": 2,
   "functions": {
-    "index.js": {
+    "./api/index.js": {
       "includeFiles": "{public,resources}/**/*",
       "regions": ["lhr1"]
     }
