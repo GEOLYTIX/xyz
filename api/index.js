@@ -1,1 +1,1 @@
-export { default } from '../server-saml.js';
+export { default } from '../server.js';

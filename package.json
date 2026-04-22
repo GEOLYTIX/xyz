@@ -11,6 +11,7 @@
     "neverBuiltDependencies": []
   },
   "scripts": {
+    "dev": "node --inspect server.js",
     "dev:saml": "turbo run dev --filter=@geolytix/xyz-saml-app",
     "test": "turbo run test",
     "test:xyz": "turbo run test --filter=@geolytix/xyz-app",
