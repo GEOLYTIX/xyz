@@ -66,6 +66,15 @@ const limiter = rateLimit({
 
 app.use(limiter);
 
+// redirect if dir is missing in url path.
+app.use((req, res, next)=>{
+  if (xyzEnv.DIR && req.url.length === 1) {
+    res.setHeader('location', `${xyzEnv.DIR}`);
+    return res.status(302).send();
+  }
+  next();
+});
+
 app.use(cookieParser());
 
 app.use(`${xyzEnv.DIR}/public`, express.static(publicDir));
@@ -101,6 +110,8 @@ app.post(
 );
 
 app.get(`${xyzEnv.DIR}/view{/:template}`, api);
+
+app.get(`${xyzEnv.DIR}{/:locale}`, api);
 
 app.get(`/`, api);
 

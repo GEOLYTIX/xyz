@@ -67,10 +67,6 @@ const routes = {
 @function api
 
 @description
-The API method will redirect requests with a request url length 1 and xyzEnv.DIR.
-
-eg. A request to localhost:3000 with a DIR = "/mapp" will be redirected to localhost:3000/mapp
-
 Request parameter will be assigned once validated with the validateRequestParams method.
 
 Requests with a logout parameter property will set the header cookie to null and return with a redirect to the application domain path [xyzEnv.DIR].
@@ -89,11 +85,6 @@ All other requests will passed to the async validateRequestAuth method.
 @property {Boolean} params.register The request should redirect to user/register.
 */
 export default function api(req, res) {
-  // redirect if dir is missing in url path.
-  if (xyzEnv.DIR && req.url.length === 1) {
-    res.setHeader('location', `${xyzEnv.DIR}`);
-    return res.status(302).send();
-  }
 
   req.params = validateRequestParams(req);
 
