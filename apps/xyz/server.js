@@ -80,7 +80,7 @@ app.use((req, res, next)=>{
   next();
 });
 
-app.use(validateRequestParams);
+//app.use(validateRequestParams);
 
 app.use(`${xyzEnv.DIR}/public`, express.static(publicDir));
 

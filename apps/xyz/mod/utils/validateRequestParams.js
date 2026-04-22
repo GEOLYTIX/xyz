@@ -95,5 +95,5 @@ export default function validateRequestParams(req, res, next) {
     }
   }
 
-  next();
+  //next();
 }
