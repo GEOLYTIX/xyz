@@ -36,9 +36,9 @@ The fetched will resource body will be parsed as JSON if the URL ends in `.json`
 export default cloudfront_signer ? cloudfront : null;
 
 async function cloudfront(req) {
-  const url = req.params?.url || req;
-
   try {
+    const url = req.params?.url || req;
+
     const signedURL = await cloudfront_signer(url);
 
     if (signedURL instanceof Error) {
