@@ -71,8 +71,6 @@ The API method will redirect requests with a request url length 1 and xyzEnv.DIR
 
 eg. A request to localhost:3000 with a DIR = "/mapp" will be redirected to localhost:3000/mapp
 
-Request parameter will be assigned once validated with the validateRequestParams method.
-
 Requests with a logout parameter property will set the header cookie to null and return with a redirect to the application domain path [xyzEnv.DIR].
 
 Requests with a login param or login property in the request body object will shortcircuit to the [user/login]{@link module:/user/login} module.
@@ -89,20 +87,6 @@ All other requests will passed to the async validateRequestAuth method.
 @property {Boolean} params.register The request should redirect to user/register.
 */
 export default function api(req, res) {
-  // redirect if dir is missing in url path.
-  if (xyzEnv.DIR && req.url.length === 1) {
-    res.setHeader('location', `${xyzEnv.DIR}`);
-    return res.status(302).send();
-  }
-
-  req.params = validateRequestParams(req);
-
-  if (req.params instanceof Error) {
-    return res
-      .status(400)
-      .setHeader('Content-Type', 'text/plain')
-      .send(req.params.message);
-  }
 
   if (req.params.logout) {
     // Remove cookie.
@@ -256,90 +240,4 @@ function requestRouter(req, res) {
     default:
       routes.view(req, res);
   }
-}
-
-/**
-@function validateRequestParams
-
-@description
-The method assigns a params object from the request params and query objects.
-
-The restricted params.user will be deleted. The params.user can only be assigned from a user object returned from the [user/auth]{@link module:/user/auth} module.
-
-The method will return an error if some params key contains non whitelisted character or if the restricted user param is detected.
-
-The template param will be set from _template if not explicit. This is required for the vercel router logic which does not allow to use URL path parameter to have the same key as request parameter.
-
-The params object will have a language property which is set to `en` if not explicit.
-
-The params object properties will be iterated through to parse Object values [eg null, boolean, array], and remove undefined parameter properties.
-
-@param {req} req HTTP request.
-@property {Object} req.params The request params object.
-@property {Object} req.query The request query object.
-
-@returns {Object} Returns a validated params object.
-*/
-function validateRequestParams(req) {
-  // Merge request params and query params.
-  const params = Object.assign(req.params || {}, req.query || {});
-
-  // User is a restricted parameter.
-  delete params.user;
-
-  // URL parameter keys must match white listed letters and numbers only.
-  if (Object.keys(params).some((key) => !/^[A-Za-z0-9_-]*$/.exec(key))) {
-    return new Error('URL parameter key validation failed.');
-  }
-
-  // URL parameter keys must match white listed letters and numbers only.
-  if (Object.keys(params).some((key) => key === 'user')) {
-    return new Error('user is a restricted request parameter.');
-  }
-
-  // Language param will default to english [en] is not explicitly set.
-  params.language ??= 'en';
-
-  // Assign from _template if provided as path param.
-  params.template ??= params._template;
-
-  for (const key in params) {
-    // Delete param keys with undefined values.
-    if (params[key] === undefined) {
-      delete params[key];
-      continue;
-    }
-
-    // Delete param keys with empty string value.
-    if (params[key] === '') {
-      delete params[key];
-      continue;
-    }
-
-    // Parse lowerCase object value.
-    switch (params[key].toLowerCase()) {
-      case 'null':
-        params[key] = null;
-        continue;
-
-      case 'false':
-        params[key] = false;
-        continue;
-
-      case 'true':
-        params[key] = true;
-        continue;
-    }
-
-    // Check whether the params value begins and ends with square braces.
-    if (params[key].match(/^\[.*\]$/)) {
-      // Match the string between square brackets and split into an array with undefined array values filtered out.
-      params[key] = params[key]
-        .match(/^\[(.*)\]$/)[1]
-        .split(',')
-        .filter(Boolean);
-    }
-  }
-
-  return params;
 }

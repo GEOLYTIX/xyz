@@ -37,6 +37,8 @@ RATE_LIMIT_WINDOW - Time window in ms (default: 1 min)
 @requires express Web application framework
 @requires cookie-parser HTTP cookie parsing middleware
 @requires express-rate-limit Rate limiting middleware
+@requires /utils/processEnv
+@requires /utils/validateRequestParams
 */
 
 import { resolve } from 'node:path';
@@ -45,6 +47,7 @@ import cookieParser from 'cookie-parser';
 import express from 'express';
 import rateLimit from 'express-rate-limit';
 import api from './api.js';
+import validateRequestParams from './mod/utils/validateRequestParams.js';
 
 const publicDir = resolve(process.cwd(), 'public');
 
@@ -67,6 +70,17 @@ const limiter = rateLimit({
 app.use(limiter);
 
 app.use(cookieParser());
+
+// redirect if dir is missing in url path.
+app.use((req, res, next)=>{
+  if (xyzEnv.DIR && req.url.length === 1) {
+    res.setHeader('location', `${xyzEnv.DIR}`);
+    return res.status(302).send();
+  }
+  next();
+});
+
+app.use(validateRequestParams);
 
 app.use(`${xyzEnv.DIR}/public`, express.static(publicDir));
 
@@ -101,6 +115,8 @@ app.post(
 );
 
 app.get(`${xyzEnv.DIR}/view{/:template}`, api);
+
+app.get(`${xyzEnv.DIR}{/:locale}`, api);
 
 app.get(`/`, api);
 
