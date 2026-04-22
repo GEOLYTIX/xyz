@@ -28,14 +28,14 @@ The params object properties will be iterated through to parse Object values [eg
 */
 export default function validateRequestParams(req, res, next) {
   // Assign request query [params] to req.params.
-  Object.assign(req.params || {}, req.query || {});
+  const params = Object.assign(req.params || {}, req.query || {});
 
   // User is a restricted parameter.
-  delete req.params.user;
+  delete params.user;
 
   // URL parameter keys must match white listed letters and numbers only.
-  if (Object.keys(req.params).some((key) => !/^[A-Za-z0-9_-]*$/.exec(key))) {
-        res
+  if (Object.keys(params).some((key) => !/^[A-Za-z0-9_-]*$/.exec(key))) {
+    res
       .status(400)
       .setHeader('Content-Type', 'text/plain')
       .send('URL parameter key validation failed.');
@@ -43,7 +43,7 @@ export default function validateRequestParams(req, res, next) {
   }
 
   // URL parameter keys must match white listed letters and numbers only.
-  if (Object.keys(req.params).some((key) => key === 'user')) {
+  if (Object.keys(params).some((key) => key === 'user')) {
     res
       .status(400)
       .setHeader('Content-Type', 'text/plain')
@@ -52,48 +52,50 @@ export default function validateRequestParams(req, res, next) {
   }
 
   // Language param will default to english [en] is not explicitly set.
-  req.params.language ??= 'en';
+  params.language ??= 'en';
 
   // Assign from _template if provided as path param.
-  req.params.template ??= req.params._template;
+  params.template ??= params._template;
 
-  for (const key in req.params) {
+  for (const key in params) {
     // Delete param keys with undefined values.
-    if (req.params[key] === undefined) {
-      delete req.params[key];
+    if (params[key] === undefined) {
+      delete params[key];
       continue;
     }
 
     // Delete param keys with empty string value.
-    if (req.params[key] === '') {
-      delete req.params[key];
+    if (params[key] === '') {
+      delete params[key];
       continue;
     }
 
     // Parse lowerCase object value.
-    switch (req.params[key].toLowerCase()) {
+    switch (params[key].toLowerCase()) {
       case 'null':
-        req.params[key] = null;
+        params[key] = null;
         continue;
 
       case 'false':
-        req.params[key] = false;
+        params[key] = false;
         continue;
 
       case 'true':
-        req.params[key] = true;
+        params[key] = true;
         continue;
     }
 
     // Check whether the params value begins and ends with square braces.
-    if (req.params[key].match(/^\[.*\]$/)) {
+    if (params[key].match(/^\[.*\]$/)) {
       // Match the string between square brackets and split into an array with undefined array values filtered out.
-      req.params[key] = req.params[key]
+      params[key] = params[key]
         .match(/^\[(.*)\]$/)[1]
         .split(',')
         .filter(Boolean);
     }
   }
 
-  //next();
+  req._params = params;
+
+  next();
 }

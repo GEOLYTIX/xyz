@@ -72,7 +72,7 @@ app.use(limiter);
 app.use(cookieParser());
 
 // redirect if dir is missing in url path.
-app.use((req, res, next)=>{
+app.use((req, res, next) => {
   if (xyzEnv.DIR && req.url.length === 1) {
     res.setHeader('location', `${xyzEnv.DIR}`);
     return res.status(302).send();
@@ -80,7 +80,7 @@ app.use((req, res, next)=>{
   next();
 });
 
-//app.use(validateRequestParams);
+app.use(validateRequestParams);
 
 app.use(`${xyzEnv.DIR}/public`, express.static(publicDir));
 
