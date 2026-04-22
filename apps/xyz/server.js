@@ -67,7 +67,7 @@ const limiter = rateLimit({
 app.use(limiter);
 
 // redirect if dir is missing in url path.
-app.use((req, res, next)=>{
+app.use((req, res, next) => {
   if (xyzEnv.DIR && req.url.length === 1) {
     res.setHeader('location', `${xyzEnv.DIR}`);
     return res.status(302).send();
