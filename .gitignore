@@ -18,10 +18,6 @@ yarn.lock
 
 resources
 coverage
-public/js/*
-public/workspaces/*
-public/js/plugins/*
-!public/dictionaries/*
 
 docs/*
 
