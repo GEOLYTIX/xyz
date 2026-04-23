@@ -42,15 +42,6 @@ export default function validateRequestParams(req, res, next) {
     return;
   }
 
-  // URL parameter keys must match white listed letters and numbers only.
-  if (Object.keys(params).includes((key) => key === 'user')) {
-    res
-      .status(400)
-      .setHeader('Content-Type', 'text/plain')
-      .send('user is a restricted request parameter.');
-    return;
-  }
-
   // Language param will default to english [en] is not explicitly set.
   params.language ??= 'en';
 
