@@ -1,5 +1,8 @@
 {
   "templates": {
+    "default_view": {
+      "template": "<html lang=\"{{language}}\"></html>"
+    },
     "custom_view": {
       "template": "<html lang=\"{{language}}\">{{varcheck}}</html>"
     }
