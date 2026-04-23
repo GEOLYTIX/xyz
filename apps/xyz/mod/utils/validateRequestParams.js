@@ -43,7 +43,7 @@ export default function validateRequestParams(req, res, next) {
   }
 
   // URL parameter keys must match white listed letters and numbers only.
-  if (Object.keys(params).some((key) => key === 'user')) {
+  if (Object.keys(params).includes((key) => key === 'user')) {
     res
       .status(400)
       .setHeader('Content-Type', 'text/plain')
