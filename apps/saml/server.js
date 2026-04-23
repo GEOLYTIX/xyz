@@ -4,9 +4,22 @@ The saml server script imports an express app from /apps/xyz
 The express app is extended with routes to the saml module imported from /apps/saml
 */
 
-import app from '@geolytix/xyz-app/server';
+import process from 'node:process';
+import { fileURLToPath } from 'node:url';
 import express from 'express';
-import saml from './saml.js';
+
+const workspaceRoot = fileURLToPath(new URL('../..', import.meta.url));
+
+// The xyz app resolves built-in file: references from process.cwd(), so the
+// SAML entrypoint must switch to the workspace root before those modules load.
+if (process.cwd() !== workspaceRoot) {
+  process.chdir(workspaceRoot);
+}
+
+const [{ default: app }, { default: saml }] = await Promise.all([
+  import('@geolytix/xyz-app/server'),
+  import('./saml.js'),
+]);
 
 app.get(`${xyzEnv.DIR}/saml/metadata`, saml);
 app.get(`${xyzEnv.DIR}/saml/logout`, saml);
