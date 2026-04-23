@@ -1,7 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
 
 const fsMockFn = vi.fn();
-const mockPathdirnameFn = vi.fn();
 const mockPathJoinFn = vi.fn();
 
 vi.mock('fs', () => ({
@@ -9,12 +8,7 @@ vi.mock('fs', () => ({
 }));
 
 vi.mock('path', () => ({
-  dirname: (...args) => mockPathdirnameFn(...args),
   join: (...args) => mockPathJoinFn(...args),
-}));
-
-vi.mock('url', () => ({
-  fileURLToPath: vi.fn(),
 }));
 
 vi.mock('@geolytix/xyz-app/mod/sign/file.js', () => ({
@@ -33,15 +27,11 @@ describe('file:', () => {
       return JSON.stringify(fileContent);
     });
 
-    mockPathdirnameFn.mockImplementationOnce(() => {
-      return 'test.json';
-    });
-
     mockPathJoinFn.mockImplementationOnce(() => {
-      '../../test.json';
+      return './tests/thing.json';
     });
 
-    const results = await file('../../dir/tests/thing.json');
+    const results = await file('./tests/thing.json');
 
     expect(results).toEqual(fileContent);
   });
