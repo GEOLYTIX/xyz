@@ -26,15 +26,15 @@
   "dependencies": {
     "@geolytix/mapp": "file:apps/mapp",
     "@geolytix/xyz-app": "file:apps/xyz",
-    "@geolytix/xyz-saml-app": "file:apps/saml"
+    "@geolytix/xyz-saml-app": "file:apps/saml",
+    "express": "5.2.0",
+    "express-rate-limit": "^7.5.1"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.6",
     "@vitest/coverage-v8": "4.1.4",
     "clean-jsdoc-theme": "^4.3.2",
     "dotenv": "^17.4.2",
-    "express": "5.2.0",
-    "express-rate-limit": "^7.5.1",
     "node-mocks-http": "^1.17.2",
     "turbo": "^2.9.6",
     "undici": "^7.25.0",
