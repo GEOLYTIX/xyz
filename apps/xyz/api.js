@@ -39,7 +39,6 @@ The req object represents the HTTP request and has properties for the request qu
 @property {Object} header HTTP request header.
 */
 
-import './mod/utils/processEnv.js';
 import { ServerResponse } from 'node:http';
 import provider from './mod/provider/_provider.js';
 //Route imports
@@ -52,7 +51,6 @@ import register from './mod/user/register.js';
 import { setRedirect } from './mod/utils/redirect.js';
 import view from './mod/view.js';
 import workspace from './mod/workspace/_workspace.js';
-import validateRequestParams from './mod/utils/validateRequestParams.js';
 
 // Group all routes
 const routes = {
@@ -88,6 +86,7 @@ All other requests will passed to the async validateRequestAuth method.
 @property {Boolean} params.register The request should redirect to user/register.
 */
 export default function api(req, res) {
+  // Assign _params object from validateRequestParams module to req.params.
   Object.assign(req.params, req._params);
 
   if (req.params.logout) {
