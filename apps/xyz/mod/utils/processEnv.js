@@ -75,9 +75,9 @@ const defaults = {
   FILE_RESOURCES: 'resources',
 };
 
-// Resolve bundled assets from the workspace root when XYZ_ROOT is not set.
+// Resolve bundled assets from the workspace root when XYZ_CWD is not set.
 const workspaceRoot = fileURLToPath(new URL('../../../../', import.meta.url));
-const rootDir = process.env.XYZ_ROOT || workspaceRoot;
+const rootDir = process.env.XYZ_CWD || workspaceRoot;
 
 if (process.env.SECRET_KEY) {
   const SECRET = String(readFileSync(resolve(rootDir, process.env.SECRET_KEY)));
@@ -113,7 +113,7 @@ const xyzEnv = {
   TRANSPORT_TLS: process.env.TRANSPORT_TLS,
   WORKSPACE_AGE: process.env.WORKSPACE_AGE,
   WALLET: {},
-  XYZ_ROOT: rootDir,
+  XYZ_CWD: rootDir,
 };
 
 for (const [key, value] of Object.entries(process.env)) {

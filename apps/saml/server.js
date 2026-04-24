@@ -10,8 +10,8 @@ import express from 'express';
 
 const workspaceRoot = fileURLToPath(new URL('../..', import.meta.url));
 
-// The xyz app resolves built-in file references from XYZ_ROOT when provided.
-process.env.XYZ_ROOT ??= workspaceRoot;
+// The xyz app resolves built-in file references from XYZ_CWD when provided.
+process.env.XYZ_CWD ??= workspaceRoot;
 
 const [{ default: app }, { default: saml }] = await Promise.all([
   import('@geolytix/xyz-app/server'),
