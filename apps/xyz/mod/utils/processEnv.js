@@ -54,7 +54,7 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [SLO_CALLBACK] - URL for handling logout callbacks
 */
 
-import 'dotenv/config';
+import { config } from 'dotenv';
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { readFileSync } from 'fs';
@@ -78,6 +78,8 @@ const defaults = {
 // Resolve bundled assets from the workspace root when XYZ_CWD is not set.
 const workspaceRoot = fileURLToPath(new URL('../../../../', import.meta.url));
 const rootDir = process.env.XYZ_CWD || workspaceRoot;
+
+config({ path: resolve(rootDir, '.env'), quiet: true });
 
 if (process.env.SECRET_KEY) {
   const SECRET = String(readFileSync(resolve(rootDir, process.env.SECRET_KEY)));
