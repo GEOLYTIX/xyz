@@ -30,7 +30,9 @@ export default xyzEnv.KEY_CLOUDFRONT
   ? (() => {
       try {
         privateKey = String(
-          readFileSync(join(__dirname, `../../${xyzEnv.KEY_CLOUDFRONT}.pem`)),
+          readFileSync(
+            join(xyzEnv.XYZ_CWD || __dirname, `${xyzEnv.KEY_CLOUDFRONT}.pem`),
+          ),
         );
 
         if (getSignedUrl) {

@@ -14,6 +14,7 @@
     "@node-saml/node-saml": "^5.0.1"
   },
   "dependencies": {
-    "@geolytix/xyz-app": "file:../xyz"
+    "@geolytix/xyz-app": "file:../xyz",
+    "jsonwebtoken": "^9.0.2"
   }
 }

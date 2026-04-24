@@ -58,23 +58,17 @@ const getModule = async () => {
       identifierFormat: xyzEnv.SAML_IDENTIFIER_FORMAT,
       idpCert:
         xyzEnv.SAML_IDP_CRT &&
-        String(
-          readFileSync(join(__dirname, `../xyz/${xyzEnv.SAML_IDP_CRT}.crt`)),
-        ),
+        String(readFileSync(join(__dirname, `./${xyzEnv.SAML_IDP_CRT}.crt`))),
       issuer: xyzEnv.SAML_ENTITY_ID,
       logoutCallbackUrl: xyzEnv.SLO_CALLBACK,
       logoutUrl: xyzEnv.SAML_SLO,
       privateKey:
         xyzEnv.SAML_SP_CRT &&
-        String(
-          readFileSync(join(__dirname, `../xyz/${xyzEnv.SAML_SP_CRT}.pem`)),
-        ),
+        String(readFileSync(join(__dirname, `./${xyzEnv.SAML_SP_CRT}.pem`))),
       providerName: xyzEnv.SAML_PROVIDER_NAME,
       publicCert:
         xyzEnv.SAML_SP_CRT &&
-        String(
-          readFileSync(join(__dirname, `../xyz/${xyzEnv.SAML_SP_CRT}.crt`)),
-        ),
+        String(readFileSync(join(__dirname, `./${xyzEnv.SAML_SP_CRT}.crt`))),
       signatureAlgorithm: xyzEnv.SAML_SIGNATURE_ALGORITHM,
       wantAssertionsSigned: parseBoolean(xyzEnv.SAML_WANT_ASSERTIONS_SIGNED),
       wantAuthnResponseSigned: parseBoolean(
@@ -88,6 +82,7 @@ const getModule = async () => {
     };
 
     samlStrat = new SAML(samlConfig);
+
     return saml;
   } catch {
     const samlKeys = Object.keys(xyzEnv).filter((key) =>

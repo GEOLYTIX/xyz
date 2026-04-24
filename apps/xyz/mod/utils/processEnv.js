@@ -54,7 +54,9 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [SLO_CALLBACK] - URL for handling logout callbacks
 */
 
-import 'dotenv/config';
+import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { config } from 'dotenv';
 import { readFileSync } from 'fs';
 
 const defaults = {
@@ -73,8 +75,14 @@ const defaults = {
   FILE_RESOURCES: 'resources',
 };
 
+// Resolve bundled assets from the workspace root when XYZ_CWD is not set.
+const workspaceRoot = fileURLToPath(new URL('../../../../', import.meta.url));
+const rootDir = process.env.XYZ_CWD || workspaceRoot;
+
+config({ path: resolve(rootDir, '.env'), quiet: true });
+
 if (process.env.SECRET_KEY) {
-  const SECRET = String(readFileSync(`./${process.env.SECRET_KEY}`));
+  const SECRET = String(readFileSync(resolve(rootDir, process.env.SECRET_KEY)));
 
   process.env.SECRET = SECRET;
   process.env.SECRET_ALGORITHM ??= 'RS256';
@@ -107,6 +115,7 @@ const xyzEnv = {
   TRANSPORT_TLS: process.env.TRANSPORT_TLS,
   WORKSPACE_AGE: process.env.WORKSPACE_AGE,
   WALLET: {},
+  XYZ_CWD: rootDir,
 };
 
 for (const [key, value] of Object.entries(process.env)) {
@@ -120,7 +129,7 @@ function addKeyToWallet(variable) {
   const KEY = new RegExp(/^SIGN_(.*)/).exec(variable)?.[1];
   if (KEY === undefined) return;
   try {
-    xyzEnv.WALLET[KEY] = String(readFileSync(`./${KEY}.pem`));
+    xyzEnv.WALLET[KEY] = String(readFileSync(resolve(rootDir, `${KEY}.pem`)));
   } catch (error) {
     console.error(`File Signer: ${error.toString()}`);
   }
