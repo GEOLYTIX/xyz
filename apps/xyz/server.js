@@ -46,7 +46,7 @@ import express from 'express';
 import rateLimit from 'express-rate-limit';
 import api from './api.js';
 
-const publicDir = resolve(process.cwd(), 'public');
+const publicDir = resolve(xyzEnv.XYZ_ROOT || process.cwd(), 'public');
 
 if (process.versions.node.split('.')[0] < 22) {
   console.warn(`Process Node version below 22.`);

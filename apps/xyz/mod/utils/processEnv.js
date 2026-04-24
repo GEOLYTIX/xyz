@@ -55,6 +55,7 @@ The process.ENV object holds configuration provided to the node process from the
 */
 
 import 'dotenv/config';
+import { resolve } from 'node:path';
 import { readFileSync } from 'fs';
 
 const defaults = {
@@ -73,8 +74,10 @@ const defaults = {
   FILE_RESOURCES: 'resources',
 };
 
+const rootDir = process.env.XYZ_ROOT || process.cwd();
+
 if (process.env.SECRET_KEY) {
-  const SECRET = String(readFileSync(`./${process.env.SECRET_KEY}`));
+  const SECRET = String(readFileSync(resolve(rootDir, process.env.SECRET_KEY)));
 
   process.env.SECRET = SECRET;
   process.env.SECRET_ALGORITHM ??= 'RS256';
@@ -82,6 +85,7 @@ if (process.env.SECRET_KEY) {
 
 process.env.COOKIE_TTL ??= defaults.COOKIE_TTL;
 process.env.DIR ??= defaults.DIR;
+process.env.DIR = process.env.DIR;
 process.env.FAILED_ATTEMPTS ??= defaults.FAILED_ATTEMPTS;
 process.env.PORT ??= defaults.PORT;
 process.env.RATE_LIMIT_WINDOW ??= defaults.RATE_LIMIT_WINDOW;
@@ -120,10 +124,16 @@ function addKeyToWallet(variable) {
   const KEY = new RegExp(/^SIGN_(.*)/).exec(variable)?.[1];
   if (KEY === undefined) return;
   try {
-    xyzEnv.WALLET[KEY] = String(readFileSync(`./${KEY}.pem`));
+    xyzEnv.WALLET[KEY] = String(readFileSync(resolve(rootDir, `${KEY}.pem`)));
   } catch (error) {
     console.error(`File Signer: ${error.toString()}`);
   }
+}
+
+function normalizeDir(dir) {
+  if (!dir || dir === '/') return '';
+
+  return `/${dir.replace(/^\/+|\/+$/g, '')}`;
 }
 
 // Freeze to prevent modifications
