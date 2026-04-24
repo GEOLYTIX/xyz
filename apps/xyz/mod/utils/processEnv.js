@@ -85,7 +85,6 @@ if (process.env.SECRET_KEY) {
 
 process.env.COOKIE_TTL ??= defaults.COOKIE_TTL;
 process.env.DIR ??= defaults.DIR;
-process.env.DIR = process.env.DIR;
 process.env.FAILED_ATTEMPTS ??= defaults.FAILED_ATTEMPTS;
 process.env.PORT ??= defaults.PORT;
 process.env.RATE_LIMIT_WINDOW ??= defaults.RATE_LIMIT_WINDOW;
