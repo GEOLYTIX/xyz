@@ -83,7 +83,6 @@ const getModule = async () => {
 
     samlStrat = new SAML(samlConfig);
 
-    console.log(samlStrat);
     return saml;
   } catch {
     const samlKeys = Object.keys(xyzEnv).filter((key) =>
