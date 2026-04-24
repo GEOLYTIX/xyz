@@ -1,5 +1,4 @@
-**v4.23.0**
-
+**v5.0.0**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Unit Tests](https://github.com/GEOLYTIX/xyz/actions/workflows/unit_tests.yml/badge.svg)
@@ -35,6 +34,8 @@ The MAPP library can be extended at runtime by dynamically importing [mapp plugi
 ## Documentation
 
 Please refer to the [wiki pages](https://github.com/GEOLYTIX/xyz/wiki) for detailed interface references.
+
+For a local install and first-run walkthrough, see [SETUP.md](./SETUP.md).
 
 ## Version History
 

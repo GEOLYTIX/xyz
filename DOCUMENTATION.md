@@ -99,7 +99,7 @@ Functions no longer in use but kept with a warning for legacy configurations sho
 @deprecated
 
 @description
-The deprectaed mapp.layer.Style() method will warn if use and return the featureStyle() method which supersedes the Style() method.
+The deprecated mapp.layer.Style() method will warn if used and return the featureStyle() method which supersedes the Style() method.
 
 @param {Object} layer
 
