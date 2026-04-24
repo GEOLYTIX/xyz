@@ -18,23 +18,10 @@ yarn.lock
 
 resources
 coverage
-public/js/*
-public/workspaces/*
-public/js/plugins/*
-!public/dictionaries/*
 
 docs/*
 
 **/*.pem
 *.crt
-/*.json
-/*.jsonc
-!tests/*.json
-!tests/**
-!package.json
-!jsdoc*.json
-!codi.json
-!biome.json
-!turbo.json
 
 .vercel
