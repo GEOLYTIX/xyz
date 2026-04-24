@@ -19,60 +19,49 @@ import logger from '../utils/logger.js';
 @function cloudfront
 
 @description
-The cloudfront method returns an async Fetch method which must be awaited to resolve into a cloudfront resource.
+The cloudfront provider method will parse an URL from the request parameter and sign this request through the cloudfront signer module.
 
-A req param will be provided by requests through the provider endpoint module.
+The module will attempt to fetch a resource from the signed request URL.
 
-The req param is string if the request for a resource is passed from the getFrom module.
+An error will be returned if the signing or fetching fails.
+
+The fetched will resource body will be parsed as JSON if the URL ends in `.json`. Otherwise the resource body will be parsed as text.
 
 @param {req|string} req Request object or URL string.
 @property {object} [req.params] Request params.
 @property {string} params.url URL in request param.
 
-@returns {function} The async fetch function is returned.
+@returns {Promise<Object|Error>}
 */
 export default cloudfront_signer ? cloudfront : null;
 
-function cloudfront(req) {
-  const url = req.params?.url || req;
+async function cloudfront(req) {
+  try {
+    const url = req.params?.url || req;
 
-  return Fetch(url);
-}
+    const signedURL = await cloudfront_signer(url);
 
-/**
-@function fetch
-@async
+    if (signedURL instanceof Error) {
+      return signedURL;
+    }
 
-@description
-The url string is passed to the cloudfront signer to request a signed URL.
+    const timestamp = Date.now();
 
-The resource is fetched from the signed cloudfront URL.
+    // Fetch will fail with an invalid domain.
+    const response = await fetch(signedURL);
 
-The response is parsed as JSON if the URL ending matches `.json`
+    logger(
+      `${Date.now() - timestamp}: ${response.status} - ${url}`,
+      'cloudfront',
+    );
 
-@param {string} url Cloudfront resource URL.
+    if (response.status >= 300) return new Error(`${response.status} ${url}`);
 
-@returns {Promise<String|JSON|Error>} The fetch is resolved into either a string or JSON depending on the url ending.
-*/
-async function Fetch(url) {
-  const signedURL = await cloudfront_signer(url);
+    if (url.match(/\.json$/i)) return await response.json();
 
-  if (signedURL instanceof Error) {
-    return signedURL;
+    return await response.text();
+  } catch (err) {
+    console.error(err);
+    return err;
   }
-
-  const timestamp = Date.now();
-
-  const response = await fetch(signedURL);
-
-  logger(
-    `${Date.now() - timestamp}: ${response.status} - ${url}`,
-    'cloudfront',
-  );
-
-  if (response.status >= 300) return new Error(`${response.status} ${url}`);
-
-  if (url.match(/\.json$/i)) return await response.json();
-
-  return await response.text();
 }
