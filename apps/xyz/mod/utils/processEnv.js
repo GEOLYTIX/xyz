@@ -56,6 +56,7 @@ The process.ENV object holds configuration provided to the node process from the
 
 import 'dotenv/config';
 import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import { readFileSync } from 'fs';
 
 const defaults = {
@@ -74,7 +75,9 @@ const defaults = {
   FILE_RESOURCES: 'resources',
 };
 
-const rootDir = process.env.XYZ_ROOT || process.cwd();
+// Resolve bundled assets from the workspace root when XYZ_ROOT is not set.
+const workspaceRoot = fileURLToPath(new URL('../../../../', import.meta.url));
+const rootDir = process.env.XYZ_ROOT || workspaceRoot;
 
 if (process.env.SECRET_KEY) {
   const SECRET = String(readFileSync(resolve(rootDir, process.env.SECRET_KEY)));
@@ -110,6 +113,7 @@ const xyzEnv = {
   TRANSPORT_TLS: process.env.TRANSPORT_TLS,
   WORKSPACE_AGE: process.env.WORKSPACE_AGE,
   WALLET: {},
+  XYZ_ROOT: rootDir,
 };
 
 for (const [key, value] of Object.entries(process.env)) {
