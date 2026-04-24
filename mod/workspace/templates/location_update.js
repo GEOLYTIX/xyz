@@ -13,10 +13,19 @@ export default (_) => {
     );
   }
 
+  const quoteIdentifier = (key) => {
+    if (!/^[A-Za-z_][A-Za-z0-9_]*$/.test(key)) {
+      throw new Error(`Layer ${_.layer}: Invalid field name ${key}.`);
+    }
+
+    return `"${key.replace(/"/g, '""')}"`;
+  };
+
   const fields = Object.keys(_.body).map((key) => {
+    const column = quoteIdentifier(key);
     // Value is null
     if (_.body[key] === null) {
-      return `${key} = null`;
+      return `${column} = null`;
     }
 
     // Value is string. Escape quotes.
@@ -26,7 +35,7 @@ export default (_) => {
 
     // Value is geometry.
     if (_.body[key].coordinates) {
-      return `${key} = ST_SetSRID(ST_MakeValid(ST_GeomFromGeoJSON('${JSON.stringify(_.body[key])}')),${_.layer.srid})`;
+      return `${column} = ST_SetSRID(ST_MakeValid(ST_GeomFromGeoJSON('${JSON.stringify(_.body[key])}')),${_.layer.srid})`;
     }
 
     // Value is an object and must be stringified.
@@ -36,6 +45,7 @@ export default (_) => {
         const jsonb = _.body[key]['jsonb'];
 
         const jsonb_field = Object.keys(jsonb)[0];
+        const jsonb_column = quoteIdentifier(jsonb_field);
 
         const updateObject = [];
         Object.keys(jsonb[jsonb_field]).forEach((key) => {
@@ -50,7 +60,7 @@ export default (_) => {
           updateObject.push(`"${key}":${value}`);
         });
 
-        return `${jsonb_field} = coalesce(${jsonb_field}::jsonb,'{}'::jsonb)::jsonb || '{${updateObject.join(',')}}'::jsonb`;
+        return `${jsonb_column} = coalesce(${jsonb_column}::jsonb,'{}'::jsonb)::jsonb || '{${updateObject.join(',')}}'::jsonb`;
       }
     }
 
@@ -63,7 +73,7 @@ export default (_) => {
       _[key] = _.body[key];
     }
 
-    return `${key} = %{${key}}`;
+    return `${column} = %{${key}}`;
   });
 
   return `
