@@ -3,7 +3,6 @@
   "version": "v1.0.0",
   "description": "Optional SAML backend app",
   "type": "module",
-  "packageManager": "pnpm@10.10.0",
   "scripts": {
     "dev": "node --inspect server.js"
   },

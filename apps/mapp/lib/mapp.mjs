@@ -52,5 +52,5 @@ globalThis.mapp = {
   Mapview,
   plugins,
   utils,
-  version: '5.0.0',
+  version: '4.23.0',
 };

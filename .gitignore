@@ -8,6 +8,7 @@
 env
 # npm legacy files (replaced by pnpm)
 package-lock.json
+pnpm-lock.yaml
 yarn.lock
 
 # pnpm files
@@ -15,7 +16,9 @@ yarn.lock
 .pnpm-store/
 .turbo/
 
+resources
 coverage
+public/js/*
 public/workspaces/*
 public/js/plugins/*
 !public/dictionaries/*
@@ -30,8 +33,8 @@ docs/*
 !tests/**
 !package.json
 !jsdoc*.json
+!codi.json
 !biome.json
 !turbo.json
-!vercel.json
 
 .vercel
