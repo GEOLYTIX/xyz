@@ -130,12 +130,6 @@ function addKeyToWallet(variable) {
   }
 }
 
-function normalizeDir(dir) {
-  if (!dir || dir === '/') return '';
-
-  return `/${dir.replace(/^\/+|\/+$/g, '')}`;
-}
-
 // Freeze to prevent modifications
 Object.freeze(xyzEnv);
 
