@@ -1,6 +1,8 @@
 /**
 ## /user/redirect
 
+The module exports the default redirect method called from the default or a custom user authentication method.
+
 @requires jsonwebtoken
 @requires module:/user/acl
 
@@ -12,6 +14,26 @@ import jsonwebtoken from 'jsonwebtoken';
 const { sign } = jsonwebtoken;
 import acl from './acl.js';
 
+/**
+@function redirect
+
+@description
+A user object from the acl module is performed with the lookup property flag in the provided user param.
+
+A user cookie is signed with the jsonwebtoken library and set on the response header.
+
+The method checks for a redirect location on a `_redirect` cookie and sets the location header to the redirect location or the base directory if no redirect cookie is found.
+
+The redirect cookie is destroyed [set to NULL] with the response header.
+
+The response is sent with a 302 status code to redirect the client to the location header URL.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+@param {object} user The user object should contain an email property and optionally a lookup property which will trigger a lookup in the ACL for the user email to assign any additional properties from the ACL to the user object before signing the cookie.
+@property {string} user.email The email property is required to lookup the user in the ACL and assign any additional properties to the user object before signing the cookie.
+@property {boolean} [user.lookup] The lookup property flag will trigger a lookup in the ACL for the user email to assign any additional properties to the user object before signing the cookie.
+*/
 export default async function redirect(req, res, user) {
   if (user.lookup) {
     const rows = await acl(
