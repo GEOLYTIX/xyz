@@ -204,7 +204,7 @@ function loginRedirect(req, res) {
   const redirect = req.cookies?.[`${xyzEnv.TITLE}_redirect`];
 
   if (redirect) {
-    return true;
+    return;
   }
 
   let redirectUrl =

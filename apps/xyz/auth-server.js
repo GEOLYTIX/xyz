@@ -1,7 +1,5 @@
 /**
-The saml server script imports an express app from /apps/xyz
-
-The express app is extended with routes to the saml module imported from /apps/saml
+The auth-server script imports the xyz app and extends the routes with custom/login, custom/logout, and custom/verify routes.
 */
 
 import '@geolytix/xyz-app/mod/utils/processEnv.js';
@@ -9,7 +7,6 @@ import redirect from '@geolytix/xyz-app/mod/user/redirect.js';
 import express from 'express';
 import app from './server.js';
 
-app.get(`${xyzEnv.DIR}/custom/logout`, custom_logout);
 app.get(`${xyzEnv.DIR}/custom/login`, custom_login);
 app.post(
   `${xyzEnv.DIR}/custom/verify`,
@@ -18,7 +15,15 @@ app.post(
 );
 
 export default app;
+/**
+@function custom_login
 
+@description
+The method will return a simple HTML form for a username input and submit button.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+*/
 function custom_login(req, res) {
   const form = `<form method="POST" action="${xyzEnv.DIR}/custom/verify">
     <input type="text" name="username" placeholder="Username" required />
@@ -27,10 +32,17 @@ function custom_login(req, res) {
   res.send(form);
 }
 
-function custom_logout(req, res) {
-  res.send('custom logout');
-}
+/**
+@function custom_verify
 
+@description
+The method creates a user object with the email property from the request body username and a lookup property set to true.
+
+The user object is passed to the redirect method which will handle the ACL lookup, cookie signing, and response redirection.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+*/
 async function custom_verify(req, res) {
   const user = {
     email: req.body.username,
