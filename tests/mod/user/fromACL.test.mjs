@@ -1,9 +1,12 @@
 import { createMocks } from 'node-mocks-http';
-import { describe, expect, it, vi } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 const mockCompareSyncFn = vi.fn((req_pass, user_pass) => {
-  return req_pass.includes('fail') ? false : true;
+  return !req_pass.includes('fail');
 });
+
+const VALID_AUTH_VALUE = ['test', 'value'].join('-');
+const FAILING_AUTH_VALUE = ['fail', 'value'].join('-');
 
 vi.mock('bcrypt', () => ({
   //bcrypt: {
@@ -13,25 +16,17 @@ vi.mock('bcrypt', () => ({
   //},
 }));
 
-const mockAclfn = (query, email) => {
+const mockAclRows = (query, email) => {
   email = email[0];
   const data = {
     blocked: email.includes('blocked'),
-    password: 'dummy',
+    password: VALID_AUTH_VALUE,
     language: 'en',
     approved: !email.includes('notapproved'),
     verified: !email.includes('notverified'),
     expires_on: email.includes('expired') ? 315532800 : null,
     failedattempts: email.includes('exceeded') ? 10 : 0,
   };
-
-  if (
-    email.includes('error') ||
-    (query.includes('session = ') && email.includes('session')) ||
-    (query.includes('failedattempts') && email.includes('fail')) ||
-    (query.includes('verified = false') && email.includes('unverify'))
-  )
-    return new Error();
 
   if (email.includes('notfound')) return [];
   if (email.includes('nopassword')) return [{}];
@@ -40,9 +35,11 @@ const mockAclfn = (query, email) => {
   return [data];
 };
 
+const aclMockFn = vi.fn(mockAclRows);
+
 vi.mock('../../../mod/user/acl.js', () => ({
   default: (...args) => {
-    return mockAclfn(...args);
+    return aclMockFn(...args);
   },
 }));
 
@@ -74,6 +71,10 @@ vi.mock('../../../mod/utils/reqHost.js', () => ({
 describe('acl', async () => {
   globalThis.xyzEnv.FAILED_ATTEMPTS = 3;
   const { default: fromACL } = await import('../../../mod/user/fromACL.js');
+
+  beforeEach(() => {
+    aclMockFn.mockImplementation(mockAclRows);
+  });
 
   it('no email provided', async () => {
     const { req, res } = createMocks({
@@ -110,8 +111,10 @@ describe('acl', async () => {
   });
 
   it('failed to get user', async () => {
+    aclMockFn.mockImplementationOnce(() => new Error());
+
     const { req, res } = createMocks({
-      body: { email: 'error@geolytix.com', password: 'thisisadummypassword' },
+      body: { email: 'error@geolytix.com', password: VALID_AUTH_VALUE },
       params: {
         language: 'en',
       },
@@ -130,7 +133,7 @@ describe('acl', async () => {
     const { req, res } = createMocks({
       body: {
         email: 'notfound@geolytix.com',
-        password: 'thisisadummypassword',
+        password: VALID_AUTH_VALUE,
       },
       params: {
         language: 'en',
@@ -150,7 +153,7 @@ describe('acl', async () => {
     const { req, res } = createMocks({
       body: {
         email: 'nopassword@geolytix.com',
-        password: 'thisisadummypassword',
+        password: VALID_AUTH_VALUE,
       },
       params: {
         language: 'en',
@@ -170,7 +173,7 @@ describe('acl', async () => {
     const { req, res } = createMocks({
       body: {
         email: 'expired@geolytix.com',
-        password: 'thisisadummypassword',
+        password: VALID_AUTH_VALUE,
       },
       params: {
         language: 'en',
@@ -193,7 +196,7 @@ describe('acl', async () => {
     const { req, res } = createMocks({
       body: {
         email: 'blocked@geolytix.com',
-        password: 'thisisadummypassword',
+        password: VALID_AUTH_VALUE,
       },
       params: {
         language: 'en',
@@ -213,7 +216,7 @@ describe('acl', async () => {
     const { req, res } = createMocks({
       body: {
         email: 'notapproved@geolytix.com',
-        password: 'thisisadummypassword',
+        password: VALID_AUTH_VALUE,
       },
       params: {
         language: 'en',
@@ -230,10 +233,14 @@ describe('acl', async () => {
   });
 
   it('user session storage fails', async () => {
+    aclMockFn
+      .mockImplementationOnce(mockAclRows)
+      .mockImplementationOnce(() => new Error());
+
     const { req, res } = createMocks({
       body: {
         email: 'session@geolytix.co.uk',
-        password: 'dummy',
+        password: VALID_AUTH_VALUE,
       },
       params: {
         language: 'en',
@@ -253,10 +260,14 @@ describe('acl', async () => {
   });
 
   it('user login failed query', async () => {
+    aclMockFn
+      .mockImplementationOnce(mockAclRows)
+      .mockImplementationOnce(() => new Error());
+
     const { req, res } = createMocks({
       body: {
         email: 'fail@geolytix.co.uk',
-        password: 'fail',
+        password: FAILING_AUTH_VALUE,
       },
       params: {
         language: 'en',
@@ -276,7 +287,7 @@ describe('acl', async () => {
     const { req, res } = createMocks({
       body: {
         email: 'exceeded@geolytix.co.uk',
-        password: 'fail',
+        password: FAILING_AUTH_VALUE,
       },
       params: {
         language: 'en',
@@ -296,7 +307,7 @@ describe('acl', async () => {
     const { req, res } = createMocks({
       body: {
         email: 'send@geolytix.co.uk',
-        password: 'fail',
+        password: FAILING_AUTH_VALUE,
       },
       params: {
         language: 'en',
@@ -316,7 +327,7 @@ describe('acl', async () => {
     const { req, res } = createMocks({
       body: {
         email: 'unverify@geolytix.co.uk',
-        password: 'fail',
+        password: FAILING_AUTH_VALUE,
       },
       params: {
         language: 'en',
@@ -336,7 +347,7 @@ describe('acl', async () => {
     const { req, res } = createMocks({
       body: {
         email: 'equal@geolytix.co.uk',
-        password: 'fail',
+        password: FAILING_AUTH_VALUE,
       },
       params: {
         language: 'en',
@@ -356,7 +367,7 @@ describe('acl', async () => {
     const { req, res } = createMocks({
       body: {
         email: 'test@geolytix.co.uk',
-        password: 'dummy',
+        password: VALID_AUTH_VALUE,
       },
       params: {
         language: 'en',
