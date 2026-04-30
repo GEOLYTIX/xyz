@@ -4,15 +4,10 @@ The saml server script imports an express app from /apps/xyz
 The express app is extended with routes to the saml module imported from /apps/saml
 */
 
-// biome-ignore assist/source/organizeImports: The processEnv import must be first to set the global.xyzEnv for the other imports.
 import '@geolytix/xyz-app/mod/utils/processEnv.js';
 import redirect from '@geolytix/xyz-app/mod/user/redirect.js';
-import process from 'node:process';
 import express from 'express';
-
-const [{ default: app }] = await Promise.all([
-  import('@geolytix/xyz-app/server'),
-]);
+import app from './server.js';
 
 app.get(`${xyzEnv.DIR}/custom/logout`, custom_logout);
 app.get(`${xyzEnv.DIR}/custom/login`, custom_login);
