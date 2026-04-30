@@ -37,6 +37,26 @@ const mockAclRows = (query, email) => {
 
 const aclMockFn = vi.fn(mockAclRows);
 
+const createLoginMocks = ({
+  body,
+  email = 'test@geolytix.com',
+  language = 'en',
+  password = VALID_AUTH_VALUE,
+} = {}) => {
+  return createMocks({
+    body: body ?? { email, password },
+    params: { language },
+    headers: { host: 'localhost:3000' },
+  });
+};
+
+const expectAuthError = async (fromACL, req, res, message) => {
+  const result = await fromACL(req, res);
+
+  expect(result instanceof Error).toBeTruthy();
+  expect(result.message).toEqual(message);
+};
+
 vi.mock('../../../mod/user/acl.js', () => ({
   default: (...args) => {
     return aclMockFn(...args);
@@ -77,184 +97,89 @@ describe('acl', async () => {
   });
 
   it('no email provided', async () => {
-    const { req, res } = createMocks({
-      body: {},
-      params: {
-        language: 'fr',
-      },
-      headers: {
-        host: 'localhost:3000',
-      },
-    });
+    const { req, res } = createLoginMocks({ body: {}, language: 'fr' });
 
-    const result = await fromACL(req, res);
-
-    expect(result instanceof Error).toBeTruthy();
-    expect(result.message).toEqual('E-mail manquant');
+    await expectAuthError(fromACL, req, res, 'E-mail manquant');
   });
 
   it('no password provided', async () => {
-    const { req, res } = createMocks({
+    const { req, res } = createLoginMocks({
       body: { email: 'test@geolytix.com' },
-      params: {
-        language: 'fr',
-      },
-      headers: {
-        host: 'localhost:3000',
-      },
+      language: 'fr',
     });
 
-    const result = await fromACL(req, res);
-
-    expect(result instanceof Error).toBeTruthy();
-    expect(result.message).toEqual('Mot de passe manquant');
+    await expectAuthError(fromACL, req, res, 'Mot de passe manquant');
   });
 
   it('failed to get user', async () => {
-    aclMockFn.mockImplementationOnce(() => new Error());
+    aclMockFn.mockImplementationOnce(() => new Error('ACL query failed'));
 
-    const { req, res } = createMocks({
-      body: { email: 'error@geolytix.com', password: VALID_AUTH_VALUE },
-      params: {
-        language: 'en',
-      },
-      headers: {
-        host: 'localhost:3000',
-      },
-    });
+    const { req, res } = createLoginMocks({ email: 'error@geolytix.com' });
 
-    const result = await fromACL(req, res);
-
-    expect(result instanceof Error).toBeTruthy();
-    expect(result.message).toEqual('Failed to query PostGIS table');
+    await expectAuthError(fromACL, req, res, 'Failed to query PostGIS table');
   });
 
-  it('user not found', async () => {
-    const { req, res } = createMocks({
-      body: {
-        email: 'notfound@geolytix.com',
-        password: VALID_AUTH_VALUE,
-      },
-      params: {
-        language: 'en',
-      },
-      headers: {
-        host: 'localhost:3000',
-      },
+  const authFailureCases = [
+    ['user not found', 'notfound@geolytix.com', 'auth_failed'],
+    ['user has no password', 'nopassword@geolytix.com', 'auth_failed'],
+    ['user is blocked', 'blocked@geolytix.com', 'User Blocked'],
+    [
+      'user is not approved/verified',
+      'notapproved@geolytix.com',
+      'user_not_verified',
+    ],
+    [
+      'exceeded max attempts',
+      'exceeded@geolytix.co.uk',
+      'auth_failed',
+      FAILING_AUTH_VALUE,
+    ],
+    [
+      'incorrect login fail',
+      'send@geolytix.co.uk',
+      'auth_failed',
+      FAILING_AUTH_VALUE,
+    ],
+    [
+      'mark user unverified query failed',
+      'unverify@geolytix.co.uk',
+      'auth_failed',
+      FAILING_AUTH_VALUE,
+    ],
+    [
+      'login fail max attempts reached',
+      'equal@geolytix.co.uk',
+      'Max login attempts reached',
+      FAILING_AUTH_VALUE,
+    ],
+  ];
+
+  for (const [name, email, message, password] of authFailureCases) {
+    it(name, async () => {
+      const { req, res } = createLoginMocks({ email, password });
+
+      await expectAuthError(fromACL, req, res, message);
     });
-
-    const result = await fromACL(req, res);
-
-    expect(result instanceof Error).toBeTruthy();
-    expect(result.message).toEqual('auth_failed');
-  });
-
-  it('user has no password', async () => {
-    const { req, res } = createMocks({
-      body: {
-        email: 'nopassword@geolytix.com',
-        password: VALID_AUTH_VALUE,
-      },
-      params: {
-        language: 'en',
-      },
-      headers: {
-        host: 'localhost:3000',
-      },
-    });
-
-    const result = await fromACL(req, res);
-
-    expect(result instanceof Error).toBeTruthy();
-    expect(result.message).toEqual('auth_failed');
-  });
+  }
 
   it('user account expired', async () => {
-    const { req, res } = createMocks({
-      body: {
-        email: 'expired@geolytix.com',
-        password: VALID_AUTH_VALUE,
-      },
-      params: {
-        language: 'en',
-      },
-      headers: {
-        host: 'localhost:3000',
-      },
-    });
+    const { req, res } = createLoginMocks({ email: 'expired@geolytix.com' });
 
     globalThis.xyzEnv.APPROVAL_EXPIRY = true;
-    const result = await fromACL(req, res);
-
-    expect(result instanceof Error).toBeTruthy();
-    expect(result.message).toEqual('User Expired');
+    await expectAuthError(fromACL, req, res, 'User Expired');
 
     globalThis.xyzEnv.APPROVAL_EXPIRY = false;
-  });
-
-  it('user is blocked', async () => {
-    const { req, res } = createMocks({
-      body: {
-        email: 'blocked@geolytix.com',
-        password: VALID_AUTH_VALUE,
-      },
-      params: {
-        language: 'en',
-      },
-      headers: {
-        host: 'localhost:3000',
-      },
-    });
-
-    const result = await fromACL(req, res);
-
-    expect(result instanceof Error).toBeTruthy();
-    expect(result.message).toEqual('User Blocked');
-  });
-
-  it('user is not approved/verified', async () => {
-    const { req, res } = createMocks({
-      body: {
-        email: 'notapproved@geolytix.com',
-        password: VALID_AUTH_VALUE,
-      },
-      params: {
-        language: 'en',
-      },
-      headers: {
-        host: 'localhost:3000',
-      },
-    });
-
-    const result = await fromACL(req, res);
-
-    expect(result instanceof Error).toBeTruthy();
-    expect(result.message).toEqual('user_not_verified');
   });
 
   it('user session storage fails', async () => {
     aclMockFn
       .mockImplementationOnce(mockAclRows)
-      .mockImplementationOnce(() => new Error());
+      .mockImplementationOnce(() => new Error('ACL session update failed'));
 
-    const { req, res } = createMocks({
-      body: {
-        email: 'session@geolytix.co.uk',
-        password: VALID_AUTH_VALUE,
-      },
-      params: {
-        language: 'en',
-      },
-      headers: {
-        host: 'localhost:3000',
-      },
-    });
+    const { req, res } = createLoginMocks({ email: 'session@geolytix.co.uk' });
 
     globalThis.xyzEnv.USER_SESSION = true;
-    const result = await fromACL(req, res);
-
-    expect(result instanceof Error).toBeTruthy();
-    expect(result.message).toEqual('Unable to store session.');
+    await expectAuthError(fromACL, req, res, 'Unable to store session.');
 
     globalThis.xyzEnv.USER_SESSION = false;
   });
@@ -262,120 +187,20 @@ describe('acl', async () => {
   it('user login failed query', async () => {
     aclMockFn
       .mockImplementationOnce(mockAclRows)
-      .mockImplementationOnce(() => new Error());
+      .mockImplementationOnce(
+        () => new Error('ACL failed attempts update failed'),
+      );
 
-    const { req, res } = createMocks({
-      body: {
-        email: 'fail@geolytix.co.uk',
-        password: FAILING_AUTH_VALUE,
-      },
-      params: {
-        language: 'en',
-      },
-      headers: {
-        host: 'localhost:3000',
-      },
+    const { req, res } = createLoginMocks({
+      email: 'fail@geolytix.co.uk',
+      password: FAILING_AUTH_VALUE,
     });
 
-    const result = await fromACL(req, res);
-
-    expect(result instanceof Error).toBeTruthy();
-    expect(result.message).toEqual('Failed to query PostGIS table');
-  });
-
-  it('exceeded max attempts', async () => {
-    const { req, res } = createMocks({
-      body: {
-        email: 'exceeded@geolytix.co.uk',
-        password: FAILING_AUTH_VALUE,
-      },
-      params: {
-        language: 'en',
-      },
-      headers: {
-        host: 'localhost:3000',
-      },
-    });
-
-    const result = await fromACL(req, res);
-
-    expect(result instanceof Error).toBeTruthy();
-    expect(result.message).toEqual('auth_failed');
-  });
-
-  it('incorrect login fail', async () => {
-    const { req, res } = createMocks({
-      body: {
-        email: 'send@geolytix.co.uk',
-        password: FAILING_AUTH_VALUE,
-      },
-      params: {
-        language: 'en',
-      },
-      headers: {
-        host: 'localhost:3000',
-      },
-    });
-
-    const result = await fromACL(req, res);
-
-    expect(result instanceof Error).toBeTruthy();
-    expect(result.message).toEqual('auth_failed');
-  });
-
-  it('mark user unverified query failed', async () => {
-    const { req, res } = createMocks({
-      body: {
-        email: 'unverify@geolytix.co.uk',
-        password: FAILING_AUTH_VALUE,
-      },
-      params: {
-        language: 'en',
-      },
-      headers: {
-        host: 'localhost:3000',
-      },
-    });
-
-    const result = await fromACL(req, res);
-
-    expect(result instanceof Error).toBeTruthy();
-    expect(result.message).toEqual('auth_failed');
-  });
-
-  it('login fail max attempts reached', async () => {
-    const { req, res } = createMocks({
-      body: {
-        email: 'equal@geolytix.co.uk',
-        password: FAILING_AUTH_VALUE,
-      },
-      params: {
-        language: 'en',
-      },
-      headers: {
-        host: 'localhost:3000',
-      },
-    });
-
-    const result = await fromACL(req, res);
-
-    expect(result instanceof Error).toBeTruthy();
-    expect(result.message).toEqual('Max login attempts reached');
+    await expectAuthError(fromACL, req, res, 'Failed to query PostGIS table');
   });
 
   it('user succesfully retrieved', async () => {
-    const { req, res } = createMocks({
-      body: {
-        email: 'test@geolytix.co.uk',
-        password: VALID_AUTH_VALUE,
-      },
-      params: {
-        language: 'en',
-      },
-      headers: {
-        host: 'localhost:3000',
-      },
-    });
+    const { req, res } = createLoginMocks({ email: 'test@geolytix.co.uk' });
 
     const result = await fromACL(req, res);
 
