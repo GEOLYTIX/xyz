@@ -12,7 +12,6 @@ Exports the [user] cookie method for the /api/user/cookie route.
 */
 
 import jwt from 'jsonwebtoken';
-import { setRedirect } from '../utils/redirect.js';
 import acl from './acl.js';
 import login from './login.js';
 

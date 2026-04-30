@@ -49,7 +49,6 @@ import user from './mod/user/_user.js';
 import auth from './mod/user/auth.js';
 import login from './mod/user/login.js';
 import register from './mod/user/register.js';
-import { setRedirect } from './mod/utils/redirect.js';
 import view from './mod/view.js';
 import workspace from './mod/workspace/_workspace.js';
 
@@ -190,7 +189,7 @@ async function validateRequestAuth(req, res) {
 
   // PRIVATE instances require user auth for all requests.
   if (!req.params.user && xyzEnv.PRIVATE) {
-    setRedirect(req, res);
+    loginRedirect(req, res);
 
     if (xyzEnv.AUTH_PATH) {
       res.setHeader('location', `${xyzEnv.DIR}${xyzEnv.AUTH_PATH}/login`);
@@ -203,6 +202,43 @@ async function validateRequestAuth(req, res) {
   }
 
   requestRouter(req, res);
+}
+
+function loginRedirect(req, res) {
+  if (req.url === `${xyzEnv.DIR}/`) {
+    return;
+  }
+
+  const redirect = req.cookies?.[`${xyzEnv.TITLE}_redirect`];
+
+  if (redirect) {
+    return true;
+  }
+
+  let redirectUrl =
+    req.url && decodeURIComponent(req.url).replace(/login=true/, '');
+
+  // Remove any characters that could be used for cookie injection
+  redirectUrl = redirectUrl.replaceAll(/[;\r\n]/g, '');
+
+  // Ensure it's a relative URL (it starts with '/')
+  if (!redirectUrl.startsWith('/')) {
+    redirectUrl = xyzEnv.DIR || '/';
+  }
+
+  // Encode the URL for safe storage in the cookie
+  const encodedRedirectUrl = encodeURIComponent(redirectUrl);
+
+  cookies.push(
+    `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`,
+  );
+
+  cookies.push(
+    `${xyzEnv.TITLE}_redirect=${encodedRedirectUrl};HttpOnly;Max-Age=60;Path=${xyzEnv.DIR || '/'}`,
+  );
+
+  // Set cookie with properly encoded redirect value.
+  res.setHeader('Set-Cookie', cookies);
 }
 
 /**

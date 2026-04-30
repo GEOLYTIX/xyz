@@ -7,6 +7,7 @@
 @module /user/redirect
 */
 
+// biome-ignore assist/source/organizeImports: jsonwebtoken must be imported before the sign method is declared.
 import jsonwebtoken from 'jsonwebtoken';
 const { sign } = jsonwebtoken;
 import acl from './acl.js';

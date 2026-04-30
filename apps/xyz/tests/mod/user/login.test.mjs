@@ -11,10 +11,6 @@ vi.mock('@geolytix/xyz-app/mod/view.js', () => ({
   default: vi.fn(),
 }));
 
-vi.mock('@geolytix/xyz-app/mod/utils/redirect.js', () => ({
-  setRedirect: vi.fn(),
-}));
-
 // Set environment variables
 global.xyzEnv = {
   DIR: '/app',
@@ -29,9 +25,6 @@ describe('login', async () => {
     '@geolytix/xyz-app/mod/user/login.js'
   );
   const view = (await import('@geolytix/xyz-app/mod/view.js')).default;
-  const { setRedirect } = await import(
-    '@geolytix/xyz-app/mod/utils/redirect.js'
-  );
 
   beforeEach(() => {
     vi.clearAllMocks();
