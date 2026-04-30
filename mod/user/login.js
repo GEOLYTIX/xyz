@@ -45,8 +45,7 @@ export default function login(req, res) {
 
   // The request has body with data from the login view submit.
   if (req.body) {
-    loginBody(req, res);
-    return;
+    return loginBody(req, res);
   }
 
   if (!req.params.msg && req.params.user) {
