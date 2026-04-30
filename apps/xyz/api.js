@@ -3,14 +3,6 @@
 
 The XYZ API module exports the api function which serves as the entry point for all XYZ API requests.
 
-A node.js express app will require the api module and reference the exported api method for all request routes.
-
-```js
-const app = express()
-const api = require('./api/api')
-app.get(`/`, api)
-```
-
 @requires /utils/processEnv
 @requires /query
 @requires /view
