@@ -221,16 +221,12 @@ function loginRedirect(req, res) {
   // Encode the URL for safe storage in the cookie
   const encodedRedirectUrl = encodeURIComponent(redirectUrl);
 
-  cookies.push(
-    `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`,
-  );
+  const user_cookie = `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`;
 
-  cookies.push(
-    `${xyzEnv.TITLE}_redirect=${encodedRedirectUrl};HttpOnly;Max-Age=60;Path=${xyzEnv.DIR || '/'}`,
-  );
+  const redirect_cookie = `${xyzEnv.TITLE}_redirect=${encodedRedirectUrl};HttpOnly;Max-Age=60;Path=${xyzEnv.DIR || '/'}`;
 
   // Set cookie with properly encoded redirect value.
-  res.setHeader('Set-Cookie', cookies);
+  res.setHeader('Set-Cookie', [user_cookie, redirect_cookie]);
 }
 
 /**
