@@ -96,7 +96,7 @@ export default async function cookie(req, res) {
         return res.status(500).send('Failed to retrieve user from ACL');
       }
 
-      const user = Object.assign({}, rows[0]);
+      const user = { ...rows[0] };
 
       user.email = payload.email;
 

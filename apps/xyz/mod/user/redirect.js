@@ -40,8 +40,6 @@ export default async function redirect(req, res, user) {
 
   const user_cookie = `${xyzEnv.TITLE}=${token};HttpOnly;Max-Age=${xyzEnv.COOKIE_TTL};Path=${xyzEnv.DIR || '/'};SameSite=Strict${(!req.headers.host.includes('localhost') && ';Secure') || ''}`;
 
-  const cookies = [user_cookie];
-
   const redirect = req.cookies?.[`${xyzEnv.TITLE}_redirect`];
 
   const redirect_cookie = `${xyzEnv.TITLE}_redirect=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`;
