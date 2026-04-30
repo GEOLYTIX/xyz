@@ -12,7 +12,6 @@ vi.mock('@geolytix/xyz-app/mod/view.js', () => ({
 }));
 
 vi.mock('@geolytix/xyz-app/mod/utils/redirect.js', () => ({
-  getRedirect: vi.fn(),
   setRedirect: vi.fn(),
 }));
 

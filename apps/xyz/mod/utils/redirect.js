@@ -61,21 +61,3 @@ export function setRedirect(req, res, cookies = []) {
   // Set cookie with properly encoded redirect value.
   res.setHeader('Set-Cookie', cookies);
 }
-
-export function getRedirect(req, res, cookies = []) {
-  const redirect = req.cookies?.[`${xyzEnv.TITLE}_redirect`];
-
-  if (!redirect) return;
-
-  // Decode the redirect URL since it's now encoded when stored
-  const decodedRedirect = decodeURIComponent(redirect);
-
-  cookies.push(
-    `${xyzEnv.TITLE}_redirect=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`,
-  );
-
-  res.setHeader('Set-Cookie', cookies);
-  res.setHeader('location', decodedRedirect);
-  res.status(302).send();
-  return true;
-}

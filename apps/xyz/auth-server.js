@@ -6,15 +6,9 @@ The express app is extended with routes to the saml module imported from /apps/s
 
 // biome-ignore assist/source/organizeImports: The processEnv import must be first to set the global.xyzEnv for the other imports.
 import '@geolytix/xyz-app/mod/utils/processEnv.js';
-import acl from '@geolytix/xyz-app/mod/user/acl.js';
-import {
-  getRedirect,
-  setRedirect,
-} from '@geolytix/xyz-app/mod/utils/redirect.js';
-
+import redirect from '@geolytix/xyz-app/mod/user/redirect.js';
 import process from 'node:process';
 import express from 'express';
-import jsonwebtoken from 'jsonwebtoken';
 
 const [{ default: app }] = await Promise.all([
   import('@geolytix/xyz-app/server'),
@@ -43,39 +37,9 @@ function custom_logout(req, res) {
 }
 
 async function custom_verify(req, res) {
-  const { sign } = jsonwebtoken;
-  const email = req.body.username;
-
-  const rows = await acl(
-    `
-    SELECT email, admin, language, roles, blocked
-    FROM acl_schema.acl_table
-    WHERE lower(email) = lower($1);`,
-    [email],
-  );
-
-  if (rows instanceof Error) {
-    res.setHeader(
-      'Set-Cookie',
-      `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`,
-    );
-    return res.status(500).send('Failed to retrieve user from ACL');
-  }
-
-  const user = Object.assign({ email }, rows[0]);
-
-  const token = sign(user, xyzEnv.SECRET, {
-    expiresIn: xyzEnv.COOKIE_TTL,
-    algorithm: xyzEnv.SECRET_ALGORITHM,
-  });
-
-  const user_cookie = `${xyzEnv.TITLE}=${token};HttpOnly;Max-Age=${xyzEnv.COOKIE_TTL};Path=${xyzEnv.DIR || '/'};SameSite=Strict${(!req.headers.host.includes('localhost') && ';Secure') || ''}`;
-
-  if (getRedirect(req, res, [user_cookie])) {
-    return;
-  }
-
-  res.setHeader('Set-Cookie', user_cookie);
-  res.setHeader('location', `${xyzEnv.DIR}/`);
-  res.status(302).send();
+  const user = {
+    email: req.body.username,
+    lookup: true,
+  };
+  redirect(req, res, user);
 }

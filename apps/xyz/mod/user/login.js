@@ -11,12 +11,9 @@ Exports the login method for the /api/user/login route.
 @module /user/login
 */
 
-import jsonwebtoken from 'jsonwebtoken';
-import { getRedirect, setRedirect } from '../utils/redirect.js';
 import view from '../view.js';
 import fromACL from './fromACL.js';
-
-const { sign } = jsonwebtoken;
+import redirect from './redirect.js';
 
 /**
 @function login
@@ -70,9 +67,7 @@ The method checks for a redirect location on a `_redirect` cookie.
 
 The login view will be returned if the fromACL() errs.
 
-A user cookie will signed and set as response header.
-
-The response will be redirected to the location from the redirect cookie. The redirect cookie will be removed.
+The user will be passed with the request and response object to the user/direct module.
 
 @param {req} req HTTP request.
 @param {res} res HTTP response.
@@ -96,28 +91,5 @@ async function loginBody(req, res) {
       .send(user.message);
   }
 
-  const token = sign(
-    {
-      admin: user.admin,
-      email: user.email,
-      language: user.language,
-      roles: user.roles,
-      session: user.session,
-    },
-    xyzEnv.SECRET,
-    {
-      expiresIn: xyzEnv.COOKIE_TTL,
-      algorithm: xyzEnv.SECRET_ALGORITHM,
-    },
-  );
-
-  const user_cookie = `${xyzEnv.TITLE}=${token};HttpOnly;Max-Age=${xyzEnv.COOKIE_TTL};Path=${xyzEnv.DIR || '/'};SameSite=Strict${(!req.headers.host.includes('localhost') && ';Secure') || ''}`;
-
-  if (getRedirect(req, res, [user_cookie])) {
-    return;
-  }
-
-  res.setHeader('Set-Cookie', user_cookie);
-  res.setHeader('location', `${xyzEnv.DIR}/`);
-  res.status(302).send();
+  redirect(req, res, user);
 }

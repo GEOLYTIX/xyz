@@ -49,7 +49,7 @@ import user from './mod/user/_user.js';
 import auth from './mod/user/auth.js';
 import login from './mod/user/login.js';
 import register from './mod/user/register.js';
-import { getRedirect, setRedirect } from './mod/utils/redirect.js';
+import { setRedirect } from './mod/utils/redirect.js';
 import view from './mod/view.js';
 import workspace from './mod/workspace/_workspace.js';
 
