@@ -1,13 +1,5 @@
 import { createMocks } from 'node-mocks-http';
-import {
-  afterAll,
-  beforeAll,
-  beforeEach,
-  describe,
-  expect,
-  it,
-  vi,
-} from 'vitest';
+import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
 
 /**
  * ## View Tests

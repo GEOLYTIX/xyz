@@ -1,4 +1,4 @@
-import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import sqlfilter from '../../../mod/utils/sqlFilter.js';
 
 const originalConsole = console.warn;
