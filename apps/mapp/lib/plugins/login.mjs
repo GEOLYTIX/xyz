@@ -34,9 +34,7 @@ export function login(plugin, mapview) {
 
   let userURL;
 
-  if (mapp.user?.sessionIndex) {
-    userURL = `${mapp.host}/saml/logout`;
-  } else if (mapp.user) {
+  if (mapp.user) {
     userURL = '?logout=true';
   } else {
     userURL = '?login=true';
