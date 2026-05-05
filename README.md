@@ -1,5 +1,4 @@
-**v4.23.0**
-
+**v5.0.0**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ![Unit Tests](https://github.com/GEOLYTIX/xyz/actions/workflows/unit_tests.yml/badge.svg)
@@ -10,6 +9,9 @@
 
 [![OSGeo Community Project](https://www.osgeo.org/wp-content/themes/roots/assets/img/badge-community-project.png)](https://www.osgeo.org/projects/xyz-mapp/)
 
+## Turbo Monorepo
+With the release of v5 this repository will be structured as monorepo which provides shared dependencies for several apps. Server apps can be provided to expand the XYZ API routes. Apps may also provide custom authentication layers.
+
 ## XYZ
 
 The pattern for the Node.js **domain and service layer** are that of a RESTful API which provides secure gateways for spatial data sources and 3rd party service providers.
@@ -17,8 +19,6 @@ The pattern for the Node.js **domain and service layer** are that of a RESTful A
 The domain layer handles API routing, rewrites, and resource caching.
 
 The service layer manages authentication and transaction script. URL parameter (and payloads) from the application control layer (mapp) are assigned to query templates and passed to the data source (service) layer. The response being parsed and returned to the (mapp) presentation layer.
-
-The Node.js application layers may be served by an [Express](https://github.com/expressjs/express) application or deployed as cloud native serverless functions to node.js runtime.
 
 The data source (service) layer is build on the non blocking [node-postgres](https://github.com/brianc/node-postgres) library to allow access to PostGIS extended relational Postgres databases.
 
@@ -31,6 +31,8 @@ Postgres being able to handle object records allows for the Access Control Lists
 **MAPP.UI** contains utilities to build engaging user interfaces around mapviews. The application views can be dashboards made up of multiple data views such as maps, tables, lists, or graphs.
 
 The MAPP library can be extended at runtime by dynamically importing [mapp plugins](https://github.com/GEOLYTIX/mapp/tree/main/plugins) which may use third party modules.
+
+A bundled MAPP library is provided in the public directory. It is not required to deploy library files and bundle the v5 MAPP library in the XYZ server runtime.
 
 ## Documentation
 
@@ -51,6 +53,8 @@ The mapp library is now able to instantiate multiple mapviews.
 Polymorphism is applied to extend or modify object types and methods through plugins without the need to fork the repository.
 
 Dynamic module imports reduce the need to bundle 3rd party libraries such as [Tabulator](https://github.com/olifolkerd/tabulator) and [Chart.js](https://github.com/chartjs/Chart.js).
+
+**v5** is a restructure as a Turbo monorepo with individual apps.
 
 ## XYZ Dependencies
 
@@ -75,10 +79,6 @@ Dynamic module imports reduce the need to bundle 3rd party libraries such as [Ta
 ### Development dependencies
 
 Following development dependencies are required to build the library and run a local instance of the XYZ host.
-
-[Express](https://www.npmjs.com/package/express) - Fast, unopinionated, minimalist web framework for Node.
-
-[cookie-parser](https://www.npmjs.com/package/cookie-parser) - Parse cookie header for express.js.
 
 [dotenv](https://www.npmjs.com/package/dotenv) - Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env.
 

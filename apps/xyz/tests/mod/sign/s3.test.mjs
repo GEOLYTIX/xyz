@@ -8,30 +8,20 @@ vi.mock('@aws-sdk/s3-request-presigner', () => ({
 }));
 
 vi.mock('@aws-sdk/client-s3', () => ({
-  S3Client: class s3Client {
-    constructor(credentials) {
-      this.credentials = credentials;
-    }
+  S3Client: function s3Client(credentials) {
+    this.credentials = credentials;
   },
-  ListObjectsV2Command: class ListObjectsV2Command {
-    constructor() {
-      this.url = 'https://aws.s3.test/list';
-    }
+  ListObjectsV2Command: function ListObjectsV2Command() {
+    this.url = 'https://aws.s3.test/list';
   },
-  GetObjectCommand: class GetObjectCommand {
-    constructor() {
-      this.url = 'https://aws.s3.test/get/test.json';
-    }
+  GetObjectCommand: function GetObjectCommand() {
+    this.url = 'https://aws.s3.test/get/test.json';
   },
-  PutObjectCommand: class PutObjectCommand {
-    constructor() {
-      this.url = 'https://aws.s3.test/put/test.json';
-    }
+  PutObjectCommand: function PutObjectCommand() {
+    this.url = 'https://aws.s3.test/put/test.json';
   },
-  DeleteObjectCommand: class DeleteObjectCommand {
-    constructor() {
-      this.url = 'https://aws.s3.test/delete/test.json';
-    }
+  DeleteObjectCommand: function DeleteObjectCommand() {
+    this.url = 'https://aws.s3.test/delete/test.json';
   },
 }));
 

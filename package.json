@@ -11,7 +11,7 @@
     "neverBuiltDependencies": []
   },
   "scripts": {
-    "dev": "turbo run dev --filter=@geolytix/xyz-saml-app",
+    "dev": "turbo run dev --filter=@geolytix/xyz-app",
     "dev:saml": "turbo run dev --filter=@geolytix/xyz-saml-app",
     "test": "turbo run test",
     "test:xyz": "turbo run test --filter=@geolytix/xyz-app",
@@ -27,9 +27,7 @@
   "dependencies": {
     "@geolytix/mapp": "file:apps/mapp",
     "@geolytix/xyz-app": "file:apps/xyz",
-    "@geolytix/xyz-saml-app": "file:apps/saml",
-    "express": "5.2.0",
-    "express-rate-limit": "^7.5.1"
+    "@geolytix/xyz-saml-app": "file:apps/saml"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.6",

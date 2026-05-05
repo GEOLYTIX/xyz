@@ -112,12 +112,9 @@ describe('add:', () => {
   });
 
   it('insert error', async () => {
-    aclMockFn.mockImplementation((q) => {
-      if (q.includes('INSERT INTO')) {
-        return new Error();
-      }
-      return [];
-    });
+    aclMockFn
+      .mockImplementationOnce(() => [])
+      .mockImplementationOnce(() => new Error());
 
     const { req, res } = createMocks({
       params: {

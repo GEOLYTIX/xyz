@@ -1,10 +1,10 @@
 ## XYZ API
 
-The XYZ API are a collection of javascript modules for Node.js web application frameworks.
+The XYZ API is a collection of JavaScript modules for Node.js web application frameworks.
 
-An example Express application script is provided in the project root.
+An Express application script is provided in this app at `server.js`.
 
-XYZ API modules should be run with a Node.js runtime v18 or higher.
+XYZ API modules should be run with a Node.js runtime v22 or higher.
 
 The [XYZ API](/xyz/module-_api.html) module is located in the api folder as a requirement for using the offical Node.js runtime in Vercel's Edge Network.
 
@@ -25,3 +25,25 @@ The XYZ API modules are:
 ### [User](/xyz/module-_user)
 
 ### [Sign](/xyz/module-_sign)
+
+## Development
+
+From the repository root, start the XYZ app server with:
+
+```bash
+pnpm dev
+```
+
+From `apps/xyz`, run the package dev script directly:
+
+```bash
+pnpm dev
+```
+
+## Tests
+
+From the repository root, run XYZ tests with:
+
+```bash
+pnpm test:xyz
+```

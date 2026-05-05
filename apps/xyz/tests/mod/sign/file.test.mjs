@@ -31,7 +31,7 @@ describe('file:', () => {
       .update(String(Date.parse(date)))
       .digest('hex');
 
-    const { req, res } = createMocks({
+    const { req } = createMocks({
       host: 'localhost/',
       params: {
         url: './public/views/_login.html',

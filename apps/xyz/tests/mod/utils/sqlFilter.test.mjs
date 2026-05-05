@@ -1,5 +1,5 @@
-import sqlfilter from '@geolytix/xyz-app/mod/utils/sqlFilter.js';
-import { afterAll, beforeAll, describe, expect, it, vi } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
+import sqlfilter from '../../../mod/utils/sqlFilter.js';
 
 const originalConsole = console.warn;
 const mockWarns = [];

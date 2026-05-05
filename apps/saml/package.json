@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@geolytix/xyz-app": "file:../xyz",
+    "express": "5.2.0",
     "jsonwebtoken": "^9.0.2"
   }
 }

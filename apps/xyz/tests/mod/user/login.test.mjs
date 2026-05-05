@@ -12,7 +12,7 @@ vi.mock('@geolytix/xyz-app/mod/view.js', () => ({
 }));
 
 // Set environment variables
-global.xyzEnv = {
+globalThis.xyzEnv = {
   DIR: '/app',
   TITLE: 'TEST_APP',
   SECRET: 'super_secret_key',
