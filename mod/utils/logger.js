@@ -78,19 +78,25 @@ export default function log(log, key = 'err') {
   // Check whether the log for the key should be logged.
   if (!logs.has(key)) return;
 
-  const safeLog = sanitizeLog(log);
+  if (typeof log === 'string') {
+    log = log.replace(/[\n\r]/g, "_");
+  }
+
+  logger?.(log, key);
+
+  //const safeLog = sanitizeLog(log);
 
   // Write log to logger if configured.
-  logger?.(safeLog, key);
+  logger?.(log, key);
 
   if (key === 'err') {
     // Log errors as such.
-    console.error(safeLog);
+    console.error(log);
     return;
   }
 
   // Log to stdout.
-  console.log(safeLog);
+  console.log(log);
 }
 
 function sanitizeLog(log) {
