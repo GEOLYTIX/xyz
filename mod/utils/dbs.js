@@ -92,7 +92,9 @@ async function clientQuery(pool, query, variables, timeout) {
 
       // Set statement timeout if specified
       if (timeout) {
-        await client.query(`SET statement_timeout = ${parseInt(timeout)}`);
+        await client.query(
+          `SET statement_timeout = ${Number.parseInt(timeout)}`,
+        );
       }
 
       const { rows } = await client.query(query, variables);

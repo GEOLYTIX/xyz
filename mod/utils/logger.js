@@ -153,7 +153,13 @@ function postgresql() {
       `INSERT INTO ${table} 
       (process, datetime, key, log, message)
       VALUES ($1, $2, $3, $4, $5)`,
-      [process_id, parseInt(Date.now() / 1000), key, logstring, errorMessage],
+      [
+        process_id,
+        Number.parseInt(Date.now() / 1000),
+        key,
+        logstring,
+        errorMessage,
+      ],
       3000,
     );
   };

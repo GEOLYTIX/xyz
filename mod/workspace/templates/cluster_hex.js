@@ -28,7 +28,7 @@ export default (_) => {
   const where = _.viewport || `AND ${_.geom} IS NOT NULL`;
 
   // Calculate grid resolution (r) based on zoom level and resolution parameter.
-  const r = parseInt((40075016.68 / Math.pow(2, _.z)) * _.resolution);
+  const r = Number.parseInt((40075016.68 / Math.pow(2, _.z)) * _.resolution);
 
   const _width = r;
   const _height = r - ((r * 2) / Math.sqrt(3) - r) / 2;

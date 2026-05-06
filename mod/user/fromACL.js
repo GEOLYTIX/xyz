@@ -278,7 +278,7 @@ It is recommended to reset the password for the account if this happens.
 @returns {Promise<Error>} A Promise that resolves with an Error.
 */
 
-const maxFailedAttempts = parseInt(xyzEnv.FAILED_ATTEMPTS);
+const maxFailedAttempts = Number.parseInt(xyzEnv.FAILED_ATTEMPTS);
 
 async function failedLogin(request) {
   // Increase failed login attempts counter by 1.

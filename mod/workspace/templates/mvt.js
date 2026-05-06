@@ -15,9 +15,9 @@ export default (_) => {
       fields.push(`(${value}) as ${key}`);
     });
 
-  const x = parseInt(_.x),
-    y = parseInt(_.y),
-    z = parseInt(_.z);
+  const x = Number.parseInt(_.x),
+    y = Number.parseInt(_.y),
+    z = Number.parseInt(_.z);
 
   return `
     SELECT

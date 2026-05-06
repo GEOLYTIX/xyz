@@ -199,8 +199,8 @@ const typeCheckers = {
   // Uses native Array.isArray for array checking
   array: Array.isArray,
   // Checks if value is strictly a string using typeof
-  numeric: (val) => !isNaN(val) && val !== null,
+  numeric: (val) => !Number.isNaN(Number(val)) && val !== null,
   // Checks if value is a valid number and not null
-  // Note: isNaN('123') returns false, so this also accepts numeric strings
+  // Note: Number.isNaN(Number('123')) returns false, so this also accepts numeric strings
   string: (val) => typeof val === 'string',
 };
