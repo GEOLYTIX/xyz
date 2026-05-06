@@ -18,14 +18,11 @@ existing deployment layout and environment variables continue to work.
 
 @module saml-app
 */
-
-import '../xyz/mod/utils/processEnv.js';
+import redirect from '@geolytix/xyz-app/mod/user/redirect.js';
 import { readFileSync } from 'fs';
 import jwt from 'jsonwebtoken';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
-import acl from '../xyz/mod/user/acl.js';
-import redirect from '@geolytix/xyz-app/mod/user/redirect.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
