@@ -156,21 +156,11 @@ function postgresql() {
     // Dynamic import to avoid circular dependency (dbs.js imports logger.js).
     const { default: dbs } = await import('./dbs.js');
 
-    // Log messages can be string or objects
-    // Objects must be parsed as string for the PostgreSQL log table schema.
-    const logstring = typeof log === 'string' ? log : JSON.stringify(log);
-
-    //This is to pull the short Error message from the stack
-    const errorMessage =
-      log && typeof log === 'object' && log.err
-        ? log.err.toString().split('\n')[0]
-        : undefined;
-
     dbs[params.dbs](
       `INSERT INTO ${table} 
       (process, datetime, key, log, message)
       VALUES ($1, $2, $3, $4, $5)`,
-      [process_id, parseInt(Date.now() / 1000), key, logstring, errorMessage],
+      [process_id, parseInt(Date.now() / 1000), key, log, undefined],
       3000,
     );
   };
