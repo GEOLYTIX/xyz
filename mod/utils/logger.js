@@ -48,6 +48,8 @@ import crypto from 'crypto';
 
 const logs = new Set(xyzEnv.LOGS?.split(',') || []);
 
+const REDACTED_LOG_VALUE = '[REDACTED]';
+
 // Errors should always be logged.
 logs.add('err');
 
@@ -76,17 +78,29 @@ export default function log(log, key = 'err') {
   // Check whether the log for the key should be logged.
   if (!logs.has(key)) return;
 
+  const safeLog = sanitizeLog(log);
+
   // Write log to logger if configured.
-  logger?.(log, key);
+  logger?.(safeLog, key);
 
   if (key === 'err') {
     // Log errors as such.
-    console.error(log);
+    console.error(safeLog);
     return;
   }
 
   // Log to stdout.
-  console.log(log);
+  console.log(safeLog);
+}
+
+function sanitizeLog(log) {
+  if (log instanceof Error) return '[Error]';
+
+  if (Array.isArray(log)) return '[Array]';
+
+  if (log && typeof log === 'object') return '[Object]';
+
+  return REDACTED_LOG_VALUE;
 }
 
 /**
@@ -147,7 +161,10 @@ function postgresql() {
     const logstring = typeof log === 'string' ? log : JSON.stringify(log);
 
     //This is to pull the short Error message from the stack
-    const errorMessage = log.err?.toString().split('\n')[0];
+    const errorMessage =
+      log && typeof log === 'object' && log.err
+        ? log.err.toString().split('\n')[0]
+        : undefined;
 
     dbs[params.dbs](
       `INSERT INTO ${table} 
