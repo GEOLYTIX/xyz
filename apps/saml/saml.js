@@ -18,6 +18,7 @@ existing deployment layout and environment variables continue to work.
 
 @module saml-app
 */
+import '../xyz/mod/utils/processEnv.js';
 import redirect from '@geolytix/xyz-app/mod/user/redirect.js';
 import { readFileSync } from 'fs';
 import jwt from 'jsonwebtoken';
