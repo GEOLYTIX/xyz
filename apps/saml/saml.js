@@ -154,12 +154,13 @@ async function logout(req, res) {
 }
 
 async function login(req, res) {
-  // const redirect = req.cookies?.[`${xyzEnv.TITLE}_redirect`];
+  const redirect = req.cookies?.[`${xyzEnv.TITLE}_redirect`];
 
   try {
-    // const relayState = (redirect || xyzEnv.DIR) ?? '/';
+    //This tells the IDP where to redirect to
+    const relayState = (redirect || xyzEnv.DIR) ?? '/';
     const url = await samlStrat.getAuthorizeUrlAsync(
-      '/',
+      relayState,
       req.headers['x-forwarded-host'],
       { additionalParams: {} },
     );
