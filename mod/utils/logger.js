@@ -79,12 +79,10 @@ export default function log(log, key = 'err') {
   if (!logs.has(key)) return;
 
   if (typeof log === 'string') {
-    log = log.replace(/[\n\r]/g, '_');
+    log = log.replaceAll(/[\n\r]/g, '_');
   }
 
   logger?.(log, key);
-
-  //const safeLog = sanitizeLog(log);
 
   // Write log to logger if configured.
   logger?.(log, key);
@@ -97,16 +95,6 @@ export default function log(log, key = 'err') {
 
   // Log to stdout.
   console.log(log);
-}
-
-function sanitizeLog(log) {
-  if (log instanceof Error) return '[Error]';
-
-  if (Array.isArray(log)) return '[Array]';
-
-  if (log && typeof log === 'object') return '[Object]';
-
-  return REDACTED_LOG_VALUE;
 }
 
 /**
