@@ -19,7 +19,7 @@ describe('logger', () => {
     globalThis.xyzEnv = {};
   });
 
-  it('redacts objects before logging', async () => {
+  it('logs objects unchanged', async () => {
     const logger = await importLogger();
     const consoleLog = vi.spyOn(console, 'log').mockImplementation(() => {});
 
@@ -35,7 +35,14 @@ describe('logger', () => {
       'query_params',
     );
 
-    expect(consoleLog).toHaveBeenCalledWith('[Object]');
+    expect(consoleLog).toHaveBeenCalledWith({
+      nested: {
+        authorization: 'Bearer secret-token',
+        ok: true,
+      },
+      password: 'super-secret',
+      q: 'stores',
+    });
   });
 
   it('does not log disabled keys', async () => {
@@ -55,42 +62,46 @@ describe('logger', () => {
 
     logger('secret-token');
 
-    expect(consoleError).toHaveBeenCalledWith('[REDACTED]');
+    expect(consoleError).toHaveBeenCalledWith('secret-token');
   });
 
-  it('redacts strings before logging', async () => {
+  it('normalizes newlines in string logs', async () => {
     const logger = await importLogger();
     const consoleLog = vi.spyOn(console, 'log').mockImplementation(() => {});
 
     logger(
-      '/view?workspace=demo&token=abc123&apikey=xyz Authorization: Bearer abc.def',
+      '/view?workspace=demo&token=abc123\napikey=xyz\rAuthorization: Bearer abc.def',
       'view-req-url',
     );
 
-    expect(consoleLog).toHaveBeenCalledWith('[REDACTED]');
+    expect(consoleLog).toHaveBeenCalledWith(
+      '/view?workspace=demo&token=abc123_apikey=xyz_Authorization: Bearer abc.def',
+    );
   });
 
-  it('redacts arrays before logging', async () => {
+  it('logs arrays unchanged', async () => {
     const logger = await importLogger();
     const consoleLog = vi.spyOn(console, 'log').mockImplementation(() => {});
 
     logger(['token=abc123'], 'query_params');
 
-    expect(consoleLog).toHaveBeenCalledWith('[Array]');
+    expect(consoleLog).toHaveBeenCalledWith(['token=abc123']);
   });
 
-  it('redacts errors before writing to stderr', async () => {
+  it('logs errors unchanged to stderr', async () => {
     const logger = await importLogger();
     const consoleError = vi
       .spyOn(console, 'error')
       .mockImplementation(() => {});
 
-    logger(new Error('Failed with token=abc123'));
+    const expected = new Error('Failed with token=abc123');
 
-    expect(consoleError).toHaveBeenCalledWith('[Error]');
+    logger(expected);
+
+    expect(consoleError).toHaveBeenCalledWith(expected);
   });
 
-  it('sends redacted values to configured remote loggers', async () => {
+  it('sends log values to configured remote loggers', async () => {
     const fetchMock = vi.fn().mockResolvedValue({});
     vi.stubGlobal('fetch', fetchMock);
 
@@ -100,14 +111,14 @@ describe('logger', () => {
 
     logger({ api_key: 'secret', value: 'safe' }, 'query_params');
 
-    expect(fetchMock).toHaveBeenCalledTimes(1);
+    expect(fetchMock).toHaveBeenCalledTimes(2);
 
     const request = fetchMock.mock.calls[0][1];
     const body = JSON.parse(request.body);
     const processId = Object.keys(body).find((key) => key !== 'key');
 
     expect(body.key).toBe('query_params');
-    expect(body[processId]).toBe('[Object]');
+    expect(body[processId]).toEqual({ api_key: 'secret', value: 'safe' });
   });
 
   it('logs Logflare request failures to stderr', async () => {
@@ -142,7 +153,7 @@ describe('logger', () => {
     );
   });
 
-  it('writes redacted values to the configured PostgreSQL logger', async () => {
+  it('writes log values to the configured PostgreSQL logger', async () => {
     const dbMock = vi.fn();
 
     vi.doMock('../../../mod/utils/dbs.js', () => ({
@@ -164,7 +175,7 @@ describe('logger', () => {
 
     expect(dbMock).toHaveBeenCalledWith(
       expect.stringContaining('INSERT INTO public.logsdrop'),
-      expect.arrayContaining(['[Object]']),
+      expect.arrayContaining([{ token: 'secret' }]),
       3000,
     );
   });
