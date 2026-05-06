@@ -1,0 +1,51 @@
+name: Build
+on:
+  push:
+    branches:
+      - main
+      - major
+      - minor
+      - patch
+  pull_request:
+    types: [opened, synchronize, reopened]
+jobs:
+  sonarqube:
+    name: SonarQube
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: read
+    env:
+      SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+    steps:
+      - uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4.3.1
+        with:
+          fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
+      - name: Install pnpm
+        uses: pnpm/action-setup@f40ffcd9367d9f12939873eb1018b921a783ffaa
+      - uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: '22'
+      - name: Skip SonarQube for fork pull requests
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name != github.repository
+        run: |
+          echo "Skipping SonarQube scan because this pull request comes from a fork."
+          echo "GitHub does not expose repository secrets, including SONAR_TOKEN, to fork pull_request workflows."
+      - name: Check SonarQube token
+        if: (github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository) && env.SONAR_TOKEN == ''
+        run: |
+          echo "SONAR_TOKEN is not available to this workflow run."
+          echo "Add a repository or organization secret named SONAR_TOKEN, or check whether this run is from a fork or Dependabot PR where secrets are restricted."
+          exit 1
+      - name: Install dependencies
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        run: pnpm install --ignore-scripts
+      - name: Test & Coverage
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        run: pnpm test:xyz:coverage
+      - name: Verify coverage report
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        run: test -s coverage/lcov.info
+      - name: SonarQube Scan
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+        uses: SonarSource/sonarqube-scan-action@fd88b7d7ccbaefd23d8f36f73b59db7a3d246602 # v6.0.0

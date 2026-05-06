@@ -19,7 +19,8 @@ export default defineConfig({
     testTimeout: 10000,
     fileParallelism: true,
     coverage: {
-      provider: 'v8',
+      provider: 'v8', // or 'istanbul'
+      reporter: ['text', 'lcov'],
     },
   },
 });

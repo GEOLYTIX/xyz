@@ -55,7 +55,11 @@ async function cloudfront(req) {
       'cloudfront',
     );
 
-    if (response.status >= 300) return new Error(`${response.status} ${url}`);
+    if (response.status >= 300) {
+      return new Error(
+        `CloudFront request failed with status ${response.status}.`,
+      );
+    }
 
     if (url.match(/\.json$/i)) return await response.json();
 

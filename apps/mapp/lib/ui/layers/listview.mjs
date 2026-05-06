@@ -118,7 +118,7 @@ function createGroup(layer) {
         .forEach((layer) => layer.hide());
     }}>visibility_off`;
 
-  group.meta = mapp.utils.html.node`<div class="meta">`;
+  group.meta = mapp.utils.html.node`<div class="meta no-select">`;
   group.drawer = mapp.ui.elements.drawer({
     class: `layer-group ${layer.groupClassList || ''}`,
     content: group.meta,

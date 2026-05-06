@@ -325,7 +325,7 @@ function validateRequestParams(req) {
   }
 
   // URL parameter keys must match white listed letters and numbers only.
-  if (Object.keys(params).some((key) => key === 'user')) {
+  if (Object.keys(params).includes((key) => key === 'user')) {
     return new Error('user is a restricted request parameter.');
   }
 

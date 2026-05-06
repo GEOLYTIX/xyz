@@ -23,7 +23,7 @@ jobs:
           node-version: '22'
 
       - name: Install Dependencies
-        run: pnpm install
+        run: pnpm install --ignore-scripts
 
       - name: Run tests
         run: node --run test

@@ -148,7 +148,7 @@ describe('cloudfront:', () => {
 
     // Assert
     expect(result).toBeInstanceOf(Error);
-    expect(result.message).toBe('404 https://origin.example/missing.json');
+    expect(result.message).toBe('CloudFront request failed with status 404.');
     expect(response.json).not.toHaveBeenCalled();
     expect(response.text).not.toHaveBeenCalled();
     expect(loggerMock).toHaveBeenCalledWith(
