@@ -42,7 +42,7 @@ This cannot be undone.`,create:"Create",csv_upload_failed:"Data import failed, p
     <button
       data-id="locator"
       title=${mapp.dictionary.toolbar_current_location}
-      onclick=${r=>{r.target.classList.toggle("active"),t.locate()}}><span class="notranslate material-symbols-outlined">my_location`;o.append(n)}function Tt(e,t){let o=t.mapButton;if(!o||!document.head.dataset.login)return;let n=`${mapp.user?"logout":"lock_open"}`,r="notranslate material-symbols-outlined"+(mapp.user?" color-danger":""),i;mapp.user?i="/api/user/logout":i="?login=true",o.appendChild(mapp.utils.html.node`
+      onclick=${r=>{r.target.classList.toggle("active"),t.locate()}}><span class="notranslate material-symbols-outlined">my_location`;o.append(n)}function Tt(e,t){let o=t.mapButton;if(!o||!document.head.dataset.login)return;let n=`${mapp.user?"logout":"lock_open"}`,r="notranslate material-symbols-outlined"+(mapp.user?" color-danger":""),i;mapp.user?i="?logout=true":i="?login=true",o.appendChild(mapp.utils.html.node`
     <a
       title=${mapp.user?mapp.dictionary.toolbar_logout:mapp.dictionary.toolbar_login}
       href=${i}>

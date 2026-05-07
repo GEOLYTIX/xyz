@@ -10,10 +10,8 @@
     ".": "./saml.js",
     "./server": "./server.js"
   },
-  "optionalDependencies": {
-    "@node-saml/node-saml": "^5.0.1"
-  },
   "dependencies": {
+    "@node-saml/node-saml": "^5.0.1",
     "@geolytix/xyz-app": "file:../xyz",
     "express": "5.2.0",
     "jsonwebtoken": "^9.0.2"

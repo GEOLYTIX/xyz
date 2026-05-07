@@ -128,7 +128,7 @@ function logoutCallback(res) {
 
 async function logout(req, res) {
   try {
-    const user = await jwt.decode(req.cookies[`${xyzEnv.TITLE}`]);
+    const user = await jwt.decode(req.cookies?.[`${xyzEnv.TITLE}`]);
 
     if (!user) {
       res.setHeader('location', `${xyzEnv.DIR || '/'}`);
@@ -178,6 +178,11 @@ async function acs(req, res) {
     const user = {
       email: samlResponse.profile.email || samlResponse.profile.nameID,
       lookup: true,
+      nameID: samlResponse.profile.nameID,
+      nameIDFormat: samlResponse.profile.nameIDFormat,
+      nameQualifier: samlResponse.profile.nameQualifier,
+      sessionIndex: samlResponse.profile.sessionIndex,
+      spNameQualifier: samlResponse.profile.spNameQualifier,
     };
 
     redirect(req, res, user);
