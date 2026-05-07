@@ -19,11 +19,11 @@ existing deployment layout and environment variables continue to work.
 @module saml-app
 */
 import '../xyz/mod/utils/processEnv.js';
+import { readFileSync } from 'node:fs';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import redirect from '@geolytix/xyz-app/mod/user/redirect.js';
-import { readFileSync } from 'fs';
 import jwt from 'jsonwebtoken';
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -63,9 +63,9 @@ const samlConfig = {
     false,
   ),
   disableRequestedAuthnContext:
-    xyzEnv.SAML_DISABLE_REQUESTED_AUTHN_CONTEXT !== undefined
-      ? xyzEnv.SAML_DISABLE_REQUESTED_AUTHN_CONTEXT === 'true'
-      : true,
+    xyzEnv.SAML_DISABLE_REQUESTED_AUTHN_CONTEXT === undefined
+      ? true
+      : xyzEnv.SAML_DISABLE_REQUESTED_AUTHN_CONTEXT === 'true',
 };
 
 const samlStrat = new SAML(samlConfig);
