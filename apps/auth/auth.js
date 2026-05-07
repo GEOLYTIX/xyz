@@ -5,13 +5,15 @@ Custom auth route registration for XYZ.
 import redirect from '@geolytix/xyz-app/mod/user/redirect.js';
 import express from 'express';
 
-app.get(`${xyzEnv.DIR}/custom/login`, custom_login);
-app.get(`${xyzEnv.DIR}/custom/logout`, custom_logout);
-app.post(
-  `${xyzEnv.DIR}/custom/verify`,
-  [express.urlencoded({ extended: true }), express.json({ limit: '5mb' })],
-  custom_verify,
-);
+export default function registerAuthRoutes(app) {
+  app.get(`${xyzEnv.DIR}/custom/login`, custom_login);
+  app.get(`${xyzEnv.DIR}/custom/logout`, custom_logout);
+  app.post(
+    `${xyzEnv.DIR}/custom/verify`,
+    [express.urlencoded({ extended: true }), express.json({ limit: '5mb' })],
+    custom_verify,
+  );
+}
 
 /**
 @function custom_login
@@ -34,7 +36,7 @@ function custom_login(req, res) {
 @function custom_logout
 
 @description
-The method will destroy the user cookie and redirect to the base directory. 
+The method will destroy the user cookie and redirect to the base directory.
 
 @param {req} req HTTP request.
 @param {res} res HTTP response.
@@ -59,12 +61,10 @@ The user object is passed to the redirect method which will handle the ACL looku
 @param {req} req HTTP request.
 @param {res} res HTTP response.
 */
-function customVerify(redirectUser) {
-  return async (req, res) => {
-    const user = {
-      email: req.body.username,
-      lookup: true,
-    };
-    return await redirectUser(req, res, user);
+function custom_verify(req, res) {
+  const user = {
+    email: req.body.username,
+    lookup: true,
   };
+  return redirect(req, res, user);
 }
