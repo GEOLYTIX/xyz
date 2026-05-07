@@ -5,16 +5,13 @@ Custom auth route registration for XYZ.
 import redirect from '@geolytix/xyz-app/mod/user/redirect.js';
 import express from 'express';
 
-export default function registerAuthRoutes(app, redirectUser = redirect) {
-  app.get(`${xyzEnv.DIR}/custom/login`, custom_login);
-  app.post(
-    `${xyzEnv.DIR}/custom/verify`,
-    [express.urlencoded({ extended: true }), express.json({ limit: '5mb' })],
-    customVerify(redirectUser),
-  );
-
-  return app;
-}
+app.get(`${xyzEnv.DIR}/custom/login`, custom_login);
+app.get(`${xyzEnv.DIR}/custom/logout`, custom_logout);
+app.post(
+  `${xyzEnv.DIR}/custom/verify`,
+  [express.urlencoded({ extended: true }), express.json({ limit: '5mb' })],
+  custom_verify,
+);
 
 /**
 @function custom_login
@@ -31,6 +28,24 @@ function custom_login(req, res) {
     <button type="submit">Login</button></form>`;
 
   res.send(form);
+}
+
+/**
+@function custom_logout
+
+@description
+The method will destroy the user cookie and redirect to the base directory. 
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+*/
+function custom_logout(req, res) {
+  res.setHeader(
+    'Set-Cookie',
+    `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`,
+  );
+  res.setHeader('location', `${xyzEnv.DIR}/`);
+  res.status(302).send();
 }
 
 /**
