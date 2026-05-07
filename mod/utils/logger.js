@@ -136,7 +136,7 @@ function postgresql() {
   }
 
   // Sanitize the params.table once at init to ensure no SQL injection.
-  const table = params.table.replace(/[^a-zA-Z0-9_.]/g, '');
+  const table = params.table.replaceAll(/[^a-zA-Z0-9_.]/g, '');
 
   return async (log, key) => {
     // Dynamic import to avoid circular dependency (dbs.js imports logger.js).
@@ -150,7 +150,7 @@ function postgresql() {
     const errorMessage = log.err?.toString().split('\n')[0];
 
     dbs[params.dbs](
-      `INSERT INTO ${table} 
+      `INSERT INTO ${table}
       (process, datetime, key, log, message)
       VALUES ($1, $2, $3, $4, $5)`,
       [
