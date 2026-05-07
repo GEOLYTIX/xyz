@@ -1,4 +1,5 @@
 packages:
+  - "apps/auth"
   - "apps/mapp"
   - "apps/saml"
   - "apps/xyz"

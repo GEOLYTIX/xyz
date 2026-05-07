@@ -1,20 +1,21 @@
 /**
-The auth-server script imports the xyz app and extends the routes with custom/login, custom/logout, and custom/verify routes.
+Custom auth route registration for XYZ.
 */
 
-import '@geolytix/xyz-app/mod/utils/processEnv.js';
 import redirect from '@geolytix/xyz-app/mod/user/redirect.js';
 import express from 'express';
-import app from './server.js';
 
-app.get(`${xyzEnv.DIR}/custom/login`, custom_login);
-app.post(
-  `${xyzEnv.DIR}/custom/verify`,
-  [express.urlencoded({ extended: true }), express.json({ limit: '5mb' })],
-  custom_verify,
-);
+export default function registerAuthRoutes(app, redirectUser = redirect) {
+  app.get(`${xyzEnv.DIR}/custom/login`, custom_login);
+  app.post(
+    `${xyzEnv.DIR}/custom/verify`,
+    [express.urlencoded({ extended: true }), express.json({ limit: '5mb' })],
+    customVerify(redirectUser),
+  );
 
-export default app;
+  return app;
+}
+
 /**
 @function custom_login
 
@@ -43,10 +44,12 @@ The user object is passed to the redirect method which will handle the ACL looku
 @param {req} req HTTP request.
 @param {res} res HTTP response.
 */
-async function custom_verify(req, res) {
-  const user = {
-    email: req.body.username,
-    lookup: true,
+function customVerify(redirectUser) {
+  return async (req, res) => {
+    const user = {
+      email: req.body.username,
+      lookup: true,
+    };
+    return await redirectUser(req, res, user);
   };
-  return await redirect(req, res, user);
 }

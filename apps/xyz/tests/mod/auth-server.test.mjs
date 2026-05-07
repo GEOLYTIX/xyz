@@ -7,10 +7,6 @@ const app = {
 };
 const redirectFn = vi.fn();
 
-vi.mock('../../server.js', () => ({
-  default: app,
-}));
-
 vi.mock('@geolytix/xyz-app/mod/user/redirect.js', () => ({
   default: (...args) => redirectFn(...args),
 }));
@@ -27,7 +23,8 @@ globalThis.xyzEnv = {
 };
 
 describe('auth-server:', async () => {
-  await import('../../auth-server.js');
+  const { default: registerAuthRoutes } = await import('../../../auth/auth.js');
+  registerAuthRoutes(app, redirectFn);
 
   beforeEach(() => {
     redirectFn.mockClear();
