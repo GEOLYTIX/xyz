@@ -52,6 +52,8 @@ export default async function view(req, res) {
 
   params.dir = xyzEnv.DIR;
 
+  params.authPath = xyzEnv.AUTH_PATH;
+
   params.login = (xyzEnv.PRIVATE || xyzEnv.PUBLIC) && 'true';
 
   params.title = xyzEnv.TITLE;

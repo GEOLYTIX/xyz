@@ -23,6 +23,7 @@ import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import redirect from '@geolytix/xyz-app/mod/user/redirect.js';
+import { SAML } from '@node-saml/node-saml';
 import jwt from 'jsonwebtoken';
 
 const __filename = fileURLToPath(import.meta.url);
@@ -35,8 +36,6 @@ function parseBoolean(value, fallback) {
   if (value === 'false') return false;
   return fallback;
 }
-
-const { SAML } = await import('@node-saml/node-saml');
 
 const samlConfig = {
   acceptedClockSkewMs: xyzEnv.SAML_ACCEPTED_CLOCK_SKEW ?? -1,
@@ -68,10 +67,23 @@ const samlConfig = {
       : xyzEnv.SAML_DISABLE_REQUESTED_AUTHN_CONTEXT === 'true',
 };
 
-const samlStrat = new SAML(samlConfig);
+let samlStrat;
 
 export default function saml(req, res) {
-  if (!samlStrat) {
+  return samlHandler(req, res, getSamlStrat(), redirect);
+}
+
+export function createSamlHandler(strategy, redirectUser = redirect) {
+  return (req, res) => samlHandler(req, res, strategy, redirectUser);
+}
+
+function getSamlStrat() {
+  samlStrat ??= new SAML(samlConfig);
+  return samlStrat;
+}
+
+function samlHandler(req, res, strategy, redirectUser) {
+  if (!strategy) {
     console.warn('SAML is not available in XYZ instance.');
     return;
   }
@@ -79,30 +91,25 @@ export default function saml(req, res) {
   // Dispatch the mounted SAML endpoints from a single handler.
   switch (true) {
     case /\/saml\/metadata/.test(req.url):
-      metadata(res);
-      break;
+      return metadata(res, strategy);
 
     case /\/saml\/logout\/callback/.test(req.url):
-      logoutCallback(res);
-      break;
+      return logoutCallback(res);
 
     case /\/saml\/logout/.test(req.url):
-      logout(req, res);
-      break;
+      return logout(req, res, strategy);
 
     case req.params?.login || /\/saml\/login/.test(req.url):
-      login(req, res);
-      break;
+      return login(req, res, strategy);
 
     case /\/saml\/acs/.test(req.url):
-      acs(req, res);
-      break;
+      return acs(req, res, strategy, redirectUser);
   }
 }
 
-function metadata(res) {
+function metadata(res, strategy) {
   res.setHeader('Content-Type', 'application/xml');
-  const metadata = samlStrat.generateServiceProviderMetadata(
+  const metadata = strategy.generateServiceProviderMetadata(
     null,
     samlConfig.idpCert,
   );
@@ -126,7 +133,7 @@ function logoutCallback(res) {
   }
 }
 
-async function logout(req, res) {
+async function logout(req, res, strategy) {
   try {
     const user = await jwt.decode(req.cookies?.[`${xyzEnv.TITLE}`]);
 
@@ -136,7 +143,7 @@ async function logout(req, res) {
     }
 
     if (user.sessionIndex) {
-      const url = await samlStrat.getLogoutUrlAsync(user);
+      const url = await strategy.getLogoutUrlAsync(user);
 
       res.setHeader('location', url);
       return res.status(302).send();
@@ -151,13 +158,13 @@ async function logout(req, res) {
   }
 }
 
-async function login(req, res) {
+async function login(req, res, strategy) {
   const redirect = req.cookies?.[`${xyzEnv.TITLE}_redirect`];
 
   try {
     //This tells the IDP where to redirect to
     const relayState = (redirect || xyzEnv.DIR) ?? '/';
-    const url = await samlStrat.getAuthorizeUrlAsync(
+    const url = await strategy.getAuthorizeUrlAsync(
       relayState,
       req.headers['x-forwarded-host'],
       { additionalParams: {} },
@@ -171,9 +178,9 @@ async function login(req, res) {
   }
 }
 
-async function acs(req, res) {
+async function acs(req, res, strategy, redirectUser) {
   try {
-    const samlResponse = await samlStrat.validatePostResponseAsync(req.body);
+    const samlResponse = await strategy.validatePostResponseAsync(req.body);
 
     const user = {
       email: samlResponse.profile.email || samlResponse.profile.nameID,
@@ -185,7 +192,7 @@ async function acs(req, res) {
       spNameQualifier: samlResponse.profile.spNameQualifier,
     };
 
-    redirect(req, res, user);
+    return await redirectUser(req, res, user);
   } catch (error) {
     console.error(error);
   }

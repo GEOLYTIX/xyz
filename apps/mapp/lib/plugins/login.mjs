@@ -33,11 +33,13 @@ export function login(plugin, mapview) {
     (mapp.user ? ' color-danger' : '');
 
   let userURL;
+  const authPath = document.head.dataset.authPath;
+  const dir = document.head.dataset.dir || '';
 
   if (mapp.user) {
-    userURL = '?logout=true';
+    userURL = authPath ? `${dir}${authPath}/logout` : '?logout=true';
   } else {
-    userURL = '?login=true';
+    userURL = authPath ? `${dir}${authPath}/login` : '?login=true';
   }
 
   btnColumn.appendChild(mapp.utils.html.node`

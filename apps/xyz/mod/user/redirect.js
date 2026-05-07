@@ -36,9 +36,13 @@ The response is sent with a 302 status code to redirect the client to the locati
 */
 export default async function redirect(req, res, user) {
   if (user.lookup) {
+    if (acl === null) {
+      return res.status(405).send('ACL unavailable.');
+    }
+
     const rows = await acl(
       `
-      SELECT email, admin, language, roles, blocked
+      SELECT email, admin, language, roles, blocked, approved, verified
       FROM acl_schema.acl_table
       WHERE lower(email) = lower($1);`,
       [user.email],
@@ -50,6 +54,26 @@ export default async function redirect(req, res, user) {
         `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`,
       );
       return res.status(500).send('Failed to retrieve user from ACL');
+    }
+
+    if (!rows[0]) {
+      return res.status(401).send('User not found.');
+    }
+
+    if (rows[0].blocked) {
+      res.setHeader(
+        'Set-Cookie',
+        `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`,
+      );
+      return res.status(403).send('User blocked in ACL.');
+    }
+
+    if (rows[0].verified === false) {
+      return res.status(401).send('User not verified in ACL.');
+    }
+
+    if (rows[0].approved === false) {
+      return res.status(401).send('User not approved in ACL.');
     }
 
     Object.assign(user, rows[0]);
@@ -66,9 +90,25 @@ export default async function redirect(req, res, user) {
 
   const redirect_cookie = `${xyzEnv.TITLE}_redirect=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`;
 
-  const location = redirect ? decodeURIComponent(redirect) : `${xyzEnv.DIR}/`;
+  const location = redirectLocation(redirect);
 
   res.setHeader('Set-Cookie', [user_cookie, redirect_cookie]);
   res.setHeader('location', location);
   res.status(302).send();
+}
+
+function redirectLocation(redirect) {
+  if (!redirect) return `${xyzEnv.DIR}/`;
+
+  try {
+    const location = decodeURIComponent(redirect).replaceAll(/[;\r\n]/g, '');
+
+    if (location.startsWith('/') && !location.startsWith('//')) {
+      return location;
+    }
+  } catch {
+    // Fall through to the safe default for malformed cookie values.
+  }
+
+  return `${xyzEnv.DIR}/`;
 }

@@ -48,5 +48,5 @@ async function custom_verify(req, res) {
     email: req.body.username,
     lookup: true,
   };
-  redirect(req, res, user);
+  return await redirect(req, res, user);
 }
