@@ -67,18 +67,16 @@ export default async function query(req, res) {
   if (res.finished) return;
 
   // Must be run after the layerQuery method since the query template could be defined within the layer [template].
-  const retrievedTemplate = await getTemplate(req.params.template);
+  // The template must be a copy to prevent mutation of the cached template object which may be used in other requests.
+  const template = {...await getTemplate(req.params.template)};
 
-  if (retrievedTemplate.err instanceof Error) {
+  if (template.err instanceof Error) {
     res
       .status(500)
       .setHeader('Content-Type', 'text/plain')
-      .send(retrievedTemplate.err.message);
+      .send(template.err.message);
     return;
   }
-
-  // The template must be a copy to prevent mutation of the cached template object which may be used in other requests.
-  const template = { ...retrievedTemplate };
 
   // A layer template must have a layer param.
   if (template.layer && !req.params.layer) {
