@@ -197,29 +197,6 @@ describe('Query: Testing Query API', () => {
       expect(mockLayerDb).not.toHaveBeenCalled();
     });
 
-    it('should use req.params.dbs when defined, overriding template.dbs', async () => {
-      const { req, res } = createMocks({
-        params: {
-          template: 'mock_template',
-          dbs: 'req_db',
-          user: { roles: ['admin'], admin: true },
-        },
-      });
-
-      checkWorkspaceCache.mockResolvedValueOnce({ dbs: undefined });
-      getTemplate.mockResolvedValueOnce({
-        template: 'SELECT * FROM mock_table',
-        dbs: 'template_db',
-      });
-
-      await query(req, res);
-
-      expect(mockReqDb).toHaveBeenCalled();
-      expect(mockTemplateDb).not.toHaveBeenCalled();
-      expect(mockWorkspaceDb).not.toHaveBeenCalled();
-      expect(mockLayerDb).not.toHaveBeenCalled();
-    });
-
     it('should use workspace.dbs when defined, overriding req.params and template dbs', async () => {
       const { req, res } = createMocks({
         params: {

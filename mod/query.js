@@ -67,15 +67,18 @@ export default async function query(req, res) {
   if (res.finished) return;
 
   // Must be run after the layerQuery method since the query template could be defined within the layer [template].
-  const template = await getTemplate(req.params.template);
+  const retrievedTemplate = await getTemplate(req.params.template);
 
-  if (template.err instanceof Error) {
+  if (retrievedTemplate.err instanceof Error) {
     res
       .status(500)
       .setHeader('Content-Type', 'text/plain')
-      .send(template.err.message);
+      .send(retrievedTemplate.err.message);
     return;
   }
+
+  // The template must be a copy to prevent mutation of the cached template object which may be used in other requests.
+  const template = {...retrievedTemplate};
 
   // A layer template must have a layer param.
   if (template.layer && !req.params.layer) {
@@ -114,7 +117,6 @@ export default async function query(req, res) {
   template.dbs =
     req.params.layer?.dbs ||
     req.params.workspace.dbs ||
-    req.params.dbs ||
     template.dbs;
 
   // Validate that the dbs string exists as a stored connection method in dbs_connections.
