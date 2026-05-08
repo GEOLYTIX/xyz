@@ -111,7 +111,11 @@ export default async function query(req, res) {
     return;
   }
   // Use layer dbs if defined, or workspace dbs, or provided dbs in the query.
-  template.dbs = req.params.layer?.dbs || req.params.workspace.dbs || req.params.dbs || template.dbs;
+  template.dbs =
+    req.params.layer?.dbs ||
+    req.params.workspace.dbs ||
+    req.params.dbs ||
+    template.dbs;
 
   // Validate that the dbs string exists as a stored connection method in dbs_connections.
   if (!Object.hasOwn(dbs_connections, template.dbs)) {
