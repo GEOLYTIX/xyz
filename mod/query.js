@@ -111,12 +111,9 @@ export default async function query(req, res) {
       .send('Role access denied for query template.');
     return;
   }
-
-  // Use layer dbs as fallback if template dbs is not defined.
-  template.dbs ??= req.params.layer?.dbs;
-
-  // Use workspace dbs as fallback if not explicit or from layer.
-  template.dbs ??= req.params.workspace.dbs;
+  // Use layer dbs if defined, or workspace dbs, or provided dbs in the query.
+  template.dbs =
+    req.params.layer?.dbs || req.params.workspace.dbs || template.dbs;
 
   // Validate that the dbs string exists as a stored connection method in dbs_connections.
   if (!Object.hasOwn(dbs_connections, template.dbs)) {
