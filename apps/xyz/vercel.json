@@ -15,18 +15,5 @@
       "src": "/(.*)",
       "dest": "apps/xyz/fastify.js"
     }
-  ],
-  "env": {
-    "WORKSPACE": "file:./public/workspace.json",
-    "SRC_CDN": "dev.geolytix.io",
-    "SRC_PLUGINSREPO": "../xyz_plugins",
-    "SRC_PLUGINS": "/api/provider/file?content_type=application/javascript&url={PLUGINSREPO}",
-    "SRC_LOCALRESOURCES": "../xyz_resources",
-    "SRC_LOCAL": "/api/provider/file?content_type=application/javascript&url={LOCALRESOURCES}",
-    "SRC_CLIENT": "file:../xyz_resources/bugs_testing",
-    "SRC_TEMPLATES": "file:../xyz_templates/v4.20.0",
-    "SRC_RESOURCES": "file:../xyz_resources",
-    "PUBLIC": "postgres://dbauszus-glx:2dwpHfF5kcQg@ep-curly-base-242741.eu-central-1.aws.neon.tech/neondb?uselibpqcompat=true&sslmode=require|public.acl",
-    "SECRET": "Turning and turning in the widening gyre The falcon cannot hear the falconer; Things fall apart; the centre cannot hold; Mere anarchy is loosed upon the world,"
-  }
+  ]
 }
