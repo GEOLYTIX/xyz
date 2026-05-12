@@ -3,7 +3,7 @@
   "trailingSlash": false,
   "builds": [
     {
-      "src": "apps/xyz/server.js",
+      "src": "apps/xyz/fastify.js",
       "use": "@vercel/node",
       "config": {
         "includeFiles": "public/**"
@@ -13,7 +13,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "apps/xyz/server.js"
+      "dest": "apps/xyz/fastify.js"
     }
   ]
 }

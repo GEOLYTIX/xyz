@@ -114,7 +114,7 @@ async function layer(req, res) {
       .send(layer.message);
   }
 
-  res.json(removeRoles(layer));
+  res.send(removeRoles(layer));
 }
 
 /**
@@ -293,7 +293,7 @@ async function locale(req, res) {
 
     assignChecksum(localeWithoutRoles);
 
-    return res.json(localeWithoutRoles);
+    return res.send(localeWithoutRoles);
   }
 
   // Check layer access.
@@ -312,7 +312,7 @@ async function locale(req, res) {
 
   assignChecksum(localeWithoutRoles);
 
-  res.json(localeWithoutRoles);
+  res.send(localeWithoutRoles);
 }
 
 /**

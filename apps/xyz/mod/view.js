@@ -93,5 +93,5 @@ export default async function view(req, res) {
     },
   );
 
-  res.send(view);
+  res.type('text/html').send(view);
 }
