@@ -3,3 +3,6 @@ packages:
   - "apps/mapp"
   - "apps/saml"
   - "apps/xyz"
+allowBuilds:
+  bcrypt: set this to true or false
+  esbuild: set this to true or false

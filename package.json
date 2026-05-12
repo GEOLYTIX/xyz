@@ -6,7 +6,7 @@
     "type": "git",
     "url": "https://github.com/geolytix/xyz"
   },
-  "packageManager": "pnpm@10.33.0",
+  "packageManager": "pnpm@11.0.9",
   "pnpm": {
     "neverBuiltDependencies": []
   },
@@ -28,15 +28,14 @@
   "license": "MIT",
   "dependencies": {
     "@geolytix/mapp": "file:apps/mapp",
-    "@geolytix/xyz-auth-app": "file:apps/auth",
     "@geolytix/xyz-app": "file:apps/xyz",
+    "@geolytix/xyz-auth-app": "file:apps/auth",
     "@geolytix/xyz-saml-app": "file:apps/saml"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.6",
     "@vitest/coverage-v8": "4.1.4",
     "clean-jsdoc-theme": "^4.3.2",
-    "dotenv": "^17.4.2",
     "node-mocks-http": "^1.17.2",
     "turbo": "^2.9.6",
     "undici": "^7.25.0",

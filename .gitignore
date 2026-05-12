@@ -25,3 +25,5 @@ docs/*
 *.crt
 
 .vercel
+
+.vercel
