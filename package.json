@@ -36,7 +36,6 @@
     "@biomejs/biome": "2.2.6",
     "@vitest/coverage-v8": "4.1.4",
     "clean-jsdoc-theme": "^4.3.2",
-    "dotenv": "^17.4.2",
     "node-mocks-http": "^1.17.2",
     "turbo": "^2.9.6",
     "undici": "^7.25.0",
