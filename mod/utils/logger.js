@@ -8,8 +8,7 @@ Possible log values are:
 - query: Logs the sql to executed by calling the query endpoint.
 - view-req-url: Logs the url of the requested view.
 - cloudfront: Logs responses from requests made to cloudfront e.g. <staus_code> - <endpoint>
-- mailer: Logs the response from email sending.
-- mailer_body: Logs email from and two with the body.
+- mailer: Logs the sent mail template.
 - reqhost: Logs the host for the request.
 - workspace: Logs responses for requests made to /workspace.
 

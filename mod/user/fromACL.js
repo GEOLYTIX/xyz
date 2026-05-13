@@ -204,7 +204,7 @@ async function getUser(request) {
     return user;
   }
 
-  return await failedLogin(request);
+  return await failedLogin(user, request);
 }
 
 /**
@@ -269,18 +269,19 @@ An email with the verification token is sent to the user notifying that the acco
 
 It is recommended to reset the password for the account if this happens.
 
+@param {Object} user The user for which login has failed.
 @param {Object} request The request object.
-@param {string} request.email The email address of the user.
-@param {string} request.language The language for the user.
-@param {string} request.host The host for the account verification email.
-@param {string} request.remote_address The IP address of the client.
+@property {string} request.email The email address of the user.
+@property {string} request.language The language for the user.
+@property {string} request.host The host for the account verification email.
+@property {string} request.remote_address The IP address of the client.
 
 @returns {Promise<Error>} A Promise that resolves with an Error.
 */
 
 const maxFailedAttempts = Number.parseInt(xyzEnv.FAILED_ATTEMPTS);
 
-async function failedLogin(request) {
+async function failedLogin(user, request) {
   // Increase failed login attempts counter by 1.
   let rows = await acl(
     `
@@ -288,7 +289,7 @@ async function failedLogin(request) {
     SET failedattempts = failedattempts + 1
     WHERE lower(email) = lower($1)
     RETURNING failedattempts;`,
-    [request.email],
+    [user.email],
   );
 
   if (rows instanceof Error) {
@@ -313,7 +314,7 @@ async function failedLogin(request) {
         verified = false,
         verificationtoken = '${verificationtoken}'
       WHERE lower(email) = lower($1);`,
-      [request.email],
+      [user.email],
     );
 
     if (rows instanceof Error) {
@@ -331,7 +332,7 @@ async function failedLogin(request) {
       language: request.language,
       remote_address: request.remote_address,
       template: 'locked_account',
-      to: request.email,
+      to: user.email,
       verificationtoken,
     });
 
@@ -354,7 +355,7 @@ async function failedLogin(request) {
     language: request.language,
     remote_address: request.remote_address,
     template: 'login_incorrect',
-    to: request.email,
+    to: user.email,
   });
 
   return new Error('auth_failed');

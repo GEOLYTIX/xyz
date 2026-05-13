@@ -79,13 +79,10 @@ async function send(params) {
     return;
   }
 
-  let result = `${data.id}\nFrom: ${xyzEnv.TRANSPORT_EMAIL}\nTo: ${params.to}`;
-
-  logger(result, 'mailer');
-
-  result += `\nBody:\n ${mailTemplate.text?.replace('    ', '')}`;
-
-  logger(result, 'mailer_body');
+  logger(
+    `${params.template}\nFrom: ${xyzEnv.TRANSPORT_EMAIL}\nTo: ${params.to}`,
+    'mailer',
+  );
 }
 
 /**
