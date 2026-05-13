@@ -49,11 +49,7 @@ Object.keys(xyzEnv)
 
     // Handle pool errors
     pool.on('error', (err, client) => {
-      logger({
-        err,
-        message: 'Unexpected error on idle client',
-        pool: id,
-      });
+      console.error(err);
     });
 
     // Assigning clientQuery method to dbs property.
