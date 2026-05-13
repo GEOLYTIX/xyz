@@ -70,20 +70,14 @@ const logger =
 Logs a message to the configured logger or console.
 
 @param {string|Object} log The message or object to log.
-@param {string} [key='err'] The log level or key.
+@param {string} key The log level or key.
 */
-export default function log(log, key = 'err') {
+export default function log(log, key) {
   // Check whether the log for the key should be logged.
   if (!logs.has(key)) return;
 
   // Write log to logger if configured.
   logger?.(log, key);
-
-  if (key === 'err') {
-    // Log errors as such.
-    console.error(log);
-    return;
-  }
 
   // Log to stdout.
   console.log(log);
