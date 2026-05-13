@@ -77,7 +77,7 @@ export default function log(log, key = 'err') {
   if (!logs.has(key)) return;
 
   if (typeof log === 'string') {
-    log = log.replace(/[\n\r]/g, '_');
+    log = { log: log.replace(/[\n\r]/g, '_') };
   }
 
   // Write log to logger if configured.
