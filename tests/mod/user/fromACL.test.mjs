@@ -19,6 +19,7 @@ vi.mock('bcrypt', () => ({
 const mockAclRows = (query, email) => {
   email = email[0];
   const data = {
+    email: email,
     blocked: email.includes('blocked'),
     password: VALID_AUTH_VALUE,
     language: 'en',
@@ -206,6 +207,7 @@ describe('acl', async () => {
 
     expect(typeof result === 'object').toBeTruthy();
     expect(Object.keys(result)).toEqual([
+      'email',
       'language',
       'approved',
       'verified',
