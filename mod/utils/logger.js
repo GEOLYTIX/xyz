@@ -6,7 +6,6 @@ Possible log values are:
 
 - query_params: Logs query parameters sent to the query endpoint.
 - query: Logs the sql to executed by calling the query endpoint.
-- view-req-url: Logs the url of the requested view.
 - cloudfront: Logs responses from requests made to cloudfront e.g. <staus_code> - <endpoint>
 - mailer: Logs the sent mail template.
 - reqhost: Logs the host for the request.
