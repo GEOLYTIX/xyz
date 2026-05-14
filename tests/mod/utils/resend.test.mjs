@@ -91,7 +91,9 @@ describe('resend Module', () => {
   });
 
   it('does not log a single email when resend returns an error', async () => {
-    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleError = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
     const error = new Error('send failed');
 
     emailSend.mockResolvedValue({ error });
@@ -198,7 +200,9 @@ describe('resend Module', () => {
   });
 
   it('logs batch send errors and still writes batch log entries', async () => {
-    const consoleError = vi.spyOn(console, 'error').mockImplementation(() => {});
+    const consoleError = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
     const error = new Error('batch failed');
 
     batchSend.mockResolvedValue({ error });
@@ -212,7 +216,9 @@ describe('resend Module', () => {
       TRANSPORT_PASSWORD: 'secret',
     });
 
-    await mailer.batch([{ name: 'Rob', template: 'hello', to: 'rob@example.com' }]);
+    await mailer.batch([
+      { name: 'Rob', template: 'hello', to: 'rob@example.com' },
+    ]);
 
     expect(consoleError).toHaveBeenCalledWith(error);
     expect(logger).toHaveBeenCalledWith(

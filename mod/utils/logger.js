@@ -98,7 +98,10 @@ function sanitizeLogValue(value) {
 
   if (value && typeof value === 'object') {
     return Object.fromEntries(
-      Object.entries(value).map(([key, value]) => [key, sanitizeLogValue(value)]),
+      Object.entries(value).map(([key, value]) => [
+        key,
+        sanitizeLogValue(value),
+      ]),
     );
   }
 
