@@ -74,11 +74,35 @@ export default function log(log, key) {
   // Check whether the log for the key should be logged.
   if (!logs.has(key)) return;
 
-  // Write log to logger if configured.
-  logger?.(log, key);
+  const sanitizedLog = { message: sanitizeLogValue(log), time: new Date() };
+
+  // Log structured, sanitized data to prevent CR/LF log injection.
+  logger?.(sanitizedLog, key);
 
   // Log to stdout.
-  console.log(log);
+  console.log(sanitizedLog);
+}
+
+function sanitizeLogValue(value) {
+  if (typeof value === 'string') return value.replaceAll(/[\n\r]/g, '_');
+
+  if (Array.isArray(value)) return value.map(sanitizeLogValue);
+
+  if (value instanceof Error) {
+    return {
+      message: sanitizeLogValue(value.message),
+      name: value.name,
+      stack: sanitizeLogValue(value.stack),
+    };
+  }
+
+  if (value && typeof value === 'object') {
+    return Object.fromEntries(
+      Object.entries(value).map(([key, value]) => [key, sanitizeLogValue(value)]),
+    );
+  }
+
+  return value;
 }
 
 /**
