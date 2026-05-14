@@ -72,7 +72,7 @@ async function send(params) {
     to: params.to,
   };
 
-  const { data, error } = await resend.emails.send(mailTemplate);
+  const { error } = await resend.emails.send(mailTemplate);
 
   if (error) {
     console.error(error);
