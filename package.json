@@ -33,10 +33,11 @@
     "resend": "^6.12.2"
   },
   "dependencies": {
+    "@varlock/google-secret-manager-plugin": "^1.1.0",
     "bcrypt": "^6.0.0",
-    "dotenv": "^17.4.2",
     "jsonwebtoken": "^9.0.3",
-    "pg": "~8.15.6"
+    "pg": "~8.15.6",
+    "varlock": "^1.1.0"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.6",

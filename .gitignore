@@ -3,6 +3,8 @@
 .zed/
 .env
 .env.*
+!.env.schema.d/
+!.env.schema.d/.env.*
 .DS_Store
 .vercel
 
