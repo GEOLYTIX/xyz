@@ -117,7 +117,7 @@ A deployment can use a smaller schema by importing only the required parts. For 
 # ---
 ```
 
-Database connection variables use the `DBS_` prefix. Varlock schemas should define each concrete environment key that a deployment uses, because the schema validates named variables rather than an open-ended `DBS_*` wildcard. Keep shared keys such as `DBS_NEON` in `.env.schema.d/.env.data`, and define application-specific keys in the schema used by that deployment:
+Database connection variables use the `DBS_` prefix. Varlock schemas should define each concrete environment key that a deployment uses, because the schema validates named variables rather than an open-ended `DBS_*` wildcard. Define application-specific keys in the schema used by that deployment:
 
 ```env
 # .env.schema
