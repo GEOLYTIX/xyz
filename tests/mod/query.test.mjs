@@ -14,30 +14,44 @@ import {
  * @module mod/query
  */
 
-// Mock dbs_connections so no real database is required.
+// Define dedicated mocks for testing DB precedence overrides
 const mockDbQuery = vi.fn();
+const mockLayerDb = vi.fn().mockResolvedValue([{ status: 'ok' }]);
+const mockWorkspaceDb = vi.fn().mockResolvedValue([{ status: 'ok' }]);
+const mockReqDb = vi.fn().mockResolvedValue([{ status: 'ok' }]);
+const mockTemplateDb = vi.fn().mockResolvedValue([{ status: 'ok' }]);
 
-vi.mock('../../mod/utils/dbs.js', () => ({
-  default: new Proxy(
-    {},
-    {
+// Mock dbs_connections so no real database is required.
+// Uses a Proxy to support both wildcard fallback (mockDbQuery) and specific DBs.
+vi.mock('../../mod/utils/dbs.js', () => {
+  const dbMocks = {
+    layer_db: mockLayerDb,
+    workspace_db: mockWorkspaceDb,
+    req_db: mockReqDb,
+    template_db: mockTemplateDb,
+  };
+
+  return {
+    default: new Proxy(dbMocks, {
       get(target, prop) {
         if (prop === '__esModule') return true;
-        return mockDbQuery;
+        if (target[prop]) return target[prop]; // Return mapped DBs for precedence tests
+        return mockDbQuery; // Fallback for standard tests
       },
       has(target, prop) {
-        return prop === 'NEON';
+        if (prop === 'NEON' || prop in target) return true;
+        return false;
       },
       getOwnPropertyDescriptor(target, prop) {
-        // Object.hasOwn() uses getOwnPropertyDescriptor internally.
-        if (prop === 'NEON') {
+        if (prop === 'NEON')
           return { configurable: true, enumerable: true, value: mockDbQuery };
-        }
+        if (target[prop])
+          return { configurable: true, enumerable: true, value: target[prop] };
         return undefined;
       },
-    },
-  ),
-}));
+    }),
+  };
+});
 
 // Mock the login module to prevent view rendering side effects.
 vi.mock('../../mod/user/login.js', () => ({
@@ -51,10 +65,34 @@ vi.mock('../../mod/utils/logger.js', () => ({
   default: () => {},
 }));
 
+// Dynamically mock the dependencies so we can override them for precedence tests
+// without breaking the original tests that rely on the actual underlying modules.
+vi.mock('../../mod/workspace/getTemplate.js', async (importOriginal) => {
+  const actual = await importOriginal();
+  return { ...actual, default: vi.fn().mockImplementation(actual.default) };
+});
+
+vi.mock('../../mod/workspace/cache.js', async (importOriginal) => {
+  const actual = await importOriginal();
+  return { ...actual, default: vi.fn().mockImplementation(actual.default) };
+});
+
+vi.mock('../../mod/utils/roles.js', async (importOriginal) => {
+  const actual = await importOriginal();
+  return { ...actual, check: vi.fn().mockImplementation(actual.check) };
+});
+
+const { default: queries } = await import(
+  '../../mod/workspace/templates/_queries.js'
+);
 const { default: query } = await import('../../mod/query.js');
 const { default: checkWorkspaceCache } = await import(
   '../../mod/workspace/cache.js'
 );
+const { default: getTemplate } = await import(
+  '../../mod/workspace/getTemplate.js'
+);
+const Roles = await import('../../mod/utils/roles.js');
 
 // Suppress console.error from getTemplate for missing template tests.
 const originalConsoleError = console.error;
@@ -76,7 +114,142 @@ describe('Query: Testing Query API', () => {
   });
 
   beforeEach(() => {
-    mockDbQuery.mockReset();
+    mockDbQuery.mockClear();
+    mockLayerDb.mockClear();
+    mockWorkspaceDb.mockClear();
+    mockReqDb.mockClear();
+    mockTemplateDb.mockClear();
+  });
+
+  describe('queries registration', () => {
+    it('table_schema should be registered in queries', () => {
+      expect(Object.hasOwn(queries, 'table_schema')).toBe(true);
+    });
+
+    it('table_schema should require admin access', () => {
+      expect(queries.table_schema.admin).toBe(true);
+    });
+
+    it('table_schema should require a layer', () => {
+      expect(queries.table_schema.layer).toBe(true);
+    });
+
+    it('table_schema should have a template string', () => {
+      expect(typeof queries.table_schema.template).toBe('string');
+    });
+  });
+
+  describe('dbs connection', () => {
+    beforeEach(() => {
+      Roles.check.mockReturnValue(true);
+    });
+
+    it('should return 400 when the resolved dbs connection does not exist', async () => {
+      const { req, res } = createMocks({
+        params: {
+          template: 'mock_template',
+          user: { roles: ['admin'], admin: true },
+        },
+      });
+
+      // Resolve the workspace without a DB, and force the template to use an invalid DB
+      checkWorkspaceCache.mockResolvedValueOnce({ dbs: undefined });
+      getTemplate.mockResolvedValueOnce({
+        template: 'SELECT * FROM mock_table',
+        dbs: 'invalid_bogus_db', // This does not exist in our dbs_connections mock
+      });
+
+      await query(req, res);
+
+      // Assert the expected error response
+      expect(res.statusCode).toBe(400);
+      expect(res._getData()).toBe(
+        'Failed to validate database connection method.',
+      );
+
+      // Ensure no database connections were actually triggered
+      expect(mockTemplateDb).not.toHaveBeenCalled();
+      expect(mockWorkspaceDb).not.toHaveBeenCalled();
+      expect(mockReqDb).not.toHaveBeenCalled();
+      expect(mockLayerDb).not.toHaveBeenCalled();
+      expect(mockDbQuery).not.toHaveBeenCalled();
+    });
+
+    it('should use template.dbs when layer, workspace, and req dbs are NOT defined', async () => {
+      const { req, res } = createMocks({
+        params: {
+          template: 'mock_template',
+          user: { roles: ['admin'], admin: true },
+        },
+      });
+
+      checkWorkspaceCache.mockResolvedValueOnce({ dbs: undefined });
+      getTemplate.mockResolvedValueOnce({
+        template: 'SELECT * FROM mock_table',
+        dbs: 'template_db',
+      });
+
+      await query(req, res);
+
+      expect(mockTemplateDb).toHaveBeenCalled();
+      expect(mockWorkspaceDb).not.toHaveBeenCalled();
+      expect(mockReqDb).not.toHaveBeenCalled();
+      expect(mockLayerDb).not.toHaveBeenCalled();
+    });
+
+    it('should use workspace.dbs when defined, overriding req.params and template dbs', async () => {
+      const { req, res } = createMocks({
+        params: {
+          template: 'mock_template',
+          dbs: 'req_db',
+          user: { roles: ['admin'], admin: true },
+        },
+      });
+
+      checkWorkspaceCache.mockResolvedValueOnce({ dbs: 'workspace_db' });
+      getTemplate.mockResolvedValueOnce({
+        template: 'SELECT * FROM mock_table',
+        dbs: 'template_db',
+      });
+
+      await query(req, res);
+
+      expect(mockWorkspaceDb).toHaveBeenCalled();
+      expect(mockReqDb).not.toHaveBeenCalled();
+      expect(mockTemplateDb).not.toHaveBeenCalled();
+      expect(mockLayerDb).not.toHaveBeenCalled();
+    });
+
+    it('should use layer.dbs when defined, overriding workspace, req, and template dbs', async () => {
+      const { req, res } = createMocks({
+        params: {
+          template: 'mock_template',
+          dbs: 'req_db',
+          user: { roles: ['admin'], admin: true },
+          // Inject layer directly into req.params to bypass getLayer lookup
+          layer: {
+            qID: 'id',
+            srid: 4326,
+            geom: 'geom',
+            dbs: 'layer_db',
+          },
+        },
+      });
+
+      checkWorkspaceCache.mockResolvedValueOnce({ dbs: 'workspace_db' });
+      getTemplate.mockResolvedValueOnce({
+        template: 'SELECT * FROM mock_table',
+        dbs: 'template_db',
+        layer: true, // Requires layer
+      });
+
+      await query(req, res);
+
+      expect(mockLayerDb).toHaveBeenCalled();
+      expect(mockWorkspaceDb).not.toHaveBeenCalled();
+      expect(mockReqDb).not.toHaveBeenCalled();
+      expect(mockTemplateDb).not.toHaveBeenCalled();
+    });
   });
 
   describe('Template resolution', () => {
@@ -264,23 +437,6 @@ describe('Query: Testing Query API', () => {
       await query(req, res);
 
       expect(res.statusCode).toBe(400);
-    });
-  });
-
-  describe('Invalid dbs connection', () => {
-    it('should return 400 when dbs connection does not exist', async () => {
-      const { req, res } = createMocks({
-        params: {
-          template: 'bogus_dbs_query',
-        },
-      });
-
-      await query(req, res);
-
-      expect(res.statusCode).toBe(400);
-      expect(res._getData()).toBe(
-        'Failed to validate database connection method.',
-      );
     });
   });
 

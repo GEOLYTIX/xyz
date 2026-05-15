@@ -21,8 +21,8 @@ Otherwise, the query returns the final data as a table.
 @module /workspace/templates/histogram
 */
 export default (_) => {
-  const decimals = parseInt(_.decimals) || 0;
-  const buckets = parseInt(_.buckets) || 7;
+  const decimals = Number.parseInt(_.decimals) || 0;
+  const buckets = Number.parseInt(_.buckets) || 7;
 
   let bucketCases = '';
   for (const i of Array(buckets).keys()) {
