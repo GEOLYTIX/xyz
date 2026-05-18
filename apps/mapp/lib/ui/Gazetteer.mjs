@@ -39,7 +39,12 @@ export default (gazetteer) => {
     // Check whether coordinates are valid float values.
     if (
       ll.length === 2 &&
-      ll.every((n) => typeof n === 'number' && !isNaN(n) && isFinite(n))
+      ll.every(
+        (n) =>
+          typeof n === 'number' &&
+          !Number.isNaN(Number(n)) &&
+          Number.isFinite(Number(n)),
+      )
     ) {
       // Check if both coordinates are within valid range (latitude: -90 to 90, longitude: -180 to 180).
       const [lat, lng] = ll;

@@ -34,7 +34,7 @@ export default function time(entry) {
         type="time"
         value=${stringVal}
         onchange=${(e) => {
-          entry.newValue = parseFloat(e.target.value.replace(':', '.'));
+          entry.newValue = Number.parseFloat(e.target.value.replace(':', '.'));
 
           entry.location.view?.dispatchEvent(
             new CustomEvent('valChange', {

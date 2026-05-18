@@ -113,15 +113,15 @@ process.env.WORKSPACE_AGE ??= defaults.WORKSPACE_AGE;
 process.env.FILE_RESOURCES ??= defaults.FILE_RESOURCES;
 
 const xyzEnv = {
-  COOKIE_TTL: parseInt(process.env.COOKIE_TTL),
+  COOKIE_TTL: Number.parseInt(process.env.COOKIE_TTL),
   DIR: process.env.DIR,
   FAILED_ATTEMPTS: process.env.FAILED_ATTEMPTS,
-  PORT: parseInt(process.env.PORT),
+  PORT: Number.parseInt(process.env.PORT),
   RATE_LIMIT: process.env.RATE_LIMIT,
   RATE_LIMIT_WINDOW: process.env.RATE_LIMIT_WINDOW,
   RETRY_LIMIT: process.env.RETRY_LIMIT,
   TITLE: process.env.TITLE,
-  TRANSPORT_PORT: parseInt(process.env.TRANSPORT_PORT),
+  TRANSPORT_PORT: Number.parseInt(process.env.TRANSPORT_PORT),
   TRANSPORT_TLS: process.env.TRANSPORT_TLS,
   WORKSPACE_AGE: process.env.WORKSPACE_AGE,
   WALLET: {},

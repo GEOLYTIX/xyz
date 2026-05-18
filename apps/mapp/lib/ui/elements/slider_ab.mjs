@@ -72,7 +72,7 @@ export default function slider_ab(params) {
     // Check whether value is a null.
     if (value === null) return false;
     // Check whether value is a number.
-    if (isNaN(value)) return false;
+    if (Number.isNaN(Number(value))) return false;
 
     //Value should be cast to number
     value = Number(value);

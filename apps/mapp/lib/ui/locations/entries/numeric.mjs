@@ -29,7 +29,7 @@ Formatting will be surpressed if the formatterParams are set to null.
 export default function numeric(entry) {
   if (entry.edit) return edit(entry);
 
-  if (entry.value === null || isNaN(entry.value)) return;
+  if (entry.value === null || Number.isNaN(Number(entry.value))) return;
 
   mapp.utils.formatNumericValue(entry);
 
@@ -78,7 +78,7 @@ function edit(entry) {
   // Range must be shown when value is 0 and in range.
   if (
     entry.edit.range &&
-    !isNaN(value) &&
+    !Number.isNaN(Number(value)) &&
     value > entry.min &&
     value < entry.max
   ) {

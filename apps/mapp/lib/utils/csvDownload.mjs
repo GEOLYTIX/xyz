@@ -85,9 +85,9 @@ function fieldsFunction(record, fields) {
 
     // Format number toLocaleString
     if (field.formatter === 'toLocaleString') {
-      const val = parseFloat(record[field.field]);
+      const val = Number.parseFloat(record[field.field]);
 
-      if (isNaN(val)) return;
+      if (Number.isNaN(Number(val))) return;
 
       return `"${val.toLocaleString(field.locale || navigator.language, field.options)}"`;
     }

@@ -35,9 +35,9 @@ export default function graduated(theme, feature) {
         0,
       )
     : // Get catValue from cat or field property.
-      parseFloat(feature.properties[theme.field]);
+      Number.parseFloat(feature.properties[theme.field]);
 
-  if (!isNaN(catValue) && catValue !== null) {
+  if (!Number.isNaN(Number(catValue)) && catValue !== null) {
     const index = theme.categories.findIndex(
       graduated_breaks[theme.graduated_breaks](catValue),
     );

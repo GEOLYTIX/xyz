@@ -102,12 +102,12 @@ function deleteFilter(layer, filter) {
     }
 
     // Delete [filter] min if not fixed as Min.
-    if (isNaN(filter.Min)) {
+    if (Number.isNaN(Number(filter.Min))) {
       delete filter.min;
     }
 
     // Delete [filter] max if not fixed as Max.
-    if (isNaN(filter.Max)) {
+    if (Number.isNaN(Number(filter.Max))) {
       delete filter.max;
     }
   }
@@ -285,8 +285,8 @@ async function generateMinMax(layer, filter) {
   );
 
   // Assign min, max from response if not a number.
-  let min = isNaN(filter.min) ? response.minmax[0] : filter.min;
-  let max = isNaN(filter.max) ? response.minmax[1] : filter.max;
+  let min = Number.isNaN(Number(filter.min)) ? response.minmax[0] : filter.min;
+  let max = Number.isNaN(Number(filter.max)) ? response.minmax[1] : filter.max;
 
   // overwrite min max from response if viewport is applied
   if (layer.filter?.viewport) {
@@ -296,8 +296,10 @@ async function generateMinMax(layer, filter) {
 
   // Parse min, max as interger or float depending on type.
   // Round integer to be correct up or down.
-  filter.min = filter.type === 'integer' ? Math.round(min) : parseFloat(min);
-  filter.max = filter.type === 'integer' ? Math.round(max) : parseFloat(max);
+  filter.min =
+    filter.type === 'integer' ? Math.round(min) : Number.parseFloat(min);
+  filter.max =
+    filter.type === 'integer' ? Math.round(max) : Number.parseFloat(max);
 
   filter.min = filter.val_a < filter.min ? filter.val_a : filter.min;
   filter.max = filter.val_b > filter.max ? filter.val_b : filter.max;
@@ -335,13 +337,13 @@ async function filter_numeric(layer, filter) {
   filter.Min ??= Number.isFinite(filter.min) ? filter.min : undefined;
   filter.Max ??= Number.isFinite(filter.max) ? filter.max : undefined;
 
-  if (isNaN(filter.max) || isNaN(filter.min)) {
+  if (Number.isNaN(Number(filter.max)) || Number.isNaN(Number(filter.min))) {
     // Query min and max if not implicit.
     await generateMinMax(layer, filter);
   }
 
   // If filter.min and filter.max are not numeric values, return a message.
-  if (isNaN(filter.min) || isNaN(filter.max)) {
+  if (Number.isNaN(Number(filter.min)) || Number.isNaN(Number(filter.max))) {
     // Return text to indicate that the min and max values are not defined.
     return mapp.utils.html.node`<div>${mapp.dictionary.no_data_filter}</div>`;
   }

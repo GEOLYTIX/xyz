@@ -21,7 +21,7 @@ async function moduleImport() {
 export default async (value, params) => {
   await moduleImport();
 
-  value = parseFloat(value);
+  value = Number.parseFloat(value);
 
   if (params.units && params.convertTo) {
     value = convert(value, params.units).to(params.convertTo);

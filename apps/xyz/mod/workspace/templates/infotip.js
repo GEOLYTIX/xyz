@@ -12,7 +12,7 @@ export default (_) => {
     FROM \${table}
     WHERE \${qID} = %{id} \${filter}`;
 
-  const coords = _.coords.split(',').map((val) => parseFloat(val));
+  const coords = _.coords.split(',').map((val) => Number.parseFloat(val));
 
   return `
     SELECT \${field} AS label

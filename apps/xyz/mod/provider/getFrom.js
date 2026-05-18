@@ -88,7 +88,7 @@ async function Https(url) {
   try {
     const response = await fetch(url);
 
-    logger(`${response.status} - ${url}`, 'fetch');
+    logger(`${response.status} - ${response.url}`, 'fetch');
 
     if (url.match(/\.json$/i)) {
       return await response.json();

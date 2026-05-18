@@ -67,7 +67,7 @@ export default function olStyle(style, feature) {
         style.strokeColor &&
         new ol.style.Stroke({
           color: mapp.utils.hexa(style.strokeColor, style.strokeOpacity),
-          width: parseFloat(style.strokeWidth || 1),
+          width: Number.parseFloat(style.strokeWidth || 1),
           lineDash: style.lineDash,
         });
 

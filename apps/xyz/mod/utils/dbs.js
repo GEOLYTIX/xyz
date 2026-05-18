@@ -49,11 +49,7 @@ Object.keys(xyzEnv)
 
     // Handle pool errors
     pool.on('error', (err, client) => {
-      logger({
-        err,
-        message: 'Unexpected error on idle client',
-        pool: id,
-      });
+      console.error(err);
     });
 
     // Assigning clientQuery method to dbs property.
@@ -92,7 +88,9 @@ async function clientQuery(pool, query, variables, timeout) {
 
       // Set statement timeout if specified
       if (timeout) {
-        await client.query(`SET statement_timeout = ${parseInt(timeout)}`);
+        await client.query(
+          `SET statement_timeout = ${Number.parseInt(timeout)}`,
+        );
       }
 
       const { rows } = await client.query(query, variables);

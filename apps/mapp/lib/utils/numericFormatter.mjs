@@ -37,8 +37,8 @@ export function formatNumericValue(params) {
   // numericValue must not be a number if either value is null.
   const numericValue =
     params.newValue !== undefined
-      ? parseFloat(params.newValue)
-      : parseFloat(params.value);
+      ? Number.parseFloat(params.newValue)
+      : Number.parseFloat(params.value);
 
   params.localeString = '';
 
@@ -49,10 +49,10 @@ export function formatNumericValue(params) {
     };
   }
 
-  if (params.formatterParams === null && !isNaN(numericValue)) {
+  if (params.formatterParams === null && !Number.isNaN(Number(numericValue))) {
     // Assign numericValue as string if formatterParams are null.
     params.localeString = numericValue.toString();
-  } else if (!isNaN(numericValue)) {
+  } else if (!Number.isNaN(Number(numericValue))) {
     // Assign the browser language as locale if not provided in formatterParams, otherwise use mapp.language.
     params.formatterParams.locale ??= navigator.language || mapp.language;
 
@@ -153,12 +153,12 @@ export function unformatStringValue(params) {
     }
 
     // Parse the cleaned string into a float (decimal) number
-    stringValue = parseFloat(cleanedValue);
+    stringValue = Number.parseFloat(cleanedValue);
 
     return stringValue;
   }
 
   if (stringValue === '') return null;
 
-  return parseFloat(stringValue);
+  return Number.parseFloat(stringValue);
 }
