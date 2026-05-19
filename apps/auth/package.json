@@ -11,7 +11,7 @@
     "./server": "./server.js"
   },
   "dependencies": {
-    "@geolytix/xyz-app": "file:../xyz",
-    "express": "5.2.0"
+    "@geolytix/xyz-app": "workspace:*",
+    "express": "catalog:"
   }
 }

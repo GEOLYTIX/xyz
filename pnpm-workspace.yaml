@@ -1,5 +1,26 @@
 packages:
-  - "apps/auth"
-  - "apps/mapp"
-  - "apps/saml"
-  - "apps/xyz"
+  - apps/auth
+  - apps/mapp
+  - apps/saml
+  - apps/xyz
+catalog:
+  "@aws-sdk/client-s3": ^3.691.0
+  "@aws-sdk/cloudfront-signer": ^3.621.0
+  "@aws-sdk/s3-request-presigner": ^3.691.0
+  "@biomejs/biome": 2.2.6
+  "@node-saml/node-saml": ^5.0.1
+  "@vitest/coverage-v8": 4.1.4
+  bcrypt: ^6.0.0
+  clean-jsdoc-theme: ^4.3.2
+  cookie-parser: ^1.4.5
+  dotenv: ^17.4.2
+  esbuild: ^0.25.0
+  express: 5.2.0
+  express-rate-limit: ^7.5.1
+  jsonwebtoken: ^9.0.2
+  node-mocks-http: ^1.17.2
+  pg: ~8.15.1
+  resend: ^6.4.2
+  turbo: ^2.9.6
+  undici: ^7.25.0
+  vitest: 4.1.4

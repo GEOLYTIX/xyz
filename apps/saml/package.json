@@ -11,9 +11,9 @@
     "./server": "./server.js"
   },
   "dependencies": {
-    "@node-saml/node-saml": "^5.0.1",
-    "@geolytix/xyz-app": "file:../xyz",
-    "express": "5.2.0",
-    "jsonwebtoken": "^9.0.2"
+    "@node-saml/node-saml": "catalog:",
+    "@geolytix/xyz-app": "workspace:*",
+    "express": "catalog:",
+    "jsonwebtoken": "catalog:"
   }
 }

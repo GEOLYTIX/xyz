@@ -27,19 +27,19 @@
   },
   "license": "MIT",
   "dependencies": {
-    "@geolytix/mapp": "file:apps/mapp",
-    "@geolytix/xyz-auth-app": "file:apps/auth",
-    "@geolytix/xyz-app": "file:apps/xyz",
-    "@geolytix/xyz-saml-app": "file:apps/saml"
+    "@geolytix/mapp": "workspace:*",
+    "@geolytix/xyz-auth-app": "workspace:*",
+    "@geolytix/xyz-app": "workspace:*",
+    "@geolytix/xyz-saml-app": "workspace:*"
   },
   "devDependencies": {
-    "@biomejs/biome": "2.2.6",
-    "@vitest/coverage-v8": "4.1.4",
-    "clean-jsdoc-theme": "^4.3.2",
-    "dotenv": "^17.4.2",
-    "node-mocks-http": "^1.17.2",
-    "turbo": "^2.9.6",
-    "undici": "^7.25.0",
-    "vitest": "4.1.4"
+    "@biomejs/biome": "catalog:",
+    "@vitest/coverage-v8": "catalog:",
+    "clean-jsdoc-theme": "catalog:",
+    "dotenv": "catalog:",
+    "node-mocks-http": "catalog:",
+    "turbo": "catalog:",
+    "undici": "catalog:",
+    "vitest": "catalog:"
   }
 }

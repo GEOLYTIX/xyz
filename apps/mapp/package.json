@@ -12,6 +12,6 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "esbuild": "^0.25.0"
+    "esbuild": "catalog:"
   }
 }
