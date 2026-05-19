@@ -6,10 +6,7 @@
     "type": "git",
     "url": "https://github.com/geolytix/xyz"
   },
-  "packageManager": "pnpm@10.33.0",
-  "pnpm": {
-    "neverBuiltDependencies": []
-  },
+  "packageManager": "pnpm@11.1.3",
   "scripts": {
     "dev": "turbo run dev --filter=@geolytix/xyz-app",
     "dev:auth": "turbo run dev --filter=@geolytix/xyz-auth-app",

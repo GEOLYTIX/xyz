@@ -3,6 +3,9 @@ packages:
   - apps/mapp
   - apps/saml
   - apps/xyz
+allowBuilds:
+  bcrypt: false
+  esbuild: false
 catalog:
   "@aws-sdk/client-s3": ^3.691.0
   "@aws-sdk/cloudfront-signer": ^3.621.0
