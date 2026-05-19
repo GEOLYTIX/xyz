@@ -1,6 +1,5 @@
 {
   "name": "@geolytix/xyz-saml-app",
-  "version": "v1.0.0",
   "description": "Optional SAML backend app",
   "type": "module",
   "scripts": {

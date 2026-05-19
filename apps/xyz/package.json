@@ -1,6 +1,5 @@
 {
   "name": "@geolytix/xyz-app",
-  "version": "v4.22.1",
   "type": "module",
   "exports": {
     ".": "./api.js",

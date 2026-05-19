@@ -1,6 +1,5 @@
 {
   "name": "@geolytix/xyz-auth-app",
-  "version": "v1.0.0",
   "description": "Optional custom auth backend app",
   "type": "module",
   "scripts": {
