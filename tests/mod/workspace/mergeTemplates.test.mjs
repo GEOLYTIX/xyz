@@ -235,7 +235,7 @@ describe('mergeTemplates', async () => {
 
     const template = await mergeTemplates(obj, roles);
 
-    // Check the roles object contains nested roles.
+    // Check the roles object contains just the expected roles without dot notation.
     const expectedRoles = ['Super', 'Standard', 'A'].sort();
 
     const templateRoles = Object.keys(template.roles).sort();

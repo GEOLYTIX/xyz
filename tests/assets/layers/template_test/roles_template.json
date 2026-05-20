@@ -1,7 +1,7 @@
 {
   "roles": {
-    "super": null,
-    "standard": null,
+    "Super": null,
+    "Standard": null,
     "A": {
       "filter": {
         "default": {
