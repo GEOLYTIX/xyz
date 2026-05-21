@@ -23,9 +23,9 @@ Other arguments you can provide the script are:
 */
 
 import { config } from 'dotenv';
-import { existsSync, readFileSync } from 'fs';
+import { existsSync, readFileSync } from 'node:fs';
 import https from 'https';
-import { join } from 'path';
+import { join } from 'node:path';
 
 //get the vercel token from a separate .env file
 config({ path: '.env.vercel' });

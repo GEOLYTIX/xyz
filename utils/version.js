@@ -11,7 +11,7 @@ To run this script you can execute `node version.js` in your terminal.
 
 import { execSync } from 'child_process'; // For executing shell commands synchronously
 // File system module for reading/writing files
-import { readFileSync, writeFileSync } from 'fs';
+import { readFileSync, writeFileSync } from 'node:fs';
 
 // Regular expression pattern to match 'hash: ' followed by any characters
 const key = 'hash:.*';

@@ -8,8 +8,8 @@ The file provider module exports a method to fetch resources from the local file
 @module /provider/file
 */
 
-import { readFileSync } from 'fs';
-import { join } from 'path';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 
 /**
 @function file

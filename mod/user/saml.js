@@ -93,10 +93,10 @@ This module handles SAML-based Single Sign-On (SSO) authentication. Here's how t
 @property {boolean} disableRequestedAuthnContext - If true, disables sending the AuthnContext in SAML authentication requests. Useful for IdPs that do not require or support AuthnContext, or for compatibility with certain SAML providers.
 **/
 
-import { readFileSync } from 'fs';
+import { readFileSync } from 'node:fs';
 // Import required dependencies
-import { dirname, join } from 'path';
-import { fileURLToPath } from 'url';
+import { dirname, join } from 'node:path';
+import { fileURLToPath } from 'node:url';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);

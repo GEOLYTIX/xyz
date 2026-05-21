@@ -16,7 +16,7 @@ This module exports the fromACL method to request and validate a user from the A
 
 import { compareSync } from 'bcrypt';
 
-import { randomBytes } from 'crypto';
+import { randomBytes } from 'node:crypto';
 import languageTemplates from '../utils/languageTemplates.js';
 import reqHost from '../utils/reqHost.js';
 import mailer from '../utils/resend.js';

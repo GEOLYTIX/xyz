@@ -17,7 +17,7 @@ Exports the [user] register method for the /api/user/register route.
 */
 
 import bcrypt from 'bcrypt';
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 import languageTemplates from '../utils/languageTemplates.js';
 import reqHost from '../utils/reqHost.js';
 import mailer from '../utils/resend.js';
