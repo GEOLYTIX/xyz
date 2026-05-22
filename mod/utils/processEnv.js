@@ -55,7 +55,7 @@ The process.ENV object holds configuration provided to the node process from the
 */
 
 import 'dotenv/config';
-import { readFileSync } from 'fs';
+import { readFileSync } from 'node:fs';
 
 const defaults = {
   COOKIE_TTL: 36000,

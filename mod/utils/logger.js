@@ -42,7 +42,7 @@ CREATE TABLE public.dev_logs (
 @module /utils/logger
 */
 
-import crypto from 'crypto';
+import crypto from 'node:crypto';
 
 const logs = new Set(xyzEnv.LOGS?.split(',') || []);
 

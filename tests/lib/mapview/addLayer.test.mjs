@@ -34,7 +34,7 @@ export async function addLayer(mapview) {
             'We expect to see 1 layer being returned from getLayers method.',
           );
           codi.assertTrue(
-            layers[0].show instanceof Function,
+            typeof layers[0].show === 'function',
             'The decorated layer has a show method.',
           );
           codi.assertTrue(
@@ -74,7 +74,7 @@ export async function addLayer(mapview) {
             'We expect to see 2 layer being returned from getLayers method.',
           );
           codi.assertTrue(
-            layers[0].show instanceof Function,
+            typeof layers[0].show === 'function',
             'The first decorated layer has a show method.',
           );
           codi.assertTrue(
