@@ -16,7 +16,7 @@ export async function DataviewTest(mapview) {
 
     await codi.it('dataview should have a show method', async () => {
       codi.assertTrue(
-        entry.show instanceof Function,
+        typeof entry.show === 'function',
         'The dataview entry has a show method.',
       );
     });
@@ -34,7 +34,7 @@ export async function DataviewTest(mapview) {
 
     await codi.it('dataview should have a hide method', async () => {
       codi.assertTrue(
-        entry.hide instanceof Function,
+        typeof entry.hide === 'function',
         'The dataview entry has a hide method.',
       );
     });
