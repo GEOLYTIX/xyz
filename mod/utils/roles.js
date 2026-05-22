@@ -318,24 +318,31 @@ function combineLocaleRoles(child, parent) {
   child.roles ??= {};
   parent.roles ??= {};
 
+  const childRole = typeof child.role === 'string' ? child.role : undefined;
+  const parentRole = typeof parent.role === 'string' ? parent.role : undefined;
+
   // Convert string role properties to roles object entries
-  if (child.role && typeof child.role === 'string') {
-    child.roles[child.role] ??= true;
+  if (childRole) {
+    child.roles[childRole] ??= true;
   }
 
-  if (parent.role && typeof parent.role === 'string') {
-    parent.roles[parent.role] ??= true;
+  if (parentRole) {
+    parent.roles[parentRole] ??= true;
   }
 
-  // Identify roles specific to the child (not present in parent)
-  const specificChildRoles = Object.keys(child.roles).filter(
-    (role) => !parent.roles[role],
-  );
+  // Dot notation should only be generated from explicit role strings.
+  if (!childRole || !parentRole) return;
+
+  const parentRoles = Object.keys(parent.roles).filter((role) => {
+    return (
+      role === parentRole ||
+      role.split('.').pop() === parentRole ||
+      parentRole.endsWith(`.${role}`)
+    );
+  });
 
   // Create combinations Parent.Child
-  Object.keys(parent.roles).forEach((parentRole) => {
-    specificChildRoles.forEach((childRole) => {
-      child.roles[`${parentRole}.${childRole}`] ??= true;
-    });
+  parentRoles.forEach((role) => {
+    child.roles[`${role}.${childRole}`] ??= true;
   });
 }

@@ -432,20 +432,20 @@ describe('Roles Module', () => {
   });
 
   describe('combine()', () => {
-    it('should combine parent roles with child roles', () => {
+    it('should not combine roles object keys', () => {
       const child = { roles: { Child: true } };
       const parent = { roles: { Parent: true } };
       combine(child, parent);
       expect(child.roles.Child).toBeTruthy();
-      expect(child.roles['Parent.Child']).toBeTruthy();
+      expect(!!child.roles['Parent.Child']).toBeFalsy();
     });
 
     it('should handle string role properties', () => {
-      const child = { role: 'Child' };
-      const parent = { role: 'Parent' };
+      const child = { role: 'child_role' };
+      const parent = { role: 'parent_role' };
       combine(child, parent);
-      expect(child.roles.Child).toBeTruthy();
-      expect(child.roles['Parent.Child']).toBeTruthy();
+      expect(child.roles.child_role).toBeTruthy();
+      expect(child.roles['parent_role.child_role']).toBeTruthy();
     });
 
     it('should not combine if parent role is same as child role', () => {
