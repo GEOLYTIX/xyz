@@ -15,6 +15,7 @@ The default project schema imports every section:
 # @import(./.env.schema.d/.env.integrations)
 # @import(./.env.schema.d/.env.workspace)
 # @import(./.env.schema.d/.env.saml)
+# @import(./.env.schema.d/.env.gsm)
 # ---
 ```
 
@@ -61,7 +62,7 @@ SAML_SP_CRT=sp_certificate
 SAML_IDP_CRT=idp_certificate
 ```
 
-For local development, Varlock resolves Google Secret Manager values with Google Application Default Credentials. Authenticate with `gcloud`, then set `GCP_PROJECT_ID` in your local `.env` file:
+For local development, Varlock resolves Google Secret Manager values with Google Application Default Credentials. Authenticate with `gcloud`, then set `GCP_PROJECT_ID` in your local `.env.local` file:
 
 ```sh
 gcloud auth application-default login
@@ -71,7 +72,70 @@ gcloud auth application-default login
 GCP_PROJECT_ID=your-gcp-project-id
 ```
 
-For deployed environments where Application Default Credentials are not available, provide service-account JSON in `GCP_SA_KEY`. `GCP_SA_KEY` must be JSON content, not a file path. Do not set `GCP_SA_KEY=gsm(...)` because the Google plugin needs credentials before it can fetch secrets.
+For Vercel deployments, use OIDC Workload Identity Federation instead of a service-account JSON key. This avoids storing `GCP_SA_KEY` in Vercel.
+
+Enable the required Google APIs:
+
+```sh
+gcloud services enable secretmanager.googleapis.com iamcredentials.googleapis.com sts.googleapis.com \
+  --project=PROJECT_ID
+```
+
+Create the service account that Varlock will impersonate:
+
+```sh
+gcloud iam service-accounts create varlock-secrets \
+  --project=PROJECT_ID \
+  --display-name="Varlock Secret Manager access"
+```
+
+Grant it access to read secrets:
+
+```sh
+gcloud projects add-iam-policy-binding PROJECT_ID \
+  --member="serviceAccount:varlock-secrets@PROJECT_ID.iam.gserviceaccount.com" \
+  --role="roles/secretmanager.secretAccessor"
+```
+
+Create a Workload Identity Pool and Vercel OIDC provider. Vercel recommends the team-specific issuer mode, configured in the project Security settings:
+
+```sh
+gcloud iam workload-identity-pools create varlock-pool \
+  --project=PROJECT_ID \
+  --location=global
+
+gcloud iam workload-identity-pools providers create-oidc vercel \
+  --project=PROJECT_ID \
+  --location=global \
+  --workload-identity-pool=varlock-pool \
+  --issuer-uri=https://oidc.vercel.com/VERCEL_TEAM_SLUG \
+  --allowed-audiences=https://vercel.com/VERCEL_TEAM_SLUG \
+  --attribute-mapping="google.subject=assertion.sub"
+```
+
+If the Vercel project uses global issuer mode, use `--issuer-uri=https://oidc.vercel.com` instead.
+
+Allow the Vercel project/environment identity to impersonate the service account:
+
+```sh
+gcloud iam service-accounts add-iam-policy-binding \
+  varlock-secrets@PROJECT_ID.iam.gserviceaccount.com \
+  --project=PROJECT_ID \
+  --role=roles/iam.workloadIdentityUser \
+  --member="principal://iam.googleapis.com/projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/varlock-pool/subject/owner:VERCEL_TEAM_SLUG:project:VERCEL_PROJECT_NAME:environment:production"
+```
+
+Repeat the binding for `environment:preview` or `environment:development` if those deployments should also access Google Secret Manager.
+
+Set these non-secret bootstrap variables in Vercel:
+
+```env
+GCP_PROJECT_ID=PROJECT_ID
+GCP_WORKLOAD_IDENTITY_PROVIDER=//iam.googleapis.com/projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/varlock-pool/providers/vercel
+GCP_SERVICE_ACCOUNT_EMAIL=varlock-secrets@PROJECT_ID.iam.gserviceaccount.com
+```
+
+Keep `GCP_WORKLOAD_IDENTITY_PROVIDER` and `GCP_SERVICE_ACCOUNT_EMAIL` empty locally so Varlock uses Application Default Credentials.
 
 Validate the full schema with:
 
@@ -85,7 +149,13 @@ Validate a single schema section with:
 pnpm exec varlock load --path .env.schema.d/.env.saml --compact
 ```
 
+Validate only the Google Secret Manager bootstrap configuration with:
+
+```sh
+pnpm exec varlock load --path .env.schema.d/.env.gsm --compact
+```
+
 If Google Secret Manager returns `invalid_grant` or `invalid_rapt` locally, refresh Application Default Credentials with `gcloud auth application-default login`.
 
-The gloud cli must be installed locally.
+The gcloud CLI must be installed locally.
 https://docs.cloud.google.com/sdk/docs/install-sdk
