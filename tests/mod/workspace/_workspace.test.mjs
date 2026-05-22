@@ -243,9 +243,9 @@ describe('workspace: Roles Object Templates', () => {
       'A',
       'GeoBurger',
       'GeoCoffee',
+      'pol',
       'Standard',
       'Super',
-      'pol',
       'uk',
     ]);
   });
