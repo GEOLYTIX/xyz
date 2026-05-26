@@ -214,4 +214,33 @@ describe('mergeTemplates', async () => {
     // Check no other roles are present other than expected.
     expect(expectedRoles).toEqual(templateRoles);
   });
+
+  it('mergeTemplates using roles object should not create dot notation roles', async () => {
+    // This test is designed to ensure that backwards compatibility is maintained with templates that use the "roles" object instead of "localeRole" and "role".
+    // The test is similar to the previous one but uses "roles" object instead of dot notation roles.
+    // The expected result is that the same roles are present in the final template, but without the dot notation.
+    const obj = {
+      roles: {
+        Super: null,
+        Standard: null,
+        A: null,
+      },
+      template: {
+        src: 'file:./tests/assets/layers/template_test/roles_template.json',
+      },
+    };
+
+    // Call the template as if i have role "A".
+    const roles = ['A'];
+
+    const template = await mergeTemplates(obj, roles);
+
+    // Check the roles object contains just the expected roles without dot notation.
+    const expectedRoles = ['Super', 'Standard', 'A'].sort();
+
+    const templateRoles = Object.keys(template.roles).sort();
+
+    // Check no other roles are present other than expected.
+    expect(expectedRoles).toEqual(templateRoles);
+  });
 });

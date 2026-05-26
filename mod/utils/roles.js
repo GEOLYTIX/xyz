@@ -240,7 +240,7 @@ export function combine(child, parent) {
   }
 
   // Handle simple locale-style role combination
-  combineLocaleRoles(child, parent);
+  combineObjRoles(child, parent);
 }
 
 /**
@@ -304,38 +304,45 @@ function combineTemplateRoles(template, obj) {
 }
 
 /**
-@function combineLocaleRoles
+@function combineObjRoles
 @description
-Combines roles for nested locales. Creates parent.child role combinations.
+Combines roles for nested objects, such as locales.
 
-@param {Object} child The child locale.
-@param {Object} parent The parent locale.
+@param {Object} child Nested object.
+@param {Object} parent Parent object.
 */
-function combineLocaleRoles(child, parent) {
+function combineObjRoles(child, parent) {
   if (!parent || !child) return;
 
-  // Ensure roles objects exist
-  child.roles ??= {};
-  parent.roles ??= {};
+  const childRole = typeof child.role === 'string' ? child.role : undefined;
+  const parentRole = typeof parent.role === 'string' ? parent.role : undefined;
 
-  // Convert string role properties to roles object entries
-  if (child.role && typeof child.role === 'string') {
-    child.roles[child.role] ??= true;
+  // Assign child.role string property to child.roles object property.
+  if (childRole) {
+    child.roles ??= {};
+    child.roles[childRole] ??= true;
   }
 
-  if (parent.role && typeof parent.role === 'string') {
-    parent.roles[parent.role] ??= true;
+  // Assign parent.role string property to parent.roles object property.
+  if (parentRole) {
+    parent.roles ??= {};
+    parent.roles[parentRole] ??= true;
   }
 
-  // Identify roles specific to the child (not present in parent)
-  const specificChildRoles = Object.keys(child.roles).filter(
-    (role) => !parent.roles[role],
-  );
+  // Nested roles will only be created if both parent and child have a role string property defined. This is to prevent unnecessary role combinations for objects that do not have role restrictions.
+  if (!childRole || !parentRole) return;
 
-  // Create combinations Parent.Child
-  Object.keys(parent.roles).forEach((parentRole) => {
-    specificChildRoles.forEach((childRole) => {
-      child.roles[`${parentRole}.${childRole}`] ??= true;
-    });
+  // Get parent roles that match the parent role or end with the parent role.
+  const parentRoles = Object.keys(parent.roles).filter((role) => {
+    return (
+      role === parentRole ||
+      role.split('.').pop() === parentRole ||
+      parentRole.endsWith(`.${role}`)
+    );
+  });
+
+  // Create nested child role keys in child.roles object property by concatenating parent role keys with the child role string.
+  parentRoles.forEach((role) => {
+    child.roles[`${role}.${childRole}`] ??= true;
   });
 }

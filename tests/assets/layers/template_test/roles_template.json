@@ -1,0 +1,15 @@
+{
+  "roles": {
+    "Super": null,
+    "Standard": null,
+    "A": {
+      "filter": {
+        "default": {
+          "franchisee_name": {
+            "in": ["A"]
+          }
+        }
+      }
+    }
+  }
+}

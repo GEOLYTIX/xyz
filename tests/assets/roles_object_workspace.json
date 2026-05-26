@@ -1,0 +1,50 @@
+{
+  "templates": {
+    "roles_template": {
+      "src": "file:./tests/assets/layers/template_test/roles_template.json"
+    },
+    "uk_locale": {
+      "name": "United Kingdom",
+      "roles": {
+        "uk": true
+      }
+    },
+    "pol_locale": {
+      "name": "Poland",
+      "roles": {
+        "pol": true
+      }
+    },
+    "geocoffee_locale": {
+      "name": "GeoCoffee",
+      "roles": {
+        "GeoCoffee": true
+      }
+    },
+    "geoburger_locale": {
+      "name": "GeoBurger",
+      "roles": {
+        "GeoBurger": true
+      }
+    }
+  },
+  "locale": {},
+  "locales": {
+    "uk": {
+      "template": "uk_locale",
+      "locales": ["geocoffee_locale", "geoburger_locale"]
+    },
+    "pol": {
+      "template": "pol_locale",
+      "locales": ["geocoffee_locale"]
+    },
+    "roles_locale": {
+      "roles": {
+        "Super": null,
+        "Standard": null,
+        "A": null
+      },
+      "template": "roles_template"
+    }
+  }
+}

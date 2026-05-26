@@ -65,8 +65,6 @@ describe('workspace: w/ Nested Locales & Roles', () => {
       'TEMPLATE_ROLE',
       'test',
       'uk',
-      'uk.brand_a',
-      'uk.brand_b',
       'uk.coremarkets',
       'uk.coremarkets.brand_a',
       'uk.coremarkets.brand_b',
@@ -216,6 +214,40 @@ describe('workspace: w/ Nested Locales & Roles', () => {
     const code = res.statusCode;
 
     expect(code).toEqual(400);
+  });
+});
+
+describe('workspace: Roles Object Templates', () => {
+  beforeAll(async () => {
+    globalThis.xyzEnv = {
+      TITLE: 'WORKSPACE TEST',
+      WORKSPACE: 'file:./tests/assets/roles_object_workspace.json',
+    };
+
+    await checkWorkspaceCache(true);
+  });
+
+  it('roles objects should not create dot notation roles', async () => {
+    const { req, res } = createMocks({
+      params: {
+        key: 'roles',
+        user: {
+          admin: true,
+        },
+      },
+    });
+
+    await getKeyMethod(req, res);
+
+    expect(res._getData()).toEqual([
+      'A',
+      'GeoBurger',
+      'GeoCoffee',
+      'pol',
+      'Standard',
+      'Super',
+      'uk',
+    ]);
   });
 });
 
