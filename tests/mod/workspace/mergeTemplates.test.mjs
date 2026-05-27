@@ -5,7 +5,7 @@ describe('mergeTemplates', async () => {
     '../../../mod/workspace/mergeTemplates.js'
   );
 
-  it('get template from workspace', async () => {
+  it('get template from workspace and exclude style property', async () => {
     const obj = {
       template: {
         src: 'file:./tests/assets/layers/template_test/layer.json',
@@ -16,6 +16,33 @@ describe('mergeTemplates', async () => {
     const template = await mergeTemplates(obj, null, false);
 
     expect(Object.hasOwn(template, 'style')).toBeFalsy();
+  });
+
+  it('get template and templates from workspace and exclude style property from original template', async () => {
+    const obj = {
+      template: {
+        src: 'file:./tests/assets/layers/template_test/layer.json',
+        exclude_props: ['style'],
+      },
+      templates: [
+        {
+          style: {
+            default: {
+              icon: {
+                type: 'dot',
+                fillColor: '#00ff00',
+              },
+            },
+          },
+        },
+      ],
+    };
+
+    const template = await mergeTemplates(obj, null, false);
+
+    // Here we expect the original style property was skipped, and the templates style property was merged in.
+    expect(Object.hasOwn(template, 'style')).toBeTruthy();
+    expect(template.style.default.icon.fillColor).toEqual('#00ff00');
   });
 
   it('check roles object merge', async () => {
@@ -77,7 +104,6 @@ describe('mergeTemplates', async () => {
       localeRole: 'locale',
       template: {
         src: 'file:./tests/assets/layers/template_test/nested_templates.json',
-        exclude_props: ['style'],
       },
     };
 
