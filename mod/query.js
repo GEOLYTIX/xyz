@@ -359,6 +359,11 @@ async function checkFieldsParam(req, res) {
 
   objPropValueSet(req.params.layer, 'field', layerFields);
 
+  // Technical debt: The cluster label should be added as a field in the layer template to prevent direct reference here.
+  if (req.params.layer.cluster?.label) {
+    layerFields.add(req.params.layer.cluster.label);
+  }
+
   req.params.fieldsMap = new Map();
 
   for (const field of req.params.fields.split(',')) {
