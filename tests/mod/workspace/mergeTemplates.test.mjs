@@ -22,7 +22,7 @@ describe('mergeTemplates', async () => {
     const obj = {
       template: {
         src: 'file:./tests/assets/layers/template_test/layer.json',
-        exclude_props: ['style'],
+        exclude_props: ['style', 'foo'],
       },
       templates: [
         {
