@@ -72,8 +72,8 @@ describe('mergeTemplates', async () => {
     // Here we expect the original table property was included, and the templates style property was merged in.
     expect(Object.hasOwn(template, 'table')).toBeTruthy();
     expect(Object.hasOwn(template, 'style')).toBeTruthy();
-    // We expect that no other keys are present other than table and style.
-    expect(Object.keys(template)).toEqual(['table', 'style']);
+    // We expect that no other keys are present other than table and style from the merge. A template will always have roles and dbs properties.
+    expect(Object.keys(template).sort()).toEqual(['dbs', 'roles', 'style', 'table']);
     expect(template.style.default.icon.fillColor).toEqual('#00ff00');
   });
 
