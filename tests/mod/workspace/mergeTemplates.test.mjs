@@ -22,7 +22,7 @@ describe('mergeTemplates', async () => {
     const obj = {
       template: {
         src: 'file:./tests/assets/layers/template_test/layer.json',
-        exclude_props: ['style', 'foo'],
+        exclude_props: ['style', 'table'],
       },
       templates: [
         {
@@ -42,6 +42,38 @@ describe('mergeTemplates', async () => {
 
     // Here we expect the original style property was skipped, and the templates style property was merged in.
     expect(Object.hasOwn(template, 'style')).toBeTruthy();
+    expect(template.style.default.icon.fillColor).toEqual('#00ff00');
+    // We expect not to see the table property from the original template, but we should see the style property from the templates array.
+    expect(Object.hasOwn(template, 'table')).toBeFalsy();
+  });
+
+    it('get template and templates from workspace and include just the name property from original template', async () => {
+    const obj = {
+      template: {
+        src: 'file:./tests/assets/layers/template_test/layer.json',
+        include_props: ['table'],
+      },
+      templates: [
+        {
+          style: {
+            default: {
+              icon: {
+                type: 'dot',
+                fillColor: '#00ff00',
+              },
+            },
+          },
+        },
+      ],
+    };
+
+    const template = await mergeTemplates(obj, null, false);
+
+    // Here we expect the original table property was included, and the templates style property was merged in.
+    expect(Object.hasOwn(template, 'table')).toBeTruthy();
+    expect(Object.hasOwn(template, 'style')).toBeTruthy();
+    // We expect that no other keys are present other than table and style.
+    expect(Object.keys(template)).toEqual(['table', 'style']);
     expect(template.style.default.icon.fillColor).toEqual('#00ff00');
   });
 
