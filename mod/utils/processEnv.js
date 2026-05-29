@@ -55,7 +55,10 @@ The process.ENV object holds configuration provided to the node process from the
 */
 
 import 'varlock/auto-load';
-import { readFileSync } from 'fs';
+import { readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import { ENV } from 'varlock/env';
 
 const defaults = {
   COOKIE_TTL: 36000,
@@ -73,8 +76,11 @@ const defaults = {
   FILE_RESOURCES: 'resources',
 };
 
-if (process.env.SECRET_KEY) {
-  const SECRET = String(readFileSync(`./${process.env.SECRET_KEY}`));
+const workspaceRoot = fileURLToPath(new URL('../../', import.meta.url));
+const rootDir = process.env.XYZ_CWD || workspaceRoot;
+
+if (envValue('SECRET_KEY')) {
+  const SECRET = String(readFileSync(resolve(rootDir, envValue('SECRET_KEY'))));
 
   process.env.SECRET = SECRET;
   process.env.SECRET_ALGORITHM ??= 'RS256';
@@ -95,18 +101,19 @@ process.env.WORKSPACE_AGE ??= defaults.WORKSPACE_AGE;
 process.env.FILE_RESOURCES ??= defaults.FILE_RESOURCES;
 
 const xyzEnv = {
-  COOKIE_TTL: Number.parseInt(process.env.COOKIE_TTL),
+  COOKIE_TTL: Number.parseInt(envValue('COOKIE_TTL')),
   DIR: process.env.DIR,
-  FAILED_ATTEMPTS: process.env.FAILED_ATTEMPTS,
-  PORT: Number.parseInt(process.env.PORT),
-  RATE_LIMIT: process.env.RATE_LIMIT,
-  RATE_LIMIT_WINDOW: process.env.RATE_LIMIT_WINDOW,
-  RETRY_LIMIT: process.env.RETRY_LIMIT,
-  TITLE: process.env.TITLE,
-  TRANSPORT_PORT: Number.parseInt(process.env.TRANSPORT_PORT),
-  TRANSPORT_TLS: process.env.TRANSPORT_TLS,
-  WORKSPACE_AGE: process.env.WORKSPACE_AGE,
+  FAILED_ATTEMPTS: envValue('FAILED_ATTEMPTS'),
+  PORT: Number.parseInt(envValue('PORT')),
+  RATE_LIMIT: envValue('RATE_LIMIT'),
+  RATE_LIMIT_WINDOW: envValue('RATE_LIMIT_WINDOW'),
+  RETRY_LIMIT: envValue('RETRY_LIMIT'),
+  TITLE: envValue('TITLE'),
+  TRANSPORT_PORT: Number.parseInt(envValue('TRANSPORT_PORT')),
+  TRANSPORT_TLS: envValue('TRANSPORT_TLS'),
+  WORKSPACE_AGE: envValue('WORKSPACE_AGE'),
   WALLET: {},
+  XYZ_CWD: rootDir,
 };
 
 for (const [key, value] of Object.entries(process.env)) {
@@ -120,7 +127,7 @@ function addKeyToWallet(variable) {
   const KEY = new RegExp(/^SIGN_(.*)/).exec(variable)?.[1];
   if (KEY === undefined) return;
   try {
-    xyzEnv.WALLET[KEY] = String(readFileSync(`./${KEY}.pem`));
+    xyzEnv.WALLET[KEY] = String(readFileSync(resolve(rootDir, `${KEY}.pem`)));
   } catch (error) {
     console.error(`File Signer: ${error.toString()}`);
   }
@@ -130,3 +137,7 @@ function addKeyToWallet(variable) {
 Object.freeze(xyzEnv);
 
 globalThis.xyzEnv ??= xyzEnv;
+
+function envValue(key) {
+  return ENV[key] ?? process.env[key];
+}

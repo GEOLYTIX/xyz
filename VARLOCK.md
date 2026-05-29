@@ -135,6 +135,8 @@ GCP_WORKLOAD_IDENTITY_PROVIDER=//iam.googleapis.com/projects/PROJECT_NUMBER/loca
 GCP_SERVICE_ACCOUNT_EMAIL=varlock-secrets@PROJECT_ID.iam.gserviceaccount.com
 ```
 
+Vercel Functions expose the OIDC token on the `x-vercel-oidc-token` request header, not as a runtime environment variable. The `api/index.js` handler converts that header into a temporary Google external-account credentials file and sets `GOOGLE_APPLICATION_CREDENTIALS` before the API imports Varlock. Varlock then uses the standard ADC path to resolve `gsm()` values.
+
 Keep `GCP_WORKLOAD_IDENTITY_PROVIDER` and `GCP_SERVICE_ACCOUNT_EMAIL` empty locally so Varlock uses Application Default Credentials.
 
 Validate the full schema with:

@@ -6,10 +6,7 @@
     "type": "git",
     "url": "https://github.com/geolytix/xyz"
   },
-  "packageManager": "pnpm@10.10.0",
-  "pnpm": {
-    "neverBuiltDependencies": []
-  },
+  "packageManager": "pnpm@11.1.3",
   "scripts": {
     "dev": "node --inspect express.js",
     "test": "vitest run",
@@ -37,7 +34,7 @@
     "bcrypt": "^6.0.0",
     "jsonwebtoken": "^9.0.3",
     "pg": "~8.15.6",
-    "varlock": "^1.1.0"
+    "varlock": "file:varlock-1.3.0.tgz"
   },
   "devDependencies": {
     "@biomejs/biome": "2.2.6",

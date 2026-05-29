@@ -1,17 +1,12 @@
 .idea/
 .vscode/
 .zed/
-.env
-.env.*
-!.env.schema.d/
-!.env.schema.d/.env.*
 .DS_Store
 .vercel
 
 env
 # npm legacy files (replaced by pnpm)
 package-lock.json
-pnpm-lock.yaml
 yarn.lock
 
 # pnpm files
@@ -34,6 +29,7 @@ docs/*
 !tests/*.json
 !tests/**
 !package.json
+!vercel.json
 !jsdoc*.json
 !codi.json
 !biome.json
