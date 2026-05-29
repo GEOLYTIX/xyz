@@ -47,7 +47,7 @@ describe('mergeTemplates', async () => {
     expect(Object.hasOwn(template, 'table')).toBeFalsy();
   });
 
-    it('get template and templates from workspace and include just the name property from original template', async () => {
+  it('get template and templates from workspace and include just the name property from original template', async () => {
     const obj = {
       template: {
         src: 'file:./tests/assets/layers/template_test/layer.json',
@@ -73,7 +73,12 @@ describe('mergeTemplates', async () => {
     expect(Object.hasOwn(template, 'table')).toBeTruthy();
     expect(Object.hasOwn(template, 'style')).toBeTruthy();
     // We expect that no other keys are present other than table and style from the merge. A template will always have roles and dbs properties.
-    expect(Object.keys(template).sort()).toEqual(['dbs', 'roles', 'style', 'table']);
+    expect(Object.keys(template).sort()).toEqual([
+      'dbs',
+      'roles',
+      'style',
+      'table',
+    ]);
     expect(template.style.default.icon.fillColor).toEqual('#00ff00');
   });
 
