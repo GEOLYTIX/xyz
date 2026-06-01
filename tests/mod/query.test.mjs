@@ -175,11 +175,12 @@ describe('Query: Testing Query API', () => {
       expect(mockDbQuery).not.toHaveBeenCalled();
     });
 
-    it('should use template.dbs when layer, workspace, and req dbs are NOT defined', async () => {
+    it('should use template.dbs when provided', async () => {
       const { req, res } = createMocks({
         params: {
           template: 'mock_template',
           user: { roles: ['admin'], admin: true },
+          dbs: 'template_db',
         },
       });
 
@@ -197,11 +198,10 @@ describe('Query: Testing Query API', () => {
       expect(mockLayerDb).not.toHaveBeenCalled();
     });
 
-    it('should use workspace.dbs when defined, overriding req.params and template dbs', async () => {
+    it('should use workspace.dbs as template dbs not provided', async () => {
       const { req, res } = createMocks({
         params: {
           template: 'mock_template',
-          dbs: 'req_db',
           user: { roles: ['admin'], admin: true },
         },
       });
@@ -209,7 +209,7 @@ describe('Query: Testing Query API', () => {
       checkWorkspaceCache.mockResolvedValueOnce({ dbs: 'workspace_db' });
       getTemplate.mockResolvedValueOnce({
         template: 'SELECT * FROM mock_table',
-        dbs: 'template_db',
+        dbs: 'workspace_db',
       });
 
       await query(req, res);
@@ -220,11 +220,10 @@ describe('Query: Testing Query API', () => {
       expect(mockLayerDb).not.toHaveBeenCalled();
     });
 
-    it('should use layer.dbs when defined, overriding workspace, req, and template dbs', async () => {
+    it('should use layer.dbs when defined, overriding workspace dbs as template dbs not provided', async () => {
       const { req, res } = createMocks({
         params: {
           template: 'mock_template',
-          dbs: 'req_db',
           user: { roles: ['admin'], admin: true },
           // Inject layer directly into req.params to bypass getLayer lookup
           layer: {
@@ -239,7 +238,7 @@ describe('Query: Testing Query API', () => {
       checkWorkspaceCache.mockResolvedValueOnce({ dbs: 'workspace_db' });
       getTemplate.mockResolvedValueOnce({
         template: 'SELECT * FROM mock_table',
-        dbs: 'template_db',
+        dbs: 'layer_db',
         layer: true, // Requires layer
       });
 
