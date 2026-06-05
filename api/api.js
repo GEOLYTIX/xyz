@@ -173,7 +173,7 @@ async function validateRequestAuth(req, res) {
 
   // The authentication method returns an error.
   if (user && user instanceof Error) {
-    if (req.headers.authorization || req.params?.token || req.params?.key) {
+    if (req.headers.authorization || hasKeyOrToken(req)) {
       // Request with failed authorization headers are not passed to login.
       return res.status(401).send(user.message);
     }
@@ -223,7 +223,7 @@ async function validateRequestAuth(req, res) {
 }
 
 function hasKeyOrToken(req) {
-  return req.params?.key || req.params?.token;
+  return req.query?.key || req.query?.token;
 }
 
 /**

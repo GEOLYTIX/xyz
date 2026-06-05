@@ -31,7 +31,10 @@ vi.mock('../../mod/sign/_sign.js', () => ({ default: vi.fn() }));
 vi.mock('../../mod/user/_user.js', () => ({ default: vi.fn() }));
 vi.mock('../../mod/user/register.js', () => ({ default: vi.fn() }));
 vi.mock('../../mod/view.js', () => ({ default: vi.fn() }));
-vi.mock('../../mod/workspace/_workspace.js', () => ({ default: vi.fn() }));
+const workspaceFn = vi.fn();
+vi.mock('../../mod/workspace/_workspace.js', () => ({
+  default: (...args) => workspaceFn(...args),
+}));
 
 describe('api', async () => {
   const { default: api } = await import('../../api/api.js');
@@ -63,6 +66,24 @@ describe('api', async () => {
     expect(samlFn).not.toHaveBeenCalled();
     expect(setRedirectFn).not.toHaveBeenCalled();
     expect(res.getHeader('location')).toBeUndefined();
+  });
+
+  it('redirects workspace key route params without query key or token', async () => {
+    authFn.mockResolvedValueOnce(null);
+
+    const { req, res } = createMocks({
+      headers: { host: 'localhost' },
+      params: { key: 'locales' },
+      query: {},
+      url: '/api/workspace/locales',
+    });
+
+    api(req, res);
+    await vi.waitFor(() => expect(setRedirectFn).toHaveBeenCalledWith(req, res));
+
+    expect(workspaceFn).not.toHaveBeenCalled();
+    expect(res.statusCode).toEqual(302);
+    expect(res.getHeader('location')).toEqual('/app/saml/login');
   });
 
   it('does not short-circuit SAML routes when key is present', async () => {
