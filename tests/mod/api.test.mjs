@@ -79,7 +79,9 @@ describe('api', async () => {
     });
 
     api(req, res);
-    await vi.waitFor(() => expect(setRedirectFn).toHaveBeenCalledWith(req, res));
+    await vi.waitFor(() =>
+      expect(setRedirectFn).toHaveBeenCalledWith(req, res),
+    );
 
     expect(workspaceFn).not.toHaveBeenCalled();
     expect(res.statusCode).toEqual(302);
