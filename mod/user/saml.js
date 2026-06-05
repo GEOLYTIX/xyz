@@ -140,12 +140,11 @@ const getModule = async () => {
           readFileSync(join(__dirname, `../../${xyzEnv.SAML_SP_CRT}.crt`)),
         ),
       signatureAlgorithm: xyzEnv.SAML_SIGNATURE_ALGORITHM,
-      wantAssertionsSigned: xyzEnv.SAML_WANT_ASSERTIONS_SIGNED,
-      wantAuthnResponseSigned: xyzEnv.SAML_AUTHN_RESPONSE_SIGNED ?? false,
+      wantAssertionsSigned: booleanFromEnv(xyzEnv.SAML_WANT_ASSERTIONS_SIGNED),
+      wantAuthnResponseSigned:
+        booleanFromEnv(xyzEnv.SAML_AUTHN_RESPONSE_SIGNED) ?? false,
       disableRequestedAuthnContext:
-        xyzEnv.SAML_DISABLE_REQUESTED_AUTHN_CONTEXT !== undefined
-          ? xyzEnv.SAML_DISABLE_REQUESTED_AUTHN_CONTEXT === 'true'
-          : true,
+        booleanFromEnv(xyzEnv.SAML_DISABLE_REQUESTED_AUTHN_CONTEXT) ?? true,
     };
 
     // Create SAML strategy instance
@@ -164,6 +163,12 @@ const getModule = async () => {
     return saml_not_configured;
   }
 };
+
+function booleanFromEnv(value) {
+  if (typeof value === 'boolean') return value;
+  if (value === 'true') return true;
+  if (value === 'false') return false;
+}
 
 /**
 @function saml_not_configured
