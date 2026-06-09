@@ -111,6 +111,14 @@ app.post(
 
 app.get(`${xyzEnv.DIR}/saml/metadata`, api);
 
+app.get(`${xyzEnv.DIR}/saml/logout/callback`, api);
+
+app.post(
+  `${xyzEnv.DIR}/saml/logout/callback`,
+  express.urlencoded({ extended: true }),
+  api,
+);
+
 app.get(`${xyzEnv.DIR}/saml/logout`, api);
 
 app.get(`${xyzEnv.DIR}/saml/login`, api);
