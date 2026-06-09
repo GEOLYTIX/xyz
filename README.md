@@ -46,7 +46,7 @@ The Mapp library changed the map render to [Openlayers](https://github.com/openl
 
 The XYZ API was rebuild to run as serverless functions in **v3**.
 
-**v4** is a complete rewrite of the client libraries. All user interface utilities have been taken out of the mapp library and have been compiled as mapp.ui library. Both libraries are now bundled with [esbuild](https://esbuild.github.io/).
+**v4** is a complete rewrite of the client libraries. All user interface utilities have been taken out of the mapp library and have been compiled as mapp.ui library. Both libraries are now bundled with [Vite](https://vite.dev/).
 
 The mapp library is now able to instantiate multiple mapviews.
 

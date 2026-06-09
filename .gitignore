@@ -3,6 +3,7 @@
 .zed/
 .env
 .env.*
+!.env.schema
 .DS_Store
 
 env

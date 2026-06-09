@@ -472,37 +472,12 @@ codi.describe(
 
 #### Build Configuration
 
-Tests require an unminified build to enable debugging and stepping through code. This is handled by the build system (`esbuild.config.mjs`).
+Tests require an unminified build to enable debugging and stepping through code. This is handled by the build system (`apps/mapp/vite.config.mjs`).
 
 Setting process environment `NODE_ENV=DEVELOPMENT` disables minification in build processes.
 
-```javascript
-// esbuild.config.mjs
-import * as esbuild from 'esbuild';
-
-const isDev = process.env.NODE_ENV !== 'DEVELOPMENT';
-
-const buildOptions = {
-  entryPoints: isDev
-    ? ['./lib/mapp.mjs', './lib/ui.mjs']
-    : ['./lib/mapp.mjs', './lib/ui.mjs', './tests/_mapp.test.mjs'],
-  bundle: true,
-  minify: isDev, // Code won't be minified in development
-  sourcemap: true,
-  sourceRoot: '/lib',
-  format: 'iife',
-  outbase: '.',
-  outdir: 'public/js',
-  metafile: true,
-  logLevel: 'info',
-};
-
-try {
-  await esbuild.build(buildOptions);
-} catch (err) {
-  console.error('Build failed:', err);
-  process.exit(1);
-}
+```bash
+NODE_ENV=DEVELOPMENT pnpm build --filter=@geolytix/mapp
 ```
 
 ### Running Tests in Development Mode
@@ -518,11 +493,10 @@ try {
 2. Build the project:
 
    ```bash
-   pnpm _build
+   pnpm build --filter=@geolytix/mapp
    ```
 
 3. Verify that:
-   - Test files are included in the build
    - Source maps are generated
    - Code is not minified
 

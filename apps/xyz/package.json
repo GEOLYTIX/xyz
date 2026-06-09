@@ -16,6 +16,9 @@
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage"
   },
+  "varlock": {
+    "loadPath": "../../"
+  },
   "license": "MIT",
   "optionalDependencies": {
     "@aws-sdk/client-s3": "catalog:",
@@ -29,6 +32,7 @@
     "express": "catalog:",
     "express-rate-limit": "catalog:",
     "jsonwebtoken": "catalog:",
-    "pg": "catalog:"
+    "pg": "catalog:",
+    "varlock": "catalog:"
   }
 }

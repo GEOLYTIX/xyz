@@ -31,12 +31,14 @@
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
+    "@varlock/google-secret-manager-plugin": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "clean-jsdoc-theme": "catalog:",
     "dotenv": "catalog:",
     "node-mocks-http": "catalog:",
     "turbo": "catalog:",
     "undici": "catalog:",
+    "varlock": "catalog:",
     "vitest": "catalog:"
   }
 }

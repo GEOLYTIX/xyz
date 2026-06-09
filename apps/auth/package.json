@@ -5,6 +5,9 @@
   "scripts": {
     "dev": "node --inspect server.js"
   },
+  "varlock": {
+    "loadPath": "../../"
+  },
   "exports": {
     ".": "./customAuth.js",
     "./server": "./server.js"

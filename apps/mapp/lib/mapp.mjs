@@ -3,7 +3,7 @@
 
 The primary module for the MAPP API will import other MAPP modules and assign itself as the `window.mapp{}` object.
 
-The `mapp.mjs` module is used as entry point for the esbuild process to bundle the MAPP API.
+The `mapp.mjs` module is used as entry point for the Vite build process to bundle the MAPP API.
 
 The MAPP library requires Openlayers. The mapp module will check whether the Openlayers script has been loaded and will log the version. A warning will be issued if the loaded Openlayers version is outdated.
 

@@ -16,7 +16,17 @@ From `apps/mapp`, run the package build directly:
 pnpm build
 ```
 
-The build uses `apps/mapp/esbuild.config.mjs` and writes bundled assets to `public/js` in the repository root.
+The build uses `apps/mapp/vite.config.mjs` and writes bundled assets to `public/js/lib` in the repository root. Varlock loads env files from the repository root via this package's `varlock.loadPath` setting.
+
+To build against an environment-specific Varlock file, set the environment before running the build:
+
+```bash
+APP_ENV=production pnpm build --filter=@geolytix/mapp
+```
+
+Production SSR env injection is configured with `ssrInjectMode: 'resolved-env'` and `.env.schema` enables encrypted injected env blobs for `APP_ENV=production`. The current build is client-only, so no SSR env blob is emitted. Serverless platforms must provide `_VARLOCK_ENV_KEY` at build time and runtime if an SSR build path is added.
+
+The root schema also enables Varlock's Google Secret Manager plugin. Use `GCP_PROJECT_ID` plus `gsm()` values in root env files when build servers should resolve config from Google Secret Manager.
 
 ## CSS Bundles
 

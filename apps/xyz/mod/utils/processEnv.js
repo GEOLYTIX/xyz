@@ -6,6 +6,8 @@ The processEnv utility script is required by the express web server app and the 
 @requires dotenv Environment configuration loading
 */
 
+import 'varlock/auto-load';
+
 /**
 @global
 @typedef {Object} xyzEnv
