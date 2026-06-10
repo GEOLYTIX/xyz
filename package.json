@@ -27,18 +27,17 @@
     "@geolytix/mapp": "workspace:*",
     "@geolytix/xyz-auth-app": "workspace:*",
     "@geolytix/xyz-app": "workspace:*",
-    "@geolytix/xyz-saml-app": "workspace:*"
+    "@geolytix/xyz-saml-app": "workspace:*",
+    "@varlock/google-secret-manager-plugin": "1.1.0",
+    "varlock": "file:./varlock-1.5.1.tgz"
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
-    "@varlock/google-secret-manager-plugin": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "clean-jsdoc-theme": "catalog:",
-    "dotenv": "catalog:",
     "node-mocks-http": "catalog:",
     "turbo": "catalog:",
     "undici": "catalog:",
-    "varlock": "catalog:",
     "vitest": "catalog:"
   }
 }

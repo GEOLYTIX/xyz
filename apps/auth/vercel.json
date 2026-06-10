@@ -3,17 +3,24 @@
   "trailingSlash": false,
   "builds": [
     {
-      "src": "apps/auth/server.js",
+      "src": "apps/auth/vercel.js",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": "public/**"
+        "includeFiles": [
+          ".env.schema",
+          ".env.production",
+          ".env.preview",
+          "utils/varlock-gsm-plugin.cjs",
+          "utils/vercel-oidc.js",
+          "public/**"
+        ]
       }
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "apps/auth/server.js"
+      "dest": "apps/auth/vercel.js"
     }
   ]
 }

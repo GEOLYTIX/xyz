@@ -3,17 +3,26 @@
   "trailingSlash": false,
   "builds": [
     {
-      "src": "apps/saml/server.js",
+      "src": "apps/saml/vercel.js",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": "{public/**,apps/xyz/*.crt,apps/xyz/*.pem}"
+        "includeFiles": [
+          ".env.schema",
+          ".env.production",
+          ".env.preview",
+          "utils/varlock-gsm-plugin.cjs",
+          "utils/vercel-oidc.js",
+          "public/**",
+          "apps/xyz/*.crt",
+          "apps/xyz/*.pem"
+        ]
       }
     }
   ],
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "apps/saml/server.js"
+      "dest": "apps/saml/vercel.js"
     }
   ]
 }

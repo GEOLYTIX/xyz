@@ -62,8 +62,6 @@ Dynamic module imports reduce the need to bundle 3rd party libraries such as [Ta
 
 [brcypt](https://github.com/kelektiv/node.bcrypt.js) - A library to help you hash passwords.
 
-[dotenv](https://github.com/motdotla/dotenv) - Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env.
-
 [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) - A Node implementation of JSON Web Token.
 
 [Node-Postgres](https://github.com/brianc/node-postgres) - PostgreSQL client for Node.
@@ -79,8 +77,6 @@ Dynamic module imports reduce the need to bundle 3rd party libraries such as [Ta
 ### Development dependencies
 
 Following development dependencies are required to build the library and run a local instance of the XYZ host.
-
-[dotenv](https://www.npmjs.com/package/dotenv) - Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env.
 
 [esbuild](https://www.npmjs.com/package/esbuild) - A JavaScript bundler and minifier.
 

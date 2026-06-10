@@ -3,10 +3,18 @@
 
 The processEnv utility script is required by the express web server app and the api module to set default environment variables as well ass variables defined in the process environment to the globalThis xyzEnv object.
 
-@requires dotenv Environment configuration loading
+@requires varlock Environment configuration loading
 */
 
+import { createRequire } from 'node:module';
 import 'varlock/auto-load';
+
+// Vercel traces dependencies from code, but Varlock loads schema plugins from
+// .env.schema. Resolve the local shim and package entry without executing the
+// plugin module here.
+const require = createRequire(import.meta.url);
+require.resolve('../../../../utils/varlock-gsm-plugin.cjs');
+require.resolve('@varlock/google-secret-manager-plugin/plugin');
 
 /**
 @global
@@ -58,7 +66,6 @@ The process.ENV object holds configuration provided to the node process from the
 
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { config } from 'dotenv';
 import { readFileSync } from 'fs';
 
 const defaults = {
@@ -80,8 +87,6 @@ const defaults = {
 // Resolve bundled assets from the workspace root when XYZ_CWD is not set.
 const workspaceRoot = fileURLToPath(new URL('../../../../', import.meta.url));
 const rootDir = process.env.XYZ_CWD || workspaceRoot;
-
-config({ path: resolve(rootDir, '.env'), quiet: true });
 
 if (process.env.SECRET_KEY) {
   const SECRET = String(readFileSync(resolve(rootDir, process.env.SECRET_KEY)));

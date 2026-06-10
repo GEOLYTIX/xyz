@@ -26,7 +26,7 @@ APP_ENV=production pnpm build --filter=@geolytix/mapp
 
 Production SSR env injection is configured with `ssrInjectMode: 'resolved-env'` and `.env.schema` enables encrypted injected env blobs for `APP_ENV=production`. The current build is client-only, so no SSR env blob is emitted. Serverless platforms must provide `_VARLOCK_ENV_KEY` at build time and runtime if an SSR build path is added.
 
-The root schema also enables Varlock's Google Secret Manager plugin. Use `GCP_PROJECT_ID` plus `gsm()` values in root env files when build servers should resolve config from Google Secret Manager.
+The root schema also enables Varlock's Google Secret Manager plugin. Use `GCP_PROJECT_ID` plus `gsm()` values in root env files when build servers should resolve config from Google Secret Manager. For OIDC Workload Identity Federation, also set `GCP_WORKLOAD_IDENTITY_PROVIDER` and `GCP_SERVICE_ACCOUNT_EMAIL`.
 
 ## CSS Bundles
 

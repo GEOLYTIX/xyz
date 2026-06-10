@@ -24,11 +24,7 @@ Other arguments you can provide the script are:
 
 import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
-import { config } from 'dotenv';
 import https from 'https';
-
-//get the vercel token from a separate .env file
-config({ path: '.env.vercel' });
 
 // Get the command line arguments
 const args = process.argv.slice(2);
@@ -41,9 +37,11 @@ if (args.includes('--help')) {
 
 let envType =
   args.find((arg) => arg.startsWith('--env='))?.split('=')[1] || 'development';
+const vercelEnv = existsSync('.env.vercel') ? parseEnvFile('.env.vercel') : {};
 const token =
   args.find((arg) => arg.startsWith('--token='))?.split('=')[1] ||
-  process.env.VERCEL_TOKEN;
+  process.env.VERCEL_TOKEN ||
+  vercelEnv.VERCEL_TOKEN;
 const dryRun = args.includes('--dry-run');
 const envFile =
   args.find((arg) => arg.startsWith('--file='))?.split('=')[1] || '.env';

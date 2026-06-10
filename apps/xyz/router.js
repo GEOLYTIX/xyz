@@ -57,8 +57,10 @@ function createRouter(middleWare = []) {
 
   router.use(cookieParser());
 
-  router.use(`${xyzEnv.DIR}/public`, express.static(publicDir));
-  router.use(xyzEnv.DIR, express.static(publicDir));
+  const staticOptions = { redirect: false };
+
+  router.use(`${xyzEnv.DIR}/public`, express.static(publicDir, staticOptions));
+  router.use(xyzEnv.DIR, express.static(publicDir, staticOptions));
 
   router.get(`${xyzEnv.DIR}/api/provider{/:provider}`, middleWare, provider);
 
