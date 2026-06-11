@@ -129,6 +129,7 @@ export function objMerge(obj, user_roles) {
     return obj.map((arrEntry) => objMerge(arrEntry, user_roles));
   }
 
+  // TODO this iteration causes roles to be merged deeply in complex workspaces.
   Object.keys(obj)
     .filter((key) => typeof obj[key] === 'object')
     .forEach((key) => {
@@ -148,28 +149,27 @@ export function objMerge(obj, user_roles) {
 
   const clone = structuredClone(obj);
 
-  Object.keys(clone.roles)
-    .filter((role) => clone.roles[role] !== true)
-    .filter((role) => clone.roles[role] !== null)
-    .filter((role) => typeof clone.roles[role] === 'object')
-    .filter((role) => !Array.isArray(clone.roles[role]))
-    .filter((role) => {
-      // Get last role from a dot tree role string.
-      const popRole = role.split('.').pop();
+  for (const role in clone.roles) {
+    if (clone.roles[role] === true) continue;
+    if (clone.roles[role] === null) continue;
+    if (Array.isArray(clone.roles[role])) continue;
+    if (typeof clone.roles[role] !== 'object') continue;
 
-      // A negated role starts with an exclamation mark.
-      const negatedRole = popRole.match(/(?<=^!)(.*)/g)?.[0];
+    // Get last role from a dot tree role string.
+    const popRole = role.split('.').pop();
 
-      if (negatedRole) {
-        // True if the user_roles NOT includes the negated role.
-        return !user_roles.includes(negatedRole);
-      }
+    // A negated role starts with an exclamation mark.
+    const negatedRole = popRole.match(/(?<=^!)(.*)/g)?.[0];
 
-      return user_roles.includes(popRole);
-    })
-    .forEach((role) => {
-      merge(clone, clone.roles[role]);
-    });
+    if (negatedRole) {
+      // True if the user_roles NOT includes the negated role.
+      if (user_roles.includes(negatedRole)) continue;
+    }
+
+    if (!user_roles.includes(popRole)) continue;
+
+    merge(clone, clone.roles[role]);
+  }
 
   return clone;
 }
