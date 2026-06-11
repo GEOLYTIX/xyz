@@ -4,6 +4,7 @@
 .env
 .env.*
 !.env.schema
+.varlock.blob
 .DS_Store
 
 env

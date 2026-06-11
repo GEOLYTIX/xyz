@@ -9,6 +9,7 @@
   "packageManager": "pnpm@11.1.3",
   "scripts": {
     "dev": "turbo run dev --filter=@geolytix/xyz-app",
+    "freeze-env": "node utils/freeze-env.js",
     "dev:auth": "turbo run dev --filter=@geolytix/xyz-auth-app",
     "dev:saml": "turbo run dev --filter=@geolytix/xyz-saml-app",
     "test": "turbo run test",

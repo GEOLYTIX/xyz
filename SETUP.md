@@ -103,7 +103,16 @@ WORKSPACE=gsm("WORKSPACE")
 
 The Google service account must allow the workload identity principal to impersonate it with `roles/iam.workloadIdentityUser`, and it must have `roles/secretmanager.secretAccessor` for the required secrets.
 
-The `.env.production` file holding `gsm()` references is untracked. Vercel deployments must run through the Vercel CLI from a checkout which contains the file; git-triggered Vercel builds will not include it. See VARLOCK.md for details.
+The `.env.production` file holding `gsm()` references is untracked. Vercel deployments must run through the Vercel CLI from a checkout which contains the file; git-triggered Vercel builds will not include it.
+
+Deploy with a frozen environment so secret resolution and validation happen before the deployment rather than on serverless invocations:
+
+```bash
+pnpm freeze-env --env=production
+vercel --prod
+```
+
+See VARLOCK.md for details, including the `_VARLOCK_ENV_KEY` blob encryption setup.
 
 ## Start the application
 

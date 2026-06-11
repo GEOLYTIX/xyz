@@ -40,7 +40,7 @@ gcloud auth application-default login
 GCP_PROJECT_ID=your-gcp-project-id
 ```
 
-For Vercel deployments, use OIDC Workload Identity Federation instead of a service-account JSON key. This avoids storing `GCP_SA_KEY` in Vercel.
+The preferred Vercel deployment flow freezes resolved values before the deployment, so serverless functions never resolve secrets at runtime — see [Frozen environment deployments](#frozen-environment-deployments) below. The following OIDC Workload Identity Federation setup enables the runtime-resolution fallback, where serverless functions resolve `gsm()` references directly without a service-account JSON key stored in Vercel.
 
 Enable the required Google APIs:
 
@@ -103,13 +103,30 @@ GCP_WORKLOAD_IDENTITY_PROVIDER=//iam.googleapis.com/projects/PROJECT_NUMBER/loca
 GCP_SERVICE_ACCOUNT_EMAIL=varlock-secrets@PROJECT_ID.iam.gserviceaccount.com
 ```
 
+Keep `GCP_WORKLOAD_IDENTITY_PROVIDER` and `GCP_SERVICE_ACCOUNT_EMAIL` empty locally so Varlock uses Application Default Credentials.
+
 Vercel Functions expose the OIDC token on the `x-vercel-oidc-token` request header, not as a runtime environment variable. The shared `utils/vercel-handler.js` handler factory used by `apps/{xyz,auth,saml}/vercel.js` writes that header to a temporary subject-token file via `utils/vercel-oidc.js` and sets `GOOGLE_CREDENTIALS` to an external-account credentials configuration before the app module imports Varlock. The token file is refreshed whenever a request carries a new token, because google-auth re-reads it when its cached STS token expires. Varlock's GSM plugin then resolves `gsm()` values through the workload identity federation exchange.
 
 The handler also sets `APP_ENV` from Vercel's `VERCEL_ENV` (production/preview/development) before Varlock loads, so the schema's `@currentEnv=$APP_ENV` resolves the deployment target without requiring `APP_ENV` in the Vercel project settings.
 
 The `.env.production` file holds `gsm()` references for production deployments. It is intentionally untracked (`.gitignore` excludes `.env.*` except the schema), so production deployments must run through the Vercel CLI from a checkout which contains `.env.production` — a git-triggered Vercel build will not include it.
 
-Keep `GCP_WORKLOAD_IDENTITY_PROVIDER` and `GCP_SERVICE_ACCOUNT_EMAIL` empty locally so Varlock uses Application Default Credentials.
+## Frozen environment deployments
+
+The preferred deployment flow resolves and validates the environment once, before the deployment, and freezes the resolved values into a `.varlock.blob` file:
+
+```sh
+pnpm freeze-env --env=production
+vercel --prod
+```
+
+The freeze script resolves `gsm()` references with the deploying machine's Application Default Credentials and validates the configuration against the schema — an invalid configuration fails the deployment instead of the first serverless invocation. The blob ships with the function through the vercel.json `includeFiles` configuration, and `processEnv.js` hydrates the runtime environment from it. Serverless invocations then make no Secret Manager or STS calls, and the OIDC Workload Identity Federation runtime configuration is not required.
+
+The schema's `@encryptInjectedEnv=forEnv(production)` decorator encrypts production blobs with AES-256-GCM. Generate a key with `pnpm exec varlock generate-key --plain`, keep it in `.env.local` (or the shell environment) for the freeze script, and set the same `_VARLOCK_ENV_KEY` as a sensitive environment variable in the Vercel project so the runtime can decrypt the blob.
+
+Rotating a secret in Google Secret Manager requires a new freeze and deployment, because the resolved values are fixed per deployment.
+
+The blob is only read when the `VERCEL` environment variable is set, so a frozen blob on a development machine cannot leak production values into a local process. Deployments without a blob fall back to runtime resolution through the OIDC Workload Identity Federation flow described above.
 
 Validate the schema and local env files with:
 

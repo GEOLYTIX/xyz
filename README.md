@@ -66,6 +66,8 @@ Dynamic module imports reduce the need to bundle 3rd party libraries such as [Ta
 
 [Node-Postgres](https://github.com/brianc/node-postgres) - PostgreSQL client for Node.
 
+[Varlock](https://varlock.dev) - Schema-validated environment configuration with Google Secret Manager resolution. See VARLOCK.md.
+
 ### Optional dependencies
 
 [aws-sdk](https://github.com/aws/aws-sdk-js-v3) - Several modules are required in order to access resources on cloudfront or S3.
@@ -78,7 +80,9 @@ Dynamic module imports reduce the need to bundle 3rd party libraries such as [Ta
 
 Following development dependencies are required to build the library and run a local instance of the XYZ host.
 
-[esbuild](https://www.npmjs.com/package/esbuild) - A JavaScript bundler and minifier.
+[Vite](https://vite.dev) - The build tool which bundles the MAPP client libraries.
+
+[esbuild](https://www.npmjs.com/package/esbuild) - A JavaScript bundler and minifier, used for the CSS bundles.
 
 [µhtml](https://github.com/WebReflection/uhtml) - A micro HTML/SVG render which is bundled as utils into the MAPP library.
 

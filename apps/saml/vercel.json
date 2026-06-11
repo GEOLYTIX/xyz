@@ -8,6 +8,7 @@
       "config": {
         "includeFiles": [
           ".env.schema",
+          ".varlock.blob",
           ".env.production",
           "utils/vercel-oidc.js",
           "public/**",
