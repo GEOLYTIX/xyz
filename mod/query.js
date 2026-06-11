@@ -336,7 +336,7 @@ function templateTables(template) {
 @description
 Layer queries should restrict the fields provided as param to query templates.
 
-The method will call the recursive objPropValueSet method to parse the layer object for any values referenced as properties with the 'field' key.
+The method will call the recursive fieldsValueSet method to parse the layer object for any values referenced as properties with the 'field' key.
 
 Field values may not be referenced in the layer object from role restricted templates.
 
@@ -354,7 +354,7 @@ async function checkFieldsParam(req, res) {
 
   const layerFields = new Set();
 
-  objPropValueSet(req.params.layer, 'field', layerFields);
+  fieldsValueSet(req.params.layer, layerFields);
 
   // Technical debt: The cluster label should be added as a field in the layer template to prevent direct reference here.
   if (req.params.layer.cluster?.label) {
@@ -386,18 +386,17 @@ async function checkFieldsParam(req, res) {
 }
 
 /**
-@function objPropValueSet
+@function fieldsValueSet
 
 @description
 The recursive method parses all properties in an object and calls itself if the property value is an object.
 
-String values of object properties with the key matching the prop argument will be added to the set argument.
+String values of properties with the key 'field' and values of properties with the key 'fields' which are arrays of strings are added to the set provided as an argument to the method.
 
 @param {object} obj Object to parse for property values.
-@param {string} prop The property key.
 @param {set} set The set to which the property values should be added.
 */
-function objPropValueSet(obj, prop, set) {
+function fieldsValueSet(obj, set) {
   if (typeof obj !== 'object') return;
 
   // Return early if object is null or empty
@@ -407,20 +406,25 @@ function objPropValueSet(obj, prop, set) {
   if (obj instanceof Object && !Object.keys(obj)) return;
 
   for (const [key, value] of Object.entries(obj)) {
-    if (key === prop && typeof value === 'string') {
+    if (key === 'field' && typeof value === 'string') {
       set.add(value);
+      continue;
+    }
+
+    if (key === 'fields' && Array.isArray(value)) {
+      value.forEach((item) => set.add(item));
       continue;
     }
 
     // Recursively process each item if we find an array
     if (Array.isArray(value)) {
-      value.forEach((item) => objPropValueSet(item, prop, set));
+      value.forEach((item) => fieldsValueSet(item, set));
       continue;
     }
 
     // Recursively process nested objects
     if (value instanceof Object) {
-      objPropValueSet(value, prop, set);
+      fieldsValueSet(value, set);
     }
   }
 }
