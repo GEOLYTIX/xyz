@@ -28,13 +28,14 @@
     "@geolytix/xyz-auth-app": "workspace:*",
     "@geolytix/xyz-app": "workspace:*",
     "@geolytix/xyz-saml-app": "workspace:*",
-    "@varlock/google-secret-manager-plugin": "1.1.0",
-    "varlock": "file:./varlock-1.5.1.tgz"
+    "@varlock/google-secret-manager-plugin": "catalog:",
+    "varlock": "catalog:"
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
     "@vitest/coverage-v8": "catalog:",
     "clean-jsdoc-theme": "catalog:",
+    "esbuild": "catalog:",
     "node-mocks-http": "catalog:",
     "turbo": "catalog:",
     "undici": "catalog:",

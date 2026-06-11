@@ -13,6 +13,7 @@ The module will export null if neither a PRIVATE or PUBLIC xyzEnv are provided.
 */
 
 import pg from 'pg';
+import '../utils/processEnv.js';
 
 const { Pool } = pg;
 

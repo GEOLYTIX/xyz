@@ -16,7 +16,7 @@
   "devDependencies": {
     "@varlock/google-secret-manager-plugin": "catalog:",
     "@varlock/vite-integration": "catalog:",
-    "varlock": "file:../../varlock-1.5.1.tgz",
+    "varlock": "catalog:",
     "vite": "catalog:"
   }
 }

@@ -34,6 +34,6 @@
     "jsonwebtoken": "catalog:",
     "pg": "catalog:",
     "@varlock/google-secret-manager-plugin": "catalog:",
-    "varlock": "file:../../varlock-1.5.1.tgz"
+    "varlock": "catalog:"
   }
 }

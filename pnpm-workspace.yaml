@@ -27,7 +27,9 @@ catalog:
   resend: ^6.4.2
   turbo: ^2.9.6
   undici: ^7.25.0
+  varlock: 1.6.0
   vite: 8.0.16
   vitest: 4.1.4
 minimumReleaseAgeExclude:
-  - '@varlock/google-secret-manager-plugin@1.2.0'
+  - '@varlock/google-secret-manager-plugin'
+  - varlock

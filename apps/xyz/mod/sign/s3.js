@@ -62,6 +62,8 @@ The aws-sdk/client-s3 and aws-sdk/s3-request-presigner are optional dependencies
 @module /sign/s3
 */
 
+import '../utils/processEnv.js';
+
 let clientSDK, getSignedUrl, credentials;
 
 // Check if optional dependencies are available

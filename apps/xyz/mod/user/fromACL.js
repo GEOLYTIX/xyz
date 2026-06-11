@@ -20,6 +20,7 @@ import languageTemplates from '../utils/languageTemplates.js';
 import reqHost from '../utils/reqHost.js';
 import mailer from '../utils/resend.js';
 import acl from './acl.js';
+import '../utils/processEnv.js';
 
 export default !acl ? null : fromACL;
 

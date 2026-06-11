@@ -1,9 +1,11 @@
 import { fileURLToPath } from 'node:url';
 import { varlockVitePlugin } from '@varlock/vite-integration';
-import { ENV } from 'varlock/env';
 import { defineConfig } from 'vite';
 
-const isDevelopmentBuild = ENV.NODE_ENV === 'DEVELOPMENT';
+// The varlock ENV proxy is not initialized when vite evaluates the config;
+// the minify toggle reads the build invocation environment directly, eg.
+// NODE_ENV=DEVELOPMENT pnpm build --filter=@geolytix/mapp
+const isDevelopmentBuild = process.env.NODE_ENV === 'DEVELOPMENT';
 
 export default defineConfig({
   build: {
@@ -20,6 +22,8 @@ export default defineConfig({
     outDir: fileURLToPath(new URL('../../public/js/lib', import.meta.url)),
     rolldownOptions: {
       output: {
+        // build.minify alone does not compress whitespace in lib mode; the
+        // rolldown output option enables full minification.
         minify: !isDevelopmentBuild,
       },
     },

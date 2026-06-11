@@ -6,15 +6,38 @@ The processEnv utility script is required by the express web server app and the 
 @requires varlock Environment configuration loading
 */
 
-import { createRequire } from 'node:module';
-import 'varlock/auto-load';
+import {
+  internal,
+  patchGlobalConsole,
+  patchGlobalResponse,
+  patchGlobalServerResponse,
+} from 'varlock';
 
-// Vercel traces dependencies from code, but Varlock loads schema plugins from
-// .env.schema. Resolve the local shim and package entry without executing the
-// plugin module here.
-const require = createRequire(import.meta.url);
-require.resolve('../../../../utils/varlock-gsm-plugin.cjs');
-require.resolve('@varlock/google-secret-manager-plugin/plugin');
+// Load and validate the environment in-process. varlock/auto-load spawns the
+// varlock CLI executable, which is not traced into serverless bundles. The
+// programmatic API runs the same schema and plugin resolution within this
+// process and throws on config errors rather than exiting the process.
+const envGraph = await internal.loadVarlockEnvGraph();
+
+// Surface schema and plugin loading errors before value resolution. Varlock's
+// load() resolves values first, which masks plugin loading failures behind
+// unrelated resolution errors.
+for (const plugin of envGraph.plugins) {
+  if (plugin.loadingError) throw plugin.loadingError;
+}
+internal.checkForConfigErrors(envGraph);
+
+await envGraph.resolveEnvValues();
+internal.checkForConfigErrors(envGraph);
+
+process.env.__VARLOCK_ENV = JSON.stringify(envGraph.getSerializedGraph());
+internal.initVarlockEnv();
+
+// Match varlock/auto-load runtime behavior; redact sensitive values from
+// console output and prevent leaks in HTTP responses.
+patchGlobalConsole();
+patchGlobalServerResponse();
+patchGlobalResponse();
 
 /**
 @global
@@ -92,7 +115,7 @@ if (process.env.SECRET_KEY) {
   const SECRET = String(readFileSync(resolve(rootDir, process.env.SECRET_KEY)));
 
   process.env.SECRET = SECRET;
-  process.env.SECRET_ALGORITHM ??= 'RS256';
+  process.env.SECRET_ALGORITHM ||= 'RS256';
 }
 
 if (process.env.DIR) {
@@ -105,19 +128,21 @@ if (process.env.DIR) {
     : process.env.DIR;
 }
 
-process.env.COOKIE_TTL ??= defaults.COOKIE_TTL;
-process.env.DIR ??= defaults.DIR;
-process.env.FAILED_ATTEMPTS ??= defaults.FAILED_ATTEMPTS;
-process.env.PORT ??= defaults.PORT;
-process.env.RATE_LIMIT_WINDOW ??= defaults.RATE_LIMIT_WINDOW;
-process.env.RATE_LIMIT ??= defaults.RATE_LIMIT;
-process.env.RETRY_LIMIT ??= defaults.RETRY_LIMIT;
-process.env.SECRET_ALGORITHM ??= defaults.SECRET_ALGORITHM;
-process.env.TITLE ??= defaults.TITLE;
-process.env.TRANSPORT_PORT ??= defaults.TRANSPORT_PORT;
-process.env.TRANSPORT_TLS ??= defaults.TRANSPORT_TLS;
-process.env.WORKSPACE_AGE ??= defaults.WORKSPACE_AGE;
-process.env.FILE_RESOURCES ??= defaults.FILE_RESOURCES;
+// Varlock injects schema-declared keys without a value as empty strings, so
+// the fallbacks must also apply on empty values, not just undefined.
+process.env.COOKIE_TTL ||= defaults.COOKIE_TTL;
+process.env.DIR ||= defaults.DIR;
+process.env.FAILED_ATTEMPTS ||= defaults.FAILED_ATTEMPTS;
+process.env.PORT ||= defaults.PORT;
+process.env.RATE_LIMIT_WINDOW ||= defaults.RATE_LIMIT_WINDOW;
+process.env.RATE_LIMIT ||= defaults.RATE_LIMIT;
+process.env.RETRY_LIMIT ||= defaults.RETRY_LIMIT;
+process.env.SECRET_ALGORITHM ||= defaults.SECRET_ALGORITHM;
+process.env.TITLE ||= defaults.TITLE;
+process.env.TRANSPORT_PORT ||= defaults.TRANSPORT_PORT;
+process.env.TRANSPORT_TLS ||= defaults.TRANSPORT_TLS;
+process.env.WORKSPACE_AGE ||= defaults.WORKSPACE_AGE;
+process.env.FILE_RESOURCES ||= defaults.FILE_RESOURCES;
 
 const xyzEnv = {
   COOKIE_TTL: Number.parseInt(process.env.COOKIE_TTL),

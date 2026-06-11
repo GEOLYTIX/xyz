@@ -9,8 +9,6 @@
         "includeFiles": [
           ".env.schema",
           ".env.production",
-          ".env.preview",
-          "utils/varlock-gsm-plugin.cjs",
           "utils/vercel-oidc.js",
           "public/**"
         ]
