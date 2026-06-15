@@ -12,7 +12,6 @@ Roles utility module exports methods to inspect roles in object, checking object
 @property {Object} roles - roles configuration object
 @property {boolean} [roles.*] - Wildcard role indicating unrestricted access
 @property {Object} [roles.key] - Role-specific properties to merge
-@property {Object} [roles.'!key'] - Negated role properties (applied when user doesn't have the role)
 */
 
 import merge from './merge.js';
