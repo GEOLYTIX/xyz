@@ -392,7 +392,11 @@ Browser tests still use [Codi](https://www.npmjs.com/package/codi-test-framework
 
 A [Test Plugin](https://github.com/GEOLYTIX/xyz/blob/main/lib/plugins/test.mjs) is provided to run tests in the browser.
 
-Please ensure to run the `_build` script prior to launching the local test environment test environment.
+Build the MAPP browser bundles before launching the local test environment:
+
+```bash
+NODE_ENV=DEVELOPMENT pnpm build --filter=@geolytix/mapp
+```
 
 The current tests require an active user to execute.
 

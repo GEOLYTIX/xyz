@@ -28,6 +28,16 @@ The XYZ API modules are:
 
 ## Development
 
+The XYZ server imports `apps/xyz/mod/utils/processEnv.js` before routes are created. That loader initializes Varlock from the repository root schema, applies server defaults, creates the frozen `globalThis.xyzEnv` object, and patches console/HTTP output so sensitive Varlock values are redacted.
+
+For local development, create a root `.env` file and validate it with:
+
+```bash
+pnpm exec varlock load --compact
+```
+
+For Vercel deployments, run `pnpm freeze-env --env=production` before deploying. The generated `.varlock.blob` is included by `vercel.json` and read by `processEnv.js` at runtime, so the serverless function does not call Google Secret Manager during requests.
+
 From the repository root, start the XYZ app server with:
 
 ```bash

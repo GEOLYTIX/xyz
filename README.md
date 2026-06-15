@@ -38,6 +38,10 @@ A bundled MAPP library is provided in the public directory. It is not required t
 
 Please refer to the [wiki pages](https://github.com/GEOLYTIX/xyz/wiki) for detailed interface references.
 
+For repository setup, local development, and deployment workflows, see [SETUP.md](./SETUP.md).
+
+For environment validation, Google Secret Manager, and frozen Vercel deployments, see [VARLOCK.md](./VARLOCK.md).
+
 ## Version History
 
 **v1** was build with [Leaflet](https://github.com/Leaflet/Leaflet) as the map render for the client library.

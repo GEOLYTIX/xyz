@@ -42,6 +42,8 @@ Environment keys are documented in the committed root `.env.schema` file.
 The Vite-powered MAPP build loads and validates root env files through Varlock.
 The Express server loads runtime variables through Varlock.
 
+The root `.env.schema` is committed. Runtime files such as `.env`, `.env.local`, `.env.production`, and the generated `.varlock.blob` are ignored and must not be committed.
+
 Create `.env` in the repository root with a minimal local setup:
 
 ```env
@@ -74,7 +76,7 @@ Add these only when you need them:
 Validate the root env schema and local env files with:
 
 ```bash
-pnpm exec varlock load
+pnpm exec varlock load --compact
 ```
 
 Google Secret Manager is available through Varlock's GSM plugin. Set `GCP_PROJECT_ID` and use `gsm()` references in a gitignored env file, for example:
@@ -94,7 +96,27 @@ pnpm freeze-env --env=production
 vercel --prod
 ```
 
-The untracked `.env.production` file holds the production `gsm()` references, so deployments must run through the Vercel CLI from a checkout which contains it. See VARLOCK.md for details, including the `_VARLOCK_ENV_KEY` blob encryption setup.
+The untracked `.env.production` file holds the production `gsm()` references, so deployments must run through the Vercel CLI from a checkout which contains it. See [VARLOCK.md](./VARLOCK.md) for details, including the `_VARLOCK_ENV_KEY` blob encryption setup.
+
+## Environment workflows
+
+Local development uses `.env` and `.env.local` by default. Use `.env.local` for machine-specific secrets or values you do not want to share.
+
+Environment-specific commands use `APP_ENV`. For example, this validates the production inputs without starting the server:
+
+```bash
+APP_ENV=production pnpm exec varlock load --compact
+```
+
+Vercel deployments use a frozen environment. The `pnpm freeze-env --env=production` command sets `APP_ENV=production`, resolves `gsm()` references, validates the result, and writes `.varlock.blob` for the deployment.
+
+Production blobs are encrypted by the schema. Generate a key with:
+
+```bash
+pnpm exec varlock generate-key --plain
+```
+
+Set that value as `_VARLOCK_ENV_KEY` in your local shell or `.env.local` for the freeze command, and set the same value as a sensitive environment variable in Vercel so the runtime can decrypt the blob.
 
 ## Start the application
 
@@ -148,7 +170,26 @@ pnpm build
 
 For MAPP-specific build details, see [apps/mapp/README.md](./apps/mapp/README.md).
 
+Build unminified MAPP bundles for browser debugging with:
+
+```bash
+NODE_ENV=DEVELOPMENT pnpm build --filter=@geolytix/mapp
+```
+
 For JSDoc generation, see [DOCUMENTATION.md](./DOCUMENTATION.md).
+
+## Vercel deployment
+
+Deployments should be run from a checkout that contains the target env file, for example `.env.production`:
+
+```bash
+pnpm freeze-env --env=production
+vercel --prod
+```
+
+The root `vercel.json` deploys the XYZ app and includes `.varlock.blob`, `public/**`, and `resources/**`. The SAML and auth app Vercel configs also include `.varlock.blob` for deployments that target those apps directly.
+
+Do not commit `.varlock.blob`. Regenerate it whenever env files or Google Secret Manager values change.
 
 ## Run tests
 
@@ -231,6 +272,14 @@ Check that `SECRET` or `SECRET_KEY` is configured. Token and cookie auth depend 
 ### Query or ACL failures
 
 Check your `DBS_*`, `PRIVATE`, and `PUBLIC` values. These are consumed directly by the XYZ backend modules.
+
+### Vercel reports a missing frozen env
+
+Run `pnpm freeze-env --env=production` before `vercel --prod` and confirm `.varlock.blob` exists at the repository root.
+
+### Vercel cannot decrypt `.varlock.blob`
+
+Set `_VARLOCK_ENV_KEY` in the Vercel project. It must match the key used when `pnpm freeze-env --env=production` created the blob.
 
 ## Related docs
 
