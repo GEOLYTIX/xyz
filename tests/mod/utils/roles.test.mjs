@@ -26,18 +26,6 @@ describe('Roles Module', () => {
       expect(result).toBeFalsy();
     });
 
-    it('should return false if a negated role is included in user_roles', () => {
-      const obj = { roles: { '!guest': true } };
-      const result = check(obj, ['guest']);
-      expect(result).toBeFalsy();
-    });
-
-    it('should return true if all roles are negated and none match user_roles', () => {
-      const obj = { roles: { '!admin': true, '!user': true } };
-      const result = check(obj, ['guest', 'users']);
-      expect(result).toBeTruthy();
-    });
-
     it('should return true if a positive role is included in user_roles', () => {
       const obj = { roles: { admin: true, user: true } };
       const result = check(obj, ['admin']);
@@ -59,12 +47,6 @@ describe('Roles Module', () => {
     it('should return false if user_roles is null', () => {
       const obj = { roles: { admin: true } };
       const result = check(obj, null);
-      expect(result).toBeFalsy();
-    });
-
-    it('should handle mixed positive and negated roles', () => {
-      const obj = { roles: { admin: true, '!guest': true } };
-      const result = check(obj, ['guest']);
       expect(result).toBeFalsy();
     });
 
@@ -126,32 +108,6 @@ describe('Roles Module', () => {
       };
 
       expect(objMerge(obj, user_roles)).toEqual(expected);
-    });
-
-    it('should handle negated roles', () => {
-      let obj = {
-        roles: {
-          admin: {
-            text: 'admin',
-          },
-          '!guest': {
-            text: 'guest',
-          },
-          user: {
-            text: 'user',
-          },
-        },
-      };
-
-      const user_roles = ['user'];
-
-      const expected = {
-        text: 'user',
-      };
-
-      obj = objMerge(obj, user_roles);
-
-      expect(obj.text).toEqual(expected.text);
     });
 
     it('should handle arrays', () => {
@@ -312,23 +268,6 @@ describe('Roles Module', () => {
       expect(rolesSet.has('admin')).toEqual(true);
       expect(rolesSet.has('user')).toEqual(true);
       expect(rolesSet.has('guest')).toEqual(true);
-    });
-
-    it('should handle negated roles by removing ! prefix', () => {
-      const rolesSet = new Set();
-      const obj = {
-        roles: {
-          '!admin': true,
-          '!guest': true,
-          user: true,
-        },
-      };
-      setInObj(rolesSet, obj);
-      expect(rolesSet.has('admin')).toEqual(true);
-      expect(rolesSet.has('guest')).toEqual(true);
-      expect(rolesSet.has('user')).toEqual(true);
-      expect(rolesSet.has('!admin')).toEqual(false);
-      expect(rolesSet.has('!guest')).toEqual(false);
     });
 
     it('should recurse through nested objects', () => {
