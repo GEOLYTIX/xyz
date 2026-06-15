@@ -112,7 +112,6 @@ export function objMerge(obj, user_roles) {
     return obj.map((arrEntry) => objMerge(arrEntry, user_roles));
   }
 
-  // TODO this iteration causes roles to be merged deeply in complex workspaces.
   Object.keys(obj)
     .filter((key) => typeof obj[key] === 'object')
     .forEach((key) => {
