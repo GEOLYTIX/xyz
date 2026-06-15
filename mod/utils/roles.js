@@ -74,30 +74,24 @@ export function check(obj, user_roles) {
 @function objMerge
 
 @description
-Recursively merges role-specific object properties based on user roles.
-The function handles several special cases:
-- Recursively processes nested objects
-- Handles arrays by mapping over their elements
-- Preserves the original object if conditions aren't met
-- Skip null or undefined values
+The objMerge method recursively merges roles object properties with the object.
 
-```js
-const obj = {
-  name: 'layer',
-  roles: {
-    admin: { secretField: 'sensitive' },
-    user: { publicField: 'visible' }
-  }
-};
+The method will short circuit if the obj param is not an object or if the user_roles param is not an array.
 
-// With admin role
-objMerge(obj, ['admin']);
-// Returns: { name: 'layer', secretField: 'sensitive', roles: {...} }
+The roles object role property must be an object and not an array.
 
-// With user role
-objMerge(obj, ['user']);
-// Returns: { name: 'layer', publicField: 'visible', roles: {...} }
+In the following example, the display true property will be merged into the object containing the roles object if the 'display' role is provided in the user_roles array param.
+
 ```
+roles: {
+  display: {
+    display: true
+  }
+}
+```
+
+Only structured clones of objects are merged and returned. Workspace templates must not be modified to acknlowledge user roles associated with a request.
+
 @param {Object} obj The object to process
 @param {Array<string>} user_roles Array of roles assigned to the user
 @property {roles} obj.roles Role configuration object
@@ -123,11 +117,9 @@ export function objMerge(obj, user_roles) {
 
   if (!obj.roles) return obj;
 
-  if (typeof obj.roles !== 'object') return obj;
-
   if (Array.isArray(obj.roles)) return obj;
 
-  if (typeof obj.roles === 'function') return obj;
+  if (typeof obj.roles !== 'object') return obj;
 
   const clone = structuredClone(obj);
 
