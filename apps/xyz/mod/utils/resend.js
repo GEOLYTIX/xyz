@@ -19,7 +19,6 @@ import getFrom from '../provider/getFrom.js';
 
 import languageTemplates from './languageTemplates.js';
 import logger from './logger.js';
-import './processEnv.js';
 
 let resend;
 

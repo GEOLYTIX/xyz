@@ -16,7 +16,6 @@ import pg from 'pg';
 const { Pool } = pg;
 
 import logger from './logger.js';
-import './processEnv.js';
 
 const RETRY_LIMIT = xyzEnv.RETRY_LIMIT;
 

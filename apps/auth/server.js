@@ -45,5 +45,3 @@ app.disable('x-powered-by');
 if (!process.env.VERCEL) {
   app.listen(xyzEnv.PORT);
 }
-
-export default app;

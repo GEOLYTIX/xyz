@@ -43,7 +43,6 @@ CREATE TABLE public.dev_logs (
 */
 
 import crypto from 'node:crypto';
-import './processEnv.js';
 
 const logs = new Set(xyzEnv.LOGS?.split(',') || []);
 

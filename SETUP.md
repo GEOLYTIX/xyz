@@ -77,42 +77,24 @@ Validate the root env schema and local env files with:
 pnpm exec varlock load
 ```
 
-Production Varlock SSR injection is configured for encrypted resolved env blobs. The current MAPP Vite build is client-only, so it does not emit an SSR env blob. If a future Vite SSR/server build uses this config with `APP_ENV=production`, set `_VARLOCK_ENV_KEY` in both the build environment and runtime environment. Generate one with `pnpm exec varlock generate-key --plain`.
-
-Google Secret Manager is available through Varlock's GSM plugin. The XYZ server env bootstrap loads Varlock, so `gsm()` values are resolved before Express routes are created. Set `GCP_PROJECT_ID` and use `gsm()` in a gitignored env file, for example:
+Google Secret Manager is available through Varlock's GSM plugin. Set `GCP_PROJECT_ID` and use `gsm()` references in a gitignored env file, for example:
 
 ```env
-APP_ENV=production
 GCP_PROJECT_ID=my-gcp-project
 SECRET=gsm("xyz-secret")
 WORKSPACE=gsm("xyz-workspace")
 ```
 
-Authentication uses Google Application Default Credentials, `GOOGLE_APPLICATION_CREDENTIALS`, or OIDC Workload Identity Federation.
+Resolution authenticates with Google Application Default Credentials (`gcloud auth application-default login`).
 
-For OIDC Workload Identity Federation on Vercel, configure these Vercel environment variables:
-
-```env
-GCP_PROJECT_ID=my-gcp-project
-GCP_WORKLOAD_IDENTITY_PROVIDER=//iam.googleapis.com/projects/PROJECT_NUMBER/locations/global/workloadIdentityPools/POOL_ID/providers/PROVIDER_ID
-GCP_SERVICE_ACCOUNT_EMAIL=xyz-secrets@my-gcp-project.iam.gserviceaccount.com
-DIR=gsm("DIR")
-PRIVATE=gsm("PRIVATE")
-WORKSPACE=gsm("WORKSPACE")
-```
-
-The Google service account must allow the workload identity principal to impersonate it with `roles/iam.workloadIdentityUser`, and it must have `roles/secretmanager.secretAccessor` for the required secrets.
-
-The `.env.production` file holding `gsm()` references is untracked. Vercel deployments must run through the Vercel CLI from a checkout which contains the file; git-triggered Vercel builds will not include it.
-
-Deploy with a frozen environment so secret resolution and validation happen before the deployment rather than on serverless invocations:
+Vercel deployments require a frozen environment. The freeze script resolves and validates the configuration before the deployment, so serverless invocations make no Secret Manager calls:
 
 ```bash
 pnpm freeze-env --env=production
 vercel --prod
 ```
 
-See VARLOCK.md for details, including the `_VARLOCK_ENV_KEY` blob encryption setup.
+The untracked `.env.production` file holds the production `gsm()` references, so deployments must run through the Vercel CLI from a checkout which contains it. See VARLOCK.md for details, including the `_VARLOCK_ENV_KEY` blob encryption setup.
 
 ## Start the application
 

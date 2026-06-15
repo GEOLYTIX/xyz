@@ -14,7 +14,6 @@ Cloudfront resources get cached for 60seconds to prevent excessive requests for 
 */
 
 import file_signer from '../sign/file.js';
-import '../utils/processEnv.js';
 import logger from '../utils/logger.js';
 import cloudfront from './cloudfront.js';
 import file from './file.js';

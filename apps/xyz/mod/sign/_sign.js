@@ -14,7 +14,6 @@ import cloudfront from './cloudfront.js';
 import cloudinary from './cloudinary.js';
 import file from './file.js';
 import s3 from './s3.js';
-import '../utils/processEnv.js';
 
 const signerModules = {
   cloudfront,

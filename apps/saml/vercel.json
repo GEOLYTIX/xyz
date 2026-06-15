@@ -3,14 +3,11 @@
   "trailingSlash": false,
   "builds": [
     {
-      "src": "apps/saml/vercel.js",
+      "src": "apps/saml/server.js",
       "use": "@vercel/node",
       "config": {
         "includeFiles": [
-          ".env.schema",
           ".varlock.blob",
-          ".env.production",
-          "utils/vercel-oidc.js",
           "public/**",
           "apps/xyz/*.crt",
           "apps/xyz/*.pem"
@@ -21,7 +18,7 @@
   "routes": [
     {
       "src": "/(.*)",
-      "dest": "apps/saml/vercel.js"
+      "dest": "apps/saml/server.js"
     }
   ]
 }

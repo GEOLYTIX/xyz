@@ -14,13 +14,20 @@ import {
   patchGlobalServerResponse,
 } from 'varlock';
 import { decryptEnvBlobSync, isEncryptedBlob } from 'varlock/encrypt-env';
+import { execSyncVarlock } from 'varlock/exec-sync-varlock';
 
-// A deployment can freeze the resolved environment into a .varlock.blob file
-// with utils/freeze-env.js. The blob is only used on Vercel so a frozen blob
-// on a development machine cannot leak into a local process environment.
-const frozenEnvPath = new URL('../../../../.varlock.blob', import.meta.url);
+if (process.env.VERCEL) {
+  // Vercel deployments hydrate the environment from the frozen blob written
+  // by utils/freeze-env.js before the deployment. No schema, plugin, or
+  // secret resolution happens at runtime.
+  const frozenEnvPath = new URL('../../../../.varlock.blob', import.meta.url);
 
-if (process.env.VERCEL && existsSync(frozenEnvPath)) {
+  if (!existsSync(frozenEnvPath)) {
+    throw new Error(
+      'Missing .varlock.blob - run `pnpm freeze-env` before deploying.',
+    );
+  }
+
   let frozenEnv = readFileSync(frozenEnvPath, 'utf8');
 
   if (isEncryptedBlob(frozenEnv)) {
@@ -32,31 +39,19 @@ if (process.env.VERCEL && existsSync(frozenEnvPath)) {
     frozenEnv = decryptEnvBlobSync(frozenEnv, process.env._VARLOCK_ENV_KEY);
   }
 
-  // Hydrate the environment from the frozen blob. No schema, plugin, or
-  // secret resolution happens at runtime.
   process.env.__VARLOCK_ENV = frozenEnv;
-  internal.initVarlockEnv();
-} else {
-  // Load and validate the environment in-process. varlock/auto-load spawns
-  // the varlock CLI executable, which is not traced into serverless bundles.
-  // The programmatic API runs the same schema and plugin resolution within
-  // this process and throws on config errors rather than exiting the process.
-  const envGraph = await internal.loadVarlockEnvGraph();
+} else if (!process.env.__VARLOCK_ENV) {
+  // Resolve and validate the environment with the varlock CLI, like
+  // varlock/auto-load, but without exiting the process on config errors.
+  const { stdout } = execSyncVarlock('load --format json-full --compact', {
+    fullResult: true,
+    callerDir: new URL('.', import.meta.url).pathname,
+  });
 
-  // Surface schema and plugin loading errors before value resolution.
-  // Varlock's load() resolves values first, which masks plugin loading
-  // failures behind unrelated resolution errors.
-  for (const plugin of envGraph.plugins) {
-    if (plugin.loadingError) throw plugin.loadingError;
-  }
-  internal.checkForConfigErrors(envGraph);
-
-  await envGraph.resolveEnvValues();
-  internal.checkForConfigErrors(envGraph);
-
-  process.env.__VARLOCK_ENV = JSON.stringify(envGraph.getSerializedGraph());
-  internal.initVarlockEnv();
+  process.env.__VARLOCK_ENV = stdout;
 }
+
+internal.initVarlockEnv();
 
 // Match varlock/auto-load runtime behavior; redact sensitive values from
 // console output and prevent leaks in HTTP responses.

@@ -13,7 +13,6 @@ The cloudfront sign module exports a method to sign requests to an AWS cloudfron
 import { readFileSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import '../utils/processEnv.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
