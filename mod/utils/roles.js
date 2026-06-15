@@ -183,7 +183,7 @@ export function setInObj(rolesSet, obj) {
 
       // Add string type obj.role property to the rolesSet.
     } else if (key === 'role' && typeof obj[key] === 'string') {
-      rolesSet.add(role);
+      rolesSet.add(obj[key]);
     }
   });
 }
