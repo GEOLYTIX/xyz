@@ -99,10 +99,10 @@ async function cacheWorkspace() {
 
   workspace.templates = Object.create(templates);
 
-  mark_template(workspace.templates, view_templates, 'core');
-  mark_template(workspace.templates, mail_templates, 'core');
-  mark_template(workspace.templates, msg_templates, 'core');
-  mark_template(workspace.templates, query_templates, 'core');
+  mark_template(workspace.templates, view_templates);
+  mark_template(workspace.templates, mail_templates);
+  mark_template(workspace.templates, msg_templates);
+  mark_template(workspace.templates, query_templates);
   mark_template(workspace.templates, custom_templates, 'custom');
   mark_template(workspace.templates, workspace_templates, 'workspace');
 
@@ -154,12 +154,14 @@ async function cacheWorkspace() {
 @function mark_template
 
 @description
-The method maps the Object.entries of the templates_object param and assigns the _type property on the object marking is a different types of templates.
+The method assigns objects in a templates object to the workspace.templates provided as workspace_templates param.
 
-@param {Object} templates_object
+@param {object} workspace_templates The workspace.templates object.
+@param {Object} templates_object An object of templates to be assigned with the template key to the workspace templates.
+@param {string} [type = 'core'] The type value to assign to the template to identify the origin.
 @returns {Object} templates_object with _core: true property.
 */
-function mark_template(workspace_templates, templates_object, type) {
+function mark_template(workspace_templates, templates_object, type = 'core') {
   if (!templates_object) return;
 
   for (const [key, template] of Object.entries(templates_object)) {
