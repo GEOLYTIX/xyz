@@ -115,8 +115,13 @@ export default async function getTemplate(template) {
     template.template = response;
   }
 
-  // Assign template to workspace.
-  workspace.templates[template.key || template.src] = template;
+  try {
+    // Assign template to workspace.
+    workspace.templates[template.key || template.src] = template;
+  } catch (err) {
+    console.error(err);
+    return err;
+  }
 
   // Removing the src property caches the template.
   delete template.src;

@@ -353,11 +353,16 @@ function assignWorkspaceTemplates(obj) {
   Object.entries(obj).forEach((entry) => {
     // Process template objects - if found, add type and merge into workspace templates
     if (entry[0] === 'template' && entry[1].key) {
-      entry[1]._type = 'template';
-      workspace.templates[entry[1].key] = Object.assign(
-        workspace.templates[entry[1].key] || {},
-        entry[1],
-      );
+      try {
+        entry[1]._type = 'template';
+        workspace.templates[entry[1].key] = Object.assign(
+          workspace.templates[entry[1].key] || {},
+          entry[1],
+        );
+      } catch (err) {
+        console.error(err);
+      }
+
       return;
     }
 

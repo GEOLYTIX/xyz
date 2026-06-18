@@ -10,6 +10,8 @@ The Workspace API module exports the getKeyMethod() which returns a method from 
 
 The workspace typedef object has templates, locale, locales, dbs, and roles properties. The workspace will be cached in the process by the workspace/cache module.
 
+The workspace module freezes the object prototype. It must not be possible overwrite an object protype eg assigning a template called `toString`.
+
 @requires /workspace/cache
 @requires /workspace/getLocale
 @requires /workspace/getLayer
@@ -30,6 +32,9 @@ The workspace object defines the mapp resources available in an XYZ instance.
 @property {object} locales Each property in the locales object is a locale available from this workspace.
 @property {template} templates Each property in the templates object is a global template typedef.
 */
+
+// It must not be possible to modify object prototypes
+Object.freeze(Object.prototype);
 
 import { createHash } from 'node:crypto';
 import logger from '../utils/logger.js';
