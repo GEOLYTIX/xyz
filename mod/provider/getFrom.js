@@ -21,6 +21,7 @@ import file from './file.js';
 const getFromModules = {
   cloudfront: Cloudfront,
   file: File,
+  http: Https,
   https: Https,
 };
 
@@ -86,11 +87,21 @@ function File(ref) {
 
 async function Https(url) {
   try {
-    const response = await fetch(url);
+    const requestUrl = new URL(url);
+
+    const isLoopbackHttp =
+      requestUrl.protocol === 'http:' &&
+      ['localhost', '127.0.0.1', '[::1]'].includes(requestUrl.hostname);
+
+    if (requestUrl.protocol !== 'https:' && !isLoopbackHttp) {
+      throw new Error('Invalid HTTPS URL');
+    }
+
+    const response = await fetch(requestUrl);
 
     logger(`${response.status} - ${response.url}`, 'fetch');
 
-    if (url.match(/\.json$/i)) {
+    if (requestUrl.href.match(/\.json$/i)) {
       return await response.json();
     }
 

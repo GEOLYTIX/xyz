@@ -41,6 +41,44 @@ describe('getFrom:', () => {
     );
   });
 
+  it('http accepts loopback urls', async () => {
+    const resBody = JSON.stringify(
+      '{ "templates": {}, "locale": { "layers": {}, }, }',
+    );
+
+    const mockPool = mockAgent.get('http://localhost:3000');
+
+    mockPool.intercept({ path: '/config/workspace.json' }).reply(200, resBody);
+
+    const url = 'http://localhost:3000/config/workspace.json';
+
+    const results = await getFrom['http'](url);
+
+    expect(results).toEqual(
+      '{ "templates": {}, "locale": { "layers": {}, }, }',
+    );
+  });
+
+  it('https rejects unsafe urls', async () => {
+    const consoleError = vi
+      .spyOn(console, 'error')
+      .mockImplementation(() => {});
+
+    try {
+      for (const url of [
+        'http://geolytix.com/config/workspace.json',
+        'file:///etc/passwd',
+        'not-a-url',
+      ]) {
+        const results = await getFrom['https'](url);
+
+        expect(results).toBeInstanceOf(Error);
+      }
+    } finally {
+      consoleError.mockRestore();
+    }
+  });
+
   it('file', async () => {
     const filePath = 'file:../../workspaces/workspace.json';
 
