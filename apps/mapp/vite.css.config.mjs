@@ -21,16 +21,4 @@ export default defineConfig({
       },
     },
   },
-  plugins: [cssOnlyBuild()],
 });
-
-function cssOnlyBuild() {
-  return {
-    name: 'xyz-css-only-build',
-    generateBundle(_options, bundle) {
-      for (const [fileName, output] of Object.entries(bundle)) {
-        if (output.type === 'chunk') delete bundle[fileName];
-      }
-    },
-  };
-}
