@@ -99,12 +99,16 @@ async function cacheWorkspace() {
 
   workspace.templates = Object.create(templates);
 
-  mark_template(workspace.templates, view_templates);
-  mark_template(workspace.templates, mail_templates);
-  mark_template(workspace.templates, msg_templates);
-  mark_template(workspace.templates, query_templates);
-  mark_template(workspace.templates, custom_templates, 'custom');
-  mark_template(workspace.templates, workspace_templates, 'workspace');
+  assign_workspace_templates(workspace.templates, view_templates);
+  assign_workspace_templates(workspace.templates, mail_templates);
+  assign_workspace_templates(workspace.templates, msg_templates);
+  assign_workspace_templates(workspace.templates, query_templates);
+  assign_workspace_templates(workspace.templates, custom_templates, 'custom');
+  assign_workspace_templates(
+    workspace.templates,
+    workspace_templates,
+    'workspace',
+  );
 
   // A workspace must have a default locale [template]
   workspace.locale ??= {
@@ -151,7 +155,7 @@ async function cacheWorkspace() {
 }
 
 /**
-@function mark_template
+@function assign_workspace_templates
 
 @description
 The method assigns objects in a templates object to the workspace.templates provided as workspace_templates param.
@@ -161,7 +165,11 @@ The method assigns objects in a templates object to the workspace.templates prov
 @param {string} [type = 'core'] The type value to assign to the template to identify the origin.
 @returns {Object} templates_object with _core: true property.
 */
-function mark_template(workspace_templates, templates_object, type = 'core') {
+function assign_workspace_templates(
+  workspace_templates,
+  templates_object,
+  type = 'core',
+) {
   if (!templates_object) return;
 
   for (const [key, template] of Object.entries(templates_object)) {
