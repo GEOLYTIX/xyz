@@ -32,7 +32,7 @@ The workspace object defines the mapp resources available in an XYZ instance.
 */
 
 // It must not be possible to modify object prototypes
-//Object.freeze(Object.prototype);
+Object.freeze(Object.prototype);
 
 import { createHash } from 'node:crypto';
 import logger from '../utils/logger.js';
