@@ -84,9 +84,7 @@ Dynamic module imports reduce the need to bundle 3rd party libraries such as [Ta
 
 Following development dependencies are required to build the library and run a local instance of the XYZ host.
 
-[Vite](https://vite.dev) - The build tool which bundles the MAPP client libraries.
-
-[esbuild](https://www.npmjs.com/package/esbuild) - A JavaScript bundler and minifier, used for the CSS bundles.
+[Vite](https://vite.dev) - The build tool which bundles the MAPP client libraries and CSS assets.
 
 [µhtml](https://github.com/WebReflection/uhtml) - A micro HTML/SVG render which is bundled as utils into the MAPP library.
 

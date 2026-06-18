@@ -45,7 +45,9 @@ NODE_ENV=DEVELOPMENT pnpm build --filter=@geolytix/mapp
 
 ## CSS Bundles
 
-The root package exposes CSS bundle commands used by the host app:
+The MAPP build also bundles `apps/mapp/css/_mapp.css` and `apps/mapp/css/_ui.css` through `apps/mapp/vite.css.config.mjs`. The generated CSS and font assets are written to the root `public/css` directory.
+
+The root package also exposes CSS-only commands used by the host app:
 
 ```bash
 pnpm mapp_css

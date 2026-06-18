@@ -40,6 +40,8 @@ function createRouter(middleWare = []) {
   const router = express.Router();
 
   const publicDir = resolve(xyzEnv.XYZ_CWD || process.cwd(), 'public');
+  const disableStaticAssetCache =
+    xyzEnv.APP_ENV === 'development' && !process.env.VERCEL;
 
   if (process.versions.node.split('.')[0] < 22) {
     console.warn(`Process Node version below 22.`);
@@ -57,7 +59,14 @@ function createRouter(middleWare = []) {
 
   router.use(cookieParser());
 
-  const staticOptions = { redirect: false };
+  const staticOptions = {
+    redirect: false,
+    setHeaders(res, path) {
+      if (disableStaticAssetCache && /\/css\/.*\.(css|woff2)$/.test(path)) {
+        res.setHeader('Cache-Control', 'no-store');
+      }
+    },
+  };
 
   router.use(`${xyzEnv.DIR}/public`, express.static(publicDir, staticOptions));
   router.use(xyzEnv.DIR, express.static(publicDir, staticOptions));

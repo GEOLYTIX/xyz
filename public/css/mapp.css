@@ -1,29 +1,61 @@
-/* public/css/base/_colours.css */
 :root {
+  /* begin default colour palette */
+
   --color-primary: #003d57;
+
+  /* Backgrounds */
   --color-base: #f2f2f2;
   --color-base-secondary: #f7f7f7;
   --color-base-tertiary: #fafafa;
+  /* background colour for static content readability - cuts between secondary and tertiary */
+  --color-base-quartenary: #f7f7f7;
+
+  /* Border */
   --color-border: #dddddd;
+
+  /* Text */
   --color-font: #3f3f3f;
   --color-font-mid: #858585;
   --color-font-contrast: #ffffff;
+
+  /* State */
   --color-active: #d57120;
   --color-hover: #939faa;
   --color-changed: #ffffa7;
+
   --color-info: #0b6f50;
   --color-danger: #a21309;
-  --container-box-shadow: rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px 1px;
+  /* end default colour palette */
+
+  /* Global Layout Properties */
+  --container-box-shadow:
+    rgba(60, 64, 67, 0.3) 0px 1px 2px 0px, rgba(60, 64, 67, 0.15) 0px 1px 3px
+    1px;
   --container-border-radius: 3px;
+  /* End of Global Layout Properties */
 }
+
 * {
   transition: 0.2s ease-in-out;
   transition-property: background-color;
 }
 
-/* public/css/base/_body.css */
+@font-face {
+  font-family: 'Titillium Web';
+  font-style: normal;
+  font-weight: 400;
+  src: url('./titillium-web-v19-latin_latin-ext-regular.woff2') format('woff2');
+}
+
+@font-face {
+  font-family: 'Titillium Web';
+  font-style: italic;
+  font-weight: 400;
+  src: url('./titillium-web-v19-latin_latin-ext-italic.woff2') format('woff2');
+}
+
 body {
-  font-family: "Titillium Web", sans-serif;
+  font-family: 'Titillium Web', sans-serif;
   font-size: 0.8em;
   color: var(--color-font);
   background-color: var(--color-base);
@@ -32,11 +64,11 @@ body {
   height: 100%;
 }
 
-/* public/css/layout/_ol.css */
 .ol-scale-line {
   position: static;
   background: none;
 }
+
 .ol-scale-line-inner {
   border: 2px solid var(--color-font);
   border-top: none;
@@ -45,6 +77,7 @@ body {
   margin: 1px;
   will-change: contents, width;
 }
+
 .ol-unselectable,
 .ol-viewport {
   -webkit-touch-callout: none;
@@ -54,19 +87,23 @@ body {
   user-select: none;
   -webkit-tap-highlight-color: transparent;
 }
+
 .ol-zoom {
   top: 0.5em;
   left: 0.5em;
+
   & .ol-zoom-in,
   & .ol-zoom-out {
     border-radius: 2px 2px 0 0;
   }
 }
+
 .ol-control {
   position: absolute;
   background-color: rgba(255, 255, 255, 0.4);
   border-radius: 4px;
   padding: 2px;
+
   & button {
     display: block;
     margin: 1px;
@@ -85,7 +122,6 @@ body {
   }
 }
 
-/* public/css/layout/_map_attribution.css */
 .map-attribution {
   position: absolute;
   display: flex;
@@ -101,13 +137,16 @@ body {
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+
   & > .logo {
     pointer-events: auto;
     height: 1em;
   }
+
   .attribution-links {
     text-align: right;
     font-size: 95%;
+
     & a {
       pointer-events: auto;
       margin-left: 5px;
@@ -122,35 +161,40 @@ body {
   }
 }
 
-/* public/css/layout/_legend.css */
 .legend {
   -webkit-touch-callout: none;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   user-select: none;
+
   & .contents-wrapper,
   &.content .contents-wrapper {
     margin-top: 0.5em;
     gap: 0.5em;
+
     & > .contents {
       display: contents;
     }
+
     .label {
       grid-column: 2;
       text-overflow: ellipsis;
       text-wrap: nowrap;
       overflow: hidden;
     }
+
     &.flex {
       display: flex;
       flex-wrap: wrap;
       flex-grow: 1;
       justify-content: start;
+
       & .contents {
         display: block;
         flex-basis: 30%;
         flex-shrink: 1;
+
         &.center {
           display: flex;
           align-items: center;
@@ -159,11 +203,13 @@ body {
           margin-bottom: 1em;
           text-align: center;
         }
+
         &.row {
           display: flex;
           align-items: center;
           margin-bottom: 1em;
         }
+
         &.horizontal {
           display: flex;
           align-items: center;
@@ -172,17 +218,21 @@ body {
           flex-grow: 1;
         }
       }
+
       &.nowrap {
         flex-wrap: nowrap;
         overflow: scroll;
+
         & .contents {
           justify-content: flex-start;
+
           & .label {
             text-align: center;
           }
         }
       }
     }
+
     &.grid {
       display: grid;
       grid-template-columns: min-content;
@@ -190,18 +240,20 @@ body {
       justify-content: start;
     }
   }
+
   & .switch {
     cursor: pointer;
   }
+
   & .switch.disabled {
     opacity: 0.5;
   }
+
   .legend-icon {
     display: flex;
   }
 }
 
-/* public/css/layout/_infotip.css */
 .infotip {
   position: fixed;
   isolation: isolate;
@@ -214,7 +266,6 @@ body {
   transition-delay: 0.2s;
 }
 
-/* public/css/layout/_popup.css */
 .popup {
   position: absolute;
   background-color: var(--color-base-tertiary);
@@ -222,34 +273,37 @@ body {
   border: solid 1px var(--color-border);
   bottom: 12px;
   transform: translate(-50%, 0);
+
   &::after,
   &::before {
     border: solid transparent;
-    content: " ";
+    content: ' ';
     position: absolute;
     pointer-events: none;
   }
+
   &::after {
     border-top-color: var(--color-border);
     border-width: 10px;
     left: 50%;
     margin-left: -10px;
   }
+
   & li {
     padding: 5px 10px;
     white-space: nowrap;
     line-height: 1.5;
     list-style-type: none;
   }
+
   & li:hover {
     background-color: var(--color-base-secondary);
     cursor: pointer;
   }
+
   .list {
     max-width: 66vw;
     max-height: 300px;
     overflow-x: hidden;
   }
 }
-
-/* public/css/_mapp.css */
