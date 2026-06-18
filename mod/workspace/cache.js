@@ -76,6 +76,7 @@ The workspace is assigned to the module scope cache variable and the timestamp i
 
 @returns {workspace} JSON Workspace.
 */
+const templates = {};
 async function cacheWorkspace() {
   const src = xyzEnv.WORKSPACE?.split(':')[0];
 
@@ -94,39 +95,16 @@ async function cacheWorkspace() {
       xyzEnv.CUSTOM_TEMPLATES,
     ));
 
-  /**
-  @function mark_template
+  const workspace_templates = structuredClone(workspace.templates);
 
-  @description
-  The method maps the Object.entries of the templates_object param and assigns the _type property on the object marking is a different types of templates.
+  workspace.templates = Object.create(templates);
 
-
-  @param {Object} templates_object
-  @returns {Object} templates_object with _core: true property.
-  */
-  function mark_template(templates_object, type) {
-    if (!templates_object) return;
-
-    return Object.fromEntries(
-      Object.entries(templates_object).map(([key, template]) => [
-        key,
-        { ...template, _type: type },
-      ]),
-    );
-  }
-
-  // Assign default view and query templates to workspace.
-  workspace.templates = {
-    ...mark_template(view_templates, 'core'),
-    ...mark_template(mail_templates, 'core'),
-    ...mark_template(msg_templates, 'core'),
-    ...mark_template(query_templates, 'core'),
-
-    ...mark_template(custom_templates, 'custom'),
-
-    // Default templates can be overridden by assigning a template with the same key.
-    ...mark_template(workspace.templates, 'workspace'),
-  };
+  mark_template(workspace.templates, view_templates, 'core');
+  mark_template(workspace.templates, mail_templates, 'core');
+  mark_template(workspace.templates, msg_templates, 'core');
+  mark_template(workspace.templates, query_templates, 'core');
+  mark_template(workspace.templates, custom_templates, 'custom');
+  mark_template(workspace.templates, workspace_templates, 'workspace');
 
   // A workspace must have a default locale [template]
   workspace.locale ??= {
@@ -170,4 +148,22 @@ async function cacheWorkspace() {
   cache = workspace;
 
   return workspace;
+}
+
+/**
+@function mark_template
+
+@description
+The method maps the Object.entries of the templates_object param and assigns the _type property on the object marking is a different types of templates.
+
+@param {Object} templates_object
+@returns {Object} templates_object with _core: true property.
+*/
+function mark_template(workspace_templates, templates_object, type) {
+  if (!templates_object) return;
+
+  for (const [key, template] of Object.entries(templates_object)) {
+    template._type = type;
+    workspace_templates[key] = template;
+  }
 }
