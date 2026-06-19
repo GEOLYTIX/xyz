@@ -103,7 +103,7 @@ export default async function getTemplate(template) {
     return new Error(`Unable to getFrom src: ${template.src}`);
   }
 
-  if (template.module) {
+  if (template.module && typeof response === 'string') {
     // Module templates must not be cached.
     return await moduleTemplate(template, response);
   }
