@@ -76,7 +76,6 @@ The workspace is assigned to the module scope cache variable and the timestamp i
 
 @returns {workspace} JSON Workspace.
 */
-const templates = {};
 async function cacheWorkspace() {
   const src = xyzEnv.WORKSPACE?.split(':')[0];
 
@@ -97,7 +96,7 @@ async function cacheWorkspace() {
 
   const workspace_templates = structuredClone(workspace.templates);
 
-  workspace.templates = Object.create(templates);
+  workspace.templates = Object.create(null);
 
   assign_workspace_templates(workspace.templates, view_templates);
   assign_workspace_templates(workspace.templates, mail_templates);
