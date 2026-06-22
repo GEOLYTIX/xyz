@@ -6,7 +6,7 @@ The processEnv utility script is required by the express web server app and the 
 @requires varlock Environment configuration loading
 */
 
-import { existsSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import {
   internal,
   patchGlobalConsole,
@@ -109,7 +109,6 @@ The process.ENV object holds configuration provided to the node process from the
 
 import { resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { readFileSync } from 'fs';
 
 const defaults = {
   COOKIE_TTL: 36000,
