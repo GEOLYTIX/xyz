@@ -3,7 +3,7 @@
   "description": "Optional custom auth backend app",
   "type": "module",
   "scripts": {
-    "dev": "node --inspect server.js"
+    "dev": "varlock run -- node --inspect server.js"
   },
   "varlock": {
     "loadPath": "../../"

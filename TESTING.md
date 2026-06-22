@@ -48,24 +48,24 @@ Run the full test suite:
 pnpm test
 ```
 
-This runs `vitest run` as defined in the package.json `test` script.
+This runs `varlock run -- vitest run` as defined in the package.json `test` script.
 
 Watch mode re-runs affected tests on file changes:
 
 ```bash
-pnpm test-watch
+pnpm --filter=@geolytix/xyz-app test:watch
 ```
 
 Run a single test file:
 
 ```bash
-pnpm exec vitest run tests/mod/query.test.mjs
+pnpm exec varlock run -- vitest run apps/xyz/tests/mod/query.test.mjs
 ```
 
 Run tests matching a name pattern:
 
 ```bash
-pnpm exec vitest run -t "should return 400"
+pnpm exec varlock run -- vitest run -t "should return 400"
 ```
 
 ### Coverage
@@ -73,10 +73,10 @@ pnpm exec vitest run -t "should return 400"
 Generate a coverage report with the v8 provider:
 
 ```bash
-pnpm coverage
+pnpm test:xyz:coverage
 ```
 
-This runs `vitest run --coverage` and prints a table showing statement, branch, function, and line coverage for every file under `mod/`.
+This runs `varlock run -- vitest run --coverage` and prints a table showing statement, branch, function, and line coverage for every file under `mod/`.
 
 ### Configuration
 

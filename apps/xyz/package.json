@@ -12,9 +12,9 @@
   },
   "scripts": {
     "dev": "varlock run -- node --inspect server.js",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test": "varlock run -- vitest run",
+    "test:watch": "varlock run -- vitest",
+    "test:coverage": "varlock run -- vitest run --coverage"
   },
   "varlock": {
     "loadPath": "../../"

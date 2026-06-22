@@ -69,6 +69,8 @@ Start the XYZ server:
 pnpm dev
 ```
 
+Runtime and test scripts are launched through `varlock run --`. Locally, `processEnv.js` consumes the serialized environment that Varlock injects into `process.env.__VARLOCK_ENV`; on Vercel, it consumes the frozen `.varlock.blob` generated before deployment.
+
 Build the MAPP client bundles:
 
 ```sh

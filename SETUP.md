@@ -126,12 +126,12 @@ For the standard local server:
 pnpm dev
 ```
 
-That runs the XYZ app server at `apps/xyz/server.js` with the Node inspector enabled.
+That runs the XYZ app server at `apps/xyz/server.js` through `varlock run --` with the Node inspector enabled.
 
 If you do not want the inspector, run:
 
 ```bash
-node apps/xyz/server.js
+pnpm exec varlock run -- node apps/xyz/server.js
 ```
 
 Open the app at:
