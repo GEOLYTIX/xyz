@@ -43,7 +43,7 @@ if (process.env.VERCEL) {
 } else if (!process.env.__VARLOCK_ENV) {
   // Resolve and validate the environment with the varlock CLI, like
   // varlock/auto-load, but without exiting the process on config errors.
-  const { stdout } = execSyncVarlock('load --format json-full --compact', {
+  const { stdout } = execSyncVarlock('load --format json-full', {
     fullResult: true,
     callerDir: new URL('.', import.meta.url).pathname,
   });

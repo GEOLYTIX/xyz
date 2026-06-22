@@ -15,8 +15,6 @@
   },
   "license": "MIT",
   "devDependencies": {
-    "@varlock/google-secret-manager-plugin": "catalog:",
-    "@varlock/vite-integration": "catalog:",
     "varlock": "catalog:",
     "vite": "catalog:"
   }
