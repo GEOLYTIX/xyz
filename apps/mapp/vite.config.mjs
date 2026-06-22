@@ -1,5 +1,4 @@
 import { fileURLToPath } from 'node:url';
-import { varlockVitePlugin } from '@varlock/vite-integration';
 import { defineConfig } from 'vite';
 
 // The varlock ENV proxy is not initialized when vite evaluates the config;
@@ -28,6 +27,5 @@ export default defineConfig({
       },
     },
     sourcemap: true,
-  },
-  plugins: [varlockVitePlugin({ ssrInjectMode: 'resolved-env' })],
+  }
 });

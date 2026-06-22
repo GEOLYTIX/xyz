@@ -10,12 +10,8 @@
     "build": "vite build && pnpm css",
     "css": "vite build --config vite.css.config.mjs"
   },
-  "varlock": {
-    "loadPath": "../../"
-  },
   "license": "MIT",
   "devDependencies": {
-    "varlock": "catalog:",
     "vite": "catalog:"
   }
 }
