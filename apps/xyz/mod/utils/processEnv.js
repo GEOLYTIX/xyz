@@ -14,7 +14,6 @@ import {
   patchGlobalServerResponse,
 } from 'varlock';
 import { decryptEnvBlobSync, isEncryptedBlob } from 'varlock/encrypt-env';
-import { execSyncVarlock } from 'varlock/exec-sync-varlock';
 
 if (process.env.VERCEL) {
   // Vercel deployments hydrate the environment from the frozen blob written
@@ -40,15 +39,6 @@ if (process.env.VERCEL) {
   }
 
   process.env.__VARLOCK_ENV = frozenEnv;
-} else if (!process.env.__VARLOCK_ENV) {
-  // Resolve and validate the environment with the varlock CLI, like
-  // varlock/auto-load, but without exiting the process on config errors.
-  const { stdout } = execSyncVarlock('load --format json-full', {
-    fullResult: true,
-    callerDir: new URL('.', import.meta.url).pathname,
-  });
-
-  process.env.__VARLOCK_ENV = stdout;
 }
 
 internal.initVarlockEnv();
