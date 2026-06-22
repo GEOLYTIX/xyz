@@ -148,6 +148,30 @@ The blob is gitignored and only read when the `VERCEL` environment variable is s
 
 The root `vercel.json` deploys `apps/xyz/server.js` and includes `.varlock.blob`, `public/**`, and `resources/**`. The auth and SAML app Vercel configs also include `.varlock.blob`; the SAML config additionally includes certificate files from `apps/xyz`.
 
+Example root `vercel.json` for the XYZ app:
+
+```json
+{
+  "version": 2,
+  "trailingSlash": false,
+  "builds": [
+    {
+      "src": "apps/xyz/server.js",
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": [".varlock.blob", "public/**", "resources/**"]
+      }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "apps/xyz/server.js"
+    }
+  ]
+}
+```
+
 The legacy `push-env` script still syncs raw env files to Vercel when needed, but frozen deployments only require runtime variables that are not embedded in the blob. For encrypted production blobs, `_VARLOCK_ENV_KEY` must be present in Vercel.
 
 ## Validation
