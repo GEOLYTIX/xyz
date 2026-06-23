@@ -10,8 +10,11 @@
       "persistent": true
     },
     "test": {
-      "dependsOn": ["^test"],
+      "dependsOn": ["transit"],
       "outputs": []
+    },
+    "transit": {
+      "dependsOn": ["^transit"]
     },
     "test:coverage": {
       "dependsOn": ["^test:coverage"],

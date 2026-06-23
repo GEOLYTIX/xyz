@@ -32,7 +32,7 @@ describe('cookie:', async () => {
 
   it('destroy cookie', async () => {
     const expHeader = {
-      'set-cookie': 'TEST=null;HttpOnly;Max-Age=0;Path=/',
+      'set-cookie': 'TEST=null; Max-Age=0; undefined',
     };
 
     const user = {

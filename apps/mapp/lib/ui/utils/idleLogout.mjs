@@ -102,7 +102,7 @@ function renewToken() {
 Timeout function for renewing the access token used in {@link module:/ui/utils/idleLogout~renewToken}.
 */
 function cookie() {
-  const params = { url: `${idle.host}/api/user/cookie?renew=true` };
+  const params = { url: `${idle.host}/api/user/cookie` };
 
   params.onLoad = (e) => {
     // Lock interface if cookie renewal fails.

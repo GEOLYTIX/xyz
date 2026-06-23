@@ -17,5 +17,9 @@
     "@geolytix/xyz-app": "workspace:*",
     "express": "catalog:",
     "jsonwebtoken": "catalog:"
+  },
+  "devDependencies": {
+    "node-mocks-http": "catalog:",
+    "vitest": "catalog:"
   }
 }

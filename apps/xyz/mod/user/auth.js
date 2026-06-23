@@ -185,7 +185,7 @@ async function checkParamToken(req, res, user) {
 
     res.setHeader(
       'Set-Cookie',
-      `${xyzEnv.TITLE}=${cookie};HttpOnly;Max-Age=${(user.exp && user.exp - user.iat) || xyzEnv.COOKIE_TTL};Path=${xyzEnv.DIR || '/'};SameSite=Strict${(!req.headers.host?.includes('localhost') && ';Secure') || ''}`,
+      `${xyzEnv.TITLE}=${cookie}; Max-Age=${(user.exp && user.exp - user.iat) || xyzEnv.COOKIE_TTL}; ${xyzEnv.COOKIE_PROPS}`,
     );
   }
 }

@@ -33,7 +33,7 @@ The method will destroy the user cookie and redirect to the base directory.
 export function custom_logout(req, res) {
   res.setHeader(
     'Set-Cookie',
-    `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`,
+    `${xyzEnv.TITLE}=null; Max-Age=0; ${xyzEnv.COOKIE_PROPS}`,
   );
   res.setHeader('location', `${xyzEnv.DIR}/`);
   res.status(302).send();

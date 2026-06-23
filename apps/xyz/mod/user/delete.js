@@ -56,7 +56,7 @@ export default async function deleteUser(req, res) {
     // The cookie must be set to null on successful return from delete method.
     res.setHeader(
       'Set-Cookie',
-      `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`,
+      `${xyzEnv.TITLE}=null;Max-Age=0;${xyzEnv.COOKIE_PROPS}`,
     );
 
     console.log(`${email} removed themselves`);

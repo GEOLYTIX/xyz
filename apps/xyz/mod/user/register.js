@@ -53,7 +53,7 @@ export default async function register(req, res) {
   // The login view will set the cookie to null.
   res.setHeader(
     'Set-Cookie',
-    `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`,
+    `${xyzEnv.TITLE}=null; Max-Age=0; ${xyzEnv.COOKIE_PROPS}`,
   );
 
   req.params.template = req.params.reset
