@@ -12,9 +12,9 @@
   },
   "scripts": {
     "dev": "varlock run -- node --inspect server.js",
-    "test": "varlock run -- vitest run",
-    "test:watch": "varlock run -- vitest",
-    "test:coverage": "varlock run -- vitest run --coverage"
+    "test": "varlock run --path ../../examples/varlock/vanilla.env.schema --path ../../examples/varlock/vanilla.env -- vitest run",
+    "test:watch": "varlock run --path ../../examples/varlock/vanilla.env.schema --path ../../examples/varlock/vanilla.env -- vitest",
+    "test:coverage": "varlock run --path ../../examples/varlock/vanilla.env.schema --path ../../examples/varlock/vanilla.env -- vitest run --coverage"
   },
   "varlock": {
     "loadPath": "../../"
