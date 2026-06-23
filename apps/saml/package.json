@@ -3,7 +3,8 @@
   "description": "Optional SAML backend app",
   "type": "module",
   "scripts": {
-    "dev": "node --inspect server.js"
+    "dev": "node --inspect server.js",
+    "test": "vitest run --config vitest.config.mjs"
   },
   "exports": {
     ".": "./saml.js",
@@ -14,5 +15,9 @@
     "@geolytix/xyz-app": "workspace:*",
     "express": "catalog:",
     "jsonwebtoken": "catalog:"
+  },
+  "devDependencies": {
+    "node-mocks-http": "catalog:",
+    "vitest": "catalog:"
   }
 }

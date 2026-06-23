@@ -12,9 +12,9 @@
   },
   "scripts": {
     "dev": "node --inspect server.js",
-    "test": "vitest run",
-    "test:watch": "vitest",
-    "test:coverage": "vitest run --coverage"
+    "test": "vitest run --config vitest.config.mjs",
+    "test:watch": "vitest --config vitest.config.mjs",
+    "test:coverage": "vitest run --config vitest.config.mjs --coverage"
   },
   "license": "MIT",
   "optionalDependencies": {
@@ -30,5 +30,11 @@
     "express-rate-limit": "catalog:",
     "jsonwebtoken": "catalog:",
     "pg": "catalog:"
+  },
+  "devDependencies": {
+    "@vitest/coverage-v8": "catalog:",
+    "node-mocks-http": "catalog:",
+    "undici": "catalog:",
+    "vitest": "catalog:"
   }
 }

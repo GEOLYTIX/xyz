@@ -120,7 +120,7 @@ function logoutCallback(res) {
   try {
     res.setHeader(
       'Set-Cookie',
-      `${xyzEnv.TITLE}=; HttpOnly; Path=${xyzEnv.DIR || '/'}; Expires=Thu, 01 Jan 1970 00:00:00 GMT`,
+      `${xyzEnv.TITLE}=null; Max-Age=0; ${xyzEnv.COOKIE_PROPS}`,
     );
 
     res.setHeader('location', `${xyzEnv.DIR || '/'}`);
@@ -188,6 +188,7 @@ async function acs(req, res, strategy, redirectUser) {
       nameID: samlResponse.profile.nameID,
       nameIDFormat: samlResponse.profile.nameIDFormat,
       nameQualifier: samlResponse.profile.nameQualifier,
+      redirect: req.body?.RelayState || req.query?.RelayState,
       sessionIndex: samlResponse.profile.sessionIndex,
       spNameQualifier: samlResponse.profile.spNameQualifier,
     };

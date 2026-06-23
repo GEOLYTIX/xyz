@@ -44,7 +44,7 @@ export default async function validateRequestAuth(req, res, next) {
     // Remove cookie.
     res.setHeader(
       'Set-Cookie',
-      `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'};SameSite=Strict${(!req.headers.host.includes('localhost') && ';Secure') || ''}`,
+      `${xyzEnv.TITLE}=null; Max-Age=0; ${xyzEnv.COOKIE_PROPS}`,
     );
 
     res.status(401).send(req.params.user.message);
@@ -102,9 +102,9 @@ function loginRedirect(req, res) {
     ? encodeURIComponent(req.url)
     : xyzEnv.DIR || '/';
 
-  const user_cookie = `${xyzEnv.TITLE}=null;HttpOnly;Max-Age=0;Path=${xyzEnv.DIR || '/'}`;
+  const user_cookie = `${xyzEnv.TITLE}=null; Max-Age=0; ${xyzEnv.COOKIE_PROPS}`;
 
-  const redirect_cookie = `${xyzEnv.TITLE}_redirect=${redirectUrl};HttpOnly;Max-Age=60;Path=${xyzEnv.DIR || '/'}`;
+  const redirect_cookie = `${xyzEnv.TITLE}_redirect=${redirectUrl}; Max-Age=60; ${xyzEnv.COOKIE_PROPS}`;
 
   // Set cookie with properly encoded redirect value.
   res.setHeader('Set-Cookie', [user_cookie, redirect_cookie]);
