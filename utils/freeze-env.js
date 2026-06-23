@@ -23,7 +23,7 @@ local environment (or .env.local) and in the Vercel project environment.
 Generate a key with `pnpm exec varlock generate-key --plain`.
 */
 
-import { writeFileSync } from 'node:fs';
+import { existsSync, writeFileSync } from 'node:fs';
 import { internal } from 'varlock';
 import { encryptEnvBlobSync } from 'varlock/encrypt-env';
 
@@ -32,6 +32,16 @@ const targetEnv =
   'production';
 
 process.env.APP_ENV = targetEnv;
+
+if (!existsSync('.env.schema')) {
+  console.error(
+    'Missing .env.schema. Copy one of the examples from examples/varlock first.',
+  );
+  console.error(
+    'For a plain Varlock setup, start with: cp examples/varlock/vanilla.env.schema .env.schema',
+  );
+  process.exit(1);
+}
 
 const envGraph = await internal.loadVarlockEnvGraph();
 
@@ -46,11 +56,10 @@ internal.checkForConfigErrors(envGraph);
 const serialized = envGraph.getSerializedGraph();
 let blob = JSON.stringify(serialized);
 let encrypted = false;
+const key =
+  process.env._VARLOCK_ENV_KEY || serialized.config?._VARLOCK_ENV_KEY?.value;
 
-if (serialized.settings?.encryptInjectedEnv) {
-  const key =
-    process.env._VARLOCK_ENV_KEY || serialized.config?._VARLOCK_ENV_KEY?.value;
-
+if (serialized.settings?.encryptInjectedEnv || key) {
   if (!key) {
     console.error(
       `The schema enables encryptInjectedEnv for the ${targetEnv} environment but no _VARLOCK_ENV_KEY is set.`,

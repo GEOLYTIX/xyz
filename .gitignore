@@ -3,6 +3,7 @@
 .zed/
 .env
 .env.*
+env.d.ts
 .varlock.blob
 .DS_Store
 

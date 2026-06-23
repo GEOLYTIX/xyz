@@ -40,7 +40,7 @@ Please refer to the [wiki pages](https://github.com/GEOLYTIX/xyz/wiki) for detai
 
 For repository setup, local development, and deployment workflows, see [SETUP.md](./SETUP.md).
 
-For environment validation, Google Secret Manager, and frozen Vercel deployments, see [VARLOCK.md](./VARLOCK.md).
+For environment validation, vanilla Varlock examples, and frozen Vercel deployments, see [VARLOCK.md](./VARLOCK.md).
 
 ## Version History
 
@@ -70,7 +70,7 @@ Dynamic module imports reduce the need to bundle 3rd party libraries such as [Ta
 
 [Node-Postgres](https://github.com/brianc/node-postgres) - PostgreSQL client for Node.
 
-[Varlock](https://varlock.dev) - Schema-validated environment configuration with Google Secret Manager resolution. See VARLOCK.md.
+[Varlock](https://varlock.dev) - Schema-validated environment configuration. Vanilla examples live in `examples/varlock`; see `VARLOCK.md`.
 
 ### Optional dependencies
 
