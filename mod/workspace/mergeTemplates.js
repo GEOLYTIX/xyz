@@ -64,11 +64,6 @@ export default async function mergeTemplates(obj, roles) {
     for (const _template of obj.templates) {
       obj = await objTemplate(obj, _template, roles, context);
     }
-  } else if (obj.templates instanceof Object) {
-    const err = `${obj.key} Object must be a templates Array.`;
-    obj.err ??= [];
-    obj.err.push(err);
-    console.warn(err);
   }
 
   // Substitute ${SRC_*} in object string.

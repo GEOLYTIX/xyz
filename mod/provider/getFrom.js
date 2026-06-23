@@ -101,7 +101,7 @@ async function Https(url) {
 
     logger(`${response.status} - ${response.url}`, 'fetch');
 
-    if (requestUrl.href.match(/\.json$/i)) {
+    if (requestUrl.href.endsWith('.json')) {
       return await response.json();
     }
 
