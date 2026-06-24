@@ -3,6 +3,7 @@
 import { spawnSync } from 'node:child_process';
 
 const args = process.argv.slice(2);
+const pnpmCommand = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm';
 
 if (args.includes('--help') || args.includes('-h')) {
   console.log(`Usage: pnpm deploy:vercel --env=<production|preview> [vercel flags]
@@ -38,10 +39,15 @@ deploy(environment);
 
 function generateVarlockKey() {
   const result = spawnSync(
-    'pnpm',
+    pnpmCommand,
     ['exec', 'varlock', 'generate-key', '--plain'],
     { encoding: 'utf8' },
   );
+
+  if (result.error) {
+    console.error(`Failed to run ${pnpmCommand}: ${result.error.message}`);
+    process.exit(1);
+  }
 
   if (result.status !== 0) {
     process.stderr.write(
@@ -62,7 +68,7 @@ function generateVarlockKey() {
 
 function setVercelEnvKey(environment, key) {
   run(
-    'pnpm',
+    pnpmCommand,
     [
       'exec',
       'vercel',
@@ -94,7 +100,7 @@ function deploy(environment) {
 
   deployArgs.push(...getVercelDeployArgs(args));
 
-  run('pnpm', deployArgs);
+  run(pnpmCommand, deployArgs);
 }
 
 function getArg(name) {
@@ -197,6 +203,11 @@ function run(command, commandArgs, options = {}) {
     stdio: 'inherit',
     ...options,
   });
+
+  if (result.error) {
+    console.error(`Failed to run ${command}: ${result.error.message}`);
+    process.exit(1);
+  }
 
   if (result.status !== 0) {
     process.exit(result.status || 1);
