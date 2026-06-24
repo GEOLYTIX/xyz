@@ -117,24 +117,8 @@ For JSDoc generation, see [DOCUMENTATION.md](./DOCUMENTATION.md).
 ## Vercel deployment
 Deployments to Vercel require environment variables to be encrypted with varlock. Please refer to the [varlock documentation](./varlock/README.md) for configuration and workflows.
 
-## Run tests
-Run the full workspace test suite:
-
-```bash
-pnpm test
-```
-
-Run the XYZ app tests only:
-
-```bash
-pnpm test:xyz
-```
-
-Run Biome checks manually:
-
-```bash
-pnpm exec biome check .
-```
+## Tests
+Please refer to [TESTING.md](./TESTING.md) in regards to testing the individual XYZ monorepo apps.
 
 ## Database-backed setups
 You only need a database if your workspace templates, ACL flow, or provider/query configuration depend on one.
@@ -150,19 +134,8 @@ PRIVATE=localhost:5432|user:password|acl_table
 
 Use the exact connection and ACL values required by your workspace and auth setup.
 
-## Optional SAML setup
-The SAML dev server mounts SAML routes from `apps/saml` onto the XYZ app server.
-For SAML-specific configuration and routes, see [apps/saml/README.md](./apps/saml/README.md).
-
-If you need SAML locally:
-
-1. Install dependencies with `pnpm install`.
-2. Add the required `SAML_*` variables to `.env`.
-3. Start the SAML dev server:
-
-```bash
-pnpm dev:saml
-```
+## SAML authentication
+Please refer to [apps/saml/README.md](./apps/saml/README.md) in regards to authenticating users with SAML.
 
 ## Troubleshooting
 
