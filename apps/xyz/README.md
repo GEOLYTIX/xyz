@@ -1,14 +1,6 @@
 ## XYZ API
 
-The XYZ API is a collection of JavaScript modules for Node.js web application frameworks.
-
-An Express application script is provided in this app at `server.js`.
-
-XYZ API modules should be run with a Node.js runtime v22 or higher.
-
-The [XYZ API](/xyz/module-_api.html) module is located in the api folder as a requirement for using the offical Node.js runtime in Vercel's Edge Network.
-
-All other XYZ API modules are located in the /mod directory.
+The XYZ monorepo application is an Express router and server.
 
 JSDoc is used to documented any XYZ API module, function, and their parameter.
 
@@ -26,34 +18,18 @@ The XYZ API modules are:
 
 ### [Sign](/xyz/module-_sign)
 
-## Development
+### Running a local XYZ server
 
-The XYZ server imports `apps/xyz/mod/utils/processEnv.js` before routes are created. Local runtime and test commands launch through `varlock run --`, so the loader initializes from the serialized Varlock environment, applies server defaults, creates the frozen `globalThis.xyzEnv` object, and patches console/HTTP output so sensitive Varlock values are redacted.
+The dev turbo task can be executed by runniung the dev script defined in the xyz app package.json.
 
-For local development, copy one of the root Varlock examples, create a root `.env` file, and validate it with:
-
-```bash
-pnpm exec varlock load --compact
 ```
-
-For Vercel deployments, run `pnpm freeze-env --env=production` before deploying. The generated `.varlock.blob` is included by `vercel.json` and read by `processEnv.js` at runtime, so serverless functions do not need `.env` files.
-
-From the repository root, start the XYZ app server with:
-
-```bash
 pnpm dev
 ```
 
-From `apps/xyz`, run the package dev script directly:
+### Environment variables
+The node process which runs the xyz express app can be configured with environment variables in an env file in the repository root.
 
-```bash
-pnpm dev
-```
+Please refer to the [varlock documentation](../../varlock/README.md) for schema validation and protection of sensitive environment variables.
 
-## Tests
-
-From the repository root, run XYZ tests with:
-
-```bash
-pnpm test:xyz
-```
+### Tests
+Please refer to [TESTING.md](../../TESTING.md) in regards to testing the individual XYZ monorepo apps.

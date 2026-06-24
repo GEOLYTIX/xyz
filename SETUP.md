@@ -37,7 +37,6 @@ Use `git clone https://github.com/GEOLYTIX/xyz.git` to clone the repository into
 Change into the directory and use `pnpm install` to install any monorepo dependencies defined or referenced in the package.json
 
 ## Environment variables
-
 The node process which runs the xyz express app can be configured with environment variables in an env file in the repository root.
 
 For a minimum configuration the workspace.json with a single OSM tile layer can be used:
