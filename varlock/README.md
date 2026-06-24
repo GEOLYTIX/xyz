@@ -21,7 +21,6 @@ pnpm dev
 ```
 
 ### varlock load
-
 New variables required to configure the XYZ process must be added to the env and schema. The varlock load command loads and validates variables in your env files and prints the results.
 
 ```sh
@@ -29,14 +28,12 @@ pnpm exec varlock load --compact
 ```
 
 ### Platform variables
-
 Platform variables like NODE_ENV, VERCEL, and XYZ_CWD should not be kept in the env.schema to prevent these being overriden at runtime.
 
 ### Git commits
 The `.env`, `.env.*`, `.env.schema`, or `.varlock.blob` files must NOT be committed to your Git repository.
 
 ### Google Cloud Secret Manager and Application Default Credentials (ADC)
-
 Sensitive variables can be stored in the Google Cloud Secret Manager. An example env and schema are provided in the directory.
 
 ```sh
@@ -66,7 +63,6 @@ gcloud auth application-default login
 ```
 
 ## Deployment to Vercel
-
 For deployments to Vercel it is required to freeze the active local schema and env values before deploying:
 
 ```sh
@@ -84,3 +80,9 @@ pnpm deploy:vercel --env=preview
 The helper generates a fresh key with `varlock generate-key --plain`, encrypts `.varlock.blob` with that key, stores the same key in the selected Vercel environment, then deploys. It supports Vercel CLI flags such as `--scope=...`, `--token=...`, and `--local-config=...`.
 
 The generated `.varlock.blob` is included by `vercel.json`, so the serverless runtime does not need `.env.schema` or `.env` files.
+
+### Missing frozen env
+Run `pnpm freeze-env --env=production` before `vercel --prod` and confirm `.varlock.blob` exists at the repository root.
+
+### Unable to decrypt .varlock.blob
+Set `_VARLOCK_ENV_KEY` in the Vercel project. It must match the key used when `pnpm freeze-env --env=production` created the blob.
