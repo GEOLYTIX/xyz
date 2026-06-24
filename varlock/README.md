@@ -36,6 +36,8 @@ The `.env`, `.env.*`, `.env.schema`, or `.varlock.blob` files must NOT be commit
 ### Google Cloud Secret Manager and Application Default Credentials (ADC)
 Sensitive variables can be stored in the Google Cloud Secret Manager. An example env and schema are provided in the directory.
 
+To install Google Cloud CLI on your machine see [here](https://docs.cloud.google.com/sdk/docs/install-sdk)
+
 ```sh
 cp varlock/gsm-adc.env .env
 cp varlock/gsm-adc.env.schema .env.schema
