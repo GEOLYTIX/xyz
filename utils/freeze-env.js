@@ -35,10 +35,10 @@ process.env.APP_ENV = targetEnv;
 
 if (!existsSync('.env.schema')) {
   console.error(
-    'Missing .env.schema. Copy one of the examples from examples/varlock first.',
+    'Missing .env.schema. Copy one of the examples from varlock first.',
   );
   console.error(
-    'For a plain Varlock setup, start with: cp examples/varlock/vanilla.env.schema .env.schema',
+    'For a plain Varlock setup, start with: cp varlock/vanilla.env.schema .env.schema',
   );
   process.exit(1);
 }

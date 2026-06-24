@@ -45,8 +45,8 @@ The Vite-powered MAPP build and Express server both load root env files through 
 Create a vanilla local setup:
 
 ```bash
-cp examples/varlock/vanilla.env.schema .env.schema
-cp examples/varlock/vanilla.env .env
+cp varlock/vanilla.env.schema .env.schema
+cp varlock/vanilla.env .env
 ```
 
 The copied `.env` contains:

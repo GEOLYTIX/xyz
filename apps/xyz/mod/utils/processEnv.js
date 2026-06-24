@@ -9,7 +9,7 @@ Non sensitive environment variables such as a local workspace may be provided in
 
 It is highly recommended to use a secret manager to store sensitive environment variable values such as database connection strings.
 
-Please refer to the VARLOCK.md for more information in regards to managing and encrypting sensitive environment variables.
+Please refer to the documentation and examples in the /varlock root directory for information.
 
 @requires node:fs
 @requires node:path
