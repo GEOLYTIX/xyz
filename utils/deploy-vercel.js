@@ -76,12 +76,10 @@ function setVercelEnvKey(environment, key) {
       '--force',
       '--yes',
       '--non-interactive',
+      '--value',
+      key,
       ...getVercelGlobalArgs(args),
     ],
-    {
-      input: `${key}\n`,
-      stdio: ['pipe', 'inherit', 'inherit'],
-    },
   );
 }
 
