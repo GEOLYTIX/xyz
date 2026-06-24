@@ -64,23 +64,21 @@ function generateVarlockKey() {
 }
 
 function setVercelEnvKey(environment, key) {
-  runPnpm(
-    [
-      'exec',
-      'vercel',
-      'env',
-      'add',
-      '_VARLOCK_ENV_KEY',
-      environment,
-      '--sensitive',
-      '--force',
-      '--yes',
-      '--non-interactive',
-      '--value',
-      key,
-      ...getVercelGlobalArgs(args),
-    ],
-  );
+  runPnpm([
+    'exec',
+    'vercel',
+    'env',
+    'add',
+    '_VARLOCK_ENV_KEY',
+    environment,
+    '--sensitive',
+    '--force',
+    '--yes',
+    '--non-interactive',
+    '--value',
+    key,
+    ...getVercelGlobalArgs(args),
+  ]);
 }
 
 function deploy(environment) {
