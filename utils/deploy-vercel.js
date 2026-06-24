@@ -3,7 +3,6 @@
 import { spawnSync } from 'node:child_process';
 
 const args = process.argv.slice(2);
-const pnpmCommand = process.platform === 'win32' ? 'pnpm.cmd' : 'pnpm';
 
 if (args.includes('--help') || args.includes('-h')) {
   console.log(`Usage: pnpm deploy:vercel --env=<production|preview> [vercel flags]
@@ -38,14 +37,12 @@ setVercelEnvKey(environment, key);
 deploy(environment);
 
 function generateVarlockKey() {
-  const result = spawnSync(
-    pnpmCommand,
-    ['exec', 'varlock', 'generate-key', '--plain'],
-    { encoding: 'utf8' },
-  );
+  const result = spawnPnpm(['exec', 'varlock', 'generate-key', '--plain'], {
+    encoding: 'utf8',
+  });
 
   if (result.error) {
-    console.error(`Failed to run ${pnpmCommand}: ${result.error.message}`);
+    console.error(`Failed to run pnpm: ${result.error.message}`);
     process.exit(1);
   }
 
@@ -67,8 +64,7 @@ function generateVarlockKey() {
 }
 
 function setVercelEnvKey(environment, key) {
-  run(
-    pnpmCommand,
+  runPnpm(
     [
       'exec',
       'vercel',
@@ -100,7 +96,7 @@ function deploy(environment) {
 
   deployArgs.push(...getVercelDeployArgs(args));
 
-  run(pnpmCommand, deployArgs);
+  runPnpm(deployArgs);
 }
 
 function getArg(name) {
@@ -212,4 +208,31 @@ function run(command, commandArgs, options = {}) {
   if (result.status !== 0) {
     process.exit(result.status || 1);
   }
+}
+
+function runPnpm(commandArgs, options = {}) {
+  const result = spawnPnpm(commandArgs, {
+    stdio: 'inherit',
+    ...options,
+  });
+
+  if (result.error) {
+    console.error(`Failed to run pnpm: ${result.error.message}`);
+    process.exit(1);
+  }
+
+  if (result.status !== 0) {
+    process.exit(result.status || 1);
+  }
+}
+
+function spawnPnpm(commandArgs, options = {}) {
+  if (process.env.npm_execpath?.toLowerCase().includes('pnpm')) {
+    return spawnSync(process.execPath, [process.env.npm_execpath, ...commandArgs], options);
+  }
+
+  return spawnSync('pnpm', commandArgs, {
+    shell: process.platform === 'win32',
+    ...options,
+  });
 }
