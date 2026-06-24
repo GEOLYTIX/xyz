@@ -228,7 +228,11 @@ function runPnpm(commandArgs, options = {}) {
 
 function spawnPnpm(commandArgs, options = {}) {
   if (process.env.npm_execpath?.toLowerCase().includes('pnpm')) {
-    return spawnSync(process.execPath, [process.env.npm_execpath, ...commandArgs], options);
+    return spawnSync(
+      process.execPath,
+      [process.env.npm_execpath, ...commandArgs],
+      options,
+    );
   }
 
   return spawnSync('pnpm', commandArgs, {
