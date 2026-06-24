@@ -43,7 +43,12 @@ if (!existsSync('.env.schema')) {
   process.exit(1);
 }
 
-const envGraph = await internal.loadVarlockEnvGraph();
+const envGraph = await internal.loadEnvGraph({
+  entryFilePaths: ['.'],
+  overrideValues: { ...process.env, APP_ENV: targetEnv },
+  processEnvOverride: { ...process.env, APP_ENV: targetEnv },
+  currentEnvFallback: targetEnv,
+});
 
 for (const plugin of envGraph.plugins) {
   if (plugin.loadingError) throw plugin.loadingError;
