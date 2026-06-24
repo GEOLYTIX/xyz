@@ -1,12 +1,25 @@
 /**
 ## /utils/processEnv
 
-The processEnv utility script is required by the express web server app and the api module to set default environment variables as well ass variables defined in the process environment to the globalThis xyzEnv object.
+The processEnv module parses environment variables, sets defaults, and assigns an object with variable properties as globalThis.xyzEnv.
 
+Sensitive variables must be declared in an .env.schema file in the root directory.
+
+Non sensitive environment variables such as a local workspace may be provided in the root env file.
+
+It is highly recommended to use a secret manager to store sensitive environment variable values such as database connection strings.
+
+Please refer to the VARLOCK.md for more information in regards to managing and encrypting sensitive environment variables.
+
+@requires node:fs
+@requires node:path
+@requires node:url
 @requires varlock Environment configuration loading
 */
 
 import { existsSync, readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
 import {
   internal,
   patchGlobalConsole,
@@ -16,9 +29,8 @@ import {
 import { decryptEnvBlobSync, isEncryptedBlob } from 'varlock/encrypt-env';
 
 if (process.env.VERCEL) {
-  // Vercel deployments hydrate the environment from the frozen blob written
-  // by utils/freeze-env.js before the deployment. No schema, plugin, or
-  // secret resolution happens at runtime.
+  // Vercel deployments hydrate the environment from the frozen blob written by utils/freeze-env.js before the deployment.
+  // No schema, plugin, or secret resolution happens at runtime.
   const frozenEnvPath = new URL('../../../../.varlock.blob', import.meta.url);
 
   if (!existsSync(frozenEnvPath)) {
@@ -43,8 +55,7 @@ if (process.env.VERCEL) {
 
 internal.initVarlockEnv();
 
-// Match varlock/auto-load runtime behavior; redact sensitive values from
-// console output and prevent leaks in HTTP responses.
+// Match varlock/auto-load runtime behavior; redact sensitive values from console output and prevent leaks in HTTP responses.
 patchGlobalConsole();
 patchGlobalServerResponse();
 patchGlobalResponse();
@@ -97,9 +108,6 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [SLO_CALLBACK] - URL for handling logout callbacks
 */
 
-import { resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
-
 const defaults = {
   COOKIE_TTL: 36000,
   DIR: '',
@@ -137,8 +145,7 @@ if (process.env.DIR) {
     : process.env.DIR;
 }
 
-// Varlock injects schema-declared keys without a value as empty strings, so
-// the fallbacks must also apply on empty values, not just undefined.
+// Varlock injects schema-declared keys without a value as empty strings, so the fallbacks must also apply on empty values, not just undefined.
 process.env.COOKIE_TTL ||= defaults.COOKIE_TTL;
 process.env.DIR ||= defaults.DIR;
 process.env.FAILED_ATTEMPTS ||= defaults.FAILED_ATTEMPTS;
