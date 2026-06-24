@@ -50,7 +50,7 @@ The Mapp library changed the map render to [Openlayers](https://github.com/openl
 
 The XYZ API was rebuild to run as serverless functions in **v3**.
 
-**v4** is a complete rewrite of the client libraries. All user interface utilities have been taken out of the mapp library and have been compiled as mapp.ui library. Both libraries are now bundled with [Vite](https://vite.dev/).
+**v4** is a complete rewrite of the client libraries. All user interface utilities have been taken out of the mapp library and have been compiled as mapp.ui library.
 
 The mapp library is now able to instantiate multiple mapviews.
 
@@ -58,7 +58,7 @@ Polymorphism is applied to extend or modify object types and methods through plu
 
 Dynamic module imports reduce the need to bundle 3rd party libraries such as [Tabulator](https://github.com/olifolkerd/tabulator) and [Chart.js](https://github.com/chartjs/Chart.js).
 
-**v5** is a restructure as a Turbo monorepo with individual apps.
+**v5** is a restructure as a Turbo monorepo with individual apps. Vite is now used for testing and to build the mapp library and associated style sheets.
 
 ## XYZ Dependencies
 
