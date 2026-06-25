@@ -1,14 +1,6 @@
 ## XYZ API
 
-The XYZ API is a collection of JavaScript modules for Node.js web application frameworks.
-
-An Express application script is provided in this app at `server.js`.
-
-XYZ API modules should be run with a Node.js runtime v22 or higher.
-
-The [XYZ API](/xyz/module-_api.html) module is located in the api folder as a requirement for using the offical Node.js runtime in Vercel's Edge Network.
-
-All other XYZ API modules are located in the /mod directory.
+The XYZ monorepo application is an Express router and server.
 
 JSDoc is used to documented any XYZ API module, function, and their parameter.
 
@@ -26,24 +18,18 @@ The XYZ API modules are:
 
 ### [Sign](/xyz/module-_sign)
 
-## Development
+### Running a local XYZ server
 
-From the repository root, start the XYZ app server with:
+The dev turbo task can be executed by runniung the dev script defined in the xyz app package.json.
 
-```bash
+```
 pnpm dev
 ```
 
-From `apps/xyz`, run the package dev script directly:
+### Environment variables
+The node process which runs the xyz express app can be configured with environment variables in an env file in the repository root.
 
-```bash
-pnpm dev
-```
+Please refer to the [varlock documentation](../../varlock/README.md) for schema validation and protection of sensitive environment variables.
 
-## Tests
-
-From the repository root, run XYZ tests with:
-
-```bash
-pnpm test:xyz
-```
+### Tests
+Please refer to [TESTING.md](../../TESTING.md) in regards to testing the individual XYZ monorepo apps.

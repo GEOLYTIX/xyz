@@ -6,7 +6,7 @@
       "src": "apps/auth/server.js",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": "public/**"
+        "includeFiles": [".varlock.blob", "public/**"]
       }
     }
   ],

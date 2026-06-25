@@ -38,6 +38,10 @@ A bundled MAPP library is provided in the public directory. It is not required t
 
 Please refer to the [wiki pages](https://github.com/GEOLYTIX/xyz/wiki) for detailed interface references.
 
+For repository setup, local development, and deployment workflows, see [SETUP.md](./SETUP.md).
+
+For environment validation, vanilla Varlock examples, and frozen Vercel deployments, see [VARLOCK.md](./VARLOCK.md).
+
 ## Version History
 
 **v1** was build with [Leaflet](https://github.com/Leaflet/Leaflet) as the map render for the client library.
@@ -46,7 +50,7 @@ The Mapp library changed the map render to [Openlayers](https://github.com/openl
 
 The XYZ API was rebuild to run as serverless functions in **v3**.
 
-**v4** is a complete rewrite of the client libraries. All user interface utilities have been taken out of the mapp library and have been compiled as mapp.ui library. Both libraries are now bundled with [esbuild](https://esbuild.github.io/).
+**v4** is a complete rewrite of the client libraries. All user interface utilities have been taken out of the mapp library and have been compiled as mapp.ui library.
 
 The mapp library is now able to instantiate multiple mapviews.
 
@@ -54,7 +58,7 @@ Polymorphism is applied to extend or modify object types and methods through plu
 
 Dynamic module imports reduce the need to bundle 3rd party libraries such as [Tabulator](https://github.com/olifolkerd/tabulator) and [Chart.js](https://github.com/chartjs/Chart.js).
 
-**v5** is a restructure as a Turbo monorepo with individual apps.
+**v5** is a restructure as a Turbo monorepo with individual apps. Vite is now used for testing and to build the mapp library and associated style sheets.
 
 ## XYZ Dependencies
 
@@ -62,11 +66,11 @@ Dynamic module imports reduce the need to bundle 3rd party libraries such as [Ta
 
 [brcypt](https://github.com/kelektiv/node.bcrypt.js) - A library to help you hash passwords.
 
-[dotenv](https://github.com/motdotla/dotenv) - Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env.
-
 [jsonwebtoken](https://github.com/auth0/node-jsonwebtoken) - A Node implementation of JSON Web Token.
 
 [Node-Postgres](https://github.com/brianc/node-postgres) - PostgreSQL client for Node.
+
+[Varlock](https://varlock.dev) - Schema-validated environment configuration. Vanilla examples live in `examples/varlock`; see `VARLOCK.md`.
 
 ### Optional dependencies
 
@@ -80,9 +84,7 @@ Dynamic module imports reduce the need to bundle 3rd party libraries such as [Ta
 
 Following development dependencies are required to build the library and run a local instance of the XYZ host.
 
-[dotenv](https://www.npmjs.com/package/dotenv) - Dotenv is a zero-dependency module that loads environment variables from a .env file into process.env.
-
-[esbuild](https://www.npmjs.com/package/esbuild) - A JavaScript bundler and minifier.
+[Vite](https://vite.dev) - The build tool which bundles the MAPP client libraries and CSS assets.
 
 [µhtml](https://github.com/WebReflection/uhtml) - A micro HTML/SVG render which is bundled as utils into the MAPP library.
 

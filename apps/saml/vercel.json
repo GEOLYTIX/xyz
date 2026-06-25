@@ -6,7 +6,12 @@
       "src": "apps/saml/server.js",
       "use": "@vercel/node",
       "config": {
-        "includeFiles": "{public/**,apps/xyz/*.crt,apps/xyz/*.pem}"
+        "includeFiles": [
+          ".varlock.blob",
+          "public/**",
+          "apps/xyz/*.crt",
+          "apps/xyz/*.pem"
+        ]
       }
     }
   ],

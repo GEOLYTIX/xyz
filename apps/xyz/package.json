@@ -11,10 +11,13 @@
     "url": "https://github.com/geolytix/xyz"
   },
   "scripts": {
-    "dev": "node --inspect server.js",
-    "test": "vitest run --config vitest.config.mjs",
-    "test:watch": "vitest --config vitest.config.mjs",
-    "test:coverage": "vitest run --config vitest.config.mjs --coverage"
+    "dev": "varlock run -- node --inspect server.js",
+    "test": "varlock run --path ../../varlock/vanilla.env.schema --path ../../varlock/vanilla.env -- vitest run",
+    "test:watch": "varlock run --path ../../varlock/vanilla.env.schema --path ../../varlock/vanilla.env -- vitest",
+    "test:coverage": "varlock run --path ../../varlock/vanilla.env.schema --path ../../varlock/vanilla.env -- vitest run --coverage"
+  },
+  "varlock": {
+    "loadPath": "../../"
   },
   "license": "MIT",
   "optionalDependencies": {
@@ -29,12 +32,8 @@
     "express": "catalog:",
     "express-rate-limit": "catalog:",
     "jsonwebtoken": "catalog:",
-    "pg": "catalog:"
-  },
-  "devDependencies": {
-    "@vitest/coverage-v8": "catalog:",
-    "node-mocks-http": "catalog:",
-    "undici": "catalog:",
-    "vitest": "catalog:"
+    "pg": "catalog:",
+    "@varlock/google-secret-manager-plugin": "catalog:",
+    "varlock": "catalog:"
   }
 }

@@ -5,7 +5,7 @@ The primary module for the MAPP/UI API will import other MAPP/UI modules and ass
 
 The `ui{}` object will be assigned to the global `mapp{}` object if loaded prior to the execution of the ui module script.
 
-The `ui.mjs` module is used as entry point for the esbuild process to bundle the MAPP/UI API.
+The `ui.mjs` module is used as entry point for the Vite build process to bundle the MAPP/UI API.
 
 @requires /ui/elements
 @requires /ui/locations

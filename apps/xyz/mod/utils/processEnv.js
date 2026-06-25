@@ -1,10 +1,64 @@
 /**
 ## /utils/processEnv
 
-The processEnv utility script is required by the express web server app and the api module to set default environment variables as well ass variables defined in the process environment to the globalThis xyzEnv object.
+The processEnv module parses environment variables, sets defaults, and assigns an object with variable properties as globalThis.xyzEnv.
 
-@requires dotenv Environment configuration loading
+Sensitive variables must be declared in an .env.schema file in the root directory.
+
+Non sensitive environment variables such as a local workspace may be provided in the root env file.
+
+It is highly recommended to use a secret manager to store sensitive environment variable values such as database connection strings.
+
+Please refer to the documentation and examples in the /varlock root directory for information.
+
+@requires node:fs
+@requires node:path
+@requires node:url
+@requires varlock Environment configuration loading
 */
+
+import { existsSync, readFileSync } from 'node:fs';
+import { resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+import {
+  internal,
+  patchGlobalConsole,
+  patchGlobalResponse,
+  patchGlobalServerResponse,
+} from 'varlock';
+import { decryptEnvBlobSync, isEncryptedBlob } from 'varlock/encrypt-env';
+
+if (process.env.VERCEL) {
+  // Vercel deployments hydrate the environment from the frozen blob written by utils/freeze-env.js before the deployment.
+  // No schema, plugin, or secret resolution happens at runtime.
+  const frozenEnvPath = new URL('../../../../.varlock.blob', import.meta.url);
+
+  if (!existsSync(frozenEnvPath)) {
+    throw new Error(
+      'Missing .varlock.blob - run `pnpm freeze-env` before deploying.',
+    );
+  }
+
+  let frozenEnv = readFileSync(frozenEnvPath, 'utf8');
+
+  if (isEncryptedBlob(frozenEnv)) {
+    if (!process.env._VARLOCK_ENV_KEY) {
+      throw new Error(
+        '.varlock.blob is encrypted but _VARLOCK_ENV_KEY is not set in the process environment.',
+      );
+    }
+    frozenEnv = decryptEnvBlobSync(frozenEnv, process.env._VARLOCK_ENV_KEY);
+  }
+
+  process.env.__VARLOCK_ENV = frozenEnv;
+}
+
+internal.initVarlockEnv();
+
+// Match varlock/auto-load runtime behavior; redact sensitive values from console output and prevent leaks in HTTP responses.
+patchGlobalConsole();
+patchGlobalServerResponse();
+patchGlobalResponse();
 
 /**
 @global
@@ -54,11 +108,6 @@ The process.ENV object holds configuration provided to the node process from the
 @property {String} [SLO_CALLBACK] - URL for handling logout callbacks
 */
 
-import { resolve } from 'node:path';
-import { fileURLToPath } from 'node:url';
-import { config } from 'dotenv';
-import { readFileSync } from 'fs';
-
 const defaults = {
   COOKIE_TTL: 36000,
   DIR: '',
@@ -79,13 +128,11 @@ const defaults = {
 const workspaceRoot = fileURLToPath(new URL('../../../../', import.meta.url));
 const rootDir = process.env.XYZ_CWD || workspaceRoot;
 
-config({ path: resolve(rootDir, '.env'), quiet: true });
-
 if (process.env.SECRET_KEY) {
   const SECRET = String(readFileSync(resolve(rootDir, process.env.SECRET_KEY)));
 
   process.env.SECRET = SECRET;
-  process.env.SECRET_ALGORITHM ??= 'RS256';
+  process.env.SECRET_ALGORITHM ||= 'RS256';
 }
 
 if (process.env.DIR) {
@@ -98,20 +145,20 @@ if (process.env.DIR) {
     : process.env.DIR;
 }
 
-process.env.COOKIE_TTL ??= defaults.COOKIE_TTL;
-process.env.DIR ??= defaults.DIR;
-process.env.COOKIE_PROPS ??= `Secure; HttpOnly; SameSite=Strict; Path=${process.env.DIR || '/'}`;
-process.env.FAILED_ATTEMPTS ??= defaults.FAILED_ATTEMPTS;
-process.env.PORT ??= defaults.PORT;
-process.env.RATE_LIMIT_WINDOW ??= defaults.RATE_LIMIT_WINDOW;
-process.env.RATE_LIMIT ??= defaults.RATE_LIMIT;
-process.env.RETRY_LIMIT ??= defaults.RETRY_LIMIT;
-process.env.SECRET_ALGORITHM ??= defaults.SECRET_ALGORITHM;
-process.env.TITLE ??= defaults.TITLE;
-process.env.TRANSPORT_PORT ??= defaults.TRANSPORT_PORT;
-process.env.TRANSPORT_TLS ??= defaults.TRANSPORT_TLS;
-process.env.WORKSPACE_AGE ??= defaults.WORKSPACE_AGE;
-process.env.FILE_RESOURCES ??= defaults.FILE_RESOURCES;
+// Varlock injects schema-declared keys without a value as empty strings, so the fallbacks must also apply on empty values, not just undefined.
+process.env.COOKIE_TTL ||= defaults.COOKIE_TTL;
+process.env.DIR ||= defaults.DIR;
+process.env.FAILED_ATTEMPTS ||= defaults.FAILED_ATTEMPTS;
+process.env.PORT ||= defaults.PORT;
+process.env.RATE_LIMIT_WINDOW ||= defaults.RATE_LIMIT_WINDOW;
+process.env.RATE_LIMIT ||= defaults.RATE_LIMIT;
+process.env.RETRY_LIMIT ||= defaults.RETRY_LIMIT;
+process.env.SECRET_ALGORITHM ||= defaults.SECRET_ALGORITHM;
+process.env.TITLE ||= defaults.TITLE;
+process.env.TRANSPORT_PORT ||= defaults.TRANSPORT_PORT;
+process.env.TRANSPORT_TLS ||= defaults.TRANSPORT_TLS;
+process.env.WORKSPACE_AGE ||= defaults.WORKSPACE_AGE;
+process.env.FILE_RESOURCES ||= defaults.FILE_RESOURCES;
 
 const xyzEnv = {
   COOKIE_TTL: Number.parseInt(process.env.COOKIE_TTL),

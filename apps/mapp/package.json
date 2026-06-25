@@ -7,10 +7,11 @@
   },
   "packageManager": "pnpm@10.10.0",
   "scripts": {
-    "build": "node esbuild.config.mjs"
+    "build": "vite build && pnpm css",
+    "css": "vite build --config vite.css.config.mjs"
   },
   "license": "MIT",
   "devDependencies": {
-    "esbuild": "catalog:"
+    "vite": "catalog:"
   }
 }

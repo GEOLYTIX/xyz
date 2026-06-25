@@ -9,15 +9,15 @@
   "packageManager": "pnpm@11.1.3",
   "scripts": {
     "dev": "turbo run dev --filter=@geolytix/xyz-app",
+    "freeze-env": "node utils/freeze-env.js",
     "dev:auth": "turbo run dev --filter=@geolytix/xyz-auth-app",
     "dev:saml": "turbo run dev --filter=@geolytix/xyz-saml-app",
+    "deploy:vercel": "node utils/deploy-vercel.js",
     "test": "turbo run test",
     "test:saml": "turbo run test --filter=@geolytix/xyz-saml-app",
     "test:xyz": "turbo run test --filter=@geolytix/xyz-app",
     "test:xyz:coverage": "turbo run test:coverage --filter=@geolytix/xyz-app",
     "build": "turbo run build",
-    "ui_css": "pnpm exec esbuild --bundle public/css/_ui.css --outfile=public/css/ui.css --external:*.woff2",
-    "mapp_css": "pnpm exec esbuild --bundle public/css/_mapp.css --outfile=public/css/mapp.css",
     "generate-docs": "jsdoc --configure ./utils/jsdoc_mapp.json --verbose && jsdoc --configure ./utils/jsdoc_xyz.json --verbose",
     "mapp-docs": "jsdoc --configure ./utils/jsdoc_mapp.json --verbose",
     "xyz-docs": "jsdoc --configure ./utils/jsdoc_xyz.json --verbose",
@@ -28,12 +28,16 @@
     "@geolytix/mapp": "workspace:*",
     "@geolytix/xyz-auth-app": "workspace:*",
     "@geolytix/xyz-app": "workspace:*",
-    "@geolytix/xyz-saml-app": "workspace:*"
+    "@geolytix/xyz-saml-app": "workspace:*",
+    "@varlock/google-secret-manager-plugin": "catalog:",
+    "varlock": "catalog:"
   },
   "devDependencies": {
     "@biomejs/biome": "catalog:",
     "clean-jsdoc-theme": "catalog:",
-    "dotenv": "catalog:",
-    "turbo": "catalog:"
+    "node-mocks-http": "catalog:",
+    "turbo": "catalog:",
+    "undici": "catalog:",
+    "vitest": "catalog:"
   }
 }

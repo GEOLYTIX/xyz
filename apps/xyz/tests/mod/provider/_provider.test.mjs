@@ -1,7 +1,6 @@
 import { createMocks } from 'node-mocks-http';
 import { describe, expect, it, vi } from 'vitest';
 
-import 'dotenv/config';
 import '@geolytix/xyz-app/mod/utils/processEnv.js';
 
 vi.mock('@geolytix/xyz-app/mod/sign/file.js', () => ({

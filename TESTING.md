@@ -48,24 +48,24 @@ Run the full test suite:
 pnpm test
 ```
 
-This runs `vitest run` as defined in the package.json `test` script.
+This runs `varlock run -- vitest run` as defined in the package.json `test` script.
 
 Watch mode re-runs affected tests on file changes:
 
 ```bash
-pnpm test-watch
+pnpm --filter=@geolytix/xyz-app test:watch
 ```
 
 Run a single test file:
 
 ```bash
-pnpm exec vitest run tests/mod/query.test.mjs
+pnpm exec varlock run -- vitest run apps/xyz/tests/mod/query.test.mjs
 ```
 
 Run tests matching a name pattern:
 
 ```bash
-pnpm exec vitest run -t "should return 400"
+pnpm exec varlock run -- vitest run -t "should return 400"
 ```
 
 ### Coverage
@@ -73,10 +73,10 @@ pnpm exec vitest run -t "should return 400"
 Generate a coverage report with the v8 provider:
 
 ```bash
-pnpm coverage
+pnpm test:xyz:coverage
 ```
 
-This runs `vitest run --coverage` and prints a table showing statement, branch, function, and line coverage for every file under `mod/`.
+This runs `varlock run -- vitest run --coverage` and prints a table showing statement, branch, function, and line coverage for every file under `mod/`.
 
 ### Configuration
 
@@ -392,7 +392,11 @@ Browser tests still use [Codi](https://www.npmjs.com/package/codi-test-framework
 
 A [Test Plugin](https://github.com/GEOLYTIX/xyz/blob/main/lib/plugins/test.mjs) is provided to run tests in the browser.
 
-Please ensure to run the `_build` script prior to launching the local test environment test environment.
+Build the MAPP browser bundles before launching the local test environment:
+
+```bash
+NODE_ENV=DEVELOPMENT pnpm build --filter=@geolytix/mapp
+```
 
 The current tests require an active user to execute.
 
@@ -472,37 +476,12 @@ codi.describe(
 
 #### Build Configuration
 
-Tests require an unminified build to enable debugging and stepping through code. This is handled by the build system (`esbuild.config.mjs`).
+Tests require an unminified build to enable debugging and stepping through code. This is handled by the build system (`apps/mapp/vite.config.mjs`).
 
 Setting process environment `NODE_ENV=DEVELOPMENT` disables minification in build processes.
 
-```javascript
-// esbuild.config.mjs
-import * as esbuild from 'esbuild';
-
-const isDev = process.env.NODE_ENV !== 'DEVELOPMENT';
-
-const buildOptions = {
-  entryPoints: isDev
-    ? ['./lib/mapp.mjs', './lib/ui.mjs']
-    : ['./lib/mapp.mjs', './lib/ui.mjs', './tests/_mapp.test.mjs'],
-  bundle: true,
-  minify: isDev, // Code won't be minified in development
-  sourcemap: true,
-  sourceRoot: '/lib',
-  format: 'iife',
-  outbase: '.',
-  outdir: 'public/js',
-  metafile: true,
-  logLevel: 'info',
-};
-
-try {
-  await esbuild.build(buildOptions);
-} catch (err) {
-  console.error('Build failed:', err);
-  process.exit(1);
-}
+```bash
+NODE_ENV=DEVELOPMENT pnpm build --filter=@geolytix/mapp
 ```
 
 ### Running Tests in Development Mode
@@ -518,11 +497,10 @@ try {
 2. Build the project:
 
    ```bash
-   pnpm _build
+   pnpm build --filter=@geolytix/mapp
    ```
 
 3. Verify that:
-   - Test files are included in the build
    - Source maps are generated
    - Code is not minified
 

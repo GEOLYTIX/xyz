@@ -3,8 +3,10 @@
   "description": "Optional SAML backend app",
   "type": "module",
   "scripts": {
-    "dev": "node --inspect server.js",
-    "test": "vitest run --config vitest.config.mjs"
+    "dev": "varlock run -- node --inspect server.js"
+  },
+  "varlock": {
+    "loadPath": "../../"
   },
   "exports": {
     ".": "./saml.js",
