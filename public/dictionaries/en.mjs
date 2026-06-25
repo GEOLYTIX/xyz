@@ -17,6 +17,7 @@ export default {
   delete: 'Delete',
   delete_geometry: 'Delete Geometry',
   delete_vertex: 'Remove vertex',
+  delete_polygon_part: 'Delete polygon part',
   document_upload_failed: 'Document upload failed.',
   drag_and_drop_doc: 'Drag and drop or add document',
   drag_and_drop_image: 'Drag and drop or add image',
