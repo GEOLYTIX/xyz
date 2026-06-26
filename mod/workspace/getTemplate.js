@@ -97,6 +97,7 @@ export default async function getTemplate(template) {
     return new Error(`Unknown getFrom method: ${template.src}`);
   }
 
+  // module templates must be returned as string.
   const response = await getFrom[method](template.src);
 
   if (response instanceof Error) {
