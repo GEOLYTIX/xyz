@@ -81,10 +81,16 @@ export default async function redirect(req, res, user) {
   }
 
   const redirect = user.redirect || req.cookies?.[`${xyzEnv.TITLE}_redirect`];
-  delete user.redirect;
+  let token;
+  //If the user is granted from external providers,
+  //These properties may already exist.
+  if (!user.exp)
+    token = sign(user, xyzEnv.SECRET, {
+      expiresIn: xyzEnv.COOKIE_TTL,
+      algorithm: xyzEnv.SECRET_ALGORITHM,
+    });
 
-  const token = sign(user, xyzEnv.SECRET, {
-    expiresIn: xyzEnv.COOKIE_TTL,
+  token ??= sign(user, xyzEnv.SECRET, {
     algorithm: xyzEnv.SECRET_ALGORITHM,
   });
 
