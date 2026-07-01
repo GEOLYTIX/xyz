@@ -134,20 +134,26 @@ if (process.env.SECRET_KEY) {
   process.env.SECRET = SECRET;
   process.env.SECRET_ALGORITHM ||= 'RS256';
 }
+//Check to ensure auth_path and dir are valid.
+pathCheck('DIR');
+pathCheck('AUTH_PATH');
 
-if (process.env.DIR) {
-  // Ensure DIR starts with a slash and does not end with a slash
-  process.env.DIR = process.env.DIR.startsWith('/')
-    ? process.env.DIR
-    : `/${process.env.DIR}`;
-  process.env.DIR = process.env.DIR.endsWith('/')
-    ? process.env.DIR.slice(0, -1)
-    : process.env.DIR;
+// Ensure Paths start with a slash and do not end with a slash
+function pathCheck(key) {
+  if (!process.env[key]) return;
+
+  process.env[key] = process.env[key].startsWith('/')
+    ? process.env[key]
+    : `/${process.env[key]}`;
+  process.env[key] = process.env[key].endsWith('/')
+    ? process.env[key].slice(0, -1)
+    : process.env[key];
 }
 
 // Varlock injects schema-declared keys without a value as empty strings, so the fallbacks must also apply on empty values, not just undefined.
 process.env.COOKIE_TTL ||= defaults.COOKIE_TTL;
 process.env.DIR ||= defaults.DIR;
+process.env.COOKIE_PROPS ??= `Secure; HttpOnly; SameSite=Strict; Path=${process.env.DIR || '/'}`;
 process.env.FAILED_ATTEMPTS ||= defaults.FAILED_ATTEMPTS;
 process.env.PORT ||= defaults.PORT;
 process.env.RATE_LIMIT_WINDOW ||= defaults.RATE_LIMIT_WINDOW;
