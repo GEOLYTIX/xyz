@@ -59,7 +59,7 @@ async function mergeTemplateIntoObj(
   template,
   roles,
   reverse,
-  templateScope,
+  templateScope = obj.key,
 ) {
   if (template === undefined) {
     await parseTemplates(obj, roles, obj.key);
