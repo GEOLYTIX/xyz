@@ -4,7 +4,7 @@ The getLocale module exports the getLocale method which is required by the getLa
 
 @requires /utils/roles
 @requires /utils/merge
-@requires /workspace/mergeTemplates
+@requires /workspace/composeObj
 @requires /workspace/cache
 @requires /workspace/getTemplate
 
@@ -14,9 +14,8 @@ The getLocale module exports the getLocale method which is required by the getLa
 import merge from '../utils/merge.js';
 import * as Roles from '../utils/roles.js';
 import workspaceCache from './cache.js';
-
+import composeObj from './composeObj.js';
 import getTemplate from './getTemplate.js';
-import mergeTemplates from './mergeTemplates.js';
 
 /**
 @function getLocale
@@ -132,10 +131,10 @@ async function processRoles(locale, parentLocale, params) {
   }
 
   // Pass params.user.roles to enforce role checks on merged templates.
-  // TODO: ensure that the roles are checked in the mergeTemplates
-  locale = await mergeTemplates(locale, params.user?.roles);
+  // TODO: ensure that the roles are checked in the composeObj
+  locale = await composeObj(locale, params.user?.roles);
 
-  // The mergeTemplates method returned an Error.
+  // The composeObj method returned an Error.
   if (locale instanceof Error) {
     return locale;
   }

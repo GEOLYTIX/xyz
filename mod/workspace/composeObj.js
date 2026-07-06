@@ -1,10 +1,9 @@
 /**
-## /workspace/mergeTemplates
+## /workspace/composeObj
 
-@module /workspace/mergeTemplates
+@module /workspace/composeObj
 */
 
-import envReplace from '../utils/envReplace.js';
 import merge from '../utils/merge.js';
 import * as Roles from '../utils/roles.js';
 import workspaceCache from './cache.js';
@@ -13,7 +12,7 @@ import getTemplate from './getTemplate.js';
 let workspace;
 
 /**
-@function mergeTemplates
+@function composeObj
 @async
 
 @description
@@ -24,24 +23,14 @@ let workspace;
 @property {string} [obj.template] Key of template for the object.
 @property {array} [obj.templates] An array of template keys to be merged into the object.
 */
-export default async function mergeTemplates(obj, roles) {
+export default async function composeObj(obj, roles) {
   // Cache workspace in module scope for template assignment.
   workspace = await workspaceCache();
 
-  obj = await objTemplateComposition(obj, obj.template, roles, true);
+  obj = await mergeTemplateIntoObj(obj, obj.template, roles, true);
 
   // This would only happen if the user does not have access to the object after it has been merged into the template [prototype].
   if (obj instanceof Error) return obj;
-
-  // TODO the templates should be assigned after the template not if else
-  if (Array.isArray(obj.templates)) {
-    for (const template of obj.templates) {
-      obj = await objTemplateComposition(obj, template, roles);
-    }
-  }
-  // // Substitute ${SRC_*} in object string.
-  // obj = envReplace(obj);
-
 
   // //If the user is an admin we don't need to check roles
   // if (!Roles.check(obj, roles)) {
@@ -52,7 +41,7 @@ export default async function mergeTemplates(obj, roles) {
 }
 
 /**
-@function objTemplateComposition
+@function mergeTemplateIntoObj
 @async
 
 @description
@@ -60,11 +49,16 @@ export default async function mergeTemplates(obj, roles) {
 @param {Object} obj
 @param {Object} [template] The template maybe an object with a src property or a string.
 @param {array} [roles] An array of user roles from request params.
+@param {boolean} [reverse] Whether the template should be merged into the obj or the obj into the template.
+@param {string} [templateScope] The templateScope is a string that represents the path to the template in the workspace.templates object. It is used to prevent circular references when merging templates.
 
 @returns {Promise<Object>} Returns the merged obj.
 */
-async function objTemplateComposition(obj, template, roles, reverse) {
-  if (template === undefined) return;
+async function mergeTemplateIntoObj(obj, template, roles, reverse, templateScope) {
+  if (template === undefined) {
+    await parseTemplates(obj, roles, obj.key);
+    return obj;
+  };
 
   template = await getTemplate(template);
 
@@ -81,11 +75,16 @@ async function objTemplateComposition(obj, template, roles, reverse) {
     delete obj.template;
     // Merge obj --> template
     obj = merge(template, obj);
-    await parseTemplates(obj);
+    await parseTemplates(obj, roles, templateScope);
     return obj;
   }
 
-  await parseTemplates(template);
+  templateScope = `${templateScope}/${template.key}`;
+
+  await parseTemplates(template, roles, templateScope);
+
+  // The scopes array will be merged into the obj.scopes array.
+  template.scopes = [templateScope];
 
   // Merge template --> obj
   obj = merge(obj, template);
@@ -139,46 +138,92 @@ If a template object is found, it will be added to the workspace.templates objec
 If an array of templates is found, each template will be merged into the object in the order they are defined in the array.
 
 @param {Object} obj
+@param {Object} roles
+@param {string} templateScope
 */
-async function parseTemplates(obj) {
+async function parseTemplates(obj, roles, templateScope) {
   // Return early if object is null or empty
   if (obj === null) return;
 
   if (obj instanceof Object && !Object.keys(obj)) return;
 
   for (const [key, val] of Object.entries(obj)) {
-    if (key === 'template' && val.key) {
-      // A template object provided in a template will be a query template to be merged into the workspace.templates object. The template will be assigned a _type property to identify it as a template object. Query templates are not merged into the object they are defined in but are assigned to the workspace.templates object for later use.
-      val._type = 'template';
-      workspace.templates[val.key] = Object.assign(
-        workspace.templates[val.key] || {},
-        val,
-      );
-      // The template is now referenced by it's key in the workspace.templates object. The template property is no longer needed on the object.
-      delete obj.template;
-      continue;
-    }
 
-    if (key === 'templates' && Array.isArray(val)) {
-      for (const template of val) {
-        // Merge template from templates array into the object. The templates will be merged in the order they are defined in the array.
-        console.log(template);
-        await objTemplateComposition(obj, template);
-      }
-      delete obj.templates;
+    if (queryTemplate(key, val, obj, roles, templateScope)) continue;
 
-      continue;
-    }
+    if (await templatesArray(key, val, obj, roles, templateScope)) continue;
 
     // Recursively process each item if we find an array
     if (Array.isArray(val)) {
-      val.forEach(parseTemplates);
+      for (const item of val) {
+        await parseTemplates(item, roles, templateScope);
+      }
       continue;
     }
 
     // Recursively process nested objects
     if (val instanceof Object) {
-      await parseTemplates(val);
+      await parseTemplates(val, roles, templateScope);
     }
   }
+}
+
+/**
+@function queryTemplate
+
+@description
+The method checks if the key is 'template' and the val has a key property. If so, it will add the template to the workspace.templates object and remove the template property from the obj.
+
+@param {string} key
+@param {Object} val
+@param {Object} obj
+@param {array} roles
+@param {string} templateScope
+@returns {boolean} Returns true if the key is 'template' and the val has a key property.
+*/
+function queryTemplate(key, val, obj, roles, templateScope) {
+
+  if (key !== 'template') return false;
+
+  if (!val.key) return false;
+
+  // A template object provided in a template will be a query template to be merged into the workspace.templates object. The template will be assigned a _type property to identify it as a template object. Query templates are not merged into the object they are defined in but are assigned to the workspace.templates object for later use.
+  val._type = 'template';
+  workspace.templates[val.key] = Object.assign(
+    workspace.templates[val.key] || {},
+    val,
+  );
+  // The template is now referenced by it's key in the workspace.templates object. The template property is no longer needed on the object.
+  delete obj.template;
+  return true;
+}
+
+/**
+@function templatesArray
+@async
+
+@description
+The method checks if the key is 'templates' and the val is an array. If so, it will merge each template in the array into the object and remove the templates property from the obj.
+
+@param {string} key
+@param {Object} val
+@param {Object} obj
+@param {array} roles
+@param {string} templateScope
+@returns {boolean} Returns true if the key is 'templates' and the val is an array.
+*/
+async function templatesArray(key, val, obj, roles, templateScope) {
+  if (key !== 'templates') return false;
+
+  if (!Array.isArray(val)) return false;
+
+  // Delete the templates property from the obj before merging the templates into the obj. This will prevent circular references when merging templates.
+  delete obj.templates;
+
+  for (const template of val) {
+    // Merge template from templates array into the object. The templates will be merged in the order they are defined in the array.
+    await mergeTemplateIntoObj(obj, template, roles, false, templateScope);
+  }
+  
+  return true;
 }

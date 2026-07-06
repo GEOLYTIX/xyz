@@ -115,8 +115,10 @@ export default async function getTemplate(template) {
     template.template = response;
   }
 
+  template.key ??= template.src.match(/([^\/]+$)/)[0];
+
   // Assign template to workspace.
-  workspace.templates[template.key || template.src] = template;
+  workspace.templates[template.src] = template;
 
   // Removing the src property caches the template.
   delete template.src;

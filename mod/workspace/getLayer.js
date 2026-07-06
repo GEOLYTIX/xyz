@@ -4,7 +4,7 @@ The getLayer module exports the getLayer method which is required by the query a
 
 @requires /utils/roles
 @requires /utils/merge
-@requires /workspace/mergeTemplates
+@requires /workspace/composeObj
 @requires /workspace/getLocale
 @requires /workspace/getTemplate
 
@@ -12,9 +12,9 @@ The getLayer module exports the getLayer method which is required by the query a
 */
 
 import merge from '../utils/merge.js';
+import composeObj from './composeObj.js';
 import getLocale from './getLocale.js';
 import getTemplate from './getTemplate.js';
-import mergeTemplates from './mergeTemplates.js';
 
 /**
 @function getLayer
@@ -23,13 +23,13 @@ import mergeTemplates from './mergeTemplates.js';
 @description
 A layer will primarily be requested from a locale.
 
-The getLocale method will err if the requesting user does not have access to the locale.
+The getLocale method will return an error if the requesting user does not have access to the locale.
 
 If a layer is not part of a locale an attempt to get the layer directly from the workspace templates will be made.
 
 The locale object can be provided as an additional param. The getLocale method of the workspace API may request any layer in the locale after the locale has already been retrieved. This will prevent a loopback to the locale for every layer in the locale.
 
-The mergeTemplate module will be called to merge templates into the locale object and substitute SRC_* xyzEnvironment variables.
+The composeObj module will be called to merge templates into the locale object and substitute SRC_* xyzEnvironment variables.
 
 A role check is performed to check whether the requesting user has access to the layer object.
 
@@ -92,9 +92,9 @@ export default async function getLayer(params, locale) {
   }
 
   // The roles property maybe assigned from a template. Templates must be merged prior to the role check.
-  layer = await mergeTemplates(layer, params.user?.roles);
+  layer = await composeObj(layer, params.user?.roles);
 
-  // The mergeTemplates method returned an Error.
+  // The composeObj method returned an Error.
   if (layer instanceof Error) {
     return layer;
   }
