@@ -92,6 +92,9 @@ async function mergeTemplateIntoObj(
   // The scopes array will be merged into the obj.scopes array.
   template.scopes = [templateScope];
 
+  // A template.key must not overwrite an obj.key.
+  delete template.key;
+
   // Merge template --> obj
   obj = merge(obj, template);
   return obj;
