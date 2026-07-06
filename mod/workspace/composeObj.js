@@ -54,11 +54,17 @@ export default async function composeObj(obj, roles) {
 
 @returns {Promise<Object>} Returns the merged obj.
 */
-async function mergeTemplateIntoObj(obj, template, roles, reverse, templateScope) {
+async function mergeTemplateIntoObj(
+  obj,
+  template,
+  roles,
+  reverse,
+  templateScope,
+) {
   if (template === undefined) {
     await parseTemplates(obj, roles, obj.key);
     return obj;
-  };
+  }
 
   template = await getTemplate(template);
 
@@ -103,7 +109,6 @@ The filterProperties method will check for include_props and exclude_props prope
 @returns {Object} The prepared template with role overrides applied and properties filtered.
 */
 function filterProperties(obj, template) {
-
   // TODO: should the props carried into nested templates? undefined include_props/exclude_props should not be assigned to the template object.
   template.exclude_props = obj.exclude_props ?? template.exclude_props;
   template.include_props = obj.include_props ?? template.include_props;
@@ -148,7 +153,6 @@ async function parseTemplates(obj, roles, templateScope) {
   if (obj instanceof Object && !Object.keys(obj)) return;
 
   for (const [key, val] of Object.entries(obj)) {
-
     if (queryTemplate(key, val, obj, roles, templateScope)) continue;
 
     if (await templatesArray(key, val, obj, roles, templateScope)) continue;
@@ -182,7 +186,6 @@ The method checks if the key is 'template' and the val has a key property. If so
 @returns {boolean} Returns true if the key is 'template' and the val has a key property.
 */
 function queryTemplate(key, val, obj, roles, templateScope) {
-
   if (key !== 'template') return false;
 
   if (!val.key) return false;
@@ -224,6 +227,6 @@ async function templatesArray(key, val, obj, roles, templateScope) {
     // Merge template from templates array into the object. The templates will be merged in the order they are defined in the array.
     await mergeTemplateIntoObj(obj, template, roles, false, templateScope);
   }
-  
+
   return true;
 }
