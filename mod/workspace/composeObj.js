@@ -109,7 +109,6 @@ If the template.include_props array is defined, only the properties defined in t
 @returns {Object} The template object with filtered properties.
 */
 function filterTemplateProperties(template) {
-
   if (Array.isArray(template.exclude_props)) {
     for (const prop of template.exclude_props) {
       if (template.hasOwnProperty(prop)) {
@@ -225,10 +224,9 @@ async function rolesTemplates(key, val, obj, roles, templateScope) {
 
   for (const [roleKey, roleVal] of Object.entries(val)) {
     if (roleVal === true) {
-
       const template = {
         key: roleKey,
-      }
+      };
 
       await mergeTemplateIntoObj(obj, template, roles, templateScope);
       continue;
