@@ -27,16 +27,48 @@ export default async function composeObj(obj, roles) {
   // Cache workspace in module scope for template assignment.
   workspace = await workspaceCache();
 
-  obj = await mergeTemplateIntoObj(obj, obj.template, roles, true);
+  obj = await mergeObjIntoTemplate(obj, roles);
+
+  await parseTemplates(obj, roles, obj.key);
 
   // This would only happen if the user does not have access to the object after it has been merged into the template [prototype].
   if (obj instanceof Error) return obj;
 
-  // //If the user is an admin we don't need to check roles
-  // if (!Roles.check(obj, roles)) {
-  //   return new Error('Role access denied.');
-  // }
+  return obj;
+}
 
+/**
+@function mergeObjIntoTemplate
+@async
+
+@description
+The method checks whether the obj has a template property. If so, the object will be merged into the template. The obj.template property will be removed before the merge.
+
+The parseTemplates method will be called to recursively to traverse the obj and its nested objects to identify and process templates.
+
+@param {Object} obj
+@param {array} [roles] An array of user roles from request params.
+@property {string} [obj.template] Key of template for the object.
+
+@returns {Promise<Object>} Returns the merged obj.
+*/
+async function mergeObjIntoTemplate(obj, roles) {
+  if (obj.template) {
+    const template = await getTemplate(obj.template);
+    delete obj.template;
+
+    // TODO role check for template access should be performed here. The template may be a string or an object with a src property. The template will be merged into the obj.
+    if (template instanceof Error) {
+      obj.err ??= [];
+      obj.err.push(template.message);
+      return obj;
+    }
+
+    // Merge obj --> template
+    obj = merge(template, obj);
+  }
+
+  await parseTemplates(obj, roles, obj.key);
   return obj;
 }
 
@@ -47,28 +79,15 @@ export default async function composeObj(obj, roles) {
 @description
 
 @param {Object} obj
-@param {Object} [template] The template maybe an object with a src property or a string.
+@param {Object} template The template maybe an object with a src property or a string.
 @param {array} [roles] An array of user roles from request params.
-@param {boolean} [reverse] Whether the template should be merged into the obj or the obj into the template.
 @param {string} [templateScope] The templateScope is a string that represents the path to the template in the workspace.templates object. It is used to prevent circular references when merging templates.
 
 @returns {Promise<Object>} Returns the merged obj.
 */
-async function mergeTemplateIntoObj(
-  obj,
-  template,
-  roles,
-  reverse,
-  templateScope = obj.key,
-) {
-  if (template === undefined) {
-    await parseTemplates(obj, roles, obj.key);
-    return obj;
-  }
-
+async function mergeTemplateIntoObj(obj, template, roles, templateScope) {
   template = await getTemplate(template);
 
-  // Failed to get template matching obj.template from template.src!
   if (template instanceof Error) {
     obj.err ??= [];
     obj.err.push(template.message);
@@ -76,14 +95,6 @@ async function mergeTemplateIntoObj(
   }
 
   template = filterProperties(obj, template);
-
-  if (reverse) {
-    delete obj.template;
-    // Merge obj --> template
-    obj = merge(template, obj);
-    await parseTemplates(obj, roles, templateScope);
-    return obj;
-  }
 
   templateScope = `${templateScope}/${template.key}`;
 
@@ -97,6 +108,7 @@ async function mergeTemplateIntoObj(
 
   // Merge template --> obj
   obj = merge(obj, template);
+
   return obj;
 }
 
@@ -228,7 +240,7 @@ async function templatesArray(key, val, obj, roles, templateScope) {
 
   for (const template of val) {
     // Merge template from templates array into the object. The templates will be merged in the order they are defined in the array.
-    await mergeTemplateIntoObj(obj, template, roles, false, templateScope);
+    await mergeTemplateIntoObj(obj, template, roles, templateScope);
   }
 
   return true;
