@@ -12,7 +12,6 @@ This function replaces variables in src strings with their corresponding values 
 @param {string} str The string containing template variables to be replaced.
 @returns {string} The string with template variables replaced.
 */
-
 export default function envReplace(str) {
   if (str === undefined) return;
 

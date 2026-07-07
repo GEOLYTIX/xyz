@@ -54,7 +54,7 @@ The parseTemplates method will be called to recursively to traverse the obj and 
 */
 async function mergeObjIntoTemplate(obj, roles) {
   if (obj.template) {
-    const template = await getTemplate(obj.template);
+    let template = await getTemplate(obj.template);
     delete obj.template;
 
     // TODO role check for template access should be performed here. The template may be a string or an object with a src property. The template will be merged into the obj.
@@ -63,6 +63,8 @@ async function mergeObjIntoTemplate(obj, roles) {
       obj.err.push(template.message);
       return obj;
     }
+
+    template = filterTemplateProperties(template);
 
     // Merge obj --> template
     obj = merge(template, obj);
@@ -94,7 +96,7 @@ async function mergeTemplateIntoObj(obj, template, roles, templateScope) {
     return obj;
   }
 
-  template = filterProperties(obj, template);
+  template = filterTemplateProperties(template);
 
   templateScope = `${templateScope}/${template.key}`;
 
@@ -113,20 +115,18 @@ async function mergeTemplateIntoObj(obj, template, roles, templateScope) {
 }
 
 /**
-@function filterProperties
+@function filterTemplateProperties
 
 @description
-The filterProperties method will check for include_props and exclude_props properties on the obj and template.
+The filterTemplateProperties method will first remove any properties defined in the template.exclude_props array from the template object.
 
-@param {Object} obj The parent object providing include/exclude property configuration.
-@param {Object} template The template to prepare.
+If the template.include_props array is defined, only the properties defined in the include_props array will be retained in the template object.
 
-@returns {Object} The prepared template with role overrides applied and properties filtered.
+@param {Object} template
+
+@returns {Object} The template object with filtered properties.
 */
-function filterProperties(obj, template) {
-  // TODO: should the props carried into nested templates? undefined include_props/exclude_props should not be assigned to the template object.
-  template.exclude_props = obj.exclude_props ?? template.exclude_props;
-  template.include_props = obj.include_props ?? template.include_props;
+function filterTemplateProperties(template) {
 
   if (Array.isArray(template.exclude_props)) {
     for (const prop of template.exclude_props) {
@@ -135,6 +135,7 @@ function filterProperties(obj, template) {
       }
     }
   }
+  delete template.exclude_props;
   if (Array.isArray(template.include_props)) {
     const _template = {};
     for (const prop of template.include_props) {
@@ -144,6 +145,7 @@ function filterProperties(obj, template) {
     }
     return _template;
   }
+  delete template.include_props;
   return template;
 }
 
@@ -171,6 +173,8 @@ async function parseTemplates(obj, roles, templateScope) {
     if (queryTemplate(key, val, obj, roles, templateScope)) continue;
 
     if (await templatesArray(key, val, obj, roles, templateScope)) continue;
+
+    if (await rolesTemplates(key, val, obj, roles, templateScope)) continue;
 
     // Recursively process each item if we find an array
     if (Array.isArray(val)) {
@@ -213,6 +217,49 @@ function queryTemplate(key, val, obj, roles, templateScope) {
   );
   // The template is now referenced by it's key in the workspace.templates object. The template property is no longer needed on the object.
   delete obj.template;
+  return true;
+}
+
+/**
+@function rolesTemplates
+@async
+
+@description
+The rolesTemplates method processes the 'roles' property of an object. It iterates over each role and merges the corresponding template into the object if the role value is true or an object.
+
+@param {string} key
+@param {Object} val
+@param {Object} obj
+@param {array} roles
+@param {string} templateScope
+@returns {boolean} 
+*/
+async function rolesTemplates(key, val, obj, roles, templateScope) {
+  if (key !== 'roles') return false;
+
+  if (typeof val !== 'object') return false;
+
+  delete obj.roles;
+
+  for (const [roleKey, roleVal] of Object.entries(val)) {
+    if (roleVal === true) {
+
+      const template = {
+        key: roleKey,
+      }
+
+      await mergeTemplateIntoObj(obj, template, roles, templateScope);
+      continue;
+    }
+    
+    if (typeof roleVal !== 'object') continue;
+    const template = {
+      key: roleKey,
+      ...roleVal,
+    };
+    await mergeTemplateIntoObj(obj, template, roles, templateScope);
+  }
+
   return true;
 }
 

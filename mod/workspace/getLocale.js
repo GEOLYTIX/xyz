@@ -188,10 +188,7 @@ async function composeLocale(locale, parentLocale, params, workspaceKey) {
     locale.name = `${parentLocale.name}/${locale.name}`;
 
     if (parentLocale.role && locale.role) {
-      // When localesRoleContext exists, compose the role with the most
-      // specific parent path from the context (e.g., "uk.stores") rather
-      // than the locale's own role (e.g., "uk"), which would create a
-      // spurious compound like "uk.brand_a" instead of "uk.stores.brand_a".
+      // When localesRoleContext exists, compose the role with the most specific parent path from the context (e.g., "uk.stores") rather than the locale's own role (e.g., "uk"), which would create a spurious compound like "uk.brand_a" instead of "uk.stores.brand_a".
       if (parentLocale.localesRoleContext?.roles) {
         const contextRoles = Object.keys(parentLocale.localesRoleContext.roles);
         // Use the longest role as it represents the most specific path.
@@ -219,13 +216,6 @@ async function composeLocale(locale, parentLocale, params, workspaceKey) {
   if (Array.isArray(locale.plugins)) {
     locale.plugins = locale.plugins.map((plugin) => envReplace(plugin));
   }
-
-  // Remove properties which are only required for the fetching templates and composing workspace objects.
-  delete locale.src;
-  delete locale.template;
-  delete locale.templates;
-  delete locale._type;
-  delete locale.localesRoleContext;
 
   return locale;
 }

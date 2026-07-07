@@ -115,7 +115,8 @@ async function layer(req, res) {
       .send(layer.message);
   }
 
-  res.json(removeRoles(layer));
+  // TODO roles object will be turned into templates.
+  // res.json(removeRoles(layer));
 }
 
 /**
@@ -290,11 +291,12 @@ async function locale(req, res) {
         .filter((layer) => !(layer instanceof Error));
     });
 
-    const localeWithoutRoles = removeRoles(locale);
+    // TODO roles object will be turned into templates.
+    // const localeWithoutRoles = removeRoles(locale);
 
-    assignChecksum(localeWithoutRoles);
+    assignChecksum(locale);
 
-    return res.json(localeWithoutRoles);
+    return res.json(locale);
   }
 
   // Check layer access.
@@ -309,11 +311,12 @@ async function locale(req, res) {
       .filter((layer) => !!Roles.check(layer[1], req.params.user?.roles))
       .map((layer) => layer[0]);
 
-  const localeWithoutRoles = removeRoles(locale);
+  // TODO roles object will be turned into templates.
+  // const localeWithoutRoles = removeRoles(locale);
 
-  assignChecksum(localeWithoutRoles);
+  assignChecksum(locale);
 
-  res.json(localeWithoutRoles);
+  res.json(locale);
 }
 
 /**
@@ -618,42 +621,42 @@ function processTestResults(testConfig) {
   return results;
 }
 
-/**
-@function removeRoles
-@description
-Recursively removes all 'roles' objects from the provided object [locale, layer].
-This function is designed to sanitize locale configuration objects before sending to the client,
-ensuring that role-based permissions data is not exposed.
-@param {object} obj A locale or layer JSON object.
-@returns {object}
-*/
-function removeRoles(obj) {
-  // If param is not an object or is null, return as is
-  if (typeof obj !== 'object' || obj === null) {
-    return obj;
-  }
+// /**
+// @function removeRoles
+// @description
+// Recursively removes all 'roles' objects from the provided object [locale, layer].
+// This function is designed to sanitize locale configuration objects before sending to the client,
+// ensuring that role-based permissions data is not exposed.
+// @param {object} obj A locale or layer JSON object.
+// @returns {object}
+// */
+// function removeRoles(obj) {
+//   // If param is not an object or is null, return as is
+//   if (typeof obj !== 'object' || obj === null) {
+//     return obj;
+//   }
 
-  // If object is an array, process each element
-  if (Array.isArray(obj)) {
-    return obj.map((item) => removeRoles(item));
-  }
+//   // If object is an array, process each element
+//   if (Array.isArray(obj)) {
+//     return obj.map((item) => removeRoles(item));
+//   }
 
-  // Create a new object to store cleaned properties
-  const cleanedObj = {};
+//   // Create a new object to store cleaned properties
+//   const cleanedObj = {};
 
-  // Process each property in the object
-  for (const [key, value] of Object.entries(obj)) {
-    // Skip 'roles' properties
-    if (key === 'roles') {
-      continue;
-    }
+//   // Process each property in the object
+//   for (const [key, value] of Object.entries(obj)) {
+//     // Skip 'roles' properties
+//     if (key === 'roles') {
+//       continue;
+//     }
 
-    // Recursively clean nested objects
-    cleanedObj[key] = removeRoles(value);
-  }
+//     // Recursively clean nested objects
+//     cleanedObj[key] = removeRoles(value);
+//   }
 
-  return cleanedObj;
-}
+//   return cleanedObj;
+// }
 
 /**
 @function cacheTemplates

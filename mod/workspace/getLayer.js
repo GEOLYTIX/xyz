@@ -113,11 +113,5 @@ export default async function getLayer(params, locale) {
     };
   }
 
-  // Remove properties which are only required for the fetching templates and composing workspace objects.
-  delete layer.src;
-  delete layer.template;
-  delete layer.templates;
-  delete layer._type;
-
   return layer;
 }
