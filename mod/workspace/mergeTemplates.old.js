@@ -12,7 +12,7 @@ The workspace is cached in the module scope to allow for the mergeObjectTemplate
 @module /workspace/mergeTemplates
 */
 
-import envReplace from '../utils/envReplace.js';
+// import envReplace from '../utils/envReplace.js';
 import merge from '../utils/merge.js';
 import * as Roles from '../utils/roles.js';
 import workspaceCache from './cache.js';
@@ -71,8 +71,8 @@ export default async function mergeTemplates(obj, roles) {
     console.warn(err);
   }
 
-  // Substitute ${SRC_*} in object string.
-  obj = envReplace(obj);
+  // // Substitute ${SRC_*} in object string.
+  // obj = envReplace(obj);
 
   // Assign templates to workspace.
   assignWorkspaceTemplates(obj);

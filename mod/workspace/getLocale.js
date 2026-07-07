@@ -2,15 +2,17 @@
 ## /workspace/getLocale
 The getLocale module exports the getLocale method which is required by the getLayer and workspace modules.
 
-@requires /utils/roles
+@requires /utils/envReplace
 @requires /utils/merge
-@requires /workspace/composeObj
+@requires /utils/roles
 @requires /workspace/cache
+@requires /workspace/composeObj
 @requires /workspace/getTemplate
 
 @module /workspace/getLocale
 */
 
+import envReplace from '../utils/envReplace.js';
 import merge from '../utils/merge.js';
 import * as Roles from '../utils/roles.js';
 import workspaceCache from './cache.js';
@@ -212,6 +214,10 @@ async function composeLocale(locale, parentLocale, params, workspaceKey) {
 
   if (Array.isArray(locale.keys)) {
     locale.key = locale.keys;
+  }
+
+  if (Array.isArray(locale.plugins)) {
+    locale.plugins = locale.plugins.map((plugin) => envReplace(plugin));
   }
 
   // Remove properties which are only required for the fetching templates and composing workspace objects.
