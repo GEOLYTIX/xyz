@@ -26,33 +26,8 @@ let workspace;
 export default async function composeObj(obj, roles) {
   // Cache workspace in module scope for template assignment.
   workspace = await workspaceCache();
+  workspace.scopes = new Set();
 
-  obj = await mergeObjIntoTemplate(obj, roles);
-
-  await parseTemplates(obj, roles, obj.key);
-
-  // This would only happen if the user does not have access to the object after it has been merged into the template [prototype].
-  if (obj instanceof Error) return obj;
-
-  return obj;
-}
-
-/**
-@function mergeObjIntoTemplate
-@async
-
-@description
-The method checks whether the obj has a template property. If so, the object will be merged into the template. The obj.template property will be removed before the merge.
-
-The parseTemplates method will be called to recursively to traverse the obj and its nested objects to identify and process templates.
-
-@param {Object} obj
-@param {array} [roles] An array of user roles from request params.
-@property {string} [obj.template] Key of template for the object.
-
-@returns {Promise<Object>} Returns the merged obj.
-*/
-async function mergeObjIntoTemplate(obj, roles) {
   if (obj.template) {
     let template = await getTemplate(obj.template);
     delete obj.template;
@@ -71,6 +46,10 @@ async function mergeObjIntoTemplate(obj, roles) {
   }
 
   await parseTemplates(obj, roles, obj.key);
+
+  // This would only happen if the user does not have access to the object after it has been merged into the template [prototype].
+  if (obj instanceof Error) return obj;
+
   return obj;
 }
 
@@ -102,8 +81,11 @@ async function mergeTemplateIntoObj(obj, template, roles, templateScope) {
 
   await parseTemplates(template, roles, templateScope);
 
-  // The scopes array will be merged into the obj.scopes array.
-  template.scopes = [templateScope];
+  // TODO the template scopes are only required during the development and debugging of the logic.
+  template.templateScopes = [templateScope];
+
+  // TODO ensure that the workspace.scopes can accessed by the _workspace module.
+  workspace.scopes.add(templateScope);
 
   // A template.key must not overwrite an obj.key.
   delete template.key;
@@ -251,7 +233,7 @@ async function rolesTemplates(key, val, obj, roles, templateScope) {
       await mergeTemplateIntoObj(obj, template, roles, templateScope);
       continue;
     }
-    
+
     if (typeof roleVal !== 'object') continue;
     const template = {
       key: roleKey,

@@ -293,6 +293,7 @@ async function locale(req, res) {
 
     // TODO roles object will be turned into templates.
     // const localeWithoutRoles = removeRoles(locale);
+    console.log(workspace.scopes);
 
     assignChecksum(locale);
 
