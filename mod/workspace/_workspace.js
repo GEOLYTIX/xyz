@@ -291,8 +291,6 @@ async function locale(req, res) {
         .filter((layer) => !(layer instanceof Error));
     });
 
-    console.log(workspace.scopes);
-
     assignChecksum(locale);
 
     return res.json(locale);

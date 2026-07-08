@@ -5,7 +5,6 @@
 */
 
 import merge from '../utils/merge.js';
-import * as Roles from '../utils/roles.js';
 import workspaceCache from './cache.js';
 import getTemplate from './getTemplate.js';
 
@@ -96,6 +95,11 @@ async function mergeTemplateIntoObj(obj, template, roles, templateScope=[]) {
     workspace.scopes.add(scope);
     // The templateScope array must be spread into a new array to prevent the original templateScope from being modified by nested templates.
     templateScope = [...templateScope, scope];
+  }
+
+  if (!checkScope(templateScope, roles)) {
+
+    return obj;
   }
 
   await parseTemplates(template, roles, templateScope);
@@ -296,10 +300,35 @@ async function templatesArray(key, val, obj, roles, templateScope) {
   return true;
 }
 
+/**
+@function checkScope
+
+@description
+The checkScope method checks whether the user has access to the object based on the provided roles and templateScope.
+
+If the roles parameter is undefined, the method will return undefined.
+
+If the roles parameter is true, the method will return true.
+
+If the roles parameter is an array, the method will check whether the templateScope string is included in the roles array. If so, it will return true.
+
+@param {array} templateScope
+@param {array} roles
+@returns {boolean} Returns true if the user has access based on the roles and templateScope.
+*/
 function checkScope(templateScope, roles) {
 
-  if (!roles) return;
+  // Prevent access if no roles are provided from user.
+  if (!roles) return false;
+
+  // Admin endpoints will set the roles parameter to true to bypass role checks.
   if (roles === true) return true;
-  const firstDefinedRole = templateScope.find((scope) => scope !== undefined);
-  if (roles.includes(firstDefinedRole)) return true;
+
+  // Filter out undefined values from the templateScope array and join the remaining values with a pipe character to create a string representation of the template scope.
+  const templateScopeString = templateScope.filter(Boolean).join('|');
+
+  // Check whether the roles array includes the templateScopeString.
+  if (roles.includes(templateScopeString)) return true;
+
+  return false;
 }
