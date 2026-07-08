@@ -419,6 +419,22 @@ async function roles(req, res) {
   res.send(rolesArr);
 }
 
+/**
+@function scopes
+@async
+
+@description
+The scopes method returns an array of scopes which are the templateScopes assigned to each template in the workspace.templates{} object.
+
+@param {req} req HTTP request.
+@param {res} res HTTP response.
+
+@property {Object} req.params HTTP request parameter.
+@property {Object} params.user User requesting the scopes.
+@property {boolean} params.user.admin Whether user has admin privileges (required).
+
+@returns {Array} Returns an array of scopes.
+*/
 async function scopes(req, res) {
   if (!req.params.user?.admin) {
     res
