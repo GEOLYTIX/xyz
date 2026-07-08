@@ -116,8 +116,7 @@ async function layer(req, res) {
       .send(layer.message);
   }
 
-  // TODO roles object will be turned into templates.
-  // res.json(removeRoles(layer));
+  res.json(layer);
 }
 
 /**
@@ -292,8 +291,6 @@ async function locale(req, res) {
         .filter((layer) => !(layer instanceof Error));
     });
 
-    // TODO roles object will be turned into templates.
-    // const localeWithoutRoles = removeRoles(locale);
     console.log(workspace.scopes);
 
     assignChecksum(locale);
@@ -312,9 +309,6 @@ async function locale(req, res) {
       // check layer for user roles
       .filter((layer) => !!Roles.check(layer[1], req.params.user?.roles))
       .map((layer) => layer[0]);
-
-  // TODO roles object will be turned into templates.
-  // const localeWithoutRoles = removeRoles(locale);
 
   assignChecksum(locale);
 
@@ -447,7 +441,7 @@ async function scopes(req, res) {
     user: req.params.user,
   });
 
-  res.send(Array.from(cachedWorkspace.scopes));
+  res.send(Array.from(cachedWorkspace.scopes).sort());
 }
 
 /**

@@ -30,7 +30,6 @@ export default async function composeObj(obj, roles) {
 
   if (obj.template) {
     let template = await getTemplate(obj.template);
-    delete obj.template;
 
     // TODO role check for template access should be performed here. The template may be a string or an object with a src property. The template will be merged into the obj.
     if (template instanceof Error) {
@@ -39,13 +38,21 @@ export default async function composeObj(obj, roles) {
       return obj;
     }
 
+    delete obj.template;
+
     template = filterTemplateProperties(template);
 
     // Merge obj --> template
     obj = merge(template, obj);
   }
 
-  const templateScope = obj.role || obj.key;
+  const templateScope = obj.role;// || obj.key;
+
+  // obj.scopes ??= [];
+  // obj.scopes.push(templateScope);
+  workspace.scopes.add(templateScope);
+
+
 
   await parseTemplates(obj, roles, templateScope);
 
@@ -85,17 +92,19 @@ async function mergeTemplateIntoObj(obj, template, roles, templateScope) {
   if (scope) {
     // Any individual template scope should be added to the workspace.scopes set.
     workspace.scopes.add(scope);
-    
+
     // TODO ensure that templates that should be scoped are scoped.
-    templateScope = `${templateScope}|${scope}`;
-  } else {
-    console.warn(`Template does not have a role or key property.`,)
-  } 
+    if (templateScope) {
+      templateScope += `|${scope}`;
+    } else {
+      templateScope = scope;
+    }
+  }
 
   await parseTemplates(template, roles, templateScope);
 
   // TODO the template scopes are only required during the development and debugging of the logic.
-  template.templateScopes = [templateScope];
+  // template.templateScopes = [templateScope];
 
   // TODO ensure that the workspace.scopes can accessed by the _workspace module.
   workspace.scopes.add(templateScope);
@@ -160,6 +169,8 @@ If an array of templates is found, each template will be merged into the object 
 async function parseTemplates(obj, roles, templateScope) {
   // Return early if object is null or empty
   if (obj === null) return;
+
+  if (obj === undefined) return;
 
   if (obj instanceof Object && !Object.keys(obj)) return;
 
