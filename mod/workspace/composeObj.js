@@ -299,6 +299,7 @@ async function templatesArray(key, val, obj, roles, templateScope) {
 function checkScope(templateScope, roles) {
 
   if (!roles) return;
+  if (roles === true) return true;
   const firstDefinedRole = templateScope.find((scope) => scope !== undefined);
   if (roles.includes(firstDefinedRole)) return true;
 }
