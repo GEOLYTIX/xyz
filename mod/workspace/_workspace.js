@@ -45,6 +45,7 @@ const keyMethods = {
   locale,
   locales,
   roles,
+  scopes,
   test,
 };
 
@@ -418,6 +419,21 @@ async function roles(req, res) {
   res.send(rolesArr);
 }
 
+async function scopes(req, res) {
+  if (!req.params.user?.admin) {
+    res
+      .status(403)
+      .send(`Admin credentials are required to test the workspace sources.`);
+    return;
+  }
+
+  const cachedWorkspace = await cacheTemplates({
+    user: req.params.user,
+  });
+
+  res.send(Array.from(cachedWorkspace.scopes));
+}
+
 /**
 @function test
 
@@ -621,43 +637,6 @@ function processTestResults(testConfig) {
 
   return results;
 }
-
-// /**
-// @function removeRoles
-// @description
-// Recursively removes all 'roles' objects from the provided object [locale, layer].
-// This function is designed to sanitize locale configuration objects before sending to the client,
-// ensuring that role-based permissions data is not exposed.
-// @param {object} obj A locale or layer JSON object.
-// @returns {object}
-// */
-// function removeRoles(obj) {
-//   // If param is not an object or is null, return as is
-//   if (typeof obj !== 'object' || obj === null) {
-//     return obj;
-//   }
-
-//   // If object is an array, process each element
-//   if (Array.isArray(obj)) {
-//     return obj.map((item) => removeRoles(item));
-//   }
-
-//   // Create a new object to store cleaned properties
-//   const cleanedObj = {};
-
-//   // Process each property in the object
-//   for (const [key, value] of Object.entries(obj)) {
-//     // Skip 'roles' properties
-//     if (key === 'roles') {
-//       continue;
-//     }
-
-//     // Recursively clean nested objects
-//     cleanedObj[key] = removeRoles(value);
-//   }
-
-//   return cleanedObj;
-// }
 
 /**
 @function cacheTemplates

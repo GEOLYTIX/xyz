@@ -26,7 +26,7 @@ let workspace;
 export default async function composeObj(obj, roles) {
   // Cache workspace in module scope for template assignment.
   workspace = await workspaceCache();
-  workspace.scopes = new Set();
+  workspace.scopes ??= new Set();
 
   if (obj.template) {
     let template = await getTemplate(obj.template);
@@ -45,7 +45,9 @@ export default async function composeObj(obj, roles) {
     obj = merge(template, obj);
   }
 
-  await parseTemplates(obj, roles, obj.key);
+  const templateScope = obj.role || obj.key;
+
+  await parseTemplates(obj, roles, templateScope);
 
   // This would only happen if the user does not have access to the object after it has been merged into the template [prototype].
   if (obj instanceof Error) return obj;
@@ -77,7 +79,18 @@ async function mergeTemplateIntoObj(obj, template, roles, templateScope) {
 
   template = filterTemplateProperties(template);
 
-  templateScope = `${templateScope}/${template.key}`;
+  // The role takes precedence over the key for the scope.
+  const scope = template.role || template.key;
+
+  if (scope) {
+    // Any individual template scope should be added to the workspace.scopes set.
+    workspace.scopes.add(scope);
+    
+    // TODO ensure that templates that should be scoped are scoped.
+    templateScope = `${templateScope}|${scope}`;
+  } else {
+    console.warn(`Template does not have a role or key property.`,)
+  } 
 
   await parseTemplates(template, roles, templateScope);
 

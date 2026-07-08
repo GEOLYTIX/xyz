@@ -89,6 +89,8 @@ export default async function getLocale(params, parentLocale) {
     return new Error(locale.message);
   }
 
+  locale = await composeObj(locale, params.user?.roles);
+
   // TODO disabled until template composition is fixed to not modify the workspace templates.
   //locale = await processRoles(locale, parentLocale, params);
 
@@ -96,6 +98,7 @@ export default async function getLocale(params, parentLocale) {
     return locale;
   }
 
+  // TODO look at nested locales
   locale = await composeLocale(locale, parentLocale, params, workspace.key);
 
   return locale;
