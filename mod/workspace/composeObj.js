@@ -46,13 +46,15 @@ export default async function composeObj(obj, roles) {
     obj = merge(template, obj);
   }
 
-  const templateScope = obj.role;// || obj.key;
+  const templateScope = [obj.localeRole, obj.role];
 
-  // obj.scopes ??= [];
-  // obj.scopes.push(templateScope);
+  const templateScopeString = templateScope.filter(Boolean).join('|');
+
   workspace.scopes.add(templateScope);
 
-
+  if (!checkScope(templateScope, roles)) {
+    return new Error(`User does not have access to object with template scope: ${templateScopeString}`);
+  }
 
   await parseTemplates(obj, roles, templateScope);
 
@@ -71,11 +73,11 @@ export default async function composeObj(obj, roles) {
 @param {Object} obj
 @param {Object} template The template maybe an object with a src property or a string.
 @param {array} [roles] An array of user roles from request params.
-@param {string} [templateScope] The templateScope is a string that represents the path to the template in the workspace.templates object. It is used to prevent circular references when merging templates.
+@param {array} [templateScope] The templateScope is an array that represents nested template roles/scope.
 
 @returns {Promise<Object>} Returns the merged obj.
 */
-async function mergeTemplateIntoObj(obj, template, roles, templateScope) {
+async function mergeTemplateIntoObj(obj, template, roles, templateScope=[]) {
   template = await getTemplate(template);
 
   if (template instanceof Error) {
@@ -92,13 +94,8 @@ async function mergeTemplateIntoObj(obj, template, roles, templateScope) {
   if (scope) {
     // Any individual template scope should be added to the workspace.scopes set.
     workspace.scopes.add(scope);
-
-    // TODO ensure that templates that should be scoped are scoped.
-    if (templateScope) {
-      templateScope += `|${scope}`;
-    } else {
-      templateScope = scope;
-    }
+    // The templateScope array must be spread into a new array to prevent the original templateScope from being modified by nested templates.
+    templateScope = [...templateScope, scope];
   }
 
   await parseTemplates(template, roles, templateScope);
@@ -107,10 +104,12 @@ async function mergeTemplateIntoObj(obj, template, roles, templateScope) {
   // template.templateScopes = [templateScope];
 
   // TODO ensure that the workspace.scopes can accessed by the _workspace module.
+  // const templateScopeString = templateScope.filter(Boolean).join('|');
   workspace.scopes.add(templateScope);
 
-  // A template.key must not overwrite an obj.key.
+  // key and role properties must not overwrite in obj.
   delete template.key;
+  delete template.role;
 
   // Merge template --> obj
   obj = merge(obj, template);
@@ -164,7 +163,7 @@ If an array of templates is found, each template will be merged into the object 
 
 @param {Object} obj
 @param {Object} roles
-@param {string} templateScope
+@param {array} templateScope
 */
 async function parseTemplates(obj, roles, templateScope) {
   // Return early if object is null or empty
@@ -206,7 +205,7 @@ The method checks if the key is 'template' and the val has a key property. If so
 @param {Object} val
 @param {Object} obj
 @param {array} roles
-@param {string} templateScope
+@param {array} templateScope
 @returns {boolean} Returns true if the key is 'template' and the val has a key property.
 */
 function queryTemplate(key, val, obj, roles, templateScope) {
@@ -236,7 +235,7 @@ The rolesTemplates method processes the 'roles' property of an object. It iterat
 @param {Object} val
 @param {Object} obj
 @param {array} roles
-@param {string} templateScope
+@param {array} templateScope
 @returns {boolean} 
 */
 async function rolesTemplates(key, val, obj, roles, templateScope) {
@@ -249,7 +248,7 @@ async function rolesTemplates(key, val, obj, roles, templateScope) {
   for (const [roleKey, roleVal] of Object.entries(val)) {
     if (roleVal === true) {
       const template = {
-        key: roleKey,
+        role: roleKey,
       };
 
       await mergeTemplateIntoObj(obj, template, roles, templateScope);
@@ -258,7 +257,7 @@ async function rolesTemplates(key, val, obj, roles, templateScope) {
 
     if (typeof roleVal !== 'object') continue;
     const template = {
-      key: roleKey,
+      role: roleKey,
       ...roleVal,
     };
     await mergeTemplateIntoObj(obj, template, roles, templateScope);
@@ -278,7 +277,7 @@ The method checks if the key is 'templates' and the val is an array. If so, it w
 @param {Object} val
 @param {Object} obj
 @param {array} roles
-@param {string} templateScope
+@param {array} templateScope
 @returns {boolean} Returns true if the key is 'templates' and the val is an array.
 */
 async function templatesArray(key, val, obj, roles, templateScope) {
@@ -295,4 +294,11 @@ async function templatesArray(key, val, obj, roles, templateScope) {
   }
 
   return true;
+}
+
+function checkScope(templateScope, roles) {
+
+  if (!roles) return;
+  const firstDefinedRole = templateScope.find((scope) => scope !== undefined);
+  if (roles.includes(firstDefinedRole)) return true;
 }

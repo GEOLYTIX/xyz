@@ -441,7 +441,14 @@ async function scopes(req, res) {
     user: req.params.user,
   });
 
-  res.send(Array.from(cachedWorkspace.scopes).sort());
+  const scopesStringsSet = new Set();
+  
+  cachedWorkspace.scopes.forEach((scope) => {
+    if (!Array.isArray(scope)) return;
+    scopesStringsSet.add(scope.filter(Boolean).join('|'))
+  });
+
+  res.send(Array.from(scopesStringsSet).sort());
 }
 
 /**
