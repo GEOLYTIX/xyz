@@ -81,7 +81,7 @@ export default async function getLocale(params, parentLocale) {
     locale = structuredClone(workspace.locales[localeKey]);
   } else {
     // getTemplate returns a structuredClone.
-    locale = await getTemplate(key);
+    locale = await getTemplate(localeKey);
   }
 
   // TODO: why is a new Error created from an Error?
