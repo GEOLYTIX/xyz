@@ -90,7 +90,7 @@ async function mergeTemplateIntoObj(obj, template, roles, templateScope = []) {
   template = filterTemplateProperties(template);
 
   // The role takes precedence over the key for the scope.
-  const scope = template.role || template.key;
+  const scope = template.role;
 
   if (scope) {
     // Any individual template scope should be added to the workspace.scopes set.
@@ -323,6 +323,9 @@ function checkScope(templateScope, roles) {
 
   // Admin endpoints will set the roles parameter to true to bypass role checks.
   if (roles === true) return true;
+
+  // Remove undefined values from the templateScope array.
+  templateScope = templateScope.filter(Boolean);
 
   // Filter out undefined values from the templateScope array and join the remaining values with a pipe character to create a string representation of the template scope.
   const templateScopeString = templateScope.filter(Boolean).join('|');

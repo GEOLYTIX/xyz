@@ -12,7 +12,7 @@ describe('getLayer: ', async () => {
 
   // TODO split duplicate layers and exclude include properties test
   // @simon-leech
-  it('Get Layer from workspace', async () => {
+  it('duplicate layer with include/exclude properties', async () => {
     const params = {
       locale: 'locale',
       layer: 'OSM_Layer',
@@ -38,61 +38,73 @@ describe('getLayer: ', async () => {
     expect(Object.hasOwn(layer_2, 'display')).toBeTruthy();
   });
 
-  it('1. layer with role, templates with roles', async () => {
+  it('locale role only', async () => {
+    const params = {
+      locale: 'europe',
+      layer: 'Scratch_no_role',
+      user: {
+        roles: [
+          'europe', // locale role
+        ],
+      },
+    };
+    const layer = await getLayer(params);
+    expect(layer.key === 'Scratch_no_role').toBeTruthy();
+    expect(layer.name === 'SCRATCH NO ROLE TEMPLATE').toBeTruthy();
+  });
+
+  it('locale and template role', async () => {
+    const params = {
+      locale: 'europe',
+      layer: 'Scratch_no_role',
+      user: {
+        roles: [
+          'europe', // locale role
+          'scratch_role_template' // template role
+        ],
+      },
+    };
+
+    const layer = await getLayer(params);
+
+    expect(layer.key === 'Scratch_no_role').toBeTruthy();
+    expect(layer.name === 'SCRATCH ROLE TEMPLATE').toBeTruthy();
+  });
+
+  it('locale and layer role', async () => {
     const params = {
       locale: 'europe',
       layer: 'Scratch',
       user: {
-        roles: ['europe', 'scratch_role', 'scratch_role_template'],
+        roles: [
+          'europe', // locale role
+          'scratch_role' // layer role
+        ],
       },
     };
-    // User with 3 roles
-    // Europe = locale role
-    // scratch_role = layer role
-    // scratch_role_template = template role on the layer
 
     const layer = await getLayer(params);
 
-    // The layer key should be Scratch to ensure we got the correct layer
     expect(layer.key === 'Scratch').toBeTruthy();
-    // The layer name should be SCRATCH ROLE TEMPLATE from the template with role
-    expect(layer.name === 'SCRATCH ROLE TEMPLATE').toBeTruthy();
-  });
-
-  it('2. layer without role, templates with roles', async () => {
-    const params = {
-      locale: 'europe',
-      layer: 'Scratch_no_role',
-      user: {
-        roles: ['europe', 'scratch_role_template'],
-      },
-    };
-    // User with 2 roles
-    // Europe = locale role
-    // scratch_role_template = template role on the layer
-
-    const layer = await getLayer(params);
-
-    // The layer key should be Scratch_no_role to ensure we got the correct layer
-    expect(layer.key === 'Scratch_no_role').toBeTruthy();
-    // The layer name should be SCRATCH ROLE TEMPLATE from the template with role
-    expect(layer.name === 'SCRATCH ROLE TEMPLATE').toBeTruthy();
-  });
-
-  it('3. layer without role, templates without roles', async () => {
-    const params = {
-      locale: 'europe',
-      layer: 'Scratch_no_role',
-      user: {
-        roles: ['europe'],
-      },
-    };
-    // User with 1 role
-    // Europe = locale role
-    const layer = await getLayer(params);
-    // The layer key should be Scratch_no_role to ensure we got the correct layer
-    expect(layer.key === 'Scratch_no_role').toBeTruthy();
-    // The layer name should be SCRATCH NO ROLE TEMPLATE from the template without role
     expect(layer.name === 'SCRATCH NO ROLE TEMPLATE').toBeTruthy();
+  });  
+
+  it('locale, layer, and template role', async () => {
+    const params = {
+      locale: 'europe',
+      layer: 'Scratch',
+      user: {
+        roles: [
+          'europe', // locale role
+          'scratch_role', // layer role
+          'scratch_role_template' // template role
+        ],
+      },
+    };
+
+    const layer = await getLayer(params);
+
+    expect(layer.key === 'Scratch').toBeTruthy();
+    expect(layer.name === 'SCRATCH ROLE TEMPLATE').toBeTruthy();
   });
 });
