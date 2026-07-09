@@ -52,7 +52,9 @@ export default async function composeObj(obj, roles) {
   workspace.scopes.add(templateScope);
 
   if (!checkScope(templateScope, roles)) {
-    return new Error(`User does not have access to object with template scope: ${templateScopeString}`);
+    return new Error(
+      `User does not have access to object with template scope: ${templateScopeString}`,
+    );
   }
 
   await parseTemplates(obj, roles, templateScope);
@@ -76,7 +78,7 @@ export default async function composeObj(obj, roles) {
 
 @returns {Promise<Object>} Returns the merged obj.
 */
-async function mergeTemplateIntoObj(obj, template, roles, templateScope=[]) {
+async function mergeTemplateIntoObj(obj, template, roles, templateScope = []) {
   template = await getTemplate(template);
 
   if (template instanceof Error) {
@@ -98,7 +100,6 @@ async function mergeTemplateIntoObj(obj, template, roles, templateScope=[]) {
   }
 
   if (!checkScope(templateScope, roles)) {
-
     return obj;
   }
 
@@ -317,7 +318,6 @@ If the roles parameter is an array, the method will check whether the templateSc
 @returns {boolean} Returns true if the user has access based on the roles and templateScope.
 */
 function checkScope(templateScope, roles) {
-
   // Prevent access if no roles are provided from user.
   if (!roles) return false;
 
@@ -327,8 +327,15 @@ function checkScope(templateScope, roles) {
   // Filter out undefined values from the templateScope array and join the remaining values with a pipe character to create a string representation of the template scope.
   const templateScopeString = templateScope.filter(Boolean).join('|');
 
+  // Validate access if roles array contains every scope in the templateScope array.
+  if (templateScope.every((scope) => roles.includes(scope))) {
+    return true;
+  }
+
   // Check whether the roles array includes the templateScopeString.
-  if (roles.includes(templateScopeString)) return true;
+  if (roles.includes(templateScopeString)) {
+    return true;
+  }
 
   return false;
 }

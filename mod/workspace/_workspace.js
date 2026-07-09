@@ -440,10 +440,10 @@ async function scopes(req, res) {
   });
 
   const scopesStringsSet = new Set();
-  
+
   cachedWorkspace.scopes.forEach((scope) => {
     if (!Array.isArray(scope)) return;
-    scopesStringsSet.add(scope.filter(Boolean).join('|'))
+    scopesStringsSet.add(scope.filter(Boolean).join('|'));
   });
 
   res.send(Array.from(scopesStringsSet).sort());
