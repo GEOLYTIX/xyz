@@ -10,6 +10,8 @@ describe('getLayer: ', async () => {
 
   await checkWorkspaceCache(true);
 
+  // TODO split duplicate layers and exclude include properties test
+  // @simon-leech
   it('Get Layer from workspace', async () => {
     const params = {
       locale: 'locale',
