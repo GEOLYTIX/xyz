@@ -318,14 +318,17 @@ If the roles parameter is an array, the method will check whether the templateSc
 @returns {boolean} Returns true if the user has access based on the roles and templateScope.
 */
 function checkScope(templateScope, roles) {
+  // Remove undefined values from the templateScope array.
+  templateScope = templateScope.filter(Boolean);
+
+  // The templateScope array is empty, meaning there are no access restrictions.
+  if (!templateScope.length) return true;
+
   // Prevent access if no roles are provided from user.
   if (!roles) return false;
 
   // Admin endpoints will set the roles parameter to true to bypass role checks.
   if (roles === true) return true;
-
-  // Remove undefined values from the templateScope array.
-  templateScope = templateScope.filter(Boolean);
 
   // Filter out undefined values from the templateScope array and join the remaining values with a pipe character to create a string representation of the template scope.
   const templateScopeString = templateScope.filter(Boolean).join('|');
