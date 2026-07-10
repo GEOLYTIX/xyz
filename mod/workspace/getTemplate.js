@@ -85,11 +85,6 @@ export default async function getTemplate(template) {
 
   template.src = envReplace(template.src);
 
-  // Check whether a template from .src has been cached.
-  if (Object.hasOwn(workspace.templates, template.src)) {
-    return workspace.templates[template.src];
-  }
-
   const method = template.src.split(':')[0];
 
   if (!Object.hasOwn(getFrom, method)) {
@@ -115,13 +110,8 @@ export default async function getTemplate(template) {
     template.template = response;
   }
 
+  // TODO: decide whether key should be used for scoping.
   template.key ??= template.src.match(/([^\/]+$)/)[0];
-
-  // Assign template to workspace.
-  workspace.templates[template.src] = template;
-
-  // Removing the src property caches the template.
-  delete template.src;
 
   // Prevent modification of cached template.
   return structuredClone(template);

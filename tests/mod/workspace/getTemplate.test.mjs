@@ -28,54 +28,72 @@ describe('getTemplate', async () => {
   await checkWorkspaceCache('file');
 
   it('get template from workspace', async () => {
-    const template = 'OSM';
-
     const { default: getTemplate } = await import(
       '../../../mod/workspace/getTemplate.js'
     );
 
-    const result = await getTemplate(template);
+    const result = await getTemplate('OSM');
 
     expect(typeof result === 'object').toBeTruthy();
     expect(Object.hasOwn(result, 'roles')).toBeTruthy();
   });
 
   it('query module has render property', async () => {
-    const template = 'mod_query';
-
     const { default: getTemplate } = await import(
       '../../../mod/workspace/getTemplate.js'
     );
 
-    const result = await getTemplate(template);
+    const result = await getTemplate('mod_query');
 
     expect(typeof result === 'object').toBeTruthy();
     expect(Object.hasOwn(result, 'render')).toBeTruthy();
   });
 
   it('query module is Error', async () => {
-    const template = 'bad_mod_query';
-
     const { default: getTemplate } = await import(
       '../../../mod/workspace/getTemplate.js'
     );
 
-    const result = await getTemplate(template);
+    const result = await getTemplate('bad_mod_query');
 
     expect(result instanceof Error).toBeTruthy();
   });
 
   it('query module render string', async () => {
-    const template = 'mod_query_no_default';
-
     const { default: getTemplate } = await import(
       '../../../mod/workspace/getTemplate.js'
     );
 
-    const result = await getTemplate(template);
+    const result = await getTemplate('mod_query_no_default');
 
     const foo = result.render.foo();
 
     expect(foo).toEqual('I am a module query fam');
+  });
+
+  it('template with src cache', async () => {
+    const { default: getTemplate } = await import(
+      '../../../mod/workspace/getTemplate.js'
+    );
+
+    const fooTemplate = {
+      foo: true,
+      src: 'file:./tests/assets/layers/template_test/layer.json',
+    };
+
+    const fooResult = await getTemplate(fooTemplate);
+
+    expect(fooResult.foo).toBeTruthy();
+    expect(fooResult.bar).toBeFalsy();
+
+    const barTemplate = {
+      bar: true,
+      src: 'file:./tests/assets/layers/template_test/layer.json',
+    };
+
+    const barResult = await getTemplate(barTemplate);
+
+    expect(barResult.bar).toBeTruthy();
+    expect(barResult.foo).toBeFalsy();
   });
 });
