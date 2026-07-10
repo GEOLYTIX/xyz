@@ -448,7 +448,7 @@ async function scopes(req, res) {
 
   const scopesArray = Array.from(scopesStringsSet)
     .filter(Boolean)
-    .sort((a, b) => a.localeCompare(b))
+    .sort((a, b) => a.localeCompare(b));
 
   res.send(scopesArray);
 }

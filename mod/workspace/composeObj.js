@@ -323,7 +323,7 @@ async function rolesTemplates(key, val, obj, roles, templateScope) {
 
   if (roles === true) {
     accessRoles.forEach((role) => {
-      workspace.scopes.add([...templateScope,role]);
+      workspace.scopes.add([...templateScope, role]);
     });
     // Role check is not required for admin endpoints. The roles parameter is set to true to bypass role checks.
     return true;
