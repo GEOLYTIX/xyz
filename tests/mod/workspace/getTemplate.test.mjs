@@ -24,10 +24,9 @@ describe('getTemplate', async () => {
     WORKSPACE: 'file:./tests/assets/workspace_locale_layers_templates.json',
   };
 
-      const { default: getTemplate } = await import(
-      '../../../mod/workspace/getTemplate.js'
-    );
-
+  const { default: getTemplate } = await import(
+    '../../../mod/workspace/getTemplate.js'
+  );
 
   //Calling the cache method with force to reload a new workspace
   await checkWorkspaceCache('file');

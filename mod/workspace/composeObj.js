@@ -37,9 +37,10 @@ export default async function composeObj(obj, roles) {
       return obj;
     }
 
-    delete obj.template;
-
     template = filterTemplateProperties(template);
+
+    delete obj.template;
+    delete template.src;
 
     // Merge obj --> template
     obj = merge(template, obj);
@@ -47,7 +48,7 @@ export default async function composeObj(obj, roles) {
 
   const templateScope = [obj.localeRole, obj.role];
 
-  const templateScopeString = templateScope.filter(Boolean).join('|');
+  const templateScopeString = templateScope.filter(Boolean).join('.');
 
   workspace.scopes.add(templateScope);
 
@@ -113,6 +114,7 @@ async function mergeTemplateIntoObj(obj, template, roles, templateScope = []) {
   // key and role properties must not overwrite in obj.
   delete template.key;
   delete template.role;
+  delete template.src;
 
   // Merge template --> obj
   obj = merge(obj, template);
@@ -330,13 +332,14 @@ async function rolesTemplates(key, val, obj, roles, templateScope) {
     );
   }
 
-  if (accessRoles.every((role) => !roles.includes(role))) {
-    return new Error(
-      'Access to the object with the roles property is denied. User does not have the required roles.',
-    );
+  // At least one of the accessRoles must be included in the roles array provided by the user. If not, access to the obj will be denied.
+  if (accessRoles.some((role) => roles.includes(role))) {
+    return true;
   }
 
-  return true;
+  return new Error(
+    'Access to the object with the roles property is denied. User does not have the required roles.',
+  );
 }
 
 /**
@@ -396,7 +399,7 @@ function checkScope(templateScope, roles) {
   if (roles === true) return true;
 
   // Filter out undefined values from the templateScope array and join the remaining values with a pipe character to create a string representation of the template scope.
-  const templateScopeString = templateScope.filter(Boolean).join('|');
+  const templateScopeString = templateScope.filter(Boolean).join('.');
 
   // Validate access if roles array contains every scope in the templateScope array.
   if (templateScope.every((scope) => roles.includes(scope))) {
