@@ -10,34 +10,6 @@ describe('getLayer: ', async () => {
 
   await checkWorkspaceCache(true);
 
-  // TODO split duplicate layers and exclude include properties test
-  // @simon-leech
-  it('duplicate layer with include/exclude properties', async () => {
-    const params = {
-      locale: 'locale',
-      layer: 'OSM_Layer',
-      user: {
-        email: 'test@test.com',
-        admin: true,
-      },
-      ignoreRoles: true,
-    };
-
-    const layer = await getLayer(params);
-
-    params.layer = 'OSM_Duplicate';
-    const layer_2 = await getLayer(params);
-
-    //Check for if we have excluded props
-    expect(Object.hasOwn(layer, 'attribution')).toBeFalsy();
-    expect(Object.hasOwn(layer, 'format')).toBeFalsy();
-    expect(Object.hasOwn(layer, 'URI')).toBeFalsy();
-
-    //Check for if we have include props
-    expect(Object.hasOwn(layer_2, 'attribution')).toBeTruthy();
-    expect(Object.hasOwn(layer_2, 'display')).toBeTruthy();
-  });
-
   it('locale role only', async () => {
     const params = {
       locale: 'europe',

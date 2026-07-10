@@ -1,9 +1,7 @@
 import { describe, expect, it } from 'vitest';
+import composeObj from '../../../mod/workspace/composeObj.js';
 
 describe('composeObj', async () => {
-  const { default: composeObj } = await import(
-    '../../../mod/workspace/composeObj.js'
-  );
 
   it('get layer with template from workspace', async () => {
     const obj = {

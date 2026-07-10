@@ -24,13 +24,18 @@ describe('getTemplate', async () => {
     WORKSPACE: 'file:./tests/assets/workspace_locale_layers_templates.json',
   };
 
+      const { default: getTemplate } = await import(
+      '../../../mod/workspace/getTemplate.js'
+    );
+
+
   //Calling the cache method with force to reload a new workspace
   await checkWorkspaceCache('file');
 
   it('get template from workspace', async () => {
-    const { default: getTemplate } = await import(
-      '../../../mod/workspace/getTemplate.js'
-    );
+    // const { default: getTemplate } = await import(
+    //   '../../../mod/workspace/getTemplate.js'
+    // );
 
     const result = await getTemplate('OSM');
 
@@ -39,9 +44,9 @@ describe('getTemplate', async () => {
   });
 
   it('query module has render property', async () => {
-    const { default: getTemplate } = await import(
-      '../../../mod/workspace/getTemplate.js'
-    );
+    // const { default: getTemplate } = await import(
+    //   '../../../mod/workspace/getTemplate.js'
+    // );
 
     const result = await getTemplate('mod_query');
 
@@ -50,9 +55,9 @@ describe('getTemplate', async () => {
   });
 
   it('query module is Error', async () => {
-    const { default: getTemplate } = await import(
-      '../../../mod/workspace/getTemplate.js'
-    );
+    // const { default: getTemplate } = await import(
+    //   '../../../mod/workspace/getTemplate.js'
+    // );
 
     const result = await getTemplate('bad_mod_query');
 
@@ -60,9 +65,9 @@ describe('getTemplate', async () => {
   });
 
   it('query module render string', async () => {
-    const { default: getTemplate } = await import(
-      '../../../mod/workspace/getTemplate.js'
-    );
+    // const { default: getTemplate } = await import(
+    //   '../../../mod/workspace/getTemplate.js'
+    // );
 
     const result = await getTemplate('mod_query_no_default');
 
@@ -72,9 +77,9 @@ describe('getTemplate', async () => {
   });
 
   it('template with src cache', async () => {
-    const { default: getTemplate } = await import(
-      '../../../mod/workspace/getTemplate.js'
-    );
+    // const { default: getTemplate } = await import(
+    //   '../../../mod/workspace/getTemplate.js'
+    // );
 
     const fooTemplate = {
       foo: true,
