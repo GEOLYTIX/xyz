@@ -30,16 +30,53 @@ describe('composeObj', async () => {
     expect(Object.hasOwn(layer, 'style')).toBeFalsy();
   });
 
-  it('roles object with out roles', async () => {
+  it('roles object without roles', async () => {
     const obj = {
+      root: true,
       roles: {
         foo: null,
-      }
+      },
     };
 
     const no_roles = await composeObj(obj);
 
-    expect(Object.keys(no_roles).length === 0).toBeTruthy();
+    expect(no_roles instanceof Error).toBeTruthy();
+  });
+
+  it('nested roles object without roles', async () => {
+    const obj = {
+      root: true,
+      nested: {
+        nested: true,
+        roles: {
+          foo: null,
+        },
+      },
+    };
+
+    const no_roles = await composeObj(obj);
+
+    expect(no_roles.root).toBeTruthy();
+    expect(Array.isArray(no_roles.err)).toBeTruthy();
+  });
+
+  it('array with roles object without roles', async () => {
+    const obj = {
+      root: true,
+      arr: [
+        {
+          arr: true,
+          roles: {
+            foo: null,
+          },
+        },
+      ],
+    };
+
+    const no_roles = await composeObj(obj);
+
+    expect(no_roles.root).toBeTruthy();
+    expect(no_roles.arr.length === 0).toBeTruthy();
   });
 
   it('roles object with roles', async () => {
@@ -48,12 +85,12 @@ describe('composeObj', async () => {
         foo: {
           check: true,
         },
-      }
+      },
     };
 
     const with_roles = await composeObj(obj, ['foo']);
 
-    expect(Object.hasOwn(with_roles, 'foo')).toBeTruthy();
+    expect(with_roles.check === true).toBeTruthy();
   });
 
   it('merge roles in template', async () => {

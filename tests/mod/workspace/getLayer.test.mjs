@@ -60,7 +60,7 @@ describe('getLayer: ', async () => {
       user: {
         roles: [
           'europe', // locale role
-          'scratch_role_template' // template role
+          'scratch_role_template', // template role
         ],
       },
     };
@@ -78,7 +78,7 @@ describe('getLayer: ', async () => {
       user: {
         roles: [
           'europe', // locale role
-          'scratch_role' // layer role
+          'scratch_role', // layer role
         ],
       },
     };
@@ -87,7 +87,7 @@ describe('getLayer: ', async () => {
 
     expect(layer.key === 'Scratch').toBeTruthy();
     expect(layer.name === 'SCRATCH NO ROLE TEMPLATE').toBeTruthy();
-  });  
+  });
 
   it('locale, layer, and template role', async () => {
     const params = {
@@ -97,7 +97,7 @@ describe('getLayer: ', async () => {
         roles: [
           'europe', // locale role
           'scratch_role', // layer role
-          'scratch_role_template' // template role
+          'scratch_role_template', // template role
         ],
       },
     };

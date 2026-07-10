@@ -62,7 +62,7 @@ vi.mock('../../mod/user/login.js', () => ({
 
 // Mock the logger to suppress output during tests.
 vi.mock('../../mod/utils/logger.js', () => ({
-  default: () => { },
+  default: () => {},
 }));
 
 // Dynamically mock the dependencies so we can override them for precedence tests
@@ -99,7 +99,7 @@ const originalConsoleError = console.error;
 
 describe('Query: Testing Query API', () => {
   beforeAll(async () => {
-    console.error = () => { };
+    console.error = () => {};
 
     globalThis.xyzEnv = {
       TITLE: 'QUERY TEST',
