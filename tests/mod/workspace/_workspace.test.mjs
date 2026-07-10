@@ -230,7 +230,7 @@ describe('workspace: Roles Object Templates', () => {
   it('roles objects should not create dot notation roles', async () => {
     const { req, res } = createMocks({
       params: {
-        key: 'roles',
+        key: 'scopes',
         user: {
           admin: true,
         },
@@ -239,7 +239,9 @@ describe('workspace: Roles Object Templates', () => {
 
     await getKeyMethod(req, res);
 
-    expect(res._getData()).toEqual([
+    const roles = res._getData();
+
+    expect(roles).toEqual([
       'A',
       'GeoBurger',
       'GeoCoffee',

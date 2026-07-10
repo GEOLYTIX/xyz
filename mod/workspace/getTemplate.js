@@ -80,7 +80,7 @@ export default async function getTemplate(template) {
   }
 
   if (!template.src) {
-    return structuredClone(template);
+    return { ...template };
   }
 
   template.src = envReplace(template.src);
@@ -114,7 +114,7 @@ export default async function getTemplate(template) {
   template.key ??= template.src.match(/([^\/]+$)/)[0];
 
   // Prevent modification of cached template.
-  return structuredClone(template);
+  return { ...template };
 }
 
 /**

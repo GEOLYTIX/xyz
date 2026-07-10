@@ -446,7 +446,11 @@ async function scopes(req, res) {
     scopesStringsSet.add(scope.filter(Boolean).join('.'));
   });
 
-  res.send(Array.from(scopesStringsSet).sort());
+  const scopesArray = Array.from(scopesStringsSet)
+    .filter(Boolean)
+    .sort((a, b) => a.localeCompare(b))
+
+  res.send(scopesArray);
 }
 
 /**

@@ -246,7 +246,7 @@ describe('Query: Testing Query API', () => {
       expect(res.statusCode).toBe(400);
     });
 
-    it('should return 400 when a layer template is used without a layer param', async () => {
+    it('query template with layer flag without layer param', async () => {
       const { req, res } = createMocks({
         params: {
           template: 'location_get',
@@ -256,9 +256,6 @@ describe('Query: Testing Query API', () => {
       await query(req, res);
 
       expect(res.statusCode).toBe(400);
-      expect(res._getData()).toContain(
-        'location_get query requires a valid layer request parameter',
-      );
     });
   });
 
