@@ -435,9 +435,13 @@ async function scopes(req, res) {
     return;
   }
 
-  const cachedWorkspace = await cacheTemplates({
-    user: req.params.user,
-  });
+  const cachedWorkspace = await workspaceCache(true);
+
+  const locales = structuredClone(cachedWorkspace.locales);
+
+  for (const localeKey of Object.keys(locales)) {
+    await loadLocale(locales, localeKey, req.params.user);
+  }
 
   const scopesStringsSet = new Set();
 

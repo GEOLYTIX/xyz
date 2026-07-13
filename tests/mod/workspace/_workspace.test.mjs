@@ -75,8 +75,7 @@ describe('workspace: w/ Nested Locales & Roles', () => {
 
     const { req, res } = createMocks({
       params: {
-        key: 'roles',
-        detail: false,
+        key: 'scopes',
         user: {
           admin: true,
         },
