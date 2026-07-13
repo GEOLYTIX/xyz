@@ -67,13 +67,15 @@ export default async function getLocale(params, parentLocale) {
     params.locale = params.locale.split(',');
   }
 
-  const localeKey = Array.isArray(params.locale)
+  let localeKey = Array.isArray(params.locale)
     ? params.locale.shift()
     : params.locale;
 
+  localeKey ??= 'locale';
+
   let locale;
 
-  if (!localeKey || localeKey === 'locale') {
+  if (localeKey === 'locale') {
     // The workspace.locale must not be modified.
     locale = structuredClone(workspace.locale);
   } else if (Object.hasOwn(workspace.locales, localeKey)) {
