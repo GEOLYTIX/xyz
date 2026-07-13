@@ -46,7 +46,7 @@ export default async function composeObj(obj, roles) {
     obj = merge(template, obj);
   }
 
-  const templateScope = [obj.localeRole, obj.role];
+  const templateScope = [obj.parentRole, obj.role];
 
   const templateScopeString = templateScope.filter(Boolean).join('.');
 
@@ -60,7 +60,9 @@ export default async function composeObj(obj, roles) {
 
   const rolesCheck = await parseTemplates(obj, roles, templateScope);
 
-  if (rolesCheck instanceof Error) return rolesCheck;
+  if (rolesCheck instanceof Error) {
+    return rolesCheck;
+  }
 
   return obj;
 }
@@ -401,16 +403,23 @@ function checkScope(templateScope, roles) {
   // Admin endpoints will set the roles parameter to true to bypass role checks.
   if (roles === true) return true;
 
-  // Filter out undefined values from the templateScope array and join the remaining values with a pipe character to create a string representation of the template scope.
-  const templateScopeString = templateScope.filter(Boolean).join('.');
-
   // Validate access if roles array contains every scope in the templateScope array.
   if (templateScope.every((scope) => roles.includes(scope))) {
     return true;
   }
 
+  // Filter out undefined values from the templateScope array and join the remaining values with a pipe character to create a string representation of the template scope.
+  const templateScopeString = templateScope.filter(Boolean).join('.');
+
   // Check whether the roles array includes the templateScopeString.
   if (roles.includes(templateScopeString)) {
+    return true;
+  }
+
+  // Access should be granted if the templateScopeString is the first part of any nested role.
+  if (
+    roles.findIndex((role) => role.startsWith(`${templateScopeString}.`)) > -1
+  ) {
     return true;
   }
 

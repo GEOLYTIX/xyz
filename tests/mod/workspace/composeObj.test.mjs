@@ -109,7 +109,7 @@ describe('composeObj', async () => {
 
   it('obj with template and nested roles', async () => {
     const obj = {
-      localeRole: 'locale',
+      parentRole: 'locale',
       template: {
         src: 'file:./tests/assets/layers/template_test/nested_templates.json',
       },
@@ -130,7 +130,7 @@ describe('composeObj', async () => {
 
   it('templates with 4 levels of nesting with roles', async () => {
     const obj = {
-      localeRole: 'locale',
+      parentRole: 'locale',
       template: {
         src: 'file:./tests/assets/layers/template_test/nested_templates.json',
       },

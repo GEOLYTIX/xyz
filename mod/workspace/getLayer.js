@@ -88,7 +88,7 @@ export default async function getLayer(params, locale) {
   }
 
   if (locale.role) {
-    layer.localeRole = locale.role;
+    layer.parentRole = locale.role;
   }
 
   // The roles property maybe assigned from a template. Templates must be merged prior to the role check.

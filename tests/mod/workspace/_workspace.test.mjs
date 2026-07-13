@@ -18,7 +18,6 @@ describe('workspace:', () => {
       { key: 'layer', value: 'OSM' },
       { key: 'locale', value: '' },
       { key: 'locales', value: '' },
-      { key: 'roles', value: '' },
       { key: 'test', value: '' },
     ];
 

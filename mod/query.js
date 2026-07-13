@@ -16,7 +16,6 @@ The query module exports the [SQL] query method to pass queries to dbs connectio
 import login from './user/login.js';
 import dbs_connections from './utils/dbs.js';
 import logger from './utils/logger.js';
-import * as Roles from './utils/roles.js';
 import sqlFilter from './utils/sqlFilter.js';
 import workspaceCache from './workspace/cache.js';
 import getLayer from './workspace/getLayer.js';
@@ -103,14 +102,15 @@ export default async function query(req, res) {
     return;
   }
 
-  // Validate template role access.
-  if (!Roles.check(template, req.params.user?.roles)) {
-    res
-      .status(403)
-      .setHeader('Content-Type', 'text/plain')
-      .send('Role access denied for query template.');
-    return;
-  }
+  // TODO: validate that the user has required roles for the template.
+  // if (!Roles.check(template, req.params.user?.roles)) {
+  //   res
+  //     .status(403)
+  //     .setHeader('Content-Type', 'text/plain')
+  //     .send('Role access denied for query template.');
+  //   return;
+  // }
+
   // Use layer dbs if defined, or workspace dbs, or provided dbs in the query.
   template.dbs ??= req.params.layer?.dbs || req.params.workspace.dbs;
 

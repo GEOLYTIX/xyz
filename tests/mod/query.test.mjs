@@ -92,7 +92,6 @@ const { default: checkWorkspaceCache } = await import(
 const { default: getTemplate } = await import(
   '../../mod/workspace/getTemplate.js'
 );
-const Roles = await import('../../mod/utils/roles.js');
 
 // Suppress console.error from getTemplate for missing template tests.
 const originalConsoleError = console.error;
@@ -140,10 +139,6 @@ describe('Query: Testing Query API', () => {
   });
 
   describe('dbs connection', () => {
-    beforeEach(() => {
-      Roles.check.mockReturnValue(true);
-    });
-
     it('should return 400 when the resolved dbs connection does not exist', async () => {
       const { req, res } = createMocks({
         params: {

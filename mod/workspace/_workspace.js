@@ -34,7 +34,7 @@ The workspace object defines the mapp resources available in an XYZ instance.
 import { createHash } from 'node:crypto';
 import envReplace from '../utils/envReplace.js';
 import logger from '../utils/logger.js';
-import * as Roles from '../utils/roles.js';
+// import * as Roles from '../utils/roles.js';
 import workspaceCache from './cache.js';
 import getLayer from './getLayer.js';
 import getLocale from './getLocale.js';
@@ -44,7 +44,6 @@ const keyMethods = {
   layer,
   locale,
   locales,
-  roles,
   scopes,
   test,
 };
@@ -304,8 +303,8 @@ async function locale(req, res) {
       // filter layers which are null
       .filter((layer) => layer[1] !== null)
 
-      // check layer for user roles
-      .filter((layer) => !!Roles.check(layer[1], req.params.user?.roles))
+      // TODO role check should be performed in the getLayer method. The getLayer method will return an Error if role access is denied.
+      // .filter((layer) => !!Roles.check(layer[1], req.params.user?.roles))
       .map((layer) => layer[0]);
 
   assignChecksum(locale);
@@ -313,103 +312,103 @@ async function locale(req, res) {
   res.json(locale);
 }
 
-/**
-@function roles
-@async
+// /**
+// @function roles
+// @async
 
-@description
-The roles method returns an array of roles returned from the roles utility.
+// @description
+// The roles method returns an array of roles returned from the roles utility.
 
-This method is only available to users with admin credentials.
+// This method is only available to users with admin credentials.
 
-The cacheTemplates method will called to read any template from it's src and cache the template. This is required to extract any roles from the workspace which may be defined in a template only.
+// The cacheTemplates method will called to read any template from it's src and cache the template. This is required to extract any roles from the workspace which may be defined in a template only.
 
-The workspace.roles{} object will be returned with the `detail=true` url parameter.
+// The workspace.roles{} object will be returned with the `detail=true` url parameter.
 
-A hierarchical tree structure can be requested with the `tree=true` url parameter.
+// A hierarchical tree structure can be requested with the `tree=true` url parameter.
 
-@param {req} req HTTP request.
-@param {res} res HTTP response.
+// @param {req} req HTTP request.
+// @param {res} res HTTP response.
 
-@property {Object} req.params HTTP request parameter.
-@property {Object} params.user User requesting the roles.
-@property {boolean} params.user.admin Whether user has admin privileges (required).
-@property {boolean} [params.tree] Whether the roles should be returned as a hierarchical tree structure.
+// @property {Object} req.params HTTP request parameter.
+// @property {Object} params.user User requesting the roles.
+// @property {boolean} params.user.admin Whether user has admin privileges (required).
+// @property {boolean} [params.tree] Whether the roles should be returned as a hierarchical tree structure.
 
-@returns {Array|Object} Returns either an array of roles as strings, detailed roles object, or hierarchical roles tree.
-*/
-async function roles(req, res) {
-  if (!req.params.user?.admin) {
-    res
-      .status(403)
-      .send(`Admin credentials are required to test the workspace sources.`);
-    return;
-  }
+// @returns {Array|Object} Returns either an array of roles as strings, detailed roles object, or hierarchical roles tree.
+// */
+// async function roles(req, res) {
+//   if (!req.params.user?.admin) {
+//     res
+//       .status(403)
+//       .send(`Admin credentials are required to test the workspace sources.`);
+//     return;
+//   }
 
-  if (req.params.detail) {
-    return res.send(workspace.roles);
-  }
+//   if (req.params.detail) {
+//     return res.send(workspace.roles);
+//   }
 
-  const locales = await cacheTemplates({
-    user: req.params.user,
-    locales: true,
-  });
+//   const locales = await cacheTemplates({
+//     user: req.params.user,
+//     locales: true,
+//   });
 
-  const rolesSet = new Set();
+//   const rolesSet = new Set();
 
-  for (const locale of Object.values(locales)) {
-    Roles.setInObj(rolesSet, locale);
-  }
+//   for (const locale of Object.values(locales)) {
+//     Roles.setInObj(rolesSet, locale);
+//   }
 
-  const rolesTree = {};
+//   const rolesTree = {};
 
-  // Delete restricted Asterisk role.
-  rolesSet.delete('*');
+//   // Delete restricted Asterisk role.
+//   rolesSet.delete('*');
 
-  // Remove self-referential double roles
-  const rolesToRemove = new Set();
-  rolesSet.forEach((role) => {
-    const parts = role.split('.');
-    // Check if it's a double role like 'locale.locale'
-    if (parts.length === 2 && parts[0] === parts[1]) {
-      rolesToRemove.add(role);
-    }
-    // Also remove triple+ nesting of same role
-    for (let i = 0; i < parts.length - 1; i++) {
-      if (parts[i] === parts[i + 1]) {
-        rolesToRemove.add(role);
-        break;
-      }
-    }
-  });
+//   // Remove self-referential double roles
+//   const rolesToRemove = new Set();
+//   rolesSet.forEach((role) => {
+//     const parts = role.split('.');
+//     // Check if it's a double role like 'locale.locale'
+//     if (parts.length === 2 && parts[0] === parts[1]) {
+//       rolesToRemove.add(role);
+//     }
+//     // Also remove triple+ nesting of same role
+//     for (let i = 0; i < parts.length - 1; i++) {
+//       if (parts[i] === parts[i + 1]) {
+//         rolesToRemove.add(role);
+//         break;
+//       }
+//     }
+//   });
 
-  rolesToRemove.forEach((role) => rolesSet.delete(role));
+//   rolesToRemove.forEach((role) => rolesSet.delete(role));
 
-  for (const role of rolesSet) {
-    const rolesArr = role.split('.');
+//   for (const role of rolesSet) {
+//     const rolesArr = role.split('.');
 
-    if (rolesArr.length > 1) {
-      rolesArr.reduce(
-        (accumulator, currentValue) => (accumulator[currentValue] ??= {}),
-        rolesTree,
-      );
+//     if (rolesArr.length > 1) {
+//       rolesArr.reduce(
+//         (accumulator, currentValue) => (accumulator[currentValue] ??= {}),
+//         rolesTree,
+//       );
 
-      for (const role of rolesArr) {
-        rolesSet.add(role);
-      }
-    } else {
-      rolesTree[role] ??= {};
-    }
-  }
+//       for (const role of rolesArr) {
+//         rolesSet.add(role);
+//       }
+//     } else {
+//       rolesTree[role] ??= {};
+//     }
+//   }
 
-  const rolesArr = Array.from(rolesSet).sort((a, b) => a.localeCompare(b));
+//   const rolesArr = Array.from(rolesSet).sort((a, b) => a.localeCompare(b));
 
-  if (req.params.tree) {
-    return res.send(rolesTree);
-  }
+//   if (req.params.tree) {
+//     return res.send(rolesTree);
+//   }
 
-  res.send(rolesArr);
-}
+//   res.send(rolesArr);
+// }
 
 /**
 @function scopes
