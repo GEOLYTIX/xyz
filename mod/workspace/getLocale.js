@@ -15,6 +15,7 @@ import envReplace from '../utils/envReplace.js';
 import merge from '../utils/merge.js';
 import workspaceCache from './cache.js';
 import composeObj from './composeObj.js';
+import getLayer from './getLayer.js';
 import getTemplate from './getTemplate.js';
 
 /**
@@ -31,7 +32,9 @@ The getLocale method will return an error if the requesting user does not have a
 @property {string} [params.locale] Locale key.
 @property {array} [params.locale] An array of locale keys to be merged as a nested locale.
 @property {Object} [params.user] Requesting user.
+@property {Array} [user.roles] User roles.
 @property {Boolean} [params.ignoreRoles] Whether role check should be performed.
+@property {Boolean} [params.layers] Whether to retrieve layers for the locale.
 
 @returns {Promise<Object|Error>} JSON Locale.
 */
@@ -96,6 +99,8 @@ export default async function getLocale(params, parentLocale) {
     locale.plugins = locale.plugins.map((plugin) => envReplace(plugin));
   }
 
+  await localeLayers(locale, params);
+
   return locale;
 }
 
@@ -128,4 +133,24 @@ function mergeParentLocale(locale, parentLocale) {
   locale = merge(parentLocale, locale);
 
   return locale;
+}
+
+async function localeLayers(locale, params) {
+  if (!params.layers) {
+    return;
+  }
+
+  const layers = {};
+
+  for (const layerKey of Object.keys(locale.layers)) {
+    const layer = await getLayer({ ...params, layer: layerKey }, locale);
+
+    if (layer instanceof Error) {
+      continue;
+    }
+
+    layers[layerKey] = layer;
+  }
+
+  locale.layers = layers;
 }

@@ -77,7 +77,6 @@ export default async function getLayer(params, locale) {
   }
 
   // TODO: I don't understand how this could be.
-  // layer may be null.
   if (!layer) return;
 
   // Assign key value as key on layer object.

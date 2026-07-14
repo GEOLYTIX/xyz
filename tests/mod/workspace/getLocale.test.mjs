@@ -79,6 +79,20 @@ describe('getLocale', async () => {
     expect(locale.name === 'europe/UK_locale').toBeTruthy();
   });
 
+  it('nested locales with layers and role[s]; user with roles array', async () => {
+    const params = {
+      locale: ['europe', 'UK_locale'],
+      layers: true,
+      user: {
+        roles: ['europe', 'UK', 'scratch_role'],
+      },
+    };
+
+    const locale = await getLocale(params);
+
+    expect(locale.layers.Scratch).toBeTruthy();
+  });
+
   it('nested locales with role[s]; user with nested role string', async () => {
     const params = {
       locale: ['europe', 'UK_locale'],
@@ -90,5 +104,19 @@ describe('getLocale', async () => {
     const locale = await getLocale(params);
 
     expect(locale.name === 'europe/UK_locale').toBeTruthy();
+  });
+
+  it('nested locales with layers and role[s]; user with nested role string', async () => {
+    const params = {
+      locale: ['europe', 'UK_locale'],
+      layers: true,
+      user: {
+        roles: ['europe.UK.scratch_role'],
+      },
+    };
+
+    const locale = await getLocale(params);
+
+    expect(locale.layers.Scratch).toBeTruthy();
   });
 });
