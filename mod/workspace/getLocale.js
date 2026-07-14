@@ -76,8 +76,9 @@ export default async function getLocale(params, parentLocale) {
     return locale;
   }
 
+  locale.parentRoles ??= [];
   if (parentLocale?.role) {
-    locale.parentRole = parentLocale.role;
+    locale.parentRoles.push(parentLocale.role);
   }
 
   locale = await composeObj(locale, params.user?.roles);
@@ -129,6 +130,10 @@ function mergeParentLocale(locale, parentLocale) {
 
   // Compose the nested locale name.
   locale.name = `${parentLocale.name}/${locale.name}`;
+
+  if (locale.role) {
+    locale.parentRoles.push(locale.role);
+  }
 
   locale = merge(parentLocale, locale);
 

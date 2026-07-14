@@ -46,7 +46,9 @@ export default async function composeObj(obj, roles) {
     obj = merge(template, obj);
   }
 
-  const templateScope = [obj.parentRole, obj.role];
+  obj.parentRoles ??= [];
+
+  const templateScope = [...obj.parentRoles, obj.role];
 
   const templateScopeString = templateScope.filter(Boolean).join('.');
 
