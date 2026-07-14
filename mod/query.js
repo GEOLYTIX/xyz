@@ -4,7 +4,6 @@ The query module exports the [SQL] query method to pass queries to dbs connectio
 @requires /user/login
 @requires /utils/dbs
 @requires /utils/logger
-@requires /utils/roles
 @requires /utils/sqlFilter
 @requires /workspace/cache
 @requires /workspace/getLayer

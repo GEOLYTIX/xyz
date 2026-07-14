@@ -25,7 +25,6 @@ The workspace object defines the mapp resources available in an XYZ instance.
 import { createHash } from 'node:crypto';
 import envReplace from '../utils/envReplace.js';
 import logger from '../utils/logger.js';
-// import * as Roles from '../utils/roles.js';
 import workspaceCache from './cache.js';
 import getLayer from './getLayer.js';
 import getLocale from './getLocale.js';

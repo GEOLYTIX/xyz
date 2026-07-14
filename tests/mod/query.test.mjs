@@ -77,11 +77,6 @@ vi.mock('../../mod/workspace/cache.js', async (importOriginal) => {
   return { ...actual, default: vi.fn().mockImplementation(actual.default) };
 });
 
-vi.mock('../../mod/utils/roles.js', async (importOriginal) => {
-  const actual = await importOriginal();
-  return { ...actual, check: vi.fn().mockImplementation(actual.check) };
-});
-
 const { default: queries } = await import(
   '../../mod/workspace/templates/_queries.js'
 );

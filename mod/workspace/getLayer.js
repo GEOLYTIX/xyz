@@ -2,7 +2,6 @@
 ## /workspace/getLayer
 The getLayer module exports the getLayer method which is required by the query and workspace modules.
 
-@requires /utils/roles
 @requires /utils/merge
 @requires /workspace/composeObj
 @requires /workspace/getLocale
