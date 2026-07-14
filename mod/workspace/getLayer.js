@@ -45,7 +45,6 @@ Template properties will be removed as these are not required by the MAPP API bu
 @property {string} [params.locale] Locale key.
 @property {string} [params.layer] Layer key.
 @property {Object} [params.user] Requesting user.
-@property {Boolean} [params.ignoreRoles] Whether role check should be performed.
 @property {Array} [user.roles] User roles.
 
 @returns {Promise<Object|Error>} JSON Layer.
@@ -53,10 +52,6 @@ Template properties will be removed as these are not required by the MAPP API bu
 export default async function getLayer(params, locale) {
   if (!locale) {
     locale = await getLocale(params);
-  }
-
-  if (params.ignoreRoles) {
-    params.user.roles = true;
   }
 
   // getLocale will return err if role.check fails.

@@ -33,7 +33,6 @@ The getLocale method will return an error if the requesting user does not have a
 @property {array} [params.locale] An array of locale keys to be merged as a nested locale.
 @property {Object} [params.user] Requesting user.
 @property {Array} [user.roles] User roles.
-@property {Boolean} [params.ignoreRoles] Whether role check should be performed.
 @property {Boolean} [params.layers] Whether to retrieve layers for the locale.
 
 @returns {Promise<Object|Error>} JSON Locale.
@@ -43,10 +42,6 @@ export default async function getLocale(params, parentLocale) {
 
   if (workspace instanceof Error) {
     return workspace;
-  }
-
-  if (params.ignoreRoles) {
-    params.user.roles = true;
   }
 
   if (typeof params.locale === 'string') {
@@ -120,22 +115,24 @@ function mergeParentLocale(locale, parentLocale) {
     return locale;
   }
 
+  const parentClone = structuredClone(parentLocale);
+
   // Only locales of a nested locales should be used for further nesting.
-  delete parentLocale.locales;
+  delete parentClone.locales;
 
-  parentLocale.keys ??= [parentLocale.key];
-  parentLocale.keys.push(locale.key);
+  parentClone.keys ??= [parentClone.key];
+  parentClone.keys.push(locale.key);
 
-  parentLocale.name ??= parentLocale.key;
+  parentClone.name ??= parentClone.key;
 
   // Compose the nested locale name.
-  locale.name = `${parentLocale.name}/${locale.name}`;
+  locale.name = `${parentClone.name}/${locale.name}`;
 
   if (locale.role) {
     locale.parentRoles.push(locale.role);
   }
 
-  locale = merge(parentLocale, locale);
+  locale = merge(parentClone, locale);
 
   return locale;
 }

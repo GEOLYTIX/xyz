@@ -105,7 +105,7 @@ async function layer(req, res) {
       .send(layer.message);
   }
 
-  res.json(layer);
+  res.send(layer);
 }
 
 /**
@@ -139,7 +139,7 @@ async function locale(req, res) {
 
   assignChecksum(locale);
 
-  res.json(locale);
+  res.send(locale);
 }
 
 /**
@@ -281,9 +281,9 @@ async function scopes(req, res) {
   for (const localeKey of Object.keys(locales)) {
     const locale = await getLocale({
       locale: localeKey,
-      user: req.params.user,
-      ignoreRoles: true,
+      user: { roles: true },
     });
+    await nestedLocales(locale, [], { roles: true });
   }
 
   // TODO iterate through all nested locales
@@ -321,6 +321,24 @@ async function scopes(req, res) {
   //   }
 
   res.send(scopesArray);
+}
+
+async function nestedLocales(locale, locales = [], user) {
+
+  if (!Array.isArray(locale.locales)) return;
+
+  for (const localeKey of locale.locales) {
+    const keys = locale.keys ?? [locale.key];
+    keys.push(localeKey);
+    const nestedLocale = await getLocale({
+      locale: keys,
+      user,
+    });
+
+    locales.push(nestedLocale);
+
+    await nestedLocales(nestedLocale, locales, user);
+  }
 }
 
 /**

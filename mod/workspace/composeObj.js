@@ -355,6 +355,8 @@ async function rolesTemplates(key, val, obj, roles, templateScope) {
 
 @description
 The arrayProperty method processes array properties of an object. It iterates over each item in the array and checks the roles for each item. If the roles check fails, the item is removed from the array.
+
+Nested locales are added to the workspace.nestedLocales object for later use. The templateScope is added to the nestedLocales array for each nested locale.
 @param {string} key
 @param {Object} val
 @param {Object} obj
@@ -363,6 +365,14 @@ The arrayProperty method processes array properties of an object. It iterates ov
 @returns {boolean} 
 */
 async function arrayProperty(key, val, obj, roles, templateScope) {
+  if (key === 'locales') {
+    workspace.nestedLocales ??= {};
+    for (const nestedLocale of val) {
+      workspace.nestedLocales[nestedLocale] ??= []
+      workspace.nestedLocales[nestedLocale].push(templateScope);
+    }
+    return true;
+  }
   if (!Array.isArray(val)) return false;
   for (const item of val) {
     const rolesCheck = await parseTemplates(item, roles, templateScope);
