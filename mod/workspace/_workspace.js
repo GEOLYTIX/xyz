@@ -168,7 +168,6 @@ async function locales(req, res) {
   const locales = [];
 
   for (const localeKey of Object.keys(workspace.locales)) {
-
     const locale = await getLocale({
       user: req.params.user,
       locale: localeKey,
