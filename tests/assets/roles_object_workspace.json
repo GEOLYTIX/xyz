@@ -23,9 +23,7 @@
       "roles": {
         "GeoBurger": true
       },
-      "locales": [
-        "roles_locale"
-      ]
+      "locales": ["roles_locale"]
     },
     "roles_locale": {
       "roles": {
@@ -39,16 +37,11 @@
   "locales": {
     "uk": {
       "template": "uk_locale",
-      "locales": [
-        "geocoffee_locale",
-        "geoburger_locale"
-      ]
+      "locales": ["geocoffee_locale", "geoburger_locale"]
     },
     "pol": {
       "template": "pol_locale",
-      "locales": [
-        "geocoffee_locale"
-      ]
+      "locales": ["geocoffee_locale"]
     }
   }
 }

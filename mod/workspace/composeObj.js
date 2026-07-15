@@ -96,12 +96,10 @@ async function mergeTemplateIntoObj(obj, template, roles, templateScope = []) {
   // The role takes precedence over the key for the scope.
   const scope = template.role;
 
-  if (scope) {
-    // Any individual template scope should be added to the workspace.scopes set.
-    workspace.scopes.add(scope);
-    // The templateScope array must be spread into a new array to prevent the original templateScope from being modified by nested templates.
-    templateScope = [...templateScope, scope];
-  }
+  // Any individual template scope should be added to the workspace.scopes set.
+  workspace.scopes.add(scope);
+  // The templateScope array must be spread into a new array to prevent the original templateScope from being modified by nested templates.
+  templateScope = [...templateScope, scope];
 
   workspace.scopes.add(templateScope);
 
@@ -111,6 +109,7 @@ async function mergeTemplateIntoObj(obj, template, roles, templateScope = []) {
 
   const rolesCheck = await parseTemplates(template, roles, templateScope);
 
+  // TODO test for rolesCheck instanceof Error in templates array template.
   if (rolesCheck instanceof Error) {
     console.log(template);
   }
@@ -368,7 +367,7 @@ async function arrayProperty(key, val, obj, roles, templateScope) {
   if (key === 'locales') {
     workspace.nestedLocales ??= {};
     for (const nestedLocale of val) {
-      workspace.nestedLocales[nestedLocale] ??= []
+      workspace.nestedLocales[nestedLocale] ??= [];
       workspace.nestedLocales[nestedLocale].push(templateScope);
     }
     return true;

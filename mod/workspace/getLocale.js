@@ -58,17 +58,27 @@ export default async function getLocale(params, parentLocale) {
 
   if (localeKey === 'locale') {
     locale = structuredClone(workspace.locale);
+    locale.key ??= localeKey;
   } else if (Object.hasOwn(workspace.locales, localeKey)) {
     locale = structuredClone(workspace.locales[localeKey]);
-  } else if (typeof localeKey === 'object') {
-    locale = structuredClone(localeKey);
+    locale.key ??= localeKey;
   } else if (typeof localeKey === 'string') {
     locale = await getTemplate(localeKey);
+    locale.key ??= localeKey;
+  }
+
+  if (typeof localeKey === 'object') {
+    locale = structuredClone(localeKey);
   }
 
   // Failed to getTemplate localeKey.
   if (locale instanceof Error) {
     return locale;
+  }
+
+  // Merge the default workspace locale
+  if (workspace.locale && locale.key !== 'locale') {
+    locale = merge(structuredClone(workspace.locale), locale);
   }
 
   locale.parentRoles ??= [];

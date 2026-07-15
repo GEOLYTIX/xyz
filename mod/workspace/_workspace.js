@@ -286,11 +286,6 @@ async function scopes(req, res) {
     await nestedLocales(locale, [], { roles: true });
   }
 
-  // TODO iterate through all nested locales
-  //   for (const nestedLocale of locale.locales) {
-  //   await loadLocale(locales, [localeKey, nestedLocale].join(','), user);
-  // }
-
   const scopesStringsSet = new Set();
 
   cachedWorkspace.scopes.forEach((scope) => {
@@ -324,12 +319,12 @@ async function scopes(req, res) {
 }
 
 async function nestedLocales(locale, locales = [], user) {
-
   if (!Array.isArray(locale.locales)) return;
 
   for (const localeKey of locale.locales) {
     const keys = locale.keys ?? [locale.key];
     keys.push(localeKey);
+    // TODO it should be possible to provide the locale as parentLocale to avoid re-composing the parent locale for each nested locale. This would require a change to the getLocale method to accept a parentLocale parameter.
     const nestedLocale = await getLocale({
       locale: keys,
       user,

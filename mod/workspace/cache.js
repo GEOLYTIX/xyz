@@ -138,23 +138,6 @@ async function cacheWorkspace() {
     locale: workspace.locale,
   };
 
-  // Loop through locale keys in workspace.
-  Object.keys(workspace.locales).forEach((locale_key) => {
-    // workspace has a locale prototype.
-    // don't merge workspace.locale with itself.
-    if (workspace.locale && locale_key !== 'locale') {
-      // Create clone to prevent the workspace.locale from being modified.
-      const locale = structuredClone(workspace.locale);
-
-      merge(locale, workspace.locales[locale_key]);
-
-      workspace.locales[locale_key] = locale;
-    }
-
-    // Assign key value as key on locale object.
-    workspace.locales[locale_key].key = locale_key;
-  });
-
   if (workspace.plugins) {
     console.warn(
       `Default plugins should be defined in the default workspace.locale{}`,

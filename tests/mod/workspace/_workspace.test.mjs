@@ -26,12 +26,12 @@ describe('getKeyMethod', () => {
     const layer = res._getData();
 
     expect(layer.key === 'OSM').toBeTruthy();
-  })
+  });
 
   it('locale', async () => {
     const { req, res } = createMocks({
       params: {
-        key: 'locale'
+        key: 'locale',
       },
     });
 
@@ -40,7 +40,7 @@ describe('getKeyMethod', () => {
     const locale = res._getData();
 
     expect(locale.layers.OSM).toBeTruthy();
-  })
+  });
 });
 
 describe('scopes: roles_object_workspace', () => {
@@ -108,14 +108,14 @@ describe('scopes: sibling_workspace', () => {
       'uk.brand_b',
       'uk.demographics',
       'uk.nested',
-      'uk.stores'
+      'uk.stores',
     ];
 
     expect(roles).toEqual(expectedRoles);
   });
 });
 
-describe('workspace: w/ Nested Locales & Roles', () => {
+describe('nested_roles/workspace', () => {
   beforeAll(async () => {
     globalThis.xyzEnv = {
       TITLE: 'WORKSPACE TEST',

@@ -35,7 +35,22 @@ describe('getLocale', async () => {
     expect(locale instanceof Error).toBeTruthy();
   });
 
-  it('locale with role; user with roles', async () => {
+  it('locale as string with role; user with roles', async () => {
+    const params = {
+      locale: 'uk',
+      user: {
+        roles: ['uk'],
+      },
+    };
+
+    const locale = await getLocale(params);
+
+    expect(locale.key === 'uk').toBeTruthy();
+    // This default locale with the OSM layer has been merged into the UK locale which has no layers.
+    expect(locale.layers.OSM).toBeTruthy();
+  });
+
+  it('locale as object with template with role; user with roles', async () => {
     const params = {
       locale: {
         template: {
