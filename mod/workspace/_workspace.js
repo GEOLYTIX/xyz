@@ -161,7 +161,7 @@ The nestedLocales method will be returned if a locale property is provided in th
 */
 async function locales(req, res) {
   if (req.params.locale) {
-    getNestedLocales(req, res);
+    await getNestedLocales(req, res);
     return;
   }
 
