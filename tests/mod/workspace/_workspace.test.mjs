@@ -214,41 +214,6 @@ describe('workspace: nested_roles/workspace', () => {
     expect(roles).toEqual(expectedRoles);
   });
 
-  it('locales list for restricted locales; user with nested role', async () => {
-    // User has access to UK -> coremarkets -> brand_b
-    // But requests Germany
-    const { req, res } = createMocks({
-      params: {
-        key: 'locales', // Requesting list of locales
-        user: {
-          roles: ['uk.coremarkets.brand_b'],
-        },
-      },
-    });
-
-    await getKeyMethod(req, res);
-
-    const expectedLocales = [
-      {
-        key: 'uk',
-        name: 'uk',
-        locales: [
-          'globalvista_template',
-          'coremarkets_template',
-          'no_role_locale',
-        ],
-      },
-    ];
-
-    const locales = res._getData();
-
-    expect(expectedLocales).toEqual(locales);
-
-    // Germany should NOT be in the list
-    const germany = locales.find((l) => l.key === 'germany');
-    expect(!germany).toBeTruthy();
-  });
-
   it('locale: anonymous access denied for restricted locale', async () => {
     const { req, res } = createMocks({
       params: {
@@ -311,6 +276,41 @@ describe('workspace: nested_roles/workspace', () => {
     expect(locales.find((l) => l.key === 'uk')).toBeFalsy();
   });
 
+  it('locales: list for restricted locales; user with nested role', async () => {
+    // User has access to UK -> coremarkets -> brand_b
+    // But requests Germany
+    const { req, res } = createMocks({
+      params: {
+        key: 'locales', // Requesting list of locales
+        user: {
+          roles: ['uk.coremarkets.brand_b'],
+        },
+      },
+    });
+
+    await getKeyMethod(req, res);
+
+    const expectedLocales = [
+      {
+        key: 'uk',
+        name: 'uk',
+        locales: [
+          'globalvista_template',
+          'coremarkets_template',
+          'no_role_locale',
+        ],
+      },
+    ];
+
+    const locales = res._getData();
+
+    expect(expectedLocales).toEqual(locales);
+
+    // Germany should NOT be in the list
+    const germany = locales.find((l) => l.key === 'germany');
+    expect(!germany).toBeTruthy();
+  });
+
   it('locales: list nested locales in restricted locale without roles', async () => {
     const { req, res } = createMocks({
       params: {
@@ -346,6 +346,24 @@ describe('workspace: nested_roles/workspace', () => {
     expect(
       locales.find((locale) => locale.key === 'no_role_locale'),
     ).toBeTruthy();
+  });
+
+  it('locales: list nested locales where there are none', async () => {
+    const { req, res } = createMocks({
+      params: {
+        key: 'locales',
+        locale: 'uk,globalvista_template',
+        user: {
+          roles: ['uk.globalvista'],
+        },
+      },
+    });
+
+    await getKeyMethod(req, res);
+
+    const locales = res._getData();
+
+    expect(locales.length === 0).toBeTruthy();
   });
 
   it('locales: list nested locales in nested locale', async () => {
