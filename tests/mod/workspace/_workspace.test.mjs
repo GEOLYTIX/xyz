@@ -127,28 +127,30 @@ describe('nested_roles/workspace', () => {
 
   it('nested locales w/ Nested Roles', async () => {
     const expectedRoles = [
-      'another_role',
-      'brand_a',
-      'brand_b',
-      'coremarkets',
-      'coremarkets.brand_a',
-      'coremarkets.brand_b',
       'germany',
       'germany.another_role',
       'germany.globalvista',
+      'germany.globalvista.OBJ_ROLE',
       'germany.globalvista.TEMPLATE_ROLE',
       'germany.TEMPLATE_ROLE',
-      'globalvista',
       'OBJ_ROLE',
       'TEMPLATE_ROLE',
-      'test',
       'uk',
       'uk.coremarkets',
       'uk.coremarkets.brand_a',
+      'uk.coremarkets.brand_a.OBJ_ROLE',
+      'uk.coremarkets.brand_a.TEMPLATE_ROLE',
       'uk.coremarkets.brand_b',
+      'uk.coremarkets.brand_b.OBJ_ROLE',
+      'uk.coremarkets.brand_b.TEMPLATE_ROLE',
+      'uk.coremarkets.OBJ_ROLE',
+      'uk.coremarkets.TEMPLATE_ROLE',
       'uk.globalvista',
+      'uk.globalvista.OBJ_ROLE',
       'uk.globalvista.TEMPLATE_ROLE',
+      'uk.OBJ_ROLE',
       'uk.TEMPLATE_ROLE',
+      'uk.test',
     ];
 
     const { req, res } = createMocks({

@@ -275,15 +275,14 @@ async function scopes(req, res) {
 
   const cachedWorkspace = await workspaceCache(true);
 
-  // TODO why is this structuredClone of the locales required?
-  const locales = structuredClone(cachedWorkspace.locales);
-
-  for (const localeKey of Object.keys(locales)) {
+  // TODO test workspace without locales property. Should the scopes method still return the scopes of the templates in the workspace.templates object?
+  for (const localeKey of Object.keys(cachedWorkspace.locales)) {
     const locale = await getLocale({
       locale: localeKey,
+      layers: true,
       user: { roles: true },
     });
-    await nestedLocales(locale, [], { roles: true });
+    await nestedLocales(locale, { roles: true });
   }
 
   const scopesStringsSet = new Set();
@@ -318,21 +317,19 @@ async function scopes(req, res) {
   res.send(scopesArray);
 }
 
-async function nestedLocales(locale, locales = [], user) {
+async function nestedLocales(locale, user) {
   if (!Array.isArray(locale.locales)) return;
 
+  const keys = locale.keys ?? [locale.key];
   for (const localeKey of locale.locales) {
-    const keys = locale.keys ?? [locale.key];
-    keys.push(localeKey);
     // TODO it should be possible to provide the locale as parentLocale to avoid re-composing the parent locale for each nested locale. This would require a change to the getLocale method to accept a parentLocale parameter.
     const nestedLocale = await getLocale({
-      locale: keys,
+      locale: [...keys, localeKey],
+      layers: true,
       user,
     });
 
-    locales.push(nestedLocale);
-
-    await nestedLocales(nestedLocale, locales, user);
+    await nestedLocales(nestedLocale, user);
   }
 }
 

@@ -77,13 +77,14 @@ export default async function getLocale(params, parentLocale) {
   }
 
   // Merge the default workspace locale
-  if (workspace.locale && locale.key !== 'locale') {
+  if (!parentLocale && locale.key !== 'locale') {
     locale = merge(structuredClone(workspace.locale), locale);
   }
 
-  locale.parentRoles ??= [];
-  if (parentLocale?.role) {
-    locale.parentRoles.push(parentLocale.role);
+  if (parentLocale) {
+    locale.parentRoles = parentLocale.parentRoles.length
+      ? parentLocale.parentRoles
+      : [parentLocale.role];
   }
 
   locale = await composeObj(locale, params.user?.roles);
@@ -129,10 +130,10 @@ function mergeParentLocale(locale, parentLocale) {
 
   // Only locales of a nested locales should be used for further nesting.
   delete parentClone.locales;
+  delete parentClone.parentRoles;
 
   parentClone.keys ??= [parentClone.key];
   parentClone.keys.push(locale.key);
-
   parentClone.name ??= parentClone.key;
 
   // Compose the nested locale name.
@@ -149,6 +150,10 @@ function mergeParentLocale(locale, parentLocale) {
 
 async function localeLayers(locale, params) {
   if (!params.layers) {
+    return;
+  }
+
+  if (!locale.layers) {
     return;
   }
 
