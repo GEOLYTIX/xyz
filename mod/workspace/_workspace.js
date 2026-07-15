@@ -168,8 +168,6 @@ async function locales(req, res) {
   const locales = [];
 
   for (const localeKey of Object.keys(workspace.locales)) {
-    // Nested locales should not be parsed unless specifically requested.
-    if (localeKey.split(',').length > 1) continue;
 
     const locale = await getLocale({
       user: req.params.user,
@@ -317,6 +315,19 @@ async function scopes(req, res) {
   res.send(scopesArray);
 }
 
+/**
+@function nestedLocales
+@async
+
+@description
+The nestedLocales method iterates the locale.locales array property and requests each nested locale from the getLocale method.
+
+The nestedLocales method is called recursively to check for further nested locales.
+
+@param {Object} locale The locale object.
+@param {Object} user The user requesting the nested locales.
+@property {Array} [locale.locales] An array of nested locale keys.
+*/
 async function nestedLocales(locale, user) {
   if (!Array.isArray(locale.locales)) return;
 

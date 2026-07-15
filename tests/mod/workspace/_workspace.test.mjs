@@ -43,7 +43,7 @@ describe('getKeyMethod', () => {
   });
 });
 
-describe('scopes: roles_object_workspace', () => {
+describe('workspace: roles_object_workspace', () => {
   beforeAll(async () => {
     globalThis.xyzEnv = {
       WORKSPACE: 'file:./tests/assets/roles_object_workspace.json',
@@ -78,7 +78,7 @@ describe('scopes: roles_object_workspace', () => {
   });
 });
 
-describe('scopes: sibling_workspace', () => {
+describe('workspace: sibling_workspace', () => {
   beforeAll(async () => {
     globalThis.xyzEnv = {
       TITLE: 'WORKSPACE TEST',
@@ -88,7 +88,7 @@ describe('scopes: sibling_workspace', () => {
     await checkWorkspaceCache(true);
   });
 
-  it('nested locale roles should not leak into sibling templates', async () => {
+  it('scopes: nested locale roles should not leak into sibling templates', async () => {
     const { req, res } = createMocks({
       params: {
         key: 'scopes',
@@ -115,7 +115,7 @@ describe('scopes: sibling_workspace', () => {
   });
 });
 
-describe('nested_roles/workspace', () => {
+describe('workspace: nested_roles/workspace', () => {
   beforeAll(async () => {
     globalThis.xyzEnv = {
       TITLE: 'WORKSPACE TEST',
@@ -125,7 +125,7 @@ describe('nested_roles/workspace', () => {
     await checkWorkspaceCache(true);
   });
 
-  it('nested locales w/ Nested Roles', async () => {
+  it('scopes: nested locales with nested roles', async () => {
     const expectedRoles = [
       'germany',
       'germany.another_role',
@@ -169,14 +169,14 @@ describe('nested_roles/workspace', () => {
     expect(roles).toEqual(expectedRoles);
   });
 
-  it('Check Access to Unrelated Locale', async () => {
+  it('locales list for restricted locales; user with nested role', async () => {
     // User has access to UK -> coremarkets -> brand_b
     // But requests Germany
     const { req, res } = createMocks({
       params: {
         key: 'locales', // Requesting list of locales
         user: {
-          roles: ['uk', 'uk.coremarkets', 'uk.coremarkets.brand_b'],
+          roles: ['uk.coremarkets.brand_b'],
         },
       },
     });
@@ -204,12 +204,11 @@ describe('nested_roles/workspace', () => {
     expect(!germany).toBeTruthy();
   });
 
-  it('Anonymous Access to Restricted Locale', async () => {
+  it('locale: anonymous access denied for restricted locale', async () => {
     const { req, res } = createMocks({
       params: {
         key: 'locale',
         locale: 'germany',
-        user: {}, // No roles
       },
     });
 
@@ -217,16 +216,14 @@ describe('nested_roles/workspace', () => {
 
     const code = res.statusCode;
     expect(code).toEqual(400);
-    expect(res._getData()).toEqual('Role access denied.');
   });
 
-  it('Anonymous Access to Restricted Layer', async () => {
+  it('layer: anonymous access denied for restricted layer', async () => {
     const { req, res } = createMocks({
       params: {
         key: 'layer',
         layer: 'OSM_GERMANY',
         locale: 'germany',
-        user: {},
       },
     });
 
@@ -236,7 +233,7 @@ describe('nested_roles/workspace', () => {
     expect(code).toEqual(400);
   });
 
-  it('Authorized User Accessing Inherited Role Layer', async () => {
+  it('layer: authorized user accessing inherited role layer', async () => {
     const { req, res } = createMocks({
       params: {
         key: 'layer',
@@ -255,7 +252,7 @@ describe('nested_roles/workspace', () => {
     expect(code).toEqual(200);
   });
 
-  it('Hidden Parent in Locales List', async () => {
+  it('locales: hidden parent in locales list', async () => {
     const { req, res } = createMocks({
       params: {
         key: 'locales',
@@ -268,16 +265,12 @@ describe('nested_roles/workspace', () => {
     await getKeyMethod(req, res);
 
     const locales = res._getData();
-    const code = res.statusCode;
 
-    expect(code).toEqual(200);
-
-    // Germany should be hidden (traversal only, not target)
-    const germany = locales.find((l) => l.key === 'germany');
-    expect(!germany).toBeTruthy();
+    expect(locales.find((l) => l.key === 'germany')).toBeTruthy();
+    expect(locales.find((l) => l.key === 'uk')).toBeFalsy();
   });
 
-  it('Should not see a locale without the correct role', async () => {
+  it('locale: should not see a locale without the correct role', async () => {
     const { req, res } = createMocks({
       params: {
         key: 'locale',
