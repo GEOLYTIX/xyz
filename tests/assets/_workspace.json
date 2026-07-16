@@ -29,6 +29,9 @@
         "brand_c_layer": {}
       }
     },
+    "template_layer": {
+      "template": "scratch_geojson"
+    },
     "OSM": {
       "display": true,
       "format": "tiles",

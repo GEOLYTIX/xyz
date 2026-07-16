@@ -80,4 +80,13 @@ describe('getLayer: ', async () => {
     expect(layer.name === 'SCRATCH ROLE TEMPLATE').toBeTruthy();
     expect(layer.template.warn).toBeTruthy();
   });
+
+  it('template_layer without roles', async () => {
+    const params = {
+      layer: 'template_layer',
+    };
+    const layer = await getLayer(params);
+    expect(layer.key === 'template_layer').toBeTruthy();
+    expect(layer.name === 'SCRATCH NO ROLE TEMPLATE').toBeTruthy();
+  });
 });
