@@ -182,7 +182,7 @@ async function parseTemplates(obj, roles, templateScope) {
   if (obj instanceof Object && !Object.keys(obj)) return;
 
   for (const [key, val] of Object.entries(obj)) {
-    if (await queryTemplate(key, val, obj, roles, templateScope)) {
+    if (queryTemplate(key, val, obj, roles, templateScope)) {
       continue;
     }
 
@@ -225,10 +225,13 @@ async function parseTemplates(obj, roles, templateScope) {
 
 /**
 @function queryTemplate
-@async
 
 @description
-The method checks if the key is 'template' and the val has a key property. If so, it will add the template to the workspace.templates object and remove the template property from the obj.
+The queryTemplate method checks if the key is 'template' and the val is a string or an object with a key property. If so, it will add the template to the workspace.templates object and remove the template property from the obj.
+
+A prototype template into which the object will merged will only be processed if the template is defined in a layer or locale object. A prototype template will not be processed if it is nested in a template.
+
+Access to an object is denied if the user does not have access to a prototype template. This would cause an object to fail if attempting to merge the object into the prototype template. Merging will not be attempted if the template with an access role is defined in a templates array.
 
 @param {string} key
 @param {Object} val
@@ -237,19 +240,27 @@ The method checks if the key is 'template' and the val has a key property. If so
 @param {array} templateScope
 @returns {boolean} Returns true if the key is 'template' and the val has a key property.
 */
-async function queryTemplate(key, val, obj, roles, templateScope) {
+function queryTemplate(key, val, obj, roles, templateScope) {
   if (key !== 'template') return false;
 
   if (typeof val === 'string') {
-    // delete obj.template;
-    // await mergeTemplateIntoObj(obj, val, roles, templateScope);
+    return true;
+  }
+
+  if (typeof val.role === 'string' && !val.key) {
+    val.warn = `Prototype template with access role [${val.role}] may only be used in a layer or locale object, not nested in a template.`;
+    return true;
+  }
+
+  if (!val.key) {
+    val.warn =
+      'Prototype template may only be used in a layer or locale object, not nested in a template.';
     return true;
   }
 
   // A query template object must be referenced by it's key in the obj properties values.
   if (val.key && !Object.values(obj).some((v) => v === val.key)) {
-    delete obj.template;
-    await mergeTemplateIntoObj(obj, val, roles, templateScope);
+    val.warn = `Prototype template [${val.key}] may only be used in layer or locale object, not nested in a template.`;
     return true;
   }
 

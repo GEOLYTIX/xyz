@@ -100,6 +100,9 @@ export default async function getLocale(params, parentLocale) {
   if (Array.isArray(params.locale) && params.locale.length > 0) {
     // Recursively call getLocale with locale as parentLocale to merge nested locales.
     locale = await getLocale(params, locale);
+
+    // The locale must be returned to prevent processing plugins and layers on a parent locale prior to merging the nested locale.
+    return locale;
   }
 
   if (Array.isArray(locale.plugins)) {

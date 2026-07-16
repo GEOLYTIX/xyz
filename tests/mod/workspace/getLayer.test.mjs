@@ -78,6 +78,6 @@ describe('getLayer: ', async () => {
 
     expect(layer.key === 'Scratch').toBeTruthy();
     expect(layer.name === 'SCRATCH ROLE TEMPLATE').toBeTruthy();
-    expect(layer.dbs === 'XYZ').toBeTruthy();
+    expect(layer.template.warn).toBeTruthy();
   });
 });

@@ -132,9 +132,12 @@ describe('getLocale', async () => {
 
     const locale = await getLocale(params);
 
+    const osmLayer = locale.layers.find((layer) => layer.key === 'OSM');
+    expect(osmLayer.template.warn).toBeTruthy();
+
     const scratchLayer = locale.layers.find((layer) => layer.key === 'Scratch');
 
     expect(scratchLayer.name === 'SCRATCH ROLE TEMPLATE').toBeTruthy();
-    expect(scratchLayer.dbs === 'XYZ').toBeTruthy();
+    expect(scratchLayer.template.warn).toBeTruthy();
   });
 });
