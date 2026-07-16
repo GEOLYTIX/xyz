@@ -89,4 +89,12 @@ describe('getLayer: ', async () => {
     expect(layer.key === 'template_layer').toBeTruthy();
     expect(layer.name === 'SCRATCH NO ROLE TEMPLATE').toBeTruthy();
   });
+
+  it('template layer non existe', async () => {
+    const params = {
+      layer: 'bogus_template_layer',
+    };
+    const layer = await getLayer(params);
+    expect(layer instanceof Error).toBeTruthy();
+  });
 });

@@ -65,8 +65,8 @@ export default async function getLayer(params, locale) {
     // A layer maybe defined as a template only.
     layer = await getTemplate(params.layer);
 
-    if (!layer || layer instanceof Error) {
-      return new Error('Unable to validate layer param.');
+    if (layer instanceof Error) {
+      return new Error('Unable to validate template layer.');
     }
   }
 
