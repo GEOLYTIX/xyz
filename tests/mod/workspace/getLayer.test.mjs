@@ -88,6 +88,7 @@ describe('getLayer: ', async () => {
     const layer = await getLayer(params);
     expect(layer.key === 'template_layer').toBeTruthy();
     expect(layer.name === 'SCRATCH NO ROLE TEMPLATE').toBeTruthy();
+    expect(layer.locale_layer === true).toBeTruthy();
   });
 
   it('template layer non existe', async () => {
