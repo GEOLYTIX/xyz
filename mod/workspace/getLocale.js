@@ -157,7 +157,7 @@ async function localeLayers(locale, params) {
     return;
   }
 
-  const layers = {};
+  const layers = [];
 
   for (const layerKey of Object.keys(locale.layers)) {
     const layer = await getLayer({ ...params, layer: layerKey }, locale);
@@ -166,8 +166,9 @@ async function localeLayers(locale, params) {
       continue;
     }
 
-    layers[layerKey] = layer;
+    layers.push(layer);
   }
 
+  // Locale layers should be returned as an array.
   locale.layers = layers;
 }
