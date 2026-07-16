@@ -70,9 +70,6 @@ export default async function getLayer(params, locale) {
     }
   }
 
-  // TODO: I don't understand how this could be.
-  if (!layer) return;
-
   // Assign key value as key on layer object.
   layer.key ??= params.layer;
 

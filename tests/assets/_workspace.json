@@ -55,10 +55,14 @@
           "name": "SCRATCH NO ROLE TEMPLATE"
         },
         {
-          "name": "SCRATCH ROLE TEMPLATE",
-          "role": "scratch_role_template"
+          "src": "file:./tests/assets/scratch_role_template.json"
         }
       ],
+      "template": {
+        "key": "dbs_XYZ",
+        "src": "file:./tests/assets/dbs_XYZ.json",
+        "dbs": "XYZ"
+      },
       "infoj": [
         {
           "type": "geometry",

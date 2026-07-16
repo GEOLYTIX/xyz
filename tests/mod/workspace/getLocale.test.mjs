@@ -126,12 +126,15 @@ describe('getLocale', async () => {
       locale: ['europe', 'UK_locale'],
       layers: true,
       user: {
-        roles: ['europe.UK.scratch_role'],
+        roles: ['europe.UK.scratch_role.scratch_role_template'],
       },
     };
 
     const locale = await getLocale(params);
 
-    expect(locale.layers.some((layer) => layer.key === 'Scratch')).toBeTruthy();
+    const scratchLayer = locale.layers.find((layer) => layer.key === 'Scratch');
+
+    expect(scratchLayer.name === 'SCRATCH ROLE TEMPLATE').toBeTruthy();
+    expect(scratchLayer.dbs === 'XYZ').toBeTruthy();
   });
 });

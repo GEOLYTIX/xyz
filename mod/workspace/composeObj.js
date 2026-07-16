@@ -182,7 +182,7 @@ async function parseTemplates(obj, roles, templateScope) {
   if (obj instanceof Object && !Object.keys(obj)) return;
 
   for (const [key, val] of Object.entries(obj)) {
-    if (queryTemplate(key, val, obj, roles, templateScope)) {
+    if (await queryTemplate(key, val, obj, roles, templateScope)) {
       continue;
     }
 
@@ -225,6 +225,7 @@ async function parseTemplates(obj, roles, templateScope) {
 
 /**
 @function queryTemplate
+@async
 
 @description
 The method checks if the key is 'template' and the val has a key property. If so, it will add the template to the workspace.templates object and remove the template property from the obj.
@@ -236,10 +237,21 @@ The method checks if the key is 'template' and the val has a key property. If so
 @param {array} templateScope
 @returns {boolean} Returns true if the key is 'template' and the val has a key property.
 */
-function queryTemplate(key, val, obj, roles, templateScope) {
+async function queryTemplate(key, val, obj, roles, templateScope) {
   if (key !== 'template') return false;
 
-  if (!val.key) return false;
+  if (typeof val === 'string') {
+    // delete obj.template;
+    // await mergeTemplateIntoObj(obj, val, roles, templateScope);    
+    return true;
+  }
+
+  // A query template object must be referenced by it's key in the obj properties values.
+  if (val.key && !Object.values(obj).some((v) => v === val.key)) {
+    delete obj.template;
+    await mergeTemplateIntoObj(obj, val, roles, templateScope);
+    return true;
+  }
 
   // A template object provided in a template will be a query template to be merged into the workspace.templates object. The template will be assigned a _type property to identify it as a template object. Query templates are not merged into the object they are defined in but are assigned to the workspace.templates object for later use.
   val._type = 'template';
