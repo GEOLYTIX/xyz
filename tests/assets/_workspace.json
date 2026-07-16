@@ -100,6 +100,9 @@
     }
   },
   "locale": {
+    "queryparams": {
+      "locale": "uk"
+    },
     "layer": {
       "locale_layer": true
     },

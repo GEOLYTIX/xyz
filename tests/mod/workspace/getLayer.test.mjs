@@ -59,6 +59,7 @@ describe('getLayer: ', async () => {
 
     expect(layer.key === 'Scratch').toBeTruthy();
     expect(layer.name === 'SCRATCH NO ROLE TEMPLATE').toBeTruthy();
+    expect(layer.queryparams.locale === 'uk').toBeTruthy();
   });
 
   it('locale and layer without role', async () => {
