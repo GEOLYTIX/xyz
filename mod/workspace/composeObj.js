@@ -242,7 +242,7 @@ async function queryTemplate(key, val, obj, roles, templateScope) {
 
   if (typeof val === 'string') {
     // delete obj.template;
-    // await mergeTemplateIntoObj(obj, val, roles, templateScope);    
+    // await mergeTemplateIntoObj(obj, val, roles, templateScope);
     return true;
   }
 
