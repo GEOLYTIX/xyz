@@ -61,6 +61,22 @@ describe('getLayer: ', async () => {
     expect(layer.name === 'SCRATCH NO ROLE TEMPLATE').toBeTruthy();
   });
 
+  it('locale and layer without role', async () => {
+    const params = {
+      locale: 'europe',
+      layer: 'Scratch',
+      user: {
+        roles: [
+          'europe', // locale role
+        ],
+      },
+    };
+
+    const layer = await getLayer(params);
+
+    expect(layer instanceof Error).toBeTruthy();
+  });
+
   it('locale, layer, and template role', async () => {
     const params = {
       locale: 'europe',
