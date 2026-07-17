@@ -54,15 +54,7 @@ A structured clone of the template will be returned to prevent the cached object
 @returns {Promise<Object|Error>} JSON Template
 */
 export default async function getTemplate(template) {
-  if (template === undefined) {
-    return new Error('Undefined template key.');
-  }
-
   const workspace = await workspaceCache();
-
-  if (workspace instanceof Error) {
-    return workspace;
-  }
 
   if (typeof template === 'string') {
     const templateKey = String(template);

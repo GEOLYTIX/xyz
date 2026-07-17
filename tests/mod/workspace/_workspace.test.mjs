@@ -3,25 +3,20 @@ import { beforeAll, describe, expect, it } from 'vitest';
 import getKeyMethod from '../../../mod/workspace/_workspace.js';
 import checkWorkspaceCache from '../../../mod/workspace/cache.js';
 
-describe('workspace access error', () => {
-  beforeAll(async () => {
+describe('workspace', () => {
+  it('should throw error if workspace is not accessible', async () => {
     globalThis.xyzEnv = {
       WORKSPACE: 'file:bar.json',
     };
 
-    await checkWorkspaceCache(true);
-  });
+    let err;
+    try {
+      await checkWorkspaceCache(true);
+    } catch (e) {
+      err = e;
+    }
 
-  it('return 500', async () => {
-    const { req, res } = createMocks({
-      params: {
-        key: 'locale',
-      },
-    });
-
-    await getKeyMethod(req, res);
-
-    expect(res.statusCode).toEqual(500);
+    expect(err instanceof Error).toBeTruthy();
   });
 });
 

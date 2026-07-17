@@ -40,10 +40,6 @@ The getLocale method will return an error if the requesting user does not have a
 export default async function getLocale(params, parentLocale) {
   const workspace = await workspaceCache();
 
-  if (workspace instanceof Error) {
-    return workspace;
-  }
-
   if (typeof params.locale === 'string') {
     params.locale = params.locale.split(',');
   }

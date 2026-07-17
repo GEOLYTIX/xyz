@@ -83,9 +83,8 @@ async function cacheWorkspace() {
     ? await getFrom[src](xyzEnv.WORKSPACE)
     : {};
 
-  // Return error if source failed.
   if (workspace instanceof Error) {
-    return workspace;
+    throw workspace;
   }
 
   const custom_templates =

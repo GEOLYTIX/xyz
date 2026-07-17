@@ -58,13 +58,6 @@ The method checks whether the req.params.key matches a keyMethods property and r
 export default async function getKeyMethod(req, res) {
   workspace = await workspaceCache();
 
-  if (workspace instanceof Error) {
-    return res
-      .status(500)
-      .setHeader('Content-Type', 'text/plain')
-      .send('Failed to load workspace.');
-  }
-
   // The keys object must own a user provided lookup key
   if (!Object.hasOwn(keyMethods, req.params.key)) {
     return res
@@ -590,10 +583,6 @@ keep their src because render functions cannot be serialised into JSON.
 */
 export async function cacheWorkspaceTemplates() {
   workspace = await workspaceCache(true);
-
-  if (workspace instanceof Error) {
-    return workspace;
-  }
 
   const errors = [];
   const srcMap = new Map();
