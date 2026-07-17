@@ -35,6 +35,7 @@ const keyMethods = {
   locale,
   locales,
   scopes,
+  roles: scopes, // for backwards compatibility with the workspace/roles endpoint
   test,
 };
 
@@ -293,25 +294,42 @@ async function scopes(req, res) {
     .filter(Boolean)
     .sort((a, b) => a.localeCompare(b));
 
-  //TODO: Should the scopesArray be filtered for user roles? If so, how should that be implemented?
-  //   for (const role of rolesSet) {
-  //     const rolesArr = role.split('.');
-
-  //     if (rolesArr.length > 1) {
-  //       rolesArr.reduce(
-  //         (accumulator, currentValue) => (accumulator[currentValue] ??= {}),
-  //         rolesTree,
-  //       );
-
-  //       for (const role of rolesArr) {
-  //         rolesSet.add(role);
-  //       }
-  //     } else {
-  //       rolesTree[role] ??= {};
-  //     }
-  //   }
+  if (req.params.tree) {
+    scopesArrayToTree(res, scopesStringsSet);
+    return;
+  }
 
   res.send(scopesArray);
+}
+
+/**
+@function scopesArrayToTree
+
+@description
+The scopesArrayToTree method converts an array of scopes strings into a tree structure.
+
+@param {res} res HTTP response.
+@param {Set} scopesStringsSet Set of scopes strings.
+*/
+function scopesArrayToTree(res, scopesStringsSet) {
+  const scopesTree = {};
+
+  for (const scope of scopesStringsSet) {
+    if (scope === '') continue;
+
+    const rolesArr = scope.split('.');
+
+    if (rolesArr.length > 1) {
+      rolesArr.reduce(
+        (accumulator, currentValue) => (accumulator[currentValue] ??= {}),
+        scopesTree,
+      );
+    } else {
+      scopesTree[scope] ??= {};
+    }
+  }
+
+  res.send(scopesTree);
 }
 
 /**
