@@ -14,6 +14,42 @@ describe('composeObj', async () => {
     expect(Object.hasOwn(layer, 'style')).toBeTruthy();
   });
 
+  it('object with bogus template', async () => {
+    const obj = {
+      template: 'bogus',
+    };
+
+    const response = await composeObj(obj);
+
+    expect(response instanceof Error).toBeTruthy();
+  });
+
+  it('object with nested object template string', async () => {
+    const obj = {
+      nested: {
+        template: 'bogus',
+      },
+    };
+
+    const response = await composeObj(obj);
+
+    expect(response.nested.template).toBeTruthy();
+  });
+
+  it('object with nested object template object', async () => {
+    const obj = {
+      nested: {
+        template: {
+          src: 'bogus',
+        },
+      },
+    };
+
+    const response = await composeObj(obj);
+
+    expect(response.nested.template.warn).toBeTruthy();
+  });
+
   it('exclude_props in layer.template', async () => {
     const obj = {
       template: {
@@ -27,6 +63,19 @@ describe('composeObj', async () => {
     expect(Object.hasOwn(layer, 'style')).toBeFalsy();
   });
 
+  it('include_props in layer.template', async () => {
+    const obj = {
+      template: {
+        src: 'file:./tests/assets/layers/template_test/layer.json',
+        include_props: ['style'],
+      },
+    };
+
+    const layer = await composeObj(obj);
+
+    expect(Object.hasOwn(layer, 'style')).toBeTruthy();
+  });
+
   it('roles object without roles', async () => {
     const obj = {
       root: true,
@@ -35,9 +84,26 @@ describe('composeObj', async () => {
       },
     };
 
-    const no_roles = await composeObj(obj);
+    const response = await composeObj(obj);
 
-    expect(no_roles instanceof Error).toBeTruthy();
+    expect(response instanceof Error).toBeTruthy();
+  });
+
+  it('nested templates with roles object without roles', async () => {
+    const obj = {
+      root: true,
+      templates: [
+        {
+          roles: {
+            foo: null,
+          },
+        },
+      ],
+    };
+
+    const response = await composeObj(obj);
+
+    expect(response.err?.length === 1).toBeTruthy();
   });
 
   it('nested roles object without roles', async () => {
@@ -51,10 +117,11 @@ describe('composeObj', async () => {
       },
     };
 
-    const no_roles = await composeObj(obj);
+    const response = await composeObj(obj);
 
-    expect(no_roles.root).toBeTruthy();
-    expect(Array.isArray(no_roles.err)).toBeTruthy();
+    expect(response.root).toBeTruthy();
+    expect(response.nested).toBeFalsy();
+    expect(Array.isArray(response.err)).toBeTruthy();
   });
 
   it('array with roles object without roles', async () => {
@@ -107,7 +174,7 @@ describe('composeObj', async () => {
     expect(layer.infoj.length).toEqual(2);
   });
 
-  it('obj with template and nested roles', async () => {
+  it('obj with nested templates in template and roles', async () => {
     const obj = {
       parentRoles: ['locale'],
       template: {
@@ -126,6 +193,7 @@ describe('composeObj', async () => {
 
     expect(layer.draw?.point).toBeTruthy();
     expect(layer.draw?.circle).toBeTruthy();
+    expect(layer.err?.length === 3).toBeTruthy();
   });
 
   it('templates with 4 levels of nesting with roles', async () => {

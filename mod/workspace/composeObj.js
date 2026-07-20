@@ -30,11 +30,8 @@ export default async function composeObj(obj, roles) {
   if (obj.template) {
     let template = await getTemplate(obj.template);
 
-    // TODO role check for template access should be performed here. The template may be a string or an object with a src property. The template will be merged into the obj.
     if (template instanceof Error) {
-      obj.err ??= [];
-      obj.err.push(template.message);
-      return obj;
+      return template;
     }
 
     template = filterTemplateProperties(template);
@@ -88,7 +85,7 @@ async function mergeTemplateIntoObj(obj, template, roles, templateScope = []) {
   if (template instanceof Error) {
     obj.err ??= [];
     obj.err.push(template.message);
-    return obj;
+    return;
   }
 
   template = filterTemplateProperties(template);
@@ -104,14 +101,18 @@ async function mergeTemplateIntoObj(obj, template, roles, templateScope = []) {
   workspace.scopes.add(templateScope);
 
   if (!checkScope(templateScope, roles)) {
-    return obj;
+    obj.err ??= [];
+    obj.err.push(
+      `Access denied to template with scope: ${templateScope.join('.')}`,
+    );
+    return;
   }
 
   const rolesCheck = await parseTemplates(template, roles, templateScope);
 
-  // TODO test for rolesCheck instanceof Error in templates array template.
   if (rolesCheck instanceof Error) {
-    console.log(template);
+    obj.err ??= [];
+    obj.err.push(rolesCheck.message);
   }
 
   // key and role properties must not overwrite in obj.
@@ -174,7 +175,8 @@ If an array of templates is found, each template will be merged into the object 
 @param {array} templateScope
 */
 async function parseTemplates(obj, roles, templateScope) {
-  // Return early if object is null or empty
+  if (typeof obj !== 'object') return;
+
   if (obj === null) return;
 
   if (obj === undefined) return;
@@ -190,7 +192,7 @@ async function parseTemplates(obj, roles, templateScope) {
       continue;
     }
 
-    const rolesCheck = await rolesTemplates(
+    const rolesTemplatesCheck = await rolesTemplates(
       key,
       val,
       obj,
@@ -198,12 +200,12 @@ async function parseTemplates(obj, roles, templateScope) {
       templateScope,
     );
 
-    if (rolesCheck === true) {
+    if (rolesTemplatesCheck === true) {
       continue;
     }
 
-    if (rolesCheck instanceof Error) {
-      return rolesCheck;
+    if (rolesTemplatesCheck instanceof Error) {
+      return rolesTemplatesCheck;
     }
 
     // Recursively process each item in an array property of the object.
@@ -212,13 +214,11 @@ async function parseTemplates(obj, roles, templateScope) {
     }
 
     // Recursively process nested objects
-    if (val instanceof Object) {
-      const rolesCheck = await parseTemplates(val, roles, templateScope);
-      if (rolesCheck instanceof Error) {
-        delete obj[key];
-        obj.err ??= [];
-        obj.err.push(rolesCheck.message);
-      }
+    const parseTemplatesCheck = await parseTemplates(val, roles, templateScope);
+    if (parseTemplatesCheck instanceof Error) {
+      delete obj[key];
+      obj.err ??= [];
+      obj.err.push(parseTemplatesCheck.message);
     }
   }
 }
@@ -365,10 +365,6 @@ async function rolesTemplates(key, val, obj, roles, templateScope) {
   if (accessRoles.some((role) => roles.includes(role))) {
     return true;
   }
-
-  return new Error(
-    'Access to the object with the roles property is denied. User does not have the required roles.',
-  );
 }
 
 /**

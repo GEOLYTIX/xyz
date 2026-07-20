@@ -16,6 +16,14 @@
       "draw": {
         "circle": true
       }
+    },
+    {
+      "src": "bogus",
+      "property": "bogus_src"
+    },
+    {
+      "role": "bogus",
+      "property": "bogus_role"
     }
   ]
 }
