@@ -26,7 +26,10 @@
       "role": "UK",
       "extent": {},
       "layers": {
-        "brand_c_layer": {}
+        "brand_c_layer": {},
+        "restricted": {
+          "role": "restricted"
+        }
       }
     },
     "template_layer": {
@@ -124,8 +127,8 @@
   },
   "locales": {
     "uk": {
+      "plugins": ["plugin_a", "plugin_b"],
       "extent": {},
-      "layers": {},
       "locales": ["brand_a_locale", "brand_b_locale", "UK_locale"]
     },
     "europe": {

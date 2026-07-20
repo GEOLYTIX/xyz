@@ -77,7 +77,7 @@ export default async function getLayer(params, locale) {
     layer = merge(structuredClone(locale.layer), layer);
   }
 
-  layer.parentRoles = locale.parentRoles ?? [];
+  layer.parentRoles = locale.parentRoles;
 
   // The roles property maybe assigned from a template. Templates must be merged prior to the role check.
   layer = await composeObj(layer, params.user?.roles);

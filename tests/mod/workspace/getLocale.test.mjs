@@ -106,6 +106,9 @@ describe('getLocale', async () => {
     const locale = await getLocale(params);
 
     expect(locale.layers.some((layer) => layer.key === 'Scratch')).toBeTruthy();
+    expect(
+      locale.layers.some((layer) => layer.key === 'restricted'),
+    ).toBeFalsy();
   });
 
   it('nested locales with role[s]; user with nested role string', async () => {
