@@ -98,7 +98,9 @@ export default async function getTemplate(template) {
   // Assign response to template.
   if (typeof response === 'object') {
     Object.assign(template, response);
-  } else if (typeof response === 'string') {
+  }
+
+  if (typeof response === 'string') {
     template.template = response;
   }
 

@@ -32,21 +32,39 @@ describe('getTemplate', async () => {
   await checkWorkspaceCache('file');
 
   it('get template from workspace', async () => {
-    // const { default: getTemplate } = await import(
-    //   '../../../mod/workspace/getTemplate.js'
-    // );
-
     const result = await getTemplate('OSM');
 
     expect(typeof result === 'object').toBeTruthy();
     expect(Object.hasOwn(result, 'roles')).toBeTruthy();
   });
 
-  it('query module has render property', async () => {
-    // const { default: getTemplate } = await import(
-    //   '../../../mod/workspace/getTemplate.js'
-    // );
+  it('template with invalid characters', async () => {
+    const result = await getTemplate('foo/bar');
 
+    expect(result instanceof Error).toBeTruthy();
+  });
+
+  it('template with invalid src method', async () => {
+    const result = await getTemplate({ src: 'foo:bar' });
+
+    expect(result instanceof Error).toBeTruthy();
+  });
+
+  it('unable to get template from src', async () => {
+    const result = await getTemplate({ src: 'file:foo/bar' });
+
+    expect(result instanceof Error).toBeTruthy();
+  });
+
+  it('SQL string template from src', async () => {
+    const result = await getTemplate({
+      src: 'file:./tests/assets/queries/data_array.sql',
+    });
+
+    expect(typeof result === 'object').toBeTruthy();
+  });
+
+  it('query module has render property', async () => {
     const result = await getTemplate('mod_query');
 
     expect(typeof result === 'object').toBeTruthy();
@@ -54,20 +72,12 @@ describe('getTemplate', async () => {
   });
 
   it('query module is Error', async () => {
-    // const { default: getTemplate } = await import(
-    //   '../../../mod/workspace/getTemplate.js'
-    // );
-
     const result = await getTemplate('bad_mod_query');
 
     expect(result instanceof Error).toBeTruthy();
   });
 
   it('query module render string', async () => {
-    // const { default: getTemplate } = await import(
-    //   '../../../mod/workspace/getTemplate.js'
-    // );
-
     const result = await getTemplate('mod_query_no_default');
 
     const foo = result.render.foo();
@@ -76,10 +86,6 @@ describe('getTemplate', async () => {
   });
 
   it('template with src cache', async () => {
-    // const { default: getTemplate } = await import(
-    //   '../../../mod/workspace/getTemplate.js'
-    // );
-
     const fooTemplate = {
       foo: true,
       src: 'file:./tests/assets/layers/template_test/layer.json',

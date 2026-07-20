@@ -1,7 +1,24 @@
 import { createMocks } from 'node-mocks-http';
-import { beforeAll, describe, expect, it } from 'vitest';
+import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 import getKeyMethod from '../../../mod/workspace/_workspace.js';
 import checkWorkspaceCache from '../../../mod/workspace/cache.js';
+
+//Assigning console.error to a property to restore original function with.
+const originalConsole = console.error;
+
+//erros from test so we can assert on them and not get polute the console.
+const mockErrors = [];
+
+beforeAll(() => {
+  //Changing the console.error function to push to our local collection of messages.
+  console.error = (message) => {
+    mockErrors.push(message);
+  };
+});
+
+afterAll(() => {
+  console.error = originalConsole;
+});
 
 describe('workspace', () => {
   it('should throw error if workspace is not accessible', async () => {
