@@ -25,7 +25,7 @@ let workspace;
 export default async function composeObj(obj, roles) {
   // Cache workspace in module scope for template assignment.
   workspace = await workspaceCache();
-  workspace.scopes ??= new Set();
+  workspace.scopes ??= new Set(); 
 
   if (obj.template) {
     let template = await getTemplate(obj.template);
@@ -36,11 +36,15 @@ export default async function composeObj(obj, roles) {
 
     template = filterTemplateProperties(template);
 
+    setScope(template);
+
     delete obj.template;
     delete template.src;
 
     // Merge obj --> template
     obj = merge(template, obj);
+  } else {
+    setScope(obj);
   }
 
   obj.parentRoles ??= [];
@@ -64,6 +68,17 @@ export default async function composeObj(obj, roles) {
   }
 
   return obj;
+}
+
+function setScope(obj) {
+  if (obj.role) {
+    return;
+  }
+
+  if (obj.key) {
+    obj.role = `#${obj.key}`;
+    return;
+  }
 }
 
 /**
@@ -91,12 +106,12 @@ async function mergeTemplateIntoObj(obj, template, roles, templateScope = []) {
   template = filterTemplateProperties(template);
 
   // The role takes precedence over the key for the scope.
-  const scope = template.role;
+  setScope(template);
 
   // Any individual template scope should be added to the workspace.scopes set.
-  workspace.scopes.add(scope);
+  workspace.scopes.add(template.role);
   // The templateScope array must be spread into a new array to prevent the original templateScope from being modified by nested templates.
-  templateScope = [...templateScope, scope];
+  templateScope = [...templateScope, template.role];
 
   workspace.scopes.add(templateScope);
 
