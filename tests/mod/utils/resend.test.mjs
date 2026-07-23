@@ -20,7 +20,7 @@ vi.mock('resend', () => ({
 }));
 
 vi.mock('../../../mod/provider/getSrc.js', () => ({
-  default: (params) => {
+  getSrc: (params) => {
     // The test param checks whether a provider exists for the src.
     if (typeof params === 'object' && params?.test) {
       return params.src.split(':')[0] === 'file';

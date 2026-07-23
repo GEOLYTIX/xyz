@@ -15,7 +15,7 @@ The send function sends one email. And the batch function queues a batch of emai
 @module /utils/resend
 */
 
-import getSrc from '../provider/getSrc.js';
+import { getSrc } from '../provider/getSrc.js';
 
 import languageTemplates from './languageTemplates.js';
 import logger from './logger.js';

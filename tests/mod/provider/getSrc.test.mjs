@@ -20,10 +20,12 @@ vi.mock('../../../mod/provider/cloudfront.js', () => ({
   default: (...args) => mockCloudFrontFn(...args),
 }));
 
-const { default: getSrc } = await import('../../../mod/provider/getSrc.js');
+const { getSrc, clearSrcMap, cacheSources } = await import(
+  '../../../mod/provider/getSrc.js'
+);
 
 beforeEach(async () => {
-  await getSrc({ clear: true });
+  clearSrcMap();
   mockFileFn.mockReset();
   mockCloudFrontFn.mockReset();
 });
@@ -181,7 +183,7 @@ describe('getSrc: source map', () => {
     mockFileFn.mockImplementation(async () => 'source');
 
     await getSrc('file:./flushed.json');
-    await getSrc({ clear: true });
+    clearSrcMap();
     await getSrc('file:./flushed.json');
 
     expect(mockFileFn).toHaveBeenCalledTimes(2);
@@ -205,7 +207,7 @@ describe('getSrc: cache workspace sources', () => {
       return { loaded: true };
     });
 
-    const result = await getSrc({ workspace });
+    const result = await cacheSources(workspace);
 
     expect(result).toBe(workspace);
     expect(mockFileFn).toHaveBeenCalledTimes(2);
@@ -228,7 +230,7 @@ describe('getSrc: cache workspace sources', () => {
 
     mockFileFn.mockImplementation(async () => ({ loaded: true }));
 
-    const result = await getSrc({ workspace });
+    const result = await cacheSources(workspace);
 
     expect(result).toBe(workspace);
     expect(mockFileFn).toHaveBeenCalledTimes(1);
@@ -246,7 +248,7 @@ describe('getSrc: cache workspace sources', () => {
       return { nested: { src: 'file:./circular-first.json' } };
     });
 
-    const result = await getSrc({ workspace });
+    const result = await cacheSources(workspace);
 
     expect(result).toBe(workspace);
     expect(mockFileFn).toHaveBeenCalledTimes(2);
@@ -263,7 +265,7 @@ describe('getSrc: cache workspace sources', () => {
       throw new Error('provider failed');
     });
 
-    const result = await getSrc({ workspace });
+    const result = await cacheSources(workspace);
 
     expect(result).toBeInstanceOf(Error);
     expect(result.message).toBe('file:./failing.json: provider failed');

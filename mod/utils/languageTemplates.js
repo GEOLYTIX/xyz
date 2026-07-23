@@ -24,7 +24,7 @@ English being the default language, each language template should have the 'en' 
 @module /utils/languageTemplates
 */
 
-import getSrc from '../provider/getSrc.js';
+import { getSrc } from '../provider/getSrc.js';
 
 import getTemplate from '../workspace/getTemplate.js';
 

@@ -8,7 +8,7 @@ The module exports the getTemplate method which is required by the query, langua
 @module /workspace/getTemplate
 */
 
-import getSrc from '../provider/getSrc.js';
+import { getSrc } from '../provider/getSrc.js';
 import workspaceCache from './cache.js';
 
 /**

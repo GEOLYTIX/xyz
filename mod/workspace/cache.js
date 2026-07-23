@@ -11,7 +11,7 @@ Default templates can be overwritten in the workspace or by providing a CUSTOM_T
 @module /workspace/cache
 */
 
-import getSrc from '../provider/getSrc.js';
+import { cacheSources, clearSrcMap, getSrc } from '../provider/getSrc.js';
 import logger from '../utils/logger.js';
 import merge from '../utils/merge.js';
 
@@ -152,9 +152,9 @@ async function cacheWorkspace() {
   cache = workspace;
 
   // Cached source responses may be stale after the workspace is rebuilt.
-  await getSrc({ clear: true });
+  clearSrcMap();
 
-  getSrc({ workspace: cache }).then((result) => {
+  cacheSources(cache).then((result) => {
     if (result instanceof Error) {
       // TODO needs test
       console.error(result);

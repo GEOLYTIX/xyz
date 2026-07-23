@@ -5,14 +5,6 @@ The getSrc module resolves src references through a provider determined from the
 
 All source responses are cached in a module scope source map regardless of their provider. Promises are stored in the map before provider requests are awaited so concurrent requests for the same src share one request. The source map must be cleared when the workspace cache is rebuilt.
 
-The module has a single getSrc export. The params determine the behaviour:
-
-- A src string or `{src}` params object resolves a single source response from the source map.
-- `{src, cache: false}` bypasses the source map for a fresh provider response, eg. a workspace rebuild.
-- `{src, test: true}` checks whether a provider exists for the src reference.
-- `{clear: true}` flushes the source map.
-- `{workspace}` recursively discovers and caches every source in the workspace.
-
 @requires /sign/file
 @requires /utils/envReplace
 @requires /utils/logger
@@ -61,22 +53,12 @@ The behaviour of the method is determined by the params. A string param is short
 @property {String} [params.src] Source reference.
 @property {Boolean} [params.cache] The source map is bypassed for a fresh provider response with cache being false.
 @property {Boolean} [params.test] Returns whether a provider exists for the src reference.
-@property {Boolean} [params.clear] Flushes the source map.
 @property {Object} [params.workspace] Workspace to recursively discover and cache sources in.
 
 @returns {Promise<String|Object|Error>} Cloned source response.
 */
-export default async function getSrc(params) {
+export async function getSrc(params) {
   if (typeof params === 'string') params = { src: params };
-
-  if (params?.clear) {
-    srcMap.clear();
-    return;
-  }
-
-  if (params?.workspace) {
-    return cacheSources(params.workspace);
-  }
 
   if (typeof params?.src !== 'string') {
     return new Error('A src string is required to get a source.');
@@ -101,6 +83,69 @@ export default async function getSrc(params) {
   }
 
   return cloneSource(response);
+}
+
+/**
+@function clearSrcMap
+@description
+Clears the module scope source map. The source map must be cleared when the workspace cache is rebuilt.
+*/
+export function clearSrcMap() {
+  srcMap.clear();
+}
+
+/**
+@function cacheSources
+@async
+
+@description
+Recursively discovers src properties in a workspace and in fetched responses. Every source promise in a breadth is inserted into the source map before responses are inspected, so duplicate and concurrent references share one request.
+
+All sources are fetched and inspected regardless of their provider. Sources nested in a source response, eg. a template src in a template, are discovered by inspecting the response.
+
+Objects with the srcLoaded flag have their source response assembled in the cached workspace and their src is not read.
+
+@param {Object} workspace Workspace to scan.
+@returns {Promise<Object|Error>} Workspace or source discovery Error.
+*/
+export async function cacheSources(workspace) {
+  const inspectedSrcs = new Set();
+  const inspectedObjects = new WeakSet();
+  const errors = [];
+  let queue = [workspace];
+
+  while (queue.length) {
+    const sources = new Set();
+
+    queue.forEach((value) => collectSrcs(value, sources, inspectedObjects));
+
+    // Calling getSrcPromise for the whole breadth starts every new request before any response is awaited.
+    const responses = Array.from(sources)
+      .filter((src) => !inspectedSrcs.has(src))
+      .map((src) => {
+        inspectedSrcs.add(src);
+        return [src, getSrcPromise(src)];
+      });
+
+    queue = [];
+
+    for (const [src, responsePromise] of responses) {
+      const response = await responsePromise;
+
+      if (response instanceof Error || response === undefined) {
+        errors.push(
+          `${src}: ${response?.message || `Unable to load src: ${src}`}`,
+        );
+        continue;
+      }
+
+      queue.push(response);
+    }
+  }
+
+  if (errors.length) return new Error(errors.join('\n'));
+
+  return workspace;
 }
 
 /**
@@ -154,60 +199,6 @@ function providerPromise(resolvedSrc) {
   return Promise.resolve()
     .then(() => providers[method](resolvedSrc))
     .catch((err) => err);
-}
-
-/**
-@function cacheSources
-@async
-
-@description
-Recursively discovers src properties in a workspace and in fetched responses. Every source promise in a breadth is inserted into the source map before responses are inspected, so duplicate and concurrent references share one request.
-
-All sources are fetched and inspected regardless of their provider. Sources nested in a source response, eg. a template src in a template, are discovered by inspecting the response.
-
-Objects with the srcLoaded flag have their source response assembled in the cached workspace and their src is not read.
-
-@param {Object} workspace Workspace to scan.
-@returns {Promise<Object|Error>} Workspace or source discovery Error.
-*/
-async function cacheSources(workspace) {
-  const inspectedSrcs = new Set();
-  const inspectedObjects = new WeakSet();
-  const errors = [];
-  let queue = [workspace];
-
-  while (queue.length) {
-    const sources = new Set();
-
-    queue.forEach((value) => collectSrcs(value, sources, inspectedObjects));
-
-    // Calling getSrcPromise for the whole breadth starts every new request before any response is awaited.
-    const responses = Array.from(sources)
-      .filter((src) => !inspectedSrcs.has(src))
-      .map((src) => {
-        inspectedSrcs.add(src);
-        return [src, getSrcPromise(src)];
-      });
-
-    queue = [];
-
-    for (const [src, responsePromise] of responses) {
-      const response = await responsePromise;
-
-      if (response instanceof Error || response === undefined) {
-        errors.push(
-          `${src}: ${response?.message || `Unable to load src: ${src}`}`,
-        );
-        continue;
-      }
-
-      queue.push(response);
-    }
-  }
-
-  if (errors.length) return new Error(errors.join('\n'));
-
-  return workspace;
 }
 
 /**

@@ -124,7 +124,7 @@ describe('getTemplate', async () => {
   });
 
   it('loads the template source into workspace.templates for repeat requests', async () => {
-    const { default: getSrc } = await import('../../../mod/provider/getSrc.js');
+    const { clearSrcMap } = await import('../../../mod/provider/getSrc.js');
 
     const workspace = await checkWorkspaceCache();
 
@@ -149,7 +149,7 @@ describe('getTemplate', async () => {
       });
 
       // The source map is flushed to prove repeat requests are resolved from the workspace.templates object.
-      await getSrc({ clear: true });
+      await clearSrcMap();
 
       // Modification of a requested template must not affect the loaded template.
       first.nested.format = 'mutated';
