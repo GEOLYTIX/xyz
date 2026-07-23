@@ -101,6 +101,10 @@ export default async function getLocale(params, parentLocale) {
     return locale;
   }
 
+  if (Array.isArray(locale.keys)) {
+    locale.key = locale.keys.join(',');
+  }
+
   if (Array.isArray(locale.plugins)) {
     locale.plugins = locale.plugins.map((plugin) => envReplace(plugin));
   }

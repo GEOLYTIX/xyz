@@ -231,8 +231,8 @@ async function getNestedLocales(req, res) {
     if (nestedLocale instanceof Error) continue;
 
     nestedLocales.push({
-      key: Array.isArray(nestedLocale.key)
-        ? nestedLocale.key.join(',')
+      key: Array.isArray(nestedLocale.keys)
+        ? nestedLocale.keys.join(',')
         : nestedLocale.key,
       name: `${nestedLocale.name || key}`,
       locales: nestedLocale.locales,
