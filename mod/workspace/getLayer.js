@@ -2,6 +2,7 @@
 ## /workspace/getLayer
 The getLayer module exports the getLayer method which is required by the query and workspace modules.
 
+@requires /utils/envReplace
 @requires /utils/merge
 @requires /workspace/composeObj
 @requires /workspace/getLocale
@@ -10,6 +11,7 @@ The getLayer module exports the getLayer method which is required by the query a
 @module /workspace/getLayer
 */
 
+import envReplace from '../utils/envReplace.js';
 import merge from '../utils/merge.js';
 import composeObj from './composeObj.js';
 import getLocale from './getLocale.js';
@@ -99,6 +101,10 @@ export default async function getLayer(params, locale) {
       ...locale.queryparams,
       ...layer.queryparams,
     };
+  }
+
+  if (Array.isArray(layer.plugins)) {
+    layer.plugins = layer.plugins.map((plugin) => envReplace(plugin));
   }
 
   return layer;
