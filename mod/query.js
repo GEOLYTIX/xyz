@@ -101,15 +101,6 @@ export default async function query(req, res) {
     return;
   }
 
-  // TODO: validate that the user has required roles for the template.
-  // if (!Roles.check(template, req.params.user?.roles)) {
-  //   res
-  //     .status(403)
-  //     .setHeader('Content-Type', 'text/plain')
-  //     .send('Role access denied for query template.');
-  //   return;
-  // }
-
   // Use layer dbs if defined, or workspace dbs, or provided dbs in the query.
   template.dbs ??= req.params.layer?.dbs || req.params.workspace.dbs;
 
