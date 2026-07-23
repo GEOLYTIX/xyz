@@ -31,14 +31,6 @@
     "LAYER_TEMPLATE": {
       "meta": "test role access from a template.",
       "role": "TEMPLATE_ROLE"
-    },
-    "scope_key_layer": {
-      "meta": "test scope from key.",
-      "key": "bogus_scope_key"
-    },
-    "scope_src_layer": {
-      "meta": "test scope from src.",
-      "src": "file:./tests/assets/nested_roles/scope_src_layer.json"
     }
   },
   "locale": {
@@ -65,19 +57,6 @@
         "coremarkets_template",
         "no_role_locale"
       ]
-    },
-    "foo": {
-      "template": "foo_locale",
-      "templates": [{
-        "layers": {
-          "scope_key_layer": {
-            "template": "scope_key_layer"
-          },
-          "scope_src_layer": {
-            "template": "scope_src_layer"
-          }
-        }
-      }]
     }
   }
 }

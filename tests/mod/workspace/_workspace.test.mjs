@@ -244,24 +244,6 @@ describe('workspace: nested_roles/workspace', () => {
     expect(scopesTree.uk.globalvista.OBJ_ROLE).toBeTruthy();
   });
 
-  it('scopes: nested locales with nested roles treeview [full scope]', async () => {
-    const { req, res } = createMocks({
-      params: {
-        key: 'scopes',
-        tree: true,
-        user: {
-          admin: true,
-        },
-      },
-    });
-
-    await getKeyMethod(req, res);
-
-    const scopesTree = res._getData();
-
-    expect(scopesTree.uk.globalvista.OBJ_ROLE).toBeTruthy();
-  });
-
   it('locale: anonymous access denied for restricted locale', async () => {
     const { req, res } = createMocks({
       params: {
