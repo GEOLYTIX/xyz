@@ -19,9 +19,16 @@ vi.mock('resend', () => ({
   }),
 }));
 
-vi.mock('../../../mod/provider/getFrom.js', () => ({
-  default: {
-    file: fileGet,
+vi.mock('../../../mod/provider/getSrc.js', () => ({
+  default: (params) => {
+    // The test param checks whether a provider exists for the src.
+    if (typeof params === 'object' && params?.test) {
+      return params.src.split(':')[0] === 'file';
+    }
+
+    const src = typeof params === 'string' ? params : params?.src;
+
+    return fileGet(src);
   },
 }));
 

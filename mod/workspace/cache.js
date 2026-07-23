@@ -4,14 +4,14 @@ The module exports the cacheWorkspace method which returns a workspace from the 
 
 Default templates can be overwritten in the workspace or by providing a CUSTOM_TEMPLATES xyzEnvironment variable which references a JSON with templates to be merged into the workspace.
 
-@requires /provider/getFrom
+@requires /provider/getSrc
 @requires /utils/merge
 @requires /utils/processEnv
 
 @module /workspace/cache
 */
 
-import getFrom from '../provider/getFrom.js';
+import getSrc from '../provider/getSrc.js';
 import logger from '../utils/logger.js';
 import merge from '../utils/merge.js';
 
@@ -26,7 +26,7 @@ The method checks whether the module scope variable cache has been populated.
 
 The timestamp set by cacheWorkspace is checked against the current time. The [workspace] cache will be invalidated if the difference exceeds the WORKSPACE_AGE xyzEnvironment variable.
 
-Setting the WORKSPACE_AGE to 0 is not recommended as this could cause the cache to be flushed while a request is passed through the XYZ API. A layer query processed by the [Query API module]{@link module:/query~layerQuery} will request the layer and associated locale which could be defined in remote templates. Each request to the [Workspace API getTemplate]{@link module:/workspace/getTemplate~getTemplate} method for the locale, layer, and query templates will call the checkWorkspaceCache method which will cause the workspace to be flushed and templates previously cached from their src no longer available.
+Setting the WORKSPACE_AGE to 0 is not recommended because the source promise map is flushed whenever the workspace is rebuilt. Constantly replacing the workspace prevents source responses from being reused between requests.
 
 The cacheWorkspace method is called if the cache is invalid.
 
@@ -77,10 +77,12 @@ The workspace is assigned to the module scope cache variable and the timestamp i
 @returns {workspace} JSON Workspace.
 */
 async function cacheWorkspace() {
-  const src = xyzEnv.WORKSPACE?.split(':')[0];
+  const hasProvider =
+    xyzEnv.WORKSPACE && (await getSrc({ src: xyzEnv.WORKSPACE, test: true }));
 
-  const workspace = Object.hasOwn(getFrom, src)
-    ? await getFrom[src](xyzEnv.WORKSPACE)
+  // The workspace must be fetched fresh on cache invalidation and bypasses the source map.
+  const workspace = hasProvider
+    ? await getSrc({ src: xyzEnv.WORKSPACE, cache: false })
     : {};
 
   if (workspace instanceof Error) {
@@ -89,9 +91,7 @@ async function cacheWorkspace() {
 
   const custom_templates =
     xyzEnv.CUSTOM_TEMPLATES &&
-    (await getFrom[xyzEnv.CUSTOM_TEMPLATES.split(':')[0]](
-      xyzEnv.CUSTOM_TEMPLATES,
-    ));
+    (await getSrc({ src: xyzEnv.CUSTOM_TEMPLATES, cache: false }));
 
   /**
   @function mark_template
@@ -150,6 +150,16 @@ async function cacheWorkspace() {
   timestamp = Date.now();
 
   cache = workspace;
+
+  // Cached source responses may be stale after the workspace is rebuilt.
+  await getSrc({ clear: true });
+
+  getSrc({ workspace: cache }).then((result) => {
+    if (result instanceof Error) {
+      // TODO needs test
+      console.error(result);
+    }
+  });
 
   return workspace;
 }

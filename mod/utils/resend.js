@@ -10,12 +10,12 @@ The send function sends one email. And the batch function queues a batch of emai
 @requires resend
 @requires /utils/logger
 @requires /utils/languageTemplates
-@requires /provider/getFrom
+@requires /provider/getSrc
 
 @module /utils/resend
 */
 
-import getFrom from '../provider/getFrom.js';
+import getSrc from '../provider/getSrc.js';
 
 import languageTemplates from './languageTemplates.js';
 import logger from './logger.js';
@@ -149,22 +149,22 @@ async function batch(emails) {
 Retrieves the body of the text from the provided url/file.
 
 @param {Object} template
-@property {String} template.text The url from which to retrieve the text content using {@link module:/provider/getFrom~flyTo}.
-@property {String} template.html The url from which to retrieve the html content using {@link module:/provider/getFrom~flyTo}.
+@property {String} template.text The url from which to retrieve the text content using {@link module:/provider/getSrc}.
+@property {String} template.html The url from which to retrieve the html content using {@link module:/provider/getSrc}.
 */
 async function getBody(template) {
   if (template.text) {
     // Prevent mail template from having text and html
     delete template.html;
 
-    if (Object.hasOwn(getFrom, template.text.split(':')[0])) {
-      template.text = await getFrom[template.text.split(':')[0]](template.text);
+    if (await getSrc({ src: template.text, test: true })) {
+      template.text = await getSrc(template.text);
     }
   }
 
   if (template.html) {
-    if (Object.hasOwn(getFrom, template.html.split(':')[0])) {
-      template.html = await getFrom[template.html.split(':')[0]](template.html);
+    if (await getSrc({ src: template.html, test: true })) {
+      template.html = await getSrc(template.html);
     }
   }
 }
@@ -176,7 +176,7 @@ async function getBody(template) {
 Substitutes supplied params into a supplied string.
 
 @param {String} string
-@property {Object} params The url from which to retrieve the text content using {@link module:/provider/getFrom~flyTo}.
+@property {Object} params The url from which to retrieve the text content using {@link module:/provider/getSrc}.
 
 @returns {String} The string with substitutions made.
 */

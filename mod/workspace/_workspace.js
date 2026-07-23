@@ -23,12 +23,10 @@ The workspace object defines the mapp resources available in an XYZ instance.
 */
 
 import { createHash } from 'node:crypto';
-import envReplace from '../utils/envReplace.js';
 import logger from '../utils/logger.js';
 import workspaceCache from './cache.js';
 import getLayer from './getLayer.js';
 import getLocale from './getLocale.js';
-import getTemplate from './getTemplate.js';
 
 const keyMethods = {
   layer,
@@ -558,150 +556,6 @@ function processTestResults(testConfig) {
   );
 
   return results;
-}
-
-/**
-@function cacheWorkspaceTemplates
-@async
-
-@description
-Build-time workspace cache method used by the workspace generation script. The
-method lives in the workspace module so it can reuse the same workspace cache and
-getTemplate behaviour as the API without going through an HTTP-only response
-path.
-
-The workspace is parsed for every non-module src property. All matching source
-templates found in the current pass are cached, then only those newly cached
-templates are parsed for additional src properties. This repeats until no new src
-templates are discovered.
-
-Each unique src is fetched once (de-duplicated via srcMap). References within a
-circular src path are skipped to prevent infinite expansion. Module templates
-keep their src because render functions cannot be serialised into JSON.
-
-@returns {Promise<Object|Error>} Generated workspace or an Error.
-*/
-export async function cacheWorkspaceTemplates() {
-  workspace = await workspaceCache(true);
-
-  const errors = [];
-  const srcMap = new Map();
-  const scannedSrc = new Set();
-  const queue = [{ obj: workspace, srcPath: new Set() }];
-
-  while (queue.length) {
-    const srcRefs = new Map();
-
-    for (const item of queue.splice(0)) {
-      collectSrcRefs(item.obj, item.srcPath, srcRefs, new WeakSet());
-    }
-
-    for (const [src, refs] of srcRefs) {
-      await inlineSrc(src, refs, srcMap, scannedSrc, errors, queue);
-    }
-  }
-
-  if (errors.length) {
-    return new Error(errors.join('\n'));
-  }
-
-  return workspace;
-}
-
-/**
-@function inlineSrc
-@async
-
-@description
-Loads the template for a single src, inlines it into every referencing object,
-and queues the newly populated objects for the next BFS pass. Refs that already
-contain this src in their branch path are skipped to prevent circular expansion.
-
-@param {string} src Normalised source reference.
-@param {Array} refs Objects that reference this src with their current srcPath.
-@param {Map} srcMap Cache of already-loaded templates for this generation run.
-@param {Set} scannedSrc Sources whose children have already been queued.
-@param {Array} errors Accumulated error messages.
-@param {Array} queue BFS queue for the next pass.
-*/
-async function inlineSrc(src, refs, srcMap, scannedSrc, errors, queue) {
-  // Skip refs where this src already appears in the branch path (circular).
-  const refsToExpand = refs.filter((ref) => !ref.srcPath.has(src));
-  if (!refsToExpand.length) return;
-
-  let template = srcMap.get(src);
-  if (!template) {
-    // getTemplate caches anonymous src objects under the src key; remove
-    // that temporary entry unless the key already existed before this run.
-    const hadTemplate = Object.hasOwn(workspace.templates, src);
-    template = await getTemplate({ src });
-    if (!hadTemplate) delete workspace.templates[src];
-    srcMap.set(src, template);
-  }
-
-  if (template instanceof Error) {
-    errors.push(template.message);
-    return;
-  }
-
-  for (const ref of refsToExpand) {
-    Object.assign(ref.obj, template);
-    delete ref.obj.src;
-  }
-
-  // Only scan a src once for nested src values; repeated references in the
-  // same pass are already inlined above.
-  if (!scannedSrc.has(src)) {
-    scannedSrc.add(src);
-    queue.push(
-      ...refsToExpand.map((ref) => ({
-        obj: ref.obj,
-        srcPath: new Set([...ref.srcPath, src]),
-      })),
-    );
-  }
-}
-
-/**
-@function collectSrcRefs
-
-@description
-Walks an object tree and groups non-module src references by normalized src
-value. The object that owns the src is retained so the cached template can be
-assigned back to the same location in the generated workspace.
-
-@param {Object|Array} obj Object or array to inspect.
-@param {Set<String>} srcPath Source chain for circular reference detection.
-@param {Map<String, Array<Object>>} srcRefs Grouped source references.
-@param {WeakSet<Object>} objects Objects already visited during this scan.
-*/
-function collectSrcRefs(obj, srcPath, srcRefs, objects) {
-  if (!obj || typeof obj !== 'object') return;
-
-  // Avoid walking the same object twice in one scan if objects are shared.
-  if (objects.has(obj)) return;
-  objects.add(obj);
-
-  if (Array.isArray(obj)) {
-    obj.forEach((item) => collectSrcRefs(item, srcPath, srcRefs, objects));
-    return;
-  }
-
-  if (typeof obj.src === 'string') {
-    obj.src = envReplace(obj.src);
-
-    // Module templates stay as runtime imports; skip them entirely so nested
-    // src properties inside a module object are not inlined either.
-    if (obj.module) return;
-
-    const refs = srcRefs.get(obj.src) || [];
-    refs.push({ obj, srcPath });
-    srcRefs.set(obj.src, refs);
-  }
-
-  Object.values(obj).forEach((value) =>
-    collectSrcRefs(value, srcPath, srcRefs, objects),
-  );
 }
 
 /**
