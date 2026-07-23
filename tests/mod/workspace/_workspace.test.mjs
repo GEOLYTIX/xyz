@@ -371,10 +371,10 @@ describe('workspace: nested_roles/workspace', () => {
 
     expect(Array.isArray(locales)).toBeTruthy();
     expect(
-      locales.find((locale) => locale.key === 'coremarkets_template'),
+      locales.find((locale) => locale.key === 'uk,coremarkets_template'),
     ).toBeTruthy();
     expect(
-      locales.find((locale) => locale.key === 'no_role_locale'),
+      locales.find((locale) => locale.key === 'uk,no_role_locale'),
     ).toBeTruthy();
   });
 
