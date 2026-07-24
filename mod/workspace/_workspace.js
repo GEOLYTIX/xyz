@@ -27,6 +27,7 @@ The workspace object defines the mapp resources available in an XYZ instance.
 // Object.freeze(Object.prototype);
 
 import { createHash } from 'node:crypto';
+import { cacheSources } from '../provider/getSrc.js';
 import logger from '../utils/logger.js';
 import workspaceCache from './cache.js';
 import getLayer from './getLayer.js';
@@ -267,6 +268,12 @@ async function scopes(req, res) {
   }
 
   const cachedWorkspace = await workspaceCache(true);
+
+  await cacheSources(cachedWorkspace).then((errors) => {
+    if (errors.length) {
+      console.error(new Error(errors.join('\n')));
+    }
+  });
 
   // TODO test workspace without locales property. Should the scopes method still return the scopes of the templates in the workspace.templates object?
   for (const localeKey of Object.keys(cachedWorkspace.locales)) {

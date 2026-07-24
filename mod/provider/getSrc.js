@@ -106,8 +106,8 @@ All sources are fetched and inspected regardless of their provider. Sources nest
 
 Objects with the srcLoaded flag have their source response assembled in the cached workspace and their src is not read.
 
-@param {Object} workspace Workspace to scan.
-@returns {Promise<Object|Error>} Workspace or source discovery Error.
+@param {Object} workspace
+@returns {Promise<Array<String>>} Array of error messages for failed source requests.
 */
 export async function cacheSources(workspace) {
   const inspectedSrcs = new Set();
@@ -144,9 +144,7 @@ export async function cacheSources(workspace) {
     }
   }
 
-  if (errors.length) return new Error(errors.join('\n'));
-
-  return workspace;
+  return errors;
 }
 
 /**
@@ -242,12 +240,38 @@ async function Cloudfront(ref) {
   return await cloudfront(url);
 }
 
+/**
+@function File
+@async
+
+@description
+The method will extract a file path from the ref param string.
+
+The fetch request will be created from the file provider module with the file path.
+
+@param {string} ref File resource reference.
+
+@returns {Promise<String|JSON|Error>} The fetch is resolved into either a string or JSON depending on the url ending.
+*/
 function File(ref) {
   const src = ref.split(':')[1];
 
   return file(src);
 }
 
+/**
+@function Https
+@async
+
+@description
+The method will extract a https URL from the ref param string.
+
+The fetch request will be created with the https url.
+
+@param {string} ref Https resource reference.
+
+@returns {Promise<String|JSON|Error>} The fetch is resolved into either a string or JSON depending on the url ending.
+*/
 async function Https(url) {
   try {
     const response = await fetch(url);

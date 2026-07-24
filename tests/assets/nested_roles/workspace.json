@@ -57,6 +57,9 @@
         "coremarkets_template",
         "no_role_locale"
       ]
+    },
+    "foo_locale": {
+      "template": "foo_locale"
     }
   }
 }

@@ -198,9 +198,9 @@ describe('getSrc: cache workspace sources', () => {
       return { loaded: true };
     });
 
-    const result = await cacheSources(workspace);
+    const errors = await cacheSources(workspace);
 
-    expect(result).toBe(workspace);
+    expect(errors.length).toBe(0);
     expect(mockFileFn).toHaveBeenCalledTimes(2);
 
     // The workspace src references are not rewritten without a directory param.
@@ -221,9 +221,9 @@ describe('getSrc: cache workspace sources', () => {
 
     mockFileFn.mockImplementation(async () => ({ loaded: true }));
 
-    const result = await cacheSources(workspace);
+    const errors = await cacheSources(workspace);
 
-    expect(result).toBe(workspace);
+    expect(errors.length).toBe(0);
     expect(mockFileFn).toHaveBeenCalledTimes(1);
     expect(mockFileFn).toHaveBeenCalledWith('./pending.json');
   });
@@ -239,9 +239,9 @@ describe('getSrc: cache workspace sources', () => {
       return { nested: { src: 'file:./circular-first.json' } };
     });
 
-    const result = await cacheSources(workspace);
+    const errors = await cacheSources(workspace);
 
-    expect(result).toBe(workspace);
+    expect(errors.length).toBe(0);
     expect(mockFileFn).toHaveBeenCalledTimes(2);
   });
 
@@ -256,9 +256,9 @@ describe('getSrc: cache workspace sources', () => {
       throw new Error('provider failed');
     });
 
-    const result = await cacheSources(workspace);
+    const errors = await cacheSources(workspace);
 
-    expect(result).toBeInstanceOf(Error);
-    expect(result.message).toBe('file:./failing.json: provider failed');
+    expect(errors.length).toBe(1);
+    expect(errors[0]).toBe('file:./failing.json: provider failed');
   });
 });
