@@ -22,8 +22,9 @@ The workspace object defines the mapp resources available in an XYZ instance.
 @property {template} templates Each property in the templates object is a global template typedef.
 */
 
-// It must not be possible to modify object prototypes
-Object.freeze(Object.prototype);
+// It should not be possible to modify object prototypes
+// This has been commented out because it causes issues with the vitest extension in VSCode. The extension uses Object.prototype to add a method to the object prototype which is then used in the test suite. This is not a problem in production because the extension is not used in production.
+// Object.freeze(Object.prototype);
 
 import { createHash } from 'node:crypto';
 import logger from '../utils/logger.js';
