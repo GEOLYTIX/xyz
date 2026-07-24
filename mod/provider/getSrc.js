@@ -69,16 +69,21 @@ export async function getSrc(params) {
     return new Error(`No provider found for src: ${params.src}`);
   }
 
-  const response = await getSrcPromise(params.src);
+  let response = await getSrcPromise(params.src);
 
   if (response instanceof Error) {
     return response;
   }
+
   if (response === undefined) {
     return new Error(`Unable to load src: ${params.src}`);
   }
 
-  return cloneSource(response);
+  if (typeof response === 'object') {
+    response = structuredClone(response);
+  }
+
+  return response;
 }
 
 /**
@@ -212,12 +217,6 @@ function collectSrcs(value, sources, inspectedObjects) {
   Object.values(value).forEach((item) =>
     collectSrcs(item, sources, inspectedObjects),
   );
-}
-
-function cloneSource(response) {
-  return typeof response === 'object' && response !== null
-    ? structuredClone(response)
-    : response;
 }
 
 /**
