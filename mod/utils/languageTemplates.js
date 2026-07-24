@@ -74,16 +74,19 @@ export default async function languageTemplates(params) {
   params.language ??= 'en';
 
   // Assign language property from languageTemplate as template
-  const template = Object.hasOwn(languageTemplate, params.language)
+  let template = Object.hasOwn(languageTemplate, params.language)
     ? languageTemplate[params.language]
     : languageTemplate.en;
 
-  if (typeof template !== 'string') return template;
+  if (typeof template !== 'string') {
+    return template;
+  }
 
-  // HTML Templates must be gotten as string from [template] string.
-  if (await getSrc({ src: template, test: true })) {
-    // Get template from src reference.
-    return await getSrc(template);
+  template = await getSrc({ src: template });
+
+  if (template instanceof Error) {
+    // Return the template string value if the template is not available in workspace.
+    return params.template;
   }
 
   return template;

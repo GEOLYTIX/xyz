@@ -156,16 +156,11 @@ async function getBody(template) {
   if (template.text) {
     // Prevent mail template from having text and html
     delete template.html;
-
-    if (await getSrc({ src: template.text, test: true })) {
-      template.text = await getSrc(template.text);
-    }
+    template.text = await getSrc(template.text);
   }
 
   if (template.html) {
-    if (await getSrc({ src: template.html, test: true })) {
-      template.html = await getSrc(template.html);
-    }
+    template.html = await getSrc(template.html);
   }
 }
 
@@ -176,7 +171,7 @@ async function getBody(template) {
 Substitutes supplied params into a supplied string.
 
 @param {String} string
-@property {Object} params The url from which to retrieve the text content using {@link module:/provider/getSrc}.
+@property {Object} params The parameters to substitute into the string.
 
 @returns {String} The string with substitutions made.
 */

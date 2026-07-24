@@ -43,34 +43,35 @@ const srcMap = new Map();
 @async
 
 @description
-The getSrc method resolves a src reference to its source response. The provider for the request is determined from the resolved src prefix.
+The method will resolve a src reference through a provider determined from the src prefix, eg. `file:`, `https:`, `cloudfront:`, or a signer provider from a SIGN_* xyzEnv key.
 
-Errors are returned rather than thrown. Object responses are cloned to prevent modification of the cached response.
-
-The behaviour of the method is determined by the params. A string param is shorthand for a params object with a src property.
+An error is returned if the provider does not exist for the src prefix. The provider request is resolved into a string or JSON depending on the url ending.
 
 @param {String|Object} params A src reference string or params object.
 @property {String} [params.src] Source reference.
 @property {Boolean} [params.cache] The source map is bypassed for a fresh provider response with cache being false.
-@property {Boolean} [params.test] Returns whether a provider exists for the src reference.
 @property {Object} [params.workspace] Workspace to recursively discover and cache sources in.
 
 @returns {Promise<String|Object|Error>} Cloned source response.
 */
 export async function getSrc(params) {
-  if (typeof params === 'string') params = { src: params };
+  if (typeof params === 'string') {
+    params = { src: params };
+  }
 
   if (typeof params?.src !== 'string') {
     return new Error('A src string is required to get a source.');
   }
 
-  if (params.test) {
-    return Object.hasOwn(providers, envReplace(params.src).split(':')[0]);
+  params.src = envReplace(params.src);
+
+  if (!Object.hasOwn(providers, params.src.split(':')[0])) {
+    return new Error(`No provider found for src: ${params.src}`);
   }
 
   if (params.cache === false) {
     // A fresh provider response is required, eg. for a workspace rebuild.
-    return providerPromise(envReplace(params.src));
+    return providerPromise(params.src);
   }
 
   const response = await getSrcPromise(params.src);
@@ -163,18 +164,9 @@ function getSrcPromise(src) {
 
   if (responsePromise) return responsePromise;
 
-  const resolvedSrc = envReplace(src);
+  responsePromise = providerPromise(src);
 
-  responsePromise = srcMap.get(resolvedSrc);
-
-  if (!responsePromise) {
-    responsePromise = providerPromise(resolvedSrc);
-
-    srcMap.set(resolvedSrc, responsePromise);
-  }
-
-  // Alias the unresolved src so subsequent requests hit the map without envReplace.
-  if (src !== resolvedSrc) srcMap.set(src, responsePromise);
+  srcMap.set(src, responsePromise);
 
   return responsePromise;
 }

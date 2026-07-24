@@ -77,13 +77,8 @@ The workspace is assigned to the module scope cache variable and the timestamp i
 @returns {workspace} JSON Workspace.
 */
 async function cacheWorkspace() {
-  const hasProvider =
-    xyzEnv.WORKSPACE && (await getSrc({ src: xyzEnv.WORKSPACE, test: true }));
-
   // The workspace must be fetched fresh on cache invalidation and bypasses the source map.
-  const workspace = hasProvider
-    ? await getSrc({ src: xyzEnv.WORKSPACE, cache: false })
-    : {};
+  const workspace = await getSrc({ src: xyzEnv.WORKSPACE, cache: false });
 
   if (workspace instanceof Error) {
     throw workspace;

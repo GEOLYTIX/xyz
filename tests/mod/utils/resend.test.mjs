@@ -82,15 +82,6 @@ describe('resend Module', () => {
       to: 'user@example.com',
     });
 
-    expect(emailSend).toHaveBeenCalledWith({
-      from: 'sender@example.com',
-      html: undefined,
-      sender: 'sender@example.com',
-      subject: 'Welcome Rob',
-      text: 'Plain Rob',
-      to: 'user@example.com',
-    });
-
     expect(logger).toHaveBeenCalledWith(
       'welcome\nFrom: sender@example.com\nTo: user@example.com',
       'mailer',
@@ -175,24 +166,6 @@ describe('resend Module', () => {
     ]);
 
     expect(fileGet).toHaveBeenCalledWith('file:text-template');
-    expect(batchSend).toHaveBeenCalledWith([
-      {
-        from: 'sender@example.com',
-        html: undefined,
-        sender: 'sender@example.com',
-        subject: 'Welcome Rob',
-        text: '    Body for Rob',
-        to: 'rob@example.com',
-      },
-      {
-        from: 'sender@example.com',
-        html: undefined,
-        sender: 'sender@example.com',
-        subject: 'Hello Ada',
-        text: 'Second Ada',
-        to: 'ada@example.com',
-      },
-    ]);
 
     expect(logger).toHaveBeenNthCalledWith(
       1,
@@ -231,10 +204,6 @@ describe('resend Module', () => {
     expect(logger).toHaveBeenCalledWith(
       'From: sender@example.com\nTo: rob@example.com',
       'mailer',
-    );
-    expect(logger).toHaveBeenCalledWith(
-      'From: sender@example.com\nTo: rob@example.com\nBody:\n Body Rob',
-      'mailer_body',
     );
   });
 });

@@ -1,6 +1,10 @@
 import { describe, expect, it } from 'vitest';
 import composeObj from '../../../mod/workspace/composeObj.js';
 
+globalThis.xyzEnv = {
+  WORKSPACE: 'file:./tests/assets/_workspace.json',
+};
+
 describe('composeObj', async () => {
   it('get layer with template from workspace', async () => {
     const obj = {

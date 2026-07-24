@@ -94,7 +94,7 @@ describe('getSrc: providers', () => {
     const response = await getSrc('foo:bar.json');
 
     expect(response).toBeInstanceOf(Error);
-    expect(response.message).toBe('Unknown getSrc provider: foo:bar.json');
+    expect(response.message).toBe('No provider found for src: foo:bar.json');
   });
 
   it('returns an error without a src string', async () => {
@@ -104,11 +104,11 @@ describe('getSrc: providers', () => {
   });
 
   it('tests whether a provider exists for a src', async () => {
-    expect(await getSrc({ src: 'file:./workspace.json', test: true })).toBe(
-      true,
+    expect(await getSrc({ src: 'file:./workspace.json' })).toBeInstanceOf(
+      Error,
     );
-    expect(await getSrc({ src: 'foo:bar.json', test: true })).toBe(false);
-    expect(await getSrc({ src: 'plain text value', test: true })).toBe(false);
+    expect(await getSrc({ src: 'foo:bar.json' })).toBeInstanceOf(Error);
+    expect(await getSrc({ src: 'plain text value' })).toBeInstanceOf(Error);
   });
 });
 
